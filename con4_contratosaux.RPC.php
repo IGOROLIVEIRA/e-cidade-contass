@@ -171,7 +171,7 @@ switch($oParam->exec) {
 
             $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
 
-            $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
+            $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} and z09_tipo = 1");
             db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
             $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
             $dtcadastro = $oAcordo->getDataInicial();
@@ -205,7 +205,7 @@ switch($oParam->exec) {
 
             $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
 
-            $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
+            $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} and z09_tipo = 1");
             db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
             $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
             $dtcadastro = $oAcordo->getDataInicial();
@@ -576,13 +576,20 @@ switch($oParam->exec) {
               }
             }
 
+            if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 4){
+                if($oParam->contrato->iAdesaoregpreco == ""){
+                    $lAcordoValido = false;
+                    $sMessagemInvalido = "Acordo sem vinculo com Adesão de Registro de Preço.";
+                }
+            }
+
             if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
                 $lAcordoValido = false;
                 $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
             }
 
             if($lAcordoValido){
-                $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado} order by z09_sequencial desc");
+                $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado} and z09_tipo = 1");
                 db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
                 $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
 

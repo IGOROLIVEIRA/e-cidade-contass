@@ -137,7 +137,7 @@ switch($oParam->exec) {
         }
       }
 
-      $result_dtcadcgm = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_datacadastro","z09_sequencial desc","z09_numcgm = $oParam->obr05_responsavel"));
+      $result_dtcadcgm = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_datacadastro","","z09_numcgm = $oParam->obr05_responsavel and z09_tipo = 1"));
       db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
       $datacgm = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
       $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));
@@ -145,7 +145,8 @@ switch($oParam->exec) {
       $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $datacgm);
 
       if ($dtencerramento != false){
-          if($z09_datacadastro > $dtencerramento){
+
+          if($z09_datacadastro < $dtencerramento){
               throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
           }
       }

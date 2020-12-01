@@ -1749,7 +1749,7 @@ if($oRegraEmissao->isCobranca()){
         $pdf1->descr11_1     = $z01_numcgm." - ".$nome_contri;
         $pdf1->descr11_2     = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl) . " - " . $j23_bairro;
         $pdf1->descr11_3     = $j23_bairro;
-        $pdf1->descr17       = $j23_munic . "/" . $j23_uf . (trim($j23_cep) != ""?" - CEP: " . $j23_cep:"");
+        $pdf1->descr17       = $bql;
         $pdf1->descr3_1      = $z01_numcgm." - ".$nome_contri;
         $pdf1->cgmpessoa     = $z01_cgmpri;
         $pdf1->nomepessoa    = $z01_nome;

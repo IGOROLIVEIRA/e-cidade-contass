@@ -52,6 +52,19 @@ try {
     $oDaoProcessoCompra     = new cl_pcproc();
     $oDaoProcessoCompraItem = new cl_pcprocitem();
 
+    $resultprocesso = $oDaoProcessoCompra->sql_record($oDaoProcessoCompra->sql_query($pc80_codproc));
+    db_fieldsmemory($resultprocesso,0);
+
+    $data = (implode("/",(array_reverse(explode("-",$pc80_data)))));
+    $dtDataProcCompra = DateTime::createFromFormat('d/m/Y', $data);
+
+    $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));
+    $datausu  = DateTime::createFromFormat('d/m/Y', $date);
+
+    if($dtDataProcCompra > $datausu){
+        throw new Exception("Erro data do processo de compras maior que data do orçamento");
+    }
+
     $sSqlProcessocompraItem = $oDaoProcessoCompraItem->sql_query_item_lote(null, "count(*)", null, "pc81_codproc = {$pc80_codproc} and pc69_sequencial is null");
     $sSqlProcessoCompra     = $oDaoProcessoCompra->sql_query_file( null,
                                                                    "({$sSqlProcessocompraItem}) as quantidade, pc80_tipoprocesso",

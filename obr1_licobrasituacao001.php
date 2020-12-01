@@ -14,6 +14,7 @@ $cllicobras = new cl_licobras;
 $clcondataconf = new cl_condataconf;
 $db_opcao = 1;
 $db_botao = true;
+$sqlerro = false;
 
 if(isset($incluir)){
 
@@ -49,12 +50,14 @@ if(isset($incluir)){
      */
     if($obr02_situacao == "0"){
       throw new Exception ("Selecione uma Situação");
+        $sqlerro = true;
     }
 
     if($obr02_situacao == "2"){
       $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
       if(pg_num_rows($resultSituacao) > 0){
         throw new Exception ("Obra já iniciada!");
+        $sqlerro = true;
       }
     }
 
@@ -62,20 +65,33 @@ if(isset($incluir)){
       $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra"));
       if(pg_num_rows($resultSituacao) > 0){
         throw new Exception ("Obra já iniciada!");
+        $sqlerro = true;
       }
     }
 
     if($obr02_situacao == "2"){
-      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"obr02_dtsituacao as dtsituacao1",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Obra sem cadastro inicial informado!");
+        $sqlerro = true;
       }
+
+      db_fieldsmemory($resultSituacao,0);
+      $data1 = (implode("/",(array_reverse(explode("-",$dtsituacao1)))));
+      $datasituacao1 = DateTime::createFromFormat('d/m/Y', $data1);
+
+      if($dtsituacao <= $datasituacao1){
+          throw new Exception ("Data da Inicio deve ser maior que data de não iniciada.");
+          $sqlerro = true;
+      }
+
     }
 
     if($obr02_situacao == "3" || $obr02_situacao == "4"){
       $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Para que uma obra seja paralisada deve existir o registro de inicio da obra!");
+        $sqlerro = true;
       }
     }
 
@@ -83,6 +99,7 @@ if(isset($incluir)){
       $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Para que uma obra seja concluída ela deve ter sido iniciada!");
+          $sqlerro = true;
       }
     }
 
@@ -90,6 +107,7 @@ if(isset($incluir)){
       $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao in (3,4)"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Para que uma obra seja Reiniciada ela deve ter sido Paralisada!");
+          $sqlerro = true;
       }
     }
 
@@ -101,6 +119,7 @@ if(isset($incluir)){
         $datasituacao7 = DateTime::createFromFormat('d/m/Y', $data);
         if($dtsituacao > $datasituacao7){
           throw new Exception ("Obra já concluída definitivamente!");
+            $sqlerro = true;
         }
       }
     }
@@ -108,35 +127,40 @@ if(isset($incluir)){
     if($datalancamentobra != null){
       if( $dtalancamento < $datalancamentobra){
         throw new Exception ("Usuário: Data de Lançamento deve ser maior ou igual a data de lançamento da Obra.");
+          $sqlerro = true;
       }
     }
 
     if($dtsituacao < $dtalancamento){
        throw new Exception ("Usuário: Data de Situação deve ser maior ou igual a data de lançamento da Obra.");
+        $sqlerro = true;
     }
 
     if($dtpublicacao < $dtsituacao){
       throw new Exception ("Usuário: Data de Publicação deve ser maior ou igual a data de Situação da Obra.");
+        $sqlerro = true;
     }
 
     db_inicio_transacao();
-    $cllicobrasituacao->obr02_seqobra                  = $obr02_seqobra;
-    $cllicobrasituacao->obr02_dtlancamento             = $obr02_dtlancamento;
-    $cllicobrasituacao->obr02_situacao                 = $obr02_situacao;
-    $cllicobrasituacao->obr02_dtsituacao               = $obr02_dtsituacao;
-    $cllicobrasituacao->obr02_veiculopublicacao        = $obr02_veiculopublicacao;
-    $cllicobrasituacao->obr02_dtpublicacao             = $obr02_dtpublicacao;
-    $cllicobrasituacao->obr02_descrisituacao           = $obr02_descrisituacao;
-    $cllicobrasituacao->obr02_motivoparalisacao        = $obr02_motivoparalisacao;
-    $cllicobrasituacao->obr02_dtparalisacao            = $obr02_dtparalisacao;
-    $cllicobrasituacao->obr02_outrosmotivos            = $obr02_outrosmotivos;
-    $cllicobrasituacao->obr02_dtretomada               = $obr02_dtretomada;
-    $cllicobrasituacao->obr02_instit                   = db_getsession('DB_instit');
-    $cllicobrasituacao->incluir();
+    if($sqlerro == false){
+        $cllicobrasituacao->obr02_seqobra                  = $obr02_seqobra;
+        $cllicobrasituacao->obr02_dtlancamento             = $obr02_dtlancamento;
+        $cllicobrasituacao->obr02_situacao                 = $obr02_situacao;
+        $cllicobrasituacao->obr02_dtsituacao               = $obr02_dtsituacao;
+        $cllicobrasituacao->obr02_veiculopublicacao        = $obr02_veiculopublicacao;
+        $cllicobrasituacao->obr02_dtpublicacao             = $obr02_dtpublicacao;
+        $cllicobrasituacao->obr02_descrisituacao           = $obr02_descrisituacao;
+        $cllicobrasituacao->obr02_motivoparalisacao        = $obr02_motivoparalisacao;
+        $cllicobrasituacao->obr02_dtparalisacao            = $obr02_dtparalisacao;
+        $cllicobrasituacao->obr02_outrosmotivos            = $obr02_outrosmotivos;
+        $cllicobrasituacao->obr02_dtretomada               = $obr02_dtretomada;
+        $cllicobrasituacao->obr02_instit                   = db_getsession('DB_instit');
+        $cllicobrasituacao->incluir();
 
-    if($cllicobrasituacao->erro_status == 0){
-      $erro = $cllicobrasituacao->erro_msg;
-      $sqlerro = true;
+        if($cllicobrasituacao->erro_status == 0){
+            $erro = $cllicobrasituacao->erro_msg;
+            $sqlerro = true;
+        }
     }
 
     db_fim_transacao();
@@ -190,16 +214,18 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </script>
 <?
 if(isset($incluir)){
-  if($cllicobrasituacao->erro_status=="0"){
-    $cllicobrasituacao->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($cllicobrasituacao->erro_campo!=""){
-      echo "<script> document.form1.".$cllicobrasituacao->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$cllicobrasituacao->erro_campo.".focus();</script>";
-    }
-  }else{
-    $cllicobrasituacao->erro(true,true);
+  if($sqlerro == false) {
+      if ($cllicobrasituacao->erro_status == "0") {
+          $cllicobrasituacao->erro(true, false);
+          $db_botao = true;
+          echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+          if ($cllicobrasituacao->erro_campo != "") {
+              echo "<script> document.form1." . $cllicobrasituacao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+              echo "<script> document.form1." . $cllicobrasituacao->erro_campo . ".focus();</script>";
+          }
+      } else {
+          $cllicobrasituacao->erro(true, true);
+      }
   }
 }
 ?>

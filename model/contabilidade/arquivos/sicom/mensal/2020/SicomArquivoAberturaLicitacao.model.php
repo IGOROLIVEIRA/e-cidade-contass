@@ -274,7 +274,9 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_tipliticacao AS tipoLicitacao,
        liclicita.l20_naturezaobjeto AS naturezaObjeto,
        liclicita.l20_objeto AS Objeto,
-       case when liclicita.l20_naturezaobjeto = '1' then liclicita.l20_regimexecucao else 0 end AS regimeExecucaoObras,
+       case when liclicita.l20_naturezaobjeto = '1' then liclicita.l20_regimexecucao 
+            when liclicita.l20_naturezaobjeto = '7' then liclicita.l20_regimexecucao 
+       else 0 end AS regimeExecucaoObras,
        case when pctipocompratribunal.l44_codigotribunal = '1' then liclicita.l20_numeroconvidado else 0 end AS nroConvidado,
        ' ' AS clausulaProrrogacao,
        '2' AS unidadeMedidaPrazoExecucao,
