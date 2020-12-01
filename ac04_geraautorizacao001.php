@@ -874,7 +874,6 @@ if($x->consultarDataDoSistema == true){
      * É colocado  a mascara do valor e bloqueado para Edição
      */
     function js_bloqueiaDigitacao(object, lFormata) {
-
         object.readOnly         = true;
         object.style.border     ='1px';
         object.style.fontWeight = "normal";
@@ -939,7 +938,6 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_verificaValorTotal(nValueAut, iSeq) {
-
         var aLinha = oGridItens.aRows[iSeq];
 
         var value = js_arrangeDotAndComma($("valoritem"+iSeq).value);
@@ -983,8 +981,7 @@ if($x->consultarDataDoSistema == true){
             aLinha.aCells[7].content.setValue(aLinha.aCells[5].getValue());
         } else {
 
-            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue());
-
+            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue().replace('.', '').replace(',', '.'));
             aLinha.aCells[7].content.setValue(js_formatar(nValorTotal.toFixed(2), "f",2));
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
             $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f",2);
@@ -1059,6 +1056,7 @@ if($x->consultarDataDoSistema == true){
                 }
             }
 
+            // debug
             aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
                 var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",iCasasDecimais));
@@ -1151,7 +1149,7 @@ if($x->consultarDataDoSistema == true){
         var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
         var nValorTotal     = nValor;
         var nQuantAutorizar = Number(oDadosItem.aCells[6].getValue());
-        var nValorUnit = Number(oDadosItem.aCells[4].getValue());
+        var nValorUnit = Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',','.'));
 
         aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
@@ -1215,7 +1213,7 @@ if($x->consultarDataDoSistema == true){
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())).toFixed(2));
+            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',','.'))).toFixed(2));
             $("valordot"+iDot).value = js_formatar(Number(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
         }
     }
