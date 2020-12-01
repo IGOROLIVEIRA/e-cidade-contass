@@ -2569,6 +2569,10 @@ class cl_rhpessoalmov {
      * @return float $valor
      */
     public function sql_valores_servidor($regist, $anousu, $mesusu, $rubrica) {
+        if ($mesusu <= 0) {
+            $mesusu = 12;
+            $anousu = $anousu-1;
+        }
         $tabelas = array("r14" => "gerfsal",
         "r48" => "gerfcom",
         "r20" => "gerfres",
