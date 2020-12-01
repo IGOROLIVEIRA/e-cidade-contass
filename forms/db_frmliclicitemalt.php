@@ -117,10 +117,6 @@ function js_exportarcsv(){
         '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
 
-    setTimeout(()=>{
-        jan.close();
-    },1000);
-
 }
 
 </script>
