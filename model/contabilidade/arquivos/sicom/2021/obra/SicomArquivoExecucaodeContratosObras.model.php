@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/2020/obra/geradores/gerarEXEOBRAS.php");
-require_once("classes/db_exeobras102020_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2021/obra/geradores/gerarEXEOBRAS.php");
+require_once("classes/db_exeobras102021_classe.php");
 
 /**
  * Dados Cadastro de Reponsaveis Sicom Obras
@@ -60,7 +60,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $exeobras102020 = new cl_exeobras102020();
+    $exeobras102021 = new cl_exeobras102021();
 
     /**
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -69,11 +69,11 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
     /**
      * registro 10 exclusão
      */
-    $result = db_query($exeobras102020->sql_query(null, "*", null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit")));
+    $result = db_query($exeobras102021->sql_query(null, "*", null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $exeobras102020->excluir(null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit"));
-      if ($exeobras102020->erro_status == 0) {
-        throw new Exception($exeobras102020->erro_msg);
+      $exeobras102021->excluir(null, "si197_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si197_instit=" . db_getsession("DB_instit"));
+      if ($exeobras102021->erro_status == 0) {
+        throw new Exception($exeobras102021->erro_msg);
       }
     }
 
@@ -133,23 +133,23 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
     $rsResult10 = db_query($sql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      $clexeobras102020 = new cl_exeobras102020();
+      $clexeobras102021 = new cl_exeobras102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $clexeobras102020->si197_tiporegistro = 10;
-      $clexeobras102020->si197_codorgao = $oDados10->si197_codorgao;
-      $clexeobras102020->si197_codunidadesub = $oDados10->si197_codunidadesub;
-      $clexeobras102020->si197_nrocontrato = $oDados10->si197_nrocontrato;
-      $clexeobras102020->si197_exerciciolicitacao = $oDados10->si197_exerciciolicitacao;
-      $clexeobras102020->si197_codobra = $oDados10->si197_codobra;
-      $clexeobras102020->si197_objeto = $oDados10->si197_objeto;
-      $clexeobras102020->si197_linkobra = $oDados10->si197_linkobra;
-      $clexeobras102020->si197_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clexeobras102020->si197_instit = db_getsession("DB_instit");
-      $clexeobras102020->incluir(null);
+      $clexeobras102021->si197_tiporegistro = 10;
+      $clexeobras102021->si197_codorgao = $oDados10->si197_codorgao;
+      $clexeobras102021->si197_codunidadesub = $oDados10->si197_codunidadesub;
+      $clexeobras102021->si197_nrocontrato = $oDados10->si197_nrocontrato;
+      $clexeobras102021->si197_exerciciolicitacao = $oDados10->si197_exerciciolicitacao;
+      $clexeobras102021->si197_codobra = $oDados10->si197_codobra;
+      $clexeobras102021->si197_objeto = $oDados10->si197_objeto;
+      $clexeobras102021->si197_linkobra = $oDados10->si197_linkobra;
+      $clexeobras102021->si197_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clexeobras102021->si197_instit = db_getsession("DB_instit");
+      $clexeobras102021->incluir(null);
 
-      if ($clexeobras102020->erro_status == 0) {
-        throw new Exception($clexeobras102020->erro_msg);
+      if ($clexeobras102021->erro_status == 0) {
+        throw new Exception($clexeobras102021->erro_msg);
       }
     }
     $oGerarEXEOBRAS = new gerarEXEOBRAS();

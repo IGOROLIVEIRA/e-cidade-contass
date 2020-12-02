@@ -2,10 +2,10 @@
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once ("classes/db_ops10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ops11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ops12$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ops13$PROXIMO_ANO_classe.php");
+require_once ("classes/db_ops102021_classe.php");
+require_once ("classes/db_ops112021_classe.php");
+require_once ("classes/db_ops122021_classe.php");
+require_once ("classes/db_ops132021_classe.php");
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarOPS.model.php");
  /**
@@ -61,10 +61,10 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
     
   	
     
-    $clops10 = new cl_ops10$PROXIMO_ANO();
-    $clops11 = new cl_ops11$PROXIMO_ANO();
-    $clops12 = new cl_ops12$PROXIMO_ANO();
-    $clops13 = new cl_ops13$PROXIMO_ANO();
+    $clops10 = new cl_ops102021();
+    $clops11 = new cl_ops112021();
+    $clops12 = new cl_ops122021();
+    $clops13 = new cl_ops132021();
      
     db_inicio_transacao();
 			/**
@@ -142,7 +142,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
         $rsEmpenhosPagosGeral = db_query($sSql);
         
         //db_criatabela($rsEmpenhosPagosGeral);exit;
-        $aCaracteres = array("°",chr(13),chr(10),"'",);
+        $aCaracteres = array("Â°",chr(13),chr(10),"'",);
         $aInformado = array();
 	    for ($iCont = 0; $iCont < pg_num_rows($rsEmpenhosPagosGeral); $iCont++) {
 			 
@@ -160,7 +160,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 			
 			if(!isset($aInformado[$sHash])){	
 				
-				$clops10 = new cl_ops10$PROXIMO_ANO();
+				$clops10 = new cl_ops102021();
 				
 				$clops10->si132_tiporegistro 	= $oEmpPago->tiporesgistro;
 				$clops10->si132_codorgao 		= $oEmpPago->codorgao;
@@ -229,7 +229,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                 
 		        $reg11 = db_utils::fieldsMemory($rsPagOrd11,0);
 		        
-		        $clops11 = new cl_ops11$PROXIMO_ANO();
+		        $clops11 = new cl_ops112021();
 		        		        
 		        $clops11->si133_tiporegistro 		= $reg11->tiporegistro;
 		        $clops11->si133_codreduzidoop 		= $reg11->codreduzidoop;
@@ -325,7 +325,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 		        $reg12 = db_utils::fieldsMemory($rsPagOrd12,0);
 		        
 		        if(pg_num_rows($rsPagOrd12) > 0){
-			        $clops12 = new cl_ops12$PROXIMO_ANO();
+			        $clops12 = new cl_ops122021();
 			        
 			        $clops12->si134_tiporegistro    = $reg12->tiporegistro;
 					$clops12->si134_codreduzidoop   = $reg11->codreduzidoop;
@@ -339,7 +339,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 			        $clops12->si134_reg10			= $clops10->si132_sequencial;
 			        $clops12->si134_instit 			= db_getsession("DB_instit");
 		        }else {
-		        	$clops12 = new cl_ops12$PROXIMO_ANO();
+		        	$clops12 = new cl_ops122021();
 			        
 			        $clops12->si134_tiporegistro    = 12;
 					$clops12->si134_codreduzidoop   = $reg11->codreduzidoop;
@@ -389,7 +389,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 			 			
 		        		$reg13 = db_utils::fieldsMemory($rsPagOrd13,$iCont13);
 					
-			        	$clops13 = new cl_ops13$PROXIMO_ANO();
+			        	$clops13 = new cl_ops132021();
 			        	
 			        	$clops13->si135_tiporegistro 		= $reg13->tiporegistro;
 			        	$clops13->si135_codreduzidoop 		= $reg11->codreduzidoop;

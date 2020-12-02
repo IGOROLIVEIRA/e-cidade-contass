@@ -1,13 +1,13 @@
 <?php  
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_aberlic10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aberlic11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aberlic12$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aberlic13$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aberlic14$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aberlic15$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aberlic16$PROXIMO_ANO_classe.php");
+require_once ("classes/db_aberlic102021_classe.php");
+require_once ("classes/db_aberlic112021_classe.php");
+require_once ("classes/db_aberlic122021_classe.php");
+require_once ("classes/db_aberlic132021_classe.php");
+require_once ("classes/db_aberlic142021_classe.php");
+require_once ("classes/db_aberlic152021_classe.php");
+require_once ("classes/db_aberlic162021_classe.php");
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarABERLIC.model.php");
 
@@ -139,13 +139,13 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
    	/**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-      $claberlic10$PROXIMO_ANO = new cl_aberlic10$PROXIMO_ANO();
-      $claberlic11$PROXIMO_ANO = new cl_aberlic11$PROXIMO_ANO();
-      $claberlic12$PROXIMO_ANO = new cl_aberlic12$PROXIMO_ANO();
-      $claberlic13$PROXIMO_ANO = new cl_aberlic13$PROXIMO_ANO();
-      $claberlic14$PROXIMO_ANO = new cl_aberlic14$PROXIMO_ANO();
-      $claberlic15$PROXIMO_ANO = new cl_aberlic15$PROXIMO_ANO();
-      $claberlic16$PROXIMO_ANO = new cl_aberlic16$PROXIMO_ANO();
+      $claberlic102021 = new cl_aberlic102021();
+      $claberlic112021 = new cl_aberlic112021();
+      $claberlic122021 = new cl_aberlic122021();
+      $claberlic132021 = new cl_aberlic132021();
+      $claberlic142021 = new cl_aberlic142021();
+      $claberlic152021 = new cl_aberlic152021();
+      $claberlic162021 = new cl_aberlic162021();
       
     /**
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -155,11 +155,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     /**
      * registro 16  
      */
-      $result = db_query($claberlic16$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si52_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si52_instit=".db_getsession("DB_instit")  ));
+      $result = db_query($claberlic162021->sql_query(NULL,"*",NULL,"si52_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si52_instit=".db_getsession("DB_instit")  ));
 	  if (pg_num_rows($result) > 0) {
-	      $claberlic16$PROXIMO_ANO->excluir(NULL,"si52_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si52_instit=".db_getsession("DB_instit"));
-	      if ($claberlic16$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claberlic16$PROXIMO_ANO->erro_msg);
+	      $claberlic162021->excluir(NULL,"si52_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si52_instit=".db_getsession("DB_instit"));
+	      if ($claberlic162021->erro_status == 0) {
+	    	  throw new Exception($claberlic162021->erro_msg);
 	      }
 	    }
 	  
@@ -167,67 +167,67 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
      * registro 15  
      */
 	    
-      $result = db_query($claberlic15$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si51_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si51_instit=".db_getsession("DB_instit") ));
+      $result = db_query($claberlic152021->sql_query(NULL,"*",NULL,"si51_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si51_instit=".db_getsession("DB_instit") ));
       
 	  if (pg_num_rows($result) > 0) {
-	      $claberlic15$PROXIMO_ANO->excluir(NULL,"si51_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si51_instit=".db_getsession("DB_instit"));
-	      if ($claberlic15$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claberlic15$PROXIMO_ANO->erro_msg);
+	      $claberlic152021->excluir(NULL,"si51_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si51_instit=".db_getsession("DB_instit"));
+	      if ($claberlic152021->erro_status == 0) {
+	    	  throw new Exception($claberlic152021->erro_msg);
 	      }
 	    }
 	    
 	/**
      * registro 14  
      */
-      $result = db_query($claberlic14$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si50_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si50_instit=".db_getsession("DB_instit")));
+      $result = db_query($claberlic142021->sql_query(NULL,"*",NULL,"si50_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si50_instit=".db_getsession("DB_instit")));
 	  if (pg_num_rows($result) > 0) {
-	      $claberlic14$PROXIMO_ANO->excluir(NULL,"si50_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si50_instit=".db_getsession("DB_instit"));
-	      if ($claberlic14$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claberlic14$PROXIMO_ANO->erro_msg);
+	      $claberlic142021->excluir(NULL,"si50_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si50_instit=".db_getsession("DB_instit"));
+	      if ($claberlic142021->erro_status == 0) {
+	    	  throw new Exception($claberlic142021->erro_msg);
 	      }
 	    }
 	    
 	/**
      * registro 13  
      */
-      $result = db_query($claberlic13$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si49_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si49_instit=".db_getsession("DB_instit")));
+      $result = db_query($claberlic132021->sql_query(NULL,"*",NULL,"si49_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si49_instit=".db_getsession("DB_instit")));
 	  if (pg_num_rows($result) > 0) {
-	      $claberlic13$PROXIMO_ANO->excluir(NULL,"si49_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si49_instit=".db_getsession("DB_instit"));
-	      if ($claberlic13$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claberlic13$PROXIMO_ANO->erro_msg);
+	      $claberlic132021->excluir(NULL,"si49_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si49_instit=".db_getsession("DB_instit"));
+	      if ($claberlic132021->erro_status == 0) {
+	    	  throw new Exception($claberlic132021->erro_msg);
 	      }
 	    }
 	    
 	/**
      * registro 12  
      */
-      $result = db_query($claberlic12$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si48_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si48_instit=".db_getsession("DB_instit")));
+      $result = db_query($claberlic122021->sql_query(NULL,"*",NULL,"si48_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si48_instit=".db_getsession("DB_instit")));
 	  if (pg_num_rows($result) > 0) {
-	      $claberlic12$PROXIMO_ANO->excluir(NULL,"si48_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si48_instit=".db_getsession("DB_instit"));
-	      if ($claberlic12$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claberlic12$PROXIMO_ANO->erro_msg);
+	      $claberlic122021->excluir(NULL,"si48_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si48_instit=".db_getsession("DB_instit"));
+	      if ($claberlic122021->erro_status == 0) {
+	    	  throw new Exception($claberlic122021->erro_msg);
 	      }
 	    }
 	    
 	/**
      * registro 11  
      */
-      $result = db_query($claberlic11$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si47_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si47_instit=".db_getsession("DB_instit")));
+      $result = db_query($claberlic112021->sql_query(NULL,"*",NULL,"si47_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si47_instit=".db_getsession("DB_instit")));
 	  if (pg_num_rows($result) > 0) {
-	      $claberlic11$PROXIMO_ANO->excluir(NULL,"si47_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si47_instit=".db_getsession("DB_instit"));
-	      if ($claberlic11$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claberlic11$PROXIMO_ANO->erro_msg);
+	      $claberlic112021->excluir(NULL,"si47_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si47_instit=".db_getsession("DB_instit"));
+	      if ($claberlic112021->erro_status == 0) {
+	    	  throw new Exception($claberlic112021->erro_msg);
 	      }
 	    }
 	    
 	/**
      * registro 10  
      */
-      $result = db_query($claberlic10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si46_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si46_instit=".db_getsession("DB_instit")));
+      $result = db_query($claberlic102021->sql_query(NULL,"*",NULL,"si46_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si46_instit=".db_getsession("DB_instit")));
 	  if (pg_num_rows($result) > 0) {
-	      $claberlic10$PROXIMO_ANO->excluir(NULL,"si46_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si46_instit=".db_getsession("DB_instit"));
-	      if ($claberlic10$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claberlic10$PROXIMO_ANO->erro_msg);
+	      $claberlic102021->excluir(NULL,"si46_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si46_instit=".db_getsession("DB_instit"));
+	      if ($claberlic102021->erro_status == 0) {
+	    	  throw new Exception($claberlic102021->erro_msg);
 	      }
 	    }
 	    
@@ -289,47 +289,47 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
      */
 	    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++){
       
-    	    $claberlic10$PROXIMO_ANO = new cl_aberlic10$PROXIMO_ANO();
+    	    $claberlic102021 = new cl_aberlic102021();
     	    $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-			  $claberlic10$PROXIMO_ANO->si46_tiporegistro    = 10;
-			  $claberlic10$PROXIMO_ANO->si46_clausulaprorrogacao           = $oDados10->clausulaprorrogacao;
-			  $claberlic10$PROXIMO_ANO->si46_codmodalidadelicitacao        = $oDados10->codmodalidadelicitacao;
-			  $claberlic10$PROXIMO_ANO->si46_codorgaoresp    		 	   = $oDados10->codorgaoresp;
-			  $claberlic10$PROXIMO_ANO->si46_codunidadesubresp 			   = $oDados10->codunidadesubresp;
-			  $claberlic10$PROXIMO_ANO->si46_criterioaceitabilidade        = $oDados10->criterioAceitabilidade;
-			  $claberlic10$PROXIMO_ANO->si46_criteriodesempate             = $oDados10->criteriodesempate;
-			  $claberlic10$PROXIMO_ANO->si46_descontotabela                = $oDados10->descontotabela;
-			  $claberlic10$PROXIMO_ANO->si46_destinacaoexclusiva           = $oDados10->destinacaoexclusiva;
-			  $claberlic10$PROXIMO_ANO->si46_dtabertura 				   = $oDados10->dtabertura;
-			  $claberlic10$PROXIMO_ANO->si46_dteditalconvite 			   = $oDados10->dteditalconvite;
-			  $claberlic10$PROXIMO_ANO->si46_dtpublicacaoeditaldo 		   = $oDados10->dtpublicacaoeditaldo;
-			  $claberlic10$PROXIMO_ANO->si46_dtpublicacaoeditalveiculo1    = $oDados10->dtpublicacaoeditalveiculo1;
-			  $claberlic10$PROXIMO_ANO->si46_dtpublicacaoeditalveiculo2    = $oDados10->dtpublicacaoeditalveiculo2;
-			  $claberlic10$PROXIMO_ANO->si46_dtrecebimentodoc              = $oDados10->dtrecebimentodoc;
-			  $claberlic10$PROXIMO_ANO->si46_exerciciolicitacao            = $oDados10->exerciciolicitacao;
-			  $claberlic10$PROXIMO_ANO->si46_formapagamento                = $oDados10->formaPagamento;
-			  $claberlic10$PROXIMO_ANO->si46_limitecontratacao             = $oDados10->limitecontratacao;
-			  $claberlic10$PROXIMO_ANO->si46_mes                           = $this->sDataFinal['5'].$this->sDataFinal['6'];
-			  $claberlic10$PROXIMO_ANO->si46_naturezaobjeto                = $oDados10->naturezaobjeto;
-			  $claberlic10$PROXIMO_ANO->si46_naturezaprocedimento          = $oDados10->naturezaprocedimento;
-			  $claberlic10$PROXIMO_ANO->si46_nroconvidado                  = $oDados10->nroconvidado;
-			  $claberlic10$PROXIMO_ANO->si46_nromodalidade                 = $oDados10->nromodalidade;
-			  $claberlic10$PROXIMO_ANO->si46_nroprocessolicitatorio        = $oDados10->nroprocessolicitatorio;
-			  $claberlic10$PROXIMO_ANO->si46_objeto                        = $oDados10->objeto;
-			  $claberlic10$PROXIMO_ANO->si46_prazoexecucao                 = $oDados10->prazoexecucao;
-			  $claberlic10$PROXIMO_ANO->si46_processoporlote               = $oDados10->processoporlote;
-			  $claberlic10$PROXIMO_ANO->si46_regimeexecucaoobras           = $oDados10->regimeexecucaoobras;
-			  $claberlic10$PROXIMO_ANO->si46_subcontratacao                = $oDados10->subcontratacao;
-			  $claberlic10$PROXIMO_ANO->si46_tipolicitacao                 = $oDados10->tipolicitacao;
-			  $claberlic10$PROXIMO_ANO->si46_unidademedidaprazoexecucao    = $oDados10->unidademedidaprazoexecucao;
-			  $claberlic10$PROXIMO_ANO->si46_veiculo1publicacao            = $oDados10->veiculo1publicacao;
-			  $claberlic10$PROXIMO_ANO->si46_veiculo2publicacao            = $oDados10->veiculo2Publicacao;
-			  $claberlic10$PROXIMO_ANO->si46_instit		   				   = db_getsession("DB_instit");
+			  $claberlic102021->si46_tiporegistro    = 10;
+			  $claberlic102021->si46_clausulaprorrogacao           = $oDados10->clausulaprorrogacao;
+			  $claberlic102021->si46_codmodalidadelicitacao        = $oDados10->codmodalidadelicitacao;
+			  $claberlic102021->si46_codorgaoresp    		 	   = $oDados10->codorgaoresp;
+			  $claberlic102021->si46_codunidadesubresp 			   = $oDados10->codunidadesubresp;
+			  $claberlic102021->si46_criterioaceitabilidade        = $oDados10->criterioAceitabilidade;
+			  $claberlic102021->si46_criteriodesempate             = $oDados10->criteriodesempate;
+			  $claberlic102021->si46_descontotabela                = $oDados10->descontotabela;
+			  $claberlic102021->si46_destinacaoexclusiva           = $oDados10->destinacaoexclusiva;
+			  $claberlic102021->si46_dtabertura 				   = $oDados10->dtabertura;
+			  $claberlic102021->si46_dteditalconvite 			   = $oDados10->dteditalconvite;
+			  $claberlic102021->si46_dtpublicacaoeditaldo 		   = $oDados10->dtpublicacaoeditaldo;
+			  $claberlic102021->si46_dtpublicacaoeditalveiculo1    = $oDados10->dtpublicacaoeditalveiculo1;
+			  $claberlic102021->si46_dtpublicacaoeditalveiculo2    = $oDados10->dtpublicacaoeditalveiculo2;
+			  $claberlic102021->si46_dtrecebimentodoc              = $oDados10->dtrecebimentodoc;
+			  $claberlic102021->si46_exerciciolicitacao            = $oDados10->exerciciolicitacao;
+			  $claberlic102021->si46_formapagamento                = $oDados10->formaPagamento;
+			  $claberlic102021->si46_limitecontratacao             = $oDados10->limitecontratacao;
+			  $claberlic102021->si46_mes                           = $this->sDataFinal['5'].$this->sDataFinal['6'];
+			  $claberlic102021->si46_naturezaobjeto                = $oDados10->naturezaobjeto;
+			  $claberlic102021->si46_naturezaprocedimento          = $oDados10->naturezaprocedimento;
+			  $claberlic102021->si46_nroconvidado                  = $oDados10->nroconvidado;
+			  $claberlic102021->si46_nromodalidade                 = $oDados10->nromodalidade;
+			  $claberlic102021->si46_nroprocessolicitatorio        = $oDados10->nroprocessolicitatorio;
+			  $claberlic102021->si46_objeto                        = $oDados10->objeto;
+			  $claberlic102021->si46_prazoexecucao                 = $oDados10->prazoexecucao;
+			  $claberlic102021->si46_processoporlote               = $oDados10->processoporlote;
+			  $claberlic102021->si46_regimeexecucaoobras           = $oDados10->regimeexecucaoobras;
+			  $claberlic102021->si46_subcontratacao                = $oDados10->subcontratacao;
+			  $claberlic102021->si46_tipolicitacao                 = $oDados10->tipolicitacao;
+			  $claberlic102021->si46_unidademedidaprazoexecucao    = $oDados10->unidademedidaprazoexecucao;
+			  $claberlic102021->si46_veiculo1publicacao            = $oDados10->veiculo1publicacao;
+			  $claberlic102021->si46_veiculo2publicacao            = $oDados10->veiculo2Publicacao;
+			  $claberlic102021->si46_instit		   				   = db_getsession("DB_instit");
 			   
-			  $claberlic10$PROXIMO_ANO->incluir(null); 
-			  if ($claberlic10$PROXIMO_ANO->erro_status == 0) {
-			  	throw new Exception($claberlic10$PROXIMO_ANO->erro_msg);
+			  $claberlic102021->incluir(null); 
+			  if ($claberlic102021->erro_status == 0) {
+			  	throw new Exception($claberlic102021->erro_msg);
 			  }
 		  
        
@@ -358,23 +358,23 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 			   
 		       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 		           	
-		         $claberlic11$PROXIMO_ANO = new cl_aberlic11$PROXIMO_ANO();
+		         $claberlic112021 = new cl_aberlic112021();
 		    	 $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 		    	 
-		    	 $claberlic11$PROXIMO_ANO->si47_tiporegistro             = 11;
-		    	 $claberlic11$PROXIMO_ANO->si47_codorgaoresp             = $oDados11->codorgaoresp;
-		    	 $claberlic11$PROXIMO_ANO->si47_codunidadesubresp        = $oDados11->codunidadesubresp;
-		    	 $claberlic11$PROXIMO_ANO->si47_exerciciolicitacao       = $oDados11->exerciciolicitacao;
-		    	 $claberlic11$PROXIMO_ANO->si47_nroprocessolicitatorio   = $oDados11->nroprocessolicitatorio;
-		    	 $claberlic11$PROXIMO_ANO->si47_nrolote       			 = $oDados11->nrolote;
-		    	 $claberlic11$PROXIMO_ANO->si47_dsclote 				 = $oDados11->dsclote;
-		    	 $claberlic11$PROXIMO_ANO->si47_mes                   	 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-		    	 $claberlic11$PROXIMO_ANO->si47_reg10  				 	 = $claberlic10$PROXIMO_ANO->si46_sequencial;// chave estrangeira
-		    	 $claberlic11$PROXIMO_ANO->si47_instit  				 = db_getsession("DB_instit");
+		    	 $claberlic112021->si47_tiporegistro             = 11;
+		    	 $claberlic112021->si47_codorgaoresp             = $oDados11->codorgaoresp;
+		    	 $claberlic112021->si47_codunidadesubresp        = $oDados11->codunidadesubresp;
+		    	 $claberlic112021->si47_exerciciolicitacao       = $oDados11->exerciciolicitacao;
+		    	 $claberlic112021->si47_nroprocessolicitatorio   = $oDados11->nroprocessolicitatorio;
+		    	 $claberlic112021->si47_nrolote       			 = $oDados11->nrolote;
+		    	 $claberlic112021->si47_dsclote 				 = $oDados11->dsclote;
+		    	 $claberlic112021->si47_mes                   	 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		    	 $claberlic112021->si47_reg10  				 	 = $claberlic102021->si46_sequencial;// chave estrangeira
+		    	 $claberlic112021->si47_instit  				 = db_getsession("DB_instit");
 		    		
-		    	 $claberlic11$PROXIMO_ANO->incluir(null);
-		    	 if ($claberlic11$PROXIMO_ANO->erro_status == 0) {
-		    	   throw new Exception($claberlic11$PROXIMO_ANO->erro_msg);
+		    	 $claberlic112021->incluir(null);
+		    	 if ($claberlic112021->erro_status == 0) {
+		    	   throw new Exception($claberlic112021->erro_msg);
 		    	 }
 		    		
 		    	}
@@ -400,23 +400,23 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     	       $rsResult12 = db_query($sSql);
 		       for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 		             	
-		         $claberlic12$PROXIMO_ANO = new cl_aberlic12$PROXIMO_ANO();
+		         $claberlic122021 = new cl_aberlic122021();
 		    	 $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 		    	 
-		    	 $claberlic12$PROXIMO_ANO->si48_tiporegistro             = 12;
-		    	 $claberlic12$PROXIMO_ANO->si48_codorgaoresp             = $oDados12->codorgaoresp;
-		    	 $claberlic12$PROXIMO_ANO->si48_exerciciolicitacao       = $oDados12->exerciciolicitacao;
-		    	 $claberlic12$PROXIMO_ANO->si48_nroprocessolicitatorio   = $oDados12->nroprocessolicitatorio;
-		    	 $claberlic12$PROXIMO_ANO->si48_coditem					 = $oDados12->coditem ; 
-		    	 $claberlic12$PROXIMO_ANO->si48_nroitem					 = $oDados12->nroitem;
-		    	 $claberlic12$PROXIMO_ANO->si48_reg10  				 	 = $claberlic10$PROXIMO_ANO->si46_sequencial;// chave estrangeira
-		    	 $claberlic12$PROXIMO_ANO->si48_instit		   		     = db_getsession("DB_instit");
-		    	 $claberlic12$PROXIMO_ANO->si48_mes                   	 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		    	 $claberlic122021->si48_tiporegistro             = 12;
+		    	 $claberlic122021->si48_codorgaoresp             = $oDados12->codorgaoresp;
+		    	 $claberlic122021->si48_exerciciolicitacao       = $oDados12->exerciciolicitacao;
+		    	 $claberlic122021->si48_nroprocessolicitatorio   = $oDados12->nroprocessolicitatorio;
+		    	 $claberlic122021->si48_coditem					 = $oDados12->coditem ; 
+		    	 $claberlic122021->si48_nroitem					 = $oDados12->nroitem;
+		    	 $claberlic122021->si48_reg10  				 	 = $claberlic102021->si46_sequencial;// chave estrangeira
+		    	 $claberlic122021->si48_instit		   		     = db_getsession("DB_instit");
+		    	 $claberlic122021->si48_mes                   	 = $this->sDataFinal['5'].$this->sDataFinal['6'];
 		    	
 		    	 
-		       	 $claberlic12$PROXIMO_ANO->incluir(null);
-		    	 if ($claberlic12$PROXIMO_ANO->erro_status == 0) {
-		    	   throw new Exception($claberlic12$PROXIMO_ANO->erro_msg);
+		       	 $claberlic122021->incluir(null);
+		    	 if ($claberlic122021->erro_status == 0) {
+		    	   throw new Exception($claberlic122021->erro_msg);
 		    	 }
 		    	}
 		  
@@ -443,24 +443,24 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     	       $rsResult13 = db_query($sSql);
 		       for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 		             	
-		         $claberlic13$PROXIMO_ANO = new cl_aberlic13$PROXIMO_ANO();
+		         $claberlic132021 = new cl_aberlic132021();
 		    	 $oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
 		    	 
-		    	 $claberlic13$PROXIMO_ANO->si49_tiporegistro             	= 13;
-		    	 $claberlic13$PROXIMO_ANO->si49_codorgaoresp             	= $oDados13->codorgaoresp;
-		    	 $claberlic13$PROXIMO_ANO->si49_codunidadesubresp       	= $oDados13->codunidadesubresp;
-		    	 $claberlic13$PROXIMO_ANO->si49_exerciciolicitacao   		= $oDados13->exerciciolicitacao;
-		    	 $claberlic13$PROXIMO_ANO->si49_nroprocessolicitatorio		= $oDados13->nroprocessolicitatorio; 
-		    	 $claberlic13$PROXIMO_ANO->si49_nrolote					 	= $oDados13->nrolote;
-		    	 $claberlic13$PROXIMO_ANO->si49_reg10 				 	 	= $claberlic10$PROXIMO_ANO->si46_sequencial;// chave estrangeira
-		    	 $claberlic13$PROXIMO_ANO->si49_coditem						= $oDados13->coditem;
-		    	 $claberlic13$PROXIMO_ANO->si49_instit		   				= db_getsession("DB_instit");
-		    	 $claberlic13$PROXIMO_ANO->si49_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
+		    	 $claberlic132021->si49_tiporegistro             	= 13;
+		    	 $claberlic132021->si49_codorgaoresp             	= $oDados13->codorgaoresp;
+		    	 $claberlic132021->si49_codunidadesubresp       	= $oDados13->codunidadesubresp;
+		    	 $claberlic132021->si49_exerciciolicitacao   		= $oDados13->exerciciolicitacao;
+		    	 $claberlic132021->si49_nroprocessolicitatorio		= $oDados13->nroprocessolicitatorio; 
+		    	 $claberlic132021->si49_nrolote					 	= $oDados13->nrolote;
+		    	 $claberlic132021->si49_reg10 				 	 	= $claberlic102021->si46_sequencial;// chave estrangeira
+		    	 $claberlic132021->si49_coditem						= $oDados13->coditem;
+		    	 $claberlic132021->si49_instit		   				= db_getsession("DB_instit");
+		    	 $claberlic132021->si49_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
 		    	
 		    	 
-		       	 $claberlic13$PROXIMO_ANO->incluir(null);
-		    	 if ($claberlic13$PROXIMO_ANO->erro_status == 0) {
-		    	   throw new Exception($claberlic13$PROXIMO_ANO->erro_msg);
+		       	 $claberlic132021->incluir(null);
+		    	 if ($claberlic132021->erro_status == 0) {
+		    	   throw new Exception($claberlic132021->erro_msg);
 		    	 }
 		    	}
 		    	
@@ -495,28 +495,28 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     	       $rsResult14 = db_query($sSql);
 		       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 		             	
-		         $claberlic14$PROXIMO_ANO = new cl_aberlic14$PROXIMO_ANO();
+		         $claberlic142021 = new cl_aberlic142021();
 		    	 $oDados14 = db_utils::fieldsMemory($rsResult14, $iCont14);
 		    	 
-		    	 $claberlic14$PROXIMO_ANO->si50_tiporegistro             	= 14;
-		    	 $claberlic14$PROXIMO_ANO->si50_codorgaoresp             	= $oDados14->codorgaoresp;
-		    	 $claberlic14$PROXIMO_ANO->si50_codunidadesubresp       	= $oDados14->codunidadesubresp;
-		    	 $claberlic14$PROXIMO_ANO->si50_exerciciolicitacao   		= $oDados14->exerciciolicitacao;
-		    	 $claberlic14$PROXIMO_ANO->si50_nroprocessolicitatorio		= $oDados14->nroprocessolicitatorio; 
-		    	 $claberlic14$PROXIMO_ANO->si50_nrolote					 	= $oDados14->nrolote;
-		    	 $claberlic14$PROXIMO_ANO->si50_reg10 				 	 	= $claberlic10$PROXIMO_ANO->si46_sequencial;// chave estrangeira
-		    	 $claberlic14$PROXIMO_ANO->si50_coditem						= $oDados14->coditem;
-		    	 $claberlic14$PROXIMO_ANO->si50_dtcotacao					= $oDados14->dtcotacao;
-		    	 $claberlic14$PROXIMO_ANO->si50_vlcotprecosunitario			= $oDados14->vlcotprecosunitario;
-		    	 $claberlic14$PROXIMO_ANO->si50_quantidade					= $oDados14->quantidade;
-		    	 $claberlic14$PROXIMO_ANO->si50_vlminalienbens				= $oDados14->vlminalienbens;
-		    	 $claberlic14$PROXIMO_ANO->si50_instit		   				   = db_getsession("DB_instit");
-		    	 $claberlic14$PROXIMO_ANO->si50_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
+		    	 $claberlic142021->si50_tiporegistro             	= 14;
+		    	 $claberlic142021->si50_codorgaoresp             	= $oDados14->codorgaoresp;
+		    	 $claberlic142021->si50_codunidadesubresp       	= $oDados14->codunidadesubresp;
+		    	 $claberlic142021->si50_exerciciolicitacao   		= $oDados14->exerciciolicitacao;
+		    	 $claberlic142021->si50_nroprocessolicitatorio		= $oDados14->nroprocessolicitatorio; 
+		    	 $claberlic142021->si50_nrolote					 	= $oDados14->nrolote;
+		    	 $claberlic142021->si50_reg10 				 	 	= $claberlic102021->si46_sequencial;// chave estrangeira
+		    	 $claberlic142021->si50_coditem						= $oDados14->coditem;
+		    	 $claberlic142021->si50_dtcotacao					= $oDados14->dtcotacao;
+		    	 $claberlic142021->si50_vlcotprecosunitario			= $oDados14->vlcotprecosunitario;
+		    	 $claberlic142021->si50_quantidade					= $oDados14->quantidade;
+		    	 $claberlic142021->si50_vlminalienbens				= $oDados14->vlminalienbens;
+		    	 $claberlic142021->si50_instit		   				   = db_getsession("DB_instit");
+		    	 $claberlic142021->si50_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
 		    	 
 		    	 
-		       	 $claberlic14$PROXIMO_ANO->incluir(null);
-		    	 if ($claberlic14$PROXIMO_ANO->erro_status == 0) {
-		    	   throw new Exception($claberlic14$PROXIMO_ANO->erro_msg);
+		       	 $claberlic142021->incluir(null);
+		    	 if ($claberlic142021->erro_status == 0) {
+		    	   throw new Exception($claberlic142021->erro_msg);
 		    	 }
 		    	}
 		    	
@@ -551,24 +551,24 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     	       $rsResult15 = db_query($sSql);
 		       for ($iCont15 = 0; $iCont15 < pg_num_rows($rsResult15); $iCont15++) {
 		             	
-		         $claberlic15$PROXIMO_ANO = new cl_aberlic15$PROXIMO_ANO();
+		         $claberlic152021 = new cl_aberlic152021();
 		    	 $oDados15 = db_utils::fieldsMemory($rsResult15, $iCont15);
 		    	 
-		    	 $claberlic15$PROXIMO_ANO->si51_tiporegistro             	= 15;
-		    	 $claberlic15$PROXIMO_ANO->si51_codorgaoresp             	= $oDados15->codorgaoresp;
-		    	 $claberlic15$PROXIMO_ANO->si51_codunidadesubresp       	= $oDados15->codunidadesubresp;
-		    	 $claberlic15$PROXIMO_ANO->si51_exerciciolicitacao   		= $oDados15->exerciciolicitacao;
-		    	 $claberlic15$PROXIMO_ANO->si51_nroprocessolicitatorio		= $oDados15->nroprocessolicitatorio; 
-		    	 $claberlic15$PROXIMO_ANO->si51_nrolote					 	= $oDados15->nrolote;
-		    	 $claberlic15$PROXIMO_ANO->si51_reg10 				 	 	= $claberlic10$PROXIMO_ANO->si46_sequencial;// chave estrangeira
-		    	 $claberlic15$PROXIMO_ANO->si51_coditem						= $oDados15->coditem;
-		    	 $claberlic15$PROXIMO_ANO->si51_vlitem						= $oDados15->vlitem;
-		    	 $claberlic15$PROXIMO_ANO->si51_instit		   				   = db_getsession("DB_instit");
-		    	 $claberlic15$PROXIMO_ANO->si51_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
+		    	 $claberlic152021->si51_tiporegistro             	= 15;
+		    	 $claberlic152021->si51_codorgaoresp             	= $oDados15->codorgaoresp;
+		    	 $claberlic152021->si51_codunidadesubresp       	= $oDados15->codunidadesubresp;
+		    	 $claberlic152021->si51_exerciciolicitacao   		= $oDados15->exerciciolicitacao;
+		    	 $claberlic152021->si51_nroprocessolicitatorio		= $oDados15->nroprocessolicitatorio; 
+		    	 $claberlic152021->si51_nrolote					 	= $oDados15->nrolote;
+		    	 $claberlic152021->si51_reg10 				 	 	= $claberlic102021->si46_sequencial;// chave estrangeira
+		    	 $claberlic152021->si51_coditem						= $oDados15->coditem;
+		    	 $claberlic152021->si51_vlitem						= $oDados15->vlitem;
+		    	 $claberlic152021->si51_instit		   				   = db_getsession("DB_instit");
+		    	 $claberlic152021->si51_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
 
-		       	 $claberlic15$PROXIMO_ANO->incluir(null);
-		    	 if ($claberlic15$PROXIMO_ANO->erro_status == 0) {
-		    	   throw new Exception($claberlic15$PROXIMO_ANO->erro_msg);
+		       	 $claberlic152021->incluir(null);
+		    	 if ($claberlic152021->erro_status == 0) {
+		    	   throw new Exception($claberlic152021->erro_msg);
 		    	 }
 		    	}
 		    	
@@ -604,31 +604,31 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     	       $rsResult16 = db_query($sSql);
 		       for ($iCont16 = 0; $iCont16 < pg_num_rows($rsResult16); $iCont16++) {
 		             	
-		         $claberlic16$PROXIMO_ANO = new cl_aberlic16$PROXIMO_ANO();
+		         $claberlic162021 = new cl_aberlic162021();
 		    	 $oDados16 = db_utils::fieldsMemory($rsResult16, $iCont16);
 		    	 
-		    	 $claberlic16$PROXIMO_ANO->si52_tiporegistro             	= 16;
-		    	 $claberlic16$PROXIMO_ANO->si52_codorgaoresp             	= $oDados16->codorgaoresp;
-		    	 $claberlic16$PROXIMO_ANO->si52_codunidadesubresp       	= $oDados16->codunidadesubresp;
-		    	 $claberlic16$PROXIMO_ANO->si52_exerciciolicitacao   		= $oDados16->exerciciolicitacao;
-		    	 $claberlic16$PROXIMO_ANO->si52_nroprocessolicitatorio		= $oDados16->nroprocessolicitatorio;
-		    	 $claberlic16$PROXIMO_ANO->si52_codorgao					= $oDados16->codorgao;
-		    	 $claberlic16$PROXIMO_ANO->si52_codunidadesub				= $oDados16->codunidadesub;
-		    	 $claberlic16$PROXIMO_ANO->si52_codfuncao					= $oDados16->codfuncao;
-		    	 $claberlic16$PROXIMO_ANO->si52_codsubfuncao				= $oDados16->codsubfuncao;
-		    	 $claberlic16$PROXIMO_ANO->si52_codprograma					= $oDados16->codprograma;
-		    	 $claberlic16$PROXIMO_ANO->si52_idacao						= $oDados16->idacao;
-		    	 $claberlic16$PROXIMO_ANO->si52_idsubacao					= $oDados16->idsubacao;
-		    	 $claberlic16$PROXIMO_ANO->si52_naturezadespesa				= $oDados16->naturezadespesa;
-		    	 $claberlic16$PROXIMO_ANO->si52_codfontrecursos				= $oDados16->codfontrecursos;
-		    	 $claberlic16$PROXIMO_ANO->si52_vlrecurso					= $oDados16->vlrecurso;
-		    	 $claberlic16$PROXIMO_ANO->si52_reg10 				 	 	= $claberlic10$PROXIMO_ANO->si46_sequencial;// chave estrangeira
-		    	 $claberlic16$PROXIMO_ANO->si52_instit		   				   = db_getsession("DB_instit");
-		    	 $claberlic16$PROXIMO_ANO->si52_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
+		    	 $claberlic162021->si52_tiporegistro             	= 16;
+		    	 $claberlic162021->si52_codorgaoresp             	= $oDados16->codorgaoresp;
+		    	 $claberlic162021->si52_codunidadesubresp       	= $oDados16->codunidadesubresp;
+		    	 $claberlic162021->si52_exerciciolicitacao   		= $oDados16->exerciciolicitacao;
+		    	 $claberlic162021->si52_nroprocessolicitatorio		= $oDados16->nroprocessolicitatorio;
+		    	 $claberlic162021->si52_codorgao					= $oDados16->codorgao;
+		    	 $claberlic162021->si52_codunidadesub				= $oDados16->codunidadesub;
+		    	 $claberlic162021->si52_codfuncao					= $oDados16->codfuncao;
+		    	 $claberlic162021->si52_codsubfuncao				= $oDados16->codsubfuncao;
+		    	 $claberlic162021->si52_codprograma					= $oDados16->codprograma;
+		    	 $claberlic162021->si52_idacao						= $oDados16->idacao;
+		    	 $claberlic162021->si52_idsubacao					= $oDados16->idsubacao;
+		    	 $claberlic162021->si52_naturezadespesa				= $oDados16->naturezadespesa;
+		    	 $claberlic162021->si52_codfontrecursos				= $oDados16->codfontrecursos;
+		    	 $claberlic162021->si52_vlrecurso					= $oDados16->vlrecurso;
+		    	 $claberlic162021->si52_reg10 				 	 	= $claberlic102021->si46_sequencial;// chave estrangeira
+		    	 $claberlic162021->si52_instit		   				   = db_getsession("DB_instit");
+		    	 $claberlic162021->si52_mes                   	 	= $this->sDataFinal['5'].$this->sDataFinal['6'];
 		    		    	 
-		       	 $claberlic16$PROXIMO_ANO->incluir(null);
-		    	 if ($claberlic16$PROXIMO_ANO->erro_status == 0) {
-		    	   throw new Exception($claberlic16$PROXIMO_ANO->erro_msg);
+		       	 $claberlic162021->incluir(null);
+		    	 if ($claberlic162021->erro_status == 0) {
+		    	   throw new Exception($claberlic162021->erro_msg);
 		    	 }
 		    	}
 	    }

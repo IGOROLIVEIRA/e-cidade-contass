@@ -1,14 +1,14 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_arc102020_classe.php");
-require_once("classes/db_arc112020_classe.php");
-require_once("classes/db_arc122020_classe.php");
-require_once("classes/db_arc202020_classe.php");
-require_once("classes/db_arc212020_classe.php");
-require_once("classes/db_rec102020_classe.php");
-require_once("classes/db_rec112020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarARC.model.php");
+require_once("classes/db_arc102021_classe.php");
+require_once("classes/db_arc112021_classe.php");
+require_once("classes/db_arc122021_classe.php");
+require_once("classes/db_arc202021_classe.php");
+require_once("classes/db_arc212021_classe.php");
+require_once("classes/db_rec102021_classe.php");
+require_once("classes/db_rec112021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarARC.model.php");
 
 /**
  * detalhamento das correcoes das receitas do mes Sicom Acompanhamento Mensal
@@ -119,10 +119,10 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clrec10 = new cl_rec102020();
-        $clrec11 = new cl_rec112020();
-        $clarc20 = new cl_arc202020();
-        $clarc21 = new cl_arc212020();
+        $clrec10 = new cl_rec102021();
+        $clrec11 = new cl_rec112021();
+        $clarc20 = new cl_arc202021();
+        $clarc21 = new cl_arc212021();
 
 
         $db_filtro = "o70_instit = " . db_getsession("DB_instit");
@@ -346,7 +346,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
 
         /*
-         * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2020!
+         * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2021!
          * */
 
         $aRectceSaudEduc = array('11120111', '11180111', '11130311', '11130341', '11180141', '11180231', '11180241', '17180121', '17180151', '17180611',
@@ -356,7 +356,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
         foreach ($aDadosAgrupados as $oDados10) {
 
-            $clarc20 = new cl_arc202020();
+            $clarc20 = new cl_arc202021();
             $clarc20->si31_tiporegistro = 20;
             $clarc20->si31_codorgao = $oDados10->si25_codorgao;
             $clarc20->si31_codestorno = $oDados10->si25_codreceita;
@@ -406,7 +406,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '') &&
                         ($oDados11->si26_codfontrecursos != '101') && ($oDados11->si26_codfontrecursos != '102')
                     ) {
-                        $clarc21 = new cl_arc212020();
+                        $clarc21 = new cl_arc212021();
                         $clarc21->si32_tiporegistro = 21;
                         $clarc21->si32_reg20 = $clarc20->si31_sequencial;
                         $clarc21->si32_codestorno = intval($oDados10->si25_codreceita);
@@ -450,13 +450,13 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                     ) {
 
 
-                        $clarc21 = new cl_arc212020();
+                        $clarc21 = new cl_arc212021();
                         $clarc21->si32_tiporegistro = 21;
                         $clarc21->si32_reg20 = $clarc20->si31_sequencial;
                         $clarc21->si32_codestorno = intval($oDados10->si25_codreceita);
 
                         $clarc21->si32_codfonteestornada = $oDados11->si26_codfontrecursos;
-                        $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);// \d arc212020
+                        $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);// \d arc212021
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clarc21->si32_nroconvenio = $sNroConv;
                         $clarc21->si32_dataassinatura = $dtAssinat;

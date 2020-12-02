@@ -18,37 +18,37 @@ class GerarDFC extends GerarAM
     $this->sArquivo = "DFC";
     $this->abreArquivo();
 
-    $sSql = "select * from dfcdcasp10$PROXIMO_ANO where si219_anousu = {$this->iAno} AND si219_periodo = {$this->iPeriodo} AND si219_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp102021 where si219_anousu = {$this->iAno} AND si219_periodo = {$this->iPeriodo} AND si219_instit = " . db_getsession("DB_instit");
     $rsDFC10 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp20$PROXIMO_ANO where si220_anousu = {$this->iAno} AND si220_periodo = {$this->iPeriodo} AND si220_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp202121 where si220_anousu = {$this->iAno} AND si220_periodo = {$this->iPeriodo} AND si220_instit = " . db_getsession("DB_instit");
     $rsDFC20 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp30$PROXIMO_ANO where si221_anousu = {$this->iAno} AND si221_periodo = {$this->iPeriodo} AND si221_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp302021 where si221_anousu = {$this->iAno} AND si221_periodo = {$this->iPeriodo} AND si221_instit = " . db_getsession("DB_instit");
     $rsDFC30 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp40$PROXIMO_ANO where si222_anousu = {$this->iAno} AND si222_periodo = {$this->iPeriodo} AND si222_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp402021 where si222_anousu = {$this->iAno} AND si222_periodo = {$this->iPeriodo} AND si222_instit = " . db_getsession("DB_instit");
     $rsDFC40 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp50$PROXIMO_ANO where si223_anousu = {$this->iAno} AND si223_periodo = {$this->iPeriodo} AND si223_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp502021 where si223_anousu = {$this->iAno} AND si223_periodo = {$this->iPeriodo} AND si223_instit = " . db_getsession("DB_instit");
     $rsDFC50 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp60$PROXIMO_ANO where si224_anousu = {$this->iAno} AND si224_periodo = {$this->iPeriodo} AND si224_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp602021 where si224_anousu = {$this->iAno} AND si224_periodo = {$this->iPeriodo} AND si224_instit = " . db_getsession("DB_instit");
     $rsDFC60 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp70$PROXIMO_ANO where si225_anousu = {$this->iAno} AND si225_periodo = {$this->iPeriodo} AND si225_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp702021 where si225_anousu = {$this->iAno} AND si225_periodo = {$this->iPeriodo} AND si225_instit = " . db_getsession("DB_instit");
     $rsDFC70 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp80$PROXIMO_ANO where si226_anousu = {$this->iAno} AND si226_periodo = {$this->iPeriodo} AND si226_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp802021 where si226_anousu = {$this->iAno} AND si226_periodo = {$this->iPeriodo} AND si226_instit = " . db_getsession("DB_instit");
     $rsDFC80 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp90$PROXIMO_ANO where si227_anousu = {$this->iAno} AND si227_periodo = {$this->iPeriodo} AND si227_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp902021 where si227_anousu = {$this->iAno} AND si227_periodo = {$this->iPeriodo} AND si227_instit = " . db_getsession("DB_instit");
     $rsDFC90 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp100$PROXIMO_ANO where si228_anousu = {$this->iAno} AND si228_periodo = {$this->iPeriodo} AND si228_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp1002021 where si228_anousu = {$this->iAno} AND si228_periodo = {$this->iPeriodo} AND si228_instit = " . db_getsession("DB_instit");
     $rsDFC100 = db_query($sSql);
 
-    $sSql = "select * from dfcdcasp110$PROXIMO_ANO where si229_anousu = {$this->iAno} AND si229_periodo = {$this->iPeriodo} AND si229_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from dfcdcasp1102021 where si229_anousu = {$this->iAno} AND si229_periodo = {$this->iPeriodo} AND si229_instit = " . db_getsession("DB_instit");
     $rsDFC110 = db_query($sSql);
 
 

@@ -1,20 +1,20 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_balancete10$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete11$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete12$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete13$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete14$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete15$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete16$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete17$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete18$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete19$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete20$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete21$PROXIMO_ANO_classe.php");
-require_once("classes/db_balancete22$PROXIMO_ANO_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/$PROXIMO_ANO/GerarBALANCETE.model.php");
+require_once("classes/db_balancete102021_classe.php");
+require_once("classes/db_balancete112021_classe.php");
+require_once("classes/db_balancete122021_classe.php");
+require_once("classes/db_balancete132021_classe.php");
+require_once("classes/db_balancete142021_classe.php");
+require_once("classes/db_balancete152021_classe.php");
+require_once("classes/db_balancete162021_classe.php");
+require_once("classes/db_balancete172021_classe.php");
+require_once("classes/db_balancete182021_classe.php");
+require_once("classes/db_balancete192021_classe.php");
+require_once("classes/db_balancete202021_classe.php");
+require_once("classes/db_balancete212021_classe.php");
+require_once("classes/db_balancete222021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarBALANCETE.model.php");
 require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
 
 // ini_set('display_errors', 'On');
@@ -35,7 +35,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
     protected $sNomeArquivo = 'BALANCETE';
 
     /**
-     * @var array Fontes encerradas em 2020
+     * @var array Fontes encerradas em 2021
      */
     protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -113,7 +113,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
                                     else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub
                      from orcunidade
-                     inner join orcorgao on (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu) 
+                     inner join orcorgao on (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
                      where o41_orgao = {$iOrgao}
                        and o41_unidade = {$iUnidade}
                        and o41_anousu = " . db_getsession('DB_anousu') ."
@@ -248,19 +248,19 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         }
 
         db_inicio_transacao();
-        $obalancete10 = new cl_balancete10$PROXIMO_ANO();
-        $obalancete11 = new cl_balancete11$PROXIMO_ANO();
-        $obalancete12 = new cl_balancete12$PROXIMO_ANO();
-        $obalancete13 = new cl_balancete13$PROXIMO_ANO();
-        $obalancete14 = new cl_balancete14$PROXIMO_ANO();
-        $obalancete15 = new cl_balancete15$PROXIMO_ANO();
-        $obalancete16 = new cl_balancete16$PROXIMO_ANO();
-        $obalancete17 = new cl_balancete17$PROXIMO_ANO();
-        $obalancete18 = new cl_balancete18$PROXIMO_ANO();
-        $obalancete23 = new cl_balancete23$PROXIMO_ANO();
-        $obalancete24 = new cl_balancete24$PROXIMO_ANO();
-        $obalancete25 = new cl_balancete25$PROXIMO_ANO();
-        $obalancete26 = new cl_balancete26$PROXIMO_ANO();
+        $obalancete10 = new cl_balancete102021();
+        $obalancete11 = new cl_balancete112021();
+        $obalancete12 = new cl_balancete122021();
+        $obalancete13 = new cl_balancete132021();
+        $obalancete14 = new cl_balancete142021();
+        $obalancete15 = new cl_balancete152021();
+        $obalancete16 = new cl_balancete162021();
+        $obalancete17 = new cl_balancete172021();
+        $obalancete18 = new cl_balancete182021();
+        $obalancete23 = new cl_balancete232021();
+        $obalancete24 = new cl_balancete242021();
+        $obalancete25 = new cl_balancete252021();
+        $obalancete26 = new cl_balancete262021();
 
         $obalancete26->excluir(null, "si196_mes = 13 and si196_instit = " . db_getsession("DB_instit"));
         $obalancete25->excluir(null, "si195_mes = 13 and si195_instit = " . db_getsession("DB_instit"));
@@ -835,8 +835,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                 select DISTINCT conplanoorcamento.c60_codcon,
                                                             conplanoorcamento.c60_descr,
                                                             conplanoorcamento.c60_estrut, o15_codtri
-                                                FROM orcreceita 
-                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu 
+                                                FROM orcreceita
+                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu
                                                 left JOIN conplanoorcamentoanalitica ON c61_codcon = conplanoorcamento.c60_codcon AND c61_anousu = conplanoorcamento.c60_anousu
                                                 inner JOIN orctiporec ON o70_codigo = orctiporec.o15_codigo
                                                 WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
@@ -1296,7 +1296,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
                                     o58_orgao,o58_unidade
-                                    from  contacorrentedetalhe 
+                                    from  contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
                                     inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
@@ -1474,7 +1474,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                 /**
                                  * Realiza o tratamento do codunidadesub e do codunidadesuborig
                                  * 1. Toma-se como verdade que o codunidadesub é sempre igual ao codunidadesuborig, ou seja, não houve alteração
-                                 * 2. Verifica se existe dotacao em $PROXIMO_ANO passando a unidade e o orgao
+                                 * 2. Verifica se existe dotacao em 2021 passando a unidade e o orgao
                                  * 3. Caso nao exista, então buscamos o padrao e passamos para o sCodunidadesub, e o valor do sCodunidadesub é passado para o $sCodunidadesubOrig
                                  */
 
@@ -1493,7 +1493,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                                 if ($bFonteEncerrada && $nMes == '01' && $saldoFinalRsp == 0) {
                                     $iFonte = $oReg14->codfontrecursos;
-                                } elseif ($bFonteEncerrada && db_getsession("DB_anousu") >= 2020 && !$bRPExercicioAnterior) {
+                                } elseif ($bFonteEncerrada && db_getsession("DB_anousu") >= 2021 && !$bRPExercicioAnterior) {
                                     $iFonte = substr($oReg14->codfontrecursos, 0, 1).'59';
                                 } else {
                                     $iFonte = $oReg14->codfontrecursos;
@@ -1908,10 +1908,10 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     END AS natursaldofinctb
                                 FROM
                                     (SELECT *
-                                        FROM ctb202020
-                                        LEFT JOIN ctb212020 ON si96_sequencial = si97_reg20
+                                        FROM ctb202120
+                                        LEFT JOIN ctb212021 ON si96_sequencial = si97_reg20
                                         WHERE si96_mes = ".$this->sDataFinal['5'] . $this->sDataFinal['6']."
-                                            AND si96_instit = ".db_getsession("DB_instit").") AS xx 
+                                            AND si96_instit = ".db_getsession("DB_instit").") AS xx
                                 ORDER BY codctb";
 
                 $rsCtb = db_query($sSqlCtb) or die($sSqlCtb);
@@ -2671,8 +2671,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                        from
                                           (select 25 as tiporegistro,
                                                   case when c209_tceestrut is null then substr(conplano.c60_estrut,1,9) else c209_tceestrut end as contacontabil,
-                                                  (select sum(c69_valor) as credito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_credito = c61_reduz and c69_data between '$PROXIMO_ANO-12-31' and '$PROXIMO_ANO-12-31') as credito,
-                                                  (select sum(c69_valor) as debito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_debito = c61_reduz and c69_data between '$PROXIMO_ANO-12-31' and '$PROXIMO_ANO-12-31') as debito,
+                                                  (select sum(c69_valor) as credito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_credito = c61_reduz and c69_data between '2021-12-31' and '2021-12-31') as credito,
+                                                  (select sum(c69_valor) as debito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_debito = c61_reduz and c69_data between '2021-12-31' and '2021-12-31') as debito,
                                                   (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, conplano.c60_nregobrig,
                                                   conplano.c60_codcon as codcon, conplano.c60_identificadorfinanceiro, conplano.c60_naturezasaldo, o.c60_estrut as c60_estrut
                                             from contabilidade.conplano
@@ -2790,7 +2790,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                   p.c60_descr,
                                                   p.c60_finali,
                                                   r.c61_instit,
-                                                  fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz, '$PROXIMO_ANO-12-31', '$PROXIMO_ANO-12-31',false),
+                                                  fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz, '2021-12-31', '2021-12-31',false),
                                                   p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta,
                                                   cgm.z01_cgccpf as nrodocumentopessoaatributosf,z01_numcgm
@@ -2854,7 +2854,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
         foreach ($aContasReg10 as $oDado10) {
 
-            $obalancete10 = new cl_balancete10$PROXIMO_ANO();
+            $obalancete10 = new cl_balancete102021();
 
             $obalancete10->si177_tiporegistro = $oDado10->si177_tiporegistro;
             $obalancete10->si177_contacontaabil = $oDado10->si177_contacontaabil;
@@ -2895,7 +2895,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg11 as $reg11) {
 
-                $obalreg11 = new cl_balancete11$PROXIMO_ANO();
+                $obalreg11 = new cl_balancete112021();
 
                 $obalreg11->si178_tiporegistro = $reg11->si178_tiporegistro;
                 $obalreg11->si178_contacontaabil = $reg11->si178_contacontaabil;
@@ -2953,7 +2953,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg12 as $reg12) {
 
-                $obalreg12 = new cl_balancete12$PROXIMO_ANO();
+                $obalreg12 = new cl_balancete122021();
 
                 $obalreg12->si179_tiporegistro = $reg12->si179_tiporegistro;
                 $obalreg12->si179_contacontabil = $reg12->si179_contacontabil;
@@ -2997,7 +2997,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg13 as $reg13) {
 
-                $obalreg13 = new cl_balancete13$PROXIMO_ANO();
+                $obalreg13 = new cl_balancete132021();
                 $obalreg13->si180_tiporegistro = $reg13->si180_tiporegistro;
                 $obalreg13->si180_contacontabil = $reg13->si180_contacontabil;
                 $obalreg13->si180_codfundo = $sCodFundo;
@@ -3038,7 +3038,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
             }
 
             foreach ($oDado10->reg14 as $reg14) {
-                $obalreg14 = new cl_balancete14$PROXIMO_ANO();
+                $obalreg14 = new cl_balancete142021();
 
                 $obalreg14->si181_tiporegistro = $reg14->si181_tiporegistro;
                 $obalreg14->si181_contacontabil = $reg14->si181_contacontabil;
@@ -3091,7 +3091,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg15 as $reg15) {
 
-                $obalreg15 = new cl_balancete15$PROXIMO_ANO();
+                $obalreg15 = new cl_balancete152021();
 
                 $obalreg15->si182_tiporegistro = $reg15->si182_tiporegistro;
                 $obalreg15->si182_contacontabil = $reg15->si182_contacontabil;
@@ -3135,7 +3135,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg16 as $reg16) {
 
-                $obalreg16 = new cl_balancete16$PROXIMO_ANO();
+                $obalreg16 = new cl_balancete162021();
 
                 $obalreg16->si183_tiporegistro = $reg16->si183_tiporegistro;
                 $obalreg16->si183_contacontabil = $reg16->si183_contacontabil;
@@ -3177,7 +3177,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg17 as $reg17) {
 
-                $obalreg17 = new cl_balancete17$PROXIMO_ANO();
+                $obalreg17 = new cl_balancete172021();
 
                 $obalreg17->si184_tiporegistro = $reg17->si184_tiporegistro;
                 $obalreg17->si184_contacontabil = $reg17->si184_contacontabil;
@@ -3219,7 +3219,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg18 as $reg18) {
 
-                $obalreg18 = new cl_balancete18$PROXIMO_ANO();
+                $obalreg18 = new cl_balancete182021();
 
                 $obalreg18->si185_tiporegistro = $reg18->si185_tiporegistro;
                 $obalreg18->si185_contacontabil = $reg18->si185_contacontabil;
@@ -3263,7 +3263,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg19 as $reg19) {
 
-                $obalreg19 = new cl_balancete19$PROXIMO_ANO();
+                $obalreg19 = new cl_balancete192021();
 
                 $obalreg19->si186_tiporegistro = $reg19->si186_tiporegistro;
                 $obalreg19->si186_contacontabil = $reg19->si186_contacontabil;
@@ -3289,7 +3289,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg20 as $reg20) {
 
-                $obalreg20 = new cl_balancete20$PROXIMO_ANO();
+                $obalreg20 = new cl_balancete202121();
 
                 $obalreg20->si187_tiporegistro = $reg20->si187_tiporegistro;
                 $obalreg20->si187_contacontabil = $reg20->si187_contacontabil;
@@ -3321,7 +3321,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg21 as $reg21) {
 
-                $obalreg21 = new cl_balancete21$PROXIMO_ANO();
+                $obalreg21 = new cl_balancete212021();
 
                 $obalreg21->si188_tiporegistro = $reg21->si188_tiporegistro;
                 $obalreg21->si188_contacontabil = $reg21->si188_contacontabil;
@@ -3348,7 +3348,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg22 as $reg22) {
 
-                $obalreg22 = new cl_balancete22$PROXIMO_ANO();
+                $obalreg22 = new cl_balancete222021();
 
                 $obalreg22->si189_tiporegistro = $reg22->si189_tiporegistro;
                 $obalreg22->si189_contacontabil = $reg22->si189_contacontabil;
@@ -3375,7 +3375,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg24 as $reg24) {
 
-                $obalreg24 = new cl_balancete24$PROXIMO_ANO();
+                $obalreg24 = new cl_balancete242021();
 
                 $obalreg24->si191_tiporegistro = $reg24->si191_tiporegistro;
                 $obalreg24->si191_contacontabil = $reg24->si191_contacontabil;
@@ -3415,7 +3415,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg25 as $reg25) {
 
-              $obalreg25 = new cl_balancete25$PROXIMO_ANO();
+              $obalreg25 = new cl_balancete252021();
 
               $obalreg25->si195_tiporegistro    = $reg25->si195_tiporegistro;
               $obalreg25->si195_contacontabil   = $reg25->si195_contacontabil;
@@ -3441,7 +3441,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
             foreach ($oDado10->reg26 as $reg26) {
 
-              $obalreg26 = new cl_balancete26$PROXIMO_ANO();
+              $obalreg26 = new cl_balancete262021();
 
               $obalreg26->si196_tiporegistro = $reg26->si196_tiporegistro;
               $obalreg26->si196_contacontabil = $reg26->si196_contacontabil;

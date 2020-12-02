@@ -1,13 +1,13 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_ext102020_classe.php");
-require_once ("classes/db_ext202020_classe.php");
-require_once ("classes/db_ext302020_classe.php");
-require_once ("classes/db_ext312020_classe.php");
+require_once ("classes/db_ext102021_classe.php");
+require_once ("classes/db_ext202021_classe.php");
+require_once ("classes/db_ext302021_classe.php");
+require_once ("classes/db_ext312021_classe.php");
 
 
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarEXT.model.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarEXT.model.php");
 
  /**
   * Detalhamento Extra Ocamentarias Sicom Acompanhamento Mensal
@@ -31,7 +31,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
   protected $sNomeArquivo = 'EXT';
 
   /**
-   * @var array Fontes encerradas em 2020
+   * @var array Fontes encerradas em 2021
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -65,10 +65,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
    */
   public function gerarDados() {
 
-  	$cExt10 = new cl_ext102020();
-  	$cExt20 = new cl_ext202020();
-  	$cExt30 = new cl_ext302020();
-  	$cExt31 = new cl_ext312020();
+  	$cExt10 = new cl_ext102021();
+  	$cExt20 = new cl_ext202021();
+  	$cExt30 = new cl_ext302021();
+  	$cExt31 = new cl_ext312021();
 
   	/*
   	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA
@@ -134,10 +134,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 		//db_criatabela($rsContasExtra);
 
 	    // matriz de entrada
-    	$what = array("°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô',
-    			'ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
+    	$what = array("Â°",chr(13),chr(10), 'Ã¤','Ã£','Ã ','Ã¡','Ã¢','Ãª','Ã«','Ã¨','Ã©','Ã¯','Ã¬','Ã­','Ã¶','Ãµ','Ã²','Ã³','Ã´',
+    			'Ã¼','Ã¹','Ãº','Ã»','Ã€','Ã','Ãƒ','Ã‰','Ã','Ã“','Ãš','Ã±','Ã‘','Ã§','Ã‡',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','Âª','Âº' );
 
-    	// matriz de saída
+    	// matriz de saÃ­da
     	$by   = array('','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u',
     			'u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
 
@@ -163,7 +163,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 	       		if (!isset($aExt10Agrupodo[$aHash]) ){
 
-					$cExt10 = new cl_ext102020();
+					$cExt10 = new cl_ext102021();
 
 		       		$cExt10->si124_tiporegistro     = $oContaExtra->tiporegistro;
 		       		$cExt10->si124_codext  			= $oContaExtra->codtce != 0 ? $oContaExtra->codtce : $oContaExtra->codext;
@@ -177,46 +177,46 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 		       		$cExt10->extras					= array();
 
                     /*
-					 * VERIFICA SE NO EM ALGUMA REMESSA ENVIADA O CODEXT FOI IMFORMADO, CASO NÃO TENHA ENCONTRATO CRIA UM NOVO
+					 * VERIFICA SE NO EM ALGUMA REMESSA ENVIADA O CODEXT FOI IMFORMADO, CASO NÃƒO TENHA ENCONTRATO CRIA UM NOVO
 					 */
-                   $sSqlVerifica  = "SELECT 1 FROM ext102020
+                   $sSqlVerifica  = "SELECT 1 FROM ext102021
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo = '".$cExt10->si124_desdobrasubtipo."'
                                        AND si124_mes             <= ".$this->sDataFinal['5'].$this->sDataFinal['6'];
                    $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext10$PROXIMO_ANO
+                                    SELECT 1 FROM ext102021
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext10$PROXIMO_ANO
+                                    SELECT 1 FROM ext102021
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext10$PROXIMO_ANO
+                                    SELECT 1 FROM ext102021
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext10$PROXIMO_ANO
+                                    SELECT 1 FROM ext102021
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext10$PROXIMO_ANO
+                                    SELECT 1 FROM ext102021
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext10$PROXIMO_ANO
+                                    SELECT 1 FROM ext102021
                                     WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                       AND si124_tipolancamento    = '".$cExt10->si124_tipolancamento."'
                                       AND si124_subtipo           = '".$cExt10->si124_subtipo."'
@@ -334,9 +334,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
                     //OC11537
                     $bFonteEncerrada  = in_array($oExtRecursoTCE, $this->aFontesEncerradas);
-                    $bCorrecaoFonte   = ($bFonteEncerrada && $this->sDataFinal['5'] . $this->sDataFinal['6'] == '01' && db_getsession("DB_anousu") == 2020);
+                    $bCorrecaoFonte   = ($bFonteEncerrada && $this->sDataFinal['5'] . $this->sDataFinal['6'] == '01' && db_getsession("DB_anousu") == 2021);
 
-                    $oExtRecursoTCE2 = $bFonteEncerrada ? substr($oExtRecursoTCE, 0, 1).'59' : $oExtRecursoTCE; //caso atenda condição, altera para fonte nova 159 ou 259
+                    $oExtRecursoTCE2 = $bFonteEncerrada ? substr($oExtRecursoTCE, 0, 1).'59' : $oExtRecursoTCE; //caso atenda condiÃ§Ã£o, altera para fonte nova 159 ou 259
 
                     if ($bFonteEncerrada && $bCorrecaoFonte) {
 
@@ -556,7 +556,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 //       echo "<pre>";print_r($aExt20);
 	foreach($aExt20 as $oExt20) {
 
-			$cExt   = new cl_ext202020();
+			$cExt   = new cl_ext202021();
 
 			$cExt->si165_tiporegistro          = $oExt20->si165_tiporegistro;
 			$cExt->si165_codorgao 			   = $oExt20->si165_codorgao;
@@ -598,7 +598,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 			}
 			foreach ($oExt20->ext30 as $oExtAgrupado) {
 
-				$cExt30 = new cl_ext302020();
+				$cExt30 = new cl_ext302021();
 
 				$cExt30->si126_tiporegistro        = $oExtAgrupado->si126_tiporegistro;
 				$cExt30->si126_codext              = $oExtAgrupado->si126_codext;
@@ -623,7 +623,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 				foreach ($oExtAgrupado->ext31 as $oext31agrupado) {
 
-					$cExt31 = new cl_ext312020();
+					$cExt31 = new cl_ext312021();
 
 
 					$cExt31->si127_tiporegistro        = 31;

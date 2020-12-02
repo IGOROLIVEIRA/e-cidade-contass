@@ -1,15 +1,15 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_aoc10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aoc11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aoc12$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aoc13$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aoc14$PROXIMO_ANO_classe.php");
+require_once ("classes/db_aoc102021_classe.php");
+require_once ("classes/db_aoc112021_classe.php");
+require_once ("classes/db_aoc122021_classe.php");
+require_once ("classes/db_aoc132021_classe.php");
+require_once ("classes/db_aoc142021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAOC.model.php");
 
  /**
-  * Alterações Orçamentárias Sicom Acompanhamento Mensal
+  * AlteraÃ§Ãµes OrÃ§amentÃ¡rias Sicom Acompanhamento Mensal
   * @author marcelo
   * @package Contabilidade
   */
@@ -85,53 +85,53 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
    */
   public function gerarDados() {
 
-  	$claoc10$PROXIMO_ANO = new cl_aoc10$PROXIMO_ANO();
-  	$claoc11$PROXIMO_ANO = new cl_aoc11$PROXIMO_ANO();
-  	$claoc12$PROXIMO_ANO = new cl_aoc12$PROXIMO_ANO();
-  	$claoc13$PROXIMO_ANO = new cl_aoc13$PROXIMO_ANO();
-  	$claoc14$PROXIMO_ANO = new cl_aoc14$PROXIMO_ANO();
+  	$claoc102021 = new cl_aoc102021();
+  	$claoc112021 = new cl_aoc112021();
+  	$claoc122021 = new cl_aoc122021();
+  	$claoc132021 = new cl_aoc132021();
+  	$claoc142021 = new cl_aoc142021();
   	
   	/**
   	 * excluir informacoes do mes selecionado
   	 */
     db_inicio_transacao();
-    $result = $claoc11$PROXIMO_ANO->sql_record($claoc11$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si39_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si39_instit = ".db_getsession("DB_instit")));
+    $result = $claoc112021->sql_record($claoc112021->sql_query(NULL,"*",NULL,"si39_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si39_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$claoc11$PROXIMO_ANO->excluir(NULL,"si39_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si39_instit = ".db_getsession("DB_instit"));
-      if ($claoc11$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($claoc11$PROXIMO_ANO->erro_msg);
+    	$claoc112021->excluir(NULL,"si39_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si39_instit = ".db_getsession("DB_instit"));
+      if ($claoc112021->erro_status == 0) {
+    	  throw new Exception($claoc112021->erro_msg);
       }
     }
     
-    $result = $claoc12$PROXIMO_ANO->sql_record($claoc12$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si40_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si40_instit = ".db_getsession("DB_instit")));
+    $result = $claoc122021->sql_record($claoc122021->sql_query(NULL,"*",NULL,"si40_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si40_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$claoc12$PROXIMO_ANO->excluir(NULL,"si40_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si40_instit = ".db_getsession("DB_instit"));
-      if ($claoc12$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($claoc12$PROXIMO_ANO->erro_msg);
+    	$claoc122021->excluir(NULL,"si40_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si40_instit = ".db_getsession("DB_instit"));
+      if ($claoc122021->erro_status == 0) {
+    	  throw new Exception($claoc122021->erro_msg);
       }
     }
     
-    $result = $claoc13$PROXIMO_ANO->sql_record($claoc13$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si41_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si41_instit = ".db_getsession("DB_instit")));
+    $result = $claoc132021->sql_record($claoc132021->sql_query(NULL,"*",NULL,"si41_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si41_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$claoc13$PROXIMO_ANO->excluir(NULL,"si41_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si41_instit = ".db_getsession("DB_instit"));
-      if ($claoc13$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($claoc13$PROXIMO_ANO->erro_msg);
+    	$claoc132021->excluir(NULL,"si41_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si41_instit = ".db_getsession("DB_instit"));
+      if ($claoc132021->erro_status == 0) {
+    	  throw new Exception($claoc132021->erro_msg);
       }
     }
     
-    $result = $claoc14$PROXIMO_ANO->sql_record($claoc14$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si42_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si42_instit = ".db_getsession("DB_instit")));
+    $result = $claoc142021->sql_record($claoc142021->sql_query(NULL,"*",NULL,"si42_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si42_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$claoc14$PROXIMO_ANO->excluir(NULL,"si42_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si42_instit = ".db_getsession("DB_instit"));
-      if ($claoc14$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($claoc14$PROXIMO_ANO->erro_msg);
+    	$claoc142021->excluir(NULL,"si42_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si42_instit = ".db_getsession("DB_instit"));
+      if ($claoc142021->erro_status == 0) {
+    	  throw new Exception($claoc142021->erro_msg);
       }
     }
     
-    $result = $claoc10$PROXIMO_ANO->sql_record($claoc10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si38_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si38_instit = ".db_getsession("DB_instit")));
+    $result = $claoc102021->sql_record($claoc102021->sql_query(NULL,"*",NULL,"si38_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si38_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$claoc10$PROXIMO_ANO->excluir(NULL,"si38_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si38_instit = ".db_getsession("DB_instit"));
-      if ($claoc10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($claoc10$PROXIMO_ANO->erro_msg);
+    	$claoc102021->excluir(NULL,"si38_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si38_instit = ".db_getsession("DB_instit"));
+      if ($claoc102021->erro_status == 0) {
+    	  throw new Exception($claoc102021->erro_msg);
       }
     }
     /**
@@ -157,18 +157,18 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     for ($iCont10 = 0; $iCont10 < pg_num_fields($rsResult10); $iCont10++) {
     	
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-    	$claoc10$PROXIMO_ANO = new cl_aoc10$PROXIMO_ANO();
+    	$claoc102021 = new cl_aoc102021();
     	
-    	$claoc10$PROXIMO_ANO->si38_tiporegistro = 10;
-    	$claoc10$PROXIMO_ANO->si38_codorgao     = $oDados10->codorgao;
-    	$claoc10$PROXIMO_ANO->si38_nrodecreto   = $oDados10->nrodecreto;
-    	$claoc10$PROXIMO_ANO->si38_datadecreto  = $oDados10->datadecreto;
-    	$claoc10$PROXIMO_ANO->si38_mes          = $this->sDataFinal['5'].$this->sDataFinal['6'];
-    	$claoc10$PROXIMO_ANO->si38_instit       = db_getsession("DB_instit");
+    	$claoc102021->si38_tiporegistro = 10;
+    	$claoc102021->si38_codorgao     = $oDados10->codorgao;
+    	$claoc102021->si38_nrodecreto   = $oDados10->nrodecreto;
+    	$claoc102021->si38_datadecreto  = $oDados10->datadecreto;
+    	$claoc102021->si38_mes          = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    	$claoc102021->si38_instit       = db_getsession("DB_instit");
     	
-    	$claoc10$PROXIMO_ANO->incluir(null);
-      if ($claoc10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($claoc10$PROXIMO_ANO->erro_msg);
+    	$claoc102021->incluir(null);
+      if ($claoc102021->erro_status == 0) {
+    	  throw new Exception($claoc102021->erro_msg);
       }
       
       /**
@@ -198,20 +198,20 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
       	
       	$oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-      	$claoc11$PROXIMO_ANO = new cl_aoc11$PROXIMO_ANO();
+      	$claoc112021 = new cl_aoc112021();
       	
-      	$claoc11$PROXIMO_ANO->si39_tiporegistro         = 11;
-      	$claoc11$PROXIMO_ANO->si39_codreduzidodecreto   = $oDados11->codreduzidodecreto;
-      	$claoc11$PROXIMO_ANO->si39_nrodecreto           = $oDados11->nrodecreto;
-      	$claoc11$PROXIMO_ANO->si39_tipodecretoalteracao = $oDados11->tipodecretoalteracao;
-      	$claoc11$PROXIMO_ANO->si39_valoraberto          = $oDados11->valoraberto;
-      	$claoc11$PROXIMO_ANO->si39_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      	$claoc11$PROXIMO_ANO->si39_reg10                = $claoc10$PROXIMO_ANO->si38_sequencial;
-      	$claoc11$PROXIMO_ANO->si39_instit               = db_getsession("DB_instit");
+      	$claoc112021->si39_tiporegistro         = 11;
+      	$claoc112021->si39_codreduzidodecreto   = $oDados11->codreduzidodecreto;
+      	$claoc112021->si39_nrodecreto           = $oDados11->nrodecreto;
+      	$claoc112021->si39_tipodecretoalteracao = $oDados11->tipodecretoalteracao;
+      	$claoc112021->si39_valoraberto          = $oDados11->valoraberto;
+      	$claoc112021->si39_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
+      	$claoc112021->si39_reg10                = $claoc102021->si38_sequencial;
+      	$claoc112021->si39_instit               = db_getsession("DB_instit");
       	
-        $claoc11$PROXIMO_ANO->incluir(null);
-        if ($claoc11$PROXIMO_ANO->erro_status == 0) {
-    	    throw new Exception($claoc11$PROXIMO_ANO->erro_msg);
+        $claoc112021->incluir(null);
+        if ($claoc112021->erro_status == 0) {
+    	    throw new Exception($claoc112021->erro_msg);
         }
       	
       }
@@ -222,7 +222,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	$sSql = "select '12' as tiporegistro,
         o39_codproj as codReduzidoDecreto, 
        o45_numlei as nroLeiAlteracao ,
-       '$PROXIMO_ANO-01-01' as dataLeiAlteracao
+       '2021-01-01' as dataLeiAlteracao
       from orcprojeto 
       join orclei on o39_codlei = o45_codlei
      where o39_codproj in ({$oDados10->codigovinc})";
@@ -231,19 +231,19 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
     		
     		$oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-    		$claoc12$PROXIMO_ANO = new cl_aoc12$PROXIMO_ANO();
+    		$claoc122021 = new cl_aoc122021();
     		
-    		$claoc12$PROXIMO_ANO->si40_tiporegistro       = 12;
-    		$claoc12$PROXIMO_ANO->si40_codreduzidodecreto = $oDados12->codreduzidodecreto;
-    		$claoc12$PROXIMO_ANO->si40_nroleialteracao    = $oDados12->nroleialteracao;
-    		$claoc12$PROXIMO_ANO->si40_dataleialteracao   = $oDados12->dataleialteracao;
-    		$claoc12$PROXIMO_ANO->si40_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
-    		$claoc12$PROXIMO_ANO->si40_reg10              = $claoc10$PROXIMO_ANO->si38_sequencial;
-    		$claoc12$PROXIMO_ANO->si40_instit             = db_getsession("DB_instit");
+    		$claoc122021->si40_tiporegistro       = 12;
+    		$claoc122021->si40_codreduzidodecreto = $oDados12->codreduzidodecreto;
+    		$claoc122021->si40_nroleialteracao    = $oDados12->nroleialteracao;
+    		$claoc122021->si40_dataleialteracao   = $oDados12->dataleialteracao;
+    		$claoc122021->si40_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    		$claoc122021->si40_reg10              = $claoc102021->si38_sequencial;
+    		$claoc122021->si40_instit             = db_getsession("DB_instit");
     		
-    	  $claoc12$PROXIMO_ANO->incluir(null);
-        if ($claoc12$PROXIMO_ANO->erro_status == 0) {
-    	    throw new Exception($claoc12$PROXIMO_ANO->erro_msg);
+    	  $claoc122021->incluir(null);
+        if ($claoc122021->erro_status == 0) {
+    	    throw new Exception($claoc122021->erro_msg);
         }
     		
     	}
@@ -272,19 +272,19 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
     		
     		$oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
-    		$claoc13$PROXIMO_ANO = new cl_aoc13$PROXIMO_ANO();
+    		$claoc132021 = new cl_aoc132021();
     		
-    		$claoc13$PROXIMO_ANO->si41_tiporegistro       = 13;
-    		$claoc13$PROXIMO_ANO->si41_codreduzidodecreto = $oDados13->codreduzidodecreto;
-    		$claoc13$PROXIMO_ANO->si41_origemrecalteracao = $oDados13->tipodecretoalteracao;
-    		$claoc13$PROXIMO_ANO->si41_valorabertoorigem  = $oDados13->valoraberto;
-    		$claoc13$PROXIMO_ANO->si41_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
-    		$claoc13$PROXIMO_ANO->si41_reg10              = $claoc10$PROXIMO_ANO->si38_sequencial;
-    		$claoc13$PROXIMO_ANO->si41_instit             = db_getsession("DB_instit");
+    		$claoc132021->si41_tiporegistro       = 13;
+    		$claoc132021->si41_codreduzidodecreto = $oDados13->codreduzidodecreto;
+    		$claoc132021->si41_origemrecalteracao = $oDados13->tipodecretoalteracao;
+    		$claoc132021->si41_valorabertoorigem  = $oDados13->valoraberto;
+    		$claoc132021->si41_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    		$claoc132021->si41_reg10              = $claoc102021->si38_sequencial;
+    		$claoc132021->si41_instit             = db_getsession("DB_instit");
     		
-    		$claoc13$PROXIMO_ANO->incluir(null);
-    	  if ($claoc13$PROXIMO_ANO->erro_status == 0) {
-    	    throw new Exception($claoc13$PROXIMO_ANO->erro_msg);
+    		$claoc132021->incluir(null);
+    	  if ($claoc132021->erro_status == 0) {
+    	    throw new Exception($claoc132021->erro_msg);
         }
     		
     	}
@@ -318,28 +318,28 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
     		
     		$oDados14 = db_utils::fieldsMemory($rsResult14, $iCont14);
-    		$claoc14$PROXIMO_ANO = new cl_aoc14$PROXIMO_ANO();
+    		$claoc142021 = new cl_aoc142021();
     		
-    		$claoc14$PROXIMO_ANO->si42_tiporegistro       = 14;
-    		$claoc14$PROXIMO_ANO->si42_codreduzidodecreto = $oDados14->codreduzidodecreto;
-    		$claoc14$PROXIMO_ANO->si42_tipoalteracao      = $oDados14->tipoalteracao;
-    		$claoc14$PROXIMO_ANO->si42_codorgao           = $oDados14->codorgao;
-    		$claoc14$PROXIMO_ANO->si42_codunidadesub      = $oDados14->codunidadesub;
-    		$claoc14$PROXIMO_ANO->si42_codfuncao          = $oDados14->codfuncao;
-    		$claoc14$PROXIMO_ANO->si42_codsubfuncao       = $oDados14->codsubfuncao;
-    		$claoc14$PROXIMO_ANO->si42_codprograma        = $oDados14->codprograma;
-    		$claoc14$PROXIMO_ANO->si42_idacao             = $oDados14->idacao;
-    		$claoc14$PROXIMO_ANO->si42_idsubacao          = $oDados14->idsubacao;
-    		$claoc14$PROXIMO_ANO->si42_naturezadespesa    = $oDados14->naturezadespesa;
-    		$claoc14$PROXIMO_ANO->si42_codfontrecursos    = $oDados14->codfontrecursos;
-    		$claoc14$PROXIMO_ANO->si42_vlacrescimoreducao = $oDados14->vlacrescimoreducao;
-    		$claoc14$PROXIMO_ANO->si42_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
-    		$claoc14$PROXIMO_ANO->si42_reg10              = $claoc10$PROXIMO_ANO->si38_sequencial;
-    		$claoc14$PROXIMO_ANO->si42_instit             = db_getsession("DB_instit");
+    		$claoc142021->si42_tiporegistro       = 14;
+    		$claoc142021->si42_codreduzidodecreto = $oDados14->codreduzidodecreto;
+    		$claoc142021->si42_tipoalteracao      = $oDados14->tipoalteracao;
+    		$claoc142021->si42_codorgao           = $oDados14->codorgao;
+    		$claoc142021->si42_codunidadesub      = $oDados14->codunidadesub;
+    		$claoc142021->si42_codfuncao          = $oDados14->codfuncao;
+    		$claoc142021->si42_codsubfuncao       = $oDados14->codsubfuncao;
+    		$claoc142021->si42_codprograma        = $oDados14->codprograma;
+    		$claoc142021->si42_idacao             = $oDados14->idacao;
+    		$claoc142021->si42_idsubacao          = $oDados14->idsubacao;
+    		$claoc142021->si42_naturezadespesa    = $oDados14->naturezadespesa;
+    		$claoc142021->si42_codfontrecursos    = $oDados14->codfontrecursos;
+    		$claoc142021->si42_vlacrescimoreducao = $oDados14->vlacrescimoreducao;
+    		$claoc142021->si42_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    		$claoc142021->si42_reg10              = $claoc102021->si38_sequencial;
+    		$claoc142021->si42_instit             = db_getsession("DB_instit");
     		
-    		$claoc14$PROXIMO_ANO->incluir(null);
-    	  if ($claoc14$PROXIMO_ANO->erro_status == 0) {
-    	    throw new Exception($claoc14$PROXIMO_ANO->erro_msg);
+    		$claoc142021->incluir(null);
+    	  if ($claoc142021->erro_status == 0) {
+    	    throw new Exception($claoc142021->erro_msg);
         }
     		
     	}

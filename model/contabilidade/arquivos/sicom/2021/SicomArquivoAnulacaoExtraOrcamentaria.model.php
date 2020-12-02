@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_aex10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aex11$PROXIMO_ANO_classe.php");
+require_once ("classes/db_aex102021_classe.php");
+require_once ("classes/db_aex112021_classe.php");
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAEX.model.php");
 
@@ -58,9 +58,9 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
    */
   public function gerarDados() {
   	
-    $cAex10 = new cl_aex10$PROXIMO_ANO();
+    $cAex10 = new cl_aex102021();
   	
-    $cAex11 = new cl_aex11$PROXIMO_ANO();
+    $cAex11 = new cl_aex112021();
   	
   	/*
   	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA 
@@ -177,7 +177,7 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
 						         case when c71_coddoc in (131,152,162) then 1 else 2 end as categoria,
 						         e50_data as dtlancamento,
 						         c86_data as dtanulacaoextra,
-						         'Estorno de Renteção' as justificativaanulacao,
+						         'Estorno de RenteÃ§Ã£o' as justificativaanulacao,
 						         c69_valor as valor
 						     from retencaoreceitas 
 						     join retencaocorgrupocorrente on e47_retencaoreceita = e23_sequencial 
@@ -204,7 +204,7 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
 						         case when c71_coddoc in (131,152,162) then 1 else 2 end as categoria,
 						         e50_data as dtlancamento,
 						         c86_data as dtanulacaoextra,
-						         'Estorno de Renteção' as justificativaanulacao,
+						         'Estorno de RenteÃ§Ã£o' as justificativaanulacao,
 						         c69_valor as valor
 						     from retencaoreceitas 
 						     join retencaocorgrupocorrente on e47_retencaoreceita = e23_sequencial 
@@ -302,7 +302,7 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
 	     
 	     foreach ($aAex10Agrupa as $oDados10) {
 	    			
-			    	    $claex   = new cl_aex10$PROXIMO_ANO();
+			    	    $claex   = new cl_aex102021();
 			    	  
 					    $claex->si129_tiporegistro 		     = $oDados10->si129_tiporegistro;
 			    		$claex->si129_codreduzidoaex 		 = $oDados10->si129_codreduzidoaex;
@@ -322,7 +322,7 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
 			        }
 	      foreach ($oDados10->aex11 as $oDados11) {
 	      	    
-	            $aex11 = new cl_aex11$PROXIMO_ANO();
+	            $aex11 = new cl_aex112021();
 	            
 	    		    $aex11->si130_tiporegistro      = $oDados11->si130_tiporegistro;
 		    		$aex11->si130_codreduzidoaex    = $oDados11->si130_codreduzidoaex;

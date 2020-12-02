@@ -2,12 +2,12 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once("classes/db_ops102020_classe.php");
-require_once("classes/db_ops112020_classe.php");
-require_once("classes/db_ops122020_classe.php");
-require_once("classes/db_ops132020_classe.php");
+require_once("classes/db_ops102021_classe.php");
+require_once("classes/db_ops112021_classe.php");
+require_once("classes/db_ops122021_classe.php");
+require_once("classes/db_ops132021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarOPS.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarOPS.model.php");
 
 /**
  * Pagamento das Despesas Sicom Acompanhamento Mensal
@@ -32,7 +32,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
   protected $sNomeArquivo = 'OPS';
 
   /**
-   * @var array Fontes encerradas em 2020
+   * @var array Fontes encerradas em 2021
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -71,10 +71,10 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
   {
 
 
-    $clops10 = new cl_ops102020();
-    $clops11 = new cl_ops112020();
-    $clops12 = new cl_ops122020();
-    $clops13 = new cl_ops132020();
+    $clops10 = new cl_ops102021();
+    $clops11 = new cl_ops112021();
+    $clops12 = new cl_ops122021();
+    $clops13 = new cl_ops132021();
 
       $sSqlUnidade = "SELECT * FROM infocomplementares
                       WHERE si08_anousu = " . db_getsession("DB_anousu") . "
@@ -180,11 +180,11 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
     $rsEmpenhosPagosGeral = db_query($sSql);
 
-    //$aCaracteres = array("°",chr(13),chr(10),"'",);
+    //$aCaracteres = array("Â°",chr(13),chr(10),"'",);
     // matriz de entrada
-    $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+    $what = array("Â°", chr(13), chr(10), 'Ã¤', 'Ã£', 'Ã ', 'Ã¡', 'Ã¢', 'Ãª', 'Ã«', 'Ã¨', 'Ã©', 'Ã¯', 'Ã¬', 'Ã­', 'Ã¶', 'Ãµ', 'Ã²', 'Ã³', 'Ã´', 'Ã¼', 'Ã¹', 'Ãº', 'Ã»', 'Ã€', 'Ã', 'Ãƒ', 'Ã‰', 'Ã', 'Ã“', 'Ãš', 'Ã±', 'Ã‘', 'Ã§', 'Ã‡', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'Âª', 'Âº');
 
-    // matriz de saída
+    // matriz de saÃ­da
     $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     $aInformado = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsEmpenhosPagosGeral); $iCont++) {
@@ -211,7 +211,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
         if (!isset($aInformado[$sHash])) {
 
-          $clops10 = new cl_ops102020();
+          $clops10 = new cl_ops102021();
 
             if (($sTrataCodUnidade == 2) && ($oEmpPago->subunidade != '' && $oEmpPago->subunidade != 0)) {
 
@@ -225,7 +225,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             }
           /*
            * Verifica se o empenho existe na tabela dotacaorpsicom
-           * Caso exista, busca os dados da dotação.
+           * Caso exista, busca os dados da dotaÃ§Ã£o.
            * */
           $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oEmpPago->e60_numemp}";
           $iFonteAlterada = '0';
@@ -280,7 +280,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                   e60_codemp AS nroempenho,
                                   e60_emiss AS dtempenho,
                                   CASE
-                                      WHEN date_part('year',e50_data) < $PROXIMO_ANO THEN e71_codnota::varchar /*nao alterar esse ano*/
+                                      WHEN date_part('year',e50_data) < 2021 THEN e71_codnota::varchar /*nao alterar esse ano*/
                                       ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
                                   END AS nroliquidacao,
                                   e50_data AS dtliquidacao,
@@ -322,7 +322,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           $reg11 = db_utils::fieldsMemory($rsPagOrd11, 0);
 
           if (pg_num_rows($rsPagOrd11) > 0) {
-            $clops11 = new cl_ops112020();
+            $clops11 = new cl_ops112021();
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
             }
@@ -464,85 +464,85 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           }
 
           if (pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != '') {
-            $clops12 = new cl_ops122020();
+            $clops12 = new cl_ops122021();
 
-            $sSqlContaPagFont = "select * from ( select distinct 'ctb102020' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+            $sSqlContaPagFont = "select * from ( select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb102020 on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $sSqlContaPagFont .= " UNION select distinct 'ctb10$PROXIMO_ANO' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+            $sSqlContaPagFont .= " UNION select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
-            $sSqlContaPagFont .= " UNION select distinct 'ctb10$PROXIMO_ANO' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+            $sSqlContaPagFont .= " UNION select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
-            $sSqlContaPagFont .= " UNION select distinct 'ctb10$PROXIMO_ANO' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+            $sSqlContaPagFont .= " UNION select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
-            $sSqlContaPagFont .= " UNION select distinct 'ctb10$PROXIMO_ANO' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+            $sSqlContaPagFont .= " UNION select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
-              $sSqlContaPagFont .= " UNION select distinct 'ctb10$PROXIMO_ANO' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+              $sSqlContaPagFont .= " UNION select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
-            $sSqlContaPagFont .= " UNION select distinct 'ctb10$PROXIMO_ANO' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+            $sSqlContaPagFont .= " UNION select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by contapag asc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste1");
 
@@ -572,90 +572,90 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb102020 on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       si95_agencia = c63_agencia and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by contapag asc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste2");
 
@@ -663,7 +663,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
             $FontContaPag2 = db_utils::fieldsMemory($rsResultContaPag)->fonte;
 
-            $clops12 = new cl_ops122020();
+            $clops12 = new cl_ops122021();
 
             $clops12->si134_tiporegistro = 12;
             $clops12->si134_codreduzidoop = $reg11->codreduzidoop;
@@ -778,7 +778,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
               foreach ($aOps23 as $oOps23ag) {
 
-                $clops13 = new cl_ops132020();
+                $clops13 = new cl_ops132021();
 
                 $clops13->si135_tiporegistro = $oOps23ag->si135_tiporegistro;
                 $clops13->si135_codreduzidoop = $oOps23ag->si135_codreduzidoop;
@@ -807,14 +807,14 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
            * PAGAMENTO PARA INFORMAR COMO UM NOVO PAGAMENTO
            */
 
-          $clops10 = new cl_ops102020();
+          $clops10 = new cl_ops102021();
           if ($oEmpPago->subunidade != '' && $oEmpPago->subunidade != 0) {
             $oEmpPago->codunidadesub .= str_pad($oEmpPago->subunidade, 3, "0", STR_PAD_LEFT);
           }
 
           /*
           * Verifica se o empenho existe na tabela dotacaorpsicom
-          * Caso exista, busca os dados da dotação.
+          * Caso exista, busca os dados da dotaÃ§Ã£o.
           * */
           $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oEmpPago->e60_numemp}";
           $iFonteAlterada = '0';
@@ -861,7 +861,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                   e60_codemp AS nroempenho,
                                   e60_emiss AS dtempenho,
                                   CASE
-                                      WHEN date_part('year',e50_data) < $PROXIMO_ANO THEN e71_codnota::varchar
+                                      WHEN date_part('year',e50_data) < 2021 THEN e71_codnota::varchar
                                       ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
                                   END AS nroliquidacao,
                                   e50_data AS dtliquidacao,
@@ -903,7 +903,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           if (pg_num_rows($rsPagOrd11) > 0) {
 
-            $clops11 = new cl_ops112020();
+            $clops11 = new cl_ops112021();
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
             }
@@ -1005,7 +1005,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
           /**
-           * NOVA VERIFICAÇÃO RETENÇÃO PARA A ORDEM, PARA QUE O VALOR DA RETENÇÃO SEJA SUBTRAIDO DO VALOR DO LANCAMENTO.
+           * NOVA VERIFICAÃ‡ÃƒO RETENÃ‡ÃƒO PARA A ORDEM, PARA QUE O VALOR DA RETENÃ‡ÃƒO SEJA SUBTRAIDO DO VALOR DO LANCAMENTO.
            */
           if ($reg12->e81_codmov == ''){
             $reg12->e81_codmov = 0;
@@ -1048,86 +1048,86 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           if (pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != '') {
 
-            $clops12 = new cl_ops122020();
+            $clops12 = new cl_ops122021();
 
 
             $sSqlContaPagFont = "select * from (select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb102020 on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by contapag asc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste3");
 
@@ -1156,85 +1156,85 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco   = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb10$PROXIMO_ANO on
+                      join ctb102021 on
                       si95_banco = c63_banco
                       AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
-                      join ctb102020 on
+                      join ctb102021 on
                       si95_banco   = c63_banco and
                       substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
                       si95_digitoverificadoragencia = c63_dvagencia and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . " and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") as x order by contapag desc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste4");
 
@@ -1242,7 +1242,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
             $FontContaPag2 = db_utils::fieldsMemory($rsResultContaPag)->fonte;
 
-            $clops12 = new cl_ops122020();
+            $clops12 = new cl_ops122021();
 
 
             $clops12->si134_tiporegistro = 12;
@@ -1354,7 +1354,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
               foreach ($aOps23 as $oOps23ag) {
 
-                $clops13 = new cl_ops132020();
+                $clops13 = new cl_ops132021();
 
                 $clops13->si135_tiporegistro = $oOps23ag->si135_tiporegistro;
                 $clops13->si135_codreduzidoop = $oOps23ag->si135_codreduzidoop;

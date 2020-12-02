@@ -2,9 +2,9 @@
 
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_reglic102020_classe.php");
-require_once("classes/db_reglic202020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarREGLIC.model.php");
+require_once("classes/db_reglic102021_classe.php");
+require_once("classes/db_reglic202021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarREGLIC.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -67,8 +67,8 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
 
-    $clreglic10 = new cl_reglic102020();
-    $clreglic20 = new cl_reglic202020();
+    $clreglic10 = new cl_reglic102021();
+    $clreglic20 = new cl_reglic202021();
 
     
     /**
@@ -99,20 +99,20 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
   decretopregao.l201_datapublicacao as dataPublicacaoDecretoMunicipal
   FROM licitacao.decretopregao as decretopregao
   WHERE decretopregao.l201_numdecreto not in
-  (select si44_nrodecretomunicipal from reglic10$PROXIMO_ANO
+  (select si44_nrodecretomunicipal from reglic102021
    UNION 
-   select si44_nrodecretomunicipal from reglic10$PROXIMO_ANO
+   select si44_nrodecretomunicipal from reglic102021
    UNION
-   select si44_nrodecretomunicipal from reglic10$PROXIMO_ANO
+   select si44_nrodecretomunicipal from reglic102021
    UNION
-   select si44_nrodecretomunicipal from reglic10$PROXIMO_ANO
+   select si44_nrodecretomunicipal from reglic102021
    UNION
-   select si44_nrodecretomunicipal from reglic10$PROXIMO_ANO
+   select si44_nrodecretomunicipal from reglic102021
    UNION
-   select si44_nrodecretomunicipal from reglic10$PROXIMO_ANO
+   select si44_nrodecretomunicipal from reglic102021
    UNION
-   select si44_nrodecretomunicipal from reglic102020 where si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") 
-    AND DATE_PART ( 'YEAR' , l201_datapublicacao ) = '2020'
+   select si44_nrodecretomunicipal from reglic102021 where si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") 
+    AND DATE_PART ( 'YEAR' , l201_datapublicacao ) = '2021'
     AND DATE_PART ( 'MONTH' , l201_datapublicacao ) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
     ";
     
@@ -121,7 +121,7 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
     
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-      $clreglic10 = new cl_reglic102020();
+      $clreglic10 = new cl_reglic102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clreglic10->si44_tiporegistro = 10;
@@ -141,7 +141,7 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
 
     }
     /**
-     * campos faltantes  na especificação de AGNALDO. VERIFICAR ###########  SQL  ############
+     * campos faltantes  na especificaÃ§Ã£o de AGNALDO. VERIFICAR ###########  SQL  ############
      */
 
     db_fim_transacao();

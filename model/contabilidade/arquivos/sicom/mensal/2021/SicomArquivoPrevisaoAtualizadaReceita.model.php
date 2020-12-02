@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_parec102020_classe.php");
-require_once("classes/db_parec112020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarPAREC.model.php");
+require_once("classes/db_parec102021_classe.php");
+require_once("classes/db_parec112021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarPAREC.model.php");
 
 /**
  *
@@ -92,8 +92,8 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clparec10 = new cl_parec102020();
-    $clparec11 = new cl_parec112020();
+    $clparec10 = new cl_parec102021();
+    $clparec11 = new cl_parec112021();
 
     $sSqlInst = "SELECT codigo FROM db_config";
     $rsInst   = db_query($sSqlInst);
@@ -236,12 +236,12 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
       }
     }
 
-    $aRectceSaudEduc = array('11120101', '11120200', '11120431', '11120434', '11120800', '11130501', '11130502', '17210102', '17210105', '17213600',
+    $aRectceSaudEduc = array('11120101', '11120210', '11120431', '11120434', '11120800', '11130501', '11130502', '17210102', '17210105', '17213600',
       '17220101', '17220102', '17220104', '19110801', '19113800', '19113900', '19114000', '19130800', '19131100', '19131200',
       '19131300', '19310400', '19311100', '19311200', '19311300');
     foreach ($aDadosAgrupados as $oDados10) {
 
-      $clparec10 = new cl_parec102020();
+      $clparec10 = new cl_parec102021();
       $clparec10->si22_tiporegistro = $oDados10->si22_tiporegistro;
       $clparec10->si22_codreduzido = $oDados10->si22_codreduzido;
       $clparec10->si22_codorgao = $oDados10->si22_codorgao;
@@ -264,7 +264,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           ($oDados11->si23_codfontrecursos != '101') && ($oDados11->si23_codfontrecursos != '102')
         ) {
 
-          $clparec11 = new cl_parec112020();
+          $clparec11 = new cl_parec112021();
           $clparec11->si23_tiporegistro = $oDados11->si23_tiporegistro;
           $clparec11->si23_reg10 = $clparec10->si22_sequencial;
           $clparec11->si23_codreduzido = $oDados10->si22_codreduzido;
@@ -299,7 +299,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           || $oDados10->si22_identificadordeducao != ''
         ) {
 
-          $clparec11 = new cl_parec112020();
+          $clparec11 = new cl_parec112021();
           $clparec11->si23_tiporegistro = $oDados11->si23_tiporegistro;
           $clparec11->si23_codreduzido = $oDados10->si22_codreduzido;
           $clparec11->si23_codfontrecursos = $oDados11->si23_codfontrecursos;

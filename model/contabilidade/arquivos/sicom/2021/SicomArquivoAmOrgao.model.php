@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_orgao10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_orgao11$PROXIMO_ANO_classe.php");
+require_once ("classes/db_orgao102021_classe.php");
+require_once ("classes/db_orgao112021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarORGAO.model.php");
 
  /**
@@ -90,26 +90,26 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
    */
   public function gerarDados() {
     
-  	$clorgao10$PROXIMO_ANO = new cl_orgao10$PROXIMO_ANO();
-  	$clorgao11$PROXIMO_ANO = new cl_orgao11$PROXIMO_ANO();
+  	$clorgao102021 = new cl_orgao102021();
+  	$clorgao112021 = new cl_orgao112021();
 		
     db_inicio_transacao();
     /**
      * excluir informacoes do mes selecionado
      */
-  $result = $clorgao11$PROXIMO_ANO->sql_record($clorgao11$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si15_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si15_instit = ".db_getsession("DB_instit")));
+  $result = $clorgao112021->sql_record($clorgao112021->sql_query(NULL,"*",NULL,"si15_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si15_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clorgao11$PROXIMO_ANO->excluir(NULL,"si15_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si15_instit = ".db_getsession("DB_instit"));
-      if ($clorgao11$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clorgao11$PROXIMO_ANO->erro_msg);
+    	$clorgao112021->excluir(NULL,"si15_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si15_instit = ".db_getsession("DB_instit"));
+      if ($clorgao112021->erro_status == 0) {
+    	  throw new Exception($clorgao112021->erro_msg);
       }
     }
     
-    $result = $clorgao10$PROXIMO_ANO->sql_record($clorgao10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si14_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si14_instit = ".db_getsession("DB_instit")));
+    $result = $clorgao102021->sql_record($clorgao102021->sql_query(NULL,"*",NULL,"si14_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si14_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clorgao10$PROXIMO_ANO->excluir(NULL,"si14_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si14_instit = ".db_getsession("DB_instit"));
-      if ($clorgao10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clorgao10$PROXIMO_ANO->erro_msg);
+    	$clorgao102021->excluir(NULL,"si14_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si14_instit = ".db_getsession("DB_instit"));
+      if ($clorgao102021->erro_status == 0) {
+    	  throw new Exception($clorgao102021->erro_msg);
       }
     }
     
@@ -129,19 +129,19 @@ left join infocomplementaresinstit on si09_instit = codigo
     
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
     	
-    	$clorgao10$PROXIMO_ANO = new cl_orgao10$PROXIMO_ANO();
+    	$clorgao102021 = new cl_orgao102021();
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
     	
-    	$clorgao10$PROXIMO_ANO->si14_tiporegistro = 10;
-    	$clorgao10$PROXIMO_ANO->si14_codorgao     = $oDados10->codorgao;
-    	$clorgao10$PROXIMO_ANO->si14_tipoorgao    = $oDados10->tipoorgao;
+    	$clorgao102021->si14_tiporegistro = 10;
+    	$clorgao102021->si14_codorgao     = $oDados10->codorgao;
+    	$clorgao102021->si14_tipoorgao    = $oDados10->tipoorgao;
     		
-    	$clorgao10$PROXIMO_ANO->si14_mes          = $this->sDataFinal['5'].$this->sDataFinal['6'];
-    	$clorgao10$PROXIMO_ANO->si14_instit       = db_getsession("DB_instit"); 
+    	$clorgao102021->si14_mes          = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    	$clorgao102021->si14_instit       = db_getsession("DB_instit"); 
     	
-      $clorgao10$PROXIMO_ANO->incluir(null);
-		  if ($clorgao10$PROXIMO_ANO->erro_status == 0) {
-		  	throw new Exception($clorgao10$PROXIMO_ANO->erro_msg);
+      $clorgao102021->incluir(null);
+		  if ($clorgao102021->erro_status == 0) {
+		  	throw new Exception($clorgao102021->erro_msg);
 		  }
     	
     	$sSql = "select * from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_instit = ".db_getsession("DB_instit");
@@ -149,28 +149,28 @@ left join infocomplementaresinstit on si09_instit = codigo
     	
     	for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
     		
-    		$clorgao11$PROXIMO_ANO = new cl_orgao11$PROXIMO_ANO();
+    		$clorgao112021 = new cl_orgao112021();
     		$oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
     		if (strlen($oDados11->z01_cgccpf) > 11)
     		echo $oDados11->z01_numcgm." | ".$oDados11->z01_cgccpf."<br>";
-    		$clorgao11$PROXIMO_ANO->si15_tiporegistro      = 11;
-    		$clorgao11$PROXIMO_ANO->si15_tiporesponsavel   = $oDados11->si166_tiporesponsavel;
-    		$clorgao11$PROXIMO_ANO->si15_cartident         = $oDados11->z01_ident;
-    		$clorgao11$PROXIMO_ANO->si15_orgemissorci      = $oDados11->z01_identorgao;
-    		$clorgao11$PROXIMO_ANO->si15_cpf               = $oDados11->z01_cgccpf;
-    		$clorgao11$PROXIMO_ANO->si15_crccontador       = $oDados11->si166_crccontador;
-    		$clorgao11$PROXIMO_ANO->si15_ufcrccontador     = $oDados11->si166_ufcrccontador;
-    		$clorgao11$PROXIMO_ANO->si15_cargoorddespdeleg = $oDados11->si166_cargoorddespesa;
-    		$clorgao11$PROXIMO_ANO->si15_dtinicio          = $oDados11->si166_dataini;
-    		$clorgao11$PROXIMO_ANO->si15_dtfinal           = $oDados11->si166_datafim;
-    		$clorgao11$PROXIMO_ANO->si15_email             = $oDados11->z01_email;
-    		$clorgao11$PROXIMO_ANO->si15_reg10             = $clorgao10$PROXIMO_ANO->si14_sequencial;
-    		$clorgao11$PROXIMO_ANO->si15_mes               = $this->sDataFinal['5'].$this->sDataFinal['6'];
-    		$clorgao11$PROXIMO_ANO->si15_instit            = db_getsession("DB_instit");
+    		$clorgao112021->si15_tiporegistro      = 11;
+    		$clorgao112021->si15_tiporesponsavel   = $oDados11->si166_tiporesponsavel;
+    		$clorgao112021->si15_cartident         = $oDados11->z01_ident;
+    		$clorgao112021->si15_orgemissorci      = $oDados11->z01_identorgao;
+    		$clorgao112021->si15_cpf               = $oDados11->z01_cgccpf;
+    		$clorgao112021->si15_crccontador       = $oDados11->si166_crccontador;
+    		$clorgao112021->si15_ufcrccontador     = $oDados11->si166_ufcrccontador;
+    		$clorgao112021->si15_cargoorddespdeleg = $oDados11->si166_cargoorddespesa;
+    		$clorgao112021->si15_dtinicio          = $oDados11->si166_dataini;
+    		$clorgao112021->si15_dtfinal           = $oDados11->si166_datafim;
+    		$clorgao112021->si15_email             = $oDados11->z01_email;
+    		$clorgao112021->si15_reg10             = $clorgao102021->si14_sequencial;
+    		$clorgao112021->si15_mes               = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    		$clorgao112021->si15_instit            = db_getsession("DB_instit");
     		
-    	  $clorgao11$PROXIMO_ANO->incluir(null);
-		    if ($clorgao11$PROXIMO_ANO->erro_status == 0) {
-		  	  throw new Exception($clorgao11$PROXIMO_ANO->erro_msg);
+    	  $clorgao112021->incluir(null);
+		    if ($clorgao112021->erro_status == 0) {
+		  	  throw new Exception($clorgao112021->erro_msg);
 		    }
     		
     	}

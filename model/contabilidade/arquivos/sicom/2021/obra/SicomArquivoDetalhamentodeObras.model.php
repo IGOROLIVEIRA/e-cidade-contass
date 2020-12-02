@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/2020/obra/geradores/gerarCADOBRAS.php");
-require_once("classes/db_cadobras102020_classe.php");
-require_once("classes/db_cadobras202020_classe.php");
-require_once("classes/db_cadobras212020_classe.php");
-require_once("classes/db_cadobras302020_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2021/obra/geradores/gerarCADOBRAS.php");
+require_once("classes/db_cadobras102021_classe.php");
+require_once("classes/db_cadobras202021_classe.php");
+require_once("classes/db_cadobras212021_classe.php");
+require_once("classes/db_cadobras302021_classe.php");
 require_once('model/relatorios/Relatorio.php');
 require_once('vendor/mpdf/mpdf/mpdf.php');
 require('fpdf151/fpdf.php');
@@ -96,10 +96,10 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
 
-    $clcadobras102020 = new cl_cadobras102020();
-    $clcadobras202020 = new cl_cadobras202020();
-    $clcadobras212020 = new cl_cadobras212020();
-    $clcadobras302020 = new cl_cadobras302020();
+    $clcadobras102021 = new cl_cadobras102021();
+    $clcadobras202021 = new cl_cadobras202021();
+    $clcadobras212021 = new cl_cadobras212021();
+    $clcadobras302021 = new cl_cadobras302021();
 
     /**
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -108,44 +108,44 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     /**
      * registro 30 exclusão
      */
-    $result = db_query($clcadobras302020->sql_query(null, "*", null, "si201_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si201_instit=" . db_getsession("DB_instit")));
+    $result = db_query($clcadobras302021->sql_query(null, "*", null, "si201_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si201_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clcadobras302020->excluir(null, "si201_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si201_instit=" . db_getsession("DB_instit"));
-      if ($clcadobras302020->erro_status == 0) {
-        throw new Exception($clcadobras302020->erro_msg);
+      $clcadobras302021->excluir(null, "si201_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si201_instit=" . db_getsession("DB_instit"));
+      if ($clcadobras302021->erro_status == 0) {
+        throw new Exception($clcadobras302021->erro_msg);
       }
     }
 
     /**
      * registro 21 exclusão
      */
-    $result = db_query($clcadobras212020->sql_query(null, "*", null, "si200_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si200_instit=" . db_getsession("DB_instit")));
+    $result = db_query($clcadobras212021->sql_query(null, "*", null, "si200_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si200_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clcadobras212020->excluir(null, "si200_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si200_instit=" . db_getsession("DB_instit"));
-      if ($clcadobras212020->erro_status == 0) {
-        throw new Exception($clcadobras212020->erro_msg);
+      $clcadobras212021->excluir(null, "si200_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si200_instit=" . db_getsession("DB_instit"));
+      if ($clcadobras212021->erro_status == 0) {
+        throw new Exception($clcadobras212021->erro_msg);
       }
     }
 
     /**
      * registro 20 exclusão
      */
-    $result = db_query($clcadobras202020->sql_query(null, "*", null, "si199_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si199_instit=" . db_getsession("DB_instit")));
+    $result = db_query($clcadobras202021->sql_query(null, "*", null, "si199_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si199_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clcadobras202020->excluir(null, "si199_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si199_instit=" . db_getsession("DB_instit"));
-      if ($clcadobras202020->erro_status == 0) {
-        throw new Exception($clcadobras202020->erro_msg);
+      $clcadobras202021->excluir(null, "si199_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si199_instit=" . db_getsession("DB_instit"));
+      if ($clcadobras202021->erro_status == 0) {
+        throw new Exception($clcadobras202021->erro_msg);
       }
     }
 
     /**
      * registro 10 exclusão
      */
-    $result = db_query($clcadobras102020->sql_query(null, "*", null, "si198_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si198_instit=" . db_getsession("DB_instit")));
+    $result = db_query($clcadobras102021->sql_query(null, "*", null, "si198_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si198_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clcadobras102020->excluir(null, "si198_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si198_instit=" . db_getsession("DB_instit"));
-      if ($clcadobras102020->erro_status == 0) {
-        throw new Exception($clcadobras102020->erro_msg);
+      $clcadobras102021->excluir(null, "si198_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si198_instit=" . db_getsession("DB_instit"));
+      if ($clcadobras102021->erro_status == 0) {
+        throw new Exception($clcadobras102021->erro_msg);
       }
     }
 
@@ -165,25 +165,25 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     $rsResult10 = db_query($sql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      $clcadobras102020 = new cl_cadobras102020();
+      $clcadobras102021 = new cl_cadobras102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $clcadobras102020->si198_tiporegistro = 10;
-      $clcadobras102020->si198_codorgaoresp = $oDados10->si09_codorgaotce;
-      $clcadobras102020->si198_codobra = $oDados10->obr01_numeroobra;
-      $clcadobras102020->si198_tiporesponsavel = $oDados10->obr05_tiporesponsavel;
-      $clcadobras102020->si198_nrodocumento = $oDados10->z01_cgccpf;
-      $clcadobras102020->si198_tiporegistroconselho = $oDados10->obr05_tiporegistro;
-      $clcadobras102020->si198_nroregistroconseprof = $oDados10->obr05_numregistro;
-      $clcadobras102020->si198_numrt = $oDados10->obr05_numartourrt;
-      $clcadobras102020->si198_dtinicioatividadeseng = $oDados10->obr05_dtcadastrores;
-      $clcadobras102020->si198_tipovinculo = $oDados10->obr05_vinculoprofissional;
-      $clcadobras102020->si198_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clcadobras102020->si198_instit = db_getsession("DB_instit");
-      $clcadobras102020->incluir(null);
+      $clcadobras102021->si198_tiporegistro = 10;
+      $clcadobras102021->si198_codorgaoresp = $oDados10->si09_codorgaotce;
+      $clcadobras102021->si198_codobra = $oDados10->obr01_numeroobra;
+      $clcadobras102021->si198_tiporesponsavel = $oDados10->obr05_tiporesponsavel;
+      $clcadobras102021->si198_nrodocumento = $oDados10->z01_cgccpf;
+      $clcadobras102021->si198_tiporegistroconselho = $oDados10->obr05_tiporegistro;
+      $clcadobras102021->si198_nroregistroconseprof = $oDados10->obr05_numregistro;
+      $clcadobras102021->si198_numrt = $oDados10->obr05_numartourrt;
+      $clcadobras102021->si198_dtinicioatividadeseng = $oDados10->obr05_dtcadastrores;
+      $clcadobras102021->si198_tipovinculo = $oDados10->obr05_vinculoprofissional;
+      $clcadobras102021->si198_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clcadobras102021->si198_instit = db_getsession("DB_instit");
+      $clcadobras102021->incluir(null);
 
-      if ($clcadobras102020->erro_status == 0) {
-        throw new Exception($clcadobras102020->erro_msg);
+      if ($clcadobras102021->erro_status == 0) {
+        throw new Exception($clcadobras102021->erro_msg);
       }
     }
 
@@ -203,23 +203,23 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     $rsResult20 = db_query($sql);
 
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
-      $clcadobras202020 = new cl_cadobras202020();
+      $clcadobras202021 = new cl_cadobras202021();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
-      $clcadobras202020->si199_tiporegistro = 20;
-      $clcadobras202020->si199_codorgaoresp = $oDados20->si09_codorgaotce;
-      $clcadobras202020->si199_codobra = $oDados20->obr01_numeroobra;
-      $clcadobras202020->si199_situacaodaobra = $oDados20->obr02_situacao;
-      $clcadobras202020->si199_dtsituacao = $oDados20->obr02_dtsituacao;
-      $clcadobras202020->si199_veiculopublicacao = $oDados20->obr02_veiculopublicacao;
-      $clcadobras202020->si199_dtpublicacao = $oDados20->obr02_dtpublicacao;
-      $clcadobras202020->si199_descsituacao = $oDados20->obr02_descrisituacao;
-      $clcadobras202020->si199_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clcadobras202020->si199_instit = db_getsession("DB_instit");
-      $clcadobras202020->incluir(null);
+      $clcadobras202021->si199_tiporegistro = 20;
+      $clcadobras202021->si199_codorgaoresp = $oDados20->si09_codorgaotce;
+      $clcadobras202021->si199_codobra = $oDados20->obr01_numeroobra;
+      $clcadobras202021->si199_situacaodaobra = $oDados20->obr02_situacao;
+      $clcadobras202021->si199_dtsituacao = $oDados20->obr02_dtsituacao;
+      $clcadobras202021->si199_veiculopublicacao = $oDados20->obr02_veiculopublicacao;
+      $clcadobras202021->si199_dtpublicacao = $oDados20->obr02_dtpublicacao;
+      $clcadobras202021->si199_descsituacao = $oDados20->obr02_descrisituacao;
+      $clcadobras202021->si199_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clcadobras202021->si199_instit = db_getsession("DB_instit");
+      $clcadobras202021->incluir(null);
 
-      if ($clcadobras202020->erro_status == 0) {
-        throw new Exception($clcadobras202020->erro_msg);
+      if ($clcadobras202021->erro_status == 0) {
+        throw new Exception($clcadobras202021->erro_msg);
       }
     }
 
@@ -239,22 +239,22 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     $rsResult21 = db_query($sql);//db_criatabela($rsResult21);die($sql);
 
     for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
-      $clcadobras212020 = new cl_cadobras212020();
+      $clcadobras212021 = new cl_cadobras212021();
       $oDados21 = db_utils::fieldsMemory($rsResult21, $iCont21);
 
-      $clcadobras212020->si200_tiporegistro = 21;
-      $clcadobras212020->si200_codorgaoresp = $oDados21->si09_codorgaotce;
-      $clcadobras212020->si200_codobra = $oDados21->obr01_numeroobra;
-      $clcadobras212020->si200_dtparalisacao = $oDados21->obr02_dtparalisacao;
-      $clcadobras212020->si200_motivoparalisacap = $oDados21->obr02_motivoparalisacao;
-      $clcadobras212020->si200_descoutrosparalisacao = $oDados21->obr02_outrosmotivos;
-      $clcadobras212020->si200_dtretomada = $oDados21->obr02_dtretomada;
-      $clcadobras212020->si200_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clcadobras212020->si200_instit = db_getsession("DB_instit");
-      $clcadobras212020->incluir(null);
+      $clcadobras212021->si200_tiporegistro = 21;
+      $clcadobras212021->si200_codorgaoresp = $oDados21->si09_codorgaotce;
+      $clcadobras212021->si200_codobra = $oDados21->obr01_numeroobra;
+      $clcadobras212021->si200_dtparalisacao = $oDados21->obr02_dtparalisacao;
+      $clcadobras212021->si200_motivoparalisacap = $oDados21->obr02_motivoparalisacao;
+      $clcadobras212021->si200_descoutrosparalisacao = $oDados21->obr02_outrosmotivos;
+      $clcadobras212021->si200_dtretomada = $oDados21->obr02_dtretomada;
+      $clcadobras212021->si200_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clcadobras212021->si200_instit = db_getsession("DB_instit");
+      $clcadobras212021->incluir(null);
 
-      if ($clcadobras212020->erro_status == 0) {
-        throw new Exception($clcadobras212020->erro_msg);
+      if ($clcadobras212021->erro_status == 0) {
+        throw new Exception($clcadobras212021->erro_msg);
       }
     }
 
@@ -274,7 +274,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     $rsResult30 = db_query($sql);//echo $sql; db_criatabela($rsResult30);die();
 
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
-      $clcadobras302020 = new cl_cadobras302020();
+      $clcadobras302021 = new cl_cadobras302021();
       $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
       /**
@@ -284,24 +284,24 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
         $this->gerarPDFobra($oDados30->obr03_sequencial);
       }
 
-      $clcadobras302020->si201_tiporegistro = 30;
-      $clcadobras302020->si201_codorgaoresp = $oDados30->si09_codorgaotce;
-      $clcadobras302020->si201_codobra = $oDados30->obr01_numeroobra;
-      $clcadobras302020->si201_tipomedicao = $oDados30->obr03_tipomedicao;
-      $clcadobras302020->si201_descoutrostiposmed = $oDados30->obr03_outrostiposmedicao;
-      $clcadobras302020->si201_nummedicao = $oDados30->obr03_nummedicao;
-      $clcadobras302020->si201_descmedicao = $oDados30->obr03_descmedicao;
-      $clcadobras302020->si201_dtiniciomedicao = $oDados30->obr03_dtiniciomedicao;
-      $clcadobras302020->si201_dtfimmedicao = $oDados30->obr03_dtfimmedicao;
-      $clcadobras302020->si201_dtmedicao = $oDados30->obr03_dtentregamedicao;
-      $clcadobras302020->si201_valormedicao = $oDados30->obr03_vlrmedicao;
-      $clcadobras302020->si201_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-//      $clcadobras302020->si201_pdf = 'FOTO_MEDICAO' . $oDados30->si197_codorgao . "_" . $oDados30->obr03_seqobra . "_" . $oDados30->obr03_tipomedicao . "_" . $oDados30->obr03_nummedicao . ".pdf";
-      $clcadobras302020->si201_instit = db_getsession("DB_instit");
-      $clcadobras302020->incluir(null);
+      $clcadobras302021->si201_tiporegistro = 30;
+      $clcadobras302021->si201_codorgaoresp = $oDados30->si09_codorgaotce;
+      $clcadobras302021->si201_codobra = $oDados30->obr01_numeroobra;
+      $clcadobras302021->si201_tipomedicao = $oDados30->obr03_tipomedicao;
+      $clcadobras302021->si201_descoutrostiposmed = $oDados30->obr03_outrostiposmedicao;
+      $clcadobras302021->si201_nummedicao = $oDados30->obr03_nummedicao;
+      $clcadobras302021->si201_descmedicao = $oDados30->obr03_descmedicao;
+      $clcadobras302021->si201_dtiniciomedicao = $oDados30->obr03_dtiniciomedicao;
+      $clcadobras302021->si201_dtfimmedicao = $oDados30->obr03_dtfimmedicao;
+      $clcadobras302021->si201_dtmedicao = $oDados30->obr03_dtentregamedicao;
+      $clcadobras302021->si201_valormedicao = $oDados30->obr03_vlrmedicao;
+      $clcadobras302021->si201_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+//      $clcadobras302021->si201_pdf = 'FOTO_MEDICAO' . $oDados30->si197_codorgao . "_" . $oDados30->obr03_seqobra . "_" . $oDados30->obr03_tipomedicao . "_" . $oDados30->obr03_nummedicao . ".pdf";
+      $clcadobras302021->si201_instit = db_getsession("DB_instit");
+      $clcadobras302021->incluir(null);
 
-      if ($clcadobras302020->erro_status == 0) {
-        throw new Exception($clcadobras302020->erro_msg);
+      if ($clcadobras302021->erro_status == 0) {
+        throw new Exception($clcadobras302021->erro_msg);
       }
     }
 

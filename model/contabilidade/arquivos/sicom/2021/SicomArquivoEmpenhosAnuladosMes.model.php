@@ -3,13 +3,13 @@
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once ("classes/db_anl10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_anl11$PROXIMO_ANO_classe.php");
+require_once ("classes/db_anl102021_classe.php");
+require_once ("classes/db_anl112021_classe.php");
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarANL.model.php");
 
  /**
-  * detalhamento dos empenhos do mÍs Sicom Acompanhamento Mensal
+  * detalhamento dos empenhos do m√™s Sicom Acompanhamento Mensal
   * @author igor
   * @package Contabilidade
   */
@@ -91,8 +91,8 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
   public function gerarDados() {
           
   	
-  	$regitro10 = new cl_anl10$PROXIMO_ANO();
-  	$regitro11 = new cl_anl11$PROXIMO_ANO();
+  	$regitro10 = new cl_anl102021();
+  	$regitro11 = new cl_anl112021();
     
   	$sSqlUnidade = "select * from infocomplementares where 
   	 si08_anousu = ".db_getsession("DB_anousu")." and si08_instit = ".db_getsession("DB_instit");
@@ -170,7 +170,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
       		
       }
     	
-    	$oDadosEmpenhoAnulado = new cl_anl10$PROXIMO_ANO();
+    	$oDadosEmpenhoAnulado = new cl_anl102021();
 
     	$oDadosEmpenhoAnulado->si110_tiporegistro          = 10;
     	$oDadosEmpenhoAnulado->si110_codorgao              = str_pad($oEmpenhoAnulado->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
@@ -195,7 +195,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
         
         
          
-	    $oDadosEmpenhoAnuladoFonte = new cl_anl11$PROXIMO_ANO();
+	    $oDadosEmpenhoAnuladoFonte = new cl_anl112021();
 	    
 	    $oDadosEmpenhoAnuladoFonte->si111_tiporegistro     = 11;
 	    $oDadosEmpenhoAnuladoFonte->si111_codunidadesub    = $sCodUnidade;
@@ -226,14 +226,14 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
   
   function trataString($sub){
     $acentos = array(
-        '¿','¡','√','¬', '‡','·','„','‚',
-        ' ', '…',
-        'Õ', 'Ì', 
-        '”','’','‘', 'Û', 'ı', 'Ù',
-        '⁄','‹',
-        '«', 'Á',
-        'È','Í', 
-        '˙','¸',
+        '√Ä','√Å','√É','√Ç', '√†','√°','√£','√¢',
+        '√ä', '√â',
+        '√ç', '√≠', 
+        '√ì','√ï','√î', '√≥', '√µ', '√¥',
+        '√ö','√ú',
+        '√á', '√ß',
+        '√©','√™', 
+        '√∫','√º',
         );
     $remove_acentos = array(
         'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a',

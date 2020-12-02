@@ -1,11 +1,11 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_cute102020_classe.php");
-require_once ("classes/db_cute202020_classe.php");
-require_once ("classes/db_cute212020_classe.php");
-require_once ("classes/db_cute302020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCUTE.model.php");
+require_once ("classes/db_cute102021_classe.php");
+require_once ("classes/db_cute202021_classe.php");
+require_once ("classes/db_cute212021_classe.php");
+require_once ("classes/db_cute302021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCUTE.model.php");
 /**
  * TomadasContasEspeciais Sicom Acompanhamento Mensal
  * @author Mario Junior
@@ -33,10 +33,10 @@ class SicomArquivoContaUnicadoTesouroMunicipal extends SicomArquivoBase implemen
 
     public function gerarDados()
     {
-        $db_cute102020 = new cl_cute102020();
-        $db_cute202020 = new cl_cute202020();
-        $db_cute212020 = new cl_cute212020();
-        $db_cute302020 = new cl_cute302020();
+        $db_cute102021 = new cl_cute102021();
+        $db_cute202021 = new cl_cute202021();
+        $db_cute212021 = new cl_cute212021();
+        $db_cute302021 = new cl_cute302021();
 
         $oGerarCUTE = new GerarCUTE();
         $oGerarCUTE->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];

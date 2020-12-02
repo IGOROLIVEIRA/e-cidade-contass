@@ -1,15 +1,15 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_contratos102020_classe.php");
-require_once("classes/db_contratos112020_classe.php");
-require_once("classes/db_contratos122020_classe.php");
-require_once("classes/db_contratos132020_classe.php");
-require_once("classes/db_contratos202020_classe.php");
-require_once("classes/db_contratos212020_classe.php");
-require_once("classes/db_contratos302020_classe.php");
-require_once("classes/db_contratos402020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCONTRATOS.model.php");
+require_once("classes/db_contratos102021_classe.php");
+require_once("classes/db_contratos112021_classe.php");
+require_once("classes/db_contratos122021_classe.php");
+require_once("classes/db_contratos132021_classe.php");
+require_once("classes/db_contratos202021_classe.php");
+require_once("classes/db_contratos212021_classe.php");
+require_once("classes/db_contratos302021_classe.php");
+require_once("classes/db_contratos402021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCONTRATOS.model.php");
 require_once("model/Acordo.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoRescisao.model.php");
@@ -244,14 +244,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 //
 //error_reporting(E_ALL);
 
-    $clcontratos10 = new cl_contratos102020();
-    $clcontratos11 = new cl_contratos112020();
-    $clcontratos12 = new cl_contratos122020();
-    $clcontratos13 = new cl_contratos132020();
-    $clcontratos20 = new cl_contratos202020();
-    $clcontratos21 = new cl_contratos212020();
-    $clcontratos30 = new cl_contratos302020();
-    $clcontratos40 = new cl_contratos402020();
+    $clcontratos10 = new cl_contratos102021();
+    $clcontratos11 = new cl_contratos112021();
+    $clcontratos12 = new cl_contratos122021();
+    $clcontratos13 = new cl_contratos132021();
+    $clcontratos20 = new cl_contratos202021();
+    $clcontratos21 = new cl_contratos212021();
+    $clcontratos30 = new cl_contratos302021();
+    $clcontratos40 = new cl_contratos402021();
 
     db_inicio_transacao();
     // matriz de entrada
@@ -451,7 +451,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clcontratos10 = new cl_contratos102020();
+      $clcontratos10 = new cl_contratos102021();
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
@@ -522,7 +522,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       }
 
       /*
-       * verifica se o contrato e de origem processo de compra e tipo origem licitação por ser registro de preço
+       * verifica se o contrato e de origem processo de compra e tipo origem licitaÃ§Ã£o por ser registro de preÃ§o
        *
        */
 
@@ -682,7 +682,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
         foreach ($aDadosAgrupados as $oDadosReg11) {
 
-          $clcontratos11 = new cl_contratos112020();
+          $clcontratos11 = new cl_contratos112021();
 
           $clcontratos11->si84_tiporegistro = 11;
           $clcontratos11->si84_reg10 = $oDadosReg11->si84_reg10;
@@ -945,7 +945,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
         foreach ($aDadosAgrupados12 as $oDadosReg12) {
 
-          $clcontratos12 = new cl_contratos122020();
+          $clcontratos12 = new cl_contratos122021();
           $clcontratos12->si85_tiporegistro = 12;
           $clcontratos12->si85_reg10 = $oDadosReg12->si85_reg10;
           $clcontratos12->si85_codcontrato = $oDadosReg12->si85_codcontrato;
@@ -981,7 +981,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       $rsResult13 = db_query($sSql);//db_criatabela($rsResult13);
       $oDados13 = db_utils::fieldsMemory($rsResult13, 0);
 
-      $clcontratos13 = new cl_contratos132020;
+      $clcontratos13 = new cl_contratos132021;
       $clcontratos13->si86_tiporegistro = 13;
       $clcontratos13->si86_codcontrato = $oAcordo->getCodigo();
       $clcontratos13->si86_tipodocumento = $oDados13->tipodocumento;
@@ -1042,12 +1042,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
     $rsResult20 = db_query($sSql);
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-      $clcontratos20 = new cl_contratos202020();
+      $clcontratos20 = new cl_contratos202021();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
       $sSQL20 = "
               select si87_codaditivo
-                from contratos202020
+                from contratos202021
                   where si87_codaditivo = {$oDados20->ac26_sequencial}
             ";
       $rsConsultaR20  = db_query($sSQL20);
@@ -1127,7 +1127,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
           if ($oAcordoItem->getQuantiAditada() > 0 || $oAcordoItem->getValorAditado() > 0) {
 
             $sSql = "SELECT si43_coditem FROM
-                                (select si43_coditem,si43_dscitem  from item10$PROXIMO_ANO union select si43_coditem,si43_dscitem from item10$PROXIMO_ANO union select si43_coditem,si43_dscitem from item10$PROXIMO_ANO union select si43_coditem,si43_dscitem from item10$PROXIMO_ANO union select si43_coditem,si43_dscitem from item102020) as y
+                                (select si43_coditem,si43_dscitem  from item102021 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102021) as y
                                 WHERE si43_dscitem LIKE
                                         '" . trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oAcordoItem->getMaterial()->getDescricao()))) . "%'";
             $result = db_query($sSql);
@@ -1282,7 +1282,7 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
         $sCodUnidadeSub = ' ';
       }
 
-      $clcontratos30 = new cl_contratos302020();
+      $clcontratos30 = new cl_contratos302021();
 
       $clcontratos30->si89_tiporegistro = 30;
       $clcontratos30->si89_codorgao = $sCodorgao;
@@ -1317,7 +1317,7 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
 
     for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-      $clcontratos40 = new cl_contratos402020();
+      $clcontratos40 = new cl_contratos402021();
       $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
       $aAnoContrato = explode("-", $oDados40->ac16_dataassinatura);

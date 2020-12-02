@@ -1,12 +1,12 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ext102020_classe.php");
-require_once("classes/db_ext202020_classe.php");
-//require_once("classes/db_ext302020_classe.php");
-require_once("classes/db_ext312020_classe.php");
+require_once("classes/db_ext102021_classe.php");
+require_once("classes/db_ext202021_classe.php");
+//require_once("classes/db_ext302021_classe.php");
+require_once("classes/db_ext312021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarEXT.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarEXT.model.php");
 
 /**
  * Detalhamento Extra Ocamentarias Sicom Acompanhamento Mensal
@@ -64,16 +64,16 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 	public function gerarDados()
 	{
 
-		$cExt10 = new cl_ext102020();
-		$cExt20 = new cl_ext202020();
-		$cExt30 = new cl_ext302020();
-		$cExt31 = new cl_ext312020();
+		$cExt10 = new cl_ext102021();
+		$cExt20 = new cl_ext202021();
+		$cExt30 = new cl_ext302021();
+		$cExt31 = new cl_ext312021();
 		/*
          * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA
          * EXCLUIR OS REGISTROS E GERAR NOVAMENTE
          *
          */
-		//$aCaracteres = array("°",chr(13),chr(10),"'",";",".");
+		//$aCaracteres = array("Â°",chr(13),chr(10),"'",";",".");
 
 		db_inicio_transacao();
 
@@ -148,9 +148,9 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 		$rsContasExtra = db_query($sSqlExt);//echo pg_last_error();db_criatabela($rsContasExtra);
 
 		// matriz de entrada
-		$what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+		$what = array("Â°", chr(13), chr(10), 'Ã¤', 'Ã£', 'Ã ', 'Ã¡', 'Ã¢', 'Ãª', 'Ã«', 'Ã¨', 'Ã©', 'Ã¯', 'Ã¬', 'Ã­', 'Ã¶', 'Ãµ', 'Ã²', 'Ã³', 'Ã´', 'Ã¼', 'Ã¹', 'Ãº', 'Ã»', 'Ã€', 'Ã', 'Ãƒ', 'Ã‰', 'Ã', 'Ã“', 'Ãš', 'Ã±', 'Ã‘', 'Ã§', 'Ã‡', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'Âª', 'Âº');
 
-		// matriz de saída
+		// matriz de saÃ­da
 		$by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
 
@@ -168,7 +168,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 			$where .= " and c61_reduz = " . $oContaExtraSaldo->codext . " and c61_reduz != 0";
 
 			/**
-			 * Comando adicionado para excluir tabela temporária que, ao gerar o arquivo juntamente com outros que utilizam essa função, traz valores diferentes
+			 * Comando adicionado para excluir tabela temporÃ¡ria que, ao gerar o arquivo juntamente com outros que utilizam essa funÃ§Ã£o, traz valores diferentes
 			 */
 			db_query("drop table if EXISTS work_pl");
 			db_inicio_transacao();
@@ -226,7 +226,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 			$aHash .= $oContaExtra->desdobrasubtipo;
 
 			if (!isset($aExt10Agrupodo[$aHash])) {
-				$cExt10 = new cl_ext102020();
+				$cExt10 = new cl_ext102021();
 
 				$cExt10->si124_tiporegistro = $oContaExtra->tiporegistro;
 				$cExt10->si124_codext = $oContaExtra->codtce != 0 ? $oContaExtra->codtce : $oContaExtra->codext;
@@ -240,7 +240,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				$cExt10->extras = array();
 
 				$sSqlVerifica = "SELECT si124_sequencial
-										FROM ext102020
+										FROM ext102021
 										WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
 		       							AND si124_subtipo = '$cExt10->si124_subtipo'
@@ -248,42 +248,42 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 		       							AND si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 				$sSqlVerifica .= " UNION
 								 SELECT si124_sequencial
-										FROM ext10$PROXIMO_ANO
+										FROM ext102021
 										WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
 		       							AND si124_subtipo = '$cExt10->si124_subtipo'
 		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
 				$sSqlVerifica .= " UNION
 								 SELECT si124_sequencial
-										FROM ext10$PROXIMO_ANO
+										FROM ext102021
 										WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
 		       							AND si124_subtipo = '$cExt10->si124_subtipo'
 		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
 				$sSqlVerifica .= " UNION
 								 SELECT si124_sequencial
-										FROM ext10$PROXIMO_ANO
+										FROM ext102021
 										WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
 		       							AND si124_subtipo = '$cExt10->si124_subtipo'
 		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
 				$sSqlVerifica .= " UNION
 								 SELECT si124_sequencial
-										FROM ext10$PROXIMO_ANO
+										FROM ext102021
 										WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
 		       							AND si124_subtipo = '$cExt10->si124_subtipo'
 		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
 				$sSqlVerifica .= " UNION
 								 SELECT si124_sequencial
-										FROM ext10$PROXIMO_ANO
+										FROM ext102021
 										WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
 		       							AND si124_subtipo = '$cExt10->si124_subtipo'
 		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
                 $sSqlVerifica .= " UNION
                 				 SELECT si124_sequencial
-                				 		FROM ext10$PROXIMO_ANO
+                				 		FROM ext102021
                 				 		WHERE si124_codorgao = '$oContaExtra->codorgao'
                 				 		AND si124_codunidadesub = '$oContaExtra->codunidadesub'
                    						AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
@@ -310,7 +310,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
 		foreach ($aExt10Agrupodo as $oExt10Agrupado) {
 
-			$cExt20 = new cl_ext202020();
+			$cExt20 = new cl_ext202021();
 			$aExt30 = array();
 			foreach ($oExt10Agrupado->extras as $nExtras) {
 
@@ -547,80 +547,80 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont = "select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102020 on 
+											join ctb102021 on 
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and 
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
-											si95_tipoconta::int8 = c63_tipoconta join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+											si95_tipoconta::int8 = c63_tipoconta join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
 											        and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb10$PROXIMO_ANO on
+											join ctb102021 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
-											si95_tipoconta::int8 = c63_tipoconta join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+											si95_tipoconta::int8 = c63_tipoconta join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb10$PROXIMO_ANO on
+											join ctb102021 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
-											si95_tipoconta::int8 = c63_tipoconta join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+											si95_tipoconta::int8 = c63_tipoconta join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb10$PROXIMO_ANO on
+											join ctb102021 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
-											si95_tipoconta::int8 = c63_tipoconta join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+											si95_tipoconta::int8 = c63_tipoconta join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb10$PROXIMO_ANO on
+											join ctb102021 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
-											si95_tipoconta::int8 = c63_tipoconta join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+											si95_tipoconta::int8 = c63_tipoconta join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb10$PROXIMO_ANO on
+											join ctb102021 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
-											si95_tipoconta::int8 = c63_tipoconta join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+											si95_tipoconta::int8 = c63_tipoconta join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb10$PROXIMO_ANO on 
+											join ctb102021 on 
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and 
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
-											si95_tipoconta::int8 = c63_tipoconta join ctb20$PROXIMO_ANO on si96_codctb = si95_codctb and si96_mes = si95_mes
+											si95_tipoconta::int8 = c63_tipoconta join ctb202121 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 								$rsResultContaPag = db_query($sSqlContaPagFont);
 								$oConta = db_utils::fieldsMemory($rsResultContaPag, 0);
@@ -668,7 +668,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				foreach ($aExtAgrupado as $oExt30agrupado) {
 
 					//echo "<pre>";print_r($oExt30agrupado);exit;
-					$cExt30 = new cl_ext302020();
+					$cExt30 = new cl_ext302021();
 
 					$cExt30->si126_tiporegistro = $oExt30agrupado->si126_tiporegistro;
 					$cExt30->si126_codext = $oExt30agrupado->si126_codext;
@@ -691,7 +691,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 					}
 					foreach ($oExt30agrupado->ext31 as $oExt31agrupado) {
 
-						$cExt31 = new cl_ext312020();
+						$cExt31 = new cl_ext312021();
 
 						$cExt31->si127_tiporegistro = $oExt31agrupado->si127_tiporegistro;
 						$cExt31->si127_codreduzidoop = $oExt31agrupado->si127_codreduzidoop;

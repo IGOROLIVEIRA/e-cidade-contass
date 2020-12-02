@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_lao102020_classe.php");
-require_once("classes/db_lao112020_classe.php");
-require_once("classes/db_lao202020_classe.php");
-require_once("classes/db_lao212020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarLAO.model.php");
+require_once("classes/db_lao102021_classe.php");
+require_once("classes/db_lao112021_classe.php");
+require_once("classes/db_lao202021_classe.php");
+require_once("classes/db_lao212021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarLAO.model.php");
 
 /**
  * selecionar dados de Leis de Alteração Sicom Acompanhamento Mensal
@@ -95,10 +95,10 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
   {
 
 
-    $cllao10 = new cl_lao102020();
-    $cllao11 = new cl_lao112020();
-    $cllao20 = new cl_lao202020();
-    $cllao21 = new cl_lao212020();
+    $cllao10 = new cl_lao102021();
+    $cllao11 = new cl_lao112021();
+    $cllao20 = new cl_lao202021();
+    $cllao21 = new cl_lao212021();
 
     db_inicio_transacao();
 
@@ -170,7 +170,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
       $rsResult10 = db_query($sSql);
       for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-        $cllao10 = new cl_lao102020();
+        $cllao10 = new cl_lao102021();
         $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
         $sNroLei = str_pad(preg_replace("/[^0-9]/", "", $oDados10->o138_numerolei),1,"0",STR_PAD_LEFT);
         $cllao10->si34_tiporegistro = 10;
@@ -198,7 +198,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
         $rsResult11 = db_query($sSql);
         for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-          $cllao11 = new cl_lao112020();
+          $cllao11 = new cl_lao112021();
           $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
           $cllao11->si35_tiporegistro = 11;
@@ -233,7 +233,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
 
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-        $cllao20 = new cl_lao202020();
+        $cllao20 = new cl_lao202021();
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
         $sNroLei = str_pad(preg_replace("/[^0-9]/", "", $oDados20->o138_numerolei),1,"0",STR_PAD_LEFT);
         $cllao20->si36_tiporegistro = 20;
@@ -261,7 +261,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
         $rsResult21 = db_query($sSql);
         for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
 
-          $cllao21 = new cl_lao212020();
+          $cllao21 = new cl_lao212021();
           $oDados21 = db_utils::fieldsMemory($rsResult21, $iCont21);
 
           $cllao21->si37_tiporegistro = 21;

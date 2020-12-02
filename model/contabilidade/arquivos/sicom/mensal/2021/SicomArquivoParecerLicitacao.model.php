@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_parelic102020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarPARELIC.model.php");
+require_once("classes/db_parelic102021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarPARELIC.model.php");
 
 /**
  * Parecer da Licitação Sicom Acompanhamento Mensal
@@ -82,7 +82,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clparelic10 = new cl_parelic102020();
+    $clparelic10 = new cl_parelic102021();
 
     /**
      * excluir informacoes do mes selecioado
@@ -145,7 +145,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
     
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-      $clparelic10 = new cl_parelic102020();
+      $clparelic10 = new cl_parelic102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clparelic10->si66_tiporegistro = 10;

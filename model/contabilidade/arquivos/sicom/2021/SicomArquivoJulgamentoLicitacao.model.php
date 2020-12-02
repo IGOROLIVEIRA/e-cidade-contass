@@ -1,14 +1,14 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_julglic10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_julglic20$PROXIMO_ANO_classe.php");
-require_once ("classes/db_julglic30$PROXIMO_ANO_classe.php");
+require_once ("classes/db_julglic102021_classe.php");
+require_once ("classes/db_julglic202121_classe.php");
+require_once ("classes/db_julglic302021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarJULGLIC.model.php");
 
 
  /**
-  * Julgamento da Licitação Sicom Acompanhamento Mensal
+  * Julgamento da LicitaÃ§Ã£o Sicom Acompanhamento Mensal
   * @author Johnatan 
   * @package Contabilidade
   */
@@ -93,42 +93,42 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
   }
   
   /**
-   * Julgamento da Licitação do mes para gerar o arquivo
+   * Julgamento da LicitaÃ§Ã£o do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
   	/**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-  	$cljulglic10$PROXIMO_ANO = new cl_julglic10$PROXIMO_ANO();
-  	$cljulglic20$PROXIMO_ANO = new cl_julglic20$PROXIMO_ANO();
-  	$cljulglic30$PROXIMO_ANO = new cl_julglic30$PROXIMO_ANO();
+  	$cljulglic102021 = new cl_julglic102021();
+  	$cljulglic202121 = new cl_julglic202121();
+  	$cljulglic302021 = new cl_julglic302021();
     
     /**
      * excluir informacoes do mes selecioado
      */
     db_inicio_transacao();
-    $result = db_query($cljulglic10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si60_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si60_instit=".db_getsession("DB_instit")));
+    $result = db_query($cljulglic102021->sql_query(NULL,"*",NULL,"si60_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si60_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$cljulglic10$PROXIMO_ANO->excluir(NULL,"si60_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si60_instit=".db_getsession("DB_instit"));
-      if ($cljulglic10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($cljulglic10$PROXIMO_ANO->erro_msg);
+    	$cljulglic102021->excluir(NULL,"si60_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si60_instit=".db_getsession("DB_instit"));
+      if ($cljulglic102021->erro_status == 0) {
+    	  throw new Exception($cljulglic102021->erro_msg);
       }
     }
     
-    $result = db_query($cljulglic20$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si61_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si61_instit=".db_getsession("DB_instit")));
+    $result = db_query($cljulglic202121->sql_query(NULL,"*",NULL,"si61_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si61_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$cljulglic20$PROXIMO_ANO->excluir(NULL,"si61_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si61_instit=".db_getsession("DB_instit"));
-      if ($cljulglic20$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($cljulglic20$PROXIMO_ANO->erro_msg);
+    	$cljulglic202121->excluir(NULL,"si61_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si61_instit=".db_getsession("DB_instit"));
+      if ($cljulglic202121->erro_status == 0) {
+    	  throw new Exception($cljulglic202121->erro_msg);
       }
     }
     
-    $result = db_query($cljulglic30$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si62_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si62_instit=".db_getsession("DB_instit")));
+    $result = db_query($cljulglic302021->sql_query(NULL,"*",NULL,"si62_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si62_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$cljulglic30$PROXIMO_ANO->excluir(NULL,"si62_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si62_instit=".db_getsession("DB_instit"));
-      if ($cljulglic30$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($cljulglic30$PROXIMO_ANO->erro_msg);
+    	$cljulglic302021->excluir(NULL,"si62_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si62_instit=".db_getsession("DB_instit"));
+      if ($cljulglic302021->erro_status == 0) {
+    	  throw new Exception($cljulglic302021->erro_msg);
       }
     }
     
@@ -171,26 +171,26 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		 */
 		for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 		  	
-		  $cljulglic10$PROXIMO_ANO = new cl_julglic10$PROXIMO_ANO();
+		  $cljulglic102021 = new cl_julglic102021();
 		  $oDados10       = db_utils::fieldsMemory($rsResult10, $iCont10);
 		  	
-			$cljulglic10$PROXIMO_ANO->si60_tiporegistro   		  = 10;
-			$cljulglic10$PROXIMO_ANO->si60_codorgao	 			  = $oDados10->codorgaoresp;
-			$cljulglic10$PROXIMO_ANO->si60_codunidadesub	      = $oDados10->codunidadesubresp;
-			$cljulglic10$PROXIMO_ANO->si60_exerciciolicitacao	  = $oDados10->exerciciolicitacao;
-			$cljulglic10$PROXIMO_ANO->si60_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
-			$cljulglic10$PROXIMO_ANO->si60_tipodocumento		  = $oDados10->tipodocumento;
-			$cljulglic10$PROXIMO_ANO->si60_nrodocumento			  = $oDados10->nrodocumento;
-			$cljulglic10$PROXIMO_ANO->si60_nrolote				  = $oDados10->nrolote;
-			$cljulglic10$PROXIMO_ANO->si60_coditem				  = $oDados10->coditem;
-			$cljulglic10$PROXIMO_ANO->si60_vlunitario	          = $oDados10->vlunitario;
-			$cljulglic10$PROXIMO_ANO->si60_quantidade	          = $oDados10->quantidade;
-			$cljulglic10$PROXIMO_ANO->si60_instit		   		  = db_getsession("DB_instit");
-		 	$cljulglic10$PROXIMO_ANO->si60_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+			$cljulglic102021->si60_tiporegistro   		  = 10;
+			$cljulglic102021->si60_codorgao	 			  = $oDados10->codorgaoresp;
+			$cljulglic102021->si60_codunidadesub	      = $oDados10->codunidadesubresp;
+			$cljulglic102021->si60_exerciciolicitacao	  = $oDados10->exerciciolicitacao;
+			$cljulglic102021->si60_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
+			$cljulglic102021->si60_tipodocumento		  = $oDados10->tipodocumento;
+			$cljulglic102021->si60_nrodocumento			  = $oDados10->nrodocumento;
+			$cljulglic102021->si60_nrolote				  = $oDados10->nrolote;
+			$cljulglic102021->si60_coditem				  = $oDados10->coditem;
+			$cljulglic102021->si60_vlunitario	          = $oDados10->vlunitario;
+			$cljulglic102021->si60_quantidade	          = $oDados10->quantidade;
+			$cljulglic102021->si60_instit		   		  = db_getsession("DB_instit");
+		 	$cljulglic102021->si60_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  	
-		  $cljulglic10$PROXIMO_ANO->incluir(null);
-		  if ($cljulglic10$PROXIMO_ANO->erro_status == 0) {
-		    throw new Exception($cljulglic10$PROXIMO_ANO->erro_msg);
+		  $cljulglic102021->incluir(null);
+		  if ($cljulglic102021->erro_status == 0) {
+		    throw new Exception($cljulglic102021->erro_msg);
 		  }
 		  	
 		}
@@ -233,25 +233,25 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		 */
 		for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 		  	
-		  $cljulglic20$PROXIMO_ANO = new cl_julglic20$PROXIMO_ANO();
+		  $cljulglic202121 = new cl_julglic202121();
 		  $oDados20       = db_utils::fieldsMemory($rsResult20, $iCont20);
 		  	
-		  $cljulglic20$PROXIMO_ANO->si61_tiporegistro        	= 20;
-		  $cljulglic20$PROXIMO_ANO->si61_codorgao            	= $oDados20->codorgaoresp;
-		  $cljulglic20$PROXIMO_ANO->si61_codunidadesub		 	= $oDados20->codunidadesubresp;
-		  $cljulglic20$PROXIMO_ANO->si61_exerciciolicitacao	 	= $oDados20->exerciciolicitacao;
-		  $cljulglic20$PROXIMO_ANO->si61_nroprocessolicitatorio	= $oDados20->nroprocessolicitatorio;
-		  $cljulglic20$PROXIMO_ANO->si61_tipodocumento   		= $oDados20->tipodocumento;
-		  $cljulglic20$PROXIMO_ANO->si61_nrodocumento   		= $oDados20->nrodocumento;
-		  $cljulglic20$PROXIMO_ANO->si61_nrolote  			    = $oDados20->nrolote;
-		  $cljulglic20$PROXIMO_ANO->si61_coditem				= $oDados20->coditem;
-		  $cljulglic20$PROXIMO_ANO->si61_percdesconto			= $oDados20->percdesconto;
-		  $cljulglic20$PROXIMO_ANO->si61_instit		   		    = db_getsession("DB_instit");
-		  $cljulglic20$PROXIMO_ANO->si61_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  $cljulglic202121->si61_tiporegistro        	= 20;
+		  $cljulglic202121->si61_codorgao            	= $oDados20->codorgaoresp;
+		  $cljulglic202121->si61_codunidadesub		 	= $oDados20->codunidadesubresp;
+		  $cljulglic202121->si61_exerciciolicitacao	 	= $oDados20->exerciciolicitacao;
+		  $cljulglic202121->si61_nroprocessolicitatorio	= $oDados20->nroprocessolicitatorio;
+		  $cljulglic202121->si61_tipodocumento   		= $oDados20->tipodocumento;
+		  $cljulglic202121->si61_nrodocumento   		= $oDados20->nrodocumento;
+		  $cljulglic202121->si61_nrolote  			    = $oDados20->nrolote;
+		  $cljulglic202121->si61_coditem				= $oDados20->coditem;
+		  $cljulglic202121->si61_percdesconto			= $oDados20->percdesconto;
+		  $cljulglic202121->si61_instit		   		    = db_getsession("DB_instit");
+		  $cljulglic202121->si61_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  	
-		  $cljulglic20$PROXIMO_ANO->incluir(null);
-		  if ($cljulglic20$PROXIMO_ANO->erro_status == 0) {
-		    throw new Exception($cljulglic20$PROXIMO_ANO->erro_msg);
+		  $cljulglic202121->incluir(null);
+		  if ($cljulglic202121->erro_status == 0) {
+		    throw new Exception($cljulglic202121->erro_msg);
 		  }
 		  	
 		}
@@ -277,23 +277,23 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		
 		for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 		  	
-		  $cljulglic30$PROXIMO_ANO = new cl_julglic30$PROXIMO_ANO();
+		  $cljulglic302021 = new cl_julglic302021();
 		  $oDados30       = db_utils::fieldsMemory($rsResult30, $iCont30);
 		  	
-		  $cljulglic30$PROXIMO_ANO->si62_tiporegistro     		= 30;
-		  $cljulglic30$PROXIMO_ANO->si62_codorgao 				=$oDados30->codorgaoresp;
-		  $cljulglic30$PROXIMO_ANO->si62_codunidadesub 			=$oDados30->codunidadesubresp;
-		  $cljulglic30$PROXIMO_ANO->si62_exerciciolicitacao 	=$oDados30->exerciciolicitacao;
-		  $cljulglic30$PROXIMO_ANO->si62_nroprocessolicitatorio =$oDados30->nroprocessolicitatorio;
-		  $cljulglic30$PROXIMO_ANO->si62_dtjulgamento 			=$oDados30->dtjulgamento;
-		  $cljulglic30$PROXIMO_ANO->si62_presencalicitantes 	=$oDados30->presencalicitantes;
-		  $cljulglic30$PROXIMO_ANO->si62_renunciarecurso		=$oDados30->renunciarecurso;
-		  $cljulglic30$PROXIMO_ANO->si62_instit		   		    = db_getsession("DB_instit");
-		  $cljulglic30$PROXIMO_ANO->si62_mes              		= $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  $cljulglic302021->si62_tiporegistro     		= 30;
+		  $cljulglic302021->si62_codorgao 				=$oDados30->codorgaoresp;
+		  $cljulglic302021->si62_codunidadesub 			=$oDados30->codunidadesubresp;
+		  $cljulglic302021->si62_exerciciolicitacao 	=$oDados30->exerciciolicitacao;
+		  $cljulglic302021->si62_nroprocessolicitatorio =$oDados30->nroprocessolicitatorio;
+		  $cljulglic302021->si62_dtjulgamento 			=$oDados30->dtjulgamento;
+		  $cljulglic302021->si62_presencalicitantes 	=$oDados30->presencalicitantes;
+		  $cljulglic302021->si62_renunciarecurso		=$oDados30->renunciarecurso;
+		  $cljulglic302021->si62_instit		   		    = db_getsession("DB_instit");
+		  $cljulglic302021->si62_mes              		= $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  	
-		  $cljulglic30$PROXIMO_ANO->incluir(null);
-		  if ($cljulglic30$PROXIMO_ANO->erro_status == 0) {
-		    throw new Exception($cljulglic30$PROXIMO_ANO->erro_msg);
+		  $cljulglic302021->incluir(null);
+		  if ($cljulglic302021->erro_status == 0) {
+		    throw new Exception($cljulglic302021->erro_msg);
 		  }
 		  	
 		}

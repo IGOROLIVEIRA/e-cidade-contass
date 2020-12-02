@@ -3,9 +3,9 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_caixa10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_caixa11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_caixa12$PROXIMO_ANO_classe.php");
+require_once ("classes/db_caixa102021_classe.php");
+require_once ("classes/db_caixa112021_classe.php");
+require_once ("classes/db_caixa122021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarCAIXA.model.php");
 
  /**
@@ -61,28 +61,28 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
   public function gerarDados() {
   	
   	
-    $clcaixa12$PROXIMO_ANO = new cl_caixa12$PROXIMO_ANO();
-    $clcaixa11$PROXIMO_ANO = new cl_caixa11$PROXIMO_ANO();
-    $clcaixa10$PROXIMO_ANO = new cl_caixa10$PROXIMO_ANO();
+    $clcaixa122021 = new cl_caixa122021();
+    $clcaixa112021 = new cl_caixa112021();
+    $clcaixa102021 = new cl_caixa102021();
   	
     
          /*
          * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
          */
 	    db_inicio_transacao();
-	    $result = $clcaixa10$PROXIMO_ANO->sql_record($clcaixa10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	    $result = $clcaixa102021->sql_record($clcaixa102021->sql_query(NULL,"*",NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
 	     and si103_instit = ".db_getsession("DB_instit")));
 	    if (pg_num_rows($result) > 0) {
 	    	
-	    	$clcaixa12$PROXIMO_ANO->excluir(NULL,"si105_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	    	$clcaixa122021->excluir(NULL,"si105_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
 	    	and si105_instit = ".db_getsession("DB_instit"));
-	    	$clcaixa11$PROXIMO_ANO->excluir(NULL,"si104_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	    	$clcaixa112021->excluir(NULL,"si104_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
 	    	and si104_instit = ".db_getsession("DB_instit"));
-	    	$clcaixa10$PROXIMO_ANO->excluir(NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	    	$clcaixa102021->excluir(NULL,"si103_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
 	    	and si103_instit = ".db_getsession("DB_instit"));
 	   
-	      if ($clcaixa10$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($clcaixa10$PROXIMO_ANO->erro_msg);
+	      if ($clcaixa102021->erro_status == 0) {
+	    	  throw new Exception($clcaixa102021->erro_msg);
 	      }
 	    }
 	    db_fim_transacao();
@@ -134,7 +134,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	       	$nSaldoInicial = $oPlanoContas->saldo_anterior;
 	       }
     	
-    	  $oDadosCaixa = new cl_caixa10$PROXIMO_ANO();
+    	  $oDadosCaixa = new cl_caixa102021();
     	
     	  $oDadosCaixa->si103_tiporegistro    = 10;
     	  $oDadosCaixa->si103_codorgao        = $oContas->si09_codorgaotce;
@@ -264,7 +264,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 					       c70_valor as vlrreceitacont       
 					     from conlancamrec
 					     join conlancam on c70_codlan = c74_codlan and c70_anousu = c74_anousu 
-					left join orcreceita on c74_codrec = o70_codrec and o70_anousu = $PROXIMO_ANO     
+					left join orcreceita on c74_codrec = o70_codrec and o70_anousu = 2021     
 					left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
 					left join orctiporec on o15_codigo = o70_codigo
 					    where c74_codlan = {$oMovi->codreduzido}";
@@ -303,24 +303,24 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
     		foreach ($aDadosAgrupados as $mov) {
      			
     			
-    			$clcaixa11$PROXIMO_ANO = new cl_caixa11$PROXIMO_ANO();
+    			$clcaixa112021 = new cl_caixa112021();
     			
-    			$clcaixa11$PROXIMO_ANO->si104_tiporegistro            = $mov->si104_tiporegistro;
-	    		$clcaixa11$PROXIMO_ANO->si104_codreduzido             = $mov->si104_codreduzido;
-	    		$clcaixa11$PROXIMO_ANO->si104_tipomovimentacao        = $mov->si104_tipomovimentacao;
-	    		$clcaixa11$PROXIMO_ANO->si104_tipoentrsaida           = $mov->si104_tipoentrsaida;
-	    		$clcaixa11$PROXIMO_ANO->si104_descrmovimentacao       = $mov->si104_descrmovimentacao;
-	    		$clcaixa11$PROXIMO_ANO->si104_valorentrsaida          = abs($mov->si104_valorentrsaida);
-	    		$clcaixa11$PROXIMO_ANO->si104_codctbtransf            = $mov->si104_codctbtransf;
-	    		$clcaixa11$PROXIMO_ANO->si104_codfontectbtransf  	  = $mov->si104_codfontectbtransf;
-	    		$clcaixa11$PROXIMO_ANO->si104_mes  				      = $mov->si104_mes;
-	    		$clcaixa11$PROXIMO_ANO->si104_reg10  			      = $mov->si104_reg10;
-	    		$clcaixa11$PROXIMO_ANO->si104_instit                  = db_getsession("DB_instit");
+    			$clcaixa112021->si104_tiporegistro            = $mov->si104_tiporegistro;
+	    		$clcaixa112021->si104_codreduzido             = $mov->si104_codreduzido;
+	    		$clcaixa112021->si104_tipomovimentacao        = $mov->si104_tipomovimentacao;
+	    		$clcaixa112021->si104_tipoentrsaida           = $mov->si104_tipoentrsaida;
+	    		$clcaixa112021->si104_descrmovimentacao       = $mov->si104_descrmovimentacao;
+	    		$clcaixa112021->si104_valorentrsaida          = abs($mov->si104_valorentrsaida);
+	    		$clcaixa112021->si104_codctbtransf            = $mov->si104_codctbtransf;
+	    		$clcaixa112021->si104_codfontectbtransf  	  = $mov->si104_codfontectbtransf;
+	    		$clcaixa112021->si104_mes  				      = $mov->si104_mes;
+	    		$clcaixa112021->si104_reg10  			      = $mov->si104_reg10;
+	    		$clcaixa112021->si104_instit                  = db_getsession("DB_instit");
 	    		    			
-    			$clcaixa11$PROXIMO_ANO->incluir(null);
+    			$clcaixa112021->incluir(null);
     			
-    		    if ($clcaixa11$PROXIMO_ANO->erro_status == 0) {
-					throw new Exception($clcaixa11$PROXIMO_ANO->erro_msg);
+    		    if ($clcaixa112021->erro_status == 0) {
+					throw new Exception($clcaixa112021->erro_msg);
 				}
     			
     			
@@ -331,19 +331,19 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
     		    	
     				foreach ($mov->registro12 as $reg12){
     					 
-    					$clcaixa12$PROXIMO_ANO = new cl_caixa12$PROXIMO_ANO();
+    					$clcaixa122021 = new cl_caixa122021();
     					
-    					$clcaixa12$PROXIMO_ANO->si105_tiporegistro                      = $reg12->si105_tiporegistro;
-				    	$clcaixa12$PROXIMO_ANO->si105_codreduzido                       = $reg12->si105_codreduzido;
-				    	$clcaixa12$PROXIMO_ANO->si105_ededucaodereceita                 = $reg12->si105_ededucaodereceita;
-				    	$clcaixa12$PROXIMO_ANO->si105_identificadordeducao              = $reg12->si105_identificadordeducao;
-				    	$clcaixa12$PROXIMO_ANO->si105_naturezareceita                   = $reg12->si105_naturezareceita;
-				    	$clcaixa12$PROXIMO_ANO->si105_vlrreceitacont                    = $reg12->si105_vlrreceitacont;
-				    	$clcaixa12$PROXIMO_ANO->si105_mes                               = $reg12->si105_mes;
-				    	$clcaixa12$PROXIMO_ANO->si105_reg10                             = $oDadosCaixa->si103_sequencial;
-				    	$clcaixa12$PROXIMO_ANO->si105_instit                            = db_getsession("DB_instit");
+    					$clcaixa122021->si105_tiporegistro                      = $reg12->si105_tiporegistro;
+				    	$clcaixa122021->si105_codreduzido                       = $reg12->si105_codreduzido;
+				    	$clcaixa122021->si105_ededucaodereceita                 = $reg12->si105_ededucaodereceita;
+				    	$clcaixa122021->si105_identificadordeducao              = $reg12->si105_identificadordeducao;
+				    	$clcaixa122021->si105_naturezareceita                   = $reg12->si105_naturezareceita;
+				    	$clcaixa122021->si105_vlrreceitacont                    = $reg12->si105_vlrreceitacont;
+				    	$clcaixa122021->si105_mes                               = $reg12->si105_mes;
+				    	$clcaixa122021->si105_reg10                             = $oDadosCaixa->si103_sequencial;
+				    	$clcaixa122021->si105_instit                            = db_getsession("DB_instit");
 				    		
-				    	$clcaixa12$PROXIMO_ANO->incluir(null);
+				    	$clcaixa122021->incluir(null);
 	    				
     				}
     			}

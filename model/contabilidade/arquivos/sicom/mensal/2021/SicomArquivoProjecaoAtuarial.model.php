@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_parpps102020_classe.php");
-require_once("classes/db_parpps202020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarPARPPS.model.php");
+require_once("classes/db_parpps102021_classe.php");
+require_once("classes/db_parpps202021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarPARPPS.model.php");
 
 /**
  * Projeção Atuarial Sicom Acompanhamento Mensal
@@ -62,8 +62,8 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
   public function gerarDados()
   {
 
-    $clparpps10 = new cl_parpps102020();
-    $clparpps20 = new cl_parpps202020();
+    $clparpps10 = new cl_parpps102021();
+    $clparpps20 = new cl_parpps202021();
 
     db_inicio_transacao();
     /*
@@ -109,7 +109,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
       for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-        $clparpps10 = new cl_parpps102020();
+        $clparpps10 = new cl_parpps102021();
         $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
         $clparpps10->si156_tiporegistro = 10;
@@ -138,7 +138,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-        $clparpps20 = new cl_parpps202020();
+        $clparpps20 = new cl_parpps202021();
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
         $clparpps20->si155_tiporegistro = 20;

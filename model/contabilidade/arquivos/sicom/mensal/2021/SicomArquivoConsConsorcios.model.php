@@ -1,12 +1,12 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_consor102020_classe.php");
-require_once("classes/db_consor202020_classe.php");
-require_once("classes/db_consor302020_classe.php");
-require_once("classes/db_consor402020_classe.php");
-require_once("classes/db_consor502020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCONSOR.model.php");
+require_once("classes/db_consor102021_classe.php");
+require_once("classes/db_consor202021_classe.php");
+require_once("classes/db_consor302021_classe.php");
+require_once("classes/db_consor402021_classe.php");
+require_once("classes/db_consor502021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCONSOR.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -67,11 +67,11 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clconsor10 = new cl_consor102020();
-    $clconsor20 = new cl_consor202020();
-    $clconsor30 = new cl_consor302020();
-    $clconsor40 = new cl_consor402020();
-    $clconsor50 = new cl_consor502020();
+    $clconsor10 = new cl_consor102021();
+    $clconsor20 = new cl_consor202021();
+    $clconsor30 = new cl_consor302021();
+    $clconsor40 = new cl_consor402021();
+    $clconsor50 = new cl_consor502021();
 
     /**
      * excluir informacoes do mes selecioado
@@ -132,7 +132,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clconsor10 = new cl_consor102020();
+      $clconsor10 = new cl_consor102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       $clconsor10->si16_tiporegistro = 10;
       $clconsor10->si16_codorgao = $oDados10->si09_codorgaotce;
@@ -161,7 +161,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
      */
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-      $clconsor20 = new cl_consor202020();
+      $clconsor20 = new cl_consor202021();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
       $clconsor20->si17_tiporegistro = 20;
@@ -192,7 +192,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
      */
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-      $clconsor30 = new cl_consor302020();
+      $clconsor30 = new cl_consor302021();
       $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
       $clconsor30->si18_tiporegistro = 30;
@@ -233,7 +233,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
        */
       for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-        $clconsor40 = new cl_consor402020();
+        $clconsor40 = new cl_consor402021();
         $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
         $clconsor40->si19_tiporegistro = 40;
@@ -262,7 +262,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 
     for ($iCont50 = 0; $iCont50 < pg_num_rows($rsResult50); $iCont50++) {
 
-      $clconsor50 = new cl_consor502020();
+      $clconsor50 = new cl_consor502021();
       $oDados50 = db_utils::fieldsMemory($rsResult50, $iCont50);
 
       $clconsor50->si20_tiporegistro = 50;

@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_consid102020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCONSID.model.php");
+require_once("classes/db_consid102021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCONSID.model.php");
 
 /**
  * Dados Complementares Sicom Acompanhamento Mensal
@@ -60,7 +60,7 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
   public function gerarDados()
   {
 
-    $clconsid10 = new cl_consid102020();
+    $clconsid10 = new cl_consid102021();
 
     db_inicio_transacao();
 
@@ -85,7 +85,7 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clconsid10 = new cl_consid102020();
+      $clconsid10 = new cl_consid102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clconsid10->si158_tiporegistro              = 10;

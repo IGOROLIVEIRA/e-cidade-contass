@@ -1,16 +1,16 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_ctb10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb20$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb21$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb22$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb30$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb31$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb40$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb41$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb50$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ctb60$PROXIMO_ANO_classe.php");
+require_once ("classes/db_ctb102021_classe.php");
+require_once ("classes/db_ctb202121_classe.php");
+require_once ("classes/db_ctb212021_classe.php");
+require_once ("classes/db_ctb222021_classe.php");
+require_once ("classes/db_ctb302021_classe.php");
+require_once ("classes/db_ctb312021_classe.php");
+require_once ("classes/db_ctb402021_classe.php");
+require_once ("classes/db_ctb412021_classe.php");
+require_once ("classes/db_ctb502021_classe.php");
+require_once ("classes/db_ctb602021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarCTB.model.php");
 
 
@@ -69,15 +69,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 	      
   	
   	            
-  	$cCtb10 = new cl_ctb10$PROXIMO_ANO();
-	$cCtb20 = new cl_ctb20$PROXIMO_ANO();
-	$cCtb21 = new cl_ctb21$PROXIMO_ANO();
-	$cCtb22 = new cl_ctb22$PROXIMO_ANO();
-	$cCtb30 = new cl_ctb30$PROXIMO_ANO();
-	$cCtb31 = new cl_ctb31$PROXIMO_ANO();
-	$cCtb40 = new cl_ctb40$PROXIMO_ANO();
-	$cCtb41 = new cl_ctb41$PROXIMO_ANO();
-	$cCtb50 = new cl_ctb50$PROXIMO_ANO();
+  	$cCtb10 = new cl_ctb102021();
+	$cCtb20 = new cl_ctb202121();
+	$cCtb21 = new cl_ctb212021();
+	$cCtb22 = new cl_ctb222021();
+	$cCtb30 = new cl_ctb302021();
+	$cCtb31 = new cl_ctb312021();
+	$cCtb40 = new cl_ctb402021();
+	$cCtb41 = new cl_ctb412021();
+	$cCtb50 = new cl_ctb502021();
 	
       
     /**
@@ -85,7 +85,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   	 *
     $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomnaturezareceita.xml";
     if (!file_exists($sArquivo)) {
-      throw new Exception("Arquivo de configuração de natureza das receitas do sicom inexistente!");
+      throw new Exception("Arquivo de configuraÃ§Ã£o de natureza das receitas do sicom inexistente!");
     }
     $sTextoXml    = file_get_contents($sArquivo);
     $oDOMDocument = new DOMDocument();
@@ -158,7 +158,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       	
       	if(!isset($aBancosAgrupodos[$aHash])){
       		
-      		$cCtb10    =  new cl_ctb10$PROXIMO_ANO();
+      		$cCtb10    =  new cl_ctb102021();
       		
       		
       		$cCtb10->si95_tiporegistro 					  =	$oRegistro10->tiporegistro;
@@ -373,7 +373,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								       c70_valor as vlrreceitacont       
 								     from conlancamrec
 								     join conlancam on c70_codlan = c74_codlan and c70_anousu = c74_anousu 
-								left join orcreceita on c74_codrec = o70_codrec and o70_anousu = $PROXIMO_ANO     
+								left join orcreceita on c74_codrec = o70_codrec and o70_anousu = 2021     
 								left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
 								left join orctiporec on o15_codigo = o70_codigo
 								    where c74_codlan = {$oMovi->codreduzido}";
@@ -413,7 +413,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     	//echo pg_last_error();
     	//echo "<pre>";print_r($oCtb20);
     	
-    			$cCtb20 = new cl_ctb20$PROXIMO_ANO();
+    			$cCtb20 = new cl_ctb202121();
     	
     	        $cCtb20->si96_tiporegistro 			= $oCtb20->si96_tiporegistro;
 			    $cCtb20->si96_codorgao 				= $oCtb20->si96_codorgao;
@@ -431,7 +431,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				}
 			    foreach ($oCtb20->ext21 as $oCtb21agrupado){
 			    	
-			    	 $cCtb21 = new cl_ctb21$PROXIMO_ANO();
+			    	 $cCtb21 = new cl_ctb212021();
 			    	
 			    	 $cCtb21->si97_tiporegistro         = $oCtb21agrupado->si97_tiporegistro;
 				     $cCtb21->si97_codctb               = $oCtb21agrupado->si97_codctb;
@@ -455,7 +455,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				     
 				     foreach($cCtb21->registro22 as $oCtb22Agrupado){
 				     	
-				     	$cCtb22 = new cl_ctb22$PROXIMO_ANO();
+				     	$cCtb22 = new cl_ctb222021();
 				     	
 				     	$cCtb22->si98_tiporegistro                      = $oCtb22Agrupado->si98_tiporegistro;
 						$cCtb22->si98_codreduzidomov                    = $oCtb22Agrupado->si98_codreduzidomov;
@@ -504,7 +504,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 	    		
 	    		$oMovi50  = db_utils::fieldsMemory($rsCtbEncerradas, $iCont50);
 	    		
-	    		$cCtb50 = new cl_ctb50$PROXIMO_ANO();
+	    		$cCtb50 = new cl_ctb502021();
 	    		
 	    		$cCtb50->si102_tiporegistro		= $oMovi50->tiporegistro;
 				$cCtb50->si102_codorgao			= $oMovi50->si09_codorgaotce;

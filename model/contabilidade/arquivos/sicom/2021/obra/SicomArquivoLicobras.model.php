@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_licobras102020_classe.php");
-require_once("classes/db_licobras202020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/2020/obra/geradores/gerarLICOBRAS.php");
+require_once("classes/db_licobras102021_classe.php");
+require_once("classes/db_licobras202021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2021/obra/geradores/gerarLICOBRAS.php");
 
 
 /**
@@ -76,8 +76,8 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $licobras102020 = new cl_licobras102020();
-    $licobras202020 = new cl_licobras202020();
+    $licobras102021 = new cl_licobras102021();
+    $licobras202021 = new cl_licobras202021();
 
     /**
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -86,22 +86,22 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
     /**
      * registro 10 exclusão
      */
-    $result = db_query($licobras102020->sql_query(null, "*", null, "si195_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si195_instit=" . db_getsession("DB_instit")));
+    $result = db_query($licobras102021->sql_query(null, "*", null, "si195_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si195_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $licobras102020->excluir(null, "si195_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si195_instit=" . db_getsession("DB_instit"));
-      if ($licobras102020->erro_status == 0) {
-        throw new Exception($licobras102020->erro_msg);
+      $licobras102021->excluir(null, "si195_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si195_instit=" . db_getsession("DB_instit"));
+      if ($licobras102021->erro_status == 0) {
+        throw new Exception($licobras102021->erro_msg);
       }
     }
 
     /**
      * registro 20 exclusão
      */
-    $result = db_query($licobras202020->sql_query(null, "*", null, "si196_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si196_instit=" . db_getsession("DB_instit")));
+    $result = db_query($licobras202021->sql_query(null, "*", null, "si196_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si196_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $licobras202020->excluir(null, "si196_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si196_instit=" . db_getsession("DB_instit"));
-      if ($licobras202020->erro_status == 0) {
-        throw new Exception($licobras202020->erro_msg);
+      $licobras202021->excluir(null, "si196_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si196_instit=" . db_getsession("DB_instit"));
+      if ($licobras202021->erro_status == 0) {
+        throw new Exception($licobras202021->erro_msg);
       }
     }
 
@@ -131,23 +131,23 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
     $rsResult10 = db_query($sql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      $cllicobras102020 = new cl_licobras102020();
+      $cllicobras102021 = new cl_licobras102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $cllicobras102020->si195_tiporegistro = 10;
-      $cllicobras102020->si195_codorgaoresp = $oDados10->si195_codorgaoresp;
-      $cllicobras102020->si195_codunidadesubrespestadual = substr($oDados10->si195_codunidadesubrespestadual, 0, 4);
-      $cllicobras102020->si195_exerciciolicitacao = $oDados10->si195_exerciciolicitacao;
-      $cllicobras102020->si195_nroprocessolicitatorio = $oDados10->si195_nroprocessolicitatorio;
-      $cllicobras102020->si195_codobra = $oDados10->si195_codobra;
-      $cllicobras102020->si195_objeto = $oDados10->si195_objeto;
-      $cllicobras102020->si195_linkobra = $oDados10->si195_linkobra;
-      $cllicobras102020->si195_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $cllicobras102020->si195_instit = db_getsession("DB_instit");
-      $cllicobras102020->incluir(null);
+      $cllicobras102021->si195_tiporegistro = 10;
+      $cllicobras102021->si195_codorgaoresp = $oDados10->si195_codorgaoresp;
+      $cllicobras102021->si195_codunidadesubrespestadual = substr($oDados10->si195_codunidadesubrespestadual, 0, 4);
+      $cllicobras102021->si195_exerciciolicitacao = $oDados10->si195_exerciciolicitacao;
+      $cllicobras102021->si195_nroprocessolicitatorio = $oDados10->si195_nroprocessolicitatorio;
+      $cllicobras102021->si195_codobra = $oDados10->si195_codobra;
+      $cllicobras102021->si195_objeto = $oDados10->si195_objeto;
+      $cllicobras102021->si195_linkobra = $oDados10->si195_linkobra;
+      $cllicobras102021->si195_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $cllicobras102021->si195_instit = db_getsession("DB_instit");
+      $cllicobras102021->incluir(null);
 
-      if ($cllicobras102020->erro_status == 0) {
-        throw new Exception($cllicobras102020->erro_msg);
+      if ($cllicobras102021->erro_status == 0) {
+        throw new Exception($cllicobras102021->erro_msg);
       }
     }
 
@@ -177,23 +177,23 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 
     if(pg_num_rows($rsResult20) > 0) {
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult10); $iCont20++) {
-        $cllicobras202020 = new cl_licobras202020();
+        $cllicobras202021 = new cl_licobras202021();
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
-        $cllicobras202020->si196_tiporegistro = 20;
-        $cllicobras202020->si196_codorgaoresp = $oDados20->si195_codorgaoresp;
-        $cllicobras202020->si196_codunidadesubrespestadual = substr($oDados20->si195_codunidadesubrespestadual, 0, 4);
-        $cllicobras202020->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
-        $cllicobras202020->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
-        $cllicobras202020->si196_codobra = $oDados20->si195_codobra;
-        $cllicobras202020->si196_objeto = $oDados20->si195_objeto;
-        $cllicobras202020->si196_linkobra = $oDados20->si195_linkobra;
-        $cllicobras202020->si196_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $cllicobras202020->si196_instit = db_getsession("DB_instit");
-        $cllicobras202020->incluir(null);
+        $cllicobras202021->si196_tiporegistro = 20;
+        $cllicobras202021->si196_codorgaoresp = $oDados20->si195_codorgaoresp;
+        $cllicobras202021->si196_codunidadesubrespestadual = substr($oDados20->si195_codunidadesubrespestadual, 0, 4);
+        $cllicobras202021->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
+        $cllicobras202021->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
+        $cllicobras202021->si196_codobra = $oDados20->si195_codobra;
+        $cllicobras202021->si196_objeto = $oDados20->si195_objeto;
+        $cllicobras202021->si196_linkobra = $oDados20->si195_linkobra;
+        $cllicobras202021->si196_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $cllicobras202021->si196_instit = db_getsession("DB_instit");
+        $cllicobras202021->incluir(null);
 
-        if ($cllicobras202020->erro_status == 0) {
-          throw new Exception($cllicobras202020->erro_msg);
+        if ($cllicobras202021->erro_status == 0) {
+          throw new Exception($cllicobras202021->erro_msg);
         }
       }
     }

@@ -1,7 +1,7 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_pessoa10$PROXIMO_ANO_classe.php");
+require_once ("classes/db_pessoa102021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarPESSOA.model.php");
 
  /**
@@ -58,7 +58,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
   	/**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-  	$clpessoa = new cl_pessoa10$PROXIMO_ANO();
+  	$clpessoa = new cl_pessoa102021();
   	
   	/**
   	 * excluir informacoes do mes selecionado
@@ -97,7 +97,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
     
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     	
-    	$clpessoa = new cl_pessoa10$PROXIMO_ANO();
+    	$clpessoa = new cl_pessoa102021();
     	$oDados = db_utils::fieldsMemory($rsResult, $iCont);
     	
     	if ($oDados->z01_cadast >= $this->sDataInicial && $oDados->z01_cadast <= $this->sDataFinal) {

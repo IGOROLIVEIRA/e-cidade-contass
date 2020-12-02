@@ -1,17 +1,17 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ctb102020_classe.php");
-require_once("classes/db_ctb202020_classe.php");
-require_once("classes/db_ctb212020_classe.php");
-require_once("classes/db_ctb222020_classe.php");
-require_once("classes/db_ctb302020_classe.php");
-require_once("classes/db_ctb312020_classe.php");
-require_once("classes/db_ctb402020_classe.php");
-require_once("classes/db_ctb412020_classe.php");
-require_once("classes/db_ctb502020_classe.php");
-require_once("classes/db_ctb602020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCTB.model.php");
+require_once("classes/db_ctb102021_classe.php");
+require_once("classes/db_ctb202021_classe.php");
+require_once("classes/db_ctb212021_classe.php");
+require_once("classes/db_ctb222021_classe.php");
+require_once("classes/db_ctb302021_classe.php");
+require_once("classes/db_ctb312021_classe.php");
+require_once("classes/db_ctb402021_classe.php");
+require_once("classes/db_ctb412021_classe.php");
+require_once("classes/db_ctb502021_classe.php");
+require_once("classes/db_ctb602021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCTB.model.php");
 
 
 /**
@@ -37,7 +37,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   protected $sNomeArquivo = 'CTB';
 
   /**
-   * @var array Fontes encerradas em 2020
+   * @var array Fontes encerradas em 2021
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -76,15 +76,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   {
 
 
-    $cCtb10 = new cl_ctb102020();
-    $cCtb20 = new cl_ctb202020();
-    $cCtb21 = new cl_ctb212020();
-    $cCtb22 = new cl_ctb222020();
-    $cCtb30 = new cl_ctb302020();
-    $cCtb31 = new cl_ctb312020();
-    $cCtb40 = new cl_ctb402020();
-    $cCtb41 = new cl_ctb412020();
-    $cCtb50 = new cl_ctb502020();
+    $cCtb10 = new cl_ctb102021();
+    $cCtb20 = new cl_ctb202021();
+    $cCtb21 = new cl_ctb212021();
+    $cCtb22 = new cl_ctb222021();
+    $cCtb30 = new cl_ctb302021();
+    $cCtb31 = new cl_ctb312021();
+    $cCtb40 = new cl_ctb402021();
+    $cCtb41 = new cl_ctb412021();
+    $cCtb50 = new cl_ctb502021();
 
 
     /**
@@ -173,7 +173,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join convconvenios on db83_numconvenio = c206_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit ";
-    if( db_getsession("DB_anousu") == 2020 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1 ) {
+    if( db_getsession("DB_anousu") == 2021 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1 ) {
         $sSqlGeral .= " where (k13_limite is null or k13_limite >= '" . $this->sDataFinal . "') 
     				     and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
     }else {
@@ -213,7 +213,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
         if (!isset($aBancosAgrupados[$aHash])) {
 
-          $cCtb10 = new cl_ctb102020();
+          $cCtb10 = new cl_ctb102021();
 
 
           $cCtb10->si95_tiporegistro = $oRegistro10->tiporegistro;
@@ -236,7 +236,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->recurso = $oRegistro10->recurso;
           $cCtb10->contas = array();
 
-          $sSqlVerifica = "SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
+          $sSqlVerifica = "SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio FROM ctb102021 ";
           $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                               AND si95_banco = '$oRegistro10->c63_banco'
                               AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -247,7 +247,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                               AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                               AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio FROM ctb10$PROXIMO_ANO ";
+          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio FROM ctb102021 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -257,7 +257,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -267,7 +267,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -277,7 +277,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -287,7 +287,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -297,7 +297,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -310,7 +310,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $rsResultVerifica = db_query($sSqlVerifica);
 
           /**
-          * Adicionada consulta abaixo para verificação da data de cadastro da conta
+          * Adicionada consulta abaixo para verificaÃ§Ã£o da data de cadastro da conta
           **/
           $sSqlDtCad = "SELECT k13_dtimplantacao,
                                si09_codorgaotce,
@@ -336,10 +336,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $oDtCadastro = db_utils::fieldsMemory($rsResultDtCad, 0);
 
           /*
-           * condição adicionada para criar um registro das contas bancaria de aplicação que foram alteradas o tipo de aplicação no MES de 01/$PROXIMO_ANO
-           * a tabela acertactb será preenchida pelo menu CONTABILAIDE > PROCEDIMENTOS > DUPLICAR CTB
+           * condiÃ§Ã£o adicionada para criar um registro das contas bancaria de aplicaÃ§Ã£o que foram alteradas o tipo de aplicaÃ§Ã£o no MES de 01/2021
+           * a tabela acertactb serÃ¡ preenchida pelo menu CONTABILAIDE > PROCEDIMENTOS > DUPLICAR CTB
            */
-          if (pg_num_rows($rsResultVerifica) != 0 && (db_getsession("DB_anousu") == $PROXIMO_ANO && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1)) {
+          if (pg_num_rows($rsResultVerifica) != 0 && (db_getsession("DB_anousu") == 2021 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1)) {
 
               $sql = "select * from  acertactb where si95_reduz =".$oRegistro10->codctb ;
               $rsCtb = db_query($sql);
@@ -352,7 +352,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
               }
 
           /*
-           * Verificação se a data de cadastro da conta está dentro do período de geração do arquivo.
+           * VerificaÃ§Ã£o se a data de cadastro da conta estÃ¡ dentro do perÃ­odo de geraÃ§Ã£o do arquivo.
            * */
 
           } elseif ((pg_num_rows($rsResultVerifica) == 0) && ($oDtCadastro->k13_dtimplantacao <= $this->sDataFinal)) {
@@ -367,7 +367,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
           $sql = "select * from  acertactb where si95_reduz =".$oRegistro10->codctb ;
           $rsCtb = db_query($sql);
-          if (pg_num_rows($rsCtb) != 0 && (db_getsession("DB_anousu") == $PROXIMO_ANO && $this->sDataFinal['5'] . $this->sDataFinal['6'] != 1)) {
+          if (pg_num_rows($rsCtb) != 0 && (db_getsession("DB_anousu") == 2021 && $this->sDataFinal['5'] . $this->sDataFinal['6'] != 1)) {
               $cCtb10->si95_codctb = $oRegistro10->codctb;
           }
           $cCtb10->contas[] = $oRegistro10->codctb;
@@ -485,7 +485,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
           //OC11537
           $bFonteEncerrada  = in_array($iFonte, $this->aFontesEncerradas);
-          $bCorrecaoFonte   = ($bFonteEncerrada && $nMes == '01' && db_getsession("DB_anousu") == 2020);
+          $bCorrecaoFonte   = ($bFonteEncerrada && $nMes == '01' && db_getsession("DB_anousu") == 2021);
 
           $iFonte2 = $bFonteEncerrada ? substr($iFonte, 0, 1).'59' : $iFonte;
 
@@ -496,10 +496,10 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
             $oCtb20->si96_tiporegistro = '20';
             $oCtb20->si96_codorgao = $oContaAgrupada->si95_codorgao;
             $oCtb20->si96_codctb = $oContaAgrupada->si95_codctb;
-            //Modificação para de/para das fontes encerradas tratadas na OC11537
-            if ($bFonteEncerrada && $nMes != '01' && db_getsession("DB_anousu") == 2020) {
+            //ModificaÃ§Ã£o para de/para das fontes encerradas tratadas na OC11537
+            if ($bFonteEncerrada && $nMes != '01' && db_getsession("DB_anousu") == 2021) {
                 $oCtb20->si96_codfontrecursos = $iFonte2;
-            } elseif ($bFonteEncerrada && db_getsession("DB_anousu") > 2020) {
+            } elseif ($bFonteEncerrada && db_getsession("DB_anousu") > 2021) {
                 $oCtb20->si96_codfontrecursos = $iFonte2;
             } else {
                 $oCtb20->si96_codfontrecursos = $iFonte;
@@ -870,7 +870,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 			    			join conplano on c60_codcon = c61_codcon and c60_anousu = c61_anousu where k13_reduz = {$oMovi->codctbtransf} ";
                   $rsCodSis = db_query($sSql);
                   /**
-                   * se o c60_codsis for 5, essa é uma conta caixa
+                   * se o c60_codsis for 5, essa Ã© uma conta caixa
                    */
                   $iCodSis = db_utils::fieldsMemory($rsCodSis, 0)->c60_codsis;
                 } else {
@@ -894,7 +894,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
               $sHash .= $oCtb20->si96_codfontrecursos;
               $sHash .= $oMovi->tipomovimentacao;
               /**
-               * quando o codctb for igual codctbtransf, será agrupado a movimentação no tipoentrsaida 99
+               * quando o codctb for igual codctbtransf, serÃ¡ agrupado a movimentaÃ§Ã£o no tipoentrsaida 99
                */
               $sHash .= (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8) ? '99' : $oMovi->tipoentrsaida);
               $sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
@@ -913,7 +913,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                 $oDadosMovi21->si97_codreduzidomov = $oMovi->codreduzido . "0" . $oMovi->tipomovimentacao;
                 $oDadosMovi21->si97_tipomovimentacao = $oMovi->tipomovimentacao;
                 $oDadosMovi21->si97_tipoentrsaida = (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) ? '99' : $oMovi->tipoentrsaida;
-                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ' ');
+                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-OrÃ§amentÃ¡rio' : ' ');
                 $oDadosMovi21->si97_valorentrsaida = $nValor;
                 $oDadosMovi21->si97_codctbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
                   && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
@@ -1011,18 +1011,18 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
       }
 
       /**
-       * inclusão do registro 20 e 21 do procedimento normal
+       * inclusÃ£o do registro 20 e 21 do procedimento normal
        */
       foreach ($aCtb20Agrupado as $oCtb20) {
 
         $bFonteEncerrada  = in_array($oCtb20->si96_codfontrecursos, $this->aFontesEncerradas);
-        $bCorrecaoFonte   = ($bFonteEncerrada && $oCtb20->si96_mes == '01' && db_getsession("DB_anousu") == 2020);
+        $bCorrecaoFonte   = ($bFonteEncerrada && $oCtb20->si96_mes == '01' && db_getsession("DB_anousu") == 2021);
 
         if ($bFonteEncerrada && $bCorrecaoFonte && $oCtb20->si96_vlsaldoinicialfonte == 0) {
           continue;
         }
 
-        $cCtb20 = new cl_ctb202020();
+        $cCtb20 = new cl_ctb202021();
 
         $cCtb20->si96_tiporegistro = $oCtb20->si96_tiporegistro;
         $cCtb20->si96_codorgao = $oCtb20->si96_codorgao;
@@ -1040,7 +1040,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
         foreach ($oCtb20->ext21 as $oCtb21agrupado) {
 
-          $cCtb21 = new cl_ctb212020();
+          $cCtb21 = new cl_ctb212021();
 
           $cCtb21->si97_tiporegistro = $oCtb21agrupado->si97_tiporegistro;
           $cCtb21->si97_codctb = $oCtb21agrupado->si97_codctb;
@@ -1049,7 +1049,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
           $cCtb21->si97_tipomovimentacao = $oCtb21agrupado->si97_tipomovimentacao;
           $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
-          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ' ');
+          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-OrÃ§amentÃ¡rio': ' ');
           $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codctbtransf : 0;
           $cCtb21->si97_codfontectbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codfontectbtransf : 0;
           $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
@@ -1065,7 +1065,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
           foreach ($oCtb21agrupado->registro22 as $oCtb22Agrupado) {
 
-            $cCtb22 = new cl_ctb222020();
+            $cCtb22 = new cl_ctb222021();
 
             $cCtb22->si98_tiporegistro = $oCtb22Agrupado->si98_tiporegistro;
             $cCtb22->si98_codreduzidomov = $oCtb22Agrupado->si98_codreduzidomov;
@@ -1104,7 +1104,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         $oMovi40 = db_utils::fieldsMemory($rsCtasReg40, $icont40);
 
         /**
-         * Adicionada consulta abaixo para verificação da data de cadastro da conta
+         * Adicionada consulta abaixo para verificaÃ§Ã£o da data de cadastro da conta
          **/
         $sSqlDtCad = "SELECT k13_dtimplantacao,
                                si09_codorgaotce,
@@ -1129,7 +1129,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         $rsResultDtCad = db_query($sSqlDtCad);
         $oDtCad = db_utils::fieldsMemory($rsResultDtCad, 0);
 
-        $sSqlVerifica = "SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
+        $sSqlVerifica = "SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio FROM ctb102021 ";
         $sSqlVerifica .= "WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
                             AND si95_banco = '$oMovi40->c63_banco'
                             AND si95_agencia = '$oMovi40->c63_agencia' 
@@ -1140,7 +1140,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                             AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                             AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
-        $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio FROM ctb10$PROXIMO_ANO ";
+        $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio FROM ctb102021 ";
         $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
                              AND si95_banco = '$oMovi40->c63_banco'
                              AND si95_agencia = '$oMovi40->c63_agencia' 
@@ -1150,7 +1150,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                              AND si95_tipoconta::int = $oMovi40->tipoconta 
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
-        $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+        $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
         $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
                              AND si95_banco = '$oMovi40->c63_banco' 
                              AND si95_agencia = '$oMovi40->c63_agencia' 
@@ -1160,7 +1160,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                              AND si95_tipoconta::int = $oMovi40->tipoconta 
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
-        $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+        $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
         $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
                              AND si95_banco = '$oMovi40->c63_banco' 
                              AND si95_agencia = '$oMovi40->c63_agencia' 
@@ -1170,7 +1170,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                              AND si95_tipoconta::int = $oMovi40->tipoconta 
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
-        $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+        $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
         $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
                              AND si95_banco = '$oMovi40->c63_banco'
                              AND si95_agencia = '$oMovi40->c63_agencia' 
@@ -1180,7 +1180,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                              AND si95_tipoconta::int = $oMovi40->tipoconta 
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
-        $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+        $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
         $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
                              AND si95_banco = '$oMovi40->c63_banco'
                              AND si95_agencia = '$oMovi40->c63_agencia' 
@@ -1190,7 +1190,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                              AND si95_tipoconta::int = $oMovi40->tipoconta 
                              AND si95_instit = " . db_getsession('DB_instit');
         $sSqlVerifica .= " UNION ";
-        $sSqlVerifica .= " SELECT 'ctb10$PROXIMO_ANO' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb10$PROXIMO_ANO ";
+        $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
         $sSqlVerifica .= " WHERE si95_codorgao::int = '$oMovi40->si09_codorgaotce' 
                              AND si95_banco = '$oMovi40->c63_banco' 
                              AND si95_agencia = '$oMovi40->c63_agencia' 
@@ -1203,28 +1203,28 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         $rsResultVerifica40 = db_query($sSqlVerifica);
         $oVerificaReg40 = db_utils::fieldsMemory($rsResultVerifica40, 0);
 
-        $sSql40 = "SELECT 'ctb402020' AS ano, ctb402020.* FROM ctb402020
+        $sSql40 = "SELECT 'ctb402021' AS ano, ctb402021.* FROM ctb402021
                     WHERE si101_codctb = {$oVerificaReg40->si95_codctb}
                       AND si101_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                       AND si101_instit = " . db_getsession('DB_instit');
         $sSql40 .= "UNION ALL ";
-        $sSql40 .= "SELECT 'ctb40$PROXIMO_ANO' AS ano, ctb40$PROXIMO_ANO.* FROM ctb40$PROXIMO_ANO
+        $sSql40 .= "SELECT 'ctb402021' AS ano, ctb402021.* FROM ctb402021
                      WHERE si101_codctb = {$oVerificaReg40->si95_codctb}
                        AND si101_instit = " . db_getsession('DB_instit');
         $sSql40 .= "UNION ALL ";
-        $sSql40 .= "SELECT 'ctb40$PROXIMO_ANO' AS ano, ctb40$PROXIMO_ANO.* FROM ctb40$PROXIMO_ANO
+        $sSql40 .= "SELECT 'ctb402021' AS ano, ctb402021.* FROM ctb402021
                      WHERE si101_codctb = {$oVerificaReg40->si95_codctb}
                        AND si101_instit = " . db_getsession('DB_instit');
         $sSql40 .= "UNION ALL ";
-        $sSql40 .= "SELECT 'ctb40$PROXIMO_ANO' AS ano, ctb40$PROXIMO_ANO.* FROM ctb40$PROXIMO_ANO
+        $sSql40 .= "SELECT 'ctb402021' AS ano, ctb402021.* FROM ctb402021
                      WHERE si101_codctb = {$oVerificaReg40->si95_codctb}
                        AND si101_instit = " . db_getsession('DB_instit');
         $sSql40 .= "UNION ALL ";
-        $sSql40 .= "SELECT 'ctb40$PROXIMO_ANO' AS ano, ctb40$PROXIMO_ANO.* FROM ctb40$PROXIMO_ANO
+        $sSql40 .= "SELECT 'ctb402021' AS ano, ctb402021.* FROM ctb402021
                      WHERE si101_codctb = {$oVerificaReg40->si95_codctb}
                        AND si101_instit = " . db_getsession('DB_instit');
         $sSql40 .= "UNION ALL ";
-        $sSql40 .= "SELECT 'ctb40$PROXIMO_ANO' AS ano, ctb40$PROXIMO_ANO.* FROM ctb40$PROXIMO_ANO
+        $sSql40 .= "SELECT 'ctb402021' AS ano, ctb402021.* FROM ctb402021
                      WHERE si101_codctb = {$oVerificaReg40->si95_codctb}
                        AND si101_instit = " . db_getsession('DB_instit');
 
@@ -1234,7 +1234,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         if ($oMovi40->contaconvenio == 1 && ($oMovi40->nroconvenio != $oReg40->si101_nroconvenio) && empty($oMovi40->nroconvenio)
           && pg_num_rows($rsQuery40) == 0 && ($oDtCad->k13_dtimplantacao <= $this->sDataFinal)) {
 
-          $cCtb40 = new cl_ctb402020();
+          $cCtb40 = new cl_ctb402021();
 
           $cCtb40->si101_tiporegistro = 40;
           $cCtb40->si101_codorgao = $oMovi40->si09_codorgaotce;
@@ -1278,7 +1278,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
         $oMovi50 = db_utils::fieldsMemory($rsCtbEncerradas, $iCont50);
 
-        $cCtb50 = new cl_ctb502020();
+        $cCtb50 = new cl_ctb502021();
 
         $cCtb50->si102_tiporegistro = $oMovi50->tiporegistro;
         $cCtb50->si102_codorgao = $oMovi50->si09_codorgaotce;

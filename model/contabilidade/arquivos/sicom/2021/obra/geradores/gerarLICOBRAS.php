@@ -21,13 +21,13 @@ class gerarLICOBRAS extends GerarAM
     $this->sArquivo = "LICOBRAS";
     $this->abreArquivo();
 
-    $sSql = "select * from licobras102020 where si195_mes = " . $this->iMes . " and si195_instit=" . db_getsession("DB_instit");
-    $rslicobras102020 = db_query($sSql);
-//db_criatabela($rslicobras102020);exit;
-    $sSql = "select * from licobras202020 where si196_mes = " . $this->iMes . " and si196_instit=" . db_getsession("DB_instit");
-    $rslicobras202020 = db_query($sSql);
+    $sSql = "select * from licobras102021 where si195_mes = " . $this->iMes . " and si195_instit=" . db_getsession("DB_instit");
+    $rslicobras102021 = db_query($sSql);
+//db_criatabela($rslicobras102021);exit;
+    $sSql = "select * from licobras202021 where si196_mes = " . $this->iMes . " and si196_instit=" . db_getsession("DB_instit");
+    $rslicobras202021 = db_query($sSql);
 
-    if (pg_num_rows($rslicobras102020) == 0) {
+    if (pg_num_rows($rslicobras102021) == 0) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
@@ -39,9 +39,9 @@ class gerarLICOBRAS extends GerarAM
        *
        * Registros 10
        */
-      for ($iCont = 0; $iCont < pg_num_rows($rslicobras102020); $iCont++) {
+      for ($iCont = 0; $iCont < pg_num_rows($rslicobras102021); $iCont++) {
 
-        $alICOBRAS10 = pg_fetch_array($rslicobras102020, $iCont);
+        $alICOBRAS10 = pg_fetch_array($rslicobras102021, $iCont);
 
         $aCSVLICOBRAS10['si195_tiporegistro'] = str_pad($alICOBRAS10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVLICOBRAS10['si195_codorgaoresp'] = str_pad($alICOBRAS10['si195_codorgaoresp'], 3, "0",STR_PAD_LEFT);
@@ -56,7 +56,7 @@ class gerarLICOBRAS extends GerarAM
       }
     }
 
-    if (pg_num_rows($rslicobras202020) == 0) {
+    if (pg_num_rows($rslicobras202021) == 0) {
 
 //      $aCSV['tiporegistro'] = '99';
 //      $this->sLinha = $aCSV;
@@ -68,9 +68,9 @@ class gerarLICOBRAS extends GerarAM
        *
        * Registros 20
        */
-      for ($iCont = 0; $iCont < pg_num_rows($rslicobras202020); $iCont++) {
+      for ($iCont = 0; $iCont < pg_num_rows($rslicobras202021); $iCont++) {
 
-        $aLICOBRAS20 = pg_fetch_array($rslicobras202020, $iCont);
+        $aLICOBRAS20 = pg_fetch_array($rslicobras202021, $iCont);
 
         $aCSVLICOBRAS20['si196_tiporegistro'] = str_pad($aLICOBRAS20['si196_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVLICOBRAS20['si196_codorgaoresp'] = str_pad($aLICOBRAS20['si196_codorgaoresp'], 3, "0",STR_PAD_LEFT);

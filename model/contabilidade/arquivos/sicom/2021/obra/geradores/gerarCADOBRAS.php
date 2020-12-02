@@ -21,30 +21,30 @@ class gerarCADOBRAS extends GerarAM
     $this->sArquivo = "CADOBRAS";
     $this->abreArquivo();
 
-    $sSql = "select * from cadobras102020 where si198_mes = " . $this->iMes . " and si198_instit=" . db_getsession("DB_instit");
-    $rscadobras102020 = db_query($sSql);
+    $sSql = "select * from cadobras102021 where si198_mes = " . $this->iMes . " and si198_instit=" . db_getsession("DB_instit");
+    $rscadobras102021 = db_query($sSql);
 
-    $sSql = "select * from cadobras202020 where si199_mes = " . $this->iMes . " and si199_instit=" . db_getsession("DB_instit") ." order by si199_codobra,si199_situacaodaobra";
-    $rscadobras202020 = db_query($sSql);
+    $sSql = "select * from cadobras202021 where si199_mes = " . $this->iMes . " and si199_instit=" . db_getsession("DB_instit") ." order by si199_codobra,si199_situacaodaobra";
+    $rscadobras202021 = db_query($sSql);
 
-    $sSql = "select * from cadobras212020 where si200_mes = " . $this->iMes . " and si200_instit=" . db_getsession("DB_instit");
-    $rscadobras212020 = db_query($sSql);
+    $sSql = "select * from cadobras212021 where si200_mes = " . $this->iMes . " and si200_instit=" . db_getsession("DB_instit");
+    $rscadobras212021 = db_query($sSql);
 
-    $sSql = "select * from cadobras302020 where si201_mes = " . $this->iMes . " and si201_instit=" . db_getsession("DB_instit");
-    $rscadobras302020 = db_query($sSql);
+    $sSql = "select * from cadobras302021 where si201_mes = " . $this->iMes . " and si201_instit=" . db_getsession("DB_instit");
+    $rscadobras302021 = db_query($sSql);
 
     /**
      *
      * Registros 10
      */
-    if(pg_num_rows($rscadobras102020) == 0 && pg_num_rows($rscadobras202020) == 0 && pg_num_rows($rscadobras212020) == 0 && pg_num_rows($rscadobras302020) == 0 ){
+    if(pg_num_rows($rscadobras102021) == 0 && pg_num_rows($rscadobras202021) == 0 && pg_num_rows($rscadobras212021) == 0 && pg_num_rows($rscadobras302021) == 0 ){
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
     }else {
-        for ($iCont = 0; $iCont < pg_num_rows($rscadobras102020); $iCont++) {
+        for ($iCont = 0; $iCont < pg_num_rows($rscadobras102021); $iCont++) {
 
-            $aCADORBRAS10 = pg_fetch_array($rscadobras102020, $iCont);
+            $aCADORBRAS10 = pg_fetch_array($rscadobras102021, $iCont);
 
             $aCSVCADOBRAS10['si198_tiporegistro'] = $aCADORBRAS10['si198_tiporegistro'];
             $aCSVCADOBRAS10['si198_codorgaoresp'] = str_pad($aCADORBRAS10['si198_codorgaoresp'],3,"0",STR_PAD_LEFT);
@@ -65,9 +65,9 @@ class gerarCADOBRAS extends GerarAM
          * Registros 20
          */
 
-        for ($iCont20 = 0; $iCont20 < pg_num_rows($rscadobras202020); $iCont20++) {
+        for ($iCont20 = 0; $iCont20 < pg_num_rows($rscadobras202021); $iCont20++) {
 
-            $aCADORBRAS20 = pg_fetch_array($rscadobras202020, $iCont20);
+            $aCADORBRAS20 = pg_fetch_array($rscadobras202021, $iCont20);
 
             $aCSVCADOBRAS20['si199_tiporegistro'] = $aCADORBRAS20['si199_tiporegistro'];
             $aCSVCADOBRAS20['si199_codorgaoresp'] = str_pad($aCADORBRAS20['si199_codorgaoresp'], 3, "0", STR_PAD_LEFT);
@@ -86,9 +86,9 @@ class gerarCADOBRAS extends GerarAM
              * Registros 21
              */
             if($aCADORBRAS20['si199_situacaodaobra'] == "4" || $aCADORBRAS20['si199_situacaodaobra'] == "3") {
-                for ($iCont21 = 0; $iCont21 < pg_num_rows($rscadobras212020); $iCont21++) {
+                for ($iCont21 = 0; $iCont21 < pg_num_rows($rscadobras212021); $iCont21++) {
 
-                    $aCADORBRAS21 = pg_fetch_array($rscadobras212020, $iCont21);
+                    $aCADORBRAS21 = pg_fetch_array($rscadobras212021, $iCont21);
 
                     if ($aCADORBRAS21['si200_codobra'] == $aCADORBRAS20['si199_codobra']) {
                         if ($aCADORBRAS21['si200_codobra'] == $aCADORBRAS20['si199_codobra']) {
@@ -112,9 +112,9 @@ class gerarCADOBRAS extends GerarAM
          * Registros 30
          */
 
-        for ($iCont = 0; $iCont < pg_num_rows($rscadobras302020); $iCont++) {
+        for ($iCont = 0; $iCont < pg_num_rows($rscadobras302021); $iCont++) {
 
-            $aCADORBRAS30 = pg_fetch_array($rscadobras302020, $iCont);
+            $aCADORBRAS30 = pg_fetch_array($rscadobras302021, $iCont);
 
             $aCSVCADOBRAS30['si201_tiporegistro'] = str_pad($aCADORBRAS30['si201_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVCADOBRAS30['si201_codorgaoresp'] = str_pad($aCADORBRAS30['si201_codorgaoresp'], 3, "0",STR_PAD_LEFT);

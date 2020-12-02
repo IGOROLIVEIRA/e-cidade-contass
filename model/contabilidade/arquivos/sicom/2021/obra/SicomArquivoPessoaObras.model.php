@@ -1,8 +1,8 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_pessoasobra102020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/2020/obra/geradores/gerarPESSOAOBRA.php");
+require_once("classes/db_pessoasobra102021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2021/obra/geradores/gerarPESSOAOBRA.php");
 
 /**
  * Dados Cadastro de Reponsaveis Sicom Obras
@@ -60,7 +60,7 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
         /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clpessoasobra102020 = new cl_pessoasobra102020();
+    $clpessoasobra102021 = new cl_pessoasobra102021();
 
 
     /**
@@ -70,11 +70,11 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
     /**
      * registro 10 exclusão
      */
-    $result = db_query($clpessoasobra102020->sql_query(null, "*", null, "si194_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si194_instit=" . db_getsession("DB_instit")));
+    $result = db_query($clpessoasobra102021->sql_query(null, "*", null, "si194_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si194_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clpessoasobra102020->excluir(null, "si194_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si194_instit=" . db_getsession("DB_instit"));
-      if ($clpessoasobra102020->erro_status == 0) {
-        throw new Exception($clpessoasobra102020->erro_msg);
+      $clpessoasobra102021->excluir(null, "si194_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si194_instit=" . db_getsession("DB_instit"));
+      if ($clpessoasobra102021->erro_status == 0) {
+        throw new Exception($clpessoasobra102021->erro_msg);
       }
     }
 
@@ -94,26 +94,26 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
             AND DATE_PART('MONTH',licobrasresponsaveis.obr05_dtcadastrores)=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
             AND z01_cgccpf NOT IN
             (SELECT si194_nrodocumento
-                 FROM pessoasobra102020
+                 FROM pessoasobra102021
             INNER JOIN cgm ON si194_nrodocumento = z01_cgccpf)
     ";
     $rsResult10 = db_query($sql);//db_criatabela($rsResult10);die($sql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      $clpessoasobra102020 = new cl_pessoasobra102020();
+      $clpessoasobra102021 = new cl_pessoasobra102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $clpessoasobra102020->si194_tiporegistro           = 10;
-      $clpessoasobra102020->si194_nrodocumento           = $oDados10->si194_nrodocumento;
-      $clpessoasobra102020->si194_nome                   = $this->removeCaracteres($oDados10->si194_nome);
-      $clpessoasobra102020->si194_tipocadastro           = $oDados10->si194_tipocadastro;
-      $clpessoasobra102020->si194_justificativaalteracao = $oDados10->si194_justificativaalteracao;
-      $clpessoasobra102020->si194_mes                    = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clpessoasobra102020->si194_instit                 = db_getsession("DB_instit");
+      $clpessoasobra102021->si194_tiporegistro           = 10;
+      $clpessoasobra102021->si194_nrodocumento           = $oDados10->si194_nrodocumento;
+      $clpessoasobra102021->si194_nome                   = $this->removeCaracteres($oDados10->si194_nome);
+      $clpessoasobra102021->si194_tipocadastro           = $oDados10->si194_tipocadastro;
+      $clpessoasobra102021->si194_justificativaalteracao = $oDados10->si194_justificativaalteracao;
+      $clpessoasobra102021->si194_mes                    = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clpessoasobra102021->si194_instit                 = db_getsession("DB_instit");
 
-      $clpessoasobra102020->incluir(null);
-      if ($clpessoasobra102020->erro_status == 0) {
-        throw new Exception($clpessoasobra102020->erro_msg);
+      $clpessoasobra102021->incluir(null);
+      if ($clpessoasobra102021->erro_status == 0) {
+        throw new Exception($clpessoasobra102021->erro_msg);
       }
     }
 

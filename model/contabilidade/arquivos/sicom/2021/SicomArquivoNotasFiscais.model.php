@@ -1,9 +1,9 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_ntf102020_classe.php");
-require_once ("classes/db_ntf112020_classe.php");
-require_once ("classes/db_ntf122020_classe.php");
+require_once ("classes/db_ntf102021_classe.php");
+require_once ("classes/db_ntf112021_classe.php");
+require_once ("classes/db_ntf122021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarNTF.model.php");
 
  /**
@@ -58,9 +58,9 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
    */
   public function gerarDados() {
 
-  	$clntf102020 = new cl_ntf102020();
-    $clntf112020 = new cl_ntf112020();
-    $clntf122020 = new cl_ntf122020();
+  	$clntf102021 = new cl_ntf102021();
+    $clntf112021 = new cl_ntf112021();
+    $clntf122021 = new cl_ntf122021();
 
 
 
@@ -69,35 +69,35 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
     /*
      * excluir informacoes do mes selecionado registro 12
      */
-    $result = $clntf122020->sql_record($clntf122020->sql_query(NULL,"*",NULL,"si145_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si145_instit = ".db_getsession("DB_instit") ));
+    $result = $clntf122021->sql_record($clntf122021->sql_query(NULL,"*",NULL,"si145_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si145_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
 
-      $clntf122020->excluir(NULL,"si145_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si145_instit = ".db_getsession("DB_instit"));
-      if ($clntf122020->erro_status == 0) {
-        throw new Exception($clntf122020->erro_msg);
+      $clntf122021->excluir(NULL,"si145_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si145_instit = ".db_getsession("DB_instit"));
+      if ($clntf122021->erro_status == 0) {
+        throw new Exception($clntf122021->erro_msg);
       }
     }
 
      /*
      * excluir informacoes do mes selecionado registro 11
      */
-    $result = $clntf112020->sql_record($clntf112020->sql_query(NULL,"*",NULL,"si144_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si144_instit = ".db_getsession("DB_instit")));
+    $result = $clntf112021->sql_record($clntf112021->sql_query(NULL,"*",NULL,"si144_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si144_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
 
-      $clntf112020->excluir(NULL,"si144_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si144_instit = ".db_getsession("DB_instit"));
-      if ($clntf112020->erro_status == 0) {
-        throw new Exception($clntf112020->erro_msg);
+      $clntf112021->excluir(NULL,"si144_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si144_instit = ".db_getsession("DB_instit"));
+      if ($clntf112021->erro_status == 0) {
+        throw new Exception($clntf112021->erro_msg);
       }
     }
 
     /*
      * excluir informacoes do mes selecionado registro 10
      */
-    $result = $clntf102020->sql_record($clntf102020->sql_query(NULL,"*",NULL,"si143_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si143_instit = ".db_getsession("DB_instit")));
+    $result = $clntf102021->sql_record($clntf102021->sql_query(NULL,"*",NULL,"si143_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si143_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clntf102020->excluir(NULL,"si143_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si143_instit = ".db_getsession("DB_instit"));
-      if ($clntf102020->erro_status == 0) {
-        throw new Exception($clntf102020->erro_msg);
+      $clntf102021->excluir(NULL,"si143_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si143_instit = ".db_getsession("DB_instit"));
+      if ($clntf102021->erro_status == 0) {
+        throw new Exception($clntf102021->erro_msg);
       }
     }
 
@@ -163,46 +163,46 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clntf102020 = new cl_ntf102020();
+      $clntf102021 = new cl_ntf102021();
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $clntf102020->si143_tiporegistro              = 10;
-      $clntf102020->si143_codnotafiscal             = $oDados10->codnotafiscal;
-      $clntf102020->si143_codorgao                  = $oDados10->codorgao;
+      $clntf102021->si143_tiporegistro              = 10;
+      $clntf102021->si143_codnotafiscal             = $oDados10->codnotafiscal;
+      $clntf102021->si143_codorgao                  = $oDados10->codorgao;
 
       $oDados10->nfnumero = str_replace("/", "", $oDados10->nfnumero);
       if(ereg('[^0-9]',$oDados10->nfnumero)){
-        $clntf102020->si143_nfnumero                  = null;
+        $clntf102021->si143_nfnumero                  = null;
       }else{
-        $clntf102020->si143_nfnumero                  = $oDados10->nfnumero;
+        $clntf102021->si143_nfnumero                  = $oDados10->nfnumero;
       }
 
-      $clntf102020->si143_nfserie                   = $oDados10->nfserie;
-      $clntf102020->si143_tipodocumento             = $oDados10->tipodocumento;
-      $clntf102020->si143_nrodocumento              = $oDados10->nrodocumento;
-      $clntf102020->si143_nroinscestadual           = $oDados10->nroinscestadual;
-      $clntf102020->si143_nroinscmunicipal          = $oDados10->nroinscmunicipal;
-      $clntf102020->si143_nomemunicipio             = $oDados10->nomemunicipio;
-      $clntf102020->si143_cepmunicipio              = $oDados10->cepmunicipio;
-      $clntf102020->si143_ufcredor                  = $oDados10->ufcredor;
-      $clntf102020->si143_notafiscaleletronica      = $oDados10->notafiscaleletronica;
-      $clntf102020->si143_chaveacesso               = $oDados10->chaveacesso;
-      $clntf102020->si143_chaveacessomunicipal      = $oDados10->chaveacessomunicipal;
-      $clntf102020->si143_nfaidf                    = $oDados10->nfaidf;
-      $clntf102020->si143_dtemissaonf               = $oDados10->dtemissaonf;
-      $clntf102020->si143_dtvencimentonf            = $oDados10->dtvencimentonf;
-      $clntf102020->si143_nfvalortotal              = $oDados10->nfvalortotal;
-      $clntf102020->si143_nfvalordesconto           = $oDados10->nfvalordesconto;
-      $clntf102020->si143_nfvalorliquido            = $oDados10->nfvalorliquido;
-      $clntf102020->si143_mes                       = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clntf102020->si143_instit                    = db_getsession("DB_instit");
+      $clntf102021->si143_nfserie                   = $oDados10->nfserie;
+      $clntf102021->si143_tipodocumento             = $oDados10->tipodocumento;
+      $clntf102021->si143_nrodocumento              = $oDados10->nrodocumento;
+      $clntf102021->si143_nroinscestadual           = $oDados10->nroinscestadual;
+      $clntf102021->si143_nroinscmunicipal          = $oDados10->nroinscmunicipal;
+      $clntf102021->si143_nomemunicipio             = $oDados10->nomemunicipio;
+      $clntf102021->si143_cepmunicipio              = $oDados10->cepmunicipio;
+      $clntf102021->si143_ufcredor                  = $oDados10->ufcredor;
+      $clntf102021->si143_notafiscaleletronica      = $oDados10->notafiscaleletronica;
+      $clntf102021->si143_chaveacesso               = $oDados10->chaveacesso;
+      $clntf102021->si143_chaveacessomunicipal      = $oDados10->chaveacessomunicipal;
+      $clntf102021->si143_nfaidf                    = $oDados10->nfaidf;
+      $clntf102021->si143_dtemissaonf               = $oDados10->dtemissaonf;
+      $clntf102021->si143_dtvencimentonf            = $oDados10->dtvencimentonf;
+      $clntf102021->si143_nfvalortotal              = $oDados10->nfvalortotal;
+      $clntf102021->si143_nfvalordesconto           = $oDados10->nfvalordesconto;
+      $clntf102021->si143_nfvalorliquido            = $oDados10->nfvalorliquido;
+      $clntf102021->si143_mes                       = $this->sDataFinal['5'].$this->sDataFinal['6'];
+      $clntf102021->si143_instit                    = db_getsession("DB_instit");
 
-      $clntf102020->incluir(null);
+      $clntf102021->incluir(null);
 
-      if ($clntf102020->erro_status == 0) {
+      if ($clntf102021->erro_status == 0) {
 
-        throw new Exception($clntf102020->erro_msg);
+        throw new Exception($clntf102021->erro_msg);
       }
 
       /*
@@ -220,28 +220,28 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       inner join empenho.empempenho as empempenho on (empnota.e69_numemp=empempenho.e60_numemp)
       inner join compras.pcmater as pcmater on (empempitem.e62_item = pcmater.pc01_codmater)
       inner join empenho.pagordemnota as pagordemnota on (empnota.e69_codnota=pagordemnota.e71_codnota and pagordemnota.e71_anulado = false)
-      where empnota.e69_codnota = ".$clntf102020->si143_codnotafiscal;
+      where empnota.e69_codnota = ".$clntf102021->si143_codnotafiscal;
 
       $rsResult11 = db_query($sSql);
 
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-        $clntf112020 = new cl_ntf112020();
+        $clntf112021 = new cl_ntf112021();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
-        $clntf112020->si144_tiporegistro           = 11;
-        $clntf112020->si144_reg10                  = $clntf102020->si143_sequencial;
-        $clntf112020->si144_codnotafiscal          = $clntf112020->codnotafiscal;
-        $clntf112020->si144_coditem                = $clntf112020->coditem;
-        $clntf112020->si144_quantidadeitem         = $clntf112020->quantidadeitem;
-        $clntf112020->si144_valorunitarioitem      = $clntf112020->valorunitarioitem;
-        $clntf112020->si144_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
-        $clntf112020->si144_instit                 = db_getsession("DB_instit");
+        $clntf112021->si144_tiporegistro           = 11;
+        $clntf112021->si144_reg10                  = $clntf102021->si143_sequencial;
+        $clntf112021->si144_codnotafiscal          = $clntf112021->codnotafiscal;
+        $clntf112021->si144_coditem                = $clntf112021->coditem;
+        $clntf112021->si144_quantidadeitem         = $clntf112021->quantidadeitem;
+        $clntf112021->si144_valorunitarioitem      = $clntf112021->valorunitarioitem;
+        $clntf112021->si144_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+        $clntf112021->si144_instit                 = db_getsession("DB_instit");
 
-        $clntf112020->incluir(null);
+        $clntf112021->incluir(null);
 
-        if ($clntf112020->erro_status == 0) {
-          throw new Exception($clntf112020->erro_msg);
+        if ($clntf112021->erro_status == 0) {
+          throw new Exception($clntf112021->erro_msg);
         }
 
       }
@@ -265,30 +265,30 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       inner join empenho.pagordem as pagordem on (pagordemnota.e71_codord=pagordem.e50_codord)
       inner join orcamento.orcdotacao as orcdotacao on (empempenho.e60_coddot = orcdotacao.o58_coddot)
       where orcdotacao.o58_anousu = ". db_getsession("DB_anousu") ."
-      and empnota.e69_codnota = ". $clntf102020->si143_codnotafiscal;
+      and empnota.e69_codnota = ". $clntf102021->si143_codnotafiscal;
 
       //orcdotacao pegar orgão e unidade
       $rsResult12 = db_query($sSql);
       for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
-        $clntf122020 = new cl_ntf122020();
+        $clntf122021 = new cl_ntf122021();
         $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 
-        $clntf122020->si145_tiporegistro           = 12;
-        $clntf122020->si145_reg10                  = $clntf102020->si143_sequencial;
-        $clntf122020->si145_codnotafiscal          = $oDados12->codnotafiscal;
-        $clntf122020->si145_codunidadesub          = str_pad($oDados12->orgao, 2, "0", STR_PAD_LEFT).str_pad($oDados12->unidade, 3, "0", STR_PAD_LEFT);
-        $clntf122020->si145_dtempenho              = $oDados12->dtempenho;
-        $clntf122020->si145_nroempenho             = $oDados12->nroempenho;
-        $clntf122020->si145_dtliquidacao           = $oDados12->dtliquidacao;
-        $clntf122020->si145_nroliquidacao          = $oDados12->nroliquidacao;
-        $clntf122020->si145_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
-        $clntf122020->si145_instit                 = db_getsession("DB_instit");
+        $clntf122021->si145_tiporegistro           = 12;
+        $clntf122021->si145_reg10                  = $clntf102021->si143_sequencial;
+        $clntf122021->si145_codnotafiscal          = $oDados12->codnotafiscal;
+        $clntf122021->si145_codunidadesub          = str_pad($oDados12->orgao, 2, "0", STR_PAD_LEFT).str_pad($oDados12->unidade, 3, "0", STR_PAD_LEFT);
+        $clntf122021->si145_dtempenho              = $oDados12->dtempenho;
+        $clntf122021->si145_nroempenho             = $oDados12->nroempenho;
+        $clntf122021->si145_dtliquidacao           = $oDados12->dtliquidacao;
+        $clntf122021->si145_nroliquidacao          = $oDados12->nroliquidacao;
+        $clntf122021->si145_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+        $clntf122021->si145_instit                 = db_getsession("DB_instit");
 
-        $clntf122020->incluir(null);
+        $clntf122021->incluir(null);
 
-        if ($clntf122020->erro_status == 0) {
-          throw new Exception($clntf122020->erro_msg);
+        if ($clntf122021->erro_status == 0) {
+          throw new Exception($clntf122021->erro_msg);
         }
 
       }

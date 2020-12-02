@@ -2,8 +2,8 @@
  
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_reglic10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_reglic20$PROXIMO_ANO_classe.php");
+require_once ("classes/db_reglic102021_classe.php");
+require_once ("classes/db_reglic202121_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarREGLIC.model.php");
 
  /**
@@ -63,27 +63,27 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
   	
-	$clreglic10$PROXIMO_ANO = new cl_reglic10$PROXIMO_ANO();
-  	$clreglic20$PROXIMO_ANO = new cl_reglic20$PROXIMO_ANO();
+	$clreglic102021 = new cl_reglic102021();
+  	$clreglic202121 = new cl_reglic202121();
   	
     
     /**
      * excluir informacoes do mes selecioado
      */
     db_inicio_transacao();
-    $result = db_query($clreglic10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si44_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si44_instit=".db_getsession("DB_instit")));
+    $result = db_query($clreglic102021->sql_query(NULL,"*",NULL,"si44_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si44_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clreglic10$PROXIMO_ANO->excluir(NULL,"si44_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si44_instit=".db_getsession("DB_instit"));
-      if ($clreglic10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clreglic10$PROXIMO_ANO->erro_msg);
+    	$clreglic102021->excluir(NULL,"si44_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si44_instit=".db_getsession("DB_instit"));
+      if ($clreglic102021->erro_status == 0) {
+    	  throw new Exception($clreglic102021->erro_msg);
       }
     }
     
-    $result = db_query($clreglic20$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si45_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si45_instit=".db_getsession("DB_instit")));
+    $result = db_query($clreglic202121->sql_query(NULL,"*",NULL,"si45_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si45_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clreglic20$PROXIMO_ANO->excluir(NULL,"si45_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si45_instit=".db_getsession("DB_instit"));
-      if ($clreglic20$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clreglic20$PROXIMO_ANO->erro_msg);
+    	$clreglic202121->excluir(NULL,"si45_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si45_instit=".db_getsession("DB_instit"));
+      if ($clreglic202121->erro_status == 0) {
+    	  throw new Exception($clreglic202121->erro_msg);
       }
     }
     
@@ -101,27 +101,27 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
     
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-    	$clreglic10$PROXIMO_ANO = new cl_reglic10$PROXIMO_ANO();
+    	$clreglic102021 = new cl_reglic102021();
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 	   
-		  $clreglic10$PROXIMO_ANO->si44_tiporegistro         			= 10;
-		  $clreglic10$PROXIMO_ANO->si44_codorgao        	 			= $oDados10->codorgao;
-		  $clreglic10$PROXIMO_ANO->si44_tipodecreto    		 			= $oDados10->tipodecreto;
-		  $clreglic10$PROXIMO_ANO->si44_nrodecretomunicipal  			= $oDados10->nrodecretomunicipal;
-		  $clreglic10$PROXIMO_ANO->si44_datadecretomunicipal 			= $oDados10->datadecretomunicipal;
-		  $clreglic10$PROXIMO_ANO->si44_datapublicacaodecretomunicipal  = $oDados10->datapublicacaodecretomunicipal;
-		  $clreglic10$PROXIMO_ANO->si44_instit		   				    = db_getsession("DB_instit");
-		  $clreglic10$PROXIMO_ANO->si44_mes			                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  $clreglic102021->si44_tiporegistro         			= 10;
+		  $clreglic102021->si44_codorgao        	 			= $oDados10->codorgao;
+		  $clreglic102021->si44_tipodecreto    		 			= $oDados10->tipodecreto;
+		  $clreglic102021->si44_nrodecretomunicipal  			= $oDados10->nrodecretomunicipal;
+		  $clreglic102021->si44_datadecretomunicipal 			= $oDados10->datadecretomunicipal;
+		  $clreglic102021->si44_datapublicacaodecretomunicipal  = $oDados10->datapublicacaodecretomunicipal;
+		  $clreglic102021->si44_instit		   				    = db_getsession("DB_instit");
+		  $clreglic102021->si44_mes			                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 		   		  
 		  
-		  $clreglic10$PROXIMO_ANO->incluir(null);
-		  if ($clreglic10$PROXIMO_ANO->erro_status == 0) {
-		  	throw new Exception($clreglic10$PROXIMO_ANO->erro_msg);
+		  $clreglic102021->incluir(null);
+		  if ($clreglic102021->erro_status == 0) {
+		  	throw new Exception($clreglic102021->erro_msg);
 		  }
 		  
     }
     /**
-     * campos faltantes  na especificação de AGNALDO. VERIFICAR ###########  SQL  ############ 
+     * campos faltantes  na especificaÃ§Ã£o de AGNALDO. VERIFICAR ###########  SQL  ############ 
      */
     
   	/*	$sSql = "SELECT   '20' as tipoRegistro,
@@ -150,32 +150,32 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
 		 */
 		/*for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 		  	
-		   $clreglic20$PROXIMO_ANO = new cl_reglic20$PROXIMO_ANO();
+		   $clreglic202121 = new cl_reglic202121();
 		  
 			$oDados20       = db_utils::fieldsMemory($rsResult20, $iCont20);
 		  	
-		 	$clreglic20$PROXIMO_ANO->si45_tiporegistro   			 = 20;
-			$clreglic20$PROXIMO_ANO->si45_codorgao					 =$oDados20->codorgao;
-			$clreglic20$PROXIMO_ANO->si45_regulamentart47			 =$oDados20->regulamentart47;	
-			$clreglic20$PROXIMO_ANO->si45_nronormareg				 =$oDados20->nronormareg;
-			$clreglic20$PROXIMO_ANO->si45_datanormareg               =$oDados20->datanormareg;
-			$clreglic20$PROXIMO_ANO->si45_datapubnormareg			 =$oDados20->datapubnormareg;
-			$clreglic20$PROXIMO_ANO->si45_regexclusiva				 =$oDados20->regexclusiva;
-			$clreglic20$PROXIMO_ANO->si45_artigoregexclusiva		 =$oDados20->artigoregexclusiva;
-			$clreglic20$PROXIMO_ANO->si45_valorlimiteregexclusiva	 =$oDados20->valorlimiteregexclusiva;
-			$clreglic20$PROXIMO_ANO->si45_procsubcontratacao		 =$oDados20->procsubcontratacao	;
-			$clreglic20$PROXIMO_ANO->si45_artigoprocsubcontratacao	 =$oDados20->vartigoprocsubcontratacao;
-			$clreglic20$PROXIMO_ANO->si45_percentualsubcontratacao	 =$oDados20->percentualsubcontratacao;
-			$clreglic20$PROXIMO_ANO->si45_criteriosempenhopagamento	 =$oDados20->criteriosempenhopagamento;
-			$clreglic20$PROXIMO_ANO->si45_artigoempenhopagamento     =$oDados20->artigoempenhopagamento;
-			$clreglic20$PROXIMO_ANO->si45_estabeleceuperccontratacao =$oDados20->estabeleceuperccontratacao;
-			$clreglic20$PROXIMO_ANO->si45_artigoperccontratacao 	 =$oDados20->vartigoperccontratacao;
-			$clreglic20$PROXIMO_ANO->si45_percentualcontratacao		 =$oDados20->percentualcontratacao;
+		 	$clreglic202121->si45_tiporegistro   			 = 20;
+			$clreglic202121->si45_codorgao					 =$oDados20->codorgao;
+			$clreglic202121->si45_regulamentart47			 =$oDados20->regulamentart47;	
+			$clreglic202121->si45_nronormareg				 =$oDados20->nronormareg;
+			$clreglic202121->si45_datanormareg               =$oDados20->datanormareg;
+			$clreglic202121->si45_datapubnormareg			 =$oDados20->datapubnormareg;
+			$clreglic202121->si45_regexclusiva				 =$oDados20->regexclusiva;
+			$clreglic202121->si45_artigoregexclusiva		 =$oDados20->artigoregexclusiva;
+			$clreglic202121->si45_valorlimiteregexclusiva	 =$oDados20->valorlimiteregexclusiva;
+			$clreglic202121->si45_procsubcontratacao		 =$oDados20->procsubcontratacao	;
+			$clreglic202121->si45_artigoprocsubcontratacao	 =$oDados20->vartigoprocsubcontratacao;
+			$clreglic202121->si45_percentualsubcontratacao	 =$oDados20->percentualsubcontratacao;
+			$clreglic202121->si45_criteriosempenhopagamento	 =$oDados20->criteriosempenhopagamento;
+			$clreglic202121->si45_artigoempenhopagamento     =$oDados20->artigoempenhopagamento;
+			$clreglic202121->si45_estabeleceuperccontratacao =$oDados20->estabeleceuperccontratacao;
+			$clreglic202121->si45_artigoperccontratacao 	 =$oDados20->vartigoperccontratacao;
+			$clreglic202121->si45_percentualcontratacao		 =$oDados20->percentualcontratacao;
 		 	
 		 	
-		  $clreglic20$PROXIMO_ANO->incluir(null);
-		  if ($clreglic20$PROXIMO_ANO->erro_status == 0) {
-		    throw new Exception($clreglic20$PROXIMO_ANO->erro_msg);
+		  $clreglic202121->incluir(null);
+		  if ($clreglic202121->erro_status == 0) {
+		    throw new Exception($clreglic202121->erro_msg);
 		  }
 		  	
 		}*/

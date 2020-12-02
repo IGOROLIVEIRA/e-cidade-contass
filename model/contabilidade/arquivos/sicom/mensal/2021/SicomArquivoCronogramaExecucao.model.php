@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_cronem102020_classe.php");
+require_once("classes/db_cronem102021_classe.php");
 require_once("classes/db_cronogramamesdesembolso_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCRONEM.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCRONEM.model.php");
 
 /**
  * gerar arquivo Cronograma de Execucao Mensal de Desembolso Sicom Acompanhamento Mensal
@@ -73,7 +73,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clcronem10 = new cl_cronem102020();
+    $clcronem10 = new cl_cronem102021();
     
     /**
      * inserir informacoes no banco de dados
@@ -131,7 +131,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
     $rsResult = db_query($sSql);//db_criatabela($rsResult);
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
       
-      $clcronem10 = new cl_cronem102020();
+      $clcronem10 = new cl_cronem102021();
       $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
       $clcronem10->si170_tiporegistro = "10";

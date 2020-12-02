@@ -1,15 +1,15 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_dclrf102020_classe.php");
-require_once ("classes/db_dclrf112020_classe.php");
-require_once ("classes/db_dclrf202020_classe.php");
-require_once ("classes/db_dclrf302020_classe.php");
-require_once ("classes/db_dclrf402020_classe.php");
+require_once ("classes/db_dclrf102021_classe.php");
+require_once ("classes/db_dclrf112021_classe.php");
+require_once ("classes/db_dclrf202021_classe.php");
+require_once ("classes/db_dclrf302021_classe.php");
+require_once ("classes/db_dclrf402021_classe.php");
 require_once ("classes/db_infocomplementaresinstit_classe.php");
 require_once ("classes/db_dadoscomplementareslrf_classe.php");
 require_once ("classes/db_medidasadotadaslrf_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarDCLRF.model.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarDCLRF.model.php");
 
 
 /**
@@ -72,11 +72,11 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
      */
     public function gerarDados() {
 
-        $cldclrf10                  = new cl_dclrf102020();
-        $cldclrf11                  = new cl_dclrf112020();
-        $cldclrf20                  = new cl_dclrf202020();
-        $cldclrf30                  = new cl_dclrf302020();
-        $cldclrf40                  = new cl_dclrf402020();
+        $cldclrf10                  = new cl_dclrf102021();
+        $cldclrf11                  = new cl_dclrf112021();
+        $cldclrf20                  = new cl_dclrf202021();
+        $cldclrf30                  = new cl_dclrf302021();
+        $cldclrf40                  = new cl_dclrf402021();
         $cldadoscomplementareslrf   = new cl_dadoscomplementareslrf();
         $clmedidasadotadaslrf       = new cl_medidasadotadaslrf();
         $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
@@ -127,7 +127,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
     //echo '<pre>'; var_dump($rsDadoscomplementares);die;
         foreach ($rsDadoscomplementares as $dados) {
 
-            $cldclrf10 = new cl_dclrf102020();
+            $cldclrf10 = new cl_dclrf102021();
             $cldclrf10->si157_tiporegistro = 10;
             $cldclrf10->si157_codorgao                          = $dados->c218_codorgao;
             $cldclrf10->si157_passivosreconhecidos              = $dados->c218_passivosreconhecidos;
@@ -191,7 +191,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
 
             if($this->getTipoinstit(db_getsession('DB_instit')) == 2){
                 if($this->sDataFinal['5'].$this->sDataFinal['6'] == '12'){
-                    $cldclrf20 = new cl_dclrf202020();
+                    $cldclrf20 = new cl_dclrf202021();
                     $cldclrf20->si191_tiporegistro = 20;
                     $cldclrf20->si191_reg10 = $cldclrf10->si157_sequencial;
                     $cldclrf20->si191_contopcredito = $dados->c219_contopcredito;
@@ -210,7 +210,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
                     }
 
                 }
-                $cldclrf30 = new cl_dclrf302020();
+                $cldclrf30 = new cl_dclrf302021();
                 $cldclrf30->si192_tiporegistro = 30;
                 $cldclrf30->si192_publiclrf = $dados->c220_publiclrf;
                 $cldclrf30->si192_dtpublicacaorelatoriolrf = $dados->c220_dtpublicacaorelatoriolrf;
@@ -227,7 +227,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
                 }
 
             }
-            $cldclrf40 = new cl_dclrf402020();
+            $cldclrf40 = new cl_dclrf402021();
             $cldclrf40->si193_tiporegistro = 40;
             $cldclrf40->si193_reg10 = $cldclrf10->si157_sequencial;
             $cldclrf40->si193_publicrgf = $dados->c221_publicrgf;

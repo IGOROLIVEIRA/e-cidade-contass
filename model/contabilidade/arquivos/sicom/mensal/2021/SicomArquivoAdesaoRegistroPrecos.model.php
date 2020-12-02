@@ -1,14 +1,14 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_regadesao102020_classe.php");
-require_once("classes/db_regadesao112020_classe.php");
-require_once("classes/db_regadesao122020_classe.php");
-require_once("classes/db_regadesao132020_classe.php");
-require_once("classes/db_regadesao142020_classe.php");
-require_once("classes/db_regadesao152020_classe.php");
-require_once("classes/db_regadesao202020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarREGADESAO.model.php");
+require_once("classes/db_regadesao102021_classe.php");
+require_once("classes/db_regadesao112021_classe.php");
+require_once("classes/db_regadesao122021_classe.php");
+require_once("classes/db_regadesao132021_classe.php");
+require_once("classes/db_regadesao142021_classe.php");
+require_once("classes/db_regadesao152021_classe.php");
+require_once("classes/db_regadesao202021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarREGADESAO.model.php");
 
 /**
  * Adeso a Registro de Preos Sicom Acompanhamento Mensal
@@ -140,13 +140,13 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
   public function gerarDados()
   {
 
-    $regadesao10 = new cl_regadesao102020();
-    $regadesao11 = new cl_regadesao112020();
-    $regadesao12 = new cl_regadesao122020();
-    $regadesao13 = new cl_regadesao132020();
-    $regadesao14 = new cl_regadesao142020();
-    $regadesao15 = new cl_regadesao152020();
-    $regadesao20 = new cl_regadesao202020();
+    $regadesao10 = new cl_regadesao102021();
+    $regadesao11 = new cl_regadesao112021();
+    $regadesao12 = new cl_regadesao122021();
+    $regadesao13 = new cl_regadesao132021();
+    $regadesao14 = new cl_regadesao142021();
+    $regadesao15 = new cl_regadesao152021();
+    $regadesao20 = new cl_regadesao202021();
 
     db_inicio_transacao();
 
@@ -240,7 +240,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      $regadesao10 = new cl_regadesao102020();
+      $regadesao10 = new cl_regadesao102021();
       $regadesao10->si67_tiporegistro = 10;
       $regadesao10->si67_tipocadastro = $oDados10->si06_cadinicial;
       $regadesao10->si67_codorgao = $oDados10->codorgao;
@@ -278,7 +278,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-        $regadesao11 = new cl_regadesao112020();
+        $regadesao11 = new cl_regadesao112021();
         $regadesao11->si68_tiporegistro = 11;
         $regadesao11->si68_codorgao = $oDados10->codorgao;
         $regadesao11->si68_codunidadesub = $oDados10->codunidadesub;
@@ -305,7 +305,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
         $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-        $regadesao12 = new cl_regadesao122020();
+        $regadesao12 = new cl_regadesao122021();
         $regadesao12->si69_tiporegistro = 12;
         $regadesao12->si69_codorgao = $oDados10->codorgao;
         $regadesao12->si69_codunidadesub = $oDados10->codunidadesub;
@@ -332,7 +332,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
         $oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
-        $regadesao13 = new cl_regadesao132020();
+        $regadesao13 = new cl_regadesao132021();
         $regadesao13->si70_tiporegistro = 13;
         $regadesao13->si70_codorgao = $oDados10->codorgao;
         $regadesao13->si70_codunidadesub = $oDados10->codunidadesub;
@@ -414,7 +414,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
         $oDados14 = db_utils::fieldsMemory($rsResult14, $iCont14);
-        $regadesao14 = new cl_regadesao142020();
+        $regadesao14 = new cl_regadesao142021();
         $regadesao14->si71_tiporegistro = 14;
         $regadesao14->si71_codorgao = $oDados10->codorgao;
         $regadesao14->si71_codunidadesub = $oDados10->codunidadesub;
@@ -448,7 +448,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
       for ($iCont15 = 0; $iCont15 < pg_num_rows($rsResult15); $iCont15++) {
 
         $oDados15 = db_utils::fieldsMemory($rsResult15, $iCont15);
-        $regadesao15 = new cl_regadesao152020();
+        $regadesao15 = new cl_regadesao152021();
         $regadesao15->si72_tiporegistro = 15;
         $regadesao15->si72_codorgao = $oDados10->codorgao;
         $regadesao15->si72_codunidadesub = $oDados10->codunidadesub;
@@ -483,7 +483,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-        $regadesao20 = new cl_regadesao202020();
+        $regadesao20 = new cl_regadesao202021();
         $regadesao20->si73_tiporegistro = 20;
         $regadesao20->si73_codorgao = $oDados10->codorgao;
         $regadesao20->si73_codunidadesub = $oDados10->codunidadesub;

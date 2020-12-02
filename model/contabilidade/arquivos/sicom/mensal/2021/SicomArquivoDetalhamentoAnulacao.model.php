@@ -1,10 +1,10 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_alq102020_classe.php");
-require_once("classes/db_alq112020_classe.php");
-require_once("classes/db_alq122020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarALQ.model.php");
+require_once("classes/db_alq102021_classe.php");
+require_once("classes/db_alq112021_classe.php");
+require_once("classes/db_alq122021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarALQ.model.php");
 
 /**
  * Anulacao da Liquidacao Sicom Acompanhamento Mensal
@@ -29,7 +29,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
   protected $sNomeArquivo = 'ALQ';
 
   /**
-   * @var array Fontes encerradas em 2020
+   * @var array Fontes encerradas em 2021
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -105,11 +105,11 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
    $sSql = "SELECT e50_data,
                    CASE
-                       WHEN date_part('year',e50_data) < $PROXIMO_ANO THEN e71_codnota::varchar
+                       WHEN date_part('year',e50_data) < 2021 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0'))
                    END AS codreduzido,
                    CASE
-                       WHEN date_part('year',e50_data) < $PROXIMO_ANO THEN e71_codnota::varchar
+                       WHEN date_part('year',e50_data) < 2021 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
                    END AS nroliquidacao,
                    c80_data,
@@ -176,9 +176,9 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
     $rsDetalhamentos = db_query($sSql);
     //    db_criatabela($rsDetalhamentos);echo pg_last_error();
 
-    $clalq10 = new cl_alq102020();
-    $clalq11 = new cl_alq112020();
-    $clalq12 = new cl_alq122020();
+    $clalq10 = new cl_alq102021();
+    $clalq11 = new cl_alq112021();
+    $clalq12 = new cl_alq122021();
 
     /*
      * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
@@ -202,7 +202,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
     db_fim_transacao();
     db_inicio_transacao();
     /**
-     * percorrer registros de detalhamento anulação retornados do sql acima
+     * percorrer registros de detalhamento anulaÃ§Ã£o retornados do sql acima
      */
     $aDadosAgrupados = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsDetalhamentos); $iCont++) {
@@ -237,7 +237,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
         /*
          * Verifica se o empenho existe na tabela dotacaorpsicom
-         * Caso exista, busca os dados da dotação.
+         * Caso exista, busca os dados da dotaÃ§Ã£o.
          * */
         $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDetalhamento->e60_numemp}";
         $iFonteAlterada = '0';
@@ -295,7 +295,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
     foreach ($aDadosAgrupados as $oDadosAgrupados) {
 
-      $oDados10 = new cl_alq102020();
+      $oDados10 = new cl_alq102021();
 
       $oDados10->si121_tiporegistro = 10;
       $oDados10->si121_codreduzido = $oDadosAgrupados->si121_codreduzido;
@@ -318,7 +318,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         throw new Exception($oDados10->erro_msg);
       }
 
-      $oDados11 = new cl_alq112020();
+      $oDados11 = new cl_alq112021();
 
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
@@ -341,7 +341,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
       if (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizCompDesp)) {
           
-        $oDados12 = new cl_alq122020();
+        $oDados12 = new cl_alq122021();
         $oDados12->si123_tiporegistro = 12;
         $oDados12->si123_reg10 = $oDados10->si121_sequencial;
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
@@ -357,7 +357,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
       } elseif (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizDespSentenca)) {
         
-        $oDados12 = new cl_alq122020();
+        $oDados12 = new cl_alq122021();
         $oDados12->si123_tiporegistro = 12;
         $oDados12->si123_reg10 = $oDados10->si121_sequencial;
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;

@@ -1,11 +1,11 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_parelic10$PROXIMO_ANO_classe.php");
+require_once ("classes/db_parelic102021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarPARELIC.model.php");
 
  /**
-  * Parecer da Licitação Sicom Acompanhamento Mensal
+  * Parecer da LicitaÃ§Ã£o Sicom Acompanhamento Mensal
   * @author marcelo
   * @package Contabilidade
   */
@@ -68,7 +68,7 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
   }
   
   /**
-   * Parecer da Licitação do mes para gerar o arquivo
+   * Parecer da LicitaÃ§Ã£o do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
@@ -76,17 +76,17 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
   /**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-  	$clparelic10$PROXIMO_ANO = new cl_parelic10$PROXIMO_ANO();
+  	$clparelic102021 = new cl_parelic102021();
   	
   	/**
      * excluir informacoes do mes selecioado
      */
     db_inicio_transacao(); 
-    $result = db_query($clparelic10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit")));
+    $result = db_query($clparelic102021->sql_query(NULL,"*",NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clparelic10$PROXIMO_ANO->excluir(NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit"));
-      if ($clparelic10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clparelic10$PROXIMO_ANO->erro_msg);
+    	$clparelic102021->excluir(NULL,"si66_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si66_instit=".db_getsession("DB_instit"));
+      if ($clparelic102021->erro_status == 0) {
+    	  throw new Exception($clparelic102021->erro_msg);
       }
     }
     //
@@ -113,23 +113,23 @@ class SicomArquivoParecerLicitacao extends SicomArquivoBase implements iPadArqui
     
     	for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-	    	$clparelic10$PROXIMO_ANO = new cl_parelic10$PROXIMO_ANO();
+	    	$clparelic102021 = new cl_parelic102021();
 	    	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 	   
-		  $clparelic10$PROXIMO_ANO->si66_tiporegistro                 = 10;
-		  $clparelic10$PROXIMO_ANO->si66_codorgao                     = $oDados10->codorgaoresp;
-		  $clparelic10$PROXIMO_ANO->si66_codunidadesub                = $oDados10->codunidadesubresp;
-		  $clparelic10$PROXIMO_ANO->si66_exerciciolicitacao           = $oDados10->exerciciolicitacao;
-		  $clparelic10$PROXIMO_ANO->si66_nroprocessolicitatorio       = $oDados10->nroprocessolicitatorio;        
-		  $clparelic10$PROXIMO_ANO->si66_dataparecer                  = $oDados10->dataparecer;
-		  $clparelic10$PROXIMO_ANO->si66_tipoparecer                  = $oDados10->tipoparecer;
-		  $clparelic10$PROXIMO_ANO->si66_nrocpf                       = $oDados10->nrocpf;
-		  $clparelic10$PROXIMO_ANO->si66_instit		   		     	  = db_getsession("DB_instit");
-		  $clparelic10$PROXIMO_ANO->si66_mes                          = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  $clparelic102021->si66_tiporegistro                 = 10;
+		  $clparelic102021->si66_codorgao                     = $oDados10->codorgaoresp;
+		  $clparelic102021->si66_codunidadesub                = $oDados10->codunidadesubresp;
+		  $clparelic102021->si66_exerciciolicitacao           = $oDados10->exerciciolicitacao;
+		  $clparelic102021->si66_nroprocessolicitatorio       = $oDados10->nroprocessolicitatorio;        
+		  $clparelic102021->si66_dataparecer                  = $oDados10->dataparecer;
+		  $clparelic102021->si66_tipoparecer                  = $oDados10->tipoparecer;
+		  $clparelic102021->si66_nrocpf                       = $oDados10->nrocpf;
+		  $clparelic102021->si66_instit		   		     	  = db_getsession("DB_instit");
+		  $clparelic102021->si66_mes                          = $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  
-		  $clparelic10$PROXIMO_ANO->incluir(null);
-		  if ($clparelic10$PROXIMO_ANO->erro_status == 0) {
-		  	throw new Exception($clparelic10$PROXIMO_ANO->erro_msg);
+		  $clparelic102021->incluir(null);
+		  if ($clparelic102021->erro_status == 0) {
+		  	throw new Exception($clparelic102021->erro_msg);
 		  }
     
   	} 

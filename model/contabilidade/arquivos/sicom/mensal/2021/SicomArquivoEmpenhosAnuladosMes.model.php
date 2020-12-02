@@ -3,10 +3,10 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once("classes/db_anl102020_classe.php");
-require_once("classes/db_anl112020_classe.php");
+require_once("classes/db_anl102021_classe.php");
+require_once("classes/db_anl112021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarANL.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarANL.model.php");
 
 /**
  * detalhamento dos empenhos do mês Sicom Acompanhamento Mensal
@@ -97,8 +97,8 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
     {
 
 
-        $regitro10 = new cl_anl102020();
-        $regitro11 = new cl_anl112020();
+        $regitro10 = new cl_anl102021();
+        $regitro11 = new cl_anl112021();
 
         $sSqlUnidade = "select * from infocomplementares where
   	 si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
@@ -217,7 +217,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
 
             }
 
-            $oDadosEmpenhoAnulado = new cl_anl102020();
+            $oDadosEmpenhoAnulado = new cl_anl102021();
 
             $oDadosEmpenhoAnulado->si110_tiporegistro = 10;
             $oDadosEmpenhoAnulado->si110_codorgao = str_pad($oEmpenhoAnulado->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
@@ -244,7 +244,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
             }
 
 
-            $oDadosEmpenhoAnuladoFonte = new cl_anl112020();
+            $oDadosEmpenhoAnuladoFonte = new cl_anl112021();
 
             $oDadosEmpenhoAnuladoFonte->si111_tiporegistro = 11;
             $oDadosEmpenhoAnuladoFonte->si111_codunidadesub = $sCodUnidade;

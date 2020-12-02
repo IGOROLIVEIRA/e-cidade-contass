@@ -468,7 +468,7 @@ for ($iCont = 1; $iCont <= 3; $iCont++) {
   if (${$iAnoUsu}) {
     $oDadosMTFIS->exercicio = ${$iAnoUsu};
   } else {
-    $oDadosMTFIS->exercicio = '2020';
+    $oDadosMTFIS->exercicio = '2021';
   }
 
   $oDadosMTFIS->vlCorrenteReceitaTotal = number_format($aRegistrosporAno[${$iAnoUsu}]["Receita Total"]["Corrente"], 2, ",", "");

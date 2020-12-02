@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_viap102020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarVIAP.model.php");
+require_once ("classes/db_viap102021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarVIAP.model.php");
 
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
@@ -67,7 +67,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clviap = new cl_viap102020();
+        $clviap = new cl_viap102021();
 
         /**
          * inserir informacoes no banco de dados
@@ -95,13 +95,13 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      AND rh01_regist NOT IN
                         (SELECT si198_codvinculopessoa
-                         FROM viap102020 where si198_mes < {$iMes} )
+                         FROM viap102021 where si198_mes < {$iMes} )
               AND rh01_instit =  " . db_getsession("DB_instit") . "
               AND (
                     rh05_seqpes is null 
                     or  
                     (date_part('MONTH',rh05_recis) = 01
-                     and date_part('YEAR',rh05_recis) = 2020 
+                     and date_part('YEAR',rh05_recis) = 2021 
                     )
                     or
                     (date_part('MONTH',rh05_recis) = 12
@@ -130,7 +130,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     rh05_seqpes is null 
                     or 
                     (date_part('MONTH',rh05_recis) = 01
-                     and date_part('YEAR',rh05_recis) = 2020 
+                     and date_part('YEAR',rh05_recis) = 2021 
                     )
                     or
                     (date_part('MONTH',rh05_recis) = 12
@@ -151,7 +151,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-            $clviap = new cl_viap102020();
+            $clviap = new cl_viap102021();
             $oDadosViap = db_utils::fieldsMemory($rsResult, $iCont);
 
             $sSqlPrimeiraMov = "SELECT rh02_mesusu,rh02_anousu

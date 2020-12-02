@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_rec102020_classe.php");
-require_once("classes/db_rec112020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarREC.model.php");
+require_once("classes/db_rec102021_classe.php");
+require_once("classes/db_rec112021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarREC.model.php");
 
 /**
  * detalhamento das receitas do mês Sicom Acompanhamento Mensal
@@ -100,8 +100,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clrec10 = new cl_rec102020();
-        $clrec11 = new cl_rec112020();
+        $clrec10 = new cl_rec102021();
+        $clrec11 = new cl_rec112021();
 
         $db_filtro = "o70_instit = " . db_getsession("DB_instit");
         $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
@@ -358,7 +358,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         }
 
         /*
-         * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2020!
+         * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2021!
          * */
 
         $aRectceSaudEduc = array('11120111', '11180111', '11130311', '11130341', '11180141', '11180231', '11180241', '17180121', '17180151', '17180611',
@@ -367,7 +367,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
         foreach ($aDadosAgrupados as $oDados10) {
 
-            $clrec10 = new cl_rec102020();
+            $clrec10 = new cl_rec102021();
             $clrec10->si25_tiporegistro = $oDados10->si25_tiporegistro;
             $clrec10->si25_codreceita = $oDados10->si25_codreceita;
             $clrec10->si25_codorgao = $oDados10->si25_codorgao;
@@ -391,7 +391,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '')
                     ) {
 
-                        $clrec11 = new cl_rec112020();
+                        $clrec11 = new cl_rec112021();
                         $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
                         $clrec11->si26_reg10 = $clrec10->si25_sequencial;
                         $clrec11->si26_codreceita = $oDados10->si25_codreceita;
@@ -415,7 +415,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                     ) {
 
 
-                        $clrec11 = new cl_rec112020();
+                        $clrec11 = new cl_rec112021();
                         $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
                         $clrec11->si26_reg10 = $clrec10->si25_sequencial;
                         $clrec11->si26_codreceita = $oDados10->si25_codreceita;

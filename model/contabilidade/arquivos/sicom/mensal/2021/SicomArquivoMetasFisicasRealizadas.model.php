@@ -2,8 +2,8 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_metareal102020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarMETAREAL.model.php");
+require_once ("classes/db_metareal102021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarMETAREAL.model.php");
 
 /**
  * Dados Complementares Sicom Acompanhamento Mensal
@@ -58,7 +58,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
    */
   public function gerarDados() {
 
-    $clmetareal10 = new cl_metareal102020();
+    $clmetareal10 = new cl_metareal102021();
 
     db_inicio_transacao();
 
@@ -178,7 +178,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
         }
         if (!isset($aDadosAgrupados[$sHash])) {
 
-          $clmetareal10 = new cl_metareal102020();
+          $clmetareal10 = new cl_metareal102021();
           $clmetareal10->si171_tiporegistro    = 10;
           $clmetareal10->si171_codorgao        = str_pad($oMetasPPA->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
           $clmetareal10->si171_codunidadesub   = str_pad($org, 2, "0", STR_PAD_LEFT);
@@ -209,7 +209,7 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
       //echo "<pre>";print_r($aDadosAgrupados);
       foreach ($aDadosAgrupados as $oDado) {
 
-        $clmetareal = new cl_metareal102020();
+        $clmetareal = new cl_metareal102021();
 
         $clmetareal->si171_tiporegistro    = 10;
         $clmetareal->si171_codorgao        = $oDado->si171_codorgao;

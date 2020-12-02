@@ -1,11 +1,11 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_arc10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_arc11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_arc12$PROXIMO_ANO_classe.php");
-require_once ("classes/db_arc20$PROXIMO_ANO_classe.php");
-require_once ("classes/db_arc21$PROXIMO_ANO_classe.php");
+require_once ("classes/db_arc102021_classe.php");
+require_once ("classes/db_arc112021_classe.php");
+require_once ("classes/db_arc122021_classe.php");
+require_once ("classes/db_arc202121_classe.php");
+require_once ("classes/db_arc212021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarARC.model.php");
 
  /**

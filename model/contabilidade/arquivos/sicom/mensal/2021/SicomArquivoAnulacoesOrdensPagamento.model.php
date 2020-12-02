@@ -1,12 +1,12 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_aop102020_classe.php");
-require_once("classes/db_aop112020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarAOP.model.php");
+require_once("classes/db_aop102021_classe.php");
+require_once("classes/db_aop112021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarAOP.model.php");
 
 /**
- * Anulações das Ordens de Pagamento Sicom Acompanhamento Mensal
+ * AnulaÃ§Ãµes das Ordens de Pagamento Sicom Acompanhamento Mensal
  * @author marcelo
  * @package Contabilidade
  */
@@ -28,7 +28,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     protected $sNomeArquivo = 'AOP';
 
     /**
-     * @var array Fontes encerradas em 2020
+     * @var array Fontes encerradas em 2021
      */
     protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
     /**
@@ -88,8 +88,8 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     public function gerarDados()
     {
 
-        $claop10 = new cl_aop102020();
-        $claop11 = new cl_aop112020();
+        $claop10 = new cl_aop102021();
+        $claop11 = new cl_aop112021();
 
 
         $sSqlUnidade = "select * from infocomplementares where
@@ -171,7 +171,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                    o15_codtri AS recurso,
                    e50_obs,
                    CASE
-                       WHEN date_part('year',e50_data) < $PROXIMO_ANO THEN e71_codnota::varchar
+                       WHEN date_part('year',e50_data) < 2021 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
                    END AS nroliquidacao,
                    si09_codorgaotce,
@@ -297,7 +297,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
                     /*
                      * Verifica se o empenho existe na tabela dotacaorpsicom
-                     * Caso exista, busca os dados da dotação.
+                     * Caso exista, busca os dados da dotaÃ§Ã£o.
                      * */
                     $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oAnulacoes->e60_numemp}";
                     $iFonteAlterada = '0';
@@ -365,7 +365,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
         foreach ($aAnulacoes as $anulacao) {
 
-            $oDadosAnulacao = new cl_aop102020();
+            $oDadosAnulacao = new cl_aop102021();
 
             $oDadosAnulacao->si137_tiporegistro = $anulacao->si137_tiporegistro;
             $oDadosAnulacao->si137_codreduzido = $anulacao->si137_codreduzido;
@@ -387,7 +387,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
             foreach ($anulacao->reg11 as $reg11) {
 
-                $oDadosAnulacaoFonte = new cl_aop112020();
+                $oDadosAnulacaoFonte = new cl_aop112021();
 
                 $oDadosAnulacaoFonte->si138_tiporegistro = $reg11->si138_tiporegistro;
                 $oDadosAnulacaoFonte->si138_codreduzido = $reg11->si138_codreduzido;

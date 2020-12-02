@@ -1,15 +1,15 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_cvc102020_classe.php");
-require_once("classes/db_cvc202020_classe.php");
-require_once("classes/db_cvc302020_classe.php");
-require_once("classes/db_cvc402020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCVC.model.php");
+require_once("classes/db_cvc102021_classe.php");
+require_once("classes/db_cvc202021_classe.php");
+require_once("classes/db_cvc302021_classe.php");
+require_once("classes/db_cvc402021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCVC.model.php");
 
 
 /**
- * Dados Cadastro de Veículos Sicom Acompanhamento Mensal
+ * Dados Cadastro de VeÃ­culos Sicom Acompanhamento Mensal
  * @author robson
  * @package Contabilidade
  */
@@ -59,7 +59,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
     }
 
     /**
-     * selecionar os dados do cadastro de veículos
+     * selecionar os dados do cadastro de veÃ­culos
      * @see iPadArquivoBase::gerarDados()
      */
     public function gerarDados()
@@ -68,10 +68,10 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clcvc10 = new cl_cvc102020();
-        $clcvc20 = new cl_cvc202020();
-        $clcvc30 = new cl_cvc302020();
-        $clcvc40 = new cl_cvc402020();
+        $clcvc10 = new cl_cvc102021();
+        $clcvc20 = new cl_cvc202021();
+        $clcvc30 = new cl_cvc302021();
+        $clcvc40 = new cl_cvc402021();
 
         $sSqlTrataUnidade = "SELECT si08_tratacodunidade FROM infocomplementares WHERE si08_instit = " . db_getsession("DB_instit");
         $rsResultTrataUnidade = db_query($sSqlTrataUnidade);
@@ -219,7 +219,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         if (pg_num_rows($rsResult10) > 0) {
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-                $clcvc10 = new cl_cvc102020();
+                $clcvc10 = new cl_cvc102021();
                 $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
                 if ($oDados10->subunidade == 1) {
@@ -232,13 +232,13 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 where ve04_veiculo = '{$oDados10->codveiculo}'
                   and ve04_veiccadtipobaixa = 7 and to_char(ve04_data,'MM') = '" . $this->sDataFinal['5'] . $this->sDataFinal['6']."'";
 
-                $sSqlVerifica = "select si146_sequencial from cvc102020 where si146_codveiculo = '{$oDados10->codveiculo}'
+                $sSqlVerifica = "select si146_sequencial from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}'
         and si146_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                $sSqlVerifica .= " union select si146_sequencial from cvc10$PROXIMO_ANO where si146_codveiculo = '{$oDados10->codveiculo}'";
-                $sSqlVerifica .= " union select si146_sequencial from cvc10$PROXIMO_ANO where si146_codveiculo = '{$oDados10->codveiculo}'";
+                $sSqlVerifica .= " union select si146_sequencial from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}'";
+                $sSqlVerifica .= " union select si146_sequencial from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}'";
 
                 $sSqlNaoRepete = "
-          select * from cvc102020 where si146_codveiculo = '{$oDados10->codveiculo}' and si146_codunidadesub = '{$oDados10->ve01_codunidadesub}'
+          select * from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}' and si146_codunidadesub = '{$oDados10->ve01_codunidadesub}'
         ";
                 $rsVerifica = db_query($sSqlNaoRepete);
                 if (pg_num_rows($rsVerifica) > 0) {
@@ -523,15 +523,15 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 if ($oResult20->subunidade != 0 ||$oResult20->subunidade = null) {
                     /*
                     * O campo codUnidadeSubEmpenho torna-se de
-                    * preenchimento obrigatório se a origem do gasto foi
-                    * através de abastecimento em posto/ Comércio ( origemGasto = 2 ).
+                    * preenchimento obrigatÃ³rio se a origem do gasto foi
+                    * atravÃ©s de abastecimento em posto/ ComÃ©rcio ( origemGasto = 2 ).
                     */
                     if ($oResult20->origemgasto == 2) {
                         $oResult20->codunidadesubempenho .= str_pad($oResult20->subunidade, 3, "0", STR_PAD_LEFT);
                     } else {
                         $oResult20->codunidadesubempenho = "";
                     }
-                    if ($oResult20->anoveiculo >= $PROXIMO_ANO) {
+                    if ($oResult20->anoveiculo >= 2021) {
                         $oResult20->codunidadesub .= str_pad($oResult20->subunidade, 3, "0", STR_PAD_LEFT);
                     }
                 }
@@ -557,7 +557,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $oDados20->si147_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
                 /**
-                 *          MARCAÇÃO INICIAL E FINAL DO VEICULO:
+                 *          MARCAÃ‡ÃƒO INICIAL E FINAL DO VEICULO:
                  */
 
                 $sSqlKm = "select min(ve60_medidasaida) as km_inicial, max(ve61_medidadevol) as km_final
@@ -581,7 +581,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
         foreach ($aDadosAgrupados20 as $oDadosAgrupados20) {
 
-            $clcvc20 = new cl_cvc202020();
+            $clcvc20 = new cl_cvc202021();
             $clcvc20->si147_tiporegistro = 20;
             $clcvc20->si147_codorgao = $oDadosAgrupados20->si147_codorgao;
             $clcvc20->si147_codunidadesub = $oDadosAgrupados20->si147_codunidadesub;
@@ -651,7 +651,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         if (pg_num_rows($rsResult30) > 0) {
             for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-                $clcvc30 = new cl_cvc302020();
+                $clcvc30 = new cl_cvc302021();
                 $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
                 if ($oDados30->subunidade == 1) {
@@ -770,7 +770,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         if (pg_num_rows($rsResult40) > 0) {
             for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-                $clcvc40 = new cl_cvc402020();
+                $clcvc40 = new cl_cvc402021();
                 $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
                 if ($oDados10->subunidade == 1) {

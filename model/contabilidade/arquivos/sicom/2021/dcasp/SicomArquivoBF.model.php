@@ -2,7 +2,7 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once('model/contabilidade/relatorios/dcasp/BalancoFinanceiroDCASP$PROXIMO_ANO.model.php');
+require_once('model/contabilidade/relatorios/dcasp/BalancoFinanceiroDCASP2021.model.php');
 require_once('libs/db_stdlib.php');
 require_once('libs/db_conecta.php');
 require_once('libs/db_sessoes.php');
@@ -15,19 +15,19 @@ require_once('libs/db_libcontabilidade.php');
 require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
-require_once("classes/db_bfdcasp10$PROXIMO_ANO_classe.php");
-require_once("classes/db_bfdcasp20$PROXIMO_ANO_classe.php");
+require_once("classes/db_bfdcasp102021_classe.php");
+require_once("classes/db_bfdcasp202121_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/$PROXIMO_ANO/dcasp/geradores/GerarBF.model.php");
+require_once("model/contabilidade/arquivos/sicom/2021/dcasp/geradores/GerarBF.model.php");
 
 /**
- * gerar arquivo de Balanço Financeiro
+ * gerar arquivo de BalanÃ§o Financeiro
  * @author gabriel
  * @package Contabilidade
  */
 class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  protected $iCodigoLayout = 152; // Código do relatório
+  protected $iCodigoLayout = 152; // CÃ³digo do relatÃ³rio
 
   protected $sNomeArquivo = 'BF';
 
@@ -67,7 +67,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function __construct() { }
 
   /**
-   * selecionar os dados do balanço orcamentário pra gerar o arquivo
+   * selecionar os dados do balanÃ§o orcamentÃ¡rio pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -78,7 +78,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iCodigoRelatorio   = $this->iCodigoLayout;
 
     /**
-     * Se o tipo da geração for consolidado, busca todas as instituições do sistema. Se não, pega a instituição da sessão
+     * Se o tipo da geraÃ§Ã£o for consolidado, busca todas as instituiÃ§Ãµes do sistema. Se nÃ£o, pega a instituiÃ§Ã£o da sessÃ£o
      */
 
     if ($this->getTipoGeracao() == 'CONSOLIDADO') {
@@ -99,8 +99,8 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clbfdcasp10 = new cl_bfdcasp10$PROXIMO_ANO();
-    $clbfdcasp20 = new cl_bfdcasp20$PROXIMO_ANO();
+    $clbfdcasp10 = new cl_bfdcasp102021();
+    $clbfdcasp20 = new cl_bfdcasp202121();
 
 
     /**
@@ -134,14 +134,14 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O método `getDados()`, da classe `BalancoFinanceiroDCASP$PROXIMO_ANO()`,
-     * retorna um array enorme. Para pegar os dados necessários para cada
-     * registro do SICOM DCASP, estamos passando os índices exatos do array.
-     * Se eles forem alterados (nas configurações dos relatórios), devem
-     * ser alterados aqui também.
+     * O mÃ©todo `getDados()`, da classe `BalancoFinanceiroDCASP2021()`,
+     * retorna um array enorme. Para pegar os dados necessÃ¡rios para cada
+     * registro do SICOM DCASP, estamos passando os Ã­ndices exatos do array.
+     * Se eles forem alterados (nas configuraÃ§Ãµes dos relatÃ³rios), devem
+     * ser alterados aqui tambÃ©m.
      */
 
-    $oBalancoFinanceiro = new BalancoFinanceiroDCASP$PROXIMO_ANO($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oBalancoFinanceiro = new BalancoFinanceiroDCASP2021($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoFinanceiro->setInstituicoes($sListaInstituicoes);
     $oBalancoFinanceiro->setExibirExercicioAnterior(true);
     $oBalancoFinanceiro->setTipo($sTipoImpressao);
@@ -149,7 +149,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oRetornoBF = $oBalancoFinanceiro->getDados();
 
 
-    /** BFDCASP10$PROXIMO_ANO */
+    /** BFDCASP102021 */
     $aExercicios = array(
         1 => 'vlrexatual'
     );
@@ -157,7 +157,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbfdcasp10  = new cl_bfdcasp10$PROXIMO_ANO();
+      $clbfdcasp10  = new cl_bfdcasp102021();
 
       $clbfdcasp10->si206_ano                               = $iAnoUsu;
       $clbfdcasp10->si206_periodo                           = $iCodigoPeriodo;
@@ -189,14 +189,14 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult10
 
 
-    /** BFDCASP20$PROXIMO_ANO */
+    /** BFDCASP202121 */
     $aExercicios = array(
         1 => 'vlrexatual'
     );
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbfdcasp20  = new cl_bfdcasp20$PROXIMO_ANO();
+      $clbfdcasp20  = new cl_bfdcasp202121();
 
       $clbfdcasp20->si207_ano                               = $iAnoUsu;
       $clbfdcasp20->si207_periodo                           = $iCodigoPeriodo;

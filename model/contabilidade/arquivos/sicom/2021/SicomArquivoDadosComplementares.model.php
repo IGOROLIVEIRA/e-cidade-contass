@@ -1,7 +1,7 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_dclrf10$PROXIMO_ANO_classe.php");
+require_once ("classes/db_dclrf102021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarDCLRF.model.php");
 
  /**
@@ -50,23 +50,23 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
   }
 
   /**
-   * selecionar os dados de Dados Complementares à LRF do mes para gerar o arquivo
+   * selecionar os dados de Dados Complementares Ã  LRF do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
 
-  	$cldclrf10$PROXIMO_ANO = new cl_dclrf10$PROXIMO_ANO();
+  	$cldclrf102021 = new cl_dclrf102021();
 
     db_inicio_transacao();
 
     /*
      * excluir informacoes do mes selecionado registro 10
      */
-    $result = $cldclrf10$PROXIMO_ANO->sql_record($cldclrf10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit") ));
+    $result = $cldclrf102021->sql_record($cldclrf102021->sql_query(NULL,"*",NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $cldclrf10$PROXIMO_ANO->excluir(NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit"));
-      if ($cldclrf10$PROXIMO_ANO->erro_status == 0) {
-        throw new Exception($cldclrf10$PROXIMO_ANO->erro_msg);
+      $cldclrf102021->excluir(NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit"));
+      if ($cldclrf102021->erro_status == 0) {
+        throw new Exception($cldclrf102021->erro_msg);
       }
     }
 
@@ -88,25 +88,25 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-          $cldclrf10$PROXIMO_ANO = new cl_dclrf10$PROXIMO_ANO();
+          $cldclrf102021 = new cl_dclrf102021();
           $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-          $cldclrf10$PROXIMO_ANO->si157_tiporegistro                        = 10;
-          $cldclrf10$PROXIMO_ANO->si157_codorgao                            = $sCodorgao;
-          $cldclrf10$PROXIMO_ANO->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
-          $cldclrf10$PROXIMO_ANO->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
-          $cldclrf10$PROXIMO_ANO->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
-          $cldclrf10$PROXIMO_ANO->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
-          $cldclrf10$PROXIMO_ANO->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
-          $cldclrf10$PROXIMO_ANO->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
-          $cldclrf10$PROXIMO_ANO->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
-          $cldclrf10$PROXIMO_ANO->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
-          $cldclrf10$PROXIMO_ANO->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-          $cldclrf10$PROXIMO_ANO->si157_instit                              = db_getsession("DB_instit");
+          $cldclrf102021->si157_tiporegistro                        = 10;
+          $cldclrf102021->si157_codorgao                            = $sCodorgao;
+          $cldclrf102021->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
+          $cldclrf102021->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
+          $cldclrf102021->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
+          $cldclrf102021->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
+          $cldclrf102021->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
+          $cldclrf102021->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
+          $cldclrf102021->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
+          $cldclrf102021->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
+          $cldclrf102021->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+          $cldclrf102021->si157_instit                              = db_getsession("DB_instit");
 
-          $cldclrf10$PROXIMO_ANO->incluir(null);
-          if ($cldclrf10$PROXIMO_ANO->erro_status == 0) {
-            throw new Exception($cldclrf10$PROXIMO_ANO->erro_msg);
+          $cldclrf102021->incluir(null);
+          if ($cldclrf102021->erro_status == 0) {
+            throw new Exception($cldclrf102021->erro_msg);
           }
 
         }

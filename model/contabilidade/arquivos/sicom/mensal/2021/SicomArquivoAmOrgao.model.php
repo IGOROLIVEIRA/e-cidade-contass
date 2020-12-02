@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_orgao102020_classe.php");
-require_once("classes/db_orgao112020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarORGAO.model.php");
+require_once("classes/db_orgao102021_classe.php");
+require_once("classes/db_orgao112021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarORGAO.model.php");
 
 /**
  * selecionar dados de Orgao Sicom Acompanhamento Mensal
@@ -96,8 +96,8 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function gerarDados()
   {
     
-    $clorgao10 = new cl_orgao102020();
-    $clorgao11 = new cl_orgao112020();
+    $clorgao10 = new cl_orgao102021();
+    $clorgao11 = new cl_orgao112021();
 
     db_inicio_transacao();
     /**
@@ -145,7 +145,7 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
     $aCaracteres = array(".", "-");
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clorgao10 = new cl_orgao102020();
+      $clorgao10 = new cl_orgao102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clorgao10->si14_tiporegistro = 10;
@@ -172,7 +172,7 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
 
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-        $clorgao11 = new cl_orgao112020();
+        $clorgao11 = new cl_orgao112021();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
         //if (strlen($oDados11->z01_cgccpf) > 11)
         //echo $oDados11->z01_numcgm." | ".$oDados11->z01_cgccpf."<br>";

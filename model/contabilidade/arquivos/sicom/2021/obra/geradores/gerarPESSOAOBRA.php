@@ -20,7 +20,7 @@ class gerarPESSOAOBRA extends GerarAM
     $this->sArquivo = "PESSOA";
     $this->abreArquivo();
 
-    $sSql = "select * from pessoasobra102020 where si194_mes = " . $this->iMes . " and si194_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from pessoasobra102021 where si194_mes = " . $this->iMes . " and si194_instit=" . db_getsession("DB_instit");
     $rspessoaobra10 = db_query($sSql);
 
     if (pg_num_rows($rspessoaobra10) == 0) {

@@ -1,14 +1,14 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_rsp10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_rsp11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_rsp20$PROXIMO_ANO_classe.php");
-require_once ("classes/db_rsp21$PROXIMO_ANO_classe.php");
+require_once ("classes/db_rsp102021_classe.php");
+require_once ("classes/db_rsp112021_classe.php");
+require_once ("classes/db_rsp202121_classe.php");
+require_once ("classes/db_rsp212021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarRSP.model.php");
 
  /**
-  * selecionar dados de Leis de Alteração Sicom Acompanhamento Mensal
+  * selecionar dados de Leis de AlteraÃ§Ã£o Sicom Acompanhamento Mensal
   * @author Marcelo
   * @package Contabilidade
   */
@@ -53,16 +53,16 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
   }
   
   /**
-   * selecionar os dados de Leis de Alteração
+   * selecionar os dados de Leis de AlteraÃ§Ã£o
    * 
    */
   public function gerarDados() {
 
     
-    $clrsp10 = new cl_rsp10$PROXIMO_ANO();
-    $clrsp11 = new cl_rsp11$PROXIMO_ANO();
-    $clrsp20 = new cl_rsp20$PROXIMO_ANO();
-    $clrsp21 = new cl_rsp21$PROXIMO_ANO();
+    $clrsp10 = new cl_rsp102021();
+    $clrsp11 = new cl_rsp112021();
+    $clrsp20 = new cl_rsp202121();
+    $clrsp21 = new cl_rsp212021();
     
     db_inicio_transacao();
 
@@ -193,7 +193,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clrsp10 = new cl_rsp10$PROXIMO_ANO();
+      $clrsp10 = new cl_rsp102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       
       $clrsp10->si112_tiporegistro                 = 10;
@@ -281,7 +281,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       $rsResult11 = db_query($sSql);
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
         
-        $clrsp11 = new cl_rsp11$PROXIMO_ANO();
+        $clrsp11 = new cl_rsp112021();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
         
         $clrsp11->si113_tiporegistro           = 11;
@@ -342,7 +342,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
       
-      $clrsp20 = new cl_rsp20$PROXIMO_ANO();
+      $clrsp20 = new cl_rsp202121();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
       
       $clrsp20->si115_tiporegistro                   = 20;
@@ -393,7 +393,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       $rsResult21 = db_query($sSql);
       for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
         
-        $clrsp21 = new cl_rsp21$PROXIMO_ANO();
+        $clrsp21 = new cl_rsp212021();
         $oDados21 = db_utils::fieldsMemory($rsResult21, $iCont21);
         
         $clrsp21->si116_tiporegistro            = 21;

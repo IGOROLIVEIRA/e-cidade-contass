@@ -1,15 +1,15 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_hablic10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_hablic11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_hablic20$PROXIMO_ANO_classe.php");
+require_once ("classes/db_hablic102021_classe.php");
+require_once ("classes/db_hablic112021_classe.php");
+require_once ("classes/db_hablic202121_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarHABLIC.model.php");
 
 
 
 /**
- * Habilitação Licitação Sicom Acompanhamento Mensal
+ * HabilitaÃ§Ã£o LicitaÃ§Ã£o Sicom Acompanhamento Mensal
  * @author robson
  * @package Contabilidade
  */
@@ -122,7 +122,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	}
 
 	/**
-	 * selecionar os dados dE Habilitação da licitação
+	 * selecionar os dados dE HabilitaÃ§Ã£o da licitaÃ§Ã£o
 	 * @see iPadArquivoBase::gerarDados()
 	 */
 	public function gerarDados() {
@@ -130,40 +130,40 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		/**
 		 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
 		 */
-		$clhablic10$PROXIMO_ANO = new cl_hablic10$PROXIMO_ANO();
-		$clhablic11$PROXIMO_ANO = new cl_hablic11$PROXIMO_ANO();
-		$clhablic20$PROXIMO_ANO = new cl_hablic20$PROXIMO_ANO();
+		$clhablic102021 = new cl_hablic102021();
+		$clhablic112021 = new cl_hablic112021();
+		$clhablic202121 = new cl_hablic202121();
 			
 
 		/**
 		 * excluir informacoes do mes selecioado
 		 */
 		db_inicio_transacao();
-		$result = db_query($clhablic11$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si58_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si58_instit=".db_getsession("DB_instit")));
+		$result = db_query($clhablic112021->sql_query(NULL,"*",NULL,"si58_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si58_instit=".db_getsession("DB_instit")));
 		if (pg_num_rows($result) > 0) {
-			$clhablic11$PROXIMO_ANO->excluir(NULL,"si58_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si58_instit=".db_getsession("DB_instit"));
-			if ($clhablic11$PROXIMO_ANO->erro_status == 0) {
-				throw new Exception($clhablic11$PROXIMO_ANO->erro_msg);
+			$clhablic112021->excluir(NULL,"si58_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si58_instit=".db_getsession("DB_instit"));
+			if ($clhablic112021->erro_status == 0) {
+				throw new Exception($clhablic112021->erro_msg);
 			}
 		}
 
-		$result = db_query($clhablic10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si57_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si57_instit=".db_getsession("DB_instit")));
+		$result = db_query($clhablic102021->sql_query(NULL,"*",NULL,"si57_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si57_instit=".db_getsession("DB_instit")));
 		if (pg_num_rows($result) > 0) {
-			$clhablic10$PROXIMO_ANO->excluir(NULL,"si57_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si57_instit=".db_getsession("DB_instit"));
-			if ($clhablic10$PROXIMO_ANO->erro_status == 0) {
-				throw new Exception($clhablic10$PROXIMO_ANO->erro_msg);
+			$clhablic102021->excluir(NULL,"si57_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si57_instit=".db_getsession("DB_instit"));
+			if ($clhablic102021->erro_status == 0) {
+				throw new Exception($clhablic102021->erro_msg);
 			}
 		}
 
-		$result = db_query($clhablic20$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si59_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si59_instit=".db_getsession("DB_instit")));
+		$result = db_query($clhablic202121->sql_query(NULL,"*",NULL,"si59_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si59_instit=".db_getsession("DB_instit")));
 		if (pg_num_rows($result) > 0) {
-			$clhablic20$PROXIMO_ANO->excluir(NULL,"si59_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si59_instit=".db_getsession("DB_instit"));
-			if ($clconsor21$PROXIMO_ANO->erro_status == 0) {
-				throw new Exception($clhablic20$PROXIMO_ANO->erro_msg);
+			$clhablic202121->excluir(NULL,"si59_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si59_instit=".db_getsession("DB_instit"));
+			if ($clconsor212021->erro_status == 0) {
+				throw new Exception($clhablic202121->erro_msg);
 			}
 		}
 		/**
-		 * Sob solicitação de Igor, o campo nroRegistro foi alterado para pegar o cnpj 04/03/$PROXIMO_ANO
+		 * Sob solicitaÃ§Ã£o de Igor, o campo nroRegistro foi alterado para pegar o cnpj 04/03/2021
 		 */
 	$sSql = "select '10' as tipoRegistro,
 	db_config.db21_tipoinstit as codOrgaoResp,
@@ -209,42 +209,42 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 
 		for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-			$clhablic10$PROXIMO_ANO = new cl_hablic10$PROXIMO_ANO();
+			$clhablic102021 = new cl_hablic102021();
 			$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-			$clhablic10$PROXIMO_ANO->si57_tiporegistro   									= 10;
-			$clhablic10$PROXIMO_ANO->si57_codorgao											=$oDados10->codorgaoresp;
-			$clhablic10$PROXIMO_ANO->si57_codunidadesub										=$oDados10->codunidadesubresp;
-			$clhablic10$PROXIMO_ANO->si57_exerciciolicitacao								=$oDados10->exerciciolicitacao;
-			$clhablic10$PROXIMO_ANO->si57_nroprocessolicitatorio							=$oDados10->nroprocessolicitatorio;
-			$clhablic10$PROXIMO_ANO->si57_tipodocumento										=$oDados10->tipodocumento;
-			$clhablic10$PROXIMO_ANO->si57_nrodocumento										=$oDados10->nrodocumento;
-			$clhablic10$PROXIMO_ANO->si57_objetosocial										=$oDados10->objetosocial;
-			$clhablic10$PROXIMO_ANO->si57_orgaorespregistro									=$oDados10->orgaorespregistro;
-			$clhablic10$PROXIMO_ANO->si57_dataregistro										=$oDados10->dataregistro;
-			$clhablic10$PROXIMO_ANO->si57_nroregistro										=$oDados10->nroregistro;
-			$clhablic10$PROXIMO_ANO->si57_dataregistrocvm									=$oDados10->dataregistrocvm;
-			$clhablic10$PROXIMO_ANO->si57_nroregistrocvm									=$oDados10->nroregistrocvm;
-			$clhablic10$PROXIMO_ANO->si57_nroinscricaoestadual								=$oDados10->nroinscricaoestadual;
-			$clhablic10$PROXIMO_ANO->si57_ufinscricaoestadual								=$oDados10->ufinscricaoestadual;
-			$clhablic10$PROXIMO_ANO->si57_nrocertidaoregularidadeinss						=$oDados10->nrocertidaoregularidadeinss;
-			$clhablic10$PROXIMO_ANO->si57_dtemissaocertidaoregularidadeinss					=$oDados10->dtemissaocertidaoregularidadeinss;
-			$clhablic10$PROXIMO_ANO->si57_dtvalidadecertidaoregularidadeinss				=$oDados10->dtvalidadecertidaoregularidadeinss;
-			$clhablic10$PROXIMO_ANO->si57_nrocertidaoregularidadefgts						=$oDados10->nrocertidaoregularidadefgts;
-			$clhablic10$PROXIMO_ANO->si57_dtemissaocertidaoregularidadefgts					=$oDados10->dtemissaocertidaoregularidadefgts;
-			$clhablic10$PROXIMO_ANO->si57_dtvalidadecertidaoregularidadefgts				=$oDados10->dtvalidadecertidaoregularidadefgts;
-			$clhablic10$PROXIMO_ANO->si57_nrocndt											=$oDados10->nrocndt;
-			$clhablic10$PROXIMO_ANO->si57_dtemissaocndt										=$oDados10->dtemissaocndt;
-			$clhablic10$PROXIMO_ANO->si57_dtvalidadecndt									=$oDados10->dtvalidadecndt;
-			$clhablic10$PROXIMO_ANO->si57_dthabilitacao										=$oDados10->dthabilitacao;
-			$clhablic10$PROXIMO_ANO->si57_presencalicitantes								=$oDados10->presencalicitantes;
-			$clhablic10$PROXIMO_ANO->si57_renunciarecurso									=$oDados10->renunciarecurso;
-			$clhablic10$PROXIMO_ANO->si57_mes             									= $this->sDataFinal['5'].$this->sDataFinal['6'];
+			$clhablic102021->si57_tiporegistro   									= 10;
+			$clhablic102021->si57_codorgao											=$oDados10->codorgaoresp;
+			$clhablic102021->si57_codunidadesub										=$oDados10->codunidadesubresp;
+			$clhablic102021->si57_exerciciolicitacao								=$oDados10->exerciciolicitacao;
+			$clhablic102021->si57_nroprocessolicitatorio							=$oDados10->nroprocessolicitatorio;
+			$clhablic102021->si57_tipodocumento										=$oDados10->tipodocumento;
+			$clhablic102021->si57_nrodocumento										=$oDados10->nrodocumento;
+			$clhablic102021->si57_objetosocial										=$oDados10->objetosocial;
+			$clhablic102021->si57_orgaorespregistro									=$oDados10->orgaorespregistro;
+			$clhablic102021->si57_dataregistro										=$oDados10->dataregistro;
+			$clhablic102021->si57_nroregistro										=$oDados10->nroregistro;
+			$clhablic102021->si57_dataregistrocvm									=$oDados10->dataregistrocvm;
+			$clhablic102021->si57_nroregistrocvm									=$oDados10->nroregistrocvm;
+			$clhablic102021->si57_nroinscricaoestadual								=$oDados10->nroinscricaoestadual;
+			$clhablic102021->si57_ufinscricaoestadual								=$oDados10->ufinscricaoestadual;
+			$clhablic102021->si57_nrocertidaoregularidadeinss						=$oDados10->nrocertidaoregularidadeinss;
+			$clhablic102021->si57_dtemissaocertidaoregularidadeinss					=$oDados10->dtemissaocertidaoregularidadeinss;
+			$clhablic102021->si57_dtvalidadecertidaoregularidadeinss				=$oDados10->dtvalidadecertidaoregularidadeinss;
+			$clhablic102021->si57_nrocertidaoregularidadefgts						=$oDados10->nrocertidaoregularidadefgts;
+			$clhablic102021->si57_dtemissaocertidaoregularidadefgts					=$oDados10->dtemissaocertidaoregularidadefgts;
+			$clhablic102021->si57_dtvalidadecertidaoregularidadefgts				=$oDados10->dtvalidadecertidaoregularidadefgts;
+			$clhablic102021->si57_nrocndt											=$oDados10->nrocndt;
+			$clhablic102021->si57_dtemissaocndt										=$oDados10->dtemissaocndt;
+			$clhablic102021->si57_dtvalidadecndt									=$oDados10->dtvalidadecndt;
+			$clhablic102021->si57_dthabilitacao										=$oDados10->dthabilitacao;
+			$clhablic102021->si57_presencalicitantes								=$oDados10->presencalicitantes;
+			$clhablic102021->si57_renunciarecurso									=$oDados10->renunciarecurso;
+			$clhablic102021->si57_mes             									= $this->sDataFinal['5'].$this->sDataFinal['6'];
 
 
-			$clhablic10$PROXIMO_ANO->incluir(null);
-			if ($clhablic10$PROXIMO_ANO->erro_status == 0) {
-				throw new Exception($clhablic10$PROXIMO_ANO->erro_msg);
+			$clhablic102021->incluir(null);
+			if ($clhablic102021->erro_status == 0) {
+				throw new Exception($clhablic102021->erro_msg);
 			}
 
 			/**
@@ -279,25 +279,25 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 			$rsResult11 = db_query($sSql);
 			for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-				$clhablic11$PROXIMO_ANO = new cl_hablic11$PROXIMO_ANO();
+				$clhablic112021 = new cl_hablic112021();
 				$oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 				//l20_codigo as codlicitacao
-				$clhablic11$PROXIMO_ANO->si58_tiporegistro 		 				=11;
-				$clhablic11$PROXIMO_ANO->si58_reg10                 				= $clhablic10$PROXIMO_ANO->si57_sequencial;
-				$clhablic11$PROXIMO_ANO->si58_codorgao 							=$oDados11->codorgaoresp ;
-				$clhablic11$PROXIMO_ANO->si58_codunidadesub 						=$oDados11->codunidadesubresp ;
-				$clhablic11$PROXIMO_ANO->si58_exerciciolicitacao 					=$oDados11->exerciciolicitacao;
-				$clhablic11$PROXIMO_ANO->si58_nroprocessolicitatorio 				=$oDados11->nroprocessolicitatorio;
-				$clhablic11$PROXIMO_ANO->si58_tipodocumentocnpjempresahablic 		=$oDados11->tipodocumentocnpjempresahablic;
-				$clhablic11$PROXIMO_ANO->si58_cnpjempresahablic 					=$oDados11->cnpjempresahablic;
-				$clhablic11$PROXIMO_ANO->si58_tipodocumentosocio 					=$oDados11->tipodocumentosocio;
-				$clhablic11$PROXIMO_ANO->si58_nrodocumentosocio 					=$oDados11->nrodocumentosocio;
-				$clhablic11$PROXIMO_ANO->si58_tipoparticipacao					 	=$oDados11->tipoparticipacao;
-				$clhablic11$PROXIMO_ANO->si58_mes				                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+				$clhablic112021->si58_tiporegistro 		 				=11;
+				$clhablic112021->si58_reg10                 				= $clhablic102021->si57_sequencial;
+				$clhablic112021->si58_codorgao 							=$oDados11->codorgaoresp ;
+				$clhablic112021->si58_codunidadesub 						=$oDados11->codunidadesubresp ;
+				$clhablic112021->si58_exerciciolicitacao 					=$oDados11->exerciciolicitacao;
+				$clhablic112021->si58_nroprocessolicitatorio 				=$oDados11->nroprocessolicitatorio;
+				$clhablic112021->si58_tipodocumentocnpjempresahablic 		=$oDados11->tipodocumentocnpjempresahablic;
+				$clhablic112021->si58_cnpjempresahablic 					=$oDados11->cnpjempresahablic;
+				$clhablic112021->si58_tipodocumentosocio 					=$oDados11->tipodocumentosocio;
+				$clhablic112021->si58_nrodocumentosocio 					=$oDados11->nrodocumentosocio;
+				$clhablic112021->si58_tipoparticipacao					 	=$oDados11->tipoparticipacao;
+				$clhablic112021->si58_mes				                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 
-				$clhablic11$PROXIMO_ANO->incluir(null);
-				if ($clhablic11$PROXIMO_ANO->erro_status == 0) {
-					throw new Exception($clhablic11$PROXIMO_ANO->erro_msg);
+				$clhablic112021->incluir(null);
+				if ($clhablic112021->erro_status == 0) {
+					throw new Exception($clhablic112021->erro_msg);
 				}
 
 			}
@@ -349,35 +349,35 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 
 			for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-				$clhablic20$PROXIMO_ANO = new cl_hablic20$PROXIMO_ANO();
+				$clhablic202121 = new cl_hablic202121();
 				$oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
-				$clhablic20$PROXIMO_ANO->si59_tiporegistro											='20' ;
-				$clhablic20$PROXIMO_ANO->si59_codorgao												=$oDados20->codorgaoresp  ;
-				$clhablic20$PROXIMO_ANO->si59_codunidadesub											=$oDados20->codunidadesubresp  ;
-				$clhablic20$PROXIMO_ANO->si59_exerciciolicitacao									=$oDados20->exerciciolicitacao ;
-				$clhablic20$PROXIMO_ANO->si59_nroprocessolicitatorio								=$oDados20->nroprocessolicitatorio;
-				$clhablic20$PROXIMO_ANO->si59_tipodocumento											=$oDados20->tipodocumento ;
-				$clhablic20$PROXIMO_ANO->si59_nrodocumento											=$oDados20->nrodocumento  ;
-				$clhablic20$PROXIMO_ANO->si59_datacredenciamento									=$oDados20->datacredenciamento;
-				$clhablic20$PROXIMO_ANO->si59_nrolote												=$oDados20->nrolote  ;
-				$clhablic20$PROXIMO_ANO->si59_coditem												=$oDados20->coditem  ;
-				$clhablic20$PROXIMO_ANO->si59_nroinscricaoestadual									=$oDados20->nroinscricaoestadual ;
-				$clhablic20$PROXIMO_ANO->si59_ufinscricaoestadual									=$oDados20->ufinscricaoestadual  ;
-				$clhablic20$PROXIMO_ANO->si59_nrocertidaoregularidadeinss							=$oDados20->nrocertidaoregularidadeinss  ;
-				$clhablic20$PROXIMO_ANO->si59_dataemissaocertidaoregularidadeinss					=$oDados20->dataemissaocertidaoregularidadeinss  ;
-				$clhablic20$PROXIMO_ANO->si59_dtvalidadecertidaoregularidadeinss					=$oDados20->datavalidadecertidaoregularidadeinss;
-				$clhablic20$PROXIMO_ANO->si59_nrocertidaoregularidadefgts							=$oDados20->nrocertidaoregularidadefgts  ;
-				$clhablic20$PROXIMO_ANO->si59_dtemissaocertidaoregularidadefgts						=$oDados20->dataemissaocertidaoregularidadefgts  ;
-				$clhablic20$PROXIMO_ANO->si59_dtvalidadecertidaoregularidadefgts					=$oDados20->datavalidadecertidaoregularidadefgts;
-				$clhablic20$PROXIMO_ANO->si59_nrocndt												=$oDados20->nrocndt  ;
-				$clhablic20$PROXIMO_ANO->si59_dtemissaocndt 										=$oDados20->dtemissaocndt ;
-				$clhablic20$PROXIMO_ANO->si59_dtvalidadecndt 										=$oDados20->dtvalidadecndt;
-				$clhablic20$PROXIMO_ANO->si59_mes 											        = $this->sDataFinal['5'].$this->sDataFinal['6'];
+				$clhablic202121->si59_tiporegistro											='20' ;
+				$clhablic202121->si59_codorgao												=$oDados20->codorgaoresp  ;
+				$clhablic202121->si59_codunidadesub											=$oDados20->codunidadesubresp  ;
+				$clhablic202121->si59_exerciciolicitacao									=$oDados20->exerciciolicitacao ;
+				$clhablic202121->si59_nroprocessolicitatorio								=$oDados20->nroprocessolicitatorio;
+				$clhablic202121->si59_tipodocumento											=$oDados20->tipodocumento ;
+				$clhablic202121->si59_nrodocumento											=$oDados20->nrodocumento  ;
+				$clhablic202121->si59_datacredenciamento									=$oDados20->datacredenciamento;
+				$clhablic202121->si59_nrolote												=$oDados20->nrolote  ;
+				$clhablic202121->si59_coditem												=$oDados20->coditem  ;
+				$clhablic202121->si59_nroinscricaoestadual									=$oDados20->nroinscricaoestadual ;
+				$clhablic202121->si59_ufinscricaoestadual									=$oDados20->ufinscricaoestadual  ;
+				$clhablic202121->si59_nrocertidaoregularidadeinss							=$oDados20->nrocertidaoregularidadeinss  ;
+				$clhablic202121->si59_dataemissaocertidaoregularidadeinss					=$oDados20->dataemissaocertidaoregularidadeinss  ;
+				$clhablic202121->si59_dtvalidadecertidaoregularidadeinss					=$oDados20->datavalidadecertidaoregularidadeinss;
+				$clhablic202121->si59_nrocertidaoregularidadefgts							=$oDados20->nrocertidaoregularidadefgts  ;
+				$clhablic202121->si59_dtemissaocertidaoregularidadefgts						=$oDados20->dataemissaocertidaoregularidadefgts  ;
+				$clhablic202121->si59_dtvalidadecertidaoregularidadefgts					=$oDados20->datavalidadecertidaoregularidadefgts;
+				$clhablic202121->si59_nrocndt												=$oDados20->nrocndt  ;
+				$clhablic202121->si59_dtemissaocndt 										=$oDados20->dtemissaocndt ;
+				$clhablic202121->si59_dtvalidadecndt 										=$oDados20->dtvalidadecndt;
+				$clhablic202121->si59_mes 											        = $this->sDataFinal['5'].$this->sDataFinal['6'];
 
-				$clhablic20$PROXIMO_ANO->incluir(null);
-				if ($clhablic20$PROXIMO_ANO->erro_status == 0) {
-					throw new Exception($clhablic20$PROXIMO_ANO->erro_msg);
+				$clhablic202121->incluir(null);
+				if ($clhablic202121->erro_status == 0) {
+					throw new Exception($clhablic202121->erro_msg);
 				}
 
 			}

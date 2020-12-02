@@ -3,11 +3,11 @@
 
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_caixa102020_classe.php");
-require_once("classes/db_caixa112020_classe.php");
-require_once("classes/db_caixa122020_classe.php");
-require_once("classes/db_caixa132020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCAIXA.model.php");
+require_once("classes/db_caixa102021_classe.php");
+require_once("classes/db_caixa112021_classe.php");
+require_once("classes/db_caixa122021_classe.php");
+require_once("classes/db_caixa132021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCAIXA.model.php");
 
 /**
  * Contas de Caixa Sicom Acompanhamento Mensal
@@ -67,10 +67,10 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
   {
 
 
-    $clcaixa13 = new cl_caixa132020();
-    $clcaixa12 = new cl_caixa122020();
-    $clcaixa11 = new cl_caixa112020();
-    $clcaixa10 = new cl_caixa102020();
+    $clcaixa13 = new cl_caixa132021();
+    $clcaixa12 = new cl_caixa122021();
+    $clcaixa11 = new cl_caixa112021();
+    $clcaixa10 = new cl_caixa102021();
 
 
     /*
@@ -152,7 +152,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
         $nSaldoInicial = $oPlanoContas->saldo_anterior;
       }
 
-      $oDadosCaixa = new cl_caixa102020();
+      $oDadosCaixa = new cl_caixa102021();
 
       $oDadosCaixa->si103_tiporegistro = 10;
       $oDadosCaixa->si103_codorgao = $oContas->si09_codorgaotce;
@@ -163,7 +163,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $oDadosCaixa->incluir(null);
 
-      $oDadosSaldoCaixa = new cl_caixa112020();
+      $oDadosSaldoCaixa = new cl_caixa112021();
 
       $oDadosSaldoCaixa->si166_tiporegistro = 11;
       $oDadosSaldoCaixa->si166_codfontecaixa = $oContas->o15_codtri;
@@ -295,7 +295,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
                            o15_codtri::integer
                     FROM conlancamrec
                     JOIN conlancam ON c70_codlan = c74_codlan AND c70_anousu = c74_anousu
-                    LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = 2020
+                    LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = 2021
                     LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
                     LEFT JOIN orctiporec ON o15_codigo = o70_codigo
                     WHERE c74_codlan = {$oMovi->codreduzido}";
@@ -341,7 +341,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
       foreach ($aDadosAgrupados as $mov) {
 
 
-        $clcaixa12 = new cl_caixa122020();
+        $clcaixa12 = new cl_caixa122021();
 
         $clcaixa12->si104_tiporegistro = $mov->si104_tiporegistro;
         $clcaixa12->si104_codreduzido = $mov->si104_codreduzido;
@@ -368,7 +368,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
           foreach ($mov->registro13 as $reg13) {
 
-            $clcaixa13 = new cl_caixa132020();
+            $clcaixa13 = new cl_caixa132021();
 
             $clcaixa13->si105_tiporegistro = $reg13->si105_tiporegistro;
             $clcaixa13->si105_codreduzido = $reg13->si105_codreduzido;

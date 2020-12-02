@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_rpsd10$PROXIMO_ANO_classe.php");
-require_once("classes/db_rpsd11$PROXIMO_ANO_classe.php");
-require_once("model/contabilidade/arquivos/sicom/$PROXIMO_ANO/dcasp/geradores/GerarRPSD.model.php");
+require_once("classes/db_rpsd102021_classe.php");
+require_once("classes/db_rpsd112021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2021/dcasp/geradores/GerarRPSD.model.php");
 
 
 
@@ -38,8 +38,8 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnousu    = db_getsession("DB_anousu");
     $iCodInstit = db_getsession("DB_instit");
 
-    $clrpsd10 = new cl_rpsd10$PROXIMO_ANO();
-    $clrpsd11 = new cl_rpsd11$PROXIMO_ANO();
+    $clrpsd10 = new cl_rpsd102021();
+    $clrpsd11 = new cl_rpsd112021();
 
     db_inicio_transacao();
     /**
@@ -126,7 +126,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
               $nTotalRPPago = 0;
               for ($iContRP = 0; $iContRP < pg_num_rows($rsRPPago); $iContRP++) {
 
-                  $clrpsd10 = new cl_rpsd10$PROXIMO_ANO();
+                  $clrpsd10 = new cl_rpsd102021();
 
                   $oDadosRPSD = db_utils::fieldsMemory($rsRPPago, $iContRP);
 
@@ -135,7 +135,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                   }
                   /**
                    * Verifica se o empenho existe na tabela dotacaorpsicom
-                   * Caso exista, busca os dados da dotação.
+                   * Caso exista, busca os dados da dotaÃ§Ã£o.
                    **/
                   $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDadosRPSD->codreduzidorsp}";
                   $iFonteAlterada = 0;
@@ -167,7 +167,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                   if ($clrpsd10->erro_status == 0) {
                       throw new Exception($clrpsd10->erro_msg);
                   }
-                  $clrpsd11 = new cl_rpsd11$PROXIMO_ANO();
+                  $clrpsd11 = new cl_rpsd112021();
                   $clrpsd11->si190_tiporegistro = 11;
                   $clrpsd11->si190_codreduzidorsp = $oDadosRPSD->codreduzidorsp;
                   $clrpsd11->si190_codfontrecursos = $iFonteAlterada;
@@ -199,10 +199,10 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                              where substr(c60_estrut,1,5)='82111' and c60_anousu=" . $iAno ." and c61_anousu=" . $iAno;
         $sWhere =  " AND conhistdoc.c53_tipo not in (1000) ";
 
-        if($iAno==$PROXIMO_ANO){
-            $iAno = $PROXIMO_ANO;
+        if($iAno==2021){
+            $iAno = 2021;
             $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
-                             where substr(c60_estrut,1,5)='82910' and c60_anousu=$PROXIMO_ANO and c61_anousu=$PROXIMO_ANO";
+                             where substr(c60_estrut,1,5)='82910' and c60_anousu=2021 and c61_anousu=2021";
             $sWhere =  " AND conhistdoc.c53_tipo in (2023) ";
         }
 

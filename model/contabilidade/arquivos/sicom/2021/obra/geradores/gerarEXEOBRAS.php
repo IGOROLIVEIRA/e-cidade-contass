@@ -21,10 +21,10 @@ class gerarEXEOBRAS extends GerarAM
     $this->sArquivo = "EXEOBRAS";
     $this->abreArquivo();
 
-    $sSql = "select * from exeobras102020 where si197_mes = " . $this->iMes . " and si197_instit=" . db_getsession("DB_instit");
-    $rsexeobras102020 = db_query($sSql);
+    $sSql = "select * from exeobras102021 where si197_mes = " . $this->iMes . " and si197_instit=" . db_getsession("DB_instit");
+    $rsexeobras102021 = db_query($sSql);
 
-    if (pg_num_rows($rsexeobras102020) == 0) {
+    if (pg_num_rows($rsexeobras102021) == 0) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
@@ -36,9 +36,9 @@ class gerarEXEOBRAS extends GerarAM
        *
        * Registros 10
        */
-      for ($iCont = 0; $iCont < pg_num_rows($rsexeobras102020); $iCont++) {
+      for ($iCont = 0; $iCont < pg_num_rows($rsexeobras102021); $iCont++) {
 
-        $aEXEOBRAS10 = pg_fetch_array($rsexeobras102020, $iCont);
+        $aEXEOBRAS10 = pg_fetch_array($rsexeobras102021, $iCont);
 
         $aCSVEXEOBRAS10['si197_tiporegistro'] = $aEXEOBRAS10['si197_tiporegistro'];
         $aCSVEXEOBRAS10['si197_codorgao'] = str_pad($aEXEOBRAS10['si197_codorgao'], 3, "0", STR_PAD_LEFT);

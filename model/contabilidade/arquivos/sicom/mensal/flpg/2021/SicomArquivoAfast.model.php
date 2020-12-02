@@ -127,7 +127,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             OR (DATE_PART('YEAR',r45_dtreto) > ".db_getsession("DB_anousu")."))
             AND r45_situac <> 5
             AND (r45_mesusu = {$iMes} OR (r45_mesusu > {$iMes} AND DATE_PART('MONTH',r45_dtafas) = {$iMes}))
-            AND r45_dtafas >= '$PROXIMO_ANO-01-01'
+            AND r45_dtafas >= '2021-01-01'
             AND rh02_instit = ".db_getsession("DB_instit")."
             GROUP BY r45_regist,si199_tipoafastamento
             ";
@@ -137,7 +137,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
-            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '$PROXIMO_ANO-11-01') {
+            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2021-11-01') {
               continue;
             }
 
@@ -203,15 +203,15 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                 AND (
                                         (DATE_PART('YEAR',r45_dtafas) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',r45_dtafas) = 01)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = $PROXIMO_ANO and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = $PROXIMO_ANO and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = $PROXIMO_ANO and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = $PROXIMO_ANO and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = $PROXIMO_ANO and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
                                         (DATE_PART('YEAR',r45_dtafas) = 2013 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                     )
@@ -419,7 +419,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             AND DATE_PART('MONTH',r45_dtafas) < {$iMes}) OR DATE_PART('YEAR',r45_dtafas) < ".db_getsession("DB_anousu").")
             AND r45_situac <> 5
             AND r45_mesusu = {$iMes}
-            AND r45_dtafas >= '$PROXIMO_ANO-01-01'
+            AND r45_dtafas >= '2021-01-01'
             AND rh02_instit = ".db_getsession("DB_instit")."
             GROUP BY r45_regist,
             si199_tipoafastamento,
@@ -434,7 +434,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         for ($iCont = 0; $iCont < pg_num_rows($rsResultafast30); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResultafast30, $iCont);
-            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '$PROXIMO_ANO-11-01') {
+            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2021-11-01') {
               continue;
             }
 

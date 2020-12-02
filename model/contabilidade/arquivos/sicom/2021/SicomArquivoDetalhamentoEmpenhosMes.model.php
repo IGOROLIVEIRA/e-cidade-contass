@@ -1,12 +1,12 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_emp10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_emp11$PROXIMO_ANO_classe.php");
+require_once ("classes/db_emp102021_classe.php");
+require_once ("classes/db_emp112021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarEMP.model.php");
 
 /**
- * detalhamento dos empenhos do mês Sicom Acompanhamento Mensal
+ * detalhamento dos empenhos do mÃªs Sicom Acompanhamento Mensal
  * @author robson
  * @package Contabilidade
  */
@@ -56,8 +56,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 	 */
 	public function gerarDados() {
 		
-		$cEmp10$PROXIMO_ANO = new cl_emp10$PROXIMO_ANO();
-		$cEmp11$PROXIMO_ANO = new cl_emp11$PROXIMO_ANO();
+		$cEmp102021 = new cl_emp102021();
+		$cEmp112021 = new cl_emp112021();
 		
 		$sSqlInstit = "select cgc from db_config where codigo = ".db_getsession("DB_instit");
 		$rsResultCnpj = db_query($sSqlInstit);
@@ -74,16 +74,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 		  	 * excluir informacoes do mes caso ja tenha sido gerado anteriormente
 		  	 */
 		    
-		    $result = $cEmp10$PROXIMO_ANO->sql_record($cEmp10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si106_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'])
+		    $result = $cEmp102021->sql_record($cEmp102021->sql_query(NULL,"*",NULL,"si106_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'])
 		     ." si106_instit = ".db_getsession("DB_instit"));
 		    
 		    if (pg_num_rows($result) > 0) {
-		    	$cEmp11$PROXIMO_ANO->excluir(NULL,"si107_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
+		    	$cEmp112021->excluir(NULL,"si107_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
 		    	." si107_instit = ".db_getsession("DB_instit"));
-		    	$cEmp10$PROXIMO_ANO->excluir(NULL,"si106_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
+		    	$cEmp102021->excluir(NULL,"si106_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
 		    	." si106_instit = ".db_getsession("DB_instit"));
-		      if ($cEmp10$PROXIMO_ANO->erro_status == 0) {
-		    	  throw new Exception($claoc11$PROXIMO_ANO->erro_msg);
+		      if ($cEmp102021->erro_status == 0) {
+		    	  throw new Exception($claoc112021->erro_msg);
 		      }
 		    }
 		    
@@ -174,7 +174,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         
 		$rsEmpenho = db_query($sSql);
      
-		$aCaracteres = array("°",chr(13),chr(10),"'",);
+		$aCaracteres = array("Â°",chr(13),chr(10),"'",);
 		
 		
 		
@@ -211,7 +211,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 	      }
           db_inicio_transacao();
 	            
-			$oDadosEmpenho = new cl_emp10$PROXIMO_ANO();
+			$oDadosEmpenho = new cl_emp102021();
 	
 			$oDadosEmpenho->si106_tiporegistro                 = $oEmpenho->tiporegistro;
 			$oDadosEmpenho->si106_codorgao                     = $oEmpenho->codorgao;
@@ -256,7 +256,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 			/**
 			 * dados registro 11
 			 */
-			$oDadosEmpenhoFonte = new cl_emp11$PROXIMO_ANO();
+			$oDadosEmpenhoFonte = new cl_emp112021();
 			
 			$oDadosEmpenhoFonte->si107_tiporegistro    = 11;
 			$oDadosEmpenhoFonte->si107_codunidadesub   = $sCodUnidade;

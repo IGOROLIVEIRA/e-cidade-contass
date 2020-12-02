@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_rec102020_classe.php");
-require_once ("classes/db_rec112020_classe.php");
+require_once ("classes/db_rec102021_classe.php");
+require_once ("classes/db_rec112021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarREC.model.php");
 
  /**
@@ -78,8 +78,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
     /**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
   	 */
-  	$clrec102020 = new cl_rec102020();
-  	$clrec112020 = new cl_rec112020();
+  	$clrec102021 = new cl_rec102021();
+  	$clrec112021 = new cl_rec112021();
 
   	$db_filtro  = "o70_instit = ".db_getsession("DB_instit");
     $rsResult10  = db_receitasaldo(11,1,3,true,$db_filtro,db_getsession("DB_anousu"),$this->sDataInicial,$this->sDataFinal,false,' * ',true,0);
@@ -93,19 +93,19 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
      */
     db_inicio_transacao();
 
-    $result = $clrec112020->sql_record($clrec112020->sql_query(NULL,"*",NULL,"si26_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'])." and si26_instit = ".db_getsession("DB_instit"));
+    $result = $clrec112021->sql_record($clrec112021->sql_query(NULL,"*",NULL,"si26_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'])." and si26_instit = ".db_getsession("DB_instit"));
     if (pg_num_rows($result) > 0) {
-    	$clrec112020->excluir(NULL,"si26_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si26_instit = ".db_getsession("DB_instit"));
-      if ($clrec112020->erro_status == 0) {
-    	  throw new Exception($clrec112020->erro_msg);
+    	$clrec112021->excluir(NULL,"si26_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si26_instit = ".db_getsession("DB_instit"));
+      if ($clrec112021->erro_status == 0) {
+    	  throw new Exception($clrec112021->erro_msg);
       }
     }
 
-    $result = $clrec102020->sql_record($clrec102020->sql_query(NULL,"*",NULL,"si25_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si25_instit = ".db_getsession("DB_instit")));
+    $result = $clrec102021->sql_record($clrec102021->sql_query(NULL,"*",NULL,"si25_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si25_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clrec102020->excluir(NULL,"si25_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si25_instit = ".db_getsession("DB_instit"));
-      if ($clrec102020->erro_status == 0) {
-    	  throw new Exception($clrec102020->erro_msg);
+    	$clrec102021->excluir(NULL,"si25_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si25_instit = ".db_getsession("DB_instit"));
+      if ($clrec102021->erro_status == 0) {
+    	  throw new Exception($clrec102021->erro_msg);
       }
     }
     /* RECEITAS QUE DEVEM SER SUBSTIUIDAS RUBRICA CADASTRADA ERRADA */
@@ -182,26 +182,26 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
     }
 
-    $aRectceSaudEduc = array('11120101','11120200','11120431','11120434','11120800','11130501','11130502','17210102', '17210105','17213600',
+    $aRectceSaudEduc = array('11120101','11120210','11120431','11120434','11120800','11130501','11130502','17210102', '17210105','17213600',
                             '17220101','17220102','17220104','19110801','19113800','19113900','19114000','19130800','19131100','19131200',
                             '19131300','19310400','19311100','19311200','19311300');
     foreach ($aDadosAgrupados as $oDados10) {
 
-    	$clrec102020 = new cl_rec102020();
-		  $clrec102020->si25_tiporegistro         = $oDados10->si25_tiporegistro;
-		  $clrec102020->si25_codreceita           = $oDados10->si25_codreceita;
-		  $clrec102020->si25_codorgao             = $oDados10->si25_codorgao;
-		  $clrec102020->si25_ededucaodereceita    = $oDados10->si25_ededucaodereceita;
-		  $clrec102020->si25_identificadordeducao = $oDados10->si25_identificadordeducao;
-		  $clrec102020->si25_naturezareceita      = $oDados10->si25_naturezareceita;
-		  $clrec102020->si25_especificacao        = $oDados10->si25_especificacao;
-		  $clrec102020->si25_vlarrecadado         = abs($oDados10->si25_vlarrecadado);
-		  $clrec102020->si25_mes                  = $oDados10->si25_mes;
-		  $clrec102020->si25_instit               = db_getsession("DB_instit");
+    	$clrec102021 = new cl_rec102021();
+		  $clrec102021->si25_tiporegistro         = $oDados10->si25_tiporegistro;
+		  $clrec102021->si25_codreceita           = $oDados10->si25_codreceita;
+		  $clrec102021->si25_codorgao             = $oDados10->si25_codorgao;
+		  $clrec102021->si25_ededucaodereceita    = $oDados10->si25_ededucaodereceita;
+		  $clrec102021->si25_identificadordeducao = $oDados10->si25_identificadordeducao;
+		  $clrec102021->si25_naturezareceita      = $oDados10->si25_naturezareceita;
+		  $clrec102021->si25_especificacao        = $oDados10->si25_especificacao;
+		  $clrec102021->si25_vlarrecadado         = abs($oDados10->si25_vlarrecadado);
+		  $clrec102021->si25_mes                  = $oDados10->si25_mes;
+		  $clrec102021->si25_instit               = db_getsession("DB_instit");
 
-		  $clrec102020->incluir(null);
-    	if ($clrec102020->erro_status == 0) {
-    	  throw new Exception($clrec102020->erro_msg);
+		  $clrec102021->incluir(null);
+    	if ($clrec102021->erro_status == 0) {
+    	  throw new Exception($clrec102021->erro_msg);
       }
       foreach ($oDados10->Reg11 as $oDados11) {
       	if (in_array($oDados10->si25_naturezareceita ,$aRectceSaudEduc )) {
@@ -213,50 +213,50 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
       			$nValor = $oDados10->si25_vlarrecadado*0.15;
       		}
 
-      	  $clrec112020 = new cl_rec112020();
-    		  $clrec112020->si26_tiporegistro      = $oDados11->si26_tiporegistro;
-    		  $clrec112020->si26_reg10             = $clrec102020->si25_sequencial;
-    		  $clrec112020->si26_codreceita        = $oDados11->si26_codreceita;
-    		  $clrec112020->si26_codfontrecursos   = '100';
-    		  $clrec112020->si26_vlarrecadadofonte = abs($oDados10->si25_vlarrecadado*0.60);
-    		  $clrec112020->si26_mes               = $oDados11->si26_mes;
-    		  $clrec112020->si26_instit            = db_getsession("DB_instit");
+      	  $clrec112021 = new cl_rec112021();
+    		  $clrec112021->si26_tiporegistro      = $oDados11->si26_tiporegistro;
+    		  $clrec112021->si26_reg10             = $clrec102021->si25_sequencial;
+    		  $clrec112021->si26_codreceita        = $oDados11->si26_codreceita;
+    		  $clrec112021->si26_codfontrecursos   = '100';
+    		  $clrec112021->si26_vlarrecadadofonte = abs($oDados10->si25_vlarrecadado*0.60);
+    		  $clrec112021->si26_mes               = $oDados11->si26_mes;
+    		  $clrec112021->si26_instit            = db_getsession("DB_instit");
 
-          $clrec112020->incluir(null);
-    	    if ($clrec112020->erro_status == 0) {
-    	      throw new Exception($clrec112020->erro_msg);
+          $clrec112021->incluir(null);
+    	    if ($clrec112021->erro_status == 0) {
+    	      throw new Exception($clrec112021->erro_msg);
           }
 
-          $clrec112020->si26_sequencial = null;
-          $clrec112020->si26_codfontrecursos   = '101';
-          $clrec112020->si26_vlarrecadadofonte = abs($oDados10->si25_vlarrecadado*0.25);
-      	  $clrec112020->incluir(null);
-    	    if ($clrec112020->erro_status == 0) {
-    	      throw new Exception($clrec112020->erro_msg);
+          $clrec112021->si26_sequencial = null;
+          $clrec112021->si26_codfontrecursos   = '101';
+          $clrec112021->si26_vlarrecadadofonte = abs($oDados10->si25_vlarrecadado*0.25);
+      	  $clrec112021->incluir(null);
+    	    if ($clrec112021->erro_status == 0) {
+    	      throw new Exception($clrec112021->erro_msg);
           }
 
-      	  $clrec112020->si26_sequencial = null;
-          $clrec112020->si26_codfontrecursos   = '102';
-          $clrec112020->si26_vlarrecadadofonte = abs($oDados10->si25_vlarrecadado*0.15);
-      	  $clrec112020->incluir(null);
-    	    if ($clrec112020->erro_status == 0) {
-    	      throw new Exception($clrec112020->erro_msg);
+      	  $clrec112021->si26_sequencial = null;
+          $clrec112021->si26_codfontrecursos   = '102';
+          $clrec112021->si26_vlarrecadadofonte = abs($oDados10->si25_vlarrecadado*0.15);
+      	  $clrec112021->incluir(null);
+    	    if ($clrec112021->erro_status == 0) {
+    	      throw new Exception($clrec112021->erro_msg);
           }
 
       	} else {
 
-          $clrec112020 = new cl_rec112020();
-    		  $clrec112020->si26_tiporegistro      = $oDados11->si26_tiporegistro;
-    		  $clrec112020->si26_reg10             = $clrec102020->si25_sequencial;
-    		  $clrec112020->si26_codreceita        = $oDados11->si26_codreceita;
-    		  $clrec112020->si26_codfontrecursos   = $oDados11->si26_codfontrecursos;
-    		  $clrec112020->si26_vlarrecadadofonte = abs($oDados11->si26_vlarrecadadofonte);
-    		  $clrec112020->si26_mes               = $oDados11->si26_mes;
-    		  $clrec112020->si26_instit            = db_getsession("DB_instit");
+          $clrec112021 = new cl_rec112021();
+    		  $clrec112021->si26_tiporegistro      = $oDados11->si26_tiporegistro;
+    		  $clrec112021->si26_reg10             = $clrec102021->si25_sequencial;
+    		  $clrec112021->si26_codreceita        = $oDados11->si26_codreceita;
+    		  $clrec112021->si26_codfontrecursos   = $oDados11->si26_codfontrecursos;
+    		  $clrec112021->si26_vlarrecadadofonte = abs($oDados11->si26_vlarrecadadofonte);
+    		  $clrec112021->si26_mes               = $oDados11->si26_mes;
+    		  $clrec112021->si26_instit            = db_getsession("DB_instit");
 
-          $clrec112020->incluir(null);
-    	    if ($clrec112020->erro_status == 0) {
-    	      throw new Exception($clrec112020->erro_msg);
+          $clrec112021->incluir(null);
+    	    if ($clrec112021->erro_status == 0) {
+    	      throw new Exception($clrec112021->erro_msg);
           }
 
       	}

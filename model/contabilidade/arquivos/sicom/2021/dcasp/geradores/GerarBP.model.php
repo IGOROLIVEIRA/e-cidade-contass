@@ -18,28 +18,28 @@ class GerarBP extends GerarAM
     $this->sArquivo = "BP";
     $this->abreArquivo();
 
-    $sSql = "select * from bpdcasp10$PROXIMO_ANO where si208_ano = {$this->iAno} AND si208_periodo = {$this->iPeriodo} AND si208_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp102021 where si208_ano = {$this->iAno} AND si208_periodo = {$this->iPeriodo} AND si208_institu = " . db_getsession("DB_instit");
     $rsBP10 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp20$PROXIMO_ANO where si209_ano = {$this->iAno} AND si209_periodo = {$this->iPeriodo} AND si209_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp202121 where si209_ano = {$this->iAno} AND si209_periodo = {$this->iPeriodo} AND si209_institu = " . db_getsession("DB_instit");
     $rsBP20 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp30$PROXIMO_ANO where si210_ano = {$this->iAno} AND si210_periodo = {$this->iPeriodo} AND si210_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp302021 where si210_ano = {$this->iAno} AND si210_periodo = {$this->iPeriodo} AND si210_institu = " . db_getsession("DB_instit");
     $rsBP30 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp40$PROXIMO_ANO where si211_ano = {$this->iAno} AND si211_periodo = {$this->iPeriodo} AND si211_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp402021 where si211_ano = {$this->iAno} AND si211_periodo = {$this->iPeriodo} AND si211_institu = " . db_getsession("DB_instit");
     $rsBP40 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp50$PROXIMO_ANO where si212_ano = {$this->iAno} AND si212_periodo = {$this->iPeriodo} AND si212_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp502021 where si212_ano = {$this->iAno} AND si212_periodo = {$this->iPeriodo} AND si212_institu = " . db_getsession("DB_instit");
     $rsBP50 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp60$PROXIMO_ANO where si213_ano = {$this->iAno} AND si213_periodo = {$this->iPeriodo} AND si213_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp602021 where si213_ano = {$this->iAno} AND si213_periodo = {$this->iPeriodo} AND si213_institu = " . db_getsession("DB_instit");
     $rsBP60 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp70$PROXIMO_ANO where si214_ano = {$this->iAno} AND si214_periodo = {$this->iPeriodo} AND si214_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp702021 where si214_ano = {$this->iAno} AND si214_periodo = {$this->iPeriodo} AND si214_institu = " . db_getsession("DB_instit");
     $rsBP70 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp71$PROXIMO_ANO where si215_ano = {$this->iAno} AND si215_periodo = {$this->iPeriodo} AND si215_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp712021 where si215_ano = {$this->iAno} AND si215_periodo = {$this->iPeriodo} AND si215_institu = " . db_getsession("DB_instit");
     $rsBP71 = db_query($sSql);
 
 

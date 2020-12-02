@@ -1,11 +1,11 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_ext10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ext20$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ext21$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ext22$PROXIMO_ANO_classe.php");
-require_once ("classes/db_ext23$PROXIMO_ANO_classe.php");
+require_once ("classes/db_ext102021_classe.php");
+require_once ("classes/db_ext202121_classe.php");
+require_once ("classes/db_ext212021_classe.php");
+require_once ("classes/db_ext222021_classe.php");
+require_once ("classes/db_ext232021_classe.php");
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarEXT.model.php");
 
@@ -60,11 +60,11 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
    */
   public function gerarDados() {
   	
-  	$cExt10 = new cl_ext10$PROXIMO_ANO();
-  	$cExt20 = new cl_ext20$PROXIMO_ANO();
-  	$cExt21 = new cl_ext21$PROXIMO_ANO();
-  	$cExt22 = new cl_ext22$PROXIMO_ANO();
-  	$cExt23 = new cl_ext23$PROXIMO_ANO();
+  	$cExt10 = new cl_ext102021();
+  	$cExt20 = new cl_ext202121();
+  	$cExt21 = new cl_ext212021();
+  	$cExt22 = new cl_ext222021();
+  	$cExt23 = new cl_ext232021();
   	/*
   	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA 
   	 * EXCLUIR OS REGISTROS E GERAR NOVAMENTE
@@ -198,7 +198,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 	       				 and si124_codext =".$oContaExtra->codext)." and si124_instit = ".db_getsession("DB_instit"));
 	       if (pg_num_rows($result) == 0) {
 	       	
-	       		$cExt10 = new cl_ext10$PROXIMO_ANO();
+	       		$cExt10 = new cl_ext102021();
 	       		
 	       		$cExt10->si124_tiporegistro     = $oContaExtra->tiporegistro;
 	       		$cExt10->si124_codext  			= $oContaExtra->codext;
@@ -643,13 +643,13 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 					 * desagrupar para salvar no bd
 					 */
 					
-					$aCaracteres = array("°",chr(13),chr(10),"'",);
+					$aCaracteres = array("Â°",chr(13),chr(10),"'",);
 					
 					foreach($aExt20 as $oExt20Agrupado){
 						//echo "<pre>";print_r($oExt20Agrupado);exit;
 						
 						
-						$cExt20 = new cl_ext20$PROXIMO_ANO();
+						$cExt20 = new cl_ext202121();
 						
 						$cExt20->si165_tiporegistro 		= $oExt20Agrupado->si165_tiporegistro;
 			            $cExt20->si165_codorgao 			= $oExt20Agrupado->si165_codorgao;
@@ -669,7 +669,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							
 							foreach($aExtAgrupado as $oExtAgrupado){
 									 
-									 $cExt21 = new cl_ext21$PROXIMO_ANO();
+									 $cExt21 = new cl_ext212021();
 									 
 									 $cExt21->si125_tiporegistro 		= $oExtAgrupado->si125_tiporegistro;
 									 $cExt21->si125_codreduzidomov 		= $oExtAgrupado->si125_codreduzidomov;
@@ -689,7 +689,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									 foreach ($oExtAgrupado->ext22 as $oext22agrupado){
 									 	
 									 	//echo "<pre>";print_r($oext22agrupado);exit;
-									 	$cExt22 = new cl_ext22$PROXIMO_ANO();
+									 	$cExt22 = new cl_ext222021();
 									 	
 									 	$cExt22->si126_tiporegistro 		=  $oext22agrupado->si126_tiporegistro;
 									 	$cExt22->si126_codreduzidoeo 		=  $oext22agrupado->si126_codreduzidoeo;
@@ -714,7 +714,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 										 	
 										 	
 										 	
-										 	 $cExt23 = new cl_ext23$PROXIMO_ANO();
+										 	 $cExt23 = new cl_ext232021();
 										 	
 										 	 $cExt23->si127_tiporegistro    =  $oext23agrupado->si127_tiporegistro; 
 											 $cExt23->si127_codreduzidoop   =  $oext23agrupado->si127_codreduzidoop; 

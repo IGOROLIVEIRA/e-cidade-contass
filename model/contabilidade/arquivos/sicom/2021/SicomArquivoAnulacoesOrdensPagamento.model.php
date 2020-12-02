@@ -1,12 +1,12 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_aop10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_aop11$PROXIMO_ANO_classe.php");
+require_once ("classes/db_aop102021_classe.php");
+require_once ("classes/db_aop112021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAOP.model.php");
 
  /**
-  * Anulações das Ordens de Pagamento Sicom Acompanhamento Mensal
+  * AnulaÃ§Ãµes das Ordens de Pagamento Sicom Acompanhamento Mensal
   * @author marcelo
   * @package Contabilidade
   */
@@ -76,14 +76,14 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
   }
   
   /**
-   * selecionar os dados de Decreto Municipal Regulamentador do Pregão / Registro de Preços do mes para gerar o arquivo
+   * selecionar os dados de Decreto Municipal Regulamentador do PregÃ£o / Registro de PreÃ§os do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
   	
   	
-  	$claop10$PROXIMO_ANO = new cl_aop10$PROXIMO_ANO();
-  	$claop11$PROXIMO_ANO = new cl_aop11$PROXIMO_ANO();
+  	$claop102021 = new cl_aop102021();
+  	$claop112021 = new cl_aop112021();
     
     $sSqlUnidade = "select * from infocomplementares where 
   	si08_anousu = ".db_getsession("DB_anousu")." and si08_instit = ".db_getsession("DB_instit");
@@ -103,17 +103,17 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
      * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
      */
     db_inicio_transacao();
-    $result = $claop10$PROXIMO_ANO->sql_record($claop10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si137_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'] 
+    $result = $claop102021->sql_record($claop102021->sql_query(NULL,"*",NULL,"si137_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'] 
     . " and si137_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
     	
-    	$claop11$PROXIMO_ANO->excluir(NULL,"si138_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'] . " and si138_instit = ".db_getsession("DB_instit"));
-        if ($claop11$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claop11$PROXIMO_ANO->erro_msg);
+    	$claop112021->excluir(NULL,"si138_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'] . " and si138_instit = ".db_getsession("DB_instit"));
+        if ($claop112021->erro_status == 0) {
+	    	  throw new Exception($claop112021->erro_msg);
 	      }
-    	$claop10$PROXIMO_ANO->excluir(NULL,"si137_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'] . " and si137_instit = ".db_getsession("DB_instit"));
-	    if ($claop10$PROXIMO_ANO->erro_status == 0) {
-	    	  throw new Exception($claop10$PROXIMO_ANO->erro_msg);
+    	$claop102021->excluir(NULL,"si137_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'] . " and si137_instit = ".db_getsession("DB_instit"));
+	    if ($claop102021->erro_status == 0) {
+	    	  throw new Exception($claop102021->erro_msg);
 	      }
 	}
 	
@@ -259,7 +259,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     }
     foreach ($aAnulacoes as $anulacao) {
     	  
-    	  $oDadosAnulacao = new cl_aop10$PROXIMO_ANO();
+    	  $oDadosAnulacao = new cl_aop102021();
     	
     	  $oDadosAnulacao->si137_tiporegistro    			= $anulacao->si137_tiporegistro;
 		  $oDadosAnulacao->si137_codreduzido    			= $anulacao->si137_codreduzido;
@@ -281,7 +281,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 		  
 		  foreach($anulacao->reg11 as $reg11){
 		  	      
-		  		  $oDadosAnulacaoFonte = new cl_aop11$PROXIMO_ANO();
+		  		  $oDadosAnulacaoFonte = new cl_aop112021();
 				  
 				  $oDadosAnulacaoFonte->si138_tiporegistro       = $reg11->si138_tiporegistro;
 			   	  $oDadosAnulacaoFonte->si138_codreduzido        = $reg11->si138_codreduzido;

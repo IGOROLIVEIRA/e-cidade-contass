@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_conv102020_classe.php");
-require_once("classes/db_conv112020_classe.php");
-require_once("classes/db_conv202020_classe.php");
-require_once("classes/db_conv212020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCONV.model.php");
+require_once("classes/db_conv102021_classe.php");
+require_once("classes/db_conv112021_classe.php");
+require_once("classes/db_conv202021_classe.php");
+require_once("classes/db_conv212021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCONV.model.php");
 
 /**
  * selecionar dados de Convenios Sicom Acompanhamento Mensal
@@ -62,12 +62,12 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
   public function gerarDados()
   {
 
-    $clconv10 = new cl_conv102020();
-    $clconv11 = new cl_conv112020();
-    $clconv20 = new cl_conv202020();
-    $clconv21 = new cl_conv212020();
-    $clconv30 = new cl_conv302020();
-    $clconv31 = new cl_conv312020();
+    $clconv10 = new cl_conv102021();
+    $clconv11 = new cl_conv112021();
+    $clconv20 = new cl_conv202021();
+    $clconv21 = new cl_conv212021();
+    $clconv30 = new cl_conv302021();
+    $clconv31 = new cl_conv312021();
 
     db_inicio_transacao();
 
@@ -163,7 +163,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clconv10 = new cl_conv102020();
+      $clconv10 = new cl_conv102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clconv10->si92_tiporegistro = 10;
@@ -198,7 +198,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-        $clconv11 = new cl_conv112020();
+        $clconv11 = new cl_conv112021();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
         $clconv11->si93_tiporegistro = 11;
@@ -234,7 +234,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-        $clconv20 = new cl_conv202020();
+        $clconv20 = new cl_conv202021();
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
         $clconv20->si94_tiporegistro = 20;
@@ -256,7 +256,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
           throw new Exception($clconv20->erro_msg);
         }
 
-        $clconv21 = new cl_conv212020();
+        $clconv21 = new cl_conv212021();
         $clconv21->si232_tiporegistro = 21;
         $clconv21->si232_codconvaditivo = $oDados20->c206_sequencial.$oDados20->c208_sequencial;
         $clconv21->si232_tipotermoaditivo = $oDados20->c208_tipotermoaditivo;
@@ -286,7 +286,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-            $clconv30 = new cl_conv302020();
+            $clconv30 = new cl_conv302021();
             $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
             $clconv30->si203_tiporegistro = 30;
@@ -311,7 +311,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
                 for ($iCont31 = 0; $iCont31 < pg_num_rows($rsResult31); $iCont31++) {
 
-                    $clconv31 = new cl_conv312020();
+                    $clconv31 = new cl_conv312021();
                     $oDados31 = db_utils::fieldsMemory($rsResult31, $iCont31);
 
                     $clconv31->si204_tiporegistro = 31;
@@ -332,7 +332,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
             } else {
 
-                $clconv31 = new cl_conv312020();
+                $clconv31 = new cl_conv312021();
 
                 $clconv31->si204_tiporegistro = 31;
                 $clconv31->si204_codreceita = $oDados30->o70_codrec;
@@ -350,7 +350,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
             if ($oDados30->c229_semassinatura > 0) {
 
-                $clconv31 = new cl_conv312020();
+                $clconv31 = new cl_conv312021();
 
                 $clconv31->si204_tiporegistro = 31;
                 $clconv31->si204_codreceita = $oDados30->o70_codrec;

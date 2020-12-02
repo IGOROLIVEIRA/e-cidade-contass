@@ -2,12 +2,12 @@
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once ("classes/db_lqd10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_lqd11$PROXIMO_ANO_classe.php");
-require_once ("classes/db_lqd12$PROXIMO_ANO_classe.php");
+require_once ("classes/db_lqd102021_classe.php");
+require_once ("classes/db_lqd112021_classe.php");
+require_once ("classes/db_lqd122021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarLQD.model.php");
  /**
-  * Detalhamento da liquidação da despesa Sicom Acompanhamento Mensal
+  * Detalhamento da liquidaÃ§Ã£o da despesa Sicom Acompanhamento Mensal
   * @author robson
   * @package Contabilidade
   */
@@ -85,9 +85,9 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
    */
   public function gerarDados() {
     
-  	$cllqd10$PROXIMO_ANO = new cl_lqd10$PROXIMO_ANO();
-  	$cllqd11$PROXIMO_ANO = new cl_lqd11$PROXIMO_ANO();
-  	$cllqd12$PROXIMO_ANO = new cl_lqd12$PROXIMO_ANO();
+  	$cllqd102021 = new cl_lqd102021();
+  	$cllqd112021 = new cl_lqd112021();
+  	$cllqd122021 = new cl_lqd122021();
   	
   	$sSqlUnidade = "select * from infocomplementares where 
   	si08_anousu = ".db_getsession("DB_anousu")." and si08_instit = ".db_getsession("DB_instit");
@@ -127,18 +127,18 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
      * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
      */
     db_inicio_transacao();
-    $result = $cllqd10$PROXIMO_ANO->sql_record($cllqd10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si118_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
+    $result = $cllqd102021->sql_record($cllqd102021->sql_query(NULL,"*",NULL,"si118_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
         ." and si118_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
     	
-    	$cllqd11$PROXIMO_ANO->excluir(NULL,"si119_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
+    	$cllqd112021->excluir(NULL,"si119_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
     		." and si119_instit = ".db_getsession("DB_instit"));
-    	$cllqd12$PROXIMO_ANO->excluir(NULL,"si120_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
+    	$cllqd122021->excluir(NULL,"si120_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
     		." and si120_instit = ".db_getsession("DB_instit"));
-    	$cllqd10$PROXIMO_ANO->excluir(NULL,"si118_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
+    	$cllqd102021->excluir(NULL,"si118_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
     		." and si118_instit = ".db_getsession("DB_instit"));
-      if ($cllqd10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($cllqd10$PROXIMO_ANO->erro_msg);
+      if ($cllqd102021->erro_status == 0) {
+    	  throw new Exception($cllqd102021->erro_msg);
       }
     }
     
@@ -228,41 +228,41 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     }
     foreach ($aDadosAgrupados as $oDados10) {
     			
-		    	  $cllqd10$PROXIMO_ANO = new cl_lqd10$PROXIMO_ANO();
-				  $cllqd10$PROXIMO_ANO->si118_tiporegistro          = $oDados10->si118_tiporegistro;
-				  $cllqd10$PROXIMO_ANO->si118_codreduzido           = $oDados10->si118_codreduzido;
-				  $cllqd10$PROXIMO_ANO->si118_codorgao              = $oDados10->si118_codorgao;
-				  $cllqd10$PROXIMO_ANO->si118_codunidadesub         = $oDados10->si118_codunidadesub;
-				  $cllqd10$PROXIMO_ANO->si118_tpliquidacao          = $oDados10->si118_tpliquidacao;
-				  $cllqd10$PROXIMO_ANO->si118_nroempenho            = $oDados10->si118_nroempenho;
-				  $cllqd10$PROXIMO_ANO->si118_dtempenho             = $oDados10->si118_dtempenho;
-				  $cllqd10$PROXIMO_ANO->si118_dtliquidacao          = $oDados10->si118_dtliquidacao;
-				  $cllqd10$PROXIMO_ANO->si118_nroliquidacao         = $oDados10->si118_nroliquidacao;
-				  $cllqd10$PROXIMO_ANO->si118_vlliquidado           = $oDados10->si118_vlliquidado;
-				  $cllqd10$PROXIMO_ANO->si118_cpfliquidante         = $oDados10->si118_cpfliquidante;
-				  $cllqd10$PROXIMO_ANO->si118_mes                   = $oDados10->si118_mes;
-				  $cllqd10$PROXIMO_ANO->si118_instit 				= db_getsession("DB_instit");
+		    	  $cllqd102021 = new cl_lqd102021();
+				  $cllqd102021->si118_tiporegistro          = $oDados10->si118_tiporegistro;
+				  $cllqd102021->si118_codreduzido           = $oDados10->si118_codreduzido;
+				  $cllqd102021->si118_codorgao              = $oDados10->si118_codorgao;
+				  $cllqd102021->si118_codunidadesub         = $oDados10->si118_codunidadesub;
+				  $cllqd102021->si118_tpliquidacao          = $oDados10->si118_tpliquidacao;
+				  $cllqd102021->si118_nroempenho            = $oDados10->si118_nroempenho;
+				  $cllqd102021->si118_dtempenho             = $oDados10->si118_dtempenho;
+				  $cllqd102021->si118_dtliquidacao          = $oDados10->si118_dtliquidacao;
+				  $cllqd102021->si118_nroliquidacao         = $oDados10->si118_nroliquidacao;
+				  $cllqd102021->si118_vlliquidado           = $oDados10->si118_vlliquidado;
+				  $cllqd102021->si118_cpfliquidante         = $oDados10->si118_cpfliquidante;
+				  $cllqd102021->si118_mes                   = $oDados10->si118_mes;
+				  $cllqd102021->si118_instit 				= db_getsession("DB_instit");
 				  
-				  $cllqd10$PROXIMO_ANO->incluir(null);
-		    	if ($cllqd10$PROXIMO_ANO->erro_status == 0) {
-		    		echo "<pre>";print_r($cllqd10$PROXIMO_ANO);
-		    	  throw new Exception($cllqd10$PROXIMO_ANO->erro_msg);
+				  $cllqd102021->incluir(null);
+		    	if ($cllqd102021->erro_status == 0) {
+		    		echo "<pre>";print_r($cllqd102021);
+		    	  throw new Exception($cllqd102021->erro_msg);
 		      }
       foreach ($oDados10->Reg11 as $oDados11) {
       	    
-            $cllqd11$PROXIMO_ANO = new cl_lqd11$PROXIMO_ANO();
+            $cllqd112021 = new cl_lqd112021();
             
-    		$cllqd11$PROXIMO_ANO->si119_tiporegistro     = $oDados11->si119_tiporegistro;
-    		$cllqd11$PROXIMO_ANO->si119_codreduzido      = $oDados11->si119_codreduzido;
-    		$cllqd11$PROXIMO_ANO->si119_codfontrecursos  = $oDados11->si119_codfontrecursos;
-    		$cllqd11$PROXIMO_ANO->si119_valorfonte       = $oDados11->si119_valorfonte;
-    		$cllqd11$PROXIMO_ANO->si119_mes              = $oDados11->si119_mes;
-    		$cllqd11$PROXIMO_ANO->si119_reg10            = $cllqd10$PROXIMO_ANO->si118_sequencial;
-    		$cllqd11$PROXIMO_ANO->si119_instit 			 = db_getsession("DB_instit");
+    		$cllqd112021->si119_tiporegistro     = $oDados11->si119_tiporegistro;
+    		$cllqd112021->si119_codreduzido      = $oDados11->si119_codreduzido;
+    		$cllqd112021->si119_codfontrecursos  = $oDados11->si119_codfontrecursos;
+    		$cllqd112021->si119_valorfonte       = $oDados11->si119_valorfonte;
+    		$cllqd112021->si119_mes              = $oDados11->si119_mes;
+    		$cllqd112021->si119_reg10            = $cllqd102021->si118_sequencial;
+    		$cllqd112021->si119_instit 			 = db_getsession("DB_instit");
     		
-          $cllqd11$PROXIMO_ANO->incluir(null);
-    	  if ($cllqd11$PROXIMO_ANO->erro_status == 0) {
-    	    throw new Exception($cllqd11$PROXIMO_ANO->erro_msg);
+          $cllqd112021->incluir(null);
+    	  if ($cllqd112021->erro_status == 0) {
+    	    throw new Exception($cllqd112021->erro_msg);
         }
       	
       }

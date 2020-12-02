@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ddc102020_classe.php");
-require_once("classes/db_ddc202020_classe.php");
-require_once("classes/db_ddc302020_classe.php");
-require_once("classes/db_ddc402020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarDDC.model.php");
+require_once("classes/db_ddc102021_classe.php");
+require_once("classes/db_ddc202021_classe.php");
+require_once("classes/db_ddc302021_classe.php");
+require_once("classes/db_ddc402021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarDDC.model.php");
 
 /**
  * Divida Consolidada Sicom Acompanhamento Mensal
@@ -57,16 +57,16 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
   }
 
   /**
-   * Parecer da Licitação do mes para gerar o arquivo
+   * Parecer da LicitaÃ§Ã£o do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
   {
 
-    $clddc10 = new cl_ddc102020();
-    $clddc20 = new cl_ddc202020();
-    $clddc30 = new cl_ddc302020();
-    $clddc40 = new cl_ddc402020();
+    $clddc10 = new cl_ddc102021();
+    $clddc20 = new cl_ddc202021();
+    $clddc30 = new cl_ddc302021();
+    $clddc40 = new cl_ddc402021();
 
     db_inicio_transacao();
     /*
@@ -128,17 +128,17 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
      */
     $sSql = "select * from dividaconsolidada where si167_mesreferencia = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
              and si167_anoreferencia = " . db_getsession("DB_anousu") . " and si167_instit = " . db_getsession("DB_instit") . " and not exists
-             (select 1 from ddc102020  where si150_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si150_instit = " . db_getsession("DB_instit") . "
+             (select 1 from ddc102021  where si150_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si150_instit = " . db_getsession("DB_instit") . "
              and si150_nroleiautorizacao = si167_nroleiautorizacao and si150_dtleiautorizacao = si167_dtleiautorizacao
-              union select 1 from ddc10$PROXIMO_ANO  where si150_nroleiautorizacao = si167_nroleiautorizacao and si150_dtleiautorizacao = si167_dtleiautorizacao
+              union select 1 from ddc102021  where si150_nroleiautorizacao = si167_nroleiautorizacao and si150_dtleiautorizacao = si167_dtleiautorizacao
               and si150_instit = " . db_getsession("DB_instit") . "
-              union select 1 from ddc10$PROXIMO_ANO  where si150_nroleiautorizacao = si167_nroleiautorizacao and si150_dtleiautorizacao = si167_dtleiautorizacao
+              union select 1 from ddc102021  where si150_nroleiautorizacao = si167_nroleiautorizacao and si150_dtleiautorizacao = si167_dtleiautorizacao
               and si150_instit = " . db_getsession("DB_instit") . ")";
 
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clddc10 = new cl_ddc102020();
+      $clddc10 = new cl_ddc102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clddc10->si150_tiporegistro = 10;
@@ -161,23 +161,23 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
      */
     $sSql = "select * from dividaconsolidada where si167_mesreferencia = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
              and si167_anoreferencia = " . db_getsession("DB_anousu") . " and si167_instit = " . db_getsession("DB_instit") . " and not exists
-             (select 1 from ddc202020  where si153_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si153_instit = " . db_getsession("DB_instit") . "
+             (select 1 from ddc202021  where si153_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si153_instit = " . db_getsession("DB_instit") . "
              and si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
-              union select 1 from ddc20$PROXIMO_ANO  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              union select 1 from ddc202121  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
               and si153_instit = " . db_getsession("DB_instit") . "
-              union select 1 from ddc20$PROXIMO_ANO  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              union select 1 from ddc202121  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
               and si153_instit = " . db_getsession("DB_instit") . "
-              union select 1 from ddc20$PROXIMO_ANO  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              union select 1 from ddc202121  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
               and si153_instit = " . db_getsession("DB_instit") . "
-              union select 1 from ddc20$PROXIMO_ANO  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              union select 1 from ddc202121  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
               and si153_instit = " . db_getsession("DB_instit") . "
-              union select 1 from ddc20$PROXIMO_ANO  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              union select 1 from ddc202121  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
               and si153_instit = " . db_getsession("DB_instit") . ")";
     $rsResult20 = db_query($sSql);
 
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-      $clddc20 = new cl_ddc202020();
+      $clddc20 = new cl_ddc202021();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
       $clddc20->si153_tiporegistro = 20;
@@ -209,7 +209,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
     $rsResult30 = db_query($sSql);
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-      $clddc30 = new cl_ddc302020();
+      $clddc30 = new cl_ddc302021();
       $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
       $clddc30->si154_tiporegistro = 30;
@@ -239,7 +239,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
     }
 
     /**
-     * selecionar informações do registro 40
+     * selecionar informaÃ§Ãµes do registro 40
      */
     $sSql = "select * from (select
              sum(round(substr(fc_planosaldonovo(" . db_getsession("DB_anousu") . ",c61_reduz,'{$this->sDataInicial}','{$this->sDataFinal}',FALSE),3,14)::float8,2)::float8) AS saldoinicial,
@@ -251,7 +251,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
     $rsResult40 = db_query($sSql);
     for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
       $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
-      $clddc40 = new cl_ddc402020();
+      $clddc40 = new cl_ddc402021();
 
       $clddc40->si178_tiporegistro = 40;
       $clddc40->si178_codorgao = $sCodorgao;

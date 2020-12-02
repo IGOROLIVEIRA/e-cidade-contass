@@ -1,14 +1,14 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_emp102020_classe.php");
-require_once("classes/db_emp112020_classe.php");
-require_once("classes/db_emp122020_classe.php");
-require_once("classes/db_emp302020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarEMP.model.php");
+require_once("classes/db_emp102021_classe.php");
+require_once("classes/db_emp112021_classe.php");
+require_once("classes/db_emp122021_classe.php");
+require_once("classes/db_emp302021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarEMP.model.php");
 
 /**
- * detalhamento dos empenhos do mês Sicom Acompanhamento Mensal
+ * detalhamento dos empenhos do mÃªs Sicom Acompanhamento Mensal
  * @author robson
  * @package Contabilidade
  */
@@ -63,10 +63,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     public function gerarDados()
     {
 
-        $cEmp10 = new cl_emp102020();
-        $cEmp11 = new cl_emp112020();
-        $cEmp12 = new cl_emp122020();
-        $cEmp30 = new cl_emp302020();
+        $cEmp10 = new cl_emp102021();
+        $cEmp11 = new cl_emp112021();
+        $cEmp12 = new cl_emp122021();
+        $cEmp30 = new cl_emp302021();
 
         $sSqlInstit = "select cgc from db_config where codigo = " . db_getsession("DB_instit");
         $rsResultCnpj = db_query($sSqlInstit);
@@ -119,7 +119,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $oElementos = $oDOMDocument->getElementsByTagName('elemento');
 
         /**
-         * selecionar arquivo xml de Dados Compl Licitação
+         * selecionar arquivo xml de Dados Compl LicitaÃ§Ã£o
          */
         $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
         /*if (!file_exists($sArquivo)) {
@@ -355,11 +355,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         
         $rsEmpenho10 = db_query($sSql);
 
-        $aCaracteres = array("°", chr(13), chr(10), "'", ";");
+        $aCaracteres = array("Â°", chr(13), chr(10), "'", ";");
         // matriz de entrada
-        $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+        $what = array("Â°", chr(13), chr(10), 'Ã¤', 'Ã£', 'Ã ', 'Ã¡', 'Ã¢', 'Ãª', 'Ã«', 'Ã¨', 'Ã©', 'Ã¯', 'Ã¬', 'Ã­', 'Ã¶', 'Ãµ', 'Ã²', 'Ã³', 'Ã´', 'Ã¼', 'Ã¹', 'Ãº', 'Ã»', 'Ã€', 'Ã', 'Ãƒ', 'Ã‰', 'Ã', 'Ã“', 'Ãš', 'Ã±', 'Ã‘', 'Ã§', 'Ã‡', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'Âª', 'Âº');
 
-        // matriz de saída
+        // matriz de saÃ­da
         $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
         /**
@@ -436,7 +436,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
             db_inicio_transacao();
 
-            $oDadosEmpenho10 = new cl_emp102020();
+            $oDadosEmpenho10 = new cl_emp102021();
 
             $oDadosEmpenho10->si106_tiporegistro = $oEmpenho10->tiporegistro; // campo 1
             $oDadosEmpenho10->si106_codorgao = $oEmpenho10->codorgao; // campo 2
@@ -523,7 +523,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             $oDadosEmpenho10->si106_nroconvenioconge = $oEmpenho10->si106_nroconvenioconge; // campo 27
             $oDadosEmpenho10->si106_dataassinaturaconvenioconge = $oEmpenho10->si106_dataassinaturaconvenioconge; // campo 28
             $aHomologa = explode("-", $oEmpenho10->datahomologacao);
-            if (($oEmpenho10->datahomologacao == null && $oDadosEmpenho10->exercicioprocessolicitatorio < $PROXIMO_ANO) || $aHomologa[0] < $PROXIMO_ANO) {
+            if (($oEmpenho10->datahomologacao == null && $oDadosEmpenho10->exercicioprocessolicitatorio < 2021) || $aHomologa[0] < 2021) {
                 $oDadosEmpenho10->si106_despdeclicitacao = 1; // campo 29
                 $oDadosEmpenho10->si106_codunidadesubresplicit = null; // campo 30
                 $oDadosEmpenho10->si106_nroprocessolicitatorio = null; // campo 31
@@ -538,7 +538,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             }
             $oDadosEmpenho10->si106_cpfordenador = substr($oEmpenho10->ordenador, 0, 11); // campo 34
             /*
-             * verificar se o tipo de despesa se enquadra nos elementos necessários para informar esse campo para RPPS
+             * verificar se o tipo de despesa se enquadra nos elementos necessÃ¡rios para informar esse campo para RPPS
              */
             if (($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6) && (in_array($sElemento, $aTipoDespEmpRPPS))) {
                 $oDadosEmpenho10->si106_tipodespesaemprpps = $oEmpenho10->e60_tipodespesa; // campo 35
@@ -556,7 +556,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             /**
              * dados registro 11
              */
-            $oDadosEmpenhoFonte = new cl_emp112020();
+            $oDadosEmpenhoFonte = new cl_emp112021();
 
             $oDadosEmpenhoFonte->si107_tiporegistro = 11;
             $oDadosEmpenhoFonte->si107_codunidadesub = $sCodUnidade;
@@ -573,7 +573,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             }
 
 
-            $oEmp12 = new cl_emp122020();
+            $oEmp12 = new cl_emp122021();
 
             $oEmp12->si108_tiporegistro = '12';
             $oEmp12->si108_codunidadesub = $sCodUnidade;
@@ -695,7 +695,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
               /**
               * dados do registro 30
               */
-              $oDadosEmpenho30 = new cl_emp302020();
+              $oDadosEmpenho30 = new cl_emp302021();
 
               $oDadosEmpenho30->si206_tiporegistro = $oEmpenho30->tiporegistro; // campo 1
               $oDadosEmpenho30->si206_codorgao = $oEmpenho30->codorgao; //campo 2

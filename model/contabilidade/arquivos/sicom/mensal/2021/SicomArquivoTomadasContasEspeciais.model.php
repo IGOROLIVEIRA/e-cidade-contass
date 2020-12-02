@@ -2,9 +2,9 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_tce102020_classe.php");
-require_once ("classes/db_tce112020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarTCE.model.php");
+require_once ("classes/db_tce102021_classe.php");
+require_once ("classes/db_tce112021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarTCE.model.php");
  /**
   * TomadasContasEspeciais Sicom Acompanhamento Mensal
   * @author igor
@@ -56,8 +56,8 @@ class SicomArquivoTomadasContasEspeciais extends SicomArquivoBase implements iPa
    */
   public function gerarDados() {
 
-    $tce102020 = new cl_tce102020();
-    $tce112020 = new cl_tce112020();
+    $tce102021 = new cl_tce102021();
+    $tce112021 = new cl_tce112021();
 
 
     db_inicio_transacao();
@@ -66,18 +66,18 @@ class SicomArquivoTomadasContasEspeciais extends SicomArquivoBase implements iPa
      * excluir informacoes do mes selecionado 
      */
 
-    $result = $tce112020->sql_record($tce112020->sql_query(NULL,"*",NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit") ));
+    $result = $tce112021->sql_record($tce112021->sql_query(NULL,"*",NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $tce112020->excluir(NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit"));
-      if ($tce112020->erro_status == 0) {
-        throw new Exception($tce112020->erro_msg);
+      $tce112021->excluir(NULL,"si188_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si188_instit = ".db_getsession("DB_instit"));
+      if ($tce112021->erro_status == 0) {
+        throw new Exception($tce112021->erro_msg);
       }
     }
-    $result = $tce102020->sql_record($tce102020->sql_query(NULL,"*",NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit") ));
+    $result = $tce102021->sql_record($tce102021->sql_query(NULL,"*",NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $tce102020->excluir(NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit"));
-      if ($tce102020->erro_status == 0) {
-        throw new Exception($tce102020->erro_msg);
+      $tce102021->excluir(NULL,"si187_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si187_instit = ".db_getsession("DB_instit"));
+      if ($tce102021->erro_status == 0) {
+        throw new Exception($tce102021->erro_msg);
       }
     }
 
@@ -92,31 +92,31 @@ class SicomArquivoTomadasContasEspeciais extends SicomArquivoBase implements iPa
      * selecionar informacoes registro 10
      */
 
-        $sSql       = "select * from tce102020 ";
+        $sSql       = "select * from tce102021 ";
 
         $rsResult10 = db_query($sSql);
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-          // $cldclrf10$PROXIMO_ANO = new cl_dclrf10$PROXIMO_ANO();
+          // $cldclrf102021 = new cl_dclrf102021();
           // $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-          // $cldclrf10$PROXIMO_ANO->si157_tiporegistro                        = 10;
-          // $cldclrf10$PROXIMO_ANO->si157_codorgao                            = $sCodorgao;
-          // $cldclrf10$PROXIMO_ANO->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
-          // $cldclrf10$PROXIMO_ANO->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
-          // $cldclrf10$PROXIMO_ANO->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
-          // $cldclrf10$PROXIMO_ANO->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
-          // $cldclrf10$PROXIMO_ANO->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
-          // $cldclrf10$PROXIMO_ANO->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
-          // $cldclrf10$PROXIMO_ANO->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
-          // $cldclrf10$PROXIMO_ANO->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
-          // $cldclrf10$PROXIMO_ANO->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-          // $cldclrf10$PROXIMO_ANO->si157_instit                              = db_getsession("DB_instit");
+          // $cldclrf102021->si157_tiporegistro                        = 10;
+          // $cldclrf102021->si157_codorgao                            = $sCodorgao;
+          // $cldclrf102021->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
+          // $cldclrf102021->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
+          // $cldclrf102021->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
+          // $cldclrf102021->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
+          // $cldclrf102021->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
+          // $cldclrf102021->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
+          // $cldclrf102021->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
+          // $cldclrf102021->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
+          // $cldclrf102021->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+          // $cldclrf102021->si157_instit                              = db_getsession("DB_instit");
 
-          // $cldclrf10$PROXIMO_ANO->incluir(null);
-          // if ($cldclrf10$PROXIMO_ANO->erro_status == 0) {
-          //   throw new Exception($cldclrf10$PROXIMO_ANO->erro_msg);
+          // $cldclrf102021->incluir(null);
+          // if ($cldclrf102021->erro_status == 0) {
+          //   throw new Exception($cldclrf102021->erro_msg);
           // }
 
         }

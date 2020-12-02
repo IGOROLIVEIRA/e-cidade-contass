@@ -3,7 +3,7 @@ require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
 // require_once('model/contabilidade/relatorios/RelatoriosLegaisBase.model.php');
-require_once('model/contabilidade/relatorios/dcasp/BalancoOrcamentarioDCASP$PROXIMO_ANO.model.php');
+require_once('model/contabilidade/relatorios/dcasp/BalancoOrcamentarioDCASP2021.model.php');
 require_once('libs/db_stdlib.php');
 require_once('libs/db_conecta.php');
 require_once('libs/db_sessoes.php');
@@ -16,22 +16,22 @@ require_once('libs/db_libcontabilidade.php');
 require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
-require_once("classes/db_bodcasp102020_classe.php");
-require_once("classes/db_bodcasp202020_classe.php");
-require_once("classes/db_bodcasp302020_classe.php");
-require_once("classes/db_bodcasp402020_classe.php");
-require_once("classes/db_bodcasp502020_classe.php");
+require_once("classes/db_bodcasp102021_classe.php");
+require_once("classes/db_bodcasp202021_classe.php");
+require_once("classes/db_bodcasp302021_classe.php");
+require_once("classes/db_bodcasp402021_classe.php");
+require_once("classes/db_bodcasp502021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2020/dcasp/geradores/GerarBO.model.php");
+require_once("model/contabilidade/arquivos/sicom/2021/dcasp/geradores/GerarBO.model.php");
 
 /**
- * gerar arquivo de Balanço Orçamentário
+ * gerar arquivo de BalanÃ§o OrÃ§amentÃ¡rio
  * @author gabriel
  * @package Contabilidade
  */
 class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  protected $iCodigoLayout = 153; // Código do relatório
+  protected $iCodigoLayout = 153; // CÃ³digo do relatÃ³rio
 
   protected $sNomeArquivo = 'BO';
 
@@ -78,7 +78,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function __construct() { }
 
   /**
-   * selecionar os dados do balanço orcamentário pra gerar o arquivo
+   * selecionar os dados do balanÃ§o orcamentÃ¡rio pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -105,11 +105,11 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clbodcasp10 = new cl_bodcasp102020();
-    $clbodcasp20 = new cl_bodcasp202020();
-    $clbodcasp30 = new cl_bodcasp302020();
-    $clbodcasp40 = new cl_bodcasp402020();
-    $clbodcasp50 = new cl_bodcasp502020();
+    $clbodcasp10 = new cl_bodcasp102021();
+    $clbodcasp20 = new cl_bodcasp202021();
+    $clbodcasp30 = new cl_bodcasp302021();
+    $clbodcasp40 = new cl_bodcasp402021();
+    $clbodcasp50 = new cl_bodcasp502021();
 
 
     /**
@@ -176,28 +176,28 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O método `getDados()`, da classe `BalancoOrcamentarioDCASP$PROXIMO_ANO()`,
-     * retorna um array enorme. Para pegar os dados necessários para cada
-     * registro do SICOM DCASP, estamos passando os índices exatos do array.
-     * Se eles forem alterados (nas configurações dos relatórios), devem
-     * ser alterados aqui também.
+     * O mÃ©todo `getDados()`, da classe `BalancoOrcamentarioDCASP2021()`,
+     * retorna um array enorme. Para pegar os dados necessÃ¡rios para cada
+     * registro do SICOM DCASP, estamos passando os Ã­ndices exatos do array.
+     * Se eles forem alterados (nas configuraÃ§Ãµes dos relatÃ³rios), devem
+     * ser alterados aqui tambÃ©m.
      */
 
-    $oBalancoOrcamentario = new BalancoOrcamentarioDCASP$PROXIMO_ANO($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oBalancoOrcamentario = new BalancoOrcamentarioDCASP2021($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoOrcamentario->setInstituicoes($sListaInstituicoes);
 
     $aQuadros   = array();
-    $aQuadros[] = BalancoOrcamentarioDCASP$PROXIMO_ANO::QUADRO_PRINCIPAL;
-    $aQuadros[] = BalancoOrcamentarioDCASP$PROXIMO_ANO::QUADRO_RESTOS_NAO_PROCESSADOS;
-    $aQuadros[] = BalancoOrcamentarioDCASP$PROXIMO_ANO::QUADRO_RESTOS_PROCESSADOS;
+    $aQuadros[] = BalancoOrcamentarioDCASP2021::QUADRO_PRINCIPAL;
+    $aQuadros[] = BalancoOrcamentarioDCASP2021::QUADRO_RESTOS_NAO_PROCESSADOS;
+    $aQuadros[] = BalancoOrcamentarioDCASP2021::QUADRO_RESTOS_PROCESSADOS;
 
     $oBalancoOrcamentario->setExibirQuadros($aQuadros);
 
     $oRetornoBO = $oBalancoOrcamentario->getDados();
 
 
-    /** BODCASP102020
-     *  Quadro principal do relatório
+    /** BODCASP102021
+     *  Quadro principal do relatÃ³rio
      */
 
     $aFasesReceitaOrcamentaria = array(
@@ -208,7 +208,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
 
-      $clbodcasp10 = new cl_bodcasp102020();
+      $clbodcasp10 = new cl_bodcasp102021();
 
       // $clbodcasp10 = new stdClass();
       $clbodcasp10->si201_ano                   = $iAnoUsu;
@@ -245,7 +245,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // Registo 10
 
 
-    /** BODCASP202020
+    /** BODCASP202021
      *
      */
 
@@ -256,7 +256,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
 
-      $clbodcasp20 = new cl_bodcasp202020();
+      $clbodcasp20 = new cl_bodcasp202021();
 
       // $clbodcasp20 = new stdClass();
       $clbodcasp20->si202_anousu                = $iAnoUsu;
@@ -276,7 +276,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // Registo 20
 
 
-    /** BODCASP302020
+    /** BODCASP302021
      *
      */
 
@@ -290,7 +290,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
 
-      $clbodcasp30 = new cl_bodcasp302020();
+      $clbodcasp30 = new cl_bodcasp302021();
 
       // $clbodcasp30 = new stdClass();
       $clbodcasp30->si203_anousu                    = $iAnoUsu;
@@ -322,8 +322,8 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
 
-    /** BODCASP402020
-     *  Quadro da Execução de Restos a Pagar Não Processados
+    /** BODCASP402021
+     *  Quadro da ExecuÃ§Ã£o de Restos a Pagar NÃ£o Processados
      */
 
     $faseRestosPagarNaoProcessados = array(
@@ -336,7 +336,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($faseRestosPagarNaoProcessados as $iValorNumerico => $sChave) {
 
-      $clbodcasp40  = new cl_bodcasp402020();
+      $clbodcasp40  = new cl_bodcasp402021();
 
       $clbodcasp40->si204_ano                             = $iAnoUsu;
       $clbodcasp40->si204_periodo                         = $iCodigoPeriodo;
@@ -360,8 +360,8 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
 
-    /** BODCASP502020
-     *  Quadro da Execução de Restos a Pagar Processados e não Processados Liquidados
+    /** BODCASP502021
+     *  Quadro da ExecuÃ§Ã£o de Restos a Pagar Processados e nÃ£o Processados Liquidados
      */
 
     $RestosPagarProcessadosNaoProcessadosLiquidados = array(
@@ -373,7 +373,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($RestosPagarProcessadosNaoProcessadosLiquidados as $iValorNumerico => $sChave) {
 
-      $clbodcasp50  = new cl_bodcasp502020();
+      $clbodcasp50  = new cl_bodcasp502021();
 
       $clbodcasp50->si205_ano                             = $iAnoUsu;
       $clbodcasp50->si205_periodo                         = $iCodigoPeriodo;

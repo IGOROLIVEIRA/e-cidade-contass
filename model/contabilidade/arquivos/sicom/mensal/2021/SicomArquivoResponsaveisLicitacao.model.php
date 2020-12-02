@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_resplic102020_classe.php");
-require_once("classes/db_resplic202020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarRESPLIC.model.php");
+require_once("classes/db_resplic102021_classe.php");
+require_once("classes/db_resplic202021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarRESPLIC.model.php");
 
 /**
  * Responsáveis pela Licitação Sicom Acompanhamento Mensal
@@ -108,8 +108,8 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clresplic10 = new cl_resplic102020();
-    $clresplic20 = new cl_resplic202020();
+    $clresplic10 = new cl_resplic102021();
+    $clresplic20 = new cl_resplic202021();
 
     
     /**
@@ -181,7 +181,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
     $aLicitacoes = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-      $clresplic10 = new cl_resplic102020();
+      $clresplic10 = new cl_resplic102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       if ($oDados10->l20_naturezaobjeto != 6 && $oDados10->tiporesp == 9) {
         continue;
@@ -256,7 +256,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
       
-      $clresplic20 = new cl_resplic202020();
+      $clresplic20 = new cl_resplic202021();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
       $clresplic20->si56_tiporegistro = 20;

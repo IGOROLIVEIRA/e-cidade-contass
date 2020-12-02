@@ -1,12 +1,12 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
-require_once ("classes/db_parpps10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_parpps20$PROXIMO_ANO_classe.php");
+require_once ("classes/db_parpps102021_classe.php");
+require_once ("classes/db_parpps202121_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarPARPPS.model.php");
 
  /**
-  * Projeção Atuarial Sicom Acompanhamento Mensal
+  * ProjeÃ§Ã£o Atuarial Sicom Acompanhamento Mensal
   * @author marcelo
   * @package Contabilidade
   */
@@ -53,34 +53,34 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
   }
   
   /**
-   * selecionar os dados de Projeção Atuarial do RPPS do mes para gerar o arquivo
+   * selecionar os dados de ProjeÃ§Ã£o Atuarial do RPPS do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
     
-  	$clparpps10$PROXIMO_ANO = new cl_parpps10$PROXIMO_ANO();
-    $clparpps20$PROXIMO_ANO = new cl_parpps20$PROXIMO_ANO();
+  	$clparpps102021 = new cl_parpps102021();
+    $clparpps202121 = new cl_parpps202121();
 
     db_inicio_transacao();
     /*
      * excluir informacoes do mes selecionado registro 10
      */
-    $result = $clparpps10$PROXIMO_ANO->sql_record($clparpps10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit") ));
+    $result = $clparpps102021->sql_record($clparpps102021->sql_query(NULL,"*",NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $clparpps10$PROXIMO_ANO->excluir(NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit"));
-      if ($clparpps10$PROXIMO_ANO->erro_status == 0) {
-        throw new Exception($clparpps10$PROXIMO_ANO->erro_msg);
+      $clparpps102021->excluir(NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit"));
+      if ($clparpps102021->erro_status == 0) {
+        throw new Exception($clparpps102021->erro_msg);
       }
     }
     
     /*
      * excluir informacoes do mes selecionado registro 20
      */
-    $result = $clparpps20$PROXIMO_ANO->sql_record($clparpps20$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit")));
+    $result = $clparpps202121->sql_record($clparpps202121->sql_query(NULL,"*",NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clparpps20$PROXIMO_ANO->excluir(NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit"));
-      if ($clparpps20$PROXIMO_ANO->erro_status == 0) {
-        throw new Exception($clparpps20$PROXIMO_ANO->erro_msg);
+      $clparpps202121->excluir(NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit"));
+      if ($clparpps202121->erro_status == 0) {
+        throw new Exception($clparpps202121->erro_msg);
       }
     }
     
@@ -100,18 +100,18 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-      $clparpps10$PROXIMO_ANO = new cl_parpps10$PROXIMO_ANO();
+      $clparpps102021 = new cl_parpps102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       
-      $clparpps10$PROXIMO_ANO->si156_tiporegistro                        = 10;
-      $clparpps10$PROXIMO_ANO->si156_codorgao                            = $sCodorgao;
-      $clparpps10$PROXIMO_ANO->si156_vlsaldofinanceiroexercicioanterior  = $oDados10->si168_vlsaldofinanceiroexercicioanterior;
-      $clparpps10$PROXIMO_ANO->si156_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clparpps10$PROXIMO_ANO->si156_instit                              = db_getsession("DB_instit");
+      $clparpps102021->si156_tiporegistro                        = 10;
+      $clparpps102021->si156_codorgao                            = $sCodorgao;
+      $clparpps102021->si156_vlsaldofinanceiroexercicioanterior  = $oDados10->si168_vlsaldofinanceiroexercicioanterior;
+      $clparpps102021->si156_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+      $clparpps102021->si156_instit                              = db_getsession("DB_instit");
       
-      $clparpps10$PROXIMO_ANO->incluir(null);
-      if ($clparpps10$PROXIMO_ANO->erro_status == 0) {
-        throw new Exception($clparpps10$PROXIMO_ANO->erro_msg);
+      $clparpps102021->incluir(null);
+      if ($clparpps102021->erro_status == 0) {
+        throw new Exception($clparpps102021->erro_msg);
       }
       
     }
@@ -124,20 +124,20 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
     
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
       
-      $clparpps20$PROXIMO_ANO = new cl_parpps20$PROXIMO_ANO();
+      $clparpps202121 = new cl_parpps202121();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
       
-      $clparpps20$PROXIMO_ANO->si155_tiporegistro                     = 20;
-      $clparpps20$PROXIMO_ANO->si155_codorgao                         = $sCodorgao;
-      $clparpps20$PROXIMO_ANO->si155_exercicio                        = $oDados20->si169_exercicio;
-      $clparpps20$PROXIMO_ANO->si155_vlreceitaprevidenciaria          = $oDados20->si169_vlreceitaprevidenciaria;
-      $clparpps20$PROXIMO_ANO->si155_vldespesaprevidenciaria          = $oDados20->si169_vldespesaprevidenciaria;
-      $clparpps20$PROXIMO_ANO->si155_mes                              = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clparpps20$PROXIMO_ANO->si155_instit                           = db_getsession("DB_instit");
+      $clparpps202121->si155_tiporegistro                     = 20;
+      $clparpps202121->si155_codorgao                         = $sCodorgao;
+      $clparpps202121->si155_exercicio                        = $oDados20->si169_exercicio;
+      $clparpps202121->si155_vlreceitaprevidenciaria          = $oDados20->si169_vlreceitaprevidenciaria;
+      $clparpps202121->si155_vldespesaprevidenciaria          = $oDados20->si169_vldespesaprevidenciaria;
+      $clparpps202121->si155_mes                              = $this->sDataFinal['5'].$this->sDataFinal['6'];
+      $clparpps202121->si155_instit                           = db_getsession("DB_instit");
       
-      $clparpps20$PROXIMO_ANO->incluir(null);
-      if ($clparpps20$PROXIMO_ANO->erro_status == 0) {
-        throw new Exception($clparpps20$PROXIMO_ANO->erro_msg);
+      $clparpps202121->incluir(null);
+      if ($clparpps202121->erro_status == 0) {
+        throw new Exception($clparpps202121->erro_msg);
       }
 
     }

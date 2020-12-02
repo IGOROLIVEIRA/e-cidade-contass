@@ -2,10 +2,10 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once("classes/db_lqd102020_classe.php");
-require_once("classes/db_lqd112020_classe.php");
-require_once("classes/db_lqd122020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarLQD.model.php");
+require_once("classes/db_lqd102021_classe.php");
+require_once("classes/db_lqd112021_classe.php");
+require_once("classes/db_lqd122021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarLQD.model.php");
 
 /**
  * Detalhamento da liquidação da despesa Sicom Acompanhamento Mensal
@@ -30,7 +30,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
   protected $sNomeArquivo = 'LQD';
 
   /**
-   * @var array Fontes encerradas em 2020
+   * @var array Fontes encerradas em 2021
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -69,9 +69,9 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
   public function gerarDados()
   {
 
-    $cllqd10 = new cl_lqd102020();
-    $cllqd11 = new cl_lqd112020();
-    $cllqd12 = new cl_lqd122020();
+    $cllqd10 = new cl_lqd102021();
+    $cllqd11 = new cl_lqd112021();
+    $cllqd12 = new cl_lqd122021();
 
     $sSqlUnidade = "select * from infocomplementares where
     si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
@@ -258,7 +258,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     }
     foreach ($aDadosAgrupados as $oDados10) {
 
-      $cllqd10 = new cl_lqd102020();
+      $cllqd10 = new cl_lqd102021();
       $cllqd10->si118_tiporegistro = $oDados10->si118_tiporegistro;
       $cllqd10->si118_codreduzido = $oDados10->si118_codreduzido;
       $cllqd10->si118_codorgao = $oDados10->si118_codorgao;
@@ -280,7 +280,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
       }
       foreach ($oDados10->Reg11 as $oDados11) {
 
-        $cllqd11 = new cl_lqd112020();
+        $cllqd11 = new cl_lqd112021();
 
         $cllqd11->si119_tiporegistro = $oDados11->si119_tiporegistro;
         $cllqd11->si119_codreduzido = $oDados11->si119_codreduzido;
@@ -302,7 +302,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 
       if (in_array(substr($oDados10->o56_elemento, 0, 7), $aMatrizCompDesp)) {
             
-        $cllqd12 = new cl_lqd122020();
+        $cllqd12 = new cl_lqd122021();
         $cllqd12->si120_tiporegistro = 12;
         $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
         $cllqd12->si120_codreduzido = $oDados10->si118_codreduzido;
@@ -319,7 +319,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 
       } elseif (in_array(substr($oDados10->o56_elemento, 0, 7), $aMatrizDespSentenca)) {
         
-        $cllqd12 = new cl_lqd122020();
+        $cllqd12 = new cl_lqd122021();
         $cllqd12->si120_tiporegistro = 12;
         $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
         $cllqd12->si120_codreduzido = $oDados10->si118_codreduzido;

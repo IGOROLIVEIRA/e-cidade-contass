@@ -1,7 +1,7 @@
 <?php  
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_item10$PROXIMO_ANO_classe.php");
+require_once ("classes/db_item102021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarITEM.model.php");
 
  /**
@@ -58,17 +58,17 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV {
   	/**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-  	$clitem10$PROXIMO_ANO = new cl_item10$PROXIMO_ANO();
+  	$clitem102021 = new cl_item102021();
   	
   	/**
      * excluir informacoes do mes selecioado
      */
     db_inicio_transacao(); 
-    $result = db_query($clitem10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si43_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si43_instit=".db_getsession("DB_instit")));
+    $result = db_query($clitem102021->sql_query(NULL,"*",NULL,"si43_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si43_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clitem10$PROXIMO_ANO->excluir(NULL,"si43_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si43_instit=".db_getsession("DB_instit"));
-      if ($clitem10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clitem10$PROXIMO_ANO->erro_msg);
+    	$clitem102021->excluir(NULL,"si43_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si43_instit=".db_getsession("DB_instit"));
+      if ($clitem102021->erro_status == 0) {
+    	  throw new Exception($clitem102021->erro_msg);
       }
     }
     
@@ -128,28 +128,28 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV {
     
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-    	$clitem10$PROXIMO_ANO = new cl_item10$PROXIMO_ANO();
+    	$clitem102021 = new cl_item102021();
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
     	
-    	$sSqlitem="select si43_coditem,si43_unidademedida from item10$PROXIMO_ANO  where si43_coditem=".$oDados10->coditem." and si43_unidademedida='{$oDados10->unidademedida}'";
+    	$sSqlitem="select si43_coditem,si43_unidademedida from item102021  where si43_coditem=".$oDados10->coditem." and si43_unidademedida='{$oDados10->unidademedida}'";
     	$rsResultitem = db_query($sSqlitem);
     	/**
-    	 * verifica se já nao existe o registro  na base de dados do sicom
+    	 * verifica se jÃ¡ nao existe o registro  na base de dados do sicom
     	 */
         	 if(pg_num_rows($rsResultitem) == 0 ){
         	 	
-		          $clitem10$PROXIMO_ANO->si43_tiporegistro           = 10;
-				  $clitem10$PROXIMO_ANO->si43_coditem                = $oDados10->coditem;
-				  $clitem10$PROXIMO_ANO->si43_dscItem                = addslashes($oDados10->dscitem);
-				  $clitem10$PROXIMO_ANO->si43_unidademedida          = $oDados10->unidademedida;
-				  $clitem10$PROXIMO_ANO->si43_tipocadastro           = $oDados10->tipocadastro;        
-				  $clitem10$PROXIMO_ANO->si43_justificativaalteracao = $oDados10->justificativaalteracao;
-				  $clitem10$PROXIMO_ANO->si43_instit		   				   = db_getsession("DB_instit");
-				  $clitem10$PROXIMO_ANO->si43_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		          $clitem102021->si43_tiporegistro           = 10;
+				  $clitem102021->si43_coditem                = $oDados10->coditem;
+				  $clitem102021->si43_dscItem                = addslashes($oDados10->dscitem);
+				  $clitem102021->si43_unidademedida          = $oDados10->unidademedida;
+				  $clitem102021->si43_tipocadastro           = $oDados10->tipocadastro;        
+				  $clitem102021->si43_justificativaalteracao = $oDados10->justificativaalteracao;
+				  $clitem102021->si43_instit		   				   = db_getsession("DB_instit");
+				  $clitem102021->si43_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 				  
-				  $clitem10$PROXIMO_ANO->incluir(null);
-				  if ($clitem10$PROXIMO_ANO->erro_status == 0) {
-				  	throw new Exception($clitem10$PROXIMO_ANO->erro_msg);
+				  $clitem102021->incluir(null);
+				  if ($clitem102021->erro_status == 0) {
+				  	throw new Exception($clitem102021->erro_msg);
 				  }
         	 }
     }

@@ -1,16 +1,16 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_dispensa102020_classe.php");
-require_once("classes/db_dispensa112020_classe.php");
-require_once("classes/db_dispensa122020_classe.php");
-require_once("classes/db_dispensa132020_classe.php");
-require_once("classes/db_dispensa142020_classe.php");
-require_once("classes/db_dispensa152020_classe.php");
-require_once("classes/db_dispensa162020_classe.php");
-require_once("classes/db_dispensa172020_classe.php");
-require_once("classes/db_dispensa182020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarDISPENSA.model.php");
+require_once("classes/db_dispensa102021_classe.php");
+require_once("classes/db_dispensa112021_classe.php");
+require_once("classes/db_dispensa122021_classe.php");
+require_once("classes/db_dispensa132021_classe.php");
+require_once("classes/db_dispensa142021_classe.php");
+require_once("classes/db_dispensa152021_classe.php");
+require_once("classes/db_dispensa162021_classe.php");
+require_once("classes/db_dispensa172021_classe.php");
+require_once("classes/db_dispensa182021_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarDISPENSA.model.php");
 
 /**
  * Dispensa ou Inexigibilidade Sicom Acompanhamento Mensal
@@ -184,15 +184,15 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $dispensa10 = new cl_dispensa102020();
-    $dispensa11 = new cl_dispensa112020();
-    $dispensa12 = new cl_dispensa122020();
-    $dispensa13 = new cl_dispensa132020();
-    $dispensa14 = new cl_dispensa142020();
-    $dispensa15 = new cl_dispensa152020();
-    $dispensa16 = new cl_dispensa162020();
-    $dispensa17 = new cl_dispensa172020();
-    $dispensa18 = new cl_dispensa182020();
+    $dispensa10 = new cl_dispensa102021();
+    $dispensa11 = new cl_dispensa112021();
+    $dispensa12 = new cl_dispensa122021();
+    $dispensa13 = new cl_dispensa132021();
+    $dispensa14 = new cl_dispensa142021();
+    $dispensa15 = new cl_dispensa152021();
+    $dispensa16 = new cl_dispensa162021();
+    $dispensa17 = new cl_dispensa172021();
+    $dispensa18 = new cl_dispensa182021();
 
     /**
      * excluir informacoes do mes selecioado
@@ -310,7 +310,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	l20_codigo as codlicitacao,
 	liclicita.l20_veicdivulgacao as veiculoPublicacao,
 	 (CASE 
-        WHEN liclicita.l20_cadInicial is null or liclicita.l20_cadInicial = 0 and liclicita.l20_anousu >= 2020 THEN 1
+        WHEN liclicita.l20_cadInicial is null or liclicita.l20_cadInicial = 0 and liclicita.l20_anousu >= 2021 THEN 1
      	ELSE liclicita.l20_cadInicial
      END) as cadInicial,
 	(CASE liclicita.l20_tipojulg WHEN 3 THEN 1
@@ -332,7 +332,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $dispensa10 = new cl_dispensa102020();
+      $dispensa10 = new cl_dispensa102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $dispensa10->si74_tiporegistro = 10;
@@ -404,7 +404,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
         if (!isset($aDadosAgrupados11[$sHash11])) {
 
-          $dispensa11 = new cl_dispensa112020();
+          $dispensa11 = new cl_dispensa112021();
 
           $dispensa11->si75_tiporegistro = 11;
           $dispensa11->si75_reg10 = $dispensa10->si74_sequencial;
@@ -472,7 +472,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
       for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
-        $dispensa12 = new cl_dispensa122020();
+        $dispensa12 = new cl_dispensa122021();
         $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 
         $dispensa12->si76_tiporegistro = 12;
@@ -520,12 +520,12 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
-		dispensa112020.si75_nrolote as nroLote,
+		dispensa112021.si75_nrolote as nroLote,
 		(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem
 		FROM liclicitem
 		INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
 		INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
-		INNER JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
+		INNER JOIN dispensa112021 on (liclicitemlote.l04_descricao = dispensa112021.si75_dsclote and dispensa112021.si75_nroprocesso = liclicita.l20_edital::varchar)
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 		INNER JOIN pcprocitem  on (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
@@ -545,7 +545,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
       for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
-        $dispensa13 = new cl_dispensa132020();
+        $dispensa13 = new cl_dispensa132021();
         $oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
 
         $dispensa13->si77_tiporegistro = 13;
@@ -644,7 +644,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
-        $dispensa14 = new cl_dispensa142020();
+        $dispensa14 = new cl_dispensa142021();
         $oDados14 = db_utils::fieldsMemory($rsResult14, $iCont14);
 
         $dispensa14->si78_tiporegistro = 14;
@@ -687,14 +687,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
-		dispensa112020.si75_nrolote as nroLote,
+		dispensa112021.si75_nrolote as nroLote,
 		(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 		itemprecoreferencia.si02_vlprecoreferencia as vlCotPrecosUnitario,
 		pcorcamval.pc23_quant as quantidade
 		FROM liclicitem
 		INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
 		LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem AND liclicita.l20_tipojulg = 3)
-		LEFT  JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
+		LEFT  JOIN dispensa112021 on (liclicitemlote.l04_descricao = dispensa112021.si75_dsclote and dispensa112021.si75_nroprocesso = liclicita.l20_edital::varchar)
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 		INNER JOIN pcprocitem  on (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
@@ -750,7 +750,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
       foreach ($aDadosAgrupados15 as $oDadosAgrupados15) {
 
-        $dispensa15 = new cl_dispensa152020();
+        $dispensa15 = new cl_dispensa152021();
 
         $dispensa15->si79_tiporegistro = 15;
         $dispensa15->si79_reg10 = $oDadosAgrupados15->si79_reg10;
@@ -834,7 +834,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
       for ($iCont16 = 0; $iCont16 < pg_num_rows($rsResult16); $iCont16++) {
 
-        $dispensa16 = new cl_dispensa162020();
+        $dispensa16 = new cl_dispensa162021();
         $oDados16 = db_utils::fieldsMemory($rsResult16, $iCont16);
 
         $dispensa16->si80_tiporegistro = 16;
@@ -902,7 +902,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	habilitacaoforn.l206_numcertidaocndt as nroCNDT,
 	habilitacaoforn.l206_dataemissaocndt as dtEmissaoCNDT,
 	habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT,
-	dispensa112020.si75_nrolote as nroLote,
+	dispensa112021.si75_nrolote as nroLote,
 	(solicitempcmater.pc16_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 	pcorcamval.pc23_vlrun as vlUnitario,
 	pcorcamval.pc23_quant as quantidade
@@ -922,7 +922,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
 	LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem AND liclicita.l20_tipojulg = 3)
-	LEFT  JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
+	LEFT  JOIN dispensa112021 on (liclicitemlote.l04_descricao = dispensa112021.si75_dsclote and dispensa112021.si75_nroprocesso = liclicita.l20_edital::varchar)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
@@ -979,7 +979,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
       foreach ($aDadosAgrupados17 as $oDadosAgrupados17) {
 
-        $dispensa17 = new cl_dispensa172020();
+        $dispensa17 = new cl_dispensa172021();
 
         $dispensa17->si81_tiporegistro = 17;
         $dispensa17->si81_codorgaoresp = $oDadosAgrupados17->si81_codorgaoresp;
@@ -1043,7 +1043,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	END) as tipoDocumento,
 	cgm.z01_cgccpf as nroDocumento,
 	credenciamento.l205_datacred as dataCredenciamento,
-	dispensa112020.si75_nrolote as nroLote,
+	dispensa112021.si75_nrolote as nroLote,
 	(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 	pcforne.pc60_inscriestadual as nroInscricaoEstadual,
 	pcforne.pc60_uf as ufInscricaoEstadual,
@@ -1071,7 +1071,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
 	INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
 	INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-	LEFT JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
+	LEFT JOIN dispensa112021 on (liclicitemlote.l04_descricao = dispensa112021.si75_dsclote and dispensa112021.si75_nroprocesso = liclicita.l20_edital::varchar)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
@@ -1086,7 +1086,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
     for ($iCont18 = 0; $iCont18 < pg_num_rows($rsResult18); $iCont18++) {
 
-      $dispensa18 = new cl_dispensa182020();
+      $dispensa18 = new cl_dispensa182021();
       $oDados18 = db_utils::fieldsMemory($rsResult18, $iCont18);
 
       $dispensa18->si82_tiporegistro = 20;

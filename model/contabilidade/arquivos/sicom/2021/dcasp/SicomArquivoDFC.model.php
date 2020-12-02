@@ -2,7 +2,7 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
-require_once("model/contabilidade/relatorios/dcasp/FluxoCaixaDCASP$PROXIMO_ANO.model.php");
+require_once("model/contabilidade/relatorios/dcasp/FluxoCaixaDCASP2021.model.php");
 require_once("fpdf151/assinatura.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -18,29 +18,29 @@ require_once("libs/db_libcontabilidade.php");
 require_once("libs/db_liborcamento.php");
 require_once("fpdf151/PDFDocument.php");
 
-require_once("classes/db_dfcdcasp10$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp20$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp30$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp40$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp50$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp60$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp70$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp80$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp90$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp100$PROXIMO_ANO_classe.php");
-require_once("classes/db_dfcdcasp110$PROXIMO_ANO_classe.php");
+require_once("classes/db_dfcdcasp102021_classe.php");
+require_once("classes/db_dfcdcasp202121_classe.php");
+require_once("classes/db_dfcdcasp302021_classe.php");
+require_once("classes/db_dfcdcasp402021_classe.php");
+require_once("classes/db_dfcdcasp502021_classe.php");
+require_once("classes/db_dfcdcasp602021_classe.php");
+require_once("classes/db_dfcdcasp702021_classe.php");
+require_once("classes/db_dfcdcasp802021_classe.php");
+require_once("classes/db_dfcdcasp902021_classe.php");
+require_once("classes/db_dfcdcasp1002021_classe.php");
+require_once("classes/db_dfcdcasp1102021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/$PROXIMO_ANO/dcasp/geradores/GerarDFC.model.php");
+require_once("model/contabilidade/arquivos/sicom/2021/dcasp/geradores/GerarDFC.model.php");
 
 /**
- * gerar arquivo de Demonstração dos Fluxos de Caixa
+ * gerar arquivo de DemonstraÃ§Ã£o dos Fluxos de Caixa
  * @author gabriel
  * @package Contabilidade
  */
 class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
-  protected $iCodigoLayout = 150; // Código do relatório
+  protected $iCodigoLayout = 150; // CÃ³digo do relatÃ³rio
 
   protected $sNomeArquivo = 'DFC';
 
@@ -83,7 +83,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function __construct() { }
 
   /**
-   * selecionar os dados das Demonstrações dos Fluxos de Caixa pra gerar o arquivo
+   * selecionar os dados das DemonstraÃ§Ãµes dos Fluxos de Caixa pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -110,17 +110,17 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $cldfcdcasp10   = new cl_dfcdcasp10$PROXIMO_ANO();
-    $cldfcdcasp20   = new cl_dfcdcasp20$PROXIMO_ANO();
-    $cldfcdcasp30   = new cl_dfcdcasp30$PROXIMO_ANO();
-    $cldfcdcasp40   = new cl_dfcdcasp40$PROXIMO_ANO();
-    $cldfcdcasp50   = new cl_dfcdcasp50$PROXIMO_ANO();
-    $cldfcdcasp60   = new cl_dfcdcasp60$PROXIMO_ANO();
-    $cldfcdcasp70   = new cl_dfcdcasp70$PROXIMO_ANO();
-    $cldfcdcasp80   = new cl_dfcdcasp80$PROXIMO_ANO();
-    $cldfcdcasp90   = new cl_dfcdcasp90$PROXIMO_ANO();
-    $cldfcdcasp100  = new cl_dfcdcasp100$PROXIMO_ANO();
-    $cldfcdcasp110  = new cl_dfcdcasp110$PROXIMO_ANO();
+    $cldfcdcasp10   = new cl_dfcdcasp102021();
+    $cldfcdcasp20   = new cl_dfcdcasp202121();
+    $cldfcdcasp30   = new cl_dfcdcasp302021();
+    $cldfcdcasp40   = new cl_dfcdcasp402021();
+    $cldfcdcasp50   = new cl_dfcdcasp502021();
+    $cldfcdcasp60   = new cl_dfcdcasp602021();
+    $cldfcdcasp70   = new cl_dfcdcasp702021();
+    $cldfcdcasp80   = new cl_dfcdcasp802021();
+    $cldfcdcasp90   = new cl_dfcdcasp902021();
+    $cldfcdcasp100  = new cl_dfcdcasp1002021();
+    $cldfcdcasp110  = new cl_dfcdcasp1102021();
 
     /**
      * excluir informacoes caso estejam repetidas
@@ -252,21 +252,21 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     /*------------------------------------------------------------------------*/
 
     /**
-     * O método `getDados()`, da classe `FluxoCaixaDCASP$PROXIMO_ANO()`,
-     * retorna um array enorme. Para pegar os dados necessários para cada
-     * registro do SICOM DCASP, estamos passando os índices exatos do array.
-     * Se eles forem alterados (nas configurações dos relatórios), devem
-     * ser alterados aqui também.
+     * O mÃ©todo `getDados()`, da classe `FluxoCaixaDCASP2021()`,
+     * retorna um array enorme. Para pegar os dados necessÃ¡rios para cada
+     * registro do SICOM DCASP, estamos passando os Ã­ndices exatos do array.
+     * Se eles forem alterados (nas configuraÃ§Ãµes dos relatÃ³rios), devem
+     * ser alterados aqui tambÃ©m.
      */
 
-    $oFluxoCaixa = new FluxoCaixaDCASP$PROXIMO_ANO($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oFluxoCaixa = new FluxoCaixaDCASP2021($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
 
     $aQuadros = array();
-    $aQuadros[] = FluxoCaixaDCASP$PROXIMO_ANO::QUADRO_PRINCIPAL;
-    // $aQuadros[] = FluxoCaixaDCASP$PROXIMO_ANO::QUADRO_RECEITAS;
-    // $aQuadros[] = FluxoCaixaDCASP$PROXIMO_ANO::QUADRO_TRANSFERENCIAS;
-    // $aQuadros[] = FluxoCaixaDCASP$PROXIMO_ANO::QUADRO_DESEMBOLSOS;
-    // $aQuadros[] = FluxoCaixaDCASP$PROXIMO_ANO::QUADRO_DIVIDA;
+    $aQuadros[] = FluxoCaixaDCASP2021::QUADRO_PRINCIPAL;
+    // $aQuadros[] = FluxoCaixaDCASP2021::QUADRO_RECEITAS;
+    // $aQuadros[] = FluxoCaixaDCASP2021::QUADRO_TRANSFERENCIAS;
+    // $aQuadros[] = FluxoCaixaDCASP2021::QUADRO_DESEMBOLSOS;
+    // $aQuadros[] = FluxoCaixaDCASP2021::QUADRO_DIVIDA;
 
     $oFluxoCaixa->setInstituicoes($sListaInstituicoes);
     $oFluxoCaixa->setExibirQuadros($aQuadros);
@@ -285,12 +285,12 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     );
 
 
-    /** DFCDCASP10$PROXIMO_ANO
+    /** DFCDCASP102021
      * FLUXOS DE CAIXA DAS ATIVIDADES OPERACIONAIS - Ingressos
      */
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp10 = new cl_dfcdcasp10$PROXIMO_ANO();
+      $cldfcdcasp10 = new cl_dfcdcasp102021();
 
       $cldfcdcasp10->si219_anousu                           = $iAnoUsu;
       $cldfcdcasp10->si219_periodo                          = $iCodigoPeriodo;
@@ -310,12 +310,12 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult10
 
 
-    /** DFCDCASP20$PROXIMO_ANO
+    /** DFCDCASP202121
      * FLUXOS DE CAIXA DAS ATIVIDADES OPERACIONAIS - Desembolsos
      */
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp20 = new cl_dfcdcasp20$PROXIMO_ANO();
+      $cldfcdcasp20 = new cl_dfcdcasp202121();
 
       $cldfcdcasp20->si220_anousu                             = $iAnoUsu;
       $cldfcdcasp20->si220_periodo                            = $iCodigoPeriodo;
@@ -336,13 +336,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult20
 
 
-    /** DFCDCASP30$PROXIMO_ANO
-     * Fluxo de caixa líquido das atividades operacionais (I)
+    /** DFCDCASP302021
+     * Fluxo de caixa lÃ­quido das atividades operacionais (I)
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp30 = new cl_dfcdcasp30$PROXIMO_ANO();
+      $cldfcdcasp30 = new cl_dfcdcasp302021();
 
       $cldfcdcasp30->si221_anousu                         = $iAnoUsu;
       $cldfcdcasp30->si221_periodo                        = $iCodigoPeriodo;
@@ -359,13 +359,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult30
 
 
-    /** DFCDCASP40$PROXIMO_ANO
+    /** DFCDCASP402021
      * FLUXOS DE CAIXA DAS ATIVIDADES DE INVESTIMENTO - Ingressos
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp40 = new cl_dfcdcasp40$PROXIMO_ANO();
+      $cldfcdcasp40 = new cl_dfcdcasp402021();
 
       $cldfcdcasp40->si222_anousu                             = $iAnoUsu;
       $cldfcdcasp40->si222_periodo                            = $iCodigoPeriodo;
@@ -385,13 +385,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult40
 
 
-    /** DFCDCASP50$PROXIMO_ANO
+    /** DFCDCASP502021
      * FLUXOS DE CAIXA DAS ATIVIDADES DE INVESTIMENTO - Desembolsos
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp50 = new cl_dfcdcasp50$PROXIMO_ANO();
+      $cldfcdcasp50 = new cl_dfcdcasp502021();
 
       $cldfcdcasp50->si223_anousu                             = $iAnoUsu;
       $cldfcdcasp50->si223_periodo                            = $iCodigoPeriodo;
@@ -411,13 +411,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult50
 
 
-    /** DFCDCASP60$PROXIMO_ANO
-     * Fluxo de caixa líquido das atividades de investimento (II)
+    /** DFCDCASP602021
+     * Fluxo de caixa lÃ­quido das atividades de investimento (II)
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp60 = new cl_dfcdcasp60$PROXIMO_ANO();
+      $cldfcdcasp60 = new cl_dfcdcasp602021();
 
       $cldfcdcasp60->si224_anousu                           = $iAnoUsu;
       $cldfcdcasp60->si224_periodo                          = $iCodigoPeriodo;
@@ -434,13 +434,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult60
 
 
-    /** DFCDCASP70$PROXIMO_ANO
+    /** DFCDCASP702021
      * FLUXOS DE CAIXA DAS ATIVIDADES DE FINANCIAMENTO - Ingressos
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp70 = new cl_dfcdcasp70$PROXIMO_ANO();
+      $cldfcdcasp70 = new cl_dfcdcasp702021();
 
       $cldfcdcasp70->si225_anousu                             = $iAnoUsu;
       $cldfcdcasp70->si225_periodo                            = $iCodigoPeriodo;
@@ -461,13 +461,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult70
 
 
-    /** DFCDCASP80$PROXIMO_ANO
+    /** DFCDCASP802021
      * FLUXOS DE CAIXA DAS ATIVIDADES DE FINANCIAMENTO - Desembolsos
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp80 = new cl_dfcdcasp80$PROXIMO_ANO();
+      $cldfcdcasp80 = new cl_dfcdcasp802021();
 
       $cldfcdcasp80->si226_anousu                             = $iAnoUsu;
       $cldfcdcasp80->si226_periodo                            = $iCodigoPeriodo;
@@ -486,13 +486,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult80
 
 
-    /** DFCDCASP90$PROXIMO_ANO
-     * Fluxo de caixa líquido das atividades de financiamento (III)
+    /** DFCDCASP902021
+     * Fluxo de caixa lÃ­quido das atividades de financiamento (III)
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp90 = new cl_dfcdcasp90$PROXIMO_ANO();
+      $cldfcdcasp90 = new cl_dfcdcasp902021();
 
       $cldfcdcasp90->si227_anousu                     = $iAnoUsu;
       $cldfcdcasp90->si227_periodo                    = $iCodigoPeriodo;
@@ -509,13 +509,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult90
 
 
-    /** DFCDCASP100$PROXIMO_ANO
-     * GERAÇÃO LÍQUIDA DE CAIXA E EQUIVALENTE DE CAIXA ( I+II+III )
+    /** DFCDCASP1002021
+     * GERAÃ‡ÃƒO LÃQUIDA DE CAIXA E EQUIVALENTE DE CAIXA ( I+II+III )
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp100 = new cl_dfcdcasp100$PROXIMO_ANO();
+      $cldfcdcasp100 = new cl_dfcdcasp1002021();
 
       $cldfcdcasp100->si228_anousu                            = $iAnoUsu;
       $cldfcdcasp100->si228_periodo                           = $iCodigoPeriodo;
@@ -532,13 +532,13 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult100
 
 
-    /** DFCDCASP110$PROXIMO_ANO
+    /** DFCDCASP1102021
      * Caixa e Equivalentes de caixa inicial e final
      */
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $cldfcdcasp110 = new cl_dfcdcasp110$PROXIMO_ANO();
+      $cldfcdcasp110 = new cl_dfcdcasp1102021();
 
       $cldfcdcasp110->si229_anousu                          = $iAnoUsu;
       $cldfcdcasp110->si229_periodo                         = $iCodigoPeriodo;

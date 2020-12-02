@@ -1,11 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
-require_once("classes/db_homolic102020_classe.php");
-require_once("classes/db_homolic202020_classe.php");
-require_once("classes/db_homolic302020_classe.php");
-require_once("classes/db_homolic402020_classe.php");
+require_once("classes/db_homolic102021_classe.php");
+require_once("classes/db_homolic202021_classe.php");
+require_once("classes/db_homolic302021_classe.php");
+require_once("classes/db_homolic402021_classe.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarHOMOLIC.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarHOMOLIC.model.php");
 
 /**
  * Homologação da Licitação Sicom Acompanhamento Mensal
@@ -113,10 +113,10 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	public function gerarDados()
 	{
 
-		$clhomolic10 = new cl_homolic102020();
-		$clhomolic20 = new cl_homolic202020();
-		$clhomolic30 = new cl_homolic302020();
-		$clhomolic40 = new cl_homolic402020();
+		$clhomolic10 = new cl_homolic102021();
+		$clhomolic20 = new cl_homolic202021();
+		$clhomolic30 = new cl_homolic302021();
+		$clhomolic40 = new cl_homolic402021();
 
 
 		db_inicio_transacao();
@@ -195,7 +195,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     		ELSE 2
     	END) as tipoDocumento,
     	cgm.z01_cgccpf as nroDocumento,
-    	CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112020.si47_nrolote ELSE 0 END AS nroLote,
+    	CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112021.si47_nrolote ELSE 0 END AS nroLote,
     	(solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
     	pcorcamval.pc23_vlrun as vlUnitario,
     	solicitem.pc11_quant as quantidade,
@@ -223,7 +223,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
       INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
     	INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
     	LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-    	LEFT JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote  and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+    	LEFT JOIN aberlic112021 on (liclicitemlote.l04_descricao = aberlic112021.si47_dsclote  and aberlic112021.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
     	WHERE db_config.codigo =" . db_getsession("DB_instit") . "
     	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao) =" . db_getsession("DB_anousu") . "
@@ -309,7 +309,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
       ELSE 2
     END) as tipoDocumento,
     cgm.z01_cgccpf as nroDocumento,
-    aberlic112020.si47_nrolote as nroLote,
+    aberlic112021.si47_nrolote as nroLote,
     pcorcamval.pc23_vlrun AS vlUnitario,
     solicitem.pc11_quant AS quantidade,
     liclicita.l20_codigo AS codlicitacao,
@@ -339,7 +339,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
     LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
     LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-    LEFT JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote  and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+    LEFT JOIN aberlic112021 on (liclicitemlote.l04_descricao = aberlic112021.si47_dsclote  and aberlic112021.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
     WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
     and liclicita.l20_codigo in (".implode(',', $aLicitacoes).") order by liclicita.l20_edital";
@@ -355,7 +355,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 				$sHash20 = '20'.$oDados20->exerciciolicitacao . $oDados20->nroprocessolicitatorio . $oDados20->nrodocumento . $oDados20->nrolote . $oDados20->coditem;
 
 				if(!$aDadosAgrupados20[$sHash20]){
-					$clhomolic20 = new cl_homolic202020();
+					$clhomolic20 = new cl_homolic202021();
 					$clhomolic20->si64_tiporegistro = 20;
 					$clhomolic20->si64_codorgao = $oDados20->codorgaoresp;
 					$clhomolic20->si64_codunidadesub = $oDados20->codunidadesubresp;
@@ -399,7 +399,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
             ELSE 2
           END) as tipoDocumento,
           cgm.z01_cgccpf as nroDocumento,
-          aberlic112020.si47_nrolote as nroLote,
+          aberlic112021.si47_nrolote as nroLote,
           (solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
           pcorcamval.pc23_percentualdesconto as perctaxaadm,
           CASE
@@ -426,7 +426,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
           LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
           LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
           LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-          LEFT JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote  and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+          LEFT JOIN aberlic112021 on (liclicitemlote.l04_descricao = aberlic112021.si47_dsclote  and aberlic112021.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
           LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
           WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
           AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao) =" . db_getsession("DB_anousu") . "
@@ -443,7 +443,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 				$sHash30 = '30'.$oDados30->exerciciolicitacao . $oDados30->nroprocessolicitatorio . $oDados30->nrodocumento . $oDados30->nrolote . $oDados30->coditem;;
 
 				if(!$aDadosAgrupados30[$sHash30]){
-					$clhomolic30 = new cl_homolic302020();
+					$clhomolic30 = new cl_homolic302021();
 
 					$clhomolic30->si65_tiporegistro = 30;
 					$clhomolic30->si65_codorgao = $oDados30->codorgaoresp;
@@ -499,12 +499,12 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 		$aDadosAgrupados40 = array();
 		for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-			$clhomolic40 = new cl_homolic402020();
+			$clhomolic40 = new cl_homolic402021();
 			$oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 			$sHash40 = '40'.$oDados40->exerciciolicitacao . $oDados40->nroprocessolicitatorio . $oDados40->nrodocumento . $oDados40->nrolote . $oDados40->coditem;
 
 			if(!$aDadosAgrupados40[$sHash40]){
-				$clhomolic40 = new cl_homolic402020();
+				$clhomolic40 = new cl_homolic402021();
 				$clhomolic40->si65_tiporegistro = 40;
 				$clhomolic40->si65_codorgao = $oDados40->codorgaoresp;
 				$clhomolic40->si65_codunidadesub = $oDados40->codunidadesubresp;
@@ -521,7 +521,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 		foreach ($aDadosAgrupados as $oDadosAgrupados) {
 
-			$clhomolic10 = new cl_homolic102020();
+			$clhomolic10 = new cl_homolic102021();
 
 			$clhomolic10->si63_tiporegistro = $oDadosAgrupados->si63_tiporegistro;
 			$clhomolic10->si63_codorgao = $oDadosAgrupados->si63_codorgao;
@@ -545,7 +545,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 		}
 
 		foreach ($aDadosAgrupados20 as $oDadosAgrupados) {
-			$clhomolic20 = new cl_homolic202020();
+			$clhomolic20 = new cl_homolic202021();
 
 			$clhomolic20->si64_tiporegistro = $oDadosAgrupados->si64_tiporegistro;
 			$clhomolic20->si64_codorgao = $oDadosAgrupados->si64_codorgao;
@@ -570,7 +570,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 		foreach ($aDadosAgrupados30 as $oDadosAgrupados) {
 
-			$clhomolic30 = new cl_homolic302020();
+			$clhomolic30 = new cl_homolic302021();
 
 			$clhomolic30->si65_tiporegistro = $oDadosAgrupados->si65_tiporegistro;
 			$clhomolic30->si65_codorgao = $oDadosAgrupados->si65_codorgao;
@@ -594,7 +594,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 		foreach ($aDadosAgrupados40 as $oDadosAgrupados) {
 
-			$clhomolic40 = new cl_homolic402020();
+			$clhomolic40 = new cl_homolic402021();
 
 			$clhomolic40->si65_tiporegistro = 40;
 			$clhomolic40->si65_codorgao = $oDadosAgrupados->si65_codorgao;

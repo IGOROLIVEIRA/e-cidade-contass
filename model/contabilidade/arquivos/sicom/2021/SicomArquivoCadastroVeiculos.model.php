@@ -1,17 +1,17 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_cvc10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_cvc20$PROXIMO_ANO_classe.php");
-require_once ("classes/db_cvc30$PROXIMO_ANO_classe.php");
-require_once ("classes/db_cvc40$PROXIMO_ANO_classe.php");
+require_once ("classes/db_cvc102021_classe.php");
+require_once ("classes/db_cvc202121_classe.php");
+require_once ("classes/db_cvc302021_classe.php");
+require_once ("classes/db_cvc402021_classe.php");
 
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarCVC.model.php");
 
 
  /**
-  * Dados Cadastro de Veículos Sicom Acompanhamento Mensal
+  * Dados Cadastro de VeÃ­culos Sicom Acompanhamento Mensal
   * @author robson
   * @package Contabilidade
   */
@@ -111,7 +111,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
   }
   
   /**
-   * selecionar os dados do cadastro de veículos
+   * selecionar os dados do cadastro de veÃ­culos
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
@@ -119,45 +119,45 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 /**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-  	$clcvc10$PROXIMO_ANO = new cl_cvc10$PROXIMO_ANO();
-  	$clcvc20$PROXIMO_ANO = new cl_cvc20$PROXIMO_ANO();
-  	$clcvc30$PROXIMO_ANO = new cl_cvc30$PROXIMO_ANO();
-  	$clcvc40$PROXIMO_ANO = new cl_cvc40$PROXIMO_ANO();
+  	$clcvc102021 = new cl_cvc102021();
+  	$clcvc202121 = new cl_cvc202121();
+  	$clcvc302021 = new cl_cvc302021();
+  	$clcvc402021 = new cl_cvc402021();
   	
     
     /**
      * excluir informacoes do mes selecioado
      */
     db_inicio_transacao();
-    $result = db_query($clcvc10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si146_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si146_instit=".db_getsession("DB_instit")));
+    $result = db_query($clcvc102021->sql_query(NULL,"*",NULL,"si146_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si146_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clcvc10$PROXIMO_ANO->excluir(NULL,"si146_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si146_instit=".db_getsession("DB_instit"));
-      if ($clcvc10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clcvc10$PROXIMO_ANO->erro_msg);
+    	$clcvc102021->excluir(NULL,"si146_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si146_instit=".db_getsession("DB_instit"));
+      if ($clcvc102021->erro_status == 0) {
+    	  throw new Exception($clcvc102021->erro_msg);
       }
     }
    
-    $result = db_query($clcvc20$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si147_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si147_instit=".db_getsession("DB_instit")));
+    $result = db_query($clcvc202121->sql_query(NULL,"*",NULL,"si147_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si147_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clcvc20$PROXIMO_ANO->excluir(NULL,"si147_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si147_instit=".db_getsession("DB_instit"));
-      if ($clcvc20$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clcvc20$PROXIMO_ANO->erro_msg);
+    	$clcvc202121->excluir(NULL,"si147_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si147_instit=".db_getsession("DB_instit"));
+      if ($clcvc202121->erro_status == 0) {
+    	  throw new Exception($clcvc202121->erro_msg);
       }
     }
     
-    $result = db_query($clcvc30$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si148_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si148_instit=".db_getsession("DB_instit")));
+    $result = db_query($clcvc302021->sql_query(NULL,"*",NULL,"si148_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si148_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clcvc30$PROXIMO_ANO->excluir(NULL,"s148_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si148_instit=".db_getsession("DB_instit"));
-      if ($clcvc30$PROXIMO_ANO>erro_status == 0) {
-    	  throw new Exception($clcvc30$PROXIMO_ANO->erro_msg);
+    	$clcvc302021->excluir(NULL,"s148_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si148_instit=".db_getsession("DB_instit"));
+      if ($clcvc302021>erro_status == 0) {
+    	  throw new Exception($clcvc302021->erro_msg);
       }
     }
      
-    $result = db_query($clcvc40$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si149_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si149_instit=".db_getsession("DB_instit")));
+    $result = db_query($clcvc402021->sql_query(NULL,"*",NULL,"si149_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si149_instit=".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clcvc40$PROXIMO_ANO->excluir(NULL,"si149_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si149_instit=".db_getsession("DB_instit"));
-      if ($clcvc40$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clcvc40$PROXIMO_ANO->erro_msg);
+    	$clcvc402021->excluir(NULL,"si149_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si149_instit=".db_getsession("DB_instit"));
+      if ($clcvc402021->erro_status == 0) {
+    	  throw new Exception($clcvc402021->erro_msg);
       }
     }
     
@@ -197,33 +197,33 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
-    	$clcvc10$PROXIMO_ANO = new cl_cvc10$PROXIMO_ANO();
+    	$clcvc102021 = new cl_cvc102021();
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 	   
-	    $clcvc10$PROXIMO_ANO->si146_tiporegistro    	= 10;
-		$clcvc10$PROXIMO_ANO->si146_codorgao			= $oDados10->codorgao;
-		$clcvc10$PROXIMO_ANO->si146_codunidadesub		= $oDados10->codunidadesub;
-		$clcvc10$PROXIMO_ANO->si146_codveiculo			= $oDados10->codveiculo;
-		$clcvc10$PROXIMO_ANO->si146_tpveiculo			= $oDados10->tpveiculo;
-		$clcvc10$PROXIMO_ANO->si146_subtipoveiculo		= $oDados10->subtipoveiculo;
-		$clcvc10$PROXIMO_ANO->si146_descveiculo			= $oDados10->descveiculo;   
-		$clcvc10$PROXIMO_ANO->si146_marca				= $oDados10->marca;        
-		$clcvc10$PROXIMO_ANO->si146_modelo				= $oDados10->modelo;       
-		$clcvc10$PROXIMO_ANO->si146_ano					= $oDados10->ano ;         
-		$clcvc10$PROXIMO_ANO->si146_placa				= $oDados10->placa;        
-		$clcvc10$PROXIMO_ANO->si146_chassi				= $oDados10->chassi;       
-		$clcvc10$PROXIMO_ANO->si146_numerorenavam		= $oDados10->numerorenavam;
-		$clcvc10$PROXIMO_ANO->si146_nroserie			= $oDados10->nroserie;       
-		$clcvc10$PROXIMO_ANO->si146_situacao			= $oDados10->situacao;     
-		$clcvc10$PROXIMO_ANO->si146_tpdeslocamento		= $oDados10->tpdeslocament;
-		$clcvc10$PROXIMO_ANO->si146_instit				= db_getsession("DB_instit");
-		$clcvc10$PROXIMO_ANO->si146_mes             	= $this->sDataFinal['5'].$this->sDataFinal['6']; 
+	    $clcvc102021->si146_tiporegistro    	= 10;
+		$clcvc102021->si146_codorgao			= $oDados10->codorgao;
+		$clcvc102021->si146_codunidadesub		= $oDados10->codunidadesub;
+		$clcvc102021->si146_codveiculo			= $oDados10->codveiculo;
+		$clcvc102021->si146_tpveiculo			= $oDados10->tpveiculo;
+		$clcvc102021->si146_subtipoveiculo		= $oDados10->subtipoveiculo;
+		$clcvc102021->si146_descveiculo			= $oDados10->descveiculo;   
+		$clcvc102021->si146_marca				= $oDados10->marca;        
+		$clcvc102021->si146_modelo				= $oDados10->modelo;       
+		$clcvc102021->si146_ano					= $oDados10->ano ;         
+		$clcvc102021->si146_placa				= $oDados10->placa;        
+		$clcvc102021->si146_chassi				= $oDados10->chassi;       
+		$clcvc102021->si146_numerorenavam		= $oDados10->numerorenavam;
+		$clcvc102021->si146_nroserie			= $oDados10->nroserie;       
+		$clcvc102021->si146_situacao			= $oDados10->situacao;     
+		$clcvc102021->si146_tpdeslocamento		= $oDados10->tpdeslocament;
+		$clcvc102021->si146_instit				= db_getsession("DB_instit");
+		$clcvc102021->si146_mes             	= $this->sDataFinal['5'].$this->sDataFinal['6']; 
 		
 		  
 		  
-		  $clcvc10$PROXIMO_ANO->incluir(null);
-		  if ($clcvc10$PROXIMO_ANO->erro_status == 0) {
-		  	throw new Exception($clcvc10$PROXIMO_ANO->erro_msg);
+		  $clcvc102021->incluir(null);
+		  if ($clcvc102021->erro_status == 0) {
+		  	throw new Exception($clcvc102021->erro_msg);
 		  }
 		  
     }
@@ -236,7 +236,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		(SELECT lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0)
 		FROM db_departorg
 		WHERE db01_coddepto=l20_codepartamento
-		AND db01_anousu=$PROXIMO_ANO) AS codUnidadeSubResp,
+		AND db01_anousu=2021) AS codUnidadeSubResp,
 		veiculos.ve01_codigo AS codVeiculo,
 		1 AS origemGasto,
 		lpad(o58_orgao,2,0) || lpad(o58_unidade,3,0)  as codUnidadeSubEmpenho,	
@@ -361,27 +361,27 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		 */
 		for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 		  	
-		  	$clcvc20$PROXIMO_ANO = new cl_cvc20$PROXIMO_ANO();
+		  	$clcvc202121 = new cl_cvc202121();
 			$oDados20       = db_utils::fieldsMemory($rsResult20, $iCont20);
 		  	
-			$clcvc20$PROXIMO_ANO->si147_tiporegistro 			= 20;
-			$clcvc20$PROXIMO_ANO->si147_codorgao				= $oDados20->codorgao  ;
-			$clcvc20$PROXIMO_ANO->si147_codunidadesub			= $oDados20->codunidadesub ;      
-			$clcvc20$PROXIMO_ANO->si147_codveiculo				= $oDados20->codveiculo   ;        
-			$clcvc20$PROXIMO_ANO->si147_origemgasto				= $oDados20->origemgasto ;        
-			$clcvc20$PROXIMO_ANO->si147_codunidadesubempenho	= $oDados20->codunidadesubempenho;
-			$clcvc20$PROXIMO_ANO->si147_nroempenho				= $oDados20->nroempenho   ;       
-			$clcvc20$PROXIMO_ANO->si147_dtempenho				= $oDados20->dtempenho  ;         
-			$clcvc20$PROXIMO_ANO->si147_tipogasto				= $oDados20->tipogasto  ;         
-			$clcvc20$PROXIMO_ANO->si147_qtdeutilizada			= $oDados20->qtdeutilizada ;      
-			$clcvc20$PROXIMO_ANO->si147_vlgasto					= $oDados20->vlgasto   ;           
-			$clcvc20$PROXIMO_ANO->si147_dscpecasservicos		= $oDados20->dscpecasservicos  ;    
-			$clcvc20$PROXIMO_ANO->si147_atestadocontrole		= $oDados20->atestadocontrole ;   
-			$clcvc20$PROXIMO_ANO->si147_instit					= db_getsession("DB_instit");
-			$clcvc20$PROXIMO_ANO->si147_mes            			= $this->sDataFinal['5'].$this->sDataFinal['6'];
+			$clcvc202121->si147_tiporegistro 			= 20;
+			$clcvc202121->si147_codorgao				= $oDados20->codorgao  ;
+			$clcvc202121->si147_codunidadesub			= $oDados20->codunidadesub ;      
+			$clcvc202121->si147_codveiculo				= $oDados20->codveiculo   ;        
+			$clcvc202121->si147_origemgasto				= $oDados20->origemgasto ;        
+			$clcvc202121->si147_codunidadesubempenho	= $oDados20->codunidadesubempenho;
+			$clcvc202121->si147_nroempenho				= $oDados20->nroempenho   ;       
+			$clcvc202121->si147_dtempenho				= $oDados20->dtempenho  ;         
+			$clcvc202121->si147_tipogasto				= $oDados20->tipogasto  ;         
+			$clcvc202121->si147_qtdeutilizada			= $oDados20->qtdeutilizada ;      
+			$clcvc202121->si147_vlgasto					= $oDados20->vlgasto   ;           
+			$clcvc202121->si147_dscpecasservicos		= $oDados20->dscpecasservicos  ;    
+			$clcvc202121->si147_atestadocontrole		= $oDados20->atestadocontrole ;   
+			$clcvc202121->si147_instit					= db_getsession("DB_instit");
+			$clcvc202121->si147_mes            			= $this->sDataFinal['5'].$this->sDataFinal['6'];
 			
 		   /**
-		 	*          MARCAÇÃO INICIAL E FINAL DE MANUTENÇÃO DO VEICULO: 
+		 	*          MARCAÃ‡ÃƒO INICIAL E FINAL DE MANUTENÃ‡ÃƒO DO VEICULO: 
 		 	*/			
 			$sSqlm= "SELECT min(veicmanut.ve62_medida) as km_inicial_manu, max(veicmanut.ve62_medida) as km_final__manu 
 			FROM veiculos.veicmanut  as veicmanut  
@@ -393,7 +393,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 			$oDadosVeiculo       = db_utils::fieldsMemory($rsResultVeiculo, 0); 
 		
 			/**
-			 * MARCAÇÃO INICIAL E FINAL DE ABASTECIMENTO DO VEICULO:
+			 * MARCAÃ‡ÃƒO INICIAL E FINAL DE ABASTECIMENTO DO VEICULO:
 			 */
 
 	         $sSqlabs="SELECT min(veicabast.ve70_medida) as km_inicial_comb, max(veicabast.ve70_medida) as km_final_comb 
@@ -405,7 +405,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 	         $rsResultAbas 	   = db_query($sSqlabs);
 			 $oDadosAbs       = db_utils::fieldsMemory($rsResultAbas,0);
 			/**
-			 * seleção da menor marcação inicial e da maior marcação final, esta pesquisa será realizada para cada veículo retornado pelo comando sql de seleção
+			 * seleÃ§Ã£o da menor marcaÃ§Ã£o inicial e da maior marcaÃ§Ã£o final, esta pesquisa serÃ¡ realizada para cada veÃ­culo retornado pelo comando sql de seleÃ§Ã£o
 			 */
 			
 			$marcacaoInicial =  $oDadosVeiculo->km_inicial_manu;
@@ -417,14 +417,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 			$marcacaoFinal =  $oDadosAbs->km_inicial_comb;
 			}
           	
-          	$clcvc20$PROXIMO_ANO->si147_marcacaoinicial		= $marcacaoInicial;
-          	$clcvc20$PROXIMO_ANO->si147_marcacaofinal		= $marcacaoFinal;
+          	$clcvc202121->si147_marcacaoinicial		= $marcacaoInicial;
+          	$clcvc202121->si147_marcacaofinal		= $marcacaoFinal;
 			
 			echo $sSqlabs;exit;
 		  	
-		  $clcvc20$PROXIMO_ANO->incluir(null);
-		  if ($clcvc20$PROXIMO_ANO->erro_status == 0) {
-		    throw new Exception($clcvc20$PROXIMO_ANO->erro_msg);
+		  $clcvc202121->incluir(null);
+		  if ($clcvc202121->erro_status == 0) {
+		    throw new Exception($clcvc202121->erro_msg);
 		  }
 		  	
 		}
@@ -458,7 +458,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		INNER JOIN veiculos.transporteescolar AS transporteescolar ON (veiculos.ve01_codigo=transporteescolar.v200_veiculo)
 		INNER JOIN  liclicita on  db_config.codigo= liclicita.l20_instit
 		WHERE db_config.codigo =" .db_getsession("DB_instit")."";
-//		AND veiculos.ve01_codigo = [ Código do Veículo ] ;
+//		AND veiculos.ve01_codigo = [ CÃ³digo do VeÃ­culo ] ;
 		
 		$rsResult30 = db_query($sSql);
 		/**
@@ -466,25 +466,25 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		 */
 		for ($iCont0 = 30; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 		  	
-		  	$clcvc30$PROXIMO_ANO = new cl_cvc30$PROXIMO_ANO();
+		  	$clcvc302021 = new cl_cvc302021();
 			$oDados30       = db_utils::fieldsMemory($rsResult30, $iCont30);
 		  	
-			$clcvc30$PROXIMO_ANO->si148_tiporegistro 				= 30;			 
-			$clcvc30$PROXIMO_ANO->si148_codorgao					= $oDados30->codorgao;
-			$clcvc30$PROXIMO_ANO->si148_codunidadesub				= $oDados30->codunidadesubresp;
-			$clcvc30$PROXIMO_ANO->si148_codveiculo					= $oDados30->codveiculo  ;
-			$clcvc30$PROXIMO_ANO->si148_nomeestabelecimento			= $oDados30->nomeestabelecimento; 
-			$clcvc30$PROXIMO_ANO->si148_localidade					= $oDados30->localidade  ;
-			$clcvc30$PROXIMO_ANO->si148_qtdediasrodados				= $oDados30->qtdediasrodados;
-			$clcvc30$PROXIMO_ANO->si148_distanciaestabelecimento	= $oDados30->distanciaestabelecimento; 
-			$clcvc30$PROXIMO_ANO->si148_numeropassageiros			= $oDados30->numeropassageiros; 
-			$clcvc30$PROXIMO_ANO->si148_turnos						= $oDados30->turnos;
-			$clcvc30$PROXIMO_ANO->si148_instit						= db_getsession("DB_instit");
-			$clcvc30$PROXIMO_ANO->si148_mes            				= $this->sDataFinal['5'].$this->sDataFinal['6'];
+			$clcvc302021->si148_tiporegistro 				= 30;			 
+			$clcvc302021->si148_codorgao					= $oDados30->codorgao;
+			$clcvc302021->si148_codunidadesub				= $oDados30->codunidadesubresp;
+			$clcvc302021->si148_codveiculo					= $oDados30->codveiculo  ;
+			$clcvc302021->si148_nomeestabelecimento			= $oDados30->nomeestabelecimento; 
+			$clcvc302021->si148_localidade					= $oDados30->localidade  ;
+			$clcvc302021->si148_qtdediasrodados				= $oDados30->qtdediasrodados;
+			$clcvc302021->si148_distanciaestabelecimento	= $oDados30->distanciaestabelecimento; 
+			$clcvc302021->si148_numeropassageiros			= $oDados30->numeropassageiros; 
+			$clcvc302021->si148_turnos						= $oDados30->turnos;
+			$clcvc302021->si148_instit						= db_getsession("DB_instit");
+			$clcvc302021->si148_mes            				= $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  	
-		  	$clcvc30$PROXIMO_ANO->incluir(null);
-		  if ($clcvc30$PROXIMO_ANO->erro_status == 0) {
-		    throw new Exception($clcvc30$PROXIMO_ANO->erro_msg);
+		  	$clcvc302021->incluir(null);
+		  if ($clcvc302021->erro_status == 0) {
+		    throw new Exception($clcvc302021->erro_msg);
 		  }
 		  	
 		}
@@ -522,26 +522,26 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		   */
 		  for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 		  	
-		    $clcvc40$PROXIMO_ANO= new cl_cvc40$PROXIMO_ANO();
+		    $clcvc402021= new cl_cvc402021();
 		  	$oDados40       =  db_utils::fieldsMemory($rsResult40, $iCont40);
 		  	
-		  	$clcvc40$PROXIMO_ANO->si149_tiporegistro 				= 40;
-		  	$clcvc40$PROXIMO_ANO->si149_codorgao					= $oDados40->codorgao;
-			$clcvc40$PROXIMO_ANO->si149_codunidadesub				= $oDados40->codunidadesubresp;
-			$clcvc40$PROXIMO_ANO->si149_codveiculo					= $oDados40->codveiculo;
-			$clcvc40$PROXIMO_ANO->si149_nomeestabelecimento			= $oDados40->nomeestabelecimento;
-			$clcvc40$PROXIMO_ANO->si149_localidade					= $oDados40->localidade;
-			$clcvc40$PROXIMO_ANO->si149_qtdediasrodados				= $oDados40->qtdediasrodados;
-			$clcvc40$PROXIMO_ANO->si149_distanciaestabelecimento	= $oDados40->distanciaestabelecimento;
-			$clcvc40$PROXIMO_ANO->si149_numeropassageiros			= $oDados40->numeropassageiros;
-			$clcvc40$PROXIMO_ANO->si149_turnos						= $oDados40->turnos;
-			$clcvc40$PROXIMO_ANO->si149_instit						= db_getsession("DB_instit");
-			$clcvc40$PROXIMO_ANO->si149_mes           				= $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  	$clcvc402021->si149_tiporegistro 				= 40;
+		  	$clcvc402021->si149_codorgao					= $oDados40->codorgao;
+			$clcvc402021->si149_codunidadesub				= $oDados40->codunidadesubresp;
+			$clcvc402021->si149_codveiculo					= $oDados40->codveiculo;
+			$clcvc402021->si149_nomeestabelecimento			= $oDados40->nomeestabelecimento;
+			$clcvc402021->si149_localidade					= $oDados40->localidade;
+			$clcvc402021->si149_qtdediasrodados				= $oDados40->qtdediasrodados;
+			$clcvc402021->si149_distanciaestabelecimento	= $oDados40->distanciaestabelecimento;
+			$clcvc402021->si149_numeropassageiros			= $oDados40->numeropassageiros;
+			$clcvc402021->si149_turnos						= $oDados40->turnos;
+			$clcvc402021->si149_instit						= db_getsession("DB_instit");
+			$clcvc402021->si149_mes           				= $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  	
 		  	
-		    $clcvc40$PROXIMO_ANO->incluir(null);
-		    if ($clcvc40$PROXIMO_ANO->erro_status == 0) {
-		  	  throw new Exception($clcvc40$PROXIMO_ANO->erro_msg);
+		    $clcvc402021->incluir(null);
+		    if ($clcvc402021->erro_status == 0) {
+		  	  throw new Exception($clcvc402021->erro_msg);
 		    }	
 		}  
     db_fim_transacao();

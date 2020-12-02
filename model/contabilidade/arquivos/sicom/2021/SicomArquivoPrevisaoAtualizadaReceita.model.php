@@ -1,19 +1,19 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_parec10$PROXIMO_ANO_classe.php");
-require_once ("classes/db_parec11$PROXIMO_ANO_classe.php");
+require_once ("classes/db_parec102021_classe.php");
+require_once ("classes/db_parec112021_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarPAREC.model.php");
 /**
  * 
- * selecionar dados de Previsão Atualizada da Receita
+ * selecionar dados de PrevisÃ£o Atualizada da Receita
  * @author Marcelo
  * @package Contabilidade
  */
 class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements iPadArquivoBaseCSV {
   
 	/**
-	 * Código do layout. (db_layouttxt.db50_codigo)
+	 * CÃ³digo do layout. (db_layouttxt.db50_codigo)
 	 *
 	 * @var Integer
 	 */
@@ -27,7 +27,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
   protected $sNomeArquivo = 'PAREC';
   
   /**
-	 * Código da Pespectiva. (ppaversao.o119_sequencial)
+	 * CÃ³digo da Pespectiva. (ppaversao.o119_sequencial)
 	 *
 	 * @var Integer
 	 */
@@ -77,7 +77,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
   }
   
   /**
-   * Gerar os dados necessários para o arquivo
+   * Gerar os dados necessÃ¡rios para o arquivo
    *
    */
   public function gerarDados(){
@@ -85,8 +85,8 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
    /**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-  	$clparec10$PROXIMO_ANO = new cl_parec10$PROXIMO_ANO();
-  	$clparec11$PROXIMO_ANO = new cl_parec11$PROXIMO_ANO();
+  	$clparec102021 = new cl_parec102021();
+  	$clparec112021 = new cl_parec112021();
 
   	$db_filtro  = "o70_instit = ".db_getsession("DB_instit");
     $rsResult10  = db_receitasaldo(11,1,3,true,$db_filtro,db_getsession("DB_anousu"),$this->sDataInicial,$this->sDataFinal,false,' * ',true,0);
@@ -100,19 +100,19 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
      */
     db_inicio_transacao();
     
-    $result = $clparec11$PROXIMO_ANO->sql_record($clparec11$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si23_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si23_instit = ".db_getsession("DB_instit")));
+    $result = $clparec112021->sql_record($clparec112021->sql_query(NULL,"*",NULL,"si23_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si23_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clparec11$PROXIMO_ANO->excluir(NULL,"si23_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si23_instit = ".db_getsession("DB_instit"));
-      if ($clparec11$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clparec11$PROXIMO_ANO->erro_msg);
+    	$clparec112021->excluir(NULL,"si23_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si23_instit = ".db_getsession("DB_instit"));
+      if ($clparec112021->erro_status == 0) {
+    	  throw new Exception($clparec112021->erro_msg);
       }
     }
     
-    $result = $clparec10$PROXIMO_ANO->sql_record($clparec10$PROXIMO_ANO->sql_query(NULL,"*",NULL,"si22_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si22_instit = ".db_getsession("DB_instit")));
+    $result = $clparec102021->sql_record($clparec102021->sql_query(NULL,"*",NULL,"si22_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si22_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clparec10$PROXIMO_ANO->excluir(NULL,"si22_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si22_instit = ".db_getsession("DB_instit"));
-      if ($clparec10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clparec10$PROXIMO_ANO->erro_msg);
+    	$clparec102021->excluir(NULL,"si22_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si22_instit = ".db_getsession("DB_instit"));
+      if ($clparec102021->erro_status == 0) {
+    	  throw new Exception($clparec102021->erro_msg);
       }
     }
     
@@ -179,37 +179,37 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
    
     foreach ($aDadosAgrupados as $oDados10) {
     	
-    	$clparec10$PROXIMO_ANO = new cl_parec10$PROXIMO_ANO();
-		  $clparec10$PROXIMO_ANO->si22_tiporegistro         = $oDados10->si22_tiporegistro;
-		  $clparec10$PROXIMO_ANO->si22_codreduzido          = $oDados10->si22_codreduzido;
-		  $clparec10$PROXIMO_ANO->si22_codorgao             = $oDados10->si22_codorgao;
-		  $clparec10$PROXIMO_ANO->si22_ededucaodereceita    = $oDados10->si22_ededucaodereceita;
-		  $clparec10$PROXIMO_ANO->si22_identificadordeducao = $oDados10->si22_identificadordeducao;
-		  $clparec10$PROXIMO_ANO->si22_naturezareceita      = $oDados10->si22_naturezareceita;
-		  $clparec10$PROXIMO_ANO->si22_tipoatualizacao      = $oDados10->si22_tipoatualizacao;
-		  $clparec10$PROXIMO_ANO->si22_especificacao        = $oDados10->si22_especificacao;
-		  $clparec10$PROXIMO_ANO->si22_vlacrescidoreduzido  = abs($oDados10->si22_vlacrescidoreduzido);
-		  $clparec10$PROXIMO_ANO->si22_mes                  = $oDados10->si22_mes;
-		  $clparec10$PROXIMO_ANO->si22_instit               = db_getsession("DB_instit");
+    	$clparec102021 = new cl_parec102021();
+		  $clparec102021->si22_tiporegistro         = $oDados10->si22_tiporegistro;
+		  $clparec102021->si22_codreduzido          = $oDados10->si22_codreduzido;
+		  $clparec102021->si22_codorgao             = $oDados10->si22_codorgao;
+		  $clparec102021->si22_ededucaodereceita    = $oDados10->si22_ededucaodereceita;
+		  $clparec102021->si22_identificadordeducao = $oDados10->si22_identificadordeducao;
+		  $clparec102021->si22_naturezareceita      = $oDados10->si22_naturezareceita;
+		  $clparec102021->si22_tipoatualizacao      = $oDados10->si22_tipoatualizacao;
+		  $clparec102021->si22_especificacao        = $oDados10->si22_especificacao;
+		  $clparec102021->si22_vlacrescidoreduzido  = abs($oDados10->si22_vlacrescidoreduzido);
+		  $clparec102021->si22_mes                  = $oDados10->si22_mes;
+		  $clparec102021->si22_instit               = db_getsession("DB_instit");
 		  
-		  $clparec10$PROXIMO_ANO->incluir(null);
-    	if ($clparec10$PROXIMO_ANO->erro_status == 0) {
-    	  throw new Exception($clparec10$PROXIMO_ANO->erro_msg);
+		  $clparec102021->incluir(null);
+    	if ($clparec102021->erro_status == 0) {
+    	  throw new Exception($clparec102021->erro_msg);
       }
       foreach ($oDados10->Reg11 as $oDados11) {
       	
-        $clparec11$PROXIMO_ANO = new cl_parec11$PROXIMO_ANO();
-    		$clparec11$PROXIMO_ANO->si23_tiporegistro    = $oDados11->si23_tiporegistro;
-    		$clparec11$PROXIMO_ANO->si23_codreduzido     = $oDados11->si23_codreduzido;
-    		$clparec11$PROXIMO_ANO->si23_codfontrecursos = $oDados11->si23_codfontrecursos;
-    		$clparec11$PROXIMO_ANO->si23_vlfonte         = abs($oDados11->si23_vlfonte);
-    		$clparec11$PROXIMO_ANO->si23_mes             = $oDados11->si23_mes;
-    		$clparec11$PROXIMO_ANO->si23_reg10           = $clparec10$PROXIMO_ANO->si22_sequencial;
-    		$clparec11$PROXIMO_ANO->si23_instit          = db_getsession("DB_instit");
+        $clparec112021 = new cl_parec112021();
+    		$clparec112021->si23_tiporegistro    = $oDados11->si23_tiporegistro;
+    		$clparec112021->si23_codreduzido     = $oDados11->si23_codreduzido;
+    		$clparec112021->si23_codfontrecursos = $oDados11->si23_codfontrecursos;
+    		$clparec112021->si23_vlfonte         = abs($oDados11->si23_vlfonte);
+    		$clparec112021->si23_mes             = $oDados11->si23_mes;
+    		$clparec112021->si23_reg10           = $clparec102021->si22_sequencial;
+    		$clparec112021->si23_instit          = db_getsession("DB_instit");
     		
-        $clparec11$PROXIMO_ANO->incluir(null);
-    	  if ($clparec11$PROXIMO_ANO->erro_status == 0) {
-    	    throw new Exception($clparec11$PROXIMO_ANO->erro_msg);
+        $clparec112021->incluir(null);
+    	  if ($clparec112021->erro_status == 0) {
+    	    throw new Exception($clparec112021->erro_msg);
         }
       	
       }

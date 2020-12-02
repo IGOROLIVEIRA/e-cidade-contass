@@ -1,7 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarOBELAC.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarOBELAC.model.php");
 
 /**
  * Outras Baixas de Empenhos por Lançamento Contábil Sicom Acompanhamento Mensal
