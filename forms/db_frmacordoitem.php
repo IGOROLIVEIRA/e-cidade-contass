@@ -206,10 +206,10 @@ db_app::load("estilos.css, grid.style.css");
                   ?>
                 </td>
 
-                <td>
+                <td id="tdlabelservico">
                   <b>Serviço Controlado por Quantidades:</b>
                 </td>
-                <td>
+                <td id="tdselectservico">
                   <?
                   db_select("ac20_servicoquantidade", array("f" => "NÂO", "t" => "SIM"), true, $db_opcao, "onChange='js_verificaServico();'");
                   ?>
@@ -397,7 +397,14 @@ db_app::load("estilos.css, grid.style.css");
 
   }
 
-  function js_mostrapcmater2(chave, erro) {
+  function js_mostrapcmater2(chave, erro, chave2) {
+      if(chave2 === 'f'){
+          $('tdlabelservico').style.display = 'none';
+          $('tdselectservico').style.display = 'none';
+      }else{
+          $('tdlabelservico').style.display = '';
+          $('tdselectservico').style.display = '';
+      }
     let params = {
       exec: 'verificaItemContratoAcordo',
       ac20_pcmater: document.form1.ac20_pcmater.value
@@ -424,6 +431,14 @@ db_app::load("estilos.css, grid.style.css");
 
   function js_mostrapcmater1(chave1, chave2, chave3) {
 
+if(chave3 === 'f'){
+    $('tdlabelservico').style.display = 'none';
+    $('tdselectservico').style.display = 'none';
+}else{
+    $('tdlabelservico').style.display = '';
+    $('tdselectservico').style.display = '';
+}
+      ac20_servicoquantidade
     let params = {
       exec: 'verificaItemContratoAcordo',
       ac20_pcmater: chave1

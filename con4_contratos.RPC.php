@@ -588,6 +588,13 @@ switch($oParam->exec) {
               }
           }
 
+          if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 4){
+              if($oParam->contrato->iAdesaoregpreco == ""){
+                  $lAcordoValido = false;
+                  $sMessagemInvalido = "Acordo sem vinculo com Adesão de Registro de Preço.";
+              }
+          }
+
           if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
               $lAcordoValido = false;
               $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";

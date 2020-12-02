@@ -699,10 +699,11 @@ class cl_acordo {
             }
         }
 
-        if(trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="") ){
+        if((trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&
+            ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="")) && $this->ac16_dataassinatura != 'null'){
             $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
             $virgula = ",";
-        }else{
+        }elseif($this->ac16_dataassinatura == 'null'){
             $sql  .= $virgula." ac16_dataassinatura = null ";
             $virgula = ",";
         }
