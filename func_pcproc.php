@@ -142,10 +142,10 @@ $sWhereContrato = " and 1 = 1 ";
       }
 
 	  if($filtrovinculo){
-		  $sWhereContrato .= ' AND pc80_codproc NOT IN
-                                (SELECT DISTINCT si06_processocompra
-                                 FROM adesaoregprecos
-                                 JOIN liclicita ON si06_numlicitacao = l20_codigo) ';
+
+          $oDaoLiclicitem = db_utils::getDao('liclicitem');
+		  $sqlProcCompra = $oDaoLiclicitem->sql_query(null,"distinct pc80_codproc",null,'');
+		  $sWhereContrato .= " AND pc80_codproc NOT IN (" . $sqlProcCompra . ") ";
 	  }
 
 	  if (isset($orc)) {
