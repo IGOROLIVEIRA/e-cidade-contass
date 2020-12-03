@@ -19,7 +19,7 @@ if(isset($incluir)){
 
   db_fim_transacao();
 
-  $sSql = "select * from mtfis_ldo order by mtfisanexo_sequencial desc limit 1;";
+  $sSql = "select * from mtfis_ldo order by mtfis_sequencial desc limit 1;";
   $rsResult = pg_query($sSql);
   db_fieldsmemory($rsResult,0);
 
@@ -27,11 +27,20 @@ if(isset($incluir)){
   db_fieldsmemory($result,0);
   $db_botao = true;
 
-  echo "<script>
-  top.corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=".$mtfis_sequencial."&mtfis_anoinicialldo=".$mtfis_anoinicialldo."';
-  parent.document.formaba.db_anexo.disabled=false;
-  parent.mo_camada('db_anexo');
-  </script>";
+  if($clmtfis_ldo->erro_campo==""){
+      echo "<script> alert('Incluído com sucesso'); </script>";
+
+      echo "<script>
+      top.corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=".$mtfis_sequencial."&mtfis_anoinicialldo=".$mtfis_anoinicialldo."';
+      parent.document.formaba.db_anexo.disabled=false;
+      parent.mo_camada('db_anexo');
+      </script>";
+  }else{
+      $clmtfis_ldo->erro(true,true);
+  }
+
+
+
 
 
 

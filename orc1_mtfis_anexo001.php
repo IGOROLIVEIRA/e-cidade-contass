@@ -9,7 +9,7 @@ db_postmemory($HTTP_POST_VARS);
 $clmtfis_anexo = new cl_mtfis_anexo;
 $db_opcao = 1;
 $db_botao = true;
-$aEspecificacoes = array('Receita Total','Receitas Primárias (I)','Receitas de Impostos, Taxas e Contribuições de Melhoria','Receitas de Contribuições','Receitas de Transferências Correntes','Demais Receitas Primárias Correntes','Receitas Primárias de Capital','Despesa Total','Despesas Primárias (II)','Despesas de  Pessoal e Encargos Sociais','Outras Despesas Correntes','Despesas Primárias de Capital','Pagamento de Restos a Pagar de Despesas Primárias','Resultado Primário (III) = (I - II)','Juros, Encargos e Variaááes Monetárias Ativos (IV)','Juros, Encargos e Variaááes Monetárias Passivos (V)','Resultado Nominal (VI) = (III + (IV -V)','Dávida Páblica Consolidada','Dávida Consolidada Láquida','Receita primária advindas de PPP','Despesas primária geradas por PPP','Impacto do saldo das PPPs (IX) = (VII - VIII)');
+$aEspecificacoes = array('Receita Total','Receitas Primárias (I)','Receitas Primárias Correntes','Receitas de Impostos, Taxas e Contribuições de Melhoria','Receitas de Contribuições','Receitas de Transferências Correntes','Demais Receitas Primárias Correntes','Receitas Primárias de Capital','Despesa Total','Despesas Primárias (II)','Despesas Primárias Correntes','Despesas de  Pessoal e Encargos Sociais','Outras Despesas Correntes','Despesas Primárias de Capital','Pagamento de Restos a Pagar de Despesas Primárias','Resultado Primário (III) = (I - II)','Juros, Encargos e Variáveis Monetárias Ativos (IV)','Juros, Encargos e Variáveis Monetárias Passivos (V)','Resultado Nominal (VI) = (III + (IV -V)','Dívida Pública Consolidada','Dívida Consolidada Líquida','Receita primária advindas de PPP','Despesas primária geradas por PPP','Impacto do saldo das PPPs (IX) = (VII - VIII)');
 if(isset($incluir)){
   db_inicio_transacao();
   $clmtfis_anexo->sql_record($clmtfis_anexo->sql_query(null,'*','',"mtfisanexo_ldo = $mtfisanexo_ldo"));
@@ -88,6 +88,6 @@ if(isset($incluir)){
 </html>
 <?
 if(isset($incluir)){
-    echo "<script> alert('Incluí­do com sucesso'); </script>";
+    echo "<script> alert('Incluído com sucesso'); </script>";
 }
 ?>
