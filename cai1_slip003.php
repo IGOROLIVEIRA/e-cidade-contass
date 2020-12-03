@@ -271,6 +271,7 @@ try {
     $tes =  "______________________________"."\n"."Secretário de Fazenda";
     $pdf->tesoureiro      = $classinatura->assinatura(1004,$tes);
 
+    $pdf1->ordenapagamento =  $ordenapaga;
     $pdf->contador        = $contador;
     $pdf->crc             = $crc;
     $pdf->controleinterno = $controleinterno;
