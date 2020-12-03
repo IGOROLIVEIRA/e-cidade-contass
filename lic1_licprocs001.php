@@ -125,9 +125,14 @@ function js_liberaexclusao(value){
             echo "<script>";
             echo "parent.document.form1.excluir.disabled = false;";
             echo "parent.document.form1.codprocesso.value = document.getElementById('codprocanu').value;";
+			echo "parent.document.form1.exportarcsv.disabled = false; ";
             echo "</script>";
 
         }else{
+            echo "<script>";
+			echo "parent.document.form1.exportarcsv.disabled = true; ";
+			echo "</script>";
+
             echo "Nenhum Processo de Compra incluído.";
         }
     ?>
@@ -181,6 +186,7 @@ function js_liberaexclusao(value){
     //aqui e removido processos com autorização de empenho geradas no compras.
     $sWhere .= "and not EXISTS (select 1 from empautitempcprocitem where e73_pcprocitem = pc81_codprocitem)";
 
+    $sWhere .= " AND pc80_codproc not in (select si06_processocompra from adesaoregprecos) ";
 
 
 	if (isset ($pc30_contrandsol) && $pc30_contrandsol == 't') {

@@ -450,6 +450,12 @@ function js_addRetencao() {
      return false;
 
    }
+   if ( nValorRetencao <= 0 ) {
+	
+	  alert("O valor da retenção deve ser maior que zero!");
+	  return false;
+	  
+   }
    isSave = true;
    oRetencao.iCodigoRetencao = $F('e21_sequencial');
    oRetencao.nValorDeducao   = new Number($F('e23_deducao')).toString();

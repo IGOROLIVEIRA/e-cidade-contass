@@ -124,11 +124,7 @@ if (isset($processa) && $processa == 't') {
     $sSql  = " select *  ";
     $sSql .= "   from (select distinct   ";
     $sSql .= "		             q02_inscr, ";
-    $sSql .= "		             case       ";
-    $sSql .= "		               when q02_dtcada is not null ";
-    $sSql .= "		                 then q02_dtcada ";
-    $sSql .= "		               else q02_dtinic   ";
-    $sSql .= "		             end as datacad      ";
+    $sSql .= "		             q02_dtinic as datacad      ";
     $sSql .= "	          from issbase             ";
     $sSql .= "		             inner join tabativ   on q07_inscr  = issbase.q02_inscr   ";
     $sSql .= "		             inner join ativid    on q03_ativ   = tabativ.q07_ativ    ";

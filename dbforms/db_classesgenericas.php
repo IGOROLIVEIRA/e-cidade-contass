@@ -1109,7 +1109,7 @@ class cl_arquivo_auxiliar {
     echo "<table align=\"center\" $sClassAuxiliar>\n";
     echo "  <tr>\n";
     echo "    <td nowrap title=\"\" > \n";
-    echo "      <fieldset id='fieldset_{$this->nomeobjeto}'><Legend>".$this->cabecalho."</legend>\n";
+    echo "    <fieldset id='fieldset_{$this->nomeobjeto}'><Legend>".$this->cabecalho."</legend>\n";
     echo "      <table border=\"0\">\n";
     echo "        <tr>\n";
     echo "          <td nowrap >\n<b>";
@@ -1157,7 +1157,7 @@ class cl_arquivo_auxiliar {
     echo "          </td>\n";
     echo "        </tr>\n";
     echo "      </table>\n";
-    echo "      </fieldset>\n";
+    echo "  </fieldset>\n";
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "</table>\n";
