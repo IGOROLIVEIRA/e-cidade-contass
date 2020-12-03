@@ -303,10 +303,10 @@ function js_mostracgmresp1(chave1,chave2){
 }
 function js_pesquisasi06_processocompra(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?lFiltroPrecoRef=1&funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
+    js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?lFiltroPrecoRef=1&filtrovinculo=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
   }else{
      if(document.form1.si06_processocompra.value != ''){
-        js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?lFiltroPrecoRef=1&pesquisa_chave='+document.form1.si06_processocompra.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
+        js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?lFiltroPrecoRef=1&filtrovinculo=true&pesquisa_chave='+document.form1.si06_processocompra.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
      }
   }
 }

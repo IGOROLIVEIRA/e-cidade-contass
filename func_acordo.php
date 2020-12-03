@@ -214,6 +214,10 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             $sWhere .= " and ac10_acordomovimentacaotipo = {$iTipo} ";
           }
 
+          if(!empty($aditamentos)){
+              $sWhere .= " AND ac26_acordoposicaotipo in (2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14) ";
+          }
+
         }
 
         if (!isset($pesquisa_chave)) {

@@ -522,7 +522,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       }
 
       /*
-       * verifica se o contrato e de origem processo de compra e tipo origem licitação por ser registro de preço
+       * verifica se o contrato e de origem processo de compra e tipo origem licitaÃ§Ã£o por ser registro de preÃ§o
        *
        */
 
@@ -644,7 +644,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $oContrato11->si84_reg10 = $clcontratos10->si83_sequencial;
             $oContrato11->si84_codcontrato = $oDados10->ac16_sequencial;
             if ($oDados10->ac02_acordonatureza == "1"){
-                if($oDadosItensObra->obr06_tabela == "3"){
+                if($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4"){
                     $oContrato11->si84_coditem = $iCodItem;
                 }else{
                     $oContrato11->si84_coditem = null;
@@ -1128,7 +1128,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
           if ($oAcordoItem->getQuantiAditada() > 0 || $oAcordoItem->getValorAditado() > 0) {
 
             $sSql = "SELECT si43_coditem FROM
-                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021) as y
+                                (select si43_coditem,si43_dscitem  from item102021 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102021) as y
                                 WHERE si43_dscitem LIKE
                                         '" . trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oAcordoItem->getMaterial()->getDescricao()))) . "%'";
             $result = db_query($sSql);

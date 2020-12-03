@@ -22,29 +22,29 @@ class GerarCONTRATOS extends GerarAM {
     $this->sArquivo = "CONTRATOS";
     $this->abreArquivo();
 
-    $sSql = "select * from sicom2021.contratos102021 where si83_mes = ". $this->iMes ." and si83_instit = ". db_getsession("DB_instit");
+    $sSql = "select * from contratos102020 where si83_mes = ". $this->iMes ." and si83_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS10    = db_query($sSql);
 
-    $sSql2 = "select * from sicom2021.contratos112021 where si84_mes = ". $this->iMes ." and si84_instit = ". db_getsession("DB_instit");
+    $sSql2 = "select * from contratos112020 where si84_mes = ". $this->iMes ." and si84_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS11    = db_query($sSql2);
 
 
-    $sSql3 = "select * from sicom2021.contratos122021 where si85_mes = ". $this->iMes ." and si85_instit = ". db_getsession("DB_instit");
+    $sSql3 = "select * from contratos122020 where si85_mes = ". $this->iMes ." and si85_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS12    = db_query($sSql3);
 
-    $sSql4 = "select * from sicom2021.contratos132021 where si86_mes = ". $this->iMes ." and si86_instit = ". db_getsession("DB_instit");
+    $sSql4 = "select * from contratos132020 where si86_mes = ". $this->iMes ." and si86_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS13    = db_query($sSql4);
 
-    $sSql5 = "select * from sicom2021.contratos202021 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
+    $sSql5 = "select * from contratos202020 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS20    = db_query($sSql5);
 
-    $sSql6 = "select * from sicom2021.contratos212021 where si88_mes = ". $this->iMes ." and si88_instit = ". db_getsession("DB_instit");
+    $sSql6 = "select * from contratos212020 where si88_mes = ". $this->iMes ." and si88_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS21    = db_query($sSql6);
 
-    $sSql7 = "select * from sicom2021.contratos302021 where si89_mes = ". $this->iMes ." and si89_instit = ". db_getsession("DB_instit");
+    $sSql7 = "select * from contratos302020 where si89_mes = ". $this->iMes ." and si89_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS30    = db_query($sSql7);
 
-    $sSql8 = "select * from sicom2021.contratos402021 where si91_mes = ". $this->iMes ." and si91_instit = ". db_getsession("DB_instit");
+    $sSql8 = "select * from contratos402020 where si91_mes = ". $this->iMes ." and si91_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS40    = db_query($sSql8);
 
 
