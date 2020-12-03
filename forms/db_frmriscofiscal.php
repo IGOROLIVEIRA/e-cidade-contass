@@ -13,7 +13,7 @@ $clrotulo->label("o119_versao");
 
 $si53_instituicao= db_getsession("DB_instit");
 ?>
-<form name="form1" method="post" action="<?=$db_action?>">
+<form name="form1" method="post" action="<?=$db_action?>" onsubmit="js_submit();">
 <center>
 <fieldset style="width: 800px; margin-left: 200px; margin-top: 80px;"><legend
 	style="font-weight: bold;"> Riscos Fiscais</legend>
@@ -69,16 +69,6 @@ $si53_instituicao= db_getsession("DB_instit");
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tsi53_dscriscofiscal?>">
-       <?=@$Lsi53_dscriscofiscal?>
-    </td>
-    <td> 
-		<?
-		db_textarea('si53_dscriscofiscal',7,40,$Isi53_dscriscofiscal,true,'text',$db_opcao,"onkeyup='limitaTextarea(this.value);'");
-		?></br>Caracteres restantes: <span id="contador">100</span>
-    </td>
-  </tr>
-  <tr>
     <td nowrap title="<?=@$Tsi53_codriscofiscal?>">
        <?=@$Lsi53_codriscofiscal?>
     </td>
@@ -93,12 +83,23 @@ $si53_instituicao= db_getsession("DB_instit");
     </td>
   </tr>
   <tr>
+    <td nowrap title="<?=@$Tsi53_dscriscofiscal?>">
+       <?=@$Lsi53_dscriscofiscal?>
+    </td>
+    <td> 
+		<?
+    db_textarea("si53_dscriscofiscal",7,40, "", true, "text", $db_opcao, "", "", "",500);
+		?>
+    </td>
+  </tr>
+
+  <tr>
     <td nowrap title="<?=@$Tsi53_valorisco?>">
        <?=@$Lsi53_valorisco?>
     </td>
     <td> 
 <?
-db_input('si53_valorisco',8,$Isi53_valorisco,true,'text',$db_opcao,"")
+db_input('si53_valorisco',10,$Isi53_valorisco,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
@@ -109,26 +110,12 @@ db_input('si53_valorisco',8,$Isi53_valorisco,true,'text',$db_opcao,"")
 </form>
 <script>
 
-function limitaTextarea(valor) {
-	quantidade = 100;
-	total = valor.length;
-
-	if(total <= quantidade) {
-		resto = quantidade- total;
-		document.getElementById('contador').innerHTML = resto;
-	} else {
-		document.getElementById('si53_dscriscofiscal').value = valor.substr(0, quantidade);
-		alert("Limite alcançado!");
-	}
-}
-
-
 function js_pesquisasi53_codigoppa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?funcao_js=parent.js_mostrappaversao1|o119_sequencial|o01_descricao','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?funcao_js=parent.js_mostrappaversao1|o119_sequencial|o01_descricao','Pesquisa',true,'0','1');
   }else{
      if(document.form1.si53_codigoppa.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?pesquisa_chave='+document.form1.si53_codigoppa.value+'&funcao_js=parent.js_mostrappaversao','Pesquisa',false,'0','1','775','390');
+        js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?pesquisa_chave='+document.form1.si53_codigoppa.value+'&funcao_js=parent.js_mostrappaversao','Pesquisa',false,'0','1');
      }else{
        document.form1.o119_versao.value = ''; 
      }
@@ -147,7 +134,7 @@ function js_mostrappaversao1(chave1,chave2){
   db_iframe_ppaversao.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_riscofiscal','func_riscofiscal.php?funcao_js=parent.js_preenchepesquisa|si53_sequencial','Pesquisa',true,'0','1','775','390');
+  js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_riscofiscal','func_riscofiscal.php?funcao_js=parent.js_preenchepesquisa|si53_sequencial','Pesquisa',true,'0','1');
 }
 function js_preenchepesquisa(chave){
   db_iframe_riscofiscal.hide();
@@ -156,5 +143,15 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+
+function js_submit() {
+  
+    if ( document.form1.si53_codriscofiscal.value == 10 && document.form1.si53_dscriscofiscal.value == '' ) {
+
+        alert('Informe a Descrição do Risco');
+        event.preventDefault();
+
+    }  
 }
 </script>

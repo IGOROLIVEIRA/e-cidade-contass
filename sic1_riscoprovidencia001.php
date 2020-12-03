@@ -53,7 +53,7 @@ if(isset($incluir)){
     db_fim_transacao($sqlerro);
   }
 }else if(isset($opcao)){
-   $result = $clriscoprovidencia->sql_record($clriscoprovidencia->sql_query($si54_sequencial));
+   $result = $clriscoprovidencia->sql_record($clriscoprovidencia->sql_query_file($si54_sequencial));
    if($result!=false && $clriscoprovidencia->numrows>0){
      db_fieldsmemory($result,0);
    }
