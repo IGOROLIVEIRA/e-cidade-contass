@@ -259,7 +259,7 @@ class cl_contratos102021 {
        return false;
      }
      if($si83_sequencial == "" || $si83_sequencial == null ){
-       $result = db_query("select nextval('sicom2021.contratos102021_si83_sequencial_seq')");
+       $result = db_query("select nextval('contratos102021_si83_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("","",@pg_last_error());
          $this->erro_sql   = "Verifique o cadastro da sequencia: contratos102021_si83_sequencial_seq do campo: si83_sequencial";
@@ -270,7 +270,7 @@ class cl_contratos102021 {
        }
        $this->si83_sequencial = pg_result($result,0,0);
      }else{
-       $result = db_query("select last_value from sicom2021.contratos102021_si83_sequencial_seq");
+       $result = db_query("select last_value from contratos102021_si83_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si83_sequencial)){
          $this->erro_sql = " Campo si83_sequencial maior que último número da sequencia.";
          $this->erro_banco = "Sequencia menor que este número.";
@@ -290,7 +290,7 @@ class cl_contratos102021 {
        $this->erro_status = "0";
        return false;
      }
-     $sql = "insert into sicom2021.contratos102021(
+     $sql = "insert into contratos102021(
                                        si83_sequencial
                                       ,si83_tiporegistro
                                       ,si83_tipocadastro
@@ -427,7 +427,7 @@ class cl_contratos102021 {
    // funcao para alteracao
    function alterar ($si83_sequencial=null) {
       $this->atualizacampos();
-     $sql = " update sicom2021.contratos102021 set ";
+     $sql = " update contratos102021 set ";
      $virgula = "";
      if(trim($this->si83_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si83_sequencial"])){
         if(trim($this->si83_sequencial)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si83_sequencial"])){
@@ -786,7 +786,7 @@ class cl_contratos102021 {
          $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','".AddSlashes(pg_result($resaco,$iresaco,'si83_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
-     $sql = " delete from sicom2021.contratos102021
+     $sql = " delete from contratos102021
                     where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
@@ -867,7 +867,7 @@ class cl_contratos102021 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from sicom2021.contratos102021 ";
+     $sql .= " from contratos102021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si83_sequencial!=null ){
@@ -901,7 +901,7 @@ class cl_contratos102021 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from sicom2021.contratos102021 ";
+     $sql .= " from contratos102021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si83_sequencial!=null ){

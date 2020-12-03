@@ -135,7 +135,7 @@ class cl_contratos122021 {
        return false;
      }
      if($si85_sequencial == "" || $si85_sequencial == null ){
-       $result = db_query("select nextval('sicom2021.contratos122021_si85_sequencial_seq')");
+       $result = db_query("select nextval('contratos122021_si85_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("
 ","",@pg_last_error());
@@ -147,7 +147,7 @@ class cl_contratos122021 {
        }
        $this->si85_sequencial = pg_result($result,0,0); 
      }else{
-       $result = db_query("select last_value from sicom2021.contratos122021_si85_sequencial_seq");
+       $result = db_query("select last_value from contratos122021_si85_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si85_sequencial)){
          $this->erro_sql = " Campo si85_sequencial maior que último número da sequencia.";
          $this->erro_banco = "Sequencia menor que este número.";
@@ -167,7 +167,7 @@ class cl_contratos122021 {
        $this->erro_status = "0";
        return false;
      }
-     $sql = "insert into sicom2021.contratos122021(
+     $sql = "insert into contratos122021(
                                        si85_sequencial 
                                       ,si85_tiporegistro 
                                       ,si85_codcontrato 
@@ -256,7 +256,7 @@ class cl_contratos122021 {
    // funcao para alteracao
    function alterar ($si85_sequencial=null) { 
       $this->atualizacampos();
-     $sql = " update sicom2021.contratos122021 set ";
+     $sql = " update contratos122021 set ";
      $virgula = "";
      if(trim($this->si85_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si85_sequencial"])){ 
         if(trim($this->si85_sequencial)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si85_sequencial"])){ 
@@ -476,7 +476,7 @@ class cl_contratos122021 {
          $resac = db_query("insert into db_acount values($acount,2010314,2011598,'','".AddSlashes(pg_result($resaco,$iresaco,'si85_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
-     $sql = " delete from sicom2021.contratos122021
+     $sql = " delete from contratos122021
                     where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
@@ -559,7 +559,7 @@ class cl_contratos122021 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from sicom2021.contratos122021 ";
+     $sql .= " from contratos122021 ";
      $sql .= "      left  join contratos102021  on  contratos102021.si83_sequencial = contratos122021.si85_reg10";
      $sql2 = "";
      if($dbwhere==""){
@@ -594,7 +594,7 @@ class cl_contratos122021 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from sicom2021.contratos122021 ";
+     $sql .= " from contratos122021 ";
      $sql2 = "";
      if($dbwhere==""){
        if($si85_sequencial!=null ){
