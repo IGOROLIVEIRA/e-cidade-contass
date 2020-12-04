@@ -1100,7 +1100,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[2].addStyle("text-align","right");
             aLinha[2].addStyle("height","100%");
             aLinha[2].addStyle("width","100px");
-            aLinha[2].addStyle("border","1px solid transparent;");
+            aLinha[2].addStyle("border","1px solid #000;");
             aLinha[2].addEvent("onBlur","quantdot"+iDot+".sValue=this.value;");
             if(tipo != 2) {
                 aLinha[2].addEvent("onBlur", "js_ajustaQuantDot(this," + iDot + "," + iLinha + ");");
@@ -1115,7 +1115,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[3].addStyle("text-align","right");
             aLinha[3].addStyle("height","100%");
             aLinha[3].addStyle("width","100px");
-            aLinha[3].addStyle("border","1px solid transparent;");
+            aLinha[3].addStyle("border","1px solid #000;");
             aLinha[3].addEvent("onBlur","valordot"+iDot+".sValue=this.value;");
             aLinha[3].addEvent("onBlur","js_ajustaValorDot(this,"+iDot+","+tipo+");");
             aLinha[3].addEvent("onBlur","js_bloqueiaDigitacao(this, true);");
