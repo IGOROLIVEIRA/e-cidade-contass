@@ -2,6 +2,10 @@
 require_once('classes/db_transferenciaveiculos_classe.php');
 require_once('classes/db_veiculostransferencia_classe.php');
 require_once('classes/db_veicbaixa_classe.php');
+require_once('classes/db_veiccentral_classe.php');
+require_once('classes/db_veiccadcentral_classe.php');
+require_once('classes/db_veicresp_classe.php');
+require_once('classes/db_veiculoscomb_classe.php');
 require_once("std/db_stdClass.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -152,12 +156,68 @@ switch ($oParam->exec){
 
             }
 
-            $rsUpdate = alteraVeiculo($oParam->veiculos, $oParam->departamento_destino, $aUnidadeAnterior, $nInstit);
+            foreach ($oParam->veiculos as $veiculo){
+                $clveiculos = new cl_veiculos();
+                $clveicretirada = new cl_veicretirada();
 
-            if ($rsUpdate == false) {
-                throw new Exception ("Erro ao realizar transferencia!");
+                $rsveiculo = $clveiculos->sql_record($clveiculos->sql_query_veiculo($veiculo));
+                $aVeiculo = db_utils::fieldsMemory($rsveiculo,0);
+
+                $rsultimamedida = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($veiculo));
+                $aUltimamedida = db_utils::fieldsMemory($rsultimamedida,0);
+
+                //Novo Veiculo
+                $clveiculos->ve01_placa                 = $aVeiculo->ve01_placa;
+                $clveiculos->ve01_veiccadtipo           = $aVeiculo->ve01_veiccadtipo;
+                $clveiculos->ve01_veiccadmarca          = $aVeiculo->ve01_veiccadmarca;
+                $clveiculos->ve01_veiccadmodelo         = $aVeiculo->ve01_veiccadmodelo;
+                $clveiculos->ve01_veiccadcor            = $aVeiculo->ve01_veiccadcor;
+                $clveiculos->ve01_veiccadproced         = $aVeiculo->ve01_veiccadproced;
+                $clveiculos->ve01_veiccadcateg          = $aVeiculo->ve01_veiccadcateg;
+                $clveiculos->ve01_chassi                = $aVeiculo->ve01_chassi;
+                $clveiculos->ve01_ranavam               = $aVeiculo->ve01_ranavam;
+                $clveiculos->ve01_placanum              = $aVeiculo->ve01_placanum;
+                $clveiculos->ve01_certif                = $aVeiculo->ve01_certif;
+                $clveiculos->ve01_quantpotencia         = $aVeiculo->ve01_quantpotencia;
+                $clveiculos->ve01_medidaini             = $aUltimamedida->ultimamedida;
+                $clveiculos->ve01_quantcapacidad        = $aVeiculo->ve01_quantcapacidad;
+                $clveiculos->ve01_veiccadtipocapacidade = $aVeiculo->ve01_veiccadtipocapacidade;
+                $clveiculos->ve01_dtaquis               = db_getsession('DB_datausu');
+                $clveiculos->ve01_veiccadcategcnh       = $aVeiculo->ve01_veiccadcategcnh;
+                $clveiculos->ve01_anofab                = $aVeiculo->ve01_anofab;
+                $clveiculos->ve01_anomod                = $aVeiculo->ve01_anomod;
+                $clveiculos->ve01_ceplocalidades        = $aVeiculo->ve01_ceplocalidades;
+                $clveiculos->ve01_ativo                 = $aVeiculo->ve01_ativo;
+                $clveiculos->ve01_veictipoabast         = $aVeiculo->ve01_veictipoabast;
+                $clveiculos->ve01_nroserie              = $aVeiculo->ve01_nroserie;
+                $clveiculos->ve01_codigoant             = $aVeiculo->ve01_codigoant;
+                $clveiculos->ve01_codunidadesub         = $aUnidadeAtual->codunidadesub;
+                $clveiculos->ve01_instit                = $aVeiculo->ve01_instit;
+                $clveiculos->incluir(null,$aVeiculo->ve01_veiccadtipo);
+
+                //criando a veicresp
+                $clveicresp = new cl_veicresp();
+                $clveicresp->ve02_veiculo = $clveiculos->ve01_codigo;
+                $clveicresp->ve02_numcgm  = $aVeiculo->ve02_numcgm;
+                $clveicresp->incluir(null);
+
+                //criando a veiculoscomb
+                $clveiculoscomb = new cl_veiculoscomb();
+                $clveiculoscomb->ve06_veiccadcomb = $aVeiculo->ve06_veiccadcomb;
+                $clveiculoscomb->ve06_veiculos = $clveiculos->ve01_codigo;
+                $clveiculoscomb->ve06_padrao = $aVeiculo->ve06_padrao;
+                $clveiculoscomb->incluir(null);
+
+                //incluindo central nova
+                $clveiccadcentral = new cl_veiccadcentral();
+                $rsVeiccadcentral = $clveiccadcentral->sql_record($clveiccadcentral->sql_query_file(null,"*",null,"ve36_coddepto = $oParam->departamento_destino"));
+                $destino = db_utils::fieldsMemory($rsVeiccadcentral,0);
+
+                $clveiccentral = new cl_veiccentral();
+                $clveiccentral->ve40_veiccadcentral = $destino->ve36_sequencial;
+                $clveiccentral->ve40_veiculos = $clveiculos->ve01_codigo;
+                $clveiccentral->incluir(null);
             }
-
 
         } catch (Exception $eExeption) {
             $oRetorno->erro  = $eExeption->getMessage();
@@ -191,7 +251,7 @@ function buscaVeiculosDepartamentos($departamento, $Instit) {
               inner join veiccadcentral on veiccadcentral.ve36_sequencial = veiccentral.ve40_veiccadcentral
               inner join db_depart      on db_depart.coddepto             = veiccadcentral.ve36_coddepto
               where (db_depart.instit = {$Instit} and db_depart.coddepto  = {$departamento})
-                and veiculos.ve01_codigo not in (select veicbaixa.ve04_veiculo from veicbaixa where ve04_veiccadtipobaixa <> 7)
+                and veiculos.ve01_codigo not in (select veicbaixa.ve04_veiculo from veicbaixa)
             order by veiculos.ve01_codigo
             ");
 
