@@ -186,6 +186,7 @@ function js_liberaexclusao(value){
     //aqui e removido processos com autorização de empenho geradas no compras.
     $sWhere .= "and not EXISTS (select 1 from empautitempcprocitem where e73_pcprocitem = pc81_codprocitem)";
 
+    $sWhere .= " AND pc80_codproc not in (select si06_processocompra from adesaoregprecos) ";
 
 
 	if (isset ($pc30_contrandsol) && $pc30_contrandsol == 't') {

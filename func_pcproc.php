@@ -141,7 +141,14 @@ $sWhereContrato = " and 1 = 1 ";
         $sWhereSolicitaAnuAndPrecoRef .= " and exists (select 1 from precoreferencia where si01_processocompra = pc80_codproc) ";
       }
 
-      if (isset($orc)) {
+	  if($filtrovinculo){
+
+          $oDaoLiclicitem = db_utils::getDao('liclicitem');
+		  $sqlProcCompra = $oDaoLiclicitem->sql_query(null,"distinct pc80_codproc",null,'');
+		  $sWhereContrato .= " AND pc80_codproc NOT IN (" . $sqlProcCompra . ") ";
+	  }
+
+	  if (isset($orc)) {
         $result_chave = $clpcprocitem->sql_record($clpcprocitem->sql_query_orcam(null," distinct pc81_codproc as chave_pc80_codproc",""," pc22_codorc=$orc "));
         if ($clpcprocitem->numrows>0) {
           db_fieldsmemory($result_chave,0);

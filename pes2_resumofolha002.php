@@ -70,6 +70,16 @@ try {
   $aWhere            = array();
   $sDescricaoSelecao = '';
 
+  $aTipoFolhas = array(
+    'gerfsal' => 'r14',
+    'gerfcom' => 'r48',
+    'gerfres' => 'r20',
+    'gerfs13' => 'r35',
+    'gerfadi' => 'r22',
+    'gerfprovfer' => 'r93',
+    'gerfprovs13' => 'r94'
+  );
+
   /**
    * Valida se existe seleção
    */
@@ -245,11 +255,11 @@ try {
   $oDaoRhPessoalMov = db_utils::getDao("rhpessoalmov");
   $iInstituicao     = db_getsession('DB_instit');
   $sWhere           = implode(' and ', $aWhere);
-  $sCampos          = "distinct rh01_regist,rh02_anousu,rh02_mesusu,             ";
+  $sCampos          = "distinct rh01_regist,rh02_anousu,rh02_mesusu,rh02_tbprev,  ";
   $sCampos         .= "{$sCampoCondicaoTipoRelatorio}   as agrupador_codigo,     ";
   $sCampos         .= "{$sCampoEstruturalTipoRelatorio} as agrupador_estrutural, ";
   $sCampos         .= "{$sCampoDescricaoTipoRelatorio}  as agrupador_descricao   ";
-  $sAgrupamento     = "rh01_regist,rh02_anousu,rh02_mesusu, {$sCampoCondicaoTipoRelatorio}, {$sCampoDescricaoTipoRelatorio}, {$sCampoEstruturalTipoRelatorio}";
+  $sAgrupamento     = "rh01_regist,rh02_anousu,rh02_mesusu,rh02_tbprev, {$sCampoCondicaoTipoRelatorio}, {$sCampoDescricaoTipoRelatorio}, {$sCampoEstruturalTipoRelatorio}";
   $sAgrupamento     = $oParametros->iTipoRelatorio == TIPO_RELATORIO_GERAL ? "" : $sAgrupamento;
 
   $sSqlServidores   = $oDaoRhPessoalMov->sql_query_baseServidores($oParametros->iMes,
@@ -289,7 +299,6 @@ try {
       continue;
     }
 
-    $oServidor = ServidorRepository::getInstanciaByCodigo( $oDadosPesquisados->rh01_regist, $oDadosPesquisados->rh02_anousu, $oDadosPesquisados->rh02_mesusu);
     /**
      * descricao do agrupador
      */
@@ -300,40 +309,37 @@ try {
      */
     foreach ($oParametros->aTiposFolhas as $sTipoFolha) {
 
-      $oCalculo = $oServidor->getCalculoFinanceiro($sTipoFolha);
       switch ($sTipoFolha) {
         case CalculoFolha::CALCULO_COMPLEMENTAR:
 
           if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-            $aEventoFinanceiro = $oCalculo->getEventosFinanceirosHistorico(
-              FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR,
-              $oParametros->iComplementar
-            );
+            $rsResult = db_query(getSqlMovimentacaoFinanceiraHistorico($oDadosPesquisados, FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR, $oParametros->iComplementar));
           } else {
-            $aEventoFinanceiro = $oCalculo->getEventosFinanceiros($oParametros->iComplementar);
+            $rsResult = db_query(getSqlMovimentacaoFinanceira($sTipoFolha, $aTipoFolhas[$sTipoFolha], $oDadosPesquisados, $oParametros->iComplementar));
           }
+          $aEventoFinanceiro = db_utils::getCollectionByRecord($rsResult);
           break;
 
         case CalculoFolha::CALCULO_SUPLEMENTAR:
 
-          $aEventoFinanceiro = $oCalculo->getEventosFinanceirosHistorico(
-            FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR,
-            $oParametros->iSuplementar
-          );
+          $rsResult = db_query(getSqlMovimentacaoFinanceiraHistorico($oDadosPesquisados, FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR, $oParametros->iSuplementar));
+          $aEventoFinanceiro = db_utils::getCollectionByRecord($rsResult);
           break;
 
         case CalculoFolha::CALCULO_SALARIO:
 
           if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-            $aEventoFinanceiro = $oCalculo->getEventosFinanceirosHistorico(FolhaPagamento::TIPO_FOLHA_SALARIO);
+            $rsResult = db_query(getSqlMovimentacaoFinanceiraHistorico($oDadosPesquisados, FolhaPagamento::TIPO_FOLHA_SALARIO));
           } else {
-            $aEventoFinanceiro = $oCalculo->getEventosFinanceiros();
+            $rsResult = db_query(getSqlMovimentacaoFinanceira($sTipoFolha, $aTipoFolhas[$sTipoFolha], $oDadosPesquisados));
           }
+          $aEventoFinanceiro = db_utils::getCollectionByRecord($rsResult);
           break;
         
         default:
 
-          $aEventoFinanceiro = $oCalculo->getEventosFinanceiros();
+          $rsResult = db_query(getSqlMovimentacaoFinanceira($sTipoFolha, $aTipoFolhas[$sTipoFolha], $oDadosPesquisados));
+          $aEventoFinanceiro = db_utils::getCollectionByRecord($rsResult);
           break;
       }
 
@@ -341,30 +347,31 @@ try {
 
 
         $lExisteCalculo    = true; // Exibe Relatório se existir movimentação financeira
-        $sRubrica          = $oEventoFinanceiro->getRubrica()->getCodigo();
-        $sDescricaoRubrica = $oEventoFinanceiro->getRubrica()->getDescricao();
+        $sRubrica          = $oEventoFinanceiro->codigo_rubrica;
+        $sDescricaoRubrica = $oEventoFinanceiro->descricao_rubrica;
         $iMatricula        = $oDadosPesquisados->rh01_regist;
+        $oEventoFinanceiro->tabela_previdencia = $oDadosPesquisados->rh02_tbprev;
 
         $aRubricasOrdenacao        [$agrupador][$sRubrica]              = $sDescricaoRubrica;
         $aTotalServidoresRubrica   [$agrupador][$sRubrica][$iMatricula] = $iMatricula;
         $aTotalServidoresEstrutural[$agrupador][$iMatricula]            = $iMatricula;
         $aRubricas                 [$agrupador][$sRubrica][]            = $oEventoFinanceiro;
         if ($oParametros->lGrafico == 't') {
-          if ($oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::PROVENTO
+          if ($oEventoFinanceiro->provento_desconto == EventoFinanceiroFolha::PROVENTO
               && ($oParametros->sTipoGrafico == 'bruto' || $oParametros->sTipoGrafico == 'liquido')) {
 
-            $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] += $oEventoFinanceiro->getValor();
-          } else if($oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::DESCONTO
+            $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] += $oEventoFinanceiro->valor_rubrica;
+          } else if($oEventoFinanceiro->provento_desconto == EventoFinanceiroFolha::DESCONTO
                     && $oParametros->sTipoGrafico == 'liquido') {
 
-            $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] -= $oEventoFinanceiro->getValor();
+            $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] -= $oEventoFinanceiro->valor_rubrica;
           } else if($oParametros->sTipoGrafico == 'empenhos') {
 
             $oRubrica = RubricaRepository::getInstanciaByCodigo($sRubrica);
-            if ($oRubrica->getTipoEmpenho() == 'e' && $oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::PROVENTO) {
-              $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] += $oEventoFinanceiro->getValor();
-            } else if ($oRubrica->getTipoEmpenho() == 'e' && $oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::DESCONTO) {
-              $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] -= $oEventoFinanceiro->getValor();
+            if ($oRubrica->getTipoEmpenho() == 'e' && $oEventoFinanceiro->provento_desconto == EventoFinanceiroFolha::PROVENTO) {
+              $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] += $oEventoFinanceiro->valor_rubrica;
+            } else if ($oRubrica->getTipoEmpenho() == 'e' && $oEventoFinanceiro->provento_desconto == EventoFinanceiroFolha::DESCONTO) {
+              $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] -= $oEventoFinanceiro->valor_rubrica;
             }
           }
         }
@@ -375,7 +382,7 @@ try {
   /**
    * Caso seja o relatório de gráfico, não precisa executar o restante
    */
-  if ($oParametros->lGrafico == 't') {
+  if ($oParametros->lGrafico == 't' && $lExisteCalculo === true) {
     mostrarGrafico($aDadosGrafico, $oParametros->sTipoGrafico);
     exit;
   }
@@ -510,7 +517,7 @@ try {
 
       foreach ( $aEventosFinanceiros as $oEventoFinanceiro ) {
 
-        switch ( $oEventoFinanceiro->getNatureza() ) {
+        switch ( $oEventoFinanceiro->provento_desconto ) {
 
           default:
             continue;
@@ -521,11 +528,11 @@ try {
             switch ( $oRubrica->getCodigo() ) {
 
               case 'R981'://Valor Base do IRRF
-                $oTotais->nValorBaseIRRF += $oEventoFinanceiro->getValor();
+                $oTotais->nValorBaseIRRF += $oEventoFinanceiro->valor_rubrica;
               break;
 
               case 'R991'://Valor Base do FGTS
-                $oTotais->nValorBaseFGTS += $oEventoFinanceiro->getValor();
+                $oTotais->nValorBaseFGTS += $oEventoFinanceiro->valor_rubrica;
               break;
 
               /**
@@ -535,7 +542,7 @@ try {
                */
               case 'R992' :
 
-                $oTotais->nTotalBasePrevidencia += $oEventoFinanceiro->getValor();
+                $oTotais->nTotalBasePrevidencia += $oEventoFinanceiro->valor_rubrica;
 
                 /**
                  * Valida a Tabela de Previdencia do Servidor na Competencia.
@@ -543,22 +550,22 @@ try {
                  * OBS.: A lógica dos valores abaixos são a mesma da rotina de geração de empenhos. Segue a lógica:
                  *       Multiplica cada valor do evento fincanceiro pelo percentual da base respectivo e após arredonda o valor.
                  */
-                switch ( $oEventoFinanceiro->getServidor()->getTabelaPrevidencia() ) {
+                switch ( $oEventoFinanceiro->tabela_previdencia ) {
 
                   case '1' :
-                    $oTotais->nValorBasePrevidencia1 += round(($oEventoFinanceiro->getValor() * $oDadosPatronais->aBasePrevidencia1->nValor / 100), 2);
+                    $oTotais->nValorBasePrevidencia1 += round(($oEventoFinanceiro->valor_rubrica * $oDadosPatronais->aBasePrevidencia1->nValor / 100), 2);
                   break;
 
                   case '2' :
-                    $oTotais->nValorBasePrevidencia2 += round(($oEventoFinanceiro->getValor() * $oDadosPatronais->aBasePrevidencia2->nValor / 100), 2);
+                    $oTotais->nValorBasePrevidencia2 += round(($oEventoFinanceiro->valor_rubrica * $oDadosPatronais->aBasePrevidencia2->nValor / 100), 2);
                   break;
 
                   case '3' :
-                    $oTotais->nValorBasePrevidencia3 += round(($oEventoFinanceiro->getValor() * $oDadosPatronais->aBasePrevidencia3->nValor / 100), 2);
+                    $oTotais->nValorBasePrevidencia3 += round(($oEventoFinanceiro->valor_rubrica * $oDadosPatronais->aBasePrevidencia3->nValor / 100), 2);
                   break;
 
                   case '4' :
-                    $oTotais->nValorBasePrevidencia4 += round(($oEventoFinanceiro->getValor() * $oDadosPatronais->aBasePrevidencia4->nValor / 100), 2);
+                    $oTotais->nValorBasePrevidencia4 += round(($oEventoFinanceiro->valor_rubrica * $oDadosPatronais->aBasePrevidencia4->nValor / 100), 2);
                   break;
                 }
 
@@ -574,11 +581,11 @@ try {
               continue;
             }
 
-            $oTotalEventosRubricas->nValorProventos      += $oEventoFinanceiro->getValor();
-            $oTotalEventosRubricas->nQuantidadeProventos += $oEventoFinanceiro->getQuantidade();
+            $oTotalEventosRubricas->nValorProventos      += $oEventoFinanceiro->valor_rubrica;
+            $oTotalEventosRubricas->nQuantidadeProventos += $oEventoFinanceiro->quantidade_rubrica;
 
-            $oTotais->nValorProventos                    += $oEventoFinanceiro->getValor();
-            $oTotais->nValorLiquido                      += $oEventoFinanceiro->getValor();
+            $oTotais->nValorProventos                    += $oEventoFinanceiro->valor_rubrica;
+            $oTotais->nValorLiquido                      += $oEventoFinanceiro->valor_rubrica;
 
             /**
              * Valida o tipo de Empenho da Rubrica
@@ -588,23 +595,23 @@ try {
             switch ( $oRubrica->getTipoEmpenho() ) {
 
               case 'e': //empenhos[
-                $oTotais->nValorEmpenhos   += $oEventoFinanceiro->getValor();
+                $oTotais->nValorEmpenhos   += $oEventoFinanceiro->valor_rubrica;
               break;
 
               case 'r': //retencao
-                $oTotais->nValorRetencao   -= $oEventoFinanceiro->getValor();
+                $oTotais->nValorRetencao   -= $oEventoFinanceiro->valor_rubrica;
               break;
 
               case 'd': //deducao
-                $oTotais->nValorDeducao    += $oEventoFinanceiro->getValor();
+                $oTotais->nValorDeducao    += $oEventoFinanceiro->valor_rubrica;
               break;
 
               case 'p': //P.Extra
-                $oTotais->nValorPontoExtra += $oEventoFinanceiro->getValor();
+                $oTotais->nValorPontoExtra += $oEventoFinanceiro->valor_rubrica;
               break;
 
               case ''://Diferenca
-                $oTotais->nValorDiferenca  += $oEventoFinanceiro->getValor();
+                $oTotais->nValorDiferenca  += $oEventoFinanceiro->valor_rubrica;
               break;
             }
 
@@ -616,32 +623,32 @@ try {
               continue;
             }
 
-            $oTotalEventosRubricas->nValorDescontos      += $oEventoFinanceiro->getValor();
-            $oTotalEventosRubricas->nQuantidadeDescontos += $oEventoFinanceiro->getQuantidade();
+            $oTotalEventosRubricas->nValorDescontos      += $oEventoFinanceiro->valor_rubrica;
+            $oTotalEventosRubricas->nQuantidadeDescontos += $oEventoFinanceiro->quantidade_rubrica;
 
-            $oTotais->nValorDescontos                    += $oEventoFinanceiro->getValor();
-            $oTotais->nValorLiquido                      -= $oEventoFinanceiro->getValor();
+            $oTotais->nValorDescontos                    += $oEventoFinanceiro->valor_rubrica;
+            $oTotais->nValorLiquido                      -= $oEventoFinanceiro->valor_rubrica;
 
             switch ( $oRubrica->getTipoEmpenho() ) {
 
               case 'e': //empenhos[
-                $oTotais->nValorEmpenhos   -= $oEventoFinanceiro->getValor();
+                $oTotais->nValorEmpenhos   -= $oEventoFinanceiro->valor_rubrica;
               break;
 
               case 'r': //retencao
-                $oTotais->nValorRetencao   += $oEventoFinanceiro->getValor();
+                $oTotais->nValorRetencao   += $oEventoFinanceiro->valor_rubrica;
               break;
 
               case 'd': //deducao
-                $oTotais->nValorDeducao    -= $oEventoFinanceiro->getValor();
+                $oTotais->nValorDeducao    -= $oEventoFinanceiro->valor_rubrica;
               break;
 
               case 'p': //P.Extra
-                $oTotais->nValorPontoExtra -= $oEventoFinanceiro->getValor();
+                $oTotais->nValorPontoExtra -= $oEventoFinanceiro->valor_rubrica;
               break;
 
               case ''://Diferenca
-                $oTotais->nValorDiferenca  -= $oEventoFinanceiro->getValor();
+                $oTotais->nValorDiferenca  -= $oEventoFinanceiro->valor_rubrica;
               break;
             }
 
@@ -896,4 +903,66 @@ function mostrarGrafico($aDados, $sTipoGrafico) {
   $oPdf->addpage('L');
   $oPdf->Image(PHPlotReport::IMAGE,10 , 40, 278 , 150, strtoupper(PHPlotReport::IMAGE_TYPE));
   $oPdf->Output();
+}
+
+/**
+ * Retorna sql da movimentaçao financeira do servidor
+ * @param string $sTabela
+ * @param string $sSigla
+ * @param Object $oDadosPesquisados
+ * @param integer $iSemestre
+ * @return string
+ */
+function getSqlMovimentacaoFinanceira($sTabela, $sSigla, $oDadosPesquisados, $iSemestre = null) {
+
+  $sSql = "SELECT {$sSigla}_rubric AS codigo_rubrica,
+                   {$sSigla}_valor AS valor_rubrica,
+                   {$sSigla}_pd AS provento_desconto,
+                   {$sSigla}_quant AS quantidade_rubrica,
+                   rh27_descr AS descricao_rubrica,
+                   rh23_codele AS tipo_empenho
+            FROM {$sTabela}
+            JOIN rhrubricas ON ({$sTabela}.{$sSigla}_rubric,{$sTabela}.{$sSigla}_instit) = (rhrubricas.rh27_rubric,rhrubricas.rh27_instit)
+            LEFT JOIN rhrubelemento ON (rhrubricas.rh27_rubric,rhrubricas.rh27_instit) = (rhrubelemento.rh23_rubric,rhrubelemento.rh23_instit)
+            WHERE {$sSigla}_regist = {$oDadosPesquisados->rh01_regist}
+                AND {$sSigla}_anousu = {$oDadosPesquisados->rh02_anousu}
+                AND {$sSigla}_mesusu = {$oDadosPesquisados->rh02_mesusu}
+                AND {$sSigla}_instit = ".db_getsession("DB_instit");
+
+  if (!empty($iSemestre)) {
+    $sSql .= " AND {$sSigla}_semest  = {$iSemestre}";
+  }
+  return $sSql;
+}
+
+/**
+ * Retorna sql da movimentaçao financeira do servidor com base em rhhistoricocalculo
+ * @param Object $oDadosPesquisados
+ * @param integer $iTipoFolha
+ * @param integer $iSemestre
+ * @return string
+ */
+function getSqlMovimentacaoFinanceiraHistorico($oDadosPesquisados, $iTipoFolha, $iSemestre = null) {
+    
+  $oDaoHistorico = db_utils::getDao("rhhistoricocalculo");
+
+  $aCampo[] = 'rh143_rubrica    AS rubrica';
+  $aCampo[] = 'rh143_valor      AS valor';
+  $aCampo[] = 'rh143_tipoevento AS tipo';
+  $aCampo[] = 'rh143_quantidade AS quantidade';
+
+  $aWhere[] = "rh143_regist    = {$oDadosPesquisados->rh01_regist}";
+  $aWhere[] = "rh141_anousu    = {$oDadosPesquisados->rh02_anousu}";
+  $aWhere[] = "rh141_mesusu    = {$oDadosPesquisados->rh02_mesusu}";
+  $aWhere[] = "rh141_instit    = ".db_getsession("DB_instit");;
+  $aWhere[] = "rh141_tipofolha = {$iTipoFolha}";
+
+  if ($iSemestre) {
+    $aWhere[] = "rh141_codigo  = {$iSemestre}";
+  }
+
+  $sWhere = implode(' AND ', $aWhere);
+  $sCampo = implode(', ', $aCampo);
+
+  return $oDaoHistorico->sql_query(null, $sCampo, null, $sWhere);
 }
