@@ -59,13 +59,14 @@ contrato = function () {
         } else {
             sTitulo = "Licitações";
         }
-        var iLarguraJanela = document.body.getWidth();
-        var iAlturaJanela  = document.body.clientHeight / 1.5;
+        var iLarguraJanela = 1200;
+        var iAlturaJanela  = document.body.clientHeight;
 
         oJanela       = new windowAux('wndLicitacoesVencidas', sTitulo,
             iLarguraJanela,
             iAlturaJanela);
-        var sContent  = '  <fieldset style="width: 97%"><legend><b>'+sTitulo+'</b></legend>';
+
+        let sContent     = '  <fieldset style="width: 100%"><legend><b>'+sTitulo+'</b></legend>';
         sContent     += '    <div id="cntDados"></div>' ;
         sContent     += '  </fieldset>';
         sContent     += '  <center> ';
@@ -125,7 +126,7 @@ contrato = function () {
         oGridDados.show($('cntDados'));
 
 
-        oJanela.show(1,0);
+        oJanela.show(1,70);
         js_divCarregando("Aguarde, carregando itens...", "msgBox");
         me.preencheDadosItens(oRetorno);
     };
@@ -158,6 +159,9 @@ contrato = function () {
 
             oGridDados.renderRows();
             oGridDados.setStatus("");
+
+            me.setPropertiesCss();
+
         } else {
 
             oGridDados.setStatus("Não foram Encontrados registros");
@@ -165,6 +169,10 @@ contrato = function () {
     };
 
 
+    this.setPropertiesCss = () => {
+        document.getElementById('gridDadosbody').style.width = '1180px';
+        document.getElementById('tablegridDadosheader').style.width = '1180px';
+    }
 
     this.confirmaSelecao = function() {
 
