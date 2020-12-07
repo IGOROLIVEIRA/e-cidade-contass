@@ -218,6 +218,10 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
               $sWhere .= " AND ac26_acordoposicaotipo in (2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14) ";
           }
 
+          if(!empty($apostilamento)){
+              $sWhere .= " AND ac26_acordoposicaotipo NOT IN (2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14) ";
+          }
+
         }
 
         if (!isset($pesquisa_chave)) {
@@ -263,14 +267,14 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial)!="")) {
 
             $sql = $clacordo->sql_query_acordoitemexecutado(null, $campos,"ac16_sequencial desc",
-              "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}");
+              "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}", $apostilamento);
 
           } else if (isset($ac16_acordogrupo) && (trim($ac16_acordogrupo)!="")) {
 
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc",
-              "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}");
+              "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}", $apostilamento);
           } else {
-            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} " );
+            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} ", $apostilamento);
           }
 
           $repassa = array();
@@ -278,7 +282,6 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           if (isset($chave_ac16_sequencial)) {
             $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
           }
-
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
 
         } else {
@@ -292,7 +295,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
               "*",
               null,
               "ac16_sequencial = {$pesquisa_chave}
-              and {$sWhere}");
+              and {$sWhere}", $apostilamento);
 
 
             $result = $clacordo->sql_record($sSqlBuscaAcordo);
