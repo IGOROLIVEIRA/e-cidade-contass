@@ -1598,7 +1598,7 @@ if(chave3 === 'f'){
         oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
 
         oTxtQtdContratada = new DBTextField('QtdContratada' + oRow.codigo, 'oTxtQtdContratada', null, 10);
-        oTxtQtdContratada.addEvent("onBlur", "js_ValidaCamposText(this,1)");
+        oTxtQtdContratada.addEvent("onBlur", "js_ValidaCampos(this, 4)");
 
         aLinha[0] = oRow.codigo;
         aLinha[1] = iTotalLinhas;
