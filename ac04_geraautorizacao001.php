@@ -819,7 +819,11 @@ if($x->consultarDataDoSistema == true){
 
 
             lDesativaLinha = false;
-            if (nQtdeAut == 0 || nValorAut == '0,00') {
+            if (nQtdeAut <= 0 ) {
+                lDesativaLinha = true;
+            }
+
+            if (Number(nValorAut) <= 0){
                 lDesativaLinha = true;
             }
 
@@ -1491,7 +1495,6 @@ if($x->consultarDataDoSistema == true){
 
     function js_buscarInformacoesAutorizacao() {
 
-        js_divCarregando('Aguarde, pesquisando dados do acordo', 'msgbox');
         var oParam           = new Object();
         oParam.exec          = 'getDadosAcordo';
         oParam.iCodigoAcordo = oTxtCodigoAcordo.getValue();
@@ -1505,7 +1508,14 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_retornoBuscarInformacoesAutorizacao(oAjax) {
-        js_removeObj('msgbox');
+
+        var aItens = oGridItens.getSelection("object");
+        if (aItens.length == 0) {
+
+            alert('Nenhum item Selecionado');
+            return false;
+
+        }
         var oRetorno = JSON.parse(oAjax.responseText);
         var sMensagem = oRetorno.message;
 
