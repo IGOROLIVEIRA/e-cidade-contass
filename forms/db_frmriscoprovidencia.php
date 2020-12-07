@@ -55,8 +55,8 @@ if(isset($db_opcaoal)){
     </td>
     <td> 
 <?
-db_textarea('si54_dscprovidencia',7,40,$Isi54_dscprovidencia,true,'text',$db_opcao,"onkeyup='limitaTextarea(this.value);'");
-?></br>Caracteres restantes: <span id="contador">100</span>
+db_textarea("si54_dscprovidencia",7,40, "", true, "text", $db_opcao, "", "", "",500);
+?>
     </td>
   </tr>
   <tr>
@@ -65,7 +65,7 @@ db_textarea('si54_dscprovidencia',7,40,$Isi54_dscprovidencia,true,'text',$db_opc
     </td>
     <td> 
 <?
-db_input('si54_valorassociado',8,$Isi54_valorassociado,true,'text',$db_opcao,"")
+db_input('si54_valorassociado',10,$Isi54_valorassociado,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
@@ -95,20 +95,6 @@ db_input('si54_valorassociado',8,$Isi54_valorassociado,true,'text',$db_opcao,"")
   </center>
 </form>
 <script>
-function limitaTextarea(valor) {
-	quantidade = 100;
-	total = valor.length;
-
-	if(total <= quantidade) {
-		resto = quantidade- total;
-		document.getElementById('contador').innerHTML = resto;
-	} else {
-		document.getElementById('si54_dscprovidencia').value = valor.substr(0, quantidade);
-		alert("Limite alcançado!");
-	}
-}
-
-
 
 function js_cancelar(){
   var opcao = document.createElement("input");

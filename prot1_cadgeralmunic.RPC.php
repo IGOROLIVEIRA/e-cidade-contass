@@ -37,6 +37,7 @@ require_once("model/endereco.model.php");
 require_once("model/configuracao/endereco/Estado.model.php");
 require_once("model/configuracao/endereco/Municipio.model.php");
 require_once("classes/db_condataconf_classe.php");
+require_once("classes/db_historicocgm_classe.php");
 
 $oJson    = new services_json();
 $oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
@@ -330,7 +331,8 @@ switch ($oParam->exec) {
     case 'incluirAlterar' :
 
         $sqlErro = false;
-        $clcondataconf = new cl_condataconf;
+        $clcondataconf        = new cl_condataconf;
+        $clhistoricocgm      = new cl_historicocgm;
         $oRetorno->action     = $oParam->action;
 
         db_inicio_transacao();
@@ -458,6 +460,27 @@ switch ($oParam->exec) {
                     $sqlErro  = true;
                 }
             }
+            if ($oParam->action == "alterar") {
+                //HISTORICOCGM OC12852
+                $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null, "z09_sequencial", "", "z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
+                if (pg_num_rows($result) > 0) {
+                    db_fieldsmemory($result, 0);
+                    $clhistoricocgm->excluir($z09_sequencial);
+                }
+            }
+
+            $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));;
+            $clhistoricocgm->z09_motivo        = utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs));
+            $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
+            $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
+            $clhistoricocgm->z09_datacadastro  = $date;
+            if($oParam->action == 'incluir'){
+                $clhistoricocgm->z09_tipo          = 1;
+            }else{
+                $clhistoricocgm->z09_tipo          = 2;
+            }
+            $clhistoricocgm->incluir();
+            //fim OC12852
 
             if (!$sqlErro) {
                 try {
@@ -625,6 +648,28 @@ switch ($oParam->exec) {
                     $sqlErro  = true;
                 }
             }
+
+            if ($oParam->action == 'alterar'){
+                //HISTORICOCGM OC12852
+                $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
+                if(pg_num_rows($result) > 0 ) {
+                    db_fieldsmemory($result, 0);
+                    $clhistoricocgm->excluir($z09_sequencial);
+                }
+            }
+            $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));;
+
+            $clhistoricocgm->z09_motivo        = utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs));
+            $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
+            $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
+            $clhistoricocgm->z09_datacadastro  = $date;
+            if($oParam->action == 'incluir'){
+                $clhistoricocgm->z09_tipo          = 1;
+            }else{
+                $clhistoricocgm->z09_tipo          = 2;
+            }
+            $clhistoricocgm->incluir();
+            //fim OC12852
 
             if (!$sqlErro) {
                 try {
@@ -1013,7 +1058,7 @@ switch ($oParam->exec) {
 			$oCgm  = db_utils::getDao('cgm');
 			$oHistoricoCgm  = db_utils::getDao('historicocgm');
 
-			$sSqlHistorico  = $oHistoricoCgm->sql_query_file('', 'z09_datacadastro','z09_sequencial DESC limit 1','z09_numcgm = '.$oParam->numcgm);
+			$sSqlHistorico  = $oHistoricoCgm->sql_query_file('', 'z09_datacadastro','','z09_numcgm = '.$oParam->numcgm.'and z09_tipo = 1' );
 			$rsSqlHistorico = $oHistoricoCgm->sql_record($sSqlHistorico);
 			$data_cadastro = db_utils::fieldsMemory($rsSqlHistorico, 0)->z09_datacadastro;
 

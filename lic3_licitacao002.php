@@ -327,6 +327,9 @@ if (!empty($oProcessoProtocolo)) {
   $oVerticalTab->add('dadosComissao', 'Comissão de Licitação',
       "com3_pesquisacomissao.php?{$sGetUrl}");
 
+  $oVerticalTab->add('dadosParecer', 'Parecer',
+	"com3_pesquisaparecer.php?{$sGetUrl}");
+
   $oVerticalTab->add('dadosComissao', 'Fornecedores Habilitados',
       "lic3_fornhabilitados.php?{$sGetUrl}");
 

@@ -77,62 +77,14 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
             }
         }
 
-//    if ($this->sDataFinal['5'] . $this->sDataFinal['6'] != 01) {
-
-        $sSql = "select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
-                 z01_nome,
-                 z01_ultalt,
-                 z01_obs,
-                 z01_cadast
-            from cgm
-           where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-           and (z01_cgccpf != '' and z01_cgccpf is not null)
-           and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
-           or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') ) 
-           AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102020
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf)
- AND z01_cgccpf NOT IN
-    (SELECT si12_nrodocumento
-     FROM pessoa102019
-     inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-     WHERE (z01_ultalt IS NULL))
-AND z01_cgccpf NOT IN
-    (SELECT si12_nrodocumento
-     FROM pessoa102018
-     inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-     WHERE (z01_ultalt IS NULL) ) 
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102017
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102016
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102015
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102014
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )";
-
-//    } else {
-//      $sSql = "select z01_cgccpf,
-//           z01_nome,
-//           z01_ultalt,
-//           z01_obs,
-//           z01_cadast
-//          from cgm where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-//          and (z01_cgccpf != '' and z01_cgccpf is not null)";
-//    }
+        $sSql = " SELECT *
+                    FROM historicocgm
+                    INNER JOIN cgm ON z01_numcgm = z09_numcgm
+                    WHERE z09_datacadastro <='{$this->sDataFinal}'
+                        AND z09_datacadastro >= '{$this->sDataInicial}'
+                        AND z09_tipo is not null
+                        order by z09_tipo;
+                ";
 
         $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
         $aPessoas = array();
@@ -159,58 +111,27 @@ AND z01_cgccpf NOT IN
             $clpessoa = new cl_pessoa102020();
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
-
-            if (in_array($oDados->z01_cgccpf, $aCpfPessoas)) {
-                continue;
-            }
-
-
-            $sSqlVerifica = "select si12_nomerazaosocial from pessoa102014 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
-                                 UNION
-                                 select si12_nomerazaosocial from pessoa102015 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
-                                 UNION
-                                 select si12_nomerazaosocial from pessoa102016 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
-                                 UNION
-                                 select si12_nomerazaosocial from pessoa102017 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
-                                 UNION
-                                 select si12_nomerazaosocial from pessoa102018 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
-                                 UNION
-                                 select si12_nomerazaosocial from pessoa102019 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
-                                 UNION
-                                 select si12_nomerazaosocial from pessoa102020 where si12_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND si12_nrodocumento = '{$oDados->z01_cgccpf}'";
-            $rsDadosVerifica = db_query($sSqlVerifica);
-            if (pg_num_rows($rsDadosVerifica) == 0) {
-                $sTipoCadastro = 1;
-                $sJustificativaalteracao = ' ';
-            } else {
-                $sTipoCadastro = 2;
-                $sJustificativaalteracao = substr($this->removeCaracteres($oDados->z01_obs), 0, 100);
-            }
-            /*else {
-              continue;
-            }*/
-
             $aHash = $oDados->z01_cgccpf;
 
             if (!isset($aPessoas[$aHash])) {
+                $sJustificativaalteracao = substr($this->removeCaracteres($oDados->z01_obs), 0, 100);
 
                 $clpessoa->si12_tiporegistro = 10;
                 $clpessoa->si12_tipodocumento = strlen($oDados->z01_cgccpf) <= 11 ? 1 : 2;
                 $clpessoa->si12_nrodocumento = $oDados->z01_cgccpf;
                 $clpessoa->si12_nomerazaosocial = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oDados->z01_nome), 0, 200)));
-                $clpessoa->si12_tipocadastro = $sTipoCadastro;
-                $clpessoa->si12_justificativaalteracao = strlen($sJustificativaalteracao) < 4 && $sTipoCadastro == 2 ? 'Cadastro alterado' : $this->removeCaracteres($sJustificativaalteracao);
+                $clpessoa->si12_tipocadastro = $oDados->z09_tipo;
+                if ($oDados->z09_tipo == 2) {
+                    $clpessoa->si12_justificativaalteracao = $oDados->z01_obs;
+                } else {
+                    $clpessoa->si12_justificativaalteracao = '';
+                }
                 $clpessoa->si12_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clpessoa->si12_instit = db_getsession("DB_instit");
 
                 $clpessoa->incluir(null);
-                if ($clpessoa->erro_status == 0) {
-                    throw new Exception($clpessoa->erro_msg);
-                }
                 $aPessoas[$aHash] = $clpessoa;
             }
-
-
         }
         db_fim_transacao();
 

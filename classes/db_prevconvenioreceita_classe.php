@@ -201,10 +201,10 @@ class cl_prevconvenioreceita {
             $sql .= " c229_convenio = $c229_convenio";
         }
         if($c229_fonte!=null){
-            $sql .= " and c229_fonte = $this->c229_fonte";
+            $sql .= " and c229_fonte = $c229_fonte";
         }
         if($c229_anousu!=null){
-            $sql .= " and c229_anousu = $this->c229_anousu";
+            $sql .= " and c229_anousu = $c229_anousu";
         }
 
         $result = db_query($sql);

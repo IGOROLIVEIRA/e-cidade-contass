@@ -483,9 +483,9 @@ if($x->consultarDataDoSistema == true){
         oGridItens.setCheckbox(0);
         //oGridItens.allowSelectColumns(true);
         oGridItens.setCellWidth(new Array('10%', '40%',  "15%", "15%","15%", "15%", "15%","15%"));
-        oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Val. Unitário",
+        oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Vlr. Unit.",
             "Valor Total", "Qtde Autorizar", "Valor Autorizar", "Dotacoes", "iSeq"));
-        oGridItens.aHeaders[4].lDisplayed = false;
+        // oGridItens.aHeaders[4].lDisplayed = false;
         oGridItens.aHeaders[9].lDisplayed = false;
         //oGridItens.aHeaders[8].lDisplayed = false;
         oGridItens.setHeight(160);
@@ -752,7 +752,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[2] = js_formatar(oItem.quantidade, 'f',iCasasDecimais);
 
             // Valor unitário
-            aLinha[3] = oItem.valorunitario;
+            aLinha[3] = js_formatar(oItem.valorunitario.replace(',', '.'), 'f', 4);
 
             // Valor total
             //aLinha[4] = js_formatar(oItem.valortotal, 'f',4);
@@ -874,7 +874,6 @@ if($x->consultarDataDoSistema == true){
      * É colocado  a mascara do valor e bloqueado para Edição
      */
     function js_bloqueiaDigitacao(object, lFormata) {
-
         object.readOnly         = true;
         object.style.border     ='1px';
         object.style.fontWeight = "normal";
@@ -939,7 +938,6 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_verificaValorTotal(nValueAut, iSeq) {
-
         var aLinha = oGridItens.aRows[iSeq];
 
         var value = js_arrangeDotAndComma($("valoritem"+iSeq).value);
@@ -983,8 +981,7 @@ if($x->consultarDataDoSistema == true){
             aLinha.aCells[7].content.setValue(aLinha.aCells[5].getValue());
         } else {
 
-            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue());
-
+            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue().replace('.', '').replace(',', '.'));
             aLinha.aCells[7].content.setValue(js_formatar(nValorTotal.toFixed(2), "f",2));
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
             $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f",2);
@@ -1059,6 +1056,7 @@ if($x->consultarDataDoSistema == true){
                 }
             }
 
+            // debug
             aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
                 var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",iCasasDecimais));
@@ -1088,7 +1086,7 @@ if($x->consultarDataDoSistema == true){
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
             // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
-            nValorDotacao = js_formatar(oDotacao.valor.toFixed(2), "f",2);
+            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f",2);
 
 
             aLinha    = new Array();
@@ -1102,7 +1100,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[2].addStyle("text-align","right");
             aLinha[2].addStyle("height","100%");
             aLinha[2].addStyle("width","100px");
-            aLinha[2].addStyle("border","1px solid transparent;");
+            aLinha[2].addStyle("border","1px solid #000;");
             aLinha[2].addEvent("onBlur","quantdot"+iDot+".sValue=this.value;");
             if(tipo != 2) {
                 aLinha[2].addEvent("onBlur", "js_ajustaQuantDot(this," + iDot + "," + iLinha + ");");
@@ -1117,7 +1115,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[3].addStyle("text-align","right");
             aLinha[3].addStyle("height","100%");
             aLinha[3].addStyle("width","100px");
-            aLinha[3].addStyle("border","1px solid transparent;");
+            aLinha[3].addStyle("border","1px solid #000;");
             aLinha[3].addEvent("onBlur","valordot"+iDot+".sValue=this.value;");
             aLinha[3].addEvent("onBlur","js_ajustaValorDot(this,"+iDot+","+tipo+");");
             aLinha[3].addEvent("onBlur","js_bloqueiaDigitacao(this, true);");
@@ -1151,7 +1149,7 @@ if($x->consultarDataDoSistema == true){
         var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
         var nValorTotal     = nValor;
         var nQuantAutorizar = Number(oDadosItem.aCells[6].getValue());
-        var nValorUnit = Number(oDadosItem.aCells[4].getValue());
+        var nValorUnit = Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',','.'));
 
         aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
@@ -1215,7 +1213,7 @@ if($x->consultarDataDoSistema == true){
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())).toFixed(2));
+            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',','.'))).toFixed(2));
             $("valordot"+iDot).value = js_formatar(Number(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
         }
     }
@@ -1348,8 +1346,8 @@ if($x->consultarDataDoSistema == true){
                     aLinha[0] = oItem.codigo;
                     aLinha[1] = sImg+oItem.descricao.urlDecode();
                     aLinha[2] = js_formatar(oItem.quantidade, "f",iCasasDecimais);
-                    aLinha[3] = js_formatar(oItem.valorunitario, "f",iCasasDecimais);
-                    aLinha[4] = js_formatar((oItem.quantidade * oItem.valorunitario).toFixed(2),"f", 2);
+                    aLinha[3] = js_formatar(oItem.valorunitario, "f", 4);
+                    aLinha[4] = js_formatar(oItem.valor, "f",iCasasDecimais);
                     oGridAutorizacoes.addRow(aLinha);
                     iLinha++;
                 });
@@ -1458,7 +1456,7 @@ if($x->consultarDataDoSistema == true){
                 var nValorDotacao = 0;
 
                 oDadosItem.dotacoes.each(function(oDotacao, id) {
-                    nValorDotacao += oDotacao.valor;
+                    nValorDotacao += oDotacao.valorexecutar;
                 });
 
                 oItem.valor   =  js_formatar(oItem.valor , 'f',iCasasDecimais);

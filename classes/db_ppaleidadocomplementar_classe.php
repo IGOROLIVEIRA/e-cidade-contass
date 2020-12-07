@@ -58,6 +58,7 @@ class cl_ppaleidadocomplementar {
    var $o142_percsuplementacao = 0; 
    var $o142_percaro = 0; 
    var $o142_percopercredito = 0; 
+   var $o142_orcmodalidadeaplic = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  o142_sequencial = int8 = Codigo Sequencial 
@@ -78,6 +79,7 @@ class cl_ppaleidadocomplementar {
                  o142_percsuplementacao = numeric(10) = Percentual de Suplementação 
                  o142_percaro = numeric(10) = Percentual de ARO 
                  o142_percopercredito = numeric(10) = Operação de Crédito Interna 
+                 o142_orcmodalidadeaplic = bool = Orçamento por Modalidade de Aplicação
                  ";
    //funcao construtor da classe 
    function cl_ppaleidadocomplementar() { 
@@ -171,6 +173,7 @@ class cl_ppaleidadocomplementar {
        $this->o142_percsuplementacao = ($this->o142_percsuplementacao == ""?@$GLOBALS["HTTP_POST_VARS"]["o142_percsuplementacao"]:$this->o142_percsuplementacao);
        $this->o142_percaro = ($this->o142_percaro == ""?@$GLOBALS["HTTP_POST_VARS"]["o142_percaro"]:$this->o142_percaro);
        $this->o142_percopercredito = ($this->o142_percopercredito == ""?@$GLOBALS["HTTP_POST_VARS"]["o142_percopercredito"]:$this->o142_percopercredito);
+       $this->o142_orcmodalidadeaplic = ($this->o142_orcmodalidadeaplic == ""?@$GLOBALS["HTTP_POST_VARS"]["o142_orcmodalidadeaplic"]:$this->o142_orcmodalidadeaplic);
      }else{
        $this->o142_sequencial = ($this->o142_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["o142_sequencial"]:$this->o142_sequencial);
      }
@@ -249,6 +252,14 @@ class cl_ppaleidadocomplementar {
        $this->erro_status = "0";
        return false;
      }
+     if(($this->o142_orcmodalidadeaplic == null) || ($this->o142_orcmodalidadeaplic == "") ){ 
+      $this->erro_sql = " Campo Orçamento por Modalidade de Aplicação nao declarado.";
+      $this->erro_banco = "Chave Primaria zerada.";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }     
      $sql = "insert into ppaleidadocomplementar(
                                        o142_sequencial 
                                       ,o142_ppalei 
@@ -268,6 +279,7 @@ class cl_ppaleidadocomplementar {
                                       ,o142_percsuplementacao 
                                       ,o142_percaro 
                                       ,o142_percopercredito 
+                                      ,o142_orcmodalidadeaplic
                        )
                 values (
                                 $this->o142_sequencial 
@@ -288,6 +300,7 @@ class cl_ppaleidadocomplementar {
                                ,$this->o142_percsuplementacao 
                                ,$this->o142_percaro 
                                ,$this->o142_percopercredito 
+                               ,'$this->o142_orcmodalidadeaplic'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -481,6 +494,19 @@ class cl_ppaleidadocomplementar {
        $sql  .= $virgula." o142_percopercredito = $this->o142_percopercredito ";
        $virgula = ",";
      }
+     if(trim($this->o142_orcmodalidadeaplic)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o142_orcmodalidadeaplic"])){ 
+      $sql  .= $virgula." o142_orcmodalidadeaplic = '$this->o142_orcmodalidadeaplic' ";
+      $virgula = ",";
+      if(trim($this->o142_orcmodalidadeaplic) == null ){ 
+        $this->erro_sql = " Campo Orçamento por Modalidade de Aplicação nao Informado.";
+        $this->erro_campo = "o142_orcmodalidadeaplic";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($o142_sequencial!=null){
        $sql .= " o142_sequencial = $this->o142_sequencial";

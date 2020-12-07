@@ -68,10 +68,18 @@ if (isset($oPost->incluir)) {
         }
 
 	    if(!$error){
+            $result = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = $oPost->z09_numcgm and z09_tipo = 1"));
+            if(pg_num_rows($result) > 0 ) {
+               db_fieldsmemory($result, 0);
+               $cl_historicocgm->excluir($z09_sequencial);
+            }
+
+            //incluir novo registro
             $cl_historicocgm->z09_motivo        = $oPost->z09_motivo;
             $cl_historicocgm->z09_usuario       = db_getsession('DB_id_usuario');
             $cl_historicocgm->z09_numcgm        = $oPost->z09_numcgm;
             $cl_historicocgm->z09_datacadastro  = $oPost->z09_datacadastro;
+            $cl_historicocgm->z09_tipo          = 1;
             $cl_historicocgm->incluir();
 
             if($cl_historicocgm->erro_status == '0'){

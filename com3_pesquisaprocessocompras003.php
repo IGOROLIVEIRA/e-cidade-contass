@@ -147,6 +147,9 @@ switch ($oProcessoCompras->getSituacao()) {
     
     $oTabDetalhes->add("processoContratos", "Registro de Preço",
         "com3_pesquisaregistropreco.php?iProcesso={$oGet->pc80_codproc}");
+
+    $oTabDetalhes->add("processoAdesao", "Adesão de Registro de Preço",
+        "com3_pesquisarAdesaoregpreco.php?iProcesso={$oGet->pc80_codproc}");
     
     $oTabDetalhes->show();
     ?>

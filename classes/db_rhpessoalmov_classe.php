@@ -2566,9 +2566,13 @@ class cl_rhpessoalmov {
      * @param integer $anousu
      * @param integer $mesusu
      * @param string $rubrica
-     * @return float $valor
+     * @return string 
      */
     public function sql_valores_servidor($regist, $anousu, $mesusu, $rubrica) {
+        if ($mesusu <= 0) {
+            $mesusu = 12;
+            $anousu = $anousu-1;
+        }
         $tabelas = array("r14" => "gerfsal",
         "r48" => "gerfcom",
         "r20" => "gerfres",
@@ -2579,6 +2583,23 @@ class cl_rhpessoalmov {
             $aSql[] = " SELECT {$key}_valor AS valor FROM {$tabela} WHERE {$key}_anousu = {$anousu} AND {$key}_mesusu = {$mesusu} AND {$key}_regist = {$regist} AND {$key}_rubric = '{$rubrica}'";
         }
         return "SELECT SUM(valor) AS salario FROM (".implode(" UNION ", $aSql).") AS tabelas_salario";
+    }
+
+    /**
+     * Retorna valores de todas as tabelas relacionadas a valores de servidores
+     * @param integer $regist 
+     * @param integer $anousu
+     * @param integer $mesusu
+     * @param string $base
+     * @return string $sql
+     */
+    public function sql_valores_rescisao_baseEsocialSicom($regist, $anousu, $mesusu, $base) {
+        $sql = "SELECT SUM(r20_valor) AS valor FROM rubricasesocial
+        JOIN baserubricasesocial ON rubricasesocial.e990_sequencial = baserubricasesocial.e991_rubricasesocial
+        JOIN gerfres ON e991_rubricas = r20_rubric 
+        WHERE r20_anousu = {$anousu} AND r20_mesusu = {$mesusu} AND r20_regist = {$regist} AND 
+        rubricasesocial.e990_sequencial = '{$base}' ";
+        return $sql;
     }
 
 }
