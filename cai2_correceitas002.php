@@ -728,7 +728,7 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 		$oDadosAgrupados->k12_data = $k12_data;
 		$oDadosAgrupados->k12_numpre = $k12_numpre;
 		$oDadosAgrupados->estrutural = $estrutural;
-		$oDadosAgrupados->fonte = "100";
+		$oDadosAgrupados->fonte = $recurso;
 		$oDadosAgrupados->k02_drecei = $k02_drecei;
 		$oDadosAgrupados->valor = $valor;
 		$oDadosAgrupados->c61_reduz = $c61_reduz;
@@ -766,7 +766,7 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 			$pdf->Cell(15, 4, db_formatar($oValores->k12_data, 'd'), 1, 0, "C", $pre);
 			$pdf->Cell(15, 4, $oValores->k12_numpre, 1, 0, "C", $pre);
 			$pdf->cell(25, 4, $oValores->estrutural, 1, 0, "C", $pre);
-			$pdf->Cell(15, 4, getFonteRecurso($oValores->k02_tipo == 'O' ? $oValores->codrec : $oValores->c61_reduz,db_getsession('DB_anousu'),$oValores->k02_tipo), 1, 0, "C", $pre);
+			$pdf->Cell(15, 4, getFonteRecurso($oValores->k02_tipo == 'O' ? $oValores->codrec : $oValores->c61_reduz,db_getsession('DB_anousu'),$oValores->k02_tipo,$oValores->fonte), 1, 0, "C", $pre);
 			$pdf->cell(80, 4, strtoupper($oValores->k02_drecei), 1, 0, "L", $pre);
 			$pdf->cell(15, 4, $oValores->c61_reduz, 1, 0, "C", $pre);
 			$pdf->cell(69, 4, $oValores->c60_descr, 1, 0, "L", $pre);
@@ -920,15 +920,23 @@ $pdf->Output();
  * @param $sTipo
  * @return mixed|string
  */
-function getFonteRecurso($iConta, $iAno,$sTipo){
+function getFonteRecurso($iConta, $iAno,$sTipo,$iRecurso){
 	switch($sTipo){
 		case "O":
 			$oReceita = ReceitaContabilRepository::getReceitaByCodigo($iConta,$iAno);
-			$oFonteRecurso = new Recurso($oReceita->getTipoRecurso());
+			if($iRecurso == 0) {
+                $oFonteRecurso = new Recurso($oReceita->getTipoRecurso());
+            }else{
+                $oFonteRecurso = new Recurso($iRecurso);
+            }
 			return $oFonteRecurso->getEstrutural();
 			break;
 		case "E":
-			$oFonteRecurso = new Recurso(ContaPlanoPCASPRepository::getContaPorReduzido($iConta,$iAno, InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')))->getRecurso());
+            if($iRecurso == 0) {
+                $oFonteRecurso = new Recurso(ContaPlanoPCASPRepository::getContaPorReduzido($iConta, $iAno, InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')))->getRecurso());
+            }else{
+                $oFonteRecurso = new Recurso($iRecurso);
+            }
 			return $oFonteRecurso->getEstrutural();
 			break;
 	}
