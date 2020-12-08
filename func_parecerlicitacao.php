@@ -35,6 +35,28 @@ $clparecerlicitacao = new cl_parecerlicitacao;
   <tr>
     <td align="center" valign="top">
       <?
+        $sWhere = "";
+	  if($naohomologadas){
+
+		  $oDaoUsers = db_utils::getDao('db_usuarios');
+		  $sqlUsers = $oDaoUsers->sql_query("", "id_usuario", "", "login like '%.contass'");
+		  $aUsers = db_utils::getCollectionByRecord($oDaoUsers->sql_record($sqlUsers));
+
+		  //Inclui o código do Usuário dbseller junto ao array de usuários da contass para o filtro não ser aplicado.
+		  $aUsers[] = 1;
+
+		  $flag = false;
+		  foreach ($aUsers as $user){
+			  if(db_getsession('DB_id_usuario') == $user->id_usuario){
+				  $flag = true;
+			  }
+		  }
+
+		  if(!$flag){
+			  $sWhere .= " l20_licsituacao in (0, 1, 11) AND ";
+		  }
+	  }
+
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_parecerlicitacao.php")==true){
@@ -61,12 +83,15 @@ $clparecerlicitacao = new cl_parecerlicitacao;
                         ";
            }
         }
-         $sql = $clparecerlicitacao->sql_query('',$campos,'', 'codigo = '.db_getsession('DB_instit'));
+
+        $sWhere .= " codigo = ".db_getsession('DB_instit');
+
+        $sql = $clparecerlicitacao->sql_query('',$campos,'', $sWhere);
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clparecerlicitacao->sql_record($clparecerlicitacao->sql_query($pesquisa_chave));
+          $result = $clparecerlicitacao->sql_record($clparecerlicitacao->sql_query($pesquisa_chave,'','', $sWhere));
           if($clparecerlicitacao->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$oid',false);</script>";
