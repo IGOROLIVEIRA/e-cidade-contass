@@ -144,13 +144,6 @@ switch($oParam->exec) {
       $dtsessao = DateTime::createFromFormat('d/m/Y', $date);
       $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $datacgm);
 
-      if ($dtencerramento != false){
-
-          if($z09_datacadastro < $dtencerramento){
-              throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-          }
-      }
-
       if($dtsessao < $z09_datacadastro){
         throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
       }
