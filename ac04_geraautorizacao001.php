@@ -1392,6 +1392,11 @@ if($x->consultarDataDoSistema == true){
             return
 
         }
+        let botao = $('btnSalvarAutorizacoes');
+
+        if(botao != null){
+            botao.disabled = true;
+        }
 
         var aItens = oGridItens.getSelection("object");
         if (aItens.length == 0) {
