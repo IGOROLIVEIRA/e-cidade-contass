@@ -1086,7 +1086,7 @@ if($x->consultarDataDoSistema == true){
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
             // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
-            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f",2);
+            nValorDotacao = js_formatar(oDotacao.valor.toFixed(2), "f",2);
 
 
             aLinha    = new Array();
@@ -1456,7 +1456,7 @@ if($x->consultarDataDoSistema == true){
                 var nValorDotacao = 0;
 
                 oDadosItem.dotacoes.each(function(oDotacao, id) {
-                    nValorDotacao += oDotacao.valorexecutar;
+                    nValorDotacao += oDotacao.valor;
                 });
 
                 oItem.valor   =  js_formatar(oItem.valor , 'f',iCasasDecimais);
