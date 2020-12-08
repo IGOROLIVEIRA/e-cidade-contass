@@ -59,7 +59,7 @@ class SicomArquivoLeiOrcamentaria extends SicomArquivoBase implements iPadArquiv
     $oDadosLOA->nroLOA        = substr($oLOA->o142_numeroloa, 0, 6);
     $oDadosLOA->dataLOA       = str_replace("-", "", implode("-", array_reverse(explode("-", $oLOA->o142_dataloa))));
     $oDadosLOA->dataPubLOA    = str_replace("-", "", implode("-", array_reverse(explode("-", $oLOA->o142_datapubloa))));
-    $oDadosLOA->discriDespLOA = 1;
+    $oDadosLOA->discriDespLOA = $oLOA->o142_orcmodalidadeaplic == "t" ? 2 : 1;
     
     $this->aDados[] = $oDadosLOA;
     
