@@ -6,6 +6,7 @@ require_once('classes/db_veiccentral_classe.php');
 require_once('classes/db_veiccadcentral_classe.php');
 require_once('classes/db_veicresp_classe.php');
 require_once('classes/db_veiculoscomb_classe.php');
+require_once('classes/db_tipoveiculos_classe.php');
 require_once("std/db_stdClass.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -166,6 +167,8 @@ switch ($oParam->exec){
                 $rsultimamedida = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($veiculo));
                 $aUltimamedida = db_utils::fieldsMemory($rsultimamedida,0);
 
+                $dtsession = date("Y-m-d", db_getsession("DB_datausu"));
+
                 //Novo Veiculo
                 $clveiculos->ve01_placa                 = $aVeiculo->ve01_placa;
                 $clveiculos->ve01_veiccadtipo           = $aVeiculo->ve01_veiccadtipo;
@@ -182,7 +185,7 @@ switch ($oParam->exec){
                 $clveiculos->ve01_medidaini             = $aUltimamedida->ultimamedida;
                 $clveiculos->ve01_quantcapacidad        = $aVeiculo->ve01_quantcapacidad;
                 $clveiculos->ve01_veiccadtipocapacidade = $aVeiculo->ve01_veiccadtipocapacidade;
-                $clveiculos->ve01_dtaquis               = db_getsession('DB_datausu');
+                $clveiculos->ve01_dtaquis               = $dtsession;
                 $clveiculos->ve01_veiccadcategcnh       = $aVeiculo->ve01_veiccadcategcnh;
                 $clveiculos->ve01_anofab                = $aVeiculo->ve01_anofab;
                 $clveiculos->ve01_anomod                = $aVeiculo->ve01_anomod;
@@ -200,6 +203,16 @@ switch ($oParam->exec){
                 $clveicresp->ve02_veiculo = $clveiculos->ve01_codigo;
                 $clveicresp->ve02_numcgm  = $aVeiculo->ve02_numcgm;
                 $clveicresp->incluir(null);
+
+                //cria a tipoveiculos
+                $cltipoveiculos = new cl_tipoveiculos();
+                $cltipoveiculos->si04_veiculos      = $clveiculos->ve01_codigo;
+                $cltipoveiculos->si04_tipoveiculo   = $aVeiculo->si04_tipoveiculo;
+                $cltipoveiculos->si04_especificacao = $aVeiculo->si04_especificacao;
+                $cltipoveiculos->si04_situacao      = $aVeiculo->si04_situacao;
+                $cltipoveiculos->si04_descricao     = $aVeiculo->si04_descricao;
+                $cltipoveiculos->si04_numcgm        = $aVeiculo->si04_numcgm;
+                $cltipoveiculos->incluir(null);
 
                 //criando a veiculoscomb
                 $clveiculoscomb = new cl_veiculoscomb();
