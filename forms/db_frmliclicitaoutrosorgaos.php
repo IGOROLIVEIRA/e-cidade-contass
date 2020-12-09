@@ -101,12 +101,16 @@ db_input('lic211_codorgaoresplicit',4,$Ilic211_codorgaoresplicit,true,'text',$db
   </table>
   </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+    <?php if ($db_opcao != 1):?>
+        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+    <?php endif;?>
 </form>
 <script>
+
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_liclicitaoutrosorgaos','func_liclicitaoutrosorgaos.php?funcao_js=parent.js_preenchepesquisa|lic211_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('top.corpo','db_iframe_liclicitaoutrosorgaos','func_liclicitaoutrosorgaos.php?tipodescr=true&funcao_js=parent.js_preenchepesquisa|lic211_sequencial','Pesquisa',true);
 }
+
 function js_preenchepesquisa(chave){
   db_iframe_liclicitaoutrosorgaos.hide();
   <?
