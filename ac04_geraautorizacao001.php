@@ -1268,6 +1268,12 @@ if($x->consultarDataDoSistema == true){
 
     function js_visualizarAutorizacoes(oAjax) {
 
+        let botao = $('btnSalvarAutorizacoes');
+
+        if(botao != null){
+            botao.disabled = true;
+        }
+
         var oRetorno = eval("("+oAjax.responseText+")");
         js_removeObj('msgbox');
 
@@ -1366,6 +1372,11 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_consultarDataDoSistema(lProcessar){
+        let botao = $('btnSalvarAutorizacoes');
+
+        if(botao != null){
+            botao.disabled = true;
+        }
 
         var oParam = new Object();
         oParam.consultarDataDoSistema = true;
