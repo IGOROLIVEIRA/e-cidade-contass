@@ -1171,7 +1171,7 @@ if($x->consultarDataDoSistema == true){
                     nValorDotacao += nValorTotal;
                 }
             }
-            aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorDotacao,iCasasDecimais);
+            aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorDotacao,2);
 
             if (aItensPosicao[iLinha].dotacoes.length == 1) {
                 oDotacao.quantidade = nQuantAutorizar;
@@ -1347,7 +1347,7 @@ if($x->consultarDataDoSistema == true){
                     aLinha[1] = sImg+oItem.descricao.urlDecode();
                     aLinha[2] = js_formatar(oItem.quantidade, "f",iCasasDecimais);
                     aLinha[3] = js_formatar(oItem.valorunitario, "f", 4);
-                    aLinha[4] = js_formatar(oItem.valor, "f",iCasasDecimais);
+                    aLinha[4] = js_formatar((oItem.quantidade * oItem.valorunitario).toFixed(2),"f", 2);
                     oGridAutorizacoes.addRow(aLinha);
                     iLinha++;
                 });
