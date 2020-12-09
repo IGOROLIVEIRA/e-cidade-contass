@@ -337,7 +337,9 @@ if ($numrows_itens==0) {
     $locationh = true;
     echo "<br><br><br><br><br><br><br>";
     if(isset($incluir)){
-		echo "<strong>Autorização de empenho anulada com sucesso!</strong>\n";
+        echo "<script>";
+        echo "alert('Autorização de empenho anulada com sucesso!');";
+		echo "</script>";
     }else{
         echo "<strong>Autorização não existente ou já empenhada.</strong>\n";
     }
