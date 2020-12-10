@@ -651,12 +651,12 @@ if(chave3 === 'f'){
             aLinha[0] = ordem;
             aLinha[1] = codigomaterial;
             aLinha[2] = material.urlDecode();
-            aLinha[3] = quantidade.toFixed(2);
+            aLinha[3] = js_formatar(quantidade,'f',4);
             var iCasas = js_getNumeroCasasDecimais(valorunitario);
             if (iCasas < 2) {
               iCasas = 2;
             }
-            aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
+            aLinha[4] = js_formatar(valorunitario, 'f', 4);
             aLinha[5] = js_formatar(valortotal, 'f');
             aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
             aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
@@ -728,7 +728,7 @@ if(chave3 === 'f'){
             aLinha[0] = ordem;
             aLinha[1] = codigomaterial;
             aLinha[2] = material.urlDecode();
-            aLinha[3] = quantidade.toFixed(2);
+            aLinha[3] = js_formatar(quantidade,'f',4);
             aLinha[4] = js_formatar(valorunitario, 'f', 4);
             aLinha[5] = js_formatar(valortotal, 'f');
             aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
