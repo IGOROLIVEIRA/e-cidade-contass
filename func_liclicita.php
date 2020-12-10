@@ -33,6 +33,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_licobraslicitacao_classe.php");
+require_once("classes/db_db_usuarios_classe.php");
 
 db_postmemory($_GET);
 db_postmemory($_POST);
@@ -43,6 +44,7 @@ parse_str($_SERVER["QUERY_STRING"]);
 $clliclicitem = new cl_liclicitem;
 $clliclicita  = new cl_liclicita;
 $cllicobraslicitacao = new cl_licobraslicitacao;
+$cldbusuarios = new cl_db_usuarios();
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
@@ -173,8 +175,7 @@ $sWhereContratos = " and 1 = 1 ";
              }*/
 
 
-
-            if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
+            if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1"){
 
                 $dbwhere .= "l20_licsituacao in ($situacao) and ";
             }else{

@@ -959,5 +959,20 @@ class cl_db_usuarios {
      }
      return $sql;
   }
+
+  function vefica_adm_user($id){
+
+      $sSql="select administrador from db_usuarios where id_usuario = $id";
+      $result = db_query($sSql);
+      $isAdm = pg_result($result,0,0);
+
+      /* Chave identica para todos os clientes , este é o codigo do tribunal
+        CONVITE=30
+        INEXIGIBILIDADE=29
+        Dispensa de Licitacao=101
+        Inexigibilidade Por Credenciamento=102
+      */
+      return $isAdm;
+  }
 }
 ?>
