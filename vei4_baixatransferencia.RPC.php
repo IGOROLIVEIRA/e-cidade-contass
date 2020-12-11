@@ -169,6 +169,11 @@ switch ($oParam->exec){
 
                 $dtsession = date("Y-m-d", db_getsession("DB_datausu"));
 
+                //inativando veiculo antigo
+                $clveiculos->ve01_ativo = 2;
+                $clveiculos->ve01_codigo = $veiculo;
+                $clveiculos->alterar($veiculo);
+
                 //Novo Veiculo
                 $clveiculos->ve01_placa                 = $aVeiculo->ve01_placa;
                 $clveiculos->ve01_veiccadtipo           = $aVeiculo->ve01_veiccadtipo;
