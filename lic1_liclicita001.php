@@ -62,7 +62,7 @@ $db_botao = true;
 if(isset($incluir)){
 
   $oPost = db_utils::postmemory($_POST);
-
+    $sqlerro    = false;
   // ID's do l03_pctipocompratribunal com base no l20_codtipocom escolhido pelo usurio
   $sSql = $clcflicita->sql_query_file((int)$oPost->l20_codtipocom,'distinct(l03_pctipocompratribunal)');
   $aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
@@ -71,8 +71,7 @@ if(isset($incluir)){
   //Casos em que o Tipo de Licitao e Natureza do Procedimento devem ser verificados
   $aTipoLicNatProc = array(50,48,49,53,52,54);
 
-  $erro = false;
-  $msg = '';
+    $erro_msg = '';
 
   /*
     Verifica se os Campos "Tipo de Licitao", "Natureza do Procedimento" no foram selecionados.
@@ -80,12 +79,12 @@ if(isset($incluir)){
   if(in_array($iTipoCompraTribunal,$aTipoLicNatProc)){
 
     if( $oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao) ){
-      $msg .= 'Campo Tipo de Licitacao nao informado\n\n';
-      $erro = true;
+        $erro_msg .= 'Campo Tipo de Licitacao nao informado\n\n';
+        $sqlerro = true;
     }
     if( $oPost->l20_tipnaturezaproced == '0' || empty($oPost->l20_tipnaturezaproced) ){
-      $msg .= 'Campo Natureza do Procedimento nao informado\n\n';
-      $erro = true;
+        $erro_msg .= 'Campo Natureza do Procedimento nao informado\n\n';
+        $sqlerro = true;
     }
 
   }
@@ -94,13 +93,13 @@ if(isset($incluir)){
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
   if( $oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto) ){
-    $msg .= 'Campo Natureza do Objeto nao informado\n\n';
-    $erro = true;
+      $erro_msg .= 'Campo Natureza do Objeto nao informado\n\n';
+      $sqlerro = true;
   }
 
   db_inicio_transacao();
 
-  $sqlerro    = false;
+
   $anousu     = date('Y',db_getsession("DB_datausu"));
   $instit     = db_getsession("DB_instit") ;
   $anousu     = db_getsession("DB_anousu");
