@@ -116,7 +116,7 @@ $rotulo->label("z01_nome");
           } else if (isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ) {
             $sql = $clempautoriza->sql_query("",$campos,"e54_anousu"," z01_nome like '$chave_z01_nome%' $where_anul ");
           } else {
-            $sql = "";
+            $sql = $clempautoriza->sql_query(null,$campos,null,"");
           }
           db_lovrot($sql,15,"()","",$funcao_js);
         } else {
