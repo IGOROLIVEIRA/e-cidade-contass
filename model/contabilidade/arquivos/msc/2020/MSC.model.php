@@ -773,22 +773,22 @@ class MSC {
 									END
 								ELSE ''
 							END AS cf,
-							round(substr(fc_saldocontacorrenteemparalamentar,43,15)::float8,2)::float8 AS saldoinicial,
+							round(substr(fc_saldocontacorrenteemparlamentar,43,15)::float8,2)::float8 AS saldoinicial,
 							'beginning_balance' AS tipovalor_si,
-							substr(fc_saldocontacorrenteemparalamentar,107,1)::varchar(1) AS nat_vlr_si,
-							round(substr(fc_saldocontacorrenteemparalamentar,59,15)::float8,2)::float8 AS debito,
+							substr(fc_saldocontacorrenteemparlamentar,107,1)::varchar(1) AS nat_vlr_si,
+							round(substr(fc_saldocontacorrenteemparlamentar,59,15)::float8,2)::float8 AS debito,
 							CASE
-								WHEN round(substr(fc_saldocontacorrenteemparalamentar,59,15)::float8,2)::float8 = 0 THEN NULL
+								WHEN round(substr(fc_saldocontacorrenteemparlamentar,59,15)::float8,2)::float8 = 0 THEN NULL
 								ELSE 'period_change_deb'
 							END AS tipovalordeb,
-							round(substr(fc_saldocontacorrenteemparalamentar,75,15)::float8,2)::float8 AS credito,
+							round(substr(fc_saldocontacorrenteemparlamentar,75,15)::float8,2)::float8 AS credito,
 							CASE
-								WHEN round(substr(fc_saldocontacorrenteemparalamentar,75,15)::float8,2)::float8 = 0 THEN NULL
+								WHEN round(substr(fc_saldocontacorrenteemparlamentar,75,15)::float8,2)::float8 = 0 THEN NULL
 								ELSE 'period_change_cred'
 							END AS tipovalorcred,
-							round(substr(fc_saldocontacorrenteemparalamentar,91,15)::float8,2)::float8 AS saldofinal,
+							round(substr(fc_saldocontacorrenteemparlamentar,91,15)::float8,2)::float8 AS saldofinal,
 							'ending_balance' AS tipovalor_sf,
-							substr(fc_saldocontacorrenteemparalamentar,111,1)::varchar(1) AS nat_vlr_sf,
+							substr(fc_saldocontacorrenteemparlamentar,111,1)::varchar(1) AS nat_vlr_sf,
 							c61_reduz,
 							c61_codcon,
 							c61_codigo,
@@ -807,7 +807,7 @@ class MSC {
 								k81_emparlamentar,
 								c19_sequencial,
 								codigo,
-								fc_saldocontacorrenteemparalamentar(2020,c19_sequencial,100,11,codigo,k81_emparlamentar)
+								fc_saldocontacorrenteemparlamentar($iAno,c19_sequencial,100,$iMes,codigo,k81_emparlamentar)
 						FROM
    							(SELECT CASE
 										WHEN c210_mscestrut IS NULL THEN substr(p.c60_estrut,1,9)
