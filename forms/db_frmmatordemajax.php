@@ -395,7 +395,13 @@ function js_validaItens(obj, event, nVlrMax, iTipo, nVlrUni,iLinha){
 }
 
 function js_anularOrdem(){
-   
+
+    let botao = $('anular');
+
+    if(botao != null){
+        botao.disabled = true;
+    }
+
    iOrdem = $F('m51_codordem');
    //percorremos  todos os itens selecionados e criamos uma string json para enviar o servidor.
    aItens        = js_getElementbyClass(form1,"chkmarca");

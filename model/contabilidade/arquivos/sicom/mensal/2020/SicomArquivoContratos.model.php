@@ -751,7 +751,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
            * Caso o contrato seja de origem manual (3) e quando for processo de compras e NO HOUVER empenho, deve ser buscado as dotaes para cada item do contrato.
            */
 
-          if($oDados10->ac16_origem == self::ORIGEM_MANUAL or ($oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS && count($oAcordo->getEmpenhosAcordo()) == 0)) {
+          if($oDados10->ac16_origem == self::ORIGEM_MANUAL or $oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS) {
 
             /**
              * Acordos de origem manual e processo de compras e NO HOUVER empenho
@@ -867,6 +867,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
                                JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                where liclicitem.l21_codliclicita = " . $oDados10->l20_codigo;
+
                 $rsDados = db_query($sSql);
               }
 

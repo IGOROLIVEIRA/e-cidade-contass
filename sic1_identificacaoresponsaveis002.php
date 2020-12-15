@@ -39,7 +39,7 @@ if(isset($alterar)){
     $db_botao = true;
   }else{
     $db_opcao = 2;
-    $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa,'*','',"si166_tiporesponsavel = 5"));
+    $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa,'*','',"si166_tiporesponsavel = 5 and si166_instit = ".db_getsession("DB_instit")));
     db_fieldsmemory($result, 0);
     $db_botao = true;
   }
