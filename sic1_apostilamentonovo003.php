@@ -129,7 +129,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?lDepartamento=1&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4&lGeraAutorizacao=true';
+    var sUrl = 'func_acordo.php?lDepartamento=1&apostilamento=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4&lGeraAutorizacao=true';
     js_OpenJanelaIframe('top.corpo',
                         'db_iframe_acordo',
                         sUrl,
@@ -139,7 +139,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
     if (oTxtCodigoAcordo.getValue() != '') {
 
-      var sUrl = 'func_acordo.php?lDepartamento=1&descricao=true&pesquisa_chave='+oTxtCodigoAcordo.getValue()+
+      var sUrl = 'func_acordo.php?lDepartamento=1&descricao=true&apostilamento=true&pesquisa_chave='+oTxtCodigoAcordo.getValue()+
                  '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&lGeraAutorizacao=true';
 
       js_OpenJanelaIframe('top.corpo',

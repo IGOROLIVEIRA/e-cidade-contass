@@ -184,11 +184,10 @@ switch($oParam->exec) {
 
             $oPosicao        = new stdClass();
 
-            if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_INCLUSAO) {
+            if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_INCLUSAO || $oPosicaoContrato->getNumeroAditamento()) {
                 continue;
             }
             $iTipoPosicao =  $oPosicaoContrato->getTipo();
-
             $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
             $oPosicao->data           = $oPosicaoContrato->getData();
             $oPosicao->tipo           = $oPosicaoContrato->getTipo();

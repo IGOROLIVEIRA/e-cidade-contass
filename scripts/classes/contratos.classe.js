@@ -59,14 +59,15 @@ contrato = function () {
         } else {
             sTitulo = "Licitações";
         }
-        var iLarguraJanela = document.body.getWidth();
-        var iAlturaJanela  = document.body.clientHeight / 1.5;
+        var iLarguraJanela = 1200;
+        var iAlturaJanela  = document.body.clientHeight;
 
         oJanela       = new windowAux('wndLicitacoesVencidas', sTitulo,
             iLarguraJanela,
             iAlturaJanela);
-        var sContent  = '  <fieldset style="width: 97%"><legend><b>'+sTitulo+'</b></legend>';
-        sContent     += '    <div id="cntDados"></div>' ;
+
+        let sContent     = '  <fieldset style="width: 97%"><legend><b>'+sTitulo+'</b></legend>';
+        sContent     += '    <div id="cntDados" style="width:1175px"></div>' ;
         sContent     += '  </fieldset>';
         sContent     += '  <center> ';
         sContent     += '   <input type="button" value="Confirmar" id="btnConfirmarObjetos">';
@@ -119,13 +120,13 @@ contrato = function () {
             return true;
         };
 
-        oGridDados.setCellWidth(new Array("5%", "5%", "60%", "10%", "10%"));
+        oGridDados.setCellWidth(new Array("5%", "4%", "60%", "11%", "10%"));
         oGridDados.setCellAlign(new Array("right", "right", "left", "right", "right"));
         oGridDados.setHeader(new Array("Código","Número", "Objeto", "Número do Exercício", "Data da Inclusão"));
         oGridDados.show($('cntDados'));
 
 
-        oJanela.show(1,0);
+        oJanela.show(1,70);
         js_divCarregando("Aguarde, carregando itens...", "msgBox");
         me.preencheDadosItens(oRetorno);
     };
@@ -158,6 +159,7 @@ contrato = function () {
 
             oGridDados.renderRows();
             oGridDados.setStatus("");
+            me.setPropertiesCss();
         } else {
 
             oGridDados.setStatus("Não foram Encontrados registros");
@@ -165,6 +167,25 @@ contrato = function () {
     };
 
 
+    this.setPropertiesCss = () => {
+
+        let aTrs = document.querySelectorAll('#gridDadosbody tr');
+
+        for( let i=0; i < aTrs.length; i++){
+
+            aTrs[i].children[0].style.textAlign = 'center';
+            aTrs[i].children[0].style.width = '88px';
+            aTrs[i].children[1].style.textAlign = 'center';
+            aTrs[i].children[2].style.textAlign = 'center';
+            aTrs[i].children[4].style.textAlign = 'center';
+            aTrs[i].children[5].style.textAlign = 'center';
+
+        }
+
+        document.getElementById('cntDados').style.width = '1198px';
+        document.getElementById('messageboardlicitacao').style.width = '1215px';
+
+    }
 
     this.confirmaSelecao = function() {
 
