@@ -48,6 +48,8 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 
 <script>
 function js_verifica(){
@@ -119,7 +121,7 @@ function js_emite(){
         <td >
          <?
            $xx = array("s"=>"Salário","d"=>"13o. Salário");
-           db_select('tipo',$xx,true,4,"");
+           db_select('tipo',$xx,true,4,"onchange='js_verificaArquivo();'");
          ?>
 	
 	      </td>
@@ -178,3 +180,16 @@ function js_emite(){
 ?>
 </body>
 </html>
+
+<script>
+  var mesFolha = <?=db_mesfolha() ?>;
+  function js_verificaArquivo() {
+    if ($('tipo').value == 'd') {
+      $('mesfolha').value = '13';
+      $('mesfolha').disabled = true;
+    } else if ($('tipo').value == 's' && $('mesfolha').value == '13') {
+      $('mesfolha').value = mesFolha;
+      $('mesfolha').disabled = false;
+    }
+  }
+</script>
