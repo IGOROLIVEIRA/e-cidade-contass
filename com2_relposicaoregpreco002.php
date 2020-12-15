@@ -280,6 +280,13 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
   $oSolicita->empenhada             = $oCompilacao->getValorEmpenhadoItem($oSolicita->pc11_codigo);
   $oSolicita->solicitada            = $oCompilacao->getValorSolicitadoItem($oSolicita->pc11_codigo);
 
+
+    if($oGet->fornecedores && $oGet->lQuebraFornecedor){
+        if(!in_array($oSolicita->oDadosFornecedor->codigocgm, explode(',', $oGet->fornecedores))){
+            continue;
+        }
+    }
+
   $lControlaValor                   = ($oCompilacao->getFormaDeControle() == aberturaRegistroPreco::CONTROLA_VALOR);
 
   $oStdItemEstimativa               = new stdClass();
@@ -449,7 +456,11 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
     $oStdEstimativa->iLiquidada  = 0;
     $oStdEstimativa->iSolicitar  = 0;
     $oStdEstimativa->iEmpenhar   = 0;
-    $oStdEstimativa->aItens      = array();
+    if($oGet->fornecedores){
+        $oStdEstimativa->aFornecedores = array();
+    }else{
+      $oStdEstimativa->aItens = array();
+    }
     $oDadosPosRegPreco->aSolicitacoes[$iCodigoCompilacao]->aInstituicoesEstimativas[$iInstituicaoEstimativa]->aDepartamentos[$iDepartamentoEstimativa]->aEstimativas[$iCodigoEstimativa] = $oStdEstimativa;
   }
 
@@ -464,8 +475,50 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
   $oAgrupamentoEstimativa->iLiquidada  += $oStdItemEstimativa->iLiquidada;
   $oAgrupamentoEstimativa->iSolicitar  += $oStdItemEstimativa->iSolicitar;
   $oAgrupamentoEstimativa->iEmpenhar   += $oStdItemEstimativa->iEmpenhar;
-  $oAgrupamentoEstimativa->aItens[]     = $oStdItemEstimativa;
+
+  if($oGet->lQuebraFornecedor){
+      $oAgrupamentoEstimativa->aItens[]     = $oStdItemEstimativa;
+  }
+
   $oDadosPosRegPreco->aSolicitacoes[$iCodigoCompilacao]->aInstituicoesEstimativas[$iInstituicaoEstimativa]->aDepartamentos[$iDepartamentoEstimativa]->aEstimativas[$iCodigoEstimativa] = $oAgrupamentoEstimativa;
+
+  /*
+   *
+   * Realiza o agrupamento pelos fornecedores usando o codigocgm como chave. Caso não exista fornecedor vencedor na
+   * licitação, os itens serão agrupados na chave 'sem-fornecedor'
+   *
+   * */
+
+    if($oGet->lQuebraFornecedor){
+
+        $chave = $oSolicita->oDadosFornecedor->codigocgm ? $oSolicita->oDadosFornecedor->codigocgm : 'sem-fornecedor';
+
+        if (empty($oDadosPosRegPreco->aSolicitacoes[$iCodigoCompilacao]->aInstituicoesEstimativas[$iInstituicaoEstimativa]->aDepartamentos[$iDepartamentoEstimativa]->aEstimativas[$iCodigoEstimativa]->aFornecedores[$chave])) {
+              $oStdFornecedor              = new stdClass();
+              $oStdFornecedor->iCodigo     = $iCodigoEstimativa;
+              $oStdFornecedor->iRegistros  = 0;
+              $oStdFornecedor->iSolicitada = 0;
+              $oStdFornecedor->iReservada  = 0;
+              $oStdFornecedor->iEmpenhada  = 0;
+              $oStdFornecedor->iLiquidada  = 0;
+              $oStdFornecedor->iSolicitar  = 0;
+              $oStdFornecedor->iEmpenhar   = 0;
+              $oStdFornecedor->aItens      = array();
+              $oDadosPosRegPreco->aSolicitacoes[$iCodigoCompilacao]->aInstituicoesEstimativas[$iInstituicaoEstimativa]->aDepartamentos[$iDepartamentoEstimativa]->aEstimativas[$iCodigoEstimativa]->aFornecedores[$chave] = $oStdFornecedor;
+        }
+
+        $oAgrupamentoFornecedor = $oDadosPosRegPreco->aSolicitacoes[$iCodigoCompilacao]->aInstituicoesEstimativas[$iInstituicaoEstimativa]->aDepartamentos[$iDepartamentoEstimativa]->aEstimativas[$iCodigoEstimativa]->aFornecedores[$chave];
+        $oAgrupamentoFornecedor->iRegistros  ++;
+        $oAgrupamentoFornecedor->iSolicitada += $oStdItemEstimativa->iSolicitada;
+        $oAgrupamentoFornecedor->iReservada  += $oStdItemEstimativa->iReservada;
+        $oAgrupamentoFornecedor->iEmpenhada  += $oStdItemEstimativa->iEmpenhada;
+        $oAgrupamentoFornecedor->iLiquidada  += $oStdItemEstimativa->iLiquidada;
+        $oAgrupamentoFornecedor->iSolicitar  += $oStdItemEstimativa->iSolicitar;
+        $oAgrupamentoFornecedor->iEmpenhar   += $oStdItemEstimativa->iEmpenhar;
+        $oAgrupamentoFornecedor->aItens[]     = $oStdItemEstimativa;
+        $oDadosPosRegPreco->aSolicitacoes[$iCodigoCompilacao]->aInstituicoesEstimativas[$iInstituicaoEstimativa]->aDepartamentos[$iDepartamentoEstimativa]->aEstimativas[$iCodigoEstimativa]->aFornecedores[$chave] = $oAgrupamentoFornecedor;
+
+  }
 
   if ($lUltimoControle != null && $lUltimoControle != $lControlaValor) {
     $lTotalGeral = false;
@@ -529,28 +582,100 @@ foreach ($oDadosPosRegPreco->aSolicitacoes as $iCodigoCompilacao => $oCompilacao
         /**
          * Percorre cada um dos itens da estimativa e imprime
          **/
-        foreach($oEstimativa->aItens as $oItemEstimativa) {
 
-          verificaQuebraCabecalho($oPdf, $oCompilacao->iAbertura, $oCompilacao->iCompilacao, $iAlt, $oCompilacao->lControlaValor);
-          $oPdf->setfont('arial', '', 6);
-          $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
-          $oPdf->cell(15, $iAlt, $oItemEstimativa->iSeq        , 0, 0, "C", $lPreenchimento);
-          $oPdf->cell(15, $iAlt, $oItemEstimativa->iCodItem    , 0, 0, "C", $lPreenchimento);
-          $oPdf->cell(28, $iAlt, substr($oItemEstimativa->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
-          $oPdf->cell(39, $iAlt, str_replace("\\n", "\n",substr(trim($oItemEstimativa->sCompl), 0, 20)) , 0, 0, "L", $lPreenchimento);
-          $oPdf->cell(16, $iAlt, $oItemEstimativa->sUnidade    , 0, 0, "C", $lPreenchimento);
-          $oPdf->cell(16, $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
-          $oPdf->cell(($oCompilacao->lControlaValor ? 50 : 32), $iAlt, substr($oItemEstimativa->sFornecedor, 0, ($oCompilacao->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
+            if($oGet->fornecedores){
+                foreach ($oEstimativa->aFornecedores as $index => $oFornecedor){
 
-          if (!$oCompilacao->lControlaValor) {
-            $oPdf->cell(18, $iAlt, $oItemEstimativa->nQuantMax   , 0, 0, "R", $lPreenchimento);
-          }
+                  /*
+                   * Percorre os fornecedores e lista os itens pertencentes a ele
+                   *
+                   * */
 
-          $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitada, 'v', " ", $casadec) : $oItemEstimativa->iSolicitada) , 0, 0, "R", $lPreenchimento);
-          $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhada, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhada)  , 0, 0, "R", $lPreenchimento);
-          $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitar, 'v', " ", $casadec) : $oItemEstimativa->iSolicitar)  , 0, 0, "R", $lPreenchimento);
-          $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhar, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhar)   , 0, 1, "R", $lPreenchimento);
-        }
+                    foreach($oFornecedor->aItens as $index => $oItemEstimativa) {
+
+                        verificaQuebraCabecalho($oPdf, $oCompilacao->iAbertura, $oCompilacao->iCompilacao, $iAlt, $oCompilacao->lControlaValor);
+                        $oPdf->setfont('arial', '', 6);
+                        $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
+                        $oPdf->cell(15, $iAlt, $oItemEstimativa->iSeq        , 0, 0, "C", $lPreenchimento);
+                        $oPdf->cell(15, $iAlt, $oItemEstimativa->iCodItem    , 0, 0, "C", $lPreenchimento);
+                        $oPdf->cell(28, $iAlt, substr($oItemEstimativa->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
+                        $oPdf->cell(39, $iAlt, str_replace("\\n", "\n",substr(trim($oItemEstimativa->sCompl), 0, 20)) , 0, 0, "L", $lPreenchimento);
+                        $oPdf->cell(16, $iAlt, $oItemEstimativa->sUnidade    , 0, 0, "C", $lPreenchimento);
+                        $oPdf->cell(16, $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
+                        $oPdf->cell(($oCompilacao->lControlaValor ? 50 : 32), $iAlt, substr($oItemEstimativa->sFornecedor, 0, ($oCompilacao->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
+
+                        if (!$oCompilacao->lControlaValor) {
+                          $oPdf->cell(18, $iAlt, $oItemEstimativa->nQuantMax   , 0, 0, "R", $lPreenchimento);
+                        }
+
+                        $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitada, 'v', " ", $casadec) : $oItemEstimativa->iSolicitada) , 0, 0, "R", $lPreenchimento);
+                        $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhada, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhada)  , 0, 0, "R", $lPreenchimento);
+                        $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitar, 'v', " ", $casadec) : $oItemEstimativa->iSolicitar)  , 0, 0, "R", $lPreenchimento);
+                        $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhar, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhar)   , 0, 1, "R", $lPreenchimento);
+
+                        if($index == count($oFornecedor->aItens) - 1){
+                          $oPdf->setfont('arial','b',7);
+                          $oPdf->cell(279, 1,    ''                           , "T", 1, "L", 0);
+                          $oPdf->cell(113, $iAlt, 'TOTAL DO FORNECEDOR:'    ,   0, 0, "R", 0);
+                          $oPdf->cell(16,  $iAlt, ""                          ,   0, 0, "R", 0);
+                          $oPdf->cell(32,  $iAlt, $oFornecedor->iRegistros  ,   0, 0, "R", 0);
+                          $oPdf->cell(18,  $iAlt, ''                          ,   0, 0, "R", 0);
+                          $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iSolicitada, 'v', " ", $casadec) : $oFornecedor->iSolicitada) ,   0, 0, "R", 0);
+                          $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iEmpenhada, 'v', " ", $casadec) : $oFornecedor->iEmpenhada)  ,   0, 0, "R", 0);
+                          $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iSolicitar, 'v', " ", $casadec) : $oFornecedor->iSolicitar)  ,   0, 0, "R", 0);
+                          $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iEmpenhar, 'v', " ", $casadec) : $oFornecedor->iEmpenhar)   ,   0, 1, "R", 0);
+                          $oPdf->ln(2);
+                        }
+
+                    }
+
+                    imprimeCabecalho($oPdf, $iAlt, $oCompilacao->iAbertura, $oCompilacao->iCompilacao, true, $oCompilacao->lControlaValor);
+
+                    $oPdf->setfont('arial', 'b', 6);
+                    $sInstituicao = " {$oInstituicao->iCodigo} - {$oInstituicao->sNome}";
+                    $oPdf->cell( 30, $iAlt, "INSTITUIÇÃO:" , "TB", 0, "L", 1 );
+                    $oPdf->setfont('arial', '', 6);
+                    $oPdf->cell( 249, $iAlt, $sInstituicao  , "TB", 1, "L", 1 );
+
+                    $oPdf->setfont('arial', 'b', 6);
+                    $sDepartamento = "{$oDepartamento->iCodigo} - {$oDepartamento->sNome} ";
+                    $oPdf->cell( 30, $iAlt, "DEPARTAMENTO:" , "TB", 0, "L", 1 );
+                    $oPdf->setfont('arial', '', 6);
+                    $oPdf->cell( 67, $iAlt, $sDepartamento  , "TB", 0, "L", 1 );
+
+                    $oPdf->setfont('arial', 'b', 6);
+                    $oPdf->cell( 20, $iAlt, "ESTIMATIVA:"  , "TB", 0, "L", 1 );
+                    $oPdf->setfont('arial', '', 6);
+                    $oPdf->cell( 162, $iAlt, $iCodigoEstimativa  , "TB", 1, "L", 1 );
+                }
+            }else{
+                /**
+                 * Percorre cada um dos itens da estimativa e imprime
+                 **/
+                foreach($oEstimativa->aItens as $oItemEstimativa) {
+
+                    verificaQuebraCabecalho($oPdf, $oCompilacao->iAbertura, $oCompilacao->iCompilacao, $iAlt, $oCompilacao->lControlaValor);
+                    $oPdf->setfont('arial', '', 6);
+                    $lPreenchimento = $lPreenchimento == 0 ? 1 : 0;
+                    $oPdf->cell(15, $iAlt, $oItemEstimativa->iSeq        , 0, 0, "C", $lPreenchimento);
+                    $oPdf->cell(15, $iAlt, $oItemEstimativa->iCodItem    , 0, 0, "C", $lPreenchimento);
+                    $oPdf->cell(28, $iAlt, substr($oItemEstimativa->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
+                    $oPdf->cell(39, $iAlt, str_replace("\\n", "\n",substr(trim($oItemEstimativa->sCompl), 0, 20)) , 0, 0, "L", $lPreenchimento);
+                    $oPdf->cell(16, $iAlt, $oItemEstimativa->sUnidade    , 0, 0, "C", $lPreenchimento);
+                    $oPdf->cell(16, $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
+                    $oPdf->cell(($oCompilacao->lControlaValor ? 50 : 32), $iAlt, substr($oItemEstimativa->sFornecedor, 0, ($oCompilacao->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
+
+                    if (!$oCompilacao->lControlaValor) {
+                        $oPdf->cell(18, $iAlt, $oItemEstimativa->nQuantMax   , 0, 0, "R", $lPreenchimento);
+                    }
+
+                    $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitada, 'v', " ", $casadec) : $oItemEstimativa->iSolicitada) , 0, 0, "R", $lPreenchimento);
+                    $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhada, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhada)  , 0, 0, "R", $lPreenchimento);
+                    $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitar, 'v', " ", $casadec) : $oItemEstimativa->iSolicitar)  , 0, 0, "R", $lPreenchimento);
+                    $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhar, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhar)   , 0, 1, "R", $lPreenchimento);
+                }
+            }
+
       }
 
       verificaQuebraCabecalho($oPdf, $oCompilacao->iAbertura, $oCompilacao->iCompilacao, $iAlt, $oCompilacao->lControlaValor);
