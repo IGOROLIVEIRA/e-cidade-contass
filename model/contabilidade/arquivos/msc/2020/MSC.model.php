@@ -882,7 +882,7 @@ class MSC {
 							ORDER BY estrut
 						) AS xx
 					) AS xxx
-				WHERE (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+				WHERE ( cf = '' and (saldoinicial <> 0 or debito <> 0 or credito <> 0) ) or ( cf != '' and (debito <> 0 or credito <> 0) )";
 
     $rsResult = db_query($sSQL);
 
