@@ -627,7 +627,9 @@ function js_emitexls() {
     var pc10_numero_fim     = $('pc10_numero_fim').value;
     var iItens              = $('pcmater').options.length;
     var iDepartamentos      = $('departamento').options.length;
+    var iFornecedores       = $('fornecedor').options.length;
     var lQuebraDepartamento = $("lQuebraDepartamento").value;
+    var lQuebraFornecedor   = $("lQuebraFornecedor").value;
     var sQuery              = '';
 
     if (dtinicrg != "" && dtfimcrg != "") {
@@ -657,13 +659,13 @@ function js_emitexls() {
     }
 
     if(lQuebraDepartamento == 't' && iDepartamentos == 0){
-        alert('Nenhum departamento selecionado. Verifique!')
+        alert('Nenhum departamento selecionado. Verifique!');
         return false;
     }
 
     var vrg    = '';
     let sItens = '';
-    for (i = 0; i < iItens; i++) {
+    for (let i = 0; i < iItens; i++) {
 
         sItens = sItens+vrg+$('pcmater').options[i].value;
         vrg =',';
@@ -672,7 +674,7 @@ function js_emitexls() {
     vrg    = '';
     let sDepartamentos = '';
 
-    for (i = 0; i < iDepartamentos; i++) {
+    for (let i = 0; i < iDepartamentos; i++) {
         sDepartamentos += vrg+$('departamento').options[i].value;
         vrg =',';
     }
@@ -680,7 +682,7 @@ function js_emitexls() {
     vrg    = '';
     let sFornecedores = '';
 
-    for (count = 0; count < iDepartamentos; count++) {
+    for (let count = 0; count < iFornecedores; count++) {
         sFornecedores += vrg + $('fornecedor').options[count].value;
         vrg =',';
     }
@@ -696,6 +698,7 @@ function js_emitexls() {
     sQuery += '&itens='+sItens;
     sQuery += '&departs='+sDepartamentos;
     sQuery += '&fornecedores='+sFornecedores;
+    sQuery += '&lQuebraFornecedor='+lQuebraFornecedor;
 
     sUrl = "com2_gerarxlsposicaoregpreco.php?";
 

@@ -156,7 +156,7 @@ $sSql .= "         inner join matunid                on solicitemunid.pc17_unid 
 $sSql .= "         inner join solicitempcmater       on solicitem.pc11_codigo          = solicitempcmater.pc16_solicitem           ";
 $sSql .= "         inner join pcmater                on solicitempcmater.pc16_codmater = pcmater.pc01_codmater                     ";
 
-if($oGet->lQuebraFornecedor){
+if($oGet->lQuebraFornecedor == 't'){
 	$aCgms = array();
 }
 
@@ -268,7 +268,7 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
 		$aDadosPosRegPreco[$oSolicita->pc10_numero][$oSolicita->pc11_numero][$oSolicita->pc11_seq]['nTotalQntSolic'] += $oSolicita->pc11_quant;
 	}
 
-    if(strlen($oGet->fornecedores) || $oGet->lQuebraFornecedor){
+    if(strlen($oGet->fornecedores) || $oGet->lQuebraFornecedor == 't'){
 
 		if(!in_array($oSolicita->oDadosFornecedor->codigocgm, array_keys($aCgms))){
 			$aCgms[$oSolicita->oDadosFornecedor->codigocgm]['itens'] = array();
@@ -299,7 +299,7 @@ $nTotalGeralEmpenhar    = 0;
 /**
  * Percore o array $aDadosPosRegPreco agrupando pelo departamento
  */
-if(!strlen($oGet->fornecedores) && !$oGet->lQuebraFornecedor) {
+if(!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
 
 	foreach ($aDadosPosRegPreco as $iNroSolicitacao => $aDados) {
 

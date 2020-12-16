@@ -186,7 +186,7 @@ $sSql .= "         inner join solicitem itemestimativa               on vinculoi
 $sSql .= "         inner join solicita estimativa                    on estimativa.pc10_numero                  = itemestimativa.pc11_numero";
 $sSql .= "         inner join solicitemregistropreco itemestimativavalores on itemestimativa.pc11_codigo        = itemestimativavalores.pc57_solicitem";
 $sSql .= "   where  {$sWhere}  {$sOrder}, estimativa.pc10_instit asc";
-// print_r($sSql);die();
+
 /**
  * Busca a quantidade liquidada do item da solicitação
  * @param  integer $iCodigoItemSolicitacao
@@ -281,7 +281,7 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
   $oSolicita->solicitada            = $oCompilacao->getValorSolicitadoItem($oSolicita->pc11_codigo);
 
 
-    if($oGet->fornecedores && $oGet->lQuebraFornecedor){
+    if($oGet->fornecedores && $oGet->lQuebraFornecedor == 't'){
         if(!in_array($oSolicita->oDadosFornecedor->codigocgm, explode(',', $oGet->fornecedores))){
             continue;
         }
@@ -456,7 +456,7 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
     $oStdEstimativa->iLiquidada  = 0;
     $oStdEstimativa->iSolicitar  = 0;
     $oStdEstimativa->iEmpenhar   = 0;
-    if($oGet->fornecedores){
+    if($oGet->lQuebraFornecedor == 't'){
         $oStdEstimativa->aFornecedores = array();
     }else{
       $oStdEstimativa->aItens = array();
@@ -476,7 +476,7 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
   $oAgrupamentoEstimativa->iSolicitar  += $oStdItemEstimativa->iSolicitar;
   $oAgrupamentoEstimativa->iEmpenhar   += $oStdItemEstimativa->iEmpenhar;
 
-  if($oGet->lQuebraFornecedor){
+  if($oGet->lQuebraFornecedor == 't'){
       $oAgrupamentoEstimativa->aItens[]     = $oStdItemEstimativa;
   }
 
@@ -489,7 +489,7 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
    *
    * */
 
-    if($oGet->lQuebraFornecedor){
+    if($oGet->lQuebraFornecedor == 't'){
 
         $chave = $oSolicita->oDadosFornecedor->codigocgm ? $oSolicita->oDadosFornecedor->codigocgm : 'sem-fornecedor';
 
@@ -583,7 +583,7 @@ foreach ($oDadosPosRegPreco->aSolicitacoes as $iCodigoCompilacao => $oCompilacao
          * Percorre cada um dos itens da estimativa e imprime
          **/
 
-            if($oGet->fornecedores){
+            if($oGet->lQuebraFornecedor == 't'){
                 foreach ($oEstimativa->aFornecedores as $index => $oFornecedor){
 
                   /*
