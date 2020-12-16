@@ -103,15 +103,16 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
 
-   $sSql = "SELECT c70_data,
+   $sSql = "SELECT e50_data,
                    CASE
-                       WHEN date_part('year',c70_data) < 2015 THEN e71_codnota::varchar
+                       WHEN date_part('year',e50_data) < 2015 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0'))
                    END AS codreduzido,
                    CASE
-                       WHEN date_part('year',c70_data) < 2015 THEN e71_codnota::varchar
+                       WHEN date_part('year',e50_data) < 2015 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
                    END AS nroliquidacao,
+                   c80_data,
                    orctiporec.o15_codtri,
                    e60_codemp,
                    e60_emiss,
@@ -140,7 +141,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
             FROM empempenho
             INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
             INNER JOIN conlancam ON c70_codlan = c75_codlan
-            INNER JOIN conlancamnota ON c66_codlan = c70_codlan
+            LEFT JOIN conlancamnota ON c66_codlan = c70_codlan
             INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
             INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
             INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
@@ -160,16 +161,16 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
             LEFT JOIN emphist ON emphist.e40_codhist = empemphist.e63_codhist
             INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = empempenho.e60_codcom
             LEFT JOIN empresto ON e60_numemp = e91_numemp AND e60_anousu = e91_anousu
-            JOIN pagordemnota ON e71_codnota = c66_codnota
+            JOIN conlancamord ON c80_codlan = c75_codlan
+            JOIN pagordemnota ON e71_codord = c80_codord
             JOIN pagordem ON e71_codord = e50_codord
             LEFT JOIN infocomplementaresinstit ON o58_instit = si09_instit
             WHERE c53_tipo IN (21)
-                AND e71_anulado = 't'
                 AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
                 AND e60_instit IN (" . db_getsession('DB_instit') . ")
             GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr, e60_vlrpag, e60_anousu, 
                      e60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp, e71_codnota,
-                     c70_data, si09_codorgaotce, o41_subunidade, pagordemnota.e71_codord , o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, o56_elemento, e50_compdesp
+                     c80_data, e50_data, si09_codorgaotce, o41_subunidade, pagordemnota.e71_codord , o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, o56_elemento, e50_compdesp
             ORDER BY e60_numemp, c70_codlan";
     //    echo $sSql."<br>";
     $rsDetalhamentos = db_query($sSql);
@@ -257,7 +258,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->si121_codunidadesub = $sCodUnidade;
         $oDadosDetalhamento->si121_nroempenho = substr($oDetalhamento->e60_codemp, 0, 22);
         $oDadosDetalhamento->si121_dtempenho = $oDetalhamento->e60_emiss;
-        $oDadosDetalhamento->si121_dtliquidacao = $oDetalhamento->c70_data;
+        $oDadosDetalhamento->si121_dtliquidacao = $oDetalhamento->e50_data;
         $oDadosDetalhamento->si121_nroliquidacao = substr($oDetalhamento->nroliquidacao, 0, 19);
         $oDadosDetalhamento->si121_dtanulacaoliq = $oDetalhamento->c70_data;
         $oDadosDetalhamento->si121_nroliquidacaoanl = substr($oDetalhamento->nroliquidacao, 0, 19);
