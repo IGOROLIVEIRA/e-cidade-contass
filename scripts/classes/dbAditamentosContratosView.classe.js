@@ -521,13 +521,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      */
     this.ajusteDotacao = function (iLinha, iElemento) {
 
-
         let valorItem = me.oGridItens.aRows[iLinha].aCells[1].getValue();
 
         document.getElementById(`chkoGridItens${valorItem}`).checked = true;
 
         me.oGridItens.aRows[iLinha].removeClassName('normal');
         me.oGridItens.aRows[iLinha].addClassName('marcado');
+        me.oGridItens.aRows[iLinha].isSelected = true;
 
         iElementoDotacao = iElemento;
 
