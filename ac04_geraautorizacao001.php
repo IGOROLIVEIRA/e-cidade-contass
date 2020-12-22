@@ -726,7 +726,7 @@ if($x->consultarDataDoSistema == true){
 
                 if (oItem.dotacoes.length == 1) {
 
-                    oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,4);
+                    oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,2);
                     oDotItem.quantdot = oDotItem.quantidade;
 
                 } else {
@@ -735,7 +735,7 @@ if($x->consultarDataDoSistema == true){
 
             });
 
-            var nQtdeAut  = oItem.saldos.quantidadeautorizar;
+            var nQtdeAut  = oItem.saldos.quantidadeautorizar.toFixed(4);
             var vTotal = oItem.valorunitario * oItem.quantidade;
             var vTotalAut = oItem.valorunitario * nQtdeAut;
 
@@ -1062,11 +1062,9 @@ if($x->consultarDataDoSistema == true){
 
             // debug
             aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
-
                 var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",2));
-
                 oDotacao.valorexecutar = nValue;
-                var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(),"f",2));
+                var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(),"f",4));
                 oDotacao.quantidade = nQuant;
             });
             oGridItens.aRows[iLinha].select(true);
@@ -1090,7 +1088,7 @@ if($x->consultarDataDoSistema == true){
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
             // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
-            nValorDotacao = js_formatar(oDotacao.valor.toFixed(2), "f",2);
+            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f",2);
 
 
             aLinha    = new Array();
@@ -1209,7 +1207,7 @@ if($x->consultarDataDoSistema == true){
 
     function js_ajustaQuantDot(Obj, iDot, iLinha) {
 
-        var nQuant         = Number(Obj.value);
+        var nQuant         = Number(Obj.value.replace(',','.'));
         var nTotalDotacoes = oGridDotacoes.sum(2, false);
         var nQuantAut      = js_strToFloat(oDadosItem.aCells[6].getValue());
 
@@ -1476,7 +1474,7 @@ if($x->consultarDataDoSistema == true){
                 var nValorDotacao = 0;
 
                 oDadosItem.dotacoes.each(function(oDotacao, id) {
-                    nValorDotacao += oDotacao.valor;
+                    nValorDotacao += oDotacao.valorexecutar;
                 });
 
                 oItem.valor   =  js_formatar(oItem.valor , 'f',2);
