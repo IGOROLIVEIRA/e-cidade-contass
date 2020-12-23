@@ -74,7 +74,7 @@ if(isset($alterar)){
    }
    $db_botao = true;
    echo "<script>
-         parent.iframe_emissao.location.href='orc1_orcprojeto012.php?o39_codproj=$o39_codproj';
+         parent.iframe_emissao.location.href='orc1_orcprojeto012.php?o39_codproj=$o39_codproj&db_opcao=$db_opcao';
          </script>
          ";
 

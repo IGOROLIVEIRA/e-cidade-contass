@@ -30,35 +30,21 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_orcprojeto_classe.php");
-include("classes/db_orcsuplem_classe.php");
 include("dbforms/db_funcoes.php");
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
-db_postmemory($HTTP_POST_VARS);
-$clorcprojeto = new cl_orcprojeto;
-$clorcsuplem = new cl_orcsuplem;
+include("dbforms/db_classesgenericas.php");
 
-$db_botao = false;
-$db_opcao = 33;
-if(isset($excluir)){
-  /**
-	* se o projeto estiver na tabela orcsuplem não poderá ser excluido
-	*
-  */   
-  $res= $clorcsuplem->sql_record($clorcsuplem->sql_query_file(null,"*",null,"o46_codlei = $o39_codproj"));
-  if ($clorcsuplem->numrows >0) {
-  	  db_msgbox("Projeto não pode ser excluir porque possui suplementações lançadas ! Verifique !");
-  } else {	  
-     db_inicio_transacao();
-     $db_opcao = 3;
-     $clorcprojeto->excluir($o39_codproj);
-     db_fim_transacao();
-  }
-}else if(isset($chavepesquisa)){
-   $db_opcao = 3;
-   $result = $clorcprojeto->sql_record($clorcprojeto->sql_query($chavepesquisa)); 
-   db_fieldsmemory($result,0);
-   $db_botao = true;
-}
+
+$clcriaabas      = new cl_criaabas;
+
+db_postmemory($HTTP_POST_VARS);
+
+$abas    = array();
+$titulos = array();
+$fontes  = array();
+$sizecp  = array();
+
+$codrel = 15; // balancete orcamentario
+
 ?>
 <html>
 <head>
@@ -68,9 +54,9 @@ if(isset($excluir)){
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
+  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -81,27 +67,21 @@ if(isset($excluir)){
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
     <center>
-	<?
-	include("forms/db_frmorcprojeto.php");
-	?>
+    <?
+    $clcriaabas->identifica = array("projeto"=>"Projeto","emissao"=>"Dados de Emissão");
+    $clcriaabas->title      = array("projeto"=>"Projeto","emissao"=>"Dados de Emissão");
+    $clcriaabas->src  = array("projeto"=>"orc1_orcprojeto033.php",
+                              "emissao"=>"orc1_orcprojeto012.php"
+                              );
+    $clcriaabas->sizecampo= array("projeto"=>"33","emissao"=>"33");
+    $clcriaabas->cria_abas();    
+    ?>
     </center>
-	</td>
+  </td>
   </tr>
 </table>
 <?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
-<?
-if(isset($excluir)){
-  if($clorcprojeto->erro_status=="0"){
-    $clorcprojeto->erro(true,false);
-  }else{
-    $clorcprojeto->erro(true,true);
-  };
-};
-if($db_opcao==33){
-  echo "<script>document.form1.pesquisar.click();</script>";
-}
-?>
