@@ -164,7 +164,8 @@ class cl_veiculos {
    // funcao para inclusao
    function incluir ($ve01_codigo,$si04_tipoveiculo = 0){
       $this->atualizacampos();
-     if($this->ve01_placa == null && $si04_tipoveiculo == 3){
+
+     if(($this->ve01_placa == null || !$this->ve01_placa) && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Placa nao Informado.";
        $this->erro_campo = "ve01_placa";
        $this->erro_banco = "";
@@ -200,7 +201,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->ve01_veiccadcor == null || $this->ve01_veiccadcor == 0) && $si04_tipoveiculo == 3){
+     if(($this->ve01_veiccadcor == null || $this->ve01_veiccadcor == 0) && !in_array($si04_tipoveiculo, array('1', '2', '4', '5', '99'))){
        $this->erro_sql = " Campo Cor nao Informado.";
        $this->erro_campo = "ve01_veiccadcor";
        $this->erro_banco = "";
@@ -254,7 +255,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_nroserie == null && $this->ve01_chassi == null){
+     if($this->ve01_nroserie == null && $this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo N° de Série nao Informado.";
        $this->erro_campo = "ve01_nroserie";
        $this->erro_banco = "";
@@ -550,7 +551,7 @@ class cl_veiculos {
      if(trim($this->ve01_placa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_placa"])){
        $sql  .= $virgula." ve01_placa = '$this->ve01_placa' ";
        $virgula = ",";
-       if(trim($this->ve01_placa) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_placa) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Placa nao Informado.";
          $this->erro_campo = "ve01_placa";
          $this->erro_banco = "";
@@ -589,7 +590,7 @@ class cl_veiculos {
      if(trim($this->ve01_veiccadmodelo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmodelo"])){
        $sql  .= $virgula." ve01_veiccadmodelo = ".($this->ve01_veiccadmodelo == 0 ? 'null' : $this->ve01_veiccadmodelo)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadmodelo) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_veiccadmodelo) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Modelo nao Informado.";
          $this->erro_campo = "ve01_veiccadmodelo";
          $this->erro_banco = "";
@@ -602,7 +603,7 @@ class cl_veiculos {
      if(trim($this->ve01_veiccadcor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcor"])){
        $sql  .= $virgula." ve01_veiccadcor = ".($this->ve01_veiccadcor == 0 ? 'null' : $this->ve01_veiccadcor)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadcor) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_veiccadcor) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Cor nao Informado.";
          $this->erro_campo = "ve01_veiccadcor";
          $this->erro_banco = "";
@@ -615,7 +616,7 @@ class cl_veiculos {
      if(trim($this->ve01_veiccadproced)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadproced"])){
        $sql  .= $virgula." ve01_veiccadproced = ".($this->ve01_veiccadproced == 0 ? 'null' : $this->ve01_veiccadproced)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadproced) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_veiccadproced) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Procedência nao Informado.";
          $this->erro_campo = "ve01_veiccadproced";
          $this->erro_banco = "";
@@ -628,7 +629,7 @@ class cl_veiculos {
      if(trim($this->ve01_veiccadcateg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcateg"])){
        $sql  .= $virgula." ve01_veiccadcateg = ".($this->ve01_veiccadcateg == 0 ? 'null' : $this->ve01_veiccadcateg)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadcateg) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_veiccadcateg) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Categoria nao Informado.";
          $this->erro_campo = "ve01_veiccadcateg";
          $this->erro_banco = "";
@@ -641,7 +642,7 @@ class cl_veiculos {
      if(trim($this->ve01_chassi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_chassi"])){
        $sql  .= $virgula." ve01_chassi = '$this->ve01_chassi' ";
        $virgula = ",";
-       if(trim($this->ve01_chassi) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_chassi) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Nº do Chassi nao Informado.";
          $this->erro_campo = "ve01_chassi";
          $this->erro_banco = "";
@@ -654,7 +655,7 @@ class cl_veiculos {
      if(trim($this->ve01_ranavam)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_ranavam"])){
        $sql  .= $virgula." ve01_ranavam = ".($this->ve01_ranavam == null ? "null" : $this->ve01_ranavam)." ";
        $virgula = ",";
-       if(trim($this->ve01_ranavam) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_ranavam) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Renavam nao Informado.";
          $this->erro_campo = "ve01_ranavam";
          $this->erro_banco = "";
@@ -667,7 +668,7 @@ class cl_veiculos {
      if(trim($this->ve01_placanum)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_placanum"])){
        $sql  .= $virgula." ve01_placanum = ".($this->ve01_placanum == null ? "null" : $this->ve01_placanum)."  ";
        $virgula = ",";
-       if(trim($this->ve01_placanum) == null && $si04_tipoveiculo == 3){
+       if(trim($this->ve01_placanum) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Placa em Número nao Informado.";
          $this->erro_campo = "ve01_placanum";
          $this->erro_banco = "";
@@ -680,7 +681,7 @@ class cl_veiculos {
      if(trim($this->ve01_nroserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_nroserie"])){
        $sql  .= $virgula." ve01_nroserie = '$this->ve01_nroserie' ";
        $virgula = ",";
-       if(trim($this->ve01_nroserie) == null && $this->ve01_chassi == null){
+       if(trim($this->ve01_nroserie) == null && $this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
          $this->erro_sql = " Campo Nº de Série nao Informado.";
          $this->erro_campo = "ve01_nroserie";
          $this->erro_banco = "";
@@ -1102,10 +1103,10 @@ class cl_veiculos {
      $sql .= "      left join veiccadtipo            on veiccadtipo.ve20_codigo             = veiculos.ve01_veiccadtipo           ";
      $sql .= "      inner join veiccadmarca           on veiccadmarca.ve21_codigo            = veiculos.ve01_veiccadmarca          ";
      $sql .= "      inner join veiccadmodelo          on veiccadmodelo.ve22_codigo           = veiculos.ve01_veiccadmodelo         ";
-     $sql .= "      inner join veiccadcor             on veiccadcor.ve23_codigo              = veiculos.ve01_veiccadcor            ";
+     $sql .= "      left join veiccadcor             on veiccadcor.ve23_codigo              = veiculos.ve01_veiccadcor            ";
      $sql .= "      left join veiccadtipocapacidade  on veiccadtipocapacidade.ve24_codigo   = veiculos.ve01_veiccadtipocapacidade ";
      $sql .= "      left join veiccadcategcnh        on veiccadcategcnh.ve30_codigo         = veiculos.ve01_veiccadcategcnh       ";
-     $sql .= "      inner join veiccadproced          on veiccadproced.ve25_codigo           = veiculos.ve01_veiccadproced         ";
+     $sql .= "      left join veiccadproced          on veiccadproced.ve25_codigo           = veiculos.ve01_veiccadproced         ";
      $sql .= "      left  join veiccadpotencia        on veiccadpotencia.ve31_codigo         = veiculos.ve01_veiccadpotencia       ";
      $sql .= "      left join veiccadcateg  as a     on a.ve32_codigo                       = veiculos.ve01_veiccadcateg          ";
      $sql .= "      inner join veictipoabast          on veictipoabast.ve07_sequencial       = veiculos.ve01_veictipoabast         ";

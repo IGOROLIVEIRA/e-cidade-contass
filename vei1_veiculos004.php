@@ -202,11 +202,14 @@ if(isset($incluir)){
         }
 
         if ($sqlerro==false){
-            $clveicresp->ve02_veiculo=$clveiculos->ve01_codigo;
-            $clveicresp->incluir(null);
-            if ($clveicresp->erro_status=="0"){
-                $sqlerro=true;
-                $erro_msg=$clveicresp->erro_msg;
+
+            if(!in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+                $clveicresp->ve02_veiculo=$clveiculos->ve01_codigo;
+                $clveicresp->incluir(null);
+                if ($clveicresp->erro_status=="0"){
+                    $sqlerro=true;
+                    $erro_msg=$clveicresp->erro_msg;
+                }
             }
         }
         /*
@@ -281,6 +284,62 @@ if (isset($codveictipoabast) && trim($codveictipoabast)!=""){
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+
+    #ve01_veiccadcor, #ve01_veiccadmarca, #ve01_veiccadcategcnh, #ve01_veictipoabast{
+        display: none;
+    }
+
+    #ve01_veiccadpotencia, #ve01_veiccadtipocapacidade{
+        width: 93px;
+    }
+
+    #ve01_veiccadpotenciadescr, #ve01_veiccadtipocapacidadedescr{
+        width: 212px;
+    }
+
+    #si04_tipoveiculo, #si04_especificacao{
+        width: 184px;
+    }
+
+    #si04_situacao, #ve01_veiccadmarcadescr{
+        width: 395px;
+    }
+
+    #ve02_numcgm, #ve01_veiccadtipo{
+        width: 84px;
+    }
+
+    #ve06_veiccadcomb{
+        width: 394px;
+    }
+
+    #ve01_veiccadcategdescr,
+    #ve01_veiccadproceddescr{
+        width: 133px;
+    }
+
+    #ve01_veiccadtipodescr{
+        width: 307px;
+    }
+
+    #ve01_veiccadcordescr{
+        width: 182px;
+    }
+
+    #ve01_veictipoabastdescr, #ve01_veiccadcategcnhdescr{
+        width: 180px;
+    }
+
+    .tr__hidden-veiculos{
+        display: none;
+    }
+
+    .div__anos{
+        margin-left: -3px;
+    }
+
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
     <tr>
@@ -297,6 +356,8 @@ if (isset($codveictipoabast) && trim($codveictipoabast)!=""){
 </html>
 <script>
     js_tabulacaoforms("form1","ve01_placa",true,1,"ve01_placa",true);
+    document.getElementById('si04_especificacao').value = "<?=$si04_especificacao?>";
+    document.getElementById('ve06_veiccadcomb').value = "<?=$ve06_veiccadcomb?>";
 </script>
 <?
 if(isset($incluir)){
