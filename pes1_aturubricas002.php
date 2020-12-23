@@ -73,6 +73,7 @@ try {
 		$erro_msgF3 = "";
 		$erro_msgFX = "";
 		$erro_msgFS = "";
+		$erro_msgFR = "";
 
 		$erro_ALTEF = "Todos ";
 
@@ -81,6 +82,7 @@ try {
 		$erro_conF3 = 0;
 		$erro_conFX = 0;
 		$erro_conFS = 0;
+		$erro_conFR = 0;
 
 		$whereatualiza = " #s#_instit = ".db_getsession("DB_instit")." ";
 		if(isset($valoratu) && trim($valoratu) != ""){
@@ -175,6 +177,7 @@ try {
 			$arr_registrosF3 = Array();
 			$arr_registrosFX = Array();
 			$arr_registrosFS = Array();
+			$arr_registrosFR = Array();
 
 			if (isset($ativos)) {
 
@@ -211,6 +214,9 @@ try {
 					}
 					if(isset($fs)){
 							$arr_registrosFS[$rh01_regist] = $rh02_lota;
+					}
+					if(isset($fr)){
+							$arr_registrosFR[$rh01_regist] = $rh02_lota;
 					}
 				}
 
@@ -327,6 +333,32 @@ try {
 					for($i=0; $i<$iLinhas; $i++){
 						db_fieldsmemory($result_PTFS, $i);
 						$arr_registrosFS[$regist] = $lotac;
+					}
+
+				}
+
+				/**
+				 * Ponto rescisao $fr
+				 */
+				if ( isset($fr)) {
+
+					$whereatualizaFR = str_replace("#s#","r19",$whereatualiza);
+					$sWhere  = " r19_anousu = ".db_anofolha();
+					$sWhere .= " and r19_mesusu = ".db_mesfolha();
+					$sWhere .= " and r19_instit = ".db_getsession("DB_instit");
+					$sWhere .= " and $whereatualizaFR";
+					$result_PTFR = $clpontofr->sql_record($clpontofr->sql_query_seleciona(null,
+							                                                                  null,
+							                                                                  null,
+							                                                                  null,
+							                                                                  null,
+							                                                                  "distinct r19_regist as regist,r19_lotac as lotac",
+							                                                                  "",
+							                                                                  $sWhere));
+					$iLinhas = $clpontofr->numrows;
+					for($i=0; $i<$iLinhas; $i++) {
+						db_fieldsmemory($result_PTFR, $i);
+						$arr_registrosFR[$regist] = $lotac;
 					}
 
 				}
@@ -576,6 +608,53 @@ try {
 				next($arr_registrosFS);
 			}
 			$erro_msgFS = $erro_conFS." inclusões no Ponto Salário";
+
+			reset($arr_registrosFR);
+			$rh27_pd = db_utils::fieldsMemory($rsRubrica, 0)->rh27_pd;
+			for ($i=0; $i<count($arr_registrosFR); $i++) {
+				$registrocorrente = key($arr_registrosFR);
+				$lotacregcorrente = $arr_registrosFR[$registrocorrente];
+
+				$whereatualizaFR = str_replace("#s#","r19",$whereatualiza);
+				$sWhere  = " r19_anousu = ".db_anofolha();
+				$sWhere .= " and r19_mesusu = ".db_mesfolha();
+				$sWhere .= " and r19_regist = ".$registrocorrente;
+				$sWhere .= " and r19_rubric = '".$rh27_rubric."'";
+				$sWhere .= " and r19_instit = ".db_getsession("DB_instit");
+				$sWhere .= " and $whereatualizaFR";
+
+				$result_PTFRtest = $clpontofr->sql_record($clpontofr->sql_query_seleciona(null,
+						                                                                      null,
+						                                                                      null,
+						                                                                      null,
+						                                                                      null,
+						                                                                      "distinct r19_regist as regist,r19_lotac as lotac",
+						                                                                      "",
+						                                                                      $sWhere));
+				if ($clpontofr->numrows == 0) {
+
+					if (isset($valornov) && trim($valornov) != "") {
+						$clpontofr->r19_valor  = "round($setdadosnovos,2)";
+						$clpontofr->r19_quant  = "0";
+					} else if(isset($quantnov) && trim($quantnov) != "") {
+						$clpontofr->r19_valor  = "0";
+						$clpontofr->r19_quant  = "$setdadosnovos";
+					}
+
+					$clpontofr->r19_lotac  = $lotacregcorrente;
+					$clpontofr->r19_tpp    = ($rh27_pd == 1 ? 'P' : 'D');
+					$clpontofr->r19_instit = db_getsession("DB_instit");
+					$clpontofr->incluir(db_anofolha(),db_mesfolha(),$registrocorrente,$rh27_rubric);
+					if ($clpontofr->erro_status==0) {
+                        throw new Exception($clpontofr->erro_msg);
+					}
+					$erro_conFR++;
+
+				}
+
+				next($arr_registrosFR);
+			}
+			$erro_msgFR = $erro_conFR." inclusões no Ponto Rescisão";
 
 		break;
 
@@ -846,8 +925,9 @@ try {
 				$sWhere .= " and r19_mesusu = ".db_mesfolha();
 				$sWhere .= " and r19_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r19_instit = ".db_getsession("DB_instit");
-				$sWhere .= " and $whereatualizaFS";
+				$sWhere .= " and $whereatualizaFR";
 				$rsTestesFR = $clpontofr->sql_record($clpontofr->sql_query_seleciona(null,
+																															               null,
 																															               null,
 																															               null,
 																															               null,
@@ -864,7 +944,6 @@ try {
 
 				foreach ($aFuncionariosSelecao as $oFuncionariosSelecao) {
 
-					$clpontofr              = new cs_pontofr();
 					$clpontofr->r19_anousu = db_anofolha();
 					$clpontofr->r19_mesusu = db_mesfolha();
 					$clpontofr->r19_regist = $oFuncionariosSelecao->regist;
@@ -1185,6 +1264,50 @@ try {
 			  	
 			  }
 
+			  /**
+			   * Ponto rescisao
+			   */
+			  if ( isset($fr)) {
+
+			  	$whereatualizaFR = str_replace("#s#","r19",$whereatualiza);
+                $sWhere  = "     r19_anousu = ".db_anofolha();
+			  	$sWhere .= " and r19_mesusu = ".db_mesfolha();
+			  	$sWhere .= " and r19_rubric = '".$rh27_rubric."'";
+			  	$sWhere .= " and r19_instit = ".db_getsession("DB_instit");
+			  	$sWhere .= " and $whereatualizaFR";
+
+			  	$sSqlTesteFR = $clpontofr->sql_query_seleciona(null,
+			  																								 null,
+			  																								 null,
+			  																								 null,
+			  																								 null,
+			  																								 "distinct r19_regist as regist,r19_lotac as lotac",
+			  																								 "",
+			  																								 $sWhere);
+			  	$rsTestesFR = $clpontofr->sql_record($sSqlTesteFR);
+			  	$iLinhas    = $clpontofr->numrows;
+			  	if ( $iLinhas == 0) {
+			  		throw new Exception($clpontofr->erro_msg);
+			  	}
+
+			  	$aFuncionariosSelecao = db_utils::getCollectionByRecord($rsTestesFR);
+			  	$iContador = 0;
+
+			  	foreach ($aFuncionariosSelecao as $oFuncionariosSelecao) {
+
+			  		$clpontofr->excluir(db_anofolha(), db_mesfolha(), $oFuncionariosSelecao->regist, $rh27_rubric);
+			  		if ( $clpontofr->erro_status == 0 ) {
+			  			throw new Exception("Erro :".$clpontofr->erro_msg);
+			  		}
+
+			  		$iContador += $clpontofr->numrows_excluir;
+
+			  	}
+
+			  	$erro_msgFR= "{$iContador} exclusões no Ponto Salário";
+			  	
+			  }
+
 			break;
 		}
 
@@ -1211,6 +1334,10 @@ try {
 		}
 		if (isset($fs)) {
 			$erro_msg.= $barrans.$erro_msgFS;
+			$barrans = "\\n\\n";
+		}
+		if (isset($fr)) {
+			$erro_msg.= $barrans.$erro_msgFR;
 			$barrans = "\\n\\n";
 		}
 
