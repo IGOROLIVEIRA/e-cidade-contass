@@ -144,6 +144,14 @@ if (isset($incluir)) {
         }
     }
 
+    if ( ($tiposup == 1003 || $tiposup == 1008) && substr($o58_codigo, 0, 1) == 2 ) {
+    
+        db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+        $sqlerro = true;
+        $limpa_dados = false;
+        
+    }
+
     // pressionado botao incluir na tela
     db_inicio_transacao();
     if ((isset($o47_coddot)  && $o47_coddot != "") && !$sqlerro) {
