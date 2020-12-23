@@ -178,32 +178,38 @@ if(!$sqlerro){
     }
 
     if(isset($excluir)){
-      db_inicio_transacao();
-      $db_opcao = 3;
+        if(!$si06_sequencial){
+            $sqlerro = true;
+            $erro_msg = 'Adesão de Registro de Preço ainda não cadastrada.';
+        }else{
+			db_inicio_transacao();
+			$db_opcao = 3;
 
-        /**
-         * Verificar Encerramento Periodo Patrimonial
-         */
-        $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial,"si06_dataadesao")),0)->si06_dataadesao;
+			/**
+			 * Verificar Encerramento Periodo Patrimonial
+			 */
+			$dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial,"si06_dataadesao")),0)->si06_dataadesao;
 
-        if(!empty($si06_dataadesao)) {
-            $clcondataconf = new cl_condataconf;
-            if(!$clcondataconf->verificaPeriodoPatrimonial($dataadesao)) {
-                $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
-                $cladesaoregprecos->erro_status="0";
+			if(!empty($si06_dataadesao)) {
+				$clcondataconf = new cl_condataconf;
+				if(!$clcondataconf->verificaPeriodoPatrimonial($dataadesao)) {
+					$cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+					$cladesaoregprecos->erro_status="0";
 
-                $sqlerro  = true;
-                $erro_msg=$clcondataconf->erro_msg;
-            }
+					$sqlerro  = true;
+					$erro_msg=$clcondataconf->erro_msg;
+				}
+			}
+
+			if ($sqlerro == false) {
+				$clitensregpreco = new cl_itensregpreco;
+				$clitensregpreco->excluir(null," si07_sequencialadesao = $si06_sequencial");
+				$cladesaoregprecos->excluir($si06_sequencial);
+			}
+
+			db_fim_transacao();
         }
 
-        if ($sqlerro == false) {
-            $clitensregpreco = new cl_itensregpreco;
-            $clitensregpreco->excluir(null," si07_sequencialadesao = $si06_sequencial");
-            $cladesaoregprecos->excluir($si06_sequencial);
-        }
-
-      db_fim_transacao();
     }else if(isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])){
        //$db_opcao = 3;
        if (!isset($chavepesquisa)) {
@@ -286,7 +292,7 @@ if(isset($alterar)){
 if($db_opcao==22 && !$sqlerro){
   echo "<script>document.form1.pesquisar.click();</script>";
 }
-if(isset($excluir)){
+if(isset($excluir) && !$sqlerro){
   if($cladesaoregprecos->erro_status=="0"){
     $cladesaoregprecos->erro(true,false);
   }else{
