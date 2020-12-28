@@ -2195,7 +2195,7 @@ if (count($aParametrosEmpenho) > 0) {
       return verificaChave();
     } else {
       alert("Chave de Acesso inválida ");
-      $('e69_chaveacesso').value = '';
+      // $('e69_chaveacesso').value = '';
       return false;
     }
 
@@ -2205,7 +2205,7 @@ if (count($aParametrosEmpenho) > 0) {
 echo "<script>js_consultaOrdem({$m51_codordem});
   document.form1.dtjs_e69_dtnota.style.display   = 'none';
   document.form1.dtjs_e69_dtrecebe.style.display = 'none';
-  \$('matmater').style.width='80px';
+  $('matmater').style.width='80px';
   lSalvo    = true;
   teclaModi = '';
 </script>";
