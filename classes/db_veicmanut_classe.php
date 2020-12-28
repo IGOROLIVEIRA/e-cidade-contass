@@ -904,18 +904,18 @@ class cl_veicmanut {
         $sql .= "      inner join veiccadtiposervico    on veiccadtiposervico.ve28_codigo     = veicmanut.ve62_veiccadtiposervico";
         $sql .= "      inner join veiculos              on veiculos.ve01_codigo               = veicmanut.ve62_veiculos";
         $sql .= "      inner join ceplocalidades        on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades";
-        $sql .= "      inner join veiccadtipo           on veiccadtipo.ve20_codigo   = veiculos.ve01_veiccadtipo";
+        $sql .= "      left join veiccadtipo           on veiccadtipo.ve20_codigo   = veiculos.ve01_veiccadtipo";
         $sql .= "      inner join veiccadmarca          on veiccadmarca.ve21_codigo  = veiculos.ve01_veiccadmarca";
         $sql .= "      inner join veiccadmodelo         on veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo";
-        $sql .= "      inner join veiccadcor            on veiccadcor.ve23_codigo    = veiculos.ve01_veiccadcor";
-        $sql .= "      inner join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo = veiculos.ve01_veiccadtipocapacidade";
+        $sql .= "      left join veiccadcor            on veiccadcor.ve23_codigo    = veiculos.ve01_veiccadcor";
+        $sql .= "      left join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo = veiculos.ve01_veiccadtipocapacidade";
         $sql .= "      inner join veiculoscomb          on veiculoscomb.ve06_veiculos  = veiculos.ve01_codigo";
         $sql .= "      inner join veiccadcomb           on veiccadcomb.ve26_codigo     = veiculoscomb.ve06_veiccadcomb";
-        $sql .= "      inner join veiccadcategcnh       on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
-        $sql .= "      inner join veiccadproced         on veiccadproced.ve25_codigo   = veiculos.ve01_veiccadproced";
-        $sql .= "      inner join veiccadpotencia       on veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
-        $sql .= "      inner join veiccadcateg          on veiccadcateg.ve32_codigo    = veiculos.ve01_veiccadcateg";
-        $sql .= "		left join veicmanutretirada on veicmanutretirada.ve65_veicmanut   = veicmanut.ve62_codigo";
+        $sql .= "      left join veiccadcategcnh       on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
+        $sql .= "      left join veiccadproced         on veiccadproced.ve25_codigo   = veiculos.ve01_veiccadproced";
+        $sql .= "      left join veiccadpotencia       on veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
+        $sql .= "      left join veiccadcateg          on veiccadcateg.ve32_codigo    = veiculos.ve01_veiccadcateg";
+        $sql .= "        left join veicmanutretirada on veicmanutretirada.ve65_veicmanut   = veicmanut.ve62_codigo";
         $sql2 = "";
         if($dbwhere==""){
             if($ve62_codigo!=null ){

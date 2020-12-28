@@ -842,18 +842,18 @@ class cl_veicretirada {
     $sql .= "      inner join db_depart       on db_depart.coddepto          = veicretirada.ve60_coddepto";
     $sql .= "      inner join veiculos        on veiculos.ve01_codigo        = veicretirada.ve60_veiculo";
     $sql .= "      inner join veicmotoristas  on veicmotoristas.ve05_codigo  = veicretirada.ve60_veicmotoristas";
-    $sql .= "      inner join veiccadtipo     on veiccadtipo.ve20_codigo     = veiculos.ve01_veiccadtipo";
+    $sql .= "      left join veiccadtipo     on veiccadtipo.ve20_codigo     = veiculos.ve01_veiccadtipo";
     $sql .= "      inner join veiccadmarca    on veiccadmarca.ve21_codigo    = veiculos.ve01_veiccadmarca";
     $sql .= "      inner join veiccadmodelo   on veiccadmodelo.ve22_codigo   = veiculos.ve01_veiccadmodelo";
-    $sql .= "      inner join veiccadcor      on veiccadcor.ve23_codigo      = veiculos.ve01_veiccadcor";
+    $sql .= "      left join veiccadcor      on veiccadcor.ve23_codigo      = veiculos.ve01_veiccadcor";
     $sql .= "      inner join veiculoscomb    on veiculoscomb.ve06_veiculos  = veiculos.ve01_codigo";
     $sql .= "      inner join veiccadcomb     on veiccadcomb.ve26_codigo     = veiculoscomb.ve06_veiccadcomb";
-    $sql .= "      inner join veiccadcategcnh on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
+    $sql .= "      left join veiccadcategcnh on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
     $sql .= "      inner join cgm             on cgm.z01_numcgm      = veicmotoristas.ve05_numcgm";
-    $sql .= "      inner join veiccadcategcnh as a on  a.ve30_codigo = veicmotoristas.ve05_veiccadcategcnh";
+    $sql .= "      left join veiccadcategcnh as a on  a.ve30_codigo = veicmotoristas.ve05_veiccadcategcnh";
     $sql .= "    left join veicdevolucao     on veicretirada.ve60_codigo = veicdevolucao.ve61_veicretirada ";
-    $sql .= "		left join veicabastretirada on ve73_veicretirada        = ve60_codigo";
-    $sql .= "		left join veicmanutretirada on ve65_veicretirada        = ve60_codigo";
+    $sql .= "           left join veicabastretirada on ve73_veicretirada        = ve60_codigo";
+    $sql .= "           left join veicmanutretirada on ve65_veicretirada        = ve60_codigo";
     $sql2 = "";
     if($dbwhere==""){
       if($ve60_codigo!=null ){
