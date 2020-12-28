@@ -144,12 +144,31 @@ if (isset($incluir)) {
         }
     }
 
-    if ( ($tiposup == 1003 || $tiposup == 1008) && substr($o58_codigo, 0, 1) == 2 ) {
+    if ( ($tiposup == 1003 || $tiposup == 1008) && substr($o58_codigo, 0, 1) != 2 ) {
     
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
         $limpa_dados = false;
         
+    }
+
+    if ( $tiposup == 1004 ) {
+    
+        $sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup,db_getsession("DB_anousu"),null, "o58_codigo");
+        $rsFonte    = db_query($sSqlFonte);
+
+        if (pg_num_rows($rsFonte) > 0) {
+        
+            if ( $o58_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo ) {
+
+                db_msgbox("Não é possível incluir dotações com fontes diferentes neste lançamento de suplementação. Finalize o lançamento anterior e em seguida lance uma nova suplementação");
+                $sqlerro = true;
+                $limpa_dados = false;
+
+            }
+        
+        }
+
     }
 
     // pressionado botao incluir na tela
