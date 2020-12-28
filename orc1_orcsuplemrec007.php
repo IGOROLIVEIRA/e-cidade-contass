@@ -59,21 +59,24 @@ $sqlerro = false;
 
 if(isset($incluir)){
 
+	if ( $tiposup == 1004 || $tiposup == 1009 ) {
 
-  	$sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup,db_getsession("DB_anousu"),null, "o58_codigo");
-  	$rsFonte    = db_query($sSqlFonte);
+		$sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup,db_getsession("DB_anousu"),null, "o58_codigo");
+		$rsFonte    = db_query($sSqlFonte);
 
-  	if (pg_num_rows($rsFonte) > 0) {
-  
-      	if ( $o70_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo ) {
+		if (pg_num_rows($rsFonte) > 0) {
+	
+			if ( $o70_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo ) {
 
-          	db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
-         	$sqlerro = true;
-          	$limpa_dados = false;
+				db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+				$sqlerro = true;
+				$limpa_dados = false;
 
-      	}
-  
-  	}
+			}
+	
+		}
+
+	}
 
   	if ( !$sqlerro ) {
 	  

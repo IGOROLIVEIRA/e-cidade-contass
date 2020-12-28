@@ -152,7 +152,7 @@ if (isset($incluir)) {
         
     }
 
-    if ( $tiposup == 1004 ) {
+    if ( $tiposup == 1004 || $tiposup == 1009 ) {
     
         $sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup,db_getsession("DB_anousu"),null, "o58_codigo");
         $rsFonte    = db_query($sSqlFonte);
