@@ -137,11 +137,11 @@ class cl_pontofr {
        $this->erro_status = "0";
        return false;
      }
-       $this->r19_anousu = $r19_anousu; 
-       $this->r19_mesusu = $r19_mesusu; 
-       $this->r19_regist = $r19_regist; 
-       $this->r19_rubric = $r19_rubric; 
-       $this->r19_tpp = $r19_tpp; 
+       $this->r19_anousu = ($r19_anousu == "" ? $this->r19_rubric : $r19_anousu); 
+       $this->r19_mesusu = ($r19_mesusu == "" ? $this->r19_rubric : $r19_mesusu); 
+       $this->r19_regist = ($r19_regist == "" ? $this->r19_rubric : $r19_regist); 
+       $this->r19_rubric = ($r19_rubric == "" ? $this->r19_rubric : $r19_rubric);
+       $this->r19_tpp = ($r19_tpp == "" ? $this->r19_tpp : $r19_tpp); 
      if(($this->r19_anousu == null) || ($this->r19_anousu == "") ){ 
        $this->erro_sql = " Campo r19_anousu nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";

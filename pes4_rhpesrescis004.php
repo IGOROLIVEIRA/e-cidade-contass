@@ -126,7 +126,7 @@ if(!isset($_SESSION['campomatriculas'])){
   $clsql->usar_afa = true;
   $campomatriculas = "";
   $virgumatriculas = "";
-  $sql = $clsql->gerador_sql("", $anofolha, $mesfolha, null, null, " rh01_regist ", "rh01_regist", $whereestrut);
+  $sql = $clsql->gerador_sql("", $anofolha, $mesfolha, null, null, " DISTINCT rh01_regist ", "rh01_regist", $whereestrut);
   $result = $clsql->sql_record($sql);
   if($clsql->numrows_exec > 0){
     for($i=0; $i<$clsql->numrows_exec; $i++){

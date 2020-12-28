@@ -95,7 +95,7 @@ $clrotulo->label("o45_numlei");
     if($o39_tiposuplementacao == ""){
     $o39_tiposuplementacao = $o46_tiposup;
     }
-    db_selectrecord("o39_tiposuplementacao",$rtipo,false,$edita);
+    db_selectrecord("o39_tiposuplementacao",$rtipo,false, $db_opcao != 3 ? $edita : $db_opcao);
 
     ?>
   </td>
