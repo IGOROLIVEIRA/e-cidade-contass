@@ -723,12 +723,12 @@ if($x->consultarDataDoSistema == true){
         aItensPosicao.each(function (oItem, iSeq) {
 
             oItem.dotacoes.each( function (oDotItem) {
-
+                let vTotal = 0
                 if (oItem.dotacoes.length == 1) {
-
                     oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,2);
-                    oDotItem.quantdot = oDotItem.quantidade;
-
+                    oDotItem.quantdot = oItem.saldos.quantidadeautorizar.toFixed(4);
+                    vTotal = js_round(oItem.valorunitario * oItem.saldos.quantidadeautorizar,2);
+                    oDotItem.totaldot = vTotal;
                 } else {
                     oDotItem.quantdot = oDotItem.quantidade = 0;
                 }
@@ -1084,7 +1084,7 @@ if($x->consultarDataDoSistema == true){
         var nValorTotal     = nValor;
 
         aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
-
+console.log(oDotacao);
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
             // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
@@ -1097,7 +1097,7 @@ if($x->consultarDataDoSistema == true){
             if(tipo == 2) {
                 aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "',1)");
             }else{
-                aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "','" + oDotacao.quantidade + "')");
+                aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "','" + oDotacao.quantdot + "')");
             }
             aLinha[2].addStyle("text-align","right");
             aLinha[2].addStyle("height","100%");
@@ -1113,7 +1113,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[2].addEvent("onKeyPress","return js_mask(event,\"0-9|.|-\")");
             aLinha[2].addEvent("onKeyDown","return js_verifica(this,event,true)");
 
-            aLinha[3] = eval("valordot"+iDot+" = new DBTextField('valordot"+iDot+"','valordot"+iDot+"','"+nValorDotacao+"')");
+            aLinha[3] = eval("valordot"+iDot+" = new DBTextField('valordot"+iDot+"','valordot"+iDot+"','"+oDotacao.totaldot+"')");
             aLinha[3].addStyle("text-align","right");
             aLinha[3].addStyle("height","100%");
             aLinha[3].addStyle("width","100px");
