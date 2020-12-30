@@ -210,24 +210,24 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_veiccadproced == null ){
-       $this->erro_sql = " Campo Procedência nao Informado.";
-       $this->erro_campo = "ve01_veiccadproced";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->ve01_veiccadcateg == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
-       $this->erro_sql = " Campo Categoria nao Informado.";
-       $this->erro_campo = "ve01_veiccadcateg";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+    //  if($this->ve01_veiccadproced == null ){
+    //    $this->erro_sql = " Campo Procedência nao Informado.";
+    //    $this->erro_campo = "ve01_veiccadproced";
+    //    $this->erro_banco = "";
+    //    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+    //    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+    //    $this->erro_status = "0";
+    //    return false;
+    //  }
+    //  if($this->ve01_veiccadcateg == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+    //    $this->erro_sql = " Campo Categoria nao Informado.";
+    //    $this->erro_campo = "ve01_veiccadcateg";
+    //    $this->erro_banco = "";
+    //    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+    //    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+    //    $this->erro_status = "0";
+    //    return false;
+    //  }
      if($this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Nº do Chassi nao Informado.";
        $this->erro_campo = "ve01_chassi";
@@ -246,15 +246,15 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_placanum == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
-       $this->erro_sql = " Campo Placa em Número nao Informado.";
-       $this->erro_campo = "ve01_placanum";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+    //  if($this->ve01_placanum == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+    //    $this->erro_sql = " Campo Placa em Número nao Informado.";
+    //    $this->erro_campo = "ve01_placanum";
+    //    $this->erro_banco = "";
+    //    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+    //    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+    //    $this->erro_status = "0";
+    //    return false;
+    //  }
      if($this->ve01_nroserie == null && $this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo N° de Série nao Informado.";
        $this->erro_campo = "ve01_nroserie";

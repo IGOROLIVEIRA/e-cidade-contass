@@ -213,7 +213,7 @@ if(isset($incluir)){
 
         if ($sqlerro==false){
 
-            if(!in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+            if(!in_array($si04_tipoveiculo, array(1, 2, 3, 4, 5, 99))){
                 $clveicresp->ve02_veiculo=$clveiculos->ve01_codigo;
                 $clveicresp->incluir(null);
                 if ($clveicresp->erro_status=="0"){
