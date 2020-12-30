@@ -111,4 +111,12 @@ function js_mostra1(chave,chave1) {
   
   db_iframe_nome.hide();
 }
+
+document.getElementById('z01_numcgm').addEventListener('keyup', (e) => {
+   if(/[^0-9]/.test(e.target.value)){
+       alert('Informe somente números!');
+       document.getElementById('z01_numcgm').value = '';
+       e.preventDefault();
+   } 
+});
 </script>
