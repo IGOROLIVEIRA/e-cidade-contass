@@ -140,6 +140,16 @@ if(isset($incluir)){
           $clveiculos->erro_campo = "si04_especificacao";
         }
 
+        if(!$cod_comb){
+            $sqlerro  = true;
+            $erro_msg = "Nenhum combustível informado. Verifique.";
+        }
+
+        if(!trim($ve01_veictipoabast)){
+            $sqlerro  = true;
+            $erro_msg = "Tipo de Abastecimento não informado. Verifique.";
+        }
+
         if($si04_tipoveiculo == 0 || $si04_tipoveiculo == ''){
           $sqlerro  = true;
           $erro_msg = "Tipo do veículo não informado. Verifique.";

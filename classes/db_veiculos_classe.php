@@ -219,7 +219,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_veiccadcateg == null && $si04_tipoveiculo == 3){
+     if($this->ve01_veiccadcateg == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Categoria nao Informado.";
        $this->erro_campo = "ve01_veiccadcateg";
        $this->erro_banco = "";
@@ -228,7 +228,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_chassi == null && $si04_tipoveiculo == 3){
+     if($this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Nº do Chassi nao Informado.";
        $this->erro_campo = "ve01_chassi";
        $this->erro_banco = "";
@@ -237,7 +237,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_ranavam == null && $si04_tipoveiculo == 3){
+     if($this->ve01_ranavam == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Renavam nao Informado.";
        $this->erro_campo = "ve01_ranavam";
        $this->erro_banco = "";
@@ -246,7 +246,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_placanum == null && $si04_tipoveiculo == 3){
+     if($this->ve01_placanum == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Placa em Número nao Informado.";
        $this->erro_campo = "ve01_placanum";
        $this->erro_banco = "";
@@ -318,7 +318,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_veiccadcategcnh == null && $si04_tipoveiculo == 3){
+     if($this->ve01_veiccadcategcnh == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Categoria CNH Exigida nao Informado.";
        $this->erro_campo = "ve01_veiccadcategcnh";
        $this->erro_banco = "";
@@ -327,7 +327,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_anofab == null && $si04_tipoveiculo == 3){
+     if($this->ve01_anofab == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Ano de Fabricação nao Informado.";
        $this->erro_campo = "ve01_anofab";
        $this->erro_banco = "";
@@ -336,7 +336,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_anomod == null && $si04_tipoveiculo == 3){
+     if($this->ve01_anomod == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Ano do Modelo nao Informado.";
        $this->erro_campo = "ve01_anomod";
        $this->erro_banco = "";
