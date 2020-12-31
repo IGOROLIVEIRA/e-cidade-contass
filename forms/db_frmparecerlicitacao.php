@@ -80,7 +80,7 @@ db_app::load("prototype.js, scripts.js");
             <tr>
                 <td nowrap title="<?=@$Tl200_numcgm?>">
                     <?
-                    db_ancora("Responsável pelo Parecer","js_pesquisal200_numcgm(true);",$db_opcao);
+                    db_ancora("Responsável pelo Parecer:","js_pesquisal200_numcgm(true);",$db_opcao);
                     ?>
                 </td>
                 <td>
