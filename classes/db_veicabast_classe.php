@@ -788,7 +788,7 @@ class cl_veicabast {
      $sql .= "      inner join veiccadmarca          on veiccadmarca.ve21_codigo            = veiculos.ve01_veiccadmarca";
      $sql .= "      inner join veiccadmodelo         on veiccadmodelo.ve22_codigo           = veiculos.ve01_veiccadmodelo";
      $sql .= "      left join veiccadcor            on veiccadcor.ve23_codigo              = veiculos.ve01_veiccadcor";
-     $sql .= "      inner join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo   = veiculos.ve01_veiccadtipocapacidade";
+     $sql .= "      left join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo   = veiculos.ve01_veiccadtipocapacidade";
      $sql .= "      left join veiccadcategcnh       on veiccadcategcnh.ve30_codigo         = veiculos.ve01_veiccadcategcnh";
      $sql .= "      left join veiccadproced         on veiccadproced.ve25_codigo           = veiculos.ve01_veiccadproced";
      $sql .= "      left join veiccadpotencia       on veiccadpotencia.ve31_codigo         = veiculos.ve01_veiccadpotencia";

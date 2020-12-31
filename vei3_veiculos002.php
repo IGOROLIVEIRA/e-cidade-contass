@@ -131,14 +131,7 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
         </tr>
         <tr>
 
-            <td>
-                <?=@$Lve01_veiccadtipo?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve20_descr ? $oVeiculo->ve20_descr : ' - '?>
-            </td>
-
-            <td>
+            <td >
                 <?=@$Lve01_veiccadmarca?>
             </td>
             <td class="valores">
@@ -152,9 +145,6 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
                 <?=$oVeiculo->ve22_descr?>
             </td>
 
-        </tr>
-        <tr>
-
             <td>
                 <?=@$Lve01_veiccadcor?>
             </td>
@@ -162,19 +152,8 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
                 <?=$oVeiculo->ve23_descr ? $oVeiculo->ve23_descr : ' - '?>
             </td>
 
-            <td>
-                <?=@$Lve01_veiccadproced?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve25_descr ? $oVeiculo->ve25_descr : ' - '?>
-            </td>
-
-            <td>
-                <?=@$Lve01_veiccadcateg?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve32_descr ? $oVeiculo->ve32_descr : ' - '?>
-            </td>
+        </tr>
+        <tr>
 
         </tr>
         <tr>
@@ -193,13 +172,6 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
                 <?=$oVeiculo->ve01_ranavam ? $oVeiculo->ve01_ranavam : ' - '?>
             </td>
 
-            <td>
-                <?=@$Lve01_placanum?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_placanum ? $oVeiculo->ve01_placanum : ' - '?>
-            </td>
-
         </tr>
         <tr>
 
@@ -208,13 +180,6 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
             </td>
             <td class="valores">
                 <?=$oVeiculo->ve01_certif ? $oVeiculo->ve01_certif : ' - '?>
-            </td>
-
-            <td>
-                <?=@$Lve01_quantpotencia?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_quantpotencia?>
             </td>
 
             <td>
@@ -232,13 +197,6 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
             </td>
             <td class="valores">
                 <?=$oVeiculo->ve01_medidaini.' '.$oVeiculo->ve07_sigla?>
-            </td>
-
-            <td>
-                <?=@$Lve01_quantcapacidad?>
-            </td>
-            <td class="valores">
-                <?=$oVeiculo->ve01_quantcapacidad?>
             </td>
 
             <td>

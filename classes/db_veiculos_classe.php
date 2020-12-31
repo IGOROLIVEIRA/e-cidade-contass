@@ -1151,10 +1151,10 @@ class cl_veiculos {
      $sql .= "      left  join veiccadtipo  on  veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo";
      $sql .= "      inner join veiccadmarca  on  veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca";
      $sql .= "      inner join veiccadmodelo  on  veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo";
-     $sql .= "      inner join veiccadcor  on  veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor";
+     $sql .= "      left join veiccadcor  on  veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor";
      $sql .= "      left join veiccadtipocapacidade  on  veiccadtipocapacidade.ve24_codigo = veiculos.ve01_veiccadtipocapacidade";
      $sql .= "      left join veiccadcategcnh  on  veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
-     $sql .= "      inner join veiccadproced  on  veiccadproced.ve25_codigo = veiculos.ve01_veiccadproced";
+     $sql .= "      left join veiccadproced  on  veiccadproced.ve25_codigo = veiculos.ve01_veiccadproced";
      $sql .= "      left join veiccadpotencia  on  veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
      $sql .= "      left join veiccadcateg  as a on   a.ve32_codigo = veiculos.ve01_veiccadcateg";
      $sql .= "      inner join veictipoabast  on  veictipoabast.ve07_sequencial = veiculos.ve01_veictipoabast";
