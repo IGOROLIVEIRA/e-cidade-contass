@@ -420,4 +420,21 @@ function js_mostraCategoria(chave1, chave2) {
   db_iframe_acordocategoria.hide();
 }
 js_criarDBLancador();
+
+document.getElementById('iCodigoDepartamento').addEventListener('keyup', (e) => {
+    js_validaCaracteres(e);
+});
+
+document.getElementById('ac50_sequencial').addEventListener('keyup', (e) => {
+    js_validaCaracteres(e);
+});
+
+function js_validaCaracteres(e){
+    if(/[^0-9]/.test(e.target.value)){
+        alert('Informe somente números!');
+        document.getElementById(e.target.id).value = '';
+        e.preventDefault();  
+    }
+}
+
 </script>
