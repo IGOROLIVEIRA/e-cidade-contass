@@ -1263,10 +1263,10 @@ class cl_veiculos {
       $sql .= $campos;
     }
     $sql .= " from veiculos                                                                                                 ";
-    $sql .= "   inner join veiculoscomb          on veiculoscomb.ve06_veiculos         = veiculos.ve01_codigo               ";
+    $sql .= "   left join veiculoscomb          on veiculoscomb.ve06_veiculos         = veiculos.ve01_codigo               ";
     $sql .= "   left join veicresp               on veicresp.ve02_veiculo              = veiculos.ve01_codigo               ";
     $sql .= "   left join cgm                    on cgm.z01_numcgm                     = veicresp.ve02_numcgm               ";
-    $sql .= "   inner join veiccadcomb           on veiccadcomb.ve26_codigo            = veiculoscomb.ve06_veiccadcomb      ";
+    $sql .= "   left join veiccadcomb           on veiccadcomb.ve26_codigo            = veiculoscomb.ve06_veiccadcomb      ";
     $sql .= "   inner join veiccentral           on veiccentral.ve40_veiculos          = veiculos.ve01_codigo               ";
     $sql .= "   inner join veiccadcentral        on veiccadcentral.ve36_sequencial     = veiccentral.ve40_veiccadcentral    ";
     $sql .= "   inner join db_depart             on db_depart.coddepto                 = veiccadcentral.ve36_coddepto       ";

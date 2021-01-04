@@ -383,7 +383,7 @@ if($clusuarios > 0 ){
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class='tr__combustivel'>
                 <td nowrap title="<?=@$Tve06_veiccadcomb?>">
                     <?
                     db_ancora(@$Lve06_veiccadcomb,"js_veiculoscomb($db_opcao);",$db_opcao);
@@ -451,7 +451,7 @@ if($clusuarios > 0 ){
                         ?>
                     </b></td>
             </tr>
-            <tr>
+            <tr class='tr__categoriacnh'>
                 <td nowrap title="<?=@$Tve01_veiccadcategcnh?>"><?=@$Lve01_veiccadcategcnh?></td>
                 <td>
                     <?
@@ -687,6 +687,7 @@ if($clusuarios > 0 ){
         }
 
         js_hideElements(valor);
+        js_tipodeveiculo(valor);
 
     }
 
@@ -853,8 +854,7 @@ if($clusuarios > 0 ){
         ?>
     }
 
-    function js_tipodeveiculo(value)
-    {
+    function js_tipodeveiculo(value){
         if (value == 3) {
             document.getElementById("trchassi").style.display = "";
             document.getElementById("trrenavam").style.display = "";
@@ -865,6 +865,14 @@ if($clusuarios > 0 ){
             document.getElementById("trrenavam").style.display = "none";
             document.getElementById("trnumserie").style.display = "none";
             document.getElementById("trnumcertificado").style.display = "none";
+        }
+
+        if(value == 5){
+            document.getElementsByClassName('tr__combustivel')[0].style.display = 'none';
+            document.getElementsByClassName('tr__categoriacnh')[0].style.display = 'none';
+        }else{
+            document.getElementsByClassName('tr__combustivel')[0].style.display = '';
+            document.getElementsByClassName('tr__categoriacnh')[0].style.display = '';
         }
     }
 

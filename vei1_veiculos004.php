@@ -140,14 +140,16 @@ if(isset($incluir)){
           $clveiculos->erro_campo = "si04_especificacao";
         }
 
-        if(!$cod_comb){
+        if(!$cod_comb && $si04_tipoveiculo != '5'){
             $sqlerro  = true;
             $erro_msg = "Nenhum combustível informado. Verifique.";
+            $clveiculos->erro_campo = "ve06_veiccadcomb";
         }
 
         if(!trim($ve01_veictipoabast)){
             $sqlerro  = true;
             $erro_msg = "Tipo de Abastecimento não informado. Verifique.";
+            $clveiculos->erro_campo = "ve01_veictipoabast";
         }
 
         if($si04_tipoveiculo == 0 || $si04_tipoveiculo == ''){
@@ -164,12 +166,8 @@ if(isset($incluir)){
                 $sqlerro=true;
             }
 
-            if ($sqlerro == false){
-                if ($cod_comb == '') {
-                    $sqlerro  = true;
-                    $erro_msg = "Nenhum combustível selecionado";
-                    $clveiculos->erro_campo = "ve06_veiccadcomb";
-                } else {
+            if ($sqlerro == false && $si04_tipoveiculo != '5'){
+                
                     $ve01_codigo       = $clveiculos->ve01_codigo;
                     $vetor_comb        = split(",",$cod_comb);
                     $vetor_comb_padrao = split(",",$comb_padrao);
@@ -206,7 +204,7 @@ if(isset($incluir)){
                             break;
                         }
                     }
-                }
+                
             }
 
         }

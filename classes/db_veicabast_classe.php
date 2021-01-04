@@ -781,7 +781,7 @@ class cl_veicabast {
      }
      $sql .= " from veicabast ";
      $sql .= "      inner join db_usuarios           on db_usuarios.id_usuario              = veicabast.ve70_usuario";
-     $sql .= "      inner join veiccadcomb           on veiccadcomb.ve26_codigo             = veicabast.ve70_veiculoscomb  ";
+     $sql .= "      left join veiccadcomb           on veiccadcomb.ve26_codigo             = veicabast.ve70_veiculoscomb  ";
      $sql .= "      inner join veiculos              on veiculos.ve01_codigo                = veicabast.ve70_veiculos";
      $sql .= "      inner join ceplocalidades        on ceplocalidades.cp05_codlocalidades  = veiculos.ve01_ceplocalidades";
      $sql .= "      left join veiccadtipo           on veiccadtipo.ve20_codigo             = veiculos.ve01_veiccadtipo";
