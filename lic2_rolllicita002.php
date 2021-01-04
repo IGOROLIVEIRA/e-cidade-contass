@@ -24,37 +24,12 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_SERVER_VARS);
 $sWhere = "";
 $sAnd = "";
-if (($data != "--") && ($data1 != "--")) {
 
-    $sWhere .= $sAnd . " l20_datacria  between '$data' and '$data1' ";
-    $data = db_formatar($data, "d");
-    $data1 = db_formatar($data1, "d");
-    $info = "De $data até $data1.";
-    $sAnd = " and ";
-} else if ($data != "--") {
-
-    $sWhere .= $sAnd . " l20_datacria >= '$data'  ";
-    $data = db_formatar($data, "d");
-    $info = "Apartir de $data.";
-    $sAnd = " and ";
-} else if ($data1 != "--") {
-
-    $sWhere .= $sAnd . " l20_datacria <= '$data1'   ";
-    $data1 = db_formatar($data1, "d");
-    $info = "Até $data1.";
-    $sAnd = " and ";
-}
 if ($l20_codigo != "") {
 
     $sWhere .= $sAnd . " l20_codigo=$l20_codigo ";
     $sAnd = " and ";
     $info1 = "Código: ".$l20_codigo;
-}
-if ($l20_numero != "") {
-
-    $sWhere .= $sAnd . " l20_numero=$l20_numero ";
-    $sAnd = " and ";
-    $info1 = "Numero:" . $l20_numero;
 }
 if ($l03_codigo != "") {
 
@@ -72,6 +47,33 @@ CASE WHEN l20_descontotab=1 THEN 'SIM' ELSE 'NAO' end as descontotabela,
 l20_datacria as abertura,
 l20_objeto as objeto ";
 $sWhere .= $sAnd . " l20_instit = " . db_getsession("DB_instit");
+
+if($exercicio){
+    $sWhere .= $sAnd . " extract (year from l20_datacria) = " . $exercicio;
+}
+
+if($numcgm){
+    $sWhere .= $sAnd . " cgmfornecedor.z01_numcgm = " . $numcgm;
+}
+
+if($status){
+    $sWhere .= $sAnd . ' l08_sequencial = ';
+    switch($status){
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+            $sWhere .= intval($status) - 1;
+        break;
+        default:
+            $sWhere .= $status;
+        break;
+    }
+
+}
+
 $sSqlLicLicita = $clliclicita->sql_query(null, $sCampos, "4,2", $sWhere);
 $result = $clliclicita->sql_record($sSqlLicLicita);
 $numrows = $clliclicita->numrows;
