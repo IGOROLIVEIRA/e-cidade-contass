@@ -220,7 +220,7 @@ $oVeiculo         = db_utils::fieldsMemory($rsBuscaVeiculo, false);
                 <?=@$Lve06_veiccadcomb?>
             </td>
             <td class="valores">
-                <?=$oVeiculo->lista_combustivel?>
+                <?=$oVeiculo->lista_combustivel ? $oVeiculo->lista_combustivel : ' - ' ?>
             </td>
 
             <td>
