@@ -103,7 +103,6 @@ switch ($oParam->exec){
             $rsVeiculos    = buscaVeiculos($oParam->veiculos);
             $dadosVeiculos = db_utils::getCollectionByRecord($rsVeiculos);
 
-
             foreach ($dadosVeiculos as $dadosVeiculo) {
                 $oVeicTransf = new cl_veiculostransferencia;
                 $oVeicTransf->ve81_transferencia      = $transferencia->ve80_sequencial;
@@ -169,10 +168,10 @@ switch ($oParam->exec){
 
                 $dtsession = date("Y-m-d", db_getsession("DB_datausu"));
 
-                //inativando veiculo antigo
-                $clveiculos->ve01_ativo = 2;
-                $clveiculos->ve01_codigo = $veiculo;
-                $clveiculos->alterar($veiculo);
+                //                //inativando veiculo antigo
+                //                $clveiculos->ve01_ativo = 2;
+                //                $clveiculos->ve01_codigo = $veiculo;
+                //                $clveiculos->alterar($veiculo);
 
                 //Novo Veiculo
                 $clveiculos->ve01_placa                 = $aVeiculo->ve01_placa;

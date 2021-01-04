@@ -42,7 +42,7 @@ class cl_veiculos {
    var $erro_campo = null;
    var $pagina_retorno = null;
    // cria variaveis do arquivo
-   var $ve01_codigo = 0;
+   var $ve01_codigo = null;
    var $ve01_placa = null;
    var $ve01_veiccadtipo = 0;
    var $ve01_veiccadmarca = 0;
@@ -371,15 +371,11 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
+
      if($this->ve01_medidaini == null ){
-       $this->erro_sql = " Campo Medida Inicial nao Informado.";
-       $this->erro_campo = "ve01_medidaini";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+         $this->ve01_medidaini = 0;
      }
+
      if($ve01_codigo == "" || $ve01_codigo == null ){
        $result = db_query("select nextval('veiculos_ve01_codigo_seq')");
        if($result==false){
