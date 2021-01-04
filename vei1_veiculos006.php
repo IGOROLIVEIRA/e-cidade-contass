@@ -165,8 +165,9 @@ if(isset($excluir)){
                 db_fieldsmemory($res_veicitensobrig,$x);
                 $oDaoItem = db_utils::getDao('veicitensobrig');
                 $oDaoItem->excluir($ve09_sequencial);
-                $erro_msg = $oDaoItem->erro_msg;
+
                 if ($oDaoItem->erro_status == "0"){
+                    $erro_msg = $oDaoItem->erro_msg;
                     $sqlerro  = true;
                     break;
                 }

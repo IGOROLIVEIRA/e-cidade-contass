@@ -380,7 +380,7 @@ if(isset($incluir)){
         unset($incluir);
     }else{
         db_msgbox($erro_msg);
-        db_redireciona("vei1_veiculos005.php?chavepesquisa=$ve01_codigo&liberaaba=true");
+        db_redireciona("vei1_veiculos005.php?chavepesquisa=$clveiculos->ve01_codigo&liberaaba=true");
     }
 }
 ?>

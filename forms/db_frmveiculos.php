@@ -90,7 +90,7 @@ $clrotulo->label("z01_nomecgm");
  * TABELA TIPO VEICULOS PARA MODULO SICOM
  */
 $cltipoveiculos->rotulo->label();
-
+ 
 $result_param=$clveicparam->sql_record($clveicparam->sql_query_file(null,"*",null," ve50_instit=".db_getsession("DB_instit")));
 if ($clveicparam->numrows>0){
     db_fieldsmemory($result_param,0);
