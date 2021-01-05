@@ -396,7 +396,8 @@ class ReceitaContabil {
             $sWherePlanilha = "k80_codpla = {$iCodigoPlanilha} and o70_codrec = {$codrec}";
             $sSqlBuscaCP    = $oDaoPlaCaixa->sql_query_receita(null,
                                                               'k81_concarpeculiar,
-                                                               k81_numcgm',
+                                                               k81_numcgm,
+                                                               k81_emparlamentar',
                                                                null, $sWherePlanilha
                                                               );
             $rsBuscaCP      = $oDaoPlaCaixa->sql_record($sSqlBuscaCP);
@@ -405,6 +406,7 @@ class ReceitaContabil {
               $oStdDadosPlanilha                     = db_utils::fieldsMemory($rsBuscaCP, 0);
               $sCaracteristicaPeculiarPlanilhaRecibo = $oStdDadosPlanilha->k81_concarpeculiar;
               $iCodigoCgm                            = $oStdDadosPlanilha->k81_numcgm;
+              $iEmParlamentar                        = $oStdDadosPlanilha->k81_emparlamentar;
             }
           }
 
@@ -502,6 +504,9 @@ class ReceitaContabil {
         $oContaCorrenteDetalhe->setEstrutural($oDadosReceita->estrut);
         $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
         $oContaCorrenteDetalhe->setContaBancaria($oContaPlano->getContaBancaria());
+        if (!empty($iEmParlamentar)) {
+          $oContaCorrenteDetalhe->setEmendaParlamentar($iEmParlamentar);
+        }
         if (!empty($iCodigoCgm)) {
           $oContaCorrenteDetalhe->setCredor(CgmFactory::getInstanceByCgm($iCodigoCgm));
         }
