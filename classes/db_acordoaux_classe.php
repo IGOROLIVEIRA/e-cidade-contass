@@ -413,11 +413,6 @@ class cl_acordoaux {
      if($this->ac16_acordocategoria == null ){
        $this->ac16_acordocategoria = "0";
      }
-
-     if($this->ac16_numeroacordo == null ){
-       $result = db_query("select nextval('acordo_ac16_numeroacordo_seq')");
-        $this->ac16_numeroacordo = pg_result($result,0,0);
-     }
      if($this->ac16_valor == null ){
        $this->ac16_valor = "0";
      }
@@ -525,7 +520,7 @@ class cl_acordoaux {
                                ,$this->ac16_tipounidtempoperiodo
                                ,$this->ac16_acordocategoria
                                ,".($this->ac16_acordoclassificacao == "null" || $this->ac16_acordoclassificacao == ""?"null":"'".$this->ac16_acordoclassificacao."'")."
-                               ,$this->ac16_numeroacordo
+                               ,".($this->ac16_numeroacordo == "null" || $this->ac16_numeroacordo == ""?"null":"'".$this->ac16_numeroacordo."'")."
                                ,$this->ac16_valor
                                ,$this->ac16_valorrescisao
                                ,".($this->ac16_tipoorigem == "null" || $this->ac16_tipoorigem == ""?'null':$this->ac16_tipoorigem)."

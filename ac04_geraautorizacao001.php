@@ -819,7 +819,11 @@ if($x->consultarDataDoSistema == true){
 
 
             lDesativaLinha = false;
-            if (nQtdeAut == 0 || nValorAut == '0,00') {
+            if (nQtdeAut <= 0 ) {
+                lDesativaLinha = true;
+            }
+
+            if (Number(nValorAut) <= 0){
                 lDesativaLinha = true;
             }
 
@@ -1100,7 +1104,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[2].addStyle("text-align","right");
             aLinha[2].addStyle("height","100%");
             aLinha[2].addStyle("width","100px");
-            aLinha[2].addStyle("border","1px solid transparent;");
+            aLinha[2].addStyle("border","1px solid #000;");
             aLinha[2].addEvent("onBlur","quantdot"+iDot+".sValue=this.value;");
             if(tipo != 2) {
                 aLinha[2].addEvent("onBlur", "js_ajustaQuantDot(this," + iDot + "," + iLinha + ");");
@@ -1115,7 +1119,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[3].addStyle("text-align","right");
             aLinha[3].addStyle("height","100%");
             aLinha[3].addStyle("width","100px");
-            aLinha[3].addStyle("border","1px solid transparent;");
+            aLinha[3].addStyle("border","1px solid #000;");
             aLinha[3].addEvent("onBlur","valordot"+iDot+".sValue=this.value;");
             aLinha[3].addEvent("onBlur","js_ajustaValorDot(this,"+iDot+","+tipo+");");
             aLinha[3].addEvent("onBlur","js_bloqueiaDigitacao(this, true);");
@@ -1264,6 +1268,12 @@ if($x->consultarDataDoSistema == true){
 
     function js_visualizarAutorizacoes(oAjax) {
 
+        let botao = $('btnSalvarAutorizacoes');
+
+        if(botao != null){
+            botao.disabled = true;
+        }
+
         var oRetorno = eval("("+oAjax.responseText+")");
         js_removeObj('msgbox');
 
@@ -1362,6 +1372,11 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_consultarDataDoSistema(lProcessar){
+        let botao = $('btnSalvarAutorizacoes');
+
+        if(botao != null){
+            botao.disabled = true;
+        }
 
         var oParam = new Object();
         oParam.consultarDataDoSistema = true;
@@ -1387,6 +1402,11 @@ if($x->consultarDataDoSistema == true){
             alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
             return
 
+        }
+        let botao = $('btnSalvarAutorizacoes');
+
+        if(botao != null){
+            botao.disabled = true;
         }
 
         var aItens = oGridItens.getSelection("object");
@@ -1491,7 +1511,6 @@ if($x->consultarDataDoSistema == true){
 
     function js_buscarInformacoesAutorizacao() {
 
-        js_divCarregando('Aguarde, pesquisando dados do acordo', 'msgbox');
         var oParam           = new Object();
         oParam.exec          = 'getDadosAcordo';
         oParam.iCodigoAcordo = oTxtCodigoAcordo.getValue();
@@ -1505,7 +1524,14 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_retornoBuscarInformacoesAutorizacao(oAjax) {
-        js_removeObj('msgbox');
+
+        var aItens = oGridItens.getSelection("object");
+        if (aItens.length == 0) {
+
+            alert('Nenhum item Selecionado');
+            return false;
+
+        }
         var oRetorno = JSON.parse(oAjax.responseText);
         var sMensagem = oRetorno.message;
 

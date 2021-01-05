@@ -13,19 +13,37 @@ $clriscoprovidencia = new cl_riscoprovidencia;
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 1;
 $db_botao = true;
-if(isset($incluir)){
-  $sqlerro=false;
-  db_inicio_transacao();
-  $clriscofiscal->incluir($si53_sequencial);
-  if($clriscofiscal->erro_status==0){
-    $sqlerro=true;
-  } 
-  $erro_msg = $clriscofiscal->erro_msg;
- 
-  db_fim_transacao($sqlerro);
-   $si53_sequencial= $clriscofiscal->si53_sequencial;
-   $db_opcao = 1;
-   $db_botao = true;
+if (isset($incluir)){
+	
+	$sWhere 		= "si53_codriscofiscal = '{$si53_codriscofiscal}' AND si53_exercicio = '{$si53_exercicio}' AND si53_instit = ".db_getsession('DB_instit');
+	$sSqlVerifica 	= $clriscofiscal->sql_query_file(null, "*", null, $sWhere);
+	$rsVerifica	 	= db_query($sSqlVerifica);
+	
+	if ( pg_num_rows($rsVerifica) > 0 ) {
+
+		$erro_msg 	= "Já existe risco fiscal com o Código Risco para o exercício.";
+		$sqlerro 	= true;
+
+	} else {
+
+		$sqlerro = false;
+		db_inicio_transacao();
+		$clriscofiscal->si53_instit = db_getsession('DB_instit');
+		$clriscofiscal->incluir($si53_sequencial);
+		
+		if($clriscofiscal->erro_status==0){
+			$sqlerro=true;
+		} 
+	
+		$erro_msg = $clriscofiscal->erro_msg;
+	
+		db_fim_transacao($sqlerro);
+		$si53_sequencial= $clriscofiscal->si53_sequencial;
+		$db_opcao = 1;
+	   $db_botao = true;
+
+	}
+	   
 }
 ?>
 <html>

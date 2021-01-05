@@ -293,6 +293,21 @@ class LancamentoAuxiliarContaCorrente extends LancamentoAuxiliarBase implements 
         $oContaCorrenteDetalhe->setAcordo(new Acordo($this->iAcordo));
 			}
 		}
+
+		/**
+		 * Busca o campo referente a emenda parlamentar na planilha de arrecadação
+		 */
+		$oDAOPlacaixarec 	= db_utils::getDao("placaixarec");
+		$sSqlPlacaixarec 	= $oDAOPlacaixarec->sql_query_placaixarec_lancam(null, "k81_emparlamentar", null, "c86_conlancam = {$this->iCodigoLancamento}");
+		$rsPlacaixarec		= $oDAOPlacaixarec->sql_record($sSqlPlacaixarec);
+
+		if ($oDAOPlacaixarec->numrows > 0) {
+
+			$iEmendaParlamentar = db_utils::fieldsMemory($rsPlacaixarec, 0)->k81_emparlamentar;
+			$oContaCorrenteDetalhe->setEmendaParlamentar($iEmendaParlamentar);
+			
+		}
+
     $this->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 	}
 

@@ -234,6 +234,7 @@ function js_main() {
    oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', 'oTxtCodigoAcordo','', 10);
    oTxtCodigoAcordo.addEvent("onChange",";js_pesquisaac16_sequencial(false);");
    oTxtCodigoAcordo.addEvent("onKeyUp",";js_verificaAcordo(this.value);");
+   oTxtCodigoAcordo.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
    oTxtCodigoAcordo.show($('ctnTxtCodigoAcordo'));
    
    oTxtDescricaoAcordo = new DBTextField('oTxtDescricaoAcordo', 'oTxtDescricaoAcordo','', 80);

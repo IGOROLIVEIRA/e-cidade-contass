@@ -1484,7 +1484,7 @@ class cl_acordo {
 
         return $sSql;
     }
-    function sql_query_acordoitemexecutado ( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_acordoitemexecutado ( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere="",$apostilamento = false){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -1510,6 +1510,11 @@ class cl_acordo {
         $sql .= "      left  join acordoitem          on acordoitem.ac20_acordoposicao       = acordoposicao.ac26_sequencial";
         $sql .= "      left  join acordoorigem        on acordoorigem.ac28_sequencial        = acordo.ac16_origem";
         $sql .= "      left  join acordomovimentacao  on acordomovimentacao.ac10_acordo      = acordo.ac16_sequencial";
+
+        if($apostilamento){
+            $sql .= " INNER JOIN apostilamento ON apostilamento.si03_acordo = acordo.ac16_sequencial ";
+        }
+
         $sql2 = "";
         if($dbwhere==""){
             if($ac16_sequencial!=null ){

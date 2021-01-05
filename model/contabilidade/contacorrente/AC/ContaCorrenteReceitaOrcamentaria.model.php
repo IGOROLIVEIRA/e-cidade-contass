@@ -75,6 +75,7 @@ class ContaCorrenteReceitaOrcamentaria extends ContaCorrenteBase implements ICon
     $iAnoUsuConplano = $this->getContaPlano()->getAno();
     $iRecurso = $this->oContaCorrenteDetalhe->getRecurso()->getCodigo();
     $sEstrutural = $this->oContaCorrenteDetalhe->getEstrutural();
+    $iEmParlamentar = $this->oContaCorrenteDetalhe->getEmendaParlamentar();
 
     /**
      * Verificamos se já existem os dados na tabela contacorrentedetalhe
@@ -85,6 +86,9 @@ class ContaCorrenteReceitaOrcamentaria extends ContaCorrenteBase implements ICon
     $sWhere .= " and c19_conplanoreduzanousu = {$iAnoUsuConplano}";
     $sWhere .= " and c19_orctiporec = {$iRecurso}";
     $sWhere .= " and c19_estrutural = '{$sEstrutural}'";
+    if (!empty($iEmParlamentar)) {
+      $sWhere .= " and c19_emparlamentar = {$iEmParlamentar}";
+    }
 
     $sSqlContaCorrenteDetalhe = $oDaoContaCorrenteDetalhe->sql_query_file(null, "c19_sequencial", null, $sWhere);
     $rsContaCorrenteDetalhe   = $oDaoContaCorrenteDetalhe->sql_record($sSqlContaCorrenteDetalhe);
@@ -109,6 +113,9 @@ class ContaCorrenteReceitaOrcamentaria extends ContaCorrenteBase implements ICon
       $oDaoContaCorrenteDetalhe->c19_conplanoreduzanousu = $iAnoUsuConplano;
       $oDaoContaCorrenteDetalhe->c19_orctiporec = $iRecurso;
       $oDaoContaCorrenteDetalhe->c19_estrutural = "'$sEstrutural'";
+      if (!empty($iEmParlamentar)) {
+        $oDaoContaCorrenteDetalhe->c19_emparlamentar = $iEmParlamentar;
+      }
       $oDaoContaCorrenteDetalhe->incluir(null);
 
       if ($oDaoContaCorrenteDetalhe->erro_status == 0) {

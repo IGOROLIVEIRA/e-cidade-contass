@@ -487,7 +487,7 @@ class cl_homologacaoadjudica {
         return $sql;
     }
 
-    function sql_query_itens ( $l202_licitacao=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_itens ( $l202_licitacao=null, $campos="*", $ordem=null, $dbwhere="", $joinPrecoReferencia = false){
         $sql = "select ";
         if($campos != "*" ) {
             $campos_sql = split("#",$campos);
@@ -527,6 +527,11 @@ class cl_homologacaoadjudica {
         $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
         $sql .= "      left join pcorcamjulg            on pcorcamitem.pc22_orcamitem          = pcorcamjulg.pc24_orcamitem";
         $sql2 = "";
+
+        if($joinPrecoReferencia){
+            $sql .= " LEFT JOIN pcorcamval ON pc23_orcamitem = pc22_orcamitem ";
+        }
+
         if($dbwhere==""){
             if($l202_licitacao!= null && $l202_licitacao!= "" ){
                 $sql2 .= " where liclicitem.l21_codliclicita = $l202_licitacao ";

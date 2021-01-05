@@ -651,7 +651,7 @@ class cl_obras {
   $sSqlSisobra .= "  select cgmResponsavel.z01_nome                                      as nomeResponsavel,         \n";
   $sSqlSisobra .= "         cgmResponsavel.z01_numcgm                                    as cgmResponsavel,          \n";
   $sSqlSisobra .= "         cgmResponsavel.z01_cgccpf                                    as cpfResponsavel,          \n";
-  $sSqlSisobra .= "         cgmResponsavel.z01_ender ||', ' || cgmResponsavel.z01_numero as enderecoResponsavel,     \n";
+  $sSqlSisobra .= "         cgmResponsavel.z01_ender ||', ' || coalesce(cgmResponsavel.z01_numero, 0)::varchar as enderecoResponsavel,     \n";
   $sSqlSisobra .= "         cgmResponsavel.z01_bairro                                    as bairroResponsavel,       \n";
   $sSqlSisobra .= "         cgmResponsavel.z01_cep                                       as cepResponsavel,          \n";
   $sSqlSisobra .= "         cgmResponsavel.z01_uf                                        as ufResponsavel,           \n";

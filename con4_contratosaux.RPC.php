@@ -633,7 +633,9 @@ switch($oParam->exec) {
                 $oContrato->setInstit(db_getsession("DB_instit"));
                 $oContrato->setLei($oParam->contrato->sLei);
                 $oContrato->setNumero($iNumacordo);
-                $oContrato->setNumeroAcordo($iNumacordo);
+                if($oParam->contrato->iNumero != "" && $oParam->contrato->iNumero != null) {
+                    $oContrato->setNumeroAcordo($oParam->contrato->iNumero);
+                }
                 $oContrato->setOrigem($oParam->contrato->iOrigem);
                 $oContrato->setTipoOrigem($oParam->contrato->iTipoOrigem);
                 $oContrato->setObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sObjeto) );
@@ -1082,9 +1084,10 @@ switch($oParam->exec) {
             $oContrato = $_SESSION["oContrato"];
             $oPosicao  = $oContrato->getUltimaPosicao();
             $aItens    = $oPosicao->getItens();
+
             foreach ($aItens as $oItem) {
 
-                if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+                if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
                     $oItemContrato = $oItem;
                     break;
                 }
@@ -1128,8 +1131,7 @@ switch($oParam->exec) {
             $oPosicao  = $oContrato->getUltimaPosicao();
             $aItens    = $oPosicao->getItens();
             foreach ($aItens as $oItem) {
-
-                if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+                if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
                     $oItemContrato = $oItem;
                     break;
                 }

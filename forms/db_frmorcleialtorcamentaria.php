@@ -6,9 +6,8 @@ $clorcleialtorcamentaria->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("o138_numerolei");
 if(isset($db_opcaoal)){
-   $db_opcao=33;
-    //$db_botao=false;
-    $db_botao=true;
+   	$db_opcao=33;
+   	$db_botao=false;
 }else if(isset($opcao) && $opcao=="alterar"){
     $db_botao=true;
     $db_opcao = 2;
