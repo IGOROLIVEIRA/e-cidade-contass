@@ -21,10 +21,6 @@ $clrotulo->label("pc21_numcgm");
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 function js_emite(){
-    if(!document.form1.l20_codigo.value){
-        alert('Informe uma licitação!');
-        return false;
-    }
 
     query = 'l20_codigo='+document.form1.l20_codigo.value;
     query += '&l03_codigo='+document.form1.l03_codigo.value+'&l03_descr='+document.form1.l03_descr.value;

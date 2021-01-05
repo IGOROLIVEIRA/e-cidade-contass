@@ -40,13 +40,15 @@ if ($l03_codigo != "") {
     }
 }
 $sCampos = " distinct l20_codigo, l20_edital as processo,
-l03_descr||' - '||l20_numero AS modalidade,
-l20_anousu,
+l03_descr||' - '||l20_numero AS modalidade, l20_numero,
+l20_dtpubratificacao, l202_datahomologacao, l20_criterioadjudicacao,
+l20_anousu, l20_nroedital, l03_pctipocompratribunal,
 CASE WHEN l20_usaregistropreco=TRUE THEN 'SIM' ELSE 'NAO' end as usaregistropreco,
 CASE WHEN l20_descontotab=1 THEN 'SIM' ELSE 'NAO' end as descontotabela,
 l20_datacria as abertura,
 l20_objeto as objeto ";
 $sWhere .= $sAnd . " l20_instit = " . db_getsession("DB_instit");
+$sAnd = ' and ';
 
 if($exercicio){
     $sWhere .= $sAnd . " extract (year from l20_datacria) = " . $exercicio;
@@ -112,8 +114,8 @@ for ($i = 0; $i < $numrows; $i++) {
         $pdf->addpage();
         $muda = 1;
     }
-    if (strlen($objeto) > 80) {
-        $aObjeto = quebrar_texto($objeto, 80);
+    if (strlen($objeto) > 50) {
+        $aObjeto = quebrar_texto($objeto, 50);
         $alt_novo = count($aObjeto);
     } else {
         $alt_novo = 1;
@@ -122,36 +124,79 @@ for ($i = 0; $i < $numrows; $i++) {
     $troca = 1;
 
     $pdf->setfont('arial', 'b', 7);
-    $pdf->cell(20, $alt, "Processo", 1, 0, "C", 1);
-    $pdf->cell(60, $alt, 'Modalidade', 1, 0, "C", 1);
-    $pdf->cell(20, $alt, 'Exercício', 1, 0, "C", 1);
-    $pdf->cell(20, $alt, 'R.P.', 1, 0, "C", 1);
-    $pdf->cell(20, $alt, 'Tabela', 1, 0, "C", 1);
-    $pdf->cell(20, $alt, 'Abertura', 1, 0, "C", 1);
-    $pdf->cell(117, $alt, 'Objeto', 1, 1, "C", 1);
-    $pdf->setfont('arial', '', 7);
-    $pdf->cell(20, $alt*$alt_novo, $processo, 1, 0, "C", 0);
-    $pdf->cell(60, $alt*$alt_novo, $modalidade, 1, 0, "C", 0);
-    $pdf->cell(20, $alt*$alt_novo, $l20_anousu, 1, 0, "C", 0);
-    $pdf->cell(20, $alt*$alt_novo, $usaregistropreco, 1, 0, "C", 0);
-    $pdf->cell(20, $alt*$alt_novo, $descontotabela, 1, 0, "C", 0);
-    $pdf->cell(20, $alt*$alt_novo, db_formatar($abertura, "d"), 1, 0, "C", 0);
+    $pdf->cell(8, $alt, "Seq", 1, 0, "C", 1);
+    $pdf->cell(16, $alt, "N° Processo", 1, 0, "C", 1);
+    $pdf->cell(10, $alt, "Edital", 1, 0, "C", 1);
+    $pdf->cell(55, $alt, 'Modalidade', 1, 0, "C", 1);
+    $pdf->cell(15, $alt, 'Numeração', 1, 0, "C", 1);
+    $pdf->cell(8, $alt, 'R.P.', 1, 0, "C", 1);
+    $pdf->cell(30, $alt, 'Critério de Adjudicação', 1, 0, "C", 1);
+    $pdf->cell(10, $alt, 'Tabela', 1, 0, "C", 1);
+    $pdf->cell(22, $alt, 'Data de abertura', 1, 0, "C", 1);
+    $pdf->cell(78, $alt, 'Objeto', 1, 0, "C", 1);
 
-    if (strlen($objeto) > 80) {
+    if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
+        $pdf->cell(27, $alt, 'Data de Homologação', 1, 1, "C", 1);
+    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103))){
+        $pdf->cell(27, $alt, 'Data de Ratificação', 1, 1, "C", 1);
+    }
+
+    $pdf->setfont('arial', '', 7);
+
+    $pdf->cell(8, $alt*$alt_novo, $l20_codigo, 1, 0, "C", 0);
+    $pdf->cell(16, $alt*$alt_novo, $processo, 1, 0, "C", 0);
+    $pdf->cell(10, $alt*$alt_novo, ($l20_nroedital ? $l20_nroedital : ' - '), 1, 0, "C", 0);
+    $pdf->cell(55, $alt*$alt_novo, $modalidade, 1, 0, "C", 0);
+    $pdf->cell(15, $alt*$alt_novo, $l20_numero, 1, 0, "C", 0);
+    $pdf->cell(8, $alt*$alt_novo, $usaregistropreco, 1, 0, "C", 0);
+
+    if(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))){
+        $descCriterio = ' - ';
+    }else{
+        switch($l20_criterioadjudicacao){
+            case 1:
+                 $descCriterio = "Desconto sobre tabela";
+                 break;
+            case 2:
+                $descCriterio = 'Menor taxa ou percentual';
+                break;
+            default:
+                $descCriterio = "Outros";
+                break;
+        }
+    }
+
+    $pdf->cell(30, $alt*$alt_novo, $descCriterio, 1, 0, "C", 0);
+    $pdf->cell(10, $alt*$alt_novo, $descontotabela, 1, 0, "C", 0);
+    $pdf->cell(22, $alt*$alt_novo, db_formatar($abertura, "d"), 1, 0, "C", 0);
+
+    if (strlen($objeto) > 50) {
 
         $pos_x = $pdf->x;
         $pos_y = $pdf->y;
-        $pdf->cell(117, $alt*$alt_novo, "", 1, 1, "L", 0);
+        $pdf->cell(78, $alt*$alt_novo, "", 1, 0, "L", 0);
         $pdf->x = $pos_x;
         $pdf->y = $pos_y;
         foreach ($aObjeto as $oObjeto) {
-            $pdf->cell(117, ($alt), $oObjeto, 0, 1, "L", 0);
+            $pdf->cell(50, ($alt), $oObjeto, 0, 1, "L", 0);
             $pdf->x = $pos_x;
         }
-        $pdf->x = $pos_x - 160;
+        $pdf->x = $pos_x - 50;
     } else {
-        $pdf->cell(117, $alt*$alt_novo, $objeto, 1, 1, "L", 0);
+        $pdf->cell(78, $alt*$alt_novo, $objeto, 1, 0, "L", 0);
     }
+
+    if (strlen($objeto) > 50) {
+        $pdf->y = $pos_y;
+        $pdf->x = $pos_x + 78;
+    }
+    
+    if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
+        $data = $l202_datahomologacao;
+    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103))){
+        $data = $l20_dtpubratificacao;
+    }
+    $pdf->cell(27, $alt*$alt_novo, $data ? db_formatar($data, 'd') : ' - ', 1, 1, "C", 0);
 
 
     $sSqlFornecedores = " select distinct
@@ -180,8 +225,6 @@ si172_licitacao = {$l20_codigo} order by 2";
 
             db_fieldsmemory($result_fornecedores, $w);
 
-
-
             $pdf->setfont('arial', '', 7);
             $pdf->cell(165, $alt, $fornecedor, 1, 0, "L", $p);
             $pdf->cell(20, $alt, $contrato, 1, 0, "C", $p);
@@ -197,7 +240,7 @@ si172_licitacao = {$l20_codigo} order by 2";
      */
     $oLicitacao = new licitacao($l20_codigo);
     $pdf->setfont('arial', 'b', 7);
-    $pdf->cell(277, $alt, "Status: {$oLicitacao->getSituacao()->getSDescricao()}", 1, 1, "L", 1);
+    $pdf->cell(279, $alt, "Status: {$oLicitacao->getSituacao()->getSDescricao()}", 1, 1, "L", 1);
     $pdf->ln();
 }
 $pdf->Output();
