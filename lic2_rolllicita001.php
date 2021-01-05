@@ -117,7 +117,7 @@ function js_emite(){
         </td>
         <td>
           <?php
-            db_input("exercicio",8, $exercicio, true, "text", 1,'onkeyup="js_validaCaracteres(this);"');
+            db_input("exercicio",8, $exercicio, true, "text", 1,'onkeyup="js_validaCaracteres(this);onchange=js_limitaExercicio(this);"');
           ?>
         </td>
       </tr>
@@ -273,8 +273,16 @@ document.getElementById('fornecedor').addEventListener('change', e => {
 
 function js_validaCaracteres(objeto){
     js_ValidaCamposText(objeto, 1);
+
     if(/[^0-9]/.test(objeto.value)){
         objeto.value = '';
+    }
+}
+
+function js_limitaExercicio(objeto){
+    if(objeto.value.length > 4 ){
+        alert('Este campo deve conter apenas 4 caracteres');
+        objeto.value = objeto.value.substr(0, 4);
     }
 }
 
