@@ -623,6 +623,9 @@ if (USE_PCASP) {
         if (obj.data[i].pc01_servico == 't'  && obj.data[i].servicoquantidade == "t") {
           sDesabilitaValor  = "style= 'text-align:right;background-color:DEB887' disabled";
         }
+        if (obj.data[i].pc01_servico == 'f'  && obj.data[i].servicoquantidade == "f") {
+          sDesabilitaValor  = "style= 'text-align:right;background-color:DEB887' disabled";
+        }
         if (servico == false && lFraciona == false) {
           sDesabilitaValor  = "style= 'text-align:right;background-color:DEB887' disabled";
         }
@@ -1015,8 +1018,6 @@ if (USE_PCASP) {
   }
 
   function js_calculaValor(id,tipo,fraciona,servico){
-    console.log(fraciona);
-    console.log(servico);
     nVlrUni   = new Number($('vlruni'+id).innerHTML);
     nQtde     = new Number($F('qtdesol'+id));
     nVlrTotal = new Number($F('vlrtot'+id));
@@ -1057,14 +1058,12 @@ if (USE_PCASP) {
           if (nVlrTotal > 0){
 
             if(servico == true) {
-              console.log('aqui');
               if(fraciona == true) {
                 $('qtdesol' + id).value = 1;
               }else{
                 $('qtdesol' + id).value = 1;
               }
             }else{
-              console.log('aqui2');
               if(fraciona == false){
                 $('qtdesol' + id).value = 1;
               }else{
