@@ -137,7 +137,6 @@ switch (db_getsession("DB_modulo")) {
         if(isset($chave_ac08_descricao)){
           $repassa = array("chave_ac08_sequencial"=>$chave_ac08_sequencial,"chave_ac08_descricao"=>$chave_ac08_descricao);
         }
-
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){

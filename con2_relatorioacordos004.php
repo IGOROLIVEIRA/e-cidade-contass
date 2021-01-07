@@ -88,3 +88,14 @@ include("classes/db_acordonatureza_classe.php");
   </center>
 </body>
 </html>
+<script>
+    let elemento = document.getElementById('ac01_sequencial');
+
+    elemento.addEventListener('keyup', (e) => {
+        if(/[^0-9]/.test(e.target.value)){
+            alert('Informe somente números!');
+            document.getElementById('ac01_sequencial').value = '';
+            e.preventDefault();
+        }
+    });
+</script>

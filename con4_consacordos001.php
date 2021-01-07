@@ -442,4 +442,14 @@ function js_mostraAcordo1(chave1,chave2){
         limpaResponsavel = true;
     });
 
+    document.getElementById('dl_Codigo_Departamento').addEventListener('keyup', (e) => {
+        if(e.target.value){
+            if(/[^0-9]/.test(e.target.value)){
+                alert('Informe somente números!');
+                document.getElementById('dl_Codigo_Departamento').value = '';
+                e.preventDefault();
+            }
+        }
+    });
+
 </script>
