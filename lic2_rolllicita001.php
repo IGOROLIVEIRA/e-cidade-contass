@@ -26,9 +26,18 @@ function js_emite(){
     query += '&l03_codigo='+document.form1.l03_codigo.value+'&l03_descr='+document.form1.l03_descr.value;
     query += '&status='+document.form1.status.value+'&exercicio='+document.form1.exercicio.value;
   
-    if(document.form1.fornecedor.value == '1' && document.form1.pc21_numcgm.value){
-        query += '&numcgm='+document.form1.pc21_numcgm.value;
+    let sFornecedores = '';
+
+    if(document.form1.lQuebraFornecedor.value == 't' && document.form1.fornecedor.options.length){
+        vrg    = '';
+    
+        for (let count = 0; count < document.form1.fornecedor.options.length; count++) {
+            sFornecedores += vrg + document.form1.fornecedor.options[count].value;
+            vrg =',';
+        }
     }
+
+    query += '&cgms='+sFornecedores;
 
     jan = window.open('lic2_rolllicita002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);	
@@ -40,11 +49,15 @@ function js_emite(){
 
 <style>
 #fornecedor{
-  width: 69px;
+    width: 336px;
+}
+
+#lQuebraFornecedor{
+    width: 69px;
 }
 
 #status{
-  width: 200px;
+    width: 200px;
 }
 </style>
 
@@ -127,27 +140,44 @@ function js_emite(){
           <b>Filtrar por fornecedor:</b>
         </td>
         <td>
-          <?php 
-          $aFornecedor = array(0=>'Não', 1=>'Sim');
-          db_select('fornecedor', $aFornecedor, true, 2, " ","","","0","");?>
+            <select name="lQuebraFornecedor" id="lQuebraFornecedor">
+                <option value="f" selected>NÃO</option>
+                <option value="t">SIM</option>
+            </select>
         </td>
       </tr>
 
-      <tr class='tr__cgm'>
-          <td align="left"  nowrap title="<?=@$Tpc21_numcgm?>">
-              <?
-              db_ancora(@$Lpc21_numcgm,"js_pesquisapc21_numcgm(true);",$db_opcao);
-              ?>
-          </td>
-          <td>
-              <?
-              db_input('pc21_numcgm',8,$Ipc21_numcgm,true,'text',$db_opcao," onchange='js_pesquisapc21_numcgm(false);'")
-              ?>
-              <?
-              db_input('z01_nome',40,$Iz01_nome,true,'text',3);
-              ?>
-          </td>
-      </tr>
+      <tr id='area_fornecedor' class='tr__cgm'>
+                    <td colspan="2">
+                        <fieldset>
+                            <legend>Fornecedores</legend>
+                            <table align="center" border="0">
+                                <tr>
+                                    <td>
+									                    <?php db_ancora('CGM',"js_pesquisa_fornelicitacao(true);",1); ?>
+                                    </td>
+                                    <td>
+                                    <?php
+                                      db_input('z01_numcgm',6,'',true,'text',4," onchange='js_pesquisa_fornelicitacao(false);'","");
+                                      db_input('z01_nome',25, '', true, 'text', 3,"","");
+                                    ?>
+                                        <input type="button" value="Lançar" id="btn-lancar-fornecedor"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                          <select name="fornecedor[]" id="fornecedor" size="5" multiple></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <strong>Dois Cliques sobre o fornecedor o exclui.</strong>
+                                    </td>
+                                </tr>
+                              </table>
+                          </fieldset>
+                      </td>
+                  </tr>
 
       <tr>
         <td >&nbsp;</td>
@@ -155,7 +185,7 @@ function js_emite(){
       </tr>
       <tr>
         <td colspan="2" align = "center"> 
-          <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
+          <input  name="emite2" id="emite2" type="button" value="Gerar Relatório" onclick="js_emite();" >
         </td>
       </tr>
 
@@ -171,6 +201,10 @@ function js_emite(){
 <script>
 
 document.getElementsByClassName('tr__cgm')[0].style.display = 'none';
+
+if(document.getElementById('lQuebraFornecedor').value = 'f'){
+    document.getElementById('area_fornecedor').style.display = 'none';
+}
 
 function js_pesquisal20_numero(mostra){
   if(mostra==true){
@@ -236,38 +270,89 @@ function js_mostracflicita1(chave1,chave2){
   db_iframe_cflicita.hide();
 }
 
-function js_pesquisapc21_numcgm(mostra){
-    if(mostra==true){
-        js_OpenJanelaIframe('','func_nome','func_pcforne.php?validaRepresentante=true&orderName=true&funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome','Pesquisa',true);
-    }else{
-        if(document.form1.pc21_numcgm.value != ''){
-            js_OpenJanelaIframe('','func_nome','func_pcforne.php?validaRepresentante=true&orderName=true&pesquisa_chave='+document.form1.pc21_numcgm.value+'&iParam=true&funcao_js=parent.js_mostracgm','Pesquisa',false);
-        }else{
+function js_pesquisa_fornelicitacao(mostra){
+    if (mostra) {
+        js_OpenJanelaIframe('top.corpo','db_iframe_fornelicitacao','func_fornelicitacao.php?&funcao_js=parent.js_mostrafornelicitacao|z01_numcgm|z01_nome','Pesquisa',true);
+    } else {
+        if (document.form1.z01_numcgm.value != '') {
+            js_OpenJanelaIframe('','db_iframe_fornelicitacao','func_fornelicitacao.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostrafornelicitacao1','Pesquisa',false);
+        } else {
+            document.form1.z01_numcgm.value = '';
             document.form1.z01_nome.value = '';
         }
     }
 }
 
-function js_mostracgm(chave, chave2){
-    if(chave2 == true){
-        document.form1.pc21_numcgm.focus();
-        document.form1.pc21_numcgm.value = '';
-        document.form1.z01_nome.value = chave;
-    }else{
-        document.form1.z01_nome.value = chave2;
+function js_mostrafornelicitacao1(chave, erro) {
+
+    if (erro) {
+        document.form1.z01_numcgm.focus();
+        document.form1.z01_numcgm.value = '';
+        return;
     }
+
+    document.getElementById('z01_nome').value = chave;
 }
 
-function js_mostracgm1(chave1,chave2){
-    document.form1.pc21_numcgm.value = chave1;
+function js_mostrafornelicitacao(chave1,chave2) {
+    document.form1.z01_numcgm.value = chave1;
     document.form1.z01_nome.value = chave2;
-    func_nome.hide();
+    db_iframe_fornelicitacao.hide();
 }
 
-document.getElementById('fornecedor').addEventListener('change', e => {
+document.getElementById('btn-lancar-fornecedor').addEventListener('click', (e) => {
+    addOption(document.form1.z01_numcgm.value, document.form1.z01_nome.value);
+});
+
+function addOption(codigo, descricao) {
+
+    if (!codigo || !descricao) {
+        alert('Fornecedor inválido!');
+        limparCampos();
+        return;
+    }
+
+    let aOptions = document.getElementById("fornecedor");
+    let jaTem = Array.prototype.filter.call(aOptions.children, (o) => {
+        return o.value == codigo;
+    });
+
+
+    if (jaTem.length > 0) {
+        alert("Fornecedor já inserido.");
+        limparCampos();
+        return;
+    }
+
+    let option = document.createElement('option');
+    option.value = codigo;
+    option.innerHTML = codigo + ' - ' + descricao;
+    aOptions.appendChild(option);
+
+    limparCampos();
+
+}
+
+document.getElementById('fornecedor').addEventListener('dblclick', (e) => {
+  document.getElementById('fornecedor').removeChild(e.target);
+});
+
+function limparCampos() {
+    document.form1.z01_numcgm.value  = '';
+    document.form1.z01_nome.value  = '';
+}
+
+document.getElementById('lQuebraFornecedor').addEventListener('change', e => {
     let oElemento = document.getElementsByClassName('tr__cgm')[0];
 
-    oElemento.style.display = !parseInt(e.target.value) ? 'none' : '';
+    oElemento.style.display = e.target.value == 't' ? '' : 'none';
+
+    let fornecedor = document.getElementById('fornecedor');
+    if(fornecedor.options.length){
+      for(let count = 0; count < fornecedor.options.length; count++){
+          fornecedor.removeChild(fornecedor.childNodes[count]);
+      }
+    }
 
 });
 

@@ -40,7 +40,7 @@ if ($l03_codigo != "") {
     }
 }
 $sCampos = " distinct l20_codigo, l20_edital as processo,
-l03_descr||' - '||l20_numero AS modalidade, l20_numero,
+l03_descr AS modalidade, l20_numero,
 l20_dtpubratificacao, l202_datahomologacao, l20_criterioadjudicacao,
 l20_anousu, l20_nroedital, l03_pctipocompratribunal,
 CASE WHEN l20_usaregistropreco=TRUE THEN 'SIM' ELSE 'NAO' end as usaregistropreco,
@@ -54,8 +54,8 @@ if($exercicio){
     $sWhere .= $sAnd . " extract (year from l20_datacria) = " . $exercicio;
 }
 
-if($numcgm){
-    $sWhere .= $sAnd . " cgmfornecedor.z01_numcgm = " . $numcgm;
+if($cgms){
+    $sWhere .= $sAnd . " cgmfornecedor.z01_numcgm in (" . $cgms . ") ";
 }
 
 if($status){
@@ -215,7 +215,7 @@ si172_licitacao = {$l20_codigo} order by 2";
     if (pg_num_rows($result_fornecedores) > 0) {
 
         $pdf->setfont('arial', 'b', 7);
-        $pdf->cell(165, $alt, "Fornecedores", 1, 0, "L", 1);
+        $pdf->cell(167, $alt, "Fornecedores", 1, 0, "L", 1);
         $pdf->cell(20, $alt, "Contrato", 1, 0, "C", 1);
         $pdf->cell(32, $alt, "Data Assinatura", 1, 0, "C", 1);
         $pdf->cell(30, $alt, "Data Inicio", 1, 0, "C", 1);
@@ -226,7 +226,7 @@ si172_licitacao = {$l20_codigo} order by 2";
             db_fieldsmemory($result_fornecedores, $w);
 
             $pdf->setfont('arial', '', 7);
-            $pdf->cell(165, $alt, $fornecedor, 1, 0, "L", $p);
+            $pdf->cell(167, $alt, $fornecedor, 1, 0, "L", $p);
             $pdf->cell(20, $alt, $contrato, 1, 0, "C", $p);
             $pdf->cell(32, $alt, db_formatar($si172_dataassinatura, "d"), 1, 0, "C", $p);
             $pdf->cell(30, $alt, db_formatar($si172_datainiciovigencia, "d"), 1, 0, "C", $p);
