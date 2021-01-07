@@ -113,8 +113,16 @@ if (isset($lApenasComItens)) {
            }
         }
         if(db_getsession("DB_modulo") == 480){
-          $sWhere.=" and ac08_acordocomissaotipo = 3 ";
+          $sWhere .=" and ac08_acordocomissaotipo = 3 ";
+        }elseif(db_getsession("DB_modulo") == 439){
+          $sWhere .=" and ac08_acordocomissaotipo = 2 ";
+        }elseif(db_getsession("DB_modulo") == 8251){
+          $sWhere .=" and ac08_acordocomissaotipo = 1 ";
+        }else{
+          $sWhere .=" and ac08_acordocomissaotipo = 1 ";
         }
+
+        //$sWhere.=" and t75_db_depart = $iDepart";
 
         if(isset($chave_t75_sequencial) && (trim($chave_t75_sequencial) != "") ) {
 
