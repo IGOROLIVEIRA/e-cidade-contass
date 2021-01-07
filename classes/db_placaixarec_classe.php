@@ -818,5 +818,42 @@ class cl_placaixarec {
      }
      return $sql;
   }
+
+  function sql_query_placaixarec_lancam( $k81_seqpla=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from placaixarec ";
+    $sql .= "      inner join corplacaixa on k82_seqpla = k81_seqpla";
+    $sql .= "      inner join corrente on (corrente.k12_id, corrente.k12_data, corrente.k12_autent) = (k82_id, k82_data, k82_autent)";
+    $sql .= "      inner join conlancamcorrente on (c86_id, c86_data, c86_autent) = (corrente.k12_id, corrente.k12_data, corrente.k12_autent)";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($k81_seqpla!=null ){
+        $sql2 .= " where placaixarec.k81_seqpla = $k81_seqpla ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+ }
 }
 ?>

@@ -739,7 +739,7 @@ function init_130($opcao){
               if($arquivo_rubricas[$Iind]["rh27_calcp"] == 't'){
 
                $iDiasNoMes                   = 30;
-               $iDiasTrabalhados             = $oDataFimContrato->getDia();
+               $iDiasTrabalhados             = ($oDataFimContrato->getDia() > 30 ? 30 : $oDataFimContrato->getDia());
 
               // $nCoeficienteTerminoContrato  = $iDiasTrabalhados * 30 / $iDiasNoMes;
               // $nCoeficienteTerminoContrato  = $nCoeficienteTerminoContrato / 30;

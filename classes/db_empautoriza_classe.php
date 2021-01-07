@@ -957,7 +957,7 @@ class cl_empautoriza {
         }
         return $result;
     }
-    function sql_query ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere="",$possuiPC=false){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = explode("#",$campos);
@@ -981,6 +981,16 @@ class cl_empautoriza {
         $sql .= "      left  join empautidot     on e56_autori = empautoriza.e54_autori and e56_anousu=e54_anousu ";
         $sql .= "      left join orcdotacao      on e56_Coddot = o58_coddot and e56_anousu = o58_anousu";
 
+        /*
+         * Filtro para buscar apenas autorizações que tenha vínculo com Processo de Compra
+         * */
+
+        if($possuiPC){
+            $sql .= " inner join empautitem ON e55_autori = e54_autori ";
+            $sql .= " inner join empautitempcprocitem on (e73_autori, e73_sequen) = (e55_autori, e55_sequen) ";
+            $sql .= " inner join pcprocitem on e73_pcprocitem = pc81_codprocitem ";
+            $sql .= " inner join pcproc on pc81_codproc = pc80_codproc ";
+        }
 
         $sql2 = "";
         if($dbwhere==""){

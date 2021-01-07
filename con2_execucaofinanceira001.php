@@ -180,9 +180,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         db_iframe_acordofornecedor.hide();
     }
 
-    function js_completaFornecedor2(codigo,nome) {
+    function js_completaFornecedor2(nome, erro) {
 
         $('z01_nome').value  = nome;
+        if(erro){
+            $('pc60_numcgm').value = '';
+        }
+
         $('pc60_numcgm').focus();
         db_iframe_acordofornecedor.hide();
     }
@@ -303,5 +307,16 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
             return false;
         }
     }
+
+    document.getElementById('pc60_numcgm').addEventListener('keyup', e => {
+
+        if(e.target.value){
+            if(/[^0-9]/.test(e.target.value)){
+                document.getElementById('pc60_numcgm').value = '';
+                alert('Informe somente números!');
+                e.preventDefault();
+            }
+        }
+    });
 
 </script>

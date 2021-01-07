@@ -146,7 +146,7 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
 		          <td>
 		            <?
 		              db_input('ac50_sequencial', 10, $Iac50_descricao, true, 'text', 1,
-		                       "onchange=js_pesquisaac50_descricao(false)");
+		                       "onkeyup='js_validaText(this);onchange=js_pesquisaac50_descricao(false);'");
 		              db_input('ac50_descricao', 40, $Iac50_descricao, true, 'text', 3);
 		            ?>
 		          </td>
@@ -540,5 +540,12 @@ $('ac50_sequencial').value = '';
 $('ac50_descricao') .value = '';
 
 js_criaLancador();
+
+function js_validaText(objeto){
+  if(/[^0-9]/.test(objeto.value)){
+    alert('Informe somente números!');
+    document.getElementById('ac50_sequencial').value = '';
+  }
+}
 
 </script>

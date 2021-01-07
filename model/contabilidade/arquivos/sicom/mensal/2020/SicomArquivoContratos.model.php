@@ -1199,7 +1199,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
             if($oDados20->ac02_acordonatureza == "1"){
-                if($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "3"){
+                if($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4"){
                     $clcontratos21->si88_coditem = $iCodItem;
                 }else{
                     $clcontratos21->si88_coditem = null;

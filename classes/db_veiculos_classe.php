@@ -42,7 +42,7 @@ class cl_veiculos {
    var $erro_campo = null;
    var $pagina_retorno = null;
    // cria variaveis do arquivo
-   var $ve01_codigo = 0;
+   var $ve01_codigo = null;
    var $ve01_placa = null;
    var $ve01_veiccadtipo = 0;
    var $ve01_veiccadmarca = 0;
@@ -371,15 +371,11 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
+
      if($this->ve01_medidaini == null ){
-       $this->erro_sql = " Campo Medida Inicial nao Informado.";
-       $this->erro_campo = "ve01_medidaini";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+         $this->ve01_medidaini = 0;
      }
+
      if($ve01_codigo == "" || $ve01_codigo == null ){
        $result = db_query("select nextval('veiculos_ve01_codigo_seq')");
        if($result==false){
@@ -1274,7 +1270,7 @@ class cl_veiculos {
     $sql .= "   inner join veiccadmarca          on veiccadmarca.ve21_codigo           = veiculos.ve01_veiccadmarca         ";
     $sql .= "   inner join veiccadmodelo         on veiccadmodelo.ve22_codigo          = veiculos.ve01_veiccadmodelo        ";
     $sql .= "   inner join veiccadcor            on veiccadcor.ve23_codigo             = veiculos.ve01_veiccadcor           ";
-    $sql .= "   left join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo  = veiculos.ve01_veiccadtipocapacidade";
+    $sql .= "   left join veiccadtipocapacidade  on veiccadtipocapacidade.ve24_codigo  = veiculos.ve01_veiccadtipocapacidade";
     $sql .= "   inner join veiccadcategcnh       on veiccadcategcnh.ve30_codigo        = veiculos.ve01_veiccadcategcnh      ";
     $sql .= "   inner join veiccadproced         on veiccadproced.ve25_codigo          = veiculos.ve01_veiccadproced        ";
     $sql .= "   left  join veiccadpotencia       on veiccadpotencia.ve31_codigo        = veiculos.ve01_veiccadpotencia      ";
@@ -1282,6 +1278,7 @@ class cl_veiculos {
     $sql .= "   inner join veictipoabast         on veictipoabast.ve07_sequencial      = veiculos.ve01_veictipoabast        ";
     $sql .= "   inner join db_config             on db_config.codigo                   = db_depart.instit                   ";
     $sql .= "   inner join cepestados            on cepestados.cp03_sigla              = ceplocalidades.cp05_sigla          ";
+    $sql .= "   inner join tipoveiculos          on tipoveiculos.si04_veiculos         = veiculos.ve01_codigo               ";
     $sql .= "   left  join veicpatri             on veicpatri.ve03_veiculo             = veiculos.ve01_codigo               ";
     $sql .= "   left  join bens                  on veicpatri.ve03_bem                 = bens.t52_bem                       ";
     $sql .= "   left  join veicbaixa             on veicbaixa.ve04_veiculo             = veiculos.ve01_codigo               ";

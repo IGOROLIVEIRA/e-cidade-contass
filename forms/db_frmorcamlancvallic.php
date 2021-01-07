@@ -426,7 +426,7 @@ $clrotulo = new rotulocampo;
                                     <td>
 		                         </tr>";
                         } else {
-                            echo "<script>alert('Licitação sem fornecedores cadastrados');</script>";
+//                            echo "<script>alert('Licitação sem fornecedores cadastrados');</script>";
                             echo "<script>document.location.href=\"lic1_fornec001.php?chavepesquisa={$l20_codigo}\"</script>";
                         }
                         echo " 
