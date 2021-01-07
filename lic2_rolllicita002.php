@@ -8,6 +8,7 @@ require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_pcorcamjulg_classe.php");
 require_once("classes/db_pcprocitem_classe.php");
+require_once("classes/db_pcorcamitem_classe.php");
 require_once("model/licitacao.model.php");
 require_once("model/licitacao/SituacaoLicitacao.model.php");
 
@@ -17,6 +18,7 @@ $clliclicitem = new cl_liclicitem;
 $clempautitem = new cl_empautitem;
 $clpcorcamjulg = new cl_pcorcamjulg;
 $clpcprocitem = new cl_pcprocitem;
+$clpcorcamitem = new cl_pcorcamitem;
 $clrotulo = new rotulocampo;
 
 $clrotulo->label('');
@@ -200,17 +202,21 @@ for ($i = 0; $i < $numrows; $i++) {
 
 
     $sSqlFornecedores = " select distinct
-l206_fornecedor||' - '||z01_nome AS fornecedor,
-si172_nrocontrato  as contrato,
-si172_dataassinatura,
-si172_datainiciovigencia,
-si172_datafinalvigencia
- FROM contratos
- inner JOIN cgm ON si172_fornecedor=z01_numcgm
- inner join habilitacaoforn on l206_fornecedor = si172_fornecedor
-where
-si172_licitacao = {$l20_codigo} order by 2";
+                            ac16_contratado||' - '||z01_nome as fornecedor,
+                            ac16_numero as contrato,
+                            ac16_dataassinatura,
+                            ac16_datainicio,
+                            ac16_datafim
+                        FROM acordo
+                        inner JOIN cgm ON ac16_contratado = z01_numcgm
+                        inner join habilitacaoforn on l206_fornecedor = ac16_contratado
+                        where ac16_licitacao = {$l20_codigo} order by 2";
     $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
+
+    if(!pg_numrows($result_fornecedores)){
+        $sSqlOrcam = $clpcorcamitem->sql_query_pcmaterlic(null, "distinct z01_numcgm||' - '||z01_nome as fornecedor ", null, "l21_codliclicita=$l20_codigo and l20_instit = " . db_getsession("DB_instit"));
+        $result_fornecedores = db_query($sSqlOrcam) or die(pg_last_error());
+    }
 
     if (pg_num_rows($result_fornecedores) > 0) {
 
@@ -227,10 +233,10 @@ si172_licitacao = {$l20_codigo} order by 2";
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(167, $alt, $fornecedor, 1, 0, "L", $p);
-            $pdf->cell(20, $alt, $contrato, 1, 0, "C", $p);
-            $pdf->cell(32, $alt, db_formatar($si172_dataassinatura, "d"), 1, 0, "C", $p);
-            $pdf->cell(30, $alt, db_formatar($si172_datainiciovigencia, "d"), 1, 0, "C", $p);
-            $pdf->cell(30, $alt, db_formatar($si172_datafinalvigencia, "d"), 1, 1, "C", $p);
+            $pdf->cell(20, $alt, $contrato ? $contrato : ' - ', 1, 0, "C", $p);
+            $pdf->cell(32, $alt, $si172_dataassinatura ? db_formatar($si172_dataassinatura, "d") : ' - ', 1, 0, "C", $p);
+            $pdf->cell(30, $alt, $si172_datainiciovigencia ? db_formatar($si172_datainiciovigencia, "d") : ' - ', 1, 0, "C", $p);
+            $pdf->cell(30, $alt, $si172_datafinalvigencia ? db_formatar($si172_datafinalvigencia, "d") : ' - ', 1, 1, "C", $p);
 
         }
     }
