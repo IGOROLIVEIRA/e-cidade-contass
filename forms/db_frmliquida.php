@@ -171,6 +171,7 @@ $db_opcao_inf=1;
             <th class='table_header'>
 	          <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca()'>
            	<a onclick='js_marca()' style='cursor:pointer'>M</a></b></th>
+            <th class='table_header'>OP</th>
             <th class='table_header'>Seq. Nota</th>
             <th class='table_header'>Nota Fiscal</th>
             <th class='table_header'>Data</th>
@@ -179,7 +180,6 @@ $db_opcao_inf=1;
             <th class='table_header'>Liquidado</th>
             <th class='table_header'>Pago</th>
             <th class='table_header'>Retido</th>
-            <th class='table_header' width="18">&nbsp;</th>
           </tr>
           <tbody id='dados' style='height:150;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
           </tbody>
@@ -361,6 +361,7 @@ function js_saida(oAjax){
           saida += "<input type='checkbox' " + obj.data[i].libera + " onclick='js_marcaLinha(this)'";
           saida += " class='chkmarca' name='chk" + obj.data[i].e69_codnota + "'";
           saida += " id='chk" + obj.data[i].e69_codnota + "' value='" + obj.data[i].e69_codnota + "' "+sClassName+"></td>";
+          saida += "<td class='linhagrid' style='text-align:center'>" + iCodOrd + "</td>";
           saida += "<td class='linhagrid' style='text-align:center'><b>"
           saida += "<a href='' onclick='js_consultaNota("+obj.data[i].e69_codnota+");return false'>";
           saida += obj.data[i].e69_codnota + "</a></b></td>";
