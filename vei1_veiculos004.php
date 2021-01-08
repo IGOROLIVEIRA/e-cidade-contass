@@ -87,7 +87,7 @@ if(isset($incluir)){
         $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
         $datecadastro = implode("-",array_reverse(explode("/",$ve01_dtaquis)));
 
-        if($c99_datapat != "" && $datecadastro <= $c99_datapat){
+        if($c99_datapat != "" && $datecadastro && ($datecadastro <= $c99_datapat)){
             $sqlerro = true;
             $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
         }else{
