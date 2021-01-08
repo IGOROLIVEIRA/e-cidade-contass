@@ -118,8 +118,8 @@ for ($i = 0; $i < $numrows; $i++) {
         $pdf->addpage();
         $muda = 1;
     }
-    if (strlen($objeto) > 58) {
-        $aObjeto = quebrar_texto($objeto, 58);
+    if (strlen($objeto) > 56) {
+        $aObjeto = quebrar_texto($objeto, 56);
         $alt_novo = count($aObjeto);
     } else {
         $alt_novo = 1;
@@ -140,8 +140,10 @@ for ($i = 0; $i < $numrows; $i++) {
     
     if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
         $pdf->cell(27, $alt, 'Data de Homologação', 1, 1, "C", 1);
-    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103))){
+    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))){
         $pdf->cell(27, $alt, 'Data de Ratificação', 1, 1, "C", 1);
+    }else{
+        $pdf->cell(27, $alt, ' - ', 1, 1, "C", 1);
     }
 
     $pdf->setfont('arial', '', 7);
@@ -172,7 +174,7 @@ for ($i = 0; $i < $numrows; $i++) {
     $pdf->cell(30, $alt*$alt_novo, $descCriterio, 1, 0, "C", 0);
     $pdf->cell(22, $alt*$alt_novo, db_formatar($abertura, "d"), 1, 0, "C", 0);
 
-    if (strlen($objeto) > 58) {
+    if (strlen($objeto) > 56) {
 
         $pos_x = $pdf->x;
         $pos_y = $pdf->y;
@@ -180,24 +182,26 @@ for ($i = 0; $i < $numrows; $i++) {
         $pdf->x = $pos_x;
         $pdf->y = $pos_y;
         foreach ($aObjeto as $oObjeto) {
-            $pdf->cell(58, ($alt), $oObjeto, 0, 1, "L", 0);
+            $pdf->cell(56, ($alt), $oObjeto, 0, 1, "L", 0);
             $pdf->x = $pos_x;
         }
-        $pdf->x = $pos_x - 58;
+        $pdf->x = $pos_x - 56;
     } else {
         $pdf->cell(88, $alt*$alt_novo, $objeto, 1, 0, "L", 0);
     }
 
-    if (strlen($objeto) > 70) {
+    if (strlen($objeto) > 56) {
         $pdf->y = $pos_y;
         $pdf->x = $pos_x + 88;
     }
     
+    $data = '';
     if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
         $data = $l202_datahomologacao;
-    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103))){
+    }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103, 106))){
         $data = $l20_dtpubratificacao;
     }
+
     $pdf->cell(27, $alt*$alt_novo, $data ? db_formatar($data, 'd') : ' - ', 1, 1, "C", 0);
 
     $sSqlFornecedores = " select distinct
