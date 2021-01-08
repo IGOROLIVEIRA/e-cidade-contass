@@ -39,7 +39,13 @@ if (isset($incluir)) {
     $oDaoOrcLei->o45_datafim = db_getsession("DB_anousu")."-12-31";
     $oDaoOrcLei->o45_descr   = "Lei do Projeto de lei {$o138_numerolei}";
     $oDaoOrcLei->o45_numlei  = "{$o138_numerolei}";
-    $oDaoOrcLei->o45_tipolei = 2;
+    $oDaoOrcLei->o45_datalei = "{$o138_data}";
+    if ($o138_altpercsuplementacao == 1) {
+      $oDaoOrcLei->o45_tipolei = 4;
+    } {
+      $oDaoOrcLei->o45_tipolei = 3;
+    }
+    
     $oDaoOrcLei->incluir(null);
     if ($oDaoOrcLei->erro_status == 0) {
 

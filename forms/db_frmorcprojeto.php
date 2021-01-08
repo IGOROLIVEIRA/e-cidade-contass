@@ -57,6 +57,7 @@ $clrotulo->label("o45_numlei");
             <td>
              <? db_input('o39_codlei',8,$Io39_codlei,true,'text',$db_opcao," onchange='js_pesquisao39_codlei(false);'")?>
              <? db_input('o45_numlei',30,$Io45_numlei,true,'text',3,'')     ?>
+			 <input type="hidden" id="iTipoLei" value="" name="iTipoLei" >
            </td>
          </tr>
          <tr>
@@ -82,7 +83,7 @@ $clrotulo->label("o45_numlei");
   }
   ?>
   <tr>
-   <td><b>Tipo </b></td>
+   <td><b>Tipo: </b></td>
    <td> <?
 
     //$aWhere=array();
@@ -95,7 +96,7 @@ $clrotulo->label("o45_numlei");
     if($o39_tiposuplementacao == ""){
     $o39_tiposuplementacao = $o46_tiposup;
     }
-    db_selectrecord("o39_tiposuplementacao",$rtipo,false, $db_opcao != 3 ? $edita : $db_opcao);
+	db_selectrecord("o39_tiposuplementacao",$rtipo,false, $db_opcao != 3 ? $edita : $db_opcao, "", "", "", "", "js_validaTipoSup();");
 
     ?>
   </td>
@@ -107,9 +108,9 @@ $clrotulo->label("o45_numlei");
    <?=@$Lo39_usalimite?>
  </td>
  <td>
-      <?  // $x = array('1'=>'DECRETO','2'=>'LEI','3'=>'PROJETO RETIFICADOR');
-      $x = array('0'=> 'Nenhum','f'=>'Não','t'=>'Sim');
-      db_select('o39_usalimite',$x,true,$db_opcao,"");     ?>
+      <?
+      $x = array('f'=>'Não','t'=>'Sim');
+      db_select('o39_usalimite',$x,true,3,""); ?>
     </td>
   </tr>
 </table>
@@ -156,7 +157,7 @@ $clrotulo->label("o45_numlei");
 <tr valign=botton >
   <td colspan=1 align=center>
     <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
-    onclick='return js_validalimite()' type="submit" id="db_opcao"
+    type="submit" id="db_opcao"
     value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
     <?=($db_botao==false?"disabled":"")?> >
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
@@ -169,21 +170,47 @@ $clrotulo->label("o45_numlei");
 </center>
 </form>
 <script>
-  function js_validalimite() {
+  	js_validaTipoSup();
 
-    if (document.getElementById('o39_usalimite').value == '0') {
+  	function js_validaTipoSup() {
 
-      alert('Informe se o Decreto usa o limite definido na LOA.');
-      return false;
-    } else {
-      return true;
-    }
-  }
+		let iTipoLei = document.getElementById('iTipoLei').value;
+		let iTipoSup = document.getElementById('o39_tiposuplementacao').value;
+
+		if (iTipoLei == 1) {
+		
+			let aTipoSupNaoPermitidos = ['1002','1005','1006','1007','1008','1009','1010','1012','1014','1015','1016','1017','1024','1025','1026'];
+
+			if (aTipoSupNaoPermitidos.indexOf(iTipoSup) > -1) {
+				
+				alert('Tipo de suplementação '+iTipoSup+' não permitido para o Tipo da Lei: 1 -  LOA');
+				document.getElementById('o39_tiposuplementacao').options[0].selected = true;
+				document.getElementById('o39_tiposuplementacao').onchange();
+				return false;
+
+			}
+
+		}
+
+	  	if (iTipoSup == 1001 || iTipoSup == 1003 || iTipoSup == 1004) {
+			
+			document.getElementById('o39_usalimite').value = 't';	
+			document.getElementById('o39_usalimite_select_descr').value = 'Sim';
+
+		} else {
+			
+			document.getElementById('o39_usalimite').value = 'f';	
+			document.getElementById('o39_usalimite_select_descr').value = 'Não';
+
+		}
+
+   }
+
   function js_pesquisao39_codlei(mostra){
     if(mostra==true){
       js_OpenJanelaIframe('top.corpo.iframe_projeto',
         'db_iframe_orclei',
-        'func_orclei.php?funcao_js=parent.js_mostraorclei1|o45_codlei|o45_numlei&leimanual=1',
+        'func_orclei.php?funcao_js=parent.js_mostraorclei1|o45_codlei|o45_numlei|o45_tipolei&leimanual=1',
         'Pesquisa',true);
     }else{
      if(document.form1.o39_codlei.value != ''){
@@ -191,22 +218,27 @@ $clrotulo->label("o45_numlei");
         'db_iframe_orclei',
         'func_orclei.php?pesquisa_chave='+
         document.form1.o39_codlei.value+
-        '&funcao_js=parent.js_mostraorclei','Pesquisa',false);
+        '&funcao_js=parent.js_mostraorclei&bTipoLei=true','Pesquisa',false);
     }else{
-     document.form1.o45_numlei.value = '';
+	 document.form1.o45_numlei.value = '';
+	 document.form1.iTipoLei.value   = '';
    }
  }
 }
-function js_mostraorclei(chave,erro){
+function js_mostraorclei(chave,chave1,erro){
   document.form1.o45_numlei.value = chave;
+  document.form1.iTipoLei.value   = chave1;
+  js_validaTipoSup();
   if(erro==true){
     document.form1.o39_codlei.focus();
     document.form1.o39_codlei.value = '';
   }
 }
-function js_mostraorclei1(chave1,chave2){
+function js_mostraorclei1(chave1,chave2,chave3){
   document.form1.o39_codlei.value = chave1;
   document.form1.o45_numlei.value = chave2;
+  document.form1.iTipoLei.value   = chave3;
+  js_validaTipoSup();
   db_iframe_orclei.hide();
 }
 function js_pesquisa(){

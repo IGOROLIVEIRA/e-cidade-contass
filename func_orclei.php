@@ -106,11 +106,16 @@ $clorclei->rotulo->label("o45_numlei");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clorclei->sql_record($clorclei->sql_query(null, null,"*", 
+          $result = $clorclei->sql_record($clorclei->sql_query(null, "*",null, 
                                                                "o45_codlei = {$pesquisa_chave} and {$sWhere}"));
+                                                               
           if($clorclei->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$o45_numlei',false);</script>";
+            if (isset($bTipoLei) && $bTipoLei == 'true') {
+              echo "<script>".$funcao_js."('$o45_numlei', '$o45_tipolei',false);</script>";
+            } else {
+              echo "<script>".$funcao_js."('$o45_numlei',false);</script>";
+            }
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
