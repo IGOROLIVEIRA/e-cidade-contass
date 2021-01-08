@@ -1398,6 +1398,7 @@ class cl_acordo {
         $sSql .= "            left join liclicitem       on liclicitem.l21_codigo            = acordoliclicitem.ac24_liclicitem";
         $sSql .= "            inner join liclicita        on liclicita.l20_codigo             = liclicitem.l21_codliclicita
  or liclicita.l20_codigo = acordo.ac16_licitacao ";
+        $sSql .= "            left join cgm on z01_numcgm = ac16_contratado ";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 

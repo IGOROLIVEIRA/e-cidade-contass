@@ -8,9 +8,10 @@ require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_pcorcamjulg_classe.php");
 require_once("classes/db_pcprocitem_classe.php");
-require_once("classes/db_pcorcamitem_classe.php");
+require_once("classes/db_acordo_classe.php");
 require_once("model/licitacao.model.php");
 require_once("model/licitacao/SituacaoLicitacao.model.php");
+require_once("classes/db_habilitacaoforn_classe.php");
 
 $clliclicita = new cl_liclicita;
 $clliclicitasituacao = new cl_liclicitasituacao;
@@ -18,7 +19,8 @@ $clliclicitem = new cl_liclicitem;
 $clempautitem = new cl_empautitem;
 $clpcorcamjulg = new cl_pcorcamjulg;
 $clpcprocitem = new cl_pcprocitem;
-$clpcorcamitem = new cl_pcorcamitem;
+$clacordo = new cl_acordo;
+$clhabilitacao = new cl_habilitacaoforn;
 $clrotulo = new rotulocampo;
 
 $clrotulo->label('');
@@ -88,8 +90,8 @@ if ($numrows == 0) {
     exit;
 }
 
-$head2 = "Roll de Licitações";
 $head3 = @$info;
+$head2 = "Rol de Licitações";
 $head4 = @$info1;
 $head5 = @$info2;
 $pdf = new PDF('Landscape', 'mm', 'A4');
@@ -116,8 +118,8 @@ for ($i = 0; $i < $numrows; $i++) {
         $pdf->addpage();
         $muda = 1;
     }
-    if (strlen($objeto) > 50) {
-        $aObjeto = quebrar_texto($objeto, 50);
+    if (strlen($objeto) > 58) {
+        $aObjeto = quebrar_texto($objeto, 58);
         $alt_novo = count($aObjeto);
     } else {
         $alt_novo = 1;
@@ -133,10 +135,9 @@ for ($i = 0; $i < $numrows; $i++) {
     $pdf->cell(15, $alt, 'Numeração', 1, 0, "C", 1);
     $pdf->cell(8, $alt, 'R.P.', 1, 0, "C", 1);
     $pdf->cell(30, $alt, 'Critério de Adjudicação', 1, 0, "C", 1);
-    $pdf->cell(10, $alt, 'Tabela', 1, 0, "C", 1);
     $pdf->cell(22, $alt, 'Data de abertura', 1, 0, "C", 1);
-    $pdf->cell(78, $alt, 'Objeto', 1, 0, "C", 1);
-
+    $pdf->cell(88, $alt, 'Objeto', 1, 0, "C", 1);
+    
     if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
         $pdf->cell(27, $alt, 'Data de Homologação', 1, 1, "C", 1);
     }elseif(in_array($l03_pctipocompratribunal, array(100, 101, 102, 103))){
@@ -169,28 +170,27 @@ for ($i = 0; $i < $numrows; $i++) {
     }
 
     $pdf->cell(30, $alt*$alt_novo, $descCriterio, 1, 0, "C", 0);
-    $pdf->cell(10, $alt*$alt_novo, $descontotabela, 1, 0, "C", 0);
     $pdf->cell(22, $alt*$alt_novo, db_formatar($abertura, "d"), 1, 0, "C", 0);
 
-    if (strlen($objeto) > 50) {
+    if (strlen($objeto) > 58) {
 
         $pos_x = $pdf->x;
         $pos_y = $pdf->y;
-        $pdf->cell(78, $alt*$alt_novo, "", 1, 0, "L", 0);
+        $pdf->cell(88, $alt*$alt_novo, "", 1, 0, "L", 0);
         $pdf->x = $pos_x;
         $pdf->y = $pos_y;
         foreach ($aObjeto as $oObjeto) {
-            $pdf->cell(50, ($alt), $oObjeto, 0, 1, "L", 0);
+            $pdf->cell(58, ($alt), $oObjeto, 0, 1, "L", 0);
             $pdf->x = $pos_x;
         }
-        $pdf->x = $pos_x - 50;
+        $pdf->x = $pos_x - 58;
     } else {
-        $pdf->cell(78, $alt*$alt_novo, $objeto, 1, 0, "L", 0);
+        $pdf->cell(88, $alt*$alt_novo, $objeto, 1, 0, "L", 0);
     }
 
-    if (strlen($objeto) > 50) {
+    if (strlen($objeto) > 70) {
         $pdf->y = $pos_y;
-        $pdf->x = $pos_x + 78;
+        $pdf->x = $pos_x + 88;
     }
     
     if(in_array($l03_pctipocompratribunal, array(48, 50, 51, 49, 52, 53))){
@@ -200,22 +200,45 @@ for ($i = 0; $i < $numrows; $i++) {
     }
     $pdf->cell(27, $alt*$alt_novo, $data ? db_formatar($data, 'd') : ' - ', 1, 1, "C", 0);
 
-
     $sSqlFornecedores = " select distinct
-                            ac16_contratado||' - '||z01_nome as fornecedor,
-                            ac16_numero as contrato,
-                            ac16_dataassinatura,
-                            ac16_datainicio,
-                            ac16_datafim
-                        FROM acordo
-                        inner JOIN cgm ON ac16_contratado = z01_numcgm
-                        inner join habilitacaoforn on l206_fornecedor = ac16_contratado
-                        where ac16_licitacao = {$l20_codigo} order by 2";
+                            l206_fornecedor||' - '||z01_nome AS fornecedor,
+                            si172_nrocontrato  as contrato,
+                            si172_dataassinatura as ac16_dataassinatura,
+                            si172_datainiciovigencia as ac16_datainicio,
+                            si172_datafinalvigencia as ac16_datafim
+                        FROM contratos
+                        INNER JOIN cgm ON si172_fornecedor = z01_numcgm
+                        INNER JOIN habilitacaoforn ON l206_fornecedor = si172_fornecedor
+                        WHERE si172_licitacao = {$l20_codigo}";
+
     $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
 
     if(!pg_numrows($result_fornecedores)){
-        $sSqlOrcam = $clpcorcamitem->sql_query_pcmaterlic(null, "distinct z01_numcgm||' - '||z01_nome as fornecedor ", null, "l21_codliclicita=$l20_codigo and l20_instit = " . db_getsession("DB_instit"));
-        $result_fornecedores = db_query($sSqlOrcam) or die(pg_last_error());
+        $sSqlFornecedores = "
+            SELECT DISTINCT 
+                ac16_contratado||' - '||z01_nome AS fornecedor,
+                ac16_numero  as contrato,
+                ac16_dataassinatura,
+                ac16_datainicio,
+                ac16_datafim
+            FROM acordo
+            INNER JOIN cgm ON ac16_contratado = z01_numcgm
+            INNER JOIN habilitacaoforn ON l206_fornecedor = ac16_contratado
+            WHERE ac16_licitacao = {$l20_codigo}";
+
+        $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());                
+    }
+
+    
+    if(!pg_numrows($result_fornecedores)){
+        $sSqlFornecedores = $clacordo->sql_queryLicitacoesVinculadas(null, 
+        "z01_numcgm||' - '||z01_nome as fornecedor, ac16_numero as contrato, ac16_dataassinatura, ac16_datainicio, ac16_datafim", null, " AND l21_codliclicita=$l20_codigo and l20_instit = " . db_getsession("DB_instit"));
+        $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
+    }
+
+    if($usaregistropreco == 'SIM'){
+        $sSqlFornecedores = $clhabilitacao->sql_query(null,"z01_numcgm||' - '||z01_nome as fornecedor","z01_nome","l206_licitacao = {$l20_codigo}");
+        $result_fornecedores = db_query($sSqlFornecedores) or die(pg_last_error());
     }
 
     if (pg_num_rows($result_fornecedores) > 0) {
@@ -229,14 +252,14 @@ for ($i = 0; $i < $numrows; $i++) {
 
         for ($w = 0; $w < pg_num_rows($result_fornecedores); $w++) {
 
-            db_fieldsmemory($result_fornecedores, $w);
+            $oFornecedor = db_utils::fieldsMemory($result_fornecedores, $w);
 
             $pdf->setfont('arial', '', 7);
-            $pdf->cell(167, $alt, $fornecedor, 1, 0, "L", $p);
-            $pdf->cell(20, $alt, $contrato ? $contrato : ' - ', 1, 0, "C", $p);
-            $pdf->cell(32, $alt, $si172_dataassinatura ? db_formatar($si172_dataassinatura, "d") : ' - ', 1, 0, "C", $p);
-            $pdf->cell(30, $alt, $si172_datainiciovigencia ? db_formatar($si172_datainiciovigencia, "d") : ' - ', 1, 0, "C", $p);
-            $pdf->cell(30, $alt, $si172_datafinalvigencia ? db_formatar($si172_datafinalvigencia, "d") : ' - ', 1, 1, "C", $p);
+            $pdf->cell(167, $alt, $oFornecedor->fornecedor, 1, 0, "L", $p);
+            $pdf->cell(20, $alt, $oFornecedor->contrato ? $oFornecedor->contrato : ' - ', 1, 0, "C", $p);
+            $pdf->cell(32, $alt, $oFornecedor->ac16_dataassinatura ? db_formatar($oFornecedor->ac16_dataassinatura, "d") : ' - ', 1, 0, "C", $p);
+            $pdf->cell(30, $alt, $oFornecedor->ac16_datainicio ? db_formatar($oFornecedor->ac16_datainicio, "d") : ' - ', 1, 0, "C", $p);
+            $pdf->cell(30, $alt, $oFornecedor->ac16_datafim ? db_formatar($oFornecedor->ac16_datafim, "d") : ' - ', 1, 1, "C", $p);
 
         }
     }
