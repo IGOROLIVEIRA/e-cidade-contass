@@ -182,8 +182,11 @@ $clrotulo->label("o45_numlei");
 			let aTipoSupNaoPermitidos = ['1002','1005','1006','1007','1008','1009','1010','1012','1014','1015','1016','1017','1024','1025','1026'];
 
 			if (aTipoSupNaoPermitidos.indexOf(iTipoSup) > -1) {
-				
-				alert('Tipo de suplementação '+iTipoSup+' não permitido para o Tipo da Lei: 1 -  LOA');
+        
+				let eSelect 	= document.getElementById("o39_tiposuplementacaodescr");
+				let sTipoSup 	= iTipoSup +' '+ eSelect.options[eSelect.selectedIndex].text;
+				alert('Tipo de suplementação '+sTipoSup+' não permitido para o Tipo da Lei: 1 -  LOA');
+
 				document.getElementById('o39_tiposuplementacao').options[0].selected = true;
 				document.getElementById('o39_tiposuplementacao').onchange();
 				return false;

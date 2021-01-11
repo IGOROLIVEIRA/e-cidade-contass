@@ -73,7 +73,7 @@ $result=$clorcparametro->sql_record($clorcparametro->sql_query_file($anousu,"o50
 if ($clorcparametro->numrows > 0 ){
     db_fieldsmemory($result,0);
 }
-
+$limpa_dados = false;
 //------------------------------------------
 if (isset($pesquisa_dot) && $o47_coddot!=""){
     // foi clicado no botão "pesquisa" da tela
@@ -81,14 +81,35 @@ if (isset($pesquisa_dot) && $o47_coddot!=""){
     if ($clorcdotacao->numrows > 0 ){
         db_fieldsmemory($res,0); // deve existir 1 registro
 
-        $resdot= db_dotacaosaldo(8,2,2,"true","o58_coddot=$o47_coddot",db_getsession("DB_anousu"),$anousu.'-01-01',$anousu.'-12-31');
-        db_fieldsmemory($resdot,0);
-        // $atual_menos_reservado
+        if ( $tiposup == 1020 && !($o58_orgao == 2 && $o58_unidade == 1 && $o58_funcao == 4 && $o58_subfuncao == 122 && $o58_programa == 2011
+            && $o58_projativ == 2002 && substr($o56_elemento, 0, 5) == 33190 && substr($o56_elemento, 8, 5) == 00000 && $o58_codigo == 100) ) {
+                
+                db_msgbox("Dotação incompatível com o tipo de suplementação!");
+                $limpa_dados = true;
+
+        } elseif ( $tiposup == 1021 && !($o58_orgao == 2 && $o58_unidade == 1 && $o58_funcao == 4 && $o58_subfuncao == 122 && $o58_programa == 2011
+            && $o58_projativ == 2002 && substr($o56_elemento, 0, 3) == 331 && substr($o56_elemento, 5, 8) == 00000000 && $o58_codigo == 100) ) {
+                
+                db_msgbox("Dotação incompatível com o tipo de suplementação!");
+                $limpa_dados = true;
+
+        } elseif ( $tiposup == 1022 && !($o58_orgao == 2 && $o58_unidade == 1 && $o58_programa == 2011
+            && $o58_projativ == 2002 && substr($o56_elemento, 0, 3) == 331 && substr($o56_elemento, 5, 8) == 00000000 && $o58_codigo == 100) ) {
+
+                db_msgbox("Dotação incompatível com o tipo de suplementação!");
+                $limpa_dados = true;
+
+        } else {            
+            
+            $resdot= db_dotacaosaldo(8,2,2,"true","o58_coddot=$o47_coddot",db_getsession("DB_anousu"),$anousu.'-01-01',$anousu.'-12-31');
+            db_fieldsmemory($resdot,0);
+            // $atual_menos_reservado
+
+        }
 
     }
 }
 //------------------------------------------
-$limpa_dados = false;
 
 if(isset($incluir)){
     // pressionado botao incluir na tela
