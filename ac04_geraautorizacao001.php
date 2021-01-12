@@ -1474,20 +1474,21 @@ console.log(oDotacao);
                 var nValorDotacao = 0;
 
                 oDadosItem.dotacoes.each(function(oDotacao, id) {
-                    nValorDotacao += oDotacao.valorexecutar;
+                    nValorDotacao += oDotacao.valor;
                 });
 
                 oItem.valor   =  js_formatar(oItem.valor , 'f',2);
                 nValorDotacao =  js_formatar(nValorDotacao, 'f',2);
                 nTotal        =  js_formatar(nTotal, 'f',2);
-
+console.log(nTotal.valueOf());
+console.log(nValorDotacao.valueOf());
                 if (nTotal.valueOf() != nValorDotacao.valueOf()) {
                     /**
                      @todo
                      caso deseje-se que seja exibida uma mensagem informativa de uma dotação específica em caso de valores não
                      correspondentes, segue abaixo um exemplo
                      alert(nTotal.valueOf() +" <===> "+ nValorDotacao.valueOf()); */
-                    alert('Valor da (s) dotação(ões) diferente do valor do item.\nCorrija o valor das dotações.');
+                    alert('Valor da (s) dotação(ões)'+oItem.codigo+' diferente do valor do item.\nCorrija o valor das dotações.');
                     js_removeObj('msgbox');
                     return false;
                 }

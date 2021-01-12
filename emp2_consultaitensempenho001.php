@@ -163,9 +163,9 @@
       aLinha[0]  = oItem.item_empenho;
       aLinha[1]  = oItem.codigo_material;
       aLinha[2]  = oItem.descricao_material.urlDecode();
-      aLinha[3]  = js_formatar(oItem.quantidade, "f");
+      aLinha[3]  = js_formatar(oItem.quantidade, "f", 4);
       aLinha[4]  = js_formatar(oItem.valor_total, "f");
-      aLinha[5]  = js_formatar(oItem.valor_unitario, "f");
+      aLinha[5]  = js_formatar(oItem.valor_unitario, "f",4);
       aLinha[6]  = js_formatar(oItem.saldo_valor, "f");
       aLinha[7]  = oItem.observacao.urlDecode();
       oGridItensEmpenho.addRow(aLinha);
@@ -194,7 +194,7 @@
       var aLinha = new Array();
       aLinha[0] = oDado.pc01_codmater;
       aLinha[1] = oDado.pc01_descrmater;
-      aLinha[2] = js_formatar(oDado.e37_qtd, "f");
+      aLinha[2] = js_formatar(oDado.e37_qtd, "f",4);
       aLinha[3] = js_formatar(oDado.e37_vlranu, "f");
       aLinha[4] = js_formatar(oDado.e94_data, "d");
       
