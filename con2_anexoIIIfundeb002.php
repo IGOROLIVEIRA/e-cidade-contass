@@ -190,12 +190,9 @@ $commovfiltro = "Todos";
 
 $sOpImpressao = 'Sintético';
 
-
-$sExercicio = db_getsession("DB_anousu") - 1;
-
 $sql_order = " order by o58_orgao,e60_anousu,e60_codemp::integer";
 $sql_where_externo .= "  ";
-$sql_where_externo .= ' and e60_anousu = ' . $sExercicio;
+$sql_where_externo .= ' and e60_anousu < ' . db_getsession("DB_anousu");
 $sql_where_externo .= " and " . $sql_filtro;
 
 $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
