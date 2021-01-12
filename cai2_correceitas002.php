@@ -97,6 +97,12 @@ if($sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
 		$where2 .= " and c61_reduz in ({$conta}) ";
 	}
 }
+if ($contribuinte != '') {
+	$where .= $where == '' ? " k81_numcgm in ({$contribuinte}) and " : " and k81_numcgm in ({$contribuinte}) ";
+}
+if ($emparlamentar != '0') {
+	$where .= $where == '' ? " k81_emparlamentar = {$emparlamentar} and " : " and k81_emparlamentar = {$emparlamentar} ";
+}
 
 $inner_sql = "";
 
@@ -118,7 +124,7 @@ if ($recurso != ""){
 
      $where    .= " c1.c61_codigo = ".$recurso." and ";
 }
-
+echo $sinana.'<br>';
 $head3 = "RELATÓRIO DE RECEITAS ARRECADADAS";
 if($tipo == 'O') {
   $head4 = 'RECEITAS ORÇAMENTÁRIAS';
@@ -155,7 +161,11 @@ if ($sinana == 'S1') {
 				 left outer join taborc o  on o.k02_codigo = g.k02_codigo and
 				                              o.k02_anousu = extract (year from r.k12_data)
 				 left outer join tabplan p on p.k02_codigo = g.k02_codigo and
-				                              p.k02_anousu = extract (year from r.k12_data)
+											  p.k02_anousu = extract (year from r.k12_data)
+				 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+											  r.k12_data   = k82_data and 
+											  r.k12_autent = k82_autent
+     			 left  join placaixarec    on k82_seqpla = k81_seqpla
                                  $inner_sql
 			    where $where f.k12_data between '$datai' and '$dataf' and r.k12_instit = ".db_getsession("DB_instit")."
 			    group by g.k02_tipo,
@@ -196,6 +206,10 @@ elseif ($sinana == 'S2') {
 				 left outer join orcreceita       on o70_codrec = o.k02_codrec and
 				                                     o70_anousu = extract (year from r.k12_data)
 				 left outer join orcfontes        on o57_codfon = o70_codfon and o70_anousu = o57_anousu
+				 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+											  r.k12_data   = k82_data and 
+											  r.k12_autent = k82_autent
+     			 left  join placaixarec 		   on k82_seqpla = k81_seqpla
 
 			    where $where f.k12_data between '$datai'
 			      and '$dataf'
@@ -248,7 +262,11 @@ $sql .= " ) as xxx
                                                      and p.k02_anousu  = extract (year from r.k12_data)
 										     left join corhist hist       on hist.k12_id     = f.k12_id
                                                      and hist.k12_data   = f.k12_data
-                                                     and hist.k12_autent = f.k12_autent
+													 and hist.k12_autent = f.k12_autent
+											 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+													 r.k12_data   = k82_data and 
+													 r.k12_autent = k82_autent
+						 					 left  join placaixarec 		   on k82_seqpla = k81_seqpla
 							     where $where f.k12_data between '$datai'
 		           		 	 and '$dataf'
 		           			 and r.k12_instit = ".db_getsession("DB_instit");
@@ -306,7 +324,11 @@ $sql .= " ) as xxx
                                                      and p.k02_anousu  = extract (year from r.k12_data)
 										     left join corhist hist       on hist.k12_id     = f.k12_id
                                                      and hist.k12_data   = f.k12_data
-                                                     and hist.k12_autent = f.k12_autent
+													 and hist.k12_autent = f.k12_autent
+											 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+													 r.k12_data   = k82_data and 
+													 r.k12_autent = k82_autent
+						 					 left  join placaixarec 		   on k82_seqpla = k81_seqpla
 							     where $where f.k12_data between '$datai'
 		           		 	 and '$dataf'
 		           			 and r.k12_instit = ".db_getsession("DB_instit");
@@ -357,7 +379,11 @@ $sql .= " ) as xxx
 						                                   p.k02_anousu    = extract (year from r.k12_data)
 						left join corhist hist          on hist.k12_id     = f.k12_id   and
   				        				           hist.k12_data   = f.k12_data and
-							   			   hist.k12_autent = f.k12_autent
+											  hist.k12_autent = f.k12_autent
+						left  join corplacaixa    on r.k12_id 	   = k82_id and 
+											  r.k12_data   = k82_data and 
+											  r.k12_autent = k82_autent
+						left  join placaixarec 		   on k82_seqpla = k81_seqpla
 			    where $where f.k12_data between '$datai'
 			      			and '$dataf'
 			      			and r.k12_instit = ".db_getsession("DB_instit");
@@ -391,6 +417,8 @@ $sql .= " ) as xxx
 //die($sql);
 
 $result = db_query($sql) or die("Erro realizando consulta : ".$sql);
+echo $sql;
+db_criatabela($result);die;
 $xxnum = pg_numrows($result);
 if ($xxnum == 0) {
 	db_redireciona('db_erros.php?fechar=true&db_erro=Não existem lançamentos para a receita '.$codrec.' no período de '.db_formatar($datai, 'd').' a '.db_formatar($dataf, 'd'));
