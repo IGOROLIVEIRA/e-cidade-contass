@@ -612,15 +612,15 @@ class cl_veiculos {
      if(trim($this->ve01_veiccadproced)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadproced"])){
        $sql  .= $virgula." ve01_veiccadproced = ".($this->ve01_veiccadproced == 0 ? 'null' : $this->ve01_veiccadproced)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadproced) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
-         $this->erro_sql = " Campo Procedência nao Informado.";
-         $this->erro_campo = "ve01_veiccadproced";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
+      //  if(trim($this->ve01_veiccadproced) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+      //    $this->erro_sql = " Campo Procedência nao Informado.";
+      //    $this->erro_campo = "ve01_veiccadproced";
+      //    $this->erro_banco = "";
+      //    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      //    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      //    $this->erro_status = "0";
+      //    return false;
+      //  }
      }
      if(trim($this->ve01_veiccadcateg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcateg"])){
        $sql  .= $virgula." ve01_veiccadcateg = ".($this->ve01_veiccadcateg == 0 ? 'null' : $this->ve01_veiccadcateg)." ";
@@ -664,15 +664,6 @@ class cl_veiculos {
      if(trim($this->ve01_placanum)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_placanum"])){
        $sql  .= $virgula." ve01_placanum = ".($this->ve01_placanum == null ? "null" : $this->ve01_placanum)."  ";
        $virgula = ",";
-       if(trim($this->ve01_placanum) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
-         $this->erro_sql = " Campo Placa em Número nao Informado.";
-         $this->erro_campo = "ve01_placanum";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->ve01_nroserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_nroserie"])){
        $sql  .= $virgula." ve01_nroserie = '$this->ve01_nroserie' ";
