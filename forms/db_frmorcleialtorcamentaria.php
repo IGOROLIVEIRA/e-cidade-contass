@@ -149,7 +149,6 @@ db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
   </fieldset>
   </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input id="decreto" type="button" onclick="parent.location.href='orc1_orcprojeto002.php'" value="Criar Decreto" name="decreto" <?=($numrows==0?"disabled":"") ?> >
 </form>
 <script>
 function js_pesquisao200_orcprojetolei(mostra){
