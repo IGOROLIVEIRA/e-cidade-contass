@@ -103,6 +103,9 @@ if ($contribuinte != '') {
 if ($emparlamentar != '0') {
 	$where .= $where == '' ? " k81_emparlamentar = {$emparlamentar} and " : " and k81_emparlamentar = {$emparlamentar} ";
 }
+if ($regrepasse != '0') {
+	$where .= $where == '' ? " k81_regrepasse = {$regrepasse} and " : " and k81_regrepasse = {$regrepasse} ";
+}
 
 $inner_sql = "";
 
@@ -124,7 +127,7 @@ if ($recurso != ""){
 
      $where    .= " c1.c61_codigo = ".$recurso." and ";
 }
-echo $sinana.'<br>';
+
 $head3 = "RELATÓRIO DE RECEITAS ARRECADADAS";
 if($tipo == 'O') {
   $head4 = 'RECEITAS ORÇAMENTÁRIAS';
@@ -417,8 +420,7 @@ $sql .= " ) as xxx
 //die($sql);
 
 $result = db_query($sql) or die("Erro realizando consulta : ".$sql);
-echo $sql;
-db_criatabela($result);die;
+
 $xxnum = pg_numrows($result);
 if ($xxnum == 0) {
 	db_redireciona('db_erros.php?fechar=true&db_erro=Não existem lançamentos para a receita '.$codrec.' no período de '.db_formatar($datai, 'd').' a '.db_formatar($dataf, 'd'));

@@ -110,10 +110,6 @@ function js_emite(){
        	recurso = document.form1.o15_codigo.value;
 	}
 	  
-	if (document.form1.emparlamentar.value != '') {
-		emparlamentar = document.form1.emparlamentar.value;
-	}
-	  
 	qry  = "estrut="+document.form1.estrut.value;
 	qry += "&sinana="+document.form1.sinana.value;
 	qry += "&ordem="+document.form1.ordem.value;
@@ -125,7 +121,8 @@ function js_emite(){
 	qry += "&recurso="+recurso;
 	qry += "&conta="+sReduzidos;
 	qry += "&contribuinte="+sCgms;
-	qry += "&emparlamentar="+emparlamentar;
+	qry += "&emparlamentar="+document.form1.emparlamentar.value;
+	qry += "&regrepasse="+document.form1.regrepasse.value;
 
 	jan = window.open('cai2_correceitas002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	jan.moveTo(0,0);
@@ -310,6 +307,18 @@ function js_emite(){
 								<option value = '0'>Todas</option>
 								<option value = '1'>1 - Emenda parlamentar individual</option>
 								<option value = '2'>2 - Emenda parlamentar de bancada</option>
+								<option value = '3'>3 - Não se aplica</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" nowrap>
+							<strong>Regularização de Repasse:</strong> 
+						</td>
+						<td>
+							<select name="regrepasse" style="width: 175px;">
+								<option value = '0'>Todas</option>
+								<option value = '1'>Sim</option>
+								<option value = '2'>Não</option>
 						</td>
 					</tr>
 					<tr>
