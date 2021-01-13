@@ -86,7 +86,7 @@ $clorclei->rotulo->label("o45_numlei");
       <?
       $sWhere = '1=1';
       if (isset($leimanual)) {
-        $sWhere .= " and o45_tipolei = 1 and extract (year from o45_datafim) = ".db_getsession("DB_anousu");   
+        $sWhere .= " and o45_tipolei in (1, 2, 3) and extract (year from o45_datafim) = ".db_getsession("DB_anousu");   
       }
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){

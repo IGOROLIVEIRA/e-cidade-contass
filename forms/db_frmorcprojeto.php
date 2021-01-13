@@ -30,7 +30,7 @@ $clorcprojeto->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("o45_numlei");
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" onsubmit="js_validaSubmit();">
   <center>
     <table border=0 style="border:1px solid #999999; width:100%;">
       <tr>
@@ -96,7 +96,7 @@ $clrotulo->label("o45_numlei");
     if($o39_tiposuplementacao == ""){
     $o39_tiposuplementacao = $o46_tiposup;
     }
-	db_selectrecord("o39_tiposuplementacao",$rtipo,false, $db_opcao != 3 ? $edita : $db_opcao, "", "", "", "", "js_validaTipoSup();");
+	db_selectrecord("o39_tiposuplementacao",$rtipo,false, $db_opcao != 3 ? $edita : $db_opcao, "", "", "", "Selecione", "js_validaTipoSup();");
 
     ?>
   </td>
@@ -170,7 +170,6 @@ $clrotulo->label("o45_numlei");
 </center>
 </form>
 <script>
-  	js_validaTipoSup();
 
   	function js_validaTipoSup() {
 
@@ -207,7 +206,16 @@ $clrotulo->label("o45_numlei");
 
 		}
 
-   }
+	}
+	   
+	function js_validaSubmit() {
+
+		if (document.form1.o39_tiposuplementacao.value == 'Selecione') {
+			alert("Informe o Tipo de Suplementação.");
+			event.preventDefault();
+		}
+
+	}
 
   function js_pesquisao39_codlei(mostra){
     if(mostra==true){
@@ -261,4 +269,11 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
+<? if ($db_opcao == 1) {
+	echo "	document.getElementById('o39_tiposuplementacao').options[0].selected = true;
+			document.getElementById('o39_tiposuplementacao').onchange();
+			document.getElementById('o39_usalimite_select_descr').value = '';";
+}
+?>
+
 </script>
