@@ -22,25 +22,25 @@ class GerarABERLIC extends GerarAM
         $this->sArquivo = "ABERLIC";
         $this->abreArquivo();
 
-        $sSql = "select * from aberlic102020 where si46_mes = " . $this->iMes . " and si46_instit=" . db_getsession("DB_instit");
+        $sSql = "select * from aberlic102021 where si46_mes = " . $this->iMes . " and si46_instit=" . db_getsession("DB_instit");
         $rsABERLIC10 = db_query($sSql);
 
-        $sSql2 = "select * from aberlic112020 where si47_mes = " . $this->iMes . " and si47_instit=" . db_getsession("DB_instit");;
+        $sSql2 = "select * from aberlic112021 where si47_mes = " . $this->iMes . " and si47_instit=" . db_getsession("DB_instit");;
         $rsABERLIC11 = db_query($sSql2);
 
-        $sSql3 = "select * from aberlic122020 where si48_mes = " . $this->iMes . " and si48_instit=" . db_getsession("DB_instit");;
+        $sSql3 = "select * from aberlic122021 where si48_mes = " . $this->iMes . " and si48_instit=" . db_getsession("DB_instit");;
         $rsABERLIC12 = db_query($sSql3);
 
-        $sSql4 = "select * from aberlic132020 where si49_mes = " . $this->iMes . " and si49_instit=" . db_getsession("DB_instit");;
+        $sSql4 = "select * from aberlic132021 where si49_mes = " . $this->iMes . " and si49_instit=" . db_getsession("DB_instit");;
         $rsABERLIC13 = db_query($sSql4);
 
-        $sSql5 = "select * from aberlic142020 where si50_mes = " . $this->iMes . " and si50_instit=" . db_getsession("DB_instit");;
+        $sSql5 = "select * from aberlic142021 where si50_mes = " . $this->iMes . " and si50_instit=" . db_getsession("DB_instit");;
         $rsABERLIC14 = db_query($sSql5);
 
-        $sSql6 = "select * from aberlic152020 where si51_mes = " . $this->iMes . " and si51_instit=" . db_getsession("DB_instit");;
+        $sSql6 = "select * from aberlic152021 where si51_mes = " . $this->iMes . " and si51_instit=" . db_getsession("DB_instit");;
         $rsABERLIC15 = db_query($sSql6);
 
-        $sSql7 = "select * from aberlic162020 where si52_mes = " . $this->iMes . " and si52_instit=" . db_getsession("DB_instit");;
+        $sSql7 = "select * from aberlic162021 where si52_mes = " . $this->iMes . " and si52_instit=" . db_getsession("DB_instit");;
         $rsABERLIC16 = db_query($sSql7);
 
         if (pg_num_rows($rsABERLIC10) == 0) {
