@@ -14,7 +14,7 @@ require_once("model/Acordo.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoRescisao.model.php");
 
-//echo '<pre>';ini_set("display_errors", 1);
+// echo '<pre>';ini_set("display_errors", 1);
 
 /**
  * Contratos Sicom Acompanhamento Mensal
@@ -240,9 +240,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
   public function gerarDados()
   {
 
-//ini_set('display_errors', 'On');
-//
-//error_reporting(E_ALL);
+// ini_set('display_errors', 'On');
+
+// error_reporting(E_ALL);
 
     $clcontratos10 = new cl_contratos102021();
     $clcontratos11 = new cl_contratos112021();
@@ -446,6 +446,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 AND ac16_instit = " . db_getsession("DB_instit");
 
     $rsResult10 = db_query($sSql);
+    // db_criatabela($rsResult10);
 
     db_inicio_transacao();
 
@@ -588,7 +589,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       if($oDados10->ac02_acordonatureza == '4' || $oDados10->ac02_acordonatureza == '5'){
         $clcontratos10->si83_formafornecimento = '';
         $clcontratos10->si83_formapagamento = '';
-        $clcontratos10->si83_unidadedemedidaprazoexex = '';
+        $clcontratos10->si83_unidadedemedidaprazoexec = '';
         $clcontratos10->si83_prazoexecucao = '';
         $clcontratos10->si83_multarescisoria = '';
         $clcontratos10->si83_multainadimplemento = '';
@@ -596,7 +597,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       }else{
         $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
         $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
-        $clcontratos10->si83_unidadedemedidaprazoexex = $oDados10->ac16_tipounidtempoperiodo;
+        $clcontratos10->si83_unidadedemedidaprazoexec = $oDados10->ac16_tipounidtempoperiodo;
         $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo;
         $clcontratos10->si83_multarescisoria = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 1)), 0, 99);
         $clcontratos10->si83_multainadimplemento = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 2)), 0, 99);
@@ -712,6 +713,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $aDadosAgrupados12 = array();
 
         if ($clcontratos10->si83_naturezaobjeto != 4 || $clcontratos10->si83_naturezaobjeto != 5) {
+            
 
           /**
            * Caso o contrato seja de origem manual (3) e quando for processo de compras e NO HOUVER empenho, deve ser buscado as dotaes para cada item do contrato.
@@ -978,7 +980,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       join cgm as representante on pcfornereprlegal.pc81_cgmresp = representante.z01_numcgm
       where pcfornereprlegal.pc81_tipopart in (1,3) and fornecedor.z01_numcgm = " . $oAcordo->getContratado()->getCodigo();
 
-      $rsResult13 = db_query($sSql);//db_criatabela($rsResult13);
+      $rsResult13 = db_query($sSql);
       $oDados13 = db_utils::fieldsMemory($rsResult13, 0);
 
       $clcontratos13 = new cl_contratos132021;
@@ -986,7 +988,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       $clcontratos13->si86_codcontrato = $oAcordo->getCodigo();
       $clcontratos13->si86_tipodocumento = $oDados13->tipodocumento;
       $clcontratos13->si86_nrodocumento = $oDados13->nrodocumento;
-	  $clcontratos13->si86_tipodocrepresentante = (strlen($oDados13->nrodocumento) == 11 ? 1 : strlen($oDados13->nrodocumento) == 14 ? 2 : 3);
+      $clcontratos13->si86_tipodocrepresentante = (strlen($oDados13->nrodocumento) == 11 ? 1 : strlen($oDados13->nrodocumento) == 14 ? 2 : 3);
       $clcontratos13->si86_nrodocrepresentantelegal = substr($oDados13->nrodocrepresentantelegal, 0, 14);
       $clcontratos13->si86_reg10 = $clcontratos10->si83_sequencial;
       $clcontratos13->si86_instit = db_getsession("DB_instit");
