@@ -37,7 +37,7 @@ if (isset($incluir)) {
     $oDaoOrcLei = db_utils::getDao("orclei");
     $oDaoOrcLei->o45_dataini = db_getsession("DB_anousu")."-01-01";
     $oDaoOrcLei->o45_datafim = db_getsession("DB_anousu")."-12-31";
-    $oDaoOrcLei->o45_descr   = "Lei do Projeto de lei {$o138_numerolei}";
+    $oDaoOrcLei->o45_descr   = "Lei de Alteração Orçamentária Número {$o138_numerolei}";
     $oDaoOrcLei->o45_numlei  = "{$o138_numerolei}";
     $oDaoOrcLei->o45_datalei = "{$o138_data}";
     if ($o138_altpercsuplementacao == 1) {

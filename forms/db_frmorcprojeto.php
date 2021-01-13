@@ -40,7 +40,7 @@ $clrotulo->label("o45_numlei");
             <tr>
               <td nowrap title="<?=@$To39_anousu?>"><?=@$Lo39_anousu?></td>
               <td><? $o39_anousu = db_getsession('DB_anousu');
-                db_input('o39_anousu',4,$Io39_anousu,true,'text',3,"") ?>
+                db_input('o39_anousu',8,$Io39_anousu,true,'text',3,"") ?>
               </td>
             </tr>
 
@@ -48,31 +48,25 @@ $clrotulo->label("o45_numlei");
              <td nowrap title="<?=@$To39_codproj?>"><?=@$Lo39_codproj?></td>
              <td><? db_input('o39_codproj',8,$Io39_codproj,true,'text',3,"")?></td>
            </tr>
+           <tr><td nowrap title="<?=@$To39_numero?>"><?=@$Lo39_numero?></td>
+            <td><? db_input('o39_numero',10,$Io39_numero,true,'text',$db_opcao,"") ?> </td>
+          </tr>
+          <tr>
+            <td nowrap title="<?=@$To39_data?>"><?=@$Lo39_data?> </td>
+            <td><? db_inputdata('o39_data',@$o39_data_dia,@$o39_data_mes,@$o39_data_ano,true,'text',$db_opcao,"")?> </td>
+          </tr>
            <tr>
             <td nowrap title="<?=@$To39_descr?>"><?=@$Lo39_descr?></td>
-            <td><? db_textarea('o39_descr',0,35,$Io39_descr,true,'text',$db_opcao,"") ?></td>
+            <td><? db_textarea('o39_descr',0,67,$Io39_descr,true,'text',$db_opcao,"") ?></td>
           </tr>
           <tr>
             <td nowrap title="<?=@$To39_codlei?>"><?db_ancora(@$Lo39_codlei,"js_pesquisao39_codlei(true);",$db_opcao);?></td>
             <td>
              <? db_input('o39_codlei',8,$Io39_codlei,true,'text',$db_opcao," onchange='js_pesquisao39_codlei(false);'")?>
-             <? db_input('o45_numlei',30,$Io45_numlei,true,'text',3,'')     ?>
+             <? db_input('o45_numlei',30,$Io45_numlei,true,'text',3,'','','','width: 421px')     ?>
 			 <input type="hidden" id="iTipoLei" value="" name="iTipoLei" >
            </td>
          </tr>
-         <tr>
-          <td nowrap title="<?=@$To39_tipoproj?>">
-           <?=@$Lo39_tipoproj?>
-         </td>
-         <td>
-      <?  // $x = array('1'=>'DECRETO','2'=>'LEI','3'=>'PROJETO RETIFICADOR');
-      $x = array('1'=>'DECRETO');
-      if (!isset($o39_tipoproj)) {
-        $o39_tipoproj = '1';
-      }
-      db_select('o39_tipoproj',$x,true,3,"");     ?>
-    </td>
-  </tr>
   <?php
   //echo $clorcsuplem->sql_query(null,"distinct o48_tiposup","o46_codsup","orcprojeto.o39_codproj = {$o39_codproj}" );
   $res = $clorcsuplem->sql_record($clorcsuplem->sql_query(null,"distinct o48_tiposup","","orcprojeto.o39_codproj = {$o39_codproj}" ));
@@ -83,7 +77,7 @@ $clrotulo->label("o45_numlei");
   }
   ?>
   <tr>
-   <td><b>Tipo: </b></td>
+   <td><b>Tipo Suplementação: </b></td>
    <td> <?
 
     //$aWhere=array();
@@ -111,48 +105,14 @@ $clrotulo->label("o45_numlei");
       <?
       $x = array('f'=>'Não','t'=>'Sim');
       db_select('o39_usalimite',$x,true,3,""); ?>
+      <script>
+        document.getElementById('o39_usalimite_select_descr').setAttribute("style", "width: 73px; background-color:#DEB887;");
+      </script>
     </td>
   </tr>
 </table>
 </td>
-<td>
-  <table border=0>
-   <tr><td align=left colspan=2><fieldset><b>Decreto</b></fieldset></td></tr>
-   <tr><td nowrap title="<?=@$To39_numero?>"><?=@$Lo39_numero?></td>
-     <td><? db_input('o39_numero',22,$Io39_numero,true,'text',$db_opcao,"") ?> </td>
-   </tr>
-   <tr>
-    <td nowrap title="<?=@$To39_data?>"><?=@$Lo39_data?> </td>
-    <td><? db_inputdata('o39_data',@$o39_data_dia,@$o39_data_mes,@$o39_data_ano,true,'text',$db_opcao,"")?> </td>
-  </tr>
 
-  <tr><td colspan=2> &nbsp; </td></tr>
-
-  <tr style='display: none'><td align=left colspan=2><fieldset><b>Lei </b></fieldset></td></tr>
-  <tr style='display: none'>
-    <td nowrap title="<?=@$To39_lei?>"><?=@$Lo39_lei?></td>
-    <td><? db_input('o39_lei',22,$Io39_lei,true,'text',$db_opcao,"") ?> </td>
-  </tr>
-  <tr style='display: none'>
-    <td nowrap title="<?=@$To39_leidata?>"><?=@$Lo39_leidata?> </td>
-    <td><? db_inputdata('o39_leidata',@$o39_leidata_dia,@$o39_leidata_mes,@$o39_leidata_ano,true,'text',$db_opcao,"")?> </td>
-  </tr>
-
-  <tr><td colspan=2> &nbsp; </td></tr>
-
-  <tr><td align=left colspan=2><fieldset><b>Informações </b></fieldset></td></tr>
-  <tr>
-    <td nowrap ><b>Data de Processamento</b></td>
-    <td><? db_inputdata('o51_data',@$o51_data_dia,@$o51_data_mes,@$o51_data_ano,true,'text',3,"")?> </td>
-  </tr>
-  <tr>
-    <td nowrap ><b>Usuario </b></td>
-    <td><? db_input('nome',28,'',true,'text',3,"")?> </td>
-  </tr>
-
-
-</table>
-</td>
 </tr>
 <tr valign=botton >
   <td colspan=1 align=center>

@@ -89,6 +89,14 @@ class Oc13832 extends PostgresMigration
             rotulorel = 'Texto da Lei'
         WHERE nomecam = 'o138_textolei';
 
+        UPDATE db_syscampo SET nulo = 'f' WHERE nomecam = 'o39_numero';
+
+        UPDATE db_syscampo SET nulo = 'f' WHERE nomecam = 'o39_data';
+
+        UPDATE db_syscampo SET rotulo = 'Descrição' WHERE nomecam = 'o39_descr';
+
+        UPDATE db_syscampo SET rotulo = 'Código' WHERE nomecam = 'o39_codproj';
+
         COMMIT;
 
 SQL;
