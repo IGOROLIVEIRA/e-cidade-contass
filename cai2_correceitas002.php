@@ -87,7 +87,7 @@ if ($estrut != '') {
 
 }
 $inner_sql = "";
-$where = '';
+$where = ' 1=1 ';
 
 if ($codrec != '') {
 	$where = ' g.k02_codigo in ('.$codrec.') and ';
@@ -98,13 +98,13 @@ if($sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
 	}
 }
 if ($contribuinte != '') {
-	$where .= $where == '' ? " k81_numcgm in ({$contribuinte}) and " : " and k81_numcgm in ({$contribuinte}) ";
+	$where .= " and k81_numcgm in ({$contribuinte}) ";
 }
 if ($emparlamentar != '0') {
-	$where .= $where == '' ? " k81_emparlamentar = {$emparlamentar} and " : " and k81_emparlamentar = {$emparlamentar} ";
+	$where .= " and k81_emparlamentar = {$emparlamentar} ";
 }
 if ($regrepasse != '0') {
-	$where .= $where == '' ? " k81_regrepasse = {$regrepasse} and " : " and k81_regrepasse = {$regrepasse} ";
+	$where .= " and k81_regrepasse = {$regrepasse} ";
 }
 
 $inner_sql = "";
@@ -170,7 +170,7 @@ if ($sinana == 'S1') {
 											  r.k12_autent = k82_autent
      			 left  join placaixarec    on k82_seqpla = k81_seqpla
                                  $inner_sql
-			    where $where f.k12_data between '$datai' and '$dataf' and r.k12_instit = ".db_getsession("DB_instit")."
+			    where $where and f.k12_data between '$datai' and '$dataf' and r.k12_instit = ".db_getsession("DB_instit")."
 			    group by g.k02_tipo,
 				     g.k02_codigo,
 				     g.k02_drecei,
@@ -214,7 +214,7 @@ elseif ($sinana == 'S2') {
 											  r.k12_autent = k82_autent
      			 left  join placaixarec 		   on k82_seqpla = k81_seqpla
 
-			    where $where f.k12_data between '$datai'
+			    where $where and f.k12_data between '$datai'
 			      and '$dataf'
 			      and r.k12_instit = ".db_getsession("DB_instit");
 
@@ -270,7 +270,7 @@ $sql .= " ) as xxx
 													 r.k12_data   = k82_data and 
 													 r.k12_autent = k82_autent
 						 					 left  join placaixarec 		   on k82_seqpla = k81_seqpla
-							     where $where f.k12_data between '$datai'
+							     where $where and f.k12_data between '$datai'
 		           		 	 and '$dataf'
 		           			 and r.k12_instit = ".db_getsession("DB_instit");
 
@@ -332,7 +332,7 @@ $sql .= " ) as xxx
 													 r.k12_data   = k82_data and 
 													 r.k12_autent = k82_autent
 						 					 left  join placaixarec 		   on k82_seqpla = k81_seqpla
-							     where $where f.k12_data between '$datai'
+							     where $where and f.k12_data between '$datai'
 		           		 	 and '$dataf'
 		           			 and r.k12_instit = ".db_getsession("DB_instit");
 
@@ -387,7 +387,7 @@ $sql .= " ) as xxx
 											  r.k12_data   = k82_data and 
 											  r.k12_autent = k82_autent
 						left  join placaixarec 		   on k82_seqpla = k81_seqpla
-			    where $where f.k12_data between '$datai'
+			    where $where and f.k12_data between '$datai'
 			      			and '$dataf'
 			      			and r.k12_instit = ".db_getsession("DB_instit");
 
