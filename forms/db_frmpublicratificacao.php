@@ -108,14 +108,14 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
 
         $sCampos  = "DISTINCT pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, m61_descr, pc01_codmater, pc01_descrmater, pc11_resum";
 
+        $joinPrecoReferencia = false;
+
         if($l20_tipojulg == 3 && in_array($l03_pctipocompratribunal, array(100, 101)) || in_array($l20_tipoprocesso, array(100, 101))){
-            $sCampos .= ",pc23_vlrun";
-            $valorUnitario = 'pc23_vlrun';
-            $joinPrecoReferencia = true;
+            $sCampos .= ",'-' as pc23_vlrun";
+            $valorUnitario = '';
         }else{
-			$valorUnitario = 'pc11_vlrun';
-			$joinPrecoReferencia = false;
-        }
+            $valorUnitario = 'pc11_vlrun';
+		}
         $sOrdem   = "pc11_seq";
         $sWhere   = "liclicitem.l21_codliclicita = {$l20_codigo} ";
 
@@ -138,7 +138,9 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
             <td class="table_header" style="width: 50px">Item</td>
             <td class="table_header" style="width: 235px">Descrição Item</td>
             <td class="table_header" style="width: 50px">Unidade</td>
-            <td class="table_header" style="width: 72px">Valor Unitário</td>
+            <? if($valorUnitario != ''): ?>
+                <td class="table_header" style="width: 72px">Valor Unitário</td>
+            <? endif; ?>
             <td class="table_header" style="width: 125px">Quantidade Licitada</td>
         </tr>
     </table>
@@ -151,36 +153,38 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
 
                     ?>
                     <table class="DBgrid">
-                        <th class="table_header" style="width: 32px">
+                        <th class="table_header" style="width: <?= !$valorUnitario ? '40px': '32px'?>">
                             <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
                         </th>
 
-                        <td class="linhagrid" style="width: 44px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '51px' : '44px'?>">
                             <?= $aItem->pc11_seq ?>
                             <input type="hidden" name="" value="<?= $aItem->pc11_seq ?>" id="<?= $iItem?>">
                         </td>
 
-                        <td class="linhagrid" style="width: 52px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '64px' : '52px'?>">
                             <?= $aItem->pc81_codprocitem ?>
                             <input type="hidden" name="" value="<?= $aItem->pc81_codprocitem ?>" id="<?= $iItem?>">
                         </td>
 
-                        <td class="linhagrid" style="width: 260px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '298px' : '260px'?>">
                             <?= $aItem->pc01_descrmater ?>
                             <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem?>">
                         </td>
 
-                        <td class="linhagrid" style="width: 55px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '64px' : '55px'?>">
                             <?= $aItem->m61_descr ?>
                             <input type="hidden" name="" value="<?= $aItem->m61_descr ?>" id="<?= $iItem?>">
                         </td>
 
+                        <?php if($valorUnitario != ''): ?>
                         <td class="linhagrid" style="width: 80px">
                             <?= $aItem->$valorUnitario ?>
                             <input type="hidden" name="" value="<?= $aItem->$valorUnitario ?>" id="<?= $iItem?>">
                         </td>
+                        <? endif;?>
 
-                        <td class="linhagrid" style="width: 120px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '145px' : '120px'?>">
                             <?= $aItem->pc11_quant ?>
                             <input type="hidden" name="" value="<?= $aItem->pc11_quant ?>" id="<?= $iItem?>">
                         </td>
