@@ -110,12 +110,16 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
 
         $joinPrecoReferencia = false;
 
-        if($l20_tipojulg == 3 && in_array($l03_pctipocompratribunal, array(100, 101)) || in_array($l20_tipoprocesso, array(100, 101))){
+        if(in_array($l03_pctipocompratribunal, array(102, 103)) || in_array($l20_tipoprocesso, array(102, 103))){
+            $sCampos .= ", si02_vlprecoreferencia";
+            $valorUnitario = 'si02_vlprecoreferencia';
+            $joinPrecoReferencia = true;
+        }elseif($l20_tipojulg == 3 && in_array($l03_pctipocompratribunal, array(100, 101)) || in_array($l20_tipoprocesso, array(100, 101))){
             $sCampos .= ",'-' as pc23_vlrun";
             $valorUnitario = '';
-        }else{
+		}else{
             $valorUnitario = 'pc11_vlrun';
-		}
+        }
         $sOrdem   = "pc11_seq";
         $sWhere   = "liclicitem.l21_codliclicita = {$l20_codigo} ";
 
