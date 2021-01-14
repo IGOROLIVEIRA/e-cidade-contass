@@ -318,15 +318,15 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_veiccadcategcnh == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
-       $this->erro_sql = " Campo Categoria CNH Exigida nao Informado.";
-       $this->erro_campo = "ve01_veiccadcategcnh";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+    //  if($this->ve01_veiccadcategcnh == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+    //    $this->erro_sql = " Campo Categoria CNH Exigida nao Informado.";
+    //    $this->erro_campo = "ve01_veiccadcategcnh";
+    //    $this->erro_banco = "";
+    //    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+    //    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+    //    $this->erro_status = "0";
+    //    return false;
+    //  }
      if($this->ve01_anofab == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
        $this->erro_sql = " Campo Ano de Fabricação nao Informado.";
        $this->erro_campo = "ve01_anofab";
@@ -770,19 +770,12 @@ class cl_veiculos {
          }
        }
      }
+     
      if(trim($this->ve01_veiccadcategcnh)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcategcnh"])){
        $sql  .= $virgula." ve01_veiccadcategcnh = ".($this->ve01_veiccadcategcnh == 0? 'null' : $this->ve01_veiccadcategcnh)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadcategcnh) == null && $si04_tipoveiculo == 3){
-         $this->erro_sql = " Campo Categoria CNH Exigida nao Informado.";
-         $this->erro_campo = "ve01_veiccadcategcnh";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
+
      if(trim($this->ve01_anofab)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"])){
        $sql  .= $virgula." ve01_anofab = $this->ve01_anofab ";
        $virgula = ",";
