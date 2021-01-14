@@ -90,7 +90,7 @@ $inner_sql = "";
 $where = ' 1=1 ';
 
 if ($codrec != '') {
-	$where = ' g.k02_codigo in ('.$codrec.') and ';
+	$where = ' and g.k02_codigo in ('.$codrec.') ';
 }
 if($sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
 	if ($conta != '') {
