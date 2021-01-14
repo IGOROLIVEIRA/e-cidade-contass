@@ -461,7 +461,7 @@ pmlagoadospatos:
     only:
         - master
         
-novosclientes:
+prefeituras2:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'

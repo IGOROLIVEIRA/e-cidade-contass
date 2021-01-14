@@ -23,16 +23,16 @@ class GerarHOMOLIC extends GerarAM
     $this->sArquivo = "HOMOLIC";
     $this->abreArquivo();
     
-    $sSql = "select * from homolic102020 where si63_mes = " . $this->iMes . " and si63_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from homolic102021 where si63_mes = " . $this->iMes . " and si63_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC10 = db_query($sSql);
 
-    $sSql2 = "select * from homolic202020 where si64_mes = " . $this->iMes . " and si64_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from homolic202021 where si64_mes = " . $this->iMes . " and si64_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC20 = db_query($sSql2);
 
-  	$sSql3 = "select * from homolic302020 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
+  	$sSql3 = "select * from homolic302021 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
 	$rsHOMOLIC30 = db_query($sSql3);
 
-    $sSql4 = "select * from homolic402020 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
+    $sSql4 = "select * from homolic402021 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC40 = db_query($sSql4);
 
     if (pg_num_rows($rsHOMOLIC10) == 0 && pg_num_rows($rsHOMOLIC20) == 0 && pg_num_rows($rsHOMOLIC40) == 0) {
