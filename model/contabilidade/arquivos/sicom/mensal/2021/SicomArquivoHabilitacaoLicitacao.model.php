@@ -163,7 +163,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
     $result = db_query($clhablic20->sql_query(null, "*", null, "si59_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si59_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clhablic20->excluir(null, "si59_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si59_instit=" . db_getsession("DB_instit"));
-      if ($clconsor212021->erro_status == 0) {
+      if ($clconsor202021->erro_status == 0) {
         throw new Exception($clhablic20->erro_msg);
       }
     }
@@ -230,7 +230,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	WHERE db_config.codigo=  " . db_getsession("DB_instit") . "
 	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= " . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-	AND pctipocompratribunal.l44_sequencial IN ('48',
+	AND cflicita.l03_pctipocompratribunal IN ('48',
 		                                                  '49',
 		                                                  '50',
 		                                                  '51',
@@ -238,7 +238,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		                                                  '53',
 		                                                  '54')";
 
-    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);echo $sSql;
+    $rsResult10 = db_query($sSql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 

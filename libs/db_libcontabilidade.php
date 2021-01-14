@@ -5901,7 +5901,10 @@ class cl_estrutura_sistema {
                     INNER JOIN CORRENTE ON (C86_ID, C86_DATA, C86_AUTENT) = (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT)
                     INNER JOIN CORPLACAIXA ON (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT) = (K82_ID, K82_DATA, K82_AUTENT)
                     INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
-                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
+                    INNER JOIN ORCRECEITA ON (O70_ANOUSU, O70_CODREC) = (C74_ANOUSU, C74_CODREC)
+                    INNER JOIN ORCFONTES ON (O70_CODFON, O70_ANOUSU) = (O57_CODFON, O57_ANOUSU)
+                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'
+                    AND O57_FONTE LIKE '41%'";
         
         return db_utils::getColectionByRecord(db_query($sql));
 

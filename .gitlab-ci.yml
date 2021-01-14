@@ -127,23 +127,23 @@ teste-pmverdelandia:
     only:
         - teste
 
-teste-pmluislandia:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git pull origin teste "'
-    environment: staging
-    only:
-        - teste
+# teste-pmluislandia:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git pull origin teste "'
+#     environment: staging
+#     only:
+#         - teste
 
-teste-pmcristalia:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git pull origin teste "'
-    environment: staging
-    only:
-        - teste
+# teste-pmcristalia:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git pull origin teste "'
+#     environment: staging
+#     only:
+#         - teste
 
 teste-pmibiracatu:
     stage: deploy
@@ -154,14 +154,14 @@ teste-pmibiracatu:
     only:
         - teste
 
-teste-pmitacambira:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git pull origin teste "'
-    environment: staging
-    only:
-        - teste
+# teste-pmitacambira:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git pull origin teste "'
+#     environment: staging
+#     only:
+#         - teste
 
 teste-pmsaojoaodaponte:
     stage: deploy
@@ -331,25 +331,25 @@ pmverdelandia:
     only:
         - master
 
-pmluislandia:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
-    environment: production
-    only:
-        - master
+# pmluislandia:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
+#         - 'ssh -p22 contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+#     environment: production
+#     only:
+#         - master
 
-pmcristalia:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
-    environment: production
-    only:
-        - master
+# pmcristalia:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
+#         - 'ssh -p22 contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+#     environment: production
+#     only:
+#         - master
 
 pmibiracatu:
     stage: deploy
@@ -361,15 +361,15 @@ pmibiracatu:
     only:
         - master
 
-pmitacambira:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
-        - 'ssh -p22 contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
-    environment: production
-    only:
-        - master
+# pmitacambira:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-git && git pull origin master "'
+#         - 'ssh -p22 contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+#     environment: production
+#     only:
+#         - master
 
 pmsaojoaodaponte:
     stage: deploy
@@ -461,7 +461,7 @@ pmlagoadospatos:
     only:
         - master
         
-novosclientes:
+prefeituras2:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'

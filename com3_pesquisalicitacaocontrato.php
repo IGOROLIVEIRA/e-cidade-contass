@@ -36,7 +36,7 @@ require_once("libs/db_sessoes.php");
 $oGet                = db_utils::postMemory($_GET);
 
 $sSqlAcordo  = " select distinct 
-                        ac16_sequencial,
+                        ac16_numero,
                         ac16_datainicio,
                         ac16_datafim,
                         ac16_objeto
