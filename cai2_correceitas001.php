@@ -52,6 +52,8 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
 
 <script>
 function js_verifica(){
@@ -66,45 +68,74 @@ function js_verifica(){
 
 
 function js_emite(){
-  vir = "";
-  cods= "";
-  var_obj = document.getElementById('receita').length;
-  for(y=0;y<var_obj;y++){
-    var_if = document.getElementById('receita').options[y].value;
-    cods += vir + var_if;
-    vir = ",";
-  }
-  vir = "";
-  sReduzidos = "";
-  oReduzidos = document.getElementById('contas').length;
-  for(z=0;z<oReduzidos;z++){
-      sReduzido = document.getElementById('contas').options[z].value;
-      sReduzidos += vir + sReduzido;
-      vir = ",";
-  }
- 
-  if (document.form1.o15_codigo.value == 0){
-       recurso = "";
-  } else {
-       recurso = document.form1.o15_codigo.value;
-  }
+  
+	vir = "";
+  	cods= "";
+  	var_obj = document.getElementById('receita').length;
+  	for(y=0;y<var_obj;y++){
+	
+		var_if = document.getElementById('receita').options[y].value;
+    	cods += vir + var_if;
+		vir = ",";
+		
+  	}
+  
+	vir = "";
+  	sReduzidos = "";
+  	oReduzidos = document.getElementById('contas').length;
+	  
+	for(z=0;z<oReduzidos;z++){
 
-  qry  = "estrut="+document.form1.estrut.value;
-  qry += "&sinana="+document.form1.sinana.value;
-  qry += "&ordem="+document.form1.ordem.value;
-  qry += "&desdobrar="+document.form1.desdobrar.value;
-  qry += "&codrec="+cods;
-  qry += "&datai="+document.form1.datai_ano.value+'-'+document.form1.datai_mes.value+'-'+document.form1.datai_dia.value;
-  qry += "&dataf="+document.form1.dataf_ano.value+'-'+document.form1.dataf_mes.value+'-'+document.form1.dataf_dia.value;
-  qry += "&tipo="+document.form1.tipo.value;
-  qry += "&recurso="+recurso;
-  qry += "&conta="+sReduzidos;
+      	sReduzido = document.getElementById('contas').options[z].value;
+      	sReduzidos += vir + sReduzido;
+      	vir = ",";
+	  
+	}
 
-  jan = window.open('cai2_correceitas002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-  jan.moveTo(0,0);
+	vir = "";
+  	sCgms = "";
+  	oCgms = document.getElementById('cgm').length;
+	  
+	for(w=0;w<oCgms;w++){
+
+      	sCgm = document.getElementById('cgm').options[w].value;
+      	sCgms += vir + sCgm;
+      	vir = ",";
+	  
+	}
+	
+  	if (document.form1.o15_codigo.value == 0){
+       	recurso = "";
+  	} else {
+       	recurso = document.form1.o15_codigo.value;
+	}
+	  
+	qry  = "estrut="+document.form1.estrut.value;
+	qry += "&sinana="+document.form1.sinana.value;
+	qry += "&ordem="+document.form1.ordem.value;
+	qry += "&desdobrar="+document.form1.desdobrar.value;
+	qry += "&codrec="+cods;
+	qry += "&datai="+document.form1.datai_ano.value+'-'+document.form1.datai_mes.value+'-'+document.form1.datai_dia.value;
+	qry += "&dataf="+document.form1.dataf_ano.value+'-'+document.form1.dataf_mes.value+'-'+document.form1.dataf_dia.value;
+	qry += "&tipo="+document.form1.tipo.value;
+	qry += "&recurso="+recurso;
+	qry += "&conta="+sReduzidos;
+	qry += "&contribuinte="+sCgms;
+	qry += "&emparlamentar="+document.form1.emparlamentar.value;
+	qry += "&regrepasse="+document.form1.regrepasse.value;
+
+	jan = window.open('cai2_correceitas002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	jan.moveTo(0,0);
+
 }
 </script>  
 <link href="estilos.css" rel="stylesheet" type="text/css">
+<style>
+	#fieldset_contas, #fieldset_cgm {
+        width: 400px;
+        text-align: center;
+	}
+</style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
@@ -116,153 +147,205 @@ function js_emite(){
   </tr>
 </table>
 
-  <table  align="center">
-    <form name="form1" method="post" action="" onsubmit="return js_verifica();">
-      <tr>
-        <td align="rigth" ><strong>Data Inicial :</strong>
-        <?=db_inputdata('datai','01','01',db_getsession("DB_anousu"),true,'text',4)?>
-        </td>
-        <td align="left" ><strong>Data Final :</strong>
-        <?
-         $datausu = date("Y/m/d",db_getsession("DB_datausu"));
-         $dataf_ano = substr($datausu,0,4);
-         $dataf_mes = substr($datausu,5,2);
-         $dataf_dia = substr($datausu,8,2);
-
-        ?>
-        <?=db_inputdata('dataf',$dataf_dia,$dataf_mes,$dataf_ano,true,'text',4)?>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3" align="center">
-          <table>
-            <tr>
-              <td align="center">
-                 <?
-                 $aux = new cl_arquivo_auxiliar;
-                 $aux->cabecalho = "<strong>RECEITAS</strong>";
-                 $aux->codigo = "k02_codigo";
-                 $aux->descr  = "k02_drecei";
-                 $aux->nomeobjeto = 'receita';
-                 $aux->funcao_js = 'js_mostra';
-                 $aux->funcao_js_hide = 'js_mostra1';
-                 $aux->sql_exec  = "";
-                 $aux->func_arquivo = "func_tabrec_todas.php";
-                 $aux->nomeiframe = "db_iframe";
-                 $aux->localjan = "";
-                 $aux->db_opcao = 2;
-                 $aux->tipo = 2;
-                 $aux->top = 0;
-                 $aux->linhas = 6;
-                 $aux->vwhidth = 400;
-                 $aux->funcao_gera_formulario();
-                 ?>
-              </td>
-            </tr>
-              <tr>
-                  <td colspan=2 >
-                      <?
-                      $aux_conta = new cl_arquivo_auxiliar;
-                      $aux_conta->cabecalho = "<strong>Contas</strong>";
-                      $aux_conta->codigo = "k13_conta"; //chave de retorno da func
-                      $aux_conta->descr  = "k13_descr";   //chave de retorno
-                      $aux_conta->nomeobjeto = 'contas';
-                      $aux_conta->funcao_js = 'js_mostra_contas';
-                      $aux_conta->funcao_js_hide = 'js_mostra_contas1';
-                      $aux_conta->sql_exec  = "";
-                      $aux_conta->func_arquivo = "func_saltes.php";  //func a executar
-                      $aux_conta->nomeiframe = "db_iframe_saltes";
-                      $aux_conta->localjan = "";
-                      $aux_conta->onclick = "";
-                      $aux_conta->db_opcao = 2;
-                      $aux_conta->tipo = 2;
-                      $aux_conta->top = 0;
-                      $aux_conta->linhas = 5;
-                      $aux_conta->vwhidth = 400;
-                      $aux_conta->nome_botao = 'db_lanca_conta';
-                      $aux_conta->funcao_gera_formulario();
-                      ?>
-                  </td>
-              </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td align="right"><strong>Estrutural da Receita:</strong> 
-	</td>
-        <td>
-	<?
- 	  db_input('estrut',15,0,true,'text',2,"");
-	?>
-        </td>
-      </tr>
-      <tr>
-        <td align="right"><strong>Tipo de Receita:</strong> 
-	</td>
-        <td>
-          <select name="tipo" onchange="js_valor();">
-            <option value = 'T'>Todas</option>
-            <option value = 'O'>Orçamentarias</option>
-            <option value = 'E'>Extra-Orçamentarias</option>
-        </td>
-      </tr>
-      <tr>
-        <td align="right"><strong>Desdobrar Receita:</strong> 
-	</td>
-        <td>
-          <select name="desdobrar" onchange="js_valor();">
-            <option value = 'N'>Não</option>
-            <option value = 'S'>Sim</option>
-        </td>
-      </tr>
-      <tr>
-        <td align="right"><strong>Ordem:</strong> 
-	</td>
-        <td>
-          <select name="ordem" >
-            <option value = 'r'>Código Receita</option>
-            <option value = 'e'>Estrutural</option>
-            <option value = 'a'>Alfabética Descrição Receita</option>
-            <option value = 'd'>Reduzido Orçamento</option>
-            <option value = 'c'>Reduzido Conta</option>
-        </td>
-      </tr>
-      <tr>
-        <td align="right"><strong>Tipo:</strong> 
-	</td>
-        <td>
-          <select name="sinana" >
-            <option value = 'S1'>Sintético/Receita</option>
-            <option value = 'S2'>Sintético/Estrutural</option>
-            <option value = 'A'>Analítico</option>
-            <option value = 'S3'>Sintético/Conta</option>
-            <option value = 'S4'>Diário</option>
-        </td>
-      </tr>
-       <tr>
-         <td nowrap title="<?=$To15_codigo?>" align="right"><?=$Lo15_codigo?></td>
-         <td nowrap>
-         <?
-           $dbwhere     = " o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."'";
-           $res_tiporec = $clorctiporec->sql_record($clorctiporec->sql_query_file(null,"o15_codigo,o15_descr","o15_codigo",$dbwhere));
-           db_selectrecord("o15_codigo",$res_tiporec,true,2,"","","","0");
-         ?>
-         </td>
-       </tr>
-      <tr>
-        <td colspan="2" align = "center"> 
-          <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
-        </td>
-      </tr>
-
-  </form>
-    </table>
+<center>
+	<div style="margin-top: 25px; width: 650px">
+		<form name="form1" method="post" action="" onsubmit="return js_verifica();">	
+			<fieldset><legend>RECEITAS</legend>
+				<table  align="center">				
+					<tr>
+						<td colspan="4" align="center">
+							<table>
+								<tr>
+									<td align="center">
+										<? $aux_receita = new cl_arquivo_auxiliar;
+										$aux_receita->cabecalho = "<strong>Receitas</strong>";
+										$aux_receita->codigo = "k02_codigo";
+										$aux_receita->descr  = "k02_drecei";
+										$aux_receita->nomeobjeto = 'receita';
+										$aux_receita->funcao_js = 'js_mostra';
+										$aux_receita->funcao_js_hide = 'js_mostra1';
+										$aux_receita->sql_exec  = "";
+										$aux_receita->func_arquivo = "func_tabrec_todas.php";
+										$aux_receita->nomeiframe = "db_iframe";
+										$aux_receita->localjan = "";
+										$aux_receita->db_opcao = 2;
+										$aux_receita->tipo = 2;
+										$aux_receita->top = 0;
+										$aux_receita->linhas = 6;
+										$aux_receita->tamanho_campo_descricao = 30;
+										$aux_receita->nome_botao = 'db_lanca_receita';
+										$aux_receita->vwidth = 404;
+										$aux_receita->funcao_gera_formulario(); ?>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<? $aux_conta = new cl_arquivo_auxiliar;
+										$aux_conta->cabecalho = "<strong>Contas</strong>";
+										$aux_conta->codigo = "k13_conta"; 
+										$aux_conta->descr  = "k13_descr";   
+										$aux_conta->nomeobjeto = 'contas';
+										$aux_conta->funcao_js = 'js_mostra_contas';
+										$aux_conta->funcao_js_hide = 'js_mostra_contas1';
+										$aux_conta->sql_exec  = "";
+										$aux_conta->func_arquivo = "func_saltes.php";
+										$aux_conta->nomeiframe = "db_iframe_saltes";
+										$aux_conta->localjan = "";
+										$aux_conta->onclick = "";
+										$aux_conta->db_opcao = 2;
+										$aux_conta->tipo = 2;
+										$aux_conta->top = 0;
+										$aux_conta->linhas = 5;
+										$aux_conta->vwidth = 400;
+										$aux_conta->tamanho_campo_descricao = 24;
+										$aux_conta->nome_botao = 'db_lanca_conta';
+										$aux_conta->funcao_gera_formulario(); ?>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<? $aux_cgm = new cl_arquivo_auxiliar;
+										$aux_cgm->cabecalho = "<strong>Contribuinte</strong>";
+										$aux_cgm->codigo = "z01_numcgm";
+										$aux_cgm->descr = "z01_nome";
+										$aux_cgm->isfuncnome = true;
+										$aux_cgm->nomeobjeto = 'cgm';
+										$aux_cgm->funcao_js = 'js_mostraCgm';
+										$aux_cgm->funcao_js_hide = 'js_mostraCgm1';
+										$aux_cgm->sql_exec = "";
+										$aux_cgm->func_arquivo = "func_nome.php";
+										$aux_cgm->nomeiframe = "func_nome";
+										$aux_cgm->localjan = "";
+										$aux_cgm->db_opcao = 2;
+										$aux_cgm->tipo = 2;
+										$aux_cgm->top = 0;
+										$aux_cgm->linhas = 5;
+										$aux_cgm->vwidth = 400;
+										$aux_cgm->tamanho_campo_descricao = 28;
+										$aux_cgm->nome_botao = 'db_lanca_cgm';
+										$aux_cgm->funcao_gera_formulario(); ?>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" colspan=""><strong>Data Inicial :</strong></td>
+						<td>
+							<?= db_inputdata('datai','01','01',db_getsession("DB_anousu"),true,'text',4) ?>
+						<strong>Data Final :</strong>
+						<?
+							$datausu = date("Y/m/d",db_getsession("DB_datausu"));
+							$dataf_ano = substr($datausu,0,4);
+							$dataf_mes = substr($datausu,5,2);
+							$dataf_dia = substr($datausu,8,2);
+							?>
+							<?= db_inputdata('dataf',$dataf_dia,$dataf_mes,$dataf_ano,true,'text',4) ?>
+						</td>
+					</tr>
+					 <tr>
+						<td align="right">
+							<strong>Estrutural da Receita:</strong>
+						</td>
+						<td align="left">
+							<? db_input('estrut',18,0,true,'text',2,""); ?>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<strong>Tipo de Receita:</strong> 
+						</td>
+						<td>
+							<select name="tipo" onchange="js_valor();" style="width: 140px;">
+								<option value = 'T'>Todas</option>
+								<option value = 'O'>Orçamentarias</option>
+								<option value = 'E'>Extra-Orçamentarias</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<strong>Desdobrar Receita:</strong> 
+						</td>
+						<td>
+							<select name="desdobrar" onchange="js_valor();">
+								<option value = 'N'>Não</option>
+								<option value = 'S'>Sim</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<strong>Ordem:</strong> 
+						</td>
+						<td>
+							<select name="ordem" >
+								<option value = 'r'>Código Receita</option>
+								<option value = 'e'>Estrutural</option>
+								<option value = 'a'>Alfabética Descrição Receita</option>
+								<option value = 'd'>Reduzido Orçamento</option>
+								<option value = 'c'>Reduzido Conta</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<strong>Tipo:</strong> 
+						</td>
+						<td>
+							<select name="sinana" style="width: 175px;">
+								<option value = 'S1'>Sintético/Receita</option>
+								<option value = 'S2'>Sintético/Estrutural</option>
+								<option value = 'A'>Analítico</option>
+								<option value = 'S3'>Sintético/Conta</option>
+								<option value = 'S4'>Diário</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" nowrap>
+							<strong>Referente a Emenda Parlamentar:</strong> 
+						</td>
+						<td>
+							<select name="emparlamentar" style="width: 175px;">
+								<option value = '0'>Todas</option>
+								<option value = '1'>1 - Emenda parlamentar individual</option>
+								<option value = '2'>2 - Emenda parlamentar de bancada</option>
+								<option value = '3'>3 - Não se aplica</option>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" nowrap>
+							<strong>Regularização de Repasse:</strong> 
+						</td>
+						<td>
+							<select name="regrepasse" style="width: 175px;">
+								<option value = '0'>Todas</option>
+								<option value = '1'>Sim</option>
+								<option value = '2'>Não</option>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap title="<?=$To15_codigo?>" align="right"><?=$Lo15_codigo?></td>
+						<td nowrap>
+						<?  $dbwhere     = " o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."'";
+							$res_tiporec = $clorctiporec->sql_record($clorctiporec->sql_query_file(null,"o15_codigo,o15_descr","o15_codigo",$dbwhere));
+							db_selectrecord("o15_codigo",$res_tiporec,true,2,"","","","0");
+						?>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<br>
+			<input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
+		</form>
+	</div>
+</center>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
 <script>
+
+oDBToogleCredores = new DBToogle('fieldset_contas', false);
+oDBToogleCredores = new DBToogle('fieldset_cgm', false);
 
 function js_pesquisatabrec(mostra){
   if(mostra==true){
