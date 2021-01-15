@@ -100,8 +100,8 @@ if (USE_PCASP) {
                  and controle.si166_datafim >= k17_data
                  left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
                  left join identificacaoresponsaveis ordenador on ordenador.si166_instit= k17_instit and ordenador.si166_tiporesponsavel=1
-                 left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',ordenador.si166_dataini) AND DATE_PART('YEAR',ordenador.si166_datafim)
+                 left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm
 
 
            where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');
