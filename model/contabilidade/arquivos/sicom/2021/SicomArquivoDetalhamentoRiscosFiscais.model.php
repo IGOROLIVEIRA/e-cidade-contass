@@ -76,7 +76,7 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
       $oDadosRiscos->exercicio      = str_pad($oRisco->si53_exercicio, 4, "0", STR_PAD_LEFT);
       $oDadosRiscos->codRiscoFiscal = str_pad($oRisco->si53_codriscofiscal, 2, "0", STR_PAD_LEFT);
       $oDadosRiscos->dscRiscoFiscal = $oRisco->si53_codriscofiscal == 10 ? substr($oRisco->si53_dscriscofiscal, 0, 500) : " ";
-      $oDadosRiscos->vlRiscoFiscal  = number_format($oRisco->si53_valorisco, 2, "", "");
+      $oDadosRiscos->vlRiscoFiscal  = number_format($oRisco->si53_valorisco, 2, ",", "");
       
       $this->aDados[] = $oDadosRiscos;
       
