@@ -282,28 +282,28 @@ function js_calculavalores()
   //CORRENTE
   document.form1.mtfisanexo_valorcorrente1_16.value = 0;
   document.form1.mtfisanexo_valorcorrente1_16.value = Number(document.form1.mtfisanexo_valorcorrente1_2.value)
-    + Number(document.form1.mtfisanexo_valorcorrente1_10.value);
+    - Number(document.form1.mtfisanexo_valorcorrente1_10.value);
 
   document.form1.mtfisanexo_valorcorrente2_16.value = 0;
   document.form1.mtfisanexo_valorcorrente2_16.value = Number(document.form1.mtfisanexo_valorcorrente2_2.value)
-    + Number(document.form1.mtfisanexo_valorcorrente2_10.value);
+    - Number(document.form1.mtfisanexo_valorcorrente2_10.value);
 
   document.form1.mtfisanexo_valorcorrente3_16.value = 0;
   document.form1.mtfisanexo_valorcorrente3_16.value = Number(document.form1.mtfisanexo_valorcorrente3_2.value)
-    + Number(document.form1.mtfisanexo_valorcorrente3_10.value);
+    - Number(document.form1.mtfisanexo_valorcorrente3_10.value);
 
   //CONSTANTE
   document.form1.mtfisanexo_valorconstante1_16.value = 0;
   document.form1.mtfisanexo_valorconstante1_16.value = Number(document.form1.mtfisanexo_valorconstante1_2.value)
-    + Number(document.form1.mtfisanexo_valorconstante1_10.value);
+    - Number(document.form1.mtfisanexo_valorconstante1_10.value);
 
   document.form1.mtfisanexo_valorconstante2_16.value = 0;
   document.form1.mtfisanexo_valorconstante2_16.value = Number(document.form1.mtfisanexo_valorconstante2_2.value)
-    + Number(document.form1.mtfisanexo_valorconstante2_10.value);
+    - Number(document.form1.mtfisanexo_valorconstante2_10.value);
 
   document.form1.mtfisanexo_valorconstante3_16.value = 0;
   document.form1.mtfisanexo_valorconstante3_16.value = Number(document.form1.mtfisanexo_valorconstante3_2.value)
-    + Number(document.form1.mtfisanexo_valorconstante3_10.value);
+    - Number(document.form1.mtfisanexo_valorconstante3_10.value);
 
   //Resultado Nominal (VI) = (III + (IV -V)
 
