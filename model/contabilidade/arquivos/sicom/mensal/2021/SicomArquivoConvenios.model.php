@@ -302,7 +302,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 						FROM orcfontes
 							LEFT JOIN orcreceita ON o57_codfon = o70_codfon AND o57_anousu = o70_anousu
 							LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec
-						WHERE o70_codigo IN ('122','123','124','142')
+						WHERE o70_codigo IN ('122','123','124','142','163')
 							AND o70_anousu = {$iAnoUsu}
 							AND o70_instit = {$iInstit}
 							AND o70_valor > 0
