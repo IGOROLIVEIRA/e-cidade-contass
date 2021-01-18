@@ -65,7 +65,7 @@ db_textarea("si54_dscprovidencia",7,40, "", true, "text", $db_opcao, "", "", "",
     </td>
     <td> 
 <?
-db_input('si54_valorassociado',10,$Isi54_valorassociado,true,'text',$db_opcao,"")
+db_input('si54_valorassociado',15,$Isi54_valorassociado,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
