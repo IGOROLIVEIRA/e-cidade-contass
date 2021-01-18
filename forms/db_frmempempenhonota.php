@@ -344,7 +344,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?
-                        $arr  = array('0'=>'Não se aplica','1'=>'Executivo','2'=>'Legislativo');
+                        $arr  = array('0'=>'Não se aplica','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
                         db_select("e60_tipodespesa", $arr, true, 1);
                         ?>
                     </td>
@@ -541,7 +541,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 <div id="ctnCotasMensais" class="container" style=" width: 500px;">
 </div>
 <style>
-    #e60_tipodespesa{ width: 228px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
+    #e60_tipodespesa{ width: 282px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
 </style>
 
 <script>
