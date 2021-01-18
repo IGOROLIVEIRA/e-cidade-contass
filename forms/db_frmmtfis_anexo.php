@@ -62,14 +62,14 @@ $clrotulo = new rotulocampo;
         <tr class="normal ">
           <?php
           $i = 1;
-          foreach ($aEspecificacoes as $aEspecificacao) {
+          if(isset($mtfisanexo_ldo)){
+            foreach ($aEspecificacoes as $aEspecificacao) {
 
               if($i == 2 || $i == 3 || $i == 10 || $i == 11 || $i == 16 || $i == 19 || $i == 24){
                 $db_opcaoaux=3;
               }else{
                 $db_opcaoaux=1;
               }
-
               $rsAnexo = $clmtfis_anexo->sql_record($clmtfis_anexo->sql_query(null, '*', '', "mtfisanexo_especificacao = '$aEspecificacao' and mtfisanexo_ldo = {$mtfisanexo_ldo}"));
 
               if(pg_num_rows($rsAnexo) > 0) {
@@ -89,32 +89,32 @@ $clrotulo = new rotulocampo;
           </td>
           <td class="linhagrid left">
             <?
-            db_input('mtfisanexo_valorcorrente1_'.$i,14,$Imtfisanexo_valorcorrente1,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
+            db_input('mtfisanexo_valorcorrente1_'.$i,14,4,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
             ?>
           </td>
           <td class="linhagrid left">
             <?
-            db_input('mtfisanexo_valorconstante1_'.$i,14,$Imtfisanexo_valorconstante1,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
+            db_input('mtfisanexo_valorconstante1_'.$i,14,4,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
             ?>
           </td>
           <td class="linhagrid left">
             <?
-            db_input('mtfisanexo_valorcorrente2_'.$i,14,$Imtfisanexo_valorcorrente2,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
+            db_input('mtfisanexo_valorcorrente2_'.$i,14,4,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
             ?>
           </td>
           <td class="linhagrid left">
             <?
-            db_input('mtfisanexo_valorconstante2_'.$i,14,$Imtfisanexo_valorconstante2,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
+            db_input('mtfisanexo_valorconstante2_'.$i,14,4,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
             ?>
           </td>
           <td class="linhagrid left">
             <?
-            db_input('mtfisanexo_valorcorrente3_'.$i,14,$Imtfisanexo_valorcorrente3,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
+            db_input('mtfisanexo_valorcorrente3_'.$i,14,4,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
             ?>
           </td>
           <td class="linhagrid left">
             <?
-            db_input('mtfisanexo_valorconstante3_'.$i,14,$Imtfisanexo_valorconstante3,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
+            db_input('mtfisanexo_valorconstante3_'.$i,14,4,true,'text',$db_opcaoaux,"onChange='js_calculavalores()'")
             ?>
           </td>
           <?
@@ -123,7 +123,8 @@ $clrotulo = new rotulocampo;
 
         </tr>
     <?php
-    $i++;
+        $i++;
+        }
     }
     ?>
 
