@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_pessoaflpgo102020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarPESSOA.model.php");
+require_once ("classes/db_pessoaflpgo102021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarPESSOA.model.php");
 
 
 /**
@@ -59,7 +59,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clpessoa = new cl_pessoaflpgo102020();
+        $clpessoa = new cl_pessoaflpgo102021();
 
         /**
          * excluir informacoes do mes selecionado
@@ -97,11 +97,11 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
          AND z01_cgccpf IS NOT NULL)
     AND rh01_regist NOT IN
       (SELECT si195_codvinculopessoa
-       FROM flpgo102020
+       FROM flpgo102021
        WHERE si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
-       FROM pessoaflpgo102020
+       FROM pessoaflpgo102021
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
        WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) AND   rh01_sicom = 1)
@@ -178,11 +178,11 @@ WHERE (z01_cgccpf != '00000000000'
       AND z01_cgccpf IS NOT NULL)
  AND rh01_regist NOT IN
    (SELECT si195_codvinculopessoa
-    FROM flpgo102020
+    FROM flpgo102021
     WHERE si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
-    FROM pessoaflpgo102020
+    FROM pessoaflpgo102021
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
     WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) AND   rh01_sicom = 1)
@@ -255,7 +255,7 @@ WHERE (z01_cgccpf != '00000000000'
       AND z01_cgccpf IS NOT NULL)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
-    FROM pessoaflpgo102020
+    FROM pessoaflpgo102021
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
     WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) AND   rh01_sicom = 1)
@@ -329,7 +329,7 @@ AND z01_cgccpf NOT IN
   AND prefeitura = 't'
   AND z01_cgccpf NOT IN
     (SELECT si193_nrodocumento
-      FROM pessoaflpgo102020
+      FROM pessoaflpgo102021
       inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
       JOIN rhpessoal ON rh01_numcgm = z01_numcgm
       WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) AND   rh01_sicom = 1)
@@ -393,7 +393,7 @@ AND z01_cgccpf NOT IN
         cgminstituidor.z01_cadast
   FROM cgm
   INNER JOIN rhpessoal ON rh01_numcgm = cgm.z01_numcgm
-  INNER JOIN rhpessoalmov ON rh01_regist = rh02_regist and rh02_mesusu=01 and rh02_anousu=2020
+  INNER JOIN rhpessoalmov ON rh01_regist = rh02_regist and rh02_mesusu=01 and rh02_anousu=2021
   INNER JOIN cgm as cgminstituidor ON cgminstituidor.z01_numcgm = rh02_cgminstituidor
   WHERE (cgminstituidor.z01_cgccpf != '00000000000'
          AND cgminstituidor.z01_cgccpf != '00000000000000')
@@ -401,7 +401,7 @@ AND z01_cgccpf NOT IN
            AND cgminstituidor.z01_cgccpf IS NOT NULL)
       AND cgminstituidor.z01_cgccpf NOT IN
           (SELECT si193_nrodocumento
-           FROM pessoaflpgo102020
+           FROM pessoaflpgo102021
            INNER JOIN cgm ON si193_nrodocumento = cgminstituidor.z01_cgccpf
            WHERE (cgminstituidor.z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL)
                AND rh01_sicom = 1)
@@ -484,7 +484,7 @@ AND z01_cgccpf NOT IN
         $by   = array('','','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-            $clpessoa = new cl_pessoaflpgo102020();
+            $clpessoa = new cl_pessoaflpgo102021();
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
 
