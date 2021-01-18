@@ -24,10 +24,10 @@ class GerarOBELAC extends GerarAM
     $this->sArquivo = "OBELAC";
     $this->abreArquivo();
     
-    $sSql = "select * from obelac102020 where si139_mes = " . $this->iMes;
+    $sSql = "select * from obelac102021 where si139_mes = " . $this->iMes;
     $rsOBELAC10 = db_query($sSql);
 
-    $sSql2 = "select * from obelac112020 where si140_mes = " . $this->iMes;
+    $sSql2 = "select * from obelac112021 where si140_mes = " . $this->iMes;
     $rsOBELAC11 = db_query($sSql2);
 
 

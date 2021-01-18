@@ -24,10 +24,10 @@ class GerarPARPPS extends GerarAM
         $this->abreArquivo();
 
 
-        $sSql = "select * from parpps102020 where si156_mes = " . $this->iMes . " and si156_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from parpps102021 where si156_mes = " . $this->iMes . " and si156_instit = " . db_getsession("DB_instit");
         $rsPARPPS10 = db_query($sSql);
 
-        $sSql20 = "select * from parpps202020 where si155_mes = " . $this->iMes . " and si155_instit = " . db_getsession("DB_instit");
+        $sSql20 = "select * from parpps202021 where si155_mes = " . $this->iMes . " and si155_instit = " . db_getsession("DB_instit");
         $rsPARPPS20 = db_query($sSql20);
 
 

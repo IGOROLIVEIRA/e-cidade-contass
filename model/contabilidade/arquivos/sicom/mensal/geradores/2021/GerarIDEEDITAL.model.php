@@ -23,7 +23,7 @@ class GerarIDEEDITAL extends GerarAM
     $this->sArquivo = "IDE";
     $this->abreArquivo();
 
-    $sSql = "select * from ideedital2020 where si186_mes = {$this->iMes} and si186_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from ideedital2021 where si186_mes = {$this->iMes} and si186_instit = " . db_getsession("DB_instit");
     $rsIDEEDITAL = db_query($sSql);
 
     if (pg_num_rows($rsIDEEDITAL) == 0) {

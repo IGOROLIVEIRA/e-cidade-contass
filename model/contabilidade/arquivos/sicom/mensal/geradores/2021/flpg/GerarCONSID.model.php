@@ -22,7 +22,7 @@ class GerarCONSID extends GerarAM {
         $this->sArquivo = "CONSID";
         $this->abreArquivo();
 
-        $sSql = "select * from consid102020 where si158_mes = ". $this->iMes;
+        $sSql = "select * from consid102021 where si158_mes = ". $this->iMes;
         $rsCONSID10    = db_query($sSql);
 
 

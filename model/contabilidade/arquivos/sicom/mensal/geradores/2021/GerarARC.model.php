@@ -32,7 +32,7 @@ class GerarARC extends GerarAM
         $sSql3 = "select * from arc122021 where si30_mes = " . $this->iMes . " and si30_instit = " . db_getsession("DB_instit");
         $rsARC12 = db_query($sSql3);
 
-        $sSql4 = "select * from arc202021 where si31_mes = " . $this->iMes . " and si31_instit = " . db_getsession("DB_instit");
+        $sSql4 = "select * from arc202121 where si31_mes = " . $this->iMes . " and si31_instit = " . db_getsession("DB_instit");
         $rsARC20 = db_query($sSql4);
 
         $sSql5 = "select * from arc212021 where si32_mes = " . $this->iMes . " and si32_instit = " . db_getsession("DB_instit");

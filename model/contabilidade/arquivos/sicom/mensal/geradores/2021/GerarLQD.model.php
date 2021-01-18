@@ -38,16 +38,16 @@ class GerarLQD extends GerarAM
                      si118_cpfliquidante,
                      si118_mes,
                      si118_instit
-             FROM lqd102020
+             FROM lqd102021
              INNER JOIN empempenho ON e60_codemp::int8 = si118_nroempenho AND e60_emiss = si118_dtempenho
              WHERE si118_mes = " . $this->iMes . "
                AND si118_instit = " . db_getsession("DB_instit");
     $rsLQD10 = db_query($sSql);
 
-    $sSql2 = "select * from lqd112020 where si119_mes = " . $this->iMes . " and si119_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from lqd112021 where si119_mes = " . $this->iMes . " and si119_instit = " . db_getsession("DB_instit");
     $rsLQD11 = db_query($sSql2);
 
-    $sSql3 = "select * from lqd122020 where si120_mes = " . $this->iMes . " and si120_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from lqd122021 where si120_mes = " . $this->iMes . " and si120_instit = " . db_getsession("DB_instit");
     $rsLQD12 = db_query($sSql3);
 
     if (pg_num_rows($rsLQD10) == 0) {

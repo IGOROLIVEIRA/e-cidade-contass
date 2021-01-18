@@ -23,16 +23,16 @@ class GerarCVC extends GerarAM
     $this->sArquivo = "CVC";
     $this->abreArquivo();
     
-    $sSql = "select * from cvc102020 where si146_mes = " . $this->iMes . " and si146_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from cvc102021 where si146_mes = " . $this->iMes . " and si146_instit=" . db_getsession("DB_instit");
     $rsCVC10 = db_query($sSql);
 
-    $sSql2 = "select * from cvc202020 where si147_mes = " . $this->iMes . " and si147_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from cvc202021 where si147_mes = " . $this->iMes . " and si147_instit=" . db_getsession("DB_instit");
     $rsCVC20 = db_query($sSql2);
     
-    $sSql3 = "select * from cvc302020 where si148_mes = " . $this->iMes . " and si148_instit=" . db_getsession("DB_instit");
+    $sSql3 = "select * from cvc302021 where si148_mes = " . $this->iMes . " and si148_instit=" . db_getsession("DB_instit");
     $rsCVC30 = db_query($sSql3);
 
-    $sSql4 = "select * from cvc402020 where si149_mes = " . $this->iMes . " and si149_instit=" . db_getsession("DB_instit");
+    $sSql4 = "select * from cvc402021 where si149_mes = " . $this->iMes . " and si149_instit=" . db_getsession("DB_instit");
     $rsCVC40 = db_query($sSql4);
 
 
