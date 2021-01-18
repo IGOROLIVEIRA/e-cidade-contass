@@ -23,10 +23,10 @@ class GerarORGAO extends GerarAM
     $this->sArquivo = "ORGAO";
     $this->abreArquivo();
 
-    $sSql = "select * from orgao102020 where si14_mes = " . $this->iMes . " and si14_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from orgao102021 where si14_mes = " . $this->iMes . " and si14_instit = " . db_getsession("DB_instit");
     $rsORGAO10 = db_query($sSql);
 
-    $sSql2 = "select * from orgao112020 where si15_mes = " . $this->iMes . " and si15_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from orgao112021 where si15_mes = " . $this->iMes . " and si15_instit = " . db_getsession("DB_instit");
     $rsORGAO11 = db_query($sSql2);
 
     if (pg_num_rows($rsORGAO10) == 0) {

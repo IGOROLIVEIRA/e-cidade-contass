@@ -23,19 +23,19 @@ class GerarCONSOR extends GerarAM
     $this->sArquivo = "CONSOR";
     $this->abreArquivo();
 
-    $sSql = "select * from consor102020 where si16_mes = " . $this->iMes . " and si16_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from consor102021 where si16_mes = " . $this->iMes . " and si16_instit = " . db_getsession("DB_instit");
     $rsCONSOR10 = db_query($sSql);
 
-    $sSql2 = "select * from consor202020 where si17_mes = " . $this->iMes . " and si17_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from consor202021 where si17_mes = " . $this->iMes . " and si17_instit = " . db_getsession("DB_instit");
     $rsCONSOR20 = db_query($sSql2);
 
-    $sSql3 = "select * from consor302020 where si18_mes = " . $this->iMes . " and si18_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from consor302021 where si18_mes = " . $this->iMes . " and si18_instit = " . db_getsession("DB_instit");
     $rsCONSOR30 = db_query($sSql3);
 
-    $sSql4 = "select * from consor402020 where si19_mes = " . $this->iMes . " and si19_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from consor402021 where si19_mes = " . $this->iMes . " and si19_instit = " . db_getsession("DB_instit");
     $rsCONSOR40 = db_query($sSql4);
 
-    $sSql5 = "select * from consor502020 where si20_mes = " . $this->iMes . " and si20_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from consor502021 where si20_mes = " . $this->iMes . " and si20_instit = " . db_getsession("DB_instit");
     $rsCONSOR50 = db_query($sSql5);
 
     if (pg_num_rows($rsCONSOR10) == 0 && pg_num_rows($rsCONSOR20) == 0 && pg_num_rows($rsCONSOR30) == 0 && pg_num_rows($rsCONSOR40) == 0 && pg_num_rows($rsCONSOR50) == 0) {

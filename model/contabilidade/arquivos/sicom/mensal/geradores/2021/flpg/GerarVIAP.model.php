@@ -22,7 +22,7 @@ class GerarVIAP extends GerarAM {
         $this->sArquivo = "VIAP";
         $this->abreArquivo();
 
-        $sSql          = "select * from viap102020 where si198_mes = ". $this->iMes." and si198_instit = ".db_getsession("DB_instit");
+        $sSql          = "select * from viap102021 where si198_mes = ". $this->iMes." and si198_instit = ".db_getsession("DB_instit");
         $rsVIAP10    = db_query($sSql);
 
         if (pg_num_rows($rsVIAP10) == 0) {

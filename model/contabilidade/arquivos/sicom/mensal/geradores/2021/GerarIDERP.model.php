@@ -23,13 +23,13 @@ class GerarIDERP extends GerarAM
         $this->sArquivo = "IDERP";
         $this->abreArquivo();
 
-        $sSql = "select * from iderp102020 where si179_mes = " . $this->iMes . " and si179_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from iderp102021 where si179_mes = " . $this->iMes . " and si179_instit = " . db_getsession("DB_instit");
         $rsiderp10 = db_query($sSql);
 
-        $sSql2 = "select * from iderp112020 where si180_mes = " . $this->iMes . " and si180_instit = " . db_getsession("DB_instit");
+        $sSql2 = "select * from iderp112021 where si180_mes = " . $this->iMes . " and si180_instit = " . db_getsession("DB_instit");
         $rsiderp11 = db_query($sSql2);
 
-        $sSql3 = "select * from iderp202020 where si181_mes = " . $this->iMes . " and si181_instit = " . db_getsession("DB_instit");
+        $sSql3 = "select * from iderp202021 where si181_mes = " . $this->iMes . " and si181_instit = " . db_getsession("DB_instit");
         $rsiderp20 = db_query($sSql3);
 
         if (pg_num_rows($rsiderp10) == 0 && pg_num_rows($rsiderp11) == 0 && pg_num_rows($rsiderp20) == 0 || $this->iMes != 12 ) {

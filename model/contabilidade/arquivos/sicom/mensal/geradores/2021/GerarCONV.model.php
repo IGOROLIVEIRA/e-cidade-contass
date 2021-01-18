@@ -23,22 +23,22 @@ class GerarCONV extends GerarAM
     $this->sArquivo = "CONV";
     $this->abreArquivo();
 
-    $sSql = "select * from conv102020 where si92_mes = " . $this->iMes . " and si92_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from conv102021 where si92_mes = " . $this->iMes . " and si92_instit = " . db_getsession("DB_instit");
     $rsCONV10 = db_query($sSql);
 
-    $sSql2 = "select * from conv112020 where si93_mes = " . $this->iMes . " and si93_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from conv112021 where si93_mes = " . $this->iMes . " and si93_instit = " . db_getsession("DB_instit");
     $rsCONV11 = db_query($sSql2);
 
-    $sSql3 = "select * from conv202020 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from conv202021 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
     $rsCONV20 = db_query($sSql3);
 
-    $sSql4 = "select * from conv212020 where si232_mes = " . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
+    $sSql4 = "select * from conv212021 where si232_mes = " . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
     $rsCONV21 = db_query($sSql4);
 
-    $sSql5 = "select * from conv302020 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from conv302021 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
     $rsCONV30 = db_query($sSql5);
 
-    $sSql6 = "select * from conv312020 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
+    $sSql6 = "select * from conv312021 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
     $rsCONV31 = db_query($sSql6);
 
     //echo $sSql."-".$sSql3; exit;

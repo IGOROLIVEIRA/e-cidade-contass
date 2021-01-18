@@ -23,13 +23,13 @@ class GerarBALANCETE extends GerarAM
         $this->sArquivo = "BALANCETE";
         $this->abreArquivo();
 
-        $sSql = "select * from balancete102020 where si177_mes = " . $this->iMes . " and si177_instit =" . db_getsession("DB_instit");
+        $sSql = "select * from balancete102021 where si177_mes = " . $this->iMes . " and si177_instit =" . db_getsession("DB_instit");
         $rsBALANCETE10 = db_query($sSql);
-        $sSql1 = "select * from balancete112020 where si178_mes = " . $this->iMes . " and si178_instit =" . db_getsession("DB_instit");
+        $sSql1 = "select * from balancete112021 where si178_mes = " . $this->iMes . " and si178_instit =" . db_getsession("DB_instit");
         $rsBALANCETE11 = db_query($sSql1);
-        $sSql2 = "select * from balancete122020 where si179_mes = " . $this->iMes . " and si179_instit =" . db_getsession("DB_instit");
+        $sSql2 = "select * from balancete122021 where si179_mes = " . $this->iMes . " and si179_instit =" . db_getsession("DB_instit");
         $rsBALANCETE12 = db_query($sSql2);
-        $sSql3 = "select * from balancete132020 where si180_mes = " . $this->iMes . " and si180_instit =" . db_getsession("DB_instit");
+        $sSql3 = "select * from balancete132021 where si180_mes = " . $this->iMes . " and si180_instit =" . db_getsession("DB_instit");
         $rsBALANCETE13 = db_query($sSql3);
 
         $sSql4 = "SELECT DISTINCT
@@ -59,39 +59,39 @@ class GerarBALANCETE extends GerarAM
                   si181_mes,
                   si181_instit,
                   si181_reg10
-                  FROM balancete142020
+                  FROM balancete142021
                   JOIN empempenho ON e60_codemp::int8 = si181_nroempenho::int8 AND e60_anousu = si181_anoinscricao
                   WHERE si181_mes = " . $this->iMes . "
                     AND si181_instit =" . db_getsession("DB_instit");
         $rsBALANCETE14 = db_query($sSql4);
 
-        $sSql5 = "select * from balancete152020 where si182_mes = " . $this->iMes . " and si182_instit =" . db_getsession("DB_instit");
+        $sSql5 = "select * from balancete152021 where si182_mes = " . $this->iMes . " and si182_instit =" . db_getsession("DB_instit");
         $rsBALANCETE15 = db_query($sSql5);
-        $sSql6 = "select * from balancete162020 where si183_mes = " . $this->iMes . " and si183_instit =" . db_getsession("DB_instit");
+        $sSql6 = "select * from balancete162021 where si183_mes = " . $this->iMes . " and si183_instit =" . db_getsession("DB_instit");
         $rsBALANCETE16 = db_query($sSql6);
-        $sSql7 = "select * from balancete172020 where si184_mes = " . $this->iMes . " and si184_instit =" . db_getsession("DB_instit");
+        $sSql7 = "select * from balancete172021 where si184_mes = " . $this->iMes . " and si184_instit =" . db_getsession("DB_instit");
         $rsBALANCETE17 = db_query($sSql7);
-        $sSql8 = "select * from balancete182020 where si185_mes = " . $this->iMes . " and si185_instit =" . db_getsession("DB_instit");
+        $sSql8 = "select * from balancete182021 where si185_mes = " . $this->iMes . " and si185_instit =" . db_getsession("DB_instit");
         $rsBALANCETE18 = db_query($sSql8);
-        $sSql9 = "select * from balancete192020 where si186_mes = " . $this->iMes . " and si186_instit =" . db_getsession("DB_instit");
+        $sSql9 = "select * from balancete192021 where si186_mes = " . $this->iMes . " and si186_instit =" . db_getsession("DB_instit");
         $rsBALANCETE19 = db_query($sSql9);
-        $sSql20 = "select * from balancete202020 where si187_mes = " . $this->iMes . " and si187_instit =" . db_getsession("DB_instit");
+        $sSql20 = "select * from balancete202021 where si187_mes = " . $this->iMes . " and si187_instit =" . db_getsession("DB_instit");
         $rsBALANCETE20 = db_query($sSql20);
-        $sSql21 = "select * from balancete212020 where si188_mes = " . $this->iMes . " and si188_instit =" . db_getsession("DB_instit");
+        $sSql21 = "select * from balancete212021 where si188_mes = " . $this->iMes . " and si188_instit =" . db_getsession("DB_instit");
         $rsBALANCETE21 = db_query($sSql21);
-        $sSql22 = "select * from balancete222020 where si189_mes = " . $this->iMes . " and si189_instit =" . db_getsession("DB_instit");
+        $sSql22 = "select * from balancete222021 where si189_mes = " . $this->iMes . " and si189_instit =" . db_getsession("DB_instit");
         $rsBALANCETE22 = db_query($sSql22);
-        $sSql23 = "select * from balancete232020 where si190_mes = " . $this->iMes . " and si190_instit =" . db_getsession("DB_instit");
+        $sSql23 = "select * from balancete232021 where si190_mes = " . $this->iMes . " and si190_instit =" . db_getsession("DB_instit");
         $rsBALANCETE23 = db_query($sSql23);
-        $sSql24 = "select * from balancete242020 where si191_mes = " . $this->iMes . " and si191_instit =" . db_getsession("DB_instit");
+        $sSql24 = "select * from balancete242021 where si191_mes = " . $this->iMes . " and si191_instit =" . db_getsession("DB_instit");
         $rsBALANCETE24 = db_query($sSql24);
-        $sSql25 = "select * from balancete252020 where si195_mes = " . $this->iMes . " and si195_instit =" . db_getsession("DB_instit");
+        $sSql25 = "select * from balancete252021 where si195_mes = " . $this->iMes . " and si195_instit =" . db_getsession("DB_instit");
         $rsBALANCETE25 = db_query($sSql25);
-        $sSql26 = "select * from balancete262020 where si196_mes = " . $this->iMes . " and si196_instit =" . db_getsession("DB_instit");
+        $sSql26 = "select * from balancete262021 where si196_mes = " . $this->iMes . " and si196_instit =" . db_getsession("DB_instit");
         $rsBALANCETE26 = db_query($sSql26);
-        $sSql2 = "select * from balancete272020 where si197_mes = " . $this->iMes . " and si197_instit =" . db_getsession("DB_instit");
+        $sSql2 = "select * from balancete272021 where si197_mes = " . $this->iMes . " and si197_instit =" . db_getsession("DB_instit");
         $rsBALANCETE27 = db_query($sSql27);
-        $sSql2 = "select * from balancete282020 where si198_mes = " . $this->iMes . " and si197_instit =" . db_getsession("DB_instit");
+        $sSql2 = "select * from balancete282021 where si198_mes = " . $this->iMes . " and si197_instit =" . db_getsession("DB_instit");
         $rsBALANCETE28 = db_query($sSql28);
 
         if (pg_num_rows($rsBALANCETE10) == 0) {

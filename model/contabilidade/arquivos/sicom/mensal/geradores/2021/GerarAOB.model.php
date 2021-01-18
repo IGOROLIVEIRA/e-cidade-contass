@@ -23,10 +23,10 @@ class GerarAOB extends GerarAM
     $this->sArquivo = "AOB";
     $this->abreArquivo();
     
-    $sSql = "select * from aob102020 where si141_mes = " . $this->iMes;
+    $sSql = "select * from aob102021 where si141_mes = " . $this->iMes;
     $rsAOB10 = db_query($sSql);
 
-    $sSql2 = "select * from aob112020 where si142_mes = " . $this->iMes;
+    $sSql2 = "select * from aob112021 where si142_mes = " . $this->iMes;
     $rsAOB11 = db_query($sSql2);
 
 
