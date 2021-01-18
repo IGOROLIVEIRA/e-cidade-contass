@@ -57,6 +57,7 @@ if(isset($incluir)){
     if($clmtfis_anexo->mtfisanexo_valorconstante3 == "")
       $clmtfis_anexo->mtfisanexo_valorconstante3 = '0';
 
+
       $clmtfis_anexo->mtfisanexo_ldo = $mtfisanexo_ldo;
       $clmtfis_anexo->incluir($mtfisanexo_sequencial);
 
