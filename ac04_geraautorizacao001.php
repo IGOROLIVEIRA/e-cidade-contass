@@ -1063,9 +1063,11 @@ if($x->consultarDataDoSistema == true){
             // debug
             aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
                 var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",2));
+                console.log(nValue);
                 oDotacao.valorexecutar = nValue;
                 var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(),"f",4));
                 oDotacao.quantidade = nQuant;
+                console.log(nQuant);
             });
             oGridItens.aRows[iLinha].select(true);
             windowDotacaoItem.destroy();
@@ -1097,7 +1099,7 @@ console.log(oDotacao);
             if(tipo == 2) {
                 aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "',1)");
             }else{
-                aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "','" + oDotacao.quantdot + "')");
+                aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "','" + oDotacao.quantidade + "')");
             }
             aLinha[2].addStyle("text-align","right");
             aLinha[2].addStyle("height","100%");
@@ -1113,7 +1115,7 @@ console.log(oDotacao);
             aLinha[2].addEvent("onKeyPress","return js_mask(event,\"0-9|.|-\")");
             aLinha[2].addEvent("onKeyDown","return js_verifica(this,event,true)");
 
-            aLinha[3] = eval("valordot"+iDot+" = new DBTextField('valordot"+iDot+"','valordot"+iDot+"','"+oDotacao.totaldot+"')");
+            aLinha[3] = eval("valordot"+iDot+" = new DBTextField('valordot"+iDot+"','valordot"+iDot+"','"+oDotacao.valorexecutar+"')");
             aLinha[3].addStyle("text-align","right");
             aLinha[3].addStyle("height","100%");
             aLinha[3].addStyle("width","100px");
@@ -1474,14 +1476,12 @@ console.log(oDotacao);
                 var nValorDotacao = 0;
 
                 oDadosItem.dotacoes.each(function(oDotacao, id) {
-                    nValorDotacao += oDotacao.valor;
+                    nValorDotacao += oDotacao.valorexecutar;
                 });
-
                 oItem.valor   =  js_formatar(oItem.valor , 'f',2);
                 nValorDotacao =  js_formatar(nValorDotacao, 'f',2);
                 nTotal        =  js_formatar(nTotal, 'f',2);
-console.log(nTotal.valueOf());
-console.log(nValorDotacao.valueOf());
+
                 if (nTotal.valueOf() != nValorDotacao.valueOf()) {
                     /**
                      @todo
