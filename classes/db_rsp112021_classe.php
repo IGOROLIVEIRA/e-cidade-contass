@@ -42,10 +42,10 @@ class cl_rsp112021
                  ";
   
   //funcao construtor da classe
-  function cl_rsp112020(1
+  function cl_rsp112021()
   {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("rsp112020")1
+    $this->rotulo = new rotulo("rsp112021");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
   
@@ -132,11 +132,11 @@ class cl_rsp112021
       return false;
     }
     if ($si113_sequencial == "" || $si113_sequencial == null) {
-      $result = db_query("select nextval('rsp112020_si113_sequencial_seq')")1
+      $result = db_query("select nextval('rsp112021_si113_sequencial_seq')");
       if ($result == false) {
         $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-        $this->erro_sql = "Verifique o cadastro da sequencia: rsp112020_si113_sequencial_seq do campo: si113_sequencial"1
+        $this->erro_sql = "Verifique o cadastro da sequencia: rsp112021_si113_sequencial_seq do campo: si113_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
@@ -145,7 +145,7 @@ class cl_rsp112021
       }
       $this->si113_sequencial = pg_result($result, 0, 0);
     } else {
-      $result = db_query("select last_value from rsp112020_si113_sequencial_seq")1
+      $result = db_query("select last_value from rsp112021_si113_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $si113_sequencial)) {
         $this->erro_sql = " Campo si113_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -167,7 +167,7 @@ class cl_rsp112021
       
       return false;
     }
-    $sql = "insert into rsp1120201
+    $sql = "insert into rsp112021(
                                        si113_sequencial 
                                       ,si113_tiporegistro 
                                       ,si113_codreduzidorsp 
@@ -196,12 +196,12 @@ class cl_rsp112021
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "rsp112020 ($this->si113_sequencial) nao Incluído. Inclusao Abortada."1
+        $this->erro_sql = "rsp112021 ($this->si113_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_banco = "rsp112020 já Cadastrado"1
+        $this->erro_banco = "rsp112021 já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       } else {
-        $this->erro_sql = "rsp112020 ($this->si113_sequencial) nao Incluído. Inclusao Abortada."1
+        $this->erro_sql = "rsp112021 ($this->si113_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       }
@@ -242,7 +242,7 @@ class cl_rsp112021
   function alterar($si113_sequencial = null)
   {
     $this->atualizacampos();
-    $sql = " update rsp112020 set "1
+    $sql = " update rsp112021 set ";
     $virgula = "";
     if (trim($this->si113_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si113_sequencial"])) {
       if (trim($this->si113_sequencial) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si113_sequencial"])) {
@@ -382,7 +382,7 @@ class cl_rsp112021
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "rsp112020 nao Alterado. Alteracao Abortada.\n"1
+      $this->erro_sql = "rsp112021 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si113_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -393,7 +393,7 @@ class cl_rsp112021
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "rsp112020 nao foi Alterado. Alteracao Executada.\n"1
+        $this->erro_sql = "rsp112021 nao foi Alterado. Alteracao Executada.\n";
         $this->erro_sql .= "Valores : " . $this->si113_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -458,7 +458,7 @@ class cl_rsp112021
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "rsp112020 nao Excluído. Exclusão Abortada.\n"1
+      $this->erro_sql = "rsp112021 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si113_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -469,7 +469,7 @@ class cl_rsp112021
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "rsp112020 nao Encontrado. Exclusão não Efetuada.\n"1
+        $this->erro_sql = "rsp112021 nao Encontrado. Exclusão não Efetuada.\n";
         $this->erro_sql .= "Valores : " . $si113_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -509,7 +509,7 @@ class cl_rsp112021
     $this->numrows = pg_numrows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = "";
-      $this->erro_sql = "Record Vazio na Tabela:rsp112020"1
+      $this->erro_sql = "Record Vazio na Tabela:rsp112021";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
@@ -534,12 +534,12 @@ class cl_rsp112021
     } else {
       $sql .= $campos;
     }
-    $sql .= " from rsp112020 "1
-    $sql .= "      left  join rsp102020  on  rsp102020.si112_sequencial = rsp112020.si113_reg10"1
+    $sql .= " from rsp112021 ";
+    $sql .= "      left  join rsp102020  on  rsp102020.si112_sequencial = rsp112021.si113_reg10";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si113_sequencial != null) {
-        $sql2 .= " where rsp112020.si113_sequencial = $si113_sequencial "1
+        $sql2 .= " where rsp112021.si113_sequencial = $si113_sequencial ";
       }
     } else {
       if ($dbwhere != "") {
@@ -574,11 +574,11 @@ class cl_rsp112021
     } else {
       $sql .= $campos;
     }
-    $sql .= " from rsp112020 "1
+    $sql .= " from rsp112021 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si113_sequencial != null) {
-        $sql2 .= " where rsp112020.si113_sequencial = $si113_sequencial "1
+        $sql2 .= " where rsp112021.si113_sequencial = $si113_sequencial ";
       }
     } else {
       if ($dbwhere != "") {

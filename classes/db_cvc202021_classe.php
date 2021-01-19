@@ -61,10 +61,10 @@ class cl_cvc202021
                  ";
 
   //funcao construtor da classe
-  function cl_cvc202020(1
+  function cl_cvc202021()
   {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("cvc202020")1
+    $this->rotulo = new rotulo("cvc202021");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
@@ -169,11 +169,11 @@ class cl_cvc202021
       return false;
     }
     if ($si147_sequencial == "" || $si147_sequencial == null) {
-      $result = db_query("select nextval('cvc202020_si147_sequencial_seq')")1
+      $result = db_query("select nextval('cvc202021_si147_sequencial_seq')");
       if ($result == false) {
         $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-        $this->erro_sql = "Verifique o cadastro da sequencia: cvc202020_si147_sequencial_seq do campo: si147_sequencial"1
+        $this->erro_sql = "Verifique o cadastro da sequencia: cvc202021_si147_sequencial_seq do campo: si147_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
@@ -182,7 +182,7 @@ class cl_cvc202021
       }
       $this->si147_sequencial = pg_result($result, 0, 0);
     } else {
-      $result = db_query("select last_value from cvc202020_si147_sequencial_seq")1
+      $result = db_query("select last_value from cvc202021_si147_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $si147_sequencial)) {
         $this->erro_sql = " Campo si147_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -204,7 +204,7 @@ class cl_cvc202021
 
       return false;
     }
-    $sql = "insert into cvc2020201
+    $sql = "insert into cvc202021(
                                        si147_sequencial 
                                       ,si147_tiporegistro 
                                       ,si147_codorgao 
@@ -249,12 +249,12 @@ class cl_cvc202021
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "cvc202020 ($this->si147_sequencial) nao Incluído. Inclusao Abortada."1
+        $this->erro_sql = "cvc202021 ($this->si147_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_banco = "cvc202020 já Cadastrado"1
+        $this->erro_banco = "cvc202021 já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       } else {
-        $this->erro_sql = "cvc202020 ($this->si147_sequencial) nao Incluído. Inclusao Abortada."1
+        $this->erro_sql = "cvc202021 ($this->si147_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       }
@@ -303,7 +303,7 @@ class cl_cvc202021
   function alterar($si147_sequencial = null)
   {
     $this->atualizacampos();
-    $sql = " update cvc202020 set "1
+    $sql = " update cvc202021 set ";
     $virgula = "";
     if (trim($this->si147_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si147_sequencial"])) {
       if (trim($this->si147_sequencial) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si147_sequencial"])) {
@@ -486,7 +486,7 @@ class cl_cvc202021
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "cvc202020 nao Alterado. Alteracao Abortada.\n"1
+      $this->erro_sql = "cvc202021 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si147_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -497,7 +497,7 @@ class cl_cvc202021
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "cvc202020 nao foi Alterado. Alteracao Executada.\n"1
+        $this->erro_sql = "cvc202021 nao foi Alterado. Alteracao Executada.\n";
         $this->erro_sql .= "Valores : " . $this->si147_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -570,7 +570,7 @@ class cl_cvc202021
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "cvc202020 nao Excluído. Exclusão Abortada.\n"1
+      $this->erro_sql = "cvc202021 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si147_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -581,7 +581,7 @@ class cl_cvc202021
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "cvc202020 nao Encontrado. Exclusão não Efetuada.\n"1
+        $this->erro_sql = "cvc202021 nao Encontrado. Exclusão não Efetuada.\n";
         $this->erro_sql .= "Valores : " . $si147_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -621,7 +621,7 @@ class cl_cvc202021
     $this->numrows = pg_numrows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = "";
-      $this->erro_sql = "Record Vazio na Tabela:cvc202020"1
+      $this->erro_sql = "Record Vazio na Tabela:cvc202021";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
@@ -646,11 +646,11 @@ class cl_cvc202021
     } else {
       $sql .= $campos;
     }
-    $sql .= " from cvc202020 "1
+    $sql .= " from cvc202021 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si147_sequencial != null) {
-        $sql2 .= " where cvc202020.si147_sequencial = $si147_sequencial "1
+        $sql2 .= " where cvc202021.si147_sequencial = $si147_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -683,11 +683,11 @@ class cl_cvc202021
     } else {
       $sql .= $campos;
     }
-    $sql .= " from cvc202020 "1
+    $sql .= " from cvc202021 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si147_sequencial != null) {
-        $sql2 .= " where cvc202020.si147_sequencial = $si147_sequencial "1
+        $sql2 .= " where cvc202021.si147_sequencial = $si147_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
