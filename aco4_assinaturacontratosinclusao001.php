@@ -287,9 +287,8 @@ function js_checaValor(){
 
   var oParam = new Object();
   oParam.sequencial = $('ac16_sequencial').value;
-  oParam.exec = 'checaValoresItensAcordo',
-  sUrl = 'aco4_acordo.RPC.php';
-  var oAjax   = new Ajax.Request( sUrl, {
+  oParam.exec = 'checaValoresItensAcordo';
+  var oAjax   = new Ajax.Request( 'aco4_acordo.RPC.php', {
                                           method: 'post',
                                           parameters:'json='+Object.toJSON(oParam),
                                           onComplete: js_assinarContrato
