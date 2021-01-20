@@ -529,7 +529,8 @@ class cl_homologacaoadjudica {
         $sql2 = "";
 
         if($joinPrecoReferencia){
-            $sql .= " LEFT JOIN pcorcamval ON pc23_orcamitem = pc22_orcamitem ";
+            $sql .= " LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
+            $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
         }
 
         if($dbwhere==""){
