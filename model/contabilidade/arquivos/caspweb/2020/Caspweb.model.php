@@ -51,7 +51,7 @@ class Caspweb {
         $dtFim = new \DateTime();
 
         $this->dtIni = $dtIni->format('Y-m-d');
-        $this->dtFim = $dtFim->modify("last day of {$this->getMes($this->iMes)}")->format('Y-m-d');
+        $this->dtFim = $this->iAnoUsu.'-'.$this->iMes.'-'.$dtFim->modify("last day of {$this->getMes($this->iMes)}")->format('d');
 
     }
 
