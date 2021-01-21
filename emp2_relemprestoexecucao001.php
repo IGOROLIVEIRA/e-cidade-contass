@@ -73,7 +73,7 @@ $anousu  = db_getsession("DB_anousu");
        } else {
          $clcriaabas->identifica = array("g1"=>"Principal","g2"=>"Credor","filtro"=>"Filtro");
          $clcriaabas->title      = array("g1"=>"Principal","g2"=>"Selecionar credores","filtro"=>"Filtro");
-         $clcriaabas->src        = array("g1"=>"emp2_relemprestoexecucao011.php","g2"=>"emp2_relempcredor001.php","filtro"=>"func_selorcdotacao_aba.php?desdobramento=true");
+         $clcriaabas->src        = array("g1"=>"emp2_relemprestoexecucao011.php","g2"=>"emp2_relempcredor001.php","filtro"=>"func_selorcdotacao_aba.php?desdobramento=true&rsp=true");
          $clcriaabas->funcao_js  = array("g1"=>"","g2"=>"","filtro"=>"js_atualizar_instit();");
          $clcriaabas->sizecampo  = array("g1"=>"20","g2"=>"20","filtro"=>"20");
        }
