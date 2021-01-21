@@ -165,7 +165,7 @@ class cl_veiculos {
    function incluir ($ve01_codigo,$si04_tipoveiculo = 0){
       $this->atualizacampos();
 
-      if(($this->ve01_placa == null || !$this->ve01_placa) && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+      if(($this->ve01_placa == null || !$this->ve01_placa) && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99)) && $si04_tipoveiculo){
        $this->erro_sql = " Campo Placa nao Informado.";
        $this->erro_campo = "ve01_placa";
        $this->erro_banco = "";
@@ -192,7 +192,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->ve01_veiccadmodelo == null || $this->ve01_veiccadmodelo == 0) && $si04_tipoveiculo == 3){
+     if(($this->ve01_veiccadmodelo == null || $this->ve01_veiccadmodelo == 0)){
        $this->erro_sql = " Campo Modelo nao Informado.";
        $this->erro_campo = "ve01_veiccadmodelo";
        $this->erro_banco = "";
@@ -201,7 +201,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->ve01_veiccadcor == null || $this->ve01_veiccadcor == 0) && !in_array($si04_tipoveiculo, array('1', '2', '4', '5', '99'))){
+     if(($this->ve01_veiccadcor == null || $this->ve01_veiccadcor == 0) && !in_array($si04_tipoveiculo, array('1', '2', '4', '5', '99')) && $si04_tipoveiculo){
        $this->erro_sql = " Campo Cor nao Informado.";
        $this->erro_campo = "ve01_veiccadcor";
        $this->erro_banco = "";
@@ -228,7 +228,7 @@ class cl_veiculos {
     //    $this->erro_status = "0";
     //    return false;
     //  }
-     if($this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+     if($this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99)) && $si04_tipoveiculo){
        $this->erro_sql = " Campo Nº do Chassi nao Informado.";
        $this->erro_campo = "ve01_chassi";
        $this->erro_banco = "";
@@ -237,7 +237,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_ranavam == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+     if($this->ve01_ranavam == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99)) && $si04_tipoveiculo){
        $this->erro_sql = " Campo Renavam nao Informado.";
        $this->erro_campo = "ve01_ranavam";
        $this->erro_banco = "";
@@ -255,7 +255,7 @@ class cl_veiculos {
     //    $this->erro_status = "0";
     //    return false;
     //  }
-     if($this->ve01_nroserie == null && $this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+     if($this->ve01_nroserie == null && $this->ve01_chassi == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))&& $si04_tipoveiculo){
        $this->erro_sql = " Campo N° de Série nao Informado.";
        $this->erro_campo = "ve01_nroserie";
        $this->erro_banco = "";
@@ -327,7 +327,7 @@ class cl_veiculos {
     //    $this->erro_status = "0";
     //    return false;
     //  }
-     if($this->ve01_anofab == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+     if($this->ve01_anofab == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99)) && $si04_tipoveiculo){
        $this->erro_sql = " Campo Ano de Fabricação nao Informado.";
        $this->erro_campo = "ve01_anofab";
        $this->erro_banco = "";
@@ -336,7 +336,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_anomod == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+     if($this->ve01_anomod == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99)) && $si04_tipoveiculo){
        $this->erro_sql = " Campo Ano do Modelo nao Informado.";
        $this->erro_campo = "ve01_anomod";
        $this->erro_banco = "";
@@ -586,7 +586,7 @@ class cl_veiculos {
      if(trim($this->ve01_veiccadmodelo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmodelo"])){
        $sql  .= $virgula." ve01_veiccadmodelo = ".($this->ve01_veiccadmodelo == 0 ? 'null' : $this->ve01_veiccadmodelo)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadmodelo) == null && !in_array($si04_tipoveiculo, array(1, 2, 4, 5, 99))){
+       if(trim($this->ve01_veiccadmodelo) == null ){
          $this->erro_sql = " Campo Modelo nao Informado.";
          $this->erro_campo = "ve01_veiccadmodelo";
          $this->erro_banco = "";
@@ -1586,15 +1586,15 @@ class cl_veiculos {
                 INNER JOIN veiccentral ON veiculos.ve01_codigo = veiccentral.ve40_veiculos
                 INNER JOIN veiccadcentral ON ve36_sequencial = ve40_veiccadcentral and ve36_coddepto = veicretirada.ve60_coddepto
                 INNER JOIN veicmotoristas ON veicmotoristas.ve05_codigo = veicretirada.ve60_veicmotoristas
-                INNER JOIN veiccadtipo ON veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo
+                LEFT JOIN veiccadtipo ON veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo
                 INNER JOIN veiccadmarca ON veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca
                 INNER JOIN veiccadmodelo ON veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo
-                INNER JOIN veiccadcor ON veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor
+                LEFT JOIN veiccadcor ON veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor
                 INNER JOIN veiculoscomb ON veiculoscomb.ve06_veiculos = veiculos.ve01_codigo
                 INNER JOIN veiccadcomb ON veiccadcomb.ve26_codigo = veiculoscomb.ve06_veiccadcomb
-                INNER JOIN veiccadcategcnh ON veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh
+                LEFT JOIN veiccadcategcnh ON veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh
                 INNER JOIN cgm ON cgm.z01_numcgm = veicmotoristas.ve05_numcgm
-                INNER JOIN veiccadcategcnh AS a ON a.ve30_codigo = veicmotoristas.ve05_veiccadcategcnh
+                LEFT JOIN veiccadcategcnh AS a ON a.ve30_codigo = veicmotoristas.ve05_veiccadcategcnh
                 INNER JOIN veicdevolucao ON veicretirada.ve60_codigo = veicdevolucao.ve61_veicretirada
                 LEFT JOIN veicabastretirada ON ve73_veicretirada = ve60_codigo
                 LEFT JOIN veicmanutretirada ON ve65_veicretirada = ve60_codigo";
