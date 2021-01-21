@@ -25,7 +25,7 @@ include("classes/db_orctiporec_classe.php");
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/classes/db_DespesaInscritarpView.classe.js"></script>
+<!--    <script language="JavaScript" type="text/javascript" src="scripts/classes/db_DespesaInscritarpView.classe.js"></script>-->
     <script language="JavaScript" type="text/javascript" src="scripts/roundDecimal.js"></script>
 
     <link href="estilos.css" rel="stylesheet" type="text/css">

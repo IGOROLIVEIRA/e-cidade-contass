@@ -76,6 +76,20 @@ function js_submit(codproc){
 
 	parent.itens.document.form1.submit();
 	document.form1.submit();
+
+	document.form1.codprocanu.selectedIndex = 0;
+
+}
+
+function js_liberaexclusao(value){
+    parent.document.form1.excluir.disabled = (value ? false : true);
+    parent.document.form1.codprocesso.value = value;
+
+    document.form1.codproc.selectedIndex = 0;
+
+    parent.itens.document.form1.codproc.value = '';
+    parent.itens.document.form1.submit();
+
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -96,19 +110,31 @@ function js_submit(codproc){
     <td><b>Processos de Compras:</b></td>
     <td>
     <?
-    $vir="";
 
         $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query(
                                            null,"distinct pc80_codproc",null,"l21_codliclicita = $licitacao"));
-    if ($clliclicitem->numrows>0){
-    	for($w=0;$w<$clliclicitem->numrows;$w++){
-    		db_fieldsmemory($result_liclicitem,$w);
-    		echo $vir." $pc80_codproc";
-    		$vir=",";
-    	}
-    }else{
-    	echo "Nenhum Processo de Compra incluído.";
-    }
+        if ($clliclicitem->numrows>0){
+			echo"<select name='codprocanu' id='codprocanu' onchange='js_liberaexclusao(this.value)' ".($clliclicitem->numrows == 1 ? 'disabled' : '').">";
+            for($count=0; $count < $clliclicitem->numrows; $count++){
+                db_fieldsmemory($result_liclicitem, $count);
+				echo " <option value = $pc80_codproc ".(($clliclicitem->numrows == 1 || $clliclicitem->numrows && !$count) ? "selected" : "")." >$pc80_codproc</option>\n";
+				$ultimoProc = $pc80_codproc;
+            }
+            echo " </select>";
+
+            echo "<script>";
+            echo "parent.document.form1.excluir.disabled = false;";
+            echo "parent.document.form1.codprocesso.value = document.getElementById('codprocanu').value;";
+			echo "parent.document.form1.exportarcsv.disabled = false; ";
+            echo "</script>";
+
+        }else{
+            echo "<script>";
+			echo "parent.document.form1.exportarcsv.disabled = true; ";
+			echo "</script>";
+
+            echo "Nenhum Processo de Compra incluído.";
+        }
     ?>
     </td>
   </tr>
@@ -160,6 +186,7 @@ function js_submit(codproc){
     //aqui e removido processos com autorização de empenho geradas no compras.
     $sWhere .= "and not EXISTS (select 1 from empautitempcprocitem where e73_pcprocitem = pc81_codprocitem)";
 
+    $sWhere .= " AND pc80_codproc not in (select si06_processocompra from adesaoregprecos) ";
 
 
 	if (isset ($pc30_contrandsol) && $pc30_contrandsol == 't') {

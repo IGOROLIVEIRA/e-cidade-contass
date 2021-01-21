@@ -2472,30 +2472,12 @@ try {
     $sSqlServidores .= "       left  join rhlocaltrab    on rh55_codigo = rh56_localtrab";
     $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} AND rh01_sicom = 1";
     $sSqlServidores .= " AND
-
-  ((
-  rh02_anousu <
-  (SELECT r11_anousu
-  FROM cfpess
-  ORDER BY r11_anousu DESC, r11_mesusu DESC
-  LIMIT 1)
-  AND rh02_mesusu <= 12
-  )
-
-  OR
-  (
-  rh02_anousu =
-  (SELECT r11_anousu
-  FROM cfpess
-  ORDER BY r11_anousu DESC, r11_mesusu DESC
-  LIMIT 1)
-
-  AND rh02_mesusu <
-  (SELECT r11_mesusu
-  FROM cfpess
-  ORDER BY r11_anousu DESC, r11_mesusu DESC
-  LIMIT 1))
-  )
+    (rh02_anousu::varchar||lpad(rh02_mesusu::varchar, 2, '0'))::integer <
+    (SELECT (r11_anousu::varchar||lpad(r11_mesusu::varchar, 2, '0'))::integer AS competencia
+                        FROM cfpess
+                        WHERE r11_instit = rh01_instit
+                        ORDER BY r11_anousu DESC, r11_mesusu DESC
+                        LIMIT 1)
   ";
 
     $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";

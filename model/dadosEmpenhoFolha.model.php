@@ -2235,7 +2235,9 @@ class dadosEmpenhoFolha {
       $oDadosNovos = db_utils::fieldsMemory($rsTestaNovos,0);
       $iElemento   = $oDadosNovos->elementonovo;
             
-      $sCamposNovoProjAtiv  = " rh39_projativ  as projativnovo,  ";
+      $sCamposNovoProjAtiv  = " rh39_orgao  as orgaonovo,  ";
+      $sCamposNovoProjAtiv .= " rh39_unidade  as unidadenovo,  ";
+      $sCamposNovoProjAtiv .= " rh39_projativ  as projativnovo,  ";
       $sCamposNovoProjAtiv .= " rh39_funcao    as funcaonovo,    ";
       $sCamposNovoProjAtiv .= " rh39_subfuncao as subfuncaonovo, ";
       $sCamposNovoProjAtiv .= " rh39_programa  as programanovo   ";
@@ -2252,6 +2254,10 @@ class dadosEmpenhoFolha {
         $iFuncao        = $oNovoProjAtiv->funcaonovo;
         $iSubFuncao     = $oNovoProjAtiv->subfuncaonovo;
         $iPrograma      = $oNovoProjAtiv->programanovo;
+        if (!empty($oNovoProjAtiv->orgaonovo) && !empty($oNovoProjAtiv->unidadenovo)) {
+            $iOrgao   = $oNovoProjAtiv->orgaonovo;
+            $iUnidade = $oNovoProjAtiv->unidadenovo;
+        }
       }
 
       $sCamposNovoRecurso = "rh43_recurso as recursonovo ";

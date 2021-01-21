@@ -86,6 +86,7 @@ db_utils::postMemory($_POST);
                     <input type="hidden" name="fc" id="fc" value="" />
                     <input type="hidden" name="f3" id="f3" value="" />
                     <input type="hidden" name="fa" id="fa" value="" />
+                    <input type="hidden" name="fr" id="fr" value="" />
                     <input type="hidden" name="valores_campos_rel" id="valores_campos_rel" value="" />
                   </fieldset>
                 </td>
@@ -182,6 +183,7 @@ db_utils::postMemory($_POST);
           {folha: "fx", descricao: "Fixo"},
           {folha: "f3", descricao: "13o. Salário"},
           {folha: "fa", descricao: "Adiantamento"},
+          {folha: "fr", descricao: "Rescisão"},
         ];';
     }
     ?>

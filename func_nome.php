@@ -360,12 +360,12 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 					$lTelaCgmAlt = false;
 
 					if (isset($nomeDigitadoParaPesquisa) && ($nomeDigitadoParaPesquisa!="") ){
-              if (isset($z01_tipcre_cnpj)) {
-                $sSqlConv .= " and z01_tipcre = 2 ";
-              }
-							$nomeDigitadoParaPesquisa = strtoupper($nomeDigitadoParaPesquisa);
-							$sql = $clnome->sqlnome($nomeDigitadoParaPesquisa,$campos,$filtro,$sSqlConv);
-              //print_r($sql);die('Muerte!');
+                        if (isset($z01_tipcre_cnpj)) {
+                            $sSqlConv .= " and z01_tipcre = 2 ";
+                        }
+						$nomeDigitadoParaPesquisa = strtoupper($nomeDigitadoParaPesquisa);
+						$sql = $clnome->sqlnome($nomeDigitadoParaPesquisa,$campos,$filtro,$sSqlConv);
+
 					}else if(isset($numcgmDigitadoParaPesquisa) && $numcgmDigitadoParaPesquisa != ""){
 
             if( !is_int((int)$numcgmDigitadoParaPesquisa) ){
@@ -388,7 +388,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 							$lTelaCgmAlt = true;
 				      $funcao_js 	 = "js_consultacgmoriginal|z01_numcgm";
 					}else{
-              $sql = "";
+                            $sql = "";
 							if(isset($z01_numcgm) && $z01_numcgm != ""){
 									$sql = $clnome->$sMetodoExecutar($z01_numcgm,$campos);
 							}
@@ -396,7 +396,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 
 					if(isset($sql) && trim($sql) != ""){
 						 $rsNome = db_query($sql) or die($sql);
-             if( pg_num_rows($rsNome) == 0){
+                            if( pg_num_rows($rsNome) == 0){
 								if(isset($nomeDigitadoParaPesquisa) && trim($nomeDigitadoParaPesquisa!="")){
 									?>
 									  <table>
@@ -480,11 +480,10 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 			}else{
 				if($pesquisa_chave!=""){
 					$result = $clcgm->sql_record($clcgm->$sMetodoExecutar($pesquisa_chave));
-          if(!isset($testanome)){
+                    if(!isset($testanome)){
 						if(($result!=false) && (pg_numrows($result) != 0)){
 							db_fieldsmemory($result,0);
 							if ($filtro==1){
-
 								echo "<script>".$funcao_js."(false,\"$z01_nome\",\"$z01_cpf\",\"$z01_incest\",\"$z01_uf\");</script>";
 							}elseif ($filtro==2){
 								echo "<script>".$funcao_js."(false,\"$z01_nome\",\"$z01_cgc\",\"$z01_incest\",\"$z01_uf\");</script>";

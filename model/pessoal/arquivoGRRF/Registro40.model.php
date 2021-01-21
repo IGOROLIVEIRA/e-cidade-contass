@@ -80,7 +80,7 @@ class Registro40 extends RegistroBase {
             $oDados = db_utils::fieldsMemory($rsDados, $iCont);
 
             $rsSalarioMesRescisao = db_query($oDaoRhpPessoalMov->sql_valores_servidor($oDados->rh01_regist, $this->iAnoFolha, $this->iMesFolha, "R991"));
-            $rsSalarioMesAnterior = db_query($oDaoRhpPessoalMov->sql_valores_servidor($oDados->rh01_regist, $this->iAnoFolha, $this->iMesFolha-1, "R991"));
+            $rsAvisoPrevioIndenizado = db_query($oDaoRhpPessoalMov->sql_valores_rescisao_baseEsocialSicom($oDados->rh01_regist, $this->iAnoFolha, $this->iMesFolha, "6003"));
             $aLinha = array();
             $aLinha['tipoRegistro'] = "40";
             $aLinha['tipoInscricaoEmpresa'] = "1";
@@ -107,9 +107,9 @@ class Registro40 extends RegistroBase {
             $aLinha['reposicaoVaga'] = "N";
             $aLinha['dataHomologacaoDissidioColetivo'] = $this->preencherCampo(" ", 8);
             $aLinha['valorDissidio'] = $this->preencherCampo("0", 15);
-            $aLinha['remuneracaoMesAnterior'] = $this->formatarValor(db_utils::fieldsMemory($rsSalarioMesAnterior)->salario, 15);
+            $aLinha['remuneracaoMesAnterior'] = $this->preencherCampo("0", 15);
             $aLinha['remuneracaoMesRescisao'] = $this->formatarValor(db_utils::fieldsMemory($rsSalarioMesRescisao)->salario, 15);
-            $aLinha['avisoPrevioIndenizado'] = $this->preencherCampo("0", 15);
+            $aLinha['avisoPrevioIndenizado'] = $this->formatarValor(db_utils::fieldsMemory($rsAvisoPrevioIndenizado)->valor, 15);
             $aLinha['indicativoPensaoAlimenticia'] = "N";
             $aLinha['percentualPensaoAlimenticia'] = $this->preencherCampo("0", 5);
             $aLinha['valorPensaoAlimenticia'] = $this->preencherCampo("0", 15);

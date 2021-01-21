@@ -22,7 +22,7 @@ class cl_riscofiscal {
    var $si53_dscriscofiscal = null; 
    var $si53_codriscofiscal = 0; 
    var $si53_valorisco = 0;
-   var $si53_instituicao = 0;  
+   var $si53_instit = 0;  
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si53_sequencial = int8 = Código Sequencial do Risco 
@@ -31,7 +31,7 @@ class cl_riscofiscal {
                  si53_dscriscofiscal = text = Descrição 
                  si53_codriscofiscal = int8 = Codigo Risco 
                  si53_valorisco = float8 = Valor do Risco 
-                 si53_instituicao  = int8 = Codigo Risco
+                 si53_instit  = int8 = Instituição
                  ";
    //funcao construtor da classe 
    function cl_riscofiscal() { 
@@ -57,7 +57,7 @@ class cl_riscofiscal {
        $this->si53_dscriscofiscal = ($this->si53_dscriscofiscal == ""?@$GLOBALS["HTTP_POST_VARS"]["si53_dscriscofiscal"]:$this->si53_dscriscofiscal);
        $this->si53_codriscofiscal = ($this->si53_codriscofiscal == ""?@$GLOBALS["HTTP_POST_VARS"]["si53_codriscofiscal"]:$this->si53_codriscofiscal);
        $this->si53_valorisco = ($this->si53_valorisco == ""?@$GLOBALS["HTTP_POST_VARS"]["si53_valorisco"]:$this->si53_valorisco);
-       $this->si53_instituicao = ($this->si53_instituicao == ""?@$GLOBALS["HTTP_POST_VARS"]["si53_instituicao"]:$this->si53_instituicao);
+       $this->si53_instit = ($this->si53_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si53_instit"]:$this->si53_instit);
      }else{
        $this->si53_sequencial = ($this->si53_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si53_sequencial"]:$this->si53_sequencial);
      }
@@ -83,15 +83,6 @@ class cl_riscofiscal {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si53_dscriscofiscal == null ){ 
-       $this->erro_sql = " Campo Descrição nao Informado.";
-       $this->erro_campo = "si53_dscriscofiscal";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->si53_codriscofiscal == null ){ 
        $this->erro_sql = " Campo Codigo Risco nao Informado.";
        $this->erro_campo = "si53_codriscofiscal";
@@ -102,9 +93,9 @@ class cl_riscofiscal {
        return false;
      }
      
-    if($this->si53_instituicao == null ){ 
+    if($this->si53_instit == null ){ 
        $this->erro_sql = " Campo Codigo Instituicao nao Informado.";
-       $this->erro_campo = "si53_instituicao";
+       $this->erro_campo = "si53_instit";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -159,7 +150,7 @@ class cl_riscofiscal {
                                       ,si53_dscriscofiscal 
                                       ,si53_codriscofiscal 
                                       ,si53_valorisco 
-                                      ,si53_instituicao
+                                      ,si53_instit
                        )
                 values (
                                 $this->si53_sequencial 
@@ -168,7 +159,7 @@ class cl_riscofiscal {
                                ,'$this->si53_dscriscofiscal' 
                                ,$this->si53_codriscofiscal 
                                ,$this->si53_valorisco
-                               ,$this->si53_instituicao 
+                               ,$this->si53_instit 
                       )"; //echo $sql;exit;
      $result = db_query($sql); 
      if($result==false){ 
@@ -256,15 +247,6 @@ class cl_riscofiscal {
      if(trim($this->si53_dscriscofiscal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si53_dscriscofiscal"])){ 
        $sql  .= $virgula." si53_dscriscofiscal = '$this->si53_dscriscofiscal' ";
        $virgula = ",";
-       if(trim($this->si53_dscriscofiscal) == null ){ 
-         $this->erro_sql = " Campo Descrição nao Informado.";
-         $this->erro_campo = "si53_dscriscofiscal";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->si53_codriscofiscal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si53_codriscofiscal"])){ 
        $sql  .= $virgula." si53_codriscofiscal = $this->si53_codriscofiscal ";
@@ -280,12 +262,12 @@ class cl_riscofiscal {
        }
      }
      
-   if(trim($this->si53_instituicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si53_instituicao"])){ 
-       $sql  .= $virgula." si53_instituicao = $this->si53_instituicao ";
+   if(trim($this->si53_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si53_instit"])){ 
+       $sql  .= $virgula." si53_instit = $this->si53_instit ";
        $virgula = ",";
-       if(trim($this->si53_instituicao) == null ){ 
+       if(trim($this->si53_instit) == null ){ 
          $this->erro_sql = " Campo Codigo Instituicao nao Informado.";
-         $this->erro_campo = "si53_instituicao";
+         $this->erro_campo = "si53_instit";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

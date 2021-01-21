@@ -1604,6 +1604,10 @@ class cl_empempenho {
         $sql .= " INNER JOIN empempaut ON e61_numemp = e60_numemp ";
         $sql .= " INNER JOIN empautoriza ON e54_autori = e61_autori ";
         $sql .= " INNER JOIN db_depart ON e54_gestaut = coddepto ";
+
+        $sql .= " left join empempenhocontrato on  empempenho.e60_numemp = empempenhocontrato.e100_numemp    ";
+        $sql .= " left join acordo ON ac16_sequencial = e100_acordo ";
+
         $sql .= $sqlanulado;
 
         $sql2 = "";

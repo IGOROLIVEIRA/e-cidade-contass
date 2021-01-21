@@ -350,7 +350,7 @@ if ($clcfpatric->numrows > 0) {
                 </td>
                 <td>
                     <?
-                    db_input('t53_empen', 6, $It53_empen, true, 'text', $db_opcao, " onchange='js_pesquisat53_empen(false);'");
+                    db_input('t53_empen', 6, $It53_empen, true, 'text', $db_opcao, " onchange='js_pesquisat53_empen(false)';");
                     ?>
                     <span id="campoDescricao">
               <? db_input('z01_nome_empenho', 30, $Iz01_nome, true, 'text', 3, ""); ?>
@@ -418,7 +418,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
       if (document.form1.t53_empen.value != '') {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empenhogeral.php?pesquisa_chave=' + document.form1.t53_empen.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
       } else {
-        document.form1.t53_empen.value = '';
+        document.form1.z01_nome_empenho.value = '';
       }
     }
   }

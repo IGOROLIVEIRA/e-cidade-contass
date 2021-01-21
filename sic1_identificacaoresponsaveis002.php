@@ -13,7 +13,7 @@ $db_botao = false;
 $sqlerro  = false;
 if(isset($alterar)){
     db_inicio_transacao();
-    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$si166_numcgm} order by z09_sequencial desc");
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$si166_numcgm} and z09_tipo = 1");
     db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
     $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
     if($sqlerro==false){
@@ -39,7 +39,7 @@ if(isset($alterar)){
     $db_botao = true;
   }else{
     $db_opcao = 2;
-    $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa,'*','',"si166_tiporesponsavel = 5"));
+    $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa,'*','',"si166_tiporesponsavel = 5 and si166_instit = ".db_getsession("DB_instit")));
     db_fieldsmemory($result, 0);
     $db_botao = true;
   }

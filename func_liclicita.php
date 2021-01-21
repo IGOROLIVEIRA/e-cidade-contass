@@ -33,6 +33,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_licobraslicitacao_classe.php");
+require_once("classes/db_db_usuarios_classe.php");
 
 db_postmemory($_GET);
 db_postmemory($_POST);
@@ -43,6 +44,7 @@ parse_str($_SERVER["QUERY_STRING"]);
 $clliclicitem = new cl_liclicitem;
 $clliclicita  = new cl_liclicita;
 $cllicobraslicitacao = new cl_licobraslicitacao;
+$cldbusuarios = new cl_db_usuarios();
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
@@ -173,8 +175,7 @@ $sWhereContratos = " and 1 = 1 ";
              }*/
 
 
-
-            if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
+            if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1"){
 
                 $dbwhere .= "l20_licsituacao in ($situacao) and ";
             }else{
@@ -244,11 +245,23 @@ $sWhereContratos = " and 1 = 1 ";
 					                    liclicita.l20_edital,
                                         l20_anousu,
                                         pctipocompra.pc50_descr,
-                                        liclicita.l20_numero,
-                                        liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_numero, ";
+
+					if(db_getsession('DB_anousu') >= 2021){
+					    $campos .= " case when l20_nroedital is not null then l20_nroedital::varchar
+                                        else '-' END as l20_nroedital, ";
+                    }
+
+					if(!$ocultacampos) {
+
+						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
                                         liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
                                         liclicita.l20_dtpublic as dl_Data_Publicação_DO,
                                         liclicita.l20_objeto";
+					}else{
+						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_objeto";
+                    }
                 }
 
 //                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";

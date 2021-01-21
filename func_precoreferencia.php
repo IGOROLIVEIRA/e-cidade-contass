@@ -40,10 +40,26 @@ $clprecoreferencia = new cl_precoreferencia;
            if(file_exists("funcoes/db_func_precoreferencia.php")==true){
              include("funcoes/db_func_precoreferencia.php");
            }else{
-           $campos = "precoreferencia.oid,precoreferencia.*";
+                $campos = "precoreferencia.oid,precoreferencia.*";
            }
         }
-	         $sql = $clprecoreferencia->sql_query();
+
+        $campos .= ",
+            pc80_data,
+            pc80_resumo,
+            pc80_tipoprocesso,
+            (CASE
+                WHEN pc80_criterioadjudicacao = 1 THEN 'Desconto sobre tabela'
+                WHEN pc80_criterioadjudicacao = 2 THEN 'Menor Taxa'
+                ELSE 'Outros'
+            END) AS pc80_criterioadjudicacao,
+            nome,
+            coddepto,
+            descrdepto,
+            instit
+        ";
+
+        $sql = $clprecoreferencia->sql_query('', $campos);
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{

@@ -56,6 +56,11 @@ $clliclancedital   = new cl_liclancedital;
 $db_opcao=1;
 $db_botao=true;
 
+if($incluir && empty($chaves)){
+    $sqlerro = true;
+	db_msgbox("Informe ao menos um item!");
+}
+
 if (!empty($chaves) && isset($chaves)){
   $result_itens=$clpcprocitem->sql_record($clpcprocitem->sql_query_file(null,"*",null,"pc81_codproc=$codprocant"));
 
@@ -374,6 +379,7 @@ if (!empty($chaves) && isset($chaves)){
           db_input('codproc'   ,10,'',true,'hidden',3);
           db_input('codprocant',10,'',true,'hidden',3);
           db_input('cods'      ,10,'',true,'hidden',3);
+          db_input('codprocanu',10,'',true,'hidden',3);
 
           if (isset($codproc)&&$codproc!=""){
             $sql = $clpcprocitem->sql_query_pcmater(null,

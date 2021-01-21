@@ -181,20 +181,54 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 
   }
 
-  public function getCodunidadesubrespAdesao($iCodContratos)
+  public function getCodunidadesubrespAdesao($sequencial)
   {
-    $sSql = "select
-      case when o41_subunidade != 0 or not null then
-                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
-                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesubresp
-                        from empempenhocontrato
-                      inner join empempenho on e60_numemp = e100_numemp
-            join empelemento on e64_numemp = e60_numemp
-            join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
-            join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
-            join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-            where e100_acordo = {$iCodContratos}
-      ";
+//    $sSql = "select
+//      case when o41_subunidade != 0 or not null then
+//                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+//                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesubresp
+//                        from empempenhocontrato
+//                      inner join empempenho on e60_numemp = e100_numemp
+//            join empelemento on e64_numemp = e60_numemp
+//            join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
+//            join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+//            join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+//            where e100_acordo = {$iCodContratos}
+//      ";
+
+	  /* Substituição do trecho acima pela mesma consulta utilizada no campo 4 do reg. 10 da REGADESAO */
+	  $sSql = "
+	  		SELECT 
+    			(SELECT CASE
+                	WHEN o41_subunidade != 0 OR NOT NULL 
+                		THEN lpad((CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
+                        											  ELSE o40_codtri
+						END),2,0)||lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
+																		  ELSE o41_codtri
+						END),3,0)||lpad(o41_subunidade::integer,3,0)
+							ELSE lpad((CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
+																			ELSE o40_codtri
+						END),2,0)||lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
+																								ELSE o41_codtri
+						END),3,0)
+            		END AS codunidadesub
+				 FROM db_departorg
+				 JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = ".db_getsession('DB_instit')."
+				 JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade=o41_unidade AND db01_anousu = o41_anousu AND o41_instit = ".db_getsession('DB_instit')."
+				 JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu AND o40_instit = ".db_getsession('DB_instit')."
+				 WHERE db01_coddepto=pc80_depto AND db01_anousu = ".db_getsession('DB_anousu')."
+				 LIMIT 1) AS codunidadesubresp
+			FROM adesaoregprecos
+			JOIN acordo on ac16_adesaoregpreco = si06_sequencial
+			JOIN cgm orgaogerenciador ON si06_orgaogerenciador = orgaogerenciador.z01_numcgm
+			JOIN cgm responsavel ON si06_cgm = responsavel.z01_numcgm
+			INNER JOIN pcproc ON si06_processocompra = pc80_codproc
+			LEFT JOIN infocomplementaresinstit ON adesaoregprecos.si06_instit = infocomplementaresinstit.si09_instit
+			WHERE si06_instit= ".db_getsession('DB_instit')."
+				AND date_part('month',si06_dataadesao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+				AND date_part('year',si06_dataadesao) = ".db_getsession('DB_anousu'). " 
+		  		AND ac16_sequencial = " . $sequencial ." 
+	  ";
 
     $sCodunidadesubresp = db_utils::fieldsMemory(db_query($sSql), 0)->codunidadesubresp;
 
@@ -547,8 +581,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       if ($oDados10->contdeclicitacao == 1 || $oDados10->contdeclicitacao == 8) {
         $clcontratos10->si83_codunidadesubresp = ' ';
       }elseif ($oDados10->contdeclicitacao == 4) {
-        $clcontratos10->si83_codunidadesubresp = $this->getCodunidadesubrespAdesao($oDados10->ac16_sequencial);
-      }elseif(in_array($oDados10->contdeclicitacao, array(5, 6))){
+		$clcontratos10->si83_codunidadesubresp = $this->getCodunidadesubrespAdesao($oDados10->ac16_sequencial);
+	  }elseif(in_array($oDados10->contdeclicitacao, array(5, 6))){
 		  $clcontratos10->si83_codorgaoresp = $oDados10->lic211_codorgaoresplicit;
 		$clcontratos10->si83_codunidadesubresp = $oDados10->lic211_codunisubres;
 	  }elseif($oDados10->ac16_origem == self::ORIGEM_MANUAL) {
@@ -643,7 +677,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $oContrato11->si84_tiporegistro = 11;
             $oContrato11->si84_reg10 = $clcontratos10->si83_sequencial;
             $oContrato11->si84_codcontrato = $oDados10->ac16_sequencial;
-            $oContrato11->si84_coditem = $iCodItem;
+            if ($oDados10->ac02_acordonatureza == "1"){
+                if($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4"){
+                    $oContrato11->si84_coditem = $iCodItem;
+                }else{
+                    $oContrato11->si84_coditem = null;
+                }
+            }else{
+                $oContrato11->si84_coditem = $iCodItem;
+            }
             $oContrato11->si84_quantidadeitem = $oItens->getQuantidade();
             $oContrato11->si84_valorunitarioitem = $oItens->getValorUnitario();
             $oContrato11->si84_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -709,7 +751,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
            * Caso o contrato seja de origem manual (3) e quando for processo de compras e NO HOUVER empenho, deve ser buscado as dotaes para cada item do contrato.
            */
 
-          if($oDados10->ac16_origem == self::ORIGEM_MANUAL or ($oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS && count($oAcordo->getEmpenhosAcordo()) == 0)) {
+          if($oDados10->ac16_origem == self::ORIGEM_MANUAL or $oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS) {
 
             /**
              * Acordos de origem manual e processo de compras e NO HOUVER empenho
@@ -825,6 +867,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
                                JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                where liclicitem.l21_codliclicita = " . $oDados10->l20_codigo;
+
                 $rsDados = db_query($sSql);
               }
 
@@ -1145,11 +1188,25 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $iTipoAlteraoItem = 2;
               }
             }
+            /**
+             * busca itens obra;
+             */
+            $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+            $rsItems = db_query($sqlItemobra);
+            $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
 
             $clcontratos21->si88_tiporegistro = 21;
             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
-            $clcontratos21->si88_coditem = $iCodItem  ;
+            if($oDados20->ac02_acordonatureza == "1"){
+                if($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4"){
+                    $clcontratos21->si88_coditem = $iCodItem;
+                }else{
+                    $clcontratos21->si88_coditem = null;
+                }
+            }else{
+                $clcontratos21->si88_coditem = $iCodItem;
+            }
             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
             $sqlServico = "
                           select pc01_servico, ac20_servicoquantidade
@@ -1173,12 +1230,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantiAditada();
             }
 
-            /**
-             * busca itens obra;
-             */
-            $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
-            $rsItems = db_query($sqlItemobra);
-            $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos21->si88_instit = db_getsession("DB_instit");
             if($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7"){

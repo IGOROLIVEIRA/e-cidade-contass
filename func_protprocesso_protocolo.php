@@ -230,6 +230,18 @@ $clprotprocesso->rotulo->label("p58_numero");
 
             if (isset($retobs) ) {
               echo "<script>".$funcao_js."('$p58_numcgm','$p58_obs',false);</script>";
+            } elseif (isset($bCodproc)) {
+              
+              $sCampoRetorno = $p58_numero . '/' . $p58_ano;
+
+              if ( !empty($oGet->sCampoRetorno) ) {
+
+                $sCampoRetorno = $oGet->sCampoRetorno;
+                $sCampoRetorno = $$sCampoRetorno;
+              }
+              $sCgmEscape = addslashes($z01_nome);
+              echo "<script>". $funcao_js . "('$sCampoRetorno', '$sCgmEscape', '$p58_codproc', false); </script> ";
+
             } else {
 
               $sCampoRetorno = $p58_numero . '/' . $p58_ano;

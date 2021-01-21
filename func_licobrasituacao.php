@@ -90,19 +90,20 @@ $cllicobrasituacao = new cl_licobrasituacao;
            $campos = "licobrasituacao.oid,licobrasituacao.*";
            }
         }
+        $where = "and obr02_instit = ".db_getsession("DB_instit");
         $ordem = "obr02_sequencial desc";
         if(isset($chave_obr02_sequencial) && (trim($chave_obr02_sequencial)!="") ){
           $sql = $cllicobrasituacao->sql_query($chave_obr02_sequencial,$campos,null,null);
         }else if(isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra)!="")){
-          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"obr01_numeroobra = $chave_obr01_numeroobra");
+          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"obr01_numeroobra = $chave_obr01_numeroobra $where");
         }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
-          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"l20_edital = $chave_l20_edital");
+          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"l20_edital = $chave_l20_edital $where");
         }else if(isset($chave_l20_objeto) && (trim($chave_l20_objeto)!="")){
-          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"l20_objeto like '%$chave_l20_objeto%'");
+          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"l20_objeto like '%$chave_l20_objeto%' $where");
         }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
-          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu");
+          $sql = $cllicobrasituacao->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu $where");
         }else{
-          $sql = $cllicobrasituacao->sql_query(null,$campos,$ordem,null);
+          $sql = $cllicobrasituacao->sql_query(null,$campos,$ordem,"obr02_instit = ".db_getsession("DB_instit")."");
         }
 
         $repassa = array();

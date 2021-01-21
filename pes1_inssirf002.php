@@ -379,11 +379,6 @@ else if(isset($importar)){
 
 				while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 
-					if($x==0){
-						$x=1;
-						continue;
-					}
-
 					$clinssirf->r33_anousu = db_anofolha();
 					$clinssirf->r33_mesusu = db_mesfolha();
 					$clinssirf->r33_codtab = $codtab;
@@ -392,28 +387,17 @@ else if(isset($importar)){
 					$clinssirf->r33_basfet = $r33_basfet;
 					$clinssirf->r33_instit = db_getsession("DB_instit");
 					$clinssirf->r33_codele = $r33_codele;
+					$clinssirf->r33_novocalculo = TRUE;
 
+					$clinssirf->r33_inic = $data[0];
+					$clinssirf->r33_fim = $data[1];
 
-
-						foreach ($data as $value) {
-
-							if ($x == 1) {
-								$clinssirf->r33_inic = $value;
-							}
-							if ($x == 2) {
-								$clinssirf->r33_fim = $value;
-							}
-							if ($x == 3) {
-								$clinssirf->r33_perc = $value;
-							}
-							if ($x == 4) {
-								$clinssirf->r33_deduzi = $value;
-								$clinssirf->incluir(null, db_getsession("DB_instit"));
-								$x = 0;
-							}
-							$x++;
-						}
-
+					$clinssirf->r33_perc = $data[2];
+					$clinssirf->r33_deduzi = $data[3];
+					$clinssirf->incluir(null, db_getsession("DB_instit"));
+					if($clinssirf->erro_status=="0"){
+						db_msgbox($clinssirf->erro_msg);
+					}
 
 				}
 				fclose($handle);

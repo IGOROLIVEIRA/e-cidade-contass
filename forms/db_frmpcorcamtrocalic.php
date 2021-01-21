@@ -32,6 +32,7 @@ $clrotulo->label("l20_descrinterporrecurso");
 ?>
 <form name="form1" method="post" action="lic1_pcorcamtroca001.php">
 	<center>
+        <h2 style="margin-bottom: 0px;margin-top: 35px">Julgamento de Itens da Licitação Nº <?= $l20_codigo?></h2>
 		<table border="0" align="center">
 		  <tr>
 		    <td>&nbsp;</td>
@@ -60,26 +61,44 @@ $clrotulo->label("l20_descrinterporrecurso");
         </td>
       </tr>
 		  <tr align="center">
-		    <td nowrap align="center">    
+		    <td nowrap align="center">
 		      <?
 			      db_input('pc20_codorc',    8,"",true,'hidden',3);
 			      db_input('pc21_orcamforne',8,"",true,'hidden',3);
 			      db_input('l20_codigo',     8,"",true,'hidden',3);
 		      ?>
-		      <fieldset>
+                <fieldset>
+                    <legend align="left">
+                        <b>Julgamento</b>
+                    </legend>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:12%">
+                                <b>Data de julgamento:</b>
+                            </td>
+                            <td nowrap title="">
+								<?=
+								db_inputdata('dtjulgamento', '', '', '', true, 'text', $db_opcao, "");
+								?>
+                            </td>
+                        </tr>
+                    </table>
+
+                </fieldset>
+              <fieldset>
             <legend align="left">
               <b>Lista de Itens</b>
             </legend>
             <table>
               <tr>
                 <td>
-				          <iframe name="iframe_solicitem" id="solicitem" marginwidth="0" marginheight="0" 
+				          <iframe name="iframe_solicitem" id="solicitem" marginwidth="0" marginheight="0"
 				                  frameborder="0" src="lic1_trocpcorcamtroca.php" width="1100px" height="300px">
 				          </iframe>
                 </td>
               </tr>
             </table>
-		      </fieldset>
+              </fieldset>
 		    </td>
 		  </tr>
   
@@ -87,65 +106,48 @@ $clrotulo->label("l20_descrinterporrecurso");
 		<br>
 		
 	<table>
-		<tr>
-    <td nowrap title="<?=@$Tl20_regata?>">
-       <?=@$Ll20_regata?>
-    </td>
-    <td> 
-<?
-$x = array("1"=>"Sim","2"=>"Nao");
-db_select("l20_regata",$x,true,$db_opcao);
-?>
-    </td>
-  </tr>
-		  
-	<tr>
-    <td nowrap title="<?=@$Tl20_interporrecurso?>">
-       <?=@$Ll20_interporrecurso?>
-    </td>
-    <td> 
-<?
-$x = array("2"=>"Nao","1"=>"Sim",);
-db_select("l20_interporrecurso",$x,true,$db_opcao,"onchange='js_interporrecurso()'");
-?>
-    </td>
-  </tr>
+<?//
+//$x = array("2"=>"Nao","1"=>"Sim",);
+//db_select("l20_interporrecurso",$x,true,$db_opcao,"onchange='js_interporrecurso()'");
+//?>
+<!--    </td>-->
+<!--  </tr>-->
   </table>
   
-  <fieldset style="width: 60%">
-  <legend align="left">
-  <b>Descrição do Recurso</b>
-  </legend>
-  <table>
-  <tr>
-   <td nowrap title="<?=@$Tl20_descrinterporrecurso?>">
-       <?=@$Ll20_descrinterporrecurso?>
-    </td>
-    <td>
-  <?
-  db_textarea('l20_descrinterporrecurso',2,80,$Il20_descrinterporrecurso,true,'text',$db_opcao,"","","#E6E4F1")
-  ?>
-  </td>
-  </tr>
-  
-  <tr align="center">
-  <td colspan="2">
-  <input name="salvar" type="submit" value="Salvar"
-		             <?=($db_opcao==3?"disabled":"")?>>
-  
-  <input name="liberar" type="button" value="Liberar" onclick="js_liberar()"
-		             <?=($db_opcao==3?"disabled":"")?>>
-  </td>
-  </tr>
-  
-  </table>
-  </fieldset>
+<!--  <fieldset style="width: 60%">-->
+<!--  <legend align="left">-->
+<!--  <b>Descrição do Recurso</b>-->
+<!--  </legend>-->
+<!--  <table>-->
+<!--  <tr>-->
+<!--   <td nowrap title="--><?//=@$Tl20_descrinterporrecurso?><!--">-->
+<!--       --><?//=@$Ll20_descrinterporrecurso?>
+<!--    </td>-->
+<!--    <td>-->
+<!--  --><?//
+//  db_textarea('l20_descrinterporrecurso',2,80,$Il20_descrinterporrecurso,true,'text',$db_opcao,"","","#E6E4F1")
+//  ?>
+<!--  </td>-->
+<!--  </tr>-->
+<!--  -->
+<!--  <tr align="center">-->
+<!--  <td colspan="2">-->
+<!--  <input name="salvar" type="submit" value="Salvar"-->
+<!--		             --><?//=($db_opcao==3?"disabled":"")?>
+<!--  -->
+<!--  <input name="liberar" type="button" value="Liberar" onclick="js_liberar()"-->
+<!--		             --><?//=($db_opcao==3?"disabled":"")?>
+<!--  </td>-->
+<!--  </tr>-->
+<!--  -->
+<!--  </table>-->
+<!--  </fieldset>-->
 		
 		<br>
 		<table border="0">
 		  <tr>
 		    <td nowrap>
-		      <input name="confirmar" type="submit" value="Confirmar" onClick="js_confirmar();" 
+		      <input name="confirmar" type="submit" value="Confirmar" onClick="js_confirmar();"
 		             <?=($db_opcao==3?"disabled":"")?> <?=($disable_confirmar==true?"disabled":"")?> >
 		    </td>
 		    <td nowrap>
@@ -161,23 +163,23 @@ db_select("l20_interporrecurso",$x,true,$db_opcao,"onchange='js_interporrecurso(
 </form>
 <script>
   function js_confirmar() {
-     document.form1.itens.value = iframe_solicitem.document.form2.itens.value;   
+     document.form1.itens.value = iframe_solicitem.document.form2.itens.value;
 
      document.form1.submit();
   }
   
-  function js_interporrecurso() {
-    if(document.form1.l20_interporrecurso.value == 1) {
-    	document.form1.l20_descrinterporrecurso.style.backgroundColor = "";
-    	document.form1.confirmar.disabled = 1;  
-    } else {
-    	document.form1.l20_descrinterporrecurso.style.backgroundColor = "#E6E4F1";
-    	document.form1.confirmar.disabled = 0;
-    }
-  }
+  // function js_interporrecurso() {
+  //   if(document.form1.l20_interporrecurso.value == 1) {
+  //   	document.form1.l20_descrinterporrecurso.style.backgroundColor = "";
+  //   	document.form1.confirmar.disabled = 1;
+  //   } else {
+  //   	document.form1.l20_descrinterporrecurso.style.backgroundColor = "#E6E4F1";
+  //   	document.form1.confirmar.disabled = 0;
+  //   }
+  // }
 
   function js_liberar() {
 	  document.form1.confirmar.disabled = 0;
   }
-  js_interporrecurso();
+  // js_interporrecurso();
 </script>

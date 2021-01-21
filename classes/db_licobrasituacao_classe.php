@@ -339,32 +339,20 @@ class cl_licobrasituacao {
     $this->atualizacampos();
     $sql = " update licobrasituacao set ";
     $virgula = "";
-    if (trim($this->obr02_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_sequencial"])) {
-      $sql  .= $virgula." obr02_sequencial = $this->obr02_sequencial ";
-      $virgula = ",";
-      if (trim($this->obr02_sequencial) == null ) {
-        $this->erro_sql = " Campo Sequencial não informado.";
-        $this->erro_campo = "obr02_sequencial";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-    if (trim($this->obr02_seqobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_seqobra"])) {
-      $sql  .= $virgula." obr02_seqobra = $this->obr02_seqobra ";
-      $virgula = ",";
-      if (trim($this->obr02_seqobra) == null ) {
-        $this->erro_sql = " Campo Nº Obra não informado.";
-        $this->erro_campo = "obr02_seqobra";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+
+//    if (trim($this->obr02_seqobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_seqobra"])) {
+//      $sql  .= $virgula." obr02_seqobra = $this->obr02_seqobra ";
+//      $virgula = ",";
+//      if (trim($this->obr02_seqobra) == null ) {
+//        $this->erro_sql = " Campo Nº Obra não informado.";
+//        $this->erro_campo = "obr02_seqobra";
+//        $this->erro_banco = "";
+//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//        $this->erro_status = "0";
+//        return false;
+//      }
+//    }
     if (trim($this->obr02_dtlancamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtlancamento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr02_dtlancamento_dia"] !="") ) {
       $sql  .= $virgula." obr02_dtlancamento = '$this->obr02_dtlancamento' ";
       $virgula = ",";
@@ -677,14 +665,14 @@ class cl_licobrasituacao {
       return false;
     }
     $this->numrows = pg_numrows($result);
-    if ($this->numrows==0) {
-      $this->erro_banco = "";
-      $this->erro_sql   = "Record Vazio na Tabela:licobrasituacao";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+//    if ($this->numrows==0) {
+//      $this->erro_banco = "";
+//      $this->erro_sql   = "Record Vazio na Tabela:licobrasituacao";
+//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//      $this->erro_status = "0";
+//      return false;
+//    }
     return $result;
   }
 

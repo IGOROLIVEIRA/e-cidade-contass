@@ -77,6 +77,25 @@ class LancamentoAuxiliarEmLiquidacaoMaterialPermanente extends LancamentoAuxilia
     parent::salvarVinculoEmpenho();
     parent::salvarVinculoDotacao();
     $this->salvarVinculoNotaDeLiquidacao();
+
+     /**
+     * Vinculo da ordem de pagamento com o lançamento
+     */
+    if ($this->getCodigoOrdemPagamento() != '') {
+
+      $oDaoConLancamOrd             = db_utils::getDao('conlancamord');
+      $oDaoConLancamOrd->c80_codlan = $iCodigoLancamento;
+      $oDaoConLancamOrd->c80_codord = $this->getCodigoOrdemPagamento();
+      $oDaoConLancamOrd->c80_data   = $dtLancamento;
+      $oDaoConLancamOrd->incluir($iCodigoLancamento);
+      if ($oDaoConLancamOrd->erro_status == 0) {
+
+        $sErroMsg = "Não foi possível incluir o vínculo da ordem de pagamento com o lançamento.\n\n";
+        $sErroMsg .= "Erro Técnico: {$oDaoConLancamDot->erro_msg}";
+        throw new BusinessException($sErroMsg);
+      }
+    }
+    
     return true;
   }
 

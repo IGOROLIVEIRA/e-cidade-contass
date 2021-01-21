@@ -87,12 +87,14 @@ try{
 
             if($oParam->fonte == 1){
                 $where = null;
+                $where .= " c223_anousu = ".db_getsession("DB_anousu");
             }else{
                 $where = "c223_fonte = {$oParam->fonte}";
+                $where .= " and c223_anousu = ".db_getsession("DB_anosusu");
             }
 
             $result = $cldespesainscritarp->sql_record($cldespesainscritarp->sql_query_file(null,"*",null,$where));
-
+            //db_criatabela($result);
             for ($iContItens = 0; $iContItens < pg_num_rows($result); $iContItens++) {
                 $oItens = db_utils::fieldsMemory($result, $iContItens);
                 $aItens[] = $oItens;
@@ -108,8 +110,10 @@ try{
 
             if($oParam->fonte == 1){
                 $where = null;
+                $where .= " c223_anousu = ".db_getsession("DB_anousu");
             }else{
                 $where = "c223_fonte = {$oParam->fonte}";
+                $where .= " and c223_anousu = ".db_getsession("DB_anousu");
             }
 
             $result = $cldespesainscritarp->sql_record($cldespesainscritarp->sql_query_file(null,"c223_fonte,c223_vlrdisrpnp,c223_vlrdisrpp,c223_vlrdisptotal,c223_vlrdisponivel,c223_vlrutilizado",null,$where));
@@ -144,7 +148,7 @@ try{
             }
 
             $result = $cldisponibilidadedecaixa->sql_record($cldisponibilidadedecaixa->sql_query(null,"c224_vlrdisponibilidadecaixa,c224_fonte",null,"c224_instit = {$instit} $where and c224_anousu = {$anousu}"));
-//            die($cldisponibilidadedecaixa->sql_query(null,"c224_vlrdisponibilidadecaixa,c224_fonte",null,"c224_instit = {$instit} and c224_anousu = {$anousu} $where"));
+            //die($cldisponibilidadedecaixa->sql_query(null,"c224_vlrdisponibilidadecaixa,c224_fonte",null,"c224_instit = {$instit} and c224_anousu = {$anousu} $where"));
             for($i=0; $i < pg_num_rows($result); $i++){
                 $oDisponibilidade = db_utils::fieldsMemory($result, $i);
                 $oRetorno->dispobilidade[] = $oDisponibilidade;

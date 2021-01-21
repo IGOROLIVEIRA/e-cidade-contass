@@ -14,6 +14,7 @@ db_postmemory($HTTP_POST_VARS);
 if ($incluir) {
     db_inicio_transacao();
     $sqlerro = false;
+
     foreach ($aFonte as $fonte){
 
         $cldisponibilidadecaixa = new cl_disponibilidadecaixa();
@@ -21,13 +22,18 @@ if ($incluir) {
         $cldisponibilidadecaixa->c224_fonte = $fonte['fonte'];
         $cldisponibilidadecaixa->c224_vlrcaixabruta = $fonte['vlr_dispCaixaBruta'];
         $cldisponibilidadecaixa->c224_rpexercicioanterior = $fonte['vlr_rpExerAnteriores'];
-        $cldisponibilidadecaixa->c224_vlrrestoarecolher = $fonte['vlr_restArecolher'];
-        $cldisponibilidadecaixa->c224_vlrrestoregativofinanceiro = $fonte['vlr_restRegAtivoFinan'];
+        if( db_getsession("DB_anousu") < 2020) {
+          $cldisponibilidadecaixa->c224_vlrrestoarecolher = $fonte['vlr_restArecolher'];
+          $cldisponibilidadecaixa->c224_vlrrestoregativofinanceiro = $fonte['vlr_restRegAtivoFinan'];
+        }else{
+          $cldisponibilidadecaixa->c224_vlrrestoarecolher = 0;
+          $cldisponibilidadecaixa->c224_vlrrestoregativofinanceiro = 0;
+        }
         $cldisponibilidadecaixa->c224_vlrdisponibilidadecaixa = $fonte['vlr_DispCaixa'];
         $cldisponibilidadecaixa->c224_anousu = db_getsession("DB_anousu");
         $cldisponibilidadecaixa->c224_instit = db_getsession("DB_instit");
-        $result = $cldisponibilidadecaixa->sql_record($cldisponibilidadecaixa->sql_query(null,"c224_fonte",null," c224_fonte = {$fonte['fonte']} and c224_anousu = {$cldisponibilidadecaixa->c224_anousu} and c224_instit = {$cldisponibilidadecaixa->c224_instit}"));
-        
+        $result = $cldisponibilidadecaixa->sql_record($cldisponibilidadecaixa->sql_query(null,"c224_fonte",null," c224_fonte = {$fonte['fonte']} and c224_anousu = ". db_getsession("DB_anousu") ." and c224_instit = {$cldisponibilidadecaixa->c224_instit}"));
+
         if(pg_num_rows($result) == 0){
             $cldisponibilidadecaixa->incluir();
         }else{
@@ -71,7 +77,15 @@ if ($incluir) {
 <body class="body-default">
 <center>
     <?
-    include("forms/db_frmcadastrodespesainscritarp.php");
+    if( db_getsession("DB_anousu") < 2020) {
+
+      include("forms/db_frmcadastrodespesainscritarp2019.php");
+
+    }else{
+
+      include("forms/db_frmcadastrodespesainscritarp.php");
+
+    }
     ?>
 </center>
 <?php db_menu(); ?>

@@ -320,6 +320,15 @@ class cl_scripts {
         (SELECT e69_codnota
          FROM w_notas);
 
+    DELETE
+    FROM empnotaitembenspendente
+    WHERE e137_empnotaitem IN
+        (SELECT e72_sequencial
+         FROM empnotaitem
+         WHERE e72_codnota IN
+            (SELECT e69_codnota
+             FROM w_notas));
+
     DELETE FROM empnotaitem
     WHERE e72_codnota IN
         (SELECT e69_codnota

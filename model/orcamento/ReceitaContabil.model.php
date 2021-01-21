@@ -286,6 +286,7 @@ class ReceitaContabil {
       $oDadoReceita->tem_desobramento        = false;
       $oDadoReceita->estrut                  = $this->getContaOrcamento()->getEstrutural();
       $oDadoReceita->valor                   = round($oDadoSqlGeral->arrecada, 2);
+      $oDadoReceita->recurso                 = $this->getTipoRecurso();
       $aReceitas[$this->getCodigo()]         = $oDadoReceita;
       
     }
@@ -396,7 +397,8 @@ class ReceitaContabil {
             $sWherePlanilha = "k80_codpla = {$iCodigoPlanilha} and o70_codrec = {$codrec}";
             $sSqlBuscaCP    = $oDaoPlaCaixa->sql_query_receita(null,
                                                               'k81_concarpeculiar,
-                                                               k81_numcgm',
+                                                               k81_numcgm,
+                                                               k81_emparlamentar',
                                                                null, $sWherePlanilha
                                                               );
             $rsBuscaCP      = $oDaoPlaCaixa->sql_record($sSqlBuscaCP);
@@ -405,6 +407,7 @@ class ReceitaContabil {
               $oStdDadosPlanilha                     = db_utils::fieldsMemory($rsBuscaCP, 0);
               $sCaracteristicaPeculiarPlanilhaRecibo = $oStdDadosPlanilha->k81_concarpeculiar;
               $iCodigoCgm                            = $oStdDadosPlanilha->k81_numcgm;
+              $iEmParlamentar                        = $oStdDadosPlanilha->k81_emparlamentar;
             }
           }
 
@@ -500,8 +503,15 @@ class ReceitaContabil {
         $oContaPlano = new ContaPlanoPCASP(null, db_getsession('DB_anousu'), $iContaDebito, db_getsession('DB_instit'));
         $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
         $oContaCorrenteDetalhe->setEstrutural($oDadosReceita->estrut);
-        $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
+        if (!empty($oDadosReceita->recurso)) {
+          $oContaCorrenteDetalhe->setRecurso(new Recurso($oDadosReceita->recurso));
+        } else {
+          $oContaCorrenteDetalhe->setRecurso(new Recurso($oContaPlano->getRecurso()));
+        }
         $oContaCorrenteDetalhe->setContaBancaria($oContaPlano->getContaBancaria());
+        if (!empty($iEmParlamentar)) {
+          $oContaCorrenteDetalhe->setEmendaParlamentar($iEmParlamentar);
+        }
         if (!empty($iCodigoCgm)) {
           $oContaCorrenteDetalhe->setCredor(CgmFactory::getInstanceByCgm($iCodigoCgm));
         }
@@ -787,7 +797,9 @@ class ReceitaContabil {
                                                                                  null,
                                                                                  "o70_codrec,
                                                                                   o60_perc,
-                                                                                  o70_concarpeculiar,o57_fonte",
+                                                                                  o70_concarpeculiar,
+                                                                                  o57_fonte,
+                                                                                  o70_codigo",
                                                                                  "o57_fonte",
                                                                                   $sWhereEstrutural
                                                                                 );
@@ -808,6 +820,7 @@ class ReceitaContabil {
           $oDesdobramento->percentual_receita      = $oDadosDesdobramento->o60_perc;
           $oDesdobramento->caracteristica_peculiar = $oDadosDesdobramento->o70_concarpeculiar;
           $oDesdobramento->estrut                  = $oDadosDesdobramento->o57_fonte;
+          $oDesdobramento->recurso                 = $oDadosDesdobramento->o70_codigo;
           $this->aDesdobramentos[]                 = $oDesdobramento;
         }
       }

@@ -123,30 +123,32 @@ if (isset($e54_autori)) {
 
 $sqlmater = "
 	select empautoriza.*,
+		ac45_acordo,
 		pc50_descr,
 		o58_orgao,
 		o40_descr,
 		o58_unidade,
 		o41_descr,
-       		o58_coddot,
-              	o56_descr,
+       	o58_coddot,
+        o56_descr,
 		o55_projativ,
 		o55_descr,
 		o15_codigo,
 		o15_descr,
-		  orcdotacao.o58_subfuncao,
-		  orcdotacao.o58_programa,
-		  orcsubfuncao.o53_subfuncao as o53_subfuncao,
-		  orcsubfuncao.o53_descr     as o53_descr,
-		  orcprograma.o54_programa   as o54_programa,
-		  orcprograma.o54_descr      as o54_descr,
-		  cgm.*,
-		  z01_uf,
-      e60_numemp,e60_anousu,e60_codemp,
-		  fc_estruturaldotacao(e54_anousu,o58_coddot) as estrutural,
-      e54_concarpeculiar,
-      c58_descr
-	  from empautoriza
+		orcdotacao.o58_subfuncao,
+		orcdotacao.o58_programa,
+		orcsubfuncao.o53_subfuncao as o53_subfuncao,
+		orcsubfuncao.o53_descr     as o53_descr,
+		orcprograma.o54_programa   as o54_programa,
+		orcprograma.o54_descr      as o54_descr,
+		cgm.*,
+		z01_uf,
+        e60_numemp,e60_anousu,e60_codemp,
+		fc_estruturaldotacao(e54_anousu,o58_coddot) as estrutural,
+      	e54_concarpeculiar,
+      	c58_descr
+	  	from empautoriza
+	  	left join acordoempautoriza on acordoempautoriza.ac45_empautoriza = empautoriza.e54_autori
         inner join concarpeculiar on concarpeculiar.c58_sequencial = empautoriza.e54_concarpeculiar
 	      inner join empautidot on e56_autori=e54_autori
 
@@ -480,12 +482,12 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
         $pdf1->descr_modalidade = '';
     }
 
-    $sSql = "SELECT ac16_numero, ac16_anousu FROM acordo where ac16_numeroprocesso like '%".$pdf1->edital_licitacao."'";
+    $sSql = "SELECT ac16_numeroacordo, ac16_anousu FROM acordo where ac16_sequencial = $ac45_acordo";
     $rsSql = db_query($sSql);
 
     $oAcordo = db_utils::fieldsMemory($rsSql, 0);
 
-    $pdf1->acordo = $oAcordo->ac16_numero;
+    $pdf1->acordo = $oAcordo->ac16_numeroacordo;
     $pdf1->anoacordo = $oAcordo->ac16_anousu;
 
     if (isset($resumo_lic)&&$resumo_lic!=""){

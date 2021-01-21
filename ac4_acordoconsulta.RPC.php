@@ -419,5 +419,72 @@ switch($oParam->exec) {
       $oRetorno->dados[] = $oDadosParalisacao;
     }
     break;
+
+	case 'saldoConsulta':
+
+		$oRetorno->dados = array();
+
+		$oAcordo    = new Acordo($oParam->ac16_sequencial);
+		$aPosicao   = $oAcordo->getPosicoes();
+
+		$nSomaTotal = 0;
+
+		$sql = "
+			SELECT ac26_acordoposicaotipo, ac26_sequencial
+					 FROM acordoposicao
+					 WHERE ac26_acordo = $oParam->ac16_sequencial
+						 AND ac26_sequencial =
+							 (SELECT max(ac26_sequencial)
+							  FROM acordoposicao
+							  WHERE ac26_acordo = $oParam->ac16_sequencial)
+		";
+
+		$rsSql = db_query($sql);
+
+		$oAcordoPosicao = db_utils::fieldsMemory($rsSql, 0);
+
+		foreach ($aPosicao as $oPosicao) {
+			foreach ($oPosicao->getItens() as $oDado) {
+
+				if($oPosicao->getTipo() == $oAcordoPosicao->ac26_acordoposicaotipo
+					&& $oPosicao->getCodigo() == $oAcordoPosicao->ac26_sequencial) {
+
+					$oDaoItem = db_utils::getDao('acordoitemexecutado');
+					$sSqlItem = $oDaoItem->sql_query('', ' sum(ac29_valor) as valor, sum(ac29_quantidade) as quantidade', '',
+						' ac20_pcmater = ' . $oDado->getMaterial()->getMaterial() . '
+						AND ac26_acordoposicaotipo =
+							(SELECT ac26_acordoposicaotipo
+							 FROM acordoposicao
+							 WHERE ac26_acordo = ' . $oParam->ac16_sequencial . '
+								 AND ac26_sequencial =
+									 (SELECT max(ac26_sequencial)
+									  FROM acordoposicao
+									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . '))
+					  	AND ac26_acordo = ' . $oParam->ac16_sequencial);
+
+					$rsItem = $oDaoItem->sql_record($sSqlItem);
+					$valorExecutado = db_utils::fieldsMemory($rsItem, 0)->valor;
+					$qtdeExecutada = db_utils::fieldsMemory($rsItem, 0)->quantidade;
+
+					$oItem = new stdClass();
+					$oItem->codigo = $oDado->getMaterial()->getMaterial();
+					$oItem->descricao = $oDado->getMaterial()->getDescricao();
+					$oItem->quantidade = $oDado->getQuantidade() - $qtdeExecutada;
+					$oItem->vlrUnit = $oDado->getValorunitario();
+					$oItem->vlrTotal = $oDado->getValorTotal() - $valorExecutado;
+					$nSomaTotal += $oDado->getValorTotal();
+					$oRetorno->dados[] = $oItem;
+				}
+			}
+		}
+
+		$oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
+
+		//Soma do valor total de cada item
+		$oRetorno->nValorTotal = $nSomaTotal;
+
+		$oRetorno->detalhe  = $oParam->detalhe;
+
+		break;
 }
 echo $oJson->encode($oRetorno);

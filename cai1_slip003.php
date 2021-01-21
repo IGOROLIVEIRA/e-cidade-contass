@@ -55,6 +55,7 @@ if (USE_PCASP) {
                  contad.si166_crccontador as crc,
                  db_usuarios.nome,
                  controleinterno.z01_nome as controleinterno,
+                 ordenapagamento.z01_nome as ordenapagamento,
                  case when
                    k153_slipoperacaotipo not in (1, 2, 9, 10, 13, 14)
                      then
@@ -88,12 +89,21 @@ if (USE_PCASP) {
                  left join conplano as conta_credito       on reduz_credito.c61_codcon  = conta_credito.c60_codcon
                                                           and conta_credito.c60_anousu  = ".db_getsession("DB_anousu")."
                  left join saltes saltes_credito           on slip.k17_credito          = saltes_credito.k13_reduz
-                 left join identificacaoresponsaveis contad on  contad.si166_instit= k17_instit and contad.si166_tiporesponsavel=2
-                 and  DATE_PART('YEAR',contad.si166_dataini)= ".db_getsession("DB_anousu")."  
+                 left join identificacaoresponsaveis contad on contad.si166_instit= k17_instit and contad.si166_tiporesponsavel=2
+                 and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',contad.si166_dataini) AND DATE_PART('YEAR',contad.si166_datafim)
+                 and contad.si166_dataini <= k17_data
+                 and contad.si166_datafim >= k17_data
                  left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
-                 left join identificacaoresponsaveis controle on  controle.si166_instit= k17_instit and controle.si166_tiporesponsavel=3
-                  and DATE_PART('YEAR',controle.si166_dataini)= ".db_getsession("DB_anousu")." 
+                 left join identificacaoresponsaveis controle on controle.si166_instit= k17_instit and controle.si166_tiporesponsavel=3
+                 and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',controle.si166_dataini) AND DATE_PART('YEAR',controle.si166_datafim)
+                 and controle.si166_dataini <= k17_data
+                 and controle.si166_datafim >= k17_data
                  left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
+                 left join identificacaoresponsaveis ordenador on ordenador.si166_instit= k17_instit and ordenador.si166_tiporesponsavel=1
+                 and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',ordenador.si166_dataini) AND DATE_PART('YEAR',ordenador.si166_datafim)
+                 left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm
+
+
            where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');
 
 } else {
@@ -271,6 +281,7 @@ try {
     $tes =  "______________________________"."\n"."Secretário de Fazenda";
     $pdf->tesoureiro      = $classinatura->assinatura(1004,$tes);
 
+    $pdf->ordenapagamento =  $ordenapagamento;
     $pdf->contador        = $contador;
     $pdf->crc             = $crc;
     $pdf->controleinterno = $controleinterno;

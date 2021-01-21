@@ -156,6 +156,16 @@ db_input('o01_numerolei',10,$Io01_numerolei,true,'text',$db_opcao,"")
         ?>
       </td>
      </tr>
+     <tr>
+        <td nowrap title="<?=@$To142_orcmodalidadeaplic ?>">
+            <?=@$Lo142_orcmodalidadeaplic ?>
+        </td>
+        <td><?
+            $aOpcoes = array(""=>"Selecione","t"=>"Sim","f"=>"Não");
+            db_select("o142_orcmodalidadeaplic",$aOpcoes,true,$db_opcao, "style='width: 84px;'");
+            ?>
+        </td>
+    </tr>
   </table>
   </fieldset>
   </td>

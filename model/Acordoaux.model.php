@@ -1613,7 +1613,7 @@ class Acordoaux
              * não podera ser um numero menor ou igual ao maior numero de contrato do grupo e do Tipo instrumento,
              * dentro da instiuição.
              */
-            $sWhereNumeracao = "cast(ac16_numero as integer) = {$this->getNumero()} ";
+            $sWhereNumeracao = "  ac16_numero = '{$this->getNumero()}' ";
             $sWhereNumeracao .= " and ac16_acordogrupo  = {$this->getGrupo()}  ";
             $sWhereNumeracao .= " and ac16_instit       = {$this->getInstit()} ";
             $sWhereNumeracao .= " and ac16_anousu       = {$this->getAno()} ";

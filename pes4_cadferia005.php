@@ -540,6 +540,7 @@ include("libs/db_usuariosonline.php");
 include("libs/db_libpessoal.php");
 include("dbforms/db_funcoes.php");
 include("pes4_avalferia001.php");
+include("classes/db_cadferiaspremio_classe.php");
 db_postmemory($HTTP_POST_VARS);
 db_inicio_transacao();
 
@@ -572,7 +573,22 @@ if(isset($r30_per2f) && $r30_per2f != ''){
   $r30_perf = $r30_per2f;
 }
 
-cadastro_162();
+$clcadferiaspremio      = new cl_cadferiaspremio;
+$sqlerro = false;
+$result = $clcadferiaspremio->sql_record($clcadferiaspremio->sql_query_file(null, "*", null, "r95_regist = {$r30_regist} and (
+  (r95_per1i between '{$r30_peri}' and '{$r30_perf}') OR 
+  (r95_per1f between '{$r30_peri}' and '{$r30_perf}') OR
+  ('{$r30_peri}' between r95_per1i and r95_per1f) OR
+  ('{$r30_perf}' between r95_per1i and r95_per1f) 
+)"));
+if ($clcadferiaspremio->numrows > 0) {
+  $sqlerro = true;
+  db_msgbox("Já existem férias lançadas para este período para a matrícula {$r30_regist}.");
+}
+
+if ($sqlerro == false) {
+  cadastro_162();
+}
 
 if ($debug == true) {
   db_fim_transacao(true);
@@ -582,7 +598,7 @@ if ($debug == true) {
   exit;
   
 } else {
-  db_fim_transacao();
+  db_fim_transacao($sqlerro);
 }
 
 $qry = "";

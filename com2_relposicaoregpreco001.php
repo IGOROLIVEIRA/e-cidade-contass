@@ -62,16 +62,19 @@ function js_limpacampos() {
 
 function js_emite() {
 
-  var dtinicrg            = $F('dtinicrg');
-  var dtfimcrg            = $F('dtfimcrg');
-  var dtinivlrg           = $F('dtinivlrg');
-  var dtfimvlrg           = $F('dtfimvlrg');
-  var pc10_numero_ini     = $('pc10_numero_ini').value;
-  var pc10_numero_fim     = $('pc10_numero_fim').value;
-  var iItens              = $('pcmater').options.length;
-  var iDepartamentos      = $('departamento').options.length;
-  var lQuebraDepartamento = $("lQuebraDepartamento").value;
-  var sQuery              = '';
+  let dtinicrg            = $F('dtinicrg');
+  let dtfimcrg            = $F('dtfimcrg');
+  let dtinivlrg           = $F('dtinivlrg');
+  let dtfimvlrg           = $F('dtfimvlrg');
+  let pc10_numero_ini     = $('pc10_numero_ini').value;
+  let pc10_numero_fim     = $('pc10_numero_fim').value;
+  let iItens              = $('pcmater').options.length;
+  let iDepartamentos      = $('departamento').options.length;
+  let iFornecedores       = $('fornecedor').options.length;
+  let lQuebraDepartamento = $("lQuebraDepartamento").value;
+  let lQuebraFornecedor   = $("lQuebraFornecedor").value;
+
+  let sQuery              = '';
 
   if (dtinicrg != "" && dtfimcrg != "") {
 
@@ -104,7 +107,7 @@ function js_emite() {
     return false;
   }
 
-  var vrg    = '';
+  let vrg    = '';
   var sItens = '';
   for (i = 0; i < iItens; i++) {
 
@@ -112,12 +115,19 @@ function js_emite() {
     vrg =',';
   }
 
-  var vrg    = '';
-  var sDepartamentos = '';
+  vrg = '';
+  let sDepartamentos = '';
   for (i = 0; i < iDepartamentos; i++) {
 
     sDepartamentos = sDepartamentos+vrg+$('departamento').options[i].value;
     vrg =',';
+  }
+
+  vrg = '';
+  let sFornecedores = '';
+  for (let count = 0; count < iFornecedores; count++){
+      sFornecedores += vrg+$('fornecedor').options[count].value;
+      vrg = ',';
   }
 
   sQuery += '&dtinicrg='+dtinicrg;
@@ -130,12 +140,15 @@ function js_emite() {
   sQuery += '&numfim='+pc10_numero_fim;
   sQuery += '&itens='+sItens;
   sQuery += '&departs='+sDepartamentos;
+  sQuery += '&fornecedores='+sFornecedores;
+  sQuery += '&lQuebraFornecedor='+lQuebraFornecedor;
 
   if (lQuebraDepartamento == "t") {
 	  sUrl = "com2_relposicaoregpreco002.php?";
   } else {
 	  sUrl = "com2_relposicaoregpreco_agrupado002.php?";
   }
+
   jan = window.open(sUrl+sQuery,'',
                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 
@@ -153,7 +166,7 @@ td {
   white-space: nowrap
 }
 
-#departamento{
+#departamento, #fornecedor{
   width:400px;
   size: 5;
 }
@@ -248,34 +261,76 @@ td {
                 </fieldset>
                </td>
             </tr>
+                <tr>
+                    <td nowrap>
+                        <b>Quebra por fornecedor:</b>
+                    </td>
+                    <td>
+                        <select name="lQuebraFornecedor" id="lQuebraFornecedor">
+                            <option value="t">SIM</option>
+                            <option value="f" selected>NÃO</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id='area_fornecedor'>
+                    <td colspan="2">
+                        <fieldset>
+                            <legend>Fornecedores</legend>
+                            <table align="center" border="0">
+                                <tr>
+                                    <td>
+									    <?php db_ancora('CGM',"js_pesquisa_fornelicitacao(true);",1); ?>
+                                    </td>
+                                    <td>
+									    <?php
+										db_input('z01_numcgm',6,'',true,'text',4," onchange='js_pesquisa_fornelicitacao(false);'","");
+										db_input('z01_nome',25, '', true, 'text', 3,"","");
+										?>
+                                        <input type="button" value="Lançar" id="btn-lancar-fornecedor"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                          <select name="fornecedor[]" id="fornecedor" size="5" multiple></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <strong>Dois Cliques sobre o fornecedor o exclui.</strong>
+                                    </td>
+                                </tr>
+                              </table>
+                          </fieldset>
+                      </td>
+                  </tr>
 			      <tr>
-			         <td colspan="2">
-			           <table align="left" border="0">
-			             <tr>
-			                <td>
-			                   <?php
-			                     $cl_pcmater                 = new cl_arquivo_auxiliar;
-			                     $cl_pcmater->nome_botao     = "db_lanca_codmater";
-			                     $cl_pcmater->cabecalho      = "<strong>Itens Selecionados para este Relatório</strong>";
-			                     $cl_pcmater->codigo         = "pc01_codmater";
-			                     $cl_pcmater->descr          = "pc01_descrmater";
-			                     $cl_pcmater->nomeobjeto     = 'pcmater';
-			                     $cl_pcmater->funcao_js      = 'js_mostra';
-			                     $cl_pcmater->funcao_js_hide = 'js_mostra1';
-			                     $cl_pcmater->sql_exec       = "";
-			                     $cl_pcmater->func_arquivo   = "func_pcmater.php";
-			                     $cl_pcmater->nomeiframe     = "db_iframe_itens_pcmater";
-			                     $cl_pcmater->localjan       = "";
-			                     $cl_pcmater->onclick        = "";
-			                     $cl_pcmater->db_opcao       = 2;
-			                     $cl_pcmater->tipo           = 2;
-			                     $cl_pcmater->top            = 0;
-			                     $cl_pcmater->linhas         = 5;
-			                     $cl_pcmater->vwidth         = 400;
-			                     $cl_pcmater->funcao_gera_formulario();
-			                   ?>
-			                </td>
-			             </tr>
+                    <td colspan="2">
+			            <table align="left" border="0">
+			                <tr>
+			                    <td>
+                                   <?php
+                                     $cl_pcmater                 = new cl_arquivo_auxiliar;
+                                     $cl_pcmater->nome_botao     = "db_lanca_codmater";
+                                     $cl_pcmater->cabecalho      = "<strong>Itens Selecionados para este Relatório</strong>";
+                                     $cl_pcmater->codigo         = "pc01_codmater";
+                                     $cl_pcmater->descr          = "pc01_descrmater";
+                                     $cl_pcmater->nomeobjeto     = 'pcmater';
+                                     $cl_pcmater->funcao_js      = 'js_mostra';
+                                     $cl_pcmater->funcao_js_hide = 'js_mostra1';
+                                     $cl_pcmater->sql_exec       = "";
+                                     $cl_pcmater->func_arquivo   = "func_pcmater.php";
+                                     $cl_pcmater->nomeiframe     = "db_iframe_itens_pcmater";
+                                     $cl_pcmater->localjan       = "";
+                                     $cl_pcmater->onclick        = "";
+                                     $cl_pcmater->db_opcao       = 2;
+                                     $cl_pcmater->tipo           = 2;
+                                     $cl_pcmater->top            = 0;
+                                     $cl_pcmater->linhas         = 5;
+                                     $cl_pcmater->vwidth         = 400;
+                                     $cl_pcmater->funcao_gera_formulario();
+                                   ?>
+			                    </td>
+			                </tr>
 			           </table>
 			         </td>
 			      </tr>
@@ -288,6 +343,7 @@ td {
 			  <tr>
 			    <td colspan="2" align = "center">
 			      <input  name="emiterel" id="emiterel" type="button" value="Emitir Relátorio" onclick="js_emite();" >
+			      <input  name="emiterelxls" id="emiterelxls" type="button" value="Exportar xls" onclick="js_emitexls();" >
 			    </td>
 			  </tr>
 			</table>
@@ -306,11 +362,20 @@ if(document.getElementById('lQuebraDepartamento').value = 'f'){
   document.getElementById('area_departamento').style.display = 'none';
 }
 
+if(document.getElementById('lQuebraFornecedor').value = 'f'){
+    document.getElementById('area_fornecedor').style.display = 'none';
+}
+
 var quebraDepartamento = document.getElementById('lQuebraDepartamento');
-quebraDepartamento.addEventListener('change',function(){
-  var mostra = quebraDepartamento.value == 'f' ? 'none' : '';
-  document.getElementById('area_departamento').style.display = mostra;
-})
+quebraDepartamento.addEventListener('change', () => {
+  document.getElementById('area_departamento').style.display = quebraDepartamento.value == 'f' ? 'none' : '';
+});
+
+
+var quebraFornecedor = document.getElementById('lQuebraFornecedor');
+quebraFornecedor.addEventListener('change', () => {
+    document.getElementById('area_fornecedor').style.display = quebraFornecedor.value == 'f' ? 'none' : '';
+});
 
 function js_pesquisa_pc10_numero_ini(mostra) {
   var lMostra         = mostra;
@@ -330,7 +395,7 @@ function js_pesquisa_pc10_numero_ini(mostra) {
        $('pc10_numero_ini').value = '';
      }
   }
-  limpar();
+  limparCampos('d');
 }
 
 function js_mostrapc10_numero_ini(chave,erro) {
@@ -367,7 +432,7 @@ function js_pesquisa_pc10_numero_fim(mostra) {
        $('pc10_numero_fim').value = '';
      }
   }
-  limpar();
+  limpaOptions('d');
 }
 
 function js_mostrapc10_numero_fim(chave,erro) {
@@ -419,70 +484,226 @@ function js_mostradepart(chave1,chave2) {
   db_iframe_departamento.hide();
 }
 
-element = document.getElementById('lQuebraDepartamento');
+function js_pesquisa_fornelicitacao(mostra){
+    if (mostra) {
+        if(document.form1.pc10_numero_ini.value == '' && document.form1.pc10_numero_fim.value == ''){
+            alert('Informe o número da compilação!');
+            return;
+        }
+        let numero_ini = document.form1.pc10_numero_ini.value;
+        let numero_fim = document.form1.pc10_numero_fim.value;
+        js_OpenJanelaIframe('top.corpo','db_iframe_fornelicitacao','func_fornelicitacao.php?comp_ini='+numero_ini+
+            '&comp_fim='+numero_fim+'&funcao_js=parent.js_mostrafornelicitacao|z01_numcgm|z01_nome','Pesquisa',true);
+    } else {
+        if (document.form1.z01_numcgm.value != '') {
+            js_OpenJanelaIframe('','db_iframe_fornelicitacao','func_fornelicitacao.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostrafornelicitacao1','Pesquisa',false);
+        } else {
+            document.form1.z01_numcgm.value = '';
+            document.form1.z01_nome.value = '';
+        }
+    }
+}
 
-element.addEventListener('click',function(){
-  if(element.value == 't'){
-    document.getElementById('area_departamento').style.display = '';
-  }else{
-    document.getElementById('area_departamento').style.display = 'none';
-    limparCampos();
-    limpar();
-  }
+function js_mostrafornelicitacao1(chave, erro) {
+
+    if (erro) {
+        document.form1.z01_numcgm.focus();
+        document.form1.z01_numcgm.value = '';
+        return;
+    }
+
+    document.getElementById('z01_nome').value = chave;
+}
+
+function js_mostrafornelicitacao(chave1,chave2) {
+    document.form1.z01_numcgm.value = chave1;
+    document.form1.z01_nome.value = chave2;
+    db_iframe_fornelicitacao.hide();
+}
+
+lQuebraDepartamento = document.getElementById('lQuebraDepartamento');
+lQuebraDepartamento.addEventListener('click', () => {
+    document.getElementById('area_departamento').style.display = lQuebraDepartamento.value == 't' ? '' : 'none';
+
+    if(lQuebraDepartamento.value == 'f'){
+        document.getElementById('area_departamento').style.display = 'none';
+        limparCampos('d');
+        limpaOptions('d');
+    }
+});
+
+lQuebraFornecedor = document.getElementById('lQuebraFornecedor');
+lQuebraFornecedor.addEventListener('click', () => {
+    document.getElementById('area_fornecedor').style.display = lQuebraFornecedor.value == 't' ? '' : 'none';
+
+    if(lQuebraFornecedor.value == 'f'){
+        document.getElementById('area_fornecedor').style.display = 'none';
+        limparCampos('f');
+        limpaOptions('f');
+    }
 });
 
 var optionsDepartamentos = document.getElementById("departamento");
+var optionsFornecedores = document.getElementById("fornecedor");
 
-function addOption(codigo, descricao) {
-  if(document.getElementById('pc10_numero_ini').value == '' && document.getElementById('pc10_numero_ini').value == ''){
-    alert('Informe o número da compilação');
-    limparCampos();
-    return;
-  }
+function addOption(codigo, descricao, element='') {
 
-  if (!codigo || !descricao) {
-    alert("Departamento inválido!");
-    limparCampos();
-    return;
-  }
+    if(document.getElementById('pc10_numero_ini').value == '' && document.getElementById('pc10_numero_ini').value == ''){
+        alert('Informe o número da compilação');
+        limparCampos('');
+        return;
+    }
+
+    if (!codigo || !descricao) {
+        alert(element == 'd' ? 'Departamento' : 'Fornecedor' + " inválido!");
+        limparCampos(element);
+        return;
+    }
+
+    let aOptions = element == 'd' ? optionsDepartamentos : optionsFornecedores;
+    let jaTem = Array.prototype.filter.call(aOptions.children, (o) => {
+        return o.value == codigo;
+    });
 
 
-  var jaTem = Array.prototype.filter.call(optionsDepartamentos.children, function(o) {
-    return o.value == codigo;
-  });
+    if (jaTem.length > 0) {
+        alert(element == 'd' ? 'Departamento' : 'Fornecedor' + " já inserido.");
+        limparCampos(element);
+        return;
+    }
 
-  if (jaTem.length > 0) {
-    alert("Departamento já inserido.");
-    limparCampos();
-    return;
-  }
+    let option = document.createElement('option');
+    option.value = codigo;
+    option.innerHTML = codigo + ' - ' + descricao;
+    aOptions.appendChild(option);
 
-  var option = document.createElement('option');
-  option.value = codigo;
-  option.innerHTML = codigo + ' - ' + descricao;
-  optionsDepartamentos.appendChild(option);
-
-  limparCampos();
+    limparCampos(element);
 }
 
-function limpar() {
-  optionsDepartamentos.innerHTML = "";
+function limpaOptions(param = '') {
+    if(param == 'd'){
+        optionsDepartamentos.innerHTML = "";
+    }else{
+        optionsFornecedores.innerHTML = "";
+    }
 }
 
-function limparCampos() {
-  document.form1.coddepto.value  = '';
-  document.form1.descrdepto.value  = '';
+function limparCampos(param = '') {
+    if(param == 'd') {
+        document.form1.coddepto.value  = '';
+        document.form1.descrdepto.value  = '';
+    }else{
+        document.form1.z01_numcgm.value  = '';
+        document.form1.z01_nome.value  = '';
+    }
 }
 
-optionsDepartamentos.addEventListener('dblclick', function excluirEmpenho(e) {
+optionsDepartamentos.addEventListener('dblclick', (e) => {
   optionsDepartamentos.removeChild(e.target);
 });
 
+optionsFornecedores.addEventListener('dblclick', (e) => {
+    optionsFornecedores.removeChild(e.target);
+});
+
 document.getElementById('btn-lancar').addEventListener('click', function(e) {
-  addOption(
-    document.form1.coddepto.value,
-    document.form1.descrdepto.value
+    addOption(
+        document.form1.coddepto.value,
+        document.form1.descrdepto.value,
+        'd'
   );
 });
+
+document.getElementById('btn-lancar-fornecedor').addEventListener('click', (e) => {
+    addOption(document.form1.z01_numcgm.value, document.form1.z01_nome.value, 'f');
+});
+
+function js_emitexls() {
+    var dtinicrg            = $F('dtinicrg');
+    var dtfimcrg            = $F('dtfimcrg');
+    var dtinivlrg           = $F('dtinivlrg');
+    var dtfimvlrg           = $F('dtfimvlrg');
+    var pc10_numero_ini     = $('pc10_numero_ini').value;
+    var pc10_numero_fim     = $('pc10_numero_fim').value;
+    var iItens              = $('pcmater').options.length;
+    var iDepartamentos      = $('departamento').options.length;
+    var iFornecedores       = $('fornecedor').options.length;
+    var lQuebraDepartamento = $("lQuebraDepartamento").value;
+    var lQuebraFornecedor   = $("lQuebraFornecedor").value;
+    var sQuery              = '';
+
+    if (dtinicrg != "" && dtfimcrg != "") {
+
+        if (!js_comparadata(dtinicrg, dtfimcrg, '<=')) {
+            alert('Datas de criação do registro inválidas. Verifique!');
+            return false;
+        }
+    }
+
+    if (dtinivlrg != "" && dtfimvlrg != "") {
+
+        if (!js_comparadata(dtinivlrg, dtfimvlrg, '<=')) {
+
+            alert('Datas de validade do Registro inválidas. Verifique!');
+            return false;
+        }
+    }
+
+    if (pc10_numero_ini != "" && pc10_numero_fim != "") {
+
+        if (pc10_numero_fim < pc10_numero_ini) {
+
+            alert('Números da solicitacao inválidos. Verifique!');
+            return false;
+        }
+    }
+
+    if(lQuebraDepartamento == 't' && iDepartamentos == 0){
+        alert('Nenhum departamento selecionado. Verifique!');
+        return false;
+    }
+
+    var vrg    = '';
+    let sItens = '';
+    for (let i = 0; i < iItens; i++) {
+
+        sItens = sItens+vrg+$('pcmater').options[i].value;
+        vrg =',';
+    }
+
+    vrg    = '';
+    let sDepartamentos = '';
+
+    for (let i = 0; i < iDepartamentos; i++) {
+        sDepartamentos += vrg+$('departamento').options[i].value;
+        vrg =',';
+    }
+
+    vrg    = '';
+    let sFornecedores = '';
+
+    for (let count = 0; count < iFornecedores; count++) {
+        sFornecedores += vrg + $('fornecedor').options[count].value;
+        vrg =',';
+    }
+
+    sQuery += '&dtinicrg='+dtinicrg;
+    sQuery += '&dtfimcrg='+dtfimcrg;
+
+    sQuery += '&dtinivlrg='+dtinivlrg;
+    sQuery += '&dtfimvlrg='+dtfimvlrg;
+
+    sQuery += '&numini='+pc10_numero_ini;
+    sQuery += '&numfim='+pc10_numero_fim;
+    sQuery += '&itens='+sItens;
+    sQuery += '&departs='+sDepartamentos;
+    sQuery += '&fornecedores='+sFornecedores;
+    sQuery += '&lQuebraFornecedor='+lQuebraFornecedor;
+
+    sUrl = "com2_gerarxlsposicaoregpreco.php?";
+
+    const jan = window.open(sUrl+sQuery,'',
+        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+}
 
 </script>

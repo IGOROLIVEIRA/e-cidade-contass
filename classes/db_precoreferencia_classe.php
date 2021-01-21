@@ -116,7 +116,7 @@ class cl_precoreferencia {
      
      $rsResult = db_query($sSql);
      
-     if (pg_num_rows($rsResult) == 1) {
+     if (pg_num_rows($rsResult) < 3) {
      
      	 if($this->si01_justificativa == null ){ 
          $this->erro_sql = " Campo Justificativa nao Informado.";
@@ -297,7 +297,7 @@ class cl_precoreferencia {
        }
      }
      
-   /*$sSql = "select distinct pc21_orcamforne from pcproc
+   $sSql = "select distinct pc21_orcamforne from pcproc
               join pcprocitem on pc80_codproc = pc81_codproc 
               join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
               join pcorcamitem on pc31_orcamitem = pc22_orcamitem
@@ -305,17 +305,23 @@ class cl_precoreferencia {
               join pcorcamforne on pc23_orcamforne = pc21_orcamforne
               where pc80_codproc = {$this->si01_processocompra}";
      
-     $rsResult = db_query($sSql);*/
+     $rsResult = db_query($sSql);
      
-     //if (pg_num_rows($rsResult) == 1) {
-     
-	     if(trim($this->si01_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_justificativa"])){ 
-	       $sql  .= $virgula." si01_justificativa = '$this->si01_justificativa' ";
-	       $virgula = ",";
+     if (pg_num_rows($rsResult) >= 3 ) {
+        if(trim($this->si01_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_justificativa"])){ 
+	          $sql  .= $virgula." si01_justificativa = '$this->si01_justificativa' ";
+	          $virgula = ",";
+        }
+     }else{
+        $this->erro_sql = " Campo Justificativa não Informada.";
+        $this->erro_campo = "si01_justificativa";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+     }
 
-	     }
-     
-     //}
      $sql .= " where ";
      if($si01_sequencial!=null){
        $sql .= " si01_sequencial = $this->si01_sequencial";

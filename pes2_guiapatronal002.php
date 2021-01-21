@@ -33,10 +33,15 @@ include("classes/db_selecao_classe.php");
 $clselecao = new cl_selecao();
 $clbasesr = new cl_basesr;
 
-$sql_in = $clbasesr->sql_query_file($ano,$mes,"B995",null,db_getsession("DB_instit"),"r09_rubric");
-
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-//db_postmemory($HTTP_SERVER_VARS,2);exit;
+if ($tipo == 'd') {
+  $mes = 12;
+  $mesPdf = 13;
+} else {
+  $mesPdf = $mes;
+}
+
+$sql_in = $clbasesr->sql_query_file($ano,$mes,"B995",null,db_getsession("DB_instit"),"r09_rubric");
 
 $sql_inst = "select * from db_config where codigo = ".db_getsession("DB_instit");
 $result_inst = db_query($sql_inst);
@@ -406,7 +411,7 @@ $pdf1->municpref        = $munic;
 $pdf1->telefpref        = $telef;
 $pdf1->emailpref        = $email;
 $pdf1->ano              = $ano;
-$pdf1->mes              = $mes;
+$pdf1->mes              = $mesPdf;
 $pdf1->func             = $soma;
 $pdf1->base             = $base;
 $pdf1->deducao          = $ded;

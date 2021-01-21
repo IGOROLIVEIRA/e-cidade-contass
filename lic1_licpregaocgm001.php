@@ -22,15 +22,28 @@ $cllicpregaocgm->l46_comissao = $l46_comissao;
   */
 }
 if(isset($incluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $cllicpregaocgm->incluir($l46_sequencial);
-    $erro_msg = $cllicpregaocgm->erro_msg;
-    if($cllicpregaocgm->erro_status==0){
-      $sqlerro=true;
+    if($sqlerro==false){
+        $result_comissao = $cllicpregao->sql_record($cllicpregao->sql_query($l46_licpregao));
+        db_fieldsmemory($result_comissao, 0);
+
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$l46_numcgm} and z09_tipo = 1");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+
+        if($l45_data < $z09_datacadastro){
+            $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+            $sqlerro = true;
+        }
+
     }
-    db_fim_transacao($sqlerro);
-  }
+    if($sqlerro==false){
+        db_inicio_transacao();
+        $cllicpregaocgm->incluir($l46_sequencial);
+        $erro_msg = $cllicpregaocgm->erro_msg;
+        if($cllicpregaocgm->erro_status==0){
+            $sqlerro=true;
+        }
+        db_fim_transacao($sqlerro);
+    }
 }else if(isset($alterar)){
   if($sqlerro==false){
     db_inicio_transacao();

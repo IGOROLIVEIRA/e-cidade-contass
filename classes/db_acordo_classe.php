@@ -699,10 +699,11 @@ class cl_acordo {
             }
         }
 
-        if(trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="") ){
+        if((trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&
+            ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="")) && $this->ac16_dataassinatura != 'null'){
             $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
             $virgula = ",";
-        }else{
+        }elseif($this->ac16_dataassinatura == 'null'){
             $sql  .= $virgula." ac16_dataassinatura = null ";
             $virgula = ",";
         }
@@ -1397,6 +1398,7 @@ class cl_acordo {
         $sSql .= "            left join liclicitem       on liclicitem.l21_codigo            = acordoliclicitem.ac24_liclicitem";
         $sSql .= "            inner join liclicita        on liclicita.l20_codigo             = liclicitem.l21_codliclicita
  or liclicita.l20_codigo = acordo.ac16_licitacao ";
+        $sSql .= "            left join cgm on z01_numcgm = ac16_contratado ";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 
@@ -1483,7 +1485,7 @@ class cl_acordo {
 
         return $sSql;
     }
-    function sql_query_acordoitemexecutado ( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_acordoitemexecutado ( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere="",$apostilamento = false){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -1509,6 +1511,11 @@ class cl_acordo {
         $sql .= "      left  join acordoitem          on acordoitem.ac20_acordoposicao       = acordoposicao.ac26_sequencial";
         $sql .= "      left  join acordoorigem        on acordoorigem.ac28_sequencial        = acordo.ac16_origem";
         $sql .= "      left  join acordomovimentacao  on acordomovimentacao.ac10_acordo      = acordo.ac16_sequencial";
+
+        if($apostilamento){
+            $sql .= " INNER JOIN apostilamento ON apostilamento.si03_acordo = acordo.ac16_sequencial ";
+        }
+
         $sql2 = "";
         if($dbwhere==""){
             if($ac16_sequencial!=null ){

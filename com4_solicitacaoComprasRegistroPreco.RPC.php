@@ -155,9 +155,25 @@ switch ($oParam->exec) {
       $oRetorno->iCodigoSolicita = $oSolicita->getCodigoSolicitacao();
       $_SESSION["oSolicita"] = $oSolicita;
       $aItens = $oSolicita->getItens();
+
       foreach ($aItens as $iIndice => $oItem) {
 
-        $oItemRetono = new stdClass;
+		  if($oRetorno->itens){
+			  $itemIncluido = false;
+			  foreach ($oRetorno->itens as $key => $item) {
+				  if($item->codigoitem == $oItem->getCodigoMaterial()){
+					  $oRetorno->itens[$key]->quantidade += $oItem->getQuantidade();
+					  $oRetorno->itens[$key]->qtdemax += $oItem->getQuantidadeMaxima();
+					  $itemIncluido = true;
+				  }
+			  }
+
+			  if($itemIncluido){
+				  continue;
+			  }
+		  }
+
+		$oItemRetono = new stdClass;
         $oItemRetono->codigoitem     = $oItem->getCodigoMaterial();
         $oItemRetono->descricaoitem  = $oItem->getDescricaoMaterial();
         $oItemRetono->quantidade     = $oItem->getQuantidade();
@@ -223,6 +239,21 @@ switch ($oParam->exec) {
       $_SESSION["oSolicita"] = $oSolicita;
       $aitens = $oSolicita->getItens();
       foreach ($aitens as $iIndice => $oItem) {
+
+		  if($oRetorno->itens){
+			  $itemIncluido = false;
+			  foreach ($oRetorno->itens as $key => $item) {
+				  if($item->codigoitem == $oItem->getCodigoMaterial()){
+					  $oRetorno->itens[$key]->quantidade += $oItem->getQuantidade();
+					  $oRetorno->itens[$key]->qtdemax += $oItem->getQuantidadeMaxima();
+					  $itemIncluido = true;
+				  }
+			  }
+
+			  if($itemIncluido){
+				  continue;
+			  }
+		  }
 
         $oItemRetono = new stdClass;
         $oItemRetono->codigoitem     = $oItem->getCodigoMaterial();

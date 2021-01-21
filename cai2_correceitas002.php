@@ -87,15 +87,24 @@ if ($estrut != '') {
 
 }
 $inner_sql = "";
-$where = '';
+$where = ' 1=1 ';
 
 if ($codrec != '') {
-	$where = ' g.k02_codigo in ('.$codrec.') and ';
+	$where .= ' and g.k02_codigo in ('.$codrec.') ';
 }
 if($sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
 	if ($conta != '') {
 		$where2 .= " and c61_reduz in ({$conta}) ";
 	}
+}
+if ($contribuinte != '') {
+	$where .= " and k81_numcgm in ({$contribuinte}) ";
+}
+if ($emparlamentar != '0') {
+	$where .= " and k81_emparlamentar = {$emparlamentar} ";
+}
+if ($regrepasse != '0') {
+	$where .= " and k81_regrepasse = {$regrepasse} ";
 }
 
 $inner_sql = "";
@@ -155,9 +164,13 @@ if ($sinana == 'S1') {
 				 left outer join taborc o  on o.k02_codigo = g.k02_codigo and
 				                              o.k02_anousu = extract (year from r.k12_data)
 				 left outer join tabplan p on p.k02_codigo = g.k02_codigo and
-				                              p.k02_anousu = extract (year from r.k12_data)
+											  p.k02_anousu = extract (year from r.k12_data)
+				 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+											  r.k12_data   = k82_data and 
+											  r.k12_autent = k82_autent
+     			 left  join placaixarec    on k82_seqpla = k81_seqpla
                                  $inner_sql
-			    where $where f.k12_data between '$datai' and '$dataf' and r.k12_instit = ".db_getsession("DB_instit")."
+			    where $where and f.k12_data between '$datai' and '$dataf' and r.k12_instit = ".db_getsession("DB_instit")."
 			    group by g.k02_tipo,
 				     g.k02_codigo,
 				     g.k02_drecei,
@@ -196,8 +209,12 @@ elseif ($sinana == 'S2') {
 				 left outer join orcreceita       on o70_codrec = o.k02_codrec and
 				                                     o70_anousu = extract (year from r.k12_data)
 				 left outer join orcfontes        on o57_codfon = o70_codfon and o70_anousu = o57_anousu
+				 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+											  r.k12_data   = k82_data and 
+											  r.k12_autent = k82_autent
+     			 left  join placaixarec 		   on k82_seqpla = k81_seqpla
 
-			    where $where f.k12_data between '$datai'
+			    where $where and f.k12_data between '$datai'
 			      and '$dataf'
 			      and r.k12_instit = ".db_getsession("DB_instit");
 
@@ -248,8 +265,12 @@ $sql .= " ) as xxx
                                                      and p.k02_anousu  = extract (year from r.k12_data)
 										     left join corhist hist       on hist.k12_id     = f.k12_id
                                                      and hist.k12_data   = f.k12_data
-                                                     and hist.k12_autent = f.k12_autent
-							     where $where f.k12_data between '$datai'
+													 and hist.k12_autent = f.k12_autent
+											 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+													 r.k12_data   = k82_data and 
+													 r.k12_autent = k82_autent
+						 					 left  join placaixarec 		   on k82_seqpla = k81_seqpla
+							     where $where and f.k12_data between '$datai'
 		           		 	 and '$dataf'
 		           			 and r.k12_instit = ".db_getsession("DB_instit");
 
@@ -306,8 +327,12 @@ $sql .= " ) as xxx
                                                      and p.k02_anousu  = extract (year from r.k12_data)
 										     left join corhist hist       on hist.k12_id     = f.k12_id
                                                      and hist.k12_data   = f.k12_data
-                                                     and hist.k12_autent = f.k12_autent
-							     where $where f.k12_data between '$datai'
+													 and hist.k12_autent = f.k12_autent
+											 left  join corplacaixa    on r.k12_id 	   = k82_id and 
+													 r.k12_data   = k82_data and 
+													 r.k12_autent = k82_autent
+						 					 left  join placaixarec 		   on k82_seqpla = k81_seqpla
+							     where $where and f.k12_data between '$datai'
 		           		 	 and '$dataf'
 		           			 and r.k12_instit = ".db_getsession("DB_instit");
 
@@ -357,8 +382,12 @@ $sql .= " ) as xxx
 						                                   p.k02_anousu    = extract (year from r.k12_data)
 						left join corhist hist          on hist.k12_id     = f.k12_id   and
   				        				           hist.k12_data   = f.k12_data and
-							   			   hist.k12_autent = f.k12_autent
-			    where $where f.k12_data between '$datai'
+											  hist.k12_autent = f.k12_autent
+						left  join corplacaixa    on r.k12_id 	   = k82_id and 
+											  r.k12_data   = k82_data and 
+											  r.k12_autent = k82_autent
+						left  join placaixarec 		   on k82_seqpla = k81_seqpla
+			    where $where and f.k12_data between '$datai'
 			      			and '$dataf'
 			      			and r.k12_instit = ".db_getsession("DB_instit");
 
@@ -391,6 +420,7 @@ $sql .= " ) as xxx
 //die($sql);
 
 $result = db_query($sql) or die("Erro realizando consulta : ".$sql);
+
 $xxnum = pg_numrows($result);
 if ($xxnum == 0) {
 	db_redireciona('db_erros.php?fechar=true&db_erro=Não existem lançamentos para a receita '.$codrec.' no período de '.db_formatar($datai, 'd').' a '.db_formatar($dataf, 'd'));
@@ -728,7 +758,7 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 		$oDadosAgrupados->k12_data = $k12_data;
 		$oDadosAgrupados->k12_numpre = $k12_numpre;
 		$oDadosAgrupados->estrutural = $estrutural;
-		$oDadosAgrupados->fonte = "100";
+		$oDadosAgrupados->fonte = $recurso;
 		$oDadosAgrupados->k02_drecei = $k02_drecei;
 		$oDadosAgrupados->valor = $valor;
 		$oDadosAgrupados->c61_reduz = $c61_reduz;
@@ -766,7 +796,7 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 			$pdf->Cell(15, 4, db_formatar($oValores->k12_data, 'd'), 1, 0, "C", $pre);
 			$pdf->Cell(15, 4, $oValores->k12_numpre, 1, 0, "C", $pre);
 			$pdf->cell(25, 4, $oValores->estrutural, 1, 0, "C", $pre);
-			$pdf->Cell(15, 4, getFonteRecurso($oValores->k02_tipo == 'O' ? $oValores->codrec : $oValores->c61_reduz,db_getsession('DB_anousu'),$oValores->k02_tipo), 1, 0, "C", $pre);
+			$pdf->Cell(15, 4, getFonteRecurso($oValores->k02_tipo == 'O' ? $oValores->codrec : $oValores->c61_reduz,db_getsession('DB_anousu'),$oValores->k02_tipo,$oValores->fonte), 1, 0, "C", $pre);
 			$pdf->cell(80, 4, strtoupper($oValores->k02_drecei), 1, 0, "L", $pre);
 			$pdf->cell(15, 4, $oValores->c61_reduz, 1, 0, "C", $pre);
 			$pdf->cell(69, 4, $oValores->c60_descr, 1, 0, "L", $pre);
@@ -920,15 +950,23 @@ $pdf->Output();
  * @param $sTipo
  * @return mixed|string
  */
-function getFonteRecurso($iConta, $iAno,$sTipo){
+function getFonteRecurso($iConta, $iAno,$sTipo,$iRecurso){
 	switch($sTipo){
 		case "O":
 			$oReceita = ReceitaContabilRepository::getReceitaByCodigo($iConta,$iAno);
-			$oFonteRecurso = new Recurso($oReceita->getTipoRecurso());
+			if($iRecurso == 0) {
+                $oFonteRecurso = new Recurso($oReceita->getTipoRecurso());
+            }else{
+                $oFonteRecurso = new Recurso($iRecurso);
+            }
 			return $oFonteRecurso->getEstrutural();
 			break;
 		case "E":
-			$oFonteRecurso = new Recurso(ContaPlanoPCASPRepository::getContaPorReduzido($iConta,$iAno, InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')))->getRecurso());
+            if($iRecurso == 0) {
+                $oFonteRecurso = new Recurso(ContaPlanoPCASPRepository::getContaPorReduzido($iConta, $iAno, InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')))->getRecurso());
+            }else{
+                $oFonteRecurso = new Recurso($iRecurso);
+            }
 			return $oFonteRecurso->getEstrutural();
 			break;
 	}

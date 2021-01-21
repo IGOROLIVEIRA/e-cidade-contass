@@ -309,7 +309,18 @@ if ($oInstit->db21_usasisagua == "t") {
       <td class='tamanho-primeira-col' nowrap title="<?=@$Tk81_emparlamentar?>"><?=$Lk81_emparlamentar?></td>
       <td colspan='5'>
         <?
-        $aOpcoes = array('' => 'Selecione', '1' => '1 - Emenda parlamentar individual', '2' => '2 - Emenda parlamentar de bancada', '3' => '3 - Não se aplica');
+        if (db_getsession("DB_anousu") == 2020) {
+            $aOpcoes = array( 	'' => 'Selecione', 
+                              	'1' => '1 - Emenda parlamentar individual', 
+                              	'2' => '2 - Emenda parlamentar de bancada', 
+                              	'3' => '3 - Não se aplica');
+        } elseif (db_getsession("DB_anousu") >= 2021) {
+            $aOpcoes = array( 	'' => 'Selecione', 
+                              	'1' => '1 - Emenda parlamentar individual', 
+                              	'2' => '2 - Emenda parlamentar de bancada ou de bloco', 
+							  	'3' => '3 - Não se aplica',
+								'4' => '4 - Emenda não impositiva (Emendas de comissão e relatoria)');
+        }
         db_select("k81_emparlamentar",$aOpcoes,true,1,"class='input-menor'");
         ?>
       </td>
@@ -700,7 +711,7 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
     }
   }
 
-  if(iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142){
+  if(iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142 || iCodRecursoConta == 163){
     
     js_getSaltesConvenio(iCodigoConta);  
 
@@ -737,7 +748,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
   }
   db_iframe_saltes.hide();
 
-  if(iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142){
+  if(iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142 || iCodRecursoConta == 163){
     
     js_getSaltesConvenio(iCodigoConta);  
 
@@ -1117,6 +1128,14 @@ function js_addReceita () {
     case 142:
       if (!$('k81_convenio').value) {
         alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+        $('k81_convenio').focus();
+        return false;
+      }
+    break;
+
+    case 163:
+	    if ( $('anoUsu').value >= 2021 && (!$('k81_convenio').value) && ($('estrutural').value.substr(0, 8) == '41718113') ) {
+		    alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124, 142 e 163.");
         $('k81_convenio').focus();
         return false;
       }
@@ -1710,8 +1729,11 @@ function js_verificaEmendaParlamentar() {
     var naoSeAplica = ( ($('estrutural').value.substr(0, 9) == '417189911' && $('recurso').value == '161') 
                     || ($('estrutural').value.substr(0, 9) == '417289911' && $('recurso').value == '106') 
                     || ($('estrutural').value.substr(0, 9) == '417181021' && $('recurso').value == '122')
-                    || ($('estrutural').value.substr(0, 9) == '417180311' && $('recurso').value == '159') );
+                    || ($('estrutural').value.substr(0, 9) == '417180311' && $('recurso').value == '159') 
+                    || ($('estrutural').value.substr(0, 9) == '417180911')
+                    || ($('estrutural').value.substr(0, 9) == '417580111') );
 
+  
     if (naoSeAplica) {
         document.getElementById("k81_emparlamentar").options[3].selected = true;
     } else if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424') {

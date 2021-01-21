@@ -68,7 +68,7 @@ $sql = $clcfpess->sql_query_parametro(db_anofolha(),
                                        r11_desliq, r11_rubpgintegral,
                                        r08_codigo, r08_descr,
                                        r11_rubricasubstituicaoatual, r11_rubricasubstituicaoanterior,
-                                       r11_avisoprevio13,r11_avisoprevioferias,r11_avisoprevio13ferias");
+                                       r11_avisoprevio13,r11_avisoprevioferias,r11_avisoprevio13ferias,r11_feriaspremio");
 
 $result = $clcfpess->sql_record($sql);
 if ($result != false && $clcfpess->numrows > 0) {

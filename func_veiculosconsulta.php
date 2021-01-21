@@ -123,9 +123,9 @@ $iInstituicao = db_getsession("DB_instit");
 
       if(isset($chave_baixa) && trim($chave_baixa) != "" && $chave_baixa != "0"){
         if ($chave_baixa == "1"){
-          $where = "and ve01_ativo = '1' and not exists (select ve04_codigo from veicbaixa where ve04_veiculo = ve01_codigo and ve04_veiccadtipobaixa not in (1,2,3,4,5,99))";
+          $where = "and ve01_ativo = '1' and not exists (select ve04_codigo from veicbaixa where ve04_veiculo = ve01_codigo and ve04_veiccadtipobaixa not in (1,2,3,4,5,7,99))";
         }else{
-          $where = "and exists (select ve04_codigo from veicbaixa where ve04_veiculo = ve01_codigo and ve04_veiccadtipobaixa not in (7))";
+          $where = "and exists (select ve04_codigo from veicbaixa where ve04_veiculo = ve01_codigo )";
         }
       }
 

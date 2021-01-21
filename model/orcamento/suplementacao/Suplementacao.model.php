@@ -518,13 +518,15 @@ class Suplementacao {
     /**
      * calcula o valor das suplementações/reduções/receita de cada dotacao/receita
      */
-    $sSqlLancamentos  = " select  codsup,o48_tiposup,tipo,dot,valor,o48_coddocsup ";
+    $sSqlLancamentos  = " select  codsup,o48_tiposup,tipo,dot,valor,o48_coddocsup,o70_codigo,o57_fonte ";
     /**
      * suplementacoes
      */ 
     $sSqlLancamentos .= "   from (select o47_codsup as codsup,'s'::char(1) as tipo, "; 
     $sSqlLancamentos .= "                o47_coddot as dot,  ";
-    $sSqlLancamentos .= "                o47_valor as valor ";
+    $sSqlLancamentos .= "                o47_valor as valor, ";
+    $sSqlLancamentos .= "                '' as o70_codigo, ";
+    $sSqlLancamentos .= "                '' as o57_fonte ";
     $sSqlLancamentos .= "           from orcsuplemval ";
     $sSqlLancamentos .= "          where o47_codsup={$this->getCodigo()} ";
     $sSqlLancamentos .= "            and o47_valor > 0 ";
@@ -536,7 +538,9 @@ class Suplementacao {
     $sSqlLancamentos .= "         select o47_codsup as codsup,  ";
     $sSqlLancamentos .= "                'r'::char(1) as tipo,";
     $sSqlLancamentos .= "                o47_coddot as dot, ";
-    $sSqlLancamentos .= "                o47_valor*-1   as valor ";
+    $sSqlLancamentos .= "                o47_valor*-1   as valor, ";
+    $sSqlLancamentos .= "                '' as o70_codigo, ";
+    $sSqlLancamentos .= "                '' as o57_fonte ";
     $sSqlLancamentos .= "           from orcsuplemval  ";
     $sSqlLancamentos .= "           where o47_codsup={$this->getCodigo()}  ";
     $sSqlLancamentos .= "             and o47_valor < 0 ";
@@ -548,9 +552,13 @@ class Suplementacao {
     $sSqlLancamentos .= "          select  o85_codsup as codsup,  ";
     $sSqlLancamentos .= "                  'rec'::char(3) as tipo, ";
     $sSqlLancamentos .= "                  o85_codrec as dot, ";
-    $sSqlLancamentos .= "                  o85_valor   as valor ";
+    $sSqlLancamentos .= "                  o85_valor   as valor, ";
+    $sSqlLancamentos .= "                  o70_codigo::text as o70_codigo, ";
+    $sSqlLancamentos .= "                  o57_fonte::text as o57_fonte ";
     $sSqlLancamentos .= "             from orcsuplemrec  ";
-    $sSqlLancamentos .= "            where o85_codsup={$this->getCodigo()} ";
+    $sSqlLancamentos .= "               inner join orcreceita on o70_codrec = o85_codrec ";
+    $sSqlLancamentos .= "               inner join orcfontes on o57_codfon = o70_codfon and o57_anousu = o70_anousu ";
+    $sSqlLancamentos .= "            where o85_codsup={$this->getCodigo()} and o70_anousu = ".db_getsession("DB_anousu");
     $sSqlLancamentos .= "  ) as x ";
     $sSqlLancamentos .= " inner join orcsuplem on o46_codsup = codsup ";
     $sSqlLancamentos .= " inner join orcsuplemtipo on o46_tiposup =o48_tiposup ";
@@ -646,8 +654,7 @@ class Suplementacao {
                                             );
       $oLancamento->setCodigoSuplementacao($this->iCodigo);
       if ($oLancamentoSuplementacao->tipo == 'rec') {
-        
-        $oLancamento->setReceita($oLancamentoSuplementacao->dot);                                              
+        $oLancamento->setReceita($oLancamentoSuplementacao->dot, $oLancamentoSuplementacao->o70_codigo, $oLancamentoSuplementacao->o57_fonte);
       } else {
         $oLancamento->setDotacao($oLancamentoSuplementacao->dot);
       }

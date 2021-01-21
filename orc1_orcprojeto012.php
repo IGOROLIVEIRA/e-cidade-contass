@@ -92,7 +92,7 @@ if (isset($gravar)){
                 $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,"; 
                 $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias:   ";
 	      }  
-	      db_textarea('o39_texto',7,80,$Io39_texto,true,'text',1); 
+	      db_textarea('o39_texto',7,80,$Io39_texto,true,'text',$db_opcao); 
 	   }   
 
        ?>	  
@@ -108,7 +108,7 @@ if (isset($gravar)){
 	      if (@pg_numrows($ro)>0){
                  @db_fieldsmemory($ro,0);
    	      }  
-	      db_textarea('o39_compllei',7,80,$Io39_compllei,true,'text',1); 
+	      db_textarea('o39_compllei',7,80,$Io39_compllei,true,'text',$db_opcao); 
 	   }   
 
        ?>	  
@@ -116,7 +116,7 @@ if (isset($gravar)){
     </tr>
 
     <tr>
-       <td colspan=2 align=center><input type="submit" name=gravar value="Gravar"></td>
+       <td colspan=2 align=center><input type="submit" name=gravar value="Gravar" <?=($db_opcao==3||$db_opcao==33?"disabled":"")?>></td>
     </tr>
     </table>
     </form>

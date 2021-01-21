@@ -22,7 +22,7 @@ $db_botao = false;
 if(isset($alterar)){
     $sqlerro=false;
     db_inicio_transacao();
-    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$c200_numcgm} order by z09_sequencial desc");
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$c200_numcgm} and z09_tipo = 1");
     db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
     $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
 
@@ -94,6 +94,8 @@ if(isset($chavepesquisa)){
          top.corpo.iframe_consdispcaixaano.location.href='con1_consdispcaixaano001.php?c203_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consretiradaexclusao.disabled=false;
          top.corpo.iframe_consretiradaexclusao.location.href='con1_consretiradaexclusao001.php?c204_consconsorcios=".@$c200_sequencial."';
+         parent.document.formaba.consmesreferencia.disabled=false;
+         top.corpo.iframe_consmesreferencia.location.href='con1_consmesreferencia001.php?db_opcao=2&c202_consconsorcios=".@$c200_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('consvalorestransf');";

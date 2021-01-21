@@ -164,13 +164,13 @@ class AcordoAssinatura extends AcordoMovimentacao {
    * @return AcordoAssinatura
    */
   public function cancelar() {
-  	
+
     parent::cancelar();
     $iCodigoAcordo = $this->getAcordo();
-    
+
     $oDaoAcordo                      = db_utils::getDao("acordo");
     $oDaoAcordo->ac16_sequencial     = $iCodigoAcordo;
-    $oDaoAcordo->ac16_dataassinatura = "";
+    $oDaoAcordo->ac16_dataassinatura = "null";
     $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
     if ($oDaoAcordo->erro_status == 0) {
       throw new Exception($oDaoAcordo->erro_msg); 

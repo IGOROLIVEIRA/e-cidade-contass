@@ -334,12 +334,19 @@ db_input('valores',8,0,true,'hidden',3);
 $locationh = false;
 $simnaod = "  ";
 if ($numrows_itens==0) {
-  $locationh = true;
-  echo "<br><br><br><br><br><br><br>";
-  echo "      <strong>Autorização não existente ou já empenhada.</strong>\n";
-  echo "<script>";
-  echo "  parent.document.form1.incluir.disabled=true;";
-  echo "</script> ";
+    $locationh = true;
+    echo "<br><br><br><br><br><br><br>";
+    if(isset($incluir)){
+        echo "<script>";
+        echo "alert('Autorização de empenho anulada com sucesso!');";
+		echo "</script>";
+    }else{
+        echo "<strong>Autorização não existente ou já empenhada.</strong>\n";
+    }
+
+    echo "<script>";
+    echo "  parent.document.form1.incluir.disabled=true;";
+    echo "</script> ";
 } else {
   if (isset($e54_autori)) {
     db_fieldsmemory($result_itens,0);

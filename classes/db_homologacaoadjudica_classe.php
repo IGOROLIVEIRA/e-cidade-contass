@@ -487,7 +487,7 @@ class cl_homologacaoadjudica {
         return $sql;
     }
 
-    function sql_query_itens ( $l202_licitacao=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_itens ( $l202_licitacao=null, $campos="*", $ordem=null, $dbwhere="", $joinPrecoReferencia = false){
         $sql = "select ";
         if($campos != "*" ) {
             $campos_sql = split("#",$campos);
@@ -509,6 +509,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join db_usuarios            on pcproc.pc80_usuario                 = db_usuarios.id_usuario";
         $sql .= "      left  join solicitempcmater       on solicitempcmater.pc16_solicitem     = solicitem.pc11_codigo";
         $sql .= "      left  join pcmater                on pcmater.pc01_codmater               = solicitempcmater.pc16_codmater";
+        $sql .= "      left  join licitemobra            on licitemobra.obr06_pcmater           = pcmater.pc01_codmater";
         $sql .= "      left  join pcsubgrupo             on pcsubgrupo.pc04_codsubgrupo         = pcmater.pc01_codsubgrupo";
         $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
         $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
@@ -526,6 +527,12 @@ class cl_homologacaoadjudica {
         $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
         $sql .= "      left join pcorcamjulg            on pcorcamitem.pc22_orcamitem          = pcorcamjulg.pc24_orcamitem";
         $sql2 = "";
+
+        if($joinPrecoReferencia){
+            $sql .= " LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
+            $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
+        }
+
         if($dbwhere==""){
             if($l202_licitacao!= null && $l202_licitacao!= "" ){
                 $sql2 .= " where liclicitem.l21_codliclicita = $l202_licitacao ";

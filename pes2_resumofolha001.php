@@ -350,7 +350,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     }
 
     if (($F('periodo') == 't') 
-        && (($F('DBtxt26') <= 0 || $F('DBtxt26') > 12) || ($F('DBtxt26') <= $F('DBtxt25') && $F('DBtxt24') == $F('DBtxt23')))) {
+        && (($F('DBtxt26') <= 0 || $F('DBtxt26') > 12) || (Number($F('DBtxt26')) <= Number($F('DBtxt25')) && Number($F('DBtxt24')) == Number($F('DBtxt23'))))) {
 
       alert('Mês Final da folha informado é invalido.');
       return false;
