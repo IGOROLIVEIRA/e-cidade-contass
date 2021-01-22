@@ -22,10 +22,10 @@ class GerarREC extends GerarAM {
         $this->sArquivo = "REC";
         $this->abreArquivo();
 
-        $sSql = "select * from rec102020 where si25_mes = ". $this->iMes." and si25_instit = ".db_getsession("DB_instit");
+        $sSql = "select * from rec102021 where si25_mes = ". $this->iMes." and si25_instit = ".db_getsession("DB_instit");
         $rsREC10    = db_query($sSql);
 
-        $sSql2 = "select * from rec112020 where si26_mes = ". $this->iMes." and si26_instit = ".db_getsession("DB_instit");
+        $sSql2 = "select * from rec112021 where si26_mes = ". $this->iMes." and si26_instit = ".db_getsession("DB_instit");
         $rsREC11    = db_query($sSql2);
 
         if (pg_num_rows($rsREC10) == 0) {

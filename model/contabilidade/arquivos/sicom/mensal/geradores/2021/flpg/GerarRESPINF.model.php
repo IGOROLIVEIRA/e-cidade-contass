@@ -24,7 +24,7 @@ class GerarRESPINF extends GerarAM {
 
 
 
-		$sSql          = "select * from respinf2020 where si197_mes = ". $this->iMes." and si197_instit = ".db_getsession("DB_instit");
+		$sSql          = "select * from respinf2021 where si197_mes = ". $this->iMes." and si197_instit = ".db_getsession("DB_instit");
 		$rsRESPINF10    = db_query($sSql);
     // db_criatabela($rsRESPINF10);die();
 

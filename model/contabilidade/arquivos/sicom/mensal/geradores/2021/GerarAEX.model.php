@@ -23,10 +23,10 @@ class GerarAEX extends GerarAM
     $this->sArquivo = "AEX";
     $this->abreArquivo();
 
-//    $sSql = "select * from aex102020 where si129_mes = " . $this->iMes;
+//    $sSql = "select * from aex102021 where si129_mes = " . $this->iMes;
 //    $rsAEX10 = db_query($sSql);
 
-    $sSql2 = "select * from aex102020 where si130_mes = " . $this->iMes;
+    $sSql2 = "select * from aex102021 where si130_mes = " . $this->iMes;
     $rsAEX10 = db_query($sSql2);
 
 

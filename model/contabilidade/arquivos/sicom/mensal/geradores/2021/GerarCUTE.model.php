@@ -12,13 +12,13 @@ class GerarCUTE extends GerarAM
         $this->sArquivo = "CUTE";
         $this->abreArquivo();
 
-        $sSql10 = "select * from cute102020 where si199_mes = " . $this->iMes . " and si199_instit = " . db_getsession("DB_instit");
+        $sSql10 = "select * from cute102021 where si199_mes = " . $this->iMes . " and si199_instit = " . db_getsession("DB_instit");
         $rscute10 = db_query($sSql10);
 
-        $sSql22 = "select * from cute202020 where si200_mes = " . $this->iMes . " and si200_instit = " . db_getsession("DB_instit");
+        $sSql22 = "select * from cute202021 where si200_mes = " . $this->iMes . " and si200_instit = " . db_getsession("DB_instit");
         $rscute20 = db_query($sSql22);
 
-        $sSql21 = "select * from cute212020 where si201_mes = " . $this->iMes . " and si201_instit = " . db_getsession("DB_instit");
+        $sSql21 = "select * from cute212021 where si201_mes = " . $this->iMes . " and si201_instit = " . db_getsession("DB_instit");
         $rsiderp21 = db_query($sSql21);
 
         if (pg_num_rows($rscute10) == 0 && pg_num_rows($rscute20) == 0 && pg_num_rows($rsiderp21) == 0 ) {

@@ -23,10 +23,10 @@ class GerarPAREC extends GerarAM
     $this->sArquivo = "PAREC";
     $this->abreArquivo();
     
-    $sSql = "select * from parec102020  where  si22_mes  =  " . $this->iMes . " and si22_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from parec102021  where  si22_mes  =  " . $this->iMes . " and si22_instit = " . db_getsession("DB_instit");
     $rsPAREC10 = db_query($sSql);
     
-    $sSql2 = "select * from parec112020 where  si23_mes  =  " . $this->iMes . " and si23_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from parec112021 where  si23_mes  =  " . $this->iMes . " and si23_instit = " . db_getsession("DB_instit");
     $rsPAREC11 = db_query($sSql2);
     
     if (pg_num_rows($rsPAREC10) == 0) {

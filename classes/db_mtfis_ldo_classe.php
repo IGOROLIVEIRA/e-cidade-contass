@@ -447,36 +447,36 @@ class cl_mtfis_ldo {
   // funcao para exclusao
   function excluir ($mtfis_sequencial=null,$dbwhere=null) {
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($mtfis_sequencial));
-       } else {
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,2012478,'$mtfis_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012478,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012479,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_anoinicialldo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012480,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_pibano1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012481,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_pibano2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012482,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_pibano3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012483,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_rclano1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012484,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_rclano2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012485,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_rclano3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,2012486,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
+//     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+//     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+//       && ($lSessaoDesativarAccount === false))) {
+//
+//       if ($dbwhere==null || $dbwhere=="") {
+//
+//         $resaco = $this->sql_record($this->sql_query_file($mtfis_sequencial));
+//       } else {
+//         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
+//       }
+//       if (($resaco != false) || ($this->numrows!=0)) {
+//
+//         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+//
+//           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//           $acount = pg_result($resac,0,0);
+//           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//           $resac  = db_query("insert into db_acountkey values($acount,2012478,'$mtfis_sequencial','E')");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012478,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012479,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_anoinicialldo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012480,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_pibano1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012481,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_pibano2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012482,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_pibano3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012483,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_rclano1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012484,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_rclano2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012485,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_rclano3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010193,2012486,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfis_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         }
+//       }
+//     }
      $sql = " delete from mtfis_ldo
                     where ";
      $sql2 = "";

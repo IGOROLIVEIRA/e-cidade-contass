@@ -23,10 +23,10 @@ class GerarREGLIC extends GerarAM
     $this->sArquivo = "REGLIC";
     $this->abreArquivo();
     
-    $sSql = "select * from reglic102020 where si44_mes = " . $this->iMes . " and si44_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from reglic102021 where si44_mes = " . $this->iMes . " and si44_instit=" . db_getsession("DB_instit");
     $rsREGLIC10 = db_query($sSql);
 
-    $sSql2 = "select * from reglic202020 where si45_mes = " . $this->iMes . " and si45_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from reglic202021 where si45_mes = " . $this->iMes . " and si45_instit=" . db_getsession("DB_instit");
     $rsREGLIC20 = db_query($sSql2);
 
     if (pg_num_rows($rsREGLIC10) == 0 && pg_num_rows($rsREGLIC20) == 0) {

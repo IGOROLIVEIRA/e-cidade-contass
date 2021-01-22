@@ -29,15 +29,15 @@ class GerarDCLRF extends GerarAM {
         $this->sArquivo = "DCLRF";
         $this->abreArquivo();
 
-        $sSql = "select * from dclrf102020  ";
-        $sSql .= " left join dclrf202020 on si157_sequencial = si191_reg10 ";
-        $sSql .= " left join dclrf302020 on si157_sequencial = si192_reg10 ";
-        $sSql .= " left join dclrf402020 on si157_sequencial = si193_reg10 ";
+        $sSql = "select * from dclrf102021  ";
+        $sSql .= " left join dclrf202021 on si157_sequencial = si191_reg10 ";
+        $sSql .= " left join dclrf302021 on si157_sequencial = si192_reg10 ";
+        $sSql .= " left join dclrf402021 on si157_sequencial = si193_reg10 ";
         $sSql .= " where si157_mes = '".$this->iMes."' and si157_instit = ".db_getsession("DB_instit")."";
         $rsDCLRF    = db_query($sSql);
 //        echo $sSql; db_criatabela($rsDCLRF);exit;
 
-        $sSql11 = "select * from dclrf112020 where si205_mes = '".$this->iMes."' and si205_instit = ".db_getsession("DB_instit")."";
+        $sSql11 = "select * from dclrf112021 where si205_mes = '".$this->iMes."' and si205_instit = ".db_getsession("DB_instit")."";
         $rsDCLRF11    = db_query($sSql11);
 //        echo $sSql11; db_criatabela($rsDCLRF11);exit;
 

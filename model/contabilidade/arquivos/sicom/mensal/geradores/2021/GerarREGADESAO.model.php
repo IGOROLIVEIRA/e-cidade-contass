@@ -23,25 +23,25 @@ class GerarREGADESAO extends GerarAM
     $this->sArquivo = "REGADESAO";
     $this->abreArquivo();
     
-    $sSql = "select * from regadesao102020 where si67_mes = " . $this->iMes. " and si67_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from regadesao102021 where si67_mes = " . $this->iMes. " and si67_instit=" . db_getsession("DB_instit");
     $rsREGADESAO10 = db_query($sSql);
     
-    $sSql2 = "select * from regadesao112020 where si68_mes = " . $this->iMes. " and si68_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from regadesao112021 where si68_mes = " . $this->iMes. " and si68_instit=" . db_getsession("DB_instit");
     $rsREGADESAO11 = db_query($sSql2);
     
-    $sSql3 = "select * from regadesao122020 where si69_mes = " . $this->iMes. " and si69_instit=" . db_getsession("DB_instit");
+    $sSql3 = "select * from regadesao122021 where si69_mes = " . $this->iMes. " and si69_instit=" . db_getsession("DB_instit");
     $rsREGADESAO12 = db_query($sSql3);
     
-    $sSql4 = "select * from regadesao132020 where si70_mes = " . $this->iMes. " and si70_instit=" . db_getsession("DB_instit");
+    $sSql4 = "select * from regadesao132021 where si70_mes = " . $this->iMes. " and si70_instit=" . db_getsession("DB_instit");
     $rsREGADESAO13 = db_query($sSql4);
     
-    $sSql5 = "select * from regadesao142020 where si71_mes = " . $this->iMes. " and si71_instit=" . db_getsession("DB_instit");
+    $sSql5 = "select * from regadesao142021 where si71_mes = " . $this->iMes. " and si71_instit=" . db_getsession("DB_instit");
     $rsREGADESAO14 = db_query($sSql5);
     
-    $sSql6 = "select * from regadesao152020 where si72_mes = " . $this->iMes. " and si72_instit=" . db_getsession("DB_instit");
+    $sSql6 = "select * from regadesao152021 where si72_mes = " . $this->iMes. " and si72_instit=" . db_getsession("DB_instit");
     $rsREGADESAO15 = db_query($sSql6);
     
-    $sSql7 = "select * from regadesao202020 where si73_mes = " . $this->iMes. " and si73_instit=" . db_getsession("DB_instit");
+    $sSql7 = "select * from regadesao202021 where si73_mes = " . $this->iMes. " and si73_instit=" . db_getsession("DB_instit");
     $rsREGADESAO20 = db_query($sSql7);
     
     if (pg_num_rows($rsREGADESAO10) == 0 && pg_num_rows($rsREGADESAO20) == 0) {

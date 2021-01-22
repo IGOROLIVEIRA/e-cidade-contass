@@ -23,13 +23,13 @@ class GerarRALIC extends GerarAM
         $this->sArquivo = "RALIC";
         $this->abreArquivo();
 
-        $sSql = "select * from ralic102020 where si180_mes = " . $this->iMes . " and si180_instit=" . db_getsession("DB_instit");
+        $sSql = "select * from ralic102021 where si180_mes = " . $this->iMes . " and si180_instit=" . db_getsession("DB_instit");
         $rsRALIC10 = db_query($sSql);
 
-        $sSql2 = "select * from ralic112020 where si181_mes = " . $this->iMes . " and si181_instit=" . db_getsession("DB_instit");;
+        $sSql2 = "select * from ralic112021 where si181_mes = " . $this->iMes . " and si181_instit=" . db_getsession("DB_instit");;
         $rsRALIC11 = db_query($sSql2);
 
-        $sSql3 = "select * from ralic122020 where si182_mes = " . $this->iMes . " and si182_instit=" . db_getsession("DB_instit");;
+        $sSql3 = "select * from ralic122021 where si182_mes = " . $this->iMes . " and si182_instit=" . db_getsession("DB_instit");;
         $rsRALIC12 = db_query($sSql3);
 
         if (pg_num_rows($rsRALIC10) == 0) {

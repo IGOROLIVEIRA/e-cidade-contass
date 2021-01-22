@@ -653,14 +653,19 @@ class cl_inssirf {
           }
           $sql2 .= " r33_codigo = $r33_codigo ";
         }
-        if($r33_instit != ""){
-          if($sql2!=""){
-            $sql2 .= " and ";
-          }
-          $sql2 .= " r33_instit = $r33_instit ";
-        }
      }else{
        $sql2 = $dbwhere;
+     }
+     if($r33_instit != ""){
+       if($sql2!=""){
+         $sql2 .= " and ";
+       }
+       $sql2 .= " r33_instit = $r33_instit ";
+     } else {
+       if($sql2!=""){
+         $sql2 .= " and ";
+       }
+       $sql2 .= " r33_instit = ".db_getsession("DB_instit");
      }
      $result = db_query($sql.$sql2);
      if($result==false){ 

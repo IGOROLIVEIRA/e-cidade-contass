@@ -23,10 +23,10 @@ class GerarANL extends GerarAM
     $this->sArquivo = "ANL";
     $this->abreArquivo();
     
-    $sSql = "select * from anl102020 where si110_mes = " . $this->iMes . " and si110_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from anl102021 where si110_mes = " . $this->iMes . " and si110_instit = " . db_getsession("DB_instit");
     $rsANL10 = db_query($sSql);
 
-    $sSql2 = "select * from anl112020 where si111_mes = " . $this->iMes . " and si111_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from anl112021 where si111_mes = " . $this->iMes . " and si111_instit = " . db_getsession("DB_instit");
     $rsANL11 = db_query($sSql2);
 
 
