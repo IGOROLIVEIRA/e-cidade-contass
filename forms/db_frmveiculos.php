@@ -868,10 +868,8 @@ if($clusuarios > 0 ){
         }
 
         if(value == 5){
-            document.getElementsByClassName('tr__combustivel')[0].style.display = 'none';
             document.getElementsByClassName('tr__categoriacnh')[0].style.display = 'none';
         }else{
-            document.getElementsByClassName('tr__combustivel')[0].style.display = '';
             document.getElementsByClassName('tr__categoriacnh')[0].style.display = '';
         }
     }
