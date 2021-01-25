@@ -45,6 +45,7 @@ try{
             $aFonte = array();
 
             $result = $cldisponibilidadedecaixa->sql_record($cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}"));
+            // echo $cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}");
 //die($cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}"));
             for ($i = 0; $i < pg_num_rows($result); $i++) {
                 $oFonte = db_utils::fieldsMemory($result, $i);
@@ -522,13 +523,20 @@ try{
           }
         }
 
+        $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+        
         foreach ($vlRspExerciciosAnteriores as $fonte => $oDados){
+
+          if(in_array($fonte, $aFontesEncerradas)) {
+            $fonte = substr($fonte, 0, 1).'59';
+          }
+
           $vlrDisponibilidade[$fonte]->VlrDisponibilidade -= round($oDados->vlRspExeAnt,2);
           if(!$retornoSicom[$fonte]){
             $retornoSicom[$fonte]->vlrcaixabruta = 0;
             $retornoSicom[$fonte]->VlrroexercicioAnteriores = round($oDados->vlRspExeAnt,2);
           }else{
-            $retornoSicom[$fonte]->VlrroexercicioAnteriores = round($oDados->vlRspExeAnt,2);
+            $retornoSicom[$fonte]->VlrroexercicioAnteriores += round($oDados->vlRspExeAnt,2);
           }
         }
 

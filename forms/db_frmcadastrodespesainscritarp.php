@@ -117,6 +117,7 @@
    */
 
   function carregarSicom() {
+    document.form1.reset();
     buscarSicom({
       exec: 'getSicom',
       // fonte: fonte
