@@ -802,7 +802,7 @@ class cl_veicretirada {
     $sql .= "      inner join veiccadcomb     on veiccadcomb.ve26_codigo     = veiculoscomb.ve06_veiccadcomb";
     $sql .= "      left join veiccadcategcnh on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
     $sql .= "      inner join cgm             on cgm.z01_numcgm              = veicmotoristas.ve05_numcgm";
-    $sql .= "      inner join veiccadcategcnh as a on a.ve30_codigo  = veicmotoristas.ve05_veiccadcategcnh";
+    $sql .= "      left join veiccadcategcnh as a on a.ve30_codigo  = veicmotoristas.ve05_veiccadcategcnh";
     $sql .= "      left join veicdevolucao on veicretirada.ve60_codigo = veicdevolucao.ve61_veicretirada ";
     $sql .= "      left  join veiccadcentraldepart  on veiccadcentraldepart.ve37_veiccadcentral = veiccadcentral.ve36_sequencial";
     $sql2 = "";
