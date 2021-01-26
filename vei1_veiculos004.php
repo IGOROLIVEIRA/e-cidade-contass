@@ -166,7 +166,7 @@ if(isset($incluir)){
                 $sqlerro=true;
             }
 
-            if ($sqlerro == false && $si04_tipoveiculo != '5'){
+            if (!$sqlerro){
                 
                     $ve01_codigo       = $clveiculos->ve01_codigo;
                     $vetor_comb        = split(",",$cod_comb);
