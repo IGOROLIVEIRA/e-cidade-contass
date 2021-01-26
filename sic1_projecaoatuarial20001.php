@@ -47,6 +47,7 @@ if(isset($salvar)) {
             $clprojecaoatuarial20->si169_sequencial = $si169_sequencial;
             $data = 'data_'.$ano;
             $clprojecaoatuarial20->si169_data = implode("-", array_reverse(explode("/", $$data)));
+            $clprojecaoatuarial20->si169_projecaoatuarial10 = $oResult10->si168_sequencial;
             $clprojecaoatuarial20->alterar($si169_sequencial);
             if ($clprojecaoatuarial20->erro_status == 0) {
                 throw new Exception($clprojecaoatuarial20->erro_msg);
