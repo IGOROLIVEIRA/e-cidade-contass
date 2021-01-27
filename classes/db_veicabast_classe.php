@@ -1341,7 +1341,7 @@ if($dbwhere==""){
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        echo $sql;
+
         if($ordem != null ){
             $sql .= " order by ";
             $campos_sql = split("#",$ordem);
