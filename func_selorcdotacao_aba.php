@@ -148,7 +148,12 @@ function js_atualizar_instit(){
        }
 
        document.form1.db_selinstit.value = obj.value;
-       location.href='func_selorcdotacao_aba.php?'+query;
+       
+       if (document.form1.rsp && document.form1.rsp.value == 'true') {     
+        location.href='func_selorcdotacao_aba.php?'+query+'&rsp=true';
+       } else {
+        location.href='func_selorcdotacao_aba.php?'+query;
+       }
   }
 }
 function js_atualiza_instit(){
@@ -367,6 +372,9 @@ function js_atualiza_variavel_retorno(objeto){
 
           if (isset($desdobramento) && $desdobramento == true){
             db_input("desdobramento",10,0,true,"hidden",3);
+          }
+          if (isset($rsp) && $rsp == true){
+            db_input("rsp",10,0,true,"hidden",3);
           }
        ?>
 
@@ -625,6 +633,9 @@ function js_atualiza_variavel_retorno(objeto){
    <table border=1 cellspacing=0 >
     <?
      $dbwhere = " o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."'";
+     if(isset($rsp) && $rsp != null) {
+      $dbwhere .= " or o58_codigo in (select e91_recurso from empresto where e91_anousu = ".db_getsession("DB_anousu").")";
+     }
      $sQuery  = " o58_anousu = ".db_getsession("DB_anousu")." and $sel_orgaos and $dbwhere ";
      $result  = $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null," distinct o58_codigo,orctiporec.o15_descr","o58_codigo",$sQuery));
      for($i=0;$i<$clorcdotacao->numrows;$i++){
