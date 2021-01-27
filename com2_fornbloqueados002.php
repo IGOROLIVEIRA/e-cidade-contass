@@ -46,37 +46,22 @@ switch ($tipo_fornecedor){
 		break;
 
 	case 'a':
-		/* Impedimentos não vigentes */
-		$head6 .= "Impedimentos não vigentes";
-	    if($data_ini){
-			$where = " NOT (('{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataInicial}' <= pc60_databloqueio_ini) ";
-        }
-
-	    if($data_fim){
-	        $where = $where ? $where . ' AND ' : '';
-			$where .= " NOT (('{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataFinal}' <= pc60_databloqueio_fim) ";
-        }
-
+		  /* Impedimentos não vigentes */
+		  $head6 .= "Impedimentos não vigentes";
+      
+      $where = " ((pc60_databloqueio_ini BETWEEN '{$dataInicial}' AND '{$dataFinal}') OR pc60_databloqueio_ini < '{$dataFinal}') 
+                    AND (pc60_databloqueio_fim BETWEEN '{$dataInicial}' AND '{$dataFinal}') ";
+    
 		break;
 
 	case 'i':
         /* Impedimentos vigentes */
 		$head6 .= "Impedimentos vigentes";
-		if($data_ini){
-			$where = " (('{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataInicial}' <= pc60_databloqueio_ini) ";
-		}
+    
+    $where = " ((pc60_databloqueio_ini BETWEEN '{$dataInicial}' AND '{$dataFinal}') OR pc60_databloqueio_ini < '{$dataFinal}') 
+                  AND NOT (pc60_databloqueio_fim BETWEEN '{$dataInicial}' AND '{$dataFinal}') ";
 
-		if($data_fim){
-			$where = $where ? $where . ' AND ' : '';
-			$where .= "  (('{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataFinal}' >= pc60_databloqueio_fim)";
-		}
-
-		$where = $where ? " (".$where.") " . " AND " : $where;
-
-		if(!isset($where)){
-			$orderBy .=  ', pc60_databloqueio_ini ';
-		}
-		$where .= " pc60_bloqueado = 't'";
+    $where .= " AND pc60_bloqueado = 't'";
 		break;
 }
 
@@ -130,7 +115,7 @@ ob_start();
                   <b>
                       <?php
                       if($data_ini && $data_fim){
-                            $trecho_complementar = " para o período de $data_ini a =$data_fim";
+                            $trecho_complementar = " para o período de $data_ini a $data_fim";
                       }
 
                       if($data_ini && !$data_fim){
@@ -142,7 +127,8 @@ ob_start();
 					  }
 
                       ?>
-                    Em consulta realizada <?= $trecho_complementar ?>, o sistema verificou que não há fornecedores com impedimentos vigentes no referido período.
+                    Em consulta realizada <?= $trecho_complementar ?>, o sistema verificou que não há fornecedores com 
+                    impedimentos <?=$tipo_fornecedor == 'a' ? 'não' : ''?> vigentes no referido período.
                   </b>
                   <br/><br/><br/>
               </td>

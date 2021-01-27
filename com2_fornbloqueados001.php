@@ -105,9 +105,32 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </head>
 </html>
 <script>
-  function js_emite(){
-    jan = window.open('com2_fornbloqueados002.php?data_ini='+document.form1.data_ini.value+'&data_fim='+document.form1.data_fim.value+
-        '&tipo_fornecedor='+document.form1.tipo_fornecedor.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    jan.moveTo(0,0);
+    function js_emite(){
+        let error_msg = '';
+
+        if(!document.form1.data_fim.value){
+            error_msg = 'Informe uma Data Final!';
+        }
+
+        if(!document.form1.data_ini.value){
+            error_msg = 'Informe uma Data de Início!';
+        }
+
+        if(!document.form1.data_fim.value && !document.form1.data_ini.value){
+            error_msg = 'Nenhum período informado. Verifique!';
+        }
+
+        if(document.form1.data_fim.value < document.form1.data_ini.value){
+            error_msg = 'Data Final é menor que a Data Inicial. Verifique!';
+        }
+
+        if(error_msg){
+           alert(error_msg);
+           return false;
+        }
+
+        jan = window.open('com2_fornbloqueados002.php?data_ini='+document.form1.data_ini.value+'&data_fim='+document.form1.data_fim.value+
+            '&tipo_fornecedor='+document.form1.tipo_fornecedor.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        jan.moveTo(0,0);
   }
 </script>
