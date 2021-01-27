@@ -403,7 +403,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 					       e94_motivo as justificativa,
 					       e60_codemp,
 					       e94_ato as atocancelamento,
-					       e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos
+                 e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos,
+                 e60_numemp
         from conlancamdoc
         join conlancamemp on c71_codlan = c75_codlan
         join empempenho on c75_numemp = e60_numemp
@@ -438,7 +439,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         * Verifica se o empenho existe na tabela dotacaorpsicom
         * Caso exista, busca os dados da dotação.
         * */
-        $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados20->e60_codemp}";
+        $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados20->e60_numemp}";
         if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
 
           $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
