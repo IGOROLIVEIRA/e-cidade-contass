@@ -529,6 +529,12 @@ class cl_veiculos {
    // funcao para alteracao
    function alterar ($ve01_codigo=null, $si04_tipoveiculo) {
       $this->atualizacampos();
+
+      if(!$si04_tipoveiculo || $si04_tipoveiculo == null){
+          $sSqlTipo = " select si04_tipoveiculo from tipoveiculos where si04_veiculos = " . $ve01_codigo;
+          $si04_tipoveiculo = db_utils::fieldsMemory(db_query($sSqlTipo, 0))->si04_tipoveiculo;
+      }
+
      $sql = " update veiculos set ";
      $virgula = "";
      if(trim($this->ve01_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigo"])){
