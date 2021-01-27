@@ -333,6 +333,10 @@ class cl_projecaoatuarial20 {
        }
      }
      if(trim($this->si169_data) != null) {
+       $sql  .= $virgula." si169_projecaoatuarial10 = '$this->si169_projecaoatuarial10' ";
+       $virgula = ",";
+     }
+     if(trim($this->si169_data) != null) {
        $sql  .= $virgula." si169_data = '$this->si169_data' ";
        $virgula = ",";
      }
@@ -341,27 +345,28 @@ class cl_projecaoatuarial20 {
      if($si169_sequencial!=null){
        $sql .= " si169_sequencial = $this->si169_sequencial";
      }
-     $resaco = $this->sql_record($this->sql_query_file($this->si169_sequencial));
-     if($this->numrows>0){
-       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,2011435,'$this->si169_sequencial','A')");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_sequencial"]) || $this->si169_sequencial != "")
-           $resac = db_query("insert into db_acount values($acount,2010403,2011435,'".AddSlashes(pg_result($resaco,$conresaco,'si169_sequencial'))."','$this->si169_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_exercicio"]) || $this->si169_exercicio != "")
-           $resac = db_query("insert into db_acount values($acount,2010403,2011436,'".AddSlashes(pg_result($resaco,$conresaco,'si169_exercicio'))."','$this->si169_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_vlreceitaprevidenciaria"]) || $this->si169_vlreceitaprevidenciaria != "")
-           $resac = db_query("insert into db_acount values($acount,2010403,2011437,'".AddSlashes(pg_result($resaco,$conresaco,'si169_vlreceitaprevidenciaria'))."','$this->si169_vlreceitaprevidenciaria',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_vldespesaprevidenciaria"]) || $this->si169_vldespesaprevidenciaria != "")
-           $resac = db_query("insert into db_acount values($acount,2010403,2011439,'".AddSlashes(pg_result($resaco,$conresaco,'si169_vldespesaprevidenciaria'))."','$this->si169_vldespesaprevidenciaria',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_dtcadastro"]) || $this->si169_dtcadastro != "")
-           $resac = db_query("insert into db_acount values($acount,2010403,2011442,'".AddSlashes(pg_result($resaco,$conresaco,'si169_dtcadastro'))."','$this->si169_dtcadastro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_instit"]) || $this->si169_instit != "")
-           $resac = db_query("insert into db_acount values($acount,2010403,2011441,'".AddSlashes(pg_result($resaco,$conresaco,'si169_instit'))."','$this->si169_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
+//     $resaco = $this->sql_record($this->sql_query_file($this->si169_sequencial));
+//     if($this->numrows>0){
+//       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+//         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//         $acount = pg_result($resac,0,0);
+//         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//         $resac = db_query("insert into db_acountkey values($acount,2011435,'$this->si169_sequencial','A')");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_sequencial"]) || $this->si169_sequencial != "")
+//           $resac = db_query("insert into db_acount values($acount,2010403,2011435,'".AddSlashes(pg_result($resaco,$conresaco,'si169_sequencial'))."','$this->si169_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_exercicio"]) || $this->si169_exercicio != "")
+//           $resac = db_query("insert into db_acount values($acount,2010403,2011436,'".AddSlashes(pg_result($resaco,$conresaco,'si169_exercicio'))."','$this->si169_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_vlreceitaprevidenciaria"]) || $this->si169_vlreceitaprevidenciaria != "")
+//           $resac = db_query("insert into db_acount values($acount,2010403,2011437,'".AddSlashes(pg_result($resaco,$conresaco,'si169_vlreceitaprevidenciaria'))."','$this->si169_vlreceitaprevidenciaria',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_vldespesaprevidenciaria"]) || $this->si169_vldespesaprevidenciaria != "")
+//           $resac = db_query("insert into db_acount values($acount,2010403,2011439,'".AddSlashes(pg_result($resaco,$conresaco,'si169_vldespesaprevidenciaria'))."','$this->si169_vldespesaprevidenciaria',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_dtcadastro"]) || $this->si169_dtcadastro != "")
+//           $resac = db_query("insert into db_acount values($acount,2010403,2011442,'".AddSlashes(pg_result($resaco,$conresaco,'si169_dtcadastro'))."','$this->si169_dtcadastro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si169_instit"]) || $this->si169_instit != "")
+//           $resac = db_query("insert into db_acount values($acount,2010403,2011441,'".AddSlashes(pg_result($resaco,$conresaco,'si169_instit'))."','$this->si169_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       }
+//     }
+     //echo $sql;
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
