@@ -1317,7 +1317,7 @@ if($dbwhere==""){
         $sql .= "      inner join veiccentral           on veiccentral.ve40_veiculos          = veiculos.ve01_codigo";
         $sql .= "      inner join veiccadcentral        on veiccadcentral.ve36_sequencial     = veiccentral.ve40_veiccadcentral";
         $sql .= "      inner join ceplocalidades        on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades";
-        $sql .= "      inner join veiccadtipo           on veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo";
+        $sql .= "      LEFT join veiccadtipo           on veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo";
         $sql .= "      inner join veiccadmarca          on veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca";
         $sql .= "      inner join veiccadmodelo         on veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo";
         $sql .= "      left join veiccadcor            on veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor";
@@ -1341,6 +1341,7 @@ if($dbwhere==""){
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
+        echo $sql;
         if($ordem != null ){
             $sql .= " order by ";
             $campos_sql = split("#",$ordem);
