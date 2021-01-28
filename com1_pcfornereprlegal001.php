@@ -46,7 +46,11 @@ if(isset($incluir)){
     if(pg_numrows($rsSql)){
         $clpcfornereprlegal->erro_msg = "Tipo de participação já informado. Verifique!";
     }else{
-        $clpcfornereprlegal->incluir($pc81_sequencia);
+        if(!intval($pc81_tipopart)){
+            $clpcfornereprlegal->erro_msg = "Tipo de participação inválido. Verifique!";
+        }else{
+            $clpcfornereprlegal->incluir($pc81_sequencia);
+        }
     }
     db_fim_transacao();
 }else if(isset($alterar)){
