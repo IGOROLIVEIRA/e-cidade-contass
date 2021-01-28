@@ -67,37 +67,37 @@ if(isset($excluir)){
   $sqlerro=false;
 
   // die($clgerfadi->sql_query_file(null,null,null,$rh27_rubric,"*","r22_rubric limit 1"));
-  $result_sqladi = $clgerfadi->sql_record($clgerfadi->sql_query_file(null,null,null,$rh27_rubric,"*","r22_rubric limit 1"));
+  $result_sqladi = $clgerfadi->sql_record($clgerfadi->sql_query_file(null,null,null,$rh27_rubric,"*","r22_rubric limit 1","r22_rubric = '$rh27_rubric' AND r22_instit = ".db_getsession("DB_instit")));
   if($clgerfadi->numrows > 0){
   	$sqlerro = true;
   }else{
   	// die($clgerfcom->sql_query_file(null,null,null,$rh27_rubric,"*","r48_rubric limit 1"));
-	  $result_sqlcom = $clgerfcom->sql_record($clgerfcom->sql_query_file(null,null,null,$rh27_rubric,"*","r48_rubric limit 1"));
+	  $result_sqlcom = $clgerfcom->sql_record($clgerfcom->sql_query_file(null,null,null,$rh27_rubric,"*","r48_rubric limit 1","r48_rubric = '$rh27_rubric' AND r48_instit = ".db_getsession("DB_instit")));
 	  if($clgerfcom->numrows > 0){
 	  	$sqlerro = true;
     }else{
     	// die($clgerffer->sql_query_file(null,null,null,$rh27_rubric,null,"*","r31_rubric limit 1"));
-		  $result_sqlfer = $clgerffer->sql_record($clgerffer->sql_query_file(null,null,null,$rh27_rubric,null,"*","r31_rubric limit 1"));
+		  $result_sqlfer = $clgerffer->sql_record($clgerffer->sql_query_file(null,null,null,$rh27_rubric,null,"*","r31_rubric limit 1","r31_rubric = '$rh27_rubric' AND r31_instit = ".db_getsession("DB_instit")));
 		  if($clgerffer->numrows > 0){
 		  	$sqlerro = true;
 		  }else{
 		  	// die($clgerffx->sql_query_file(null,null,null,$rh27_rubric,"*","r53_rubric limit 1"));
-		    $result_sqlfx  = $clgerffx->sql_record($clgerffx->sql_query_file(null,null,null,$rh27_rubric,"*","r53_rubric limit 1"));
+		    $result_sqlfx  = $clgerffx->sql_record($clgerffx->sql_query_file(null,null,null,$rh27_rubric,"*","r53_rubric limit 1","r53_rubric = '$rh27_rubric' AND r53_instit = ".db_getsession("DB_instit")));
 			  if($clgerffx->numrows > 0){
 			  	$sqlerro = true;
 			  }else{
 				  // die($clgerfres->sql_query_file(null,null,null,$rh27_rubric,null,"*","r20_rubric limit 1"));
-				  $result_sql = $clgerfres->sql_record($clgerfres->sql_query_file(null,null,null,$rh27_rubric,null,"*","r20_rubric limit 1"));
+				  $result_sql = $clgerfres->sql_record($clgerfres->sql_query_file(null,null,null,$rh27_rubric,null,"*","r20_rubric limit 1","r20_rubric = '$rh27_rubric' AND r20_instit = ".db_getsession("DB_instit")));
 				  if($clgerfres->numrows > 0){
 				  	$sqlerro = true;
 				  }else{
 					  // die($clgerfs13->sql_query_file(null,null,null,$rh27_rubric,"*","r35_rubric limit 1"));
-					  $result_sqls13 = $clgerfs13->sql_record($clgerfs13->sql_query_file(null,null,null,$rh27_rubric,"*","r35_rubric limit 1"));
+					  $result_sqls13 = $clgerfs13->sql_record($clgerfs13->sql_query_file(null,null,null,$rh27_rubric,"*","r35_rubric limit 1","r35_rubric = '$rh27_rubric' AND r35_instit = ".db_getsession("DB_instit")));
 					  if($clgerfs13->numrows > 0){
 					  	$sqlerro = true;
             }else{
 						  // die($clgerfsal->sql_query_file(null,null,null,$rh27_rubric,"*","r14_rubric limit 1"));
-						  $result_sql = $clgerfsal->sql_record($clgerfsal->sql_query_file(null,null,null,$rh27_rubric,"*","r14_rubric limit 1"));
+						  $result_sql = $clgerfsal->sql_record($clgerfsal->sql_query_file(null,null,null,$rh27_rubric,"*","r14_rubric limit 1","r14_rubric = '$rh27_rubric' AND r14_instit = ".db_getsession("DB_instit")));
 						  if($clgerfsal->numrows > 0){
 						  	$sqlerro = true;
 						  }
@@ -108,7 +108,7 @@ if(isset($excluir)){
 	  }
   }
   if($sqlerro == true){
-    $erro_msg = "Usuário:\\n\\nCálculos já efetuados com esta rubrica.\\nExclusão abortada.\\n\\nAdministrador:";
+    $erro_msg = "Usuário:\\n\\nCálculos já efetuados com esta rubrica.\\nExclusão abortada.\\n\\nAdministrador: ";
   }
   
   if($sqlerro == false){
