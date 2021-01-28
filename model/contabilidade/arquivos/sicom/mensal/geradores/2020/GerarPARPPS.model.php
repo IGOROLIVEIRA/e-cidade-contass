@@ -47,7 +47,7 @@ class GerarPARPPS extends GerarAM
 
                 $aPARPPS10 = pg_fetch_array($rsPARPPS10, $iCont);
 
-                ini_set("display_errors", "on");
+                //ini_set("display_errors", "on");
                 $aCSVPARPPS10['si156_tiporegistro']                       = $this->padLeftZero($aPARPPS10['si156_tiporegistro'], 2);
                 $aCSVPARPPS10['si156_codorgao']                           = $this->padLeftZero($aPARPPS10['si156_codorgao'], 2);
                 $aCSVPARPPS10['si156_tipoplano']                          = $aPARPPS10['si156_tipoplano'];
