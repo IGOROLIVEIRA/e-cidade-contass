@@ -57,10 +57,10 @@ $db_opcao = 1;
      <?
 	 $clcriaabas->identifica = array(
                                          "pcforne"=>"Fornecedor",
+                                         "pcfornereprlegal"=>"Representantes Legais",
                                          "pcfornecon"=>"Contas Banco",
                                          "pcfornemov"=>"Movimento",
                                          "subgrupo"=>"Subgrupo",
-                                         "pcfornereprlegal"=>"Representantes Legais",
                                          "pcforneidentificacaocredor" => "Identificação do Fornecedor"
                                         ); 
 	 $clcriaabas->src = array("pcforne"=>"com1_pcforne005.php");

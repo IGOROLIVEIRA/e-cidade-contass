@@ -26,6 +26,7 @@
  */
 
 require("libs/db_stdlib.php");
+require("libs/db_utils.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
@@ -39,9 +40,15 @@ $clpcforne = new cl_pcforne;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  db_inicio_transacao();
-  $clpcfornereprlegal->incluir($pc81_sequencia);
-  db_fim_transacao();
+    db_inicio_transacao();
+    $sSql = $clpcfornereprlegal->sql_query('', 'pcfornereprlegal.*', '', 'pc81_tipopart = ' . $pc81_tipopart . ' AND pc81_cgmforn = ' . $pc81_cgmforn);
+    $rsSql = db_query($sSql);
+    if(pg_numrows($rsSql)){
+        $clpcfornereprlegal->erro_msg = "Tipo de participação já informado. Verifique!";
+    }else{
+        $clpcfornereprlegal->incluir($pc81_sequencia);
+    }
+    db_fim_transacao();
 }else if(isset($alterar)){
   $db_opcao = 2;
   db_inicio_transacao();
