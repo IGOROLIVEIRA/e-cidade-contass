@@ -59,9 +59,8 @@ switch ($tipo_fornecedor){
 		$head6 .= "Impedimentos vigentes";
     
     $where = " ((pc60_databloqueio_ini BETWEEN '{$dataInicial}' AND '{$dataFinal}') OR pc60_databloqueio_ini < '{$dataFinal}') 
-                  AND NOT (pc60_databloqueio_fim BETWEEN '{$dataInicial}' AND '{$dataFinal}') ";
+                  AND pc60_databloqueio_fim > '{$dataFinal}'";
 
-    $where .= " AND pc60_bloqueado = 't'";
 		break;
 }
 
