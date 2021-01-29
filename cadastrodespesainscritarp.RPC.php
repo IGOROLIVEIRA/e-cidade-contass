@@ -515,6 +515,11 @@ try{
 
 
         foreach ($vlrdiscaixabruta as $fonte => $oDados){
+
+          if($fonte == '119') {
+            $fonte = '118';
+          }
+          
           $vlrDisponibilidade[$fonte]->VlrDisponibilidade = round($oDados->valor,2);
           if(!$retornoSicom[$fonte]){
             $retornoSicom[$fonte]->vlrcaixabruta = round($oDados->valor,2);
@@ -529,6 +534,10 @@ try{
 
           if(in_array($fonte, $aFontesEncerradas)) {
             $fonte = substr($fonte, 0, 1).'59';
+          }
+
+          if($fonte == '119') {
+            $fonte = '118';
           }
 
           $vlrDisponibilidade[$fonte]->VlrDisponibilidade -= round($oDados->vlRspExeAnt,2);
