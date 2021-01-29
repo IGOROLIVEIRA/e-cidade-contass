@@ -310,7 +310,6 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 						GROUP BY 1,2,3,4,5) AS x";
 		
 		$rsResult30 = db_query($sSql);
-		// db_criatabela($rsResult30);
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
