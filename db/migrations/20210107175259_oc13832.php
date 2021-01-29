@@ -97,6 +97,18 @@ class Oc13832 extends PostgresMigration
 
         UPDATE db_syscampo SET rotulo = 'Código' WHERE nomecam = 'o39_codproj';
 
+        DELETE FROM orcsuplemtipo WHERE o48_tiposup = 1005;
+
+        UPDATE orcsuplemtipo SET o48_descr = 'CREDITO SUPLEMENTAR - ANULAÇÃO DE DOTAÇÕES' WHERE o48_tiposup = 1001;
+        
+        UPDATE orcsuplemtipo SET o48_descr = 'CREDITO SUPLEMENTAR - OPERACAO DE CREDITO' WHERE o48_tiposup = 1002;
+        
+        UPDATE orcsuplemtipo SET o48_descr = 'CREDITO SUPLEMENTAR - SUPERAVIT FINANCEIRO' WHERE o48_tiposup = 1003;
+        
+        UPDATE orcsuplemtipo SET o48_descr = 'CREDITO SUPLEMENTAR - EXCESSO DE ARRECADAÇÃO' WHERE o48_tiposup = 1004;
+
+        UPDATE orcsuplemtipo SET o48_coddocred = 0, o48_arrecadmaior = 58 WHERE o48_tiposup = 1019;                     
+
         COMMIT;
 
 SQL;
