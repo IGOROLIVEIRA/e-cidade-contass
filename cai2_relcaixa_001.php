@@ -127,9 +127,9 @@
                         <td> <input type="radio" name="opcao_relatorio" value="<?=$db_opcao?>" checked> 
                           &nbsp;Contas da Tesouraria</td>
                         <td> <input name="ordem_relatorio" type="radio" value="alfabetica" checked> 
-                          &nbsp;Alfabetica&nbsp;</td>
+                          &nbsp;Nº da Conta&nbsp;</td>
                         <td>&nbsp; <input type="radio" name="ordem_relatorio" value="numerica">
-                          Numerica&nbsp;</td>
+                          Reduzido&nbsp;</td>
                       </tr>
                       <?
     } else if ($db_opcao == "cadban") {
