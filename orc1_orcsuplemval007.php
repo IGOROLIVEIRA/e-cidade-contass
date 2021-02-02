@@ -265,7 +265,7 @@ WHERE o58_anousu=".db_getsession('DB_anousu')."
             }
         }
         /*verifica se ja existe alguma dotacao cadastrada OC 9039*/
-        $tipossupvalida = array(1001,1006,1011,1012,1013,1014,1015,1016,1017);
+        $tipossupvalida = array(1001,1006,1011,1012,1013,1014,1015,1016,1017,1020,1021,1022,1023);
         if (in_array($tiposup , $tipossupvalida)) {
             $sql = "select * from orcsuplemval where o47_codsup = {$o46_codsup}";
             if (pg_num_rows(db_query($sql)) >= 1) {

@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "orclei.o45_codlei,orclei.o45_numlei,orclei.o45_descr,orclei.o45_dataini,orclei.o45_datafim,orclei.o45_tipolei";
+$campos = "orclei.o45_codlei,orclei.o45_numlei,orclei.o45_descr,orclei.o45_dataini,orclei.o45_datafim";
 ?>

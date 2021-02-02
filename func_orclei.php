@@ -96,6 +96,11 @@ $clorclei->rotulo->label("o45_numlei");
            $campos = "orclei.*";
            }
         }
+        $campos .= ", case 
+                        when o45_tipolei = 1 then '1 - LOA'::char(7)
+                        when o45_tipolei = 2 then '2 - LDO'::char(7)
+                        when o45_tipolei = 3 then '3 - LAO'::char(7)
+                        end as o45_tipolei ";
         if(isset($chave_o45_codlei) && (trim($chave_o45_codlei)!="") ){
 	         $sql = $clorclei->sql_query($chave_o45_codlei,$campos,"o45_codlei");
         }else if(isset($chave_o45_numlei) && (trim($chave_o45_numlei)!="") ){

@@ -223,7 +223,7 @@ $clrotulo->label("o45_numlei");
 }
 function js_mostraorclei(chave,chave1,erro){
   document.form1.o45_numlei.value = chave;
-  document.form1.iTipoLei.value   = chave1;
+  document.form1.iTipoLei.value   = chave1.substr(0, 1);
   js_validaTipoSup();
   if(erro==true){
     document.form1.o39_codlei.focus();
@@ -233,7 +233,7 @@ function js_mostraorclei(chave,chave1,erro){
 function js_mostraorclei1(chave1,chave2,chave3){
   document.form1.o39_codlei.value = chave1;
   document.form1.o45_numlei.value = chave2;
-  document.form1.iTipoLei.value   = chave3;
+  document.form1.iTipoLei.value   = chave3.substr(0, 1);
   js_validaTipoSup();
   db_iframe_orclei.hide();
 }
