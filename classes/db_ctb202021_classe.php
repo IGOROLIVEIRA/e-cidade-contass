@@ -22,6 +22,7 @@ class cl_ctb202021
   var $si96_codorgao = null;
   var $si96_codctb = 0;
   var $si96_codfontrecursos = 0;
+  var $si96_saldocec = 0;
   var $si96_vlsaldoinicialfonte = 0;
   var $si96_vlsaldofinalfonte = 0;
   var $si96_mes = 0;
@@ -33,6 +34,7 @@ class cl_ctb202021
                  si96_codorgao = varchar(2) = Código do órgão
                  si96_codctb = int8 = Código Identificador da Conta Bancária
                  si96_codfontrecursos = int8 = Código da fonte de recursos
+                 si96_saldocec = int8 = Saldo compõe ou não compõe Caixa e Equivalentes de Caixa
                  si96_vlsaldoinicialfonte = float8 = Valor do Saldo do  Início do Mês
                  si96_vlsaldofinalfonte = float8 = Valor do Saldo do  Final do Mês
                  si96_mes = int8 = Mês
@@ -67,6 +69,7 @@ class cl_ctb202021
       $this->si96_codorgao = ($this->si96_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_codorgao"] : $this->si96_codorgao);
       $this->si96_codctb = ($this->si96_codctb == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_codctb"] : $this->si96_codctb);
       $this->si96_codfontrecursos = ($this->si96_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_codfontrecursos"] : $this->si96_codfontrecursos);
+      $this->si96_saldocec = ($this->si96_saldocec == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_saldocec"] : $this->si96_saldocec);
       $this->si96_vlsaldoinicialfonte = ($this->si96_vlsaldoinicialfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_vlsaldoinicialfonte"] : $this->si96_vlsaldoinicialfonte);
       $this->si96_vlsaldofinalfonte = ($this->si96_vlsaldofinalfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_vlsaldofinalfonte"] : $this->si96_vlsaldofinalfonte);
       $this->si96_mes = ($this->si96_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_mes"] : $this->si96_mes);
@@ -95,6 +98,9 @@ class cl_ctb202021
     }
     if ($this->si96_codfontrecursos == null) {
       $this->si96_codfontrecursos = "0";
+    }
+    if ($this->si96_saldocec == null) {
+      $this->si96_saldocec = "0";
     }
     if ($this->si96_vlsaldoinicialfonte == null) {
       $this->si96_vlsaldoinicialfonte = "0";
@@ -164,6 +170,7 @@ class cl_ctb202021
                                       ,si96_codorgao
                                       ,si96_codctb
                                       ,si96_codfontrecursos
+                                      ,si96_saldocec
                                       ,si96_vlsaldoinicialfonte
                                       ,si96_vlsaldofinalfonte
                                       ,si96_mes
@@ -175,6 +182,7 @@ class cl_ctb202021
                                ,'$this->si96_codorgao'
                                ,$this->si96_codctb
                                ,$this->si96_codfontrecursos
+                               ,$this->si96_saldocec
                                ,$this->si96_vlsaldoinicialfonte
                                ,$this->si96_vlsaldofinalfonte
                                ,$this->si96_mes
@@ -269,6 +277,13 @@ class cl_ctb202021
         $this->si96_codfontrecursos = "0";
       }
       $sql .= $virgula . " si96_codfontrecursos = $this->si96_codfontrecursos ";
+      $virgula = ",";
+    }
+    if (trim($this->si96_saldocec) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si96_saldocec"])) {
+      if (trim($this->si96_saldocec) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si96_saldocec"])) {
+        $this->si96_saldocec = "0";
+      }
+      $sql .= $virgula . " si96_saldocec = $this->si96_saldocec ";
       $virgula = ",";
     }
     if (trim($this->si96_vlsaldoinicialfonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si96_vlsaldoinicialfonte"])) {

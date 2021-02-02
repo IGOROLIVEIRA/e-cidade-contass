@@ -96,6 +96,7 @@ class GerarCTB extends GerarAM
                 $aCSVCTB20['si96_codorgao']             = $this->padLeftZero($aCTB20['si96_codorgao'], 2);
                 $aCSVCTB20['si96_codctb']               = substr($aCTB20['si96_codctb'], 0, 20);
                 $aCSVCTB20['si96_codfontrecursos']      = $this->padLeftZero($aCTB20['si96_codfontrecursos'], 3);
+                $aCSVCTB20['si96_saldocec']             = $this->padLeftZero($aCTB20['si96_saldocec'], 1);
                 $aCSVCTB20['si96_vlsaldoinicialfonte']  = $this->sicomNumberReal($aCTB20['si96_vlsaldoinicialfonte'], 2);
                 $aCSVCTB20['si96_vlsaldofinalfonte']    = $this->sicomNumberReal($aCTB20['si96_vlsaldofinalfonte'], 2);
 
@@ -129,9 +130,11 @@ class GerarCTB extends GerarAM
 
                         }
 
+                        $aCSVCTB21['si97_saldocec']           = $this->padLeftZero($aCTB21['si97_saldocec'], 1);
                         $aCSVCTB21['si97_valorentrsaida']     = $this->sicomNumberReal($aCTB21['si97_valorentrsaida'], 2);
                         $aCSVCTB21['si97_codctbtransf']       = $aCTB21['si97_codctbtransf'] != 0 ? substr($aCTB21['si97_codctbtransf'], 0, 20) : ' ';
                         $aCSVCTB21['si97_codfontectbtransf']  = $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) != 0 ? $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) : ' ';
+                        $aCSVCTB21['si97_saldocectransf']     = $this->padLeftZero($aCTB21['si97_saldocectransf'], 1);
 
                         $this->sLinha = $aCSVCTB21;
                         $this->adicionaLinha();
@@ -149,6 +152,7 @@ class GerarCTB extends GerarAM
                                 $aCSVCTB22['si98_identificadordeducao'] = $aCTB22['si98_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCTB22['si98_identificadordeducao'], 2);
                                 $aCSVCTB22['si98_naturezareceita']      = $this->padLeftZero($aCTB22['si98_naturezareceita'], 8);
                                 $aCSVCTB22['si98_codfontrecursos']      = ($aCTB22['si98_codfontrecursos'] == 0 ? ' ' : $aCTB22['si98_codfontrecursos']);
+                                $aCSVCTB22['si98_saldocec']             = $this->padLeftZero($aCTB22['si98_saldocec'], 1);
                                 $aCSVCTB22['si98_vlrreceitacont']       = $this->sicomNumberReal($aCTB22['si98_vlrreceitacont'], 2);
 
                                 $this->sLinha = $aCSVCTB22;
