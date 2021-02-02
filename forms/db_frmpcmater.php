@@ -271,6 +271,14 @@ function js_executaIframe(val) {
       ?>
     </td>
   </tr>
+  <? if($db_opcao == 22 || $db_opcao == 2):?>
+    <tr>
+      <td><b>Justificativa da Alteração:</b></td>
+      <td>
+      <?= db_textarea('pc01_justificativa', 0, 75, '', true, 'text', $db_opcao, "onkeyup = 'return js_validaCaracteres(this.value, pc01_justificativa.id)';", '', '', '100'); ?>
+      </td>
+    </tr>
+  <? endif; ?>
     <!--FIM OC3770 -->
 
    <tr>
