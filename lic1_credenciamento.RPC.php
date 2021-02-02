@@ -47,6 +47,7 @@ try{
             db_fieldsmemory($rsLimiteCred,0);
 
             foreach ($oParam->itens as $item){
+
                 $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query_file(null,"l206_datahab",null,"l206_fornecedor = $item->l205_fornecedor and l206_licitacao = $item->l205_licitacao"));
                 db_fieldsmemory($rsHabilitacao,0);
 
@@ -57,11 +58,10 @@ try{
                 $clcredenciamento->l205_datacreditem = $item->l205_datacreditem == "" || $item->l205_datacreditem == null ? $item->l205_datacred : $item->l205_datacreditem;
 
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
-                
+
                 $dtcred = join('-', array_reverse(explode('/', $item->l205_datacreditem)));
                 
                 if (!$rsItem) {
-
                     if($dtcred < $l206_datahab){
                         throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
                     }
@@ -84,10 +84,16 @@ try{
 
                     $clcredenciamento->incluir(null);
 
+                    if ($clcredenciamento->erro_status == 0) {
+                        $sqlerro = true;
+                        $erro_msg = $clcredenciamento->erro_msg;
+                        break;
+                    }
+
                 } else {
 
                     $oCredenciamento = db_utils::fieldsMemory($rsItem, 0);
-
+                    
                     if($oCredenciamento->l205_datacreditem != $dtcred){
                         
                         if($dtcred < $l206_datahab){
@@ -113,16 +119,18 @@ try{
                         $clcredenciamento->l205_sequencial = $oCredenciamento->l205_sequencial;
                     
                         $clcredenciamento->alterar();
+
+                        if ($clcredenciamento->erro_status == 0) {
+                            $sqlerro = true;
+                            $erro_msg = $clcredenciamento->erro_msg;
+                            break;
+                        }
                     }
 
-              }
+                }
 
-              if ($clcredenciamento->erro_status == 0) {
-                  $sqlerro = true;
-                  $erro_msg = $clcredenciamento->erro_msg;
-                  break;
-              }
-              $oRetorno->sequecialforne = $item->sequenciaforne;
+                $oRetorno->sequecialforne = $item->sequenciaforne;
+            
             }
             
             db_fim_transacao($sqlerro);
