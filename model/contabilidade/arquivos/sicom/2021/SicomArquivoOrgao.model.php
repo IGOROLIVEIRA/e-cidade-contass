@@ -40,7 +40,7 @@ class SicomArquivoOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
   {
     
     $sSql = "SELECT db21_codigomunicipoestado,cgc,prefeitura,si09_codorgaotce,si09_opcaosemestralidade,si09_tipoinstit,z01_cgccpf  ";
-    $sSql .= " FROM db_config left join infocomplementaresinstit on si09_instit = codigo left join cgm on si09_gestor = z01_numcgm ;";
+    $sSql .= " FROM db_config left join infocomplementaresinstit on si09_instit = codigo left join cgm on si09_gestor = z01_numcgm where db21_ativo = 1 ;";
     
     $rsInst = db_query($sSql);
     

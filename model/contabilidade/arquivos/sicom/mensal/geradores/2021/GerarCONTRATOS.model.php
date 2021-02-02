@@ -34,7 +34,7 @@ class GerarCONTRATOS extends GerarAM {
     $sSql4 = "select * from contratos132021 where si86_mes = ". $this->iMes ." and si86_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS13    = db_query($sSql4);
 
-    $sSql5 = "select * from contratos202021 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
+    $sSql5 = "select * from contratos202121 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS20    = db_query($sSql5);
 
     $sSql6 = "select * from contratos212021 where si88_mes = ". $this->iMes ." and si88_instit = ". db_getsession("DB_instit");

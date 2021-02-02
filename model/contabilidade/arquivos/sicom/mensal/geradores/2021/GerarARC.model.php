@@ -23,19 +23,19 @@ class GerarARC extends GerarAM
         $this->sArquivo = "ARC";
         $this->abreArquivo();
 
-        $sSql = "select * from arc102020 where si28_mes = " . $this->iMes . " and si28_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from arc102021 where si28_mes = " . $this->iMes . " and si28_instit = " . db_getsession("DB_instit");
         $rsARC10 = db_query($sSql);
 
-        $sSql2 = "select * from arc112020 where si29_mes = " . $this->iMes . " and si29_instit = " . db_getsession("DB_instit");
+        $sSql2 = "select * from arc112021 where si29_mes = " . $this->iMes . " and si29_instit = " . db_getsession("DB_instit");
         $rsARC11 = db_query($sSql2);
 
-        $sSql3 = "select * from arc122020 where si30_mes = " . $this->iMes . " and si30_instit = " . db_getsession("DB_instit");
+        $sSql3 = "select * from arc122021 where si30_mes = " . $this->iMes . " and si30_instit = " . db_getsession("DB_instit");
         $rsARC12 = db_query($sSql3);
 
-        $sSql4 = "select * from arc202020 where si31_mes = " . $this->iMes . " and si31_instit = " . db_getsession("DB_instit");
+        $sSql4 = "select * from arc202121 where si31_mes = " . $this->iMes . " and si31_instit = " . db_getsession("DB_instit");
         $rsARC20 = db_query($sSql4);
 
-        $sSql5 = "select * from arc212020 where si32_mes = " . $this->iMes . " and si32_instit = " . db_getsession("DB_instit");
+        $sSql5 = "select * from arc212021 where si32_mes = " . $this->iMes . " and si32_instit = " . db_getsession("DB_instit");
         $rsARC21 = db_query($sSql5);
 
         if (pg_num_rows($rsARC10) == 0 && pg_num_rows($rsARC20) == 0 ) {
@@ -120,6 +120,9 @@ class GerarARC extends GerarAM
                 $aCSVARC20['si31_ededucaodereceita']        = $this->padLeftZero($aARC20['si31_ededucaodereceita'], 1);
                 $aCSVARC20['si31_identificadordeducao']     = $aARC20['si31_identificadordeducao'] == '' || $aARC20['si31_identificadordeducao'] == '0' ? "" : $aARC20['si31_identificadordeducao'];
                 $aCSVARC20['si31_naturezareceitaestornada'] = $this->padLeftZero($aARC20['si31_naturezareceitaestornada'], 8);
+                $aCSVARC20['si31_regularizacaorepasse']     = $aARC20['si31_regularizacaorepasseestornada'] == '' || $aARC20['si31_regularizacaorepasseestornada'] == '0' ? '2' : $aARC20['si31_regularizacaorepasseestornada'];
+                $aCSVARC20['si31_exercicio']                = $aARC20['si31_exercicioestornada'] == '' || $aARC20['si31_exercicioestornada'] == '0' ? ' ' : $aARC20['si31_exercicioestornada'];
+                $aCSVARC20['si31_emendaparlamentar']        = $aARC20['si31_emendaparlamentarestornada'] == '' || $aARC20['si31_emendaparlamentarestornada'] == '0' ? '3' : $aARC20['si31_emendaparlamentarestornada'];               
                 $aCSVARC20['si31_vlestornado']              = $this->sicomNumberReal($aARC20['si31_vlestornado'], 2);
 
                 $this->sLinha = $aCSVARC20;

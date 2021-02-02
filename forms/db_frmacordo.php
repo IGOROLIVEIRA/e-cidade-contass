@@ -1237,15 +1237,25 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_mostracontratado(erro, chave,z01_cgccpf) {
 
-        if(z01_cgccpf.length = 11){
+        if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
-        if(z01_cgccpf.length = 14){
+        if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
+                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }

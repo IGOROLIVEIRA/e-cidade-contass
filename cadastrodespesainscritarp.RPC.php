@@ -45,6 +45,7 @@ try{
             $aFonte = array();
 
             $result = $cldisponibilidadedecaixa->sql_record($cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}"));
+            // echo $cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}");
 //die($cldisponibilidadedecaixa->sql_query("null","*",null,"c224_instit = {$instit} and c224_anousu = {$anousu}"));
             for ($i = 0; $i < pg_num_rows($result); $i++) {
                 $oFonte = db_utils::fieldsMemory($result, $i);
@@ -501,86 +502,6 @@ try{
             }
           }
         }
-//                  echo "<pre>"; echo "totemp91: ".$oVlrTote91Emp;echo"<br>";
-//                  echo "totanu91: ".$oVlrTote91Anu;echo"<br>";
-//                  echo "totliq91: ".$oVlrTote91Liq;echo"<br>";
-//                  echo "totpag91: ".$oVlrTote91Pag;echo"<br>";
-//                  echo "totliq: ".$oVlrTotLiq;echo"<br>";
-//                  echo "totanu: ".$oVlrTotAnu;echo"<br>";
-//                  echo "totpag: ".$oVlrTotPag;echo"<br>";
-//                  echo "totpagnproc: ".$vlrTotpagnproc;echo"<br>";
-//                  echo "totanuliq: ".$vlrTotanuliq;echo"<br>";
-//                  echo "totanuliqnaoproc: ".$vlrTotanuliqnaoproc;echo"<br>";
-//                  echo "TotNP: ".$totNP;echo"<br>";
-//                  echo "TotLiq: ".$totLiq;echo"<br>";
-//                  exit;
-        /***
-         * busco informações do registro 20 ext com tipo de lançamento 01,02,05 e 99
-         */
-        $sSqlext20 = "SELECT si165_codfontrecursos,
-                                   round(sum(case when si165_natsaldoatualfonte = 'D' then si165_vlsaldoatualfonte*-1 else si165_vlsaldoatualfonte end),2) AS si165_vlsaldoatualfonte,
-                                   si165_natsaldoatualfonte,
-                                   c60_tipolancamento
-                            FROM ext20".db_getsession("DB_anousu")."
-                            JOIN conplanoreduz ON c61_anousu = ".db_getsession("DB_anousu")." AND (c61_reduz = si165_codext OR c61_codtce = si165_codext)
-                            JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
-                            WHERE (si165_instit, si165_mes) = ($instit, 12)
-                             AND c60_tipolancamento IN (1, 2, 5, 9999)
-                             AND si165_natsaldoatualfonte = 'C'
-                            GROUP BY si165_codfontrecursos, si165_instit, si165_natsaldoatualfonte, c60_tipolancamento
-                            ORDER BY si165_codfontrecursos";
-
-        $resultext20 = db_query($sSqlext20);
-        $vlrrestorecolherfonte = array();
-
-        for($i = 0; $i < pg_num_rows($resultext20); $i++){
-          $oExt20 = db_utils::fieldsMemory($resultext20, $i);
-
-          $Hash = $oExt20->si165_codfontrecursos;
-          $vlrrestorecolher = new stdClass();
-
-          if(!$vlrrestorecolherfonte[$Hash]){
-            $vlrrestorecolher->valor += $oExt20->si165_vlsaldoatualfonte;
-            $vlrrestorecolherfonte[$Hash] = $vlrrestorecolher;
-          }else{
-            $vlrrestorecolher = $vlrrestorecolherfonte[$Hash];
-            $vlrrestorecolher->valor += $oExt20->si165_vlsaldoatualfonte;
-          }
-        }
-        //echo "<pre>"; print_r($vlrrestorecolherfonte);exit;
-        /***
-         * busco informações do registro 20 ext com tipo de lançamento 03
-         */
-        $sSqlext20 = "SELECT si165_codfontrecursos,
-                                   round(sum(si165_vlsaldoatualfonte),2) AS si165_vlsaldoatualfonte,
-                                   si165_natsaldoatualfonte,
-                                   si124_tipolancamento
-                            FROM ext20".db_getsession("DB_anousu")."
-                            JOIN conplanoreduz ON c61_anousu = ".db_getsession("DB_anousu")." AND (c61_reduz = si165_codext OR c61_codtce = si165_codext)
-                            JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
-                            WHERE (si165_instit, si165_mes) = ($instit, 12)
-                             AND si124_tipolancamento IN ('03')
-                             AND si165_natsaldoatualfonte = 'C'
-                            GROUP BY si165_codfontrecursos, si165_instit, si165_natsaldoatualfonte, si124_tipolancamento
-                            ORDER BY si165_codfontrecursos";
-        //echo $sSqlext20;exit;
-        $resultext20 = db_query($sSqlext20);//die($sSqlext20);
-        $vlrAtivoFinan = array();
-
-        for($i = 0; $i < pg_num_rows($resultext20); $i++){
-          $oExt20 = db_utils::fieldsMemory($resultext20, $i);
-
-          $Hash = $oExt20->si165_codfontrecursos;
-          $vlrAtivoFanceiro = new stdClass();
-
-          if(!$vlrAtivoFinan[$Hash]){
-            $vlrAtivoFanceiro->valor += $oExt20->si165_vlsaldoatualfonte;
-            $vlrAtivoFinan[$Hash] = $vlrAtivoFanceiro;
-          }else{
-            $vlrAtivoFanceiro = $vlrAtivoFinan[$Hash];
-            $vlrAtivoFanceiro->valor += $oExt20->si165_vlsaldoatualfonte;
-          }
-        }
 
         /**
          * Aqui irei calcular o valor de disponiblidade por fonte
@@ -594,6 +515,11 @@ try{
 
 
         foreach ($vlrdiscaixabruta as $fonte => $oDados){
+
+          if($fonte == '119') {
+            $fonte = '118';
+          }
+          
           $vlrDisponibilidade[$fonte]->VlrDisponibilidade = round($oDados->valor,2);
           if(!$retornoSicom[$fonte]){
             $retornoSicom[$fonte]->vlrcaixabruta = round($oDados->valor,2);
@@ -602,37 +528,24 @@ try{
           }
         }
 
+        $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+        
         foreach ($vlRspExerciciosAnteriores as $fonte => $oDados){
+
+          if(in_array($fonte, $aFontesEncerradas)) {
+            $fonte = substr($fonte, 0, 1).'59';
+          }
+
+          if($fonte == '119') {
+            $fonte = '118';
+          }
+
           $vlrDisponibilidade[$fonte]->VlrDisponibilidade -= round($oDados->vlRspExeAnt,2);
           if(!$retornoSicom[$fonte]){
             $retornoSicom[$fonte]->vlrcaixabruta = 0;
             $retornoSicom[$fonte]->VlrroexercicioAnteriores = round($oDados->vlRspExeAnt,2);
           }else{
-            $retornoSicom[$fonte]->VlrroexercicioAnteriores = round($oDados->vlRspExeAnt,2);
-          }
-        }
-
-        foreach ($vlrrestorecolherfonte as $fonte => $oDados){
-          $vlrDisponibilidade[$fonte]->VlrDisponibilidade -= round($oDados->valor,2);
-          if(!$retornoSicom[$fonte]){
-            $retornoSicom[$fonte]->vlrcaixabruta = 0;
-            $retornoSicom[$fonte]->VlrroexercicioAnteriores = 0;
-            $retornoSicom[$fonte]->vlrrestorecolher = $oDados->valor;
-          }else{
-            $retornoSicom[$fonte]->vlrrestorecolher = $oDados->valor;
-          }
-        }
-
-        foreach ($vlrAtivoFinan as $fonte => $oDados){
-          $vlrDisponibilidade[$fonte]->VlrDisponibilidade += round($oDados->valor,2);
-
-          if(!$retornoSicom[$fonte]){
-            $retornoSicom[$fonte]->vlrcaixabruta = 0;
-            $retornoSicom[$fonte]->VlrroexercicioAnteriores = 0;
-            $retornoSicom[$fonte]->vlrrestorecolher = 0;
-            $retornoSicom[$fonte]->vlrAtivoFian = $oDados->valor;
-          }else{
-            $retornoSicom[$fonte]->vlrAtivoFian = $oDados->valor;
+            $retornoSicom[$fonte]->VlrroexercicioAnteriores += round($oDados->vlRspExeAnt,2);
           }
         }
 
@@ -647,8 +560,8 @@ try{
             $retornoSicom[$fonte]->vlrDisponibilidade = $oDados->VlrDisponibilidade;
           }
         }
+
         $oRetorno->oDados[] = $retornoSicom;
-//            echo "<pre>";print_r($retornoSicom);
         break;
     }
 }catch (Exception $eErro) {

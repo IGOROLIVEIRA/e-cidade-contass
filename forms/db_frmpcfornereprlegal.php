@@ -115,10 +115,18 @@ db_textarea('pc81_obs',3,51,$Ipc81_obs,true,'text',$db_opcao,"")
     </td>
     <td> 
 <?
-//db_input('pc81_tipopart',10,$Ipc81_tipopart,true,'text',$db_opcao,"")
-$x = array("1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual (MEI)", "4" => "Empresário Individual (EI)",
+  $rsOrgaoReg = db_query("SELECT pc60_orgaoreg FROM pcforne WHERE pc60_numcgm = $pc81_cgmforn");
+  $iOrgaoReg = db_utils::fieldsMemory($rsOrgaoReg, 0)->pc60_orgaoreg;
+  
+  if(intval($iOrgaoReg) == 4){
+      $aParticipacao = array("0" => "Selecione", "3" => "MicroEmpreendedor Individual (MEI)");
+  }else{
+      $aParticipacao = array("0"=>"Selecione", "1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual (MEI)", "4" => "Empresário Individual (EI)",
 "5"=>"Empresa Individual de Responsabilidade Limitada (EIRELI)");
-db_select("pc81_tipopart",$x,true,$db_opcao);
+  }
+
+
+  db_select("pc81_tipopart",$aParticipacao,true,$db_opcao);
 ?>
     </td>
   </tr>

@@ -99,7 +99,7 @@ $si53_instituicao= db_getsession("DB_instit");
     </td>
     <td> 
 <?
-db_input('si53_valorisco',10,$Isi53_valorisco,true,'text',$db_opcao,"")
+db_input('si53_valorisco',15,$Isi53_valorisco,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>

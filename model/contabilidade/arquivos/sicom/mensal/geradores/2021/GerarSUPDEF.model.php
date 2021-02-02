@@ -23,10 +23,10 @@ class GerarSUPDEF extends GerarAM
     $this->sArquivo = "SUPDEF";
     $this->abreArquivo();
     
-    $sSql = "select * from supdef102020 where si141_mes = " . $this->iMes;
+    $sSql = "select * from supdef102021 where si141_mes = " . $this->iMes;
     $rsSUPDEF10 = db_query($sSql);
 
-    $sSql2 = "select * from supdef112020 where si142_mes = " . $this->iMes;
+    $sSql2 = "select * from supdef112021 where si142_mes = " . $this->iMes;
     $rsSUPDEF11 = db_query($sSql2);
 
     $aCSV['tiporegistro'] = '99';

@@ -16,16 +16,6 @@ $clmtfis_ldo = new cl_mtfis_ldo;
   <script language='JavaScript' type='text/javascript' src='scripts/scripts.js'></script>
 </head>
 <body>
-  <form name="form2" method="post" action="" class="container">
-    <fieldset>
-      <legend>Dados para Pesquisa</legend>
-      <table width="35%" border="0" align="center" cellspacing="3" class="form-container">
-      </table>
-    </fieldset>
-    <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-    <input name="limpar" type="reset" id="limpar" value="Limpar" >
-    <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_mtfis_ldo.hide();">
-  </form>
       <?
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
@@ -35,11 +25,12 @@ $clmtfis_ldo = new cl_mtfis_ldo;
            $campos = "mtfis_ldo.oid,mtfis_ldo.*";
            }
         }
-	         $sql = $clmtfis_ldo->sql_query();
+	         $sql = $clmtfis_ldo->sql_query('',$campos);
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';
         echo '    <legend>Resultado da Pesquisa</legend>';
+
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
         echo '  </fieldset>';
         echo '</div>';

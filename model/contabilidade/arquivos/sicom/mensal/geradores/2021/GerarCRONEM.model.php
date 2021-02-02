@@ -23,7 +23,7 @@ class GerarCRONEM extends GerarAM
     $this->sArquivo = "CRONEM";
     $this->abreArquivo();
     
-    $sSql = "select * from cronem102020 where si170_mes = " . $this->iMes." and si170_instit = ".db_getsession("DB_instit");
+    $sSql = "select * from cronem102021 where si170_mes = " . $this->iMes." and si170_instit = ".db_getsession("DB_instit");
     $rsCRONEM10 = db_query($sSql);
 
 

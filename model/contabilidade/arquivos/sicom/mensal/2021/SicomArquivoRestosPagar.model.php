@@ -31,12 +31,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
    */
   protected $sNomeArquivo = 'RSP';
 
-  const JUSTIFICATIVA_CANCELAMENTO = 'Cancelamento de resto a pagar para restabelecimento na fonte correta conforme orientacao TCE';
-
-  const JUSTIFICATIVA_RESTABELECIMENTO = 'Restabelecimento de resto a pagar na fonte correta conforme orientacao TCE';
-
   /**
-   * @var array Fontes encerradas em 2021
+   * @var array Fontes encerradas em 2020
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
@@ -314,7 +310,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         $clrsp11->si113_codreduzidorsp = $oDados10->codreduzidorsp;
 
         $clrsp11->si113_codfontrecursos = $iFonteAlterada != '0' && $iFonteAlterada != '' ? $iFonteAlterada : $oDados10->codfontrecursos;
-        if (db_getsession("DB_anousu") > 2021 && in_array($oDados10->codfontrecursos, $this->aFontesEncerradas)) {
+        if (in_array($oDados10->codfontrecursos, $this->aFontesEncerradas)) {
           $clrsp11->si113_codfontrecursos = substr($clrsp11->si113_codfontrecursos, 0, 1).'59';
         }
         $clrsp11->si113_vloriginalfonte = $oDados10->vloriginal;
@@ -347,33 +343,6 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
           }
         }
 
-        /**
-         * Alteracoes nas validacoes do SICOM sera necessario inscrever e cancelar todos os restos a pagar
-         * das fontes 148,149,150,151,152,248,249,250,251 e 252 e restabelece-los nas fontes 159 e 259
-         */
-        if (db_getsession("DB_anousu") == 2021) {
-
-          if(in_array($oDados10->codfontrecursos, $this->aFontesEncerradas)) {
-
-            if ($oDados10->vlsaldoantproce > 0) {
-
-              $this->gerarReg202122($oDados10, $clrsp10,1, 1, $oDados10->vlsaldoantproce, $this::JUSTIFICATIVA_CANCELAMENTO, false);
-              $this->gerarReg202122($oDados10, $clrsp10,1, 4, $oDados10->vlsaldoantproce, $this::JUSTIFICATIVA_RESTABELECIMENTO, true);
-
-            }
-
-            if ($oDados10->vlsaldoantnaoproc > 0) {
-
-              $this->gerarReg202122($oDados10, $clrsp10,2, 1, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_CANCELAMENTO, false);
-              $this->gerarReg202122($oDados10, $clrsp10,2, 4, $oDados10->vlsaldoantnaoproc, $this::JUSTIFICATIVA_RESTABELECIMENTO, true);
-
-
-            }
-
-          }
-
-        }
-
       }
     }
     /*
@@ -403,7 +372,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 					       e94_motivo as justificativa,
 					       e60_codemp,
 					       e94_ato as atocancelamento,
-					       e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos
+                 e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos,
+                 e60_numemp
         from conlancamdoc
         join conlancamemp on c71_codlan = c75_codlan
         join empempenho on c75_numemp = e60_numemp
@@ -438,7 +408,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         * Verifica se o empenho existe na tabela dotacaorpsicom
         * Caso exista, busca os dados da dotação.
         * */
-        $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados20->e60_codemp}";
+        $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados20->e60_numemp}";
         if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
 
           $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
@@ -548,71 +518,6 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     $oGerarRSP = new GerarRSP();
     $oGerarRSP->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarRSP->gerarDados();
-
-  }
-
-  public function gerarReg202122($oDados10, $clrsp10, $iTiporestospagar, $iTipoMovimento, $vlSaldoproce, $sJustificativa, $bRestabelecimento) {
-
-    $clrsp20 = new cl_rsp202021();
-    $clrsp20->si115_tiporegistro = 20;
-    $clrsp20->si115_codreduzidomov = $iTipoMovimento == 1 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '159' . $iTiporestospagar;
-    $clrsp20->si115_codorgao = $oDados10->codorgao;
-    $clrsp20->si115_codunidadesub = $clrsp10->si112_codunidadesub;
-    $clrsp20->si115_codunidadesuborig = $clrsp10->si112_codunidadesuborig;
-    $clrsp20->si115_nroempenho = $oDados10->nroempenho;
-    $clrsp20->si115_exercicioempenho = $oDados10->exercicioempenho;
-    $clrsp20->si115_dtempenho = $oDados10->dtempenho;
-    $clrsp20->si115_tiporestospagar = $iTiporestospagar;
-    $clrsp20->si115_tipomovimento = $iTipoMovimento;
-    $clrsp20->si115_dtmovimentacao = '2021-01-01';
-    $clrsp20->si115_dotorig = $bRestabelecimento ? $oDados10->dototigres : '';
-    $clrsp20->si115_vlmovimentacao = $vlSaldoproce;
-    $clrsp20->si115_codorgaoencampatribuic = '';
-    $clrsp20->si115_codunidadesubencampatribuic = '';
-    $clrsp20->si115_justificativa = $sJustificativa;
-    $clrsp20->si115_atocancelamento = '';
-    $clrsp20->si115_dataatocancelamento = '';
-    $clrsp20->si115_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $clrsp20->si115_instit = db_getsession("DB_instit");
-
-    $clrsp20->incluir(null);
-    if ($clrsp20->erro_status == 0) {
-      throw new Exception($clrsp20->erro_msg);
-    }
-
-    $clrsp21 = new cl_rsp212021();
-
-    $clrsp21->si116_tiporegistro = 21;
-    $clrsp21->si116_reg20 = $clrsp20->si115_sequencial;
-    $clrsp21->si116_codreduzidomov = $iTipoMovimento == 1 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '159' . $iTiporestospagar;
-    $clrsp21->si116_codfontrecursos = $iTipoMovimento == 1 ? $oDados10->codfontrecursos : substr($oDados10->codfontrecursos, 0, 1).'59';
-    $clrsp21->si116_vlmovimentacaofonte = $vlSaldoproce;
-    $clrsp21->si116_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $clrsp21->si116_instit = db_getsession("DB_instit");
-
-    $clrsp21->incluir(null);
-    if ($clrsp21->erro_status == 0) {
-      throw new Exception($clrsp21->erro_msg);
-    }
-
-    if ($iTipoMovimento == 4) {
-
-      $clrsp22 = new cl_rsp222021();
-
-      $clrsp22->si117_tiporegistro = 22;
-      $clrsp22->si117_codreduzidomov = $iTipoMovimento == 1 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '159' . $iTiporestospagar;
-      $clrsp22->si117_tipodocumento = strlen($oDados10->documentocreddor) == 11 ? 1 : 2;
-      $clrsp22->si117_nrodocumento = $oDados10->documentocreddor;
-      $clrsp22->si117_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clrsp22->si117_reg20 = $clrsp20->si115_sequencial;
-      $clrsp22->si117_instit = db_getsession("DB_instit");
-
-      $clrsp22->incluir(null);
-      if ($clrsp22->erro_status == 0) {
-        throw new Exception($clrsp22->erro_msg);
-      }
-
-    }
 
   }
 

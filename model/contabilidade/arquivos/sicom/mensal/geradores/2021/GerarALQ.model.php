@@ -40,17 +40,17 @@ class GerarALQ extends GerarAM
                     si121_vlanulado,
                     si121_mes,
                     si121_instit
-             FROM alq102020
+             FROM alq102021
              INNER JOIN empempenho ON e60_codemp::int8 = si121_nroempenho AND e60_emiss = si121_dtempenho
              WHERE si121_mes = " . $this->iMes . "
                AND si121_instit = " . db_getsession("DB_instit");
     $rsALQ10 = db_query($sSql);
 
-    $sSql2 = "select * from alq112020 where si122_mes = " . $this->iMes . " and si122_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from alq112021 where si122_mes = " . $this->iMes . " and si122_instit = " . db_getsession("DB_instit");
     $rsALQ11 = db_query($sSql2);
 
 
-    $sSql3 = "select * from alq122020 where si123_mes = " . $this->iMes . " and si123_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from alq122021 where si123_mes = " . $this->iMes . " and si123_instit = " . db_getsession("DB_instit");
     $rsALQ12 = db_query($sSql3);
 
 

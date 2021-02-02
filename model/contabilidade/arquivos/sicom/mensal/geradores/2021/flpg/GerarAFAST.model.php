@@ -22,16 +22,16 @@ class GerarAFAST extends GerarAM {
 		$this->sArquivo = "AFAST";
 		$this->abreArquivo();
 
-        $sSql     = "select * from afast102020 where si199_mes = {$this->iMes} and si199_inst = ".db_getsession("DB_instit");
+        $sSql     = "select * from afast102021 where si199_mes = {$this->iMes} and si199_inst = ".db_getsession("DB_instit");
         $rsAFAST    = db_query($sSql); //db_criatabela($rsAFAST);
 
-        $sSql2     = "select * from afast202020 where si200_mes = {$this->iMes} and si200_inst = ".db_getsession("DB_instit");
+        $sSql2     = "select * from afast202021 where si200_mes = {$this->iMes} and si200_inst = ".db_getsession("DB_instit");
         $rsAFAST2    = db_query($sSql2);
 
-//        $sSql3delete = "delete from afast302020 where si201_mes = {$this->iMes}";
+//        $sSql3delete = "delete from afast302021 where si201_mes = {$this->iMes}";
 //        db_query($sSql3delete);
 
-        $sSql3 = "select * from afast302020 where si201_mes = {$this->iMes} and si201_inst = ".db_getsession("DB_instit");
+        $sSql3 = "select * from afast302021 where si201_mes = {$this->iMes} and si201_inst = ".db_getsession("DB_instit");
         $rsAFAST3 = db_query($sSql3);
 
 		if (pg_num_rows($rsAFAST) == 0 && pg_num_rows($rsAFAST2) == 0 && pg_num_rows($rsAFAST3) == 0 ) {

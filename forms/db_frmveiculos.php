@@ -90,7 +90,7 @@ $clrotulo->label("z01_nomecgm");
  * TABELA TIPO VEICULOS PARA MODULO SICOM
  */
 $cltipoveiculos->rotulo->label();
-
+ 
 $result_param=$clveicparam->sql_record($clveicparam->sql_query_file(null,"*",null," ve50_instit=".db_getsession("DB_instit")));
 if ($clveicparam->numrows>0){
     db_fieldsmemory($result_param,0);
@@ -197,17 +197,17 @@ if($clusuarios > 0 ){
                 </td>
             </tr>
 
-            <tr>
+            <tr class="tr__hidden">
                 <td nowrap title="<?=@$Tve01_placa?>">
                     <?=@$Lve01_placa?>
                 </td>
                 <td>
                     <?
-                    db_input('ve01_placa',7,$Ive01_placa,true,'text',$db_opcao,"")
+                    db_input('ve01_placa',10,$Ive01_placa,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__numcgm">
                 <td nowrap title="<?=@$Tve02_numcgm?>"><?=@$Lve02_numcgm?></td>
                 <td>
                     <?
@@ -216,7 +216,7 @@ if($clusuarios > 0 ){
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__hidden tr__hidden-veiculos">
                 <td nowrap title="<?=@$Tve01_veiccadtipo?>"><?=@$Lve01_veiccadtipo?></td>
                 <td>
                     <?
@@ -233,7 +233,7 @@ if($clusuarios > 0 ){
                 <td>
                     <?
                     $result_marca=$clveiccadmarca->sql_record($clveiccadmarca->sql_query(null, "*", "ve21_descr"));
-                    db_selectrecord("ve01_veiccadmarca",$result_marca,true,$db_opcao,"","","", "0-Nenhum");
+                    db_selectrecord("ve01_veiccadmarca",$result_marca,true,$db_opcao,"","","", "0-Selecione");
                     ?>
                 </td>
             </tr>
@@ -248,20 +248,20 @@ if($clusuarios > 0 ){
                     db_input('ve01_veiccadmodelo',10,$Ive01_veiccadmodelo,true,'text',$db_opcao," onchange='js_pesquisave01_veiccadmodelo(false);'")
                     ?>
                     <?
-                    db_input('ve22_descr',40,$Ive22_descr,true,'text',3,'')
+                    db_input('ve22_descr',42,$Ive22_descr,true,'text',3,'')
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__hidden">
                 <td nowrap title="<?=@$Tve01_veiccadcor?>"><?=@$Lve01_veiccadcor?></td>
                 <td>
                     <?
                     $result_cor=$clveiccadcor->sql_record($clveiccadcor->sql_query(null, "*", "ve23_descr"));
-                    db_selectrecord("ve01_veiccadcor",$result_cor,true,$db_opcao,"","","", "0-Nenhum");
+                    db_selectrecord("ve01_veiccadcor",$result_cor,true,$db_opcao,"","","", "0-Selecione");
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__hidden tr__hidden-veiculos">
                 <td nowrap title="<?=@$Tve01_veiccadproced?>"><?=@$Lve01_veiccadproced?></td>
                 <td>
                     <?
@@ -270,7 +270,7 @@ if($clusuarios > 0 ){
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__hidden tr__hidden-veiculos">
                 <td nowrap title="<?=@$Tve01_veiccadcateg?>"><?=@$Lve01_veiccadcateg?></td>
                 <td>
                     <?
@@ -279,59 +279,59 @@ if($clusuarios > 0 ){
                     ?>
                 </td>
             </tr>
-            <tr id="trchassi" style="display: ;">
+            <tr id="trchassi" class="tr__hidden" style="display: ;">
                 <td nowrap title="<?=@$Tve01_chassi?>">
                     <?=@$Lve01_chassi?>
                 </td>
                 <td>
                     <?
-                    db_input('ve01_chassi',30,$Ive01_chassi,true,'text',$db_opcao,"")
+                    db_input('ve01_chassi',24,$Ive01_chassi,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
-            <tr id="trrenavam" style="display: ;">
+            <tr id="trrenavam" class="tr__hidden" style="display: ;">
                 <td nowrap title="<?=@$Tve01_ranavam?>">
                     <?=@$Lve01_ranavam?>
                 </td>
                 <td>
                     <?
-                    db_input('ve01_ranavam',10,$Ive01_ranavam,true,'text',$db_opcao,"")
+                    db_input('ve01_ranavam',24,$Ive01_ranavam,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__hidden tr__hidden-veiculos">
                 <td nowrap title="<?=@$Tve01_placanum?>">
                     <?=@$Lve01_placanum?>
                 </td>
                 <td>
                     <?
-                    db_input('ve01_placanum',12,$Ive01_placanum,true,'text',$db_opcao,"")
+                    db_input('ve01_placanum', 24,$Ive01_placanum,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
 
-            <tr id="trnumserie" style="display: ;">
+            <tr id="trnumserie" class='tr__hidden' style="display: ;">
                 <td nowrap title="<?=@$Tve01_nroserie?>">
                     <?=@$Lve01_nroserie?>
                 </td>
                 <td>
                     <?
-                    db_input('ve01_nroserie',20,$Ive01_nroserie,true,'text',$db_opcao,"")
+                    db_input('ve01_nroserie',24,$Ive01_nroserie,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
 
-            <tr id="trnumcertificado" style="display: ;">
+            <tr id="trnumcertificado" class='tr__hidden' style="display: ;">
                 <td nowrap title="<?=@$Tve01_certif?>">
                     <?=@$Lve01_certif?>
                 </td>
                 <td>
                     <?
-                    db_input('ve01_certif',20,$Ive01_certif,true,'text',$db_opcao,"")
+                    db_input('ve01_certif',24,$Ive01_certif,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__hidden-veiculos">
                 <td nowrap title="<?=@$Tve01_quantpotencia?>"><?=@$Lve01_quantpotencia?></td>
                 <td>
                     <?
@@ -346,7 +346,7 @@ if($clusuarios > 0 ){
                 <td>
                     <?
                     $result_veictipoabast = $clveictipoabast->sql_record($clveictipoabast->sql_query(null,"ve07_sequencial,ve07_descr"));
-                    db_selectrecord("ve01_veictipoabast",$result_veictipoabast,true,$db_opcao,"","",""," -(Selecione)","js_mostramedida();");
+                    db_selectrecord("ve01_veictipoabast",$result_veictipoabast,true,$db_opcao,"","",""," 0-Selecione","js_mostramedida();");
                     ?>
                 </td>
             </tr>
@@ -356,14 +356,14 @@ if($clusuarios > 0 ){
                 </td>
                 <td>
                     <?
-                    db_input('ve01_medidaini',15,$Ive01_medidaini,true,'text',$db_opcao,"");
+                    db_input('ve01_medidaini',10,$Ive01_medidaini,true,'text',$db_opcao,"");
                     if (isset($ve07_sigla) && trim($ve07_sigla) != ""){
                         echo " ".db_input("ve07_sigla",3,0,true,"text",3);
                     }
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class="tr__hidden tr__hidden-veiculos">
                 <td nowrap title="<?=@$Tve01_quantcapacidad?>"><?=@$Lve01_quantcapacidad?></td>
                 <td>
                     <?
@@ -383,7 +383,7 @@ if($clusuarios > 0 ){
                     ?>
                 </td>
             </tr>
-            <tr>
+            <tr class='tr__combustivel'>
                 <td nowrap title="<?=@$Tve06_veiccadcomb?>">
                     <?
                     db_ancora(@$Lve06_veiccadcomb,"js_veiculoscomb($db_opcao);",$db_opcao);
@@ -451,7 +451,7 @@ if($clusuarios > 0 ){
                         ?>
                     </b></td>
             </tr>
-            <tr>
+            <tr class='tr__categoriacnh'>
                 <td nowrap title="<?=@$Tve01_veiccadcategcnh?>"><?=@$Lve01_veiccadcategcnh?></td>
                 <td>
                     <?
@@ -459,28 +459,37 @@ if($clusuarios > 0 ){
                         $ve01_veiccadcategcnh = $ve50_veiccadcategcnh;
                     }*/
                     $result_categcnh=$clveiccadcategcnh->sql_record($clveiccadcategcnh->sql_query());
-                    db_selectrecord("ve01_veiccadcategcnh",$result_categcnh,true,$db_opcao,"","","","0-Nenhum");
+                    db_selectrecord("ve01_veiccadcategcnh",$result_categcnh,true,$db_opcao,"","","","0-Selecione");
                     ?>
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tve01_anofab?>">
-                    <?=@$Lve01_anofab?>
-                </td>
-                <td>
-                    <?
-                    db_input('ve01_anofab',4,$Ive01_anofab,true,'text',$db_opcao,"")
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap title="<?=@$Tve01_anomod?>">
-                    <?=@$Lve01_anomod?>
-                </td>
-                <td>
-                    <?
-                    db_input('ve01_anomod',4,$Ive01_anomod,true,'text',$db_opcao,"")
-                    ?>
+                <td colspan="2">
+                    <div class="div__anos">
+                        <table style="width:100%;">
+                            <tbody>
+                            <tr>
+                                <td nowrap title="<?=@$Tve01_anofab?>" style="width:133px;">
+                                    <?=@$Lve01_anofab?>
+                                </td>
+                                <td style="width:83px;padding-left:3px;">
+                                    <?
+                                    db_input('ve01_anofab', 10,$Ive01_anofab,true,'text',$db_opcao,"")
+                                    ?>
+                                </td>
+
+                                <td nowrap title="<?=@$Tve01_anomod?>" style="width:18%">
+                                    <?=@$Lve01_anomod?>
+                                </td>
+                                <td>
+                                    <?
+                                    db_input('ve01_anomod',10,$Ive01_anomod,true,'text',$db_opcao,"")
+                                    ?>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -504,7 +513,7 @@ if($clusuarios > 0 ){
                     db_input('ve01_ceplocalidades',10,$Ive01_ceplocalidades,true,'text',$db_opcao," onchange='js_pesquisave01_ceplocalidades(false);'")
                     ?>
                     <?
-                    db_input('cp05_localidades',60,$Icp05_localidades,true,'text',3,'')
+                    db_input('cp05_localidades',42,$Icp05_localidades,true,'text',3,'')
                     ?>
                 </td>
             </tr>
@@ -535,7 +544,7 @@ if($clusuarios > 0 ){
                         db_input('ve03_bem',10,$Ive03_bem,true,'text',$db_opcao," onchange='js_pesquisave03_bem(false);'")
                         ?>
                         <?
-                        db_input('t52_descr',40,$It52_descr,true,'text',3,'')
+                        db_input('t52_descr', 42,$It52_descr,true,'text',3,'')
                         ?>
                     </td>
                 </tr>
@@ -549,6 +558,12 @@ if($clusuarios > 0 ){
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+
+    tipoveiculo = "<?=$si04_tipoveiculo?>";
+
+    if(tipoveiculo && tipoveiculo != '0'){
+        js_verifica_select(tipoveiculo);
+    }
 
     function js_submit() {
         if(document.form1.si04_situacao.value == 2 || document.form1.si04_situacao.value == 3){
@@ -566,9 +581,11 @@ if($clusuarios > 0 ){
             document.form1.si04_numcgm.value = "";
             document.getElementById("titulonumcgm").style.display = "none";
             document.getElementById("si04_numcgm").style.background = "#C0C0C0";
+            document.getElementsByClassName('tr__numcgm')[0].style.display = 'none';
         }else{
             document.getElementById("titulonumcgm").style.display = "table-row";
             document.getElementById("si04_numcgm").style.background = "#FFFFFF";
+            document.getElementsByClassName('tr__numcgm')[0].style.display = '';
         }
     }
 
@@ -609,23 +626,24 @@ if($clusuarios > 0 ){
         db_iframe_nomes.hide();
     }
     function js_verifica_select(valor){
+        let combo = '';
         if(valor == '0'){
-            var combo = document.getElementById('si04_especificacao');
+            combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option ("Selecione", "0");
         }
         if(valor == '1'){
-            var combo = document.getElementById('si04_especificacao');
+            combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option ("Aeronaves", "1");
         }
         if(valor == '2'){
-            var combo = document.getElementById('si04_especificacao');
+            combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option ("Embarcações", "2");
         }
         if(valor == '3'){
-            var combo = document.getElementById('si04_especificacao');
+            combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option ("Selecione", "0");
             combo.options[1] = new Option ("Veículo de passeio", "3");
@@ -636,7 +654,7 @@ if($clusuarios > 0 ){
             combo.options[6] = new Option ("Van", "8");
         }
         if(valor == '4'){
-            var combo = document.getElementById('si04_especificacao');
+            combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option ("Selecione", "0");
             combo.options[1] = new Option ("Trator de Esteira", "9");
@@ -650,7 +668,7 @@ if($clusuarios > 0 ){
             combo.options[9] = new Option ("Compactador", "17");
         }
         if(valor == '5'){
-            var combo = document.getElementById('si04_especificacao');
+            combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option ("Selecione", "0");
             combo.options[1] = new Option ("Gerador", "18");
@@ -663,11 +681,32 @@ if($clusuarios > 0 ){
             combo.options[8] = new Option ("Motor de Popa", "25");
         }
         if(valor == '99'){
-            var combo = document.getElementById('si04_especificacao');
+            combo = document.getElementById('si04_especificacao');
             removeAllOptions(combo);
             combo.options[0] = new Option ("Outros", "99");
         }
 
+        js_hideElements(valor);
+        js_tipodeveiculo(valor);
+
+    }
+
+    function js_hideElements(valor){
+        let aClasses = document.getElementsByClassName('tr__hidden');
+
+        if([1, 2, 4, 5, 99].includes(Number(valor))){
+            document.getElementsByClassName('tr__numcgm')[0].style.display = 'none';
+        }else{
+            document.getElementsByClassName('tr__numcgm')[0].style.display = '';
+        }
+
+        for (let count=0; count < aClasses.length; count++){
+            if([1, 2, 4, 5, 99].includes(Number(valor))){
+                aClasses[count].style.display = 'none';
+            }else{
+                aClasses[count].style.display = '';
+            }
+        }
     }
 
     function removeAllOptions(selectbox)
@@ -815,8 +854,7 @@ if($clusuarios > 0 ){
         ?>
     }
 
-    function js_tipodeveiculo(value)
-    {
+    function js_tipodeveiculo(value){
         if (value == 3) {
             document.getElementById("trchassi").style.display = "";
             document.getElementById("trrenavam").style.display = "";
@@ -827,6 +865,12 @@ if($clusuarios > 0 ){
             document.getElementById("trrenavam").style.display = "none";
             document.getElementById("trnumserie").style.display = "none";
             document.getElementById("trnumcertificado").style.display = "none";
+        }
+
+        if(value == 5){
+            document.getElementsByClassName('tr__categoriacnh')[0].style.display = 'none';
+        }else{
+            document.getElementsByClassName('tr__categoriacnh')[0].style.display = '';
         }
     }
 
@@ -842,6 +886,20 @@ if($clusuarios > 0 ){
 
     }
     js_situacao();
+
+
+    // document.getElementById('si04_especificacao').addEventListener('change', (event) => {
+    //     let aTrs = document.getElementsByClassName('tr__hidden-veiculos');
+    //
+    //     for (let count = 0; count < aTrs.length; count++){
+    //         if(['3', '4', '5', '6', '7', '8'].includes(event.target.value)){
+    //             aTrs[count].style.display = 'none';
+    //         }else{
+    //             aTrs[count].style.display = '';
+    //         }
+    //     }
+    // })
+
 </script>
 <?
 if ($db_opcao == 1) {
@@ -851,7 +909,7 @@ if ($db_opcao==2 || $db_opcao==22) {
     echo
     "<script>
 		js_verifica_select($si04_tipoveiculo);
-		var combo = document.getElementById('si04_especificacao');
+		let combo = document.getElementById('si04_especificacao');
 		for (var i=0; i < combo.options.length ; i++){
 		  if(combo.options[i].value == $si04_especificacao){
 			combo.options[i].setAttribute('selected', 'selected');

@@ -23,7 +23,7 @@ class GerarOPS extends GerarAM
     $this->sArquivo = "OPS";
     $this->abreArquivo();
 
-    $sSql = "select * from ops102020 where si132_mes = " . $this->iMes . " and si132_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from ops102021 where si132_mes = " . $this->iMes . " and si132_instit = " . db_getsession("DB_instit");
     $rsOPS10 = db_query($sSql);
 
     $sSql2 = "SELECT DISTINCT si133_sequencial,
@@ -46,19 +46,19 @@ class GerarOPS extends GerarAM
                      si133_mes,
                      si133_reg10,
                      si133_instit
-              FROM ops112020
+              FROM ops112021
               INNER JOIN empempenho ON e60_codemp::int8 = si133_nroempenho AND e60_emiss = si133_dtempenho
               WHERE si133_mes = " . $this->iMes . "
                 AND si133_instit = " . db_getsession("DB_instit");
     $rsOPS11 = db_query($sSql2);
 
-    $sSql3 = "select * from ops122020 where si134_mes = " . $this->iMes . " and si134_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from ops122021 where si134_mes = " . $this->iMes . " and si134_instit = " . db_getsession("DB_instit");
     $rsOPS12 = db_query($sSql3);
 
-    $sSql4 = "select * from ops132020 where si135_mes = " . $this->iMes . " and si135_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from ops132021 where si135_mes = " . $this->iMes . " and si135_instit = " . db_getsession("DB_instit");
     $rsOPS13 = db_query($sSql4);
 
-    $sSql5 = "select * from ops142020 where si136_mes = " . $this->iMes . " and si136_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from ops142021 where si136_mes = " . $this->iMes . " and si136_instit = " . db_getsession("DB_instit");
     $rsOPS14 = db_query($sSql5);
 
     if (pg_num_rows($rsOPS10) == 0) {

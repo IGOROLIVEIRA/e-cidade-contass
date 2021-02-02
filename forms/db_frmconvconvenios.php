@@ -9,7 +9,7 @@ if ($db_opcao==1) {
     $db_action="con1_convconvenios006.php";
 }
 
-$sSQL = " SELECT o15_codigo, o15_codtri, o15_descr FROM orctiporec WHERE o15_codtri IN ('122','123','124','142') ORDER BY o15_codigo ";
+$sSQL = " SELECT o15_codigo, o15_codtri, o15_descr FROM orctiporec WHERE o15_codtri IN ('122','123','124','142','163') ORDER BY o15_codigo ";
 $tpCadastros = db_utils::getCollectionByRecord(db_query($sSQL));
 
 $aTpCadastros = array(""=>"Selecione");

@@ -23,19 +23,19 @@ class GerarEMP extends GerarAM
     $this->sArquivo = "EMP";
     $this->abreArquivo();
 
-    $sSql = "select * from emp102020 where si106_mes = " . $this->iMes . " and si106_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from emp102021 where si106_mes = " . $this->iMes . " and si106_instit = " . db_getsession("DB_instit");
     $rsEMP10 = db_query($sSql);
 
-    $sSql2 = "select * from emp112020 where si107_mes = " . $this->iMes . " and si107_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from emp112021 where si107_mes = " . $this->iMes . " and si107_instit = " . db_getsession("DB_instit");
     $rsEMP11 = db_query($sSql2);
 
-    $sSql3 = "select * from emp122020 where si108_mes = " . $this->iMes . " and si108_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from emp122021 where si108_mes = " . $this->iMes . " and si108_instit = " . db_getsession("DB_instit");
     $rsEMP12 = db_query($sSql3);
 
-    $sSql4 = "select * from emp202020 where si109_mes = " . $this->iMes . " and si109_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from emp202021 where si109_mes = " . $this->iMes . " and si109_instit = " . db_getsession("DB_instit");
     $rsEMP20 = db_query($sSql4);
 
-    $sSql5 = "select * from emp302020 where si206_mes = " . $this->iMes . " and si206_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from emp302021 where si206_mes = " . $this->iMes . " and si206_instit = " . db_getsession("DB_instit");
     $rsEMP30 = db_query($sSql5);
 
     if (pg_num_rows($rsEMP10) == 0 && pg_num_rows($rsEMP20) == 0 && pg_num_rows($rsEMP30) == 0) {

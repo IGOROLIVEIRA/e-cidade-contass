@@ -23,16 +23,16 @@ class GerarCAIXA extends GerarAM
     $this->sArquivo = "CAIXA";
     $this->abreArquivo();
     
-    $sSql = "select * from caixa102020 where si103_mes = " . $this->iMes . " and si103_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from caixa102021 where si103_mes = " . $this->iMes . " and si103_instit = " . db_getsession("DB_instit");
     $rsCAIXA10 = db_query($sSql);
 
-    $sSql2 = "select * from caixa112020 where si166_mes = " . $this->iMes . " and si166_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from caixa112021 where si166_mes = " . $this->iMes . " and si166_instit = " . db_getsession("DB_instit");
     $rsCAIXA11 = db_query($sSql2);
 
-    $sSql3 = "select * from caixa122020 where si104_mes = " . $this->iMes . " and si104_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from caixa122021 where si104_mes = " . $this->iMes . " and si104_instit = " . db_getsession("DB_instit");
     $rsCAIXA12 = db_query($sSql3);
 
-    $sSql4 = "select * from caixa132020 where si105_mes = " . $this->iMes . " and si105_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from caixa132021 where si105_mes = " . $this->iMes . " and si105_instit = " . db_getsession("DB_instit");
     $rsCAIXA13 = db_query($sSql4);
 
     if (pg_num_rows($rsCAIXA10) == 0) {

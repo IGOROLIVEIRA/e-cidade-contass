@@ -23,13 +23,13 @@ class GerarNTF extends GerarAM
     $this->sArquivo = "NTF";
     $this->abreArquivo();
 
-    $sSql = "select * from ntf102020 where si143_mes = " . $this->iMes . " and si143_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from ntf102021 where si143_mes = " . $this->iMes . " and si143_instit = " . db_getsession("DB_instit");
     $rsNTF10 = db_query($sSql);
 
-    /*$sSql2 = "select * from ntf112020 where si144_mes = ". $this->iMes ." and si144_instit = ". db_getsession("DB_instit");
+    /*$sSql2 = "select * from ntf112021 where si144_mes = ". $this->iMes ." and si144_instit = ". db_getsession("DB_instit");
     $rsNTF11    = db_query($sSql2);*/
 
-    $sSql3 = "select * from ntf202020 where si145_mes = " . $this->iMes . " and si145_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from ntf202021 where si145_mes = " . $this->iMes . " and si145_instit = " . db_getsession("DB_instit");
     $rsNTF20 = db_query($sSql3);
 
 

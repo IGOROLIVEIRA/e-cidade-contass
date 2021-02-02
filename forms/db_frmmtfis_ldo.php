@@ -21,7 +21,11 @@ $clmtfis_ldo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('mtfis_anoinicialldo',4,$Imtfis_anoinicialldo,true,'text',$db_opcao,"")
+                    if($db_opcao==2) {
+                        db_input('mtfis_anoinicialldo', 4, $Imtfis_anoinicialldo, true, 'text', 3, "");
+                    }else{
+                        db_input('mtfis_anoinicialldo', 4, $Imtfis_anoinicialldo, true, 'text', $db_opcao, "");
+                    }
                     ?>
                 </td>
             </tr>
@@ -31,7 +35,7 @@ $clmtfis_ldo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('mtfis_pibano1',14,$Imtfis_pibano1,true,'text',$db_opcao,"")
+                    db_input('mtfis_pibano1',14,4,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -41,7 +45,7 @@ $clmtfis_ldo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('mtfis_pibano2',14,$Imtfis_pibano2,true,'text',$db_opcao,"")
+                    db_input('mtfis_pibano2',14,4,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -51,7 +55,7 @@ $clmtfis_ldo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('mtfis_pibano3',14,$Imtfis_pibano3,true,'text',$db_opcao,"")
+                    db_input('mtfis_pibano3',14,4,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -61,7 +65,7 @@ $clmtfis_ldo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('mtfis_rclano1',14,$Imtfis_rclano1,true,'text',$db_opcao,"")
+                    db_input('mtfis_rclano1',14,4,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -71,7 +75,7 @@ $clmtfis_ldo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('mtfis_rclano2',14,$Imtfis_rclano2,true,'text',$db_opcao,"")
+                    db_input('mtfis_rclano2',14,4,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -81,7 +85,7 @@ $clmtfis_ldo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('mtfis_rclano3',14,$Imtfis_rclano3,true,'text',$db_opcao,"")
+                    db_input('mtfis_rclano3',14,4,true,'text',$db_opcao,"")
                     ?>
                 </td>
             </tr>
@@ -100,14 +104,12 @@ $clmtfis_ldo->rotulo->label();
 </form>
 <script>
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_mtfis_ldo','func_mtfis_ldo.php?funcao_js=parent.js_preenchepesquisa|mtfis_sequencial','Pesquisa',true);
+        js_OpenJanelaIframe('','db_iframe_mtfis_ldo','func_mtfis_ldo.php?funcao_js=parent.js_preenchepesquisa|dl_Sequencial','Pesquisa',true);
     }
     function js_preenchepesquisa(chave){
         //db_iframe_mtfis_ldo.hide();
         <?
-
         echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-
         ?>
     }
 </script>
