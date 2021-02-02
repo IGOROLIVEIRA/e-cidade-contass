@@ -475,13 +475,47 @@ class AcordoItem {
         "ac22_acordoitem={$this->getCodigo()}
         and ac22_anousu=".db_getsession("DB_anousu").""
         );
-
       $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
       $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
     }
 
     return $this->aDotacoes;
   }
+
+    public function getDotacoesAdesao() {
+
+        if (count($this->aDotacoes) == 0) {
+
+            $oDaoAcordoItemDotacao  = new cl_acordoitemdotacao;
+            $sSqlDotacoes           = "select
+	o58_coddot as dotacao,
+	pc13_quant as quantidade,
+	pc13_sequencial as codigodotacaoitem,
+	pc13_valor as valor,
+	o80_codres as reserva,
+	o80_valor as valorreserva,
+	pc13_anousu as ano
+from acordoitem
+join acordopcprocitem on (ac23_acordoitem) = (ac20_sequencial)	
+join pcprocitem  ON (ac23_pcprocitem) = (pc81_codprocitem)
+join solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
+join pcdotac on (pcdotac.pc13_codigo = solicitem.pc11_codigo)
+join orcdotacao on (pc13_anousu, pc13_coddot) = (o58_anousu, o58_coddot)
+left join orcreservasol on (o82_solicitem) = (pc11_codigo)
+left join orcreserva on (o82_codres) = (o80_codres)
+--join solicitempcmater on (pc16_solicitem) = solicitem(pc11_codigo)
+where
+	ac20_sequencial = {$this->getCodigo()}
+	and pc13_anousu = ".db_getsession("DB_anousu")."
+order by
+	pc13_coddot";
+
+            $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
+            $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
+        }
+
+        return $this->aDotacoes;
+    }
 
   /**
    * @param unknown_type $aDotacoes
