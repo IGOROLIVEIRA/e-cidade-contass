@@ -139,22 +139,27 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 
   }
   db_fim_transacao($sqlerro);
-}else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $db_botao = true;
+}
 
-   $result = $clpcmater->sql_record($clpcmater->sql_query_file($chavepesquisa));
-   db_fieldsmemory($result,0);
+if(isset($chavepesquisa) || $pc01_codmater){
 
-   $result = $clpcmaterele->sql_record($clpcmaterele->sql_query_file($chavepesquisa));
-   $numrows = $clpcmaterele->numrows;
-   $coluna =  '';
-   $sep = '';
-   for($i=0; $i<$numrows; $i++){
-         db_fieldsmemory($result,$i);
+    $chavepesquisa = $chavepesquisa ? $chavepesquisa : $pc01_codmater;
+
+    $db_opcao = 2;
+    $db_botao = true;
+
+    $result = $clpcmater->sql_record($clpcmater->sql_query_file($chavepesquisa));
+    db_fieldsmemory($result,0);
+
+    $result = $clpcmaterele->sql_record($clpcmaterele->sql_query_file($chavepesquisa));
+    $numrows = $clpcmaterele->numrows;
+    $coluna =  '';
+    $sep = '';
+    for ($i = 0; $i < $numrows; $i++){
+        db_fieldsmemory($result,$i);
         $coluna .=  $sep.$pc07_codele;
-	$sep     = "XX";
-   }
+	      $sep     = "XX";
+    }
 
 }
 ?>
