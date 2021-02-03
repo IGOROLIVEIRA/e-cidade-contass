@@ -25,6 +25,8 @@ class HotfixOc13956 extends AbstractMigration
             INSERT INTO db_menu(id_item, id_item_filho, menusequencia, modulo)
                 VALUES(2000018, 29, 1, 2000018), 
                       (2000025, 29, 1, 2000025);
+
+            COMMIT;                      
         ";
 
         $this->execute($sql);
