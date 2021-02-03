@@ -1729,7 +1729,7 @@ class cl_empempenho {
                                      END) AS vlranu,
                                  sum(CASE
                                          WHEN c71_coddoc IN (502,412,84,310,506,306,23,3) THEN round(c70_valor,2)
-                                         WHEN c71_coddoc IN (4,24,85,307,311,413,503,507) THEN round(c70_valor,2) *-1
+                                         WHEN c71_coddoc IN (4,24,25,85,307,311,413,503,507) THEN round(c70_valor,2) *-1
                                          ELSE 0
                                      END) AS vlrliq,
                                  sum(CASE

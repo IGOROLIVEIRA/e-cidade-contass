@@ -220,7 +220,7 @@ for ($i = 0; $i < $numrows_itens; $i ++){
 
     if($pc80_criterioadjudicacao == 3) {
         //formatacao na cell valor unitario
-        $sheet->getStyle($collO)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
+        $sheet->getStyle($collO)->getNumberFormat()->setFormatCode('[$R$ ]#,####0.0000_-');
         //formula multiplicacao
         $sheet->setCellValue($collP,'='.$collN.'*'.$collO);
         $sheet->getStyle($collP)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');

@@ -269,7 +269,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
            INNER JOIN empempenho ON e60_coddot = o58_coddot 
            INNER JOIN pagordem ON e50_numemp = e60_numemp 
            WHERE e50_codord = {$e50_codord} 
-           AND o41_anousu = ".db_getsession("DB_anousu")."
+           AND o41_anousu = DATE_PART('YEAR',pagordem.e50_data)
       ";
 
   $resultordass = db_query($sql1);

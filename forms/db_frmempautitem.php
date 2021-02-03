@@ -310,7 +310,7 @@ function js_troca(codele) {
             $db_opcao_e55_vltot = $db_opcao;
           }
 
-          db_input('e55_vltot',15,$Ie55_vltot,true,'text',$db_opcao_e55_vltot,"onblur=\"js_calcula('tot');\"");
+          db_input('e55_vltot',15,$Ie55_vltot,true,'text',3,"onblur=\"js_calcula('tot');\"");
         ?>
       </td>
     </tr>
