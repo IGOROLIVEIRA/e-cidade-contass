@@ -85,8 +85,10 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                           (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida,
                           (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
                           CASE 
-                          WHEN pc01_dataalteracao IS NULL THEN '1'
-                                ELSE '2' 
+                            WHEN pc01_dataalteracao IS NULL OR 
+                              (extract(month from pc01_data) = extract(month from pc01_dataalteracao) 
+                                AND (extract(year from pc01_data) = extract(year from pc01_dataalteracao))) THEN '1' 
+                              WHEN pc01_dataalteracao > pc01_data THEN '2'
                           END as tipoCadastro,
                           pc01_justificativa as justificativaalteracao
                 FROM pcmater
@@ -134,8 +136,10 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                           (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida,
                           (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
                           CASE 
-                            WHEN pc01_dataalteracao IS NULL THEN '1'
-                                  ELSE '2' 
+                            WHEN pc01_dataalteracao IS NULL OR 
+                              (extract(month from pc01_data) = extract(month from pc01_dataalteracao) 
+                                AND (extract(year from pc01_data) = extract(year from pc01_dataalteracao))) THEN '1' 
+                              WHEN pc01_dataalteracao > pc01_data THEN '2'
                           END as tipoCadastro,
                           pc01_justificativa as justificativaalteracao
                 FROM empautoriza
@@ -182,8 +186,10 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                           (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida,
                           (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
                           CASE 
-                          WHEN pc01_dataalteracao IS NULL THEN '1'
-                                ELSE '2' 
+                            WHEN pc01_dataalteracao IS NULL OR 
+                              (extract(month from pc01_data) = extract(month from pc01_dataalteracao) 
+                                AND (extract(year from pc01_data) = extract(year from pc01_dataalteracao))) THEN '1' 
+                              WHEN pc01_dataalteracao > pc01_data THEN '2'
                           END as tipoCadastro,
                           pc01_justificativa as justificativaalteracao
                 FROM acordoitem
