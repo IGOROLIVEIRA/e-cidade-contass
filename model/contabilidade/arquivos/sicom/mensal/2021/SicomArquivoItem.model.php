@@ -84,20 +84,29 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                           pc11_codigo||''||m61_codmatunid AS coditem,
                           (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida,
                           (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
-                          CASE 
-                            WHEN pc01_dataalteracao IS NULL OR 
-                              (extract(month from pc01_data) = extract(month from pc01_dataalteracao) 
-                                AND (extract(year from pc01_data) = extract(year from pc01_dataalteracao))) THEN '1' 
-                              WHEN pc01_dataalteracao > pc01_data THEN '2'
-                          END as tipoCadastro,
-                          pc01_justificativa as justificativaalteracao
+                          CASE
+                              WHEN pc01_dataalteracao > pc01_data and extract(month from pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " THEN '2'
+                              else '1'
+                          END AS tipoCadastro,
+                          (CASE
+                              WHEN extract(MONTH
+                                          FROM pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " THEN pc01_justificativa
+                              ELSE ''
+                          END) AS justificativaalteracao
                 FROM pcmater
                 INNER JOIN solicitempcmater ON pc16_codmater=pc01_codmater
                 INNER JOIN solicitem ON pc11_codigo=pc16_solicitem
                 INNER JOIN solicitemunid ON pc17_codigo=pc11_codigo
                 INNER JOIN matunid ON m61_codmatunid=pc17_unid
-                WHERE extract(month from pc01_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " 
-                  AND extract(year from pc01_data) = ".db_getsession("DB_anousu")."
+                WHERE 
+                  (
+                    CASE 
+                      WHEN pc01_dataalteracao is null or extract(MONTH FROM pc01_dataalteracao) > " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                        THEN extract(MONTH FROM pc01_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                          AND extract(year from pc01_data) = " . db_getsession('DB_anousu') . "
+                        ELSE extract(MONTH FROM pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND extract(YEAR FROM pc01_dataalteracao) = ". db_getsession('DB_anousu') ."
+                    END
+                  )
                   AND (
                         (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
                         (SELECT si43_coditem::varchar
@@ -135,13 +144,15 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                           pc01_codmater||''||m61_codmatunid AS coditem,
                           (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida,
                           (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
-                          CASE 
-                            WHEN pc01_dataalteracao IS NULL OR 
-                              (extract(month from pc01_data) = extract(month from pc01_dataalteracao) 
-                                AND (extract(year from pc01_data) = extract(year from pc01_dataalteracao))) THEN '1' 
-                              WHEN pc01_dataalteracao > pc01_data THEN '2'
-                          END as tipoCadastro,
-                          pc01_justificativa as justificativaalteracao
+                          CASE
+                              WHEN pc01_dataalteracao > pc01_data and extract(month from pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " THEN '2'
+                              else '1'
+                          END AS tipoCadastro,
+                          (CASE
+                              WHEN extract(MONTH
+                                          FROM pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " THEN pc01_justificativa
+                              ELSE ''
+                          END) AS justificativaalteracao
                 FROM empautoriza
                 INNER JOIN empautitem ON e55_autori=e54_autori
                 INNER JOIN pcmater ON pc01_codmater=e55_item
@@ -185,18 +196,27 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                           pc01_codmater||''||m61_codmatunid AS coditem,
                           (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida,
                           (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
-                          CASE 
-                            WHEN pc01_dataalteracao IS NULL OR 
-                              (extract(month from pc01_data) = extract(month from pc01_dataalteracao) 
-                                AND (extract(year from pc01_data) = extract(year from pc01_dataalteracao))) THEN '1' 
-                              WHEN pc01_dataalteracao > pc01_data THEN '2'
-                          END as tipoCadastro,
-                          pc01_justificativa as justificativaalteracao
+                          CASE
+                              WHEN pc01_dataalteracao > pc01_data and extract(month from pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " THEN '2'
+                              else '1'
+                          END AS tipoCadastro,
+                          (CASE
+                            WHEN extract(MONTH
+                                        FROM pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " THEN pc01_justificativa
+                            ELSE ''
+                          END) AS justificativaalteracao
                 FROM acordoitem
                 INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
                 INNER JOIN matunid ON m61_codmatunid=ac20_matunid
-                WHERE extract(month from pc01_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                  AND extract(year from pc01_data) = " . db_getsession('DB_anousu') . "
+                WHERE 
+                  (
+                    CASE 
+                      WHEN pc01_dataalteracao is null or extract(MONTH FROM pc01_dataalteracao) > " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                        THEN extract(MONTH FROM pc01_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                         AND extract(year from pc01_data) = " . db_getsession('DB_anousu') . "
+                        ELSE extract(MONTH FROM pc01_dataalteracao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND extract(YEAR FROM pc01_dataalteracao) = ". db_getsession('DB_anousu') ."
+                    END
+                  )
                   AND (
                         (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) NOT IN
                         (SELECT si43_coditem::varchar
