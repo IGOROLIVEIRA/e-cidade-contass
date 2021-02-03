@@ -1140,9 +1140,9 @@ if(chave3 === 'f'){
     oTxtValorDotacao.setReadOnly(true);
 
     oTxtQuantidadeDotacao = new DBTextField('oTxtQuantidadeDotacao', 'oTxtQuantidadeDotacao', '', 10);
-    var nValorMaximo = oDadosItem.aCells[3].getValue().replace(',','.');
+    var nValorMaximo = oDadosItem.aCells[3].getValue().replace('.', '').replace(',', '.');
     var nValorUnitario = js_strToFloat(oDadosItem.aCells[4].getValue()).valueOf();
-    var sEvent = ";js_validaValorDotacao(this," + nValorMaximo + "," + nValorUnitario + ",\"oTxtValorDotacao\");";
+    var sEvent = "js_validaValorDotacao(this," + nValorMaximo + "," + nValorUnitario + ",\"oTxtValorDotacao\");";
     oTxtQuantidadeDotacao.addEvent("onChange", sEvent);
     oTxtQuantidadeDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
     oTxtQuantidadeDotacao.show($('inputquantidadedotacao'));
