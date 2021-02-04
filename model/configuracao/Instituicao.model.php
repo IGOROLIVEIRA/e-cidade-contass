@@ -41,6 +41,7 @@ class Instituicao {
   CONST COD_CLI_PMLUISLANDIA = 48;
   CONST COD_CLI_PMCAPITAOENEAS = 62;
   CONST COD_CLI_PMUBAI = 9;
+  CONST COD_CLI_PMGRAOMOGOL = 90;
 
   /**
    * Código da Instituicao
