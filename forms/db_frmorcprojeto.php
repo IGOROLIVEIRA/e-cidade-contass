@@ -65,6 +65,7 @@ $clrotulo->label("o45_numlei");
              <? db_input('o39_codlei',8,$Io39_codlei,true,'text',$db_opcao," onchange='js_pesquisao39_codlei(false);'")?>
              <? db_input('o45_numlei',30,$Io45_numlei,true,'text',3,'','','','width: 421px')     ?>
 			 <input type="hidden" id="iTipoLei" value="" name="iTipoLei" >
+			 <input type="hidden" id="bModalidadeAplic" value="<?=$bModalidadeAplic?>" name="bModalidadeAplic">
            </td>
          </tr>
   <?php
@@ -166,6 +167,18 @@ $clrotulo->label("o45_numlei");
 			
 			document.getElementById('o39_usalimite').value = 'f';	
 			document.getElementById('o39_usalimite_select_descr').value = 'Não';
+
+		}
+
+		let aTiposModalidade = ['1020', '1021', '1022'];
+		let bModalidadeAplic = document.getElementById('bModalidadeAplic').value;
+
+		if ( (aTiposModalidade.indexOf(iTipoSup) > -1) && bModalidadeAplic == 'f') {
+			
+			alert("Esse tipo de suplementação somente pode ser utilizado quando orçamento é aprovado por modalidade de aplicação!");
+			document.getElementById('o39_tiposuplementacao').options[0].selected = true;
+			document.getElementById('o39_tiposuplementacao').onchange();
+			return false;
 
 		}
 
