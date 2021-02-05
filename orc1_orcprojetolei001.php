@@ -31,7 +31,7 @@ $clcriaabas     = new cl_criaabas;
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
      <?
-   $clcriaabas->identifica = array("db_projlei"=>"Projeto de Lei","db_leialtorc"=>"Lei Alteração Orçamentária"); 
+   $clcriaabas->identifica = array("db_projlei"=>"Principal","db_leialtorc"=>"Lei Alteração Orçamentária"); 
    $clcriaabas->sizecampo = array("db_projlei"=>"19","db_leialtorc"=>"20");
    $clcriaabas->src = array("db_projlei"=>"orc1_orcprojetolei004.php","db_leialtorc"=>"orc1_orcleialtorcamentaria001.php");
    $clcriaabas->disabled   =  array("db_leialtorc"=>"true"); 
