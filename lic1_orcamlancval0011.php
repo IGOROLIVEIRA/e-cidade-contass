@@ -628,7 +628,7 @@ db_inputdata("pc23_validmin_$pc22_orcamitem",@$$dia,@$$mes,@$$ano,true,"text",$d
        echo "
           </td>
     <td align='center'  class='$class' width='15%'>";
-    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',3,"onchange=\"js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);\" $disabled");
+    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa == 'f') ? 1 : 3,"onchange=\"js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);\" $disabled");
         echo"
           </td>
         </tr>";

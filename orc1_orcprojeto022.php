@@ -34,12 +34,16 @@ include("classes/db_orcprojlan_classe.php");
 include("classes/db_db_usuarios_classe.php");
 include("classes/db_orcsuplemtipo_classe.php");
 include("classes/db_orcsuplem_classe.php");
+include("classes/db_ppaleidadocomplementar_classe.php");
 
 include("dbforms/db_funcoes.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
+$clppaleidadocomplementar 	= new cl_ppaleidadocomplementar;
+$sSqlModalidadeAplic 		= $clppaleidadocomplementar->sql_query_file(null, "o142_orcmodalidadeaplic", "o142_sequencial DESC LIMIT 1");
+$bModalidadeAplic 			= db_utils::fieldsmemory(db_query($sSqlModalidadeAplic))->o142_orcmodalidadeaplic;
 
 $clorcprojeto = new cl_orcprojeto;
 $clorcprojlan = new cl_orcprojlan;
