@@ -9,11 +9,11 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
 switch ($oGet->tipoprecoreferencia) {
-    case 2:
+    case '2':
         $tipoReferencia = " MAX(pc23_vlrun) ";
         break;
 
-    case 3:
+    case '3':
         $tipoReferencia = " MIN(pc23_vlrun) ";
         break;
 
