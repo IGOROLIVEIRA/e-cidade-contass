@@ -1,7 +1,7 @@
 <?php
 
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
-
+require_once ("classes/db_conplano_classe.php");
 /**
  * Sicom Acompanhamento Mensal
  * @author Gabriel
@@ -20,6 +20,7 @@ class GerarBALANCETE extends GerarAM
     public function gerarDados()
     {
 
+        $clconplano     = new cl_conplano();
         $this->sArquivo = "BALANCETE";
         $this->abreArquivo();
 
@@ -114,11 +115,21 @@ class GerarBALANCETE extends GerarAM
                 $aCSVBALANCETE10['si177_contacontaabil']        = $this->padLeftZero($aBALACETE10['si177_contacontaabil'], 9);
                 $aCSVBALANCETE10['si177_codfundo']              = $aBALACETE10['si177_codfundo'];
                 $aCSVBALANCETE10['si177_saldoinicial']          = $this->sicomNumberReal($aBALACETE10['si177_saldoinicial'], 2);
-                $aCSVBALANCETE10['si177_naturezasaldoinicial']  = $this->padLeftZero($aBALACETE10['si177_naturezasaldoinicial'], 1);
+                
+                $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = '1' then 'D' when c60_naturezasaldo = '2' then 'C' when c60_naturezasaldo = '3' then 'N' end as c60_naturezasaldo ", "", "substr(c60_estrut, 1, 9) = '".$aBALACETE10['si177_contacontaabil'] ."' and c60_anousu = ".db_getsession("DB_anousu") ));
+
+                if (pg_num_rows($result) > 0) {
+                    $sNaturezaSaldo = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
+                } else {
+                    $result = $clconplano->sql_record("select case when c60_naturezasaldo = '1' then 'D' when c60_naturezasaldo = '2' then 'C' when c60_naturezasaldo = '3' then 'N' end as c60_naturezasaldo from conplano join vinculopcasptce on c209_pcaspestrut = substr(c60_estrut, 1, 9) where c209_tceestrut = '{$aBALACETE10['si177_contacontaabil']}' and c60_anousu = ".db_getsession("DB_anousu"));
+                    $sNaturezaSaldo = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
+                }
+
+                $aCSVBALANCETE10['si177_naturezasaldoinicial']  = $aBALACETE10['si177_saldoinicial'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE10['si177_naturezasaldoinicial'], 1);                
                 $aCSVBALANCETE10['si177_totaldebitos']          = $this->sicomNumberReal($aBALACETE10['si177_totaldebitos'], 2);
                 $aCSVBALANCETE10['si177_totalcreditos']         = $this->sicomNumberReal($aBALACETE10['si177_totalcreditos'], 2);
                 $aCSVBALANCETE10['si177_saldofinal']            = $this->sicomNumberReal($aBALACETE10['si177_saldofinal'], 2);
-                $aCSVBALANCETE10['si177_naturezasaldofinal']    = $this->padLeftZero($aBALACETE10['si177_naturezasaldofinal'], 1);
+                $aCSVBALANCETE10['si177_naturezasaldofinal']    = $aBALACETE10['si177_saldofinal'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE10['si177_naturezasaldofinal'], 1);
 
                 $this->sLinha = $aCSVBALANCETE10;
                 $this->adicionaLinha();
