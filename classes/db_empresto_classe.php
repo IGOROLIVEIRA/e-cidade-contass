@@ -1138,7 +1138,7 @@ $order
                         sum(case when c71_coddoc IN (select c53_coddoc from conhistdoc where c53_tipo = 10) then round(c70_valor,2) else 0 end) as vlremp,
                         sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
                         sum(case when c71_coddoc in (502,412,84,310,506,306,23,3,39,33) then round(c70_valor,2)
-                        when c71_coddoc in (4,24,85,307,311,413,503,507,34,40) then round(c70_valor,2) *-1
+                        when c71_coddoc in (4,24,25,85,307,311,413,503,507,34,40) then round(c70_valor,2) *-1
                         else 0 end) as vlrliq,
                         sum(case when c71_coddoc in (208,210,212,200) then round(c70_valor,2)
                         when c71_coddoc in (209,211,213,201) then round(c70_valor,2) *-1
@@ -1183,7 +1183,7 @@ $order
                         sum(case when c71_coddoc IN (select c53_coddoc from conhistdoc where c53_tipo = 10) then round(c70_valor,2) else 0 end) as vlremp,
                         sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
                         sum(case when c71_coddoc in (502,412,84,310,506,306,23,3,39,33) then round(c70_valor,2)
-                        when c71_coddoc in (4,24,85,307,311,413,503,507,34,40) then round(c70_valor,2) *-1
+                        when c71_coddoc in (4,24,25,85,307,311,413,503,507,34,40) then round(c70_valor,2) *-1
                         else 0 end) as vlrliq,
                         sum(case when c71_coddoc in (208,210,212,200) then round(c70_valor,2)
                         when c71_coddoc in (209,211,213,201) then round(c70_valor,2) *-1
