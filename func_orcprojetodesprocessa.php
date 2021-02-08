@@ -86,11 +86,11 @@ $clorcprojeto->rotulo->label("o39_descr");
         $campos  = "distinct orcprojeto.o39_codproj, orcprojeto.o39_descr, orcprojeto.o39_numero, ";
         $campos .= "orcprojeto.o39_data, orcprojeto.o39_anousu as db_o39_anousu";
         if(isset($chave_o39_codproj) && (trim($chave_o39_codproj)!="") ){
-           $sql = $clorcprojeto->sql_query($chave_o39_codproj,$campos,"o39_codproj"," o39_codproj=$chave_o39_codproj    and   retif.o48_retificado is null and to_char(o46_data,'YYYY')::int4=".db_getsession("DB_anousu"));
+           $sql = $clorcprojeto->sql_query($chave_o39_codproj,$campos,"o39_codproj desc"," o39_codproj=$chave_o39_codproj    and   retif.o48_retificado is null and to_char(o46_data,'YYYY')::int4=".db_getsession("DB_anousu"));
         }else if(isset($chave_o39_descr) && (trim($chave_o39_descr)!="") ){
-	   $sql = $clorcprojeto->sql_query("",$campos,"o39_descr"," upper(o39_descr) like '".strtoupper($chave_o39_descr)."%' and retif.o48_retificado is null and to_char(o46_data,'YYYY')::int4=".db_getsession("DB_anousu"));
+	   $sql = $clorcprojeto->sql_query("",$campos,"o39_codproj desc, o39_descr"," upper(o39_descr) like '".strtoupper($chave_o39_descr)."%' and retif.o48_retificado is null and to_char(o46_data,'YYYY')::int4=".db_getsession("DB_anousu"));
         }else{
-           $sql = $clorcprojeto->sql_query("",$campos,"o39_codproj"," retif.o48_retificado is null and to_char(o46_data,'YYYY')::int4=".db_getsession("DB_anousu"));
+           $sql = $clorcprojeto->sql_query("",$campos,"o39_codproj desc"," retif.o48_retificado is null and to_char(o46_data,'YYYY')::int4=".db_getsession("DB_anousu"));
         }
 	// echo $sql;
         db_lovrot($sql,15,"()","",$funcao_js);
