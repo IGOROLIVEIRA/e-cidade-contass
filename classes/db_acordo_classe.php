@@ -348,15 +348,15 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        if($this->ac16_acordocomissao == null ){
-            $this->erro_sql = " Campo Acordo Comissão não informado.";
-            $this->erro_campo = "ac16_acordocomissao";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
+        // if($this->ac16_acordocomissao == null ){
+        //     $this->erro_sql = " Campo Acordo Comissão não informado.";
+        //     $this->erro_campo = "ac16_acordocomissao";
+        //     $this->erro_banco = "";
+        //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //     $this->erro_status = "0";
+        //     return false;
+        // }
         if($this->ac16_acordogrupo == null ){
             $this->erro_sql = " Campo Acordo Grupo não informado.";
             $this->erro_campo = "ac16_acordogrupo";
@@ -366,7 +366,7 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        if($this->ac16_origem == null ){
+        if($this->ac16_origem == null || !$this->ac16_origem){
             $this->erro_sql = " Campo Origem não informado.";
             $this->erro_campo = "ac16_origem";
             $this->erro_banco = "";
@@ -375,15 +375,15 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        if($this->ac16_qtdrenovacao == null ){
-            $this->erro_sql = " Campo Quantidade de Renovação não informado.";
-            $this->erro_campo = "ac16_qtdrenovacao";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
+        // if($this->ac16_qtdrenovacao == null ){
+        //     $this->erro_sql = " Campo Quantidade de Renovação não informado.";
+        //     $this->erro_campo = "ac16_qtdrenovacao";
+        //     $this->erro_banco = "";
+        //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //     $this->erro_status = "0";
+        //     return false;
+        // }
         if($this->ac16_tipounidtempo == null ){
             $this->erro_sql = " Campo Unidade do Tempo não informado.";
             $this->erro_campo = "ac16_tipounidtempo";
@@ -402,20 +402,26 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        if($this->ac16_periodocomercial == null ){
-            $this->erro_sql = " Campo Período Comercial não informado.";
-            $this->erro_campo = "ac16_periodocomercial";
+        // if($this->ac16_periodocomercial == null ){
+        //     $this->erro_sql = " Campo Período Comercial não informado.";
+        //     $this->erro_campo = "ac16_periodocomercial";
+        //     $this->erro_banco = "";
+        //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //     $this->erro_status = "0";
+        //     return false;
+        // }
+        if($this->ac16_qtdperiodo == null ){
+            $this->ac16_qtdperiodo = "0";
+        }
+        if($this->ac16_tipounidtempoperiodo == null || !$this->ac16_tipounidtempoperiodo){
+            $this->erro_sql = " Campo Unid. Execução/Entrega não informado.";
+            $this->erro_campo = "ac16_tipounidtempoperiodo";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
-        }
-        if($this->ac16_qtdperiodo == null ){
-            $this->ac16_qtdperiodo = "0";
-        }
-        if($this->ac16_tipounidtempoperiodo == null ){
-            $this->ac16_tipounidtempoperiodo = "0";
         }
         if($this->ac16_acordocategoria == null ){
             $this->ac16_acordocategoria = "0";
@@ -823,15 +829,15 @@ class cl_acordo {
         if(trim($this->ac16_acordocomissao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_acordocomissao"])){
             $sql  .= $virgula." ac16_acordocomissao = $this->ac16_acordocomissao ";
             $virgula = ",";
-            if(trim($this->ac16_acordocomissao) == null ){
-                $this->erro_sql = " Campo Acordo Comissão não informado.";
-                $this->erro_campo = "ac16_acordocomissao";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if(trim($this->ac16_acordocomissao) == null ){
+            //     $this->erro_sql = " Campo Acordo Comissão não informado.";
+            //     $this->erro_campo = "ac16_acordocomissao";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         }
         if(trim($this->ac16_lei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_lei"])){
             $sql  .= $virgula." ac16_lei = ".($this->ac16_lei == "" || $this->ac16_lei == 0 ? 'null' : $this->ac16_lei);
@@ -853,7 +859,7 @@ class cl_acordo {
         if(trim($this->ac16_origem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_origem"])){
             $sql  .= $virgula." ac16_origem = $this->ac16_origem ";
             $virgula = ",";
-            if(trim($this->ac16_origem) == null ){
+            if(trim($this->ac16_origem) == null || !$this->ac16_origem){
                 $this->erro_sql = " Campo Origem não informado.";
                 $this->erro_campo = "ac16_origem";
                 $this->erro_banco = "";
@@ -866,15 +872,15 @@ class cl_acordo {
         if(trim($this->ac16_qtdrenovacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdrenovacao"])){
             $sql  .= $virgula." ac16_qtdrenovacao = $this->ac16_qtdrenovacao ";
             $virgula = ",";
-            if(trim($this->ac16_qtdrenovacao) == null ){
-                $this->erro_sql = " Campo Quantidade de Renovação não informado.";
-                $this->erro_campo = "ac16_qtdrenovacao";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if(trim($this->ac16_qtdrenovacao) == null ){
+            //     $this->erro_sql = " Campo Quantidade de Renovação não informado.";
+            //     $this->erro_campo = "ac16_qtdrenovacao";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         }
         if(trim($this->ac16_tipounidtempo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_tipounidtempo"])){
             $sql  .= $virgula." ac16_tipounidtempo = $this->ac16_tipounidtempo ";
@@ -909,15 +915,15 @@ class cl_acordo {
         if(trim($this->ac16_periodocomercial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_periodocomercial"])){
             $sql  .= $virgula." ac16_periodocomercial = '$this->ac16_periodocomercial' ";
             $virgula = ",";
-            if(trim($this->ac16_periodocomercial) == null ){
-                $this->erro_sql = " Campo Período Comercial não informado.";
-                $this->erro_campo = "ac16_periodocomercial";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if(trim($this->ac16_periodocomercial) == null ){
+            //     $this->erro_sql = " Campo Período Comercial não informado.";
+            //     $this->erro_campo = "ac16_periodocomercial";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         }
         if(trim($this->ac16_qtdperiodo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdperiodo"])){
             if(trim($this->ac16_qtdperiodo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdperiodo"])){

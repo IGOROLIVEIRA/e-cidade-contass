@@ -99,8 +99,12 @@ db_app::load("dbtextFieldData.widget.js");
         width: 90px;
     }
 
-    #ac16_tipounidtempo, #ac16_tipounidtempoperiodo{
+    #ac16_tipounidtempo{
         width: 49px;
+    }
+
+    #ac16_tipounidtempoperiodo, #ac16_datainicio, #ac16_datafim{
+        width: 90px;
     }
 
     #ac16_formafornecimento {
@@ -110,6 +114,10 @@ db_app::load("dbtextFieldData.widget.js");
     #ac16_objeto{
         width: 564px;
         height: 66px;
+    }
+
+    .tr__qtdrenovacao, .tr__contrato-emergencial, .tr__periodo-comercial{
+        display: none;
     }
 </style>
 <form name="form1" method="post" action="<?= $db_action ?>">
@@ -181,8 +189,9 @@ db_app::load("dbtextFieldData.widget.js");
                                                             3 => 'Manual'
                                                         );
                                                     }
+                                                    
                                                     db_select('ac16_origem', $aValores, true, $db_opcao,
-                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();");
+                                                        "onchange='js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();'");
 
                                                     ?>
                                                 </td>
@@ -359,7 +368,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr class="tr__qtdrenovacao">
                                                 <td nowrap title="<?= @$Tac16_qtdrenovacao ?>">
                                                     <?= $Lac16_qtdrenovacao; ?>
                                                 </td>
@@ -372,7 +381,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr class="tr__contrato-emergencial">
                                                 <td>
                                                     <b>Contrato Emergencial:</b>
                                                 </td>
@@ -384,7 +393,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                 </td>
                                             </tr>
 
-                                            <tr>
+                                            <tr class="tr__periodo-comercial">
                                                 <td>
                                                     <b>Períodos por Mês Comercial:</b>
                                                 </td>
@@ -505,7 +514,9 @@ db_app::load("dbtextFieldData.widget.js");
                                                     <?
                                                     db_input('ac16_qtdperiodo', 2, @$Iac16_qtdperiodo, true, 'text', $db_opcao,
                                                         "", "", "");
-                                                    db_select("ac16_tipounidtempoperiodo", getValoresPadroesCampo("ac16_tipounidtempoperiodo"),
+                                                    $aTipoUnidades = getValoresPadroesCampo("ac16_tipounidtempoperiodo");
+                                                    $aTipoUnidades[0] = "Selecione";
+                                                    db_select("ac16_tipounidtempoperiodo", $aTipoUnidades,
                                                         true, $db_opcao);
                                                     ?>
                                                 </td>
@@ -1006,9 +1017,9 @@ db_app::load("dbtextFieldData.widget.js");
 
         var iAcordoOrigem = $('ac16_origem').value;
 
-        if (iAcordoOrigem != 0) {
-            $('ac16_origem').options[0].disabled = true;
-        }
+        // if (iAcordoOrigem != 0) {
+        //     $('ac16_origem').options[0].disabled = true;
+        // }
     }
 
 
@@ -1544,6 +1555,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_verificaorigem() {
 
+        console.log('Enter here 4...');
         iOrigem = document.form1.ac16_origem.value;
 
         if(iOrigem == 1 || iOrigem == 2){
