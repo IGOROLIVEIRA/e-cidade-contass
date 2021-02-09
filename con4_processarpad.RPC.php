@@ -394,8 +394,12 @@ switch($oParam->exec) {
      $oArquivo->setDataInicial($sDataInicial);
      $oArquivo->setDataFinal($sDataFinal);
      if ($sArquivo == "MetasFisicasRealizadas"){
-      $oArquivo->setCodigoPespectiva($oParam->pespectivappa);
-    }
+      	$oArquivo->setCodigoPespectiva($oParam->pespectivappa);
+	 }
+	 if (db_getsession("DB_anousu") >= 2020 && $sArquivo == "ContasBancarias" && $oParam->encerraCtbExt == 1) {
+		$oArquivo->setEncerramentoCtbExt($oParam->encerraCtbExt);
+	 }
+
     $oArquivoCsv = new stdClass();
     try {
 
