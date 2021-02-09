@@ -459,16 +459,26 @@ AND e60_codemp = '$codemp'";
          */
 
         $sFontesExistentes = implode(',',$aFontesExistentes);
-
-        $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
-        FROM disponibilidadecaixa
-        WHERE c224_anousu = ". db_getsession('DB_anousu')."
-        AND c224_instit = ". db_getsession('DB_instit')."
-        AND (c224_vlrcaixabruta != 0
-        OR c224_rpexercicioanterior != 0
-        OR c224_vlrrestoarecolher != 0
-        OR c224_vlrdisponibilidadecaixa != 0
-        OR c224_fonte IN ({$sFontesExistentes})) order by c224_fonte";
+        if(pg_num_rows($resultEmp) > 0) {
+            $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
+            FROM disponibilidadecaixa
+            WHERE c224_anousu = ". db_getsession('DB_anousu')."
+            AND c224_instit = ". db_getsession('DB_instit')."
+            AND (c224_vlrcaixabruta != 0
+            OR c224_rpexercicioanterior != 0
+            OR c224_vlrrestoarecolher != 0
+            OR c224_vlrdisponibilidadecaixa != 0
+            OR c224_fonte IN ({$sFontesExistentes})) order by c224_fonte";
+        }else{
+            $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
+            FROM disponibilidadecaixa
+            WHERE c224_anousu = ". db_getsession('DB_anousu')."
+            AND c224_instit = ". db_getsession('DB_instit')."
+            AND (c224_vlrcaixabruta != 0
+            OR c224_rpexercicioanterior != 0
+            OR c224_vlrrestoarecolher != 0
+            OR c224_vlrdisponibilidadecaixa != 0) order by c224_fonte";
+        }
 
         $rsResult20 = db_query($sSql20);
 
