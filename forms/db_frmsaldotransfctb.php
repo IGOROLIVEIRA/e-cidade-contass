@@ -4,61 +4,45 @@ $clsaldotransfctb->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
 <center>
-<table border="0">
-  <tr>
-    <td nowrap title="<?=@$Tsi202_codctb?>">
-    <input name="oid" type="hidden" value="<?=@$oid?>">
-       <?=@$Lsi202_codctb?>
-    </td>
-    <td> 
-<?
-db_input('si202_codctb',11,$Isi202_codctb,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi202_codfontrecursos?>">
-       <?=@$Lsi202_codfontrecursos?>
-    </td>
-    <td> 
-<?
-db_input('si202_codfontrecursos',3,$Isi202_codfontrecursos,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi202_saldofinal?>">
-       <?=@$Lsi202_saldofinal?>
-    </td>
-    <td> 
-<?
-db_input('si202_saldofinal',14,$Isi202_saldofinal,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi202_anousu?>">
-       <?=@$Lsi202_anousu?>
-    </td>
-    <td> 
-<?
-$si202_anousu = db_getsession('DB_anousu');
-db_input('si202_anousu',10,$Isi202_anousu,true,'text',3,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi202_instit?>">
-       <?=@$Lsi202_instit?>
-    </td>
-    <td> 
-<?
-db_input('si202_instit',10,$Isi202_instit,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  </table>
-  </center>
+<fieldset style="margin-top: 10px;">
+	<legend>Saldos Transferência CTB</legend>
+	<table border="0">
+		<tr>
+			<td nowrap title="<?=@$Tsi202_codctb?>">
+			<input name="si202_codctb" type="hidden" value="<?=@$si202_codctb?>">
+			<input name="si202_anousu" type="hidden" value="<?=@$si202_anousu?>">
+			<input name="si202_instit" type="hidden" value="<?=@$si202_instit?>">
+			<?=@$Lsi202_codctb?>
+			</td>
+			<td> 
+		<?
+		db_input('si202_codctb',11,$Isi202_codctb,true,'text',$db_opcao,"")
+		?>
+			</td>
+		</tr>
+		<tr>
+			<td nowrap title="<?=@$Tsi202_codfontrecursos?>">
+			<?=@$Lsi202_codfontrecursos?>
+			</td>
+			<td> 
+		<?
+		db_input('si202_codfontrecursos',3,$Isi202_codfontrecursos,true,'text',$db_opcao,"")
+		?>
+			</td>
+		</tr>
+		<tr>
+			<td nowrap title="<?=@$Tsi202_saldofinal?>">
+			<?=@$Lsi202_saldofinal?>
+			</td>
+			<td> 
+		<?
+		db_input('si202_saldofinal',14,$Isi202_saldofinal,true,'text',$db_opcao,"")
+		?>
+			</td>
+		</tr>
+	</table>
+</fieldset>
+</center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>

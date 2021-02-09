@@ -153,7 +153,7 @@ class cl_saldotransfctb {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) { 
+  function alterar ( $si202_codctb=null, $si202_anousu=null, $si202_instit=null ) { 
       $this->atualizacampos();
      $sql = " update saldotransfctb set ";
      $virgula = "";
@@ -223,7 +223,8 @@ class cl_saldotransfctb {
        }
      }
      $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+     $sql .= "si202_codctb = '$si202_codctb' and si202_anousu = '$si202_anousu' and si202_instit = '$si202_instit' ";     
+     $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Saldos Transferência CTB nao Alterado. Alteracao Abortada.\\n";
@@ -254,13 +255,13 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao para exclusao 
-  function excluir ( $oid=null ,$dbwhere=null) { 
+  function excluir ( $si202_codctb=null, $si202_anousu=null, $si202_instit=null ,$dbwhere=null) { 
 
      $sql = " delete from saldotransfctb
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "oid = '$oid'";
+       $sql2 = "si202_codctb = '$si202_codctb' and si202_anousu = '$si202_anousu' and si202_instit = '$si202_instit'";
      } else {
        $sql2 = $dbwhere;
      }
@@ -319,7 +320,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql 
-  function sql_query ( $oid = null,$campos="saldotransfctb.oid,*",$ordem=null,$dbwhere="") { 
+  function sql_query ( $si202_codctb = null,$campos="*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -334,8 +335,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      $sql .= " from saldotransfctb ";
      $sql2 = "";
      if ($dbwhere=="") {
-       if ( $oid != "" && $oid != null) {
-          $sql2 = " where saldotransfctb.oid = '$oid'";
+       if ( $si202_codctb != "" && $si202_codctb != null) {
+          $sql2 = " where saldotransfctb.si202_codctb = '$si202_codctb'";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
@@ -354,7 +355,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql 
-  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") { 
+  function sql_query_file ( $si202_codctb = null,$campos="*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);

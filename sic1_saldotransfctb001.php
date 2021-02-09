@@ -11,6 +11,8 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
+  $clsaldotransfctb->si202_anousu = db_getsession('DB_anousu');
+  $clsaldotransfctb->si202_instit = db_getsession('DB_instit');
   $clsaldotransfctb->incluir();
   db_fim_transacao();
 }
@@ -24,7 +26,7 @@ if(isset($incluir)){
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+<table border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
   <tr> 
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
@@ -32,7 +34,7 @@ if(isset($incluir)){
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
+<table width="590" align="center" border="0" cellspacing="0" cellpadding="0">
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
     <center>
@@ -48,9 +50,6 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 ?>
 </body>
 </html>
-<script>
-js_tabulacaoforms("form1","si202_codfontrecursos",true,1,"si202_codfontrecursos",true);
-</script>
 <?
 if(isset($incluir)){
   if($clsaldotransfctb->erro_status=="0"){

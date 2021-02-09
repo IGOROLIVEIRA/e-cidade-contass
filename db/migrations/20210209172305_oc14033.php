@@ -40,7 +40,7 @@ class Oc14033 extends PostgresMigration
 
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='sicom'), (SELECT max(codarq) FROM db_sysarquivo));
 
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si202_codctb','int8','Código CTB','', 'Código CTB',11,false,false,false,0,'int8','Código CTB');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si202_codctb','int8','Código CTB','', 'Código CTB',11,false,false,false,1,'int8','Código CTB');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si202_codfontrecursos','int4','Fonte','', 'Fonte',3,false,false,false,1,'int4','Fonte');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si202_saldofinal','float8','Saldo Final','0', 'Saldo Final',14,false,false,false,4,'text','Saldo Final');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'si202_anousu','int4','Ano','', 'Ano',10,false,false,false,0,'text','Ano');
@@ -51,7 +51,16 @@ class Oc14033 extends PostgresMigration
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'si202_saldofinal'), 		3, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'si202_anousu'), 			4, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'si202_instit'), 			5, 0);
-        
+
+        CREATE TABLE saldotransfctb(
+            si202_codctb            bigint not null,
+            si202_codfontrecursos   bigint not null,
+            si202_saldofinal        double precision DEFAULT 0 NOT NULL,
+            si202_anousu            bigint DEFAULT 0 NOT NULL,
+            si202_instit           	bigint DEFAULT 0 NOT NULL);
+
+        CREATE UNIQUE INDEX saldotransfctb_index ON saldotransfctb(si202_codctb, si202_anousu, si202_instit);
+                
         COMMIT;
 
 SQL;

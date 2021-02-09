@@ -13,7 +13,7 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $clsaldotransfctb->alterar($oid);
+  $clsaldotransfctb->alterar($si202_codctb, $si202_anousu, $si202_instit);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
@@ -31,7 +31,7 @@ if(isset($alterar)){
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+<table border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
   <tr> 
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
@@ -39,7 +39,7 @@ if(isset($alterar)){
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
+<table width="590" align="center" border="0" cellspacing="0" cellpadding="0">
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
     <center>

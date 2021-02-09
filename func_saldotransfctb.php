@@ -32,10 +32,10 @@ $clsaldotransfctb = new cl_saldotransfctb;
            if(file_exists("funcoes/db_func_saldotransfctb.php")==true){
              include("funcoes/db_func_saldotransfctb.php");
            }else{
-           $campos = "saldotransfctb.oid,saldotransfctb.*";
+           $campos = "saldotransfctb.*";
            }
         }
-	         $sql = $clsaldotransfctb->sql_query();
+	      $sql = $clsaldotransfctb->sql_query(null, $campos, null, "si202_anousu = ".db_getsession('DB_anousu')." and si202_instit = ".db_getsession('DB_instit'));
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';
@@ -45,7 +45,7 @@ $clsaldotransfctb = new cl_saldotransfctb;
         echo '</div>';
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clsaldotransfctb->sql_record($clsaldotransfctb->sql_query($pesquisa_chave));
+          $result = $clsaldotransfctb->sql_record($clsaldotransfctb->sql_query($pesquisa_chave, $campos, null, "si202_anousu = ".db_getsession('DB_anousu')." and si202_instit = ".db_getsession('DB_instit')));
           if($clsaldotransfctb->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$oid',false);</script>";
