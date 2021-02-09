@@ -413,9 +413,9 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
           $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
 
-          $clrsp20->si115_codorgao = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0");
+          $clrsp20->si115_codorgao = $aDotacaoRpSicom[0]->si177_codorgaotce;
           $clrsp20->si115_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
-          $clrsp20->si115_codunidadesuborig = $clrsp20->si115_codunidadesub;
+          $clrsp20->si115_codunidadesuborig = strlen($aDotacaoRpSicom[0]->si177_codunidadesuborig) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesuborig) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesuborig : $aDotacaoRpSicom[0]->si177_codunidadesuborig;
 
         } else {
           $clrsp20->si115_codorgao = $oDados20->codorgao;
