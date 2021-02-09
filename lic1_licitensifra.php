@@ -233,11 +233,12 @@ if (!empty($chaves) && isset($chaves)){
                * Tipo de julgamento por Lote
                * pega o lote do processo de compras e ja vem sugerido
                */
-              if ($tipojulg == 3) {
-                $clliclicitemlote->l04_descricao = $pc68_nome;
-              }
+              // Comentado por causa da Oc13887
+              // if ($tipojulg == 3) {
+              //   $clliclicitemlote->l04_descricao = $pc68_nome;
+              // }
 
-              if (!empty($clliclicitemlote->l04_descricao)) {
+              if (!empty($clliclicitemlote->l04_descricao) && in_array($tipojulg, array(1, 2))) {
 
                 $clliclicitemlote->incluir(null);
 
