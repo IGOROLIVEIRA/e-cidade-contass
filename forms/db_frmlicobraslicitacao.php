@@ -43,7 +43,7 @@ $cllicobraslicitacao->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('obr07_objeto',0,0,$Iobr07_objeto,true,'text',$db_opcao,"","","",'1000')
+                    db_textarea('obr07_objeto', 0, 0,'',true,'text',$db_opcao,"","","",'1000')
                     ?>
                 </td>
             </tr>

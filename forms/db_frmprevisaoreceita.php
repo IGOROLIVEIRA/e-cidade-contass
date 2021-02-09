@@ -4,7 +4,7 @@
     $iAnousu =  db_getsession('DB_anousu');
     $clorcfontes = new cl_orcfontes();
 
-    $sWhere = "o70_codigo in ('122', '123', '124', '142') and o70_anousu = ".$iAnousu." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5";
+    $sWhere = "o70_codigo in ('122', '123', '124', '142', '163') and o70_anousu = ".$iAnousu." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5";
 
     if ($iAnousu >= 2020) {
         

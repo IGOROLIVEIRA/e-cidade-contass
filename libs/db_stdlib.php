@@ -2461,6 +2461,876 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
   return $result;
 }
 
+//Executa um SELECT e pagina na tela com os labels do sistema
+function db_lovrot_arredondamento($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array (), $automatico = true, $totalizacao = array()) {
+
+    //Observação : Quando utilizar o parametro automatico, coloque no parametro NomeForm o seguinte "NoMe" e em variaveis_repassa array().
+
+    //#00#//db_lovrot
+    //#10#//Esta funcao é utilizada para mostrar registros na tela, podendo páginar os dados
+    //#15#//db_lovrot($query,$numlinhas,$arquivo="",$filtro="%",$aonde="_self",$campos_layer="",$NomeForm="NoMe",$variaveis_repassa=array());
+    //#20#//$query               Select que será executado
+    //#20#//$numlinhas           Número de linhas a serem mostradas
+    //#20#//$arquivo             Arquivo que será executado quando der um click em uma linha
+    //#20#//                     Na versão com iframe deverá ser colocado "()"
+    //#20#//$filtro              Filtro que será gerado, normamente ""
+    //#20#//$aonde               Nome da função que será executada quando der um click
+    //#20#//$campos_layer        Campos que serão colocados na layer quando passar o mouse ( não esta implementado )
+    //#20#//$NomeForm            Nome do formulário para colocar variáveis complementares Padrão = "NoMe"
+    //#20#//$variaveis_repassa   Array com as variáveis a serem reoassadas para o programa
+    //#99#//Exemplo:
+    //#99#//$js_funcao = "";
+    //#99#//db_lovrot("select z01_nome from cgm limit 1","()","",$js_funcao);
+    //#99#//
+    //#99#//O cabeçalho da tabela o sistema pega pelo nome do campo e busca na documentação, colcando o label
+    //#99#//Quando não desejar colocar o label da documentacao, o nome do campo deverá ser iniciado com dl_ e o sistema retirará
+    //#99#//estes caracteres e colocará o primeiro caracter em maiusculo
+    //#99#//Criado parametro novo, $totalizacao = array() que devere fornecer os campos que desejar fazer somatorio, conforme
+    //#99#//exemplo abaixo:
+    //#99#//
+    //#99#//$totalizacao["e60_vlremp"] = "e60_vlremp"; totaliza o campo
+    //#99#//$totalizacao["e60_vlranu"] = "e60_vlranu"; totaliza o campo
+    //#99#//$totalizacao["e60_vlrpag"] = "e60_vlrpag"; totaliza o campo
+    //#99#//$totalizacao["e60_vlrliq"] = "e60_vlrliq"; totaliza o campo
+    //#99#//$totalizacao["dl_saldo"] = "dl_saldo";     totaliza o campo ( neste caso, o campo é um alias no sql)
+    //#99#//$totalizacao["totalgeral"] = "z01_nome";   indica qual o campo sera colocado o total
+
+
+    global $BrowSe;
+    //cor do cabecalho
+    global $db_corcabec;
+    //cor de fundo de cada registro
+    global $cor1;
+    global $cor2;
+    global $_POST;
+    $db_corcabec   = $db_corcabec == "" ? "#CDCDFF" : $db_corcabec;
+    $mensagem      = "Clique Aqui";
+    $cor1          = $cor1 == "" ? "#97B5E6" : $cor1;
+    $cor2          = $cor2 == "" ? "#E796A4" : $cor2;
+    $tot_registros = "tot_registros".$NomeForm;
+    $offset        = "offset".$NomeForm;
+    //recebe os valores do campo hidden
+
+    if( isset( $_POST["totreg".$NomeForm] ) ) {
+        $$tot_registros = $_POST["totreg".$NomeForm];
+    } else {
+        $$tot_registros = 0;
+    }
+
+    if( isset( $_POST["offset".$NomeForm] ) ) {
+        $$offset = $_POST["offset".$NomeForm];
+    } else {
+        $$offset = 0;
+    }
+
+    if( isset( $_POST["recomecar"] ) ) {
+        $recomecar = $_POST["recomecar"];
+    }
+
+    // se for a primeira vez que é rodado, pega o total de registros e guarda no campo hidden
+    if( ( empty ($$tot_registros) && !empty ($query) ) || isset($recomecar)) {
+
+        if( isset( $recomecar ) ) {
+            $query = db_getsession("dblov_query_inicial");
+        }
+
+        $Dd1 = "disabled";
+
+        if( count( $totalizacao ) > 0 || isset( $totalizacao_rep ) ) {
+
+            $total_campos     = "";
+            $sep_total_campos = "";
+            reset($totalizacao);
+
+            for ( $j = 0; $j < count( $totalizacao ); $j ++) {
+
+                if( key( $totalizacao ) == $totalizacao[key($totalizacao)] ) {
+
+                    $total_campos    .= $sep_total_campos . "sum(" . $totalizacao[key($totalizacao)] . ") as ";
+                    $total_campos    .= $totalizacao[key($totalizacao)];
+                    $sep_total_campos = ",";
+                }
+
+                next($totalizacao);
+            }
+
+            reset($totalizacao);
+            $tot = db_query("select count(*),$total_campos from ($query) as temp");
+        } else {
+            $tot = db_query("select count(*) from ($query) as temp");
+        }
+
+        db_putsession("dblov_query_inicial",$query);
+
+        $$tot_registros = pg_result($tot, 0, 0);
+
+        if ( $$tot_registros == 0 ) {
+            $Dd2 = "disabled";
+        }
+    }
+
+    if( isset( $_POST["nova_quantidade_linhas"] ) && $_POST["nova_quantidade_linhas"] != '' ) {
+
+        $_POST["nova_quantidade_linhas"] = $_POST["nova_quantidade_linhas"] + 0;
+        $numlinhas                       = $_POST["nova_quantidade_linhas"];
+    }
+
+    // testa qual botao foi pressionado
+    if( isset( $_POST["pri".$NomeForm] ) ) {
+
+        $$offset = 0;
+        $Dd1     = "disabled";
+        $query   = base64_decode( $_POST["filtroquery"] );
+    } else if ( isset( $_POST["ant".$NomeForm] ) ) {
+
+        $query = base64_decode( @$_POST["filtroquery"] );
+
+        if( $$offset <= $numlinhas ) {
+
+            $$offset = 0;
+            $Dd1     = "disabled";
+        } else {
+            $$offset = $$offset - $numlinhas;
+        }
+    } else if( isset( $_POST["prox".$NomeForm] ) ) {
+
+        $query = base64_decode( $_POST["filtroquery"] );
+
+        if( ( $$offset + ( $numlinhas * 2 ) ) >= $$tot_registros) {
+            $Dd2 = "disabled";
+        }
+
+        if( $numlinhas >= ( $$tot_registros - $$offset ) ) {
+
+            if( $$tot_registros - $$offset - $numlinhas >= $numlinhas ) {
+                $$offset = $numlinhas;
+            } else {
+                $$offset = $$offset + $numlinhas;
+            }
+
+            if( $$offset > $$tot_registros ) {
+                $$offset = 0;
+            }
+
+            $Dd2 = "disabled";
+        } else {
+            $$offset = $$offset + $numlinhas;
+        }
+    } else if( isset ( $_POST["ult".$NomeForm] ) ) {
+
+        $query   = base64_decode( $_POST["filtroquery"] );
+        $$offset = $$tot_registros - $numlinhas;
+        if( $$offset < 0 ) {
+            $$offset = 0;
+        }
+
+        $Dd2 = "disabled";
+    } else {
+
+        reset( $_POST );
+
+        for( $i = 0; $i < sizeof( $_POST ); $i ++ ) {
+
+            $ordem_lov = substr( key( $_POST ), 0, 11 );
+
+            if( $ordem_lov == 'ordem_dblov' ) {
+
+                $query           = base64_decode( $_POST["filtroquery"] );
+                $campo           = substr( key( $_POST ), 11 );
+                $ordem_ordenacao = '';
+
+                if( isset( $_POST['ordem_lov_anterior'] ) ) {
+
+                    if( $_POST['ordem_lov_anterior'] == $_POST[key( $_POST )] ) {
+                        $ordem_ordenacao = 'desc';
+                    }
+                }
+
+                if( $_POST["codigo_pesquisa"] != '' ) {
+
+                    /**
+                     * Query para buscar o tipo do campo clicado no cabeçalho
+                     */
+                    $sValorPesquisa    = $_POST["codigo_pesquisa"];
+                    $sWhere            = "nomecam = '{$_POST['campo_filtrado']}'";
+                    $oDaoDbSysCampo    = new cl_db_syscampo();
+                    $sSqlDaoDbSysCampo = $oDaoDbSysCampo->sql_query_file( null, 'conteudo', null, $sWhere );
+                    $rsDaoDbSysCampo   = db_query( $sSqlDaoDbSysCampo );
+
+                    if( $rsDaoDbSysCampo && pg_num_rows( $rsDaoDbSysCampo ) > 0 ) {
+
+                        $sConteudo = db_utils::fieldsMemory( $rsDaoDbSysCampo, 0 )->conteudo;
+
+                        /**
+                         * Caso seja um tipo 'date', trata para inverter o valor passado, transformando num valor válido para o banco
+                         */
+                        if( $sConteudo == 'date' ) {
+
+                            $aValorPesquisa = array_reverse( explode( "/", $sValorPesquisa ) );
+                            $sValorPesquisa = "%" . implode( "-", $aValorPesquisa );
+                        }
+                    }
+
+                    $query_anterior     = $query;
+                    $query_novo_filtro  = "select * from ({$query}) as x where {$campo}::text ILIKE '{$sValorPesquisa}%'";
+                    $query_novo_filtro .= " order by {$campo} {$ordem_ordenacao}";
+                    $query              = $query_novo_filtro;
+                } else {
+
+                    if( $_POST["distinct_pesquisa"] == '1' ) {
+
+                        $query_anterior    = $query;
+                        $query             = "select distinct on (".$campo.") * from (".$query.") as x order by ".$campo." ".$ordem_ordenacao;
+                        $query_novo_filtro = $query;
+
+                    }else{
+                        $query = "select * from (".$query.") as x order by ".$campo." ".$ordem_ordenacao;
+                    }
+                }
+
+                $$offset = 0;
+                break;
+            }
+            next($_POST);
+        }
+    }
+
+    $filtroquery = $query;
+
+    // executa a query e cria a tabela
+    if( $query == "" ) {
+        exit;
+    }
+
+    $query  .= " limit $numlinhas offset ".$$offset;
+    $result  = db_query($query);
+    $NumRows = pg_numrows($result);
+
+    if( $NumRows == 0 ) {
+
+        if( isset( $query_anterior ) ) {
+
+            echo "<script>alert('Não existem dados para este filtro');</script>";
+
+            if( count( $totalizacao ) > 0 || isset( $totalizacao_rep ) ) {
+
+                $total_campos     = "";
+                $sep_total_campos = "";
+                reset($totalizacao);
+
+                for ( $j = 0; $j < count( $totalizacao ); $j ++) {
+
+                    if( key( $totalizacao ) == $totalizacao[key( $totalizacao )] ) {
+
+                        $total_campos    .= $sep_total_campos . "sum(" . $totalizacao[key($totalizacao)] . ") as ";
+                        $total_campos    .= $totalizacao[key($totalizacao)];
+                        $sep_total_campos = ",";
+                    }
+
+                    next($totalizacao);
+                }
+
+                reset($totalizacao);
+                $tot = db_query( "select count(*),{$total_campos} from ({$query_anterior}) as temp" );
+            } else {
+                $tot = db_query("select count(*) from ({$query_anterior}) as temp");
+            }
+
+            $$tot_registros = pg_result($tot, 0, 0);
+
+            $query       = $query_anterior . " limit $numlinhas offset " . $$offset;
+            $result      = db_query($query);
+            $NumRows     = pg_numrows($result);
+            $filtroquery = $query_anterior;
+        }
+    } else {
+
+        if( isset( $query_anterior ) ) {
+
+            $Dd1 = "disabled";
+
+            if( count( $totalizacao ) > 0 || isset( $totalizacao_rep ) ) {
+
+                $total_campos     = "";
+                $sep_total_campos = "";
+                reset($totalizacao);
+
+                for ( $j = 0; $j < count( $totalizacao ); $j ++) {
+
+                    if( key( $totalizacao ) == $totalizacao[key( $totalizacao )] ) {
+
+                        $total_campos    .= $sep_total_campos . "sum(" . $totalizacao[key( $totalizacao )] . ") as ";
+                        $total_campos    .= $totalizacao[key($totalizacao)];
+                        $sep_total_campos = ",";
+                    }
+
+                    next($totalizacao);
+                }
+
+                reset($totalizacao);
+                $tot = db_query("select count(*),{$total_campos} from ({$query_novo_filtro}) as temp");
+            } else {
+                $tot = db_query("select count(*) from ({$query_novo_filtro}) as temp");
+            }
+
+            $$tot_registros = pg_result($tot, 0, 0);
+
+            if ( $$tot_registros == 0 ) {
+                $Dd2 = "disabled";
+            }
+        }
+    }
+
+    $NumFields = pg_numfields( $result );
+
+    if( ( $NumRows < $numlinhas ) && ( $numlinhas < ( $$tot_registros - $$offset - $numlinhas ) ) ) {
+        $Dd1 = @ $Dd2 = "disabled";
+    }
+
+    $sScript = "<script>
+                function js_mostra_text( liga, nomediv, evt ) {
+
+                  evt = (evt) ? evt : (window.event) ? window.event : '';
+
+                  if( liga == true ) {
+
+                    document.getElementById(nomediv).style.top        = 0; //evt.clientY;
+                    document.getElementById(nomediv).style.left       = 0; //(evt.clientX+20);
+                    document.getElementById(nomediv).style.visibility = 'visible';
+                  } else {
+                    document.getElementById(nomediv).style.visibility = 'hidden';
+                  }
+                }
+
+                function js_troca_ordem( nomeform, campo, valor ) {
+
+                  document.navega_lov" . $NomeForm . ".campo_filtrado.value = valor;
+
+                  obj = document.createElement( 'input' );
+                  obj.setAttribute( 'name', campo );
+                  obj.setAttribute( 'type', 'submit' );
+                  obj.setAttribute( 'value', valor );
+                  obj.setAttribute( 'style', 'color:#FCA; background-color:transparent; border-style:none' );
+                  eval( 'document.' + nomeform + '.appendChild( obj )' );
+                  eval( 'document.' + nomeform + '.' + campo + '.click()' );
+                }
+
+                function js_lanca_codigo_pesquisa( valor_recebido ) {
+                  document.navega_lov" . $NomeForm . ".codigo_pesquisa.value = valor_recebido;
+                }
+
+                function js_lanca_distinct_pesquisa() {
+                  document.navega_lov" . $NomeForm . ".distinct_pesquisa.value = 1;
+                }
+
+                function js_nova_quantidade_linhas( valor_recebido ) {
+
+                  valor_recebe = Number( valor_recebido );
+
+                  if( !valor_recebe ) {
+
+                    alert( 'Valor Inválido!' );
+                    document.navega_lov" . $NomeForm . ".nova_quantidade_linhas.value = '';
+                    document.getElementById('quant_lista').value                      = '';
+                  } else {
+
+                    if( valor_recebe > 100 ) {
+
+                      document.navega_lov" . $NomeForm . ".nova_quantidade_linhas.value = '100';
+                      document.getElementById('quant_lista').value                      = 100;
+                    } else {
+                      document.navega_lov".$NomeForm.".nova_quantidade_linhas.value = valor_recebido;
+                    }
+                  }
+                }
+              </script>";
+    echo $sScript;
+
+    $sHtml  = "<table id=\"TabDbLov\" class='DBLovrotTable' >";
+    /**** botoes de navegacao ********/
+    $sHtml .= "  <tr>";
+    $sHtml .= "    <td colspan=\"". ($NumFields +1)."\">";
+    $sHtml .= "      <form name=\"navega_lov".$NomeForm."\" method=\"post\">";
+    $sHtml .= "        <input type=\"submit\" name=\"pri".$NomeForm."\"    value=\"Início\" ".@ $Dd1.">     ";
+    $sHtml .= "        <input type=\"submit\" name=\"ant".$NomeForm."\"    value=\"Anterior\" ".@ $Dd1.">   ";
+    $sHtml .= "        <input type=\"submit\" name=\"prox".$NomeForm."\"   value=\"Próximo\" ".@ $Dd2.">    ";
+    $sHtml .= "        <input type=\"submit\" name=\"ult".$NomeForm."\"    value=\"Último\" ".@ $Dd2.">     ";
+    $sHtml .= "        <input type=\"hidden\" name=\"offset".$NomeForm."\" value=\"".@ $$offset."\">        ";
+    $sHtml .= "        <input type=\"hidden\" name=\"totreg".$NomeForm."\" value=\"".@ $$tot_registros."\"> ";
+    $sHtml .= "        <input type=\"hidden\" name=\"codigo_pesquisa\"     value=\"\">                      ";
+    $sHtml .= "        <input type=\"hidden\" name=\"distinct_pesquisa\"   value=\"\">                      ";
+    $sHtml .= "        <input type=\"hidden\" name=\"filtro\"              value=\"$filtro\">               ";
+    $sHtml .= "        <input type=\"hidden\" name=\"campo_filtrado\"      value=\"\">                      ";
+
+    reset($variaveis_repassa);
+
+    if( sizeof( $variaveis_repassa ) > 0 ) {
+
+        for ( $varrep = 0; $varrep < sizeof( $variaveis_repassa ); $varrep ++ ) {
+
+            $sHtml .= "<input type=\"hidden\" name=\"".key($variaveis_repassa)."\"";
+            $sHtml .= "       value=\"".$variaveis_repassa[key($variaveis_repassa)]."\">\n";
+            next($variaveis_repassa);
+        }
+    }
+
+    if( isset( $ordem_lov ) && ( isset( $ordem_ordenacao ) && $ordem_ordenacao == '' ) ) {
+        $sHtml .= "<input type=\"hidden\" name=\"ordem_lov_anterior\" value=\"".$_POST[key($_POST)]."\">\n";
+    }
+
+    if( isset( $_POST['nova_quantidade_linhas'] ) && $_POST['nova_quantidade_linhas'] == '' ) {
+        $numlinhas = $_POST['nova_quantidade_linhas'];
+    }
+
+    $sHtml .= "<input type=\"hidden\" name=\"nova_quantidade_linhas\" value=\"$numlinhas\" >\n";
+
+    if( isset( $totalizacao ) && isset( $tot ) ) {
+
+        if( count( $totalizacao ) > 0 ) {
+
+            $totNumfields = pg_numfields( $tot );
+            for( $totrep = 1; $totrep < $totNumfields; $totrep++ ) {
+
+                $sHtml .= "<input type=\"hidden\"";
+                $sHtml .= "       name=\"totrep_" . pg_fieldname( $tot, $totrep ) . "\"";
+                $sHtml .= "       value=\"" . pg_result( $tot , 0 , $totrep ) . "\">";
+            }
+
+            reset( $totalizacao );
+            $totrepreg = "";
+            $totregsep = "";
+
+            for( $totrep = 0; $totrep < count( $totalizacao ); $totrep++ ) {
+
+                $totrepreg .= $totregsep . key( $totalizacao ) . "=" . $totalizacao[key( $totalizacao )];
+                $totregsep  = "|";
+                next( $totalizacao );
+            }
+
+            reset( $totalizacao );
+            $sHtml .= "<input type=\"hidden\" name=\"totalizacao_repas\" value=\"".$totrepreg."\">";
+        }
+    } else if( isset( $_POST["totalizacao_repas"] ) ) {
+
+        $totalizacao_split = split( "\|", $_POST["totalizacao_repas"] );
+
+        for( $totrep = 0; $totrep < count( $totalizacao_split ); $totrep++ ) {
+
+            $totalizacao_sep                  = split( "\=", $totalizacao_split[$totrep] );
+            $totalizacao[$totalizacao_sep[0]] = $totalizacao_sep[1];
+
+            if( isset( $_POST["totrep_".$totalizacao_sep[0]] ) ) {
+
+                $sHtml .= "<input type=\"hidden\"";
+                $sHtml .= "       name=\"totrep_".$totalizacao_sep[0]."\"";
+                $sHtml .= "       value=\"".$_POST["totrep_".$totalizacao_sep[0]]."\">";
+            }
+        }
+
+        $sHtml .= "<input type=\"hidden\" name=\"totalizacao_repas\" value=\"".$_POST["totalizacao_repas"]."\">";
+    }
+
+    $sHtml .= "<input type=\"hidden\" name=\"filtroquery\" value=\"" . base64_encode( @$filtroquery ) . "\">";
+
+    if( $NumRows > 0 ) {
+
+        $sHtml .= "Foram retornados <label class='DBLovrotNumeroRegistros'> ". $$tot_registros . "</label> registros.";
+        $sHtml .= " Mostrando de <label class='DBLovrotNumeroRegistros'>" . (@$$offset +1)." </label> até";
+        $sHtml .= "<label class='DBLovrotNumeroRegistros'> ";
+        $sHtml .= ($$tot_registros < (@ $$offset + $numlinhas) ? ($NumRows <= $numlinhas ? $$tot_registros : $NumRows) : ($$offset + $numlinhas));
+        $sHtml .= "</label>.";
+    } else {
+        $sHtml .= "Nenhum Registro Retornado";
+    }
+
+    $sHtml .= "    </form>";
+    $sHtml .= "  </td>";
+    $sHtml .= "</tr>";
+
+    /*********************************/
+    /***** Escreve o cabecalho *******/
+    /*********************************/
+
+    if( $NumRows > 0 ) {
+
+        $sHtml .= "<tr>";
+
+        // se foi passado funcao
+        if ( $campos_layer != "" ) {
+
+            $campo_layerexe = split( "\|", $campos_layer );
+            $sHtml .= "<td bgcolor=\"$db_corcabec\" title=\"Executa Procedimento Específico.\" class='DBLovrotClique'>";
+            $sHtml .= "  Clique";
+            $sHtml .= "</td>";
+        }
+
+        $clrotulocab = new rotulolov();
+
+        for ( $i = 0; $i < $NumFields; $i ++ ) {
+
+            if( strlen( strstr( pg_fieldname( $result, $i ), "db_") ) == 0 ) {
+
+                $clrotulocab->label( pg_fieldname( $result, $i) );
+                $sHtml .= "<td bgcolor=\"$db_corcabec\" title=\"".$clrotulocab->title."\" class = 'DBLovrotTdCabecalho'> ";
+                $sHtml .= "  <input name=\"" . pg_fieldname( $result, $i ) . "\" ";
+                $sHtml .= "         value=\"" . ucfirst( $clrotulocab->titulo ) . "\" ";
+                $sHtml .= "         type=\"button\" ";
+                $sHtml .= "         onclick=\"js_troca_ordem( 'navega_lov" . $NomeForm . "', ";
+                $sHtml .= "                                   'ordem_dblov" . pg_fieldname( $result, $i ) . "', ";
+                $sHtml .= "                                   '" . pg_fieldname( $result, $i ) . "');\" ";
+                $sHtml .= "         class='DBLovrotInputCabecalho'>";
+                $sHtml .= "</td>";
+
+            } else {
+
+                if( strlen( strstr( pg_fieldname( $result, $i ), "db_m_" ) ) != 0 ) {
+                    $sHtml .= "<td bgcolor=\"$db_corcabec\" ";
+                    $sHtml .= "    title=\"" . substr( pg_fieldname( $result, $i ), 5 ) . "\" ";
+                    $sHtml .= "    class = 'DBLovrotTdCabecalho'> ";
+                    $sHtml .= "  <b><u>" . substr( pg_fieldname( $result, $i ), 5 ) . "</u></b> ";
+                    $sHtml .= "</td>";
+                }
+            }
+        }
+
+        $sHtml .= "</tr>";
+    }
+
+    //cria nome da funcao com parametros
+    if( $arquivo == "()" ) {
+
+        $arrayFuncao                = split( "\|", $aonde );
+        $quantidadeItemsArrayFuncao = sizeof( $arrayFuncao );
+    }
+
+    /********************************/
+    /****** escreve o corpo *********/
+    /********************************/
+    for( $i = 0; $i < $NumRows; $i ++ ) {
+
+        $sHtml .= '<tr>';
+
+        if( $arquivo == "()" ) {
+
+            $loop     = "";
+            $caracter = "";
+
+            if( $quantidadeItemsArrayFuncao > 1 ) {
+
+                for( $cont = 1; $cont < $quantidadeItemsArrayFuncao; $cont ++ ) {
+
+                    if( strlen( $arrayFuncao[$cont] ) > 3 ) {
+
+                        for( $luup = 0; $luup < pg_NumFields( $result ); $luup ++ ) {
+
+                            if( pg_FieldName( $result, $luup ) == "db_".$arrayFuncao[$cont] ) {
+                                $arrayFuncao[$cont] = "db_".$arrayFuncao[$cont];
+                            }
+                        }
+                    }
+
+                    $loop     .= $caracter . "'";
+                    $loop     .= addslashes( str_replace( '"', '', @pg_result( $result, $i, ( strlen( $arrayFuncao[$cont] ) < 4 ? (int) $arrayFuncao[$cont] : $arrayFuncao[$cont] ) ) ) ) . "'";
+                    $caracter  = ",";
+                }
+
+                $resultadoRetorno = $arrayFuncao[0] . "(" . $loop . ")";
+            } else {
+                $resultadoRetorno = $arrayFuncao[0] . "()";
+            }
+        }
+
+        if( isset( $cor ) ) {
+            $cor = $cor == $cor1 ? $cor2 : $cor1;
+        } else {
+            $cor = $cor1;
+        }
+
+        if( $campos_layer != "" ) {
+
+            $campo_layerexe = split( "\|", $campos_layer );
+            $sHtml .= "<td id=\"funcao_aux" . $i . "\" ";
+            $sHtml .= "    class = 'DBLovrotTdFuncaoAuxiliar' ";
+            $sHtml .= "    bgcolor=\"$cor\"> ";
+            $sHtml .= "  <a href=\"\" onclick=\"" . $campo_layerexe[1] . "({$loop});return false\" > ";
+            $sHtml .= "    <strong>" . $campo_layerexe[0] . "&nbsp;</strong> ";
+            $sHtml .= "  </a> ";
+            $sHtml .= "</td>";
+        }
+
+        for( $j = 0; $j < $NumFields; $j ++ ) {
+
+            $sHtmlCampos     = "";
+            $var_data        = "";
+            $lCampoTipoTexto = false;
+            $lTipoEspecifico = true;
+            $lPrefixoDb      = false;
+
+            if(    strlen( strstr( pg_fieldname( $result, $j ), "db_" ) ) == 0
+                || strlen( strstr( pg_fieldname( $result, $j ), "db_m_" ) ) != 0 ) {
+
+                if( pg_fieldtype( $result, $j ) == "date") {
+
+                    if( pg_result( $result, $i, $j ) != "" ) {
+
+                        $matriz_data = split( "-", pg_result( $result, $i, $j ) );
+                        $var_data    = $matriz_data[2] . "/" . $matriz_data[1] . "/" . $matriz_data[0];
+                    } else {
+                        $var_data = "//";
+                    }
+                } else if(pg_fieldtype( $result, $j ) == "timestamp") {
+                    $data_hora = split(" ", pg_result( $result, $i, $j ));
+                    $matriz_data = split( "-", $data_hora[0] );
+                    $var_data    = $matriz_data[2] . "/" . $matriz_data[1] . "/" . $matriz_data[0]. " " .$data_hora[1];
+                }else if( pg_fieldtype( $result, $j ) == "float8" || pg_fieldtype( $result, $j ) == "float4" ) {
+                    $var_data = pg_result( $result, $i, $j );
+                } else if( pg_fieldtype( $result, $j ) == "bool" ) {
+                    $var_data  = ( pg_result( $result, $i, $j ) == 'f' || pg_result( $result, $i, $j ) == '' ? 'Não' : 'Sim' );
+                } else if( pg_fieldtype( $result, $j ) == "text" ) {
+
+                    $lCampoTipoTexto = true;
+                    $var_data  = substr( pg_result( $result, $i, $j ), 0, 30 ) . "...";
+                } else {
+
+                    $lEncontrouResultado = true;
+                    $sTitulo             = "";
+                    $sLabel              = "";
+                    $sCampo              = pg_fieldname( $result, $j );
+                    $lTipoEspecifico     = false;
+
+                    switch( $sCampo ) {
+
+                        case 'j01_matric':
+
+                            $sTitulo = "Informações Imóvel";
+                            $sLabel  = "iptubase";
+                            break;
+
+                        case 'm80_codigo':
+
+                            $sTitulo = "Informações Lançamento";
+                            $sLabel  = "matestoqueini";
+                            break;
+
+                        case 'm40_codigo':
+
+                            $sTitulo = "Informações Requisição";
+                            $sLabel  = "matrequi";
+                            break;
+
+                        case 'm42_codigo':
+
+                            $sTitulo = "Informações Atendimento";
+                            $sLabel  = "atendrequi";
+                            break;
+
+                        case 'm45_codigo':
+
+                            $sTitulo = "Informações Devolução";
+                            $sLabel  = "matestoquedev";
+                            break;
+
+                        case 't52_bem':
+
+                            $sTitulo = "Informações Bem";
+                            $sLabel  = "bem";
+                            break;
+
+                        case 'q02_inscr':
+
+                            $sTitulo = "Informações Issqn";
+                            $sLabel  = "issbase";
+                            break;
+
+                        case 'z01_numcgm':
+
+                            $sTitulo = "Informações Contribuinte/Empresa";
+                            $sLabel  = "cgm";
+                            break;
+
+                        case 'e60_numemp':
+                        case 'e61_numemp':
+                        case 'e62_numemp':
+
+                            $sTitulo = "Informações do Empenho";
+                            $sLabel  = "empempenho";
+                            break;
+
+                        case 'e54_autori':
+                        case 'e55_autori':
+                        case 'e56_autori':
+
+                            $sTitulo = "Informações da Autorização de Empenho";
+                            $sLabel  = "empautoriza";
+                            break;
+
+                        case 'pc10_numero':
+
+                            $sTitulo = "Informações da Solicitação";
+                            $sLabel  = "empsolicita";
+                            break;
+
+                        default:
+
+                            $lEncontrouResultado = false;
+                            break;
+                    }
+
+                    if( $lEncontrouResultado ) {
+                        $sHtmlCampos = "<td id=\"I".$i.$j."\" class='DBLovrotRegistrosRetornados' bgcolor=\"$cor\"><a title='" . $sTitulo . "' onclick=\"js_JanelaAutomatica('" . $sLabel . "','". (trim(pg_result($result, $i, $j)))."');return false;\">&nbsp;Inf->&nbsp;</a>". ($arquivo != "" ? "<a title=\"$mensagem\" class='DBLovrotRegistrosRetornados' href=\"\" ". ($arquivo == "()" ? "OnClick=\"".$resultadoRetorno.";return false\">" : "onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=". ($BrowSe == 1 ? $i : trim(pg_result($result, $i, 0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result, $i, $j))."</a>" : (trim(pg_result($result, $i, $j))))."&nbsp;</td>\n";
+                    } else {
+                        $sHtmlCampos = "<td id=\"I".$i.$j."\" class='DBLovrotRegistrosRetornados' bgcolor=\"$cor\">". ($arquivo != "" ? "<a title=\"$mensagem\" class='DBLovrotRegistrosRetornados' href=\"\" ". ($arquivo == "()" ? "OnClick=\"".$resultadoRetorno.";return false\">" : "onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=". ($BrowSe == 1 ? $i : trim(pg_result($result, $i, 0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result, $i, $j))."</a>" : (trim(pg_result($result, $i, $j))))."&nbsp;</td>\n";
+                    }
+                }
+            } else {
+                $lPrefixoDb = true;
+            }
+
+            if( $lPrefixoDb ) {
+                continue;
+            }
+
+            if ( $lTipoEspecifico ) {
+
+                if( $lCampoTipoTexto ) {
+
+                    $sHtmlCampos = "<td onMouseOver=\"js_mostra_text(true,'div_text_".$i."_".$j."',event);\"
+                              onMouseOut=\"js_mostra_text(false,'div_text_".$i."_".$j."',event)\"
+                              id=\"I" . $i . $j . "\"
+                              class='DBLovrotRegistrosRetornados'
+                              bgcolor=\"$cor\">";
+                } else {
+                    $sHtmlCampos = "<td id=\"I".$i.$j."\" class='DBLovrotRegistrosRetornados' bgcolor=\"$cor\">";
+                }
+            }
+
+            $sHtml .= $sHtmlCampos;
+
+            if( $arquivo != "" ) {
+
+                $sHtml   .= "<a title=\"$mensagem\" class='DBLovrotRegistrosRetornados' ";
+                $sHtml   .= "  href=\"\" ". ($arquivo == "()" ? "OnClick=\"".$resultadoRetorno.";return false\">" : "onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=". ($BrowSe == 1 ? $i : trim(pg_result($result, $i, 0))))."','$aonde','width=800,height=600');return false\">").trim($var_data);
+                $sHtml   .= "</a>";
+            } else {
+                $sHtml .= trim($var_data);
+            }
+
+            $sHtml .= "&nbsp;</td>";
+        }
+
+        $sHtml .= "</tr>";
+    }
+
+    if( count( $totalizacao ) > 0 ) {
+
+        $sHtml .= "<tr>";
+        for( $j = 0; $j < $NumFields; $j ++ ) {
+
+            $key_elemento = array_search( pg_fieldname( $result, $j ), $totalizacao );
+
+            if(    $key_elemento == true
+                && pg_fieldname( $result, $j ) == $key_elemento
+                && strlen( strstr( pg_fieldname( $result, $j ), "db_" ) ) == 0 ) {
+
+                @$vertotrep = $_POST['totrep_'.$key_elemento];
+
+                if( @$vertotrep != "" && !isset( $tot ) ) {
+
+                    $sHtml .= "<td class='DBLovrotRegistrosRetornadosTotalizacao'>";
+                    $sHtml .= $vertotrep."&nbsp;";
+                    $sHtml .= "</td>";
+                } else if( isset( $tot ) ) {
+
+                    $sHtml .= "<td class='DBLovrotRegistrosRetornadosTotalizacao'>";
+                    $sHtml .= db_formatar( pg_result( $tot, 0, $key_elemento ), 'f' ) . "&nbsp;";
+                    $sHtml .= "</td>";
+                } else {
+                    $sHtml .= "<td class='DBLovrotRegistrosRetornadosTotalizacao'> &nbsp;</td>\n";
+                }
+            } else {
+
+                if( $key_elemento == 'totalgeral' ) {
+                    $sHtml .=  "<td class='DBLovrotTdTotalGeral'> Total Geral : </td>";
+                } else if ( strlen( strstr( pg_fieldname( $result, $j ), "db_" ) ) == 0 ) {
+                    $sHtml .=  "<td></td>";
+                }
+            }
+        }
+
+        $sHtml .= "</tr>";
+    }
+
+    if( $NumRows > 0 ) {
+
+        $sHtml .= "<tr>";
+        $sHtml .= "  <td colspan=$NumFields>";
+        $sHtml .= "    <input name='recomecar' ";
+        $sHtml .= "           type='button' ";
+        $sHtml .= "           value='Recomeçar' ";
+        $sHtml .= "           onclick=\"js_troca_ordem( 'navega_lov" . $NomeForm . "', 'recomecar', '0' );\">";
+        $sHtml .= "    <label class='DBLovrotBold'>Indique o Conteúdo:</label> ";
+        $sHtml .= "    <input title='Digite o valor a pesquisar e clique sobre o campo (cabeçalho) a pesquisar' ";
+        $sHtml .= "           name=indica_codigo ";
+        $sHtml .= "           type=text ";
+        $sHtml .= "           onchange='js_lanca_codigo_pesquisa( this.value )'";
+        $sHtml .= "           class = 'DBLovrotInputRodape'>";
+        $sHtml .= "    <label class='DBLovrotBold'>Quantidade a Listar:</label>";
+        $sHtml .= "    <input id=quant_lista ";
+        $sHtml .= "           name=quant_lista ";
+        $sHtml .= "           type=text ";
+        $sHtml .= "           onchange='js_nova_quantidade_linhas( this.value )'";
+        $sHtml .= "           class = 'DBLovrotInputRodape'";
+        $sHtml .= "           value='$numlinhas' ";
+        $sHtml .= "           size='5'>";
+        $sHtml .= "    <label class='DBLovrotBold'>Mostra Diferentes:</label>";
+        $sHtml .= "    <input title='Mostra os valores diferentes clicando no cabeçalho a pesquisar' ";
+        $sHtml .= "           name=mostra_diferentes ";
+        $sHtml .= "           type=checkbox ";
+        $sHtml .= "           onchange='js_lanca_distinct_pesquisa()' ";
+        $sHtml .= "           class = 'DBLovrotInputRodape'>";
+        $sHtml .= "  </td>";
+        $sHtml .= "</tr>";
+    }
+
+    $sHtml .= "</table>";
+
+    for ( $i = 0; $i < $NumRows; $i ++ ) {
+
+        for ( $j = 0; $j < $NumFields; $j ++ ) {
+
+            if ( pg_fieldtype( $result, $j ) == "text" ) {
+
+                $clrotulocab->label( pg_fieldname( $result, $j ) );
+                $sHtml .= "<div id='div_text_".$i."_".$j."' ";
+                $sHtml .=       "class ='DBLovrotDivText' >";
+                $sHtml .= "  <table> ";
+                $sHtml .= "    <tr> ";
+                $sHtml .= "      <td align='left'> ";
+                $sHtml .= "       <label class='DBLovrotLabelDivTextTitulo'> ";
+                $sHtml .=            $clrotulocab->titulo . ":";
+                $sHtml .= "        </label><br> ";
+                $sHtml .= "        <label class='DBLovrotLabelDivTextDescricao'>";
+                $sHtml .=            str_replace( "\n", "<br>", pg_result( $result, $i, $j ) );
+                $sHtml .= "        </font> ";
+                $sHtml .= "      </td> ";
+                $sHtml .= "    </tr> ";
+                $sHtml .= "  </table> ";
+                $sHtml .= "</div>";
+            }
+        }
+    }
+
+    if( $automatico == true ) {
+
+        if( pg_numrows( $result ) == 1 && $$offset == 0 ) {
+            $sHtml .= "<script>".@$resultadoRetorno."</script>";
+        }
+    }
+
+    echo $sHtml;
+    return $result;
+}
+
 function db_lov($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $mensagem = "Clique Aqui", $NomeForm = "NoMe") {
   global $BrowSe;
   //cor do cabecalho

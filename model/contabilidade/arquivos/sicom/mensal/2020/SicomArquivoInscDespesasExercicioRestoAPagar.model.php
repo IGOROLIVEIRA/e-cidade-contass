@@ -271,6 +271,8 @@ AND e60_codemp = '$codemp'";
             $empenhos[] = $oDadosEmp->empenho;
         }
 
+        $aFontesExistentes = array();
+
         foreach ($empenhos as $emp) {
 
             $sSql = "SELECT * FROM despesasinscritasRP WHERE c223_codemp = $emp and c223_instit = " . db_getsession("DB_instit") . " and  c223_anousu = " . db_getsession("DB_anousu");
@@ -286,6 +288,10 @@ AND e60_codemp = '$codemp'";
 
                 if ($oDados10->c223_vlrnaoliquidado > 0) {
                     $empNaoLiqMaiorque0[] = $oDados10;
+                }
+                
+                if (!in_array($oDados10->c223_fonte, $aFontesExistentes)) {
+                    array_push($aFontesExistentes, $oDados10->c223_fonte);
                 }
             }
         }
@@ -452,6 +458,8 @@ AND e60_codemp = '$codemp'";
          *
          */
 
+        $sFontesExistentes = implode(',',$aFontesExistentes);
+
         $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
         FROM disponibilidadecaixa
         WHERE c224_anousu = ". db_getsession('DB_anousu')."
@@ -459,7 +467,8 @@ AND e60_codemp = '$codemp'";
         AND (c224_vlrcaixabruta != 0
         OR c224_rpexercicioanterior != 0
         OR c224_vlrrestoarecolher != 0
-        OR c224_vlrdisponibilidadecaixa != 0) order by c224_fonte";
+        OR c224_vlrdisponibilidadecaixa != 0
+        OR c224_fonte IN ({$sFontesExistentes})) order by c224_fonte";
 
         $rsResult20 = db_query($sSql20);
 

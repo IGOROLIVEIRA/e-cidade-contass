@@ -83,15 +83,15 @@ class cl_veiculostransferencia {
         if ($this->ve81_codigoant == null ) {
             $this->ve81_codigoant = "0";
         }
-        if ($this->ve81_placa == null ) {
-            $this->erro_sql = " Campo Placa não informado.";
-            $this->erro_campo = "ve81_placa";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
+        // if ($this->ve81_placa == null ) {
+        //     $this->erro_sql = " Campo PlacaOS não informado.";
+        //     $this->erro_campo = "ve81_placa";
+        //     $this->erro_banco = "";
+        //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //     $this->erro_status = "0";
+        //     return false;
+        // }
         if ($this->ve81_codunidadesubatual == null ) {
             $this->erro_sql = " Campo Codigo unidade ant. atual não informado.";
             $this->erro_campo = "ve81_codunidadesubatual";
@@ -252,15 +252,15 @@ class cl_veiculostransferencia {
         if (trim($this->ve81_placa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve81_placa"])) {
             $sql  .= $virgula." ve81_placa = '$this->ve81_placa' ";
             $virgula = ",";
-            if (trim($this->ve81_placa) == null ) {
-                $this->erro_sql = " Campo Placa não informado.";
-                $this->erro_campo = "ve81_placa";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if (trim($this->ve81_placa) == null ) {
+            //     $this->erro_sql = " Campo Placa não informado.";
+            //     $this->erro_campo = "ve81_placa";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         }
         if (trim($this->ve81_codunidadesubatual)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve81_codunidadesubatual"])) {
             $sql  .= $virgula." ve81_codunidadesubatual = '$this->ve81_codunidadesubatual' ";
@@ -292,7 +292,7 @@ class cl_veiculostransferencia {
             $sql  .= $virgula." ve81_transferencia = $this->ve81_transferencia ";
             $virgula = ",";
             if (trim($this->ve81_transferencia) == null ) {
-                $this->erro_sql = " Campo CÃ³digo da transferencia não informado.";
+                $this->erro_sql = " Campo CÓdigo da transferencia não informado.";
                 $this->erro_campo = "ve81_transferencia";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

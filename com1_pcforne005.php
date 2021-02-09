@@ -100,8 +100,8 @@ if(isset($chavepesquisa)){
          top.corpo.iframe_pcfornemov.location.href='com1_pcfornemov001.php?pc62_numcgm=".@$pc60_numcgm."';
          parent.document.formaba.subgrupo.disabled=false;
          top.corpo.iframe_subgrupo.location.href='com1_pcfornesub001.php?pc76_pcforne=".@$pc60_numcgm."';
-         parent.document.formaba.pcfornereprlegal.disabled=false;
-         top.corpo.iframe_pcfornereprlegal.location.href='com1_pcfornereprlegal001.php?pc81_cgmforn=".@$pc60_numcgm."';
+         parent.document.formaba.pcfornecon.disabled=false;
+         top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
          top.corpo.iframe_pcforneidentificacaocredor.location.href='com1_pcfornetipoidentificacaocredorgenerica001.php?pc81_cgmforn=".@$pc60_numcgm."';
          parent.document.formaba.pcforneidentificacaocredor.disabled=false;
      ";
@@ -114,11 +114,12 @@ if(isset($chavepesquisa)){
 
      $permissao=true;
      if ($permissao=='true'){
-     	echo"parent.document.formaba.pcfornecon.disabled=false;
-         	 top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
+     	    echo" 
+                parent.document.formaba.pcfornereprlegal.disabled=false;
+         	      top.corpo.iframe_pcfornereprlegal.location.href='com1_pcfornereprlegal001.php?pc81_cgmforn=".@$pc60_numcgm."';
          	";
      	if(isset($liberaaba)){
-        	echo "  parent.mo_camada('pcfornecon');";
+          echo "  parent.mo_camada('pcfornereprlegal');";
      	}
      }else{
      	if(isset($liberaaba)){

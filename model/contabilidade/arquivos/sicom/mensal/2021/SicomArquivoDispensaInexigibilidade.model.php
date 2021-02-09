@@ -1063,7 +1063,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN cgm on (pcforne.pc60_numcgm=cgm.z01_numcgm)
 	INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 	INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
-	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
+	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita) and (liclicitem.l21_codpcprocitem = credenciamento.l205_item)
 	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )
 	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)
 	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)

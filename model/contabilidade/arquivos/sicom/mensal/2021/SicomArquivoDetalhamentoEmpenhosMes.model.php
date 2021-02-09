@@ -366,8 +366,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
          * elementos de despesa utilizados para verificar se a despesa precisa ser identificada como sendo do poder executivo ou legislativo
          * par empenhos de orgaos RPPS
          */
-        $aTipoDespEmpRPPS = array('31900101', '31900102', '31900301', '31900302', '31900501', '31900502', '31900503', '31909102', '31909103', '31909201',
-            '31909202', '31909203', '31909403', '31919102', '31919103', '31919201', '31919202', '31919203', '31969102', '31969103', '31969201', '31969202', '31969203');
+        $aTipoDespEmpRPPS = array('319001','319003','319091','319092','319094','319191','319192','319194');
 
         for ($iCont = 0; $iCont < pg_num_rows($rsEmpenho10); $iCont++) {
 
@@ -540,7 +539,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             /*
              * verificar se o tipo de despesa se enquadra nos elementos necessários para informar esse campo para RPPS
              */
-            if (($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6) && (in_array($sElemento, $aTipoDespEmpRPPS))) {
+            if (($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6) && (in_array(substr($sElemento, 0, 6), $aTipoDespEmpRPPS))) {
                 $oDadosEmpenho10->si106_tipodespesaemprpps = $oEmpenho10->e60_tipodespesa; // campo 35
             }else{
                 $oDadosEmpenho10->si106_tipodespesaemprpps = null; // campo 35

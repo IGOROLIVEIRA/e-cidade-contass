@@ -494,7 +494,7 @@ class cl_rhpessoalmov {
                                ,$this->rh02_tipodeficiencia
                                ,'$this->rh02_abonopermanencia'
 			                   ,".($this->rh02_diasgozoferias == "null" || $this->rh02_diasgozoferias == ""?"30":"'".$this->rh02_diasgozoferias."'")."
-                               ,'$this->rh02_tipcatprof'
+                               ,".($this->rh02_tipcatprof == "null" || $this->rh02_tipcatprof == ""?"null":$this->rh02_tipcatprof)."
                                ,".($this->rh02_cgminstituidor == "null" || $this->rh02_cgminstituidor == ""?"null":"'".$this->rh02_cgminstituidor."'")."
                                ,".($this->rh02_dtobitoinstituidor == "null" || $this->rh02_dtobitoinstituidor == ""?"null":"'".$this->rh02_dtobitoinstituidor."'")."
                                ,".($this->rh02_tipoparentescoinst == "null" || $this->rh02_tipoparentescoinst == ""?"null":"'".$this->rh02_tipoparentescoinst."'")."

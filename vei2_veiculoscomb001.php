@@ -84,7 +84,7 @@ if (isset($confirmar) && trim($confirmar)!=""){
     $cont_vetor++;
   }
 
-  if ($db_opcao == 1){
+  if ($db_opcao == 1 || $db_opcao == 2){
     $virgula     = "";
     $cod_comb    = "";
     $comb_padrao = "";
@@ -97,6 +97,7 @@ if (isset($confirmar) && trim($confirmar)!=""){
   }
 
   if ($db_opcao == 2){
+    $aCombPadrao = explode(',', $comb_padrao);
     db_inicio_transacao();
     // Trocado combustivel padrao
     if (isset($marcados)){
@@ -120,7 +121,6 @@ if (isset($confirmar) && trim($confirmar)!=""){
         }
 
         $array_marcados=explode(',',$marcados);
-        print_r($array_marcados);
         $cont_vetor=count($array_marcados);
         
          for($x = 0; $x < $cont_vetor; $x++){
@@ -128,11 +128,32 @@ if (isset($confirmar) && trim($confirmar)!=""){
           $clveiculoscomb->ve06_veiccadcomb = $array_marcados[$x]; 
           $clveiculoscomb->ve06_veiculos    = $ve06_veiculos;
 
-          if (($comb_padrao)==($array_marcados[$x])){
-          $clveiculoscomb->ve06_padrao   = 'true';
+          if (intval($aCombPadrao[$x])){
+              $clveiculoscomb->ve06_padrao = 'true';
           }else{
-            $clveiculoscomb->ve06_padrao   = 'false';
+              $clveiculoscomb->ve06_padrao = 'false';
           }
+          $clveiculoscomb->incluir(null);
+          if ($clveiculoscomb->erro_status == 0){
+            $erro_msg = $clveiculoscomb->erro_msg;
+            $sqlerro  = true;
+          }
+        }
+      }else{
+        $array_marcados=explode(',',$marcados);
+        $cont_vetor=count($array_marcados);
+       
+         for($x = 0; $x < $cont_vetor; $x++){
+          
+          $clveiculoscomb->ve06_veiccadcomb = $array_marcados[$x]; 
+          $clveiculoscomb->ve06_veiculos    = $ve06_veiculos;
+
+          if (intval($aCombPadrao[$x])){
+              $clveiculoscomb->ve06_padrao = 'true';
+          }else{
+              $clveiculoscomb->ve06_padrao = 'false';
+          }
+          
           $clveiculoscomb->incluir(null);
           if ($clveiculoscomb->erro_status == 0){
             $erro_msg = $clveiculoscomb->erro_msg;

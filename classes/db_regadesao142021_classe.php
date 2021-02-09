@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE regadesao142020
-class cl_regadesao142020
+//CLASSE DA ENTIDADE regadesao142021
+class cl_regadesao142021
 {
   // cria variaveis de erro
   var $rotulo = null;
@@ -53,10 +53,10 @@ class cl_regadesao142020
                  ";
   
   //funcao construtor da classe
-  function cl_regadesao142020()
+  function cl_regadesao142021()
   {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("regadesao142020");
+    $this->rotulo = new rotulo("regadesao142021");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
   
@@ -154,11 +154,11 @@ class cl_regadesao142020
       return false;
     }
     if ($si71_sequencial == "" || $si71_sequencial == null) {
-      $result = db_query("select nextval('regadesao142020_si71_sequencial_seq')");
+      $result = db_query("select nextval('regadesao142021_si71_sequencial_seq')");
       if ($result == false) {
         $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-        $this->erro_sql = "Verifique o cadastro da sequencia: regadesao142020_si71_sequencial_seq do campo: si71_sequencial";
+        $this->erro_sql = "Verifique o cadastro da sequencia: regadesao142021_si71_sequencial_seq do campo: si71_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
@@ -166,7 +166,7 @@ class cl_regadesao142020
       }
       $this->si71_sequencial = pg_result($result, 0, 0);
     } else {
-      $result = db_query("select last_value from regadesao142020_si71_sequencial_seq");
+      $result = db_query("select last_value from regadesao142021_si71_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $si71_sequencial)) {
         $this->erro_sql = " Campo si71_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -186,7 +186,7 @@ class cl_regadesao142020
       $this->erro_status = "0";
       return false;
     }
-    $sql = "insert into regadesao142020(
+    $sql = "insert into regadesao142021(
                                        si71_sequencial 
                                       ,si71_tiporegistro 
                                       ,si71_codorgao 
@@ -223,12 +223,12 @@ class cl_regadesao142020
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "regadesao142020 ($this->si71_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "regadesao142021 ($this->si71_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_banco = "regadesao142020 já Cadastrado";
+        $this->erro_banco = "regadesao142021 já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       } else {
-        $this->erro_sql = "regadesao142020 ($this->si71_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "regadesao142021 ($this->si71_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       }
@@ -271,7 +271,7 @@ class cl_regadesao142020
   function alterar($si71_sequencial = null)
   {
     $this->atualizacampos();
-    $sql = " update regadesao142020 set ";
+    $sql = " update regadesao142021 set ";
     $virgula = "";
     if (trim($this->si71_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si71_sequencial"])) {
       if (trim($this->si71_sequencial) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si71_sequencial"])) {
@@ -427,7 +427,7 @@ class cl_regadesao142020
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "regadesao142020 nao Alterado. Alteracao Abortada.\n";
+      $this->erro_sql = "regadesao142021 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si71_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -437,7 +437,7 @@ class cl_regadesao142020
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "regadesao142020 nao foi Alterado. Alteracao Executada.\n";
+        $this->erro_sql = "regadesao142021 nao foi Alterado. Alteracao Executada.\n";
         $this->erro_sql .= "Valores : " . $this->si71_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -487,7 +487,7 @@ class cl_regadesao142020
         $resac = db_query("insert into db_acount values($acount,2010300,2011583,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si71_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
-    $sql = " delete from regadesao142020
+    $sql = " delete from regadesao142021
                     where ";
     $sql2 = "";
     if ($dbwhere == null || $dbwhere == "") {
@@ -504,7 +504,7 @@ class cl_regadesao142020
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "regadesao142020 nao Excluído. Exclusão Abortada.\n";
+      $this->erro_sql = "regadesao142021 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si71_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -514,7 +514,7 @@ class cl_regadesao142020
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "regadesao142020 nao Encontrado. Exclusão não Efetuada.\n";
+        $this->erro_sql = "regadesao142021 nao Encontrado. Exclusão não Efetuada.\n";
         $this->erro_sql .= "Valores : " . $si71_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -551,7 +551,7 @@ class cl_regadesao142020
     $this->numrows = pg_numrows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = "";
-      $this->erro_sql = "Record Vazio na Tabela:regadesao142020";
+      $this->erro_sql = "Record Vazio na Tabela:regadesao142021";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
@@ -574,12 +574,12 @@ class cl_regadesao142020
     } else {
       $sql .= $campos;
     }
-    $sql .= " from regadesao142020 ";
-    $sql .= "      left  join regadesao102020  on  regadesao102020.si67_sequencial = regadesao142020.si71_reg10";
+    $sql .= " from regadesao142021 ";
+    $sql .= "      left  join regadesao102020  on  regadesao102020.si67_sequencial = regadesao142021.si71_reg10";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si71_sequencial != null) {
-        $sql2 .= " where regadesao142020.si71_sequencial = $si71_sequencial ";
+        $sql2 .= " where regadesao142021.si71_sequencial = $si71_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -611,11 +611,11 @@ class cl_regadesao142020
     } else {
       $sql .= $campos;
     }
-    $sql .= " from regadesao142020 ";
+    $sql .= " from regadesao142021 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si71_sequencial != null) {
-        $sql2 .= " where regadesao142020.si71_sequencial = $si71_sequencial ";
+        $sql2 .= " where regadesao142021.si71_sequencial = $si71_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
