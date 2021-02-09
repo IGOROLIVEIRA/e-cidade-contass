@@ -43,6 +43,7 @@ class Instituicao {
   const COD_CLI_PMUBAI = 9;
   const COD_CLI_PMGRAOMOGOL = 90;
   const COD_CLI_SANTAFEMINAS = 92;
+  const COD_CLI_SAOJOAOMISSOES = 94;
 
   /**
    * Código da Instituicao

@@ -313,6 +313,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $oInstit = new Instituicao(db_getsession('DB_instit'));
   /**
    * Customizações realizadas para alguns clientes
+   * @todo Refatorar para remover esse if
    */
   if(in_array($oInstit->getCodigoCliente(),
       array(
@@ -321,6 +322,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
           Instituicao::COD_CLI_PMUBAI,
           Instituicao::COD_CLI_PMGRAOMOGOL,
           Instituicao::COD_CLI_SANTAFEMINAS,
+          Instituicao::COD_CLI_SAOJOAOMISSOES,
       )
   )) {
 
