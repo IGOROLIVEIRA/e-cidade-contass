@@ -69,6 +69,11 @@
     <input name="imprimir" type="submit" id="imprimir" value="Imprimir PDF">
     <input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
   <?php endif; ?>
+  <b>Quantidade de casas decimais:</b>
+  <?php
+    $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
+    db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
+  ?>
 </form>
 <script>
   function js_pesquisasi01_processocompra(mostra) {
