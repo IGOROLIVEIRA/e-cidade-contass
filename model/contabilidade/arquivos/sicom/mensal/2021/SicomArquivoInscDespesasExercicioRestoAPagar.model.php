@@ -468,7 +468,8 @@ AND e60_codemp = '$codemp'";
             OR c224_rpexercicioanterior != 0
             OR c224_vlrrestoarecolher != 0
             OR c224_vlrdisponibilidadecaixa != 0
-            OR c224_fonte IN ({$sFontesExistentes})) order by c224_fonte";
+            OR c224_fonte IN ({$sFontesExistentes}))
+            AND c224_fonte NOT IN ('148','149','150','151','152','248','249','250','251','252') order by c224_fonte";
         }else{
             $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
             FROM disponibilidadecaixa
@@ -477,12 +478,12 @@ AND e60_codemp = '$codemp'";
             AND (c224_vlrcaixabruta != 0
             OR c224_rpexercicioanterior != 0
             OR c224_vlrrestoarecolher != 0
-            OR c224_vlrdisponibilidadecaixa != 0) order by c224_fonte";
+            OR c224_vlrdisponibilidadecaixa != 0)
+            AND c224_fonte NOT IN ('148','149','150','151','152','248','249','250','251','252') order by c224_fonte";
         }
 
         $rsResult20 = db_query($sSql20);
-
-
+        //echo $sSql20;db_criatabela($rsResult20);exit;
         if(pg_num_rows($rsResult20) > 0) {
 
             for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
