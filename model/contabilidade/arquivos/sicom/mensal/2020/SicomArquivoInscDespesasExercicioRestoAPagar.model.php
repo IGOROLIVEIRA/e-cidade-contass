@@ -459,37 +459,66 @@ AND e60_codemp = '$codemp'";
          */
 
         $sFontesExistentes = implode(',',$aFontesExistentes);
-
-        $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
-        FROM disponibilidadecaixa
-        WHERE c224_anousu = ". db_getsession('DB_anousu')."
-        AND c224_instit = ". db_getsession('DB_instit')."
-        AND (c224_vlrcaixabruta != 0
-        OR c224_rpexercicioanterior != 0
-        OR c224_vlrrestoarecolher != 0
-        OR c224_vlrdisponibilidadecaixa != 0
-        OR c224_fonte IN ({$sFontesExistentes})) order by c224_fonte";
-
-        $rsResult20 = db_query($sSql20);
-
-        for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
-
-            $oDados20[] = db_utils::fieldsMemory($rsResult20, $iCont20);
-
+        if(pg_num_rows($resultEmp) > 0) {
+            $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
+            FROM disponibilidadecaixa
+            WHERE c224_anousu = ". db_getsession('DB_anousu')."
+            AND c224_instit = ". db_getsession('DB_instit')."
+            AND (c224_vlrcaixabruta != 0
+            OR c224_rpexercicioanterior != 0
+            OR c224_vlrrestoarecolher != 0
+            OR c224_vlrdisponibilidadecaixa != 0
+            OR c224_fonte IN ({$sFontesExistentes})) order by c224_fonte";
+        }else{
+            $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
+            FROM disponibilidadecaixa
+            WHERE c224_anousu = ". db_getsession('DB_anousu')."
+            AND c224_instit = ". db_getsession('DB_instit')."
+            AND (c224_vlrcaixabruta != 0
+            OR c224_rpexercicioanterior != 0
+            OR c224_vlrrestoarecolher != 0
+            OR c224_vlrdisponibilidadecaixa != 0) order by c224_fonte";
         }
 
-        foreach ($oDados20 as $reg20){
+        $rsResult20 = db_query($sSql20);
+        if(pg_num_rows($rsResult20) > 0) {
 
+            for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
+
+                $oDados20[] = db_utils::fieldsMemory($rsResult20, $iCont20);
+
+            }
+
+            foreach ($oDados20 as $reg20) {
+
+                $iderp202020->si181_tiporegistro = 20;
+                $iderp202020->si181_codorgao = $sCodorgao;
+                $iderp202020->si181_codfontrecursos = $reg20->c224_fonte;
+                $iderp202020->si181_vlcaixabruta = $reg20->c224_vlrcaixabruta;
+                $iderp202020->si181_vlrspexerciciosanteriores = $reg20->c224_rpexercicioanterior;
+                $iderp202020->si181_vlrestituiveisrecolher = 0;
+                $iderp202020->si181_vlrestituiveisativofinanceiro = 0;
+                $iderp202020->si181_vlsaldodispcaixa = $reg20->vlRdispCaixa < 0 ? 0 : $reg20->c224_vlrdisponibilidadecaixa;
+                $iderp202020->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];;
+                $iderp202020->si181_instit = $reg20->c224_instit;
+                $iderp202020->incluir(null);
+
+                if ($iderp202020->erro_status == 0) {
+                    throw new Exception($iderp202020->erro_msg);
+                }
+            }
+
+        }else{
             $iderp202020->si181_tiporegistro = 20;
             $iderp202020->si181_codorgao = $sCodorgao;
-            $iderp202020->si181_codfontrecursos = $reg20->c224_fonte;
-            $iderp202020->si181_vlcaixabruta = $reg20->c224_vlrcaixabruta;
-            $iderp202020->si181_vlrspexerciciosanteriores = $reg20->c224_rpexercicioanterior;
-            $iderp202020->si181_vlrestituiveisrecolher = 0;
-            $iderp202020->si181_vlrestituiveisativofinanceiro = 0;
-            $iderp202020->si181_vlsaldodispcaixa = $reg20->vlRdispCaixa < 0 ? 0 : $reg20->c224_vlrdisponibilidadecaixa;
+            $iderp202020->si181_codfontrecursos = '100';
+            $iderp202020->si181_vlcaixabruta = '0,00';
+            $iderp202020->si181_vlrspexerciciosanteriores = '0,00';
+            $iderp202020->si181_vlrestituiveisrecolher = '0,00';
+            $iderp202020->si181_vlrestituiveisativofinanceiro = '0,00';
+            $iderp202020->si181_vlsaldodispcaixa = '0,00';
             $iderp202020->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];;
-            $iderp202020->si181_instit = $reg20->c224_instit;
+            $iderp202020->si181_instit = db_getsession('DB_instit');
             $iderp202020->incluir(null);
 
             if ($iderp202020->erro_status == 0) {
