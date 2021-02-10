@@ -48,7 +48,7 @@ $clsaldotransfctb = new cl_saldotransfctb;
           $result = $clsaldotransfctb->sql_record($clsaldotransfctb->sql_query($pesquisa_chave, $campos, null, "si202_anousu = ".db_getsession('DB_anousu')." and si202_instit = ".db_getsession('DB_instit')));
           if($clsaldotransfctb->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$oid',false);</script>";
+            echo "<script>".$funcao_js."('$si202_seq',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

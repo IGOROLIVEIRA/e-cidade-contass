@@ -16,6 +16,7 @@ class cl_saldotransfctb {
   public $erro_campo = null;  
   public $pagina_retorno = null; 
   // cria variaveis do arquivo 
+  public $si202_seq = 0;
   public $si202_codctb = 0; 
   public $si202_codfontrecursos = 0; 
   public $si202_saldofinal = 0; 
@@ -23,6 +24,7 @@ class cl_saldotransfctb {
   public $si202_instit = 0; 
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
+                 si202_seq = int8 = Sequencial
                  si202_codctb = int8 = Código CTB 
                  si202_codfontrecursos = int4 = Fonte 
                  si202_saldofinal = float8 = Saldo Final 
@@ -50,18 +52,43 @@ class cl_saldotransfctb {
   // funcao para atualizar campos
   function atualizacampos($exclusao=false) {
     if ($exclusao==false) {
-       $this->si202_codctb = ($this->si202_codctb == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_codctb"]:$this->si202_codctb);
-       $this->si202_codfontrecursos = ($this->si202_codfontrecursos == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_codfontrecursos"]:$this->si202_codfontrecursos);
-       $this->si202_saldofinal = ($this->si202_saldofinal == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_saldofinal"]:$this->si202_saldofinal);
-       $this->si202_anousu = ($this->si202_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_anousu"]:$this->si202_anousu);
-       $this->si202_instit = ($this->si202_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_instit"]:$this->si202_instit);
+		$this->si202_seq = ($this->si202_seq == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_seq"]:$this->si202_seq);
+		$this->si202_codctb = ($this->si202_codctb == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_codctb"]:$this->si202_codctb);
+		$this->si202_codfontrecursos = ($this->si202_codfontrecursos == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_codfontrecursos"]:$this->si202_codfontrecursos);
+		$this->si202_saldofinal = ($this->si202_saldofinal == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_saldofinal"]:$this->si202_saldofinal);
+		$this->si202_anousu = ($this->si202_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_anousu"]:$this->si202_anousu);
+		$this->si202_instit = ($this->si202_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_instit"]:$this->si202_instit);
      } else {
      }
    }
 
   // funcao para inclusao
-  function incluir () { 
+  function incluir ($si202_seq=null) { 
       $this->atualizacampos();
+	  if($si202_seq == null || $si202_seq == ""){ 
+        $result = db_query("select nextval('saldotransfctb_si202_seq_seq')");
+        if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: saldotransfctb_si202_seq_seq do campo: si202_seq"; 
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false; 
+       }
+       $this->si202_seq = pg_result($result,0,0); 
+      }else{
+       $result = db_query("select last_value from saldotransfctb_si202_seq_seq");
+       if(($result != false) && (pg_result($result,0,0) < $si202_seq)){
+         $this->erro_sql = " Campo si202_seq maior que último número da sequencia.";
+         $this->erro_banco = "Sequencia menor que este número.";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }else{
+         $this->si202_seq = $si202_seq; 
+       }
+     }
      if ($this->si202_codctb == null ) { 
        $this->erro_sql = " Campo Código CTB não informado.";
        $this->erro_campo = "si202_codctb";
@@ -108,14 +135,16 @@ class cl_saldotransfctb {
        return false;
      }
      $sql = "insert into saldotransfctb(
-                                       si202_codctb 
+									   si202_seq
+                                      ,si202_codctb 
                                       ,si202_codfontrecursos 
                                       ,si202_saldofinal 
                                       ,si202_anousu 
                                       ,si202_instit 
                        )
                 values (
-                                $this->si202_codctb 
+                                $this->si202_seq 
+							   ,$this->si202_codctb 
                                ,$this->si202_codfontrecursos 
                                ,$this->si202_saldofinal 
                                ,$this->si202_anousu 
@@ -153,7 +182,7 @@ class cl_saldotransfctb {
   }
 
   // funcao para alteracao
-  function alterar ( $si202_codctb=null, $si202_anousu=null, $si202_instit=null ) { 
+  function alterar ( $si202_seq=null ) { 
       $this->atualizacampos();
      $sql = " update saldotransfctb set ";
      $virgula = "";
@@ -223,7 +252,7 @@ class cl_saldotransfctb {
        }
      }
      $sql .= " where ";
-     $sql .= "si202_codctb = '$si202_codctb' and si202_anousu = '$si202_anousu' and si202_instit = '$si202_instit' ";     
+     $sql .= "si202_seq = '$si202_seq' "; 
      $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -255,13 +284,13 @@ class cl_saldotransfctb {
   }
 
   // funcao para exclusao 
-  function excluir ( $si202_codctb=null, $si202_anousu=null, $si202_instit=null ,$dbwhere=null) { 
+  function excluir ( $si202_seq=null,$dbwhere=null) { 
 
      $sql = " delete from saldotransfctb
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "si202_codctb = '$si202_codctb' and si202_anousu = '$si202_anousu' and si202_instit = '$si202_instit'";
+       $sql2 = "si202_seq = '$si202_seq'";
      } else {
        $sql2 = $dbwhere;
      }
@@ -320,7 +349,7 @@ class cl_saldotransfctb {
   }
 
   // funcao do sql 
-  function sql_query ( $si202_codctb = null,$campos="*",$ordem=null,$dbwhere="") { 
+  function sql_query ( $si202_seq = null,$campos="*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -335,8 +364,8 @@ class cl_saldotransfctb {
      $sql .= " from saldotransfctb ";
      $sql2 = "";
      if ($dbwhere=="") {
-       if ( $si202_codctb != "" && $si202_codctb != null) {
-          $sql2 = " where saldotransfctb.si202_codctb = '$si202_codctb'";
+       if ( $si202_seq != "" && $si202_seq != null) {
+          $sql2 = " where saldotransfctb.si202_seq = '$si202_seq'";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
@@ -351,11 +380,12 @@ class cl_saldotransfctb {
          $virgula = ",";
       }
     }
+	// die($sql);
     return $sql;
   }
 
   // funcao do sql 
-  function sql_query_file ( $si202_codctb = null,$campos="*",$ordem=null,$dbwhere="") { 
+  function sql_query_file ( $si202_seq = null,$campos="*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);

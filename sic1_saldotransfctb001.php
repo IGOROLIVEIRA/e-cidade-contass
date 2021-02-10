@@ -10,11 +10,19 @@ $clsaldotransfctb = new cl_saldotransfctb;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  db_inicio_transacao();
-  $clsaldotransfctb->si202_anousu = db_getsession('DB_anousu');
-  $clsaldotransfctb->si202_instit = db_getsession('DB_instit');
-  $clsaldotransfctb->incluir();
-  db_fim_transacao();
+	$sqlerro = false;
+    db_inicio_transacao();
+    $clsaldotransfctb->si202_anousu = db_getsession('DB_anousu');
+    $clsaldotransfctb->si202_instit = db_getsession('DB_instit');
+    $clsaldotransfctb->incluir($si202_seq);
+    if($clsaldotransfctb->erro_status=="0"){
+		$sqlerro = true;
+	}
+	db_fim_transacao($sqlerro);
+
+    $si202_seq = $clsaldotransfctb->si202_seq;
+    $db_opcao = 1;
+    $db_botao = true;
 }
 ?>
 <html>

@@ -9,9 +9,7 @@ $clsaldotransfctb->rotulo->label();
 	<table border="0">
 		<tr>
 			<td nowrap title="<?=@$Tsi202_codctb?>">
-			<input name="si202_codctb" type="hidden" value="<?=@$si202_codctb?>">
-			<input name="si202_anousu" type="hidden" value="<?=@$si202_anousu?>">
-			<input name="si202_instit" type="hidden" value="<?=@$si202_instit?>">
+			<input name="si202_seq" type="hidden" value="<?=@$si202_seq?>">
 			<?=@$Lsi202_codctb?>
 			</td>
 			<td> 

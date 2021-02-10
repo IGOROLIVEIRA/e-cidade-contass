@@ -13,7 +13,7 @@ $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $clsaldotransfctb->excluir($si202_codctb, $si202_anousu, $si202_instit);
+  $clsaldotransfctb->excluir($si202_seq);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;

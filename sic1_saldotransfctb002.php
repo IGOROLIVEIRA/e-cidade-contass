@@ -13,7 +13,7 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $clsaldotransfctb->alterar($si202_codctb, $si202_anousu, $si202_instit);
+  $clsaldotransfctb->alterar($si202_seq);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
