@@ -42,12 +42,14 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 
 <script>
 
 
 function js_emite(){
-  jan = window.open('pes2_bagefetividade002.php?secini='+document.form1.secini.value+'&secfin='+document.form1.secfin.value+'&ano='+document.form1.DBtxt23.value+'&mes='+document.form1.DBtxt25.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan = window.open('pes2_bagefetividade002.php?secini='+document.form1.secini.value+'&secfin='+document.form1.secfin.value+'&ano='+document.form1.DBtxt23.value+'&mes='+document.form1.DBtxt25.value+'&tipo_filtro='+document.form1.tipo_filtro.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
 </script>  
@@ -88,7 +90,18 @@ function js_emite(){
           ?>
         </td>
       </tr>
+
       <tr> 
+        <td align="right" nowrap title="Tipo Filtro" ><b>Tipo Filtro :</b>&nbsp;&nbsp;
+        </td>
+        <td>
+          <select name="tipo_filtro" id="tipoFiltro" onchange="js_tipo_filtro()">
+            <option value='geral'>Geral</option>
+            <option value='secretaria'>Secretaria</option>
+          </select>
+	      </td>
+      </tr>
+      <tr id="tipoSecretaria"> 
         <td align="right" nowrap title="Secretaria inicial/final" ><b>Secretaria Inicial/Final :</b>&nbsp;&nbsp;
         </td>
         <td>&nbsp;&nbsp;
@@ -101,7 +114,7 @@ function js_emite(){
           $secfin = 99;
             db_input('secfin',2,'',true,'text',2,'')
           ?>
-	</td>
+      </td>
       </tr>
       <tr>
         <td >&nbsp;</td>
@@ -143,6 +156,16 @@ function js_mostratabdesc1(chave1,chave2){
      document.form1.k07_descr.value = chave2;
      db_iframe.hide();
 }
+function js_tipo_filtro() {
+  let elementoFiltro = $("tipoFiltro");
+  let elementoMostrar = $('tipoSecretaria');
+  if (elementoFiltro.value == 'secretaria') {
+    elementoMostrar.show();
+  } else {
+    elementoMostrar.hide();
+  }
+}
+js_tipo_filtro();
 </script>
 
 
