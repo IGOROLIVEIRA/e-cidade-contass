@@ -1555,7 +1555,6 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_verificaorigem() {
 
-        console.log('Enter here 4...');
         iOrigem = document.form1.ac16_origem.value;
 
         if(iOrigem == 1 || iOrigem == 2){

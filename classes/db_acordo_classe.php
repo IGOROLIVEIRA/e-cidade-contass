@@ -348,7 +348,8 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        // if($this->ac16_acordocomissao == null ){
+        if($this->ac16_acordocomissao == null ){
+            $this->ac16_acordocomissao = "null";
         //     $this->erro_sql = " Campo Acordo Comissão não informado.";
         //     $this->erro_campo = "ac16_acordocomissao";
         //     $this->erro_banco = "";
@@ -356,7 +357,7 @@ class cl_acordo {
         //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         //     $this->erro_status = "0";
         //     return false;
-        // }
+        }
         if($this->ac16_acordogrupo == null ){
             $this->erro_sql = " Campo Acordo Grupo não informado.";
             $this->erro_campo = "ac16_acordogrupo";
@@ -375,7 +376,8 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        // if($this->ac16_qtdrenovacao == null ){
+        if($this->ac16_qtdrenovacao == null ){
+            $this->ac16_qtdrenovacao = "null";
         //     $this->erro_sql = " Campo Quantidade de Renovação não informado.";
         //     $this->erro_campo = "ac16_qtdrenovacao";
         //     $this->erro_banco = "";
@@ -383,7 +385,7 @@ class cl_acordo {
         //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         //     $this->erro_status = "0";
         //     return false;
-        // }
+        }
         if($this->ac16_tipounidtempo == null ){
             $this->erro_sql = " Campo Unidade do Tempo não informado.";
             $this->erro_campo = "ac16_tipounidtempo";
@@ -423,6 +425,7 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
+        
         if($this->ac16_acordocategoria == null ){
             $this->ac16_acordocategoria = "0";
         }

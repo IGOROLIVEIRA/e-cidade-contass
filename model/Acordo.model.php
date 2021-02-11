@@ -1736,7 +1736,6 @@ class Acordo
              * incluimos uma posição inicial para o contrato:
              */
             $oPosicao = new AcordoPosicao();
-            $oPosicao->setPosicaoPeriodo($this->getDataInicial(), $this->getDataFinal(), $oDaoAcordo->ac16_periodocomercial);
             $oPosicao->setAcordo($this->iCodigoAcordo);
             $oPosicao->setNumero(1);
             $oPosicao->setTipo(1);
@@ -1863,7 +1862,6 @@ class Acordo
      */
     function getUltimaPosicao($bCancelados = false)
     {
-
 
         if ($this->oUltimaPosicao == null) {
 
