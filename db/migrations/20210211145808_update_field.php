@@ -4,7 +4,7 @@ use Phinx\Migration\AbstractMigration;
 
 class UpdateField extends AbstractMigration
 {
-    public function change()
+    public function up()
     {
         $sql = <<<SQL
   
