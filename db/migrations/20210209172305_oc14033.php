@@ -69,6 +69,8 @@ class Oc14033 extends PostgresMigration
                 MAXVALUE 9223372036854775807
                 START 1
                 CACHE 1;
+
+        ALTER TABLE saldotransfctb ADD PRIMARY KEY (si202_seq);        
                 
         COMMIT;
 

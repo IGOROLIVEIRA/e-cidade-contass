@@ -78,10 +78,19 @@ $clrotulo->label("o15_codigo");
                                             ?>
                                         </td>
                                     </tr>
-                                    <tr id="encerramentoCtbExt" style="display: none">
-                                        <td>Transferência de Fontes CTB e EXT:</td>
+                                    <tr id="encerramentoCtb" style="display: none">
+                                        <td>Transferência de Fontes CTB:</td>
                                         <td>
-                                            <select id="iEncerraCtbExt">
+                                            <select id="iEncerraCtb">
+                                                <option value="0">Não</option>
+                                                <option value="1">Sim</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr id="encerramentoExt" style="display: none">
+                                        <td>Transferência de Fontes EXT:</td>
+                                        <td>
+                                            <select id="iEncerraExt">
                                                 <option value="0">Não</option>
                                                 <option value="1">Sim</option>
                                             </select>
@@ -318,7 +327,7 @@ $clrotulo->label("o15_codigo");
         var aArquivosSelecionados = new Array();
         var aArquivos             = $$("input[type='checkbox']");
         var iMesReferencia        = $("MesReferencia");
-        var iEncerraCtbExt        = $("iEncerraCtbExt");
+        var iEncerraCtb           = $("iEncerraCtb");
 
         /*
          * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
@@ -340,7 +349,7 @@ $clrotulo->label("o15_codigo");
         oParam.arquivos      = aArquivosSelecionados;
         oParam.pespectivappa = $F('o119_sequencial');
         oParam.mesReferencia = iMesReferencia.value;
-        oParam.encerraCtbExt = iEncerraCtbExt.value;
+        oParam.encerraCtb    = iEncerraCtb.value;
         var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
             {
                 method:'post',
@@ -489,15 +498,18 @@ $clrotulo->label("o15_codigo");
             $("meta").style.display = "block";
             
             if (iAno >= 2020) {
-                $('encerramentoCtbExt').style.display = "block";
+                $('encerramentoCtb').style.display = "block";
+                $('encerramentoExt').style.display = "block";
             } else {
-                $('encerramentoCtbExt').style.display = "none";    
+                $('encerramentoCtb').style.display = "none"; 
+                $('encerramentoExt').style.display = "none"; 
             }
 
         } else {
 
             $("meta").style.display = "none";        
-            $('encerramentoCtbExt').style.display = "none";
+            $('encerramentoCtb').style.display = "none";
+            $('encerramentoExt').style.display = "none";
 
         }
     }
