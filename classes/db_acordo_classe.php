@@ -1347,6 +1347,7 @@ class cl_acordo {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
+        print_r($sql);
         if($ordem != null ){
             $sql .= " order by ";
             $campos_sql = split("#",$ordem);
@@ -1431,7 +1432,7 @@ class cl_acordo {
                        inner join db_depart depresp on depresp.coddepto = acordo.ac16_deptoresponsavel";
         $sql .= "      inner join acordogrupo    on acordogrupo.ac02_sequencial    = acordo.ac16_acordogrupo";
         $sql .= "      inner join acordosituacao on acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
-        $sql .= "      inner join acordocomissao on acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
+        $sql .= "      left join acordocomissao on acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
         $sql .= "      inner join acordonatureza on acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
         $sql .= "      inner join acordotipo     on acordotipo.ac04_sequencial     = acordogrupo.ac02_acordotipo";
         $sql .= "      inner join acordoorigem   on acordoorigem.ac28_sequencial   = acordo.ac16_origem";
