@@ -1347,7 +1347,6 @@ class cl_acordo {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        print_r($sql);
         if($ordem != null ){
             $sql .= " order by ";
             $campos_sql = split("#",$ordem);
