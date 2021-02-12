@@ -514,8 +514,8 @@ db_app::load("dbtextFieldData.widget.js");
                                                     <?
                                                     db_input('ac16_qtdperiodo', 2, @$Iac16_qtdperiodo, true, 'text', $db_opcao,
                                                         "", "", "");
-                                                    $aTipoUnidades = getValoresPadroesCampo("ac16_tipounidtempoperiodo");
-                                                    $aTipoUnidades[0] = "Selecione";
+                                                    $aTipoUnidades = array_merge(array(0=>'Selecione'), getValoresPadroesCampo("ac16_tipounidtempoperiodo"));
+                                                    
                                                     db_select("ac16_tipounidtempoperiodo", $aTipoUnidades,
                                                         true, $db_opcao);
                                                     ?>
