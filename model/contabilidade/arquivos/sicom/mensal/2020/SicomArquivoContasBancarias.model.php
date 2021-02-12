@@ -374,7 +374,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $aBancosAgrupados[$aHash] = $cCtb10;
 
         } else {
-		  $aBancosAgrupados[$aHash]->contas[] = $oRegistro10->codctb;
+          $aBancosAgrupados[$aHash]->contas[] = $oRegistro10->codctb;
         }
 
 

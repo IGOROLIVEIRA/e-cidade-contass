@@ -134,7 +134,7 @@ class GerarCTB extends GerarAM
                         $aCSVCTB21['si97_valorentrsaida']     = $this->sicomNumberReal($aCTB21['si97_valorentrsaida'], 2);
                         $aCSVCTB21['si97_codctbtransf']       = $aCTB21['si97_codctbtransf'] != 0 ? substr($aCTB21['si97_codctbtransf'], 0, 20) : ' ';
                         $aCSVCTB21['si97_codfontectbtransf']  = $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) != 0 ? $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) : ' ';
-                        $aCSVCTB21['si97_saldocectransf']     = $this->padLeftZero($aCTB21['si97_saldocectransf'], 1);
+                        $aCSVCTB21['si97_saldocectransf']     = $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) != 0 ? $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) : ' ';
 
                         $this->sLinha = $aCSVCTB21;
                         $this->adicionaLinha();

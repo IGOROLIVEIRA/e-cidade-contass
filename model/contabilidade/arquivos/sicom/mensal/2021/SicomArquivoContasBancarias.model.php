@@ -256,7 +256,17 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                               AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                               AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio FROM ctb102021 ";
+          $sSqlVerifica .= " SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                               AND si95_banco = '$oRegistro10->c63_banco'
+                               AND si95_agencia = '$oRegistro10->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_contabancaria = '$oRegistro10->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+		  $sSqlVerifica .= " UNION ";
+		  $sSqlVerifica .= " SELECT 'ctb102019' AS ano, si95_codctb, si95_nroconvenio FROM ctb102019 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -266,7 +276,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
+          $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102018 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -276,7 +286,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
+          $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102017 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -286,7 +296,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
+          $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102016 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -296,7 +306,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
+          $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102015 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -306,7 +316,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102021' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102021 ";
+          $sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102014 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -718,8 +728,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                              FROM conlancamdoc
                              INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
 							 INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
-							 INNER JOIN conplano conplanocredito ON contacredito.c61_codcon = conplanocredito.c60_codcon and contacredito.c61_anousu = conplanocredito.c60_anousu
-     	 				     INNER JOIN conplano conplanodebito ON contacredito.c61_codcon = conplanodebito.c60_codcon and contacredito.c61_anousu = conplanodebito.c60_anousu
+							 INNER JOIN conplano conplanocredito ON contadebito.c61_codcon = conplanocredito.c60_codcon AND contadebito.c61_anousu = conplanocredito.c60_anousu
+							 INNER JOIN conplano conplanodebito ON contadebito.c61_codcon = conplanodebito.c60_codcon AND contadebito.c61_anousu = conplanodebito.c60_anousu
                              LEFT JOIN conplanoconta bancodebito ON (bancodebito.c63_codcon, bancodebito.c63_anousu) = (contadebito.c61_codcon, contadebito.c61_anousu)
                              AND contadebito.c61_reduz = conlancamval.c69_debito
                              INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
@@ -827,8 +837,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 $oDadosMovi21->si97_codreduzidomov = $oMovi->codreduzido . "0" . $oMovi->tipomovimentacao;
                 $oDadosMovi21->si97_tipomovimentacao = $oMovi->tipomovimentacao;
 				$oDadosMovi21->si97_tipoentrsaida = (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) ? $oMovi->c71_coddoc == 164 ? '20' : '99' : $oMovi->tipoentrsaida;
-				$oDadosMovi21->si97_valorentrsaida = $oMovi->saldocec;
-				$oDadosMovi21->si97_saldocec = $nValor;
+				$oDadosMovi21->si97_valorentrsaida = $nValor;
+				$oDadosMovi21->si97_saldocec = $oMovi->saldocec;
                 $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ($oDadosMovi21->si97_tipoentrsaida == 10 ? 'Estorno de recebimentos' : ' '));
                 $oDadosMovi21->si97_codctbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
                   && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
@@ -960,11 +970,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb21->si97_codreduzidomov = $oCtb21agrupado->si97_codreduzidomov;
           $cCtb21->si97_tipomovimentacao = $oCtb21agrupado->si97_tipomovimentacao;
           $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
+		  $cCtb21->si97_saldocec = $oCtb21agrupado->si97_saldocec;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
           $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ' ');
           $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codctbtransf : 0;
           $cCtb21->si97_codfontectbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codfontectbtransf : 0;
-          $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
+		  $cCtb21->si97_saldocectransf = $oCtb21agrupado->si97_saldocectransf; 
+		  $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
           $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;
           $cCtb21->si97_instit = $oCtb21agrupado->si97_instit;
 
@@ -985,6 +997,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             $cCtb22->si98_identificadordeducao = $oCtb22Agrupado->si98_identificadordeducao;
             $cCtb22->si98_naturezareceita = $oCtb22Agrupado->si98_naturezareceita;
             $cCtb22->si98_codfontrecursos = $oCtb21agrupado->si97_codfontrecursos;
+			$cCtb22->si98_saldocec = $oCtb22Agrupado->si98_saldocec;
             $cCtb22->si98_vlrreceitacont = $oCtb22Agrupado->si98_vlrreceitacont;
             $cCtb22->si98_mes = $oCtb22Agrupado->si98_mes;
             $cCtb22->si98_reg21 = $cCtb21->si97_sequencial;
