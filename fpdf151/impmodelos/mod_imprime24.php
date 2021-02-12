@@ -5,7 +5,7 @@ $cldb_config = new cl_db_config;
 
 $this->objpdf->settopmargin(1);
 $this->objpdf->SetTextColor(0,0,0);
-$this->objpdf->SetFont('Arial','B',12);
+$this->objpdf->SetFont('Arial','B',10);
 $this->objpdf->SetLineWidth(1);
 $this->objpdf->RoundedRect(2,3,204,292,2,'1234');
 $this->objpdf->SetLineWidth(0.5);
@@ -28,11 +28,11 @@ if (file_exists('imagens/files/' . $logofundo.'_fundoalvara.jpg')){
 $this->objpdf->Image('imagens/files/' . $logo,90,7,16);
 
 $this->objpdf->sety(34);
-$this->objpdf->setfont('Arial','B',16);
+$this->objpdf->setfont('Arial','B',14);
 $this->objpdf->Multicell(0,8,$this->prefeitura,0,"C",0); // prefeitura
 
 $this->objpdf->sety(42);
-$this->objpdf->setfont('Arial','B',16);
+$this->objpdf->setfont('Arial','B',14);
 $this->objpdf->Multicell(0,8,$this->tipoalvara,0,"C",0); // tipo de alvara
 
 
@@ -45,34 +45,34 @@ if(!empty($this->dtemissao)){
 if($this->permanente == 't'){
 
 	$this->objpdf->sety(49);
-	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->setfont('Arial','B',10);
 	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
 	$this->objpdf->sety(55);
-	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->setfont('Arial','B',10);
 	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
   $this->objpdf->sety(61);
-  $this->objpdf->setfont('Arial','B',12);
+  $this->objpdf->setfont('Arial','B',10);
   $this->objpdf->Multicell(0,8,"Data do Documento: ".$sDataEmissao,0,"C",0); // Data de Emissao
 	$this->objpdf->setxy(10,70);
 } else {
 
 	$this->objpdf->sety(56);
-	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->setfont('Arial','B',10);
 	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
 	$this->objpdf->sety(62);
-	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->setfont('Arial','B',10);
 	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
   $this->objpdf->sety(67);
-  $this->objpdf->setfont('Arial','B',12);
+  $this->objpdf->setfont('Arial','B',10);
   $this->objpdf->Multicell(0,8,"Data do Documento: ".db_formatar($this->dtemissao,'d'),0,"C",0); // Data de Emissao
 	$this->objpdf->setxy(10,75);
 }
 
-$this->objpdf->SetFont('Arial','',14);
+$this->objpdf->SetFont('Arial','',10);
 $this->objpdf->multicell(0,7,db_geratexto($this->texto),0,"J",0,40);
 
 $coluna = 15;
-$fonte  = 12;
+$fonte  = 10;
 $linha =  $this->objpdf->gety();
 $a = $linha;
 $this->objpdf->SetFont('Arial','B',$fonte);
@@ -157,7 +157,7 @@ $this->objpdf->sety($linha);
 $pos = $linha;
 $alt = 10;
 //	  $this->objpdf->roundedrect($coluna-2,$linha-1,187,20,2,'1234');
-$this->objpdf->SetFont('Arial','B',12);
+$this->objpdf->SetFont('Arial','B',10);
 $this->objpdf->Ln(2);
 $this->objpdf->setx(15);
 
@@ -401,14 +401,14 @@ if ($num_outras >0) {
 $x=64;
 $this->objpdf->setxy(14,$iPos+40);
 
-$this->objpdf->SetFont('Arial','',14);
+$this->objpdf->SetFont('Arial','',10);
 $this->objpdf->Multicell(0,6,$this->obs); // observação
 
 if(isset($this->impobslanc) && $this->impobslanc == 't'){
   if (isset($this->lancobs) && $this->lancobs != '') {;
     $this->objpdf->Ln(2);
     $this->objpdf->setx(15);
-    $this->objpdf->SetFont('Arial','',14);
+    $this->objpdf->SetFont('Arial','',10);
     $this->objpdf->Multicell(0,5,"Obs : ".$this->lancobs);
     $this->objpdf->Ln(2);
   }

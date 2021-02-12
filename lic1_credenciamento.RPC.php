@@ -41,15 +41,15 @@ try{
 
         case 'SalvarCred':
 
+            db_inicio_transacao();
+
             $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento,l20_datacria,l20_dtpubratificacao",null,null));
             db_fieldsmemory($rsLimiteCred,0);
-            $dtLimitecredenciamento = (implode("/",(array_reverse(explode("-",$l20_dtlimitecredenciamento)))));
-            $l20_datacria = (implode("/",(array_reverse(explode("-",$l20_datacria)))));
-            $l20_dtpubratificacao = (implode("/",(array_reverse(explode("-",$l20_dtpubratificacao)))));
-          foreach ($oParam->itens as $item){
+
+            foreach ($oParam->itens as $item){
+
                 $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query_file(null,"l206_datahab",null,"l206_fornecedor = $item->l205_fornecedor and l206_licitacao = $item->l205_licitacao"));
                 db_fieldsmemory($rsHabilitacao,0);
-                $dtHabilitacaoforne = (implode("/",(array_reverse(explode("-",$l206_datahab)))));
 
                 $clcredenciamento->l205_fornecedor = $item->l205_fornecedor;
                 $clcredenciamento->l205_datacred = $item->l205_datacreditem;
@@ -58,47 +58,82 @@ try{
                 $clcredenciamento->l205_datacreditem = $item->l205_datacreditem == "" || $item->l205_datacreditem == null ? $item->l205_datacred : $item->l205_datacreditem;
 
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
-                db_fieldsmemory($rsItem,0)->l205_sequencial;
 
-              $dtcred = DateTime::createFromFormat('d/m/Y', $item->l205_datacreditem);
-              $dthabilitacao = DateTime::createFromFormat('d/m/Y', $dtHabilitacaoforne);
-              $dtCriacaoProcAdm = DateTime::createFromFormat('d/m/Y', $l20_datacria);
-              $dtpubratificacao = DateTime::createFromFormat('d/m/Y', $l20_dtpubratificacao);
+                $dtcred = join('-', array_reverse(explode('/', $item->l205_datacreditem)));
+                
+                if (!$rsItem) {
+                    if($dtcred < $l206_datahab){
+                        throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
+                    }
+  
+                    if($l20_dtlimitecredenciamento != ""){
+                        if($item->l205_datacred > $l20_dtlimitecredenciamento){
+                            throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
+                        }
+                    }
+  
+                    if($dtcred < $l20_datacria){
+                        throw new Exception ("Erro: Data de credenciamento menor que a data de abertura do procedimento adm.");
+                    }
+  
+                    if($l20_dtpubratificacao != ""){
+                        if($dtcred < $l20_dtpubratificacao){
+                            throw new Exception ("Erro: A data de credenciamento deve ser maior ou igual a data de publicação do Termo de Ratificação");
+                        }
+                    }
 
-              if($dtcred < $dthabilitacao){
-                  throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
-              }
+                    $clcredenciamento->incluir(null);
 
-              if($dtLimitecredenciamento != ""){
-                  if($item->l205_datacred > $dtLimitecredenciamento){
-                      throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
-                  }
-              }
+                    if ($clcredenciamento->erro_status == 0) {
+                        $sqlerro = true;
+                        $erro_msg = $clcredenciamento->erro_msg;
+                        break;
+                    }
 
-              if($dtcred < $dtCriacaoProcAdm){
-                  throw new Exception ("Erro: Data de credenciamento menor que a data de abertura do procedimento adm.");
-              }
+                } else {
 
-              if($dtpubratificacao != ""){
-                  if($dtcred < $dtpubratificacao){
-                      throw new Exception ("Erro: A data de credenciamento deve ser maior ou igual a data de publicação do Termo de Ratificação");
-                  }
-              }
+                    $oCredenciamento = db_utils::fieldsMemory($rsItem, 0);
+                    
+                    if($oCredenciamento->l205_datacreditem != $dtcred){
+                        
+                        if($dtcred < $l206_datahab){
+                            throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
+                        }
+      
+                        if($l20_dtlimitecredenciamento != ""){
+                            if($item->l205_datacred > $l20_dtlimitecredenciamento){
+                                throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
+                            }
+                        }
+      
+                        if($dtcred < $l20_datacria){
+                            throw new Exception ("Erro: Data de credenciamento menor que a data de abertura do procedimento adm.");
+                        }
+      
+                        if($l20_dtpubratificacao != ""){
+                            if($dtcred < $l20_dtpubratificacao){
+                                throw new Exception ("Erro: A data de credenciamento deve ser maior ou igual a data de publicação do Termo de Ratificação");
+                            }
+                        }
 
-              if ($rsItem == 0) {
-                  $clcredenciamento->incluir(null);
-              } else {
-                  $clcredenciamento->l205_sequencial = $l205_sequencial;
-                  $clcredenciamento->alterar();
-              }
+                        $clcredenciamento->l205_sequencial = $oCredenciamento->l205_sequencial;
+                    
+                        $clcredenciamento->alterar();
 
-              if ($clcredenciamento->erro_status == 0) {
-                  $sqlerro = true;
-                  $erro_msg = $clcredenciamento->erro_msg;
-                  break;
-              }
-              $oRetorno->sequecialforne = $item->sequenciaforne;
+                        if ($clcredenciamento->erro_status == 0) {
+                            $sqlerro = true;
+                            $erro_msg = $clcredenciamento->erro_msg;
+                            break;
+                        }
+                    }
+
+                }
+
+                $oRetorno->sequecialforne = $item->sequenciaforne;
+            
             }
+            
+            db_fim_transacao($sqlerro);
 
             break;
 

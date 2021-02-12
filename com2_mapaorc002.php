@@ -312,7 +312,7 @@ if ($modelo == 1) {
             if ($pc23_perctaxadesctabela != 0 || $pc23_percentualdesconto != 0) {
                 $pdf->cell(20, $alt, "", 0, 0, "R", 0);
             } else {
-                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 2, ',', '.'), 0, 0, "R", 0);
+                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 4, ',', '.'), 0, 0, "R", 0);
             }
             /*FIM - OC3770*/
 
@@ -339,7 +339,7 @@ if ($modelo == 1) {
             if ($pc23_perctaxadesctabela != 0 || $pc23_percentualdesconto != 0) {
                 $pdf->cell(20, $alt, "", 0, 0, "R", 0);
             } else {
-                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 2, ',', '.'), 0, 0, "R", 0);
+                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 4, ',', '.'), 0, 0, "R", 0);
             }
             /*FIM - OC3770*/
 

@@ -325,10 +325,10 @@ switch($oParam->exec) {
 
                 $oAcordoItem     = new AcordoItem($oItem->codigo);
                 $nValorTotalItem = $oAcordoItem->getValorTotal();
-
+                //print_r($oItem->dotacoes);
                 foreach ($oItem->dotacoes as $iDotacoes => $oDotacoes) {
 
-                    $nTotalExecutar += $oDotacoes->valor;
+                    $nTotalExecutar += $oDotacoes->valorexecutar;
                 }
 
                 if (round($nTotalExecutar, 2) > round($nValorTotalItem, 2)) {

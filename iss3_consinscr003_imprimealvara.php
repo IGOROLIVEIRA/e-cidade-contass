@@ -313,9 +313,17 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $oInstit = new Instituicao(db_getsession('DB_instit'));
   /**
    * Customizações realizadas para alguns clientes
+   * @todo Refatorar para remover esse if
    */
   if(in_array($oInstit->getCodigoCliente(),
-      array(Instituicao::COD_CLI_PMPIRAPORA, Instituicao::COD_CLI_PMCAPITAOENEAS, Instituicao::COD_CLI_PMUBAI)
+      array(
+          Instituicao::COD_CLI_PMPIRAPORA,
+          Instituicao::COD_CLI_PMCAPITAOENEAS,
+          Instituicao::COD_CLI_PMUBAI,
+          Instituicao::COD_CLI_PMGRAOMOGOL,
+          Instituicao::COD_CLI_SANTAFEMINAS,
+          Instituicao::COD_CLI_SAOJOAOMISSOES,
+      )
   )) {
 
   $pdf1->horariofuncionamento = empty($q07_horaini) || empty($q07_horafim) ? "08:00 às 18:00" : $q07_horaini." às ".$q07_horafim;
