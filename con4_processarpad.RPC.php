@@ -400,6 +400,10 @@ switch($oParam->exec) {
 		$oArquivo->setEncerramentoCtb($oParam->encerraCtb);
 	 }
 
+   if (db_getsession("DB_anousu") >= 2020 && $sArquivo == "DetalhamentoExtraOrcamentariasPorFonte" && $oParam->encerraExt == 1) {
+		$oArquivo->setEncerramentoExt($oParam->encerraExt);
+	 }
+
     $oArquivoCsv = new stdClass();
     try {
 

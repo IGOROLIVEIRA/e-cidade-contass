@@ -36,6 +36,12 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
   /**
+ 	* @var bollean
+	* Realiza transferência de fontes utilizadas no reg 20 para fonte principal da conta (PCASP)
+	*/
+  protected $bEncerramento = false;
+
+  /**
    *
    * Construtor da classe
    */
@@ -57,6 +63,12 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
    */
   public function getCampos(){
 
+  }
+
+  public function setEncerramentoExt($iEncerramento) {
+	  if ($iEncerramento == 1) {
+		  $this->bEncerramento = true;
+	  }
   }
 
   /**

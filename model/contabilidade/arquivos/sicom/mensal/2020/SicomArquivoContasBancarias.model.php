@@ -192,7 +192,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         $sSqlGeral .= " where (k13_limite is null or k13_limite >= '" . $this->sDataFinal . "') 
 				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " 
 				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
-    				  and c61_instit = " . db_getsession("DB_instit") . " and c61_codtce in (255) order by k13_reduz";//255,293
+    				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
     }
 
     $rsContas = db_query($sSqlGeral);
@@ -1041,7 +1041,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oDadosMovi21->si97_tiporegistro 		= '21';
 				$oDadosMovi21->si97_codctb 				= $oContaAgrupada->si95_codctb;
 				$oDadosMovi21->si97_codfontrecursos 	= $oCtb20->si96_codfontrecursos;
-				$oDadosMovi21->si97_codreduzidomov 		= $oContaAgrupada->si95_codctb . $oCtb20->si96_codfontrecursos;
+				$oDadosMovi21->si97_codreduzidomov 		= $oContaAgrupada->si95_codctb . $oCtb20->si96_codfontrecursos.($aCtb20Agrupado[$sHash20]->si96_vlsaldofinalfonte > 0 ? 2 : 1);
 				$oDadosMovi21->si97_tipomovimentacao 	= $aCtb20Agrupado[$sHash20]->si96_vlsaldofinalfonte > 0 ? 2 : 1;
 				$oDadosMovi21->si97_tipoentrsaida 		= '98';
 				$oDadosMovi21->si97_dscoutrasmov 		= ' ';
@@ -1080,7 +1080,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oDadosMovi21->si97_tiporegistro 		= '21';
 				$oDadosMovi21->si97_codctb 				= $oContaAgrupada->si95_codctb;
 				$oDadosMovi21->si97_codfontrecursos 	= $oConta->recurso;
-				$oDadosMovi21->si97_codreduzidomov 		= $oContaAgrupada->si95_codctb . $oCtb20->si96_codfontrecursos;
+				$oDadosMovi21->si97_codreduzidomov 		= $oContaAgrupada->si95_codctb . $oCtb20->si96_codfontrecursos.($oDadosMovi21->si97_tipomovimentacao == 1 ? 2 : 1);
 				$oDadosMovi21->si97_tipomovimentacao 	= $oDadosMovi21->si97_tipomovimentacao == 1 ? 2 : 1;
 				$oDadosMovi21->si97_tipoentrsaida 		= '98';
 				$oDadosMovi21->si97_dscoutrasmov 		= ' ';
@@ -1095,28 +1095,21 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				if (!$aCtb20Agrupado[$sHash20recurso]) {
 					$aReg21Temps[$sHash21] = $oDadosMovi21;
 				} else {
-						
-					foreach($aReg21Temps as $sHash => $aReg21Temp) {
-						$aCtb20Agrupado[$sHash20recurso]->ext21[$sHash] = $aReg21Temp;
-					}
+                    $aCtb20Agrupado[$sHash20recurso]->ext21[$sHash21] = $oDadosMovi21;                    
+                }
 
-					$aReg21Temps = array();
-
-					$aCtb20Agrupado[$sHash20recurso]->ext21[$sHash21] = $oDadosMovi21;
-						
-				}
-
-				// Saldo final da fonte atual zerada
-				$aCtb20Agrupado[$sHash20]->si96_vlsaldofinalfonte = 0;
+				// Atualiza saldo final da fonte atual				
+                $aCtb20Agrupado[$sHash20]->si96_vlsaldofinalfonte -= $aCtb20Agrupado[$sHash20]->si96_vlsaldofinalfonte;
 
 			}
+            
 			/**
 			 * Caso seja informado um valor de Saldo Final nesta rotina (saldotransfctb) para alguma fonte, 
 			 * o sistema deverá fazer uma saída (2) do tipo 98 na fonte principal da conta e uma entrada (1) do tipo 98 na fonte informada na rotina.
 			 */
 
 			$sSqlSaldoTransfCtb = "	SELECT * FROM saldotransfctb 
-                                		WHERE si202_codctb = {$oConta->codctb} 
+                                		WHERE si202_codctb = {$oContaAgrupada->si95_codctb} 
 										AND si202_anousu = ".db_getsession("DB_anousu")." AND si202_instit = ".db_getsession("DB_instit");
 			
 			$rsSaldoTransfCtb = db_query($sSqlSaldoTransfCtb);
@@ -1152,6 +1145,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 							$oDadosMovi21->bAcertaSaldo20 			= true;
 
 							$aCtb20Agrupado[$sHash20]->ext21[$sHash21] = $oDadosMovi21;
+                            $aCtb20Agrupado[$sHash20]->si96_vlsaldofinalfonte -= $oSaldoTransfCtb->si202_saldofinal;
 
 						}
 
@@ -1176,9 +1170,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 							$oDadosMovi21->si97_instit 				= db_getsession("DB_instit");
 							$oDadosMovi21->bAcertaSaldo20 			= true;
 
+                            $aCtb20Agrupado[$sHash20b]->si96_vlsaldofinalfonte += $oSaldoTransfCtb->si202_saldofinal;
+
 							//Caso não exista reg20 para a fonte ainda, guarda os reg21 em um array temporário
 							if (!$aCtb20Agrupado[$sHash20b]) {
-								$aReg21bTemps[$sHash21] = $oDadosMovi21;
+								$aReg21Temps[$sHash21] = $oDadosMovi21;
 							} else {
 								$aCtb20Agrupado[$sHash20b]->ext21[$sHash21] = $oDadosMovi21;
 							}
@@ -1192,13 +1188,14 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			}	
 		
 			//Percorre array temporário para adicionar registros 21 aos respectivos regs20 que são criados após criação do reg21
-			foreach($aReg21bTemps as $sHash => $aReg21Temp) {
+			foreach($aReg21Temps as $sHash => $aReg21Temp) {
 
 				$sHash20fonte = $aReg21Temp->si97_codctb.$aReg21Temp->si97_codfontrecursos;
 				
 				if ($aCtb20Agrupado[$sHash20fonte]){	
 					$aCtb20Agrupado[$sHash20fonte]->ext21[$sHash] = $aReg21Temp;
-					$aReg21bTemps = array();
+                    $aCtb20Agrupado[$sHash20fonte]->si96_vlsaldofinalfonte += $aReg21Temp->si97_valorentrsaida;
+					unset($aReg21Temps[$sHash]);
 				}
 
 			}		
@@ -1252,7 +1249,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
           $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ' ');
-          $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codctbtransf : 0;
+          $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9 || $oCtb21agrupado->bAcertaSaldo20) ? $oCtb21agrupado->si97_codctbtransf : 0;
           $cCtb21->si97_codfontectbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9 || $oCtb21agrupado->bAcertaSaldo20) ? $oCtb21agrupado->si97_codfontectbtransf : 0;
           $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
           $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;

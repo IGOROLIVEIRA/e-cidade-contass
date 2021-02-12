@@ -328,6 +328,7 @@ $clrotulo->label("o15_codigo");
         var aArquivos             = $$("input[type='checkbox']");
         var iMesReferencia        = $("MesReferencia");
         var iEncerraCtb           = $("iEncerraCtb");
+        var iEncerraExt           = $("iEncerraExt");
 
         /*
          * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
@@ -350,6 +351,7 @@ $clrotulo->label("o15_codigo");
         oParam.pespectivappa = $F('o119_sequencial');
         oParam.mesReferencia = iMesReferencia.value;
         oParam.encerraCtb    = iEncerraCtb.value;
+        oParam.encerraExt    = iEncerraExt.value;
         var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
             {
                 method:'post',
