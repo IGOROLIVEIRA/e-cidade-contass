@@ -61,10 +61,10 @@ $head2 = "FOLHA DE PAGAMENTO (".$mes." / ".$ano.") - ".$impressao;
 $head4 = "ARQUIVO : ";
 
 //$whereRESC = " rh05_seqpes is null and (r45_regist is null or  r45_regist is not null and (r45_dtreto is null or r45_dtreto > '".$ano."-".$mes."-01'))";
-$whereRESC = " rh05_seqpes is null ";
-$andwhere = " and  ";
-$aWhere   = array();
-$aWhere[] = " rh05_seqpes is null ";
+// $whereRESC = " rh05_seqpes is null ";
+// $andwhere = " and  ";
+// $aWhere   = array();
+// $aWhere[] = " rh05_seqpes is null ";
 
 
 $clgerasql->inicio_rh = true;
