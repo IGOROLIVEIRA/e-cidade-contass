@@ -102,7 +102,7 @@ $oDaoVeicCadCentralDepart->rotulo->label("ve37_veiccadcentral");
             } else {
 
               /* Descubro a central deste departamento */
-              $sWhereCentral = " ve37_coddepto = ".db_getsession("DB_coddepto");
+              $sWhereCentral = " ve36_coddepto = ".db_getsession("DB_coddepto");
               $sSqlCentral   = $oDaoVeicCadCentralDepart->sql_query("",
                                                                     "ve37_veiccadcentral",
                                                                     "",
