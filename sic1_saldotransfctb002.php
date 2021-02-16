@@ -11,10 +11,29 @@ $clsaldotransfctb = new cl_saldotransfctb;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $clsaldotransfctb->alterar($si202_seq);
-  db_fim_transacao();
+  
+	$sqlerro = false;
+	db_inicio_transacao();
+  	$db_opcao = 2;
+  	$clsaldotransfctb->alterar($si202_seq);
+  
+	$sWhere = " si202_codctb = {$si202_codctb} 
+				and si202_codfontrecursos = {$si202_codfontrecursos} 
+				and si202_anousu = ".db_getsession('DB_anousu')." 
+				and si202_instit = ".db_getsession('DB_instit');
+	$sSqlVerifica = $clsaldotransfctb->sql_query(null, "*", null, $sWhere);
+	$rsVerifica = db_query($sSqlVerifica);
+	
+	if (pg_num_rows($rsVerifica) > 1) {
+
+		$clsaldotransfctb->erro_msg = "Já existe saldo cadastrado para o Código CTB e Fonte!";
+		$clsaldotransfctb->erro_status = "0";
+		$sqlerro = true;
+
+	}
+
+  	db_fim_transacao($sqlerro);
+
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
    $result = $clsaldotransfctb->sql_record($clsaldotransfctb->sql_query($chavepesquisa)); 

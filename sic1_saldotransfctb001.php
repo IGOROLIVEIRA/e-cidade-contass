@@ -11,18 +11,35 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
 	$sqlerro = false;
-    db_inicio_transacao();
-    $clsaldotransfctb->si202_anousu = db_getsession('DB_anousu');
-    $clsaldotransfctb->si202_instit = db_getsession('DB_instit');
-    $clsaldotransfctb->incluir($si202_seq);
-    if($clsaldotransfctb->erro_status=="0"){
-		$sqlerro = true;
-	}
-	db_fim_transacao($sqlerro);
 
-    $si202_seq = $clsaldotransfctb->si202_seq;
-    $db_opcao = 1;
-    $db_botao = true;
+	$sWhere = " si202_codctb = {$si202_codctb} 
+				and si202_codfontrecursos = {$si202_codfontrecursos} 
+				and si202_anousu = ".db_getsession('DB_anousu')." 
+				and si202_instit = ".db_getsession('DB_instit');
+	$sSqlVerifica = $clsaldotransfctb->sql_query(null, "*", null, $sWhere);
+	$rsVerifica = db_query($sSqlVerifica);
+	
+	if (pg_num_rows($rsVerifica) > 0) {
+
+		$clsaldotransfctb->erro_msg = "Já existe saldo cadastrado para o Código CTB e Fonte!";
+		$clsaldotransfctb->erro_status = "0";
+
+	} else {
+		
+		db_inicio_transacao();
+		$clsaldotransfctb->si202_anousu = db_getsession('DB_anousu');
+		$clsaldotransfctb->si202_instit = db_getsession('DB_instit');
+		$clsaldotransfctb->incluir($si202_seq);
+		if($clsaldotransfctb->erro_status=="0"){
+			$sqlerro = true;
+		}
+		db_fim_transacao($sqlerro);
+
+		$si202_seq = $clsaldotransfctb->si202_seq;
+		$db_opcao = 1;
+		$db_botao = true;
+
+	}
 }
 ?>
 <html>
