@@ -3,7 +3,7 @@ require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
 // require_once('model/contabilidade/relatorios/RelatoriosLegaisBase.model.php');
-require_once('model/contabilidade/relatorios/dcasp/BalancoOrcamentarioDCASP2021.model.php');
+require_once('model/contabilidade/relatorios/dcasp/BalancoOrcamentarioDCASP2015.model.php');
 require_once('libs/db_stdlib.php');
 require_once('libs/db_conecta.php');
 require_once('libs/db_sessoes.php');
@@ -176,20 +176,20 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O método `getDados()`, da classe `BalancoOrcamentarioDCASP2021()`,
+     * O método `getDados()`, da classe `BalancoOrcamentarioDCASP2015()`,
      * retorna um array enorme. Para pegar os dados necessários para cada
      * registro do SICOM DCASP, estamos passando os índices exatos do array.
      * Se eles forem alterados (nas configurações dos relatórios), devem
      * ser alterados aqui também.
      */
 
-    $oBalancoOrcamentario = new BalancoOrcamentarioDCASP2021($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oBalancoOrcamentario = new BalancoOrcamentarioDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoOrcamentario->setInstituicoes($sListaInstituicoes);
 
     $aQuadros   = array();
-    $aQuadros[] = BalancoOrcamentarioDCASP2021::QUADRO_PRINCIPAL;
-    $aQuadros[] = BalancoOrcamentarioDCASP2021::QUADRO_RESTOS_NAO_PROCESSADOS;
-    $aQuadros[] = BalancoOrcamentarioDCASP2021::QUADRO_RESTOS_PROCESSADOS;
+    $aQuadros[] = BalancoOrcamentarioDCASP2015::QUADRO_PRINCIPAL;
+    $aQuadros[] = BalancoOrcamentarioDCASP2015::QUADRO_RESTOS_NAO_PROCESSADOS;
+    $aQuadros[] = BalancoOrcamentarioDCASP2015::QUADRO_RESTOS_PROCESSADOS;
 
     $oBalancoOrcamentario->setExibirQuadros($aQuadros);
 
