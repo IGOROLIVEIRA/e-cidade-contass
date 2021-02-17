@@ -1244,7 +1244,6 @@ if(chave3 === 'f'){
   }
 
   function js_validaValorDotacao(obj, iQuantMax, nValUnitario, oValorTotal) {
-
     if (obj.value.replace(',','.') > iQuantMax) {
       obj.value = iQuantMax;
     } else if (obj.value == 0) {
@@ -1252,7 +1251,7 @@ if(chave3 === 'f'){
     }
 
     var nValorTotal = js_strToFloat(obj.value) * nValUnitario;
-    $(oValorTotal).value = js_formatar(nValorTotal, 'f');
+    $(oValorTotal).value = js_formatar(nValorTotal.toFixed(4), 'f');
   }
 
   function js_saveDotacao() {
