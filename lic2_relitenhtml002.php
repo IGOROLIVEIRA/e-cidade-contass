@@ -41,10 +41,12 @@ $clrotulo->label("l20_codigo");
 // Funcao Locao para formatar um campo
 function lic2_relitenhtml002_formatar($valor, $separador, $delimitador) {
   $del="";
-  if($delimitador=="1") {
-    $del = "\"";
-  }else if($delimitador == "2") {
-    $del = "'";
+  if(!$oGet->ocultaCabecalho){
+      if($delimitador=="1") {
+        $del = "\"";
+      }else if($delimitador == "2") {
+        $del = "'";
+      }
   }
   $valor = str_replace("\n"," ",$valor);
   $valor = str_replace("\r"," ",$valor);
@@ -68,7 +70,7 @@ if ($clliclicitem->numrows == 0) {
 $clabre_arquivo = new cl_abre_arquivo("/tmp/licitacao_$l20_codigo.csv");
 if ($clabre_arquivo->arquivo != false) {
   $vir = $separador;
-  $del = $delimitador;
+  $del = $oGet->ocultaCabecalho ? '' : $delimitador;
 
   if(!$oGet->ocultaCabecalho){
 	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("ITEM",     $vir, $del));
@@ -96,7 +98,14 @@ if ($clabre_arquivo->arquivo != false) {
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("{$pc01_descrmater} {$pc11_resum}", $vir, $del));
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc11_quant, $vir, $del));
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($m61_descr, $vir, $del));
-    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar(db_formatar($precounitario, ($oGet->ocultaCabecalho ? 'p' : "v")), $vir, $del));
+
+    if($oGet->ocultaCabecalho){
+        $precounitario = str_replace('.', ',', $precounitario);
+    }else{
+        $precounitario = db_formatar($precounitario, 'p');
+    }
+
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($precounitario, $vir, $del));
     fputs($clabre_arquivo->arquivo, "\n");
   }
   
