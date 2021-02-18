@@ -71,6 +71,30 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 	  }
   }
 
+  	/**
+	 * Separa função para buscar a natureza do saldo atual/final da conta
+	 * utilizando as condições já existentes
+	 * @param Object $oExt20
+	 * @return String
+	 */
+	private function getNatSaldoAtual($oExt20) {
+
+		if (substr($oExt20->si165_codfontrecursos, 1, 2) == '59') {
+			$verificaNatSaldoAtual = $oExt20->si165_vlsaldoatualfonte;
+		} else {
+			$verificaNatSaldoAtual = ($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos);
+		}
+
+		if ($verificaNatSaldoAtual < 0) {
+			return 'C';
+		} elseif ($verificaNatSaldoAtual > 0) {
+			return 'D';
+		} else {
+			return $oExt20->si165_natsaldoatualfonte;
+		}
+
+	}
+
   /**
    * selecionar os dados de //
    * @see iPadArquivoBase::gerarDados()
@@ -621,7 +645,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 				
 				//Atualiza saldo atual da fonte principal utilizando o valor acumulado no for das fontes não principais
 				if ($this->getNatSaldoAtual($oExt20) == 'C') {
-					$oExt20->si165_vlsaldoatualfonte += $oExt20->iTotalSaldoAtual * -1;
+					$oExt20->si165_vlsaldoatualfonte += ($oExt20->iTotalSaldoAtual < 0) ? $oExt20->iTotalSaldoAtual : $oExt20->iTotalSaldoAtual * -1;
 				} else {
 					$oExt20->si165_vlsaldoatualfonte += abs($oExt20->iTotalSaldoAtual);
 				}
@@ -725,29 +749,5 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 	$oGerarEXT->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	$oGerarEXT->gerarDados();
   }
-
-  	/**
-	   * Separa função para buscar a natureza do saldo atual/final da conta
-	   * utilizando as condições já existentes
-	   * @param Object $oExt20
-	   * @return String
-	   */
-  	private function getNatSaldoAtual($oExt20) {
-
-		if (substr($oExt20->si165_codfontrecursos, 1, 2) == '59') {
-			$verificaNatSaldoAtual = $oExt20->si165_vlsaldoatualfonte;
-		} else {
-			$verificaNatSaldoAtual = ($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos);
-		}
-
-		if ($verificaNatSaldoAtual < 0) {
-			return 'C';
-		} elseif ($verificaNatSaldoAtual > 0) {
-			return 'D';
-		} else {
-			return $oExt20->si165_natsaldoatualfonte;
-		}
-
-  	}
 
 }

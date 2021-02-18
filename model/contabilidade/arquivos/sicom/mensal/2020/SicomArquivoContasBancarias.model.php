@@ -1181,6 +1181,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 							$oDadosMovi21->si97_codfontectbtransf 	= ' ';
 							$oDadosMovi21->si97_mes 				= $this->sDataFinal['5'] . $this->sDataFinal['6'];
 							$oDadosMovi21->si97_instit 				= db_getsession("DB_instit");
+							$oDadosMovi21->codorgao 				= $oContaAgrupada->si95_codorgao;
+							$oDadosMovi21->hashFontePrincipal		= $sHash20recurso;
 
                             $aCtb20Agrupado[$sHash20b]->si96_vlsaldofinalfonte += $oSaldoTransfCtb->si202_saldofinal;
 
@@ -1234,8 +1236,36 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 			}		
 
-		}	
+		}
 		
+		/**
+		 * Percorre array para verificar se existe algum registro 21 sem registro 20
+		 * Se não existir, um registro 20 é criado
+		 */
+		foreach ($aCtb20Agrupado as $oCtb20) {
+
+			if (!$oCtb20->si96_tiporegistro) {
+
+				$sHash21 = key($oCtb20->ext21);
+
+				$oCtb20->si96_tiporegistro 			= 20;
+				$oCtb20->si96_codorgao 				= $oCtb20->ext21[$sHash21]->codorgao;
+				$oCtb20->si96_codctb 				= $oCtb20->ext21[$sHash21]->si97_codctb;
+				$oCtb20->si96_codfontrecursos 		= $oCtb20->ext21[$sHash21]->si97_codfontrecursos;
+				$oCtb20->si96_vlsaldoinicialfonte 	= 0;
+				$oCtb20->si96_vlsaldofinalfonte 	= $oCtb20->ext21[$sHash21]->si97_valorentrsaida;
+				$oCtb20->si96_mes 					= $oCtb20->ext21[$sHash21]->si97_mes;
+				$oCtb20->si96_instit 				= $oCtb20->ext21[$sHash21]->si97_instit;
+
+				$sHashFontePrincipal = $oCtb20->ext21[$sHash21]->hashFontePrincipal;
+
+				//Atualiza saldo final da fonte principal
+				$aCtb20Agrupado[$sHashFontePrincipal]->si96_vlsaldofinalfonte -= $oCtb20->ext21[$sHash21]->si97_valorentrsaida;
+				
+			}
+
+		}
+
 	}	
 
       /**
