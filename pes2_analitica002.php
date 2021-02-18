@@ -64,7 +64,17 @@ $head4 = "ARQUIVO : ";
 $whereRESC = " rh05_seqpes is null ";
 $andwhere = " and  ";
 $aWhere   = array();
-$aWhere[] = " rh05_seqpes is null ";
+$aWhere[] = "( rh05_seqpes is null OR EXISTS (
+SELECT r14_regist FROM gerfsal WHERE (r14_anousu,r14_mesusu,r14_regist) = ({$ano},{$mes},rh01_regist)
+UNION
+SELECT r48_regist FROM gerfcom WHERE (r48_anousu,r48_mesusu,r48_regist) = ({$ano},{$mes},rh01_regist)
+UNION
+SELECT r53_regist FROM gerffx WHERE (r53_anousu,r53_mesusu,r53_regist) = ({$ano},{$mes},rh01_regist)
+UNION
+SELECT r35_regist FROM gerfs13 WHERE (r35_anousu,r35_mesusu,r35_regist) = ({$ano},{$mes},rh01_regist)
+UNION
+SELECT r31_regist FROM gerffer WHERE (r31_anousu,r31_mesusu,r31_regist) = ({$ano},{$mes},rh01_regist)
+) )";
 
 
 $clgerasql->inicio_rh = true;

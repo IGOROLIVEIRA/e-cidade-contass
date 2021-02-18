@@ -12,7 +12,7 @@ class GerarVIAP extends GerarAM {
 
     /**
      *
-     * Mes de refer�ncia
+     * Mes de referencia
      * @var Integer
      */
     public $iMes;

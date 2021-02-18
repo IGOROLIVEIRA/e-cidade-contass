@@ -93,12 +93,12 @@ contratoaux = function () {
             $('ac16_deptoresponsavel').focus();
             return false;
         }
-        if (iComissao == "") {
+        // if (iComissao == "") {
 
-            alert('Informe a comissão de vistoria do acordo.');
-            $('ac16_acordocomissão').focus();
-            return false;
-        }
+        //     alert('Informe a comissão de vistoria do acordo.');
+        //     $('ac16_acordocomissão').focus();
+        //     return false;
+        // }
         if (iAnousu == "") {
 
             alert('Informe o ano do contrato.');

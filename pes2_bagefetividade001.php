@@ -49,7 +49,7 @@ db_postmemory($HTTP_POST_VARS);
 
 
 function js_emite(){
-  jan = window.open('pes2_bagefetividade002.php?secini='+document.form1.secini.value+'&secfin='+document.form1.secfin.value+'&ano='+document.form1.DBtxt23.value+'&mes='+document.form1.DBtxt25.value+'&tipo_filtro='+document.form1.tipo_filtro.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan = window.open('pes2_bagefetividade002.php?secini='+document.form1.secini.value+'&secfin='+document.form1.secfin.value+'&ano='+document.form1.DBtxt23.value+'&mes='+document.form1.DBtxt25.value+'&tipo_filtro='+document.form1.tipo_filtro.value+'&modelo='+document.form1.modelo.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
 </script>  
@@ -114,7 +114,17 @@ function js_emite(){
           $secfin = 99;
             db_input('secfin',2,'',true,'text',2,'')
           ?>
-      </td>
+        </td>
+      </tr>
+      <tr> 
+        <td align="right" nowrap title="Modelo" ><b>Modelo :</b>&nbsp;&nbsp;
+        </td>
+        <td>
+          <select name="modelo">
+            <option value='efetividade'>Efetividade</option>
+            <option value='ocorrencias'>Ocorrências</option>
+          </select>
+        </td>
       </tr>
       <tr>
         <td >&nbsp;</td>

@@ -692,7 +692,17 @@ ob_start();
                     $aSaldoEstrut1 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, SUM( CASE WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8 WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 ELSE 0::FLOAT8 END ) AS liquidado", null, "o58_elemento like '3319091%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
                     $aSaldoEstrut2 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, SUM( CASE WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8 WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 ELSE 0::FLOAT8 END ) AS liquidado", null, "o58_elemento like '3319191%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
                     $aSaldoEstrut3 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, SUM( CASE WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8 WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 ELSE 0::FLOAT8 END ) AS liquidado", null, "o58_elemento like '3319691%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
-                    $fSaldoSentencasJudAnt += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                    
+                    for ($i = 1; $i <= 3; $i++) {
+                        
+                        $aSaldoEstrut   = 'aSaldoEstrut'.$i;
+                        $oSaldEstrut    = 'oSaldEstrut'.$i;
+                        
+                        foreach($$aSaldoEstrut as $$oSaldEstrut) {
+                            $fSaldoSentencasJudAnt += $$oSaldEstrut->liquidado;
+                        }
+
+                    }
                 }
                 echo db_formatar($fSaldoSentencasJudAnt == null ? 0 : $fSaldoSentencasJudAnt, "f");
                 ?>
