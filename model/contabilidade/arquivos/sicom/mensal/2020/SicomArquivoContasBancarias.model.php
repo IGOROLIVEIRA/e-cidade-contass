@@ -1209,30 +1209,34 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
       }
 
-	  //Percorre array temporário para adicionar registros 21 aos respectivos regs20 que são criados após criação do reg21
-	  foreach($aReg21Temps as $sHash => $aReg21Temp) {
-		
-		foreach($aReg21Temp as $aReg21) {
-			
-			$sHash20fonte = $aReg21->si97_codctb.$aReg21->si97_codfontrecursos;
+	if ($this->bEncerramento) {
 
-			if ($aCtb20Agrupado[$sHash20fonte]){	
+	  	//Percorre array temporário para adicionar registros 21 aos respectivos regs20 que são criados após criação do reg21
+		foreach($aReg21Temps as $sHash => $aReg21Temp) {
+			
+			foreach($aReg21Temp as $aReg21) {
 				
-        		if (!$aCtb20Agrupado[$sHash20fonte]->ext21[$sHash]) {
-					$aCtb20Agrupado[$sHash20fonte]->ext21[$sHash] = $aReg21;
-				} else {
-					$aCtb20Agrupado[$sHash20fonte]->ext21[$sHash]->si97_valorentrsaida += $aReg21->si97_valorentrsaida;
+				$sHash20fonte = $aReg21->si97_codctb.$aReg21->si97_codfontrecursos;
+
+				if ($aCtb20Agrupado[$sHash20fonte]){	
+					
+					if (!$aCtb20Agrupado[$sHash20fonte]->ext21[$sHash]) {
+						$aCtb20Agrupado[$sHash20fonte]->ext21[$sHash] = $aReg21;
+					} else {
+						$aCtb20Agrupado[$sHash20fonte]->ext21[$sHash]->si97_valorentrsaida += $aReg21->si97_valorentrsaida;
+					}
+
+					$aCtb20Agrupado[$sHash20fonte]->si96_vlsaldofinalfonte += $aValoresTemp[$sHash20fonte];
+					unset($aValoresTemp[$sHash20fonte]);
+					unset($aReg21Temps[$sHash]);
+
 				}
 
-				$aCtb20Agrupado[$sHash20fonte]->si96_vlsaldofinalfonte += $aValoresTemp[$sHash20fonte];
-				unset($aValoresTemp[$sHash20fonte]);
-				unset($aReg21Temps[$sHash]);
+			}		
 
-			}
-
-		}		
-
-	  }		
+		}	
+		
+	}	
 
       /**
        * inclusão do registro 20 e 21 do procedimento normal

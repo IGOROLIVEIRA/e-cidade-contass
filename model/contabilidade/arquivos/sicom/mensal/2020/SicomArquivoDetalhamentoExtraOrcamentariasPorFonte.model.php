@@ -729,6 +729,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
   	/**
 	   * Separa função para buscar a natureza do saldo atual/final da conta
 	   * utilizando as condições já existentes
+	   * @param Object $oExt20
+	   * @return String
 	   */
   	private function getNatSaldoAtual($oExt20) {
 
