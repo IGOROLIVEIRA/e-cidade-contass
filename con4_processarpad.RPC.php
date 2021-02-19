@@ -127,7 +127,7 @@ switch($oParam->exec) {
       $sql = "SELECT si201_codobra,
                        si201_tipomedicao,
                        si201_nummedicao
-                FROM cadobras302020
+                FROM cadobras30".db_getsession('DB_anousu')."
                 INNER JOIN licobrasmedicao ON obr03_nummedicao::int = si201_nummedicao::int
                 INNER JOIN licobrasanexo ON obr03_sequencial = obr04_licobrasmedicao
                 WHERE si201_instit = ".db_getsession("DB_instit")." and si201_mes = $oParam->mesReferencia";
