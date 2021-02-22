@@ -87,7 +87,7 @@ $oGet = db_utils::postMemory($_GET);
 
 	function js_submit(){
 
-		if(!document.getElementById('licitacao').checked || !document.getElementById('aditamento').checked){
+		if(!document.getElementById('licitacao').checked && !document.getElementById('aditamento').checked){
 			alert('Informe uma providência a ser realizada.');
 			return false;
 		}
