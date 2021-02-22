@@ -10,6 +10,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.lBloqueiaItem = false;
     this.lObrigaDescricao = false;
     this.lTipoAlteracao = false;
+    this.lProvidencia = false;
 
     switch (iTipoAditamento) {
 
@@ -243,6 +244,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 me.oTxtCodigoAcordo.setValue('');
             }
         }
+    }
+
+    this.pesquisaAcordoByCodigo = (acordo) => {
+    
+        var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + acordo +
+            '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
+
+        js_OpenJanelaIframe('top.corpo',
+            'db_iframe_acordo',
+            sUrl,
+            'Pesquisa de Acordo',
+            false);
+
     }
 
     /**
@@ -832,10 +846,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         });
     }
 
-    me.show = function () {
+    me.show = function (acordo = null) {
 
         me.main();
-        me.pesquisaAcordo(true);
+
+        /**
+         * 
+         */
+        if(acordo){
+            me.pesquisaAcordoByCodigo(acordo);
+            me.lProvidencia = true;
+        }else{
+            me.pesquisaAcordo(true);
+        }
     }
 
     this.aditar = function () {
@@ -917,7 +940,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),
             aItens: [],
             aSelecionados: iSelecionados,
-            sVigenciaalterada: vigenciaalterada
+            sVigenciaalterada: vigenciaalterada,
+            lProvidencia: me.lProvidencia
         }
 
         var dti     = me.oTxtDataInicial.getValue().split("/");

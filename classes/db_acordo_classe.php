@@ -96,6 +96,11 @@ class cl_acordo {
     var $ac16_licoutroorgao = null;
     var $ac16_adesaoregpreco = null;
     var $ac16_tipocadastro = null;
+    var $ac16_providencia = null;
+    /**
+     * A descrição do status do campo ac16_providencia podem ser checados na tabela providencia
+     */
+
     // cria propriedade com as variaveis do arquivo
     var $campos = "
  ac16_sequencial = int4 = Acordo
@@ -136,6 +141,7 @@ class cl_acordo {
  ac16_licoutroorgao = int8 = licitacao de outros orgaos
  ac16_adesaoregpreco = int8 = adesao de registro de precos
  ac16_tipocadastro   = int8 = tipo de cadastro
+ ac16_providencia = int4 = Status da Providência do Acordo
  ";
     //funcao construtor da classe
     function cl_acordo() {
@@ -232,6 +238,7 @@ class cl_acordo {
             $this->ac16_licoutroorgao = ($this->ac16_licoutroorgao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_licoutroorgao"]:$this->ac16_licoutroorgao);
             $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"]:$this->ac16_adesaoregpreco);
             $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"]:$this->ac16_tipocadastro);
+            $this->ac16_providencia = ($this->ac16_providencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_providencia"]:$this->ac16_providencia);
         }else{
             $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
         }
@@ -1081,8 +1088,13 @@ class cl_acordo {
 
 
         if(trim($this->ac16_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])){
-            $sql  .= $virgula." ac16_licitacao = $this->ac16_licitacao ";
+            $sql .= $virgula . " ac16_licitacao = $this->ac16_licitacao ";
         }
+
+        if(trim($this->ac16_providencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_providencia"])){
+            $sql .= $virgula . " ac16_providencia = $this->ac16_providencia ";
+        }
+
         $sql .= " where ";
         if($ac16_sequencial!=null){
             $sql .= " ac16_sequencial = $this->ac16_sequencial";
@@ -1453,7 +1465,8 @@ class cl_acordo {
             LEFT JOIN liclicitem on l21_codpcprocitem=pclic.pc81_codprocitem
             LEFT JOIN liclicita on l20_codigo=l21_codliclicita
             LEFT JOIN cflicita on l03_codigo=l20_codtipocom
-            LEFT JOIN pctipocompra on pc50_codcom=l03_codcom";
+            LEFT JOIN pctipocompra on pc50_codcom=l03_codcom
+            LEFT JOIN providencia on providencia.codigo=ac16_providencia";
 
         $sql2 = "";
         if($dbwhere==""){

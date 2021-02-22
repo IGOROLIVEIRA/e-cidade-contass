@@ -489,6 +489,15 @@ if(pg_numrows($result) == 0) {
                                     </td>
                                 </tr>
                             <?php endif; ?>
+                            <?php if($modulo == 8251):?>
+                                <tr>
+                                    <hr style="color:#000; size: 25px;">
+                                    <td>
+                                        <h2>Acordos a vencer</h2>
+                                        <iframe frameborder="0"  width="100%" height="130%" id="acordos" name="acordos" src="func_acordosavencer.php" scrolling="auto"></iframe>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                             <?php
                             $sqlPermissao = "select m.id_item,m.descricao
                                                 from db_permissao p
