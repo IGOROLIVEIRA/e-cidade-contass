@@ -20,6 +20,9 @@ class Oc14109 extends AbstractMigration
                 
                 COMMIT;
         ";
+
+        $this->execute($sql);
+
     }
 
     public function down(){
@@ -34,5 +37,8 @@ class Oc14109 extends AbstractMigration
 
                 COMMIT;
         ";
+
+        $this->execute($sql);
+        
     }
 }
