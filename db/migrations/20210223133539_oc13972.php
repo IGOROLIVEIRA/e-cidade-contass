@@ -4,7 +4,7 @@ use Phinx\Migration\AbstractMigration;
 
 class Oc13972 extends AbstractMigration
 {
-    public function change(){
+    public function up(){
         $sql = "
             BEGIN;
 
