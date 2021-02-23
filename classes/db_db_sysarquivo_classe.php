@@ -786,5 +786,24 @@ class cl_db_sysarquivo {
     return $sSql;
   }
 
+  /**
+   * Busca codigo do arquivo pelo nome da tabela
+   * @param string $sNomeTabela
+   * @access public
+   * @return int
+   */
+  public function buscaCodigoArquivoPorTabela($sNomeTabela) {
+
+	  if ($sNomeTabela != null) {
+
+        $sSql 		= $this->sql_query_file(null, "codarq", null, "nomearq = '{$sNomeTabela}' limit 1");
+        $rsResult   = db_query($sSql);
+    
+		return db_utils::fieldsMemory($rsResult,0)->codarq;
+
+    }
+	
+  }
+
 }
 ?>
