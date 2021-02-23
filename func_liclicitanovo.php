@@ -157,14 +157,14 @@ $sWhereContratos = " and 1 = 1 ";
         <td align="center" valign="top">
             <?
             $and            = "and ";
-            $dbwhere          = "l20_licsituacao = 0 or (cflicita.l03_pctipocompratribunal in (102,103) and l20_licsituacao = 10) and ";
+            // $dbwhere          = "l20_licsituacao = 0 or (cflicita.l03_pctipocompratribunal in (102,103) and l20_licsituacao = 10) and ";
 
             if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
-                $dbwhere .= "l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102,103) and l20_licsituacao in ($situacao,10,11)) and ";
+                $dbwhere .= "l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102,103) and l20_licsituacao in ($situacao,10,11)) ";
             }
 
             if (!empty($oGet->validasaldo)){
-                $dbwhere .= " $sWhere and ";
+                $dbwhere .= " $sWhere ";
             }
 
             $sWhereModalidade = "";
@@ -179,9 +179,9 @@ $sWhereContratos = " and 1 = 1 ";
 
             if ($validafornecedor == "1"){
                 if($dbwhere != ""){
-                    $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+                    $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) ";
                 }else{
-                    $dbwhere .= " exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+                    $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) ";
                 }
             }
 
@@ -209,9 +209,9 @@ $sWhereContratos = " and 1 = 1 ";
                 }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
                     $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere l20_edital=$chave_l20_edital  and $dbwhere_instit");
                 }else if(isset($l20_anousu) && (trim($l20_anousu)!="")){
-                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit and l20_anousu = {$l20_anousu}");
+                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","($dbwhere) and $dbwhere_instit and l20_anousu = {$l20_anousu}");
                 }else{
-                    $sql = $clliclicita->sql_queryContratos(""," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit");
+                    $sql = $clliclicita->sql_queryContratos(""," " .$campos,"l20_codigo","($dbwhere) and $dbwhere_instit");
                 }
 
                 if (isset($param) && trim($param) != ""){
