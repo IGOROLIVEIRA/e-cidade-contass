@@ -150,10 +150,11 @@ class Caspweb {
                                         LEFT JOIN conplanoconta ON c63_codcon = c60_codcon AND c63_anousu = c60_anousu
                                         LEFT JOIN vinculocaspweb ON c232_estrutecidade = c60_estrut AND c232_anousu = c60_anousu
                                         WHERE c60_anousu = $this->iAnoUsu
-                                        AND substr(c60_estrut,1,1)::integer IN (1,2,3,4,7,8)) AS x
+                                        AND substr(c60_estrut,1,1)::integer IN (1,2,3,4,7,8)
+                                        AND substr(c60_estrut,1,7) NOT IN ('2371101', '2371102')) AS x
                                     WHERE debito != 0
                                     OR credito != 0
-                                    ORDER BY contacontabil";
+                                    ORDER BY contacontabil, codbanco";
 
         $rsMapaAprop = db_query($sSqlMapaApropriacao);
 
