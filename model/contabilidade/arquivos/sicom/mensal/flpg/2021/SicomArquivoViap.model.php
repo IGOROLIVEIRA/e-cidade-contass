@@ -80,6 +80,30 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 throw new Exception($clviap->erro_msg);
             }
         }
+
+        $sWhereRescisao = "
+        rh05_seqpes is null 
+                    or  
+                    (date_part('MONTH',rh05_recis) = 01
+                     and date_part('YEAR',rh05_recis) = 2021 
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2020
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2019
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2018
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2017
+                    )
+        ";
         
         if ($iMes != 01) {
 
@@ -98,19 +122,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                          FROM viap102021 where si198_mes < {$iMes} )
               AND rh01_instit =  " . db_getsession("DB_instit") . "
               AND (
-                    rh05_seqpes is null 
-                    or  
-                    (date_part('MONTH',rh05_recis) = 01
-                     and date_part('YEAR',rh05_recis) = 2021 
-                    )
-                    or
-                    (date_part('MONTH',rh05_recis) = 12
-                     and date_part('YEAR',rh05_recis) = $PROXIMO_ANO 
-                    )
-                    or
-                    (date_part('MONTH',rh05_recis) = 12
-                     and date_part('YEAR',rh05_recis) = $PROXIMO_ANO 
-                    )
+                    {$sWhereRescisao}
                   )
               AND   rh01_sicom = 1";
         }else{
@@ -127,19 +139,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      AND rh01_instit =  " . db_getsession("DB_instit") . "
 		      AND (
-                    rh05_seqpes is null 
-                    or 
-                    (date_part('MONTH',rh05_recis) = 01
-                     and date_part('YEAR',rh05_recis) = 2021 
-                    )
-                    or
-                    (date_part('MONTH',rh05_recis) = 12
-                     and date_part('YEAR',rh05_recis) = $PROXIMO_ANO 
-                    )
-                    or
-                    (date_part('MONTH',rh05_recis) = 12
-                     and date_part('YEAR',rh05_recis) = $PROXIMO_ANO 
-                    )
+                    {$sWhereRescisao}
                   )
               AND   rh01_sicom = 1";
 

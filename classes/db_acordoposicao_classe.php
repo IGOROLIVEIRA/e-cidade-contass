@@ -646,7 +646,7 @@ class cl_acordoposicao {
      $sql .= "      inner join db_depart  on  db_depart.coddepto = acordo.ac16_coddepto";
      $sql .= "      inner join acordogrupo  on  acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo";
      $sql .= "      inner join acordosituacao  on  acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
-     $sql .= "      inner join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
+     $sql .= "      left join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
      $sql .= "      left  join acordovigencia  on  ac26_sequencial                = ac18_acordoposicao";
      $sql .= "      left  join acordoposicaoaditamento  on  ac26_sequencial       = ac35_acordoposicao";
      $sql2 = "";

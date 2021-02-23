@@ -193,7 +193,7 @@ class cl_idedcasp2020 {
      }
 
      $sql = "insert into idedcasp2020(
-                                      ,si200_sequencial
+                                      si200_sequencial
                                       ,si200_codmunicipio
                                       ,si200_cnpjorgao
                                       ,si200_codorgao
@@ -206,7 +206,7 @@ class cl_idedcasp2020 {
                                       ,si200_instit
                        )
                 values (
-                               ,$this->si200_sequencial
+                               $this->si200_sequencial
                                ,'$this->si200_codmunicipio'
                                ,'$this->si200_cnpjorgao'
                                ,'$this->si200_codorgao'

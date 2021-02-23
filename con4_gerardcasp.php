@@ -86,7 +86,7 @@ $clrotulo->label("o15_codigo");
                             <label for="DFC">Demonstração dos Fluxos de Caixa (DFC)</label><br>
                             <input type="checkbox" value="RPSD" id="RPSD" />
                             <label for="RPSD">Restos a Pagar (RPSD)</label><br>
-                            <? if( db_getsession("DB_anousu") >= 2019 ){ ?>
+                            <? if( db_getsession("DB_anousu") <= 2019 ){ ?>
                                 <input type="checkbox" value="PREFUNDEF" id="PREFUNDEF" />
                                 <label for="PREFUNDEF">Precatórios do FUNDEF (PREFUNDEF)</label><br>
                             <? } ?>
