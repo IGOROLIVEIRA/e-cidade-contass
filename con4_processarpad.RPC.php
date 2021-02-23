@@ -394,8 +394,16 @@ switch($oParam->exec) {
      $oArquivo->setDataInicial($sDataInicial);
      $oArquivo->setDataFinal($sDataFinal);
      if ($sArquivo == "MetasFisicasRealizadas"){
-      $oArquivo->setCodigoPespectiva($oParam->pespectivappa);
-    }
+      	$oArquivo->setCodigoPespectiva($oParam->pespectivappa);
+	 }
+	 if (db_getsession("DB_anousu") >= 2020 && $sArquivo == "ContasBancarias" && $oParam->encerraCtb == 1) {
+		$oArquivo->setEncerramentoCtb($oParam->encerraCtb);
+	 }
+
+   if (db_getsession("DB_anousu") >= 2020 && $sArquivo == "DetalhamentoExtraOrcamentariasPorFonte" && $oParam->encerraExt == 1) {
+		$oArquivo->setEncerramentoExt($oParam->encerraExt);
+	 }
+
     $oArquivoCsv = new stdClass();
     try {
 
