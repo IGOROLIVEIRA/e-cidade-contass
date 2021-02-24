@@ -376,7 +376,8 @@ function js_mostrapcsubgrupo1(chave1,chave2){
   db_iframe_pcsubgrupo.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true','Pesquisa',true);
+  let filtra_atuais = <?=$db_opcao != 1?> ? true : false;
+  js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true&filtra_atuais='+filtra_atuais,'Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
 
