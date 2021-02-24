@@ -53,6 +53,7 @@ class SicomArquivoLeiDiretrizOrcamentaria extends SicomArquivoBase implements iP
     
     
     $rsLDO = db_query($sSqlLDO);
+    // db_criatabela($rsLDO);
     
     $oLDO = db_utils::fieldsMemory($rsLDO, 0);
     
@@ -60,9 +61,9 @@ class SicomArquivoLeiDiretrizOrcamentaria extends SicomArquivoBase implements iP
     $oDadosLDO->nroLDO            = substr($oPPAVersao->getNumerolei(), 0, 6);
     $oDadosLDO->dataLDO           = implode(array_reverse(explode("-", $oLDO->o142_dataldo)));
     $oDadosLDO->dataPubLDO        = implode(array_reverse(explode("-", $oLDO->o142_datapublicacaoldo)));
-    $oDadosLDO->nroLeiAlteracao   = substr($oLDO->o142_leialteracaoppa, 0, 6);
-    $oDadosLDO->dataLeiAlteracao  = implode("", array_reverse(explode("-", $oLDO->o142_dataalteracaoppa)));
-    $oDadosLDO->dataPubLeiAlt     = implode("", array_reverse(explode("-", $oLDO->o142_datapubalteracao)));
+    $oDadosLDO->nroLeiAlteracao   = '';
+    $oDadosLDO->dataLeiAlteracao  = '';
+    $oDadosLDO->dataPubLeiAlt     = '';
     
     $this->aDados[] = $oDadosLDO;
     

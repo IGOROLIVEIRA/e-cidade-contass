@@ -115,10 +115,18 @@ db_textarea('pc81_obs',3,51,$Ipc81_obs,true,'text',$db_opcao,"")
     </td>
     <td> 
 <?
-//db_input('pc81_tipopart',10,$Ipc81_tipopart,true,'text',$db_opcao,"")
-$x = array("1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual (MEI)", "4" => "Empresário Individual (EI)",
+  $rsOrgaoReg = db_query("SELECT pc60_orgaoreg FROM pcforne WHERE pc60_numcgm = $pc81_cgmforn");
+  $iOrgaoReg = db_utils::fieldsMemory($rsOrgaoReg, 0)->pc60_orgaoreg;
+  
+  if(intval($iOrgaoReg) == 4){
+      $aParticipacao = array("0" => "Selecione", "3" => "MicroEmpreendedor Individual (MEI)");
+  }else{
+      $aParticipacao = array("0"=>"Selecione", "1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual (MEI)", "4" => "Empresário Individual (EI)",
 "5"=>"Empresa Individual de Responsabilidade Limitada (EIRELI)");
-db_select("pc81_tipopart",$x,true,$db_opcao);
+  }
+
+
+  db_select("pc81_tipopart",$aParticipacao,true,$db_opcao);
 ?>
     </td>
   </tr>
@@ -163,13 +171,12 @@ if($db_opcao != 1){
 <script>
 function js_pesquisapc81_cgmresp(mostra){
     let anousu = "<?= db_getsession('DB_anousu')?>";
-    let filtro = anousu >= 2021 ? '2' : '1';
-
+    
     if(mostra==true){
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm1|z01_numcgm|z01_nome&filtro='+filtro,'Pesquisa',true,0);
+        js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,0);
     }else{
         if(document.form1.pc81_cgmresp.value != ''){
-            js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.pc81_cgmresp.value+'&funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm&filtro='+filtro,'Pesquisa',false);
+            js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.pc81_cgmresp.value+'&funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm','Pesquisa',false);
         }else{
             document.form1.z01_nome1.value = '';
         }

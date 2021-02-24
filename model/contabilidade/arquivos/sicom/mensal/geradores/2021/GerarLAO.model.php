@@ -24,16 +24,16 @@ class GerarLAO extends GerarAM
     $this->sArquivo = "LAO";
     $this->abreArquivo();
     
-    $sSql = "select * from lao102020 where si34_mes = " . $this->iMes . " and si34_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from lao102021 where si34_mes = " . $this->iMes . " and si34_instit = " . db_getsession("DB_instit");
     $rsLAO10 = db_query($sSql);
 
-    $sSql2 = "select * from lao112020 where si35_mes = " . $this->iMes . " and si35_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from lao112021 where si35_mes = " . $this->iMes . " and si35_instit = " . db_getsession("DB_instit");
     $rsLAO11 = db_query($sSql2);
 
-    $sSql3 = "select * from lao202020 where si36_mes = " . $this->iMes . " and si36_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from lao202021 where si36_mes = " . $this->iMes . " and si36_instit = " . db_getsession("DB_instit");
     $rsLAO20 = db_query($sSql3);
 
-    $sSql4 = "select * from lao212020 where si37_mes = " . $this->iMes . " and si37_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from lao212021 where si37_mes = " . $this->iMes . " and si37_instit = " . db_getsession("DB_instit");
     $rsLAO21 = db_query($sSql4);
 
     if (pg_num_rows($rsLAO10) == 0 && pg_num_rows($rsLAO20) == 0) {

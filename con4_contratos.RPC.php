@@ -206,8 +206,9 @@ switch($oParam->exec) {
 
         $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} and z09_tipo = 1");
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
-        $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
-        $dtcadastro = $oAcordo->getDataInicial();
+        $date   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
+        $dtcadastro = DateTime::createFromFormat('d/m/Y', $oAcordo->getDataInicial());
+        $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $date);
 
         if($dtcadastro < $z09_datacadastro){
             throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");

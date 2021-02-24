@@ -22,13 +22,13 @@ class GerarFLPGO extends GerarAM {
         $this->sArquivo = "FLPGO";
         $this->abreArquivo();
 
-        $sSql = "select * from flpgo102020 where si195_mes = ". $this->iMes ." and si195_inst = ". db_getsession("DB_instit");
+        $sSql = "select * from flpgo102021 where si195_mes = ". $this->iMes ." and si195_inst = ". db_getsession("DB_instit");
         $rsFLPGO10    = db_query($sSql);
 
-        $sSql2 = "select * from flpgo112020 where si196_mes = ". $this->iMes ." and si196_inst = ". db_getsession("DB_instit");
+        $sSql2 = "select * from flpgo112021 where si196_mes = ". $this->iMes ." and si196_inst = ". db_getsession("DB_instit");
         $rsFLPGO11    = db_query($sSql2);
 
-        $sSql3 = "select * from flpgo122020 where si197_mes = ". $this->iMes ." and si197_inst = ". db_getsession("DB_instit");
+        $sSql3 = "select * from flpgo122021 where si197_mes = ". $this->iMes ." and si197_inst = ". db_getsession("DB_instit");
         $rsFLPGO12    = db_query($sSql3);
 
 

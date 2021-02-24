@@ -54,15 +54,15 @@ if (isset($incluir)) {
 
     if ($clprecoreferencia->erro_status != 0 && $processoValidado) {
 
-        if ($si01_tipoprecoreferencia == 1) {
+        if ($si01_tipoprecoreferencia == '1') {
             $sFuncao = "avg";
-        } else if ($si01_tipoprecoreferencia == 2) {
+        } else if ($si01_tipoprecoreferencia == '2') {
             $sFuncao = "max";
         } else {
             $sFuncao = "min";
         }
 
-        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),$quant_casas) as valor,
+        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
                     round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
                     round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
                       from pcproc
@@ -109,8 +109,8 @@ if (isset($incluir)) {
     db_fim_transacao($sqlerro);
     if ($clprecoreferencia->erro_status != 0) {
         echo "<script>
-      jan = window.open('sic1_precoreferencia004.php?impjust=$impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+'&quant_casas='+$quant_casas
-      +'&tipoprecoreferencia='+$si01_tipoprecoreferencia,
+      jan = window.open('sic1_precoreferencia004.php?impjust=$impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+
+      '&tipoprecoreferencia='+$si01_tipoprecoreferencia,
 
                     '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');

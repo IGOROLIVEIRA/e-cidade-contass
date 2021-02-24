@@ -43,11 +43,11 @@ $projecaoaturialano = $anousu10 + 74;
                 </td>
 
                 <td class="linhagrid" style="width: 70px;">
-                    <input type="text" style="width: 70px;" name="receita[<?=$ano?>]" value="0">
+                    <input type="text" style="width: 70px;" name="receita[<?=$ano?>]" onkeypress="GetChar(event);" value="0">
                 </td>
 
                 <td class="linhagrid" style="width: 70px;">
-                    <input type="text" style="width: 70px;" name="despesa[<?=$ano?>]" value="0">
+                    <input type="text" style="width: 70px;" name="despesa[<?=$ano?>]" onkeypress="GetChar(event);" value="0">
                 </td>
 
                 <td class="linhagrid" style="width: 150px;">
@@ -66,6 +66,12 @@ $projecaoaturialano = $anousu10 + 74;
     </center>
 </form>
 <script>
+
+    function GetChar(event){
+      if(event.key === ",") {
+        event.preventDefault();
+      }
+    }
 
     function js_aplicar(){
       let data = document.form1.dtavaliacao.value;

@@ -22,7 +22,7 @@ class GerarAOP extends GerarAM
     $this->sArquivo = "AOP";
     $this->abreArquivo();
 
-    $sSql = "select * from aop102020 where si137_mes = " . $this->iMes . " and si137_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from aop102021 where si137_mes = " . $this->iMes . " and si137_instit = " . db_getsession("DB_instit");
     $rsAOP10 = db_query($sSql);
 
     $sSql2 = "SELECT DISTINCT si138_sequencial,
@@ -38,7 +38,7 @@ class GerarAOP extends GerarAM
                      si138_mes,
                      si138_reg10,
                      si138_instit
-              FROM aop112020
+              FROM aop112021
               INNER JOIN empempenho ON e60_codemp::int8 = si138_nroempenho AND e60_emiss = si138_dtempenho
               WHERE si138_mes = " . $this->iMes . "
                 AND si138_instit = " . db_getsession("DB_instit");

@@ -117,6 +117,7 @@
    */
 
   function carregarSicom() {
+    document.form1.reset();
     buscarSicom({
       exec: 'getSicom',
       // fonte: fonte
@@ -185,7 +186,7 @@
     let vlrRpExercicioanterior = document.form1['aFonte[' + fonte + '][vlr_rpExerAnteriores]'].value;
     // let vlrRestoRecolher       = document.form1['aFonte[' + fonte + '][vlr_restArecolher]'].value;
     // let vlrRegAtivoFian        = document.form1['aFonte[' + fonte + '][vlr_restRegAtivoFinan]'].value;
-    let ResultVlrDisponibilidade = Number(vlrDisCaixaBruta) - Number(vlrRpExercicioanterior) - Number(vlrRestoRecolher) - Number(vlrRegAtivoFian);
+    let ResultVlrDisponibilidade = Number(vlrDisCaixaBruta) - Number(vlrRpExercicioanterior);
 
     //document.form1['aFonte[' + fonte + '][vlr_DispCaixa]'].value = ResultVlrDisponibilidade.toFixed(2)
     document.form1['aFonte[' + fonte + '][vlr_DispCaixa]'].value = ResultVlrDisponibilidade.toFixed(2)

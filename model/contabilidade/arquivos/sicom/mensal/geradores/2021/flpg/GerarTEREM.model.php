@@ -22,10 +22,10 @@ class GerarTEREM extends GerarAM {
 		$this->sArquivo = "TEREM";
 		$this->abreArquivo();
 
-		$sSql         = "select * from terem102020 where si194_mes = ". $this->iMes." and si194_inst = ".db_getsession("DB_instit");
+		$sSql         = "select * from terem102021 where si194_mes = ". $this->iMes." and si194_inst = ".db_getsession("DB_instit");
 		$rsTEREM10    = db_query($sSql);
 
-        $sSql2        = "select * from terem202020 where si196_mes = ". $this->iMes." and si196_inst = ".db_getsession("DB_instit");
+        $sSql2        = "select * from terem202021 where si196_mes = ". $this->iMes." and si196_inst = ".db_getsession("DB_instit");
         $rsTEREM20    = db_query($sSql2);
 
 

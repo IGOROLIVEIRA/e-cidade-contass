@@ -23,13 +23,13 @@ class GerarHABLIC extends GerarAM
     $this->sArquivo = "HABLIC";
     $this->abreArquivo();
     
-    $sSql = "select * from hablic102020 where si57_mes = " . $this->iMes . " and si57_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from hablic102021 where si57_mes = " . $this->iMes . " and si57_instit=" . db_getsession("DB_instit");
     $rsHABLIC10 = db_query($sSql);
     
-    $sSql2 = "select * from hablic112020 where si58_mes = " . $this->iMes . " and si58_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from hablic112021 where si58_mes = " . $this->iMes . " and si58_instit=" . db_getsession("DB_instit");
     $rsHABLIC11 = db_query($sSql2);
     
-    $sSql3 = "select * from hablic202020 where si59_mes = " . $this->iMes . " and si59_instit=" . db_getsession("DB_instit");
+    $sSql3 = "select * from hablic202121 where si59_mes = " . $this->iMes . " and si59_instit=" . db_getsession("DB_instit");
     $rsHABLIC20 = db_query($sSql3);
     
     if (pg_num_rows($rsHABLIC10) == 0 && pg_num_rows($rsHABLIC20) == 0) {

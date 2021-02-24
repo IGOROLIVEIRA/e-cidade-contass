@@ -578,15 +578,25 @@ if (count($aParametrosEmpenho) > 0) {
         }
     }
     function js_mostrapagordem1(chave1,z01_cgccpf){
-        if(z01_cgccpf.length = 11){
+        if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
-        if(z01_cgccpf.length = 14){
+        if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
+                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
@@ -651,16 +661,26 @@ if (count($aParametrosEmpenho) > 0) {
         }
     }
     function js_mostraempempenho2(chave1, iAnoEmepenho, z01_cgccpf){
-        if(z01_cgccpf.length = 11){
+        if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
-        if(z01_cgccpf.length = 14){
+        if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
                 alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }

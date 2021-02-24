@@ -190,44 +190,59 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
              contador.z01_nome as contador,
              contad.si166_crccontador as crc,
              controleinterno.z01_nome as controleinterno,
+
              (select nome from db_usuarios where id_usuario = pagordem.e50_id_usuario) as usuario
            from pagordem
-				        inner join empempenho 		on empempenho.e60_numemp = pagordem.e50_numemp
-                inner join cgm    on cgm.z01_numcgm = empempenho.e60_numcgm
-  			        inner join empnota        on empnota.e69_numemp    = pagordem.e50_numemp
-								inner join db_config 		  on db_config.codigo      = empempenho.e60_instit
-								inner join orcdotacao 		on orcdotacao.o58_anousu = empempenho.e60_anousu
-			            				               and orcdotacao.o58_coddot = empempenho.e60_coddot
-				                                 and o58_instit    = ".db_getsession("DB_instit")."
-				        inner join orcorgao   		on o58_orgao     = o40_orgao
-				                                 and o40_anousu    = empempenho.e60_anousu
-				        inner join orcunidade 		on o58_unidade   = o41_unidade
-				                                 and o58_orgao     = o41_orgao
-				                                 and o58_anousu    = o41_anousu
-				        inner join orcfuncao  		on o58_funcao    = o52_funcao
-				        inner join orcsubfuncao  	on o58_subfuncao = o53_subfuncao
-				        inner join orcprograma  	on o58_programa  = o54_programa
-				                                 and o54_anousu    = o58_anousu
-				        inner join orcprojativ  	on o58_projativ  = o55_projativ
-				                                 and o55_anousu    = o58_anousu
-				        inner join orcelemento a	on o58_codele    = o56_codele
-					                               and o58_anousu    = o56_anousu
-				        inner join orctiporec  		on o58_codigo    = o15_codigo
-				        inner join emptipo 		    on emptipo.e41_codtipo = empempenho.e60_codtipo
-                left join cgm as ordena on ordena.z01_numcgm  = o41_orddespesa
-                left join cgm as paga on paga.z01_numcgm = o41_ordpagamento
-                left join cgm as liquida on liquida.z01_numcgm = o41_ordliquidacao
-                left join identificacaoresponsaveis contad on  contad.si166_instit= e60_instit and contad.si166_tiporesponsavel=2
-                left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
-                left join identificacaoresponsaveis controle on  controle.si166_instit= e60_instit and controle.si166_tiporesponsavel=3
-                left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
-					      left  join pagordemconta  on e50_codord          = e49_codord
-					      left  join pagordemprocesso on  pagordem.e50_codord = pagordemprocesso.e03_pagordem
-					where pagordem.e50_codord = {$e50_codord} ) as x
-           inner join cgm 			on cgm.z01_numcgm = _numcgm
-           left  join pcfornecon on pc63_numcgm = _numcgm  and pc63_tipoconta=1
-           left  join pcforneconpad ON pc64_contabanco = pc63_contabanco
-           ORDER BY pc64_contabanco
+				inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
+        inner join cgm on cgm.z01_numcgm = empempenho.e60_numcgm
+  			inner join empnota on empnota.e69_numemp = pagordem.e50_numemp
+				inner join db_config on db_config.codigo = empempenho.e60_instit
+				inner join orcdotacao on orcdotacao.o58_anousu = empempenho.e60_anousu
+			  and orcdotacao.o58_coddot = empempenho.e60_coddot
+				and o58_instit = ".db_getsession("DB_instit")."
+				inner join orcorgao on o58_orgao = o40_orgao
+				and o40_anousu = empempenho.e60_anousu
+				inner join orcunidade on o58_unidade = o41_unidade
+				and o58_orgao = o41_orgao
+				and o58_anousu = o41_anousu
+				inner join orcfuncao on o58_funcao = o52_funcao
+				inner join orcsubfuncao on o58_subfuncao = o53_subfuncao
+				inner join orcprograma on o58_programa = o54_programa
+				and o54_anousu = o58_anousu
+				inner join orcprojativ on o58_projativ = o55_projativ
+				and o55_anousu = o58_anousu
+				inner join orcelemento a on o58_codele = o56_codele
+				and o58_anousu = o56_anousu
+				inner join orctiporec on o58_codigo = o15_codigo
+				inner join emptipo on emptipo.e41_codtipo = empempenho.e60_codtipo
+        left join cgm as ordena on ordena.z01_numcgm = o41_orddespesa
+        left join cgm as paga on paga.z01_numcgm = o41_ordpagamento
+        left join cgm as liquida on liquida.z01_numcgm = o41_ordliquidacao
+        left join identificacaoresponsaveis contad on contad.si166_instit= e60_instit 
+        and contad.si166_tiporesponsavel=2
+        and ".db_getsession("DB_anousu")." between DATE_PART('YEAR',contad.si166_dataini) AND DATE_PART('YEAR',contad.si166_datafim)
+        and contad.si166_dataini <= e50_data
+        and contad.si166_datafim >= e50_data
+        left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
+        left join identificacaoresponsaveis controle on controle.si166_instit= e60_instit 
+        and controle.si166_tiporesponsavel=3
+        and ".db_getsession("DB_anousu")." between DATE_PART('YEAR',controle.si166_dataini) AND DATE_PART('YEAR',controle.si166_datafim)
+     		and controle.si166_dataini <= e50_data
+     		and controle.si166_datafim >= e50_data
+        left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
+        left JOIN identificacaoresponsaveis ordenapaga ON ordenapaga.si166_instit= e60_instit 
+        and ordenapaga.si166_tiporesponsavel=1
+     		and ".db_getsession("DB_anousu")." between DATE_PART('YEAR',ordenapaga.si166_dataini) AND DATE_PART('YEAR',ordenapaga.si166_datafim)
+     		and ordenapaga.si166_dataini <= e50_data
+     		and ordenapaga.si166_datafim >= e50_data
+     		LEFT JOIN cgm AS ordenapagamento ON ordenapagamento.z01_numcgm = ordenapaga.si166_numcgm
+				left join pagordemconta on e50_codord = e49_codord
+				left join pagordemprocesso on pagordem.e50_codord = pagordemprocesso.e03_pagordem
+				where pagordem.e50_codord = {$e50_codord} ) as x
+        inner join cgm on cgm.z01_numcgm = _numcgm
+        left join pcfornecon on pc63_numcgm = _numcgm  and pc63_tipoconta=1
+        left join pcforneconpad ON pc64_contabanco = pc63_contabanco
+        ORDER BY pc64_contabanco
 	   ";
 
 
@@ -237,6 +252,30 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
   if (pg_numrows($resultord)==0) continue;
 
   db_fieldsmemory($resultord,0);
+
+   $sql1 = "SELECT desp.z01_nome assindsp, 
+           liqu.z01_nome assinlqd, 
+           orde.z01_nome assinord
+           FROM orcunidade
+           LEFT JOIN cgm desp ON desp.z01_numcgm = o41_orddespesa
+           LEFT JOIN cgm liqu ON liqu.z01_numcgm = o41_ordliquidacao
+           LEFT JOIN cgm orde ON orde.z01_numcgm = o41_ordpagamento 
+           LEFT JOIN orcorgao ON o40_anousu = o41_anousu 
+           AND o40_orgao = o41_orgao 
+           INNER JOIN orcdotacao ON o58_anousu = o41_anousu 
+           AND o58_orgao = o41_orgao 
+           AND o58_unidade = o41_unidade 
+           AND o58_instit = o41_instit 
+           INNER JOIN empempenho ON e60_coddot = o58_coddot 
+           INNER JOIN pagordem ON e50_numemp = e60_numemp 
+           WHERE e50_codord = {$e50_codord} 
+           AND o41_anousu = DATE_PART('YEAR',pagordem.e50_data)
+      ";
+
+  $resultordass = db_query($sql1);
+
+  db_fieldsmemory($resultordass,0);
+
 
   $sqlitem = "select *,e53_valor - e53_vlranu as saldo, e53_valor - e53_vlranu - e53_vlrpag as saldo_final
               from pagordemele
@@ -282,13 +321,13 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    }
 
-   $sSqlFuncaoOrdenaPagamento  ="select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenapagamento ";
+   $sSqlFuncaoOrdenaPagamento =" select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenapagamento ";
    $sSqlFuncaoOrdenaPagamento.=" from rhpessoal  ";
-   $sSqlFuncaoOrdenaPagamento.="LEFT join rhpessoalmov on rh02_regist=rh01_regist  ";
-   $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao ";
-   $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes ";
-   $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo  ";
-   $sSqlFuncaoOrdenaPagamento.="where rh01_numcgm = $cgmpaga and rh01_admiss >= (select max(rh01_admiss) from rhpessoal where rh01_numcgm = $cgmpaga)";
+   $sSqlFuncaoOrdenaPagamento.=" LEFT join rhpessoalmov on rh02_regist=rh01_regist  ";
+   $sSqlFuncaoOrdenaPagamento.=" LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao ";
+   $sSqlFuncaoOrdenaPagamento.=" LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes ";
+   $sSqlFuncaoOrdenaPagamento.=" LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo  ";
+   $sSqlFuncaoOrdenaPagamento.=" where rh01_numcgm = $cgmpaga and rh01_admiss >= (select max(rh01_admiss) from rhpessoal where rh01_numcgm = $cgmpaga)";
    $sSqlFuncaoOrdenaPagamento.=" order by rh02_seqpes desc limit 1 ";
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
    
@@ -318,9 +357,9 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
   /*FIM = OC4401*/
 
    //assinaturas
-   $pdf1->ordenadespesa   =  $ordenadesp;
-   $pdf1->liquida         =  $liquida;
-   $pdf1->ordenapagamento =  $ordenapaga;
+   $pdf1->ordenadespesa   =  $assindsp;
+   $pdf1->liquida         =  $assinlqd;
+   $pdf1->ordenapagamento =  $assinord;
    $pdf1->contador        =  $contador;
    $pdf1->crccontador     =  $crc;
    $pdf1->controleinterno =  $controleinterno;

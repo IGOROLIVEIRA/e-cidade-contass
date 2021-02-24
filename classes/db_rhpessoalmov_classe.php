@@ -494,7 +494,7 @@ class cl_rhpessoalmov {
                                ,$this->rh02_tipodeficiencia
                                ,'$this->rh02_abonopermanencia'
 			                   ,".($this->rh02_diasgozoferias == "null" || $this->rh02_diasgozoferias == ""?"30":"'".$this->rh02_diasgozoferias."'")."
-                               ,'$this->rh02_tipcatprof'
+                               ,".($this->rh02_tipcatprof == "null" || $this->rh02_tipcatprof == ""?"null":$this->rh02_tipcatprof)."
                                ,".($this->rh02_cgminstituidor == "null" || $this->rh02_cgminstituidor == ""?"null":"'".$this->rh02_cgminstituidor."'")."
                                ,".($this->rh02_dtobitoinstituidor == "null" || $this->rh02_dtobitoinstituidor == ""?"null":"'".$this->rh02_dtobitoinstituidor."'")."
                                ,".($this->rh02_tipoparentescoinst == "null" || $this->rh02_tipoparentescoinst == ""?"null":"'".$this->rh02_tipoparentescoinst."'")."
@@ -1812,6 +1812,7 @@ class cl_rhpessoalmov {
         $sSql .= "       left  join rhpeslocaltrab       on rhpeslocaltrab.rh56_seqpes    = rhpessoalmov.rh02_seqpes    \n";
         $sSql .= "                                      and rhpeslocaltrab.rh56_princ     = 't'                         \n";
         $sSql .= "       left  join rhlocaltrab          on rhpeslocaltrab.rh56_localtrab = rhlocaltrab.rh55_codigo     \n";
+        $sSql .= "       AND rhlocaltrab.rh55_instit =  rhpessoal.rh01_instit                                               \n";
         $sSql .= "       left  join rhpesdoc             on rhpesdoc.rh16_regist          = rhpessoal.rh01_regist       \n";
         $sSql .= "       left  join rhpesbanco           on rhpesbanco.rh44_seqpes        = rhpessoalmov.rh02_seqpes    \n";
         $sSql .= "       left  join (select distinct rhipe.*,                                                           \n";

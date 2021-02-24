@@ -618,17 +618,20 @@ if (USE_PCASP) {
           var servico = false;
         }
         if (obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == "f") {
-          sDisabilitaQuantidade  = 'disabled';
+          sDisabilitaQuantidade  = "style= 'text-align:right;background-color:DEB887' disabled";
         }
         if (obj.data[i].pc01_servico == 't'  && obj.data[i].servicoquantidade == "t") {
-          sDesabilitaValor  = 'disabled';
+          sDesabilitaValor  = "style= 'text-align:right;background-color:DEB887' disabled";
+        }
+        if (obj.data[i].pc01_servico == 'f'  && obj.data[i].servicoquantidade == "f") {
+          sDesabilitaValor  = "style= 'text-align:right;background-color:DEB887' disabled";
         }
         if (servico == false && lFraciona == false) {
-          sDesabilitaValor  = 'disabled';
+          sDesabilitaValor  = "style= 'text-align:right;background-color:DEB887' disabled";
         }
 
         if (lBloquearItens || !lLiberaItemLiquidacao) {
-          obj.data[i].libera = 'disabled';
+          obj.data[i].libera = "style= 'text-align:right;background-color:DEB887' disabled";
         }
 
         saida += "<tr class='"+sClassName+"' id='trchk"+obj.data[i].e62_sequen+"' style='height:1em'>";
@@ -655,19 +658,19 @@ if (USE_PCASP) {
         saida += "  <td class='linhagrid' style='text-align:center;width:10%'>";
         saida += "    <input type='text' name='qtdesol"+obj.data[i].e62_sequen+"'";
         saida += "           id='qtdesol"+obj.data[i].e62_sequen+"' "+sDisabilitaQuantidade;
-        saida += "           value='"+obj.data[i].saldo+"' style='text-align:right'";
+        saida += "           value='"+obj.data[i].saldo+"' ";
         saida += "           size='5' onkeypress='return js_validaFracionamento(event,"+lFraciona+",this)'";
         saida += "           onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,"+lFraciona+","+servico+")' "+obj.data[i].libera+">";
         saida += "  </td>";
         saida += "  <td class='linhagrid' style='text-align:center;width:10%'>";
-        saida += "    <input type='text' style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"'";
+        saida += "    <input type='text' name='vlrtot"+obj.data[i].e62_sequen+"'";
         saida += "           id='vlrtot"+obj.data[i].e62_sequen+"'  value='"+obj.data[i].e62_vlrtot+"' "+sDesabilitaValor;
         saida += "           size='5' class='valores' onkeypress='return js_teclas(event)'";
         saida += "          onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,"+lFraciona+","+servico+")' "+obj.data[i].libera+">"
         saida += "  </td>";
         if (iTipoControle > 0) {
 
-          saida += "  <td class='linhagrid' id='custo"+obj.data[i].e62_sequen+"' style='text-align:left'>";
+          saida += "  <td class='linhagrid' id='custo"+obj.data[i].e62_sequen+"'>";
           saida += "  <span id='cc08_sequencial"+obj.data[i].e62_sequen+"'></span>";
           saida += "  <a id='cc08_descricao"+obj.data[i].e62_sequen+"' href='#' ";
           saida += "     onclick='js_adicionaCentroCusto("+obj.data[i].e62_sequen+","+obj.data[i].e62_sequencial+");";
@@ -1015,8 +1018,6 @@ if (USE_PCASP) {
   }
 
   function js_calculaValor(id,tipo,fraciona,servico){
-    console.log(fraciona);
-    console.log(servico);
     nVlrUni   = new Number($('vlruni'+id).innerHTML);
     nQtde     = new Number($F('qtdesol'+id));
     nVlrTotal = new Number($F('vlrtot'+id));
@@ -1057,14 +1058,12 @@ if (USE_PCASP) {
           if (nVlrTotal > 0){
 
             if(servico == true) {
-              console.log('aqui');
               if(fraciona == true) {
                 $('qtdesol' + id).value = 1;
               }else{
                 $('qtdesol' + id).value = 1;
               }
             }else{
-              console.log('aqui2');
               if(fraciona == false){
                 $('qtdesol' + id).value = 1;
               }else{

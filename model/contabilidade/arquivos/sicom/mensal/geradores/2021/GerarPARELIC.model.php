@@ -23,7 +23,7 @@ class GerarPARELIC extends GerarAM
     $this->sArquivo = "PARELIC";
     $this->abreArquivo();
     
-    $sSql = "select * from parelic102020 where si66_mes = " . $this->iMes . " and si66_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from parelic102021 where si66_mes = " . $this->iMes . " and si66_instit=" . db_getsession("DB_instit");
     $rsPARELIC10 = db_query($sSql);
 
     if (pg_num_rows($rsPARELIC10) == 0) {

@@ -250,14 +250,16 @@ $TPagina = 45;
 //	     where c61_instit = " . db_getsession("DB_instit");
 
    $sql = "select k13_reduz,
+                  c61_codtce,
                   k13_ident,
                   c60_estrut,
                   c60_descr,
                   c63_banco,
                   c63_agencia,
                   c63_dvagencia,
-                  c63_conta,
+                  c63_conta::bigint,
                   c63_dvconta,
+                  case when c63_tipoconta in (2,3) then 'C/A' else 'C/C' end tipoconta,
                   c61_codigo,
                   o15_descr
             from saltes 
@@ -272,13 +274,11 @@ $TPagina = 45;
    
    if ($opcaoOrdem == "alfabetica") {
       $head6 = "Ordem Alfabética";
-      $sql .= " order by k13_descr ";
+      $sql .= " order by c63_tipoconta, c61_codigo, c63_conta ";
    }else{
       $head6 = "Ordem Numérica";
-      $sql .= " order by k13_conta ";
+      $sql .= " order by c63_tipoconta, c61_codigo, k13_reduz ";
    }
-   
-   //die($sql);
    
    $head7 = "Exercício: ".db_getsession("DB_anousu");
    
@@ -288,61 +288,52 @@ $TPagina = 45;
     $pdf->AddPage("L"); // adiciona uma pagina
     $TPagina = 34;
 
-
-//  $pdf->SetFillColor(255,255,255); 
-//  $pdf->SetFont('Arial','B',12);
-//  $pdf->SetTextColor(0,100,255);
-//  $pdf->Cell(154,15,"CONTAS DA TESOURARIA",$bordat,1,"C",$preenc);
-
-
-
-//    $pdf->SetFont('Arial','B',9); // seta a fonte do relatorio
-//    $pdf->Cell(14,4,"Codigo",$bordat,0,"C",$preenc); // escreve a celula
-//    $pdf->Cell(30,4,"Cod.Reduzido",$bordat,0,"C",$preenc);
-//    $pdf->Cell(80,4,"Conta",$bordat,0,"C",$preenc);
-//    $pdf->Cell(30,4,"Terminal",$bordat,1,"C",$preenc);
-
-    $pdf->SetFont('Arial','B',9); // seta a fonte do relatorio
-    $pdf->Cell(16,4,"Reduzido","TRB",0,"C",$preenc); // escreve a celula
-    $pdf->Cell(14,4,"Banco",$bordat,0,"C",$preenc);
-    $pdf->Cell(80,4,"Descrição",$bordat,0,"C",$preenc);
-    $pdf->Cell(18,4,"Agência",$bordat,0,"C",$preenc);
-    $pdf->Cell(35,4,"Conta",$bordat,0,"C",$preenc);
-    $pdf->Cell(30,4,"Cod.Recurso",$bordat,0,"C",$preenc);    
-    $pdf->Cell(85,4,"Recurso","LTB",1,"C",$preenc);
-
     $result = pg_exec($sql);
     $num = pg_numrows($result);
     $pdf->SetFont('Arial','',7);
     $linha = 0;
+    $tipoConta = '';
     
     for($i=0;$i<$num;$i++) {
 
-    	$oSaltes = db_utils::fieldsMemory($result,$i);
+      	$oSaltes = db_utils::fieldsMemory($result,$i);
 
-      $pdf->Cell(16,4,$oSaltes->k13_reduz,"TRB",0,"R",$preenc);
-      $pdf->Cell(14,4,$oSaltes->c63_banco,1,0,"R",$preenc);
-      $pdf->Cell(80,4,$oSaltes->c60_descr,1,0,"L",$preenc);
-      $pdf->Cell(10,4,$oSaltes->c63_agencia,1,0,"R",$preenc);
-      $pdf->Cell(8,4,$oSaltes->c63_dvagencia,1,0,"L",$preenc);
-      $pdf->Cell(25,4,$oSaltes->c63_conta,1,0,"R",$preenc);
-      $pdf->Cell(10,4,$oSaltes->c63_dvconta,1,0,"L",$preenc);      
-      $pdf->Cell(30,4,$oSaltes->c61_codigo,1,0,"C",$preenc);
-      $pdf->Cell(85,4,$oSaltes->o15_descr,"LTB",1,"L",$preenc);
+      	if($linha++ > $TPagina || $tipoConta == '' || $tipoConta != $oSaltes->tipoconta){
+		
+			$linha = 0;
+		
+			if ($tipoConta != '') {
+				$pdf->AddPage("L");
+			}
+			
+			$pdf->SetFont('Arial','B',9);
+			$pdf->Cell(16,4,"Reduzido","TRB",0,"C",$preenc);
+			$pdf->Cell(16,4,"Cod. TCE","TRB",0,"C",$preenc);
+			$pdf->Cell(14,4,"Banco",$bordat,0,"C",$preenc);
+			$pdf->Cell(80,4,"Descrição",$bordat,0,"C",$preenc);
+			$pdf->Cell(18,4,"Agência",$bordat,0,"C",$preenc);
+			$pdf->Cell(22,4,"Conta",$bordat,0,"C",$preenc);
+			$pdf->Cell(15,4,"Tipo",$bordat,0,"C",$preenc);
+			$pdf->Cell(15,4,"Fonte",$bordat,0,"C",$preenc);    
+			$pdf->Cell(85,4,"Descrição da Fonte","LTB",1,"C",$preenc);
+			$pdf->SetFont('Arial','',7);
+
+     	}
+
+		$pdf->Cell(16,4,$oSaltes->k13_reduz,"TRB",0,"R",$preenc);
+		$pdf->Cell(16,4,$oSaltes->c61_codtce,"TRB",0,"R",$preenc);
+		$pdf->Cell(14,4,$oSaltes->c63_banco,1,0,"R",$preenc);
+		$pdf->Cell(80,4,$oSaltes->c60_descr,1,0,"L",$preenc);
+		$pdf->Cell(10,4,$oSaltes->c63_agencia,1,0,"R",$preenc);
+		$pdf->Cell(8,4,$oSaltes->c63_dvagencia,1,0,"L",$preenc);
+		$pdf->Cell(17,4,$oSaltes->c63_conta,1,0,"R",$preenc);
+		$pdf->Cell(5,4,$oSaltes->c63_dvconta,1,0,"L",$preenc);      
+		$pdf->Cell(15,4,$oSaltes->tipoconta,1,0,"C",$preenc);
+		$pdf->Cell(15,4,$oSaltes->c61_codigo,1,0,"C",$preenc);
+		$pdf->Cell(85,4,substr($oSaltes->o15_descr,0,55),"LTB",1,"L",$preenc);
+		
+		$tipoConta = $oSaltes->tipoconta;
       
-      if($linha++ > $TPagina){
-         $linha = 0;
-         $pdf->AddPage("L");
-         $pdf->SetFont('Arial','B',9);
-			   $pdf->Cell(16,4,"Reduzido","TRB",0,"C",$preenc);
-			   $pdf->Cell(14,4,"Banco",$bordat,0,"C",$preenc);
-         $pdf->Cell(80,4,"Descrição",$bordat,0,"C",$preenc);
-         $pdf->Cell(18,4,"Agência",$bordat,0,"C",$preenc);
-         $pdf->Cell(35,4,"Conta",$bordat,0,"C",$preenc);
-         $pdf->Cell(30,4,"Cod.Recurso",$bordat,0,"C",$preenc);    
-         $pdf->Cell(85,4,"Recurso","LTB",1,"C",$preenc);
-         $pdf->SetFont('Arial','',7);
-      }
     }
 
    

@@ -306,9 +306,10 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 							AND o70_anousu = {$iAnoUsu}
 							AND o70_instit = {$iInstit}
 							AND o70_valor > 0
+							--AND o70_codrec = 287
 						GROUP BY 1,2,3,4,5) AS x";
 		
-        $rsResult30 = db_query($sSql);
+		$rsResult30 = db_query($sSql);
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
@@ -415,22 +416,24 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
 			}
 
-			$clconv31 = new cl_conv312020();
+			if ($oDados30->o70_valor != $oDados30->c229_vlprevisto) {
+				$clconv31 = new cl_conv312020();
 
-			$clconv31->si204_tiporegistro = 31;
-			$clconv31->si204_codreceita = $oDados30->o70_codrec;
-			$clconv31->si204_prevorcamentoassin = 2;
-			if ($oDados30->c229_semassinatura > 0 && $oDados30->saldo_arrecadado > 0) {
-				$clconv31->si204_vlprevisaoconvenio = $oDados30->c229_semassinatura;
-			} else {
-				$clconv31->si204_vlprevisaoconvenio = $oDados30->o70_valor;
-			}
-			$clconv31->si204_mes = 12;
-			$clconv31->si204_instit = db_getsession("DB_instit");
+				$clconv31->si204_tiporegistro = 31;
+				$clconv31->si204_codreceita = $oDados30->o70_codrec;
+				$clconv31->si204_prevorcamentoassin = 2;
+				if ($oDados30->c229_semassinatura > 0 && $oDados30->saldo_arrecadado > 0) {
+					$clconv31->si204_vlprevisaoconvenio = $oDados30->c229_semassinatura;
+				} else {
+					$clconv31->si204_vlprevisaoconvenio = $oDados30->o70_valor;
+				}
+				$clconv31->si204_mes = 12;
+				$clconv31->si204_instit = db_getsession("DB_instit");
 
-			$clconv31->incluir(null);
-			if ($clconv31->erro_status == 0) {
-				throw new Exception($clconv31->erro_msg);
+				$clconv31->incluir(null);
+				if ($clconv31->erro_status == 0) {
+					throw new Exception($clconv31->erro_msg);
+				}
 			}
 
         }

@@ -303,6 +303,28 @@ try {
       $oRetorno->aDocumentoRetorno = $aDocumentoRetorno;
       
       break;
+
+      case "checaValoresItensAcordo":
+
+        $cl_acordo = db_utils::getDao('acordo');
+
+        $sSqlAcordo = $cl_acordo->sql_query($oParam->sequencial,'ac16_valor');
+        $rsAcordo = $cl_acordo->sql_record($sSqlAcordo);
+        $oAcordo = db_utils::fieldsMemory($rsAcordo, 0);
+
+        $cl_acordoitemdotacao = db_utils::getDao('acordoitemdotacao');
+        $sSqlItensDotados = $cl_acordoitemdotacao->sql_buscaSomaItens('sum(ac22_valor) as valor',null,"ac16_sequencial = $oParam->sequencial and ac26_acordoposicaotipo = 1");
+        $rsItensDotados = $cl_acordoitemdotacao->sql_record($sSqlItensDotados);
+        $oItensDotados = db_utils::fieldsMemory($rsItensDotados, 0);
+        
+        $oRetorno->erro = false;
+
+        if($oAcordo->ac16_valor != $oItensDotados->valor || (!$oAcordo->ac16_valor && !$oItensDotados->valor)){
+          $oRetorno->message = urlencode('Existem itens sem dotações, realize as alterações e tente novamente!');
+          $oRetorno->erro = true;
+        }
+
+        break;
   }
   
 } catch (BusinessException $oErro) {

@@ -812,7 +812,7 @@ class cl_liclicita
         }
 
         /*valida combos */
-        if ($this->l20_critdesempate == null) {
+        if ($this->l20_critdesempate == null || !$this->l20_critdesempate) {
             $this->erro_sql = " Campo  Critério de desempate não foi informado.";
             $this->erro_campo = "l20_critdesempate";
             $this->erro_banco = "";
@@ -821,7 +821,7 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_destexclusiva == null) {
+        if ($this->l20_destexclusiva == null || !$this->l20_destexclusiva) {
             $this->erro_sql = " Campo Destinação Exclusiva não foi informada.";
             $this->erro_campo = "l20_destexclusiva";
             $this->erro_banco = "";
@@ -830,7 +830,7 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_subcontratacao == null) {
+        if ($this->l20_subcontratacao == null || !$this->l20_subcontratacao) {
             $this->erro_sql = " Campo Sub. Contratação  não foi informada.";
             $this->erro_campo = "l20_subcontratacao ";
             $this->erro_banco = "";
@@ -839,7 +839,7 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_limitcontratacao == null) {
+        if ($this->l20_limitcontratacao == null || !$this->l20_limitcontratacao) {
             $this->erro_sql = " Campo Limite Contratação não foi informada.";
             $this->erro_campo = "l20_limitcontratacao";
             $this->erro_banco = "";
@@ -1815,7 +1815,7 @@ class cl_liclicita
         if (trim($this->l20_critdesempate != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_critdesempate"]))) {
             $sql .= $virgula . " l20_critdesempate = $this->l20_critdesempate ";
             $virgula = ",";
-            if ($this->l20_critdesempate == null) {
+            if ($this->l20_critdesempate == null || !$this->l20_critdesempate) {
                 $this->erro_sql = " Campo  Critério de desempate nao foi informado.";
                 $this->erro_campo = "l20_critdesempate";
                 $this->erro_banco = "";
@@ -1829,7 +1829,7 @@ class cl_liclicita
         if (trim($this->l20_destexclusiva != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_destexclusiva"]))) {
             $sql .= $virgula . " l20_destexclusiva = $this->l20_destexclusiva ";
             $virgula = ",";
-            if ($this->l20_destexclusiva == null) {
+            if ($this->l20_destexclusiva == null || !$this->l20_destexclusiva) {
                 $this->erro_sql = " Campo Destinação Exclusiva  nao foi informada.";
                 $this->erro_campo = "l20_destexclusiva";
                 $this->erro_banco = "";
@@ -1843,7 +1843,7 @@ class cl_liclicita
         if (trim($this->l20_subcontratacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_subcontratacao"]))) {
             $sql .= $virgula . " l20_subcontratacao = $this->l20_subcontratacao ";
             $virgula = ",";
-            if ($this->l20_subcontratacao == null) {
+            if ($this->l20_subcontratacao == null || !$this->l20_subcontratacao) {
                 $this->erro_sql = " Campo Sub. Contratação  nao foi informada.";
                 $this->erro_campo = "l20_subcontratacao ";
                 $this->erro_banco = "";
@@ -1857,7 +1857,7 @@ class cl_liclicita
         if (trim($this->l20_limitcontratacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_limitcontratacao"]))) {
             $sql .= $virgula . " l20_limitcontratacao = $this->l20_limitcontratacao ";
             $virgula = ",";
-            if ($this->l20_subcontratacao == null) {
+            if ($this->l20_limitcontratacao == null || !$this->l20_limitcontratacao) {
                 $this->erro_sql = " Campo Limite Contratação nao foi informada.";
                 $this->erro_campo = "l20_limitcontratacao";
                 $this->erro_banco = "";

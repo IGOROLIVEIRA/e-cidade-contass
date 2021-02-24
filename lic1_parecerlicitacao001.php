@@ -169,7 +169,7 @@ if (isset($incluir)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
   <center>
-  <fieldset style=" margin-top: 30px; width: 500px; height: 182px;">
+  <fieldset style=" margin-top: 30px; width: 50%; height: 182px;">
   <legend>Parecer da Licita&ccedil;&atilde;o</legend>
 	<?
 	include("forms/db_frmparecerlicitacao.php");

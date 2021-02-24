@@ -521,7 +521,7 @@ class cl_pcorcamitem {
         $sql .= "      left  join pcproc ON  pcproc.pc80_codproc = pcprocitem.pc81_codproc ";
         $sql .= "      left  join pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne ";
         /*FIM - OC3770*/
-        $sql .= "      inner join itenshomologacao on l203_item = l21_codpcprocitem ";
+        $sql .= "      left join itenshomologacao on l203_item = l21_codpcprocitem ";
 
         $sql2 = "";
         if($dbwhere==""){

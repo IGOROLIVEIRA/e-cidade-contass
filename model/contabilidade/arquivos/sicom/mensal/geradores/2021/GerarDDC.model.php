@@ -23,16 +23,16 @@ class GerarDDC extends GerarAM
     $this->sArquivo = "DDC";
     $this->abreArquivo();
 
-    $sSql = "select * from ddc102020 where si150_mes = " . $this->iMes . " and si150_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from ddc102021 where si150_mes = " . $this->iMes . " and si150_instit = " . db_getsession("DB_instit");
     $rsDDC10 = db_query($sSql);
 
-    $sSql2 = "select * from ddc202020 where si153_mes = " . $this->iMes . " and si153_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from ddc202021 where si153_mes = " . $this->iMes . " and si153_instit = " . db_getsession("DB_instit");
     $rsDDC20 = db_query($sSql2);
 
-    $sSql3 = "select * from ddc302020 where si154_mes = " . $this->iMes . " and si154_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from ddc302021 where si154_mes = " . $this->iMes . " and si154_instit = " . db_getsession("DB_instit");
     $rsDDC30 = db_query($sSql3);
 
-    $sSql4 = "select * from ddc402020 where si178_mes = " . $this->iMes . " and si178_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from ddc402021 where si178_mes = " . $this->iMes . " and si178_instit = " . db_getsession("DB_instit");
     $rsDDC40 = db_query($sSql4);
 
 

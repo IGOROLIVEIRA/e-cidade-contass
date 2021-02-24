@@ -74,8 +74,10 @@ class cl_mtfis_anexo {
 
   // funcao para inclusao
   function incluir ($mtfisanexo_sequencial) {
+
       $this->atualizacampos();
-     if ($this->mtfisanexo_especificacao == null ) {
+
+      if ($this->mtfisanexo_especificacao == null ) {
        $this->erro_sql = " Campo Especificação não informado.";
        $this->erro_campo = "mtfisanexo_especificacao";
        $this->erro_banco = "";
@@ -147,6 +149,7 @@ class cl_mtfis_anexo {
        $this->erro_status = "0";
        return false;
      }
+
      if ($mtfisanexo_sequencial == "" || $mtfisanexo_sequencial == null ) {
        $result = db_query("select nextval('mtfis_anexo_mtfisanexo_sequencial_seq')");
        if ($result==false) {
@@ -159,6 +162,7 @@ class cl_mtfis_anexo {
        }
        $this->mtfisanexo_sequencial = pg_result($result,0,0);
      } else {
+
        $result = db_query("select last_value from mtfis_anexo_mtfisanexo_sequencial_seq");
        if (($result != false) && (pg_result($result,0,0) < $mtfisanexo_sequencial)) {
          $this->erro_sql = " Campo mtfisanexo_sequencial maior que último número da sequencia.";
@@ -201,7 +205,6 @@ class cl_mtfis_anexo {
                                ,$this->mtfisanexo_valorconstante3
                                ,$this->mtfisanexo_ldo
                       )";
-
      $result = db_query($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -447,36 +450,36 @@ class cl_mtfis_anexo {
   // funcao para exclusao
   function excluir ($mtfisanexo_sequencial=null,$dbwhere=null) {
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($mtfisanexo_sequencial));
-       } else {
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,2012487,'$mtfisanexo_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012487,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012488,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_especificacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012489,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorcorrente1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012490,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorcorrente2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012491,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorcorrente3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012492,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorconstante1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012493,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorconstante2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012494,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorconstante3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010194,2012495,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_ldo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
+//     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+//     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+//       && ($lSessaoDesativarAccount === false))) {
+//
+//       if ($dbwhere==null || $dbwhere=="") {
+//
+//         $resaco = $this->sql_record($this->sql_query_file($mtfisanexo_sequencial));
+//       } else {
+//         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
+//       }
+//       if (($resaco != false) || ($this->numrows!=0)) {
+//
+//         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+//
+//           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//           $acount = pg_result($resac,0,0);
+//           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//           $resac  = db_query("insert into db_acountkey values($acount,2012487,'$mtfisanexo_sequencial','E')");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012487,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012488,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_especificacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012489,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorcorrente1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012490,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorcorrente2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012491,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorcorrente3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012492,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorconstante1'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012493,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorconstante2'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012494,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_valorconstante3'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//           $resac  = db_query("insert into db_acount values($acount,1010194,2012495,'','".AddSlashes(pg_result($resaco,$iresaco,'mtfisanexo_ldo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         }
+//       }
+//     }
      $sql = " delete from mtfis_anexo
                     where ";
      $sql2 = "";

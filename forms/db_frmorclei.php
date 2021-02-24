@@ -28,7 +28,7 @@
 //MODULO: orcamento
 $clorclei->rotulo->label();
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" onsubmit="js_valida();">
 <center>
 <table border="0">
   <tr>
@@ -57,7 +57,7 @@ db_input('o45_numlei',30,$Io45_numlei,true,'text',$db_opcao,"")
     </td>
     <td> 
 <?
-db_textarea('o45_descr',4,25,$Io45_descr,true,'text',$db_opcao,"")
+db_textarea('o45_descr',4,55,$Io45_descr,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
@@ -91,6 +91,23 @@ db_inputdata('o45_datalei',@$o45_datalei_dia,@$o45_datalei_mes,@$o45_datalei_ano
 ?>
     </td>
   </tr>
+  <tr>
+    <td nowrap title="<?=@$To45_tipolei?>">
+       <?=@$Lo45_tipolei?>
+    </td>
+    <td> 
+    <?
+    $aTipoLei = array(
+        '0' => 'Selecione', 
+        '1' => 'LOA - Lei Orçamentária Anual',
+        '2' => 'LDO - Lei de Diretrizes Orçamentárias',
+        '3' => 'LAO - Lei de Alteração Orçamentária',
+        '4' => 'LAOP - Lei de Alteração da Lei Orçamentária (Alteração de Percentual)'
+    );
+    db_select('o45_tipolei', $aTipoLei, true, $db_opcao, "style='width:411px'");
+    ?>
+    </td>
+  </tr>
   </table>
   </center>
 <input name="db_opcao" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
@@ -107,5 +124,14 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+
+function js_valida() {
+	
+    if (document.form1.o45_tipolei.value == 0) {
+        alert('Informe o Tipo da Lei!');
+        event.preventDefault();
+    }
+
 }
 </script>

@@ -12,49 +12,51 @@ $clmtfis_anexo = new cl_mtfis_anexo;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  db_inicio_transacao();
+
   $db_opcao = 2;
-  $clmtfis_ldo->mtfis_instit = db_getsession("DB_instit");
-  $clmtfis_ldo->incluir($mtfis_sequencial);
-
-  db_fim_transacao();
-
-  $sSql = "select * from mtfis_ldo order by mtfis_sequencial desc limit 1;";
-  $rsResult = pg_query($sSql);
-  db_fieldsmemory($rsResult,0);
-
-  $result = $clmtfis_ldo->sql_record($clmtfis_ldo->sql_query($mtfis_sequencial));
-  db_fieldsmemory($result,0);
-  $db_botao = true;
-
-  if($clmtfis_ldo->erro_campo==""){
-      echo "<script> alert('Incluído com sucesso'); </script>";
-
+  //echo $mtfis_anoinicialldo;
+  $clmtfis_ldo->sql_record($clmtfis_ldo->sql_query(null,'*','',"mtfis_anoinicialldo = $mtfis_anoinicialldo "));
+  if($clmtfis_ldo->numrows > 0){
+      echo "<script> alert('Já existe registro para este ano'); </script>";
+      $db_opcao = 1;
       echo "<script>
-      top.corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=".$mtfis_sequencial."&mtfis_anoinicialldo=".$mtfis_anoinicialldo."';
+      top.corpo.iframe_db_anexo.location.href='orc1_mtfis_ldo001.php';
+      </script>";
+  }else {
+      db_inicio_transacao();
+      $clmtfis_ldo->mtfis_instit = db_getsession("DB_instit");
+      $clmtfis_ldo->incluir($mtfis_sequencial);
+
+      db_fim_transacao();
+
+      $sSql = "select * from mtfis_ldo order by mtfis_sequencial desc limit 1;";
+      $rsResult = pg_query($sSql);
+      db_fieldsmemory($rsResult, 0);
+
+      $result = $clmtfis_ldo->sql_record($clmtfis_ldo->sql_query($mtfis_sequencial));
+      db_fieldsmemory($result, 0);
+      $db_botao = true;
+
+      if ($clmtfis_ldo->erro_campo == "") {
+          echo "<script> alert('Incluído com sucesso'); </script>";
+
+          echo "<script>
+      top.corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=" . $mtfis_sequencial . "&mtfis_anoinicialldo=" . $mtfis_anoinicialldo . "';
       parent.document.formaba.db_anexo.disabled=false;
       parent.mo_camada('db_anexo');
       </script>";
-  }else{
-      $clmtfis_ldo->erro(true,true);
+      } else {
+          $clmtfis_ldo->erro(true, true);
+      }
   }
-
-
-
-
-
-
-
 }elseif(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
   $clmtfis_ldo->alterar($mtfis_sequencial);
-  $sSql = "select * from mtfis_ldo where mtfis_sequencial = ".$mtfis_sequencial;
   $rsResult = pg_query($sSql);
   db_fieldsmemory($rsResult,0);
 
   echo "<script>
-  top.corpo.iframe_db_anexo.location.href='orc1_mtfis_anexo001.php?mtfisanexo_ldo=".$mtfis_sequencial."&mtfis_anoinicialldo=".$mtfis_anoinicialldo."';
   parent.document.formaba.db_anexo.disabled=false;
   parent.mo_camada('db_anexo');
   </script>";
@@ -66,7 +68,6 @@ if(isset($incluir)){
   $clmtfis_ldo->excluir($mtfis_sequencial);
   db_fim_transacao();
 }elseif(isset($chavepesquisa)){
-
   $db_opcao = 2;
   $result = $clmtfis_ldo->sql_record($clmtfis_ldo->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);

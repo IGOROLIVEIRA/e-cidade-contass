@@ -1062,15 +1062,25 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    */
   me.preencheFavorecido = function (lErro, sNome, sCnpj) {
 
-    if(sCnpj.length = 11){
+    if(sCnpj.length == 11){
       if(sCnpj == '00000000000'){
+        alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+        return false
+      }
+    }else{
+      if(sCnpj == '' || sCnpj == null ){
         alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
         return false
       }
     }
 
-    if(sCnpj.length = 14){
+    if(sCnpj.length == 14){
       if(sCnpj == '00000000000000'){
+        alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+        return false
+      }
+    }else{
+      if(sCnpj == '' || sCnpj == null ){
         alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
         return false
       }

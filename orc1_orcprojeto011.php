@@ -29,15 +29,21 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
+require("libs/db_utils.php");
 include("classes/db_orcprojeto_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_orcsuplemtipo_classe.php");
 include("classes/db_orcsuplem_classe.php");
+include("classes/db_ppaleidadocomplementar_classe.php");
 $clorcsuplemtipo = new cl_orcsuplemtipo;
 $clorcsuplem = new cl_orcsuplem;
 
 db_postmemory($HTTP_POST_VARS);
 $clorcprojeto = new cl_orcprojeto;
+
+$clppaleidadocomplementar 	= new cl_ppaleidadocomplementar;
+$sSqlModalidadeAplic 		= $clppaleidadocomplementar->sql_query_file(null, "o142_orcmodalidadeaplic", "o142_sequencial DESC LIMIT 1");
+$bModalidadeAplic 			= db_utils::fieldsmemory(db_query($sSqlModalidadeAplic))->o142_orcmodalidadeaplic;
 
 $db_opcao = 1;
 $db_botao = true;

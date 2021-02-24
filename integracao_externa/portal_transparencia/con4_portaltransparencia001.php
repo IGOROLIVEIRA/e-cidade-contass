@@ -99,6 +99,8 @@ require_once(DB_MODEL."model/dataManager.php");
  *  dados apartir do exerccio informado.
  */
 $iExercicioBase = EXERCICIO_BASE;
+$iAnoEspecificoFolha = ANO_ESPECIFICO_FOLHA;
+$iInstitEspecificoFolha = INSTIT_ESPECIFICO_FOLHA;
 $aIntegracoesRealizar = array();
 if (defined("INTEGRACOES_TRANSPARENCIA")) {
     $aIntegracoesRealizar = explode(",", INTEGRACOES_TRANSPARENCIA);
@@ -2470,7 +2472,15 @@ try {
     $sSqlServidores .= "       left  join rhpeslocaltrab on rh56_seqpes = rh02_seqpes";
     $sSqlServidores .= "       and rh56_princ  = 't'                                 ";
     $sSqlServidores .= "       left  join rhlocaltrab    on rh55_codigo = rh56_localtrab";
+    $sSqlServidores .= "       AND rhlocaltrab.rh55_instit =  rhpessoal.rh01_instit";
     $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} AND rh01_sicom = 1";
+    if (!empty($iAnoEspecificoFolha) && !empty($iInstitEspecificoFolha)) {
+      $sSqlServidores .= " AND ( 
+        (rh02_anousu >= {$iAnoEspecificoFolha} AND rh02_instit = {$iInstitEspecificoFolha})
+        OR
+        (rh02_instit != {$iInstitEspecificoFolha})
+      )";
+    }
     $sSqlServidores .= " AND
     (rh02_anousu::varchar||lpad(rh02_mesusu::varchar, 2, '0'))::integer <
     (SELECT (r11_anousu::varchar||lpad(r11_mesusu::varchar, 2, '0'))::integer AS competencia

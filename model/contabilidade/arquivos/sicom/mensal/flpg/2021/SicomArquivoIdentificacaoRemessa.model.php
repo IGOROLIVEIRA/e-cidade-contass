@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_ide2020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarIDE.model.php");
+require_once ("classes/db_ide2021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarIDE.model.php");
 
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
@@ -72,7 +72,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clide = new cl_ide2020();
+        $clide = new cl_ide2021();
 
         $sSql  = "SELECT db21_codigomunicipoestado AS codmunicipio,
                 cgc::varchar AS cnpjmunicipio,
@@ -99,7 +99,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-            $clide = new cl_ide2020();
+            $clide = new cl_ide2021();
             $oDadosIde = db_utils::fieldsMemory($rsResult, $iCont);
 
             $clide->si11_codmunicipio         = $oDadosIde->codmunicipio;
