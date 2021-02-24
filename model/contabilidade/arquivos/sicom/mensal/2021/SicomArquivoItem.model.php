@@ -81,7 +81,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
     $sSql = "
    
               SELECT DISTINCT '10' AS tipoRegistro,
-                          pc11_codigo||''||m61_codmatunid AS coditem,
+                          pc01_codmater||''||m61_codmatunid AS coditem,
                           (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida,
                           (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
                           CASE
@@ -249,7 +249,6 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
                   )
                 ";
 
-    // echo $sSql;
     $rsResult10 = db_query($sSql);//echo $sSql;
     // db_criatabela($rsResult10);//die($sSql);
     //$aCaracteres = array("/","\","'","\"","°","ª","º","§");
