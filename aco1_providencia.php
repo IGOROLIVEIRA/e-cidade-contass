@@ -50,18 +50,18 @@ $oGet = db_utils::postMemory($_GET);
 						<table class="checkboxes">
 							<tr>
 								<td>
-									<input type='checkbox' id='licitacao' name='checkBoxProvidencia' onclick="js_verificaItem(this.id);">
-								</td>
-								<td>
-									<strong>Licitação</strong>
-								</td>
-							</tr>
-							<tr>
-								<td>
 									<input type='checkbox' id='aditamento' name='checkBoxProvidencia' onclick="js_verificaItem(this.id);">
 								</td>
 								<td>
 									<strong>Aditamento</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type='checkbox' id='finalizar' name='checkBoxProvidencia' onclick="js_verificaItem(this.id);">
+								</td>
+								<td>
+									<strong>Finalizar</strong>
 								</td>
 							</tr>
 						</table>
@@ -77,22 +77,22 @@ $oGet = db_utils::postMemory($_GET);
 	
 	function js_verificaItem(objeto){
 
-		if(objeto == 'licitacao'){
+		if(objeto == 'finalizar'){
 			document.getElementById('aditamento').checked = false;
 		}else{
-			document.getElementById('licitacao').checked = false;
+			document.getElementById('finalizar').checked = false;
 		}
 		
 	}
 
 	function js_submit(){
 
-		if(!document.getElementById('licitacao').checked && !document.getElementById('aditamento').checked){
+		if(!document.getElementById('finalizar').checked && !document.getElementById('aditamento').checked){
 			alert('Informe uma providência a ser realizada.');
 			return false;
 		}
 
-		if(document.getElementById('licitacao').checked){
+		if(document.getElementById('finalizar').checked){
 			let oParam = new Object();
 			oParam.exec = 'updateProvidencia';
 			oParam.acordo = <?= $oGet->codigo?>;
@@ -117,7 +117,7 @@ $oGet = db_utils::postMemory($_GET);
 		let oResponse = eval("("+oAjax.responseText+")");
 		
 		if(oResponse.status){
-			alert('Providência da licitação cadastrada com sucesso!');
+			alert('Providência do acordo Finalizada com sucesso!');
 			parent.db_iframe_providencia.hide();
 			parent.parent.acordos.location.href = 'func_acordosavencer.php';
 		}

@@ -1450,9 +1450,9 @@ class cl_acordo {
         $sql .= "      left  join acordoleis   on acordo.ac16_lei   = acordoleis.ac54_sequencial";
         $sql .= "
             LEFT JOIN (
-                select max(ac26_sequencial) as ac26_sequencial,ac26_acordo
+                select max(ac26_sequencial) as ac26_sequencial,ac26_acordo,ac26_data
                 from acordoposicao
-                    GROUP BY ac26_acordo
+                    GROUP BY ac26_acordo, ac26_data
             ) acordoposicao ON acordoposicao.ac26_acordo = ac16_sequencial
             LEFT JOIN acordoitem on ac20_acordoposicao=ac26_sequencial
             LEFT JOIN acordopcprocitem on ac23_acordoitem=ac20_sequencial
