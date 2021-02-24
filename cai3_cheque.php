@@ -86,10 +86,11 @@ $pdf->setx(6);
 $pdf->Cell(0 , 6, $credor, "", 1, "L", 0);
 
 // Rodapé do cheque
-$pdf->setXY(85, 33);
+$pdf->setXY(70, 33);
 
 $size_munic = strlen($munic);
 $pdf->Cell(15, 5, $munic,"", 0,"L", 0);
+$pdf->setXY(100, 33);
 $pdf->Cell(13, 5, $dia_emissao, "", 0, "R", 0);
 $pdf->Cell(28, 5, $mes_emissao, "", 0, "C", 0);
 $pdf->Cell(26, 5, "$ano_emissao", "", 0,"R", 0);
