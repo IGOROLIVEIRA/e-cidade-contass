@@ -124,9 +124,6 @@ class calculoRetencaoOutros implements iCalculoRetencao {
   function calcularRetencao() {
     
     $this->nValorBaseCalculo = $this->calculaBasedeCalculo();
-    if (empty($this->nAliquota) || $this->nAliquota == 0) {
-      throw  new Exception("Erro [1] Valor da Aliquota Inválido!");
-    }
     
     $nValorRetido = $this->nValorBaseCalculo * ($this->nAliquota/100);
     return $nValorRetido;
