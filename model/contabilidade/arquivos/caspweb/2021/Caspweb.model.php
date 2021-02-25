@@ -93,7 +93,10 @@ class Caspweb {
                                         END AS indsuperavit,
                                         codbanco, 
                                         codagencia, 
-                                        codconta,
+                                        CASE 
+                                            WHEN contacontabil = '11111500200000000' THEN '13003126-5'
+                                            ELSE codconta
+                                        END AS codconta,
                                         indapfincanc,
                                         NULL AS dotorcamentaria,
                                         NULL AS tipopesssoa,
