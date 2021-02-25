@@ -323,6 +323,11 @@ class Caspweb {
                 $sDotacaoOrcamentaria .= "$oResto->fonte";              //Fonte: elemento iniciado em 31 a fonte é 01, ini em 33 é 03 e ini em 44 é 04
                 $sDotacaoOrcamentaria .= "00";                          //Fonte Detalhe: 00
 
+                //OC14173
+                if ($sDotacaoOrcamentaria == '0101.1000.09.272.033.000.3.003.0001.31900101.0100') {
+                    $sDotacaoOrcamentaria = substr($sDotacaoOrcamentaria,0,45).'09'.substr($sDotacaoOrcamentaria,47,2);
+                }
+
                 $sHash = substr($oContaContabil->contacontabil,0,13).$oResto->anoinscricao.$sDotacaoOrcamentaria;
 
                 if(!isset($this->aMapa[$sHash])) {
