@@ -63,7 +63,7 @@ $pdf->setfillcolor(235);
 $pdf->SetMargins(0, 0, 0);
 
 $pdf->AddPage('P');
-$pdf->setXY(135, 3);
+$pdf->setXY(135, 5);
 $pdf->SetFont('Courier', 'b', 10);
 $valor_inserido ="R$ ".$valor;
 
@@ -79,7 +79,7 @@ for($count = strlen($text_transformado); $count < 160; $count++){
   if(strlen($text_transformado) < 160)
     $text_transformado .= ' X';
 }
-$pdf->setXY(5,13);
+
 $pdf->MultiCell(165, 6, $text_transformado, 0, "L", 0, 20);
 $pdf->ln(1);
 $pdf->setx(6);
@@ -92,7 +92,8 @@ $size_munic = strlen($munic);
 $pdf->Cell(15, 5, $munic,"", 0,"L", 0);
 $pdf->setXY(100, 33);
 $pdf->Cell(13, 5, $dia_emissao, "", 0, "R", 0);
-$pdf->Cell(28, 5, $mes_emissao, "", 0, "C", 0);
+$pdf->setx(115);
+$pdf->Cell(26, 5, $mes_emissao, "", 0, "C", 0);
 $pdf->Cell(26, 5, "$ano_emissao", "", 0,"R", 0);
 
 $pdf->Output();
