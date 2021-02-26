@@ -503,7 +503,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		                     unveic.o41_subunidade,
 		                     codmater) as teste";
 
-        $rsResult20 = db_query($sSql); //echo $sSql; db_criatabela($rsResult20);die();
+        $rsResult20 = db_query($sSql);// echo $sSql; db_criatabela($rsResult20);die();
         /**
          * registro 20
          */
@@ -512,6 +512,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
             $oResult20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
+            $sqlTipoVeiculo = "select si04_tipoveiculo from tipoveiculos where si04_veiculos = " . $oResult20->codveiculo ;
+            $rsTipoVeiculo = db_query($sqlTipoVeiculo);
+            $iTipoVeiculo = db_utils::fieldsMemory($rsTipoVeiculo, 0)->si04_tipoveiculo;
+            
+            if(intval($iTipoVeiculo) == 5){
+                continue;
+            }
+            
             $sHash20 = $oResult20->codveiculo . $oResult20->codmater . $oResult20->nroempenho . $oResult20->dtempenho . $oResult20->tipogasto . $oResult20->atestadocontrole;
 
             if (!isset($aDadosAgrupados20[$sHash20])) {
