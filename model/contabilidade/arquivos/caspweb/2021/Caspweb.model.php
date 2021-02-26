@@ -165,37 +165,41 @@ class Caspweb {
 
             $oContaContabil = db_utils::fieldsMemory($rsMapaAprop, $iCont);
 
-            $sHash = $oContaContabil->contacontabil;
+            if(!(substr($oContaContabil->contacontabil,0,3) == '237' && $this->iMes == 01)){
 
-            if(!isset($this->aMapa[$sHash])) {
+                $sHash = $oContaContabil->contacontabil;
 
-                $aMapaAprop = array();
-                $aMapaAprop['codtipomapa'] = $oContaContabil->codtipomapa;
-                $aMapaAprop['codentcont'] = $oContaContabil->codentcont;
-                $aMapaAprop['exercicio'] = $oContaContabil->exercicio;
-                $aMapaAprop['mes'] = $oContaContabil->mes;
-                $aMapaAprop['contacontabil'] = $oContaContabil->contacontabil;
-                $aMapaAprop['indsuperavit'] = $oContaContabil->indsuperavit;
-                $aMapaAprop['codbanco'] = $oContaContabil->codbanco;
-                $aMapaAprop['codagencia'] = $oContaContabil->codagencia;
-                $aMapaAprop['codconta'] = $oContaContabil->codconta;
-                $aMapaAprop['indapfincanc'] = $oContaContabil->indapfincanc;
-                $aMapaAprop['dotorcamentaria'] = $oContaContabil->dotorcamentaria;
-                $aMapaAprop['tipopesssoa'] = $oContaContabil->tipopesssoa;
-                $aMapaAprop['codcred_forn'] = $oContaContabil->codcred_forn;
-                $aMapaAprop['grupfontanalitica'] = $oContaContabil->grupfontanalitica;
-                $aMapaAprop['espfontanalitica'] = $oContaContabil->espfontanalitica;
-                $aMapaAprop['instjuridico'] = $oContaContabil->instjuridico;
-                $aMapaAprop['codenttransfinanc'] = $oContaContabil->codenttransfinanc;
-                $aMapaAprop['debito'] = $oContaContabil->debito;
-                $aMapaAprop['credito'] = $oContaContabil->credito;
+                if(!isset($this->aMapa[$sHash])) {
 
-                $this->aMapa[$sHash] = $aMapaAprop;
+                    $aMapaAprop = array();
+                    $aMapaAprop['codtipomapa'] = $oContaContabil->codtipomapa;
+                    $aMapaAprop['codentcont'] = $oContaContabil->codentcont;
+                    $aMapaAprop['exercicio'] = $oContaContabil->exercicio;
+                    $aMapaAprop['mes'] = $oContaContabil->mes;
+                    $aMapaAprop['contacontabil'] = $oContaContabil->contacontabil;
+                    $aMapaAprop['indsuperavit'] = $oContaContabil->indsuperavit;
+                    $aMapaAprop['codbanco'] = $oContaContabil->codbanco;
+                    $aMapaAprop['codagencia'] = $oContaContabil->codagencia;
+                    $aMapaAprop['codconta'] = $oContaContabil->codconta;
+                    $aMapaAprop['indapfincanc'] = $oContaContabil->indapfincanc;
+                    $aMapaAprop['dotorcamentaria'] = $oContaContabil->dotorcamentaria;
+                    $aMapaAprop['tipopesssoa'] = $oContaContabil->tipopesssoa;
+                    $aMapaAprop['codcred_forn'] = $oContaContabil->codcred_forn;
+                    $aMapaAprop['grupfontanalitica'] = $oContaContabil->grupfontanalitica;
+                    $aMapaAprop['espfontanalitica'] = $oContaContabil->espfontanalitica;
+                    $aMapaAprop['instjuridico'] = $oContaContabil->instjuridico;
+                    $aMapaAprop['codenttransfinanc'] = $oContaContabil->codenttransfinanc;
+                    $aMapaAprop['debito'] = $oContaContabil->debito;
+                    $aMapaAprop['credito'] = $oContaContabil->credito;
 
-            } else {
+                    $this->aMapa[$sHash] = $aMapaAprop;
 
-                $this->aMapa[$sHash]['debito'] += $oContaContabil->debito;
-                $this->aMapa[$sHash]['credito'] += $oContaContabil->credito;
+                } else {
+
+                    $this->aMapa[$sHash]['debito'] += $oContaContabil->debito;
+                    $this->aMapa[$sHash]['credito'] += $oContaContabil->credito;
+
+                }
 
             }
 
@@ -277,7 +281,7 @@ class Caspweb {
                 $oResto = db_utils::fieldsMemory($rsRestos, $iContRestos);
 
                 $sSqlDebCred = "    SELECT 
-                                            (SELECT sum(c69_valor)
+                                            coalesce((SELECT sum(c69_valor)
                                                  FROM conlancamval
                                                  INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan AND conlancam.c70_anousu = conlancamval.c69_anousu
                                                  INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
@@ -290,10 +294,10 @@ class Caspweb {
                                                      AND c19_reduz IN ($oContaContabil->reduz)
                                                      AND c19_instit = $this->iInstit
                                                      AND c19_numemp = $oResto->numemp
-                                                     AND conhistdoc.c53_tipo NOT IN (1000)
-                                                 GROUP BY c28_tipo) AS creditos,
+                                                     AND conhistdoc.c53_tipo NOT IN (1000,2000)
+                                                 GROUP BY c28_tipo),0) AS creditos,
                                             
-                                                (SELECT sum(c69_valor)
+                                                 coalesce((SELECT sum(c69_valor)
                                                  FROM conlancamval
                                                  INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
                                                  AND conlancam.c70_anousu = conlancamval.c69_anousu
@@ -307,61 +311,65 @@ class Caspweb {
                                                      AND c19_reduz IN ($oContaContabil->reduz)
                                                      AND c19_instit = $this->iInstit
                                                      AND c19_numemp = $oResto->numemp
-                                                     AND conhistdoc.c53_tipo NOT IN (1000)
-                                                 GROUP BY c28_tipo) AS debitos";
+                                                     AND conhistdoc.c53_tipo NOT IN (1000,2000)
+                                                 GROUP BY c28_tipo),0) AS debitos";
 
                 $rsDebCred  = db_query($sSqlDebCred);
                 $oDebCred   = db_utils::fieldsMemory($rsDebCred, 0);
 
-                $sDotacaoOrcamentaria  = "0101.";                       //Unidade Orçamentária: sempre 0101
-                $sDotacaoOrcamentaria .= "1000.";                       //Unidade Administrativa: por enquanto 1000
-                $sDotacaoOrcamentaria .= "$oResto->codfuncao.";         //Função: o58_funcao
-                $sDotacaoOrcamentaria .= "$oResto->codsubfuncao.";      //Subfunção: o58_subfuncao
-                $sDotacaoOrcamentaria .= "$oResto->codprograma.";       //Programa: o58_programa s/ 0 esquerda
-                $sDotacaoOrcamentaria .= "000.";                        //SubPrograma: 000
-                $sDotacaoOrcamentaria .= substr($oResto->acao,0,1).".".substr($oResto->acao,1,3).".";//Ação: o58_projativ
-                $sDotacaoOrcamentaria .= "0001.";                       //Sub-ação: o55_origemacao eu não sei se tá retornando no sistema, mas é sempre 0001
-                $sDotacaoOrcamentaria .= "$oResto->naturezadadespesa";  //Natureza Despesa: substr(o56_elemento,2,6)
-                $sDotacaoOrcamentaria .= "$oResto->itemdespesa.";        //Item Despesa: substr(o56_elemento,8,2)
-                $sDotacaoOrcamentaria .= "$oResto->fonte";              //Fonte: elemento iniciado em 31 a fonte é 01, ini em 33 é 03 e ini em 44 é 04
-                $sDotacaoOrcamentaria .= "00";                          //Fonte Detalhe: 00
+                if (!($oDebCred->creditos == 0 && $oDebCred->debitos == 0)) {
 
-                //OC14173
-                if ($sDotacaoOrcamentaria == '0101.1000.09.272.033.000.3.003.0001.31900101.0100') {
-                    $sDotacaoOrcamentaria = substr($sDotacaoOrcamentaria,0,45).'09'.substr($sDotacaoOrcamentaria,47,2);
-                }
+                    $sDotacaoOrcamentaria  = "0101.";                       //Unidade Orçamentária: sempre 0101
+                    $sDotacaoOrcamentaria .= "1000.";                       //Unidade Administrativa: por enquanto 1000
+                    $sDotacaoOrcamentaria .= "$oResto->codfuncao.";         //Função: o58_funcao
+                    $sDotacaoOrcamentaria .= "$oResto->codsubfuncao.";      //Subfunção: o58_subfuncao
+                    $sDotacaoOrcamentaria .= "$oResto->codprograma.";       //Programa: o58_programa s/ 0 esquerda
+                    $sDotacaoOrcamentaria .= "000.";                        //SubPrograma: 000
+                    $sDotacaoOrcamentaria .= substr($oResto->acao,0,1).".".substr($oResto->acao,1,3).".";//Ação: o58_projativ
+                    $sDotacaoOrcamentaria .= "0001.";                       //Sub-ação: o55_origemacao eu não sei se tá retornando no sistema, mas é sempre 0001
+                    $sDotacaoOrcamentaria .= "$oResto->naturezadadespesa";  //Natureza Despesa: substr(o56_elemento,2,6)
+                    $sDotacaoOrcamentaria .= "$oResto->itemdespesa.";        //Item Despesa: substr(o56_elemento,8,2)
+                    $sDotacaoOrcamentaria .= "$oResto->fonte";              //Fonte: elemento iniciado em 31 a fonte é 01, ini em 33 é 03 e ini em 44 é 04
+                    $sDotacaoOrcamentaria .= "00";                          //Fonte Detalhe: 00
 
-                $sHash = substr($oContaContabil->contacontabil,0,13).$oResto->anoinscricao.$sDotacaoOrcamentaria;
+                    //OC14173
+                    if ($sDotacaoOrcamentaria == '0101.1000.09.272.033.000.3.003.0001.31900101.0100') {
+                        $sDotacaoOrcamentaria = substr($sDotacaoOrcamentaria,0,45).'09'.substr($sDotacaoOrcamentaria,47,2);
+                    }
 
-                if(!isset($this->aMapa[$sHash])) {
+                    $sHash = substr($oContaContabil->contacontabil,0,13).$oResto->anoinscricao.$sDotacaoOrcamentaria;
 
-                    $aMapaRsp = array();
-                    $aMapaRsp['codtipomapa'] = 33;
-                    $aMapaRsp['codentcont'] = 227;
-                    $aMapaRsp['exercicio'] = $this->iAnoUsu;
-                    $aMapaRsp['mes'] = $this->iMes;
-                    $aMapaRsp['contacontabil'] = substr($oContaContabil->contacontabil, 0, 13) . $oResto->anoinscricao;
-                    $aMapaRsp['indsuperavit'] = '';
-                    $aMapaRsp['codbanco'] = '';
-                    $aMapaRsp['codagencia'] = '';
-                    $aMapaRsp['codconta'] = '';
-                    $aMapaRsp['indapfincanc'] = '';
-                    $aMapaRsp['dotorcamentaria'] = $sDotacaoOrcamentaria;
-                    $aMapaRsp['tipopesssoa'] = '';
-                    $aMapaRsp['codcred_forn'] = '';
-                    $aMapaRsp['grupfontanalitica'] = '';
-                    $aMapaRsp['espfontanalitica'] = '';
-                    $aMapaRsp['instjuridico'] = '';
-                    $aMapaRsp['codenttransfinanc'] = '';
-                    $aMapaRsp['debito'] = $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
-                    $aMapaRsp['credito'] = $oDebCred->creditos != '' ? $oDebCred->creditos : 0;
+                    if(!isset($this->aMapa[$sHash])) {
 
-                    $this->aMapa[$sHash] = $aMapaRsp;
+                        $aMapaRsp = array();
+                        $aMapaRsp['codtipomapa'] = 33;
+                        $aMapaRsp['codentcont'] = 227;
+                        $aMapaRsp['exercicio'] = $this->iAnoUsu;
+                        $aMapaRsp['mes'] = $this->iMes;
+                        $aMapaRsp['contacontabil'] = substr($oContaContabil->contacontabil, 0, 13) . $oResto->anoinscricao;
+                        $aMapaRsp['indsuperavit'] = '';
+                        $aMapaRsp['codbanco'] = '';
+                        $aMapaRsp['codagencia'] = '';
+                        $aMapaRsp['codconta'] = '';
+                        $aMapaRsp['indapfincanc'] = '';
+                        $aMapaRsp['dotorcamentaria'] = $sDotacaoOrcamentaria;
+                        $aMapaRsp['tipopesssoa'] = '';
+                        $aMapaRsp['codcred_forn'] = '';
+                        $aMapaRsp['grupfontanalitica'] = '';
+                        $aMapaRsp['espfontanalitica'] = '';
+                        $aMapaRsp['instjuridico'] = '';
+                        $aMapaRsp['codenttransfinanc'] = '';
+                        $aMapaRsp['debito'] = $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
+                        $aMapaRsp['credito'] = $oDebCred->creditos != '' ? $oDebCred->creditos : 0;
 
-                } else {
+                        $this->aMapa[$sHash] = $aMapaRsp;
 
-                    $this->aMapa[$sHash]['debito'] += $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
-                    $this->aMapa[$sHash]['credito'] += $oDebCred->creditos != '' ? $oDebCred->creditos : 0;
+                    } else {
+
+                        $this->aMapa[$sHash]['debito'] += $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
+                        $this->aMapa[$sHash]['credito'] += $oDebCred->creditos != '' ? $oDebCred->creditos : 0;
+
+                    }
 
                 }
 
