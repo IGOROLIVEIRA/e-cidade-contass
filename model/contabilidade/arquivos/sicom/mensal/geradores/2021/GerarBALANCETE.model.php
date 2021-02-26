@@ -141,7 +141,6 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE11['si178_idacao']                  = $this->padLeftZero($aBALACETE11['si178_idacao'], 4);
                         $aCSVBALANCETE11['si178_idsubacao']               = ($aBALACETE11['si178_idsubacao'] == 0 ? ' ' : $this->padLeftZero($aBALACETE11['si178_idsubacao'], 4));
                         $aCSVBALANCETE11['si178_naturezadespesa']         = $this->padLeftZero($aBALACETE11['si178_naturezadespesa'], 6);
-                        $aCSVBALANCETE11['si178_subelemento']             = $this->padLeftZero($aBALACETE11['si178_subelemento'], 2);
                         $aCSVBALANCETE11['si178_codfontrecursos']         = $this->padLeftZero($aBALACETE11['si178_codfontrecursos'], 3);
                         $aCSVBALANCETE11['si178_saldoinicialcd']          = $this->sicomNumberReal($aBALACETE11['si178_saldoinicialcd'], 2);
                         $aCSVBALANCETE11['si178_naturezasaldoinicialcd']  = $this->padLeftZero($aBALACETE11['si178_naturezasaldoinicialcd'], 1);
@@ -268,7 +267,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE16['si183_contacontabil']               = $this->padLeftZero($aBALACETE16['si183_contacontabil'], 9);
                         $aCSVBALANCETE16['si183_codfundo']                    = $aBALACETE16['si183_codfundo'];
                         $aCSVBALANCETE16['si183_atributosf']                  = trim($aBALACETE16['si183_atributosf']);
-                        $aCSVBALANCETE16['si183_codfontrecursos']             = $this->padLeftZero($aBALACETE16['si183_codfontrecursos'], 3);
+                        $aCSVBALANCETE16['si183_codfontrecursos']             = ($aBALACETE16['si183_codfontrecursos'] == 0) ? ' ' : $this->padLeftZero($aBALACETE16['si183_codfontrecursos'], 3);
                         $aCSVBALANCETE16['si183_saldoinicialfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_saldoinicialfontsf'], 2);
                         $aCSVBALANCETE16['si183_naturezasaldoinicialfontsf']  = $this->padLeftZero($aBALACETE16['si183_naturezasaldoinicialfontsf'], 1);
                         $aCSVBALANCETE16['si183_totaldebitosfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_totaldebitosfontsf'], 2);

@@ -11,7 +11,7 @@ require_once("classes/db_balancete162021_classe.php");
 require_once("classes/db_balancete172021_classe.php");
 require_once("classes/db_balancete182021_classe.php");
 require_once("classes/db_balancete192021_classe.php");
-require_once("classes/db_balancete202121_classe.php");
+require_once("classes/db_balancete202021_classe.php");
 require_once("classes/db_balancete212021_classe.php");
 require_once("classes/db_balancete222021_classe.php");
 require_once("classes/db_balancete232021_classe.php");
@@ -20,6 +20,9 @@ require_once("classes/db_balancete252021_classe.php");
 require_once("classes/db_balancete262021_classe.php");
 require_once("classes/db_balancete272021_classe.php");
 require_once("classes/db_balancete282021_classe.php");
+require_once("classes/db_balancete292021_classe.php");
+require_once("classes/db_balancete302021_classe.php");
+require_once("classes/db_balancete312021_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarBALANCETE.model.php");
 require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
 
@@ -79,7 +82,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
      */
     public function getFontReduzAM($iReduz)
     {
-        $sSqlVerifica = " select distinct si96_codfontrecursos, si96_anousu from ( SELECT distinct si96_codfontrecursos, 2021 as si96_anousu FROM ctb202120 WHERE si96_codctb = {$iReduz}
+        $sSqlVerifica = " select distinct si96_codfontrecursos, si96_anousu from ( SELECT distinct si96_codfontrecursos, 2021 as si96_anousu FROM ctb202021 WHERE si96_codctb = {$iReduz}
                                       AND si96_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2021 as si96_anousu FROM ctb202121 WHERE si96_codctb = {$iReduz}) as x order by 2 DESC limit 1";
         $iCodFont = db_utils::fieldsMemory(db_query($sSqlVerifica), 0)->si96_codfontrecursos;
@@ -281,7 +284,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $obalancete17 = new cl_balancete172021();
         $obalancete18 = new cl_balancete182021();
         $obalancete19 = new cl_balancete192021();
-        $obalancete20 = new cl_balancete202120();
+        $obalancete20 = new cl_balancete202021();
         $obalancete21 = new cl_balancete212021();
         $obalancete22 = new cl_balancete222021();
         $obalancete23 = new cl_balancete232021();
@@ -601,7 +604,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                o58_projativ as idacao,
 					                o55_origemacao as idsubacao,
 					                substr(o56_elemento,2,12) as naturezadadespesa,
-					                substr(o56_elemento,8,2) as subelemento,
 								    o15_codtri as codfontrecursos,
 					                e60_numemp
 					  from conlancamemp
@@ -731,7 +733,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                         if (!(($oReg11Saldo->saldoanterior == "" || $oReg11Saldo->saldoanterior == 0) && $oReg11Saldo->debitos == "" && $oReg11Saldo->creditos == "")) {
 
                             $sElemento = substr($oReg11->naturezadadespesa, 0, 6);
-                            $sSubElemento = $oReg11->subelemento;
                             /**
                              * percorrer xml elemento despesa
                              */
@@ -741,22 +742,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                     $sElementoXml = $oElemento->getAttribute('elementoEcidade');
 
-                                    if ($nContaCorrente == 101) {
-                                        if (substr($sElementoXml, 0, 6) == $sElemento) {
-                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                            $sSubElemento = '00';
-                                        }
-                                    } else {
-                                        if ($oElemento->getAttribute('deParaDesdobramento') != '' && $oElemento->getAttribute('deParaDesdobramento') == 1) {
-                                            if($oElemento->getAttribute('elementoEcidade') == $oReg11->naturezadadespesa) {
-                                                $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                                $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
-                                            }
-                                        } elseif ($sElementoXml == $sElemento . $sSubElemento) {
-                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                            $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
-                                        }
+                                    if (substr($sElementoXml, 0, 6) == $sElemento) {
+                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
                                     }
+
                                 }
                             }
                             /**
@@ -770,7 +759,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             }
 
                             $sHash11 = '11' . $oContas10->si177_contacontaabil . $oReg11->codorgao . $oReg11->codunidadesub . $oReg11->codfuncao . $oReg11->codsubfuncao . $oReg11->codprograma;
-                            $sHash11 .= $oReg11->idacao . $oReg11->idsubacao . $sElemento . $sSubElemento . $oReg11->codfontrecursos;
+                            $sHash11 .= $oReg11->idacao . $oReg11->idsubacao . $sElemento . $oReg11->codfontrecursos;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg11[$sHash11])) {
 
@@ -787,7 +776,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete11->si178_idacao = $oReg11->idacao;
                                 $obalancete11->si178_idsubacao = $oReg11->idsubacao;
                                 $obalancete11->si178_naturezadespesa = $sElemento;
-                                $obalancete11->si178_subelemento = $sSubElemento;
                                 $obalancete11->si178_codfontrecursos = $oReg11->codfontrecursos;
                                 $obalancete11->si178_saldoinicialcd = $oReg11Saldo->saldoanterior;
                                 $obalancete11->si178_naturezasaldoinicialcd = $oReg11Saldo->saldoanterior > 0 ? 'D' : 'C';
@@ -1835,7 +1823,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete16->si183_contacontabil = $oContas10->si177_contacontaabil;
                                 $obalancete16->si183_codfundo = $sCodFundo;
                                 $obalancete16->si183_atributosf = $oContas10->identificadorfinanceiro;
-                                $obalancete16->si183_codfontrecursos = $oReg16Font->codfontrecursos;
+                                $obalancete16->si183_codfontrecursos = ($oContas10->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
                                 $obalancete16->si183_saldoinicialfontsf = $oReg16Saldo->saldoanterior;
                                 $obalancete16->si183_naturezasaldoinicialfontsf = $oReg16Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                 $obalancete16->si183_totaldebitosfontsf = $oReg16Saldo->debitos;
@@ -1912,7 +1900,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     END AS natursaldofinctb
                                 FROM
                                     (SELECT *
-                                        FROM ctb202120
+                                        FROM ctb202021
                                         LEFT JOIN ctb212021 ON si96_sequencial = si97_reg20
                                         WHERE si96_mes = ".$this->sDataFinal['5'] . $this->sDataFinal['6']."
                                             AND si96_instit = ".db_getsession("DB_instit").") AS xx
@@ -2858,7 +2846,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $obalreg11->si178_idacao = $reg11->si178_idacao;
                 $obalreg11->si178_idsubacao = $reg11->si178_idsubacao;
                 $obalreg11->si178_naturezadespesa = $reg11->si178_naturezadespesa;
-                $obalreg11->si178_subelemento = $reg11->si178_subelemento;
                 $obalreg11->si178_codfontrecursos = $reg11->si178_codfontrecursos;
                 $obalreg11->si178_saldoinicialcd = number_format(abs($reg11->si178_saldoinicialcd == '' ? 0 : $reg11->si178_saldoinicialcd), 2, ".", "");
                 $obalreg11->si178_naturezasaldoinicialcd = $reg11->si178_saldoinicialcd == 0 ? $oDado10->naturezasaldo : ($reg11->si178_saldoinicialcd > 0 ? 'D' : 'C');
@@ -3173,7 +3160,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
             foreach ($oDado10->reg20 as $reg20) {
 
-                $obalreg20 = new cl_balancete202120();
+                $obalreg20 = new cl_balancete202021();
 
                 $obalreg20->si187_tiporegistro = $reg20->si187_tiporegistro;
                 $obalreg20->si187_contacontabil = $reg20->si187_contacontabil;
