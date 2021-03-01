@@ -19,10 +19,10 @@ class GerarBF extends GerarAM
     $this->sArquivo = "BF";
     $this->abreArquivo();
 
-    $sSql = "select * from bfdcasp102019 where si206_ano = {$this->iAno} AND si206_periodo = {$this->iPeriodo} AND si206_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bfdcasp102020 where si206_ano = {$this->iAno} AND si206_periodo = {$this->iPeriodo} AND si206_institu = " . db_getsession("DB_instit");
     $rsBF10 = db_query($sSql);
 
-    $sSql = "select * from bfdcasp202019 where si207_ano = {$this->iAno} AND si207_periodo = {$this->iPeriodo} AND si207_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bfdcasp202020 where si207_ano = {$this->iAno} AND si207_periodo = {$this->iPeriodo} AND si207_institu = " . db_getsession("DB_instit");
     $rsBF20 = db_query($sSql);
 
     if (pg_num_rows($rsBF10) == 0
