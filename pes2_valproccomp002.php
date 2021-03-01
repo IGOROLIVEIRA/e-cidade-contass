@@ -94,11 +94,12 @@ for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
 	$oPdf->Cell(20 ,$iAlt,$oDadosGerados->numcgm                                     ,0,0,'C',$iPreenche);
 	$oPdf->Cell(70 ,$iAlt,$oDadosGerados->nome                                       ,0,0,'L',$iPreenche);
 	$oPdf->Cell(25 ,$iAlt,db_formatar($oDadosGerados->valor_servico,'f')             ,0,0,'R',$iPreenche);
-	$oPdf->Cell(30 ,$iAlt,db_formatar($oDadosGerados->valor_inss,'f')                ,0,0,'R',$iPreenche);
-	$oPdf->Cell(30 ,$iAlt,$oDadosGerados->ordem_pgto                                 ,0,0,'C',$iPreenche);
-	$oPdf->Cell(25 ,$iAlt,$oDadosGerados->codigo_empenho.'/'.$oDadosGerados->ano_usu ,0,0,'C',$iPreenche);
-	$oPdf->Cell(30 ,$iAlt,db_formatar($oDadosGerados->data_liquidacao,'d')           ,0,0,'C',$iPreenche);
-	$oPdf->Cell(30 ,$iAlt,$oDadosGerados->enviado_sefip                              ,0,1,'C',$iPreenche);
+	$oPdf->Cell(24 ,$iAlt,db_formatar(($oDadosGerados->valor_servico*20/100),'f')             ,0,0,'R',$iPreenche);
+	$oPdf->Cell(25 ,$iAlt,db_formatar($oDadosGerados->valor_inss,'f')                ,0,0,'R',$iPreenche);
+	$oPdf->Cell(27 ,$iAlt,$oDadosGerados->ordem_pgto                                 ,0,0,'C',$iPreenche);
+	$oPdf->Cell(16 ,$iAlt,$oDadosGerados->codigo_empenho.'/'.$oDadosGerados->ano_usu ,0,0,'C',$iPreenche);
+	$oPdf->Cell(28 ,$iAlt,db_formatar($oDadosGerados->data_liquidacao,'d')           ,0,0,'C',$iPreenche);
+	$oPdf->Cell(25 ,$iAlt,$oDadosGerados->enviado_sefip                              ,0,1,'C',$iPreenche);
 	
 	$iTotalValorServico +=  $oDadosGerados->valor_servico;
 	$iTotalValorInss    +=  $oDadosGerados->valor_inss;
@@ -110,11 +111,12 @@ $oPdf->Cell(20 ,$iAlt, 'Total' ,1,0,'C',$iPreenche);
 $oPdf->Cell(20 ,$iAlt, '' ,1,0,'C',$iPreenche);
 $oPdf->Cell(70 ,$iAlt, '' ,1,0,'L',$iPreenche);
 $oPdf->Cell(25 ,$iAlt,db_formatar($iTotalValorServico,'f')             ,1,0,'R',$iPreenche);
-$oPdf->Cell(30 ,$iAlt,db_formatar($iTotalValorInss,'f')                ,1,0,'R',$iPreenche);
-$oPdf->Cell(30 ,$iAlt, '' ,1,0,'C',$iPreenche);
-$oPdf->Cell(25 ,$iAlt, '' ,1,0,'C',$iPreenche);
-$oPdf->Cell(30 ,$iAlt, '' ,1,0,'C',$iPreenche);
-$oPdf->Cell(30 ,$iAlt, '' ,1,1,'C',$iPreenche);
+$oPdf->Cell(24 ,$iAlt,db_formatar(($iTotalValorServico*20/100),'f')             ,1,0,'R',$iPreenche);
+$oPdf->Cell(25 ,$iAlt,db_formatar($iTotalValorInss,'f')                ,1,0,'R',$iPreenche);
+$oPdf->Cell(27 ,$iAlt, '' ,1,0,'C',$iPreenche);
+$oPdf->Cell(16 ,$iAlt, '' ,1,0,'C',$iPreenche);
+$oPdf->Cell(28 ,$iAlt, '' ,1,0,'C',$iPreenche);
+$oPdf->Cell(25 ,$iAlt, '' ,1,1,'C',$iPreenche);
 
 $oPdf->Output();
 
@@ -129,11 +131,12 @@ function imprimeCab($oPdf,$iAlt,$iFonte,$lImprime=false){
 	  $oPdf->Cell(20 ,$iAlt,"CGM"            ,1,0,'C',1);
 	  $oPdf->Cell(70 ,$iAlt,"Nome"           ,1,0,'C',1);
 	  $oPdf->Cell(25 ,$iAlt,"Valor Serviço"  ,1,0,'C',1);
-	  $oPdf->Cell(30 ,$iAlt,"Valor INSS"     ,1,0,'C',1);
-	  $oPdf->Cell(30 ,$iAlt,"Ordem Pagamento",1,0,'C',1);
-	  $oPdf->Cell(25 ,$iAlt,"Empenho"        ,1,0,'C',1);
-	  $oPdf->Cell(30 ,$iAlt,"Data Liquidação",1,0,'C',1);
-	  $oPdf->Cell(30 ,$iAlt,"Enviado SEFIP"  ,1,1,'C',1);
+	  $oPdf->Cell(24 ,$iAlt,"Patronal"  ,1,0,'C',1);
+	  $oPdf->Cell(25 ,$iAlt,"Valor INSS"     ,1,0,'C',1);
+	  $oPdf->Cell(27 ,$iAlt,"Ordem Pagamento",1,0,'C',1);
+	  $oPdf->Cell(16 ,$iAlt,"Empenho"        ,1,0,'C',1);
+	  $oPdf->Cell(28 ,$iAlt,"Data Liquidação",1,0,'C',1);
+	  $oPdf->Cell(25 ,$iAlt,"Enviado SEFIP"  ,1,1,'C',1);
 		
   	$oPdf->SetFont('Arial','',$iFonte);
 			
