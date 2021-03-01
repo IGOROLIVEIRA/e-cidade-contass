@@ -33,7 +33,7 @@ if (USE_PCASP) {
 
 /// retângulo dos dados da transferência
 
-$this->objpdf->rect($xcol, $xlin +2, $xcol +180, 75, 10, 'DF', '1234');
+$this->objpdf->rect($xcol, $xlin +2, $xcol +180, 79, 10, 'DF', '1234');
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->text($xcol +2, $xlin +7, 'DATA');
 $this->objpdf->text($xcol +6, $xlin +11,  db_formatar(pg_result($this->dados, 0, "k17_data"), 'd'));
@@ -70,11 +70,11 @@ if ( !empty($this->oDadosBancarioCredor) ) {
 
   $this->objpdf->text($xcol + 2, $xlin + 42, 'CONTA BANCÁRIA FORNECEDOR');
 
-  $sTextoDadosBancariosCredor  = $this->oDadosBancarioCredor->iBanco;
+  $sTextoDadosBancariosCredor  = 'Banco: '.$this->oDadosBancarioCredor->iBanco;
   $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->sBanco;
-  $sTextoDadosBancariosCredor .= '  Agência: ' . $this->oDadosBancarioCredor->iAgencia;
+  $sTextoDadosBancariosCredor .= ' - Agência: ' . $this->oDadosBancarioCredor->iAgencia;
   $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->iAgenciaDigito;
-  $sTextoDadosBancariosCredor .= '  Conta: '   . $this->oDadosBancarioCredor->iConta;
+  $sTextoDadosBancariosCredor .= ' - Conta: '   . $this->oDadosBancarioCredor->iConta;
   $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->iContaDigito;
 
   $this->objpdf->text($xcol + 6, $xlin + 46,  $sTextoDadosBancariosCredor);
@@ -82,8 +82,26 @@ if ( !empty($this->oDadosBancarioCredor) ) {
 
 $this->objpdf->text($xcol + 2, $xlin + 54, 'DÉBITO');
 $this->objpdf->text($xcol + 6, $xlin + 58, pg_result($this->dados, 0, "k17_debito").'   -   '.pg_result($this->dados, 0, "descr_debito"));
+if (pg_result($this->dados, 0, "banco_debito") != "" && pg_result($this->dados, 0, "agencia_debito") != "" && pg_result($this->dados, 0, "conta_debito") != "") {
+	
+	$sDadosBancariosDeb = 'Banco: '.pg_result($this->dados, 0, "banco_debito");
+	$sDadosBancariosDeb .= ' - Agência: '.pg_result($this->dados, 0, "agencia_debito");
+	$sDadosBancariosDeb .= ' - Conta: '.pg_result($this->dados, 0, "conta_debito");
+	$sDadosBancariosDeb .= ' - Fonte: '.pg_result($this->dados, 0, "fonte_debito");
+	$this->objpdf->text($xcol + 6, $xlin + 62, $sDadosBancariosDeb);
+
+}
 $this->objpdf->text($xcol + 2, $xlin + 70, 'CRÉDITO');
 $this->objpdf->text($xcol + 6, $xlin + 74, pg_result($this->dados, 0, "k17_credito").'   -   '.pg_result($this->dados, 0, "descr_credito"));
+if (pg_result($this->dados, 0, "banco_credito") != "" && pg_result($this->dados, 0, "agencia_credito") != "" && pg_result($this->dados, 0, "conta_credito") != "") {
+	
+	$sDadosBancariosCred = 'Banco: '.pg_result($this->dados, 0, "banco_credito");
+	$sDadosBancariosCred .= ' - Agência: '.pg_result($this->dados, 0, "agencia_credito");
+	$sDadosBancariosCred .= ' - Conta: '.pg_result($this->dados, 0, "conta_credito");
+	$sDadosBancariosCred .= ' - Fonte: '.pg_result($this->dados, 0, "fonte_credito");
+	$this->objpdf->text($xcol + 6, $xlin + 78, $sDadosBancariosCred);
+
+}
 
 /// retângulo do histórico
 
