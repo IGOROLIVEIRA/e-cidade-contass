@@ -311,6 +311,13 @@ if($agrupar=='S'){
 if ($agrupar_fonte == 'S') {
   $ordem_conta = "c61_codigo,".$ordem_conta;
 }
+
+$sWhere = "";
+if (isset($fonte) && $fonte != '') {
+  $sWhere .= " and o15_codtri = '{$fonte}' ";
+  $descr_conta = "CONTAS DA FONTE {$fonte}";
+}
+
 /// CONTAS MOVIMENTO
 $sql="select   o15_codtri,c61_codigo,
                o15_descr,
@@ -349,7 +356,7 @@ $sql .=	" from  saltes
 	             inner join conplano      on c60_codcon = c61_codcon and c60_anousu=c61_anousu
                inner join orctiporec ON o15_codigo = c61_codigo
 	             left  join conplanoconta on c60_codcon = c63_codcon and c63_anousu=c60_anousu
-  where (k13_limite is null or k13_limite >= '$dataatual' )
+  where (k13_limite is null or k13_limite >= '$dataatual' ) $sWhere
  	order by ".$ordem_conta."
 
           ) as x
@@ -762,7 +769,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
         $oConta->descr = $k13_descr;
       }else{
         $oConta->descr = $k13_reduz.' - '.$k13_descr;
-        $oConta->c63_conta = $c63_conta;
+        $oConta->c63_conta = "Nº Cta: ".$c63_conta.'-'.$c63_dvconta;
       }
       $oConta->o15_codtri  = $o15_codtri;
       $oConta->o15_descr   = $o15_descr;
@@ -822,13 +829,13 @@ foreach ($aContasMovs as $oConta) {
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->debitado, 'f'), 1, 0, 'R', 0);
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->creditado, 'f'), 1, 0, 'R', 0);
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->atual, 'f'), 1, 1, 'R', 0);
-      $pdf->SetFont('Arial', '', 6);
       $sVerificaFonte = $oConta->o15_descr;
     }
-		$pdf->cell(80, $alt, $oConta->descr, "LTB", 0, 'L', $pre);
+		$pdf->SetFont('Arial', '', 6);
+		$pdf->cell(78, $alt, $oConta->descr, "LTB", 0, 'L', $pre);
 
 		$pdf->SetFont('Arial', '', 6);
-		$pdf->cell(16, $alt, $oConta->c63_conta, "RTB", 0, 'L', $pre);
+		$pdf->cell(18, $alt, substr($oConta->c63_conta,0,16), "RTB", 0, 'L', $pre);
 
 		$pdf->cell(24, $alt, db_formatar($oConta->anterior, 'f'), 1, 0, 'R', $pre);
 		$pdf->cell(24, $alt, db_formatar($oConta->debitado, 'f'), 1, 0, 'R', $pre);

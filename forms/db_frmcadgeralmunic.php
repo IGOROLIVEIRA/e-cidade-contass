@@ -605,9 +605,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                         <legend><strong>Observações</strong></legend>
                                         <?
                                         if($db_opcao == 1) {
-                                            db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao,'','',"#E6E4F1");
+                                            db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao,'','',"#E6E4F1",'100');
                                         }else{
-                                            db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao);
+                                            db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao,'', '', '', '100');
                                         }
                                         ?>
                                     </fieldset>
@@ -828,9 +828,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                         <legend><strong>Observações</strong></legend>
                                         <?
                                         if($db_opcao == 1) {
-                                            db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao,'','',"#E6E4F1");
+                                            db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao,'','',"#E6E4F1", '100');
                                         }else{
-                                            db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao);
+                                            db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao, '', '', '', '100');
                                         }
                                         ?>
                                     </fieldset>
@@ -1591,6 +1591,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 oPessoa.z01_obs           = $F('z01_obs');
                 oPessoa.z04_rhcbo         = $F('rh70_sequencial');
                 oPessoa.z01_incmunici     = $F('z01_incmunici');
+                oPessoa.z01_escolaridade  = $F('z01_escolaridade');
 
                 var oEndereco = new Object();
                 oEndereco.idEndPrimario   = $F('idEnderPrimario');

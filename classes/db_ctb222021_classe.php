@@ -24,6 +24,7 @@ class cl_ctb222021
   var $si98_identificadordeducao = 0;
   var $si98_naturezareceita = 0;
   var $si98_codfontrecursos = 0;
+  var $si98_saldocec = 0;
   var $si98_vlrreceitacont = 0;
   var $si98_mes = 0;
   var $si98_reg21 = 0;
@@ -37,6 +38,7 @@ class cl_ctb222021
                  si98_identificadordeducao = int8 = Identificador da dedução da receita 
                  si98_naturezareceita = int8 = Natureza da receita 
                  si98_codfontrecursos = int8 = Código da fonte de recursos 
+                 si98_saldocec = int8 = Saldo compõe ou não compõe Caixa e Equivalentes de Caixa
                  si98_vlrreceitacont = float8 = Valor  correspondente à  receita 
                  si98_mes = int8 = Mês 
                  si98_reg21 = int8 = reg21 
@@ -73,6 +75,7 @@ class cl_ctb222021
       $this->si98_identificadordeducao = ($this->si98_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_identificadordeducao"] : $this->si98_identificadordeducao);
       $this->si98_naturezareceita = ($this->si98_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_naturezareceita"] : $this->si98_naturezareceita);
       $this->si98_codfontrecursos = ($this->si98_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_codfontrecursos"] : $this->si98_codfontrecursos);
+      $this->si98_saldocec = ($this->si98_saldocec == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_saldocec"] : $this->si98_saldocec);
       $this->si98_vlrreceitacont = ($this->si98_vlrreceitacont == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_vlrreceitacont"] : $this->si98_vlrreceitacont);
       $this->si98_mes = ($this->si98_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_mes"] : $this->si98_mes);
       $this->si98_reg21 = ($this->si98_reg21 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_reg21"] : $this->si98_reg21);
@@ -110,6 +113,9 @@ class cl_ctb222021
     }
     if ($this->si98_codfontrecursos == null) {
       $this->si98_codfontrecursos = "0";
+    }
+    if ($this->si98_saldocec == null) {
+      $this->si98_saldocec = "0";
     }
     if ($this->si98_vlrreceitacont == null) {
       $this->si98_vlrreceitacont = "0";
@@ -181,6 +187,7 @@ class cl_ctb222021
                                       ,si98_identificadordeducao 
                                       ,si98_naturezareceita 
                                       ,si98_codfontrecursos
+                                      ,si98_saldocec
                                       ,si98_vlrreceitacont 
                                       ,si98_mes 
                                       ,si98_reg21 
@@ -194,6 +201,7 @@ class cl_ctb222021
                                ,$this->si98_identificadordeducao 
                                ,$this->si98_naturezareceita
                                ,$this->si98_codfontrecursos 
+                               ,$this->si98_saldocec
                                ,$this->si98_vlrreceitacont 
                                ,$this->si98_mes 
                                ,$this->si98_reg21 
@@ -306,6 +314,13 @@ class cl_ctb222021
         $this->si98_codfontrecursos = "0";
       }
       $sql .= $virgula . " si98_codfontrecursos = $this->si98_codfontrecursos ";
+      $virgula = ",";
+    }
+    if (trim($this->si98_saldocec) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si98_saldocec"])) {
+      if (trim($this->si98_saldocec) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si98_saldocec"])) {
+        $this->si98_saldocec = "0";
+      }
+      $sql .= $virgula . " si98_saldocec = $this->si98_saldocec ";
       $virgula = ",";
     }
     if (trim($this->si98_vlrreceitacont) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si98_vlrreceitacont"])) {
