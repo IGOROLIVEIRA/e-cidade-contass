@@ -467,9 +467,11 @@ AND e60_codemp = '$codemp'";
             AND (c224_vlrcaixabruta != 0
             OR c224_rpexercicioanterior != 0
             OR c224_vlrrestoarecolher != 0
-            OR c224_vlrdisponibilidadecaixa != 0
-            OR c224_fonte IN ({$sFontesExistentes}))
-            AND c224_fonte NOT IN ('148','149','150','151','152','248','249','250','251','252') order by c224_fonte";
+            OR c224_vlrdisponibilidadecaixa != 0 ";
+            if ($sFontesExistentes != '') {
+                $sSql20 .= " OR c224_fonte IN ({$sFontesExistentes}) ";
+            }    
+            $sSql20 .= " ) AND c224_fonte NOT IN ('148','149','150','151','152','248','249','250','251','252') order by c224_fonte";
         }else{
             $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
             FROM disponibilidadecaixa
