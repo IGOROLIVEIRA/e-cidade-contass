@@ -21,6 +21,9 @@ e-cidade            5432    pmlagoadospatos
 
 pmcapitaoeneas      5432    prefeituras
 pmsaoromao          5432    prefeituras
+pmcristalia         5432    prefeituras
+pmluislandia        5432    prefeituras
+pmitacambira        5432    prefeituras
 treinamento         5432    prefeituras
 
 pmburitizeiro          5432    prefeituras2
@@ -69,7 +72,7 @@ cmibiai             5432    e-cidade
 cmubai_folha        5432    e-cidade
 cmbotumirim_folha   5432    e-cidade
 comar               5432    e-cidade
-conserrageral       5432    e-cidade
+conserrageral       5432    e-cidadepmitacambira
 cisgraomogol		5432	e-cidade
 cimvales            5432    e-cidade
 cidsmeje            5432    e-cidade
