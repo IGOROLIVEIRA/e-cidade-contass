@@ -667,7 +667,8 @@ case "processarBalancete" :
 
     case "processarPCA" :
 
-    $sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+    //$sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+    $sSql  = "SELECT db21_codigomunicipoestado,cgc FROM db_config where codigo = ".db_getsession("DB_instit");
     $rsInst = db_query($sSql);
     $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
     $iTipoInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
