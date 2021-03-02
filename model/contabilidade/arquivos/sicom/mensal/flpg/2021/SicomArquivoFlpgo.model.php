@@ -2,10 +2,10 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_flpgo102020_classe.php");
-require_once ("classes/db_flpgo112020_classe.php");
-require_once ("classes/db_flpgo122020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarFLPGO.model.php");
+require_once ("classes/db_flpgo102021_classe.php");
+require_once ("classes/db_flpgo112021_classe.php");
+require_once ("classes/db_flpgo122021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarFLPGO.model.php");
 
 
 /**
@@ -85,9 +85,9 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	 */
 	public function gerarDados() {
 
-		$clflpgo10 = new cl_flpgo102020();
-		$clflpgo11 = new cl_flpgo112020();
-		$clflpgo12 = new cl_flpgo122020();
+		$clflpgo10 = new cl_flpgo102021();
+		$clflpgo11 = new cl_flpgo112021();
+		$clflpgo12 = new cl_flpgo122021();
 
 		db_inicio_transacao();
 
@@ -505,7 +505,7 @@ WHERE (r59_anousu,
 
   for ($iContEx = 1; $iContEx <= $iQuantTipoPagamento; $iContEx++) {
 
-        $clflpgo10                                          = new cl_flpgo102020();
+        $clflpgo10                                          = new cl_flpgo102021();
         $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
         $clflpgo10->si195_codvinculopessoa                  = $oDados10->rh02_regist;
 		$clflpgo10->si195_regime             		        = $oDados10->si195_regime;
@@ -530,18 +530,18 @@ WHERE (r59_anousu,
         $clflpgo10->si195_dscdependencia                       = $this->convert_accented_characters($oDados10->si195_dscdependencia);
         $clflpgo10->si195_datafastpreliminar                   = NULL;
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
-        $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
-        $clflpgo10->si195_codcargo                          = ($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0;
-        $clflpgo10->si195_sglcargo 							= $this->convert_accented_characters($oDados10->si195_sglcargo);
+        $clflpgo10->si195_dsccargo                          = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_dsccargo);
+        $clflpgo10->si195_codcargo                          = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : (($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0);
+        $clflpgo10->si195_sglcargo 							= $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_sglcargo);
         $clflpgo10->si195_dscsiglacargo                     = $this->convert_accented_characters($oDados10->si195_dscsiglacargo);
         $clflpgo10->si195_dscapo           					= $this->convert_accented_characters($dscAPO);
-        $clflpgo10->si195_natcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);
+        $clflpgo10->si195_natcargo                          = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_reqcargo);
         $clflpgo10->si195_dscnatcargo 						= ($oDados10->si195_reqcargo == 4)?substr($this->convert_accented_characters($oDados10->rh37_atividadedocargo),0,150):' ';
         $clflpgo10->si195_indcessao 						= $this->convert_accented_characters($oDados10->si195_indcessao);
-        $clflpgo10->si195_dsclotacao 						= $this->convert_accented_characters($oDados10->si195_dsclotacao);
-        $clflpgo10->si195_indsalaaula 						= ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
+        $clflpgo10->si195_dsclotacao 						= $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $this->convert_accented_characters($oDados10->si195_dsclotacao);
+        $clflpgo10->si195_indsalaaula 						= $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
         $clflpgo10->si195_vlrcargahorariasemanal 		    = ($oDados10->si195_sglcargo != 'APO') ? $oDados10->si195_vlrcargahorariasemanal : '';
-        $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
+        $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_indsituacaoservidorpensionista == 'O' ? '' : $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
         $clflpgo10->si195_datcomissionadoexclusao           = $oDados10->si195_datexclusao;
@@ -842,7 +842,7 @@ WHERE (r59_anousu,
 
          $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
-         $clflpgo11 = new cl_flpgo112020();
+         $clflpgo11 = new cl_flpgo112021();
          $clflpgo11->si196_reg10                          = $clflpgo10->si195_sequencial;
          $clflpgo11->si196_tiporegistro                   = $oDados11->si196_tiporegistro;
          $clflpgo11->si196_indtipopagamento               = $oDados11->si196_indtipopagamento;
@@ -1141,7 +1141,7 @@ WHERE (r59_anousu,
 
        $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 
-       $clflpgo12 = new cl_flpgo122020();
+       $clflpgo12 = new cl_flpgo122021();
 
        $clflpgo12->si197_reg10                   = $clflpgo10->si195_sequencial;
        $clflpgo12->si197_tiporegistro            = $oDados12->si197_tiporegistro;
