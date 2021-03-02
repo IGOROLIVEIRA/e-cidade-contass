@@ -43,11 +43,29 @@ $db_botao = false;
 if (isset($alterar)) {
   $sqlerro = false;
   db_inicio_transacao();
-  $clbensguarda->alterar($t21_codigo);
-  if ($clbensguarda->erro_status == 0) {
-    $sqlerro = true;
+
+  if(!$t21_cpf){
+      $sqlerro = true;
+      $erro_msg = 'Campo CPF não Informado. Verifique!';
+      $clbensguarda->erro_campo = 't21_cpf';
   }
-  $erro_msg = $clbensguarda->erro_msg;
+
+  if(!$t21_representante){
+      $sqlerro = true;
+      $erro_msg = 'Campo Representante não Informado. Verifique!';
+      $clbensguarda->erro_campo = 't21_representante';
+  }
+
+  if(!$sqlerro){
+      $clbensguarda->t21_cpf = str_replace('-', '', str_replace('.', '', $t21_cpf));
+      $clbensguarda->alterar($t21_codigo);
+  }
+
+  if ($clbensguarda->erro_status == 0) {
+      $sqlerro = true;
+      $erro_msg = $clbensguarda->erro_msg;
+  }
+  
   db_fim_transacao($sqlerro);
   $db_opcao = 2;
   $db_botao = true;
@@ -97,6 +115,7 @@ if (isset($chavepesquisa)) {
       function js_db_libera(){
          parent.document.formaba.bensguardaitem.disabled=false;
          top.corpo.iframe_bensguardaitem.location.href='pat1_bensguardaitem001.php?t22_bensguarda=" . @$t21_codigo . "';
+         js_aplicaMascara(document.form1.t21_cpf);
      ";
   if (isset($liberaaba)) {
     echo "  parent.mo_camada('bensguardaitem');";

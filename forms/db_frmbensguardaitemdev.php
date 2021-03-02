@@ -104,6 +104,17 @@ function js_submit_form() {
          type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Devolver":"Excluir"))?>" 
          <?=($db_botao==false?"disabled":"")?> Onclick='return js_submit_form();' /> 
   <input type="button" value="Imprimir" onClick="js_imprimir();" />
+  <?php
+    
+    $sSqlTermo = "SELECT t59_termodeguarda from cfpatriinstituicao where t59_instituicao = " . db_getsession('DB_instit');
+    $rsTermo = db_query($sSqlTermo);
+    $iTermo = db_utils::fieldsMemory($rsTermo, 0)->t59_termodeguarda;
+
+    if($iTermo == 'f'){
+        db_select('modelo', array(0 => 'Modelo 1'), $db_opcao, '');
+    }
+  
+  ?>
   <table>
     <tr>
       <td valign="top"  align="center">  
@@ -130,11 +141,21 @@ function js_submit_form() {
  */
 function js_imprimir() {
 
-  var sUrl  = 'pat2_reltermoguarda001.php?';
-      sUrl += 'iTermo='+$F('t22_bensguarda');
-      sUrl += '&devolucao=true';
+  let sUrl  = '';
+  let iTermo = "<?=$iTermo?>";
+  let codigo = "<?=$t21_codigo?>";
 
-  js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+  if(iTermo == 'f'){
+      sUrl = "pat2_reltermoguardamodelodevolucao.php?iTermo="+codigo;
+      let janela = window.open(sUrl, 'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
+	      janela.moveTo(0,0);
+  }else{
+      sUrl  = 'pat2_reltermoguarda001.php?';
+      sUrl += 'iTermo='+codigo;
+      sUrl += '&devolucao=true';
+      js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+  }
+
 }
 
 function js_pesquisa() {

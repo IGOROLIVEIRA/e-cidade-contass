@@ -151,7 +151,16 @@ $iddepart = db_getsession("DB_coddepto");
   <input type="button" value="Imprimir" onClick="js_imprimir();" 
          <?=(isset($opcao_imp) && $opcao_imp != "" ? "" : "disabled") ?> />
   <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" 
-         <?=($db_opcao == 1 || isset($db_opcaoal) ? "style='visibility:hidden;'" : "") ?> />
+         <?=($db_opcao == 1 || isset($db_opcaoal) ? "style='display:none;'" : "") ?> />
+    <?php
+    $sSqlTermo = "SELECT t59_termodeguarda from cfpatriinstituicao where t59_instituicao = " . db_getsession('DB_instit');
+    $rsTermo = db_query($sSqlTermo);
+    $iTermo = db_utils::fieldsMemory($rsTermo, 0)->t59_termodeguarda;
+
+    if($iTermo == 'f'){
+        db_select('modelo', array(0 => 'Modelo 1'), $db_opcao, '');
+    }
+    ?>
   <br />
   <table>
    <tr>
@@ -177,12 +186,25 @@ $iddepart = db_getsession("DB_coddepto");
  * 
  */
 function js_imprimir() {
+    let sUrl = '';
+    let termoguarda = "<?=$iTermo?>";
 
-  var sUrl  = 'pat2_reltermoguarda001.php?';
-      sUrl += 'iTermo='+$F('t22_bensguarda');
-
-  js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+    if(termoguarda == 't'){
+        sUrl  = 'pat2_reltermoguarda001.php?';
+    }else{
+        sUrl = 'pat2_reltermoguardamodelo.php?';
+    }
+   
+    sUrl += 'iTermo='+document.getElementById('t22_bensguarda').value;
+    
+    if(termoguarda == 't'){
+        js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+    }else{
+        let janela = window.open(sUrl, 'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
+	      janela.moveTo(0,0);
+    }
 }
+
 function js_cancelar() {
   
   var opcao = document.createElement("input");
