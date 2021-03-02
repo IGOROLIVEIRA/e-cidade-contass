@@ -2,9 +2,9 @@
 
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_terem102020_classe.php");
+require_once ("classes/db_terem102021_classe.php");
 require_once ("classes/db_tetoremuneratorio_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarTEREM.model.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarTEREM.model.php");
 
 /**
  * Dados Complementares Sicom Acompanhamento Mensal
@@ -71,8 +71,8 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
         $CNPJ = db_utils::fieldsMemory($rsResult, 0)->cnpjmunicipio;
 
-        $clterem10 = new cl_terem102020();
-        $clterem20 = new cl_terem202020();
+        $clterem10 = new cl_terem102021();
+        $clterem20 = new cl_terem202021();
 
         db_inicio_transacao();
 
@@ -118,7 +118,7 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
-            $clterem10 = new cl_terem102020();
+            $clterem10 = new cl_terem102021();
 
             $clterem10->si194_tiporegistro          = 10;
 
@@ -178,7 +178,7 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
-            $clterem20 = new cl_terem202020();
+            $clterem20 = new cl_terem202021();
 
             $clterem20->si196_tiporegistro          = 20;
             $clterem20->si196_vlrparateto           = $oDados->te01_valor;
