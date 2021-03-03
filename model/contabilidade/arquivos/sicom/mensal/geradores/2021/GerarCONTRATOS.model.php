@@ -188,7 +188,7 @@ class GerarCONTRATOS extends GerarAM {
             $aCSVCONTRATOS13['si86_tipodocumento']         =   str_pad($aCONTRATOS13['si86_tipodocumento'], 1, "0", STR_PAD_LEFT);
             $aCSVCONTRATOS13['si86_nrodocumento']          =   substr($aCONTRATOS13['si86_nrodocumento'], 0, 14);
             $aCSVCONTRATOS13['si86_tipodocrepresentante']  =   substr($aCONTRATOS13['si86_tipodocrepresentante'], 0, 1);
-            $aCSVCONTRATOS13['si86_nrodocrepresentantelegal'] =   str_pad($aCONTRATOS13['si86_nrodocrepresentantelegal'], 14, "0", STR_PAD_LEFT);
+            $aCSVCONTRATOS13['si86_nrodocrepresentantelegal'] =   substr($aCONTRATOS13['si86_nrodocrepresentantelegal'], 0, 14);
 
             $this->sLinha = $aCSVCONTRATOS13;
             $this->adicionaLinha();
