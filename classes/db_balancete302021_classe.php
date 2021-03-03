@@ -31,12 +31,13 @@ class cl_balancete302021
   var $si242_naturezadespesa = 0;
   var $si242_subelemento = null;
   var $si242_codfontrecursos = 0;
-  var $si242_saldoinicialcd = 0;
-  var $si242_naturezasaldoinicialcd = null;
-  var $si242_totaldebitoscd = 0;
-  var $si242_totalcreditoscd = 0;
-  var $si242_saldofinalcd = 0;
-  var $si242_naturezasaldofinalcd = null;
+  var $si242_tipodespesarpps = 0;
+  var $si242_saldoinicialcde = 0;
+  var $si242_naturezasaldoinicialcde = null;
+  var $si242_totaldebitoscde = 0;
+  var $si242_totalcreditoscde = 0;
+  var $si242_saldofinalcde = 0;
+  var $si242_naturezasaldofinalcde = null;
   var $si242_mes = 0;
   var $si242_instit = 0;
   var $si242_reg10 = null;
@@ -56,12 +57,13 @@ class cl_balancete302021
                  si242_naturezadespesa = int8 = si242_naturezadespesa 
                  si242_subelemento = varchar(2) = si242_subelemento 
                  si242_codfontrecursos = int8 = si242_codfontrecursos 
-                 si242_saldoinicialcd = float8 = si242_saldoinicialcd 
-                 si242_naturezasaldoinicialcd = varchar(1) = si242_naturezasaldoinicialcd 
-                 si242_totaldebitoscd = float8 = si242_totaldebitoscd 
-                 si242_totalcreditoscd = float8 = si242_totalcreditoscd 
-                 si242_saldofinalcd = float8 = si242_saldofinalcd 
-                 si242_naturezasaldofinalcd = varchar(1) = si242_naturezasaldofinalcd 
+                 si242_tipodespesarpps = int4 = si242_tipodespesarpps
+                 si242_saldoinicialcde = float8 = si242_saldoinicialcde 
+                 si242_naturezasaldoinicialcde = varchar(1) = si242_naturezasaldoinicialcde 
+                 si242_totaldebitoscde = float8 = si242_totaldebitoscde 
+                 si242_totalcreditoscde = float8 = si242_totalcreditoscde 
+                 si242_saldofinalcde = float8 = si242_saldofinalcde 
+                 si242_naturezasaldofinalcde = varchar(1) = si242_naturezasaldofinalcde 
                  si242_mes = int8 = si242_mes 
                  si242_instit = int8 = si242_instit 
                  ";
@@ -103,12 +105,13 @@ class cl_balancete302021
       $this->si242_naturezadespesa = ($this->si242_naturezadespesa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_naturezadespesa"] : $this->si242_naturezadespesa);
       $this->si242_subelemento = ($this->si242_subelemento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_subelemento"] : $this->si242_subelemento);
       $this->si242_codfontrecursos = ($this->si242_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_codfontrecursos"] : $this->si242_codfontrecursos);
-      $this->si242_saldoinicialcd = ($this->si242_saldoinicialcd == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_saldoinicialcd"] : $this->si242_saldoinicialcd);
-      $this->si242_naturezasaldoinicialcd = ($this->si242_naturezasaldoinicialcd == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldoinicialcd"] : $this->si242_naturezasaldoinicialcd);
-      $this->si242_totaldebitoscd = ($this->si242_totaldebitoscd == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_totaldebitoscd"] : $this->si242_totaldebitoscd);
-      $this->si242_totalcreditoscd = ($this->si242_totalcreditoscd == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_totalcreditoscd"] : $this->si242_totalcreditoscd);
-      $this->si242_saldofinalcd = ($this->si242_saldofinalcd == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_saldofinalcd"] : $this->si242_saldofinalcd);
-      $this->si242_naturezasaldofinalcd = ($this->si242_naturezasaldofinalcd == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldofinalcd"] : $this->si242_naturezasaldofinalcd);
+      $this->si242_tipodespesarpps = ($this->si242_tipodespesarpps == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_tipodespesarpps"] : $this->si242_tipodespesarpps);
+      $this->si242_saldoinicialcde = ($this->si242_saldoinicialcde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_saldoinicialcde"] : $this->si242_saldoinicialcde);
+      $this->si242_naturezasaldoinicialcde = ($this->si242_naturezasaldoinicialcde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldoinicialcde"] : $this->si242_naturezasaldoinicialcde);
+      $this->si242_totaldebitoscde = ($this->si242_totaldebitoscde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_totaldebitoscde"] : $this->si242_totaldebitoscde);
+      $this->si242_totalcreditoscde = ($this->si242_totalcreditoscde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_totalcreditoscde"] : $this->si242_totalcreditoscde);
+      $this->si242_saldofinalcde = ($this->si242_saldofinalcde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_saldofinalcde"] : $this->si242_saldofinalcde);
+      $this->si242_naturezasaldofinalcde = ($this->si242_naturezasaldofinalcde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldofinalcde"] : $this->si242_naturezasaldofinalcde);
       $this->si242_mes = ($this->si242_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_mes"] : $this->si242_mes);
       $this->si242_instit = ($this->si242_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_instit"] : $this->si242_instit);
     } else {
@@ -233,9 +236,12 @@ class cl_balancete302021
       
       return false;
     }
-    if ($this->si242_saldoinicialcd == null) {
-      $this->erro_sql = " Campo si242_saldoinicialcd não informado.";
-      $this->erro_campo = "si242_saldoinicialcd";
+    if ($this->si242_tipodespesarpps == null) {
+      $this->si242_tipodespesarpps = 0;
+    }
+    if ($this->si242_saldoinicialcde == null) {
+      $this->erro_sql = " Campo si242_saldoinicialcde não informado.";
+      $this->erro_campo = "si242_saldoinicialcde";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -243,9 +249,9 @@ class cl_balancete302021
       
       return false;
     }
-    if ($this->si242_naturezasaldoinicialcd == null) {
-      $this->erro_sql = " Campo si242_naturezasaldoinicialcd não informado.";
-      $this->erro_campo = "si242_naturezasaldoinicialcd";
+    if ($this->si242_naturezasaldoinicialcde == null) {
+      $this->erro_sql = " Campo si242_naturezasaldoinicialcde não informado.";
+      $this->erro_campo = "si242_naturezasaldoinicialcde";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -253,9 +259,9 @@ class cl_balancete302021
       
       return false;
     }
-    if ($this->si242_totaldebitoscd == null) {
-      $this->erro_sql = " Campo si242_totaldebitoscd não informado.";
-      $this->erro_campo = "si242_totaldebitoscd";
+    if ($this->si242_totaldebitoscde == null) {
+      $this->erro_sql = " Campo si242_totaldebitoscde não informado.";
+      $this->erro_campo = "si242_totaldebitoscde";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -263,9 +269,9 @@ class cl_balancete302021
       
       return false;
     }
-    if ($this->si242_totalcreditoscd == null) {
-      $this->erro_sql = " Campo si242_totalcreditoscd não informado.";
-      $this->erro_campo = "si242_totalcreditoscd";
+    if ($this->si242_totalcreditoscde == null) {
+      $this->erro_sql = " Campo si242_totalcreditoscde não informado.";
+      $this->erro_campo = "si242_totalcreditoscde";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -273,9 +279,9 @@ class cl_balancete302021
       
       return false;
     }
-    if ($this->si242_saldofinalcd == null) {
-      $this->erro_sql = " Campo si242_saldofinalcd não informado.";
-      $this->erro_campo = "si242_saldofinalcd";
+    if ($this->si242_saldofinalcde == null) {
+      $this->erro_sql = " Campo si242_saldofinalcde não informado.";
+      $this->erro_campo = "si242_saldofinalcde";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -283,9 +289,9 @@ class cl_balancete302021
       
       return false;
     }
-    if ($this->si242_naturezasaldofinalcd == null) {
-      $this->erro_sql = " Campo si242_naturezasaldofinalcd não informado.";
-      $this->erro_campo = "si242_naturezasaldofinalcd";
+    if ($this->si242_naturezasaldofinalcde == null) {
+      $this->erro_sql = " Campo si242_naturezasaldofinalcde não informado.";
+      $this->erro_campo = "si242_naturezasaldofinalcde";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -365,12 +371,13 @@ class cl_balancete302021
                                       ,si242_naturezadespesa 
                                       ,si242_subelemento 
                                       ,si242_codfontrecursos 
-                                      ,si242_saldoinicialcd 
-                                      ,si242_naturezasaldoinicialcd 
-                                      ,si242_totaldebitoscd 
-                                      ,si242_totalcreditoscd 
-                                      ,si242_saldofinalcd 
-                                      ,si242_naturezasaldofinalcd 
+                                      ,si242_tipodespesarpps
+                                      ,si242_saldoinicialcde 
+                                      ,si242_naturezasaldoinicialcde 
+                                      ,si242_totaldebitoscde 
+                                      ,si242_totalcreditoscde 
+                                      ,si242_saldofinalcde 
+                                      ,si242_naturezasaldofinalcde 
                                       ,si242_mes 
                                       ,si242_instit
                                       ,si242_reg10
@@ -390,12 +397,13 @@ class cl_balancete302021
                                ,$this->si242_naturezadespesa 
                                ,'$this->si242_subelemento' 
                                ,$this->si242_codfontrecursos 
-                               ,$this->si242_saldoinicialcd 
-                               ,'$this->si242_naturezasaldoinicialcd' 
-                               ,$this->si242_totaldebitoscd 
-                               ,$this->si242_totalcreditoscd 
-                               ,$this->si242_saldofinalcd 
-                               ,'$this->si242_naturezasaldofinalcd' 
+                               ,$this->si242_tipodespesarpps
+                               ,$this->si242_saldoinicialcde 
+                               ,'$this->si242_naturezasaldoinicialcde' 
+                               ,$this->si242_totaldebitoscde 
+                               ,$this->si242_totalcreditoscde 
+                               ,$this->si242_saldofinalcde 
+                               ,'$this->si242_naturezasaldofinalcde' 
                                ,$this->si242_mes 
                                ,$this->si242_instit
                                ,$this->si242_reg10
@@ -632,12 +640,12 @@ class cl_balancete302021
         return false;
       }
     }
-    if (trim($this->si242_saldoinicialcd) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_saldoinicialcd"])) {
-      $sql .= $virgula . " si242_saldoinicialcd = $this->si242_saldoinicialcd ";
+    if (trim($this->si242_tipodespesarpps) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_tipodespesarpps"])) {
+      $sql .= $virgula . " si242_tipodespesarpps = $this->si242_tipodespesarpps ";
       $virgula = ",";
-      if (trim($this->si242_saldoinicialcd) == null) {
-        $this->erro_sql = " Campo si242_saldoinicialcd não informado.";
-        $this->erro_campo = "si242_saldoinicialcd";
+      if (trim($this->si242_tipodespesarpps) == null) {
+        $this->erro_sql = " Campo si242_tipodespesarpps não informado.";
+        $this->erro_campo = "si242_tipodespesarpps";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -646,12 +654,12 @@ class cl_balancete302021
         return false;
       }
     }
-    if (trim($this->si242_naturezasaldoinicialcd) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldoinicialcd"])) {
-      $sql .= $virgula . " si242_naturezasaldoinicialcd = '$this->si242_naturezasaldoinicialcd' ";
+    if (trim($this->si242_saldoinicialcde) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_saldoinicialcde"])) {
+      $sql .= $virgula . " si242_saldoinicialcde = $this->si242_saldoinicialcde ";
       $virgula = ",";
-      if (trim($this->si242_naturezasaldoinicialcd) == null) {
-        $this->erro_sql = " Campo si242_naturezasaldoinicialcd não informado.";
-        $this->erro_campo = "si242_naturezasaldoinicialcd";
+      if (trim($this->si242_saldoinicialcde) == null) {
+        $this->erro_sql = " Campo si242_saldoinicialcde não informado.";
+        $this->erro_campo = "si242_saldoinicialcde";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -660,12 +668,12 @@ class cl_balancete302021
         return false;
       }
     }
-    if (trim($this->si242_totaldebitoscd) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_totaldebitoscd"])) {
-      $sql .= $virgula . " si242_totaldebitoscd = $this->si242_totaldebitoscd ";
+    if (trim($this->si242_naturezasaldoinicialcde) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldoinicialcde"])) {
+      $sql .= $virgula . " si242_naturezasaldoinicialcde = '$this->si242_naturezasaldoinicialcde' ";
       $virgula = ",";
-      if (trim($this->si242_totaldebitoscd) == null) {
-        $this->erro_sql = " Campo si242_totaldebitoscd não informado.";
-        $this->erro_campo = "si242_totaldebitoscd";
+      if (trim($this->si242_naturezasaldoinicialcde) == null) {
+        $this->erro_sql = " Campo si242_naturezasaldoinicialcde não informado.";
+        $this->erro_campo = "si242_naturezasaldoinicialcde";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -674,12 +682,12 @@ class cl_balancete302021
         return false;
       }
     }
-    if (trim($this->si242_totalcreditoscd) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_totalcreditoscd"])) {
-      $sql .= $virgula . " si242_totalcreditoscd = $this->si242_totalcreditoscd ";
+    if (trim($this->si242_totaldebitoscde) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_totaldebitoscde"])) {
+      $sql .= $virgula . " si242_totaldebitoscde = $this->si242_totaldebitoscde ";
       $virgula = ",";
-      if (trim($this->si242_totalcreditoscd) == null) {
-        $this->erro_sql = " Campo si242_totalcreditoscd não informado.";
-        $this->erro_campo = "si242_totalcreditoscd";
+      if (trim($this->si242_totaldebitoscde) == null) {
+        $this->erro_sql = " Campo si242_totaldebitoscde não informado.";
+        $this->erro_campo = "si242_totaldebitoscde";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -688,12 +696,12 @@ class cl_balancete302021
         return false;
       }
     }
-    if (trim($this->si242_saldofinalcd) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_saldofinalcd"])) {
-      $sql .= $virgula . " si242_saldofinalcd = $this->si242_saldofinalcd ";
+    if (trim($this->si242_totalcreditoscde) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_totalcreditoscde"])) {
+      $sql .= $virgula . " si242_totalcreditoscde = $this->si242_totalcreditoscde ";
       $virgula = ",";
-      if (trim($this->si242_saldofinalcd) == null) {
-        $this->erro_sql = " Campo si242_saldofinalcd não informado.";
-        $this->erro_campo = "si242_saldofinalcd";
+      if (trim($this->si242_totalcreditoscde) == null) {
+        $this->erro_sql = " Campo si242_totalcreditoscde não informado.";
+        $this->erro_campo = "si242_totalcreditoscde";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -702,12 +710,26 @@ class cl_balancete302021
         return false;
       }
     }
-    if (trim($this->si242_naturezasaldofinalcd) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldofinalcd"])) {
-      $sql .= $virgula . " si242_naturezasaldofinalcd = '$this->si242_naturezasaldofinalcd' ";
+    if (trim($this->si242_saldofinalcde) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_saldofinalcde"])) {
+      $sql .= $virgula . " si242_saldofinalcde = $this->si242_saldofinalcde ";
       $virgula = ",";
-      if (trim($this->si242_naturezasaldofinalcd) == null) {
-        $this->erro_sql = " Campo si242_naturezasaldofinalcd não informado.";
-        $this->erro_campo = "si242_naturezasaldofinalcd";
+      if (trim($this->si242_saldofinalcde) == null) {
+        $this->erro_sql = " Campo si242_saldofinalcde não informado.";
+        $this->erro_campo = "si242_saldofinalcde";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+        
+        return false;
+      }
+    }
+    if (trim($this->si242_naturezasaldofinalcde) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldofinalcde"])) {
+      $sql .= $virgula . " si242_naturezasaldofinalcde = '$this->si242_naturezasaldofinalcde' ";
+      $virgula = ",";
+      if (trim($this->si242_naturezasaldofinalcde) == null) {
+        $this->erro_sql = " Campo si242_naturezasaldofinalcde não informado.";
+        $this->erro_campo = "si242_naturezasaldofinalcde";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
