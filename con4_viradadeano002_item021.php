@@ -1168,6 +1168,7 @@ if ($sqlerro == false) {
 	      $oDaoIssConfiguracaoGrupoServico->q136_tipotributacao  = $oIssConfiguracaoGrupoServico->q136_tipotributacao ;
 	      $oDaoIssConfiguracaoGrupoServico->q136_valor           = $oIssConfiguracaoGrupoServico->q136_valor          ;
 	      $oDaoIssConfiguracaoGrupoServico->q136_localpagamento  = $oIssConfiguracaoGrupoServico->q136_localpagamento ;
+	      $oDaoIssConfiguracaoGrupoServico->q136_valor_reduzido  = $oIssConfiguracaoGrupoServico->q136_valor_reduzido ;
 	      $oDaoIssConfiguracaoGrupoServico->incluir(null);
 
 	      if ($oDaoIssConfiguracaoGrupoServico->erro_status == '0') {
