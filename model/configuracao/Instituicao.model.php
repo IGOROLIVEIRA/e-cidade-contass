@@ -44,6 +44,8 @@ class Instituicao {
   const COD_CLI_PMGRAOMOGOL = 90;
   const COD_CLI_SANTAFEMINAS = 92;
   const COD_CLI_SAOJOAOMISSOES = 94;
+  const COD_CLI_NOVAPORTEIRINHA = 93;
+  
 
   /**
    * Código da Instituicao
