@@ -60,20 +60,20 @@ if($ansin == "a"){
 $head2 = "FOLHA DE PAGAMENTO (".$mes." / ".$ano.") - ".$impressao;
 $head4 = "ARQUIVO : ";
 
+$aTipoFolha = array(
+      'r14' => 'gerfsal',
+      'r48' => 'gerfcom',
+      'r20' => 'Rescisão',
+      'r35' => 'gerfs13',
+      'r22' => 'gerfadi'
+    );
+
 //$whereRESC = " rh05_seqpes is null and (r45_regist is null or  r45_regist is not null and (r45_dtreto is null or r45_dtreto > '".$ano."-".$mes."-01'))";
 $whereRESC = " rh05_seqpes is null ";
 $andwhere = " and  ";
 $aWhere   = array();
 $aWhere[] = "( rh05_seqpes is null OR EXISTS (
-SELECT r14_regist FROM gerfsal WHERE (r14_anousu,r14_mesusu,r14_regist) = ({$ano},{$mes},rh01_regist)
-UNION
-SELECT r48_regist FROM gerfcom WHERE (r48_anousu,r48_mesusu,r48_regist) = ({$ano},{$mes},rh01_regist)
-UNION
-SELECT r53_regist FROM gerffx WHERE (r53_anousu,r53_mesusu,r53_regist) = ({$ano},{$mes},rh01_regist)
-UNION
-SELECT r35_regist FROM gerfs13 WHERE (r35_anousu,r35_mesusu,r35_regist) = ({$ano},{$mes},rh01_regist)
-UNION
-SELECT r31_regist FROM gerffer WHERE (r31_anousu,r31_mesusu,r31_regist) = ({$ano},{$mes},rh01_regist)
+SELECT {$folha}_regist FROM {$aTipoFolha[$folha]} WHERE ({$folha}_anousu,{$folha}_mesusu,{$folha}_regist) = ({$ano},{$mes},rh01_regist)
 ) )";
 
 

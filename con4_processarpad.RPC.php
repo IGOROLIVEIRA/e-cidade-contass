@@ -667,7 +667,8 @@ case "processarBalancete" :
 
     case "processarPCA" :
 
-    $sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+    //$sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+    $sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit")." where codigo = ".db_getsession("DB_instit");
     $rsInst = db_query($sSql);
     $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
     $iTipoInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
@@ -683,17 +684,26 @@ case "processarBalancete" :
       /*
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
        */
-
+      //print_r($oParam->arquivos);
       foreach ($oParam->arquivos as $sArquivo) {
-
 
         if (file_exists("{$sArquivo}_{$iAnoReferencia}.pdf")) {
 
         	$oArquivoCsv          = new stdClass();
-          $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.pdf";
-          $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.pdf";
-          $aArrayArquivos[] = $oArquivoCsv;
+        	$oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.pdf";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.pdf";
+            $aArrayArquivos[] = $oArquivoCsv;
 
+        }elseif(file_exists("{$sArquivo}_{$iAnoReferencia}.xls")){
+            $oArquivoCsv          = new stdClass();
+            $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.xls";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.xls";
+            $aArrayArquivos[] = $oArquivoCsv;
+        }elseif(file_exists("{$sArquivo}_{$iAnoReferencia}.xlsx")){
+            $oArquivoCsv          = new stdClass();
+            $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.xlsx";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.xlsx";
+            $aArrayArquivos[] = $oArquivoCsv;
         } else {
 
           if($iTipoInst == 5 && $sArquivo == 'DRAA') {

@@ -1,10 +1,10 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_afast102020_classe.php");
-require_once ("classes/db_afast202020_classe.php");
-require_once ("classes/db_afast302020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarAFAST.model.php");
+require_once ("classes/db_afast102021_classe.php");
+require_once ("classes/db_afast202021_classe.php");
+require_once ("classes/db_afast302021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarAFAST.model.php");
 
 
 /**
@@ -70,9 +70,9 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clafast = new cl_afast102020();
-        $clafast20 = new cl_afast202020();
-        $clafast30 = new cl_afast302020();
+        $clafast = new cl_afast102021();
+        $clafast20 = new cl_afast202021();
+        $clafast30 = new cl_afast302021();
 
         /**
          * inserir informacoes no banco de dados
@@ -292,7 +292,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
             foreach ($aDadosAfast as $oDadosAfast) {
              
-                $clafast = new cl_afast102020();
+                $clafast = new cl_afast102021();
 
                 $clafast->si199_tiporegistro = 10;
                 $clafast->si199_codvinculopessoa = $oDadosAfast->si199_codvinculopessoa;
@@ -375,7 +375,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
                 if ( pg_num_rows($rsResult20) > 0 ) {
 
-                    $clafast = new cl_afast202020();
+                    $clafast = new cl_afast202021();
 
                     $clafast->si200_tiporegistro = 20;
                     $clafast->si200_codvinculopessoa = $oDadosAfast20->si199_codvinculopessoa;
@@ -445,7 +445,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
                 $aRegistros30[] = $oDados->si201_codvinculopessoa;
                 
-                $clafast = new cl_afast302020();
+                $clafast = new cl_afast302021();
 
                 $clafast->si201_tiporegistro = 30;
                 $clafast->si201_codvinculopessoa = $oDados->si201_codvinculopessoa;
