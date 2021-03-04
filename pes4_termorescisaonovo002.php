@@ -594,6 +594,8 @@ for($iCont = 0; $iCont < $oDaoRhpesrescisao->numrows; $iCont++) {
     $oPdf->cell(34,$alt,"VALOR LÍQUIDO",1,0,"L",1);
     $oPdf->cell(30,$alt,db_formatar($aValoresRescisao['totalProventos']-$aValoresRescisao['totalDescontos'] , 'f'),1,1,"R",1);
 
+    addFooter($oPdf);
+
 }
 
 $oPdf->Output();
@@ -613,6 +615,19 @@ function addField($oPdf, $oDados) {
 function addHeader($oPdf, $text) {
 	$oPdf->SetFont('arial','b',7);
     $oPdf->cell(192,4,$text,1,1,"C",1);
+    $oPdf->SetFont('arial','',7);
+}
+
+function addFooter($oPdf) {
+    $oPdf->Ln();
+    $oPdf->SetFont('arial','b',7);
+    $oPdf->cell(80,4,"","B",0,"C",0);
+    $oPdf->cell(20,4,"",0,0,"C",0);
+    $oPdf->cell(80,4,"","B",1,"C",0);
+
+    $oPdf->cell(80,4,"Assinatura Empregado",0,0,"C",0);
+    $oPdf->cell(20,4,"",0,0,"C",0);
+    $oPdf->cell(80,4,"Assinatura Empregador/Preposto",0,1,"C",0);
     $oPdf->SetFont('arial','',7);
 }
 
