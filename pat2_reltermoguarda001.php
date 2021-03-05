@@ -305,7 +305,7 @@ function js_imprime() {
         sUrl     += '&sFuncao='+$F('funcao');
     }else{
         if(!document.form1.modelo.selectedIndex){
-            alert('Informe um modelo!');
+            alert('Nenhum modelo selecionado. Verifique!');
             return;
         }
 
