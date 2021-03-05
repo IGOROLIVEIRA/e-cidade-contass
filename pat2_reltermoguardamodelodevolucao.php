@@ -5,21 +5,18 @@ require("libs/db_utils.php");
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_conecta.php");
 require_once ("dbforms/db_funcoes.php");
-require_once("classes/db_bensguardaitem_classe.php");
-
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+require_once("classes/db_bensguardaitemdev_classe.php");
 
 $oGet = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
-$cl_bensguardaitem = new cl_bensguardaitem;
+$cl_bensguardaitemdev = new cl_bensguardaitemdev;
 
 $sCampos = "t22_bem, t52_ident, t52_descr, t70_descr as situacao, t22_obs, t21_representante, t21_cpf, ";
-$sCampos .= "t21_data, a.z01_nome as responsavel, a.z01_numcgm as numcgm, t20_descr as tipoguarda, t21_obs";
-$sSqlBens = $cl_bensguardaitem->sql_query_relatorio('', $sCampos, '', 't22_bensguarda = '. $oGet->iTermo);
-$rsBens = $cl_bensguardaitem->sql_record($sSqlBens);
+$sCampos .= "t21_data, z01_nome as responsavel, z01_numcgm as numcgm, t20_descr as tipoguarda, t21_obs";
+$sSqlBens = $cl_bensguardaitemdev->sql_query_relatorio('', $sCampos, '', 't22_bensguarda = '. $oGet->iTermo);
+$rsBens = $cl_bensguardaitemdev->sql_record($sSqlBens);
 
 $mPDF = new mpdf('', 'A4', 0, '', 10, 10, 30, 10, 5, 5);
 
@@ -96,7 +93,7 @@ $oItemPosicao1 = db_utils::fieldsMemory($rsBens, 0);
             color: #000;
             direction: ltr;
             font-family: 'Calibri', Arial;
-            font-size: 10pt;
+            font-size: 8pt;
         }
 
         .div__assinaturas{
@@ -166,7 +163,7 @@ $oItemPosicao1 = db_utils::fieldsMemory($rsBens, 0);
             <tbody>
                 <h3>Listagem dos Bens</h3>
                 <?php  
-                for($count = 0; $count < $cl_bensguardaitem->numrows; $count++) {
+                for($count = 0; $count < $cl_bensguardaitemdev->numrows; $count++) {
                     $oItem = db_utils::fieldsMemory($rsBens, $count);
                 ?> 
                     <tr>

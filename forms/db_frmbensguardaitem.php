@@ -158,7 +158,7 @@ $iddepart = db_getsession("DB_coddepto");
     $iTermo = db_utils::fieldsMemory($rsTermo, 0)->t59_termodeguarda;
 
     if($iTermo == 'f'){
-        db_select('modelo', array(0 => 'Modelo 1'), $db_opcao, '');
+        db_select('modelo', array(0 => 'Selecione', 1 => 'Modelo 1'), $db_opcao, '');
     }
     ?>
   <br />
@@ -182,9 +182,9 @@ $iddepart = db_getsession("DB_coddepto");
 </form>
 
 <script type="text/javascript">
-/**
- * 
- */
+
+document.getElementById('modelo').selectedIndex = 1;
+
 function js_imprimir() {
     let sUrl = '';
     let termoguarda = "<?=$iTermo?>";
@@ -200,6 +200,10 @@ function js_imprimir() {
     if(termoguarda == 't'){
         js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
     }else{
+        if(!document.form1.modelo.selectedIndex){
+            alert('Informe um modelo!');
+            return;
+        }
         let janela = window.open(sUrl, 'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
 	      janela.moveTo(0,0);
     }

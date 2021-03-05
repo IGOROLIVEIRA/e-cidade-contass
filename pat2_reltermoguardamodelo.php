@@ -7,9 +7,6 @@ require_once ("libs/db_conecta.php");
 require_once ("dbforms/db_funcoes.php");
 require_once("classes/db_bensguardaitem_classe.php");
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
-
 $oGet = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
@@ -26,7 +23,7 @@ $mPDF = new mpdf('', 'A4', 0, '', 10, 10, 30, 10, 5, 5);
 $header = <<<HEADER
 <header>
   <div style="width: 100%; font-family:sans-serif; padding-top: 18px;">
-    <div style="text-align: center; width: 100%; font-size: 16pt;">
+    <div style="text-align: center; width: 100%; font-size: 16pt;border-top: 1px solid #000; border-bottom: 1px solid #000;">
       <span style="font-weight: bold;">Termo de Guarda - Nº $oGet->iTermo </span><br>
     </div>
   </div>
@@ -96,7 +93,7 @@ $oItemPosicao1 = db_utils::fieldsMemory($rsBens, 0);
             color: #000;
             direction: ltr;
             font-family: 'Calibri', Arial;
-            font-size: 10pt;
+            font-size: 8pt;
             padding: 0px 3px 0px 3px;
             text-align: center;
         }

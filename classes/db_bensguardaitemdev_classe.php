@@ -473,5 +473,46 @@ class cl_bensguardaitemdev {
      }
      return $sql;
   }
+  function sql_query_relatorio ( $t23_guardaitem=null,$campos="*",$ordem=null,$dbwhere=""){ 
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from bensguardaitemdev ";
+    $sql .= "      inner join db_usuarios on db_usuarios.id_usuario = bensguardaitemdev.t23_usuario";
+    $sql .= "      inner join situabens on situabens.t70_situac = bensguardaitemdev.t23_situacao";
+    $sql .= "      inner join bensguardaitem on bensguardaitem.t22_codigo = bensguardaitemdev.t23_guardaitem";
+    $sql .= "      inner join bens as a on a.t52_bem = bensguardaitem.t22_bem";
+    $sql .= "      inner join bensguarda on t21_codigo = bensguardaitem.t22_bensguarda";
+    $sql .= "      inner join cgm ON z01_numcgm = bensguarda.t21_numcgm";
+    $sql .= "      inner join histbem ON t56_histbem = (SELECT max(t56_histbem) FROM histbem WHERE t56_codbem = t52_bem)";
+    $sql .= "      inner join benstipoguarda ON t20_codigo = t21_tipoguarda";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($t23_guardaitem!=null ){
+        $sql2 .= " where bensguardaitemdev.t23_guardaitem = $t23_guardaitem "; 
+      } 
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+ }
 }
 ?>
