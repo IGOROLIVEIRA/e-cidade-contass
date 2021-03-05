@@ -203,15 +203,19 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                 AND (
                                         (DATE_PART('YEAR',r45_dtafas) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',r45_dtafas) = 01)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2020 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2019 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2018 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2017 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2016 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        or
+                                        (DATE_PART('YEAR',r45_dtafas) = 2015 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        or
+                                        (DATE_PART('YEAR',r45_dtafas) = 2014 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
                                         (DATE_PART('YEAR',r45_dtafas) = 2013 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                     )
