@@ -826,7 +826,7 @@ class ProcessoCompras {
             if (pg_numrows($result) > 0) {
                 $oSaldoDotacao = db_utils::fieldsMemory($result,0);
                 $nSaldoAcumuladoDisponivel = ($oSaldoDotacao->dot_ini+$oSaldoDotacao->suplementado_acumulado-$oSaldoDotacao->reduzido_acumulado)-$oSaldoDotacao->empenhado_acumulado+$oSaldoDotacao->anulado_acumulado-$oSaldoDotacao->reservado;
-                if ($nValorTotal > $nSaldoAcumuladoDisponivel) {
+                if (db_formatar($nValorTotal, 'f') > db_formatar($nSaldoAcumuladoDisponivel, 'f')) {
                     $nSaldoAcumuladoDisponivel = trim(db_formatar($nSaldoAcumuladoDisponivel,'f'));
                     $nValorTotal = trim(db_formatar($nValorTotal,'f'));
                     $sMsgErro = "Valor a autorizar($nValorTotal) maior que saldo($nSaldoAcumuladoDisponivel) da Dotação $oDados->dotacao na data atual(".date("d/m/Y",db_getsession("DB_datausu")).")";
