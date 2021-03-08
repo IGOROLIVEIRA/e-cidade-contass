@@ -483,7 +483,7 @@ if (count($aParametrosEmpenho) > 0) {
                     <span>
           <fieldset>
             <legend><b>Mostrar</b></legend>
-            <input type="checkbox" id='configuradas' onclick='js_showFiltro("configurada",this.checked)' />
+            <input type="checkbox" id='configuradas' checked onclick='js_showFiltro("configurada",this.checked)' />
             <label for="configuradas" style='padding:1px;border: 1px solid black; background-color:#d1f07c'>
               <b>Atualizados</b>
             </label>
@@ -491,7 +491,7 @@ if (count($aParametrosEmpenho) > 0) {
             <label for="normais" style='padding:1px;border: 1px solid black;background-color:white'>
               <b>Não Atualizados</b>
             </label>
-            <input type="checkbox" id='comMovs'  onclick='js_showFiltro("comMov",this.checked)' />
+            <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("comMov",this.checked)' />
             <label for="comMovs" style='padding:1px;border: 1px solid black;background-color:rgb(222, 184, 135)'>
               <b>Com cheque/em Arquivo</b>
             </label>
