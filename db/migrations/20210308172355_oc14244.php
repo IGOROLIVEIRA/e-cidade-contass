@@ -15,7 +15,7 @@ class Oc14244 extends PostgresMigration
 
         UPDATE db_estruturavalor SET db121_descricao = 'TRANSF. FUNDEB APLIC. MAGISTÉRIO 70' WHERE db121_estrutural = '118';
 
-        UPDATE orctiporec SET o15_descr = 'TRANSF. FUNDEB APLIC. OUTRAS DESP. 30' WHERE o15_codigo = '118';
+        UPDATE orctiporec SET o15_descr = 'TRANSF. FUNDEB APLIC. OUTRAS DESP. 30' WHERE o15_codigo = '119';
 
         UPDATE db_estruturavalor SET db121_descricao = 'TRANSF. FUNDEB APLIC. OUTRAS DESP. 30' WHERE db121_estrutural = '119';
 
