@@ -363,69 +363,84 @@ class cl_pccfeditalnum {
        }
      }
    }
-   function sql_query ( $oid = null,$campos="pccfeditalnum.oid,*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = split("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from pccfeditalnum ";
-     $sql .= "      inner join db_config  on  db_config.codigo = pccfeditalnum.l47_instit";
-     $sql2 = "";
-     if($dbwhere==""){
-       if( $oid != "" && $oid != null){
-          $sql2 = " where pccfeditalnum.oid = '$oid'";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
+   
+    function sql_query ( $sequencial = null, $campos="*", $ordem=null, $dbwhere=""){
+
+        $sql = "select ";
+
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+       
+            for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+
+        $sql .= " from pccfeditalnum ";
+        $sql .= "      inner join db_config  on  db_config.codigo = pccfeditalnum.l47_instit";
+        $sql2 = "";
+        
+        if($dbwhere==""){
+            if( $sequencial != "" && $sequencial != null){
+                $sql2 = " where pccfeditalnum.sequencial = '$sequencial'";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+
+        $sql .= $sql2;
+
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+
+        return $sql;
+
   }
-   function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = split("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from pccfeditalnum ";
-     $sql2 = "";
-     if($dbwhere==""){
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
+    function sql_query_file ( $sequencial = null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+     
+        $sql .= " from pccfeditalnum ";
+        $sql2 = "";
+
+        if($dbwhere != ""){
+          $sql2 = " where $dbwhere";
+        }
+
+        $sql .= $sql2;
+
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+            }
+        }
+      
+      return $sql;
+
   }
 
    function sql_query_numero_geral ($anousu,$instit,$campos="",$ordem=null,$dbwhere=""){

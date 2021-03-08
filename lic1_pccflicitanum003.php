@@ -75,36 +75,29 @@ if(isset($alterar)){
   }
 
   /* Tratamento do campo l20_nroedital. */
-  $clliclicita_edital = new cl_liclicita;
-  $result_geral_edital=$clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null,"max(l20_nroedital) as nroedital",null,"l20_instit=$instit and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
-  
-  if ($clliclicita_edital->numrows>0){
-    db_fieldsmemory($result_geral_edital,0,1);
-    //verifica se existe edital maior ou igual.
-    if ($l47_numero>=$nroedital){
-      $numero=$l47_numero+1;
+    $clliclicita_edital = new cl_liclicita;
+    $sSqlMaxEdital = $clliclicita_edital->sql_query_file(null, "max(l20_nroedital) as nroedital", null, "l20_instit = $instit and l20_anousu = ".db_getsession("DB_anousu"));
+    $result_geral_edital = $clliclicita_edital->sql_record($sSqlMaxEdital);
+    
+    if ($clliclicita_edital->numrows > 0){
 
-      $numero_geral=$clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null,"l20_nroedital",null,"l20_nroedital=$numero and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
-      if ($clliclicita_edital->numrows>0){
-        db_msgbox("Já existe licitação com o edital número $numero");
-        $erro_edital=true;
-      }
-    }
-
-    //verifica se existe edital menor
-    if ($l47_numero<$nroedital){
-      $numero=$l47_numero+1;
-      $numero_geral=$clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_edital",null,"l20_nroedital=$numero and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
-      if ($clliclicita->numrows==0){
-        $l20_nroedital=$l47_numero;
-      }else{
-        db_msgbox("Já existe licitação com o edital número $numero");
-        $erro_edital=true;
-      }
-    }
+        db_fieldsmemory($result_geral_edital, 0, 1);
+        //verifica se existe edital maior ou igual.
+      
+        $numero = $l47_numero+1;
+    
+        $sWhere = "l20_nroedital = $numero and l20_instit = $instit and l20_anousu = $anousu";
+        $numero_geral = $clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null, "l20_nroedital", null, $sWhere));
+   
+        if ($clliclicita_edital->numrows > 0){
+            db_msgbox("Já existe licitação com o edital número $numero");
+            $erro_edital=true;
+        }else{
+            $l20_nroedital=$l47_numero;      
+        }
   }
 
-  if (!isset($erro)){
+  if (!isset($erro) && !$erro_edital){
     db_inicio_transacao();
     $result = $clpccflicitanum->sql_record($clpccflicitanum->sql_query(null, "pccflicitanum.*, nomeinst", "l24_anousu desc", "l24_anousu = {$anousu} and l24_instit = {$instit}"));
     if($result==false || $clpccflicitanum->numrows==0){
@@ -116,48 +109,72 @@ if(isset($alterar)){
     db_fim_transacao();
   }
 
-  if(!isset($erro_edital)){
-    db_inicio_transacao();
-    $result = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query(null, "pccfeditalnum.*, nomeinst", "l47_anousu desc", "l47_anousu = {$anousu} and l47_instit = {$instit}"));
+    if(!isset($erro_edital)){
+
+        db_inicio_transacao();
+
+        $result = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query(null, "DISTINCT pccfeditalnum.*", "l47_anousu desc", "l47_anousu = {$anousu} and l47_instit = {$instit}"));
     
-    if($result==false || $clpccfeditalnum->numrows==0){
-      $clpccfeditalnum->l47_instit = $instit;
-      $clpccfeditalnum->l47_anousu = $anousu;
-      if(!$l47_numero){
-        $l47_numero .= 1;
-      }
+        if(!$result || $clpccfeditalnum->numrows==0){
+            $clpccfeditalnum->l47_instit = $instit;
+            $clpccfeditalnum->l47_anousu = $anousu;
+        
+            if(!$l47_numero){
+                $l47_numero = 1;
+            }
       
-      $clpccfeditalnum->incluir();
-    }else{
-      $clpccfeditalnum->alterar(null, "l47_anousu = {$anousu} and l47_instit = {$instit}");
+            $clpccfeditalnum->incluir();
+
+        }else{
+
+            $sWhere =  "l47_anousu = {$anousu} and l47_instit = {$instit} and l47_numero = {$l47_numero}";
+            $result = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query(null, "DISTINCT pccfeditalnum.*, nomeinst", "l47_anousu desc", $sWhere));
+
+            if(!$clpccfeditalnum->numrows){
+                $clpccfeditalnum->l47_instit = $instit;
+                $clpccfeditalnum->l47_anousu = $anousu;
+                $clpccfeditalnum->l47_numero = $l47_numero;
+
+                $clpccfeditalnum->incluir();
+
+            }
+
+        }
+
+        db_fim_transacao();
     }
-    db_fim_transacao();
-  }
+
 } else {
 
-  $db_opcao = 2;
-  $db_opcao_edital = 2;
-  $result = $clpccflicitanum->sql_record($clpccflicitanum->sql_query(null, "pccflicitanum.*, nomeinst", "l24_anousu desc", "l24_anousu = {$anousu} and l24_instit = {$instit}"));
+    $db_opcao = 2;
+    $result = $clpccflicitanum->sql_record($clpccflicitanum->sql_query(null, "pccflicitanum.*, nomeinst", "l24_anousu desc", "l24_anousu = {$anousu} and l24_instit = {$instit}"));
 
-  if($clpccflicitanum->numrows>0){
-    db_fieldsmemory($result,0);
-  }else{
-    $l24_numero = 0;
-    $oInstit = db_stdClass::getDadosInstit($instit);
-    $l24_instit = $instit;
-    $nomeinstit = $oInstit->nomeinst;
-  }
 
-  $result_edital = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query(null, "pccfeditalnum.*, nomeinst", "l47_anousu desc", "l47_anousu = {$anousu} and l47_instit = {$instit} and l47_numero = (select max(l47_numero) from pccfeditalnum)"));
-  
-  if($clpccfeditalnum->numrows > 0){
-    db_fieldsmemory($result_edital, 0);
-  }else{
-    $l47_numero = 0;
-    $l47_instit = $instit;
-  }
+    if($clpccflicitanum->numrows>0){
+        db_fieldsmemory($result,0);
+    }else{
+        $l24_numero = 0;
+        $oInstit = db_stdClass::getDadosInstit($instit);
+        $l24_instit = $instit;
+        $nomeinstit = $oInstit->nomeinst;
+    }
 
-  $db_botao = true;
+    $sWhere =  " l47_instit = {$instit} AND l47_anousu = {$anousu} ";
+    $sSqlEdital = "
+      SELECT l47_numero,
+             seq from (" . 
+              $clpccfeditalnum->sql_query_file(null, "pccfeditalnum.*, ROW_NUMBER() OVER (ORDER BY l47_anousu) AS seq", "l47_anousu desc", $sWhere)
+              .") as tabela where seq = (select count(*) from pccfeditalnum where l47_instit = {$instit} AND l47_anousu = {$anousu})";
+    $result_edital = $clpccfeditalnum->sql_record($sSqlEdital);
+    
+    if($clpccfeditalnum->numrows > 0){
+        db_fieldsmemory($result_edital, 0);
+    }else{
+        $l47_numero = 0;
+        $l47_instit = $instit;
+    }
+
+    $db_botao = true;
 
 }
 
@@ -201,7 +218,6 @@ if(isset($alterar)){
     }
   }else{
     $clpccflicitanum->erro(true,true);
-    $db_opcao_edital = 1;
   }
 
   if($clpccfeditalnum->erro_status=="0"){
@@ -214,11 +230,7 @@ if(isset($alterar)){
     }
   }else{
     $clpccfeditalnum->erro(true,true);
-    $db_opcao_edital = 1;
   }
 
-  // if((!$erro && $erro_edital) || ($erro && $erro_edital)){
-  //   $db_botao = true
-  // }
 }
 ?>
