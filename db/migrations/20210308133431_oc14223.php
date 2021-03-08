@@ -32,19 +32,19 @@ class Oc14223 extends PostgresMigration
 
         INSERT INTO db_menu VALUES (
                     (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item 
-                    WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Caixa') AND descricao = 'Relatórios'),
+                    WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE descr_modulo = 'Tesouraria') AND descricao = 'Relatórios'),
                     (SELECT max(id_item) FROM db_itensmenu),
                     (SELECT 
                         CASE 
                             WHEN (SELECT count(*) FROM db_menu 
                             WHERE db_menu.id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item 
                                 WHERE modulo = (SELECT id_item FROM db_modulos 
-                                WHERE nome_modulo = 'Caixa') AND descricao = 'Relatórios')) = 0 THEN 1
+                                WHERE descr_modulo = 'Tesouraria') AND descricao = 'Relatórios')) = 0 THEN 1
                             ELSE (SELECT max(menusequencia)+1 AS COUNT FROM db_menu 
                             WHERE id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item 
-                                WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Caixa') AND descricao = 'Relatórios'))
+                                WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE descr_modulo = 'Tesouraria') AND descricao = 'Relatórios'))
                         END),
-                    (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Caixa') );
+                    (SELECT id_item FROM db_modulos WHERE descr_modulo = 'Tesouraria') );
 
         COMMIT;
 
