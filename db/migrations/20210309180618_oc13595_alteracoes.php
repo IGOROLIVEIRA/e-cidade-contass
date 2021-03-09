@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc13595 extends AbstractMigration
+class Oc13595Alteracoes extends AbstractMigration
 {
     public function up()
     {
