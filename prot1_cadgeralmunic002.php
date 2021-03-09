@@ -86,10 +86,12 @@ $db_opcao = 1;
        $clcriaabas->identifica = array(
                                        "cgm"        => "Dados CGM",
                                        "documentos" => "Documentos",
-                                       "fotos"      => "Fotos"
+                                       "fotos"      => "Fotos",
+                                       "contasbanco"=> "Contas Bancárias"
                                      );
        $clcriaabas->src        = array("cgm" => "prot1_cadgeralmunic005.php".$sQueryUrl);
-       $clcriaabas->disabled   = array("documentos"=>"true");
+       $clcriaabas->disabled   = array("documentos"=>"true", "contasbanco" => true);
+       $clcriaabas->sizecampo  = array("contasbanco"=>20);
        $clcriaabas->cria_abas();
      ?>
     </td>
