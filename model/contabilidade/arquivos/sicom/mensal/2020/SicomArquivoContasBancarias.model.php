@@ -1393,10 +1393,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$oDadosMovi21->si97_codfontectbtransf 	= ' ';
 								$oDadosMovi21->si97_mes 				= $this->sDataFinal['5'] . $this->sDataFinal['6'];
 								$oDadosMovi21->si97_instit 				= db_getsession("DB_instit");
-								$oDadosMovi21->codorgao 				= $oContaAgrupada->si95_codorgao;
-								$oDadosMovi21->hashFontePrincipal		= $sHash20recurso;
-
-								
+								$oDadosMovi21->codorgao 				= $oContaAgrupada->si95_codorgao;	
 
 								$aCtb20Agrupado[$sHash20b]->ext21[$sHash21b] = $oDadosMovi21;
 
@@ -1437,11 +1434,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oCtb20->si96_vlsaldofinalfonte 	= $oCtb20->ext21[$sHash21]->si97_valorentrsaida;
 				$oCtb20->si96_mes 					= $oCtb20->ext21[$sHash21]->si97_mes;
 				$oCtb20->si96_instit 				= $oCtb20->ext21[$sHash21]->si97_instit;
-
-				$sHashFontePrincipal = $oCtb20->ext21[$sHash21]->hashFontePrincipal;
-
-				//Atualiza saldo final da fonte principal
-				$aCtb20Agrupado[$sHashFontePrincipal]->si96_vlsaldofinalfonte -= $oCtb20->ext21[$sHash21]->si97_valorentrsaida;
 				
 			}
 
