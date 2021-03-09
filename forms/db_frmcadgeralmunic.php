@@ -913,9 +913,10 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 
     }
 
-    parent.document.getElementById('cgm').style.display        = '';
-    parent.document.getElementById('documentos').style.display = '';
-    parent.document.getElementById('fotos').style.display      = '';
+    parent.document.getElementById('cgm').style.display         = '';
+    parent.document.getElementById('documentos').style.display  = '';
+    parent.document.getElementById('fotos').style.display       = '';
+    parent.document.getElementById('contasbanco').style.display = '';
 
 
     var j14_codigo    = "";
