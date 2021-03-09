@@ -218,6 +218,10 @@ $sWhereContratos = " and 1 = 1 ";
 				$dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
 			}
 
+            if($listacred == 'false'){
+                $dbwhere .= " l03_pctipocompratribunal IN (100, 101) AND ";
+            }
+
 			if($ratificacao == 'true'){
 				$dbwhere .= " l20_dtpubratificacao IS NOT NULL AND ";
             }elseif($ratificacao == 'false'){

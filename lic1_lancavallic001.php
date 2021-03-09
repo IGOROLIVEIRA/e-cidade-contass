@@ -118,7 +118,7 @@ function js_pesquisa_liclicita(mostra){
     js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&listacred=false&funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
   }else{
      if(document.form1.l20_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?tipo=1&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?tipo=1situacao=0&listacred=false&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
        document.form1.l20_codigo.value = ''; 
      }
