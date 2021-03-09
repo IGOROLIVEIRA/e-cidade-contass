@@ -4,11 +4,13 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_precoreferencia_classe.php");
+include("classes/db_itemprecoreferencia_classe.php");
 include("dbforms/db_funcoes.php");
 $oPost = db_utils::postMemory($_POST);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprecoreferencia = new cl_precoreferencia;
+$clitemprecoreferencia = new cl_itemprecoreferencia;
 $db_opcao = 22;
 $db_botao = false;
 
@@ -46,8 +48,47 @@ if (isset($alterar)) {
   db_inicio_transacao();
   $db_opcao = 2;
   $clprecoreferencia->si01_justificativa = $si01_justificativa;
-  $clprecoreferencia->alterar($si01_sequencial);
+
+    /**
+     * Atualização do valor dos itens do preço referência
+     */
+
+    if ($si01_tipoprecoreferencia == '1') {
+        $sFuncao = "avg";
+    } else if ($si01_tipoprecoreferencia == '2') {
+        $sFuncao = "max";
+    } else {
+        $sFuncao = "min";
+    }
+
+    $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+                round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
+                round($sFuncao(pc23_percentualdesconto),2) as percreferencia2,
+                si02_sequencial as sequencial
+                from pcproc
+                join pcprocitem on pc80_codproc = pc81_codproc
+                join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+                join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+                join pcorcamval on pc22_orcamitem = pc23_orcamitem
+                join itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                where pc80_codproc = $si01_processocompra and pc23_vlrun > 0 group by pc23_orcamitem, si02_sequencial";
+
+    $rsResult = db_query($sSql);
+
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+        $oItem = db_utils::fieldsMemory($rsResult, $iCont);
+        $clitemprecoreferencia->si02_vlprecoreferencia = $oItem->valor;
+        $clitemprecoreferencia->alterar($oItem->sequencial);
+        
+    }
+
+    if($clitemprecoreferencia->numrows_alterar){
+        $clprecoreferencia->alterar($si01_sequencial);
+    }
+  
   db_fim_transacao();
+
 } else if (isset($chavepesquisa)) {
   $db_opcao = 2;
   $result = $clprecoreferencia->sql_record($clprecoreferencia->sql_query($chavepesquisa));
