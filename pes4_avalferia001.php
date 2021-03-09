@@ -325,8 +325,10 @@ function levanta_ponto(){
                               //echo "<BR> 1.1 - subpes   --> $subpes  tiporub --> $tiporub m_rubr --> ".$m_rubr[$ind]." m_media -->".$m_media[$ind]. " ".$gerfsal[$Igerfsal]["r14_quant"]." >= ".$rubricas[0]["rh27_quant"]/2;
                            }
                         }
-                        $m_valor[$ind] += $gerfsal[$Igerfsal]["r14_valor"];
-                        $m_quant[$ind] += $gerfsal[$Igerfsal]["r14_quant"];
+                        if( $tiporub == "8") {
+                          $m_valor[$ind] += $gerfsal[$Igerfsal]["r14_valor"];
+                          $m_quant[$ind] += $gerfsal[$Igerfsal]["r14_quant"];
+                        }
                         //echo "<BR> salario rubrica --> ".$gerfsal[$Igerfsal]["r14_rubric"]." m_quant --> ".$m_quant[$ind]." += ".$gerfsal[$Igerfsal]["r14_quant"];
                         if(db_at($tiporub,"1-2-7")>0){
                            $qten[$ind] = $gerfsal[$Igerfsal]["r14_quant"];
@@ -445,9 +447,11 @@ function levanta_ponto(){
                      }else{
                         $m_media[$ind] += 1;
 //echo "<BR> 4 - subpes   --> $subpes  m_rubr --> ".$m_rubr[$ind]." m_media -->".$m_media[$ind]. " ".$pontofx[$Ipontofx]["r90_quant"]." >= ".$rubricas[0]["rh27_quant"]/2;
-                        $m_valor[$ind] += $pontofx[$Ipontofx]["r90_valor"]   ;
-                        $m_quant[$ind] += $pontofx[$Ipontofx]["r90_quant"]   ;
-                        //echo "<BR> m_quant --> ".$m_quant[$ind]." += ".$pontofx[$Ipontofx]["r90_valor"];
+                        if( $tiporub != "8") {
+                          $m_valor[$ind] += $pontofx[$Ipontofx]["r90_valor"];
+                          $m_quant[$ind] += $pontofx[$Ipontofx]["r90_quant"];
+                          //echo "<BR> m_quant --> ".$m_quant[$ind]." += ".$pontofx[$Ipontofx]["r90_valor"];
+                        }
                      }
                      if( db_at($tiporub,"1-2-7")>0){
                         $qten[$ind] = $pontofx[$Ipontofx]["r90_quant"];
