@@ -34,7 +34,7 @@ class GerarCONTRATOS extends GerarAM {
     $sSql4 = "select * from contratos132021 where si86_mes = ". $this->iMes ." and si86_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS13    = db_query($sSql4);
 
-    $sSql5 = "select * from contratos202121 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
+    $sSql5 = "select * from contratos202021 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS20    = db_query($sSql5);
 
     $sSql6 = "select * from contratos212021 where si88_mes = ". $this->iMes ." and si88_instit = ". db_getsession("DB_instit");
@@ -73,7 +73,7 @@ class GerarCONTRATOS extends GerarAM {
         $aCSVCONTRATOS10['si83_dataassinatura']               =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_dataassinatura'])));
         $aCSVCONTRATOS10['si83_contdeclicitacao']             =   str_pad($aCONTRATOS10['si83_contdeclicitacao'], 1, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS10['si83_codorgaoresp']                 =   $aCONTRATOS10['si83_codorgaoresp'] == 0 ? ' ' : str_pad($aCONTRATOS10['si83_codorgaoresp'], 2, '0', STR_PAD_LEFT);
-        $aCSVCONTRATOS10['si83_codunidadesubresp']            =   str_pad($aCONTRATOS10['si83_codunidadesubresp'], 5, '0', STR_PAD_LEFT);
+        $aCSVCONTRATOS10['si83_codunidadesubresp']            =   $aCONTRATOS10['si83_contdeclicitacao'] != 1 ? str_pad($aCONTRATOS10['si83_codunidadesubresp'], 5, '0', STR_PAD_LEFT) : '';
         $aCSVCONTRATOS10['si83_nroprocesso']                  =   substr($aCONTRATOS10['si83_nroprocesso'], 0, 12);
         $aCSVCONTRATOS10['si83_exercicioprocesso']            =   $aCONTRATOS10['si83_exercicioprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_exercicioprocesso'];
         $aCSVCONTRATOS10['si83_tipoprocesso']                 =   $aCONTRATOS10['si83_tipoprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_tipoprocesso'];
