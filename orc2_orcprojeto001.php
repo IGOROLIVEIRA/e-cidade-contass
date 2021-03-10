@@ -112,7 +112,7 @@ function emite(){
   <table  align="center" border="0" >
    <form name="form1" method="post" action="" >   
    <tr>
-      <td nowrap title="<?=@$To46_codlei?>"><? db_ancora(@$Lo46_codlei,"js_projeto();",$db_opcao);  ?> </td>
+      <td nowrap title="Decreto"><? db_ancora("Decreto:","js_projeto();",$db_opcao);  ?> </td>
       <td nowrap> <? db_input('o46_codlei',8,$Io46_codlei,true,'text',$db_opcao,"") ?>  </td>
 
       <td nowrap><b>Modelo </b>

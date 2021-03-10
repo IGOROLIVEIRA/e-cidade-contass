@@ -222,6 +222,10 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 		$sWhere .= "  and orcprojeto.o39_tipoproj=2  ";
 	}
 
+	if (isset($o39_codproj) && $o39_codproj != '') {
+		$sWhere .= " and orcprojeto.o39_codproj = {$o39_codproj} ";
+	}
+
 	$sql .= $sWhere;
   $sSqlDotacoesPPA .= $sWhere;
   $sSqlDotacoesPPA .= " order by 1, 4, 7";
