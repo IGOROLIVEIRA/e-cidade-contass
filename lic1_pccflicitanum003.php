@@ -118,7 +118,7 @@ if(isset($alterar)){
         if(!$result || $clpccfeditalnum->numrows==0){
             $clpccfeditalnum->l47_instit = $instit;
             $clpccfeditalnum->l47_anousu = $anousu;
-        
+            
             if(!$l47_numero){
                 $l47_numero = 1;
             }
@@ -144,6 +144,8 @@ if(isset($alterar)){
         db_fim_transacao();
     }
 
+    $db_botao=true;
+
 } else {
 
     $db_opcao = 2;
@@ -159,12 +161,8 @@ if(isset($alterar)){
         $nomeinstit = $oInstit->nomeinst;
     }
 
-    $sWhere =  " l47_instit = {$instit} AND l47_anousu = {$anousu} ";
-    $sSqlEdital = "
-      SELECT l47_numero,
-             seq from (" . 
-              $clpccfeditalnum->sql_query_file(null, "pccfeditalnum.*, ROW_NUMBER() OVER (ORDER BY l47_anousu) AS seq", "l47_anousu desc", $sWhere)
-              .") as tabela where seq = (select count(*) from pccfeditalnum where l47_instit = {$instit} AND l47_anousu = {$anousu})";
+    $sWhere =  " l47_timestamp = (select max(l47_timestamp) from pccfeditalnum) and l47_instit = $instit and l47_anousu = $anousu";
+    $sSqlEdital = $clpccfeditalnum->sql_query_file(null, "pccfeditalnum.*", "l47_anousu desc", $sWhere);
     $result_edital = $clpccfeditalnum->sql_record($sSqlEdital);
     
     if($clpccfeditalnum->numrows > 0){
@@ -210,7 +208,7 @@ if(isset($alterar)){
 if(isset($alterar)){
   if($clpccflicitanum->erro_status=="0"){
     $clpccflicitanum->erro(true,false);
-    $db_botao=true;
+    // $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if($clpccflicitanum->erro_campo!=""){
       echo "<script> document.form1.".$clpccflicitanum->erro_campo.".style.backgroundColor='#99A9AE';</script>";
@@ -222,7 +220,7 @@ if(isset($alterar)){
 
   if($clpccfeditalnum->erro_status=="0"){
     $clpccfeditalnum->erro(true,false);
-    $db_botao=true;
+    // $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if($clpccfeditalnum->erro_campo!=""){
       echo "<script> document.form1.".$clpccfeditalnum->erro_campo.".style.backgroundColor='#99A9AE';</script>";

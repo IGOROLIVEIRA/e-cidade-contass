@@ -45,11 +45,13 @@ class cl_pccfeditalnum {
    var $l47_instit = 0;
    var $l47_anousu = 0;
    var $l47_numero = 0;
+   var $l47_timestamp = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  l47_instit = int4 = instituicao 
                  l47_anousu = int4 = Ano 
                  l47_numero = int8 = Numeração 
+                 l47_timestamp = timestamp = Timestamp
                  ";
    //funcao construtor da classe
    function cl_pccfeditalnum() {
@@ -72,6 +74,7 @@ class cl_pccfeditalnum {
        $this->l47_instit = ($this->l47_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_instit"]:$this->l47_instit);
        $this->l47_anousu = ($this->l47_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_anousu"]:$this->l47_anousu);
        $this->l47_numero = ($this->l47_numero == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_numero"]:$this->l47_numero);
+       $this->l47_timestamp = ($this->l47_timestamp == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_timestamp"]:$this->l47_timestamp);
      }else{
      }
    }
@@ -105,15 +108,20 @@ class cl_pccfeditalnum {
        $this->erro_status = "0";
        return false;
      }
+     if(!$this->l47_timestamp || $this->l47_timestamp == null){
+        $this->l47_timestamp = "to_timestamp(now()::varchar, 'YYYY-MM-DD HH24:mi:ss')::timestamp without time zone";
+     }
      $sql = "insert into pccfeditalnum(
                                        l47_instit 
                                       ,l47_anousu 
-                                      ,l47_numero 
+                                      ,l47_numero
+                                      ,l47_timestamp
                        )
                 values (
                                 $this->l47_instit 
                                ,$this->l47_anousu 
-                               ,$this->l47_numero 
+                               ,$this->l47_numero
+                               ,$this->l47_timestamp
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -184,6 +192,11 @@ class cl_pccfeditalnum {
          return false;
        }
      }
+
+     if(trim($this->l47_timestamp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l47_timestamp"])){
+        $sql  .= $virgula." l47_timestamp = $this->l47_timestamp ";
+     }
+
      $sql .= " where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
