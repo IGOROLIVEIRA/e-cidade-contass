@@ -76,7 +76,7 @@ if(isset($excluir)){
   
   db_inicio_transacao();
 
-	$sSql = $clliclicita->sql_query_file($l20_codigo, 'l20_cadinicial, l20_anousu, l20_nroedital');
+	$sSql = $clliclicita->sql_query_file($l20_codigo, 'l20_cadinicial, l20_anousu');
 	$rsSql = $clliclicita->sql_record($sSql);
 	$oLicitacao = db_utils::fieldsMemory($rsSql, 0);
 	$status = $oLicitacao->l20_cadinicial;
