@@ -935,13 +935,8 @@ class cl_liclicita
         }
 
         if(db_getsession('DB_anousu') >= 2020){
-            if (!$this->l20_cadinicial) {
-                $this->l20_cadinicial = 1;
-            };
-
-            if (!$this->l20_exercicioedital) {
-                $this->l20_exercicioedital = db_getsession('DB_anousu');
-            };
+            $this->l20_cadinicial = 1;
+            $this->l20_exercicioedital = db_getsession('DB_anousu');
         }else{
             $this->l20_cadinicial = 'null';
             $this->l20_exercicioedital = 'null';
