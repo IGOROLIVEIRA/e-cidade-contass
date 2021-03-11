@@ -85,4 +85,14 @@ class GerarAM
     return number_format($valor, $decimal, ",", "");
   }
 
+  /**
+   * Retorna bool se número é -0,00
+   * @param $valor float
+   * @return bool
+   */
+  public function isZeroNegativo($valor)
+  {
+    return pow(number_format($valor, 2, ".", ""), -1) === -INF;
+  }
+
 }

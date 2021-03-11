@@ -219,7 +219,7 @@ class GerarBP extends GerarAM
         $aCSVBP71 = array();
         $aCSVBP71['si215_tiporegistro']     = $this->padLeftZero($aBP71['si215_tiporegistro'], 2);
         $aCSVBP71['si215_codfontrecursos']  = $this->padLeftZero($aBP71['si215_codfontrecursos'], 3);
-        $aCSVBP71['si215_vlsaldofonte']     = $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
+        $aCSVBP71['si215_vlsaldofonte']     = $this->isZeroNegativo($aBP71['si215_vlsaldofonte']) ? '0,00' : $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
 
         $this->sLinha = $aCSVBP71;
         $this->adicionaLinha();
