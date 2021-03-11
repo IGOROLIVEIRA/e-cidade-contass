@@ -368,7 +368,7 @@ function js_anular(){
         <td colspan='5' align='left'>
           <span>
           <fieldset><legend><b>Mostrar Movimentos</b></legend>
-            <input type="checkbox" id='disabled'  onclick='js_showFiltro("comcheque",this.checked)'>
+            <input type="checkbox" id='disabled' checked onclick='js_showFiltro("comcheque",this.checked)'>
             <label for="disabled" ><b>Com cheque Emitido</b></label>
             <input type="checkbox" id='normal' checked onclick='js_showFiltro("normal",this.checked)'>
             <label for="normal" style='color:black'><b>Sem Cheque</b></label>

@@ -139,7 +139,7 @@ $clrotulo->label("o45_numlei");
 
 		if (iTipoLei == 1) {
 		
-			let aTipoSupPermitidosLOA = ['Selecione','1001','1002','1003','1004','1011','1018','1019','1020','1021','1022'];
+			let aTipoSupPermitidosLOA = ['Selecione','1001','1002','1003','1004','1011','1018','1019','1020','1021','1022','2026'];
 			js_validaTipoSupArray(aTipoSupPermitidosLOA, iTipoSup, iTipoLei);
 
 		}

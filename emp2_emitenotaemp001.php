@@ -65,7 +65,7 @@ $db_opcao = 1;
                 query += "&e60_numemp="+obj.e60_numemp.value;
             }else if (obj.e60_codemp.value!='' && obj.e60_codemp_fim.value!=''){
                 query += "&e60_codemp="+obj.e60_codemp.value;
-                if(obj.e60_codemp.value > obj.e60_codemp_fim.value) {
+                if(Number(obj.e60_codemp.value) > Number(obj.e60_codemp_fim.value)) {
                     alert("Empenho inicial maior que o empenho final. Verifique!");
                     return false;
                 }

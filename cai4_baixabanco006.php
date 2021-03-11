@@ -104,13 +104,6 @@ $oGet = db_utils::postMemory($_GET);
    	}
      $oInstit = new Instituicao(db_getsession('DB_instit'));
 
-     /**
-      * Integração JMS
-      * Este trecho foi inserido para que as guias emitidas no JMS podessem ser reconhecidas no e-cidade no momento da baixa de banco
-      * Rotina adaptada para a implantação do modulo tributário em Pirapora MG
-      * Codcli do cadastro de clientes do SIGAT
-      * @author Rodrigo Cabral <rodrigo.cabral@contassconsultoria.com.br>
-      */
      if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA) {
        $sSqlIntegracaoJMS = "UPDATE disbanco
                               SET k00_numpre = debitos_jms.k00_numpre,
@@ -130,6 +123,19 @@ $oGet = db_utils::postMemory($_GET);
                                   SET classi = true
                                   WHERE char_length(k00_numpre::varchar) < 6
                                   AND disbanco.codret = {$oGet->codret}";
+     }
+
+     if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO) {
+       $sSqlIntegracaoHLH = "UPDATE disbanco
+                              SET k00_numpre = debitos_jms.k00_numpre,
+                                  k00_numpar = debitos_jms.k00_numpar
+                              FROM debitos_hlh
+                              WHERE disbanco.k00_numpre = debitos_jms.k00_numpre_old
+                                  AND disbanco.k00_numpar = debitos_jms.k00_numpar_old
+                                  AND disbanco.codret = {$oGet->codret}";
+       if (!db_query($sSqlIntegracaoHLH)) {
+         throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
+       }
      }
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
