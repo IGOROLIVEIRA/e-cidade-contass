@@ -45,11 +45,13 @@ class cl_pccfeditalnum {
    var $l47_instit = 0;
    var $l47_anousu = 0;
    var $l47_numero = 0;
+   var $l47_timestamp = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  l47_instit = int4 = instituicao 
                  l47_anousu = int4 = Ano 
                  l47_numero = int8 = Numeração 
+                 l47_timestamp = timestamp = Timestamp
                  ";
    //funcao construtor da classe
    function cl_pccfeditalnum() {
@@ -72,6 +74,7 @@ class cl_pccfeditalnum {
        $this->l47_instit = ($this->l47_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_instit"]:$this->l47_instit);
        $this->l47_anousu = ($this->l47_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_anousu"]:$this->l47_anousu);
        $this->l47_numero = ($this->l47_numero == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_numero"]:$this->l47_numero);
+       $this->l47_timestamp = ($this->l47_timestamp == ""?@$GLOBALS["HTTP_POST_VARS"]["l47_timestamp"]:$this->l47_timestamp);
      }else{
      }
    }
@@ -105,15 +108,20 @@ class cl_pccfeditalnum {
        $this->erro_status = "0";
        return false;
      }
+     if(!$this->l47_timestamp || $this->l47_timestamp == null){
+        $this->l47_timestamp = "to_timestamp(now()::varchar, 'YYYY-MM-DD HH24:mi:ss')::timestamp without time zone";
+     }
      $sql = "insert into pccfeditalnum(
                                        l47_instit 
                                       ,l47_anousu 
-                                      ,l47_numero 
+                                      ,l47_numero
+                                      ,l47_timestamp
                        )
                 values (
                                 $this->l47_instit 
                                ,$this->l47_anousu 
-                               ,$this->l47_numero 
+                               ,$this->l47_numero
+                               ,$this->l47_timestamp
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -184,6 +192,11 @@ class cl_pccfeditalnum {
          return false;
        }
      }
+
+     if(trim($this->l47_timestamp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l47_timestamp"])){
+        $sql  .= $virgula." l47_timestamp = $this->l47_timestamp ";
+     }
+
      $sql .= " where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
@@ -363,69 +376,84 @@ class cl_pccfeditalnum {
        }
      }
    }
-   function sql_query ( $oid = null,$campos="pccfeditalnum.oid,*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = split("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from pccfeditalnum ";
-     $sql .= "      inner join db_config  on  db_config.codigo = pccfeditalnum.l47_instit";
-     $sql2 = "";
-     if($dbwhere==""){
-       if( $oid != "" && $oid != null){
-          $sql2 = " where pccfeditalnum.oid = '$oid'";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
+   
+    function sql_query ( $sequencial = null, $campos="*", $ordem=null, $dbwhere=""){
+
+        $sql = "select ";
+
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+       
+            for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+
+        $sql .= " from pccfeditalnum ";
+        $sql .= "      inner join db_config  on  db_config.codigo = pccfeditalnum.l47_instit";
+        $sql2 = "";
+        
+        if($dbwhere==""){
+            if( $sequencial != "" && $sequencial != null){
+                $sql2 = " where pccfeditalnum.sequencial = '$sequencial'";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+
+        $sql .= $sql2;
+
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+
+        return $sql;
+
   }
-   function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = split("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from pccfeditalnum ";
-     $sql2 = "";
-     if($dbwhere==""){
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
+    function sql_query_file ( $sequencial = null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+     
+        $sql .= " from pccfeditalnum ";
+        $sql2 = "";
+
+        if($dbwhere != ""){
+          $sql2 = " where $dbwhere";
+        }
+
+        $sql .= $sql2;
+
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+            }
+        }
+      
+      return $sql;
+
   }
 
    function sql_query_numero_geral ($anousu,$instit,$campos="",$ordem=null,$dbwhere=""){
