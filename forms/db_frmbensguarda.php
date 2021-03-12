@@ -139,6 +139,8 @@ if($t21_numcgm){
 </form>
 <script>
 
+isPessoaJuridica = false;
+
 /**
  * Add placeholder in element
  */
@@ -216,17 +218,19 @@ function js_preenchepesquisa(chave) {
 }
 
 function js_verificaCPF(cpf){
-    
-    if(!validaCPF(cpf) && !cpf.value.length){
-        alert('CPF inválido. Verifique!');
-        return false;
+    console.log('Pessoa jurídica? ', isPessoaJuridica);
+    if(isPessoaJuridica){
+        if(!validaCPF(cpf) && !cpf.value.length){
+            alert('CPF inválido. Verifique!');
+            return false;
+        }
     }
 
     return true;
 }
 
 function js_aplicaMascara(objeto){
-
+    
     let sValue = objeto.value.replaceAll('.', '').replace('-', '');
     objeto.value = sValue;
    
@@ -267,13 +271,13 @@ function js_checaCGM(){
 function js_retorno(oAjax){
     
     let oResponse = eval("("+oAjax.responseText+")");
-    let mostra = false;
+    
     if(oResponse.cgm.z01_cgc){
-        mostra = true;
+        isPessoaJuridica = true;
     }
     for(let count = 0; count < aClasses.length; count++){
         aClasses[count].value = '';
-        aClasses[count].style.display = mostra ? '' : 'none';
+        aClasses[count].style.display = isPessoaJuridica ? '' : 'none';
     }
 }
 
