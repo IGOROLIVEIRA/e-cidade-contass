@@ -136,6 +136,18 @@ db_fieldsmemory($result,0);
 
       $where_baixado = " and t55_codbem is null ";
 
+      $where_bem = " and (t52_bem NOT IN (SELECT DISTINCT t22_bem FROM bensguardaitem)  
+                     OR t52_bem in (SELECT DISTINCT t22_bem 
+                                        FROM bensguardaitem
+                                    INNER JOIN bensguarda ON t21_codigo = t22_bensguarda
+                                    INNER JOIN bensguardaitemdev ON bensguardaitemdev.t23_guardaitem = bensguardaitem.t22_codigo";
+
+      if(isset($guarda)){
+          $where_bem .= " where t22_bensguarda != $guarda";
+      }
+
+      $where_bem .= "))";
+
       if (isset($campos)==false) {
         if(file_exists("funcoes/db_func_bens.php")==true){
           include("funcoes/db_func_bensconfirmacao.php");
@@ -148,7 +160,7 @@ db_fieldsmemory($result,0);
 
       //rotina q só deixará passar os bens cadastrados no(s) departamento(s) em q o usuário está
       //cadastrado...
-      $result_dep = $cldb_depusu->sql_record($cldb_depusu->sql_query_instit(null,null,"db_depart.coddepto",null,"db_usuarios.id_usuario = $chave_id_usuario $where_instit"));
+      $result_dep = $cldb_depusu->sql_record($cldb_depusu->sql_query_instit(null,null,"distinct db_depart.coddepto",null,"db_usuarios.id_usuario = $chave_id_usuario $where_instit"));
       $numrows = $cldb_depusu->numrows;
       $deptos = "";
       $virg = "";
@@ -218,7 +230,7 @@ db_fieldsmemory($result,0);
          * Busca pelo código do bem
          */
         if (isset($chave_t52_bem) && (trim($chave_t52_bem)!="") ) {
-        	$sql = $clbens->sql_query_benstransf("",$campos,"t52_bem","1=1 $where_depart $where_g $where2_instit and t52_bem = $chave_t52_bem $where_baixado","true");
+        	$sql = $clbens->sql_query_benstransf("",$campos,"t52_bem","1=1 $where_depart $where_g $where2_instit and t52_bem = $chave_t52_bem $where_baixado $where_bem","true");
 
         /**
          * Filtro por placa
@@ -229,7 +241,7 @@ db_fieldsmemory($result,0);
           $sql    = $clbens->sql_query_benstransf("",
                                                   $campos,
                                                   "t52_bem",
-                                                  " {$sWhere} {$where_depart} {$where_g} {$where2_instit} {$where_baixado}",
+                                                  " {$sWhere} {$where_depart} {$where_g} {$where2_instit} {$where_baixado} {$where_bem}",
                                                   "true");
 
         /**
@@ -241,13 +253,13 @@ db_fieldsmemory($result,0);
 	         $sql = $clbens->sql_query_benstransf("",
                                                 $campos,
                                                 "",
-                                                "t52_codcla = -1 $where_g $where2_instit $where_baixado",
+                                                "t52_codcla = -1 $where_g $where2_instit $where_baixado $where_bem",
                                                 "true");
           } else {
 	         $sql = $clbens->sql_query_benstransf("",
                                                 $campos,
                                                 "",
-                                                "t52_codcla = $chave_t64_codcla $where_depart $where_g $where2_instit $where_baixado",
+                                                "t52_codcla = $chave_t64_codcla $where_depart $where_g $where2_instit $where_baixado $where_bem",
                                                 "true");
           }
 
@@ -258,7 +270,7 @@ db_fieldsmemory($result,0);
         	$sql = $clbens->sql_query_benstransf("",
                                                $campos,
                                                "t52_descr",
-                                               "t52_descr like '$chave_t52_descr%' $where_depart $where_g $where2_instit $where_baixado",
+                                               "t52_descr like '$chave_t52_descr%' $where_depart $where_g $where2_instit $where_baixado $where_bem",
                                                "true");
 
         /**
@@ -273,7 +285,7 @@ db_fieldsmemory($result,0);
             $sql = $clbens->sql_query_benstransf("",
                                                  $campos,
                                                  "",
-                                                 " t52_depart = -1 $where_g $where2_instit $where_baixado",
+                                                 " t52_depart = -1 $where_g $where2_instit $where_baixado $where_bem",
                                                  "",
                                                  "true"
             );
@@ -286,7 +298,7 @@ db_fieldsmemory($result,0);
             $sql = $clbens->sql_query_benstransf("",
                                                  $campos,
                                                  "",
-                                                 "$where $where_depart $where_g $where2_instit $where_baixado",
+                                                 "$where $where_depart $where_g $where2_instit $where_baixado $where_bem",
                                                  "true"
             );
           }
@@ -299,9 +311,13 @@ db_fieldsmemory($result,0);
            $sql = $clbens->sql_query_benstransf("",
                                                 $campos,
                                                 "t52_bem",
-                                                " 1=1 $where_depart $where_g $where2_instit $where_baixado",
+                                                " 1=1 $where_depart $where_g $where2_instit $where_baixado $where_bem",
                                                 "true");
         }
+
+        /**
+         * VERIFICAR SE ITEM NÃO ESTÁ SOB GUARDA ATIVA DE UM T21_REPRESENTANTE OU SE JÁ FOI DEVOLVIDO
+         */
         db_lovrot($sql,15,"()","",$funcao_js);
 
       /**
@@ -335,7 +351,7 @@ db_fieldsmemory($result,0);
             $sql    = $clbens->sql_query_benstransf("",
                                                     $campos,
                                                     "",
-                                                    "{$sWhere} {$where_depart} {$where2_instit} {$where_g} {$where_baixado}",
+                                                    "{$sWhere} {$where_depart} {$where2_instit} {$where_g} {$where_baixado} {$where_bem}",
                                                     "true");
 	          $result = $clbens->sql_record($sql);
 
@@ -344,7 +360,7 @@ db_fieldsmemory($result,0);
            */
           } else if(isset($chave_coddepto) && (trim($chave_descrdepto) != "")) {
 
-	          $sql    = $clbens->sql_query_benstransf("", $campos, "", "t52_depart = $pesquisa_chave $where_g $where2_instit $where_baixado");
+	          $sql    = $clbens->sql_query_benstransf("", $campos, "", "t52_depart = $pesquisa_chave $where_g $where2_instit $where_baixado $where_bem");
 	          $result = $clbens->sql_record($sql);
 
           /**
@@ -354,7 +370,7 @@ db_fieldsmemory($result,0);
             $result = $clbens->sql_record($clbens->sql_query(null,
                                                              "*",
                                                              null,
-                                                             "{$sWhere} {$where2_instit} {$where_baixado}"));
+                                                             "{$sWhere} {$where2_instit} {$where_baixado} {$where_bem}"));
       	  }
 
           if($clbens->numrows != 0) {

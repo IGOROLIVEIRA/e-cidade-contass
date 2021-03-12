@@ -59,11 +59,11 @@ if (isset($alterar)) {
   if(!$sqlerro){
       $clbensguarda->t21_cpf = str_replace('-', '', str_replace('.', '', $t21_cpf));
       $clbensguarda->alterar($t21_codigo);
+      $erro_msg = $clbensguarda->erro_msg;
   }
 
-  if ($clbensguarda->erro_status == 0) {
+  if (!$clbensguarda->numrows_alterar) {
       $sqlerro = true;
-      $erro_msg = $clbensguarda->erro_msg;
   }
   
   db_fim_transacao($sqlerro);

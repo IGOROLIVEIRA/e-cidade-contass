@@ -74,8 +74,11 @@ if (isset($incluir)) {
         $erro_msg = $clbensguarda->erro_msg;
     }
 
+    if(!$sqlerro){
+        $t21_codigo = $clbensguarda->t21_codigo;
+    }
+    
   db_fim_transacao($sqlerro);
-  $t21_codigo = $clbensguarda->t21_codigo;
   $db_opcao = 1;
   $db_botao = true;
 }

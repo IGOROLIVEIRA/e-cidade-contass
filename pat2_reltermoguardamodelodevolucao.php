@@ -14,8 +14,9 @@ db_postmemory($HTTP_POST_VARS);
 $cl_bensguardaitemdev = new cl_bensguardaitemdev;
 
 $sCampos = "t22_bem, t52_ident, t52_descr, t70_descr as situacao, t22_obs, t21_representante, t21_cpf, ";
-$sCampos .= "t21_data, z01_nome as responsavel, z01_numcgm as numcgm, t20_descr as tipoguarda, t21_obs";
+$sCampos .= "t21_data, z01_nome as responsavel, z01_numcgm as numcgm, t20_descr as tipoguarda, t23_obs";
 $sSqlBens = $cl_bensguardaitemdev->sql_query_relatorio('', $sCampos, '', 't22_bensguarda = '. $oGet->iTermo);
+
 $rsBens = $cl_bensguardaitemdev->sql_record($sSqlBens);
 
 $mPDF = new mpdf('', 'A4', 0, '', 10, 10, 30, 10, 5, 5);
@@ -38,33 +39,10 @@ $nomeMunicipio = ucwords(strtolower(db_utils::fieldsMemory($rsInstit, 0)->munic)
  * Busca os dados da guarda
  *  */
 
-$sSqlGuarda = "SELECT min(t22_dtini) as dtini, max(t22_dtfim) as dtfim
-        FROM bensguardaitem
-        INNER JOIN bens ON t52_bem = t22_bem
-        INNER JOIN histbem ON t56_histbem =
-            (SELECT max(t56_histbem)
-            FROM histbem
-            WHERE t56_codbem = t52_bem)
-        WHERE t22_bensguarda = " . $oGet->iTermo;
-$rsGuarda = db_query($sSqlGuarda);
-
-// $footer = <<<FOOTER
-// <div>
-//     <div style="text-align: center; font-size: 13px; width:100%; height: 10px;">
-//         $nomeInstit, 02 de Março de 2021.
-//     </div>
-// </div>
-
-// FOOTER;
-
-
 $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
 $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
-// $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 
 ob_start();
-
-$oItemPosicao1 = db_utils::fieldsMemory($rsBens, 0);
 
 ?>
 <html>
@@ -146,7 +124,17 @@ $oItemPosicao1 = db_utils::fieldsMemory($rsBens, 0);
                     <hr>
                 </li>
             </ul>
-            <p><b>Observações: </b><?= $oItemPosicao1->t21_obs ? $oItemPosicao1->t21_obs : ' - ';?></p>
+            <p><b>Observações: </b></p>
+            <?php
+                $aBens = db_utils::fieldsMemory($rsBens, 0);
+
+                for($count=0;$count< pg_numrows($rsBens);$count++){
+                    $oItemPosicao = db_utils::fieldsMemory($rsBens, $count);
+            ?>
+                    <p style="font-size: 10px"><?= $oItemPosicao->t23_obs ? $count+1 .' - '.$oItemPosicao->t23_obs : ' - ';?></p>
+            <?php
+                }
+            ?>
         </div>
         <br>
         <table class="table__dados" cellspacing="0" cellpadding="0">

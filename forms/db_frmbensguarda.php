@@ -216,11 +216,13 @@ function js_preenchepesquisa(chave) {
 }
 
 function js_verificaCPF(cpf){
-    if(!validaCPF(cpf) && cpf.value){
+    
+    if(!validaCPF(cpf) && !cpf.value.length){
         alert('CPF inválido. Verifique!');
-        document.getElementById('t21_cpf').value = '';
-        return true;
+        return false;
     }
+
+    return true;
 }
 
 function js_aplicaMascara(objeto){
@@ -228,8 +230,13 @@ function js_aplicaMascara(objeto){
     let sValue = objeto.value.replaceAll('.', '').replace('-', '');
     objeto.value = sValue;
    
-    if(js_verificaCPF(objeto)){
+    if(!js_verificaCPF(objeto)){
+        document.getElementById('t21_cpf').value = '';
+        document.getElementById('t21_cpf').focus();
+        document.getElementById('t21_cpf').style.backgroundColor='#99A9AE';
         return false;
+    }else{
+        document.getElementById('t21_cpf').style.backgroundColor='#fff';
     }
     
     let valorFormatado = sValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
