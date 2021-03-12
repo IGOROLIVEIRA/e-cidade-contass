@@ -137,13 +137,13 @@ class GerarBO extends GerarAM
         $aCSVBO40 = array();
         $aCSVBO40['si204_tiporegistro']                     = $this->padLeftZero($aBO40['si204_tiporegistro'], 2);
         $aCSVBO40['si204_faserestospagarnaoproc']           = $this->padLeftZero($aBO40['si204_faserestospagarnaoproc'], 1);
-        $aCSVBO40['si204_vlrspnaoprocpessoalencarsociais']  = $this->isZeroNegativo($aBO40['si204_vlrspnaoprocpessoalencarsociais']) ? '0,00' : $this->sicomNumberReal($aBO40['si204_vlrspnaoprocpessoalencarsociais'], 2);
+        $aCSVBO40['si204_vlrspnaoprocpessoalencarsociais']  = ($this->sicomNumberReal($aBO40['si204_vlrspnaoprocpessoalencarsociais'], 2) == '-0,00')? '0,00' : $this->sicomNumberReal($aBO40['si204_vlrspnaoprocpessoalencarsociais'], 2);
         $aCSVBO40['si204_vlrspnaoprocjurosencardividas']    = $this->sicomNumberReal($aBO40['si204_vlrspnaoprocjurosencardividas'], 2);
         $aCSVBO40['si204_vlrspnaoprocoutrasdespcorrentes']  = $this->sicomNumberReal($aBO40['si204_vlrspnaoprocoutrasdespcorrentes'], 2);
         $aCSVBO40['si204_vlrspnaoprocinvestimentos']        = $this->sicomNumberReal($aBO40['si204_vlrspnaoprocinvestimentos'], 2);
         $aCSVBO40['si204_vlrspnaoprocinverfinanceira']      = $this->sicomNumberReal($aBO40['si204_vlrspnaoprocinverfinanceira'], 2);
         $aCSVBO40['si204_vlrspnaoprocamortizadivida']       = $this->sicomNumberReal($aBO40['si204_vlrspnaoprocamortizadivida'], 2);
-        $aCSVBO40['si204_vltotalexecurspnaoprocessado']     = $this->isZeroNegativo($aBO40['si204_vltotalexecurspnaoprocessado']) ? '0,00' : $this->sicomNumberReal($aBO40['si204_vltotalexecurspnaoprocessado'], 2);
+        $aCSVBO40['si204_vltotalexecurspnaoprocessado']     = $this->sicomNumberReal($aBO40['si204_vltotalexecurspnaoprocessado'], 2);
 
         $this->sLinha = $aCSVBO40;
         $this->adicionaLinha();
