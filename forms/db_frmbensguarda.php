@@ -95,7 +95,7 @@ if($t21_numcgm){
     <td><b>Representante:</b></td>
     <td>
       <?
-        db_input('t21_representante', 52, $It21_representante, true, 'text', 1, '', '', '', '', 60);
+        db_input('t21_representante', 52, $It21_representante, true, 'text', in_array($db_opcao, array(1, 2, 22)) ? 1 : 3, '', '', '', '', 60);
       ?>
     </td>
   </tr>
@@ -106,7 +106,7 @@ if($t21_numcgm){
     </td>
     <td>
       <?
-        db_input('t21_cpf', 52, $It21_cpf, true, 'text', 1,"onchange='js_aplicaMascara(this);'onkeyup='js_verificaDigito(this);'",'', '', '', 14);
+        db_input('t21_cpf', 52, $It21_cpf, true, 'text', in_array($db_opcao, array(1, 2, 22)) ? 1 : 3,"onchange='js_aplicaMascara(this);'onkeyup='js_verificaDigito(this);'",'', '', '', 14);
       ?>
     </td>
   </tr>
@@ -218,7 +218,7 @@ function js_preenchepesquisa(chave) {
 }
 
 function js_verificaCPF(cpf){
-    console.log('Pessoa jurídica? ', isPessoaJuridica);
+    js_checaCGM();
     if(isPessoaJuridica){
         if(!validaCPF(cpf) && !cpf.value.length){
             alert('CPF inválido. Verifique!');
