@@ -674,6 +674,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								(SELECT '21' AS tiporegistro,
 										c71_codlan AS codreduzido,
 										contacredito.c61_reduz AS codctb,
+										conplanodebito.c60_codsis as codsisctb,
 										contacreditofonte.o15_codtri AS codfontrecurso,
 										2 AS tipomovimentacao,
 										(bancodebito.c63_conta||bancodebito.c63_dvconta)AS bancodebito_c63_conta,
@@ -757,6 +758,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								FROM conlancamdoc
 								INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
 								INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
+								INNER JOIN conplano conplanodebito ON contadebito.c61_codcon = conplanodebito.c60_codcon AND contadebito.c61_anousu = conplanodebito.c60_anousu
 								LEFT JOIN conplanoconta bancodebito ON (bancodebito.c63_codcon, bancodebito.c63_anousu) = (contadebito.c61_codcon, contadebito.c61_anousu)
 								AND contadebito.c61_reduz = conlancamval.c69_debito
 								INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
@@ -780,6 +782,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								SELECT '21' AS tiporegistro,
 										c71_codlan AS codreduzido,
 										contadebito.c61_reduz AS codctb,
+										conplanodebito.c60_codsis as codsisctb,
 										contadebitofonte.o15_codtri AS codfontrecurso,
 										1 AS tipomovimentacao,
 										(bancodebito.c63_conta||bancodebito.c63_dvconta) AS bancodebito_c63_conta,
@@ -825,6 +828,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								FROM conlancamdoc
 								INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
 								INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
+								INNER JOIN conplano conplanodebito ON contadebito.c61_codcon = conplanodebito.c60_codcon AND contadebito.c61_anousu = conplanodebito.c60_anousu
 								LEFT JOIN conplanoconta bancodebito ON (bancodebito.c63_codcon, bancodebito.c63_anousu) = (contadebito.c61_codcon, contadebito.c61_anousu)
 								AND contadebito.c61_reduz = conlancamval.c69_debito
 								INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
@@ -855,6 +859,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 
 						$nValor = $oMovi->valorentrsaida;
+
+						$iCodSis     = 0;
+			    		$conta       = 0;
 
 						if ($oMovi->codctbtransf != 0 && $oMovi->codctbtransf != '') {
 							$sqlcontatransf = "SELECT si09_codorgaotce||(c63_banco::integer)::varchar
@@ -916,7 +923,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 						/**
 						 * quando o codctb for igual codctbtransf, será agrupado a movimentação no tipoentrsaida 99
 						 */
-						$sHash .= (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8) ? '99' : $oMovi->tipoentrsaida);
+
+						if ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 1 ) {
+							$iTipoEntrSaida = '18';
+						} elseif (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) {
+							$iTipoEntrSaida = '99';
+						} else {
+							$iTipoEntrSaida = $oMovi->tipoentrsaida;
+						}
+
+						$sHash .= $iTipoEntrSaida;
 						$sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
 							&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0);
 						$sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
@@ -932,7 +948,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 							$oDadosMovi21->si97_codfontrecursos = $oCtb20->si96_codfontrecursos;
 							$oDadosMovi21->si97_codreduzidomov = $oCtb20->si96_codctb.$oMovi->codreduzido . "0" . $oMovi->tipomovimentacao;
 							$oDadosMovi21->si97_tipomovimentacao = $oMovi->tipomovimentacao;
-							$oDadosMovi21->si97_tipoentrsaida = (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) ? '99' : $oMovi->tipoentrsaida;
+							$oDadosMovi21->si97_tipoentrsaida = $iTipoEntrSaida;
 							$oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ' ');
 							$oDadosMovi21->si97_valorentrsaida = $nValor;
 							$oDadosMovi21->si97_codctbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
