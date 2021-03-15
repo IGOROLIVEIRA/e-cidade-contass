@@ -30,6 +30,7 @@ include("libs/db_sql.php");
 
 $head3 = "CÓDIGOS EXT AGRUPADOS SICOM";
 
+$aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
 /*
  * SQL RETORNA TODAS AS CONTAS EXTRAS EXISTENTES NO SISTEMA
@@ -66,10 +67,12 @@ if(db_getsession("DB_anousu") < 2016) {
 				            when c60_tipolancamento = 4 and c60_subtipolancamento not in (1,2,3,4,5,6,7) then c61_reduz
 				            else c60_desdobramneto
 				       end as desdobrasubtipo,
-				       substr(c60_descr,1,50) as descextraorc
+				       substr(c60_descr,1,50) as descextraorc,
+					   o15_codtri as recurso
 				  from conplano
 				  join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
 				  left join infocomplementaresinstit on si09_instit = c61_instit
+				  join orctiporec on c61_codigo = o15_codigo
 				  where c60_anousu = " . db_getsession("DB_anousu") . " and c60_codsis = 7 and c61_instit = " . db_getsession("DB_instit") . "
   				order by c61_reduz  ";
 } else {
@@ -96,10 +99,12 @@ if(db_getsession("DB_anousu") < 2016) {
 				                 (c60_tipolancamento = 9999 and c60_desdobramneto is not null) then c60_desdobramneto
 				            else 0
 				       end as desdobrasubtipo,
-				       substr(c60_descr,1,50) as descextraorc
+				       substr(c60_descr,1,50) as descextraorc,
+					   o15_codtri as recurso
 				  from conplano
 				  join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
 				  left join infocomplementaresinstit on si09_instit = c61_instit
+				  join orctiporec on c61_codigo = o15_codigo
 				  where c60_anousu = " . db_getsession("DB_anousu") . " and c60_codsis = 7 and c61_instit = " . db_getsession("DB_instit") . "
   				order by c61_reduz  ";
 }
@@ -126,12 +131,21 @@ for ($iCont10 = 0;$iCont10 < pg_num_rows($rsContasExtra); $iCont10++) {
 
         $cExt10->codext = $oContaExtra->codtce != 0 ? $oContaExtra->codtce : $oContaExtra->codext;
         $cExt10->codtce = $oContaExtra->codtce;
+		$cExt10->recurso = in_array($oContaExtra->recurso, $aFontesEncerradas) ? substr($oContaExtra->recurso, 0, 1).'59' : $oContaExtra->recurso;
         $cExt10->extras	= array();
 
-        $cExt10->extras[]= $oContaExtra->codext;
+		$oCodExt = new stdClass();
+		$oCodExt->codext = $oContaExtra->codext;
+		$oCodExt->recurso = in_array($oContaExtra->recurso, $aFontesEncerradas) ? substr($oContaExtra->recurso, 0, 1).'59' : $oContaExtra->recurso;
+
+        $cExt10->extras[]= $oCodExt;
         $aExt10Agrupado[$aHash] = $cExt10;
     }else{
-        $aExt10Agrupado[$aHash]->extras[] = $oContaExtra->codext;
+		$oCodExt = new stdClass();
+		$oCodExt->codext = $oContaExtra->codext;
+		$oCodExt->recurso = in_array($oContaExtra->recurso, $aFontesEncerradas) ? substr($oContaExtra->recurso, 0, 1).'59' : $oContaExtra->recurso;
+
+        $aExt10Agrupado[$aHash]->extras[] = $oCodExt;
     }
 
 }
@@ -157,9 +171,23 @@ foreach($aExt10Agrupado as $oCodigos)
         $troca = 0;
     }
     $pdf->setfont('arial','',7);
-    $pdf->cell(35,$alt,$oCodigos->codext,1,0,"C",0);
+    $pdf->cell(35,$alt,$oCodigos->codext.' ('.$oCodigos->recurso.')',1,0,"C",0);
     $pdf->cell(35,$alt,$oCodigos->codtce,1,0,"C",0);
-    $pdf->cell(110,$alt,implode(",",$oCodigos->extras),1,1,"C",0);
+
+	$sCoditosAgrup = '';
+    $iCount = count($oCodigos->extras);
+    
+    foreach($oCodigos->extras as $index => $oExt) {
+
+        $sCoditosAgrup .= $oExt->codext.' ('.$oExt->recurso.')';
+        
+        if ($index < ($iCount-1)) {
+            $sCoditosAgrup .= ', ';
+        }
+        
+    }
+
+    $pdf->cell(110,$alt,$sCoditosAgrup,1,1,"C",0);
     $total ++;
 }
 $pdf->setfont('arial','b',8);
