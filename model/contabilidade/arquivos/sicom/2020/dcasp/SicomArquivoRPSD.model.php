@@ -1,9 +1,9 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_rpsd102019_classe.php");
-require_once("classes/db_rpsd112019_classe.php");
-require_once("model/contabilidade/arquivos/sicom/2019/dcasp/geradores/GerarRPSD.model.php");
+require_once("classes/db_rpsd102020_classe.php");
+require_once("classes/db_rpsd112020_classe.php");
+require_once("model/contabilidade/arquivos/sicom/2020/dcasp/geradores/GerarRPSD.model.php");
 
 
 
@@ -38,8 +38,8 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnousu    = db_getsession("DB_anousu");
     $iCodInstit = db_getsession("DB_instit");
 
-    $clrpsd10 = new cl_rpsd102019();
-    $clrpsd11 = new cl_rpsd112019();
+    $clrpsd10 = new cl_rpsd102020();
+    $clrpsd11 = new cl_rpsd112020();
 
     db_inicio_transacao();
     /**
@@ -126,7 +126,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
               $nTotalRPPago = 0;
               for ($iContRP = 0; $iContRP < pg_num_rows($rsRPPago); $iContRP++) {
 
-                  $clrpsd10 = new cl_rpsd102019();
+                  $clrpsd10 = new cl_rpsd102020();
 
                   $oDadosRPSD = db_utils::fieldsMemory($rsRPPago, $iContRP);
 
@@ -167,7 +167,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                   if ($clrpsd10->erro_status == 0) {
                       throw new Exception($clrpsd10->erro_msg);
                   }
-                  $clrpsd11 = new cl_rpsd112019();
+                  $clrpsd11 = new cl_rpsd112020();
                   $clrpsd11->si190_tiporegistro = 11;
                   $clrpsd11->si190_codreduzidorsp = $oDadosRPSD->codreduzidorsp;
                   $clrpsd11->si190_codfontrecursos = $iFonteAlterada;
@@ -200,9 +200,9 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
         $sWhere =  " AND conhistdoc.c53_tipo not in (1000) ";
 
         if($iAno==2018){
-            $iAno = 2019;
+            $iAno = 2020;
             $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
-                             where substr(c60_estrut,1,5)='82910' and c60_anousu=2019 and c61_anousu=2019";
+                             where substr(c60_estrut,1,5)='82910' and c60_anousu=2020 and c61_anousu=2020";
             $sWhere =  " AND conhistdoc.c53_tipo in (2023) ";
         }
 

@@ -15,10 +15,10 @@ require_once('libs/db_libcontabilidade.php');
 require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
-require_once("classes/db_bfdcasp102019_classe.php");
-require_once("classes/db_bfdcasp202019_classe.php");
+require_once("classes/db_bfdcasp102020_classe.php");
+require_once("classes/db_bfdcasp202020_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2019/dcasp/geradores/GerarBF.model.php");
+require_once("model/contabilidade/arquivos/sicom/2020/dcasp/geradores/GerarBF.model.php");
 
 /**
  * gerar arquivo de Balanço Financeiro
@@ -99,8 +99,8 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clbfdcasp10 = new cl_bfdcasp102019();
-    $clbfdcasp20 = new cl_bfdcasp202019();
+    $clbfdcasp10 = new cl_bfdcasp102020();
+    $clbfdcasp20 = new cl_bfdcasp202020();
 
 
     /**
@@ -149,7 +149,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oRetornoBF = $oBalancoFinanceiro->getDados();
 
 
-    /** BFDCASP102019 */
+    /** BFDCASP102020 */
     $aExercicios = array(
         1 => 'vlrexatual'
     );
@@ -157,7 +157,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbfdcasp10  = new cl_bfdcasp102019();
+      $clbfdcasp10  = new cl_bfdcasp102020();
 
       $clbfdcasp10->si206_ano                               = $iAnoUsu;
       $clbfdcasp10->si206_periodo                           = $iCodigoPeriodo;
@@ -189,14 +189,14 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // $rsResult10
 
 
-    /** BFDCASP202019 */
+    /** BFDCASP202020 */
     $aExercicios = array(
         1 => 'vlrexatual'
     );
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $clbfdcasp20  = new cl_bfdcasp202019();
+      $clbfdcasp20  = new cl_bfdcasp202020();
 
       $clbfdcasp20->si207_ano                               = $iAnoUsu;
       $clbfdcasp20->si207_periodo                           = $iCodigoPeriodo;
