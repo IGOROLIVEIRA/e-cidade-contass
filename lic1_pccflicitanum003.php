@@ -109,7 +109,7 @@ if(isset($alterar)){
     db_fim_transacao();
   }
 
-    if(!isset($erro_edital)){
+    if(!$erro_edital && !$erro){
 
         db_inicio_transacao();
 
@@ -162,21 +162,26 @@ if(isset($alterar)){
         $l24_instit = $instit;
         $nomeinstit = $oInstit->nomeinst;
     }
-
-    $sWhere =  " l47_timestamp = (select max(l47_timestamp) from pccfeditalnum) and l47_instit = $instit and l47_anousu = $anousu";
-    $sSqlEdital = $clpccfeditalnum->sql_query_file(null, "pccfeditalnum.*", "l47_anousu desc", $sWhere);
-    $result_edital = $clpccfeditalnum->sql_record($sSqlEdital);
     
-    if($clpccfeditalnum->numrows > 0){
-        db_fieldsmemory($result_edital, 0);
-    }else{
-        $l47_numero = 0;
-        $l47_instit = $instit;
+  }
+  
+
+    if(!isset($alterar) || $erro_edital || $erro){
+
+        $sWhere =  " l47_timestamp = (select max(l47_timestamp) from pccfeditalnum) and l47_instit = $instit and l47_anousu = $anousu";
+        $sSqlEdital = $clpccfeditalnum->sql_query_file(null, "pccfeditalnum.*", "l47_anousu desc", $sWhere);
+        $result_edital = $clpccfeditalnum->sql_record($sSqlEdital);
+        
+        if($clpccfeditalnum->numrows > 0){
+            db_fieldsmemory($result_edital, 0);
+        }else{
+            $l47_numero = 0;
+            $l47_instit = $instit;
+        }
+
+        $db_botao = true;
+
     }
-
-    $db_botao = true;
-
-}
 
 ?>
 <html>
