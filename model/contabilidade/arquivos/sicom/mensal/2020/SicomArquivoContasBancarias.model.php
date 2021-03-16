@@ -1345,8 +1345,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 						if ($oSaldoTransfCtb->si202_codctb == $oCtb20->si96_codctb) {
 
-							//Cria reg21 de saída da fonte principal para fonte cadastrada na tabela saldotransfctb
-							$sHash21 = $oCtb20->si96_codctb.$oCtb20->iFontePrincipal.'2';
+							$iTipoMovimentacao = $oSaldoTransfCtb->si202_saldofinal < 0 ? 1 : 2;
+
+							/**
+							 * Cria reg21 de saída/entrada da fonte principal para fonte cadastrada na tabela saldotransfctb
+							 * Se o valor cadastrado for negativo, será uma entrada na principal
+							 */							
+							$sHash21 = $oCtb20->si96_codctb.$oCtb20->iFontePrincipal.$iTipoMovimentacao;
 
 							//Cria saída da fonte principal
 							if (!$aCtb20Agrupado[$sHash20]->ext21[$sHash21]) {
@@ -1355,8 +1360,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$oDadosMovi21->si97_tiporegistro 		= '21';
 								$oDadosMovi21->si97_codctb 				= $oCtb20->si96_codctb;
 								$oDadosMovi21->si97_codfontrecursos 	= $oCtb20->iFontePrincipal;
-								$oDadosMovi21->si97_codreduzidomov 		= $oCtb20->si96_codctb . $oCtb20->si96_codfontrecursos.'2';
-								$oDadosMovi21->si97_tipomovimentacao 	= 2;
+								$oDadosMovi21->si97_codreduzidomov 		= $oCtb20->si96_codctb . $oCtb20->si96_codfontrecursos.$iTipoMovimentacao;
+								$oDadosMovi21->si97_tipomovimentacao 	= $iTipoMovimentacao;
 								$oDadosMovi21->si97_tipoentrsaida 		= '98';
 								$oDadosMovi21->si97_dscoutrasmov 		= ' ';
 								$oDadosMovi21->si97_valorentrsaida 		= $oSaldoTransfCtb->si202_saldofinal;
@@ -1374,8 +1379,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 							//Atualiza saldo do reg20
 							$aCtb20Agrupado[$sHash20]->si96_vlsaldofinalfonte -= $oSaldoTransfCtb->si202_saldofinal;
 
-							//Cria entrada na fonte cadastrada na tabela saldotransfctb
-							$sHash21b = $oCtb20->si96_codctb.$oSaldoTransfCtb->si202_codfontrecursos.'1';
+							$iTipoMovimentacao = $oSaldoTransfCtb->si202_saldofinal < 0 ? 2 : 1;
+
+							/**
+							 * Cria entrada/saída na fonte cadastrada na tabela saldotransfctb 
+							 * Se o valor cadastrado for negativo, será uma saída na fonte cadastrada
+							 */
+							$sHash21b = $oCtb20->si96_codctb.$oSaldoTransfCtb->si202_codfontrecursos.$iTipoMovimentacao;
 							$sHash20b = substr($sHash20, 0, -3).$oSaldoTransfCtb->si202_codfontrecursos;
 						  
 							if (!$aCtb20Agrupado[$sHash20b]->ext21[$sHash21b]) {
@@ -1384,8 +1394,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$oDadosMovi21->si97_tiporegistro 		= '21';
 								$oDadosMovi21->si97_codctb 				= $oCtb20->si96_codctb;
 								$oDadosMovi21->si97_codfontrecursos 	= $oSaldoTransfCtb->si202_codfontrecursos;
-								$oDadosMovi21->si97_codreduzidomov 		= $oCtb20->si96_codctb . $oSaldoTransfCtb->si202_codfontrecursos.'1';
-								$oDadosMovi21->si97_tipomovimentacao 	= 1;
+								$oDadosMovi21->si97_codreduzidomov 		= $oCtb20->si96_codctb . $oSaldoTransfCtb->si202_codfontrecursos.$iTipoMovimentacao;
+								$oDadosMovi21->si97_tipomovimentacao 	= $iTipoMovimentacao;
 								$oDadosMovi21->si97_tipoentrsaida 		= '98';
 								$oDadosMovi21->si97_dscoutrasmov 		= ' ';
 								$oDadosMovi21->si97_valorentrsaida 		= $oSaldoTransfCtb->si202_saldofinal;
