@@ -392,7 +392,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         } else {			
 			$oConta = new stdClass();
 			$oConta->codctb 	= $oRegistro10->codctb;
-			$oConta->recurso 	= in_array($oRegistro10->recurso, $this->aFontesEncerradas) ? substr($oRegistro10->recurso, 0, 1).'59' : $oRegistro10->recurso;
+			$oConta->recurso 	= $aBancosAgrupados[$aHash]->contas[0]->recurso;
 
 			$aBancosAgrupados[$aHash]->contas[] = $oConta;
         }
