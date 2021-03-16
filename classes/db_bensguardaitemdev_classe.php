@@ -417,7 +417,7 @@ class cl_bensguardaitemdev {
      $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = bensguardaitemdev.t23_usuario";
      $sql .= "      inner join situabens  on  situabens.t70_situac = bensguardaitemdev.t23_situacao";
      $sql .= "      inner join bensguardaitem  on  bensguardaitem.t22_codigo = bensguardaitemdev.t23_guardaitem";
-     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = bensguardaitem.t22_usuario";
+     $sql .= "      inner join db_usuarios as c on c.id_usuario = bensguardaitem.t22_usuario";
      $sql .= "      inner join bens  as a on   a.t52_bem = bensguardaitem.t22_bem";
      $sql .= "      inner join bensguarda  as b on   b.t21_codigo = bensguardaitem.t22_bensguarda";
      $sql2 = "";

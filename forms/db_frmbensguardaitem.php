@@ -249,6 +249,7 @@ function js_mostrabensguarda1(chave1,chave2){
 }
 
 function js_pesquisat22_bem(mostra){
+
   let codigo_guarda = "<?=$t22_bensguarda?>";
 
   if(mostra==true){

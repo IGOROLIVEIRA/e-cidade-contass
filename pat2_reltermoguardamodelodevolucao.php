@@ -131,7 +131,7 @@ ob_start();
                 for($count=0;$count< pg_numrows($rsBens);$count++){
                     $oItemPosicao = db_utils::fieldsMemory($rsBens, $count);
             ?>
-                    <p style="font-size: 10px"><?= $oItemPosicao->t23_obs ? $count+1 .' - '.$oItemPosicao->t23_obs : ' - ';?></p>
+                    <p style="font-size: 10px"><?= $count+1 . ($oItemPosicao->t23_obs ? ' - '.$oItemPosicao->t23_obs : ' - ' . 'NENHUMA OBSERVAÇÃO INFORMADA.');?></p>
             <?php
                 }
             ?>
