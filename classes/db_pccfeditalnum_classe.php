@@ -149,7 +149,7 @@ class cl_pccfeditalnum {
      return true;
    }
    // funcao para alteracao
-   function alterar ( $oid=null, $dbwhere=null ) {
+   function alterar ( $l47_numero=null, $dbwhere=null ) {
       $this->atualizacampos();
      $sql = " update pccfeditalnum set ";
      $virgula = "";
@@ -193,14 +193,14 @@ class cl_pccfeditalnum {
        }
      }
 
-     if(trim($this->l47_timestamp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l47_timestamp"])){
-        $sql  .= $virgula." l47_timestamp = $this->l47_timestamp ";
-     }
+      if(!$this->l47_timestamp || !isset($GLOBALS["HTTP_POST_VARS"]["l47_timestamp"])){
+          $sql .= $virgula." l47_timestamp = to_timestamp(now()::varchar, 'YYYY-MM-DD HH24:mi:ss')::timestamp without time zone ";
+      }
 
      $sql .= " where ";
      $sql2 = "";
-     if($dbwhere==null || $dbwhere ==""){
-       $sql2 = "oid = '$oid'";
+     if($dbwhere == null || !$dbwhere){
+       $sql2 = " l47_numero = $l47_numero";
      }else{
        $sql2 = $dbwhere;
      }

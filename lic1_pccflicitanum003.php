@@ -137,6 +137,8 @@ if(isset($alterar)){
 
                 $clpccfeditalnum->incluir();
 
+            }else{
+                $clpccfeditalnum->alterar($l47_numero, 'l47_numero = '.$l47_numero.' and l47_instit = '.$instit.' and l47_anousu = '.$anousu);
             }
 
         }
