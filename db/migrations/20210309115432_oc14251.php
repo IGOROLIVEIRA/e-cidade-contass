@@ -12,6 +12,8 @@ class Oc14251 extends AbstractMigration
             SELECT fc_startsession();
         
             DELETE FROM pccfeditalnum;
+
+            ALTER TABLE pccfeditalnum DROP COLUMN IF EXISTS l47_timestamp;
             
             ALTER TABLE pccfeditalnum ADD COLUMN l47_timestamp TIMESTAMP;
             
@@ -24,7 +26,10 @@ class Oc14251 extends AbstractMigration
             
             INSERT INTO dadosEdital(nroedital, exercicio, instit, datacriacao)
                 (SELECT l20_nroedital,
-                        l20_exercicioedital,
+                        case 
+                        when l20_exercicioedital is null 
+                            then extract(year from l20_datacria)
+                            else l20_exercicioedital end,
                         l20_instit,
                         to_timestamp(l20_datacria::varchar||' '||l20_horacria::varchar, 'YYYY-MM-DD HH24:MI') as data
                  FROM liclicita
