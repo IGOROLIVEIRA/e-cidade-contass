@@ -65,9 +65,6 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 	 */
 	public function gerarDados()
 	{
-		
-		// ini_set('display_errors', 'On');
-		// error_reporting(E_ALL);
 
 		$clcaixa13 = new cl_caixa132020();
 		$clcaixa12 = new cl_caixa122020();
@@ -349,11 +346,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			}
 
-		}
-
-		// echo "<pre>";
-		// print_r($aDadosAgrupados);die;
-		
+		}		
 
 		foreach ($aDadosAgrupados as $oDados10) {
 
@@ -439,7 +432,6 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			}
 
-			// db_fim_transacao();
 			$oGerarCAIXA = new GerarCAIXA();
 			$oGerarCAIXA->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 			$oGerarCAIXA->gerarDados();
