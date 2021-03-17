@@ -194,7 +194,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz"; 
     }
-// and (k13_reduz = 53241 or c61_codtce = 21) 
+
     $rsContas = db_query($sSqlGeral);
     //echo $sSqlGeral;
     //db_criatabela($rsContas);
