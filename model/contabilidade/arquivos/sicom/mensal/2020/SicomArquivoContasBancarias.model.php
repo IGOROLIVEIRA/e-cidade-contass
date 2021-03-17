@@ -194,7 +194,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz"; 
     }
-
+// and (k13_reduz = 53241 or c61_codtce = 21) 
     $rsContas = db_query($sSqlGeral);
     //echo $sSqlGeral;
     //db_criatabela($rsContas);
@@ -1380,7 +1380,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$oDadosMovi21->si97_tipomovimentacao 	= $iTipoMovimentacao;
 								$oDadosMovi21->si97_tipoentrsaida 		= '98';
 								$oDadosMovi21->si97_dscoutrasmov 		= ' ';
-								$oDadosMovi21->si97_valorentrsaida 		= abs($oSaldoTransfCtb->si202_saldofinal);
+								$oDadosMovi21->si97_valorentrsaida 		= $oSaldoTransfCtb->si202_saldofinal;
 								$oDadosMovi21->si97_codctbtransf 		= ' ';
 								$oDadosMovi21->si97_codfontectbtransf 	= ' ';
 								$oDadosMovi21->si97_mes 				= $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1389,7 +1389,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$aCtb20Agrupado[$sHash20]->ext21[$sHash21] = $oDadosMovi21;
 
 							} else {
-								$aCtb20Agrupado[$sHash20]->ext21[$sHash21]->si97_valorentrsaida += abs($oSaldoTransfCtb->si202_saldofinal);
+								$aCtb20Agrupado[$sHash20]->ext21[$sHash21]->si97_valorentrsaida += $aCtb20Agrupado[$sHash20]->ext21[$sHash21]->si97_valorentrsaida < 0 ? ($oSaldoTransfCtb->si202_saldofinal * -1) : abs($oSaldoTransfCtb->si202_saldofinal);
 							}
 
 							//Atualiza saldo do reg20
