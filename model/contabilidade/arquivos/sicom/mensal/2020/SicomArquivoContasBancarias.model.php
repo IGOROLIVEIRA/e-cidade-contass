@@ -194,7 +194,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz"; 
     }
-
+//  and (c61_codtce in (53241,53310) or k13_reduz in (53241,53310))
     $rsContas = db_query($sSqlGeral);
     //echo $sSqlGeral;
     //db_criatabela($rsContas);
@@ -1287,7 +1287,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 				//Cria segundo registro 21 entrada/saída da fonte principal
 				$iTipoMovimentacao 	= $oCtb20->si96_vlsaldofinalfonte > 0 ? 1 : 2;
-				$sHash21 			= $oContaAgrupada->si95_codctb.$oCtb20->iFontePrincipal.$iTipoMovimentacao;
+				$sHash21 			= $oCtb20->si96_codctb.$oCtb20->iFontePrincipal.$iTipoMovimentacao;
 
 				if(!$aCtb20Agrupado[$sHash20recurso]->ext21[$sHash21]) {
 				  
@@ -1364,7 +1364,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$oDadosMovi21->si97_tipomovimentacao 	= $iTipoMovimentacao;
 								$oDadosMovi21->si97_tipoentrsaida 		= '98';
 								$oDadosMovi21->si97_dscoutrasmov 		= ' ';
-								$oDadosMovi21->si97_valorentrsaida 		= $oSaldoTransfCtb->si202_saldofinal;
+								$oDadosMovi21->si97_valorentrsaida 		= abs($oSaldoTransfCtb->si202_saldofinal);
 								$oDadosMovi21->si97_codctbtransf 		= ' ';
 								$oDadosMovi21->si97_codfontectbtransf 	= ' ';
 								$oDadosMovi21->si97_mes 				= $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1373,7 +1373,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$aCtb20Agrupado[$sHash20]->ext21[$sHash21] = $oDadosMovi21;
 
 							} else {
-								$aCtb20Agrupado[$sHash20]->ext21[$sHash21]->si97_valorentrsaida += $oSaldoTransfCtb->si202_saldofinal;
+								$aCtb20Agrupado[$sHash20]->ext21[$sHash21]->si97_valorentrsaida += abs($oSaldoTransfCtb->si202_saldofinal);
 							}
 
 							//Atualiza saldo do reg20
@@ -1454,6 +1454,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 	 /**
        * inclusão do registro 20 e 21 do procedimento normal
        */
+	//   echo '<pre>';print_r($aCtb20Agrupado);echo '</pre>';
 	foreach ($aCtb20Agrupado as $oCtb20) {
 
         $bFonteEncerrada  = in_array($oCtb20->si96_codfontrecursos, $this->aFontesEncerradas);
