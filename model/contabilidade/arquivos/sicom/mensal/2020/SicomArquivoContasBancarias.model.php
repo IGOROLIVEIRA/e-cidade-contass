@@ -194,7 +194,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz"; 
     }
-//  and (c61_codtce in (53241,53310) or k13_reduz in (53241,53310))
+
     $rsContas = db_query($sSqlGeral);
     //echo $sSqlGeral;
     //db_criatabela($rsContas);
@@ -1454,7 +1454,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 	 /**
        * inclusão do registro 20 e 21 do procedimento normal
        */
-	//   echo '<pre>';print_r($aCtb20Agrupado);echo '</pre>';
 	foreach ($aCtb20Agrupado as $oCtb20) {
 
         $bFonteEncerrada  = in_array($oCtb20->si96_codfontrecursos, $this->aFontesEncerradas);
