@@ -9,7 +9,7 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarCVC.
 
 
 /**
- * Dados Cadastro de Ve√≠culos Sicom Acompanhamento Mensal
+ * Dados Cadastro de VeÌculos Sicom Acompanhamento Mensal
  * @author robson
  * @package Contabilidade
  */
@@ -59,7 +59,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
     }
 
     /**
-     * selecionar os dados do cadastro de ve√≠culos
+     * selecionar os dados do cadastro de veÌculos
      * @see iPadArquivoBase::gerarDados()
      */
     public function gerarDados()
@@ -103,7 +103,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         $result = db_query($clcvc30->sql_query(null, "*", null, "si148_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si148_instit=" . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
             $clcvc30->excluir(null, "si148_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si148_instit=" . db_getsession("DB_instit"));
-            if ($clcvc30 > erro_status == 0) {
+            if ($clcvc30->erro_status == 0) {
                 throw new Exception($clcvc30->erro_msg);
             }
         }
@@ -115,9 +115,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 throw new Exception($clcvc40->erro_msg);
             }
         }
-        db_fim_transacao();
 
-        db_inicio_transacao();
         $sSql = "
       SELECT DISTINCT '10' AS tipoRegistro,
                       si09_codorgaotce AS codOrgao,
@@ -210,7 +208,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       LEFT JOIN infocomplementaresinstit ON si09_instit = db_depart.instit
       LEFT JOIN cgm ON tipoveiculos.si04_numcgm = cgm.z01_numcgm
       WHERE db_config.codigo = " . db_getsession("DB_instit") . "
-          AND veicbaixa.ve04_veiccadtipobaixa = 7
+      AND veicbaixa.ve04_veiccadtipobaixa != 7
           AND DATE_PART('YEAR',veicbaixa.ve04_data) = " . db_getsession("DB_anousu") . "
           AND DATE_PART('MONTH',veicbaixa.ve04_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -234,8 +232,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $sSqlVerifica = "select si146_sequencial from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}'
         and si146_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                $sSqlVerifica .= " union select si146_sequencial from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}'";
-                $sSqlVerifica .= " union select si146_sequencial from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}'";
+                $sSqlVerifica .= " union select si146_sequencial from cvc102015 where si146_codveiculo = '{$oDados10->codveiculo}'";
+                $sSqlVerifica .= " union select si146_sequencial from cvc102014 where si146_codveiculo = '{$oDados10->codveiculo}'";
 
                 $sSqlNaoRepete = "
           select * from cvc102021 where si146_codveiculo = '{$oDados10->codveiculo}' and si146_codunidadesub = '{$oDados10->ve01_codunidadesub}'
@@ -505,7 +503,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		                     unveic.o41_subunidade,
 		                     codmater) as teste";
 
-        $rsResult20 = db_query($sSql); //echo $sSql; db_criatabela($rsResult20);die();
+        $rsResult20 = db_query($sSql);// echo $sSql; db_criatabela($rsResult20);die();
         /**
          * registro 20
          */
@@ -514,6 +512,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
             $oResult20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
+            $sqlTipoVeiculo = "select si04_tipoveiculo from tipoveiculos where si04_veiculos = " . $oResult20->codveiculo ;
+            $rsTipoVeiculo = db_query($sqlTipoVeiculo);
+            $iTipoVeiculo = db_utils::fieldsMemory($rsTipoVeiculo, 0)->si04_tipoveiculo;
+            
+            if(intval($iTipoVeiculo) == 5){
+                continue;
+            }
+            
             $sHash20 = $oResult20->codveiculo . $oResult20->codmater . $oResult20->nroempenho . $oResult20->dtempenho . $oResult20->tipogasto . $oResult20->atestadocontrole;
 
             if (!isset($aDadosAgrupados20[$sHash20])) {
@@ -523,15 +529,15 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 if ($oResult20->subunidade != 0 ||$oResult20->subunidade = null) {
                     /*
                     * O campo codUnidadeSubEmpenho torna-se de
-                    * preenchimento obrigat√≥rio se a origem do gasto foi
-                    * atrav√©s de abastecimento em posto/ Com√©rcio ( origemGasto = 2 ).
+                    * preenchimento obrigatÛrio se a origem do gasto foi
+                    * atravÈs de abastecimento em posto/ ComÈrcio ( origemGasto = 2 ).
                     */
                     if ($oResult20->origemgasto == 2) {
                         $oResult20->codunidadesubempenho .= str_pad($oResult20->subunidade, 3, "0", STR_PAD_LEFT);
                     } else {
                         $oResult20->codunidadesubempenho = "";
                     }
-                    if ($oResult20->anoveiculo >= 2021) {
+                    if ($oResult20->anoveiculo >= 2014) {
                         $oResult20->codunidadesub .= str_pad($oResult20->subunidade, 3, "0", STR_PAD_LEFT);
                     }
                 }
@@ -557,7 +563,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $oDados20->si147_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
                 /**
-                 *          MARCA√á√ÉO INICIAL E FINAL DO VEICULO:
+                 *          MARCA«√O INICIAL E FINAL DO VEICULO:
                  */
 
                 $sSqlKm = "select min(ve60_medidasaida) as km_inicial, max(ve61_medidadevol) as km_final
@@ -708,10 +714,10 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       LEFT JOIN empenho.empempenho AS empempenho ON (empveiculos.si05_numemp = empempenho.e60_numemp)
       LEFT JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
                                                         AND empempenho.e60_anousu = orcdotacao.o58_anousu)
-      INNER JOIN veiculos.veicitensobrig AS veicitensobrig ON (veiculos.ve01_codigo=veicitensobrig.ve09_veiculos)
-      INNER JOIN veiculos.veiccaditensobrig AS veiccaditensobrig ON (veicitensobrig.ve09_veiccaditensobrig=veiccaditensobrig.ve08_sequencial)
+      LEFT JOIN veiculos.veicitensobrig AS veicitensobrig ON (veiculos.ve01_codigo=veicitensobrig.ve09_veiculos)
+      LEFT JOIN veiculos.veiccaditensobrig AS veiccaditensobrig ON (veicitensobrig.ve09_veiccaditensobrig=veiccaditensobrig.ve08_sequencial)
       INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto
-      INNER JOIN veiculos.veicbaixa AS veicbaixa ON (veicitensobrig.ve09_veiculos=veicbaixa.ve04_veiculo)
+      INNER JOIN veiculos.veicbaixa AS veicbaixa ON (veiculos.ve01_codigo=veicbaixa.ve04_veiculo)
       AND db01_anousu = " . db_getsession("DB_anousu") . "
       INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao
       AND db01_unidade = unveic.o41_unidade
@@ -745,10 +751,10 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       LEFT JOIN empenho.empempenho AS empempenho ON (empveiculos.si05_numemp = empempenho.e60_numemp)
       LEFT JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
                                                         AND empempenho.e60_anousu = orcdotacao.o58_anousu)
-      INNER JOIN veiculos.veicitensobrig AS veicitensobrig ON (veiculos.ve01_codigo=veicitensobrig.ve09_veiculos)
-      INNER JOIN veiculos.veiccaditensobrig AS veiccaditensobrig ON (veicitensobrig.ve09_veiccaditensobrig=veiccaditensobrig.ve08_sequencial)
+      LEFT JOIN veiculos.veicitensobrig AS veicitensobrig ON (veiculos.ve01_codigo=veicitensobrig.ve09_veiculos)
+      LEFT JOIN veiculos.veiccaditensobrig AS veiccaditensobrig ON (veicitensobrig.ve09_veiccaditensobrig=veiccaditensobrig.ve08_sequencial)
       INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto
-      INNER JOIN veiculos.veicbaixa AS veicbaixa ON (veicitensobrig.ve09_veiculos=veicbaixa.ve04_veiculo)
+      INNER JOIN veiculos.veicbaixa AS veicbaixa ON (veiculos.ve01_codigo=veicbaixa.ve04_veiculo)
       AND db01_anousu = " . db_getsession("DB_anousu") . "
       LEFT JOIN veiculostransferencia on ve81_codigo=ve01_codigo
       INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao

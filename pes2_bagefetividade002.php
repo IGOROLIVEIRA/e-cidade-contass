@@ -31,7 +31,15 @@ include("libs/db_sql.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $head3 = "EFETIVIDADE REFERENTE A ".$mes." / ".$ano;
-$head5 = "INTERVALO: ".$secini." até ".$secfin;
+
+if ($tipo_filtro == 'geral') {
+   $order = "order by z01_nome";
+   $whereSecretaria = "";
+} else {
+   $head5 = "INTERVALO: ".$secini." até ".$secfin;
+   $order = "order by o40_orgao, z01_nome";
+   $whereSecretaria = "and o40_orgao between $secini and $secfin";
+}
 
 $sSql  = "select rh02_regist,                                       ";
 $sSql .= "       z01_nome,                                          ";
@@ -63,10 +71,10 @@ $sSql .= "     left join rhpesrescisao on rh05_seqpes = rh02_seqpes ";
 $sSql .= "where rh02_anousu = $ano                                  ";
 $sSql .= "  and rh02_mesusu = $mes                                  ";
 $sSql .= "  and rh02_instit = ".db_getsession("DB_instit");
-$sSql .= "  and o40_orgao between $secini and $secfin               ";
+$sSql .= "  {$whereSecretaria}                                      ";
 $sSql .= "  and rh05_seqpes is null                                 ";
 $sSql .= "  and rh30_vinculo = 'A'                                  ";
-$sSql .= "order by o40_orgao, z01_nome                              ";
+$sSql .= "{$order}                                                  ";
 
 $result = db_query($sSql);
 $xxnum  = pg_numrows($result);
@@ -89,7 +97,7 @@ $orgao 	= 0;
 
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
-   if ($orgao != $o40_orgao){
+   if ($orgao != $o40_orgao && $tipo_filtro == 'secretaria'){
    	  if($x != 0){
         $pdf->setfont('arial','b',8);
         $pdf->cell(190,$alt,'TOTAL DE REGISTROS  : '.$total,"T",0,"C",0);
@@ -102,68 +110,80 @@ for($x = 0; $x < pg_numrows($result);$x++){
       $pdf->addpage('L');
       $pdf->setfont('arial','b',8);
       $alt = 5;
-   	  $pdf->cell(0,$alt,'SECRETARIA : '.$o40_orgao.' - '.$o40_descr,0,1,"L",0);
-   	  $pdf->ln(4);
+      if ($tipo_filtro == 'secretaria') {
+         $pdf->cell(0,$alt,'SECRETARIA : '.$o40_orgao.' - '.$o40_descr,0,1,"L",0);
+         $pdf->ln(4);
+      }
       $pdf->cell(20,$alt,'MATRIC.','LRT',0,"C",1);
       $pdf->cell(60,$alt,'NOME DO FUNCIONÁRIO','LRT',0,"C",1);
-   	  $pdf->cell(28,$alt,'EFETIVIDADE','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-   	  $pdf->cell(18,$alt,'','LRT',0,"C",1);
-  	  $pdf->cell(18,$alt,'','LRT',1,"C",1);
-      $pdf->setfont('arial','b',6);
-      $pdf->cell(20,$alt,'','L',0,"C",1);
-      $pdf->cell(60,$alt,'','L',0,"C",1);
-   	  $pdf->cell(28,$alt,'','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'Faltas','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'Ajuda de Custo','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'H.Extra 50%','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'H.Extra 100%','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'Dif.H.Ext.50%','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'Dif.H.Ext.100%','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'Adic.Not.Var.','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'Vale Aliment.','L',0,"C",1);
-   	  $pdf->cell(18,$alt,'Sal.Conserv.','L',0,"C",1);
- 	    $pdf->cell(18,$alt,'Reg.Supl.','LR',1,"C",1);
-
+      if ($modelo == 'ocorrencias') {
+         $pdf->cell(210,$alt,'OCORRÊNCIAS','LRT',1,"C",1);
+      } else {
+         $pdf->cell(28,$alt,'EFETIVIDADE','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',0,"C",1);
+         $pdf->cell(18,$alt,'','LRT',1,"C",1);
+         $pdf->setfont('arial','b',6);
+         $pdf->cell(20,$alt,'','L',0,"C",1);
+         $pdf->cell(60,$alt,'','L',0,"C",1);
+         $pdf->cell(28,$alt,'','L',0,"C",1);
+         $pdf->cell(18,$alt,'Faltas','L',0,"C",1);
+         $pdf->cell(18,$alt,'Ajuda de Custo','L',0,"C",1);
+         $pdf->cell(18,$alt,'H.Extra 50%','L',0,"C",1);
+         $pdf->cell(18,$alt,'H.Extra 100%','L',0,"C",1);
+         $pdf->cell(18,$alt,'Dif.H.Ext.50%','L',0,"C",1);
+         $pdf->cell(18,$alt,'Dif.H.Ext.100%','L',0,"C",1);
+         $pdf->cell(18,$alt,'Adic.Not.Var.','L',0,"C",1);
+         $pdf->cell(18,$alt,'Vale Aliment.','L',0,"C",1);
+         $pdf->cell(18,$alt,'Sal.Conserv.','L',0,"C",1);
+         $pdf->cell(18,$alt,'Reg.Supl.','LR',1,"C",1);
+      }
       $troca = 0;
    }
    $alt = 6;
    $pdf->setfont('arial','',7);
    $pdf->cell(20,$alt,$rh02_regist,'TLR',0,0,"C",0);
    $pdf->cell(60,$alt,$z01_nome,'TLR',0,"L",0);
-   $pdf->cell(28,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',0,"L",0);
-   $pdf->cell(18,$alt,'','TLR',1,"L",0);
+   if ($modelo == 'ocorrencias') {
+      $pdf->cell(210,$alt,'','TLR',1,"L",0);
+      $pdf->cell(20,$alt,'','BLR',0,"C",0);
+      $pdf->cell(60,$alt,substr($rh37_descr,0,25).'-'.$rh30_regime,'BLR',0,"L",0);
+      $pdf->cell(210,$alt,'','TLRB',1,"L",0);
+   } else {
+      $pdf->cell(28,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',0,"L",0);
+      $pdf->cell(18,$alt,'','TLR',1,"L",0);
 
-   $alt = 5;
-   $pdf->cell(20,$alt,'','BLR',0,"C",0);
-   $pdf->cell(60,$alt,substr($rh37_descr,0,25).'-'.$rh30_regime,'BLR',0,"L",0);
-   $pdf->cell(28,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',0,"L",0);
-   $pdf->cell(18,$alt,'','BLR',1,"L",0);
+      $alt = 5;
+      $pdf->cell(20,$alt,'','BLR',0,"C",0);
+      $pdf->cell(60,$alt,substr($rh37_descr,0,25).'-'.$rh30_regime,'BLR',0,"L",0);
+      $pdf->cell(28,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',0,"L",0);
+      $pdf->cell(18,$alt,'','BLR',1,"L",0);
+   }
    $total ++;
 }
 $pdf->setfont('arial','b',8);

@@ -25,8 +25,10 @@ class cl_ctb212021 {
    var $si97_tipoentrsaida = null; 
    var $si97_valorentrsaida = 0;
    var $si97_dscoutrasmov = null;
+   var $si97_saldocec = 0;
    var $si97_codctbtransf = 0; 
    var $si97_codfontectbtransf = 0; 
+   var $si97_saldocectransf = 0;
    var $si97_mes = 0; 
    var $si97_reg20 = 0; 
    var $si97_instit = 0; 
@@ -41,8 +43,10 @@ class cl_ctb212021 {
                  si97_tipoentrsaida = varchar(2) = Tipo de entrada ou  saída 
                  si97_valorentrsaida = float8 = Valor correspondente à entrada/saída
                  si97_dscoutrasmov = varchar(50) = Descrição de outras movimentações 
+                 si97_saldocec = int8 = Saldo compõe ou não compõe Caixa e Equivalentes de Caixa
                  si97_codctbtransf = int8 = Código Identificador da Conta Bancária 
                  si97_codfontectbtransf = int8 = Código da fonte de recursos ctb 
+                 si97_saldocectransf = int8 = A conta de onde saiu ou entrou recurso compõe ou não compõe Caixa e Equivalentes de Caixa
                  si97_mes = int8 = Mês 
                  si97_reg20 = int8 = reg20 
                  si97_instit = int8 = Instituição 
@@ -73,9 +77,11 @@ class cl_ctb212021 {
        $this->si97_tipomovimentacao = ($this->si97_tipomovimentacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_tipomovimentacao"]:$this->si97_tipomovimentacao);
        $this->si97_tipoentrsaida = ($this->si97_tipoentrsaida == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_tipoentrsaida"]:$this->si97_tipoentrsaida);
        $this->si97_dscoutrasmov = ($this->si97_dscoutrasmov == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_dscoutrasmov"]:$this->si97_dscoutrasmov);
+       $this->si97_saldocec = ($this->si97_saldocec == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_saldocec"]:$this->si97_saldocec);
        $this->si97_valorentrsaida = ($this->si97_valorentrsaida == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_valorentrsaida"]:$this->si97_valorentrsaida);
        $this->si97_codctbtransf = ($this->si97_codctbtransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codctbtransf"]:$this->si97_codctbtransf);
        $this->si97_codfontectbtransf = ($this->si97_codfontectbtransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codfontectbtransf"]:$this->si97_codfontectbtransf);
+       $this->si97_saldocectransf = ($this->si97_saldocectransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_saldocectransf"]:$this->si97_saldocectransf);
        $this->si97_mes = ($this->si97_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_mes"]:$this->si97_mes);
        $this->si97_reg20 = ($this->si97_reg20 == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_reg20"]:$this->si97_reg20);
        $this->si97_instit = ($this->si97_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_instit"]:$this->si97_instit);
@@ -109,13 +115,19 @@ class cl_ctb212021 {
      }
      if($this->si97_valorentrsaida == null ){ 
        $this->si97_valorentrsaida = "0";
-     }
+	 }
+	 if($this->si97_saldocec == null ){ 
+		$this->si97_saldocec = "0";
+	 }
      if($this->si97_codctbtransf == null ){ 
        $this->si97_codctbtransf = "0";
      }
      if($this->si97_codfontectbtransf == null ){ 
        $this->si97_codfontectbtransf = "0";
-     }
+	 }
+	 if($this->si97_saldocectransf == null ){ 
+		$this->si97_saldocectransf = "0";
+	 }
      if($this->si97_mes == null ){ 
        $this->erro_sql = " Campo Mês nao Informado.";
        $this->erro_campo = "si97_mes";
@@ -178,10 +190,12 @@ class cl_ctb212021 {
                                       ,si97_codreduzidomov 
                                       ,si97_tipomovimentacao 
                                       ,si97_tipoentrsaida 
-                                	  ,si97_dscoutrasmov
+									  ,si97_dscoutrasmov
+									  ,si97_saldocec
                                       ,si97_valorentrsaida 
                                       ,si97_codctbtransf 
-                                      ,si97_codfontectbtransf 
+									  ,si97_codfontectbtransf 
+									  ,si97_saldocectransf
                                       ,si97_mes 
                                       ,si97_reg20 
                                       ,si97_instit 
@@ -194,10 +208,12 @@ class cl_ctb212021 {
                                ,$this->si97_codreduzidomov 
                                ,$this->si97_tipomovimentacao 
                                ,'$this->si97_tipoentrsaida' 
-                               ,'$this->si97_dscoutrasmov'
+							   ,'$this->si97_dscoutrasmov'
+							   ,$this->si97_saldocec
                                ,$this->si97_valorentrsaida 
                                ,$this->si97_codctbtransf 
-                               ,$this->si97_codfontectbtransf 
+							   ,$this->si97_codfontectbtransf 
+							   ,$this->si97_saldocectransf
                                ,$this->si97_mes 
                                ,$this->si97_reg20 
                                ,$this->si97_instit 
@@ -309,7 +325,11 @@ class cl_ctb212021 {
      if(trim($this->si97_dscoutrasmov)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_dscoutrasmov"])){
        $sql  .= $virgula." si97_dscoutrasmov = '$this->si97_dscoutrasmov' ";
        $virgula = ",";
-     }
+	 }
+	 if(trim($this->si97_saldocec)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_saldocec"])){
+		$sql  .= $virgula." si97_saldocec = '$this->si97_saldocec' ";
+		$virgula = ",";
+	 }
      if(trim($this->si97_valorentrsaida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_valorentrsaida"])){ 
         if(trim($this->si97_valorentrsaida)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si97_valorentrsaida"])){ 
            $this->si97_valorentrsaida = "0" ; 
@@ -330,7 +350,11 @@ class cl_ctb212021 {
         } 
        $sql  .= $virgula." si97_codfontectbtransf = $this->si97_codfontectbtransf ";
        $virgula = ",";
-     }
+	 }
+	 if(trim($this->si97_saldocectransf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_saldocectransf"])){
+		$sql  .= $virgula." si97_saldocectransf = '$this->si97_saldocectransf' ";
+		$virgula = ",";
+	 }
      if(trim($this->si97_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_mes"])){ 
        $sql  .= $virgula." si97_mes = $this->si97_mes ";
        $virgula = ",";

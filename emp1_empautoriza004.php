@@ -154,12 +154,22 @@ if (isset($incluir)) {
                 $sqlerro = true;
                 $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
             }
+        }else{
+            if ($z01_cgccpf == '' || $z01_cgccpf == null) {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
         }
 
         if (strlen($z01_cgccpf) == 11) {
             if ($z01_cgccpf == '00000000000') {
-                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
                 $sqlerro = true;
+                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
+        }else{
+            if ($z01_cgccpf == '' || $z01_cgccpf == null) {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
             }
         }
 

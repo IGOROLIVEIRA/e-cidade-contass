@@ -114,7 +114,8 @@ for($x = 0; $x < pg_numrows($result);$x++){
         $pdf->cell(40,$alt,'',0,0,"C",0);
       $pdf->cell(60,$alt,$rh31_nome,0,0,"L",0);
       $pdf->cell(20,$alt,$rh31_gparen,0,0,"L",0);
-      $pdf->cell(20,$alt,db_formatar($rh31_dtnasc,'d'),0,1,"C",0);
+      $pdf->cell(20,$alt,db_formatar($rh31_dtnasc,'d'),0,0,"C",0);
+      $pdf->cell(20,$alt,str_replace('/','-',db_formatar($rh31_cpf,'cpf')),0,1,"C",0);
    }
    $pdf->cell(0,$alt,'','T',1,"C",0);
    

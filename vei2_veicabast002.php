@@ -179,7 +179,6 @@ if(isset($quebrar_por) && ($quebrar_por == "C")){
 }
 
 $sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast(null,"",$ordem,$dbwhere,$iCoddepto);
-//die($sSqlBuscaAbastecimentos);
 $result  = $clveicabast->sql_record($sSqlBuscaAbastecimentos);
 $numrows = $clveicabast->numrows;
 

@@ -104,7 +104,11 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 		  $clide->si11_codorgao							= $oDadosIde->codorgao;
 		  $clide->si11_tipoorgao            = $oDadosIde->tipoorgao;
 		  $clide->si11_exercicioreferencia  = db_getsession("DB_anousu");
-		  $clide->si11_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
+            if($this->bEncerramento){
+                $clide->si11_mesreferencia    =  '13';
+            }else {
+                $clide->si11_mesreferencia = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            }
 		  $clide->si11_datageracao          = date("d-m-Y");
 		  $clide->si11_codcontroleremessa   = " ";
 		  $clide->si11_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];

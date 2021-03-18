@@ -515,6 +515,7 @@ try{
 
 
         foreach ($vlrdiscaixabruta as $fonte => $oDados){
+          
           $vlrDisponibilidade[$fonte]->VlrDisponibilidade = round($oDados->valor,2);
           if(!$retornoSicom[$fonte]){
             $retornoSicom[$fonte]->vlrcaixabruta = round($oDados->valor,2);

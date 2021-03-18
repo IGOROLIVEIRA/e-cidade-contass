@@ -316,7 +316,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
                                         foreach ($oResult as $oRow) {
                                             $aEle[$oRow->o56_codele] = $oRow->o56_descr;
-                                            $aCodele['o56_elemento'] = $oRow->o56_elemento;
+                                            $aCodele[] = substr($oRow->o56_elemento, 0 , -6);
                                         }
                                     }
 
@@ -344,7 +344,23 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?
-                        $arr  = array('0'=>'Não se aplica','1'=>'Executivo','2'=>'Legislativo');
+                        $arr  = array('0'=>'Não se aplica','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+
+                        $sSql = "SELECT si09_tipoinstit AS tipoinstit FROM infocomplementaresinstit WHERE si09_instit = " . db_getsession("DB_instit");
+          
+                        $rsResult = db_query($sSql);
+                        db_fieldsMemory($rsResult, 0);
+                        
+                        if ($tipoinstit == 5 || $tipoinstit == 6) {
+
+                            $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
+                            
+                            if(count(array_intersect($aElementos, $aCodele)) > 0) {
+                                $arr  = array('0'=>'Selecione','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+                            }
+                            
+                        }                        
+                        
                         db_select("e60_tipodespesa", $arr, true, 1);
                         ?>
                     </td>
@@ -541,7 +557,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 <div id="ctnCotasMensais" class="container" style=" width: 500px;">
 </div>
 <style>
-    #e60_tipodespesa{ width: 228px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
+    #e60_tipodespesa{ width: 282px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
 </style>
 
 <script>

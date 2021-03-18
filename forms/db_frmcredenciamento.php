@@ -54,14 +54,12 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         $sOrdem   = "l21_ordem";
         $sWhere   = "l21_codliclicita = {$l20_codigo} ";
         $sSqlItemLicitacao = $clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
-        echo $sSqlItemLicitacao;
         $sResultitens = $clliclicitem->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clliclicitem->numrows;
         if ($numrows > 0) {
             $sWhere   = "l21_codliclicita = {$l20_codigo} and l205_fornecedor = {$l205_fornecedor} and l205_licitacao = {$l20_codigo}";
             $sql     = $clcredenciamento->itensCredenciados(null, $sCampos, $sOrdem, $sWhere);
-            //echo $sql;
             $result  = $clcredenciamento->sql_record($sql);
             $numrows = $clcredenciamento->numrows;
         }

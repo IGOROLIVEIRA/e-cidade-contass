@@ -30,6 +30,7 @@ include("libs/db_sql.php");
 
 $head3 = "CONTAS AGRUPADAS SICOM";
 
+$aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
 $sSqlGeral = "select  10 as tiporegistro,
 					     k13_reduz as codctb,
@@ -87,13 +88,17 @@ for ($iCont = 0;$iCont < pg_num_rows($rsContas); $iCont++) {
 
             $cCtb10->codctb =	$oRegistro10->codctb;
             $cCtb10->codtce =	$oRegistro10->codtce;
+            $cCtb10->recurso =	in_array($oRegistro10->recurso, $aFontesEncerradas) ? substr($oRegistro10->recurso, 0, 1).'59' : $oRegistro10->recurso;
             $cCtb10->contas	= array();
 
-            //$cCtb10->contas[]= $oRegistro10->codctb;
             $aBancosAgrupados[$aHash] = $cCtb10;
 
         }else{
-            $aBancosAgrupados[$aHash]->contas[] = $oRegistro10->codctb;
+            $oConta = new stdClass();
+            $oConta->codctb = $oRegistro10->codctb;
+            $oConta->recurso = in_array($oRegistro10->recurso, $aFontesEncerradas) ? substr($oRegistro10->recurso, 0, 1).'59' : $oRegistro10->recurso;
+
+            $aBancosAgrupados[$aHash]->contas[] = $oConta;
         }
 
 
@@ -126,9 +131,23 @@ foreach($aBancosAgrupados as $oBancos)
         $troca = 0;
     }
     $pdf->setfont('arial','',7);
-    $pdf->cell(35,$alt,$oBancos->codctb,1,0,"C",0);
-    $pdf->cell(35,$alt,$oBancos->codtce,1,0,"C",0);
-    $pdf->cell(110,$alt,implode(",",$oBancos->contas),1,1,"C",0);
+    $pdf->cell(35,$alt,$oBancos->codctb.' ('.$oBancos->recurso.')',1,0,"C",0);
+    $pdf->cell(35,$alt,$oBancos->codtce,1,0,"C",0);    
+    
+    $sContaAgrup = '';
+    $iCount = count($oBancos->contas);
+    
+    foreach($oBancos->contas as $index => $oConta) {
+
+        $sContaAgrup .= $oConta->codctb.' ('.$oConta->recurso.')';
+        
+        if ($index < ($iCount-1)) {
+            $sContaAgrup .= ', ';
+        }
+        
+    }
+
+    $pdf->cell(110,$alt,$sContaAgrup,1,1,"C",0);
     $total ++;
 }
 $pdf->setfont('arial','b',8);

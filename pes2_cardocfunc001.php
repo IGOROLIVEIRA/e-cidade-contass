@@ -30,6 +30,8 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+include("dbforms/db_classesgenericas.php");
+$gform    = new cl_formulario_rel_pes;
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt23');
 $clrotulo->label('DBtxt25');
@@ -58,12 +60,49 @@ function js_verifica(){
 
 
 function js_emite(){
+  let qry = '';
+  qry += "&tipo="             + document.form1.tipo.value;
+  qry += "&quebrar="          + document.form1.quebrar.value;
+  if(document.form1.selcargo){
+    if(document.form1.selcargo.length > 0){
+      faixacargo = js_campo_recebe_valores();
+      qry+= "&fca="+faixacargo;
+    }
+  }else if(document.form1.cargoi){
+    carini = document.form1.cargoi.value;
+    carfim = document.form1.cargof.value;
+    qry+= "&cai="+carini;
+    qry+= "&caf="+carfim;
+  }
+
+  if(document.form1.sellot){
+    if(document.form1.sellot.length > 0){
+      faixalot = js_campo_recebe_valores();
+      qry+= "&flt="+faixalot;
+    }
+  }else if(document.form1.lotaci){
+    lotini = document.form1.lotaci.value;
+    lotfim = document.form1.lotacf.value;
+    qry+= "&lti="+lotini;
+    qry+= "&ltf="+lotfim;
+  }
+  if(document.form1.selorg){
+    if(document.form1.selorg.length > 0){
+      faixaorg = js_campo_recebe_valores();
+      qry+= "&for="+faixaorg;
+    }
+  }else if(document.form1.orgaoi){
+    orgini = document.form1.orgaoi.value;
+    orgfim = document.form1.orgaof.value;
+    qry+= "&ori="+orgini;
+    qry+= "&orf="+orgfim;
+  }
   jan = window.open('pes2_cardocfunc002.php?regime='+document.form1.reg.value+
 					      '&ordem='+document.form1.ordem.value+
 					      '&cargo='+document.form1.cargo.value+
 					      '&demit='+document.form1.demit.value+
 					      '&ano='+document.form1.DBtxt23.value+
-					      '&mes='+document.form1.DBtxt25.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+					      '&mes='+document.form1.DBtxt25.value+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
 </script>  
@@ -141,6 +180,63 @@ function js_emite(){
             db_select('cargo',$xyy,true,4,"");
 	  ?>
 	</td>
+      </tr>
+      <?
+        if(!isset($tipo)){
+          $tipo = "l";
+        }
+        if(!isset($filtro)){
+          $filtro = "i";
+        }
+        
+        $gform->tipores = true;
+        $gform->usalota = true;               // PERMITIR SELEÇÃO DE LOTAÇÕES
+        $gform->usaLotaFieldsetClass = true;  // PERMITIR SELEÇÃO DE LOTAÇÕES
+        $gform->usaorga = true;               // PERMITIR SELEÇÃO DE ÓRGÃO
+        $gform->usacarg = true;               // PERMITIR SELEÇÃO DE Cargo
+        //$gform->mostaln = true;             // Removido campo tipo de ordem e carregado manualmente 
+                                              
+        $gform->masnome = "ordem";            
+                                              
+        $gform->ca1nome = "cargoi";           // NOME DO CAMPO DO CARGO INICIAL
+        $gform->ca2nome = "cargof";           // NOME DO CAMPO DO CARGO FINAL
+        $gform->ca3nome = "selcargo";         
+        $gform->ca4nome = "Cargo";            
+                                              
+        $gform->lo1nome = "lotaci";           // NOME DO CAMPO DA LOTAÇÃO INICIAL
+        $gform->lo2nome = "lotacf";           // NOME DO CAMPO DA LOTAÇÃO FINAL
+        $gform->lo3nome = "sellot";           
+                                              
+        $gform->or1nome = "orgaoi";           // NOME DO CAMPO DO ÓRGÃO INICIAL
+        $gform->or2nome = "orgaof";           // NOME DO CAMPO DO ÓRGÃO FINAL
+        $gform->or3nome = "selorg";           // NOME DO CAMPO DE SELEÇÃO DE ÓRGÃOS
+        $gform->or4nome = "Secretaria";       // NOME DO CAMPO DE SELEÇÃO DE ÓRGÃOS
+                                              
+        $gform->trenome = "tipo";             // NOME DO CAMPO TIPO DE RESUMO
+        $gform->tfinome = "filtro";           // NOME DO CAMPO TIPO DE FILTRO
+                                              
+        $gform->resumopadrao = "l";           // TIPO DE RESUMO PADRÃO
+        $gform->filtropadrao = "i";           
+        $gform->strngtipores = "loc";         // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
+                                              
+        $gform->selecao = false;               
+        $gform->onchpad = true;               // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
+    
+        $gform->manomes = true;
+        $gform->gera_form( db_anofolha(), db_mesfolha() );
+      ?>
+      <tr >
+        <td nowrap><strong>Quebrar :</strong>&nbsp;
+        </td>
+        <td>
+          <?
+            $xxy = array(
+                      "n"=>"NÃO", 
+                      "s"=>"SIM"
+                        );
+            db_select('quebrar',$xxy,true,4,"");
+          ?>
+        </td>
       </tr>
       <tr>
         <td >&nbsp;</td>

@@ -60,11 +60,21 @@ if($ansin == "a"){
 $head2 = "FOLHA DE PAGAMENTO (".$mes." / ".$ano.") - ".$impressao;
 $head4 = "ARQUIVO : ";
 
+$aTipoFolha = array(
+      'r14' => 'gerfsal',
+      'r48' => 'gerfcom',
+      'r20' => 'Rescisão',
+      'r35' => 'gerfs13',
+      'r22' => 'gerfadi'
+    );
+
 //$whereRESC = " rh05_seqpes is null and (r45_regist is null or  r45_regist is not null and (r45_dtreto is null or r45_dtreto > '".$ano."-".$mes."-01'))";
 $whereRESC = " rh05_seqpes is null ";
 $andwhere = " and  ";
 $aWhere   = array();
-$aWhere[] = " rh05_seqpes is null ";
+$aWhere[] = "( rh05_seqpes is null OR EXISTS (
+SELECT {$folha}_regist FROM {$aTipoFolha[$folha]} WHERE ({$folha}_anousu,{$folha}_mesusu,{$folha}_regist) = ({$ano},{$mes},rh01_regist)
+) )";
 
 
 $clgerasql->inicio_rh = true;

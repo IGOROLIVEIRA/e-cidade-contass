@@ -75,6 +75,7 @@ function js_relatorio() {
   var quebrarpag           = obj.quebrarpag.value;
   var contassemmov         = obj.k29_contassemmovimento.value;
   var agruparfonte         = obj.agrupar_fonte.value;
+  var fonte 			   = obj.o15_codigo.value;
   
   jan = window.open('cai2_emissbol002.php?contasnegativas='+contasnegativas
                                                            +'&imprime_interferencia='+imprimeinterferencia
@@ -86,7 +87,8 @@ function js_relatorio() {
                                                            //+'&conta='+conta
                                                            +'&quebrarpag='+quebrarpag
                                                            +'&contassemmov='+contassemmov
-                                                           +'&agrupar_fonte='+agruparfonte,
+                                                           +'&agrupar_fonte='+agruparfonte
+														   +'&fonte='+fonte,
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -145,6 +147,43 @@ function js_bloquearordem(){
     document.form1.ordem_conta.disabled = false;
   }
 }
+
+function js_pesquisa_recurso(mostra){
+	
+	if (mostra==true){
+	  	js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostrarecurso1|o15_codigo|o15_descr','Pesquisa',true);
+	} else {
+	   
+		if (document.form1.o15_codigo.value != ''){ 
+		  	js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostrarecurso','Pesquisa',false);
+	   	} else{
+		 	document.form1.o15_descr.value = ''; 
+	   	}
+	}
+  
+}
+
+function js_mostrarecurso(chave,erro){
+	
+	document.form1.o15_descr.value = chave; 
+	
+	if( erro == true ){ 
+	  
+		document.form1.o15_codigo.value = ''; 
+	  	document.form1.o15_codigo.focus(); 
+
+	}
+  
+}
+  
+function js_mostrarecurso1(chave1,chave2){
+		  
+	document.form1.o15_codigo.value = chave1;  
+	document.form1.o15_descr.value = chave2;
+	db_iframe_orctiporec.hide();
+  
+}
+  
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -286,7 +325,7 @@ function js_bloquearordem(){
         </td>
       </tr>
      <tr>
-        <td align="right"><strong>Agrupar por fonte de recursos:</strong></td>
+        <td align="right"><strong>Agrupar por Fonte:</strong></td>
         <td> &nbsp; &nbsp;
           <select name="agrupar_fonte">
             <option value = 'N'>Não</option>
@@ -294,6 +333,15 @@ function js_bloquearordem(){
           </select>
         </td>
       </tr>
+	<tr>
+		<td align="right"><?db_ancora("<b>Fonte:</b>","js_pesquisa_recurso(true);",1);?></td>
+		<td nowrap>&nbsp; &nbsp;			
+			<?
+				db_input("o15_codigo",6,1,true,"text",4,"onchange='js_pesquisa_recurso(false);'");
+				db_input("o15_descr",30,"",true,"text",3);
+			?>
+		</td>
+	</tr>
 
 	    <tr>
                <td width="25">&nbsp;</td>

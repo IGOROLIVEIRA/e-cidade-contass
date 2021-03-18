@@ -37,7 +37,7 @@ $clrotulo->label("nomeinst");
         <td>
           <fieldset>
            <legend>
-            <b>Projeto de Lei</b>
+            <b>Dados da Lei</b>
           </legend>
           <table>
             <tr>

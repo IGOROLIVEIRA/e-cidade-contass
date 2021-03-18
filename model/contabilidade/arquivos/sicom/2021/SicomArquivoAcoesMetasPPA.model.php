@@ -139,8 +139,16 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
       $aDespesa = $oPPADespesa->getQuadroEstimativas(null, 6);
     }
 
-    $sSqlVALOR = "select o58_projativ,o28_anoref,round(sum(o28_valor),2) as o28_valor from orcdotacao inner join orcprojativprogramfisica on o28_orcprojativ = o58_projativ and o28_anousu = o58_anousu where o58_anousu = " . db_getsession("DB_anousu") . "  group by o58_projativ,o28_anoref order by o58_projativ,o28_anoref";
-
+    $sSqlVALOR = "	SELECT  o28_orcprojativ,
+							o28_anoref,
+							round(sum(o28_valor),2) AS o28_valor 
+					FROM orcprojativprogramfisica 
+					WHERE o28_anousu = ".db_getsession('DB_anousu')."
+					GROUP BY o28_orcprojativ,
+							 o28_anoref 
+					ORDER BY o28_orcprojativ,
+							 o28_anoref";
+	
     $rsVALOR = db_query($sSqlVALOR);
     
     $aDadosAgrupados = array();
@@ -248,8 +256,42 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
           }                    
         }
       
-        //echo "<pre>";
-        //print_r($aDespesa);
+		$sSqlMetas = "	SELECT DISTINCT o08_projativ,
+										o05_anoreferencia,
+										coalesce ((SELECT sum(o28_valor)
+											FROM orcprojativprogramfisica
+											WHERE o28_orcprojativ = ppadotacao.o08_projativ
+											AND o28_anoref = o05_anoreferencia ),0) AS o28_valor
+						FROM ppadotacao
+							INNER JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
+							INNER JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial
+						WHERE o05_ppaversao = {$oPPAVersao->getCodigoversao()}
+							AND o05_anoreferencia BETWEEN {$oPPAVersao->getAnoinicio()} AND {$oPPAVersao->getAnofim()}
+							AND o08_orgao = {$oMetasPPA->o08_orgao}
+							AND o08_unidade = {$oMetasPPA->o08_unidade}
+							AND o08_funcao = {$oMetasPPA->o08_funcao}
+							AND o08_subfuncao = {$oMetasPPA->o08_subfuncao}
+							AND o08_programa = {$oMetasPPA->o08_programa}
+							AND o08_instit IN({$sListaInstit})
+							AND o08_projativ = {$oMetasPPA->o55_projativ}
+						ORDER BY o08_projativ,
+						o05_anoreferencia";
+
+    	$rsMetas = db_query($sSqlMetas);
+
+		if(pg_num_rows($rsMetas) > 0) {
+
+			for($iMetas = 0; $iMetas < pg_num_rows($rsMetas); $iMetas++) {  
+
+				$oMetas = db_utils::fieldsMemory($rsMetas, $iMetas);
+				$sPosicaoAno = $oMetas->o05_anoreferencia - ($oPPAVersao->getAnoinicio() - 1);
+				$sMeta = "metas".$sPosicaoAno."Ano";
+				$oDadosAMP12->$sMeta = number_format($oMetas->o28_valor, 2, ",", "");
+
+			}
+
+		}
+		
         foreach ($aDespesa as $sEstimativa) {
           
           if ($sEstimativa->iCodigo == $oMetasPPA->o55_projativ) {
@@ -302,12 +344,12 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
         $iNum = 1;
         for ($iCont1 = 0; $iCont1 < pg_num_rows($rsVALOR); $iCont1++) {
           $oProgramaValor = db_utils::fieldsMemory($rsVALOR, $iCont1);
-           if ($oProgramaValor->o58_projativ == $oMetasPPA->o55_projativ) {
+           if ($oProgramaValor->o28_orcprojativ == $oMetasPPA->o55_projativ) {
               if ($oProgramaValor->o28_anoref == db_getsession("DB_anousu")) {
                     
                     $sqlValorPro = "select sum(o58_valor) as valor ";
                     $sqlValorPro .= "  from orcdotacao where o58_anousu = " . db_getsession("DB_anousu") . " 
-                                             and o58_projativ = " . $oProgramaValor->o58_projativ;
+                                             and o58_projativ = " . $oProgramaValor->o28_orcprojativ;
                     $rsValorPro = db_query($sqlValorPro);
                     $nValorAno = db_utils::fieldsMemory($rsValorPro, 0)->valor;
                     
@@ -322,6 +364,23 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
         
       }
       
+      	if ($oDadosAMP12->recursos1Ano == 0 || $oDadosAMP12->recursos2Ano == 0 || $oDadosAMP12->recursos3Ano == 0 || $oDadosAMP12->recursos4Ano == 0) {
+			
+			$sSqlOrcProjProgFisica = "select * from orcprojativprogramfisica where o28_orcprojativ = $oDadosAMP12->idAcao and o28_anousu = ".db_getsession("DB_anousu")." ORDER BY o28_anoref";
+			$rsOrcProjProgFisica = db_query($sSqlOrcProjProgFisica);
+		
+			if (pg_num_rows($rsOrcProjProgFisica) > 0) {
+
+				for ($iContProgFisica = 0; $iContProgFisica < pg_num_rows($rsOrcProjProgFisica); $iContProgFisica++) {
+
+					$oOrcProjProgFisica = db_utils::fieldsMemory($rsOrcProjProgFisica, $iContProgFisica);
+					$sPosicaoAno = $oOrcProjProgFisica->o28_anoref - ($oPPAVersao->getAnoinicio() - 1);
+					$sRecursos = "recursos".$sPosicaoAno."Ano";
+					$oDadosAMP12->$sRecursos = number_format($oOrcProjProgFisica->o28_valor, 2, ",", "");
+
+				}
+			}
+		  }
       
       if ($oDadosAMP12->recursos1Ano > 0 || $oDadosAMP12->recursos2Ano > 0 || $oDadosAMP12->recursos3Ano > 0 || $oDadosAMP12->recursos4Ano > 0) {
         $aDadosAgrupados[$sHash]->Reg12[] = $oDadosAMP12;

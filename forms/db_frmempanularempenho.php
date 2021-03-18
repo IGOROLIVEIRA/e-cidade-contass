@@ -290,7 +290,7 @@ if (empty ($e60_numemp)) {
 
         if (obj.numnotas > 0){
             for (var i = 0; i < obj.data.length;i++){
-                console.log(obj.e60_numemp);
+                console.log(obj);
 
                 sClassName = "normal"
                 if (lDisabled == "disabled") {
@@ -352,40 +352,44 @@ if (empty ($e60_numemp)) {
                 saida += "<td class='linhagrid' id='saldo"+obj.data[i].e62_sequen+"'  style='text-align:right'>"+obj.data[i].saldo+"</td>";
                 saida += "<td class='linhagrid' id='saldovlr"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrtot, 'f')+"</td>";
 
-                console.log(obj.data[i].pc01_servico);
-                console.log(obj.data[i].servicoquantidade);
                 if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 'f'){
+                    lDisabledQuantidade = ' disabled';
+                    sDisableValor       = ' ';
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='1' readonly style='text-align:right' size='5' onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)' ></td>";
+                    saida += " value='1' readonly style='text-align:right;background-color:#DEB887;' size='5' onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)' ></td>";
 
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)'></td></tr>";
+                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)'></td></tr>";
 
                 }else if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 't'){
+                    lDisabledQuantidade = ' ';
+                    sDisableValor       = ' disabled';
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+                    saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
 
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                    saida += "<input type='text' "+lDisabled+" style='text-align:right; background-color:#DEB887' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
 
                 }else if(obj.data[i].pc01_servico == 'f' && obj.data[i].servicoquantidade == 'f'){
+                    lDisabledQuantidade = ' ';
+                    sDisableValor       = ' disabled';
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+                    saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
 
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                    saida += "<input type='text' "+lDisabled+" style='text-align:right;background-color:#DEB887;' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
 
                 }
 
@@ -526,9 +530,9 @@ if (empty ($e60_numemp)) {
             //$('vlrtot'+id).disabled = true;
         }else if (nQtde == 0) {
 
-            $('vlrtot'+id).disabled = false;
+            // $('vlrtot'+id).disabled = false;
             if (tipo == 1) {
-                $('vlrtot'+id).value    = "";
+                $('vlrtot'+id).value    = 0;
             }
 
         }

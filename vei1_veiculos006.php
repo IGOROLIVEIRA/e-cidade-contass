@@ -144,13 +144,13 @@ if(isset($excluir)){
             for($x = 0; $x < $clveiculoscomb->numrows; $x++){
                 db_fieldsmemory($res_veiculoscomb,$x);
 
-                $clveiculoscomb->ve06_sequencial = $ve06_sequencial;
+                $oDaoCombustivel = db_utils::getDao('veiculoscomb');
+                $oDaoCombustivel->excluir($ve06_sequencial);
 
-                $clveiculoscomb->excluir($ve06_sequencial);
-                $erro_msg=$clveiculoscomb->erro_msg;
-                if ($clveiculoscomb->erro_status == "0"){
-                    $sqlerro=true;
-                    $erro_msg=$clveiculoscomb->erro_msg;
+                $erro_msg = $oDaoCombustivel->erro_msg;
+                if ($oDaoCombustivel->erro_status == "0"){
+                    $sqlerro = true;
+                    $erro_msg = $oDaoCombustivel->erro_msg;
                     break;
                 }
             }
@@ -163,14 +163,12 @@ if(isset($excluir)){
         if ($clveicitensobrig->numrows > 0){
             for($x = 0; $x < $clveicitensobrig->numrows; $x++){
                 db_fieldsmemory($res_veicitensobrig,$x);
+                $oDaoItem = db_utils::getDao('veicitensobrig');
+                $oDaoItem->excluir($ve09_sequencial);
 
-                $clveicitensobrig->ve09_sequencial = $ve09_sequencial;
-
-                $clveicitensobrig->excluir($ve09_sequencial);
-                $erro_msg = $clveicitensobrig->erro_msg;
-                if ($clveicitensobrig->erro_status == "0"){
+                if ($oDaoItem->erro_status == "0"){
+                    $erro_msg = $oDaoItem->erro_msg;
                     $sqlerro  = true;
-//           $erro_msg = $clveicitensobrig->erro_msg;
                     break;
                 }
             }
@@ -293,6 +291,61 @@ if(isset($excluir)){
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+
+    #ve01_veiccadcor, #ve01_veiccadmarca, #ve01_veiccadcategcnh, #ve01_veictipoabast{
+        display: none;
+    }
+
+    #ve01_veiccadpotencia, #ve01_veiccadtipocapacidade{
+        width: 93px;
+    }
+
+    #ve01_veiccadpotenciadescr, #ve01_veiccadtipocapacidadedescr{
+        width: 212px;
+    }
+
+    #si04_tipoveiculo, #si04_especificacao{
+        width: 184px;
+    }
+
+    #si04_situacao, #ve01_veiccadmarcadescr{
+        width: 395px;
+    }
+
+    #ve02_numcgm, #ve01_veiccadtipo{
+        width: 84px;
+    }
+
+    #ve06_veiccadcomb{
+        width: 394px;
+    }
+
+    #ve01_veiccadcategdescr,
+    #ve01_veiccadproceddescr{
+        width: 133px;
+    }
+
+    #ve01_veiccadtipodescr{
+        width: 307px;
+    }
+
+    #ve01_veiccadcordescr{
+        width: 182px;
+    }
+
+    #ve01_veictipoabastdescr, #ve01_veiccadcategcnhdescr{
+        width: 180px;
+    }
+
+    .div__anos{
+        margin-left: -3px;
+    }
+
+    .tr__hidden-veiculos{
+        display: none;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
     <tr>

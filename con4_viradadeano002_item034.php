@@ -29,6 +29,7 @@
 if($sqlerro==false) {
     $iTotPassos = 2;
     db_atutermometro(0, $iTotPassos, 'termometroitem', 1, $sMensagemTermometroItem);
+    $oDaoArquivo = new cl_db_sysarquivo();
 
     //De/Para Vinculo Pcasp MSC
     $sqlVinculoPcaspMscorigem = "select * from vinculopcaspmsc where c210_anousu = $anoorigem limit 1";
@@ -56,7 +57,7 @@ if($sqlerro==false) {
         } else if ($linhasVinculoPcaspMscdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem vínculos para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010454;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('vinculopcaspmsc');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -94,7 +95,7 @@ if($sqlerro==false) {
         } else if ($linhasElemDespMscdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem elementos para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010455;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('elemdespmsc');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -132,7 +133,7 @@ if($sqlerro==false) {
         } else if ($linhasNatDespMscdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem naturezas para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010456;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('natdespmsc');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -170,7 +171,7 @@ if($sqlerro==false) {
         } else if ($linhasNatDespSiopedestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem naturezas para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010459;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('naturdessiope');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -208,7 +209,7 @@ if($sqlerro==false) {
         } else if ($linhasElemDespSiopedestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem elementos para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010460;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('eledessiope');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -246,7 +247,7 @@ if($sqlerro==false) {
         } else if ($linhasNatRecSiopedestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem naturezas para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010459;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('naturrecsiope');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -284,7 +285,7 @@ if($sqlerro==false) {
         } else if ($linhasElemRecSiopedestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem elementos para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010462;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('elerecsiope');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -322,7 +323,7 @@ if($sqlerro==false) {
         } else if ($linhasNatDespSiopsdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem naturezas para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010463;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('naturdessiops');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -360,7 +361,7 @@ if($sqlerro==false) {
         } else if ($linhasElemDespSiopsdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem elementos para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010464;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('eledessiops');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -398,7 +399,7 @@ if($sqlerro==false) {
         } else if ($linhasElemNomeArqDespSiopsdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem nomes dos arquivos despesa siops para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010465;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('nomearqdessiops');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -436,7 +437,7 @@ if($sqlerro==false) {
         } else if ($linhasNatRecSiopsdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem naturezas para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010470;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('naturrecsiops');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -474,7 +475,7 @@ if($sqlerro==false) {
         } else if ($linhasElemRecSiopsdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem elementos para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010471;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('elerecsiops');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");
@@ -512,7 +513,7 @@ if($sqlerro==false) {
         } else if ($linhasEstContaCaspwebdestino>0) {
             $cldb_viradaitemlog->c35_log = "Ja existem estruturais para ano de destino $anodestino";
         }
-        $cldb_viradaitemlog->c35_codarq        = 2010491;
+        $cldb_viradaitemlog->c35_codarq        = $oDaoArquivo->buscaCodigoArquivoPorTabela('vinculocaspweb');
         $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
         $cldb_viradaitemlog->c35_data          = date("Y-m-d");
         $cldb_viradaitemlog->c35_hora          = date("H:i");

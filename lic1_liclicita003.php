@@ -84,7 +84,7 @@ if(isset($excluir)){
 	/*
 	 * Apenas as licitações com o l20_cadinicial = 1 (PENDENTES) serão excluídas...
 	 * */
-	$sqlerro = $status == 1 || (!$status && $anousu < 2020) ? false : true;
+	$sqlerro = $status == 1 || !$status ? false : true;
 	$erro_msg = $sqlerro ? 'Licitação possui Edital lançado.' : '';
 
 	if(!$sqlerro) {

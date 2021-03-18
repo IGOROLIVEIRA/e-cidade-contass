@@ -403,7 +403,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 					       e94_motivo as justificativa,
 					       e60_codemp,
 					       e94_ato as atocancelamento,
-					       e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos
+                 e94_dataato as dataatocancelamento,o15_codtri as codfontrecursos,
+                 e60_numemp
         from conlancamdoc
         join conlancamemp on c71_codlan = c75_codlan
         join empempenho on c75_numemp = e60_numemp
@@ -438,15 +439,14 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         * Verifica se o empenho existe na tabela dotacaorpsicom
         * Caso exista, busca os dados da dotação.
         * */
-        $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados20->e60_codemp}";
+        $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados20->e60_numemp}";
         if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
 
           $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
 
-          $clrsp20->si115_codorgao = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0");
+          $clrsp20->si115_codorgao = $aDotacaoRpSicom[0]->si177_codorgaotce;
           $clrsp20->si115_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
-          $clrsp20->si115_codunidadesuborig = $clrsp20->si115_codunidadesub;
-
+          $clrsp20->si115_codunidadesuborig = strlen($aDotacaoRpSicom[0]->si177_codunidadesuborig) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesuborig) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesuborig : $aDotacaoRpSicom[0]->si177_codunidadesuborig;
         } else {
           $clrsp20->si115_codorgao = $oDados20->codorgao;
           $clrsp20->si115_codunidadesub = $oDados20->codunidadesub;

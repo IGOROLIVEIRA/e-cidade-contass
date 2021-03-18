@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_respinf102020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarRESPINF.model.php");
+require_once ("classes/db_respinf102021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarRESPINF.model.php");
 
 /**
  * FLPGO
@@ -55,7 +55,7 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
    */
   public function gerarDados() {
 
-    $clrespinf10 = new cl_respinf102020();
+    $clrespinf10 = new cl_respinf102021();
 
     db_inicio_transacao();
 
@@ -94,7 +94,7 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $clrespinf10 = new cl_respinf102020();
+      $clrespinf10 = new cl_respinf102021();
       // $clrespinf10->si197_nomeresponsavel       = $oDados10->z01_nome;
       // $clrespinf10->si197_cartident             = 'mg99999999';//$oDados10->z01_ident;
       // $clrespinf10->si197_orgemissorci          = 'SSP';//$oDados10->z01_identorgao;

@@ -124,6 +124,8 @@ if(isset($chavepesquisa)){
          parent.iframe_documentos.location.href='prot1_cadgeraldocumentos001.php?'+get;
          parent.document.formaba.fotos.disabled=false;
          parent.iframe_fotos.location.href='prot1_cadgeralfotos001.php?z01_numcgm=".@$chavepesquisa."';
+         parent.iframe_contasbanco.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$chavepesquisa."';
+         parent.document.formaba.contasbanco.disabled=false;
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('documentos');";

@@ -217,7 +217,11 @@ $clrotulo->label("db89_codagencia");
                         '37' => "Fundos de Investimento classificados como \"Ações - Mercado de Acesso\" - Art. 8°, IV, \"c\"",
                         '38' => "Fundos de Investimento classificados como \"Renda Fixa - Dívida Externa\" - Art. 9°-A, I",
                         '39' => "Fundos de Investimento - Sufixo Investimento no Exterior - Art. 9°-A, II",
-                        '40' => "Fundos de Ações BDR Nível 1 - Art. 9°-A, III");
+						'40' => "Fundos de Ações BDR Nível 1 - Art. 9°-A, III",
+						'60' => "Aplicações financeiras da taxa de administração do RPPS",
+						'61' => "Títulos e valores em enquadramento",
+						'62' => "Títulos e valores não sujeitos ao enquadramento"
+						);
                     db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao, "");
                 }
 				?>

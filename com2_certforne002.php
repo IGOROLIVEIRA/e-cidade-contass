@@ -386,7 +386,7 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
     }
   }
 
-  $result_munic = $cldb_config->sql_record($cldb_config->sql_query_file());
+  $result_munic = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession("DB_instit")));
   if($cldb_config->numrows > 0) {
     db_fieldsmemory($result_munic, 0);
   }

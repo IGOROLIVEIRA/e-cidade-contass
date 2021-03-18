@@ -54,7 +54,7 @@ function abra(){
     listaCgm+=vir+document.form1.cgm.options[x].value;
     vir=",";
   }
- window.open("cai2_relrecibo002.php?k02_codigo="+document.form1.k02_codigo.value+"&dataini="+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+'&datafim='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value+"&ordem="+document.form1.ordem.value+"&busca="+document.form1.busca.value+"&cgm="+listaCgm,"Relatório","toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no");
+ window.open("cai2_relrecibo002.php?k02_codigo="+document.form1.k02_codigo.value+"&dataini="+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+'&datafim='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value+"&ordem="+document.form1.ordem.value+"&busca="+document.form1.busca.value+"&historico="+document.form1.k00_histtxt.value+"&cgm="+listaCgm,"Relatório","toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no");
 }
 function js_pesquisatabrec(mostra){
      if(mostra==true){
@@ -100,6 +100,19 @@ function js_mostratabrec1(chave1,chave2){
       db_input('k02_codigo',4,$Ik02_codigo,true,'text',4,"onchange='js_pesquisatabrec(false);'");
       db_input('k02_drecei',40,$Ik02_drecei,true,'text',3);
       ?>
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <br>
+      <b> Histórico contém: </b> 
+    </td>
+    <td>
+      <br>
+      <?
+      db_input('k00_histtxt','46','','',true,'text',1,"","","","200");
+      ?>
+      &nbsp;
     </td>
   </tr>
   <tr>

@@ -239,8 +239,10 @@ class cl_itemprecoreferencia {
        }
      }
      $sql .= " where ";
-     if($si02_sequencial!=null){
-       $sql .= " si02_sequencial = $this->si02_sequencial";
+     if($si02_sequencial==null){
+        $sql .= " si02_sequencial = $this->si02_sequencial";
+     }else{
+        $sql .= " si02_sequencial = $si02_sequencial";
      }
      $resaco = $this->sql_record($this->sql_query_file($this->si02_sequencial));
      if($this->numrows>0){
