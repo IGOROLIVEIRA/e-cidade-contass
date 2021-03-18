@@ -53,6 +53,7 @@ class cl_solicitem {
    var $pc11_just = null;
    var $pc11_liberado = 'f';
    var $pc11_servicoquantidade = 'f';
+   var $pc11_reservado = false;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc11_codigo = int8 = Código do registro
@@ -66,6 +67,7 @@ class cl_solicitem {
                  pc11_just = text = justificativa para compra
                  pc11_liberado = bool = Liberar para contabilidade
                  pc11_servicoquantidade = bool = Serviço Controlado por Quantidade
+                 pc11_reservado = boolean = Reservado
                  ";
    //funcao construtor da classe
    function cl_solicitem() {
@@ -96,6 +98,7 @@ class cl_solicitem {
        $this->pc11_just = ($this->pc11_just == ""?@$GLOBALS["HTTP_POST_VARS"]["pc11_just"]:$this->pc11_just);
        $this->pc11_liberado = ($this->pc11_liberado == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc11_liberado"]:$this->pc11_liberado);
        $this->pc11_servicoquantidade = ($this->pc11_servicoquantidade == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc11_servicoquantidade"]:$this->pc11_servicoquantidade);
+       $this->pc11_reservado = ($this->pc11_reservado == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc11_reservado"]:$this->pc11_reservado);
      }else{
        $this->pc11_codigo = ($this->pc11_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc11_codigo"]:$this->pc11_codigo);
      }

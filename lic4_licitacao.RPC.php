@@ -766,5 +766,262 @@ switch ($oParam->exec) {
 		}
 
 		break;
+
+    case 'getItensLicitacao':
+
+        $oDaoProcItem = db_utils::getDao('pcprocitem');
+
+        $sSql = $oDaoProcItem->sql_query_pcmater(null,
+              "distinct
+              		                                   pc01_codmater as codigoitem,
+              		                                   pc11_seq as seqitem,
+              		                                   pc01_descrmater as descritem,
+                                                       pc01_complmater as complitem,
+              		                                   pc11_quant as qtditem,
+              		                                   m61_descr as unidade,
+                                                       pc81_codprocitem as procitem",
+              "pc11_seq",
+              "pc81_codproc=$oParam->iProcCompra and pc23_valor <> 0",true);
+
+        $rsSql = $oDaoProcItem->sql_record($sSql);
+        
+        $sWhere = 'pc81_codproc='.$oParam->iProcCompra.' AND (l21_codliclicita <> ' . $oParam->iLicitacao. '
+                        or l21_codliclicita = ' . $oParam->iLicitacao .' and l21_codigo IS NOT NULL
+                        or (e54_anulad IS NULL and e55_sequen IS NOT NULL))';
+        
+        $sSqlMarcados = $oDaoProcItem->sql_query_pcmater('null', 'DISTINCT pc81_codprocitem', '', $sWhere, true);
+        $rsMarcados = db_query($sSqlMarcados);
+        
+        for($count=0; $count < pg_numrows($rsSql); $count++){
+
+            $oItem = db_utils::fieldsMemory($rsSql, $count);
+            
+            $oItemLicitacao = new stdClass();
+            $oItem->codigoitem = $oItem->codigoitem;
+            $oItem->seqitem = $oItem->seqitem;
+            $oItem->descritem = urlencode($oItem->descritem);
+            $oItem->complitem = urlencode($oItem->complitem);
+            $oItem->qtditem = $oItem->qtditem;
+            $oItem->unidade = $oItem->unidade;
+            $oItem->procitem = $oItem->procitem;
+            $oItem->marcado = false;
+
+            for($i = 0; $i < pg_numrows($rsMarcados); $i++){
+                $oMarcado = db_utils::fieldsMemory($rsMarcados, $i);
+
+                if($oMarcado->pc81_codprocitem == $oItem->procitem){
+                    $oItem->marcado = true;
+                }
+            }
+
+            $oRetorno->itens[] = $oItem;
+
+        }
+
+
+
+        $oRetorno->erro = pg_numrows($rsSql) ? false : true;
+        
+        break;
+        
+    case 'insereItens':
+
+        db_inicio_transacao();
+
+        $clliclicitemlote = db_utils::getDao('liclicitemlote');
+        $sSqlLicitacao = $clliclicitemlote->sql_query_licitacao(null,"l21_codpcprocitem",null,"l21_codliclicita=$oParam->licitacao");
+        $rsLote = $clliclicitemlote->sql_record($sSqlLicitacao);
+        $numrows_lote = $clliclicitemlote->numrows;
+
+        if ($numrows_lote > 0){
+            $itens_incluidos = "";
+            $separador       = "";
+        
+            for($x = 0; $x < $numrows_lote; $x++){
+                db_fieldsmemory($rsLote,$x);
+                $itens_incluidos .= $separador.$l21_codpcprocitem;
+                $separador        = ", ";
+            }
+    
+            if (strlen(trim($itens_incluidos)) > 0){
+                $arr_itens = split(",", $itens_incluidos);
+            }
+
+        }
+
+        $dbwhere = " ";
+
+        if (strlen(trim($itens_incluidos)) > 0){
+            $dbwhere = " and l21_codpcprocitem not in ($itens_incluidos)";
+        }
+
+        $oDaoLiclicitem = db_utils::getDao('liclicitem');
+        $oDaoLiclicitem->excluir(null, " l21_codliclicita = $oParam->licitacao $dbwhere ");
+        
+        if (!$oDaoLiclicitem->erro_status){
+            $sqlerro = true;
+            $erro_msg = $oDaoLiclicitem->erro_msg;
+        }
+
+        if(!$sqlerro){
+
+            $sql_ult_ordem  = "select l21_ordem ";
+            $sql_ult_ordem .= "from liclicitem ";
+            $sql_ult_ordem .= "where l21_codliclicita = $oParam->licitacao ";
+            $sql_ult_ordem .= "order by l21_codigo desc limit 1";
+
+            $res_ult_ordem  = @db_query($sql_ult_ordem);
+            
+            if (pg_numrows($res_ult_ordem)){
+                $seq = pg_result($res_ult_ordem, 0, "l21_ordem");
+                $seq++;
+            } else {
+                $seq = 1;
+            }
+
+            for($count = 0; $count < count($oParam->aItens); $count++){
+
+                if(isset($oParam->aItens[$count])){
+                    
+                    if(!$sqlerro){
+
+                        $achou = false;
+
+                        for($x = 0; $x < count(@$arr_itens); $x++){
+                            
+                            if (trim($arr_itens[$x]) == trim($oParam->aItens[$x]->codprocitem)){
+                                $achou = true;
+                                break;
+                            }
+                        }
+        
+                        if (!$achou){
+                            $clliclicitem = db_utils::getDao('liclicitem');
+                            $clliclicitem->l21_codliclicita  = $oParam->licitacao;
+                            $clliclicitem->l21_codpcprocitem = $oParam->aItens[$count]->codprocitem;
+                            $clliclicitem->l21_situacao      = "0";
+                            $clliclicitem->l21_ordem         = $seq;
+                            $clliclicitem->incluir(null);
+                            
+                            if ($clliclicitem->erro_status==0){
+                                $erro_msg = $clliclicitem->erro_msg;
+                                $sqlerro=true;
+                                break;
+                            }
+                
+                            $seq++;
+
+                        }
+                    }
+        
+
+                    if (!$sqlerro) {
+                        if (!$achou) {
+        
+                            $coditem = $clliclicitem->l21_codigo;
+        
+                            /**
+                             * Vincula os itens ao lote
+                             **/
+                            $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_sol($coditem,"pc11_codigo, pc68_nome"));
+
+                            if ($clliclicitem->numrows > 0){
+                                db_fieldsmemory($res_liclicitem,0);
+                            }
+        
+                            $clliclicitemlote->l04_liclicitem = $coditem;
+        
+                            /**
+                             * Tipo de julgamento por item
+                             */
+                            if ($oParam->tipojulg == 1) {
+                                $clliclicitemlote->l04_descricao = "LOTE_AUTOITEM_".$pc11_codigo;
+                            }
+        
+                            /**
+                             * Tipo de julgamento Global
+                             */
+                            if ($oParam->tipojulg == 2){
+                                $clliclicitemlote->l04_descricao = "GLOBAL";
+                            }
+        
+                            
+                            if (!empty($clliclicitemlote->l04_descricao) && in_array($oParam->tipojulg, array(1, 2))) {
+        
+                                $clliclicitemlote->incluir(null);
+                                if ($clliclicitemlote->erro_status == 0){
+                                    $erro_msg = $clliclicitemlote->erro_msg;
+                                    $sqlerro  = true;
+                                    break;
+                                }
+                            }
+        
+                        }
+                    }
+                }
+            }
+
+        }
+
+        // db_fim_transacao(true);
+        if (!$sqlerro){
+
+            $clpcorcamitem = db_utils::getDao('pcorcamitem');
+            $res_pcorcam = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_codorc",null,"l20_codigo = $oParam->licitacao limit 1"));
+            
+            if ($clpcorcamitem->numrows > 0){   // Tem orçamento para esta Licitacao
+                // db_inicio_transacao();
+                db_fieldsmemory($res_pcorcam,0);
+
+                for($x = 0; $x < count($oParam->aItens); $x++){
+                    
+                    if ($oParam->aItens[$x]->codprocitem){
+                        $clpcorcamitemlic = db_utils::getDao('pcorcamitemlic');
+                        $clpcorcamitemlic->sql_record($clpcorcamitemlic->sql_query(null,"*",null,"pc81_codprocitem = ".$oParam->aItens[$x]->codprocitem));
+                        
+                        if (!$clpcorcamitemlic->numrows){
+                            $clliclicitem = db_utils::getDao('liclicitem');
+                            $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codpcprocitem = ".$oParam->aItens[$x]->codprocitem));
+                            
+                            if ($clliclicitem->numrows > 0){
+                                db_fieldsmemory($res_liclicitem,0);
+      
+                                $clpcorcamitem->pc22_codorc = $pc22_codorc;
+                                $clpcorcamitem->incluir(null);
+                                
+                                if ($clpcorcamitem->erro_status == 0){
+                                    $sqlerro  = true;
+                                    $erro_msg = $clpcorcamitem->erro_msg;
+                                    break;
+                                }
+      
+                            if (!$sqlerro){
+                                $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
+      
+                                $clpcorcamitemlic->pc26_orcamitem  = $pc22_orcamitem;
+                                $clpcorcamitemlic->pc26_liclicitem = $l21_codigo;
+                                $clpcorcamitemlic->incluir(null);
+
+      
+                                if ($clpcorcamitemlic->erro_status == 0){
+                                    $sqlerro  = true;
+                                    $erro_msg = $clpcorcamitemlic->erro_msg;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+      
+            //   db_fim_transacao(false);
+            }
+        }
+
+        db_fim_transacao(true);
+        $oRetorno->erro_msg = $erro_msg;
+        $oRetorno->itens = array(1,2,3);
+
+        break;
 }
 echo $oJson->encode($oRetorno);

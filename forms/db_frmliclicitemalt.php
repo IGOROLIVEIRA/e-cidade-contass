@@ -77,13 +77,13 @@ $clrotulo->label("nome");
     </tr>
     <tr colspan="2">
         <td>
-        <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?=@$licitacao?>&tipojulg=<?=$tipojulg?>&redireciona=<?=$redireciona_edital?> " width="1000" height="230" marginwidth="0" marginheight="0" frameborder="0">
+        <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?=@$licitacao?>&tipojulg=<?=$tipojulg?>&redireciona=<?=$redireciona_edital?> " width="1200" height="400" marginwidth="0" marginheight="0" frameborder="0">
         </iframe>
         </td>
     </tr>
   <tr>
    <?
-      db_input('cods',10,'',true,'hidden',3);
+      db_input('cods',10,'',true,'text',3);
       db_input('licitacao',10,'',true,'hidden',3);
       db_input("tipojulg",1,"",true,"hidden",3);
       db_input('codprocesso' ,10, '', true, 'hidden', 3);
@@ -97,6 +97,8 @@ $clrotulo->label("nome");
 function js_inclui(){
 	itens.js_submit_form();
 	itens.document.form1.incluir.value='incluir';
+  itens.js_insereItens();
+  return;
 	itens.document.form1.submit();
 	procs.document.form1.submit();
 
