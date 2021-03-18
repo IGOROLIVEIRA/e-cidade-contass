@@ -158,18 +158,17 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
          */
 
         $sSql = "select  distinct o39_codproj as codigovinc,
-        '10' as tiporegistro,
-        si09_codorgaotce as codorgao,
-        replace(o39_numero,' ','') as nroDecreto,
-        o39_data as dataDecreto,o39_tipoproj as tipodecreto
-        from
-        orcsuplem
-        join orcsuplemval  on o47_codsup = o46_codsup
-        join orcprojeto    on o46_codlei = o39_codproj
-        join db_config on prefeitura  = 't'
-        join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
-        left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
-        where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'";
+                        '10' as tiporegistro,
+                        si09_codorgaotce as codorgao,
+                        replace(o39_numero,' ','') as nroDecreto,
+                        o39_data as dataDecreto,o39_tipoproj as tipodecreto
+                    from orcsuplem
+                        join orcsuplemval  on o47_codsup = o46_codsup
+                        join orcprojeto    on o46_codlei = o39_codproj
+                        join db_config on prefeitura  = 't'
+                        join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
+                        left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
+                    where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'";
         $rsResult10 = db_query($sSql);
 
         $sSqlPrefeitura = "select * from infocomplementaresinstit where  si09_instit =" . db_getsession("DB_instit") . " and si09_tipoinstit = 2";
@@ -200,28 +199,31 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                  * registro 11
                  */
                 $sSql = "SELECT '11' AS tiporegistro,
-                o46_codlei AS codreduzidodecreto,
-                o39_numero AS nrodecreto,
-                (CASE
-                WHEN o46_tiposup IN (1006, 1007, 1008, 1009, 1010, 1012) THEN 2
-                WHEN o46_tiposup IN (1001, 1002, 1003, 1004, 1005) THEN 1
-                WHEN o46_tiposup = 1012 THEN 6
-                WHEN o46_tiposup = 1013 THEN 7
-                WHEN o46_tiposup = 1016 THEN 8
-                WHEN o46_tiposup = 1014 THEN 9
-                WHEN o46_tiposup = 1015 THEN 10
-                WHEN o46_tiposup = 1017 THEN 5
-                WHEN o46_tiposup = 1011 THEN 4
-                END ) AS tipoDecretoAlteracao,
-                sum(o47_valor) AS valorAberto
-                FROM orcsuplem
-                JOIN orcsuplemval ON o47_codsup = o46_codsup
-                JOIN orcprojeto ON o46_codlei = o39_codproj
-                JOIN orcsuplemtipo ON o46_tiposup = o48_tiposup
-                JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
-                WHERE o47_valor > 0
-                AND o46_codlei IN ({$oDados10->codigovinc})
-                GROUP BY o46_codlei, o39_numero, o46_tiposup";
+                                o46_codlei AS codreduzidodecreto,
+                                o39_numero AS nrodecreto,
+                                (CASE
+                                WHEN o46_tiposup IN (1006, 1007, 1008, 1009, 1010, 1012) THEN 2
+                                WHEN o46_tiposup IN (1001, 1002, 1003, 1004, 1005) THEN 1
+                                WHEN o46_tiposup = 1012 THEN 6
+                                WHEN o46_tiposup = 1013 THEN 7
+                                WHEN o46_tiposup = 1014 THEN 9
+                                WHEN o46_tiposup IN (1015, 1016) THEN 10
+                                WHEN o46_tiposup = 1017 THEN 5
+                                WHEN o46_tiposup IN (1011, 1018, 1019, 2026) THEN 4
+                                WHEN o46_tiposup = 1020 THEN 12
+                                WHEN o46_tiposup = 1021 THEN 14
+                                WHEN o46_tiposup = 1022 THEN 15
+                                WHEN o46_tiposup IN (1023, 1024, 1025) THEN 11
+                                END ) AS tipoDecretoAlteracao,
+                                sum(o47_valor) AS valorAberto
+                            FROM orcsuplem
+                                JOIN orcsuplemval ON o47_codsup = o46_codsup
+                                JOIN orcprojeto ON o46_codlei = o39_codproj
+                                JOIN orcsuplemtipo ON o46_tiposup = o48_tiposup
+                                JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
+                            WHERE o47_valor > 0
+                                AND o46_codlei IN ({$oDados10->codigovinc})
+                            GROUP BY o46_codlei, o39_numero, o46_tiposup";
                 $rsResult11 = db_query($sSql);
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
@@ -251,76 +253,81 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                  * registro 12
                  */
 
-                if ($oDados11->tipodecretoalteracao != 4) {
+                $aTipoDecretoNaoObrigReg12 = array(4, 12, 14, 15);
+
+                if (!in_array($oDados11->tipodecretoalteracao, $aTipoDecretoNaoObrigReg12)) {
 
                     if ($oDados10->tipodecreto == 1) {
                         $sSql = "select '12' as tiporegistro,
-                        o39_codproj as codReduzidoDecreto,
-                        o45_numlei as nroLeiAlteracao ,
-                        o45_datalei as dataLeiAlteracao, 'LOA' as o138_altpercsuplementacao, 1 as sql
-                        from orcprojeto
-                        join orclei on o39_codlei = o45_codlei
-                        where o39_codproj in ({$oDados10->codigovinc}) ";
+                                        o39_codproj as codReduzidoDecreto,
+                                        o45_numlei as nroLeiAlteracao,
+                                        o45_datalei as dataLeiAlteracao, 
+                                        case 
+                                            when o45_tipolei = 1 then 'LOA'
+                                            when o45_tipolei = 2 then 'LDO'
+                                            when o45_tipolei = 3 then 'LAO'
+                                            when o45_tipolei = 4 then 'LAOP'
+                                            else ''
+                                        end as tipoLei,
+                                        case 
+                                            when o200_tipoleialteracao is not null then o200_tipoleialteracao
+                                            else 0
+                                        end as tipoLeiAlteracao,
+                                        1 as sql
+                                    from orcprojeto
+                                        join orclei on o39_codlei = o45_codlei
+                                        join orcprojetolei on o45_numlei = o138_numerolei
+                                        left join orcleialtorcamentaria on o200_orcprojetolei = o138_sequencial
+                                    where o39_codproj in ({$oDados10->codigovinc}) ";
 
                     } else {
                         $sSql = "select '12' as tiporegistro,
-                        o39_codproj as codReduzidoDecreto,
-                        o138_numerolei as nroLeiAlteracao ,
-                        o138_data as dataLeiAlteracao,
-                        case when o138_altpercsuplementacao =1 then 'LAOP' else 'LAO' end o138_altpercsuplementacao, 2 as sql
-                        from orcprojeto
-                        join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto
-                        join orcprojetolei on o139_orcprojetolei = o138_sequencial
+                                        o39_codproj as codReduzidoDecreto,
+                                        o138_numerolei as nroLeiAlteracao,
+                                        o138_data as dataLeiAlteracao,
+                                        case 
+                                            when o138_altpercsuplementacao = 1 then 'LAOP' 
+                                            else 'LAO' 
+                                        end tipoLei, 
+                                        case 
+                                            when o200_tipoleialteracao is not null then o200_tipoleialteracao
+                                            else 0
+                                        end as tipoLeiAlteracao,
+                                        2 as sql
+                                from orcprojeto
+                                    join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto
+                                    join orcprojetolei on o139_orcprojetolei = o138_sequencial
+                                    left join orcleialtorcamentaria on o200_orcprojetolei = o138_sequencial
                         where o39_codproj in ({$oDados10->codigovinc})";
 
                     }
+
                     $rsResult12 = db_query($sSql);
-                //db_criatabela($rsResult12);echo $sSql;
-
-
 
                     for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
                         $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
                         $claoc12 = new cl_aoc122021();
 
-                        if ($oDados11->tipodecretoalteracao == 1) {
-                            $si40_tipoleialteracao = 1;
-                        } elseif ($oDados11->tipodecretoalteracao == 2 || $oDados11->tipodecretoalteracao == 6) {
-                            $si40_tipoleialteracao = 2;
-                        } elseif ($oDados11->tipodecretoalteracao == 8 || $oDados11->tipodecretoalteracao == 9
-                            || $oDados11->tipodecretoalteracao == 10
-                        ) {
-                            $si40_tipoleialteracao = 3;
-                        } elseif ($oDados11->tipodecretoalteracao == 5) {
-                            $si40_tipoleialteracao = 4;
-                        } elseif ($oDados11->tipodecretoalteracao == 11) {
-                            $si40_tipoleialteracao = 5;
-                        }
-
                         $claoc12->si40_tiporegistro = 12;
                         $claoc12->si40_codreduzidodecreto = $oDados12->codreduzidodecreto;
 
                         if ($oDados11->tipodecretoalteracao == 2) {
-                            $oDados12->o138_altpercsuplementacao = "LAO";
+                            $oDados12->tipolei = "LAO";
                         }
 
                         $claoc12->si40_nroleialteracao  = substr($oDados12->nroleialteracao, 0, 6);
                         $claoc12->si40_dataleialteracao = $oDados12->dataleialteracao;
-                        $claoc12->si40_tpleiorigdecreto = $oDados12->o138_altpercsuplementacao;
-                        $claoc12->si40_tipoleialteracao = $oDados12->o138_altpercsuplementacao == "LAO" ? $si40_tipoleialteracao : 0;
+                        $claoc12->si40_tpleiorigdecreto = $oDados12->tipolei;
+                        $claoc12->si40_tipoleialteracao = $oDados12->tipolei == "LAO" ? $oDados12->tipoleialteracao : 0;
                         $claoc12->si40_valorabertolei   = $oDados11->valoraberto;
-
-
-
 
                         $claoc12->si40_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                         $claoc12->si40_reg10 = $claoc10->si38_sequencial;
                         $claoc12->si40_instit = db_getsession("DB_instit");
 
                         $claoc12->incluir(null);
-                        // echo $claoc12->erro_sql;
-                        // echo pg_last_error();
+
                         if ($claoc12->erro_status == 0) {
                             throw new Exception($claoc12->erro_msg);
                         }
@@ -332,25 +339,25 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 /**
                  * registro 13
                  */
-                $sSql = "select '13'       as tiporegistro,
-                o46_codlei as codreduzidodecreto,
-                (case when o46_tiposup = 1001 or o46_tiposup = 1006 then 3
-                when o46_tiposup = 1002 then 4
-                when o46_tiposup in (1003, 1008) then 1
-                when o46_tiposup in (1004,1005,1007,1009,1010) then 2
-                else 98
-                end
-                ) as tipoDecretoAlteracao,
-                sum(o47_valor) as valorAberto
-                from orcsuplem
-                join orcsuplemval  on o47_codsup = o46_codsup
-                join orcprojeto    on o46_codlei = o39_codproj
-                join orcsuplemtipo on o46_tiposup =  o48_tiposup
-                join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
-                where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
-                group by o46_codlei, o39_numero,o46_tiposup";
+                $sSql = "select '13' as tiporegistro,
+                                o46_codlei as codreduzidodecreto,
+                                case 
+                                    when o46_tiposup in (1001, 1006, 1018, 1023) then 3
+                                    when o46_tiposup = 1002 then 4
+                                    when o46_tiposup in (1003, 1008, 1024, 2026) then 1
+                                    when o46_tiposup in (1004,1005,1007,1009,1010,1019,1025) then 2
+                                    else 98
+                                end as tipoDecretoAlteracao,
+                                sum(o47_valor) as valorAberto
+                            from orcsuplem
+                                join orcsuplemval  on o47_codsup = o46_codsup
+                                join orcprojeto    on o46_codlei = o39_codproj
+                                join orcsuplemtipo on o46_tiposup =  o48_tiposup
+                                join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
+                            where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
+                            group by o46_codlei, o39_numero,o46_tiposup";
+                
                 $rsResult13 = db_query($sSql);
-                //db_criatabela($rsResult13);
 
                 for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
@@ -375,67 +382,67 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 /**
                  * registro 14
                  */
-                $sSql = "SELECT DISTINCT o46_codsup,
-                CASE
-                WHEN o47_valor > 0 THEN 14
-                WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006) THEN 15
-                END AS tipoRegistro,
-                o46_codlei AS codReduzidoDecreto,
-                CASE
-                WHEN o46_tiposup = 1001 OR o46_tiposup = 1006 THEN 3
-                WHEN o46_tiposup = 1002 THEN 4
-                WHEN o46_tiposup IN (1003, 1008) THEN 1
-                WHEN o46_tiposup IN (1004, 1005, 1007, 1009, 1010) THEN 2
-                ELSE 98
-                END AS tipoDecretoAlteracao,
-                si09_codorgaotce AS codOrgao,
-                lpad(substr(o58_programa,length(o58_programa::varchar) -1,2),2,'0')||lpad(substr(o58_projativ,length(o58_projativ::varchar) -1,2),3,'0')||	sum(substr(o56_elemento,1,2)::int + substr(o56_elemento,3,2)::int + substr(o56_elemento,5,2)::int + substr(o56_elemento,7,2)::int) ||o15_codtri||o47_codsup AS codorigem,
-                o47_codsup,
-                CASE
-                WHEN o41_subunidade != 0
-                OR NOT NULL THEN lpad((CASE
-                WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
-                ELSE o40_codtri
-                END),2,0)||lpad((CASE
-                WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
-                ELSE o41_codtri
-                END),3,0)||lpad(o41_subunidade::integer,3,0)
-                ELSE lpad((CASE
-                WHEN o40_codtri = '0'
-                OR NULL THEN o40_orgao::varchar
-                ELSE o40_codtri
-                END),2,0)||lpad((CASE
-                WHEN o41_codtri = '0'
-                OR NULL THEN o41_unidade::varchar
-                ELSE o41_codtri
-                END),3,0)
-                END AS codunidadesub,
-                o58_funcao AS codFuncao,
-                o58_subfuncao AS codSubFuncao,
-                o58_programa AS codPrograma,
-                o58_projativ AS idAcao,
-                ' ' AS idSubAcao,
-                substr(o56_elemento,2,6) AS naturezaDespesa,
-                o15_codtri AS codFontRecursos,
-                abs(o47_valor) AS vlacrescimoreducao,
-                o41_subunidade AS subunidade
-                FROM orcsuplemval
-                JOIN orcsuplem ON o47_codsup = o46_codsup
-                JOIN orcdotacao ON (o47_anousu, o47_coddot) = (o58_anousu, o58_coddot)
-                JOIN orcelemento ON (o58_codele, o58_anousu) = (o56_codele, o56_anousu)
-                JOIN orctiporec ON o58_codigo = o15_codigo
-                JOIN db_config ON o58_instit = codigo
-                JOIN orcunidade ON (orcdotacao.o58_orgao, orcdotacao.o58_unidade, orcdotacao.o58_anousu) = (orcunidade.o41_orgao, orcunidade.o41_unidade, orcunidade.o41_anousu)
-                JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
-                JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
-                LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
-                WHERE o46_codlei IN ({$oDados10->codigovinc})
-                group by o46_codsup,o47_valor,o46_codlei,o46_tiposup,si09_codorgaotce,o58_programa,o58_projativ,o56_elemento,o47_codsup,o41_subunidade,o40_codtri,o40_orgao,o41_codtri,o41_unidade,o58_funcao,o58_subfuncao,
-                o58_programa,o58_projativ,o15_codtri
-                ORDER BY o46_codsup";
-
-                          // echo $oDados10->codigovinc;
-                          // echo $sSql;
+                $sSql = "SELECT DISTINCT row_number () over () as seq_row_number,
+                                        o46_codsup,
+                                        CASE
+                                            WHEN o47_valor > 0 THEN 14
+                                            WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006,1018,1020,1021) THEN 15
+                                        END AS tipoRegistro,
+                                        o46_codlei AS codReduzidoDecreto,
+                                        CASE
+                                            WHEN o46_tiposup IN (1001, 1006, 1018, 1023) THEN 3
+                                            WHEN o46_tiposup = 1002 THEN 4
+                                            WHEN o46_tiposup IN (1003, 1008, 1024, 2026) THEN 1
+                                            WHEN o46_tiposup IN (1004, 1005, 1007, 1009, 1010, 1019, 1025) THEN 2
+                                            ELSE 98
+                                        END AS tipoDecretoAlteracao,
+                                        si09_codorgaotce AS codOrgao,
+                                        substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o58_subfuncao||row_number () over () AS codorigem,
+                                        o47_codsup,
+                                        CASE
+                                            WHEN o41_subunidade != 0
+                                                OR NOT NULL THEN lpad((CASE
+                                                                        WHEN o40_codtri = '0' 
+                                                                            OR NULL THEN o40_orgao::varchar
+                                                                        ELSE o40_codtri
+                                                                    END),2,0)||lpad((CASE
+                                                                                        WHEN o41_codtri = '0' 
+                                                                                            OR NULL THEN o41_unidade::varchar
+                                                                                        ELSE o41_codtri
+                                                                                    END),3,0)||lpad(o41_subunidade::integer,3,0)
+                                            ELSE lpad((CASE
+                                                            WHEN o40_codtri = '0'
+                                                                OR NULL THEN o40_orgao::varchar
+                                                            ELSE o40_codtri
+                                                        END),2,0)||lpad((CASE
+                                                                            WHEN o41_codtri = '0'
+                                                                                OR NULL THEN o41_unidade::varchar
+                                                                            ELSE o41_codtri
+                                                                        END),3,0)
+                                        END AS codunidadesub,
+                                        o58_funcao AS codFuncao,
+                                        o58_subfuncao AS codSubFuncao,
+                                        o58_programa AS codPrograma,
+                                        o58_projativ AS idAcao,
+                                        ' ' AS idSubAcao,
+                                        substr(o56_elemento,2,6) AS naturezaDespesa,
+                                        o15_codtri AS codFontRecursos,
+                                        abs(o47_valor) AS vlacrescimoreducao,
+                                        o41_subunidade AS subunidade
+                        FROM orcsuplemval
+                        JOIN orcsuplem ON o47_codsup = o46_codsup
+                        JOIN orcdotacao ON (o47_anousu, o47_coddot) = (o58_anousu, o58_coddot)
+                        JOIN orcelemento ON (o58_codele, o58_anousu) = (o56_codele, o56_anousu)
+                        JOIN orctiporec ON o58_codigo = o15_codigo
+                        JOIN db_config ON o58_instit = codigo
+                        JOIN orcunidade ON (orcdotacao.o58_orgao, orcdotacao.o58_unidade, orcdotacao.o58_anousu) = (orcunidade.o41_orgao, orcunidade.o41_unidade, orcunidade.o41_anousu)
+                        JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
+                        JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
+                        LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
+                        WHERE o46_codlei IN ({$oDados10->codigovinc}) 
+                        group by o46_codsup,o47_valor,o46_codlei,o46_tiposup,si09_codorgaotce,o58_programa,o58_projativ,o56_elemento,o47_codsup,o41_subunidade,o40_codtri,o40_orgao,o41_codtri,o41_unidade,o58_funcao,o58_subfuncao,
+                        o58_programa,o58_projativ,o15_codtri
+                        ORDER BY o46_codsup";
 
                 $rsResult = db_query($sSql);
 
@@ -569,12 +576,13 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                   }
               }
           }
-                // echo '<pre>';
-                // print_r($aDadosAgrupados14);
-                //print_r($aDadosAgrupados15);
+
           if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98) {
 
-            if($oDadosSql14->tipodecretoalteracao == 98){
+            $sTipoDecretoReg11          = $claoc11->si39_tipodecretoalteracao;
+            $aTipoDecretoNaoObrigReg15  = array(4,6,7);
+            
+            if($oDadosSql14->tipodecretoalteracao == 98 && in_array($sTipoDecretoReg11, $aTipoDecretoNaoObrigReg15)){
 
                 foreach ($aDadosAgrupados14 as $oDadosReg14) {
 
