@@ -1424,7 +1424,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								$aCtb20Agrupado[$sHash20b]->ext21[$sHash21b] = $oDadosMovi21;
 
 							} else {
-								$aCtb20Agrupado[$sHash20b]->ext21[$sHash21b]->si97_valorentrsaida += $oSaldoTransfCtb->si202_saldofinal;
+								$aCtb20Agrupado[$sHash20b]->ext21[$sHash21b]->si97_valorentrsaida += $aCtb20Agrupado[$sHash20b]->ext21[$sHash21b]->si97_valorentrsaida < 0 ? ($oSaldoTransfCtb->si202_saldofinal * -1) : $aCtb20Agrupado[$sHash20b]->ext21[$sHash21b]->si97_valorentrsaida;
 							}
 
 							//Atualiza saldo do reg20
