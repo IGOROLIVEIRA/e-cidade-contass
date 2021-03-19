@@ -72,10 +72,14 @@ switch ($oParam->exec) {
      * Conforme acertado com Henrique, nao mostrar notas liquidadas
      */
     $sWhereBensPendentes  .= " and empnotaitem.e72_vlrliq = 0 ";
-    $sWhereBensPendentes  .= " and empempenho.e60_anousu >= ".date('Y',strtotime($dtImplantacaoDepreciacao));
+    /**
+     *  Trecho comentado segundo conversa com o colaborador Danilo, para permitir a inclusão de Bens após a data da Implantação
+     *  HOTFIX_inclusaobens
+     */
+    // $sWhereBensPendentes  .= " and empempenho.e60_anousu >= ".date('Y',strtotime($dtImplantacaoDepreciacao));
     if (!empty($dtImplantacaoDepreciacao)) {
    
-      $sWhereBensPendentes  .= " and empempenho.e60_emiss >= '{$dtImplantacaoDepreciacao}' ";
+      // $sWhereBensPendentes  .= " and empempenho.e60_emiss >= '{$dtImplantacaoDepreciacao}' ";
    
       if (!USE_PCASP) {
        $sWhereBensPendentes  .="  and o56_elemento in (select distinct e135_desdobramento from configuracaodesdobramentopatrimonio)";

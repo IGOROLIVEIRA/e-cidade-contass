@@ -26,19 +26,19 @@ class GerarEXT extends GerarAM
     $this->sArquivo = "EXT";
     $this->abreArquivo();
     
-    $sSql = "select * from ext102020 where si124_mes = " . $this->iMes . " and  si124_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from ext102021 where si124_mes = " . $this->iMes . " and  si124_instit = " . db_getsession("DB_instit");
     $rsEXT10 = db_query($sSql);
     
-    $sSql = "select * from ext202020 where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from ext202021 where si165_mes = " . $this->iMes . " and  si165_instit = " . db_getsession("DB_instit");
     $rsEXT20 = db_query($sSql);
     
-    $sSql3 = "select * from EXT302020 where si126_mes = " . $this->iMes . " and  si126_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from EXT302021 where si126_mes = " . $this->iMes . " and  si126_instit = " . db_getsession("DB_instit");
     $rsEXT30 = db_query($sSql3);
     
-    $sSql4 = "select * from EXT312020 where si127_mes = " . $this->iMes . " and  si127_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from EXT312021 where si127_mes = " . $this->iMes . " and  si127_instit = " . db_getsession("DB_instit");
     $rsEXT31 = db_query($sSql4);
     
-    $sSql5 = "select * from EXT322020 where si128_mes = " . $this->iMes . " and  si128_instit = " . db_getsession("DB_instit");
+    $sSql5 = "select * from EXT322021 where si128_mes = " . $this->iMes . " and  si128_instit = " . db_getsession("DB_instit");
     $rsEXT32 = db_query($sSql5);
     
     
@@ -82,7 +82,7 @@ class GerarEXT extends GerarAM
         //OC11537
         $aFontes  = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252', '159');
         $bFonteEncerrada    = in_array($aEXT20['si165_codfontrecursos'], $aFontes);
-        $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2020);
+        $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2021);
 
         $aCSVEXT20['si165_tiporegistro']          = $this->padLeftZero($aEXT20['si165_tiporegistro'], 2);
         $aCSVEXT20['si165_codorgao']              = $this->padLeftZero($aEXT20['si165_codorgao'], 2);
@@ -132,7 +132,7 @@ class GerarEXT extends GerarAM
 
           if($clconplano->numrows > 0) {
 
-          $result = $clconplano->sql_record($clconplano->sql_query(null, null, "CASE WHEN c60_tipolancamento = 3 THEN 'D' WHEN c60_tipolancamento = 4 AND (substr(c60_estrut, 1, 1)) = '3' THEN 'D' ELSE 'C' END AS c60_naturezasaldo ", "", " c61_anousu = 2020 and c61_codtce = ".$aEXT20['si165_codext']." and c60_codsis = 7"));
+          $result = $clconplano->sql_record($clconplano->sql_query(null, null, "CASE WHEN c60_tipolancamento = 3 THEN 'D' WHEN c60_tipolancamento = 4 AND (substr(c60_estrut, 1, 1)) = '3' THEN 'D' ELSE 'C' END AS c60_naturezasaldo ", "", " c61_anousu = 2021 and c61_codtce = ".$aEXT20['si165_codext']." and c60_codsis = 7"));
 
           // echo 'c61_codtce';
           //   echo $aEXT20['si165_codext'];

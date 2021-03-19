@@ -222,7 +222,7 @@ function js_abre(){
    if(e60_codemp_ini != '') {
 
      if(e60_codemp_fim != '') {
-       if(e60_codemp_fim < e60_codemp_ini) {
+       if(Number(e60_codemp_fim) < Number(e60_codemp_ini)) {
          alert("Empenho inicial maior que o empenho final. Verifique!");
          return false;
        }

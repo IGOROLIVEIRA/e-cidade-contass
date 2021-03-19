@@ -6,9 +6,8 @@ $clorcleialtorcamentaria->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("o138_numerolei");
 if(isset($db_opcaoal)){
-   $db_opcao=33;
-    //$db_botao=false;
-    $db_botao=true;
+   	$db_opcao=33;
+   	$db_botao=false;
 }else if(isset($opcao) && $opcao=="alterar"){
     $db_botao=true;
     $db_opcao = 2;
@@ -114,7 +113,8 @@ db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
   </tr>
   <? } ?>
   </table>
-  
+  <br>
+  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
    <table>
   <tr>
     <td valign="top"  align="center">  
@@ -149,8 +149,6 @@ db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
  </table>
   </fieldset>
   </center>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input id="decreto" type="button" onclick="parent.location.href='orc1_orcprojeto002.php'" value="Criar Decreto" name="decreto" <?=($numrows==0?"disabled":"") ?> >
 </form>
 <script>
 function js_pesquisao200_orcprojetolei(mostra){

@@ -556,7 +556,7 @@ if ($clempparametro->numrows > 0){
                                                     }
                                                 ${"qtde_$pc22_orcamitem"} = $pc23_quant;
                                             }
-                                            db_input("qtde_$pc22_orcamitem",10,$Ipc23_quant,true,'text',$db_opcao,"onchange='js_verquant(this.name,this.value,$pc11_quant,$pc22_orcamitem,$flag);js_somavalor();'");
+                                            db_input("qtde_$pc22_orcamitem",10,$Ipc23_quant,true,'text',3,"onchange='js_verquant(this.name,this.value,$pc11_quant,$pc22_orcamitem,$flag);js_somavalor();'");
                                     echo "
                                     </td>
                                     <td align='center'  class='bordas_corp'>";

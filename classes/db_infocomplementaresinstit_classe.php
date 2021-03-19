@@ -244,9 +244,9 @@ class cl_infocomplementaresinstit {
                                ,$this->si09_assessoriacontabil
                                ,".($this->si09_cgmassessoriacontabil == '' ? 'null' : $this->si09_cgmassessoriacontabil)."
                                ,".($this->si09_codunidadesubunidade == '' ? 0 : $this->si09_codunidadesubunidade)."
-                               ,$this->si09_nroleicute
+                               ,".($this->si09_nroleicute == '' ? 'null' : $this->si09_nroleicute)."
                                ,". ($this->si09_dataleicute == "null" || $this->si09_dataleicute == "" ? "null" : "'" . $this->si09_dataleicute . "'") . "
-                               ,$this->contaunicatesoumunicipal
+                               ,".($this->contaunicatesoumunicipal == '' ? 'null' : $this->contaunicatesoumunicipal)."
                                ,".($this->si09_instsiconfi == '' ? 'null' : "'" . $this->si09_instsiconfi . "'")."
                                ,".($this->si09_codfundotcemg == '' ? 0 : $this->si09_codfundotcemg)."
                       )";

@@ -26,7 +26,7 @@ class GerarCTB extends GerarAM
         $sSql = "select * from ctb102020 where si95_mes = " . $this->iMes . " and si95_instit = " . db_getsession("DB_instit");
         $rsCTB10 = db_query($sSql);
 
-        $sSql2 = "select * from ctb202020 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
+        $sSql2 = "select * from ctb202020 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit") . " order by si96_codctb";
         $rsCTB20 = db_query($sSql2);
 
         $sSql3 = "select * from ctb212020 where si97_mes = " . $this->iMes . " and si97_instit = " . db_getsession("DB_instit");

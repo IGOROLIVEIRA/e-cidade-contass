@@ -836,6 +836,7 @@ function imprime_rais_128($nomearq){
   $lin .= "000000000000";                                             // 373 a 384 - CREA a ser retificado
   $lin .= db_str($datan,8,0,"0");                                    // 385 a 392 - Data de nascimento do resonsavel (ddmmaaaa)
   $lin .= bb_space(159);                                              // 393 a 551 - Espacos;
+  $lin .= bb_space(33);                                              
   fputs($arquivo,$lin."\n");
 
   $t_asso   = 0;
@@ -966,6 +967,7 @@ function imprime_rais_128($nomearq){
          $lin .= str_pad($iTipoSistemaPonto,2, '0', STR_PAD_LEFT);           // 453 a 454 02 Número Tipo de Sistema de Controle de Ponto;
          $lin .= bb_space(85);                                               // 453 a 539 - espacos;
          $lin .= str_pad( substr($obs,0,12), 12 );                           // 540 a 551 - espaco para empresa;
+         $lin .= bb_space(33);       
          fputs($arquivo,$lin."\n");
      }
      $vinculo += 1;
@@ -1223,7 +1225,10 @@ function imprime_rais_128($nomearq){
      }else{
        $lin .= "2"  ;                                                    // 539 a 539 - Indicador - Sidicalizado (1-sim 2-nao)
      }
-     $lin .= "2222".bb_space(8);                                               // 540 a 551 - espacos;
+     $lin .= "2222";                                               // 540 a 551 - espacos;
+     $lin .= bb_space(30-strlen($work[$Iwork]["w_matric"])).$work[$Iwork]["w_matric"];                    // 544 a 573 - Matricula
+     $lin .= "000";                                               // 574 a 576 - Categoria
+     $lin .= bb_space(8);           
      fputs($arquivo,$lin."\n");
   }
 
@@ -1237,6 +1242,7 @@ function imprime_rais_128($nomearq){
   $lin .= db_str($prefixo+1,6,0,"0");                                    // 024 a 029 - qtde de registros tipo 1 ;
   $lin .= db_str($vinculo,6,0,"0");                                      // 030 a 035 - qtde de registros tipo 2;
   $lin .= bb_space(516);                                                 // 036 a 527 - espaços;
+  $lin .= bb_space(33);    
   fputs($arquivo,$lin."\n");
   fclose($arquivo);
 }

@@ -509,7 +509,7 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $oPdf->multicell(28, 3, $sNotasEncontradas, 0, "L", 0);
     $iYlinha = $oPdf->gety();
     $oPdf->setxy($iXold + 22, $iYold);
-    $oPdf->cell(60, $iAltura, $oDadoEmpenho->z01_nome, 0, 0, "L", 0);
+    $oPdf->cell(60, $iAltura, strlen($oDadoEmpenho->z01_nome) > 36 ? substr($oDadoEmpenho->z01_nome,0,36).'...' : $oDadoEmpenho->z01_nome , 0, 0, "L", 0);
     $oPdf->cell(20, $iAltura, db_formatar($oDadoEmpenho->k12_valor, 'f'), 0, 0, "R", 0);
     $oPdf->cell(20, $iAltura, $oDadoEmpenho->k12_cheque, 0, 0, "R", 0);
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->tipo, 0, 0, "C", 0);

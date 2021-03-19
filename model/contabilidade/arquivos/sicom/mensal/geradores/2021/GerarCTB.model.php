@@ -23,28 +23,28 @@ class GerarCTB extends GerarAM
         $this->sArquivo = "CTB";
         $this->abreArquivo();
 
-        $sSql = "select * from ctb102020 where si95_mes = " . $this->iMes . " and si95_instit = " . db_getsession("DB_instit");
+        $sSql = "select * from ctb102021 where si95_mes = " . $this->iMes . " and si95_instit = " . db_getsession("DB_instit");
         $rsCTB10 = db_query($sSql);
 
-        $sSql2 = "select * from ctb202020 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
+        $sSql2 = "select * from ctb202021 where si96_mes = " . $this->iMes . " and si96_instit = " . db_getsession("DB_instit");
         $rsCTB20 = db_query($sSql2);
 
-        $sSql3 = "select * from ctb212020 where si97_mes = " . $this->iMes . " and si97_instit = " . db_getsession("DB_instit");
+        $sSql3 = "select * from ctb212021 where si97_mes = " . $this->iMes . " and si97_instit = " . db_getsession("DB_instit");
         $rsCTB21 = db_query($sSql3);
 
-        $sSql4 = "select * from ctb222020 where si98_mes = " . $this->iMes . " and si98_instit = " . db_getsession("DB_instit");
+        $sSql4 = "select * from ctb222021 where si98_mes = " . $this->iMes . " and si98_instit = " . db_getsession("DB_instit");
         $rsCTB22 = db_query($sSql4);
 
-        $sSql5 = "select * from ctb302020 where si99_mes = " . $this->iMes . " and si99_instit = " . db_getsession("DB_instit");
+        $sSql5 = "select * from ctb302021 where si99_mes = " . $this->iMes . " and si99_instit = " . db_getsession("DB_instit");
         $rsCTB30 = db_query($sSql5);
 
-        $sSql6 = "select * from ctb312020 where si100_mes = " . $this->iMes . " and si100_instit = " . db_getsession("DB_instit");
+        $sSql6 = "select * from ctb312021 where si100_mes = " . $this->iMes . " and si100_instit = " . db_getsession("DB_instit");
         $rsCTB31 = db_query($sSql6);
 
-        $sSql7 = "select * from ctb402020 where si101_mes = " . $this->iMes . " and si101_instit = " . db_getsession("DB_instit");
+        $sSql7 = "select * from ctb402021 where si101_mes = " . $this->iMes . " and si101_instit = " . db_getsession("DB_instit");
         $rsCTB40 = db_query($sSql7);
 
-        $sSql8 = "select * from ctb502020 where si102_mes = " . $this->iMes . " and si102_instit = " . db_getsession("DB_instit");
+        $sSql8 = "select * from ctb502021 where si102_mes = " . $this->iMes . " and si102_instit = " . db_getsession("DB_instit");
         $rsCTB50 = db_query($sSql8);
 
         if (pg_num_rows($rsCTB10) == 0 && pg_num_rows($rsCTB20) == 0 && pg_num_rows($rsCTB30) == 0 && pg_num_rows($rsCTB40) == 0 && pg_num_rows($rsCTB50) == 0) {
@@ -96,6 +96,7 @@ class GerarCTB extends GerarAM
                 $aCSVCTB20['si96_codorgao']             = $this->padLeftZero($aCTB20['si96_codorgao'], 2);
                 $aCSVCTB20['si96_codctb']               = substr($aCTB20['si96_codctb'], 0, 20);
                 $aCSVCTB20['si96_codfontrecursos']      = $this->padLeftZero($aCTB20['si96_codfontrecursos'], 3);
+                $aCSVCTB20['si96_saldocec']             = $this->padLeftZero($aCTB20['si96_saldocec'], 1);
                 $aCSVCTB20['si96_vlsaldoinicialfonte']  = $this->sicomNumberReal($aCTB20['si96_vlsaldoinicialfonte'], 2);
                 $aCSVCTB20['si96_vlsaldofinalfonte']    = $this->sicomNumberReal($aCTB20['si96_vlsaldofinalfonte'], 2);
 
@@ -129,9 +130,11 @@ class GerarCTB extends GerarAM
 
                         }
 
+                        $aCSVCTB21['si97_saldocec']           = $this->padLeftZero($aCTB21['si97_saldocec'], 1);
                         $aCSVCTB21['si97_valorentrsaida']     = $this->sicomNumberReal($aCTB21['si97_valorentrsaida'], 2);
                         $aCSVCTB21['si97_codctbtransf']       = $aCTB21['si97_codctbtransf'] != 0 ? substr($aCTB21['si97_codctbtransf'], 0, 20) : ' ';
                         $aCSVCTB21['si97_codfontectbtransf']  = $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) != 0 ? $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) : ' ';
+                        $aCSVCTB21['si97_saldocectransf']     = $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) != 0 ? $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) : ' ';
 
                         $this->sLinha = $aCSVCTB21;
                         $this->adicionaLinha();
@@ -149,6 +152,7 @@ class GerarCTB extends GerarAM
                                 $aCSVCTB22['si98_identificadordeducao'] = $aCTB22['si98_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCTB22['si98_identificadordeducao'], 2);
                                 $aCSVCTB22['si98_naturezareceita']      = $this->padLeftZero($aCTB22['si98_naturezareceita'], 8);
                                 $aCSVCTB22['si98_codfontrecursos']      = ($aCTB22['si98_codfontrecursos'] == 0 ? ' ' : $aCTB22['si98_codfontrecursos']);
+                                $aCSVCTB22['si98_saldocec']             = $this->padLeftZero($aCTB22['si98_saldocec'], 1);
                                 $aCSVCTB22['si98_vlrreceitacont']       = $this->sicomNumberReal($aCTB22['si98_vlrreceitacont'], 2);
 
                                 $this->sLinha = $aCSVCTB22;

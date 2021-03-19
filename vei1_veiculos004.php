@@ -87,7 +87,7 @@ if(isset($incluir)){
         $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
         $datecadastro = implode("-",array_reverse(explode("/",$ve01_dtaquis)));
 
-        if($c99_datapat != "" && $datecadastro <= $c99_datapat){
+        if($c99_datapat != "" && $datecadastro && ($datecadastro <= $c99_datapat)){
             $sqlerro = true;
             $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
         }else{
@@ -140,6 +140,18 @@ if(isset($incluir)){
           $clveiculos->erro_campo = "si04_especificacao";
         }
 
+        if(!$cod_comb && $si04_tipoveiculo != '5'){
+            $sqlerro  = true;
+            $erro_msg = "Nenhum combustível informado. Verifique.";
+            $clveiculos->erro_campo = "ve06_veiccadcomb";
+        }
+
+        if(!trim($ve01_veictipoabast)){
+            $sqlerro  = true;
+            $erro_msg = "Tipo de Abastecimento não informado. Verifique.";
+            $clveiculos->erro_campo = "ve01_veictipoabast";
+        }
+
         if($si04_tipoveiculo == 0 || $si04_tipoveiculo == ''){
           $sqlerro  = true;
           $erro_msg = "Tipo do veículo não informado. Verifique.";
@@ -154,12 +166,8 @@ if(isset($incluir)){
                 $sqlerro=true;
             }
 
-            if ($sqlerro == false){
-                if ($cod_comb == '') {
-                    $sqlerro  = true;
-                    $erro_msg = "Nenhum combustível selecionado";
-                    $clveiculos->erro_campo = "ve06_veiccadcomb";
-                } else {
+            if (!$sqlerro){
+                
                     $ve01_codigo       = $clveiculos->ve01_codigo;
                     $vetor_comb        = split(",",$cod_comb);
                     $vetor_comb_padrao = split(",",$comb_padrao);
@@ -196,17 +204,20 @@ if(isset($incluir)){
                             break;
                         }
                     }
-                }
+                
             }
 
         }
 
         if ($sqlerro==false){
-            $clveicresp->ve02_veiculo=$clveiculos->ve01_codigo;
-            $clveicresp->incluir(null);
-            if ($clveicresp->erro_status=="0"){
-                $sqlerro=true;
-                $erro_msg=$clveicresp->erro_msg;
+
+            if(!in_array($si04_tipoveiculo, array(1, 2, 3, 4, 5, 99))){
+                $clveicresp->ve02_veiculo=$clveiculos->ve01_codigo;
+                $clveicresp->incluir(null);
+                if ($clveicresp->erro_status=="0"){
+                    $sqlerro=true;
+                    $erro_msg=$clveicresp->erro_msg;
+                }
             }
         }
         /*
@@ -281,6 +292,62 @@ if (isset($codveictipoabast) && trim($codveictipoabast)!=""){
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+
+    #ve01_veiccadcor, #ve01_veiccadmarca, #ve01_veiccadcategcnh, #ve01_veictipoabast{
+        display: none;
+    }
+
+    #ve01_veiccadpotencia, #ve01_veiccadtipocapacidade{
+        width: 93px;
+    }
+
+    #ve01_veiccadpotenciadescr, #ve01_veiccadtipocapacidadedescr{
+        width: 212px;
+    }
+
+    #si04_tipoveiculo, #si04_especificacao{
+        width: 184px;
+    }
+
+    #si04_situacao, #ve01_veiccadmarcadescr{
+        width: 395px;
+    }
+
+    #ve02_numcgm, #ve01_veiccadtipo{
+        width: 84px;
+    }
+
+    #ve06_veiccadcomb{
+        width: 394px;
+    }
+
+    #ve01_veiccadcategdescr,
+    #ve01_veiccadproceddescr{
+        width: 133px;
+    }
+
+    #ve01_veiccadtipodescr{
+        width: 307px;
+    }
+
+    #ve01_veiccadcordescr{
+        width: 182px;
+    }
+
+    #ve01_veictipoabastdescr, #ve01_veiccadcategcnhdescr{
+        width: 180px;
+    }
+
+    .tr__hidden-veiculos{
+        display: none;
+    }
+
+    .div__anos{
+        margin-left: -3px;
+    }
+
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
     <tr>
@@ -297,6 +364,8 @@ if (isset($codveictipoabast) && trim($codveictipoabast)!=""){
 </html>
 <script>
     js_tabulacaoforms("form1","ve01_placa",true,1,"ve01_placa",true);
+    document.getElementById('si04_especificacao').value = "<?=$si04_especificacao?>";
+    document.getElementById('ve06_veiccadcomb').value = "<?=$ve06_veiccadcomb?>";
 </script>
 <?
 if(isset($incluir)){
@@ -311,7 +380,7 @@ if(isset($incluir)){
         unset($incluir);
     }else{
         db_msgbox($erro_msg);
-        db_redireciona("vei1_veiculos005.php?chavepesquisa=$ve01_codigo&liberaaba=true");
+        db_redireciona("vei1_veiculos005.php?chavepesquisa=$clveiculos->ve01_codigo&liberaaba=true");
     }
 }
 ?>

@@ -193,7 +193,7 @@ if (isset($oGet->e69_codnota)) {
          $sWhere       = "e72_codnota = {$oNotas->e69_codnota}";
          $sCampos      = "e62_sequen, pc01_descrmater, e72_valor, e72_qtd,e72_vlrliq,e72_vlranu";
          $sSqltensNota = $oDaoEmpNotaItem->sql_query(null,$sCampos,"e62_sequen",$sWhere);
-         db_lovrot($sSqltensNota, 15,'','',"","","Itens");
+         db_lovrot_arredondamento($sSqltensNota, 15,'','',"","","Itens");
        }
        ?>
      </table>

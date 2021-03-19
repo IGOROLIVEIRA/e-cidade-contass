@@ -905,6 +905,12 @@ abstract class Transferencia {
       throw new BusinessException("financeiro.caixa.Transferencia.exclusao_vinculo_tipotransferencia");
     }
 
+    $oDaoExcluirSlip = new cl_transferenciafinanceirarecebimento();
+    $oDaoExcluirSlip ->excluir(null, "k151_slip  = {$this->getCodigoSlip()}");
+    if ($oDaoExcluirSlip->erro_status == "0") {
+      throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferenciafinanceirarecebimento");
+    }
+
     $oDaoExcluirSlip = new cl_transferenciafinanceira();
     $oDaoExcluirSlip ->excluir(null, "k150_slip  = {$this->getCodigoSlip()}");
     if ($oDaoExcluirSlip->erro_status == "0") {
@@ -921,6 +927,18 @@ abstract class Transferencia {
     $oDaoExcluirSlip->excluir(null, "p106_slip = {$this->getCodigoSlip()}");
     if ($oDaoExcluirSlip->erro_status == "0") {
       throw new BusinessException("financeiro.caixa.Transferencia.exclusao_protocolo");
+    }
+
+    $oDaoExcluirSlip = new cl_sliprecurso();
+    $oDaoExcluirSlip->excluir(null, "k29_slip = {$this->getCodigoSlip()}");
+    if ($oDaoExcluirSlip->erro_status == "0") {
+      throw new BusinessException("financeiro.caixa.Transferencia.exclusao_recurso");
+    }
+
+    $oDaoExcluirSlip = new cl_rhslipfolhaslip();
+    $oDaoExcluirSlip->excluir(null, "rh82_slip = {$this->getCodigoSlip()}");
+    if ($oDaoExcluirSlip->erro_status == "0") {
+      throw new BusinessException("financeiro.caixa.Transferencia.exclusao_rhslipfolha");
     }
 
     $oDaoExcluirSlip = new cl_sliptipooperacaovinculo();

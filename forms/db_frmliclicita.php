@@ -454,14 +454,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $al20_critdesempate = array("2"=>"Não","1"=>"Sim");
+                                        $al20_critdesempate = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_critdesempate",$al20_critdesempate,true,$db_opcao);
                                         ?>
                                     <td>
                                         <?=@$Ll20_subcontratacao?>
                                     </td>
                                     <td>
-                                        <?$al20_subcontratacao = array("2"=>"Não","1"=>"Sim");
+                                        <?$al20_subcontratacao = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_subcontratacao",$al20_subcontratacao,true,$db_opcao);
                                         ?>
                                     </td>
@@ -473,14 +473,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $al20_destexclusiva = array("2"=>"Não","1"=>"Sim");
+                                        $al20_destexclusiva = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_destexclusiva",$al20_destexclusiva,true,$db_opcao);
                                         ?>
                                     <td>
                                         <?=@$Ll20_limitecontratacao?>
                                     </td>
                                     <td>
-                                        <?$al20_limitcontratacao = array("2"=>"Não","1"=>"Sim");
+                                        <?$al20_limitcontratacao = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_limitcontratacao",$al20_limitcontratacao,true,$db_opcao);
                                         ?>
                                     </td>

@@ -3,9 +3,7 @@ e-cidade			5432	cmbocaiuva
 e-cidade			5432	cmcapitaoeneas
 e-cidade			5432	cmmoc
 e-cidade			5432	fumasa
-e-cidade			5432	pmcristalia
 e-cidade			5432	pmibiracatu
-e-cidade			5432	pmitacambira
 e-cidade			5433	pmpatis
 e-cidade			5432	pmsaofrancisco
 e-cidade			5432	pmsaojoaodaponte
@@ -14,7 +12,6 @@ e-cidade			5432	pmpirapora
 e-cidade			5432	cisaje
 e-cidade        		5432	prevmoc
 e-cidade			5432	pmverdelandia
-e-cidade			5432	pmluislandia
 e-cidade			5432	pmvarzelandia
 e-cidade			5432	pmclarodospocoes
 e-cidade			5432	cii-amaje
@@ -24,7 +21,19 @@ e-cidade            5432    pmlagoadospatos
 
 pmcapitaoeneas      5432    prefeituras
 pmsaoromao          5432    prefeituras
+pmcristalia         5432    prefeituras
+pmluislandia        5432    prefeituras
+pmitacambira        5432    prefeituras
 treinamento         5432    prefeituras
+
+pmburitizeiro          5432    prefeituras2
+pmgraomogol            5432    prefeituras2
+pmnovaporteirinha      5432    prefeituras2
+pmsantafeminas         5432    prefeituras2
+pmsaojoaomissoes       5432    prefeituras2
+pmtaquaracuminas       5432    prefeituras2
+pmubai                 5432    prefeituras2
+pmcurraldedentro       5432    prefeituras2
 
 e-cidade            5432    cmbhecid
 
@@ -38,10 +47,8 @@ cimva				5432	e-cidade
 cindecon			5432	e-cidade
 cmberizal			5432	e-cidade
 cmbotumirim			5432	e-cidade
-cmcristalia			5432	e-cidade
 cmgraomogol			5432	e-cidade
 cmibiracatu			5432	e-cidade
-cmitacambira			5432	e-cidade
 cmjosenopolis			5432	e-cidade
 cmjuramento			5432	e-cidade
 cmmatiascardoso			5432	e-cidade
@@ -71,3 +78,13 @@ cisgraomogol		5432	e-cidade
 cimvales            5432    e-cidade
 cidsmeje            5432    e-cidade
 cisaje              5432    e-cidade
+cmnavarro           5432    e-cidade
+cmluislandia        5432    e-cidade
+cisnorte            5432    e-cidade
+
+pmubai              5432    e-cidadenovosclientes
+pmsaojoaomissoes    5432    e-cidadenovosclientes
+pmsantafeminas      5432    e-cidadenovosclientes
+pmnovaporteirinha   5432    e-cidadenovosclientes
+pmgraomogol         5432    e-cidadenovosclientes
+pmburitizeiro       5432    e-cidadenovosclientes

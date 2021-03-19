@@ -33,5 +33,8 @@ $campos = "inventario.t75_sequencial,
            inventario.t75_processo,
            inventario.t75_acordocomissao,
            inventario.t75_observacao,
-           acordocomissao.ac08_descricao";
+           CASE
+               WHEN ac08_acordocomissaotipo = 1 THEN 'Contratos'
+               ELSE 'Patrimonial'
+           END AS ac08_acordocomissaotipo";
 ?>

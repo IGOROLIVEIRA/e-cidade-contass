@@ -39,6 +39,9 @@ if ($oParam->exec == "addRetencao") {
 
   try {
 
+    if($oParam->params[0]->oRetencao->nValorRetencao <= 0){
+        throw new Exception("Erro - O valor da retenção deve ser maior que zero!");
+    }
     $oRetencaoNota = new retencaoNota($oParam->params[0]->oRetencao->iCodNota);
     $oRetencaoNota->setInSession($oParam->params[0]->inSession);
 

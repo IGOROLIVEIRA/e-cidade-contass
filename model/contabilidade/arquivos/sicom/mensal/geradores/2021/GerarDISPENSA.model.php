@@ -23,31 +23,31 @@ class GerarDISPENSA extends GerarAM
     $this->sArquivo = "DISPENSA";
     $this->abreArquivo();
 
-    $sSql = "select * from dispensa102020 where si74_mes = " . $this->iMes . " and si74_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from dispensa102021 where si74_mes = " . $this->iMes . " and si74_instit=" . db_getsession("DB_instit");
     $rsDISPENSA10 = db_query($sSql);
 
-    $sSql2 = "select * from dispensa112020 where si75_mes = " . $this->iMes . " and si75_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from dispensa112021 where si75_mes = " . $this->iMes . " and si75_instit=" . db_getsession("DB_instit");
     $rsDISPENSA11 = db_query($sSql2);
 
-    $sSql3 = "select * from dispensa122020 where si76_mes = " . $this->iMes . " and si76_instit=" . db_getsession("DB_instit");
+    $sSql3 = "select * from dispensa122021 where si76_mes = " . $this->iMes . " and si76_instit=" . db_getsession("DB_instit");
     $rsDISPENSA12 = db_query($sSql3);
 
-    $sSql4 = "select * from dispensa132020 where si77_mes = " . $this->iMes . " and si77_instit=" . db_getsession("DB_instit");
+    $sSql4 = "select * from dispensa132021 where si77_mes = " . $this->iMes . " and si77_instit=" . db_getsession("DB_instit");
     $rsDISPENSA13 = db_query($sSql4);
 
-    $sSql5 = "select * from dispensa142020 where si78_mes = " . $this->iMes . " and si78_instit=" . db_getsession("DB_instit");
+    $sSql5 = "select * from dispensa142021 where si78_mes = " . $this->iMes . " and si78_instit=" . db_getsession("DB_instit");
     $rsDISPENSA14 = db_query($sSql5);
 
-    $sSql6 = "select * from dispensa152020 where si79_mes = " . $this->iMes . " and si79_instit=" . db_getsession("DB_instit");
+    $sSql6 = "select * from dispensa152021 where si79_mes = " . $this->iMes . " and si79_instit=" . db_getsession("DB_instit");
     $rsDISPENSA15 = db_query($sSql6);
 
-    $sSql7 = "select * from dispensa162020 where si80_mes = " . $this->iMes . " and si80_instit=" . db_getsession("DB_instit");
+    $sSql7 = "select * from dispensa162021 where si80_mes = " . $this->iMes . " and si80_instit=" . db_getsession("DB_instit");
     $rsDISPENSA16 = db_query($sSql7);
 
-    $sSql8 = "select * from dispensa172020 where si81_mes = " . $this->iMes . " and si81_instit=" . db_getsession("DB_instit");
+    $sSql8 = "select * from dispensa172021 where si81_mes = " . $this->iMes . " and si81_instit=" . db_getsession("DB_instit");
     $rsDISPENSA17 = db_query($sSql8);
 
-    $sSql9 = "select * from dispensa182020 where si82_mes = " . $this->iMes . " and si82_instit=" . db_getsession("DB_instit");
+    $sSql9 = "select * from dispensa182021 where si82_mes = " . $this->iMes . " and si82_instit=" . db_getsession("DB_instit");
     $rsDISPENSA18 = db_query($sSql9);
 
     if (pg_num_rows($rsDISPENSA10) == 0 && pg_num_rows($rsDISPENSA18) == 0) {

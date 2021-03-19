@@ -22,29 +22,28 @@ class GerarCONTRATOS extends GerarAM {
     $this->sArquivo = "CONTRATOS";
     $this->abreArquivo();
 
-    $sSql = "select * from contratos102020 where si83_mes = ". $this->iMes ." and si83_instit = ". db_getsession("DB_instit");
+    $sSql = "select * from contratos102021 where si83_mes = ". $this->iMes ." and si83_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS10    = db_query($sSql);
 
-    $sSql2 = "select * from contratos112020 where si84_mes = ". $this->iMes ." and si84_instit = ". db_getsession("DB_instit");
+    $sSql2 = "select * from contratos112021 where si84_mes = ". $this->iMes ." and si84_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS11    = db_query($sSql2);
 
-
-    $sSql3 = "select * from contratos122020 where si85_mes = ". $this->iMes ." and si85_instit = ". db_getsession("DB_instit");
+    $sSql3 = "select * from contratos122021 where si85_mes = ". $this->iMes ." and si85_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS12    = db_query($sSql3);
 
-    $sSql4 = "select * from contratos132020 where si86_mes = ". $this->iMes ." and si86_instit = ". db_getsession("DB_instit");
+    $sSql4 = "select * from contratos132021 where si86_mes = ". $this->iMes ." and si86_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS13    = db_query($sSql4);
 
-    $sSql5 = "select * from contratos202020 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
+    $sSql5 = "select * from contratos202021 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS20    = db_query($sSql5);
 
-    $sSql6 = "select * from contratos212020 where si88_mes = ". $this->iMes ." and si88_instit = ". db_getsession("DB_instit");
+    $sSql6 = "select * from contratos212021 where si88_mes = ". $this->iMes ." and si88_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS21    = db_query($sSql6);
 
-    $sSql7 = "select * from contratos302020 where si89_mes = ". $this->iMes ." and si89_instit = ". db_getsession("DB_instit");
+    $sSql7 = "select * from contratos302021 where si89_mes = ". $this->iMes ." and si89_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS30    = db_query($sSql7);
 
-    $sSql8 = "select * from contratos402020 where si91_mes = ". $this->iMes ." and si91_instit = ". db_getsession("DB_instit");
+    $sSql8 = "select * from contratos402021 where si91_mes = ". $this->iMes ." and si91_instit = ". db_getsession("DB_instit");
     $rsCONTRATOS40    = db_query($sSql8);
 
 
@@ -74,7 +73,7 @@ class GerarCONTRATOS extends GerarAM {
         $aCSVCONTRATOS10['si83_dataassinatura']               =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_dataassinatura'])));
         $aCSVCONTRATOS10['si83_contdeclicitacao']             =   str_pad($aCONTRATOS10['si83_contdeclicitacao'], 1, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS10['si83_codorgaoresp']                 =   $aCONTRATOS10['si83_codorgaoresp'] == 0 ? ' ' : str_pad($aCONTRATOS10['si83_codorgaoresp'], 2, '0', STR_PAD_LEFT);
-        $aCSVCONTRATOS10['si83_codunidadesubresp']            =   str_pad($aCONTRATOS10['si83_codunidadesubresp'], 5, '0', STR_PAD_LEFT);
+        $aCSVCONTRATOS10['si83_codunidadesubresp']            =   $aCONTRATOS10['si83_contdeclicitacao'] != 1 ? str_pad($aCONTRATOS10['si83_codunidadesubresp'], 5, '0', STR_PAD_LEFT) : '';
         $aCSVCONTRATOS10['si83_nroprocesso']                  =   substr($aCONTRATOS10['si83_nroprocesso'], 0, 12);
         $aCSVCONTRATOS10['si83_exercicioprocesso']            =   $aCONTRATOS10['si83_exercicioprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_exercicioprocesso'];
         $aCSVCONTRATOS10['si83_tipoprocesso']                 =   $aCONTRATOS10['si83_tipoprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_tipoprocesso'];
@@ -86,7 +85,7 @@ class GerarCONTRATOS extends GerarAM {
         $aCSVCONTRATOS10['si83_vlcontrato']                   =   number_format($aCONTRATOS10['si83_vlcontrato'], 2, ",", "");
         $aCSVCONTRATOS10['si83_formafornecimento']            =   substr($aCONTRATOS10['si83_formafornecimento'], 0, 50);
         $aCSVCONTRATOS10['si83_formapagamento']               =   substr($aCONTRATOS10['si83_formapagamento'], 0, 100);
-        $aCSVCONTRATOS10['si83_unidadedemedidaprazoexex']     =   $aCONTRATOS10['si83_unidadedemedidaprazoexex'];
+        $aCSVCONTRATOS10['si83_unidadedemedidaprazoexec']     =   $aCONTRATOS10['si83_unidadedemedidaprazoexec'];
         $aCSVCONTRATOS10['si83_prazoexecucao']                =   $aCONTRATOS10['si83_prazoexecucao'];
         $aCSVCONTRATOS10['si83_multarescisoria']              =   substr($aCONTRATOS10['si83_multarescisoria'], 0, 100);
         $aCSVCONTRATOS10['si83_multainadimplemento']          =   substr($aCONTRATOS10['si83_multainadimplemento'], 0, 100);
@@ -189,7 +188,7 @@ class GerarCONTRATOS extends GerarAM {
             $aCSVCONTRATOS13['si86_tipodocumento']         =   str_pad($aCONTRATOS13['si86_tipodocumento'], 1, "0", STR_PAD_LEFT);
             $aCSVCONTRATOS13['si86_nrodocumento']          =   substr($aCONTRATOS13['si86_nrodocumento'], 0, 14);
             $aCSVCONTRATOS13['si86_tipodocrepresentante']  =   substr($aCONTRATOS13['si86_tipodocrepresentante'], 0, 1);
-            $aCSVCONTRATOS13['si86_nrodocrepresentantelegal'] =   str_pad($aCONTRATOS13['si86_nrodocrepresentantelegal'], 14, "0", STR_PAD_LEFT);
+            $aCSVCONTRATOS13['si86_nrodocrepresentantelegal'] =   substr($aCONTRATOS13['si86_nrodocrepresentantelegal'], 0, 14);
 
             $this->sLinha = $aCSVCONTRATOS13;
             $this->adicionaLinha();

@@ -23,7 +23,7 @@ class GerarITEM extends GerarAM
     $this->sArquivo = "ITEM";
     $this->abreArquivo();
 
-    $sSql = "select * from item102020 where si43_mes = " . $this->iMes . " and si43_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from item102021 where si43_mes = " . $this->iMes . " and si43_instit = " . db_getsession("DB_instit");
     $rsITEM10 = db_query($sSql);//db_criatabela($rsITEM10);
 
     if (pg_num_rows($rsITEM10) == 0) {

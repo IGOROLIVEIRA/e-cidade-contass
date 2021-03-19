@@ -23,10 +23,10 @@ class GerarRESPLIC extends GerarAM
     $this->sArquivo = "RESPLIC";
     $this->abreArquivo();
     
-    $sSql = "select * from resplic102020 where si55_mes = " . $this->iMes . " and si55_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from resplic102021 where si55_mes = " . $this->iMes . " and si55_instit=" . db_getsession("DB_instit");
     $rsRESPLIC10 = db_query($sSql);
     
-    $sSql2 = "select * from resplic202020 where si56_mes = " . $this->iMes . " and si56_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from resplic202021 where si56_mes = " . $this->iMes . " and si56_instit=" . db_getsession("DB_instit");
     $rsRESPLIC20 = db_query($sSql2);
     
     if (pg_num_rows($rsRESPLIC10) == 0 && pg_num_rows($rsRESPLIC20) == 0) {

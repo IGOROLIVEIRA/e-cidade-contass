@@ -19,19 +19,19 @@ class GerarBO extends GerarAM
     $this->sArquivo = "BO";
     $this->abreArquivo();
 
-    $sSql = "select * from bodcasp102019 where si201_ano = {$this->iAno} AND si201_periodo = {$this->iPeriodo} AND si201_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp102020 where si201_ano = {$this->iAno} AND si201_periodo = {$this->iPeriodo} AND si201_institu = " . db_getsession("DB_instit");
     $rsBO10 = db_query($sSql);
 
-    $sSql = "select * from bodcasp202019 where si202_anousu = {$this->iAno} AND si202_periodo = {$this->iPeriodo} AND si202_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp202020 where si202_anousu = {$this->iAno} AND si202_periodo = {$this->iPeriodo} AND si202_instit = " . db_getsession("DB_instit");
     $rsBO20 = db_query($sSql);
 
-    $sSql = "select * from bodcasp302019 where si203_anousu = {$this->iAno} AND si203_periodo = {$this->iPeriodo} AND si203_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp302020 where si203_anousu = {$this->iAno} AND si203_periodo = {$this->iPeriodo} AND si203_instit = " . db_getsession("DB_instit");
     $rsBO30 = db_query($sSql);
 
-    $sSql = "select * from bodcasp402019 where si204_ano = {$this->iAno} AND si204_periodo = {$this->iPeriodo} AND si204_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp402020 where si204_ano = {$this->iAno} AND si204_periodo = {$this->iPeriodo} AND si204_institu = " . db_getsession("DB_instit");
     $rsBO40 = db_query($sSql);
 
-    $sSql = "select * from bodcasp502019 where si205_ano = {$this->iAno} AND si205_periodo = {$this->iPeriodo} AND si205_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bodcasp502020 where si205_ano = {$this->iAno} AND si205_periodo = {$this->iPeriodo} AND si205_institu = " . db_getsession("DB_instit");
     $rsBO50 = db_query($sSql);
 
     if (pg_num_rows($rsBO10) == 0

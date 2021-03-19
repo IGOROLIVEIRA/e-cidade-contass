@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_ide2020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarIDE.model.php");
+require_once ("classes/db_ide2021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarIDE.model.php");
 
  /**
   * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -69,7 +69,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
   	/**
   	 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo 
   	 */
-  	$clide = new cl_ide2020();
+  	$clide = new cl_ide2021();
   	
   	$sSql  = "SELECT db21_codigomunicipoestado AS codmunicipio,
                 case when si09_tipoinstit::varchar = '2' then cgc::varchar else si09_cnpjprefeitura::varchar end AS cnpjmunicipio,
@@ -96,7 +96,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
     
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
       
-    	$clide = new cl_ide2020();
+    	$clide = new cl_ide2021();
     	$oDadosIde = db_utils::fieldsMemory($rsResult, $iCont);
 	   
 		  $clide->si11_codmunicipio         = $oDadosIde->codmunicipio;
@@ -104,7 +104,11 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 		  $clide->si11_codorgao							= $oDadosIde->codorgao;
 		  $clide->si11_tipoorgao            = $oDadosIde->tipoorgao;
 		  $clide->si11_exercicioreferencia  = db_getsession("DB_anousu");
-		  $clide->si11_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
+            if($this->bEncerramento){
+                $clide->si11_mesreferencia    =  '13';
+            }else {
+                $clide->si11_mesreferencia = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            }
 		  $clide->si11_datageracao          = date("d-m-Y");
 		  $clide->si11_codcontroleremessa   = " ";
 		  $clide->si11_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];

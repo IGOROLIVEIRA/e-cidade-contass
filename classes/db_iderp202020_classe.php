@@ -221,11 +221,11 @@ class cl_iderp202020 {
                                ,$this->si181_tiporegistro
                                ,'$this->si181_codorgao'
                                ,$this->si181_codfontrecursos
-                               ,$this->si181_vlcaixabruta
-                               ,$this->si181_vlrspexerciciosanteriores
+                               ,'$this->si181_vlcaixabruta'
+                               ,'$this->si181_vlrspexerciciosanteriores'
                                ,".($this->si181_vlrestituiveisrecolher == "null" || $this->si181_vlrestituiveisrecolher == ""?"null":"'".$this->si181_vlrestituiveisrecolher."'")."
                                ,".($this->si181_vlrestituiveisativofinanceiro == "null" || $this->si181_vlrestituiveisativofinanceiro == ""?"null":"'".$this->si181_vlrestituiveisativofinanceiro."'")."
-                               ,$this->si181_vlsaldodispcaixa
+                               ,'$this->si181_vlsaldodispcaixa'
                                ,$this->si181_mes
                                ,$this->si181_instit
                       )";

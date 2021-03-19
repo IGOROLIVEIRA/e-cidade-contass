@@ -23,16 +23,16 @@ class GerarCAIXA extends GerarAM
     $this->sArquivo = "CAIXA";
     $this->abreArquivo();
     
-    $sSql = "select * from caixa102020 where si103_mes = " . $this->iMes . " and si103_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from caixa102021 where si103_mes = " . $this->iMes . " and si103_instit = " . db_getsession("DB_instit");
     $rsCAIXA10 = db_query($sSql);
 
-    $sSql2 = "select * from caixa112020 where si166_mes = " . $this->iMes . " and si166_instit = " . db_getsession("DB_instit");
+    $sSql2 = "select * from caixa112021 where si166_mes = " . $this->iMes . " and si166_instit = " . db_getsession("DB_instit");
     $rsCAIXA11 = db_query($sSql2);
 
-    $sSql3 = "select * from caixa122020 where si104_mes = " . $this->iMes . " and si104_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from caixa122021 where si104_mes = " . $this->iMes . " and si104_instit = " . db_getsession("DB_instit");
     $rsCAIXA12 = db_query($sSql3);
 
-    $sSql4 = "select * from caixa132020 where si105_mes = " . $this->iMes . " and si105_instit = " . db_getsession("DB_instit");
+    $sSql4 = "select * from caixa132021 where si105_mes = " . $this->iMes . " and si105_instit = " . db_getsession("DB_instit");
     $rsCAIXA13 = db_query($sSql4);
 
     if (pg_num_rows($rsCAIXA10) == 0) {
@@ -78,7 +78,7 @@ class GerarCAIXA extends GerarAM
 
             $aCAIXA12 = pg_fetch_array($rsCAIXA12, $iCont3);
             
-            if ($aCAIXA10['si103_sequencial'] == $aCAIXA12['si104_reg10']) {
+            if ($aCAIXA10['si103_sequencial'] == $aCAIXA12['si104_reg10'] && $aCSVCAIXA11['si166_codfontecaixa'] == $aCAIXA12['si104_codfontecaixa']) {
 
               $aCSVCAIXA12['si104_tiporegistro']      = $this->padLeftZero($aCAIXA12['si104_tiporegistro'], 2);
               $aCSVCAIXA12['si104_codreduzido']       = substr($aCAIXA12['si104_codreduzido'], 0, 15);
@@ -99,7 +99,7 @@ class GerarCAIXA extends GerarAM
 
               $aCAIXA13 = pg_fetch_array($rsCAIXA13, $iCont4);
 
-              if ($aCAIXA12['si104_codreduzido'] == $aCAIXA13['si105_codreduzido']) {
+              if ($aCAIXA10['si103_sequencial'] == $aCAIXA13['si105_reg10'] && $aCAIXA12['si104_codreduzido'] == $aCAIXA13['si105_codreduzido'] && $aCSVCAIXA11['si166_codfontecaixa'] == $aCAIXA12['si104_codfontecaixa']) {
 
                 $aCSVCAIXA13['si105_tiporegistro']          = $this->padLeftZero($aCAIXA13['si105_tiporegistro'], 2);
                 $aCSVCAIXA13['si105_codreduzido']           = substr($aCAIXA13['si105_codreduzido'], 0, 15);

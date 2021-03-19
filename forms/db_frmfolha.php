@@ -239,7 +239,7 @@ if(!isset($mesfolha) || (isset($mesfolha) && trim($mesfolha) == "")){
     </td>
     <td nowrap align="left">
     <?php
-	    $liquido1 = '0';
+	    $liquido1 = '0.01';
 	    db_input("r90_valor", 15, $Ir90_valor, true, 'text', 1, '', "liquido1");
     ?>
     <b>até</b>

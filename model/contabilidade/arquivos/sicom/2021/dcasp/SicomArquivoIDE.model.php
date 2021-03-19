@@ -30,6 +30,10 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
     return array();
   }
 
+  public function setTipoGeracao($sTipoGeracao) {
+    $this->sTipoGeracao = $sTipoGeracao;
+  }
+
 
   /**
    * Contrutor da classe

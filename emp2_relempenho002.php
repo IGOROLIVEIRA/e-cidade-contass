@@ -430,7 +430,7 @@ if ($agrupar !="orgao" && $agrupar!="r" && $agrupar!="d"){
 
 if ($agrupar == "oo"){
     // $sOrderSQL = " e60_emiss, z01_nome, e60_anousu, e60_codemp ";
-    $sOrderSQL = " e60_numemp, to_number(e60_codemp::text,'9999999999') ";
+    $sOrderSQL = " to_number(e60_codemp::text,'9999999999') ";
 }
 
 
@@ -454,7 +454,101 @@ if ($processar == "a") {
 
     $sqlrelemp = $clempempenho->sql_query_relatorio(null, $sCamposPosicaoAtual, $sOrderSQL, $sWhereSQL, $sSqlAnulado);
 
-    if ($agrupar == "d" or 1==1) {
+    if ($agrupar == "d") {
+
+        $sqlrelemp = "select distinct x.e60_resumo,
+					  x.e60_numemp,
+					  x.e60_codemp,
+					  x.e60_emiss,
+					  x.e60_numcgm,
+					  x.z01_nome,
+					  x.z01_cgccpf,
+					  x.z01_munic,
+ 					  x.e63_codhist,
+					  x.e40_descr,
+ 				  	  x.e60_anousu,
+					  x.e60_coddot,
+					  x.o58_coddot,
+					  x.o58_orgao,
+					  x.o40_orgao,
+					  x.o40_descr,
+					  x.o58_unidade,
+					  x.o41_descr,
+					  x.o15_codigo,
+					  x.o15_descr,
+					  x.dl_estrutural,
+					  x.e60_codcom,
+					  x.pc50_descr,
+					  empelemento.e64_codele,
+					  orcelemento.o56_descr,
+            x.e60_vlremp,
+					  x.e60_vlranu,
+					  x.e60_vlrliq,
+            x.e60_vlrpag,
+					  empelemento.e64_vlremp,
+					  empelemento.e64_vlrliq,
+					  empelemento.e64_vlranu,
+					  empelemento.e64_vlrpag,
+            x.e60_concarpeculiar,
+            x.e60_numerol,
+            x.e54_gestaut,
+            x.descrdepto,
+            x.ac16_sequencial,
+            x.ac16_resumoobjeto,
+            x.ac16_numero,
+            x.l20_edital,
+            x.l20_anousu
+				  from ($sqlrelemp) as x
+			               inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
+				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
+
+				       group by
+                x.e60_resumo,
+					      x.e60_numemp,
+					      x.e60_codemp,
+					      x.e60_emiss,
+					      x.e60_numcgm,
+					      x.z01_nome,
+					      x.z01_cgccpf,
+					      x.z01_munic,
+ 					      x.e63_codhist,
+					      x.e40_descr,
+ 				  	      x.e60_anousu,
+					      x.e60_coddot,
+					      x.o58_coddot,
+					      x.o58_orgao,
+					      x.o40_orgao,
+					      x.o40_descr,
+					      x.o58_unidade,
+					      x.o41_descr,
+					      x.o15_codigo,
+					      x.o15_descr,
+					      x.dl_estrutural,
+					      x.e60_codcom,
+					      x.pc50_descr,
+					      empelemento.e64_codele,
+					      orcelemento.o56_descr,
+                x.e60_vlremp,
+					      x.e60_vlranu,
+					      x.e60_vlrliq,
+                x.e60_vlrpag,
+					      empelemento.e64_vlremp,
+					      empelemento.e64_vlrliq,
+					      empelemento.e64_vlranu,
+					      empelemento.e64_vlrpag,
+                x.e60_concarpeculiar,
+                x.e60_numerol,
+                x.e54_gestaut,
+                x.descrdepto,
+                x.ac16_sequencial,
+                x.ac16_resumoobjeto,
+                x.ac16_numero,
+                e94_empanuladotipo,
+            	  e38_descr,
+                x.l20_edital,
+                x.l20_anousu";
+    }elseif($agrupar == "ta"){
+
         $sqlrelemp = "select 	  x.e60_resumo,
 					  x.e60_numemp,
 					  x.e60_codemp,
@@ -548,6 +642,99 @@ if ($processar == "a") {
             	  e38_descr,
                 x.l20_edital,
                 x.l20_anousu";
+
+    }else{
+        $sqlrelemp = "select distinct x.e60_resumo,
+					  x.e60_numemp,
+					  x.e60_codemp,
+					  x.e60_emiss,
+					  x.e60_numcgm,
+					  x.z01_nome,
+					  x.z01_cgccpf,
+					  x.z01_munic,
+ 					  x.e63_codhist,
+					  x.e40_descr,
+ 				  	  x.e60_anousu,
+					  x.e60_coddot,
+					  x.o58_coddot,
+					  x.o58_orgao,
+					  x.o40_orgao,
+					  x.o40_descr,
+					  x.o58_unidade,
+					  x.o41_descr,
+					  x.o15_codigo,
+					  x.o15_descr,
+					  x.dl_estrutural,
+					  x.e60_codcom,
+					  x.pc50_descr,
+					  empelemento.e64_codele,
+					  orcelemento.o56_descr,
+            x.e60_vlremp,
+					  x.e60_vlranu,
+					  x.e60_vlrliq,
+            x.e60_vlrpag,
+					  empelemento.e64_vlremp,
+					  empelemento.e64_vlrliq,
+					  empelemento.e64_vlranu,
+					  empelemento.e64_vlrpag,
+            x.e60_concarpeculiar,
+            x.e60_numerol,
+            x.e54_gestaut,
+            x.descrdepto,
+            x.ac16_sequencial,
+            x.ac16_resumoobjeto,
+            x.ac16_numero,
+            x.l20_edital,
+            x.l20_anousu
+				  from ($sqlrelemp) as x
+			               inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
+				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
+
+				       group by
+                x.e60_resumo,
+					      x.e60_numemp,
+					      x.e60_codemp,
+					      x.e60_emiss,
+					      x.e60_numcgm,
+					      x.z01_nome,
+					      x.z01_cgccpf,
+					      x.z01_munic,
+ 					      x.e63_codhist,
+					      x.e40_descr,
+ 				  	      x.e60_anousu,
+					      x.e60_coddot,
+					      x.o58_coddot,
+					      x.o58_orgao,
+					      x.o40_orgao,
+					      x.o40_descr,
+					      x.o58_unidade,
+					      x.o41_descr,
+					      x.o15_codigo,
+					      x.o15_descr,
+					      x.dl_estrutural,
+					      x.e60_codcom,
+					      x.pc50_descr,
+					      empelemento.e64_codele,
+					      orcelemento.o56_descr,
+                x.e60_vlremp,
+					      x.e60_vlranu,
+					      x.e60_vlrliq,
+                x.e60_vlrpag,
+					      empelemento.e64_vlremp,
+					      empelemento.e64_vlrliq,
+					      empelemento.e64_vlranu,
+					      empelemento.e64_vlrpag,
+                x.e60_concarpeculiar,
+                x.e60_numerol,
+                x.e54_gestaut,
+                x.descrdepto,
+                x.ac16_sequencial,
+                x.ac16_resumoobjeto,
+                x.ac16_numero,
+                e94_empanuladotipo,
+            	  e38_descr,
+                x.l20_edital,
+                x.l20_anousu";
     }
 
     $sqlrelemp = "select * from ($sqlrelemp) as x " . (
@@ -558,7 +745,7 @@ if ($processar == "a") {
               : " order by $sOrderSQL "
 
         );
-
+    //echo $sqlrelemp;exit;
     $res = $clempempenho->sql_record($sqlrelemp);
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
@@ -568,8 +755,12 @@ if ($processar == "a") {
 
 } else {
 
-    $sqlperiodo = "
-	      select distinct	empempenho.e60_numemp,
+    $sqlperiodo = " select ";
+	          if($agrupar != "ta") {
+              $sqlperiodo .=   " distinct ";
+	          }
+
+    $sqlperiodo .=  " empempenho.e60_numemp,
 					e60_resumo,
 					e60_codemp,
 					e60_emiss,
@@ -600,8 +791,6 @@ if ($processar == "a") {
           e60_numerol,
           e54_gestaut,
           descrdepto,
-          e94_empanuladotipo,
-          e38_descr,
           to_number(e60_codemp::text,'9999999999')
 			   from (
 			  select e60_numemp, e60_vlremp,
@@ -687,7 +876,7 @@ if ($processar == "a") {
 
     if ($agrupar == "d" || $sele_desdobramentos != "") {
         $sqlperiodo =  "
-			      select 	e60_numemp,
+			      select distinct e60_numemp,
 					e60_resumo,
 					e60_codemp,
 					e60_emiss,
@@ -765,10 +954,86 @@ if ($processar == "a") {
 
         }
 
+    }elseif($agrupar == "ta"){
+
+        $sqlperiodo =  "
+			      select e60_numemp,
+					e60_resumo,
+					e60_codemp,
+					e60_emiss,
+					e60_numcgm,
+					z01_nome,
+					z01_cgccpf,
+					z01_munic,
+					e60_vlremp,
+					e60_vlranu,
+					e60_vlrliq,
+					e63_codhist,
+					e40_descr,
+					e60_vlrpag,
+					e60_anousu,
+					e60_coddot,
+					o58_coddot,
+					o58_orgao,
+					o40_orgao,
+					o40_descr,
+					o58_unidade,
+					o41_descr,
+					o15_codigo,
+					o15_descr,
+					dl_estrutural,
+					e60_codcom,
+					pc50_descr,
+					empelemento.e64_codele,
+					orcelemento.o56_descr,
+          			e60_concarpeculiar,
+          			e60_numerol
+		      from ($sqlperiodo) as x
+			    /* inner join empelemento on x.e60_numemp = e64_numemp */
+
+	 	      inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
+			  inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
+			  
+		      group by  e60_numemp,
+					e60_resumo,
+					e60_codemp,
+					e60_emiss,
+					e60_numcgm,
+					z01_nome,
+					z01_cgccpf,
+					z01_munic,
+					e60_vlremp,
+					e60_vlranu,
+					e60_vlrliq,
+					e63_codhist,
+					e40_descr,
+					e60_vlrpag,
+					e60_anousu,
+					e60_coddot,
+					o58_coddot,
+					o58_orgao,
+					o40_orgao,
+					o40_descr,
+					o58_unidade,
+					o41_descr,
+					o15_codigo,
+					o15_descr,
+					dl_estrutural,
+					e60_codcom,
+					pc50_descr,
+					empelemento.e64_codele,
+					orcelemento.o56_descr,
+          e60_concarpeculiar,
+          e60_numerol";
+
+        $sqlperiodo .= "
+                         order by  e60_emiss,empelemento.e64_codele
+  			    ";
+
     }
 
     $res = $clempempenho->sql_record($sqlperiodo);
-
+    //echo $sqlperiodo;db_criatabela($res);die();
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
     } else {

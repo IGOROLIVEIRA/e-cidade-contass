@@ -67,7 +67,21 @@ if (USE_PCASP) {
                  case when
                    k153_slipoperacaotipo in (1, 2, 5, 6, 9, 10, 13, 14)
                      then saltes_credito.k13_descr
-                   else conta_credito.c60_descr end as descr_credito
+                   else conta_credito.c60_descr end as descr_credito,
+                   conplanoconta_cred.c63_banco as banco_credito,
+                   conplanoconta_cred.c63_agencia||'-'||conplanoconta_cred.c63_dvagencia as agencia_credito,
+                   conplanoconta_cred.c63_conta||'-'||conplanoconta_cred.c63_dvconta as conta_credito,
+                   conplanoconta_deb.c63_banco as banco_debito,
+                   conplanoconta_deb.c63_agencia||'-'||conplanoconta_deb.c63_dvagencia as agencia_debito,
+                   conplanoconta_deb.c63_conta||'-'||conplanoconta_deb.c63_dvconta as conta_debito,
+                   case when
+                        conplanoconta_cred.c63_codcon is not null then reduz_credito.c61_codigo::text 
+                        else '' 
+                   end as fonte_credito,
+                   case when
+                        conplanoconta_deb.c63_codcon is not null then reduz_debito.c61_codigo::text
+                        else '' 
+                   end as fonte_debito
             from slip
                  left join db_usuarios on db_usuarios.id_usuario = slip.k17_id_usuario
                  left join sliptipooperacaovinculo         on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
@@ -88,16 +102,22 @@ if (USE_PCASP) {
                                                           and reduz_credito.c61_anousu  = ".db_getsession("DB_anousu")."
                  left join conplano as conta_credito       on reduz_credito.c61_codcon  = conta_credito.c60_codcon
                                                           and conta_credito.c60_anousu  = ".db_getsession("DB_anousu")."
+                 left join conplanoconta as conplanoconta_deb   on conplanoconta_deb.c63_codcon = conta_debito.c60_codcon and conplanoconta_deb.c63_anousu = ".db_getsession("DB_anousu")."
+                 left join conplanoconta AS conplanoconta_cred  on conplanoconta_cred.c63_codcon = conta_credito.c60_codcon and conplanoconta_cred.c63_anousu = ".db_getsession("DB_anousu")."
                  left join saltes saltes_credito           on slip.k17_credito          = saltes_credito.k13_reduz
-                 left join identificacaoresponsaveis contad on  contad.si166_instit= k17_instit and contad.si166_tiporesponsavel=2
+                 left join identificacaoresponsaveis contad on contad.si166_instit= k17_instit and contad.si166_tiporesponsavel=2
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',contad.si166_dataini) AND DATE_PART('YEAR',contad.si166_datafim)
+                 and contad.si166_dataini <= k17_data
+                 and contad.si166_datafim >= k17_data
                  left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
-                 left join identificacaoresponsaveis controle on  controle.si166_instit= k17_instit and controle.si166_tiporesponsavel=3
-                 left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
+                 left join identificacaoresponsaveis controle on controle.si166_instit= k17_instit and controle.si166_tiporesponsavel=3
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',controle.si166_dataini) AND DATE_PART('YEAR',controle.si166_datafim)
-                 left join identificacaoresponsaveis ordenador on  ordenador.si166_instit= k17_instit and ordenador.si166_tiporesponsavel=1
-                 left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm
+                 and controle.si166_dataini <= k17_data
+                 and controle.si166_datafim >= k17_data
+                 left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
+                 left join identificacaoresponsaveis ordenador on ordenador.si166_instit= k17_instit and ordenador.si166_tiporesponsavel=1
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',ordenador.si166_dataini) AND DATE_PART('YEAR',ordenador.si166_datafim)
+                 left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm
 
 
            where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');

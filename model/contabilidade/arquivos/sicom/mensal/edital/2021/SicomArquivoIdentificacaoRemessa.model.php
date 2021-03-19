@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_ideedital2020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarIDEEDITAL.model.php");
+require_once ("classes/db_ideedital2021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarIDEEDITAL.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
@@ -70,7 +70,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
       /**
        * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
        */
-        $clideedital = new cl_ideedital2020();
+        $clideedital = new cl_ideedital2021();
 
         $sSql  = "SELECT db21_codigomunicipoestado AS codIdentificador,
                   cgc::varchar cnpj,
@@ -97,7 +97,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-            $clideedital = new cl_ideedital2020();
+            $clideedital = new cl_ideedital2021();
             $oDadosIde = db_utils::fieldsMemory($rsResult, $iCont);
 
             $clideedital->si186_codidentificador     = $oDadosIde->codidentificador;
