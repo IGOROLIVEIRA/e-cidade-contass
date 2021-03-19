@@ -207,7 +207,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                 WHEN o46_tiposup = 1012 THEN 6
                                 WHEN o46_tiposup = 1013 THEN 7
                                 WHEN o46_tiposup = 1014 THEN 9
-                                WHEN o46_tiposup IN (1015, 1016) THEN 10
+                                WHEN o46_tiposup = 1015 THEN 10
+                                WHEN o46_tiposup = 1016 THEN 8
                                 WHEN o46_tiposup = 1017 THEN 5
                                 WHEN o46_tiposup IN (1011, 1018, 1019, 2026) THEN 4
                                 WHEN o46_tiposup = 1020 THEN 12
