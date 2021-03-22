@@ -387,6 +387,7 @@ class cl_licitemobra {
     }
     $sql .= " where ";
     $sql .= "obr06_sequencial = $this->obr06_sequencial";
+//    die($sql);
     $result = db_query($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -570,14 +571,14 @@ class cl_licitemobra {
         $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
         $sql .= " INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem ";
         $sql .= " INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero ";
-        $sql .= " LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo ";
-        $sql .= " LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
+        $sql .= " INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo ";
+        $sql .= " INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
         $sql .= " LEFT JOIN licitemobra ON obr06_pcmater = pc01_codmater ";
         $sql2 = "";
         if ($dbwhere=="") {
           $sql2 = "where l20_codigo = $l20_codigo";
         } else if ($dbwhere != "") {
-            $sql2 = "AND pc01_obras = 't' where $dbwhere";
+            $sql2 = "where $dbwhere";
         }
         $sql .= $sql2;
         if ($ordem != null ) {
@@ -609,14 +610,14 @@ class cl_licitemobra {
         $sql .= " INNER JOIN pcprocitem ON pc81_codproc = pc80_codproc ";
         $sql .= " INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem ";
         $sql .= " INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero ";
-        $sql .= " LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo ";
-        $sql .= " LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
+        $sql .= " INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo ";
+        $sql .= " INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
         $sql .= " LEFT JOIN licitemobra ON obr06_pcmater = pc01_codmater ";
         $sql2 = "";
         if ($dbwhere=="") {
             $sql2 = "where pc80_codproc = $pc80_codproc";
         } else if ($dbwhere != "") {
-            $sql2 = "AND pc01_obras = 't' where $dbwhere";
+            $sql2 = "where $dbwhere";
         }
         $sql .= $sql2;
         if ($ordem != null ) {

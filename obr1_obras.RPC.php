@@ -329,9 +329,9 @@ switch($oParam->exec) {
 
         $cllicitemobra = new cl_licitemobra();
         if($oParam->l20_codigo != ""){
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"*", null, "l21_codliclicita = {$oParam->l20_codigo}"));
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"*", null, "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't'"));
         }elseif ($oParam->pc80_codproc != ""){
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null,"*", null, "pc80_codproc = {$oParam->pc80_codproc}"));
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null,"*", null, "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't'"));
         }else{
             $oRetorno->message = "selecione um processo de compras ou uma licitacao";
         }
@@ -351,6 +351,8 @@ switch($oParam->exec) {
             $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null,"obr06_sequencial",null,"obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
 
             if(pg_num_rows($verificaItem) <= 0){
+//                die('incluir');
+                $cllicitemobra->obr06_sequencial        = null;
                 $cllicitemobra->obr06_pcmater           = $pcmater;
                 $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
                 $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
@@ -370,6 +372,8 @@ switch($oParam->exec) {
                     $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
                 }
             }else{
+//                die('alterar');
+
                 db_fieldsmemory($verificaItem,0);
                 $cllicitemobra->obr06_sequencial        = $obr06_sequencial;
                 $cllicitemobra->obr06_pcmater           = $pcmater;
