@@ -644,14 +644,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 			if ($oExt20->iFontePrincipal == $oExt20->si165_codfontrecursos) {
 				
 				//Atualiza saldo atual da fonte principal utilizando o valor acumulado no for das fontes não principais
-				if ($this->getNatSaldoAtual($oExt20) == 'C') {
-					$oExt20->si165_vlsaldoatualfonte += ($oExt20->iTotalSaldoAtual < 0) ? $oExt20->iTotalSaldoAtual : $oExt20->iTotalSaldoAtual * -1;
-				} else {
-					$oExt20->si165_vlsaldoatualfonte += abs($oExt20->iTotalSaldoAtual);
-				}
+				$oExt20->si165_vlsaldoatualfonte += $oExt20->iTotalSaldoAtual;
 				
 				//Atualiza o crédito/débito da fonte principal
-				if ($oExt20->si165_vlsaldoatualfonte > 0) {
+				if ($oExt20->iTotalSaldoAtual > 0) {
 					$oExt20->si165_totaldebitos += abs($oExt20->iTotalSaldoAtual);
 				} else {
 					$oExt20->si165_totalcreditos += abs($oExt20->iTotalSaldoAtual);

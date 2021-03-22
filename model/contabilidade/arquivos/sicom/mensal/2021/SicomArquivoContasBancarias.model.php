@@ -42,6 +42,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
   /**
+   * @var array Tipo Entrada/Saída que devem informar conta
+   */
+  protected $aTiposObrigConta = array(5,6,7,9);
+
+  /**
+   * @var array Tipo Entrada/Saída que devem informar fonte
+   */
+  protected $aTiposObrigFonte = array(5,6,7,9,11);
+
+  /**
    *
    * Construtor da classe
    */
@@ -397,10 +407,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $aBancosAgrupados[$aHash] = $cCtb10;
 
         } else {
-		  $oConta->codctb 	= $oRegistro10->codctb;
-		  $oConta->saldocec = $oRegistro10->saldocec;
-		 
-		  $aBancosAgrupados[$aHash]->contas[] = $oConta;
+			$oConta = new stdClass();
+			$oConta->codctb 	= $oRegistro10->codctb;
+			$oConta->saldocec = $oRegistro10->saldocec;
+
+			$aBancosAgrupados[$aHash]->contas[] = $oConta;
         }
 
 
@@ -537,6 +548,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                              (SELECT '21' AS tiporegistro,
                                      c71_codlan AS codreduzido,
                                      contacredito.c61_reduz AS codctb,
+									 conplanodebito.c60_codsis as codsisctb,
                                      contacreditofonte.o15_codtri AS codfontrecurso,
                                      2 AS tipomovimentacao,
                                      (bancodebito.c63_conta||bancodebito.c63_dvconta)AS bancodebito_c63_conta,
@@ -664,6 +676,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                              SELECT '21' AS tiporegistro,
                                     c71_codlan AS codreduzido,
                                     contadebito.c61_reduz AS codctb,
+									conplanodebito.c60_codsis as codsisctb,
                                     contadebitofonte.o15_codtri AS codfontrecurso,
                                     1 AS tipomovimentacao,
                                     (bancodebito.c63_conta||bancodebito.c63_dvconta) AS bancodebito_c63_conta,
@@ -760,6 +773,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
               $nValor = $oMovi->valorentrsaida;
 
+			  $iCodSis     = 0;
+			  $conta       = 0;
+
               if ($oMovi->codctbtransf != 0 && $oMovi->codctbtransf != '') {
                 $sqlcontatransf = "SELECT si09_codorgaotce||(c63_banco::integer)::varchar
                                           ||(c63_agencia::integer)::varchar
@@ -817,15 +833,24 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
               $sHash .= $oCtb20->si96_codctb;
               $sHash .= $oCtb20->si96_codfontrecursos;
               $sHash .= $oMovi->tipomovimentacao;
+			  $sHash .= $oMovi->saldocec;
               /**
                * quando o codctb for igual codctbtransf, serÃ¡ agrupado a movimentaÃ§Ã£o no tipoentrsaida 99
                */
-              $sHash .= (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8) ? $oMovi->c71_coddoc == 164 ? '20' : '99' : $oMovi->tipoentrsaida);
-              $sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
-                && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0);
-              $sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
-                && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0);
 
+			  if ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 2 ) {
+				$iTipoEntrSaida = '11';  
+			  } elseif ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 1 ) {
+				$iTipoEntrSaida = '18';
+			  } elseif (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) {
+				$iTipoEntrSaida = '99';
+			  } else {
+				$iTipoEntrSaida = $oMovi->tipoentrsaida;
+			  }
+
+              $sHash .= $iTipoEntrSaida;
+              $sHash .= (in_array($oMovi->tipoentrsaida, $this->aTiposObrigConta) && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
+              $sHash .= ((in_array($oMovi->tipoentrsaida, $this->aTiposObrigFonte) && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0);
 
               if (!isset($oCtb20->ext21[$sHash])) {
 
@@ -836,16 +861,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 $oDadosMovi21->si97_codfontrecursos = $oCtb20->si96_codfontrecursos;
                 $oDadosMovi21->si97_codreduzidomov = $oMovi->codreduzido . "0" . $oMovi->tipomovimentacao;
                 $oDadosMovi21->si97_tipomovimentacao = $oMovi->tipomovimentacao;
-				$oDadosMovi21->si97_tipoentrsaida = (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) ? $oMovi->c71_coddoc == 164 ? '20' : '99' : $oMovi->tipoentrsaida;
+				$oDadosMovi21->si97_tipoentrsaida = $iTipoEntrSaida;
 				$oDadosMovi21->si97_valorentrsaida = $nValor;
 				$oDadosMovi21->si97_saldocec = $oMovi->saldocec;
-                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ($oDadosMovi21->si97_tipoentrsaida == 10 ? 'Estorno de recebimentos' : ' '));
-                $oDadosMovi21->si97_codctbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
-                  && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
-                $oDadosMovi21->si97_codfontectbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
-				  && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
-				$oDadosMovi21->si97_saldocectransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
-				&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
+                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
+                $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta) 
+					&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
+                $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
+					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
+				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
+					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $oDadosMovi21->si97_instit = db_getsession("DB_instit");
                 $oDadosMovi21->registro22 = array();
@@ -973,8 +998,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 		  $cCtb21->si97_saldocec = $oCtb21agrupado->si97_saldocec;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
           $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ' ');
-          $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codctbtransf : 0;
-          $cCtb21->si97_codfontectbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codfontectbtransf : 0;
+          $cCtb21->si97_codctbtransf = $oCtb21agrupado->si97_codctbtransf;
+          $cCtb21->si97_codfontectbtransf = $oCtb21agrupado->si97_codfontectbtransf;
 		  $cCtb21->si97_saldocectransf = $oCtb21agrupado->si97_saldocectransf; 
 		  $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
           $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;

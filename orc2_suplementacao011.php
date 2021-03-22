@@ -95,6 +95,25 @@ function js_inverte(){
    }
 }
 
+function js_projeto(){
+    js_OpenJanelaIframe('','db_iframe_orcprojeto','func_orcprojeto001.php?funcao_js=parent.js_mostra|o39_codproj','Pesquisa',true,0);
+}
+
+function js_mostra(chave,erro){
+  	
+	document.form1.o39_codproj.value = chave;
+  	
+	if (erro==true) {
+		
+		$('o39_codproj').focus();
+		$('o39_codproj').value = '';
+		
+	} 
+	
+	db_iframe_orcprojeto.hide();
+
+}
+
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -132,6 +151,10 @@ function js_inverte(){
 	   </fieldset>
 	 </td>
       </tr>
+	<tr>
+		<td nowrap title="Decreto"><? db_ancora("Decreto:","js_projeto();",$db_opcao);  ?> </td>
+      	<td nowrap> <? db_input('o39_codproj',8,$Io39_codproj,true,'text',$db_opcao,"") ?>  </td>
+	</tr>
   <tr>
     <td nowrap><b>  Período inicial  </b></td>
       <td colspan="1">

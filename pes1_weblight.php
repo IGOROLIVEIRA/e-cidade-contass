@@ -81,7 +81,7 @@ AND rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
 LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
 LEFT JOIN rhcontratoemergencial ON rhcontratoemergencial.rh163_matricula = rhpessoal.rh01_regist
 LEFT JOIN afasta on r45_regist = rh01_regist
-LEFT JOIN rhcontratoemergencialrenovacao on rh163_matricula = rh01_regist
+LEFT JOIN rhcontratoemergencialrenovacao on rh163_sequencial = rh164_contratoemergencial
 WHERE rh01_instit = ".db_getsession("DB_instit")."
     AND rh05_seqpes IS NULL
 
