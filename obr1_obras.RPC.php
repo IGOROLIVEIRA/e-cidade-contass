@@ -328,8 +328,13 @@ switch($oParam->exec) {
     case 'getItensObra':
 
         $cllicitemobra = new cl_licitemobra();
-
-        $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"*", null, "l21_codliclicita = {$oParam->l20_codigo}"));
+        if($oParam->l20_codigo != ""){
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"*", null, "l21_codliclicita = {$oParam->l20_codigo}"));
+        }elseif ($oParam->pc80_codproc != ""){
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null,"*", null, "pc80_codproc = {$oParam->pc80_codproc}"));
+        }else{
+            $oRetorno->message = "selecione um processo de compras ou uma licitacao";
+        }
 
         for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
             $oItensObra = db_utils::fieldsMemory($result, $iCont);
@@ -342,27 +347,79 @@ switch($oParam->exec) {
         $cllicitemobra = new cl_licitemobra();
 
         foreach ($oParam->itens as $item){
+            $pcmater = substr($item->obr06_pcmater,0,-1);
+            $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null,"obr06_sequencial",null,"obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
 
-            $cllicitemobra->obr06_pcmater           = $item->obr06_pcmater;
-            $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
-            $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
-            $cllicitemobra->obr06_codigotabela      = $item->obr06_codigotabela;
-            $cllicitemobra->obr06_versaotabela      = $item->obr06_versaotabela;
-            $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
-            $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
-            $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
-            $cllicitemobra->incluir();
+            if(pg_num_rows($verificaItem) <= 0){
+                $cllicitemobra->obr06_pcmater           = $pcmater;
+                $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
+                $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
+                $cllicitemobra->obr06_codigotabela      = $item->obr06_codigotabela;
+                $cllicitemobra->obr06_versaotabela      = $item->obr06_versaotabela;
+                $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
+                $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
+                $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+                $cllicitemobra->incluir();
 
-            if ($cllicitemobra->erro_status == 0) {
-                $erro = $cllicitemobra->erro_msg;
-                $oRetorno->message = urlencode($erro);
-                $oRetorno->status = 2;
-            } else {
-                $oRetorno->status = 1;
-                $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
+                if ($cllicitemobra->erro_status == 0) {
+                    $erro = $cllicitemobra->erro_msg;
+                    $oRetorno->message = urlencode($erro);
+                    $oRetorno->status = 2;
+                } else {
+                    $oRetorno->status = 1;
+                    $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
+                }
+            }else{
+                db_fieldsmemory($verificaItem,0);
+                $cllicitemobra->obr06_sequencial        = $obr06_sequencial;
+                $cllicitemobra->obr06_pcmater           = $pcmater;
+                $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
+                $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
+                $cllicitemobra->obr06_codigotabela      = $item->obr06_codigotabela;
+                $cllicitemobra->obr06_versaotabela      = $item->obr06_versaotabela;
+                $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
+                $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
+                $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+                $cllicitemobra->alterar($obr06_sequencial);
+
+                if ($cllicitemobra->erro_status == 0) {
+                    $erro = $cllicitemobra->erro_msg;
+                    $oRetorno->message = urlencode($erro);
+                    $oRetorno->status = 2;
+                } else {
+                    $oRetorno->status = 1;
+                    $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
+                }
             }
         }
 
+        break;
+    case 'ExcluirItemObra':
+
+        foreach ($oParam->itens as $item) {
+            $cllicitemobra = new cl_licitemobra();
+
+            $pcmater = substr($item->obr06_pcmater,0,-1);
+            $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null,"obr06_sequencial",null,"obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
+
+            if(pg_num_rows($verificaItem) > 0 ){
+                db_fieldsmemory($verificaItem,0);
+                /*
+                 * excluindo item
+                 */
+                $cllicitemobra->obr06_sequencial = $obr06_sequencial;
+                $cllicitemobra->excluir($obr06_sequencial);
+                if ($cllicitemobra->erro_status == 0) {
+                    $erro = $cllicitemobra->erro_msg;
+                    $oRetorno->message = urlencode($erro);
+                    $oRetorno->status = 2;
+                } else {
+                    $oRetorno->status = 1;
+                    $oRetorno->message = urlencode("Itens Excluido com Sucesso!.");
+                }
+            }
+
+        }
         break;
 
 }

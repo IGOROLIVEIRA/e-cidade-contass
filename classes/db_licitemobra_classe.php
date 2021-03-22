@@ -386,7 +386,7 @@ class cl_licitemobra {
       }
     }
     $sql .= " where ";
-    $sql .= "obr06_sequencial = '$obr06_sequencial'";
+    $sql .= "obr06_sequencial = $this->obr06_sequencial";
     $result = db_query($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());

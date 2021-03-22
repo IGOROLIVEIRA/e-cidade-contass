@@ -61,7 +61,7 @@ $cllicitemobra->rotulo->label();
                         "2" => "2 - Tabela SICRO",
                         "3" => "3 - Outras Tabelas Oficiais",
                         "4" => "4 - Cadastro Próprio" );
-                    db_select('obr06_tabela',$aTab,true,$db_opcao,"")
+                    db_select('obr06_tabela',$aTab,true,$db_opcao," onchange='js_validatabela(this.value)'")
                     ?>
                 </td>
                 <td nowrap title="<?=@$Tobr06_versaotabela?>">
@@ -156,7 +156,11 @@ $cllicitemobra->rotulo->label();
             <table>
                 <th class="table_header">
                     <?php foreach ($aItensObras as $key => $aItem):
-                        $iItem = $aItem->pc01_codmater;
+                        if($aItem->obr06_tabela == ""){
+                            $iItem = $aItem->pc01_codmater."0";
+                        }else{
+                            $iItem = $aItem->pc01_codmater.$aItem->obr06_tabela;
+                        }
 
                         ?>
                         <table class="DBgrid">
@@ -214,7 +218,7 @@ $cllicitemobra->rotulo->label();
                                 <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_'.$iItem?>">
                             </td>
                             <td class="linhagrid" style="width: 87px">
-                                <input type="button" name="" value="Excluir" id="<?= $iItem?>">
+                                <input type="button" name="" value="Excluir" id="<?= $iItem?>" onclick="excluirLinha(<?=$iItem?>)">
                             </td>
                         </table>
                     <?php
@@ -233,11 +237,23 @@ $cllicitemobra->rotulo->label();
         <br>
         <div>
             <input id="Salvar" type="button" value="Salvar" name="Salvar" onclick="js_salvarItens()">
-            <input id="db_opcao" type="button" value="Excluir" name="excluir" onclick="excluirCred()">
+            <input id="db_opcao" type="button" value="Excluir" name="excluir" onclick="js_excluirItensObra()">
         </div>
     </fieldset>
 </form>
 <script>
+
+    function js_dataFormat(strData,formato){
+
+        if(formato=='b'){
+            aData = strData.split('/');
+            return  aData[2]+'-'+aData[1]+'-'+aData[0];
+        }else{
+            aData = strData.split('-');
+            return  aData[2]+'/'+aData[1]+'/'+aData[0];
+        }
+    }
+
     function js_pesquisa(){
         js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_licitemobra.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
     }
@@ -374,10 +390,13 @@ $cllicitemobra->rotulo->label();
     }
 
     function js_carregar_tabela() {
+        let licitacao = document.form1.l20_codigo.value;
+        let processodecompras = document.form1.pc80_codproc.value;
         try {
             BuscarItensAjax({
                 exec: 'getItensObra',
-                l20_codigo: document.form1.l20_codigo.value
+                l20_codigo: licitacao,
+                pc80_codproc: processodecompras
             }, preenchercampos);
         } catch(e) {
             alert(e.toString());
@@ -386,12 +405,12 @@ $cllicitemobra->rotulo->label();
     }
 
     function BuscarItensAjax(params, onComplete) {
-        // js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
+        js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
         var request = new Ajax.Request('obr1_obras.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
             onComplete: function(oRetornoitems) {
-                // js_removeObj('div_aguarde');
+                js_removeObj('div_aguarde');
                 onComplete(oRetornoitems);
             }
         });
@@ -401,7 +420,17 @@ $cllicitemobra->rotulo->label();
         var oRetornoitens = JSON.parse(oRetornoitems.responseText);
 
         oRetornoitens.itens.forEach(function (item, x) {
-            document.getElementById('obr06_tabela_'+item.pc01_codmater).value = item.obr06_tabela;
+            let tabela = item.obr06_tabela;
+            if(item.obr06_tabela == ""){
+                tabela = 0;
+            }else{
+                tabela = item.obr06_tabela;
+            }
+            document.getElementById('obr06_tabela_'+item.pc01_codmater+tabela).value = tabela;
+            if(item.obr06_dtregistro != ""){
+                document.getElementById('obr06_dtregistro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtregistro,'u');
+                document.getElementById('obr06_dtcadastro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtcadastro,'u');
+            }
         });
     }
 
@@ -417,15 +446,16 @@ $cllicitemobra->rotulo->label();
         let dtregistro      = document.getElementById('obr06_dtregistro').value;
         let dtcadastro      = document.getElementById('obr06_dtcadastro').value;
         let codigodatabela  = document.getElementById('obr06_codigotabela').value;
+        // console.log(aItens());
         aItens().forEach(function (item) {
-            console.log(item);
+            // console.log(item.id);
             if(item.checked === true){
-                document.getElementById('obr06_tabela_'+item.value).value = tabela;
-                document.getElementById('obr06_versaotabela_'+item.value).value = versaotabela;
-                document.getElementById('obr06_descricaotabela_'+item.value).value = descricaotabela;
-                document.getElementById('obr06_dtregistro_'+item.value).value = dtregistro;
-                document.getElementById('obr06_dtcadastro_'+item.value).value = dtcadastro;
-                document.getElementById('obr06_codigotabela_'+item.value).value = codigodatabela;
+                document.getElementById('obr06_tabela_'+item.id).value = tabela;
+                document.getElementById('obr06_versaotabela_'+item.id).value = versaotabela;
+                document.getElementById('obr06_descricaotabela_'+item.id).value = descricaotabela;
+                document.getElementById('obr06_dtregistro_'+item.id).value = dtregistro;
+                document.getElementById('obr06_dtcadastro_'+item.id).value = dtcadastro;
+                document.getElementById('obr06_codigotabela_'+item.id).value = codigodatabela;
             }
         })
 
@@ -494,13 +524,118 @@ $cllicitemobra->rotulo->label();
 
      function retornoAjax(res) {
          var response = JSON.parse(res.responseText);
-
          if (response.status != 1) {
-             alert(response.message.urlDecode());
-         } else if (response.erro == false) {
-             alert('Credenciamento salvo com sucesso !');
+             alert(response.message);
+         }else{
+             alert("Item salvo com sucesso!")
          }
      }
 
+    function js_validatabela(value){
+
+        if(value != 3){
+            document.getElementById('obr06_descricaotabela').style.backgroundColor = '#E6E4F1'
+        }else{
+            document.getElementById('obr06_descricaotabela').style.backgroundColor = '#FFFFFF'
+
+        }
+    }
+
+    /**
+     * Excluir Itens
+     */
+
+    function js_excluirItensObra(){
+        let itens = getItensMarcados();
+
+        if (itens.length < 1) {
+            alert('Selecione pelo menos um item da lista.');
+            return false;
+        }
+
+        var itensEnviar = [];
+
+        try {
+            itens.forEach(function (item) {
+                let coditem = item.id;
+
+                var novoItem = {
+                    obr06_pcmater:            coditem,
+                    obr06_tabela:             document.getElementById('obr06_tabela_'+coditem).value,
+                };
+                itensEnviar.push(novoItem);
+            });
+            excluirItemAjax({
+                exec: 'ExcluirItemObra',
+                itens: itensEnviar,
+            }, retornoexclusaoAjax);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function excluirItemAjax(params, onComplete) {
+        js_divCarregando('Aguarde Excluindo', 'div_aguarde');
+        var request = new Ajax.Request('obr1_obras.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(res) {
+                js_removeObj('div_aguarde');
+                onComplete(res);
+            }
+        });
+    }
+
+    function retornoexclusaoAjax(res) {
+        var response = JSON.parse(res.responseText);
+        if (response.status != 1) {
+            alert(response.message);
+        }else{
+            js_carregar_tabela();
+            alert("Item Excluido com sucesso!")
+        }
+    }
+
+    function excluirLinha(codigo) {
+        var itensEnviar = [];
+
+        try {
+            var novoItem = {
+                obr06_pcmater:            codigo,
+                obr06_tabela:             document.getElementById('obr06_tabela_'+codigo).value,
+            };
+            itensEnviar.push(novoItem);
+            excluirlinhaAjax({
+                exec: 'ExcluirItemObra',
+                itens: itensEnviar,
+            }, retornoexclusaolinhaAjax);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function excluirlinhaAjax(params, onComplete) {
+        js_divCarregando('Aguarde Excluindo', 'div_aguarde');
+        var request = new Ajax.Request('obr1_obras.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(res) {
+                js_removeObj('div_aguarde');
+                onComplete(res);
+            }
+        });
+    }
+
+    function retornoexclusaolinhaAjax(res) {
+        var response = JSON.parse(res.responseText);
+        if (response.status != 1) {
+            alert(response.message);
+        }else{
+            js_carregar_tabela();
+            alert("Item Excluido com sucesso!")
+        }
+    }
 
 </script>
