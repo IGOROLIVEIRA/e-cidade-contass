@@ -195,15 +195,6 @@ class cl_caiparametro {
        $this->erro_status = "0";
        return false;
      }
-     if($this->k29_orctiporecfundeb == null ){ 
-       $this->erro_sql = " Campo Recurso Fundeb nao Informado.";
-       $this->erro_campo = "k29_orctiporecfundeb";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
        $this->k29_instit = $k29_instit; 
      if(($this->k29_instit == null) || ($this->k29_instit == "") ){ 
        $this->erro_sql = " Campo k29_instit nao declarado.";
@@ -427,18 +418,12 @@ class cl_caiparametro {
          return false;
        }
      }
-     if(trim($this->k29_orctiporecfundeb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k29_orctiporecfundeb"])){ 
+     if(trim($this->k29_orctiporecfundeb) == null ){ 
+      $sql  .= $virgula." k29_orctiporecfundeb = null ";
+      $virgula = ",";
+     }elseif(trim($this->k29_orctiporecfundeb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k29_orctiporecfundeb"])){ 
        $sql  .= $virgula." k29_orctiporecfundeb = $this->k29_orctiporecfundeb ";
        $virgula = ",";
-       if(trim($this->k29_orctiporecfundeb) == null ){ 
-         $this->erro_sql = " Campo Recurso Fundeb nao Informado.";
-         $this->erro_campo = "k29_orctiporecfundeb";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->k29_cotaunicafundeb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k29_cotaunicafundeb"])){ 
       $sql  .= $virgula." k29_cotaunicafundeb = '$this->k29_cotaunicafundeb' ";

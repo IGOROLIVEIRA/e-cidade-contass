@@ -205,6 +205,7 @@ db_app::load("prototype.js");
   $('k29_boletimzerado').style.width = '155px';
   $('k29_saldoemitechq').style.width = '155px';
   $('k29_trazdatacheque').style.width = '155px';
+  $('k29_cotaunicafundeb').style.width = '155px';
   $('k29_contassemmovimento').style.width = '155px';
   $('k29_chqduplicado').style.width = '110px';
   $('tipo_transmissao').style.width = '110px';
