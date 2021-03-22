@@ -149,6 +149,17 @@ db_app::load("prototype.js");
           ?>
         </td>
       </tr>
+      <tr>
+        <td nowrap title="<?=@$Tk29_cotaunicafundeb?>">
+          <?=@$Lk29_cotaunicafundeb?>
+        </td>
+        <td>
+          <?
+          $x = array('f'=>'Não','t'=>'Sim');
+          db_select('k29_cotaunicafundeb',$x,true,$db_opcao,"");
+          ?>
+        </td>
+      </tr>
     </table>
     <br />
     <fieldset style="width: 97%; border-left: none; border-right: none; border-bottom: none;">

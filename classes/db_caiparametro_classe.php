@@ -59,6 +59,7 @@ class cl_caiparametro {
    var $k29_trazdatacheque = 'f'; 
    var $k29_contassemmovimento = 'f'; 
    var $k29_orctiporecfundeb = 0; 
+   var $k29_cotaunicafundeb = 'f';
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  k29_instit = int4 = Instituição 
@@ -72,6 +73,7 @@ class cl_caiparametro {
                  k29_trazdatacheque = bool = Trazer data cheques pagamentos agenda 
                  k29_contassemmovimento = bool = Trazer Contas sem Movimento 
                  k29_orctiporecfundeb = int4 = Recurso Fundeb 
+                 k29_cotaunicafundeb = bool = Conta única FUNDEB
                  ";
    //funcao construtor da classe 
    function cl_caiparametro() { 
@@ -115,6 +117,7 @@ class cl_caiparametro {
        }
        $this->k29_trazdatacheque = ($this->k29_trazdatacheque == "f"?@$GLOBALS["HTTP_POST_VARS"]["k29_trazdatacheque"]:$this->k29_trazdatacheque);
        $this->k29_contassemmovimento = ($this->k29_contassemmovimento == "f"?@$GLOBALS["HTTP_POST_VARS"]["k29_contassemmovimento"]:$this->k29_contassemmovimento);
+       $this->k29_cotaunicafundeb = ($this->k29_cotaunicafundeb == "f"?@$GLOBALS["HTTP_POST_VARS"]["k29_cotaunicafundeb"]:$this->k29_cotaunicafundeb);
        $this->k29_orctiporecfundeb = ($this->k29_orctiporecfundeb == ""?@$GLOBALS["HTTP_POST_VARS"]["k29_orctiporecfundeb"]:$this->k29_orctiporecfundeb);
      }else{
        $this->k29_instit = ($this->k29_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["k29_instit"]:$this->k29_instit);
@@ -210,6 +213,15 @@ class cl_caiparametro {
        $this->erro_status = "0";
        return false;
      }
+     if($this->k29_cotaunicafundeb == null ){ 
+      $this->erro_sql = " Campo Trazer Contas sem Movimento nao Informado.";
+      $this->erro_campo = "k29_cotaunicafundeb";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      $sql = "insert into caiparametro(
                                        k29_instit 
                                       ,k29_boletimzerado 
@@ -222,6 +234,7 @@ class cl_caiparametro {
                                       ,k29_trazdatacheque 
                                       ,k29_contassemmovimento 
                                       ,k29_orctiporecfundeb 
+                                      ,k29_cotaunicafundeb
                        )
                 values (
                                 $this->k29_instit 
@@ -235,6 +248,7 @@ class cl_caiparametro {
                                ,'$this->k29_trazdatacheque' 
                                ,'$this->k29_contassemmovimento' 
                                ,$this->k29_orctiporecfundeb 
+                               ,$this->k29_cotaunicafundeb
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -426,6 +440,19 @@ class cl_caiparametro {
          return false;
        }
      }
+     if(trim($this->k29_cotaunicafundeb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k29_cotaunicafundeb"])){ 
+      $sql  .= $virgula." k29_cotaunicafundeb = '$this->k29_cotaunicafundeb' ";
+      $virgula = ",";
+      if(trim($this->k29_cotaunicafundeb) == null ){ 
+        $this->erro_sql = " Campo Conta única FUNDEB nao Informado.";
+        $this->erro_campo = "k29_cotaunicafundeb";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($k29_instit!=null){
        $sql .= " k29_instit = $this->k29_instit";
