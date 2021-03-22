@@ -277,7 +277,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                         1 as sql
                                     from orcprojeto
                                         join orclei on o39_codlei = o45_codlei
-                                        join orcprojetolei on o45_numlei = o138_numerolei
+                                        left join orcprojetolei on o45_numlei = o138_numerolei
                                         left join orcleialtorcamentaria on o200_orcprojetolei = o138_sequencial
                                     where o39_codproj in ({$oDados10->codigovinc}) ";
 
