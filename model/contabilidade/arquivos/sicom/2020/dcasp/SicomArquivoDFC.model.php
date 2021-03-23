@@ -459,8 +459,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
             $cldfcdcasp70->si225_exercicio                          = $iValorNumerico;
             $cldfcdcasp70->si225_vloperacoescredito                 = $aRetornoDFC[24]->$sChave;
             $cldfcdcasp70->si225_vlintegralizacaodependentes        = $aRetornoDFC[25]->$sChave;
-            $cldfcdcasp70->si225_vltranscapitalrecebida             = $aRetornoDFC[26]->$sChave;
-            $cldfcdcasp70->si225_vloutrosingressosfinanciamento     = $aRetornoDFC[27]->$sChave;
+            $cldfcdcasp70->si225_vloutrosingressosfinanciamento     = $aRetornoDFC[26]->$sChave + $aRetornoDFC[27]->$sChave;
             $cldfcdcasp70->si225_vltotalingressoatividafinanciament = $aRetornoDFC[23]->$sChave;
 
             $cldfcdcasp70->incluir(null);
