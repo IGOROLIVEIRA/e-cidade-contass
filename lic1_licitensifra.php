@@ -417,9 +417,11 @@ $db_botao=true;
 
         if(!aSelecionados.length){
             alert('Informe ao menos um item!');
+            return;
         }
 
         aSelecionados.forEach(elemento => {
+          
             let item = new Object();
             item.codigo = elemento.aCells[1].getContent();
             item.sequencial = elemento.aCells[2].getContent();
@@ -461,6 +463,9 @@ $db_botao=true;
         }else{
             alert(oRetorno.erro_msg.urlDecode());
         }
-        console.log('Retorno: ', oRetorno);
+        parent.procs.document.form1.submit();
+        oItensLicitacao.oGridItens.clearAll(true);
+        oItensLicitacao.hide();
+        
     }
 </script>

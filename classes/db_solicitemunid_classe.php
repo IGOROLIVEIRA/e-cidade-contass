@@ -97,7 +97,6 @@ class cl_solicitemunid {
        $this->erro_status = "0";
        return false;
      }
-       $this->pc17_codigo = $pc17_codigo; 
      if(($this->pc17_codigo == null) || ($this->pc17_codigo == "") ){ 
        $this->erro_sql = " Campo pc17_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";

@@ -21,6 +21,7 @@ class cl_liclicitem {
    var $l21_codpcprocitem = 0;
    var $l21_situacao = 0;
    var $l21_ordem = 0;
+   var $l21_reservado = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  l21_codigo = int8 = Cod. Sequencial
@@ -28,6 +29,7 @@ class cl_liclicitem {
                  l21_codpcprocitem = int8 = Código sequencial do item no processo
                  l21_situacao = int4 = Situação
                  l21_ordem = int4 = Seqüência
+                 l21_reservado = boolean = Reservado
                  ";
    //funcao construtor da classe
    function cl_liclicitem() {
@@ -52,6 +54,7 @@ class cl_liclicitem {
        $this->l21_codpcprocitem = ($this->l21_codpcprocitem == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_codpcprocitem"]:$this->l21_codpcprocitem);
        $this->l21_situacao = ($this->l21_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_situacao"]:$this->l21_situacao);
        $this->l21_ordem = ($this->l21_ordem == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_ordem"]:$this->l21_ordem);
+       $this->l21_reservado = ($this->l21_reservado == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_reservado"]:$this->l21_reservado);
      }else{
        $this->l21_codigo = ($this->l21_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["l21_codigo"]:$this->l21_codigo);
      }
@@ -121,12 +124,17 @@ class cl_liclicitem {
        $this->erro_status = "0";
        return false;
      }
+     if($this->l21_reservado == null || !$this->l21_reservado){
+        $this->l21_reservado = 'false';
+     }
+
      $sql = "insert into liclicitem(
                                        l21_codigo
                                       ,l21_codliclicita
                                       ,l21_codpcprocitem
                                       ,l21_situacao
                                       ,l21_ordem
+                                      ,l21_reservado
                        )
                 values (
                                 $this->l21_codigo
@@ -134,6 +142,7 @@ class cl_liclicitem {
                                ,$this->l21_codpcprocitem
                                ,$this->l21_situacao
                                ,$this->l21_ordem
+                               ,'$this->l21_reservado'
                       )";
      $result = db_query($sql);
      if($result==false){

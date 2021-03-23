@@ -53,7 +53,7 @@ class cl_solicitem {
    var $pc11_just = null;
    var $pc11_liberado = 'f';
    var $pc11_servicoquantidade = 'f';
-   var $pc11_reservado = false;
+   var $pc11_reservado = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc11_codigo = int8 = Código do registro
@@ -180,6 +180,11 @@ class cl_solicitem {
        $this->erro_status = "0";
        return false;
      }
+     
+      if(!$this->pc11_reservado || $this->pc11_reservado == null){
+          $this->pc11_reservado = 'false';
+      }
+
      $sql = "insert into solicitem(
                                        pc11_codigo
                                       ,pc11_numero
@@ -192,6 +197,7 @@ class cl_solicitem {
                                       ,pc11_just
                                       ,pc11_liberado
                                       ,pc11_servicoquantidade
+                                      ,pc11_reservado
                        )
                 values (
                                 $this->pc11_codigo
@@ -205,6 +211,7 @@ class cl_solicitem {
                                ,'$this->pc11_just'
                                ,'$this->pc11_liberado'
                                ,'$this->pc11_servicoquantidade'
+                               ,'$this->pc11_reservado'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -347,41 +354,48 @@ class cl_solicitem {
        $sql  .= $virgula." pc11_servicoquantidade = '$this->pc11_servicoquantidade' ";
        $virgula = ",";
      }
+      if(trim($this->pc11_reservado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc11_reservado"])){
+          $sql  .= $virgula." pc11_reservado = '$this->pc11_reservado' ";
+          $virgula = ",";
+      }
      $sql .= " where ";
      if($pc11_codigo!=null){
+       $sql .= " pc11_codigo = $pc11_codigo";
+     }else{
        $sql .= " pc11_codigo = $this->pc11_codigo";
      }
-     $resaco = $this->sql_record($this->sql_query_file($this->pc11_codigo));
-     if($this->numrows>0){
-       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,5558,'$this->pc11_codigo','A')");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_codigo"]) || $this->pc11_codigo != "")
-           $resac = db_query("insert into db_acount values($acount,870,5558,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_codigo'))."','$this->pc11_codigo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_numero"]) || $this->pc11_numero != "")
-           $resac = db_query("insert into db_acount values($acount,870,5548,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_numero'))."','$this->pc11_numero',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_seq"]) || $this->pc11_seq != "")
-           $resac = db_query("insert into db_acount values($acount,870,5549,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_seq'))."','$this->pc11_seq',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_quant"]) || $this->pc11_quant != "")
-           $resac = db_query("insert into db_acount values($acount,870,5551,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_quant'))."','$this->pc11_quant',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_vlrun"]) || $this->pc11_vlrun != "")
-           $resac = db_query("insert into db_acount values($acount,870,5552,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_vlrun'))."','$this->pc11_vlrun',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_prazo"]) || $this->pc11_prazo != "")
-           $resac = db_query("insert into db_acount values($acount,870,5553,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_prazo'))."','$this->pc11_prazo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_pgto"]) || $this->pc11_pgto != "")
-           $resac = db_query("insert into db_acount values($acount,870,5554,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_pgto'))."','$this->pc11_pgto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_resum"]) || $this->pc11_resum != "")
-           $resac = db_query("insert into db_acount values($acount,870,5555,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_resum'))."','$this->pc11_resum',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_just"]) || $this->pc11_just != "")
-           $resac = db_query("insert into db_acount values($acount,870,5556,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_just'))."','$this->pc11_just',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_liberado"]) || $this->pc11_liberado != "")
-           $resac = db_query("insert into db_acount values($acount,870,5557,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_liberado'))."','$this->pc11_liberado',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_servicoquantidade"]) || $this->pc11_servicoquantidade != "")
-           $resac = db_query("insert into db_acount values($acount,870,19696,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_servicoquantidade'))."','$this->pc11_servicoquantidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
+    //  $resaco = $this->sql_record($this->sql_query_file($this->pc11_codigo));
+    //  if($this->numrows>0){
+    //    for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+    //      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //      $acount = pg_result($resac,0,0);
+    //      $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+    //      $resac = db_query("insert into db_acountkey values($acount,5558,'$this->pc11_codigo','A')");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_codigo"]) || $this->pc11_codigo != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5558,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_codigo'))."','$this->pc11_codigo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_numero"]) || $this->pc11_numero != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5548,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_numero'))."','$this->pc11_numero',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_seq"]) || $this->pc11_seq != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5549,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_seq'))."','$this->pc11_seq',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_quant"]) || $this->pc11_quant != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5551,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_quant'))."','$this->pc11_quant',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_vlrun"]) || $this->pc11_vlrun != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5552,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_vlrun'))."','$this->pc11_vlrun',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_prazo"]) || $this->pc11_prazo != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5553,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_prazo'))."','$this->pc11_prazo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_pgto"]) || $this->pc11_pgto != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5554,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_pgto'))."','$this->pc11_pgto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_resum"]) || $this->pc11_resum != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5555,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_resum'))."','$this->pc11_resum',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_just"]) || $this->pc11_just != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5556,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_just'))."','$this->pc11_just',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_liberado"]) || $this->pc11_liberado != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,5557,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_liberado'))."','$this->pc11_liberado',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      if(isset($GLOBALS["HTTP_POST_VARS"]["pc11_servicoquantidade"]) || $this->pc11_servicoquantidade != "")
+    //        $resac = db_query("insert into db_acount values($acount,870,19696,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_servicoquantidade'))."','$this->pc11_servicoquantidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //    }
+    //  }
+    //  echo $sql;die();
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());

@@ -101,7 +101,8 @@ if(!$sqlerro && $codprocesso){
     if(!$sqlerro){
 		$clitensregpreco->excluir('',
             'si07_sequencialadesao = (select si06_sequencial from adesaoregprecos where si06_processocompra = '.$codprocesso.')');
-		if($clitensregpreco->erro_status = '0'){
+        
+        if($clitensregpreco->erro_status = '0'){
 		    $sqlerro = true;
 		    $erro_msg = $clitensregpreco->erro_msg;
         }

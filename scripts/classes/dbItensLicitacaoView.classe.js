@@ -40,8 +40,9 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
         }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
     }
+
     /**
-     * monta a tela principal do aditamento
+     * Monta a tela principal com os itens do processo de compra
      */
     this.main = () => {
 
@@ -59,9 +60,13 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
         
     }
 
-    me.show = (iProcCompra) => {
+    me.show = (oParams) => {
         me.main();
-        me.pesquisaItensLicitacao(iProcCompra);
+        me.pesquisaItensLicitacao(oParams);
+    }
+
+    me.hide = () => {
+        oNode.style.display = 'none';
     }
 
     this.preencheItens = (aItens) => {
@@ -75,7 +80,7 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
 
         aItens.each( (oItem, iSeq) => {
 
-            var aLinha = new Array();
+            let aLinha = new Array();
             aLinha[0] = oItem.codigoitem ? oItem.codigoitem : ' - ';
             aLinha[1] = oItem.seqitem;
             aLinha[2] = oItem.descritem ? oItem.descritem.urlDecode() : ' - ';
@@ -106,7 +111,7 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
 
             me.oGridItens.addRow(aLinha, false, oItem.marcado, oItem.marcado);
             
-            var sTextEvent  = " ";
+            let sTextEvent  = " ";
             
             if (aLinha[1] !== '') {
                 sTextEvent += "<b>Item: </b>"+aLinha[1];
@@ -114,7 +119,7 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
                 sTextEvent += "<b>Nenhum dado à mostrar</b>";
             }
 
-            var oDadosHint           = new Object();
+            let oDadosHint       = new Object();
             oDadosHint.idLinha   = `oGridItensrowoGridItens${iSeq}`;
             oDadosHint.sText     = sTextEvent;
             aDadosHintGrid.push(oDadosHint);

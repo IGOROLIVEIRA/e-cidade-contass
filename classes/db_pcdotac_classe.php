@@ -361,7 +361,7 @@ class cl_pcdotac {
      }
      $sql .= " where ";
      if($pc13_sequencial!=null){
-       $sql .= " pc13_sequencial = $this->pc13_sequencial";
+       $sql .= " pc13_sequencial = $pc13_sequencial";
      }
      $resaco = $this->sql_record($this->sql_query_file(null,null,null,"*",null,"pc13_sequencial={$this->pc13_sequencial}"));
      if($this->numrows>0){

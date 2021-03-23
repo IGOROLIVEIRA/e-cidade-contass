@@ -83,7 +83,7 @@ $clrotulo->label("nome");
     </tr>
   <tr>
    <?
-      db_input('cods',10,'',true,'text',3);
+      db_input('cods',10,'',true,'hidden',3);
       db_input('licitacao',10,'',true,'hidden',3);
       db_input("tipojulg",1,"",true,"hidden",3);
       db_input('codprocesso' ,10, '', true, 'hidden', 3);
@@ -99,9 +99,6 @@ function js_inclui(){
 	itens.document.form1.incluir.value='incluir';
   itens.js_insereItens();
   return;
-	itens.document.form1.submit();
-	procs.document.form1.submit();
-
 }
 
 function js_excluir(){
