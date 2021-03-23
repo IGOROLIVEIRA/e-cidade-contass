@@ -328,8 +328,8 @@ switch ($oParam->exec) {
   case 'buscarDeducao':
 
     try{
-        $oRetorno->oDeducao = buscarDeducao($oParam->k81_receita);
-        $oRetorno->oDeducao->k02_descr = urlencode($oRetorno->oDeducao->k02_descr);
+        $oRetorno->oReceita = buscarDeducao($oParam->k81_receita);
+        $oRetorno->oReceita->k02_descr = urlencode($oRetorno->oReceita->k02_descr);
 
     }catch (Exception $oExceptionErro) {
       $oRetorno->status  = 2;
@@ -360,6 +360,22 @@ switch ($oParam->exec) {
     }
 
    break;
+
+   	case 'buscaReceitaFundep':
+
+		try {
+
+			$oRetorno->oReceita = buscaReceitaFundep();
+			$oRetorno->oReceita->k02_descr = urlencode($oRetorno->oReceita->k02_descr);
+
+		} catch (Exception $oExceptionErro) {
+
+			$oRetorno->status  = 2;
+			$oRetorno->message = str_replace("\n", "\\n", urlencode($oExceptionErro->getMessage()));
+		
+		}
+
+	break;
 
 }
 /**
@@ -477,6 +493,25 @@ function buscaCgmMatricula($iMatricula) {
   $sMsgErro .= $oDaoIptuBase->erro_msg;
 
   throw new BusinessException($sMsgErro);
+
+}
+
+function buscaReceitaFundep() {
+
+	$oDaoTabRec = db_utils::getDao('tabrec');
+	$sCampos 	= "tabrec.k02_codigo, k02_descr, o70_codigo";
+	$sWhere 	= "k02_estorc like '417580111%' and o70_codig = '119' limit 1";
+	$sSqlTabRec = $oDaoTabRec->sql_query_concarpeculiar(null, $sCampos, null, $sWhere);
+	$rsTabRec 	= $oDaoTabRec->sql_record($sSqlTabRec);
+
+	if ($rsTabRec && $oDaoTabRec->numrows == 1) {
+		return db_utils::fieldsMemory($rsTabRec,0);
+	} else {
+		
+		$sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 119 esteja cadastrada na tesouraria.";
+		throw new BusinessException($sMsgErro);
+
+	}
 
 }
 
