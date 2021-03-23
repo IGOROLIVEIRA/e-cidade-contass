@@ -288,7 +288,14 @@ switch($oParam->exec) {
       $oAgenda->setOrdemConsultas("case when trim(a.z01_nome)   is not null then a.z01_nome   else cgm.z01_nome end");
     }
 
-    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere,$sJoin,$lTrazContasFornecedor , $lTrazContasRecurso,'',$oParam->params[0]->lVinculadas, $sCredorCgm);
+	$lContaUnicaFundeb = false;
+    $aParametrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_instit")));
+    
+	if (count($aParametrosCaixa) > 0) {
+      $lContaUnicaFundeb = $aParametrosCaixa[0]->k29_cotaunicafundeb == "t" ? true : false;
+    }
+
+    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere,$sJoin,$lTrazContasFornecedor , $lTrazContasRecurso,'',$oParam->params[0]->lVinculadas, $sCredorCgm, $lContaUnicaFundeb);
 
     if (!empty($oParam->params[0]->lTratarMovimentosConfigurados) && $oParam->params[0]->lTratarMovimentosConfigurados) {
 
