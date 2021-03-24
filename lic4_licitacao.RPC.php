@@ -1272,6 +1272,9 @@ switch ($oParam->exec) {
                             $clliclicitem = db_utils::getDao('liclicitem');
                             $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codpcprocitem = ".$aItens[$x]->codprocitem));
                             
+                            $clliclicitemreservado = db_utils::getDao('liclicitem');
+                            $res_liclicitemreservado = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codpcprocitem = " . $codprocitemreservado));
+
                             if ($clliclicitem->numrows > 0){
                                 db_fieldsmemory($res_liclicitem,0);
       
@@ -1284,11 +1287,28 @@ switch ($oParam->exec) {
                                     break;
                                 }
 
+                                if($aItens[$x]->qtdexclusiva){
+
+                                    $clpcorcamitemreservado = db_utils::getDao('pcorcamitem');
+                                    $clpcorcamitemreservado->pc22_codorc = $pc22_codorc;
+                                    $clpcorcamitemreservado->incluir(null);
+
+                                    if(!$clpcorcamitemreservado->erro_status){
+                                        $sqlerro  = true;
+                                        $erro_msg = $clpcorcamitem->erro_msg;
+                                        break;
+                                    }
+
+                                    $pc22_orcamitemreservado = $clpcorcamitemreservado->pc22_orcamitem;
+
+                                }
+
                                 /**
                                  * @todo verificar se será incluído o novo item reservado na pcorcamitemlic
                                  */
       
                                 if (!$sqlerro){
+
                                     $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
         
                                     $clpcorcamitemlic->pc26_orcamitem  = $pc22_orcamitem;
@@ -1299,6 +1319,27 @@ switch ($oParam->exec) {
                                         $sqlerro  = true;
                                         $erro_msg = $clpcorcamitemlic->erro_msg;
                                         break;
+                                    }
+
+                                    if($aItens[$x]->qtdexclusiva){
+
+                                        /**
+                                         * Inclui o item reservado na pcorcamitemlic
+                                         */
+    
+                                        $oItem = db_utils::fieldsMemory($res_liclicitemreservado, 0);
+    
+                                        $clpcorcamitemlicreservado = db_utils::getDao('pcorcamitemlic');
+                                        $clpcorcamitemlicreservado->pc26_orcamitem = $pc22_orcamitemreservado;
+                                        $clpcorcamitemlicreservado->pc26_liclicitem = $oItem->l21_codigo;
+                                        $clpcorcamitemlicreservado->incluir(null);
+    
+                                        if (!$clpcorcamitemlicreservado->erro_status){
+                                            $sqlerro = true;
+                                            $erro_msg = $clpcorcamitemlicreservado->erro_msg;
+                                            break;
+                                        }
+
                                     }
                                 }
                             }
