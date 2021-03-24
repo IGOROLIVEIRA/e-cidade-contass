@@ -83,7 +83,7 @@ if(!$sqlerro && $codprocesso){
 
     if(pg_numrows($rsOrcamItem)){
         $sqlerro = true;
-        $erro_msg = 'Existe orçamento lançado para o processo de compras ' . $codprocesso;
+        $erro_msg = 'Processo de Compra '.$codprocesso.' não excluído. Existe fornecedor lançado para a licitação.';
     }
 
 	if(!$sqlerro){
