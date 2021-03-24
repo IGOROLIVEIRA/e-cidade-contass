@@ -77,6 +77,15 @@ if(isset($codprocesso) && $codprocesso != ''){
 
 if(!$sqlerro && $codprocesso){
 
+    $oDaoPcorcamitemlic = db_utils::getDao('pcorcamitemlic');
+    $sSqlOrcamItem = $oDaoPcorcamitemlic->sql_query(null, '*', null, 'pc81_codproc = '.$codprocesso);
+    $rsOrcamItem = $oDaoPcorcamitemlic->sql_record($sSqlOrcamItem);
+
+    if(pg_numrows($rsOrcamItem)){
+        $sqlerro = true;
+        $erro_msg = 'Existe orçamento lançado para o processo de compras ' . $codprocesso;
+    }
+
 	if(!$sqlerro){
 	    $clliclicitemlote->excluir('', ' l04_liclicitem in (select l21_codigo from liclicitem
 	        where l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.'))');
