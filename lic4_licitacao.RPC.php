@@ -1355,7 +1355,7 @@ switch ($oParam->exec) {
          * mas antes tem que verificar os preenchimentos das tabelas anteriores
          */
 
-        db_fim_transacao(true);
+        db_fim_transacao($sqlerro);
         $oRetorno->erro_msg = $erro_msg;
 
         break;
