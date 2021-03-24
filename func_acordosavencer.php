@@ -89,10 +89,9 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
           }
 
-          $sWhere = " (((cast(ac16_datafim AS date) - date '" . date("Y-m-d"). "' between 0 and 30) OR ";
-          $sWhere .= " (cast(ac26_data AS date) - date '" . date("Y-m-d"). "' between 0 and 30)) ";
+          $sWhere = " cast(ac16_datafim AS date) - date '" . date("Y-m-d"). "' between 0 and 30 ";
           $sWhere .= " and  ac16_instit = ". db_getsession('DB_instit');
-          $sWhere .= " and ac16_providencia is null or ac16_providencia = 2) ";
+          $sWhere .= " and (ac16_providencia is null or ac16_providencia = 2) ";
           $sWhere .= " and ac16_acordosituacao = 4 ";
           $sWhere .= " and ac16_coddepto = ". db_getsession('DB_coddepto');
           $sql = $clacordo->sql_query_completo(null, $campos, '', $sWhere);
