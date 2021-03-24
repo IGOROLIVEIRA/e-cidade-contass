@@ -119,13 +119,13 @@ $cllicitemobra->rotulo->label();
         <table>
             <tr class="DBgrid">
                 <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
-                <td class="table_header" style="width: 87px">Códido do item</td>
-                <td class="table_header" style="width: 300px">Descrição do Item</td>
-                <td class="table_header" style="width: 178px">Tabela</td>
-                <td class="table_header" style="width: 87px"> Versão da Tabela</td>
+                <td class="table_header" style="width: 75px">Códido do item</td>
+                <td class="table_header" style="width: 253px">Descrição do Item</td>
+                <td class="table_header" style="width: 215px">Tabela</td>
+                <td class="table_header" style="width: 90px"> Versão da Tabela</td>
                 <td class="table_header" style="width: 300px">Descrição Tabela</td>
-                <td class="table_header" style="width: 150px">Data de Registro</td>
-                <td class="table_header" style="width: 150px">Data de Cadastro</td>
+                <td class="table_header" style="width: 155px">Data de Registro</td>
+                <td class="table_header" style="width: 155px">Data de Cadastro</td>
                 <td class="table_header" style="width: 87px"> Código da Tabela</td>
                 <td class="table_header" style="width: 87px">Ação</td>
             </tr>
@@ -164,22 +164,22 @@ $cllicitemobra->rotulo->label();
 
                         ?>
                         <table class="DBgrid">
-                            <th class="table_header" style="width: 35px">
+                            <th class="table_header" style="width: 30px">
                                 <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
                             </th>
 
-                            <td class="linhagrid" style="width: 87px">
+                            <td class="linhagrid" style="width: 85px">
                                 <?= $aItem->pc01_codmater ?>
                                 <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem?>">
                             </td>
 
-                            <td class="linhagrid" style="width: 300px">
+                            <td class="linhagrid" style="width: 310px">
                                 <?= $aItem->pc01_descrmater ?>
                                 <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem?>">
                             </td>
 
-                            <td class="linhagrid" style="width: 178px">
-                                <select name="tabela" id="<?= 'obr06_tabela_'.$iItem?>">
+                            <td class="linhagrid" style="width: 179px">
+                                <select name="tabela" id="<?= 'obr06_tabela_'.$iItem?>" onchange='js_validatabelaLinha(this.id)'>
                                     <option value="0">Selecione</option>
                                     <option value="1">1 - Tabela SINAP</option>
                                     <option value="2">2 - Tabela SICRO</option>
@@ -192,7 +192,7 @@ $cllicitemobra->rotulo->label();
                                 <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_'.$iItem?>">
                             </td>
 
-                            <td class="linhagrid" style="width: 300px">
+                            <td class="linhagrid" style="width: 305px">
                                 <input type="text" name="" value="<?= $aItem->obr06_descricaotabela ?>" id="<?= 'obr06_descricaotabela_'.$iItem?>">
                             </td>
 
@@ -421,28 +421,18 @@ $cllicitemobra->rotulo->label();
 
         oRetornoitens.itens.forEach(function (item, x) {
             let tabela = item.obr06_tabela;
-            let coditem = item.obr06_sequencial;
 
-            if(item.obr06_tabela == ""){
+            if(tabela.empty() === true){
                 tabela = 0;
             }else{
                 tabela = item.obr06_tabela;
             }
-console.log(coditem);
-            if(coditem != ""){
-                document.getElementById('obr06_tabela_'+item.pc01_codmater+tabela).value = tabela;
-                if(item.obr06_dtregistro != ""){
-                    document.getElementById('obr06_dtregistro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtregistro,'u');
-                    document.getElementById('obr06_dtcadastro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtcadastro,'u');
-                }
-            }else{
-                document.getElementById('obr06_tabela_'+item.pc01_codmater+tabela).value = 0;
-                document.getElementById('obr06_versaotabela_'+item.pc01_codmater+tabela).value = "";
-                document.getElementById('obr06_descricaotabela_'+item.pc01_codmater+tabela).value = "";
-                document.getElementById('obr06_dtcadastro_'+item.pc01_codmater+tabela).value = "";
-                document.getElementById('obr06_codigotabela_'+item.pc01_codmater+tabela).value = "";
-            }
 
+            document.getElementById('obr06_tabela_'+item.pc01_codmater+tabela).value = tabela;
+            if(item.obr06_dtregistro != ""){
+               document.getElementById('obr06_dtregistro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtregistro,'u');
+               document.getElementById('obr06_dtcadastro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtcadastro,'u');
+            }
         });
     }
 
@@ -536,10 +526,10 @@ console.log(coditem);
 
      function retornoAjax(res) {
          var response = JSON.parse(res.responseText);
-         if (response.status != 1) {
-             alert(response.message);
+         if (response.status == 2) {
+             alert(response.message.urlDecode());
          }else{
-             alert("Item salvo com sucesso!")
+             alert("Item salvo com sucesso!");
          }
      }
 
@@ -549,6 +539,17 @@ console.log(coditem);
             document.getElementById('obr06_descricaotabela').style.backgroundColor = '#E6E4F1'
         }else{
             document.getElementById('obr06_descricaotabela').style.backgroundColor = '#FFFFFF'
+
+        }
+    }
+
+    function js_validatabelaLinha(value){
+        let campo = value.substring(13);
+        let tipotabela = document.getElementById('obr06_tabela_'+campo).value;
+        if(tipotabela != 3){
+            document.getElementById('obr06_descricaotabela_'+campo).style.backgroundColor = '#E6E4F1'
+        }else{
+            document.getElementById('obr06_descricaotabela_'+campo).style.backgroundColor = '#FFFFFF'
 
         }
     }
@@ -604,7 +605,14 @@ console.log(coditem);
         if (response.status != 1) {
             alert(response.message);
         }else{
-            js_carregar_tabela();
+            response.itens.forEach(function (item, x) {
+                document.getElementById('obr06_tabela_'+item).value = 0;
+                document.getElementById('obr06_versaotabela_'+item).value = "";
+                document.getElementById('obr06_descricaotabela_'+item).value = "";
+                document.getElementById('obr06_dtcadastro_'+item).value = "";
+                document.getElementById('obr06_dtregistro_'+item).value = "";
+                document.getElementById('obr06_codigotabela_'+item).value = "";
+            })
             alert("Item Excluido com sucesso!")
         }
     }
@@ -645,7 +653,14 @@ console.log(coditem);
         if (response.status != 1) {
             alert(response.message);
         }else{
-            js_carregar_tabela();
+            response.itens.forEach(function (item, x) {
+                document.getElementById('obr06_tabela_'+item).value = 0;
+                document.getElementById('obr06_versaotabela_'+item).value = "";
+                document.getElementById('obr06_descricaotabela_'+item).value = "";
+                document.getElementById('obr06_dtcadastro_'+item).value = "";
+                document.getElementById('obr06_dtregistro_'+item).value = "";
+                document.getElementById('obr06_codigotabela_'+item).value = "";
+            })
             alert("Item Excluido com sucesso!")
         }
     }

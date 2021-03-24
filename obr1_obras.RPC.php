@@ -418,6 +418,7 @@ switch($oParam->exec) {
                     $oRetorno->message = urlencode($erro);
                     $oRetorno->status = 2;
                 } else {
+                    $oRetorno->itens[] = $item->obr06_pcmater;
                     $oRetorno->status = 1;
                     $oRetorno->message = urlencode("Itens Excluido com Sucesso!.");
                 }

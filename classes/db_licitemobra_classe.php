@@ -116,7 +116,7 @@ class cl_licitemobra {
       return false;
     }
     if ($this->obr06_tabela == null || $this->obr06_tabela == "0") {
-      $this->erro_sql = " Campo Tabela não informado.";
+      $this->erro_sql = " Campo Tabela não informado. Item: $this->obr06_pcmater";
       $this->erro_campo = "obr06_tabela";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -129,8 +129,7 @@ class cl_licitemobra {
         $this->erro_sql = " Campo Descrição da Tabela não informado.";
         $this->erro_campo = "obr06_descricaotabela";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_msg   = "Usuário: tabelas do tipo 3 - outras tabelas oficiais e obrigatorio informar o campo descrição da tabela. Item: $this->obr06_pcmater";
         $this->erro_status = "0";
         return false;
       }
@@ -270,7 +269,7 @@ class cl_licitemobra {
       $sql  .= $virgula." obr06_tabela = $this->obr06_tabela ";
       $virgula = ",";
       if (trim($this->obr06_tabela) == null ) {
-        $this->erro_sql = " Campo Tabela não informado.";
+        $this->erro_sql = " Campo Tabela não informado. Item: $this->obr06_pcmater";
         $this->erro_campo = "obr06_tabela";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -279,18 +278,34 @@ class cl_licitemobra {
         return false;
       }
     }
-    if (trim($this->obr06_descricaotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_descricaotabela"])) {
-      $sql  .= $virgula." obr06_descricaotabela = '$this->obr06_descricaotabela' ";
-      $virgula = ",";
-      if (trim($this->obr06_descricaotabela) == null ) {
-        $this->erro_sql = " Campo Descrição da Tabela não informado.";
-        $this->erro_campo = "obr06_descricaotabela";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+    if($this->obr06_tabela == "3"){
+        if (trim($this->obr06_descricaotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_descricaotabela"])) {
+            $sql  .= $virgula." obr06_descricaotabela = '$this->obr06_descricaotabela' ";
+            $virgula = ",";
+            if (trim($this->obr06_descricaotabela) == "") {
+                $this->erro_sql = " Campo Descrição da Tabela não informado. Item: $this->obr06_pcmater";
+                $this->erro_campo = "obr06_descricaotabela";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+    }else{
+        if (trim($this->obr06_descricaotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_descricaotabela"])) {
+            $sql  .= $virgula." obr06_descricaotabela = '$this->obr06_descricaotabela' ";
+            $virgula = ",";
+            if (trim($this->obr06_descricaotabela) == null ) {
+                $this->erro_sql = " Campo Descrição da Tabela não informado.";
+                $this->erro_campo = "obr06_descricaotabela";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
     }
     if (trim($this->obr06_codigotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_codigotabela"])) {
       $sql  .= $virgula." obr06_codigotabela = '$this->obr06_codigotabela' ";
