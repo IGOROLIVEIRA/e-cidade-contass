@@ -67,8 +67,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 
             $lSqlErro                     = true;
             $clempparametro->erro_status  = 0;
-            $clempparametro->erro_msg     = "Sistema já convertido para nota de liquidacao.";
-            $clempparametro->erro_msg    .= "\\n não pode ser alterado o parametro nota de liquidação";
+            $clempparametro->erro_msg     = "Sistema jï¿½ convertido para nota de liquidacao.";
+            $clempparametro->erro_msg    .= "\\n nï¿½o pode ser alterado o parametro nota de liquidaï¿½ï¿½o";
             $clempparametro->erro_campo   = "e30_notaliquidacao";
 
         }

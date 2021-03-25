@@ -30,7 +30,7 @@ $clempparametro->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
     <fieldset>
-        <legend><b>Manutenção de Parâmetros<b></legend>
+        <legend><b>Manutenï¿½ï¿½o de Parï¿½metros<b></legend>
         <table border="0">
             <tr>
                 <td nowrap title="<?=@$Te39_anousu?>">
@@ -91,7 +91,7 @@ $clempparametro->rotulo->label();
                     <?=@$Le30_liberaempenho ?>
                 </td>
                 <td><?
-                    $matriz = array("f"=>"Não","t"=>"Sim");
+                    $matriz = array("f"=>"Nï¿½o","t"=>"Sim");
                     db_select("e30_liberaempenho",$matriz,true,1);
                     ?>
                 </td>
@@ -100,7 +100,7 @@ $clempparametro->rotulo->label();
             <tr>
                 <td nowrap title="<?=@$Te30_autimportahist ?>"><?=@$Le30_autimportahist ?> </td>
                 <td><?
-                    $matriz = array("f"=>"Não","t"=>"Sim");
+                    $matriz = array("f"=>"Nï¿½o","t"=>"Sim");
                     db_select("e30_autimportahist",$matriz,true,1);
                     ?>
                 </td>
@@ -108,7 +108,7 @@ $clempparametro->rotulo->label();
 
             <tr>
                 <td nowrap title="<?=@$Te30_trazobsultop?>">       <?=@$Le30_trazobsultop ?>    </td>
-                <td><? $matriz = array("1"=>"Não Trazer","2"=>"Trazer Geral","3"=>"Trazer por usuário");
+                <td><? $matriz = array("1"=>"Nï¿½o Trazer","2"=>"Trazer Geral","3"=>"Trazer por usuï¿½rio");
                     db_select("e30_trazobsultop", $matriz,true,1);
                     ?>
                 </td>
@@ -116,7 +116,7 @@ $clempparametro->rotulo->label();
 
             <tr>
                 <td nowrap title="<?=@$Te30_opimportaresumo?>">       <?=@$Le30_opimportaresumo ?>    </td>
-                <td><? $matriz = array("f"=>"Não","t"=>"Sim");
+                <td><? $matriz = array("f"=>"Nï¿½o","t"=>"Sim");
                     db_select("e30_opimportaresumo", $matriz,true,1);
                     ?>
                 </td>
@@ -125,7 +125,7 @@ $clempparametro->rotulo->label();
 
             <tr>
                 <td nowrap title="<?=@$Te30_empdataserv?>"><?=@$Le30_empdataserv ?></td>
-                <td><? $matriz = array("f"=>"Não","t"=>"Sim");
+                <td><? $matriz = array("f"=>"Nï¿½o","t"=>"Sim");
                     db_select("e30_empdataserv", $matriz,true,1);
                     ?>
                 </td>
@@ -133,8 +133,7 @@ $clempparametro->rotulo->label();
 
             <tr>
                 <td nowrap title="<?=@$Te30_empdataemp?>"><?=@$Le30_empdataemp ?></td>
-                <td><? $matriz = array("f"=>"Não","t"=>"Sim");
-                    db_select("e30_empdataemp", $matriz,true,1);
+                <td><? $matriz = array("f"=>"Nï¿½o","t"=>"Sim");
                     db_select("e30_empdataemp", $matriz,true,1);
                     ?>
                 </td>
@@ -149,7 +148,7 @@ $clempparametro->rotulo->label();
 
             <tr>
                 <td nowrap title="<?=@$Te30_verificarmatordem?>"><?=@$Le30_verificarmatordem?></td>
-                <td><? $matriz = array("0"=>"Sim","1"=>"Não");
+                <td><? $matriz = array("0"=>"Sim","1"=>"Nï¿½o");
                     db_select("e30_verificarmatordem", $matriz,true,1);
                     ?>
                 </td>
@@ -177,7 +176,7 @@ $clempparametro->rotulo->label();
             </tr>
             <tr>
                 <td nowrap title="<?=@$Te30_usadataagenda?>">       <?=@$Le30_usadataagenda?>    </td>
-                <td><? $matriz = array("f"=>"Não","t"=>"Sim");
+                <td><? $matriz = array("f"=>"Nï¿½o","t"=>"Sim");
                     db_select("e30_usadataagenda", $matriz,true,1);
                     ?>
                 </td>
@@ -185,7 +184,7 @@ $clempparametro->rotulo->label();
             <tr>
                 <td nowrap title="<?=@$Te30_impobslicempenho?>">       <?=@$Le30_impobslicempenho?>    </td>
                 <td>
-                    <? $matriz = array("t"=>"Sim", "f"=>"Não");
+                    <? $matriz = array("t"=>"Sim", "f"=>"Nï¿½o");
                     db_select("e30_impobslicempenho", $matriz,true,1);
                     ?>
                 </td>
@@ -194,14 +193,14 @@ $clempparametro->rotulo->label();
                 <td nowrap title="<?=@$Te30_dadosbancoempenho?>">       <?=@$Le30_dadosbancoempenho?>    </td>
                 <td>
                     <?
-                    $aDadosBancoEmpenho = array("f"=>"Não", "t"=>"Sim");
+                    $aDadosBancoEmpenho = array("f"=>"Nï¿½o", "t"=>"Sim");
                     db_select("e30_dadosbancoempenho", $aDadosBancoEmpenho, true, 1);
                     ?>
                 </td>
             </tr>
             <tr>
                 <td nowrap title="<?=@$Te30_dadosbancoempenho?>">
-                    <strong>Tipo padrão de Anulação de Empenho</strong>
+                    <strong>Tipo padrï¿½o de Anulaï¿½ï¿½o de Empenho</strong>
                 </td>
                 <td>
                     <?
@@ -220,7 +219,7 @@ $clempparametro->rotulo->label();
                     <?=@$Le30_atestocontinterno ?>
                 </td>
                 <td><?
-                    $matriz = array("f"=>"Não","t"=>"Sim");
+                    $matriz = array("f"=>"Nï¿½o","t"=>"Sim");
                     db_select("e30_atestocontinterno",$matriz,true,1);
                     ?>
                 </td>
