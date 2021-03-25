@@ -46,12 +46,11 @@ class SicomArquivoUnidadeOrcamentaria extends SicomArquivoBase implements iPadAr
   {
 
 
-    $sSqlUnidade = "select orcunidade.*,infocomplementaresinstit.* from orcunidade ";
-    $sSqlUnidade .= " left join db_config on codigo = o41_instit left join infocomplementaresinstit on si09_instit = codigo ";
+    $sSqlUnidade = "select distinct o41_unidade,o41_ident,o41_orgao,o41_codtri,o41_descr,si09_codorgaotce from orcunidade ";
+    $sSqlUnidade .= " inner join db_config on codigo = o41_instit inner join infocomplementaresinstit on si09_instit = codigo ";
     $sSqlUnidade .= "WHERE o41_anousu = " . db_getsession("DB_anousu") . " and db21_ativo = 1 ";
 
     $rsUnidade = db_query($sSqlUnidade);
-
 
     for ($iCont = 0; $iCont < pg_num_rows($rsUnidade); $iCont++) {
 
