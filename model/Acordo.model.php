@@ -1589,6 +1589,16 @@ class Acordo
         if ($oDaoAcordoVigencia->erro_status == 0) {
             throw new Exception("Erro ao definir vigência do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
         }
+
+        $oDaoAcordo = db_utils::getDao('acordo');
+        $oDaoAcordo->ac16_sequencial  = $this->getCodigo();
+        $oDaoAcordo->ac16_providencia = $this->getProvidencia();
+        $oDaoAcordo->alterar($this->getCodigo());
+
+        if($oDaoAcordo->erro_status == 0){
+            throw new Exception("Erro ao alterar contrato.\n{$oDaoAcordo->erro_msg}");
+        }
+
     }
 
     /**
