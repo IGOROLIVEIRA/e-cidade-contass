@@ -65,7 +65,7 @@ class DBHttpRequest
             'baseUrl' => null,
             'headers' => array(),
             'method' => 'GET',
-            'body' => null,
+            'body' > null,
             'timeout' => 60,
         );
 
@@ -104,11 +104,7 @@ class DBHttpRequest
     public function send($url, $method = 'GET', array $options = array())
     {
         $options = DBArray::merge($this->options, $options);
-
         $this->body = $this->__sendFileWrapper($options['baseUrl'] . $url, $method, $options);
-        if(!strpos($this->body,"Lote Recebido com Sucesso")) {
-            return false;
-        }
         return true;
     }
 
@@ -121,14 +117,15 @@ class DBHttpRequest
     {
         $contextOptions = array(
             'http' => array(
-            'method' => 'POST',
+            'ignore_errors' => true,
+            'method' => $method,
+            'timeout' => $options['timeout'],
             ),
         );
 
-        // Com essa parte nao funcionou
-        // if (!empty($options['proxy'])) {
-        //     $contextOptions['http']['proxy'] = $options['proxy'];
-        // }
+        if (!empty($options['proxy'])) {
+            $contextOptions['http']['proxy'] = $options['proxy'];
+        }
 
         if (!empty($options['headers'])) {
             $contextOptions['http']['header'] = $this->headersToString();
@@ -138,8 +135,6 @@ class DBHttpRequest
             $contextOptions['http']['content'] = $options['body'];
         }
 
-        // echo $url.' contextOptions ';
-        // print_r($contextOptions);exit;
         $context = stream_context_create($contextOptions);
         $result = @file_get_contents($url, false, $context);
 
@@ -151,7 +146,7 @@ class DBHttpRequest
             $error = error_get_last();
             throw new BusinessException("Erro ao executar requisição:\nRetorno: " . $error['message']);
         }
-        print_r($result);
+
         return $result;
     }
 

@@ -1,0 +1,2332 @@
+[2017-07-12 18:22:12] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-13 10:29:52] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-13 10:29:52] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-13 10:30:18] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-13 10:31:03] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-13 17:54:10] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-14 09:43:11] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-14 10:22:15] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  relação "db_logsacessa" não existe
+LINE 1: INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_cod...
+                    ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 98
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:98 - pg_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2017-07-14','10:22:15','/juliano/pacotes_e-cidade/pacotes_completos/teste_ecidade_pspb_melhorias/e-cidade_demo/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#2 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:2606 - db_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2017-07-14','10:22:15','/juliano/pacotes_e-cidade/pacotes_completos/teste_ecidade_pspb_melhorias/e-cidade_demo/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#3 abrir.php:84 - db_logsmanual_demais(Abrindo Acesso ao Sistema - Login: dbseller)
+#4 app.php:175 - require_once(abrir.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2017-07-14 10:40:49] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-07-14 10:40:50] ERROR: E_ERROR - Call to undefined function imageftbbox() in securimage/securimage.php on line 1666
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2017-10-13 11:20:38] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  relaï¿½ï¿½o &quot;db_usuarios&quot; nï¿½o existe
+LINE 1: select * from db_usuarios  where id_usuario = 1
+                      ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 98
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:98 - pg_query(select * from db_usuarios  where id_usuario = 1)
+#2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
+#3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
+#4 extension/package/Desktop/Controller/Desktop.php:148 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/Desktop.php:83 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#6 : - ECidade\Package\Desktop\Controller\Desktop->index()
+#7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
+(
+    [0] => ECidade\Package\Desktop\Controller\Desktop
+    [1] => index
+)
+, Array
+(
+)
+)
+#8 app.php:76 - ECidade\V3\Extension\Dispatcher->execute(ECidade\V3\Extension\Request, ECidade\V3\Extension\Response)
+#9 FrontController.php:7 - require(app.php)
+
+[2017-11-21 16:20:45] ERROR: E_WARNING - mkdir(): File exists in src/V3/Extension/Storage.php on line 160
+#1 src/V3/Extension/Storage.php:160 - mkdir(extension/modification/data/cache/parsing-5a146e7da539e/user/dbseller/libs, 509, 1)
+#2 src/V3/Extension/Storage.php:88 - ECidade\V3\Extension\Storage->createDirectory()
+#3 src/V3/Modification/Data/File.php:92 - ECidade\V3\Extension\Storage->save()
+#4 src/V3/Modification/ManagerParseFiles.php:583 - ECidade\V3\Modification\Data\File->save()
+#5 src/V3/Modification/ManagerParseFiles.php:494 - ECidade\V3\Modification\ManagerParseFiles->persistData(ECidade\V3\Modification\Data\File)
+#6 src/V3/Modification/ManagerParseFiles.php:368 - ECidade\V3\Modification\ManagerParseFiles->parseFile(libs/db_stdlib.php, dbportal-v3-desktop, dbseller)
+#7 src/V3/Modification/ManagerParseFiles.php:228 - ECidade\V3\Modification\ManagerParseFiles->parseModification(dbportal-v3-desktop, ArrayObject, dbseller)
+#8 src/V3/Modification/Manager.php:467 - ECidade\V3\Modification\ManagerParseFiles->parse()
+#9 src/V3/Modification/Manager.php:400 - ECidade\V3\Modification\Manager->parseFiles(ArrayObject, dbseller)
+#10 src/V3/Modification/Data/FileSync.php:95 - ECidade\V3\Modification\Manager->updateFile(libs/db_stdlib.php, dbseller)
+#11 definitions.php:91 - ECidade\V3\Modification\Data\FileSync::update(libs/db_stdlib.php, dbseller)
+#12 skins/estilos.php:29 - modification(libs/db_stdlib.php)
+#13 app.php:160 - require_once(skins/estilos.php)
+#14 FrontController.php:7 - require(app.php)
+
+[2017-11-21 16:27:59] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  relaï¿½ï¿½o &quot;db_usuarios&quot; nï¿½o existe
+LINE 1: select * from db_usuarios  where id_usuario = 1
+                      ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select * from db_usuarios  where id_usuario = 1)
+#2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
+#3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
+#4 extension/package/Desktop/Controller/Desktop.php:149 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/Desktop.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#6 : - ECidade\Package\Desktop\Controller\Desktop->index()
+#7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
+(
+    [0] => ECidade\Package\Desktop\Controller\Desktop
+    [1] => index
+)
+, Array
+(
+)
+)
+#8 app.php:68 - ECidade\V3\Extension\Dispatcher->execute(ECidade\V3\Extension\Request, ECidade\V3\Extension\Response)
+#9 FrontController.php:7 - require(app.php)
+
+[2018-01-16 15:53:49] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  permissï¿½o negada para relaï¿½ï¿½o db_logsacessa in libs/db_stdlib.php on line 101
+#1 libs/db_stdlib.php:101 - pg_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2018-01-16','15:53:49','/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#2 libs/db_stdlib.php:2590 - db_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2018-01-16','15:53:49','/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#3 abrir.php:84 - db_logsmanual_demais(Abrindo Acesso ao Sistema - Login: dbseller)
+#4 app.php:160 - require_once(abrir.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2018-01-16 15:54:49] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  permissï¿½o negada para relaï¿½ï¿½o db_logsacessa in libs/db_stdlib.php on line 101
+#1 libs/db_stdlib.php:101 - pg_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2018-01-16','15:54:49','/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#2 libs/db_stdlib.php:2590 - db_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2018-01-16','15:54:49','/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#3 abrir.php:84 - db_logsmanual_demais(Abrindo Acesso ao Sistema - Login: dbseller)
+#4 app.php:160 - require_once(abrir.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2018-01-16 15:55:16] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  permissï¿½o negada para relaï¿½ï¿½o db_logsacessa in libs/db_stdlib.php on line 101
+#1 libs/db_stdlib.php:101 - pg_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2018-01-16','15:55:16','/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#2 libs/db_stdlib.php:2590 - db_query(INSERT INTO db_logsacessa VALUES (nextval('db_logsacessa_codsequen_seq'),'127.0.0.1','2018-01-16','15:55:16','/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/abrir.php?sAuth=REJfbG9naW49ZGJzZWxsZXImREJfc2VuaGE9ZDQxZDhjZDk4ZjAwYjIwNGU5ODAwOTk4ZWNmODQyN2U%3D&conteudoCaptcha=','Abrindo Acesso ao Sistema - Login: dbseller',0,0,0,0,0))
+#3 abrir.php:84 - db_logsmanual_demais(Abrindo Acesso ao Sistema - Login: dbseller)
+#4 app.php:160 - require_once(abrir.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2018-01-17 13:26:52] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  relaï¿½ï¿½o &quot;db_usuarios&quot; nï¿½o existe
+LINE 1: select * from db_usuarios  where id_usuario = 1
+                      ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select * from db_usuarios  where id_usuario = 1)
+#2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
+#3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
+#4 extension/package/Desktop/Controller/Desktop.php:149 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/Desktop.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#6 : - ECidade\Package\Desktop\Controller\Desktop->index()
+#7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
+(
+    [0] => ECidade\Package\Desktop\Controller\Desktop
+    [1] => index
+)
+, Array
+(
+)
+)
+#8 app.php:68 - ECidade\V3\Extension\Dispatcher->execute(ECidade\V3\Extension\Request, ECidade\V3\Extension\Response)
+#9 FrontController.php:7 - require(app.php)
+
+[2018-01-18 10:05:04] ERROR: E_WARNING - pg_query(): Query failed: ERRO:  relaï¿½ï¿½o &quot;db_usuarios&quot; nï¿½o existe
+LINE 1: select * from db_usuarios  where id_usuario = 1
+                      ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select * from db_usuarios  where id_usuario = 1)
+#2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
+#3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
+#4 extension/package/Desktop/Controller/Desktop.php:149 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/Desktop.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#6 : - ECidade\Package\Desktop\Controller\Desktop->index()
+#7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
+(
+    [0] => ECidade\Package\Desktop\Controller\Desktop
+    [1] => index
+)
+, Array
+(
+)
+)
+#8 app.php:68 - ECidade\V3\Extension\Dispatcher->execute(ECidade\V3\Extension\Request, ECidade\V3\Extension\Response)
+#9 FrontController.php:7 - require(app.php)
+
+[2018-02-22 11:24:15] ERROR: E_NOTICE - Undefined offset: 0 in extension/modification/data/cache/user/dbseller/libs/db_conecta.php on line 140
+#1 con4_dbplugin001.php:29 - require_once(extension/modification/data/cache/user/dbseller/libs/db_conecta.php)
+#2 app.php:160 - require_once(con4_dbplugin001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 11:24:16] ERROR: E_NOTICE - Undefined offset: 0 in extension/modification/data/cache/user/dbseller/libs/db_conecta.php on line 140
+#1 con4_dbhelp.RPC.php:8 - require_once(extension/modification/data/cache/user/dbseller/libs/db_conecta.php)
+#2 app.php:160 - require_once(con4_dbhelp.RPC.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 11:24:16] ERROR: E_NOTICE - Undefined offset: 0 in extension/modification/data/cache/user/dbseller/libs/db_conecta.php on line 140
+#1 con4_dbtutorial.RPC.php:29 - require_once(extension/modification/data/cache/user/dbseller/libs/db_conecta.php)
+#2 app.php:160 - require_once(con4_dbtutorial.RPC.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 11:24:16] ERROR: E_NOTICE - Undefined offset: 0 in libs/db_conecta.php on line 140
+#1 skins/img.php:31 - require_once(libs/db_conecta.php)
+#2 app.php:160 - require_once(skins/img.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 11:24:16] ERROR: E_NOTICE - Undefined offset: 0 in extension/modification/data/cache/user/dbseller/libs/db_conecta.php on line 140
+#1 con4_dbplugin.RPC.php:34 - require_once(extension/modification/data/cache/user/dbseller/libs/db_conecta.php)
+#2 app.php:160 - require_once(con4_dbplugin.RPC.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 15:23:44] ERROR: E_WARNING - require_once(/var/www/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/libs/db_conn.php): failed to open stream: No such file or directory in abrir.php on line 29
+#1 abrir.php:29 - require_once()
+#2 app.php:160 - require_once(abrir.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 15:23:44] ERROR: E_COMPILE_ERROR - require_once(): Failed opening required '/var/www/ecidade_pspb/teste/e-cidade-2018-1-linux-completo/e-cidade/libs/db_conn.php' (include_path='.:/usr/share/php') in abrir.php on line 29
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2018-02-22 15:23:50] ERROR: E_WARNING - require_once(libs/db_conn.php): failed to open stream: No such file or directory in abrir.php on line 29
+#1 abrir.php:29 - require_once()
+#2 app.php:160 - require_once(abrir.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 15:23:50] ERROR: E_COMPILE_ERROR - require_once(): Failed opening required 'libs/db_conn.php' (include_path='.:/usr/share/php') in abrir.php on line 29
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2018-02-22 15:24:01] ERROR: E_WARNING - require_once(libs/db_conn.php): failed to open stream: No such file or directory in login.php on line 84
+#1 login.php:84 - require_once()
+#2 app.php:160 - require_once(login.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2018-02-22 15:24:01] ERROR: E_COMPILE_ERROR - require_once(): Failed opening required 'libs/db_conn.php' (include_path='.:/usr/share/php') in login.php on line 84
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-07-23 15:16:57] ERROR: E_ERROR - Uncaught exception 'DBException' with message 'Nenhuma informação encontrada' in con1_organograma.RPC.php on line 259 in con1_organograma.RPC.php on line 259
+#1 app.php:160 - require_once()
+#2 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:24:59] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:24:59] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:24:59] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:25:27] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;,&quot;
+LINE 69:                                ,265
+                                        ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,100
+                               ,''
+                               ,0
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,12345678
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'null'
+                               ,7
+                               ,0
+                               ,0
+                               ,0
+                               ,null
+                               ,1
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#2 classes/db_escola_classe.php:455 - db_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,100
+                               ,''
+                               ,0
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,12345678
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'null'
+                               ,7
+                               ,0
+                               ,0
+                               ,0
+                               ,null
+                               ,1
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#3 edu1_escola002.php:101 - cl_escola->incluir(19)
+#4 app.php:160 - require_once(edu1_escola002.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:25:28] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:25:28] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:25:28] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:33:21] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-07-23 15:40:05] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  column &quot;selecione&quot; does not exist
+LINE 18:                                ,Selecione
+                                         ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into relacaotrabalho(
+                                       ed23_i_codigo
+                                      ,ed23_i_rechumanoescola
+                                      ,ed23_i_numero
+                                      ,ed23_i_regimetrabalho
+                                      ,ed23_i_areatrabalho
+                                      ,ed23_i_disciplina
+                                      ,ed23_tipohoratrabalho
+                                      ,ed23_ativo
+                       )
+                values (
+                                259
+                               ,34
+                               ,null
+                               ,3
+                               ,null
+                               ,null
+                               ,Selecione
+                               ,'true'
+                      ))
+#2 classes/db_relacaotrabalho_classe.php:194 - db_query(insert into relacaotrabalho(
+                                       ed23_i_codigo
+                                      ,ed23_i_rechumanoescola
+                                      ,ed23_i_numero
+                                      ,ed23_i_regimetrabalho
+                                      ,ed23_i_areatrabalho
+                                      ,ed23_i_disciplina
+                                      ,ed23_tipohoratrabalho
+                                      ,ed23_ativo
+                       )
+                values (
+                                259
+                               ,34
+                               ,null
+                               ,3
+                               ,null
+                               ,null
+                               ,Selecione
+                               ,'true'
+                      ))
+#3 edu4_relacaotrabalho.RPC.php:139 - cl_relacaotrabalho->incluir()
+#4 app.php:160 - require_once(edu4_relacaotrabalho.RPC.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:40:05] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  current transaction is aborted, commands ignored until end of transaction block in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select *   from rechumanorelacao  where  ed03_i_relacaotrabalho = 259)
+#2 classes/db_rechumanorelacao_classe.php:360 - db_query(select *   from rechumanorelacao  where  ed03_i_relacaotrabalho = 259)
+#3 classes/db_rechumanorelacao_classe.php:297 - cl_rechumanorelacao->sql_record(select *   from rechumanorelacao  where  ed03_i_relacaotrabalho = 259)
+#4 edu4_relacaotrabalho.RPC.php:183 - cl_rechumanorelacao->excluir(,  ed03_i_relacaotrabalho = 259)
+#5 edu4_relacaotrabalho.RPC.php:140 - salvarVinculoFuncaoComRelacao(259, Selecione)
+#6 app.php:160 - require_once(edu4_relacaotrabalho.RPC.php)
+#7 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:40:05] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  current transaction is aborted, commands ignored until end of transaction block in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query( delete from rechumanorelacao
+                    where  ed03_i_relacaotrabalho = 259)
+#2 classes/db_rechumanorelacao_classe.php:326 - db_query( delete from rechumanorelacao
+                    where  ed03_i_relacaotrabalho = 259)
+#3 edu4_relacaotrabalho.RPC.php:183 - cl_rechumanorelacao->excluir(,  ed03_i_relacaotrabalho = 259)
+#4 edu4_relacaotrabalho.RPC.php:140 - salvarVinculoFuncaoComRelacao(259, Selecione)
+#5 app.php:160 - require_once(edu4_relacaotrabalho.RPC.php)
+#6 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:48:34] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  column &quot;selecione&quot; does not exist
+LINE 18:                                ,Selecione
+                                         ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into relacaotrabalho(
+                                       ed23_i_codigo
+                                      ,ed23_i_rechumanoescola
+                                      ,ed23_i_numero
+                                      ,ed23_i_regimetrabalho
+                                      ,ed23_i_areatrabalho
+                                      ,ed23_i_disciplina
+                                      ,ed23_tipohoratrabalho
+                                      ,ed23_ativo
+                       )
+                values (
+                                260
+                               ,34
+                               ,null
+                               ,3
+                               ,null
+                               ,null
+                               ,Selecione
+                               ,'true'
+                      ))
+#2 classes/db_relacaotrabalho_classe.php:194 - db_query(insert into relacaotrabalho(
+                                       ed23_i_codigo
+                                      ,ed23_i_rechumanoescola
+                                      ,ed23_i_numero
+                                      ,ed23_i_regimetrabalho
+                                      ,ed23_i_areatrabalho
+                                      ,ed23_i_disciplina
+                                      ,ed23_tipohoratrabalho
+                                      ,ed23_ativo
+                       )
+                values (
+                                260
+                               ,34
+                               ,null
+                               ,3
+                               ,null
+                               ,null
+                               ,Selecione
+                               ,'true'
+                      ))
+#3 edu4_relacaotrabalho.RPC.php:139 - cl_relacaotrabalho->incluir()
+#4 app.php:160 - require_once(edu4_relacaotrabalho.RPC.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:48:34] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  current transaction is aborted, commands ignored until end of transaction block in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select *   from rechumanorelacao  where  ed03_i_relacaotrabalho = 260)
+#2 classes/db_rechumanorelacao_classe.php:360 - db_query(select *   from rechumanorelacao  where  ed03_i_relacaotrabalho = 260)
+#3 classes/db_rechumanorelacao_classe.php:297 - cl_rechumanorelacao->sql_record(select *   from rechumanorelacao  where  ed03_i_relacaotrabalho = 260)
+#4 edu4_relacaotrabalho.RPC.php:183 - cl_rechumanorelacao->excluir(,  ed03_i_relacaotrabalho = 260)
+#5 edu4_relacaotrabalho.RPC.php:140 - salvarVinculoFuncaoComRelacao(260, Selecione)
+#6 app.php:160 - require_once(edu4_relacaotrabalho.RPC.php)
+#7 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:48:34] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  current transaction is aborted, commands ignored until end of transaction block in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query( delete from rechumanorelacao
+                    where  ed03_i_relacaotrabalho = 260)
+#2 classes/db_rechumanorelacao_classe.php:326 - db_query( delete from rechumanorelacao
+                    where  ed03_i_relacaotrabalho = 260)
+#3 edu4_relacaotrabalho.RPC.php:183 - cl_rechumanorelacao->excluir(,  ed03_i_relacaotrabalho = 260)
+#4 edu4_relacaotrabalho.RPC.php:140 - salvarVinculoFuncaoComRelacao(260, Selecione)
+#5 app.php:160 - require_once(edu4_relacaotrabalho.RPC.php)
+#6 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:50:06] ERROR: E_WARNING - pg_numfields() expects parameter 1 to be resource, boolean given in libs/db_stdlib.php on line 1234
+#1 libs/db_stdlib.php:1234 - pg_numfields()
+#2 edu1_sala001.php:44 - db_fieldsmemory(, 0)
+#3 app.php:160 - require_once(edu1_sala001.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:50:06] ERROR: E_WARNING - pg_numrows() expects parameter 1 to be resource, boolean given in libs/db_stdlib.php on line 1235
+#1 libs/db_stdlib.php:1235 - pg_numrows()
+#2 edu1_sala001.php:44 - db_fieldsmemory(, 0)
+#3 app.php:160 - require_once(edu1_sala001.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:51:00] ERROR: E_NOTICE - Undefined variable: x in forms/db_frmedu_parametros.php on line 66
+#1 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#2 app.php:160 - require_once(edu1_edu_parametros001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:51:00] ERROR: E_WARNING - reset() expects parameter 1 to be array, null given in dbforms/db_funcoes.php on line 1018
+#1 dbforms/db_funcoes.php:1018 - reset()
+#2 forms/db_frmedu_parametros.php:66 - db_select(ed233_c_decimais, , 1, 1, )
+#3 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#4 app.php:160 - require_once(edu1_edu_parametros001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:51:45] ERROR: E_NOTICE - Undefined variable: x in forms/db_frmedu_parametros.php on line 66
+#1 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#2 app.php:160 - require_once(edu1_edu_parametros001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:51:45] ERROR: E_WARNING - reset() expects parameter 1 to be array, null given in dbforms/db_funcoes.php on line 1018
+#1 dbforms/db_funcoes.php:1018 - reset()
+#2 forms/db_frmedu_parametros.php:66 - db_select(ed233_c_decimais, , 1, 1, )
+#3 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#4 app.php:160 - require_once(edu1_edu_parametros001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:51:46] ERROR: E_NOTICE - Undefined variable: x in forms/db_frmedu_parametros.php on line 66
+#1 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#2 app.php:160 - require_once(edu1_edu_parametros001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:51:46] ERROR: E_WARNING - reset() expects parameter 1 to be array, null given in dbforms/db_funcoes.php on line 1018
+#1 dbforms/db_funcoes.php:1018 - reset()
+#2 forms/db_frmedu_parametros.php:66 - db_select(ed233_c_decimais, , 1, 2, )
+#3 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#4 app.php:160 - require_once(edu1_edu_parametros001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:52:06] ERROR: E_NOTICE - Undefined variable: x in forms/db_frmedu_parametros.php on line 66
+#1 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#2 app.php:160 - require_once(edu1_edu_parametros001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:52:06] ERROR: E_WARNING - reset() expects parameter 1 to be array, null given in dbforms/db_funcoes.php on line 1018
+#1 dbforms/db_funcoes.php:1018 - reset()
+#2 forms/db_frmedu_parametros.php:66 - db_select(ed233_c_decimais, , 1, 2, )
+#3 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#4 app.php:160 - require_once(edu1_edu_parametros001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:52:07] ERROR: E_NOTICE - Undefined variable: x in forms/db_frmedu_parametros.php on line 66
+#1 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#2 app.php:160 - require_once(edu1_edu_parametros001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:52:07] ERROR: E_WARNING - reset() expects parameter 1 to be array, null given in dbforms/db_funcoes.php on line 1018
+#1 dbforms/db_funcoes.php:1018 - reset()
+#2 forms/db_frmedu_parametros.php:66 - db_select(ed233_c_decimais, , 1, 2, )
+#3 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#4 app.php:160 - require_once(edu1_edu_parametros001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-07-23 15:54:11] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-07-23 16:52:02] ERROR: E_WARNING - Creating default object from empty value in edu1_periodocalendario001.php on line 136
+#1 app.php:160 - require_once(edu1_periodocalendario001.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2019-07-23 16:53:05] ERROR: E_WARNING - Creating default object from empty value in edu1_periodocalendario001.php on line 136
+#1 app.php:160 - require_once(edu1_periodocalendario001.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2019-07-23 16:56:33] ERROR: E_WARNING - Creating default object from empty value in edu1_periodocalendario001.php on line 136
+#1 app.php:160 - require_once(edu1_periodocalendario001.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2019-07-23 16:57:17] ERROR: E_WARNING - Creating default object from empty value in edu1_periodocalendario001.php on line 136
+#1 app.php:160 - require_once(edu1_periodocalendario001.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:22:05] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:22:05] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:22:05] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:22:12] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;,&quot;
+LINE 69:                                ,265
+                                        ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,0
+                               ,''
+                               ,0
+                               ,'ESCOLA DE TESTE DEBORAH'
+                               ,''
+                               ,3
+                               ,2018
+                               ,''
+                               ,''
+                               ,'S'
+                               ,12345678
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'null'
+                               ,7
+                               ,0
+                               ,0
+                               ,0
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#2 classes/db_escola_classe.php:455 - db_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,0
+                               ,''
+                               ,0
+                               ,'ESCOLA DE TESTE DEBORAH'
+                               ,''
+                               ,3
+                               ,2018
+                               ,''
+                               ,''
+                               ,'S'
+                               ,12345678
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'null'
+                               ,7
+                               ,0
+                               ,0
+                               ,0
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#3 edu1_escola002.php:101 - cl_escola->incluir(19)
+#4 app.php:160 - require_once(edu1_escola002.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:22:12] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:22:12] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:22:12] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 10:24:25] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 10:48:40] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 11:25:02] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 11:40:38] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 13:56:13] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 13:59:03] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 13:59:03] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 13:59:03] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 2)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 13:59:03] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:00:22] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:03:19] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:19] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:19] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:32] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:32] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:32] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:38] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;,&quot;
+LINE 69:                                ,265
+                                        ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#2 classes/db_escola_classe.php:455 - db_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#3 edu1_escola002.php:101 - cl_escola->incluir(19)
+#4 app.php:160 - require_once(edu1_escola002.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:38] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:38] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:38] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:59] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;,&quot;
+LINE 69:                                ,265
+                                        ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#2 classes/db_escola_classe.php:455 - db_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#3 edu1_escola002.php:101 - cl_escola->incluir(19)
+#4 app.php:160 - require_once(edu1_escola002.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:59] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:59] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:03:59] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:04:42] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;,&quot;
+LINE 69:                                ,265
+                                        ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#2 classes/db_escola_classe.php:455 - db_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#3 edu1_escola002.php:101 - cl_escola->incluir(19)
+#4 app.php:160 - require_once(edu1_escola002.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:04:42] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:04:42] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:04:42] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:05:54] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;,&quot;
+LINE 69:                                ,265
+                                        ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#2 classes/db_escola_classe.php:455 - db_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#3 edu1_escola002.php:101 - cl_escola->incluir(19)
+#4 app.php:160 - require_once(edu1_escola002.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:05:54] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:05:54] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:05:54] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:06:12] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;,&quot;
+LINE 69:                                ,265
+                                        ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#2 classes/db_escola_classe.php:455 - db_query(insert into escola(
+                                       ed18_i_codigo
+                                      ,ed18_i_rua
+                                      ,ed18_i_numero
+                                      ,ed18_c_compl
+                                      ,ed18_i_bairro
+                                      ,ed18_c_nome
+                                      ,ed18_c_abrev
+                                      ,ed18_c_mantenedora
+                                      ,ed18_i_anoinicio
+                                      ,ed18_c_email
+                                      ,ed18_c_homepage
+                                      ,ed18_c_tipo
+                                      ,ed18_c_codigoinep
+                                      ,ed18_c_local
+                                      ,ed18_c_logo
+                                      ,ed18_c_cep
+                                      ,ed18_i_cnpj
+                                      ,ed18_i_locdiferenciada
+                                      ,ed18_i_educindigena
+                                      ,ed18_i_tipolinguain
+                                      ,ed18_i_tipolinguapt
+                                      ,ed18_i_linguaindigena
+                                      ,ed18_i_credenciamento
+                                      ,ed18_i_funcionamento
+                                      ,ed18_i_censouf
+                                      ,ed18_i_censomunic
+                                      ,ed18_i_censodistrito
+                                      ,ed18_i_censoorgreg
+                                      ,ed18_i_categprivada
+                                      ,ed18_i_conveniada
+                                      ,ed18_i_cnas
+                                      ,ed18_i_cebas
+                                      ,ed18_c_mantprivada
+                                      ,ed18_i_cnpjprivada
+                                      ,ed18_i_cnpjmantprivada
+                                      ,ed18_latitude
+                                      ,ed18_longitude
+                                      ,ed18_codigoreferencia
+                       )
+                values (
+                                19
+                               ,0
+                               ,1
+                               ,''
+                               ,1
+                               ,'ESCOLA DE TESTE'
+                               ,''
+                               ,3
+                               ,2019
+                               ,''
+                               ,''
+                               ,'S'
+                               ,00000000
+                               ,'1'
+                               ,''
+                               ,'90000000'
+                               ,'00000000000000'
+                               ,1
+                               ,1
+                               ,0
+                               ,1
+                               ,null
+                               ,0
+                               ,1
+                               ,31
+                               ,3143302
+                               , 
+                               ,265
+                               ,null
+                               ,null
+                               ,null
+                               ,null
+                               ,'0000'
+                               ,'null'
+                               ,'null'
+                               ,''
+                               ,''
+                               ,null
+                      ))
+#3 edu1_escola002.php:101 - cl_escola->incluir(19)
+#4 app.php:160 - require_once(edu1_escola002.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:06:12] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:06:12] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:06:12] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:06:36] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:07:54] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:07:54] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:07:54] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:07:58] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:07:58] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:07:58] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:03] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:03] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:03] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:19] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:19] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:19] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:28] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:28] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:28] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:32] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:32] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:32] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:32] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:08:33] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:08:54] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:54] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:54] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 2)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:08:55] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:09:21] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:09:21] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:09:21] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 2)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:09:22] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:09:52] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:09:52] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:09:52] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 2)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:09:53] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:17:11] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:17:21] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:19:40] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:19:40] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:19:40] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 1)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2019-08-09 14:19:41] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:19:41] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 14:23:39] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-09 15:11:13] ERROR: E_NOTICE - Undefined variable: x in forms/db_frmedu_parametros.php on line 66
+#1 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#2 app.php:160 - require_once(edu1_edu_parametros001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2019-08-09 15:11:13] ERROR: E_WARNING - reset() expects parameter 1 to be array, null given in dbforms/db_funcoes.php on line 1018
+#1 dbforms/db_funcoes.php:1018 - reset()
+#2 forms/db_frmedu_parametros.php:66 - db_select(ed233_c_decimais, , 1, 2, )
+#3 edu1_edu_parametros001.php:93 - include(forms/db_frmedu_parametros.php)
+#4 app.php:160 - require_once(edu1_edu_parametros001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2019-08-29 09:15:08] ERROR: E_ERROR - Cannot redeclare class cl_download in libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-29 09:15:10] ERROR: E_ERROR - Cannot redeclare class cl_download in libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-08-29 09:15:14] ERROR: E_ERROR - Cannot redeclare class cl_download in libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2019-12-16 09:00:06] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;)&quot;
+LINE 24:                       )
+                               ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into acordocomissaomembro(
+                                       ac07_sequencial 
+                                      ,ac07_acordocomissao 
+                                      ,ac07_numcgm 
+                                      ,ac07_tipomembro 
+                                      ,ac07_datainicio 
+                                      ,ac07_datatermino 
+                                      ,ac07_numeroatodesignacao 
+                                      ,ac07_anoatodesignacao 
+                                      ,ac07_nomearquivo 
+                                      ,ac07_arquivo 
+                       )
+                values (
+                                5 
+                               ,5 
+                               ,45 
+                               ,1 
+                               ,null 
+                               ,null 
+                               ,'' 
+                               ,0 
+                               ,'' 
+                               , 
+                      ))
+#2 classes/db_acordocomissaomembro_classe.php:183 - db_query(insert into acordocomissaomembro(
+                                       ac07_sequencial 
+                                      ,ac07_acordocomissao 
+                                      ,ac07_numcgm 
+                                      ,ac07_tipomembro 
+                                      ,ac07_datainicio 
+                                      ,ac07_datatermino 
+                                      ,ac07_numeroatodesignacao 
+                                      ,ac07_anoatodesignacao 
+                                      ,ac07_nomearquivo 
+                                      ,ac07_arquivo 
+                       )
+                values (
+                                5 
+                               ,5 
+                               ,45 
+                               ,1 
+                               ,null 
+                               ,null 
+                               ,'' 
+                               ,0 
+                               ,'' 
+                               , 
+                      ))
+#3 model/AcordoComissaoMembro.model.php:179 - cl_acordocomissaomembro->incluir()
+#4 con4_contratos.RPC.php:261 - AcordoComissaoMembro->save()
+#5 app.php:160 - require_once(con4_contratos.RPC.php)
+#6 FrontController.php:7 - require(app.php)
+
+[2019-12-16 09:02:04] ERROR: E_WARNING - Creating default object from empty value in con4_contratos.RPC.php on line 121
+#1 app.php:160 - require_once(con4_contratos.RPC.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-02 09:55:23] ERROR: E_NOTICE - Undefined variable: tipojulg in forms/db_frmliclicitemalt.php on line 63
+#1 lic1_liclicitemalt001.php:82 - include(forms/db_frmliclicitemalt.php)
+#2 app.php:160 - require_once(lic1_liclicitemalt001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2020-01-02 09:55:24] ERROR: E_NOTICE - Undefined variable: numrows in lic1_liclicitemlote011.php on line 95
+#1 app.php:160 - require_once(lic1_liclicitemlote011.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-02 09:55:24] ERROR: E_NOTICE - Undefined variable: numrows in lic1_liclicitemlote011.php on line 163
+#1 app.php:160 - require_once(lic1_liclicitemlote011.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-02 13:27:26] ERROR: E_NOTICE - Undefined variable: iMatricula in pes1_rhsuspensaopag001.php on line 45
+#1 app.php:160 - require_once(pes1_rhsuspensaopag001.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-02 13:27:27] ERROR: E_NOTICE - Undefined property: stdClass::$iMatricula in pes1_rhsuspensaopag001.php on line 65
+#1 app.php:160 - require_once(pes1_rhsuspensaopag001.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-02 13:27:27] ERROR: E_NOTICE - Undefined property: stdClass::$iMatricula in pes1_rhsuspensaopag001.php on line 279
+#1 app.php:160 - require_once(pes1_rhsuspensaopag001.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 15:26:40] ERROR: E_NOTICE - Undefined variable: tipojulg in forms/db_frmliclicitemalt.php on line 63
+#1 lic1_liclicitemalt001.php:82 - include(forms/db_frmliclicitemalt.php)
+#2 app.php:160 - require_once(lic1_liclicitemalt001.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2020-01-21 15:26:40] ERROR: E_NOTICE - Undefined variable: numrows in lic1_liclicitemlote011.php on line 95
+#1 app.php:160 - require_once(lic1_liclicitemlote011.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 15:26:40] ERROR: E_NOTICE - Undefined variable: numrows in lic1_liclicitemlote011.php on line 163
+#1 app.php:160 - require_once(lic1_liclicitemlote011.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 16:57:54] ERROR: E_ERROR - Uncaught exception 'DBException' with message 'Nenhuma informação encontrada' in con1_organograma.RPC.php on line 259 in con1_organograma.RPC.php on line 259
+#1 app.php:160 - require_once()
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:01:34] ERROR: E_NOTICE - Undefined variable: chave_o41_unidade in func_orcunidade.php on line 138
+#1 app.php:160 - require_once(func_orcunidade.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:01:43] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:03:23] ERROR: E_NOTICE - Undefined property: stdClass::$iCodigoProjeto in orc1_programa.RPC.php on line 262
+#1 app.php:160 - require_once(orc1_programa.RPC.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:03:23] ERROR: E_NOTICE - Undefined property: stdClass::$iAnoProjeto in orc1_programa.RPC.php on line 262
+#1 app.php:160 - require_once(orc1_programa.RPC.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:03:23] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  syntax error at or near &quot;and&quot;
+LINE 1: ...ativavinculoprojativ  where      o149_projativ =  and o149_a...
+                                                             ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
+#1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select o149_iniciativa from orciniciativavinculoprojativ  where      o149_projativ =  and o149_anousu   = )
+#2 classes/db_orciniciativavinculoprojativ_classe.php:388 - db_query(select o149_iniciativa from orciniciativavinculoprojativ  where      o149_projativ =  and o149_anousu   = )
+#3 model/orcamento/programa/ProgramaProjetoAtividade.model.php:203 - cl_orciniciativavinculoprojativ->sql_record(select o149_iniciativa from orciniciativavinculoprojativ  where      o149_projativ =  and o149_anousu   = )
+#4 orc1_programa.RPC.php:263 - ProgramaProjetoAtividade->getIniciativas()
+#5 app.php:160 - require_once(orc1_programa.RPC.php)
+#6 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:05:51] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;orcsubfuncao_subf_pk&quot;
+DETAIL:  Key (o53_subfuncao)=(1) already exists. in libs/db_stdlib.php on line 101
+#1 libs/db_stdlib.php:101 - pg_query(insert into orcsubfuncao(
+                                       o53_subfuncao 
+                                      ,o53_descr 
+                                      ,o53_codtri 
+                                      ,o53_finali 
+                       )
+                values (
+                                1 
+                               ,'MIGRAÇAO' 
+                               ,'1' 
+                               ,'MIGRAÇAO' 
+                      ))
+#2 classes/db_orcsubfuncao_classe.php:124 - db_query(insert into orcsubfuncao(
+                                       o53_subfuncao 
+                                      ,o53_descr 
+                                      ,o53_codtri 
+                                      ,o53_finali 
+                       )
+                values (
+                                1 
+                               ,'MIGRAÇAO' 
+                               ,'1' 
+                               ,'MIGRAÇAO' 
+                      ))
+#3 orc1_orcsubfuncao001.php:40 - cl_orcsubfuncao->incluir(1)
+#4 app.php:160 - require_once(orc1_orcsubfuncao001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:05:57] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:06:02] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;orcsubfuncao_subf_pk&quot;
+DETAIL:  Key (o53_subfuncao)=(1) already exists. in libs/db_stdlib.php on line 101
+#1 libs/db_stdlib.php:101 - pg_query(insert into orcsubfuncao(
+                                       o53_subfuncao 
+                                      ,o53_descr 
+                                      ,o53_codtri 
+                                      ,o53_finali 
+                       )
+                values (
+                                1 
+                               ,'MIGRAÇAO' 
+                               ,'1' 
+                               ,'MIGRAÇAO' 
+                      ))
+#2 classes/db_orcsubfuncao_classe.php:124 - db_query(insert into orcsubfuncao(
+                                       o53_subfuncao 
+                                      ,o53_descr 
+                                      ,o53_codtri 
+                                      ,o53_finali 
+                       )
+                values (
+                                1 
+                               ,'MIGRAÇAO' 
+                               ,'1' 
+                               ,'MIGRAÇAO' 
+                      ))
+#3 orc1_orcsubfuncao001.php:40 - cl_orcsubfuncao->incluir(1)
+#4 app.php:160 - require_once(orc1_orcsubfuncao001.php)
+#5 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:08:24] ERROR: E_NOTICE - Undefined variable: chave_o41_unidade in func_orcunidade.php on line 138
+#1 app.php:160 - require_once(func_orcunidade.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-21 17:08:29] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-22 10:15:35] ERROR: E_NOTICE - Undefined variable: chave_o41_unidade in func_orcunidade.php on line 138
+#1 app.php:160 - require_once(func_orcunidade.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-22 10:15:39] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 13:40:14] ERROR: E_NOTICE - Undefined variable: chave_o41_unidade in func_orcunidade.php on line 138
+#1 app.php:160 - require_once(func_orcunidade.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 13:40:18] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 13:40:21] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 14:05:51] ERROR: E_NOTICE - Undefined variable: chave_o41_unidade in func_orcunidade.php on line 138
+#1 app.php:160 - require_once(func_orcunidade.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 14:05:52] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 14:06:47] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 14:57:09] ERROR: E_NOTICE - Undefined variable: chave_o41_unidade in func_orcunidade.php on line 138
+#1 app.php:160 - require_once(func_orcunidade.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 14:57:14] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 14:59:24] ERROR: E_NOTICE - Undefined variable: chave_o41_unidade in func_orcunidade.php on line 138
+#1 app.php:160 - require_once(func_orcunidade.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-01-27 14:59:29] ERROR: E_NOTICE - Undefined variable: chave_o53_subfuncao in func_orcsubfuncao.php on line 91
+#1 app.php:160 - require_once(func_orcsubfuncao.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-02-06 16:33:54] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2020-02-06 16:37:31] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2020-02-06 16:37:31] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2020-02-06 16:37:31] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 2)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2020-02-06 16:37:32] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2020-02-06 16:43:48] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2020-02-06 16:47:17] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 481
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2020-02-06 16:47:17] ERROR: E_NOTICE - Array to string conversion in forms/db_frmescola.php on line 487
+#1 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#2 app.php:160 - require_once(edu1_escola002.php)
+#3 FrontController.php:7 - require(app.php)
+
+[2020-02-06 16:47:17] ERROR: E_NOTICE - Array to string conversion in extension/modification/data/cache/user/dbseller/dbforms/db_funcoes.php on line 194
+#1 forms/db_frmescola.php:554 - db_input(ed18_c_logo, 50, 0, 1, file, 2)
+#2 edu1_escola002.php:225 - require_once(forms/db_frmescola.php)
+#3 app.php:160 - require_once(edu1_escola002.php)
+#4 FrontController.php:7 - require(app.php)
+
+[2020-02-06 16:47:18] ERROR: E_ERROR - Cannot redeclare class cl_download in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 212
+#1 : - ECidade\V3\Error\Handler\Shutdown::handle()
+
+[2020-02-11 12:07:33] ERROR: E_NOTICE - Undefined index: json in edu4_censoalunosseminep.RPC.php on line 49
+#1 app.php:160 - require_once(edu4_censoalunosseminep.RPC.php)
+#2 FrontController.php:7 - require(app.php)
+
+[2020-02-11 12:07:33] ERROR: E_NOTICE - Trying to get property of non-object in edu4_censoalunosseminep.RPC.php on line 50
+#1 app.php:160 - require_once(edu4_censoalunosseminep.RPC.php)
+#2 FrontController.php:7 - require(app.php)
+

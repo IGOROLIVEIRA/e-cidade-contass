@@ -211,7 +211,7 @@ class cl_estrutura {
 
 
         if ($this->autocompletar == true) {
-          ?>
+        ?>
         tam = <?=strlen(str_replace(".","",$mascara))?>;
         for(i=obj.length; i<tam; i++){
           obj=obj+"0";
@@ -219,8 +219,8 @@ class cl_estrutura {
         <?
 
 
-      }
-      ?>
+        }
+        ?>
         //analise da estrutura passada
         str='<?=$mascara?>';
         nada='';
@@ -249,7 +249,7 @@ class cl_estrutura {
 
 
         if ($this->reload == true) {
-          ?>
+        ?>
         obj=document.createElement('input');
         obj.setAttribute('name','atualizar');
         obj.setAttribute('type','hidden');
@@ -259,8 +259,8 @@ class cl_estrutura {
         <?
 
 
-      }
-      ?>
+        }
+        ?>
       }
     </script>
     <?
@@ -963,9 +963,7 @@ function db_rpsaldo($anousu = "", $w_instit = "=1", $dt_ini = "", $dt_fin = "", 
 // quando for zero o sistema trata como se não existisse e portanto da erro nos relatorios
 // tive que colocar em vez de zero, -1 para nao ficar fora de ordem
 // para funcionar corretamente deverá ser alterado todos os relatorios que utilizam esta funcao
-// para funcionar corretamente deverá ser alterado todos os relatorios que utilizam esta funcao
-// a pedido da OC067 foi adicionado o parâmetro $sinal que filtra as dotações negativas ou positivas
-function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $primeiro_fim = 8, $segundo_inicio = 0, $retsql = false, $tipo_balanco = 1, $desmembra_segundo_inicio = true, $subelemento = 'nao', $sinal = null) {
+function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $primeiro_fim = 8, $segundo_inicio = 0, $retsql = false, $tipo_balanco = 1, $desmembra_segundo_inicio = true, $subelemento = 'nao') {
 
   if ($anousu == null)
     $anousu = db_getsession("DB_anousu");
@@ -991,15 +989,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
   } else {
     $tipo_pa = 'pago';
   }
-  $whereSinal = "";
-  if($sinal == 1){
-    //mostra dotações positivas
-    $whereSinal=" where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) > 0 ";
-  }else if($sinal == 2){
-    //mostra dotações negativas
-    $whereSinal=" where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) < 0 ";
 
-  }
   //#00#//db_dotacaosaldo
   //#10#//Esta funcao retorna o recordset do saldo das dotações
   //#15#//db_dotacaosaldo($nivel=8, $tipo_nivel=1, $tipo_saldo=2, $descr=true, $where='', $anousu=null, $dataini=null, $datafim=null)
@@ -1076,9 +1066,9 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
   //   substr(o56_elemento,1,7) as o58_elemento,
   //   9999999 as o58_coddot,
 
+  db_query("drop table if exists work_dotacao;");
   $sql = "
      CREATE TEMP TABLE IF NOT EXISTS work_dotacao (
-       o58_instit integer,
        o58_anousu integer,
        o58_orgao integer,
        o58_unidade integer,
@@ -1090,7 +1080,6 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
        o58_coddot integer,
        o58_elemento character varying,
        o58_codigo integer,
-       o15_codtri character varying,
        dot_ini double precision,
        saldo_anterior double precision,
        empenhado double precision,
@@ -1140,7 +1129,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     (case when o15_tipo  =  1 then $tipo_pa else 0 end) as ordinario,
     (case when o15_tipo  <> 1 then $tipo_pa else 0 end) as vinculado
     from
-    (select o58_instit,o58_anousu,
+    (select o58_anousu,
     o58_orgao,
     o58_unidade,
     o58_funcao,
@@ -1156,7 +1145,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     substr(o56_elemento,1,7)
     else o56_elemento
     end as o58_elemento,
-    o58_codigo,o15_codtri,
+    o58_codigo,
     substr(fc_dotacaosaldo,3,12)::float8   as dot_ini,
     substr(fc_dotacaosaldo,16,12)::float8  as saldo_anterior,
     substr(fc_dotacaosaldo,29,12)::float8  as empenhado,
@@ -2161,8 +2150,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     $xordem .= "o58_programa,o54_descr,";
   }
   if ($primeiro_fim >= 6) {
-    $junta .= "case when o58_projativ = -1 then 0 else o58_projativ end as o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
-    $xordem .= "o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
+    $junta .= "case when o58_projativ = -1 then 0 else o58_projativ end as o58_projativ,o55_descr,o55_finali,";
+    $xordem .= "o58_projativ,o55_descr,o55_finali,";
   }
   if ($primeiro_fim >= 7) {
     $junta .= "o58_elemento,o56_descr,";
@@ -2292,7 +2281,6 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     oe.o56_anousu = $anousu
     left  outer join orctiporec  otr on o15_codigo   	 = o58_codigo
     ) as x
-    $whereSinal
     group by ".$xordem."
     order by ".$xordem;
 
@@ -2438,7 +2426,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     select ";
     if( $nivel_agrupar == 1 || $nivel_agrupar == 2 ) {
       $sql .= "
-         case when substr(o57_fonte,1,2)='49' then '4' else substr(o57_fonte,1,1) end::int4 as classe,
+         case when substr(o57_fonte,1,1)='9' then '4' else substr(o57_fonte,1,1) end::int4 as classe,
       ";
     }else if( $nivel_agrupar == 0 ){
       $sql .= " substr(o57_fonte,1,1)::int4 as classe, ";
@@ -2582,8 +2570,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     ) as m
      ";
 
-//$result = db_query($nivel11);
-//db_criatabela($result);exit;
+    //$result = db_query($nivel11);
+    //db_criatabela($result);exit;
 
     ///////// Nivel 10 /////////////
 
@@ -3378,9 +3366,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       $sql2 .= " order by o57_fonte";
     }
 
-//    echo $sql2;
-//    $res =  db_query($sql2);
-//    db_criatabela($res);exit;
+    //    echo $sql2;
+    //    $res =  db_query($sql2);
+    //    db_criatabela($res);exit;
 
 
 
@@ -4452,14 +4440,14 @@ class cl_permusuario_dotacao {
 
           $dotacoes .= " and {$sWhere}";
         }
-        require_once(("std/db_stdClass.php"));
+        require_once(modification("std/db_stdClass.php"));
         $aParametroCompras = db_stdClass::getParametro("pcparam", array(db_getsession("DB_instit")));
         if ($this->departamento != "" && isset($aParametroCompras[0]->pc30_dotacaopordepartamento)
-            && $aParametroCompras[0]->pc30_dotacaopordepartamento == 't') {
+          && $aParametroCompras[0]->pc30_dotacaopordepartamento == 't') {
 
           $sSqlUnidade = "select * from db_departorg where db01_coddepto= $this->departamento and db01_anousu = {$anousu}";
           $rsUnidade   = db_query($sSqlUnidade);
-          require_once(("libs/db_utils.php"));
+          require_once(modification("libs/db_utils.php"));
           if (pg_num_rows($rsUnidade) > 0) {
 
             $iCodigoUnidade = db_utils::fieldsMemory($rsUnidade, 0)->db01_unidade;
@@ -4475,7 +4463,7 @@ class cl_permusuario_dotacao {
         //$departam .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
         $departam .= " and o58_anousu = $anousu and o58_instit in ($instituicoes)";
         $departam .= " ORDER BY CODDEPTO ";
-//echo $dotacoes;
+        //echo $dotacoes;
         $result = db_query($dotacoes);
         if ($result == false || pg_numrows($result) == 0) {
           return false;
@@ -4782,7 +4770,7 @@ class cl_selorcdotacao {
       $sele_work_subfuncao .= ")";
       $sele_work_programa .= ")";
       $sele_work_projativ .= ")";
-//        $sele_work_elemento .= ")";
+      //        $sele_work_elemento .= ")";
       $sele_work_desdobramento .= ")";
       $sele_work_recurso .= ")";
       //echo $sele_work_elemento; exit;

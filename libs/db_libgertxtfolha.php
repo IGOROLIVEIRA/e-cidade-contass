@@ -1,6 +1,32 @@
 <?
+/*
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
+ */
+
 //MODULO: PESSOAL
-class cl_layout_BBBS {
+class LayoutBBBSFolha {
 
 /***************************************************************************************************/
 /***************      TXT - Variável que retorna texto a ser impresso no arquivo     ***************/
@@ -14,7 +40,7 @@ class cl_layout_BBBS {
 /***************************************************************************************************/
 /*
     CABEÇALHO ARQUIVO
-*/ 
+*/
     var  $BSheaderA_001_003 = null;
     var  $BSheaderA_004_007 = null;
     var  $BSheaderA_008_008 = null;
@@ -42,7 +68,7 @@ class cl_layout_BBBS {
     var  $BSheaderA_212_240 = null;
 /*
     CABEÇALHO LOTE
-*/ 
+*/
     var  $BSheaderL_001_003 = null;
     var  $BSheaderL_004_007 = null;
     var  $BSheaderL_008_008 = null;
@@ -70,7 +96,7 @@ class cl_layout_BBBS {
     var  $BSheaderL_223_224 = null;
     var  $BSheaderL_225_240 = null;
 /*
-    FINAL CABEÇALHOS      
+    FINAL CABEÇALHOS
 */
 /*
     CORPO
@@ -148,7 +174,7 @@ class cl_layout_BBBS {
       var  $BBheaderA_231_240 = null;
   /*
       CABEÇALHO LOTE
-  */ 
+  */
       var  $BBheaderL_001_003 = null;
       var  $BBheaderL_004_007 = null;
       var  $BBheaderL_008_008 = null;
@@ -159,14 +185,14 @@ class cl_layout_BBBS {
       var  $BBheaderL_017_017 = null;
       var  $BBheaderL_018_018 = null;
       var  $BBheaderL_019_032 = null;
-      var  $BBheaderL_033_052 = null;    
+      var  $BBheaderL_033_052 = null;
       var  $BBheaderL_053_057 = null;
       var  $BBheaderL_058_058 = null;
       var  $BBheaderL_059_070 = null;
-      var  $BBheaderL_071_071 = null;    
+      var  $BBheaderL_071_071 = null;
       var  $BBheaderL_072_072 = null;
       var  $BBheaderL_073_102 = null;
-      var  $BBheaderL_103_142 = null;    
+      var  $BBheaderL_103_142 = null;
       var  $BBheaderL_143_172 = null;
       var  $BBheaderL_173_177 = null;
       var  $BBheaderL_178_192 = null;
@@ -176,8 +202,8 @@ class cl_layout_BBBS {
       var  $BBheaderL_221_222 = null;
       var  $BBheaderL_223_230 = null;
       var  $BBheaderL_231_240 = null;
-  /*         
-      FINAL CBABEÇALHOS      
+  /*
+      FINAL CBABEÇALHOS
   */
   /*
       CORPO SEGMENTO A
@@ -613,7 +639,7 @@ class cl_layout_BBBS {
       var  $VVheaderA_401_450 = null;
   /*
       REGISTRO FILIAL OU POSTO DE PESSOA JURÍDICA
-  */ 
+  */
       var  $VVregistFL_001_001 = null;
       var  $VVregistFL_002_009 = null;
       var  $VVregistFL_010_013 = null;
@@ -624,21 +650,21 @@ class cl_layout_BBBS {
       var  $VVregistFL_065_099 = null;
       var  $VVregistFL_100_139 = null;
       var  $VVregistFL_140_151 = null;
-      var  $VVregistFL_152_157 = null;    
+      var  $VVregistFL_152_157 = null;
       var  $VVregistFL_158_192 = null;
       var  $VVregistFL_193_232 = null;
       var  $VVregistFL_233_244 = null;
-      var  $VVregistFL_245_250 = null;    
+      var  $VVregistFL_245_250 = null;
       var  $VVregistFL_251_285 = null;
       var  $VVregistFL_286_325 = null;
-      var  $VVregistFL_326_337 = null;    
+      var  $VVregistFL_326_337 = null;
       var  $VVregistFL_338_343 = null;
       var  $VVregistFL_344_363 = null;
       var  $VVregistFL_364_394 = null;
       var  $VVregistFL_395_400 = null;
       var  $VVregistFL_401_450 = null;
-  /*         
-      FINAL REGISTROS     
+  /*
+      FINAL REGISTROS
   */
   /*
       REGISTRO USUÁRIOS (FUNCIONÁRIOS)
@@ -881,7 +907,7 @@ class cl_layout_SEFIP {
     var  $SFPRegistro00_360_360 = null;
 /*
     INFORMAÇÕES DA EMPRESA - REGISTRO '10'
-*/ 
+*/
     var  $SFPRegistro10_001_002 = null;
     var  $SFPRegistro10_003_003 = null;
     var  $SFPRegistro10_004_017 = null;
@@ -914,7 +940,7 @@ class cl_layout_SEFIP {
     var  $SFPRegistro10_311_355 = null;
     var  $SFPRegistro10_356_359 = null;
     var  $SFPRegistro10_360_360 = null;
-    
+
     /*
      * dados do registro 12
      */
@@ -947,10 +973,10 @@ class cl_layout_SEFIP {
     var  $SFPRegistro12_309_353 = null;
     var  $SFPRegistro12_354_359 = "000000";
     var  $SFPRegistro12_360_360 = null;
-    
+
 /*
     INCLUSÃO / ALTERAÇÃO ENDEREÇO DO TRABALHADOR - REGISTRO '14'
-*/ 
+*/
     var  $SFPRegistro14_001_002 = null;
     var  $SFPRegistro14_003_003 = null;
     var  $SFPRegistro14_004_017 = null;
@@ -970,7 +996,7 @@ class cl_layout_SEFIP {
     var  $SFPRegistro14_360_360 = null;
 /*
     REGISTRO DO TRABALHADOR - REGISTRO '30'
-*/ 
+*/
     var  $SFPRegistro30_001_002 = null;
     var  $SFPRegistro30_003_003 = null;
     var  $SFPRegistro30_004_017 = null;
@@ -998,7 +1024,7 @@ class cl_layout_SEFIP {
     var  $SFPRegistro30_360_360 = null;
 /*
     MOVIMENTAÇÃO DO TRABALHADOR - REGISTRO '32'
-*/ 
+*/
     var  $SFPRegistro32_001_002 = null;
     var  $SFPRegistro32_003_003 = null;
     var  $SFPRegistro32_004_017 = null;
@@ -1015,7 +1041,7 @@ class cl_layout_SEFIP {
     var  $SFPRegistro32_360_360 = null;
 /*
     REGISTRO TOTALIZADOR DO ARQUIVO - REGISTRO '90'
-*/ 
+*/
     var  $SFPRegistro90_001_002 = null;
     var  $SFPRegistro90_003_053 = null;
     var  $SFPRegistro90_054_359 = null;
@@ -1047,7 +1073,7 @@ class cl_layout_SEFIP {
            .db_formatar($this->SFPRegistro00_220_231,"s","0",12,"e",0)
            .db_formatar(strtolower(substr(db_translate($this->SFPRegistro00_232_291),0,60)),"s"," ",60,"d",0)
            .db_formatar(strtolower(substr(db_translate(str_replace("/",'',$this->SFPRegistro00_292_297)),0,6)),"s","0",6,"e",0)
-           .db_formatar($this->SFPRegistro00_298_300,"s","0",3,"e",0) 
+           .db_formatar($this->SFPRegistro00_298_300,"s","0",3,"e",0)
            .db_formatar($this->SFPRegistro00_301_301,"s"," ",1,"d",0)
            .db_formatar($this->SFPRegistro00_302_302,"s"," ",1,"d",0)
            .db_formatar(str_replace('-','',str_replace("/",'',$this->SFPRegistro00_303_310)),"s","0",8,"e",0)
@@ -1094,7 +1120,7 @@ class cl_layout_SEFIP {
            ."\r\n"
           );
     }
-    
+
     function geraRegist12SFP(){
       fputs($this->arquivo,
             "12"
@@ -1128,7 +1154,7 @@ class cl_layout_SEFIP {
             ."*"
             ."\r\n"
            );
-    } 
+    }
     function geraRegist14SFP(){
       fputs($this->arquivo,
             "14"
@@ -1265,7 +1291,7 @@ class cl_layout_CAGED {
     var  $KGDRegistroA_149_150 = null;
 /*
     ESTABELECIMENTO - REGISTRO 'B'
-*/ 
+*/
     var  $KGDRegistroB_001_001 = null;
     var  $KGDRegistroB_002_002 = null;
     var  $KGDRegistroB_003_016 = null;
@@ -1283,7 +1309,7 @@ class cl_layout_CAGED {
     var  $KGDRegistroB_145_150 = null;
 /*
     EMPREGADO - REGISTRO 'C'
-*/ 
+*/
     var  $KGDRegistroC_001_001 = null;
     var  $KGDRegistroC_002_002 = null;
     var  $KGDRegistroC_003_016 = null;
@@ -1310,7 +1336,7 @@ class cl_layout_CAGED {
     var  $KGDRegistroC_140_150 = null;
 /*
     ACERTO - REGISTRO 'X'
-*/ 
+*/
     var  $KGDRegistroX_001_001 = null;
     var  $KGDRegistroX_002_002 = null;
     var  $KGDRegistroX_003_016 = null;
@@ -1496,7 +1522,7 @@ class cl_layout_IPE {
     var  $IPEHeader_019_250 = null;
 /*
     REGISTRO
-*/ 
+*/
     var  $IPERegistro_001_003 = null;
     var  $IPERegistro_004_011 = null;
     var  $IPERegistro_012_024 = null;
@@ -1525,7 +1551,7 @@ class cl_layout_IPE {
 
    var $arquivo  = null;
    var $nomearq  = null;
-   
+
   // Construtor
   function cl_layout_IPE(){
     $this->nomearq = '/tmp/IPE'.date("mY").'.TXT';
@@ -1619,7 +1645,7 @@ class cl_layout_BLV {
     var  $BLVHeader_128_128 = null;
 /*
     REGISTRO
-*/ 
+*/
     var  $BLVRegistro_001_005 = null;
     var  $BLVRegistro_006_015 = null;
     var  $BLVRegistro_016_050 = null;
@@ -1639,7 +1665,7 @@ class cl_layout_BLV {
 
    var $arquivo  = null;
    var $nomearq  = null;
-   
+
   // Construtor
   function cl_layout_BLV(){
     $this->nomearq = '/tmp/BLV'.date("mY").'.TXT';
@@ -1728,7 +1754,7 @@ class cl_layout_PREVID {
     var  $PVDHeader_010_027 = null;
 /*
     REGISTRO DETALHE
-*/ 
+*/
     var  $PVDRegistro_001_002 = null;
     var  $PVDRegistro_006_015 = null;
     var  $PVDRegistro_016_050 = null;
@@ -1748,7 +1774,7 @@ class cl_layout_PREVID {
 
    var $arquivo  = null;
    var $nomearq  = null;
-   
+
   // Construtor
   function cl_layout_PVD(){
     $this->nomearq = '/tmp/PVD'.date("mY").'.TXT';
@@ -1802,4 +1828,3 @@ class cl_layout_PREVID {
     }
 ////////////////////////////////////////
 }
-?>

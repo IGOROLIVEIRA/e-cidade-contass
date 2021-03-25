@@ -25,17 +25,15 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conn.php");
-require_once("std/db_stdClass.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_autoload.php");
-require_once("model/configuracao/Encriptacao.model.php");
-require_once("model/configuracao/UsuarioSistema.model.php");
-require_once("model/configuracao/Preferencia.model.php");
-require_once("model/configuracao/PreferenciaCliente.model.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_conn.php"));
+require_once(modification("std/db_stdClass.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("model/configuracao/Encriptacao.model.php"));
+require_once(modification("model/configuracao/UsuarioSistema.model.php"));
+require_once(modification("model/configuracao/Preferencia.model.php"));
+require_once(modification("model/configuracao/PreferenciaCliente.model.php"));
 
-require_once("std/Modification.php");
 Modification::find();
 
 $stdClass = new db_stdClass();
@@ -53,21 +51,20 @@ if ( isset($servidor) &&
      isset($base)     &&
      $base     != ""     ){
 
-		$DB_SERVIDOR = $servidor;
+    $DB_SERVIDOR = $servidor;
     $DB_BASE     = $base;
-		$DB_PORTA    = $port;
-		$DB_USUARIO  = "dbportal";//base64_decode($user);
-		$DB_SENHA    = base64_decode($stdClass->db_stripTagsJson($senha));
+    $DB_PORTA    = $port;
+    $DB_USUARIO  = base64_decode($user);
+    $DB_SENHA    = base64_decode($stdClass->db_stripTagsJson($senha));
 }
 
 $oParametrosMsg         = new stdClass();
 $oParametrosMsg->sCampo = $DB_login;
 
-if(strlen($DB_login)==0){
+if (strlen($DB_login)==0) {
 
   $sMsg     = _M( MENSAGEM . "login_invalido" );
   $sMsgLogs = _M( MENSAGEM . "logs_login_invalido", $oParametrosMsg );
-  db_logsmanual_demais( 1, $sMsgLogs );
   echo "<script>window.opener.document.getElementById('testaLogin').innerHTML = '<div class=\"error\">{$sMsg}</div>';window.opener.document.form1.usu_login.focus();window.close();</script>\n";
   exit;
 }
@@ -78,7 +75,6 @@ if(!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=
   $oParametrosMsg->sParametros = "(host={$DB_SERVIDOR} dbname={$DB_BASE} port={$DB_PORTA} user={$DB_USUARIO} password={$DB_SENHA}) - Login: {$DB_login}";
   $sMsg                        = _M( MENSAGEM . "conexao_invalida" );
   $sMsgLogs                    = _M( MENSAGEM . "logs_conexao_invalida", $oParametrosMsg );
-  db_logsmanual_demais( $sMsgLogs );
   echo "<script>window.opener.document.getElementById('testaLogin').innerHTML = '<div class=\"error\">{$sMsg}</div>';window.opener.document.form1.usu_login.focus();window.close()</script>\n";
   exit;
 }
@@ -98,6 +94,7 @@ $iTentativasLoginCliente = $oPreferenciaCliente->getTentativasLogin();
 
 $oTentativasAcesso       = new stdClass();
 
+$sLogin                  = $DB_login;
 $sSenha                  = $DB_senha;
 
 session_start();
@@ -108,10 +105,9 @@ session_start();
  */
 if( !empty($_SESSION['DB_id_usuario'] ) ){
 
-  $sLogin = $DB_login;
-
   session_unset();
   session_destroy();
+  session_start();
 
   $DB_login = $sLogin;
   $DB_senha = $sSenha;
@@ -133,7 +129,7 @@ $lUtilizaCaptcha = (isset($lUtilizaCaptcha) && $lUtilizaCaptcha);
 
 if ($lUtilizaCaptcha && $iTotalTentativas >= 3) {
 
-  require_once('securimage/securimage.php');
+  require_once(modification('securimage/securimage.php'));
   $oImagem = new Securimage();
 
   ?>
@@ -210,39 +206,33 @@ db_putsession( "DB_tentativasAcesso", $oTentativasAcesso );
  * 1 - Usuário Externo
  * 2 - Perfil
  */
-$sSql  = "select id_usuario,           \n";
-$sSql .= "       senha,                \n";
-$sSql .= "       administrador,        \n";
-$sSql .= "       usuarioativo          \n";
+$sSql  = "select *                     \n";
 $sSql .= "  from db_usuarios           \n";
 $sSql .= " where usuarioativo <> '0'   \n";
 $sSql .= "   and usuext not in (1,2)   \n";
 $sSql .= "   and login = '{$DB_login}' \n";
-$result = db_query( $conn, $sSql );
+$result = db_query($conn, $sSql);
 
-  if ($DB_login != 'dbseller' && pg_result($result,0,"administrador") != 1 ) {
+if ($DB_login != 'dbseller' && pg_num_rows($result) > 0 && pg_result($result,0,"administrador") != 1 ) {
 
-    $result1 = db_query($conn,"select db21_ativo from db_config
-    join db_userinst on db_config.codigo = db_userinst.id_instit
-    join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario 
-    where db_usuarios.id_usuario=".pg_result($result,0,"id_usuario")) or die("Erro ao verificar se sistema está liberado! Contate suporte!");
-    $ativo   = pg_result($result1,0,0);
+  $result1 = db_query($conn,"select db21_ativo from db_config where prefeitura = true") or die("Erro ao verificar se sistema está liberado! Contate suporte!");
+  $ativo   = pg_result($result1,0,0);
 
-    if ($ativo == 3) {
+  if ($ativo == 3) {
 
-      $sMsg = _M( MENSAGEM . "sistema_desativado" );
-      db_logsmanual_demais( $sMsg );
-      echo "<script>window.opener.document.getElementById('testaLogin').innerHTML = '<div class=\"warning\">{$sMsg}</div>';window.opener.document.form1.usu_login.focus();window.close()</script>\n";
-      exit;
-    }else if ($ativo == 2) {
+    $sMsg = _M( MENSAGEM . "sistema_desativado" );
+    db_logsmanual_demais( $sMsg );
+    echo "<script>window.opener.document.getElementById('testaLogin').innerHTML = '<div class=\"warning\">{$sMsg}</div>';window.opener.document.form1.usu_login.focus();window.close()</script>\n";
+    exit;
+  }else if ($ativo == 2) {
 
-      $sMsg     = _M( MENSAGEM . "acesso_negado" );
-      $sMsgLogs = _M( MENSAGEM . "logs_acesso_negado", $oParametrosMsg );
-      db_logsmanual_demais( $sMsgLogs );
-      echo "<script>window.opener.document.getElementById('testaLogin').innerHTML = '<div class=\"warning\">{$sMsg}</div>';window.opener.document.form1.usu_login.focus();window.close()</script>\n";
-      exit;
-    }
+    $sMsg     = _M( MENSAGEM . "acesso_negado" );
+    $sMsgLogs = _M( MENSAGEM . "logs_acesso_negado", $oParametrosMsg );
+    db_logsmanual_demais( $sMsgLogs );
+    echo "<script>window.opener.document.getElementById('testaLogin').innerHTML = '<div class=\"warning\">{$sMsg}</div>';window.opener.document.form1.usu_login.focus();window.close()</script>\n";
+    exit;
   }
+}
 
 $sSql    = "select * from db_depusu";
 $result1 = db_query( $conn, $sSql ) or die($sSql);
@@ -252,7 +242,7 @@ if( pg_numrows($result) == 0 or pg_numrows($result1) == 0 ) {
   if( $DB_login == 'dbseller' &&  pg_numrows($result) == 0 ){
 
     db_logsmanual_demais( _M( MENSAGEM . "logs_registro_sistema", $oParametrosMsg ) );
-    include('con4_registrasistema.php');
+    include(modification('con4_registrasistema.php'));
     exit;
   }else{
 
@@ -276,7 +266,25 @@ if( pg_numrows($result) == 0 or pg_numrows($result1) == 0 ) {
 
   $oUsuario = db_utils::fieldsMemory($result, 0);
 
-  if (Encriptacao::hash( $DB_senha ) != $oUsuario->senha && $DB_senha  != MD5( ~($oUsuario->senha) )) {
+  // valida data limite para login
+  if (!empty($oUsuario->dataexpira) && strtotime($oUsuario->dataexpira) < strtotime(date('Y-m-d'))) {
+
+    db_logsmanual_demais( _M( MENSAGEM . 'logs_data_expira', $oParametrosMsg ), $oUsuario->id_usuario );
+    $sMsg = _M( MENSAGEM . 'data_expira' );
+    ?>
+      <script type="text/javascript">
+
+        window.opener.document.getElementById('testaLogin').innerHTML = '<?=$sMsg?>';
+        window.opener.document.form1.usu_login.focus();
+        window.opener.document.form1.usu_senha.value = '';
+        window.close();
+      </script>
+    <?php
+
+    exit;
+  }
+
+  if (Encriptacao::hash( $DB_senha ) != $oUsuario->senha) {
 
     db_logsmanual_demais( _M( MENSAGEM . 'logs_senha_invalida', $oParametrosMsg ), $oUsuario->id_usuario );
     $sMsg = _M( MENSAGEM . 'senha_invalida' );
@@ -292,6 +300,8 @@ if( pg_numrows($result) == 0 or pg_numrows($result1) == 0 ) {
 
     exit;
   }
+
+
 
   if ($oUsuario->usuarioativo != 1) {
 
@@ -337,10 +347,10 @@ if( pg_numrows($result) == 0 or pg_numrows($result1) == 0 ) {
 
   session_register("DB_ip");
   if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ){
-   
+
     /** [Extensao] Tratamento IP */
     db_putsession("DB_ip",$_SERVER["HTTP_X_FORWARDED_FOR"]);
-    
+
   }else{
     db_putsession("DB_ip",$HTTP_SERVER_VARS["REMOTE_ADDR"]);
   }
@@ -367,21 +377,21 @@ if( db_verifica_ip_banco() != '1' ){
   exit;
 }
 
-include("classes/db_db_versao_classe.php");
+include(modification("classes/db_db_versao_classe.php"));
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $cldb_versao = new cl_db_versao;
-$result      = $cldb_versao->sql_record($cldb_versao->sql_query(null,"db30_codversao,db30_codrelease","db30_codver desc limit 1"));
+$rsVersao      = $cldb_versao->sql_record($cldb_versao->sql_query(null,"db30_codversao,db30_codrelease","db30_codver desc limit 1"));
 
 if( $cldb_versao->numrows == 0 ){
 
   $db30_codversao  = "1";
   $db30_codrelease = "1";
 }else{
-  db_fieldsmemory($result,0);
+  db_fieldsmemory($rsVersao,0);
 }
 
-include('libs/db_acessa.php');
+include(modification('libs/db_acessa.php'));
 
 if( $db30_codversao != $db_fonte_codversao || $db30_codrelease != $db_fonte_codrelease ){
 
@@ -411,8 +421,10 @@ pg_close($conn);
   sizeHeight = screen.availHeight;
 
   if(age.indexOf("Firefox") != -1) {
-
+debugger;
+console.log('aquiiii');
     jan = window.open('inicio.php?uso=<?=$DB_login?>&janelaWidth='+sizeWidth+'&janelaHeight='+sizeHeight,wname,'width='+sizeWidth+',height='+sizeHeight+',fullscreen=1,toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=0');
+console.log(jan);
     jan.moveTo(0,0);
   } else if(nav.indexOf('Microsoft') != -1) {
 
@@ -468,6 +480,6 @@ pg_close($conn);
 <script type="text/javascript">
   window.close();
 </script>
-<?
+<?php
 }
 ?>

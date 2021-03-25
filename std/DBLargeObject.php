@@ -116,21 +116,4 @@ abstract class DBLargeObject {
 		}
 		return $iOidGerado;
 	}
-
-    /**
-	 * Cria L.O. escrevendo o arquivo e retorna o OID 
-	 * @param string $sCaminhoArquivo
-	 * @param integer $lTemTransacaoAtiva
-	 *
-	 * @return integer | boolean
-	 */
-	public static function gerarArquivoOid($sCaminhoArquivo, $lTemTransacaoAtiva = false) {
-
-		$iOid = self::criaOID($lTemTransacaoAtiva);
-		$lEscritaArquivo = self::escrita($sCaminhoArquivo, $iOid);
-		if (!$lEscritaArquivo) {
-			return $lEscritaArquivo;
-		}
-		return $iOid;
-	}
 }

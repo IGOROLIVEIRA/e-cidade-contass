@@ -22,7 +22,7 @@ class FormatterFactory
                 $formatter->setDePara(require($path . DS . 'templateEstabelecimentoObras.php'));
                 break;
             case Tipo::RUBRICA:
-                $formatter->setDePara(require($path . DS . 'templateTabelaRubricas.php'));
+                $formatter->setDePara(require($path . DS . 'templateRubrica.php'));
                 break;
             case Tipo::SERVIDOR:
                 $formatter->setDePara(require($path . DS . 'templateServidor.php'));

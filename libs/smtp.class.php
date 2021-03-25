@@ -55,13 +55,13 @@ class Smtp {
    */
   private $timeLimit = 300;
 
-  function __construct() {
+  public function __construct() {
 
-    if (!file_exists('./libs/config.mail.php')) {
+    if (!file_exists('libs/config.mail.php')) {
       throw new Exception("Arquivo de configuração de e-mail não encontrado!");
     }
 
-    include('config.mail.php');
+    include(modification('libs/config.mail.php'));
 
     if (empty($sHost)) {
       throw new Exception("Host servidor de e-mail não informado! \nVerifique arquivo de configuração.");
@@ -86,7 +86,7 @@ class Smtp {
   /**
    * @return bool
    */
-  function Auth() {
+  public function Auth() {
 
     $this->Put("AUTH LOGIN");
     $this->Put(base64_encode($this->user));
@@ -102,7 +102,7 @@ class Smtp {
    * @param string $msg
    * @returm bool
    */
-  function Send($to, $from, $subject, $msg) {
+  public function Send($to, $from, $subject, $msg) {
 
     if (!is_resource($this->conn)) {
       return false;
@@ -125,7 +125,7 @@ class Smtp {
    * @param bool $wait - esperar resposta do comando
    * @return mixed
    */
-  function Put($value, $wait = true) {
+  public function Put($value, $wait = true) {
 
     /**
      * Resposta do comando
@@ -163,7 +163,7 @@ class Smtp {
    * @param string $subject
    * @return void
    */
-  function sendHeader($to, $from, $subject) {
+  public function sendHeader($to, $from, $subject) {
 
     $this->Put("Message-ID: <". date('YmdHis').".". md5(microtime()).".". strtoupper($from) .">", false);
     $this->Put("From: <" . $from . ">", false);
@@ -179,7 +179,7 @@ class Smtp {
   /**
    * @return bool
    */
-  function Close() {
+  public function Close() {
 
     $this->Put("QUIT", false);
     return fclose($this->conn);

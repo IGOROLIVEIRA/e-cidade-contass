@@ -25,27 +25,31 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("interfaces/iLog.interface.php");
+require_once(modification("interfaces/iLog.interface.php"));
 /**
  * Classe para escrita de logs em TXT
  * @author Rafael Serpa Nery <rafael.nery@dbseller.com.br>
- * @revision $Author: dbandrio.costa $
- * @version $Revision: 1.7 $
+ * @revision $Author: dbigor.cemim $
+ * @version $Revision: 1.9 $
  */
 class DBLogTXT implements iLog {
 
-  private $sCaminhoArquivo = null;
+  private $sCaminhoArquivo;
+
   private $pArquivo;
+
   private $lMostraDataHora = true;
-  private $lMostraStatus   = true;
+
+  private $lMostraStatus = true;
+
   /**
    * Construtor da Classe
    * @param integer $sCaminhoArquivo
    */
   public function __construct($sCaminhoArquivo) {
+    $this->sCaminhoArquivo = $sCaminhoArquivo;
     $this->pArquivo = fopen($sCaminhoArquivo, 'w');
   }
-
 
   /**
    * Escreve Log
@@ -53,8 +57,7 @@ class DBLogTXT implements iLog {
    */
   public function log($sTextoLog, $iTipoLog = DBLog::LOG_INFO) {
 
-    $oDataHora 	        = (object)getdate();
-    $sOutrasInformacoes = "";
+    $oDataHora = (object)getdate();
 
     switch ( $iTipoLog ) {
 
@@ -68,8 +71,8 @@ class DBLogTXT implements iLog {
         $sTipo = "ERRO ";
         break;
     }
-    $sMensagem = sprintf("[ %s ] %s", $sTipo,
-                                      $sTextoLog."\n");
+
+    $sMensagem = sprintf("[ %s ] %s", $sTipo, $sTextoLog."\n");
 
     if ($this->lMostraDataHora) {
 
@@ -81,19 +84,16 @@ class DBLogTXT implements iLog {
                                                                         $oDataHora->minutes,
                                                                         $oDataHora->seconds,
                                                                         $sTextoLog."\n");
-
     }
 
     if ( !$this->lMostraStatus ) {
       $sMensagem = sprintf($sTextoLog. "\n");
     }
 
-
     return fputs($this->pArquivo, $sMensagem);
   }
 
   public function finalizarLog() {
-
     fclose($this->pArquivo);
   }
 
@@ -107,19 +107,18 @@ class DBLogTXT implements iLog {
    * @return string
    */
   public function getConteudo($sCaminhoArquivo){
-
-    $sArquivo = file_get_contents($sCaminhoArquivo);
-
-    return $sArquivo;
+    return file_get_contents($sCaminhoArquivo);
   }
 
-  public function setMostraDataHora( $lMostra ) {
+  public function setMostraDataHora($lMostra) {
     $this->lMostraDataHora = $lMostra;
   }
 
-  public function setMostraStatus( $lMostra  ) {
+  public function setMostraStatus($lMostra) {
     $this->lMostraStatus = $lMostra;
   }
 
-
+  public function getArquivo() {
+    return $this->sCaminhoArquivo;
+  }
 }

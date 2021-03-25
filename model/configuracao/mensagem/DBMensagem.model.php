@@ -25,8 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once 'libs/JSON.php';
-require_once 'libs/exceptions/ParameterException.php';
+require_once modification("libs/JSON.php");
+require_once modification("libs/exceptions/ParameterException.php");
 
 /**
  * Classe para controle de mensagens do sistema
@@ -34,7 +34,7 @@ require_once 'libs/exceptions/ParameterException.php';
  * @author Iuri Guntchnigg iuri@dbseller.com.br
  * @package configuracao
  * @subpackage mensagem
- * @version $Revision: 1.12 $;
+ * @version $Revision: 1.14 $;
  */
 class DBMensagem {
 
@@ -103,14 +103,14 @@ class DBMensagem {
   		throw new ParameterException('Parametro $aOpcoes deve ser um objeto.');
   	}
 
-    $oJson                 = new Services_JSON();
+    $oJson                 = JSON::create();
     $aPartesArquivo        = explode('.', $sMensagem);
     $iTamanhoPartesArquivo = count($aPartesArquivo);
     $sNomeArquivo          = $aPartesArquivo[$iTamanhoPartesArquivo - 2];
     $sNomeMensagem         = $aPartesArquivo[$iTamanhoPartesArquivo - 1];
     $sCaminhoArquivo       = implode("/", array_slice($aPartesArquivo, 0, $iTamanhoPartesArquivo - 1)).".json";
     $sArquivo              = DBMensagem::getInstance()->getFile($sCaminhoArquivo);
-    $oJsonArquivo          = $oJson->decode($sArquivo);
+    $oJsonArquivo          = $oJson->parse($sArquivo, JSON::UTF8_DECODE);
     $sMensagem             = 'Ocorreu um erro inesperado. Contate suporte.';
 
     if (isset($oJsonArquivo->{$sNomeMensagem})) {

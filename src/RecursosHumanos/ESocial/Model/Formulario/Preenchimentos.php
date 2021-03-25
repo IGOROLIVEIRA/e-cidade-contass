@@ -71,7 +71,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos servidores xx. $sql");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos servidores.");
         }
 
         /**
@@ -129,7 +129,6 @@ class Preenchimentos
         $campos .= '   join avaliacaopergunta as ap on ap.db103_sequencial = apo.db104_avaliacaopergunta ';
         $campos .= '  where ap.db103_perguntaidentificadora is true ';
         $campos .= '    and preenchimento.db108_avaliacaogruporesposta = db107_sequencial ';
-        $campos .= "    and db103_identificadorcampo != 'instituicao' ";
         $campos .= ') as pk ';
         $dao = new \cl_avaliacaogruporesposta;
         $sql = $dao->sql_avaliacao_preenchida(null, $campos, null, $where);

@@ -1,4 +1,5 @@
-<?
+<?php
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -43,485 +44,485 @@ function db_inputdatasaude( $intEspecmed,
                             $onfocus="",
                             $jsRetornoCal="",
                             $exame=false,
-                            $lTodosDias = false
-                            ) {
+                            $lTodosDias = false,
+                            $iUpsSolicitante = "",
+                            $iUpsPrestadora = ""
+) {
 
+  //#00#//db_inputdata
+  //#10#//Função para montar um objeto tipo data. Serão três objetos input na tela mais um objeto input tipo button para
+  //#10#//acessar o calendário do sistema
+  //#15#//db_inputdata($nome,$dia="",$mes="",$ano="",$dbcadastro=true,$dbtype='text',$db_opcao=3,$js_script="",$nomevar="",$bgcolor="",$shutdown_funcion="none",$onclickBT="",$onfocus"");
+  //#20#//Nome            : Nome do campo da documentacao do sistema ou do arquivo
+  //#20#//Dia             : Valor para o objeto |db_input| do dia
+  //#20#//Mês             : Valor para o objeto |db_input| do mês
+  //#20#//Ano             : Valor para o objeto |db_input| do ano
+  //#20#//Cadastro        : True se cadastro ou false se nao cadastro Padrão: true
+  //#20#//Type            : Tipo a ser incluido para a data Padrão: text
+  //#20#//Opcao           : *db_opcao* do programa a ser executado neste objeto input, inclusão(1) alteração(2) exclusão(3)
+  //#20#//Script          : JAVASCRIPT  a ser executado juntamento com o objeto, indicando os métodos
+  //#20#//Nome Secundário : Nome do input que será gerado, assumindo somente as características do campo Nome
+  //#20#//Cor Background  : Cor de fundo da tela, no caso de *db_opcao*=3 será "#DEB887"
+  //#20#//shutdown_funcion : função que será executada apos o retorno do calendário
+  //#20#//onclickBT       : Função que será executada ao clicar no botão que abre o calendário
+  //#20#//onfocus         : Função que será executada ao focar os campos
+  //#99#//Quando o parâmetro Opção for de alteração (Opcao = 22) ou exclusão (Opção = 33) o sistema
+  //#99#//colocará a sem acesso ao calendário
+  //#99#//Para *db_opcao* 3 e 5 o sistema colocará sem o calendário e com readonly
+  //#99#//
+  //#99#//Os três input gerados para a data terão o nome do campo acrescido do [Nome]_dia, [Nome]_mes e
+  //#99#//[Nome]_ano os quais serão acessados pela classe com estes nome.
+  //#99#//
+  //#99#//O sistema gerá para a primeira data incluída um formulário, um objeto de JanelaIframe do nosso
+  //#99#//sistema para que sejá mostrado o calendário.
 
+  global $DataJavaScript;
+  if ($db_opcao == 3 || $db_opcao == 22) {
+    $bgcolor = "style='background-color:#DEB887'";
+  }
 
-        //#00#//db_inputdata
-        //#10#//Função para montar um objeto tipo data. Serão três objetos input na tela mais um objeto input tipo button para
-        //#10#//acessar o calendário do sistema
-        //#15#//db_inputdata($nome,$dia="",$mes="",$ano="",$dbcadastro=true,$dbtype='text',$db_opcao=3,$js_script="",$nomevar="",$bgcolor="",$shutdown_funcion="none",$onclickBT="",$onfocus"");
-        //#20#//Nome            : Nome do campo da documentacao do sistema ou do arquivo
-        //#20#//Dia             : Valor para o objeto |db_input| do dia
-        //#20#//Mês             : Valor para o objeto |db_input| do mês
-        //#20#//Ano             : Valor para o objeto |db_input| do ano
-        //#20#//Cadastro        : True se cadastro ou false se nao cadastro Padrão: true
-        //#20#//Type            : Tipo a ser incluido para a data Padrão: text
-        //#20#//Opcao           : *db_opcao* do programa a ser executado neste objeto input, inclusão(1) alteração(2) exclusão(3)
-        //#20#//Script          : JAVASCRIPT  a ser executado juntamento com o objeto, indicando os métodos
-        //#20#//Nome Secundário : Nome do input que será gerado, assumindo somente as características do campo Nome
-        //#20#//Cor Background  : Cor de fundo da tela, no caso de *db_opcao*=3 será "#DEB887"
-        //#20#//shutdown_funcion : função que será executada apos o retorno do calendário
-        //#20#//onclickBT       : Função que será executada ao clicar no botão que abre o calendário
-        //#20#//onfocus         : Função que será executada ao focar os campos
-        //#99#//Quando o parâmetro Opção for de alteração (Opcao = 22) ou exclusão (Opção = 33) o sistema
-        //#99#//colocará a sem acesso ao calendário
-        //#99#//Para *db_opcao* 3 e 5 o sistema colocará sem o calendário e com readonly
-        //#99#//
-        //#99#//Os três input gerados para a data terão o nome do campo acrescido do [Nome]_dia, [Nome]_mes e
-        //#99#//[Nome]_ano os quais serão acessados pela classe com estes nome.
-        //#99#//
-        //#99#//O sistema gerá para a primeira data incluída um formulário, um objeto de JanelaIframe do nosso
-        //#99#//sistema para que sejá mostrado o calendário.
+  if (isset($dia) && $dia != "" && isset($mes) && $mes != '' && isset($ano) && $ano != "") {
+    $diamesano = $dia."/".$mes."/".$ano;
+    $anomesdia = $ano."/".$mes."/".$dia;
+  }
 
-    global $DataJavaScript;
-    if ($db_opcao == 3 || $db_opcao == 22) {
-        $bgcolor = "style='background-color:#DEB887'";
-    }
+  $sButtonType = "button";
 
-    if (isset($dia) && $dia != "" && isset($mes) && $mes != '' && isset($ano) && $ano != "") {
-        $diamesano = $dia."/".$mes."/".$ano;
-        $anomesdia = $ano."/".$mes."/".$dia;
-    }
+  ?>
+  <input name="<?=($nomevar==""?$nome:$nomevar).""?>" <?=$bgcolor?>
+         type="<?=$dbtype?>"
+         id="<?=($nomevar==""?$nome:$nomevar).""?>"
+    <?=($db_opcao==3 || $db_opcao==22 ?'readonly':($db_opcao==5?'disabled':''))?>
+         value="<?=@$diamesano?>" size="10" maxlength="10" autocomplete="off"
+         onBlur='js_validaDbData(this);'
+         onKeyUp="return js_mascaraData(this,event);"
+         onFocus="js_validaEntrada(this);" <?=$js_script?>
+         readonly="readonly" class="readonly" />
 
-    $sButtonType = "button";
-
+  <input name="<?=($nomevar==""?$nome:$nomevar)."_dia"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_dia"?>" value="<?=@$dia?>" size="2"  maxlength="2" >
+  <input name="<?=($nomevar==""?$nome:$nomevar)."_mes"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_mes"?>" value="<?=@$mes?>" size="2"  maxlength="2" >
+  <input name="<?=($nomevar==""?$nome:$nomevar)."_ano"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_ano"?>" value="<?=@$ano?>" size="4"  maxlength="4" >
+  <?
+  if (($db_opcao < 3) || ($db_opcao == 4)) {
     ?>
-        <input name="<?=($nomevar==""?$nome:$nomevar).""?>" <?=$bgcolor?>
-               type="<?=$dbtype?>"
-               id="<?=($nomevar==""?$nome:$nomevar).""?>"
-               <?=($db_opcao==3 || $db_opcao==22 ?'readonly':($db_opcao==5?'disabled':''))?>
-               value="<?=@$diamesano?>" size="10" maxlength="10" autocomplete="off"
-               onBlur='js_validaDbData(this);'
-               onKeyUp="return js_mascaraData(this,event)"
-               onSelect="return js_bloqueiaSelecionar(this);"
-               onFocus="js_validaEntrada(this);" <?=$js_script?> >
+    <script>
+      var PosMouseY, PosMoudeX;
 
-        <input name="<?=($nomevar==""?$nome:$nomevar)."_dia"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_dia"?>" value="<?=@$dia?>" size="2"  maxlength="2" >
-        <input name="<?=($nomevar==""?$nome:$nomevar)."_mes"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_mes"?>" value="<?=@$mes?>" size="2"  maxlength="2" >
-        <input name="<?=($nomevar==""?$nome:$nomevar)."_ano"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_ano"?>" value="<?=@$ano?>" size="4"  maxlength="4" >
+      function js_comparaDatas<?=($nomevar==""?$nome:$nomevar).""?>(dia,mes,ano) {
+        var objData        = document.getElementById('<?=($nomevar==""?$nome:$nomevar).""?>');
+        objData.value      = dia+"/"+mes+'/'+ano;
+        <?=$jsRetornoCal?>
+      }
+    </script>
     <?
-    if (($db_opcao < 3) || ($db_opcao == 4)) {
-        ?>
-        <script>
-        var PosMouseY, PosMoudeX;
-
-        function js_comparaDatas<?=($nomevar==""?$nome:$nomevar).""?>(dia,mes,ano) {
-            var objData        = document.getElementById('<?=($nomevar==""?$nome:$nomevar).""?>');
-            objData.value      = dia+"/"+mes+'/'+ano;
-            <?=$jsRetornoCal?>
-        }
-        </script>
-        <?
-        if (isset($dbtype) && strtolower($dbtype) == strtolower('hidden')) {
-            $sButtonType = "hidden";
-        }
-
-        if ( $exame == true ) {
-        ?>
-            <input value="D"
-                   type="<?=$sButtonType?>"
-                   name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
-                   onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarexames('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>)"  >
-        <?
-        } else {
-
-          if ( !$lTodosDias ) {
-
-            ?>
-              <input value="D"
-                     type="<?=$sButtonType?>"
-                     name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
-                     onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarsaude('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>)"  >
-            <?
-          } else {
-
-            ?>
-              <input value="D"
-                     type="<?=$sButtonType?>"
-                     name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
-                     onclick="<?=$onclickBT?>pegaPosMouse(event);showCalendarioSaudeTodosDias('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>)"  >
-            <?
-          }
-        }
+    if (isset($dbtype) && strtolower($dbtype) == strtolower('hidden')) {
+      $sButtonType = "hidden";
     }
+
+    if ( $exame == true ) {
+      ?>
+      <input value="D"
+             type="<?=$sButtonType?>"
+             name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
+             onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarexames('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>)"  >
+      <?
+    } else {
+
+      if ( !$lTodosDias ) {
+
+        ?>
+        <input value="D"
+               type="<?=$sButtonType?>"
+               name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
+               onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarsaude('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>, <?=$iUpsSolicitante?>, <?=$iUpsPrestadora?>)"  >
+        <?
+      } else {
+
+        ?>
+        <input value="D"
+               type="<?=$sButtonType?>"
+               name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>"
+               onclick="<?=$onclickBT?>pegaPosMouse(event);showCalendarioSaudeTodosDias('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>',<?=$intEspecmed ?>)"  >
+        <?
+      }
+    }
+  }
 } //fim function
 
 
 //função para mostrar mensagens de aviso ao usuário
 
 function MsgAviso($codescola,$tabela,$arquivo=null,$where=null) {
- require_once("classes/db_".trim($tabela)."_classe.php");
- $instancia = "cl_".$tabela;
- $cltabela = new $instancia;
- if (trim($tabela)=="escola") {
-  $result = $cltabela->sql_record($cltabela->sql_query("","*",""," ed18_i_codigo = $codescola"));
- }else{
-  $result = $cltabela->sql_record($cltabela->sql_query("","*","","$where"));
- }
- if ($cltabela->numrows==0) {
-  $where = $arquivo!=null?"AND ed90_c_arquivo = '$arquivo'":"";
-  $sql = "SELECT * FROM msgaviso
+  require_once modification("classes/db_".trim($tabela)."_classe.php");
+  $instancia = "cl_".$tabela;
+  $cltabela = new $instancia;
+  if (trim($tabela)=="escola") {
+    $result = $cltabela->sql_record($cltabela->sql_query("","*",""," ed18_i_codigo = $codescola"));
+  }else{
+    $result = $cltabela->sql_record($cltabela->sql_query("","*","","$where"));
+  }
+  if ($cltabela->numrows==0) {
+    $where = $arquivo!=null?"AND ed90_c_arquivo = '$arquivo'":"";
+    $sql = "SELECT * FROM msgaviso
           WHERE trim(ed90_c_tabela) = '$tabela'
           $where";
-  $result1 = db_query($sql);
-  $dados = pg_fetch_array($result1);
-  $arquivo = trim($dados['ed90_c_arqdestino']);
-  ?>
-  <br>
-  <center>
-  <fieldset style="width:90%"><legend><b>Aviso Importante:</b></legend>
-   <?=$dados["ed90_t_msg"]?><br><br>
-   <a href="javascript:location.href='<?=$arquivo?>'" title="<?=$dados['ed90_c_titulolink']?>"><?=$dados["ed90_c_descrlink"]?></a>
-  </fieldset>
-  </center>
-  <?
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-  exit;
- }
+    $result1 = db_query($sql);
+    $dados = pg_fetch_array($result1);
+    $arquivo = trim($dados['ed90_c_arqdestino']);
+    ?>
+    <br>
+    <center>
+      <fieldset style="width:90%"><legend><b>Aviso Importante:</b></legend>
+        <?=$dados["ed90_t_msg"]?><br><br>
+        <a href="javascript:location.href='<?=$arquivo?>'" title="<?=$dados['ed90_c_titulolink']?>"><?=$dados["ed90_c_descrlink"]?></a>
+      </fieldset>
+    </center>
+    <?
+    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+    exit;
+  }
 }
 function DiasLetivos($data_inicio,$data_fim,$sabado,$calendario,$retorno) {
- $data_in = mktime(0,0,0,substr($data_inicio,5,2),substr($data_inicio,8,2),substr($data_inicio,0,4));
- $data_out = mktime(0,0,0,substr($data_fim,5,2),substr($data_fim,8,2),substr($data_fim,0,4));
- #pega a data de saida em UNIX_TIMESTAMP e diminui da data de entrada UNIX_TIMESTAMP
- $data_entre = $data_out - $data_in;
- #divide a diferenca das datas pelo numero de segundos de um dia e arredonda, para saber o numero de dias inteiro que tem
- $dias = ceil($data_entre/86400);
- $dias2 = $dias;
- $day = 0;
- $nao_util = 0;
- #pega dia, mes e ano da data de entrada
- $mes_inicial = date('m', $data_in);
- $d = date('d', $data_in);
- $m = date('m', $data_in);
- $y = date('Y', $data_in);
- #pega mes e ano da data de saida
- $m2 = date('m', $data_out);
- $y2 = date('Y', $data_out);
- #conta o numero de dias do mes de entrada
- $days_month = date("t", $data_in);
- $mi = date('m', $data_in);
- $semanas = 1;
- #se o dia da entrada + total de dias for menor que total de dias do mes, ou seja, se não passar do mesmo mês.
- if ($dias+$d <= $days_month) {
-  for ($i = 0; $i < $dias+1; $i++) {
-   $letivo = true;
-   $day++;
-   #checa o dia da semana para cada dia do mês, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia não útil
-   if ($sabado=="N") {
-    if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 || date("w", mktime (0,0,0,$m,$d+$i,$y)) == 6) {
-     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-     $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
-     if (pg_num_rows($res)==0) {
-      $nao_util++;
-      $letivo = false;
-     }else{
-      if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
-       $nao_util++;
-       $letivo = false;
-      }
-     }
-    }else{
-     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-     $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
-     if ($row = pg_fetch_assoc($res)) {
-      $nao_util++;
-      $letivo = false;
-     }
-    }
-   }else{
-    if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 ) {
-     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-     $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
-     if (pg_num_rows($res)==0) {
-      $nao_util++;
-      $letivo = false;
-     }else{
-      if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
-       $nao_util++;
-       $letivo = false;
-      }
-     }
-    }else{
-     #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-     $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
-     if ($row = pg_fetch_assoc($res)) {
-      $nao_util++;
-      $letivo = false;
-     }
-    }
-   }
-   if ($letivo==true) {
-    $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m)==1?"0".$m:$m);
-   }
-  }
- #se o dia da entrada + total de dias for maior que total de dias do mes, ou seja, se passar do mesmo mês.
- }else{
-  #enquanto o mês de entrada for diferente do mês de saida ou ano de entrada for diferente do ano de saida.
-  while($m != $m2 || $y != $y2) {
-   #pega total de dias do mes de entrada
-   if ($m==$mi) {
-    $days_month = date("t", mktime (0,0,0,$m,$d,$y))-$d+1;
-   }else{
-    $days_month = date("t", mktime (0,0,0,$m,$d,$y));
-   }
-   for ($i = 0; $i < $days_month; $i++) {
-    $letivo = true;
-    $day++;
-    #checa o dia da semana para cada dia do mês, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia não útil
-    if ($sabado=="N") {
-     if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 || date("w", mktime (0,0,0,$m,$d+$i,$y)) == 6) {
-      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-      $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
-      if (pg_num_rows($res)==0) {
-       $nao_util++;
-       $letivo = false;
-      }else{
-       if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
-        $nao_util++;
-        $letivo = false;
-       }
-      }
-     }else{
-      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-      $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
-      if ($row = pg_fetch_assoc($res)) {
-       $nao_util++;
-       $letivo = false;
-      }
-     }
-    }else{
-     if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 ) {
-      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-      $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
-      if (pg_num_rows($res)==0) {
-       $nao_util++;
-       $letivo = false;
-      }else{
-       if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
-        $nao_util++;
-        $letivo = false;
-       }
-      }
-     }else{
-      #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-      $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
-      if ($row = pg_fetch_assoc($res)) {
-       $nao_util++;
-       $letivo = false;
-      }
-     }
-    }
-    if ($letivo==true) {
-     $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m)==1?"0".$m:$m);
-    }
-   }
-   #se o mes for igual a 12 (dezembro), mes recebe 1 (janeiro) e ano recebe +1 (próximo ano)
-   if ($m == 12) {
-    $m = 1;
-    $y++;
-   #mês recebe mais 1 para fazer o mesmo processo do próximo mês
-   }else{
-    $m++;
-   }
-   $d = 1;
-   //$dias2 = $dias2 - $day;
-   if ($m==$m2) {
-    $d3 = date('d', $data_out);
-    $m3 = date('m', $data_out);
-    $y3 = date('Y', $data_out);
-    for ($i = 0; $i < $d3; $i++) {
-     $letivo = true;
-     $day++;
-     #checa o dia da semana para cada dia do mês, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia não útil
-     if ($sabado=="N") {
-      if (date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 0 || date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 6) {
-       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-       $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
-       if (pg_num_rows($res)==0) {
-        $nao_util++;
-        $letivo = false;
-       }else{
-        if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
-         $nao_util++;
-         $letivo = false;
+  $data_in = mktime(0,0,0,substr($data_inicio,5,2),substr($data_inicio,8,2),substr($data_inicio,0,4));
+  $data_out = mktime(0,0,0,substr($data_fim,5,2),substr($data_fim,8,2),substr($data_fim,0,4));
+  #pega a data de saida em UNIX_TIMESTAMP e diminui da data de entrada UNIX_TIMESTAMP
+  $data_entre = $data_out - $data_in;
+  #divide a diferenca das datas pelo numero de segundos de um dia e arredonda, para saber o numero de dias inteiro que tem
+  $dias = ceil($data_entre/86400);
+  $dias2 = $dias;
+  $day = 0;
+  $nao_util = 0;
+  #pega dia, mes e ano da data de entrada
+  $mes_inicial = date('m', $data_in);
+  $d = date('d', $data_in);
+  $m = date('m', $data_in);
+  $y = date('Y', $data_in);
+  #pega mes e ano da data de saida
+  $m2 = date('m', $data_out);
+  $y2 = date('Y', $data_out);
+  #conta o numero de dias do mes de entrada
+  $days_month = date("t", $data_in);
+  $mi = date('m', $data_in);
+  $semanas = 1;
+  #se o dia da entrada + total de dias for menor que total de dias do mes, ou seja, se não passar do mesmo mês.
+  if ($dias+$d <= $days_month) {
+    for ($i = 0; $i < $dias+1; $i++) {
+      $letivo = true;
+      $day++;
+      #checa o dia da semana para cada dia do mês, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia não útil
+      if ($sabado=="N") {
+        if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 || date("w", mktime (0,0,0,$m,$d+$i,$y)) == 6) {
+          #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+          $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+          if (pg_num_rows($res)==0) {
+            $nao_util++;
+            $letivo = false;
+          }else{
+            if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
+              $nao_util++;
+              $letivo = false;
+            }
+          }
+        }else{
+          #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+          $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+          if ($row = pg_fetch_assoc($res)) {
+            $nao_util++;
+            $letivo = false;
+          }
         }
-       }
       }else{
-       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-       $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
-       if ($row = pg_fetch_assoc($res)) {
-        $nao_util++;
-        $letivo = false;
-       }
-      }
-     }else{
-      if (date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 0 ) {
-       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-       $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
-       if (pg_num_rows($res)==0) {
-        $nao_util++;
-        $letivo = false;
-       }else{
-        if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
-         $nao_util++;
-         $letivo = false;
+        if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 ) {
+          #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+          $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+          if (pg_num_rows($res)==0) {
+            $nao_util++;
+            $letivo = false;
+          }else{
+            if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
+              $nao_util++;
+              $letivo = false;
+            }
+          }
+        }else{
+          #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+          $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+          if ($row = pg_fetch_assoc($res)) {
+            $nao_util++;
+            $letivo = false;
+          }
         }
-       }
-      }else{
-       #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
-       $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
-       if ($row = pg_fetch_assoc($res)) {
-        $nao_util++;
-        $letivo = false;
-       }
       }
-     }
-     if ($letivo==true) {
-      $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m3)==1?"0".$m3:$m3);
-     }
+      if ($letivo==true) {
+        $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m)==1?"0".$m:$m);
+      }
     }
-   }
+    #se o dia da entrada + total de dias for maior que total de dias do mes, ou seja, se passar do mesmo mês.
+  }else{
+    #enquanto o mês de entrada for diferente do mês de saida ou ano de entrada for diferente do ano de saida.
+    while($m != $m2 || $y != $y2) {
+      #pega total de dias do mes de entrada
+      if ($m==$mi) {
+        $days_month = date("t", mktime (0,0,0,$m,$d,$y))-$d+1;
+      }else{
+        $days_month = date("t", mktime (0,0,0,$m,$d,$y));
+      }
+      for ($i = 0; $i < $days_month; $i++) {
+        $letivo = true;
+        $day++;
+        #checa o dia da semana para cada dia do mês, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia não útil
+        if ($sabado=="N") {
+          if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 || date("w", mktime (0,0,0,$m,$d+$i,$y)) == 6) {
+            #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+            $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+            if (pg_num_rows($res)==0) {
+              $nao_util++;
+              $letivo = false;
+            }else{
+              if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
+                $nao_util++;
+                $letivo = false;
+              }
+            }
+          }else{
+            #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+            $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+            if ($row = pg_fetch_assoc($res)) {
+              $nao_util++;
+              $letivo = false;
+            }
+          }
+        }else{
+          if (date("w", mktime (0,0,0,$m,$d+$i,$y)) == 0 ) {
+            #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+            $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+            if (pg_num_rows($res)==0) {
+              $nao_util++;
+              $letivo = false;
+            }else{
+              if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
+                $nao_util++;
+                $letivo = false;
+              }
+            }
+          }else{
+            #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+            $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+            if ($row = pg_fetch_assoc($res)) {
+              $nao_util++;
+              $letivo = false;
+            }
+          }
+        }
+        if ($letivo==true) {
+          $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m)==1?"0".$m:$m);
+        }
+      }
+      #se o mes for igual a 12 (dezembro), mes recebe 1 (janeiro) e ano recebe +1 (próximo ano)
+      if ($m == 12) {
+        $m = 1;
+        $y++;
+        #mês recebe mais 1 para fazer o mesmo processo do próximo mês
+      }else{
+        $m++;
+      }
+      $d = 1;
+      //$dias2 = $dias2 - $day;
+      if ($m==$m2) {
+        $d3 = date('d', $data_out);
+        $m3 = date('m', $data_out);
+        $y3 = date('Y', $data_out);
+        for ($i = 0; $i < $d3; $i++) {
+          $letivo = true;
+          $day++;
+          #checa o dia da semana para cada dia do mês, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia não útil
+          if ($sabado=="N") {
+            if (date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 0 || date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 6) {
+              #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+              $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+              if (pg_num_rows($res)==0) {
+                $nao_util++;
+                $letivo = false;
+              }else{
+                if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
+                  $nao_util++;
+                  $letivo = false;
+                }
+              }
+            }else{
+              #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+              $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+              if ($row = pg_fetch_assoc($res)) {
+                $nao_util++;
+                $letivo = false;
+              }
+            }
+          }else{
+            if (date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 0 ) {
+              #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+              $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario");
+              if (pg_num_rows($res)==0) {
+                $nao_util++;
+                $letivo = false;
+              }else{
+                if (pg_result($res,0,'ed54_c_dialetivo')=="N") {
+                  $nao_util++;
+                  $letivo = false;
+                }
+              }
+            }else{
+              #pesquisa no banco os feriados cadastrados se retornar aquele dia ele adiciona 1 no dia não útil
+              $res = db_query("SELECT * FROM feriado WHERE extract(month from ed54_d_data)=$m3 AND extract(day from ed54_d_data)=$d+$i AND ed54_i_calendario=$calendario AND ed54_c_dialetivo = 'N' ");
+              if ($row = pg_fetch_assoc($res)) {
+                $nao_util++;
+                $letivo = false;
+              }
+            }
+          }
+          if ($letivo==true) {
+            $dia_mes_letivo[] = (strlen($d+$i)==1?"0".($d+$i):($d+$i))."-".(strlen($m3)==1?"0".$m3:$m3);
+          }
+        }
+      }
+    }
   }
- }
- $diasletivos = $day-$nao_util;
- $cont = 0;
- for($r=0;$r<count($dia_mes_letivo);$r++) {
-  $array_data = explode("-",$dia_mes_letivo[$r]);
-  if (trim($array_data[1])!=$mes_inicial || $r==(count($dia_mes_letivo)-1)) {
-   $mes_qtdias[] = $mes_inicial.",".($r==(count($dia_mes_letivo)-1)?$cont+1:$cont);
-   $mes_inicial = $array_data[1];
-   $cont = 0;
+  $diasletivos = $day-$nao_util;
+  $cont = 0;
+  for($r=0;$r<count($dia_mes_letivo);$r++) {
+    $array_data = explode("-",$dia_mes_letivo[$r]);
+    if (trim($array_data[1])!=$mes_inicial || $r==(count($dia_mes_letivo)-1)) {
+      $mes_qtdias[] = $mes_inicial.",".($r==(count($dia_mes_letivo)-1)?$cont+1:$cont);
+      $mes_inicial = $array_data[1];
+      $cont = 0;
+    }
+    $cont++;
   }
-  $cont++;
- }
- if ($retorno==1) {
-  return $diasletivos;
- }elseif ($retorno==2) {
-  return $dia_mes_letivo;
- }elseif ($retorno==3) {
-  return $mes_qtdias;
- }
+  if ($retorno==1) {
+    return $diasletivos;
+  }elseif ($retorno==2) {
+    return $dia_mes_letivo;
+  }elseif ($retorno==3) {
+    return $mes_qtdias;
+  }
 }
 function Situacao($situacao,$matricula) {
- if (trim($situacao)=="MATRICULADO") {
-  $sql = "SELECT ed60_c_tipo
+  if (trim($situacao)=="MATRICULADO") {
+    $sql = "SELECT ed60_c_tipo
           FROM matricula
           WHERE ed60_i_codigo = $matricula
          ";
-  $result = db_query($sql);
-  $tipo = pg_result($result,0,0);
-  if ($tipo=="N") {
-   $retorno = "MATRICULADO";
+    $result = db_query($sql);
+    $tipo = pg_result($result,0,0);
+    if ($tipo=="N") {
+      $retorno = "MATRICULADO";
+    }else{
+      $retorno = "REMATRICULADO";
+    }
   }else{
-   $retorno = "REMATRICULADO";
+    $retorno = $situacao;
   }
- }else{
-  $retorno = $situacao;
- }
- return $retorno;
+  return $retorno;
 }
 
 function eduparametros($escola) {
- $sql2 = "SELECT *
+  $sql2 = "SELECT *
           FROM edu_parametros
           WHERE ed233_i_escola = $escola
          ";
- $result2 = db_query($sql2);
- if (pg_num_rows($result2)>0) {
-  $retorno = pg_result($result2,0,"ed233_c_decimais");
- }else{
-  $retorno = null;
- }
- return $retorno;
+  $result2 = db_query($sql2);
+  if (pg_num_rows($result2)>0) {
+    $retorno = pg_result($result2,0,"ed233_c_decimais");
+  }else{
+    $retorno = null;
+  }
+  return $retorno;
 }
 
 function TiraAcento($sString, $lMaiusculo = true) {
 
   $aAcentos = array('á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú', 'à', 'À', 'Â', 'â', 'Ê', 'ê',
-                    'ô', 'Ô', 'ü', 'Ü', 'ï', 'Ï', 'ö', 'Ö', 'ñ', 'Ñ', 'ã', 'Ã', 'õ', 'Õ', 'ç', 'Ç',
-                    'ª', 'º', 'ä', 'Ä', '\\'
-                   );
+    'ô', 'Ô', 'ü', 'Ü', 'ï', 'Ï', 'ö', 'Ö', 'ñ', 'Ñ', 'ã', 'Ã', 'õ', 'Õ', 'ç', 'Ç',
+    'ª', 'º', 'ä', 'Ä', '\\'
+  );
 
   if ($lMaiusculo) {
 
     $aLetras  = array('A', 'E', 'I', 'O', 'U', 'A', 'E', 'I', 'O', 'U', 'A', 'A', 'A', 'A', 'E', 'E',
-                      'O', 'O', 'U', 'U', 'I', 'I', 'O', 'O', 'N', 'N', 'A', 'A', 'O', 'O', 'C', 'C',
-                      'A', 'O', 'A', 'A', ' '
-                     );
+      'O', 'O', 'U', 'U', 'I', 'I', 'O', 'O', 'N', 'N', 'A', 'A', 'O', 'O', 'C', 'C',
+      'A', 'O', 'A', 'A', ' '
+    );
 
   } else {
 
     $aLetras  = array('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U', 'a', 'A', 'A', 'a', 'E', 'e',
-                      'o', 'O', 'u', 'U', 'i', 'I', 'o', 'O', 'n', 'N', 'a', 'A', 'o', 'O', 'c', 'C',
-                      'a', 'o', 'a', 'A', ' '
-                     );
+      'o', 'O', 'u', 'U', 'i', 'I', 'o', 'O', 'n', 'N', 'a', 'A', 'o', 'O', 'c', 'C',
+      'a', 'o', 'a', 'A', ' '
+    );
   }
 
- return str_replace($aAcentos, $aLetras, $sString);
+  return str_replace($aAcentos, $aLetras, $sString);
 
 }
 
 function VerParametroNota($escola) {
- $sql2 = "SELECT *
+  $sql2 = "SELECT *
           FROM edu_parametros
           WHERE ed233_i_escola = $escola
          ";
- $result2 = db_query($sql2);
- if (pg_num_rows($result2)>0) {
-  $retorno = pg_result($result2,0,"ed233_c_notabranca");
- }else{
-  $retorno = "N";
- }
- return $retorno;
+  $result2 = db_query($sql2);
+  if (pg_num_rows($result2)>0) {
+    $retorno = pg_result($result2,0,"ed233_c_notabranca");
+  }else{
+    $retorno = "N";
+  }
+  return $retorno;
 }
 function calcage($dd,$mm,$yy,$dd2,$mm2,$yy2,$iFormato = 1) {
-    $yy  = $yy * 1;
-    $yy2 = $yy2 * 1;
+  $yy  = $yy * 1;
+  $yy2 = $yy2 * 1;
 
-    if ($yy < 100 && $yy < 20) {$yy = $yy + 2000;}
-    if ($yy2 < 100 && $yy2 > 20) {$yy2 = $yy2 + 1900;}
-    if ($yy2 < 100 && $yy2 < 20) {$yy2 = $yy2 + 2000;}
+  if ($yy < 100 && $yy < 20) {$yy = $yy + 2000;}
+  if ($yy2 < 100 && $yy2 > 20) {$yy2 = $yy2 + 1900;}
+  if ($yy2 < 100 && $yy2 < 20) {$yy2 = $yy2 + 2000;}
 
-    //firstdate = new Date(mm+'/'+ dd +'/'+ yy)
-    $mm = $mm + 1;
+  //firstdate = new Date(mm+'/'+ dd +'/'+ yy)
+  $mm = $mm + 1;
 
-    //seconddate = new Date(mm2+'/'+ dd2 +'/'+ yy2)
-    $mm2 = $mm2 + 1;
+  //seconddate = new Date(mm2+'/'+ dd2 +'/'+ yy2)
+  $mm2 = $mm2 + 1;
 
-    $ageyears = $yy2 - $yy;
+  $ageyears = $yy2 - $yy;
 
-    if ($mm2 == $mm) {
-          if ($dd2 < $dd) {
-               $mm2 = $mm2 + 12;
-               $ageyears = $ageyears - 1;
-          }
-    }
-
-    if ($mm2 < $mm) {
-          $mm2 = $mm2 + 12;
-          $ageyears = $ageyears - 1;
-          $agemonths = $mm2 - $mm;
-     }
-
-     $agemonths = $mm2 - $mm;
-
+  if ($mm2 == $mm) {
     if ($dd2 < $dd) {
-          $agemonths = $agemonths - 1;
-          $dd2 = $dd2 + 30;
-          if ($mm2 == $mm) {
-               $agemonths = 0;
-               $ageyears = $ageyears - 1;
-          }
-     }
-     $agedays = $dd2 - $dd;
+      $mm2 = $mm2 + 12;
+      $ageyears = $ageyears - 1;
+    }
+  }
 
-     if ($iFormato == 1) {
-       return $totalage =  $ageyears . ' anos, '. $agemonths .' meses e '. $agedays .' dias';
-     } else {
-       return $ageyears.' || '.$agemonths.' || '.$agedays;
-     }
+  if ($mm2 < $mm) {
+    $mm2 = $mm2 + 12;
+    $ageyears = $ageyears - 1;
+    $agemonths = $mm2 - $mm;
+  }
+
+  $agemonths = $mm2 - $mm;
+
+  if ($dd2 < $dd) {
+    $agemonths = $agemonths - 1;
+    $dd2 = $dd2 + 30;
+    if ($mm2 == $mm) {
+      $agemonths = 0;
+      $ageyears = $ageyears - 1;
+    }
+  }
+  $agedays = $dd2 - $dd;
+
+  if ($iFormato == 1) {
+    return $totalage =  $ageyears . ' anos, '. $agemonths .' meses e '. $agedays .' dias';
+  } else {
+    return $ageyears.' || '.$agemonths.' || '.$agedays;
+  }
 
 }
 
@@ -532,6 +533,9 @@ function ResultadoFinal($ed60_i_codigo,$ed60_i_aluno,$ed60_i_turma,$ed60_c_situa
   }
 
   $oTurma         = TurmaRepository::getTurmaByCodigo( $ed60_i_turma );
+  if ( !$oTurma instanceof Turma ) {
+    throw new BusinessException("Houve um erro ao tentar buscar os dados da turma.");
+  }
   $iAnoCalendario = $oTurma->getCalendario()->getAnoExecucao();
 
   $resultado = "";
@@ -578,7 +582,7 @@ function ResultadoFinal($ed60_i_codigo,$ed60_i_aluno,$ed60_i_turma,$ed60_c_situa
     }
   } else {
 
-   $sql4 = "SELECT ed95_c_encerrado
+    $sql4 = "SELECT ed95_c_encerrado
             FROM diario
              inner join aluno on ed47_i_codigo = ed95_i_aluno
              inner join diariofinal on ed74_i_diario = ed95_i_codigo
@@ -592,39 +596,39 @@ function ResultadoFinal($ed60_i_codigo,$ed60_i_aluno,$ed60_i_turma,$ed60_c_situa
                                     and ed59_c_condicao = 'OB')
            ";
 
-   $result4 = db_query($sql4);
-   $linhas4 = pg_num_rows($result4);
-   if ($linhas4 == 0) {
+    $result4 = db_query($sql4);
+    $linhas4 = pg_num_rows($result4);
+    if ($linhas4 == 0) {
 
-     if ($ed60_c_concluida=="S") {
-       $resultado = Situacao($ed60_c_situacao, $ed60_i_codigo);
-     } else {
+      if ($ed60_c_concluida=="S") {
+        $resultado = Situacao($ed60_c_situacao, $ed60_i_codigo);
+      } else {
 
-       $resultado = "EM ANDAMENTO";
+        $resultado = "EM ANDAMENTO";
 
-       $sSqlValidaRecuperacao  = "SELECT 1 ";
-       $sSqlValidaRecuperacao .= "  FROM diario ";
-       $sSqlValidaRecuperacao .= " INNER JOIN diarioresultado on diarioresultado.ed73_i_diario = diario.ed95_i_codigo ";
-       $sSqlValidaRecuperacao .= " INNER JOIN diarioresultadorecuperacao on diarioresultadorecuperacao.ed116_diarioresultado = diarioresultado.ed73_i_codigo ";
-       $sSqlValidaRecuperacao .= " INNER JOIN regencia    ON ed59_i_codigo = ed95_i_regencia ";
-       $sSqlValidaRecuperacao .= " WHERE ed95_i_aluno = {$ed60_i_aluno} ";
-       $sSqlValidaRecuperacao .= "   AND ed95_i_regencia IN (SELECT ed59_i_codigo ";
-       $sSqlValidaRecuperacao .= "                             FROM regencia ";
-       $sSqlValidaRecuperacao .= "                            WHERE ed59_i_turma = {$ed60_i_turma} ";
-       $sSqlValidaRecuperacao .= "                              AND ed59_i_serie = {$ed221_i_serie} ";
-       $sSqlValidaRecuperacao .= "                              AND ed59_c_condicao = 'OB') ";
+        $sSqlValidaRecuperacao  = "SELECT 1 ";
+        $sSqlValidaRecuperacao .= "  FROM diario ";
+        $sSqlValidaRecuperacao .= " INNER JOIN diarioresultado on diarioresultado.ed73_i_diario = diario.ed95_i_codigo ";
+        $sSqlValidaRecuperacao .= " INNER JOIN diarioresultadorecuperacao on diarioresultadorecuperacao.ed116_diarioresultado = diarioresultado.ed73_i_codigo ";
+        $sSqlValidaRecuperacao .= " INNER JOIN regencia    ON ed59_i_codigo = ed95_i_regencia ";
+        $sSqlValidaRecuperacao .= " WHERE ed95_i_aluno = {$ed60_i_aluno} ";
+        $sSqlValidaRecuperacao .= "   AND ed95_i_regencia IN (SELECT ed59_i_codigo ";
+        $sSqlValidaRecuperacao .= "                             FROM regencia ";
+        $sSqlValidaRecuperacao .= "                            WHERE ed59_i_turma = {$ed60_i_turma} ";
+        $sSqlValidaRecuperacao .= "                              AND ed59_i_serie = {$ed221_i_serie} ";
+        $sSqlValidaRecuperacao .= "                              AND ed59_c_condicao = 'OB') ";
 
-       $rsValidaRecuperacao = db_query($sSqlValidaRecuperacao);
+        $rsValidaRecuperacao = db_query($sSqlValidaRecuperacao);
 
-       if ($rsValidaRecuperacao && pg_num_rows($rsValidaRecuperacao) > 0) {
-         $resultado = "EM RECUPERAÇÃO";
-       }
+        if ($rsValidaRecuperacao && pg_num_rows($rsValidaRecuperacao) > 0) {
+          $resultado = "EM RECUPERAÇÃO";
+        }
 
 
-     }
-   } else {
+      }
+    } else {
 
-     $sql41 = "SELECT ed74_c_resultadofinal,ed74_c_resultadofreq,
+      $sql41 = "SELECT ed74_c_resultadofinal,ed74_c_resultadofreq,
                exists(select 1
                         from progressaoparcialaluno
                              inner join progressaoparcialalunodiariofinalorigem on ed107_progressaoparcialaluno = ed114_sequencial
@@ -641,11 +645,11 @@ function ResultadoFinal($ed60_i_codigo,$ed60_i_aluno,$ed60_i_turma,$ed60_c_situa
                                           where ed59_i_turma = $ed60_i_turma
                                             and ed59_i_serie = $ed221_i_serie
                                             and ed59_c_condicao = 'OB')";
-     $result41 = db_query($sql41);
-     $linhas41 = pg_num_rows($result41);
-     $res_final = "";
-     $sep = "";
-     for($f = 0; $f < $linhas4; $f++) {
+      $result41 = db_query($sql41);
+      $linhas41 = pg_num_rows($result41);
+      $res_final = "";
+      $sep = "";
+      for($f = 0; $f < $linhas4; $f++) {
 
         $ed74_c_resultadofinal = pg_result($result41,$f,'ed74_c_resultadofinal')==""?" ":pg_result($result41,$f,'ed74_c_resultadofinal');
         $lAprovacaoParcial     = pg_result($result41,$f,'disciplina_com_progressao') == "t"? true: false;
@@ -655,82 +659,82 @@ function ResultadoFinal($ed60_i_codigo,$ed60_i_aluno,$ed60_i_turma,$ed60_c_situa
         $res_final .= $sep.$ed74_c_resultadofinal;
         $sep = ",";
 
-     }
-     if (strstr($res_final," ")) {
+      }
+      if (strstr($res_final," ")) {
 
-       if ($ed60_c_concluida=="S") {
+        if ($ed60_c_concluida=="S") {
 
-         if (strstr($res_final,"R")) {
+          if (strstr($res_final,"R")) {
 
-           $resultado = "REPROVADO";
-           if (!empty($iCodigoEnsino)) {
-             $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, 'R', $iAnoCalendario);
-             if (isset($aDadosTermo[0])) {
-               $resultado = $aDadosTermo[0]->sDescricao;
-             }
-           }
-         } else if  (strstr($res_final,"D")) {
-           $resultado = "APROVADO COM PROGRESSAO PARCIAL /DEPENDÊNCIA";
-         } else {
-           $resultado = Situacao($ed60_c_situacao,$ed60_i_codigo);
-         }
-       } else {
-         $resultado = "EM ANDAMENTO";
-       }
-     } elseif (strstr($res_final,"R")) {
+            $resultado = "REPROVADO";
+            if (!empty($iCodigoEnsino)) {
+              $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, 'R', $iAnoCalendario);
+              if (isset($aDadosTermo[0])) {
+                $resultado = $aDadosTermo[0]->sDescricao;
+              }
+            }
+          } else if  (strstr($res_final,"D")) {
+            $resultado = "APROVADO COM PROGRESSAO PARCIAL /DEPENDÊNCIA";
+          } else {
+            $resultado = Situacao($ed60_c_situacao,$ed60_i_codigo);
+          }
+        } else {
+          $resultado = "EM ANDAMENTO";
+        }
+      } elseif (strstr($res_final,"R")) {
 
-       $resultado = "REPROVADO";
-       if (!empty($iCodigoEnsino)) {
-         $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, 'R', $iAnoCalendario);
-         if (isset($aDadosTermo[0])) {
-           $resultado = $aDadosTermo[0]->sDescricao;
-         }
-       }
-     } else if  (strstr($res_final,"D")) {
-       $resultado = "APROVADO COM PROGRESSAO PARCIAL /DEPENDÊNCIA";
-     } else {
+        $resultado = "REPROVADO";
+        if (!empty($iCodigoEnsino)) {
+          $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, 'R', $iAnoCalendario);
+          if (isset($aDadosTermo[0])) {
+            $resultado = $aDadosTermo[0]->sDescricao;
+          }
+        }
+      } else if  (strstr($res_final,"D")) {
+        $resultado = "APROVADO COM PROGRESSAO PARCIAL /DEPENDÊNCIA";
+      } else {
 
         if ($ed29_i_avalparcial==2 && $iLinhasReg > 0) {
-         $resultado = "APROVADO PARCIAL";
-         if (!empty($iCodigoEnsino)) {
+          $resultado = "APROVADO PARCIAL";
+          if (!empty($iCodigoEnsino)) {
 
-           $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, "P", $iAnoCalendario);
-           if (isset($aDadosTermo[0])) {
-             $resultado = $aDadosTermo[0]->sDescricao;
-           }
-         }
+            $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, "P", $iAnoCalendario);
+            if (isset($aDadosTermo[0])) {
+              $resultado = $aDadosTermo[0]->sDescricao;
+            }
+          }
         } else {
 
-         $resultado = "APROVADO";
-         if (!empty($iCodigoEnsino)) {
+          $resultado = "APROVADO";
+          if (!empty($iCodigoEnsino)) {
 
-           $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, "A", $iAnoCalendario);
+            $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, "A", $iAnoCalendario);
 
 
 
-           if (isset($aDadosTermo[0])) {
-             $resultado = $aDadosTermo[0]->sDescricao;
-           }
-         }
+            if (isset($aDadosTermo[0])) {
+              $resultado = $aDadosTermo[0]->sDescricao;
+            }
+          }
         }
-     }
-   }
+      }
+    }
   }
   return $resultado;
 }
 
 function LimpaResultadoFinal($matricula) {
- $result = db_query("SELECT ed60_i_turma,ed60_i_aluno,ed221_i_serie
+  $result = db_query("SELECT ed60_i_turma,ed60_i_aluno,ed221_i_serie
                      FROM matricula
                       inner join matriculaserie on ed221_i_matricula = ed60_i_codigo
                      WHERE ed60_i_codigo = $matricula
                      AND ed221_c_origem = 'S'
                     ");
- if (pg_num_rows($result)>0) {
-   $ed60_i_turma = pg_result($result,0,0);
-   $ed60_i_aluno = pg_result($result,0,1);
-   $ed221_i_serie = pg_result($result,0,2);
-   $result1 = db_query("UPDATE diariofinal SET
+  if (pg_num_rows($result)>0) {
+    $ed60_i_turma = pg_result($result,0,0);
+    $ed60_i_aluno = pg_result($result,0,1);
+    $ed221_i_serie = pg_result($result,0,2);
+    $result1 = db_query("UPDATE diariofinal SET
                        ed74_i_procresultadoaprov = null,
                        ed74_c_valoraprov = '',
                        ed74_c_resultadoaprov = '',
@@ -748,7 +752,7 @@ function LimpaResultadoFinal($matricula) {
                                                                       )
                                               )
                      ");
- }
+  }
 }
 
 function MatriculaPosterior( $iMatricula ) {
@@ -774,6 +778,7 @@ function MatriculaPosterior( $iMatricula ) {
       $sql2   .= " WHERE ed60_i_aluno = {$oRetornoMatricula->ed60_i_aluno} ";
       $sql2   .= "   AND ed60_d_datamatricula >= '{$oRetornoMatricula->ed60_d_datasaida}' ";
       $sql2   .= "   AND ed60_c_situacao NOT IN ('TROCA DE MODALIDADE', 'CANCELADO', 'EVADIDO')";
+      $sql2   .= "   AND ed60_i_codigo <> {$iMatricula}";
       $result2 = db_query( $sql2 );
 
       if( $result2 && pg_num_rows( $result2 ) > 0 ) {
@@ -800,18 +805,18 @@ function MatriculaPosterior( $iMatricula ) {
 
 function RFanterior($matricula) {
 
- $sql = "SELECT ed57_i_calendario,ed221_i_serie,ed60_i_aluno
+  $sql = "SELECT ed57_i_calendario,ed221_i_serie,ed60_i_aluno
          FROM matricula
           inner join matriculaserie on ed221_i_matricula = ed60_i_codigo
           inner join turma on ed57_i_codigo = ed60_i_turma
          WHERE ed60_i_codigo = $matricula
          AND ed221_c_origem = 'S'
         ";
- $result = db_query($sql);
- $calendario = pg_result($result,0,0);
- $serie = pg_result($result,0,1);
- $aluno = pg_result($result,0,2);
- $sql1 = "SELECT ed60_i_codigo,ed57_i_codigo,ed57_c_descr,ed60_c_situacao,ed60_c_concluida
+  $result = db_query($sql);
+  $calendario = pg_result($result,0,0);
+  $serie = pg_result($result,0,1);
+  $aluno = pg_result($result,0,2);
+  $sql1 = "SELECT ed60_i_codigo,ed57_i_codigo,ed57_c_descr,ed60_c_situacao,ed60_c_concluida
           FROM matricula
            inner join matriculaserie on ed221_i_matricula = ed60_i_codigo
            inner join turma on ed57_i_codigo = ed60_i_turma
@@ -827,144 +832,144 @@ function RFanterior($matricula) {
           ORDER BY ed60_d_datamatricula desc LIMIT 1
          ";
 
- $result1 = db_query($sql1);
- $linhas1 = pg_num_rows($result1);
- if ($linhas1>0) {
-  $codigo = pg_result($result1,0,0);
-  $turma = pg_result($result1,0,1);
-  $descrturma = pg_result($result1,0,2);
-  $situacao = trim(pg_result($result1,0,3));
-  $concluida = trim(pg_result($result1,0,4));
-  if ($situacao=="CLASSIFICADO" || $situacao=="AVANÇADO") {
-   $rfanterior = "APROVADO";
-  }elseif ($situacao=="MATRICULADO") {
-   $rfanterior = ResultadoFinal($codigo,$aluno,$turma,$situacao,$concluida);
+  $result1 = db_query($sql1);
+  $linhas1 = pg_num_rows($result1);
+  if ($linhas1>0) {
+    $codigo = pg_result($result1,0,0);
+    $turma = pg_result($result1,0,1);
+    $descrturma = pg_result($result1,0,2);
+    $situacao = trim(pg_result($result1,0,3));
+    $concluida = trim(pg_result($result1,0,4));
+    if ($situacao=="CLASSIFICADO" || $situacao=="AVANÇADO") {
+      $rfanterior = "APROVADO";
+    }elseif ($situacao=="MATRICULADO") {
+      $rfanterior = ResultadoFinal($codigo,$aluno,$turma,$situacao,$concluida);
+    }else{
+      $rfanterior = $situacao;
+    }
   }else{
-   $rfanterior = $situacao;
+    $descrturma = "";
+    $rfanterior = "";
   }
- }else{
-  $descrturma = "";
-  $rfanterior = "";
- }
- if ($rfanterior=="EM ANDAMENTO") {
-  $descrturma = "";
-  $rfanterior = "";
- }
- return trim($descrturma)."|".trim($rfanterior);
+  if ($rfanterior=="EM ANDAMENTO") {
+    $descrturma = "";
+    $rfanterior = "";
+  }
+  return trim($descrturma)."|".trim($rfanterior);
 }
 
 
 
 
 function data_farmacia($ano,$tipo='1T') {
-   //#10#// retorna datas bimestrais, trimestrais,quadrimestras ou semestrais
-   //#20#// tipo: [1B|2B|3B|4B|5B|6B|1T|2T|T3|T4|1Q|2Q|3Q|1S|2S|M1|M2|M3|M4|M5|M6|M7|M8|M9|M10|M11|M12|QUIN1|QUIN2]
-   //#20#//
-   $mes_ini = '';
-   $mes_fin = '';
-   $texto ='';
-   $abrev ='';
+  //#10#// retorna datas bimestrais, trimestrais,quadrimestras ou semestrais
+  //#20#// tipo: [1B|2B|3B|4B|5B|6B|1T|2T|T3|T4|1Q|2Q|3Q|1S|2S|M1|M2|M3|M4|M5|M6|M7|M8|M9|M10|M11|M12|QUIN1|QUIN2]
+  //#20#//
+  $mes_ini = '';
+  $mes_fin = '';
+  $texto ='';
+  $abrev ='';
 
   if ($tipo=='1T') { ////COMEÇA TRIMESTRE
-      $mes_ini=1;  $mes_fin=3;
-      $texto = 'PRIMEIRO TRIMESTRE';
-      $abrev = 'Trimestre';
-   } elseif ($tipo=='2T') {
-      $mes_ini=4;  $mes_fin=6;
-      $texto = 'SEGUNDO TRIMESTRE';
-      $abrev = 'Trimestre';
-   } elseif ($tipo=='3T') {
-      $mes_ini=7;  $mes_fin=9;
-      $texto = 'TERCEIRO TRIMESTRE';
-      $abrev = 'Trimestre';
-   } elseif ($tipo=='4T') {
-      $mes_ini=10;  $mes_fin=12;
-      $texto = 'QUARTO TRIMESTRE';
-      $abrev = 'Trimestre';
-   }  elseif ($tipo=='1M') { ///COMEÇA OS MESES X MESES
-      $mes_ini=1;  $mes_fin=1;
-      $texto = 'JANEIRO';
-      $abrev = 'Janeiro';
-   }  elseif ($tipo=='2M') {
-      $mes_ini=2;  $mes_fin=2;
-      $texto = 'FEVEREIRO';
-      $abrev = 'Fevereiro';
-   }  elseif ($tipo=='3M') {
-      $mes_ini=3;  $mes_fin=3;
-      $texto = 'MARÇO';
-      $abrev = 'Março';
-   }  elseif ($tipo=='4M') {
-      $mes_ini=4;  $mes_fin=4;
-      $texto = 'ABRIL';
-      $abrev = 'Abril';
-   }  elseif ($tipo=='5M') {
-      $mes_ini=5;  $mes_fin=5;
-      $texto = 'MAIO';
-      $abrev = 'Maio';
-   }  elseif ($tipo=='6M') {
-      $mes_ini=6;  $mes_fin=6;
-      $texto = 'JUNHO';
-      $abrev = 'Junho';
-   }  elseif ($tipo=='7M') {
-      $mes_ini=7;  $mes_fin=7;
-      $texto = 'JULHO';
-      $abrev = 'Julho';
-   }  elseif ($tipo=='8M') {
-      $mes_ini=8;  $mes_fin=8;
-      $texto = 'AGOSTO';
-      $abrev = 'Agosto';
-   }  elseif ($tipo=='9M') {
-      $mes_ini=9;  $mes_fin=9;
-      $texto = 'SETEMBRO';
-      $abrev = 'Setembro';
-   }  elseif ($tipo=='10M') {
-      $mes_ini=10;  $mes_fin=10;
-      $texto = 'OUTUBRO';
-      $abrev = 'Outubro';
-   }  elseif ($tipo=='11M') {
-      $mes_ini=11;  $mes_fin=11;
-      $texto = 'NOVEMBRO';
-      $abrev = 'Novembro';
-   }  elseif ($tipo=='12M') {
-      $mes_ini=12;  $mes_fin=12;
-      $texto = 'DEZEMBRO';
-      $abrev = 'Dezembro';
-   }  elseif ($tipo=='1A') {
-      $mes_ini=1;  $mes_fin=12;
-      $texto = 'ANO';
-      $abrev = 'ano';
-   }  else {
-       echo "Datas inválidas tipo=$tipo ano=$ano ";
-      exit;
-   }
-   $data_ini = $ano."-".$mes_ini."-01";
-   $data_fin = $ano."-".$mes_fin."-".ultimo_dia_mes($mes_fin, $ano);
-   $matriz[0] = $data_ini;
-   $matriz[1] = $data_fin;
-   $matriz['texto']=$texto;
-   $matriz['periodo']=$abrev;
+    $mes_ini=1;  $mes_fin=3;
+    $texto = 'PRIMEIRO TRIMESTRE';
+    $abrev = 'Trimestre';
+  } elseif ($tipo=='2T') {
+    $mes_ini=4;  $mes_fin=6;
+    $texto = 'SEGUNDO TRIMESTRE';
+    $abrev = 'Trimestre';
+  } elseif ($tipo=='3T') {
+    $mes_ini=7;  $mes_fin=9;
+    $texto = 'TERCEIRO TRIMESTRE';
+    $abrev = 'Trimestre';
+  } elseif ($tipo=='4T') {
+    $mes_ini=10;  $mes_fin=12;
+    $texto = 'QUARTO TRIMESTRE';
+    $abrev = 'Trimestre';
+  }  elseif ($tipo=='1M') { ///COMEÇA OS MESES X MESES
+    $mes_ini=1;  $mes_fin=1;
+    $texto = 'JANEIRO';
+    $abrev = 'Janeiro';
+  }  elseif ($tipo=='2M') {
+    $mes_ini=2;  $mes_fin=2;
+    $texto = 'FEVEREIRO';
+    $abrev = 'Fevereiro';
+  }  elseif ($tipo=='3M') {
+    $mes_ini=3;  $mes_fin=3;
+    $texto = 'MARÇO';
+    $abrev = 'Março';
+  }  elseif ($tipo=='4M') {
+    $mes_ini=4;  $mes_fin=4;
+    $texto = 'ABRIL';
+    $abrev = 'Abril';
+  }  elseif ($tipo=='5M') {
+    $mes_ini=5;  $mes_fin=5;
+    $texto = 'MAIO';
+    $abrev = 'Maio';
+  }  elseif ($tipo=='6M') {
+    $mes_ini=6;  $mes_fin=6;
+    $texto = 'JUNHO';
+    $abrev = 'Junho';
+  }  elseif ($tipo=='7M') {
+    $mes_ini=7;  $mes_fin=7;
+    $texto = 'JULHO';
+    $abrev = 'Julho';
+  }  elseif ($tipo=='8M') {
+    $mes_ini=8;  $mes_fin=8;
+    $texto = 'AGOSTO';
+    $abrev = 'Agosto';
+  }  elseif ($tipo=='9M') {
+    $mes_ini=9;  $mes_fin=9;
+    $texto = 'SETEMBRO';
+    $abrev = 'Setembro';
+  }  elseif ($tipo=='10M') {
+    $mes_ini=10;  $mes_fin=10;
+    $texto = 'OUTUBRO';
+    $abrev = 'Outubro';
+  }  elseif ($tipo=='11M') {
+    $mes_ini=11;  $mes_fin=11;
+    $texto = 'NOVEMBRO';
+    $abrev = 'Novembro';
+  }  elseif ($tipo=='12M') {
+    $mes_ini=12;  $mes_fin=12;
+    $texto = 'DEZEMBRO';
+    $abrev = 'Dezembro';
+  }  elseif ($tipo=='1A') {
+    $mes_ini=1;  $mes_fin=12;
+    $texto = 'ANO';
+    $abrev = 'ano';
+  }  else {
+    echo "Datas inválidas tipo=$tipo ano=$ano ";
+    exit;
+  }
+  $data_ini = $ano."-".$mes_ini."-01";
+  $data_fin = $ano."-".$mes_fin."-".ultimo_dia_mes($mes_fin, $ano);
+  $matriz[0] = $data_ini;
+  $matriz[1] = $data_fin;
+  $matriz['texto']=$texto;
+  $matriz['periodo']=$abrev;
 
-   return $matriz;
+  return $matriz;
 }
 
 
 
 function retorna_dia($ano,$mes,$dia,$tipo='1D') {
-   //#10#// retorna datas diárias
-   //#20#// tipo: [D1|D2.....]
-   //#20#//
+  //#10#// retorna datas diárias
+  //#20#// tipo: [D1|D2.....]
+  //#20#//
 
-   $dia_ini = '';
-   $dia_fin = '';
-   $texto ='';
-   $abrev ='';
+  $dia_ini = '';
+  $dia_fin = '';
+  $texto ='';
+  $abrev ='';
 
-   $data_ini = $ano."-".$mes."-".$dia;
-   $data_fin = $ano."-".$mes."-".$dia;
-   $matriz[0] = $data_ini;
-   $matriz[1] = $data_fin;
+  $data_ini = $ano."-".$mes."-".$dia;
+  $data_fin = $ano."-".$mes."-".$dia;
+  $matriz[0] = $data_ini;
+  $matriz[1] = $data_fin;
 
-   return $matriz;
+  return $matriz;
 
 }
 
@@ -973,48 +978,48 @@ function retorna_dia($ano,$mes,$dia,$tipo='1D') {
 // Retorna a data de inicio da ultima quinzena
 function inicio_ultima_quinzena()
 {
-        $data_atual = getdate();
+  $data_atual = getdate();
 
-        if ($data_atual['mday'] <= 15)
-        {
-                $mes = $data_atual['mon'] - 1;
-                $ano = $data_atual['year'];
-                if ($mes == 0)
-                {
-                        $mes = 12;
-                        $ano --;
-                }
-                return date("d/m/y",strtotime($ano . sprintf("%02d", $mes) . "16"));
-        }
-        else
-        {
-                return date("d/m/y",strtotime($data_atual['year'] .
-                sprintf("%02d", $data_atual['mon']) . "01"));
-        }
+  if ($data_atual['mday'] <= 15)
+  {
+    $mes = $data_atual['mon'] - 1;
+    $ano = $data_atual['year'];
+    if ($mes == 0)
+    {
+      $mes = 12;
+      $ano --;
+    }
+    return date("d/m/y",strtotime($ano . sprintf("%02d", $mes) . "16"));
+  }
+  else
+  {
+    return date("d/m/y",strtotime($data_atual['year'] .
+      sprintf("%02d", $data_atual['mon']) . "01"));
+  }
 }
 
 // Retorna a data de termino da ultima quinzena
 function fim_ultima_quinzena()
 {
-        $data_atual = getdate();
+  $data_atual = getdate();
 
-        if ($data_atual['mday'] <= 15)
-        {
-                $mes = $data_atual['mon'] - 1;
-                $ano = $data_atual['year'];
-                if ($mes == 0)
-                {
-                        $mes = 12;
-                        $ano --;
-                }
-                return date("d/m/y",strtotime("{$ano}-{$mes}-" .
-                cal_days_in_month(CAL_GREGORIAN, $mes, $ano)));
-        }
-        else
-        {
-                return date("d/m/y",strtotime($data_atual['year'] .
-                sprintf("%02d", $data_atual['mon']) . "15"));
-        }
+  if ($data_atual['mday'] <= 15)
+  {
+    $mes = $data_atual['mon'] - 1;
+    $ano = $data_atual['year'];
+    if ($mes == 0)
+    {
+      $mes = 12;
+      $ano --;
+    }
+    return date("d/m/y",strtotime("{$ano}-{$mes}-" .
+      cal_days_in_month(CAL_GREGORIAN, $mes, $ano)));
+  }
+  else
+  {
+    return date("d/m/y",strtotime($data_atual['year'] .
+      sprintf("%02d", $data_atual['mon']) . "15"));
+  }
 }
 
 
@@ -1024,18 +1029,18 @@ function fim_ultima_quinzena()
  * Se ela estiver assim 00/00/0000, ela converte para 0000-00-00.
  */
 function converte_data($data) {
-    if (strstr($data, "/")) {//verifica se tem a barra /
-  $d = explode ("/", $data);//tira a barra
-  $invert_data = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mês etc...
-  return $invert_data;
-    }
-    elseif (strstr($data, "-")) {
-  $d = explode ("-", $data);
-  $invert_data = "$d[2]/$d[1]/$d[0]";
-  return $invert_data;
-    }
-    else{
-  return "Data invalida";
+  if (strstr($data, "/")) {//verifica se tem a barra /
+    $d = explode ("/", $data);//tira a barra
+    $invert_data = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mês etc...
+    return $invert_data;
+  }
+  elseif (strstr($data, "-")) {
+    $d = explode ("-", $data);
+    $invert_data = "$d[2]/$d[1]/$d[0]";
+    return $invert_data;
+  }
+  else{
+    return "Data invalida";
   }
 
 }
@@ -1058,46 +1063,46 @@ function db_geraArquivoOidfarmacia ($arquivo,$arquivoAlt=null,$opcao=1,$conn) {
   }
   if ($opcao==3) {
     pg_lo_unlink($conn, $arquivoAlt);
-  return "null";
+    return "null";
   }
 
   $nomeArquivo        = $arquivo;
   $localRecebeArquivo = $arquivo;
 
   if ( trim($localRecebeArquivo) != "") {
-      $arquivoGrava = fopen($localRecebeArquivo, "rb");
-      if ($arquivoGrava == false) {
-        echo "erro ao abrir o arquivo: $localRecebeArquivo";
-        exit;
-      }
-      $dados = fread($arquivoGrava, filesize($localRecebeArquivo));
-      if ($dados == false) {
-        echo "erro fread";
-        exit;
-      }
-      fclose($arquivoGrava);
-      $oidgrava = pg_lo_create();
-      if ($oidgrava == false) {
-        echo "erro pg_lo_create";
-        exit;
-      }
-
-
-      $objeto = pg_lo_open($conn, $oidgrava, "w");
-      if ($objeto != false) {
-        $erro = pg_lo_write($objeto, $dados);
-        if ($erro == false) {
-          echo "erro pg_lo_write";
-          exit;
-        }
-        pg_lo_close($objeto);
-      } else {
-        $erro_msg ("Operação Cancelada!!");
-        $sqlerro = true;
-      }
-
-      return $oidgrava;
+    $arquivoGrava = fopen($localRecebeArquivo, "rb");
+    if ($arquivoGrava == false) {
+      echo "erro ao abrir o arquivo: $localRecebeArquivo";
+      exit;
     }
+    $dados = fread($arquivoGrava, filesize($localRecebeArquivo));
+    if ($dados == false) {
+      echo "erro fread";
+      exit;
+    }
+    fclose($arquivoGrava);
+    $oidgrava = pg_lo_create();
+    if ($oidgrava == false) {
+      echo "erro pg_lo_create";
+      exit;
+    }
+
+
+    $objeto = pg_lo_open($conn, $oidgrava, "w");
+    if ($objeto != false) {
+      $erro = pg_lo_write($objeto, $dados);
+      if ($erro == false) {
+        echo "erro pg_lo_write";
+        exit;
+      }
+      pg_lo_close($objeto);
+    } else {
+      $erro_msg ("Operação Cancelada!!");
+      $sqlerro = true;
+    }
+
+    return $oidgrava;
+  }
 
 }
 
@@ -1111,52 +1116,52 @@ function db_geraArquivoOidfarmacia ($arquivo,$arquivoAlt=null,$opcao=1,$conn) {
  * @return string
  */
 function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultado = "S") {
- #Campos de Retorno do sql:
- ## 01 - Descrição da Disciplina
- ## 02 - Array contendo informações de cada elemento(periodo de avaliação e/ou resultado)
- ##      do procedimento de avaliação, separados por "|"
- ##      [0] - sequencial
- ##      [1] - abreviatura da descrição do elemento
- ##      [2] - forma de avaliação do elemento
- ##      [3] - aproveitamento do aluno no elemento
- ##      [4] - n° de faltas do aluno no elemento
- ##      [5] - se o elemento é periodo de avaliação ou resultado: AVA->Periodo de Avaliação | RES->Resultado
- ##      [6] - ordenação do elemento no procedimento de avaliação
- ##      [7] - se aluno atingiu aproveitamento minimo no elemento: S->Sim | N->Não
- ##      [8] - descrição do elemento
- ##      [9] - se o elemento está amparado: S->Sim | N->Não
- ## 03 - Nota Parcial
- ## 04 - Total de Aulas Dadas ou Dias Letivos
- ## 05 - Percentual de Frequência
- ## 06 - Aproveitamento do aluno no Resultado Final
- ## 07 - Resultado Final da matrícula: APR->Aprovado | REP->Reprovado
- ## 08 - Total de Faltas
- ## 09 - Total de Faltas Abonadas
- ## 10 - Mínimo para Aprovação do Resultado que gera o Resultado Final
- ## 11 - Descrição dos Níveis da Forma de Avaliação, caso a turma tenha forma de avaliação NIVEL
- ## 12 - Se matricula está concluida: S->Sim | N->Não
- ## 13 - Situação da Matrícula
- ## 14 - Código do Aluno
- ## 15 - Código da Turma
- ## 16 - Descrição da Etapa
- ## 17 - Se parâmetro Calcular Média Final está habilitado: S->Sim | N->Não
- ## 18 - Se parâmetro Casas Decimais está habilitado: S->Sim | N->Não
- ## 19 - Medidor da Frequência: PERIODOS ou DIAS LETIVOS
- ## 20 - Forma de Avaliação do Resultado que gera o Resultado Final
- ## 21 - Convencoes de Amparo
- ## 22 - Forma de Obtenção do Resultado que gera o Resultado Final
- if ($relatorio=="S") {
-  $restricao1 = " AND procavaliacao.ed41_c_boletim = 'S'";
-  $restricao2 = " AND procresultado_res.ed43_c_boletim = 'S'";
-  $restricao3 = "";
- }else{
-  $restricao1 = "";
-  $restricao2 = "";
-  $restricao3 = "AND procresultado_res.ed43_c_geraresultado = 'N'";
- }
- require_once("model/educacao/ArredondamentoNota.model.php");
- $iCasasDecimais = ArredondamentoNota::getNumeroCasasDecimais($iAno);
- $sql="SELECT distinct caddisciplina.ed232_c_descrcompleta as disciplina,regencia.ed59_i_ordenacao,
+  #Campos de Retorno do sql:
+  ## 01 - Descrição da Disciplina
+  ## 02 - Array contendo informações de cada elemento(periodo de avaliação e/ou resultado)
+  ##      do procedimento de avaliação, separados por "|"
+  ##      [0] - sequencial
+  ##      [1] - abreviatura da descrição do elemento
+  ##      [2] - forma de avaliação do elemento
+  ##      [3] - aproveitamento do aluno no elemento
+  ##      [4] - n° de faltas do aluno no elemento
+  ##      [5] - se o elemento é periodo de avaliação ou resultado: AVA->Periodo de Avaliação | RES->Resultado
+  ##      [6] - ordenação do elemento no procedimento de avaliação
+  ##      [7] - se aluno atingiu aproveitamento minimo no elemento: S->Sim | N->Não
+  ##      [8] - descrição do elemento
+  ##      [9] - se o elemento está amparado: S->Sim | N->Não
+  ## 03 - Nota Parcial
+  ## 04 - Total de Aulas Dadas ou Dias Letivos
+  ## 05 - Percentual de Frequência
+  ## 06 - Aproveitamento do aluno no Resultado Final
+  ## 07 - Resultado Final da matrícula: APR->Aprovado | REP->Reprovado
+  ## 08 - Total de Faltas
+  ## 09 - Total de Faltas Abonadas
+  ## 10 - Mínimo para Aprovação do Resultado que gera o Resultado Final
+  ## 11 - Descrição dos Níveis da Forma de Avaliação, caso a turma tenha forma de avaliação NIVEL
+  ## 12 - Se matricula está concluida: S->Sim | N->Não
+  ## 13 - Situação da Matrícula
+  ## 14 - Código do Aluno
+  ## 15 - Código da Turma
+  ## 16 - Descrição da Etapa
+  ## 17 - Se parâmetro Calcular Média Final está habilitado: S->Sim | N->Não
+  ## 18 - Se parâmetro Casas Decimais está habilitado: S->Sim | N->Não
+  ## 19 - Medidor da Frequência: PERIODOS ou DIAS LETIVOS
+  ## 20 - Forma de Avaliação do Resultado que gera o Resultado Final
+  ## 21 - Convencoes de Amparo
+  ## 22 - Forma de Obtenção do Resultado que gera o Resultado Final
+  if ($relatorio=="S") {
+    $restricao1 = " AND procavaliacao.ed41_c_boletim = 'S'";
+    $restricao2 = " AND procresultado_res.ed43_c_boletim = 'S'";
+    $restricao3 = "";
+  }else{
+    $restricao1 = "";
+    $restricao2 = "";
+    $restricao3 = "AND procresultado_res.ed43_c_geraresultado = 'N'";
+  }
+  require_once(modification("model/educacao/ArredondamentoNota.model.php"));
+  $iCasasDecimais = ArredondamentoNota::getNumeroCasasDecimais($iAno);
+  $sql="SELECT distinct caddisciplina.ed232_c_descrcompleta as disciplina,regencia.ed59_i_ordenacao,
  regencia.ed59_i_codigo as codigo_disciplina,
               (SELECT ARRAY ( SELECT coalesce(lpad(procavaliacao.ed41_i_sequencia,3,0)::varchar,'')||'|'||
                                      coalesce(periodoavaliacao.ed09_c_abrev::varchar,'')||'|'||
@@ -1243,8 +1248,8 @@ function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultad
                                           case when formaavaliacao_res.ed37_c_tipo = 'NOTA'
                                            then
                                             case when (select edu_parametros.ed233_c_decimais from edu_parametros where edu_parametros.ed233_i_escola = diario.ed95_i_escola) = 'S'
-                                             then diarioresultado_res.ed73_i_valornota::varchar
-                                             else diarioresultado_res.ed73_i_valornota::varchar
+                                             then diarioresultado_res.ed73_valorreal::varchar
+                                             else diarioresultado_res.ed73_valorreal::varchar
                                              end::varchar
                                            when formaavaliacao_res.ed37_c_tipo = 'NIVEL'
                                             then diarioresultado_res.ed73_c_valorconceito
@@ -1278,10 +1283,10 @@ function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultad
                 case
 
                  when procresultado.ed43_c_obtencao = 'ME' then
-                      (select sum(coalesce(diariorescomp.ed73_i_valornota,0)+coalesce(da3.ed72_i_valornota,0))
-                          /case when count(dr3.ed73_i_valornota) = 0
+                      (select sum(coalesce(diariorescomp.ed73_valorreal,0)+coalesce(da3.ed72_i_valornota,0))
+                          /case when count(dr3.ed73_valorreal) = 0
                             then count(da3.ed72_i_valornota)
-                            else count(dr3.ed73_i_valornota)
+                            else count(dr3.ed73_valorreal)
                            end
                    from diarioresultado as dr3
                     inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
@@ -1294,9 +1299,9 @@ function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultad
                                                     and da3.ed72_i_diario = dr3.ed73_i_diario
                    where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
                    and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
-                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_valorreal is not null))
                  when procresultado.ed43_c_obtencao = 'MP' then
-                  (select sum(coalesce(diariorescomp.ed73_i_valornota*rescompoeres.ed68_i_peso,0)+coalesce(da3.ed72_i_valornota*avalcompoeres.ed44_i_peso,0))
+                  (select sum(coalesce(diariorescomp.ed73_valorreal*rescompoeres.ed68_i_peso,0)+coalesce(da3.ed72_i_valornota*avalcompoeres.ed44_i_peso,0))
                          /coalesce(sum(coalesce(avalcompoeres.ed44_i_peso,0)+coalesce(rescompoeres.ed68_i_peso,0)),1)
                    from diarioresultado as dr3
                     inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
@@ -1309,9 +1314,9 @@ function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultad
                                                     and da3.ed72_i_diario = dr3.ed73_i_diario
                    where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
                    and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
-                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_valorreal is not null))
                  when procresultado.ed43_c_obtencao = 'SO' then
-                  (select sum(coalesce(diariorescomp.ed73_i_valornota,0)
+                  (select sum(coalesce(diariorescomp.ed73_valorreal,0)
                              +coalesce(da3.ed72_i_valornota,0))
                    from diarioresultado as dr3
                     inner join procresultado as proc3 on proc3.ed43_i_codigo = dr3.ed73_i_procresultado
@@ -1324,12 +1329,12 @@ function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultad
                                                     and da3.ed72_i_diario = dr3.ed73_i_diario
                    where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
                    and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
-                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_valorreal is not null))
                  when procresultado.ed43_c_obtencao = 'MN' then
                   (select case
-                           when max(coalesce(diariorescomp.ed73_i_valornota,0)) > max(coalesce(da3.ed72_i_valornota,0))
-                            then max(coalesce(diariorescomp.ed73_i_valornota,0))
-                           when max(coalesce(da3.ed72_i_valornota,0)) > max(coalesce(diariorescomp.ed73_i_valornota,0))
+                           when max(coalesce(diariorescomp.ed73_valorreal,0)) > max(coalesce(da3.ed72_i_valornota,0))
+                            then max(coalesce(diariorescomp.ed73_valorreal,0))
+                           when max(coalesce(da3.ed72_i_valornota,0)) > max(coalesce(diariorescomp.ed73_valorreal,0))
                             then max(coalesce(da3.ed72_i_valornota,0))
                            else max(coalesce(da3.ed72_i_valornota,0))
                           end
@@ -1344,7 +1349,7 @@ function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultad
                                                     and da3.ed72_i_diario = dr3.ed73_i_diario
                    where dr3.ed73_i_codigo = diarioresultado.ed73_i_codigo
                    and (da3.ed72_c_amparo = 'N' OR diariorescomp.ed73_c_amparo = 'N')
-                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_i_valornota is not null))
+                   and (da3.ed72_i_valornota is not null OR diariorescomp.ed73_valorreal is not null))
                  when procresultado.ed43_c_obtencao = 'UN' then
                   (select daval5.ed72_i_valornota
                    from diario as d5
@@ -1601,45 +1606,45 @@ function GradeAproveitamentoSQL($matricula,$relatorio="N", $iAno, $sGeraResultad
        AND matriculaserie.ed221_c_origem = 'S'
        ORDER BY regencia.ed59_i_ordenacao
        ";
- return $sql;
+  return $sql;
 }
 function GradeAproveitamentoHTML($matricula, $mostraresfinal="S", $iAno) {
- ?>
- <style>
- .titulo{
-  font-size: 11px;
-  color: #DEB887;
-  background-color:#444444;
-  font-weight: bold;
-  border: 1px solid #f3f3f3;
- }
- .cabec1{
-  font-size: 11px;
-  color: #000000;
-  background-color:#999999;
-  font-weight: bold;
- }
- .aluno{
-  color: #000000;
-  font-family : Tahoma;
-  font-size: 10px;
-  font-weight: bold;
- }
- .aluno1{
-  color: #000000;
-  font-family : Tahoma;
-  font-weight: bold;
-  text-align: center;
-  font-size: 10px;
- }
- .aluno2{
-  color: #000000;
-  font-family : Verdana;
-  font-size: 10px;
-  font-weight: bold;
- }
- </style>
- <?
+  ?>
+  <style>
+    .titulo{
+      font-size: 11px;
+      color: #DEB887;
+      background-color:#444444;
+      font-weight: bold;
+      border: 1px solid #f3f3f3;
+    }
+    .cabec1{
+      font-size: 11px;
+      color: #000000;
+      background-color:#999999;
+      font-weight: bold;
+    }
+    .aluno{
+      color: #000000;
+      font-family : Tahoma;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    .aluno1{
+      color: #000000;
+      font-family : Tahoma;
+      font-weight: bold;
+      text-align: center;
+      font-size: 10px;
+    }
+    .aluno2{
+      color: #000000;
+      font-family : Verdana;
+      font-size: 10px;
+      font-weight: bold;
+    }
+  </style>
+  <?
   $oDaoMatricula = db_utils::getDao("matricula");
   db_inicio_transacao();
 
@@ -1764,98 +1769,98 @@ function GradeAproveitamentoHTML($matricula, $mostraresfinal="S", $iAno) {
         echo '<td align="center" class="aluno1">Nenhum registro para esta disciplina.</td></tr>';
       }else{
 
-       $array_peraval = str_replace("{","",$periodos);
-       $array_peraval = str_replace("}","",$array_peraval);
-       $array_peraval = str_replace(chr(34),"",$array_peraval);
-       $array_peraval = explode(",",$array_peraval);
-       for($x=0;$x<count($array_peraval);$x++) {
-        $arr_explode = explode("|",$array_peraval[$x]);
+        $array_peraval = str_replace("{","",$periodos);
+        $array_peraval = str_replace("}","",$array_peraval);
+        $array_peraval = str_replace(chr(34),"",$array_peraval);
+        $array_peraval = explode(",",$array_peraval);
+        for($x=0;$x<count($array_peraval);$x++) {
+          $arr_explode = explode("|",$array_peraval[$x]);
 
-        if ($arr_explode[5] == "RES") {
-          $arr_explode[3] = ArredondamentoNota::formatar($arr_explode[3], $iAno);
-        }
-
-        echo '<td class="aluno1">'.(trim($arr_explode[3])==""?"&nbsp;":trim($arr_explode[3])).'</td>';
-        if (trim($arr_explode[5])=="AVA") {
-
-          $iFaltas = trim($arr_explode[4]);
-          if ( empty($iFaltas) ) {
-            $iFaltas = "&nbsp";
+          if ($arr_explode[5] == "RES") {
+            $arr_explode[3] = ArredondamentoNota::formatar($arr_explode[3], $iAno);
           }
 
-         echo '<td class="aluno1">'. $iFaltas .'</td>';
+          echo '<td class="aluno1">'.(trim($arr_explode[3])==""?"&nbsp;":trim($arr_explode[3])).'</td>';
+          if (trim($arr_explode[5])=="AVA") {
+
+            $iFaltas = trim($arr_explode[4]);
+            if ( empty($iFaltas) ) {
+              $iFaltas = "&nbsp";
+            }
+
+            echo '<td class="aluno1">'. $iFaltas .'</td>';
+          }
         }
-       }
-       if (trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")) {
+        if (trim($permitenotaembranco)=="S" && trim($situacao)=="MATRICULADO" && trim($concluida)=="N" && ($formaobtencao=="ME" || $formaobtencao=="MP" || $formaobtencao=="SO")) {
 
-         $notaparcial = '';
-         $oDisciplinasDiario->getElementoResultadoFinal();
-         if ($oDisciplinasDiario != '') {
+          $notaparcial = '';
+          $oDisciplinasDiario->getElementoResultadoFinal();
+          if ($oDisciplinasDiario != '') {
 
-           $oElementoNota = $oDisciplinasDiario->getElementoResultadoFinal();
-           if ($oElementoNota != '') {
-             $notaparcial   = $oDisciplinasDiario->getNotaParcial($oElementoNota->getElementoAvaliacao());
-           }
-         }
+            $oElementoNota = $oDisciplinasDiario->getElementoResultadoFinal();
+            if ($oElementoNota != '') {
+              $notaparcial   = $oDisciplinasDiario->getNotaParcial($oElementoNota->getElementoAvaliacao());
+            }
+          }
 
-         $sNotaParcial = ArredondamentoNota::formatar($notaparcial, $iAno);
-         echo '<td class="aluno1">'.$sNotaParcial.'</td>';
-       }
+          $sNotaParcial = ArredondamentoNota::formatar($notaparcial, $iAno);
+          echo '<td class="aluno1">'.$sNotaParcial.'</td>';
+        }
 
-       if ($arr_periodo[2] == 'NOTA'  && $aprovfinal != "") {
-         $aprovfinal = ArredondamentoNota::formatar($aprovfinal, $iAno);
-       }
+        if ($arr_periodo[2] == 'NOTA'  && $aprovfinal != "") {
+          $aprovfinal = ArredondamentoNota::formatar($aprovfinal, $iAno);
+        }
 
-       switch (trim($situacao)) {
+        switch (trim($situacao)) {
 
-         case 'MATRICULA INDEVIDA':
+          case 'MATRICULA INDEVIDA':
 
-           $frequencia = 'MATRICULA INDEVIDA';
-           $aprovfinal = 'MATRICULA INDEVIDA';
-           $resfinal   = 'MATRICULA INDEVIDA';
-           break;
+            $frequencia = 'MATRICULA INDEVIDA';
+            $aprovfinal = 'MATRICULA INDEVIDA';
+            $resfinal   = 'MATRICULA INDEVIDA';
+            break;
 
-         case 'MATRICULA TRANCADA':
+          case 'MATRICULA TRANCADA':
 
-           $frequencia = 'MATRICULA TRANCADA';
-           $aprovfinal = 'MATRICULA TRANCADA';
-           $resfinal   = 'MATRICULA TRANCADA';
-           break;
+            $frequencia = 'MATRICULA TRANCADA';
+            $aprovfinal = 'MATRICULA TRANCADA';
+            $resfinal   = 'MATRICULA TRANCADA';
+            break;
 
-        case 'MATRICULA INDEFERIDA':
+          case 'MATRICULA INDEFERIDA':
 
-           $frequencia = 'MATRICULA INDEFERIDA';
-           $aprovfinal = 'MATRICULA INDEFERIDA';
-           $resfinal   = 'MATRICULA INDEFERIDA';
-           break;
-       }
-       echo '<td class="aluno1">'.(trim($aulas)==""?"&nbsp;":trim($aulas)).'</td>';
-       echo '<td class="aluno1">'.trim($frequencia).'</td>';
-       echo '<td class="aluno1">'.(trim($aprovfinal)==""?"&nbsp;":($mostraresfinal=="S"?trim($aprovfinal):"")).'</td>';
-       $corfonte = trim($resfinal) == "Apr" ? "green" : (trim($resfinal) == "Rep" ? "red" :"black");
-       if (trim($situacao) == 'AVANÇADO') {
-         $resfinal = 'AVANÇ.';
-       } elseif (trim($situacao) == 'CLASSIFICADO') {
-         $resfinal = 'CLASS.';
-       }
-       if (!empty($iCodigoEnsino) && ($resfinal == 'Apr' || $resfinal == 'Rep')) {
+            $frequencia = 'MATRICULA INDEFERIDA';
+            $aprovfinal = 'MATRICULA INDEFERIDA';
+            $resfinal   = 'MATRICULA INDEFERIDA';
+            break;
+        }
+        echo '<td class="aluno1">'.(trim($aulas)==""?"&nbsp;":trim($aulas)).'</td>';
+        echo '<td class="aluno1">'.trim($frequencia).'</td>';
+        echo '<td class="aluno1">'.(trim($aprovfinal)==""?"&nbsp;":($mostraresfinal=="S"?trim($aprovfinal):"")).'</td>';
+        $corfonte = trim($resfinal) == "Apr" ? "green" : (trim($resfinal) == "Rep" ? "red" :"black");
+        if (trim($situacao) == 'AVANÇADO') {
+          $resfinal = 'AVANÇ.';
+        } elseif (trim($situacao) == 'CLASSIFICADO') {
+          $resfinal = 'CLASS.';
+        }
+        if (!empty($iCodigoEnsino) && ($resfinal == 'Apr' || $resfinal == 'Rep')) {
 
-         $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, substr($resfinal, 0, 1), $iAno );
-         if (isset($aDadosTermo[0])) {
-           $resfinal    = $aDadosTermo[0]->sAbreviatura;
-         }
-       }
-       $oDisciplina = $oDiario->getDisciplinasPorRegencia(RegenciaRepository::getRegenciaByCodigo($iCodigoDisciplina));
-       if ($oDisciplina->getResultadoFinal()->aprovadoPorProgressaoParcial()) {
-         $resfinal = 'AP / DP';
-       }
-       echo '<td class="aluno1"><font color="'.$corfonte.'">'.(trim($resfinal)==""?"&nbsp;":($mostraresfinal=="S"?trim($resfinal):"")).'</font></td>';
-       echo '</tr>';
+          $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($iCodigoEnsino, substr($resfinal, 0, 1), $iAno );
+          if (isset($aDadosTermo[0])) {
+            $resfinal    = $aDadosTermo[0]->sAbreviatura;
+          }
+        }
+        $oDisciplina = $oDiario->getDisciplinasPorRegencia(RegenciaRepository::getRegenciaByCodigo($iCodigoDisciplina));
+        if ($oDisciplina->getResultadoFinal()->aprovadoPorProgressaoParcial()) {
+          $resfinal = 'AP / DP';
+        }
+        echo '<td class="aluno1"><font color="'.$corfonte.'">'.(trim($resfinal)==""?"&nbsp;":($mostraresfinal=="S"?trim($resfinal):"")).'</font></td>';
+        echo '</tr>';
       }
-  }
-  if (trim($periodos) != '' || trim($situacao) == 'AVANÇADO' || trim($situacao) == 'CLASSIFICADO') {
-   $rfatual = ResultadoFinal($matricula,$aluno,$turma,trim($situacao),trim($concluida), $iCodigoEnsino);
-   echo '<tr>
+    }
+    if (trim($periodos) != '' || trim($situacao) == 'AVANÇADO' || trim($situacao) == 'CLASSIFICADO') {
+      $rfatual = ResultadoFinal($matricula,$aluno,$turma,trim($situacao),trim($concluida), $iCodigoEnsino);
+      echo '<tr>
           <td colspan="'.((count(@$pri_periodos)*2)+5+@$qtd_periodo).'">
            <table width="100%">
             <tr>
@@ -1869,9 +1874,9 @@ function GradeAproveitamentoHTML($matricula, $mostraresfinal="S", $iAno) {
            </table>
           </td>
          </tr>';
+    }
+    echo '</table>';
   }
-  echo '</table>';
- }
 }
 
 function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "S", $iAno ) {
@@ -1915,9 +1920,9 @@ function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "
        * corretas
        */
       if(    $oDisciplinasDiario->getRegencia()->getProcedimentoAvaliacao()->getFormaAvaliacao()->getTipo() ==
-             $oProcedimentoAvaliacaoEtapa->getFormaAvaliacao()->getTipo()
-          && !$lEncontrouPeriodoValido
-        ) {
+        $oProcedimentoAvaliacaoEtapa->getFormaAvaliacao()->getTipo()
+        && !$lEncontrouPeriodoValido
+      ) {
 
         $lEncontrouPeriodoValido = true;
 
@@ -1931,10 +1936,10 @@ function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "
           $pri_periodos = explode( ",", $pri_periodos );
 
           if(    trim($oDadosGrade->permitenotaembranco) == "S"
-              && trim($oDadosGrade->situacao) == "MATRICULADO"
-              && trim($oDadosGrade->concluida) == "N"
-              && in_array( $oDadosGrade->formaobtencao, $aFormasObtencao )
-            ) {
+            && trim($oDadosGrade->situacao) == "MATRICULADO"
+            && trim($oDadosGrade->concluida) == "N"
+            && in_array( $oDadosGrade->formaobtencao, $aFormasObtencao )
+          ) {
             $acrescecoluna = 1;
           } else {
             $acrescecoluna = 0;
@@ -1950,10 +1955,10 @@ function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "
           }
 
           if(    trim($oDadosGrade->permitenotaembranco) == "S"
-              && trim($oDadosGrade->situacao) == "MATRICULADO"
-              && trim($oDadosGrade->concluida) == "N"
-              && in_array( $oDadosGrade->formaobtencao, $aFormasObtencao )
-            ) {
+            && trim($oDadosGrade->situacao) == "MATRICULADO"
+            && trim($oDadosGrade->concluida) == "N"
+            && in_array( $oDadosGrade->formaobtencao, $aFormasObtencao )
+          ) {
             $pdf->cell( $largura_periodo, 4, "Nota Parcial", 1, 0, "C", 0 );
           }
 
@@ -1985,10 +1990,10 @@ function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "
           }
 
           if(    trim($oDadosGrade->permitenotaembranco) == "S"
-              && trim($oDadosGrade->situacao) == "MATRICULADO"
-              && trim($oDadosGrade->concluida) == "N"
-              && in_array( $oDadosGrade->formaobtencao, $aFormasObtencao )
-            ) {
+            && trim($oDadosGrade->situacao) == "MATRICULADO"
+            && trim($oDadosGrade->concluida) == "N"
+            && in_array( $oDadosGrade->formaobtencao, $aFormasObtencao )
+          ) {
             $pdf->cell( $largura_periodo, 4, "", 1, 0, "C", 0 );
           }
 
@@ -2050,9 +2055,9 @@ function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "
 
       if( trim( $periodos ) == "" || trim( $periodos ) == "{}" ) {
 
-         $aDados[]    = "Nenhum registro para esta disciplina.";
-         $aLarguras[] = $largura_meio + $largura_rf;
-         $aPosicao[]  = "C";
+        $aDados[]    = "Nenhum registro para esta disciplina.";
+        $aLarguras[] = $largura_meio + $largura_rf;
+        $aPosicao[]  = "C";
       } else {
 
         $array_peraval = str_replace( "{", "", $periodos );
@@ -2084,7 +2089,7 @@ function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "
             $sNota  = trim(@$arr_explode[3]);
 
             if (trim(@$arr_explode[2]) == "NOTA") {
-               $sNota = ArredondamentoNota::formatar($sNota, $iAno);
+              $sNota = ArredondamentoNota::formatar($sNota, $iAno);
             }
 
             $aDados[]    = trim($sNota);
@@ -2106,10 +2111,10 @@ function GradeAproveitamentoPDF( $matricula, $largura, $pdf, $mostraresfinal = "
         }
 
         if(    trim($permitenotaembranco) == "S"
-            && trim($situacao) == "MATRICULADO"
-            && trim($concluida) == "N"
-            && in_array( $formaobtencao, $aFormasObtencao )
-          ) {
+          && trim($situacao) == "MATRICULADO"
+          && trim($concluida) == "N"
+          && in_array( $formaobtencao, $aFormasObtencao )
+        ) {
 
           $aDados[]    = (trim($notaparcial) == "" ? "" : ($decimais == "S" ? number_format(trim($notaparcial),2,".",".") : number_format(trim($notaparcial))));
           $aLarguras[] = $largura_periodo;
@@ -2294,9 +2299,9 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
           $pri_periodos = explode(",", $pri_periodos);
 
           if (trim($permitenotaembranco) == "S"
-              && trim($situacao) == "MATRICULADO"
-              && trim($concluida) == "N"
-              && ($formaobtencao == "ME" || $formaobtencao == "MP" || $formaobtencao == "SO")) {
+            && trim($situacao) == "MATRICULADO"
+            && trim($concluida) == "N"
+            && ($formaobtencao == "ME" || $formaobtencao == "MP" || $formaobtencao == "SO")) {
 
             $lTemMediaFinal = true;
             $acrescecoluna  = 1;
@@ -2305,8 +2310,8 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
           }
 
           $largura_periodo        = $largura_meio/(count($pri_periodos)+$acrescecoluna);
-          $largura_aprov          = ($largura_periodo*63)/100;
-          $largura_ft             = ($largura_periodo*37)/100;
+          $largura_aprov          = ($largura_periodo*65)/100;
+          $largura_ft             = ($largura_periodo*44)/100;
           $nTamanhoOriginal       = $largura_ft;
           $iTotalPeriodosComFalta = 0;
           $iTotalPeriodosSemFalta = 0;
@@ -2333,8 +2338,6 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
             $largura_aprov   += ($nTamanhoSobrando/2)/$iTotalPeriodosComFalta;
           }
 
-
-
           for ($x = 0; $x < count($aPeriodosCabecalho); $x++) {
 
             $arr_periodo     = explode("|", $aPeriodosCabecalho[$x]);
@@ -2355,17 +2358,17 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
           }
 
           if (trim($permitenotaembranco) == "S"
-              && trim($situacao) == "MATRICULADO"
-              && trim($concluida) == "N"
-              && ($formaobtencao == "ME" || $formaobtencao == "MP" || $formaobtencao == "SO")) {
+            && trim($situacao) == "MATRICULADO"
+            && trim($concluida) == "N"
+            && ($formaobtencao == "ME" || $formaobtencao == "MP" || $formaobtencao == "SO")) {
 
             $qtd_periodo++;
             $pdf->cell($largura_periodo - 1.1, 4, "NP", 1, 0, "C", 0);
 
           }
 
-          $pdf->cell(($largura_rf*64/100), 4, "Frequência", 1, 0, "C", 0);
-          $pdf->cell($largura_rf*38/100, 4, "Resultado Final", 1, 1, "C", 0);
+          $pdf->cell(($largura_rf*52/100), 4, "Frequência", 1, 0, "C", 0);
+          $pdf->cell($largura_rf*37/100, 4, "Resultado Final", 1, 1, "C", 0);
 
         }
         $pdf->cell($largura_disc, 4, "Disciplina", 1, 0, "C", 0);
@@ -2393,23 +2396,23 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
           }
 
           if (trim($permitenotaembranco) == "S"
-              && trim($situacao) == "MATRICULADO"
-              && trim($concluida) == "N"
-              && ($formaobtencao == "ME" || $formaobtencao == "MP" || $formaobtencao == "SO")) {
+            && trim($situacao) == "MATRICULADO"
+            && trim($concluida) == "N"
+            && ($formaobtencao == "ME" || $formaobtencao == "MP" || $formaobtencao == "SO")) {
 
             $pdf->cell($largura_periodo-1.1, 4, "", 1, 0, "C", 0);
           }
 
-          $largura_dias     = $largura_rf*16/100;
-          $largura_ttfaltas = $largura_rf*13/100;
-          $largura_ttabonos = $largura_rf*14/100;
-          $largura_freq     = $largura_rf*21/100;
-          $largura_aprovrf  = $largura_rf*21/100;
-          $largura_result   = $largura_rf*17/100;
-          $pdf->cell($largura_dias, 4, (trim($medfrequencia) == "PERÌODOS"?"AD":"DL"), 1, 0, "C", 0);
+          $largura_dias     = $largura_rf*12/100;
+          $largura_ttfaltas = $largura_rf*12/100;
+          $largura_ttabonos = $largura_rf*12/100;
+          $largura_freq     = $largura_rf*16/100;
+          $largura_aprovrf  = $largura_rf*18/100;
+          $largura_result   = $largura_rf*19/100;
+          $pdf->cell($largura_dias, 4, (trim($medfrequencia) == "PERÌODOS" ? "AD" : "DL"), 1, 0, "C", 0);
           $pdf->cell($largura_ttfaltas, 4, "TF", 1, 0, "C", 0);
           $pdf->cell($largura_ttabonos, 4, "FA", 1, 0, "C", 0);
-          $pdf->cell($largura_freq ,4, "% Freq", 1, 0, "C", 0);
+          $pdf->cell($largura_freq ,4, "Freq.", 1, 0, "C", 0);
           $pdf->cell($largura_aprovrf, 4, "Aprov.", 1, 0, "C", 0);
           $pdf->cell($largura_result, 4, "RF", 1, 1, "C", 0);
         }
@@ -2452,7 +2455,7 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
 
       if ($oDisciplinasDiario) {
 
-        $frequencia = $oDisciplinasDiario->calcularPercentualFrequencia();
+        $frequencia = "{$oDisciplinasDiario->calcularPercentualFrequencia()}%";
 
         if ( verificaReclassificadoBaixaFrequencia( $oDisciplinasDiario ) ) {
           $frequencia = '--';
@@ -2533,7 +2536,16 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
              * Alterado valor da avaliação quando = "Amparo" para informar somente "Amp"
              */
             if ($arr_explode[3] == "Amparo") {
-              $aDados[$iInd] = "Amp";
+
+
+              $aDados[$iInd] = "AMP";
+              $oAmparo       = $oDisciplinasDiario->getAmparo();
+              if ( !is_null($oAmparo) ) {
+
+                if ( $oAmparo->getTipoAmparo() == AmparoDisciplina::AMPARO_JUSTIFICATIVA ) {
+                  $aDados[$iInd] = $oAmparo->getJustificativa()->getAbreviatura();
+                }
+              }
             }
 
             $iInd             = count($aDados);
@@ -2545,13 +2557,14 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
 
           } else {
 
+            $iInd   = count($aDados);
             if ( $lProcedimentoDiferenteAvaliacao ) {
 
               $lImprimiuLinha = true;
               $iInd   = count($aDados);
               $sNota  = trim(@$arr_explode[3]);
               if (trim(@$arr_explode[2]) == "NOTA") {
-                 $sNota =  ArredondamentoNota::formatar($sNota, $iAno);
+                $sNota =  ArredondamentoNota::formatar($sNota, $iAno);
               }
               $nTamanhoColuna = $largura_periodo;
               if (trim(@$arr_explode[5]) == "AVA") {
@@ -2561,6 +2574,22 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
               $aPosicao[$iInd]  = "C";
               $aLarguras[$iInd] = $nTamanhoColuna;
               $aNegrito[$iInd]  = $lBold;
+            }
+
+            /**
+             * Alterado valor da avaliação quando = "Amparo" para informar somente "Amp"
+             */
+            if ($arr_explode[3] == "Amparo") {
+
+
+              $aDados[$iInd] = "AMP";
+              $oAmparo       = $oDisciplinasDiario->getAmparo();
+              if ( !is_null($oAmparo) ) {
+
+                if ( $oAmparo->getTipoAmparo() == AmparoDisciplina::AMPARO_JUSTIFICATIVA ) {
+                  $aDados[$iInd] = $oAmparo->getJustificativa()->getAbreviatura();
+                }
+              }
             }
           }
         }
@@ -2589,10 +2618,10 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
             $oDisciplinasDiario->getElementoResultadoFinal();
             if ($oDisciplinasDiario != '') {
 
-               $oElementoNota = $oDisciplinasDiario->getElementoResultadoFinal();
-               if ($oElementoNota != '') {
-                 $notaparcial   = $oDisciplinasDiario->getNotaParcial($oElementoNota->getElementoAvaliacao());
-               }
+              $oElementoNota = $oDisciplinasDiario->getElementoResultadoFinal();
+              if ($oElementoNota != '') {
+                $notaparcial   = $oDisciplinasDiario->getNotaParcial($oElementoNota->getElementoAvaliacao());
+              }
             }
 
             $notaparcial = ArredondamentoNota::formatar($notaparcial, $iAno);
@@ -2710,19 +2739,19 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
 
             if ($resfinal=="R") {
               $pdf->setfont('arial', 'b', 10);
-          } else {
+            } else {
               $pdf->setfont('arial', '', 9);
-          }
+            }
 
-        } else {
+          } else {
 
             if (trim($aprovfinal) < $minimoaprov) {
               $lBold = true;
             } else {
               $lBold = false;
-          }
+            }
 
-         }
+          }
 
         }
 
@@ -2777,7 +2806,7 @@ function GradeAproveitamentoBOLETIM($matricula, $largura, $pdf, $niveis, $orient
       $pdf->setfont('arial', 'b', 8);
       $pdf->cell(35, 4, "Resultado Final: ", "BTL", 0, "L", 0);
       $pdf->cell(array_sum($aLarguras)-35,4,(ResultadoFinal($matricula, $aluno, $turma,
-                 trim($situacao), trim($concluida), $iCodigoEnsino)), "BTR", 1, "L", 0);
+        trim($situacao), trim($concluida), $iCodigoEnsino)), "BTR", 1, "L", 0);
 
     }
 
@@ -2867,7 +2896,7 @@ function Assinatura($iEscola) {
 }
 
 function NotaParcial() {
- $sql = "case
+  $sql = "case
 
          when procresultado.ed43_c_obtencao = 'ME' then
           (select sum(coalesce(diariorescomp.ed73_i_valornota,0)+coalesce(da3.ed72_i_valornota,0))
@@ -2949,76 +2978,77 @@ function NotaParcial() {
            order by proc5.ed41_i_sequencia DESC LIMIT 1)
          else null
         end";
- return $sql;
+  return $sql;
 }
 function db_inputdatamerenda($nome, $dia = "", $mes = "", $ano = "", $dbcadastro = true, $dbtype = 'text', $db_opcao = "", $js_script = "", $nomevar = "", $bgcolor = "",$shutdown_function="none",$onclickBT="", $onfocus="", $jsRetornoCal="") {
- //#00#//db_inputdata
- //#10#//Função para montar um objeto tipo data. Serão três objetos input na tela mais um objeto input tipo button para
- //#10#//acessar o calendário do sistema
- //#15#//db_inputdata($nome,$dia="",$mes="",$ano="",$dbcadastro=true,$dbtype='text',$db_opcao=3,$js_script="",$nomevar="",$bgcolor="",$shutdown_funcion="none",$onclickBT="",$onfocus"");
- //#20#//Nome            : Nome do campo da documentacao do sistema ou do arquivo
- //#20#//Dia             : Valor para o objeto |db_input| do dia
- //#20#//Mês             : Valor para o objeto |db_input| do mês
- //#20#//Ano             : Valor para o objeto |db_input| do ano
- //#20#//Cadastro        : True se cadastro ou false se nao cadastro Padrão: true
- //#20#//Type            : Tipo a ser incluido para a data Padrão: text
- //#20#//Opcao           : *db_opcao* do programa a ser executado neste objeto input, inclusão(1) alteração(2) exclusão(3)
- //#20#//Script          : JAVASCRIPT  a ser executado juntamento com o objeto, indicando os métodos
- //#20#//Nome Secundário : Nome do input que será gerado, assumindo somente as características do campo Nome
- //#20#//Cor Background  : Cor de fundo da tela, no caso de *db_opcao*=3 será "#DEB887"
- //#20#//shutdown_funcion : função que será executada apos o retorno do calendário
- //#20#//onclickBT       : Função que será executada ao clicar no botão que abre o calendário
- //#20#//onfocus         : Função que será executada ao focar os campos
- //#99#//Quando o parâmetro Opção for de alteração (Opcao = 22) ou exclusão (Opção = 33) o sistema
- //#99#//colocará a sem acesso ao calendário
- //#99#//Para *db_opcao* 3 e 5 o sistema colocará sem o calendário e com readonly
- //#99#//
- //#99#//Os três input gerados para a data terão o nome do campo acrescido do [Nome]_dia, [Nome]_mes e
- //#99#//[Nome]_ano os quais serão acessados pela classe com estes nome.
- //#99#//
- //#99#//O sistema gerá para a primeira data incluída um formulário, um objeto de JanelaIframe do nosso
- //#99#//sistema para que sejá mostrado o calendário.
- global $DataJavaScript;
- if ($db_opcao == 3 || $db_opcao == 22) {
-  $bgcolor = "style='background-color:#DEB887'";
- }
- if ($bgcolor == "") {
-  $bgcolor = @$GLOBALS['N'.$nome];
- }
- if (isset($dia) && $dia != "" && isset($mes) && $mes != '' && isset($ano) && $ano != "") {
-  $diamesano = $dia."/".$mes."/".$ano;
-  $anomesdia = $ano."/".$mes."/".$dia;
- }
- $sButtonType = "button";
- ?>
- <input name="<?=($nomevar==""?$nome:$nomevar).""?>" <?=$bgcolor?>   type="<?=$dbtype?>" id="<?=($nomevar==""?$nome:$nomevar).""?>" <?=($db_opcao==3 || $db_opcao==22 ?'readonly':($db_opcao==5?'disabled':''))?> value="<?=@$diamesano?>" size="10" maxlength="10" autocomplete="off" onBlur='js_validaDbData(this);' onKeyUp="return js_mascaraData(this,event)"  onFocus="js_validaEntrada(this);" <?=$js_script?> >
- <input name="<?=($nomevar==""?$nome:$nomevar)."_dia"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_dia"?>" value="<?=@$dia?>" size="2"  maxlength="2" >
- <input name="<?=($nomevar==""?$nome:$nomevar)."_mes"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_mes"?>" value="<?=@$mes?>" size="2"  maxlength="2" >
- <input name="<?=($nomevar==""?$nome:$nomevar)."_ano"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_ano"?>" value="<?=@$ano?>" size="4"  maxlength="4" >
- <?
- if (($db_opcao < 3) || ($db_opcao == 4)) {
-  ?>
-  <script>
-   var PosMouseY, PosMoudeX;
-   function js_comparaDatas<?=($nomevar==""?$nome:$nomevar).""?>(dia,mes,ano) {
-    var objData        = document.getElementById('<?=($nomevar==""?$nome:$nomevar).""?>');
-    objData.value      = dia+"/"+mes+'/'+ano;
-    <?=$jsRetornoCal?>
-   }
-  </script>
-  <?
-  if (isset($dbtype) && strtolower($dbtype) == strtolower('hidden')) {
-   $sButtonType = "hidden";
+  //#00#//db_inputdata
+  //#10#//Função para montar um objeto tipo data. Serão três objetos input na tela mais um objeto input tipo button para
+  //#10#//acessar o calendário do sistema
+  //#15#//db_inputdata($nome,$dia="",$mes="",$ano="",$dbcadastro=true,$dbtype='text',$db_opcao=3,$js_script="",$nomevar="",$bgcolor="",$shutdown_funcion="none",$onclickBT="",$onfocus"");
+  //#20#//Nome            : Nome do campo da documentacao do sistema ou do arquivo
+  //#20#//Dia             : Valor para o objeto |db_input| do dia
+  //#20#//Mês             : Valor para o objeto |db_input| do mês
+  //#20#//Ano             : Valor para o objeto |db_input| do ano
+  //#20#//Cadastro        : True se cadastro ou false se nao cadastro Padrão: true
+  //#20#//Type            : Tipo a ser incluido para a data Padrão: text
+  //#20#//Opcao           : *db_opcao* do programa a ser executado neste objeto input, inclusão(1) alteração(2) exclusão(3)
+  //#20#//Script          : JAVASCRIPT  a ser executado juntamento com o objeto, indicando os métodos
+  //#20#//Nome Secundário : Nome do input que será gerado, assumindo somente as características do campo Nome
+  //#20#//Cor Background  : Cor de fundo da tela, no caso de *db_opcao*=3 será "#DEB887"
+  //#20#//shutdown_funcion : função que será executada apos o retorno do calendário
+  //#20#//onclickBT       : Função que será executada ao clicar no botão que abre o calendário
+  //#20#//onfocus         : Função que será executada ao focar os campos
+  //#99#//Quando o parâmetro Opção for de alteração (Opcao = 22) ou exclusão (Opção = 33) o sistema
+  //#99#//colocará a sem acesso ao calendário
+  //#99#//Para *db_opcao* 3 e 5 o sistema colocará sem o calendário e com readonly
+  //#99#//
+  //#99#//Os três input gerados para a data terão o nome do campo acrescido do [Nome]_dia, [Nome]_mes e
+  //#99#//[Nome]_ano os quais serão acessados pela classe com estes nome.
+  //#99#//
+  //#99#//O sistema gerá para a primeira data incluída um formulário, um objeto de JanelaIframe do nosso
+  //#99#//sistema para que sejá mostrado o calendário.
+  global $DataJavaScript;
+  if ($db_opcao == 3 || $db_opcao == 22) {
+    $bgcolor = "style='background-color:#DEB887'";
   }
+  if ($bgcolor == "") {
+    $bgcolor = @$GLOBALS['N'.$nome];
+  }
+  if (isset($dia) && $dia != "" && isset($mes) && $mes != '' && isset($ano) && $ano != "") {
+    $diamesano = $dia."/".$mes."/".$ano;
+    $anomesdia = $ano."/".$mes."/".$dia;
+  }
+  $sButtonType = "button";
   ?>
-  <input value="D" type="<?=$sButtonType?>" name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>" onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarmerenda('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>')"  >
+  <input name="<?=($nomevar==""?$nome:$nomevar).""?>" <?=$bgcolor?>   type="<?=$dbtype?>" id="<?=($nomevar==""?$nome:$nomevar).""?>" <?=($db_opcao==3 || $db_opcao==22 ?'readonly':($db_opcao==5?'disabled':''))?> value="<?=@$diamesano?>" size="10" maxlength="10" autocomplete="off" onBlur='js_validaDbData(this);' onKeyUp="return js_mascaraData(this,event)"  onFocus="js_validaEntrada(this);" <?=$js_script?> >
+  <input name="<?=($nomevar==""?$nome:$nomevar)."_dia"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_dia"?>" value="<?=@$dia?>" size="2"  maxlength="2" >
+  <input name="<?=($nomevar==""?$nome:$nomevar)."_mes"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_mes"?>" value="<?=@$mes?>" size="2"  maxlength="2" >
+  <input name="<?=($nomevar==""?$nome:$nomevar)."_ano"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_ano"?>" value="<?=@$ano?>" size="4"  maxlength="4" >
   <?
- }
+  if (($db_opcao < 3) || ($db_opcao == 4)) {
+    ?>
+    <script>
+      var PosMouseY, PosMoudeX;
+      function js_comparaDatas<?=($nomevar==""?$nome:$nomevar).""?>(dia,mes,ano) {
+        var objData        = document.getElementById('<?=($nomevar==""?$nome:$nomevar).""?>');
+        objData.value      = dia+"/"+mes+'/'+ano;
+        <?=$jsRetornoCal?>
+      }
+    </script>
+    <?
+    if (isset($dbtype) && strtolower($dbtype) == strtolower('hidden')) {
+      $sButtonType = "hidden";
+    }
+    ?>
+    <input value="D" type="<?=$sButtonType?>" name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>" onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendarmerenda('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>')"  >
+    <?
+  }
 }
 function VerUltimoRegHistorico($aluno,$etapaindicada,$etapasturma) {
- $restricao = false;
- global $msgequiv;
- $sql_hist = "SELECT ed11_i_codigo as ult_cod,
+
+  $restricao = false;
+  global $msgequiv;
+  $sql_hist = "SELECT ed11_i_codigo as ult_cod,
                      ed11_c_descr as ult_descr,
                      ed11_i_ensino as ult_ensino,
                      ed11_i_sequencia as ult_sequencia,
@@ -3048,117 +3078,132 @@ function VerUltimoRegHistorico($aluno,$etapaindicada,$etapasturma) {
               ORDER BY ult_ano desc,ult_sequencia desc,ult_resfinal asc
               LIMIT 1
              ";
- $result_hist = db_query($sql_hist);
- if (pg_num_rows($result_hist)>0) {
-  $ult_cod = pg_result($result_hist,0,'ult_cod');
-  $ult_resfinal = trim(pg_result($result_hist,0,'ult_resfinal'));
-  $ult_descr = trim(pg_result($result_hist,0,'ult_descr'));
-  $ult_descrensino = trim(pg_result($result_hist,0,'ult_descrensino'));
-  $ult_abrevensino = trim(pg_result($result_hist,0,'ult_abrevensino'));
-  $ult_ensino = trim(pg_result($result_hist,0,'ult_ensino'));
-  $ult_sequencia = trim(pg_result($result_hist,0,'ult_sequencia'));
-  if ($ult_resfinal=="R") {
-   $descr_situacao = "REPROVADO";
-   if ($ult_cod!=$etapaindicada) {
-    $temequiv = false;
-    $msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino) como a última cursada, na situação de $descr_situacao. Selecione uma turma que contenha alguma das etapas abaixo relacionadas:\\n";
-    $sql_equiv = "SELECT ed234_i_serieequiv,ed11_c_descr as descr_equiv,ed10_c_descr as ensino_equiv,ed10_c_abrev as abrev_equiv
-                  FROM serieequiv
-                   inner join serie on ed11_i_codigo = ed234_i_serieequiv
-                   inner join ensino on ed10_i_codigo = ed11_i_ensino
-                  WHERE ed234_i_serie = $ult_cod";
-    $result_equiv = db_query($sql_equiv);
-    $msgequiv .= "-> ".$ult_descr." (".$ult_descrensino." - ".$ult_abrevensino.")\\n";
-    for($r=0;$r<pg_num_rows($result_equiv);$r++) {
-     $codserie_equiv = pg_result($result_equiv,$r,'ed234_i_serieequiv');
-     $descr_equiv = trim(pg_result($result_equiv,$r,'descr_equiv'));
-     $ensino_equiv = trim(pg_result($result_equiv,$r,'ensino_equiv'));
-     $abrev_equiv = trim(pg_result($result_equiv,$r,'abrev_equiv'));
-     if ($codserie_equiv==$etapaindicada) {
-      $temequiv = true;
-      break;
-     }else{
-      $msgequiv .= "-> ".$descr_equiv." (".$ensino_equiv." - ".$abrev_equiv.")\\n";
-     }
-    }
-    if ($temequiv==false) {
-     $restricao = true;
-    }
-   }
-  }else if($ult_resfinal=='A'){
-   $descr_situacao = "APROVADO";
-   $sql_prox = "SELECT ed11_i_codigo as cod_prox,ed11_c_descr as descr_prox,ed10_c_descr as ensino_prox,ed10_c_abrev as abrev_prox
-                FROM serie
-                 inner join ensino on ed10_i_codigo = ed11_i_ensino
-                WHERE ed11_i_ensino = $ult_ensino
-                AND ed11_i_sequencia > $ult_sequencia";
-   $result_prox = db_query($sql_prox);
-   if (pg_num_rows($result_prox)>0) {
-    $cod_prox = pg_result($result_prox,0,'cod_prox');
-    $descr_prox = trim(pg_result($result_prox,0,'descr_prox'));
-    $ensino_prox = trim(pg_result($result_prox,0,'ensino_prox'));
-    $abrev_prox = trim(pg_result($result_prox,0,'abrev_prox'));
-    if ($cod_prox!=$etapaindicada) {
-     $temequiv = false;
-     $msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino)como a última cursada, na situação de $descr_situacao. Selecione uma turma que contenha alguma das etapas abaixo relacionadas:\\n";
-     $sql_equiv = "SELECT ed234_i_serieequiv,ed11_c_descr as descr_equiv,ed10_c_descr as ensino_equiv,ed10_c_abrev as abrev_equiv
-                   FROM serieequiv
-                    inner join serie on ed11_i_codigo = ed234_i_serieequiv
-                    inner join ensino on ed10_i_codigo = ed11_i_ensino
-                   WHERE ed234_i_serie = $cod_prox";
-     $result_equiv = db_query($sql_equiv);
-     $msgequiv .= "-> ".$descr_prox." (".$ensino_prox." - ".$abrev_prox.")\\n";
-     for($r=0;$r<pg_num_rows($result_equiv);$r++) {
-      $codserie_equiv = pg_result($result_equiv,$r,'ed234_i_serieequiv');
-      $descr_equiv = trim(pg_result($result_equiv,$r,'descr_equiv'));
-      $ensino_equiv = trim(pg_result($result_equiv,$r,'ensino_equiv'));
-      $abrev_equiv = trim(pg_result($result_equiv,$r,'abrev_equiv'));
-      if ($codserie_equiv==$etapaindicada) {
-       $temequiv = true;
-       break;
-      }else{
-       $msgequiv .= "-> ".$descr_equiv." (".$ensino_equiv." - ".$abrev_equiv.")\\n";
+
+
+  $result_hist = db_query($sql_hist);
+  if (pg_num_rows($result_hist)>0) {
+
+    $ult_cod = pg_result($result_hist,0,'ult_cod');
+    $ult_resfinal = trim(pg_result($result_hist,0,'ult_resfinal'));
+    $ult_descr = trim(pg_result($result_hist,0,'ult_descr'));
+    $ult_descrensino = trim(pg_result($result_hist,0,'ult_descrensino'));
+    $ult_abrevensino = trim(pg_result($result_hist,0,'ult_abrevensino'));
+    $ult_ensino = trim(pg_result($result_hist,0,'ult_ensino'));
+    $ult_sequencia = trim(pg_result($result_hist,0,'ult_sequencia'));
+    if ($ult_resfinal=="R") {
+
+      $descr_situacao = "REPROVADO";
+      if ($ult_cod!=$etapaindicada) {
+
+        $temequiv  = false;
+        $msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino) como a última cursada, na situação de $descr_situacao. Selecione uma turma que contenha alguma das etapas abaixo relacionadas:\\n";
+        $sql_equiv = "SELECT ed234_i_serieequiv,ed11_c_descr as descr_equiv,ed10_c_descr as ensino_equiv,ed10_c_abrev as abrev_equiv
+                      FROM serieequiv
+                       inner join serie on ed11_i_codigo = ed234_i_serieequiv
+                       inner join ensino on ed10_i_codigo = ed11_i_ensino
+                      WHERE ed234_i_serie = $ult_cod order by ed11_i_sequencia";
+        $result_equiv = db_query($sql_equiv);
+        $msgequiv .= "-> ".$ult_descr." (".$ult_descrensino." - ".$ult_abrevensino.")\\n";
+        for ($r=0;$r<pg_num_rows($result_equiv);$r++) {
+
+          $codserie_equiv = pg_result($result_equiv,$r,'ed234_i_serieequiv');
+          $descr_equiv = trim(pg_result($result_equiv,$r,'descr_equiv'));
+          $ensino_equiv = trim(pg_result($result_equiv,$r,'ensino_equiv'));
+          $abrev_equiv = trim(pg_result($result_equiv,$r,'abrev_equiv'));
+          if ($codserie_equiv==$etapaindicada) {
+
+            $temequiv = true;
+            break;
+          }else{
+            $msgequiv .= "-> ".$descr_equiv." (".$ensino_equiv." - ".$abrev_equiv.")\\n";
+          }
+        }
+        if ($temequiv==false) {
+          $restricao = true;
+        }
       }
-     }
-     if ($temequiv==false) {
-      $restricao = true;
-     }
+    } else if($ult_resfinal=='A') {
+
+      $descr_situacao = "APROVADO";
+      $sql_prox = "SELECT ed11_i_codigo as cod_prox,ed11_c_descr as descr_prox,ed10_c_descr as ensino_prox,ed10_c_abrev as abrev_prox
+                     FROM serie
+                    inner join ensino on ed10_i_codigo = ed11_i_ensino
+                   WHERE ed11_i_ensino = $ult_ensino
+                   AND ed11_i_sequencia > $ult_sequencia order by ed11_i_sequencia";
+      $result_prox = db_query($sql_prox);
+      if (pg_num_rows($result_prox)>0) {
+
+        $cod_prox = pg_result($result_prox,0,'cod_prox');
+        $descr_prox = trim(pg_result($result_prox,0,'descr_prox'));
+        $ensino_prox = trim(pg_result($result_prox,0,'ensino_prox'));
+        $abrev_prox = trim(pg_result($result_prox,0,'abrev_prox'));
+
+        if ($cod_prox!=$etapaindicada) {
+
+          $temequiv = false;
+          $msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino)como a última cursada, na situação de $descr_situacao. Selecione uma turma que contenha alguma das etapas abaixo relacionadas:\\n";
+          $sql_equiv = "SELECT ed234_i_serieequiv,ed11_c_descr as descr_equiv,ed10_c_descr as ensino_equiv,ed10_c_abrev as abrev_equiv
+                        FROM serieequiv
+                         inner join serie on ed11_i_codigo = ed234_i_serieequiv
+                         inner join ensino on ed10_i_codigo = ed11_i_ensino
+                        WHERE ed234_i_serie = $cod_prox order by ed11_i_sequencia";
+          $result_equiv = db_query($sql_equiv);
+          $msgequiv .= "-> ".$descr_prox." (".$ensino_prox." - ".$abrev_prox.")\\n";
+          for($r=0;$r<pg_num_rows($result_equiv);$r++) {
+
+            $codserie_equiv = pg_result($result_equiv,$r,'ed234_i_serieequiv');
+            $descr_equiv = trim(pg_result($result_equiv,$r,'descr_equiv'));
+            $ensino_equiv = trim(pg_result($result_equiv,$r,'ensino_equiv'));
+            $abrev_equiv = trim(pg_result($result_equiv,$r,'abrev_equiv'));
+            if ($codserie_equiv==$etapaindicada) {
+              $temequiv = true;
+              break;
+            }else{
+              $msgequiv .= "-> ".$descr_equiv." (".$ensino_equiv." - ".$abrev_equiv.")\\n";
+            }
+          }
+          if ($temequiv==false) {
+            $restricao = true;
+          }
+        }
+      }//else{
+      //$restricao = true;
+      //$msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino) como a última cursada, na situação de $descr_situacao. Não existem etapas após esta descrita acima.\\n";
+      //}
+    } elseif ($ult_resfinal=="P") {
+
+      $descr_situacao = "APROVADO PARCIAL";
+      if (!strstr($etapasturma,$ult_cod)) {
+
+        $temequiv = false;
+        $msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino) como a última cursada, na situação de $descr_situacao. Selecione uma turma que contenha alguma das etapas abaixo relacionadas:\\n";
+        $sql_equiv = "SELECT ed234_i_serieequiv,ed11_c_descr as descr_equiv,ed10_c_descr as ensino_equiv,ed10_c_abrev as abrev_equiv
+                        FROM serieequiv
+                         inner join serie on ed11_i_codigo = ed234_i_serieequiv
+                         inner join ensino on ed10_i_codigo = ed11_i_ensino
+                        WHERE ed234_i_serie = $ult_cod";
+        $result_equiv = db_query($sql_equiv);
+        $msgequiv .= "-> ".$ult_descr." (".$ult_descrensino." - ".$ult_abrevensino.")\\n";
+        for($r=0;$r<pg_num_rows($result_equiv);$r++) {
+
+          $codserie_equiv = pg_result($result_equiv,$r,'ed234_i_serieequiv');
+          $descr_equiv = trim(pg_result($result_equiv,$r,'descr_equiv'));
+          $ensino_equiv = trim(pg_result($result_equiv,$r,'ensino_equiv'));
+          $abrev_equiv = trim(pg_result($result_equiv,$r,'abrev_equiv'));
+          if ($codserie_equiv==$etapaindicada) {
+            $temequiv = true;
+            break;
+          }else{
+            $msgequiv .= "-> ".$descr_equiv." (".$ensino_equiv." - ".$abrev_equiv.")\\n";
+          }
+        }
+        if ($temequiv==false) {
+          $restricao = true;
+        }
+      }
     }
-   }//else{
-    //$restricao = true;
-    //$msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino) como a última cursada, na situação de $descr_situacao. Não existem etapas após esta descrita acima.\\n";
-   //}
-   }elseif ($ult_resfinal=="P") {
-   $descr_situacao = "APROVADO PARCIAL";
-   if (!strstr($etapasturma,$ult_cod)) {
-    $temequiv = false;
-    $msgequiv .= "\\nATENÇÃO: Aluno(a) $aluno tem a Etapa $ult_descr ($ult_descrensino - $ult_abrevensino) como a última cursada, na situação de $descr_situacao. Selecione uma turma que contenha alguma das etapas abaixo relacionadas:\\n";
-    $sql_equiv = "SELECT ed234_i_serieequiv,ed11_c_descr as descr_equiv,ed10_c_descr as ensino_equiv,ed10_c_abrev as abrev_equiv
-                  FROM serieequiv
-                   inner join serie on ed11_i_codigo = ed234_i_serieequiv
-                   inner join ensino on ed10_i_codigo = ed11_i_ensino
-                  WHERE ed234_i_serie = $ult_cod";
-    $result_equiv = db_query($sql_equiv);
-    $msgequiv .= "-> ".$ult_descr." (".$ult_descrensino." - ".$ult_abrevensino.")\\n";
-    for($r=0;$r<pg_num_rows($result_equiv);$r++) {
-     $codserie_equiv = pg_result($result_equiv,$r,'ed234_i_serieequiv');
-     $descr_equiv = trim(pg_result($result_equiv,$r,'descr_equiv'));
-     $ensino_equiv = trim(pg_result($result_equiv,$r,'ensino_equiv'));
-     $abrev_equiv = trim(pg_result($result_equiv,$r,'abrev_equiv'));
-     if ($codserie_equiv==$etapaindicada) {
-      $temequiv = true;
-      break;
-     }else{
-      $msgequiv .= "-> ".$descr_equiv." (".$ensino_equiv." - ".$abrev_equiv.")\\n";
-     }
-    }
-    if ($temequiv==false) {
-     $restricao = true;
-    }
-   }
+    return $restricao;
   }
-  return $restricao;
- }
 }
 
 /*
@@ -3183,93 +3228,93 @@ function converteCodificacao($sStr, $iTipo = 1) {
 
 function validaCnsDefinitivo($cns) {
 
-    if ( !is_numeric($cns) ) {
-      return false;
-    }
+  if ( !is_numeric($cns) ) {
+    return false;
+  }
 
-    if ( $cns == '000000000000000' ) {
-      return false;
-    }
+  if ( $cns == '000000000000000' ) {
+    return false;
+  }
 
-    if ((strlen(trim($cns))) != 15) {
-      return false;
-    }
-    $pis = substr($cns,0,11);
-    $soma = (((substr($pis, 0,1)) * 15) +
-             ((substr($pis, 1,1)) * 14) +
-           ((substr($pis, 2,1)) * 13) +
-           ((substr($pis, 3,1)) * 12) +
-           ((substr($pis, 4,1)) * 11) +
-           ((substr($pis, 5,1)) * 10) +
-           ((substr($pis, 6,1)) * 9) +
-           ((substr($pis, 7,1)) * 8) +
-           ((substr($pis, 8,1)) * 7) +
-           ((substr($pis, 9,1)) * 6) +
-           ((substr($pis, 10,1)) * 5));
+  if ((strlen(trim($cns))) != 15) {
+    return false;
+  }
+  $pis = substr($cns,0,11);
+  $soma = (((substr($pis, 0,1)) * 15) +
+    ((substr($pis, 1,1)) * 14) +
+    ((substr($pis, 2,1)) * 13) +
+    ((substr($pis, 3,1)) * 12) +
+    ((substr($pis, 4,1)) * 11) +
+    ((substr($pis, 5,1)) * 10) +
+    ((substr($pis, 6,1)) * 9) +
+    ((substr($pis, 7,1)) * 8) +
+    ((substr($pis, 8,1)) * 7) +
+    ((substr($pis, 9,1)) * 6) +
+    ((substr($pis, 10,1)) * 5));
+  $resto = fmod($soma, 11);
+  $dv = 11  - $resto;
+  if ($dv == 11) {
+    $dv = 0;
+  }
+  if ($dv == 10) {
+    $soma = ((((substr($pis, 0,1)) * 15) +
+        ((substr($pis, 1,1)) * 14) +
+        ((substr($pis, 2,1)) * 13) +
+        ((substr($pis, 3,1)) * 12) +
+        ((substr($pis, 4,1)) * 11) +
+        ((substr($pis, 5,1)) * 10) +
+        ((substr($pis, 6,1)) * 9) +
+        ((substr($pis, 7,1)) * 8) +
+        ((substr($pis, 8,1)) * 7) +
+        ((substr($pis, 9,1)) * 6) +
+        ((substr($pis, 10,1)) * 5)) + 2);
     $resto = fmod($soma, 11);
     $dv = 11  - $resto;
-    if ($dv == 11) {
-      $dv = 0;
-    }
-    if ($dv == 10) {
-      $soma = ((((substr($pis, 0,1)) * 15) +
-                  ((substr($pis, 1,1)) * 14) +
-                ((substr($pis, 2,1)) * 13) +
-                ((substr($pis, 3,1)) * 12) +
-                ((substr($pis, 4,1)) * 11) +
-                ((substr($pis, 5,1)) * 10) +
-                ((substr($pis, 6,1)) * 9) +
-                ((substr($pis, 7,1)) * 8) +
-                ((substr($pis, 8,1)) * 7) +
-                ((substr($pis, 9,1)) * 6) +
-                ((substr($pis, 10,1)) * 5)) + 2);
-      $resto = fmod($soma, 11);
-      $dv = 11  - $resto;
-      $resultado = $pis."001".$dv;
-    } else {
-      $resultado = $pis."000".$dv;
-    }
-    if ($cns != $resultado) {
-            return false;
-        } else {
-          return true;
-    }
+    $resultado = $pis."001".$dv;
+  } else {
+    $resultado = $pis."000".$dv;
+  }
+  if ($cns != $resultado) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 function validaCnsProvisorio($cns) {
 
-    if ( !is_numeric($cns) ) {
-      return false;
-    }
+  if ( !is_numeric($cns) ) {
+    return false;
+  }
 
-    if ( $cns == '000000000000000' ) {
-      return false;
-    }
+  if ( $cns == '000000000000000' ) {
+    return false;
+  }
 
-    if ((strlen(trim($cns))) != 15) {
-      return false;
-      }
-      $soma = (((substr($cns,0,1)) * 15) +
-      ((substr($cns,1,1)) * 14) +
-      ((substr($cns,2,1)) * 13) +
-      ((substr($cns,3,1)) * 12) +
-      ((substr($cns,4,1)) * 11) +
-      ((substr($cns,5,1)) * 10) +
-      ((substr($cns,6,1)) * 9) +
-      ((substr($cns,7,1)) * 8) +
-      ((substr($cns,8,1)) * 7) +
-      ((substr($cns,9,1)) * 6) +
-      ((substr($cns,10,1)) * 5) +
-      ((substr($cns,11,1)) * 4) +
-      ((substr($cns,12,1)) * 3) +
-      ((substr($cns,13,1)) * 2) +
-      ((substr($cns,14,1)) * 1));
-      $resto = fmod($soma,11);
-      if ($resto != 0) {
-        return false;
-      } else {
-        return true;
-      }
+  if ((strlen(trim($cns))) != 15) {
+    return false;
+  }
+  $soma = (((substr($cns,0,1)) * 15) +
+    ((substr($cns,1,1)) * 14) +
+    ((substr($cns,2,1)) * 13) +
+    ((substr($cns,3,1)) * 12) +
+    ((substr($cns,4,1)) * 11) +
+    ((substr($cns,5,1)) * 10) +
+    ((substr($cns,6,1)) * 9) +
+    ((substr($cns,7,1)) * 8) +
+    ((substr($cns,8,1)) * 7) +
+    ((substr($cns,9,1)) * 6) +
+    ((substr($cns,10,1)) * 5) +
+    ((substr($cns,11,1)) * 4) +
+    ((substr($cns,12,1)) * 3) +
+    ((substr($cns,13,1)) * 2) +
+    ((substr($cns,14,1)) * 1));
+  $resto = fmod($soma,11);
+  if ($resto != 0) {
+    return false;
+  } else {
+    return true;
+  }
 
 }
 
@@ -3298,174 +3343,174 @@ function arr_search( $array, $valor ) {
  */
 function geraArquivoBPA($oDados, $rsCabecalho, $rsProducao, $lValidaCid = true, $sArquivo = "/tmp/arquivobpa.txt") {
 
-    require_once ("dbforms/db_layouttxt.php");
-    include("classes/db_db_layoutcampos_classe.php");
+  require_once(modification("dbforms/db_layouttxt.php"));
+  include(modification("classes/db_db_layoutcampos_classe.php"));
 
-    /* Inicializa variaveis princiais */
-    $cldb_layouttxt      = new db_layouttxt(85, $sArquivo, "");
-    $sValida             = "/tmp/validacns.bpa";
-    $pValidacns          = fopen($sValida, "w");
-    $iPagina             = 1;
-    $iLinhaPagina        = 1;
-    $oCabecalho          = db_utils::fieldsMemory($rsCabecalho, 0);
-    $oCabecalho->cbc_fim = "";
-    $lErro               = false;
-    $objValida           = new stdClass();
-    $objValida->valida   = array(array(), array(), array());
-    $iBpas               = 0;
-    $iUpsAnt             = "";
-    $iCnsMed             = "";
+  /* Inicializa variaveis princiais */
+  $cldb_layouttxt      = new db_layouttxt(85, $sArquivo, "");
+  $sValida             = "/tmp/validacns.bpa";
+  $pValidacns          = fopen($sValida, "w");
+  $iPagina             = 1;
+  $iLinhaPagina        = 1;
+  $oCabecalho          = db_utils::fieldsMemory($rsCabecalho, 0);
+  $oCabecalho->cbc_fim = "";
+  $lErro               = false;
+  $objValida           = new stdClass();
+  $objValida->valida   = array(array(), array(), array());
+  $iBpas               = 0;
+  $iUpsAnt             = "";
+  $iCnsMed             = "";
 
-    /* Escreve no arquivo o cabeçalho */
-    $cldb_layouttxt->setByLineOfDBUtils($oCabecalho, 1);
+  /* Escreve no arquivo o cabeçalho */
+  $cldb_layouttxt->setByLineOfDBUtils($oCabecalho, 1);
 
-    /* Percorre todas as linhas da produção */
-    for ($iIndice = 0; $iIndice < $oDados->iLinhas; $iIndice ++) {
+  /* Percorre todas as linhas da produção */
+  for ($iIndice = 0; $iIndice < $oDados->iLinhas; $iIndice ++) {
 
-      $oProducao = db_utils::fieldsMemory($rsProducao, $iIndice);
+    $oProducao = db_utils::fieldsMemory($rsProducao, $iIndice);
 
-      /* Atualiza o Termometro */
-      db_atutermometro ($iIndice, $oDados->iLinhas, 'termometro');
+    /* Atualiza o Termometro */
+    db_atutermometro ($iIndice, $oDados->iLinhas, 'termometro');
 
-      /* Seta campos da produção */
-      $oProducao->prd_fim = "";
-      if ($oProducao->prd_ups != $iUpsAnt) {
+    /* Seta campos da produção */
+    $oProducao->prd_fim = "";
+    if ($oProducao->prd_ups != $iUpsAnt) {
 
-          $iLinhaPagina = 1;
-          $iPagina      = 1;
-          $iUpsAnt      = $oProducao->prd_ups;
-          $iBpas++;
-
-      }
-      if ($oDados->sTipo == "01") {
-
-        $oProducao->prd_cmp    = $oDados->iCompano.str_pad ($oDados->iCompmes,2, "0", STR_PAD_LEFT);
-        $oProducao->prd_cnspac = str_pad (' ', 15, ' ', STR_PAD_LEFT);
-        $oProducao->prd_sexo   = str_pad (' ', 2, ' ', STR_PAD_LEFT);
-        $oProducao->prd_ibge   = str_pad (' ', 6, ' ', STR_PAD_LEFT);
-        $oProducao->prd_cid    = str_pad (' ', 4, ' ', STR_PAD_LEFT);
-        $oProducao->prd_cnsmed = str_pad (' ', 15, ' ', STR_PAD_LEFT);
-        $oProducao->prd_dtaten = str_pad (' ', 8, ' ', STR_PAD_LEFT);
-        $oProducao->prd_caten  = str_pad (' ', 2, ' ', STR_PAD_LEFT);
-        $oProducao->prd_nmpac  = str_pad (' ', 30, ' ', STR_PAD_LEFT);
-        $oProducao->prd_dtnasc = str_pad (' ', 8, ' ', STR_PAD_LEFT);
-        $oProducao->prd_raca   = "99";
-        $oProducao->prd_naut   = str_pad (' ', 13, ' ', STR_PAD_LEFT );
-        $oProducao->prd_org    = "BPA";
-
-      } else {
-
-        if ($oProducao->prd_cnsmed != $iCnsMed) {
-
-          $iLinhaPagina = 1;
-          $iPagina      = 1;
-          $iCnsMed      = $oProducao->prd_cnsmed;
-          $iBpas++;
-
-        }
-        $oProducao->prd_dtaten = str_replace('-', '', $oProducao->prd_dtaten);
-        $oProducao->prd_dtnasc = str_replace('-', '', $oProducao->prd_dtnasc);
-
-        /* Valida informações antes de gerar o arquivo */
-        if ($oProducao->valida_cns_cgs == 'f') {
-
-          if (( arr_search( $objValida->valida[0],
-                             "$oProducao->cod_pac, $oProducao->prd_nmpac, $oProducao->prd_cnspac" )
-              == false) ) {
-
-            $objValida->valida[0][] = "$oProducao->cod_pac, $oProducao->prd_nmpac, $oProducao->prd_cnspac";
-            $lErro=true;
-
-          }
-        }
-        if ($oProducao->valida_cns_med == 'f') {
-          if (( arr_search( $objValida->valida[1],
-                             "$oProducao->cod_prof, $oProducao->nome_med , $oProducao->prd_cnsmed")
-             == false) ) {
-
-            $objValida->valida[1][] = "$oProducao->cod_prof, $oProducao->nome_med , $oProducao->prd_cnsmed";
-            $lErro=true;
-
-          }
-        }
-        if ($lValidaCid == true) {
-          if ($oProducao->prd_cid == "" && $oProducao->proc_quant_cid > 0) {
-             if (( arr_search( $objValida->valida[2],$oProducao->cod_faa." - ".$oProducao->prd_pa) == false)) {
-
-               $objValida->valida[2][] = $oProducao->cod_faa." - ".$oProducao->prd_pa;
-               $lErro=true;
-
-             }
-          }
-        }
-      }
-      $oProducao->prd_flh = str_pad ($iPagina, 3, "0", STR_PAD_LEFT);
-      $oProducao->prd_seq = str_pad ($iLinhaPagina, 2, "0", STR_PAD_LEFT);
-
-      /* Escreve produção no cabeçalho */
-      $cldb_layouttxt->setByLineOfDBUtils($oProducao, 3);
-
-      /* quebra a pagina quando chega a 20 elementos */
-      if ($iLinhaPagina == 20) {
-
-        $iLinhaPagina = 0;
-        $iPagina++;
-        if ($oDados->sTipo == "01") {
-          $iBpas++;
-        }
-
-      }
-      $iLinhaPagina ++;
+      $iLinhaPagina = 1;
+      $iPagina      = 1;
+      $iUpsAnt      = $oProducao->prd_ups;
+      $iBpas++;
 
     }
-    /* Fecha ponteiro do arquivo */
-    $cldb_layouttxt->fechaArquivo();
+    if ($oDados->sTipo == "01") {
 
-    /* Se houve erro e tipo de BPA 02 individual */
-    if (($lErro == true) && ($oDados->sTipo == "02")) {
-
-      db_msgbox("Arquivo possui inconsistências. Verifique!");
-      asort($objValida->valida[0]);
-      for ($iX = 0; $iX < sizeof( $objValida->valida[0] ); $iX++) {
-
-        fwrite( $pValidacns, "PACIENTES:".$objValida->valida[0][ $iX ]. "\n" );
-
-      }
-      asort($objValida->valida[1]);
-      for ($iX = 0; $iX < sizeof( $objValida->valida[1] ); $iX++) {
-
-        fwrite($pValidacns, "PROFISSIONAIS:".$objValida->valida[1][ $iX ]."\n" );
-
-      }
-      for ($iX = 0; $iX < sizeof( $objValida->valida[2] ); $iX++) {
-
-        fwrite( $pValidacns, "FAA - Procedimento sem CID:".$objValida->valida[2][ $iX ]."\n" );
-
-      }
-      fclose( $pValidacns );
-      ?>
-      <script>
-        jan = window.open('sau2_bpa001.php?bpa=<?=$sValida?>', '',
-                          'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-        jan.moveTo(0,0);
-      </script>
-      <?
-      return -1;
+      $oProducao->prd_cmp    = $oDados->iCompano.str_pad ($oDados->iCompmes,2, "0", STR_PAD_LEFT);
+      $oProducao->prd_cnspac = str_pad (' ', 15, ' ', STR_PAD_LEFT);
+      $oProducao->prd_sexo   = str_pad (' ', 2, ' ', STR_PAD_LEFT);
+      $oProducao->prd_ibge   = str_pad (' ', 6, ' ', STR_PAD_LEFT);
+      $oProducao->prd_cid    = str_pad (' ', 4, ' ', STR_PAD_LEFT);
+      $oProducao->prd_cnsmed = str_pad (' ', 15, ' ', STR_PAD_LEFT);
+      $oProducao->prd_dtaten = str_pad (' ', 8, ' ', STR_PAD_LEFT);
+      $oProducao->prd_caten  = str_pad (' ', 2, ' ', STR_PAD_LEFT);
+      $oProducao->prd_nmpac  = str_pad (' ', 30, ' ', STR_PAD_LEFT);
+      $oProducao->prd_dtnasc = str_pad (' ', 8, ' ', STR_PAD_LEFT);
+      $oProducao->prd_raca   = "99";
+      $oProducao->prd_naut   = str_pad (' ', 13, ' ', STR_PAD_LEFT );
+      $oProducao->prd_org    = "BPA";
 
     } else {
 
-      /* Abre pop-up com link para download do arquivo */
-      ?>
-      <script>
-        listagem = '<?=$sArquivo?>#Download arquivo TXT (BPA)|';
-        js_montarlista(listagem, 'form1');
-      </script>
-      <?
-      return $iBpas;
+      if ($oProducao->prd_cnsmed != $iCnsMed) {
+
+        $iLinhaPagina = 1;
+        $iPagina      = 1;
+        $iCnsMed      = $oProducao->prd_cnsmed;
+        $iBpas++;
+
+      }
+      $oProducao->prd_dtaten = str_replace('-', '', $oProducao->prd_dtaten);
+      $oProducao->prd_dtnasc = str_replace('-', '', $oProducao->prd_dtnasc);
+
+      /* Valida informações antes de gerar o arquivo */
+      if ($oProducao->valida_cns_cgs == 'f') {
+
+        if (( arr_search( $objValida->valida[0],
+            "$oProducao->cod_pac, $oProducao->prd_nmpac, $oProducao->prd_cnspac" )
+          == false) ) {
+
+          $objValida->valida[0][] = "$oProducao->cod_pac, $oProducao->prd_nmpac, $oProducao->prd_cnspac";
+          $lErro=true;
+
+        }
+      }
+      if ($oProducao->valida_cns_med == 'f') {
+        if (( arr_search( $objValida->valida[1],
+            "$oProducao->cod_prof, $oProducao->nome_med , $oProducao->prd_cnsmed")
+          == false) ) {
+
+          $objValida->valida[1][] = "$oProducao->cod_prof, $oProducao->nome_med , $oProducao->prd_cnsmed";
+          $lErro=true;
+
+        }
+      }
+      if ($lValidaCid == true) {
+        if ($oProducao->prd_cid == "" && $oProducao->proc_quant_cid > 0) {
+          if (( arr_search( $objValida->valida[2],$oProducao->cod_faa." - ".$oProducao->prd_pa) == false)) {
+
+            $objValida->valida[2][] = $oProducao->cod_faa." - ".$oProducao->prd_pa;
+            $lErro=true;
+
+          }
+        }
+      }
+    }
+    $oProducao->prd_flh = str_pad ($iPagina, 3, "0", STR_PAD_LEFT);
+    $oProducao->prd_seq = str_pad ($iLinhaPagina, 2, "0", STR_PAD_LEFT);
+
+    /* Escreve produção no cabeçalho */
+    $cldb_layouttxt->setByLineOfDBUtils($oProducao, 3);
+
+    /* quebra a pagina quando chega a 20 elementos */
+    if ($iLinhaPagina == 20) {
+
+      $iLinhaPagina = 0;
+      $iPagina++;
+      if ($oDados->sTipo == "01") {
+        $iBpas++;
+      }
 
     }
+    $iLinhaPagina ++;
 
   }
+  /* Fecha ponteiro do arquivo */
+  $cldb_layouttxt->fechaArquivo();
+
+  /* Se houve erro e tipo de BPA 02 individual */
+  if (($lErro == true) && ($oDados->sTipo == "02")) {
+
+    db_msgbox("Arquivo possui inconsistências. Verifique!");
+    asort($objValida->valida[0]);
+    for ($iX = 0; $iX < sizeof( $objValida->valida[0] ); $iX++) {
+
+      fwrite( $pValidacns, "PACIENTES:".$objValida->valida[0][ $iX ]. "\n" );
+
+    }
+    asort($objValida->valida[1]);
+    for ($iX = 0; $iX < sizeof( $objValida->valida[1] ); $iX++) {
+
+      fwrite($pValidacns, "PROFISSIONAIS:".$objValida->valida[1][ $iX ]."\n" );
+
+    }
+    for ($iX = 0; $iX < sizeof( $objValida->valida[2] ); $iX++) {
+
+      fwrite( $pValidacns, "FAA - Procedimento sem CID:".$objValida->valida[2][ $iX ]."\n" );
+
+    }
+    fclose( $pValidacns );
+    ?>
+    <script>
+      jan = window.open('sau2_bpa001.php?bpa=<?=$sValida?>', '',
+        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+      jan.moveTo(0,0);
+    </script>
+    <?
+    return -1;
+
+  } else {
+
+    /* Abre pop-up com link para download do arquivo */
+    ?>
+    <script>
+      listagem = '<?=$sArquivo?>#Download arquivo TXT (BPA)|';
+      js_montarlista(listagem, 'form1');
+    </script>
+    <?
+    return $iBpas;
+
+  }
+
+}
 
 /*
  * Função que soma dias, messes e ou anos a uma determinada data
@@ -3481,7 +3526,7 @@ function geraArquivoBPA($oDados, $rsCabecalho, $rsProducao, $lValidaCid = true, 
  */
 function somaDataDiaMesAno($iDia, $iMes, $iAno, $iDiaSomar, $iMesSomar, $iAnoSomar, $iFormato = 1) {
 
-  require_once("ext/php/adodb-time.inc.php");
+  require_once(modification("ext/php/adodb-time.inc.php"));
   $dTimestamp  = adodb_mktime(0, 0, 0, $iMes, $iDia, $iAno);
   $dTimestamp += $iAnoSomar * 31557600; //31536000
   $dTimestamp += $iMesSomar * 2629800;  //2628000
@@ -3506,7 +3551,7 @@ function quantDias($data1, $data2) {
   $aVet1=explode("/",$data1);
   $aVet2=explode("/",$data2);
   return round((mktime(0,0,0,$aVet2[1],$aVet2[0],$aVet2[2])-
-                mktime(0,0,0,$aVet1[1],$aVet1[0],$aVet1[2])) / (24 * 60 * 60), 0);
+      mktime(0,0,0,$aVet1[1],$aVet1[0],$aVet1[2])) / (24 * 60 * 60), 0);
 }
 function ParamAvalAlternativa($escola) {
 
@@ -3544,19 +3589,19 @@ function validaSaldo($sTipoGrade, $sd23_i_undmedhor, $sd23_d_consulta, $sd23_i_f
     //grade por periodo verifica a quantidade de fichas
 
     $sSql               = $oDaoAgendamentos->sql_query("",
-                                                       "*",
-                                                       "",
-                                                       " sd23_i_undmedhor = $sd23_i_undmedhor ".
-                                                       " and sd23_d_consulta='$sd23_d_consulta' ".
-                                                       " and $sWhere "
-                                                      );
+      "*",
+      "",
+      " sd23_i_undmedhor = $sd23_i_undmedhor ".
+      " and sd23_d_consulta='$sd23_d_consulta' ".
+      " and $sWhere "
+    );
     $rsAgendamento      = $oDaoAgendamentos->sql_record($sSql);
     $iFichasMarcadas    = $oDaoAgendamentos->numrows;
     $sSql               = $oDaoUndmedhorario->sql_query("",
-                                                        "sd30_i_fichas,sd30_i_reservas",
-                                                        "",
-                                                        " sd30_i_codigo = $sd23_i_undmedhor"
-                                                       );
+      "sd30_i_fichas,sd30_i_reservas",
+      "",
+      " sd30_i_codigo = $sd23_i_undmedhor"
+    );
     $rsUndmedhorario    = $oDaoUndmedhorario->sql_record($sSql);
     if ($oDaoUndmedhorario->numrows > 0) {
       $oUndmedhorario   = db_utils::fieldsmemory($rsUndmedhorario, 0);
@@ -3572,13 +3617,13 @@ function validaSaldo($sTipoGrade, $sd23_i_undmedhor, $sd23_d_consulta, $sd23_i_f
 
     //verifica se o id da ficha ja esta agendade
     $sSql          = $oDaoAgendamentos->sql_query("",
-                                                  "*",
-                                                  "",
-                                                  " sd23_i_undmedhor    = $sd23_i_undmedhor ".
-                                                  " and sd23_i_ficha    = $sd23_i_ficha ".
-                                                  " and sd23_d_consulta = '$sd23_d_consulta' ".
-                                                  " and $sWhere "
-                                                 );
+      "*",
+      "",
+      " sd23_i_undmedhor    = $sd23_i_undmedhor ".
+      " and sd23_i_ficha    = $sd23_i_ficha ".
+      " and sd23_d_consulta = '$sd23_d_consulta' ".
+      " and $sWhere "
+    );
     $rsAgendamento = $oDaoAgendamentos->sql_record($sSql);
     if ($oDaoAgendamentos->numrows > 0) {
       return false;
@@ -3592,8 +3637,8 @@ function validaSaldo($sTipoGrade, $sd23_i_undmedhor, $sd23_d_consulta, $sd23_i_f
 
 function geraArquivoHiperdia($iTipo, $sArquivo, $rsRegistros, $iLinhas) {
 
-  require_once('dbforms/db_layouttxt.php');
-  require_once('classes/db_db_layoutcampos_classe.php');
+  require_once(modification('dbforms/db_layouttxt.php'));
+  require_once(modification('classes/db_db_layoutcampos_classe.php'));
 
   $iCodLayout = null;
   switch($iTipo) {
@@ -3645,7 +3690,7 @@ function geraArquivoHiperdia($iTipo, $sArquivo, $rsRegistros, $iLinhas) {
   for ($iIndice = 0; $iIndice < $iLinhas; $iIndice++) {
 
     $oRegistro = db_utils::fieldsMemory($rsRegistros, $iIndice)
-                 or die ('Erro na geração do Arquivo. Contate o administrador do sistema.');
+    or die ('Erro na geração do Arquivo. Contate o administrador do sistema.');
 
     db_atutermometro ($iIndice, $iLinhas, 'termometro');
     if ($iTipo == 2) {
@@ -3749,33 +3794,33 @@ function modeloFaa($cod) {
 
     case 1:
 
-        return "sau2_emitirfaa002.php";
-        break;
+      return "sau2_emitirfaa002.php";
+      break;
 
     case 2:
 
-        return "sau2_emitirfaa003.php";
-        break;
+      return "sau2_emitirfaa003.php";
+      break;
 
     case 3:
 
-        return "sau2_fichaatend005.php";
-        break;
+      return "sau2_fichaatend005.php";
+      break;
 
     case 4:
 
-        return "sau2_fichaatend006.php";
-        break;
+      return "sau2_fichaatend006.php";
+      break;
 
     case 5:
 
-        return "sau2_emitirfaa004.php";
-        break;
+      return "sau2_emitirfaa004.php";
+      break;
 
     case 6:
 
-        return "sau2_emitirfaa005.php";
-        break;
+      return "sau2_emitirfaa005.php";
+      break;
 
     default:
 
@@ -3910,27 +3955,27 @@ function diferencaEmMinutos($sHoraIni, $sHoraFim) {
 
   return $iMinutosFim - $iMinutosIni;
 
-/*  $iHorasTrabalhadas = ($minutosFim - $minutosIni) / 60;
-  $iHorasTrabalhadas = $iHorasTrabalhadas > 20 ? $iHorasTrabalhadas - 20 : $iHorasTrabalhadas;
-  $decimal           =  strstr($iHorasTrabalhadas, '.');
+  /*  $iHorasTrabalhadas = ($minutosFim - $minutosIni) / 60;
+		$iHorasTrabalhadas = $iHorasTrabalhadas > 20 ? $iHorasTrabalhadas - 20 : $iHorasTrabalhadas;
+		$decimal           =  strstr($iHorasTrabalhadas, '.');
 
-  if ($decimal != '') {
+		if ($decimal != '') {
 
-    $minutos_decimal = round($decimal * 60);
-    $explode         = explode('.', $iHorasTrabalhadas);
-    $horas_finais    = @str_pad($explode[0], 2, 0, str_pad_left).':'.@str_pad($minutos_decimal, 2, 0, str_pad_left);
-    $minutos_finais  = $minutos_decimal + ($explode[0] * 60);
+			$minutos_decimal = round($decimal * 60);
+			$explode         = explode('.', $iHorasTrabalhadas);
+			$horas_finais    = @str_pad($explode[0], 2, 0, str_pad_left).':'.@str_pad($minutos_decimal, 2, 0, str_pad_left);
+			$minutos_finais  = $minutos_decimal + ($explode[0] * 60);
 
-  } else {
+		} else {
 
-    $horas_finais   = @str_pad($iHorasTrabalhadas,2,0,str_pad_left).":00";
-    $minutos_finais = $iHorasTrabalhadas * 60;
+			$horas_finais   = @str_pad($iHorasTrabalhadas,2,0,str_pad_left).":00";
+			$minutos_finais = $iHorasTrabalhadas * 60;
 
-  }
+		}
 
-  $minutos_finais = $minutos_finais < 0 ? $minutos_finais * (-1) : $minutos_finais;
-  return $minutos_finais;
-*/
+		$minutos_finais = $minutos_finais < 0 ? $minutos_finais * (-1) : $minutos_finais;
+		return $minutos_finais;
+	*/
 
 }
 
@@ -4032,16 +4077,16 @@ function verificaAgendamentoHorario($sHoraIni, $sHoraFim, $dIni, $dFim, $iEspecM
       $rs      = $oDaoAusencias->sql_record($sSql);
 
       $iMinTrab           = diferencaEmMinutos($aGradesPeriodo[$iCont]->sd30_c_horaini,
-                                               $aGradesPeriodo[$iCont]->sd30_c_horafim
-                                              );
+        $aGradesPeriodo[$iCont]->sd30_c_horafim
+      );
       $iNumFichas         = $aGradesPeriodo[$iCont]->sd30_i_fichas + $aGradesPeriodo[$iCont]->sd30_i_reservas;
       $iIntervalo         = number_format(($iMinTrab / $iNumFichas), 2, '.', '');
 
       /* Horário final que já estaria agendado (mas como pode haver ausencias neste período,
          os agendamentos podem acabar sendo movidos para horários mais adiante */
       $sHoraFimJaAgendado = somaMinutosHora($aGradesPeriodo[$iCont]->sd30_c_horaini,
-                                            $iIntervalo * $aGradesPeriodo[$iCont]->numagendamentos
-                                           );
+        $iIntervalo * $aGradesPeriodo[$iCont]->numagendamentos
+      );
 
       for ($iCont2 = 0; $iCont2 < $oDaoAusencias->numrows; $iCont2++) {
 
@@ -4049,23 +4094,23 @@ function verificaAgendamentoHorario($sHoraIni, $sHoraFim, $dIni, $dFim, $iEspecM
 
         // Se a ausencia começar no período já agendado, tenho que aumentar o tempo de ausência ao período já ocupado
         if ($oAusencia->sd06_c_horainicio >= $aGradesPeriodo[$iCont]->sd30_c_horaini
-            && $oAusencia->sd06_c_horainicio <= $sHoraFimJaAgendado) {
+          && $oAusencia->sd06_c_horainicio <= $sHoraFimJaAgendado) {
 
           $sHoraFimJaAgendado = somaMinutosHora($sHoraFimJaAgendado,
-                                                diferencaEmMinutos($oAusencia->sd06_c_horainicio,
-                                                                   $oAusencia->sd06_c_horafim
-                                                                  )
-                                               );
+            diferencaEmMinutos($oAusencia->sd06_c_horainicio,
+              $oAusencia->sd06_c_horafim
+            )
+          );
 
-        /* Se a ausência terminar no período já agendado, mas começar antes dele,
-           tenho que aumentar o tempo do inicio da grade até o fim da ausência ao período já ocupado */
+          /* Se a ausência terminar no período já agendado, mas começar antes dele,
+						 tenho que aumentar o tempo do inicio da grade até o fim da ausência ao período já ocupado */
         } elseif ($oAusencia->sd06_c_horafim >= $aGradesPeriodo[$iCont]->sd30_c_horaini
-                  && $oAusencia->sd06_c_horafim <= $sHoraFimJaAgendado) {
+          && $oAusencia->sd06_c_horafim <= $sHoraFimJaAgendado) {
           $sHoraFimJaAgendado = somaMinutosHora($sHoraFimJaAgendado,
-                                                diferencaEmMinutos($aGradesPeriodo[$iCont]->sd30_c_horaini,
-                                                                   $oAusencia->sd06_c_horafim
-                                                                  )
-                                               );
+            diferencaEmMinutos($aGradesPeriodo[$iCont]->sd30_c_horaini,
+              $oAusencia->sd06_c_horafim
+            )
+          );
         }
 
       }
@@ -4074,18 +4119,18 @@ function verificaAgendamentoHorario($sHoraIni, $sHoraFim, $dIni, $dFim, $iEspecM
       if ($oDaoAusencias->numrows > 1) {
         $sHoraFimJaAgendado = somaMinutosHora($sHoraFimJaAgendado, 1);
       }
-/*
-   die ("($sHoraIni >= {$aGradesPeriodo[$iCont]->sd30_c_horaini}
-          && $sHoraIni <= $sHoraFimJaAgendado)
-          || ($sHoraFim <= $sHoraFimJaAgendado
-          && $sHoraFim >= {$aGradesPeriodo[$iCont]->sd30_c_horaini})
-          || ($sHoraIni <= {$aGradesPeriodo[$iCont]->sd30_c_horaini}
-          && $sHoraFim >= $sHoraFimJaAgendado)");*/
+      /*
+				 die ("($sHoraIni >= {$aGradesPeriodo[$iCont]->sd30_c_horaini}
+								&& $sHoraIni <= $sHoraFimJaAgendado)
+								|| ($sHoraFim <= $sHoraFimJaAgendado
+								&& $sHoraFim >= {$aGradesPeriodo[$iCont]->sd30_c_horaini})
+								|| ($sHoraIni <= {$aGradesPeriodo[$iCont]->sd30_c_horaini}
+								&& $sHoraFim >= $sHoraFimJaAgendado)");*/
       if (($sHoraIni >= $aGradesPeriodo[$iCont]->sd30_c_horaini
           && $sHoraIni <= $sHoraFimJaAgendado)
-          || ($sHoraFim <= $sHoraFimJaAgendado
+        || ($sHoraFim <= $sHoraFimJaAgendado
           && $sHoraFim >= $aGradesPeriodo[$iCont]->sd30_c_horaini)
-          || ($sHoraIni <= $aGradesPeriodo[$iCont]->sd30_c_horaini
+        || ($sHoraIni <= $aGradesPeriodo[$iCont]->sd30_c_horaini
           && $sHoraFim >= $sHoraFimJaAgendado)) {
 
         return true;
@@ -4103,22 +4148,22 @@ function verificaAgendamentoHorario($sHoraIni, $sHoraFim, $dIni, $dFim, $iEspecM
     for ($iCont = 0; $iCont < $iTam; $iCont++) {
 
       $iMinTrab      = diferencaEmMinutos($aGradesIntervalo[$iCont]->sd30_c_horaini,
-                                          $aGradesIntervalo[$iCont]->sd30_c_horafim
-                                         );
+        $aGradesIntervalo[$iCont]->sd30_c_horafim
+      );
       $iNumFichas    = $aGradesIntervalo[$iCont]->sd30_i_fichas + $aGradesIntervalo[$iCont]->sd30_i_reservas;
       $iIntervalo    = number_format(($iMinTrab / $iNumFichas), 2, '.', '');
 
       // Horário de início da ficha
       $sHoraIniFicha = somaMinutosHora($aGradesIntervalo[$iCont]->sd30_c_horaini,
-                                       ($iIntervalo * ($aGradesIntervalo[$iCont]->sd23_i_ficha - 1)) + 1
-                                      );
+        ($iIntervalo * ($aGradesIntervalo[$iCont]->sd23_i_ficha - 1)) + 1
+      );
       // Horário de fim da ficha
       $sHoraFimFicha = somaMinutosHora($aGradesIntervalo[$iCont]->sd30_c_horaini,
-                                       $iIntervalo * $aGradesIntervalo[$iCont]->sd23_i_ficha
-                                      );
+        $iIntervalo * $aGradesIntervalo[$iCont]->sd23_i_ficha
+      );
       if (($sHoraIni >= $sHoraIniFicha && $sHoraIni <= $sHoraFimFicha)
-          || ($sHoraFim <= $sHoraFimFicha && $sHoraFim >= $sHoraIniFicha)
-          || ($sHoraIni <= $sHoraIniFicha && $sHoraFim >= $sHoraFimFicha)) {
+        || ($sHoraFim <= $sHoraFimFicha && $sHoraFim >= $sHoraIniFicha)
+        || ($sHoraIni <= $sHoraIniFicha && $sHoraFim >= $sHoraFimFicha)) {
 
         return true;
 
@@ -4176,22 +4221,22 @@ function selectModelosFaa($iModeloSelecionar = null) {
     $GLOBALS['s103_i_modelofaa'] = $iModeloSelecionar;
   }
   $aX = array('1' => 'Modelo 1 Padrão',
-              '2' => 'Modelo 2 Continuada',
-              '3' => 'Modelo 3 ',
-              '4' => 'Modelo 4 ',
-              '5' => 'Modelo 1 Com 1 via',
-              '6' => 'Modelo TXT - Alegrete',
-              '7' => 'Modelo TXT - Bagé'
-             );
+    '2' => 'Modelo 2 Continuada',
+    '3' => 'Modelo 3 ',
+    '4' => 'Modelo 4 ',
+    '5' => 'Modelo 1 Com 1 via',
+    '6' => 'Modelo TXT - Alegrete',
+    '7' => 'Modelo TXT - Bagé'
+  );
 
   $aY = array('1' => 'sau2_emitirfaa002.php',
-              '2' => 'sau2_emitirfaa003.php',
-              '3' => 'sau2_fichaatend005.php',
-              '4' => 'sau2_fichaatend006.php',
-              '5' => 'sau2_emitirfaa004.php',
-              '6' => 'sau2_emitirfaa005.php',
-              '7' => 'sau2_emitirfaa006.php'
-             );
+    '2' => 'sau2_emitirfaa003.php',
+    '3' => 'sau2_fichaatend005.php',
+    '4' => 'sau2_fichaatend006.php',
+    '5' => 'sau2_emitirfaa004.php',
+    '6' => 'sau2_emitirfaa005.php',
+    '7' => 'sau2_emitirfaa006.php'
+  );
 
   db_select('s103_i_modelofaa', $aX, true, 1);
   db_select('sArquivoFaa', $aY, true, 1, 'style="display: none;"');
@@ -4206,14 +4251,19 @@ function selectModelosFaa($iModeloSelecionar = null) {
  * @param int $sRh70_estrutural   Código estrutural da especialidade
  * @param int $iAnocomp           Quando informado pega os registros apenas daquele ano
  * @param int $iMescomp           Quando informado pega os registros apenas daquele mes
+ * @param int $iUndmedhorario     Código referente ao dia da grade de horário
+ * @param int $iMedico            Médico a ter as cotas validadas
  * @return Array com dados das cotas do agendamento, quantidade em cotas, e uma mensagem.
  */
 
-function getCotasAgendamento($iUpssolicitante, $iUpsprestadora=null, $sRh70_estrutural=null, $iAnocomp=null,
-                                                                               $iMescomp=null, $iUndmedhorario = 0) {
+function getCotasAgendamento(
+  $iUpssolicitante, $iUpsprestadora = null, $sRh70_estrutural = null, $iAnocomp = null,
+  $iMescomp = null, $iUndmedhorario = 0, $iMedico = null
+) {
 
-  $oDaoCotasAgendamento = db_utils::getdao('sau_cotasagendamento');
+  $oDaoCotasAgendamento = new cl_sau_cotasagendamento();
   $sCampos              = ' s163_i_codigo, s163_i_quantidade, s163_i_upsprestadora, rh70_estrutural, rh70_descr ';
+
   if ($iUndmedhorario != 0) {
 
     $sCampos             .= ' ,(select s164_quantidade from sau_cotasagendamentoprofissional ';
@@ -4221,32 +4271,31 @@ function getCotasAgendamento($iUpssolicitante, $iUpsprestadora=null, $sRh70_estr
     $sCampos             .= '  inner join undmedhorario as y on y.sd30_i_undmed = x.sd27_i_codigo ';
     $sCampos             .= '  where s164_cotaagendamento = s163_i_codigo and y.sd30_i_codigo = '.$iUndmedhorario.' ';
     $sCampos             .= 'limit 1) as saldo_medico ';
-
   }
-  $sWhere               = " s163_i_upssolicitante = '$iUpssolicitante' ";
-  $sWhere              .= (isset($sRh70_estrutural) && !empty($sRh70_estrutural)) ?
-                          " AND rh70_estrutural =  '$sRh70_estrutural' " : "";
-  $sWhere              .= (isset($iAnocomp) && !empty($iAnocomp)) ?
-                          " AND s163_i_anocomp =  '$iAnocomp'" : "";
-  $sWhere              .= (isset($iMescomp) && !empty($iMescomp)) ?
-                          " AND s163_i_mescomp =  '$iMescomp' " : "";
-  $sWhere              .= (isset($iUpsprestadora) && !empty($iUpsprestadora)) ?
-                          " AND s163_i_upsprestadora = '$iUpsprestadora'" : "";
-  $sSql                 = $oDaoCotasAgendamento->sql_query_cotas(null, $sCampos, null, $sWhere);
-  $rs                   = $oDaoCotasAgendamento->sql_record($sSql);
 
-  if ($oDaoCotasAgendamento->numrows > 0) {
+  $sWhere  = " s163_i_upssolicitante = '$iUpssolicitante' ";
+  $sWhere .= isset($sRh70_estrutural) && !empty($sRh70_estrutural) ? " AND rh70_estrutural =  '$sRh70_estrutural' " : "";
+  $sWhere .= isset($iAnocomp) && !empty($iAnocomp) ? " AND s163_i_anocomp =  '$iAnocomp'" : "";
+  $sWhere .= isset($iMescomp) && !empty($iMescomp) ? " AND s163_i_mescomp =  '$iMescomp' " : "";
+  $sWhere .= isset($iUpsprestadora) && !empty($iUpsprestadora) ? " AND s163_i_upsprestadora = '$iUpsprestadora'" : "";
+
+  if( !is_null( $iMedico ) ) {
+    $sWhere .= " AND sd04_i_medico = {$iMedico}";
+  }
+
+  $sSql = $oDaoCotasAgendamento->sql_query_cotas(null, $sCampos, null, $sWhere);
+  $rs   = db_query( $sSql );
+
+  $oResult                    = new stdClass();
+  $oResult->lStatus           = 0;
+  $oResult->sMensagem         = "Não encontrado o controle por cotas para a UPS solicitante.";
+  $oResult->aCotasAgendamento = null;
+
+  if( is_resource( $rs ) && pg_num_rows( $rs ) > 0 ) {
 
     $oResult->lStatus           = 1;
     $oResult->sMensagem         = "Agendamento realizado por cotas.";
     $oResult->aCotasAgendamento = db_utils::getCollectionByRecord($rs, false, false, true);
-
-  } else {
-
-    $oResult->lStatus           = 0;
-    $oResult->sMensagem         = "Não encontrado o controle por cotas para a UPS solicitante.";
-    $oResult->aCotasAgendamento = null;
-
   }
 
   return $oResult;
@@ -4371,7 +4420,7 @@ function verificaMatriculados($iTurma, $iEscola = null, $iTipoRetorno = 1) {
  * @return bool
  * @throws Exception
  */
-function trocaTurma($iSeqMatricula, $iCodigoTurmaDestino, $lAproveitamento = false, $iMatriculaOrigem = null, $sTurno = null) {
+function trocaTurma($iSeqMatricula, $iCodigoTurmaDestino, $lAproveitamento = false, $iMatriculaOrigem = null, $sTurno = null, $lValidaEtapataOrigem = true) {
 
   if (!db_utils::inTransaction()) {
     throw new Exception('Não existe transação ativa com o banco de dados.');
@@ -4434,7 +4483,7 @@ function trocaTurma($iSeqMatricula, $iCodigoTurmaDestino, $lAproveitamento = fal
   $oDaoMatricula->ed60_matricula       = $iMatriculaOrigem;
 
   if ($oDadosTurma->ultimo_numero != '') {
-   $oDaoMatricula->ed60_i_numaluno = $oDadosTurma->ultimo_numero + 1;
+    $oDaoMatricula->ed60_i_numaluno = $oDadosTurma->ultimo_numero + 1;
   }
 
   $oDaoMatricula->incluir(null);
@@ -4448,12 +4497,36 @@ function trocaTurma($iSeqMatricula, $iCodigoTurmaDestino, $lAproveitamento = fal
 
   $iSerieDestino = null;
 
-  for ($iSerie = 0; $iSerie < $iTotalSeriesTurma; $iSerie++) {
+  /**
+   * Alterado lógica que identifica a etapa de origem para validar se etapa da turma de destino = etapa turma de origem
+   * Como essa função é chamada somente quando ensino turma origem = ensino turma de destino o código das etapas serão iguais
+   */
+  $iCodigoEtapaOrigem = null;
+  if ( !empty($iMatriculaOrigem) ) {
 
-    $oDadosSerie = db_utils::fieldsMemory($rsSerieTurma, $iSerie);
-    $sOrigem = 'S';
-    if ($iSerie > 0) {
-      $sOrigem = "N";
+    $oMatriculaOrigem   = MatriculaRepository::getMatriculaByCodigo($iMatriculaOrigem);
+    $iCodigoEtapaOrigem = $oMatriculaOrigem->getEtapaDeOrigem()->getCodigo();
+  }
+
+  for ($i = 0; $i < $iTotalSeriesTurma; $i++) {
+
+    $oDadosSerie = db_utils::fieldsMemory($rsSerieTurma, $i);
+    $sOrigem     = "N";
+    if ($iCodigoEtapaOrigem == $oDadosSerie->ed11_i_codigo ) {
+      $sOrigem = 'S';
+    }
+
+    /**
+     * Lógica aplicada quando função chamada da rotina de Alterar Situação da Matricula e selecionado a
+     * opção: MATRICULA INDEVIDA é possível selecionar uma turma de qualquer etapa do ensino (maior ou menor que etapa atual)
+     *  sendo assim a Etapa de origem pode ser diferente da turma de destino.
+     */
+    if (!$lValidaEtapataOrigem) {
+
+      $sOrigem = 'S';
+      if ($i > 0) {
+        $sOrigem = 'N';
+      }
     }
 
     $iSerieDestino                         = $oDadosSerie->ed11_i_codigo;
@@ -4515,6 +4588,10 @@ function trocaTurma($iSeqMatricula, $iCodigoTurmaDestino, $lAproveitamento = fal
     }
   }
 
+  if( empty($sTurno) ) {
+    throw new BusinessException('Nenhum turno foi selecionado.');
+  }
+
   if ( !empty( $sTurno ) ) {
 
     /**
@@ -4562,8 +4639,8 @@ function verificaNotaFinalAprovadoConselho(DiarioAvaliacaoDisciplina $oDiarioDis
 
     $oAprovadoConselho = $oResultadoFinal->getFormaAprovacaoConselho();
     if ($oAprovadoConselho &&
-        $oResultadoFinal->getFormaAprovacaoConselho()->getFormaAprovacao() == 1 &&
-        $oResultadoFinal->getFormaAprovacaoConselho()->getAlterarNotaFinal() == 2)  {
+      $oResultadoFinal->getFormaAprovacaoConselho()->getFormaAprovacao() == 1 &&
+      $oResultadoFinal->getFormaAprovacaoConselho()->getAlterarNotaFinal() == 2)  {
 
       return $oResultadoFinal->getFormaAprovacaoConselho()->getAvaliacaoConselho();
 
@@ -4582,14 +4659,14 @@ function verificaReclassificadoBaixaFrequencia( $oDisciplinasDiario ) {
 
   $lReclassificadoBaixaFrequencia = false;
 
-    $oDiario       = $oDisciplinasDiario->getDiario();
-    $iFormaCalculo = $oDiario->getProcedimentoDeAvaliacao()->getFormaCalculoFrequencia();
+  $oDiario       = $oDisciplinasDiario->getDiario();
+  $iFormaCalculo = $oDiario->getProcedimentoDeAvaliacao()->getFormaCalculoFrequencia();
 
-    if ( $iFormaCalculo == 1) {
-      $lReclassificadoBaixaFrequencia = $oDisciplinasDiario->reclassificadoPorBaixaFrequencia();
-    } else {
-      $lReclassificadoBaixaFrequencia = $oDiario->reclassificadoPorBaixaFrequencia();
-    }
+  if ( $iFormaCalculo == 1) {
+    $lReclassificadoBaixaFrequencia = $oDisciplinasDiario->reclassificadoPorBaixaFrequencia();
+  } else {
+    $lReclassificadoBaixaFrequencia = $oDiario->reclassificadoPorBaixaFrequencia();
+  }
 
   return $lReclassificadoBaixaFrequencia;
 }

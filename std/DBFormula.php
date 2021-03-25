@@ -6,7 +6,7 @@
 abstract class DBFormula {
 
   /**
-   * FÃ³rmulas que ficarÃ£o em memÃ³ria, que sejam utilizadas
+   * Fórmulas que ficarão em memória, que sejam utilizadas
    */
   protected $aFormulas          = array();
   protected $aFormulasEstaticas = array();
@@ -14,7 +14,7 @@ abstract class DBFormula {
   const REGEX_PARSE  = "|\[(.*)\]|U";
 
   /**
-   * Interpreta a fÃ³rmula
+   * Interpreta a fórmula
    *
    * @param String $sFormula
    */
@@ -44,11 +44,19 @@ abstract class DBFormula {
 
     $aResposta = array_intersect_key($aResposta, $this->aFormulas);
 
-    /**
-     * Retorna quando nÃ£o consegue mais achar nenhuma formula conhecida
-     */
     if (count($aResposta) == 0) {
-      return $sFormula;
+
+      /**
+       * Retorna quando não consegue mais achar nenhuma formula conhecida
+       */
+      if(preg_match_all(DBFormula::REGEX_PARSE, $sFormula, $aFormulasRestantes) == 0) {
+        return $sFormula;
+      } else {
+        /**
+         * Se ainda há fórmulas que são desconhecidas, deve retornar erro para nao ocorrer erro de SQL
+         */
+        throw new BusinessException("Há fórmulas desconhecidas. Verifique.");
+      }
     }
 
     /**
@@ -75,7 +83,7 @@ abstract class DBFormula {
     $rsSql          = db_query($sSql);
 
     if ( !$rsSql ) {
-      throw new DBException("Erro ao buscar as fÃ³rmulas cadastradas.");
+      throw new DBException("Erro ao buscar as fórmulas cadastradas.");
     }
 
     foreach (db_utils::getCollectionByRecord($rsSql) as $oDados) {
@@ -87,7 +95,7 @@ abstract class DBFormula {
   }
 
   /**
-   * Adiciona ao ambiente, variÃ¡veis com valores definidos
+   * Adiciona ao ambiente, variáveis com valores definidos
    *
    * @param mixed $sVariavel
    * @param mixed $sFormula
@@ -98,3 +106,4 @@ abstract class DBFormula {
 
 
 }
+

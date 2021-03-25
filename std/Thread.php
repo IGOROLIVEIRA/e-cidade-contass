@@ -194,7 +194,8 @@ class Thread {
     if( $this->isAlive() || $lForce ) {
       posix_kill( $this->pid, $_signal );
       if( $_wait ) {
-        pcntl_waitpid( $this->pid, $status = 0 );
+        $status = 0;
+        pcntl_waitpid( $this->pid, $status);
       }
     }
   }

@@ -40,7 +40,41 @@ class Check {
    * @param $iValorMaximo
    * @return bool
    */
-  public static function between ($iValorProcurado, $iValorMinimo, $iValorMaximo) {
+  public static function between($iValorProcurado, $iValorMinimo, $iValorMaximo) {
     return ($iValorProcurado >= $iValorMinimo && $iValorProcurado <= $iValorMaximo);
+  }
+
+  /**
+   * Verifica se o valor informado é inteiro ou compatível com inteiro.
+   * @param $iValor
+   *
+   * @return bool
+   */
+  public static function isInt($iValor) {
+    return filter_var($iValor, FILTER_VALIDATE_INT, array('flags' => FILTER_NULL_ON_FAILURE)) !== null;
+  }
+
+  /**
+   * Verifica se o valor informadi é float ou compatível com float.
+   * @param $nValor
+   *
+   * @return bool
+   */
+  public static function isFloat($nValor) {
+    return filter_var($nValor, FILTER_VALIDATE_FLOAT, array('flags' => FILTER_NULL_ON_FAILURE)) !== null;
+  }
+
+  /**
+   * Verifica se o valor informado é boolean ou compatível com boolean.
+   * @param $nValor
+   *
+   * @return bool
+   */
+  public static function isBoolean($nValor) {
+
+    if (is_bool($nValor)) {
+      return true;
+    }
+    return filter_var($nValor, FILTER_VALIDATE_BOOLEAN, array('flags' => FILTER_NULL_ON_FAILURE)) !== null;
   }
 }

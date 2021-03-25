@@ -29,8 +29,7 @@
 <frameset id="quadroprincipal" rows="60,*,19" cols="*" frameborder="no" framespacing="0" border="0" onUnload="js_fechaJanela();">
   <frame src="topo.php?uso=<?=$uso?>" name="topo"      frameborder="no" scrolling="no"   noresize id="topo">
   <frame src="instit.php"             name="corpo"     frameborder="no" scrolling="auto" noresize id="corpo">
-  <frame src="status.php?DB_id_usuario=<?=$_SESSION['DB_id_usuario']?>&DB_administrador=<?=$_SESSION['DB_administrador']?>"
-               name="bstatus"   frameborder="no" scrolling="no"   noresize id="bstatus" bordercolor="#000000">
+  <frame src="status.php"             name="bstatus"   frameborder="no" scrolling="no"   noresize id="bstatus" bordercolor="#000000">
 </frameset>
 <noframes>
   <body>

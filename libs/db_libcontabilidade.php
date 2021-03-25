@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -28,11 +28,10 @@
 /**
  * classes e funções contabeis
  * @package contabilidade
- * Revisão$Author: dbmauricio $
- * @version $Revision: 1.220 $
+ * Revisão$Author: dbroberto $
+ * @version $Revision: 1.232 $
  */
-require_once("classes/db_contranslan_classe.php");
-require_once("dbforms/db_funcoes.php");
+require_once(modification("classes/db_contranslan_classe.php"));
 
 //|00|//cl_despdesdobramento
 //|10|// emite despesa por desdobramento
@@ -54,8 +53,7 @@ class cl_desdobramento {
     sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidado,
     sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornado,
     sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamento,
-    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornado,
-    sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornado
+    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornado
     from conlancamele
     inner join conlancam on c67_codlan=c70_codlan
     inner join conlancamemp on c75_codlan = c70_codlan
@@ -74,7 +72,7 @@ class cl_desdobramento {
     $sql .= "
     empempenho.e60_instit in $w_instit
     and ( conlancam.c70_data >='$dtini' and conlancam.c70_data <='$dtfim' )
-    and conhistdoc.c53_tipo in (10,11,20,21,30,31,32)
+    and conhistdoc.c53_tipo in (10,11,20,21,30,31)
     group by /* o58_codele, */
     c60_estrut,
     c60_descr,
@@ -85,167 +83,6 @@ class cl_desdobramento {
     ";
     return analiseQueryPlanoOrcamento($sql);
   }
-
-  function sql_liquidacao($where = "", $dtini, $dtfim, $w_instit = "(1) ", $w_elemento = "") {
-
-    $sql = "select
-    c60_estrut,
-    c60_descr,
-    substr(o56_elemento||'00',1,15) as o56_elemento,
-    o56_descr,
-    sum(case when c53_tipo = 10  then c70_valor else 0 end ) as empenhado,
-    sum(case when c53_tipo = 11  then c70_valor else 0 end ) as empenhado_estornado,
-    sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidado,
-    sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornado,
-    sum(case when c53_tipo = 20 and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end) as liquidado_mes_origem,
-    sum(case when c53_tipo = 21 and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end) as liquidado_estornado_mes_origem,
-    sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamento,
-    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornado,
-    sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornado,
-    sum(case when c53_tipo = 11 and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end) as estornado_mes_origem,
-    sum(case when c53_tipo = 11 and mes_origem_empenho != date_part('month',c70_data) then c70_valor else 0 end) as estornado_mes_diferente,
-    sum(case when c53_coddoc in (200, 208, 210) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as em_liquidacao_mes_origem,
-	  sum(case when c53_coddoc in (202, 204, 206) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as liquidacao_mes_origem,
-	  sum(case when c53_coddoc in (201, 209, 211) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as estorno_em_liquidacao_mes_origem,
-	  sum(case when c53_coddoc in (203, 205, 207) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as estorno_liquidacao_mes_origem
-    from
-    (select *,
-      (select date_part('month', c75_data)
-        from conlancamemp
-          inner join conlancamdoc on c71_codlan = c75_codlan
-          inner join conhistdoc on c71_coddoc = c53_coddoc
-        where c75_numemp = e60_numemp
-          and c53_tipo = 10 limit 1) as mes_origem_empenho
-          from
-          (select conplanoorcamento.c60_estrut,
-                  conplanoorcamento.c60_descr,
-                  substr(ele.o56_elemento||'00',1,15) AS o56_elemento,
-                  ele.o56_descr,
-                  e60_numemp,
-                  c53_tipo,
-                  c70_valor,
-                  c70_data,
-                  c53_coddoc
-          from conlancamele
-          inner join conlancam on c67_codlan=c70_codlan
-          inner join conlancamemp on c75_codlan = c70_codlan
-          inner join empempenho on e60_numemp = c75_numemp and e60_anousu=".db_getsession("DB_anousu")."
-          inner join orcdotacao on o58_coddot = empempenho.e60_coddot  and o58_anousu = e60_anousu
-          $w_elemento
-          inner join conplano on c60_codcon = orcdotacao.o58_codele and c60_anousu=".db_getsession("DB_anousu")."
-          inner join conlancamdoc on c71_codlan=c70_codlan
-          inner join conhistdoc on c71_coddoc=c53_coddoc
-          inner join orcelemento ele on ele.o56_codele=conlancamele.c67_codele and
-          ele.o56_anousu = o58_anousu
-          where ";
-          if ($where != "") {
-            $sql .= " $where and ";
-          }
-          $sql .= "
-          empempenho.e60_instit in $w_instit
-          and ( conlancam.c70_data >='$dtini' and conlancam.c70_data <='$dtfim' )
-          and conhistdoc.c53_tipo in (10,11,20,21,30,31,32,200,201) ) as x ) as xx
-      group by
-        c60_estrut,
-        c60_descr,
-        o56_elemento,
-        o56_descr
-      order by
-        o56_elemento
-    ";
-    return analiseQueryPlanoOrcamento($sql);
-  }
-
-    function sql2($where = "", $dtini, $dtfim, $w_instit = "(1) "){
-        $sql = "select
-    /* orcdotacao.o58_codele,*/
-    conplano.c60_estrut,
-    conplano.c60_descr,
-    substr(ele.o56_elemento||'00',1,15) as o56_elemento,
-    ele.o56_descr,
-    sum(case when c53_tipo = 10  then c70_valor else 0 end ) as empenhadoa,
-    sum(case when c53_tipo = 11  then c70_valor else 0 end ) as empenhado_estornadoa,
-    sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidadoa,
-    sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornadoa,
-    sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamentoa,
-    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornadoa,
-    sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornadoa
-    from conlancamele
-    inner join conlancam on c67_codlan=c70_codlan
-    inner join conlancamemp on c75_codlan = c70_codlan
-    inner join empempenho on e60_numemp = c75_numemp and e60_anousu=".db_getsession("DB_anousu")."
-    inner join orcdotacao on o58_coddot = empempenho.e60_coddot  and o58_anousu = e60_anousu
-    $w_elemento
-    inner join conplano on c60_codcon = orcdotacao.o58_codele and c60_anousu=".db_getsession("DB_anousu")."
-    inner join conlancamdoc on c71_codlan=c70_codlan
-    inner join conhistdoc on c71_coddoc=c53_coddoc
-    inner join orcelemento ele on ele.o56_codele=conlancamele.c67_codele and
-    ele.o56_anousu = o58_anousu
-    where ";
-        if ($where != "") {
-            $sql .= " $where and ";
-        }
-        $sql .= "
-    empempenho.e60_instit in $w_instit
-    and ( conlancam.c70_data >='".db_getsession("DB_anousu")."-01-01' and conlancam.c70_data <='$dtfim' )
-    and conhistdoc.c53_tipo in (10,11,20,21,30,31,32)
-    group by /* o58_codele, */
-    c60_estrut,
-    c60_descr,
-    o56_elemento,
-    o56_descr
-    order by
-    o56_elemento
-    ";
-        return analiseQueryPlanoOrcamento($sql);
-    }
-
-    function sql_em_liquidacao_ate_mes($where = "", $dtini, $dtfim, $w_instit = "(1) "){
-          $sql = "select
-      conplano.c60_estrut,
-      conplano.c60_descr,
-      substr(ele.o56_elemento||'00',1,15) as o56_elemento,
-      ele.o56_descr,
-      sum(case when c53_tipo = 10  then c70_valor else 0 end ) as empenhadoa,
-      sum(case when c53_tipo = 11  then c70_valor else 0 end ) as empenhado_estornadoa,
-      sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidadoa,
-      sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornadoa,
-      sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamentoa,
-      sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornadoa,
-      sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornadoa,
-      sum(case when c53_coddoc in (200, 208, 210) then c70_valor else 0 end ) as em_liquidacaoa,
-      sum(case when c53_coddoc in (202, 204, 206) then c70_valor else 0 end ) as liquidacaoa,
-      sum(case when c53_coddoc in (201, 209, 211) then c70_valor else 0 end ) as estorno_em_liquidacaoa,
-      sum(case when c53_coddoc in (203, 205, 207) then c70_valor else 0 end ) as estorno_liquidacaoa
-      from conlancamele
-      inner join conlancam on c67_codlan=c70_codlan
-      inner join conlancamemp on c75_codlan = c70_codlan
-      inner join empempenho on e60_numemp = c75_numemp and e60_anousu=".db_getsession("DB_anousu")."
-      inner join orcdotacao on o58_coddot = empempenho.e60_coddot  and o58_anousu = e60_anousu
-      $w_elemento
-      inner join conplano on c60_codcon = orcdotacao.o58_codele and c60_anousu=".db_getsession("DB_anousu")."
-      inner join conlancamdoc on c71_codlan=c70_codlan
-      inner join conhistdoc on c71_coddoc=c53_coddoc
-      inner join orcelemento ele on ele.o56_codele=conlancamele.c67_codele and
-      ele.o56_anousu = o58_anousu
-      where ";
-          if ($where != "") {
-              $sql .= " $where and ";
-          }
-          $sql .= "
-      empempenho.e60_instit in $w_instit
-      and ( conlancam.c70_data >='".db_getsession("DB_anousu")."-01-01' and conlancam.c70_data <='$dtfim' )
-      and conhistdoc.c53_tipo in (10,11,20,21,30,31,32,200,201)
-      group by /* o58_codele, */
-      c60_estrut,
-      c60_descr,
-      o56_elemento,
-      o56_descr
-      order by
-      o56_elemento
-      ";
-          return analiseQueryPlanoOrcamento($sql);
-    }
 }
 
 class cl_receita_saldo_mes {
@@ -372,8 +209,8 @@ class cl_receita_saldo_mes {
                                  FROM ORCRECEITA
                                       inner JOIN ORCFONTES ON O70_CODFON = O57_CODFON AND O57_ANOUSU = O70_ANOUSU
                                       left JOIN CONLANCAMREC ON C74_ANOUSU = O70_ANOUSU AND C74_CODREC = O70_CODREC "
-        . ($this->usa_datas != null ? "AND c74_data between '" . $this->dtini . "' and '" . $this->dtfim . "'" : "")
-        . "
+      . ($this->usa_datas != null ? "AND c74_data between '" . $this->dtini . "' and '" . $this->dtfim . "'" : "")
+      . "
                                       left JOIN CONLANCAM    ON C74_CODLAN = C70_CODLAN
                                       left JOIN CONLANCAMDOC ON C71_CODLAN = C70_CODLAN
                                       left JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
@@ -438,7 +275,7 @@ class cl_receita_saldo_mes {
     global $o70_anousu, $o70_codrec, $o57_fonte, $o57_descr, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro, $o70_valor, $adicional;
     global $prev_jan, $prev_fev, $prev_mar, $prev_abr, $prev_mai, $prev_jun, $prev_jul, $prev_ago, $prev_set, $prev_out, $prev_nov, $prev_dez;
 
-    require_once("libs/db_utils.php");
+    require_once(modification("libs/db_utils.php"));
     if ($this->sql == null)
       $this->sql_query($this->receita);
 
@@ -494,7 +331,7 @@ class cl_receita_saldo_mes {
       if ($this->lPrevisaoCronograma) {
 
         db_query(
-            "update work_plano set
+          "update work_plano set
           prev_jan  = prev_jan  +$prev_jan,
           prev_fev  = prev_fev  +$prev_fev+0.0,
           prev_mar  = prev_mar  +$prev_mar+0.0,
@@ -525,23 +362,19 @@ class cl_receita_saldo_mes {
         // }
         if (pg_numrows($result_estrut) == 0) {
           $result_estrut = db_query(
-              "select o57_descr from orcfontes where o57_anousu = " . db_getsession("DB_anousu") . " and o57_fonte = '$estrutural'");
+            "select o57_descr from orcfontes where o57_anousu = " . $this->anousu . " and o57_fonte = '$estrutural'");
 
           if (pg_numrows($result_estrut) == 0) {
-          	$result_estrut = db_query(
-              "select o57_descr from orcfontes where o57_anousu = " . (db_getsession("DB_anousu")-1) . " and o57_fonte = '$estrutural'");
-          }
-          if (pg_numrows($result_estrut) == 0) {
             echo "Conta não encontrada nas fontes de Receita Comando:"
-                . "select o57_descr from orcfontes where o57_anousu = " . db_getsession("DB_anousu")
-                . " and o57_fonte = '$estrutural'";
+              . "select o57_descr from orcfontes where o57_anousu = " . $this->anousu
+              . " and o57_fonte = '$estrutural'";
             exit;
           }
           db_fieldsmemory($result_estrut, 0);
 
           $sInsert = "insert into work_plano values(
           " . $this->anousu
-              . ",
+            . ",
           0,
           0,
           '$estrutural',
@@ -579,7 +412,7 @@ class cl_receita_saldo_mes {
         } else {
 
           db_query(
-              "update work_plano set
+            "update work_plano set
           o70_valor = o70_valor + $o70_valor,
           adicional= adicional  +$adicional,
           janeiro  = janeiro    +$janeiro,
@@ -796,16 +629,16 @@ class cl_translan extends cl_contranslan {
 
     $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
     $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_empenho_acordo(null,
-        "e100_acordo,
+                                                                          "e100_acordo,
         ac16_acordocategoria",
-        null,
-        "e100_numemp = {$iEmpenho}"
+                                                                          null,
+                                                                          "e100_numemp = {$iEmpenho}"
     );
     $iCategoriaContrato = null;;
 
     $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
     if ($oDaoEmpenhoContrato->numrows == 0) {
-     return false;
+      return false;
     }
 
     $iCategoriaContrato = db_utils::fieldsMemory($rsContrato, 0)->ac16_acordocategoria;
@@ -869,14 +702,14 @@ class cl_translan extends cl_contranslan {
 
     $iCategoriaContrato = db_utils::fieldsMemory($rsContrato, 0)->ac16_acordocategoria;
     $this->sql = $this->sql_query_lr(null,
-        "c46_seqtranslan,
+                                     "c46_seqtranslan,
                                      c47_seqtranslr,
                                      c46_codhist,
                                      c47_credito,
                                      c47_debito,
                                      c47_compara,
                                      c47_ref", 'c46_ordem',
-        " c45_coddoc = " . $this->coddoc . "
+                                     " c45_coddoc = " . $this->coddoc . "
                                      and c45_anousu=" . db_getsession("DB_anousu") . " and c47_anousu=$anousu");
 
     $rsLancamentosContratos = $this->sql_record($this->sql);
@@ -1019,7 +852,7 @@ class cl_translan extends cl_contranslan {
         $comparador = 0;
       }
       if (($c47_ref == '' || $c47_ref == 0 || ($c47_ref != 0 && ($c47_ref == $codcom || $c47_compara == 3)))
-          && ($c47_compara == 0 || $comparador == $codele)) {
+        && ($c47_compara == 0 || $comparador == $codele)) {
 
         //------------------------------------------------------------------------
         //verificação para naum incluir duas vezes o mesmo seqtranslan
@@ -1083,7 +916,7 @@ class cl_translan extends cl_contranslan {
         $comparador = 0;
       }
       if (($c47_ref == '' || $c47_ref == 0 || ($c47_ref != 0 && ($c47_ref == $codcom || $c47_compara == 3)))
-          && ($c47_compara == 0 || $comparador == $codele)) {
+        && ($c47_compara == 0 || $comparador == $codele)) {
         //------------------------------------------------------------------------
         //verificação para naum incluir duas vezes o mesmo seqtranslan
         if (array_key_exists($c46_seqtranslan, $arr_lans)) {
@@ -1129,10 +962,10 @@ class cl_translan extends cl_contranslan {
     }
     $cont = 0;
     $this->sql = $this
-        ->sql_query_lr(null, "c47_ref, c47_compara, c47_seqtranslr,c47_credito,c47_debito", 'c46_ordem',
-            "c45_coddoc    = {$this->coddoc}
+      ->sql_query_lr(null, "c47_ref, c47_compara, c47_seqtranslr,c47_credito,c47_debito", 'c46_ordem',
+                     "c45_coddoc    = {$this->coddoc}
                                         and c45_anousu = " . db_getsession("DB_anousu")
-                . "
+                     . "
                                         and c47_anousu = {$anousu}");
     $this->result = $this->sql_record($this->sql);
 
@@ -1239,7 +1072,7 @@ class cl_translan extends cl_contranslan {
         $comparador = 0;
       }
       if (($c47_ref == '' || $c47_ref == 0 || ($c47_ref != 0 && ($c47_ref == $codcom || $c47_compara == 3)))
-          && ($c47_compara == 0 || $comparador == $codele)) {
+        && ($c47_compara == 0 || $comparador == $codele)) {
         //------------------------------------------------------------------------
         //verificação para naum incluir duas vezes o mesmo seqtranslan
         if (array_key_exists($c46_seqtranslan, $arr_lans)) {
@@ -1307,7 +1140,7 @@ class cl_translan extends cl_contranslan {
         $comparador = 0;
       }
       if (($c47_ref == '' || $c47_ref == 0 || ($c47_ref != 0 && ($c47_ref == $codcom || $c47_compara == 3)))
-          && ($c47_compara == 0 || $comparador == $codele)) {
+        && ($c47_compara == 0 || $comparador == $codele)) {
         //------------------------------------------------------------------------
         //verificação para naum incluir duas vezes o mesmo seqtranslan
         if (array_key_exists($c46_seqtranslan, $arr_lans)) {
@@ -1384,7 +1217,7 @@ class cl_translan extends cl_contranslan {
      * Verificamos a que grupo o desdobramento do empenho se refere e aplicamos o
      * documento de acordo com este grupo
      */
-    require_once("classes/empenho.php");
+    require_once(modification("classes/empenho.php"));
     $iUltimoDocumentoExecutado = empenho::buscaUltimoDocumentoExecutado($iNumEmp, db_getsession('DB_anousu'));
     if (USE_PCASP) {
 
@@ -1454,7 +1287,7 @@ class cl_translan extends cl_contranslan {
           $sSqlContaGrupo  = $oDaoMatmater->sql_query_grupo(null,
                                                             "c61_reduz, m66_codcon, m60_codmater, m60_descr",
                                                             null, $sWhere
-                                                           );
+          );
           $rsContaGrupo    = $oDaoMatmater->sql_record($sSqlContaGrupo);
           $aContasMaterial = array();
           $aItens          = db_utils::getCollectionByRecord($rsContaGrupo);
@@ -1489,7 +1322,7 @@ class cl_translan extends cl_contranslan {
     }
 
     $aDocumentosConferencia = array(
-       204 // LIQUIDAÇÃO DESPESA MATERIAL DE CONSUMO
+      204 // LIQUIDAÇÃO DESPESA MATERIAL DE CONSUMO
       ,208 // CONTROLE DESPESA EM LIQUIDAÇÃO MP
       ,209 // ESTORNO DE CONTROLE DESPESA EM LIQUIDAÇÃO MP
       ,210 // CONTROLE DESPESA EM LIQUIDAÇÃO MAT ALMOX
@@ -1508,7 +1341,7 @@ class cl_translan extends cl_contranslan {
     //rotina que pega o o valor que foi creditado na liquidacao para colocar no debit  do pagamento...
     if (USE_PCASP /*&& (in_array($coddoc_liq, $aDocumentosConferencia) || in_array($coddoc_liq_capital, $aDocumentosConferencia))*/) {
 
-      $c47_credito     = self::getContaCreditoLiquidacao($iNumEmp, array($coddoc_liq_capital, $coddoc_liq, 84, 3, 23, 202, 204, 206), $iAnoSessao);
+      $c47_credito     = self::getContaLiquidacao($iNumEmp, array($coddoc_liq_capital, $coddoc_liq, 84, 3, 23), $iAnoSessao);
       $c47_seqtranslr  = 0;
       $oEventoContabil = EventoContabilRepository::getEventoContabilByCodigo($coddoc_liq, $iAnoSessao, $iInstituicaoSessao);
       $aLancamentos    = $oEventoContabil->getEventoContabilLancamento();
@@ -1625,33 +1458,39 @@ class cl_translan extends cl_contranslan {
   }
 
   /**
-   * @param $iNumeroEmpenho
+   * @param       $iNumeroEmpenho
    * @param array $aCodigoDocumento
-   * @param $iAnoSessao
-   * @return mixed|integer
+   * @param null  $iAnoSessao
+   * @param int   $lTipoConta
+   *
+   * @return mixed
    * @throws Exception
    */
-  private static function getContaCreditoLiquidacao($iNumeroEmpenho, array $aCodigoDocumento, $iAnoSessao) {
+  public static function getContaLiquidacao($iNumeroEmpenho, array $aCodigoDocumento, $iAnoSessao = null, $lTipoConta = 1) {
 
     $sCodigoDocumento = implode(",", $aCodigoDocumento);
 
-    $sSqlContaCreditoLiquidacao = " SELECT conlancamval.c69_credito FROM conlancamemp
-                                    INNER JOIN conlancam ON conlancam.c70_codlan = conlancamemp.c75_codlan
-                                    INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
-                                    INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancam.c70_codlan
-                                    INNER JOIN conplanoreduz ON c61_reduz = c69_credito AND c61_anousu = c69_anousu
-                                    INNER JOIN conplano ON c60_codcon = c61_codcon AND c61_anousu = c60_anousu
-                                    WHERE conlancamemp.c75_numemp = {$iNumeroEmpenho}
-                                      AND conlancamdoc.c71_coddoc IN ({$sCodigoDocumento})
-                                      AND conlancam.c70_anousu = {$iAnoSessao}
-                                      AND substr(c60_estrut,1,2) = '21'
-                                    ORDER BY conlancamval.c69_sequen ASC, conlancamval.c69_codlan DESC
-                                    LIMIT 1";
+    $conta  = "conlancamval.c69_credito";
+    if ($lTipoConta <> 1) {
+      $conta  = "conlancamval.c69_debito";
+    }
+    $sSqlContaCreditoLiquidacao  = " select {$conta} as conta";
+    $sSqlContaCreditoLiquidacao .= "   from conlancamemp";
+    $sSqlContaCreditoLiquidacao .= "        inner join conlancam    on conlancam.c70_codlan    = conlancamemp.c75_codlan";
+    $sSqlContaCreditoLiquidacao .= "        inner join conlancamdoc on conlancamdoc.c71_codlan = conlancam.c70_codlan";
+    $sSqlContaCreditoLiquidacao .= "        inner join conlancamval on conlancamval.c69_codlan = conlancam.c70_codlan";
+    $sSqlContaCreditoLiquidacao .= "  where conlancamemp.c75_numemp  = {$iNumeroEmpenho}";
+    $sSqlContaCreditoLiquidacao .= "    and conlancamdoc.c71_coddoc in ({$sCodigoDocumento})";
+    if (!empty($iAnoSessao)) {
+      $sSqlContaCreditoLiquidacao .= "    and conlancam.c70_anousu     = {$iAnoSessao}";
+    }
+    $sSqlContaCreditoLiquidacao .= "  order by conlancamval.c69_codlan desc, conlancamval.c69_sequen asc ";
+    $sSqlContaCreditoLiquidacao .= "  limit 1";
     $rsBuscaContaLiquidacao = db_query($sSqlContaCreditoLiquidacao);
     if (!$rsBuscaContaLiquidacao || pg_num_rows($rsBuscaContaLiquidacao) == 0) {
       throw new Exception("Ocorreu um erro ao buscar a conta da liquidação do empenho {$iNumeroEmpenho}.\n".pg_last_error());
     }
-    return db_utils::fieldsMemory($rsBuscaContaLiquidacao, 0)->c69_credito;
+    return db_utils::fieldsMemory($rsBuscaContaLiquidacao, 0)->conta;
   }
 
   /*
@@ -1709,7 +1548,7 @@ class cl_translan extends cl_contranslan {
      * Verificamos a que grupo o desdobramento do empenho se refere e aplicamos o
      * documento de acordo com este grupo
      */
-    require_once("classes/empenho.php");
+    require_once(modification("classes/empenho.php"));
     $iUltimoDocumentoExecutado = empenho::buscaUltimoDocumentoExecutado($iNumEmp, db_getsession('DB_anousu'));
     $oGrupoOrcamento = GrupoContaOrcamento::getGrupoConta($iDesdobramentoEmpenho, $anousu);
     if ($oGrupoOrcamento && USE_PCASP) {
@@ -1748,7 +1587,7 @@ class cl_translan extends cl_contranslan {
         $aItensEmpenho      = $oEmpenhoFinanceiro->getItens();
         /**
          * Verificamos se existe mais de uma conta para o item do material
-        */
+         */
         $oDaoMatmater   = db_utils::getDao("matmater");
         $aItens         = array();
         foreach ($aItensEmpenho as $oItem) {
@@ -1760,8 +1599,8 @@ class cl_translan extends cl_contranslan {
         $sWhere .= " and c61_instit  = ".db_getsession("DB_instit");
 
         $sSqlContaGrupo  = $oDaoMatmater->sql_query_grupo(null,
-            "c61_reduz, m66_codcon, m60_codmater, m60_descr",
-            null, $sWhere
+                                                          "c61_reduz, m66_codcon, m60_codmater, m60_descr",
+                                                          null, $sWhere
         );
         $rsContaGrupo    = $oDaoMatmater->sql_record($sSqlContaGrupo);
         $aContasMaterial = array();
@@ -1947,8 +1786,8 @@ class cl_translan extends cl_contranslan {
 
       //deixa passar de a instituição for zero  ou entao se ela vier preenchida deve ser iqual à do db_getsession('DB_instit');
       if (($c47_instit == 0 || $c47_instit == '') ||
-         (($c47_instit != '' && $c47_instit != 0) &&
-           $c47_instit == $iInstituicaoSessao)) {
+        (($c47_instit != '' && $c47_instit != 0) &&
+          $c47_instit == $iInstituicaoSessao)) {
 
         //verificação para naum incluir duas vezes o mesmo seqtranslan
         if (array_key_exists($c46_seqtranslan, $arr_lans)) {
@@ -2027,7 +1866,7 @@ class cl_translan extends cl_contranslan {
 
       //deixa passar de a instituição for zero  ou entao se ela vier preenchida deve ser iqual à do db_getsession('DB_instit');
       if (($c47_instit == 0 || $c47_instit == '')
-          || (($c47_instit != '' && $c47_instit != 0) && $c47_instit == $iInstituicaoSessao)) {
+        || (($c47_instit != '' && $c47_instit != 0) && $c47_instit == $iInstituicaoSessao)) {
         //------------------------------------------------------------------------
         //verificação para naum incluir duas vezes o mesmo seqtranslan
         if (array_key_exists($c46_seqtranslan, $arr_lans)) {
@@ -2050,7 +1889,7 @@ class cl_translan extends cl_contranslan {
 
   function db_trans_pagamento_resto($codele, $reduz, $anousu, $numemp, $iCodDoc = 35) {
 
-    global $c46_codhist, $c47_credito, $c47_debito, $c47_ref, $c46_seqtranslan, $c47_seqtranslr, $c61_reduz, $c47_tiporesto, $c46_ordem;
+    global $c46_codhist, $c47_credito, $c47_debito, $c47_ref, $c46_seqtranslan, $c47_seqtranslr, $c61_reduz, $c47_tiporesto, $c46_ordem, $c70_data;
     $this->cl_zera_variaveis();
     $this->coddoc = $iCodDoc;
 
@@ -2068,9 +1907,15 @@ class cl_translan extends cl_contranslan {
     }
     //----------------------------------------------------------------------
 
+    $iAnoLancamento = db_getsession('DB_anousu');
+    if (!empty($c70_data)) {
+      $oDataLancamento = new DBDate($c70_data);
+      $iAnoLancamento = $oDataLancamento->getAno();
+    }
+
     $cont = 0;
 
-    require_once("classes/empenho.php");
+    require_once(modification("classes/empenho.php"));
     //declara array para verificação
     $arr_lans = array();
     for ($i = 0; $i < $this->numrows; $i++) {
@@ -2088,35 +1933,25 @@ class cl_translan extends cl_contranslan {
        */
       if ($c46_ordem == 1 && USE_PCASP && $this->coddoc != 35) {
 
-        /**
-         * verifica se tem lancamento de controle de liquidacao e busca conta credito do controle
-         */
-          IF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, db_getsession("DB_anousu"), array(212))) {
-          $c47_debito = self::getContaCreditoLiquidacao($numemp, array(212), db_getsession("DB_anousu"));
+        if ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $iAnoLancamento, array(210, 200, 208, 212, 214))) {
+          $c47_debito = self::getContaLiquidacao($numemp, array(210, 200, 208, 212, 214), $iAnoLancamento);
+        } else if ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $iAnoLancamento, array(33))) {
+          $c47_debito = self::getContaLiquidacao($numemp, array(33), $iAnoLancamento);
+        } else if ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $iAnoLancamento-1, array(210, 200, 208, 212, 214))) {
+          $c47_debito = self::getContaLiquidacao($numemp, array(210, 200, 208, 212, 214), $iAnoLancamento-1);
+        } else {
 
-          } ELSEIF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $anousu, array(208))) {
-          $c47_debito = self::getContaCreditoLiquidacao($numemp, array(208), $anousu);
-
-          } ELSEIF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $anousu, array(210))) {
-          $c47_debito = self::getContaCreditoLiquidacao($numemp, array(210), $anousu);
-          } ELSEIF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, db_getsession("DB_anousu"), array(214))) {
-              $c47_debito = self::getContaCreditoLiquidacao($numemp, array(214), db_getsession("DB_anousu"));
-
-          } ELSE {
-
-              $sSqlContaCredito = " SELECT c69_credito
-                                    FROM conlancamemp
-                                    INNER JOIN conlancamdoc ON conlancamemp.c75_codlan = conlancamdoc.c71_codlan
-                                    INNER JOIN conlancamval ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
-                                    INNER JOIN conlancam ON conlancamval.c69_codlan = conlancam.c70_codlan
-                                    WHERE c75_numemp = {$numemp}
-                                      AND c71_coddoc = 33
-                                      AND c70_anousu = ".db_getsession("DB_anousu")."
-                                    ORDER BY c69_sequen
-                                    LIMIT 1 ";
-
+          $sSqlContaCredito = " select c69_credito
+                                  from conlancamemp
+                                       inner join conlancamdoc  on conlancamemp.c75_codlan = conlancamdoc.c71_codlan
+                                       inner join conlancamval  on conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                       inner join conlancam     on conlancamval.c69_codlan = conlancam.c70_codlan
+                                 where c75_numemp = {$numemp}
+                                   and c71_coddoc = 33
+                                   and c70_anousu = ".db_getsession("DB_anousu")."
+                                 order by c69_sequen
+                                 limit 1";
           $rsBuscaContaCredito = db_query($sSqlContaCredito);
-
           if (pg_num_rows($rsBuscaContaCredito) == 0) {
 
             $this->sqlerro  = true;
@@ -2154,11 +1989,11 @@ class cl_translan extends cl_contranslan {
 
   function db_trans_estorna_pagamento_resto($codele, $reduz, $anousu, $numemp, $iCodDoc = 36) {
 
-    global $c46_codhist, $c47_credito, $c47_debito, $c47_ref, $c46_seqtranslan, $c47_seqtranslr, $c61_reduz, $c47_tiporesto, $c46_ordem;
+    global $c46_codhist, $c47_credito, $c47_debito, $c47_ref, $c46_seqtranslan, $c47_seqtranslr, $c61_reduz, $c47_tiporesto, $c46_ordem, $c70_data;
     $this->cl_zera_variaveis();
     $this->coddoc = $iCodDoc;
 
-    require_once("classes/empenho.php");
+    require_once(modification("classes/empenho.php"));
     $codele = $this->getVinculoPcasp($codele);
 
     if ($codele != "") {
@@ -2189,6 +2024,13 @@ class cl_translan extends cl_contranslan {
 
     //declara array para verificação
     $arr_lans = array();
+
+    $iAnoLancamento = db_getsession('DB_anousu');
+    if (!empty($c70_data)) {
+      $oDataLancamento = new DBDate($c70_data);
+      $iAnoLancamento = $oDataLancamento->getAno();
+    }
+
     for ($i = 0; $i < $this->numrows; $i++) {
 
       db_fieldsmemory($this->result, $i);
@@ -2208,8 +2050,10 @@ class cl_translan extends cl_contranslan {
         /**
          * verifica se tem lancamento de controle de liquidacao e busca conta credito do controle
          */
-        if ($this->coddoc == 38 && empenho::possuiLancamentoDeControle($numemp, db_getsession("DB_anousu"), array(212))) {
-          $c47_credito = self::getContaCreditoLiquidacao($numemp, array(212), db_getsession("DB_anousu"));
+        if ($this->coddoc == 38 && empenho::possuiLancamentoDeControle($numemp,$iAnoLancamento, array(212, 214))) {
+          $c47_credito = self::getContaLiquidacao($numemp, array(212, 214), $iAnoLancamento);
+        } else if ($this->coddoc == 38 && empenho::possuiLancamentoDeControle($numemp,$iAnoLancamento-1, array(212, 214))) {
+          $c47_credito = self::getContaLiquidacao($numemp, array(212, 214), $iAnoLancamento-1);
         } else {
 
           $sSqlContaDebito = "  select c69_debito
@@ -2554,12 +2398,12 @@ class cl_translan extends cl_contranslan {
 
       if ($oEstorno->c46_ordem == 1 && $oEstorno->c47_credito == 0 && $oEstorno->c47_debito == 0) {
 
-      	$this->arr_credito[$cont]    = $conta; // reduzido da receita
-      	$this->arr_debito[$cont]     = $codcon; // reduzido caixa ou banco
-      	$this->arr_histori[$cont]    = $oEstorno->c46_codhist;
-      	$this->arr_seqtranslr[$cont] = $oEstorno->c47_seqtranslr;
-      	$cont++;
-      	continue;
+        $this->arr_credito[$cont]    = $conta; // reduzido da receita
+        $this->arr_debito[$cont]     = $codcon; // reduzido caixa ou banco
+        $this->arr_histori[$cont]    = $oEstorno->c46_codhist;
+        $this->arr_seqtranslr[$cont] = $oEstorno->c47_seqtranslr;
+        $cont++;
+        continue;
       }
 
       if ($oEstorno->c47_compara == 0) {
@@ -2601,7 +2445,7 @@ class cl_translan extends cl_contranslan {
     $this->cl_zera_variaveis();
     $this->coddoc = $iCodigoDocumento;
 
-    $this->result = $this->getRegrasTransacao($this->coddoc, db_getsession("DB_anousu"), db_getsession('DB_anousu'), 1);
+    $this->result = $this->getRegrasTransacao($this->coddoc, db_getsession("DB_anousu"), db_getsession('DB_anousu'));
     $cont = 0;
 
     for ($i = 0; $i < $this->numrows; $i++) {
@@ -2716,12 +2560,12 @@ class cl_translan extends cl_contranslan {
       $this->coddoc = $doc_reducao; // reduzido ou arrecadação a maior ( parte que informa receita )
     // ------------ ------------ --------------
     $this->sql = $this
-        ->sql_query_lr(null, "c47_seqtranslr,c46_codhist,c47_credito,c47_debito,c47_ref", 'c46_ordem',
-            "    c45_coddoc = " . $this->coddoc . "
+      ->sql_query_lr(null, "c47_seqtranslr,c46_codhist,c47_credito,c47_debito,c47_ref", 'c46_ordem',
+                     "    c45_coddoc = " . $this->coddoc . "
                                       and c45_anousu=" . db_getsession("DB_anousu")
-                . "
+                     . "
                                       and c45_instit =" . $iInstit
-                . "
+                     . "
                                       and c47_anousu=" . db_getsession("DB_anousu"), $iInstit);
     $this->result = $this->sql_record($this->sql);
     $cont = 0;
@@ -2748,8 +2592,8 @@ class cl_translan extends cl_contranslan {
     $this->coddoc = $documento;
 
     $this->sql = $this
-        ->sql_query_lr(null, "c47_seqtranslr,c47_ref,c46_seqtranslan,c46_codhist,c47_credito,c47_debito,c47_compara",
-            'c46_ordem', "c45_coddoc = " . $this->coddoc . " and c45_anousu=" . db_getsession("DB_anousu"));
+      ->sql_query_lr(null, "c47_seqtranslr,c47_ref,c46_seqtranslan,c46_codhist,c47_credito,c47_debito,c47_compara",
+                     'c46_ordem', "c45_coddoc = " . $this->coddoc . " and c45_anousu=" . db_getsession("DB_anousu"));
     $this->result = $this->sql_record($this->sql);
 
     $cont = 0;
@@ -2794,11 +2638,11 @@ class cl_translan extends cl_contranslan {
       }
     }
     $this->sql = $this
-        ->sql_query_lr(null, "c47_compara,c47_seqtranslr,c47_ref,c46_seqtranslan,c46_codhist,c47_credito,c47_debito",
-            'c46_ordem',
-            "    c45_coddoc = {$this->coddoc}
+      ->sql_query_lr(null, "c47_compara,c47_seqtranslr,c47_ref,c46_seqtranslan,c46_codhist,c47_credito,c47_debito",
+                     'c46_ordem',
+                     "    c45_coddoc = {$this->coddoc}
                                       and c45_anousu=" . db_getsession("DB_anousu")
-                . "
+                     . "
                                       and c47_anousu={$anousu}");
     # echo $this->sql;
     $this->result = $this->sql_record($this->sql);
@@ -2817,7 +2661,7 @@ class cl_translan extends cl_contranslan {
         $comparador = 0;
       }
       if (($c47_ref == '' || $c47_ref == 0 || ($c47_ref != 0 && ($c47_ref == $codcom || $c47_compara == 3)))
-          && ($c47_compara == 0 || $comparador == $codele)) {
+        && ($c47_compara == 0 || $comparador == $codele)) {
 
         //------------------------------------------------------------------------
         //verificação para naum incluir duas vezes o mesmo seqtranslan
@@ -2856,7 +2700,7 @@ class cl_translan extends cl_contranslan {
       $sWhereTemVinculoPcasp = "    c72_conplanoorcamento = {$iCodigoConta} ";
       $sWhereTemVinculoPcasp .= "and c72_anousu            = {$iAnoUsu}";
       $sSqlTemVinculoPcasp = $oDaoConplanoConplanoOrcamento
-          ->sql_query_file(null, "c72_conplano", null, $sWhereTemVinculoPcasp);
+        ->sql_query_file(null, "c72_conplano", null, $sWhereTemVinculoPcasp);
       $rsTemVinculoPcasp = $oDaoConplanoConplanoOrcamento->sql_record($sSqlTemVinculoPcasp);
       if ($oDaoConplanoConplanoOrcamento->numrows == 0) {
         $sMsgErro = "Conta de código {$iCodigoConta} não possui vínculo com o PCASP.\n ";
@@ -2892,6 +2736,8 @@ class cl_translan extends cl_contranslan {
   public function getRegrasTransacao($iCodigoDocumento, $iAnoContas, $iAnoTransacao = null, $iOrdemLancamento = null) {
 
     $sWhere  = " c45_coddoc = $iCodigoDocumento ";
+    $sWhere .= " and c45_instit = " . db_getsession('DB_instit');
+    $sWhere .= " and c47_instit = " . db_getsession('DB_instit');
     $sWhere .= " and c47_anousu = $iAnoContas ";
 
     if (!empty($iAnoTransacao)) {
@@ -3000,133 +2846,133 @@ class cl_estrutura_sistema {
       $funcao = "onChange=\"js_mascara02_$picture(this.value);\"";
     }
     if ($this->mascara == true && $this->input == false) {
-?>
+      ?>
       <tr>
-      <td nowrap title="Máscara do campo <?=@$picture ?>">
-      <b>Máscara:</b>
-      </td>
-      <td>
+        <td nowrap title="Máscara do campo <?=@$picture ?>">
+          <b>Máscara:</b>
+        </td>
+        <td>
 
-      <input name="mascara_<?=$picture ?>"  readonly disabled size='<?=$this->size ?>' type="text"  value="<?=$mascara ?>"    >
+          <input name="mascara_<?=$picture ?>"  readonly disabled size='<?=$this->size ?>' type="text"  value="<?=$mascara ?>"    >
 
-      </td>
+        </td>
       </tr>
       <?
 
-          }
-          if ($this->input == false) {
-      ?>
-      <tr>
+    }
+  if ($this->input == false) {
+    ?>
+    <tr>
       <td nowrap title="<?=@$$title ?>">
-      <?=@$$label ?>
+        <?=@$$label ?>
       </td>
       <td>
-      <?
+        <?
 
-          }
-      ?>
+        }
+        ?>
 
-    <input title="<?=@$$title ?>"
-     name="<?=$picture ?>" maxlength='<?=$tamanho ?>'
-     size='<?=$this->size ?>' type="text"  value="<?=@$$picture ?>"
-     onKeyPress="return js_mascara01_<?=$picture ?>(event,this.value);"
-     <?=$funcao ?> <?=($this->db_opcao == 22 || $this->db_opcao == 33 || $this->db_opcao == 3 ? "readonly style=\"background-color:#DEB887\" "
-                          : "") ?>
-     >
-    <?
+        <input title="<?=@$$title ?>"
+               name="<?=$picture ?>" maxlength='<?=$tamanho ?>'
+               size='<?=$this->size ?>' type="text"  value="<?=@$$picture ?>"
+               onKeyPress="return js_mascara01_<?=$picture ?>(event,this.value);"
+          <?=$funcao ?> <?=($this->db_opcao == 22 || $this->db_opcao == 33 || $this->db_opcao == 3 ? "readonly style=\"background-color:#DEB887\" "
+          : "") ?>
+        >
+        <?
 
         if ($this->botao == true) {
-    ?>
-      <input name='verifica' type="button" value='Verificar' onclick="js_mascara02_<?=$picture ?>(document.<?=$this
-                                                                                                                    ->nomeform ?>.<?=$picture ?>.value);" <?=($this
-                                                                                                                                                                ->db_opcao
-                                                                                                                                                                == 22
-                                                                                                                                                                || $this
-                                                                                                                                                                    ->db_opcao
-                                                                                                                                                                    == 33
-                                                                                                                                                                || $this
-                                                                                                                                                                    ->db_opcao
-                                                                                                                                                                    == 3 ? "disabled "
-                                                                                                                                                                : "") ?>  >
-      <?
+          ?>
+          <input name='verifica' type="button" value='Verificar' onclick="js_mascara02_<?=$picture ?>(document.<?=$this
+            ->nomeform ?>.<?=$picture ?>.value);" <?=($this
+            ->db_opcao
+          == 22
+          || $this
+            ->db_opcao
+          == 33
+          || $this
+            ->db_opcao
+          == 3 ? "disabled "
+            : "") ?>  >
+          <?
 
-          }
-      ?>
-    <?
+        }
+        ?>
+        <?
 
         if ($this->input == false) {
-    ?>
+        ?>
       </td>
-      </tr>
-      <?
+    </tr>
+    <?
 
-          }
-      ?>
+  }
+    ?>
     <script>
-    function js_mascara01_<?=$picture ?>(evt,obj){
-      var evt = (evt) ? evt : (window.event) ? window.event : "";
-      if(evt.charCode >47 && evt.charCode <58 ){//8:backspace|46:delete|190:.
-      var  str='<?=$mascara ?>';
-      var  tam=obj.length;
-      var  dig=str.substr(tam,1);
-        if(dig=="."){
-          document.<?=$this->nomeform ?>.<?=$picture ?>.value=obj+".";
+      function js_mascara01_<?=$picture ?>(evt,obj){
+        var evt = (evt) ? evt : (window.event) ? window.event : "";
+        if(evt.charCode >47 && evt.charCode <58 ){//8:backspace|46:delete|190:.
+          var  str='<?=$mascara ?>';
+          var  tam=obj.length;
+          var  dig=str.substr(tam,1);
+          if(dig=="."){
+            document.<?=$this->nomeform ?>.<?=$picture ?>.value=obj+".";
+          }
+          return true;
+        }else if(evt.charCode=='0'){
+          return true;
+        }else{
+          return false;
         }
-        return true;
-      }else if(evt.charCode=='0'){
-        return true;
-      }else{
-        return false;
       }
-    }
-    function js_mascara02_<?=$picture ?>(obj){
+      function js_mascara02_<?=$picture ?>(obj){
 
-      var str='<?=$mascara ?>';
-      var obj=document.<?=$this->nomeform ?>.<?=$picture ?>.value;
-      while(obj.search(/\./)!='-1'){
-        obj=obj.replace(/\./,'');
-      }
-      <?
+        var str='<?=$mascara ?>';
+        var obj=document.<?=$this->nomeform ?>.<?=$picture ?>.value;
+        while(obj.search(/\./)!='-1'){
+          obj=obj.replace(/\./,'');
+        }
+        <?
 
-          if ($this->autocompletar == true) {
-      ?>
+        if ($this->autocompletar == true) {
+        ?>
         if(obj!=''){
-        var  tam=<?=strlen(str_replace(".", "", $mascara)) ?>;
+          var  tam=<?=strlen(str_replace(".", "", $mascara)) ?>;
           for(var i=obj.length; i<tam; i++){
             obj=obj+"0";
           }
         }
         <?
 
-            }
+        }
         ?>
-      //analise da estrutura passada
-     var nada='';
-     var matriz=str.split(nada);
-     var tam=matriz.length;
-     var arr=new Array();
-     var cont=0;
-      for(i=0; i<tam; i++){
-        if(matriz[i]=='.'){
-          arr[cont]=i;
-          cont++;
+        //analise da estrutura passada
+        var nada='';
+        var matriz=str.split(nada);
+        var tam=matriz.length;
+        var arr=new Array();
+        var cont=0;
+        for(i=0; i<tam; i++){
+          if(matriz[i]=='.'){
+            arr[cont]=i;
+            cont++;
+          }
         }
-      }
-      //fim
-      for(var i=0; i<arr.length; i++){
-        var pos=arr[i];
-        var strpos=obj.substr(pos,1);
-        if(strpos!='' && strpos!='.'){
-          ini=obj.slice(0,pos);
-          fim=obj.slice(pos);
-          obj=ini+"."+fim;
+        //fim
+        for(var i=0; i<arr.length; i++){
+          var pos=arr[i];
+          var strpos=obj.substr(pos,1);
+          if(strpos!='' && strpos!='.'){
+            ini=obj.slice(0,pos);
+            fim=obj.slice(pos);
+            obj=ini+"."+fim;
+          }
         }
-      }
-      document.<?=$this->nomeform ?>.<?=$picture ?>.value=obj;
-      <?
+        document.<?=$this->nomeform ?>.<?=$picture ?>.value=obj;
+        <?
 
-          if ($this->reload == true) {
-      ?>
+        if ($this->reload == true) {
+        ?>
         obj=document.createElement('input');
         obj.setAttribute('name','atualizar');
         obj.setAttribute('type','hidden');
@@ -3135,302 +2981,302 @@ class cl_estrutura_sistema {
         document.<?=$this->nomeform ?>.submit();
         <?
 
-            }
+        }
         ?>
-    }
-    function js_mascara03_<?=$picture ?>(obj){
-      obj=document.<?=$this->nomeform ?>.<?=$picture ?>.value;
-      while(obj.search(/\./)!='-1'){
-        obj=obj.replace(/\./,'');
       }
-      <?
+      function js_mascara03_<?=$picture ?>(obj){
+        obj=document.<?=$this->nomeform ?>.<?=$picture ?>.value;
+        while(obj.search(/\./)!='-1'){
+          obj=obj.replace(/\./,'');
+        }
+        <?
 
-          if ($this->autocompletar == true) {
-      ?>
+        if ($this->autocompletar == true) {
+        ?>
         tam=<?=strlen(str_replace(".", "", $mascara)) ?>;
         for(i=obj.length; i<tam; i++){
           obj=obj+"0";
         }
         <?
 
-            }
+        }
         ?>
-      //analise da estrutura passada
-      var str='<?=$mascara ?>';
-      var nada='';
-      var matriz=str.split(nada);
-      var tam=matriz.length;
-      var arr=new Array();
-      var cont=0;
-      for(var i=0; i<tam; i++){
-        if(matriz[i]=='.'){
-          arr[cont]=i;
-          cont++;
+        //analise da estrutura passada
+        var str='<?=$mascara ?>';
+        var nada='';
+        var matriz=str.split(nada);
+        var tam=matriz.length;
+        var arr=new Array();
+        var cont=0;
+        for(var i=0; i<tam; i++){
+          if(matriz[i]=='.'){
+            arr[cont]=i;
+            cont++;
+          }
         }
-      }
-      //fim
-      for(var i=0; i<arr.length; i++){
-        pos=arr[i];
-        strpos=obj.substr(pos,1);
-        if(strpos!='' && strpos!='.'){
-          ini=obj.slice(0,pos);
-          fim=obj.slice(pos);
-          obj=ini+"."+fim;
+        //fim
+        for(var i=0; i<arr.length; i++){
+          pos=arr[i];
+          strpos=obj.substr(pos,1);
+          if(strpos!='' && strpos!='.'){
+            ini=obj.slice(0,pos);
+            fim=obj.slice(pos);
+            obj=ini+"."+fim;
+          }
         }
+        document.<?=$this->nomeform ?>.<?=$picture ?>.value=obj;
       }
-      document.<?=$this->nomeform ?>.<?=$picture ?>.value=obj;
-    }
     </script>
     <?
 
-        $this->nomeform = "form1";
-        $this->reload = false;
-        $this->size = '50';
-        $this->mascara = true;
-        $this->input = false;
-        $this->db_opcao = 1;
-        $this->funcao_onchange = null;
-        $this->autocompletar = false;
-        $this->botao = false;
-      }
+    $this->nomeform = "form1";
+    $this->reload = false;
+    $this->size = '50';
+    $this->mascara = true;
+    $this->input = false;
+    $this->db_opcao = 1;
+    $this->funcao_onchange = null;
+    $this->autocompletar = false;
+    $this->botao = false;
+  }
+}
+
+function db_le_mae_sistema($codigo, $nivel = false) {
+
+  $retorno = "";
+  if (substr($codigo, 11, 2) != '00') {
+    if ($nivel == true) {
+      $retorno = 9;
+    } else {
+      $retorno = substr($codigo, 0, 11) . '00';
     }
-
-    function db_le_mae_sistema($codigo, $nivel = false) {
-
-      $retorno = "";
-      if (substr($codigo, 11, 2) != '00') {
-        if ($nivel == true) {
-          $retorno = 9;
-        } else {
-          $retorno = substr($codigo, 0, 11) . '00';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 9, 4) != '0000') {
-        if ($nivel == true) {
-          $retorno = 8;
-        } else {
-          $retorno = substr($codigo, 0, 9) . '0000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 7, 6) != '000000') {
-        if ($nivel == true) {
-          $retorno = 7;
-        } else {
-          $retorno = substr($codigo, 0, 7) . '000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 5, 8) != '00000000') {
-        if ($nivel == true) {
-          $retorno = 6;
-        } else {
-          $retorno = substr($codigo, 0, 5) . '00000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 4, 9) != '000000000') {
-        if ($nivel == true) {
-          $retorno = 5;
-        } else {
-          $retorno = substr($codigo, 0, 4) . '000000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 3, 10) != '0000000000') {
-        if ($nivel == true) {
-          $retorno = 4;
-        } else {
-          $retorno = substr($codigo, 0, 3) . '0000000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 2, 11) != '00000000000') {
-        if ($nivel == true) {
-          $retorno = 3;
-        } else {
-          $retorno = substr($codigo, 0, 2) . '00000000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 1, 12) != '000000000000') {
-        if ($nivel == true) {
-          $retorno = 2;
-        } else {
-          $retorno = substr($codigo, 0, 1) . '000000000000';
-        }
-      }
-      if ($retorno == "") {
-        if ($nivel == true) {
-          $retorno = 1;
-        } else {
-          $retorno = $codigo;
-        }
-      }
-      return $retorno;
+  }
+  if ($retorno == "" && substr($codigo, 9, 4) != '0000') {
+    if ($nivel == true) {
+      $retorno = 8;
+    } else {
+      $retorno = substr($codigo, 0, 9) . '0000';
     }
-    //codigo seria o estrutural fornecido
-    //$nivel seria qual o nivel do estrutural que é para retornar...
-    //$full= true se desejar que seja retornado o nivel desejado e o resto com zero.. false ele retornara só ate o nivel desejado...
-
-    function db_le_corta_conplano($codigo, $nivel, $full = false) {
-
-      $retorno = "";
-      if ($nivel == 9) {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 13) . '00';
-        } else {
-          $retorno = substr($codigo, 0, 13);
-        }
-      }
-      if ($nivel == 8) {
-        if ($full == 8) {
-          $retorno = substr($codigo, 0, 11) . '0000';
-        } else {
-          $retorno = substr($codigo, 0, 11);
-        }
-      }
-      if ($nivel == 7) {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 9) . '000000';
-        } else {
-          $retorno = substr($codigo, 0, 9);
-        }
-      }
-      if ($nivel == 6) {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 7) . '00000000';
-        } else {
-          $retorno = substr($codigo, 0, 7);
-        }
-      }
-      if ($nivel == 5) {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 5) . '0000000000';
-        } else {
-          $retorno = substr($codigo, 0, 5);
-        }
-      }
-      if ($nivel == 4) {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 4) . '00000000000';
-        } else {
-          $retorno = substr($codigo, 0, 4);
-        }
-      }
-      if ($nivel == 3) {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 3) . '000000000000';
-        } else {
-          $retorno = substr($codigo, 0, 3);
-        }
-      }
-      if ($nivel == 2) {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 2) . '0000000000000';
-        } else {
-          $retorno = substr($codigo, 0, 2);
-        }
-      }
-      if ($nivel == "1") {
-        if ($full == true) {
-          $retorno = substr($codigo, 0, 1) . '0000000000000';
-        } else {
-          $retorno = substr($codigo, 0, 1);
-        }
-      }
-      return $retorno;
+  }
+  if ($retorno == "" && substr($codigo, 7, 6) != '000000') {
+    if ($nivel == true) {
+      $retorno = 7;
+    } else {
+      $retorno = substr($codigo, 0, 7) . '000000';
     }
-
-    function db_le_mae_conplano($codigo, $nivel = false) {
-
-      $retorno = "";
-
-      if ($retorno == "" && substr($codigo, 13, 2) != '00') {
-        if ($nivel == true) {
-          $retorno = 10;
-        } else {
-          $retorno = substr($codigo, 0, 13) . '00';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 11, 2) != '00') {
-        if ($nivel == true) {
-          $retorno = 9;
-        } else {
-          $retorno = substr($codigo, 0, 11) . '0000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 9, 6) != '000000') {
-        if ($nivel == true) {
-          $retorno = 8;
-        } else {
-          $retorno = substr($codigo, 0, 9) . '000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 7, 8) != '00000000') {
-        if ($nivel == true) {
-          $retorno = 7;
-        } else {
-          $retorno = substr($codigo, 0, 7) . '00000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 5, 10) != '0000000000') {
-        if ($nivel == true) {
-          $retorno = 6;
-        } else {
-          $retorno = substr($codigo, 0, 5) . '0000000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 4, 11) != '00000000000') {
-        if ($nivel == true) {
-          $retorno = 5;
-        } else {
-          $retorno = substr($codigo, 0, 4) . '00000000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 3, 12) != '000000000000') {
-        if ($nivel == true) {
-          $retorno = 4;
-        } else {
-          $retorno = substr($codigo, 0, 3) . '000000000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 2, 13) != '0000000000000') {
-        if ($nivel == true) {
-          $retorno = 3;
-        } else {
-          $retorno = substr($codigo, 0, 2) . '0000000000000';
-        }
-      }
-      if ($retorno == "" && substr($codigo, 1, 14) != '00000000000000') {
-        if ($nivel == true) {
-          $retorno = 2;
-        } else {
-          $retorno = substr($codigo, 0, 1) . '00000000000000';
-        }
-      }
-      if ($retorno == "") {
-        if ($nivel == true) {
-          $retorno = 1;
-        } else {
-          $retorno = $codigo;
-        }
-      }
-      return $retorno;
+  }
+  if ($retorno == "" && substr($codigo, 5, 8) != '00000000') {
+    if ($nivel == true) {
+      $retorno = 6;
+    } else {
+      $retorno = substr($codigo, 0, 5) . '00000000';
     }
+  }
+  if ($retorno == "" && substr($codigo, 4, 9) != '000000000') {
+    if ($nivel == true) {
+      $retorno = 5;
+    } else {
+      $retorno = substr($codigo, 0, 4) . '000000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 3, 10) != '0000000000') {
+    if ($nivel == true) {
+      $retorno = 4;
+    } else {
+      $retorno = substr($codigo, 0, 3) . '0000000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 2, 11) != '00000000000') {
+    if ($nivel == true) {
+      $retorno = 3;
+    } else {
+      $retorno = substr($codigo, 0, 2) . '00000000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 1, 12) != '000000000000') {
+    if ($nivel == true) {
+      $retorno = 2;
+    } else {
+      $retorno = substr($codigo, 0, 1) . '000000000000';
+    }
+  }
+  if ($retorno == "") {
+    if ($nivel == true) {
+      $retorno = 1;
+    } else {
+      $retorno = $codigo;
+    }
+  }
+  return $retorno;
+}
+//codigo seria o estrutural fornecido
+//$nivel seria qual o nivel do estrutural que é para retornar...
+//$full= true se desejar que seja retornado o nivel desejado e o resto com zero.. false ele retornara só ate o nivel desejado...
 
-    function db_planosissaldo($anousu, $dataini, $datafim, $retsql = false, $where = '') {
+function db_le_corta_conplano($codigo, $nivel, $full = false) {
 
-      if ($anousu == null)
-        $anousu = db_getsession("DB_anousu");
+  $retorno = "";
+  if ($nivel == 9) {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 13) . '00';
+    } else {
+      $retorno = substr($codigo, 0, 13);
+    }
+  }
+  if ($nivel == 8) {
+    if ($full == 8) {
+      $retorno = substr($codigo, 0, 11) . '0000';
+    } else {
+      $retorno = substr($codigo, 0, 11);
+    }
+  }
+  if ($nivel == 7) {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 9) . '000000';
+    } else {
+      $retorno = substr($codigo, 0, 9);
+    }
+  }
+  if ($nivel == 6) {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 7) . '00000000';
+    } else {
+      $retorno = substr($codigo, 0, 7);
+    }
+  }
+  if ($nivel == 5) {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 5) . '0000000000';
+    } else {
+      $retorno = substr($codigo, 0, 5);
+    }
+  }
+  if ($nivel == 4) {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 4) . '00000000000';
+    } else {
+      $retorno = substr($codigo, 0, 4);
+    }
+  }
+  if ($nivel == 3) {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 3) . '000000000000';
+    } else {
+      $retorno = substr($codigo, 0, 3);
+    }
+  }
+  if ($nivel == 2) {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 2) . '0000000000000';
+    } else {
+      $retorno = substr($codigo, 0, 2);
+    }
+  }
+  if ($nivel == "1") {
+    if ($full == true) {
+      $retorno = substr($codigo, 0, 1) . '0000000000000';
+    } else {
+      $retorno = substr($codigo, 0, 1);
+    }
+  }
+  return $retorno;
+}
 
-      if ($dataini == null)
-        $dataini = date('Y-m-d', db_getsession('DB_datausu'));
+function db_le_mae_conplano($codigo, $nivel = false) {
 
-      if ($datafim == null)
-        $datafim = date('Y-m-d', db_getsession('DB_datausu'));
+  $retorno = "";
 
-      if ($where != '') {
-        $condicao = " and " . $where;
-      } else {
-        $condicao = "";
-      }
+  if ($retorno == "" && substr($codigo, 13, 2) != '00') {
+    if ($nivel == true) {
+      $retorno = 10;
+    } else {
+      $retorno = substr($codigo, 0, 13) . '00';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 11, 2) != '00') {
+    if ($nivel == true) {
+      $retorno = 9;
+    } else {
+      $retorno = substr($codigo, 0, 11) . '0000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 9, 6) != '000000') {
+    if ($nivel == true) {
+      $retorno = 8;
+    } else {
+      $retorno = substr($codigo, 0, 9) . '000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 7, 8) != '00000000') {
+    if ($nivel == true) {
+      $retorno = 7;
+    } else {
+      $retorno = substr($codigo, 0, 7) . '00000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 5, 10) != '0000000000') {
+    if ($nivel == true) {
+      $retorno = 6;
+    } else {
+      $retorno = substr($codigo, 0, 5) . '0000000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 4, 11) != '00000000000') {
+    if ($nivel == true) {
+      $retorno = 5;
+    } else {
+      $retorno = substr($codigo, 0, 4) . '00000000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 3, 12) != '000000000000') {
+    if ($nivel == true) {
+      $retorno = 4;
+    } else {
+      $retorno = substr($codigo, 0, 3) . '000000000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 2, 13) != '0000000000000') {
+    if ($nivel == true) {
+      $retorno = 3;
+    } else {
+      $retorno = substr($codigo, 0, 2) . '0000000000000';
+    }
+  }
+  if ($retorno == "" && substr($codigo, 1, 14) != '00000000000000') {
+    if ($nivel == true) {
+      $retorno = 2;
+    } else {
+      $retorno = substr($codigo, 0, 1) . '00000000000000';
+    }
+  }
+  if ($retorno == "") {
+    if ($nivel == true) {
+      $retorno = 1;
+    } else {
+      $retorno = $codigo;
+    }
+  }
+  return $retorno;
+}
 
-      $sql = "select   estrut_mae,
+function db_planosissaldo($anousu, $dataini, $datafim, $retsql = false, $where = '') {
+
+  if ($anousu == null)
+    $anousu = db_getsession("DB_anousu");
+
+  if ($dataini == null)
+    $dataini = date('Y-m-d', db_getsession('DB_datausu'));
+
+  if ($datafim == null)
+    $datafim = date('Y-m-d', db_getsession('DB_datausu'));
+
+  if ($where != '') {
+    $condicao = " and " . $where;
+  } else {
+    $condicao = "";
+  }
+
+  $sql = "select   estrut_mae,
   estrut,
   c61_reduz,
   c60_descr,
@@ -3448,7 +3294,7 @@ class cl_estrutura_sistema {
   p.c60_descr,
   p.c60_finali,
   fc_planosaldo(" . db_getsession('DB_anousu')
-          . ",c61_reduz,'$dataini','$datafim')
+    . ",c61_reduz,'$dataini','$datafim')
   from conplanoexe e
   inner join conplanoreduz r on r.c61_reduz = c62_reduz and r.c61_anousu=e.c62_anousu
   inner join conplanoref f on f.c65_codcon = c61_codcon
@@ -3457,10 +3303,10 @@ class cl_estrutura_sistema {
   where c62_anousu = $anousu $condicao) as x
   ";
 
-      //db_criatabela(db_query($sql));exit;
+  //db_criatabela(db_query($sql));exit;
 
-      db_query(
-          "create temporary table work_planosis(estrut_mae varchar(15),
+  db_query(
+    "create temporary table work_planosis(estrut_mae varchar(15),
   estrut varchar(15),
   c61_reduz integer,
   c60_descr varchar(60),
@@ -3472,30 +3318,30 @@ class cl_estrutura_sistema {
   sinal_anterior varchar(1),
   sinal_final varchar(1))");
 
-      db_query("create index work_planosis_estrut on work_planosis(estrut)");
+  db_query("create index work_planosis_estrut on work_planosis(estrut)");
 
-      $result = db_query($sql);
+  $result = db_query($sql);
 
-      //  db_criatabela($result);exit;
-      $tot_anterior = 0;
-      $tot_anterior_debito = 0;
-      $tot_anterior_credito = 0;
-      $tot_saldo_final = 0;
-      GLOBAL $estrut_mae, $estrut, $c61_reduz, $c60_descr, $c60_finali, $saldo_anterior, $saldo_anterior_debito, $saldo_anterior_credito, $saldo_final, $result_estrut, $sinal_anterior, $sinal_final, $c64_descr;
-      $nivel = 0;
-      for ($i = 0; $i < pg_numrows($result); $i++) {
-        //  for($i = 0;$i < 4;$i++){
-        db_fieldsmemory($result, $i);
-        if ($sinal_anterior == "C")
-          $saldo_anterior *= -1;
-        if ($sinal_final == "C")
-          $saldo_final *= -1;
-        $tot_anterior = $saldo_anterior;
-        $tot_anterior_debito = $saldo_anterior_debito;
-        $tot_anterior_credito = $saldo_anterior_credito;
-        $tot_saldo_final = $saldo_final;
-        db_query(
-            "insert into work_planosis values('$estrut_mae',
+  //  db_criatabela($result);exit;
+  $tot_anterior = 0;
+  $tot_anterior_debito = 0;
+  $tot_anterior_credito = 0;
+  $tot_saldo_final = 0;
+  GLOBAL $estrut_mae, $estrut, $c61_reduz, $c60_descr, $c60_finali, $saldo_anterior, $saldo_anterior_debito, $saldo_anterior_credito, $saldo_final, $result_estrut, $sinal_anterior, $sinal_final, $c64_descr;
+  $nivel = 0;
+  for ($i = 0; $i < pg_numrows($result); $i++) {
+    //  for($i = 0;$i < 4;$i++){
+    db_fieldsmemory($result, $i);
+    if ($sinal_anterior == "C")
+      $saldo_anterior *= -1;
+    if ($sinal_final == "C")
+      $saldo_final *= -1;
+    $tot_anterior = $saldo_anterior;
+    $tot_anterior_debito = $saldo_anterior_debito;
+    $tot_anterior_credito = $saldo_anterior_credito;
+    $tot_saldo_final = $saldo_final;
+    db_query(
+      "insert into work_planosis values('$estrut_mae',
       '$estrut',
       $c61_reduz,
       '".pg_scape_string($c60_descr)."',
@@ -3506,21 +3352,21 @@ class cl_estrutura_sistema {
       $saldo_final,
       '$sinal_anterior',
       '$sinal_final')");
-        $estrutural = $estrut_mae;
-        $nivel = 10;
-        for ($ii = 1; $ii < 11; $ii++) {
-          if ($ii > 1) {
-            $estrutural = db_le_mae_sistema($estrutural);
-            $nivel = db_le_mae_sistema($estrutural, true);
-          }
-          $result_estrut = db_query("select saldo_anterior from work_planosis where estrut = '$estrutural'");
-          //db_criatabela($result_estrut);
-          if (@pg_numrows($result_estrut) != true) {
-            $res = db_query("select c64_descr from conplanosis where c64_estrut = '$estrutural'");
-            db_fieldsmemory($res, 0);
+    $estrutural = $estrut_mae;
+    $nivel = 10;
+    for ($ii = 1; $ii < 11; $ii++) {
+      if ($ii > 1) {
+        $estrutural = db_le_mae_sistema($estrutural);
+        $nivel = db_le_mae_sistema($estrutural, true);
+      }
+      $result_estrut = db_query("select saldo_anterior from work_planosis where estrut = '$estrutural'");
+      //db_criatabela($result_estrut);
+      if (@pg_numrows($result_estrut) != true) {
+        $res = db_query("select c64_descr from conplanosis where c64_estrut = '$estrutural'");
+        db_fieldsmemory($res, 0);
 
-            $result_1 = db_query(
-                "insert into work_planosis values('$estrutural',
+        $result_1 = db_query(
+          "insert into work_planosis values('$estrutural',
           '$estrutural',
           0,
           '$c64_descr',
@@ -3531,21 +3377,21 @@ class cl_estrutura_sistema {
           $saldo_final,
           '$sinal_anterior',
           '$sinal_final')");
-          } else {
+      } else {
 
-            db_query(
-                "update work_planosis set saldo_anterior = saldo_anterior + $tot_anterior ,
+        db_query(
+          "update work_planosis set saldo_anterior = saldo_anterior + $tot_anterior ,
           saldo_anterior_debito = saldo_anterior_debito + $tot_anterior_debito ,
           saldo_anterior_credito = saldo_anterior_credito + $tot_anterior_credito ,
           saldo_final = saldo_final + $tot_saldo_final
           where estrut = '$estrutural' ");
-          }
-          if ($nivel == 1)
-            break;
-        }
       }
-      //db_criatabela(db_query("select * from work_planosis"));exit;
-      $sql = "select case when c61_reduz = 0 then estrut_mae else estrut end as estrutural,
+      if ($nivel == 1)
+        break;
+    }
+  }
+  //db_criatabela(db_query("select * from work_planosis"));exit;
+  $sql = "select case when c61_reduz = 0 then estrut_mae else estrut end as estrutural,
     c61_reduz,
     c60_descr,
     c60_finali,
@@ -3562,47 +3408,44 @@ class cl_estrutura_sistema {
     from work_planosis
     order by estrut_mae,estrut";
 
-      if ($retsql == false) {
-        return $result_final = db_query($sql);
-        //     db_criatabela(db_query($sql));
-      } else {
-        return $sql;
-      }
-    }
+  if ($retsql == false) {
+    return $result_final = db_query($sql);
+    //     db_criatabela(db_query($sql));
+  } else {
+    return $sql;
+  }
+}
 
-    /**
-     * @ atualização dessa função :14/04
-     * @ A versao antiga consta abaixo com o nome "db_planocontassaldo_old()";
-     * @ deixar false a opção com encerramento
-     */
-    function db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql = false, $where = '', $estrut_inicial = '',
-        $acumula_reduzido = 'true', $encerramento = 'false', $join = '', $aOrcParametro = array()) {
+/**
+ * @ atualização dessa função :14/04
+ * @ A versao antiga consta abaixo com o nome "db_planocontassaldo_old()";
+ * @ deixar false a opção com encerramento
+ */
+function db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql = false, $where = '', $estrut_inicial = '',
+                                    $acumula_reduzido = 'true', $encerramento = 'false', $join = '', $aOrcParametro = array()) {
 
-      //echo "<pre>";
-      //print_r($aOrcParametro);
-      //echo "</pre>";
 
-      if ($anousu == null)
-        $anousu = db_getsession("DB_anousu");
-      if ($dataini == null)
-        $dataini = date('Y-m-d', db_getsession('DB_datausu'));
-      if ($datafim == null)
-        $datafim = date('Y-m-d', db_getsession('DB_datausu'));
-      if ($where != '') {
-        $condicao = " and " . $where;
-      } else {
-        $condicao = "";
-      }
-      $pesq_estrut = "";
-      if ($estrut_inicial != "") {
-        // oberve a concatenação da variável
-        $condicao .= "  and p.c60_estrut like '$estrut_inicial%' ";
-      }
+  if ($anousu == null)
+    $anousu = db_getsession("DB_anousu");
+  if ($dataini == null)
+    $dataini = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($datafim == null)
+    $datafim = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($where != '') {
+    $condicao = " and " . $where;
+  } else {
+    $condicao = "";
+  }
+  $pesq_estrut = "";
+  if ($estrut_inicial != "") {
+    // oberve a concatenação da variável
+    $condicao .= "  and p.c60_estrut like '$estrut_inicial%' ";
+  }
 
-      if ($encerramento == '')
-        $encerramento = false;
+  if ($encerramento == '')
+    $encerramento = false;
 
-      $sql = "
+  $sql = "
     select
     estrut_mae,
     estrut,
@@ -3654,17 +3497,17 @@ class cl_estrutura_sistema {
     $pesq_estrut
     where c62_anousu = $anousu $condicao) as x
     ";
-      #echo "<pre>$sql</pre>";
-      // db_criatabela(db_query($sql));exit;
+  #echo "<pre>$sql</pre>";
+  // db_criatabela(db_query($sql));exit;
 
-      db_query(
-          "create temporary table work_pl (
+  db_query(
+    "create temporary table work_pl (
     estrut_mae varchar(15),
     estrut varchar(15),
     c61_reduz integer,
     c61_codcon integer,
     c61_codigo integer,
-    c60_descr varchar(50),
+    c60_descr varchar(200),
     c60_finali text,
     c61_instit integer,
     saldo_anterior float8,
@@ -3675,160 +3518,160 @@ class cl_estrutura_sistema {
     sinal_final varchar(1),
     c60_identificadorfinanceiro character(1),
     c60_consistemaconta integer)");
-      //   db_query("create temporary table work_plano as $sql");
-      db_query("create index work_pl_estrut on work_pl(estrut)");
-      db_query("create index work_pl_estrutmae on work_pl(estrut_mae)");
+  //   db_query("create temporary table work_plano as $sql");
+  db_query("create index work_pl_estrut on work_pl(estrut)");
+  db_query("create index work_pl_estrutmae on work_pl(estrut_mae)");
 
-      $result = db_query($sql);
-      //db_criatabela($result);exit;
-      $tot_anterior = 0;
-      $tot_anterior_debito = 0;
-      $tot_anterior_credito = 0;
-      $tot_saldo_final = 0;
-      GLOBAL $seq;
-      GLOBAL $estrut_mae;
-      GLOBAL $estrut;
-      GLOBAL $c61_reduz;
-      GLOBAL $c61_codcon;
-      GLOBAL $c61_codigo;
-      GLOBAL $c60_codcon;
-      GLOBAL $c60_descr;
-      GLOBAL $c60_finali;
-      GLOBAL $c61_instit;
-      GLOBAL $saldo_anterior;
-      GLOBAL $saldo_anterior_debito;
-      GLOBAL $saldo_anterior_credito;
-      GLOBAL $saldo_final;
-      GLOBAL $result_estrut;
-      GLOBAL $sinal_anterior;
-      GLOBAL $sinal_final;
-      GLOBAL $c60_identificadorfinanceiro;
-      GLOBAL $c60_consistemaconta;
-      GLOBAL $sis;
+  $result = db_query($sql);
+  //db_criatabela($result);exit;
+  $tot_anterior = 0;
+  $tot_anterior_debito = 0;
+  $tot_anterior_credito = 0;
+  $tot_saldo_final = 0;
+  GLOBAL $seq;
+  GLOBAL $estrut_mae;
+  GLOBAL $estrut;
+  GLOBAL $c61_reduz;
+  GLOBAL $c61_codcon;
+  GLOBAL $c61_codigo;
+  GLOBAL $c60_codcon;
+  GLOBAL $c60_descr;
+  GLOBAL $c60_finali;
+  GLOBAL $c61_instit;
+  GLOBAL $saldo_anterior;
+  GLOBAL $saldo_anterior_debito;
+  GLOBAL $saldo_anterior_credito;
+  GLOBAL $saldo_final;
+  GLOBAL $result_estrut;
+  GLOBAL $sinal_anterior;
+  GLOBAL $sinal_final;
+  GLOBAL $c60_identificadorfinanceiro;
+  GLOBAL $c60_consistemaconta;
+  GLOBAL $sis;
 
-      $work_planomae = array();
-      $work_planoestrut = array();
-      $work_plano = array();
-      $seq = 0;
+  $work_planomae = array();
+  $work_planoestrut = array();
+  $work_plano = array();
+  $seq = 0;
 
-      for ($i = 0; $i < pg_numrows($result); $i++) {
-        //  for($i = 0;$i < 20;$i++){
-        db_fieldsmemory($result, $i);
-        if ($sinal_anterior == "C")
-          $saldo_anterior *= -1;
-        if ($sinal_final == "C")
-          $saldo_final *= -1;
-        $tot_anterior         = dbround_php_52($saldo_anterior,2);
-        $tot_anterior_debito  = dbround_php_52($saldo_anterior_debito,2);
-        $tot_anterior_credito = dbround_php_52($saldo_anterior_credito,2);
-        $tot_saldo_final      = dbround_php_52($saldo_final,2);
+  for ($i = 0; $i < pg_numrows($result); $i++) {
+    //  for($i = 0;$i < 20;$i++){
+    db_fieldsmemory($result, $i);
+    if ($sinal_anterior == "C")
+      $saldo_anterior *= -1;
+    if ($sinal_final == "C")
+      $saldo_final *= -1;
+    $tot_anterior         = dbround_php_52($saldo_anterior,2);
+    $tot_anterior_debito  = dbround_php_52($saldo_anterior_debito,2);
+    $tot_anterior_credito = dbround_php_52($saldo_anterior_credito,2);
+    $tot_saldo_final      = dbround_php_52($saldo_final,2);
 
-        if ($acumula_reduzido == true) {
-          $key = array_search("$estrut_mae", $work_planomae);
-        } else {
-          $key = false;
+    if ($acumula_reduzido == true) {
+      $key = array_search("$estrut_mae", $work_planomae);
+    } else {
+      $key = false;
+    }
+    if ($key === false) { // não achou
+      $work_planomae[$seq] = $estrut_mae;
+      $work_planoestrut[$seq] = $estrut;
+      $work_plano[$seq] = array(0 => "$c61_reduz", 1 => "$c61_codcon", 2 => "$c61_codigo", 3 => "$c60_descr",
+                                4 => "$c60_finali", 5 => "$c61_instit", 6 => "$saldo_anterior", 7 => "$saldo_anterior_debito",
+                                8 => "$saldo_anterior_credito", 9 => "$saldo_final", 10 => "$sinal_anterior", 11 => "$sinal_final",
+                                12 => "$c60_identificadorfinanceiro", 13 => "$c60_consistemaconta");
+      $seq = $seq + 1;
+    } else {
+      $work_plano[$key][6] = dbround_php_52($work_plano[$key][6],2) + dbround_php_52($tot_anterior,2);
+      $work_plano[$key][7] = dbround_php_52($work_plano[$key][7],2) + dbround_php_52($tot_anterior_debito,2);
+      $work_plano[$key][8] = dbround_php_52($work_plano[$key][8],2) + dbround_php_52($tot_anterior_credito,2);
+      $work_plano[$key][9] = dbround_php_52($work_plano[$key][9],2) + dbround_php_52($tot_saldo_final,2);
+    }
+    $estrutural = $estrut;
+
+    for ($ii = 1; $ii < 10; $ii++) {
+      $estrutural = db_le_mae_conplano($estrutural);
+      $nivel = db_le_mae_conplano($estrutural, true);
+
+      $key = array_search("$estrutural", $work_planomae);
+      if ($key === false) { // não achou
+        // busca no banco e inclui
+        $res = db_query(
+          "select c60_descr,c60_finali,c60_codcon, c60_identificadorfinanceiro
+            from conplano
+            where c60_anousu=" . $anousu . " and c60_estrut = '$estrutural'");
+        if ($res == false || pg_numrows($res) == 0) {
+
+          $sMensagemErro = "Está faltando cadastrar esse estrutural na contabilidade. Nível : {$nivel}  Estrutural : {$estrutural} - ano: {$anousu}";
+
+          if ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            throw new Exception($sMensagemErro);
+          }
+
+          db_redireciona("db_erros.php?fechar=true&db_erro={$sMensagemErro}");
+          exit;
         }
-        if ($key === false) { // não achou
-          $work_planomae[$seq] = $estrut_mae;
-          $work_planoestrut[$seq] = $estrut;
-          $work_plano[$seq] = array(0 => "$c61_reduz", 1 => "$c61_codcon", 2 => "$c61_codigo", 3 => "$c60_descr",
-              4 => "$c60_finali", 5 => "$c61_instit", 6 => "$saldo_anterior", 7 => "$saldo_anterior_debito",
-              8 => "$saldo_anterior_credito", 9 => "$saldo_final", 10 => "$sinal_anterior", 11 => "$sinal_final",
-              12 => "$c60_identificadorfinanceiro", 13 => "$c60_consistemaconta");
-          $seq = $seq + 1;
+        db_fieldsmemory($res, 0);
+
+        $work_planomae[$seq] = $estrutural;
+        $work_planoestrut[$seq] = '';
+        /// Validar Parametros do Orcamento para Acumular as Sinteticas (Estrutura e Instituicao)
+        $work_plano[$seq] = (array(0 => 0, 1 => 0, 2 => $c60_codcon, 3 => $c60_descr, 4 => $c60_finali, 5 => 0,
+                                   6 => $saldo_anterior, 7 => $saldo_anterior_debito, 8 => $saldo_anterior_credito, 9 => $saldo_final,
+                                   10 => $sinal_anterior, 11 => $sinal_final, 12 => $c60_identificadorfinanceiro, 13 => $c60_consistemaconta));
+        if (count($aOrcParametro) > 0) { // Se foram passados parametros...
+          if (!in_array(array($estrutural, $c61_instit), $aOrcParametro)) {
+            $work_plano[$seq] = (array(0 => 0, 1 => 0, 2 => $c60_codcon, 3 => $c60_descr, 4 => $c60_finali, 5 => 0,
+                                       6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => '', 11 => '', 12 => '', 13 => 0));
+          }
+        }
+
+        $seq++;
+      } else {
+
+        /// Validar Parametros do Orcamento para Acumular as Sinteticas (Estrutura e Instituicao)
+        if (count($aOrcParametro) > 0) { // Se foram passados parametros...
+          if (!in_array(array($estrutural, $c61_instit), $aOrcParametro)) {
+
+            continue;
+          }
+          //echo "<pre>";
+          //print_r(array($estrutural, $c61_instit));
+          //echo "</pre>";
+
+          $work_plano[$key][6] = dbround_php_52($work_plano[$key][6],2) + dbround_php_52($tot_anterior,2);
+          $work_plano[$key][7] = dbround_php_52($work_plano[$key][7],2) + dbround_php_52($tot_anterior_debito,2);
+          $work_plano[$key][8] = dbround_php_52($work_plano[$key][8],2) + dbround_php_52($tot_anterior_credito,2);
+          $work_plano[$key][9] = dbround_php_52($work_plano[$key][9],2) + dbround_php_52($tot_saldo_final,2);
+
         } else {
           $work_plano[$key][6] = dbround_php_52($work_plano[$key][6],2) + dbround_php_52($tot_anterior,2);
           $work_plano[$key][7] = dbround_php_52($work_plano[$key][7],2) + dbround_php_52($tot_anterior_debito,2);
           $work_plano[$key][8] = dbround_php_52($work_plano[$key][8],2) + dbround_php_52($tot_anterior_credito,2);
           $work_plano[$key][9] = dbround_php_52($work_plano[$key][9],2) + dbround_php_52($tot_saldo_final,2);
         }
-        $estrutural = $estrut;
-
-        for ($ii = 1; $ii < 10; $ii++) {
-          $estrutural = db_le_mae_conplano($estrutural);
-          $nivel = db_le_mae_conplano($estrutural, true);
-
-          $key = array_search("$estrutural", $work_planomae);
-          if ($key === false) { // não achou
-          // busca no banco e inclui
-            $res = db_query(
-                "select c60_descr,c60_finali,c60_codcon, c60_identificadorfinanceiro
-            from conplano
-            where c60_anousu=" . $anousu . " and c60_estrut = '$estrutural'");
-            if ($res == false || pg_numrows($res) == 0) {
-
-              $sMensagemErro = "Está faltando cadastrar esse estrutural na contabilidade. Nível : {$nivel}  Estrutural : {$estrutural} - ano: {$anousu}";
-
-              if ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
-                throw new Exception($sMensagemErro);
-              }
-
-              db_redireciona("db_erros.php?fechar=true&db_erro={$sMensagemErro}");
-              exit;
-            }
-            db_fieldsmemory($res, 0);
-
-            $work_planomae[$seq] = $estrutural;
-            $work_planoestrut[$seq] = '';
-            /// Validar Parametros do Orcamento para Acumular as Sinteticas (Estrutura e Instituicao)
-            $work_plano[$seq] = (array(0 => 0, 1 => 0, 2 => $c60_codcon, 3 => $c60_descr, 4 => $c60_finali, 5 => 0,
-                6 => $saldo_anterior, 7 => $saldo_anterior_debito, 8 => $saldo_anterior_credito, 9 => $saldo_final,
-                10 => $sinal_anterior, 11 => $sinal_final, 12 => $c60_identificadorfinanceiro, 13 => $c60_consistemaconta));
-            if (count($aOrcParametro) > 0) { // Se foram passados parametros...
-              if (!in_array(array($estrutural, $c61_instit), $aOrcParametro)) {
-                $work_plano[$seq] = (array(0 => 0, 1 => 0, 2 => $c60_codcon, 3 => $c60_descr, 4 => $c60_finali, 5 => 0,
-                    6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => '', 11 => '', 12 => '', 13 => 0));
-              }
-            }
-
-            $seq++;
-          } else {
-
-            /// Validar Parametros do Orcamento para Acumular as Sinteticas (Estrutura e Instituicao)
-            if (count($aOrcParametro) > 0) { // Se foram passados parametros...
-              if (!in_array(array($estrutural, $c61_instit), $aOrcParametro)) {
-
-                continue;
-              }
-              //echo "<pre>";
-              //print_r(array($estrutural, $c61_instit));
-              //echo "</pre>";
-
-              $work_plano[$key][6] = dbround_php_52($work_plano[$key][6],2) + dbround_php_52($tot_anterior,2);
-              $work_plano[$key][7] = dbround_php_52($work_plano[$key][7],2) + dbround_php_52($tot_anterior_debito,2);
-              $work_plano[$key][8] = dbround_php_52($work_plano[$key][8],2) + dbround_php_52($tot_anterior_credito,2);
-              $work_plano[$key][9] = dbround_php_52($work_plano[$key][9],2) + dbround_php_52($tot_saldo_final,2);
-
-            } else {
-              $work_plano[$key][6] = dbround_php_52($work_plano[$key][6],2) + dbround_php_52($tot_anterior,2);
-              $work_plano[$key][7] = dbround_php_52($work_plano[$key][7],2) + dbround_php_52($tot_anterior_debito,2);
-              $work_plano[$key][8] = dbround_php_52($work_plano[$key][8],2) + dbround_php_52($tot_anterior_credito,2);
-              $work_plano[$key][9] = dbround_php_52($work_plano[$key][9],2) + dbround_php_52($tot_saldo_final,2);
-            }
-          }
-          if ($nivel == 1)
-            break;
-        }
       }
-      for ($i = 0; $i < sizeof($work_planomae); $i++) {
-        $mae = $work_planomae[$i];
-        $estrut = $work_planoestrut[$i];
-        $c61_reduz = $work_plano[$i][0];
-        $c61_codcon = $work_plano[$i][1];
-        $c61_codigo = $work_plano[$i][2];
-        $c60_descr = $work_plano[$i][3];
-        $c60_finali = $work_plano[$i][4];
-        $c61_instit = $work_plano[$i][5];
-        $saldo_anterior = $work_plano[$i][6];
-        $saldo_anterior_debito = $work_plano[$i][7];
-        $saldo_anterior_credito = $work_plano[$i][8];
-        $saldo_final = $work_plano[$i][9];
-        $sinal_anterior = $work_plano[$i][10];
-        $sinal_final = $work_plano[$i][11];
-        $c60_identificadorfinanceiro = $work_plano[$i][12];
-        $c60_consistemaconta = $work_plano[$i][13];
+      if ($nivel == 1)
+        break;
+    }
+  }
+  for ($i = 0; $i < sizeof($work_planomae); $i++) {
+    $mae = $work_planomae[$i];
+    $estrut = $work_planoestrut[$i];
+    $c61_reduz = $work_plano[$i][0];
+    $c61_codcon = $work_plano[$i][1];
+    $c61_codigo = $work_plano[$i][2];
+    $c60_descr = $work_plano[$i][3];
+    $c60_finali = $work_plano[$i][4];
+    $c61_instit = $work_plano[$i][5];
+    $saldo_anterior = $work_plano[$i][6];
+    $saldo_anterior_debito = $work_plano[$i][7];
+    $saldo_anterior_credito = $work_plano[$i][8];
+    $saldo_final = $work_plano[$i][9];
+    $sinal_anterior = $work_plano[$i][10];
+    $sinal_final = $work_plano[$i][11];
+    $c60_identificadorfinanceiro = $work_plano[$i][12];
+    $c60_consistemaconta = $work_plano[$i][13];
 
-        $sql = "insert into work_pl
+    $sql = "insert into work_pl
         values ('$mae',
         '$estrut',
         $c61_reduz,
@@ -3845,10 +3688,10 @@ class cl_estrutura_sistema {
         '$sinal_final',
         '$c60_identificadorfinanceiro',
         $c60_consistemaconta)";
-        db_query($sql);
-      }
+    db_query($sql);
+  }
 
-      $sql = "select
+  $sql = "select
       case when c61_reduz = 0 then
       estrut_mae
       else
@@ -3883,45 +3726,45 @@ class cl_estrutura_sistema {
       from work_pl
       order by estrut_mae,estrut";
 
-      if ($retsql == false) {
-        $result_final = db_query($sql);
-        //db_criatabela($result_final); exit;
-        return $result_final;
-      } else {
-        return $sql;
-      }
-    }
-    /*
-     * gera balancete com as contas de receita e despesa
-     * como no modelos do plano de contas
-     */
+  if ($retsql == false) {
+    $result_final = db_query($sql);
+    //db_criatabela($result_final); exit;
+    return $result_final;
+  } else {
+    return $sql;
+  }
+}
+/*
+ * gera balancete com as contas de receita e despesa
+ * como no modelos do plano de contas
+ */
 
-    function db_planocontassaldo_desp_rec($anousu, $dataini, $datafim, $retsql = false, $where = '',
-        $estrut_inicial = '', $encerramento = 'false') {
-      // anousu
-      // where[] :   condições adicionais de pesquisa
-      // encerramento[false/true] :  considera documentos de encerramento de exercicio
-      // retsql  [false/true] : retorna somente sql
-      // estrut_inicia []  :  pesquisa por estrutural
-      //
+function db_planocontassaldo_desp_rec($anousu, $dataini, $datafim, $retsql = false, $where = '',
+                                      $estrut_inicial = '', $encerramento = 'false') {
+  // anousu
+  // where[] :   condições adicionais de pesquisa
+  // encerramento[false/true] :  considera documentos de encerramento de exercicio
+  // retsql  [false/true] : retorna somente sql
+  // estrut_inicia []  :  pesquisa por estrutural
+  //
 
-      if ($anousu == null)
-        $anousu = db_getsession("DB_anousu");
-      if ($dataini == null)
-        $dataini = date('Y-m-d', db_getsession('DB_datausu'));
-      if ($datafim == null)
-        $datafim = date('Y-m-d', db_getsession('DB_datausu'));
-      if ($where != '') {
-        $condicao = " and " . $where;
-      } else {
-        $condicao = "";
-      }
+  if ($anousu == null)
+    $anousu = db_getsession("DB_anousu");
+  if ($dataini == null)
+    $dataini = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($datafim == null)
+    $datafim = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($where != '') {
+    $condicao = " and " . $where;
+  } else {
+    $condicao = "";
+  }
 
-      $pesq_estrut = "";
-      if ($estrut_inicial != "") {
-        $pesq_estrut = "  and p.c60_estrut like '$estrut_inicial%' ";
-      }
-      $sql = "
+  $pesq_estrut = "";
+  if ($estrut_inicial != "") {
+    $pesq_estrut = "  and p.c60_estrut like '$estrut_inicial%' ";
+  }
+  $sql = "
       select   estrut_mae,
       estrut,
       c61_reduz,
@@ -3946,27 +3789,27 @@ class cl_estrutura_sistema {
       p.c60_finali,
       r.c61_instit,
       fc_planosaldonovo(" . db_getsession('DB_anousu')
-          . ",c61_reduz,'$dataini','$datafim',$encerramento)
+    . ",c61_reduz,'$dataini','$datafim',$encerramento)
       from conplanoexe e
       inner join conplanoreduz r on r.c61_reduz = e.c62_reduz and r.c61_anousu=e.c62_anousu
       inner join conplano p on r.c61_codcon = p.c60_codcon and r.c61_anousu=p.c60_anousu
       $pesq_estrut
       where c62_anousu = $anousu $condicao";
 
-    if (USE_PCASP) {
-      $sql .= " and ( substr(p.c60_estrut,1,1)='3' or substr(p.c60_estrut,1,1)='4')) as x ";
-    } else {
-      $sql .= " and
+  if (USE_PCASP) {
+    $sql .= " and ( substr(p.c60_estrut,1,1)='3' or substr(p.c60_estrut,1,1)='4')) as x ";
+  } else {
+    $sql .= " and
                   ( substr(p.c60_estrut,1,1)='3' or substr(p.c60_estrut,1,1)='4'
                 or fc_conplano_grupo(" . db_getsession("DB_anousu")
-                . ", substr(p.c60_estrut,1,1)||'%', 9004) is true
+      . ", substr(p.c60_estrut,1,1)||'%', 9004) is true
                 or fc_conplano_grupo(" . db_getsession("DB_anousu")
-                . ", substr(p.c60_estrut,1,1)||'%', 9000) is true
+      . ", substr(p.c60_estrut,1,1)||'%', 9000) is true
                   )
                 ) as x ";
-    }
-      db_query(
-          "create temporary table work_plano (
+  }
+  db_query(
+    "create temporary table work_plano (
       estrut_mae varchar(15),
       estrut varchar(15),
       c61_reduz integer,
@@ -3981,109 +3824,109 @@ class cl_estrutura_sistema {
       saldo_final float8,
       sinal_anterior varchar(1),
       sinal_final varchar(1)) ");
-      db_query("create index work_plano_estrut on work_plano(estrut)");
-      db_query("create index work_plano_estrutmae on work_plano(estrut_mae)");
-      $result = db_query($sql);
-      $tot_anterior = 0;
-      $tot_anterior_debito = 0;
-      $tot_anterior_credito = 0;
-      $tot_saldo_final = 0;
-      GLOBAL $seq;
-      GLOBAL $estrut_mae;
-      GLOBAL $estrut;
-      GLOBAL $c61_reduz;
-      GLOBAL $c61_codcon;
-      GLOBAL $c61_codigo;
-      GLOBAL $c60_codcon;
-      GLOBAL $c60_descr;
-      GLOBAL $c60_finali;
-      GLOBAL $c61_instit;
-      GLOBAL $saldo_anterior;
-      GLOBAL $saldo_anterior_debito;
-      GLOBAL $saldo_anterior_credito;
-      GLOBAL $saldo_final;
-      GLOBAL $result_estrut;
-      GLOBAL $sinal_anterior;
-      GLOBAL $sinal_final;
-      $work_planomae = array();
-      $work_planoestrut = array();
-      $work_plano = array();
-      $seq = 0;
-      for ($i = 0; $i < pg_numrows($result); $i++) {
-        db_fieldsmemory($result, $i);
-        if ($sinal_anterior == "C")
-          $saldo_anterior *= -1;
-        if ($sinal_final == "C")
-          $saldo_final *= -1;
-        $tot_anterior = $saldo_anterior;
-        $tot_anterior_debito = $saldo_anterior_debito;
-        $tot_anterior_credito = $saldo_anterior_credito;
-        $tot_saldo_final = $saldo_final;
-        $key = array_search("$estrut_mae", $work_planomae);
-        if ($key === false) { // não achou
-          $work_planomae[$seq] = $estrut_mae;
-          $work_planoestrut[$seq] = $estrut;
-          $work_plano[$seq] = array(0 => "$c61_reduz", 1 => "$c61_codcon", 2 => "$c61_codigo", 3 => "$c60_descr",
-              4 => "$c60_finali", 5 => "$c61_instit", 6 => "$saldo_anterior", 7 => "$saldo_anterior_debito",
-              8 => "$saldo_anterior_credito", 9 => "$saldo_final", 10 => "$sinal_anterior", 11 => "$sinal_final");
-          $seq = $seq + 1;
-        } else {
-          $work_plano[$key][6] += $tot_anterior;
-          $work_plano[$key][7] += $tot_anterior_debito;
-          $work_plano[$key][8] += $tot_anterior_credito;
-          $work_plano[$key][9] += $tot_saldo_final;
-        }
-        $estrutural = $estrut;
-        for ($ii = 1; $ii < 10; $ii++) {
-          $estrutural = db_le_mae_conplano($estrutural);
-          $nivel = db_le_mae_conplano($estrutural, true);
+  db_query("create index work_plano_estrut on work_plano(estrut)");
+  db_query("create index work_plano_estrutmae on work_plano(estrut_mae)");
+  $result = db_query($sql);
+  $tot_anterior = 0;
+  $tot_anterior_debito = 0;
+  $tot_anterior_credito = 0;
+  $tot_saldo_final = 0;
+  GLOBAL $seq;
+  GLOBAL $estrut_mae;
+  GLOBAL $estrut;
+  GLOBAL $c61_reduz;
+  GLOBAL $c61_codcon;
+  GLOBAL $c61_codigo;
+  GLOBAL $c60_codcon;
+  GLOBAL $c60_descr;
+  GLOBAL $c60_finali;
+  GLOBAL $c61_instit;
+  GLOBAL $saldo_anterior;
+  GLOBAL $saldo_anterior_debito;
+  GLOBAL $saldo_anterior_credito;
+  GLOBAL $saldo_final;
+  GLOBAL $result_estrut;
+  GLOBAL $sinal_anterior;
+  GLOBAL $sinal_final;
+  $work_planomae = array();
+  $work_planoestrut = array();
+  $work_plano = array();
+  $seq = 0;
+  for ($i = 0; $i < pg_numrows($result); $i++) {
+    db_fieldsmemory($result, $i);
+    if ($sinal_anterior == "C")
+      $saldo_anterior *= -1;
+    if ($sinal_final == "C")
+      $saldo_final *= -1;
+    $tot_anterior = $saldo_anterior;
+    $tot_anterior_debito = $saldo_anterior_debito;
+    $tot_anterior_credito = $saldo_anterior_credito;
+    $tot_saldo_final = $saldo_final;
+    $key = array_search("$estrut_mae", $work_planomae);
+    if ($key === false) { // não achou
+      $work_planomae[$seq] = $estrut_mae;
+      $work_planoestrut[$seq] = $estrut;
+      $work_plano[$seq] = array(0 => "$c61_reduz", 1 => "$c61_codcon", 2 => "$c61_codigo", 3 => "$c60_descr",
+                                4 => "$c60_finali", 5 => "$c61_instit", 6 => "$saldo_anterior", 7 => "$saldo_anterior_debito",
+                                8 => "$saldo_anterior_credito", 9 => "$saldo_final", 10 => "$sinal_anterior", 11 => "$sinal_final");
+      $seq = $seq + 1;
+    } else {
+      $work_plano[$key][6] += $tot_anterior;
+      $work_plano[$key][7] += $tot_anterior_debito;
+      $work_plano[$key][8] += $tot_anterior_credito;
+      $work_plano[$key][9] += $tot_saldo_final;
+    }
+    $estrutural = $estrut;
+    for ($ii = 1; $ii < 10; $ii++) {
+      $estrutural = db_le_mae_conplano($estrutural);
+      $nivel = db_le_mae_conplano($estrutural, true);
 
-          $key = array_search("$estrutural", $work_planomae);
-          if ($key === false) { // não achou
-          // busca no banco e inclui
-            $res = db_query(
-                "select c60_descr,c60_finali,c60_codcon from conplano where c60_anousu=" . db_getsession("DB_anousu")
-                    . " and c60_estrut = '$estrutural'");
-            if ($res == false || pg_numrows($res) == 0) {
-              db_redireciona(
-                  "db_erros.php?fechar=true&db_erro=Está faltando cadastrar esse estrutural na contabilidade. Nível : $nivel  Estrutural : $estrutural - ano: " + db_getsession("DB_anousu"));
-              exit;
-            }
-            db_fieldsmemory($res, 0);
-
-            $work_planomae[$seq] = $estrutural;
-            $work_planoestrut[$seq] = '';
-            $work_plano[$seq] = (array(0 => 0, 1 => 0, 2 => $c60_codcon, 3 => $c60_descr, 4 => $c60_finali, 5 => 0,
-                6 => $saldo_anterior, 7 => $saldo_anterior_debito, 8 => $saldo_anterior_credito, 9 => $saldo_final,
-                10 => $sinal_anterior, 11 => $sinal_final));
-            $seq++;
-          } else {
-            $work_plano[$key][6] += $tot_anterior;
-            $work_plano[$key][7] += $tot_anterior_debito;
-            $work_plano[$key][8] += $tot_anterior_credito;
-            $work_plano[$key][9] += $tot_saldo_final;
-          }
-          if ($nivel == 1)
-            break;
+      $key = array_search("$estrutural", $work_planomae);
+      if ($key === false) { // não achou
+        // busca no banco e inclui
+        $res = db_query(
+          "select c60_descr,c60_finali,c60_codcon from conplano where c60_anousu=" . db_getsession("DB_anousu")
+          . " and c60_estrut = '$estrutural'");
+        if ($res == false || pg_numrows($res) == 0) {
+          db_redireciona(
+            "db_erros.php?fechar=true&db_erro=Está faltando cadastrar esse estrutural na contabilidade. Nível : $nivel  Estrutural : $estrutural - ano: " + db_getsession("DB_anousu"));
+          exit;
         }
+        db_fieldsmemory($res, 0);
+
+        $work_planomae[$seq] = $estrutural;
+        $work_planoestrut[$seq] = '';
+        $work_plano[$seq] = (array(0 => 0, 1 => 0, 2 => $c60_codcon, 3 => $c60_descr, 4 => $c60_finali, 5 => 0,
+                                   6 => $saldo_anterior, 7 => $saldo_anterior_debito, 8 => $saldo_anterior_credito, 9 => $saldo_final,
+                                   10 => $sinal_anterior, 11 => $sinal_final));
+        $seq++;
+      } else {
+        $work_plano[$key][6] += $tot_anterior;
+        $work_plano[$key][7] += $tot_anterior_debito;
+        $work_plano[$key][8] += $tot_anterior_credito;
+        $work_plano[$key][9] += $tot_saldo_final;
       }
-      for ($i = 0; $i < sizeof($work_planomae); $i++) {
-        $mae = $work_planomae[$i];
-        $estrut = $work_planoestrut[$i];
-        $c61_reduz = $work_plano[$i][0];
-        $c61_codcon = $work_plano[$i][1];
-        $c61_codigo = $work_plano[$i][2];
-        $c60_descr = $work_plano[$i][3];
-        $c60_finali = $work_plano[$i][4];
-        $c61_instit = $work_plano[$i][5];
-        $saldo_anterior = $work_plano[$i][6];
-        $saldo_anterior_debito = $work_plano[$i][7];
-        $saldo_anterior_credito = $work_plano[$i][8];
-        $saldo_final = $work_plano[$i][9];
-        $sinal_anterior = $work_plano[$i][10];
-        $sinal_final = $work_plano[$i][11];
+      if ($nivel == 1)
+        break;
+    }
+  }
+  for ($i = 0; $i < sizeof($work_planomae); $i++) {
+    $mae = $work_planomae[$i];
+    $estrut = $work_planoestrut[$i];
+    $c61_reduz = $work_plano[$i][0];
+    $c61_codcon = $work_plano[$i][1];
+    $c61_codigo = $work_plano[$i][2];
+    $c60_descr = $work_plano[$i][3];
+    $c60_finali = $work_plano[$i][4];
+    $c61_instit = $work_plano[$i][5];
+    $saldo_anterior = $work_plano[$i][6];
+    $saldo_anterior_debito = $work_plano[$i][7];
+    $saldo_anterior_credito = $work_plano[$i][8];
+    $saldo_final = $work_plano[$i][9];
+    $sinal_anterior = $work_plano[$i][10];
+    $sinal_final = $work_plano[$i][11];
 
-        $sql = "insert into work_plano
+    $sql = "insert into work_plano
         values ('$mae',
         '$estrut',
         $c61_reduz,
@@ -4100,10 +3943,10 @@ class cl_estrutura_sistema {
         '$sinal_final')
 
         ";
-        db_query($sql);
-      }
+    db_query($sql);
+  }
 
-      $sql = "select case when c61_reduz = 0 then estrut_mae else estrut end as estrutural,
+  $sql = "select case when c61_reduz = 0 then estrut_mae else estrut end as estrutural,
       c61_reduz,
       c61_codcon,
       c61_codigo,
@@ -4123,74 +3966,74 @@ class cl_estrutura_sistema {
       from work_plano
       order by estrut_mae,estrut";
 
-      if ($retsql == false) {
-        $result_final = db_query($sql);
-        // db_criatabela($result_final); exit;
-        return $result_final;
-      } else {
-        return $sql;
-      }
-    }
-    /*
-     * status : desativada
-     * mostrava o balancete completo, com todas as contas de nivel 3 e 4 abertas
-     */
+  if ($retsql == false) {
+    $result_final = db_query($sql);
+    // db_criatabela($result_final); exit;
+    return $result_final;
+  } else {
+    return $sql;
+  }
+}
+/*
+ * status : desativada
+ * mostrava o balancete completo, com todas as contas de nivel 3 e 4 abertas
+ */
 
-    function db_planocontassaldo_completo($anousu, $dataini, $datafim, $retsql = false, $where = '',
-        $aOrcParametro = array(), $estrut_inicial = '', $acumula_reduzido = false, $encerramento = 'false') {
+function db_planocontassaldo_completo($anousu, $dataini, $datafim, $retsql = false, $where = '',
+                                      $aOrcParametro = array(), $estrut_inicial = '', $acumula_reduzido = false, $encerramento = 'false') {
 
-      return db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql, $where, $estrut_inicial,
-          $acumula_reduzido, $encerramento, "", $aOrcParametro);
+  return db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql, $where, $estrut_inicial,
+                                    $acumula_reduzido, $encerramento, "", $aOrcParametro);
 
-    }
+}
 
-    /**
-     * status: desativada
-     * foi a primeira função criada. usando update em tabela temporária
-     */
-    function db_planocontassaldo($anousu, $dataini, $datafim, $retsql = false, $where = '', $estrut_inicial = '',
-        $acumula_reduzido = false, $encerramento = 'false') {
+/**
+ * status: desativada
+ * foi a primeira função criada. usando update em tabela temporária
+ */
+function db_planocontassaldo($anousu, $dataini, $datafim, $retsql = false, $where = '', $estrut_inicial = '',
+                             $acumula_reduzido = false, $encerramento = 'false') {
 
-      return db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql, $where, $estrut_inicial,
-          $acumula_reduzido, $encerramento);
+  return db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql, $where, $estrut_inicial,
+                                    $acumula_reduzido, $encerramento);
 
-    }
+}
 
-    function db_elementosaldo($tipo_agrupa = 0, $tipo_saldo = 2, $where = '', $anousu = null, $dataini = null,
-        $datafim = null, $retsql = false) {
+function db_elementosaldo($tipo_agrupa = 0, $tipo_saldo = 2, $where = '', $anousu = null, $dataini = null,
+                          $datafim = null, $retsql = false) {
 
-      if ($tipo_agrupa == 1) {
-        $agrupa = ' o58_orgao, o40_descr ,';
-        $agrupa1 = ' o58_orgao integer, o40_descr varchar(50),';
-      } elseif ($tipo_agrupa == 2) {
-        $agrupa = ' o58_orgao, o40_descr, o58_unidade , o41_descr,';
-        $agrupa1 = ' o58_orgao integer, o40_descr varchar(50), o58_unidade integer, o41_descr varchar(50),';
-      } else {
-        $agrupa = '';
-        $agrupa1 = '';
-      }
+  if ($tipo_agrupa == 1) {
+    $agrupa = ' o58_orgao, o40_descr ,';
+    $agrupa1 = ' o58_orgao integer, o40_descr varchar(50),';
+  } elseif ($tipo_agrupa == 2) {
+    $agrupa = ' o58_orgao, o40_descr, o58_unidade , o41_descr,';
+    $agrupa1 = ' o58_orgao integer, o40_descr varchar(50), o58_unidade integer, o41_descr varchar(50),';
+  } else {
+    $agrupa = '';
+    $agrupa1 = '';
+  }
 
-      if ($anousu == null)
-        $anousu = db_getsession("DB_anousu");
+  if ($anousu == null)
+    $anousu = db_getsession("DB_anousu");
 
-      if ($dataini == null)
-        $dataini = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($dataini == null)
+    $dataini = date('Y-m-d', db_getsession('DB_datausu'));
 
-      if ($datafim == null)
-        $datafim = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($datafim == null)
+    $datafim = date('Y-m-d', db_getsession('DB_datausu'));
 
-      if ($where != '') {
-        $condicao = " and " . $where;
-      } else {
-        $condicao = "";
-      }
+  if ($where != '') {
+    $condicao = " and " . $where;
+  } else {
+    $condicao = "";
+  }
 
-      if ($tipo_saldo == 1)
-        $tipo_pa = 'dot_ini';
-      else
-        $tipo_pa = 'empenhado - anulado';
+  if ($tipo_saldo == 1)
+    $tipo_pa = 'dot_ini';
+  else
+    $tipo_pa = 'empenhado - anulado';
 
-      $sql = "
+  $sql = "
       select $agrupa codele ,elemento , descr,
       sum(dot_ini) 			as dot_ini,
       sum(saldo_anterior) 		as saldo_anterior,
@@ -4263,8 +4106,8 @@ class cl_estrutura_sistema {
       group by $agrupa codele, elemento,descr
       ";
 
-      db_query(
-          "create temporary table work_plano($agrupa1
+  db_query(
+    "create temporary table work_plano($agrupa1
       codele integer,
       elemento varchar(13),
       descr varchar(50),
@@ -4290,79 +4133,79 @@ class cl_estrutura_sistema {
       suplemen           float8,
       especial           float8,
       especial_acumulado float8 )");
-      if ($tipo_agrupa == 1) {
-        db_query("create index work_plano_orgao_elemento on work_plano(o58_orgao,elemento)");
-      } elseif ($tipo_agrupa == 1) {
-        db_query("create index work_plano_orgao_unidade_elemento on work_plano(o58_orgao,o58_unidade,elemento)");
-      } else {
-        db_query("create index work_plano_elemento on work_plano(elemento)");
-      }
+  if ($tipo_agrupa == 1) {
+    db_query("create index work_plano_orgao_elemento on work_plano(o58_orgao,elemento)");
+  } elseif ($tipo_agrupa == 1) {
+    db_query("create index work_plano_orgao_unidade_elemento on work_plano(o58_orgao,o58_unidade,elemento)");
+  } else {
+    db_query("create index work_plano_elemento on work_plano(elemento)");
+  }
 
-      $result = db_query($sql);
+  $result = db_query($sql);
 
-      // db_criatabela($result);
-      $tot_dot_ini = 0;
-      $tot_saldo_anterior = 0;
-      $tot_empenhado = 0;
-      $tot_anulado = 0;
-      $tot_liquidado = 0;
-      $tot_pago = 0;
-      $tot_suplementado = 0;
-      $tot_reduzido = 0;
-      $tot_atual = 0;
-      $tot_reservado = 0;
-      $tot_atual_menos_reservado = 0;
-      $tot_atual_a_pagar = 0;
-      $tot_atual_a_pagar_liquidado = 0;
-      $tot_empenhado_acumulado = 0;
-      $tot_anulado_acumulado = 0;
-      $tot_liquidado_acumulado = 0;
-      $tot_pago_acumulado = 0;
-      $tot_suplementado_acumulado = 0;
-      $tot_reduzido_acumulado = 0;
-      $tot_suplemen = 0;
-      $tot_especial = 0;
-      $tot_especial_acumulado = 0;
+  // db_criatabela($result);
+  $tot_dot_ini = 0;
+  $tot_saldo_anterior = 0;
+  $tot_empenhado = 0;
+  $tot_anulado = 0;
+  $tot_liquidado = 0;
+  $tot_pago = 0;
+  $tot_suplementado = 0;
+  $tot_reduzido = 0;
+  $tot_atual = 0;
+  $tot_reservado = 0;
+  $tot_atual_menos_reservado = 0;
+  $tot_atual_a_pagar = 0;
+  $tot_atual_a_pagar_liquidado = 0;
+  $tot_empenhado_acumulado = 0;
+  $tot_anulado_acumulado = 0;
+  $tot_liquidado_acumulado = 0;
+  $tot_pago_acumulado = 0;
+  $tot_suplementado_acumulado = 0;
+  $tot_reduzido_acumulado = 0;
+  $tot_suplemen = 0;
+  $tot_especial = 0;
+  $tot_especial_acumulado = 0;
 
-      GLOBAL $o58_orgao, $o40_descr, $o58_unidade, $o41_descr, $o56_descr, $codele, $elemento, $descr, $dot_ini, $saldo_anterior, $empenhado, $anulado, $liquidado, $pago, $suplementado, $reduzido, $atual, $reservado, $atual_menos_reservado, $atual_a_pagar, $atual_a_pagar_liquidado, $empenhado_acumulado, $anulado_acumulado, $liquidado_acumulado, $pago_acumulado, $suplementado_acumulado, $reduzido_acumulado, $especial, $especial_acumulado, $suplemen;
-      // for($i = 0;$i < 10;$i++){
-      for ($i = 0; $i < pg_numrows($result); $i++) {
-        db_fieldsmemory($result, $i);
-        $tot_dot_ini = $dot_ini;
-        $tot_saldo_anterior = $saldo_anterior;
-        $tot_empenhado = $empenhado;
-        $tot_anulado = $anulado;
-        $tot_liquidado = $liquidado;
-        $tot_pago = $pago;
-        $tot_suplementado = $suplementado;
-        $tot_reduzido = $reduzido;
-        $tot_atual = $atual;
-        $tot_reservado = $reservado;
-        $tot_atual_menos_reservado = $atual_menos_reservado;
-        $tot_atual_a_pagar = $atual_a_pagar;
-        $tot_atual_a_pagar_liquidado = $atual_a_pagar_liquidado;
-        $tot_empenhado_acumulado = $empenhado_acumulado;
-        $tot_anulado_acumulado = $anulado_acumulado;
-        $tot_liquidado_acumulado = $liquidado_acumulado;
-        $tot_pago_acumulado = $pago_acumulado;
-        $tot_suplementado_acumulado = $suplementado_acumulado;
-        $tot_reduzido_acumulado = $reduzido_acumulado;
-        $tot_suplemen = $suplemen;
-        $tot_especial = $especial;
-        $tot_especial_acumulado = $especial_acumulado;
+  GLOBAL $o58_orgao, $o40_descr, $o58_unidade, $o41_descr, $o56_descr, $codele, $elemento, $descr, $dot_ini, $saldo_anterior, $empenhado, $anulado, $liquidado, $pago, $suplementado, $reduzido, $atual, $reservado, $atual_menos_reservado, $atual_a_pagar, $atual_a_pagar_liquidado, $empenhado_acumulado, $anulado_acumulado, $liquidado_acumulado, $pago_acumulado, $suplementado_acumulado, $reduzido_acumulado, $especial, $especial_acumulado, $suplemen;
+  // for($i = 0;$i < 10;$i++){
+  for ($i = 0; $i < pg_numrows($result); $i++) {
+    db_fieldsmemory($result, $i);
+    $tot_dot_ini = $dot_ini;
+    $tot_saldo_anterior = $saldo_anterior;
+    $tot_empenhado = $empenhado;
+    $tot_anulado = $anulado;
+    $tot_liquidado = $liquidado;
+    $tot_pago = $pago;
+    $tot_suplementado = $suplementado;
+    $tot_reduzido = $reduzido;
+    $tot_atual = $atual;
+    $tot_reservado = $reservado;
+    $tot_atual_menos_reservado = $atual_menos_reservado;
+    $tot_atual_a_pagar = $atual_a_pagar;
+    $tot_atual_a_pagar_liquidado = $atual_a_pagar_liquidado;
+    $tot_empenhado_acumulado = $empenhado_acumulado;
+    $tot_anulado_acumulado = $anulado_acumulado;
+    $tot_liquidado_acumulado = $liquidado_acumulado;
+    $tot_pago_acumulado = $pago_acumulado;
+    $tot_suplementado_acumulado = $suplementado_acumulado;
+    $tot_reduzido_acumulado = $reduzido_acumulado;
+    $tot_suplemen = $suplemen;
+    $tot_especial = $especial;
+    $tot_especial_acumulado = $especial_acumulado;
 
-        if ($tipo_agrupa == 1) {
-          $agrupa2 = $o58_orgao . ",'" . $o40_descr . "',";
-          $agrupa3 = ' and o58_orgao = ' . $o58_orgao;
-        } elseif ($tipo_agrupa == 2) {
-          $agrupa2 = $o58_orgao . ",'" . $o40_descr . "'," . $o58_unidade . ",'" . $o41_descr . "',";
-          $agrupa3 = ' and o58_orgao = ' . $o58_orgao . ' and o58_unidade = ' . $o58_unidade;
-        } else {
-          $agrupa2 = '';
-          $agrupa3 = '';
-        }
-        db_query(
-            "insert into work_plano values($agrupa2
+    if ($tipo_agrupa == 1) {
+      $agrupa2 = $o58_orgao . ",'" . $o40_descr . "',";
+      $agrupa3 = ' and o58_orgao = ' . $o58_orgao;
+    } elseif ($tipo_agrupa == 2) {
+      $agrupa2 = $o58_orgao . ",'" . $o40_descr . "'," . $o58_unidade . ",'" . $o41_descr . "',";
+      $agrupa3 = ' and o58_orgao = ' . $o58_orgao . ' and o58_unidade = ' . $o58_unidade;
+    } else {
+      $agrupa2 = '';
+      $agrupa3 = '';
+    }
+    db_query(
+      "insert into work_plano values($agrupa2
           $codele,
           '$elemento',
           '$descr',
@@ -4389,22 +4232,22 @@ class cl_estrutura_sistema {
           $especial,
           $especial_acumulado
           )");
-        $estrutural = $elemento;
-        for ($ii = 1; $ii < 11; $ii++) {
-          $estrutural = db_le_mae_sistema($estrutural);
-          $nivel = db_le_mae_sistema($estrutural, true);
-          $result_estrut = db_query("select dot_ini from work_plano where elemento = '$estrutural' $agrupa3");
+    $estrutural = $elemento;
+    for ($ii = 1; $ii < 11; $ii++) {
+      $estrutural = db_le_mae_sistema($estrutural);
+      $nivel = db_le_mae_sistema($estrutural, true);
+      $result_estrut = db_query("select dot_ini from work_plano where elemento = '$estrutural' $agrupa3");
 
-          //       db_criatabela($result_estrut);
-          if (@pg_numrows($result_estrut) != true) {
-            $res = db_query(
-                "select o56_descr from orcelemento where o56_anousu = $anousu and o56_elemento = '$estrutural'");
-            if (@pg_numrows($res) != true)
-              break;
-            db_fieldsmemory($res, 0);
+      //       db_criatabela($result_estrut);
+      if (@pg_numrows($result_estrut) != true) {
+        $res = db_query(
+          "select o56_descr from orcelemento where o56_anousu = $anousu and o56_elemento = '$estrutural'");
+        if (@pg_numrows($res) != true)
+          break;
+        db_fieldsmemory($res, 0);
 
-            $result_1 = db_query(
-                "insert into work_plano values($agrupa2
+        $result_1 = db_query(
+          "insert into work_plano values($agrupa2
               $codele,
               '$estrutural',
               '$o56_descr',
@@ -4431,10 +4274,10 @@ class cl_estrutura_sistema {
               $especial,
               $especial_acumulado
               )");
-          } else {
+      } else {
 
-            db_query(
-                "update work_plano set dot_ini = dot_ini + $tot_dot_ini,
+        db_query(
+          "update work_plano set dot_ini = dot_ini + $tot_dot_ini,
               saldo_anterior = saldo_anterior + $tot_saldo_anterior,
               empenhado = empenhado + $tot_empenhado,
               anulado = anulado + $tot_anulado,
@@ -4457,1960 +4300,1132 @@ class cl_estrutura_sistema {
               especial           = especial     +   $tot_especial,
               especial_acumulado = especial_acumulado + $tot_especial_acumulado
               where elemento = '$estrutural' $agrupa3");
-          }
-          if ($nivel == 1)
-            break;
-        }
       }
+      if ($nivel == 1)
+        break;
+    }
+  }
 
-      $sql = "select *
+  $sql = "select *
         from work_plano
         order by $agrupa elemento";
 
-      if ($retsql == false) {
-        return $result_final = db_query($sql);
-      } else {
-        return $sql;
-      }
+  if ($retsql == false) {
+    return $result_final = db_query($sql);
+  } else {
+    return $sql;
+  }
 
-    }
+}
 
-    function db_rcl($mesini, $mesfim, $instit) {
+function db_rcl($mesini, $mesfim, $instit) {
 
-      $clconrelinfo = new cl_conrelinfo;
+  $clconrelinfo = new cl_conrelinfo;
 
-      $w_instit = str_replace('-', ', ', $instit);
-      $result_variaveis = $clconrelinfo->sql_record($clconrelinfo->sql_query_valores('5', $w_instit));
+  $w_instit = str_replace('-', ', ', $instit);
+  $result_variaveis = $clconrelinfo->sql_record($clconrelinfo->sql_query_valores('5', $w_instit));
 
-      $linhaini = 18 * ($mesini - 1);
-      $linhafim = (18 * ($mesfim - 1)) + 17;
+  $linhaini = 18 * ($mesini - 1);
+  $linhafim = (18 * ($mesfim - 1)) + 17;
+  $numlin = 0;
+  $mes = 0;
+  for ($p = 0; $p < 18; $p++) {
+    $valor[$p] = 0;
+  }
+  global $c83_informacao;
+  for ($i = $linhaini; $i < $linhafim; $i++) {
+    if ($numlin == 18) {
+      $mes = $mes + 1;
       $numlin = 0;
-      $mes = 0;
-      for ($p = 0; $p < 18; $p++) {
-        $valor[$p] = 0;
-      }
-      global $c83_informacao;
-      for ($i = $linhaini; $i < $linhafim; $i++) {
-        if ($numlin == 18) {
-          $mes = $mes + 1;
-          $numlin = 0;
-        }
-        db_fieldsmemory($result_variaveis, $i);
-        $valor[$numlin] += $c83_informacao;
-        $numlin++;
-      }
-      $valorrec = $valor[0] + $valor[1] + $valor[2] + $valor[3] + $valor[4] + $valor[5] + $valor[6] + $valor[7];
-
-      $valorded = $valor[8] + $valor[9] + $valor[11] + $valor[12] + $valor[13] + $valor[14] + $valor[16] + $valor[17];
-      $rcl = $valorrec - $valorded;
-      return $rcl;
     }
+    db_fieldsmemory($result_variaveis, $i);
+    $valor[$numlin] += $c83_informacao;
+    $numlin++;
+  }
+  $valorrec = $valor[0] + $valor[1] + $valor[2] + $valor[3] + $valor[4] + $valor[5] + $valor[6] + $valor[7];
 
-    /*
-     *
-     *
-     */
+  $valorded = $valor[8] + $valor[9] + $valor[11] + $valor[12] + $valor[13] + $valor[14] + $valor[16] + $valor[17];
+  $rcl = $valorrec - $valorded;
+  return $rcl;
+}
 
-    function grupoconta($anousu, $dataini = '2005-01-01', $datafim = '2005-12-31', $db_selinstit = 1, $retsql = false,
-        $orc = false) {
-      /*
-       *Esta Função Agrupa as conta pela Seleção do Relatório 21(tabela - orcparamrel) Sequencias (tabela - orcparamseq), os elemente são informados manualmente pelo usuario
-       *OBS 1 ha função pode retonar mais valores desde q tenha o cuidado de não mudar os nomes dos campos, tb se deve ter o cuidado de trazer valores em todos os SQL
-       *     devido no final a função sempre possuir um UNION SENDO ASSIM CUIDADO CUIDADO FAZER BACK TOMAR CUIDADO
-       * OBS 2 não utilize mais funções como db_planocontassaldo_completo ou db_dotacaosaldo, utilize as q ja existe, se criar novas vai deixar o sistema mais lento
-       *     então grupe trabalhe SQL é mais vantagem.
-       * ********Parmetros**************
-       * $anousu
-       * $dataini - data inicial de pesquisa
-       * $datafim - data final de pesquisa
-       * $db_selinstit  - Instituições
-       * $retsql - Retornar o SQL ou a Tabela
-       * $orc - Opção de retonará valores orçamentarios ou de execução
-       */
+/*
+ *
+ *
+ */
 
-      $selinstit = str_replace('-', ', ', $db_selinstit);
-      $where_rec = " o70_instit in ($selinstit)";
-      $sele_work = "c61_instit in ($selinstit)";
-      $where = "w.o58_instit in ($selinstit) ";
+function grupoconta($anousu, $dataini = '2005-01-01', $datafim = '2005-12-31', $db_selinstit = 1, $retsql = false,
+                    $orc = false) {
+  /*
+   *Esta Função Agrupa as conta pela Seleção do Relatório 21(tabela - orcparamrel) Sequencias (tabela - orcparamseq), os elemente são informados manualmente pelo usuario
+   *OBS 1 ha função pode retonar mais valores desde q tenha o cuidado de não mudar os nomes dos campos, tb se deve ter o cuidado de trazer valores em todos os SQL
+   *     devido no final a função sempre possuir um UNION SENDO ASSIM CUIDADO CUIDADO FAZER BACK TOMAR CUIDADO
+   * OBS 2 não utilize mais funções como db_planocontassaldo_completo ou db_dotacaosaldo, utilize as q ja existe, se criar novas vai deixar o sistema mais lento
+   *     então grupe trabalhe SQL é mais vantagem.
+   * ********Parmetros**************
+   * $anousu
+   * $dataini - data inicial de pesquisa
+   * $datafim - data final de pesquisa
+   * $db_selinstit  - Instituições
+   * $retsql - Retornar o SQL ou a Tabela
+   * $orc - Opção de retonará valores orçamentarios ou de execução
+   */
 
-      global $estrutural, $c60_descr, $saldo_anterior, $saldo_anterior_debito, $saldo_anterior_credito, $saldo_final, $o57_fonte, $o57_descr, $saldo_inicial, $saldo_arrecadado, $anterior, $inicial, $executado;
+  $selinstit = str_replace('-', ', ', $db_selinstit);
+  $where_rec = " o70_instit in ($selinstit)";
+  $sele_work = "c61_instit in ($selinstit)";
+  $where = "w.o58_instit in ($selinstit) ";
 
-      $orcparamrel = new cl_orcparamrel;
-      //******************************************************************************************************************
-      // é necessario realizar um for na tabela orcparamseq para q ha mesma esteja sempre atualizada automaticamente
-      //******************************************************************************************************************
-      $paramconta['0'] = $orcparamrel->sql_parametro('21', '0', str_replace('-', ', ', $db_selinstit));
-      $paramconta['1'] = $orcparamrel->sql_parametro('21', '1', str_replace('-', ', ', $db_selinstit));
-      $paramconta['2'] = $orcparamrel->sql_parametro('21', '2', str_replace('-', ', ', $db_selinstit));
-      $paramconta['3'] = $orcparamrel->sql_parametro('21', '3', str_replace('-', ', ', $db_selinstit));
-      $paramconta['4'] = $orcparamrel->sql_parametro('21', '4', str_replace('-', ', ', $db_selinstit));
-      $paramconta['5'] = $orcparamrel->sql_parametro('21', '5', str_replace('-', ', ', $db_selinstit));
-      $paramconta['6'] = $orcparamrel->sql_parametro('21', '6', str_replace('-', ', ', $db_selinstit));
-      $paramconta['7'] = $orcparamrel->sql_parametro('21', '7', str_replace('-', ', ', $db_selinstit));
-      $paramconta['8'] = $orcparamrel->sql_parametro('21', '8', str_replace('-', ', ', $db_selinstit));
-      $paramconta['9'] = $orcparamrel->sql_parametro('21', '9', str_replace('-', ', ', $db_selinstit));
-      $paramconta['10'] = $orcparamrel->sql_parametro('21', '10', str_replace('-', ', ', $db_selinstit));
-      $paramconta['11'] = $orcparamrel->sql_parametro('21', '11', str_replace('-', ', ', $db_selinstit));
-      $paramconta['12'] = $orcparamrel->sql_parametro('21', '12', str_replace('-', ', ', $db_selinstit));
-      $paramconta['13'] = $orcparamrel->sql_parametro('21', '13', str_replace('-', ', ', $db_selinstit));
-      $paramconta['14'] = $orcparamrel->sql_parametro('21', '14', str_replace('-', ', ', $db_selinstit));
-      $paramconta['15'] = $orcparamrel->sql_parametro('21', '15', str_replace('-', ', ', $db_selinstit));
-      $paramconta['16'] = $orcparamrel->sql_parametro('21', '16', str_replace('-', ', ', $db_selinstit));
-      $paramconta['17'] = $orcparamrel->sql_parametro('21', '17', str_replace('-', ', ', $db_selinstit));
-      $paramconta['18'] = $orcparamrel->sql_parametro('21', '18', str_replace('-', ', ', $db_selinstit));
-      $paramconta['19'] = $orcparamrel->sql_parametro('21', '19', str_replace('-', ', ', $db_selinstit));
+  global $estrutural, $c60_descr, $saldo_anterior, $saldo_anterior_debito, $saldo_anterior_credito, $saldo_final, $o57_fonte, $o57_descr, $saldo_inicial, $saldo_arrecadado, $anterior, $inicial, $executado;
 
-      if ($orc == false) { // testa o parametro, se sim é valores de EXECUÇÃO
-      // Esta função esta sendo utilizada para trazer as contas do RECEITA E DESPESA, ATIVO,PASSIVO,DIMINUTIVO E AUMENTATIVO
-        $sql1 = db_planocontassaldo_completo($anousu, $dataini, $datafim, true, $sele_work);
-        $sql11 = "select " . "bbb.estrutural as estrutural, " . "bbb.c60_descr as c60_descr, "
-            . "bbb.saldo_anterior as saldo_anterior, " . "bbb.saldo_anterior_debito as saldo_anterior_debito, "
-            . "bbb.saldo_anterior_credito as saldo_anterior_credito, " . "bbb.saldo_final as saldo_final "
-            . "from ($sql1) as bbb " . "where substr(bbb.estrutural,1,1)<>'3'";
+  $orcparamrel = new cl_orcparamrel;
+  //******************************************************************************************************************
+  // é necessario realizar um for na tabela orcparamseq para q ha mesma esteja sempre atualizada automaticamente
+  //******************************************************************************************************************
+  $paramconta['0'] = $orcparamrel->sql_parametro('21', '0', str_replace('-', ', ', $db_selinstit));
+  $paramconta['1'] = $orcparamrel->sql_parametro('21', '1', str_replace('-', ', ', $db_selinstit));
+  $paramconta['2'] = $orcparamrel->sql_parametro('21', '2', str_replace('-', ', ', $db_selinstit));
+  $paramconta['3'] = $orcparamrel->sql_parametro('21', '3', str_replace('-', ', ', $db_selinstit));
+  $paramconta['4'] = $orcparamrel->sql_parametro('21', '4', str_replace('-', ', ', $db_selinstit));
+  $paramconta['5'] = $orcparamrel->sql_parametro('21', '5', str_replace('-', ', ', $db_selinstit));
+  $paramconta['6'] = $orcparamrel->sql_parametro('21', '6', str_replace('-', ', ', $db_selinstit));
+  $paramconta['7'] = $orcparamrel->sql_parametro('21', '7', str_replace('-', ', ', $db_selinstit));
+  $paramconta['8'] = $orcparamrel->sql_parametro('21', '8', str_replace('-', ', ', $db_selinstit));
+  $paramconta['9'] = $orcparamrel->sql_parametro('21', '9', str_replace('-', ', ', $db_selinstit));
+  $paramconta['10'] = $orcparamrel->sql_parametro('21', '10', str_replace('-', ', ', $db_selinstit));
+  $paramconta['11'] = $orcparamrel->sql_parametro('21', '11', str_replace('-', ', ', $db_selinstit));
+  $paramconta['12'] = $orcparamrel->sql_parametro('21', '12', str_replace('-', ', ', $db_selinstit));
+  $paramconta['13'] = $orcparamrel->sql_parametro('21', '13', str_replace('-', ', ', $db_selinstit));
+  $paramconta['14'] = $orcparamrel->sql_parametro('21', '14', str_replace('-', ', ', $db_selinstit));
+  $paramconta['15'] = $orcparamrel->sql_parametro('21', '15', str_replace('-', ', ', $db_selinstit));
+  $paramconta['16'] = $orcparamrel->sql_parametro('21', '16', str_replace('-', ', ', $db_selinstit));
+  $paramconta['17'] = $orcparamrel->sql_parametro('21', '17', str_replace('-', ', ', $db_selinstit));
+  $paramconta['18'] = $orcparamrel->sql_parametro('21', '18', str_replace('-', ', ', $db_selinstit));
+  $paramconta['19'] = $orcparamrel->sql_parametro('21', '19', str_replace('-', ', ', $db_selinstit));
 
-        // Esta função esta sendo utilizada para trazer as contas do DESPESA
-        $sql2 = db_dotacaosaldo(8, 2, 4, true, $where, $anousu, $dataini, $datafim, null, null, true);
-        $sql22 = "select " . "ccc.o58_elemento||'00' as estrutural, " . "ccc.o56_descr as c60_descr, "
-            . "sum(ccc.saldo_anterior) as saldo_anterior, "
-            . "sum(ccc.empenhado)-sum(anulado) as saldo_anterior_debito, "
-            . "sum(ccc.liquidado) as saldo_anterior_credito, " . "sum(ccc.pago) as saldo_final "
-            . "from ($sql2) as ccc " . "group by ccc.o58_elemento||'00',ccc.o56_descr ";
+  if ($orc == false) { // testa o parametro, se sim é valores de EXECUÇÃO
+    // Esta função esta sendo utilizada para trazer as contas do RECEITA E DESPESA, ATIVO,PASSIVO,DIMINUTIVO E AUMENTATIVO
+    $sql1 = db_planocontassaldo_completo($anousu, $dataini, $datafim, true, $sele_work);
+    $sql11 = "select " . "bbb.estrutural as estrutural, " . "bbb.c60_descr as c60_descr, "
+      . "bbb.saldo_anterior as saldo_anterior, " . "bbb.saldo_anterior_debito as saldo_anterior_debito, "
+      . "bbb.saldo_anterior_credito as saldo_anterior_credito, " . "bbb.saldo_final as saldo_final "
+      . "from ($sql1) as bbb " . "where substr(bbb.estrutural,1,1)<>'3'";
 
-        // Esta tabela é criada para estruturar os valores de todos as contas de despesas,
-        $creat_sql = "create temp table work as
+    // Esta função esta sendo utilizada para trazer as contas do DESPESA
+    $sql2 = db_dotacaosaldo(8, 2, 4, true, $where, $anousu, $dataini, $datafim, null, null, true);
+    $sql22 = "select " . "ccc.o58_elemento||'00' as estrutural, " . "ccc.o56_descr as c60_descr, "
+      . "sum(ccc.saldo_anterior) as saldo_anterior, "
+      . "sum(ccc.empenhado)-sum(anulado) as saldo_anterior_debito, "
+      . "sum(ccc.liquidado) as saldo_anterior_credito, " . "sum(ccc.pago) as saldo_final "
+      . "from ($sql2) as ccc " . "group by ccc.o58_elemento||'00',ccc.o56_descr ";
+
+    // Esta tabela é criada para estruturar os valores de todos as contas de despesas,
+    $creat_sql = "create temp table work as
           select o56_elemento||'00' as estrutural,o56_descr as c60_descr,0::float8 as valor1,0::float8 as valor2,0::float8 as valor3,0::float8 as valor4
           from orcelemento
           inner join conplano on c60_codcon = o56_codele and c60_anousu = o56_anousu
           where o56_anousu = $anousu";
 
-        // Começo da estruturação da tabela temporaria
-        $result_rec = db_query($creat_sql);
-        $result_rec = db_query($sql22);
-        for ($i = 0; $i < pg_numrows($result_rec); $i++) {
-          db_fieldsmemory($result_rec, $i);
-          //aqui é colocado os valores da DB_DOTAÇÂOSALDO recomento e alerto ao mesmo tempo pode, pode se buscar mais valores desde tome o cuidado citado acima no começo da função
-          $valor1 = $saldo_anterior;
-          $valor2 = $saldo_anterior_debito;
-          $valor3 = $saldo_anterior_credito;
-          $valor4 = $saldo_final;
-          // não coloque o dedo nesses valores adcione abaixo e não esqueça de adiconar na tabela
+    // Começo da estruturação da tabela temporaria
+    $result_rec = db_query($creat_sql);
+    $result_rec = db_query($sql22);
+    for ($i = 0; $i < pg_numrows($result_rec); $i++) {
+      db_fieldsmemory($result_rec, $i);
+      //aqui é colocado os valores da DB_DOTAÇÂOSALDO recomento e alerto ao mesmo tempo pode, pode se buscar mais valores desde tome o cuidado citado acima no começo da função
+      $valor1 = $saldo_anterior;
+      $valor2 = $saldo_anterior_debito;
+      $valor3 = $saldo_anterior_credito;
+      $valor4 = $saldo_final;
+      // não coloque o dedo nesses valores adcione abaixo e não esqueça de adiconar na tabela
 
-          $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3,valor4 = valor4+$valor4 where work.estrutural = '$estrutural'";
-          $result = db_query($sql);
-          $executa = true;
-          $conta = 0;
-          while ($executa == true) {
-            $estrutural = db_le_mae($estrutural, false);
-            $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3,valor4 = valor4+$valor4 where work.estrutural = '"
-                . $estrutural . "00" . "'";
-            $result = db_query($sql);
-            if (substr($estrutural, 1, 12) == "0000000000000") {
-              $executa = false;
-            }
-            $conta++;
-            if ($conta > 10)
-              $executa = false;
-          }
-        }
-        //to listando todas as contas de despesas com valores
-        $sql22 = "select * from work ";
-
-        //nesse SQL é trabalhado novamente com a db_dotação saldo como eu disse na OBS 2, caso não tenha lido recomento,
-        // continuando eu agrupo as funções, quando eu fiz isso era pq eu queria os valores das funçoes para colocar no Relatório BALANÇO FINANCEIRO
-        $sql33 = "select " . "'F'||ddd.o58_funcao as estrutural, " . "ddd.o52_descr as c60_descr, "
-            . "sum(ddd.saldo_anterior) as saldo_anterior, "
-            . "sum(ddd.empenhado)-sum(anulado) as saldo_anterior_debito, "
-            . "sum(ddd.liquidado) as saldo_anterior_credito, " . "sum(ddd.pago) as saldo_final "
-            . "from ($sql2) as ddd " . "group by 'F'||ddd.o58_funcao,ddd.o52_descr ";
-        // CUIDADO
-        // CUIDADO
-        //AREA DE UNION, aqui estou unindo todos os sqls para que eu tenha um unico para então eu executar e tirar apenas os dados solicitados pelo usuario
-        //dados esse q foi comentado assim, leia os comentarios não to gostando meu tempo ha atoa
-        $sql12 = $sql11 . " union " . $sql22;
-        $sql = $sql12 . " union " . $sql33;
+      $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3,valor4 = valor4+$valor4 where work.estrutural = '$estrutural'";
+      $result = db_query($sql);
+      $executa = true;
+      $conta = 0;
+      while ($executa == true) {
+        $estrutural = db_le_mae($estrutural, false);
+        $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3,valor4 = valor4+$valor4 where work.estrutural = '"
+          . $estrutural . "00" . "'";
         $result = db_query($sql);
-
-        // aqui é filtrado das as conta selecionadas pelo parametros CARLOS OU PAULO se for um de vc(s) acerta o for nos parametros e troca para array
-        $criatabela = 'create temp table work_grupconta(' . 'grupo 						varchar(4),'
-            . 'estrut 						varchar(20),' . 'descr 						varchar(100),' . 'valor_ant 				float8,'
-            . 'valor_debito    		float8,' . 'valor_credito  	 	float8,' . 'valor_final 				float8' . ')';
-        global $estrutural, $c60_descr, $saldo_anterior, $saldo_anterior_debito, $saldo_anterior_credito, $saldo_final;
-        db_query($criatabela);
-        for ($i = 0; $i < pg_numrows($result); $i++) {
-          db_fieldsmemory($result, $i);
-          for ($x = 0; $x < count($paramconta); $x++) {
-            if (in_array($estrutural, $paramconta[$x])) {
-              $g = $x;
-              db_query(
-                  "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
-                      . "'," . "$saldo_anterior," . "$saldo_anterior_debito," . "$saldo_anterior_credito,"
-                      . "$saldo_final)");
-            }
-            if (substr($estrutural, 0, 1) == 'F') {
-              $estrutural = substr($estrutural, 1);
-              $g = 'F';
-              db_query(
-                  "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
-                      . "'," . "$saldo_anterior," . "$saldo_anterior_debito," . "$saldo_anterior_credito,"
-                      . "$saldo_final)");
-            }
-          }
+        if (substr($estrutural, 1, 12) == "0000000000000") {
+          $executa = false;
         }
+        $conta++;
+        if ($conta > 10)
+          $executa = false;
+      }
+    }
+    //to listando todas as contas de despesas com valores
+    $sql22 = "select * from work ";
 
-      } else { // caso queira ORÇAMENTARIA
+    //nesse SQL é trabalhado novamente com a db_dotação saldo como eu disse na OBS 2, caso não tenha lido recomento,
+    // continuando eu agrupo as funções, quando eu fiz isso era pq eu queria os valores das funçoes para colocar no Relatório BALANÇO FINANCEIRO
+    $sql33 = "select " . "'F'||ddd.o58_funcao as estrutural, " . "ddd.o52_descr as c60_descr, "
+      . "sum(ddd.saldo_anterior) as saldo_anterior, "
+      . "sum(ddd.empenhado)-sum(anulado) as saldo_anterior_debito, "
+      . "sum(ddd.liquidado) as saldo_anterior_credito, " . "sum(ddd.pago) as saldo_final "
+      . "from ($sql2) as ddd " . "group by 'F'||ddd.o58_funcao,ddd.o52_descr ";
+    // CUIDADO
+    // CUIDADO
+    //AREA DE UNION, aqui estou unindo todos os sqls para que eu tenha um unico para então eu executar e tirar apenas os dados solicitados pelo usuario
+    //dados esse q foi comentado assim, leia os comentarios não to gostando meu tempo ha atoa
+    $sql12 = $sql11 . " union " . $sql22;
+    $sql = $sql12 . " union " . $sql33;
+    $result = db_query($sql);
 
-      // vamos novamente para o SQL ja bem eu falei assim para cuidar bem dessas coisas ou seja tem um IF ha db_dotacaosaldo esta sendo utilizada uma vez e a receita tb
-      // eu ja disse pode adcionar valores, mas não retire
-        $sql1 = db_receitasaldo(11, 1, 3, true, $where_rec, $anousu, $dataini, $datafim, true);
-        $grup_rec = "select ccc.o57_fonte as estrutural, " . "ccc.o57_descr as c60_descr, "
-            . "sum(ccc.saldo_anterior) as anterior, "
-            . "sum(ccc.saldo_inicial) + sum(ccc.saldo_prevadic_acum)as inicial, "
-            . "sum(saldo_arrecadado) as executado " . "from ($sql1) as ccc group by ccc.o57_fonte,ccc.o57_descr ";
+    // aqui é filtrado das as conta selecionadas pelo parametros CARLOS OU PAULO se for um de vc(s) acerta o for nos parametros e troca para array
+    $criatabela = 'create temp table work_grupconta(' . 'grupo 						varchar(4),'
+      . 'estrut 						varchar(20),' . 'descr 						varchar(100),' . 'valor_ant 				float8,'
+      . 'valor_debito    		float8,' . 'valor_credito  	 	float8,' . 'valor_final 				float8' . ')';
+    global $estrutural, $c60_descr, $saldo_anterior, $saldo_anterior_debito, $saldo_anterior_credito, $saldo_final;
+    db_query($criatabela);
+    for ($i = 0; $i < pg_numrows($result); $i++) {
+      db_fieldsmemory($result, $i);
+      for ($x = 0; $x < count($paramconta); $x++) {
+        if (in_array($estrutural, $paramconta[$x])) {
+          $g = $x;
+          db_query(
+            "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
+            . "'," . "$saldo_anterior," . "$saldo_anterior_debito," . "$saldo_anterior_credito,"
+            . "$saldo_final)");
+        }
+        if (substr($estrutural, 0, 1) == 'F') {
+          $estrutural = substr($estrutural, 1);
+          $g = 'F';
+          db_query(
+            "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
+            . "'," . "$saldo_anterior," . "$saldo_anterior_debito," . "$saldo_anterior_credito,"
+            . "$saldo_final)");
+        }
+      }
+    }
 
-        $sql2 = db_dotacaosaldo(8, 2, 4, true, $where, $anousu, $dataini, $datafim, null, null, true);
-        $sql11 = "select ccc.o58_elemento||'00' as estrutural, " . "ccc.o56_descr as c60_descr, "
-            . "sum(ccc.saldo_anterior) as anterior, "
-            . "sum(ccc.dot_ini) + sum(ccc.suplementado_acumulado) - sum(ccc.reduzido_acumulado) as inicial, "
-            . "sum(ccc.empenhado)-sum(anulado) as executado "
-            . "from ($sql2) as ccc group by ccc.o58_elemento||'00',ccc.o56_descr ";
+  } else { // caso queira ORÇAMENTARIA
 
-        // preste atenão aqui eu podia ter usado duas db_dotacaosaldo mas eu executaria ela duas vezes sendo assim eu agrupo
-        $sql33 = "select " . "'F'||ddd.o58_funcao as estrutural, " . "ddd.o52_descr as c60_descr, "
-            . "sum(ddd.saldo_anterior) as anterior, "
-            . "sum(ddd.dot_ini) + sum(ddd.suplementado_acumulado) - sum(ddd.reduzido_acumulado) as inicial, "
-            . "sum(ddd.empenhado)-sum(ddd.anulado) as executado " . "from ($sql2) as ddd "
-            . "group by 'F'||ddd.o58_funcao,ddd.o52_descr ";
+    // vamos novamente para o SQL ja bem eu falei assim para cuidar bem dessas coisas ou seja tem um IF ha db_dotacaosaldo esta sendo utilizada uma vez e a receita tb
+    // eu ja disse pode adcionar valores, mas não retire
+    $sql1 = db_receitasaldo(11, 1, 3, true, $where_rec, $anousu, $dataini, $datafim, true);
+    $grup_rec = "select ccc.o57_fonte as estrutural, " . "ccc.o57_descr as c60_descr, "
+      . "sum(ccc.saldo_anterior) as anterior, "
+      . "sum(ccc.saldo_inicial) + sum(ccc.saldo_prevadic_acum)as inicial, "
+      . "sum(saldo_arrecadado) as executado " . "from ($sql1) as ccc group by ccc.o57_fonte,ccc.o57_descr ";
 
-        //crio a trabela temporaria, nesse momento eu me pergunto, copio o comentario acima e coló aqui ou mando o comum ler a cima, bom é melhor copiar COMUM não lê
-        // Esta tabela é criada para estruturar os valores de todos as contas de despesas,
-        $creat_sql = "create temp table work as
+    $sql2 = db_dotacaosaldo(8, 2, 4, true, $where, $anousu, $dataini, $datafim, null, null, true);
+    $sql11 = "select ccc.o58_elemento||'00' as estrutural, " . "ccc.o56_descr as c60_descr, "
+      . "sum(ccc.saldo_anterior) as anterior, "
+      . "sum(ccc.dot_ini) + sum(ccc.suplementado_acumulado) - sum(ccc.reduzido_acumulado) as inicial, "
+      . "sum(ccc.empenhado)-sum(anulado) as executado "
+      . "from ($sql2) as ccc group by ccc.o58_elemento||'00',ccc.o56_descr ";
+
+    // preste atenão aqui eu podia ter usado duas db_dotacaosaldo mas eu executaria ela duas vezes sendo assim eu agrupo
+    $sql33 = "select " . "'F'||ddd.o58_funcao as estrutural, " . "ddd.o52_descr as c60_descr, "
+      . "sum(ddd.saldo_anterior) as anterior, "
+      . "sum(ddd.dot_ini) + sum(ddd.suplementado_acumulado) - sum(ddd.reduzido_acumulado) as inicial, "
+      . "sum(ddd.empenhado)-sum(ddd.anulado) as executado " . "from ($sql2) as ddd "
+      . "group by 'F'||ddd.o58_funcao,ddd.o52_descr ";
+
+    //crio a trabela temporaria, nesse momento eu me pergunto, copio o comentario acima e coló aqui ou mando o comum ler a cima, bom é melhor copiar COMUM não lê
+    // Esta tabela é criada para estruturar os valores de todos as contas de despesas,
+    $creat_sql = "create temp table work as
           select o56_elemento||'00' as estrutural,o56_descr as c60_descr,0::float8 as valor1,0::float8 as valor2,0::float8 as valor3
           from orcelemento
           inner join conplano on c60_codcon = o56_codele and c60_anousu = o56_anousu
           where o56_anousu = $anousu";
 
-        $result_rec = db_query($creat_sql);
-        $result_rec = db_query($sql11);
-        // novamente eu copio, da vontade de mandar ler o DICAS.PHP, torama q o comum q esteja dando manutenção aqui nesse codigo seja um dos velhos IF velho THEN deve estar lembrando de mim ELSE pergunta para os velhos
-        // Começo da estruturação da tabela temporaria
-        for ($i = 0; $i < pg_numrows($result_rec); $i++) {
-          db_fieldsmemory($result_rec, $i);
-          // eu ja disse o que pode fazer aqui, se não sei acima vai ler
-          $valor1 = $anterior;
-          $valor2 = $inicial;
-          $valor3 = $executado;
-          // troca por array
-          $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3 where work.estrutural = '$estrutural'";
-          $result = db_query($sql);
-          $executa = true;
-          $conta = 0;
-          while ($executa == true) {
-            $estrutural = db_le_mae($estrutural, false);
-            // troca por array
-            $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3 where work.estrutural = '"
-                . $estrutural . "00" . "'";
-            $result = db_query($sql);
-            if (substr($estrutural, 1, 12) == "0000000000000") {
-              $executa = false;
-            }
-            $conta++;
-            if ($conta > 10)
-              $executa = false;
-          }
-        }
-        $sql22 = "select * from work";
-
-        $sql12 = $grup_rec . " union " . $sql22;
-        $sql = $sql12 . " union " . $sql33;
+    $result_rec = db_query($creat_sql);
+    $result_rec = db_query($sql11);
+    // novamente eu copio, da vontade de mandar ler o DICAS.PHP, torama q o comum q esteja dando manutenção aqui nesse codigo seja um dos velhos IF velho THEN deve estar lembrando de mim ELSE pergunta para os velhos
+    // Começo da estruturação da tabela temporaria
+    for ($i = 0; $i < pg_numrows($result_rec); $i++) {
+      db_fieldsmemory($result_rec, $i);
+      // eu ja disse o que pode fazer aqui, se não sei acima vai ler
+      $valor1 = $anterior;
+      $valor2 = $inicial;
+      $valor3 = $executado;
+      // troca por array
+      $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3 where work.estrutural = '$estrutural'";
+      $result = db_query($sql);
+      $executa = true;
+      $conta = 0;
+      while ($executa == true) {
+        $estrutural = db_le_mae($estrutural, false);
+        // troca por array
+        $sql = "update work set valor1 = valor1+$valor1,valor2 = valor2+$valor2,valor3 = valor3+$valor3 where work.estrutural = '"
+          . $estrutural . "00" . "'";
         $result = db_query($sql);
+        if (substr($estrutural, 1, 12) == "0000000000000") {
+          $executa = false;
+        }
+        $conta++;
+        if ($conta > 10)
+          $executa = false;
+      }
+    }
+    $sql22 = "select * from work";
 
-        $criatabela = 'create temp table work_grupconta(' . 'grupo 						varchar(4),'
-            . 'estrut 						varchar(20),' . 'descr 						varchar(100),' . 'valor_anti 				float8,'
-            . 'valor_ini    		float8,' . 'valor_exec  	 	float8' . ')';
-        global $estrutural, $c60_descr, $anterior, $inicial, $executado;
-        db_query($criatabela);
-        for ($i = 0; $i < pg_numrows($result); $i++) {
-          db_fieldsmemory($result, $i);
-          for ($x = 0; $x < count($paramconta); $x++) {
-            if (in_array($estrutural, $paramconta[$x])) {
-              $g = $x;
-              // troca por array ME ORGULHE eu não tinha tempo
-              db_query(
-                  "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
-                      . "'," . "$anterior," . "$inicial," . "$executado )");
-            }
-            if (substr($estrutural, 0, 1) == 'F') {
-              $estrutural = substr($estrutural, 1);
-              $g = 'F';
-              //troca por array ME ORGULHE eu não tinha tempo
-              db_query(
-                  "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
-                      . "'," . "$anterior," . "$inicial," . "$executado )");
-            }
-          }
+    $sql12 = $grup_rec . " union " . $sql22;
+    $sql = $sql12 . " union " . $sql33;
+    $result = db_query($sql);
+
+    $criatabela = 'create temp table work_grupconta(' . 'grupo 						varchar(4),'
+      . 'estrut 						varchar(20),' . 'descr 						varchar(100),' . 'valor_anti 				float8,'
+      . 'valor_ini    		float8,' . 'valor_exec  	 	float8' . ')';
+    global $estrutural, $c60_descr, $anterior, $inicial, $executado;
+    db_query($criatabela);
+    for ($i = 0; $i < pg_numrows($result); $i++) {
+      db_fieldsmemory($result, $i);
+      for ($x = 0; $x < count($paramconta); $x++) {
+        if (in_array($estrutural, $paramconta[$x])) {
+          $g = $x;
+          // troca por array ME ORGULHE eu não tinha tempo
+          db_query(
+            "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
+            . "'," . "$anterior," . "$inicial," . "$executado )");
+        }
+        if (substr($estrutural, 0, 1) == 'F') {
+          $estrutural = substr($estrutural, 1);
+          $g = 'F';
+          //troca por array ME ORGULHE eu não tinha tempo
+          db_query(
+            "insert into work_grupconta values (' " . $g . " '," . "'" . $estrutural . "'," . "'" . pg_escape_string($c60_descr)
+            . "'," . "$anterior," . "$inicial," . "$executado )");
         }
       }
-      $sqlfim = "select * from work_grupconta order by grupo,estrut";
-      if ($retsql == false) {
-        $resultado = db_query($sqlfim);
-      } else {
-        $resultado = $sqlfim;
+    }
+  }
+  $sqlfim = "select * from work_grupconta order by grupo,estrut";
+  if ($retsql == false) {
+    $resultado = db_query($sqlfim);
+  } else {
+    $resultado = $sqlfim;
+  }
+  return $resultado;
+}
+
+function calcula_rcl($anousu, $dtini, $dtfin, $db_selinstit, $matriz = false) {
+
+  global $o57_fonte, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro;
+
+  $result_rec = new cl_receita_saldo_mes;
+  $result_rec->anousu = $anousu;
+  $result_rec->dtini = $dtini;
+  $result_rec->dtfim = $dtfin;
+  $result_rec->usa_datas = 'sim';
+  $result_rec->instit = "" . str_replace('-', ', ', $db_selinstit) . " ";
+  $result_rec->sql_record();
+  $result_rec = $result_rec->result;
+  @db_query("drop table work_plano");
+
+  // pega parametros do relatorio de rcl
+  $orcparamrel = new cl_orcparamrel;
+  $param[1] = $orcparamrel->sql_parametro('5', '1', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[2] = $orcparamrel->sql_parametro('5', '2', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[3] = $orcparamrel->sql_parametro('5', '3', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[4] = $orcparamrel->sql_parametro('5', '4', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[5] = $orcparamrel->sql_parametro('5', '5', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[6] = $orcparamrel->sql_parametro('5', '6', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[7] = $orcparamrel->sql_parametro('5', '7', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[8] = $orcparamrel->sql_parametro('5', '8', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[9] = $orcparamrel->sql_parametro('5', '9', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[10] = $orcparamrel->sql_parametro('5', '10', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[11] = $orcparamrel->sql_parametro('5', '11', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[12] = $orcparamrel->sql_parametro('5', '12', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[13] = $orcparamrel->sql_parametro('5', '13', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[14] = $orcparamrel->sql_parametro('5', '14', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[15] = $orcparamrel->sql_parametro('5', '15', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+
+  // inicio dedução
+  $param[16] = $orcparamrel->sql_parametro('5', '16', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[17] = $orcparamrel->sql_parametro('5', '17', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[18] = $orcparamrel->sql_parametro('5', '18', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+
+  $total = 0;
+
+  $rcl_matriz['janeiro'] = 0;
+  $rcl_matriz['fevereiro'] = 0;
+  $rcl_matriz['marco'] = 0;
+  $rcl_matriz['abril'] = 0;
+  $rcl_matriz['maio'] = 0;
+  $rcl_matriz['junho'] = 0;
+  $rcl_matriz['julho'] = 0;
+  $rcl_matriz['agosto'] = 0;
+  $rcl_matriz['setembro'] = 0;
+  $rcl_matriz['outubro'] = 0;
+  $rcl_matriz['novembro'] = 0;
+  $rcl_matriz['dezembro'] = 0;
+
+  for ($p = 1; $p <= 18; $p++) {
+    // 18 é a quantidade de parametros ou linhas existentes nos parametros
+
+    for ($i = 0; $i < pg_numrows($result_rec); $i++) {
+      db_fieldsmemory($result_rec, $i);
+
+      $estrutural = $o57_fonte;
+
+      if (in_array($estrutural, $param[$p])) {
+        if ($p == 18) {
+
+          $janeiro *= -1;
+          $fevereiro *= -1;
+          $marco *= -1;
+          $abril *= -1;
+          $maio *= -1;
+          $junho *= -1;
+          $julho *= -1;
+          $agosto *= -1;
+          $setembro *= -1;
+          $outubro *= -1;
+          $novembro *= -1;
+          $dezembro *= -1;
+
+        }
+        if ($p <= 15) {
+
+          $rcl_matriz['janeiro'] += $janeiro;
+          $rcl_matriz['fevereiro'] += $fevereiro;
+          $rcl_matriz['marco'] += $marco;
+          $rcl_matriz['abril'] += $abril;
+          $rcl_matriz['maio'] += $maio;
+          $rcl_matriz['junho'] += $junho;
+          $rcl_matriz['julho'] += $julho;
+          $rcl_matriz['agosto'] += $agosto;
+          $rcl_matriz['setembro'] += $setembro;
+          $rcl_matriz['outubro'] += $outubro;
+          $rcl_matriz['novembro'] += $novembro;
+          $rcl_matriz['dezembro'] += $dezembro;
+
+        } else {
+
+          //                if (substr($estrutural,0,3) == "497") {
+          if (db_conplano_grupo($anousu, substr($estrutural, 0, 3) . "%", 9001) == true) {
+
+            $rcl_matriz['janeiro'] -= ($janeiro);
+            $rcl_matriz['fevereiro'] -= ($fevereiro);
+            $rcl_matriz['marco'] -= ($marco);
+            $rcl_matriz['abril'] -= ($abril);
+            $rcl_matriz['maio'] -= ($maio);
+            $rcl_matriz['junho'] -= ($junho);
+            $rcl_matriz['julho'] -= ($julho);
+            $rcl_matriz['agosto'] -= ($agosto);
+            $rcl_matriz['setembro'] -= ($setembro);
+            $rcl_matriz['outubro'] -= ($outubro);
+            $rcl_matriz['novembro'] -= ($novembro);
+            $rcl_matriz['dezembro'] -= ($dezembro);
+
+          } else {
+
+            $rcl_matriz['janeiro'] -= $janeiro;
+            $rcl_matriz['fevereiro'] -= $fevereiro;
+            $rcl_matriz['marco'] -= $marco;
+            $rcl_matriz['abril'] -= $abril;
+            $rcl_matriz['maio'] -= $maio;
+            $rcl_matriz['junho'] -= $junho;
+            $rcl_matriz['julho'] -= $julho;
+            $rcl_matriz['agosto'] -= $agosto;
+            $rcl_matriz['setembro'] -= $setembro;
+            $rcl_matriz['outubro'] -= $outubro;
+            $rcl_matriz['novembro'] -= $novembro;
+            $rcl_matriz['dezembro'] -= $dezembro;
+
+          }
+
+        }
+
       }
-      return $resultado;
+
     }
 
-    function calcula_rcl($anousu, $dtini, $dtfin, $db_selinstit, $matriz = false) {
+  }
 
-      global $o57_fonte, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro;
+  $total = $rcl_matriz['janeiro'] + $rcl_matriz['fevereiro'] + $rcl_matriz['marco'] + $rcl_matriz['abril']
+    + $rcl_matriz['maio'] + $rcl_matriz['junho'] + $rcl_matriz['julho'] + $rcl_matriz['agosto']
+    + $rcl_matriz['setembro'] + $rcl_matriz['outubro'] + $rcl_matriz['novembro'] + $rcl_matriz['dezembro'];
 
-      $result_rec = new cl_receita_saldo_mes;
-      $result_rec->anousu = $anousu;
-      $result_rec->dtini = $dtini;
-      $result_rec->dtfim = $dtfin;
-      $result_rec->usa_datas = 'sim';
-      $result_rec->instit = "" . str_replace('-', ', ', $db_selinstit) . " ";
-      $result_rec->sql_record();
-      $result_rec = $result_rec->result;
-      @db_query("drop table work_plano");
+  if ($matriz == true) {
+    return $rcl_matriz;
+  }
 
-      // pega parametros do relatorio de rcl
-      $orcparamrel = new cl_orcparamrel;
-      $param[1] = $orcparamrel->sql_parametro('5', '1', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[2] = $orcparamrel->sql_parametro('5', '2', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[3] = $orcparamrel->sql_parametro('5', '3', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[4] = $orcparamrel->sql_parametro('5', '4', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[5] = $orcparamrel->sql_parametro('5', '5', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[6] = $orcparamrel->sql_parametro('5', '6', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[7] = $orcparamrel->sql_parametro('5', '7', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[8] = $orcparamrel->sql_parametro('5', '8', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[9] = $orcparamrel->sql_parametro('5', '9', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[10] = $orcparamrel->sql_parametro('5', '10', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[11] = $orcparamrel->sql_parametro('5', '11', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[12] = $orcparamrel->sql_parametro('5', '12', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[13] = $orcparamrel->sql_parametro('5', '13', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[14] = $orcparamrel->sql_parametro('5', '14', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[15] = $orcparamrel->sql_parametro('5', '15', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  return $total;
 
-      // inicio dedução
-      $param[16] = $orcparamrel->sql_parametro('5', '16', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[17] = $orcparamrel->sql_parametro('5', '17', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[18] = $orcparamrel->sql_parametro('5', '18', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+}
 
-      $total = 0;
+function calcula_rcl2($anousu, $dtini, $dtfin, $db_selinstit, $matriz = false, $codrel = 5, $data = 0) {
 
-      $rcl_matriz['janeiro'] = 0;
-      $rcl_matriz['fevereiro'] = 0;
-      $rcl_matriz['marco'] = 0;
-      $rcl_matriz['abril'] = 0;
-      $rcl_matriz['maio'] = 0;
-      $rcl_matriz['junho'] = 0;
-      $rcl_matriz['julho'] = 0;
-      $rcl_matriz['agosto'] = 0;
-      $rcl_matriz['setembro'] = 0;
-      $rcl_matriz['outubro'] = 0;
-      $rcl_matriz['novembro'] = 0;
-      $rcl_matriz['dezembro'] = 0;
+  require_once(modification("libs/db_utils.php"));
+  require_once(modification("model/linhaRelatorioContabil.model.php"));
+  global $o57_fonte, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro, $bimestre, $dt;
 
-      for ($p = 1; $p <= 18; $p++) {
-        // 18 é a quantidade de parametros ou linhas existentes nos parametros
+  if ($data == 0) {
+    $dt = split("-", $dtfin);
+  } else {
+    $dt = split("-", $data);
+  }
 
-        for ($i = 0; $i < pg_numrows($result_rec); $i++) {
-          db_fieldsmemory($result_rec, $i);
+  $bimestre = (int) substr(db_retorna_periodo($dt[1], "B"), 0, 1);
+  $bimestre = $dt[1];
+  $flag_anterior = false;
 
-          $estrutural = $o57_fonte;
+  if ($anousu < db_getsession("DB_anousu")) { // Exercicio anterior
 
-          if (in_array($estrutural, $param[$p])) {
-            if ($p == 18) {
+    $bimestre += 1;
+    $flag_anterior = true;
+  }
 
-              $janeiro *= -1;
-              $fevereiro *= -1;
-              $marco *= -1;
-              $abril *= -1;
-              $maio *= -1;
-              $junho *= -1;
-              $julho *= -1;
-              $agosto *= -1;
-              $setembro *= -1;
-              $outubro *= -1;
-              $novembro *= -1;
-              $dezembro *= -1;
+  $result_rec = new cl_receita_saldo_mes;
+  $result_rec->anousu = $anousu;
+  $result_rec->dtini = $dtini;
+  $result_rec->dtfim = $dtfin;
+  $result_rec->usa_datas = 'sim';
+  $result_rec->instit = $db_selinstit;
+  $result_rec->sql_record();
+  $result_rec = $result_rec->result;
+  @db_query("drop table work_plano");
 
-            }
-            if ($p <= 15) {
+  // pega parametros do relatorio de rcl
+  $orcparamrel = new cl_orcparamrel;
+  $param[1] = $orcparamrel->sql_parametro($codrel, '1', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[2] = $orcparamrel->sql_parametro($codrel, '2', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[3] = $orcparamrel->sql_parametro($codrel, '3', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[4] = $orcparamrel->sql_parametro($codrel, '4', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[5] = $orcparamrel->sql_parametro($codrel, '5', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[6] = $orcparamrel->sql_parametro($codrel, '6', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[7] = $orcparamrel->sql_parametro($codrel, '7', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[8] = $orcparamrel->sql_parametro($codrel, '8', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[9] = $orcparamrel->sql_parametro($codrel, '9', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[10] = $orcparamrel->sql_parametro($codrel, '10', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[11] = $orcparamrel->sql_parametro($codrel, '11', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[12] = $orcparamrel->sql_parametro($codrel, '12', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[13] = $orcparamrel->sql_parametro($codrel, '13', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[14] = $orcparamrel->sql_parametro($codrel, '14', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[15] = $orcparamrel->sql_parametro($codrel, '15', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
 
-              $rcl_matriz['janeiro'] += $janeiro;
-              $rcl_matriz['fevereiro'] += $fevereiro;
-              $rcl_matriz['marco'] += $marco;
-              $rcl_matriz['abril'] += $abril;
-              $rcl_matriz['maio'] += $maio;
-              $rcl_matriz['junho'] += $junho;
-              $rcl_matriz['julho'] += $julho;
-              $rcl_matriz['agosto'] += $agosto;
-              $rcl_matriz['setembro'] += $setembro;
-              $rcl_matriz['outubro'] += $outubro;
-              $rcl_matriz['novembro'] += $novembro;
-              $rcl_matriz['dezembro'] += $dezembro;
+  // inicio dedução em 2007
+  $param[16] = $orcparamrel->sql_parametro($codrel, '16', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[17] = $orcparamrel->sql_parametro($codrel, '17', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  $param[18] = $orcparamrel->sql_parametro($codrel, '18', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
 
+  if ($codrel == 27) {
+    $param[19] = $orcparamrel->sql_parametro($codrel, '19', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+    $param[20] = $orcparamrel->sql_parametro($codrel, '20', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+    $param[21] = $orcparamrel->sql_parametro($codrel, '21', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
+  }
+
+  if ($codrel == 59 || $codrel = 81) {
+
+    for ($iLinha = 1; $iLinha <= 22; $iLinha++) {
+
+      $param[$iLinha] = new linhaRelatorioContabil($codrel, $iLinha);
+      $param[$iLinha]->parametro = $param[$iLinha]->getParametros($anousu);
+    }
+  }
+
+  $total = 0;
+
+  $rcl_matriz2['janeiro'] = 0;
+  $rcl_matriz2['fevereiro'] = 0;
+  $rcl_matriz2['marco'] = 0;
+  $rcl_matriz2['abril'] = 0;
+  $rcl_matriz2['maio'] = 0;
+  $rcl_matriz2['junho'] = 0;
+  $rcl_matriz2['julho'] = 0;
+  $rcl_matriz2['agosto'] = 0;
+  $rcl_matriz2['setembro'] = 0;
+  $rcl_matriz2['outubro'] = 0;
+  $rcl_matriz2['novembro'] = 0;
+  $rcl_matriz2['dezembro'] = 0;
+
+  // Arrecadacao
+  $rcl_matriz[0][1] = 0; // Janeiro
+  $rcl_matriz[0][2] = 0; // Fevereiro
+  $rcl_matriz[0][3] = 0; // Marco
+  $rcl_matriz[0][4] = 0; // Abril
+  $rcl_matriz[0][5] = 0; // Maio
+  $rcl_matriz[0][6] = 0; // Junho
+  $rcl_matriz[0][7] = 0; // Julho
+  $rcl_matriz[0][8] = 0; // Agosto
+  $rcl_matriz[0][9] = 0; // Setembro
+  $rcl_matriz[0][10] = 0; // Outubro
+  $rcl_matriz[0][11] = 0; // Novembro
+  $rcl_matriz[0][12] = 0; // Dezembro
+
+  // Deducoes
+  $rcl_matriz[1][1] = 0; // Janeiro
+  $rcl_matriz[1][2] = 0; // Fevereiro
+  $rcl_matriz[1][3] = 0; // Marco
+  $rcl_matriz[1][4] = 0; // Abril
+  $rcl_matriz[1][5] = 0; // Maio
+  $rcl_matriz[1][6] = 0; // Junho
+  $rcl_matriz[1][7] = 0; // Julho
+  $rcl_matriz[1][8] = 0; // Agosto
+  $rcl_matriz[1][9] = 0; // Setembro
+  $rcl_matriz[1][10] = 0; // Outubro
+  $rcl_matriz[1][11] = 0; // Novembro
+  $rcl_matriz[1][12] = 0; // Dezembro
+
+  $tot_param = 18;
+  $ult_param = 15;
+
+  if ($codrel == 27) {
+    $tot_param = 21;
+    $ult_param = 18;
+
+  } else if ($codrel == 59 || $codrel == 81) {
+
+    $tot_param = 22;
+    $ult_param = 19;
+
+  }
+
+  for ($p = 1; $p <= $tot_param; $p++) {
+    // 18 para 2007 e 21 para 2008 é a quantidade de parametros ou linhas existentes nos parametros
+
+    for ($i = 0; $i < pg_numrows($result_rec); $i++) {
+
+      $oReceita = db_utils::fieldsmemory($result_rec, $i);
+      $estrutural = $oReceita->o57_fonte;
+      $oParametro = $param[$p]->parametro;
+      foreach ($oParametro->contas as $oEstrutural) {
+
+        $oRetornoVerificacao = $param[$p]->match($oEstrutural, $oParametro->orcamento, $oReceita, 1);
+        if ($oRetornoVerificacao->match) {
+
+          if ($oRetornoVerificacao->exclusao) {
+
+            $oReceita->janeiro *= -1;
+            $oReceita->fevereiro *= -1;
+            $oReceita->marco *= -1;
+            $oReceita->abril *= -1;
+            $oReceita->maio *= -1;
+            $oReceita->junho *= -1;
+            $oReceita->julho *= -1;
+            $oReceita->agosto *= -1;
+            $oReceita->setembro *= -1;
+            $oReceita->outubro *= -1;
+            $oReceita->novembro *= -1;
+            $oReceita->dezembro *= -1;
+          }
+          if ($p == $tot_param) {
+
+            $oReceita->janeiro *= -1;
+            $oReceita->fevereiro *= -1;
+            $oReceita->marco *= -1;
+            $oReceita->abril *= -1;
+            $oReceita->maio *= -1;
+            $oReceita->junho *= -1;
+            $oReceita->julho *= -1;
+            $oReceita->agosto *= -1;
+            $oReceita->setembro *= -1;
+            $oReceita->outubro *= -1;
+            $oReceita->novembro *= -1;
+            $oReceita->dezembro *= -1;
+
+          }
+          if ($p <= $ult_param) {
+
+            $rcl_matriz[0][1] += $oReceita->janeiro;
+            $rcl_matriz[0][2] += $oReceita->fevereiro;
+            $rcl_matriz[0][3] += $oReceita->marco;
+            $rcl_matriz[0][4] += $oReceita->abril;
+            $rcl_matriz[0][5] += $oReceita->maio;
+            $rcl_matriz[0][6] += $oReceita->junho;
+            $rcl_matriz[0][7] += $oReceita->julho;
+            $rcl_matriz[0][8] += $oReceita->agosto;
+            $rcl_matriz[0][9] += $oReceita->setembro;
+            $rcl_matriz[0][10] += $oReceita->outubro;
+            $rcl_matriz[0][11] += $oReceita->novembro;
+            $rcl_matriz[0][12] += $oReceita->dezembro;
+
+          } else {
+
+            if (db_conplano_grupo($anousu, substr($estrutural, 0, 3) . "%", 9001) == true) {
+
+              $rcl_matriz[1][1] += ($oReceita->janeiro);
+              $rcl_matriz[1][2] += ($oReceita->fevereiro);
+              $rcl_matriz[1][3] += ($oReceita->marco);
+              $rcl_matriz[1][4] += ($oReceita->abril);
+              $rcl_matriz[1][5] += ($oReceita->maio);
+              $rcl_matriz[1][6] += ($oReceita->junho);
+              $rcl_matriz[1][7] += ($oReceita->julho);
+              $rcl_matriz[1][8] += ($oReceita->agosto);
+              $rcl_matriz[1][9] += ($oReceita->setembro);
+              $rcl_matriz[1][10] += ($oReceita->outubro);
+              $rcl_matriz[1][11] += ($oReceita->novembro);
+              $rcl_matriz[1][12] += ($oReceita->dezembro);
             } else {
 
-              //                if (substr($estrutural,0,3) == "497") {
-              if (db_conplano_grupo($anousu, substr($estrutural, 0, 3) . "%", 9001) == true) {
-
-                $rcl_matriz['janeiro'] -= ($janeiro);
-                $rcl_matriz['fevereiro'] -= ($fevereiro);
-                $rcl_matriz['marco'] -= ($marco);
-                $rcl_matriz['abril'] -= ($abril);
-                $rcl_matriz['maio'] -= ($maio);
-                $rcl_matriz['junho'] -= ($junho);
-                $rcl_matriz['julho'] -= ($julho);
-                $rcl_matriz['agosto'] -= ($agosto);
-                $rcl_matriz['setembro'] -= ($setembro);
-                $rcl_matriz['outubro'] -= ($outubro);
-                $rcl_matriz['novembro'] -= ($novembro);
-                $rcl_matriz['dezembro'] -= ($dezembro);
-
-              } else {
-
-                $rcl_matriz['janeiro'] -= $janeiro;
-                $rcl_matriz['fevereiro'] -= $fevereiro;
-                $rcl_matriz['marco'] -= $marco;
-                $rcl_matriz['abril'] -= $abril;
-                $rcl_matriz['maio'] -= $maio;
-                $rcl_matriz['junho'] -= $junho;
-                $rcl_matriz['julho'] -= $julho;
-                $rcl_matriz['agosto'] -= $agosto;
-                $rcl_matriz['setembro'] -= $setembro;
-                $rcl_matriz['outubro'] -= $outubro;
-                $rcl_matriz['novembro'] -= $novembro;
-                $rcl_matriz['dezembro'] -= $dezembro;
-
-              }
+              $rcl_matriz[1][1] += $oReceita->janeiro;
+              $rcl_matriz[1][2] += $oReceita->fevereiro;
+              $rcl_matriz[1][3] += $oReceita->marco;
+              $rcl_matriz[1][4] += $oReceita->abril;
+              $rcl_matriz[1][5] += $oReceita->maio;
+              $rcl_matriz[1][6] += $oReceita->junho;
+              $rcl_matriz[1][7] += $oReceita->julho;
+              $rcl_matriz[1][8] += $oReceita->agosto;
+              $rcl_matriz[1][9] += $oReceita->setembro;
+              $rcl_matriz[1][10] += $oReceita->outubro;
+              $rcl_matriz[1][11] += $oReceita->novembro;
+              $rcl_matriz[1][12] += $oReceita->dezembro;
 
             }
 
           }
 
         }
-
-      }
-
-      $total = $rcl_matriz['janeiro'] + $rcl_matriz['fevereiro'] + $rcl_matriz['marco'] + $rcl_matriz['abril']
-          + $rcl_matriz['maio'] + $rcl_matriz['junho'] + $rcl_matriz['julho'] + $rcl_matriz['agosto']
-          + $rcl_matriz['setembro'] + $rcl_matriz['outubro'] + $rcl_matriz['novembro'] + $rcl_matriz['dezembro'];
-
-      if ($matriz == true) {
-        return $rcl_matriz;
-      }
-
-      return $total;
-
-    }
-
-    function calcula_rcl2($anousu, $dtini, $dtfin, $db_selinstit, $matriz = false, $codrel = 5, $data = 0) {
-
-      require_once("libs/db_utils.php");
-      require_once("model/linhaRelatorioContabil.model.php");
-      global $o57_fonte, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro, $bimestre, $dt;
-
-      if ($data == 0) {
-        $dt = split("-", $dtfin);
-      } else {
-        $dt = split("-", $data);
-      }
-
-      $bimestre = (int) substr(db_retorna_periodo($dt[1], "B"), 0, 1);
-      $bimestre = $dt[1];
-      $flag_anterior = false;
-
-      if ($anousu < db_getsession("DB_anousu")) { // Exercicio anterior
-
-        $bimestre += 1;
-        $flag_anterior = true;
-      }
-
-      $result_rec = new cl_receita_saldo_mes;
-      $result_rec->anousu = $anousu;
-      $result_rec->dtini = $dtini;
-      $result_rec->dtfim = $dtfin;
-      $result_rec->usa_datas = 'sim';
-      $result_rec->instit = $db_selinstit;
-      $result_rec->sql_record();
-      $result_rec = $result_rec->result;
-      @db_query("drop table work_plano");
-
-      // pega parametros do relatorio de rcl
-      $orcparamrel = new cl_orcparamrel;
-      $param[1] = $orcparamrel->sql_parametro($codrel, '1', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[2] = $orcparamrel->sql_parametro($codrel, '2', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[3] = $orcparamrel->sql_parametro($codrel, '3', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[4] = $orcparamrel->sql_parametro($codrel, '4', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[5] = $orcparamrel->sql_parametro($codrel, '5', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[6] = $orcparamrel->sql_parametro($codrel, '6', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[7] = $orcparamrel->sql_parametro($codrel, '7', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[8] = $orcparamrel->sql_parametro($codrel, '8', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[9] = $orcparamrel->sql_parametro($codrel, '9', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[10] = $orcparamrel->sql_parametro($codrel, '10', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[11] = $orcparamrel->sql_parametro($codrel, '11', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[12] = $orcparamrel->sql_parametro($codrel, '12', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[13] = $orcparamrel->sql_parametro($codrel, '13', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[14] = $orcparamrel->sql_parametro($codrel, '14', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[15] = $orcparamrel->sql_parametro($codrel, '15', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-
-      // inicio dedução em 2007
-      $param[16] = $orcparamrel->sql_parametro($codrel, '16', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[17] = $orcparamrel->sql_parametro($codrel, '17', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      $param[18] = $orcparamrel->sql_parametro($codrel, '18', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-
-      if ($codrel == 27) {
-        $param[19] = $orcparamrel->sql_parametro($codrel, '19', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-        $param[20] = $orcparamrel->sql_parametro($codrel, '20', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-        $param[21] = $orcparamrel->sql_parametro($codrel, '21', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
-      }
-
-      if ($codrel == 59 || $codrel == 81 || $codrel == 166) {
-
-        for ($iLinha = 1; $iLinha <= 22; $iLinha++) {
-
-          $param[$iLinha] = new linhaRelatorioContabil($codrel, $iLinha);
-          $param[$iLinha]->parametro = $param[$iLinha]->getParametros($anousu);
-        }
-      }
-
-      $total = 0;
-
-      $rcl_matriz2['janeiro'] = 0;
-      $rcl_matriz2['fevereiro'] = 0;
-      $rcl_matriz2['marco'] = 0;
-      $rcl_matriz2['abril'] = 0;
-      $rcl_matriz2['maio'] = 0;
-      $rcl_matriz2['junho'] = 0;
-      $rcl_matriz2['julho'] = 0;
-      $rcl_matriz2['agosto'] = 0;
-      $rcl_matriz2['setembro'] = 0;
-      $rcl_matriz2['outubro'] = 0;
-      $rcl_matriz2['novembro'] = 0;
-      $rcl_matriz2['dezembro'] = 0;
-
-      // Arrecadacao
-      $rcl_matriz[0][1] = 0; // Janeiro
-      $rcl_matriz[0][2] = 0; // Fevereiro
-      $rcl_matriz[0][3] = 0; // Marco
-      $rcl_matriz[0][4] = 0; // Abril
-      $rcl_matriz[0][5] = 0; // Maio
-      $rcl_matriz[0][6] = 0; // Junho
-      $rcl_matriz[0][7] = 0; // Julho
-      $rcl_matriz[0][8] = 0; // Agosto
-      $rcl_matriz[0][9] = 0; // Setembro
-      $rcl_matriz[0][10] = 0; // Outubro
-      $rcl_matriz[0][11] = 0; // Novembro
-      $rcl_matriz[0][12] = 0; // Dezembro
-
-      // Deducoes
-      $rcl_matriz[1][1] = 0; // Janeiro
-      $rcl_matriz[1][2] = 0; // Fevereiro
-      $rcl_matriz[1][3] = 0; // Marco
-      $rcl_matriz[1][4] = 0; // Abril
-      $rcl_matriz[1][5] = 0; // Maio
-      $rcl_matriz[1][6] = 0; // Junho
-      $rcl_matriz[1][7] = 0; // Julho
-      $rcl_matriz[1][8] = 0; // Agosto
-      $rcl_matriz[1][9] = 0; // Setembro
-      $rcl_matriz[1][10] = 0; // Outubro
-      $rcl_matriz[1][11] = 0; // Novembro
-      $rcl_matriz[1][12] = 0; // Dezembro
-
-      $tot_param = 18;
-      $ult_param = 15;
-
-      if ($codrel == 27) {
-        $tot_param = 21;
-        $ult_param = 18;
-
-      } else if ($codrel == 59 || $codrel == 81 || $codrel = 166) {
-
-        $tot_param = 22;
-        $ult_param = 19;
-
-      }
-
-      for ($p = 1; $p <= $tot_param; $p++) {
-        // 18 para 2007 e 21 para 2008 é a quantidade de parametros ou linhas existentes nos parametros
-
-        for ($i = 0; $i < pg_numrows($result_rec); $i++) {
-
-          $oReceita = db_utils::fieldsmemory($result_rec, $i);
-          $estrutural = $oReceita->o57_fonte;
-          $oParametro = $param[$p]->parametro;
-          foreach ($oParametro->contas as $oEstrutural) {
-
-            $oRetornoVerificacao = $param[$p]->match($oEstrutural, $oParametro->orcamento, $oReceita, 1);
-            if ($oRetornoVerificacao->match) {
-
-              if ($oRetornoVerificacao->exclusao) {
-
-                $oReceita->janeiro *= -1;
-                $oReceita->fevereiro *= -1;
-                $oReceita->marco *= -1;
-                $oReceita->abril *= -1;
-                $oReceita->maio *= -1;
-                $oReceita->junho *= -1;
-                $oReceita->julho *= -1;
-                $oReceita->agosto *= -1;
-                $oReceita->setembro *= -1;
-                $oReceita->outubro *= -1;
-                $oReceita->novembro *= -1;
-                $oReceita->dezembro *= -1;
-              }
-              if ($p == $tot_param) {
-
-                $oReceita->janeiro *= -1;
-                $oReceita->fevereiro *= -1;
-                $oReceita->marco *= -1;
-                $oReceita->abril *= -1;
-                $oReceita->maio *= -1;
-                $oReceita->junho *= -1;
-                $oReceita->julho *= -1;
-                $oReceita->agosto *= -1;
-                $oReceita->setembro *= -1;
-                $oReceita->outubro *= -1;
-                $oReceita->novembro *= -1;
-                $oReceita->dezembro *= -1;
-
-              }
-              if ($p <= $ult_param) {
-
-                $rcl_matriz[0][1] += $oReceita->janeiro;
-                $rcl_matriz[0][2] += $oReceita->fevereiro;
-                $rcl_matriz[0][3] += $oReceita->marco;
-                $rcl_matriz[0][4] += $oReceita->abril;
-                $rcl_matriz[0][5] += $oReceita->maio;
-                $rcl_matriz[0][6] += $oReceita->junho;
-                $rcl_matriz[0][7] += $oReceita->julho;
-                $rcl_matriz[0][8] += $oReceita->agosto;
-                $rcl_matriz[0][9] += $oReceita->setembro;
-                $rcl_matriz[0][10] += $oReceita->outubro;
-                $rcl_matriz[0][11] += $oReceita->novembro;
-                $rcl_matriz[0][12] += $oReceita->dezembro;
-
-              } else {
-
-                if (db_conplano_grupo($anousu, substr($estrutural, 0, 3) . "%", 9001) == true) {
-
-                  $rcl_matriz[1][1] += ($oReceita->janeiro);
-                  $rcl_matriz[1][2] += ($oReceita->fevereiro);
-                  $rcl_matriz[1][3] += ($oReceita->marco);
-                  $rcl_matriz[1][4] += ($oReceita->abril);
-                  $rcl_matriz[1][5] += ($oReceita->maio);
-                  $rcl_matriz[1][6] += ($oReceita->junho);
-                  $rcl_matriz[1][7] += ($oReceita->julho);
-                  $rcl_matriz[1][8] += ($oReceita->agosto);
-                  $rcl_matriz[1][9] += ($oReceita->setembro);
-                  $rcl_matriz[1][10] += ($oReceita->outubro);
-                  $rcl_matriz[1][11] += ($oReceita->novembro);
-                  $rcl_matriz[1][12] += ($oReceita->dezembro);
-                } else {
-
-                  $rcl_matriz[1][1] += $oReceita->janeiro;
-                  $rcl_matriz[1][2] += $oReceita->fevereiro;
-                  $rcl_matriz[1][3] += $oReceita->marco;
-                  $rcl_matriz[1][4] += $oReceita->abril;
-                  $rcl_matriz[1][5] += $oReceita->maio;
-                  $rcl_matriz[1][6] += $oReceita->junho;
-                  $rcl_matriz[1][7] += $oReceita->julho;
-                  $rcl_matriz[1][8] += $oReceita->agosto;
-                  $rcl_matriz[1][9] += $oReceita->setembro;
-                  $rcl_matriz[1][10] += $oReceita->outubro;
-                  $rcl_matriz[1][11] += $oReceita->novembro;
-                  $rcl_matriz[1][12] += $oReceita->dezembro;
-
-                }
-
-              }
-
-            }
-          }
-        }
-      }
-
-      if ($flag_anterior == false) { // Exercicio Atual
-        for ($y = 1; $y <= $bimestre; $y++) {
-          $total += $rcl_matriz[0][$y] - ($rcl_matriz[1][$y]);
-        }
-      } else { // Exercicio Anterior
-        for ($y = $bimestre; $y <= 12; $y++) {
-          $total += $rcl_matriz[0][$y] - ($rcl_matriz[1][$y]);
-        }
-      }
-
-      if ($matriz == true) {
-        // Arrecadacao - Deducoes
-        $rcl_matriz2['janeiro'] = $rcl_matriz[0][1] - ($rcl_matriz[1][1]);
-        $rcl_matriz2['fevereiro'] = $rcl_matriz[0][2] - ($rcl_matriz[1][2]);
-        $rcl_matriz2['marco'] = $rcl_matriz[0][3] - ($rcl_matriz[1][3]);
-        $rcl_matriz2['abril'] = $rcl_matriz[0][4] - ($rcl_matriz[1][4]);
-        $rcl_matriz2['maio'] = $rcl_matriz[0][5] - ($rcl_matriz[1][5]);
-        $rcl_matriz2['junho'] = $rcl_matriz[0][6] - ($rcl_matriz[1][6]);
-        $rcl_matriz2['julho'] = $rcl_matriz[0][7] - ($rcl_matriz[1][7]);
-        $rcl_matriz2['agosto'] = $rcl_matriz[0][8] - ($rcl_matriz[1][8]);
-        $rcl_matriz2['setembro'] = $rcl_matriz[0][9] - ($rcl_matriz[1][9]);
-        $rcl_matriz2['outubro'] = $rcl_matriz[0][10] - ($rcl_matriz[1][10]);
-        $rcl_matriz2['novembro'] = $rcl_matriz[0][11] - ($rcl_matriz[1][11]);
-        $rcl_matriz2['dezembro'] = $rcl_matriz[0][12] - ($rcl_matriz[1][12]);
-
-        return $rcl_matriz2;
-      }
-
-      return $total;
-
-    }
-
-    //
-    // Funcao para verificar se um estrutura (ou parte dele) esta num grupo
-    //
-
-    function db_conplano_grupo($anousu = null, $estrut = "", $grupo = 0) {
-
-      if ($anousu == "" || $anousu == null) {
-        $anousu = db_getsession("DB_anousu");
-      }
-
-      $sql_result = analiseQueryPlanoOrcamento("select fc_conplano_grupo($anousu, '$estrut', $grupo) as retorno");
-      $result = db_query($sql_result);
-      $numrows = pg_numrows($result);
-      if ($numrows != 0) {
-        $retorno = pg_result($result, 0, 0);
-        if ($retorno == 't') {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
       }
     }
-    //funcao para montar a fonte e nota explicativa dos relatorios legais.
+  }
 
-    function notasExplicativas($oPdf, $iCodRel, $sPeriodo, $iTam, $lFonte = true) {
+  if ($flag_anterior == false) { // Exercicio Atual
+    for ($y = 1; $y <= $bimestre; $y++) {
+      $total += $rcl_matriz[0][$y] - ($rcl_matriz[1][$y]);
+    }
+  } else { // Exercicio Anterior
+    for ($y = $bimestre; $y <= 12; $y++) {
+      $total += $rcl_matriz[0][$y] - ($rcl_matriz[1][$y]);
+    }
+  }
 
-      if (!class_exists("cl_orcparamrelnota")) {
-        require_once("classes/db_orcparamrelnota_classe.php");
-      }
-      if (!class_exists("db_utils")) {
-        require_once("libs/db_utils.php");
-      }
+  if ($matriz == true) {
+    // Arrecadacao - Deducoes
+    $rcl_matriz2['janeiro'] = $rcl_matriz[0][1] - ($rcl_matriz[1][1]);
+    $rcl_matriz2['fevereiro'] = $rcl_matriz[0][2] - ($rcl_matriz[1][2]);
+    $rcl_matriz2['marco'] = $rcl_matriz[0][3] - ($rcl_matriz[1][3]);
+    $rcl_matriz2['abril'] = $rcl_matriz[0][4] - ($rcl_matriz[1][4]);
+    $rcl_matriz2['maio'] = $rcl_matriz[0][5] - ($rcl_matriz[1][5]);
+    $rcl_matriz2['junho'] = $rcl_matriz[0][6] - ($rcl_matriz[1][6]);
+    $rcl_matriz2['julho'] = $rcl_matriz[0][7] - ($rcl_matriz[1][7]);
+    $rcl_matriz2['agosto'] = $rcl_matriz[0][8] - ($rcl_matriz[1][8]);
+    $rcl_matriz2['setembro'] = $rcl_matriz[0][9] - ($rcl_matriz[1][9]);
+    $rcl_matriz2['outubro'] = $rcl_matriz[0][10] - ($rcl_matriz[1][10]);
+    $rcl_matriz2['novembro'] = $rcl_matriz[0][11] - ($rcl_matriz[1][11]);
+    $rcl_matriz2['dezembro'] = $rcl_matriz[0][12] - ($rcl_matriz[1][12]);
 
-      /**
-       * Tamanhos das fontes para as Notas Explicativas
-       */
-      $nTamanhoFonteNota = 6;
-      $nTamanhoFonteDados = 8;
-      $clorcparamrelnota = new cl_orcparamrelnota();
+    return $rcl_matriz2;
+  }
 
-      $sCampos = "o42_nota, o42_fonte, o42_tamanhofontedados, o42_tamanhofontenota";
-      $sSqlNotasExplicativas = $clorcparamrelnota
-          ->sql_query($iCodRel, db_getsession("DB_anousu"), db_getsession("DB_instit"), $sPeriodo, $sCampos);
-      $rsNotas = $clorcparamrelnota->sql_record($sSqlNotasExplicativas);
-      if ($clorcparamrelnota->numrows > 0) {
-        $oNotas = db_utils::fieldsMemory($rsNotas, 0);
-      }
+  return $total;
 
-      /**
-       * Seta os tamanhos das fontes setada na tabela orcparamrelnota se ela for maior que zero,
-       * Para as Notas Explicativas
-       */
-      if (isset($oNotas->o42_tamanhofontedados) && $oNotas->o42_tamanhofontedados > 0) {
-        $nTamanhoFonteDados = $oNotas->o42_tamanhofontedados;
-      }
-      if (isset($oNotas->o42_tamanhofontenota) && $oNotas->o42_tamanhofontenota > 0) {
-        $nTamanhoFonteNota = $oNotas->o42_tamanhofontenota;
-      }
+}
+
+//
+// Funcao para verificar se um estrutura (ou parte dele) esta num grupo
+//
+
+function db_conplano_grupo($anousu = null, $estrut = "", $grupo = 0) {
+
+  if ($anousu == "" || $anousu == null) {
+    $anousu = db_getsession("DB_anousu");
+  }
+
+  $sql_result = analiseQueryPlanoOrcamento("select fc_conplano_grupo($anousu, '$estrut', $grupo) as retorno");
+  $result = db_query($sql_result);
+  $numrows = pg_numrows($result);
+  if ($numrows != 0) {
+    $retorno = pg_result($result, 0, 0);
+    if ($retorno == 't') {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+//funcao para montar a fonte e nota explicativa dos relatorios legais.
+
+function notasExplicativas($oPdf, $iCodRel, $sPeriodo, $iTam, $lFonte = true) {
+
+  if (!class_exists("cl_orcparamrelnota")) {
+    require_once(modification("classes/db_orcparamrelnota_classe.php"));
+  }
+  if (!class_exists("db_utils")) {
+    require_once(modification("libs/db_utils.php"));
+  }
+
+  /**
+   * Tamanhos das fontes para as Notas Explicativas
+   */
+  $nTamanhoFonteNota = 6;
+  $nTamanhoFonteDados = 8;
+  $clorcparamrelnota = new cl_orcparamrelnota();
+
+  $sCampos = "o42_nota, o42_fonte, o42_tamanhofontedados, o42_tamanhofontenota";
+  $sSqlNotasExplicativas = $clorcparamrelnota
+    ->sql_query($iCodRel, db_getsession("DB_anousu"), db_getsession("DB_instit"), $sPeriodo, $sCampos);
+  $rsNotas = $clorcparamrelnota->sql_record($sSqlNotasExplicativas);
+  if ($clorcparamrelnota->numrows > 0) {
+    $oNotas = db_utils::fieldsMemory($rsNotas, 0);
+  }
+
+  /**
+   * Seta os tamanhos das fontes setada na tabela orcparamrelnota se ela for maior que zero,
+   * Para as Notas Explicativas
+   */
+  if (isset($oNotas->o42_tamanhofontedados) && $oNotas->o42_tamanhofontedados > 0) {
+    $nTamanhoFonteDados = $oNotas->o42_tamanhofontedados;
+  }
+  if (isset($oNotas->o42_tamanhofontenota) && $oNotas->o42_tamanhofontenota > 0) {
+    $nTamanhoFonteNota = $oNotas->o42_tamanhofontenota;
+  }
+
+  $oPdf->setfont('arial', '', 8);
+
+  if ($lFonte == true) {
+
+    if (isset($oNotas->o42_fonte) && trim($oNotas->o42_fonte) != "") {
 
       $oPdf->setfont('arial', '', 8);
-
-      if ($lFonte == true) {
-
-        if (isset($oNotas->o42_fonte) && trim($oNotas->o42_fonte) != "") {
-
-          $oPdf->setfont('arial', '', 8);
-          $oPdf->cell($iTam, 3, "Fonte:", 0, 1, "L", 0);
-          $oPdf->setfont('arial', '', $nTamanhoFonteNota);
-          $oPdf->multicell($iTam, 3, $oNotas->o42_fonte, 0, "J");
-        } else {
-          $oPdf->cell($iTam, 3, 'Fonte: Contabilidade', "", 1, "L", 0);
-        }
-
-      }
-
-      if (isset($oNotas->o42_nota) && trim($oNotas->o42_nota) != "") {
-
-        $oPdf->ln(2);
-        $oPdf->setfont('arial', '', 8);
-        $oPdf->cell($iTam, 3, "NOTAS EXPLICATIVAS:", 0, 1, "L", 0);
-        $oPdf->ln(2);
-        $oPdf->setfont('arial', '', $nTamanhoFonteDados);
-        $oPdf->multicell($iTam, 3, $oNotas->o42_nota, 0, "J");
-
-      }
-      $oPdf->setfont('arial', '', 6);
+      $oPdf->cell($iTam, 3, "Fonte:", 0, 1, "L", 0);
+      $oPdf->setfont('arial', '', $nTamanhoFonteNota);
+      $oPdf->multicell($iTam, 3, $oNotas->o42_fonte, 0, "J");
+    } else {
+      $oPdf->cell($iTam, 3, 'Fonte: Contabilidade', "", 1, "L", 0);
     }
 
-    function db_varPatrimoniaisRpps($anousu, $dataini, $datafin, $iInstit) {
+  }
 
-      $aVariacoesAtivo = array();
-      $aVariacoesPassivo = array();
-      $aVariacoesExtraAtivo = array();
-      $aVariacoesExtraPassivo = array();
+  if (isset($oNotas->o42_nota) && trim($oNotas->o42_nota) != "") {
 
-      (float) $aVariacoesAtivo['ReceitasCorrentes'] = 0;
-      (float) $aVariacoesAtivo['ReceitasCapital'] = 0;
-      (float) $aVariacoesAtivo['IntraOrcamentarias'] = 0;
-      (float) $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'] = 0;
-      (float) $aVariacoesAtivo['IncorporacaoAtivos'] = 0;
-      (float) $aVariacoesAtivo['DesincorporacaoPassivos'] = 0;
-      (float) $aVariacoesAtivo['DeducaoReceita'] = 0;
+    $oPdf->ln(2);
+    $oPdf->setfont('arial', '', 8);
+    $oPdf->cell($iTam, 3, "NOTAS EXPLICATIVAS:", 0, 1, "L", 0);
+    $oPdf->ln(2);
+    $oPdf->setfont('arial', '', $nTamanhoFonteDados);
+    $oPdf->multicell($iTam, 3, $oNotas->o42_nota, 0, "J");
 
-      (float) $aVariacoesPassivo['DespesasCorrentes'] = 0;
-      (float) $aVariacoesPassivo['DespesasCapital'] = 0;
-      (float) $aVariacoesPassivo['IntraOrcamentarias'] = 0;
-      (float) $aVariacoesPassivo['DesincorporacaoAtivos'] = 0;
-      (float) $aVariacoesPassivo['IncorporacaoPassivos'] = 0;
+  }
+  $oPdf->setfont('arial', '', 6);
+}
 
-      (float) $aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas'] = 0;
-      (float) $aVariacoesExtraAtivo['MovimentoFundosDebito'] = 0;
-      (float) $aVariacoesExtraAtivo['IncorporacaoAtivos'] = 0;
-      (float) $aVariacoesExtraAtivo['DesincorporacaoPassivos'] = 0;
-      (float) $aVariacoesExtraAtivo['AjustesBensValoresCreditos'] = 0;
-      (float) $aVariacoesExtraAtivo['AjustesExerciciosAnteriores'] = 0;
+function db_varPatrimoniaisRpps($anousu, $dataini, $datafin, $iInstit) {
 
-      (float) $aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas'] = 0;
-      (float) $aVariacoesExtraPassivo['MovimentoFundosCredito'] = 0;
-      (float) $aVariacoesExtraPassivo['DesincorporacaoAtivos'] = 0;
-      (float) $aVariacoesExtraPassivo['AjustesBensValoresCreditos'] = 0;
-      (float) $aVariacoesExtraPassivo['IncorporacaoPassivos'] = 0;
+  $aVariacoesAtivo = array();
+  $aVariacoesPassivo = array();
+  $aVariacoesExtraAtivo = array();
+  $aVariacoesExtraPassivo = array();
 
-      //
-      // Balancete de Receita (db_receitasaldo)
-      //
-      $sSqlFiltro = ' o70_instit = ' . $iInstit;
-      $rsReceitaSaldo = db_receitasaldo(3, 1, 3, true, $sSqlFiltro, $anousu, $dataini, $datafin);
-      $iNumrowsReceita = pg_num_rows($rsReceitaSaldo);
-      //   db_criatabela($rsReceitaSaldo);exit;
+  (float) $aVariacoesAtivo['ReceitasCorrentes'] = 0;
+  (float) $aVariacoesAtivo['ReceitasCapital'] = 0;
+  (float) $aVariacoesAtivo['IntraOrcamentarias'] = 0;
+  (float) $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'] = 0;
+  (float) $aVariacoesAtivo['IncorporacaoAtivos'] = 0;
+  (float) $aVariacoesAtivo['DesincorporacaoPassivos'] = 0;
+  (float) $aVariacoesAtivo['DeducaoReceita'] = 0;
 
-      for ($i = 0; $i < $iNumrowsReceita; $i++) {
+  (float) $aVariacoesPassivo['DespesasCorrentes'] = 0;
+  (float) $aVariacoesPassivo['DespesasCapital'] = 0;
+  (float) $aVariacoesPassivo['IntraOrcamentarias'] = 0;
+  (float) $aVariacoesPassivo['DesincorporacaoAtivos'] = 0;
+  (float) $aVariacoesPassivo['IncorporacaoPassivos'] = 0;
 
-        $oReceitaSaldo = db_utils::fieldsMemory($rsReceitaSaldo, $i);
+  (float) $aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas'] = 0;
+  (float) $aVariacoesExtraAtivo['MovimentoFundosDebito'] = 0;
+  (float) $aVariacoesExtraAtivo['IncorporacaoAtivos'] = 0;
+  (float) $aVariacoesExtraAtivo['DesincorporacaoPassivos'] = 0;
+  (float) $aVariacoesExtraAtivo['AjustesBensValoresCreditos'] = 0;
+  (float) $aVariacoesExtraAtivo['AjustesExerciciosAnteriores'] = 0;
 
-        switch (substr($oReceitaSaldo->o57_fonte, 0, 4)) {
-        case '4100':
-          $aVariacoesAtivo['ReceitasCorrentes'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
-          break;
-        case '4200':
-          $aVariacoesAtivo['ReceitasCapital'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
-          break;
-        case '4700':
-          $aVariacoesAtivo['IntraOrcamentarias'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
-          break;
-        case '4800':
-          $aVariacoesAtivo['IntraOrcamentarias'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
-          break;
-        case '9000':
-          $aVariacoesAtivo['DeducaoReceita'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
-          break;
-        }
+  (float) $aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas'] = 0;
+  (float) $aVariacoesExtraPassivo['MovimentoFundosCredito'] = 0;
+  (float) $aVariacoesExtraPassivo['DesincorporacaoAtivos'] = 0;
+  (float) $aVariacoesExtraPassivo['AjustesBensValoresCreditos'] = 0;
+  (float) $aVariacoesExtraPassivo['IncorporacaoPassivos'] = 0;
 
-      }
+  //
+  // Balancete de Receita (db_receitasaldo)
+  //
+  $sSqlFiltro = ' o70_instit = ' . $iInstit;
+  $rsReceitaSaldo = db_receitasaldo(3, 1, 3, true, $sSqlFiltro, $anousu, $dataini, $datafin);
+  $iNumrowsReceita = pg_num_rows($rsReceitaSaldo);
+  //   db_criatabela($rsReceitaSaldo);exit;
 
-      //
-      // Balancete de Despesa (db_dotacaosaldo)
-      //
-      $sCondicaoDotacao = 'w.o58_instit = ' . $iInstit;
-      $rsDotacaoSaldo = db_dotacaosaldo(7, 3, 4, true, $sCondicaoDotacao, $anousu, $dataini, $datafin);
-      $iNumRowsDotacaoSaldo = pg_num_rows($rsDotacaoSaldo);
-      //db_criatabela($rsDotacaoSaldo); exit;
+  for ($i = 0; $i < $iNumrowsReceita; $i++) {
 
-      for ($i = 0; $i < $iNumRowsDotacaoSaldo; $i++) {
-        $oDotacaoSaldo = db_utils::fieldsMemory($rsDotacaoSaldo, $i);
+    $oReceitaSaldo = db_utils::fieldsMemory($rsReceitaSaldo, $i);
 
-        if (substr($oDotacaoSaldo->o58_elemento, 0, 2) == '33' && substr($oDotacaoSaldo->o58_elemento, 3, 2) != '91') {
-          $aVariacoesPassivo['DespesasCorrentes'] += (float) $oDotacaoSaldo->liquidado_acumulado;
-        }
-        if (substr($oDotacaoSaldo->o58_elemento, 0, 2) == '34' && substr($oDotacaoSaldo->o58_elemento, 3, 2) != '91') {
-          $aVariacoesPassivo['DespesasCapital'] += (float) $oDotacaoSaldo->liquidado_acumulado;
-        }
-        if ((substr($oDotacaoSaldo->o58_elemento, 0, 2) == '33' || substr($oDotacaoSaldo->o58_elemento, 0, 2) == '34')
-            && substr($oDotacaoSaldo->o58_elemento, 3, 2) == '91') {
-          $aVariacoesPassivo['IntraOrcamentarias'] += (float) $oDotacaoSaldo->liquidado_acumulado;
-        }
+    switch (substr($oReceitaSaldo->o57_fonte, 0, 4)) {
+      case '4100':
+        $aVariacoesAtivo['ReceitasCorrentes'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
+        break;
+      case '4200':
+        $aVariacoesAtivo['ReceitasCapital'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
+        break;
+      case '4700':
+        $aVariacoesAtivo['IntraOrcamentarias'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
+        break;
+      case '4800':
+        $aVariacoesAtivo['IntraOrcamentarias'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
+        break;
+      case '9000':
+        $aVariacoesAtivo['DeducaoReceita'] += (float) $oReceitaSaldo->saldo_arrecadado_acumulado;
+        break;
+    }
 
-      }
+  }
 
-      //
-      // Balancete de verificacao (db_planocontassaldo_matriz)
-      //
-      $sCondicaoConta = ' c61_instit = ' . $iInstit;
-      $rsContaSaldo = db_planocontassaldo_matriz($anousu, $dataini, $datafin, false, $sCondicaoConta);
-      $iNumRowsContaSaldo = pg_num_rows($rsContaSaldo);
-      //db_criatabela($rsContaSaldo); exit;
+  //
+  // Balancete de Despesa (db_dotacaosaldo)
+  //
+  $sCondicaoDotacao = 'w.o58_instit = ' . $iInstit;
+  $rsDotacaoSaldo = db_dotacaosaldo(7, 3, 4, true, $sCondicaoDotacao, $anousu, $dataini, $datafin);
+  $iNumRowsDotacaoSaldo = pg_num_rows($rsDotacaoSaldo);
+  //db_criatabela($rsDotacaoSaldo); exit;
 
-      for ($i = 0; $i < $iNumRowsContaSaldo; $i++) {
+  for ($i = 0; $i < $iNumRowsDotacaoSaldo; $i++) {
+    $oDotacaoSaldo = db_utils::fieldsMemory($rsDotacaoSaldo, $i);
 
-        $oContaSaldo = db_utils::fieldsMemory($rsContaSaldo, $i);
+    if (substr($oDotacaoSaldo->o58_elemento, 0, 2) == '33' && substr($oDotacaoSaldo->o58_elemento, 3, 2) != '91') {
+      $aVariacoesPassivo['DespesasCorrentes'] += (float) $oDotacaoSaldo->liquidado_acumulado;
+    }
+    if (substr($oDotacaoSaldo->o58_elemento, 0, 2) == '34' && substr($oDotacaoSaldo->o58_elemento, 3, 2) != '91') {
+      $aVariacoesPassivo['DespesasCapital'] += (float) $oDotacaoSaldo->liquidado_acumulado;
+    }
+    if ((substr($oDotacaoSaldo->o58_elemento, 0, 2) == '33' || substr($oDotacaoSaldo->o58_elemento, 0, 2) == '34')
+      && substr($oDotacaoSaldo->o58_elemento, 3, 2) == '91') {
+      $aVariacoesPassivo['IntraOrcamentarias'] += (float) $oDotacaoSaldo->liquidado_acumulado;
+    }
 
-        if (substr($oContaSaldo->estrutural, 0, 15) == '612000000000000') {
-          $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'] += (float) $oContaSaldo->saldo_final;
-        }
+  }
 
-        switch (substr($oContaSaldo->estrutural, 0, 15)) {
-        case '613100000000000':
-          $aVariacoesAtivo['IncorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '613300000000000':
-          $aVariacoesAtivo['DesincorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '622200000000000':
-          $aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '622300000000000':
-          $aVariacoesExtraAtivo['MovimentoFundosDebito'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '623100000000000':
-          $aVariacoesExtraAtivo['IncorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '623200000000000':
-          $aVariacoesExtraAtivo['AjustesBensValoresCreditos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '623300000000000':
-          $aVariacoesExtraAtivo['DesincorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '623800000000000':
-          $aVariacoesExtraAtivo['AjustesExerciciosAnteriores'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '513100000000000':
-          $aVariacoesPassivo['DesincorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '513300000000000':
-          $aVariacoesPassivo['IncorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '522200000000000':
-          $aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '522300000000000':
-          $aVariacoesExtraPassivo['MovimentoFundosCredito'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '523100000000000':
-          $aVariacoesExtraPassivo['DesincorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '523200000000000':
-          $aVariacoesExtraPassivo['AjustesBensValoresCreditos'] += (float) $oContaSaldo->saldo_final;
-          break;
-        case '523300000000000':
-          $aVariacoesExtraPassivo['IncorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
-          break;
+  //
+  // Balancete de verificacao (db_planocontassaldo_matriz)
+  //
+  $sCondicaoConta = ' c61_instit = ' . $iInstit;
+  $rsContaSaldo = db_planocontassaldo_matriz($anousu, $dataini, $datafin, false, $sCondicaoConta);
+  $iNumRowsContaSaldo = pg_num_rows($rsContaSaldo);
+  //db_criatabela($rsContaSaldo); exit;
 
-        }
+  for ($i = 0; $i < $iNumRowsContaSaldo; $i++) {
 
-      }
+    $oContaSaldo = db_utils::fieldsMemory($rsContaSaldo, $i);
 
-      //------------------------------------------------------------------------------------------------------------------------------------------------//
+    if (substr($oContaSaldo->estrutural, 0, 15) == '612000000000000') {
+      $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'] += (float) $oContaSaldo->saldo_final;
+    }
 
-      //
-      // Totalizadores
-      //
-
-      $aRetorno = array();
-
-      // Receitas
-      $aRetorno['Ativo']['ReceitasCorrentes'] = $aVariacoesAtivo['ReceitasCorrentes'];
-      $aRetorno['Ativo']['ReceitasCapital'] = $aVariacoesAtivo['ReceitasCapital'];
-      $aRetorno['Ativo']['IntraOrcamentarias'] = $aVariacoesAtivo['IntraOrcamentarias'];
-      $aRetorno['Ativo']['DeducaoReceita'] = $aVariacoesAtivo['DeducaoReceita'];
-      $aRetorno['Ativo']['Receitas'] = ($aVariacoesAtivo['ReceitasCorrentes'] + $aVariacoesAtivo['ReceitasCapital']
-          + $aVariacoesAtivo['IntraOrcamentarias'] + $aVariacoesAtivo['DeducaoReceita']);
-
-      // Interferencias Ativas
-      $aRetorno['Ativo']['TransferenciasFinanceirasRecebidas'] = $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'];
-      $aRetorno['Ativo']['InterferenciasAtivas'] = $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'];
-
-      // Mutacoes Ativas
-      $aRetorno['Ativo']['IncorporacaoAtivos'] = $aVariacoesAtivo['IncorporacaoAtivos'];
-      $aRetorno['Ativo']['DesincorporacaoPassivos'] = $aVariacoesAtivo['DesincorporacaoPassivos'];
-      $aRetorno['Ativo']['MutacoesAtivas'] = ($aVariacoesAtivo['IncorporacaoAtivos']
-          + $aVariacoesAtivo['DesincorporacaoPassivos']);
-
-      //Total Orcamentaria Ativa
-      $aRetorno['Ativo']['TotalOrcamentariaAtiva'] = ($aRetorno['Ativo']['Receitas']
-          + $aRetorno['Ativo']['InterferenciasAtivas'] + $aRetorno['Ativo']['MutacoesAtivas']);
-
-      $aRetorno['Passivo']['DespesasCorrentes'] = $aVariacoesPassivo['DespesasCorrentes'];
-      $aRetorno['Passivo']['DespesasCapital'] = $aVariacoesPassivo['DespesasCapital'];
-      $aRetorno['Passivo']['IntraOrcamentarias'] = $aVariacoesPassivo['IntraOrcamentarias'];
-      $aRetorno['Passivo']['Despesas'] = ($aVariacoesPassivo['DespesasCorrentes']
-          + $aVariacoesPassivo['DespesasCapital'] + $aVariacoesPassivo['IntraOrcamentarias']);
-
-      $aRetorno['Passivo']['DesincorporacaoAtivos'] = $aVariacoesPassivo['DesincorporacaoAtivos'];
-      $aRetorno['Passivo']['IncorporacaoPassivos'] = $aVariacoesPassivo['IncorporacaoPassivos'];
-      $aRetorno['Passivo']['MutacoesPassivas'] = ($aVariacoesPassivo['DesincorporacaoAtivos']
-          + $aVariacoesPassivo['IncorporacaoPassivos']);
-
-      // Total Orcamentaria Passiva
-      $aRetorno['Passivo']['TotalOrcamentariaPassiva'] = ($aRetorno['Passivo']['Despesas']
-          + $aRetorno['Passivo']['MutacoesPassivas']);
-
-      //
-      //Extra-Orcamentario
-      //
-
-      // Interferencias Ativas
-      $aRetorno['AtivoExtra']['TransferenciasFinanceirasRecebidas'] = $aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas'];
-      $aRetorno['AtivoExtra']['MovimentoFundosDebito'] = $aVariacoesExtraAtivo['MovimentoFundosDebito'];
-      $aRetorno['AtivoExtra']['InterferenciasAtivas'] = ($aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas']
-          + $aVariacoesExtraAtivo['MovimentoFundosDebito']);
-      // Acrescimos Patrimoniais
-      $aRetorno['AtivoExtra']['IncorporacaoAtivos'] = $aVariacoesExtraAtivo['IncorporacaoAtivos'];
-      $aRetorno['AtivoExtra']['AjustesBensValoresCreditos'] = $aVariacoesExtraAtivo['AjustesBensValoresCreditos'];
-      $aRetorno['AtivoExtra']['DesincorporacaoPassivos'] = $aVariacoesExtraAtivo['DesincorporacaoPassivos'];
-      $aRetorno['AtivoExtra']['AjustesExerciciosAnteriores'] = $aVariacoesExtraAtivo['AjustesExerciciosAnteriores'];
-      $aRetorno['AtivoExtra']['AcrescimosPatrimoniais'] = ($aVariacoesExtraAtivo['IncorporacaoAtivos']
-          + $aVariacoesExtraAtivo['AjustesBensValoresCreditos'] + $aVariacoesExtraAtivo['DesincorporacaoPassivos']);
-      // Total Ativo Extra-Orcamentario
-      $aRetorno['AtivoExtra']['TotalAtivoExtra'] = ($aRetorno['AtivoExtra']['InterferenciasAtivas']
-          + $aRetorno['AtivoExtra']['AcrescimosPatrimoniais']);
-
-      // Interferencias Passivas
-      $aRetorno['PassivoExtra']['TransferenciasFinanceirasConcedidas'] = $aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas'];
-      $aRetorno['PassivoExtra']['MovimentoFundosCredito'] = $aVariacoesExtraPassivo['MovimentoFundosCredito'];
-      $aRetorno['PassivoExtra']['InterferenciasPassivas'] = ($aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas']
-          + $aVariacoesExtraPassivo['MovimentoFundosCredito']);
-      //Descrescimos Patrimoniais
-      $aRetorno['PassivoExtra']['DesincorporacaoAtivos'] = $aVariacoesExtraPassivo['DesincorporacaoAtivos'];
-      $aRetorno['PassivoExtra']['AjustesBensValoresCreditos'] = $aVariacoesExtraPassivo['AjustesBensValoresCreditos'];
-      $aRetorno['PassivoExtra']['IncorporacaoPassivos'] = $aVariacoesExtraPassivo['IncorporacaoPassivos'];
-      $aRetorno['PassivoExtra']['DecrescimosPatrimoniais'] = ($aVariacoesExtraPassivo['DesincorporacaoAtivos']
-          + $aVariacoesExtraPassivo['AjustesBensValoresCreditos'] + $aVariacoesExtraPassivo['IncorporacaoPassivos']);
-      // Total Passivo Extra-Orcamentario
-      $aRetorno['PassivoExtra']['TotalPassivoExtra'] = ($aRetorno['PassivoExtra']['InterferenciasPassivas']
-          + $aRetorno['PassivoExtra']['DecrescimosPatrimoniais']);
-
-      $aRetorno['TotaisAtivo']['Soma'] = ($aRetorno['Ativo']['TotalOrcamentariaAtiva']
-          + $aRetorno['AtivoExtra']['TotalAtivoExtra']);
-      $aRetorno['TotaisPassivo']['Soma'] = ($aRetorno['Passivo']['TotalOrcamentariaPassiva']
-          + $aRetorno['PassivoExtra']['TotalPassivoExtra']);
-
-      $nSomaAtivo = $aRetorno['TotaisAtivo']['Soma'];
-      $nSomaPassivo = $aRetorno['TotaisPassivo']['Soma'];
-
-      if (($nSomaAtivo - $nSomaPassivo) < 0) {
-        $nDeficitPatrimonial = abs($nSomaAtivo - $nSomaPassivo);
-        (float) $nTotalAtivo = ($nSomaAtivo + abs($nSomaAtivo - $nSomaPassivo));
-      } else {
-        $nDeficitPatrimonial = '-';
-        (float) $nTotalAtivo = ($nSomaAtivo);
-      }
-
-      if (($nSomaAtivo - $nSomaPassivo) > 0) {
-        $nSuperavitPatrimonial = ($nSomaAtivo - $nSomaPassivo);
-        (float) $nTotalPassivo = ($nSomaPassivo + abs($nSomaAtivo - $nSomaPassivo));
-      } else {
-        $nSuperavitPatrimonial = '-';
-        (float) $nTotalPassivo = ($nSomaPassivo);
-      }
-
-      $aRetorno['TotaisAtivo']['TotalAtivo'] = $nTotalAtivo;
-      $aRetorno['TotaisAtivo']['DeficitPatrimonial'] = $nDeficitPatrimonial;
-
-      $aRetorno['TotaisPassivo']['TotalPassivo'] = $nTotalPassivo;
-      $aRetorno['TotaisPassivo']['SuperavitPatrimonial'] = $nSuperavitPatrimonial;
-
-      return $aRetorno;
+    switch (substr($oContaSaldo->estrutural, 0, 15)) {
+      case '613100000000000':
+        $aVariacoesAtivo['IncorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '613300000000000':
+        $aVariacoesAtivo['DesincorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '622200000000000':
+        $aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '622300000000000':
+        $aVariacoesExtraAtivo['MovimentoFundosDebito'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '623100000000000':
+        $aVariacoesExtraAtivo['IncorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '623200000000000':
+        $aVariacoesExtraAtivo['AjustesBensValoresCreditos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '623300000000000':
+        $aVariacoesExtraAtivo['DesincorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '623800000000000':
+        $aVariacoesExtraAtivo['AjustesExerciciosAnteriores'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '513100000000000':
+        $aVariacoesPassivo['DesincorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '513300000000000':
+        $aVariacoesPassivo['IncorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '522200000000000':
+        $aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '522300000000000':
+        $aVariacoesExtraPassivo['MovimentoFundosCredito'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '523100000000000':
+        $aVariacoesExtraPassivo['DesincorporacaoAtivos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '523200000000000':
+        $aVariacoesExtraPassivo['AjustesBensValoresCreditos'] += (float) $oContaSaldo->saldo_final;
+        break;
+      case '523300000000000':
+        $aVariacoesExtraPassivo['IncorporacaoPassivos'] += (float) $oContaSaldo->saldo_final;
+        break;
 
     }
 
-    function duplicaReceitaaCorrenteLiquida($iAnoUsu, $iCodigoRelatorio) {
+  }
 
-      $iExercAnt = $iAnoUsu - 1;
-      $iExercicio = $iAnoUsu;
-      $clorcparamelemento = db_utils::getDao("orcparamelemento");
-      $clorcparamelemento->o44_anousu = $iExercAnt;
-      $clorcparamelemento->o44_codparrel = $iCodigoRelatorio;
-      $clorcparamelemento->excluir($iExercAnt, $iCodigoRelatorio);
+  //------------------------------------------------------------------------------------------------------------------------------------------------//
 
-      // Inclui elemento no exercício anterior com base no atual;
-      $sSqlWhere = " o44_codparrel = {$iCodigoRelatorio} ";
-      $sSqlDuplicaEle = " select fc_duplica_exercicio('orcparamelemento', 'o44_anousu', " . db_getsession('DB_anousu')
-          . ",{$iExercAnt},'{$sSqlWhere}');";
-      $rsDuplicaEle = db_query($sSqlDuplicaEle);
+  //
+  // Totalizadores
+  //
 
-      /**
-       * Duplica a as configurações padroes do relatorio e as configurações do usuario.
-       */
-      $oDaoFiltroPadrao = db_utils::getDao("orcparamseqfiltropadrao");
-      $sSqlApagaPadrao = $oDaoFiltroPadrao
-          ->excluir(null,
+  $aRetorno = array();
+
+  // Receitas
+  $aRetorno['Ativo']['ReceitasCorrentes'] = $aVariacoesAtivo['ReceitasCorrentes'];
+  $aRetorno['Ativo']['ReceitasCapital'] = $aVariacoesAtivo['ReceitasCapital'];
+  $aRetorno['Ativo']['IntraOrcamentarias'] = $aVariacoesAtivo['IntraOrcamentarias'];
+  $aRetorno['Ativo']['DeducaoReceita'] = $aVariacoesAtivo['DeducaoReceita'];
+  $aRetorno['Ativo']['Receitas'] = ($aVariacoesAtivo['ReceitasCorrentes'] + $aVariacoesAtivo['ReceitasCapital']
+    + $aVariacoesAtivo['IntraOrcamentarias'] + $aVariacoesAtivo['DeducaoReceita']);
+
+  // Interferencias Ativas
+  $aRetorno['Ativo']['TransferenciasFinanceirasRecebidas'] = $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'];
+  $aRetorno['Ativo']['InterferenciasAtivas'] = $aVariacoesAtivo['TransferenciasFinanceirasRecebidas'];
+
+  // Mutacoes Ativas
+  $aRetorno['Ativo']['IncorporacaoAtivos'] = $aVariacoesAtivo['IncorporacaoAtivos'];
+  $aRetorno['Ativo']['DesincorporacaoPassivos'] = $aVariacoesAtivo['DesincorporacaoPassivos'];
+  $aRetorno['Ativo']['MutacoesAtivas'] = ($aVariacoesAtivo['IncorporacaoAtivos']
+    + $aVariacoesAtivo['DesincorporacaoPassivos']);
+
+  //Total Orcamentaria Ativa
+  $aRetorno['Ativo']['TotalOrcamentariaAtiva'] = ($aRetorno['Ativo']['Receitas']
+    + $aRetorno['Ativo']['InterferenciasAtivas'] + $aRetorno['Ativo']['MutacoesAtivas']);
+
+  $aRetorno['Passivo']['DespesasCorrentes'] = $aVariacoesPassivo['DespesasCorrentes'];
+  $aRetorno['Passivo']['DespesasCapital'] = $aVariacoesPassivo['DespesasCapital'];
+  $aRetorno['Passivo']['IntraOrcamentarias'] = $aVariacoesPassivo['IntraOrcamentarias'];
+  $aRetorno['Passivo']['Despesas'] = ($aVariacoesPassivo['DespesasCorrentes']
+    + $aVariacoesPassivo['DespesasCapital'] + $aVariacoesPassivo['IntraOrcamentarias']);
+
+  $aRetorno['Passivo']['DesincorporacaoAtivos'] = $aVariacoesPassivo['DesincorporacaoAtivos'];
+  $aRetorno['Passivo']['IncorporacaoPassivos'] = $aVariacoesPassivo['IncorporacaoPassivos'];
+  $aRetorno['Passivo']['MutacoesPassivas'] = ($aVariacoesPassivo['DesincorporacaoAtivos']
+    + $aVariacoesPassivo['IncorporacaoPassivos']);
+
+  // Total Orcamentaria Passiva
+  $aRetorno['Passivo']['TotalOrcamentariaPassiva'] = ($aRetorno['Passivo']['Despesas']
+    + $aRetorno['Passivo']['MutacoesPassivas']);
+
+  //
+  //Extra-Orcamentario
+  //
+
+  // Interferencias Ativas
+  $aRetorno['AtivoExtra']['TransferenciasFinanceirasRecebidas'] = $aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas'];
+  $aRetorno['AtivoExtra']['MovimentoFundosDebito'] = $aVariacoesExtraAtivo['MovimentoFundosDebito'];
+  $aRetorno['AtivoExtra']['InterferenciasAtivas'] = ($aVariacoesExtraAtivo['TransferenciasFinanceirasRecebidas']
+    + $aVariacoesExtraAtivo['MovimentoFundosDebito']);
+  // Acrescimos Patrimoniais
+  $aRetorno['AtivoExtra']['IncorporacaoAtivos'] = $aVariacoesExtraAtivo['IncorporacaoAtivos'];
+  $aRetorno['AtivoExtra']['AjustesBensValoresCreditos'] = $aVariacoesExtraAtivo['AjustesBensValoresCreditos'];
+  $aRetorno['AtivoExtra']['DesincorporacaoPassivos'] = $aVariacoesExtraAtivo['DesincorporacaoPassivos'];
+  $aRetorno['AtivoExtra']['AjustesExerciciosAnteriores'] = $aVariacoesExtraAtivo['AjustesExerciciosAnteriores'];
+  $aRetorno['AtivoExtra']['AcrescimosPatrimoniais'] = ($aVariacoesExtraAtivo['IncorporacaoAtivos']
+    + $aVariacoesExtraAtivo['AjustesBensValoresCreditos'] + $aVariacoesExtraAtivo['DesincorporacaoPassivos']);
+  // Total Ativo Extra-Orcamentario
+  $aRetorno['AtivoExtra']['TotalAtivoExtra'] = ($aRetorno['AtivoExtra']['InterferenciasAtivas']
+    + $aRetorno['AtivoExtra']['AcrescimosPatrimoniais']);
+
+  // Interferencias Passivas
+  $aRetorno['PassivoExtra']['TransferenciasFinanceirasConcedidas'] = $aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas'];
+  $aRetorno['PassivoExtra']['MovimentoFundosCredito'] = $aVariacoesExtraPassivo['MovimentoFundosCredito'];
+  $aRetorno['PassivoExtra']['InterferenciasPassivas'] = ($aVariacoesExtraPassivo['TransferenciasFinanceirasConcedidas']
+    + $aVariacoesExtraPassivo['MovimentoFundosCredito']);
+  //Descrescimos Patrimoniais
+  $aRetorno['PassivoExtra']['DesincorporacaoAtivos'] = $aVariacoesExtraPassivo['DesincorporacaoAtivos'];
+  $aRetorno['PassivoExtra']['AjustesBensValoresCreditos'] = $aVariacoesExtraPassivo['AjustesBensValoresCreditos'];
+  $aRetorno['PassivoExtra']['IncorporacaoPassivos'] = $aVariacoesExtraPassivo['IncorporacaoPassivos'];
+  $aRetorno['PassivoExtra']['DecrescimosPatrimoniais'] = ($aVariacoesExtraPassivo['DesincorporacaoAtivos']
+    + $aVariacoesExtraPassivo['AjustesBensValoresCreditos'] + $aVariacoesExtraPassivo['IncorporacaoPassivos']);
+  // Total Passivo Extra-Orcamentario
+  $aRetorno['PassivoExtra']['TotalPassivoExtra'] = ($aRetorno['PassivoExtra']['InterferenciasPassivas']
+    + $aRetorno['PassivoExtra']['DecrescimosPatrimoniais']);
+
+  $aRetorno['TotaisAtivo']['Soma'] = ($aRetorno['Ativo']['TotalOrcamentariaAtiva']
+    + $aRetorno['AtivoExtra']['TotalAtivoExtra']);
+  $aRetorno['TotaisPassivo']['Soma'] = ($aRetorno['Passivo']['TotalOrcamentariaPassiva']
+    + $aRetorno['PassivoExtra']['TotalPassivoExtra']);
+
+  $nSomaAtivo = $aRetorno['TotaisAtivo']['Soma'];
+  $nSomaPassivo = $aRetorno['TotaisPassivo']['Soma'];
+
+  if (($nSomaAtivo - $nSomaPassivo) < 0) {
+    $nDeficitPatrimonial = abs($nSomaAtivo - $nSomaPassivo);
+    (float) $nTotalAtivo = ($nSomaAtivo + abs($nSomaAtivo - $nSomaPassivo));
+  } else {
+    $nDeficitPatrimonial = '-';
+    (float) $nTotalAtivo = ($nSomaAtivo);
+  }
+
+  if (($nSomaAtivo - $nSomaPassivo) > 0) {
+    $nSuperavitPatrimonial = ($nSomaAtivo - $nSomaPassivo);
+    (float) $nTotalPassivo = ($nSomaPassivo + abs($nSomaAtivo - $nSomaPassivo));
+  } else {
+    $nSuperavitPatrimonial = '-';
+    (float) $nTotalPassivo = ($nSomaPassivo);
+  }
+
+  $aRetorno['TotaisAtivo']['TotalAtivo'] = $nTotalAtivo;
+  $aRetorno['TotaisAtivo']['DeficitPatrimonial'] = $nDeficitPatrimonial;
+
+  $aRetorno['TotaisPassivo']['TotalPassivo'] = $nTotalPassivo;
+  $aRetorno['TotaisPassivo']['SuperavitPatrimonial'] = $nSuperavitPatrimonial;
+
+  return $aRetorno;
+
+}
+
+function duplicaReceitaaCorrenteLiquida($iAnoUsu, $iCodigoRelatorio) {
+
+  $iExercAnt = $iAnoUsu - 1;
+  $iExercicio = $iAnoUsu;
+  $clorcparamelemento = db_utils::getDao("orcparamelemento");
+  $clorcparamelemento->o44_anousu = $iExercAnt;
+  $clorcparamelemento->o44_codparrel = $iCodigoRelatorio;
+  $clorcparamelemento->excluir($iExercAnt, $iCodigoRelatorio);
+
+  // Inclui elemento no exercício anterior com base no atual;
+  $sSqlWhere = " o44_codparrel = {$iCodigoRelatorio} ";
+  $sSqlDuplicaEle = " select fc_duplica_exercicio('orcparamelemento', 'o44_anousu', " . db_getsession('DB_anousu')
+    . ",{$iExercAnt},'{$sSqlWhere}');";
+  $rsDuplicaEle = db_query($sSqlDuplicaEle);
+
+  /**
+   * Duplica a as configurações padroes do relatorio e as configurações do usuario.
+   */
+  $oDaoFiltroPadrao = db_utils::getDao("orcparamseqfiltropadrao");
+  $sSqlApagaPadrao = $oDaoFiltroPadrao
+    ->excluir(null,
               "o132_anousu = {$iExercAnt}
                                                   and o132_orcparamrel = {$iCodigoRelatorio}");
-      $sSqlinclui = $oDaoFiltroPadrao
-          ->sql_query_file(null, "*", null,
-              "o132_anousu = {$iExercicio}
+  $sSqlinclui = $oDaoFiltroPadrao
+    ->sql_query_file(null, "*", null,
+                     "o132_anousu = {$iExercicio}
                                                         and o132_orcparamrel = {$iCodigoRelatorio}");
 
-      $rsIncluirPadraoAnterior = $oDaoFiltroPadrao->sql_record($sSqlinclui);
-      $aFiltrosPadraoIncluir = db_utils::getCollectionByRecord($rsIncluirPadraoAnterior);
-      foreach ($aFiltrosPadraoIncluir as $oFiltroPadrao) {
+  $rsIncluirPadraoAnterior = $oDaoFiltroPadrao->sql_record($sSqlinclui);
+  $aFiltrosPadraoIncluir = db_utils::getCollectionByRecord($rsIncluirPadraoAnterior);
+  foreach ($aFiltrosPadraoIncluir as $oFiltroPadrao) {
 
-        $oDaoFiltroPadrao->o132_filtro = $oFiltroPadrao->o132_filtro;
-        $oDaoFiltroPadrao->o132_orcparamrel = $oFiltroPadrao->o132_orcparamrel;
-        $oDaoFiltroPadrao->o132_orcparamseq = $oFiltroPadrao->o132_orcparamseq;
-        $oDaoFiltroPadrao->o132_anousu = $iExercAnt;
-        $oDaoFiltroPadrao->incluir(null);
-      }
+    $oDaoFiltroPadrao->o132_filtro = $oFiltroPadrao->o132_filtro;
+    $oDaoFiltroPadrao->o132_orcparamrel = $oFiltroPadrao->o132_orcparamrel;
+    $oDaoFiltroPadrao->o132_orcparamseq = $oFiltroPadrao->o132_orcparamseq;
+    $oDaoFiltroPadrao->o132_anousu = $iExercAnt;
+    $oDaoFiltroPadrao->incluir(null);
+  }
 
-      $oDaoFiltroUsuario = db_utils::getDao("orcparamseqfiltroorcamento");
-      $sSqlApagaOrcamento = $oDaoFiltroUsuario
-          ->excluir(null,
+  $oDaoFiltroUsuario = db_utils::getDao("orcparamseqfiltroorcamento");
+  $sSqlApagaOrcamento = $oDaoFiltroUsuario
+    ->excluir(null,
               "o133_anousu = {$iExercAnt}
                                                   and o133_orcparamrel = {$iCodigoRelatorio}");
-      $sSqlinclui = $oDaoFiltroUsuario
-          ->sql_query_file(null, "*", null,
-              "o133_anousu = {$iExercicio}
+  $sSqlinclui = $oDaoFiltroUsuario
+    ->sql_query_file(null, "*", null,
+                     "o133_anousu = {$iExercicio}
                                                         and o133_orcparamrel = {$iCodigoRelatorio}");
-      $rsIncluirUsuarioAnterior = $oDaoFiltroUsuario->sql_record($sSqlinclui);
-      $aFiltrosUsuarioIncluir = db_utils::getCollectionByRecord($rsIncluirUsuarioAnterior);
+  $rsIncluirUsuarioAnterior = $oDaoFiltroUsuario->sql_record($sSqlinclui);
+  $aFiltrosUsuarioIncluir = db_utils::getCollectionByRecord($rsIncluirUsuarioAnterior);
 
-      foreach ($aFiltrosUsuarioIncluir as $oFiltroUsuario) {
+  foreach ($aFiltrosUsuarioIncluir as $oFiltroUsuario) {
 
-        $oDaoFiltroUsuario->o133_filtro = $oFiltroUsuario->o133_filtro;
-        $oDaoFiltroUsuario->o133_orcparamrel = $oFiltroUsuario->o133_orcparamrel;
-        $oDaoFiltroUsuario->o133_orcparamseq = $oFiltroUsuario->o133_orcparamseq;
-        $oDaoFiltroUsuario->o133_anousu = $iExercAnt;
-        $oDaoFiltroUsuario->incluir(null);
-      }
+    $oDaoFiltroUsuario->o133_filtro = $oFiltroUsuario->o133_filtro;
+    $oDaoFiltroUsuario->o133_orcparamrel = $oFiltroUsuario->o133_orcparamrel;
+    $oDaoFiltroUsuario->o133_orcparamseq = $oFiltroUsuario->o133_orcparamseq;
+    $oDaoFiltroUsuario->o133_anousu = $iExercAnt;
+    $oDaoFiltroUsuario->incluir(null);
+  }
 
-    }
-
-    /**
-     * Busca saldo conta contarrente
-     *
-     */
-    function getSaldoTotalContaCorrente($iAnousu, $iReduz, $iCC, $iMes, $iInstit ){
-        $sSaldoInicialAno = "select coalesce((SELECT sum(CASE WHEN c29_debito > 0 THEN c29_debito
-                               WHEN c29_credito > 0 THEN -1 * c29_credito
-                               ELSE 0 END) AS saldoinicialano
-                   FROM contacorrente
-                          INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
-                          INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                     AND contacorrentesaldo.c29_mesusu = 0
-                     AND contacorrentesaldo.c29_anousu = $iAnousu
-                   WHERE contacorrentedetalhe.c19_reduz = $iReduz
-                     AND contacorrentedetalhe.c19_instit = $iInstit
-                     AND contacorrentedetalhe.c19_conplanoreduzanousu = $iAnousu),0) as saldoinicialano";
-
-        $rsInicAno = db_query($sSaldoInicialAno);
-
-        $nSaldoInicialAno = db_utils::fieldsMemory($rsInicAno, 0)->saldoinicialano;
-
-        $sTotalCreditoAno = "select coalesce((SELECT sum(c69_valor) 
-                   FROM conlancamval
-                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
-                     AND conlancam.c70_anousu = conlancamval.c69_anousu
-                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
-                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
-                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
-                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
-                   WHERE c28_tipo = 'C'
-                     AND DATE_PART('MONTH',c69_data) < $iMes
-                     AND DATE_PART('YEAR',c69_data) = $iAnousu
-                     AND contacorrentedetalhe.c19_reduz = $iReduz
-                     AND c19_instit = $iInstit
-                   GROUP BY c28_tipo),0) as creditoano ";
-
-        $nTotalCreditoAno = db_utils::fieldsMemory(db_query($sTotalCreditoAno), 0)->creditoano;
-
-        $sTotalDebitoAno = "select coalesce((SELECT sum(c69_valor) AS debito
-                   FROM conlancamval
-                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
-                     AND conlancam.c70_anousu = conlancamval.c69_anousu
-                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
-                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
-                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
-                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
-                   WHERE c28_tipo = 'D'
-                     AND DATE_PART('MONTH',c69_data) < $iMes
-                     AND DATE_PART('YEAR',c69_data) = $iAnousu
-                     AND contacorrentedetalhe.c19_reduz = $iReduz
-                     AND c19_instit = $iInstit
-                   GROUP BY c28_tipo),0) as debito ";
-
-        $nTotalDebitoAno = db_utils::fieldsMemory(db_query($sTotalDebitoAno), 0)->debito;
-
-        $nSaldoInicialMes = $nSaldoInicialAno + $nTotalDebitoAno - $nTotalCreditoAno;
-
-        $sTotalCreditoMes = "select coalesce((SELECT sum(c69_valor) as creditomes
-                   FROM conlancamval
-                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
-                     AND conlancam.c70_anousu = conlancamval.c69_anousu
-                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
-                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
-                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
-                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
-                   WHERE c28_tipo = 'C'
-                     AND DATE_PART('MONTH',c69_data) = $iMes
-                     AND DATE_PART('YEAR',c69_data) = $iAnousu
-                     AND contacorrentedetalhe.c19_reduz = $iReduz
-                     AND c19_instit = $iInstit
-                   GROUP BY c28_tipo),0) as creditomes";
-
-        $nTotalCreditoMes = db_utils::fieldsMemory(db_query($sTotalCreditoMes), 0)->creditomes;
-
-        $sTotalDebitosMes = "select coalesce((SELECT sum(c69_valor)
-                   FROM conlancamval
-                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
-                     AND conlancam.c70_anousu = conlancamval.c69_anousu
-                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
-                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
-                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
-                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
-                   WHERE c28_tipo = 'D'
-                     AND DATE_PART('MONTH',c69_data) = $iMes
-                     AND DATE_PART('YEAR',c69_data) = $iAnousu
-                     AND contacorrentedetalhe.c19_reduz = $iReduz
-                     AND c19_instit = $iInstit
-                   GROUP BY c28_tipo),0) as debitomes";
-
-        $nTotalDebitoMes = db_utils::fieldsMemory(db_query($sTotalDebitosMes), 0)->debitomes;
-
-        $nSaldoFinalMes = $nSaldoInicialMes + $nTotalDebitoMes - $nTotalCreditoMes;
-
-        $sinal_ant = $nSaldoInicialMes < 0 ? 'C' : 'D';
-        $sinal_final = $nSaldoFinalMes < 0 ? 'C' : 'D';
-
-        $oSaldo                   = new stdClass;
-        $oSaldo->cc               = $iCC;
-        $oSaldo->sinal_ant        = $sinal_ant;
-        $oSaldo->nSaldoInicialMes = db_formatar(abs($nSaldoInicialMes),"f");
-        $oSaldo->debito           = db_formatar($nTotalDebitoMes,"f");
-        $oSaldo->credito          = db_formatar($nTotalCreditoMes,"f");
-        $oSaldo->saldo_final      = db_formatar(abs($nSaldoFinalMes),"f");
-        $oSaldo->sinal_final      = $sinal_final;
-
-        return $oSaldo;
-    }
-    /**
-     * Busca o saldo da despesa
-     * @param null $o58_elemento
-     * @param string $campos
-     * @param null $ordem
-     * @param string $dbwhere
-     * @return array|stdClass[]
-     */
-    function getSaldoDespesa($o58_elemento=null,$campos="*",$ordem=null,$dbwhere=""){
-        $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }else{
-            $sql .= $campos;
-        }
-        $sql .= " from work_dotacao ";
-        $sql .= " inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu ";
-        $sql2 = "";
-        if($dbwhere==""){
-            if($o58_elemento!=null ){
-                $sql2 .= " where work_dotacao.o58_elemento = '{$o58_elemento}' ";
-            }
-        }else if($dbwhere != ""){
-            $sql2 = " where $dbwhere";
-        }
-        $sql .= $sql2;
-        if($ordem != null ){
-            $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }
-        return db_utils::getColectionByRecord(db_query($sql));
-    }
-
-
-    /**
-     * Busca o saldo da despesa, jutamente com tabela empenho para verificar data de julgamento da sentença
-     * @param null $o58_elemento
-     * @param string $campos
-     * @param null $ordem
-     * @param string $dbwhere
-     * @return array|stdClass[]
-     */
-    function getSaldoDespesaSentenca($o58_elemento=null,$campos="*",$ordem=null,$dbwhere=""){
-        $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }else{
-            $sql .= $campos;
-        }
-        $sql .= " from work_dotacao ";
-        $sql .= " inner join orcelemento  on o58_codele = o56_codele and o58_anousu = o56_anousu ";
-        $sql .= " inner join empempenho   on o58_coddot = e60_coddot and o58_anousu = e60_anousu ";
-        $sql .= " inner join conlancamemp on e60_numemp = c75_numemp ";
-        $sql .= " inner join conlancam    on c75_codlan = c70_codlan ";
-        $sql .= " inner join conlancamdoc on c71_codlan = c70_codlan ";
-        $sql .= " inner join conhistdoc   on c53_coddoc = c71_coddoc ";
-        $sql2 = "";
-        if($dbwhere==""){
-            if($o58_elemento!=null ){
-                $sql2 .= " where work_dotacao.o58_elemento = '{$o58_elemento}' ";
-            }
-        }else if($dbwhere != ""){
-            $sql2 = " where $dbwhere";
-        }
-        $sql .= $sql2;
-        if($ordem != null ){
-            $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }
-        // echo $sql.'<br>';
-        return db_utils::getColectionByRecord(db_query($sql));
-
-    }
-
-    /**
-     * Busca valor liquidado pelo desdobramento, passando elemento em nível analítico
-     * @param $where
-     * @param $aAnousu
-     * @param $instit
-     * @param $dtIni
-     * @param $dtFim
-     * @param string $fonte
-     * @param $group
-     * @return array|stdClass[]
-     */
-    function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte="", $group) {
-
-        $aDatas = array();
-        $dt_inicial = "";
-        $dt_final   = "";
-        if (count($aAnousu) == 2) {
-            $aDatas[$aAnousu[0]] = $dtIni.'a'.$aAnousu[0].'-12-31';
-            $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtFim;
-        }
-
-        $sql = " SELECT SUM(
-                        CASE WHEN C53_TIPO = 20 
-                            THEN ROUND(c70_VALOR, 2) 
-                        ELSE (
-                            CASE WHEN C53_TIPO = 21 
-                                THEN ROUND(c70_VALOR * -(1::FLOAT8),2) 
-                            ELSE 0::FLOAT8 END) 
-                        END ) 
-                    AS LIQUIDADO
-                    FROM conlancamele
-                        INNER JOIN conlancam                    
-                            ON c70_codlan = c67_codlan
-                        INNER JOIN conlancamdoc
-                            ON c70_codlan = c71_codlan
-                        INNER JOIN conhistdoc 
-                            ON c53_coddoc = c71_coddoc
-                        INNER JOIN conplanoorcamentoanalitica 
-                            ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
-                        INNER JOIN conplanoorcamento 
-                            ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
-                        INNER JOIN conlancamemp 
-                            ON c70_codlan = c75_codlan
-                        INNER JOIN empempenho 
-                            ON e60_numemp = c75_numemp ";
-
-        if($fonte!="") {
-            $sql .= " INNER JOIN orcdotacao ON e60_coddot=o58_coddot AND e60_anousu=o58_anousu ";
-        }
-
-        $sql .= "WHERE ".$where;
-
-        if (count($aAnousu) == 2) {
-            $sql .= " AND c70_anousu IN ({$aAnousu[0]}, {$aAnousu[1]})";
-        } else {
-            $sql .= " AND c70_anousu = {$aAnousu[0]}";
-        }
-        $sql .= " AND e60_instit = {$instit}";
-        $sql .= " AND c61_instit = {$instit}";
-        $sql .= " AND c53_tipo IN (20, 21)";
-        $sql .= " AND (";
-        $i = 1;
-        foreach($aAnousu as $anousu) {
-
-            if (count($aAnousu) == 2) {
-
-              $dt_inicial = explode("a", $aDatas[$anousu]);
-              $dt_final = explode("a", $aDatas[$anousu]);
-              $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
-              if ($i < count($aAnousu)) {
-                  $sql .= " OR ";
-              }
-              $i++;
-
-            } else {
-
-              $sql .= "(c70_data BETWEEN '{$dtIni}' AND '{$dtFim}') ";
-
-            }
-          }
-
-          $sql .= ")";
-          if($fonte!="") {
-              $sql .= " AND o58_codigo IN ({$fonte}) ";
-          }
-          $sql .= " {$group}";
-
-          return db_utils::getColectionByRecord(db_query($sql));
-
-    }
-
-    /**
-     * Busca valor arrecado decorrente de emenda parlamentar (k81_emparlamentar in (1,2))
-     * @param $dtIni
-     * @param $dtFim
-     * @param $instit
-     * @return array|stdClass[]
-     */
-    function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $instit) {
-
-        $sql = "SELECT SUM( 
-                        CASE 
-                            WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8 
-                            WHEN ( C53_TIPO = 101 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
-                        ELSE 0::FLOAT8 END) AS ARRECADADO_EMENDA_PARLAMENTAR
-                FROM CONLANCAMREC
-                    INNER JOIN CONLANCAM ON C74_CODLAN = C70_CODLAN
-                    INNER JOIN CONLANCAMDOC ON C71_CODLAN = C74_CODLAN
-                    INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
-                    INNER JOIN CONLANCAMCORRENTE ON C86_CONLANCAM = C74_CODLAN
-                    INNER JOIN CORRENTE ON (C86_ID, C86_DATA, C86_AUTENT) = (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT)
-                    INNER JOIN CORPLACAIXA ON (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT) = (K82_ID, K82_DATA, K82_AUTENT)
-                    INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
-                    INNER JOIN ORCRECEITA ON (O70_ANOUSU, O70_CODREC) = (C74_ANOUSU, C74_CODREC)
-                    INNER JOIN ORCFONTES ON (O70_CODFON, O70_ANOUSU) = (O57_CODFON, O57_ANOUSU)
-                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'
-                    AND O57_FONTE LIKE '41%'";
-        
-        return db_utils::getColectionByRecord(db_query($sql));
-
-    }
-
-    function getDespesaExercAnterior($dtIni, $instit, $sElemento) {
-
-          $sql = "SELECT 
-                    o58_elemento,
-                    o56_descr,
-                    SUM (CASE
-                        WHEN e50_compdesp IS NOT NULL THEN liquidado_compdesp
-                        ELSE liquidado
-                    END) AS liquidado
-                    FROM
-                    (SELECT  
-                            o58_elemento,
-                          o56_descr,
-                          liquidado,
-                          e50_compdesp,
-                          (SELECT SUM(
-                              CASE
-                                  WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8 
-                                  WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
-                              ELSE 0::FLOAT8 END) AS liquidado_compdesp
-                              FROM pagordem 
-                                INNER JOIN conlancamord ON c80_codord = e50_codord
-                                INNER JOIN conlancamemp ON c80_codlan = c75_codlan
-                                INNER JOIN conlancam ON c75_codlan = c70_codlan
-                                INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
-                                INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
-                              WHERE e50_numemp = e60_numemp 
-                                AND e50_compdesp < '{$dtIni}'
-                                AND e50_codord = x.e50_codord) as liquidado_compdesp                    
-                    FROM
-                      (SELECT o58_elemento,
-                              o56_descr,
-                              e60_numemp,
-                              liquidado,
-                              e50_compdesp,
-                              e50_codord
-                      FROM work_dotacao
-                      INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
-                      INNER JOIN empempenho ON o58_coddot = e60_coddot AND o58_anousu = e60_anousu
-                      INNER JOIN pagordem ON e50_numemp = e60_numemp
-                      WHERE o58_elemento LIKE '{$sElemento}'
-                          AND o58_instit = {$instit}
-                          AND (e60_datasentenca < '{$dtIni}' OR e50_compdesp < '{$dtIni}')) AS x) as xx GROUP BY 1, 2";
-        
-        return db_utils::getColectionByRecord(db_query($sql));
-        
-    }
-
-    /**
-     * Busca o saldo da receita
-     * @param null $o57_fonte
-     * @param string $campos
-     * @param null $ordem
-     * @param string $dbwhere
-     * @return array|stdClass[]
-     */
-    function getSaldoReceita($o57_fonte=null,$campos="*",$ordem=null,$dbwhere=""){
-
-        $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }else{
-            $sql .= $campos;
-        }
-        $sql .= " from work_receita ";
-        $sql2 = "";
-        if($dbwhere==""){
-            if($o57_fonte!=null ){
-                $sql2 .= " where work_receita.o57_fonte = '{$o57_fonte}' ";
-            }
-        }else if($dbwhere != ""){
-            $sql2 = " where $dbwhere";
-        }
-        $sql .= $sql2;
-        if($ordem != null ){
-            $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }
-
-        return db_utils::getColectionByRecord(db_query($sql));
-    }
-
-    /**
-     * Função que retorna a RCL no periodo indicado
-     * @param DBDate $oDataFim
-     * @param String $instits [Ex.: 1,2,3,4,5]
-     * @return int|number
-     * @throws BusinessException
-     * @throws ParameterException
-     */
-    function getRCL(DBDate $oDataFim, $instits){
-        $oPeriodo = new Periodo;
-        $oNovaDataFim = clone $oDataFim;//Salvo a data final
-        $iMes = $oDataFim->getMes() != 12 ? ($oDataFim->getMes()-11)+12 : $oDataFim->getMes()-11;//Calcula o mes separado por causa do meses que possuem 31 dias
-        $oDataFim->modificarIntervalo("-11 month");//Faço isso apenas para saber o ano
-        $oDataFim = new DBDate($oDataFim->getAno()."-".$iMes."-1");//Aqui pego o primeiro dia do mes para montar a nova data de inicio
-        $aPeriodoCalculo = DBDate::getMesesNoIntervalo($oDataFim,$oNovaDataFim);//Retorno o array com os anos e seus respectivos meses dentro do periodo informado
-
-        $aCalculos = array();
-        /*
-         * Para cada periodo, faço o calculo da RCL e guardo tudo dentro do array $aCalculos
-         */
-        foreach($aPeriodoCalculo as $ano => $mes){
-            $aCalculos[] = calcula_rcl2($ano, $ano. "-" . min(array_keys($aPeriodoCalculo[$ano])) . "-1", $ano."-".max(array_keys($aPeriodoCalculo[$ano]))."-".$oPeriodo->getPeriodoByMes(max(array_keys($aPeriodoCalculo[$ano])))->getDiaFinal(), $instits, true, 81);
-        }
-        $fSoma = 0;
-        foreach($aCalculos as $aCalculo){
-            $fSoma += array_sum($aCalculo);
-        }
-        return $fSoma;
-    }
-
-    /**
-     * Busca total do valor pago dos RP não processados
-     * @param $instits
-     * @param $dtini
-     * @param $dtfim
-     * @param $sFuncao
-     * @param $aSubFuncao
-     * @param $aFonte
-     * @return int
-     */
-    function getSaldoRP($instits,$dtini,$dtfim, $sFuncao, $aSubFuncao, $aFonte){
-        $fSaldo = 0;
-        $clempresto = new cl_empresto;
-        $sql_where_externo = "AND 1=1
-    AND o58_orgao IN (1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9) and o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).")";
-        $sql_order = "where o15_codtri in (".implode(",",$aFonte).") ORDER BY o58_orgao,
-             e60_anousu,
-             e60_codemp::integer";
-        $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), "e60_instit in ($instits)", $dtini, $dtfim, "", $sql_where_externo, $sql_order);
-        $aDados = db_utils::getColectionByRecord(db_query($sqlempresto));
-        foreach($aDados as $oResto){
-            $fSaldo += $oResto->vlrpagnproc;
-        }
-        return $fSaldo;
-    }
-
-    /**
-     * Calculo final do relatório Anexo II da Educação, Contabilidade->Relatorios->Relatórios de Acompanhamento
-     * Este total é utilizado no Anexo I
-     * @param $instits
-     * @param $dtini
-     * @param $dtfim
-     * @param $anousu
-     * @return int
-     */
-    function getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu){
-        db_inicio_transacao();
-        $sWhereDespesa      = " o58_instit in({$instits})";
-        criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
-        $sWhereReceita      = "o70_instit in ({$instits})";
-        criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
-        $fSubTotal = 0;
-        $aSubFuncoes = array(122,272,271,361,365,366,367,843);
-        $sFuncao     = "12";
-        $aFonte      = array("'101'");
-        foreach ($aSubFuncoes as $iSubFuncao) {
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-            if (count($aDespesasProgramas) > 0) {
-                foreach ($aDespesasProgramas as $oDespesaPrograma) {
-                    $fSubTotal += $oDespesaPrograma->pago;
-                }
-            }
-        }
-        $aDadoDeducao = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '495%'");
-        $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$aFonte);
-        db_query("drop table if exists work_dotacao");
-        db_query("drop table if exists work_receita");
-        db_fim_transacao();
-        return ($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP);
-    }
-
-    /**
-     * Calculo final do relatório Anexo II da Saúde, Contabilidade->Relatorios->Relatórios de Acompanhamento
-     * Este total é utilizado no Anexo I
-     * @param $instits
-     * @param $dtini
-     * @param $dtfim
-     * @param $anousu
-     * @return int
-     */
-    function getTotalAnexoIISaude($instits,$dtini,$dtfim,$anousu){
-        db_inicio_transacao();
-        $sWhereDespesa      = " o58_instit in({$instits})";
-        criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
-        $fSubTotal = 0;
-        $aSubFuncoes = array(122,272,271,301,302,303,304,305,306);
-        $sFuncao     = "10";
-        $aFonte      = array("'102'");
-        foreach ($aSubFuncoes as $iSubFuncao) {
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-            if (count($aDespesasProgramas) > 0) {
-                foreach ($aDespesasProgramas as $oDespesaPrograma) {
-                    $fSubTotal += $oDespesaPrograma->pago;
-                }
-            }
-        }
-        db_query("drop table if exists work_dotacao");
-        db_query("drop table if exists work_receita");
-        db_fim_transacao();
-        return $fSubTotal;
-    }
-
-    /**
-     * Cria a tabela temporaria work_receita para geração dos relatorios de acompanhamento
-     * @param $sWhere
-     * @param $aAnousu
-     * @param $dtini
-     * @param $dtfim
-     */
-    function criarWorkReceita($sWhere, $aAnousu, $dtini, $dtfim){
-        $sSqlCriaTabela = "CREATE TEMP TABLE work_receita AS
-                SELECT
-                  substr(o57_fonte, 1, 1) ::int4 AS classe,
-                  o57_fonte,
-                  o57_descr,
-                  substr(o57_fonte, 2, 1) ::int4 AS grupo,
-                  substr(o57_fonte, 3, 1) ::int4 AS subgrupo,
-                  substr(o57_fonte, 4, 1) ::int4 AS elemento,
-                  substr(o57_fonte, 5, 1) ::int4 AS subelemento,
-                  substr(o57_fonte, 6, 2) ::int4 AS item,
-                  substr(o57_fonte, 8, 2) ::int4 AS subitem,
-                  substr(o57_fonte, 10, 2) ::int4 AS desdobramento1,
-                  substr(o57_fonte, 12, 2) ::int4 AS desdobramento2,
-                  substr(o57_fonte, 14, 2) ::int4 AS desdobramento3,
-                  o70_codrec,
-                  o70_concarpeculiar,
-                  o70_codigo,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8) AS saldo_inicial,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8) AS saldo_prevadic_acum,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8) AS saldo_inicial_prevadic,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8) AS saldo_anterior,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8) AS saldo_arrecadado,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8) AS saldo_a_arrecadar,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8) AS saldo_arrecadado_acumulado,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8) AS saldo_prev_anterior
-                FROM (SELECT
-                  o70_anousu,
-                  o70_codrec,
-                  o70_codfon,
-                  o70_codigo,
-                  o70_valor,
-                  o70_reclan,
-                  o70_instit,
-                  o70_concarpeculiar,
-                  o57_codfon,
-                  o57_anousu,
-                  o57_fonte,
-                  o57_descr,
-                  o57_finali,
-                  fc_receitasaldo(1999, o70_codrec, 3, '1999-01-01', '1999-01-01')
-                FROM orcreceita d
-                INNER JOIN orcfontes e
-                  ON d.o70_codfon = e.o57_codfon
-                  AND e.o57_anousu = d.o70_anousu
-                WHERE o70_anousu = 1999
-                AND o70_instit in (99)
-                ORDER BY o57_fonte) AS x; TRUNCATE work_receita; ";
-        foreach($aAnousu as $anousu){
-            $sSql = "
-                  insert into work_receita
-                  SELECT
-                  substr(o57_fonte, 1, 1) ::int4 AS classe,
-                  o57_fonte,
-                  o57_descr,
-                  substr(o57_fonte, 2, 1) ::int4 AS grupo,
-                  substr(o57_fonte, 3, 1) ::int4 AS subgrupo,
-                  substr(o57_fonte, 4, 1) ::int4 AS elemento,
-                  substr(o57_fonte, 5, 1) ::int4 AS subelemento,
-                  substr(o57_fonte, 6, 2) ::int4 AS item,
-                  substr(o57_fonte, 8, 2) ::int4 AS subitem,
-                  substr(o57_fonte, 10, 2) ::int4 AS desdobramento1,
-                  substr(o57_fonte, 12, 2) ::int4 AS desdobramento2,
-                  substr(o57_fonte, 14, 2) ::int4 AS desdobramento3,
-                  o70_codrec,
-                  o70_concarpeculiar,
-                  o70_codigo,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8) AS saldo_inicial,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8) AS saldo_prevadic_acum,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8) AS saldo_inicial_prevadic,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8) AS saldo_anterior,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8) AS saldo_arrecadado,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8) AS saldo_a_arrecadar,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8) AS saldo_arrecadado_acumulado,
-                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8) AS saldo_prev_anterior
-                FROM (SELECT
-                  o70_anousu,
-                  o70_codrec,
-                  o70_codfon,
-                  o70_codigo,
-                  o70_valor,
-                  o70_reclan,
-                  o70_instit,
-                  o70_concarpeculiar,
-                  o57_codfon,
-                  o57_anousu,
-                  o57_fonte,
-                  o57_descr,
-                  o57_finali,
-                  fc_receitasaldo($anousu, o70_codrec, 3, '{$dtini}', '{$dtfim}')
-                FROM orcreceita d
-                INNER JOIN orcfontes e
-                  ON d.o70_codfon = e.o57_codfon
-                  AND e.o57_anousu = d.o70_anousu
-                WHERE o70_anousu = {$anousu}
-                AND {$sWhere}
-                ORDER BY o57_fonte) AS x;";
-        }
-        db_query($sSqlCriaTabela.$sSql) or die(pg_last_error());
-    }
-
-    /**
-     * Cria a tabela temporaria work_dotacao para geração dos relatorios de acompanhamento
-     * @param $sWhere
-     * @param $aAnousu Array()
-     * @param $dtini
-     * @param $dtfim
-     */
-    function criaWorkDotacao($sWhere, $aAnousu, $dtini, $dtfim){
-        $aDatas = array();
-        $dt_inicial = "";
-        $dt_final   = "";
-        if (count($aAnousu) == 2) {
-          $aDatas[$aAnousu[0]] = $dtini.'a'.$aAnousu[0].'-12-31';
-          $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtfim;
-        }
-
-        $sSqlCriaTabela = " CREATE TABLE IF NOT EXISTS work_dotacao
-                        (
-                          o58_instit    INTEGER,
-                          o58_anousu    INTEGER,
-                          o58_orgao     INTEGER,
-                          o58_unidade   INTEGER,
-                          o58_funcao    INTEGER,
-                          o58_subfuncao INTEGER,
-                          o58_programa  INTEGER,
-                          o58_projativ  INTEGER,
-                          o58_codele    INTEGER,
-                          o58_coddot    INTEGER,
-                          o58_elemento CHARACTER varying,
-                          o58_codigo INTEGER,
-                          o15_codtri CHARACTER VARYING,
-                          dot_ini DOUBLE PRECISION,
-                          saldo_anterior DOUBLE PRECISION,
-                          empenhado DOUBLE PRECISION,
-                          anulado DOUBLE PRECISION,
-                          liquidado DOUBLE PRECISION,
-                          pago DOUBLE PRECISION,
-                          suplementado DOUBLE PRECISION,
-                          reduzido DOUBLE PRECISION,
-                          atual DOUBLE PRECISION,
-                          reservado DOUBLE PRECISION,
-                          atual_menos_reservado DOUBLE PRECISION,
-                          atual_a_pagar DOUBLE PRECISION,
-                          atual_a_pagar_liquidado DOUBLE PRECISION,
-                          empenhado_acumulado DOUBLE PRECISION,
-                          anulado_acumulado DOUBLE PRECISION,
-                          liquidado_acumulado DOUBLE PRECISION,
-                          pago_acumulado DOUBLE PRECISION,
-                          suplementado_acumulado DOUBLE PRECISION,
-                          reduzido_acumulado DOUBLE PRECISION,
-                          suplemen DOUBLE PRECISION,
-                          suplemen_acumulado DOUBLE PRECISION,
-                          especial DOUBLE PRECISION,
-                          especial_acumulado DOUBLE PRECISION,
-                          transfsup DOUBLE PRECISION,
-                          transfsup_acumulado DOUBLE PRECISION,
-                          transfred DOUBLE PRECISION,
-                          transfred_acumulado DOUBLE PRECISION,
-                          reservado_manual_ate_data DOUBLE PRECISION,
-                          reservado_automatico_ate_data DOUBLE PRECISION,
-                          reservado_ate_data DOUBLE PRECISION,
-                          o55_tipo INTEGER,
-                          o15_tipo INTEGER,
-                          proj DOUBLE PRECISION,
-                          ativ DOUBLE PRECISION,
-                          oper DOUBLE PRECISION,
-                          ordinario DOUBLE PRECISION,
-                          vinculado DOUBLE PRECISION
-                          ); TRUNCATE work_dotacao;";
-        foreach($aAnousu as $anousu) {
-
-            $sSql .= " INSERT INTO work_dotacao
-                    SELECT *,
-                           (CASE
-                                WHEN o55_tipo = 1 THEN dot_ini
-                                ELSE 0
-                            END) AS proj,
-                           (CASE
-                                WHEN o55_tipo = 2 THEN dot_ini
-                                ELSE 0
-                            END) AS ativ,
-                           (CASE
-                                WHEN o55_tipo = 3 THEN dot_ini
-                                ELSE 0
-                            END) AS oper,
-                           (CASE
-                                WHEN o15_tipo = 1 THEN dot_ini
-                                ELSE 0
-                            END) AS ordinario,
-                           (CASE
-                                WHEN o15_tipo <> 1 THEN dot_ini
-                                ELSE 0
-                            END) AS vinculado
-                    FROM
-                      (SELECT o58_instit,
-                              o58_anousu,
-                              o58_orgao,
-                              o58_unidade,
-                              o58_funcao,
-                              o58_subfuncao,
-                              o58_programa,
-                              o58_projativ,
-                              o56_codele AS o58_codele,
-                              CASE
-                                  WHEN 'nao'='sim' THEN 9999999
-                                  ELSE o58_coddot
-                              END AS o58_coddot,
-                              CASE
-                                  WHEN 'nao'='sim' THEN substr(o56_elemento,1,7)
-                                  ELSE o56_elemento
-                              END AS o58_elemento,
-                              o58_codigo,
-                              o15_codtri,
-                              substr(fc_dotacaosaldo,3,12)::float8 AS dot_ini,
-                              substr(fc_dotacaosaldo,16,12)::float8 AS saldo_anterior,
-                              substr(fc_dotacaosaldo,29,12)::float8 AS empenhado,
-                              substr(fc_dotacaosaldo,42,12)::float8 AS anulado,
-                              substr(fc_dotacaosaldo,55,12)::float8 AS liquidado,
-                              substr(fc_dotacaosaldo,68,12)::float8 AS pago,
-                              substr(fc_dotacaosaldo,81,12)::float8 AS suplementado,
-                              substr(fc_dotacaosaldo,094,12)::float8 AS reduzido,
-                              substr(fc_dotacaosaldo,107,12)::float8 AS atual,
-                              substr(fc_dotacaosaldo,120,12)::float8 AS reservado,
-                              substr(fc_dotacaosaldo,133,12)::float8 AS atual_menos_reservado,
-                              substr(fc_dotacaosaldo,146,12)::float8 AS atual_a_pagar,
-                              substr(fc_dotacaosaldo,159,12)::float8 AS atual_a_pagar_liquidado,
-                              substr(fc_dotacaosaldo,172,12)::float8 AS empenhado_acumulado,
-                              substr(fc_dotacaosaldo,185,12)::float8 AS anulado_acumulado,
-                              substr(fc_dotacaosaldo,198,12)::float8 AS liquidado_acumulado,
-                              substr(fc_dotacaosaldo,211,12)::float8 AS pago_acumulado,
-                              substr(fc_dotacaosaldo,224,12)::float8 AS suplementado_acumulado,
-                              substr(fc_dotacaosaldo,237,12)::float8 AS reduzido_acumulado,
-                              substr(fc_dotacaosaldo,250,12)::float8 AS suplemen,
-                              substr(fc_dotacaosaldo,263,12)::float8 AS suplemen_acumulado,
-                              substr(fc_dotacaosaldo,276,12)::float8 AS especial,
-                              substr(fc_dotacaosaldo,289,12)::float8 AS especial_acumulado,
-                              substr(fc_dotacaosaldo,303,12)::float8 AS transfsup,
-                              substr(fc_dotacaosaldo,316,12)::float8 AS transfsup_acumulado,
-                              substr(fc_dotacaosaldo,329,12)::float8 AS transfred,
-                              substr(fc_dotacaosaldo,342,12)::float8 AS transfred_acumulado,
-                              substr(fc_dotacaosaldo,355,12)::float8 AS reservado_manual_ate_data,
-                              substr(fc_dotacaosaldo,368,12)::float8 AS reservado_automatico_ate_data,
-                              substr(fc_dotacaosaldo,381,12)::float8 AS reservado_ate_data,
-                              o55_tipo,
-                              o15_tipo from ";
-                    if (count($aAnousu) == 2) {
-                      $dt_inicial = explode("a",$aDatas[$anousu]);
-                      $dt_final   = explode("a",$aDatas[$anousu]);
-                      $sSql .= " (SELECT *, fc_dotacaosaldo({$anousu},o58_coddot,2,'{$dt_inicial[0]}','{$dt_final[1]}')
-                          FROM orcdotacao w
-                          INNER JOIN orcelemento e ON w.o58_codele = e.o56_codele
-                          AND e.o56_anousu = w.o58_anousu
-                          AND e.o56_orcado IS TRUE
-                          INNER JOIN orcprojativ ope ON w.o58_projativ = ope.o55_projativ
-                          AND ope.o55_anousu = w.o58_anousu
-                          INNER JOIN orctiporec ON orctiporec.o15_codigo = w.o58_codigo
-                          WHERE o58_anousu = {$anousu} ";
-                    } else {
-                        $sSql .= " (SELECT *, fc_dotacaosaldo({$anousu},o58_coddot,2,'{$dtini}','{$dtfim}')
-                          FROM orcdotacao w
-                          INNER JOIN orcelemento e ON w.o58_codele = e.o56_codele
-                          AND e.o56_anousu = w.o58_anousu
-                          AND e.o56_orcado IS TRUE
-                          INNER JOIN orcprojativ ope ON w.o58_projativ = ope.o55_projativ
-                          AND ope.o55_anousu = w.o58_anousu
-                          INNER JOIN orctiporec ON orctiporec.o15_codigo = w.o58_codigo
-                          WHERE o58_anousu = {$anousu} ";
-                    }
-                    $sSql .= " AND {$sWhere}
-                    ORDER BY o58_orgao, o58_unidade, o58_funcao, o58_subfuncao, o58_programa, o58_projativ, o56_codele, o56_elemento, o58_coddot, o58_codigo) AS x) AS xxx; ";
-        }
-        db_query($sSqlCriaTabela.$sSql) or die(pg_last_error());
-    }
-?>
+}

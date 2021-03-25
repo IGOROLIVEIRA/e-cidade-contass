@@ -1,29 +1,31 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
+
+require_once(modification("std/DBString.php"));
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
@@ -77,7 +79,7 @@
 * @author      Matt Knapp <mdknapp[at]gmail[dot]com>
 * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
 * @copyright   2005 Michal Migurski
-* @version     CVS: $Id: JSON.php,v 1.5 2015/04/14 13:39:43 dbrenan Exp $
+* @version     CVS: $Id: JSON.php,v 1.22 2016/06/30 19:56:51 dbmauricio Exp $
 * @license     http://www.opensource.org/licenses/bsd-license.php
 * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
 */
@@ -437,22 +439,22 @@ class Services_JSON
                     // this may end up allowing unlimited recursion
                     // so we check the return value to make sure it's not got the same method.
                     $recode = $var->toJSON();
-                    
+
                     if (method_exists($recode, 'toJSON')) {
-                        
+
                         return ($this->use & SERVICES_JSON_SUPPRESS_ERRORS)
                         ? 'null'
                         : new Services_JSON_Error(class_name($var). " toJSON returned an object with a toJSON method.");
-                            
+
                     }
 
                     if (is_string($recode)){
                       return $recode;
-                    } 
-                        
+                    }
+
                     return $this->encode($recode);
-                    
-                } 
+
+                }
 
                 $vars = get_object_vars($var);
 
@@ -534,7 +536,12 @@ class Services_JSON
     *                   in ASCII or UTF-8 format!
     * @access   public
     */
-    function decode($str)
+
+    function decode($str) {
+      return \DBString::urldecode_all($this->decode_interno($str));
+    }
+
+    function decode_interno($str)
     {
         $str = $this->reduce_string($str);
 
@@ -719,7 +726,7 @@ class Services_JSON
                                 // element in an associative array,
                                 // for now
                                 $parts = array();
-                                
+
                                 if (preg_match('/^\s*(["\'].*[^\\\]["\'])\s*:\s*(\S.*),?$/Uis', $slice, $parts)) {
                                     // "name":value pair
                                     $key = $this->decode($parts[1]);
@@ -856,7 +863,6 @@ if (class_exists('PEAR_Error')) {
 
 }
 
-
 /**
  * Classe para manipulação do JSON
  *
@@ -865,77 +871,74 @@ if (class_exists('PEAR_Error')) {
  */
 class JSON {
 
-    /**
-     * Tipos de conversores aplicados as strings.
-     */
-    const URL_ENCODE  = 1;
-    const UTF8_ENCODE = 10;
+  /**
+   * Tipos de conversores aplicados as strings.
+   */
+  const URL_ENCODE  = 1;
+  const UTF8_ENCODE = 10;
 
-    const URL_DECODE  = 100;
-    const UTF8_DECODE = 1000;
+  const URL_DECODE  = 100;
+  const UTF8_DECODE = 1000;
 
-    /**
-     * Instância única do Objeto
-     *
-     * @var \JSON
-     */
-    private static $instance;
+  /**
+   * Instância única do Objeto
+   *
+   * @var \JSON
+   */
+  private static $instance;
 
-    /**
-     * Construtor da classe
-     */
-    private function __construct() { }
+  /**
+   * Construtor da classe
+   */
+  private function __construct() { }
 
-    /**
-     * Transforma em objeto a representação JSON passada
-     *
-     * @param  String $string - String com a Representação JSON
-     * @return Mixed          - Objeto transformado
-     */
-    public function parse($string, $formatacao = \JSON::UTF8_DECODE) {
+  /**
+   * Transforma em objeto a representação JSON passada
+   *
+   * @param  String $string - String com a Representação JSON
+   * @return Mixed          - Objeto transformado
+   */
+  public function parse($string, $formatacao = \JSON::UTF8_DECODE) {
 
-        if(!db_utils::isUTF8($string)) {
-            $string = \DBString::utf8_encode_all($string);
-        }
-
-        $retorno = json_decode($string);
-
-        $retorno = \DBString::urldecode_all($retorno);
-
-        if ($formatacao & \JSON::UTF8_DECODE) {
-            $retorno = \DBString::utf8_decode_all($retorno); // Pois a conexão com o banco é mista
-        }
-
-        return $retorno;
+    if(!db_utils::isUTF8($string)) {
+      $string = \DBString::utf8_encode_all($string);
     }
 
-    /**
-     * Transforma o objeto em uma string JSON
-     *
-     * @param  mixed $object Dado a ser convertido
-     * @return String Representação
-     */
-    public function stringify($in, $formatacao = \JSON::UTF8_ENCODE) {
+    $retorno = json_decode($string);
 
-        if ($formatacao & \JSON::URL_ENCODE) {
-            $in = \DBString::urlencode_all($in);
-        }
+    $retorno = \DBString::urldecode_all($retorno);
 
-        if ($formatacao & \JSON::UTF8_ENCODE) {
-            $in = \DBString::utf8_encode_all($in);
-        }
-
-        return json_encode($in);
+    if ($formatacao & \JSON::UTF8_DECODE) {
+      $retorno = \DBString::utf8_decode_all($retorno); // Pois a conexão com o banco é mista
     }
 
-    public static function create() {
+    return $retorno;
+  }
 
-        if (!self::$instance) {
-            self::$instance = new \JSON();
-        }
-        return self::$instance;
+  /**
+   * Transforma o objeto em uma string JSON
+   *
+   * @param  mixed $object Dado a ser convertido
+   * @return String Representação
+   */
+  public function stringify($in, $formatacao = \JSON::UTF8_ENCODE) {
+
+    if ($formatacao & \JSON::URL_ENCODE) {
+      $in = \DBString::urlencode_all($in);
     }
+
+    if ($formatacao & \JSON::UTF8_ENCODE) {
+      $in = \DBString::utf8_encode_all($in);
+    }
+
+    return json_encode($in);
+  }
+
+  public static function create() {
+
+    if (!self::$instance) {
+      self::$instance = new \JSON();
+    }
+    return self::$instance;
+  }
 }
-
-
-?>

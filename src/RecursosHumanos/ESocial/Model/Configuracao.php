@@ -43,9 +43,7 @@ class Configuracao
      */
     public function getVersao()
     {
-
         if (empty($this->versao)) {
-
             $dao = new \cl_esocialversao();
             $sql = $dao->sql_query_file(null, 'rh210_versao', '1 desc limit 1');
             $rs  = \db_query($sql);
@@ -55,6 +53,7 @@ class Configuracao
             }
             $this->versao = \db_utils::fieldsMemory($rs, 0)->rh210_versao;
         }
+
         return $this->versao;
     }
 
@@ -111,7 +110,6 @@ class Configuracao
         $where = " rh211_versao::float >= " . $this->getVersao();
         $dao = new \cl_esocialversaoformulario();
         $sql = $dao->sql_query_file(null, 'distinct rh211_versao', 'rh211_versao', $where);
-
         $rs = db_query($sql);
 
         if (!$rs) {

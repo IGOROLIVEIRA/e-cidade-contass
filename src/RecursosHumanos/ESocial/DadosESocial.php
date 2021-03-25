@@ -79,7 +79,7 @@ class DadosESocial
             case Tipo::EMPREGADOR:
                 return $preenchimento->buscarUltimoPreenchimentoEmpregador($formularioId);
             case Tipo::RUBRICA:
-                return $preenchimento->buscarUltimoPreenchimentoRubrica($formularioId);
+                return $preenchimento->buscarUltimoPreenchimento($formularioId);
             default:
                 throw new Exception('Tipo não encontrado.');
         }

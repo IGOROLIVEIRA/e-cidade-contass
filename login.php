@@ -25,12 +25,11 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("model/configuracao/SkinService.service.php");
-require_once("libs/smtp.class.php");
+require_once(modification("model/configuracao/SkinService.service.php"));
+require_once(modification("libs/smtp.class.php"));
 
 $oSkin = new SkinService();
 $oSkin->setCookie();
-echo('<h3 style="color:white">Recomenda-se utilizar o Mozila FireFox Versão 66.0 para garantia da plena execução do sistema</h3>');
 
 /**
  * Busca preferencias para verificar qual class
@@ -82,10 +81,9 @@ try {
   $lMostraLinkPrimeiroAcesso = true;
 }
 
-error_reporting(null);
-require_once("libs/db_conn.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_stdlib.php");
+require_once(modification("libs/db_conn.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_stdlib.php"));
 
 $sDiretorio         = "config/require_extensions.xml";
 $lValidaLogin       = false;
@@ -162,12 +160,11 @@ $iTotalTentativas = array_sum((array) $oTentativasAcesso);
 $lCaptcha = (isset($lUtilizaCaptcha) && $lUtilizaCaptcha && $iTotalTentativas >= 3);
 
 if ( $lValidaLogin ) {
-  include($sScriptLogin);
+  include(modification($sScriptLogin));
 }
 
 ?>
 <script type="text/javascript">
-
   function js_logaComTeclaEnter(evt) {
 
     var evt = (evt) ? evt : (window.event) ? window.event : "";
@@ -263,4 +260,29 @@ if ( $lValidaLogin ) {
     document.form1.usu_login.focus();
     js_verifica_cookie();
   }
+
+
+/**
+ * Valida se a versão do Firefox utilizada pelo usuário é válida.
+ * Este bloco de código, deve ser removido em 2018.
+ */
+(function(){
+
+  var sAgent                 = navigator.userAgent;
+  var iVersaoCompletaFirefox = sAgent.substring(sAgent.indexOf("Firefox") + 8);
+  var iVersaoFirefox         = parseInt(''+iVersaoCompletaFirefox,10);
+  var dtAtual                = new Date();
+
+  if (isNaN(iVersaoFirefox)) {
+    iVersaoFirefox = parseInt(navigator.appVersion,10);
+  }
+
+  if (iVersaoFirefox < 42 && dtAtual.getFullYear() == 2017 ) {
+    
+    var sMensagem  = "Identificamos que você está utilizando uma versão desatualizada do Firefox.";
+        sMensagem += "\nA partir de 2018, a versão mínima suportada pelo e-cidade será a 42, sendo a versão 52 a máxima homologada.";
+    alert(sMensagem);
+  }
+
+})();
 </script>

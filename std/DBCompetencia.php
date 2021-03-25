@@ -31,7 +31,7 @@
  * 
  * @package std
  * @author Andrio Costa <andrio.costa@dbseller.com.br>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.12 $
  *
  */
 final class DBCompetencia {
@@ -48,12 +48,14 @@ final class DBCompetencia {
    */
   private $iMes;
   
-  const COMPARACAO_IGUAL     = 'COMPARACAO_IGUAL';
-  const COMPARACAO_MENOR     = 'COMPARACAO_MENOR';
-  const COMPARACAO_MAIOR     = 'COMPARACAO_MAIOR';
-  const COMPARACAO_DIFERENTE = 'COMPARACAO_DIFERENTE';
-  const FORMATO_AAAAMM       = "AAAAMM";
-  const FORMATO_MMAAAA       = "MMAAAA";
+  const COMPARACAO_IGUAL       = 'COMPARACAO_IGUAL';
+  const COMPARACAO_MENOR       = 'COMPARACAO_MENOR';
+  const COMPARACAO_MENOR_IGUAL = 'COMPARACAO_MENOR_IGUAL';
+  const COMPARACAO_MAIOR       = 'COMPARACAO_MAIOR';
+  const COMPARACAO_MAIOR_IGUAL = 'COMPARACAO_MAIOR_IGUAL';
+  const COMPARACAO_DIFERENTE   = 'COMPARACAO_DIFERENTE';
+  const FORMATO_AAAAMM         = "AAAAMM";
+  const FORMATO_MMAAAA         = "MMAAAA";
   
   /**
    * @param integer $iAno
@@ -163,8 +165,14 @@ final class DBCompetencia {
         break; 
       case DBCompetencia::COMPARACAO_MENOR:    
         $lComparacao = $sCompetenciaAtual   < $sCompetenciaComparar;
-        break; 
-      default: 
+        break;
+      case DBCompetencia::COMPARACAO_MAIOR_IGUAL:
+        $lComparacao = $sCompetenciaAtual  >= $sCompetenciaComparar;
+        break;
+      case DBCompetencia::COMPARACAO_MENOR_IGUAL:
+        $lComparacao = $sCompetenciaAtual  <= $sCompetenciaComparar;
+        break;
+    default:
         throw new ParameterException("Tipo de Comparação Inválida.");
         break; 
     }
@@ -238,11 +246,54 @@ final class DBCompetencia {
       $iMesCompetencia = $iProximoMes;
     }
 
-    $this->setAno($iAnoCompetencia);
-    $this->setMes($iMesCompetencia);
-
-    $oCompetenciaAnterior = new DBCompetencia($this->getAno(), $this->getMes());
+    $oCompetenciaAnterior = new DBCompetencia($iAnoCompetencia, $iMesCompetencia);
 
     return $oCompetenciaAnterior;
+  }
+
+  /**
+   * Retorna a data de inicio da competência
+   * @return \DBDate
+   */
+  public function getDataDeInicio() {
+
+    return new DBDate("{$this->getAno()}-{$this->getMes()}-01");
+  }
+  /**
+   * Retorna a data de termino da competência
+   * @return \DBDate
+   */
+  public function getDataDeTermino() {
+
+    $iUltimoDiaCompetencia = $this->getUltimoDia();
+    return new DBDate("{$this->getAno()}-{$this->getMes()}-{$iUltimoDiaCompetencia}");
+  }
+
+  /**
+   * Retorna o Ultimo dia da competência
+   * @return int
+   */
+  public function getUltimoDia() {
+    return  cal_days_in_month(CAL_GREGORIAN, $this->getMes(), $this->getAno());
+  }
+
+  /**
+   * Instancia uma competencia de uma string
+   * @param $competencia
+   * @return \DBCompetencia
+   * @throws \BusinessException
+   */
+  public static function createFromString($competencia) {
+    
+    if (strlen($competencia) != 7) {
+      throw new BusinessException("Competência {$competencia} com formato inválido.");
+    }
+    $aPartes = explode("/", $competencia);    
+    if (strlen($aPartes[0]) == 2) {
+      return new DBCompetencia($aPartes[1], $aPartes[0]);
+    }
+    if (strlen($aPartes[0]) == 4) {
+      return new DBCompetencia($aPartes[0], $aPartes[1]);
+    }
   }
 }

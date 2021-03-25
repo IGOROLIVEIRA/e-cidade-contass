@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-//namespace ECidade\Core;
+namespace ECidade\Core;
 
 /**
  * An example of a general-purpose implementation that includes the optional
@@ -222,7 +222,7 @@ class Autoloader
             return false;
         }
 
-        $filename = $useModification ? $file : $file;
+        $filename = $useModification ? modification($file) : $file;
 
         require $filename;
         return true;

@@ -882,8 +882,6 @@ if($justific==true){
     }
   }
 
-
-
   $result = db_query($sql) or die("<br><br><blink><font color=red>VERIFIQUE INFLATORES!!!<br></blink><font color=black> <br> $sql");
   if ($limite == 0 ) {
      if (pg_numrows($result) == 0 ){
@@ -899,6 +897,20 @@ if($justific==true){
   }
 }
 
+function retornaRegraDescontoParcelamento($sNumpre) {
+
+  $sSql = "select k38_cadtipoparc from arredesconto where k38_numpre = $sNumpre";
+  $rRes = db_query($sSql) or die("Erro(28) não encontrado no arredesconto: ".pg_errormessage());
+
+  if (pg_numrows($rRes) > 0) {
+
+    // se existe regra cadastrada gera a variavel
+    return $regra_desconto = pg_result($rRes, 0, 0);
+  }
+
+  return 0;
+}
+
 function debitos_numpre_carne($numpre,$numpar,$datausu,$anousu,$instit=null,$DB_DATACALC=null,$forcarvencimento=false ){
 
   global $k03_numpre,$k00_dtvenc;
@@ -910,7 +922,7 @@ function debitos_numpre_carne($numpre,$numpar,$datausu,$anousu,$instit=null,$DB_
   $sql = "select k38_cadtipoparc from arredesconto where k38_numpre = $numpre";
   $res = db_query($sql) or die("Erro(28) não encontrado no arredesconto: ".pg_errormessage());
 
-  if ( pg_numrows($res) > 0 ) {
+  if (pg_numrows($res) > 0) {
 
     // se existe regra cadastrada gera a variavel
     $regra_desconto = pg_result($res,0,0);
@@ -918,7 +930,7 @@ function debitos_numpre_carne($numpre,$numpar,$datausu,$anousu,$instit=null,$DB_
     try {
     	$oRecibo = new recibo(2,null);
       $oRecibo->addNumpre($numpre,$numpar);
-      $oRecibo->setDescontoReciboWeb($numpre,$numpar,$regra_desconto);
+      $oRecibo->setDescontoReciboWeb($numpre, $numpar, $regra_desconto);
     } catch ( Exception $eException ) {
       db_fim_transacao(true);
       db_redireciona("db_erros.php?fechar=true&db_erro={$eException->getMessage()}");
@@ -1651,8 +1663,8 @@ class cl_gera_sql_folha {
   var $usar_tra = false; // Se usarï¿½ inner ou left join com a tabela rhpeslocaltrab.
   var $usar_car = false; // Se usarï¿½ inner ou left join com a tabela rhpescargo.
   var $usar_ban = false; // Se usarï¿½ inner ou left join com a tabela rhpesbanco.
-  var $usar_pro = true; // Se usarï¿½ inner ou left join com a tabela orcprojativ.
-  var $usar_rec = true; // Se usarï¿½ inner ou left join com a tabela orctiporec.
+  var $usar_pro = false; // Se usarï¿½ inner ou left join com a tabela orcprojativ.
+  var $usar_rec = false; // Se usarï¿½ inner ou left join com a tabela orctiporec.
   var $usar_afa = false; // Se usarï¿½ inner ou left join com a tabela afasta.
   var $usar_inf = false; // Se usarï¿½ inner ou left join com a tabela infla;
 
@@ -1691,8 +1703,7 @@ class cl_gera_sql_folha {
   // A VARIï¿½VEL where serï¿½: rh05_seqpes is null... Mas o where do SQL serï¿½:
   // where rh02_anousu = 2005 and rh02_mesusu = 11 and rh02_regist = 2870 and rh05_seqpes is null
 
-  function gerador_sql($sigla,$ano=null,$mes=null,$regist=null,$rubric=null,$campos=" * ",$order="",$where="",$instit=null, $sWhereSup = '',$iVinc=0){
-
+  function gerador_sql($sigla,$ano=null,$mes=null,$regist=null,$rubric=null,$campos=" * ",$order="",$where="",$instit=null, $sWhereSup = ''){
     if($sigla == 'r14'){
       $arquivo = ' gerfsal';
       $iTipoFolha = 1;
@@ -2155,7 +2166,7 @@ class cl_gera_sql_folha {
       $sql.= "                     and padroes.r02_regime = rhpespadrao.rh03_regime ";
       $sql.= "                     and padroes.r02_codigo = rhpespadrao.rh03_padrao ";
       $sql.= "                     and padroes.r02_instit = ".db_getsession("DB_instit")." ";
-      
+
     }
     if($this->usar_ins == true){
       $inner = " inner join ";
@@ -2239,6 +2250,7 @@ class cl_gera_sql_folha {
     if(trim($order) != ""){
       $sql.= " order by ".$order;
     }
+
     return $sql;
   }
 

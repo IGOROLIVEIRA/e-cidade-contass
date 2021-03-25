@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-include("db_conecta.php");
+include("libs/db_conecta.php");
 
 $oPluginService = new PluginService();
 

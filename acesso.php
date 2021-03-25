@@ -26,17 +26,17 @@
  */
 
 
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_utils.php");
-require_once("libs/db_conecta.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ('model/configuracao/PreferenciaUsuario.model.php');
-require_once ('model/configuracao/SkinService.service.php');
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification('model/configuracao/PreferenciaUsuario.model.php'));
+require_once(modification('model/configuracao/SkinService.service.php'));
 
 db_postmemory($HTTP_POST_VARS);
 
 $_SESSION["DB_itemmenu_acessado"] = "0";
-require("libs/db_usuariosonline.php");
+require(modification("libs/db_usuariosonline.php"));
 
 $lRecarregaSistema = false;
 
@@ -57,10 +57,38 @@ if (isset($atualiza)) {
     $oPreferenciaUsuario->setSkin($_POST['skin']);
 
     $oPreferenciaUsuario->salvar();
+    if (isset($_POST['versao3']) && $_POST['versao3'] == 1) {
+
+      if (isset($db_base)) {
+        db_putsession("DB_NBASE", $db_base);
+      }
+
+      ini_set('memory_limit', '-1');
+
+      $extensionData = \ECidade\V3\Extension\Data::restore('Desktop');
+
+      // extensao não descompactada, comando: bin/v3/extension/unpack desktop-package.tar.gz
+      if (!$extensionData->exists()) {
+        throw new \Exception("Desktop não configurado.");
+      }
+
+      $extensionManager = new \ECidade\V3\Extension\Manager();
+      $success = $extensionManager->install('Desktop', $_SESSION['DB_login']);
+      var_dump($success);exit;
+      if ($success) {
+        echo "<script type='text/javascript'>
+          top.document.body.onunload = '';
+          top.document.location.href = 'extension/desktop';
+        </script>";
+        exit;
+      }
+
+      throw new \Exception('Não foi possível alterar para a versão 3.\\nTente novamente mais tarde.');
+    }
 
     $sMensagem = _M('configuracao.configuracao.preferenciaUsuario.sucesso');
   } catch (Exception $oErro){
-    $sMensagem = $oErro->getMessage();;
+    $sMensagem = str_replace("'", "\'", \DBString::utf8_decode_all($oErro->getMessage()));
   }
 
   /**
@@ -71,7 +99,7 @@ if (isset($atualiza)) {
     db_putsession("DB_NBASE",$db_base);
     $DB_BASE = db_getsession("DB_NBASE");
     echo "<script>
-            top.topo.document.getElementById('auxAcesso').value = '".$DB_BASE."';
+            (window.CurrentWindow || parent.CurrentWindow || top).topo.document.getElementById('auxAcesso').value = '".$DB_BASE."';
           </script>";
   }
 }
@@ -115,7 +143,13 @@ if(!isset($trocaip) && !isset($atualiza)){
 
   <body class="body-default">
 
-   <form name="form1" action="" method="post" class="form-container">
+
+  <script type="text/javascript">
+      function salvandoPreferencias() {
+          js_divCarregando('Aguarde...', 'msgBox', false);
+      }
+  </script>
+ <form name="form1" action="" method="post" class="form-container" onSubmit="return salvandoPreferencias();">
      <div id="aba_banco">
         <fieldset>
           <legend>Configuração de Banco de dados</legend>
@@ -213,6 +247,12 @@ if(!isset($trocaip) && !isset($atualiza)){
             <td><strong>Tema:</strong></td>
             <td><?php db_select('skin', $aSkins, true, 1); ?></td>
            </tr>
+
+          <tr>
+            <td><strong>Usar versão 3.0:</strong></td>
+            <td><?php db_select('versao3', array('0' => 'Não', '1' => 'Sim'), true, 1); ?></td>
+           </tr>
+
          </table>
        </fieldset>
        <input type="submit" class="bt_salvar" name="atualiza" value="Salvar" />
@@ -230,8 +270,8 @@ if(!isset($trocaip) && !isset($atualiza)){
       <?php endif; ?>
 
       <?php if ($lRecarregaSistema): ?>
-        top.quadroprincipal.onunload = '';
-        top.location.href = top.location.href;
+        (window.CurrentWindow || parent.CurrentWindow).quadroprincipal.onunload = '';
+        (window.CurrentWindow || parent.CurrentWindow).location.href = (window.CurrentWindow || parent.CurrentWindow).location.href;
       <?php endif; ?>
 
     </script>

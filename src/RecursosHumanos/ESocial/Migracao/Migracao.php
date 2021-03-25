@@ -251,8 +251,8 @@ abstract class Migracao
     {
         $this->progressBar->flush();
         $this->progressBar->setMessageLog("Buscando informações do Formulário: " . $this->nomeFormulario);
-
         $preenchimentosServidores = $this->buscarUltimoPreenchimento($this->formularioAtual->formulario);
+
         $this->progressBar->setMessageLog("Migrando as respostas do formulário: " . $this->nomeFormulario);
         $this->progressBar->updateMaxProgress(count($preenchimentosServidores));
         foreach ($preenchimentosServidores as $indice => $preenchimento) {

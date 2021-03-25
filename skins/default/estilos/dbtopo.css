@@ -64,14 +64,14 @@ header #logoDBSeller h1 {
     display: block;
 }
 header #logoDBSeller{
-    top: 5px;
+    top: 0px;
     right: 12px;
     position: absolute;
     display: block;
 }
 
 header #logoDBSeller h1{
-    background: #FFFFFF url("../img/logoContass.png") left top no-repeat;
+    background: #FFFFFF url("../img/logoDBSeller.png") left top no-repeat;
     text-indent: -9999px;
 }
 

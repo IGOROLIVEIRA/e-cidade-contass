@@ -25,64 +25,61 @@
  *                                licenca/licenca_pt.txt 
  */
 
-
 class db_app {
 
+
   /**
-   *
+   * Carremento de assets do sistema
    */
-  function __construct() {
+  public static function load($files) {
 
-  }
+    $aFiles                       = array();
+    $aFiles["estilos.css"]        = "<link href='estilos.css' rel='stylesheet' type='text/css'>";
+    $aFiles["grid.style.css"]     = "<link href='estilos/grid.style.css' rel='stylesheet' type='text/css'>";
+    $aFiles["scripts.js"]         = "<script language='JavaScript' type='text/javascript' src='scripts/scripts.js?version=".DB_VERSION."'></script>";
+    $aFiles["strings.js"]         = "<script language='JavaScript' type='text/javascript' src='scripts/strings.js?version=".DB_VERSION."'></script>";
+    $aFiles["datagrid.widget.js"] = "<script language='JavaScript' type='text/javascript' src='scripts/datagrid.widget.js?version=".DB_VERSION."'></script>";
+    $aFiles["prototype.js"]       = "<script language='JavaScript' type='text/javascript' src='scripts/prototype.js?version=".DB_VERSION."'></script>";
+    $aFileToLoad = is_array($files) ? $files : explode(",", $files);
 
-  static function load($files) {
+    foreach ($aFileToLoad as $index => $filename) {
 
-     $aFiles = array();
-     $aFiles["estilos.css"]    = "<link href='estilos.css' rel='stylesheet' type='text/css'>";
-     $aFiles["grid.style.css"] = "<link href='estilos/grid.style.css' rel='stylesheet' type='text/css'>";
-     $aFiles["scripts.js"]     = "<script language='JavaScript' type='text/javascript' src='scripts/scripts.js?version=".DB_VERSION."'></script>";
-     $aFiles["strings.js"]     = "<script language='JavaScript' type='text/javascript' src='scripts/strings.js?version=".DB_VERSION."'></script>";
-     $aFiles["datagrid.widget.js"] = "<script language='JavaScript' type='text/javascript' src='scripts/datagrid.widget.js?version=".DB_VERSION."'></script>";
-     $aFiles["prototype.js"]       = "<script language='JavaScript' type='text/javascript' src='scripts/prototype.js?version=".DB_VERSION."'></script>";
-     $aFileToLoad = explode(",", $files);
+      if (isset($aFiles[trim($filename)])) {
+        echo $aFiles[trim($filename)]."\n";
+      } else {
 
-     foreach ($aFileToLoad as $index => $filename) {
+        $extension  = explode(".", trim($filename));
+        $extension  = array_reverse($extension);
+        $directory  = "";
+        $sStringPrefix = "";
+        $sStringSufix  = "";
+        if ($extension[0] == "js") {
 
-       if (isset($aFiles[trim($filename)])) {
-         echo $aFiles[trim($filename)]."\n";
-       } else {
+          $sStringPrefix = "<script language='JavaScript' type='text/javascript' src='#filename'>";
+          $sStringSufix  = "</script>";
+          $directory     = "scripts";
 
-         $extension  = explode(".", trim($filename));
-         $extension  = array_reverse($extension);
-         $directory  = "";
-         $sStringPrefix = "";
-         $sStringSufix  = "";
-         if ($extension[0] == "js") {
+        } else if ($extension[0] == "css") {
 
-           $sStringPrefix = "<script language='JavaScript' type='text/javascript' src='#filename'>";
-           $sStringSufix  = "</script>";
-           $directory     = "scripts";
+          $sStringPrefix = "<link href='#filename' rel='stylesheet' type='text/css'>";
+          $sStringSufix  = "";
+          $directory     = "estilos";
 
-         } else if ($extension[0] == "css") {
-
-           $sStringPrefix = "<link href='#filename' rel='stylesheet' type='text/css'>";
-           $sStringSufix  = "";
-           $directory     = "estilos";
-
-         }
-         if (file_exists("{$directory}/".trim($filename))) {
-           echo str_replace("#filename", "{$directory}/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-         }else if (file_exists("{$directory}/widgets/".trim($filename))) {
-           echo str_replace("#filename", "{$directory}/widgets/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-         }else if (file_exists("{$directory}/classes/".trim($filename))) {
-           echo str_replace("#filename", "{$directory}/classes/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-         } else if (file_exists("ext/javascript/".trim($filename))) {
-           echo str_replace("#filename", "ext/javascript/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-         } else {
-           throw new Exception("Include {$filename} não existe");
-         }
-       }
-     }
+        }
+        if (file_exists("{$directory}/".trim($filename))) {
+          echo str_replace("#filename", "{$directory}/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+        }else if (file_exists("{$directory}/widgets/".trim($filename))) {
+          echo str_replace("#filename", "{$directory}/widgets/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+        }else if (file_exists("{$directory}/classes/".trim($filename))) {
+          echo str_replace("#filename", "{$directory}/classes/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+        } else if (file_exists("ext/javascript/".trim($filename))) {
+          echo str_replace("#filename", "ext/javascript/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+        } else {
+          echo "<!-- Arquivo não encontrado {$filename}. -->";
+          throw new Exception("Include {$filename} não existe");
+        }
+      }
+    }
   }
 
 
@@ -112,8 +109,8 @@ class db_app {
              */
             if (($sFile == '.') || ($sFile == '..') ||
               (is_dir($oDirectory->path . "/" . $sFile))) {
-               continue;
-            }
+                continue;
+              }
             /**
              * não carrega arquivos que não sejam php
              */
@@ -121,7 +118,7 @@ class db_app {
               continue;
             }
             if (is_file($sBasePath . $sImportFilePath . "/" . $sFile)) {
-              require_once($sBasePath . $sImportFilePath . "/" . $sFile);
+              require_once(modification($sBasePath . $sImportFilePath . "/" . $sFile));
             }
           }
         }
@@ -137,10 +134,10 @@ class db_app {
         }
         $sImportFile = str_replace(".", "/", $sClasse);
         if (is_file($sBasePath . $sImportFile.$sSufix)) {
-          require_once($sBasePath . $sImportFile.$sSufix);
+          require_once(modification($sBasePath . $sImportFile.$sSufix));
         }
         if (is_file($sBasePath . $sImportFile.".interface.php")) {
-          require_once($sBasePath . $sImportFile.".interface.php");
+          require_once(modification($sBasePath . $sImportFile.".interface.php"));
         }
       }
     }

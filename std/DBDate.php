@@ -30,8 +30,8 @@
  * Classe para controle de datas
  * @package std
  * @author Andrio Costa
- * @version $Revision: 1.30 $
- * @revision $Author: dbandrio.costa $
+ * @version $Revision: 1.47 $
+ * @revision $Author: dbigor.cemim $
  */
 class DBDate {
 
@@ -43,6 +43,56 @@ class DBDate {
 
   const DATA_PTBR = "d/m/Y";
   const DATA_EN   = "Y-m-d";
+
+  /**
+   * @var array Lista de Meses por Extenso
+   */
+  private static $aMesesExtenso = array(
+    self::JANEIRO   => "Janeiro",
+    self::FEVEREIRO => "Fevereiro",
+    self::MARCO     => "Março",
+    self::ABRIL     => "Abril",
+    self::MAIO      => "Maio",
+    self::JUNHO     => "Junho",
+    self::JULHO     => "Julho",
+    self::AGOSTO    => "Agosto",
+    self::SETEMBRO  => "Setembro",
+    self::OUTUBRO   => "Outubro",
+    self::NOVEMBRO  => "Novembro",
+    self::DEZEMBRO  => "Dezembro"
+  );
+
+  /**
+   * @var array Lista de Meses Abreviatura
+   */
+  private static $aMesesAbreviatura = array(
+    self::JANEIRO   => "Jan",
+    self::FEVEREIRO => "Fev",
+    self::MARCO     => "Mar",
+    self::ABRIL     => "Abr",
+    self::MAIO      => "Mai",
+    self::JUNHO     => "Jun",
+    self::JULHO     => "Jul",
+    self::AGOSTO    => "Ago",
+    self::SETEMBRO  => "Set",
+    self::OUTUBRO   => "Out",
+    self::NOVEMBRO  => "Nov",
+    self::DEZEMBRO  => "Dez"
+  );
+
+  /**
+   * Dias da Semana
+   * @type array
+   */
+  private static $aDiasSemana = array(
+    self::DOMINGO => "Domingo",
+    self::SEGUNDA => "Segunda",
+    self::TERCA   => "Terça",
+    self::QUARTA  => "Quarta",
+    self::QUINTA  => "Quinta",
+    self::SEXTA   => "Sexta",
+    self::SABADO  => "Sábado"
+  );
 
   /**
    * Constantes para o dia da semana
@@ -74,7 +124,6 @@ class DBDate {
    * @throws ParameterException @see DBDate::validaData()
    */
   public function __construct($sData) {
-
     $this->iTimeStamp = $this->validaData($sData);
   }
 
@@ -83,8 +132,14 @@ class DBDate {
    * @return string
    */
   public function getDate($sMascaraData = DBDate::DATA_EN) {
-
     return date($sMascaraData, $this->iTimeStamp);
+  }
+
+  /**
+   * @return string Data no formato brasileiro
+   */
+  public function __toString() {
+    return $this->getDate(DBDate::DATA_PTBR);
   }
 
   /**
@@ -123,12 +178,12 @@ class DBDate {
       throw new ParameterException($sMsgErro);
     }
 
-    if (! checkdate($mes, $dia, $ano)) {
-    	$sMsgErro = "Data inexistente. Favor verificar";
-    	throw new ParameterException($sMsgErro);
+    if (!checkdate($mes, $dia, $ano)) {
+      $sMsgErro = "Data {$sData} inexistente. Favor verificar";
+      throw new ParameterException($sMsgErro);
     }
     $sDataValidada = "{$ano}-{$mes}-{$dia}";
-    return db_strtotime($sDataValidada);
+    return strtotime($sDataValidada);
   }
 
   /**
@@ -190,33 +245,52 @@ class DBDate {
    * @param string $data2
    * @param string $intervalo m, d, h, n,y
    * @return int|string intervalo de horas
+   *
+   * @deprecated quando e intervalo de mes, o mesmo encontra-se fixo com 30 dias.
+   *
+   * @see getIntervaloEntreDatas
    */
   public static function calculaIntervaloEntreDatas(DBDate $oDt1, DBDate $oDt2, $sIntervalo) {
 
     $nIntervalo = 1;
     switch ($sIntervalo) {
-      case 'y':
-        $nIntervalo = 86400*365.25;
-        break; //ano
-      case 'm':
-        $nIntervalo = 2592000;
-        break; //mes
-      case 'd':
-        $nIntervalo = 86400;
-        break; //dia
-      case 'h':
-        $nIntervalo = 3600;
-        break; //hora
-      case 'n':
-        $nIntervalo = 60;
-        break; //minuto
-      default:
-        $nIntervalo = 1;
-        break; //segundo
+    case 'y':
+      $nIntervalo = 86400*365.25;
+      break; //ano
+    case 'm':
+      $nIntervalo = 2592000;
+      break; //mes
+    case 'd':
+      $nIntervalo = 86400;
+      break; //dia
+    case 'h':
+      $nIntervalo = 3600;
+      break; //hora
+    case 'n':
+      $nIntervalo = 60;
+      break; //minuto
+    default:
+      $nIntervalo = 1;
+      break; //segundo
     }
 
     $nValor = (strtotime($oDt1->getDate(DBDate::DATA_EN)) - strtotime($oDt2->getDate(DBDate::DATA_EN))) / $nIntervalo;
     return floor($nValor);
+  }
+
+
+  /**
+   * Retorna um VO do tipo DateInterval
+   * @param DBDate $oDataInicial
+   * @param DBDate $oDataFinal
+   * @return DateInterval
+   */
+  public static function getIntervaloEntreDatas(DBDate $oDataInicial, DBDate $oDataFinal) {
+
+    $oDateTimeInicial = new DateTime($oDataInicial->getDate());
+    $oDateTimeFinal   = new DateTime($oDataFinal->getDate());
+    $oDateInterval    = $oDateTimeInicial->diff($oDateTimeFinal);
+    return $oDateInterval;
   }
 
   /**
@@ -233,10 +307,10 @@ class DBDate {
    */
   public static function dataEstaNoIntervalo(DBDate $oData, DBDate $oDtInicio, DBDate $oDtFim) {
 
-  	if ($oDtInicio->getTimeStamp() <= $oData->getTimeStamp() && $oDtFim->getTimeStamp() >= $oData->getTimeStamp()) {
-  		return true;
-  	}
-  	return false;
+    if ($oDtInicio->getTimeStamp() <= $oData->getTimeStamp() && $oDtFim->getTimeStamp() >= $oData->getTimeStamp()) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -244,7 +318,7 @@ class DBDate {
    * @static
    * @param integer $iDiaSemana
    * @throws ParameterException
-   * @return Ambigous <string>
+   * @return string <string>
    */
   static function getLabelDiaSemana($iDiaSemana) {
 
@@ -254,18 +328,7 @@ class DBDate {
       $sMsgErro .= "padrão da ISO-8601";
       throw new ParameterException ($sMsgErro);
     }
-
-    $aDiasSemana = array();
-    $aDiasSemana[0] = "Domingo";
-    $aDiasSemana[1] = "Segunda";
-    $aDiasSemana[2] = "Terça";
-    $aDiasSemana[3] = "Quarta";
-    $aDiasSemana[4] = "Quinta";
-    $aDiasSemana[5] = "Sexta";
-    $aDiasSemana[6] = "Sábado";
-
-    return $aDiasSemana[$iDiaSemana];
-
+    return self::$aDiasSemana[$iDiaSemana];
   }
 
   /**
@@ -292,7 +355,13 @@ class DBDate {
    * @throws ParameterException
    * @return DBDate[]
    */
-  static function getDatasNoIntervalo(DBDate $oDtInicio, DBDate $oDtFim, array $aDiasSemana = null) {
+  static function getDatasNoIntervalo(DBDate $oDtInicio, DBDate $oDtFim, array $aDiasSemana = null, \Closure $fFormatter = null) {
+
+    if (is_null($fFormatter)) {
+      $fFormatter = function(DBDate $oData) {
+        return $oData;
+      };
+    }
 
     if ($oDtInicio->getTimeStamp() > $oDtFim->getTimeStamp()) {
       throw new ParameterException("Data de inicio não pode ser maior que a data final");
@@ -305,11 +374,11 @@ class DBDate {
     do {
 
       if ( count($aDiasSemana) > 0 && in_array($oData->getDiaSemana(), $aDiasSemana) ) {
-        $aDatasNoIntervalo[] = clone $oData;
+        $aDatasNoIntervalo[] = $fFormatter(clone $oData);
       } else if ( count($aDiasSemana) > 0 && !in_array($oData->getDiaSemana(), $aDiasSemana) ) {
         $lContinue = true;
       } else {
-        $aDatasNoIntervalo[] = clone $oData;
+        $aDatasNoIntervalo[] = $fFormatter(clone $oData);
       }
 
       $oData->iTimeStamp = mktime(0, 0, 0, $oData->getMes(), $oData->getDia() +1, $oData->getAno());
@@ -330,9 +399,9 @@ class DBDate {
    * @throws ParameterException
    * @return multitype:array
    */
-  static function getMesesNoIntervalo(DBDate $oDtInicio, DBDate $oDtFim) {
+  static function getMesesNoIntervalo(DBDate $oDtInicio, DBDate $oDtFim, $lMeExtenso = true) {
 
-    if ($oDtInicio->getDate() > $oDtFim->getDate()) {
+    if ($oDtInicio->getTimeStamp() > $oDtFim->getTimeStamp()) {
       throw new ParameterException("Data de inicio não pode ser maior que a data final");
     }
 
@@ -341,8 +410,11 @@ class DBDate {
     $oData = clone $oDtInicio;
 
     do {
-
-      $aMesesRetorno[$oData->getAno()][(int)$oData->getMes()] = DBDate::getMesExtenso((int)$oData->getMes());
+      $sMes = (int)$oData->getMes();
+      if ($lMeExtenso) {
+        $sMes = DBDate::getMesExtenso((int)$oData->getMes());
+      }
+      $aMesesRetorno[$oData->getAno()][(int)$oData->getMes()] = $sMes;
       $oData->iTimeStamp = mktime(0, 0, 0, $oData->getMes() +1, $oData->getDia(), $oData->getAno());
 
       if ($oData->getAno() < $oDtFim->getAno()) {
@@ -370,7 +442,7 @@ class DBDate {
    */
   public function modificarIntervalo ($sIntervalo) {
 
-  	$this->iTimeStamp = strtotime($sIntervalo, $this->iTimeStamp);
+    $this->iTimeStamp = strtotime($sIntervalo, $this->iTimeStamp);
 
   }
 
@@ -383,7 +455,7 @@ class DBDate {
    */
   public static function getQuantidadeDiasMes( $iMes, $iAno ) {
 
-  	return cal_days_in_month(CAL_GREGORIAN, $iMes, $iAno);
+    return cal_days_in_month(CAL_GREGORIAN, $iMes, $iAno);
   }
 
   /**
@@ -395,25 +467,19 @@ class DBDate {
   public static function getMesExtenso($iMes) {
 
     if ($iMes < DBDate::JANEIRO || $iMes > DBDate::DEZEMBRO) {
-    	throw new ParameterException("Mês informado não existe.\nInforme uma valor entre 1 e 12.");
+      throw new ParameterException("Mês informado não existe.\nInforme uma valor entre 1 e 12.");
     }
 
-    $aMeses[DBDate::JANEIRO  ]= "Janeiro";
-    $aMeses[DBDate::FEVEREIRO]= "Fevereiro";
-    $aMeses[DBDate::MARCO    ]= "Março";
-    $aMeses[DBDate::ABRIL    ]= "Abril";
-    $aMeses[DBDate::MAIO     ]= "Maio";
-    $aMeses[DBDate::JUNHO    ]= "Junho";
-    $aMeses[DBDate::JULHO    ]= "Julho";
-    $aMeses[DBDate::AGOSTO   ]= "Agosto";
-    $aMeses[DBDate::SETEMBRO ]= "Setembro";
-    $aMeses[DBDate::OUTUBRO  ]= "Outubro";
-    $aMeses[DBDate::NOVEMBRO ]= "Novembro";
-    $aMeses[DBDate::DEZEMBRO ]= "Dezembro";
-
-    return $aMeses[ (int) $iMes];
+    return self::$aMesesExtenso[ (int) $iMes];
   }
 
+  /**
+   * Retorna Lista de Meses por extenso
+   * @return mixed
+   */
+  public static function getMesesExtenso() {
+    return self::$aMesesExtenso;
+  }
 
   /**
    * Retorna a data instanciado como uma string
@@ -482,50 +548,100 @@ class DBDate {
   }
 
   /**
-   * @todo alterar o parametro para DBDate
-   * Obtem os decendios de um mês. Exemplo: JANEIRO, retorna:
-   * [0] => Array
-   * (
-   * [0] => 2016-1-01
-   * [1] => 2016-1-10
-   * )
-   * [1] => Array
-   * (
-   * [0] => 2016-1-11
-   * [1] => 2016-1-20
-   * )
+   * Adianta o período em segundos, minutos, horas ou dias
    *
-   * [2] => Array
-   * (
-   * [0] => 2016-1-21
-   * [1] => 2016-1-31
-   * )
-   * @param $mes
-   * @param $ano
-   * @return array
+   * @param  Integer $iQuantidade Quantidade a adiantar
+   * @param  String  $sTipo       Tipo de adiantamento, em segundos, minutos, horas ou dias
+   *
+   * @return DBDate
    */
-  public static function getDecendio($mes, $ano)
-  {
-    $nUltimo  = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
-    $aRetorno = array();
-    $aRetorno[] = array(date("{$ano}-{$mes}-01"), date("{$ano}-{$mes}-10"));
-    $aRetorno[] = array(date("{$ano}-{$mes}-11"), date("{$ano}-{$mes}-20"));
-    $aRetorno[] = array(date("{$ano}-{$mes}-21"), date("{$ano}-{$mes}-{$nUltimo}"));
-    return $aRetorno;
+  public function adiantarPeriodo($iQuantidade = 1, $sTipo = 's') {
+
+    switch ($sTipo) {
+
+    case 'm': //Minutos
+      $iTimeStampAdiantar = $iQuantidade * 60;
+      break;
+
+    case 'h': //Horas
+      $iTimeStampAdiantar = $iQuantidade * 3600;
+      break;
+
+    case 'd': //Dias
+      $iTimeStampAdiantar = $iQuantidade * 24 * 3600;
+      break;
+
+    default: //Segundos
+      $iTimeStampAdiantar = $iQuantidade;
+      break;
+    }
+
+    $this->iTimeStamp = $this->getTimeStamp() + $iTimeStampAdiantar;
+
+    return $this;
+  }
+
+
+  /**
+   * Recebe uma data em formarto d/m/Y, Y-m-d e retorna o contrario
+   * @param  string $sData
+   * @return string
+   */
+  public static function converter($sData) {
+
+    $sFormat = DBDate::DATA_PTBR;
+    if (strpos($sData, "/")) {
+      $sFormat = DBDate::DATA_EN;
+    }
+    $oData = new DBDate($sData);
+    return $oData->convertTo($sFormat);
   }
 
   /**
-   * Returns the difference between two DateTime objects
-   * @param DBDate $oDtFim The date to compare to.
-   * @param boolean $absolute [optional] Whether to return absolute difference.
-   * @return DateInterval|boolean The DateInterval object representing the difference between the two dates or FALSE on failure.
+   * Define se o dia é util ou não
+   * @todo implementar feriados nacionais
+   * @return bool
    */
-  public function diff(DBDate $oDtFim, $absolute = false)
-  {
-    $oDateTimeInicio = new DateTime($this->getDate());
-    $oDateTimeFim = new DateTime($oDtFim->getDate());
+  public function diaUtil() {
 
-    return $oDateTimeInicio->diff($oDateTimeFim, $absolute);
+    $aDiaNaoUtil = array(self::SABADO, self::DOMINGO);
+    return !in_array($this->getDiaSemana(), $aDiaNaoUtil);
   }
 
+  public static function create($string) {
+    return new \DBDate($string);
+  }
+
+  /**
+   * Cria um DBDate a partir de um Unix timestamp.
+   *
+   * @param $iTimestamp
+   * @return DBDate
+   */
+  public static function createFromTimestamp($iTimestamp) {
+    return new DBDate(date('Y-m-d', $iTimestamp));
+  }
+
+  /**
+   * REtorna a competencia da data
+   * @return DBCompetencia
+   */
+  public function getCompetencia() {
+    return new DBCompetencia($this->getAno(), $this->getMes());
+  }
+
+  /**
+   * Retorna o nome do Mês por extenso
+   * @param integer $iMes
+   * @throws ParameterException
+   * @return string
+   */
+  public static function getMesAbreviado($iMes) {
+
+    if ($iMes < DBDate::JANEIRO || $iMes > DBDate::DEZEMBRO) {
+      throw new ParameterException("Mês informado não existe.\nInforme uma valor entre 1 e 12.");
+    }
+
+    return self::$aMesesAbreviatura[ (int) $iMes];
+  }
 }

@@ -1,6 +1,32 @@
 <?
-require_once('libs/db_utils.php');
-require_once('std/DBDate.php');
+/*
+ *     E-cidade Software Publico para Gestao Municipal                
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica             
+ *                            www.dbseller.com.br                     
+ *                         e-cidade@dbseller.com.br                   
+ *                                                                    
+ *  Este programa e software livre; voce pode redistribui-lo e/ou     
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
+ *  publicada pela Free Software Foundation; tanto a versao 2 da      
+ *  Licenca como (a seu criterio) qualquer versao mais nova.          
+ *                                                                    
+ *  Este programa e distribuido na expectativa de ser util, mas SEM   
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
+ *  detalhes.                                                         
+ *                                                                    
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
+ *  junto com este programa; se nao, escreva para a Free Software     
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
+ *  02111-1307, USA.                                                  
+ *  
+ *  Copia da licenca no diretorio licenca/licenca_en.txt 
+ *                                licenca/licenca_pt.txt 
+ */
+
+require_once(modification('libs/db_utils.php'));
+require_once(modification('std/DBDate.php'));
 /**
  * Utilidades para uso do Tributário
  */
@@ -220,9 +246,9 @@ function db_getcadbancobranca($arretipo,$ip,$datahj,$instit,$tipomod){
    */
 function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
-    include("classes/db_cgm_classe.php");
-    require_once("libs/db_utils.php");
-    require_once("classes/db_iptuconstrhabite_classe.php");
+    include(modification("classes/db_cgm_classe.php"));
+    require_once(modification("libs/db_utils.php"));
+    require_once(modification("classes/db_iptuconstrhabite_classe.php"));
 
     $post  = db_utils::postmemory($_POST);
     $clcgm = new cl_cgm;
@@ -697,10 +723,12 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     $pdf->Cell(200,4,"DADOS DO REGISTRO DE IMÓVEIS","B",1,"L",0);
     $pdf->SetFont('Arial','',9);
     $pdf->setX(5);
-    $pdf->Cell(45,5,"Matricula do registro: ".$fieldreg->j04_matricregimo,0,0,"L",0);
-    $pdf->Cell(80,5,"Setor do registro: ".$fieldreg->j04_setorregimovel." - ".$fieldreg->j69_descr,0,0,"L",0);
-    $pdf->Cell(40,5,"Quadra do registro: ".$fieldreg->j04_quadraregimo,0,0,"L",0);
-    $pdf->Cell(35,5,"Lote do registro: ".$fieldreg->j04_loteregimo,0,1,"L",0);
+    $pdf->Cell(92,5,"Matrícula do registro: ".$fieldreg->j04_matricregimo,0,0,"L",0);
+    $pdf->Cell(98,5,"Setor do registro: ".$fieldreg->j04_setorregimovel." - ".$fieldreg->j69_descr,0,1,"L",0);
+
+    $pdf->setX(5);
+    $pdf->Cell(92,5,"Quadra do registro: ".$fieldreg->j04_quadraregimo,0,0,"L",0);
+    $pdf->Cell(998,5,"Lote do registro: ".$fieldreg->j04_loteregimo,0,1,"L",0);
   }
   $pdf->setX(5);
   $pdf->Cell(200,4,"",0,1,"C",0);
@@ -1365,23 +1393,21 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
       $sql2 .= "                         k02_descr, ";
       $sql2 .= "                         j17_codhis, ";
       $sql2 .= "                         j17_descr, ";
-//      $sql2 .= "                         case  ";
-//      $sql2 .= "                            when iptucalh.j17_codhis = iptucadtaxaexe.j08_iptucalh or iptucalh.j17_codhis = 1 then ";
-//      $sql2 .= "                              j21_valor ";
-//      $sql2 .= "                            else 0 ";
-//      $sql2 .= "                          end as j21_valor, ";
-      $sql2 .= "                          j21_valor, ";
-//      $sql2 .= "                            case  ";
-//      $sql2 .= "                              when iptucalh.j17_codhis = iptucadtaxaexe.j08_histisen or iptucalh.j17_codhis = (select j18_iptuhistisen from cfiptu where j18_anousu = $j23_anousu) then ";
-//      $sql2 .= "                                j21_valor ";
-//      $sql2 .= "                              else 0 ";
-//      $sql2 .= "                          end as j21_valorisen ";
-      $sql2 .= "                          0 as j21_valorisen ";
-      $sql2 .= "                     from iptucalv  ";
+      $sql2 .= "                         case  ";
+      $sql2 .= "                            when iptucalh.j17_codhis = iptucadtaxaexe.j08_iptucalh or iptucalh.j17_codhis = 1 then ";
+      $sql2 .= "                              j21_valor ";
+      $sql2 .= "                            else 0 ";
+      $sql2 .= "                          end as j21_valor, ";
+      $sql2 .= "                            case  ";
+      $sql2 .= "                              when iptucalh.j17_codhis = iptucadtaxaexe.j08_histisen or iptucalh.j17_codhis = (select j18_iptuhistisen from cfiptu where j18_anousu = $j23_anousu) then ";
+      $sql2 .= "                                j21_valor ";
+      $sql2 .= "                              else 0 "; 
+      $sql2 .= "                          end as j21_valorisen ";
+      $sql2 .= "                     from iptucalv  "; 
       $sql2 .= "                          inner join iptucalh       on iptucalh.j17_codhis       = j21_codhis  ";
       $sql2 .= "                          inner join tabrec         on tabrec.k02_codigo         = j21_receit  ";
-//      $sql2 .= "                          left  join iptucadtaxaexe on iptucadtaxaexe.j08_tabrec = j21_receit  ";
-//      $sql2 .= "                                                   and iptucadtaxaexe.j08_anousu = $j23_anousu ";
+      $sql2 .= "                          left  join iptucadtaxaexe on iptucadtaxaexe.j08_tabrec = j21_receit  ";
+      $sql2 .= "                                                   and iptucadtaxaexe.j08_anousu = $j23_anousu ";
       $sql2 .= "                    where j21_matric = ".$field7->j23_matric;
       $sql2 .= "                      and j21_anousu = $j23_anousu ";
       $sql2 .= "                    order by iptucalh.j17_codhis ";

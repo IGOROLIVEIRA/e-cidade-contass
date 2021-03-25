@@ -25,11 +25,11 @@
  *                                licenca/licenca_pt.txt
  */
 
- require_once("libs/db_utils.php");
- require_once("libs/exceptions/ParameterException.php");
- require_once("libs/exceptions/FileException.php");
- require_once("libs/exceptions/DBException.php");
- require_once("model/configuracao/DBFileExplorer.model.php");
+ require_once(modification("libs/db_utils.php"));
+ require_once(modification("libs/exceptions/ParameterException.php"));
+ require_once(modification("libs/exceptions/FileException.php"));
+ require_once(modification("libs/exceptions/DBException.php"));
+ require_once(modification("model/configuracao/DBFileExplorer.model.php"));
 
 
 class DBDataBaseMigration {
@@ -361,5 +361,23 @@ class DBDataBaseMigration {
 
     return $sSql;
   }
+
+
+  public static function getPhinxWrapper() {
+
+    $app = new \Phinx\Console\PhinxApplication();
+
+    $config = array(
+      'environment' => 'ecidade',
+      'configuration' => 'phinx.php',
+      'parser' => 'php'
+    );
+
+    $wrap = new \Phinx\Wrapper\TextWrapper($app, $config);
+
+    return $wrap;
+  }
+
+
 }
 ?>

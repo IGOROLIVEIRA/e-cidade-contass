@@ -57,7 +57,7 @@ class Data extends AbstractMetadata {
     
     // config events
     foreach(Registry::get('app.config')->get('app.events', array()) as $event => $callback) {
-      $eventManager->register($event, $this->normalizaCallable($callback) );
+      //$eventManager->register($event, $this->normalizaCallable($callback) );
     }
 
     // data eventos

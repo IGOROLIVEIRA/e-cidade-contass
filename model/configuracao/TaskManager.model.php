@@ -25,13 +25,13 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("std/Thread.php");
+require_once(modification("std/Thread.php"));
 
 /**
  * Classe que define os comportamentos do Gerenciador de Tarefas
  * @author Rafael Serpa Nery <rafael.nery@dbseller.com.br>
- * @revision $Author: dbvitor $
- * @version $Revision: 1.7 $
+ * @revision $Author: dbjeferson.belmiro $
+ * @version $Revision: 1.9 $
  */
 class TaskManager {
 
@@ -238,21 +238,22 @@ class TaskManager {
 
       }
 
-      $aTarefas       = $oAgenda->getTarefas( $iInstante );
+      $aTarefas = $oAgenda->getTarefas( $iInstante );
+
       /**
        * Percorre as Tarefas Encontradas
        */
       foreach ($aTarefas as $oJob ) {
 
-        require_once($oJob->getCaminhoPrograma());
+        require_once(modification($oJob->getCaminhoPrograma()));
         $sNomeTarefa = $oJob->getNomeClasse();
 
-        $oTarefaExecucao          = new $sNomeTarefa;
+        $oTarefaExecucao = new $sNomeTarefa;
         $oTarefaExecucao->setTarefa($oJob);
 
         if ( $oTarefaExecucao->isLiberadaExecucao() ) {
 
-          $oThread          = new Thread( array( $oTarefaExecucao, 'iniciar' ) );
+          $oThread = new Thread(array($oTarefaExecucao, 'iniciar'));
           $oThread->start();
 
           self::$aTarefasExecutando[$oJob->getNomeClasse()] = $oThread;
@@ -262,7 +263,8 @@ class TaskManager {
       unset($aTarefas);
       sleep(60);
     }
-    return "Fim da Execução...";
+
+    return true;
   }
 
   /**

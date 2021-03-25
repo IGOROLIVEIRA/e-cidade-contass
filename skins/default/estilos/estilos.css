@@ -23,7 +23,7 @@ th {
 input {
   font-family: Arial, Helvetica, sans-serif, verdana;
   font-size: 12px;
-  height: 17px;
+  height: 18px;
   border: 1px solid #999999;
 }
 
@@ -178,8 +178,12 @@ table.tab_cinza td {
   color: #000000;
 }
 
-input[type=button][disabled]:not(rel='DBInputData') {background-color:#EFEFEF}
-input[type=submit][disabled]:not(rel='DBInputData') {background-color:#EFEFEF}
+input[type=button][disabled]:not(rel='DBInputData') {
+  background-color:#EFEFEF
+}
+input[type=submit][disabled]:not(rel='DBInputData') {
+  background-color:#EFEFEF
+}
 
 /**
  * Componente Select Multiplo
@@ -201,6 +205,7 @@ input[type=submit][disabled]:not(rel='DBInputData') {background-color:#EFEFEF}
 
 legend {
   font-weight: bold;
+  text-align: left;
 }
 
 /**
@@ -279,5 +284,212 @@ input[type='button']:not([rel="ignore-css"]),
 input[type='reset']:not([rel="ignore-css"]),
 input[type='text']:not([rel="ignore-css"]),
 input[type='submit']:not([rel="ignore-css"]) {
-  height: 17px !important;
+  height: 18px !important;
+}
+
+/**
+ * Barra de Progresso com valor
+ */
+progress {
+  appearance: none;
+  border: none;
+  height: 30px;
+  width: 100%;
+  box-shadow: 0 2px 3px #CCC inset;
+  background-color: #eee;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #eee;
+  box-shadow: 0 2px 3px #CCC inset;
+}
+
+/**
+ * Padronização das cores das barras pelo shadow-dom
+ * Firefox : 10.0+
+ */
+progress::-webkit-progress-value {
+  background-image:
+  -webkit-linear-gradient( top, rgba(255, 255, 255, .35), rgba(0,0,0,.3)),
+  -webkit-linear-gradient( left, #4993F4, #006CFD);
+}
+/**
+ * Padronização das cores das barras pelo shadow-dom
+ * Chrome: Sim
+ */
+progress::-moz-progress-bar {
+  background-image:
+  -moz-linear-gradient( top, rgba(255, 255, 255, .35), rgba(0,0,0,.3)),
+  -moz-linear-gradient( left, #4993F4, #006CFD);
+}
+
+/**
+* Div onde fica os botões
+* questionário e eSocial
+*/
+.db-tooltip {
+  position: absolute;
+  top: 0;
+  right: 0;  
+}
+
+/** Botão de release */
+.db-release-note-button,
+.db-tooltip-aviso-button {
+  height: 35px;
+  float: right;
+}
+
+.db-tooltip-aviso-button {
+  background: #338C63;
+  color: #fff!important;
+}
+
+.db-tooltip-aviso-button.has-release-note-button {
+  right: 180px;
+}
+
+.db-release-note-button a,
+.db-tooltip-aviso-button a {
+  display: block;
+  height: 25px;
+  font-size: 12px;
+  font-weight: normal;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  line-height: 25px;
+  cursor: pointer;
+}
+
+.db-tooltip-aviso-button.tooltip-esocial a {
+  font-size: 16px;
+  text-transform: inherit;
+  text-decoration: none;
+  color: #FFF;
+}
+
+.tooltip-close {
+  position: absolute;
+  right: 3px;
+  cursor:pointer;
+}
+
+.db-tooltip-aviso-button.tooltip-esocial a:active {
+  color: #FFF
+}
+
+.db-release-note-button a:active,.db-release-note-button a:focus {
+  outline: none;
+}
+
+.db-release-note-previa {
+  background: #f8c604 !important;
+}
+
+.db-release-note-button.db-release-note-previa,
+.db-tooltip-aviso-button {
+  margin-top: 20px;
+}
+
+/* ecidade 3 : desktop */
+.no-menu .db-release-note-previa,
+.no-menu .db-tooltip-aviso-button {
+  margin-top: 0px;
+}
+
+.db-release-note-previa * {
+  color: #333 !important;
+  text-decoration: none !important;
+}
+
+.db-release-note-previa a:active,
+.db-tooltip-aviso-button a:active {
+  color: #666;
+}
+
+
+/**
+ * Message board
+ */
+
+.messageboard, .DBMessageBoard {
+
+  border-bottom   : 2px groove white;
+  padding         : 5px;
+  padding-top     : 0px;
+  background-color: white;
+  min-height          : 50px;
+  text-align      : left;
+  overflow        : hidden;
+}
+
+.messageboard > h1, .DBMessageBoard > h1{
+
+  font-family: Arial, Helvetica, serif,sans-serif, verdana;
+  font-size: 12px;
+  color: #000000;
+  padding: 0;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+
+
+.messageboard > div.help, .DBMessageBoard > div.help{
+  padding-left: 15px;
+  padding-top: 3px;
+}
+
+.messageboard > :last-child, .DBMessageBoard > :last-child {
+  padding-bottom: 5px;
+}
+
+.questionario li {
+  list-style: none;
+}
+
+ul.questionario {
+  margin: 0px;
+  left:150%;
+  position: relative;
+  padding: 0px;
+}
+
+ul.questionario.animate-out{
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+ul.questionario.animate-in{
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+div#questionarios{
+  z-index: 5;
+  position: relative;
+  /*width: 100%;*/
+}
+
+#listaquestionario div{
+  width: 100%;
+}
+
+#listaquestionario li a:hover{
+
+  color: #000;
+}
+
+div.db-tooltip{
+  overflow: hidden;
+}
+
+ul#listaquestionario{
+  z-index: 5;
+  position: relative;
 }
