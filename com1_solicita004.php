@@ -520,6 +520,8 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 						$clsolicitemunid->pc17_quant = $pc17_quant;
 						$clsolicitemunid->pc17_codigo = $pc11_codigo;
 						$clsolicitemunid->incluir($pc11_codigo);
+						echo 'solicitemunid....';
+						var_dump($clsolicitemunid);
 
 						if ($clsolicitemunid->erro_status == 0) {
 
