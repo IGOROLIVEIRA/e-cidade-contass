@@ -43,7 +43,7 @@
           iModuloId: context.modulo
         }
 
-        DeskCurrentWindow.Window.create(path, oParams);
+        desktop.Window.create(path, oParams);
         $('#menu').trigger('menu.close');
       }
     });
@@ -209,7 +209,7 @@
             iModuloId: $('#modulos span.active').data('id')
           }
 
-          DeskCurrentWindow.Window.create(title, oParams);
+          desktop.Window.create(title, oParams);
           $menu.trigger('menu.close');
         }
 

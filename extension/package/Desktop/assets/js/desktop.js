@@ -31,17 +31,17 @@
 
   Window.keepMultiModalWindow = true;
   Window.prototype.eventHandler = function(event) {
-    DeskCurrentWindow.Window.Iframe.eventHandler(event, this);
+    desktop.Window.Iframe.eventHandler(event, this);
   }
 
   var topbarHeight = $$('.topbar')[0].getHeight();
   var taskbarHeight = $$('.taskbar-container')[0].getHeight();
   var windowIndex = 0;
 
-  DeskCurrentWindow.Window.create = function(title, data) {
+  desktop.Window.create = function(title, data) {
 
     var url = 'extension/desktop/window/index/?' + $.param(data);
-    var win = DeskCurrentWindow.Window.createDefaultWindow(url, title);
+    var win = desktop.Window.createDefaultWindow(url, title);
 
     var buttonList = [
       {
@@ -78,7 +78,7 @@
     });
 
     settingButton.on('click', function() {
-      DeskCurrentWindow.Window.createSettingModal(win);
+      desktop.Window.createSettingModal(win);
     });
 
     var dropdown = win.addButtonList(buttonList);
@@ -124,7 +124,7 @@
     return win;
   }
 
-  DeskCurrentWindow.Window.createDefaultWindow = function(uri, title, options) {
+  desktop.Window.createDefaultWindow = function(uri, title, options) {
 
     options = jQuery.extend({
       id: 'w'+ (++windowIndex),
@@ -167,7 +167,7 @@
         if (this.taskbarButton) {
 
           this.taskbarButton.remove()
-          DeskCurrentWindow.Taskbar.Windows.Menu.update();
+          desktop.Taskbar.Windows.Menu.update();
         }
 
         $(window).trigger('app:window:destroy', [this]);
@@ -176,16 +176,16 @@
       onFocus : function() {
 
         if (this.taskbarButton) {
-          DeskCurrentWindow.Taskbar.Windows.Button.focus(this.taskbarButton);
+          desktop.Taskbar.Windows.Button.focus(this.taskbarButton);
         }
 
-        DeskCurrentWindow.Window.updateIndex();
+        desktop.Window.updateIndex();
       },
 
       onBlur : function() {
 
         if (this.taskbarButton) {
-          DeskCurrentWindow.Taskbar.Windows.Button.blur(this.taskbarButton);
+          desktop.Taskbar.Windows.Button.blur(this.taskbarButton);
         }
       },
     });
@@ -199,8 +199,8 @@
     // win.setConstraint(true, {bottom: taskbarHeight});
     win.setConstraint(true, {bottom: taskbarHeight, top: topbarHeight});
 
-    DeskCurrentWindow.Taskbar.Windows.Button.create(win);
-    DeskCurrentWindow.Taskbar.Windows.Menu.update();
+    desktop.Taskbar.Windows.Button.create(win);
+    desktop.Taskbar.Windows.Menu.update();
 
     win.show();
     if (options.maximized) {
@@ -218,7 +218,7 @@
     return win;
   };
 
-  DeskCurrentWindow.Window.createModal = function (id, title, action, options) {
+  desktop.Window.createModal = function (id, title, action, options) {
 
     var win = new Window(id, {
       className: "ecidade",
@@ -250,7 +250,7 @@
     return win;
   };
 
-  DeskCurrentWindow.Window.createSettingModal = function(win) {
+  desktop.Window.createSettingModal = function(win) {
 
     var id = win.getId();
     var settingId = id + '-setting';
@@ -262,7 +262,7 @@
       }
     }
 
-    var modal = DeskCurrentWindow.Window.createModal(settingId, 'Configurações',  'window/setting/', {
+    var modal = desktop.Window.createModal(settingId, 'Configurações',  'window/setting/', {
       width: 420,
       height: 380,
       closable: true,
@@ -275,7 +275,7 @@
     win.addChildren(modal, true);
   }
 
-  DeskCurrentWindow.Window.updateIndex = function() {
+  desktop.Window.updateIndex = function() {
 
     var menu = $('#menu');
     var menuIndex = parseInt(menu.css('zIndex'));
@@ -289,9 +289,9 @@
     $('.topbar').css({zIndex : Windows.maxZIndex + 102});
   }
 
-  DeskCurrentWindow.Window.Iframe.eventHandler = function(event, win) {
+  desktop.Window.Iframe.eventHandler = function(event, win) {
 
-    DeskCurrentWindow.Timer.get('session.block').restart();
+    desktop.Timer.get('session.block').restart();
 
     win.focus();
     $.getOutsideListeners().each(function() {
@@ -299,7 +299,7 @@
     });
   };
 
-  DeskCurrentWindow.Taskbar.Windows = {
+  desktop.Taskbar.Windows = {
 
     container : $('.taskbar-container'),
 
@@ -312,9 +312,9 @@
 
   };
 
-  DeskCurrentWindow.Taskbar.Windows.Button = {
+  desktop.Taskbar.Windows.Button = {
 
-    container : DeskCurrentWindow.Taskbar.Windows.find('> .taskbar-buttons'),
+    container : desktop.Taskbar.Windows.find('> .taskbar-buttons'),
 
     create : function(win) {
 
@@ -333,7 +333,7 @@
           return win.close();
         }
 
-        DeskCurrentWindow.Taskbar.Windows.find('.taskbar-buttons-item.active').removeClass('active');
+        desktop.Taskbar.Windows.find('.taskbar-buttons-item.active').removeClass('active');
 
         if (win.isVisible() && !win.isFocused()) {
           return win.focus();
@@ -346,7 +346,7 @@
         win.minimize();
       });
 
-      DeskCurrentWindow.Taskbar.Windows.Menu.show();
+      desktop.Taskbar.Windows.Menu.show();
 
     }, // create()
 
@@ -366,9 +366,9 @@
 
   } // button()
 
-  DeskCurrentWindow.Taskbar.Windows.Menu = {
+  desktop.Taskbar.Windows.Menu = {
 
-    container : DeskCurrentWindow.Taskbar.Windows.find('.taskbar-buttons-modal'),
+    container : desktop.Taskbar.Windows.find('.taskbar-buttons-modal'),
     active : false,
 
     show : function() {
@@ -407,7 +407,7 @@
 
     update : function() {
 
-      var itens = DeskCurrentWindow.Taskbar.Windows.Button.container.find('li');
+      var itens = desktop.Taskbar.Windows.Button.container.find('li');
 
       if ( !itens.length ) {
 
@@ -427,7 +427,7 @@
       $modal.append($('<ul />', {'class': 'taskbar-buttons'}));
 
       itens.each(function(index, item) {
-        DeskCurrentWindow.Taskbar.Windows.Menu.add($(this));
+        desktop.Taskbar.Windows.Menu.add($(this));
       });
 
       $modal.find('ul').scrollator({zIndex: Windows.maxZIndex + 104});
@@ -441,8 +441,8 @@
       });
 
       oNewList.on('mousedown', function(event) {
-        DeskCurrentWindow.Taskbar.Windows.Button.click(button, event);
-        // DeskCurrentWindow.Taskbar.Windows.Menu.close();
+        desktop.Taskbar.Windows.Button.click(button, event);
+        // desktop.Taskbar.Windows.Menu.close();
       });
 
       this.container.find('ul').append(oNewList);
@@ -450,7 +450,7 @@
 
   };
 
-  DeskCurrentWindow.Session.updateGlobal = function(data, callback) {
+  desktop.Session.updateGlobal = function(data, callback) {
 
     $.ajax({
       url: 'desktop/session',
@@ -527,7 +527,7 @@
         return timers.hasOwnProperty(id) ? timers[id] : false;
     };
 
-    DeskCurrentWindow.Timer = Timer;
+    desktop.Timer = Timer;
 
   })();
 
@@ -600,7 +600,7 @@
 
     /**
      * @param {HTMLElement} parentNode
-     * @param {DeskCurrentWindow.Loader} parent
+     * @param {desktop.Loader} parent
      */
     function Message(parentNode, parent) {
 
@@ -1050,7 +1050,7 @@
 
     exports.Inspect = Inspect;
 
-  })(DeskCurrentWindow.Window);
+  })(desktop.Window);
 
   global.Desktop = Desktop;
 

@@ -96,7 +96,7 @@ class DocumentConverter:
         inputUrl = self._fileUrl(inputFile)
         outputUrl = self._fileUrl(outputFile)
 
-        document = self.deskCurrentWindow.loadComponentFromURL(inputUrl, "_blank", 0, _unoProps(Hidden=True, ReadOnly=True))
+        document = self.desktop.loadComponentFromURL(inputUrl, "_blank", 0, _unoProps(Hidden=True, ReadOnly=True))
         try:
           document.refresh()
         except AttributeError:

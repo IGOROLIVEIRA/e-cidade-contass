@@ -34,7 +34,7 @@ class Desktop extends Controller {
 
     $styles = array(
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/css/topbar.css",
-      ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/css/deskCurrentWindow.css",
+      ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/css/desktop.css",
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/css/taskbar.css",
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/css/menu.css",
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/css/menu-list-icons.css",
@@ -55,7 +55,7 @@ class Desktop extends Controller {
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/vendors/jquery.menu-search/jquery.menu-search.js",
       ECIDADE_REQUEST_PATH . "scripts/prototype.js",
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/vendors/window/window.js",
-      ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/js/deskCurrentWindow.js",
+      ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/js/desktop.js",
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/js/menu.js",
       ECIDADE_CURRENT_EXTENSION_REQUEST_PATH . "assets/js/bootstrap.js",
     );
@@ -74,7 +74,7 @@ class Desktop extends Controller {
     }
 
     // dispara o evento do desktop
-    Registry::get('app.eventManager')->trigger('extension.deskCurrentWindow.bootstrap', $this, array($this));
+    Registry::get('app.eventManager')->trigger('extension.desktop.bootstrap', $this, array($this));
 
     /**
      * Conecta no banco

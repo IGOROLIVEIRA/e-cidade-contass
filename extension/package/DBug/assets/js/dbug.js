@@ -18,7 +18,7 @@
         iModuloId: 1
       }
 
-      DeskCurrentWindow.Window.create('Debug', oParams);
+      desktop.Window.create('Debug', oParams);
       $('#menu').trigger('menu.close');
 
       return false;

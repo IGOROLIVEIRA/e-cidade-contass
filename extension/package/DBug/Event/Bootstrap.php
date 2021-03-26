@@ -6,7 +6,7 @@ class Bootstrap extends \ECidade\V3\Event\Handler {
 
   /**
    * Event handler
-   * @param  mixed $controller Only on event 'extension.deskCurrentWindow.bootstrap'
+   * @param  mixed $controller Only on event 'extension.desktop.bootstrap'
    */
   public function execute(\Zend\EventManager\Event $event) {
 

@@ -123,7 +123,7 @@ class FileDialog
             $extra->set_relief(GTK_RELIEF_NONE);
             //$extrabutton = array(xpm, text, path, function)
         }
-        $desktop= new Icone($this->gdkwindow, images . 'deskCurrentWindow.xpm',' '._a('Desktop').' ', $desktoplabel);
+        $desktop= new Icone($this->gdkwindow, images . 'desktop.xpm',' '._a('Desktop').' ', $desktoplabel);
         $filesys= new Icone($this->gdkwindow, images . 'network.xpm',' '._a('Drives').' ', $networklabel);
         //$floppy = new Icone($this->gdkwindow, images . 'floppy.xpm',' '._a('Floppy').' ',  $floppylabel);
 

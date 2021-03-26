@@ -38,7 +38,7 @@ Object.extend(Window.prototype, {
 
     if (this.taskbarButton) {
       this.taskbarButton.html(newTitle);
-      window.DeskCurrentWindow.Taskbar.Windows.Menu.update();
+      window.desktop.Taskbar.Windows.Menu.update();
     }
   }
 })
@@ -111,7 +111,7 @@ Object.extend(Window.prototype, {
       };
 
       $('.topbar .settings').removeClass('active');
-      DeskCurrentWindow.Window.createModal("blocked_session", "Sessão bloqueada", "Window/block", options);
+      desktop.Window.createModal("blocked_session", "Sessão bloqueada", "Window/block", options);
 
       if (Windows.focusedWindow) {
         Windows.focusedWindow.blur();
@@ -126,7 +126,7 @@ Object.extend(Window.prototype, {
         return;
       }
 
-      DeskCurrentWindow.Taskbar.Windows.Menu.toggle();
+      desktop.Taskbar.Windows.Menu.toggle();
     });
 
     /** End Taskbar Events */
@@ -197,7 +197,7 @@ Object.extend(Window.prototype, {
           return false;
         }
 
-        var loader = window.loader || new DeskCurrentWindow.Loader(window.document.body);
+        var loader = window.loader || new desktop.Loader(window.document.body);
         loader.message.add({id: 'fallback', html : 'Trocando versão...'});
         loader.show();
 
@@ -226,7 +226,7 @@ Object.extend(Window.prototype, {
      */
     ;(function($) {
 
-      var timer = new DeskCurrentWindow.Timer('session.block', 1200000, function(event) {
+      var timer = new desktop.Timer('session.block', 1200000, function(event) {
         $('#block').triggerHandler('click');
       });
 
@@ -339,11 +339,11 @@ Object.extend(Window.prototype, {
               return select.val(baseAtual);
             }
 
-            var loader = window.loader || new DeskCurrentWindow.Loader(window.document.body);
+            var loader = window.loader || new desktop.Loader(window.document.body);
             loader.message.add({id: 'fallback', html : 'Trocando base...'});
             loader.show();
 
-            DeskCurrentWindow.Session.updateGlobal({"DB_NBASE": select.val()}, function(error) {
+            desktop.Session.updateGlobal({"DB_NBASE": select.val()}, function(error) {
 
               if (error) {
                 select.val(baseAtual);

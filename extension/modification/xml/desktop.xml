@@ -30,7 +30,7 @@
   echo "</script>";]]></search>
       <add><![CDATA[?>
 <script>
-parent.parent.DeskCurrentWindow.Session.updateGlobal({
+parent.parent.desktop.Session.updateGlobal({
   DB_datausu : '<?php echo db_getsession("DB_datausu"); ?>',
   DB_anousu : '<?php echo db_getsession("DB_anousu"); ?>',
 }, function(error, data) {
