@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
+echo 'xpto';exit;
 require_once(modification("libs/db_stdlib.php"));
 require_once(modification("libs/db_conecta.php"));
 require_once(modification("classes/db_db_versao_classe.php"));
@@ -34,7 +34,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $cldb_versao = new cl_db_versao;
 $result      = $cldb_versao->sql_record($cldb_versao->sql_query(null,"db30_codversao,db30_codrelease","db30_codver desc limit 1"));
-//db_criatabela($result);exit;
+db_criatabela($result);exit;
 
 if ( $cldb_versao->numrows == 0 ) {
 

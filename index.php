@@ -27,6 +27,7 @@
 
 error_reporting(null);
 session_start();
+
 require_once(modification("libs/db_conn.php"));
 require_once(modification("libs/db_utils.php"));
 require_once(modification("libs/db_stdlib.php"));
