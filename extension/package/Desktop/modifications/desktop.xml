@@ -6,7 +6,7 @@
   <version>1.0</version>
   <type>global</type>
 
-  <!-- scrips alterados antes de trocar CurrentWindow. CurrentWindow. {{{ -->
+  <!-- scrips alterados antes de trocar top. CurrentWindow. {{{ -->
 
   <file path="con4_trocadata.php">
 
@@ -30,7 +30,7 @@
   echo "</script>";]]></search>
       <add><![CDATA[?>
 <script>
-parent.parent.desktop.Session.updateGlobal({
+parent.parent.Desktop.Session.updateGlobal({
   DB_datausu : '<?php echo db_getsession("DB_datausu"); ?>',
   DB_anousu : '<?php echo db_getsession("DB_anousu"); ?>',
 }, function(error, data) {

@@ -1289,7 +1289,7 @@ class cl_arquivo_auxiliar {
     if($this->mostrar_botao_lancar == true)
       echo "  document.form1.".$this->nome_botao.".onclick = '';\n";
     echo "  if(chave){\n";
-    echo "    js_OpenJanelaIframe('".($this->localjan != "CurrentWindow.corpo"?$this->localjan:"CurrentWindow.corpo")."','".$this->nomeiframe."','".$this->func_arquivo."?funcao_js=parent.".$this->funcao_js."|".$this->codigo."|".$this->descr.$this->passar_query_string_para_func."'".($this->parametros != ""?$this->parametros:"").",'$this->nomejanela',true".($this->top!=null?",'".$this->CurrentWindow."'":"").");\n";
+    echo "    js_OpenJanelaIframe('".($this->localjan != "CurrentWindow.corpo"?$this->localjan:"CurrentWindow.corpo")."','".$this->nomeiframe."','".$this->func_arquivo."?funcao_js=parent.".$this->funcao_js."|".$this->codigo."|".$this->descr.$this->passar_query_string_para_func."'".($this->parametros != ""?$this->parametros:"").",'$this->nomejanela',true".($this->top!=null?",'".$this->top."'":"").");\n";
     echo "  }else{\n";
     if($this->completar_com_zeros_codigo == true){
 
@@ -2449,7 +2449,7 @@ class cl_formulario_rel_pes {
           } else {
             $result_complementar = db_query("select distinct r48_semest as semestralidade from gerfcom  where r48_anousu = ".$$campoano." and r48_mesusu = ".$$campomes);
           }
-
+          
           if(pg_numrows($result_complementar) > 0){
             $arr_selcomplementar[0] = "Todos ...";
             for($icompl=0; $icompl<pg_numrows($result_complementar); $icompl++){

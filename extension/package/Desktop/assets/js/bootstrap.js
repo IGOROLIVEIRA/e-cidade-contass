@@ -2,13 +2,13 @@
  * Eventos customizados disparados neste arquivo:
  *
  * app:
- *
+ * 
  * "app:start" = $() = $(document).ready()
  * "app:beforeunload" = window.onbeforeunload
  *
  * menu:
  * "menu.close"
- *
+ * 
  */
 
 Object.extend(Windows, {
@@ -38,7 +38,7 @@ Object.extend(Window.prototype, {
 
     if (this.taskbarButton) {
       this.taskbarButton.html(newTitle);
-      window.desktop.Taskbar.Windows.Menu.update();
+      window.Desktop.Taskbar.Windows.Menu.update();
     }
   }
 })
@@ -111,7 +111,7 @@ Object.extend(Window.prototype, {
       };
 
       $('.topbar .settings').removeClass('active');
-      desktop.Window.createModal("blocked_session", "Sessão bloqueada", "Window/block", options);
+      Desktop.Window.createModal("blocked_session", "Sessão bloqueada", "Window/block", options);
 
       if (Windows.focusedWindow) {
         Windows.focusedWindow.blur();
@@ -126,7 +126,7 @@ Object.extend(Window.prototype, {
         return;
       }
 
-      desktop.Taskbar.Windows.Menu.toggle();
+      Desktop.Taskbar.Windows.Menu.toggle();
     });
 
     /** End Taskbar Events */
@@ -197,7 +197,7 @@ Object.extend(Window.prototype, {
           return false;
         }
 
-        var loader = window.loader || new desktop.Loader(window.document.body);
+        var loader = window.loader || new Desktop.Loader(window.document.body);
         loader.message.add({id: 'fallback', html : 'Trocando versão...'});
         loader.show();
 
@@ -210,7 +210,7 @@ Object.extend(Window.prototype, {
 
         }, 'json')
         .fail(function(xhr) {
-
+          
           loader.message.hide();
           loader.hide();
           var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseText;
@@ -226,7 +226,7 @@ Object.extend(Window.prototype, {
      */
     ;(function($) {
 
-      var timer = new desktop.Timer('session.block', 1200000, function(event) {
+      var timer = new Desktop.Timer('session.block', 1200000, function(event) {
         $('#block').triggerHandler('click');
       });
 
@@ -293,7 +293,7 @@ Object.extend(Window.prototype, {
         if (input.search.options('background')) {
           input.search.sendMessage();
         }
-      });
+      }); 
 
       exibeBases(instit);
     });
@@ -339,18 +339,18 @@ Object.extend(Window.prototype, {
               return select.val(baseAtual);
             }
 
-            var loader = window.loader || new desktop.Loader(window.document.body);
+            var loader = window.loader || new Desktop.Loader(window.document.body);
             loader.message.add({id: 'fallback', html : 'Trocando base...'});
             loader.show();
 
-            desktop.Session.updateGlobal({"DB_NBASE": select.val()}, function(error) {
+            Desktop.Session.updateGlobal({"DB_NBASE": select.val()}, function(error) {
 
               if (error) {
                 select.val(baseAtual);
                 return console.error(error);
               }
 
-              window.document.location.href = window.document.location.href;
+              window.document.location.href = window.document.location.href; 
             });
 
           });

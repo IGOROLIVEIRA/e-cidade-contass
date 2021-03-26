@@ -573,9 +573,9 @@ if ($oDaoPagOrdemConta->numrows > 0) {
 
   function js_pesquisak13_conta(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr','Pesquisa',true);
+      js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr','Pesquisa',true);
     }else{
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
+      js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
     }
   }
   function js_mostrasaltes(chave,erro){
@@ -591,7 +591,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     db_iframe_saltes.hide();
   }
   function js_pesquisa_pagamentos(empenho){
-    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem002.php?e60_numemp='+empenho,'Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem002.php?e60_numemp='+empenho,'Pesquisa',true);
   }
 
   <?
@@ -640,7 +640,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
   ?>
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_empempenho.hide();
@@ -672,7 +672,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
 
 
   function js_cheque(abrejanela, fFuncRetorno){
-    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cheque',
+    js_OpenJanelaIframe('top.corpo','db_iframe_cheque',
       'emp4_movimentosgenda.php?js_funcao=' + 'parent.' + fFuncRetorno
       + '|e91_codcheque|e83_conta|e91_cheque|k13_descr|k12_valor|e81_codmov|k105_corgrupotipo'
       +'&e50_codord=<?=@$e50_codord?>&e60_numemp=<?=@$e60_numemp?>'
@@ -779,7 +779,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     );
   }
 
-  function js_objectToJson(oObject) { return JSON.stringify(oObject);
+  function js_objectToJson(oObject) { return JSON.stringify(oObject); 
 
     var sJson = oObject.toSource();
     sJson     = sJson.replace("(","");

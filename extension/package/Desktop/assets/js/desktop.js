@@ -31,17 +31,17 @@
 
   Window.keepMultiModalWindow = true;
   Window.prototype.eventHandler = function(event) {
-    desktop.Window.Iframe.eventHandler(event, this);
+    Desktop.Window.Iframe.eventHandler(event, this);
   }
 
   var topbarHeight = $$('.topbar')[0].getHeight();
   var taskbarHeight = $$('.taskbar-container')[0].getHeight();
   var windowIndex = 0;
 
-  desktop.Window.create = function(title, data) {
+  Desktop.Window.create = function(title, data) {
 
     var url = 'extension/desktop/window/index/?' + $.param(data);
-    var win = desktop.Window.createDefaultWindow(url, title);
+    var win = Desktop.Window.createDefaultWindow(url, title);
 
     var buttonList = [
       {
@@ -78,7 +78,7 @@
     });
 
     settingButton.on('click', function() {
-      desktop.Window.createSettingModal(win);
+      Desktop.Window.createSettingModal(win);
     });
 
     var dropdown = win.addButtonList(buttonList);
@@ -124,7 +124,7 @@
     return win;
   }
 
-  desktop.Window.createDefaultWindow = function(uri, title, options) {
+  Desktop.Window.createDefaultWindow = function(uri, title, options) {
 
     options = jQuery.extend({
       id: 'w'+ (++windowIndex),
@@ -167,7 +167,7 @@
         if (this.taskbarButton) {
 
           this.taskbarButton.remove()
-          desktop.Taskbar.Windows.Menu.update();
+          Desktop.Taskbar.Windows.Menu.update();
         }
 
         $(window).trigger('app:window:destroy', [this]);
@@ -176,16 +176,16 @@
       onFocus : function() {
 
         if (this.taskbarButton) {
-          desktop.Taskbar.Windows.Button.focus(this.taskbarButton);
+          Desktop.Taskbar.Windows.Button.focus(this.taskbarButton);
         }
 
-        desktop.Window.updateIndex();
+        Desktop.Window.updateIndex();
       },
 
       onBlur : function() {
 
         if (this.taskbarButton) {
-          desktop.Taskbar.Windows.Button.blur(this.taskbarButton);
+          Desktop.Taskbar.Windows.Button.blur(this.taskbarButton);
         }
       },
     });
@@ -199,8 +199,8 @@
     // win.setConstraint(true, {bottom: taskbarHeight});
     win.setConstraint(true, {bottom: taskbarHeight, top: topbarHeight});
 
-    desktop.Taskbar.Windows.Button.create(win);
-    desktop.Taskbar.Windows.Menu.update();
+    Desktop.Taskbar.Windows.Button.create(win);
+    Desktop.Taskbar.Windows.Menu.update();
 
     win.show();
     if (options.maximized) {
@@ -218,7 +218,7 @@
     return win;
   };
 
-  desktop.Window.createModal = function (id, title, action, options) {
+  Desktop.Window.createModal = function (id, title, action, options) {
 
     var win = new Window(id, {
       className: "ecidade",
@@ -250,7 +250,7 @@
     return win;
   };
 
-  desktop.Window.createSettingModal = function(win) {
+  Desktop.Window.createSettingModal = function(win) {
 
     var id = win.getId();
     var settingId = id + '-setting';
@@ -262,7 +262,7 @@
       }
     }
 
-    var modal = desktop.Window.createModal(settingId, 'Configurações',  'window/setting/', {
+    var modal = Desktop.Window.createModal(settingId, 'Configurações',  'window/setting/', {
       width: 420,
       height: 380,
       closable: true,
@@ -275,7 +275,7 @@
     win.addChildren(modal, true);
   }
 
-  desktop.Window.updateIndex = function() {
+  Desktop.Window.updateIndex = function() {
 
     var menu = $('#menu');
     var menuIndex = parseInt(menu.css('zIndex'));
@@ -289,9 +289,9 @@
     $('.topbar').css({zIndex : Windows.maxZIndex + 102});
   }
 
-  desktop.Window.Iframe.eventHandler = function(event, win) {
+  Desktop.Window.Iframe.eventHandler = function(event, win) {
 
-    desktop.Timer.get('session.block').restart();
+    Desktop.Timer.get('session.block').restart();
 
     win.focus();
     $.getOutsideListeners().each(function() {
@@ -299,7 +299,7 @@
     });
   };
 
-  desktop.Taskbar.Windows = {
+  Desktop.Taskbar.Windows = {
 
     container : $('.taskbar-container'),
 
@@ -312,9 +312,9 @@
 
   };
 
-  desktop.Taskbar.Windows.Button = {
+  Desktop.Taskbar.Windows.Button = {
 
-    container : desktop.Taskbar.Windows.find('> .taskbar-buttons'),
+    container : Desktop.Taskbar.Windows.find('> .taskbar-buttons'),
 
     create : function(win) {
 
@@ -333,7 +333,7 @@
           return win.close();
         }
 
-        desktop.Taskbar.Windows.find('.taskbar-buttons-item.active').removeClass('active');
+        Desktop.Taskbar.Windows.find('.taskbar-buttons-item.active').removeClass('active');
 
         if (win.isVisible() && !win.isFocused()) {
           return win.focus();
@@ -346,7 +346,7 @@
         win.minimize();
       });
 
-      desktop.Taskbar.Windows.Menu.show();
+      Desktop.Taskbar.Windows.Menu.show();
 
     }, // create()
 
@@ -366,9 +366,9 @@
 
   } // button()
 
-  desktop.Taskbar.Windows.Menu = {
+  Desktop.Taskbar.Windows.Menu = {
 
-    container : desktop.Taskbar.Windows.find('.taskbar-buttons-modal'),
+    container : Desktop.Taskbar.Windows.find('.taskbar-buttons-modal'),
     active : false,
 
     show : function() {
@@ -407,7 +407,7 @@
 
     update : function() {
 
-      var itens = desktop.Taskbar.Windows.Button.container.find('li');
+      var itens = Desktop.Taskbar.Windows.Button.container.find('li');
 
       if ( !itens.length ) {
 
@@ -427,7 +427,7 @@
       $modal.append($('<ul />', {'class': 'taskbar-buttons'}));
 
       itens.each(function(index, item) {
-        desktop.Taskbar.Windows.Menu.add($(this));
+        Desktop.Taskbar.Windows.Menu.add($(this));
       });
 
       $modal.find('ul').scrollator({zIndex: Windows.maxZIndex + 104});
@@ -441,8 +441,8 @@
       });
 
       oNewList.on('mousedown', function(event) {
-        desktop.Taskbar.Windows.Button.click(button, event);
-        // desktop.Taskbar.Windows.Menu.close();
+        Desktop.Taskbar.Windows.Button.click(button, event);
+        // Desktop.Taskbar.Windows.Menu.close();
       });
 
       this.container.find('ul').append(oNewList);
@@ -450,7 +450,7 @@
 
   };
 
-  desktop.Session.updateGlobal = function(data, callback) {
+  Desktop.Session.updateGlobal = function(data, callback) {
 
     $.ajax({
       url: 'desktop/session',
@@ -527,7 +527,7 @@
         return timers.hasOwnProperty(id) ? timers[id] : false;
     };
 
-    desktop.Timer = Timer;
+    Desktop.Timer = Timer;
 
   })();
 
@@ -600,7 +600,7 @@
 
     /**
      * @param {HTMLElement} parentNode
-     * @param {desktop.Loader} parent
+     * @param {Desktop.Loader} parent
      */
     function Message(parentNode, parent) {
 
@@ -1050,7 +1050,7 @@
 
     exports.Inspect = Inspect;
 
-  })(desktop.Window);
+  })(Desktop.Window);
 
   global.Desktop = Desktop;
 
