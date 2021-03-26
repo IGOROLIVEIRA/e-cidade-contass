@@ -26,7 +26,7 @@ class GerarJULGLIC extends GerarAM
     $sSql = "select * from julglic102021 where si60_mes = " . $this->iMes . " and si60_instit=" . db_getsession("DB_instit");
     $rsJULGLIC10 = db_query($sSql);
 
-    $sSql2 = "select * from julglic202121 where si61_mes = " . $this->iMes . " and si61_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from julglic202021 where si61_mes = " . $this->iMes . " and si61_instit=" . db_getsession("DB_instit");
     $rsJULGLIC20 = db_query($sSql2);
 
   	$sSql3 = "select * from julglic302021 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");

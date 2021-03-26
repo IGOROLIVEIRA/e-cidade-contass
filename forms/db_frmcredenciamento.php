@@ -299,7 +299,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     }
 
     function BuscarCredAjax(params, onComplete) {
-        js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
+        //js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
