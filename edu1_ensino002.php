@@ -57,7 +57,7 @@ if (isset($alterar)) {
   ?>
   <script>
    parent.document.formaba.a2.disabled = false;
-   top.corpo.iframe_a2.location.href='edu1_disciplina001.php?ed12_i_ensino=<?=$ed10_i_codigo?>';
+   CurrentWindow.corpo.iframe_a2.location.href='edu1_disciplina001.php?ed12_i_ensino=<?=$ed10_i_codigo?>';
   </script>
   <?
 }

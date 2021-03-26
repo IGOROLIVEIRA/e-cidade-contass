@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -47,7 +47,7 @@ db_postmemory($_GET);
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table  border="0" cellpadding="0" cellspacing="0">
-  <tr> 
+  <tr>
     <td width="360" height="25">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -59,28 +59,28 @@ db_postmemory($_GET);
   <table  border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
     <tr><td><fieldset><legend><B>Opções</b></legend>
     <table>
-    <tr> 
+    <tr>
       <td  nowrap title="<?=$Tk80_codpla?>">
       <?=$Lk80_codpla?>
       </td>
-      <td align="left" nowrap> 
+      <td align="left" nowrap>
        <?
        db_input("k80_codpla", 10,$Ik80_codpla,true,"text",1);
        ?>
        </td>
     </tr>
-    
-    <tr> 
+
+    <tr>
       <td  nowrap title="Processo administrativo">
         <strong>Processo Administrativo:</strong>
       </td>
-      <td align="left" nowrap> 
+      <td align="left" nowrap>
        <?
        db_input("k144_numeroprocesso", 10,null,true,"text",1, null,null,null,null,15);
        ?>
        </td>
-    </tr>        
-    
+    </tr>
+
     <tr>
       <td>
         <b>Data Inicial:</b>
@@ -93,35 +93,35 @@ db_postmemory($_GET);
       <td>
         <b>Data Final</b>
       </td>
-      <td> 
+      <td>
          <?
           db_inputdata("datafim",null,null,null,true,'text',1);
-         ?> 
+         ?>
       </td>
     </tr>
-    
+
     <tr>
       <td colspan='1'>
         <b>Filtrar Por:</b>
       </td>
       <td colspan='3'>
         <?
-           $aFiltro = array( 
+           $aFiltro = array(
                             "k80_data"  => "Data de Lancamento",
                             "k80_dtaut" => "Data de Autenticação"
                            );
-          db_select("sFiltro", $aFiltro,true,1);  
+          db_select("sFiltro", $aFiltro,true,1);
          ?>
       </td>
-    </tr>  
+    </tr>
     </table></fieldset></td></tr>
-    <tr> 
-      <td colspan="4" align="center"> 
-       <input name="pesquisar" type="button" id="pesquisar2" value="Pesquisar" onclick="js_showReport()"> 
+    <tr>
+      <td colspan="4" align="center">
+       <input name="pesquisar" type="button" id="pesquisar2" value="Pesquisar" onclick="js_showReport()">
        <input name="limpar" type="reset" id="limpar" value="Limpar" >
       </td>
     </tr>
-  </table>  
+  </table>
   </form>
   </center>
 </body>
@@ -143,13 +143,13 @@ function js_showReport() {
   } else {
 
 	  sFuncaoPesquisa = 'func_placaixairelatorio.php?dataini='+dtDataIni+'&datafim='+dtDataFim+'&sFiltro='+sFiltro ;
-	  <?php 
+	  <?php
 		  if (isset($Modulo)) { ?>
 				sFuncaoPesquisa += '&Modulo=Pessoal';
-				<?php 
-		  } 
+				<?php
+		  }
 		?>
-    js_OpenJanelaIframe('top.corpo','db_iframe_plan',sFuncaoPesquisa,'Planilhas',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_plan',sFuncaoPesquisa,'Planilhas',true);
   }
 }
 </script>

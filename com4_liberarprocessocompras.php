@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -56,8 +56,8 @@ $oDaoSolicita->rotulo->label();
       db_app::load("strings.js");
       db_app::load("grid.style.css");
       db_app::load("estilos.css");
-      db_app::load("widgets/dbmessageBoard.widget.js");  
-      db_app::load("dbcomboBox.widget.js");   
+      db_app::load("widgets/dbmessageBoard.widget.js");
+      db_app::load("dbcomboBox.widget.js");
     ?>
   </head>
   <body bgcolor="#CCCCCC" style="margin-top: 25px">
@@ -92,7 +92,7 @@ $oDaoSolicita->rotulo->label();
                    <b>Departamento:</b>
                  </td>
                  <td colspan="4">
-                 
+
                     <?
                      db_input('pc80_depto', 45, 0, true, 'text', 3);
                    ?>
@@ -107,11 +107,11 @@ $oDaoSolicita->rotulo->label();
                  <td  colspan="4">
                  <?
                    $aSituacoes = array(
-                                       2 => "Autorizado", 
+                                       2 => "Autorizado",
                                        1 => "Análise",
                                        3 => "Não Autorizado",
                                        );
-                   db_select("pc80_situacao", $aSituacoes, true, 1);                     
+                   db_select("pc80_situacao", $aSituacoes, true, 1);
                  ?>
                </tr>
              </table>
@@ -135,17 +135,17 @@ function js_pesquisarProcessoCompras() {
   js_OpenJanelaIframe('',
                       'db_iframe_pcproc',
                       'func_pcproc.php?situacao=1&funcao_js=parent.js_getDadosProcesso|pc80_codproc',
-                      'Pesquisar Processar de Compras para Liberação', 
+                      'Pesquisar Processar de Compras para Liberação',
                       true);
 }
 
 function js_getDadosProcesso(iProcessoCompras) {
-  
+
   var oParam             = new Object();
   oParam.exec            = 'getDadosProcessoCompras';
   oParam.iCodigoProcesso = iProcessoCompras;
   js_divCarregando('Aguarde, carregando dados do Processo de Compras', 'msgBox');
-  var oAjax              = new Ajax.Request(sUrlRPC, 
+  var oAjax              = new Ajax.Request(sUrlRPC,
                                             {method:'post',
                                              parameters:'json='+Object.toJSON(oParam),
                                              onComplete:js_preencheDadosProcesso
@@ -158,15 +158,15 @@ function js_preencheDadosProcesso(oAjax) {
   db_iframe_pcproc.hide();
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 2) {
-  
+
     alert(oRetorno.message.urlDecode());
     js_pesquisarProcessoCompras();
   } else {
-  
-    $('pc80_codproc').value   = oRetorno.iCodigoProcesso;    
-    $('pc80_data').value      = oRetorno.dtEmissaoProcesso;    
-    $('pc80_depto').value     = oRetorno.iDepartamento+" - "+oRetorno.sDescricaoDepartamento.urlDecode();    
-    $('pc80_situacao').value  = oRetorno.iSituacao;    
+
+    $('pc80_codproc').value   = oRetorno.iCodigoProcesso;
+    $('pc80_data').value      = oRetorno.dtEmissaoProcesso;
+    $('pc80_depto').value     = oRetorno.iDepartamento+" - "+oRetorno.sDescricaoDepartamento.urlDecode();
+    $('pc80_situacao').value  = oRetorno.iSituacao;
   }
 }
 
@@ -174,35 +174,35 @@ function js_preencheDadosProcesso(oAjax) {
  * Altera a situação do processo de compras
  */
 function js_liberarProcessoDeCompras() {
-  
-  
+
+
   if ($F('pc80_codproc') == '') {
-  
+
     alert('Processo de Compras não informado.');
     return false;
   }
   var sTipoProcessamento = ''
-  switch($F('pc80_situacao')) {  
+  switch($F('pc80_situacao')) {
     case '1':
-        
+
       sTipoProcessamento  = 'Análise.\nO Processo de Compras não estará apto para o vínculo ';
       sTipoProcessamento += 'de licitaçoes ou para a Geração de Autorizações de Empenho';
       break;
-      
+
     case '2':
-      
+
       sTipoProcessamento  = 'Autorizado.\nO Processo de Compras estará autorizado para o vínculo ';
       sTipoProcessamento += 'com licitações e a Geração de Autorizações.';
-      break;  
-      
+      break;
+
     case '3':
-      
+
       sTipoProcessamento = 'Não Autorizado.\nO Processo de Compras não estará apto para o vínculo ';
       sTipoProcessamento += 'de licitaçoes ou para a Geração de Autorizações de Empenho';
-      break;  
+      break;
   }
-  var sMsgPRocessamento  = 'o Processo de Compras '+$F('pc80_codproc')+ ' ficara com a seguinte situação:\n'; 
-      sMsgPRocessamento += sTipoProcessamento; 
+  var sMsgPRocessamento  = 'o Processo de Compras '+$F('pc80_codproc')+ ' ficara com a seguinte situação:\n';
+      sMsgPRocessamento += sTipoProcessamento;
   if (!confirm(sMsgPRocessamento)) {
     return false;
   }
@@ -211,7 +211,7 @@ function js_liberarProcessoDeCompras() {
   oParam.iCodigoProcesso = $F('pc80_codproc');
   oParam.iSituacao       = $F('pc80_situacao');
   js_divCarregando('Aguarde, Realizando procedimento', 'msgBox');
-  var oAjax              = new Ajax.Request(sUrlRPC, 
+  var oAjax              = new Ajax.Request(sUrlRPC,
                                             {method:'post',
                                              parameters:'json='+Object.toJSON(oParam),
                                              onComplete:js_retornoLiberarProcessoDeCompra
@@ -219,56 +219,56 @@ function js_liberarProcessoDeCompras() {
 }
 
 function js_retornoLiberarProcessoDeCompra(oAjax) {
-  
+
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 2) {
-  
+
     alert(oRetorno.message.urlDecode());
   } else {
-    
+
     var sTipoProcessamento = '';
     switch($F('pc80_situacao')) {
-      
+
       case '1':
-        
+
         sTipoProcessamento = ' foi colocado em análise.';
         break;
-        
+
       case '2':
-        
+
         sTipoProcessamento = ' está autorizado para os proximos procedimentos.';
-        break;  
-        
+        break;
+
       case '3':
-        
+
         sTipoProcessamento = ' foi colocado como não autorizado. Esse processo de compras não poderá ser mais usado.';
-        break;  
+        break;
     }
     if (confirm('Processo de Compras'+sTipoProcessamento+ '\nDeseja emitir o documento '+$F('pc80_codproc')+'?')){
       jan = window.open('com2_autorizacaoprocessocompras002.php?iCodigoProcesso='+$F('pc80_codproc')+'&iModeloImpressao=10',
                          '',
-                         'width='+(screen.availWidth - 5), 
+                         'width='+(screen.availWidth - 5),
                          'height='+(screen.availHeight-40)+',scrollbars=1, location=0'
                         );
       jan.moveTo(0, 0);
     }
-    
+
   }
 }
 
 function js_abrePesquisaProcesso() {
-  
+
   if ($F("pc80_codproc") != "") {
-  
-    js_OpenJanelaIframe('top.corpo', 
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_pesquisa_processo',
                         'com3_pesquisaprocessocompras003.php?pc80_codproc='+$F("pc80_codproc"),
                         'Consulta Processo de Compras',
                         true
                        );
-                       
-                         
+
+
   }
 }
 $('btnPesquisar').observe('click', js_pesquisarProcessoCompras);

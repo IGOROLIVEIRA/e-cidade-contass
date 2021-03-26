@@ -57,10 +57,10 @@ if(isset($incluir)){
   $arr_cgms = Array();
   $arr_help = Array();
   $indexaut = 0;
-  
+
   // arrays para dados do empautitem
   $arr_proc = Array();
-  $arr_hell = Array();  
+  $arr_hell = Array();
   $indexitm = 0;
   $vir = "";
 
@@ -87,18 +87,18 @@ if(isset($incluir)){
       db_fieldsmemory($result_cgmvalor,0);
       $altcoddot = "false";
       $valres = "";
-      
+
       $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterproc($pc22_orcamitem,"pc11_codigo"));
       db_fieldsmemory($result_pcorcamitem,0);
 
       $result_dotac = $clpcdotac->sql_record($clpcdotac->sql_query_file($pc11_codigo,null,$pc13_coddot,"pc13_quant,pc13_valor"));
       db_fieldsmemory($result_dotac,0);
-      
+
       $result_altext = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(null,null,"o80_codres,o80_valor","","o80_coddot = $pc13_coddot and o82_solicitem = $pc11_codigo"));
-      
+
       if(!isset($diferenca[$pc13_coddot])){
 	    $diferenca[$pc13_coddot] = 0;
-	    $difindex[$iindexdif]    = $pc13_coddot;	
+	    $difindex[$iindexdif]    = $pc13_coddot;
 	    $iindexdif++;
       }
 
@@ -108,7 +108,7 @@ if(isset($incluir)){
 	$valres = $o80_codres;
 	if($o80_valor!=$pc23_valor / $pc23_quant * $pc13_quant){
           $diferenca[$pc13_coddot]+= $pc23_valor / $pc23_quant * $pc13_quant-$o80_valor;
-//	  $valres = 
+//	  $valres =
 	}
       }else{
 	$diferenca[$pc13_coddot]+= $pc23_valor / $pc23_quant * $pc13_quant;
@@ -117,17 +117,17 @@ if(isset($incluir)){
       if(!isset($arr_vals[$splitei[1]])){
 	$arr_vals[$splitei[1]] = 0;
         $arr_help[$indexaut]   = $splitei[1];
-        $indexaut++;	
+        $indexaut++;
       }
       $arr_vals[$splitei[1]] =  $arr_vals[$splitei[1]] + $pc23_valor / $pc23_quant * $pc13_quant;
-      $arr_cgms[$splitei[1]] =  $z01_numcgm;      
+      $arr_cgms[$splitei[1]] =  $z01_numcgm;
       if(!isset($arr_proc[$splitei[1]])){
 	$arr_proc[$splitei[1]]="";
 	$vir = "";
       }
       $arr_proc[$splitei[1]].= $vir.$pc81_codprocitem.'_'.$pc13_quant.'_'.$pc23_valor / $pc23_quant * $pc13_quant.'_'.$pc13_coddot.'_'.$altcoddot.'_'.$valres;
       $vir = ",";
-    }   
+    }
   }
 
   for($i=0;$i<sizeof($diferenca);$i++){
@@ -140,7 +140,7 @@ if(isset($incluir)){
     $verificarsaldo = is_float((0+$atual_menos_reservado));
     $dif = is_float($diferenca[$difindex[$i]]);
     if($verificarsaldo<$dif){
-      $erro_msg = "Usuário:\\n\\nDotação (".$difindex[$i].") sem saldo. Reserva não não gerada. \\nAutorizações não geradas\\n\\nAministrador:"; 
+      $erro_msg = "Usuário:\\n\\nDotação (".$difindex[$i].") sem saldo. Reserva não não gerada. \\nAutorizações não geradas\\n\\nAministrador:";
       $sqlerro  = true;
       break;
     }
@@ -157,7 +157,7 @@ if(isset($incluir)){
       $clempautoriza->e54_codcom = $e54_codcom;
       $clempautoriza->e54_destin = $e54_destin;
       $clempautoriza->e54_valor  = $e54_valor;
-      $clempautoriza->e54_anousu = $e54_anousu; 
+      $clempautoriza->e54_anousu = $e54_anousu;
       $clempautoriza->e54_tipol  = " ";
       $clempautoriza->e54_numer1 = " ";
       $clempautoriza->e54_praent = " ";
@@ -192,7 +192,7 @@ if(isset($incluir)){
 	  $valres      = $arr_daditem[5];
 	  $result_mater = $clpcprocitem->sql_record($clpcprocitem->sql_query_pcmater($e55_sequen,"pc01_codmater as e55_item,pc11_resum as e55_descr,pc11_codigo as codigo"));
 	  db_fieldsmemory($result_mater,0);
-	  
+
 	  $result_elemen= $clsolicitemele->sql_record($clsolicitemele->sql_query_file($codigo,null,"pc18_codele as e55_codele"));
 	  if($clsolicitemele->numrows>0){
             db_fieldsmemory($result_elemen,0);
@@ -201,7 +201,7 @@ if(isset($incluir)){
 	    $sqlerro=true;
             break;
 	  }
-	  
+
 	  if($sqlerro==false){
 	    $result_anousu= $clpcdotac->sql_record($clpcdotac->sql_query_file($codigo,null,$dotacao,"pc13_anousu as e56_anousu"));
 	    db_fieldsmemory($result_anousu,0);
@@ -233,7 +233,7 @@ if(isset($incluir)){
 		      $sqlerro=true;
 		      break;
 		}
-	      }	    
+	      }
 	    }
 	  }
 	}
@@ -250,11 +250,11 @@ if(isset($incluir)){
 	      $clorcreserva->o80_descr  = " ";
         $clorcreserva->o80_justificativa  = " ";
 	      $clorcreserva->incluir(null);
-	      $o80_codres = $clorcreserva->o80_codres;     
+	      $o80_codres = $clorcreserva->o80_codres;
 	      if($clorcreserva->erro_status==0){
 		    $sqlerro=true;
 		    $erro_msg = $clorcreserva->erro_msg;
-		    break;	        	      	
+		    break;
 	      }
 	      if($sqlerro==false){
 	        $clorcreservaaut->o83_autori = $e54_autori;
@@ -262,7 +262,7 @@ if(isset($incluir)){
 		    if($clorcreservaaut->erro_status==0){
               $sqlerro=true;
 		      $erro_msg = $clorcreservaaut->erro_msg;
-		      break;		      
+		      break;
 		    }else{
               $arr_geraum[$o80_codres] = $e54_autori;
 		    }
@@ -338,8 +338,8 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <form name="form1">
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
-  <tr> 
-    <td align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <?
     db_input('valores',8,0,true,'hidden',3);
@@ -358,7 +358,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
       echo "<tr>";
       echo "  <td colspan='11' align='center'>$Lpc80_codproc";
       echo "    ";db_input('pc80_codproc',8,$Ipc80_codproc,true,'text',3);
-      $result_resumo = $clpcproc->sql_record($clpcproc->sql_query_file($pc80_codproc,"pc80_resumo")); 
+      $result_resumo = $clpcproc->sql_record($clpcproc->sql_query_file($pc80_codproc,"pc80_resumo"));
       if($clpcproc->numrows>0){
 	db_fieldsmemory($result_resumo,0);
       }
@@ -381,7 +381,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
       echo "  <td nowrap class='bordas02' align='center'><strong>Val Tot.</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center'><strong>Reserva</strong></td>\n";
       echo "</tr>\n";
-      
+
       $dot_ant = "";
       $forn_ant= "";
       $codele_ant = "";
@@ -390,7 +390,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 
       $saldodotacoes = Array();
       $indexdotacoes = Array();
-      $indexsaldodotacoes = 0;      
+      $indexsaldodotacoes = 0;
       $itenssemdotac = "";
       $vircodprocitem = "";
       for($i=0;$i<$numrows_itens;$i++){
@@ -415,7 +415,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 	      $passa = true;
 	    }
 	  }
-	  
+
 	}
 
         if ($passa == false) continue;
@@ -429,8 +429,8 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 
 	if(!isset($saldodotacoes[$pc13_coddot])){
 	  $saldodotacoes[$pc13_coddot] = 0;
-	}	
-	
+	}
+
 	$result_altexttest = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(null,null,"o80_codres,o80_valor","","o80_coddot = $pc13_coddot and o82_solicitem = $pc13_codigo"));
 	if($clorcreservasol->numrows>0){
 	  db_fieldsmemory($result_altexttest,0,true);
@@ -439,7 +439,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
       }
       for($i=0;$i<$numrows_itens;$i++){
 	db_fieldsmemory($result_itens,$i);
-	
+
 	if (trim($pc13_coddot)=="") continue;
 
         $passa = true;
@@ -457,7 +457,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 	      $passa = true;
 	    }
 	  }
-	  
+
 	}
 
         if ($passa == false) continue;
@@ -468,7 +468,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
   	  if ($proxitem == $pc81_codprocitem and $proxdotac == $pc13_coddot) continue;
 	}
 
-	
+
 	//====================================================//
 	//rotina que verifica se ainda existe saldo disponivel//
 	//=========rotina para calcular o saldo final=========//
@@ -526,7 +526,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 	  if($pc11_quant_testa!=$pc13_quant_testa){
 	    $simnaod= "disabled";
 	    $bordas = "bordas01";
-	    if(strpos($itenssemdotac,"Item: ".$pc81_codprocitem." - Código na solicitação: ".$pc11_codigo)==""){	    
+	    if(strpos($itenssemdotac,"Item: ".$pc81_codprocitem." - Código na solicitação: ".$pc11_codigo)==""){
 	      $itenssemdotac .= $vircodprocitem."Item: ".$pc81_codprocitem." - Código na solicitação: ".$pc11_codigo;
 	      $vircodprocitem = "\\n";
 	    }
@@ -534,12 +534,12 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 	}else{
 	  $simnaod= "disabled";
 	  $bordas = "bordas01";
-	  if(strpos($itenssemdotac,"Item: ".$pc81_codprocitem." - Código na solicitação: ".$pc11_codigo)==""){	    
+	  if(strpos($itenssemdotac,"Item: ".$pc81_codprocitem." - Código na solicitação: ".$pc11_codigo)==""){
 	    $itenssemdotac .= $vircodprocitem."Item: ".$pc81_codprocitem." - Código na solicitação: ".$pc11_codigo;
 	    $vircodprocitem = "\\n";
 	  }
 	}
-	
+
 	echo "<tr>\n";
 	echo "  <td nowrap class='$bordas' align='center' ><input type='checkbox' name='aut_".($contador-1)."_".$pc81_codprocitem."_".$pc22_orcamitem."_".$pc23_orcamforne."_".$pc13_coddot."' value='aut_".($contador-1)."_".$pc81_codprocitem."_".$pc22_orcamitem."_".$pc23_orcamforne."_".$pc13_coddot."' $simnaod></td>\n";
 	echo "  <td nowrap class='$bordas' align='center' >$pc81_codprocitem</td>\n";
@@ -548,11 +548,11 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 	echo "  <td class='$bordas' align='left' >$z01_nome</td>\n";
 	echo "  <td nowrap class='$bordas' align='center' >$pc13_coddot</td>\n";
 	echo "  <td nowrap class='$bordas' align='right'  >$pc13_quant</td>\n";
-	echo "  <td nowrap class='$bordas' align='right'  >R$ ".db_formatar($pc23_valor/$pc23_quant,"f")."</td>\n"; 
+	echo "  <td nowrap class='$bordas' align='right'  >R$ ".db_formatar($pc23_valor/$pc23_quant,"f")."</td>\n";
 	echo "  <td nowrap class='$bordas' align='center'  >R$ ". db_formatar($pc23_valor / $pc23_quant * $pc13_quant,"f") . "</td>\n";
 	echo "  <td nowrap class='$bordas' align='center' ><strong>$simnao</strong</td>\n";
 	echo "</tr>\n";
-      } 
+      }
       echo "</table>\n";
       echo "</center>";
       echo "<script>
@@ -576,7 +576,7 @@ function js_relatorio(){
 }
 
 function js_troca(codigo,orcamento,sol){
-  top.corpo.document.location.href = 'com1_trocpcorcamtroca001.php?pc25_orcamitem='+codigo+'&orcamento='+orcamento+'&sol='+sol;
+  CurrentWindow.corpo.document.location.href = 'com1_trocpcorcamtroca001.php?pc25_orcamitem='+codigo+'&orcamento='+orcamento+'&sol='+sol;
 }
 function js_unico(nome,campo,valor,TAB,dot){
   tcampo = campo.substr(0,campo.lastIndexOf("_"));
@@ -623,7 +623,7 @@ function js_marcatudo(){
 	  x.elements[i].checked=false;
 	}else{
 	  x.elements[i].checked=true;
-	}        
+	}
       }
     }
   }
@@ -632,7 +632,7 @@ function js_marcaautoriza(valor){
   x = document.form1;
   for(i=0;i<x.length;i++){
     if(x.elements[i].type=='checkbox'){
-      splitei = x.elements[i].value.split("_");      
+      splitei = x.elements[i].value.split("_");
       if(x.elements[i].disabled==false){
 	if(splitei[1]==valor){
 	  if(x.elements[i].checked==true){

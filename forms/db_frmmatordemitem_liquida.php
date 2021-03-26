@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -63,11 +63,11 @@ $soma = 1;
 <script language="JavaScript" type="text/javascript" src="../scripts/scripts.js"></script>
 <link href="../estilos.css" rel="stylesheet" type="text/css">
 <script>
-function js_marca(obj){	
+function js_marca(obj){
    var OBJ = document.form1;
    for(i=0;i<OBJ.length;i++){
      if(OBJ.elements[i].type == 'checkbox'){
-       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
      }
    }
    return false;
@@ -94,18 +94,18 @@ function js_marca(obj){
 </style>
 <script>
 function pesquisa_emp(qchave){
- js_OpenJanelaIframe('top.corpo.iframe_oc','db_janelaReceita','func_empempenho001.php?fechar=top.corpo.db_janelaReceita&e60_numemp='+qchave,'Dados Cadastrais do Empenho',true,10);
+ js_OpenJanelaIframe('CurrentWindow.corpo.iframe_oc','db_janelaReceita','func_empempenho001.php?fechar=CurrentWindow.corpo.db_janelaReceita&e60_numemp='+qchave,'Dados Cadastrais do Empenho',true,10);
 }
 </script>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"> 
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table  border="0" cellspacing="0" cellpadding="0" width='100%'>
-<tr> 
-<td  align="left" valign="top" bgcolor="#CCCCCC"> 
+<tr>
+<td  align="left" valign="top" bgcolor="#CCCCCC">
 <form name='form1'>
 <center>
-      
-<table border='1' cellspacing="0" cellpadding="0">   
+
+<table border='1' cellspacing="0" cellpadding="0">
 <?
 
 
@@ -122,16 +122,16 @@ if (isset ($e60_codemp)) {
 
 if ((isset ($e60_numcgm) && $e60_numcgm != "") && (isset ($erro) && $erro == 'false')) {
 	$sql = ("
-       select e60_numemp,e60_codemp, 
-                  e62_item, 
-              	  pc01_descrmater, 
-			      e62_sequen, 
-			      e62_descr, 
+       select e60_numemp,e60_codemp,
+                  e62_item,
+              	  pc01_descrmater,
+			      e62_sequen,
+			      e62_descr,
 			      e62_quant,
 			      pc01_servico,
 			      e62_vltot
-	   from empempenho 
-			      inner join empempitem on e62_numemp = e60_numemp 
+	   from empempenho
+			      inner join empempitem on e62_numemp = e60_numemp
 			      inner join pcmater on pc01_codmater = e62_item
 			      inner join pcsubgrupo on pc04_codsubgrupo = pc01_codsubgrupo
 			      inner join pctipo on pc05_codtipo = pc04_codtipo
@@ -161,7 +161,7 @@ if ((isset ($e60_numcgm) && $e60_numcgm != "") && (isset ($erro) && $erro == 'fa
 	echo "</tr>";
 
 
-	// variavel que controla o indice dos itens	 
+	// variavel que controla o indice dos itens
     $i =0;
 	for ($linha = 0; $linha < $numrows; $linha ++) {
 
@@ -198,37 +198,37 @@ if ((isset ($e60_numcgm) && $e60_numcgm != "") && (isset ($erro) && $erro == 'fa
 				$errosomaquant ++;
 			}
 		} else {
-			// entra aqui quando da pesquisa por cgm			
+			// entra aqui quando da pesquisa por cgm
 			// monta o checkbox  que é selecionado
-			
-			echo "<tr>	    
+
+			echo "<tr>
 			       	  <td class='bordas_corp' title='Inverte a marcação' align='center'>
-						<input 
-                            type='checkbox' 
-                            name='CHECK_$e60_numemp"."_"."$e62_sequen"."' 
+						<input
+                            type='checkbox'
+                            name='CHECK_$e60_numemp"."_"."$e62_sequen"."'
                             id='CHECK_".$e60_numemp."_"."$e62_sequen"."'
                            onchange='js_atuValor();'
 					        ></td>
 		              <td class='bordas_corp' align='center'><small>$e60_codemp </small></td>
 		   	       	  <td class='bordas_corp' align='center'>$e60_numemp</td>
-			       	  <td class='bordas_corp' align='center'><small>$e62_item  </small></td>		    
+			       	  <td class='bordas_corp' align='center'><small>$e62_item  </small></td>
 			     	  <td class='bordas_corp' nowrap align='left' title='$pc01_descrmater'><small>".substr($pc01_descrmater, 0, 20)."&nbsp;</small></td>
 			     	  <td class='bordas_corp' align='center'><small>$e62_sequen</small></td>
 		              <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr, 0, 20)."&nbsp;</small></td>";
 
- 			// pesquisa ítens cuja ordem não tenha sido anulada 			
+ 			// pesquisa ítens cuja ordem não tenha sido anulada
 			$result1 = $clmatordemitem->sql_record(
 			                 $clmatordemitem->sql_query_anulado(
-			                            null, 
+			                            null,
   									   "sum(m52_quant) as m52_quant,
 										sum(m52_valor) as m52_valor,
 										e62_quant,e62_vltot",
-										"", 
-									   "m52_numemp=$e60_numemp and 
-                                        m52_sequen=$e62_sequen and 
-                                        m53_codordem is null  
+										"",
+									   "m52_numemp=$e60_numemp and
+                                        m52_sequen=$e62_sequen and
+                                        m53_codordem is null
 										group by m52_sequen,m52_numemp,e62_quant,e62_vltot"));
-		
+
 			$valoruni = $e62_vltot / $e62_quant;
 			if ($clmatordemitem->numrows == 0) {
 				$valoruni = $e62_vltot / $e62_quant;
@@ -286,7 +286,7 @@ if ((isset ($e60_numcgm) && $e60_numcgm != "") && (isset ($erro) && $erro == 'fa
 					$quant = "quant_$e60_numemp"."_"."$e62_sequen"."_"."$i";
 					$val = "valor_$i"."_"."$e60_numemp"."_"."$e62_sequen";
 					$$quant = $e62_quant;
-					
+
 					$valo = $e62_vltot - $m52_valor;
 					$$val = db_formatar($valo, 'f');
 					$valorrestante = db_formatar($$val, 'f');
@@ -301,8 +301,8 @@ if ((isset ($e60_numcgm) && $e60_numcgm != "") && (isset ($erro) && $erro == 'fa
 					echo "</tr> ";
 					$i++;
 				}
-			}			
-		}		
+			}
+		}
 	}
 	if (($errosomaquant == $numrows) && ($numrows != 0)) {
 		echo "<script>location.href='db_frmmatordemitem.php?erro=true&numrows=$numrows&e60_numcgm=$e60_numcgm'</script>";
@@ -317,24 +317,24 @@ if ((isset ($e60_numcgm) && $e60_numcgm != "") && (isset ($erro) && $erro == 'fa
 			       <td class='bordas' align='center'><b>Data    </b></td>
 			       <td class='bordas' align='center'><b>$RLm51_obs</b></td>
 			       <td class='bordas' align='center'><b>Valor Total</b></td>
-			     </tr>  
+			     </tr>
 			     ";
 
 		$result_ordem = $clmatordem->sql_record($clmatordem->sql_query_numemp("", "(e60_codemp||'/'||e60_anousu) as e60_codemp,m51_codordem,m51_data,m51_obs,m51_valortotal", "", "m51_numcgm=$e60_numcgm $where $where1 and m51_codordem not in(select m53_codordem from matordemanu)"));
 		for ($x = 0; $x < $clmatordem->numrows; $x ++) {
 			db_fieldsmemory($result_ordem, $x);
-			echo "<tr>	    
+			echo "<tr>
 			             <td class='bordas_corp' align='center'>$m51_codordem </td>
 			             <td class='bordas_corp' align='center'>$e60_codemp   </td>
 			             <td class='bordas_corp' align='center'>$m51_data     </td>
-			             <td class='bordas_corp' align='left' title='$m51_obs'  >".substr($m51_obs, 0, 40)."&nbsp</td>		    
+			             <td class='bordas_corp' align='left' title='$m51_obs'  >".substr($m51_obs, 0, 40)."&nbsp</td>
 			             <td class='bordas_corp' align='center'>".db_formatar($m51_valortotal, 'f')."</td>
 			          </tr>";
 		}
 	}
 ?>
  </table>
-     </form> 
+     </form>
      </center>
     </td>
   </tr>
@@ -355,34 +355,34 @@ function js_verifica(max,quan,nome,valoruni,numemp,sequen){
 	    // 	atualiza aba de retenções
 	    // 		alert(valortot);
 	    //		js_atuValor(valortot);
- 	}   
+ 	}
 }
 
 function js_atuValor(){
     // alert('atualizando valores');
 	// soma os valores selecionados e atualiza a aba de retenções
 	obj =document.form1;
-	var tvalor =0;	
+	var tvalor =0;
 	cont  = 0;
 	for (linha=0;linha < obj.length;linha++){
 	       if (obj[linha].type=='checkbox'){
 	              nome = obj[linha].name;
 	              // alert(nome);
-	              	              
- 				  i=nome.split("_");				
+
+ 				  i=nome.split("_");
  				  empenho = i[1];
- 				  sequencial  = i[2];  
+ 				  sequencial  = i[2];
  				  // pos=i[3]; // não definida
- 				  		  
+
                   valor = eval("document.form1.valor_"+cont+"_"+empenho+"_"+sequencial+".value;");
-           		  if (obj[linha].checked==true)	                                                        
+           		  if (obj[linha].checked==true)
                        tvalor = parseFloat(tvalor)+ parseFloat(valor);
-                                         
+
                   cont++;
 	       }
-	}	
+	}
 	// alert('  Atualizando valor >> ' + tvalor);
-	top.corpo.iframe_ret.setValorNota(tvalor);		 
+	CurrentWindow.corpo.iframe_ret.setValorNota(tvalor);
 }
 </script>
 </body>

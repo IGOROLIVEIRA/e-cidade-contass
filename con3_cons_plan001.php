@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -78,7 +78,7 @@ function js_emite(opcao,origem){
      perfin = document.form1.DBtxt22_ano.value+'-'+document.form1.DBtxt22_mes.value+'-'+document.form1.DBtxt22_dia.value;;
 
      document.form1.ini.value= perini;
-     document.form1.fim.value= perfin; 
+     document.form1.fim.value= perfin;
   }else if (opcao == 2){
      document.form1.opcao.value=2;
      if(document.form1.mesfin.value == 0){
@@ -130,7 +130,7 @@ function js_emite(opcao,origem){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -138,8 +138,8 @@ function js_emite(opcao,origem){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <form name="form1" method="post" action="">
           <input type=hidden name="db_opcao" value="Incluir">
@@ -160,20 +160,20 @@ function js_emite(opcao,origem){
    	     <td><? db_selorcbalanco(true,false); ?> </td>
            </tr>
            </table>
-           <? 
- 
+           <?
+
            if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir"){
                $perini=$ini;
-               $perfin=$fim; 
+               $perfin=$fim;
                if (isset($c61_reduz) && ($c61_reduz!="")) {
-                 echo "<script>  
+                 echo "<script>
                         function lancamentos(chave1){
                              chave2='$perini';
                              chave3='$perfin';
-                             js_OpenJanelaIframe('top.corpo','db_iframe_conlancamval','func_conlancamval003.php?codrec='+chave1+'&perini='+chave2+'&perfin='+chave3+'&funcao_js=parent.js_pesquisa_lancam|c69_sequen|c69_codlan','Pesquisa',true);
+                             js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamval','func_conlancamval003.php?codrec='+chave1+'&perini='+chave2+'&perfin='+chave3+'&funcao_js=parent.js_pesquisa_lancam|c69_sequen|c69_codlan','Pesquisa',true);
                       }
                     </script>";
-		 
+
 		 echo "<script> lancamentos($c61_reduz); </script>";
             }else{
        	         $sql01 = db_planocontassaldo(db_getsession("DB_anousu"),$perini,$perfin,true);
@@ -183,10 +183,10 @@ function js_emite(opcao,origem){
 		                 saldo_final as DL_Saldo
 	                  from ($sql01) as X
  	                  where c61_reduz >0 ";
-		       
+
    	           $js_funcao="lancamentos|c61_reduz";
-                   db_lovrot($sql,18,"()","","$js_funcao");  
-	     
+                   db_lovrot($sql,18,"()","","$js_funcao");
+
              }
            }
         ?>
@@ -200,7 +200,7 @@ function js_emite(opcao,origem){
 </html>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conplanoreduz','func_conplanoreduz.php?funcao_js=parent.js_preenchepesquisa|c61_codcon|c61_reduz|c60_descr','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplanoreduz','func_conplanoreduz.php?funcao_js=parent.js_preenchepesquisa|c61_codcon|c61_reduz|c60_descr','Pesquisa',true);
 }
 function js_preenchepesquisa(chave1,chave2,chave3){
     db_iframe_conplanoreduz.hide();
@@ -208,12 +208,12 @@ function js_preenchepesquisa(chave1,chave2,chave3){
     document.form1.c61_reduz.value=chave2;
     document.form1.c60_descr.value=chave3;
 }
-  
+
 function js_pesquisa_lancam(sequen,codlan){
-   
+
   //  db_iframe_conlancamval.hide();
   // chave1 = c69_sequen
-  // chave2 = c69_codlan 
-  js_OpenJanelaIframe('top.corpo','db_conlancamval','func_conlancamval002.php?chavepesquisa='+codlan+'&sequen='+sequen,'Pesquisa');
-}  
+  // chave2 = c69_codlan
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_conlancamval','func_conlancamval002.php?chavepesquisa='+codlan+'&sequen='+sequen,'Pesquisa');
+}
 </script>

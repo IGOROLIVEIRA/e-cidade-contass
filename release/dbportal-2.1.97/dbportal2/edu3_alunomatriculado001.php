@@ -577,7 +577,7 @@ function js_procurar(calendario,turma){
  }
 }
 function js_matriculas(turma,descrturma,calendario){
- js_OpenJanelaIframe('top.corpo','db_iframe_matriculas','edu3_alunomatriculado002.php?turma='+turma,'Alunos Matriculados na Turma '+descrturma,true);
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matriculas','edu3_alunomatriculado002.php?turma='+turma,'Alunos Matriculados na Turma '+descrturma,true);
  location.href = "#topo";
 }
 function js_botao(valor){

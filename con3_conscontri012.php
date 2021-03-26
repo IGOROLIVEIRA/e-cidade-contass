@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
   require("libs/db_stdlib.php");
@@ -45,9 +45,9 @@
   $clcontrib = new cl_contrib;
   $clcontricalc = new cl_contricalc;
   $clrotulo = new rotulocampo;
-  $cleditalrua->rotulo->label(); 
-  $cledital->rotulo->label(); 
-  $cleditalserv->rotulo->label(); 
+  $cleditalrua->rotulo->label();
+  $cledital->rotulo->label();
+  $cleditalserv->rotulo->label();
   $clrotulo->label('d01_codedi');
   $clrotulo->label('d01_numero');
   $clrotulo->label('d02_contri');
@@ -65,7 +65,7 @@
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <style>
 .db_area {
-  font-family : courier; 
+  font-family : courier;
 }
 </style>
 </head>
@@ -78,7 +78,7 @@ if ($solicitacao == "contri") {
     db_fieldsmemory($result01,0);
 ?>
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="2">
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
         <?=$Ld02_contri?>
     </td>
@@ -86,7 +86,7 @@ if ($solicitacao == "contri") {
         <?=$contri?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
         <?=$Lj14_nome?>
     </td>
@@ -94,7 +94,7 @@ if ($solicitacao == "contri") {
         <?=$j14_nome?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
 	<?=$Ld02_autori?>
     </td>
@@ -102,7 +102,7 @@ if ($solicitacao == "contri") {
       <?=($d02_autori=="t"?"SIM":"NÃO")?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
         <?=$Ld02_profun?>
     </td>
@@ -111,26 +111,26 @@ if ($solicitacao == "contri") {
     </td>
   </tr>
 </table>
-<? 
+<?
    $result03=$cleditalserv->sql_record($cleditalserv->sql_query($contri,"","d04_tipos,d04_quant,d04_vlrcal,d04_vlrval,d03_descr"));
    $numrows03=$cleditalserv->numrows;
-?>   
+?>
 <table width="95%" border="1" align="center" cellpadding="0" cellspacing="2">
   <tr>
     <td align='center'><b>Serviços</b></td>
     <td align='center'><b>Quantidade em metros</b></td>
     <td align='center'><b>Valor em R$</b></td>
   </tr>
-  <tr> 
+  <tr>
     <?
      for($a=0; $a<$numrows03; $a++){
     	db_fieldsmemory($result03,$a);
-       echo "<tr>"; 	
+       echo "<tr>";
        echo "<td align='center'>$d03_descr</td>";
 	 echo "<td align='center'>".db_formatar($d04_quant,'p')."</td>";
        echo "<td align='center'>".db_formatar($d04_vlrcal,'f')."</td>";
-       echo "</tr>"; 	
-     }  
+       echo "</tr>";
+     }
     ?>
   </tr>
 </table>
@@ -141,9 +141,9 @@ if ($solicitacao == "contri") {
     db_fieldsmemory($result01,0);
     $result02=$cledital->sql_record($cledital->sql_query($d02_codedi,"d01_numero,d01_data,d01_perc,k02_descr,d01_perunica"));
     db_fieldsmemory($result02,0);
-?>   
+?>
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="2">
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
         <?=$Ld01_codedi?>
     </td>
@@ -151,7 +151,7 @@ if ($solicitacao == "contri") {
         <?=$d02_codedi?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
         <?=$Ld01_numero?>
     </td>
@@ -159,7 +159,7 @@ if ($solicitacao == "contri") {
         <?=$d01_numero?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
 	<?=$Lk02_descr?>
     </td>
@@ -167,7 +167,7 @@ if ($solicitacao == "contri") {
       <?=$k02_descr?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
         <?=$Ld01_perc?>
     </td>
@@ -195,19 +195,19 @@ if ($solicitacao == "contri") {
         if(pg_numrows($result08)>0){
           db_fieldsmemory($result08,0);
         }else{
-          $sum="0,00"; 	
+          $sum="0,00";
         }
       }else{
         echo "<b>Não foram encontrados cálculos para esta matrícula</b>";
         exit;
-     }   
+     }
     }else{
       echo "<b>Não foram encontrados cálculos para esta matrícula</b>";
       exit;
-   }   
-?>   
+   }
+?>
 <table width="95%" border="1" align="center" cellpadding="0" cellspacing="2">
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
 	<?=$Ld07_valor?>
     </td>
@@ -215,7 +215,7 @@ if ($solicitacao == "contri") {
       <?=db_formatar($d07_valor,'f')?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
 	<?=$Ld07_vlrdes?>
     </td>
@@ -223,7 +223,7 @@ if ($solicitacao == "contri") {
       <?=db_formatar($d07_vlrdes,'f')?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
       <b>Valor pago:</b>
     </td>
@@ -231,7 +231,7 @@ if ($solicitacao == "contri") {
       <?=db_formatar($sum,'f')?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
       <b>Valor devido:</b>
     </td>
@@ -239,7 +239,7 @@ if ($solicitacao == "contri") {
       <?=db_formatar($total,'f')?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" width="15%" nowrap>
       <b><?=$Lk00_numpre?></b>
     </td>
@@ -262,12 +262,12 @@ if ($solicitacao == "contri") {
       }else{
 	echo "<b>Não foram encontrados outras contribuições para esta matrícula</b>";
 	exit;
-      }  
-  ?>   
+      }
+  ?>
   <script>
   function js_outra(contri,matric){
-   js_OpenJanelaIframe('top.corpo','db_iframe2','con3_conscontri011.php?contri='+contri+'&cod_matricula='+matric,'Pesquisa',true);
-  } 
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','con3_conscontri011.php?contri='+contri+'&cod_matricula='+matric,'Pesquisa',true);
+  }
   </script>
   <table width="95%" border="1" align="center" cellpadding="0" cellspacing="2">
     <tr>
@@ -277,20 +277,20 @@ if ($solicitacao == "contri") {
       <td align='center'><b><?=(str_replace(":","",$Ld01_numero))?></b></td>
       <td align='center'><b><?=(str_replace(":","",$Ld01_descr))?></b></td>
     </tr>
-    <tr> 
+    <tr>
       <?
        for($a=0; $a<$numrows10; $a++){
 	 db_fieldsmemory($result10,$a);
 	 if($contri!=$d05_contri){
-   	   echo "<tr  >"; 	
+   	   echo "<tr  >";
 	   echo "<td align='center'><a href='#' onclick=\"js_outra('$d05_contri','$matric');\" >$d05_contri</a></td>";
 	   echo "<td align='center'><a href='#' onclick=\"js_outra('$d05_contri','$matric');\" >$j14_nome</a></td>";
 	   echo "<td align='center'><a href='#' onclick=\"js_outra('$d05_contri','$matric');\" >$d01_codedi</a></td>";
 	   echo "<td align='center'><a href='#' onclick=\"js_outra('$d05_contri','$matric');\" >$d01_numero</a></td>";
 	   echo "<td align='center'><a href='#' onclick=\"js_outra('$d05_contri','$matric');\" >$d01_descr</a></td>";
-	   echo "</tr>"; 	
-	 }  
-       }  
+	   echo "</tr>";
+	 }
+       }
       ?>
     </tr>
   </table>
@@ -305,24 +305,24 @@ if ($solicitacao == "contri") {
     }else{
       echo "<b>Não foram encontrados lotes para esta matrícula</b>";
       exit;
-    }  
-?>   
+    }
+?>
 <table width="95%" border="1" align="center" cellpadding="0" cellspacing="2">
   <tr>
     <td align='center'><b>Serviços</b></td>
     <td align='center'><b>Fração em metros</b></td>
     <td align='center'><b>Valor em R$</b></td>
   </tr>
-  <tr> 
+  <tr>
     <?
      for($a=0; $a<$numrows06; $a++){
        db_fieldsmemory($result06,$a);
-       echo "<tr>"; 	
+       echo "<tr>";
        echo "<td align='left'>$d03_descr</td>";
        echo "<td align='center'>".db_formatar($d06_fracao,'p')."</td>";
        echo "<td align='center'>".db_formatar($d06_fracao,'f')."</td>";
-       echo "</tr>"; 	
-     }  
+       echo "</tr>";
+     }
     ?>
   </tr>
 </table>

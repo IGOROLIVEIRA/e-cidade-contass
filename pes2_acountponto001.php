@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -102,7 +102,7 @@ function js_relatorio() {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="if(document.form1) document.form1.elements[0].focus()" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -110,7 +110,7 @@ function js_relatorio() {
   </tr>
 </table>
 <table width="790" height="100%" border="0" align="center" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
 	<center>
         <form name="form1" method="post" action="">
@@ -119,11 +119,11 @@ function js_relatorio() {
                <td width="50%">&nbsp;</td>
                <td width="50%">&nbsp;</td>
 	    </tr>
-            <tr> 
+            <tr>
               <td width="50%">&nbsp;</td>
               <td width="50%">&nbsp;</td>
             </tr>
-            <tr> 
+            <tr>
               <td align="right" nowrap><strong>Alteracoes Entre:</strong></td>
               <td align="left"  nowrap>&nbsp;&nbsp;
                 <?db_inputdata('datai',$dtoper_dia,$dtoper_mes,$dtoper_ano,true,'text',1);?>
@@ -187,7 +187,7 @@ function js_relatorio() {
                 ?>
               </td>
             </tr>
-            <tr> 
+            <tr>
               <td width="360">&nbsp;</td>
               <td width="140">&nbsp;</td>
             </tr>
@@ -213,13 +213,13 @@ function js_relatorio() {
                         if(isset($colunas_sselecionados) && $colunas_sselecionados != ""){
                            $colunas_sselecionados = split(",",$colunas_sselecionados);
                            for($Ic=0;$Ic < count($colunas_sselecionados);$Ic++){
-                              $arr_colunas_final[$colunas_sselecionados[$Ic]] = $arr_colunas[$colunas_sselecionados[$Ic]]; 
+                              $arr_colunas_final[$colunas_sselecionados[$Ic]] = $arr_colunas[$colunas_sselecionados[$Ic]];
                            }
                         }
                         if(isset($colunas_nselecionados) && $colunas_nselecionados != ""){
                            $colunas_nselecionados = split(",",$colunas_nselecionados);
                            for($Ic=0;$Ic < count($colunas_nselecionados);$Ic++){
-                              $arr_colunas_inicial[$colunas_nselecionados[$Ic]] = $arr_colunas[$colunas_nselecionados[$Ic]]; 
+                              $arr_colunas_inicial[$colunas_nselecionados[$Ic]] = $arr_colunas[$colunas_nselecionados[$Ic]];
                            }
                         }
                         if(!isset($colunas_sselecionados) || !isset($colunas_sselecionados) || $colunas_sselecionados == ""){
@@ -235,9 +235,9 @@ function js_relatorio() {
                <td width="25">&nbsp;</td>
                <td width="140">&nbsp;</td>
 	    </tr>
-            <tr> 
-              <td colspan = "3" align="center" > 
-	          <input name="Imprimir" type="button" id="imprimir" onClick="js_relatorio()" value="Imprimir"> 
+            <tr>
+              <td colspan = "3" align="center" >
+	          <input name="Imprimir" type="button" id="imprimir" onClick="js_relatorio()" value="Imprimir">
 	      </td>
             </tr>
           </table>
@@ -246,7 +246,7 @@ function js_relatorio() {
 	</td>
   </tr>
 </table>
-    <? 
+    <?
       db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
     ?>
 </body>
@@ -254,20 +254,20 @@ function js_relatorio() {
 <script>
 function js_pesquisarub(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?funcao_js=parent.js_mostrarub1|rh27_rubric|rh27_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhrubricas','func_rhrubricas.php?funcao_js=parent.js_mostrarub1|rh27_rubric|rh27_descr','Pesquisa',true);
   }else{
-     if(document.form1.rh27_rubric.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?pesquisa_chave='+document.form1.rh27_rubric.value+'&funcao_js=parent.js_mostrarub','Pesquisa',false);
+     if(document.form1.rh27_rubric.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhrubricas','func_rhrubricas.php?pesquisa_chave='+document.form1.rh27_rubric.value+'&funcao_js=parent.js_mostrarub','Pesquisa',false);
      }else{
        document.form1.rh27_descr.value = '';
      }
   }
 }
 function js_mostrarub(chave,erro){
-  document.form1.rh27_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.rh27_rubric.focus(); 
-    document.form1.rh27_rubric.value = ''; 
+  document.form1.rh27_descr.value = chave;
+  if(erro==true){
+    document.form1.rh27_rubric.focus();
+    document.form1.rh27_rubric.value = '';
   }
 }
 function js_mostrarub1(chave1,chave2){
@@ -281,20 +281,20 @@ function js_mostrarub1(chave1,chave2){
 
 function js_pesquisamat(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostramat1|rh01_regist|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostramat1|rh01_regist|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.rh01_regist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostramat','Pesquisa',false);
+     if(document.form1.rh01_regist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostramat','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostramat(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.rh01_regist.focus(); 
-    document.form1.rh01_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.rh01_regist.focus();
+    document.form1.rh01_regist.value = '';
   }
 }
 function js_mostramat1(chave1,chave2){

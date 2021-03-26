@@ -7,33 +7,33 @@ include("dbforms/db_funcoes.php");
 include("classes/db_documento_classe.php");
 include("classes/db_documentoatributo_classe.php");
 
-$cldocumento = new cl_documento;  
+$cldocumento = new cl_documento;
 $cldocumentoatributo = new cl_documentoatributo;
-  
+
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 33;
 $db_botao = false;
 if(isset($excluir)){
   $sqlerro=false;
-  db_inicio_transacao();  
+  db_inicio_transacao();
   $cldocumentoatributo->excluir(null, "db45_documento={$db44_sequencial}");
 
   if($cldocumentoatributo->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $cldocumentoatributo->erro_msg; 
+  }
+  $erro_msg = $cldocumentoatributo->erro_msg;
   $cldocumento->excluir($db44_sequencial);
   if($cldocumento->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $cldocumento->erro_msg; 
+  }
+  $erro_msg = $cldocumento->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $cldocumento->sql_record($cldocumento->sql_query($chavepesquisa)); 
+   $result = $cldocumento->sql_record($cldocumento->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -47,8 +47,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmdocumento.php");
@@ -84,7 +84,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.documentoatributo.disabled=false;
-         top.corpo.iframe_documentoatributo.location.href='con1_documentoatributo001.php?db_opcaoal=33&db45_documento=".@$db44_sequencial."';
+         CurrentWindow.corpo.iframe_documentoatributo.location.href='con1_documentoatributo001.php?db_opcaoal=33&db45_documento=".@$db44_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('documentoatributo');";

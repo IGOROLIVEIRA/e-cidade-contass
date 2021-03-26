@@ -9,7 +9,7 @@ $clcodsistema->rotulo->label();
     <td nowrap title="<?=@$Tc52_codsis?>">
        <?=@$Lc52_codsis?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c52_codsis',1,$Ic52_codsis,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('c52_codsis',1,$Ic52_codsis,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc52_descr?>">
        <?=@$Lc52_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c52_descr',50,$Ic52_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('c52_descr',50,$Ic52_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc52_descrred?>">
        <?=@$Lc52_descrred?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('F'=>'Financeiro','P'=>'Patrimonial','O'=>'Orçamentário','C'=>'Contábil');
 db_select('c52_descrred',$x,true,$db_opcao,"");
@@ -43,7 +43,7 @@ db_select('c52_descrred',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_codsistema','func_codsistema.php?funcao_js=parent.js_preenchepesquisa|c52_codsis','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_codsistema','func_codsistema.php?funcao_js=parent.js_preenchepesquisa|c52_codsis','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_codsistema.hide();

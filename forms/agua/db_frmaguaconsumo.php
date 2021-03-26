@@ -7,7 +7,7 @@ $claguaconsumo->rotulo->label();
  	   $db_action="agu1_aguaconsumo005.php";
       }else if($db_opcao==3||$db_opcao==33){
  	   $db_action="agu1_aguaconsumo006.php";
-      }  
+      }
 ?>
 <form name="form1" method="post" action="<?=$db_action?>">
 <center>
@@ -16,7 +16,7 @@ $claguaconsumo->rotulo->label();
     <td nowrap title="<?=@$Tx19_codconsumo?>">
        <?=@$Lx19_codconsumo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x19_codconsumo',5,$Ix19_codconsumo,true,'text',3,"")
 ?>
@@ -26,7 +26,7 @@ db_input('x19_codconsumo',5,$Ix19_codconsumo,true,'text',3,"")
     <td nowrap title="<?=@$Tx19_exerc?>">
        <?=@$Lx19_exerc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x19_exerc',4,$Ix19_exerc,true,'text',$db_opcao,"")
 ?>
@@ -36,7 +36,7 @@ db_input('x19_exerc',4,$Ix19_exerc,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx19_areaini?>">
        <?=@$Lx19_areaini?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x19_areaini',8,$Ix19_areaini,true,'text',$db_opcao,"")
 ?>
@@ -46,7 +46,7 @@ db_input('x19_areaini',8,$Ix19_areaini,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx19_areafim?>">
        <?=@$Lx19_areafim?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x19_areafim',8,$Ix19_areafim,true,'text',$db_opcao,"")
 ?>
@@ -56,7 +56,7 @@ db_input('x19_areafim',8,$Ix19_areafim,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx19_caract?>">
        <?=@$Lx19_caract?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x19_caract',5,$Ix19_caract,true,'text',$db_opcao,"")
 ?>
@@ -66,7 +66,7 @@ db_input('x19_caract',5,$Ix19_caract,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx19_conspadrao?>">
        <?=@$Lx19_conspadrao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x19_conspadrao',10,$Ix19_conspadrao,true,'text',$db_opcao,"")
 ?>
@@ -76,7 +76,7 @@ db_input('x19_conspadrao',10,$Ix19_conspadrao,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx19_descr?>">
        <?=@$Lx19_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x19_descr',40,$Ix19_descr,true,'text',$db_opcao,"")
 ?>
@@ -86,7 +86,7 @@ db_input('x19_descr',40,$Ix19_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx19_ativo?>">
        <?=@$Lx19_ativo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('x19_ativo',$x,true,$db_opcao,"");
@@ -100,7 +100,7 @@ db_select('x19_ativo',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_aguaconsumo','db_iframe_aguaconsumo','func_aguaconsumo.php?funcao_js=parent.js_preenchepesquisa|x19_codconsumo','Pesquisa',true,'0','1','775','390');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguaconsumo','db_iframe_aguaconsumo','func_aguaconsumo.php?funcao_js=parent.js_preenchepesquisa|x19_codconsumo','Pesquisa',true,'0','1','775','390');
 }
 function js_preenchepesquisa(chave){
   db_iframe_aguaconsumo.hide();

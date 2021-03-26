@@ -2515,26 +2515,26 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
 <script>
 // mostra os dados do cgm do contribuinte
 function js_mostracgm(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=func_nome&numcgm=<?=@$z01_numcgm?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=func_nome&numcgm=<?=@$z01_numcgm?>','Pesquisa',true);
 }
 
 
 // esta funcao é utilizada quando clicar na matricula após pesquisar
 // a mesma
 function js_mostrabic_matricula(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_bicmatric','cad3_conscadastronovo_002.php?cod_matricula=<?=@$matric?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bicmatric','cad3_conscadastronovo_002.php?cod_matricula=<?=@$matric?>','Pesquisa',true);
 }
 // esta funcao é utilizada quando clicar na inscricao após pesquisar
 // a mesma
 function js_mostrabic_inscricao(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_bicinscr','iss3_consinscr003.php?numeroDaInscricao=<?=@$inscr?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bicinscr','iss3_consinscr003.php?numeroDaInscricao=<?=@$inscr?>','Pesquisa',true);
 }
 
 function js_mostranomes(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_preenche|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_preenche|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_preenche1','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_preenche1','Pesquisa',false);
   }
 }
 function js_preenche(chave,chave1){
@@ -2555,12 +2555,12 @@ function js_mostramatricula(mostra, nome_func){
   document.form1.q02_inscr.value  = "";
   if(mostra==true){
     if(nome_func != "func_iptubase.php") {
-      js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula|0|1','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula|0|1','Pesquisa',true);
     } else {
-      js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula3|0|1|2','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula3|0|1|2','Pesquisa',true);
     }
   }else {
-    js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenchematricula2','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenchematricula2','Pesquisa',false);
   }
 }
 function js_preenchematricula3(chave,chave1,chave2){
@@ -2596,9 +2596,9 @@ function js_mostrainscricao(mostra){
   document.form1.j01_matric.value = "";
   document.form1.z01_numcgm.value = "";
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_issbase.php?funcao_js=parent.js_mostra|q02_inscr|z01_nome|q02_dtbaix','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_issbase.php?funcao_js=parent.js_mostra|q02_inscr|z01_nome|q02_dtbaix','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
   }
 }
 
@@ -2645,13 +2645,13 @@ if($mensagem_semdebitos == true){
 ?>
 
 function js_mostradetalhes(chave){
-  js_OpenJanelaIframe('top.corpo','db_iframe_mostrainscr',chave,'Pesquisa',true, 20, 0, document.body.clientWidth, document.body.clientHeight - 30);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostrainscr',chave,'Pesquisa',true, 20, 0, document.body.clientWidth, document.body.clientHeight - 30);
 }
 
 //-------------func Situação Fiscal - Por /*Rogerio Baum*/ -----------------------
 
 function js_situacao_fiscal(cod,tipo){
-  js_OpenJanelaIframe('top.corpo','db_iframe_sitfiscal','cai3_consitfiscal002.php?cod='+cod+'&tipo='+tipo,'Situação Fiscal',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sitfiscal','cai3_consitfiscal002.php?cod='+cod+'&tipo='+tipo,'Situação Fiscal',true);
 }
 
 //--------------------------------------------------------

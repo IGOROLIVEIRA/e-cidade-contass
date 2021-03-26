@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: caixa
@@ -41,17 +41,17 @@ if($db_opcao==2 or $db_opcao==22) {
 <center>
 <table border="0">
 
-    <tr>   
+    <tr>
       <td>
       <?
        db_ancora($Ld62_banco,' js_bancos(true); ',$db_opcaobco);
       ?>
        </td>
-       <td> 
+       <td>
       <?
        db_input('d62_banco',5,$Id62_banco,true,'text',$db_opcaobco,"onchange='js_bancos(false)'");
        db_input('nomebco',40,"",true,'text',3);
-       
+
       ?>
        </td>
      </tr>
@@ -60,7 +60,7 @@ if($db_opcao==2 or $db_opcao==22) {
     <td nowrap title="<?=@$Td62_convenio?>">
        <?=@$Ld62_convenio?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('d62_convenio',20,$Id62_convenio,true,'text',$db_opcao,"")
 ?>
@@ -70,7 +70,7 @@ db_input('d62_convenio',20,$Id62_convenio,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Td62_ultimonsa?>">
        <?=@$Ld62_ultimonsa?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('d62_ultimonsa',10,$Id62_ultimonsa,true,'text',$db_opcao,"")
 ?>
@@ -80,7 +80,7 @@ db_input('d62_ultimonsa',10,$Id62_ultimonsa,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Td62_mascara?>">
        <?=@$Ld62_mascara?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('d62_mascara',25,$Id62_mascara,true,'text',$db_opcao,"")
 ?>
@@ -94,20 +94,20 @@ db_input('d62_mascara',25,$Id62_mascara,true,'text',$db_opcao,"")
 <script>
 function js_pesquisad62_instituicao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
   }else{
-     if(document.form1.d62_instituicao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.d62_instituicao.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+     if(document.form1.d62_instituicao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.d62_instituicao.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
      }else{
-       document.form1.nomeinst.value = ''; 
+       document.form1.nomeinst.value = '';
      }
   }
 }
 function js_mostradb_config(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.d62_instituicao.focus(); 
-    document.form1.d62_instituicao.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.d62_instituicao.focus();
+    document.form1.d62_instituicao.value = '';
   }
 }
 function js_mostradb_config1(chave1,chave2){
@@ -116,7 +116,7 @@ function js_mostradb_config1(chave1,chave2){
   db_iframe_db_config.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_debcontaparam','func_debcontaparam.php?funcao_js=parent.js_preenchepesquisa|d62_instituicao|d62_banco','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_debcontaparam','func_debcontaparam.php?funcao_js=parent.js_preenchepesquisa|d62_instituicao|d62_banco','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_debcontaparam.hide();
@@ -137,14 +137,14 @@ function js_bancos(mostra){
 }
 function js_mostrabancos(chave1,chave2){
   document.form1.d62_banco.value = chave1;
-  document.form1.nomebco.value = chave2;  
+  document.form1.nomebco.value = chave2;
   db_iframe2.hide();
 }
 function js_mostrabancos1(chave,erro){
   document.form1.nomebco.value = chave;
-  if(erro==true){ 
-    document.form1.d62_banco.focus(); 
-    document.form1.d62_banco.value = ''; 
+  if(erro==true){
+    document.form1.d62_banco.focus();
+    document.form1.d62_banco.value = '';
   }
 }
 

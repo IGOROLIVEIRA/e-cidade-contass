@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -56,7 +56,7 @@ if ( isset($excluir) ) {
 
   /**
    * Exclui da tabela concurcargo
-   */  
+   */
   if ( !$sqlerro ) {
 
     $clconcurcargo->excluir(null, "h82_concur = {$h06_refer}");
@@ -70,7 +70,7 @@ if ( isset($excluir) ) {
 
 	/**
 	 * Excluir da tabela concur
-	 */	 
+	 */
 	if ( $sqlerro == false ) {
 
     $clconcur->h06_refer = $h06_refer;
@@ -85,7 +85,7 @@ if ( isset($excluir) ) {
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
-   $result = $clconcur->sql_record($clconcur->sql_query($chavepesquisa)); 
+   $result = $clconcur->sql_record($clconcur->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $db_botao = true;
 }
@@ -100,8 +100,8 @@ if ( isset($excluir) ) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmconcur.php");
@@ -135,7 +135,7 @@ if ( isset($chavepesquisa) ) {
   echo "
         <script>
           parent.document.formaba.concurcargo.disabled = false;
-	      top.corpo.iframe_concurcargo.location.href = 'rec1_concurcargo001.php?chavepesquisa=$h06_refer&db_opcaoal=false';
+	      CurrentWindow.corpo.iframe_concurcargo.location.href = 'rec1_concurcargo001.php?chavepesquisa=$h06_refer&db_opcaoal=false';
 	    </script>
        ";
 }

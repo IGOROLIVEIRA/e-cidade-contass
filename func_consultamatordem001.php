@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -52,25 +52,25 @@ $clrotulo->label("m52_numemp");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tm51_codordem?>">
               <?=$Lm51_codordem?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("m51_codordem",10,$Im51_codordem,true,"text",4,"");
 		       ?>
             </td>
-          
-           
+
+
             <td width="4%" align="right" nowrap title="<?=$Tm51_data?>">
               <?=$Lm51_data?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("m51_data",10,$Im51_data,true,"text",4,"");
 		       ?>
@@ -80,17 +80,17 @@ $clrotulo->label("m52_numemp");
             <td width="4%" align="right" nowrap title="<?=$Tm51_numcgm?>">
               <?=$Lm51_numcgm?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("m51_numcgm",10,$Im51_numcgm,true,"text",4,"");
 		       ?>
             </td>
-	  
-	  
+
+
             <td width="4%" align="right" nowrap title="<?=$Tz01_nome?>">
               <?=$Lz01_nome?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("z01_nome",10,$Iz01_nome,true,"text",4,"");
 		       ?>
@@ -100,25 +100,25 @@ $clrotulo->label("m52_numemp");
             <td width="4%" align="right" nowrap title="<?=$Te60_codemp?>">
               <?=$Le60_codemp?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("e60_codemp",10,$Ie60_codemp,true,"text",4,"");
 		       ?>
             </td>
-	  
+
             <td width="4%" align="right" nowrap title="<?=$Tm52_numemp?>">
               <?=$Lm52_numemp?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("m52_numemp",10,$Im52_numemp,true,"text",4,"");
 		       ?>
             </td>
-	  
+
 	  </tr>
-          <tr> 
-            <td colspan="4" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+          <tr>
+            <td colspan="4" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_matordem.hide();">
              </td>
@@ -127,8 +127,8 @@ $clrotulo->label("m52_numemp");
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
@@ -183,6 +183,6 @@ if(!isset($pesquisa_chave)){
 ?>
 <script>
  function js_mostraordem(codordem){
-       js_OpenJanelaIframe('top.corpo','db_iframe_matordem2','com3_ordemdecompra002.php?m51_codordem='+codordem,'Ordem de Compra nº '+codordem,true)
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matordem2','com3_ordemdecompra002.php?m51_codordem='+codordem,'Ordem de Compra nº '+codordem,true)
      }
 </script>

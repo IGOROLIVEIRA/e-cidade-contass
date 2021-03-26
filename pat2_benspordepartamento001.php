@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -93,11 +93,11 @@ require_once("libs/db_app.utils.php");
               <?php
                 db_input('lista_departamento', 10, true, 3, 'hidden', 3);
                 db_input('lista_divisaodepartamento', 10, true, 3, 'hidden', 3);
-                
-                
-                $aTipos = array(0 => 'Sem as divisões selecionadas', 1 => 'Com as divisões selecionadas'); 
-                db_select('usardivisao', $aTipos, true, 1);    
-                      
+
+
+                $aTipos = array(0 => 'Sem as divisões selecionadas', 1 => 'Com as divisões selecionadas');
+                db_select('usardivisao', $aTipos, true, 1);
+
                 $oDptoDivisao                                =  new cl_arquivo_auxiliar();
                 $oDptoDivisao->cabecalho                     = "<strong>Divisão de Departamento</strong>";
                 $oDptoDivisao->codigo                        = "t30_codigo"; //chave de retorno da func
@@ -118,8 +118,8 @@ require_once("libs/db_app.utils.php");
                 $oDptoDivisao->linhas                        = 5;
                 $oDptoDivisao->vwidth                        = 400;
                 $oDptoDivisao->nome_botao                    = 'db_lancadivisao';
-                $oDptoDivisao->fieldset                      = false; 
-                $oDptoDivisao->funcao_gera_formulario(); 
+                $oDptoDivisao->fieldset                      = false;
+                $oDptoDivisao->funcao_gera_formulario();
               ?>
             </td>
           </tr>
@@ -155,9 +155,9 @@ require_once("libs/db_app.utils.php");
           </tr>
           <tr>
             <td colspan="1">
-            <?php 
+            <?php
               /*
-               *  Estrutural dos Bens 
+               *  Estrutural dos Bens
                */
               $oAuxEstrutural                 = new cl_arquivo_auxiliar();
               $oAuxEstrutural->cabecalho      = "<strong>Estruturais</strong>";
@@ -214,12 +214,12 @@ require_once("libs/db_app.utils.php");
         <table class="form-container">
           <tr>
             <td>
-              <?php 
+              <?php
                 db_ancora("<b>Classificação:</b>", "js_abreLookupClassificacao(true);", 1);
               ?>
             </td>
             <td>
-              <?php 
+              <?php
                 db_input("t64_class", 8, false, true, "text", 1, "onchange='js_abreLookupClassificacao(false);'");
                 db_input("t64_descr", 38, false, true, "text", 3);
               ?>
@@ -228,7 +228,7 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Data da Aquisição:</td>
             <td>
-              <?php 
+              <?php
                 db_inputdata("dtAquisicaoInicial", "", "", "", true, "text", 1);
                 echo " a ";
                 db_inputdata("dtAquisicaoFinal", "", "", "", true, "text", 1);
@@ -238,7 +238,7 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td nowrap="nowrap">Período da Baixa:</td>
             <td>
-              <?php 
+              <?php
                 db_inputdata("dtBaixaInicial", "", "", "", true, "text", 1);
                 echo " a ";
                 db_inputdata("dtBaixaFinal", "", "", "", true, "text", 1);
@@ -248,7 +248,7 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Convênio:</td>
             <td>
-              <?php 
+              <?php
                 $aConvenios = array (1 => "Ambos",
                                      2 => "Apenas vinculado a convênios",
                                      3 => "Apenas não vinculado a convênios");
@@ -285,7 +285,7 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Descrição do Bem:</td>
             <td>
-              <?php 
+              <?php
                 db_input("sDescricaoBem", 34, false, true, "text", 1);
               ?>
             </td>
@@ -293,7 +293,7 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Características Adicionais do Bem:</td>
             <td>
-              <?php 
+              <?php
                 $aCaracteristicaAdicional = array("f" => "Não", "t" => "Sim");
                 db_select("lCaracteristicaAdicional", $aCaracteristicaAdicional, true, 1);
               ?>
@@ -302,7 +302,7 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Imprimir Valor da Aquisição:</td>
             <td>
-              <?php 
+              <?php
                 $aValorAquisicao = array("f" => "Não", "t" => "Sim");
                 db_select("lImprimeValorAquisicao", $aValorAquisicao, true, 1);
               ?>
@@ -311,8 +311,8 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Listar:</td>
             <td>
-              <?php 
-			          $aListarBens = array("1" => "Todos", "2" => "Não Baixados", "3" => "Baixados"); 
+              <?php
+			          $aListarBens = array("1" => "Todos", "2" => "Não Baixados", "3" => "Baixados");
 			          db_select("iListarBens", $aListarBens, true, 1);
               ?>
             </td>
@@ -320,8 +320,8 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Ordem:</td>
             <td>
-              <?php 
-			          $aOrdemBens = array("1" => "Placa", "2" => "Código", "3" => "Descricao"); 
+              <?php
+			          $aOrdemBens = array("1" => "Placa", "2" => "Código", "3" => "Descricao");
 			          db_select("iOrdem", $aOrdemBens, true, 1);
               ?>
             </td>
@@ -329,7 +329,7 @@ require_once("libs/db_app.utils.php");
           <tr>
             <td>Quebra de Página:</td>
             <td>
-              <?php 
+              <?php
 			          $aQuebraPagina = array("1" => "Não", "2" => "Departamento / Divisão");
 			          db_select("iQuebraPagina", $aQuebraPagina, true, 1);
               ?>
@@ -374,7 +374,7 @@ require_once("libs/db_app.utils.php");
         return false;
       }
     }
-    
+
     /*
      * FOR BENS
      */
@@ -435,9 +435,9 @@ require_once("libs/db_app.utils.php");
     sQueryString     += "&iListarBens="+iListarBens;
     sQueryString     += "&iOrdem="+iOrdem;
     sQueryString     += "&iQuebraPagina="+iQuebraPagina;
-    
+
     var jan = window.open(sQueryString,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
-    jan.moveTo(0,0);   
+    jan.moveTo(0,0);
   });
 
   /**
@@ -459,16 +459,16 @@ require_once("libs/db_app.utils.php");
     if (lMostra == true) {
 
       var sUrlOpen = "func_clabens.php?funcao_js=parent.js_mostraclabens1|t64_class|t64_descr&analitica=true";
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_clabens', sUrlOpen, 'Pesquisa Classificação', true);  
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_clabens', sUrlOpen, 'Pesquisa Classificação', true);
     } else {
 
-      testa = new String(document.form1.t64_class.value);     
+      testa = new String(document.form1.t64_class.value);
        if(testa != '' && testa != 0){
-         i = 0;       
+         i = 0;
          for(i = 0;i < document.form1.t64_class.value.length;i++){
-           testa = testa.replace('.','');       
+           testa = testa.replace('.','');
          }
-         js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens&analitica=true','Pesquisa',false);
+         js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens&analitica=true','Pesquisa',false);
        }else{
          document.form1.t64_descr.value = '';
        }
@@ -482,7 +482,7 @@ require_once("libs/db_app.utils.php");
       document.form1.t64_class.focus();
     }
   }
-  
+
   function js_mostraclabens1(chave1,chave2){
     document.form1.t64_class.value = chave1;
     document.form1.t64_descr.value = chave2;
@@ -496,9 +496,9 @@ require_once("libs/db_app.utils.php");
 
     iDptos       = document.getElementById("departamento").length;
     sValoresDpto = "";
-      
+
     for (var i = 0; i < iDptos; i++) {
-      
+
       if (sValoresDpto == "") {
         sValoresDpto += document.getElementById("departamento")[i].value;
       } else {
@@ -519,7 +519,7 @@ require_once("libs/db_app.utils.php");
       sDivisoesSelecionadas += sVirgula+oObjDivisao[iRow].value;
     }
     $("lista_divisaodepartamento").value = sDivisoesSelecionadas;
-  } 
+  }
 
   /**
    * Libera a TR da tabela permitindo ao usuário informar as divisões do departamento
@@ -536,18 +536,18 @@ require_once("libs/db_app.utils.php");
     }
 
     for (var i = 0; i < document.getElementById("departamento").length; i++) {
-      
+
       var oRegistro = document.getElementById("departamento");
       oRegistro[i].observe('dblclick', function () {
-      
-        if (document.form1.departamento.length == 1) { 
+
+        if (document.form1.departamento.length == 1) {
 
           $('tr_fieldset_divisao').style.display = "none";
           $('fieldset_divisao').style.display    = "none";
           $('lista_departamento').value          = '';
           $('lista_divdepartamento').value       = '';
         }
-      });   
+      });
     }
   }
 
@@ -555,12 +555,12 @@ require_once("libs/db_app.utils.php");
    * Mostra os cedentes de um convênio
    */
   function js_showCedentes() {
-     
+
     if ($F('vinculoconvenio') == 2) {
       $('tr_fieldset_cedentes').style.display = '';
       $("fieldset_cedentes").style.display    = '';
     } else {
-      
+
       $('tr_fieldset_cedentes').style.display = "none";
       $("fieldset_cedentes").style.display    = 'none';
     }

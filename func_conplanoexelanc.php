@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -64,8 +64,8 @@ if(isset($codred)){
 						  			substr(fc_planosaldonovo,60,1)::varchar(1) as sinal_final
               from (
                  select c62_reduz,c60_descr,
-	      				fc_planosaldonovo(".db_getsession("DB_anousu").",c61_reduz,'".db_getsession("DB_anousu")."-01-01','".$dataret."') 
-	            		from conplanoreduz 
+	      				fc_planosaldonovo(".db_getsession("DB_anousu").",c61_reduz,'".db_getsession("DB_anousu")."-01-01','".$dataret."')
+	            		from conplanoreduz
 		                    inner join conplano on c60_codcon = c61_codcon and c60_anousu = c61_anousu
 	                        inner join conplanoexe on c62_anousu = c61_anousu and c61_reduz = c62_reduz
 		               where c61_instit =".db_getsession("DB_instit")." and  c61_anousu =".db_getsession("DB_anousu")." and   c61_reduz = $codred
@@ -86,37 +86,37 @@ if(isset($codred)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload='document.form2.chave_c62_reduz.focus();'>
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tc62_reduz?>">
               <?=$Lc62_reduz?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <? db_input("c62_reduz",6,$Ic62_reduz,true,"text",4,"","chave_c62_reduz"); ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tc60_estrut?>">
               <?=$Lc60_estrut?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <? db_input("c60_estrut",15,$Ic60_estrut,true,"text",4,"","chave_c60_estrut"); ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tc60_descr?>">
               <?=$Lc60_descr?>&nbsp;
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?  db_input("c60_descr",40,$Ic60_descr,true,"text",4,"","chave_c60_descr");   ?>
             </td>
           </tr>
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+          <tr>
+            <td colspan="2" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_conplanoexe.hide();">
              </td>
@@ -125,10 +125,10 @@ if(isset($codred)){
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
-      $campos = "c62_reduz,c60_estrut,c61_instit,c60_descr,c60_finali"; 
+      $campos = "c62_reduz,c60_estrut,c61_instit,c60_descr,c60_finali";
       if(!isset($pesquisa_chave)){
         if(isset($chave_c62_reduz) && (trim($chave_c62_reduz)!="") ){
 	        $sql = $clconplanoexe->sql_descr(null,$chave_c62_reduz ,$campos,"c60_estrut","c61_instit =".db_getsession("DB_instit")." and c62_anousu =$anousu and c62_reduz=$chave_c62_reduz and {$sWhere}");
@@ -155,8 +155,8 @@ if(isset($codred)){
 		              substr(fc_planosaldonovo,60,1)::varchar(1) as sinal_final
               from (
                  select c62_reduz,c60_descr,
-                            fc_planosaldonovo(".db_getsession("DB_anousu").",c61_reduz,'".db_getsession("DB_anousu")."-01-01','".$dataret."') 
-	            from conplanoreduz 
+                            fc_planosaldonovo(".db_getsession("DB_anousu").",c61_reduz,'".db_getsession("DB_anousu")."-01-01','".$dataret."')
+	            from conplanoreduz
 		               inner join conplano on c60_codcon = c61_codcon and c60_anousu=c61_anousu
 	                   inner join conplanoexe on c62_anousu = c61_anousu and c61_reduz = c62_reduz
 	            where
@@ -164,7 +164,7 @@ if(isset($codred)){
 		           conplanoreduz.c61_reduz = $pesquisa_chave
                    ) as saldo ";
                $result = db_query($campos);
-               db_fieldsmemory($result,0);    
+               db_fieldsmemory($result,0);
                echo "<script>".$funcao_js."('$c60_descr',false,'".db_formatar($saldo_final,'f')."','$sinal_final');</script>";
           }else{
 	       echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
@@ -185,7 +185,7 @@ function js_mostrasaldo(codigo,descr){
 }
 
 function js_mostraestrutural(codigo){
-   js_OpenJanelaIframe('top.corpo','db_iframe_estrutura','func_conplanoestrutural.php?conta='+codigo,'Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_estrutura','func_conplanoestrutural.php?conta='+codigo,'Pesquisa',true);
 }
 
 

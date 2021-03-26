@@ -222,7 +222,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if (lMostrar == true) {
 
             var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_datafim&iTipoFiltro=4&ac16_acordosituacao=4';
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_acordo',
                 sUrl,
                 'Pesquisa de Acordo',
@@ -234,7 +234,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + me.oTxtCodigoAcordo.getValue() +
                     '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
 
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_acordo',
                     sUrl,
                     'Pesquisa de Acordo',
@@ -276,7 +276,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.consultaAcordo = function () {
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
             'db_iframe_consultaacordo',
             'con4_consacordos003.php?ac16_sequencial=' + me.oTxtCodigoAcordo.getValue(),
             'Consulta de Acordo',
@@ -770,7 +770,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     me.mostraSaldo = function (chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
@@ -1848,7 +1848,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (mostra) {
 
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_pcmater',
                 'func_pcmater.php?funcao_js=parent.' + me.sInstance + '.mostraMaterial|pc01_codmater|pc01_descrmater|pc01_servico',
                 'Pesquisar Materiais',
@@ -1859,7 +1859,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             if (oTxtMaterial.getValue() != '') {
 
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_pcmater',
                     'func_pcmater.php?pesquisa_chave=' + oTxtMaterial.getValue() +
                     '&funcao_js=parent.' + me.sInstance + '.mostrapcmater',

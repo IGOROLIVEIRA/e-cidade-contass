@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlibwebseller.php");
@@ -48,11 +48,11 @@ $clrechumanoescola->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("ed75_c_simultaneo");
 if (isset($atualizar)) {
-	
-  db_inicio_transacao();	
+
+  db_inicio_transacao();
   $clrechumanoescola->ed75_c_simultaneo = $ed75_c_simultaneo;
   $clrechumanoescola->ed75_i_codigo     = $ed75_i_codigo;
-  $clrechumanoescola->alterar($ed75_i_codigo);  
+  $clrechumanoescola->alterar($ed75_i_codigo);
   db_fim_transacao();
 }
 
@@ -137,7 +137,7 @@ if ($clrechumanohoradisp->numrows > 0) {
 
   $iPosicaoCores = 0;
   for ($y = 0; $y < $clrechumanohoradisp->numrows; $y++) {
-  	
+
     db_fieldsmemory($result_cor,$y);
 
     if( $ed18_i_codigo == $escola ) {
@@ -156,7 +156,7 @@ if ($clrechumanohoradisp->numrows > 0) {
 <table border="0">
 <tr>
 <td>
-&nbsp;&nbsp;<?db_input('ed20_i_codigo',15,@$Ied20_i_codigo,true,'hidden',3,"")?> 
+&nbsp;&nbsp;<?db_input('ed20_i_codigo',15,@$Ied20_i_codigo,true,'hidden',3,"")?>
 <b><?=@$ed20_i_tiposervidor=='1'?'Matrícula:':'CGM:'?></b>
 <?php
 db_input( 'identificacao', 10, @$identificacao, true, 'text', 3 );
@@ -168,7 +168,7 @@ $sSqlRecHumanoAtiv    = $clrechumanoativ->sql_query("", "ed75_c_simultaneo, ed75
 $result_atividade     = $clrechumanoativ->sql_record( $sSqlRecHumanoAtiv );
 
 if ($clrechumanoativ->numrows > 0) {
-	
+
   db_fieldsmemory($result_atividade,0);
 	?>
    <td nowrap title="<?=@$Ted75_c_simultaneo?>">
@@ -180,16 +180,16 @@ if ($clrechumanoativ->numrows > 0) {
       db_select('ed75_c_simultaneo',$x,true,$db_opcao,"");
     ?>
    </td>
-   
-<?}?> 
+
+<?}?>
   <td>
-<?db_input('ed75_i_codigo',15,@$Ied75_i_codigo,true,'hidden',3,"")?> 
-<input type="button" name="atualizar" value="Atualizar" onclick="js_atualizar();">  
+<?db_input('ed75_i_codigo',15,@$Ied75_i_codigo,true,'hidden',3,"")?>
+<input type="button" name="atualizar" value="Atualizar" onclick="js_atualizar();">
 </td>
 </tr>
 </table>
 </form>
-<table border='0' id="id_dia" style="position:absolute;top:<?=$tabela1_top?>px;left:<?=$tabela1_left?>px;" 
+<table border='0' id="id_dia" style="position:absolute;top:<?=$tabela1_top?>px;left:<?=$tabela1_left?>px;"
        cellspacing="1" cellpadding="0">
  <tr height="20">
   <td align="center" width="<?=$larg_coluna1?>" style="background:#444444;color:#DEB887">
@@ -207,7 +207,7 @@ if ($clrechumanoativ->numrows > 0) {
                                     );
   $larg_dia = floor(($larg_tabela-$larg_coluna1-$larg_coluna2)/$cldiasemana->numrows);
   for( $x = 0; $x < $cldiasemana->numrows; $x++) {
-  	
+
     db_fieldsmemory($result,$x)
     ?>
      <td align="center" width="<?=$larg_dia?>" style="background:#444444;color:#DEB887">
@@ -373,16 +373,16 @@ for ($x = 0; $x < $cldiasemana->numrows; $x++) {
           </tr>
          </table>
         <?
-        
+
         }
       }
     }
     $tt += 1;
     if ($tt == 60) {
-    	
+
       $t += 40;
       $tt = 0;
-      
+
     }
     $ini_top += 0.5;
   }
@@ -390,14 +390,14 @@ for ($x = 0; $x < $cldiasemana->numrows; $x++) {
 }
 ?>
 </td></tr></tbody>
-<table width="150" style="position:absolute;top:<?=$tabela1_top+20?>px;left:<?=$larg_obj-150?>px;" 
+<table width="150" style="position:absolute;top:<?=$tabela1_top+20?>px;left:<?=$larg_obj-150?>px;"
        cellspacing="2" cellpadding="4">
  <tr>
-  <td id="tab_descr" bgcolor="#FFFFCC" style="visibility:hidden;border:1px solid #000000;">  
+  <td id="tab_descr" bgcolor="#FFFFCC" style="visibility:hidden;border:1px solid #000000;">
   </td>
  </tr>
 </table>
-<table width="300" height="20" style="position:absolute;top:<?=$tabela1_top+20?>px;left:<?=($larg_obj/2)-150?>px;" 
+<table width="300" height="20" style="position:absolute;top:<?=$tabela1_top+20?>px;left:<?=($larg_obj/2)-150?>px;"
        cellspacing="2" cellpadding="4">
  <tr>
   <td align="center" id="tab_excluir" bgcolor="#FF8080" style="visibility:hidden;border:1px solid #000000;">
@@ -407,7 +407,7 @@ for ($x = 0; $x < $cldiasemana->numrows; $x++) {
 </table>
 <input type="hidden" id="cod_horario" value="" style="position:absolute;top:600px;">
 <form method="post" name="form1">
-<table width="<?=$larg_dia*$cldiasemana->numrows+$larg_coluna2?>" height="<?=$alt_tab_hora?>" id="inc_periodo" 
+<table width="<?=$larg_dia*$cldiasemana->numrows+$larg_coluna2?>" height="<?=$alt_tab_hora?>" id="inc_periodo"
        style="visibility:hidden;position:absolute;border:2px outset #000000;top:<?=$tabela1_top+25?>px;
        left:<?=$tabela1_left+$larg_coluna1?>px;" bgcolor="#CCCCCC" cellspacing="2" cellpadding="2">
  <tr>
@@ -418,7 +418,7 @@ for ($x = 0; $x < $cldiasemana->numrows; $x++) {
       &nbsp;&nbsp;Incluir Disponibilidade:
      </td>
      <td width="10%" align="right" style="color:#FFFFFF;font-weight:bold;">
-      <img src="imagens/jan_fechar_off.jpg" align="center" 
+      <img src="imagens/jan_fechar_off.jpg" align="center"
            onclick="document.getElementById('inc_periodo').style.visibility='hidden';
                     document.getElementById('corpo_diasemana').innerHTML='';
                     document.getElementById('corpo_periodo').innerHTML='';
@@ -439,8 +439,8 @@ for ($x = 0; $x < $cldiasemana->numrows; $x++) {
   </td>
  </tr>
 </table>
-<table width="400" height="300" id="inc_variosperiodos" 
-       style="visibility:hidden;position:absolute;border:2px outset #000000;top:100px;left:<?=($larg_obj/2)-200?>px;" 
+<table width="400" height="300" id="inc_variosperiodos"
+       style="visibility:hidden;position:absolute;border:2px outset #000000;top:100px;left:<?=($larg_obj/2)-200?>px;"
        bgcolor="#CCCCCC" cellspacing="2" cellpadding="2">
  <tr>
   <td valign="top" height="20">
@@ -477,7 +477,7 @@ function js_atualizar() {
 
 function js_Mover(  quadro, horaini, horafim, escola, nomeescola, periodo, turno, cor, matricula
                    , sAbreviaturaTipoHora, sHoraAtividade ) {
-	
+
   texto  = "<b>"+matricula+"</b><br>Turno: <b>"+turno+"</b><br>Período: <b>"+periodo;
   texto += "</b><br>Hora Inicial: <b>"+horaini+"</b><br>Hora Final: <b>" +horafim + "</b>";
 
@@ -497,25 +497,25 @@ function js_Mover(  quadro, horaini, horafim, escola, nomeescola, periodo, turno
   document.getElementById("tab_descr").innerHTML        = texto;
   document.getElementById(quadro).style.border          = "1px inset";
   tt = 0;
-  
+
   for (t = <?=$horainicial?>; t <= <?=$horafinal?>; t += 1) {
-	   
+
     hora         = new String(t);
     hora         = hora.length==3?"0"+hora:hora;
     hora         = hora.substr(0,2)+":"+hora.substr(2,2);
     id_hora      = "HH"+hora;
     id_linhahora = "LH"+hora;
-    
+
     if (t != 2400) {
-        
+
       if (horaini == hora || horafim == hora) {
-          
+
         document.getElementById(id_hora).style.visibility = "visible";
         document.getElementById(id_hora).style.zIndex     = 10000;
       }
-           
+
       if (hora >= horaini && hora <= horafim) {
-          
+
         document.getElementById(id_linhahora).style.background = cor;
         document.getElementById(id_linhahora).style.visibility = "visible";
       }
@@ -523,7 +523,7 @@ function js_Mover(  quadro, horaini, horafim, escola, nomeescola, periodo, turno
 
     tt += 1;
     if (tt == 60) {
-        
+
       t += 40;
       tt = 0;
     }
@@ -531,59 +531,59 @@ function js_Mover(  quadro, horaini, horafim, escola, nomeescola, periodo, turno
 }
 
 function js_Mout( quadro, horaini, horafim ) {
-	
+
   document.getElementById("tab_descr").style.visibility = "hidden";
   document.getElementById("tab_descr").innerHTML        = "";
   document.getElementById(quadro).style.border          = "1px outset";
   tt = 0;
-  
+
   for (t = <?=$horainicial?>; t <= <?=$horafinal?>; t += 1) {
-	  
+
     hora         = new String(t);
     hora         = hora.length==3?"0"+hora:hora;
     hora         = hora.substr(0,2)+":"+hora.substr(2,2);
     id_hora      = "HH"+hora;
     id_linhahora = "LH"+hora;
-    
+
     if (t != 2400) {
-        
+
       if (horaini == hora || horafim == hora) {
-          
+
         document.getElementById(id_hora).style.visibility = "hidden";
         document.getElementById(id_hora).style.zIndex     = 1000;
-        
-      }      
+
+      }
     }
-    
+
     if(hora >= horaini && hora <= horafim) {
       document.getElementById(id_linhahora).style.visibility = "hidden";
     }
     tt += 1;
     if (tt == 60) {
-        
+
       t += 40;
       tt = 0;
-      
+
     }
   }
 }
 
 function js_marca(quadro,cor) {
-	
+
   if (document.getElementById("input"+quadro).value == "") {
-	  
+
     document.getElementById("tab"+quadro).style.background = "#FF8080";
     document.getElementById("input"+quadro).value          = "OK";
     document.getElementById("cod_horario").value           = document.getElementById("cod_horario").value+",tab"+quadro;
-    
+
   } else {
-	  
+
     document.getElementById("tab"+quadro).style.background = cor;
     document.getElementById("input"+quadro).value          = "";
     valor                                                  = document.getElementById("cod_horario").value;
     valor                                                  = valor.replace(",tab"+quadro,"");
     document.getElementById("cod_horario").value           = valor;
-    
+
   }
   if (document.getElementById("cod_horario").value != "") {
     document.getElementById("tab_excluir").style.visibility = "visible";
@@ -593,14 +593,14 @@ function js_marca(quadro,cor) {
 }
 
 function js_excluir() {
-	
+
   if (confirm("Confirmar exclusão destes registros?")) {
-	  
+
     js_divCarregando("Aguarde, excluindo registro(s)","msgBox");
     var sCodigos = $F('cod_horario');
     var sAction  = 'Excluir';
     var url      = 'edu1_rechumanohoradisp002.php';
-    
+
     if (sCodigos == "") {
       return false;
     }
@@ -612,24 +612,24 @@ function js_excluir() {
 }
 
 function js_retornoExclusao(oAjax) {
-	
+
   js_removeObj("msgBox");
   var oRetorno  = eval("("+oAjax.responseText+")");
   var oRetorno1 = oRetorno.split(",");
-  
+
   for (t = 1; t < oRetorno1.length; t++) {
     document.getElementById(oRetorno1[t]).style.visibility = "hidden";
   }
-  
+
   document.getElementById("cod_horario").value            = "";
   document.getElementById("tab_excluir").style.visibility = "hidden";
-  top.corpo.iframe_a7.location.href                       = 'edu1_rechumanohorario001.php?ed20_i_codigo='+
+  CurrentWindow.corpo.iframe_a7.location.href                       = 'edu1_rechumanohorario001.php?ed20_i_codigo='+
                                                             '<?=$ed20_i_codigo?>';
-  
+
 }
 
 function js_incluir(codigo,diasemana) {
-	
+
   document.getElementById("inc_periodo").style.visibility = "visible";
   sHtml  = '<tr>';
   sHtml += ' <td><b>Dia da Semana:</b>';
@@ -654,14 +654,14 @@ function js_incluir(codigo,diasemana) {
   $sql_tur .= "      ORDER BY ed15_i_sequencia ";
   $result_tur = db_query($sql_tur);
   $linhas_tur = pg_num_rows($result_tur);
-  
+
   for ($x = 0; $x < $linhas_tur; $x++) {
-  	
+
     db_fieldsmemory($result_tur,$x);
     ?>
     sHtml1 += '   <option value="<?=$ed15_i_codigo?>"><?=$ed15_c_nome?></option>';
     <?
-    
+
   }
   ?>
   sHtml1 += '  </select>';
@@ -669,15 +669,15 @@ function js_incluir(codigo,diasemana) {
   sHtml1 += ' <td>';
   sHtml1 += '  <div id="corpo_periodo"></div>';
   sHtml1 += ' </td>';
-  sHtml1 += '</tr>'; 
+  sHtml1 += '</tr>';
   $('corpo_diasemana').innerHTML = sHtml;
   $('corpo_turno').innerHTML     = sHtml1;
   $('corpo_periodo').innerHTML   = '';
-  
+
 }
 
 function js_buscaPeriodo(codturno) {
-	
+
   $('corpo_periodo').innerHTML = '';
   var sAction                  = 'PesquisaPeriodo';
   var url                      = 'edu1_rechumanohoradisp002.php';
@@ -687,15 +687,15 @@ function js_buscaPeriodo(codturno) {
                                                 '&rechumano=<?=$ed20_i_codigo?>&rechumanoescola=<?=$ed75_i_codigo?>&sAction='+sAction,
                                     onComplete: js_retornoPeriodo
                                    });
-  
+
 }
 
 function js_retornoPeriodo(oAjax) {
-	
+
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
   sHtml = '<table>';
-  sHtml += '<tr>'; 
+  sHtml += '<tr>';
   sHtml += ' <td valign="top"><b>Período(s):</b>';
   sHtml += ' </td>';
   sHtml += ' <td>';
@@ -703,21 +703,21 @@ function js_retornoPeriodo(oAjax) {
   if (oRetorno.length == 0) {
     sHtml += '  <option value="">Todos períodos preenchidos para estas opções.</option>';
   } else {
-	  
+
     for (var i = 0;i < oRetorno.length; i++) {
-        
+
       with (oRetorno[i]) {
-          
+
         sHtml += '  <option value="'+ed17_i_codigo+'">'+ed15_c_nome.urlDecode()+' - '+ed08_c_descr.urlDecode();
         sHtml += ' período : '+ed17_h_inicio.urlDecode()+' às '+ed17_h_fim.urlDecode()+'</option>';
-        
+
       }
-    }    
+    }
   }
-  
+
   sHtml += '  </select>';
-  sHtml += '</tr>'; 
-  sHtml += '<tr>'; 
+  sHtml += '</tr>';
+  sHtml += '<tr>';
   sHtml += ' <td valign="top"><b>Tipo de hora:</b>';
   sHtml += ' </td>';
   sHtml += ' <td>';
@@ -734,7 +734,7 @@ function js_retornoPeriodo(oAjax) {
     $iLinhas  = pg_num_rows($rsTipoHora);
     if ( $iLinhas > 0 ) {
 
-      for ( $iContador = 0; $iContador < $iLinhas; $iContador++ ) { 
+      for ( $iContador = 0; $iContador < $iLinhas; $iContador++ ) {
 
         $oDadosTipoHoraTrabalho = db_utils::fieldsMemory( $rsTipoHora, $iContador );
         ?>
@@ -767,11 +767,11 @@ function js_retornoPeriodo(oAjax) {
 
   sHtml += '</table>';
   $('corpo_periodo').innerHTML = sHtml;
-  
+
 }
 
 function js_incluirPeriodo() {
-	
+
   var iTipoHora      = $F("ed23_tipohoratrabalho");
   var sHoraAtividade = $F('horaAtividade');
 
@@ -780,9 +780,9 @@ function js_incluirPeriodo() {
   sep      = '';
 
   for(var i = 0; i < tam; i++ ) {
-	  
+
     if( document.form1.periodo[i].selected == true ) {
-        
+
       periodos += sep + document.form1.periodo[i].value;
       sep       = ',';
     }
@@ -799,7 +799,7 @@ function js_incluirPeriodo() {
     alert( _M(MENSAGEM_RECHUMANOHORADISP001 + "informe_tipohora") );
     return;
   }
-	  
+
   js_divCarregando("Aguarde, incluindo período(s)","msgBox");
 
   var sAction = 'IncluirPeriodo';
@@ -814,17 +814,17 @@ function js_incluirPeriodo() {
 }
 
 function js_retornoInclusaoPeriodo(oAjax) {
-	
+
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.aRetorno[0].urlDecode() == "0") {
-	  
+
     alert(oRetorno.aRetorno[1].urlDecode());
     return false;
-    
+
   } else {
-	  
+
     if (oRetorno.aRetorno[1].urlDecode() != '') {
       alert(oRetorno.aRetorno[1].urlDecode());
     }
@@ -846,36 +846,36 @@ function js_retornoInclusaoPeriodo(oAjax) {
 }
 
 function js_retornaBuscaOutrosDias(oAjax) {
-	
+
   $('inc_variosperiodos').style.visibility = 'visible';
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
   sHtml = '<tr>';
   sHtml += ' <td><b>Escolha outros dias da semana para incluir o(s) período(s) :</b><br>';
   sHtml += '  <select name="outrosdiasemana" style="width:200px;" multiple size="7">';
-  
+
   for (var i = 0;i < oRetorno.length; i++) {
-	  
+
     with (oRetorno[i]) {
       sHtml += '  <option value="'+ed32_i_codigo+'">'+ed32_c_descr.urlDecode()+'</option>';
     }
   }
-  
+
   sHtml += '  </select>';
   sHtml += ' </td>';
   sHtml += '</tr>';
   sHtml += '<tr>';
   sHtml += ' <td>';
   sHtml += '  <input type="button" name="confirmavarios" value="Confirmar" onclick="js_incluirvariosdias();">';
-  sHtml += '  <input type="button" name="cancelavarios" value="Cancelar" onclick="js_RemontaGrade();">'; 
+  sHtml += '  <input type="button" name="cancelavarios" value="Cancelar" onclick="js_RemontaGrade();">';
   sHtml += ' </td>';
   sHtml += '</tr>';
   $('corpo_outrosdias').innerHTML = sHtml;
-  
+
 }
 
 function js_incluirvariosdias() {
-	
+
   var iTipoHora      = $F("ed23_tipohoratrabalho");
   var sHoraAtividade = $F('horaAtividade');
 
@@ -932,14 +932,14 @@ function js_retornoIncluirOutrosPeriodos(oAjax) {
 
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.aRetorno[0].urlDecode() == "0") {
-	  
+
     alert(oRetorno.aRetorno[1].urlDecode());
     return false;
-    
+
   } else {
-	  
+
     if (oRetorno.aRetorno[1].urlDecode() != '') {
       alert(oRetorno.aRetorno[1].urlDecode());
     }
@@ -949,7 +949,7 @@ function js_retornoIncluirOutrosPeriodos(oAjax) {
 
 function js_RemontaGrade() {
 
-  
+
   js_divCarregando("Aguarde, atualizando tela","msgBox");
   var sAction = 'MontaGrade';
   var url     = 'edu1_rechumanohoradisp002.php';
@@ -958,19 +958,19 @@ function js_RemontaGrade() {
                                     parameters: sParams,
                                     onComplete: js_retornaGrade
                                    });
-  $('inc_periodo').style.visibility        = 'hidden'; 
-  $('inc_variosperiodos').style.visibility = 'hidden'; 
+  $('inc_periodo').style.visibility        = 'hidden';
+  $('inc_variosperiodos').style.visibility = 'hidden';
   location.href='edu1_rechumanohoradisp001.php?ed20_i_codigo=<?=$ed20_i_codigo?>&larg_obj=<?=$larg_obj?>&rechumanoescola=<?=$ed75_i_codigo?>';
 
 }
 
 function js_retornaGrade(oAjax) {
-	
+
   js_removeObj("msgBox");
   var oRetorno                             = eval("("+oAjax.responseText+")");
   $('disp_rechumano').innerHTML            = "";
-  $('disp_rechumano').innerHTML            = oRetorno.urlDecode(); 
-  top.corpo.iframe_a7.location.href='edu1_rechumanohorario001.php?ed20_i_codigo=<?=$ed20_i_codigo?>';
-  
+  $('disp_rechumano').innerHTML            = oRetorno.urlDecode();
+  CurrentWindow.corpo.iframe_a7.location.href='edu1_rechumanohorario001.php?ed20_i_codigo=<?=$ed20_i_codigo?>';
+
 }
 </script>

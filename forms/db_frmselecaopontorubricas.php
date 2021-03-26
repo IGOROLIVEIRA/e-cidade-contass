@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -43,10 +43,10 @@ if (isset($oGet->db_opcaoal)){
   $db_opcao = 3;
   $db_botao = true;
 } else{
-	  
+
   $db_opcao = 1;
   $db_botao = true;
-  
+
   if( isset($oPost->novo) || isset($oPost->alterar) || isset($oPost->excluir) || (isset($oPost->incluir) && !$lSqlErro ) ){
   	$r73_sequencial  = "";
     $r73_rubric      = "";
@@ -54,8 +54,8 @@ if (isset($oGet->db_opcaoal)){
     $r73_valor       = "";
     $rh27_descr      = "";
   }
-  
-} 
+
+}
 ?>
 <center>
 <form name="form1" method="post" action="" onSubmit="return js_validaSubmit();">
@@ -64,7 +64,7 @@ if (isset($oGet->db_opcaoal)){
     <td nowrap title="<?=@$Tr73_sequencial?>">
       <?=@$Lr73_sequencial?>
     </td>
-    <td> 
+    <td>
 			<?
 			  db_input('r73_sequencial',10,$Ir73_sequencial,true,'text',3,"");
 			  db_input('r73_selecaoponto',10,'',true,'hidden',3,"");
@@ -77,7 +77,7 @@ if (isset($oGet->db_opcaoal)){
         db_ancora(@$Lr73_rubric,"js_pesquisar73_rubric(true);",$db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
 				db_input('r73_rubric',10,$Ir73_rubric,true,'text',$db_opcao," onchange='js_pesquisar73_rubric(false);'");
 				db_input('rh27_descr',50,$Irh27_descr,true,'text',3,'');
@@ -88,7 +88,7 @@ if (isset($oGet->db_opcaoal)){
     <td nowrap title="<?=@$Tr73_tipo?>">
       <?=@$Lr73_tipo?>
     </td>
-    <td> 
+    <td>
 			<?
 			  $sSqlTipoValor = $clselecaopontorubricastipo->sql_query_file();
 			  $rsTipoValor   = $clselecaopontorubricastipo->sql_record($sSqlTipoValor);
@@ -101,7 +101,7 @@ if (isset($oGet->db_opcaoal)){
     <td nowrap title="<?=@$Tr73_valor?>">
       <?=@$Lr73_valor?>
     </td>
-    <td> 
+    <td>
 			<?
 			  db_input('r73_valor',10,$Ir73_valor,true,'text',$db_opcao,"")
 			?>
@@ -116,7 +116,7 @@ if (isset($oGet->db_opcaoal)){
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 			 $chavepri= array("r73_sequencial"=>@$r73_sequencial);
 			 $cliframe_alterar_excluir->chavepri      = $chavepri;
@@ -139,11 +139,11 @@ function js_validaSubmit() {
 	  if ( document.form1.r73_tipo.value != 3 && document.form1.r73_valor.value.trim() == '' ) {
 	    alert('Valor/Quantidade não informado!');
 	    return false;
-	  } 
+	  }
     if ( document.form1.r73_tipo.value != 3 && document.form1.r73_valor.value.trim() == 0 ) {
       alert('Valor/Quantidade deve ser diferente de zero!');
       return false;
-    } 	  
+    }
   }
 }
 
@@ -158,20 +158,20 @@ function js_cancelar(){
 
 function js_pesquisar73_rubric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_selecaopontorubricas','db_iframe_rhrubricas','func_rhrubricas.php?fixas=true&datlimit=false&funcao_js=parent.js_mostrarhrubricas1|rh27_rubric|rh27_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_selecaopontorubricas','db_iframe_rhrubricas','func_rhrubricas.php?fixas=true&datlimit=false&funcao_js=parent.js_mostrarhrubricas1|rh27_rubric|rh27_descr','Pesquisa',true);
   }else{
-     if(document.form1.r73_rubric.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_selecaopontorubricas','db_iframe_rhrubricas','func_rhrubricas.php?fixas=true&datlimit=false&pesquisa_chave='+document.form1.r73_rubric.value+'&funcao_js=parent.js_mostrarhrubricas','Pesquisa',false);
+     if(document.form1.r73_rubric.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_selecaopontorubricas','db_iframe_rhrubricas','func_rhrubricas.php?fixas=true&datlimit=false&pesquisa_chave='+document.form1.r73_rubric.value+'&funcao_js=parent.js_mostrarhrubricas','Pesquisa',false);
      }else{
-       document.form1.rh27_descr.value = ''; 
+       document.form1.rh27_descr.value = '';
      }
   }
 }
 function js_mostrarhrubricas(chave,erro){
-  document.form1.rh27_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r73_rubric.focus(); 
-    document.form1.r73_rubric.value = ''; 
+  document.form1.rh27_descr.value = chave;
+  if(erro==true){
+    document.form1.r73_rubric.focus();
+    document.form1.r73_rubric.value = '';
   }
 }
 function js_mostrarhrubricas1(chave1,chave2){
@@ -181,16 +181,16 @@ function js_mostrarhrubricas1(chave1,chave2){
 }
 
 function js_validaTela(){
-  
+
   var doc = document.form1;
-  
+
   if ( doc.r73_tipo.value == 3  ) {
     doc.r73_valor.value    = '';
     document.getElementById('linhaValor').style.display = 'none';
   } else {
     document.getElementById('linhaValor').style.display = '';
-  }  
- 
+  }
+
 }
 
 js_validaTela();

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -104,7 +104,7 @@ $clgera_sql_folha = new cl_gera_sql_folha;
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <style>
 .db_area {
-  font-family : courier; 
+  font-family : courier;
 }
 .bordasAqui{
   border: 1px solid #cccccc;
@@ -182,94 +182,94 @@ $clgera_sql_folha = new cl_gera_sql_folha;
           ?>
 
           <tr><td <?=$taman?> colspan="8"><?=$value?></td></tr>
-          
-          <tr align="center"> 
-          
+
+          <tr align="center">
+
             <td align="left" class="bordasAqui" style="font-size:12px" nowrap colspan="2">
               <b><?=db_formatar($r30_perai,'d').' - '.db_formatar($r30_peraf,'d')?></b>
             </td>
-            
+
             <td align="center" class="bordasAqui" style="font-size:12px" nowrap colspan="2">
               <b><?=$r30_ndias?></b>
             </td>
-            
+
             <td align="center" class="bordasAqui" style="font-size:12px" nowrap>
               <b><?=$r30_abono?></b>
             </td>
-            
+
             <td align="center" class="bordasAqui" style="font-size:12px" nowrap>
               <b><?=$r30_faltas?></b>
             </td>
-            
+
             <td align="left" class="bordasAqui" style="font-size:12px" nowrap colspan="2">
               <b><?=($r30_ponto == "C"?"Complementar":"Salário")?></b>
             </td>
-            
+
             <td align="center" class="bordasAqui" style="font-size:12px" nowrap colspan="2">
               <b><?=$r30_vfgt1?></b>
             </td>
-            
+
             <td align="center" class="bordasAqui" style="font-size:12px" nowrap colspan="2">
               <b>Observações</b>
-            </td>    
-                    
+            </td>
+
 	  </tr>
 	  <tr>
-	  
-	  
-	  
+
+
+
             <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=db_formatar($r30_per1i,'d').' - '.db_formatar($r30_per1f,'d')?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r30_proc1?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r30_dias1?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r30_tip1?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=db_formatar($r30_per2i,'d').' - '.db_formatar($r30_per2f,'d')?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r30_proc2?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r30_dias2?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r30_tip2?>
             </td>
-            
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC" colspan="2"> 
+
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC" colspan="2">
               <?=($r30_paga13 == 't'?"Sim":"Não")?>
             </td>
-            
-            <td id='td_<?=$i ?>' align="center" class="<?=$bordas?>" onmouseover="oHint.showHint('td_<?=$i ?>', 'obs_<?=$i ?>')" nowrap bgcolor="#CCCCCC" > 
+
+            <td id='td_<?=$i ?>' align="center" class="<?=$bordas?>" onmouseover="oHint.showHint('td_<?=$i ?>', 'obs_<?=$i ?>')" nowrap bgcolor="#CCCCCC" >
               <? echo substr($r30_obs, 0, 25) ?>
-            </td>    
-      
+            </td>
+
 				 </tr>
-				 
-				 
+
+
          <tr>
              <td align="right" nowrap bgcolor="#CCCCCC" colspan="11" >
               <div style="display: none; "  id="obsd_<?=$i ?>">
-                <textarea id='obs_<?=$i ?>'  readonly="readonly" rows="3" cols="50"><?=$r30_obs ?></textarea>   
+                <textarea id='obs_<?=$i ?>'  readonly="readonly" rows="3" cols="50"><?=$r30_obs ?></textarea>
               </div>
-            </td>   
+            </td>
           </tr>
-          
-          
+
+
           <?
           }
           ?>
@@ -282,33 +282,33 @@ $clgera_sql_folha = new cl_gera_sql_folha;
 <script>
 
 /**
- * Cria uma div semelhante a um Hint contendo textos etc; 
+ * Cria uma div semelhante a um Hint contendo textos etc;
  * @param {STRING} sEstancia Nome da instancia do OBJ
 */
 oDbHint = function(sEstancia) {
 
   var me = this;
   me.sNameInstance  = sEstancia;
-  
+
  /*
   * ao instanciar o OBJ criamos uma div oculta com o text area que recebera o texto
- */ 
+ */
   var sHtmlDiv  = "<div id='div_hint' style='position:absolute; display:none; '>                          ";
-      sHtmlDiv += "  <textarea style='background-color: #6699CC;' readonly='readonly;'                    "; 
+      sHtmlDiv += "  <textarea style='background-color: #6699CC;' readonly='readonly;'                    ";
       sHtmlDiv += "    rows='5' cols='45' onmouseout='"+me.sNameInstance+".hideHint();' id='txt_obs' >    ";
       sHtmlDiv += "  </textarea>                                                                          ";
       sHtmlDiv += "</div>                                                                                 ";
       document.write(sHtmlDiv);
-      
+
  /*
   * função a ser chamada que mostra o hint
   * @param {string} sIdAlvo      id do elemeto onde devera aparecer o hint, geralmente um td da tabela
   * @param {string} sComponente  id do componente que contem o texto, algo como um text area oculto
       tratamos assim pois pode haver textos com quebras de linha \n logo daria problemas ao passar o texto
-      como parametro 
-  */      
+      como parametro
+  */
   me.showHint = function(sIdAlvo, sComponente){
-  
+
     var iAltura = $(sIdAlvo).offsetTop + "px";
     var iLeft   = ($(sIdAlvo).offsetLeft + 70 )+ "px";
     var sValor = $F(sComponente);
@@ -316,42 +316,42 @@ oDbHint = function(sEstancia) {
     $('div_hint').style.top     = iAltura;  // setamos a altura que o hint aparecera
     $('div_hint').style.left    = iLeft;    // setamos o left
     $('txt_obs').value          = sValor;   // definimos o valor
-    $("div_hint").style.display = 'inLine'; // mudamos o style para visivel 
+    $("div_hint").style.display = 'inLine'; // mudamos o style para visivel
   }
-  
+
   /*
    * função para ocultar a div no mouseout da div que contem o texto
    *
-  */ 
+  */
   me.hideHint = function(){
-  
+
     $('txt_obs').value          = '';     // limpamos o valor antigo
-    $("div_hint").style.display = 'none'; // ocultamos novamente o hint 
+    $("div_hint").style.display = 'none'; // ocultamos novamente o hint
   }
 
-      
+
 }
 
 oHint  = new oDbHint("oHint");
 
 
-</script>  
+</script>
 
 <?
   }elseif ($solicitacao == "Efetividade") {
     $sql = $clrhpeslocaltrab->sql_query_rhpessoalmov(null,
-                                        "distinct 
-                                         rh56_localtrab, 
+                                        "distinct
+                                         rh56_localtrab,
                                          rh55_estrut,
                                          rh55_descr,
                                          case when rh56_princ = true then 'Sim' else 'Não' end as principal",
                                         "rh55_descr",
                                         "    rhpessoalmov.rh02_instit = ".db_getsession("DB_instit")."
                                          and rhpessoalmov.rh02_regist = ".$parametro."
-                                         and rhpessoalmov.rh02_anousu = {$ano} 
+                                         and rhpessoalmov.rh02_anousu = {$ano}
                                          and rhpessoalmov.rh02_mesusu = {$mes}
                                          and rh56_princ is true");
-                                         
+
   $result = $clrhpeslocaltrab->sql_record($sql);
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 ?>
@@ -373,16 +373,16 @@ oHint  = new oDbHint("oHint");
             db_fieldsmemory($result, $i);
 	  ?>
 	  <tr>
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh56_localtrab?>
             </td>
-            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh55_estrut?>
             </td>
-            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh55_descr?>
             </td>
-            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$principal?>
             </td>
           </tr>
@@ -401,7 +401,7 @@ oHint  = new oDbHint("oHint");
 				       "
                                         rh31_nome,
                                         rh31_dtnasc,
-                                        case rh31_gparen 
+                                        case rh31_gparen
                                              when 'C' then 'Conjuge'
                                              when 'F' then 'Filho'
                                              when 'P' then 'Pai'
@@ -415,7 +415,7 @@ oHint  = new oDbHint("oHint");
                                              'Cálculo'
                                              else case when rh31_depend='S' then
                                                   'Sempre dependente'
-                                                   else 
+                                                   else
                                                   'Não dependente'
                                              end
                                         end
@@ -436,7 +436,7 @@ oHint  = new oDbHint("oHint");
                                              'Cálculo'
                                              else case when rh31_especi='S' then
                                                   'Sempre dependente'
-                                                   else 
+                                                   else
                                                   'Não dependente'
                                              end
                                         end
@@ -469,22 +469,22 @@ oHint  = new oDbHint("oHint");
             db_fieldsmemory($result, $i);
 	  ?>
 	  <tr>
-            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh31_nome?>
             </td>
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=db_formatar($rh31_dtnasc,"d")?>
             </td>
-            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh31_gparen?>
             </td>
-            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh31_depend?>
             </td>
-            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh31_irf?>
             </td>
-            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left"   class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$rh31_especi?>
             </td>
           </tr>
@@ -545,24 +545,24 @@ oHint  = new oDbHint("oHint");
             db_fieldsmemory($result,$i);
           ?>
 	  <tr>
-            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r45_situac?>
             </td>
-            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=db_formatar($r45_dtafas,"d")?>
             </td>
-            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=db_formatar($r45_dtreto,"d")?>
             </td>
             <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$dias?>
             </td>
-            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="center" valign="top" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=db_formatar($r45_dtlanc,'d')?>
             </td>
             <td align="left" valign="top" class="<?=$bordas?>"  bgcolor="#CCCCCC">
               <?=nl2br($r45_obs)?>
-            </td>            
+            </td>
 	  </tr>
           <?}?>
 	</table>
@@ -740,7 +740,7 @@ oHint  = new oDbHint("oHint");
     </td>
   </tr>
 </table>
-<? 
+<?
     }
   }
   }elseif ($solicitacao == "Vale"){
@@ -778,22 +778,22 @@ oHint  = new oDbHint("oHint");
             db_fieldsmemory($result,$i);
           ?>
 	  <tr>
-            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="center" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r17_codigo?>
             </td>
-            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r16_descr?>
             </td>
-            <td align="right" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="right" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r17_quant?>
             </td>
             <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$arr_SorN[$r17_difere]?>
             </td>
-            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r17_situac?>
             </td>
-            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC"> 
+            <td align="left" class="<?=$bordas?>" nowrap bgcolor="#CCCCCC">
               <?=$r17_tipo?>
             </td>
 	  </tr>
@@ -806,7 +806,7 @@ oHint  = new oDbHint("oHint");
 <?php
 }
 if($solicitacao == 'Variaveis'){
-  
+
   $oServidor = new Servidor($parametro, $ano, $mes);
   $oVariaveis = DBPessoal::getVariaveisCalculo($oServidor);
 
@@ -976,7 +976,7 @@ if($solicitacao == 'Variaveis'){
     </td>
   </tr>
 </table>
-<?php  
+<?php
     }
   }
 if($solicitacao == 'Diversos'){
@@ -1003,7 +1003,7 @@ if($solicitacao == 'Diversos'){
 
 <?php
 }
-  
+
 if($solicitacao == 'Bases'){
   $campos = "rh32_base,rh32_descr,rh32_calqua,rh32_mesant,rh32_pfixo";
   $sql = $clrhbases->sql_query(null,$campos);
@@ -1028,13 +1028,13 @@ if($solicitacao == 'Bases'){
 }
 
 if( $solicitacao == 'ChequesEmitidos' ){
-	
+
   $sCampos = "r15_sequencial,r15_descricao,r18_anousu,r18_mesusu,r18_numcheque,r18_valor";
-  
+
   $sWhere   = "     r18_regist = {$parametro}";
   $sWhere  .= " and r18_anousu = {$ano}";
   $sWhere  .= " and r18_mesusu = {$mes}";
-  
+
   $sSql    = $clrhemitechequeitem->sql_query(null,$sCampos,"r18_sequencial",$sWhere);
 ?>
 
@@ -1056,7 +1056,7 @@ if( $solicitacao == 'ChequesEmitidos' ){
 <?php
 }
 if ($solicitacao == "temposervico") {
-  
+
   $sSqlTempoServicoAnterior  = "SELECT h16_assent,                                                                                ";
   $sSqlTempoServicoAnterior .= "       h12_descr,                                                                                 ";
   $sSqlTempoServicoAnterior .= "       (date_part('year', age(max(h16_dtterm), min(h16_dtconc)))||' anos '||                      ";
@@ -1083,14 +1083,14 @@ if ($solicitacao == "temposervico") {
         </fieldset>
       </td>
     </tr>
-  </table>    
+  </table>
 
 <?php
 }
 ?>
 
 <center>
-  <input type="button" name="fechar" value="Fechar" onClick="top.corpo.func_pesquisa.hide();">
+  <input type="button" name="fechar" value="Fechar" onClick="CurrentWindow.corpo.func_pesquisa.hide();">
 </center>
 </body>
 </html>

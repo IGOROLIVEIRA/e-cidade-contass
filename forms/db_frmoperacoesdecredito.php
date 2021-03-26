@@ -132,18 +132,18 @@ $cloperacoesdecreditolrf->rotulo->label();
     alert('O campo "Tipo de realização de operações de crédito vedada (Assução de obrigação)" não foi preenchido.');
     return false;
    }
-   top.corpo.operacoesdecredito.c219_contopcredito = document.form1.c219_contopcredito.value;
-   top.corpo.operacoesdecredito.c219_dsccontopcredito = document.form1.c219_dsccontopcredito.value;
-   top.corpo.operacoesdecredito.c219_realizopcredito = document.form1.c219_realizopcredito.value;
-   top.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = document.form1.c219_tiporealizopcreditocapta.value;
-   top.corpo.operacoesdecredito.c219_tiporealizopcreditoreceb = document.form1.c219_tiporealizopcreditoreceb.value;
-   top.corpo.operacoesdecredito.c219_tiporealizopcreditoassundir = document.form1.c219_tiporealizopcreditoassundir.value;
-   top.corpo.operacoesdecredito.c219_tiporealizopcreditoassunobg = document.form1.c219_tiporealizopcreditoassunobg.value;
+   CurrentWindow.corpo.operacoesdecredito.c219_contopcredito = document.form1.c219_contopcredito.value;
+   CurrentWindow.corpo.operacoesdecredito.c219_dsccontopcredito = document.form1.c219_dsccontopcredito.value;
+   CurrentWindow.corpo.operacoesdecredito.c219_realizopcredito = document.form1.c219_realizopcredito.value;
+   CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = document.form1.c219_tiporealizopcreditocapta.value;
+   CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoreceb = document.form1.c219_tiporealizopcreditoreceb.value;
+   CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoassundir = document.form1.c219_tiporealizopcreditoassundir.value;
+   CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoassunobg = document.form1.c219_tiporealizopcreditoassunobg.value;
 
    parent.mo_camada('publicacaoeperiodicidaderreo');
  }
  function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|si170_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|si170_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_dadoscomplementareslrf.hide();

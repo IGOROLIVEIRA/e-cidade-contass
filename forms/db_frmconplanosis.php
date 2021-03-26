@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: contabilidade
@@ -35,25 +35,25 @@ $clconplanosis->rotulo->label();
     <td nowrap title="<?=@$Tc64_codpla?>">
        <?=@$Lc64_codpla?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c64_codpla',6,$Ic64_codpla,true,'text',3)
 ?>
     </td>
   </tr>
-<?  
+<?
        if($db_opcao!=1){
          $clestrutura_sistema->db_opcao =3;
-       } 
+       }
          $clestrutura_sistema->autocompletar   =true;
          $clestrutura_sistema->size   =20;
 	 $clestrutura_sistema->estrutura_sistema('c90_estrutsistema');
-?>	 
+?>
   <tr>
     <td nowrap title="<?=@$Tc64_descr?>">
        <?=@$Lc64_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c64_descr',60,$Ic64_descr,true,'text',$db_opcao,"")
 ?>
@@ -66,7 +66,7 @@ db_input('c64_descr',60,$Ic64_descr,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conplanosis','func_conplanosis.php?funcao_js=parent.js_preenchepesquisa|c64_codpla','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplanosis','func_conplanosis.php?funcao_js=parent.js_preenchepesquisa|c64_codpla','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_conplanosis.hide();

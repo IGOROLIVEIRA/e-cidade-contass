@@ -120,12 +120,12 @@ if ($sContass[1] != 'contass') {
 
   </div>
   <script>
-   
+
     function js_pesquisa_empenho(mostra) {
 
       if (mostra == true) {
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_empempenho',
           'func_empempenho_manut.php?funcao_js=parent.js_mostraempenho1|e60_codemp|e60_anousu|e60_numemp',
           'Pesquisa',

@@ -25,7 +25,7 @@ $clrotulo->label("nome");
        db_ancora(@$Lsd23_i_medico,"js_pesquisasd23_i_medico(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd23_i_medico',10,$Isd23_i_medico,true,'text',3," onchange='js_pesquisasd23_i_medico(false);'")
 ?>
@@ -39,7 +39,7 @@ db_input('z01_nome',50,@$Isd03_c_nome,true,'text',3,'')
        Especialidade
        <?//db_ancora(@$Lsd23_i_especialidade,"js_pesquisasd23_i_especialidade(true);",3);?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd23_i_especialidade',10,$Isd23_i_especialidade,true,'text',3," onchange='js_pesquisasd23_i_especialidade(false);'")
 ?>
@@ -68,13 +68,13 @@ function js_valida(){
   return false;
  }else{
   parent.document.formaba.a2.disabled=false;
-  top.corpo.iframe_a2.location.href='sau1_agendamentos002.php?unidade=<?=$sd25_i_unidade?>&medico='+document.form1.sd23_i_medico.value+'&especialidade='+document.form1.sd23_i_especialidade.value;
+  CurrentWindow.corpo.iframe_a2.location.href='sau1_agendamentos002.php?unidade=<?=$sd25_i_unidade?>&medico='+document.form1.sd23_i_medico.value+'&especialidade='+document.form1.sd23_i_especialidade.value;
   parent.mo_camada('a2');
  }
 }
 
 function js_pesquisasd23_i_medico(){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_medicos','func_unidademedicos.php?unidade=<?=$sd25_i_unidade?>&funcao_js=parent.js_mostramedicos1|sd03_i_id|z01_nome|sd27_i_especialidade|sd05_c_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_medicos','func_unidademedicos.php?unidade=<?=$sd25_i_unidade?>&funcao_js=parent.js_mostramedicos1|sd03_i_id|z01_nome|sd27_i_especialidade|sd05_c_descr','Pesquisa',true);
 }
 
 function js_mostramedicos1(chave1,chave2,chave3,chave4){

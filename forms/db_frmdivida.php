@@ -470,9 +470,9 @@ function js_retornoAjax(oAjax) {
 
 function js_pesquisav01_proced(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_proced','func_proced.php?funcao_js=parent.js_mostraproced1|v03_codigo|v03_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_proced','func_proced.php?funcao_js=parent.js_mostraproced1|v03_codigo|v03_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_proced','func_proced.php?pesquisa_chave='+document.form1.v01_proced.value+'&funcao_js=parent.js_mostraproced','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_proced','func_proced.php?pesquisa_chave='+document.form1.v01_proced.value+'&funcao_js=parent.js_mostraproced','Pesquisa',false);
   }
 }
 function js_mostraproced(chave,erro){
@@ -514,9 +514,9 @@ function js_volta(){
 
 function js_pesquisav01_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.v01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.v01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
   }
 }
 function js_mostracgm(erro,chave){
@@ -533,7 +533,7 @@ function js_mostracgm1(chave1,chave2){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_divida','func_divida.php?funcao_js=parent.js_preenchepesquisa|v01_coddiv','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_divida','func_divida.php?funcao_js=parent.js_preenchepesquisa|v01_coddiv','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_divida.hide();

@@ -279,7 +279,7 @@ if (count($aParametrosEmpenho) > 0) {
           <?php db_input('e04_numeroprocesso', 10, '', true, 'text', $db_opcao); ?>
         </td>
       </tr>
-        
+
       <tr>
         <td align='left'><b>Obs:</b></td>
         <td colspan='3' align='left'>
@@ -606,7 +606,7 @@ if (count($aParametrosEmpenho) > 0) {
   function js_consultaOrdemDeCompra() {
 
     var iOrdemCompra = $F('m51_codordem');
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_consultaOrdemCompraNovo', 'com3_ordemdecompra002.php?m51_codordem=' + iOrdemCompra, 'Consulta Ordem de Compra', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_consultaOrdemCompraNovo', 'com3_ordemdecompra002.php?m51_codordem=' + iOrdemCompra, 'Consulta Ordem de Compra', true);
   }
 
   $('quantunid').observe('change', function() {
@@ -616,7 +616,7 @@ if (count($aParametrosEmpenho) > 0) {
     }
   });
 
-  $('lancado').value = ""; 
+  $('lancado').value = "";
   <?php
     $aUnidades = db_utils::getCollectionByRecord($rsUnidades, false, false, true);
     $oJson = new Services_JSON();
@@ -785,7 +785,7 @@ if (count($aParametrosEmpenho) > 0) {
   function js_send(obj, iCodLanc, iIndice) {
 
     ///alert(obj);
-    
+
     setSelecionado(iCodLanc + "_" + iIndice);
     js_setValorAlancar();
     $('matmater').disabled = true;
@@ -841,7 +841,7 @@ if (count($aParametrosEmpenho) > 0) {
      */
     js_removeObj("msgBox");
     js_bloqueiaLiberaBotao(false);
-    
+
     if ($F('sJson') != '' && lSalvo == false) {
 
       var oItemAnt = eval("(" + $F('sJson') + ")");
@@ -878,7 +878,7 @@ if (count($aParametrosEmpenho) > 0) {
         }
       }
     }
-    
+
     //CUIDADO! objeto oItemAtivo em escopo global
     oItemAtivo = eval("(" + oAjax.responseText + ")");
     $('m77_lote').value = oItemAtivo.m77_lote;
@@ -902,7 +902,7 @@ if (count($aParametrosEmpenho) > 0) {
     $('cc08_sequencial').value = oItemAtivo.cc08_sequencial;
     $('cc08_descricao').value = oItemAtivo.cc08_descricao.urlDecode();
     lSalvo = false;
-    
+
     //adicionada condição para habilitar o campo quantidade quando o item for controlado por quantidade
     if (oItemAtivo.pc01_servico == 't' && oItemAtivo.sServicoQuantidade == 'f') {
 
@@ -918,9 +918,9 @@ if (count($aParametrosEmpenho) > 0) {
       $('qtdeRecebido').disabled = false;
 
     }
-    
+
     if (oItemAtivo.aMateriaisEstoque.length > 0) {
-      
+
       //popula o select com as informações dos itens já vinculadas ao material do estoque com o compras.
       for (var iInd = 0; iInd < oItemAtivo.aMateriaisEstoque.length; iInd++) {
 
@@ -965,7 +965,7 @@ if (count($aParametrosEmpenho) > 0) {
    *
    */
   function js_saveMaterial(lFraciona) {
-    
+
     if ($F('quantunid') == 0 || $F('quantunid') == '0') {
       $('quantunid').value = 1;
     }
@@ -1087,7 +1087,7 @@ if (count($aParametrosEmpenho) > 0) {
         return false;
 
       }
-      
+
       oItemAtivo.fraciona = true;
       oItemAtivo.iIndiceDebitar = $F('iIndice');
       oItemAtivo.quantidadeDebitar = nQtdRecebido;
@@ -1381,7 +1381,7 @@ if (count($aParametrosEmpenho) > 0) {
    * Pesquisa a ordem de compra.
    */
   function js_pesquisa_matordem(mostra) {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_matordem', 'func_matordement.php?lExibeAutomatica=false&funcao_js=parent.js_mostramatordem|m51_codordem', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_matordem', 'func_matordement.php?lExibeAutomatica=false&funcao_js=parent.js_mostramatordem|m51_codordem', 'Pesquisa', true);
   }
 
   function js_mostramatordem(chave, erro) {
@@ -1404,7 +1404,7 @@ if (count($aParametrosEmpenho) > 0) {
     cod = oItemAtivo.pc01_codmater;
     numemp = oItemAtivo.e60_numemp;
     sequen = oItemAtivo.e62_sequencial;
-    js_OpenJanelaIframe('top.corpo', 'iframe_material',
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'iframe_material',
       'mat1_matmater011.php?m63_codpcmater=' + cod + '&numemp=' + numemp + '&sequen=' + sequen + '&lLotes=1',
       'Incluir Item de Entrada Novo', true);
   }
@@ -1532,7 +1532,7 @@ if (count($aParametrosEmpenho) > 0) {
 
             return false;
 
-         }*/     
+         }*/
 
       if ($F('e69_notafiscaleletronica') == 2) {
         if ($F('e69_nfserie') == '') {
@@ -1547,7 +1547,7 @@ if (count($aParametrosEmpenho) > 0) {
         alert('Número nota deve ser preenchida!');
         $('e69_numero').focus();
         return false;
- 
+
       }
       //Data da nota deve estar preenchida
       if ($F('e69_dtnota') == '') {
@@ -1861,10 +1861,10 @@ if (count($aParametrosEmpenho) > 0) {
 
   function js_pesquisam78_matfabricante(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_matfabricante', 'func_matfabricante.php?funcao_js=parent.js_mostramatfabricante1|m76_sequencial|m76_nome', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_matfabricante', 'func_matfabricante.php?funcao_js=parent.js_mostramatfabricante1|m76_sequencial|m76_nome', 'Pesquisa', true);
     } else {
       if (document.form1.m78_matfabricante.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_matfabricante', 'func_matfabricante.php?pesquisa_chave=' + document.form1.m78_matfabricante.value + '&funcao_js=parent.js_mostramatfabricante', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_matfabricante', 'func_matfabricante.php?pesquisa_chave=' + document.form1.m78_matfabricante.value + '&funcao_js=parent.js_mostramatfabricante', 'Pesquisa', false);
       } else {
         document.form1.m76_nome.value = '';
       }
@@ -1887,13 +1887,13 @@ if (count($aParametrosEmpenho) > 0) {
 
   function js_pesquisae11_cfop(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_cfop',
         'func_cfop.php?funcao_js=parent.js_mostracfop1|e10_sequencial|e10_descricao|e10_cfop',
         'Pesquisa CFOP', true);
     } else {
       if ($('e10_cfop').value != '') {
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_cfop',
           'func_cfop.php?pesquisa_chave=' + $('e10_cfop').value + '&funcao_js=parent.js_mostracfop',
           'Pesquisa CFOP', false);
@@ -1953,7 +1953,7 @@ if (count($aParametrosEmpenho) > 0) {
     if (oItemAtivo) {
 
       var iCodpcMater = oItemAtivo.pc01_codmater;
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_pcmatmater',
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pcmatmater',
         'func_matmaterentoc.php?codpcmater=' + iCodpcMater + '&funcao_js=js_mostramatmater|m60_codmater&lLotes=1',
         'Escolher Material', true);
     }

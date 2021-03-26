@@ -330,7 +330,7 @@ if (isset($tranca)) {
     }
 
     // Pega o c\F3digo da movimentacao do campo na primeira aba
-    document.form1.e45_codmov.value = top.corpo.iframe_emppresta.document.form1.e45_codmov.value;
+    document.form1.e45_codmov.value = CurrentWindow.corpo.iframe_emppresta.document.form1.e45_codmov.value;
 
     /**
      * Mascaras

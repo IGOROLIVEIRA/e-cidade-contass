@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: patrim
@@ -76,7 +76,7 @@ $iddepart = db_getsession("DB_coddepto");
           db_ancora(@$Lt22_bensguarda, "js_pesquisat22_bensguarda(true);", 3);
         ?>
       </td>
-      <td> 
+      <td>
         <?
           db_input('t22_bensguarda', 10, $It22_bensguarda, true, 'text', 3, " onchange='js_pesquisat22_bensguarda(false);'");
           db_input('t21_codigo', 10, $It21_codigo, true, 'hidden', 3, '')
@@ -89,7 +89,7 @@ $iddepart = db_getsession("DB_coddepto");
           db_ancora(@$Lt22_bem, "js_pesquisat22_bem(true);", $db_opcao);
         ?>
       </td>
-      <td nowrap > 
+      <td nowrap >
         <?
           db_input('t22_bem', 10, $It22_bem, true, 'text', $db_opcao, " onchange='js_pesquisat22_bem(false);'");
           db_input('t52_descr', 40, $It52_descr, true, 'text', 3, '')
@@ -100,7 +100,7 @@ $iddepart = db_getsession("DB_coddepto");
       <td nowrap title="<?=@$Tt22_dtini ?>">
          <?=@$Lt22_dtini ?>
       </td>
-      <td> 
+      <td>
         <?
           db_inputdata('t22_dtini', @$t22_dtini_dia, @$t22_dtini_mes, @$t22_dtini_ano, true, 'text', $db_opcao, "")
         ?>
@@ -110,7 +110,7 @@ $iddepart = db_getsession("DB_coddepto");
       <td nowrap title="<?=@$Tt22_dtfim ?>">
         <?=@$Lt22_dtfim ?>
       </td>
-      <td> 
+      <td>
         <?
           db_inputdata('t22_dtfim', @$t22_dtfim_dia, @$t22_dtfim_mes, @$t22_dtfim_ano, true, 'text', $db_opcao, "")
         ?>
@@ -120,7 +120,7 @@ $iddepart = db_getsession("DB_coddepto");
         <td nowrap title="<?=@$Tt22_obs ?>">
            <?=@$Lt22_obs ?>
         </td>
-        <td> 
+        <td>
           <?
           db_textarea('t22_obs', 0, 50, $It22_obs, true, 'text', $db_opcao, "")
           ?>
@@ -133,10 +133,10 @@ $iddepart = db_getsession("DB_coddepto");
            db_ancora(@$Lt22_usuario, "js_pesquisat22_usuario(true);", $db_opcao);
            ?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('t22_usuario', 10, $It22_usuario, true, 'text', $db_opcao, " onchange='js_pesquisat22_usuario(false);'");
-    
+
             db_input('nome', 40, $Inome, true, 'text', 3, '');
           ?>
         </td>
@@ -145,17 +145,17 @@ $iddepart = db_getsession("DB_coddepto");
   </table>
   </fieldset>
   <br />
-  <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" 
-         value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" 
+  <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao"
+         value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"
          <?=($db_botao == false ? "disabled": "") ?>  />
-  <input type="button" value="Imprimir" onClick="js_imprimir();" 
+  <input type="button" value="Imprimir" onClick="js_imprimir();"
          <?=(isset($opcao_imp) && $opcao_imp != "" ? "" : "disabled") ?> />
-  <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" 
+  <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();"
          <?=($db_opcao == 1 || isset($db_opcaoal) ? "style='visibility:hidden;'" : "") ?> />
   <br />
   <table>
    <tr>
-     <td valign="top"  align="center">  
+     <td valign="top"  align="center">
      <?
      $chavepri = array("t22_codigo" => @$t22_codigo);
      $cliframe_alterar_excluir->chavepri = $chavepri;
@@ -174,7 +174,7 @@ $iddepart = db_getsession("DB_coddepto");
 
 <script type="text/javascript">
 /**
- * 
+ *
  */
 function js_imprimir() {
 
@@ -184,7 +184,7 @@ function js_imprimir() {
   js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
 }
 function js_cancelar() {
-  
+
   var opcao = document.createElement("input");
   opcao.setAttribute("type","hidden");
   opcao.setAttribute("name","novo");
@@ -196,22 +196,22 @@ function js_cancelar() {
 function js_pesquisat22_bensguarda(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bensguarda','func_bensguarda.php?funcao_js=parent.js_mostrabensguarda1|t21_codigo|t21_codigo','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_bensguardaitem','db_iframe_bensguarda','func_bensguarda.php?funcao_js=parent.js_mostrabensguarda1|t21_codigo|t21_codigo','Pesquisa',true,'0');
   }else{
-     if(document.form1.t22_bensguarda.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bensguarda','func_bensguarda.php?pesquisa_chave='+document.form1.t22_bensguarda.value+'&funcao_js=parent.js_mostrabensguarda','Pesquisa',false);
+     if(document.form1.t22_bensguarda.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_bensguardaitem','db_iframe_bensguarda','func_bensguarda.php?pesquisa_chave='+document.form1.t22_bensguarda.value+'&funcao_js=parent.js_mostrabensguarda','Pesquisa',false);
      }else{
-       document.form1.t21_codigo.value = ''; 
+       document.form1.t21_codigo.value = '';
      }
   }
 }
 
 function js_mostrabensguarda(chave,erro){
 
-  document.form1.t21_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.t22_bensguarda.focus(); 
-    document.form1.t22_bensguarda.value = ''; 
+  document.form1.t21_codigo.value = chave;
+  if(erro==true){
+    document.form1.t22_bensguarda.focus();
+    document.form1.t22_bensguarda.value = '';
   }
 }
 
@@ -225,12 +225,12 @@ function js_mostrabensguarda1(chave1,chave2){
 function js_pesquisat22_bem(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>&funcao_js=parent.js_mostrabens1|t52_bem|t52_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>&funcao_js=parent.js_mostrabens1|t52_bem|t52_descr','Pesquisa',true,'0');
   }else{
-     if(document.form1.t22_bem.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?pesquisa_chave='+document.form1.t22_bem.value+'&funcao_js=parent.js_mostrabens&chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>','Pesquisa',false);
+     if(document.form1.t22_bem.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?pesquisa_chave='+document.form1.t22_bem.value+'&funcao_js=parent.js_mostrabens&chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>','Pesquisa',false);
      }else{
-       document.form1.t52_descr.value = ''; 
+       document.form1.t52_descr.value = '';
      }
   }
 }
@@ -239,8 +239,8 @@ function js_mostrabens(iCodigoBem, sDescricaoBem, sPlacaBem, lErro){
 
   document.form1.t52_descr.value = sDescricaoBem;
   if (lErro == true) {
-    document.form1.t22_bem.focus(); 
-    document.form1.t22_bem.value = ''; 
+    document.form1.t22_bem.focus();
+    document.form1.t22_bem.value = '';
   }
 }
 
@@ -253,20 +253,20 @@ function js_mostrabens1(iCodigoBem, sDescricaoBem, sPlacaBem, lErro) {
 
 function js_pesquisat22_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_bensguardaitem','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0');
   }else{
-     if(document.form1.t22_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.t22_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.t22_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_bensguardaitem','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.t22_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.t22_usuario.focus(); 
-    document.form1.t22_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.t22_usuario.focus();
+    document.form1.t22_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){

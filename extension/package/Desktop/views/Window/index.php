@@ -128,7 +128,7 @@ var Desktop = parent.Desktop, CurrentWindow, Window, corpo, bstatus;
         parentNode.style.position = 'relative';
       }
 
-      iframe.loader = new Desktop.Loader(parentNode);
+      iframe.loader = new DeskCurrentWindow.Loader(parentNode);
     }
 
     iframe.addEventListener('load', function(event) {
@@ -232,7 +232,7 @@ var Desktop = parent.Desktop, CurrentWindow, Window, corpo, bstatus;
 
     if (dateUser) {
       dateUser = false;
-      Desktop.Window.createSettingModal(CurrentWindow);
+      DeskCurrentWindow.Window.createSettingModal(CurrentWindow);
     }
 
     if (browser.webkit) {

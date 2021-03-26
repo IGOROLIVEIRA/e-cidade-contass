@@ -8,7 +8,7 @@
     float: right;  width: 20px;"></div>
 <div id="fechar" onclick="fechar()" style="background:url('imagens/jan_mini_on.gif'); height: 20px;
     float: right;  width: 20px;"></div>
-    
+
 </div><!-- topo -->
 <div id="campos" style="margin-bottom: 7px;">
 <table>
@@ -57,7 +57,7 @@
   </tr>
   <tr>
   <td><strong>Data do Ato de Nomeação:</strong></td>
-  <td><input type="text" name=dataAtoNomeacao id="dataAtoNomeacao" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name=dataAtoNomeacao id="dataAtoNomeacao" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="dataAtoNomeacao_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="dataAtoNomeacao_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -69,12 +69,12 @@
       objData.value = dia+"/"+mes+'/'+ano;
     }
   </script>
-  
+
   </td>
   </tr>
   <tr>
   <td><strong>Data do início da vigência:</strong></td>
-  <td><input type="text" name=inicioVigencia id="inicioVigencia" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name=inicioVigencia id="inicioVigencia" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="inicioVigencia_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="inicioVigencia_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -90,7 +90,7 @@
   </tr>
   <tr>
   <td><strong>Data do fim da vigência:</strong></td>
-  <td><input type="text" name=finalVigencia id="finalVigencia" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name=finalVigencia id="finalVigencia" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="finalVigencia_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="finalVigencia_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -102,7 +102,7 @@
       objData.value = dia+"/"+mes+'/'+ano;
     }
   </script>
-  
+
   </td>
   </tr>
   <tr>
@@ -120,22 +120,22 @@
 <script type="text/javascript">
 
 function limpar_codigo(cod) {
-	
-	top.corpo.iframe_db_resps.location.href='con4_sicomresponsavel.php?codigo='+cod;
+
+	CurrentWindow.corpo.iframe_db_resps.location.href='con4_sicomresponsavel.php?codigo='+cod;
 	if (cod == '') {
 	  parent.document.formaba.db_resps.disabled=true;
 	}
-	
+
 }
 
 /**
  * limitar caracteres de textarea
  */
 function textCounter(field, countfield, maxlimit) {
-	
+
 	if (field.value.length > maxlimit){
 		field.value = field.value.substring(0, maxlimit);
-	}else{ 
+	}else{
 		countfield.value = maxlimit - field.value.length;
 	}
 	}
@@ -151,7 +151,7 @@ function pesquisar(){
 		onComplete:cria_tabela
 		  }
 	);
-	
+
 }
 
 /**
@@ -169,14 +169,14 @@ function pesquisar_codigo() {
 		onComplete:cria_tabela
 			}
 	 );
-	 
+
 }
 
 /**
- * 
+ *
  */
 function pegar_valor(param1, param2, param3, param4, param5, param6, param7){
-	 
+
 	$('codigo').value = param1;
 	document.getElementById("codTipoComissao").options[param2].selected = "true";
 	document.getElementById("descricaoAtoNomeacao").options[param3].selected = "true";
@@ -185,23 +185,23 @@ function pegar_valor(param1, param2, param3, param4, param5, param6, param7){
 	$('inicioVigencia').value = param6;
 	$('finalVigencia').value = param7;
 
-	top.corpo.iframe_db_resps.location.href='con4_sicomresponsavel.php?codigo='+param1;
+	CurrentWindow.corpo.iframe_db_resps.location.href='con4_sicomresponsavel.php?codigo='+param1;
     parent.document.formaba.db_resps.disabled=false;
-	
+
 	document.getElementById('lista').style.visibility = "hidden";
 	var campo = document.getElementById('TabDbLov');
-	document.getElementById('lista').removeChild(campo); 
-	
+	document.getElementById('lista').removeChild(campo);
+
 }
 
 function fechar(){
-	var campo = document.getElementById('TabDbLov'); 
-	document.getElementById('lista').removeChild(campo); 
+	var campo = document.getElementById('TabDbLov');
+	document.getElementById('lista').removeChild(campo);
 	document.getElementById('lista').style.visibility = "hidden";
 }
 
 function cria_tabela(json){
-	
+
 	var jsonObj = eval("("+json.responseText+")");
 
 	var tabela;
@@ -224,7 +224,7 @@ function cria_tabela(json){
 	tabela += "</td></tr>";
 
 	try {
-		
+
 		for (var i = 0; i < jsonObj.length; i++){
 			if(i % 2 != 0){
 					color = "#97b5e6";
@@ -232,46 +232,46 @@ function cria_tabela(json){
 				color = "#e796a4";
 			}
 			tabela += "<tr>";
-	
+
 			tabela += "<td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor('"+jsonObj[i].codigo+"','"+jsonObj[i].codTipoComissao+"','"+jsonObj[i].descricaoAtoNomeacao+"','"
 			+jsonObj[i].nroAtoNomeacao+"','"+jsonObj[i].dataAtoNomeacao+"','"+jsonObj[i].inicioVigencia+"','"+jsonObj[i].finalVigencia+
 			"')\">"+jsonObj[i].codigo+"</a>";
-			     
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor('"+jsonObj[i].codigo+"','"+jsonObj[i].codTipoComissao+"','"+jsonObj[i].descricaoAtoNomeacao+"','"
 			+jsonObj[i].nroAtoNomeacao+"','"+jsonObj[i].dataAtoNomeacao+"','"+jsonObj[i].inicioVigencia+"','"+jsonObj[i].finalVigencia+
 			"')\">"+(jsonObj[i].codTipoComissao == '01' ? 'Especial' : 'Permanente')+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor('"+jsonObj[i].codigo+"','"+jsonObj[i].codTipoComissao+"','"+jsonObj[i].descricaoAtoNomeacao+"','"
 			+jsonObj[i].nroAtoNomeacao+"','"+jsonObj[i].dataAtoNomeacao+"','"+jsonObj[i].inicioVigencia+"','"+jsonObj[i].finalVigencia+
 			"')\">"+(jsonObj[i].descricaoAtoNomeacao == '01' ? "Portaria" : "Decreto")+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor('"+jsonObj[i].codigo+"','"+jsonObj[i].codTipoComissao+"','"+jsonObj[i].descricaoAtoNomeacao+"','"
 			+jsonObj[i].nroAtoNomeacao+"','"+jsonObj[i].dataAtoNomeacao+"','"+jsonObj[i].inicioVigencia+"','"+jsonObj[i].finalVigencia+
 			"')\">"+jsonObj[i].nroAtoNomeacao+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor('"+jsonObj[i].codigo+"','"+jsonObj[i].codTipoComissao+"','"+jsonObj[i].descricaoAtoNomeacao+"','"
 			+jsonObj[i].nroAtoNomeacao+"','"+jsonObj[i].dataAtoNomeacao+"','"+jsonObj[i].inicioVigencia+"','"+jsonObj[i].finalVigencia+
 			"')\">"+jsonObj[i].dataAtoNomeacao+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor('"+jsonObj[i].codigo+"','"+jsonObj[i].codTipoComissao+"','"+jsonObj[i].descricaoAtoNomeacao+"','"
 			+jsonObj[i].nroAtoNomeacao+"','"+jsonObj[i].dataAtoNomeacao+"','"+jsonObj[i].inicioVigencia+"','"+jsonObj[i].finalVigencia+
 			"')\">"+jsonObj[i].inicioVigencia+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor('"+jsonObj[i].codigo+"','"+jsonObj[i].codTipoComissao+"','"+jsonObj[i].descricaoAtoNomeacao+"','"
 			+jsonObj[i].nroAtoNomeacao+"','"+jsonObj[i].dataAtoNomeacao+"','"+jsonObj[i].inicioVigencia+"','"+jsonObj[i].finalVigencia+
 			"')\">"+jsonObj[i].finalVigencia+"</a>";
-	
-		
+
+
 			tabela += "</td></tr>";
 		}
-		
+
 	} catch (e) {
 	}
 	tabela += "</table>";
@@ -292,18 +292,18 @@ function passar_valores(cod) {
 			var i = 0;
 			pegar_valor(jsonObj[i].codigo,jsonObj[i].codTipoComissao,jsonObj[i].descricaoAtoNomeacao,
 					jsonObj[i].nroAtoNomeacao,jsonObj[i].dataAtoNomeacao,jsonObj[i].inicioVigencia,jsonObj[i].finalVigencia);
-			} 		
+			}
 		  }
 	  );
-	
-} 
+
+}
 </script>
 
 <?
 if (isset($iUltimoCodigo)) {
-	echo "<script>	
+	echo "<script>
 		passar_valores(".$iUltimoCodigo.");
 	</script>";
-} 
+}
 
 ?>

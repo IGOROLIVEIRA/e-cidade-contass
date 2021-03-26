@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -65,7 +65,7 @@ function js_submeter(obj) {
 
 
 function js_campos_mostra(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_campo','sys4_chaveprim002.php?<? echo base64_encode("tabela=$tabela") ?>','Pesquisa campo',true,"20","160","300","300");
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_campo','sys4_chaveprim002.php?<? echo base64_encode("tabela=$tabela") ?>','Pesquisa campo',true,"20","160","300","300");
 }
 
 </script>
@@ -93,7 +93,7 @@ input {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -103,7 +103,7 @@ input {
 <br>
 <br>
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td align="center" valign="top" bgcolor="#CCCCCC">
 <?
 if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"])) {
@@ -115,7 +115,7 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
 			           inner join db_syscampo c
 			           on c.codcam = ci.codcam
 			           where i.codind = $ind
-			           order by ci.sequen");		
+			           order by ci.sequen");
     $num_linhas = pg_numrows($result);
     $nome_ind = pg_result($result,0,"nome_indice");
   }
@@ -124,7 +124,7 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
   <fieldset style="width:500px">
     <legend><b>Tabela: <?=@$nomearq?></b></legend>
 	    <table>
-        <tr> 
+        <tr>
           <td>
             <b>Nome : </b>
           </td>
@@ -132,13 +132,13 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
             <input type="text" size="40" name="nome_ind" value="<?=@$nome_ind?>">
           </td>
         </tr>
-        <tr> 
+        <tr>
           <td valign="top">
             <b>Campos : </b>
           </td>
           <td>
             <textarea rows="7" cols="37" name="alt_ind"><?if(isset($ind)) {for($i = 0;$i < $num_linhas;$i++) {echo trim(pg_result($result,$i,"nome_campo"))."\n";}}?>
-            </textarea> 
+            </textarea>
           </td>
         </tr>
         <tr>
@@ -147,13 +147,13 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
           </td>
           <td>
             <input name="campounico" type="checkbox" id="campounico" value="unico" <?echo @pg_result($result,0,"campounico")=="0" || @pg_result($result,0,"campounico")==""?"":"checked" ?>>
-          </td>            
-        </tr>            
+          </td>
+        </tr>
       </table>
   </fieldset>
     <input type="submit" onClick="Botao='atualizar'" name="b_campo_ind" value="Atualizar">
     <input type="submit" name="excluir" value="Excluir" OnClick="return confirm('Voce quer realmente excluir este registro?')">
-    <input type="button" value="Procurar" onClick="js_campos_mostra();" name="button"> 
+    <input type="button" value="Procurar" onClick="js_campos_mostra();" name="button">
     <input type="button" name="voltar" value="Voltar" onClick="location.href='sys3_campos001.php?<?=base64_encode("tabela=".$GLOBALS["tabela"])?>'">
 	  <input type="hidden" name="tabela" value="<?=@$tabela ?>">
 	  <input type="hidden" name="ind" value="<?=@(isset($HTTP_POST_VARS["ind"])?$HTTP_POST_VARS["ind"]:$ind)?>">
@@ -169,8 +169,8 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
 	if($ind == "") {
 		pg_exec("BEGIN");
 		pg_exec("insert into db_sysindices values(nextval('db_sysindices_codind_seq'),'$nome_ind',$tabela,'$campounico')") or die("Erro(94) inserindo em db_sysindices");
-		$result = pg_exec("select codind 
-                           from db_sysindices 
+		$result = pg_exec("select codind
+                           from db_sysindices
                            where nomeind = '$nome_ind'") or die("Erro(97) selecionando db_sysindices");
 		$ind = pg_result($result,0,0);
 		$alt_ind = split("\r\n",$alt_ind);
@@ -182,7 +182,7 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
 				$s = $i + 1;
 				pg_exec("insert into db_syscadind values($ind,".pg_result($result,0,"codcam").",$s)") or die("Erro(104) inserindo em db_syscadind");
 			}
-		}	
+		}
 		pg_exec("END");
 		db_redireciona("sys3_campos001.php?".base64_encode("tabela=$tabela"));
 	} else {
@@ -198,7 +198,7 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
 					where nomecam = '$alt_ind[$i]'");
 				$s = $i + 1;
 				$result = pg_exec($conn,"
-					insert into db_syscadind 
+					insert into db_syscadind
 					values($ind,".pg_result($result,0,"codcam").",$s)") or die("Erro(156) inserindo em db_syscadind");
 			}
 		}

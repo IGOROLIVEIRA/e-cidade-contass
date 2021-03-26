@@ -95,9 +95,9 @@ if (isset($alterar)) {
    parent.document.formaba.a7.style.color = "black";
    parent.document.formaba.a8.disabled    = false;
    parent.document.formaba.a8.style.color = "black";
-   top.corpo.iframe_a2.location.href      = 'edu1_telefonerechumano001.php?ed30_i_rechumano=<?=$ed20_i_codigo?>';
-   top.corpo.iframe_a3.location.href      = 'edu1_formacao001.php?ed27_i_rechumano=<?=$ed20_i_codigo?>';
-   top.corpo.iframe_a8.location.href      = 'edu1_rechumanoescola001.php?ed75_i_rechumano=<?=$ed20_i_codigo?>&ed20_i_tiposervidor=<?=$ed20_i_tiposervidor?>';
+   CurrentWindow.corpo.iframe_a2.location.href      = 'edu1_telefonerechumano001.php?ed30_i_rechumano=<?=$ed20_i_codigo?>';
+   CurrentWindow.corpo.iframe_a3.location.href      = 'edu1_formacao001.php?ed27_i_rechumano=<?=$ed20_i_codigo?>';
+   CurrentWindow.corpo.iframe_a8.location.href      = 'edu1_rechumanoescola001.php?ed75_i_rechumano=<?=$ed20_i_codigo?>&ed20_i_tiposervidor=<?=$ed20_i_tiposervidor?>';
    <?php
    $sComplementoUrl  = $ed20_i_tiposervidor == 1 ? "&identificacao=$ed284_i_rhpessoal" : "&identificacao=$z01_numcgm";
    $sComplementoUrl .= "&z01_nome=$z01_nome";
@@ -109,21 +109,21 @@ if (isset($alterar)) {
 
    ?>
 
-     top.corpo.iframe_a4.location.href = 'edu1_rechumanoativ001.php?ed75_i_rechumano=<?=$ed20_i_codigo?><?=$sComplementoUrl?>';
-     top.corpo.iframe_a5.location.href = 'edu1_relacaotrabalho001.php?ed75_i_rechumano=<?=$ed20_i_codigo?>';
+     CurrentWindow.corpo.iframe_a4.location.href = 'edu1_rechumanoativ001.php?ed75_i_rechumano=<?=$ed20_i_codigo?><?=$sComplementoUrl?>';
+     CurrentWindow.corpo.iframe_a5.location.href = 'edu1_relacaotrabalho001.php?ed75_i_rechumano=<?=$ed20_i_codigo?>';
    <?php
    } else {
 
    ?>
 
-     top.corpo.iframe_a4.location.href = 'edu1_rechumanoativ001.php?ed75_i_rechumano=<?=$ed20_i_codigo?><?=$sComplementoUrl?>';
-     top.corpo.iframe_a5.location.href = 'edu1_relacaotrabalho001.php?ed75_i_rechumano=<?=$ed20_i_codigo?>';
+     CurrentWindow.corpo.iframe_a4.location.href = 'edu1_rechumanoativ001.php?ed75_i_rechumano=<?=$ed20_i_codigo?><?=$sComplementoUrl?>';
+     CurrentWindow.corpo.iframe_a5.location.href = 'edu1_relacaotrabalho001.php?ed75_i_rechumano=<?=$ed20_i_codigo?>';
    <?php
    }
    ?>
-   top.corpo.iframe_a6.location.href = 'edu1_rechumanohoradisp001.php?ed20_i_codigo=<?=$ed20_i_codigo?>';
-   top.corpo.iframe_a7.location.href = 'edu1_rechumanohorario001.php?ed20_i_codigo=<?=$ed20_i_codigo?>';
-   top.corpo.iframe_a9.location.href = 'edu1_rechumanonecessidade.php?iRecursoHumano=<?=$ed20_i_codigo?>';
+   CurrentWindow.corpo.iframe_a6.location.href = 'edu1_rechumanohoradisp001.php?ed20_i_codigo=<?=$ed20_i_codigo?>';
+   CurrentWindow.corpo.iframe_a7.location.href = 'edu1_rechumanohorario001.php?ed20_i_codigo=<?=$ed20_i_codigo?>';
+   CurrentWindow.corpo.iframe_a9.location.href = 'edu1_rechumanonecessidade.php?iRecursoHumano=<?=$ed20_i_codigo?>';
   </script>
   <?php
 }

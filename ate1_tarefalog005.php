@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 define("TAREFA", true);
@@ -44,7 +44,7 @@ $cldb_usuarios       = new cl_db_usuarios;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  $sqlerro = false;	
+  $sqlerro = false;
   db_inicio_transacao();
   $cltarefalog->alterar($at43_sequencial);
 
@@ -52,7 +52,7 @@ if(isset($alterar)){
   if($cltarefalog->erro_status == 0) {
 	  $sqlerro = true;
   }
-  
+
   if($sqlerro == false) {
 	  $result = $cltarefalogsituacao->sql_record($cltarefalogsituacao->sql_query(null,"at48_sequencial",null,"at48_tarefalog=$cltarefalog->at43_sequencial"));
    	  if($cltarefalogsituacao->numrows > 0) {
@@ -67,9 +67,9 @@ if(isset($alterar)){
 			  $erro_msg = $cltarefalogsituacao->erro_msg;
 			  $sqlerro = true;
 		  }
-      } 
+      }
   }
-  
+
   if($sqlerro==false) {
       if(isset($enviar)&&$enviar!="") {
 	  	  if($cltarefalog->at43_avisar==3||$cltarefalog->at43_avisar==2) {
@@ -100,7 +100,7 @@ if(isset($alterar)){
 						  }
 					  	  $rs_resp  = $cldb_usuarios->sql_record($cldb_usuarios->sql_query($at40_responsavel,"nome as nome_resp","id_usuario"));
 						  db_fieldsmemory($rs_resp,0);
-						  
+
 						  $mensagem = $nome . "\n     Você tem tarefas para fazer abaixo a descricao da sua tarefa:\n" .
 						              "Responsavel:         " . $at40_responsavel . " - " . $nome_resp . "\n".
 						              "Descricao  :         " . $at40_descr       . "\n".
@@ -108,19 +108,19 @@ if(isset($alterar)){
 						              "Data final prevista: " . db_formatar($at40_diafim,"d") . "\n".
 						              "Previsto em        : " . $at40_previsao    . "\\" . $at40_tipoprevisao . "\n" .
 						              "Prioridade         : " . $prioridade       . "\n" .
-						              "Obs.:                " . $at40_obs         . "\n";  
-	
+						              "Obs.:                " . $at40_obs         . "\n";
+
 						  $envio = $cltarefalog->enviar_email($email,"Tarefa ".$cltarefalog->at43_tarefa,$mensagem);
 						  if($envio == false) {
 						  	  db_msgbox("Erro ao enviar e-mail para " . $email);
 						  }
 					  }
-			  	  } 
+			  	  }
 			  }
-	  	  } 
+	  	  }
       }
   }
-  
+
   db_fim_transacao($sqlerro);
   $db_opcao = 2;
   $db_botao = true;
@@ -129,15 +129,15 @@ if(isset($alterar)){
    $db_botao = true;
 
    $result = $cltarefalog->sql_record($cltarefalog->sql_query($chavepesquisa));
-   if($cltarefalog->numrows > 0) { 
+   if($cltarefalog->numrows > 0) {
    	   db_fieldsmemory($result,0);
    }
-   
+
    $result = $cltarefalogsituacao->sql_record($cltarefalogsituacao->sql_query(null,"*",null,"at48_tarefalog=$chavepesquisa"));
    if($cltarefalogsituacao->numrows > 0) {
 	   db_fieldsmemory($result,0);
-   } 
-   
+   }
+
    $result = $cldb_usuarios->sql_record($cldb_usuarios->sql_query($at43_usuario,"nome","id_usuario"));
    if($cldb_usuarios->numrows > 0) {
 	   db_fieldsmemory($result,0);
@@ -154,8 +154,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmtarefalog.php");
@@ -176,9 +176,9 @@ if(isset($alterar)){
 		};
 	} else {
 		db_msgbox($erro_msg);
-		echo "<script>top.corpo.iframe_tarefaand.location.href='ate1_tarefalogand001.php?at43_tarefa=".@$at43_tarefa."&at43_usuario=".@$at43_usuario."'</script>";
+		echo "<script>CurrentWindow.corpo.iframe_tarefaand.location.href='ate1_tarefalogand001.php?at43_tarefa=".@$at43_tarefa."&at43_usuario=".@$at43_usuario."'</script>";
 	}
-/*	
+/*
   if($cltarefalog->erro_status=="0"){
     $cltarefalog->erro(true,false);
     $db_botao=true;
@@ -190,7 +190,7 @@ if(isset($alterar)){
   }else{
     $cltarefalog->erro(true,true);
   };
-*/  
+*/
 };
 if (isset ($chavepesquisa)) {
 	echo "
@@ -199,9 +199,9 @@ if (isset ($chavepesquisa)) {
          parent.document.formaba.tarefalog.disabled=false;
          parent.document.formaba.tarefaclientes.disabled=false;
          parent.document.formaba.tarefausu.disabled=false;
-         top.corpo.iframe_tarefalog.location.href='ate1_tarefalogand001.php?at43_tarefa=".@$at43_tarefa."&at43_usuario=".@$at43_usuario."';
-         top.corpo.iframe_tarefaclientes.location.href='ate1_tarefaclientes001.php?at70_tarefa=".@$at43_tarefa."';
-         top.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at43_tarefa."'";
+         CurrentWindow.corpo.iframe_tarefalog.location.href='ate1_tarefalogand001.php?at43_tarefa=".@$at43_tarefa."&at43_usuario=".@$at43_usuario."';
+         CurrentWindow.corpo.iframe_tarefaclientes.location.href='ate1_tarefaclientes001.php?at70_tarefa=".@$at43_tarefa."';
+         CurrentWindow.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at43_tarefa."'";
 	if (isset ($liberaaba)) {
 		echo "  parent.mo_camada('tarefalog');";
 	}

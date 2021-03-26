@@ -24,7 +24,7 @@ $clrotulo->label('q02_inscr');
 $clrotulo->label('k00_numpre');
 $clrotulo->label('v07_parcel');
 
-	 
+
 if(!isset($ano)){
   $ano = db_anofolha();
 }
@@ -84,7 +84,7 @@ a.links2:hover {
 	text-decoration: underline;
 }
 .nome {
-  color:black;  
+  color:black;
 }
 a.nome:hover {
   color:blue;
@@ -112,7 +112,7 @@ function js_MudaLink(nome) {
     TIPO = document.getElementById(nome).innerText;
 	document.getElementById('processando').style.top = 113;
   }
-//  if(nome.indexOf("tiposemdeb") != -1) 
+//  if(nome.indexOf("tiposemdeb") != -1)
 //    document.getElementById('outrasopcoes').disabled = true;
 //  else
 //    document.getElementById('outrasopcoes').disabled = false;
@@ -133,7 +133,7 @@ function js_relatorio(){
   jan.moveTo(0,0);
 }
 function js_Pesquisa(solicitacao) {
-  js_OpenJanelaIframe('top.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$r01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>','CONSULTA DE FUNCIONÁRIOS',true,'20');
+  js_OpenJanelaIframe('CurrentWindow.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$r01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>','CONSULTA DE FUNCIONÁRIOS',true,'20');
 }
 
 
@@ -151,7 +151,7 @@ function js_Pesquisa(solicitacao) {
 </Table>
 </div>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -159,7 +159,7 @@ function js_Pesquisa(solicitacao) {
   </tr>
 </table>
     <center>
-    <?	
+    <?
 	$mensagem_semdebitos = false;
 	$com_debitos = true;
 	if(isset($HTTP_POST_VARS["pesquisar"]) || isset($matricula) ) {
@@ -167,14 +167,14 @@ function js_Pesquisa(solicitacao) {
       //aqui é pra se clicar no link da matricula em cai3_gerfinanc002.php
       if(isset($matricula) && !empty($matricula))
 	    $HTTP_POST_VARS["r01_regist"] = $matricula;
-	
+
 	  if(!empty($HTTP_POST_VARS["r01_regist"])) {
   	    $sql = "select r01_regist,
                        r01_numcgm as k00_numcgm,
-                       z01_numcgm,r01_tbprev 
-                from   pessoal 
-                       inner join cgm on r01_numcgm = z01_numcgm 
-		        where 
+                       z01_numcgm,r01_tbprev
+                from   pessoal
+                       inner join cgm on r01_numcgm = z01_numcgm
+		        where
                        r01_regist = ".$HTTP_POST_VARS["r01_regist"]." limit 1" ;
         // echo $sql;
 	    $result = pg_exec($sql);
@@ -188,16 +188,16 @@ function js_Pesquisa(solicitacao) {
 	    } else {
 	      db_fieldsmemory($result,0);
 	      $resultaux = $result;
-          $arg = "matric=".$HTTP_POST_VARS["r01_regist"]; 
+          $arg = "matric=".$HTTP_POST_VARS["r01_regist"];
 	    }
 
-            
+
         ///////// VERIFICA SE A MATRÍCULA POSSUI SALÁRIO
 	    $matricula = $HTTP_POST_VARS["r01_regist"];
- 	    $resultgerfsal = pg_exec("select * 
-	                              from gerfsal 
-		                          where     r14_regist = $matricula 
-                                        and r14_anousu = $ano 
+ 	    $resultgerfsal = pg_exec("select *
+	                              from gerfsal
+		                          where     r14_regist = $matricula
+                                        and r14_anousu = $ano
                                         and r14_mesusu = $mes");
         if(pg_numrows($resultgerfsal) != 0){
 	      $temsalario = true;
@@ -205,10 +205,10 @@ function js_Pesquisa(solicitacao) {
           $temsalario = false;
 	    }
         ///////// VERIFICA SE A MATRÍCULA POSSUI FÉRIAS
- 	    $resultgerffer = pg_exec("select * 
-	                              from gerffer 
-			                      where     r31_regist = $matricula 
-			                            and r31_anousu = $ano 
+ 	    $resultgerffer = pg_exec("select *
+	                              from gerffer
+			                      where     r31_regist = $matricula
+			                            and r31_anousu = $ano
 				                        and r31_mesusu = $mes");
         if(pg_numrows($resultgerffer) != 0){
 	      $temferias = true;
@@ -216,21 +216,21 @@ function js_Pesquisa(solicitacao) {
           $temferias = false;
 	    }
         ///////// VERIFICA SE A MATRÍCULA POSSUI RESCISAO
- 	    $resultgerfres = pg_exec("select * 
-	                              from gerfres 
-                                  where     r20_regist = $matricula 
-			                            and r20_anousu = $ano 
+ 	    $resultgerfres = pg_exec("select *
+	                              from gerfres
+                                  where     r20_regist = $matricula
+			                            and r20_anousu = $ano
 				                        and r20_mesusu = $mes");
         if(pg_numrows($resultgerfres) != 0){
 	      $temrescisao = true;
 	    }else{
           $temrescisao = false;
 	    }
-        ///////// VERIFICA SE A MATRÍCULA POSSUI ADIANTAMENTO	
- 	    $resultgerfadi = pg_exec("select * 
-	                              from gerfadi 
-			                      where     r22_regist = $matricula 
-			                            and r22_anousu = $ano 
+        ///////// VERIFICA SE A MATRÍCULA POSSUI ADIANTAMENTO
+ 	    $resultgerfadi = pg_exec("select *
+	                              from gerfadi
+			                      where     r22_regist = $matricula
+			                            and r22_anousu = $ano
 				                        and r22_mesusu = $mes");
         if(pg_numrows($resultgerfadi) != 0){
 	      $temadiantamento = true;
@@ -238,10 +238,10 @@ function js_Pesquisa(solicitacao) {
           $temadiantamento = false;
 	    }
         ///////// VERIFICA SE A MATRÍCULA POSSUI 13 SALÁRIO
- 	    $resultgerfs13 = pg_exec("select * 
-	                              from gerfs13 
-			                      where     r35_regist = $matricula 
-			                            and r35_anousu = $ano 
+ 	    $resultgerfs13 = pg_exec("select *
+	                              from gerfs13
+			                      where     r35_regist = $matricula
+			                            and r35_anousu = $ano
 				                        and r35_mesusu = $mes");
         if(pg_numrows($resultgerfs13) != 0){
 	      $tem13salario = true;
@@ -249,10 +249,10 @@ function js_Pesquisa(solicitacao) {
           $tem13salario = false;
 	    }
         ///////// VERIFICA SE A MATRÍCULA POSSUI complementar
- 	    $resultgerfcom = pg_exec("select * 
-	                              from gerfcom 
-              		              where     r48_regist = $matricula 
-			                            and r48_anousu = $ano 
+ 	    $resultgerfcom = pg_exec("select *
+	                              from gerfcom
+              		              where     r48_regist = $matricula
+			                            and r48_anousu = $ano
 				                        and r48_mesusu = $mes");
         if(pg_numrows($resultgerfcom) != 0){
 	      $temcomplementar = true;
@@ -260,10 +260,10 @@ function js_Pesquisa(solicitacao) {
           $temcomplementar = false;
 	    }
         ///////// VERIFICA SE A MATRÍCULA POSSUI ponto fixo
- 	    $resultgerffx = pg_exec("select * 
-	                             from gerffx 
-			                     where     r53_regist = $matricula 
-			                           and r53_anousu = $ano 
+ 	    $resultgerffx = pg_exec("select *
+	                             from gerffx
+			                     where     r53_regist = $matricula
+			                           and r53_anousu = $ano
 				                       and r53_mesusu = $mes");
         if(pg_numrows($resultgerffx) != 0){
 	      $tempontofixo = true;
@@ -271,13 +271,13 @@ function js_Pesquisa(solicitacao) {
           $tempontofixo = false;
 	    }
         ///////// VERIFICA SE A MATRÍCULA POSSUI ajuste previdencia
- 	    $resultpreviden = pg_exec("select * 
+ 	    $resultpreviden = pg_exec("select *
                                    from pessoal
 				                        inner join previden on r60_numcgm = r01_numcgm
 					                                       and r60_anousu = $ano
 							                               and r60_mesusu = $mes
-			                       where     r01_regist = $matricula 
-			                             and r01_anousu = $ano 
+			                       where     r01_regist = $matricula
+			                             and r01_anousu = $ano
 				                         and r01_mesusu = $mes limit 1");
         if(pg_numrows($resultpreviden) != 0){
 	      $temajustepreviden = true;
@@ -286,13 +286,13 @@ function js_Pesquisa(solicitacao) {
 	    }
 
         //////// VERIFICA SE A MATRÍCULA POSSUI ajuste irf
- 	    $resultajusteir = pg_exec("select * 
+ 	    $resultajusteir = pg_exec("select *
 	                               from pessoal
 		                                inner join ajusteir on r61_numcgm = r01_numcgm
 					                                       and r61_anousu = $ano
 					                                       and r61_mesusu = $mes
-			                       where     r01_regist = $matricula 
-			                             and r01_anousu = $ano 
+			                       where     r01_regist = $matricula
+			                             and r01_anousu = $ano
 				                         and r01_mesusu = $mes limit 1");
         if(pg_numrows($resultajusteir) != 0){
 	      $temajusteir = true;
@@ -306,28 +306,28 @@ function js_Pesquisa(solicitacao) {
                                z01_munic,
                                z01_uf,
                                z01_cgccpf,
-                               z01_ident 
-	                    from cgm 
+                               z01_ident
+	                    from cgm
 						where z01_numcgm = ".pg_result($result,0,"k00_numcgm"));
-	  db_fieldsmemory($dados,0);	  
+	  db_fieldsmemory($dados,0);
 
 	?>
         <table width="100%" height="80%" border="1" cellspacing="0" cellpadding="0">
-          <tr> 
-            <td colspan="2" height="15%"> 
+          <tr>
+            <td colspan="2" height="15%">
 	          <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr> 
-                  <td width="33%"> 
+                <tr>
+                  <td width="33%">
 		            <table width="104%" border="0" cellspacing="0" cellpadding="0">
-                      <tr> 
+                      <tr>
                         <td nowrap title="Clique Aqui para ver os dados cadastrais." class="tabcols">
                           <strong style=\"color:blue\>
                             <a href='' onclick='js_mostracgm();return false;'>NumCgm:&nbsp;</a>
                           </strong>
                         </td>
-                        <td class="tabcols" nowrap title="Clique Aqui para ver os dados cadastrais."> 
-                          <input class="btcols" type="text" name="z01_numcgm" value="<?=@$z01_numcgm?>" size="5" readonly> 
-                          &nbsp;&nbsp;&nbsp; 
+                        <td class="tabcols" nowrap title="Clique Aqui para ver os dados cadastrais.">
+                          <input class="btcols" type="text" name="z01_numcgm" value="<?=@$z01_numcgm?>" size="5" readonly>
+                          &nbsp;&nbsp;&nbsp;
                           <?
 					      parse_str($arg);
 					      $Label = "<a href='' onclick='js_mostrapessoal();return false;'>$Lr01_regist</a>";
@@ -335,32 +335,32 @@ function js_Pesquisa(solicitacao) {
 					      ?>
                         </td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td nowrap class="tabcols"><strong>Nome:</strong></td>
                         <td nowrap>
-                          <input class="btcols" type="text" name="z01_nome" value="<?=@$z01_nome?>" size="46" readonly> 
+                          <input class="btcols" type="text" name="z01_nome" value="<?=@$z01_nome?>" size="46" readonly>
                           &nbsp;
                         </td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td nowrap class="tabcols"><strong>Endereço:</strong></td>
                         <td nowrap>
-                          <input class="btcols" type="text" name="z01_ender" value="<?=@$z01_ender?>" size="46" readonly> 
+                          <input class="btcols" type="text" name="z01_ender" value="<?=@$z01_ender?>" size="46" readonly>
                         </td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td nowrap class="tabcols"><strong>Município:</strong></td>
                         <td>
-                          <input class="btcols" type="text" name="z01_munic" value="<?=@$z01_munic?>" size="20" readonly> 
+                          <input class="btcols" type="text" name="z01_munic" value="<?=@$z01_munic?>" size="20" readonly>
                           <strong class="tabcols">
                             UF:
                           </strong>
-                          <input class="btcols" type="text" name="z01_uf" value="<?=@$z01_uf?>" size="2" maxlength="2" readonly=""> 
+                          <input class="btcols" type="text" name="z01_uf" value="<?=@$z01_uf?>" size="2" maxlength="2" readonly="">
                           &nbsp;
                         </td>
                       </tr>
-                      <tr> 
-                        <td height="21" colspan="2" nowrap class="tabcols"> 
+                      <tr>
+                        <td height="21" colspan="2" nowrap class="tabcols">
                           <?
                           if(isset($HTTP_POST_VARS["r01_regist"]) && !empty($HTTP_POST_VARS["r01_regist"]))
                             echo "<input type=\"hidden\" name=\"r01_regist\"  value=\"".$HTTP_POST_VARS["r01_regist"]."\">";
@@ -377,7 +377,7 @@ function js_Pesquisa(solicitacao) {
                       </tr>
                     </table>
                   </td>
-                  <td width="67%" valign="top"> 
+                  <td width="67%" valign="top">
                     <table border="1" cellspacing="0" cellpadding="0" >
 		              <tr class="links">
 		                <td valign="top" style="font-size:11px">
@@ -634,12 +634,12 @@ function js_Pesquisa(solicitacao) {
               </table>
             </td>
           </tr>
-          <tr> 
-            <td colspan="2"  height="80%"  align="center" valign="middle"> 
+          <tr>
+            <td colspan="2"  height="80%"  align="center" valign="middle">
 	          <table border="0" height="100%" width="100%" cellspacing="0" cellpadding="0">
-                <tr> 
+                <tr>
                   <td align="center">
-                    <iframe id="debitos" height="90%" width="95%" name="debitos" src="pes3_gerfinanc018.php?opcao=<?=$xopcao?>&numcgm=<?=$z01_numcgm?>&matricula=<?=$matricula?>&ano=<?=$ano?>&mes=<?=$mes?>&tbprev=<?$r01_tbprev?>&bases=<?=@$bases?>&rub_bases=<?=@$rub_bases?>&rub_cond=<?=@$rub_cond?>"></iframe> 
+                    <iframe id="debitos" height="90%" width="95%" name="debitos" src="pes3_gerfinanc018.php?opcao=<?=$xopcao?>&numcgm=<?=$z01_numcgm?>&matricula=<?=$matricula?>&ano=<?=$ano?>&mes=<?=$mes?>&tbprev=<?$r01_tbprev?>&bases=<?=@$bases?>&rub_bases=<?=@$rub_bases?>&rub_cond=<?=@$rub_cond?>"></iframe>
                     <input type="hidden" name="matricula"  value="<?=$matricula?>">
                     <input type="hidden" name="numcgm"  value="<?=$z01_numcgm?>">
                     <input type="hidden" name="opcao"  value="<?=$xopcao?>">
@@ -649,12 +649,12 @@ function js_Pesquisa(solicitacao) {
               </table>
             </td>
           </tr>
-          <tr> 
-            <td  height="5%" colspan="2" align="center"> 
+          <tr>
+            <td  height="5%" colspan="2" align="center">
               <?
               if(!isset($novapesquisa)){
                 $novapesquisa = "pes3_gerfinanc001.php";
-              } 
+              }
               if(isset($voltarcorreto)){
               	if(isset($rubric)){
               	  $novapesquisa = "pes3_codfinanc001.php";
@@ -679,7 +679,7 @@ function js_Pesquisa(solicitacao) {
               db_input("novapesquisa",8,0,true,'hidden',4);
               db_input("rub_bases",8,0,true,'hidden',4);
               db_input("rub_cond",8,0,true,'hidden',4);
-	      
+
 	      global $subpes;
 	      $subpes = db_anofolha()."/".db_mesfolha();
               global $diversos;
@@ -690,14 +690,14 @@ function js_Pesquisa(solicitacao) {
 	        eval('$$codigo = '.$diversos[$Idiversos]["r07_valor"].";");
               }
               $result_variaveis = db_retorno_variaveis($ano, $mes, $matricula);
-	      
+
               $campos_pessoal_  = "r01_tbprev,r01_regime, r01_tpvinc,r01_regist,r01_funcao,";
               $campos_pessoal_ .= "r01_salari, r01_padrao,r01_hrssem,r01_hrsmen, r01_tpcont,";
               $campos_pessoal_ .= "r01_anter,  r01_trien, r01_progr, r01_prores, r01_clas1,r01_clas2 ";
               $condicaoaux      = " and r01_regist = ".db_sqlformat( $matricula );
               global $pessoal,$Ipessoal;
               db_selectmax( "pessoal", "select ".$campos_pessoal_." from pessoal ".bb_condicaosubpes( "r01_" ).$condicaoaux );
-	      
+
               $Ipessoal = 0;
               if ( $xopcao == 'salario' ){
                 $result = &$resultgerfsal;
@@ -756,8 +756,8 @@ function js_Pesquisa(solicitacao) {
 			  $qual_form = 3;
 			}
 		     }
-		     
-		     $arr_cond[$rubrica] =$rubrica.$qual_form;	     
+
+		     $arr_cond[$rubrica] =$rubrica.$qual_form;
 		     $r10_form = '('.trim($formula).')';
 		     if( $r10_pd){
 			 $r10_form = "+".$r10_form;
@@ -766,7 +766,7 @@ function js_Pesquisa(solicitacao) {
 		     }
 		     $r10_form = str_replace('D','$D',$r10_form);
 		     $r10_form = str_replace('F','$F',$r10_form);
-		     
+
 		     $formula = $r10_form;
   //		 echo "<BR> rubrica --> $rubrica formula --> $formula";
 		     $pos_base = strpos("#".$formula,"B")+0;
@@ -777,16 +777,16 @@ function js_Pesquisa(solicitacao) {
 			 $pos = db_ascan($arr_bases,$base);
 			 if($pos == 0){
 			    $arr_bases[$base] = $base;
-			 }	  
-			 $arr_rub_base[$base.$rubrica] = $base.$rubrica; 
+			 }
+			 $arr_rub_base[$base.$rubrica] = $base.$rubrica;
 			 $formula = db_strtran($formula,$base,"|") ;
 			 $pos_base = (strpos("#".$formula,"B")+0);
-		       }		 
+		       }
 		     }
-				   
-		} 
+
+		}
 		if(@$temferias == true ){
-		  
+
 		   $condicaoaux = " and r33_codtab = ".db_sqlformat($r01_tbprev+2);
 		   global $inssirf_;
 		   $achou_tabela = db_selectmax( "inssirf_", "select * from inssirf ".bb_condicaosubpes( "r33_" ).$condicaoaux );
@@ -801,17 +801,17 @@ function js_Pesquisa(solicitacao) {
 	      }
               ?>
 	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	      
+
               <input type="button" name="vars1" style="width:80px" value="Bases"       onclick="js_Pesquisa('Bases');" >
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <input type="button" name="vars2" style="width:80px" value="Diversos"       onclick="js_Pesquisa('Diversos');" >
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <input type="button" name="vars" style="width:80px" value="Variáveis"       onclick="js_Pesquisa('Variaveis');" >
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input name="retornar" type="button" id="retornar" value="Nova Pesquisa" title="Inicio da Consulta" onclick="location.href='<?=($novapesquisa)?>'"> 
+              <input name="retornar" type="button" id="retornar" value="Nova Pesquisa" title="Inicio da Consulta" onclick="location.href='<?=($novapesquisa)?>'">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input name="pesquisar" type="submit" id="pesquisar"  title="Atualiza a Consulta" value="Atualizar">	
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+              <input name="pesquisar" type="submit" id="pesquisar"  title="Atualiza a Consulta" value="Atualizar">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	          <input name="imprimir" type="button" id="imprimir" value="Imprimir" title="Imprimir" onclick="js_relatorio();">
 	          <strong>
                 &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
@@ -825,7 +825,7 @@ function js_Pesquisa(solicitacao) {
 	          <?
     	      db_input("mes",2,'',true,'text',4)
 	          ?>
-            </td>   
+            </td>
            </tr>
         </table>
       </form>
@@ -834,22 +834,22 @@ function js_Pesquisa(solicitacao) {
 	?>
       <form name="form1" method="post">
 	    <table border="0" cellspacing="0" cellpadding="0">
-          <tr> 
+          <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
           </tr>
-          <tr> 
+          <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
           </tr>
-          <tr> 
-            <td align="right" title="<?=$Tr01_regist?>"> 
+          <tr>
+            <td align="right" title="<?=$Tr01_regist?>">
               <?
     		  db_ancora($Lr01_regist,'js_pesquisaregist(true);',2)
     		  ?>
     		  &nbsp;&nbsp;&nbsp;
             </td >
-            <td align="left" > 
+            <td align="left" >
               <?
     		  db_input("r01_regist",8,$Ir01_regist,true,'text',4,"onchange='js_pesquisaregist(false);'")
     		  ?>
@@ -859,7 +859,7 @@ function js_Pesquisa(solicitacao) {
             </td>
           </tr>
 	 <?echo "<script>document.form1.r01_regist.focus();</script>" ; ?>
-          <tr> 
+          <tr>
             <td height="25" align="center" colspan="2">
 	    <input onClick="return js_verificaregistro();"  type="submit" value="Pesquisar" name="pesquisar"></td>
           </tr>
@@ -869,7 +869,7 @@ function js_Pesquisa(solicitacao) {
 	}
 	?>
   </center>
-<? 
+<?
  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -877,10 +877,10 @@ function js_Pesquisa(solicitacao) {
 <script>
 
 function js_verificaregistro(){
-  if(document.form1.r01_regist.value=='' ) 
-  { 
+  if(document.form1.r01_regist.value=='' )
+  {
     alert('Informe matricula.');
-    return false; 
+    return false;
   }
   return true;
 }
@@ -935,7 +935,7 @@ function js_mostrapessoal(){
 }
 // esta funcao é utilizada quando clicar na inscricao após pesquisar
 // a mesma
-	
+
 
 function js_mostradetalhes(chave){
   db_iframepessoal.jan.location.href = chave;

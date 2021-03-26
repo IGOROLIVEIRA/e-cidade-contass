@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 ?
 	require("libs/db_stdlib.php");
@@ -34,10 +34,10 @@
 	require("libs/db_utils.php");
 
 	//$clmatparam = new cl_matparam();
-	
+
 	$clrotulo   = new rotulocampo();
 	$db_opcao   = 1;
-	
+
 	$clrotulo->label("s110_i_codigo");
 	$clrotulo->label("z01_nome");
 	$clrotulo->label("s108_i_codigo");
@@ -57,11 +57,11 @@
 function js_abre(){
    var obj = document.form1;
 
-	 // monta variáveis do período inicial    
+	 // monta variáveis do período inicial
 	 var perini = new String();
 	 perini = document.form1.perini.value;
 
-	 // monta variáveis do período inicial 
+	 // monta variáveis do período inicial
 	 var perfim = new String();
 	 perfim = document.form1.perfim.value;
 
@@ -82,7 +82,7 @@ function js_abre(){
 </script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="document.form1.m40_codigo_ini.focus();" >
- 
+
   <center>
     <form name="form1">
     <table style="margin-top: 50px;">
@@ -94,30 +94,30 @@ function js_abre(){
       <tr>
       	<td><b>Classificações:</b></td>
       	<td>
-      	<? 
+      	<?
       		$aClass = array("1"=>"Por Prestadora / Grupo / Exames / Paciente",
       										 "2"=>"Por Prestadora / Exames / Pacientes",
       										 "3"=>"Por Grupo / Prestadora / Exames / Paciente");
       		db_select('classificacao',$aClass,false,1);
       	?>
       	</td>
-      </tr>      
+      </tr>
 	    <tr>
 			  <td>
           <b> Período: </b>
 				</td>
 				<td>
-          <? 
+          <?
 	          db_inputdata('perini','','','',true,'text',1,"");
-						echo " Até: ";   		          
-	          db_inputdata('perfim','','','',true,'text',1,"");   		          
+						echo " Até: ";
+	          db_inputdata('perfim','','','',true,'text',1,"");
           ?>
 			  </td>
       </tr>
 			<tr>
 				<td><b>Protocolados:</b></td>
 				<td>
-				<? 
+				<?
       		$aProtocolados = array(	"1"=>"SIM",
       										 				"2"=>"NÂO",
       													);
@@ -131,7 +131,7 @@ function js_abre(){
 		       db_ancora('<b>Prestadoras:</b>',"js_pesquisa_prestadoras(true);",$db_opcao);
 		    ?>
 		    </td>
-		    <td nowrap> 
+		    <td nowrap>
 		     <?
 		      db_input('s110_i_codigo',10,$Is110_i_codigo,true,'text',$db_opcao," onchange='js_pesquisa_prestadoras(false);'")
 		     ?>
@@ -146,7 +146,7 @@ function js_abre(){
 		       db_ancora('<b>Exames:</b>',"js_pesquisa_exames(true);",$db_opcao);
 		    ?>
 		    </td>
-		    <td nowrap> 
+		    <td nowrap>
 		     <?
 		      db_input('s108_i_codigo',10,$Is108_i_codigo,true,'text',$db_opcao," onchange='js_pesquisa_exames(false);'")
 		     ?>
@@ -155,12 +155,12 @@ function js_abre(){
 		     ?>
 		    </td>
 			</tr>
-				
+
 				 <tr>
     <td nowrap title="<?=@$Ts108_i_grupoexame?>">
        <? db_ancora('<b>Grupo:</b>',"js_pesquisa_s108_i_grupoexame(true)",$db_opcao)?>
     </td>
-    <td> 
+    <td>
 			<?
         db_input('s108_i_grupoexame',10,$Is108_i_grupoexame,true,'text',$db_opcao," onchange='js_pesquisa_s108_i_grupoexame(false);' onFocus=\"nextfield='db_opcao'\" ");
       ?>
@@ -172,7 +172,7 @@ function js_abre(){
 				<tr>
 				<td><b>Por Produção:</b></td>
 				<td>
-				<? 
+				<?
       		$aProducao = array("1"=>"Nao",
       						   "2"=>"Sim",
       									);
@@ -181,18 +181,18 @@ function js_abre(){
 				</td>
 			</tr>
     </table>
-		
-    
+
+
     </fieldset>
-    
+
     </td></tr>
     </table>
-    <input name="pesquisar" align="center" type="button" value="Imprimir" onclick="js_abre();" /> 
-    <input name="limpar" align="center" type="reset" value="Cancelar" /> 
+    <input name="pesquisar" align="center" type="button" value="Imprimir" onclick="js_abre();" />
+    <input name="limpar" align="center" type="reset" value="Cancelar" />
     </form>
 
    </center>
-    <? 
+    <?
       db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
     ?>
 </body>
@@ -202,18 +202,18 @@ function js_pesquisa_prestadoras(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_sau_prestadoras','func_sau_prestadores.php?funcao_js=parent.js_mostraprestadores1|s110_i_codigo|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.s110_i_codigo.value != ''){ 
+     if(document.form1.s110_i_codigo.value != ''){
         js_OpenJanelaIframe('','db_iframe_sau_prestadoras','func_sau_prestadores.php?pesquisa_chave='+document.form1.s110_i_codigo.value+'&funcao_js=parent.js_mostraprestadores','Pesquisa',false);
      }else{
-       document.form1.s131_i_codigo.value = ''; 
+       document.form1.s131_i_codigo.value = '';
      }
   }
 }
 function js_mostraprestadores(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro=='true'){ 
-    document.form1.s110_i_codigo.focus(); 
-    document.form1.s110_i_codigo.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro=='true'){
+    document.form1.s110_i_codigo.focus();
+    document.form1.s110_i_codigo.value = '';
   }
 }
 function js_mostraprestadores1(chave1,chave2){
@@ -225,18 +225,18 @@ function js_pesquisa_exames(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_sau_exames','func_sau_exames.php?funcao_js=parent.js_mostra_exames1|s108_i_codigo|s108_c_exame','Pesquisa',true);
   }else{
-     if(document.form1.s108_i_codigo.value != ''){ 
+     if(document.form1.s108_i_codigo.value != ''){
         js_OpenJanelaIframe('','db_iframe_sau_exames','func_sau_exames.php?pesquisa_chave='+document.form1.s108_i_codigo.value+'&funcao_js=parent.js_mostra_exames','Pesquisa',false);
      }else{
-       document.form1.s108_i_codigo.value = ''; 
+       document.form1.s108_i_codigo.value = '';
      }
   }
 }
 function js_mostra_exames(chave,erro){
-  document.form1.s108_c_exame.value = chave; 
-  if(erro=='true'){ 
-    document.form1.s108_i_codigo.focus(); 
-    document.form1.s108_i_codigo.value = ''; 
+  document.form1.s108_c_exame.value = chave;
+  if(erro=='true'){
+    document.form1.s108_i_codigo.focus();
+    document.form1.s108_i_codigo.value = '';
   }
 }
 function js_mostra_exames1(chave1,chave2){
@@ -248,8 +248,8 @@ function js_pesquisa_s108_i_grupoexame(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_sau_grupoexames','func_sau_grupoexames.php?funcao_js=parent.js_mostragrupoexame1|s130_i_codigo|s130_c_descricao','Pesquisa',true);
   }else{
-     if(document.form1.s108_i_grupoexame.value != ''){ 
-        //js_OpenJanelaIframe('top.corpo','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form2.z01_i_cgsund.value+'&funcao_js=parent.IFdb_iframe_agendamento.js_mostracgs','Pesquisa',false);
+     if(document.form1.s108_i_grupoexame.value != ''){
+        //js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form2.z01_i_cgsund.value+'&funcao_js=parent.IFdb_iframe_agendamento.js_mostracgs','Pesquisa',false);
         js_OpenJanelaIframe('','db_iframe_sau_grupoexames','func_sau_grupoexames.php?pesquisa_chave='+document.form1.s108_i_grupoexame.value+'&funcao_js=parent.js_mostragrupoexame','Pesquisa',false);
      }else{
        document.form1.s130_i_codigo.value = '';
@@ -258,12 +258,12 @@ function js_pesquisa_s108_i_grupoexame(mostra){
 }
 
 function js_mostragrupoexame(chave,erro){
-  document.form1.s130_c_descricao.value = chave; 
-  if(erro=='true'){ 
-    document.form1.s108_i_grupoexame.focus(); 
-    document.form1.s108_i_grupoexame.value = ''; 
+  document.form1.s130_c_descricao.value = chave;
+  if(erro=='true'){
+    document.form1.s108_i_grupoexame.focus();
+    document.form1.s108_i_grupoexame.value = '';
   }
-  
+
 }
 
 function js_mostragrupoexame1(chave2,chave1){

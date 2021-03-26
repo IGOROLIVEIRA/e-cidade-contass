@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlibwebseller.php");
@@ -182,7 +182,7 @@ if(isset($sabado)){
         $day++;
         if(date("w", mktime (0,0,0,$m3,$d+$i,$y3))==1){
          $semanas++;
-        }       
+        }
         #checa o dia da semana para cada dia do mês, se for igual a 0 (domingo) ou 6 (sabado) ele adiciona 1 no dia não útil
         if($sabado=="N"){
          if (date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 0 || date("w", mktime (0,0,0,$m3,$d+$i,$y3)) == 6){
@@ -229,7 +229,7 @@ if(isset($sabado)){
     if($primeiro_dia>1 && $primeiro_dia<6){
      $semanas++;
     }
-    $semletivas = $semanas;      
+    $semletivas = $semanas;
     $sql1 = "UPDATE periodocalendario SET
               ed53_i_diasletivos = $diasletivos,
               ed53_i_semletivas = $semletivas
@@ -254,8 +254,8 @@ if(isset($sabado)){
    //echo "oioioi";
    ?>
    <script>
-    top.corpo.iframe_a1.location.href='edu1_calendario002.php?chavepesquisa=<?=$calendario?>';
-    top.corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$calendario?>&ed52_c_descr=<?=$ed52_c_descr?>';
+    CurrentWindow.corpo.iframe_a1.location.href='edu1_calendario002.php?chavepesquisa=<?=$calendario?>';
+    CurrentWindow.corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$calendario?>&ed52_c_descr=<?=$ed52_c_descr?>';
    </script>
    <?
   }else{
@@ -263,7 +263,7 @@ if(isset($sabado)){
    <script>
     parent.document.form1.ed52_i_diasletivos.value = <?=$dias1?>;
     parent.document.form1.ed52_i_semletivas.value = <?=$semanas1?>;
-    top.corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$calendario?>&ed52_c_descr=<?=$ed52_c_descr?>';
+    CurrentWindow.corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$calendario?>&ed52_c_descr=<?=$ed52_c_descr?>';
     parent.document.form1.alterar.click();
    </script>
    <?
@@ -274,7 +274,7 @@ if(isset($sabado)){
   db_fieldsmemory($result,0);
   ?>
   <script>
-   top.corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$ed52_i_codigo?>&ed52_c_descr=<?=$ed52_c_descr?>';
+   CurrentWindow.corpo.iframe_a2.location.href='edu1_periodocalendario001.php?ed53_i_calendario=<?=$ed52_i_codigo?>&ed52_c_descr=<?=$ed52_c_descr?>';
    <?if(!isset($feriado)){?>
     parent.document.form1.alterar.click();
    <?}?>

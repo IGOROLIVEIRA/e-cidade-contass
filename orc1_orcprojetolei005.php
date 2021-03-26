@@ -95,7 +95,7 @@ if (isset($chavepesquisa)) {
 	echo "
       <script>
              parent.document.formaba.db_leialtorc.disabled=false;
-             top.corpo.iframe_db_leialtorc.location.href='orc1_orcleialtorcamentaria001.php?o200_orcprojetolei=".@$o138_sequencial."';
+             CurrentWindow.corpo.iframe_db_leialtorc.location.href='orc1_orcleialtorcamentaria001.php?o200_orcprojetolei=".@$o138_sequencial."';
       </script>
      ";
 }

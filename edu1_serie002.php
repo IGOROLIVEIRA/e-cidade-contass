@@ -59,10 +59,10 @@ if( isset( $alterar ) ) {
    parent.document.formaba.a2.disabled = false;
    parent.document.formaba.a3.disabled = false;
 
-   top.corpo.iframe_a2.location.href = 'edu1_serieregimemat001.php?ed223_i_serie=<?=$ed11_i_codigo?>&ed11_c_descr=<?=$ed11_c_descr?>';
+   CurrentWindow.corpo.iframe_a2.location.href = 'edu1_serieregimemat001.php?ed223_i_serie=<?=$ed11_i_codigo?>&ed11_c_descr=<?=$ed11_c_descr?>';
 
    var sParametros = '?iEtapa=<?=$ed11_i_codigo?>&sEtapa=<?=$ed11_c_descr?>';
-   top.corpo.iframe_a3.location.href = 'edu1_vinculoserieetapacenso001.php' + sParametros;
+   CurrentWindow.corpo.iframe_a3.location.href = 'edu1_vinculoserieetapacenso001.php' + sParametros;
  </script>
 <?php
 }
@@ -108,7 +108,7 @@ if( isset( $alterar ) ) {
     <script>
       parent.document.formaba.a2.disabled = false;
       parent.document.formaba.a3.disabled = false;
-      top.corpo.iframe_a2.location.href='edu1_serieregimemat001.php?ed223_i_serie=<?=$ed11_i_codigo?>&ed11_c_descr=<?=$ed11_c_descr?>';
+      CurrentWindow.corpo.iframe_a2.location.href='edu1_serieregimemat001.php?ed223_i_serie=<?=$ed11_i_codigo?>&ed11_c_descr=<?=$ed11_c_descr?>';
       parent.mo_camada("a2");
     </script>
     <?php

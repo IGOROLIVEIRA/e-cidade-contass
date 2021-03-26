@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,23 +46,23 @@ $clrotulo->label('db90_descr');
 $clrotulo->label('rh41_codigo');
 
 if (isset($emite2)) {
-	
+
   db_inicio_transacao();
   $clrharqbanco->alterar($rh34_codarq);
   if (isset($rh34_sequencial)) {
-  	$rh34_sequencial++; 
+  	$rh34_sequencial++;
   }
-  
+
   db_fim_transacao();
-  
+
 } else if(isset($rh34_codarq)) {
-	
+
   $result = $clrharqbanco->sql_record($clrharqbanco->sql_query($rh34_codarq));
-  if($clrharqbanco->numrows > 0){ 
+  if($clrharqbanco->numrows > 0){
     db_fieldsmemory($result,0);
     $rh34_sequencial += 1;
   }
-  
+
 }
 
 ?>
@@ -94,10 +94,10 @@ if (isset($emite2)) {
     <td><b>Data da Geração:</b></td>
     <td>
       <?
-      if (    (!isset($datagera_dia) || (isset($datagera_dia) && trim($datagera_dia) == "")) 
-      		&& (!isset($datagera_mes) || (isset($datagera_mes) && trim($datagera_mes) == "")) 
+      if (    (!isset($datagera_dia) || (isset($datagera_dia) && trim($datagera_dia) == ""))
+      		&& (!isset($datagera_mes) || (isset($datagera_mes) && trim($datagera_mes) == ""))
       		&& (!isset($datagera_ano) || (isset($datagera_ano) && trim($datagera_ano) == "")) ) {
-      	
+
         $datagera_dia=date('d',db_getsession('DB_datausu'));
         $datagera_mes=date('m',db_getsession('DB_datausu'));
         $datagera_ano=date('Y',db_getsession('DB_datausu'));
@@ -110,10 +110,10 @@ if (isset($emite2)) {
     <td><b>Data do Depósito:</b></td>
     <td>
       <?
-      if (    (!isset($datadeposit_dia) || (isset($datadeposit_dia) && trim($datadeposit_dia) == "")) 
-      		&& (!isset($datadeposit_mes) || (isset($datadeposit_mes) && trim($datadeposit_mes) == "")) 
+      if (    (!isset($datadeposit_dia) || (isset($datadeposit_dia) && trim($datadeposit_dia) == ""))
+      		&& (!isset($datadeposit_mes) || (isset($datadeposit_mes) && trim($datadeposit_mes) == ""))
       		&& (!isset($datadeposit_ano) || (isset($datadeposit_ano) && trim($datadeposit_ano) == ""))  ) {
-      	
+
         $datadeposit_dia = "";
         $datadeposit_mes = "";
         $datadeposit_ano = "";
@@ -122,7 +122,7 @@ if (isset($emite2)) {
       ?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" nowrap title="<?=@$Trh34_codarq?>">
       <?db_ancora(@$Lrh34_codarq,"js_pesquisa(true);",1);?>
     </td>
@@ -138,7 +138,7 @@ if (isset($emite2)) {
       db_ancora(@$Lrh34_codban,"js_pesquisarh34_codban(true);",1);
       ?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
       <?
       db_input('rh34_codban',6,$Irh34_codban,true,'text',1," onchange='js_pesquisarh34_codban(false);'")
       ?>
@@ -147,7 +147,7 @@ if (isset($emite2)) {
       ?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" nowrap title="<?=@$Trh102_sequencial?>">
       <?db_ancora(@$Lrh102_sequencial,"js_pesquisafolha(true);",1);?>
     </td>
@@ -164,7 +164,7 @@ if (isset($emite2)) {
     <td nowrap title="<?=@$Trh34_agencia?>">
       <?=@$Lrh34_agencia?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_agencia',5,$Irh34_agencia,true,'text',3,"")
       ?>
@@ -172,7 +172,7 @@ if (isset($emite2)) {
     <td nowrap title="<?=@$Trh34_dvagencia?>" align="right">
       <?=@$Lrh34_dvagencia?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_dvagencia',2,$Irh34_dvagencia,true,'text',3,"")
       ?>
@@ -182,7 +182,7 @@ if (isset($emite2)) {
     <td nowrap title="<?=@$Trh34_conta?>">
       <?=@$Lrh34_conta?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_conta',15,$Irh34_conta,true,'text',3,"")
       ?>
@@ -190,7 +190,7 @@ if (isset($emite2)) {
     <td nowrap title="<?=@$Trh34_dvconta?>" align="right">
       <?=@$Lrh34_dvconta?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_dvconta',2,$Irh34_dvconta,true,'text',3,"")
       ?>
@@ -200,7 +200,7 @@ if (isset($emite2)) {
     <td nowrap title="<?=@$Trh34_convenio?>">
       <?=@$Lrh34_convenio?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_convenio',15,$Irh34_convenio,true,'text',3,"")
       ?>
@@ -222,7 +222,7 @@ if (isset($emite2)) {
   </tr>
     </table>
   </fieldset>
-</fieldset> 
+</fieldset>
   <br>
   <input name="emite2" id="emite2" type="submit" value="Processar" onclick="return js_valores();" />
 </form>
@@ -238,10 +238,10 @@ const MENSAGENS = "recursoshumanos.pessoal.pes2_osoemitebb200lay001.";
 
 function js_pesquisa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?ativas=true&funcao_js=parent.js_mostra1|rh34_codarq|rh34_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?ativas=true&funcao_js=parent.js_mostra1|rh34_codarq|rh34_descr','Pesquisa',true);
   }else{
     if(document.form1.rh34_codarq.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?ativas=true&pesquisa_chave='+document.form1.rh34_codarq.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?ativas=true&pesquisa_chave='+document.form1.rh34_codarq.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
     }else{
       document.form1.rh34_codarq.value = '';
       document.form1.rh34_descr.value = '';
@@ -269,21 +269,21 @@ function js_mostra1(chave1,chave2){
 
 function js_pesquisarh34_codban(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
   }else{
-    if(document.form1.rh34_codban.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
+    if(document.form1.rh34_codban.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
     }else{
-      document.form1.db90_descr.value = ''; 
+      document.form1.db90_descr.value = '';
     }
   }
 }
 
 function js_mostradb_bancos(chave,erro) {
-  document.form1.db90_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.rh34_codban.focus(); 
-    document.form1.rh34_codban.value = ''; 
+  document.form1.db90_descr.value = chave;
+  if(erro==true){
+    document.form1.rh34_codban.focus();
+    document.form1.rh34_codban.value = '';
   }
 }
 
@@ -294,7 +294,7 @@ function js_mostradb_bancos1(chave1,chave2) {
 }
 
 function js_valores(){
-	
+
   if (document.form1.rh34_codarq.value=="") {
     alert(_M(MENSAGENS + "erro_codigo_arquivo"));
     document.form1.rh34_codarq.focus();
@@ -317,9 +317,9 @@ function js_valores(){
 }
 
 function js_emite(){
-	
+
 	js_divCarregando("Processando, aguarde ","msgBox");
-	   
+
   qry  = 'rh34_codarq='+$F('rh34_codarq');
   qry += '&datadeposito='+$F('datadeposit_ano')+'-'+$F('datadeposit_mes')+'-'+$F('datadeposit_dia');
   qry += '&datageracao='+$F('datagera_ano')+'-'+$F('datagera_mes')+'-'+$F('datagera_dia');
@@ -327,27 +327,27 @@ function js_emite(){
   qry += '&vinculo='+$F('vinculo');
   qry += '&rh102_sequencial='+$F('rh102_sequencial');
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_geraarqbanco','pes2_osoemitebb200lay002.php?'+qry,'Gerando Arquivo',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geraarqbanco','pes2_osoemitebb200lay002.php?'+qry,'Gerando Arquivo',false);
 }
 
 function js_detectaarquivo(arquivo,pdf) {
-	
+
 	js_removeObj("msgBox");
-		
-  top.corpo.db_iframe_geraarqbanco.hide();
+
+  CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
   listagem = arquivo+"#Download arquivo TXT (pagamento eletrônico)|";
   listagem+= pdf+"#Download relatório";
   js_montarlista(listagem,"form1");
-  
+
 }
 
 function js_erro(msg) {
-	
+
 	js_removeObj("msgBox");
-		
-  top.corpo.db_iframe_geraarqbanco.hide();
+
+  CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
   alert(msg);
-  
+
 }
 
 function js_fechaiframe(){
@@ -392,7 +392,7 @@ function js_mostrafolha1(chave1,chave2){
 </script>
 <?
 if(isset($emite2)) {
-	
+
   if ($clrharqbanco->erro_status=="0") {
     $clrharqbanco->erro(true,false);
     $db_botao=true;

@@ -160,12 +160,12 @@
  if( parent.document.formaba.a4 != null ){
   parent.document.formaba.a4.disabled=false;
   if(parent.document.formaba.a4.value != "Débitos"){
-   top.corpo.iframe_a4.location.href='cem1_transacao002.php?sepultamento=<?=$sepultamento?>&tipoant=<?=$tipoant?>&lotecemit=<?=@$cm23_i_codigo?>';
+   CurrentWindow.corpo.iframe_a4.location.href='cem1_transacao002.php?sepultamento=<?=$sepultamento?>&tipoant=<?=$tipoant?>&lotecemit=<?=@$cm23_i_codigo?>';
   }
  }
 
 function js_pesquisasepultamento(){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_mostrasepultamentos1|cm01_i_codigo|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_mostrasepultamentos1|cm01_i_codigo|z01_nome','Pesquisa',true);
 }
 function js_mostrasepultamentos1(chave1,chave2){
   document.form1.sepultamento.value = chave1;

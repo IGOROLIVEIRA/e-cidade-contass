@@ -125,7 +125,7 @@ js_tabulacaoforms("form1","l206_fornecedor",true,1,"l206_fornecedor",true);
 
 var param2 = $('l206_licitacao').value;
 
-top.corpo.iframe_db_cred.location.href='lic1_credenciamento001.php?l20_codigo='+param2;
+CurrentWindow.corpo.iframe_db_cred.location.href='lic1_credenciamento001.php?l20_codigo='+param2;
 
 </script>
 <?

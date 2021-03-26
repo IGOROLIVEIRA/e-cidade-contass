@@ -499,7 +499,7 @@ function js_retornoBusca(oJson) {
       js_buscaPlacaString();
     }
     parent.document.formaba.bensfotos.disabled = false;
-    top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_placa=${$F('t41_placa')}`;
+    CurrentWindow.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_placa=${$F('t41_placa')}`;
   }
 }
 /**
@@ -1070,7 +1070,7 @@ function salvarDados() {
    } else {
      alert(_M('patrimonial.patrimonio.db_frm_bensglobalnovo.bens_cadastrados'));
      parent.document.formaba.bensfotos.disabled = false;
-     top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_placa=${$F('t41_placa')}`;
+     CurrentWindow.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_placa=${$F('t41_placa')}`;
      parent.mo_camada('bensfotos');
      // $('form1').reset();
      // js_carregaDadosForm(1);
@@ -1229,7 +1229,7 @@ function js_retornoBuscaDadoLote(oAjax) {
 
   var oRetorno = eval('('+oAjax.responseText+')');
 
-  top.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?cod_lote='+oRetorno.dados.cod_lote;
+  CurrentWindow.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?cod_lote='+oRetorno.dados.cod_lote;
   // parent.mo_camada('bensfotos');
   lPossuiIntegracaoPatrimonial = oRetorno.lPossuiIntegracaoPatrimonial;
 

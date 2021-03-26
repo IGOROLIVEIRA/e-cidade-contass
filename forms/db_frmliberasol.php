@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clrotulo = new rotulocampo;
@@ -34,8 +34,8 @@ $desabilita = true;
 if(isset($solicita) && trim($solicita)!=""){
 
   $sql_solicita = $clsolicitem->sql_record($clsolicitem->sql_query_pcmater(null,"distinct pc10_numero,pc10_data,pc10_resumo,descrdepto","pc10_numero"," pc10_correto='t' and pc10_numero=$solicita "));
-  
-  if($clsolicitem->numrows>0){  	
+
+  if($clsolicitem->numrows>0){
     $desabilita = false;
     db_fieldsmemory($sql_solicita,0);
     $arr_data = split("-",$pc10_data);
@@ -59,17 +59,17 @@ if(isset($solicita) && trim($solicita)!=""){
 
 
   <tr>
-    <td align='left' colspan='1' nowrap title="<?=$Tpc10_numero?>" width="150"> 
+    <td align='left' colspan='1' nowrap title="<?=$Tpc10_numero?>" width="150">
       <? db_ancora(@$Lpc10_numero,"js_pesquisapc10_numero(true);",1);?>
     </td>
     <td align="left"   nowrap>
       <? db_input('pc10_numero',8,$Ipc10_numero,true,"text",1,"onchange='js_pesquisapc10_numero(false);'"); ?>
     </td>
   </tr>
-  
+
   <tr>
     <td align="left" nowrap title="<?=@$Tpc10_data?>">
-      <strong>Data: </strong>      
+      <strong>Data: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -80,11 +80,11 @@ if(isset($solicita) && trim($solicita)!=""){
     ?>
     </td>
     </tr>
-    
+
     <tr>
-    
+
     <td align="left" nowrap title="<?=@$Tdescrdepto?>">
-      <strong>Departamento: </strong>      
+      <strong>Departamento: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -104,19 +104,19 @@ if(isset($solicita) && trim($solicita)!=""){
               ?>
             </td>
        </tr>
-      
+
       </table>
   </fieldset>
     </td>
   </tr>
-  
-  
+
+
   </table>
 </fieldset>
-  
+
   <br>
-  
-  
+
+
       <iframe name="iframe_solicitem" id="solicitem" marginwidth="0" marginheight="0" frameborder="0" src="com1_geralibsolicitem.php?solicita=<?=(@$solicita)?>" width="90%" height="350"></iframe>
 
 
@@ -129,12 +129,12 @@ db_input('valores',50,0,true,'hidden',3);
 </form>
 <script>
 function js_enviardados(){
-  
+
   var lVerifica = false;
   vir  = "";
   cont = 0;
   document.form1.valores.value = "";
-  
+
   for(i=0;i<iframe_solicitem.document.form1.length;i++){
     if(iframe_solicitem.document.form1.elements[i].type=="checkbox"){
       if(iframe_solicitem.document.form1.elements[i].checked==true){
@@ -146,20 +146,20 @@ function js_enviardados(){
       }
     }
   }
-  
+
   if (!lVerifica) {
   	alert("Nenhum registro selecionado!");
   	return false;
   }
-  
+
 }
 function js_pesquisapc10_numero(mostra){
   qry = "&gerautori=true&ativas=1";
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero'+qry,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero'+qry,'Pesquisa',true);
   }else{
     if(document.form1.pc10_numero.value!=""){
-      js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem&pesquisa_chave='+document.form1.pc10_numero.value+qry,'Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem&pesquisa_chave='+document.form1.pc10_numero.value+qry,'Pesquisa',false);
     }else{
       document.form1.pc10_numero.value = "";
       location.href = "com1_liberasol001.php";

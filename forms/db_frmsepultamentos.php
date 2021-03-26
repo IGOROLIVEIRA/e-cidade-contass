@@ -141,10 +141,10 @@ $clrotulo->label("cm04_c_descr");
 //busca cgm / falecido
 function js_pesquisacm01_i_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_pai|z01_mae','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_pai|z01_mae','Pesquisa',true);
   }else{
      if(document.form1.cm01_i_codigo.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.cm01_i_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.cm01_i_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
@@ -166,7 +166,7 @@ function js_mostracgm1(chave1,chave2,chave3,chave4){
 }
 //busca pai
 function js_pesquisacm01_c_pai(mostra){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostrapai|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostrapai|z01_numcgm|z01_nome','Pesquisa',true);
 }
 function js_mostrapai(chave1,chave2){
   document.form1.cm01_c_pai.value = chave2;
@@ -174,7 +174,7 @@ function js_mostrapai(chave1,chave2){
 }
 //busca mae
 function js_pesquisacm01_c_mae(mostra){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostramae|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostramae|z01_numcgm|z01_nome','Pesquisa',true);
 }
 function js_mostramae(chave1,chave2){
   document.form1.cm01_c_mae.value = chave2;
@@ -184,10 +184,10 @@ function js_mostramae(chave1,chave2){
 //busca cemiterio
 function js_pesquisacm01_i_cemiterio(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cemiterio','func_cemiterio.php?funcao_js=parent.js_mostracemiterio1|cm14_i_codigo|cm16_c_nome|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cemiterio','func_cemiterio.php?funcao_js=parent.js_mostracemiterio1|cm14_i_codigo|cm16_c_nome|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.cm01_i_cemiterio.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cemiterio','func_cemiterio.php?pesquisa_chave='+document.form1.cm01_i_cemiterio.value+'&funcao_js=parent.js_mostracemiterio','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cemiterio','func_cemiterio.php?pesquisa_chave='+document.form1.cm01_i_cemiterio.value+'&funcao_js=parent.js_mostracemiterio','Pesquisa',false);
      }else{
        document.form1.cm14_i_codigo.value = '';
      }
@@ -246,17 +246,17 @@ function js_valida(){
 
   parent.document.formaba.a2.disabled=false;
   <?if($db_opcao == 2){?>
-  top.corpo.iframe_a2.location.href='cem1_sepultamentos006.php?chavepesquisa=<?=$cm01_i_codigo?>&'+campos;
+  CurrentWindow.corpo.iframe_a2.location.href='cem1_sepultamentos006.php?chavepesquisa=<?=$cm01_i_codigo?>&'+campos;
   <?}else{?>
   parent.document.formaba.a1.disabled=true;
-  top.corpo.iframe_a2.location.href='cem1_sepultamentos002.php?db_opcao='+<?=$db_opcao?>+'&'+campos;
+  CurrentWindow.corpo.iframe_a2.location.href='cem1_sepultamentos002.php?db_opcao='+<?=$db_opcao?>+'&'+campos;
   <?}?>
   parent.mo_camada('a2');
  }
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_preenchepesquisa|cm01_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_preenchepesquisa|cm01_i_codigo','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

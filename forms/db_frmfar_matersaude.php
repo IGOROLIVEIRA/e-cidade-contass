@@ -313,10 +313,10 @@ function js_pesquisafa01_i_concentracaomed(mostra){
      return false;
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_concentracaomed','func_far_concentracaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_concentracaomed1|fa37_i_codigo|fa30_c_concentracao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_concentracaomed','func_far_concentracaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_concentracaomed1|fa37_i_codigo|fa30_c_concentracao','Pesquisa',true);
   }else{
      if(document.form1.fa01_i_concentracaomed.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_concentracaomed','func_far_concentracaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_concentracaomed.value+'&funcao_js=parent.js_mostrafar_concentracaomed','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_concentracaomed','func_far_concentracaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_concentracaomed.value+'&funcao_js=parent.js_mostrafar_concentracaomed','Pesquisa',false);
      }else{
        document.form1.fa37_i_codigo.value = '';
      }
@@ -340,10 +340,10 @@ function js_pesquisafa01_i_formafarmaceuticamed(mostra){
      return false;
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_formafarmaceuticamed','func_far_formafarmaceuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_formafarmaceuticamed1|fa33_i_codigo|fa29_c_forma','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_formafarmaceuticamed','func_far_formafarmaceuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_formafarmaceuticamed1|fa33_i_codigo|fa29_c_forma','Pesquisa',true);
   }else{
      if(document.form1.fa01_i_formafarmaceuticamed.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_formafarmaceuticamed','func_far_formafarmaceuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_formafarmaceuticamed.value+'&funcao_js=parent.js_mostrafar_formafarmaceuticamed','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_formafarmaceuticamed','func_far_formafarmaceuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_formafarmaceuticamed.value+'&funcao_js=parent.js_mostrafar_formafarmaceuticamed','Pesquisa',false);
      }else{
        document.form1.fa33_i_codigo.value = '';
      }
@@ -367,10 +367,10 @@ function js_pesquisafa01_i_laboratoriomed(mostra){
      return false;
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_laboratoriomed','func_far_laboratoriomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_laboratoriomed1|fa32_i_codigo|fa24_c_laboratorio','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_laboratoriomed','func_far_laboratoriomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_laboratoriomed1|fa32_i_codigo|fa24_c_laboratorio','Pesquisa',true);
   }else{
      if(document.form1.fa01_i_laboratoriomed.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_laboratoriomed','func_far_laboratoriomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_laboratoriomed.value+'&funcao_js=parent.js_mostrafar_laboratoriomed','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_laboratoriomed','func_far_laboratoriomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_laboratoriomed.value+'&funcao_js=parent.js_mostrafar_laboratoriomed','Pesquisa',false);
      }else{
        document.form1.fa32_i_codigo.value = '';
      }
@@ -394,10 +394,10 @@ function js_pesquisafa01_i_medrefemed(mostra){
      return false;
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_medreferenciamed','func_far_medreferenciamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_medreferenciamed1|fa34_i_codigo|fa19_c_medreferencia','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_medreferenciamed','func_far_medreferenciamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_medreferenciamed1|fa34_i_codigo|fa19_c_medreferencia','Pesquisa',true);
   }else{
      if(document.form1.fa01_i_medrefemed.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_medreferenciamed','func_far_medreferenciamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_medrefemed.value+'&funcao_js=parent.js_mostrafar_medreferenciamed','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_medreferenciamed','func_far_medreferenciamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_medrefemed.value+'&funcao_js=parent.js_mostrafar_medreferenciamed','Pesquisa',false);
      }else{
        document.form1.fa34_i_codigo.value = '';
      }
@@ -421,10 +421,10 @@ function js_pesquisafa01_i_listacontroladomed(mostra){
      return false;
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_listacontroladomed','func_far_listacontroladomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_listacontroladomed1|fa35_i_codigo|fa15_c_listacontrolado','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_listacontroladomed','func_far_listacontroladomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_listacontroladomed1|fa35_i_codigo|fa15_c_listacontrolado','Pesquisa',true);
   }else{
      if(document.form1.fa01_i_listacontroladomed.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_listacontroladomed','func_far_listacontroladomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_listacontroladomed.value+'&funcao_js=parent.js_mostrafar_listacontroladomed','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_listacontroladomed','func_far_listacontroladomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_listacontroladomed.value+'&funcao_js=parent.js_mostrafar_listacontroladomed','Pesquisa',false);
      }else{
        document.form1.fa35_i_codigo.value = '';
      }
@@ -448,10 +448,10 @@ function js_pesquisafa01_i_classemed(mostra){
      return false;
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_classeterapeuticamed','func_far_classeterapeuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_classeterapeuticamed1|fa36_i_codigo|fa18_c_classetera','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_classeterapeuticamed','func_far_classeterapeuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_classeterapeuticamed1|fa36_i_codigo|fa18_c_classetera','Pesquisa',true);
   }else{
      if(document.form1.fa01_i_classemed.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_classeterapeuticamed','func_far_classeterapeuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_classemed.value+'&funcao_js=parent.js_mostrafar_classeterapeuticamed','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_classeterapeuticamed','func_far_classeterapeuticamed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_classemed.value+'&funcao_js=parent.js_mostrafar_classeterapeuticamed','Pesquisa',false);
      }else{
        document.form1.fa36_i_codigo.value = '';
      }
@@ -475,10 +475,10 @@ function js_pesquisafa01_i_prescricaomed(mostra){
      return false;
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_prescricaomed','func_far_prescricaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_prescricaomed1|fa31_i_codigo|fa20_c_prescricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_prescricaomed','func_far_prescricaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&funcao_js=parent.js_mostrafar_prescricaomed1|fa31_i_codigo|fa20_c_prescricao','Pesquisa',true);
   }else{
      if(document.form1.fa01_i_prescricaomed.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_prescricaomed','func_far_prescricaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_prescricaomed.value+'&funcao_js=parent.js_mostrafar_prescricaomed','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_prescricaomed','func_far_prescricaomed.php?fa01_i_medanvisa='+document.form1.fa01_i_medanvisa.value+'&pesquisa_chave='+document.form1.fa01_i_prescricaomed.value+'&funcao_js=parent.js_mostrafar_prescricaomed','Pesquisa',false);
      }else{
        document.form1.fa31_i_codigo.value = '';
      }
@@ -497,7 +497,7 @@ function js_mostrafar_prescricaomed1(chave1,chave2){
   db_iframe_far_prescricaomed.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_far_matersaude','func_far_matersaude.php?funcao_js=parent.js_preenchepesquisa|fa01_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_matersaude','func_far_matersaude.php?funcao_js=parent.js_preenchepesquisa|fa01_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_far_matersaude.hide();

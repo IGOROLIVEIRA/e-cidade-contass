@@ -1,28 +1,28 @@
 <?php
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -48,9 +48,9 @@ if ($opcao == 'complementar') {
   $sigla          = 'r48_';
   $arquivo        = 'gerfcom';
   $sTituloCalculo = 'Complementar';
-} 
+}
 
-  
+
 $oDaoFolhaPagamento = new cl_rhhistoricocalculo();
 $sWhere             = " rh141_anousu = $iAnoFolha";
 $sWhere            .= " and rh141_mesusu    = $iMesFolha";
@@ -89,37 +89,37 @@ foreach ( $aFolhas as $oFolha ) {
       html, body, table {
         overflow: hidden;
       }
-  
+
       #tabela-calculos, #tabela-calculos tr, #tabela-calculos td, #tabela-calculos th{
         border: 1px solid #bbb;
       }
-     
-      #tabela-calculos a { 
+
+      #tabela-calculos a {
       }
-  
-  
+
+
       #tabela-calculos tr:nth-child(odd) {
         background-color: #EEEEEE;
       }
-  
+
       #tabela-calculos tr:nth-child(even) {
         background-color: #FFFFFF;
       }
-  
+
       #tabela-calculos tr:first-child {
-        border-right:1px outset #D3D3D3;  
+        border-right:1px outset #D3D3D3;
         padding:0;
         margin:0;
         overflow: hidden;
       }
-  
+
       #tabela-calculos tr td {
         text-align: left;
         padding-left: 5px;
         padding-right: 5px;
       }
-  
-     #tabela-calculos tr.totais td[colspan='4'] { 
+
+     #tabela-calculos tr.totais td[colspan='4'] {
        text-align: center;
      }
       #tabela-calculos tr td:nth-child(2),
@@ -129,15 +129,15 @@ foreach ( $aFolhas as $oFolha ) {
         text-align: right;
       }
       #tabela-calculos tr td:nth-child(2) {
-        font-weight:bold; 
+        font-weight:bold;
         padding-left: 0px;
         padding-right: 14px;
       }
-      
+
      #tabela-calculos tr td:nth-child(1) {
         text-align: center;
       }
-  
+
      #tabela-calculos tr.totais {
        background-color: #DDDDDD;
         text-align: right;
@@ -151,13 +151,13 @@ foreach ( $aFolhas as $oFolha ) {
     <script type="text/javascript" src="scripts/scripts.js"></script>
     <script type="text/javascript" src="scripts/prototype.js"></script>
   </head>
-  
+
   <body onload="js_alteraHeightCalculoComplementar(); " >
-  
+
     <form name="form1" method="post">
 
 
-     <?php 
+     <?php
 
        foreach ( $aFolhas as $oFolha ) {
 
@@ -173,22 +173,22 @@ foreach ( $aFolhas as $oFolha ) {
           echo "      <th width='80'>Descontos</th>                                     \n";
           echo "      <th width='90'>Prov/Desc</th>                                     \n";
           echo "    </tr>                                                               \n";
-   
+
           $nTotalProventos = 0;
           $nTotalDescontos = 0;
 
           foreach ( $oFolha->aDadosValores as $oValores ) {
-          
+
             $sRubrica = "<a href='#'>{$oValores->rubrica}</a>";
-          
+
             if ( $oValores->tem_base_formula == 't' ) {
               $sRubrica = "B " . $sRubrica;
             }
-          
+
             if ( $oValores->compoe_base == 't' ) {
               $sRubrica = "# " . $sRubrica;
             }
-            
+
             echo "<tr>                                                   \n";
             echo "  <td> 1 </td>                                         \n";
             echo "  <td>" . $sRubrica                            . "</td>\n";
@@ -198,32 +198,32 @@ foreach ( $aFolhas as $oFolha ) {
             echo "  <td>" . db_formatar($oValores->desconto,'f') . "</td>\n";
             echo "  <td>" . $oValores->provdesc                  . "</td>\n";
             echo "</tr>";
-          
+
             $nTotalProventos += $oValores->provento;
             $nTotalDescontos += $oValores->desconto;
           }
-          
+
           echo "  <tr class='totais'>                                     \n";
           echo "    <td colspan='4'>TOTAL</td>                            \n";
           echo "    <td>" . db_formatar($nTotalProventos,'f')    . "</td> \n";
           echo "    <td>" . db_formatar($nTotalDescontos,'f')    . "</td> \n";
           echo "    <td>&nbsp;</td>                                       \n";
           echo "  </tr>";
-          
+
           echo "  <tr class='totais'>\n";
           echo "    <td colspan='4'>LÍQUIDO</td>\n";
           echo "    <td colspan='2'>" . db_formatar($nTotalProventos - $nTotalDescontos,'f')."</td>\n";
           echo "    <td>&nbsp;</td>\n";
           echo "  </tr>";
-          
+
           foreach ( $oFolha->aDadosBases as $oBase ) {
-          
+
             $sRubrica = "<a href='#' id='{$oBase->rubrica}'>{$oBase->rubrica}</a>";
-          
+
             if ( $oBase->tem_base_formula == 't' ) {
               $sRubrica = "B " . $sRubrica;
             }
-          
+
             if ( $oBase->compoe_base == 't' ) {
               $sRubrica = "# " . $sRubrica;
             }
@@ -259,20 +259,20 @@ $$('.folha-complementar').each(function( oElemento, iIndice ){
   parent.document.formatu.opcao.value                     = "<?= $opcao; ?>";
   parent.document.getElementById('tituloFolha').innerHTML = "<?= $sTituloCalculo; ?>";
 
-  
+
 
   function js_relatorio(){
     jan = window.open('pes3_gerfinanc017.php?opcao=<?=$opcao?>&numcgm='+document.form1.numcgm.value+'&matricula='+document.form1.matricula.value+'&ano=<?=$ano?>&mes=<?=$mes?>&tbprev=<?=$tbprev?>','sdjklsdklsdf','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
-  	  
+
   }
-  
+
   function js_Pesquisarubrica( rubrica ) {
-    
-   var janela = js_OpenJanelaIframe('top.corpo','db_iframe_pesquisarubrica','pes1_rhrubricas006.php?tela_pesquisa=true&chavepesquisa='+rubrica,'Pesquisa',true,'20');
+
+   var janela = js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pesquisarubrica','pes1_rhrubricas006.php?tela_pesquisa=true&chavepesquisa='+rubrica,'Pesquisa',true,'20');
    janela.moldura.style.zIndex = 9999;
   }
-  
+
 
   function js_alteraHeightCalculoComplementar() {
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -43,9 +43,9 @@ $oGet    = db_utils::postmemory($_GET);
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
-    <td align="center" valign="top"> 
-    <?    
+  <tr>
+    <td align="center" valign="top">
+    <?
 
         $sqlTermoOrigem  = "   select 'divida' as DB_tipo_origem, parcel,'Divida' as tipo, coddiv as dl_codigo,valor,vlrcor,juros,multa,vlrdescjur,vlrdescmul,desconto,total  ";
         $sqlTermoOrigem .= "     from termodiv ";
@@ -104,7 +104,7 @@ $oGet    = db_utils::postmemory($_GET);
         $arrayTot["desconto"]   = "desconto";
         $arrayTot["total"]      = "total";
         $arrayTot["totalgeral"] = "dl_codigo";
-        
+
         $funcao_js = "js_consultaDetalhes{$oGet->parcelamento}|DB_tipo_origem|dl_codigo";
 
         db_lovrot($sqlTermoOrigem,50,"()","","$funcao_js","","NoMe", array(),false, $arrayTot);
@@ -129,31 +129,31 @@ function js_consultaDetalhes<?=$oGet->parcelamento?>(tipoOrigem,codigoOrigem){
   var arquivo    = '';
   var parametros = '';
   var nomeIframe = '';
-  
+
   if (tipoOrigem == 'divida') {
     arquivo    = 'div1_consulta003.php';
-    parametros = 'codDiv='+codigoOrigem;    
+    parametros = 'codDiv='+codigoOrigem;
     nomeIframe = 'db_iframe_consultadivida';
   }else if (tipoOrigem == 'inicial') {
     arquivo    = 'func_inicialmovcert.php';
-    parametros = 'v50_inicial='+codigoOrigem;    
+    parametros = 'v50_inicial='+codigoOrigem;
     nomeIframe = 'db_iframe';
   }else if (tipoOrigem == 'contrib') {
     arquivo    = '';
-    parametros = '';    
+    parametros = '';
     nomeIframe = 'db_iframe_consultacontrib';
   }else if (tipoOrigem == 'diversos') {
     arquivo    = 'dvr3_consdiversos004.php';
-    parametros = 'dv05_coddiver='+codigoOrigem;  
+    parametros = 'dv05_coddiver='+codigoOrigem;
     nomeIframe = 'db_iframe_consultadiversos';
   }else if (tipoOrigem == 'reparcelamento') {
     arquivo    = 'div3_consultaParcelamento.php';
-    parametros = 'parcelamento='+codigoOrigem;    
+    parametros = 'parcelamento='+codigoOrigem;
     nomeIframe = 'db_iframe_consultaparc'+codigoOrigem;
-  }  
+  }
 
   if (arquivo != "" && parametros != '') {
-    js_OpenJanelaIframe('top.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
   }
 
 }

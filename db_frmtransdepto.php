@@ -27,9 +27,9 @@ $db_opcao = 1;
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 .dono {background-color:#FFFFFF;
-       color:red 
+       color:red
       }
-      
+
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -38,14 +38,14 @@ $db_opcao = 1;
 <center>
 <table width="100%" border="0">
   <tr>
-    
+
     <td nowrap title="<?=@$Tp62_coddeptorec?>" >
        <?
        db_ancora(@$Lp62_coddeptorec,"js_pesquisap62_coddeptorec(true);",$db_opcao);
-       
+
        ?>
     </td>
-    <td nowrap> 
+    <td nowrap>
 
 <?
 db_input('p62_coddeptorec',10,$Ip62_coddeptorec,true,'text',$db_opcao," onchange='js_pesquisap62_coddeptorec(false);'");
@@ -58,12 +58,12 @@ db_input('descrdepto',60,$Idescrdepto,true,'text',3);
     <td  nowrap title="<?=@$Tp62_id_usorec?>">
        <?=@$Lp62_id_usorec; ?>
     </td>
-    <td nowrap> 
+    <td nowrap>
 <?
-   $sqlusu = "select U.id_usuario,nome 
-              from   db_usuarios U inner join db_depusu D 
-                     on U.id_usuario  = D.id_usuario 
-              where  D.coddepto = $p62_coddeptorec 
+   $sqlusu = "select U.id_usuario,nome
+              from   db_usuarios U inner join db_depusu D
+                     on U.id_usuario  = D.id_usuario
+              where  D.coddepto = $p62_coddeptorec
               order by nome ";
   echo "<select  name='p62_id_usorec' size='-1'>";
   echo "<option value=0>Selecione</Option>";
@@ -71,8 +71,8 @@ db_input('descrdepto',60,$Idescrdepto,true,'text',3);
   for ($i = 0;$i < pg_num_rows($rs);$i++){
      db_fieldsmemory($rs,$i);
      echo "<option value='".$id_usuario."'>".$nome."</option>";
-  
-  }     
+
+  }
   echo "</select>";
   }
  ?>
@@ -83,49 +83,49 @@ db_input('descrdepto',60,$Idescrdepto,true,'text',3);
 <script>
 function js_pesquisap62_id_usorec(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_tran','func_db_usutran.php?funcao_js=parent.campos.js_mostradb_usuarios1|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tran','func_db_usutran.php?funcao_js=parent.campos.js_mostradb_usuarios1|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_tran','func_db_usutran.php?pesquisa_chave='+document.form1.p62_id_usorec.value+'&funcao_js=parent.campos.js_mostradb_usuarios','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tran','func_db_usutran.php?pesquisa_chave='+document.form1.p62_id_usorec.value+'&funcao_js=parent.campos.js_mostradb_usuarios','Pesquisa',false);
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.p62_id_usorec.focus(); 
-    document.form1.p62_id_usorec.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.p62_id_usorec.focus();
+    document.form1.p62_id_usorec.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
   document.form1.p62_id_usorec.value = chave1;
   document.form1.nome.value = chave2;
-  top.corpo.db_iframe_tran.hide();
+  CurrentWindow.corpo.db_iframe_tran.hide();
 }
 function js_pesquisap62_coddeptorec(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_tran','func_db_depart.php?funcao_js=parent.campos.js_mostradb_depart1|0|1&todasinstit=1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tran','func_db_depart.php?funcao_js=parent.campos.js_mostradb_depart1|0|1&todasinstit=1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_tran','func_db_depart.php?pesquisa_chave='+document.form1.p62_coddeptorec.value+'&funcao_js=parent.campos.js_mostradb_depart&todasinstit=1','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tran','func_db_depart.php?pesquisa_chave='+document.form1.p62_coddeptorec.value+'&funcao_js=parent.campos.js_mostradb_depart&todasinstit=1','Pesquisa',false);
   }
 }
 function js_mostradb_depart(chave,erro){
-  if(erro==true){ 
+  if(erro==true){
     alert("Departamento não encontrado ou desativado.Verifique.");
-    document.form1.p62_coddeptorec.focus(); 
+    document.form1.p62_coddeptorec.focus();
     document.form1.p62_coddeptorec.value = '';
     document.form1.descrdepto.value = '';
   }else{
-    document.form1.descrdepto.value = chave; 
-    document.form1.submit();    
+    document.form1.descrdepto.value = chave;
+    document.form1.submit();
   }
 }
 function js_mostradb_depart1(chave1,chave2){
   document.form1.p62_coddeptorec.value = chave1;
   document.form1.descrdepto.value = chave2;
-  top.corpo.db_iframe_tran.hide();
+  CurrentWindow.corpo.db_iframe_tran.hide();
   document.form1.submit();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tran','func_proctransfer.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tran','func_proctransfer.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe.hide();

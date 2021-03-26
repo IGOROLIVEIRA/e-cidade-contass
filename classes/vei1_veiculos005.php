@@ -158,14 +158,14 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
     $erro_msg = "Placa já cadastrada para outro veículo. Verifique.";
     $clveiculos->erro_campo = "ve01_placa";
   }
-  
+
   $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_codigo != $ve01_codigo and ve01_ranavam = $ve01_ranavam"));
   if ($clveiculos->numrows > 0){
     $sqlerro  = true;
     $erro_msg = "Renavam já cadastrado para outro veículo. Verifique.";
     $clveiculos->erro_campo = "ve01_ranavam";
   }
-  
+
   $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_codigo != $ve01_codigo and ve01_chassi = '$ve01_chassi'"));
   if ($clveiculos->numrows > 0){
     $sqlerro  = true;
@@ -180,7 +180,7 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
     	$sqlerro=true;
     }
   }
-  
+
   /*
    * Altera tipo veiculo para sicom
    */
@@ -202,11 +202,11 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
 
        $clveicresp->excluir( null, "ve02_veiculo={$ve01_codigo}");
        if ($clveicresp->erro_status=="0") {
-         
+
          $sqlerro=true;
          $erro_msg=$clveicresp->erro_msg;
         }
-  		
+
      }
  	   if ($ve02_numcgm!= 0 ){
 
@@ -222,10 +222,10 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
   }
 
   if ($sqlerro==false) {
-    
+
   	$result_patri = $clveicpatri->sql_record($clveicpatri->sql_query(null,"ve03_codigo",null," ve03_veiculo = $ve01_codigo "));
   	if ($clveicpatri->numrows > 0) {
-  		
+
   	  db_fieldsmemory($result_patri,0);
   	/**
   	 * exclui e incluimos novamente
@@ -233,25 +233,25 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
   	  $clveicpatri->excluir(null, "ve03_veiculo = {$ve01_codigo}");
   	  if ($clveicpatri->erro_status == "0") {
 
-        $sqlerro  = true;      
+        $sqlerro  = true;
         $erro_msg = $clveicpatri->erro_msg;
       }
   	}
-  	
+
   	if (isset($ve03_bem)&&$ve03_bem != '') {
-		  
+
   		$clveicpatri->ve03_veiculo=$clveiculos->ve01_codigo;
   		$clveicpatri->incluir(null);
   		if ($clveicpatri->erro_status=="0") {
-  	 		$sqlerro=true;  		
+  	 		$sqlerro=true;
   	 		$erro_msg=$clveicpatri->erro_msg;
-  		}  		
+  		}
   	}
   }
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
-   $result = $clveiculos->sql_record($clveiculos->sql_query($chavepesquisa)); 
+   $result = $clveiculos->sql_record($clveiculos->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 
    $db_botao = true;
@@ -272,21 +272,21 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
    if ($clveictipoabast->numrows > 0){
      db_fieldsmemory($result_veictipoabast,0);
    }
-   
+
    //Result para modulo sicom
    $result_tipoveiculos = $cltipoveiculos->sql_record($cltipoveiculos->sql_query(null,"*",null," si04_veiculos = $chavepesquisa"));
    if ($cltipoveiculos->numrows > 0){
      db_fieldsmemory($result_tipoveiculos,0);
    }
-   
+
 ?>
     <script>
        parent.document.formaba.veicitensobrig.disabled=false;
-       top.corpo.iframe_veicitensobrig.location.href='vei1_veicitensobrig001.php?ve09_veiculos=<?=@$chavepesquisa?>';
+       CurrentWindow.corpo.iframe_veicitensobrig.location.href='vei1_veicitensobrig001.php?ve09_veiculos=<?=@$chavepesquisa?>';
        parent.document.formaba.veicutilizacao.disabled=false;
-       top.corpo.iframe_veicutilizacao.location.href='vei1_veicutilizacao001.php?ve15_veiculos=<?=@$chavepesquisa?>';
+       CurrentWindow.corpo.iframe_veicutilizacao.location.href='vei1_veicutilizacao001.php?ve15_veiculos=<?=@$chavepesquisa?>';
        parent.document.formaba.veiccentral.disabled=false;
-       top.corpo.iframe_veiccentral.location.href='vei1_veiccentralveiculos001.php?ve09_veiculos=<?=@$chavepesquisa?>';
+       CurrentWindow.corpo.iframe_veiccentral.location.href='vei1_veiccentralveiculos001.php?ve09_veiculos=<?=@$chavepesquisa?>';
 <?
    if (isset($liberaaba) && $liberaaba == true){
 ?>
@@ -295,7 +295,7 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
    }
 ?>
     </script>
-<?         
+<?
 }
 ?>
 <html>
@@ -308,8 +308,8 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmveiculos.php");

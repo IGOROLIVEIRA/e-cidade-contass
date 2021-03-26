@@ -203,7 +203,7 @@ function js_verAcordo( iAcordo ){
     return false;
   };
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
       'db_iframe_consultaacordo',
       'con4_consacordos003.php?ac16_sequencial='+iAcordo,
       'Consulta Dados Acordo',
@@ -314,7 +314,7 @@ function js_pesquisaParalisacao(lMostrar) {
   if (lMostrar == true) {
 
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraParalisacao1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=5';
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_acordoParalisado',
                         sUrl,
                         sTituloJanela,
@@ -326,7 +326,7 @@ function js_pesquisaParalisacao(lMostrar) {
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraParalisacao&iTipoFiltro=5';
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordoParalisado',
                           sUrl,
                           sTituloJanela,
@@ -380,7 +380,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
   if (lMostrar == true) {
 
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4';
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_acordo',
                         sUrl,
                         sTituloJanela,
@@ -392,7 +392,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4';
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           sTituloJanela,

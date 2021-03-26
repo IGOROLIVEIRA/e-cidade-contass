@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -237,14 +237,14 @@ if (isset($rh01_regist) && !empty($rh01_regist)) {
     function js_pesquisaemissor(mostra){
 
       if (mostra == true) {
-        js_OpenJanelaIframe( 'top.corpo',
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
                              'db_iframe_rhpessoal',
                              'func_rhpessoal.php?funcao_js=parent.js_mostraemissor1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>',
                              'Pesquisa',
                              true );
       } else {
 
-          js_OpenJanelaIframe( 'top.corpo',
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
                                'db_iframe_rhpessoal',
                                'func_rhpessoal.php?pesquisa_chave=' + document.form1.emissor.value
                                + '&funcao_js=parent.js_mostraemissor&instit=<?=(db_getsession("DB_instit"))?>',
@@ -273,7 +273,7 @@ if (isset($rh01_regist) && !empty($rh01_regist)) {
     function js_pesquisarh01_regist(mostra) {
 
       if (mostra == true) {
-        js_OpenJanelaIframe( 'top.corpo',
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
                              'db_iframe_rhpessoal',
                              'func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>',
                              'Pesquisa',
@@ -281,7 +281,7 @@ if (isset($rh01_regist) && !empty($rh01_regist)) {
       } else {
 
         if (document.form1.rh01_regist.value != '') {
-          js_OpenJanelaIframe( 'top.corpo',
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
                                'db_iframe_rhpessoal',
                                'func_rhpessoal.php?testarescisao=true&pesquisa_chave=' + document.form1.rh01_regist.value
                                + '&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>',

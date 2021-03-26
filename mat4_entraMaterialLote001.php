@@ -109,10 +109,10 @@ function js_limpa(){
 <script>
 function js_pesquisa_matordem(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_matordem','func_matordement.php?lExibeAutomatica=false&funcao_js=parent.js_mostramatordem1|m51_codordem|m51_depto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matordem','func_matordement.php?lExibeAutomatica=false&funcao_js=parent.js_mostramatordem1|m51_codordem|m51_depto','Pesquisa',true);
   }else{
      if(document.form1.m51_codordem.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_matordem','func_matordement.php?lExibeAutomatica=false&pesquisa_chave='+document.form1.m51_codordem.value+'&funcao_js=parent.js_mostramatordem','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matordem','func_matordement.php?lExibeAutomatica=false&pesquisa_chave='+document.form1.m51_codordem.value+'&funcao_js=parent.js_mostramatordem','Pesquisa',false);
      }else{
        document.form1.m51_codordem.value = '';
      }
@@ -129,7 +129,7 @@ function js_mostramatordem1(chave1,chave2){
    document.form1.m51_codordem.value = chave1;
    document.form1.m51_depto.value = chave2;
    db_iframe_matordem.hide();
-}                 
+}
 
 /**
  * Valida formulario
@@ -161,7 +161,7 @@ function js_valida() {
 }
 
 /**
- * Valida se ordem de compra existe 
+ * Valida se ordem de compra existe
  * - caso nao encontra passa mensagem de erro para callback
  *
  * @param {Integer} iOrdem
@@ -178,7 +178,7 @@ function js_validarOrdem(iOrdem, callback) {
   }
 
   var sPrograma = 'func_matordement.php?lExibeAutomatica=false&pesquisa_chave='+iOrdem+'&funcao_js=parent.js_validarOrdem.callback';
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_matordem', sPrograma,'Pesquisa', false); 
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_matordem', sPrograma,'Pesquisa', false);
   js_validarOrdem.callback = function(mDescricao, lErro) {
 
     if (lErro) {

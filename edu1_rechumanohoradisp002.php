@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -148,16 +148,16 @@ if ($oPost->sAction == 'IncluirPeriodo') {
     }
 
     foreach ($aAgenda as $aAgendaAtividadeProfissional ) {
-      
+
       if ( empty($aAgendaAtividadeProfissional) ) {
-        
+
         $aMensagem[] =  _M(MENSAGEM_RECHUMANOHORADISP002 . "profissional_sem_dia_semana");
         continue;
       }
-      
+
       foreach ( $aAgendaAtividadeProfissional as $oAgendaAtividadeProfissional ) {
 
-        if ( $oAgendaAtividadeProfissional->getTipoHoraTrabalho()->getCodigo() != $oPost->iTipoHora 
+        if ( $oAgendaAtividadeProfissional->getTipoHoraTrabalho()->getCodigo() != $oPost->iTipoHora
            || !$oAgendaAtividadeProfissional->getTipoHoraTrabalho()->isAtivo() ) {
           continue;
         }
@@ -198,7 +198,7 @@ if ($oPost->sAction == 'IncluirPeriodo') {
         $iHoraFimPeriodo    = strtotime( date("Y-m-d") . $oPeriodoEscola->getHoraFim() );
 
         if ( ($iHoraInicioPeriodo >= $iHoraInicioAgenda) && ( $iHoraFimPeriodo <= $iHoraFimAgenda) ) {
-          
+
           $sCamposConflito  = " case when ed20_i_tiposervidor = 1 then 'Matrícula: '||ed284_i_rhpessoal else 'CGM: '||ed285_i_cgm end ";
           $sCamposConflito .= " as codmatricula,ed17_i_escola,ed18_c_nome,ed17_h_inicio,ed17_h_fim,ed08_c_descr";
           $sWhereConflito   = " ed33_i_diasemana = {$oAgendaProfissional->getDiaSemana()} ";
@@ -216,7 +216,7 @@ if ($oPost->sAction == 'IncluirPeriodo') {
           $rsConflito       = db_query( $sSqlConflito );
 
           if ( !$rsConflito ) {
-            throw new DBException( _M( MENSAGEM_RECHUMANOHORADISP002 . "erro_verificar_conflitos") ); 
+            throw new DBException( _M( MENSAGEM_RECHUMANOHORADISP002 . "erro_verificar_conflitos") );
           }
 
           $iLinhas = pg_num_rows( $rsConflito );
@@ -273,7 +273,7 @@ if ($oPost->sAction == 'IncluirPeriodo') {
           $oErro->sDiaSemana = $oAgendaProfissional->getNomeDiaSemana();
           $oErro->sPeriodo   = $oPeriodoEscola->getDescricao();
           $aMensagem[]       = _M( MENSAGEM_RECHUMANOHORADISP002 . "sem_atividade_tipo_hora", $oErro );
-          $lErro             = true;          
+          $lErro             = true;
         }
       }
     }
@@ -304,7 +304,7 @@ if ($oPost->sAction == 'IncluirPeriodo') {
   $aMensagem      = array_filter($aMensagem);
   $aMensagem      = array_unique($aMensagem);
   $sMensagensErro = implode( "\n", $aMensagem);
-  
+
   $oRetorno->aRetorno[] = urlencode($sMensagensErro);
   $oJson = new services_json();
   echo $oJson->encode($oRetorno);
@@ -330,7 +330,7 @@ if ($oPost->sAction == 'IncluirOutrosPeriodos') {
 
     db_fieldsmemory($result_day,$dd);
     $quebra_periodos = explode(",",$oPost->periodos);
-    
+
     for ($x = 0; $x < count($quebra_periodos); $x++) {
 
 
@@ -481,7 +481,7 @@ if ($oPost->sAction == 'MontaGrade') {
             $difer     = ceil($difermin/2);
             $sHtml    .= '<table id="tab'.$ed33_i_codigo.'" width="'.$larg_dia.'" border="0" bgcolor="#CCCCCC" ';
             $sHtml    .= ' height="'.$difer.'" style="background:'.$_SESSION["sess_cordisp"][$ed17_i_escola].';';
-            $sHtml    .= ' border:1px outset #000000;position:absolute;top:'.$ini_top.'px;left:'.$ini_left.'px;" ';
+            $sHtml    .= ' border:1px outset #000000;position:absolute;top:'.$ini_CurrentWindow.'px;left:'.$ini_left.'px;" ';
             $sHtml    .= ' cellspacing="0" cellpading="0">';
             $sHtml    .= '<tr>';
             if ($ed17_i_escola == $escola) {

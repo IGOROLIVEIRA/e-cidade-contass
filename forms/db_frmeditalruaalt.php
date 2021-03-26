@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: contrib
@@ -46,9 +46,9 @@ if(isset($dados)){
   $d04_quant="";
   $d04_vlrcal="";
   $d04_vlrval="";
-  $d04_mult=""; 
-  $d04_forma=""; 
-  $d04_vlrobra=""; 
+  $d04_mult="";
+  $d04_forma="";
+  $d04_vlrobra="";
 }
 ?>
 <script>
@@ -79,27 +79,27 @@ function js_insere(){
     document.form1.d04_vlrcal.select();
     alert("Preencha este campo.");
     return false;
-    
+
   }
   if (mult=="") {
     document.form1.d04_mult.select();
     alert("Preencha este campo.");
     return false;
-    
+
   }
   if (quant=="") {
     document.form1.d04_quant.select();
     alert("Preencha este campo.");
     return false;
-    
+
   }
   if (vlrobra=="") {
     document.form1.d04_vlrobra.select();
     alert("Preencha valor da obra.");
     return false;
-    
+
   }
-  
+
   OBJ = tiposerv.document.form1;
   for (i=0; i<OBJ.length; i++) {
     if (OBJ.elements[i].type=='checkbox') {
@@ -119,7 +119,7 @@ function js_insere(){
       }
     }
   }
-  
+
   document.getElementById('id_div').style.visibility="visible";
   tiposerv.js_incluirlinha(quant,vlrcal,texto,tipos,vlrval,mult,forma,vlrobra);
   texto=document.form1.d03_descr.value="";
@@ -131,8 +131,8 @@ function js_insere(){
   valor=document.form1.d04_forma.value="";
   valor=document.form1.d04_vlrobra.value="";
   document.form1.lanca.onclick = '';
-  
-  
+
+
 }
 function js_confirma(){
   var obj = tiposerv.document.form1;
@@ -180,7 +180,7 @@ function js_trocarua(valor){
 <center>
 
 <table border='0'>
-<tr>    
+<tr>
 
 <td width="70%">
 	    <td width="100%" colspan="2" align="center">
@@ -196,7 +196,7 @@ function js_trocarua(valor){
                 <input name="numedital" type="hidden">
                 <?=@$Ld02_contri?>
              </td>
-             <td> 
+             <td>
                <?
                  db_input('d02_contri',10,$Id02_contri,true,'text',3,"")
                ?>
@@ -208,13 +208,13 @@ function js_trocarua(valor){
                 db_ancora(@$Ld02_codedi,"js_pesquisad02_codedi(true);",$db_opcao);
                 ?>
              	</td>
-             <td> 
+             <td>
                <?
                  if(empty($d02_codedi)|| isset($d02_codedi) && $d02_codedi==""){
-                   $d01_descr="";  
+                   $d01_descr="";
                  }
                  db_input('d02_codedi',10,$Id02_codedi,true,'text',$db_opcao," onchange='js_pesquisad02_codedi(false);'");
-         
+
                  db_input('d01_descr',50,$Id01_descr,true,'text',3,'');
                ?>
               </td>
@@ -236,9 +236,9 @@ function js_trocarua(valor){
                   } else {
                     $result=$cleditalruaproj->sql_record($sql01);
                   }
-                  $numrows2=$cleditalruaproj->numrows;                  
+                  $numrows2=$cleditalruaproj->numrows;
                 }
-                
+
                 if ($numrows2>0) {
                   echo "<input type='hidden' name='testedi' value='ok'>";
                   echo "<tr>";
@@ -261,16 +261,16 @@ function js_trocarua(valor){
                     $terminolistas=true;
                   }
 
-                }                
+                }
               }
-           ?>	  
+           ?>
 	         <tr>
 	         <?
 	           if(isset($numrows2) && $numrows2>0){
 	             $d02_codigo=$d40_codlog;
 	             $db_opcao2=3;
 	           }else{
-	             $db_opcao2=$db_opcao;   
+	             $db_opcao2=$db_opcao;
 	           }
 	          ?>
 	           <td nowrap title="<?=@$Td02_codigo?>">
@@ -278,10 +278,10 @@ function js_trocarua(valor){
 	              db_ancora(@$Ld02_codigo,"js_pesquisad02_codigo(true);",$db_opcao2);
 	              ?>
 	           </td>
-	           <td> 
+	           <td>
            	 <?
              	 if(empty($d02_codigo)|| isset($d02_codigo) && $d02_codigo==""){
-             	   $j14_nome="";  
+             	   $j14_nome="";
              	 }
              	 db_input('d02_codigo',10,$Id02_codigo,true,'text',$db_opcao2," onchange='js_pesquisad02_codigo(false);'");
 
@@ -293,7 +293,7 @@ function js_trocarua(valor){
 	           <td nowrap title="<?=@$Td02_profun?>">
 	            <?=$Ld02_profun?>
 	           </td>
-	           <td nowrap> 
+	           <td nowrap>
            	<?
                $db_opcao69=$db_opcao;
                if (isset($d40_codigo)) {
@@ -305,21 +305,21 @@ function js_trocarua(valor){
                }
                db_input('d02_profun',10,$Id02_profun,true,'text',$db_opcao69);
            	?>
-	           </td>   
-	         </tr> 
+	           </td>
+	         </tr>
            <tr>
 	           <td nowrap title="<?=@$Td02_valorizacao?>">
 	            <?=$Ld02_valorizacao?>
 	           </td>
-	           <td nowrap> 
+	           <td nowrap>
 	           <?
 	             db_input('d02_valorizacao',10,$Id02_valorizacao,true,'text',$db_opcao);
            	 ?>
-	           </td>   
-	         </tr> 
+	           </td>
+	         </tr>
 	       </table>
        </fieldset>
-     </td>	 
+     </td>
 	     <?
    		 $d02_autori="f";
    		 db_input('d02_autori',3,$Id02_autori,true,'hidden',3,'')
@@ -327,7 +327,7 @@ function js_trocarua(valor){
   </td>
 </tr>
 
-<tr>    
+<tr>
   <td>
 	  <td colspan="2" align="center">
 	    <fieldset>
@@ -341,12 +341,12 @@ function js_trocarua(valor){
 				     db_ancora(@$Ld03_tipos,"js_tipos(true);",$db_opcao);
            ?>
           </td>
-				  <td nowrap>         
+				  <td nowrap>
            <?
 	           db_input('d03_tipos',10,$Id03_tipos,true,'text',$db_opcao,"onchange='js_tipos(false);'");
            	 db_input('d03_descr',50,$Id03_descr,true,'text',3);
          	 ?>
-   	 	 	  </td>          
+   	 	 	  </td>
 	        <td nowrap title="<?=@$Td04_mult?>">
             <b>Multiplicador:</b>
           </td>
@@ -363,16 +363,16 @@ function js_trocarua(valor){
           <td nowrap title="<?=@$Td04_forma?>">
            <?=@$Ld04_forma?>
           </td>
-          <td nowrap> 
+          <td nowrap>
       			<?
 	    		  $x = array('1'=>'utilizando valor para calculo','2'=>'utilizando valor para valorizacao', '3'=>'testada proporcional');
 	    	  	db_select('d04_forma',$x,true,$db_opcao,"onChange='js_controlaFormaCalculo(this.value)';");
 	      		?>
-          </td>	   
+          </td>
 	    	  <td nowrap title="<?=@$Td04_quant?>">
 	    	    <?=@$Ld04_quant?>
 	    	  </td>
-	    	  <td nowrap> 
+	    	  <td nowrap>
         	  <?
           	  db_input('d04_quant',10,$Id04_quant,true,'text',$db_opcao,"")
           	?>
@@ -386,15 +386,15 @@ function js_trocarua(valor){
           <td nowrap>
           <?
          	  db_input('d04_vlrcal',10,$Id04_vlrcal,true,'text',$db_opcao,"")
-         	?>       
-	     	  </td>   
-          <td nowrap> 
+         	?>
+	     	  </td>
+          <td nowrap>
 	   	      <?=@$Ld04_vlrval?>
           </td>
           <td>
           	<?
           	db_input('d04_vlrval',10,$Id04_vlrval,true,'text',$db_opcao,"")
-          	?>       
+          	?>
          	</td>
         </tr>
 
@@ -402,7 +402,7 @@ function js_trocarua(valor){
           <td nowrap title="<?=@$Td04_vlrobra?>">
             <?=@$Ld04_vlrobra?>
           </td>
-          <td> 
+          <td>
           <?
             db_input('d04_vlrobra',10,$Id04_vlrobra,true,'text',$db_opcao,"")
           ?>
@@ -414,9 +414,9 @@ function js_trocarua(valor){
 	   	    </td>
         </tr>
 
-        <tr>   
-				  <td align="center" colspan="4" width="100%"> 
-				    <div id="id_div" <?=(!isset($dados)?'style="visibility:hidden"':'')?>>  
+        <tr>
+				  <td align="center" colspan="4" width="100%">
+				    <div id="id_div" <?=(!isset($dados)?'style="visibility:hidden"':'')?>>
          			<iframe name="tiposerv" id="tiposerv" src="con1_editalrua004.php?db_opcao=<?=$db_opcao?><?=(isset($dados)?'&dados='.$dados:"")?>" width="100%" height="150">
 				      </iframe>
 				    </div>
@@ -424,7 +424,7 @@ function js_trocarua(valor){
 				</tr>
    	  </table>
     </fieldset>
-  </td>	 
+  </td>
 </td>
 </tr>
 </table>
@@ -458,15 +458,15 @@ function js_controlaFormaCalculo(sValor) {
     document.form1.d04_vlrcal.value = '';
     document.form1.d04_vlrval.value = '';
   }
-  
+
 }
 
 function js_tipos(mostra){
   document.form1.lanca.onclick = "";
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframet','func_editaltipo.php?funcao_js=parent.js_mostraeditaltipos1|d03_tipos|d03_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframet','func_editaltipo.php?funcao_js=parent.js_mostraeditaltipos1|d03_tipos|d03_descr','Pesquisa',true);
   } else {
-    js_OpenJanelaIframe('top.corpo','db_iframet','func_editaltipo.php?pesquisa_chave='+document.form1.d03_tipos.value+'&funcao_js=parent.js_mostraeditaltipos','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframet','func_editaltipo.php?pesquisa_chave='+document.form1.d03_tipos.value+'&funcao_js=parent.js_mostraeditaltipos','Pesquisa',false);
   }
 }
 function js_mostraeditaltipos(chave,erro){
@@ -490,15 +490,15 @@ function js_pesquisad02_codedi(mostra){
   document.form1.d03_tipos.disabled=true;
   document.form1.d02_codigo.disabled=true;
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe02','func_edital.php?funcao_js=parent.js_mostraedital1|d01_codedi|d01_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe02','func_edital.php?funcao_js=parent.js_mostraedital1|d01_codedi|d01_descr','Pesquisa',true);
   } else {
-    js_OpenJanelaIframe('top.corpo','db_iframe02','func_edital.php?pesquisa_chave='+document.form1.d02_codedi.value+'&funcao_js=parent.js_mostraedital','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe02','func_edital.php?pesquisa_chave='+document.form1.d02_codedi.value+'&funcao_js=parent.js_mostraedital','Pesquisa',false);
   }
 }
 function js_mostraedital(chave,erro) {
-  
+
   document.form1.d01_descr.value = chave;
-  
+
   if (erro==true) {
     document.form1.d02_codedi.focus();
     document.form1.d02_codedi.value = '';
@@ -558,9 +558,9 @@ function js_mostraedital1(chave1,chave2){
 
 function js_pesquisad02_codigo(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe03','func_ruas.php?funcao_js=parent.js_mostraruas1|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe03','func_ruas.php?funcao_js=parent.js_mostraruas1|0|1','Pesquisa',true);
   } else {
-    js_OpenJanelaIframe('top.corpo','db_iframe03','func_ruas.php?pesquisa_chave='+document.form1.d02_codigo.value+'&funcao_js=parent.js_mostraruas','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe03','func_ruas.php?pesquisa_chave='+document.form1.d02_codigo.value+'&funcao_js=parent.js_mostraruas','Pesquisa',false);
   }
 }
 function js_mostraruas(chave,erro){
@@ -576,7 +576,7 @@ function js_mostraruas1(chave1,chave2){
   db_iframe.hide03();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe04','func_editalrua.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe04','func_editalrua.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe04.hide();
@@ -590,7 +590,7 @@ function js_preenchepesquisa(chave){
 }
 <?
 if (($db_opcao==33 || $db_opcao==22) && empty($calcnops) && empty($chavepesquisa)) {
-  
+
   echo "\njs_pesquisa();";
 }
 ?>

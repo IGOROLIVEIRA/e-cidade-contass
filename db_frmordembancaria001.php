@@ -74,8 +74,8 @@
 			<tr>
 				<td align="right" colspan="2">
 				<input type="submit" value="Incluir" name="incluir" />
-				<input type="submit" value="Excluir" name="excluir" /> 
-					<input type="button" value="Novo" name="novo" onclick="js_novo()"/> 
+				<input type="submit" value="Excluir" name="excluir" />
+					<input type="button" value="Novo" name="novo" onclick="js_novo()"/>
 					<input type="button" value="Pesquisar" name="pesquisa_banco"
 					onclick="pesquisar()" />
 				</td>
@@ -91,16 +91,16 @@
 <script>
 
 function js_abre(){
-	
+
 	   obj = document.form1;
 	   query  = document.form1.k00_codigo.value;
-	   
+
 	   jan = window.open('cai4_ordembancaria002.php?codigo_ordem='+query,
-			   
+
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
-	  
+
 	}
 
 	function js_novo() {
@@ -109,23 +109,23 @@ function js_abre(){
 		document.form1.c60_descr.value = '';
 	  parent.document.formaba.db_pagamento.disabled=true;
 	}
-	
+
 	function js_pesquisac60_codcon(mostra){
 		  if(mostra==true){
 		    js_OpenJanelaIframe('','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c60_codcon|c60_descr','Pesquisa',true);
 		  }else{
-		     if(document.form1.c60_codcon.value != ''){ 
+		     if(document.form1.c60_codcon.value != ''){
 		       js_OpenJanelaIframe('','db_iframe_conplano','func_conplano.php?pesquisa_chave='+document.form1.c60_codcon.value+'&funcao_js=parent.js_mostraconplano','Pesquisa',false);
 		     }else{
-		       document.form1.c60_descr.value = ''; 
+		       document.form1.c60_descr.value = '';
 		     }
 		  }
 		}
 		function js_mostraconplano(chave,erro){
-		  document.form1.c60_descr.value = chave; 
-		  if(erro==true){ 
-		    document.form1.c60_codcon.focus(); 
-		    document.form1.c60_codcon = ''; 
+		  document.form1.c60_descr.value = chave;
+		  if(erro==true){
+		    document.form1.c60_codcon.focus();
+		    document.form1.c60_codcon = '';
 		  }
 		}
 		function js_mostraconplano1(chave1,chave2){
@@ -144,7 +144,7 @@ function js_abre(){
 			  parameters:{inicio: $('inicio').value},
 			  onComplete:cria_tabela
 				  }
-			  );	
+			  );
 	}
 
 	 /**
@@ -157,11 +157,11 @@ function js_abre(){
 		   $('inicio').value = parseInt(($('inicio').value))+1;
 			 var campo = document.getElementById('TabDbLov');
 			 document.getElementById('lista').removeChild(campo);
-		   
+
 		   pesquisar();
 
 	   }
-		  	
+
 	 }
 	  /**
 	   * voltar para lista anterior da paginacao
@@ -169,14 +169,14 @@ function js_abre(){
 	  function anterior(){
 
 		  if (parseInt($('inicio').value) > 0) {
-			  
+
 			  var campo = document.getElementById('TabDbLov');
 		 	  document.getElementById('lista').removeChild(campo);
 		    $('inicio').value = parseInt(($('inicio').value))-1;
 		    pesquisar();
-		  	  
+
 		  }
-	 	  	
+
 	  }
 	 /**
 	  * voltar para primeira lista da paginacao
@@ -184,14 +184,14 @@ function js_abre(){
 	  function inicio(){
 
 		  if (parseInt($('inicio').value) > 0) {
-			  
+
 			  var campo = document.getElementById('TabDbLov');
 		 	  document.getElementById('lista').removeChild(campo);
 		    $('inicio').value = 0;
 		    pesquisar();
-		  	  
+
 		  }
-	 	  	
+
 	  }
 	  /**
 	   * avançar para ultima lista da paginacao
@@ -199,16 +199,16 @@ function js_abre(){
 	  function ultimo(){
 
 	    if (parseInt(($('inicio').value)) < parseInt(($('total').value))) {
-	 	   
+
 	 		 var campo = document.getElementById('TabDbLov');
 	 		 document.getElementById('lista').removeChild(campo);
 	 	   $('inicio').value = parseInt(($('total').value));
 	 	   pesquisar();
 
 	    }
-	 	  	
+
 	  }
-	 
+
 	/**
 	 * pesquisar dados no xml pelo codigo digitado
 	 */
@@ -228,14 +228,14 @@ function js_abre(){
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	function pegar_valor(param1, param2, param3){
-		
+
 		$('k00_codigo').value = param1;
 		$('c60_codcon').value = param2;
 		js_pesquisac60_codcon(false);
-		top.corpo.iframe_db_pagamento.location.href='cai4_ordempagamentos001.php?k00_codigo='+param1;
+		CurrentWindow.corpo.iframe_db_pagamento.location.href='cai4_ordempagamentos001.php?k00_codigo='+param1;
 		parent.document.formaba.db_pagamento.disabled=false;
 		fechar();
 		parent.mo_camada('db_pagamento');
@@ -243,8 +243,8 @@ function js_abre(){
 	}
 
 	function fechar(){
-		var campo = document.getElementById('TabDbLov'); 
-		document.getElementById('lista').removeChild(campo); 
+		var campo = document.getElementById('TabDbLov');
+		document.getElementById('lista').removeChild(campo);
 		document.getElementById('lista').style.visibility = "hidden";
 		inicio: $('inicio').value = 0;
 	}
@@ -264,32 +264,32 @@ function js_abre(){
 		tabela += "<input type=\"button\" value=\"Último\" name=\"ultimo\" onclick=\"ultimo()\">";
 
 		tabela += "<br></td></tr>";
-		
+
 		tabela +=	"<tr style=\"text-decoration: underline;\"><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
 		tabela += "Código";
-		
+
 		tabela += "</td><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
 		tabela += "Conta Pagadora";
-		
+
 		tabela += "</td></tr>";
 
 		try {
-		
+
 			for (var i = 0; i < jsonObj.length; i++){
 				if(i % 2 != 0){
 						color = "#97b5e6";
 				}else{
 					color = "#e796a4";
 				}
-				
+
 				tabela += "<tr>";
-				
+
 				tabela += "<td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 				tabela += "<a onclick=\"pegar_valor("+jsonObj[i].k00_codigo+",'"+jsonObj[i].k00_ctpagadora+"')\">"+jsonObj[i].k00_codigo+"</a>";
-				
+
 				tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 				tabela += "<a onclick=\"pegar_valor("+jsonObj[i].k00_codigo+",'"+jsonObj[i].k00_ctpagadora+"')\">"+jsonObj[i].k00_ctpagadora+"</a>";
-				
+
 				tabela += "</td></tr>";
 			}
 

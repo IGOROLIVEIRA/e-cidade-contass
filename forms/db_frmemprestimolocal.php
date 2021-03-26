@@ -9,7 +9,7 @@ $clemprestimolocal->rotulo->label();
     <td nowrap title="<?=@$Tbi20_codigo?>">
        <?=@$Lbi20_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('bi20_codigo',10,$Ibi20_codigo,true,'text',3,"")
 ?>
@@ -19,7 +19,7 @@ db_input('bi20_codigo',10,$Ibi20_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tbi20_descr?>">
        <?=@$Lbi20_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('bi20_descr',30,$Ibi20_descr,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('bi20_descr',30,$Ibi20_descr,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_emprestimolocal','func_emprestimolocal.php?funcao_js=parent.js_preenchepesquisa|bi20_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_emprestimolocal','func_emprestimolocal.php?funcao_js=parent.js_preenchepesquisa|bi20_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_emprestimolocal.hide();

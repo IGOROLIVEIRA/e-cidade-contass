@@ -9,7 +9,7 @@ $clcargrup->rotulo->label();
     <td nowrap title="<?=@$Tj32_grupo?>">
        <?=@$Lj32_grupo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j32_grupo',4,$Ij32_grupo,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('j32_grupo',4,$Ij32_grupo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tj32_descr?>">
        <?=@$Lj32_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j32_descr',40,$Ij32_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('j32_descr',40,$Ij32_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tj32_tipo?>">
        <?=@$Lj32_tipo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('L'=>'Lote','F'=>'Face','C'=>'Construção');
 db_select('j32_tipo',$x,true,$db_opcao,"");
@@ -43,7 +43,7 @@ db_select('j32_tipo',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_preenchepesquisa|j32_grupo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_preenchepesquisa|j32_grupo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_cargrup.hide();

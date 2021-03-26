@@ -487,7 +487,7 @@ $clrotulo->label("e60_datasentenca");
 
         parent.document.formaba.alteracaoop.disabled=false;
         empenho = chave2+'/'+ano;
-        top.corpo.iframe_alteracaoop.location.href='emp1_aba2ordempagamento002.php?pesquisa=1&empenho='+empenho;
+        CurrentWindow.corpo.iframe_alteracaoop.location.href='emp1_aba2ordempagamento002.php?pesquisa=1&empenho='+empenho;
     }
 
     /**

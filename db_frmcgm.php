@@ -1,8 +1,8 @@
 <?
   $clrotulo = new rotulocampo;
   $clrotulo->label("DBtxt29");
-  $clrotulo->label("DBtxt30");  
-  $clrotulo->label("DBtxt31");  
+  $clrotulo->label("DBtxt30");
+  $clrotulo->label("DBtxt31");
 ?>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
@@ -80,7 +80,7 @@ if(isset($cnpj) || isset($cpf)){
   }
   $cgccpf = str_replace(".","",$cgccpf);
   $cgccpf = str_replace("/","",$cgccpf);
-  $cgccpf = str_replace("-","",$cgccpf);  
+  $cgccpf = str_replace("-","",$cgccpf);
   //$result = $clcgm->sql_record($clcgm->sql_query("","cgm.z01_cgccpf,cgm.z01_numcgm",""," z01_cgccpf = '$cgccpf' and z01_cgccpf <> '' and z01_numcgm <> $z01_numcgm "));
     if(db_permissaomenu(db_getsession("DB_anousu"),604,3775) == "false"){
       if(trim($cgccpf) == '00000000000'){
@@ -93,7 +93,7 @@ if(isset($cnpj) || isset($cpf)){
         exit;
       }
     }
-  $result = $clcgm->sql_record($clcgm->sql_query("","z01_cgccpf,cgm.z01_numcgm","","z01_cgccpf = '$cgccpf' and z01_cgccpf <> '00000000000' and z01_cgccpf <> '00000000000000'")); 
+  $result = $clcgm->sql_record($clcgm->sql_query("","z01_cgccpf,cgm.z01_numcgm","","z01_cgccpf = '$cgccpf' and z01_cgccpf <> '00000000000' and z01_cgccpf <> '00000000000000'"));
   if(!isset($testanome)){
     if($clcgm->numrows > 0){
        db_fieldsmemory($result,0);
@@ -114,15 +114,15 @@ exit;
 ?>
 <form name="form1" method="post" action="" onSubmit="return js_verifica()">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr align="left" valign="top"> 
+    <tr align="left" valign="top">
       <td>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr> 
+          <tr>
 	    <td colspan="2" height="30" align="center"><br><br>
 	      <strong>Cadastro Geral do Município</strong><br><br><br><br>
 	    </td>
           </tr>
-          <tr align="center"> 
+          <tr align="center">
 	    <td width="40%" align="right" title="<?=$TDBtxt30?>">
 	      <strong><?=$LDBtxt30?></strong>
 	    </td>
@@ -136,7 +136,7 @@ exit;
 	    </td>
 	    <td align="left">
 	      <input style="text-align:right" type="text" value="" name="cnpj" size="18" maxlength="14" onBlur="js_verificaCGCCPF(this)" onKeyDown="return js_controla_tecla_enter(this,event);" >
-	      
+
 	    </td>
           </tr>
 	  <tr align="center">
@@ -165,7 +165,7 @@ onLoad = document.form1.cpf.focus();
 </script>
 <?
 if(isset($mostradadoscgm)){
-echo "<script>js_OpenJanelaIframe('top.corpo','db_janela_Cgm','prot3_conscgm002.php?fechar=top.corpo.db_janela_Cgm&numcgm=$z01_numcgm','Consulta CGM - $z01_numcgm',true);</script>";
+echo "<script>js_OpenJanelaIframe('CurrentWindow.corpo','db_janela_Cgm','prot3_conscgm002.php?fechar=CurrentWindow.corpo.db_janela_Cgm&numcgm=$z01_numcgm','Consulta CGM - $z01_numcgm',true);</script>";
 }
 ?>
 

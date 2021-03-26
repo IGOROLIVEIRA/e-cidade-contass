@@ -1,33 +1,33 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: patrim
 include("dbforms/db_classesgenericas.php");
- 
+
 $cliframe_seleciona = new cl_iframe_seleciona;
 $clbensguardaitemdev->rotulo->label();
 $clbensguardaitem->rotulo->label();
@@ -37,7 +37,7 @@ $clrotulo->label("t52_descr");
 $clrotulo->label("nome");
 ?>
 <script>
-function js_submit_form() {  
+function js_submit_form() {
   js_gera_chaves();
   return true;
 }
@@ -52,7 +52,7 @@ function js_submit_form() {
             db_ancora(@$Lt22_bensguarda,"js_pesquisat22_bensguarda(true);",3);
           ?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('t22_bensguarda', 10, $It22_bensguarda, true, 'text', 3, " onchange='js_pesquisat22_bensguarda(false);'");
             db_input('t21_codigo', 8, $It21_codigo, true, 'hidden', 3, '');
@@ -63,7 +63,7 @@ function js_submit_form() {
         <td title="<?=@$Tt23_data?>">
           <?=@$Lt23_data?>
         </td>
-        <td> 
+        <td>
           <?
             if (!isset($t23_data)){
             	$t23_data_ano = date('Y',db_getsession("DB_datausu"));
@@ -78,7 +78,7 @@ function js_submit_form() {
         <td title="<?=@$Tt23_situacao?>">
           <?=@$Lt23_situacao?>
         </td>
-        <td> 
+        <td>
           <?
             $result_sit=$clsituabens->sql_record($clsituabens->sql_query_file());
             db_selectrecord('t23_situacao',$result_sit,true,'text',$db_opcao,"");
@@ -100,17 +100,17 @@ function js_submit_form() {
       </tr>
     </table>
   </fieldset>
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"incluir":"excluir"))?>" 
-         type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Devolver":"Excluir"))?>" 
-         <?=($db_botao==false?"disabled":"")?> Onclick='return js_submit_form();' /> 
+  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"incluir":"excluir"))?>"
+         type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Devolver":"Excluir"))?>"
+         <?=($db_botao==false?"disabled":"")?> Onclick='return js_submit_form();' />
   <input type="button" value="Imprimir" onClick="js_imprimir();" />
   <table>
     <tr>
-      <td valign="top"  align="center">  
+      <td valign="top"  align="center">
         <?
   	      $cliframe_seleciona->campos = "t22_bensguarda,t22_codigo,t22_bem,t52_descr,t22_dtini,t22_dtfim,t22_obs";
   	      $cliframe_seleciona->legenda = "Bens";
-  	      if (isset($t21_codigo)&&$t21_codigo != "") { 
+  	      if (isset($t21_codigo)&&$t21_codigo != "") {
   	        $cliframe_seleciona->sql = $clbensguardaitem->sql_query_dev(null,"*",null,"t22_bensguarda=".@$t21_codigo." and t23_guardaitem is null");
   	      }
   	      //$cliframe_seleciona->sql_marca = @ $sql_marca;
@@ -118,7 +118,7 @@ function js_submit_form() {
   	      $cliframe_seleciona->iframe_width = "680";
   	      $cliframe_seleciona->iframe_nome = "itens_teste";
   	      $cliframe_seleciona->chaves = "t22_codigo";
-  	      $cliframe_seleciona->iframe_seleciona(1);	 
+  	      $cliframe_seleciona->iframe_seleciona(1);
         ?>
       </td>
     </tr>
@@ -126,7 +126,7 @@ function js_submit_form() {
 </form>
 <script type="text/javascript">
 /**
- * Imprime 
+ * Imprime
  */
 function js_imprimir() {
 
@@ -138,7 +138,7 @@ function js_imprimir() {
 }
 
 function js_pesquisa() {
-  js_OpenJanelaIframe('top.corpo','db_iframe_bensguarda','func_bensguardadev.php?funcao_js=parent.js_preenchepesquisa|t21_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensguarda','func_bensguardadev.php?funcao_js=parent.js_preenchepesquisa|t21_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_bensguarda.hide();

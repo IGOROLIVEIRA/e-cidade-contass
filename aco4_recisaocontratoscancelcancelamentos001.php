@@ -239,7 +239,7 @@ function js_pesquisarCancelaCancelamento() {
   var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=7';
       sUrl += '&funcao_js=parent.js_mostrarPesquisaRecisaoCancelamento|ac10_sequencial';
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_cancelamentorecisao',
                       sUrl,
                       'Pesquisar Cancelamento de Recisão',

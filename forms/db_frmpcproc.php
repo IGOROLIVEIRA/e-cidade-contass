@@ -270,10 +270,10 @@ $val = false;
     	    } else {
      	         if(cont != numele || imp != numele){
     	             if (cont > 0){
-    	                  js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_preenchepesquisa|pc80_codproc','Pesquisa',true,'20');
+    	                  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_preenchepesquisa|pc80_codproc','Pesquisa',true,'20');
                          }
     	             if (imp > 0){
-    	                  js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_preenchepesquisa|pc80_codproc&imp=true','Pesquisa',true,'20');
+    	                  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_preenchepesquisa|pc80_codproc&imp=true','Pesquisa',true,'20');
     	             }
     	         }
     	    }
@@ -300,7 +300,7 @@ $val = false;
 
   }
   if (document.form1.pc10_numero.value!=""){
-    top.corpo.iframe_solicitem.location.href= 'com1_gerasolicitem.php?solicita='+document.form1.pc10_numero.value+'&pc10_numero='+document.form1.pc10_numero.value;
+    CurrentWindow.corpo.iframe_solicitem.location.href= 'com1_gerasolicitem.php?solicita='+document.form1.pc10_numero.value+'&pc10_numero='+document.form1.pc10_numero.value;
   }
   <?
     if($desabilita==true){
@@ -308,18 +308,18 @@ $val = false;
       numele = parent.document.form1.length;
       cont = 0;
       for(i=0;i<numele;i++){
-        if(top.corpo.document.form1.elements[i].type=='submit' || top.corpo.document.form1.elements[i].type=='button'){
-          top.corpo.document.form1.elements[i].disabled=true;
+        if(CurrentWindow.corpo.document.form1.elements[i].type=='submit' || CurrentWindow.corpo.document.form1.elements[i].type=='button'){
+          CurrentWindow.corpo.document.form1.elements[i].disabled=true;
         }
       }
       ";
     }else{
     echo "
-      numele = top.corpo.document.form1.length;
+      numele = CurrentWindow.corpo.document.form1.length;
       cont = 0;
       for(i=0;i<numele;i++){
-        if(top.corpo.document.form1.elements[i].type=='submit' || top.corpo.document.form1.elements[i].type=='button'){
-          top.corpo.document.form1.elements[i].disabled=false;
+        if(CurrentWindow.corpo.document.form1.elements[i].type=='submit' || CurrentWindow.corpo.document.form1.elements[i].type=='button'){
+          CurrentWindow.corpo.document.form1.elements[i].disabled=false;
         }
       }
       ";
@@ -339,6 +339,6 @@ $val = false;
      // a flag 'cadastroprocessodecompras' foi adiciona para indicar ao programa que essa é a origem da opreração
      var sUrlPendencia       = "com4_cadpendencias002.php?pc10_numero="+iCodigoSolicitacao+"&cadastroprocessodecompras=true";
      var sTituloJanelaIframe = "Cadastro de Pendência da Solicitação: "+iCodigoSolicitacao;
-     js_OpenJanelaIframe('top.corpo', 'db_iframe_cadpendencia', sUrlPendencia, sTituloJanelaIframe ,true);
+     js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cadpendencia', sUrlPendencia, sTituloJanelaIframe ,true);
    }
 </script>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: material
@@ -144,7 +144,7 @@ iTipoControle = <?=$iTipoControleCustos;?>;
 function js_pesquisa(){
 
   sFiltro = "sFiltro=almox";
-  js_OpenJanelaIframe('top.corpo','db_iframe_atendrequi','func_matrequiatend.php?'+sFiltro+'&funcao_js=parent.js_preenchepesquisa|m40_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atendrequi','func_matrequiatend.php?'+sFiltro+'&funcao_js=parent.js_preenchepesquisa|m40_codigo','Pesquisa',true);
 
   $('mensagempontopedido').innerHTML     = '';
   $('mensagempontopedido').style.display = 'none';
@@ -159,7 +159,7 @@ function js_preenchepesquisa(chave){
   js_consultaRequisicao(chave);
 }
 function js_marca(idObjeto, sClasse, sLinha){
-  
+
    obj = document.getElementById(idObjeto);
    if (obj.checked){
      obj.checked = false;
@@ -168,51 +168,51 @@ function js_marca(idObjeto, sClasse, sLinha){
    }
    itens = js_getElementbyClass(form1, sClasse);
    for (i = 0;i < itens.length;i++){
-     
+
      if (itens[i].disabled == false){
         if (obj.checked == true){
-          
+
           itens[i].checked=true;
           js_marcaLinha(itens[i],sLinha);
-          
+
        }else{
-         
+
           itens[i].checked=false;
           js_marcaLinha(itens[i],sLinha);
-          
+
        }
      }
    }
 }
 
 function js_marcaLinha(obj, linha) {
- 
+
   if (obj.checked) {
-  
+
     $(linha+obj.id).className='marcado';
     $('atendido'+obj.value).disabled  = false;
-    
+
   } else {
-  
+
     $(linha+obj.id).className='normal';
     $('atendido'+obj.value).disabled  = true;
-    
+
   }
 }
 
 //Faz a requisicao de saida de material.
 function js_consultaRequisicao(iRequisicao){
-   
+
    js_divCarregando("Aguarde, efetuando pesquisa","msgBox");
    strJson = '{"exec":"getDados","params":[{"iCodReq":'+iRequisicao+'}]}';
    $('dadosrequisicao').innerHTML    = '';
    //$('pesquisar').disabled = true;
    var url     = 'mat4_requisicaoRPC.php';
    var oAjax   = new Ajax.Request(
-                            url, 
+                            url,
                               {
-                               method: 'post', 
-                               parameters: 'json='+strJson, 
+                               method: 'post',
+                               parameters: 'json='+strJson,
                                onComplete: js_saida
                               }
                              );
@@ -223,10 +223,10 @@ function js_saida(oAjax) {
   js_removeObj("msgBox");
   var obj               = eval("(" + oAjax.responseText + ")");
   if (obj.status == 2) {
-  
+
     alert(obj.message.urlDecode());
     return false;
-     
+
   }
   $('m40_codigo').value = obj.m40_codigo;
   $('m40_data').value   = js_formatar(obj.m40_data,"d");
@@ -245,16 +245,16 @@ function js_saida(oAjax) {
     var sPontoPedido        = '';
     var lMostrarPontoPedido = false;
     for (iInd = 0; iInd < obj.itens.length; iInd++){
-    
+
       with (obj.itens[iInd]) {
-        
+
         var lLote = false;
         if (m60_controlavalidade == 1 || m60_controlavalidade == 2) {
           lLote = true;
         }
         var lClassName = "normal";
         lHabilitado = "";
-        nPendente = parseFloat(m41_quant) - (parseFloat(totalatendido) + parseFloat(quantanulada)); 
+        nPendente = parseFloat(m41_quant) - (parseFloat(totalatendido) + parseFloat(quantanulada));
         if (nPendente == 0) {
 
           lHabilitado = " disabled ";
@@ -268,8 +268,8 @@ function js_saida(oAjax) {
         }
         saida += "<tr class='"+lClassName+"'id='linhachk"+m41_codigo+"'>";
         saida += "  <td class='linhagrid'>";
-        saida += "     <input type='checkbox' id='chk"+m41_codigo+"' onclick=\"js_marcaLinha(this,'linha');\""; 
-        saida += "      value='"+m41_codigo+"' class='chkmarca' "+lHabilitado+"  style='height:12px'>";      
+        saida += "     <input type='checkbox' id='chk"+m41_codigo+"' onclick=\"js_marcaLinha(this,'linha');\"";
+        saida += "      value='"+m41_codigo+"' class='chkmarca' "+lHabilitado+"  style='height:12px'>";
         saida += "  </td>";
         saida += "  <td class='linhagrid' style='text-align:right' id='codmater"+m41_codigo+"'>";
         saida +=     m41_codmatmater;
@@ -297,7 +297,7 @@ function js_saida(oAjax) {
             saida += "<a href='' onclick='js_mostraLotes("+m41_codigo+");return false'>lote</>";
         } else {
           saida += "&nbsp;";
-        } 
+        }
         saida += "  </td>";
         saida += "  <td class='linhagrid' style='text-align:center;width:10%'>";
         saida += "    <input type='text'  style='text-align:right' name='atendido"+m41_codigo+"'";
@@ -307,27 +307,27 @@ function js_saida(oAjax) {
         saida += "     onkeypress='return js_teclas(event)'>";
         saida += "   </td>";
         if (iTipoControle > 0){
-        
+
           if (cc08_descricao == "") {
             cc08_descricao   = "Escolher";
           } else {
             cc08_descricao = cc08_descricao.urlDecode();
-          } 
+          }
           saida += " <td class='linhagrid' style='text-align:right'>";
           if (lHabilitado == "") {
-            
+
             saida += "   <span id='cc08_sequencial"+m41_codigo+"'>"+cc08_sequencial+"</span>";
             saida += "   <a id='cc08_descricao"+m41_codigo+"' href='#' ";
             saida += "     onclick='js_adicionaCentroCusto("+m41_codigo+","+m41_codmatmater+")';>"+cc08_descricao+"</a>";
-            
+
           } else {
             saida +=" <span id='cc08_sequencial"+m41_codigo+"'>"+cc08_sequencial+" - "+cc08_descricao+"</span>";
           }
           saida += "  </td>";
         }
         saida += "</tr>";
-        
-        
+
+
       }
     }
     saida += "<tr style='height:auto'><td colspan=10>&nbsp;</td></tr>";
@@ -340,38 +340,38 @@ function js_saida(oAjax) {
   }
 
 }
-  
+
 function js_verificaQuantidade(nValor, nMaximo,sMsg) {
-    
+
   if (nValor > nMaximo) {
-      
+
     alert(sMsg);
     return false;
-      
-  } 
+
+  }
   return true;
 }
 
 function js_atendeRequisicao() {
 
   if (confirm('Confirma Atendimento da Requisição?')) {
-    
+
     /*
      * percorremos todos os itens marcados pelo usuário.
      * validamos a quantidade selecionada pelo usuário, que não pode ser maior que o saldo da requisição.
      */
-    
+
     aItens = js_getElementbyClass(form1, "chkmarca", "checked==true");
     sJsonItem        = "";
     if (aItens.length == 0) {
-      
+
       alert('Selecione um item para efetuar o Atendimento');
       return false;
-      
+
     }
     sVirgula         = "";
     for (var i = 0; i < aItens.length; i++) {
-    
+
       var nTotalAtendido   = new Number($('quantatend'+aItens[i].value).innerHTML);
       var nTotalSolicitado = new Number($('quantsol'+aItens[i].value).innerHTML);
       var nTotalDigitado   = new Number($('atendido'+aItens[i].value).value);
@@ -387,7 +387,7 @@ function js_atendeRequisicao() {
          sJsonItem += sVirgula+"{'iCodItemReq':"+aItens[i].value+",'nQtde':"+nTotalDigitado+",";
          sJsonItem += "'iCodMater':"+iCodMater+",'iCentroDeCusto':"+iCodigoCriterio+"}";
          sVirgula  = ",";
-         
+
       } else {
         return false;
       }
@@ -398,10 +398,10 @@ function js_atendeRequisicao() {
     var sJson  = "{'exec':'atenderRequisicao','params':[{"+sParams+"}]}";
     var url     = 'mat4_requisicaoRPC.php';
     var oAjax   = new Ajax.Request(
-                            url, 
+                            url,
                               {
-                               method: 'post', 
-                               parameters: 'json='+sJson, 
+                               method: 'post',
+                               parameters: 'json='+sJson,
                                onComplete: js_saidaAtendimento
                               }
                              );
@@ -415,11 +415,11 @@ function js_saidaAtendimento(oAjax) {
 
     alert(obj.message.urlDecode());
     return false;
-    
+
   } else {
-  
+
    if (confirm('Atendimento Efetuado com sucesso.\nDeseja imprimir a Requisição de Saída de Material?')) {
-   
+
      obj = document.form1;
      query='';
      query += "&ini="+obj.m40_codigo.value;
@@ -428,16 +428,16 @@ function js_saidaAtendimento(oAjax) {
      query += "&departamento=<?=db_getsession("DB_coddepto")?>";
      jan = window.open('mat2_matrequi002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
      jan.moveTo(0,0);
-     
+
    }
    js_reset();
    js_pesquisa();
-   
+
   }
 
 }
 function js_mostraLotes(iItem) {
-  
+
   iCodItem      = new Number($('codmater'+iItem).innerHTML);//código do material
   nValor        = new Number($('atendido'+iItem).value);//Quantidade digitada pelo usuário
   iCodEstoque   = new Number($F('m91_depto')); //Codigo do departamento estoque
@@ -445,18 +445,18 @@ function js_mostraLotes(iItem) {
   sField        = $('atendido'+iItem).id;
   sUrl          = 'mat4_mostraitemlotes.php?iCodMater='+iCodItem+'&iCodDepto='+iCodEstoque;
   sUrl         += '&nValor='+nValor+'&nValorSolicitado='+nValorReqItem+'&updateField='+sField;
-  js_OpenJanelaIframe('top.corpo','db_iframe_lotes',sUrl,'Lotes ',true);
-  
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lotes',sUrl,'Lotes ',true);
+
 }
 
 function js_reset() {
 
   document.form1.reset();
   $('dadosrequisicao').innerHTML = '';
-  
+
 }
 function js_adicionaCentroCusto(iLinha, iCodItem) {
- 
+
   var iOrigem  = 2;
   var sUrl     = 'iOrigem='+iOrigem+'&iCodItem='+iCodItem+'&iCodigoDaLinha='+iLinha;
       sUrl    += '&iCodigoDepto='+$F('m40_depto');
@@ -470,12 +470,12 @@ function js_adicionaCentroCusto(iLinha, iCodItem) {
                       (document.body.scrollWidth-10),
                       (document.body.scrollHeight-100)
                      );
-  
-   
+
+
 }
 
 function js_completaCustos(iCodigo, iCriterio, iDescr) {
-  
+
   $('cc08_sequencial'+iCodigo).innerHTML = iCriterio;
   $('cc08_descricao'+iCodigo).innerHTML  = iDescr;
   db_iframe_centroCusto.hide();

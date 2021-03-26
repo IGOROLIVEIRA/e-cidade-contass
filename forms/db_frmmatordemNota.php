@@ -516,7 +516,7 @@ if($pesqemp == true){
     <script>
 
 	function js_pesquisaEmpenho(iNumEmp){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho001.php?e60_numemp='+iNumEmp,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho001.php?e60_numemp='+iNumEmp,'Pesquisa',true);
   }
 
 	function js_AlteraCGM(cgm) {
@@ -525,11 +525,11 @@ if($pesqemp == true){
 
 	function js_coddepto(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
     }else{
       coddepto = document.form1.coddepto.value;
       if(coddepto!=""){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
       }else{
         document.form1.descrdepto.value='';
       }

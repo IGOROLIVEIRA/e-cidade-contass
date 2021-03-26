@@ -14,7 +14,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -26,7 +26,7 @@ if(isset($db_opcaoal)){
      $o200_vlautorizado     = "";
      $o200_percautorizado   = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -37,7 +37,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$To200_sequencial?>">
        <?=@$Lo200_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o200_sequencial',11,$Io200_sequencial,true,'text',3,"")
 ?>
@@ -47,7 +47,7 @@ db_input('o200_sequencial',11,$Io200_sequencial,true,'text',3,"")
     <td nowrap title="<?=@$To200_orcprojetolei?>">
     <?=@$Lo200_orcprojetolei?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o200_orcprojetolei',11,$Io200_orcprojetolei,true,'text',3)
 ?>
@@ -57,7 +57,7 @@ db_input('o200_orcprojetolei',11,$Io200_orcprojetolei,true,'text',3)
     <td nowrap title="<?=@$To200_tipoleialteracao?>">
        <?=@$Lo200_tipoleialteracao?>
     </td>
-    <td> 
+    <td>
 <?
 if ($o138_altpercsuplementacao == 1) {
 	$x = array("1"=>"Abertura de créditos suplementares","2"=>"Contratação de operações de crédito","3"=>"Contratação de operações de crédito por antecipação de receita");
@@ -73,7 +73,7 @@ db_select('o200_tipoleialteracao', $x, true,$db_opcao);
     <td nowrap title="<?=@$To200_artleialteracao?>">
        <?=@$Lo200_artleialteracao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o200_artleialteracao',6,$Io200_artleialteracao,true,'text',$db_opcao,"")
 ?>
@@ -83,18 +83,18 @@ db_input('o200_artleialteracao',6,$Io200_artleialteracao,true,'text',$db_opcao,"
     <td nowrap title="<?=@$To200_descrartigo?>">
        <?=@$Lo200_descrartigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  <? if($o138_altpercsuplementacao == 1) {?> 
+  <? if($o138_altpercsuplementacao == 1) {?>
   <tr>
     <td nowrap title="Percentual Autorizado ">
-      <b>Percentual Autorizado</b> 
+      <b>Percentual Autorizado</b>
     </td>
-    <td> 
+    <td>
       <?
       db_input('o200_percautorizado',14,$Io200_percautorizado,true,'text',$db_opcao,"")
       ?>
@@ -105,7 +105,7 @@ db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To200_vlautorizado?>">
        <?=@$Lo200_vlautorizado?>
     </td>
-    <td> 
+    <td>
     <?
     db_input('o200_vlautorizado',14,$Io200_vlautorizado,true,'text',$db_opcao,"")
     ?>
@@ -117,18 +117,18 @@ db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
   <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
    <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
     if ($o138_altpercsuplementacao == 1) {
     	$campossql = "o200_sequencial,o200_orcprojetolei,
-    	case when o200_tipoleialteracao = 1 then 'Abertura de créditos suplementares' when o200_tipoleialteracao = 2 then 'Contratação de operações de crédito' 
+    	case when o200_tipoleialteracao = 1 then 'Abertura de créditos suplementares' when o200_tipoleialteracao = 2 then 'Contratação de operações de crédito'
     	when o200_tipoleialteracao = 3 then 'Contratação de operações de crédito por antecipação de receita' end as o200_tipoleialteracao,
     	o200_artleialteracao,o200_descrartigo,o200_percautorizado";
     	$campos = "o200_sequencial,o200_orcprojetolei,o200_tipoleialteracao,o200_artleialteracao,o200_percautorizado";
     } else {
     	$campossql = "o200_sequencial,o200_orcprojetolei,
-    	case when o200_tipoleialteracao = 1 then 'Lei autorizativa de Crédito Suplementar' when o200_tipoleialteracao = 2 then 'Lei autorizativa de Crédito Especial' 
-    	when o200_tipoleialteracao = 3 then 'Lei autorizativa de Remanejamento /transposição / transferência' when o200_tipoleialteracao = 4 then 'Lei autorizativa de alteração da fonte de recurso' 
+    	case when o200_tipoleialteracao = 1 then 'Lei autorizativa de Crédito Suplementar' when o200_tipoleialteracao = 2 then 'Lei autorizativa de Crédito Especial'
+    	when o200_tipoleialteracao = 3 then 'Lei autorizativa de Remanejamento /transposição / transferência' when o200_tipoleialteracao = 4 then 'Lei autorizativa de alteração da fonte de recurso'
     	when o200_tipoleialteracao = 5 then 'Lei autorizativa de suplementação de Crédito Especial' end as o200_tipoleialteracao,
     	o200_artleialteracao,o200_descrartigo,o200_vlautorizado";
     	$campos = "o200_sequencial,o200_orcprojetolei,o200_tipoleialteracao,o200_artleialteracao,o200_vlautorizado";
@@ -153,20 +153,20 @@ db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
 <script>
 function js_pesquisao200_orcprojetolei(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?funcao_js=parent.js_mostraorcprojetolei1|o138_sequencial|o138_numerolei','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?funcao_js=parent.js_mostraorcprojetolei1|o138_sequencial|o138_numerolei','Pesquisa',true);
   }else{
-     if(document.form1.o200_orcprojetolei.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?pesquisa_chave='+document.form1.o200_orcprojetolei.value+'&funcao_js=parent.js_mostraorcprojetolei','Pesquisa',false);
+     if(document.form1.o200_orcprojetolei.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?pesquisa_chave='+document.form1.o200_orcprojetolei.value+'&funcao_js=parent.js_mostraorcprojetolei','Pesquisa',false);
      }else{
-       document.form1.o138_numerolei.value = ''; 
+       document.form1.o138_numerolei.value = '';
      }
   }
 }
 function js_mostraorcprojetolei(chave,erro){
-  document.form1.o138_numerolei.value = chave; 
-  if(erro==true){ 
-    document.form1.o200_orcprojetolei.focus(); 
-    document.form1.o200_orcprojetolei.value = ''; 
+  document.form1.o138_numerolei.value = chave;
+  if(erro==true){
+    document.form1.o200_orcprojetolei.focus();
+    document.form1.o200_orcprojetolei.value = '';
   }
 }
 function js_mostraorcprojetolei1(chave1,chave2){
@@ -175,7 +175,7 @@ function js_mostraorcprojetolei1(chave1,chave2){
   db_iframe_orcprojetolei.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orcleialtorcamentaria','func_orcleialtorcamentaria.php?funcao_js=parent.js_preenchepesquisa|o200_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcleialtorcamentaria','func_orcleialtorcamentaria.php?funcao_js=parent.js_preenchepesquisa|o200_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_orcleialtorcamentaria.hide();

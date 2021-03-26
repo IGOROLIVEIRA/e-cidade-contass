@@ -177,8 +177,8 @@ if (isset ($chave_origem) && trim($chave_origem) != "" && isset ($chave_destino)
 		            parent.document.form1.gerar.disabled=true;
                 alert('Nenhum tipo de débito encontrado com este código!');
 		          </script>";
-    echo "<script>top.corpo.db_iframe.hide();</script>";
-		echo "<script>top.corpo.location.href='div4_importadivida001.php'</script>";
+    echo "<script>CurrentWindow.corpo.db_iframe.hide();</script>";
+		echo "<script>CurrentWindow.corpo.location.href='div4_importadivida001.php'</script>";
 
 	}
 	$sql1     = " select v03_codigo, v03_descr ";
@@ -914,8 +914,8 @@ if ($teste == true) {
 
 		echo "<script>parent.document.getElementById('process').style.visibility='hidden';</script>";
 		db_msgbox($erro_msg);
-		echo "<script>top.corpo.db_iframe.hide();</script>";
-		echo "<script>top.corpo.location.href='div4_importadivida001.php'</script>";
+		echo "<script>CurrentWindow.corpo.db_iframe.hide();</script>";
+		echo "<script>CurrentWindow.corpo.location.href='div4_importadivida001.php'</script>";
 	}
 }
 ?>

@@ -17,7 +17,7 @@ DBViewFormularioFolha.PesquisaServidores = function( iInstituicao ) {
   });
   this.oInputMatricula    = new DBTextField("rh01_regist");
   this.oInputMatricula.getElement();
-  
+
   this.oInputNomeServidor = new DBTextField("z01_nome");
   this.oInputNomeServidor.setReadOnly(true);
 
@@ -107,7 +107,7 @@ DBViewFormularioFolha.PesquisaServidores.prototype.fixarBotao = function( oEleme
 
 DBViewFormularioFolha.PesquisaServidores.prototype.abrirLookUp = function( lExibeJanela ) {
 
-  var sDestino        = "top.corpo";             ;
+  var sDestino        = "CurrentWindow.corpo";             ;
   var sLabelJanela    = "Pesquisa de Servidores";;
   var sNomeObjeto     = "db_iframe_rhpessoal";   ;
   var sFuncaoPesquisa = "";
@@ -118,7 +118,7 @@ DBViewFormularioFolha.PesquisaServidores.prototype.abrirLookUp = function( lExib
     /**
      * Ao clicar na Ancora
      */
-    sDestino        = "top.corpo";
+    sDestino        = "CurrentWindow.corpo";
     sLabelJanela    = "Pesquisa de Servidores";
     sNomeObjeto     = "db_iframe_rhpessoal";
     sFuncaoPesquisa = "parent.DBViewFormularioFolha.PesquisaServidores.getInstance(" + this.iCodigoInstancia + ").retornoPesquisa|rh01_regist|z01_nome|r45_dtafas|r45_dtreto";
@@ -183,13 +183,13 @@ DBViewFormularioFolha.PesquisaServidores.prototype.retornoPesquisa= function() {
  */
 DBViewFormularioFolha.PesquisaServidores.oInstances  = DBViewFormularioFolha.PesquisaServidores.oInstances || {};
 DBViewFormularioFolha.PesquisaServidores.iCounter    = DBViewFormularioFolha.PesquisaServidores.iCounter   || 0;
-DBViewFormularioFolha.PesquisaServidores.addInstance = function( oPesquisaServidores ) { 
+DBViewFormularioFolha.PesquisaServidores.addInstance = function( oPesquisaServidores ) {
 
   var iNumeroInstancia = DBViewFormularioFolha.PesquisaServidores.iCounter++;
   DBViewFormularioFolha.PesquisaServidores.oInstances['PesquisaServidores' + iNumeroInstancia] = oPesquisaServidores;
   return iNumeroInstancia;
 }
 
-DBViewFormularioFolha.PesquisaServidores.getInstance = function( iInstancia ) { 
+DBViewFormularioFolha.PesquisaServidores.getInstance = function( iInstancia ) {
   return DBViewFormularioFolha.PesquisaServidores.oInstances['PesquisaServidores' + iInstancia];
 };

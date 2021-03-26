@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -301,11 +301,11 @@ function js_verifica(max,quan,nome,sol){
 }
 function js_lancadados(quansol,codreqitem,codmater,descrmater,obs,i,m40_codigo){
   quantatend=eval('document.form1.quant_'+codmater+'_'+codreqitem+'_'+i+'.value;');
-  js_OpenJanelaIframe('top.corpo','db_iframe_lanca','mat1_lancarequi001.php?codreqitem='+codreqitem+'&codmater='+codmater+'&descrmater='+descrmater+'&obs='+obs+'&quantatend='+quantatend+'&m40_codigo='+m40_codigo+'&m80_codigo='+parent.document.form1.m80_codigo.value,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lanca','mat1_lancarequi001.php?codreqitem='+codreqitem+'&codmater='+codmater+'&descrmater='+descrmater+'&obs='+obs+'&quantatend='+quantatend+'&m40_codigo='+m40_codigo+'&m80_codigo='+parent.document.form1.m80_codigo.value,'Pesquisa',true);
 }
 function js_mostraLotes(iCodItem, iCodEstoque) {
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_lotes','mat4_mostralotes.php?iCodMater='+iCodItem+'&iCodDepto='+iCodEstoque,'Lotes ',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lotes','mat4_mostralotes.php?iCodMater='+iCodItem+'&iCodDepto='+iCodEstoque,'Lotes ',true);
 
 }
 js_desab();

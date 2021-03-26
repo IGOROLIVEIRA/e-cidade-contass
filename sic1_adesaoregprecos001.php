@@ -102,7 +102,7 @@ if(!$sqlerro){
                 alert('Inclusão efetuada com sucesso');
                 parent.document.formaba.db_itens.disabled=false;
                 parent.mo_camada('db_itens');
-                top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
+                CurrentWindow.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
             </script>";
 			}
 			//$cladesaoregprecos->erro(true,true);
@@ -162,7 +162,7 @@ if(!$sqlerro){
       $_SESSION["codigoAdesao"] = $si06_sequencial;
       echo "<script>
         parent.document.formaba.db_itens.disabled=false;
-        top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
+        CurrentWindow.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
         </script>";
 
     }else if(isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])){
@@ -218,7 +218,7 @@ if(!$sqlerro){
        unset($_SESSION["codigoAdesao"]);
        echo "<script>
         parent.document.formaba.db_itens.disabled=false;
-        top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$chavepesquisa."';
+        CurrentWindow.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$chavepesquisa."';
         </script>";
        $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa,"*,cgm.z01_nome as z01_nomeorg,c.z01_nome as z01_nomeresp"));
        db_fieldsmemory($result,0);

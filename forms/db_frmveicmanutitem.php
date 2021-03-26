@@ -181,10 +181,10 @@ $fValorTotal = ($rsResultado[0]->ve62_valor);
   }
   function js_pesquisave63_veicmanut(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo.iframe_veicmanutitem','db_iframe_veicmanut','func_veicmanut.php?funcao_js=parent.js_mostraveicmanut1|ve62_codigo|ve62_codigo','Pesquisa',true,'0','1','775','390');
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanutitem','db_iframe_veicmanut','func_veicmanut.php?funcao_js=parent.js_mostraveicmanut1|ve62_codigo|ve62_codigo','Pesquisa',true,'0','1','775','390');
     }else{
      if(document.form1.ve63_veicmanut.value != ''){
-      js_OpenJanelaIframe('top.corpo.iframe_veicmanutitem','db_iframe_veicmanut','func_veicmanut.php?pesquisa_chave='+document.form1.ve63_veicmanut.value+'&funcao_js=parent.js_mostraveicmanut','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanutitem','db_iframe_veicmanut','func_veicmanut.php?pesquisa_chave='+document.form1.ve63_veicmanut.value+'&funcao_js=parent.js_mostraveicmanut','Pesquisa',false);
     }else{
      document.form1.ve62_codigo.value = '';
    }
@@ -204,10 +204,10 @@ function js_mostraveicmanut1(chave1,chave2){
 }
 function js_pesquisave64_pcmater(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_veicmanutitem','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanutitem','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater','Pesquisa',true,'0');
   }else{
    if(document.form1.ve64_pcmater.value != ''){
-    js_OpenJanelaIframe('top.corpo.iframe_veicmanutitem','db_iframe_pcmater','func_pcmater.php?pesquisa_chave='+document.form1.ve64_pcmater.value+'&funcao_js=parent.js_mostrapcmater','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanutitem','db_iframe_pcmater','func_pcmater.php?pesquisa_chave='+document.form1.ve64_pcmater.value+'&funcao_js=parent.js_mostrapcmater','Pesquisa',false);
   }else{
    document.form1.pc01_descrmater.value = '';
  }

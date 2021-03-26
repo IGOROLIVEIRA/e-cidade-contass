@@ -40,7 +40,7 @@ db_postmemory($HTTP_SERVER_VARS);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <script>
 function js_recebenotif(notifi){
-    js_OpenJanelaIframe('top.corpo','db_iframe_notificacao','cai3_gerfinanc019.php?notifi='+notifi,'Recebimento de Notificação',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_notificacao','cai3_gerfinanc019.php?notifi='+notifi,'Recebimento de Notificação',true);
 }
 
 </script>

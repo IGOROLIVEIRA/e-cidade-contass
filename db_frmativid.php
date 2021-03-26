@@ -9,7 +9,7 @@ $clativid->rotulo->label();
     <td nowrap title="<?=@$Tq03_ativ?>">
        <?=@$Lq03_ativ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q03_ativ',8,$Iq03_ativ,true,'text',3)
 ?>
@@ -19,7 +19,7 @@ db_input('q03_ativ',8,$Iq03_ativ,true,'text',3)
     <td nowrap title="<?=@$Tq03_descr?>">
        <?=@$Lq03_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q03_descr',40,$Iq03_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('q03_descr',40,$Iq03_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tq03_atmemo?>">
        <?=@$Lq03_atmemo?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('q03_atmemo',0,37,$Iq03_atmemo,true,'text',$db_opcao,"")
 ?>
@@ -42,7 +42,7 @@ db_textarea('q03_atmemo',0,37,$Iq03_atmemo,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_ativid','func_ativid.php?funcao_js=parent.js_preenchepesquisa|q03_ativ','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ativid','func_ativid.php?funcao_js=parent.js_preenchepesquisa|q03_ativ','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_ativid.hide();

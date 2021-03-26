@@ -16,7 +16,7 @@ $cltipoquestaoaudit->rotulo->label();
             <input name="oid" type="hidden" value="<?=@$oid?>">
               <?=@$Lci01_codtipo?>
             </td>
-            <td> 
+            <td>
         <?
         db_input('ci01_codtipo',11,$Ici01_codtipo,true,'text',3,"")
         ?>
@@ -26,7 +26,7 @@ $cltipoquestaoaudit->rotulo->label();
             <td nowrap title="<?=@$Tci01_tipoaudit?>">
               <?=@$Lci01_tipoaudit?>
             </td>
-            <td> 
+            <td>
         <?
         db_input('ci01_tipoaudit',150,$Ici01_tipoaudit,true,'text',$db_opcao,"")
         ?>
@@ -50,13 +50,13 @@ $cltipoquestaoaudit->rotulo->label();
 sRPC = 'cin4_questaoaudit.RPC.php';
 
 function js_pesquisa(lImportar){
-  
+
   if (lImportar) {
     js_OpenJanelaIframe('','db_iframe_tipoquestaoaudit','func_tipoquestaoaudit.php?funcao_js=parent.js_importar|0','Selecione',true,0);
   } else {
     js_OpenJanelaIframe('','db_iframe_tipoquestaoaudit','func_tipoquestaoaudit.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true,0);
   }
-  
+
 }
 
 function js_preenchepesquisa(chave){
@@ -104,17 +104,17 @@ function js_completaImportar(oAjax) {
 
   alert(oRetorno.sMensagem.urlDecode());
 
-  if (oRetorno.status == 1) {    
-    
+  if (oRetorno.status == 1) {
+
     parent.mo_camada('questaoauditquestoes');
-    top.corpo.iframe_questaoauditquestoes.location.reload();
+    CurrentWindow.corpo.iframe_questaoauditquestoes.location.reload();
 
   }
 
 }
 
 function js_excluir() {
-  
+
   var iNumQuestoesTipo = document.getElementById("iNumQuestoesTipo").value;
 
   if(iNumQuestoesTipo > 0) {
@@ -122,6 +122,6 @@ function js_excluir() {
       event.preventDefault();
     }
   }
-  
+
 }
 </script>

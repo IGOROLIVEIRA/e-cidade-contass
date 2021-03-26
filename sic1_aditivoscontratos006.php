@@ -10,7 +10,7 @@ include("classes/db_contratos_classe.php");
 $clcontratos = new cl_contratos;
 $claditivoscontratos = new cl_aditivoscontratos;
 $clitensaditivados   = new cl_itensaditivados;
-  
+
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 33;
 $db_botao = false;
@@ -21,20 +21,20 @@ if(isset($excluir)){
   $clitensaditivados->excluir($si174_sequencial);
   if($clitensaditivados->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clitensaditivados->erro_msg; 
+  }
+  $erro_msg = $clitensaditivados->erro_msg;
   $claditivoscontratos->excluir($si174_sequencial);
   if($claditivoscontratos->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $claditivoscontratos->erro_msg; 
+  }
+  $erro_msg = $claditivoscontratos->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $claditivoscontratos->sql_record($claditivoscontratos->sql_query_file($chavepesquisa)); 
+   $result = $claditivoscontratos->sql_record($claditivoscontratos->sql_query_file($chavepesquisa));
    db_fieldsmemory($result,0);
    $result = $clcontratos->sql_record($clcontratos->sql_query_novo(null,"si172_sequencial, si172_exercicioprocesso, si172_nrocontrato, z01_nome, si172_dataassinatura",null,"si172_sequencial = $si174_nrocontrato"));
    db_fieldsmemory($result,0);
@@ -86,7 +86,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.itensaditivados.disabled=false;
-         top.corpo.iframe_itensaditivados.location.href='sic1_itensaditivados001.php?db_opcaoal=33&si175_codaditivo=".@$si174_sequencial."';
+         CurrentWindow.corpo.iframe_itensaditivados.location.href='sic1_itensaditivados001.php?db_opcaoal=33&si175_codaditivo=".@$si174_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('itensaditivados');";

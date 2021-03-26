@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -71,8 +71,8 @@ if(isset($solicita) && trim($solicita)!=""){
 function js_setornoset(campo,SN){
   cont = 0;
   if(SN==true){
-    for(i=0;i<top.corpo.arr_dados.length;i++){
-      if(top.corpo.arr_dados[i]==campo){
+    for(i=0;i<CurrentWindow.corpo.arr_dados.length;i++){
+      if(CurrentWindow.corpo.arr_dados[i]==campo){
 	cont++;
 	break;
       }
@@ -83,20 +83,20 @@ function js_setornoset(campo,SN){
 
   if(eval('document.form1.'+campo+'.checked')==true){
     if(cont==0){
-      top.corpo.arr_dados.push(campo);
+      CurrentWindow.corpo.arr_dados.push(campo);
     }
   }else{
     if(cont>0){
-      top.corpo.arr_dados.splice(i,1);
+      CurrentWindow.corpo.arr_dados.splice(i,1);
     }
   }
-  top.corpo.document.form1.valores.value = top.corpo.arr_dados.valueOf();
+  CurrentWindow.corpo.document.form1.valores.value = CurrentWindow.corpo.arr_dados.valueOf();
 }
 function js_setornosetimp(campo,SN){
   cont = 0;
   if(SN==true){
-    for(i=0;i<top.corpo.arr_impor.length;i++){
-      if(top.corpo.arr_impor[i]==campo){
+    for(i=0;i<CurrentWindow.corpo.arr_impor.length;i++){
+      if(CurrentWindow.corpo.arr_impor[i]==campo){
 	cont++;
 	break;
       }
@@ -107,51 +107,51 @@ function js_setornosetimp(campo,SN){
 
   if(eval('document.form1.'+campo+'.checked')==true){
     if(cont==0){
-      top.corpo.arr_impor.push(campo);
+      CurrentWindow.corpo.arr_impor.push(campo);
     }
   }else{
     if(cont>0){
-      top.corpo.arr_impor.splice(i,1);
+      CurrentWindow.corpo.arr_impor.splice(i,1);
     }
   }
-  top.corpo.document.form1.importa.value = top.corpo.arr_impor.valueOf();
+  CurrentWindow.corpo.document.form1.importa.value = CurrentWindow.corpo.arr_impor.valueOf();
 }
 function js_marcacampos(){
   erro=0;
   campo = "";
   for(i=0;i<document.form1.length;i++){
     if(document.form1.elements[i].type == 'checkbox' && document.form1.elements[i].name.search('imp')==-1){
-      if(top.corpo.document.form1.valores.value.search(document.form1.elements[i].name)!=-1){
+      if(CurrentWindow.corpo.document.form1.valores.value.search(document.form1.elements[i].name)!=-1){
         document.form1.elements[i].checked = true;
 	campo = document.form1.elements[i].name;
-	for(ii=0;ii<top.corpo.arr_dados.length;ii++){
-	  if(top.corpo.arr_dados[ii]==campo){
+	for(ii=0;ii<CurrentWindow.corpo.arr_dados.length;ii++){
+	  if(CurrentWindow.corpo.arr_dados[ii]==campo){
 	    erro++;
 	    break;
 	  }
 	}
 	if(erro==0 && campo!=""){
-	  top.corpo.arr_dados.push(campo);
+	  CurrentWindow.corpo.arr_dados.push(campo);
 	}
       }
     }
-  } 
+  }
 }
 function js_marcacamposimp(){
   for(i=0;i<document.form1.length;i++){
     if(document.form1.elements[i].type == 'checkbox'){
-      if(top.corpo.document.form1.importa.value.search(document.form1.elements[i].name)!=-1){
+      if(CurrentWindow.corpo.document.form1.importa.value.search(document.form1.elements[i].name)!=-1){
         document.form1.elements[i].checked = true;
       }
     }
-  } 
+  }
 }
 function js_marcar(){
   for(i=0;i<document.form1.length;i++){
     cont = 0;
     if(document.form1.elements[i].type == 'checkbox' && document.form1.elements[i].disabled==false && document.form1.elements[i].name.search('imp')==-1){
-      for(ii=0;ii<top.corpo.arr_dados.length;ii++){
-	if(top.corpo.arr_dados[ii]==document.form1.elements[i].name){
+      for(ii=0;ii<CurrentWindow.corpo.arr_dados.length;ii++){
+	if(CurrentWindow.corpo.arr_dados[ii]==document.form1.elements[i].name){
 	  cont++;
 	  break;
 	}
@@ -160,11 +160,11 @@ function js_marcar(){
         document.form1.elements[i].checked = false;
 	eval('js_setornoset("'+document.form1.elements[i].name+'",'+cont+');');
       }else{
-        document.form1.elements[i].checked = true;	
+        document.form1.elements[i].checked = true;
 	eval('js_setornoset("'+document.form1.elements[i].name+'",'+cont+');');
       }
     }
-  } 
+  }
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -190,8 +190,8 @@ function js_marcar(){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <form name="form1">
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
-  <tr> 
-    <td align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <?
     if($clsolicitem->numrows==0){
@@ -209,20 +209,20 @@ function js_marcar(){
       echo "  <td nowrap class='bordas02' align='center'><strong>Quantidade</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center'><strong>Valor Unit.</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center'><strong>Valor Tot.</strong></td>\n";
-      echo "  <td nowrap class='bordas02' align='center'><strong>Referência</strong></td>\n";      
+      echo "  <td nowrap class='bordas02' align='center'><strong>Referência</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center'><strong>Codigo</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center'><strong>Material</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center'><strong>Resumo</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center' title='Gerar, automaticamente, orçamento do processo de compras para este item, com base no orçamento de solicitação.'><strong>Imp</strong></td>\n";
       echo "</tr>\n";
-      $readonly="";     
-      for($i=0;$i<$clsolicitem->numrows;$i++){	
+      $readonly="";
+      for($i=0;$i<$clsolicitem->numrows;$i++){
 	if($i%2==0){$bgcolor = '#ccddcc';}else{$bgcolor = '#aacccc';}
 	db_fieldsmemory($select_itens,$i,true);
 	$readonly="";
 
-	
-	
+
+
 	//---------------------------------------Controla Andamento da solicitação---------------------------------
 	$result_conand = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_contrandsol"));
 	db_fieldsmemory($result_conand,0);
@@ -236,26 +236,26 @@ function js_marcar(){
       	    if($clsolandpadraodepto->numrows>0){
       	    	db_fieldsmemory($result_tipo,0);
       	      	if ($pc47_pctipoandam!=3||$pc48_depto!=db_getsession("DB_coddepto")){
-      	      		 $sqltran = "select distinct x.p62_codtran,                   
+      	      		 $sqltran = "select distinct x.p62_codtran,
       x.pc11_numero,
 x.pc11_codigo,
-                            x.p62_dttran, 
-                            x.p62_hora, 
-                			x.descrdepto, 
+                            x.p62_dttran,
+                            x.p62_hora,
+                			x.descrdepto,
 							x.login
-			from ( select distinct p62_codtran, 
-                          p62_dttran, 
-                          p63_codproc,                          
-                          descrdepto, 
-                          p62_hora, 
+			from ( select distinct p62_codtran,
+                          p62_dttran,
+                          p63_codproc,
+                          descrdepto,
+                          p62_hora,
                           login,
                           pc11_numero,
 							pc11_codigo,
                           pc81_codproc,
                           e55_autori,
-							e54_anulad 
+							e54_anulad
 		           from proctransferproc
-                         
+
                         inner join solicitemprot on pc49_protprocesso = proctransferproc.p63_codproc
                         inner join solicitem on pc49_solicitem = pc11_codigo
                         inner join proctransfer on p63_codtran = p62_codtran
@@ -263,42 +263,42 @@ x.pc11_codigo,
 						inner join db_usuarios on id_usuario = p62_id_usuario
 						left join pcprocitem on pcprocitem.pc81_solicitem = solicitem.pc11_codigo
 						left join empautitem on empautitem.e55_sequen = pcprocitem.pc81_codprocitem
-						left join empautoriza on empautoriza.e54_autori= empautitem.e55_autori  
+						left join empautoriza on empautoriza.e54_autori= empautitem.e55_autori
              			where  p62_coddeptorec = ".db_getsession("DB_coddepto")."
                  ) as x
 				 left join proctransand 	on p64_codtran = x.p62_codtran
 				 left join arqproc 	on p68_codproc = x.p63_codproc
 			where p64_codtran is null and p68_codproc is null and x.pc11_codigo = $pc11_codigo";
-			
+
 			$result_tran=pg_exec($sqltran);
 			if(pg_numrows($result_tran)==0){
       	        	$readonly = "disabled";
 			}
         	    }
-      	    }  	
+      	    }
       	}
       	$result_=$clsolicita->sql_record($clsolicita->sql_query_andsol("distinct pc11_numero,pc11_codigo,pc11_quant,pc11_seq,pc11_vlrun,pc11_resum,pc01_codmater,pc01_descrmater,pc01_servico,pc17_unid,pc17_quant,m61_descr,m61_usaquant","where pc11_codigo=$pc11_codigo and  p64_codtran is not null  and y.pc43_depto=".db_getsession("DB_coddepto")));
 		if ($clsolicita->numrows==0){
-			 $sqltran = "select distinct x.p62_codtran,                   
+			 $sqltran = "select distinct x.p62_codtran,
       x.pc11_numero,
 x.pc11_codigo,
-                            x.p62_dttran, 
-                            x.p62_hora, 
-                			x.descrdepto, 
+                            x.p62_dttran,
+                            x.p62_hora,
+                			x.descrdepto,
 							x.login
-			from ( select distinct p62_codtran, 
-                          p62_dttran, 
-                          p63_codproc,                          
-                          descrdepto, 
-                          p62_hora, 
+			from ( select distinct p62_codtran,
+                          p62_dttran,
+                          p63_codproc,
+                          descrdepto,
+                          p62_hora,
                           login,
                           pc11_numero,
 							pc11_codigo,
                           pc81_codproc,
                           e55_autori,
-							e54_anulad 
+							e54_anulad
 		           from proctransferproc
-                         
+
                         inner join solicitemprot on pc49_protprocesso = proctransferproc.p63_codproc
                         inner join solicitem on pc49_solicitem = pc11_codigo
                         inner join proctransfer on p63_codtran = p62_codtran
@@ -306,13 +306,13 @@ x.pc11_codigo,
 						inner join db_usuarios on id_usuario = p62_id_usuario
 						left join pcprocitem on pcprocitem.pc81_solicitem = solicitem.pc11_codigo
 						left join empautitem on empautitem.e55_sequen = pcprocitem.pc81_codprocitem
-						left join empautoriza on empautoriza.e54_autori= empautitem.e55_autori  
+						left join empautoriza on empautoriza.e54_autori= empautitem.e55_autori
              			where  p62_coddeptorec = ".db_getsession("DB_coddepto")."
                  ) as x
 				 left join proctransand 	on p64_codtran = x.p62_codtran
 				 left join arqproc 	on p68_codproc = x.p63_codproc
 			where p64_codtran is null and p68_codproc is null and x.pc11_codigo = $pc11_codigo";
-			
+
 			$result_tran=pg_exec($sqltran);
 			if(pg_numrows($result_tran)==0){
 			$readonly="disabled";
@@ -320,26 +320,26 @@ x.pc11_codigo,
 		}
 	  	$result_transf = $clsolicitemprot->sql_record($clsolicitemprot->sql_query_transf(null,"*",null,"pc49_solicitem = $pc11_codigo and p64_codtran is null"));
     	if ($clsolicitemprot->numrows>0){
-    		 $sqltran = "select distinct x.p62_codtran,                   
+    		 $sqltran = "select distinct x.p62_codtran,
       x.pc11_numero,
 x.pc11_codigo,
-                            x.p62_dttran, 
-                            x.p62_hora, 
-                			x.descrdepto, 
+                            x.p62_dttran,
+                            x.p62_hora,
+                			x.descrdepto,
 							x.login
-			from ( select distinct p62_codtran, 
-                          p62_dttran, 
-                          p63_codproc,                          
-                          descrdepto, 
-                          p62_hora, 
+			from ( select distinct p62_codtran,
+                          p62_dttran,
+                          p63_codproc,
+                          descrdepto,
+                          p62_hora,
                           login,
                           pc11_numero,
 							pc11_codigo,
                           pc81_codproc,
                           e55_autori,
-							e54_anulad 
+							e54_anulad
 		           from proctransferproc
-                         
+
                         inner join solicitemprot on pc49_protprocesso = proctransferproc.p63_codproc
                         inner join solicitem on pc49_solicitem = pc11_codigo
                         inner join proctransfer on p63_codtran = p62_codtran
@@ -347,24 +347,24 @@ x.pc11_codigo,
 						inner join db_usuarios on id_usuario = p62_id_usuario
 						left join pcprocitem on pcprocitem.pc81_solicitem = solicitem.pc11_codigo
 						left join empautitem on empautitem.e55_sequen = pcprocitem.pc81_codprocitem
-						left join empautoriza on empautoriza.e54_autori= empautitem.e55_autori  
+						left join empautoriza on empautoriza.e54_autori= empautitem.e55_autori
              			where  p62_coddeptorec = ".db_getsession("DB_coddepto")."
                  ) as x
 				 left join proctransand 	on p64_codtran = x.p62_codtran
 				 left join arqproc 	on p68_codproc = x.p63_codproc
 			where p64_codtran is null and p68_codproc is null and x.pc11_codigo = $pc11_codigo";
-			
+
 			$result_tran=pg_exec($sqltran);
 			if(pg_numrows($result_tran)==0){
         	$readonly = " disabled ";
 			}
-        }      	
+        }
 		}
-	}	
+	}
 	//--------------------------------------------------------------------------------------------------------------------------------------
-	
-	
-	
+
+
+
         echo "<tr>\n";
 	echo "  <td nowrap class='bordas'><input type='checkbox' $readonly  name='item_".$pc11_numero."_".$pc11_codigo."' onclick='js_setornoset(this.name,true);'></td>\n";
         echo "  <td nowrap class='bordas' align='center'>$pc11_seq</td>\n";
@@ -389,7 +389,7 @@ x.pc11_codigo,
           $pc11_resum="&nbsp;";
         }
 	echo "  <td class='bordas' bgcolor='$bgcolor' align='left'>".substr($pc11_resum,0,40)."</td>\n";
-	$result_orcamitemsol = $clpcorcamitemsol->sql_record($clpcorcamitemsol->sql_query_solicitem(null,null,"pc22_codorc,pc22_orcamitem",""," pc29_solicitem=$pc11_codigo order by pc22_codorc desc")); 
+	$result_orcamitemsol = $clpcorcamitemsol->sql_record($clpcorcamitemsol->sql_query_solicitem(null,null,"pc22_codorc,pc22_orcamitem",""," pc29_solicitem=$pc11_codigo order by pc22_codorc desc"));
 	if($clpcorcamitemsol->numrows>0){
 	  db_fieldsmemory($result_orcamitemsol,0);
 	  $orcamitemsol = "<input type='checkbox' name='imp_".$pc22_codorc."_".$pc11_codigo."_".$pc22_orcamitem."' checked onclick='js_setornosetimp(this.name,true);'>";
@@ -408,7 +408,7 @@ x.pc11_codigo,
         echo "</tr>\n";
       }
       echo "</table>\n";
-      echo "</center>"; 
+      echo "</center>";
     }
     ?>
     </center>

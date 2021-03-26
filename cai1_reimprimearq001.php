@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -105,7 +105,7 @@ $sqlOrdem = "select distinct
 	                  c63_conta,
 	                  coalesce(c63_dvconta,'0') as c63_dvconta,
 	                  pc63_agencia::varchar,
-                    coalesce(pc63_agencia_dig,'0') as pc63_agencia_dig,	  
+                    coalesce(pc63_agencia_dig,'0') as pc63_agencia_dig,
 	                  pc63_conta::varchar,
                     coalesce(pc63_conta_dig,'0') as pc63_conta_dig,
                     pc63_codigooperacao::varchar,
@@ -115,7 +115,7 @@ $sqlOrdem = "select distinct
 	                  e81_valor- coalesce(fc_valorretencaomov(e81_codmov,false),0) as valorori,
 	                  case when  pc63_banco = c63_banco then '01' else '03' end as  lanc,
 	                  coalesce(pc63_banco,'000') as pc63_banco,
-	                  e83_convenio as convenio,	  
+	                  e83_convenio as convenio,
 	                  z01_numcgm as numcgm,
 	                  substr(z01_nome,1,40) as z01_nome,
 	                  case when pc63_cnpjcpf = '0' or trim(pc63_cnpjcpf) = '' or pc63_cnpjcpf is null then length(trim(z01_cgccpf)) else length(trim(pc63_cnpjcpf)) end as tam,
@@ -133,24 +133,24 @@ $sqlOrdem = "select distinct
                     c63_identificador
                from empageconfgera
 	                  inner join empagegera     on e90_codgera        = e87_codgera
-	                  inner join empagemov      on e90_codmov         = e81_codmov 
+	                  inner join empagemov      on e90_codmov         = e81_codmov
                     inner join empage         on  empage.e80_codage = empagemov.e81_codage
 	                  inner join empempenho     on e60_numemp         = e81_numemp
-	                  inner join empagepag      on e81_codmov         = e85_codmov 
-	                  inner join empagetipo     on e85_codtipo        = e83_codtipo 
-	                  left  join empageslip     on e81_codmov         = e89_codmov 
-	                  inner join conplanoreduz  on e83_conta          = c61_reduz 
+	                  inner join empagepag      on e81_codmov         = e85_codmov
+	                  inner join empagetipo     on e85_codtipo        = e83_codtipo
+	                  left  join empageslip     on e81_codmov         = e89_codmov
+	                  inner join conplanoreduz  on e83_conta          = c61_reduz
 		                                         and c61_anousu         = ".db_getsession("DB_anousu")."
-	                  inner join conplanoconta  on c63_codcon         = c61_codcon 
-		                                         and c63_anousu         = c61_anousu 
+	                  inner join conplanoconta  on c63_codcon         = c61_codcon
+		                                         and c63_anousu         = c61_anousu
 	                  left  join slip           on slip.k17_codigo    = e89_codigo
 	                  left  join slipnum        on slipnum.k17_codigo = slip.k17_codigo
 	                  left  join empageconfcanc on e88_codmov         = e90_codmov
 	                  left  join empagemovconta on e90_codmov         = e98_codmov
 	                  left  join pcfornecon     on pc63_contabanco    = e98_contabanco
 	                  left  join cgm            on z01_numcgm         = pc63_numcgm
-              where e80_instit = " . db_getsession("DB_instit") . " 
-                and e90_codgera = {$e87_codgera} 
+              where e80_instit = " . db_getsession("DB_instit") . "
+                and e90_codgera = {$e87_codgera}
                 and e90_cancelado is false";
 
 $sqlSlip  = "select distinct
@@ -168,16 +168,16 @@ $sqlSlip  = "select distinct
                          then contadebito.c63_agencia
                        else pc63_agencia
                      end )::varchar as pc63_agencia,
-                       
-                      coalesce((case when pc63_agencia_dig is null or k17_numcgm = (select numcgm from db_config where codigo = ".db_getsession('DB_instit').") 
+
+                      coalesce((case when pc63_agencia_dig is null or k17_numcgm = (select numcgm from db_config where codigo = ".db_getsession('DB_instit').")
                                        then contadebito.c63_dvagencia
                        else pc63_agencia_dig end ),'0')::varchar as pc63_agencia_dig,
-                       
-                    (case when pc63_conta is null or k17_numcgm = (select numcgm from db_config where codigo = ".db_getsession('DB_instit').") 
+
+                    (case when pc63_conta is null or k17_numcgm = (select numcgm from db_config where codigo = ".db_getsession('DB_instit').")
                             then contadebito.c63_conta
-                          else pc63_conta 
+                          else pc63_conta
                      end)::varchar as pc63_conta,
-                      coalesce((case when pc63_conta_dig is null or k17_numcgm = (select numcgm from db_config where codigo = ".db_getsession('DB_instit').") 
+                      coalesce((case when pc63_conta_dig is null or k17_numcgm = (select numcgm from db_config where codigo = ".db_getsession('DB_instit').")
                                   then contadebito.c63_dvconta
                        else pc63_conta_dig end ),'0')::varchar as pc63_conta_dig,
                     (case
@@ -190,7 +190,7 @@ $sqlSlip  = "select distinct
                        when pc63_tipoconta is null or k17_numcgm = (select numcgm from db_config where codigo = ".db_getsession('DB_instit').")
                          then contadebito.c63_tipoconta
                        else pc63_tipoconta
-                     end ) as pc63_tipoconta,   
+                     end ) as pc63_tipoconta,
 	                  translate(to_char(round(e81_valor - coalesce(fc_valorretencaomov(e81_codmov,false),0),2),'99999999999.99'),'.','') as valor,
 	                  e81_valor - coalesce(fc_valorretencaomov(e81_codmov,false),0) as valorori,
 	                  case
@@ -200,16 +200,16 @@ $sqlSlip  = "select distinct
                       else '03'
                     end as  lanc,
                     ( case when pc63_banco is not null and k17_numcgm != (select numcgm from db_config where codigo = ".db_getsession('DB_instit').")
-                             then pc63_banco 
-                           else contadebito.c63_banco 
+                             then pc63_banco
+                           else contadebito.c63_banco
                       end ) as pc63_banco,
-	                  e83_convenio as convenio,	  
+	                  e83_convenio as convenio,
 	                  case when cgm.z01_numcgm is null then cgmslip.z01_numcgm else cgm.z01_numcgm end as z01_numcgm,
 	                  substr(case when cgm.z01_nome is null then cgmslip.z01_nome else cgm.z01_nome end,1,40) as z01_nome,
-	                  case when  pc63_cnpjcpf = '0' or trim(pc63_cnpjcpf) = '' or pc63_cnpjcpf is null 
-	                       then length(trim( case when cgm.z01_cgccpf is null then cgmslip.z01_cgccpf else cgm.z01_cgccpf end)) 
+	                  case when  pc63_cnpjcpf = '0' or trim(pc63_cnpjcpf) = '' or pc63_cnpjcpf is null
+	                       then length(trim( case when cgm.z01_cgccpf is null then cgmslip.z01_cgccpf else cgm.z01_cgccpf end))
 	                       else length(trim(pc63_cnpjcpf)) end as tam,
-	                  case when  pc63_cnpjcpf = '0' or trim(pc63_cnpjcpf) = '' or pc63_cnpjcpf is 
+	                  case when  pc63_cnpjcpf = '0' or trim(pc63_cnpjcpf) = '' or pc63_cnpjcpf is
 	                       null then
 	                         ( case when cgm.z01_cgccpf is null then cgmslip.z01_cgccpf else cgm.z01_cgccpf end)
 	                       else pc63_cnpjcpf end as z01_cgccpf,
@@ -226,15 +226,15 @@ $sqlSlip  = "select distinct
                     contadebito.c63_identificador as c63_identificador
                from empageconfgera
 	                  l join empagegera                on e90_codgera            = e87_codgera
-	                  inner join empagemov                 on e90_codmov             = e81_codmov 
+	                  inner join empagemov                 on e90_codmov             = e81_codmov
                     inner join empage                    on  empage.e80_codage     = empagemov.e81_codage
-	                  inner join empagepag                 on e81_codmov             = e85_codmov 
-	                  inner join empagetipo                on e85_codtipo            = e83_codtipo 
-	                  inner join empageslip                on e81_codmov             = e89_codmov 
-	                  inner join conplanoreduz             on e83_conta              = c61_reduz 
+	                  inner join empagepag                 on e81_codmov             = e85_codmov
+	                  inner join empagetipo                on e85_codtipo            = e83_codtipo
+	                  inner join empageslip                on e81_codmov             = e89_codmov
+	                  inner join conplanoreduz             on e83_conta              = c61_reduz
                     		                                and c61_anousu             = ".db_getsession("DB_anousu")."
-	                  inner join conplanoconta             on c63_codcon             = c61_codcon 
-                    		                                and c63_anousu             = c61_anousu 
+	                  inner join conplanoconta             on c63_codcon             = c61_codcon
+                    		                                and c63_anousu             = c61_anousu
 	                  inner join slip                      on slip.k17_codigo        = e89_codigo
 	                  inner join slipnum                   on slipnum.k17_codigo     = slip.k17_codigo
 	                  inner join conplanoreduz reduzdebito on reduzdebito.c61_reduz  = k17_debito
@@ -250,18 +250,18 @@ $sqlSlip  = "select distinct
 	                  left join pcfornecon                 on pc63_contabanco        = e98_contabanco
 	                  left join cgm                        on z01_numcgm             = pc63_numcgm
 	                  left join cgm cgmslip                on cgmslip.z01_numcgm     = slipnum.k17_numcgm
-	                  left join conplanoreduz cre          on cre.c61_reduz          = k17_debito 
+	                  left join conplanoreduz cre          on cre.c61_reduz          = k17_debito
                                                         and cre.c61_anousu         = ".db_getsession("DB_anousu")."
-                    left join conplano concre            on concre.c60_codcon      = cre.c61_codcon 
-                                                        and concre.c60_anousu      = cre.c61_anousu 
-                    left join conplanoconta descrconta   on concre.c60_codcon      = descrconta.c63_codcon 
+                    left join conplano concre            on concre.c60_codcon      = cre.c61_codcon
+                                                        and concre.c60_anousu      = cre.c61_anousu
+                    left join conplanoconta descrconta   on concre.c60_codcon      = descrconta.c63_codcon
                                                         and concre.c60_anousu      = descrconta.c63_anousu
-               where e80_instit = " . db_getsession("DB_instit") . " 
+               where e80_instit = " . db_getsession("DB_instit") . "
                  and e90_codgera = {$e87_codgera}
                  and e90_cancelado is false
-               order by c63_conta, lanc, e90_codmov";  
+               order by c63_conta, lanc, e90_codmov";
 	$sqlMov = $sqlOrdem." union ".$sqlSlip;
-	
+
   $result  =  @db_query($sqlMov);
     $numrows =  @pg_numrows($result);
     if($numrows==0){
@@ -276,7 +276,7 @@ $sqlSlip  = "select distinct
       //// LAYOUT BANCO DO BANRISUL
       $registro = 0;
       db_fieldsmemory($result,0);
- 
+
       $result_bancos = $cldb_bancos->sql_record($cldb_bancos->sql_query_file($c63_banco));
       if($cldb_bancos->numrows > 0){
 	     db_fieldsmemory($result_bancos, 0);
@@ -284,7 +284,7 @@ $sqlSlip  = "select distinct
 
       $pc63_banco = db_formatar($pc63_banco,'s','0',3,'e',0);
       if($codigomodelo==3 && $sqlerro == false){
-	    
+
       $arr_data  = split('-',$e87_data);
 	    $arr_datap = split('-',$e87_dataproc);
     	$data    =  $arr_data[2].$arr_data[1].$arr_data[0];
@@ -294,7 +294,7 @@ $sqlSlip  = "select distinct
 
 	    $nomearquivo = 'pagt'.$c63_banco.'_'.$arr_datap[2].'-'.$arr_datap[1].'-'.$arr_datap[0].'_'.$e90_codgera.'.txt';
 	    //indica qual será o nome do arquivo
-        
+
 	$cllayout_BBBS->nomearq = "tmp/$nomearquivo";
 	if(!is_writable("tmp/")){
 	  $sqlerro= true;
@@ -302,11 +302,11 @@ $sqlSlip  = "select distinct
 	}
 
 	if($sqlerro == false){
-	
+
 	  if($banco == '001'){
 	    $dbanco = db_formatar('BANCO DO BRASIL','s',' ',30,'d',0);
 	  }else if($banco == "041"){
-	    $dbanco = db_formatar('BANRISUL','s',' ',30,'d',0);; 
+	    $dbanco = db_formatar('BANRISUL','s',' ',30,'d',0);;
 	  }
 	  $agencia_pre = db_formatar(str_replace('.','',str_replace('-','',$c63_agencia)),'s','0',5,'e',0);
 
@@ -324,7 +324,7 @@ $sqlSlip  = "select distinct
 	      $dvagconta_pre = $c63_dvconta[1];
 	    }
 	  }
-	  
+
 	  if(trim($c63_dvagencia)!=""){
 	    $digitos1 = strlen($c63_dvagencia);
 	    $dvagencia_pre   = $c63_dvagencia[0];
@@ -337,18 +337,18 @@ $sqlSlip  = "select distinct
 	  }
 
 	  $numero_dia = 2;
-	  $seq_arq = 1; 
-	  
+	  $seq_arq = 1;
+
 	  ///// HEADER DO ARQUIVO
 	  if($banco=="041"){
-	  	
+
 	  	// echo "<BR><BR>".db_formatar(str_replace('.','',str_replace('-','',trim($c63_conta.$dvconta_pre))),'s','0',10,'e',0)."<BR> ".$c63_conta.$dvconta_pre;
 	    $conta_pre   = db_formatar(str_replace('.','',str_replace('-','',trim($c63_conta.$dvconta_pre))),'s','0',10,'e',0);
 	    $cllayout_BBBS->BSheaderA_001_003 = substr($banco,0,3);
 	    $cllayout_BBBS->BSheaderA_004_007 = str_repeat('0',4);
 	    $cllayout_BBBS->BSheaderA_008_008 = "0";
 	    $cllayout_BBBS->BSheaderA_009_017 = str_repeat(' ',9);
-	    $cllayout_BBBS->BSheaderA_018_018 = "2";	  
+	    $cllayout_BBBS->BSheaderA_018_018 = "2";
 	    $cllayout_BBBS->BSheaderA_019_032 = $c63_identificador;
 	    $cllayout_BBBS->BSheaderA_033_037 = db_formatar(substr($convenio,0,5),'s','0',5,'e',0);
 	    $cllayout_BBBS->BSheaderA_038_052 = str_repeat(' ',15);
@@ -370,9 +370,9 @@ $sqlSlip  = "select distinct
 	    $cllayout_BBBS->BSheaderA_192_211 = db_formatar(substr($e90_codgera,0,20),'s',' ',20,'e',0);
 	    $cllayout_BBBS->BSheaderA_212_240 = str_repeat(' ',29);
 	    $cllayout_BBBS->geraHEADERArqBS();
-	    
+
 	  }else if($banco=="001"){
-	  	
+
 	    $conveniobb  = db_formatar(trim($convenio),'s','0',9,'e',0);
       $conveniobb .= '0126';
 	    $conta_pre   = db_formatar(str_replace('.','',str_replace('-','',$c63_conta)),'s','0',12,'e',0);
@@ -405,9 +405,9 @@ $sqlSlip  = "select distinct
 	    $cllayout_BBBS->BBheaderA_229_230 = str_repeat(' ',2);
 	    $cllayout_BBBS->BBheaderA_231_240 = str_repeat(' ',10);
 	    $cllayout_BBBS->geraHEADERArqBB();
-	    
+
 	  } else if ($banco == "104"){
-	  	
+
       $conveniobanco = substr($convenio,0,6);
       $parametrotransmiss = substr($convenio,10,2);
       $ambientecliente = "P";
@@ -423,10 +423,10 @@ $sqlSlip  = "select distinct
       $usoprefeitura1 = $e90_codgera;
       $db_layouttxt = new db_layouttxt(9,"tmp/".$nomearquivo, "A B");
       db_setaPropriedadesLayoutTxt(&$db_layouttxt,1);
-      
+
     }
 	  ///// FINAL HEADER DO ARQUIVO
-	  
+
 	  $seq_header        = 0;
 	  $xconta            = '';
 	  $registro          = 1;
@@ -435,25 +435,25 @@ $sqlSlip  = "select distinct
 	  $xlanc             = 0;
     $cep               = str_replace('.','',$cep);
     $cep               = str_replace('-','',$cep);
-    
+
 	  for ($i = 0;$i < $numrows;$i++) {
 	    if ($i == 0) {
 	      $pri = "$c63_banco";
-	    }  
+	    }
 	    db_fieldsmemory($result,$i);
-	    
+
 	    $pc63_conta = db_formatar($pc63_conta,'s','0',3,'e',0);
 	    $c63_conta  = (int)$c63_conta;
 	    $conta_pre  = (int)$conta_pre;
-	    
+
 	    if ($xconta != $c63_conta || $lanc != $xlanc) {
 	      $xconta = $c63_conta;
 	      $xlanc  = $lanc;
-	      
+
 	      if ($pri != $pc63_banco) {
 		      $pri = $pc63_banco;
 	      }
-	      
+
 	      if ($pc63_banco == $banco) {
 		      $tiposerv = "20";
 		      $tipopag = "01";
@@ -465,26 +465,26 @@ $sqlSlip  = "select distinct
 		      }
 		      $tipopag = "03";
 	      }
-	      
+
         if ($seq_header != 0) {
-        	
+
           if ($banco == "104") {
-            
+
           	$loteservico = db_formatar($seq_header,'s','0',4,'e',0);
             $quantidadetotallote = ($seq_detalhe + 2);
             $valortotallote = $valor_header;
             db_setaPropriedadesLayoutTxt(&$db_layouttxt,4);
             $valortotallote = 0;
             $valor_header = 0;
-            
+
           } else {
 
           	///// TRAILLER DO LOTE
-            $cllayout_BBBS->BBBStraillerL_001_003 = $banco; 
+            $cllayout_BBBS->BBBStraillerL_001_003 = $banco;
             $cllayout_BBBS->BBBStraillerL_004_007 = db_formatar($seq_header,'s','0',4,'e',0);
             $cllayout_BBBS->BBBStraillerL_008_008 = '5';
             $cllayout_BBBS->BBBStraillerL_009_017 = str_repeat(' ',9);
-            $cllayout_BBBS->BBBStraillerL_018_023 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0); 
+            $cllayout_BBBS->BBBStraillerL_018_023 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0);
             $cllayout_BBBS->BBBStraillerL_024_041 = db_formatar(str_replace(',','',str_replace('.','',$valor_header)),'s','0',18,'e',0);
             $cllayout_BBBS->BBBStraillerL_042_059 = str_repeat('0',18);
             $cllayout_BBBS->BBBStraillerL_060_230 = str_repeat(' ',171);
@@ -493,14 +493,14 @@ $sqlSlip  = "select distinct
             $valor_header = 0;
             $registro += 1;
             ///// FINAL DO TRAILLER DO LOTE
-            
+
           }
         }
-        
+
 	      $seq_header  += 1;
 	      $seq_detalhe  = 0;
 	      $registro    += 1;
-	      
+
 	      $agencia_pre = db_formatar(str_replace('.','',str_replace('-','',$c63_agencia)),'s','0',5,'e',0);
 
 	      $dvagencia_pre = "0";
@@ -514,25 +514,25 @@ $sqlSlip  = "select distinct
 		        $dvagconta_pre = $c63_dvconta[1];
 		      }
 	      }
-	      
+
 	      if (trim($c63_dvagencia)!="") {
-	      	
+
 		       $digitos1 = strlen($c63_dvagencia);
 		       $dvagencia_pre   = $c63_dvagencia[0];
-		       
+
 		      if (isset($digitos) && $digitos==1) {
 		        $dvagconta_pre = $c63_dvagencia[0];
-		        
+
 		        if ($digitos1>1) {
 		          $dvagconta_pre = $c63_dvagencia[1];
 		        }
-		        
+
 		      }
 	      }
-	      
+
 	      // HEADER DO LOTE
 	 if ($banco=="041") {
-	 	
+
 		$conta_pre   = db_formatar(str_replace('.','',str_replace('-','',$c63_conta.$dvconta_pre)),'s','0',10,'e',0);
 		$cllayout_BBBS->BSheaderL_001_003 = $banco;
 		$cllayout_BBBS->BSheaderL_004_007 = db_formatar($seq_header,'s','0',4,'e',0);
@@ -542,7 +542,7 @@ $sqlSlip  = "select distinct
 		$cllayout_BBBS->BSheaderL_012_013 = $tipopag;
 		$cllayout_BBBS->BSheaderL_014_016 = '020';
 		$cllayout_BBBS->BSheaderL_017_017 = ' ';
-		$cllayout_BBBS->BSheaderL_018_018 = '2'; 
+		$cllayout_BBBS->BSheaderL_018_018 = '2';
 		$cllayout_BBBS->BSheaderL_019_032 = $c63_identificador;
 		$cllayout_BBBS->BSheaderL_033_037 = db_formatar(substr($convenio,0,5),'s','0',5,'e',0);
 		$cllayout_BBBS->BSheaderL_038_052 = str_repeat(' ',15);
@@ -554,14 +554,14 @@ $sqlSlip  = "select distinct
 		$cllayout_BBBS->BSheaderL_103_142 = str_repeat(' ',40);
 		$cllayout_BBBS->BSheaderL_143_172 = db_translate(db_formatar(strtoupper(substr(trim($ender),0,30)),'s',' ',30,'d',0));
 		$cllayout_BBBS->BSheaderL_173_177 = db_formatar(substr($numero,0,5),'s',' ',5,'e',0);
-		$cllayout_BBBS->BSheaderL_178_192 = str_repeat(' ',15); 
+		$cllayout_BBBS->BSheaderL_178_192 = str_repeat(' ',15);
 		$cllayout_BBBS->BSheaderL_193_212 = db_translate(db_formatar(strtoupper(substr(trim($munic),0,20)),'s',' ',20,'d',0));
 		$cllayout_BBBS->BSheaderL_213_220 = db_formatar(substr(trim($cep),0,8),'s',' ',8,'e',0);
 		$cllayout_BBBS->BSheaderL_221_222 = db_formatar(strtoupper(substr($uf,0,2)),'s',' ',2,'d',0);
 		$cllayout_BBBS->BSheaderL_223_224 = str_repeat(' ',2);
 		$cllayout_BBBS->BSheaderL_225_240 = str_repeat(' ',16);
 		$cllayout_BBBS->geraHEADERLoteBS();
-		
+
 	 } else if($banco=="001"){
 		$conta_pre   = db_formatar(str_replace('.','',str_replace('-','',$c63_conta)),'s','0',12,'e',0);
 		$tamanho = strlen($cep);
@@ -569,7 +569,7 @@ $sqlSlip  = "select distinct
 		  $com = db_formatar(substr($cep,5,$tamanho),'s',' ',3,'d',0);
 		  $cep = substr($cep,0,5);
 		}
-    
+
 		$conveniobb  = db_formatar(trim($convenio),'s','0',9,'e',0);
     $conveniobb .= '0126';
 		$cllayout_BBBS->BBheaderL_001_003 = $banco;
@@ -592,30 +592,30 @@ $sqlSlip  = "select distinct
 		$cllayout_BBBS->BBheaderL_103_142 = str_repeat(' ',40);
 		$cllayout_BBBS->BBheaderL_143_172 = db_translate(db_formatar(strtoupper(substr(trim($ender),0,30)),'s',' ',30,'d',0));
 		$cllayout_BBBS->BBheaderL_173_177 = db_formatar(substr($numero,0,5),'s',' ',5,'e',0);
-		$cllayout_BBBS->BBheaderL_178_192 = str_repeat(' ',15); 
-		$cllayout_BBBS->BBheaderL_193_212 = db_translate(db_formatar(strtoupper(substr(trim($munic),0,20)),'s',' ',20,'d',0));	      
+		$cllayout_BBBS->BBheaderL_178_192 = str_repeat(' ',15);
+		$cllayout_BBBS->BBheaderL_193_212 = db_translate(db_formatar(strtoupper(substr(trim($munic),0,20)),'s',' ',20,'d',0));
 		$cllayout_BBBS->BBheaderL_213_217 = db_formatar(substr($cep,0,5),'s',' ',5,'e',0);
 		$cllayout_BBBS->BBheaderL_218_220 = substr($com,0,3);
 		$cllayout_BBBS->BBheaderL_221_222 = db_formatar(strtoupper(substr($uf,0,2)),'s',' ',2,'d',0);
 		$cllayout_BBBS->BBheaderL_223_230 = str_repeat(' ',8);
 		$cllayout_BBBS->BBheaderL_231_240 = str_repeat(' ',10);
 		$cllayout_BBBS->geraHEADERLoteBB();
-		
+
     } else if ($banco=="104") {
-    	
+
      $loteservico = db_formatar($seq_header,'s','0',4,'e',0);;
      $tiposervico = "20";
      $finalidadedoc = "00";
-     
+
      if ($pc63_banco == $banco) {
        $formalancamento = "01";
      } else {
        if ($valorori < 5000) {
-         
+
          $finalidadedoc = "07";
          $formalancamento = "03";
        } else {
-         
+
          $finalidadedoc = "01";
          $formalancamento = "41";
        }
@@ -633,7 +633,7 @@ $sqlSlip  = "select distinct
 	  }
 	      // FINAL HEADER DO LOTE
 	 }
-	    
+
 	    $seq_detalhe += 1;
 	    $tot_valor    = 0;
 	    $numero_lote  = 1;
@@ -643,7 +643,7 @@ $sqlSlip  = "select distinct
 	    if($tama>11){
 	      $pc63_conta = substr($pc63_conta,($tama-11));
 	    }
-	    
+
 	    if($tam == 14){
 	      $conf = 2;
 	      $cgccpf = $z01_cgccpf;
@@ -654,7 +654,7 @@ $sqlSlip  = "select distinct
 	      $conf = 3;
 	      $cgccpf= str_repeat('0',14);
 	    }
-	    
+
 	    $registro += 1;
 	    $compensacao = "   ";
 	    if ($pc63_banco == $banco || $valorori<5000) {
@@ -678,7 +678,7 @@ $sqlSlip  = "select distinct
 	    if (trim($pc63_conta_dig)!="") {
 	      $digitos2 = strlen($pc63_conta_dig);
 	      $dvconta_fav   = $pc63_conta_dig[0];
-	      
+
 	      if ($digitos2>1) {
 		      $dvagconta_fav = $pc63_conta_dig[1];
 	      }
@@ -697,28 +697,28 @@ $sqlSlip  = "select distinct
 
         $iConta   = db_formatar(str_replace('.','',str_replace('-','',trim($pc63_conta))),'s','0',8,'e',0);
         $conta_fav = $pc63_codigooperacao.$iConta;
-      } 
-	    // REGISTROS 
+      }
+	    // REGISTROS
 	    if ($banco=="041") {
-	    	
-	      $cllayout_BBBS->BSregist_001_003 = $banco; 
+
+	      $cllayout_BBBS->BSregist_001_003 = $banco;
 	      $cllayout_BBBS->BSregist_004_007 = db_formatar($seq_header,'s','0',4,'e',0);
-	      $cllayout_BBBS->BSregist_008_008 = "3"; 
+	      $cllayout_BBBS->BSregist_008_008 = "3";
 	      $cllayout_BBBS->BSregist_009_013 = db_formatar($seq_detalhe,'s','0',5,'e',0);
-	      $cllayout_BBBS->BSregist_014_014 = "A"; 
+	      $cllayout_BBBS->BSregist_014_014 = "A";
 	      $cllayout_BBBS->BSregist_015_015 = "0";
 	      $cllayout_BBBS->BSregist_016_017 = "00";
-	      $cllayout_BBBS->BSregist_018_020 = $compensacao; 
+	      $cllayout_BBBS->BSregist_018_020 = $compensacao;
 	      $cllayout_BBBS->BSregist_021_023 = $pc63_banco;
 	      $cllayout_BBBS->BSregist_024_028 = db_formatar($agencia_fav,'s','0',5,'e',0);
-	      $cllayout_BBBS->BSregist_029_029 = "0"; 
+	      $cllayout_BBBS->BSregist_029_029 = "0";
 	      $cllayout_BBBS->BSregist_030_042 = $conta_fav.$dvconta_fav;
-	      $cllayout_BBBS->BSregist_043_043 = " "; 
+	      $cllayout_BBBS->BSregist_043_043 = " ";
 	      $cllayout_BBBS->BSregist_044_073 = db_translate(db_formatar(str_replace('-','',substr($z01_nome,0,30)),'s',' ',30,'d',0));
 	      $cllayout_BBBS->BSregist_074_088 = db_formatar($e90_codmov,'s','0',15,'d',0);
 	      $cllayout_BBBS->BSregist_089_093 = "00005";
 	      $cllayout_BBBS->BSregist_094_101 = $dat_cred;
-	      $cllayout_BBBS->BSregist_102_104 = "BRL"; 
+	      $cllayout_BBBS->BSregist_102_104 = "BRL";
 	      $cllayout_BBBS->BSregist_105_119 = str_repeat('0',15);
 	      $cllayout_BBBS->BSregist_120_134 = db_formatar(str_replace(',','',str_replace('.','',$valor)),'s','0',15,'e',0);
 	      $cllayout_BBBS->BSregist_135_154 = str_repeat(' ',20);
@@ -732,31 +732,31 @@ $sqlSlip  = "select distinct
 	      $cllayout_BBBS->BSregist_230_230 = "0";
 	      $cllayout_BBBS->BSregist_231_240 = str_repeat(' ',10);
 	      $cllayout_BBBS->geraREGISTROSBS();
-	      
+
 	    } else if ($banco=="001") {
               // REGISTROS SEGMENTO A
 	      if ($pc63_banco == $banco) {
 		      $compensacao = str_repeat('0',3);
 	      }
-	      
-	      $cllayout_BBBS->BBregistA_001_003 = $banco; 
+
+	      $cllayout_BBBS->BBregistA_001_003 = $banco;
 	      $cllayout_BBBS->BBregistA_004_007 = db_formatar($seq_header,'s','0',4,'e',0);
-	      $cllayout_BBBS->BBregistA_008_008 = "3"; 
+	      $cllayout_BBBS->BBregistA_008_008 = "3";
 	      $cllayout_BBBS->BBregistA_009_013 = db_formatar($seq_detalhe,'s','0',5,'e',0);
-	      $cllayout_BBBS->BBregistA_014_014 = "A"; 
+	      $cllayout_BBBS->BBregistA_014_014 = "A";
 	      $cllayout_BBBS->BBregistA_015_015 = "0";
 	      $cllayout_BBBS->BBregistA_016_017 = "00";
-	      $cllayout_BBBS->BBregistA_018_020 = $compensacao; 
-	      $cllayout_BBBS->BBregistA_021_023 = $pc63_banco;	    
+	      $cllayout_BBBS->BBregistA_018_020 = $compensacao;
+	      $cllayout_BBBS->BBregistA_021_023 = $pc63_banco;
 	      $cllayout_BBBS->BBregistA_024_028 = db_formatar(str_replace('.','',str_replace('-','',$agencia_fav)),'s','0',5,'e',0);
-	      $cllayout_BBBS->BBregistA_029_029 = $dvagencia_fav; 
+	      $cllayout_BBBS->BBregistA_029_029 = $dvagencia_fav;
 	      $cllayout_BBBS->BBregistA_030_041 = $conta_fav;
-	      $cllayout_BBBS->BBregistA_042_042 = $dvconta_fav; 
+	      $cllayout_BBBS->BBregistA_042_042 = $dvconta_fav;
 	      $cllayout_BBBS->BBregistA_043_043 = $dvagconta_fav;
 	      $cllayout_BBBS->BBregistA_044_073 = db_translate(db_formatar(str_replace('-','',substr($z01_nome,0,30)),'s',' ',30,'d',0));
 	      $cllayout_BBBS->BBregistA_074_093 = db_formatar($e90_codmov,'s',' ',20,'d',0);
 	      $cllayout_BBBS->BBregistA_094_101 = $dat_cred;
-	      $cllayout_BBBS->BBregistA_102_104 = "BRL"; 
+	      $cllayout_BBBS->BBregistA_102_104 = "BRL";
 	      $cllayout_BBBS->BBregistA_105_119 = str_repeat('0',15);
 	      $cllayout_BBBS->BBregistA_120_134 = db_formatar(str_replace(',','',str_replace('.','',$valor)),'s','0',15,'e',0);
 	      $cllayout_BBBS->BBregistA_135_154 = str_repeat(' ',20);
@@ -772,11 +772,11 @@ $sqlSlip  = "select distinct
         $z01_cep = str_replace('.','',$z01_cep);
         $z01_cep = str_replace('-','',$z01_cep);
         // REGISTROS SEGMENTO B
-	      $cllayout_BBBS->BBregistB_001_003 = $banco; 
+	      $cllayout_BBBS->BBregistB_001_003 = $banco;
 	      $cllayout_BBBS->BBregistB_004_007 = db_formatar($seq_header,'s','0',4,'e',0);
-	      $cllayout_BBBS->BBregistB_008_008 = "3"; 
+	      $cllayout_BBBS->BBregistB_008_008 = "3";
 	      $cllayout_BBBS->BBregistB_009_013 = db_formatar($seq_detalhe,'s','0',5,'e',0);
-	      $cllayout_BBBS->BBregistB_014_014 = "B"; 
+	      $cllayout_BBBS->BBregistB_014_014 = "B";
 	      $cllayout_BBBS->BBregistB_015_017 = str_repeat(' ',3);
 	      $cllayout_BBBS->BBregistB_018_018 = $conf;
 	      $cllayout_BBBS->BBregistB_019_032 = $cgccpf;
@@ -798,9 +798,9 @@ $sqlSlip  = "select distinct
 	      $cllayout_BBBS->BBregistB_226_240 = str_repeat(' ',15);
 	      $cllayout_BBBS->geraREGISTROSBB();
         $registro += 1;
-        
+
 	    } else if($banco=="104") {
-	    	
+
 	    	$loteservico          = db_formatar($seq_header,'s','0',4,'e',0);
         $sequencialnolote     = $seq_detalhe;
         $tipomovimento        = "0";
@@ -808,7 +808,7 @@ $sqlSlip  = "select distinct
         $compensacao          = "700";
         $finalidadedoc        = '00';
         if ($pc63_banco == $banco || $valorori < 5000) {
-          
+
           $compensacao          = "700";
           $finalidadedoc        = '01';
         } else {
@@ -844,13 +844,13 @@ $sqlSlip  = "select distinct
         $valorvencimento      = $valor;
         db_setaPropriedadesLayoutTxt(&$db_layouttxt,3,"B");
         $registro += 1;
-        
+
 	    }
 	    $valor_header += $valor;
 	    // FINAL REGISTROS
-	     
+
 	  }
-	  
+
 	  if($banco == "104") {
       $loteservico        = db_formatar($seq_header,'s','0',4,'e',0);
       $quantidadetotallote = ($seq_detalhe + 2);
@@ -858,15 +858,15 @@ $sqlSlip  = "select distinct
       db_setaPropriedadesLayoutTxt(&$db_layouttxt,4);
       $valortotallote = 0;
       $valor_header = 0;
-      
+
     } else {
-	    
+
     	///// TRAILLER DO LOTE
-	    $cllayout_BBBS->BBBStraillerL_001_003 = $banco; 
+	    $cllayout_BBBS->BBBStraillerL_001_003 = $banco;
 	    $cllayout_BBBS->BBBStraillerL_004_007 = db_formatar($seq_header,'s','0',4,'e',0);
 	    $cllayout_BBBS->BBBStraillerL_008_008 = '5';
 	    $cllayout_BBBS->BBBStraillerL_009_017 = str_repeat(' ',9);
-	    $cllayout_BBBS->BBBStraillerL_018_023 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0); 
+	    $cllayout_BBBS->BBBStraillerL_018_023 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0);
 	    $cllayout_BBBS->BBBStraillerL_024_041 = db_formatar(str_replace(',','',str_replace('.','',$valor_header)),'s','0',18,'e',0);
 	    $cllayout_BBBS->BBBStraillerL_042_059 = str_repeat('0',18);
 	    $cllayout_BBBS->BBBStraillerL_060_230 = str_repeat(' ',171);
@@ -875,22 +875,22 @@ $sqlSlip  = "select distinct
 	    $valor_header = 0;
 	    $registro += 1;
 	    ///// FINAL DO TRAILLER DO LOTE
-	    
+
     }
-	  
+
 
 	  if ($banco == "104") {
-	  	
+
 	  	$loteservico = '99999';
       $quantidadelotesarq = db_formatar($seq_header,'s','0',4,'e',0);
       $quantidaderegistarq = $registro + $quantidadelotesarq +1;
       db_setaPropriedadesLayoutTxt(&$db_layouttxt,5);
-      
+
     } else {
-	    
+
     	////  TRAILLER DO ARQUIVO
 	    $registro += 1;
-	    $cllayout_BBBS->BBBStraillerA_001_003 = $banco; 
+	    $cllayout_BBBS->BBBStraillerA_001_003 = $banco;
 	    $cllayout_BBBS->BBBStraillerA_004_007 = '9999';
 	    $cllayout_BBBS->BBBStraillerA_008_008 = '9';
 	    $cllayout_BBBS->BBBStraillerA_009_017 = str_repeat(' ',9);
@@ -911,7 +911,7 @@ $sqlSlip  = "select distinct
 }
 }
 }
-}  
+}
 }
 ?>
 <html>
@@ -933,18 +933,18 @@ $sqlSlip  = "select distinct
 <script>
 
 function js_empage(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
 }
 function js_mostra(codage,data){
   arr = data.split('-');
-  
+
   obj = document.form1;
 
   obj.e80_data_ano.value = arr[0];
   obj.e80_data_mes.value = arr[1];
   obj.e80_data_dia.value = arr[2];
   obj.e80_data.value = arr[2]+'/'+arr[1]+'/'+arr[0];
- 
+
             obj=document.createElement('input');
             obj.setAttribute('name','pri_codage');
             obj.setAttribute('type','hidden');
@@ -952,9 +952,9 @@ function js_mostra(codage,data){
             document.form1.appendChild(obj);
 
   document.form1.pesquisar.click();
- 
+
   db_iframe_empage.hide();
-  
+
 }
 </script>
 <?
@@ -966,8 +966,8 @@ if(isset($sqlerro)){
     echo "
     <script>
       function js_emitir(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_download','db_download.php?arquivo=tmp/$nomearquivo','Download de arquivos',false);
-      }   
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_download','db_download.php?arquivo=tmp/$nomearquivo','Download de arquivos',false);
+      }
       js_emitir();
     </script>
     ";

@@ -962,7 +962,7 @@ function js_pesquisaDebito(lMostra, lPesquisaElemento){
     }
     sUrlHistorico  = "func_conplanoexe.php?pesquisa_chave="+sChavePesquisa+"&lEstrutural="+lPesquisaElemento+"&funcao_js=parent.js_completaDebito";
   }
-  js_OpenJanelaIframe("top.corpo.iframe_contranslr", "db_iframe_conplanoexe", sUrlHistorico, "Pesquisa Debito", lMostra);
+  js_OpenJanelaIframe("CurrentWindow.corpo.iframe_contranslr", "db_iframe_conplanoexe", sUrlHistorico, "Pesquisa Debito", lMostra);
 }
 
 function js_completaDebito(sDescricaoDebito,erro, sEstrutural, lEstrutural){
@@ -1008,7 +1008,7 @@ function js_pesquisaCredito(lMostra, lPesquisaElemento){
     }
     sUrlHistorico  = "func_conplanoexe.php?pesquisa_chave="+sChavePesquisa+"&lEstrutural="+lPesquisaElemento+"&funcao_js=parent.js_completaCredito";
   }
-  js_OpenJanelaIframe("top.corpo.iframe_contranslr", "db_iframe_conplanoexe_credito", sUrlHistorico, "Pesquisa Credito", lMostra);
+  js_OpenJanelaIframe("CurrentWindow.corpo.iframe_contranslr", "db_iframe_conplanoexe_credito", sUrlHistorico, "Pesquisa Credito", lMostra);
 }
 
 function js_completaCredito(sDescricaoCredito,erro, sEstrutural, lEstrutural){

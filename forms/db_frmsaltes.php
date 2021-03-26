@@ -190,7 +190,7 @@ $oRotulo->label("coddepto");
 
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_preenche|k13_conta&sem_filtro_departamento=1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_preenche|k13_conta&sem_filtro_departamento=1','Pesquisa',true);
   }
   function js_preenche(chave){
     db_iframe_saltes.hide();
@@ -199,7 +199,7 @@ $oRotulo->label("coddepto");
     ?>
   }
   function js_contas(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes_contas001.php?funcao_js=parent.js_preenche_conta|c62_reduz|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes_contas001.php?funcao_js=parent.js_preenche_conta|c62_reduz|c60_descr','Pesquisa',true);
   }
   function js_preenche_conta(chave1,chave2){
     db_iframe_saltes.hide();
@@ -210,7 +210,7 @@ $oRotulo->label("coddepto");
   function js_saltes(lMostra){
 
     if (lMostra) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_contrapartida',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_contrapartida',
         'func_saltes.php?funcao_js=parent.js_contrapartida|k13_conta|k13_descr',
         'Pesquisa de Contas',true);
     } else {
@@ -218,7 +218,7 @@ $oRotulo->label("coddepto");
       var iContrapartida = document.form1.k103_contrapartida.value;
       if (iContrapartida != '') {
 
-        js_OpenJanelaIframe('top.corpo','db_iframe_contrapartida',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_contrapartida',
           'func_saltes.php?funcao_js=parent.js_contrapartida2&pesquisa_chave='+iContrapartida
           ,'Pesquisa de contas',false);
       } else {
@@ -250,7 +250,7 @@ $oRotulo->label("coddepto");
   function js_saltes2(lMostra){
 
     if (lMostra) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_contrapartida',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_contrapartida',
         'func_saltes.php?funcao_js=parent.js_saltesextra|k13_conta|k13_descr',
         'Pesquisa de Contas',true);
     } else {
@@ -258,7 +258,7 @@ $oRotulo->label("coddepto");
       var iContrapartida = document.form1.k109_saltesextra.value;
       if (iContrapartida != '') {
 
-        js_OpenJanelaIframe('top.corpo','db_iframe_contrapartida',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_contrapartida',
           'func_saltes.php?funcao_js=parent.js_saltesextra2&pesquisa_chave='+iContrapartida
           ,'Pesquisa de contas',false);
       } else {

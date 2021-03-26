@@ -447,6 +447,6 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     }
 
     function atualizaAbaFornecedor(){
-        top.corpo.iframe_db_forn.location.href='lic1_fornec002.php?chavepesquisa=<?= $l20_codigo?>';
+        CurrentWindow.corpo.iframe_db_forn.location.href='lic1_fornec002.php?chavepesquisa=<?= $l20_codigo?>';
     }
 </script>

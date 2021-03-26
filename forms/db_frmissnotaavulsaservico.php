@@ -452,10 +452,10 @@ $aTiposRetencoesINSS = array(
     }
     function js_pesquisaq62_issnotaavulsa(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|q51_sequencial', 'Pesquisa', true, '0', '1', '775', '390');
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|q51_sequencial', 'Pesquisa', true, '0', '1', '775', '390');
         } else {
             if (document.form1.q62_issnotaavulsa.value != '') {
-                js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?pesquisa_chave=' + document.form1.q62_issnotaavulsa.value + '&funcao_js=parent.js_mostraissnotaavulsa', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_issnotaavulsaservico', 'db_iframe_issnotaavulsa', 'func_issnotaavulsa.php?pesquisa_chave=' + document.form1.q62_issnotaavulsa.value + '&funcao_js=parent.js_mostraissnotaavulsa', 'Pesquisa', false);
             } else {
                 document.form1.q51_sequencial.value = '';
             }

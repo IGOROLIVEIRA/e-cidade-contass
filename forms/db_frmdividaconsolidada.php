@@ -356,7 +356,7 @@ $clrotulo->label("l20_codigo");
 
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_dividaconsolidada','func_dividaconsolidada.php?funcao_js=parent.js_preenchepesquisa|si167_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dividaconsolidada','func_dividaconsolidada.php?funcao_js=parent.js_preenchepesquisa|si167_sequencial','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_dividaconsolidada.hide();
@@ -367,7 +367,7 @@ $clrotulo->label("l20_codigo");
     ?>
   }
   function js_importar(){
-   js_OpenJanelaIframe('top.corpo','db_iframe_dividaconsolidada','func_importadividaconsolidada.php?funcao_js=parent.js_preencheimportacao|si167_nroleiautorizacao|si167_nrocontratodivida|dl_ano|si167_mesreferencia','Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dividaconsolidada','func_importadividaconsolidada.php?funcao_js=parent.js_preencheimportacao|si167_nroleiautorizacao|si167_nrocontratodivida|dl_ano|si167_mesreferencia','Pesquisa',true);
  }
  function js_preencheimportacao(chave1,chave2,chave3,chave4){
    db_iframe_dividaconsolidada.hide();

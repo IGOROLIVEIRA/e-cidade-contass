@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: atendimento
@@ -41,7 +41,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -51,7 +51,7 @@ if(isset($db_opcaoal)){
      $at13_horaini = "";
      $at13_horafim = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -60,12 +60,12 @@ if(isset($db_opcaoal)){
   	<td nowrap colspan="2" align="right">
 		<input name="bt_voltar" type="button" value="Voltar" title="Voltar" onClick="js_voltar();">
   	</td>
-  </tr>	
+  </tr>
   <tr>
     <td nowrap title="<?=@$Tat13_tarefa?>">
        <?=@$Lat13_tarefa?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at13_tarefa',10,$Iat13_tarefa,true,'text',3,"")
 ?>
@@ -77,7 +77,7 @@ db_input('at13_tarefa',10,$Iat13_tarefa,true,'text',3,"")
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("at13_sequencial"=>@$at13_sequencial,"at13_tarefa"=>@$at13_tarefa);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -104,6 +104,6 @@ function js_cancelar(){
 }
 function js_voltar() {
   parent.mo_camada('tarefa')
-  top.corpo.iframe_tarefa.document.form1.bt_voltar.click();	
+  CurrentWindow.corpo.iframe_tarefa.document.form1.bt_voltar.click();
 }
 </script>

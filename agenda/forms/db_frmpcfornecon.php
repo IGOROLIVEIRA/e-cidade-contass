@@ -16,7 +16,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -28,10 +28,10 @@ if(isset($db_opcaoal)){
      $pc63_cnpjcpf = "";
      unset($pc64_contabanco);
    }
-} 
+}
 
 if($db_opcao == 1){
-   $resultx =  $clpcforne->sql_record($clpcforne->sql_query($pc63_numcgm,"z01_cgccpf as pc63_cnpjcpf")); 
+   $resultx =  $clpcforne->sql_record($clpcforne->sql_query($pc63_numcgm,"z01_cgccpf as pc63_cnpjcpf"));
    if($clpcforne->numrows>0){
      db_fieldsmemory($resultx,0);
    }
@@ -46,7 +46,7 @@ if($db_opcao == 1){
        db_ancora(@$Lpc63_numcgm,"js_pesquisapc63_numcgm(true);",3);
        ?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
 <?
 if(isset($submita)){
   db_input('submita',6,0,true,'hidden',3,"");
@@ -60,7 +60,7 @@ db_input('pc63_numcgm',8,$Ipc63_numcgm,true,'text',3," onchange='js_pesquisapc63
     <td nowrap title="<?=@$Tpc63_banco?>">
        <?=@$Lpc63_banco?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
 <?
 db_input('pc63_banco',5,$Ipc63_banco,true,'text',$db_opcao,"")
 ?>
@@ -70,15 +70,15 @@ db_input('pc63_banco',5,$Ipc63_banco,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tpc63_agencia?>">
        <?=@$Lpc63_agencia?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc63_agencia',5,$Ipc63_agencia,true,'text',$db_opcao,"")
 ?>
 
-    <td nowrap title="<?=@$Tpc63_agencia_dig?>"> 
+    <td nowrap title="<?=@$Tpc63_agencia_dig?>">
        <b><?=@$RLpc63_agencia_dig?>:</b>
-    </td> 
-    <td> 
+    </td>
+    <td>
 
 <?
 db_input('pc63_agencia_dig',2,$Ipc63_agencia_dig,true,'text',$db_opcao,"");
@@ -89,14 +89,14 @@ db_input('pc63_agencia_dig',2,$Ipc63_agencia_dig,true,'text',$db_opcao,"");
     <td nowrap title="<?=@$Tpc63_conta?>">
        <?=@$Lpc63_conta?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc63_conta',14,$Ipc63_conta,true,'text',$db_opcao,"")
 ?>
     </td>
-    <td nowrap title="<?=@$Tpc63_conta_dig?>"> 
+    <td nowrap title="<?=@$Tpc63_conta_dig?>">
        <b><?=@$RLpc63_conta_dig?>:</b>
-    </td> 
+    </td>
     <td>
 <?
 db_input('pc63_conta_dig',2,$Ipc63_conta_dig,true,'text',$db_opcao,"");
@@ -107,7 +107,7 @@ db_input('pc63_conta_dig',2,$Ipc63_conta_dig,true,'text',$db_opcao,"");
     <td nowrap title="<?=@$Tpc63_cnpjcpf?>">
        <?=@$Lpc63_cnpjcpf?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
 <?
 db_input('pc63_cnpjcpf',15,@$Ipc63_cnpjcpf,true,'text',$db_opcao," onBlur='js_verificaCGCCPF(this)'")
 ?>
@@ -117,7 +117,7 @@ db_input('pc63_cnpjcpf',15,@$Ipc63_cnpjcpf,true,'text',$db_opcao," onBlur='js_ve
     <td nowrap title="<?=@$Tpc64_contabanco?>">
     <b>Conta padrão:</b>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("t"=>"SIM","f"=>"NÃO");
 db_select('pc64_contabanco',$x,true,$db_opcao,"")
@@ -126,7 +126,7 @@ db_select('pc64_contabanco',$x,true,$db_opcao,"")
     <td nowrap title="<?=@$Tpc63_dataconf?>">
     <b><?//=@$Lpc63_dataconf?>Conferido:</b>
     </td>
-    <td> 
+    <td>
     <?
     $checked = "";
     if(isset($pc63_dataconf) && trim($pc63_dataconf)!=""){
@@ -144,11 +144,11 @@ db_select('pc64_contabanco',$x,true,$db_opcao,"")
 
 
 
-  
+
   <tr>
     <td nowrap>
     </td>
-    <td> 
+    <td>
 <?
 global $pc63_id_usuario ;
 $pc63_id_usuario = db_getsession("DB_id_usuario") ;
@@ -164,15 +164,15 @@ db_input('pc63_id_usuario',5,$Ipc63_id_usuario,true,'hidden',3," onchange='js_pe
 <?
    if(isset($novo)){?>
    <input name="fechar" type="button" value="Fechar" onclick="parent.db_iframe_pcfornecon.hide();">
-<?     
+<?
    }
-?> 
+?>
     </td>
   </tr>
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("pc63_numcgm"=>@$pc63_numcgm,"pc63_contabanco"=>@$pc63_contabanco);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -192,9 +192,9 @@ db_input('pc63_id_usuario',5,$Ipc63_id_usuario,true,'hidden',3," onchange='js_pe
 function js_ver(){
   if(document.form1.pc63_cnpjcpf.value != 0 &&document.form1.pc63_cnpjcpf.value != '' && <?=$db_opcao?> !=3){
     return  js_verificaCGCCPF(document.form1.pc63_cnpjcpf);
-  }else{   
+  }else{
     return true;
-  }  
+  }
 }
 
 function js_cancelar(){
@@ -207,20 +207,20 @@ function js_cancelar(){
 }
 function js_pesquisapc63_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.pc63_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.pc63_numcgm.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
+     if(document.form1.pc63_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.pc63_numcgm.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
      }else{
-       document.form1.pc60_dtlanc.value = ''; 
+       document.form1.pc60_dtlanc.value = '';
      }
   }
 }
 function js_mostrapcforne(chave,erro){
-  document.form1.pc60_dtlanc.value = chave; 
-  if(erro==true){ 
-    document.form1.pc63_numcgm.focus(); 
-    document.form1.pc63_numcgm.value = ''; 
+  document.form1.pc60_dtlanc.value = chave;
+  if(erro==true){
+    document.form1.pc63_numcgm.focus();
+    document.form1.pc63_numcgm.value = '';
   }
 }
 function js_mostrapcforne1(chave1,chave2){
@@ -230,20 +230,20 @@ function js_mostrapcforne1(chave1,chave2){
 }
 function js_pesquisapc63_id_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.pc63_id_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.pc63_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.pc63_id_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.pc63_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.pc63_id_usuario.focus(); 
-    document.form1.pc63_id_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.pc63_id_usuario.focus();
+    document.form1.pc63_id_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){

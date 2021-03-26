@@ -11,7 +11,7 @@ $clrotulo->label("l20_codigo");
     <td nowrap title="<?=@$Tsi03_sequencial?>">
        <?=@$Lsi03_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si03_sequencial',10,$Isi03_sequencial,true,'text',3,"")
 ?>
@@ -23,7 +23,7 @@ db_input('si03_sequencial',10,$Isi03_sequencial,true,'text',3,"")
        db_ancora(@$Lsi03_licitacao,"js_pesquisasi03_licitacao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si03_licitacao',10,$Isi03_licitacao,true,'text',3," onchange='js_pesquisasi03_licitacao(false);'")
 ?>
@@ -37,7 +37,7 @@ db_input('l20_edital',10,$Il20_edital,true,'text',3,'')
     <td nowrap title="<?=@$Tsi03_numcontrato?>">
        <?=@$Lsi03_numcontrato?>
     </td>
-    <td> 
+    <td>
 <?
 //$result = $clcontratos->sql_record($clcontratos->sql_query(null,"si172_sequencial, si172_nrocontrato"));
 //db_selectrecord("si03_numcontrato",$result,true,$db_opcao);
@@ -58,7 +58,7 @@ db_selectrecord("nrocontrato",$result,true,$db_opcao,"","",""," - ","js_selecion
     <td>
       <b> N Contrato Anos Anteriores:</b>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si03_numcontratoanosanteriores',10,1,true,'text',$db_opcao,"")
 ?>
@@ -68,7 +68,7 @@ db_input('si03_numcontratoanosanteriores',10,1,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsi03_dataassinacontrato?>">
        <?=@$Lsi03_dataassinacontrato?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si03_dataassinacontrato',@$si03_dataassinacontrato_dia,@$si03_dataassinacontrato_mes,@$si03_dataassinacontrato_ano,true,'text',$db_opcao,"")
 ?>
@@ -78,9 +78,9 @@ db_inputdata('si03_dataassinacontrato',@$si03_dataassinacontrato_dia,@$si03_data
     <td nowrap title="<?=@$Tsi03_tipoapostila?>">
        <?=@$Lsi03_tipoapostila?>
     </td>
-    <td> 
+    <td>
 <?
-$x = array("01"=>"Reajuste de preço previsto no contrato","02"=>"Atualizações, compensações ou penalizações","03"=>"Empenho de dotações orçamentárias suplementares"); 
+$x = array("01"=>"Reajuste de preço previsto no contrato","02"=>"Atualizações, compensações ou penalizações","03"=>"Empenho de dotações orçamentárias suplementares");
 db_select('si03_tipoapostila',$x,true,$db_opcao,"");
 //db_input('si03_tipoapostila',1,$Isi03_tipoapostila,true,'text',$db_opcao,"")
 ?>
@@ -90,7 +90,7 @@ db_select('si03_tipoapostila',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tsi03_dataapostila?>">
        <?=@$Lsi03_dataapostila?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si03_dataapostila',@$si03_dataapostila_dia,@$si03_dataapostila_mes,@$si03_dataapostila_ano,true,'text',$db_opcao,"")
 ?>
@@ -100,7 +100,7 @@ db_inputdata('si03_dataapostila',@$si03_dataapostila_dia,@$si03_dataapostila_mes
     <td nowrap title="<?=@$Tsi03_descrapostila?>">
        <?=@$Lsi03_descrapostila?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('si03_descrapostila',8,30,$Isi03_descrapostila,true,'text',$db_opcao,"")
 ?>
@@ -110,9 +110,9 @@ db_textarea('si03_descrapostila',8,30,$Isi03_descrapostila,true,'text',$db_opcao
     <td nowrap title="<?=@$Tsi03_tipoalteracaoapostila?>">
        <?=@$Lsi03_tipoalteracaoapostila?>
     </td>
-    <td> 
+    <td>
 <?
-$x = array("1"=>"Acréscimo de valor","2"=>"Decréscimo de valor","3"=>"Não houve alteração de valor"); 
+$x = array("1"=>"Acréscimo de valor","2"=>"Decréscimo de valor","3"=>"Não houve alteração de valor");
 db_select('si03_tipoalteracaoapostila',$x,true,$db_opcao,"");
 //db_input('si03_tipoalteracaoapostila',1,$Isi03_tipoalteracaoapostila,true,'text',$db_opcao,"")
 ?>
@@ -122,7 +122,7 @@ db_select('si03_tipoalteracaoapostila',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tsi03_numapostilamento?>">
        <?=@$Lsi03_numapostilamento?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si03_numapostilamento',10,$Isi03_numapostilamento,true,'text',$db_opcao,"")
 ?>
@@ -132,7 +132,7 @@ db_input('si03_numapostilamento',10,$Isi03_numapostilamento,true,'text',$db_opca
     <td nowrap title="<?=@$Tsi03_valorapostila?>">
        <?=@$Lsi03_valorapostila?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si03_valorapostila',14,$Isi03_valorapostila,true,'text',$db_opcao,"")
 ?>
@@ -159,20 +159,20 @@ var opcao  = document.form1.controle.value;
 
 function js_pesquisasi03_licitacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu','Pesquisa',true);
   }else{
-     if(document.form1.si03_licitacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.si03_licitacao.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+     if(document.form1.si03_licitacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.si03_licitacao.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
-       document.form1.l20_codigo.value = ''; 
+       document.form1.l20_codigo.value = '';
      }
   }
 }
 function js_mostraliclicita(chave,erro){
-  document.form1.l20_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.si03_licitacao.focus(); 
-    document.form1.si03_licitacao.value = ''; 
+  document.form1.l20_codigo.value = chave;
+  if(erro==true){
+    document.form1.si03_licitacao.focus();
+    document.form1.si03_licitacao.value = '';
   }
 }
 function js_mostraliclicita1(chave1,chave2,chave3){
@@ -181,7 +181,7 @@ function js_mostraliclicita1(chave1,chave2,chave3){
   db_iframe_liclicita.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_apostilamento','func_apostilamento.php?funcao_js=parent.js_preenchepesquisa|si03_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_apostilamento','func_apostilamento.php?funcao_js=parent.js_preenchepesquisa|si03_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_apostilamento.hide();
@@ -212,7 +212,7 @@ function js_seleciona_contrato(){
 }
 function js_retornoPesquisa(oAjax) {
 	var oRetorno = eval("("+oAjax.responseText+")");
-	document.form1.si03_dataassinacontrato.value = oRetorno.si172_dataassinatura; 
+	document.form1.si03_dataassinacontrato.value = oRetorno.si172_dataassinatura;
 	var aData = document.form1.si03_dataassinacontrato.value.split("/");
 	js_setDiaMesAno(document.form1.si03_dataassinacontrato,aData[0],aData[1],aData[2]);
 }

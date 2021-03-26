@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -42,9 +42,9 @@ $db_opcao = 33;
 $db_botao = false;
 
 if ( isset($excluir) ) {
-  
+
 	$sqlerro=false;
-  
+
   db_inicio_transacao();
 
   /**
@@ -52,7 +52,7 @@ if ( isset($excluir) ) {
    */
   $oEscrito    = db_utils::getDao('escrito');
   $sSqlEscrito = $oEscrito->sql_query_file(null, 'q10_inscr', null, "q10_numcgm = {$q86_numcgm}");
-  $rsEscrito   = db_query($sSqlEscrito);  
+  $rsEscrito   = db_query($sSqlEscrito);
 
   if ( !$rsEscrito ) {
 
@@ -68,42 +68,42 @@ if ( isset($excluir) ) {
   }
 
   /**
-   * Remove da cadescritoresp 
+   * Remove da cadescritoresp
    */
-  if ( !$sqlerro ) {    
+  if ( !$sqlerro ) {
 
     $clcadescritoresp->excluir(null, 'q84_cadescrito='.$q86_numcgm);
 
     if ( $clcadescritoresp->erro_status == "0" ) {
 
       $sqlerro  = true;
-      $erro_msg = $clcadescritoresp->erro_msg;    
+      $erro_msg = $clcadescritoresp->erro_msg;
     }
   }
-  
+
   /**
-   * Remove da cadescrito 
+   * Remove da cadescrito
    */
-  if ( !$sqlerro ) {    
+  if ( !$sqlerro ) {
 
     $clcadescrito->excluir($q86_numcgm);
 
     if ( $clcadescrito->erro_status == "0" ) {
       $sqlerro = true;
-    } 
+    }
 
     $erro_msg = $clcadescrito->erro_msg;
   }
-   
+
   db_fim_transacao($sqlerro);
   $db_opcao = 3;
   $db_botao = true;
-  
+
 } else if(isset($chavepesquisa)) {
 
   $db_opcao = 3;
   $db_botao = true;
-  $result = $clcadescrito->sql_record($clcadescrito->sql_query($chavepesquisa)); 
+  $result = $clcadescrito->sql_record($clcadescrito->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
 }
 ?>
@@ -117,8 +117,8 @@ if ( isset($excluir) ) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
     <center>
 	    <?php include("forms/db_frmcadescrito.php"); ?>
     </center>
@@ -159,7 +159,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.cadescritoresp.disabled=false;
-         top.corpo.iframe_cadescritoresp.location.href='iss1_cadescritoresp001.php?db_opcaoal=33&q84_cadescrito=".@$q86_numcgm."';
+         CurrentWindow.corpo.iframe_cadescritoresp.location.href='iss1_cadescritoresp001.php?db_opcaoal=33&q84_cadescrito=".@$q86_numcgm."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('cadescritoresp');";

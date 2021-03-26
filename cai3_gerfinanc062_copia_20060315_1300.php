@@ -22,7 +22,7 @@ if(isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))){
       $numpres = $vt[key($vt)];
       $mat = split("N",$numpres);
       for($j = 0;$j < count($mat);$j++) {
-        $numpre = split("P",$mat[$j]);	  
+        $numpre = split("P",$mat[$j]);
         $numpar = split("P",strstr($mat[$j],"P"));
         if(!isset($inicial)){
           $numpar = $numpar[1];
@@ -41,7 +41,7 @@ if(isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))){
   $numpres = "";
   for($i = 0;$i < $tam;$i++) {
     if(db_indexOf(key($vt) ,"CHECK") > 0){
-      $numpres .= "N".$vt[key($vt)];  
+      $numpres .= "N".$vt[key($vt)];
     }
     next($vt);
   }
@@ -52,16 +52,16 @@ if(isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))){
     $totalregistrospassados+=sizeof($valores)-1;
 //     echo "$i - " . $numpres[$i] . "<br>";
   }
-  
+
 
   $cadtipoparc = 0;
 
   $sqltipoparc = "select      *
-			      from tipoparc 
-			      inner join cadtipoparc 
+			      from tipoparc
+			      inner join cadtipoparc
 			      on cadtipoparc = k40_codigo
 			      where maxparc > 1 and '"
-			      . date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini and 
+			      . date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini and
 			      '" . date("Y-m-d",db_getsession("DB_datausu")) . "' <= k40_dtfim order by maxparc";
   $resulttipoparc = pg_exec($sqltipoparc);
   if (pg_numrows($resulttipoparc) > 0) {
@@ -74,7 +74,7 @@ if(isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))){
   $sqltipoparcdeb = "select * from cadtipoparcdeb limit 1";
   $resulttipoparcdeb = pg_exec($sqltipoparcdeb);
   $passar = false;
-  
+
   if(isset($inicial) && $inicial != "") {
     $k03_tipo = 18;
     $totalregistrospassados = $totregistros;
@@ -96,9 +96,9 @@ if(isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))){
 //    echo("totregistros: $totregistros<br>");
 //    echo("quantidade registros resulttipoparc: " . pg_numrows($resulttipoparc) . "<br>");
 //    exit;
- 
 
- 
+
+
   if (pg_numrows($resulttipoparc) == 0 or ($k40_todasmarc == 't'?$totalregistrospassados <> $totregistros:false) or $passar == false) {
     $desconto = 0;
   } else {
@@ -133,7 +133,7 @@ if(isset($inicial) && $inicial != ""){
 		  where v59_inicial in ($numpre)
   ";
    $result = pg_query($sql);
-   $numrows= pg_numrows($result); 
+   $numrows= pg_numrows($result);
    $virgula = "";
    $numpar1 = "";
    $numpre1 = "";
@@ -253,7 +253,7 @@ echo "<input type='hidden' name='mostra' value=0>\n";
 ?>
 <center>
 <table border="1" width="100%">
-<input type="hidden" name="matric" value="<?=@$ver_matric?>"> 
+<input type="hidden" name="matric" value="<?=@$ver_matric?>">
 <tr>
   <td  align="center" colspan="2" style='border: 1px outset #cccccc'>
   <a onclick='js_mostra()'>
@@ -270,7 +270,7 @@ echo "<input type='hidden' name='mostra' value=0>\n";
 	   db_ancora(@$Lv07_numcgm,"js_pesquisav07_numcgm(true);",1);
 	   ?>
 	</td>
-	<td nowrap colspan="2"> 
+	<td nowrap colspan="2">
     <?
     db_input('v07_numcgm',6,$Iv07_numcgm,true,'hidden',1," onchange='js_pesquisav07_numcgm(false);'")
     ?>
@@ -318,7 +318,7 @@ echo "<input type='hidden' name='mostra' value=0>\n";
 	<td nowrap title="">
 	  <strong>Primeiro vencimento:</strong>
 	</td>
-	<td> 
+	<td>
     <?
     $datpri_dia = date("d",db_getsession("DB_datausu"));
     $datpri_mes = date("m",db_getsession("DB_datausu"));
@@ -331,7 +331,7 @@ echo "<input type='hidden' name='mostra' value=0>\n";
 	<td nowrap title="">
           <strong>Segundo vencimento:</strong>
 	</td>
-	<td> 
+	<td>
     <?
 
     $sqlsegvenc = "select '" . date("Y",db_getsession("DB_datausu")) . "-" . date("m",db_getsession("DB_datausu")) . "-" . date("d",db_getsession("DB_datausu")) . "'::date + '1 months'::interval as segvenc";
@@ -340,7 +340,7 @@ echo "<input type='hidden' name='mostra' value=0>\n";
     $datsec_dia = substr($segvenc,8,2);
     $datsec_mes = substr($segvenc,5,2);
     $datsec_ano = substr($segvenc,0,4);
- 
+
 //    $datsec_dia = date("d",db_getsession("DB_datausu"));
 //    $datsec_mes = (date("m",db_getsession("DB_datausu"))) + 1;
 //    $datsec_ano = date("Y",db_getsession("DB_datausu"));
@@ -386,7 +386,7 @@ echo "<input type='hidden' name='mostra' value=0>\n";
     <iframe name='parcelas' src='cai3_gerfinanc063.php?valor=<?=$valor?>&valorcorr=<?=$valorcorr?>&juros=<?=$juros?>&multa=<?=$multa?>&valorcomdesconto=<?=$valor?>&arredondamento=D&tiposparc=<?=$tiposparc?>' frameborder='0' align='center' width='350' height='180'>
     </iframe>
   </td>
-</tr>  
+</tr>
 </table>
 <script>
 function js_verifica(){
@@ -425,7 +425,7 @@ function js_troca_parc(obj){
       parcelas.document.getElementById('val'+obj.value).checked = true;
       parcelas.document.getElementById('val'+obj.value).focus();
     }
-    document.form1.ent.value = total.toFixed(2);	
+    document.form1.ent.value = total.toFixed(2);
   }
 }
 var x = 0;
@@ -433,11 +433,11 @@ var y = 0;
 function js_valparc(id){
 
   if(parcelas.document.getElementById('vt').innerHTML != document.form1.valortotal.value){
-    js_troca_valores('0'); 
+    js_troca_valores('0');
   }
 
   valor = parcelas.document.getElementById(id).innerHTML;
- 
+
   if(valor.indexOf(",") != -1){
     valor = new String(valor)
     valor = valor.replace('.','');
@@ -463,13 +463,13 @@ function js_valparc(id){
     }
 
   } else {
-    
+
     if (document.form1.arredondamento.value == "I" ) {
       valentrada = Math.round(valor)
     } else {
       valentrada = valor
     }
-    
+
   }
 
   document.form1.ent.value = valentrada;
@@ -497,7 +497,7 @@ function js_valparc(id){
   }
 
   if (1 == 2) {
-  
+
     if (document.form1.parc.value <= 5) {
       desconto = 10;
     } else if (document.form1.parc.value <= 11) {
@@ -518,13 +518,13 @@ function js_valparc(id){
 
     juros = new Number(document.form1.juros.value)
     multa = new Number(document.form1.multa.value)
-    
+
 //    valdesconto = (document.form1.juros.value + document.form1.multa.value) * desconto / 100;
     valdesconto = (juros * descontojur / 100) + (multa * descontomul / 100);
     valdesconto = valdesconto.toFixed(2);
 
     valorcorr = Number(document.form1.valorcorr.value);
-    
+
     valtotal = valorcorr + (juros + multa) - valdesconto;
     valtotal = valtotal.toFixed(2);
 
@@ -567,7 +567,7 @@ function js_troca_valores(entrada){
     quantparcelas = new Number(document.form1.parcval.value);
     valorultima = new Number(document.form1.parcult.value);
     valortotal = (valorparcela * quantparcelas) + valorultima;
-    
+
     x = (valortotal - document.form1.ent.value)/document.form1.parc.value;
     document.form1.parcval.value = x.toFixed(2);
     x = document.form1.parc.value * document.form1.parcval.value;
@@ -575,31 +575,31 @@ function js_troca_valores(entrada){
     document.form1.parcult.value = eval(document.form1.parcval.value +'+'+ x).toFixed(2);
 
     parcelas.document.getElementById('vtcomdesconto').innerHTML = valortotal;
-  
+
     for(i=2;i<500;i++){
       parcelas.document.getElementById('val'+i).checked = false;
     }
-    
+
   }
 
   document.form1.dia.focus();
 }
 function js_pesquisav07_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?testanome=true&funcao_js=parent.debitos.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?testanome=true&funcao_js=parent.debitos.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.v07_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?testanome=true&pesquisa_chave='+document.form1.v07_numcgm.value+'&funcao_js=parent.debitos.js_mostracgm','Pesquisa',false);
+     if(document.form1.v07_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?testanome=true&pesquisa_chave='+document.form1.v07_numcgm.value+'&funcao_js=parent.debitos.js_mostracgm','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.v07_numcgm.focus(); 
-    document.form1.v07_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.v07_numcgm.focus();
+    document.form1.v07_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -609,7 +609,7 @@ function js_mostracgm1(chave1,chave2){
     parent.document.getElementById('id_resp_parc').value = chave1;
   if(parent.document.getElementById('resp_parc').value == "")
     parent.document.getElementById('resp_parc').value = chave2;
-  top.corpo.db_iframe_cgm.hide();
+  CurrentWindow.corpo.db_iframe_cgm.hide();
 }
 onload = js_pnome();
 function js_pnome(){

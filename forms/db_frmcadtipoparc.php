@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: caixa
@@ -39,7 +39,7 @@ $clrotulo->label("db03_descr");
  	   $db_action="cai1_cadtipoparc005.php";
       }else if($db_opcao==3||$db_opcao==33){
  	   $db_action="cai1_cadtipoparc006.php";
-      }  
+      }
 ?>
 <form name="form1" method="post" action="<?=$db_action?>">
 <center>
@@ -48,7 +48,7 @@ $clrotulo->label("db03_descr");
     <td nowrap title="<?=@$Tk40_codigo?>">
        <?=@$Lk40_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k40_codigo',10,$Ik40_codigo,true,'text',3,"")
 ?>
@@ -58,7 +58,7 @@ db_input('k40_codigo',10,$Ik40_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tk40_descr?>">
        <?=@$Lk40_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k40_descr',40,$Ik40_descr,true,'text',$db_opcao,"")
 ?>
@@ -68,7 +68,7 @@ db_input('k40_descr',40,$Ik40_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tk40_datalanc?>">
        <?=@$Lk40_datalanc?>
     </td>
-    <td> 
+    <td>
 <?
 if (!isset($k40_datalanc_ano)&&!isset($k40_datalanc_dia)&&!isset($k40_datalanc_mes)){
 	$k40_datalanc_ano=date("Y",db_getsession("DB_datausu"));
@@ -83,7 +83,7 @@ db_inputdata('k40_datalanc',@$k40_datalanc_dia,@$k40_datalanc_mes,@$k40_datalanc
     <td nowrap title="<?=@$Tk40_dtini?>">
        <?=@$Lk40_dtini?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('k40_dtini',@$k40_dtini_dia,@$k40_dtini_mes,@$k40_dtini_ano,true,'text',$db_opcao,"")
 ?>
@@ -93,7 +93,7 @@ db_inputdata('k40_dtini',@$k40_dtini_dia,@$k40_dtini_mes,@$k40_dtini_ano,true,'t
     <td nowrap title="<?=@$Tk40_dtfim?>">
        <?=@$Lk40_dtfim?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('k40_dtfim',@$k40_dtfim_dia,@$k40_dtfim_mes,@$k40_dtfim_ano,true,'text',$db_opcao,"")
 ?>
@@ -103,7 +103,7 @@ db_inputdata('k40_dtfim',@$k40_dtfim_dia,@$k40_dtfim_mes,@$k40_dtfim_ano,true,'t
     <td nowrap title="<?=@$Tk40_todasmarc?>">
        <?=@$Lk40_todasmarc?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('k40_todasmarc',$x,true,$db_opcao,"");
@@ -114,15 +114,15 @@ db_select('k40_todasmarc',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tk40_permvalparc?>">
        <?=@$Lk40_permvalparc?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('k40_permvalparc',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
-  
-  
+
+
 <?
 if (!isset($k40_vctopadrao)) {
 	$k40_vctopadrao = 0;
@@ -132,7 +132,7 @@ if (!isset($k40_vctopadrao)) {
     <td nowrap title="<?=@$Tk40_vctopadrao?>">
        <?=@$Lk40_vctopadrao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k40_vctopadrao',10,$Ik40_vctopadrao,true,'text',$db_opcao,"")
 ?>
@@ -147,7 +147,7 @@ if (!isset($k40_diapulames)) {
     <td nowrap title="<?=@$Tk40_diapulames?>">
        <?=@$Lk40_diapulames?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k40_diapulames',10,$Ik40_diapulames,true,'text',$db_opcao,"")
 ?>
@@ -161,7 +161,7 @@ db_input('k40_diapulames',10,$Ik40_diapulames,true,'text',$db_opcao,"")
     			<td nowrap title="<?=@$Tk40_dtreparc?>" width="50%">
        			<?=@$Lk40_dtreparc?>
     			</td>
-    			<td width="50%">&nbsp; 
+    			<td width="50%">&nbsp;
 						<?
 						if(!isset($k40_dtreparc_dia)){
 							$k40_dtreparc_mes = "";
@@ -176,7 +176,7 @@ db_input('k40_diapulames',10,$Ik40_diapulames,true,'text',$db_opcao,"")
     			<td nowrap title="<?=@$Tk40_qtdreparc?>" width="50%">
        			<?=@$Lk40_qtdreparc?>
     			</td>
-    			<td width="50%">&nbsp; 
+    			<td width="50%">&nbsp;
 						<?
 						db_input('k40_qtdreparc',10,$Ik40_qtdreparc,true,'text',$db_opcao,"")
 						?>
@@ -190,7 +190,7 @@ db_input('k40_diapulames',10,$Ik40_diapulames,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tk40_permanula?>">
        <?=@$Lk40_permanula?>
     </td>
-    <td> 
+    <td>
 			<?
 			$x = array('1'=>'Sempre','2'=>'Nunca', '3'=>'Somente sem Pagamentos/Cancelamentos');
 			db_select('k40_permanula',$x,true,$db_opcao,"");
@@ -201,18 +201,18 @@ db_input('k40_diapulames',10,$Ik40_diapulames,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tk40_tipoanulacao?>">
        <?=@$Lk40_tipoanulacao?>
     </td>
-    <td> 
+    <td>
       <?
         $x = getValoresPadroesCampo('k40_tipoanulacao');
         db_select('k40_tipoanulacao',$x,true,$db_opcao,"");
       ?>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td nowrap title="<?=@$Tk40_forma?>">
        <?=@$Lk40_forma?>
     </td>
-    <td> 
+    <td>
 			<?
 			$x = array('1'=>'Normal','2'=>'Juros e Multa na ultima', '3'=>'Loteamento');
 			db_select('k40_forma',$x,true,$db_opcao,"");
@@ -223,15 +223,15 @@ db_input('k40_diapulames',10,$Ik40_diapulames,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tk40_aplicacao?>">
        <?=$Lk40_aplicacao?>
     </td>
-    <td> 
+    <td>
 <?
 $aplic = array('1'=>'Antes do Lançamento do Débito','2'=>'Após o Lançamento do Débito');
 db_select('k40_aplicacao',$aplic,true,$db_opcao,"");
        ?>
     </td>
-  </tr> 
-  
-  
+  </tr>
+
+
   <tr>
     <td nowrap title="<?=@$Tdb03_docum?>">
        <b>
@@ -240,7 +240,7 @@ db_select('k40_aplicacao',$aplic,true,$db_opcao,"");
        ?>
        </b>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db03_docum',10,$Idb03_docum,true,'text',$db_opcao," onchange='js_pesquisadb03_docum(false);'")
 ?>
@@ -257,14 +257,14 @@ db_input('db03_descr',40,$Idb03_descr,true,'text',3,'')
 			    <td nowrap title="<?=@$Tk40_regraunif?>" width="50%">
 			       <?=@$Lk40_regraunif?>
 			    </td>
-			    <td> 
+			    <td>
 						<?
 						$x = array('1'=>'Permite agrupar origens','2'=>'Permite apenas individual por origem');
 						db_select('k40_regraunif',$x,true,$db_opcao,"onchange=js_ddl_regraunif()");
 						?>
 			    </td>
 			  </tr>
-			  <? 
+			  <?
 			  	$display_id_k40_bloqueio = '';
 			  	if(isset($k40_regraunif) && $k40_regraunif == 1){
 							$k40_bloqueio = 'false';
@@ -277,8 +277,8 @@ db_input('db03_descr',40,$Idb03_descr,true,'text',3,'')
     			<td nowrap title="<?=@$Tk40_bloqueio?>" width="50%">
        			<?=@$Lk40_bloqueio?>
     			</td>
-    			<td width="50%"> 
-						  
+    			<td width="50%">
+
        			<?
        			$k40_bloqueio = (isset($k40_bloqueio)&& $k40_bloqueio == 't') ? 'true' : 'false';
 						$x = array('false'=>'Não','true'=>'Sim');
@@ -305,12 +305,12 @@ function js_ddl_regraunif(){
 	}else{
 		document.getElementById('k40_bloqueio').value = 'false';
 		document.getElementById('id_k40_bloqueio').style.display = 'none';
-		
+
 	}
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_cadtipoparc','db_iframe_cadtipoparc','func_cadtipoparc.php?funcao_js=parent.js_preenchepesquisa|k40_codigo','Pesquisa',true,'0');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadtipoparc','db_iframe_cadtipoparc','func_cadtipoparc.php?funcao_js=parent.js_preenchepesquisa|k40_codigo','Pesquisa',true,'0');
 }
 function js_preenchepesquisa(chave){
   db_iframe_cadtipoparc.hide();
@@ -326,18 +326,18 @@ function js_pesquisadb03_docum(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_db_documento','func_db_documento_alt.php?funcao_js=parent.js_mostradb_documento1|db03_docum|db03_descr','Pesquisa',true);
   }else{
-     if(document.form1.db03_docum.value != ''){ 
+     if(document.form1.db03_docum.value != ''){
         js_OpenJanelaIframe('','db_iframe_db_documento','func_db_documento_alt.php?pesquisa_chave='+document.form1.db03_docum.value+'&funcao_js=parent.js_mostradb_documento','Pesquisa',false);
      }else{
-       document.form1.db03_descr.value = ''; 
+       document.form1.db03_descr.value = '';
      }
   }
 }
 function js_mostradb_documento(chave,erro){
-  document.form1.db03_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.db03_docum.focus(); 
-    document.form1.db03_docum.value = ''; 
+  document.form1.db03_descr.value = chave;
+  if(erro==true){
+    document.form1.db03_docum.focus();
+    document.form1.db03_docum.value = '';
   }
 }
 function js_mostradb_documento1(chave1,chave2){
@@ -348,14 +348,14 @@ function js_mostradb_documento1(chave1,chave2){
 
 function js_valida(db_opcao){
  if(db_opcao == 1 || db_opcao == 2){
-  obj = document.form1;	 	
+  obj = document.form1;
   data1 = obj.k40_dtini_ano.value+obj.k40_dtini_mes.value+obj.k40_dtini_dia.value;
-  data2 = obj.k40_dtfim_ano.value+obj.k40_dtfim_mes.value+obj.k40_dtfim_dia.value;	
+  data2 = obj.k40_dtfim_ano.value+obj.k40_dtfim_mes.value+obj.k40_dtfim_dia.value;
   if(data1 > data2){
-   alert('Data Inicial maior que a Data Final');	 	
+   alert('Data Inicial maior que a Data Final');
    return false;
   }
- }	
+ }
  document.form1.submit();
 }
 

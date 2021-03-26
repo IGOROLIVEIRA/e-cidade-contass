@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 // CLASSE PARA GERAR FORM PARA RELATÓRIOS CONFIGURÁVEIS
@@ -71,7 +71,7 @@ class cl_formulario_relcampos {
 	    	$arr_tabless[$$codigo] = $$codigo;
 	   	  $arr_tabelas[$$codigo] = $$descri;
 	    }
-     
+
       if(count($arr_tabelas) == 2){
       	$$valcam = $$codigo;
       }
@@ -102,7 +102,7 @@ class cl_formulario_relcampos {
         	exit;
         }
         db_fieldsmemory($result_camposTABLES, 0);
-        global $codigodatabela, $sigladoarquivo; 
+        global $codigodatabela, $sigladoarquivo;
 
       	$sql_camposFKPRIN = "select ".$codigodatabela." as arquivo, '".$sigladoarquivo."' as siglaarq, codarq, sigla
                              from db_sysarquivo
@@ -119,7 +119,7 @@ class cl_formulario_relcampos {
                                    and rotulo is not null
                             ";
         $result_camposFKPRIN = @pg_exec($sql_camposFKPRIN);
-        
+
         if($result_camposFKPRIN == false){
         	db_msgbox("Erro ao buscar campos referentes à tabela selecionada.");
         	exit;
@@ -140,7 +140,7 @@ class cl_formulario_relcampos {
 	 	                                    and rotulo is not null
  		                            ";
         $result_camposFKSECN = @pg_exec($sql_camposFKSECN);
-        
+
         if($result_camposFKSECN == false){
         	db_msgbox("Erro ao buscar campos referentes à tabela selecionada.");
         	exit;
@@ -497,7 +497,7 @@ class cl_formulario_relcampos {
             <script>
 							var recebelistagem = '';
               function js_outrosrel(){
-                js_OpenJanelaIframe('top.corpo','db_iframe_db_relat','func_db_relat.php?funcao_js=parent.js_preenchepesquisa|db91_codrel','Pesquisa',true,'20');
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_relat','func_db_relat.php?funcao_js=parent.js_preenchepesquisa|db91_codrel','Pesquisa',true,'20');
               }
 							function js_preenchepesquisa(chave){
 							  db_iframe_db_relat.hide();
@@ -541,17 +541,17 @@ class cl_formulario_relcampos {
 		              if(val != 'false'){
 		                qry += '&valor='+arr[val];
 		              }
-	                js_OpenJanelaIframe('top.corpo','db_iframe_interval','func_interval.php'+qry,'Informar filtro',true,20,0,600,150);
+	                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_interval','func_interval.php'+qry,'Informar filtro',true,20,0,600,150);
                 }
               }
               function js_abrearquivoqbr(){
-                js_OpenJanelaIframe('top.corpo','db_iframe_quebrapag','func_quebrapag.php','Informar quebras',true,20);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_quebrapag','func_quebrapag.php','Informar quebras',true,20);
               }
               function js_abrecabec(){
-                js_OpenJanelaIframe('top.corpo','db_iframe_cabecalho','func_cabecalho.php','Informar dados do cabeçalho',true,20);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cabecalho','func_cabecalho.php','Informar dados do cabeçalho',true,20);
               }
               function js_abrenomearq(){
-                js_OpenJanelaIframe('top.corpo','db_iframe_nomearqui','func_nomearqui.php?arquivo='+document.form1.campo_camporecb_nomearq.value,'Informar filtro',true,20,0,600,150);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomearqui','func_nomearqui.php?arquivo='+document.form1.campo_camporecb_nomearq.value,'Informar filtro',true,20,0,600,150);
               }
               function js_abrearquivosom(){
                 x = document.form1;
@@ -583,7 +583,7 @@ class cl_formulario_relcampos {
                 }
                 if(campousar != ''){
                   altura = (60+(33*quantidad));
-                  js_OpenJanelaIframe('top.corpo','db_iframe_somatorio','func_somatorio.php?sel='+document.form1.campo_camporecb_somator.value+'&campousar='+campousar,'Informar somas',true,20,0,300,altura);
+                  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_somatorio','func_somatorio.php?sel='+document.form1.campo_camporecb_somator.value+'&campousar='+campousar,'Informar somas',true,20,0,300,altura);
                 }else{
                   alert('Nenhum campo selecionado ou campos selecionados não podem ser somados.');
                 }
@@ -722,7 +722,7 @@ class cl_formulario_relcampos {
                   if(selecionados1.slice(0,(posic1+1)) == ','){
 	                  selecionados1 = selecionados1.slice(posic1+1);
                   }
-	
+
 	                selecionados2 = arr2.toString();
 	                posic2 = selecionados2.search(',');
                   if(selecionados2.slice(0,(posic2+1)) == ','){

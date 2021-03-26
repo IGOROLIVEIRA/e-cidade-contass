@@ -113,14 +113,14 @@ function js_retornocampo(oCampo) {
 
   if (oCampo.checked) {
 
-    if (top.corpo.arr_dados.indexOf(oCampo.name) == -1) {
-      top.corpo.arr_dados.push(oCampo.name);
+    if (CurrentWindow.corpo.arr_dados.indexOf(oCampo.name) == -1) {
+      CurrentWindow.corpo.arr_dados.push(oCampo.name);
     }
   } else {
-    top.corpo.arr_dados.remove(oCampo.name);
+    CurrentWindow.corpo.arr_dados.remove(oCampo.name);
   }
 
-  top.corpo.document.form1.valores.value = top.corpo.arr_dados.valueOf();
+  CurrentWindow.corpo.document.form1.valores.value = CurrentWindow.corpo.arr_dados.valueOf();
 }
 
 function js_setornosetimp(campo,SN){
@@ -129,9 +129,9 @@ function js_setornosetimp(campo,SN){
 
   if (SN == true) {
 
-    for (i = 0;i < top.corpo.arr_impor.length; i++ ){
+    for (i = 0;i < CurrentWindow.corpo.arr_impor.length; i++ ){
 
-      if (top.corpo.arr_impor[i] == campo) {
+      if (CurrentWindow.corpo.arr_impor[i] == campo) {
 
  	      cont++;
 	      break;
@@ -144,15 +144,15 @@ function js_setornosetimp(campo,SN){
   if (eval('document.form1.' + campo + '.checked') == true) {
 
     if (cont == 0) {
-      top.corpo.arr_impor.push(campo);
+      CurrentWindow.corpo.arr_impor.push(campo);
     }
   } else {
 
     if (cont > 0) {
-      top.corpo.arr_impor.splice(i,1);
+      CurrentWindow.corpo.arr_impor.splice(i,1);
     }
   }
-  top.corpo.document.form1.importa.value = top.corpo.arr_impor.valueOf();
+  CurrentWindow.corpo.document.form1.importa.value = CurrentWindow.corpo.arr_impor.valueOf();
 }
 
 function js_marcacampos() {
@@ -161,18 +161,18 @@ function js_marcacampos() {
   campo = "";
   for(i=0;i<document.form1.length;i++){
     if(document.form1.elements[i].type == 'checkbox' && document.form1.elements[i].name.search('imp')==-1){
-      if(top.corpo.document.form1.valores.value.search(document.form1.elements[i].name)!=-1){
+      if(CurrentWindow.corpo.document.form1.valores.value.search(document.form1.elements[i].name)!=-1){
         document.form1.elements[i].checked = true;
       	campo = document.form1.elements[i].name;
-      	for(ii=0;ii<top.corpo.arr_dados.length;ii++){
-      	  if(top.corpo.arr_dados[ii]==campo){
+      	for(ii=0;ii<CurrentWindow.corpo.arr_dados.length;ii++){
+      	  if(CurrentWindow.corpo.arr_dados[ii]==campo){
       	    erro++;
       	    break;
       	  }
       	}
 
       	if(erro==0 && campo!=""){
-      	  top.corpo.arr_dados.push(campo);
+      	  CurrentWindow.corpo.arr_dados.push(campo);
       	}
       }
     }
@@ -182,7 +182,7 @@ function js_marcacampos() {
 function js_marcacamposimp(){
   for(i=0;i<document.form1.length;i++){
     if(document.form1.elements[i].type == 'checkbox'){
-      if(top.corpo.document.form1.importa.value.search(document.form1.elements[i].name)!=-1){
+      if(CurrentWindow.corpo.document.form1.importa.value.search(document.form1.elements[i].name)!=-1){
         document.form1.elements[i].checked = true;
       }
     }

@@ -142,12 +142,12 @@ function enviarDados() {
 function js_pesquisaProcessoCompra(lMostra) {
 
   if (lMostra) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?lFiltroContrato=1&funcao_js=parent.js_preencheProcessoCompra|pc80_codproc','Pesquisa Processo de Compras',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcproc','func_pcproc.php?lFiltroContrato=1&funcao_js=parent.js_preencheProcessoCompra|pc80_codproc','Pesquisa Processo de Compras',true);
   } else {
 
     if ($('iProcessoCompra').value != "") {
       var sUrlOpen = 'func_pcproc.php?lFiltroContrato=1&pesquisa_chave='+$('iProcessoCompra').value+'&funcao_js=parent.js_completaProcessoCompra';
-      js_OpenJanelaIframe('top.corpo','db_iframe_pcproc',sUrlOpen,'Pesquisa Processo de Compras', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcproc',sUrlOpen,'Pesquisa Processo de Compras', false);
     }
   }
 }
@@ -179,13 +179,13 @@ function js_pesquisaSolicitacao(lMostra) {
 
   if (lMostra) {
     var sUrlOpen = 'func_solicita_compras.php?lFiltroContrato=1&iTipoConsulta=2&passar=&proc=false&validar_liberacao_solicitacao=true&gerautori=true&param=&funcao_js=parent.js_preencheSolicitacao|pc10_numero';
-    js_OpenJanelaIframe('top.corpo','db_iframe_solicita',sUrlOpen,'Pesquisa Solicitação',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita',sUrlOpen,'Pesquisa Solicitação',true);
   } else {
 
     $('btnEnviarDados').disabled = true;
     if ($('iSolicitacao').value != "") {
       var sUrlOpen = 'func_solicita_compras.php?lFiltroContrato=1&iTipoConsulta=2&passar=&proc=false&validar_liberacao_solicitacao=true&gerautori=true&param=&pesquisa_chave='+$('iSolicitacao').value+'&funcao_js=parent.js_completaSolicitacao';
-      js_OpenJanelaIframe('top.corpo','db_iframe_solicita',sUrlOpen,'Pesquisa Solicitação', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita',sUrlOpen,'Pesquisa Solicitação', false);
     }
   }
 }

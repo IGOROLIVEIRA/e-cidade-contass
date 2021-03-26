@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -72,7 +72,7 @@ db_app::load("estilos.css, grid.style.css");
 						        db_ancora("<b>Arquivo:</b>","js_pesquisae14_sequencial(true);",1);
 						       ?>
 						      </td>
-						      <td colspan="3"> 
+						      <td colspan="3">
 										<?
 										  db_input('e14_sequencial',10,$Ie14_sequencial,true,'text',1," onchange='js_pesquisae14_sequencial(false);'")
 										?>
@@ -84,22 +84,22 @@ db_app::load("estilos.css, grid.style.css");
                <tr>
                  <td>
                    <b>Data Inicial:</b>
-                 </td> 
+                 </td>
                  <td>
                    <?
                     $dtDataInicio = date("Y-m-d", db_getsession("DB_datausu"));
-                    $aPartesDataInicio = explode("-", $dtDataInicio); 
+                    $aPartesDataInicio = explode("-", $dtDataInicio);
                     db_inputdata('datainicial', '01', $aPartesDataInicio[1], $aPartesDataInicio[0], true, "text", 1);
                    ?>
                  </td>
                  <td>
                    <b>Data Final:</b>
-                 </td> 
+                 </td>
                  <td align="left">
                    <?
                     $dtDataFinal      = date("Y-m-d", db_getsession("DB_datausu"));
                     $aPartesDataFinal = explode("-", $dtDataInicio);
-                    $iUltimoDia       = cal_days_in_month(CAL_GREGORIAN, $aPartesDataFinal[1], $aPartesDataFinal[0]); 
+                    $iUltimoDia       = cal_days_in_month(CAL_GREGORIAN, $aPartesDataFinal[1], $aPartesDataFinal[0]);
                     db_inputdata('datafinal', $iUltimoDia, $aPartesDataFinal[1], $aPartesDataFinal[0], true, "text", 1);
                    ?>
                  </td>
@@ -112,7 +112,7 @@ db_app::load("estilos.css, grid.style.css");
          <td style="text-align: center">
            <input type='button' id='pesquisar'       name='pesquisar'       value='Pesquisar'
                   onclick='js_getArquivosNoPeriodo()'>
-           
+
          </td>
        </tr>
     </table>
@@ -141,14 +141,14 @@ urlRPC            = 'mat4_arquivosPIT.RPC.php';
 var dtDataInicial = '';
 var dtDataFinal   = '';
 
-function js_main() { 
+function js_main() {
 
   gridArquivos = new DBGrid("gridArquivos");
   gridArquivos.nameInstance = "gridArquivos";
   gridArquivos.setCellAlign(new Array("right","center", "left", "center"));
   gridArquivos.setHeader(new Array("Código", "Data", "Arquivo","Reemitir"));
   gridArquivos.show($('containergridArquivos'));
-  
+
 }
 
 
@@ -157,85 +157,85 @@ function js_getArquivosNoPeriodo() {
   var dtDataInicial  = $F('datainicial');
   var dtDataFinal    = $F('datafinal');
   var e14_sequencial = $F('e14_sequencial');
-  
-  
+
+
   /*
   if (dtDataFinal == "") {
-  
+
     alert('informe a data final');
     $('dtafinal').focus();
-    
+
   }
-  
+
   if (dtDataInicial == "") {
-  
+
     alert('informe a data inicial');
     $('dtainicial').focus();
-    
+
   }
   */
-  
+
   var oParamPit = new Object();
   oParamPit.exec          = "getArqReemitir";
-  oParamPit.datainicial   = dtDataInicial;  
-  oParamPit.datafinal     = dtDataFinal;  
+  oParamPit.datainicial   = dtDataInicial;
+  oParamPit.datafinal     = dtDataFinal;
   oParamPit.tipodocumento = 50;
   oParamPit.e14_sequencial = e14_sequencial == '' ? 0 : e14_sequencial;
-  js_divCarregando("Aguarde, pesquisando arquivos para o(s) filtro(s) indicado.","msgBox");  
+  js_divCarregando("Aguarde, pesquisando arquivos para o(s) filtro(s) indicado.","msgBox");
   var oAjax    = new Ajax.Request(
-                          urlRPC, 
+                          urlRPC,
                           {
-                           method    : 'post', 
-                           parameters: 'json='+Object.toJSON(oParamPit), 
+                           method    : 'post',
+                           parameters: 'json='+Object.toJSON(oParamPit),
                            onComplete: js_retornoGetArquivos
                           }
-                        ); 
+                        );
 }
 
 function js_retornoGetArquivos(oResponse) {
-  
+
   js_removeObj('msgBox');
   gridArquivos.clearAll(true);
   var oRetorno = eval("("+oResponse.responseText+")");
   lDisabled    = false;
   if (oRetorno.status == 1) {
-    
+
     if (oRetorno.itens.length  > 0) {
-      
+
       for (var i = 0; i < oRetorno.itens.length; i++) {
-        
-          
+
+
         with(oRetorno.itens[i]) {
-          
+
           aLinha    = new Array();
-          aLinha[0] = e14_sequencial; 
-          aLinha[1] = js_formatar(e14_dtarquivo,'d');  
+          aLinha[0] = e14_sequencial;
+          aLinha[1] = js_formatar(e14_dtarquivo,'d');
           aLinha[2] = e14_nomearquivo.urlDecode();
-          var sButton = "<input type='button' onclick='js_reemitirArquivo("+e14_sequencial+")' id='reemite'"+i+" value='Reemitir'>" 
-          aLinha[3] = sButton;  
+          var sButton = "<input type='button' onclick='js_reemitirArquivo("+e14_sequencial+")' id='reemite'"+i+" value='Reemitir'>"
+          aLinha[3] = sButton;
           gridArquivos.addRow(aLinha);
           gridArquivos.aRows[i].sStyle += ";padding:1px";
-          
-                    
-        } 
+
+
+        }
       }
-      
+
       gridArquivos.renderRows();
-      
-    } 
-  }  
+
+    }
+  }
 }
 
 function js_reemitirArquivo(e14_sequencial) {
 
-  
+
   var sUrl  = 'mat4_reprocessararquivopit002.php?';
   sUrl     += 'e14_sequencial='+e14_sequencial;
 
   js_OpenJanelaIframe('', 'db_iframe_pit',sUrl,"Reemitir arquivos Pit", true);
-  
-} 
- 
+
+}
+
 function js_validaSomenteNumeros(sValor) {
   var sReg    = /[^0-9]/;
   var lRetorno = sReg.test(sValor);
@@ -249,20 +249,20 @@ function js_validaSomenteNumeros(sValor) {
 
 function js_pesquisae14_sequencial(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_emparquivopit','func_emparquivopit.php?funcao_js=parent.js_mostrae14_sequencial1|e14_sequencial|e14_nomearquivo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_emparquivopit','func_emparquivopit.php?funcao_js=parent.js_mostrae14_sequencial1|e14_sequencial|e14_nomearquivo','Pesquisa',true);
   }else{
-     if($('e14_sequencial').value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_emparquivopit','func_emparquivopit.php?pesquisa_chave='+$('e14_sequencial').value+'&funcao_js=parent.js_mostrae14_sequencial','Pesquisa',false);
+     if($('e14_sequencial').value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_emparquivopit','func_emparquivopit.php?pesquisa_chave='+$('e14_sequencial').value+'&funcao_js=parent.js_mostrae14_sequencial','Pesquisa',false);
      }else{
-       $('e14_nomearquivo').value = ''; 
+       $('e14_nomearquivo').value = '';
      }
   }
 }
 function js_mostrae14_sequencial(chave,erro){
-  $('e14_nomearquivo').value = chave; 
-  if(erro==true){ 
-    $('e14_sequencial').focus(); 
-    $('e14_sequencial').value = ''; 
+  $('e14_nomearquivo').value = chave;
+  if(erro==true){
+    $('e14_sequencial').focus();
+    $('e14_sequencial').value = '';
   }else{
     js_getArquivosNoPeriodo()
   }

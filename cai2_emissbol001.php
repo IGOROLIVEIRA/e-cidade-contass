@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -61,7 +61,7 @@ if ( $iCaiParametro > 0 ) {
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 function js_relatorio() {
-  
+
   var obj                  = document.form1;
   var datai                = obj.datai_ano.value+'-'+obj.datai_mes.value+'-'+obj.datai_dia.value;
   var dataf                = obj.dataf_ano.value+'-'+obj.dataf_mes.value+'-'+obj.dataf_dia.value;
@@ -76,7 +76,7 @@ function js_relatorio() {
   var contassemmov         = obj.k29_contassemmovimento.value;
   var agruparfonte         = obj.agrupar_fonte.value;
   var fonte 			   = obj.o15_codigo.value;
-  
+
   jan = window.open('cai2_emissbol002.php?contasnegativas='+contasnegativas
                                                            +'&imprime_interferencia='+imprimeinterferencia
                                                            +'&ordem_conta='+ordemconta
@@ -105,7 +105,7 @@ function js_relatorio1(tipo) {
   var quebrarpag   = obj.quebrarpag.value;
   var contassemmov = obj.k29_contassemmovimento.value;
   var caixabanco   = obj.caixabanco.value;
-  
+
   jan = window.open('cai2_emissbol003.php?datai='+datai
                                                  +'&dataf='+dataf
                                                  +'&caixa='+caixa
@@ -128,7 +128,7 @@ function js_relatorio2() {
   var agrupar      = obj.agrupar.value;
   var contassemmov = obj.k29_contassemmovimento.value;
   var caixabanco   = obj.caixabanco.value;
-  
+
   jan = window.open('cai2_emissbol004.php?datai='+datai
                                                  +'&dataf='+dataf
                                                  +'&caixa='+caixa
@@ -149,47 +149,47 @@ function js_bloquearordem(){
 }
 
 function js_pesquisa_recurso(mostra){
-	
+
 	if (mostra==true){
-	  	js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostrarecurso1|o15_codigo|o15_descr','Pesquisa',true);
+	  	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostrarecurso1|o15_codigo|o15_descr','Pesquisa',true);
 	} else {
-	   
-		if (document.form1.o15_codigo.value != ''){ 
-		  	js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostrarecurso','Pesquisa',false);
+
+		if (document.form1.o15_codigo.value != ''){
+		  	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostrarecurso','Pesquisa',false);
 	   	} else{
-		 	document.form1.o15_descr.value = ''; 
+		 	document.form1.o15_descr.value = '';
 	   	}
 	}
-  
+
 }
 
 function js_mostrarecurso(chave,erro){
-	
-	document.form1.o15_descr.value = chave; 
-	
-	if( erro == true ){ 
-	  
-		document.form1.o15_codigo.value = ''; 
-	  	document.form1.o15_codigo.focus(); 
+
+	document.form1.o15_descr.value = chave;
+
+	if( erro == true ){
+
+		document.form1.o15_codigo.value = '';
+	  	document.form1.o15_codigo.focus();
 
 	}
-  
+
 }
-  
+
 function js_mostrarecurso1(chave1,chave2){
-		  
-	document.form1.o15_codigo.value = chave1;  
+
+	document.form1.o15_codigo.value = chave1;
 	document.form1.o15_descr.value = chave2;
 	db_iframe_orctiporec.hide();
-  
+
 }
-  
+
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="if(document.form1) document.form1.elements[0].focus()" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -197,11 +197,11 @@ function js_mostrarecurso1(chave1,chave2){
   </tr>
 </table>
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	<center>
     <br><br>
-    
+
         <form name="form1" method="post" action="">
           <fieldset style="width: 430px;">
            <legend><b>Boletim por Período</b></legend>
@@ -210,26 +210,26 @@ function js_mostrarecurso1(chave1,chave2){
                <td width="25">&nbsp;</td>
                <td width="140">&nbsp;</td>
 	    </tr>
-            <tr> 
+            <tr>
               <td align="right" nowrap><strong>Data inicial:</strong></td>
-              <td align="left"  nowrap>&nbsp;&nbsp;&nbsp; 
+              <td align="left"  nowrap>&nbsp;&nbsp;&nbsp;
                 <?=db_inputdata("datai",$k00_dtoper_dia,$k00_dtoper_mes,$k00_dtoper_ano,true,'text',2)?>
               </td>
             </tr>
 
 
-            <tr> 
+            <tr>
               <td align="right" nowrap><strong>Data final:</strong></td>
-              <td align="left"  nowrap>&nbsp;&nbsp;&nbsp; 
+              <td align="left"  nowrap>&nbsp;&nbsp;&nbsp;
                 <?=db_inputdata("dataf",$k00_dtoper_dia,$k00_dtoper_mes,$k00_dtoper_ano,true,'text',2)?>
               </td>
             </tr>
 
 
-	    
-<!--            <tr> 
+
+<!--            <tr>
               <td height="25" nowrap><strong>Data Final:</strong></td>
-              <td height="25" nowrap>&nbsp;&nbsp; 
+              <td height="25" nowrap>&nbsp;&nbsp;
               </td>
             </tr>
             <tr>
@@ -237,7 +237,7 @@ function js_mostrarecurso1(chave1,chave2){
               <td align="left"  nowrap>&nbsp; &nbsp;
                 <?
 			//	$clcfautent = new cl_cfautent;
-			//	$result = $clcfautent->sql_record($clcfautent->sql_query("","k11_id#k11_local","k11_local")); 
+			//	$result = $clcfautent->sql_record($clcfautent->sql_query("","k11_id#k11_local","k11_local"));
 			//	db_selectrecord("k11_id",$result,true,2,"","","","0");
 				?>
               </td>
@@ -248,7 +248,7 @@ function js_mostrarecurso1(chave1,chave2){
               <td align="left" nowrap>&nbsp; &nbsp;
                 <?
 				//$clsaltes = new cl_saltes;
-				//$result = $clsaltes->sql_record($clsaltes->sql_query("","saltes.k13_conta#k13_descr","k13_descr")); 
+				//$result = $clsaltes->sql_record($clsaltes->sql_query("","saltes.k13_conta#k13_descr","k13_descr"));
 				//db_selectrecord("k13_conta",$result,true,2,"","","","0");
 				?>
               </td>
@@ -258,16 +258,16 @@ function js_mostrarecurso1(chave1,chave2){
 		    <td align="right" nowrap title="<?=@$Tk29_contassemmovimento?>">
 		       <strong>Traz Contas sem Movimento:</strong>
 		    </td>
-		    <td align="left" nowrap>&nbsp; &nbsp; 
+		    <td align="left" nowrap>&nbsp; &nbsp;
 		      <?
 		         $x = array('f'=>'Não','t'=>'Sim');
 		         db_select('k29_contassemmovimento',$x,true,2,"");
 		      ?>
 		    </td>
 		  </tr>
-      
+
      <tr>
-        <td align="right"><strong>Contas negativas em cinza:</strong> 
+        <td align="right"><strong>Contas negativas em cinza:</strong>
 	 </td>
         <td>
 	  &nbsp; &nbsp;
@@ -277,7 +277,7 @@ function js_mostrarecurso1(chave1,chave2){
         </td>
       </tr>
       <tr>
-        <td align="right"><strong>Agrupar Contas:</strong> 
+        <td align="right"><strong>Agrupar Contas:</strong>
    </td>
         <td>
     &nbsp; &nbsp;
@@ -287,11 +287,11 @@ function js_mostrarecurso1(chave1,chave2){
         </td>
       </tr>
      <tr>
-        <td align="right"><strong>Imprimir Interferências:</strong> 
+        <td align="right"><strong>Imprimir Interferências:</strong>
 	 </td>
         <td>
 	  &nbsp; &nbsp;
-          <select name="imprime_interferencia">            
+          <select name="imprime_interferencia">
             <option value = 'N'>Não</option>
             <option value = 'S'>Sim</option>
         </td>
@@ -311,7 +311,7 @@ function js_mostrarecurso1(chave1,chave2){
             <option value = 'S'>Sim</option>
             <option value = 'N'>Não</option>
         </td>
-      </tr>  	    
+      </tr>
       <tr>
         <td align="right"><strong>Ordem:</strong></td>
         <td> &nbsp; &nbsp;
@@ -335,7 +335,7 @@ function js_mostrarecurso1(chave1,chave2){
       </tr>
 	<tr>
 		<td align="right"><?db_ancora("<b>Fonte:</b>","js_pesquisa_recurso(true);",1);?></td>
-		<td nowrap>&nbsp; &nbsp;			
+		<td nowrap>&nbsp; &nbsp;
 			<?
 				db_input("o15_codigo",6,1,true,"text",4,"onchange='js_pesquisa_recurso(false);'");
 				db_input("o15_descr",30,"",true,"text",3);
@@ -346,10 +346,10 @@ function js_mostrarecurso1(chave1,chave2){
 	    <tr>
                <td width="25">&nbsp;</td>
                <td width="140">&nbsp;</td>
-	    </tr>	    
-	    
-            <tr> 
-              <td colspan = "2" align="center" > 
+	    </tr>
+
+            <tr>
+              <td colspan = "2" align="center" >
 	          <input name="boletim" type="button" id="boletim" onClick="js_relatorio()" value="Boletim" />
 	          <!--<input name="autentica" type="button" id="autentica" onClick="js_relatorio1('c')" value="Autenticação Completo">
 	          <input name="autenticaresum" type="button" id="autenticaresum" onClick="js_relatorio1('r')" value="Autenticação Resumido">
@@ -359,12 +359,12 @@ function js_mostrarecurso1(chave1,chave2){
           </table>
           </fieldset>
         </form>
-      
+
       </center>
 	</td>
   </tr>
 </table>
-    <? 
+    <?
       db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
     ?>
 </body>

@@ -64,7 +64,7 @@ function js_imprime() {
 function js_OpenRelatorio(xxaondeJanela,xxnomeJanela,xxarquivoJanela,xxtituloJanela,xxmostraJanela){
   alert('1');
 	eval('var nomeIframe = '+xxnomeJanela+'_status;');
-  js_OpenJanelaIframe('top.corpo',nomeIframe,'janelaStatus.php','Aguarde Processando',true,30,30,100,60);
+  js_OpenJanelaIframe('CurrentWindow.corpo',nomeIframe,'janelaStatus.php','Aguarde Processando',true,30,30,100,60);
   alert('2');
   js_OpenJanelaIframe(xxaondeJanela,nomeIframe,xxarquivoJanela,xxtituloJanela,xxmostraJanela);
   alert('3');

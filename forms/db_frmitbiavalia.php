@@ -535,7 +535,7 @@ function js_concordaValores(){
 
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_itbi','func_itbinaoliberado.php?funcao_js=parent.js_preenchepesquisa|it01_guia','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_itbi','func_itbinaoliberado.php?funcao_js=parent.js_preenchepesquisa|it01_guia','Pesquisa',true);
 }
 
 
@@ -828,7 +828,7 @@ function js_mostraitbitransacao1(chave1,chave2){
 
 
 function js_verMatric(){
-  js_OpenJanelaIframe('top.corpo',"db_iframe_consulta",'cad3_conscadastro_002.php?cod_matricula='+document.form1.it06_matric.value,'Detalhes da Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo',"db_iframe_consulta",'cad3_conscadastro_002.php?cod_matricula='+document.form1.it06_matric.value,'Detalhes da Pesquisa',true);
 }
 
 js_criaGrid();

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -93,7 +93,7 @@ db_fieldsmemory($result,0);
     	</td>
  	</tr>
 	<tr>
-		<td colspan=2 align='center'> 
+		<td colspan=2 align='center'>
 			<input name="anular" type="button"  value="Anular Parcelamento" onclick="return js_anula();" >
 		</td>
 	</tr>
@@ -112,19 +112,19 @@ function js_pesquisaq14_proces(mostra){
       if (document.form1.v22_processo.value != '') {
         js_OpenJanelaIframe('','db_iframe_processo','func_protprocesso.php?pesquisa_chave='+document.form1.v22_processo.value+'&funcao_js=parent.js_mostraprocesso','Pesquisa',false);
       } else {
-        document.form1.p58_requer.value = ''; 
+        document.form1.p58_requer.value = '';
       }
     }
   }
-  
+
 function js_mostraprocesso(chave1,chave,erro){
     document.form1.p58_requer.value = chave;
     if (erro==true) {
-        document.form1.v22_processo.focus(); 
-    	document.form1.v22_processo.value = ''; 
+        document.form1.v22_processo.focus();
+    	document.form1.v22_processo.value = '';
     }
   }
-  
+
   function js_mostraprocesso1(chave1,chave2) {
     document.form1.v22_processo.value = chave1;
     document.form1.p58_requer.value = chave2;
@@ -138,8 +138,8 @@ function js_anula(){
 	    return true;
 		//var usu = <?=$usu?>;
 		//var parcel =<?=$parcel?>;
-		//js_OpenJanelaIframe('top.corpo','db_iframe_anulaparc','cai4_anulaparc.php?parcel='+parcel+'&usu='+usu+'&motivo='+document.form1.motivo.value+'&processo='+document.form1.v22_processo.value,'Pesquisa',false);
- 
+		//js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_anulaparc','cai4_anulaparc.php?parcel='+parcel+'&usu='+usu+'&motivo='+document.form1.motivo.value+'&processo='+document.form1.v22_processo.value,'Pesquisa',false);
+
 	}else{
 	return false;
 	}

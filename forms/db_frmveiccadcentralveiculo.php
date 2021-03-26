@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: veiculos
@@ -43,7 +43,7 @@ db_input("sequencial", 10,0,true,"hidden",3);
   <tr>
     <td nowrap title="<?=@$Tve01_codigo?>">
     </td>
-    <td> 
+    <td>
   </td>
   </tr>
     <td nowrap title="<?=@$Tve01_codigo?>">
@@ -51,7 +51,7 @@ db_input("sequencial", 10,0,true,"hidden",3);
        db_ancora(@$Lve01_codigo,"js_pesquisave01_codigo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ve01_codigo',10,$Ive01_codigo,true,'text',$db_opcao," onchange='js_pesquisave01_codigo(false);'");
 
@@ -64,12 +64,12 @@ db_input('ve22_descr',40,$Ive01_codigo,true,'text',3,'');
 
 
  <tr>
-  
+
  <td nowrap colspan="3" height="50" align="center">
-      <input name="<?=($db_opcao==1?"incluir":($db_opcao==3||$db_opcao==33?"excluir":""))?>" 
-          type="submit" id="db_opcao" 
+      <input name="<?=($db_opcao==1?"incluir":($db_opcao==3||$db_opcao==33?"excluir":""))?>"
+          type="submit" id="db_opcao"
           value="<?=($db_opcao==1?"Incluir":($db_opcao==3||$db_opcao==33?"Excluir":""))?>"
-          <?=($db_botao==false?"disabled":"")?> 
+          <?=($db_botao==false?"disabled":"")?>
        >
        <?
           if ($db_opcao != 1) {
@@ -79,9 +79,9 @@ db_input('ve22_descr',40,$Ive01_codigo,true,'text',3,'');
           }
        ?>
     </td>
- 
-  
-  
+
+
+
   </tr>
 
 <tr>
@@ -112,13 +112,13 @@ db_input('ve22_descr',40,$Ive01_codigo,true,'text',3,'');
 
 function js_pesquisave01_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_veiccadcentralveiculo','db_iframe_veiculos','func_veiculos.php?funcao_js=parent.js_preenchepesquisa01|ve01_codigo|ve01_placa|ve22_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veiccadcentralveiculo','db_iframe_veiculos','func_veiculos.php?funcao_js=parent.js_preenchepesquisa01|ve01_codigo|ve01_placa|ve22_descr','Pesquisa',true,'0');
   }else{
      if(document.form1.ve01_codigo.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_veiccadcentralveiculo','db_iframe_veiculos','func_veiculos.php?pesquisa_chave='+document.form1.ve01_codigo.value+'&funcao_js=parent.js_mostraveiccentral','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veiccadcentralveiculo','db_iframe_veiculos','func_veiculos.php?pesquisa_chave='+document.form1.ve01_codigo.value+'&funcao_js=parent.js_mostraveiccentral','Pesquisa',false);
      }else{
-       document.form1.ve01_placa.value = ''; 
-       document.form1.ve22_descr.value = ''; 
+       document.form1.ve01_placa.value = '';
+       document.form1.ve22_descr.value = '';
      }
   }
 }
@@ -128,9 +128,9 @@ function js_mostraveiccentral(erro,chave1,chave2,chave3){
     document.form1.ve22_descr.value = chave3;
   }
 
-  if(erro==true){ 
-    document.form1.ve01_codigo.focus(); 
-    document.form1.ve01_codigo.value = ""; 
+  if(erro==true){
+    document.form1.ve01_codigo.focus();
+    document.form1.ve01_codigo.value = "";
   }
 }
 function js_preenchepesquisa01(chave1,chave2,chave3){

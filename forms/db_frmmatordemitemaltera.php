@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("../libs/db_stdlib.php");
@@ -228,12 +228,12 @@ $clrotulo->label("e62_descr");
                                     $oItemOrdem = db_utils::fieldsMemory($rsItem, 0);
 
                                     if ($clmatestoqueitemoc->numrows == 0) {
-                                        
+
 										echo "<tr id='tr_$e62_sequencial' class='$marcaLinha'>
                                                     <td class='linhagrid' title='Inverte a marcação' align='center'>
                                                         <input type='checkbox' {$sChecked} {$disabled} id='chk{$e62_sequencial}' class='itensEmpenho'
                                                             name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this, $i)'>
-                                                    </td>	    
+                                                    </td>
                                                     <td	class='linhagrid' align='center'>
                                                         <small>
                                                             <input id ='sequen_".$i."' class ='input__static' value='".$e62_sequen."' disabled></input>
@@ -248,7 +248,7 @@ $clrotulo->label("e62_descr");
 													    <small>
 													        <input id ='numemp_".$i."' class='input__static' value='".$e62_numemp."' disabled></input>
 													    </small>
-                                                    </td>		    
+                                                    </td>
 													<td	class='linhagrid' nowrap align='left' title='$pc01_descrmater'>
 													    <small>
 													        <input id ='coditem_".$i."' class ='input__static' value='".$e62_item."' disabled></input>
@@ -257,7 +257,7 @@ $clrotulo->label("e62_descr");
 													<td	class='linhagrid' align='center'>
 													    <small>$pc01_descrmater</small>
                                                     </td>
-                                                    
+
 													<td	class='linhagrid' nowrap align='left' title='$m61_abrev'>
 													    <small>" .(isset($m61_abrev) ? $m61_abrev : '-'). "</small>
                                                     </td>";
@@ -609,7 +609,7 @@ $clrotulo->label("e62_descr");
 <script>
 
     function js_pesquisaEmpenho(iNumEmp){
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho001.php?e60_numemp='+iNumEmp,'Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho001.php?e60_numemp='+iNumEmp,'Pesquisa',true);
     }
 
     function js_verifica(max, quan, nome, valoruni) {

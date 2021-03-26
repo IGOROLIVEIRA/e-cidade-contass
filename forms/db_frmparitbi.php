@@ -304,10 +304,10 @@ $clrotulo->label('z01_nome');
 function js_pesquisait24_grupoespbenfurbana(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargrupespbenfurbana1|j32_grupo|j32_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargrupespbenfurbana1|j32_grupo|j32_descr','Pesquisa',true);
   }else{
     if(document.form1.it24_grupoespbenfurbana.value != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupoespbenfurbana.value+'&funcao_js=parent.js_mostracargrupespbenfurbana','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupoespbenfurbana.value+'&funcao_js=parent.js_mostracargrupespbenfurbana','Pesquisa',false);
     }else{
       document.form1.nomeespbenfurbana.value = '';
     }
@@ -332,11 +332,11 @@ function js_mostracargrupespbenfurbana1(chave1,chave2){
 function js_pesquisait24_grupotipobenfurbana(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargruptipobenfurbana1|j32_grupo|j32_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargruptipobenfurbana1|j32_grupo|j32_descr','Pesquisa',true);
   }else{
 
      if(document.form1.it24_grupotipobenfurbana.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupotipobenfurbana.value+'&funcao_js=parent.js_mostracargruptipobenfurbana','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupotipobenfurbana.value+'&funcao_js=parent.js_mostracargruptipobenfurbana','Pesquisa',false);
      }else{
        document.form1.nometipobenfurbana.value = '';
      }
@@ -363,11 +363,11 @@ function js_mostracargruptipobenfurbana1(chave1,chave2){
 function js_pesquisait24_grupoespbenfrural(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargrupespbenfrural1|j32_grupo|j32_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargrupespbenfrural1|j32_grupo|j32_descr','Pesquisa',true);
   }else{
 
     if(document.form1.it24_grupoespbenfrural.value != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupoespbenfrural.value+'&funcao_js=parent.js_mostracargrupespbenfrural','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupoespbenfrural.value+'&funcao_js=parent.js_mostracargrupespbenfrural','Pesquisa',false);
     }else{
       document.form1.nomeespbenfrural.value = '';
     }
@@ -395,11 +395,11 @@ function js_mostracargrupespbenfrural1(chave1,chave2){
 function js_pesquisait24_grupotipobenfrural(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargruptipobenfrural1|j32_grupo|j32_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargruptipobenfrural1|j32_grupo|j32_descr','Pesquisa',true);
   }else{
 
      if(document.form1.it24_grupotipobenfrural.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupotipobenfrural.value+'&funcao_js=parent.js_mostracargruptipobenfrural','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupotipobenfrural.value+'&funcao_js=parent.js_mostracargruptipobenfrural','Pesquisa',false);
      }else{
        document.form1.nometipobenfrural.value = '';
      }
@@ -425,11 +425,11 @@ function js_mostracargruptipobenfrural1(chave1,chave2){
 function js_pesquisait24_grupoutilterrarural(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargruputilterrarural1|j32_grupo|j32_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargruputilterrarural1|j32_grupo|j32_descr','Pesquisa',true);
   }else{
 
      if(document.form1.it24_grupoutilterrarural.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupoutilterrarural.value+'&funcao_js=parent.js_mostracargruputilterrarural','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupoutilterrarural.value+'&funcao_js=parent.js_mostracargruputilterrarural','Pesquisa',false);
      }else{
        document.form1.nomeutilterrarural.value = '';
      }
@@ -457,11 +457,11 @@ function js_mostracargruputilterrarural1(chave1,chave2){
 function js_pesquisait24_grupodistrterrarural(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargrupdistrterrarural1|j32_grupo|j32_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?funcao_js=parent.js_mostracargrupdistrterrarural1|j32_grupo|j32_descr','Pesquisa',true);
   }else{
 
      if(document.form1.it24_grupodistrterrarural.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupodistrterrarural.value+'&funcao_js=parent.js_mostracargrupdistrterrarural','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup.php?pesquisa_chave='+document.form1.it24_grupodistrterrarural.value+'&funcao_js=parent.js_mostracargrupdistrterrarural','Pesquisa',false);
      }else{
        document.form1.nomedistrterrarural.value = '';
      }
@@ -488,11 +488,11 @@ function js_mostracargrupdistrterrarural1(chave1,chave2){
 function js_pesquisaz01_numcgm(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nome','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
 
      if(document.form1.z01_numcgm.value != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.kz01_numcgm.value = '';
      }
@@ -521,11 +521,11 @@ function js_mostracgm1(chave1,chave2){
  function js_pesquisait24_grupopadraoconstrutivobenurbana(mostra){
 
 	  if(mostra==true){
-	    js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup_rel.php?grupo=I&funcao_js=parent.js_mostracargruptipopadraocontrutivo1|j32_grupo|j32_descr','Pesquisa',true);
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup_rel.php?grupo=I&funcao_js=parent.js_mostracargruptipopadraocontrutivo1|j32_grupo|j32_descr','Pesquisa',true);
 	  }else{
 
 	     if(document.form1.it24_grupopadraoconstrutivobenurbana.value != ''){
-	        js_OpenJanelaIframe('top.corpo','db_iframe_cargrup','func_cargrup_rel.php?grupo=I&pesquisa_chave='+document.form1.it24_grupopadraoconstrutivobenurbana.value+'&funcao_js=parent.js_mostracargruptipopadraocontrutivo','Pesquisa',false);
+	        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cargrup','func_cargrup_rel.php?grupo=I&pesquisa_chave='+document.form1.it24_grupopadraoconstrutivobenurbana.value+'&funcao_js=parent.js_mostracargruptipopadraocontrutivo','Pesquisa',false);
 	     }else{
 	       document.form1.nomegrupopadraoconstrutivourbana.value = '';
 	     }
@@ -554,11 +554,11 @@ function js_mostracgm1(chave1,chave2){
 function js_pesquisa(mostra){
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_conlancamrec','func_tabrec.php?funcao_js=parent.js_preenchepesquisa|k02_codigo|k02_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamrec','func_tabrec.php?funcao_js=parent.js_preenchepesquisa|k02_codigo|k02_descr','Pesquisa',true);
   }else{
 
      if(document.form1.k02_codigo != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_conlancamrec','func_tabrec.php?pesquisa_chave='+document.form1.k02_codigo.value+'&funcao_js=parent.js_mostrarec','Pesquisa', false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamrec','func_tabrec.php?pesquisa_chave='+document.form1.k02_codigo.value+'&funcao_js=parent.js_mostrarec','Pesquisa', false);
      }else{
        document.form1.k02_codigo.value = '';
      }

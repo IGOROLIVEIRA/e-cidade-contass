@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -50,7 +50,7 @@ include_once('libs/db_utils.php');
 if(isset($origem) && $origem != ""){
   $origemori = $origem;
 }else{
-  $origemori = "";  
+  $origemori = "";
 }
 $mostramsg = 't';
 
@@ -77,7 +77,7 @@ $db_opcao = 1;
 $sql  = " select q12_classe, ";
 $sql .= "        q12_descr   ";
 $sql .= "   from clasativ    ";
-$sql .= "        inner join classe on q82_classe=q12_classe "; 
+$sql .= "        inner join classe on q82_classe=q12_classe ";
 $sql .= "  group by q12_classe, ";
 $sql .= "           q12_descr   ";
 $where = " where 1=1 ";
@@ -94,18 +94,18 @@ if (isset($processa) && $processa == 't') {
   $numrowstipo = pg_numrows($rsTipovist);
   if ($numrowstipo == 0){
     db_msgbox("Verifique o cadastro e configure corretamente o tipo de vistoria selecionado");
-    echo "<script>top.corpo.location.href='fis4_vistgeral001.php'</script>";
+    echo "<script>CurrentWindow.corpo.location.href='fis4_vistgeral001.php'</script>";
     exit;
   }else{
     db_fieldsmemory($rsTipovist,0);
     if ($y77_diasgeral == 0 || $y77_mesgeral == 0) {
       db_msgbox("Configure corretamente o dia e o mes de vencimento do tipo de vistoria selecionado");
-      echo "<script>top.corpo.location.href='fis4_vistgeral001.php'</script>";
+      echo "<script>CurrentWindow.corpo.location.href='fis4_vistgeral001.php'</script>";
       exit;
     }
   }
 
-  // S E L E C T   Q U E   T R A S    AS   I N S C R I C O E S   A   S E R E M    V I S T O R I A D A S 
+  // S E L E C T   Q U E   T R A S    AS   I N S C R I C O E S   A   S E R E M    V I S T O R I A D A S
 
   if(isset($codigos) && $codigos != ""){
     $where .= " and q82_classe in ($codigos) ";
@@ -113,7 +113,7 @@ if (isset($processa) && $processa == 't') {
 
   if ($origemori == 1){
 
-    $where .= " and q07_perman = 't'    "; 
+    $where .= " and q07_perman = 't'    ";
     $where .= " and q81_tipo   = 3      ";
     $where .= " and q02_dtbaix is null  ";
     $where .= " and (q07_datafi is null or q07_datafi >= '" . date("Y-m-d", db_getsession("DB_datausu")) . "') ";
@@ -134,8 +134,8 @@ if (isset($processa) && $processa == 't') {
     $sSql .= "	               $where ";
 	$sSql .= ") as x ";
     $sSql .= "  where datacad < '".db_getsession('DB_anousu')."-01-01'";
-    
-	
+
+
   }elseif($origemori == 2){
 
     $where .= " and y83_perman = 't'    ";
@@ -143,7 +143,7 @@ if (isset($processa) && $processa == 't') {
     $where .= " and y80_dtbaixa is null ";
     $where .= " and (y83_dtfim is null or y83_dtfim >= '" . date("Y-m-d", db_getsession("DB_datausu")) . "') ";
     if ($q02_inscr != "") {
-      $where .= " and y18_inscr = {$q02_inscr} "; 
+      $where .= " and y18_inscr = {$q02_inscr} ";
     }
 
     $sSql  = " select *                              ";
@@ -166,15 +166,15 @@ if (isset($processa) && $processa == 't') {
     die("Erro na variavel origemori");
   }
 
-  $rsResult = db_query($sSql) or die($sSql); 
+  $rsResult = db_query($sSql) or die($sSql);
   $numrows  = pg_numrows($rsResult);
   if($numrows==0){
     db_msgbox("O filtro selecionado não retornou nenhum registro");
-    echo "<script>top.corpo.location.href='fis4_vistgeral001.php'</script>";
-    exit;	  
+    echo "<script>CurrentWindow.corpo.location.href='fis4_vistgeral001.php'</script>";
+    exit;
   }
   $sqlerro=false;
-  db_inicio_transacao();	
+  db_inicio_transacao();
   $numpre_par_rec = "";
   echo "<script>document.getElementById('filtro').style.visibility='hidden';</script>";
 
@@ -195,52 +195,52 @@ if (isset($processa) && $processa == 't') {
   if($cltipovistorias->numrows > 0){
     db_fieldsmemory($rsTipovist,0);
   }else{
-    db_msgbox("Tipo de vistoria nao encontrado e/ou pertence a outra instituição ! contate o suporte ");  
+    db_msgbox("Tipo de vistoria nao encontrado e/ou pertence a outra instituição ! contate o suporte ");
   }
 
-  //  F O R   Q   L A N Ç A   E   C A L C U L A   A S   V I S T O R I A S 
-  
+  //  F O R   Q   L A N Ç A   E   C A L C U L A   A S   V I S T O R I A S
+
   $cont_nao_gera=0;
 
   if ($q02_inscr != "") {
-    $iAnoInicial = $anoini; 
-    $iAnoFinal   = $anofim; 
+    $iAnoInicial = $anoini;
+    $iAnoFinal   = $anofim;
   } else {
-    $iAnoInicial = db_getsession('DB_anousu'); 
+    $iAnoInicial = db_getsession('DB_anousu');
     $iAnoFinal   = db_getsession('DB_anousu');
   }
 
   // for anos
 
-  for ($iAno = $iAnoInicial; $iAno <= $iAnoFinal; $iAno++ ) {  	
-  	
+  for ($iAno = $iAnoInicial; $iAno <= $iAnoFinal; $iAno++ ) {
+
     //
     // Se for calculo para varios anos buscar os dados da cissqn
     //
-     
+
     $rsParametros = $clcissqn->sql_record($clcissqn->sql_query_file($iAno));
-    $oParametros  = db_utils::fieldsMemory($rsParametros,0); 
+    $oParametros  = db_utils::fieldsMemory($rsParametros,0);
 
     for ($i=0;$i<$numrows;$i++){
 
       db_fieldsmemory($rsResult,$i);
 
       db_atutermometro($i,$numrows,'termometro');
-      
+
       if ($q02_inscr != "") {
         $sSqlAnoEmpresa = "select extract(year from q02_dtcada) as anoempresa from issbase where q02_inscr = {$q02_inscr}";
         $rsAnoEmpresa   = db_query($sSqlAnoEmpresa);
         $oAnoEmpresa    = db_utils::fieldsMemory($rsAnoEmpresa,0);
 
         if ((int)$oAnoEmpresa->anoempresa >= (int)$iAno) {
-          continue;   	
+          continue;
         }
       }
-      
+
       if($duplica=="f"){
         if ($origemori == 1){
-          $result_anovist = $clvistinscr->sql_record($clvistinscr->sql_query(null,"*",null,"y71_inscr=$q02_inscr 
-                                                                                          and   y70_tipovist = $tipo 
+          $result_anovist = $clvistinscr->sql_record($clvistinscr->sql_query(null,"*",null,"y71_inscr=$q02_inscr
+                                                                                          and   y70_tipovist = $tipo
                                                                                           and (   ( extract(year from y70_data) =  extract(year from q02_dtcada) and extract(year from q02_dtcada) = ".(int)$iAno.")
                                                                                                  or extract(year from y70_data) = ".(int)$iAno." )"));
           if($clvistinscr->numrows>0 ){
@@ -256,13 +256,13 @@ if (isset($processa) && $processa == 't') {
         }
       }
 
-      if ($origemori != 1){ 
+      if ($origemori != 1){
         $rsSanitario     = db_query(" select extract(year from y80_data) as anosani from sanitario where y80_codsani = $y80_codsani ");
         $intNumsanitario = pg_numrows($rsSanitario);
         if($intNumsanitario > 0){
           db_fieldsmemory($rsSanitario,0);
           if($anosani == db_getsession('DB_anousu')){
-            continue;          
+            continue;
           }
         }
       }
@@ -290,7 +290,7 @@ if (isset($processa) && $processa == 't') {
       }
 
       $clvistorias->y70_data        = $sDataVistoria;
-      $clvistorias->y70_hora        = db_hora(); 
+      $clvistorias->y70_hora        = db_hora();
       $clvistorias->y70_obs         = "Incluido na rotina de Inclusão geral de vistorias";
       $clvistorias->y70_contato     = "Sem contato cadastrado";
       $clvistorias->y70_tipovist    = $tipo;
@@ -310,7 +310,7 @@ if (isset($processa) && $processa == 't') {
         break;
       }
 
-      //      G R A V A   N A   V I S T I N S C R  
+      //      G R A V A   N A   V I S T I N S C R
 
       if ($origemori == 1) {
         $clvistinscr->y71_codvist = $clvistorias->y70_codvist;
@@ -342,8 +342,8 @@ if (isset($processa) && $processa == 't') {
         break;
       }
 
-      //=========================================================================================================================	
-      //   METODO DA CLASSE QUE CHAMA A FUNCAO FC_VISTORIAS DO BANCO PARA CALCULAR A VISTORIA  
+      //=========================================================================================================================
+      //   METODO DA CLASSE QUE CHAMA A FUNCAO FC_VISTORIAS DO BANCO PARA CALCULAR A VISTORIA
 
       $result = $clvistorias->sql_calculo($clvistorias->y70_codvist);
       $numrowscalc = $clvistorias->numrows;
@@ -362,8 +362,8 @@ if (isset($processa) && $processa == 't') {
         $rel       = 't';
       }
 
-      //=========================================================================================================================	
-      //      G R A V A   N A   V I S T O R I A S L O T E V I S T 
+      //=========================================================================================================================
+      //      G R A V A   N A   V I S T O R I A S L O T E V I S T
 
       $clvistoriaslotevist->y05_vistoriaslote = $clvistoriaslote->y06_vistoriaslote;
       $clvistoriaslotevist->y05_codvist       = $clvistorias->y70_codvist;
@@ -379,7 +379,7 @@ if (isset($processa) && $processa == 't') {
 
     }
 
-  } 
+  }
 
   if ($cont_nao_gera==$numrows){
     $sqlerro=true;
@@ -397,14 +397,14 @@ if (isset($processa) && $processa == 't') {
   }
 
   if($rel == 't'){
-    db_msgbox("Existem inscrições desatualizadas, verifique o cadastro.");  
+    db_msgbox("Existem inscrições desatualizadas, verifique o cadastro.");
     echo "<script>
       jan = window.open('fis4_relerrosvistgeral002.php?numlote=".$clvistoriaslote->y06_vistoriaslote."','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
     jan.moveTo(0,0);
     </script>";
   }
 
-  echo "<script>top.corpo.location.href='fis4_vistgeral001.php'</script>";
+  echo "<script>CurrentWindow.corpo.location.href='fis4_vistgeral001.php'</script>";
 
 }
 ?>

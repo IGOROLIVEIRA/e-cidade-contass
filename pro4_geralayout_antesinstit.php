@@ -52,7 +52,7 @@ if(isset($gerar)){
     $vir = "";
     for($i=0;$i<$clobraslayout->numrows;$i++){
       db_fieldsmemory($reslayout,$i);
-      $geradas .= $vir.$ob14_codobra; 
+      $geradas .= $vir.$ob14_codobra;
       $vir = ",";
     }
   }
@@ -77,13 +77,13 @@ if(isset($gerar)){
             $res_tem = $clobrasalvara->sql_record(
             $clobrasalvara->sql_query(null,"*",null,
                                       "ob04_data betwen '$dtini' and  '$dtfim' "));
-   } 	    
+   }
    if($clobrasalvara->numrows > 0){
       $tem_obras="1";   // 1- tem obras, 2- sem obras
    } else {
       $tem_obras="2";
-   }   
-  //// 
+   }
+  ////
   $linha1 = "1".substr($db10_codibge,0,5).date("Ymd").date("His").$dtini_ano.str_pad($dtini_mes,2,'0')."$tem_obras".$cgc."44".substr($nomeinst,0,55).substr($depart,0,55).$munic."\n";
   $resobras = $clobras->sql_record($clobras->sql_query("","*","ob01_codobra"));
   fputs($fd,$linha1);
@@ -129,7 +129,7 @@ if(isset($gerar)){
 	  exit;
 	}
 	$z01_telef = str_pad($z01_telef,12," ",STR_PAD_RIGHT);
-	$ddd = ""; 
+	$ddd = "";
 	for($j=0;$j<4;$j++){
 	  $ddd .= $espaco;
 	}
@@ -179,8 +179,8 @@ if(isset($gerar)){
 	}
 
 	$dadosconstr = str_replace(","," ",$dadosconstr);
-	$linha2 = "2".$tipoi.$z01_cgccpf.$z01_nome.$z01_ender.$z01_bairro.$z01_cep.$z01_uf.$db10_codibge.$ddd.$z01_telef.$ddd.$z01_telef.substr($z01_email,0,60).$ob02_cod.date("Ymd").$ender_bairro_cep_cod.$tpi.$cgccpf.$nome.$ender.$bairro.$cep.$uf.$codibge; 
-      /////////////////////////////////////////////////////// 
+	$linha2 = "2".$tipoi.$z01_cgccpf.$z01_nome.$z01_ender.$z01_bairro.$z01_cep.$z01_uf.$db10_codibge.$ddd.$z01_telef.$ddd.$z01_telef.substr($z01_email,0,60).$ob02_cod.date("Ymd").$ender_bairro_cep_cod.$tpi.$cgccpf.$nome.$ender.$bairro.$cep.$uf.$codibge;
+      ///////////////////////////////////////////////////////
 	$result = $clobrasalvara->sql_record($clobrasalvara->sql_query($ob01_codobra));
 	if($clobrasalvara->numrows > 0){
 	  db_fieldsmemory($result,0);
@@ -215,7 +215,7 @@ if(isset($gerar)){
 	//$clobraslayout->incluir("");
 	$ob09_habite =  str_pad($ob09_habite,15," ",STR_PAD_LEFT);
 	$ob09_area =  str_pad(str_replace(" ","",db_formatar($ob09_area,'f')),10," ",STR_PAD_LEFT);
-	$linha3 = "\n3".$ob09_habite.str_replace("-","",$ob09_data).$ob09_area.$hab;  
+	$linha3 = "\n3".$ob09_habite.str_replace("-","",$ob09_data).$ob09_area.$hab;
 	//fputs($fd,$linha2);
 	//fputs($fd,$linha3);
 	$linhas .= $pula.$linha2.$linha3;
@@ -277,7 +277,7 @@ if(isset($gerar)){
           $db10_codibge = str_pad("",6,"0",STR_PAD_RIGHT);
 	}
 	$z01_telef = str_pad($z01_telef,12," ",STR_PAD_RIGHT);
-	$ddd = ""; 
+	$ddd = "";
 	for($j=0;$j<4;$j++){
 	  $ddd .= $espaco;
 	}
@@ -327,8 +327,8 @@ if(isset($gerar)){
 	}
 
 	$dadosconstr = str_replace(","," ",$dadosconstr);
-	$linha2 = "2".$tipoi.$z01_cgccpf.$z01_nome.$z01_ender.$z01_bairro.$z01_cep.$z01_uf.$db10_codibge.$ddd.$z01_telef.$ddd.$z01_telef.substr($z01_email,0,60).$ob02_cod.date("Ymd").$ender_bairro_cep_cod.$tpi.$cgccpf.$nome.$ender.$bairro.$cep.$uf.$codibge; 
-      /////////////////////////////////////////////////////// 
+	$linha2 = "2".$tipoi.$z01_cgccpf.$z01_nome.$z01_ender.$z01_bairro.$z01_cep.$z01_uf.$db10_codibge.$ddd.$z01_telef.$ddd.$z01_telef.substr($z01_email,0,60).$ob02_cod.date("Ymd").$ender_bairro_cep_cod.$tpi.$cgccpf.$nome.$ender.$bairro.$cep.$uf.$codibge;
+      ///////////////////////////////////////////////////////
 	$rescons = $clobrasconstr->sql_record($clobrasconstr->sql_query("","*",""," ob08_codobra = $ob01_codobra"));
 	if($clobrasconstr->numrows > 0){
 	  db_fieldsmemory($rescons,0);
@@ -366,9 +366,9 @@ if(isset($gerar)){
 	$ob01_nomeobra = str_pad($ob01_nomeobra,55," ",STR_PAD_LEFT);
 	$ob04_data = str_replace("-","",$ob04_data);
 	if($ob08_tipolanc == "30000"){
-	  $resto  = substr($ob08_ocupacao,4,1); 
-	  $resto .= substr($ob08_tipoconstr,4,1); 
-	  $resto .= $ob08_area; 
+	  $resto  = substr($ob08_ocupacao,4,1);
+	  $resto .= substr($ob08_tipoconstr,4,1);
+	  $resto .= $ob08_area;
 	  $resto .= str_pad("",38," ",STR_PAD_RIGHT);
 	}elseif($ob08_tipolanc == "30001"){
           $resto  = str_pad("",10," ",STR_PAD_LEFT);
@@ -425,7 +425,7 @@ if(isset($gerar)){
 	    $ob09_habite =  str_pad($ob09_habite,15," ",STR_PAD_LEFT);
 	    $ob09_area =  str_pad(($ob09_area * 100),8,"0",STR_PAD_LEFT);
 	    $ob09_data = str_replace("-","",$ob09_data);
-	    $linha3 .= "\n3".$ob09_habite.$ob09_data.$ob09_area.$hab; 
+	    $linha3 .= "\n3".$ob09_habite.$ob09_data.$ob09_area.$hab;
 	    $contador ++;
 	  }
 	}
@@ -442,7 +442,7 @@ if(isset($gerar)){
       //$ob09_habite =  str_pad($ob09_habite,15," ",STR_PAD_LEFT);
   }
     fputs($fd,$linhas);
-    $linha4 = "\n4".str_pad(($contador + 2),6," ",STR_PAD_LEFT);  
+    $linha4 = "\n4".str_pad(($contador + 2),6," ",STR_PAD_LEFT);
     fputs($fd,$linha4);
    // fwrite($fd,strlen($fd));
     fclose($fd);
@@ -466,7 +466,7 @@ if(isset($gerar)){
   <br><br><br>
         <?
 	if(isset($gerar)){
-//	  system("cp $tmpfile /srv/www/htdocs/dbportal2/tmp/"); 
+//	  system("cp $tmpfile /srv/www/htdocs/dbportal2/tmp/");
 //          echo "<br><strong><a style='color:black' href='http://".$DB_SERVIDOR."/dbportal2/tmp/".basename($tmpfile)."'> Arquivo gerado em: ".basename($tmpfile)."\nClique aqui para salvar</a></strong><br><br>";
           echo "<br><strong><a style='color:black' target='_blank' href='$tmpfile'> Arquivo gerado: $tmpfile\nClique aqui para acessar o arquivo</a></strong><br><br>";
 	}
@@ -476,11 +476,11 @@ if(isset($gerar)){
     <td colspan="2">
       <b>GERADOR DE ARQUIVO PARA INSS</b>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td valign='center' nowrap align="center" >
       <strong>Período das Obras:</strong>
-       
+
 <?
 db_inputdata('dtini',@$dtini_dia,@$dtini_mes,@$dtini_ano,true,'text',1,"")
 ?>
@@ -489,14 +489,14 @@ db_inputdata('dtini',@$dtini_dia,@$dtini_mes,@$dtini_ano,true,'text',1,"")
 db_inputdata('dtfim',@$dtfim_dia,@$dtfim_mes,@$dtfim_ano,true,'text',1,"")
 ?>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td align='center' colspan='2'>
       <input name="gerar" type="submit" value="Gerar" >
     </td>
   </tr>
   </center>
-</table>  
+</table>
 </form>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -515,20 +515,20 @@ function teste(){
 }
 function js_pesquisaob04_codobra(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_obras','func_obrashabite.php?layout=true&funcao_js=parent.js_mostraobras1|ob01_codobra|ob01_nomeobra','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obras','func_obrashabite.php?layout=true&funcao_js=parent.js_mostraobras1|ob01_codobra|ob01_nomeobra','Pesquisa',true);
   }else{
-     if(document.form1.ob01_codobra.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_obras','func_obrashabite.php?layout=true&pesquisa_chave='+document.form1.ob01_codobra.value+'&funcao_js=parent.js_mostraobras','Pesquisa',false);
+     if(document.form1.ob01_codobra.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obras','func_obrashabite.php?layout=true&pesquisa_chave='+document.form1.ob01_codobra.value+'&funcao_js=parent.js_mostraobras','Pesquisa',false);
      }else{
-       document.form1.ob01_nomeobra.value = ''; 
+       document.form1.ob01_nomeobra.value = '';
      }
   }
 }
 function js_mostraobras(chave,erro){
-  document.form1.ob01_nomeobra.value = chave; 
-  if(erro==true){ 
-    document.form1.ob01_codobra.focus(); 
-    document.form1.ob01_codobra.value = ''; 
+  document.form1.ob01_nomeobra.value = chave;
+  if(erro==true){
+    document.form1.ob01_codobra.focus();
+    document.form1.ob01_codobra.value = '';
   }
 }
 function js_mostraobras1(chave1,chave2){

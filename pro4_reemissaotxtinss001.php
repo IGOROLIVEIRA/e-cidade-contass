@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -49,7 +49,7 @@ $oRotulo->label('ob16_codobrasenvio');
       db_app::load("estilos.css");
       db_app::load("scripts.js");
       db_app::load("strings.js");
-      db_app::load("prototype.js"); 
+      db_app::load("prototype.js");
     ?>
   </head>
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc">
@@ -59,34 +59,34 @@ $oRotulo->label('ob16_codobrasenvio');
     <BR>
     <center>
       <form name="form1" id="form1">
-      
+
         <fieldset style="width: 500px;">
           <legend><strong>Reemissão de Arquivo do INSS: </strong></legend>
 	        <BR>
 		      <table border="0" cellspacing="0" cellpadding="0">
-          
-		        <tr> 
-		          <td>     
+
+		        <tr>
+		          <td>
 		            <?
 		             db_ancora($Lob16_codobrasenvio,' js_pesquisa(true); ',1);
 		            ?>
               </td>
-                
-		          <td> 
+
+		          <td>
 		            <?
 		             db_input('ob16_codobrasenvio',  6, $Iob16_codobrasenvio, true, 'text', 1, "onchange='js_pesquisa(false)'");
 		             db_input('ob16_nomearq'      , 40, 0                   , true, 'text', 3, "");
 		            ?>
 		          </td>
 		        </tr>
-            
+
 		      </table>
-          
+
 	        <BR>
         </fieldset>
       </form>
       <br>
-      <input name="reemissao"   type="button"  value="Processsar"  onclick="js_salvarRPC(1, $('ob16_codobrasenvio'));">      
+      <input name="reemissao"   type="button"  value="Processsar"  onclick="js_salvarRPC(1, $('ob16_codobrasenvio'));">
     </center>
     <?php
     db_menu(db_getsession("DB_id_usuario"),
@@ -102,17 +102,17 @@ $oRotulo->label('ob16_codobrasenvio');
  * Abre lookup de pesquisa dos arquivos txt gerados
  */
 function js_pesquisa(lMostra) {
-  
+
   if ( lMostra ) {
-    
-    js_OpenJanelaIframe('top.corpo',
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe',
                         'func_obrasenvio.php?funcao_js=parent.js_preencheDadosLookUp|ob16_codobrasenvio|ob16_nomearq',
                         'Pesquisa Arquivos TXT do INSS',
                         true);
   } else {
-    
-    js_OpenJanelaIframe('top.corpo',
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe',
                         'func_obrasenvio.php?pesquisa_chave=' + $F('ob16_codobrasenvio') + '&funcao_js=parent.js_preencheDadosDigitacao',
                         'Pesquisa Arquivos TXT do INSS',
@@ -123,7 +123,7 @@ function js_pesquisa(lMostra) {
  * Retorna dados quando item da lookup for selecionado
  */
 function js_preencheDadosLookUp(iCodigoEnvio, sNomeArquivo) {
-  
+
     $('ob16_codobrasenvio').value = iCodigoEnvio;
     $('ob16_nomearq')      .value = sNomeArquivo;
     db_iframe.hide();
@@ -132,11 +132,11 @@ function js_preencheDadosLookUp(iCodigoEnvio, sNomeArquivo) {
  * Retorna dados quando houver valor no campo de pesquisa
  */
 function js_preencheDadosDigitacao(sNomeArquivo, lErro) {
-  
+
   $('ob16_nomearq').value = sNomeArquivo;
-  
+
   if ( lErro == true ) {
-    
+
     $('ob16_codobrasenvio').value = '';
     $('ob16_codobrasenvio').focus();
   }
@@ -145,7 +145,7 @@ function js_preencheDadosDigitacao(sNomeArquivo, lErro) {
 /**
  * Funcao para salvar os dados
  * @param integer iAcao | Tipo de ação a ser executada
- *                      +->  1 - Reemissao 
+ *                      +->  1 - Reemissao
  *                      +->  2 - Exclusão
  */
 function js_salvarRPC(iAcao, oCodigoTxt) {
@@ -153,13 +153,13 @@ function js_salvarRPC(iAcao, oCodigoTxt) {
   var sExecucao   = null;
   var sArquivoRPC = "pro4_txtINSS.RPC.php";
   var iCodigoTxt  = oCodigoTxt.value;
-  
+
   if (!oCodigoTxt || iCodigoTxt == "") {
-    
+
     alert(_M('tributario.projetos.pro4_reemissaotxtinss001.preencha_codigo'));
     oCodigoTxt.focus();
     return false;
-  }  
+  }
   switch (iAcao) {
     case 1:
       sExecucao = "reemitirTXT";
@@ -170,9 +170,9 @@ function js_salvarRPC(iAcao, oCodigoTxt) {
     default:
       alert(_M('tributario.projetos.pro4_reemissaotxtinss001.defina_opcao'));
       return false;
-    break; 
+    break;
   }
-  
+
   js_divCarregando(_M('tributario.projetos.pro4_reemissaotxtinss001.processando_operacao'), 'msgBox');
 
 	/**
@@ -187,7 +187,7 @@ function js_salvarRPC(iAcao, oCodigoTxt) {
   var oAjaxParameters        = new Object();
   oAjaxParameters.parameters = "json="+Object.toJSON(oParam);
   oAjaxParameters.onComplete = js_retornoRequisicao;
-  
+
 	/**
 	 * Executa a Requisição
 	 */
@@ -198,17 +198,17 @@ function js_salvarRPC(iAcao, oCodigoTxt) {
  * Funcao para tratar retorno do rpc
  */
  function js_retornoRequisicao(oRetornoAjax) {
-   
+
    var oRetorno = eval("("+ oRetornoAjax.responseText+")");
    js_removeObj('msgBox');
-   
+
    if (oRetorno.iStatus == "2") {
      alert(oRetorno.sMessage.urlDecode());
    } else {
-     
+
      var listagem  = oRetorno.sArquivoTXT + "# Download do Arquivo - " + oRetorno.sArquivoTXT;
-     js_montarlista(listagem,'form1');  
-	   window.location = window.location; 
+     js_montarlista(listagem,'form1');
+	   window.location = window.location;
    }
  }
 </script>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_app.utils.php");
@@ -143,9 +143,9 @@ db_app::load('prototype.js, strings.js');
               </tr>
               <tr>
                 <td nowrap title="<?=@$Tx01_numcgm?>" align="right">
-                  <?=@$Lx01_numcgm?>  
+                  <?=@$Lx01_numcgm?>
                 </td>
-                <td colspan="5"> 
+                <td colspan="5">
               --> <?
               db_input('x01_numcgm',8,$Ix01_numcgm,true,'text',3,"");
               ?> <?
@@ -405,13 +405,13 @@ db_app::load('prototype.js, strings.js');
                 } else {
                 	$valida_saldo = $x21_excesso;
                 }
-                 
+
                 if((db_permissaomenu(db_getsession("DB_anousu"),4555,8873)=="true") and ($valida_saldo <= 0)) {
                 	$libera_saldo = 1;
                 } else {
                 	$libera_saldo = 3;
                 }
-                db_input('x21_saldo', 6, $Ix21_saldo, true, 'text', $libera_saldo,"onchange='js_valida_saldo()'","");                
+                db_input('x21_saldo', 6, $Ix21_saldo, true, 'text', $libera_saldo,"onchange='js_valida_saldo()'","");
                 db_input('leitura_base_ajuste',6,0,false,'hidden',3,"");
                 db_input('dtleitura_base_ajuste_ano',4,0,false,'hidden',3,"");
                 db_input('dtleitura_base_ajuste_mes',2,0,false,'hidden',3,"");
@@ -447,10 +447,10 @@ function js_verifica_matricula() {
 	oParam.matricula = $F('x04_matric');
 
 	if(oParam.matricula != '') {
-  
+
   	js_divCarregando('Aguarde, pesquisando status da leitura.', 'msgbox');
   	var oAjax = new Ajax.Request(
-  															 'agua_situacao_matricula.RPC.php', 
+  															 'agua_situacao_matricula.RPC.php',
   															 {
   																method: 'POST',
   																parameters: 'json='+Object.toJSON(oParam),
@@ -478,10 +478,10 @@ function js_retorno_status (oAjax) {
 			document.getElementById('db_opcao').disabled = true;
 			return false;
 		}
-  }		
+  }
 }
 
-	
+
 function js_verifica_campos(){
   retorno = false;
 
@@ -519,13 +519,13 @@ function js_verifica_campos(){
 		var anoant = new Number(document.form1.x21_exercant.value);
 
     retorno = true;
-    
+
 		if(mesant.valueOf() === mesatu.valueOf() && anoant.valueOf() === anoatu.valueOf()){
       if(!confirm("Já existe leitura para este ano/mês.\nConfirma nova leitura?")){
 				 return false;
 			}
 	  }
-	  
+
 	  var iDifDias = js_valida_dias();
 
 	  // Campos hidden que postarão os valores antes de sofrerem ajustes no caso da leitura sofrer ajuste por ter diferênca de dias maior que 30 para a leitura anterior
@@ -533,9 +533,9 @@ function js_verifica_campos(){
 		document.form1.dtleitura_base_ajuste_ano.value = '';
 		document.form1.dtleitura_base_ajuste_mes.value = '';
 		document.form1.dtleitura_base_ajuste_dia.value = '';
-		  
+
     if (iDifDias > 30 ) {
-        
+
     	if (confirm("Data acima de 30 dias.\nDeseja adequar a leitura para 30 dias? Sim ou Não")) {
 
 		    document.form1.leitura_base_ajuste.value       = document.form1.x21_leitura.value;
@@ -549,21 +549,21 @@ function js_verifica_campos(){
         var iLeituraMes          = 0;                                             // Leitura ajustada
         var iLeituraAnterior     = document.form1.x21_leituraant.value;           // Leitura anterior
         var iConsumoMes          = 0;                                             // Consumo do Contribuinte no Mês
-        
+
         iConsumoMes              = iLeitura - iLeituraAnterior;
-        
+
         iLeituraMes              = parseInt(iLeituraAnterior) + Math.round( ( (iConsumoMes / iDifDias) * 30 ) );
-                
+
         if( iLeituraMes < iLeituraAnterior ) {
         	iLeituraMes = iLeituraAnterior;
         }
-        
+
 		    var aDataLeituraAnterior = sDataLeituraAnterior.split('/');        // Matriz para manipular a data da leitura anterior
 
-				var dDataLeituraAjustada = new Date ( aDataLeituraAnterior[2], 
-                                              aDataLeituraAnterior[1] - 1, 
-                                              aDataLeituraAnterior[0]);    // Data da leitura ajustada       
-		    	          
+				var dDataLeituraAjustada = new Date ( aDataLeituraAnterior[2],
+                                              aDataLeituraAnterior[1] - 1,
+                                              aDataLeituraAnterior[0]);    // Data da leitura ajustada
+
 				dDataLeituraAjustada.setDate( dDataLeituraAjustada.getDate() + 30 );
 
 				var sDia = dDataLeituraAjustada.getDate();
@@ -576,11 +576,11 @@ function js_verifica_campos(){
 				if ( sMes.toString().length < 2 ) {
 					sMes = '0' + sMes;
 				}
-				
+
         sDataLeituraAtual = sDia                                + "/" +
 	                          sMes                                + "/" +
 	                          dDataLeituraAjustada.getFullYear();
-                
+
 	      // Ajusta data da leitura e leitura
 	      document.form1.x21_dtleitura_dia.value = sDia;
 	      document.form1.x21_dtleitura_mes.value = sMes;
@@ -589,20 +589,20 @@ function js_verifica_campos(){
 	      document.form1.x21_leitura.value       = iLeituraMes;
 
 	    }
-    
+
       retorno = js_valida_exerc_mes();
-    
+
     }
-    
+
   }
-    
+
   return retorno;
-  
+
 }
 
-  
+
 function js_ver_leitura_anterior() {
-	
+
 
   leitura_atu = new Number(document.form1.x21_leitura.value);
   leitura_ant = new Number(document.form1.x21_leituraant.value);
@@ -633,7 +633,7 @@ function js_repete_leitura_anterior(repete){
 }
 function js_pesquisa_anterior(){
   if(document.form1.x04_matric.value != ""){
-    js_OpenJanelaIframe('top.corpo','db_iframe_anterior','agu3_agualeitura002.php?matric='+document.form1.x04_matric.value+'&ano='+document.form1.x21_exerc.value+'&mes='+document.form1.x21_mes.value,'Consulta leituras anteriores',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_anterior','agu3_agualeitura002.php?matric='+document.form1.x04_matric.value+'&ano='+document.form1.x21_exerc.value+'&mes='+document.form1.x21_mes.value,'Consulta leituras anteriores',true);
   }else{
     alert("Informe a matrícula.");
     document.form1.x04_matric.focus();
@@ -651,7 +651,7 @@ function js_retorna_dados_hidro(matricula){
   }else{
     qry+= "&mes=<?=date("m",db_getsession("DB_datausu"))?>";
   }
-  js_OpenJanelaIframe('top.corpo','db_iframe_retorna_dados_hidro','func_retorna_dados_hidro.php?matric='+matricula+qry,'Pesquisa',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_retorna_dados_hidro','func_retorna_dados_hidro.php?matric='+matricula+qry,'Pesquisa',false);
 }
 
 function js_valida_exerc_mes(){
@@ -661,7 +661,7 @@ function js_valida_exerc_mes(){
     document.form1.x21_mes.value = '';
     document.form1.x21_mes.focus();
     return false;
-  }  
+  }
   return true;
 }
 
@@ -671,14 +671,14 @@ function js_pesquisax04_matric(mostra){
     qry += "codrua="+document.form1.x01_codruaref.value+"&";
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aguabase','func_aguabasealt.php'+qry+'funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm|z01_nome|j14_codigo|j14_nome|x01_numero|x01_letra|x01_zona|x01_qtdeconomia|x01_multiplicador|x04_matric|x01_tipoimovel','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguabase','func_aguabasealt.php'+qry+'funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm|z01_nome|j14_codigo|j14_nome|x01_numero|x01_letra|x01_zona|x01_qtdeconomia|x01_multiplicador|x04_matric|x01_tipoimovel','Pesquisa',true);
   }else{
-     if(document.form1.x04_matric.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_aguabasealt.php'+qry+'pesquisa_chave='+document.form1.x04_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
+     if(document.form1.x04_matric.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_aguabasealt.php'+qry+'pesquisa_chave='+document.form1.x04_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
      }else{
-       document.form1.x04_matric.value = ''; 
-       document.form1.z01_nomedad.value   = ''; 
-       document.form1.x01_numcgm.value = ''; 
+       document.form1.x04_matric.value = '';
+       document.form1.z01_nomedad.value   = '';
+       document.form1.x01_numcgm.value = '';
        document.form1.x01_codrua.value = '';
        document.form1.j14_nome.value   = '';
        document.form1.x01_numero.value = '';
@@ -698,7 +698,7 @@ function js_pesquisax04_matric(mostra){
        document.form1.x21_leituraant.value = '';
        document.form1.x21_consumoant.value = '';
        document.form1.x21_excessoant.value = '';
-       document.form1.x21_situacao.value = '';       
+       document.form1.x21_situacao.value = '';
        document.form1.x17_descr.value  = '';
        document.form1.x21_dtleituraant_dia.value = '';
        document.form1.x21_dtleituraant_mes.value = '';
@@ -711,21 +711,21 @@ function js_pesquisax04_matric(mostra){
 			 document.form1.x21_mesant.value  = '';
      }
   }
-  
+
 }
 function js_mostraaguabase(chave1,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,chave11,erro){
   document.form1.z01_nomedad.value   = chave2;
 
-  if(erro==true || chave10 == ""){ 
+  if(erro==true || chave10 == ""){
     if(erro == false && chave10 == ""){
       document.form1.z01_nomedad.value   = "";
       alert("Matrícula sem hidrômetro cadastrado.");
     }
-    document.form1.x04_matric.value = ''; 
+    document.form1.x04_matric.value = '';
     js_pesquisax04_matric(false);
-    document.form1.x04_matric.focus(); 
+    document.form1.x04_matric.focus();
   }else{
-    document.form1.x01_numcgm.value = chave1; 
+    document.form1.x01_numcgm.value = chave1;
     document.form1.x01_codrua.value = chave3;
     document.form1.j14_nome.value   = chave4;
     document.form1.x01_numero.value = chave5;
@@ -739,7 +739,7 @@ function js_mostraaguabase(chave1,chave2,chave3,chave4,chave5,chave6,chave7,chav
     }else {
     	document.form1.x21_saldo.disabled = false;
     }
-    
+
     js_retorna_dados_hidro(document.form1.x04_matric.value);
   }
 }
@@ -766,28 +766,28 @@ function js_mostraaguabase1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,cha
     db_iframe_aguabase.hide();
   }else{
     alert("Matrícula sem hidrômetro cadastrado.");
-    document.form1.x04_matric.value = ''; 
+    document.form1.x04_matric.value = '';
     js_pesquisax04_matric(false);
-    document.form1.x04_matric.focus(); 
+    document.form1.x04_matric.focus();
   }
   js_verifica_matricula();
 }
 function js_pesquisax21_situacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?funcao_js=parent.js_mostraaguasitleitura1|x17_codigo|x17_descr|x17_regra','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?funcao_js=parent.js_mostraaguasitleitura1|x17_codigo|x17_descr|x17_regra','Pesquisa',true);
   }else{
-     if(document.form1.x21_situacao.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?pesquisa_chave='+document.form1.x21_situacao.value+'&funcao_js=parent.js_mostraaguasitleitura','Pesquisa',false);
+     if(document.form1.x21_situacao.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?pesquisa_chave='+document.form1.x21_situacao.value+'&funcao_js=parent.js_mostraaguasitleitura','Pesquisa',false);
      }else{
-       document.form1.x17_descr.value = ''; 
+       document.form1.x17_descr.value = '';
      }
   }
 }
 function js_mostraaguasitleitura(chave,chave2,erro){
   document.form1.x17_descr.value = chave;
-  if(erro==true){ 
-    document.form1.x21_situacao.focus(); 
-    document.form1.x21_situacao.value = ''; 
+  if(erro==true){
+    document.form1.x21_situacao.focus();
+    document.form1.x21_situacao.value = '';
   }else{
     if(chave2 == "0"){
       js_repete_leitura_anterior(false);
@@ -808,20 +808,20 @@ function js_mostraaguasitleitura1(chave1,chave2,chave3){
 }
 function js_pesquisax21_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?funcao_js=parent.js_mostraagualeiturista1|x16_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?funcao_js=parent.js_mostraagualeiturista1|x16_numcgm|z01_nome','Pesquisa',true);
   }else{
-    if(document.form1.x21_numcgm.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?pesquisa_chave='+document.form1.x21_numcgm.value+'&funcao_js=parent.js_mostraagualeiturista','Pesquisa',false);
+    if(document.form1.x21_numcgm.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?pesquisa_chave='+document.form1.x21_numcgm.value+'&funcao_js=parent.js_mostraagualeiturista','Pesquisa',false);
     }else{
-      document.form1.x16_numcgm.value = ''; 
+      document.form1.x16_numcgm.value = '';
     }
   }
 }
 function js_mostraagualeiturista(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.x21_numcgm.focus(); 
-    document.form1.x21_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.x21_numcgm.focus();
+    document.form1.x21_numcgm.value = '';
   }
 }
 function js_mostraagualeiturista1(chave1,chave2){
@@ -831,20 +831,20 @@ function js_mostraagualeiturista1(chave1,chave2){
 }
 function js_pesquisax01_codrua(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas1|j14_codigo|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas1|j14_codigo|j14_nome','Pesquisa',true);
   }else{
-    if(document.form1.x01_codruaref.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.x01_codruaref.value+'&funcao_js=parent.js_mostraruas','Pesquisa',false);
+    if(document.form1.x01_codruaref.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.x01_codruaref.value+'&funcao_js=parent.js_mostraruas','Pesquisa',false);
     }else{
-      document.form1.j14_nomeref.value = ''; 
+      document.form1.j14_nomeref.value = '';
     }
   }
 }
 function js_mostraruas(chave,erro){
-  document.form1.j14_nomeref.value = chave; 
-  if(erro==true){ 
-    document.form1.x01_codruaref.focus(); 
-    document.form1.x01_codruaref.value = ''; 
+  document.form1.j14_nomeref.value = chave;
+  if(erro==true){
+    document.form1.x01_codruaref.focus();
+    document.form1.x01_codruaref.value = '';
   }
 }
 function js_mostraruas1(chave1,chave2){
@@ -853,7 +853,7 @@ function js_mostraruas1(chave1,chave2){
   db_iframe_ruas.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_agualeitura','func_agualeitura.php?funcao_js=parent.js_preenchepesquisa|x21_codleitura&chave_x21_exerc=<?=$x21_exerc?>&chave_x21_mes=<?=$x21_mes?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeitura','func_agualeitura.php?funcao_js=parent.js_preenchepesquisa|x21_codleitura&chave_x21_exerc=<?=$x21_exerc?>&chave_x21_mes=<?=$x21_mes?>','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_agualeitura.hide();

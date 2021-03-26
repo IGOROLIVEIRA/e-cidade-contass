@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -81,7 +81,7 @@ $primeiro = false;
 $processados = 0;
 
 if(isset($reenviar)){
-  
+
   $sqlerro=false;
   db_inicio_transacao();
 
@@ -103,7 +103,7 @@ if(isset($reenviar)){
     $vir = "";
     for($i=0;$i<$clobraslayout->numrows;$i++){
       db_fieldsmemory($reslayout,$i);
-      $geradas .= $vir.$ob14_codobra; 
+      $geradas .= $vir.$ob14_codobra;
       $vir = ",";
     }
   }
@@ -115,9 +115,9 @@ if(isset($reenviar)){
   $fd = fopen($arqgerado,'w+');
 
 //  $fd = fopen($tmpfile,"w");
-  $sql_config = "	select cgc,nomeinst,munic,db_cepmunic.db10_codibge 
-									from db_config 
-									inner join cgm on cgm.z01_numcgm = db_config.numcgm 
+  $sql_config = "	select cgc,nomeinst,munic,db_cepmunic.db10_codibge
+									from db_config
+									inner join cgm on cgm.z01_numcgm = db_config.numcgm
 									left join db_cepmunic on trim(db10_munic) = trim(upper(munic))
 									where upper(trim(munic)) like trim(db_cepmunic.db10_munic) and prefeitura is true";
   //$result = $cldb_config->sql_record($cldb_config->sql_query("","cgc,nomeinst,munic,db_cepmunic.db10_codibge","","upper(trim(munic)) like trim(db_cepmunic.db10_munic) and prefeitura is true"));
@@ -125,7 +125,7 @@ if(isset($reenviar)){
   @db_fieldsmemory($result,0);
 
   $resobras = $clobras->sql_record($clobras->sql_query("","*","ob01_codobra"));
-  
+
   $depart =  str_pad("SECRETARIA DE PLANEJAMENTO E URBANISMO",55," ",STR_PAD_RIGHT);
   $nomeinst = str_pad($nomeinst,55," ",STR_PAD_RIGHT);
   $munic = str_pad($munic,30," ",STR_PAD_RIGHT);
@@ -149,16 +149,16 @@ if(isset($reenviar)){
      $result = pg_exec($sql);
      db_fieldsmemory($result,0);
    }
-   
+
    if(isset($dtini_dia) && $dtini_dia != "" && isset($dtfim_dia) && $dtfim_dia != ""){
      $res_tem = $clobrasalvara->sql_record($clobrasalvara->sql_query(null,"*",null,"ob04_data between '$dtini' and  '$dtfim' "));
-   } 	    
+   }
    if($clobrasalvara->numrows > 0){
       $tem_obras="1";   // 1- tem obras, 2- sem obras
    } else {
       $tem_obras="2";
-   }   
-  //// 
+   }
+  ////
 
   $sqlerro=false;
   db_inicio_transacao();
@@ -168,26 +168,26 @@ if(isset($reenviar)){
     db_fieldsmemory($resobras,$xx);
     $passa = false;
     //resultados pendentes na tabela
-    
+
     //select em obrasconstr pelo $ob01_codobra
     //faz um for nesse select pra pegar os habite-se das construcoes
     //se descobrir registro de habite-se que ainda nao existe em obrasenvioreghab passa = true;
-    
+
 		$resconstr = $clobrasconstr->sql_record($clobrasconstr->sql_query("","*","","ob08_codobra = $ob01_codobra"));
-    
+
 		for($xxx=0;$xxx<$clobrasconstr->numrows;$xxx++){
-      db_fieldsmemory($resconstr,$xxx);    
+      db_fieldsmemory($resconstr,$xxx);
 			$reshabite = $clobrashabite->sql_record($clobrashabite->sql_query("","*","","ob09_codconstr = $ob08_codconstr"));
       if($clobrashabite->numrows > 0) {
         for($xxxx=0;$xxxx < $clobrashabite->numrows;$xxxx++){
-					db_fieldsmemory($reshabite,$xxxx);    
+					db_fieldsmemory($reshabite,$xxxx);
           $resobrasreghab = $clobrasenvioreghab->sql_record($clobrasenvioreghab->sql_query(null,"*",null,"ob18_codhabite = $ob09_codhab"));
 					if($clobrasenvioreghab->numrows == 0){
 						$passa = true;
 					}
 				}
 			}
-    }  
+    }
 
 
   if($passa == false){
@@ -197,7 +197,7 @@ if(isset($reenviar)){
 	if($numrowsreg == 0){
 	  $passa = true;
 	}
-	
+
       }
 
       if($passa == true){
@@ -222,13 +222,13 @@ if(isset($reenviar)){
 	  $codigo1 = $clobrasenvio->ob16_codobrasenvio;
 
 	  $primeiro = true;
-    
+
 	}
-	
+
       } else {
 	continue;
       }
-       
+
       $linha2="";
       $linha3="";
 
@@ -236,7 +236,7 @@ if(isset($reenviar)){
 	for($i=0;$i<$numrows;$i++){
 	  $contador++;
 	  db_fieldsmemory($resob,$i);
-	  
+
 	  $result = $clobraspropri->sql_record($clobraspropri->sql_query($ob01_codobra));
 	  if($clobraspropri->numrows > 0){
 	    db_fieldsmemory($result,0);
@@ -268,7 +268,7 @@ if(isset($reenviar)){
 	    exit;
 	  }
 	  $z01_telef = str_pad($z01_telef,12," ",STR_PAD_RIGHT);
-	  $ddd = ""; 
+	  $ddd = "";
 	  for($j=0;$j<4;$j++){
 	    $ddd .= $espaco;
 	  }
@@ -313,7 +313,7 @@ if(isset($reenviar)){
 	  }
 	  $dadosconstr = str_replace(","," ",$dadosconstr);
 	  $linha2 = "22222".$tipoi.$z01_cgccpf.$z01_nome.$z01_ender.$z01_bairro.$z01_cep.$z01_uf.substr($db10_codibge,0,6).$ddd.$z01_telef.$ddd.$z01_telef.substr($z01_email,0,60).$ob02_cod.date("Ymd").$ender_bairro_cep_cod.$tpi.$cgccpf.$nome.$ender.$bairro.$cep.$uf.substr($codibge,0,6);
-	/////////////////////////////////////////////////////// 
+	///////////////////////////////////////////////////////
 	  $result = $clobrasalvara->sql_record($clobrasalvara->sql_query($ob01_codobra));
 	  if($clobrasalvara->numrows > 0){
 	    db_fieldsmemory($result,0);
@@ -344,14 +344,14 @@ if(isset($reenviar)){
 	  }
 	  $ob09_habite =  str_pad($ob09_habite,15," ",STR_PAD_LEFT);
 	  $ob09_area =  str_pad(str_replace(" ","",db_formatar($ob09_area,'f')),10," ",STR_PAD_LEFT);
-	  $linha3 = "\r\n3".$ob09_habite.str_replace("-","",$ob09_data).$ob09_area.$hab;  
+	  $linha3 = "\r\n3".$ob09_habite.str_replace("-","",$ob09_data).$ob09_area.$hab;
 	  //fputs($fd,$linha2);
 	  //fputs($fd,$linha3);
 	  $linhas .= $pula.$linha2.$linha3;
 	  $pula = "\r\n";
 	}
 	$ob09_habite =  str_pad($ob09_habite,15," ",STR_PAD_LEFT);
-      }else{  
+      }else{
 
 	  if(isset($dtini_dia) && $dtini_dia != ""){
 	    $dtini = $dtini_ano."-".$dtini_mes."-".$dtini_dia;
@@ -383,7 +383,7 @@ if(isset($reenviar)){
 	      echo "obra $ob01_codobra sem álvara<br>";
 	      continue;
 	    }
-	   
+
 
 
 	  }
@@ -422,7 +422,7 @@ if(isset($reenviar)){
 	    $db10_codibge = str_pad("",6,"0",STR_PAD_RIGHT);
 	  }
 	  $z01_telef = str_pad($z01_telef,12," ",STR_PAD_RIGHT);
-	  $ddd = ""; 
+	  $ddd = "";
 	  for($j=0;$j<4;$j++){
 	    $ddd .= $espaco;
 	  }
@@ -472,8 +472,8 @@ if(isset($reenviar)){
 	  $z01_bairro = substr(str_pad($z01_bairro,20," ",STR_PAD_RIGHT),0,20);
 	  $z01_cep    = str_pad($z01_cep,8,"0",STR_PAD_RIGHT);
 	  $z01_uf     = str_pad($z01_uf,2," ",STR_PAD_RIGHT);
-	  $linha2 = "2".$tipoi.$z01_cgccpf.$z01_nome.$z01_ender.substr($z01_bairro,0,20).substr($z01_cep,0,8).$z01_uf.substr($db10_codibge,0,6).$ddd.$z01_telef.$ddd.$z01_telef.substr($z01_email,0,60).$ob02_cod.date("Ymd").$ender_bairro_cep_cod.$tpi.$cgccpf.$nome.$ender.substr($bairro,0,20).substr($cep,0,8).$uf.substr($codibge,0,6); 
-	/////////////////////////////////////////////////////// 
+	  $linha2 = "2".$tipoi.$z01_cgccpf.$z01_nome.$z01_ender.substr($z01_bairro,0,20).substr($z01_cep,0,8).$z01_uf.substr($db10_codibge,0,6).$ddd.$z01_telef.$ddd.$z01_telef.substr($z01_email,0,60).$ob02_cod.date("Ymd").$ender_bairro_cep_cod.$tpi.$cgccpf.$nome.$ender.substr($bairro,0,20).substr($cep,0,8).$uf.substr($codibge,0,6);
+	///////////////////////////////////////////////////////
 
 	  $rescons = $clobrasconstr->sql_record($clobrasconstr->sql_query("","*",""," ob08_codobra = $ob01_codobra"));
 
@@ -508,7 +508,7 @@ if(isset($reenviar)){
 	    */
 	    continue;
 	  }
-	  
+
 		$rsSisObra = $clobrascaractarqsisobra->sql_record($clobrascaractarqsisobra->sql_query(null,"ob23_caractdestino as ob08_ocupacao",null,"ob23_caractorigem = {$ob08_ocupacao}"));
 		if ($clobrascaractarqsisobra->numrows > 0) {
 			db_fieldsmemory($rsSisObra,0);
@@ -516,7 +516,7 @@ if(isset($reenviar)){
 		 db_msgbox("Não está configurado a caracteristica para o arquivo SISOBRANET da ocupação: {$ob08_ocupacao}");
 		 db_redireciona("pro4_geralayout.php");
 		}
-		
+
 		$rsSisObra = $clobrascaractarqsisobra->sql_record($clobrascaractarqsisobra->sql_query(null,"ob23_caractdestino as ob08_tipolanc",null,"ob23_caractorigem = {$ob08_tipolanc}"));
 		if ($clobrascaractarqsisobra->numrows > 0) {
 			db_fieldsmemory($rsSisObra,0);
@@ -524,11 +524,11 @@ if(isset($reenviar)){
 		 db_msgbox("Não está configurado a caracteristica para o arquivo SISOBRANET da o tipo de lancamento: {$ob08_ocupacao}");
 		 db_redireciona("pro4_geralayout.php");
 		}
-		
+
 		$j13_descr = str_pad($j13_descr,20," ",STR_PAD_LEFT);
 	  $cep       = str_pad($cep,8,"0",STR_PAD_LEFT);
           $z01_uf    = str_pad($z01_uf,2," ",STR_PAD_LEFT);
-	  
+
 	  if (strlen($ob08_tipoconstr) < 5) {
 	    echo "obra $ob01_codobra com tipo de construção inválido<br>";
 	    continue;
@@ -537,9 +537,9 @@ if(isset($reenviar)){
 	  $ob01_nomeobra = str_pad($ob01_nomeobra,55," ",STR_PAD_LEFT);
 	  $ob04_data = str_pad(str_replace("-","",$ob04_data),8," ",STR_PAD_LEFT);
 	  if($ob08_tipolanc == "30000"){
-	    $resto  = substr($ob08_ocupacao,4,1); 
-	    $resto .= substr($ob08_tipoconstr,4,1); 
-	    $resto .= $ob08_area; 
+	    $resto  = substr($ob08_ocupacao,4,1);
+	    $resto .= substr($ob08_tipoconstr,4,1);
+	    $resto .= $ob08_area;
 	    $resto .= str_pad("",38," ",STR_PAD_RIGHT);
 	  }elseif($ob08_tipolanc == "30001"){
 	    $resto  = str_pad("",10," ",STR_PAD_LEFT);
@@ -583,13 +583,13 @@ if(isset($reenviar)){
 	    $resto .= substr($ob08_ocupacao,4,1);
 	    $resto .= substr($ob08_tipoconstr,4,1);
 	    $resto .= str_pad( $ob08_area,8,"0",STR_PAD_LEFT);
-	    
-	  }					  
+
+	  }
 
           $j13_descr = substr($j13_descr,0,20);
           $cep       = str_pad($cep,8,"0",STR_PAD_RIGHT);
           $z01_uf    = str_pad($z01_uf,2," ",STR_PAD_RIGHT);
-	  
+
 	  $linha2 = $linha2.$ob04_alvara.$ob04_data.$ob01_nomeobra.$j14_nome.$j13_descr.$cep.$z01_uf.substr($codibge,0,6).$ddd.$ddd.$ddd.$ddd.$ddd.$ddd.$ddd.$ddd.$ob07_inicio.$ob07_fim.$resto.$ob07_unidades.$ob07_pavimentos;
 
 	  $clobrasenvioreg->ob17_codobra = $ob01_codobra;
@@ -624,7 +624,7 @@ if(isset($reenviar)){
 	      $ob09_habite =  str_pad($ob09_habite,15," ",STR_PAD_LEFT);
 	      $ob09_area =  str_pad(($ob09_area * 100),8,"0",STR_PAD_LEFT);
 	    $ob09_data = str_replace("-","",$ob09_data);
-	    $linha3 .= "\r\n3".$ob09_habite.$ob09_data.$ob09_area.$hab; 
+	    $linha3 .= "\r\n3".$ob09_habite.$ob09_data.$ob09_area.$hab;
 	    $contador ++;
 	  }
 	}
@@ -643,7 +643,7 @@ if(isset($reenviar)){
   }
   if ($primeiro == true) {
     fputs($fd,$linhas);
-    $linha4 = "\r\n4".str_pad(($contador + 2),6," ",STR_PAD_LEFT);  
+    $linha4 = "\r\n4".str_pad(($contador + 2),6," ",STR_PAD_LEFT);
     fputs($fd,$linha4);
   }
   fclose($fd);
@@ -708,24 +708,24 @@ if(isset($reenviar)){
 	}
       ?>
     </td>
-       
+
     <td colspan="2">
     </td>
-      
-  </tr>  
+
+  </tr>
 
 
 
-  
+
   <tr align="center" height="60">
     <td colspan="2">
       <b>GERADOR DE ARQUIVO PARA INSS</b>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td valign='center' nowrap align="center" >
       <strong>Período das Obras:</strong>
-       
+
 <?
 db_inputdata('dtini',@$dtini_dia,@$dtini_mes,@$dtini_ano,true,'text',1,"")
 ?>
@@ -734,14 +734,14 @@ db_inputdata('dtini',@$dtini_dia,@$dtini_mes,@$dtini_ano,true,'text',1,"")
 db_inputdata('dtfim',@$dtfim_dia,@$dtfim_mes,@$dtfim_ano,true,'text',1,"")
 ?>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td align='center' colspan='2'>
       <input name="gerar" type="submit" value="Gerar" >
       <input name="verificar" type="submit" value="Verificar" >
     </td>
   </tr>
-  
+
   <tr align="center" height="60">
     <td>
     * Apenas os registros que ainda não foram enviados serão processados!
@@ -749,7 +749,7 @@ db_inputdata('dtfim',@$dtfim_dia,@$dtfim_mes,@$dtfim_ano,true,'text',1,"")
   </tr>
 
   </center>
-</table>  
+</table>
 </form>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -759,7 +759,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_abre(cgm){
   js_OpenJanelaIframe('','empempenho','prot1_cadcgm002.php?testanome=true&chavepesquisa='+cgm,'Pesquisa',true);
-}  
+}
 function teste(){
   if(document.form1.ob01_codobra.value == ""){
     alert('Escolha o código da obra antes de gerar o layout!');
@@ -771,20 +771,20 @@ function teste(){
 }
 function js_pesquisaob04_codobra(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_obras','func_obrashabite.php?layout=true&funcao_js=parent.js_mostraobras1|ob01_codobra|ob01_nomeobra','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obras','func_obrashabite.php?layout=true&funcao_js=parent.js_mostraobras1|ob01_codobra|ob01_nomeobra','Pesquisa',true);
   }else{
-     if(document.form1.ob01_codobra.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_obras','func_obrashabite.php?layout=true&pesquisa_chave='+document.form1.ob01_codobra.value+'&funcao_js=parent.js_mostraobras','Pesquisa',false);
+     if(document.form1.ob01_codobra.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obras','func_obrashabite.php?layout=true&pesquisa_chave='+document.form1.ob01_codobra.value+'&funcao_js=parent.js_mostraobras','Pesquisa',false);
      }else{
-       document.form1.ob01_nomeobra.value = ''; 
+       document.form1.ob01_nomeobra.value = '';
      }
   }
 }
 function js_mostraobras(chave,erro){
-  document.form1.ob01_nomeobra.value = chave; 
-  if(erro==true){ 
-    document.form1.ob01_codobra.focus(); 
-    document.form1.ob01_codobra.value = ''; 
+  document.form1.ob01_nomeobra.value = chave;
+  if(erro==true){
+    document.form1.ob01_codobra.focus();
+    document.form1.ob01_codobra.value = '';
   }
 }
 function js_mostraobras1(chave1,chave2){

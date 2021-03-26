@@ -291,7 +291,7 @@ function js_enviarvalores(){
   }
   if(erro == false && valores_cheques != ""){
   	<?if(!isset($forma)){?>
-  	top.corpo.db_iframe_cheque.jan.js_recebeval(con,valores_cheques);
+  	CurrentWindow.corpo.db_iframe_cheque.jan.js_recebeval(con,valores_cheques);
   	<?}else{?>
   	parent.js_recebeval(con,valores_cheques);
   	<?}?>
@@ -306,7 +306,7 @@ function js_verificardados(){
 	}
 	?>
 	<?if(!isset($forma)){?>
-	top.corpo.db_iframe_cheque.jan.js_fechariframe(con);
+	CurrentWindow.corpo.db_iframe_cheque.jan.js_fechariframe(con);
 	<?}else{?>
 	parent.js_fechariframe(con);
 	<?}?>

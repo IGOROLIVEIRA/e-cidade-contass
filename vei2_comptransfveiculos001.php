@@ -132,7 +132,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 function js_pesquisave80_sequencial(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_transferenciaveiculos','func_transferenciaveiculos.php?funcao_js=parent.js_mostratransferencia2|ve80_sequencial|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_transferenciaveiculos','func_transferenciaveiculos.php?funcao_js=parent.js_mostratransferencia2|ve80_sequencial|descrdepto','Pesquisa',true);
   } else {
      if (document.form1.ve80_sequencial.value != '') {
         js_OpenJanelaIframe('','db_iframe_transferenciaveiculos','func_transferenciaveiculos.php?codT='+document.form1.ve80_sequencial.value+'&pesquisa_chave&funcao_js=parent.js_mostratransferencia','Pesquisa',false);

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -87,8 +87,8 @@ $sPrefeituraProducao  = strtolower($oConfigPrefeitura->munic);
     <p align="center"><input type="button" name="btn_Processar" id="btn_Processar" value="Processar" onclick="js_validaDados();" ></p>
   </form>
   </center>
-  
-  
+
+
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
@@ -99,14 +99,14 @@ $sPrefeituraProducao  = strtolower($oConfigPrefeitura->munic);
    */
   var selectBase = $('datname');
   selectBase.observe ('change', function () {
-  
+
     if ( selectBase.value == '<?=$sPrefeituraProducao; ?>' ) {
-    
+
       alert ("Esta rotina não pode ser executada na base de produção: <?=$sPrefeituraProducao; ?>");
       $('btn_Processar').disabled = true;
     } else {
       $('btn_Processar').disabled = false;
-    }    
+    }
   });
 
   function js_validaDados() {
@@ -115,24 +115,24 @@ $sPrefeituraProducao  = strtolower($oConfigPrefeitura->munic);
     var iMesFolha        = $('mesfolha').value;
     var iAnoFolha        = $('anofolha').value;
     var lRetorno         = false;
-    
+
     if ( sBaseSelecionada == '<?=$sPrefeituraProducao; ?>') {
       alert ("Esta rotina não pode ser executada na base de produção: <?=$sPrefeituraProducao; ?>");
       return false;
     }
-      
-    if ( sBaseSelecionada != '<?=$sPrefeituraProducao; ?>' && 
+
+    if ( sBaseSelecionada != '<?=$sPrefeituraProducao; ?>' &&
          iMesFolha        != ""                            &&
-         iAnoFolha        != ""                            && 
+         iAnoFolha        != ""                            &&
          sBaseSelecionada != "") {
       lRetorno = true;
     }
-    
+
     if ( lRetorno ) {
-    
+
       var sParametro = "iMesFolha="+iMesFolha+"&iAnoFolha="+iAnoFolha+"&sBase="+sBaseSelecionada+"&sMunicipio=+<?=$sPrefeituraProducao;?>";
-      js_OpenJanelaIframe('top.corpo', 
-                          'db_iframe_relrefeisul', 
+      js_OpenJanelaIframe('CurrentWindow.corpo',
+                          'db_iframe_relrefeisul',
                           'pes1_relrefeisul002.php?'+sParametro,
                           'Processando ... ',
                           true);

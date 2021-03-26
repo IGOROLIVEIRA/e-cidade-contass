@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -31,7 +31,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("db90_descr");
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
- <tr> 
+ <tr>
   <td height="100%" align="center" valign="top" bgcolor="#CCCCCC">
     <form name="form1" method="post" action="">
      <fieldset style="width: 800px;">
@@ -41,7 +41,7 @@ $clrotulo->label("db90_descr");
           <td nowrap title="<?=@$Trh34_codarq?>" width="35%">
             <?=@$Lrh34_codarq?>
           </td>
-          <td width="65%"> 
+          <td width="65%">
             <? db_input('rh34_codarq',10,$Irh34_codarq,true,'text',3,"") ?>
           </td>
         </tr>
@@ -49,7 +49,7 @@ $clrotulo->label("db90_descr");
           <td nowrap title="<?=@$Trh34_descr?>">
             <?=@$Lrh34_descr?>
           </td>
-          <td> 
+          <td>
             <? db_input('rh34_descr',50,$Irh34_descr,true,'text',$db_opcao,"style='width:370px'") ?>
           </td>
         </tr>
@@ -65,7 +65,7 @@ $clrotulo->label("db90_descr");
           <td nowrap title="<?=@$Trh34_codban?>">
             <? db_ancora(@$Lrh34_codban,"js_pesquisarh34_codban(true);",$db_opcao); ?>
           </td>
-          <td> 
+          <td>
             <?
               db_input('rh34_codban',10,$Irh34_codban,true,'text',$db_opcao," onchange='js_pesquisarh34_codban(false);'");
               db_input('db90_descr',36,$Idb90_descr,true,'text',3,'');
@@ -76,15 +76,15 @@ $clrotulo->label("db90_descr");
           <td nowrap title="<?=@$Trh34_sequencial?>">
             <?=@$Lrh34_sequencial?>
           </td>
-          <td> 
+          <td>
             <? db_input('rh34_sequencial',10,$Irh34_sequencial,true,'text',$db_opcao,"") ?>
           </td>
         </tr>
-        <tr>  
+        <tr>
           <td nowrap title="<?=@$Trh34_ativo?>">
             <?=@$Lrh34_ativo?>
           </td>
-          <td> 
+          <td>
             <?
               if (!isset($rh34_ativo)) {
       	        $rh34_ativo = "t";
@@ -93,7 +93,7 @@ $clrotulo->label("db90_descr");
               db_select('rh34_ativo',$x,true,$db_opcao,"style='width: 80px;'");
             ?>
           </td>
-        </tr>    
+        </tr>
         <tr>
           <td colspan=2>
             <fieldset>
@@ -103,13 +103,13 @@ $clrotulo->label("db90_descr");
                   <td nowrap title="<?=@$Trh34_agencia?>" width="35%">
                     <?=@$Lrh34_agencia?>
                   </td>
-                  <td width="25%"> 
+                  <td width="25%">
                     <? db_input('rh34_agencia',8,$Irh34_agencia,true,'text',$db_opcao,"") ?>
                   </td>
                   <td nowrap title="<?=@$Trh34_dvagencia?>" align="right" width="16%">
                     <?=@$Lrh34_dvagencia?>
                   </td>
-                  <td width="24%"> 
+                  <td width="24%">
                     <? db_input('rh34_dvagencia',4,$Irh34_dvagencia,true,'text',$db_opcao,"") ?>
                   </td>
                 </tr>
@@ -117,13 +117,13 @@ $clrotulo->label("db90_descr");
                   <td nowrap title="<?=@$Trh34_conta?>">
                     <?=@$Lrh34_conta?>
                   </td>
-                  <td> 
+                  <td>
                     <? db_input('rh34_conta',20,$Irh34_conta,true,'text',$db_opcao,"") ?>
                   </td>
                   <td nowrap title="<?=@$Trh34_dvconta?>" align="right">
                     <?=@$Lrh34_dvconta?>
                   </td>
-                  <td> 
+                  <td>
                     <? db_input('rh34_dvconta',4,$Irh34_dvconta,true,'text',$db_opcao,"") ?>
                   </td>
                 </tr>
@@ -131,7 +131,7 @@ $clrotulo->label("db90_descr");
                   <td nowrap title="<?=@$Trh34_convenio?>">
                     <?=@$Lrh34_convenio?>
                   </td>
-                  <td colspan=2> 
+                  <td colspan=2>
                     <? db_input('rh34_convenio',20,$Irh34_convenio,true,'text',$db_opcao,"") ?>
                   </td>
                 </tr>
@@ -167,57 +167,57 @@ $clrotulo->label("db90_descr");
                 <td>
                   <? db_input('rh34_codigocompromisso',8,$Irh34_codigocompromisso,true,'text',$db_opcao,"") ?>
                 </td>
-              </tr>                    
+              </tr>
              </table>
            </fieldset>
          </td>
-        </tr> 
+        </tr>
       </table>
      </fieldset>
      <br>
-     
-     <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
-            type="submit" 
-            id="db_opcao" 
-            value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" 
-            <?=($db_botao==false?"disabled":"")?> 
+
+     <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+            type="submit"
+            id="db_opcao"
+            value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
+            <?=($db_botao==false?"disabled":"")?>
             onclick=" return js_submit();">
-            
+
      <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
     </form>
   </td>
  </tr>
 </table>
-    
+
 
 <script>
 function js_pesquisarh34_codban(mostra){
-	
+
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
   } else {
-	   
-    if (document.form1.rh34_codban.value != '') { 
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
+
+    if (document.form1.rh34_codban.value != '') {
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
     } else {
-      document.form1.db90_descr.value = ''; 
+      document.form1.db90_descr.value = '';
       js_mostraDadosCEF();
     }
-    
+
   }
-  
+
 }
 
 function js_mostradb_bancos(chave,erro) {
   document.form1.db90_descr.value = chave;
-   
-  if(erro==true){ 
-    document.form1.rh34_codban.focus(); 
-    document.form1.rh34_codban.value = ''; 
+
+  if(erro==true){
+    document.form1.rh34_codban.focus();
+    document.form1.rh34_codban.value = '';
   }
 
   js_mostraDadosCEF();
-  
+
 }
 
 function js_mostradb_bancos1(chave1,chave2) {
@@ -235,14 +235,14 @@ function js_mostraDadosCEF() {
     $('rh34_parametrotransmissaoheader').value = '';
     $('rh34_parametrotransmissaolote').value   = '';
     $('rh34_codigocompromisso').value          = '';
-	}		
+	}
 }
 
 function js_submit() {
 
 	var MENSAGEM    = 'recursoshumanos/pessoal/db_frmrharqbanco.';
 	var oRegex      = /^[0-9]+$/;
-	
+
 	/*
 	 * Validações
 	 */
@@ -254,22 +254,22 @@ function js_submit() {
 	   $('rh34_sequencial').focus();
 	   return false;
 	 }
-	    
-	 
+
+
 	 if ( $F('rh34_agencia')!= "" && !oRegex.test( $F('rh34_agencia') ) ) {
 		 alert( _M( MENSAGEM + 'somente_numeros', {sCampo: '<?=@$LSrh34_agencia?>'}) );
 		 $('rh34_agencia').value = '';
 		 $('rh34_agencia').focus();
 		 return false;
 	 }
-		 
+
 	 if ( $F('rh34_dvagencia') != "" && !oRegex.test( $F('rh34_dvagencia') ) ) {
 		 alert( _M( MENSAGEM + 'somente_numeros', {sCampo: '<?=@$LSrh34_dvagencia?>'}) );
 		 $('rh34_dvagencia').value = '';
 		 $('rh34_dvagencia').focus();
 		 return false;
 	 }
-	 
+
 	 if ( $F('rh34_conta') != "" && !oRegex.test( $F('rh34_conta') ) ) {
 		 alert( _M( MENSAGEM + 'somente_numeros', {sCampo: '<?=@$LSrh34_conta?>'}) );
 		 $('rh34_conta').value = '';
@@ -286,7 +286,7 @@ function js_submit() {
 		 $('rh34_dvconta').focus();
 		 return false;
 	 }*/
-	 
+
 	 if ( $F('rh34_convenio') != "" && !oRegex.test( $F('rh34_convenio') ) ) {
 		 alert( _M( MENSAGEM + 'somente_numeros', {sCampo: '<?=@$LSrh34_convenio?>'}) );
 		 $('rh34_convenio').value = '';
@@ -295,11 +295,11 @@ function js_submit() {
 	 }
 
 	 return true;
-	  
+
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?funcao_js=parent.js_preenchepesquisa|rh34_codarq','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?funcao_js=parent.js_preenchepesquisa|rh34_codarq','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

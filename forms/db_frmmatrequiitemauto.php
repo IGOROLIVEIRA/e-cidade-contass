@@ -326,7 +326,7 @@ function js_mostraLotes(iItem, iCodEstoque) {
 
   sUrl  = 'mat4_mostraitemlotes.php?iCodMater='+iCodItem+'&iCodDepto='+iCodEstoque+'&nValor='+nValor;
   sUrl += '&nValorSolicitado='+nValorReqItem+'&updateField=m41_quant';
-  js_OpenJanelaIframe('top.corpo.iframe_g2','db_iframe_lotes',sUrl,'Lotes ',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g2','db_iframe_lotes',sUrl,'Lotes ',true);
 }
 
 function js_adicionaCentroCusto() {

@@ -212,7 +212,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
   if (lMostrar == true) {
 
     let sUrl = 'func_acordo.php?semvigencia=true&assinatura=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_origem';
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_acordo',
                         sUrl,
                         'Pesquisar Acordo',
@@ -224,7 +224,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
       let sUrl = 'func_acordo.php?semvigencia=true&descricao=true&assinatura=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo';
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           'Pesquisar Acordo',
@@ -298,7 +298,7 @@ function js_checaValor(){
 
 function js_assinarContrato(obj) {
     let response = JSON.parse(obj.responseText);
-    
+
     if(response.erro){
         alert(response.message.urlDecode());
         return;

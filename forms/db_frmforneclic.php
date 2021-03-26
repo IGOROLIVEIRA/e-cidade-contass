@@ -216,7 +216,7 @@ if(isset($db_opcaoal)){
                             echo "<input name='gerarxlsbranco' type='button' id='gerarxlsbranco' value='xls em Branco' onclick='js_gerarxlsbranco()'>&nbsp";
 
                             if(!in_array($l03_pctipocompratribunal, $tiposcompra)){
-                                echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='top.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' ".($db_botao==false?"disabled":"").">";
+                                echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='CurrentWindow.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' ".($db_botao==false?"disabled":"").">";
                             }
 
                         }

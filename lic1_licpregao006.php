@@ -7,39 +7,39 @@ include("dbforms/db_funcoes.php");
 include("classes/db_licpregao_classe.php");
 include("classes/db_licpregaocgm_classe.php");
 $cllicpregao = new cl_licpregao;
-  
+
 $cllicpregaocgm = new cl_licpregaocgm;
-  
+
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 33;
 $db_botao = false;
 if(isset($excluir)){
   $sqlerro=false;
   db_inicio_transacao();
-  
-  $result = db_query("SELECT * FROM licpregaocgm WHERE l46_licpregao=".$l45_sequencial); 
+
+  $result = db_query("SELECT * FROM licpregaocgm WHERE l46_licpregao=".$l45_sequencial);
   $linha=pg_numrows($result);
-  
- 
+
+
   if($linha > 0){
-    $erro_msg = "Possui  itens na aba de Participantes da Licitação"; 
-  	$sqlerro=true; 
+    $erro_msg = "Possui  itens na aba de Participantes da Licitação";
+  	$sqlerro=true;
   } else {
-    
+
   	$cllicpregao->excluir($l45_sequencial);
 	if($cllicpregao->erro_status==0){
 	  $sqlerro=true;
-	} 
+	}
 	$erro_msg = $cllicpregao->erro_msg;
-  } 
-  
+  }
+
    db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $cllicpregao->sql_record($cllicpregao->sql_query($chavepesquisa)); 
+   $result = $cllicpregao->sql_record($cllicpregao->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -53,8 +53,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmlicpregao.php");
@@ -90,7 +90,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.licpregaocgm.disabled=false;
-         top.corpo.iframe_licpregaocgm.location.href='lic1_licpregaocgm001.php?db_opcaoal=33&l46_licpregao=".@$l45_sequencial."';
+         CurrentWindow.corpo.iframe_licpregaocgm.location.href='lic1_licpregaocgm001.php?db_opcaoal=33&l46_licpregao=".@$l45_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('licpregaocgm');";
@@ -99,7 +99,7 @@ if(isset($chavepesquisa)){
     js_db_libera();
   </script>\n
  ";
-} 
+}
  if($db_opcao==22||$db_opcao==33){
     echo "<script>document.form1.pesquisar.click();</script>";
  }

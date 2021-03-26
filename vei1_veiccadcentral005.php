@@ -51,13 +51,13 @@ if(isset($alterar)){
 ?>
     <script>
        parent.document.formaba.veiccadcentraldepart.disabled=true;
-       top.corpo.iframe_veiccadcentraldepart.location.href='vei1_veiccadcentraldepart001.php?ve37_veiccadcentral=<?=@$chavepesquisa?>';
+       CurrentWindow.corpo.iframe_veiccadcentraldepart.location.href='vei1_veiccadcentraldepart001.php?ve37_veiccadcentral=<?=@$chavepesquisa?>';
 
        parent.document.formaba.veicmotoristascentral.disabled=false;
-       top.corpo.iframe_veicmotoristascentral.location.href='vei1_veicmotoristascentral001.php?ve41_veiccadcentral=<?=@$chavepesquisa?>';
+       CurrentWindow.corpo.iframe_veicmotoristascentral.location.href='vei1_veicmotoristascentral001.php?ve41_veiccadcentral=<?=@$chavepesquisa?>';
 
        parent.document.formaba.veiccadcentralveiculo.disabled=true;
-       top.corpo.iframe_veiccadcentralveiculo.location.href='vei1_veiccadcentralveiculo001.php?ve41_veiccadcentral=<?=@$chavepesquisa?>';
+       CurrentWindow.corpo.iframe_veiccadcentralveiculo.location.href='vei1_veiccadcentralveiculo001.php?ve41_veiccadcentral=<?=@$chavepesquisa?>';
 
 <?
    if (isset($liberaaba) && $liberaaba == true){

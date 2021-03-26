@@ -398,7 +398,7 @@ if (USE_PCASP) {
     jan.moveTo(0,0);
   }
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino','Pesquisa',true);
   }
   function js_preenchepesquisa(chave,chave2,chave3,chave4){
     r = true;
@@ -446,13 +446,13 @@ if (USE_PCASP) {
 
   function js_pesquisae11_cfop(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_cfop',
         'func_cfop.php?funcao_js=parent.js_mostracfop1|e10_sequencial|e10_descricao|e10_cfop',
         'Pesquisa CFOP',true);
     }else{
       if($('e10_cfop').value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_cfop',
           'func_cfop.php?pesquisa_chave='+$('e10_cfop').value+'&funcao_js=parent.js_mostracfop',
           'Pesquisa CFOP',false);
@@ -1134,11 +1134,11 @@ if (USE_PCASP) {
   }
   function js_pesquisae49_numcgm(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
         'Consulta CGM',true);
     }else{
       if(document.form1.e49_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm',
           'func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value
           +'&funcao_js=parent.js_mostracgm','Pesquisa',false);
       }else{
@@ -1184,7 +1184,7 @@ if (USE_PCASP) {
     var iCodMov  = $F('e81_codmov');
     var iCodNota = $F('e69_codnota');
     var iNumEmp  = $F('e60_numemp');
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_retencao',
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_retencao',
       'emp4_lancaretencoes.php?iNumNota='+iCodNota+
       '&iNumEmp='+iNumEmp+'&iCodOrd='+iCodOrd+"&lSession="+lSession
       +'&iCodMov='+iCodMov+'&callback=true',

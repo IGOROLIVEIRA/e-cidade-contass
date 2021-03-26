@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $func_iframe = new janela('func_nome','');
@@ -45,7 +45,7 @@ function js_ruacorreta(){
 //    document.form1.z01_ender.value = '';
     document.form1.z01_ender.select();
     document.form1.z01_ender.focus();
-    js_OpenJanelaIframe('<?=(!isset($testanome)?"top.corpo":"")?>','db_iframe_ruas','func_ruas.php?nomerua='+ document.form1.z01_ender.value+'&rural=1&funcao_js=parent.js_preenchepesquisa|j14_codigo|j14_nome|j29_cep','Pesquisa',true);
+    js_OpenJanelaIframe('<?=(!isset($testanome)?"CurrentWindow.corpo":"")?>','db_iframe_ruas','func_ruas.php?nomerua='+ document.form1.z01_ender.value+'&rural=1&funcao_js=parent.js_preenchepesquisa|j14_codigo|j14_nome|j29_cep','Pesquisa',true);
     return false;
   }else{
     if(nome == "" || nome == 'undefined'){
@@ -122,7 +122,7 @@ function js_func_nome(){
   $cldb_cgmcpf->rotulo->label("z01_cpf");
   $clrotulo = new rotulocampo;
   $clrotulo->label("DBtxt1");
-  $clrotulo->label("DBtxt5");  
+  $clrotulo->label("DBtxt5");
   $clrotulo->label("DBtxt29");
   $clrotulo->label("DBtxt32");
   $clrotulo->label("DBtxt33");
@@ -143,7 +143,7 @@ function js_func_nome(){
     $db_botao = true;
     }
   }
-?> 
+?>
 <table width="100%" border="0" cellspacing="0">
   <tr>
     <td>&nbsp;</td>
@@ -159,7 +159,7 @@ function js_func_nome(){
 ?>
 <script>
 function js_testanome(obj,cpf,cnpj){
-  pesqnome.location.href = 'prot1_comparanomes.php?z01_cpf='+cpf+'&z01_cgc='+cnpj+'&nome='+obj+'&numcgm=<?=@$z01_numcgm?>';  
+  pesqnome.location.href = 'prot1_comparanomes.php?z01_cpf='+cpf+'&z01_cgc='+cnpj+'&nome='+obj+'&numcgm=<?=@$z01_numcgm?>';
 }
 function js_tamnome(nome,pessoa){
   tam=nome.split(" ");
@@ -194,14 +194,14 @@ if(isset($pessoa)){
       if(isset($cpf) && $cpf != ""){
 	$cpf = str_replace(".","",$cpf);
 	$cpf = str_replace("/","",$cpf);
-	$cpf = str_replace("-","",$cpf); 
+	$cpf = str_replace("-","",$cpf);
 	if(empty($z01_cgccpfi))
 	  $z01_cgccpf = $cpf;
 	include("prot1_pfisica.php");
       }elseif(isset($cnpj) && $cnpj != ""){
 	$cnpj = str_replace(".","",$cnpj);
 	$cnpj = str_replace("/","",$cnpj);
-	$cnpj = str_replace("-","",$cnpj); 
+	$cnpj = str_replace("-","",$cnpj);
 	if(empty($z01_cgccpf))
 	  $z01_cgccpf = $cnpj;
 	include("prot1_pjuridica.php");
@@ -223,7 +223,7 @@ if(isset($pessoa)){
 	if($z01_cgccpf == "" && !isset($pessoa)){
 	?>
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr align="center"> 
+            <tr align="center">
               <td nowrap align="center">
 	        <strong><?=$z01_nome?> não possui CPF/CNPJ cadastrado no CGM</strong><br>
 	        <strong>portanto não há como definir se é uma PESSOA FÍSICA OU JURÍDICA</strong><br>
@@ -249,7 +249,7 @@ if(isset($pessoa)){
 		  document.form1.submit();
 		}
 		</script>
-	      </td>	      
+	      </td>
             </tr>
 	  </table>
 	</table>
@@ -294,7 +294,7 @@ if(isset($pessoa)){
 	  }else{
 	    ?>
 	      <table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<tr align="center"> 
+		<tr align="center">
 		  <td nowrap align="center">
 	            <strong><?=$z01_nome?> não possui CPF/CNPJ cadastrado no CGM</strong><br>
 	        <strong>portanto não há como definir se é uma PESSOA FÍSICA OU JURÍDICA</strong><br>
@@ -320,7 +320,7 @@ if(isset($pessoa)){
 		  document.form1.submit();
 		}
 		</script>
-		  </td>	      
+		  </td>
 		</tr>
 	      </table>
 	    </table>
@@ -346,42 +346,42 @@ if(isset($pessoa)){
 	db_fieldsmemory($result,0);
 	?>
 	  <table border="1" cellspacing="0" cellpadding="0">
-	      <tr><strong><?=$DBtxt33?></strong><br><br> 
-		<td width="27%" title='<?=$Tz01_numcgm?>' nowrap> 
+	      <tr><strong><?=$DBtxt33?></strong><br><br>
+		<td width="27%" title='<?=$Tz01_numcgm?>' nowrap>
 		  <?=$Lz01_numcgm?>
 		</td>
-		<td width="73%" nowrap> 
+		<td width="73%" nowrap>
 		  <?
 		    db_input('z01_numcgm',6,$Iz01_numcgm,true,'text',3);
 		  ?>
 		</td>
 	      </tr>
-	      <tr> 
-		<td nowrap title=<?=@$Tz01_nome?>> 
+	      <tr>
+		<td nowrap title=<?=@$Tz01_nome?>>
 		  <?=@$Lz01_nome?>
 		</td>
-		<td nowrap title="<?=@$Tz01_nome?>"> 
+		<td nowrap title="<?=@$Tz01_nome?>">
 		 <?
 		   db_input('z01_nome',40,$Iz01_nome,true,'text',$db_opcao);
 		 ?>
 		</td>
 	      </tr>
-	      <tr align="center" valign="middle"> 
-		<td height="30" colspan="2" nowrap> <input name="db_opcao" type="submit" id="db_opcao"  value="<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> > 
+	      <tr align="center" valign="middle">
+		<td height="30" colspan="2" nowrap> <input name="db_opcao" type="submit" id="db_opcao"  value="<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 		  <?
 		  if(!isset($testanome)){
 		  ?>
-		  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_func_nome();"> 
-		  <input name="voltar" type="button" value="Retornar" <?=($db_opcao == 3 ?"onclick=\"location.href = 'prot1_cadcgm003.php';\"":"")?>> 
+		  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_func_nome();">
+		  <input name="voltar" type="button" value="Retornar" <?=($db_opcao == 3 ?"onclick=\"location.href = 'prot1_cadcgm003.php';\"":"")?>>
 		  <?
 		  }
 		  ?>
 		</td>
 	      </tr>
-	    </table>  
-	  </table>  
+	    </table>
+	  </table>
         <?
-      if(!isset($testanome)){ 
+      if(!isset($testanome)){
         db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
       }
       exit;
@@ -389,17 +389,17 @@ if(isset($pessoa)){
     }
     ?>
     <tr>
-      <td width="39%" align="center" title="<?=$TDBtxt1?>" valign="middle"> 
+      <td width="39%" align="center" title="<?=$TDBtxt1?>" valign="middle">
         <?=$LDBtxt1?>
       </td>
-      <td width="61%" align="center" valign="middle" title="<?=$TDBtxt5?>"> 
+      <td width="61%" align="center" valign="middle" title="<?=$TDBtxt5?>">
         <?=$LDBtxt5?>
       </td>
     </tr>
-    <tr align="center" valign="middle"> 
+    <tr align="center" valign="middle">
       <td width="39%">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr> 
+          <tr>
 	       <td><?
 	      db_ancora(@$Lz01_cep,"js_dbceplog();",($ceplog == "t"?'1':'3'));
 	      db_input('z01_cep',10,$Iz01_cep,true,'text',3);
@@ -412,17 +412,17 @@ if(isset($pessoa)){
 	       <td>
 	       </td>
           </tr>
-          <tr> 
-            <td width="29%" nowrap title="<?=@$Tz01_numero?>"> 
+          <tr>
+            <td width="29%" nowrap title="<?=@$Tz01_numero?>">
               <?=@$Lz01_numero?>
             </td>
-            <td width="71%" nowrap  ><a name="AN3"> 
+            <td width="71%" nowrap  ><a name="AN3">
               <?
 
 		  db_input('z01_numero',8,$Iz01_numero,true,'text',$db_opcao);
 
 		  ?>
-              &nbsp; 
+              &nbsp;
               <?=@$Lz01_compl?>
               <?
 
@@ -431,11 +431,11 @@ if(isset($pessoa)){
 		  ?>
               </a> </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_munic?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_munic?>">
               <?=@$Lz01_munic?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 			  if ($municipio == 't') {
 			     $z01_munic = strtoupper($munic);
@@ -445,13 +445,13 @@ if(isset($pessoa)){
 		  db_input('z01_munic',20,$Iz01_munic,true,'text',3);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_uf?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_uf?>">
               <?=@$Lz01_uf?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 		  if ($municipio == 't') {
 			$z01_uf = $uf;
@@ -461,15 +461,15 @@ if(isset($pessoa)){
 		  db_input('z01_uf',2,$Iz01_uf,true,'text',3);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_bairro?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_bairro?>">
 	      <?
 	      db_ancora(@$Lz01_bairro,"js_bairro();",($municipio == "t"?'1':'3'));
 	      ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_bairro',25,$Iz01_uf,true,'text',($municipio == "t"?'3':'1'));
@@ -479,87 +479,87 @@ if(isset($pessoa)){
 		      ?>
             </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_telef?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_telef?>">
               <?=@$Lz01_telef?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_telef',12,$Iz01_telef,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_fax?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_fax?>">
               <?=@$Lz01_fax?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_fax',12,$Iz01_fax,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_telcel?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_telcel?>">
               <?=@$Lz01_telcel?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_telcel',12,$Iz01_telcel,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_email?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_email?>">
               <?=@$Lz01_email?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_email',30,$Iz01_email,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_cxpostal?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_cxpostal?>">
               <?=@$Lz01_cxpostal?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_cxpostal',10,$Iz01_cxpostal,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
         </table>
       </td>
       <td width="61%"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr> 
-            <td nowrap title="<?=@$Tz01_cepcon?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_cepcon?>">
 	       <?
 	       db_ancora(@$Lz01_cepcon,"js_cepcon(true);",1);
 	       ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
   		      db_input('z01_cepcon',9,$Iz01_cepcon,true,'text',1,'');
 		      ?>
 	    <input type="button" value="Pesquisar" onClick="js_cepcon(false)">
-	    </td>	      
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_endcon?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_endcon?>">
               <?=@$Lz01_endcon?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_endcon',40,$Iz01_endcon,true,'text',$db_opcao);
@@ -567,11 +567,11 @@ if(isset($pessoa)){
 		  ?>
             </td>
           </tr>
-          <tr> 
-            <td width="29%" nowrap title="<?=@$Tz01_numcon?>"> 
+          <tr>
+            <td width="29%" nowrap title="<?=@$Tz01_numcon?>">
               <?=@$Lz01_numcon?>
             </td>
-            <td width="71%" nowrap > 
+            <td width="71%" nowrap >
               <?
 
 		  db_input('z01_numcon',8,$Iz01_numcon,true,'text',$db_opcao);
@@ -585,89 +585,89 @@ if(isset($pessoa)){
 		  ?>
             </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_muncon?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_muncon?>">
               <?=@$Lz01_muncon?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_muncon',20,$Iz01_muncon,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=$Tz01_ufcon?>"> 
+          <tr>
+            <td nowrap title="<?=$Tz01_ufcon?>">
               <?=@$Lz01_ufcon?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_ufcon',2,$Iz01_ufcon,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_baicon?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_baicon?>">
               <?=@$Lz01_baicon?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_baicon',25,$Iz01_baicon,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_telcon?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_telcon?>">
               <?=@$Lz01_telcon?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_telcon',12,$Iz01_telcon,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_celcon?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_celcon?>">
               <?=@$Lz01_celcon?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_celcon',12,$Iz01_celcon,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_emailc?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_emailc?>">
               <?=@$Lz01_emailc?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_emailc',30,$Iz01_emailc,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
-          <tr> 
-            <td nowrap title="<?=@$Tz01_cxposcon?>"> 
+          <tr>
+            <td nowrap title="<?=@$Tz01_cxposcon?>">
               <?=@$Lz01_cxposcon?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
 		  db_input('z01_cxposcon',10,$Iz01_cxposcon,true,'text',$db_opcao);
 
 		  ?>
-	    </td>	  
+	    </td>
           </tr>
         </table>
       </td>
@@ -675,8 +675,8 @@ if(isset($pessoa)){
     <tr align="left" valign="middle">
       <td height="21" colspan="2" nowrap><table width="64%" border="0" cellspacing="0">
        <table border=1>
-          <tr nowrap> 
-            <td width="18%" nowrap> 
+          <tr nowrap>
+            <td width="18%" nowrap>
               <?=@$Lz01_cadast?>
             </td>
             <td width="76%" nowrap>
@@ -687,11 +687,11 @@ if(isset($pessoa)){
 	        $z01_cadast_mes = date('m',db_getsession("DB_datausu"));
 	        $z01_cadast_dia = date('d',db_getsession("DB_datausu"));
 	      }
-	      
+
  	      db_inputdata('z01_cadast',@$z01_cadast_dia,@$z01_cadast_mes,@$z01_cadast_ano,true,'text',3);
 	      ?>
             </td>
-            <td width="18%" nowrap> 
+            <td width="18%" nowrap>
               <?=@$Lz01_ultalt?>
             </td>
             <td width="76%" nowrap>
@@ -717,20 +717,20 @@ if(isset($pessoa)){
           </tr>
         </table>
     </tr>
-    <tr align="center" valign="middle"> 
-      <td height="30" colspan="2" nowrap> <input name="db_opcao" type="submit" id="db_opcao"  value="<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> > 
+    <tr align="center" valign="middle">
+      <td height="30" colspan="2" nowrap> <input name="db_opcao" type="submit" id="db_opcao"  value="<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
         <?
 	if(!isset($testanome)){
 	?>
-	<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_func_nome();"> 
-        <input name="voltar" type="button" value="Retornar" onclick="location.href = 'prot1_cadcgm00<?=($db_opcao == 1?'1':'2')?>.php';"> 
+	<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_func_nome();">
+        <input name="voltar" type="button" value="Retornar" onclick="location.href = 'prot1_cadcgm00<?=($db_opcao == 1?'1':'2')?>.php';">
 	<?
 	}
 	?>
     </tr>
   </table>
-</table>  
-  
+</table>
+
 <?
 if(!isset($testanome)){
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -740,7 +740,7 @@ if(!isset($testanome)){
 </form>
 <script>
 function js_ruas(){
-  js_OpenJanelaIframe('<?=(!isset($testanome)?"top.corpo":"")?>','db_iframe_ruas','func_ruas.php?rural=1&funcao_js=parent.js_preenchepesquisa|j14_codigo|j14_nome|j29_cep','Pesquisa',true);
+  js_OpenJanelaIframe('<?=(!isset($testanome)?"CurrentWindow.corpo":"")?>','db_iframe_ruas','func_ruas.php?rural=1&funcao_js=parent.js_preenchepesquisa|j14_codigo|j14_nome|j29_cep','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2){
   if(document.form1.j14_codigo.value == "")
@@ -753,7 +753,7 @@ function js_preenchepesquisa(chave,chave1,chave2){
 function js_bairro(){
   //if(document.form1.z01_cep.value != "")
     //document.getElementById('teste').style.visibility = 'visible';
-  js_OpenJanelaIframe('<?=(!isset($testanome)?"top.corpo":"")?>','db_iframe_bairro','func_bairro.php?rural=1&funcao_js=parent.js_preenchebairro|j13_codi|j13_descr','Pesquisa',true);
+  js_OpenJanelaIframe('<?=(!isset($testanome)?"CurrentWindow.corpo":"")?>','db_iframe_bairro','func_bairro.php?rural=1&funcao_js=parent.js_preenchebairro|j13_codi|j13_descr','Pesquisa',true);
 }
 function js_preenchebairro(chave,chave1){
 //  setInterval("document.getElementById('teste').style.visibility = 'hidden'",2000);
@@ -779,9 +779,9 @@ function js_cepcon(abre){
   //if(document.form1.z01_cep.value != "")
     //document.getElementById('teste').style.visibility = 'visible';
   if(abre == true){
-    js_OpenJanelaIframe('<?=(!isset($testanome)?"top.corpo":"")?>','db_iframe_cep','func_cep.php?funcao_js=parent.js_preenchecepcon|cep|endereco|municipio|estado|bairro','Pesquisa',true);
+    js_OpenJanelaIframe('<?=(!isset($testanome)?"CurrentWindow.corpo":"")?>','db_iframe_cep','func_cep.php?funcao_js=parent.js_preenchecepcon|cep|endereco|municipio|estado|bairro','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('<?=(!isset($testanome)?"top.corpo":"")?>','db_iframe_cep','func_cep.php?pesquisa_chave='+document.form1.z01_cepcon.value+'&funcao_js=parent.js_preenchecepcon1|cep|endereco|municipio|estado|bairro','Pesquisa',false);
+    js_OpenJanelaIframe('<?=(!isset($testanome)?"CurrentWindow.corpo":"")?>','db_iframe_cep','func_cep.php?pesquisa_chave='+document.form1.z01_cepcon.value+'&funcao_js=parent.js_preenchecepcon1|cep|endereco|municipio|estado|bairro','Pesquisa',false);
   }
 }
 function js_preenchecepcon(chave,chave1,chave2,chave3,chave4){

@@ -8,8 +8,8 @@
   <file path="acesso.php">
 
     <operation>
-			<search><![CDATA[top.quadroprincipal.onunload]]></search>
-			<add><![CDATA[top.document.body.onunload]]></add>
+			<search><![CDATA[CurrentWindow.quadroprincipal.onunload]]></search>
+			<add><![CDATA[CurrentWindow.document.body.onunload]]></add>
     </operation>
 
     <operation>
@@ -72,8 +72,8 @@ if (is_array($aUsuarios) && in_array($_SESSION['DB_login'], $aUsuarios)) {
 
       if ($success) {
         echo "<script type='text/javascript'>
-          top.document.body.onunload = '';
-          top.document.location.href = 'extension/desktop';
+          CurrentWindow.document.body.onunload = '';
+          CurrentWindow.document.location.href = 'extension/desktop';
         </script>";
         exit;
       }

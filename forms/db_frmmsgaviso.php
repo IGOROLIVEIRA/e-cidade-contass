@@ -109,7 +109,7 @@ if(isset($opcao) && $opcao=="alterar"){
 </center>
 <script>
 function js_pesquisaed90_c_tabela(){
- js_OpenJanelaIframe('top.corpo','db_iframe_tabela','func_tabela.php?funcao_js=parent.js_mostratabela|nomearq|','Pesquisa de Tabelas',true);
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tabela','func_tabela.php?funcao_js=parent.js_mostratabela|nomearq|','Pesquisa de Tabelas',true);
 }
 function js_mostratabela(chave){
  document.form1.ed90_c_tabela.value = chave;

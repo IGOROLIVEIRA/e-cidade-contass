@@ -131,7 +131,7 @@ function js_procurar() {
   	document.form1.procuracampo.focus();
   	return false;
   }
-  js_OpenJanelaIframe('top.corpo','db_iframe_pesquisa','sys1_campos003.php?campo=' + document.form1.procuracampo.value);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pesquisa','sys1_campos003.php?campo=' + document.form1.procuracampo.value);
 
   //jan = window.open('sys1_campos003.php?campo=' + document.form1.procuracampo.value,'','width=220,height=310,location=0');
   //jan.moveTo(450,150);

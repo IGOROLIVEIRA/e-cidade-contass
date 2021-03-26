@@ -209,7 +209,7 @@ function js_mostravalores(){
     }
   }
   if(valores!=""){
-    js_OpenJanelaIframe('top.corpo','db_iframe_mostratotal','func_mostratotal.php?valores='+valores,'Pesquisa',true,'20','390','400','300');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostratotal','func_mostratotal.php?valores='+valores,'Pesquisa',true,'20','390','400','300');
   }else{
     alert("Selecione algum movimento.");
   }

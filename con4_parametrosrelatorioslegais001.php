@@ -384,7 +384,7 @@ function mensagem(retorno){
 function js_editar_colunas(iCodRel, iLinha){
 
 	  iAnoPesquisa = <?=db_getsession("DB_anousu")?>;
-    var iPeriodo = top.corpo.iframe_relatorio.document.getElementById('o116_periodo').value;
+    var iPeriodo = CurrentWindow.corpo.iframe_relatorio.document.getElementById('o116_periodo').value;
     if (iPeriodo == '0') {
 
       alert('Para Configurar os valores das colunas, escolha um periodo');
@@ -554,16 +554,16 @@ function js_editar_colunas(iCodRel, iLinha){
   oWindowFiltroPadrao.show(0, iCenter);
  }
 
- var oCboPeriodo = top.corpo.iframe_relatorio.document.getElementById('o116_periodo');
+ var oCboPeriodo = CurrentWindow.corpo.iframe_relatorio.document.getElementById('o116_periodo');
  if (oCboPeriodo) {
    oCboPeriodo.onchange = js_recarregaTela;
  }
 
  function js_recarregaTela() {
 
-   var oCboPeriodo = top.corpo.iframe_relatorio.document.getElementById('o116_periodo');
+   var oCboPeriodo = CurrentWindow.corpo.iframe_relatorio.document.getElementById('o116_periodo');
    var sUrl = 'con4_parametrosrelatorioslegais001.php?c83_codrel=<?=$iCodigoRelatorio?>&iCodigoPeriodo='+oCboPeriodo.value;
-   top.corpo.iframe_parametro.location.href = sUrl;
+   CurrentWindow.corpo.iframe_parametro.location.href = sUrl;
  }
  if (iPeriodo != oCboPeriodo.value ) {
    js_recarregaTela();

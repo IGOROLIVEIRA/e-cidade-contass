@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: TFD
@@ -39,7 +39,7 @@ $clrotulo->label("z01_v_nome");
     <td nowrap title="<?=@$Ttf28_i_codigo?>">
       <?=@$Ltf28_i_codigo?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf28_i_codigo',10,$Itf28_i_codigo,true,'text',3,'');
       ?>
@@ -49,7 +49,7 @@ $clrotulo->label("z01_v_nome");
     <td nowrap title="<?=@$Ttf28_i_pedidotfd?>">
       <?=@$Ltf28_i_pedidotfd?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf28_i_pedidotfd',10,$Itf01_i_codigo,true,'text',3,'');
       ?>
@@ -61,7 +61,7 @@ $clrotulo->label("z01_v_nome");
       echo $Ltf01_i_cgsund;
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf01_i_cgsund',10,$Itf01_i_cgsund,true,'text',3,'');
       db_input('z01_v_nome',50,$Iz01_v_nome,true,'text',3,'');
@@ -72,7 +72,7 @@ $clrotulo->label("z01_v_nome");
     <td nowrap title="<?=@$Ttf28_i_situacao?>">
       <?=@$Ltf28_i_situacao?>
     </td>
-    <td> 
+    <td>
       <?
       $aX = array();
       $sSql = $oDaotfd_situacaotfd->sql_query_file(null, ' * ', ' tf26_i_codigo ');
@@ -92,7 +92,7 @@ $clrotulo->label("z01_v_nome");
     <td nowrap title="<?=@$Ttf28_c_obs?>">
        <?=@$Ltf28_c_obs?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf28_c_obs',80,$Itf28_c_obs,true,'text',$db_opcao,"")
       ?>
@@ -110,16 +110,16 @@ $clrotulo->label("z01_v_nome");
 		  <td valign="top"><br>
         <?
 				$aChavepri = array ('tf28_i_codigo' => @$tf28_i_codigo,
-                            'tf28_i_pedidotfd' => @$tf28_i_pedidotfd, 
-                            'tf28_i_situacao' => @$tf28_i_situacao, 
-                            'tf28_i_login' => @$tf28_i_login, 
+                            'tf28_i_pedidotfd' => @$tf28_i_pedidotfd,
+                            'tf28_i_situacao' => @$tf28_i_situacao,
+                            'tf28_i_login' => @$tf28_i_login,
                             'tf28_c_obs' => @$tf28_c_obs,
                             'tf28_d_datasistema' => @$tf28_d_datasistema,
                             'tf28_c_horasistema' => @$tf28_c_horasistema,
                             'tf01_i_cgsund' => @$tf01_i_cgsund);
 				$oIframeAE->chavepri = $aChavepri;
 
-        $sCampos = 
+        $sCampos =
         " tf28_i_codigo,
           tf28_i_pedidotfd,
           tf28_i_situacao,
@@ -130,7 +130,7 @@ $clrotulo->label("z01_v_nome");
           tf28_d_datasistema,
           tf28_c_horasistema,
           tf01_i_cgsund ";
-        
+
 				$oIframeAE->sql = $oDaotfd_situacaopedidotfd->sql_query2(null, $sCampos,
                                                                 ' tf28_i_codigo desc ',
                                                                 " tf28_i_pedidotfd = $tf28_i_pedidotfd ");
@@ -158,7 +158,7 @@ $clrotulo->label("z01_v_nome");
 
 <?
   if(isset($opcao)) {
-    
+
     if(isset($tf28_i_login) && db_getsession('DB_id_usuario') != $tf28_i_login) {
       echo 'js_desabilitaAlteracao()';
     }
@@ -174,7 +174,7 @@ function js_desabilitaAlteracao() {
 }
 
 function js_cancelar() {
- 
+
   <?
   echo ' location.href = "'.basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]).'?tf28_i_pedidotfd='.
                           $tf28_i_pedidotfd.'&tf01_i_cgsund="'.
@@ -186,20 +186,20 @@ function js_cancelar() {
 /*
 function js_pesquisatf28_i_pedidotfd(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?funcao_js=parent.js_mostratfd_pedidotfd1|tf01_i_codigo|tf01_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?funcao_js=parent.js_mostratfd_pedidotfd1|tf01_i_codigo|tf01_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.tf28_i_pedidotfd.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?pesquisa_chave='+document.form1.tf28_i_pedidotfd.value+'&funcao_js=parent.js_mostratfd_pedidotfd','Pesquisa',false);
+     if(document.form1.tf28_i_pedidotfd.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?pesquisa_chave='+document.form1.tf28_i_pedidotfd.value+'&funcao_js=parent.js_mostratfd_pedidotfd','Pesquisa',false);
      }else{
-       document.form1.tf01_i_codigo.value = ''; 
+       document.form1.tf01_i_codigo.value = '';
      }
   }
 }
 function js_mostratfd_pedidotfd(chave,erro){
-  document.form1.tf01_i_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.tf28_i_pedidotfd.focus(); 
-    document.form1.tf28_i_pedidotfd.value = ''; 
+  document.form1.tf01_i_codigo.value = chave;
+  if(erro==true){
+    document.form1.tf28_i_pedidotfd.focus();
+    document.form1.tf28_i_pedidotfd.value = '';
   }
 }
 function js_mostratfd_pedidotfd1(chave1,chave2){

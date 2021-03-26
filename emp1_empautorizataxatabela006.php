@@ -255,8 +255,8 @@ $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
            function js_libera(recar){
             parent.document.formaba.empautitem.disabled=false;\n
             parent.document.formaba.empautidot.disabled=false;\n
-            top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
-            top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+            CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+            CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
            }
            js_libera();
           </script>
@@ -268,8 +268,8 @@ $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
                 function js_bloqueia(recar){
                   parent.document.formaba.empautitem.disabled=false;\n
                   parent.document.formaba.empautidot.disabled=false;\n
-                  top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
-                  top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+                  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+                  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
                 }
                 js_bloqueia();
               </script>
@@ -280,8 +280,8 @@ $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
                 function js_bloqueia(recar){
                   parent.document.formaba.empautitem.disabled=false;\n
                   parent.document.formaba.empautidot.disabled=false;\n
-                  top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
-                  top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+                  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+                  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?db_opcaoal=33&criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
                 }
                 js_bloqueia();
               </script>

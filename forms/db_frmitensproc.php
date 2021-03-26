@@ -299,9 +299,9 @@ if (isset($pc80_codproc)) {
     echo "<script>
             alert('Usuário:\\n\\nAlguns itens incluídos neste orçamento estão em autorização de empenho!\\n\\nAdministrador:');";
     if($db_chama=="alterar"){
-      echo "  top.corpo.iframe_orcam.location.href = 'com1_processo005.php';";
+      echo "  CurrentWindow.corpo.iframe_orcam.location.href = 'com1_processo005.php';";
     }else if($db_chama=="excluir"){
-      echo "  top.corpo.iframe_orcam.location.href = 'com1_processo006.php';";
+      echo "  CurrentWindow.corpo.iframe_orcam.location.href = 'com1_processo006.php';";
     }
     echo "</script>";
   }

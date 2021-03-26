@@ -49,10 +49,10 @@ if ( isset( $ordenacao ) ) {
   }
 ?>
  <script>
-   top.corpo.arvore.location.reload();
+   CurrentWindow.corpo.arvore.location.reload();
    parent.db_iframe_ordenar.hide();
-   top.corpo.disciplina.document.body.hidden = true;
-   top.corpo.dados.document.body.hidden      = true;
+   CurrentWindow.corpo.disciplina.document.body.hidden = true;
+   CurrentWindow.corpo.dados.document.body.hidden      = true;
  </script>
 <?}?>
 <html>

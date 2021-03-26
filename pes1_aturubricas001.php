@@ -166,12 +166,12 @@ db_utils::postMemory($_POST);
 
       if (FolhaPagamentoSalario::hasFolhaAberta()) {
         echo 'aDadosTipoPonto.push({folha: "fs", descricao: "Salário"});';
-      } 
-      
+      }
+
       if (FolhaPagamentoComplementar::hasFolhaAberta()) {
           echo 'aDadosTipoPonto.push({folha: "fc", descricao: "Complementar"});';
       }
-      
+
       if (FolhaPagamentoSuplementar::hasFolhaAberta()) {
         echo 'aDadosTipoPonto.push({folha: "fs", descricao: "Suplementar"});';
       }
@@ -265,14 +265,14 @@ db_utils::postMemory($_POST);
 
   function js_pesquisarrubric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?funcao_js=parent.js_mostrarubricas1|rh27_rubric|rh27_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhrubricas','func_rhrubricas.php?funcao_js=parent.js_mostrarubricas1|rh27_rubric|rh27_descr','Pesquisa',true);
   }else{
      if(document.form1.rh27_rubric.value != ''){
        quantcaracteres = document.form1.rh27_rubric.value.length;
        for(i=quantcaracteres;i<4;i++){
          document.form1.rh27_rubric.value = "0"+document.form1.rh27_rubric.value;
        }
-       js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?pesquisa_chave='+document.form1.rh27_rubric.value+'&funcao_js=parent.js_mostrarubricas','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhrubricas','func_rhrubricas.php?pesquisa_chave='+document.form1.rh27_rubric.value+'&funcao_js=parent.js_mostrarubricas','Pesquisa',false);
      }else{
        document.form1.rh27_descr.value = '';
      }
@@ -301,10 +301,10 @@ var oTiposFiltrosFolha;
 function js_pesquisaSelecao(lMostra) {
 
   if ( lMostra ) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_geraform_mostraselecao1|r44_selec|r44_descr&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_geraform_mostraselecao1|r44_selec|r44_descr&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
   } else {
     if ( $F(r44_selec) != "" ) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave=' + $F(r44_selec) + '&funcao_js=parent.js_geraform_mostraselecao&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave=' + $F(r44_selec) + '&funcao_js=parent.js_geraform_mostraselecao&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
     } else {
       $(r44_des).setValue("");
     }

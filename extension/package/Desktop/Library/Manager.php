@@ -19,7 +19,7 @@ class Manager extends AbstractManager {
 
     $modificationManager = new ModificationManager();
     $modificationManager->setLogger($this->container->get('logger'));
-    $this->unpackModifications($modificationManager, array('desktop.xml'));
+    $this->unpackModifications($modificationManager, array('deskCurrentWindow.xml'));
   }
 
   /**
@@ -34,7 +34,7 @@ class Manager extends AbstractManager {
     $modificationDesktopData = ModificationDataModification::restore('dbportal-v3-desktop');
 
     if (!$modificationDesktopData->exists()) {
-      $this->unpackModifications($modificationManager, array('desktop.xml'));
+      $this->unpackModifications($modificationManager, array('deskCurrentWindow.xml'));
       $modificationDesktopData = ModificationDataModification::restore('dbportal-v3-desktop');
     }
 

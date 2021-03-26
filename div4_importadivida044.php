@@ -560,8 +560,8 @@ if (isset($cod_k02_codigo) && trim($cod_k02_codigo)!="" && isset($cod_v03_codigo
                 parent.document.form1.gerar.disabled=true;
     	          alert('Nenhum tipo de débito encontrado com este código');
               </script>";
-        echo "<script>top.corpo.db_iframe.hide();</script>";
-        echo "<script>top.corpo.location.href='div4_importadivida011.php'</script>";
+        echo "<script>CurrentWindow.corpo.db_iframe.hide();</script>";
+        echo "<script>CurrentWindow.corpo.location.href='div4_importadivida011.php'</script>";
       }
 
       $sql1 = "select v03_codigo, v03_descr from proced where v03_instit = {$iInstit} order by v03_descr ";
@@ -654,8 +654,8 @@ if ($teste == true){
   if($erro_msg!=""){
     echo "<script>parent.document.getElementById('process').style.visibility='hidden';</script>";
     db_msgbox($erro_msg);
-    echo "<script>top.corpo.db_iframe.hide();</script>";
-    echo "<script>top.corpo.location.href='div4_importadivida011.php'</script>";
+    echo "<script>CurrentWindow.corpo.db_iframe.hide();</script>";
+    echo "<script>CurrentWindow.corpo.location.href='div4_importadivida011.php'</script>";
   }
 }
 ?>

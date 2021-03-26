@@ -218,7 +218,7 @@ function js_veri(){
 return true;
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_preenchepesquisa|o42_codparrel','Pesquisa',true,'0','1');
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_preenchepesquisa|o42_codparrel','Pesquisa',true,'0','1');
 }
 function js_preenchepesquisa(chave){
   db_iframe_orcparamrel.hide();

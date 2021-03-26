@@ -262,12 +262,12 @@ function  js_cancel(){
 function js_lev(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta03.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta03.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
   }else{
 
     lev = document.form1.y60_codlev.value;
     if(lev != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta03.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta03.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
     }else{
       document.form1.z01_nome.value='';
     }
@@ -299,7 +299,7 @@ if (isset ($cancelar)) {
 	} else {
 
 		db_msgbox("Cancelamento efetivado com sucesso!!");
-		echo "<script>top.corpo.location.href='fis4_cancelimport001.php';</script>";
+		echo "<script>CurrentWindow.corpo.location.href='fis4_cancelimport001.php';</script>";
 	}
 }
 ?>

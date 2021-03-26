@@ -604,8 +604,8 @@ if(isset($incluir)) {
 
             $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
 
-            if ( ($tipoinstit == 5 || $tipoinstit == 6) && 
-                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) ) 
+            if ( ($tipoinstit == 5 || $tipoinstit == 6) &&
+                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) )
                 ) {
                 if($e60_tipodespesa != 0) {
                     $clempempenho->e60_tipodespesa = $e60_tipodespesa;
@@ -1387,9 +1387,9 @@ echo "
           parent.document.formaba.empempitem.disabled = false;\n
           parent.document.formaba.empempdot.disabled  = false;\n
           parent.document.formaba.empprazos.disabled  = false;\n
-         top.corpo.iframe_empempitem.location.href = 'emp1_empempitem001.php?db_opcaoal=3&e55_autori=$e54_autori';\n
-         top.corpo.iframe_empempdot.location.href  = 'emp1_empempdot001.php?e56_autori=$e54_autori';\n
-         top.corpo.iframe_empprazos.location.href  = 'emp1_empempenho007.php?chavepesquisa=$e54_autori';\n
+         CurrentWindow.corpo.iframe_empempitem.location.href = 'emp1_empempitem001.php?db_opcaoal=3&e55_autori=$e54_autori';\n
+         CurrentWindow.corpo.iframe_empempdot.location.href  = 'emp1_empempdot001.php?e56_autori=$e54_autori';\n
+         CurrentWindow.corpo.iframe_empprazos.location.href  = 'emp1_empempenho007.php?chavepesquisa=$e54_autori';\n
 
        </script>
    ";

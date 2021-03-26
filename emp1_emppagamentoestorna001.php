@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -41,7 +41,7 @@ if ($clempparametro->numrows > 0) {
   if ($e30_notaliquidacao != '') {
    db_redireciona("emp1_emppagamentoestornanota001.php");
   }
- 
+
 }
 $db_opcao = 1;
 $db_botao = false;
@@ -61,18 +61,18 @@ $clrotulo->label("e50_codord");
 <script>
     function js_mascara(evt){
       var evt = (evt) ? evt : (window.event) ? window.event : "";
-      
-      if( (evt.charCode >46 && evt.charCode <58) || evt.charCode ==0 ){//8:backspace|46:delete|190:. 
+
+      if( (evt.charCode >46 && evt.charCode <58) || evt.charCode ==0 ){//8:backspace|46:delete|190:.
 	return true;
       }else{
 	return false;
-      }  
+      }
     }
 </script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr> 
+    <tr>
       <td width="360" height="18">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
@@ -80,8 +80,8 @@ $clrotulo->label("e50_codord");
     </tr>
   </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <form name='form1' action='emp1_emppagamentoestorna002.php'>
     <center>
       <table>
@@ -89,25 +89,25 @@ $clrotulo->label("e50_codord");
 		  <td nowrap title="<?=@$Te50_codord?>" align='right'>
 		     <? db_ancora(@$Le50_codord,"js_pesquisae50_codord(true);",$db_opcao);  ?>
 		  </td>
-		  <td> 
+		  <td>
 		     <? db_input('e50_codord',8,$Ie50_codord,true,'text',$db_opcao," onchange='js_pesquisae50_codord(false);'")  ?>
 		  </td>
 		</tr>
-          <tr> 
+          <tr>
             <td  align="right" nowrap title="<?=$Te60_numemp?>">
                  <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",$db_opcao);  ?>
             </td>
-	    
-            <td  nowrap> 
-             
+
+            <td  nowrap>
+
 	      <input name="e60_codemp" title='<?=$Te60_codemp?>' size="12" type='text'  onKeyPress="return js_mascara(event);" >
             </td>
-          </tr> 
+          </tr>
 		<tr>
 		  <td nowrap title="<?=@$Te60_numemp?>" align='right'>
 		     <? db_ancora(@$Le60_numemp,"js_pesquisae60_numemp(true);",$db_opcao);  ?>
 		  </td>
-		  <td> 
+		  <td>
 		     <? db_input('e60_numemp',13,$Ie60_numemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'")  ?>
 		  </td>
 		</tr>
@@ -151,9 +151,9 @@ function js_entra(){
 
 function js_pesquisae60_codemp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
   }else{
-   // js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+   // js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
   }
 }
 function js_mostraempempenho2(chave1){
@@ -164,15 +164,15 @@ function js_mostraempempenho2(chave1){
 
 function js_pesquisae60_numemp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
   }
 }
 function js_mostraempempenho(chave,erro){
-  if(erro==true){ 
-    document.form1.e60_numemp.focus(); 
-    document.form1.e60_numemp.value = ''; 
+  if(erro==true){
+    document.form1.e60_numemp.focus();
+    document.form1.e60_numemp.value = '';
   }
 }
 function js_mostraempempenho1(chave1){
@@ -182,15 +182,15 @@ function js_mostraempempenho1(chave1){
 
 function js_pesquisae50_codord(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostrapagordem','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostrapagordem','Pesquisa',false);
   }
 }
 function js_mostrapagordem(chave,erro){
-  if(erro==true){ 
-    document.form1.e50_codord.focus(); 
-    document.form1.e50_codord.value = ''; 
+  if(erro==true){
+    document.form1.e50_codord.focus();
+    document.form1.e50_codord.value = '';
   }
 }
 function js_mostrapagordem1(chave1,chave2){
@@ -203,21 +203,21 @@ if(isset($erro_msg)){
   db_msgbox($erro_msg);
   /*
   if(isset($e60_numemp)){
-     $clpagordem->sql_record($clpagordem->sql_query(null,'e50_codord as codord',"","e50_numemp = $e60_numemp")); 
+     $clpagordem->sql_record($clpagordem->sql_query(null,'e50_codord as codord',"","e50_numemp = $e60_numemp"));
      $numrows01 = $clpagordem->numrows;
      if($numrows01>0){
        echo "<script>";
-       echo "js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem001.php?funcao_js=parent.js_mostrapagordem1|e50_codord&chave_e50_numemp=$e60_numemp','Pesquisa',true);";
+       echo "js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem001.php?funcao_js=parent.js_mostrapagordem1|e50_codord&chave_e50_numemp=$e60_numemp','Pesquisa',true);";
        echo "</script>";
-     }  
+     }
   }
   */
   if(isset($erro) && $erro != ''){
     echo "<script>";
-    echo "js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem001.php?funcao_js=parent.js_mostrapagordem1|e50_codord&chave_e50_numemp=$e60_numemp','Pesquisa',true);";
+    echo "js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem001.php?funcao_js=parent.js_mostrapagordem1|e50_codord&chave_e50_numemp=$e60_numemp','Pesquisa',true);";
     echo "</script>";
   }
-  
+
 }
 
 ?>

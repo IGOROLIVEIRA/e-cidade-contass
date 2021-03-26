@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -63,7 +63,7 @@ $oDaoEmpAutoriza->rotulo->label();
   <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
-  
+
   <style>
   .titleTd {
     font-weight: bold;
@@ -79,24 +79,24 @@ $oDaoEmpAutoriza->rotulo->label();
         <table width="100%" border="0">
           <tr>
             <td class="titleTd">
-              <?php 
+              <?php
                 db_ancora($Le54_autori, "js_pesquisaAutorizacao(true);", 1);
               ?>
             </td>
             <td>
-              <?php 
+              <?php
                 db_input("e54_autori", 10, $Ie54_autori, true, "text", 1, "onchange='js_pesquisaAutorizacao(false);'");
               ?>
             </td>
           </tr>
           <tr>
             <td class="titleTd">
-              <?php 
+              <?php
                 db_ancora($Lo58_coddot, "js_pesquisaReduzido(true);", 1);
               ?>
             </td>
             <td>
-              <?php 
+              <?php
                 db_input("o58_coddot", 10, null, true, "text", 1, "onchange='js_pesquisaReduzido(false);'");
                 db_input("o56_descr",40,"",true,"text",3);
               ?>
@@ -104,12 +104,12 @@ $oDaoEmpAutoriza->rotulo->label();
           </tr>
           <tr>
             <td class="titleTd">
-              <?php 
+              <?php
                 db_ancora($Lpc01_codmater, "js_pesquisaMaterial(true);", 1);
               ?>
             </td>
             <td>
-              <?php 
+              <?php
                 db_input("pc01_codmater", 10, $Ipc01_codmater, true, "text", 1, "onchange='js_pesquisaMaterial(false);'");
                 db_input("pc01_descrmater",40,"",true,"text",3);
               ?>
@@ -117,12 +117,12 @@ $oDaoEmpAutoriza->rotulo->label();
           </tr>
           <tr>
             <td class="titleTd">
-              <?php 
+              <?php
                 db_ancora("Fornecedor (CGM):", "js_pesquisaFornecedor(true);", 1);
               ?>
             </td>
             <td>
-              <?php 
+              <?php
                 db_input("z01_numcgm", 10, $Iz01_numcgm, true, "text", 1, "onchange='js_pesquisaFornecedor(false);'");
                 db_input("z01_nome", 40, null, true, "text", 3);
               ?>
@@ -131,8 +131,8 @@ $oDaoEmpAutoriza->rotulo->label();
           <tr>
             <td class="titleTd">Data de Emissão:</td>
             <td>
-              <?php 
-                db_inputdata('e60_emiss1',@$e60_emiss_dia,@$e60_emiss_mes,@$e60_emiss_ano,true,'text',1,"");   		          
+              <?php
+                db_inputdata('e60_emiss1',@$e60_emiss_dia,@$e60_emiss_mes,@$e60_emiss_ano,true,'text',1,"");
                 echo " <b>a</b> ";
                 db_inputdata('e60_emiss2',@$e60_emiss_dia,@$e60_emiss_mes,@$e60_emiss_ano,true,'text',1,"");
               ?>
@@ -145,7 +145,7 @@ $oDaoEmpAutoriza->rotulo->label();
       <input type="reset" name="btnResetEmpenho" id="btnResetEmpenho" value="Limpar Formulário">
     </form>
   </center>
-<?php 
+<?php
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -160,8 +160,8 @@ $("btnPesquisaEmpenho").observe("click", function () {
   sUrlRelatorio     += "&iCodigoDotacao="+$F("o58_coddot")+"&iCodigoMaterial="+$F("pc01_codmater");
   sUrlRelatorio     += "&iCodigoFornecedor="+$F("z01_numcgm")+"&iCodigoAutorizacao="+$F("e54_autori");
   sUrlRelatorio     += "&dtDataInicial="+$F("e60_emiss1")+"&dtDataFinal="+$F("e60_emiss2");
-  js_OpenJanelaIframe('top.corpo','db_iframe_consultaautorizacaoempenho003', sUrlRelatorio, 'Consulta Empenho',true);
-  
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaautorizacaoempenho003', sUrlRelatorio, 'Consulta Empenho',true);
+
 });
 
 /**
@@ -172,10 +172,10 @@ function js_pesquisaAutorizacao (lMostra) {
   if (lMostra) {
     sUrlOpen = "func_empautoriza.php?funcao_js=parent.js_preencheAutorizacao|e54_autori";
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_empautoriza', sUrlOpen, 'Pesquisa Autorização', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empautoriza', sUrlOpen, 'Pesquisa Autorização', lMostra);
 }
 function js_preencheAutorizacao (iCodigo, sDescricao) {
-  
+
   $("e54_autori").setValue(iCodigo);
   db_iframe_empautoriza.hide();
 }
@@ -193,10 +193,10 @@ function js_pesquisaFornecedor (lMostra) {
   if (lMostra) {
     sUrlOpen = "func_cgm_empenho.php?funcao_js=parent.js_preencheFornecedor|e60_numcgm|z01_nome";
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', sUrlOpen, 'Pesquisa Material', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', sUrlOpen, 'Pesquisa Material', lMostra);
 }
 function js_preencheFornecedor (iCodigo, sDescricao) {
-  
+
   $("z01_numcgm").setValue(iCodigo);
   $("z01_nome").setValue(sDescricao);
   db_iframe_cgm.hide();
@@ -216,10 +216,10 @@ function js_pesquisaMaterial (lMostra) {
   if (lMostra) {
     sUrlOpen = "func_pcmater.php?funcao_js=parent.js_preencheMaterial|pc01_codmater|pc01_descrmater";
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_pcmater', sUrlOpen, 'Pesquisa Material', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pcmater', sUrlOpen, 'Pesquisa Material', lMostra);
 }
 function js_preencheMaterial (iCodigo, sDescricao) {
-  
+
   $("pc01_codmater").setValue(iCodigo);
   $("pc01_descrmater").setValue(sDescricao);
   db_iframe_pcmater.hide();
@@ -239,10 +239,10 @@ function js_pesquisaReduzido (lMostra) {
   if (lMostra) {
     sUrlOpen = "func_orcdotacao.php?funcao_js=parent.js_preencheReduzido|o58_coddot|o56_descr";
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_orcdotacao', sUrlOpen, 'Pesquisa Reduzido Dotação', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcdotacao', sUrlOpen, 'Pesquisa Reduzido Dotação', lMostra);
 }
 function js_preencheReduzido (iCodigoReduzido, sDescricao) {
-  
+
   $("o58_coddot").setValue(iCodigoReduzido);
   $("o56_descr").setValue(sDescricao);
   db_iframe_orcdotacao.hide();

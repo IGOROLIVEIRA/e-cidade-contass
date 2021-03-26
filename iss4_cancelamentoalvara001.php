@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -100,28 +100,28 @@ require_once("libs/db_app.utils.php");
 
   var iCodigoMovimentacaoRetorno = new Number();
   /* instância do objeto que monta a grid de documentos no formulário */
-  
+
   var oDocumentos = new DBViewAlvaraDocumentos('oDocumentos', 'ctnDocumentos');
       oDocumentos.show();
-  
+
   /* funções que fazem a pesquisa da inscrição/alvará */
-  
+
   function js_pesquisaAlvara(lMostra, iCodigo) {
-    
+
     var sUrl = '';
-    
+
     if (iCodigo == '') {
       sUrl = 'func_issalvaracancelamento.php?funcao_js=parent.js_mostraAlvara|q123_inscr|z01_nome|q123_sequencial';
     } else {
       sUrl = 'func_issalvaracancelamento.php?pesquisa_chave='+iCodigo+'&funcao_js=parent.js_mostraAlvara2';
     }
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_alvara', sUrl, 'Pesquisa Alvarás', lMostra);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_alvara', sUrl, 'Pesquisa Alvarás', lMostra);
   }
-  
+
   /** ao mostrar o alvará o script chama o RPC para buscar as informaçções que serão jogadas no formulário */
-                     
+
   function js_mostraAlvara(sAlvara, sDetalhe, iCodigoAlvara) {
- 
+
     $('q123_inscr').value     = sAlvara;
     $('z01_nome').value       = sDetalhe;
     $('q120_issalvara').value = iCodigoAlvara;
@@ -131,16 +131,16 @@ require_once("libs/db_app.utils.php");
     /* depois de preencher os campos, chama a função que popula o resto do formulário */
     buscaUltimaMovimentacao();
   }
-  
+
   function js_mostraAlvara2(sAlvaraOuTextoErro, lErro, sInscricao, sDescr) {
-  
+
     if (lErro == true) {
-    
+
       $('q123_inscr').value     = '';
       $('z01_nome').value       = sAlvaraOuTextoErro;
       $('q120_issalvara').value = '';
     } else {
-    
+
       $('q123_inscr').value     = sInscricao;
       $('z01_nome').value       = sDescr;
       $('q120_issalvara').value = sAlvaraOuTextoErro;
@@ -151,11 +151,11 @@ require_once("libs/db_app.utils.php");
       buscaUltimaMovimentacao();
     }
   }
-  
+
   /* chamada ao RPC para trazer os dados da última movimentação para o formulário */
-  
+
   function buscaUltimaMovimentacao() {
-    
+
     js_divCarregando("Aguarde, processando...", "msgBox");
     var oParam            = new Object();
     oParam.exec           = "buscaUltimaMovimentacao";
@@ -168,7 +168,7 @@ require_once("libs/db_app.utils.php");
                                                 var aRetorno = eval("("+oAjax.responseText+")");
                                                // alert(oAjax.responseText);
                                                 if (aRetorno.status == 1) {
-                                                
+
                                                   with(aRetorno.aUltimaMovimentacao) {
 	                                                  $('q121_descr').value      = q121_descr.urlDecode();
 	                                                  $('q120_dtmov').value      = js_formatar(q120_dtmov,"d");
@@ -181,18 +181,18 @@ require_once("libs/db_app.utils.php");
                                  });
     $('btnSalvar').disabled   = false;
   }
-  
+
   /* efetua o cancelamento da última movimentação */
-  
+
   function js_cancelaUltimaMovimentacao() {
-  
+
     js_divCarregando("Aguarde, processando...", "msgBox");
     if ($F('q120_issalvara') == '' || $F('q123_inscr') == '') {
-    
+
       alert('Você deve informar alguma inscrição para cancelar seu último movimento.');
       return false;
     }
-    
+
     var oParam                   = new Object();
     oParam.exec                  = "cancelaUltimaMovimentacao";
     oParam.q120_issalvara        = $F('q120_issalvara');
@@ -212,11 +212,11 @@ require_once("libs/db_app.utils.php");
                                               }
                                  });
   }
-  
+
   /* função que faz a limpeza dos campos */
-  
+
   function js_limpaCampos() {
-    
+
     $('q123_inscr').value     = '';
     $('z01_nome').value       = '';
     $('q120_issalvara').value = '';
@@ -225,5 +225,5 @@ require_once("libs/db_app.utils.php");
     $('q120_usuario').value   = '';
     $('q120_obs').value       = '';
   }
-      
+
 </script>

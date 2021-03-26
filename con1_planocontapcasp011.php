@@ -644,7 +644,7 @@ $iOpcao = 1;
 
         document.getElementById("form1").reset();
         var sUrl = 'func_conplanogeral.php?funcao_js=parent.js_preenchePlano|c60_codcon';
-        js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_conta',sUrl,'Pesquisa',true,'0');
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_conta',sUrl,'Pesquisa',true,'0');
     });
 
     function js_preenchePlano(iCodigoConta) {
@@ -740,7 +740,7 @@ $iOpcao = 1;
 
       if ($("iSistemaConta").value == 2 && this.value != 'N') {
 
-        var oGridReduzidos = top.corpo.iframe_reduzido.oGridReduzido;
+        var oGridReduzidos = CurrentWindow.corpo.iframe_reduzido.oGridReduzido;
 
         if (oGridReduzidos == undefined || oGridReduzidos.getRows().length < 1) {
 
@@ -1033,11 +1033,11 @@ $iOpcao = 1;
 
         if (lMostra == true) {
             var sUrl = 'func_consistema.php?funcao_js=parent.js_mostraDetalhamentoSistema|c52_codsis|c52_descr';
-            js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',true,'0');
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',true,'0');
         } else {
             if($("iDetalhamentoSistema").value != ''){
                 var sUrl = 'func_consistema.php?pesquisa_chave='+$("iDetalhamentoSistema").value+'&funcao_js=parent.js_completaDetalhamentoSistema';
-                js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',false);
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',false);
             } else {
                 $("sDescricaoDetalhamentoSistema").value = '';
             }
@@ -1095,11 +1095,11 @@ $iOpcao = 1;
 
         if (lMostra == true) {
             var sUrl = 'func_consistemaconta.php?funcao_js=parent.js_mostraSistemaConta|c65_sequencial|c65_descricao';
-            js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',true,'0');
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',true,'0');
         } else {
             if($("iSistemaConta").value != ''){
                 var sUrl = 'func_consistemaconta.php?pesquisa_chave='+$("iSistemaConta").value+'&funcao_js=parent.js_completaSistemaConta';
-                js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',false);
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_consistemaconta',sUrl,'Pesquisa',false);
             } else {
                 $("sDescricaoSistemaConta").value = '';
             }
@@ -1279,13 +1279,13 @@ $iOpcao = 1;
 
         if (lMostraWindow) {
             var sUrl = 'func_contacorrente.php?funcao_js=parent.js_preencheContaCorrente|c17_sequencial|c17_descricao';
-            js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_contacorrente',sUrl,'Pesquisa',true,'0');
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_contacorrente',sUrl,'Pesquisa',true,'0');
         } else {
 
             if ($("iCodigoContaCorrente").value != '') {
                 var sUrl  = 'func_contacorrente.php?pesquisa_chave='+$F("iCodigoContaCorrente");
                 sUrl +='&funcao_js=parent.js_completaContaCorrente';
-                js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_contacorente',sUrl,'Pesquisa',false);
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_contacorente',sUrl,'Pesquisa',false);
             } else {
                 $("sDescricaoRecurso").value = '';
             }

@@ -32,7 +32,7 @@ $clrotulo->label("nome");
 $clrotulo->label("la21_i_codigo");
 $clrotulo->label("la22_i_codigo");
 $clrotulo->label("z01_v_nome");
-$clrotulo->label("la24_i_laboratorio"); 
+$clrotulo->label("la24_i_laboratorio");
 $clrotulo->label("la09_i_exame");
 $clrotulo->label("la21_d_data");
 $clrotulo->label("la21_c_hora");
@@ -64,7 +64,7 @@ if (!isset($la32_d_data)) {
         <td nowrap title="<?=@$Tla22_i_codigo?>">
            <?db_ancora( "<stronger><b>Requisição</b></stronger>", "js_pesquisala22_i_codigo(true);", $db_opcao );?>
         </td>
-        <td> 
+        <td>
            <?php
              db_input( 'la22_i_codigo', 10, $Ila22_i_codigo, true, 'text', $db_opcao, "onchange='js_pesquisala22_i_codigo(false);'" );
              db_input( 'z01_v_nome',    50, $Iz01_v_nome,    true, 'text', 3 );
@@ -88,7 +88,7 @@ if (!isset($la32_d_data)) {
             <table style='width: 95%;'>
                <tr>
                  <td nowrap title="<?=@$Tla32_d_data?>">
-                    <?=@$Lla32_d_data?>  
+                    <?=@$Lla32_d_data?>
                  </td>
                  <td nowrap>
                     <?php
@@ -101,7 +101,7 @@ if (!isset($la32_d_data)) {
                   <td nowrap title="<?=@$Tla32_c_hora?>">
                      <?=@$Lla32_c_hora?>
                   </td>
-                  <td> 
+                  <td>
                      <?db_input( 'la32_c_hora', 5, $Ila32_c_hora, true, 'text', $db_opcao );?>
                   </td>
                </tr>
@@ -115,7 +115,7 @@ if (!isset($la32_d_data)) {
     </td>
     <td valign="top">
        <fieldset style='width: 90%;'><legend><b>Entrega</b></legend>
-          <table style='width: 95%;'>  
+          <table style='width: 95%;'>
                <tr>
                    <td nowrap title="<?=@$Tla32_d_entrega?>">
                        <?=@$Lla32_d_entrega?>
@@ -136,7 +136,7 @@ if (!isset($la32_d_data)) {
                    <td nowrap title="<?=@$Tla32_c_horaentrega?>">
                        <?=@$Lla32_c_horaentrega?>
                    </td>
-                   <td> 
+                   <td>
                        <?db_input( 'la32_c_horaentrega', 5, $Ila32_c_horaentrega, true, 'text', $db_opcao );?>
                    </td>
                </tr>
@@ -164,17 +164,17 @@ if (!isset($la32_d_data)) {
                       </select>
                   </td>
               </tr>
-              <tr>  
-                  <td>      
+              <tr>
+                  <td>
                       <input type="button" name="imprimir" id="imprimir" value="Imprimir etiqueta" onclick="js_emite();" disabled>
                       <input type="button" name="incluir" id="incluir" value="Salvar" onclick="return js_salvar(1)" disabled>
                   </td>
-              </tr> 
+              </tr>
           </table>
        </fieldset>
     </td>
   </tr>
-</table> 
+</table>
 </center>
 
 </form>
@@ -282,7 +282,7 @@ function js_retornoSalvar( oResponse ) {
   }
 }
 
-function js_emite() {	
+function js_emite() {
 
   var aLista = [];
 
@@ -342,7 +342,7 @@ function js_AtualizaGrid(){
 function js_mudadata(data){
 
 	F.la32_d_entrega.value=data;
-	
+
 }
 function js_carregaexames(requisicao){
 	var oParam      = new Object();
@@ -359,7 +359,7 @@ function js_retornocarregaexames(objAjax){
 	if(oAjax.status==1){
 	       if(oAjax.alinhasgrid.length>0){
 	            for(x=0;x<oAjax.alinhasgrid.length;x++){
-	               F.exames.add(new Option(oAjax.alinhasgrid[x],F.exames.length),null);   
+	               F.exames.add(new Option(oAjax.alinhasgrid[x],F.exames.length),null);
 	            }
 	            js_AtualizaGrid();
 	            F.falta.disabled=false;
@@ -377,7 +377,7 @@ function js_pesquisala22_i_codigo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_lab_requisicao','func_lab_requisicao.php?iLaboratorioLogado=<?=$iLaboratorioLogado?>&funcao_js=parent.js_mostralab_requisicao1|la22_i_codigo|z01_v_nome','Pesquisa',true);
   }else{
-     if(document.form1.la22_i_codigo.value != ''){ 
+     if(document.form1.la22_i_codigo.value != ''){
         js_OpenJanelaIframe('','db_iframe_lab_requisicao','func_lab_requisicao.php?iLaboratorioLogado=<?=$iLaboratorioLogado?>&pesquisa_chave='+document.form1.la22_i_codigo.value+'&funcao_js=parent.js_mostralab_requisicao','Pesquisa',false);
      }else{
 
@@ -388,9 +388,9 @@ function js_pesquisala22_i_codigo(mostra){
   }
 }
 function js_mostralab_requisicao(chave,erro){
-  document.form1.z01_v_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.la22_i_codigo.focus(); 
+  document.form1.z01_v_nome.value = chave;
+  if(erro==true){
+    document.form1.la22_i_codigo.focus();
     document.form1.la22_i_codigo.value = '';
     objGridExames.clearAll();
   }else{
@@ -407,7 +407,7 @@ function js_mostralab_requisicao1(chave1,chave2) {
 
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_lab_coletaitem','func_lab_coletaitem.php?funcao_js=parent.js_preenchepesquisa|la32_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lab_coletaitem','func_lab_coletaitem.php?funcao_js=parent.js_preenchepesquisa|la32_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_lab_coletaitem.hide();
@@ -419,9 +419,9 @@ function js_preenchepesquisa(chave){
 }
 function js_ajax( objParam,jsRetorno ){
 	  var objAjax = new Ajax.Request(
-	                         sRPC, 
+	                         sRPC,
 	                         {
-	                          method    : 'post', 
+	                          method    : 'post',
 	                          parameters: 'json='+Object.toJSON(objParam),
 	                          onComplete: function(objAjax){
 	                                  var evlJS = jsRetorno+'( objAjax );';

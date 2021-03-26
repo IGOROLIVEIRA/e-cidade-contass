@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("../libs/db_stdlib.php");
@@ -77,13 +77,13 @@ $clrotulo->label("e62_descr");
        }
 </style>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload='a=1'> 
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload='a=1'>
 <table  border="0" cellspacing="0" cellpadding="0" width='100%'>
-  <tr> 
-    <td  align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td  align="left" valign="top" bgcolor="#CCCCCC">
     <form name='form1'>
     <center>
- <table border='1' cellspacing="0" cellpadding="0">   
+ <table border='1' cellspacing="0" cellpadding="0">
  <?
    if (isset($m51_codordem) && $m51_codordem!= "") {
      $result=$clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null,"*","","m52_codordem=$m51_codordem"));
@@ -124,10 +124,10 @@ $clrotulo->label("e62_descr");
            if (($quantidade==0)&&($vlto==0)){
 	     $errosomaquant++;
   	   }else{
-	     echo "<tr>	    
+	     echo "<tr>
    	           <td class='bordas_corp' align='center'><small>$e60_codemp </small></td>
 	           <td class='bordas_corp' nowrap align='left' title='$pc01_descrmater'><small>".substr($pc01_descrmater,0,20)."&nbsp;</small></td>
-                   <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr,0,20)."&nbsp;</small></td>  
+                   <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr,0,20)."&nbsp;</small></td>
                    <td class='bordas_corp' align='right'><b><small>".db_formatar($valoruni,'f')."</small></b></td>
                    <td class='bordas_corp' align='right'><b><small>".db_formatar($vlto,'f')."</small></b></td>";
 	     if ($pc01_servico=="f"){
@@ -159,10 +159,10 @@ $clrotulo->label("e62_descr");
   	            </tr> ";
 	   }
 	   }else{
-	     echo "<tr>	    
+	     echo "<tr>
    	           <td class='bordas_corp' align='center'><small>$e60_codemp </small></td>
 	           <td class='bordas_corp' nowrap align='left' title='$pc01_descrmater'><small>".substr($pc01_descrmater,0,20)."&nbsp;</small></td>
-                   <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr,0,20)."&nbsp;</small></td>  
+                   <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr,0,20)."&nbsp;</small></td>
                    <td class='bordas_corp' align='right'><b><small>".db_formatar($valoruni,'f')."</small></b></td>
                    <td class='bordas_corp' align='right'><b><small>".db_formatar($valortotal,'f')."</small></b></td>
 	           <td class='bordas_corp' align='center'><small>$m52_quant</small></td>";
@@ -193,10 +193,10 @@ $clrotulo->label("e62_descr");
 	   }
        }
    }
- 
-?>    
+
+?>
  </table>
-    </form> 
+    </form>
     </center>
     </td>
   </tr>
@@ -225,10 +225,10 @@ function js_pesquisa_matmater(mostra,campo){
   }else{
      nome = campo.name;
      codigo = campo.value;
-     if(nome != ''){ 
+     if(nome != ''){
         js_OpenJanelaIframe('','db_iframe_matmater','../func_matmater.php?pesquisa_chave='+codigo+'&funcao_js=parent.js_mostramatmater','Pesquisa',false,'0','0','0','0');
      }else{
-       eval("document.form1."+nome+".value")= ''; 
+       eval("document.form1."+nome+".value")= '';
      }
   }
 }
@@ -236,15 +236,15 @@ function js_pesquisa_matmater(mostra,campo){
 function js_mostramatmater(chave,erro){
    i=nome.split("_");
    pos=i[1];
-   eval("document.form1.descr_"+pos+".value=chave;"); 
-  if(erro==true){ 
-    eval("document.form1."+nome+".value='';"); 
-    eval("document.form1."+nome+".focus();"); 
+   eval("document.form1.descr_"+pos+".value=chave;");
+  if(erro==true){
+    eval("document.form1."+nome+".value='';");
+    eval("document.form1."+nome+".focus();");
   }
 }
 function js_mostramatmater1(chave1,chave2){
-   eval("document.form1."+nome+".value") = chave1;  
-   top.corpo.db_iframe_matmater.hide();
+   eval("document.form1."+nome+".value") = chave1;
+   CurrentWindow.corpo.db_iframe_matmater.hide();
 }
 //------------------------------------------------------
 </script>

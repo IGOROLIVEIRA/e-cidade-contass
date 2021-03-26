@@ -205,41 +205,41 @@ $clrotulo->label("o15_codigo");
                 for="IdenficacaoMunicipio">Identificação do Município</label><br>
 
                 <input type="checkbox" value="Orgao" id="Orgao" /> <label
-                for="Orgao">Orgãos</label><br> 
-                
+                for="Orgao">Orgãos</label><br>
+
                 <input type="checkbox" value="LeiPPA" id="LeiPPA" /> <label for="LeiPPA">Leis
                   do PPA</label><br>
-                  
+
                 <input type="checkbox" value="LeiOrcamentaria" id="LeiOrcamentaria" /> <label for="LeiOrcamentaria">Lei
                   Orçamentária</label><br>
-                
+
                 <input type="checkbox" value="LeiDiretrizOrcamentaria" id="LeiDiretrizesOrcamentaria" />
                 <label for="LeiDiretrizesOrcamentaria">Lei de Diretrizes Orçamentárias</label><br>
 
                 <input type="checkbox" value="UnidadeOrcamentaria" id="UnidadeOrcamentaria" />
-                <label for="UnidadeOrcamentaria">Unidades Orçamentárias</label><br> 
-                
+                <label for="UnidadeOrcamentaria">Unidades Orçamentárias</label><br>
+
                 <input type="checkbox" value="ProgramaPPA" id="ProgramaPPA" />
                 <label for="ProgramaPPA">Programas do PPA</label><br>
-                  
+
                   <input type="checkbox" value="AcoesMetasPPA" id="AcoesMetasPPA" /> <label
                 for="AcoesMetasPPA">Ações e Metas do PPA</label><br>
-                
+
               </td>
               <td style="border: 2px groove white;" valign="top">
               <input type="checkbox" value="DespesaOrcamento" id="DespesaOrcamento" /> <label
                 for="DespesaOrcamento">Despesas do Orçamento</label><br>
-                
+
                 <input type="checkbox" value="ReceitaOrcamentariaOrgao" id="ReceitaOrcamentariaOrgao" /> <label
                 for="ReceitaOrcamentariaOrgao">Receita Orçamentária dos Órgãos</label><br>
-              
-                
+
+
                 <input type="checkbox" value="DetalhamentoMetasFiscais" id="DetalhamentoMetasFiscais" /> <label
                 for="DetalhamentoMetasFiscais">Detalhamento das Metas Fiscais</label><br>
-                
+
                 <input type="checkbox" value="DetalhamentoRiscosFiscais" id="DetalhamentoRiscosFiscais" /> <label
                 for="DetalhamentoRiscosFiscais">Detalhamento dos Riscos Fiscais</label><br>
-                
+
                 <input type="checkbox" value="MetasArrecadacaoReceita" id="MetasArrecadacaoReceita" /> <label
                 for="MetasArrecadacaoReceita">Metas de Arrecadação de Receita</label><br>
 
@@ -276,27 +276,27 @@ $clrotulo->label("o15_codigo");
                         db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
 <script type="text/javascript">
 function js_processar() {
-  
+
   if ($F('o119_sequencial') == '') {
 
 	  alert("Favor informar a Pespectiva do PPA");
 	  js_pesquisa_ppa(true);
-    return false;    
+    return false;
   }
   var aArquivosSelecionados = new Array();
   var aArquivos             = $$("input[type='checkbox']");
 
   /*
    * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
-   */ 
+   */
   aArquivos.each(function (oElemento, iIndice) {
-    
+
     if (oElemento.checked) {
         aArquivosSelecionados.push(oElemento.value);
     }
-  });  
+  });
   // if (aArquivosSelecionados.length == 0) {
-    
+
   //   alert("Nenhum arquivo foi selecionado para ser gerado leras");
   //   return false;
   // }
@@ -312,7 +312,7 @@ function js_processar() {
                                   onComplete:js_retornoProcessamento
 		                            }
 	      );
-  
+
 }
 
 function js_retornoProcessamento(oAjax) {
@@ -322,25 +322,25 @@ function js_retornoProcessamento(oAjax) {
 	  var oRetorno = eval("("+oAjax.responseText+")");
 	  if (oRetorno.status == 1) {
 
-		  alert("Processo concluído com sucesso!");  
+		  alert("Processo concluído com sucesso!");
 	    var sRetorno = "<b>Arquivos Gerados:</b><br>";
 	    for (var i = 0; i < oRetorno.itens.length; i++) {
 
 	      with (oRetorno.itens[i]) {
-	            
+
 	        sRetorno += "<a  href='db_download.php?arquivo="+caminho+"'>"+nome+"</a><br>";
 	      }
 	    }
-	    
+
 	    $('retorno').innerHTML = sRetorno;
 	  } else {
-	    
+
 	    $('retorno').innerHTML = '';
 	    //alert("Ouve um erro no processamento!");
 	    alert(oRetorno.message.urlDecode());
 	    return false;
 	  }
-	} 
+	}
 function js_pesquisao125_cronogramaperspectiva(mostra) {
 
     if (mostra==true){
@@ -348,15 +348,15 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
          *passa o nome dos campos do banco para pesquisar pela função js_mostracronogramaperspectiva1
          *a variavel funcao_js é uma variável global
          *db_lovrot recebe parâmetros separados por |
-         */ 
-      js_OpenJanelaIframe('top.corpo',
+         */
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_cronogramaperspectiva',
                           'func_cronogramaperspectiva.php?funcao_js='+
                           'parent.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
                           'Perspectivas do Cronograma',true);
     }else{
-       if ($F('o124_sequencial') != ''){ 
-          js_OpenJanelaIframe('top.corpo',
+       if ($F('o124_sequencial') != ''){
+          js_OpenJanelaIframe('CurrentWindow.corpo',
                               'db_iframe_cronogramaperspectiva',
                               'func_cronogramaperspectiva.php?pesquisa_chave='+
                               $F('o124_sequencial')+
@@ -370,12 +370,12 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
   }
   //para retornar sem mostrar a tela de pesquisa. ao digitar o codigo retorna direto para o campo
   function js_mostracronogramaperspectiva(chave,erro, ano) {
-    $('o124_descricao').value = chave; 
-    if(erro==true) { 
-      
-      $('o124_sequencial').focus(); 
+    $('o124_descricao').value = chave;
+    if(erro==true) {
+
+      $('o124_sequencial').focus();
       $('o124_sequencial').value = '';
-        
+
     }
   }
   //preenche os campos do frame onde foi chamada com os valores do banco
@@ -389,14 +389,14 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
   function js_pesquisa_ppa(mostra) {
 
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_ppa',
                           'func_ppaversaosigap.php?funcao_js='+
                           'parent.js_mostrappa1|o119_sequencial|o01_descricao',
                           'Perspectivas do Cronograma',true);
     }else{
-       if( $F('o119_sequencial') != ''){ 
-          js_OpenJanelaIframe('top.corpo',
+       if( $F('o119_sequencial') != ''){
+          js_OpenJanelaIframe('CurrentWindow.corpo',
                               'db_iframe_ppa',
                               'func_ppaversaosigap.php?pesquisa_chave='+
                               $F('o119_sequencial')+
@@ -404,21 +404,21 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
                               'Perspectivas do Cronograma',
                               false);
        }else{
-       
+
          document.form1.o124_descricao.value = '';
          document.form1.ano.value             = ''
-          
+
        }
     }
   }
 
   function js_mostrappa(chave,erro, ano) {
-    $('o119_descricao').value = chave; 
-    if(erro==true) { 
-      
-      $('o119_sequencial').focus(); 
+    $('o119_descricao').value = chave;
+    if(erro==true) {
+
+      $('o119_sequencial').focus();
       $('o119_sequencial').value = '';
-        
+
     }
   }
 
@@ -434,15 +434,15 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
 	  var aCheckboxes = $$('input[type=checkbox]');
 	  aCheckboxes.each(function(oCheckbox) {
 	    oCheckbox.checked = true;
-	  }); 
+	  });
 	}
 
   function js_limpa() {
-	   
+
 	  var aCheckboxes = $$('input[type=checkbox]');
 	  aCheckboxes.each(function (oCheckbox) {
 	    oCheckbox.checked = false;
-	  }); 
+	  });
 	}
 
   function js_excluirArquivos(){
@@ -457,7 +457,7 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
                                     onComplete:js_retornoProcessamento
                                   }
           );
-    
+
   }
 
 

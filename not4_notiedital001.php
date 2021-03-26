@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ if(isset($k60_codigo)&& ($k60_codigo !="")){
                            )
             and k63_codigo = ".$k60_codigo."
             and k50_instit = $instit ";
- 
+
  $result = $clnotificacao->sql_record($sql);
  $clnoticonf->k54_codigo = 3;
  $clnoticonf->k54_data   = date("Y-m-d",db_getsession("DB_datausu"));
@@ -81,7 +81,7 @@ if(isset($k60_codigo)&& ($k60_codigo !="")){
 </head>
 <body bgcolor="#cccccc">
 
-  
+
 <form class="container" name="form1" method="post" action="" >
   <fieldset>
     <legend>Procedimentos - Notificações por Edital</legend>
@@ -123,10 +123,10 @@ function js_executar(){
 
 function js_pesquisalista(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_lista.php?funcao_js=parent.js_mostra1|k60_codigo|k60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_lista.php?funcao_js=parent.js_mostra1|k60_codigo|k60_descr','Pesquisa',true);
   }else{
      if(document.form1.k60_codigo.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe','func_lista.php?pesquisa_chave='+document.form1.k60_codigo.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_lista.php?pesquisa_chave='+document.form1.k60_codigo.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
      }else{
        document.form1.k60_descr.value = '';
      }

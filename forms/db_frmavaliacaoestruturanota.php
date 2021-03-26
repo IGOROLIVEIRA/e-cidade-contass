@@ -188,7 +188,7 @@ MsgAviso(db_getsession("DB_coddepto"),"escola");
 <script>
 function js_pesquisaed315_db_estrutura(mostra) {
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframedb_estrutura',
                         'func_db_estrutura.php?funcao_js=parent.js_mostradb_estrutura1|db77_codestrut|db77_descr',
                         'Pesquisa',
@@ -197,7 +197,7 @@ function js_pesquisaed315_db_estrutura(mostra) {
   } else {
 
     if (document.form1.ed315_db_estrutura.value != '') {
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframedb_estrutura',
                           'func_db_estrutura.php?pesquisa_chave='+document.form1.ed315_db_estrutura.value+'&funcao_js=parent.js_mostradb_estrutura',
                           'Pesquisa',
@@ -229,7 +229,7 @@ function js_mostradb_estrutura1(chave1,chave2) {
 function js_pesquisaed315_escola(mostra) {
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_escola',
                         'func_escola.php?funcao_js=parent.js_mostraescola1|ed18_i_codigo|ed18_i_codigo',
                         'Pesquisa',
@@ -237,7 +237,7 @@ function js_pesquisaed315_escola(mostra) {
                        );
   } else {
     if (document.form1.ed315_escola.value != '') {
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_escola',
                           'func_escola.php?pesquisa_chave='+document.form1.ed315_escola.value+'&funcao_js=parent.js_mostraescola',
                           'Pesquisa',
@@ -274,7 +274,7 @@ function js_pesquisaed316_regraarredondamento(mostra) {
    */
   var sEstrutural = 'E';
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_regraarredondamento',
                         'func_regraarredondamento.php?pesquisa='+sEstrutural+'&funcao_js=parent.js_mostraregraarredondamento1|ed316_sequencial|ed316_descricao',
                         'Pesquisa',
@@ -285,7 +285,7 @@ function js_pesquisaed316_regraarredondamento(mostra) {
     if (document.form1.ed316_sequencial.value != "") {
 
       js_OpenJanelaIframe(
-                          'top.corpo',
+                          'CurrentWindow.corpo',
                           'db_iframe_regraarredondamento',
                           'func_regraarredondamento.php?pesquisa_chave='+document.form1.ed316_sequencial.value+
                                                       '&funcao_js=parent.js_mostraregraarredondamento',
@@ -316,7 +316,7 @@ function js_mostraregraarredondamento1(chave1, chave2) {
 }
 
 function js_pesquisa() {
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_avaliacaoestruturanota',
                       'func_avaliacaoestruturanota.php?funcao_js=parent.js_preenchepesquisa|ed315_sequencial',
                       'Pesquisa',
@@ -335,7 +335,7 @@ function js_preenchepesquisa(chave) {
 }
 
 function js_pesquisaregraarredondamento() {
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_regraarredondamento',
                       'func_regraarredondamento.php?funcao_js=parent.js_preenchepesquisaregraarredondamento|ed316_sequencial',
                       'Pesquisa',

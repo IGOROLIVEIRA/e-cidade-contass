@@ -9,7 +9,7 @@ $claguaisencaotipo->rotulo->label();
     <td nowrap title="<?=@$Tx29_codisencaotipo?>">
        <?=@$Lx29_codisencaotipo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x29_codisencaotipo',5,$Ix29_codisencaotipo,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('x29_codisencaotipo',5,$Ix29_codisencaotipo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx29_descr?>">
        <?=@$Lx29_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x29_descr',40,$Ix29_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('x29_descr',40,$Ix29_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx29_tipo?>">
        <?=@$Lx29_tipo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('0'=>'Normal','1'=>'Imune');
 db_select('x29_tipo',$x,true,$db_opcao,"");
@@ -43,7 +43,7 @@ db_select('x29_tipo',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_aguaisencaotipo','func_aguaisencaotipo.php?funcao_js=parent.js_preenchepesquisa|x29_codisencaotipo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguaisencaotipo','func_aguaisencaotipo.php?funcao_js=parent.js_preenchepesquisa|x29_codisencaotipo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_aguaisencaotipo.hide();

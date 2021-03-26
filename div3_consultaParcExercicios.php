@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -55,9 +55,9 @@ if ( $cltermo->numrows > 0 ) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
-    <td align="center" valign="top"> 
-      <? 
+  <tr>
+    <td align="center" valign="top">
+      <?
         $camposDetalhe = "";
         $funcao_js     = "js_mudaFiltro|DB_parametro";
 
@@ -101,7 +101,7 @@ if ( $cltermo->numrows > 0 ) {
         $sqlDividas .= "                        inner join certdiv         on v14_certid        = v51_certidao     ";
         $sqlDividas .= "                        inner join divida          on v01_coddiv        = v14_coddiv       ";
         $sqlDividas .= "                                                  and v01_instit        = ".db_getsession('DB_instit');
-        $sqlDividas .= "                        inner join proced          on proced.v03_codigo = divida.v01_proced  ) as x ";      
+        $sqlDividas .= "                        inner join proced          on proced.v03_codigo = divida.v01_proced  ) as x ";
         $sqlDividas .= "        group by $camposDetalhe                                                            ";
         $sqlDividas .= "                 v01_exerc,                                                                ";
         $sqlDividas .= "                 v03_descr,                                                                ";
@@ -114,7 +114,7 @@ if ( $cltermo->numrows > 0 ) {
         $arrayTot["v01_vlrhis"] = "v01_vlrhis";
         $arrayTot["v01_valor"]  = "v01_valor";
         $arrayTot["totalgeral"] = "v03_descr";
-        
+
         $array = array("s"=>"Exerc&iacute;cio","a"=>"Numpre e parcela");
 
         echo "<form name='form1'>";
@@ -143,10 +143,10 @@ function js_mudaFiltro(valor){
 function js_consultaDivida(codigoOrigem){
   /* alert(' inicio -- '+codigoOrigem); return false; */
   var  arquivo    = 'div1_consulta003.php';
-  var  parametros = 'codDiv='+codigoOrigem;    
+  var  parametros = 'codDiv='+codigoOrigem;
   var  nomeIframe = 'db_iframe_consultadivida';
 
-  js_OpenJanelaIframe('top.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
 
 }
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -42,7 +42,7 @@ db_postmemory($HTTP_POST_VARS);
 $clconplano      = new cl_conplano;
 $clconplanogrupo = new cl_conplanogrupo;
 if (USE_PCASP) {
-  $clconplanogrupo = new cl_conplanoorcamentogrupo();  
+  $clconplanogrupo = new cl_conplanoorcamentogrupo();
 }
 $db_opcao = 1;
 $db_botao = true;
@@ -92,7 +92,7 @@ if (isset($incluir)){
   $clconplanogrupo->c21_anousu   = $anousu;
   $clconplanogrupo->c21_congrupo = $c21_congrupo;
   $clconplanogrupo->c21_instit   = db_getsession("DB_instit");
-  
+
   $clconplanogrupo->incluir(null);
   $erro_msg = $clconplanogrupo->erro_msg;
   if ($clconplanogrupo->erro_status == 0){
@@ -124,7 +124,7 @@ if (isset($alterar)){
   $clconplanogrupo->c21_anousu     = $anousu;
   $clconplanogrupo->c21_congrupo   = $c21_congrupo;
   $clconplanogrupo->c21_instit     = db_getsession("DB_instit");
-  
+
   $clconplanogrupo->alterar($c21_sequencial);
   $erro_msg = $clconplanogrupo->erro_msg;
   if ($clconplanogrupo->erro_status == 0){
@@ -175,8 +175,8 @@ if (isset($excluir)){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <center>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
     <center>
     <?
       include("forms/db_frmconplanogrupoconta.php");
@@ -196,16 +196,16 @@ if ($sqlerro == true) {
  	 	echo "<script> document.form1.".$clconplano->erro_campo.".focus();</script>";
 	} else {
 		db_msgbox($erro_msg);
-/*      
-   	echo "<script> 
-             top.corpo.iframe_conta.location.href = 'con1_conplano011.php';
-             top.corpo.document.formaba.grupos.style.visibility='visible';
-	          top.corpo.iframe_grupos.disable='false';
-             top.corpo.iframe_grupos.location.href = 'con1_congrupo004.php?c21_anousu=$anousu&c21_codcon=$c60_codcon';
+/*
+   	echo "<script>
+             CurrentWindow.corpo.iframe_conta.location.href = 'con1_conplano011.php';
+             CurrentWindow.corpo.document.formaba.grupos.style.visibility='visible';
+	          CurrentWindow.corpo.iframe_grupos.disable='false';
+             CurrentWindow.corpo.iframe_grupos.location.href = 'con1_congrupo004.php?c21_anousu=$anousu&c21_codcon=$c60_codcon';
              parent.mo_camada('grupos');
 	        </script>";
-*/            
-	} 
+*/
+	}
 } else if (trim($erro_msg) != ""){
 		db_msgbox($erro_msg);
 }

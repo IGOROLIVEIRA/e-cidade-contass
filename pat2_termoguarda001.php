@@ -89,10 +89,10 @@ function js_AbreJanelaRelatorio() {
 <script>
 function js_pesquisabensguarda(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_bensguarda','func_bensguarda.php?funcao_js=parent.js_mostrabensguarda1|t21_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensguarda','func_bensguarda.php?funcao_js=parent.js_mostrabensguarda1|t21_codigo','Pesquisa',true);
   }else{
      if(document.form1.t21_codigo.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_bensguarda','func_bensguarda.php?pesquisa_chave='+document.form1.t21_codigo.value+'&funcao_js=parent.js_mostrabensguarda','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensguarda','func_bensguarda.php?pesquisa_chave='+document.form1.t21_codigo.value+'&funcao_js=parent.js_mostrabensguarda','Pesquisa',false);
      }else{
        document.form1.t21_codigo.value = '';
      }

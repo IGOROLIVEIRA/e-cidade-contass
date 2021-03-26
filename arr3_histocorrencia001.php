@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -86,7 +86,7 @@ $q02_inscr  = "";
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.j01_matric.focus()" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -96,13 +96,13 @@ $q02_inscr  = "";
 <form name="form1" method="POST" action="arr1_histocorrencia001.php" onsubmit="return validaForm()">
 
 <table border="0" cellpadding="2" cellspacing="0" align="center" style="margin-top: 50px;">
-  <tr> 
-    <td align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
 		 <?
         db_ancora($Lz01_nome, 'js_mostranomes(true);', 4);
      ?>
   	</td>
-  	<td> 
+  	<td>
     <?
         db_input("z01_numcgm", 10, $Iz01_numcgm, true, 'text', 4, "onfocus=\"apagaInputs()\" onchange='js_mostranomes(false);'");
     ?>
@@ -111,14 +111,14 @@ $q02_inscr  = "";
     ?>
 		</td>
   </tr>
-  
- 	<tr> 
-  	<td title="<?=$Tj01_matric?>"> 
+
+ 	<tr>
+  	<td title="<?=$Tj01_matric?>">
     <?
       db_ancora($Lj01_matric, "js_mostramatricula(true,'$j18_nomefunc');", 2);
     ?>
   	</td>
-  	<td> 
+  	<td>
     <?
       db_input("j01_matric", 10, $Ij01_matric, true, 'text', 1, "onfocus=\"apagaInputs()\"  onchange=\"js_mostramatricula(false,'$j18_nomefunc')\"");
     ?>
@@ -131,13 +131,13 @@ $q02_inscr  = "";
       $cssInscricao = "";
     }
   ?>
-  <tr> 
-    <td>     
+  <tr>
+    <td>
     <?
       db_ancora($Lq02_inscr,' js_inscr(true); ',1, "$cssInscricao");
     ?>
     </td>
-    <td> 
+    <td>
     <?
       db_input('q02_inscr', 10, $Iq02_inscr,true,'text',1," onfocus=\"apagaInputs()\" onchange='js_inscr(false)'", "", "", $cssInscricao);
     ?>
@@ -148,7 +148,7 @@ $q02_inscr  = "";
     	<input type="submit" value="Avan&ccedil;ar" id="avancar2" name="avancar"/>
     </td>
   </tr>
-  
+
 </table>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -162,7 +162,7 @@ document.form1.avancar.disabled = true;
 
 function apagaInputs(){
   document.form1.j01_matric.value = "";
-  document.form1.q02_inscr.value  = "";	  
+  document.form1.q02_inscr.value  = "";
   document.form1.z01_numcgm.value = "";
   document.form1.z01_nome.value   = "";
 }
@@ -171,13 +171,13 @@ function js_mostranomes(mostra){
   document.form1.j01_matric.value = "";
   document.form1.q02_inscr.value  = "";
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_preenche|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_preenche|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_preenche1','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_preenche1','Pesquisa',false);
   }
 }
 
-function js_preenche(chave,chave1){	 
+function js_preenche(chave,chave1){
   document.form1.z01_numcgm.value = chave;
   document.form1.z01_nome.value   = chave1;
   db_iframe_nomes.hide();
@@ -185,9 +185,9 @@ function js_preenche(chave,chave1){
 }
 
 function js_preenche1(chave,chave1){
-	
+
 	document.form1.j01_matric.value = "";
-	document.form1.q02_inscr.value  = "";	 
+	document.form1.q02_inscr.value  = "";
   document.form1.z01_nome.value   = chave1;
   if(chave==true){
 	  document.form1.z01_numcgm.focus();
@@ -205,15 +205,15 @@ function js_preenche1(chave,chave1){
 
 function js_mostramatricula(mostra, nome_func){
 	document.form1.z01_numcgm.value = "";
-	document.form1.q02_inscr.value  = "";	 
+	document.form1.q02_inscr.value  = "";
 	if(mostra==true){
     if(nome_func != "func_iptubase.php") {
-  	  js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula|0|1','Pesquisa',true);
+  	  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula|0|1','Pesquisa',true);
     } else {
-    	js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula3|0|1|2','Pesquisa',true);  
+    	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula3|0|1|2','Pesquisa',true);
     }
   }else {
-    js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenchematricula2','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenchematricula2','Pesquisa',false);
   }
 }
 function js_preenchematricula3(chave,chave1,chave2){
@@ -224,7 +224,7 @@ function js_preenchematricula3(chave,chave1,chave2){
     document.form1.avancar.disabled = false;
 }
 function js_preenchematricula(chave,chave1){
-	
+
  	document.form1.j01_matric.value = chave;
   document.form1.z01_nome.value   = chave1;
   db_iframe_matric.hide();
@@ -232,7 +232,7 @@ function js_preenchematricula(chave,chave1){
 }
 
 function js_preenchematricula2(chave,chave1){
-	
+
 	if(chave1 == false) {
 		document.form1.z01_nome.value = chave;
     db_iframe_matric.hide();
@@ -246,16 +246,16 @@ function js_preenchematricula2(chave,chave1){
 	if(document.form1.j01_matric.value == ''){
 		document.form1.z01_nome.value   = '';
 		document.form1.avancar.disabled = true;
-	}  
+	}
 }
 
 function js_inscr(mostra){
 	document.form1.j01_matric.value = "";
 	document.form1.z01_numcgm.value = "";
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_issbase.php?funcao_js=parent.js_mostra|q02_inscr|z01_nome|q02_dtbaix','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_issbase.php?funcao_js=parent.js_mostra|q02_inscr|z01_nome|q02_dtbaix','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
   }
 }
 function js_mostra(chave1,chave2,baixa){
@@ -265,7 +265,7 @@ function js_mostra(chave1,chave2,baixa){
     db_iframe.hide();
     alert("Inscrição já  Baixada");
   }else{
-	  if(chave2 != false) { 	
+	  if(chave2 != false) {
   	  document.form1.q02_inscr.value = chave1;
       document.form1.z01_nome.value  = chave2;
       db_iframe.hide();
@@ -275,11 +275,11 @@ function js_mostra(chave1,chave2,baixa){
       db_iframe.hide();
 		  document.form1.avancar.disabled = false;
 	  }
-  }  
+  }
 	if(document.form1.q02_inscr.value == '') {
 		document.form1.z01_nome.value   = '';
 		document.form1.avancar.disabled = true;
-	}  
+	}
 }
 function validaForm() {
 	var matricula = document.form1.j01_matric;
@@ -288,7 +288,7 @@ function validaForm() {
 	var nome      = document.form1.z01_nome;
 	if((matricula.value == "") &&
 		 (numerocgm.value == "") &&
-		 (inscricao.value == "") || 
+		 (inscricao.value == "") ||
 		 (nome.value      == "") &&
 		 (nome.value      == 'CHAVE('+matricula.value+') NÃO ENCONTRADO')||
 		 (nome.value      == 'CHAVE('+numerocgm.value+') NÃO ENCONTRADO')||
@@ -296,7 +296,7 @@ function validaForm() {
 		 (nome.value      == 'CÓDIGO ('+matricula.value+') NÃO ENCONTRADO')||
 		 (nome.value      == 'CÓDIGO ('+numerocgm.value+') NÃO ENCONTRADO')||
 		 (nome.value      == 'CÓDIGO ('+inscricao.value+') NÃO ENCONTRADO')) {
-		 alert('Valor de pesquisa invalido.');	
+		 alert('Valor de pesquisa invalido.');
 		 document.form1.avancar.disabled = true;
 		 return false;
 	}

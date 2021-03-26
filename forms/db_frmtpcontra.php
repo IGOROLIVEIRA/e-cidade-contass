@@ -144,13 +144,13 @@ function js_showAPO() {
 }
 
 
-/*if(top.corpo.document.getElementById('h13_tipocargo').options.selectedIndex == 7){
-        top.corpo.document.getElementById('tipocargodescricao1').style.display = 'inline';
-        top.corpo.document.getElementById('tipocargodescricao2').style.display = 'inline';
+/*if(CurrentWindow.corpo.document.getElementById('h13_tipocargo').options.selectedIndex == 7){
+        CurrentWindow.corpo.document.getElementById('tipocargodescricao1').style.display = 'inline';
+        CurrentWindow.corpo.document.getElementById('tipocargodescricao2').style.display = 'inline';
 }*/
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tpcontra','func_tpcontra.php?funcao_js=parent.js_preenchepesquisa|h13_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tpcontra','func_tpcontra.php?funcao_js=parent.js_preenchepesquisa|h13_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tpcontra.hide();
@@ -160,14 +160,14 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
-/*top.corpo.document.getElementById('h13_tipocargo').onchange=function () {
-    if(top.corpo.document.getElementById('h13_tipocargo').options.selectedIndex == 7){
-        top.corpo.document.getElementById('tipocargodescricao1').style.display = 'inline';
-        top.corpo.document.getElementById('tipocargodescricao2').style.display = 'inline';
+/*CurrentWindow.corpo.document.getElementById('h13_tipocargo').onchange=function () {
+    if(CurrentWindow.corpo.document.getElementById('h13_tipocargo').options.selectedIndex == 7){
+        CurrentWindow.corpo.document.getElementById('tipocargodescricao1').style.display = 'inline';
+        CurrentWindow.corpo.document.getElementById('tipocargodescricao2').style.display = 'inline';
     }else{
-        top.corpo.document.getElementById('tipocargodescricao1').style.display = 'none';
-        top.corpo.document.getElementById('tipocargodescricao2').style.display = 'none';
-        top.corpo.document.getElementById('h13_tipocargodescr').removeAttribute('value');
+        CurrentWindow.corpo.document.getElementById('tipocargodescricao1').style.display = 'none';
+        CurrentWindow.corpo.document.getElementById('tipocargodescricao2').style.display = 'none';
+        CurrentWindow.corpo.document.getElementById('h13_tipocargodescr').removeAttribute('value');
     }
 };*/
 </script>

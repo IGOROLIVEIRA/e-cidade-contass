@@ -206,7 +206,7 @@ $clregulamentalc123->rotulo->label();
 </form>
 <script>
     function js_pesquisa() {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_regulamentalc123', 'func_regulamentalc123.php?funcao_js=parent.js_preenchepesquisa|0', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_regulamentalc123', 'func_regulamentalc123.php?funcao_js=parent.js_preenchepesquisa|0', 'Pesquisa', true);
     }
     function js_preenchepesquisa(chave) {
         db_iframe_regulamentalc123.hide();

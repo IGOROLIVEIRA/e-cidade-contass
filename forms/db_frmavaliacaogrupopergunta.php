@@ -44,7 +44,7 @@ if (isset($oPost->db_opcaoal)) {
   echo "<script>parent.document.formaba.avaliacaopergunta.disabled=false;</script>";
   echo "<script>
           var sUrl = 'hab1_avaliacaopergunta001.php?db103_avaliacaogrupopergunta=".$db102_sequencial."';
-          top.corpo.iframe_avaliacaopergunta.location.href=sUrl;
+          CurrentWindow.corpo.iframe_avaliacaopergunta.location.href=sUrl;
         </script>";
 } else if (isset($oPost->opcao) && $oPost->opcao == "excluir") {
 
@@ -67,7 +67,7 @@ if (isset($oPost->db_opcaoal)) {
     echo "<script>parent.document.formaba.avaliacaopergunta.disabled=false;</script>";
     echo "<script>
             var sUrl = 'hab1_avaliacaopergunta001.php?db103_avaliacaogrupopergunta=".$db102_sequencial."';
-            top.corpo.iframe_avaliacaopergunta.location.href=sUrl;
+            CurrentWindow.corpo.iframe_avaliacaopergunta.location.href=sUrl;
           </script>";
   }
 

@@ -253,7 +253,7 @@ $clempparametro->rotulo->label();
 </form>
 <script>
     function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_empparametro','func_empparametro.php?funcao_js=parent.js_preenchepesquisa|e39_anousu','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empparametro','func_empparametro.php?funcao_js=parent.js_preenchepesquisa|e39_anousu','Pesquisa',true);
     }
     function js_preenchepesquisa(chave){
         db_iframe_empparametro.hide();

@@ -374,11 +374,11 @@ if($x->consultarDataDoSistema == true){
     function js_pesquisaCaracteristicaPeculiar(lMostra) {
 
         if (lMostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_concarpeculiar', 'func_concarpeculiar.php?funcao_js=parent.js_preencheCaracteristicaPeculiar|c58_sequencial|c58_descr&filtro=receita', 'Pesquisa Característica Peculiar', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_concarpeculiar', 'func_concarpeculiar.php?funcao_js=parent.js_preencheCaracteristicaPeculiar|c58_sequencial|c58_descr&filtro=receita', 'Pesquisa Característica Peculiar', true);
             $('Jandb_iframe_concarpeculiar').style.zIndex = 100;
         } else {
             if ($("iSequenciaCaracteristica").value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_concarpeculiar', 'func_concarpeculiar.php?pesquisa_chave=' + $("iSequenciaCaracteristica").value + '&funcao_js=parent.js_mostraCaracteristicaPeculiar&filtro=receita', 'Pesquisa Característica Peculiar', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_concarpeculiar', 'func_concarpeculiar.php?pesquisa_chave=' + $("iSequenciaCaracteristica").value + '&funcao_js=parent.js_mostraCaracteristicaPeculiar&filtro=receita', 'Pesquisa Característica Peculiar', false);
             } else {
                 document.form1.sDescricaoCaracteristica.value = '';
             }
@@ -410,7 +410,7 @@ if($x->consultarDataDoSistema == true){
         if (lMostrar == true) {
 
             var sUrl = 'func_acordo.php?lDepartamento=1&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4&lGeraAutorizacao=true';
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_acordo',
                 sUrl,
                 'Pesquisar Acordo',
@@ -422,7 +422,7 @@ if($x->consultarDataDoSistema == true){
                 var sUrl = 'func_acordo.php?lDepartamento=1&descricao=true&pesquisa_chave='+oTxtCodigoAcordo.getValue()+
                     '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&lGeraAutorizacao=true';
 
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_acordo',
                     sUrl,
                     'Pesquisar Acordo',
@@ -1237,7 +1237,7 @@ console.log(oDotacao);
     function js_mostraSaldo(chave){
 
         arq = 'func_saldoorcdotacao.php?o58_coddot='+chave
-        js_OpenJanelaIframe('top.corpo','db_iframe_saldos',arq,'Saldo da dotação',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saldos',arq,'Saldo da dotação',true);
         $('Jandb_iframe_saldos').style.zIndex='1500000';
     }
 

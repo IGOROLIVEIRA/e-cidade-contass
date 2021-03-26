@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ $oDec       = db_utils::fieldsmemory($rsDecimais, 0);
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script>
 function js_lanca(codigo){
-  js_OpenJanelaIframe('top.corpo','db_iframe_lanca','mat3_matconsultaiframe003.php?codigo='+codigo,'Consulta Lançamentos',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lanca','mat3_matconsultaiframe003.php?codigo='+codigo,'Consulta Lançamentos',true);
 }
 function js_relo(){
   document.form1.submit();
@@ -79,22 +79,22 @@ function js_relo(){
 }
 </style>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"> 
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table  border="0" cellspacing="0" cellpadding="0" width='100%'>
-<tr> 
-<td  align="center" valign="top" > 
+<tr>
+<td  align="center" valign="top" >
 
 <table border='0'>
-<form name='form1'>  
+<form name='form1'>
   <tr align=left >
     <td colspan=6 align='left' nowrap >
     <b>Departamento:</b>
-<?     
+<?
    $result_depto=$cldb_depart->sql_record($cldb_depart->sql_query_file(null,'coddepto,descrdepto','descrdepto'));
    db_selectrecord("departamento",$result_depto,true,2,"","","","0","js_relo();");
 ?>
     <b>Lançamento:</b>
-<?     
+<?
    $result_lanc=$clmatestoquetipo->sql_record($clmatestoquetipo->sql_query_file(null,"*","m81_descr"));
    db_selectrecord("lancamento",$result_lanc,true,2,"","","","0","js_relo();");
 ?>
@@ -102,7 +102,7 @@ function js_relo(){
   </tr>
   <tr>
     <td colspan=6  align=center >
-    <?php 
+    <?php
       if (!$lNovaConsulta) {
         echo "<input type='button' value='Voltar' onclick='parent.db_iframe_lancamentos.hide();' >";
       }
@@ -112,7 +112,7 @@ function js_relo(){
   </tr>
   <tr>
   <td colspan=6 align=center>
-  
+
 <?
   db_input('codmater',10,'',true,'hidden',3);
 
@@ -130,18 +130,18 @@ if (isset($codmater)&&$codmater!="") {
       $depto_atual=db_getsession("DB_coddepto");
       $where.="  and m80_coddepto=$depto_atual ";
     }else{
-    	
-      $where.=" and $db_where  "; 
+
+      $where.=" and $db_where  ";
     }
   }
 	$where.=" and instit = " . db_getsession("DB_instit");
   if (isset($db_inner)&&$db_inner!=""){
-    $inner="  $db_inner  "; 
+    $inner="  $db_inner  ";
   }else{
     $inner="";
   }
   $sql  = " select m80_codigo, ";
-	$sql .= "	       m81_descr, "; 
+	$sql .= "	       m81_descr, ";
   $sql .= "        m81_entrada, ";
   $sql .= "        origem as  dl_Lanc_Origem, ";
 	$sql .= "	       (select sum(m82_quant) ";
@@ -153,7 +153,7 @@ if (isset($codmater)&&$codmater!="") {
   $sql .= "         ) as dl_Quantidade, ";
   $sql .= "        round(avg(m89_valorunitario), {$oDec->e30_numdec}) as dl_Valor_Unitário, ";
   $sql .= "        round(avg(fc_calculapm), {$oDec->e30_numdec}) as dl_Preço_Medio, ";
-  
+
   $sql .= "        case when m80_codtipo = 12 then '' else descrdepto end as dl_Depart_Origem, ";
   $sql .= "        case when m80_codtipo = 12 then descrdepto else coddepto_destino end as dl_Depart_Destino, ";
 
@@ -206,7 +206,7 @@ if (isset($codmater)&&$codmater!="") {
 	$sql .= "	                $inner";
 	$sql .= "           where m70_codmatmater = $codmater $where and m71_servico is false ";
 	$sql .= "         ) as x ";
-	
+
 	$sql .= "group by m80_data, ";
   $sql .= "         m80_codigo,";
 	$sql .= "	        m81_descr,";
@@ -221,7 +221,7 @@ if (isset($codmater)&&$codmater!="") {
 	$sql .= "         m81_descr,";
   $sql .= "         m81_entrada,";
 	$sql .= "         m86_matestoqueini,";
-	$sql .= "         descrdepto,	";	 
+	$sql .= "         descrdepto,	";
 	$sql .= "         m80_hora,";
 	$sql .= "         nome,";
   $sql .= "         origem  ";
@@ -234,7 +234,7 @@ $repassa = array('dblov'=>'0');
   $repassa = array('dblov'=>'0');
   db_lovrot(@$sql,15,"()","","","","NoMe",$repassa);
 
-?>     
+?>
 </td>
 </tr>
 </table>

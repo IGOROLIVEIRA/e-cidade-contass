@@ -7,7 +7,7 @@ include("classes/db_identificacaoresponsaveis_classe.php");
 include("dbforms/db_funcoes.php");
 if (db_getsession("DB_anousu") < 2014 && db_getsession("DB_modulo") != 952) {
 echo "<script>
-                                   top.corpo.location.href='con4_sicomidentresponsavel.php';
+                                   CurrentWindow.corpo.location.href='con4_sicomidentresponsavel.php';
                                 </script>";
                           exit;
 }
@@ -46,7 +46,7 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -54,8 +54,8 @@ if(isset($incluir)){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmidentificacaoresponsaveis.php");

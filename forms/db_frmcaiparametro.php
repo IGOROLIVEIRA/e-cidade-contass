@@ -215,12 +215,12 @@ db_app::load("prototype.js");
     if (lMostraWindow) {
 
       var sUrl = 'func_orctiporec.php?funcao_js=parent.js_preencheRecurso|o15_codigo|o15_descr';
-      js_OpenJanelaIframe('top.corpo','db_iframe_recurso',sUrl,'Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_recurso',sUrl,'Pesquisa',true);
     } else {
       if($("k29_orctiporecfundeb").value != ''){
 
         var sUrl = 'func_orctiporec.php?pesquisa_chave='+$("k29_orctiporecfundeb").value+'&funcao_js=parent.js_completaRecurso';
-        js_OpenJanelaIframe('top.corpo','db_iframe_recurso',sUrl,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_recurso',sUrl,'Pesquisa',false);
       } else {
         $("sDescricaoRecurso").value = '';
       }
@@ -248,10 +248,10 @@ db_app::load("prototype.js");
 
   function js_pesquisak29_instit(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
     }else{
       if(document.form1.k29_instit.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.k29_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.k29_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
       }else{
         document.form1.nomeinst.value = '';
       }
@@ -270,7 +270,7 @@ db_app::load("prototype.js");
     db_iframe_db_config.hide();
   }
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_caiparametro','func_caiparametro.php?funcao_js=parent.js_preenchepesquisa|k29_instit','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_caiparametro','func_caiparametro.php?funcao_js=parent.js_preenchepesquisa|k29_instit','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_caiparametro.hide();

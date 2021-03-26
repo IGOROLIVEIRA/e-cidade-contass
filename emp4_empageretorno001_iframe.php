@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -82,19 +82,19 @@ $clrotulo->label("e86_cheque");
 </style>
 <script>
 
-function js_marca(obj){ 
+function js_marca(obj){
   var OBJ = document.form1;
   soma=new Number();
   for(i=0;i<OBJ.length;i++){
     if(OBJ.elements[i].type == 'checkbox' && OBJ.elements[i].disabled==false){
-      OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+      OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
       if(OBJ.elements[i].checked==true){
         valor = new Number(eval("document.form1.valor_"+OBJ.elements[i].value+".value"));
         soma = new Number(soma+valor);
       }
     }
   }
-  parent.document.form1.total.value = soma.toFixed(2); 
+  parent.document.form1.total.value = soma.toFixed(2);
   return false;
 }
 
@@ -106,7 +106,7 @@ function js_calcula(campo){
   }else{
     soma = new Number(total-valor);
   }
-  parent.document.form1.total.value = soma.toFixed(2); 
+  parent.document.form1.total.value = soma.toFixed(2);
 }
 </script>
 </head>
@@ -115,11 +115,11 @@ function js_calcula(campo){
   <tr>
     <td>
       <b>Total debitado:</b><?=trim(db_formatar($valor,'f'))?>&nbsp;&nbsp;&nbsp;<b>Total movimentos:</b><span id='vlrmov'></span><br>
-      <b>Movimentos:</b><?=$movs?> 
+      <b>Movimentos:</b><?=$movs?>
     </td>
   </tr>
-  <tr> 
-    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
       <form name="form1" method="post" action="">
       <center>
 <?
@@ -201,25 +201,25 @@ function js_calcula(campo){
 	    db_fieldsmemory($result,$i,true);
 	    $disab01 = false;
 	    $disab02 = false;
-         
+
             $vlrmov += $e81_valor;
-	  
+
             if($e86_codmov== ''){
 	      $disab02 = true;
             }
-     
+
 	   $result01=$clerrobanco->sql_record($clerrobanco->sql_query_file(null,"e92_descrerro,e92_sequencia",'',"e92_coderro = '".$arr_retorno[$e81_codmov]."'"));
 	   db_fieldsmemory($result01,0,true);
 	   if($arr_retorno[$e81_codmov]=='00'){
 	     $disab01 = true;
-	     
+
 	   }
 	?>
         <tr>
           <td class='bordas' >
 	    <input value="<?=$e81_codmov?>" <?=($disab01==true||$disab02==true?"disabled":"")?>  name="CHECK_<?=$e81_codmov?>" type='checkbox' onclick="js_calcula(this);"  >
             <?=($disab02==true?"<span style=\"color:darkblue;\">**</span>":"")?><?=($disab01==true?"<span style=\"color:darkblue;\">*</span>":"")?>
-	  </td>	    
+	  </td>
           <td class='bordas' align='center'><small><?=$e81_codmov?></small></td>
           <td class='bordas' align='center'><small id="e60_numemp_<?=$e82_codord?>"> <?=$e60_codemp?></small></td>
           <td class='bordas' align='center'><small><?=$e82_codord?></small></td>
@@ -232,8 +232,8 @@ function js_calcula(campo){
 	     $x= "ret_$e81_codmov";
   	     $$x = $e92_sequencia;
              db_input("ret_$e81_codmov",10,'',true,'hidden',1);
-            ?>       
-	  
+            ?>
+
           <td class='bordas' align='right'><small><?=number_format($e81_valor,"2",".","")?></small></td>
           <td class='bordas' align='right'><small><?=number_format($arr_retval[$e81_codmov],"2",".","")?></small></td>
           <td class='bordas' align='center'><small><?=$e92_descrerro?></small></td>
@@ -253,7 +253,7 @@ function js_calcula(campo){
 <script>
   document.getElementById('vlrmov').innerHTML = '<?=trim(db_formatar($vlrmov,'f'))?>';
 function js_atualizaiframe(){
-  xform  = top.corpo.document.form1;
+  xform  = CurrentWindow.corpo.document.form1;
   xformi = document.form1;
   if(xform){
     xformi.movimentos.value = xform.movimentos.value;

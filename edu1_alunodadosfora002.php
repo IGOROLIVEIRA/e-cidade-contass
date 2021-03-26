@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -48,42 +48,42 @@ $db_botao       = false;
 if (isset($alterar)) {
 
   db_inicio_transacao();
-  
+
   $db_opcao                 = 2;
   $db_opcao1                = 3;
   $oDaoAluno->ed47_d_ultalt = date("Y-m-d");
   $oDaoAluno->alterar($ed47_i_codigo);
-  
+
   db_fim_transacao();
 
   if ($oDaoAluno->erro_status != 0) {
 
     if ($j13_codi != "") {
-      
+
       $sSqlBairro    = $oDaoAlunoBairro->sql_query("", "*", "", " ed225_i_aluno = $ed47_i_codigo");
       $result_bairro = $oDaoAlunoBairro->sql_record($sSqlBairro);
-      
+
       db_inicio_transacao();
-      
+
       $oDaoAlunoBairro->ed225_i_aluno  = $ed47_i_codigo;
       $oDaoAlunoBairro->ed225_i_bairro = $j13_codi;
-      
+
       if ($oDaoAlunoBairro->numrows > 0) {
-          
+
         db_fieldsmemory($result_bairro, 0);
         $oDaoAlunoBairro->ed225_i_codigo = $ed225_i_codigo;
         $oDaoAlunoBairro->alterar($ed225_i_codigo);
-   
+
       } else {
         $oDaoAlunoBairro->incluir(null);
       }
 
       db_fim_transacao();
-    
+
     }
 
   }
-  
+
   $db_botao = true;
 
 } elseif (isset($chavepesquisa)) {
@@ -96,12 +96,12 @@ if (isset($alterar)) {
 
   $sSqlBairro    = $oDaoAlunoBairro->sql_query("", "*", "", " ed225_i_aluno = $chavepesquisa");
   $result_bairro = $oDaoAlunoBairro->sql_record($sSqlBairro);
-  
+
   if ($oDaoAlunoBairro->numrows > 0) {
-    
+
     db_fieldsmemory($result_bairro, 0);
     $j13_codi = $ed225_i_bairro;
-  
+
   }
 
   $db_botao          = true;
@@ -118,8 +118,8 @@ if (isset($alterar)) {
     parent.document.formaba.a2.style.color = "black";
     parent.document.formaba.a3.disabled    = false;
     parent.document.formaba.a3.style.color = "black";
-    top.corpo.iframe_a2.location.href='edu1_foraaluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
-    top.corpo.iframe_a3.location.href='edu1_alunofora001.php?ed216_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+    CurrentWindow.corpo.iframe_a2.location.href='edu1_foraaluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
+    CurrentWindow.corpo.iframe_a3.location.href='edu1_alunofora001.php?ed216_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
   </script>
  <?
 
@@ -155,26 +155,26 @@ if (isset($alterar)) {
 
 <?
 if (isset($alterar)) {
-    
+
   if ($oDaoAluno->erro_status == "0") {
-      
+
     $oDaoAluno->erro(true,false);
     $db_botao=true;
-      
+
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-  
+
     if($oDaoAluno->erro_campo != ""){
-        
+
       echo "<script> document.form1.".$oDaoAluno->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$oDaoAluno->erro_campo.".focus();</script>";
-    
-    }   
+
+    }
 
   } else {
 
     $oDaoAluno->erro(true, false);
     db_redireciona("edu1_alunodadosfora002.php?chavepesquisa=$ed47_i_codigo");
-  
+
   }
 
 }

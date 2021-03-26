@@ -200,7 +200,7 @@ if (isset ($chavepesquisa)) {
 	      function js_db_libera(){
 
 	         parent.document.formaba.facevalor.disabled=false;
-	         top.corpo.iframe_facevalor.location.href='cad1_facevalor001.php?j81_face=" . @ $j37_face . "';
+	         CurrentWindow.corpo.iframe_facevalor.location.href='cad1_facevalor001.php?j81_face=" . @ $j37_face . "';
 	     ";
 	if (isset ($liberaaba)) {
 		echo "  parent.mo_camada('facevalor');";

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("classes/db_conplanoexe_classe.php");
@@ -323,12 +323,12 @@ function js_adiciona_linha(mostra,chave) {
 
     if (mostra==true) {
 	    if (sem_rec=='') {
-        js_OpenJanelaIframe('top.corpo','db_iframe',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe',
                             'func_orctiporec.php?funcao_js=parent.js_mostratiporec|o15_codigo|o15_descr',
                             'Pesquisa Receitas',
                              true);
 	    } else {
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe',
                             'func_orctiporec.php?sem_recurso='+sem_rec+
                             '&funcao_js=parent.js_mostratiporec|o15_codigo|o15_descr',
@@ -336,7 +336,7 @@ function js_adiciona_linha(mostra,chave) {
                             );
 	    }
     } else {
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe','func_orctiporec.php?pesquisa_conta='+chave+
                           '&funcao_js=parent.js_mostratiporec',
                           'Pesquisa Receitas',
@@ -453,9 +453,9 @@ function js_atuRecursoConta(obj){
 
 function js_pesquisac50_codhist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_conhist.php?funcao_js=parent.js_mostrahist1|c50_codhist|c50_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_conhist.php?funcao_js=parent.js_mostrahist1|c50_codhist|c50_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_conhist.php?pesquisa_chave='+document.form1.k17_hist.value+'&funcao_js=parent.js_mostrahist','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_conhist.php?pesquisa_chave='+document.form1.k17_hist.value+'&funcao_js=parent.js_mostrahist','Pesquisa',false);
   }
 }
 function js_mostrahist(chave,erro){
@@ -472,13 +472,13 @@ function js_mostrahist1(chave1,chave2){
 }
 function js_pesquisaz01_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
     db_iframe.focus();
   }else{
   	if (document.form1.z01_numcgm.value == '') {
  	 document.form1.z01_nome.value = '';
 	}
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
   }
 }
 function js_mostracgm(erro,chave){
@@ -496,9 +496,9 @@ function js_mostracgm1(chave1,chave2){
 
 function js_pesquisac01_reduz(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_conplanoexe_financeiro.php?ver_datalimite=1&funcao_js=parent.js_mostrareduz1|c62_reduz|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_conplanoexe_financeiro.php?ver_datalimite=1&funcao_js=parent.js_mostrareduz1|c62_reduz|c60_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_conplanoexe_financeiro.php?ver_datalimite=1&pesquisa_chave='+document.form1.c62_reduz.value+'&funcao_js=parent.js_mostrareduz','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_conplanoexe_financeiro.php?ver_datalimite=1&pesquisa_chave='+document.form1.c62_reduz.value+'&funcao_js=parent.js_mostrareduz','Pesquisa',false);
   }
 }
 function js_mostrareduz(chave,erro){
@@ -516,9 +516,9 @@ function js_mostrareduz1(chave1,chave2){
 }
 function js_pesquisac01_reduz1(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?ver_datalimite=1&funcao_js=parent.js_mostrareduz2|k13_conta|k13_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?ver_datalimite=1&funcao_js=parent.js_mostrareduz2|k13_conta|k13_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?ver_datalimite=1&pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrareduz','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?ver_datalimite=1&pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrareduz','Pesquisa',false);
   }
 }
 function js_mostrareduz2(chav1,chav2){
@@ -1231,10 +1231,10 @@ $('k17_tipopagamento').style.width  = "100%";
   function js_abrePesquisaDebito(lMostra) {
 
     if (lMostra) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiarDeb','func_concarpeculiar.php?funcao_js=parent.js_preencheDebito|c58_sequencial|c58_descr','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_concarpeculiarDeb','func_concarpeculiar.php?funcao_js=parent.js_preencheDebito|c58_sequencial|c58_descr','Pesquisa',true);
     } else {
       var iSequencialDebito = $('k17_caracteristicapeculiardebito').value;
-      js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiarDeb','func_concarpeculiar.php?pesquisa_chave='+iSequencialDebito+'&funcao_js=parent.js_completaDebito','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_concarpeculiarDeb','func_concarpeculiar.php?pesquisa_chave='+iSequencialDebito+'&funcao_js=parent.js_completaDebito','Pesquisa',false);
     }
   }
 
@@ -1262,10 +1262,10 @@ $('k17_tipopagamento').style.width  = "100%";
   function js_abrePesquisaCredito(lMostra) {
 
     if (lMostra) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiarCre','func_concarpeculiar.php?funcao_js=parent.js_preencheCredito|c58_sequencial|c58_descr','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_concarpeculiarCre','func_concarpeculiar.php?funcao_js=parent.js_preencheCredito|c58_sequencial|c58_descr','Pesquisa',true);
     } else {
       var iSequencialCredito = $('k17_caracteristicapeculiarcredito').value;
-      js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiarCre','func_concarpeculiar.php?pesquisa_chave='+iSequencialCredito+'&funcao_js=parent.js_completaCredito','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_concarpeculiarCre','func_concarpeculiar.php?pesquisa_chave='+iSequencialCredito+'&funcao_js=parent.js_completaCredito','Pesquisa',false);
     }
   }
 

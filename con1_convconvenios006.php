@@ -7,9 +7,9 @@ include("dbforms/db_funcoes.php");
 include("classes/db_convconvenios_classe.php");
 include("classes/db_convdetalhaconcedentes_classe.php");
 $clconvconvenios = new cl_convconvenios;
-  
+
 $clconvdetalhaconcedentes = new cl_convdetalhaconcedentes;
-  
+
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 33;
 $db_botao = false;
@@ -21,20 +21,20 @@ if(isset($excluir)){
 
   if($clconvdetalhaconcedentes->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clconvdetalhaconcedentes->erro_msg; 
+  }
+  $erro_msg = $clconvdetalhaconcedentes->erro_msg;
   $clconvconvenios->excluir($c206_sequencial);
   if($clconvconvenios->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clconvconvenios->erro_msg; 
+  }
+  $erro_msg = $clconvconvenios->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clconvconvenios->sql_record($clconvconvenios->sql_query($chavepesquisa)); 
+   $result = $clconvconvenios->sql_record($clconvconvenios->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -48,8 +48,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmconvconvenios.php");
@@ -86,8 +86,8 @@ if(isset($chavepesquisa)){
       function js_db_libera(){
          parent.document.formaba.convdetalhaconcedentes.disabled=false;
          parent.document.formaba.convdetalhatermos.disabled=false;
-         top.corpo.iframe_convdetalhaconcedentes.location.href='con1_convdetalhaconcedentes001.php?db_opcaoal=33&c207_codconvenio=".@$c206_sequencial."';
-         top.corpo.iframe_convdetalhatermos.location.href='con1_convdetalhatermos001.php?db_opcaoal=33&c208_codconvenio=".@$c206_sequencial."';
+         CurrentWindow.corpo.iframe_convdetalhaconcedentes.location.href='con1_convdetalhaconcedentes001.php?db_opcaoal=33&c207_codconvenio=".@$c206_sequencial."';
+         CurrentWindow.corpo.iframe_convdetalhatermos.location.href='con1_convdetalhatermos001.php?db_opcaoal=33&c208_codconvenio=".@$c206_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('convdetalhaconcedentes');";

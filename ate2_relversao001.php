@@ -40,15 +40,15 @@ function js_relatorio(){
     }
   }
   if(imprimir == true){
-  
+
     cliente = "";
     virg = "";
     for(var i=0; i<document.form1.clientessel.length; i++){
       cliente += virg+document.form1.clientessel.options[i].value;
       virg = ",";
     }
-    js_OpenJanelaIframe('top.corpo','db_clientes_imprime','con3_versao005.php?versao_inicial='+document.form1.versao_inicial.value+'&dirpadrao='+document.form1.dirpadrao.value+'&tipo_relatorio='+document.form1.tipo_relatorio.value+'&cliente='+cliente,'Gerando Arquivo',false);
-  
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_clientes_imprime','con3_versao005.php?versao_inicial='+document.form1.versao_inicial.value+'&dirpadrao='+document.form1.dirpadrao.value+'&tipo_relatorio='+document.form1.tipo_relatorio.value+'&cliente='+cliente,'Gerando Arquivo',false);
+
     //jan = window.open("","db_clientes_imprime","width="+(screen.availWidth-5)+",height="+(screen.availHeight-40)+",scrollbars=0,location=0 ");
     //document.form1.action = "con3_versao005.php";
     //document.form1.target = "db_usuarios_imprime";
@@ -61,7 +61,7 @@ function js_relatorio(){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -69,8 +69,8 @@ function js_relatorio(){
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <form name="form1" method="post" action="">
       <center>
       <table border="0">

@@ -143,7 +143,7 @@ if(pg_numrows($result) == 0) {
             location.href="modulos.php?coddepto="+chave1+"&retorno=true&nomedepto="+chave2;
         }
         function js_atualizacao_versao(){
-            js_OpenJanelaIframe('top.corpo','dbiframe_atualiza','con3_versao004.php?id_item=<?=db_getsession("DB_modulo")."&tipo_consulta=M"?>',"Atualizacoes");
+            js_OpenJanelaIframe('CurrentWindow.corpo','dbiframe_atualiza','con3_versao004.php?id_item=<?=db_getsession("DB_modulo")."&tipo_consulta=M"?>',"Atualizacoes");
         }
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">

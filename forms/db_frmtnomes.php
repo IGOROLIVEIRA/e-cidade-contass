@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: teste
@@ -35,7 +35,7 @@ $cltnomes->rotulo->label();
     <td nowrap title="<?=@$Tyy_codigo?>">
        <?=@$Lyy_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('yy_codigo',4,$Iyy_codigo,true,'text',$db_opcao,"")
 ?>
@@ -45,7 +45,7 @@ db_input('yy_codigo',4,$Iyy_codigo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tyy_nome?>">
        <?=@$Lyy_nome?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('yy_nome',40,$Iyy_nome,true,'text',$db_opcao,"")
 ?>
@@ -55,7 +55,7 @@ db_input('yy_nome',40,$Iyy_nome,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tyy_data?>">
        <?=@$Lyy_data?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('yy_data',@$yy_data_dia,@$yy_data_mes,@$yy_data_ano,true,'text',$db_opcao,"")
 ?>
@@ -65,7 +65,7 @@ db_inputdata('yy_data',@$yy_data_dia,@$yy_data_mes,@$yy_data_ano,true,'text',$db
     <td nowrap title="<?=@$Tyy_obs?>">
        <?=@$Lyy_obs?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('yy_obs',0,0,$Iyy_obs,true,'text',$db_opcao,"")
 ?>
@@ -78,7 +78,7 @@ db_textarea('yy_obs',0,0,$Iyy_obs,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tnomes','func_tnomes.php?funcao_js=parent.js_preenchepesquisa|yy_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tnomes','func_tnomes.php?funcao_js=parent.js_preenchepesquisa|yy_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tnomes.hide();

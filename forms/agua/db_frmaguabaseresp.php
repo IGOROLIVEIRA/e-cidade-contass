@@ -15,13 +15,13 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $x14_numcgm = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -32,7 +32,7 @@ if(isset($db_opcaoal)){
        db_ancora(@$Lx14_matric,"js_pesquisax14_matric(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x14_matric',10,$Ix14_matric,true,'text',$db_opcao," onchange='js_pesquisax14_matric(false);'")
 ?>
@@ -47,7 +47,7 @@ db_input('x01_numcgm',10,$Ix01_numcgm,true,'text',3,'')
        db_ancora(@$Lx14_numcgm,"js_pesquisax14_numcgm(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x14_numcgm',10,$Ix14_numcgm,true,'text',$db_opcao," onchange='js_pesquisax14_numcgm(false);'")
 ?>
@@ -65,7 +65,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("x14_matric"=>@$x14_matric);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -92,20 +92,20 @@ function js_cancelar(){
 }
 function js_pesquisax14_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguabaseresp','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabaseresp','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x14_matric.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguabaseresp','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x14_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
+     if(document.form1.x14_matric.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabaseresp','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x14_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
      }else{
-       document.form1.x01_numcgm.value = ''; 
+       document.form1.x01_numcgm.value = '';
      }
   }
 }
 function js_mostraaguabase(chave,erro){
-  document.form1.x01_numcgm.value = chave; 
-  if(erro==true){ 
-    document.form1.x14_matric.focus(); 
-    document.form1.x14_matric.value = ''; 
+  document.form1.x01_numcgm.value = chave;
+  if(erro==true){
+    document.form1.x14_matric.focus();
+    document.form1.x14_matric.value = '';
   }
 }
 function js_mostraaguabase1(chave1,chave2){
@@ -115,20 +115,20 @@ function js_mostraaguabase1(chave1,chave2){
 }
 function js_pesquisax14_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguabaseresp','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabaseresp','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x14_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguabaseresp','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.x14_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+     if(document.form1.x14_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabaseresp','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.x14_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostracgm(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.x14_numcgm.focus(); 
-    document.form1.x14_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.x14_numcgm.focus();
+    document.form1.x14_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){

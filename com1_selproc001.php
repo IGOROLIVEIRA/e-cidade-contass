@@ -102,12 +102,12 @@ if (isset($pc10_numero)&&trim($pc10_numero)!=""){
 																          or (        e54_autori is not null
 																                and   e54_anulad is not null
 																                and ( e61_numemp is null or ( e60_numemp is not null and e60_vlremp = e60_vlranu ))
-																                and not exists ( select *  
+																                and not exists ( select *
 																                                   from empautitempcprocitem x
 																                                        inner join empautoriza aut on aut.e54_autori = x.e73_autori
 																                                  where x.e73_pcprocitem = pcprocitem.pc81_codprocitem
 																                                    and aut.e54_anulad is null )
-																
+
 																             )
 																        ) ";
 	 $sWhereVerificaAutorizacao .= " and pc11_codigo is not null ";
@@ -175,13 +175,13 @@ if ($clpcparam->numrows > 0){
 
           if (strlen(trim(@$dbwhere)) > 0){
                $sql = "select pc81_codproc, pc11_numero
-                       from solandam 
-			                      inner join solandpadrao  on solandpadrao.pc47_solicitem  = solandam.pc43_solicitem and 
+                       from solandam
+			                      inner join solandpadrao  on solandpadrao.pc47_solicitem  = solandam.pc43_solicitem and
                                                         solandpadrao.pc47_ordem      = solandam.pc43_ordem
 	                          inner join solicitemprot on solicitemprot.pc49_solicitem = solandam.pc43_solicitem
                             inner join solicitem     on solicitem.pc11_codigo        = solandam.pc43_solicitem
                             left  join pcprocitem    on pcprocitem.pc81_solicitem    = solandam.pc43_solicitem
-                       where $dbwhere 
+                       where $dbwhere
 		                         solandam.pc43_ordem >= 4 and
 		                         solandam.pc43_depto = ".db_getsession("DB_coddepto");
 
@@ -228,14 +228,14 @@ function js_abre(){
       resp=0;
       if(document.form1.pc80_codproc.value == "" && document.form1.pc10_numero.value == ""){
 	erro++;
-	resp=1; 
+	resp=1;
       }
       ';
       if(isset($anul) && trim($anul)!=""){
 	echo '
 	if(document.form1.e54_autori.value == "" && document.form1.pc80_codproc.value == "" && document.form1.pc10_numero.value== ""){
 	  erro++;
-	  resp=2; 
+	  resp=2;
 	}else{
 	  erro=0;
 	  resp=0;
@@ -545,10 +545,10 @@ function js_reload(valor) {
 //--------------------------------
 function js_pesquisa_solicita(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?gerautori=true&anular=<?=($anular)?>&funcao_js=parent.js_mostrasolicita1|pc10_numero','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?gerautori=true&anular=<?=($anular)?>&funcao_js=parent.js_mostrasolicita1|pc10_numero','Pesquisa',true);
   }else{
      if(document.form1.pc10_numero.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?gerautori=true&anular=<?=($anular)?>&pesquisa_chave='+document.form1.pc10_numero.value+'&funcao_js=parent.js_mostrasolicita','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?gerautori=true&anular=<?=($anular)?>&pesquisa_chave='+document.form1.pc10_numero.value+'&funcao_js=parent.js_mostrasolicita','Pesquisa',false);
      }
   }
 }
@@ -564,10 +564,10 @@ function js_mostrasolicita1(chave1,chave2){
 }
 function js_pesquisa_autori(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empautoriza','func_empautoriza.php?anul=ok&possuiPC=true&funcao_js=parent.js_mostraautori1|e54_autori','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empautoriza','func_empautoriza.php?anul=ok&possuiPC=true&funcao_js=parent.js_mostraautori1|e54_autori','Pesquisa',true);
   }else{
      if(document.form1.e54_autori.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_empautoriza','func_empautoriza.php?anul=ok&possuiPC=true&pesquisa_chave='+document.form1.e54_autori.value+'&funcao_js=parent.js_mostraautori','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empautoriza','func_empautoriza.php?anul=ok&possuiPC=true&pesquisa_chave='+document.form1.e54_autori.value+'&funcao_js=parent.js_mostraautori','Pesquisa',false);
      }
   }
 }
@@ -584,10 +584,10 @@ function js_mostraautori1(chave1,chave2){
 
 function js_pesquisa_pcproc(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
   }else{
      if(document.form1.pc80_codproc.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?pesquisa_chave='+document.form1.pc80_codproc.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcproc','func_pcproc.php?pesquisa_chave='+document.form1.pc80_codproc.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
      }
   }
 }

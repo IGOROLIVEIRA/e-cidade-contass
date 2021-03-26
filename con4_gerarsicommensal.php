@@ -396,14 +396,14 @@ $clrotulo->label("o15_codigo");
              *a variavel funcao_js é uma variável global
              *db_lovrot recebe parâmetros separados por |
              */
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_cronogramaperspectiva',
                 'func_cronogramaperspectiva.php?funcao_js='+
                 'parent.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
                 'Perspectivas do Cronograma',true);
         }else{
             if ($F('o124_sequencial') != ''){
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_cronogramaperspectiva',
                     'func_cronogramaperspectiva.php?pesquisa_chave='+
                     $F('o124_sequencial')+
@@ -436,14 +436,14 @@ $clrotulo->label("o15_codigo");
     function js_pesquisa_ppa(mostra) {
 
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_ppa',
                 'func_ppaversaosigap.php?funcao_js='+
                 'parent.js_mostrappa1|o119_sequencial|o01_descricao',
                 'Perspectivas do Cronograma',true);
         }else{
             if( $F('o119_sequencial') != ''){
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_ppa',
                     'func_ppaversaosigap.php?pesquisa_chave='+
                     $F('o119_sequencial')+
@@ -492,24 +492,24 @@ $clrotulo->label("o15_codigo");
         });
     }
     function js_mostraMetaEncerramento(mes){
-        
+
         let iAno = parseInt(parent.bstatus.document.getElementById('dtanousu').innerHTML);
-        
+
         if (mes == 12){
-            
+
             $("meta").style.display = "block";
-            
+
             if (iAno >= 2020) {
                 $('encerramentoCtb').style.display = "block";
                 $('encerramentoExt').style.display = "block";
             } else {
-                $('encerramentoCtb').style.display = "none"; 
-                $('encerramentoExt').style.display = "none"; 
+                $('encerramentoCtb').style.display = "none";
+                $('encerramentoExt').style.display = "none";
             }
 
         } else {
 
-            $("meta").style.display = "none";        
+            $("meta").style.display = "none";
             $('encerramentoCtb').style.display = "none";
             $('encerramentoExt').style.display = "none";
 

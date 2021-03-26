@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: biblioteca
@@ -75,8 +75,8 @@ $opcao = 1;
 </table>
 <br>
 <?if (!empty($bi18_carteira)) {
-	
-    $sSqlDevolucaoAcervo = "select * 
+
+    $sSqlDevolucaoAcervo = "select *
                               from emprestimoacervo
                                    inner join emprestimo      on bi18_codigo = bi19_emprestimo
                                    inner join carteira        on bi16_codigo = bi18_carteira
@@ -92,9 +92,9 @@ $opcao = 1;
                                                where devolucaoacervo.bi21_codigo = emprestimoacervo.bi19_codigo
                                              )";
     $result = $cldevolucaoacervo->sql_record($sSqlDevolucaoAcervo);
-    
+
     if ($cldevolucaoacervo->numrows == 0) {
- 	
+
       ?>
       <br>
       <center>
@@ -103,9 +103,9 @@ $opcao = 1;
        </fieldset>
       </center>
       <?
-   
+
     } else {
- 	
+
       ?>
       <table border="0" width="90%" align="center">
        <tr>
@@ -114,7 +114,7 @@ $opcao = 1;
           Leitor: <?=@$ov02_nome?>
           <table border="1" width="100%">
            <tr>
-            <td bgcolor="#D0D0D0" width="30"><input type="button" value="M" name="marca" title="Marcar/Desmarcar" 
+            <td bgcolor="#D0D0D0" width="30"><input type="button" value="M" name="marca" title="Marcar/Desmarcar"
                 onclick="marcar('<?=$cldevolucaoacervo->numrows?>',this)"></td>
             <td><b>Código do Exemplar</b></td>
             <td><b>Cód. Barras</b></td>
@@ -124,11 +124,11 @@ $opcao = 1;
            </tr>
            <?
            for ($x = 0; $x < $cldevolucaoacervo->numrows; $x++) {
-        	
+
              db_fieldsmemory($result,$x);
              ?>
              <tr>
-              <td align='center' width='30'><input type='checkbox' value='<?=$bi19_codigo?>' 
+              <td align='center' width='30'><input type='checkbox' value='<?=$bi19_codigo?>'
                   name='emprestimo' id='emprestimo'>
               </td>
               <td><?=$bi23_codigo?><input type="hidden" name="bi23_codigo" id="bi23_codigo" value="<?=$bi23_codigo?>"></td>
@@ -142,32 +142,32 @@ $opcao = 1;
               <input type="hidden" name="codbarras" id="codbarras" value="<?=$bi23_codbarras?>">
              </tr>
             <?
-          
+
            }
-        
+
           ?>
          </table>
         </fieldset>
        </td>
       </tr>
      </table>
-     <input name="confirma" type="button" id="confirma" value="Confirmar Devolução" <?=@$bi19_codigo==""?"disabled":""?> 
+     <input name="confirma" type="button" id="confirma" value="Confirmar Devolução" <?=@$bi19_codigo==""?"disabled":""?>
             onclick="js_confirma(<?=$cldevolucaoacervo->numrows?>)">
-     <input name="renovar"  type="button" value="Renovar Empréstimo" <?=@$bi19_codigo==""?"disabled":""?> 
+     <input name="renovar"  type="button" value="Renovar Empréstimo" <?=@$bi19_codigo==""?"disabled":""?>
             onclick="js_renova(<?=$cldevolucaoacervo->numrows?>)">
-     <input name="cancelar" type="button" id="cancelar" value="Cancelar" <?=@$bi19_codigo==""?"disabled":""?> 
+     <input name="cancelar" type="button" id="cancelar" value="Cancelar" <?=@$bi19_codigo==""?"disabled":""?>
             onclick="location='bib1_devolucao001.php'">
-         
+
   <?}
 
     $codigo = "";
- 
+
 ?>
 <?}?>
 
 <?if (!empty($codigo)) {
-	
-    $sSqlDevolucaoAcervo = "select * 
+
+    $sSqlDevolucaoAcervo = "select *
                               from emprestimoacervo
                                    inner join emprestimo      on bi18_codigo = bi19_emprestimo
                                    inner join carteira        on bi16_codigo = bi18_carteira
@@ -184,7 +184,7 @@ $opcao = 1;
                                              )";
     $result = $cldevolucaoacervo->sql_record($sSqlDevolucaoAcervo);
     if ($cldevolucaoacervo->numrows == 0) {
-    	
+
       ?>
       <br>
       <center>
@@ -193,10 +193,10 @@ $opcao = 1;
        </fieldset>
       </center>
       <?
-      
+
     } else {
-    	
-      $sCampos    = "ov02_nome as nome"; 
+
+      $sCampos    = "ov02_nome as nome";
       $sSqlLeitor = $clleitor->sql_query_leitorcidadao("", $sCampos, ""," bi10_codigo = ".pg_result($result,0,'bi10_codigo'));
       $result1    = $clleitor->sql_record($sSqlLeitor);
       db_fieldsmemory($result1,0);
@@ -208,7 +208,7 @@ $opcao = 1;
           Exemplar: <?=@$titulo?>
           <table border="1" width="100%">
            <tr>
-            <td bgcolor="#D0D0D0" width="30"><input type="button" value="M" name="marca" title="Marcar/Desmarcar" 
+            <td bgcolor="#D0D0D0" width="30"><input type="button" value="M" name="marca" title="Marcar/Desmarcar"
                 onclick="marcar('<?=$cldevolucaoacervo->numrows?>',this)"></td>
             <td><b>Código do Exemplar</b></td>
             <td><b>Cód. Barras</b></td>
@@ -216,16 +216,16 @@ $opcao = 1;
             <td><b>Emprestado</b></td>
             <td><b>Devolver até</b></td>
            </tr>
-           
+
            <?
            for ($x = 0; $x < $cldevolucaoacervo->numrows; $x++) {
-           	
+
              db_fieldsmemory($result,$x);
              ?>
              <tr>
-              <td align='center' width='30'><input type='checkbox' value='<?=$bi19_codigo?>' 
+              <td align='center' width='30'><input type='checkbox' value='<?=$bi19_codigo?>'
                   name='emprestimo' id='emprestimo'></td>
-              <td><?=$bi23_codigo?><input type="hidden" name="bi23_codigo" id="bi23_codigo" 
+              <td><?=$bi23_codigo?><input type="hidden" name="bi23_codigo" id="bi23_codigo"
                                           value="<?=$bi23_codigo?>"></td>
               <td><?=$bi23_codbarras?></td>
               <td><?=$nome?><input type="hidden" name="bi06_seq" id="bi06_seq" value="<?=$bi06_seq?>">
@@ -245,11 +245,11 @@ $opcao = 1;
         </td>
        </tr>
       </table>
-      <input name="confirma" type="button" id="confirma" value="Confirmar Devolução" <?=@$bi19_codigo==""?"disabled":""?> 
+      <input name="confirma" type="button" id="confirma" value="Confirmar Devolução" <?=@$bi19_codigo==""?"disabled":""?>
              onclick="js_confirma(<?=$cldevolucaoacervo->numrows?>)">
-      <input name="renovar"  type="button" value="Renovar Empréstimo" <?=@$bi19_codigo==""?"disabled":""?> 
+      <input name="renovar"  type="button" value="Renovar Empréstimo" <?=@$bi19_codigo==""?"disabled":""?>
              onclick="js_renova(<?=$cldevolucaoacervo->numrows?>)">
-      <input name="cancelar" type="button" id="cancelar" value="Cancelar" <?=@$bi19_codigo==""?"disabled":""?>  
+      <input name="cancelar" type="button" id="cancelar" value="Cancelar" <?=@$bi19_codigo==""?"disabled":""?>
              onclick="location='bib1_devolucao001.php'">
   <?}?>
 <?}?>
@@ -258,26 +258,26 @@ $opcao = 1;
 </form>
 <script>
 function js_pesquisabi18_carteira(mostra) {
-	
+
   if (mostra == true) {
-	  
-    js_OpenJanelaIframe('top.corpo',
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_leitor',
                         'func_leitorproc.php?lNaoValidaCarteira=true&funcao_js=parent.js_mostraleitor1|bi16_codigo|ov02_nome',
                         'Pesquisa',
                         true);
-    
+
   } else {
-	  
+
     if (document.form1.bi18_carteira.value != '') {
-        
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_leitor',
     	                    'func_leitorproc.php?lNaoValidaCarteira=false&pesquisa_chave='+document.form1.bi18_carteira.value
     	                                      +'&funcao_js=parent.js_mostraleitor',
     	                    'Pesquisa',
     	                    false);
-      
+
     } else {
       document.form1.ov02_nome.value = '';
     }
@@ -285,7 +285,7 @@ function js_pesquisabi18_carteira(mostra) {
 }
 
 function js_mostraleitor(chave,erro) {
-	
+
   document.form1.ov02_nome.value = chave;
   document.form1.codigo.value    = '';
   document.form1.titulo.value    = '';
@@ -294,20 +294,20 @@ function js_mostraleitor(chave,erro) {
   }
   document.form1.proximo.click();
   if (erro == true) {
-	  
+
     document.form1.bi18_carteira.focus();
     document.form1.bi18_carteira.value = '';
-    
+
   }
 }
 
 function js_mostraleitor1 (chave1, chave2) {
-	
+
   document.form1.bi18_carteira.value = chave1;
   document.form1.ov02_nome.value     = chave2;
   document.form1.codigo.value        = '';
   document.form1.titulo.value        = '';
-  
+
   if (document.form1.bi23_codbarras) {
     document.form1.bi23_codbarras.value = '';
   }
@@ -316,53 +316,53 @@ function js_mostraleitor1 (chave1, chave2) {
 }
 
 function js_pesquisabi23_codigo(mostra) {
-	
+
   if (mostra == true) {
-	  
-    js_OpenJanelaIframe('top.corpo',
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_exemplar',
                         'func_exemplardevol.php?funcao_js=parent.js_mostraexemplar1|bi23_codigo|bi06_titulo',
                         'Pesquisa',
                         true);
-    
+
   } else {
-	  
+
     if (document.form1.codigo.value != '') {
-        
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_exemplar',
     	                    'func_exemplardevol.php?pesquisa_chave='+document.form1.codigo.value
     	                                         +'&funcao_js=parent.js_mostraexemplar',
     	                    'Pesquisa',
     	                    false);
-      
-    } else {        
+
+    } else {
       document.form1.titulo.value = '';
     }
   }
 }
 
 function js_mostraexemplar(chave1,erro) {
-	
+
   document.form1.titulo.value        = chave1;
   document.form1.bi18_carteira.value = '';
   document.form1.ov02_nome.value     = '';
-  
+
   if (document.form1.bi23_codbarras) {
     document.form1.bi23_codbarras.value = '';
   }
   document.form1.proximo.click();
   if (erro == true) {
-	  
+
     document.form1.codigo.value = '';
     document.form1.codigo.focus();
     return false;
-    
+
   }
 }
 
 function js_mostraexemplar1(chave1,chave2) {
-	
+
   document.form1.codigo.value        = chave1;
   document.form1.titulo.value        = chave2;
   document.form1.bi18_carteira.value = '';
@@ -372,24 +372,24 @@ function js_mostraexemplar1(chave1,chave2) {
   }
   db_iframe_exemplar.hide();
   document.form1.proximo.click();
-  
+
 }
 
 function marcar(tudo,documento) {
-	
+
   if (tudo == 1) {
-	  
+
     if (documento.value == "D") {
       document.form1.emprestimo.checked = false;
     }
     if (documento.value == "M") {
       document.form1.emprestimo.checked = true;
     }
-    
+
   } else {
-	  
+
     for (i = 0; i < tudo; i++) {
-        
+
       if (documento.value == "D") {
         document.form1.emprestimo[i].checked = false;
       }
@@ -398,7 +398,7 @@ function marcar(tudo,documento) {
       }
     }
   }
-  
+
   if (document.form1.marca.value == "D") {
     document.form1.marca.value = "M";
   } else {
@@ -407,28 +407,28 @@ function marcar(tudo,documento) {
 }
 
 function js_confirma(tudo) {
-	
+
   var armazena = '';
   if (tudo == 1 && document.form1.emprestimo.checked == true) {
-	  
+
     armazena  = document.form1.bi19_codigo.value+";"+document.form1.bi23_codigo.value+";"+document.form1.emprestimo.value;
     armazena += ";"+document.form1.bi06_seq.value+"|";
-    
+
   }
-  
+
   if (tudo > 1) {
-	  
+
     for (i = 0; i < tudo; i++) {
-        
+
       if (document.form1.emprestimo[i].checked == true) {
-          
+
         armazena += document.form1.bi19_codigo[i].value+";"+document.form1.bi23_codigo[i].value;
         armazena += ";"+document.form1.emprestimo[i].value+";"+document.form1.bi06_seq[i].value+"|";
-        
+
       }
     }
   }
-  
+
   if (armazena != "") {
     location.href="bib1_devolucao001.php?devolvolucao="+armazena;
   } else {
@@ -454,7 +454,7 @@ function js_renova(iTotalLinhas) {
   for (var iCont = 0; iCont < oCkBox.length; iCont++) {
 
     if (oCkBox[iCont].checked) {
-     
+
       iDataDevolucao = parseInt(oDataDevolucao[iCont].value, 10);
       if (iDataDevolucao > iDataAtual) {
 
@@ -471,7 +471,7 @@ function js_renova(iTotalLinhas) {
   }
 
   if (sSep == '') { // Se houver pelo menos um registro marcado, sSep valerá "|"
-	  
+
     alert('Marque algum exemplar para renovação!');
     return false;
 
@@ -482,15 +482,15 @@ function js_renova(iTotalLinhas) {
     return false;
   }
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_renovacao', 'bib1_renovacao001.php?'+sGet,
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_renovacao', 'bib1_renovacao001.php?'+sGet,
 		    	            'Renovação de Empréstimo', true
                      );
 
 }
 function js_codbarras() {
-	
+
   if (document.form1.bi23_codbarras.value != "") {
     iframe_verificadata.location = "bib1_devolucao002.php?bi23_codbarras="+document.form1.bi23_codbarras.value;
-  }  
+  }
 }
 </script>

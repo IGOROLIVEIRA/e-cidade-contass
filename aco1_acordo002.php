@@ -96,12 +96,12 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
   var Elemento = document.getElementsByName("acordoitem")[0];
   var sFuncao  = "mo_camada('acordoitem');";
-  sFuncao += "top.corpo.iframe_acordoitem.js_verificaTipoAcordo();";
+  sFuncao += "CurrentWindow.corpo.iframe_acordoitem.js_verificaTipoAcordo();";
     //parent.document.getElementsByName("acordoitem")[0].setAttribute("onclick",sFuncao);
     document.getElementsByName("acordoitem")[0].setAttribute("onclick",sFuncao);
     <?php if($_GET['afterInclusao'] == true): ?>
     mo_camada('acordoitem');
-    top.corpo.iframe_acordoitem.js_verificaTipoAcordo();
+    CurrentWindow.corpo.iframe_acordoitem.js_verificaTipoAcordo();
     <?php endif; ?>
   </script>
 

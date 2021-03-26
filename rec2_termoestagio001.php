@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -70,7 +70,7 @@ $rotulocampo->label("z01_nome");
                    db_ancora(@$Lh83_regist,"js_pesquisah83_regist(true);",$db_opcao);
                  ?>
               </td>
-              <td> 
+              <td>
                 <?
                   db_input('h83_regist',8,$Ih83_regist,true,'text',$db_opcao," onchange='js_pesquisah83_regist(false);'")
                 ?>
@@ -148,20 +148,20 @@ $rotulocampo->label("z01_nome");
 
     function js_pesquisah83_regist(mostra) {
       if(mostra==true){
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhestagiocurricular.php?funcao_js=parent.js_mostrarhpessoal1|h83_regist|z01_nome','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhestagiocurricular.php?funcao_js=parent.js_mostrarhpessoal1|h83_regist|z01_nome','Pesquisa',true);
       }else{
-         if(document.form1.h83_regist.value != ''){ 
-            js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhestagiocurricular.php?pesquisa_chave='+document.form1.h83_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false);
+         if(document.form1.h83_regist.value != ''){
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhestagiocurricular.php?pesquisa_chave='+document.form1.h83_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false);
          }else{
-           document.form1.z01_nome.value = ''; 
+           document.form1.z01_nome.value = '';
          }
       }
     }
     function js_mostrarhpessoal(chave,erro) {
-      document.form1.z01_nome.value = chave; 
-      if(erro==true){ 
-        document.form1.h83_regist.focus(); 
-        document.form1.h83_regist.value = ''; 
+      document.form1.z01_nome.value = chave;
+      if(erro==true){
+        document.form1.h83_regist.focus();
+        document.form1.h83_regist.value = '';
       }
     }
     function js_mostrarhpessoal1(chave1,chave2) {

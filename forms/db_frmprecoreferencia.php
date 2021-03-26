@@ -37,7 +37,7 @@
             <?= @$Lsi01_tipoprecoreferencia ?>
           </td>
           <td>
-            <?php 
+            <?php
               $x = array('1' => 'Preço Médio', '2' => 'Maior Preço', '3' => 'Menor Preço');
               db_select('si01_tipoprecoreferencia', $x, true, $db_opcao, "");
             ?>
@@ -46,7 +46,7 @@
         <tr>
           <td><strong>Imprimir Justificativa: </strong></td>
           <td>
-            <?php 
+            <?php
               $x = array('n' => 'Não', 's' => 'Sim');
               db_select('impjustificativa', $x, true, $db_opcao, "style = 'width: 91px;'");
             ?>
@@ -78,10 +78,10 @@
 <script>
   function js_pesquisasi01_processocompra(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc', 'Pesquisa', true);
     } else {
       if (document.form1.si01_processocompra.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_pcproc', 'func_pcprocnovo.php?pesquisa_chave=' + document.form1.si01_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pcproc', 'func_pcprocnovo.php?pesquisa_chave=' + document.form1.si01_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
       }
     }
   }
@@ -99,7 +99,7 @@
   }
 
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_precoreferencia', 'func_precoreferencia.php?funcao_js=parent.js_preenchepesquisa|si01_sequencial', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_precoreferencia', 'func_precoreferencia.php?funcao_js=parent.js_preenchepesquisa|si01_sequencial', 'Pesquisa', true);
   }
 
   function js_preenchepesquisa(chave) {

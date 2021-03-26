@@ -45,7 +45,7 @@ if (isset($incluir)) {
     } else {
       $oDaoOrcLei->o45_tipolei = 3;
     }
-    
+
     $oDaoOrcLei->incluir(null);
     if ($oDaoOrcLei->erro_status == 0) {
 
@@ -121,7 +121,7 @@ if(isset($incluir)){
       echo "
       <script>
              parent.document.formaba.db_leialtorc.disabled=false;
-             top.corpo.iframe_db_leialtorc.location.href='orc1_orcleialtorcamentaria001.php?o200_orcprojetolei=".@$clorcprojetolei->o138_sequencial."';
+             CurrentWindow.corpo.iframe_db_leialtorc.location.href='orc1_orcleialtorcamentaria001.php?o200_orcprojetolei=".@$clorcprojetolei->o138_sequencial."';
              parent.mo_camada('db_leialtorc');
       </script>
      ";

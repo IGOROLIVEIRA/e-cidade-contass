@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /*
@@ -80,7 +80,7 @@ if ($db_opcao == 1) {
       <form name="form1" method="post" action="">
         <fieldset>
           <legend>Contas por Recurso</legend>
-          <table>            
+          <table>
             <tr>
               <td nowrap title="<?php echo $Trh41_anousu; ?>" >
                 <label class="bold" for="rh41_anousu" id="lbl_rh41_anousu"><?php echo $Srh41_anousu; ?>:</label>
@@ -96,7 +96,7 @@ if ($db_opcao == 1) {
               <td nowrap title="<?php echo $Trh41_conta; ?>" >
                 <label class="bold" for="rh41_conta" id="lbl_rh41_conta">
                   <?php
-                    db_ancora( $Srh41_conta . ':', 
+                    db_ancora( $Srh41_conta . ':',
                                "js_pesquisarh41_conta(true);", $db_opcao);
                   ?>
                 </label>
@@ -105,8 +105,8 @@ if ($db_opcao == 1) {
                 <?php
                   db_input('rh41_conta', 5, $Irh41_conta, true, 'text', $db_opcao, " onchange='js_pesquisarh41_conta(false);'");
                 ?>
-                <?php 
-                  db_input('k13_descr', 40, $Ik13_descr, true, 'text', 3, ''); 
+                <?php
+                  db_input('k13_descr', 40, $Ik13_descr, true, 'text', 3, '');
                 ?>
               </td>
             </tr>
@@ -114,7 +114,7 @@ if ($db_opcao == 1) {
               <td nowrap title="<?php echo $Trh41_codigo; ?>" >
                 <label class="bold" for="rh41_codigo" id="lbl_rh41_codigo">
                   <?php
-                    db_ancora( $Srh41_codigo . ':', 
+                    db_ancora( $Srh41_codigo . ':',
                                "js_pesquisarh41_codigo(true);", $db_opcao);
                   ?>
                 </label>
@@ -123,24 +123,24 @@ if ($db_opcao == 1) {
                 <?php
                   db_input('rh41_codigo', 5, $Irh41_codigo, true, 'text', $db_opcao, " onchange='js_pesquisarh41_codigo(false);'");
                 ?>
-                <?php 
-                  db_input('o15_descr', 40, $Io15_descr, true, 'text', 3, ''); 
+                <?php
+                  db_input('o15_descr', 40, $Io15_descr, true, 'text', 3, '');
                 ?>
               </td>
             </tr>
           </table>
         </fieldset>
-        <input name="<?php echo $sNameBotaoProcessar; ?>" type="submit" id="db_opcao" value="<?php echo ucfirst($sNameBotaoProcessar); ?>" 
+        <input name="<?php echo $sNameBotaoProcessar; ?>" type="submit" id="db_opcao" value="<?php echo ucfirst($sNameBotaoProcessar); ?>"
                <?php if ($db_opcao == 1): ?>
-                 onclick="return js_validaFormulario()" 
+                 onclick="return js_validaFormulario()"
                <?php endif; ?>
              <?php echo (!$db_botao ? "disabled" : ""); ?> >
         <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
       </form>
     </div>
-    <?php db_menu( db_getsession("DB_id_usuario"), 
-                   db_getsession("DB_modulo"), 
-                   db_getsession("DB_anousu"), 
+    <?php db_menu( db_getsession("DB_id_usuario"),
+                   db_getsession("DB_modulo"),
+                   db_getsession("DB_anousu"),
                    db_getsession("DB_instit") ); ?>
   </body>
   <script>
@@ -174,18 +174,18 @@ if ($db_opcao == 1) {
     function js_pesquisarh41_conta(lExibeJanela) {
 
       if (lExibeJanela) {
-        js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_saltes', 
-                             'func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr', 
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_saltes',
+                             'func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr',
                              'Pesquisa', true);
       } else {
         if (document.form1.rh41_conta.value != '') {
-          js_OpenJanelaIframe( 'top.corpo', 
-                               'db_iframe_saltes', 
-                               'func_saltes.php?pesquisa_chave=' + document.form1.rh41_conta.value + '&funcao_js=parent.js_mostrasaltes', 
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                               'db_iframe_saltes',
+                               'func_saltes.php?pesquisa_chave=' + document.form1.rh41_conta.value + '&funcao_js=parent.js_mostrasaltes',
                                'Pesquisa', false);
         } else {
-          document.form1.k13_descr.value = ''; 
+          document.form1.k13_descr.value = '';
         }
       }
     }
@@ -210,18 +210,18 @@ if ($db_opcao == 1) {
     function js_pesquisarh41_codigo(lExibeJanela) {
 
       if (lExibeJanela) {
-        js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_orctiporec', 
-                             'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr', 
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_orctiporec',
+                             'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr',
                              'Pesquisa', true);
       } else {
         if (document.form1.rh41_codigo.value != '') {
-          js_OpenJanelaIframe( 'top.corpo', 
-                               'db_iframe_orctiporec', 
-                               'func_orctiporec.php?pesquisa_chave=' + document.form1.rh41_codigo.value + '&funcao_js=parent.js_mostraorctiporec', 
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                               'db_iframe_orctiporec',
+                               'func_orctiporec.php?pesquisa_chave=' + document.form1.rh41_codigo.value + '&funcao_js=parent.js_mostraorctiporec',
                                'Pesquisa', false);
         } else {
-          document.form1.o15_descr.value = ''; 
+          document.form1.o15_descr.value = '';
         }
       }
     }
@@ -246,18 +246,18 @@ if ($db_opcao == 1) {
     function js_pesquisarh41_instit(lExibeJanela) {
 
       if (lExibeJanela) {
-        js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_db_config', 
-                             'func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst', 
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_db_config',
+                             'func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst',
                              'Pesquisa', true);
       } else {
         if (document.form1.rh41_instit.value != '') {
-          js_OpenJanelaIframe( 'top.corpo', 
-                               'db_iframe_db_config', 
-                               'func_db_config.php?pesquisa_chave=' + document.form1.rh41_instit.value + '&funcao_js=parent.js_mostradb_config', 
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                               'db_iframe_db_config',
+                               'func_db_config.php?pesquisa_chave=' + document.form1.rh41_instit.value + '&funcao_js=parent.js_mostradb_config',
                                'Pesquisa', false);
         } else {
-          document.form1.nomeinst.value = ''; 
+          document.form1.nomeinst.value = '';
         }
       }
     }
@@ -280,9 +280,9 @@ if ($db_opcao == 1) {
     }
 
     function js_pesquisa() {
-      js_OpenJanelaIframe( 'top.corpo', 
-                           'db_iframe_rhcontasrec', 
-                           'func_rhcontasrec.php?funcao_js=parent.js_preenchepesquisa|k13_conta|rh41_codigo|rh41_anousu', 
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                           'db_iframe_rhcontasrec',
+                           'func_rhcontasrec.php?funcao_js=parent.js_preenchepesquisa|k13_conta|rh41_codigo|rh41_anousu',
                            'Pesquisa', true);
     }
 
@@ -291,7 +291,7 @@ if ($db_opcao == 1) {
       db_iframe_rhcontasrec.hide();
       <?php
         if ($db_opcao != 1) {
-          echo "location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) 
+          echo "location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])
                . "?chavepesquisa=' + iConta + '&chavepesquisa1=' + iCodigo + "
                . "'&chavepesquisa3=' + iAnousu";
         }

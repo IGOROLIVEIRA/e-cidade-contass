@@ -19,25 +19,25 @@ $dados="ordem";
 <script>
 function js_mascara(evt){
   var evt = (evt) ? evt : (window.event) ? window.event : "";
-  
+
   if((evt.charCode >46 && evt.charCode <58) || evt.charCode ==0){//8:backspace|46:delete|190:.
     return true;
   }else{
     return false;
-  }  
+  }
 }
 
 function js_atualizar(){
   obj = ordem.document.form1;
   var coluna='';
-  var sep=''; 
+  var sep='';
   var tcoluna='';
   var tsep='';
   var asep='';
   var agens = '';
 
   for(i=0; i<obj.length; i++){
-    nome = obj[i].name.substr(0,5);  
+    nome = obj[i].name.substr(0,5);
     if(nome=="CHECK" && obj[i].checked==true){
       ord = obj[i].name.substring(6);
       numemp  = obj[i+1].value;
@@ -45,7 +45,7 @@ function js_atualizar(){
       conta   = obj[i+4].value;
       forma   = obj[i+6].value;
       valor   = obj[i+8].value;
-      
+
       coluna += sep+obj[i+9].value+"-"+obj[i].value+"-"+numemp+"-"+valor+"-"+tipo+"-"+forma+"-"+conta;
       sep= "XX";
     }
@@ -59,7 +59,7 @@ function js_atualizar(){
       }
       tcoluna+= tsep+obj[i].value;
       tsep    = "-";
-    }  
+    }
   }
   document.form1.tords.value = tcoluna;
   document.form1.ords.value = coluna;
@@ -73,7 +73,7 @@ function js_label(liga,uak1,uak2){
     document.getElementById('divlabel').style.visibility='visible';
   }else{
     document.getElementById('divlabel').style.visibility='hidden';
-  }  
+  }
 }
 
 function js_labelconta(liga,uak1,uak2,uak3){
@@ -84,7 +84,7 @@ function js_labelconta(liga,uak1,uak2,uak3){
     document.getElementById('divlabelconta').style.visibility='visible';
   }else{
     document.getElementById('divlabelconta').style.visibility='hidden';
-  }  
+  }
 }
 function js_mostravalores(){
   obj = ordem.document.form1;
@@ -96,7 +96,7 @@ function js_mostravalores(){
       ord = obj[i].name.substring(6);
       valor   = obj[i+8].value;
       tipo    = obj[i+2].value;
-      
+
       if(tipo!=0 && valor!=""){
         coluna += sep+tipo+'-'+valor;
         sep= ",";
@@ -104,7 +104,7 @@ function js_mostravalores(){
     }
   }
   if(coluna!=""){
-    js_OpenJanelaIframe('top.corpo','db_iframe_mostratotal','func_mostratotal.php?coluna='+coluna,'Pesquisa',true,'20','390','400','300');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostratotal','func_mostratotal.php?coluna='+coluna,'Pesquisa',true,'20','390','400','300');
   }else{
     alert("Selecione algum movimento.");
   }
@@ -118,13 +118,13 @@ function js_mostravalores(){
 <?//=db_input('forma',40,'',true,'text',1);?>
 <center>
   <div align="left" id="divlabel" style="position:absolute; z-index:1; top:400; left:420; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; background-color:#999999; font-weight:bold;">
-      Pago:    <span id="uak1"></span><br> 
-      Anulado: <span id="uak2"></span><br> 
+      Pago:    <span id="uak1"></span><br>
+      Anulado: <span id="uak2"></span><br>
   </div>
   <div align="left" id="divlabelconta" style="position:absolute; z-index:1; top:400; left:420; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; background-color:#999999; font-weight:bold;">
-      Banco:   <span id="uak3"></span><br> 
-      Agência: <span id="uak4"></span><br> 
-      Conta Padrão:   <span id="uak5"></span><br> 
+      Banco:   <span id="uak3"></span><br>
+      Agência: <span id="uak4"></span><br>
+      Conta Padrão:   <span id="uak5"></span><br>
   </div>
 
 <table border="0" align="left" cellpadding='0' cellspacing='0'>

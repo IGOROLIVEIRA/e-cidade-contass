@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlibwebseller.php");
@@ -60,9 +60,9 @@ if( isset( $alterar ) ) {
   $sSqlSerieRegimeMat      = $oDaoSerieRegimeMat->sql_query(null, "ed11_i_codigo", null, $sWhereSerieRegimeMat);
   $rsSerieRegimeMat        = $oDaoSerieRegimeMat->sql_record($sSqlSerieRegimeMat);
   $iTotalSerieRegimeMat    = $oDaoSerieRegimeMat->numrows;
-  
+
   if( $iTotalSerieRegimeMat > 0 ) {
-    
+
     for( $iContador = 0; $iContador < $iTotalSerieRegimeMat; $iContador++ ) {
 
       $iSerie = db_utils::fieldsMemory($rsSerieRegimeMat, $iContador)->ed11_i_codigo;
@@ -70,25 +70,25 @@ if( isset( $alterar ) ) {
       if( $ed87_i_serieinicial == $iSerie ) {
         $lSerieInicialCompativel = true;
       }
-      
+
       if( $ed87_i_seriefinal == $iSerie ) {
         $lSerieFinalCompativel = true;
       }
     }
   }
-  
+
   if( !$lSerieInicialCompativel ) {
-    
+
     $sMensagem = "Etapa inicial não permitida para esta base curricular (Etapa selecionada: {$ed87_i_serieinicial}).";
     db_msgbox($sMensagem);
     db_redireciona("edu1_base002.php?chavepesquisa={$ed31_i_codigo}");
   } else if( !$lSerieFinalCompativel ) {
-    
+
     $sMensagem = "Etapa final não permitida para esta base curricular (Etapa selecionada: {$ed87_i_seriefinal}).";
     db_msgbox($sMensagem);
     db_redireciona("edu1_base002.php?chavepesquisa={$ed31_i_codigo}");
   }
-  
+
   $db_opcao = 2;
   $db_botao = true;
 
@@ -138,7 +138,7 @@ if( isset( $alterar ) ) {
 
 
 } else if( isset( $chavepesquisa ) ) {
-  
+
   $db_opcao  = 2;
   $db_opcao1 = 3;
   $campos    = "base.*,
@@ -168,10 +168,10 @@ var sParametros  = 'iBase=<?=$ed31_i_codigo?>&sBase=<?=$ed31_c_descr?>&iCurso=<?
 
 var sDisciplinaGlobal = '&sDisciplinaGlobal=<?=$sDisciplinaGlobal?>';
 
-top.corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
-top.corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>'
+CurrentWindow.corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
+CurrentWindow.corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>'
                                                          +'&ed31_c_descr=<?=$ed31_c_descr?>';
-top.corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>'
+CurrentWindow.corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>'
                                                          +'&ed31_c_descr=<?=$ed31_c_descr?>';
 </script>
  <?
@@ -257,11 +257,11 @@ if( isset( $alterar ) ) {
 
     var sDisciplinaGlobal = '&sDisciplinaGlobal=<?=$sDisciplinaGlobal?>';
 
-    top.corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
+    CurrentWindow.corpo.iframe_a2.location.href = 'edu1_disciplinaetapa001.php?' + sParametros + sDisciplinaGlobal;
 
-    top.corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
-    top.corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
-    top.corpo.iframe_a1.location.href = 'edu1_base002.php?chavepesquisa=<?=$ed31_i_codigo?>';
+    CurrentWindow.corpo.iframe_a3.location.href = 'edu1_escolabase001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
+    CurrentWindow.corpo.iframe_a4.location.href = 'edu1_baseato001.php?ed77_i_base=<?=$ed31_i_codigo?>&ed31_c_descr=<?=$ed31_c_descr?>';
+    CurrentWindow.corpo.iframe_a1.location.href = 'edu1_base002.php?chavepesquisa=<?=$ed31_i_codigo?>';
     </script>
     <?
   }

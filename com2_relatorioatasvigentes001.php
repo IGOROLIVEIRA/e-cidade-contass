@@ -114,7 +114,7 @@ require_once "dbforms/db_funcoes.php";
           return;
         }
 
-        js_OpenJanelaIframe( 'top.corpo',
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
                              'db_iframe_nome',
                              'func_nome.php?funcao_js=parent.oFornecedor.preenche.' + sFuncao,
                              'Pesquisa de Fornecedor', lMostra);

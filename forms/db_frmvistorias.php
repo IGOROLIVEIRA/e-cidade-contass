@@ -79,7 +79,7 @@ if (isset ($z01_numcgm) && $z01_numcgm != "") {
 ?>
 			<script>
     	   		if(!confirm("AVISO:\nCGM ja possui uma vistoria lançada para este ano\n\nDados da Vistoria:\nCódigo:<?=$y71_codvist?>\nTipo:<?=$y70_tipovist?>-<?=$y77_descricao?>\nDepartamento:<?=$y70_coddepto?>\n\nDeseja cadastrar uma nova Vistoria?")){
-        			top.corpo.location = 'fis1_vistorias001.php?cgm=1';
+        			CurrentWindow.corpo.location = 'fis1_vistorias001.php?cgm=1';
        			}
       		</script>
 <?
@@ -114,7 +114,7 @@ elseif (isset ($j01_matric) && $j01_matric != "") {
 ?>
 			<script>
       			if(!confirm("AVISO:\nMatricula ja possui uma vistoria lançada para este ano\n\nDados da Vistoria:\nCódigo:<?=$y71_codvist?>\nTipo:<?=$y70_tipovist?>-<?=$y77_descricao?>\nDepartamento:<?=$y70_coddepto?>\n\nDeseja cadastrar uma nova Vistoria?")){
-       				top.corpo.location = 'fis1_vistorias001.php?matric=1';
+       				CurrentWindow.corpo.location = 'fis1_vistorias001.php?matric=1';
       			}
      		</script>
 <?
@@ -156,7 +156,7 @@ elseif (isset ($q02_inscr) && $q02_inscr != "") {
 			db_fieldsmemory($teste, 0);
 ?><script>
        if(!confirm("AVISO:\nInscrição ja possui uma vistoria lançada para este ano\n\nDados da Vistoria:\nCódigo:<?=$y71_codvist?>\nTipo:<?=$y70_tipovist?>-<?=$y77_descricao?>\nDepartamento:<?=$y70_coddepto?>\n\nDeseja cadastrar uma nova Vistoria?")){
-        top.corpo.location = 'fis1_vistorias001.php?inscr=1';
+        CurrentWindow.corpo.location = 'fis1_vistorias001.php?inscr=1';
        }
       </script>
     <?
@@ -204,7 +204,7 @@ elseif (isset ($y80_codsani) && $y80_codsani != "") {
 		if ($clvistsanitario->numrows > 0) {
 ?><script>
         if(!confirm("AVISO:\nSanitário ja possui uma vistoria lançada para este ano\n\nDados da Vistoria:\nCódigo:<?=$y71_codvist?>\nTipo:<?=$y70_tipovist?>-<?=$y77_descricao?>\nDepartamento:<?=$y70_coddepto?>\n\nDeseja cadastrar uma nova Vistoria?")){
-         top.corpo.location = 'fis1_vistorias001.php?sani=1';
+         CurrentWindow.corpo.location = 'fis1_vistorias001.php?sani=1';
         }
        </script>
      <?

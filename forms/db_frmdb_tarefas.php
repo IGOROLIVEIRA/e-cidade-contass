@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -48,7 +48,7 @@ if(isset($opcao) && $opcao=="alterar"){
     if(isset($db_opcaoal)){
      $db_opcao=33;
     }
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -68,7 +68,7 @@ if(isset($opcao) && $opcao=="alterar"){
     <td nowrap title="<?=@$Tdb79_id_usuario?>">
        <?=@$Ldb79_id_usuario?>
     </td>
-    <td> 
+    <td>
 <?
 @db_input('db79_codigo',9,$db79_codigo,true,"hidden",$db_opcao);
 db_input('db79_id_usuario',9,$Idb79_id_usuario,true,'text',3," onchange='js_pesquisadb79_id_usuario(false);'");
@@ -82,7 +82,7 @@ db_input('nome',50,$Inome,true,'text',3,'')
     <td nowrap title="<?=@$Tdb79_tarefasit?>">
        <?=@$Ldb79_tarefasit?>
     </td>
-    <td> 
+    <td>
 <?
 $result=$cldb_tarefasit->sql_record($cldb_tarefasit->sql_query_file(null,"db80_codigo,db80_descr"));
 db_selectrecord("db79_tarefasit",$result,true,$db_opcao);
@@ -93,7 +93,7 @@ db_selectrecord("db79_tarefasit",$result,true,$db_opcao);
     <td nowrap title="<?=@$Tdb79_descr?>">
        <?=@$Ldb79_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db79_descr',2,55,$Idb79_descr,true,'text',$db_opcao,"")
 ?>
@@ -107,7 +107,7 @@ db_textarea('db79_descr',2,55,$Idb79_descr,true,'text',$db_opcao,"")
 <br><br><br>
      <?
         if(isset($db79_id_usuario)){
-         $sql_item = $cldb_tarefas->sql_query($db79_id_usuario,"*","db79_data,db79_hora asc","db79_id_usuario = $db79_id_usuario"); 
+         $sql_item = $cldb_tarefas->sql_query($db79_id_usuario,"*","db79_data,db79_hora asc","db79_id_usuario = $db79_id_usuario");
 	 $chavepri= array("db79_id_usuario"=>$db79_id_usuario,"db79_codigo"=>@$db79_codigo);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
  	 $cliframe_alterar_excluir->sql     = $sql_item;
@@ -115,13 +115,13 @@ db_textarea('db79_descr',2,55,$Idb79_descr,true,'text',$db_opcao,"")
 	 $cliframe_alterar_excluir->legenda="TAREFAS CADASTRADAS PARA O USUÁRIO";
 	 $cliframe_alterar_excluir->iframe_height ="220";
 	 $cliframe_alterar_excluir->iframe_width ="750";
-	 $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);    
+	 $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
         }
        ?>
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_db_tarefas','func_db_usuarios.php?funcao_js=parent.js_preenchepesquisa|id_usuario','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_tarefas','func_db_usuarios.php?funcao_js=parent.js_preenchepesquisa|id_usuario','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_db_tarefas.hide();

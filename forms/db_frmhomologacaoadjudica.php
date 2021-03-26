@@ -290,11 +290,11 @@ $clrotulo->label("l20_codigo");
         let opcao = "<?= $db_opcao?>";
 
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
                 '&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
         }else{
             if(document.form1.l202_licitacao.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
                 '&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
             }else{
                 document.form1.l202_licitacao.value = '';
@@ -342,9 +342,9 @@ $clrotulo->label("l20_codigo");
     }
   function js_pesquisa(homologacao=false){
         if(!homologacao){
-            js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=1&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=1&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
         }else{
-            js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=10&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=10&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
         }
   }
   function js_preenchepesquisa(chave){

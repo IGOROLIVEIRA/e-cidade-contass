@@ -276,7 +276,7 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
     echo "<script> document.form1.".$clbenstransfcodigo->erro_campo.".focus();</script>";
   }else{
     echo "<script>
-              top.corpo.iframe_benstransf.location.href='pat1_benstransf005.php?chavepesquisa=".@$t95_codtran."&db_param=$db_param';
+              CurrentWindow.corpo.iframe_benstransf.location.href='pat1_benstransf005.php?chavepesquisa=".@$t95_codtran."&db_param=$db_param';
             </script>";
   }
 }

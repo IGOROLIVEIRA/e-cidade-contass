@@ -197,8 +197,8 @@ if ( isset($chavepesquisa) && !isset($alterar) ) {
     parent.document.formaba.encerra.disabled       = false;
     parent.document.formaba.empprestaitem.disabled = false;
 
-    top.corpo.iframe_empprestaitem.location.href = 'emp1_empprestaitem001.php?tranca=true&e60_codemp=$e60_codemp&e46_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
-    top.corpo.iframe_encerra.location.href       = 'emp1_empprestaencerra.php?tranca=true&e60_codemp=$e60_codemp&e60_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
+    CurrentWindow.corpo.iframe_empprestaitem.location.href = 'emp1_empprestaitem001.php?tranca=true&e60_codemp=$e60_codemp&e46_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
+    CurrentWindow.corpo.iframe_encerra.location.href       = 'emp1_empprestaencerra.php?tranca=true&e60_codemp=$e60_codemp&e60_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
   }\n
 
   js_db_libera();

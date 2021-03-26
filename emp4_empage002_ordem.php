@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -117,15 +117,15 @@ if(isset($dtfi) && $dtfi !=''){
 $dbinner='';
 if(isset($e83_codtipo)){
   //rotina que pega os bancos
-  $sqlbanco = "select c63_banco 
-  from conplanoreduz  
-  inner join conplanoconta on c61_codcon=c63_codcon 
+  $sqlbanco = "select c63_banco
+  from conplanoreduz
+  inner join conplanoconta on c61_codcon=c63_codcon
   inner join empagetipo on e83_conta = c61_reduz
   where e83_codtipo = $e83_codtipo
   ";
   $resbanco = pg_query($sqlbanco);
   db_fieldsmemory($resbanco,0);
-  
+
   $dbinner = "  inner join pcfornecon on pc63_numcgm = z01_numcgm and pc63_banco = '$c63_banco' ";
 }
 //---------------------------------------------------------------------
@@ -133,26 +133,26 @@ if(isset($e83_codtipo)){
 if(isset($e83_codtipo) && $e83_codtipo != ''){
   $result09 =   $clempagetipo->sql_record($clempagetipo->sql_query_rec(null,'c61_codigo',"","e83_codtipo=$e83_codtipo"));
   db_fieldsmemory($result09,0);
-  $dbwhere .= " and o15_codigo = $c61_codigo"; 
+  $dbwhere .= " and o15_codigo = $c61_codigo";
 }
 /*rotina que traz o recurso do tipo fornecido*/
 
 //---------------------------------------------
 /*
-$sql03 = "select e82_codord 
+$sql03 = "select e82_codord
 from empage
 inner join empagemov    on empagemov.e81_codage     = empage.e80_codage
 inner join empord       on empord.e82_codmov        = empagemov.e81_codmov
 //left join empageconfche on empageconfche.e91_codmov = empagemov.e81_codmov
 //left join empageconf    on empageconf.e86_codmov    = empageconfche.e91_codcheque
-left join empageconf    on empageconf.e86_codmov    = empagemov.e81_codmov 
+left join empageconf    on empageconf.e86_codmov    = empagemov.e81_codmov
 where e80_codage = $e80_codage ";
 */
-$sql03 = "select e82_codord 
+$sql03 = "select e82_codord
 from empage
 inner join empagemov on empagemov.e81_codage  = empage.e80_codage
 inner join empord    on empord.e82_codmov     = empagemov.e81_codmov
-left join empageconf on empageconf.e86_codmov = empagemov.e81_codmov 
+left join empageconf on empageconf.e86_codmov = empagemov.e81_codmov
 where e80_codage = $e80_codage and e80_instit= " . db_getsession("DB_instit");
 
 //$result = $clpagordem->sql_record($sql03);
@@ -246,14 +246,14 @@ $numrows09= $clpagordem->numrows;
 }
 </style>
 <script>
-function js_marca(obj){ 
+function js_marca(obj){
   var OBJ = document.form1;
   for(i=0;i<OBJ.length;i++){
     if(OBJ.elements[i].type == 'checkbox' && OBJ.elements[i].disabled==false){
-      OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+      OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
     }
     if(OBJ.elements[i].checked==true){
-      js_colocaval(OBJ.elements[i]);      
+      js_colocaval(OBJ.elements[i]);
     }
   }
   return false;
@@ -261,21 +261,21 @@ function js_marca(obj){
 function js_confere(campo){
   erro     = false;
   erro_msg = '';
-  
+
   vlrgen= new Number(campo.value);
-  
-  
+
+
   if(isNaN(vlrgen)){
     erro = true;
   }
   nome = campo.name.substring(6);
-  
+
   vlrlimite = new Number(eval("document.form1.disponivel_"+nome+".value"));
   if(vlrgen > vlrlimite){
     erro_msg = "Valor digitado é maior do que o disponível!";
     erro=true;
-  }  
-  
+  }
+
   if(vlrgen == ''){
     eval("document.form1."+campo.name+".value = '0.00';");
   }
@@ -284,23 +284,23 @@ function js_confere(campo){
   }else{
     eval("document.form1.CHECK_"+nome+".checked=true");
   }
-  
+
   if(erro==false){
     eval("document.form1."+campo.name+".value = vlrgen.toFixed(2);");
-  }else{  
+  }else{
     if(erro_msg != ''){
       //alert(erro_msg);
     }
     eval("document.form1."+campo.name+".focus()");
     eval("document.form1."+campo.name+".value = vlrlimite.toFixed(2);");
     return false;
-  }  
-  
+  }
+
 }
 
 function js_colocaval(campo){
   if(campo.checked==true){
-    valor = new Number(eval('document.form1.disponivel_'+campo.value+'.value')); 
+    valor = new Number(eval('document.form1.disponivel_'+campo.value+'.value'));
     v = valor.toFixed(2);
     eval('document.form1.valor_'+campo.value+'.value='+v);
   }else{
@@ -318,7 +318,7 @@ function js_padrao(val){
       checa = eval("document.form1.CHECK_"+ord+".checked");
       if(checa==false){
         continue;
-      } 
+      }
       for(q=0; q<OBJ.elements[i].options.length; q++){
         if(OBJ.elements[i].options[q].value==val){
           OBJ.elements[i].options[q].selected=true;
@@ -333,8 +333,8 @@ function js_padrao(val){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr> 
-<td height="100%" align="left" valign="top" bgcolor="#CCCCCC"> 
+<tr>
+<td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
 <form name="form1" method="post" action="">
 <center>
 <table  class='bordas'>
@@ -361,10 +361,10 @@ for ($i=0; $i<$numrows09; $i++) {
   db_fieldsmemory($result09,$i,true);
 
 	//echo "<br><br><br><br><br>";
-  
+
   $x= "e60_numemp_$e50_codord";
   $$x = $e60_numemp;
-  
+
   //--------------------------------------
   // rotina que verifica se tem movimento para a ordem nesta agenda.. se tiver ele marca o campo checkbox
 	$desativado=false;
@@ -376,7 +376,7 @@ for ($i=0; $i<$numrows09; $i++) {
 	//db_criatabela($result01);
   if ($clempagemov->numrows > 0) {
     db_fieldsmemory($result01,0,true);
-		
+
     if (trim($e86_codmov)=="" or trim($e90_correto) == "f") {
       $xeque = "checked";
 		} else {
@@ -397,7 +397,7 @@ for ($i=0; $i<$numrows09; $i++) {
       $passou = true;
     }
 
-    
+
     //---------------------------------------------------------
     //pega o tipo do movimento
     $result01 = $clempagepag->sql_record($clempagepag->sql_query_file($e81_codmov,null,"e85_codtipo"));
@@ -405,7 +405,7 @@ for ($i=0; $i<$numrows09; $i++) {
       db_fieldsmemory($result01,0,true);
       $x= "e83_codtipo_$e50_codord";
       $$x = $e85_codtipo;
-      
+
       $dbwhere02 = " or e83_codtipo=$e85_codtipo";
     }
     //-------------------------------------------------------------
@@ -423,29 +423,29 @@ for ($i=0; $i<$numrows09; $i++) {
   //coloca o valor com campo
   $x= "valor_$e50_codord";
   $$x = number_format($e81_valor,"2",".","");
-  
+
   // rotina que verifica se existe valor disponível
 	// comentado por evandro em 11/07/2007, pois ordens que tinham cheques sem pagar estavam aparecendo para agendar novamente
-	
 
-// sem e86_codmov is null	
+
+// sem e86_codmov is null
 //  $result03  = $clempagemov->sql_record($clempagemov->sql_query_ord(null,"e82_codord,sum(e81_valor) as tot_valor",""," e82_codord = $e50_codord and                        e80_instit= " . db_getsession("DB_instit") . " group by e82_codord "));
 //  $result03  = $clempagemov->sql_record($clempagemov->sql_query_ord(null,"e82_codord,sum(e81_valor) as tot_valor",""," e82_codord = $e50_codord and e86_codmov is null and e80_instit= " . db_getsession("DB_instit") . " group by e82_codord "));
 
   $sql3 = "	select	e81_codmov,
 										e81_valor as e81_valor_mov
-						from empagemov 
-						inner join empage on empage.e80_codage = empagemov.e81_codage 
+						from empagemov
+						inner join empage on empage.e80_codage = empagemov.e81_codage
 						inner join empord on empord.e82_codmov = empagemov.e81_codmov
-						where		e82_codord = $e50_codord and 
+						where		e82_codord = $e50_codord and
 										e80_instit = " . db_getsession("DB_instit");
 	$result03  = pg_exec($sql3) or die($sql3);
   $numrows03 = pg_numrows($result03);
 
   $tot_valor = 0;
-	
+
   if ($numrows03 > 0) {
-		
+
 		for ($reg=0; $reg < pg_numrows($result03); $reg++) {
 			db_fieldsmemory($result03,$reg);
 
@@ -457,7 +457,7 @@ for ($i=0; $i<$numrows09; $i++) {
 			if (pg_numrows($result04) == 0) {
 				$tot_valor += $e81_valor_mov;
 			} else {
-				
+
 				// se foi emitido cheque pelo botao emitir cheque (Manutencao de Agenda) e nao está pago este cheque
 				$sql6 = "	select	empageconfche.e91_codcheque,
 													empageconfche.e91_valor,
@@ -475,13 +475,13 @@ for ($i=0; $i<$numrows09; $i++) {
 						if ($k12_codmov == "") {
 							$tot_valor += $e91_valor;
 						}
-						
+
 					}
 
 				} else {
 
           // se foi marcado como cheque/transmissao/dinheiro (Manutencao de Pagamentos)
-					$sql6 = "	select * from empagemovforma 
+					$sql6 = "	select * from empagemovforma
 										inner join empagemov on e81_codmov = e97_codmov
 										where e97_codmov = $e81_codmov";
 					//and e97_codforma = 3";
@@ -492,30 +492,30 @@ for ($i=0; $i<$numrows09; $i++) {
 					}
 
 				}
-			
+
 //						left join empageconfche on empageconfche.e91_codmov = empagemov.e81_codmov
-//						left join empageconf		on empageconf.e86_codmov = empageconfche.e91_codmov 
+//						left join empageconf		on empageconf.e86_codmov = empageconfche.e91_codmov
 //						left join corconf				on empageconfche.e91_codcheque = corconf.k12_codmov
 
-//						case when k12_codmov is null then true else e86_codmov is null end and 
+//						case when k12_codmov is null then true else e86_codmov is null end and
 
 			}
 
 //////////			echo "$reg - $e81_codmov - $e81_valor_mov - " . pg_numrows($result04) . "<br>";
 
 		}
- 
+
 //////////    echo "<br>tot_valor: $tot_valor<br>";
-		
+
   } else {
     $tot_valor ='0.00';
   }
-  
+
   $total = round((float) $e53_valor,2) - round((float) $e53_vlrpag,2) - round((float) $e53_vlranu,2);
-  
+
 	$e81_valor = round($e81_valor,2);
 	$tot_valor = round($tot_valor,2);
-  
+
 //////////  echo "<br>total: $total - tot_valor: $tot_valor - e81_valor: $e81_valor<br>";
 
   if ($total == $tot_valor) {
@@ -528,14 +528,14 @@ for ($i=0; $i<$numrows09; $i++) {
 //		}
   }
   //echo "<br><br>$e50_codord --- $disponivel = (float)$total - ((float)$tot_valor - (float)$e81_valor);";
-  
+
   $x= "disponivel_$e50_codord";
   $$x = number_format($disponivel,"2",".","");
 
 //////////	echo "desativado: " . ($desativado == true?"true":"false") . "<br>";
 
 	//echo "disponivel: $disponivel<br>";
-	
+
   //=-------------------------------------------
   if ($disponivel == 0 || $disponivel < 0  ) {
     // echo $e50_codord." sem valor disponivel!";
@@ -545,9 +545,9 @@ for ($i=0; $i<$numrows09; $i++) {
       continue;
     }
   }
-  
+
   //          echo "$disponivel = $total - ($tot_valor - $e81_valor);<br><br>";
-  
+
   /*
   CÓDIGO COMENTADO POR MARLON
   BUSCAVA TODAS AS CONTAS QNDO ERA RP PQ EM 2005 NÃO TINHA RECURSO DE CONTAS DE 2004
@@ -596,7 +596,7 @@ for ($i=0; $i<$numrows09; $i++) {
 			$$t = $codtipo;
 		}
 	}
-  
+
   //rotina que verifica se o fornecedor possui conta cadastrada para pagamento eletrônico
   $outr = '';
   $result = $clpagordemconta->sql_record($clpagordemconta->sql_query($e50_codord,"e49_numcgm"));
@@ -607,7 +607,7 @@ for ($i=0; $i<$numrows09; $i++) {
   } else {
     $numcgm = $z01_numcgm;
   }
-  
+
   $result78 = $clpcfornecon->sql_record($clpcfornecon->sql_query_padrao(null,"pc63_banco,pc63_agencia,pc63_conta",'',"pc63_numcgm=$numcgm"));
   if ($clpcfornecon->numrows > 0) {
     db_fieldsmemory($result78,0);
@@ -616,7 +616,7 @@ for ($i=0; $i<$numrows09; $i++) {
     $pc63_banco		=	'0';
     $pc63_agencia =	'0';
   }
-  
+
   ?>
   <tr>
   <td class='bordas' align='right'
@@ -628,11 +628,11 @@ for ($i=0; $i<$numrows09; $i++) {
   <td class='bordas' align='right' title="Data de emissão:<?=$e50_data?>"><small><?=$outr?><?=$e50_codord?></small></td>
   <td class='bordas' align='right'><small><?=$o15_descr?></small></td>
   <td class='bordas' label="Numcgm:<?=$z01_numcgm?>" style='cursor:help'  id="ord_<?=$e50_codord?>"
-  onMouseOut='parent.js_labelconta(false);' onMouseOver="parent.js_labelconta(true,'<?=$pc63_banco?>','<?=$pc63_agencia?>','<?=$pc63_conta?>');"	  
+  onMouseOut='parent.js_labelconta(false);' onMouseOver="parent.js_labelconta(true,'<?=$pc63_banco?>','<?=$pc63_agencia?>','<?=$pc63_conta?>');"
   ><small><?=$z01_nome?>  </small></td>
   <td class='bordas'><small><input type='button' name='con_<?=$e50_codord?>' value="Conta" onclick="js_conta('<?=$numcgm?>');">  </small></td>
   <td class='bordas' align='right'  style='cursor:help' onMouseOut='parent.js_label(false);' onMouseOver="parent.js_label(true,'<?=$e53_vlrpag?>','<?=$e53_vlranu?>');"><small><?=$e53_valor?> </small></td>
-  
+
   <td class='bordas' align='right'> <small><?=db_input("disponivel_$e50_codord",6,$Iz01_numcgm,true,'text',3)?></small></td>
   <td class='bordas' align='right'> <small><?=db_input("valor_$e50_codord",6,$Ie53_valor,true,'text',($desativado == true?3:$db_opcao),"onChange='js_confere(this);'")?></small></td>
   <td class='bordas' align='right'><small><?=db_select("e83_codtipo_$e50_codord",$arr,true,1)?></small></td>
@@ -657,6 +657,6 @@ for ($i=0; $i<$numrows09; $i++) {
 </html>
 <script>
 function js_conta(cgm){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecon','com1_pcfornecon001.php?novo=true&z01_numcgm='+cgm,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecon','com1_pcfornecon001.php?novo=true&z01_numcgm='+cgm,'Pesquisa',true);
 }
 </script>

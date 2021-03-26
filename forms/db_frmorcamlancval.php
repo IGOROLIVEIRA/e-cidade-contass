@@ -563,7 +563,7 @@ $clrotulo = new rotulocampo;
                                 <br><br>
                                     <b>Campo(s) com * preenchimento obrigatório</b>
                                 <br><br>
-                                    
+
                                 <input name='".($db_opcao==1?"incluir":"alterar")."' type='submit' id='db_opcao' value='".($db_opcao==1?"Incluir":"Alterar")."'  ".($db_botao==false?"disabled":"")." onclick='return js_buscarcod();'>
                                 <input name='voltar' type='button' id='voltar' value='Voltar'  onclick='document.location.href=\"com1_selorc001.php?sol=$sol\"'>
                                 <input name='importar' type='button' id='importar' value='Valores Unit.'  onclick='elementos.js_importar(true);elementos.js_somavalor();'>
@@ -650,9 +650,9 @@ $clrotulo = new rotulocampo;
                 var vlrplanilha = oItem.valorunitario;
                 var vlrtotalitem = oItem.quantidade * oItem.valorunitario;
 
-                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlrunitem+".value = '"+ vlrplanilha.toFixed(4) +"'");
-                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+obsitem+".value = '"+ oItem.marca +"'");
-                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlritem+".value = '"+ vlrtotalitem.toFixed(2) +"'");
+                eval("CurrentWindow.corpo.document.getElementById('elementos').contentDocument.form1."+vlrunitem+".value = '"+ vlrplanilha.toFixed(4) +"'");
+                eval("CurrentWindow.corpo.document.getElementById('elementos').contentDocument.form1."+obsitem+".value = '"+ oItem.marca +"'");
+                eval("CurrentWindow.corpo.document.getElementById('elementos').contentDocument.form1."+vlritem+".value = '"+ vlrtotalitem.toFixed(2) +"'");
             })
             //setando importado para orçamento;
             importado.value = 2;

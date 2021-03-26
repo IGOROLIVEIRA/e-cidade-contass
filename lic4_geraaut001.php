@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -42,7 +42,7 @@ if ($oDaoParam->numrows > 0) {
   if ($oParam->l12_escolherprocesso == 't') {
     $lSelecionaPc = 't';
   }
-  
+
 }
 $db_botao  = true;
 $clrotulo  = new rotulocampo;
@@ -57,7 +57,7 @@ $clrotulo->label("l20_codigo");
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
 <script>
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -73,7 +73,7 @@ $clrotulo->label("l20_codigo");
         <td  align="left" nowrap title="<?=$Tl20_codigo?>">
           <b>
             <?db_ancora('Licitação',"js_pesquisa_liclicita(true);",1);?>:
-          </b> 
+          </b>
         </td>
         <td align="left" nowrap>
           <?
@@ -109,30 +109,30 @@ $clrotulo->label("l20_codigo");
 
 function js_pesquisa_liclicita(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&validasaldo=1&funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&validasaldo=1&funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
   }else{
-     if(document.form1.l20_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&validasaldo=1&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+     if(document.form1.l20_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&validasaldo=1&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
-       document.form1.l20_codigo.value = ''; 
+       document.form1.l20_codigo.value = '';
      }
   }
 }
 function js_mostraliclicita(chave,erro){
-  if(erro==true){ 
+  if(erro==true){
     document.form1.emite2.disabled  = true;
     alert("Licitacao ja julgada,revogada ou com autorizacao ativa.");
-    document.form1.l20_codigo.value = ''; 
-    document.form1.l20_codigo.focus(); 
+    document.form1.l20_codigo.value = '';
+    document.form1.l20_codigo.focus();
   }else{
-    document.form1.l20_codigo.value = chave; 
+    document.form1.l20_codigo.value = chave;
     document.form1.emite2.disabled  = false;
 
 	}
 }
 function js_mostraliclicita1(chave1){
 
-   document.form1.l20_codigo.value = chave1;  
+   document.form1.l20_codigo.value = chave1;
    document.form1.emite2.disabled  = false;
    db_iframe_liclicita.hide();
 
@@ -142,7 +142,7 @@ function js_mostraliclicita1(chave1){
 if(isset($ordem)){
   echo "<script>
        js_emite();
-       </script>";  
+       </script>";
 }
 $func_iframe = new janela('db_iframe','');
 $func_iframe->posX=1;

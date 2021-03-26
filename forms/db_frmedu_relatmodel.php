@@ -234,7 +234,7 @@ function js_init() {
   js_orientacao();
 }
 function js_pesquisa() {
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
 		              'db_iframe_edu_relatmodel',
 		              'func_edu_relatmodel.php?funcao_js=parent.js_preenchepesquisa|ed217_i_codigo',
 		              'Pesquisa',

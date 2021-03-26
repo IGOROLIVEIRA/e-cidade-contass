@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -50,7 +50,7 @@ $clrotulo->label("fa06_i_matersaude");
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
 <script>
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -97,7 +97,7 @@ $clrotulo->label("fa06_i_matersaude");
         </td>
       </tr>
 
-      <tr> 
+      <tr>
         <td>
           <fieldset style="width:100%"><legend align='left'><b>Medicamentos</b></legend>
             <table  border="0"  align="center" width='100%'>
@@ -127,7 +127,7 @@ $clrotulo->label("fa06_i_matersaude");
                 </td>
               </tr>
             </table>
-          </fieldset>    
+          </fieldset>
         </td>
       </tr>
     </table>
@@ -202,7 +202,7 @@ function js_pesquisafa01_i_medicamento(mostra){
   else
   {
     if(document.form1.fa01_i_codigo.value != '')
-    { 
+    {
       js_OpenJanelaIframe('','db_iframe_far_matersaude','func_far_matersaude.php?'+prescricao+'pesquisa_chave='+document.form1.fa01_i_codigo.value+'&funcao_js=parent.js_mostramatersaude','Pesquisa',false);
     }
     else
@@ -211,11 +211,11 @@ function js_pesquisafa01_i_medicamento(mostra){
 }
 
 function js_mostramatersaude(chave,erro){
-  document.form1.m60_descr.value = chave; 
+  document.form1.m60_descr.value = chave;
   if(erro==true)
-  { 
-    document.form1.fa01_i_codigo.focus(); 
-    document.form1.fa01_i_codigo.value = ''; 
+  {
+    document.form1.fa01_i_codigo.focus();
+    document.form1.fa01_i_codigo.value = '';
   }
   else
   {
@@ -281,26 +281,26 @@ function js_excluir_item_programa(){
 
 function js_pesquisafa12_i_programa(mostra){
   if(mostra==true)
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_programa','func_far_programa.php?funcao_js=parent.js_mostrafar_programa1|fa12_i_codigo|fa12_c_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_programa','func_far_programa.php?funcao_js=parent.js_mostrafar_programa1|fa12_i_codigo|fa12_c_descricao','Pesquisa',true);
   else
   {
      if(document.form1.fa12_i_codigo.value != '')
-     { 
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_programa','func_far_programa.php?pesquisa_chave='+document.form1.fa12_i_codigo.value+'&funcao_js=parent.js_mostrafar_programa','Pesquisa',false);
+     {
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_programa','func_far_programa.php?pesquisa_chave='+document.form1.fa12_i_codigo.value+'&funcao_js=parent.js_mostrafar_programa','Pesquisa',false);
      }
      else
      {
-       document.form1.fa12_i_codigo.value = ''; 
+       document.form1.fa12_i_codigo.value = '';
      }
   }
 }
 
 function js_mostrafar_programa(chave,erro){
-  document.form1.fa12_c_descricao.value = chave; 
+  document.form1.fa12_c_descricao.value = chave;
   if(erro==true)
-  { 
-    document.form1.fa12_i_codigo.focus(); 
-    document.form1.fa12_i_codigo.value = ''; 
+  {
+    document.form1.fa12_i_codigo.focus();
+    document.form1.fa12_i_codigo.value = '';
   }
   else
     document.form1.lancar_programa.onclick = js_incluir_item_programa;
@@ -336,7 +336,7 @@ function js_validadata(){
     document.form1.data_inicio.focus();
     return false;
   }
-                                   
+
   return true;
 }
 
@@ -353,22 +353,22 @@ function js_validaenvio(){
 }
 
 function js_mandadados(){
- 
+
   if(js_validaenvio())
-  { 
+  {
     vir = '';
     datas = '&datas='+document.form1.data_inicio.value+','+document.form1.data_fim.value;
     programas = 'programas=';
     medicamentos = '&medicamentos=';
     nomes_programas = '&nomes_programas=';
- 
+
     for(x=0;x<document.form1.select_programa.length;x++)
     {
       programas += vir + document.form1.select_programa.options[x].value;
       nomes_programas += vir + document.form1.select_programa.options[x].innerHTML;
       vir = ',';
     }
-    
+
     vir = '';
     for(x=0;x<document.form1.select_medicamento.length;x++)
     {

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
   require_once("libs/db_stdlib.php");
@@ -65,7 +65,7 @@
             ?>
           </td>
           <td>
-            <? 
+            <?
               db_input('ob04_codobra',10,$Iob04_codobra,true,'text',3," onchange='js_pesquisaObra(false);'");
               db_input('ob01_nomeobra',40,$Iob01_nomeobra,true,'text',3,'');
             ?>
@@ -139,13 +139,13 @@
 
       if ($F('datainicial') == ''){
 
-        alert(_M(MENSAGEM + 'data_inicial_nao_informado'));  
+        alert(_M(MENSAGEM + 'data_inicial_nao_informado'));
         return false;
       }
 
       if ($F('datafinal') == ''){
 
-        alert(_M(MENSAGEM + 'data_final_nao_informado'));  
+        alert(_M(MENSAGEM + 'data_final_nao_informado'));
         return false;
       }
 
@@ -158,11 +158,11 @@
       var oAjax = new Ajax.Request(sURL,
                                   {
                                     method    : 'POST',
-                                    parameters: 'json=' + Object.toJSON(oParam), 
+                                    parameters: 'json=' + Object.toJSON(oParam),
                                     onComplete: function(oAjax){
 
                                       var oRetorno = eval("("+oAjax.responseText+")");
-                                      
+
                                       alert(oRetorno.sMessage.urlDecode());
 
                                       if (oRetorno.iStatus == "1") {
@@ -182,7 +182,7 @@
       var oAjax = new Ajax.Request(sURL,
                                   {
                                     method    : 'POST',
-                                    parameters: 'json=' + Object.toJSON(oParam), 
+                                    parameters: 'json=' + Object.toJSON(oParam),
                                     onComplete: function(oAjax){
 
                                       var oRetorno = eval("("+oAjax.responseText+")");
@@ -195,14 +195,14 @@
 
                                       var aData = oAlvara.ob04_dtvalidade.split('-');
                                       var dDate = new Date(+aData[0], +aData[1]-1, +aData[2]+1);
-                                      
+
                                       $('datainicial').value = dDate.toLocaleDateString().replace(/(\d{2})-(\d{2})-(\d+)/, "$1/$2/$3");
                                     }
                                   });
     }
 
     function js_mostraObra(iCodObra,sNomeObra){
-      
+
       $('processar').enable();
       $('ob04_codobra').value  = iCodObra;
       $('ob01_nomeobra').value = sNomeObra;
@@ -211,7 +211,7 @@
     }
 
     function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_obrasalvara','func_obrasalvara.php?funcao_js=parent.js_mostraObra|ob04_codobra|ob01_nomeobra','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obrasalvara','func_obrasalvara.php?funcao_js=parent.js_mostraObra|ob04_codobra|ob01_nomeobra','Pesquisa',true);
     }
   </script>
   <?php

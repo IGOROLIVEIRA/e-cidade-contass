@@ -320,7 +320,7 @@ if (isset ($incluir) || isset ($alterar) || isset ($excluir) || isset ($autori_i
     // variavel $tot_valor é gerada no formulário
     echo "
                 <script>
-        top.corpo.iframe_empautidot.js_calc('$tot_valor');\n
+        CurrentWindow.corpo.iframe_empautidot.js_calc('$tot_valor');\n
                 </script>
        ";
 

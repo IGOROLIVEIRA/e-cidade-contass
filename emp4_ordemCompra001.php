@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -56,12 +56,12 @@ db_postmemory($HTTP_POST_VARS);
     <script>
         function js_emite() {
             if (document.form1.e60_numcgm.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + document.form1.e60_numcgm.value + '&funcao_js=parent.js_mostracgmtesta', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + document.form1.e60_numcgm.value + '&funcao_js=parent.js_mostracgmtesta', 'Pesquisa', false);
             } else if (document.form1.e60_codemp.value != '') {
                 codemp = document.form1.e60_codemp.value;
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empconsulta002', 'emp1_empconsulta002.php?e60_codemp=' + codemp + '&funcao_js=parent.js_mostracodemp|e60_numemp', 'Pesquisa', true);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empconsulta002', 'emp1_empconsulta002.php?e60_codemp=' + codemp + '&funcao_js=parent.js_mostracodemp|e60_numemp', 'Pesquisa', true);
             } else if (document.form1.e60_numemp.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenhotesta', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenhotesta', 'Pesquisa', false);
             }
         }
         function js_mostracgmtesta(erro, chave) {
@@ -186,10 +186,10 @@ db_postmemory($HTTP_POST_VARS);
     }
     function js_pesquisae60_numcgm(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true);
         } else {
             if (document.form1.e60_numcgm.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + document.form1.e60_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + document.form1.e60_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
             } else {
                 document.form1.z01_nome.value = '';
             }
@@ -210,10 +210,10 @@ db_postmemory($HTTP_POST_VARS);
     //----------------------------------------------------------------------
     function js_pesquisae60_numemp(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
         } else {
             if (document.form1.e60_numemp.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
             } else {
                 document.form1.e60_numemp.value = '';
             }
@@ -281,10 +281,10 @@ db_postmemory($HTTP_POST_VARS);
     //-----------------------------------------------------
     function js_pesquisae60_codemp(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
         } else {
             if (document.form1.e60_codemp.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&pesquisa_chave=' + document.form1.e60_codemp.value + '&funcao_js=parent.js_mostraempempenho3&lPesquisaPorCodigoEmpenho=true', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&pesquisa_chave=' + document.form1.e60_codemp.value + '&funcao_js=parent.js_mostraempempenho3&lPesquisaPorCodigoEmpenho=true', 'Pesquisa', false);
             } else {
                 document.form1.e60_codemp.value = '';
             }

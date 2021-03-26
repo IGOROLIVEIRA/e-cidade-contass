@@ -26,7 +26,7 @@ db_postmemory($HTTP_POST_VARS);
       <td >&nbsp;</td>
       <td >&nbsp;</td>
     </tr>
-    <tr> 
+    <tr>
       <td align="left" nowrap title="<?=$Tpc10_numero?>"> <? db_ancora(@$Lpc10_numero,"js_pesquisapc10_numero(true);",1);?></td>
       <td align="left" nowrap>
       <?
@@ -57,10 +57,10 @@ function js_verifica(){
 }
 function js_pesquisapc10_numero(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero','Pesquisa',true);
   }else{
     if(document.form1.pc10_numero.value!=""){
-      js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem&pesquisa_chave='+document.form1.pc10_numero.value,'Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem&pesquisa_chave='+document.form1.pc10_numero.value,'Pesquisa',false);
     }else{
       document.form1.pc10_numero.value = "";
     }

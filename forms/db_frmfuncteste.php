@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -35,7 +35,7 @@ $clfuncteste->rotulo->label();
     <td nowrap title="<?=@$Tfuncant?>">
        <?=@$Lfuncant?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('funcant',6,$Ifuncant,true,'text',3,"")
 ?>
@@ -45,7 +45,7 @@ db_input('funcant',6,$Ifuncant,true,'text',3,"")
     <td nowrap title="<?=@$Tdescrfunc?>">
        <?=@$Ldescrfunc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('descrfunc',40,$Idescrfunc,true,'text',3,"")
 ?>
@@ -55,7 +55,7 @@ db_input('descrfunc',40,$Idescrfunc,true,'text',3,"")
     <td nowrap title="<?=@$Tpadraoant?>">
        <?=@$Lpadraoant?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('padraoant',4,$Ipadraoant,true,'text',$db_opcao,"")
 ?>
@@ -65,7 +65,7 @@ db_input('padraoant',4,$Ipadraoant,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tfuncnova?>">
        <?=@$Lfuncnova?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('funcnova',5,$Ifuncnova,true,'text',$db_opcao,"")
 ?>
@@ -78,7 +78,7 @@ db_input('funcnova',5,$Ifuncnova,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_functeste','func_functeste.php?funcao_js=parent.js_preenchepesquisa|funcant|descrfunc','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_functeste','func_functeste.php?funcao_js=parent.js_preenchepesquisa|funcant|descrfunc','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_functeste.hide();

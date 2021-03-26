@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -46,20 +46,20 @@ $sWhere      .= " and tipoproc.p51_tipoprocgrupo = 1 ";
 
 if (isset($oGet->codproc) && !empty($oGet->codproc)  && !isset($oGet->numero) ) {
   $sWhere .= " and p58_codproc = {$oGet->codproc}";
-} 
+}
 
 if (isset($oGet->numero) &&  !empty($oGet->numero) ) {
-	
+
 	$aNumeroProcesso = explode("/", $oGet->numero);
 	$iAno            = db_getsession("DB_anousu");
 	$iNumeroProcesso = $aNumeroProcesso[0];
-	
+
 	if (count($aNumeroProcesso) > 1) {
-		
+
 		$iAno = $aNumeroProcesso[1];
 	}
-	
-	
+
+
 	$sWhere .= " and p58_numero = '{$iNumeroProcesso}' and p58_ano = {$iAno} ";
 }
 
@@ -81,7 +81,7 @@ $sProcessoPrincipal = '';
 $oProcesso = db_utils::fieldsMemory($rsBuscaCodigoProcesso, 0);
 
 if ($oProcesso->processo_principal != '') {
-  
+
   $sProcessoPrincipal = " - <b>(Apensado ao processo {$oProcesso->processo_principal}) </b>";
 }
 
@@ -91,7 +91,7 @@ $oLicitacao         = $oProcessoProtocolo->getLicitacao();
 $sCodigoLicitacao   = "";
 $iCodigoSequencialLicitacao = 0;
 if ($oLicitacao) {
-  
+
   $sCodigoLicitacao = "{$oLicitacao->getEdital()}/{$oLicitacao->getAno()}";
   $iCodigoSequencialLicitacao = $oLicitacao->getCodigo();
 }
@@ -104,7 +104,7 @@ if ($oLicitacao) {
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta http-equiv="Expires" CONTENT="0">
-  <?php 
+  <?php
     db_app::load('scripts.js, prototype.js');
     db_app::load('estilos.css, tab.style.css');
   ?>
@@ -140,7 +140,7 @@ if ($oLicitacao) {
       </tr>
       <tr>
         <td class='negrito'>
-          Data: 
+          Data:
         </td>
         <td class='dados'>
           <?php echo db_formatar($oProcesso->p58_dtproc, 'd')?>
@@ -153,7 +153,7 @@ if ($oLicitacao) {
         </td>
       </tr>
       <tr>
-        <td class='negrito'> 
+        <td class='negrito'>
           Tipo do Processo:
         </td>
         <td class='dados'>
@@ -169,16 +169,16 @@ if ($oLicitacao) {
         </td>
       </tr>
       <tr>
-        <td class='negrito'> 
+        <td class='negrito'>
           Departamento:
         </td>
         <td class='dados' colspan="3">
           <?php echo "{$oProcesso->p58_coddepto} - $oProcesso->descrdepto"?>
         </td>
-        
+
       </tr>
       <tr>
-        <td class='negrito'> 
+        <td class='negrito'>
           Titular do Processo:
         </td>
         <td class='dados' colspan="3">
@@ -186,7 +186,7 @@ if ($oLicitacao) {
         </td>
       </tr>
       <tr>
-        <td class='negrito'> 
+        <td class='negrito'>
           Requerente:
         </td>
         <td class='dados' colspan="3">
@@ -194,7 +194,7 @@ if ($oLicitacao) {
         </td>
       </tr>
       <tr>
-        <td class='negrito'> 
+        <td class='negrito'>
           Atendente:
         </td>
         <td class='dados' colspan="3">
@@ -202,7 +202,7 @@ if ($oLicitacao) {
         </td>
       </tr>
       <tr>
-        <td class='negrito'> 
+        <td class='negrito'>
           Instituição:
         </td>
         <td class='dados' colspan="3" >
@@ -210,7 +210,7 @@ if ($oLicitacao) {
         </td>
       </tr>
       <tr id="trObservacaoInicial">
-        <td class='negrito'> 
+        <td class='negrito'>
           Observações:
         </td>
         <td class='dados' colspan="3">
@@ -221,16 +221,16 @@ if ($oLicitacao) {
   </fieldset>
   <fieldset >
     <legend class='negrito'>Detalhes do Processo</legend>
-    <?php 
-    
+    <?php
+
       $oVerticalTab = new verticalTab('detalhesProcesso', 350);
       $sGetUrl      = "codigo_processo={$oProcesso->p58_codproc}";
-          
-      $oVerticalTab->add('dadosMovimentações', 'Movimentações', 
-                         "pro3_listamovimentacoesprocesso.php?{$sGetUrl}");  
-      
+
+      $oVerticalTab->add('dadosMovimentações', 'Movimentações',
+                         "pro3_listamovimentacoesprocesso.php?{$sGetUrl}");
+
       if ($bPossuiApensado) {
-        
+
         $oVerticalTab->add('dadosApensados', 'Apensados',
         									 "pro3_listaprocessoapensado.php?{$sGetUrl}");
       }
@@ -241,9 +241,9 @@ if ($oLicitacao) {
 
       $oVerticalTab->add('dadosImprimir', 'Imprimir',
           							 "pro3_imprimirconsultaprocesso.php?{$sGetUrl}&processo_principal={$oProcesso->processo_principal}&p58_numero={$oProcesso->p58_numero}&p58_ano={$oProcesso->p58_ano}");
-      
+
       $oVerticalTab->show();
-                         
+
     ?>
   </fieldset>
 </body>
@@ -252,13 +252,13 @@ if ($oLicitacao) {
 <script>
 
 /**
- * Função criada para mover o campo observação de acordo com a 
+ * Função criada para mover o campo observação de acordo com a
  * resolução do usuário.
  */
 function js_verificarResolucaoUsuario() {
-  
+
   var iClientWidth = new Number(document.body.clientWidth);
-  
+
   if (iClientWidth > 800) {
 
     /**
@@ -296,12 +296,12 @@ function js_verificarResolucaoUsuario() {
 function consultaLicitacao(iCodigoLicitacao) {
 
   if (iCodigoLicitacao == 0) {
-    
+
     alert("Este processo não possui licitação vinculada.");
     return false;
   }
   var sURLLicitacao = "lic3_licitacao002.php?l20_codigo="+iCodigoLicitacao
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_licitacao'+iCodigoLicitacao, sURLLicitacao, 'Consulta de Licitação', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_licitacao'+iCodigoLicitacao, sURLLicitacao, 'Consulta de Licitação', true);
 }
 
 js_verificarResolucaoUsuario();

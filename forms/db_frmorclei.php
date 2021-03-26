@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
@@ -35,7 +35,7 @@ $clorclei->rotulo->label();
     <td nowrap title="<?=@$To45_codlei?>">
        <?=@$Lo45_codlei?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o45_codlei',4,$Io45_codlei,true,'text',3,"")
 ?>
@@ -45,7 +45,7 @@ db_input('o45_codlei',4,$Io45_codlei,true,'text',3,"")
     <td nowrap title="<?=@$To45_numlei?>">
        <?=@$Lo45_numlei?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o45_numlei',30,$Io45_numlei,true,'text',$db_opcao,"")
 ?>
@@ -55,7 +55,7 @@ db_input('o45_numlei',30,$Io45_numlei,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To45_descr?>">
        <?=@$Lo45_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('o45_descr',4,55,$Io45_descr,true,'text',$db_opcao,"")
 ?>
@@ -65,7 +65,7 @@ db_textarea('o45_descr',4,55,$Io45_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To45_dataini?>">
        <?=@$Lo45_dataini?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('o45_dataini',@$o45_dataini_dia,@$o45_dataini_mes,@$o45_dataini_ano,true,'text',$db_opcao,"")
 ?>
@@ -75,7 +75,7 @@ db_inputdata('o45_dataini',@$o45_dataini_dia,@$o45_dataini_mes,@$o45_dataini_ano
     <td nowrap title="<?=@$To45_datafim?>">
        <?=@$Lo45_datafim?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('o45_datafim',@$o45_datafim_dia,@$o45_datafim_mes,@$o45_datafim_ano,true,'text',$db_opcao,"")
 ?>
@@ -85,7 +85,7 @@ db_inputdata('o45_datafim',@$o45_datafim_dia,@$o45_datafim_mes,@$o45_datafim_ano
     <td nowrap title="<?=@$To45_datalei?>">
        <?=@$Lo45_datalei?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('o45_datalei',@$o45_datalei_dia,@$o45_datalei_mes,@$o45_datalei_ano,true,'text',$db_opcao,"")
 ?>
@@ -95,10 +95,10 @@ db_inputdata('o45_datalei',@$o45_datalei_dia,@$o45_datalei_mes,@$o45_datalei_ano
     <td nowrap title="<?=@$To45_tipolei?>">
        <?=@$Lo45_tipolei?>
     </td>
-    <td> 
+    <td>
     <?
     $aTipoLei = array(
-        '0' => 'Selecione', 
+        '0' => 'Selecione',
         '1' => 'LOA - Lei Orçamentária Anual',
         '2' => 'LDO - Lei de Diretrizes Orçamentárias',
         '3' => 'LAO - Lei de Alteração Orçamentária',
@@ -115,7 +115,7 @@ db_inputdata('o45_datalei',@$o45_datalei_dia,@$o45_datalei_mes,@$o45_datalei_ano
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orclei','func_orclei.php?funcao_js=parent.js_preenchepesquisa|o45_codlei','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orclei','func_orclei.php?funcao_js=parent.js_preenchepesquisa|o45_codlei','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_orclei.hide();
@@ -127,7 +127,7 @@ function js_preenchepesquisa(chave){
 }
 
 function js_valida() {
-	
+
     if (document.form1.o45_tipolei.value == 0) {
         alert('Informe o Tipo da Lei!');
         event.preventDefault();

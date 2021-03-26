@@ -9,7 +9,7 @@ $clcodhist->rotulo->label();
     <td nowrap title="<?=@$Tc50_codhist?>">
        <?=@$Lc50_codhist?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c50_codhist',4,$Ic50_codhist,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('c50_codhist',4,$Ic50_codhist,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc50_descr?>">
        <?=@$Lc50_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c50_descr',40,$Ic50_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('c50_descr',40,$Ic50_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc50_compl?>">
        <?=@$Lc50_compl?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('c50_compl',$x,true,$db_opcao,"");
@@ -43,7 +43,7 @@ db_select('c50_compl',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_codhist','func_codhist.php?funcao_js=parent.js_preenchepesquisa|c50_codhist','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_codhist','func_codhist.php?funcao_js=parent.js_preenchepesquisa|c50_codhist','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_codhist.hide();

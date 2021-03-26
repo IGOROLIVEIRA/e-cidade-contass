@@ -328,7 +328,7 @@ function js_retornoProcessar(oAjax) {
  */
 function js_pesquisa() {
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_bensdispensatombamento',
                       'func_bensdispensatombamento.php?funcao_js=parent.js_preenchePesquisa|e139_empnotaitem|pc01_descrmater|e69_numemp|e72_valor|e72_codnota|t64_codcla|t64_class|t64_descr',
                       'Pesquisa',
@@ -364,7 +364,7 @@ function js_preenchePesquisa(iCodigoEmpNotaItem, sDescricaoItem, iNumeroEmpenho,
 function js_pesquisaClasse(mostra) {
 
   if (mostra) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_clabens',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens',
         'func_clabens.php?funcao_js=parent.js_mostraclabens1|t64_class|t64_descr|'+
         't64_codcla|t64_benstipodepreciacao|t46_descricao|t64_vidautil&analitica=true',
         'Pesquisa',true);
@@ -378,7 +378,7 @@ function js_pesquisaClasse(mostra) {
       for (i = 0; i < $("t64_class").value.length; i++){
         testa = testa.replace('.','');
       }
-      js_OpenJanelaIframe('top.corpo','db_iframe_clabens',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens',
           'func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens&analitica=true',
           'Pesquisa',false);
     } else {

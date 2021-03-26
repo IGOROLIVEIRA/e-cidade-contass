@@ -165,7 +165,7 @@ function js_pesquisaed69_i_matricula(mostra) {
 
   document.getElementById("iframe_trocaturma").style.display = "none;";
   if ( mostra == true ) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_matricula',
                         'func_matriculatransf.php?funcao_js=parent.js_mostramatricula1|ed60_i_codigo'
                                                                                     +'|ed47_v_nome'
@@ -184,7 +184,7 @@ function js_pesquisaed69_i_matricula(mostra) {
     if (document.form1.ed60_matricula.value != '') {
 
      js_OpenJanelaIframe(
-                          'top.corpo',
+                          'CurrentWindow.corpo',
                           'db_iframe_matricula',
                           'func_matriculatransf.php?pesquisa_chave='+document.form1.ed60_matricula.value
                                                  +'&funcao_js=parent.js_mostramatricula',
@@ -282,7 +282,7 @@ function js_pesquisaed69_i_turmadestino(mostra) {
 
     if ( mostra == true ) {
       js_OpenJanelaIframe(
-                           'top.corpo',
+                           'CurrentWindow.corpo',
                            'db_iframe_turma',
                            'func_turmatransf.php?turma='+document.form1.ed69_i_turmaorigem.value
                                               +'&turmasprogressao=f'

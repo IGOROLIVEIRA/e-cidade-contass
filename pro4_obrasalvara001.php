@@ -629,10 +629,10 @@ function js_mostraProcessoHidden(iCodProcesso, sNome, lErro) {
 function js_pesquisaObra(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_obras','func_obras.php?funcao_js=parent.js_mostraObra|ob01_codobra|ob01_nomeobra&liberacao=true','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obras','func_obras.php?funcao_js=parent.js_mostraObra|ob01_codobra|ob01_nomeobra&liberacao=true','Pesquisa',true);
   }else{
      if(document.form1.ob04_codobra.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_obras','func_obras.php?pesquisa_chave='+document.form1.ob04_codobra.value+'&funcao_js=parent.js_mostraObraHidden','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obras','func_obras.php?pesquisa_chave='+document.form1.ob04_codobra.value+'&funcao_js=parent.js_mostraObraHidden','Pesquisa',false);
      }else{
        document.form1.ob01_nomeobra.value = '';
      }
@@ -665,7 +665,7 @@ function js_mostraObra(chave1,chave2){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_obrasalvara','func_obrasalvara.php?funcao_js=parent.js_mostraObra|ob04_codobra|ob01_nomeobra','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_obrasalvara','func_obrasalvara.php?funcao_js=parent.js_mostraObra|ob04_codobra|ob01_nomeobra','Pesquisa',true);
 }
 </script>
 <?

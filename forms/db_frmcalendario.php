@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: educação
@@ -79,7 +79,7 @@ $clrotulo->label("ed55_i_codigo");
       </td>
       <td>
         <?php
-          db_inputdata( 
+          db_inputdata(
                         'ed52_d_inicio',
                         @$ed52_d_inicio_dia,
                         @$ed52_d_inicio_mes,
@@ -88,7 +88,7 @@ $clrotulo->label("ed55_i_codigo");
                         'text',
                         $db_opcao,
                         " onchange=\"js_datainicio();\"", "", "",
-                        "parent.js_datainicio();" 
+                        "parent.js_datainicio();"
                       );
         ?>
       </td>
@@ -151,9 +151,9 @@ $clrotulo->label("ed55_i_codigo");
       </td>
     </tr>
     <?php
-    
+
       $iOpcaoCalendAnterior = $db_opcao;
-      
+
       if (db_getsession("DB_modulo") != 1100747) {
         $iOpcaoCalendAnterior = 3;
       }
@@ -171,29 +171,29 @@ $clrotulo->label("ed55_i_codigo");
     </tr>
     <tr>
       <td>
-        <?php 
+        <?php
           db_input( 'ed52_c_passivo',     1, @$Ied52_c_passivo,    true, 'hidden', 3, '' );
           db_input( 'ed52_i_codigo_base',10, "ed52_i_codigo_base", true, 'hidden', 3, '' );
         ?>
       </td>
     </tr>
   </table>
-  
+
   <input name="<?=( $db_opcao == 1 ? "incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir" ) )?>" type="button" id="db_opcao"
          value="<?=( $db_opcao == 1 ? "Incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir" ) )?>"
          <?=($db_botao) ? "" : "disabled='disabled'"?>
          onclick="<?=( $db_opcao == 1 ? "js_carregaCalendario" : ( $db_opcao == 2 || $db_opcao == 22 ? "js_carregaCalendario" : "js_excluiCalendario" ) ) ?>();" />
-  
+
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
   <input name="novo" type="button" id="novo" value="Novo Registro" onclick="js_novo()" <?=$db_opcao==1?"disabled":""?>>
   <?php
     if (db_getsession("DB_modulo") == 1100747) {
-    
+
       $sDisabled = "";
       if ( $db_opcao == 2 || $db_opcao == 3 ) {
       	$sDisabled = "disabled = 'disabled'";
       }
-    
+
       ?>
       <input name="novo" type="button" id="importar" value="Importar Calendario" onclick="js_importarCalendario()"
              <?php echo $sDisabled;?> />
@@ -254,24 +254,24 @@ function js_pesquisaed52_i_calendant(mostra) {
 }
 
 function js_mostracalendario( chave, erro ) {
-  
+
   document.form1.ed52_c_descrant.value = chave;
   if ( erro == true ) {
-    
+
     document.form1.ed52_i_calendant.focus();
     document.form1.ed52_i_calendant.value = '';
   }
 }
 
 function js_mostracalendario1( chave1, chave2 ) {
-  
+
   document.form1.ed52_i_calendant.value = chave1;
   document.form1.ed52_c_descrant.value  = chave2;
   db_iframe_calendario.hide();
 }
 
 function js_pesquisaed52_i_duracaocal( mostra ) {
-  
+
   if ( mostra == true ) {
     js_OpenJanelaIframe(
                          '',
@@ -281,7 +281,7 @@ function js_pesquisaed52_i_duracaocal( mostra ) {
                          true
                        );
   } else {
-    
+
     if ( document.form1.ed52_i_duracaocal.value != '' ) {
       js_OpenJanelaIframe(
                            '',
@@ -297,15 +297,15 @@ function js_pesquisaed52_i_duracaocal( mostra ) {
 }
 
 function js_mostraduracaocal( chave, erro ) {
-  
+
   document.form1.ed55_c_descr.value = chave;
-  
+
   if ( erro == true ) {
-    
+
     document.form1.ed52_i_duracaocal.focus();
     document.form1.ed52_i_duracaocal.value = '';
   } else {
-    
+
     if ( document.form1.ed52_i_duracaocal.value == 1 ) {
       document.getElementById("periodos").style.visibility = "hidden";
     } else {
@@ -315,11 +315,11 @@ function js_mostraduracaocal( chave, erro ) {
 }
 
 function js_mostraduracaocal1( chave1, chave2 ) {
-  
+
   document.form1.ed52_i_duracaocal.value = chave1;
   document.form1.ed55_c_descr.value      = chave2;
   db_iframe_duracaocal.hide();
-  
+
   if ( document.form1.ed52_i_duracaocal.value == 1 ) {
     document.getElementById("periodos").style.visibility = "hidden";
   } else {
@@ -351,9 +351,9 @@ function js_novo() {
 }
 
 function js_sabado( valor, calendario ) {
-  
+
   if ( calendario != "" ) {
-    
+
     if ( confirm( "O sistema irá recalcular os dias e semanas. Confirma?" ) ) {
       iframe_sabado.location.href = "edu1_calendario004.php?calendario="+calendario+"&sabado="+valor;
     }
@@ -361,11 +361,11 @@ function js_sabado( valor, calendario ) {
 }
 
 function js_datainicio() {
-  
+
   if (document.form1.ed52_i_ano.value == "") {
-    
+
     alert( "Informe o Ano do calendário!" );
-    
+
     document.form1.ed52_d_inicio_dia.value = "";
     document.form1.ed52_d_inicio_mes.value = "";
     document.form1.ed52_d_inicio_ano.value = "";
@@ -373,12 +373,12 @@ function js_datainicio() {
     document.form1.ed52_i_ano.style.backgroundColor='#99A9AE';
     document.form1.ed52_i_ano.focus();
   } else {
-    
-    if (    document.form1.ed52_d_inicio_ano.value != "" 
+
+    if (    document.form1.ed52_d_inicio_ano.value != ""
          && document.form1.ed52_i_ano.value        != document.form1.ed52_d_inicio_ano.value ) {
-      
+
       alert( "Ano da Data Inicial está diferente do Ano do calendário" );
-      
+
       document.form1.ed52_d_inicio_dia.value = "";
       document.form1.ed52_d_inicio_mes.value = "";
       document.form1.ed52_d_inicio_ano.value = "";
@@ -389,11 +389,11 @@ function js_datainicio() {
 }
 
 function js_datafim() {
-  
+
   if ( document.form1.ed52_i_ano.value == "" ) {
-    
+
     alert( "Informe o Ano do calendário!" );
-    
+
     document.form1.ed52_d_fim_dia.value = "";
     document.form1.ed52_d_fim_mes.value = "";
     document.form1.ed52_d_fim_ano.value = "";
@@ -401,52 +401,52 @@ function js_datafim() {
     document.form1.ed52_i_ano.style.backgroundColor='#99A9AE';
     document.form1.ed52_i_ano.focus();
   } else {
-    
-    if (    document.form1.ed52_d_fim_ano.value != "" 
+
+    if (    document.form1.ed52_d_fim_ano.value != ""
          && document.form1.ed52_i_ano.value > document.form1.ed52_d_inicio_ano.value ) {
-      
+
       alert( "Ano da Data Final está diferente do Ano do calendário" );
-      
+
       document.form1.ed52_d_fim_dia.value = "";
       document.form1.ed52_d_fim_mes.value = "";
       document.form1.ed52_d_fim_ano.value = "";
       document.form1.ed52_d_fim.value     = "";
       document.form1.ed52_d_fim_dia.focus();
     } else {
-      
-      if (    document.form1.ed52_d_inicio_dia.value == "" 
-           || document.form1.ed52_d_inicio_mes.value == "" 
+
+      if (    document.form1.ed52_d_inicio_dia.value == ""
+           || document.form1.ed52_d_inicio_mes.value == ""
            || document.form1.ed52_d_inicio_ano.value == "") {
         alert( "Preencha todos os campos da Data Inicial!" );
       } else {
-        
+
         dataini = document.form1.ed52_d_inicio_ano.value+document.form1.ed52_d_inicio_mes.value+document.form1.ed52_d_inicio_dia.value;
         datafim = document.form1.ed52_d_fim_ano.value+document.form1.ed52_d_fim_mes.value+document.form1.ed52_d_fim_dia.value;
-        
-        if (    dataini > datafim 
-             && document.form1.ed52_d_fim_dia.value != "" 
-             && document.form1.ed52_d_fim_mes.value != "" 
+
+        if (    dataini > datafim
+             && document.form1.ed52_d_fim_dia.value != ""
+             && document.form1.ed52_d_fim_mes.value != ""
              && document.form1.ed52_d_fim_ano.value != "" ) {
-          
+
           alert( "Data Final deve ser maior que a Data Inicial!" );
-          
+
           document.form1.ed52_d_fim_dia.value = "";
           document.form1.ed52_d_fim_mes.value = "";
           document.form1.ed52_d_fim_ano.value = "";
           document.form1.ed52_d_fim.value     = "";
           document.form1.ed52_d_fim_dia.focus();
          }
-      } 
+      }
     }
   }
 }
 
 function js_resfinal() {
-  
+
   if ( document.form1.ed52_i_ano.value == "" ) {
-    
+
     alert( "Informe o Ano do calendário!" );
-    
+
     document.form1.ed52_d_resultfinal_dia.value     = "";
     document.form1.ed52_d_resultfinal_mes.value     = "";
     document.form1.ed52_d_resultfinal_ano.value     = "";
@@ -454,30 +454,30 @@ function js_resfinal() {
     document.form1.ed52_i_ano.style.backgroundColor = '#99A9AE';
     document.form1.ed52_i_ano.focus();
   } else {
-    
-    if (    document.form1.ed52_d_resultfinal_ano.value != "" 
-         && (    document.form1.ed52_i_ano.value > document.form1.ed52_d_resultfinal_ano.value 
-              || document.form1.ed52_i_ano.value < document.form1.ed52_d_resultfinal_ano.value ) 
+
+    if (    document.form1.ed52_d_resultfinal_ano.value != ""
+         && (    document.form1.ed52_i_ano.value > document.form1.ed52_d_resultfinal_ano.value
+              || document.form1.ed52_i_ano.value < document.form1.ed52_d_resultfinal_ano.value )
        ) {
-      
+
       alert( "Ano da Data Resultado Final está diferente do Ano do calendário!" );
-      
+
       document.form1.ed52_d_resultfinal_dia.value = "";
       document.form1.ed52_d_resultfinal_mes.value = "";
       document.form1.ed52_d_resultfinal_ano.value = "";
       document.form1.ed52_d_resultfinal.value     = "";
       document.form1.ed52_d_resultfinal_dia.focus();
     } else {
-      
+
       datafim    = document.form1.ed52_d_fim_ano.value + document.form1.ed52_d_fim_mes.value + document.form1.ed52_d_fim_dia.value;
       dataresfim = document.form1.ed52_d_resultfinal_ano.value + document.form1.ed52_d_resultfinal_mes.value + document.form1.ed52_d_resultfinal_dia.value;
-      
-      if (    datafim > dataresfim && document.form1.ed52_d_resultfinal_dia.value != "" 
-           && document.form1.ed52_d_resultfinal_mes.value                         != "" 
+
+      if (    datafim > dataresfim && document.form1.ed52_d_resultfinal_dia.value != ""
+           && document.form1.ed52_d_resultfinal_mes.value                         != ""
            && document.form1.ed52_d_resultfinal_ano.value                         != "" ) {
-        
+
         alert( "Data Resultado Final deve ser maior que a Data Final!" );
-        
+
         document.form1.ed52_d_resultfinal_dia.value = "";
         document.form1.ed52_d_resultfinal_mes.value = "";
         document.form1.ed52_d_resultfinal_ano.value = "";
@@ -489,11 +489,11 @@ function js_resfinal() {
 }
 
 function js_ano() {
-  
-  if (    document.form1.ed52_d_inicio_ano.value != "" 
-       && document.form1.ed52_i_ano.value        != "" 
+
+  if (    document.form1.ed52_d_inicio_ano.value != ""
+       && document.form1.ed52_i_ano.value        != ""
        && document.form1.ed52_d_inicio_ano.value != document.form1.ed52_i_ano.value ) {
-    
+
     alert( "Ano do calendário está diferente do ano da Data Inicial!" );
     document.form1.ed52_i_ano.value = "";
     document.form1.ed52_i_ano.focus();
@@ -504,7 +504,7 @@ function js_ano() {
  * Pesquisa os calendarios Base (sem vinculo com escola)
  */
 function js_importarCalendario() {
-  
+
   js_OpenJanelaIframe(
                        '',
                        'db_iframe_calendario',
@@ -549,7 +549,7 @@ function js_retornoDadosCalendarioClone(oJson) {
     $('ed52_c_descr').value        = oRetorno.oDadosCalendarioClone.sDescricao.urlDecode();
     $('ed52_i_duracaocal').value   = oRetorno.oDadosCalendarioClone.iPeriodicidade;
     $('periodos').style.visibility = "hidden";
-    
+
     if ($('ed52_i_duracaocal').value == 2) {
 
       $('periodos').style.visibility = "visible";
@@ -596,7 +596,7 @@ function js_carregaCalendario () {
   if ( !validaCampos() ) {
     return false;
   }
-  
+
 	$('db_opcao').disabled = true;
 
   var oObject                   = new Object();
@@ -654,7 +654,7 @@ function validaCampos() {
     $('ed52_i_ano').focus();
     return false;
   }
-  
+
   return true;
 }
 
@@ -673,7 +673,7 @@ function js_retornoVinculoCalendario(oJson) {
       alert( "Calendário incluído com sucesso!" );
     }
 
-    top.corpo.iframe_a1.location.href = 'edu1_calendario002.php?chavepesquisa='+oRetorno.iCalendario;
+    CurrentWindow.corpo.iframe_a1.location.href = 'edu1_calendario002.php?chavepesquisa='+oRetorno.iCalendario;
 
   } else {
 

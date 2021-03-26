@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -36,7 +36,7 @@ require_once("dbforms/db_funcoes.php");
 $sTitulo = "Processamento de escala de férias";
 
 if ( $_GET['sAcao'] == 'cancelar' ) {
-  $sTitulo = "Cancelamento de escala de férias";  
+  $sTitulo = "Cancelamento de escala de férias";
 }
 
 
@@ -67,7 +67,7 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
         </table>
         <br />
         <div id="grioPeriodosGozo"></div>
-        
+
       </fieldset>
       <input name="processar" onclick="return js_processar()" value="Processar" type="submit">
     </form>
@@ -87,7 +87,7 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
       (function() {
 
         /**
-         * Instância o Input Competencia Folha 
+         * Instância o Input Competencia Folha
          */
         var oCompetenciaFolha = new DBViewFormularioFolha.CompetenciaFolha(true);
         oCompetenciaFolha.renderizaLabel($('labelCompetencia'));
@@ -117,21 +117,21 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
       function js_pesquisaMatricula(mostra){
 
         if(mostra==true){
-          js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome','Pesquisa',true);
+          js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome','Pesquisa',true);
         }else{
-           if($F('r90_regist') != ''){ 
-              js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+$F('r90_regist')+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
+           if($F('r90_regist') != ''){
+              js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+$F('r90_regist')+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
            }
         }
       }
 
       function js_mostrapessoal(chave,erro){
 
-        $('z01_nome').value = chave; 
+        $('z01_nome').value = chave;
 
-        if(erro==true){ 
-          $('r90_regist').focus(); 
-          $('r90_regist').value = ''; 
+        if(erro==true){
+          $('r90_regist').focus();
+          $('r90_regist').value = '';
         }
       }
 
@@ -153,7 +153,7 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
         var iMesCompetencia = $F('mes');
 
         var oParametros = {};
-        
+
         oParametros.iAnoCompetencia = iAnoCompetencia;
         oParametros.iMesCompetencia = iMesCompetencia;
         oParametros.sExecucao       = 'BuscaPeriodosGozo';
@@ -168,8 +168,8 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
       }
 
       /**
-       * Trata o retorno da função js_BuscaPeriodosGozo, populando a grid com os dados 
-       * retornados da consulta realizada pelo RPC    
+       * Trata o retorno da função js_BuscaPeriodosGozo, populando a grid com os dados
+       * retornados da consulta realizada pelo RPC
        * @param  Object oPeriodosGozo retorno da consulta RPC
        * @return void
        */
@@ -177,17 +177,17 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
 
         var oRetorno  = eval("("+oRetornoPeriodosGozo.responseText+")");
         var sMensagem = oRetorno.sMensagem.urlDecode();
-        
+
         if ( oRetorno.iStatus > 1 ) {
 
           alert(sMensagem);
           return false;
         }
 
-        var aPeriodosGozo = oRetorno.oPeriodosGozo; 
+        var aPeriodosGozo = oRetorno.oPeriodosGozo;
 
         for (var iIndicePeriodoGozo = 0; iIndicePeriodoGozo < aPeriodosGozo.length; iIndicePeriodoGozo++ ) {
-           
+
           var oPeriodoGozo = aPeriodosGozo[iIndicePeriodoGozo];
 
           oGridPeriodosGozo.addRow([
@@ -207,7 +207,7 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
 
         var aPeriodosSelecionados = oGridPeriodosGozo.getSelection();
 
-        if ( aPeriodosSelecionados.length == 0) { 
+        if ( aPeriodosSelecionados.length == 0) {
 
           alert('Por favor, selecione pelo menos 1 servidor');
           return false;
@@ -223,7 +223,7 @@ if ( $_GET['sAcao'] == 'cancelar' ) {
         oParametros.sExecucao = 'processarEscalaFerias';
 
         if ( oGet.sAcao == 'cancelar' ) {
-          oParametros.sExecucao = 'cancelarPeriodoGozo';  
+          oParametros.sExecucao = 'cancelarPeriodoGozo';
         }
 
         oParametros.aPeriodosGozo = aPeriodosGozo;

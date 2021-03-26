@@ -6,13 +6,13 @@ class Bootstrap extends \ECidade\V3\Event\Handler {
 
   /**
    * Event handler
-   * @param  mixed $controller Only on event 'extension.desktop.bootstrap'
+   * @param  mixed $controller Only on event 'extension.deskCurrentWindow.bootstrap'
    */
   public function execute(\Zend\EventManager\Event $event) {
 
     $params = $event->getParams();
     $controller = $params[0];
-    
+
     $controller->getView()->document->addScript(
       ECIDADE_REQUEST_PATH . 'extension/DBug/assets/js/dbug.js', array('type' => 'text/javascript')
     );

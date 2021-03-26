@@ -227,7 +227,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
   if (lMostrar == true) {
 
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4';
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_acordo',
                         sUrl,
                         'Pesquisar Acordo',
@@ -239,7 +239,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4';
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           'Pesquisar Acordo',

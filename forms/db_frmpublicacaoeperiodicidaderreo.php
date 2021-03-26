@@ -115,18 +115,18 @@ $clpublicacaoeperiodicidaderreo->rotulo->label();
       }
     }
 
-    top.corpo.publicacaoeperiodicidaderreo.c220_publiclrf = document.form1.c220_publiclrf.value;
-    top.corpo.publicacaoeperiodicidaderreo.c220_dtpublicacaorelatoriolrf = document.form1.c220_dtpublicacaorelatoriolrf.value;
-    top.corpo.publicacaoeperiodicidaderreo.c220_localpublicacao = document.form1.c220_localpublicacao.value;
-    top.corpo.publicacaoeperiodicidaderreo.c220_tpbimestre = document.form1.c220_tpbimestre.value;
-    top.corpo.publicacaoeperiodicidaderreo.c220_exerciciotpbimestre = document.form1.c220_exerciciotpbimestre.value;
+    CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_publiclrf = document.form1.c220_publiclrf.value;
+    CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_dtpublicacaorelatoriolrf = document.form1.c220_dtpublicacaorelatoriolrf.value;
+    CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_localpublicacao = document.form1.c220_localpublicacao.value;
+    CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_tpbimestre = document.form1.c220_tpbimestre.value;
+    CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_exerciciotpbimestre = document.form1.c220_exerciciotpbimestre.value;
 
     parent.mo_camada('publicacaoeperiodicidadergf');
 
   }
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|si170_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|si170_sequencial','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_dadoscomplementareslrf.hide();

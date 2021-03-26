@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -60,7 +60,7 @@ function js_verifica(){
 function js_emite(){
    var v = '';
    var chk = '';
-   var tipo = document.form1.formato.value;   
+   var tipo = document.form1.formato.value;
 
    for (i=0;i<document.form2.elements.length;i++){
       if (document.form2.elements[i].checked == true){
@@ -68,17 +68,17 @@ function js_emite(){
          v = '-';
          a += 1;
       }
-   } 
+   }
 
    if (chk == '') {
      alert("Nenhum recurso selecionado.");
      return false;
    }
-   
+
    var sQueryString = '&data='+document.form1.datai_ano.value+'-'+document.form1.datai_mes.value+'-'+document.form1.datai_dia.value+'&recid='+chk+'&formato='+document.form1.formato.value+'&orientacao='+document.form1.orientacao.value;
 
    if (tipo == 't') {
-     js_OpenJanelaIframe('top.corpo','db_iframe_geratxt','con2_saldocontabil002.php?'+sQueryString,'Aguarde gerando arquivo',true); 
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geratxt','con2_saldocontabil002.php?'+sQueryString,'Aguarde gerando arquivo',true);
    } else {
      jan = window.open('con2_saldocontabil002.php?'+sQueryString,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
      jan.moveTo(0,0);
@@ -93,8 +93,8 @@ function md(){
               el.elements[i].checked = true;
               itens[i] = el.elements[i].parentNode.parentNode.style.background;
                marca(el.elements[i],'#eeeeee');
-           }   
-     
+           }
+
         }
      }else{
         for (i = 0;i < el.length;i++){
@@ -102,11 +102,11 @@ function md(){
               el.elements[i].checked = false;
               //document.form1.btncadastrar.disabled=true;
               marca(el.elements[i],itens[i]);
-           }   
+           }
         }
-     
+
      }
-}      
+}
 
 function marca(item,cor){
     if (item.checked == true){
@@ -114,8 +114,8 @@ function marca(item,cor){
     }else{
       item.parentNode.parentNode.style.background = cor;
     }
-}       
-</script>  
+}
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -189,7 +189,7 @@ function marca(item,cor){
         <td >&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
         </td>
       </tr>
@@ -212,7 +212,7 @@ function marca(item,cor){
        <th bgcolor="#eeeee2" style="border-bottom:1px solid threedshadow;border-right:1px solid threedshadow;">Código</th>
        <th bgcolor="#eeeee2" style="border-bottom:1px solid threedshadow;border-right:1px solid threedshadow;">Recurso</th>
        </tr></thead>
-        <tbody id='tbcorpo' style="height:35ex;overflow:scroll;"> 
+        <tbody id='tbcorpo' style="height:35ex;overflow:scroll;">
        </form>
       <form name="form2" method="post">
         <?
@@ -228,11 +228,11 @@ function marca(item,cor){
            echo "<td style='border-bottom:1px solid threedshadow;border-right:1px solid threedshadow;'>".$lnrec["o15_codigo"]."</td>\n";
            echo "<td style='border-bottom:1px solid threedshadow;border-right:1px solid threedshadow;'>".$lnrec["o15_descr"]."</td>\n";
            echo "</tr>";
-      $i++; 
+      $i++;
    }
-   
+
 ?>
-   
+
      </tbody>
      </table>
   </form>
@@ -272,7 +272,7 @@ function js_mostrarecurso1(chave1,chave2){
 if(isset($ordem)){
   echo "<script>
        js_emite();
-       </script>";  
+       </script>";
 }
 $func_iframe = new janela('db_iframe','');
 $func_iframe->posX=1;

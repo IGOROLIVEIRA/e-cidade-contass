@@ -300,7 +300,7 @@ function consultaLicitacao(iCodigoLicitacao) {
     return false;
   }
   var sURLLicitacao = "lic3_licitacao002.php?l20_codigo="+iCodigoLicitacao
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_licitacao'+iCodigoLicitacao, sURLLicitacao, 'Consulta de Licitação', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_licitacao'+iCodigoLicitacao, sURLLicitacao, 'Consulta de Licitação', true);
 }
 
 js_verificarResolucaoUsuario();

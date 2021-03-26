@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -54,17 +54,17 @@ $clrotulo->label("ac10_obs");
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<?php   
+<?php
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
-  
+
   $oTemplates      = new cl_db_documentotemplate();
   $sCamposTemplate = "db82_sequencial, db82_descricao";
-  $sWhereTemplate  = "db82_templatetipo = 45"; 
+  $sWhereTemplate  = "db82_templatetipo = 45";
   $sSqlTemplates   = $oTemplates->sql_query( null, $sCamposTemplate , null, $sWhereTemplate);
   $rsModelo        = $oTemplates->sql_record($sSqlTemplates);
-  
+
 ?>
 <style>
 td {
@@ -93,9 +93,9 @@ fieldset table td:first-child {
   <center>
       <fieldset style="margin-top: 30px; width: 400px; ">
         <legend><strong>Relatório de Extrato do Acordo</strong></legend>
-        
+
 	      <table align="left" border="0">
-	      
+
 	        <tr>
 	          <td title="<?=@$Tac16_sequencial?>" align="left">
 	            <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
@@ -109,7 +109,7 @@ fieldset table td:first-child {
               ?>
 	          </td>
 	        </tr>
-	        
+
 	        <tr>
 	          <td title="<?=@$Tac16_sequencial?>" align="left">
 	            <strong>Modelo:</strong>
@@ -119,20 +119,20 @@ fieldset table td:first-child {
 	              db_selectrecord('iModelo', $rsModelo, true, 1);
               ?>
 	          </td>
-	        </tr>	        
-	        
-	        
+	        </tr>
+
+
 	      </table>
-	      
+
       </fieldset>
-      
+
       <div style="margin-top: 10px;">
         <input id="gerar" name="gerar" type="button" value="Gerar Relatório" onclick="js_emitir();">
       </div>
-            
+
   </center>
   </form>
-      
+
 <?php db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
 
 </body>
@@ -147,7 +147,7 @@ function js_emitir(){
   var iAcordo           = $F('ac16_sequencial');
   var iModelo           = $F('iModelo');
   var sArquivoRelatorio = "con2_extratoacordos003.php";
-  
+
   if ( iAcordo == '' ) {
     alert( _M(CAMINHO_MENSAGEM + 'contrato_branco') ); return false;
   };
@@ -161,9 +161,9 @@ function js_emitir(){
 
   jan = window.open(sArquivoRelatorio + sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
-  
-  
-  
+
+
+
 }
 
 
@@ -174,27 +174,27 @@ function js_emitir(){
 function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
-    
+
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4';
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_acordo', 
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_acordo',
                         sUrl,
                         'Pesquisar Acordo',
                         true);
   } else {
-  
-    if ($('ac16_sequencial').value != '') { 
-    
+
+    if ($('ac16_sequencial').value != '') {
+
       var sUrl = 'func_acordo.php?descricao=true&iTipoFiltro=4&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo';
-                 
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           'Pesquisar Acordo',
                           false);
      } else {
-       $('ac16_sequencial').value = ''; 
+       $('ac16_sequencial').value = '';
      }
   }
 }
@@ -203,14 +203,14 @@ function js_pesquisaac16_sequencial(lMostrar) {
  * Retorno da pesquisa acordos
  */
 function js_mostraacordo(chave1,chave2,erro) {
- 
+
   if (erro == true) {
-   
-    $('ac16_sequencial').value   = ''; 
+
+    $('ac16_sequencial').value   = '';
     $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial').focus(); 
+    $('ac16_sequencial').focus();
   } else {
-  
+
     $('ac16_sequencial').value   = chave1;
     $('ac16_resumoobjeto').value = chave2;
   }

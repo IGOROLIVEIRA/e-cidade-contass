@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require ("libs/db_stdlib.php");
@@ -119,7 +119,7 @@ if(isset($atualizar) || isset($prever)){
       	$erro_compl .= "\n- Cheque $e91_cheque já impresso para o movimento $e91_codmov (".db_formatar($e86_data,"d").")";
       }
       $erro_msg.= $erro_compl;
-      $erro_msg = str_replace("\n","\\n",$erro_msg); 
+      $erro_msg = str_replace("\n","\\n",$erro_msg);
     }
   }else{
   	$erro_msg = "Conta pagadora não encontrada.";
@@ -131,7 +131,7 @@ if(isset($atualizar) || isset($prever)){
     // Monta verso do cheque
     ///////////////////////////////////////////////////////////
 
-    // Variáveis para testar quantos cgm diferentes existem... 
+    // Variáveis para testar quantos cgm diferentes existem...
     $cgmprinc = '';
     $nome_nominal = false;
 
@@ -166,16 +166,16 @@ if(isset($atualizar) || isset($prever)){
       $arr_m = array ();
       for($i=0; $i<count($arr); $i++){
         $mov = $arr[$i];
-     
+
         // Rotina para calcular o valor total dos movimentos
         $result = $clempagemov->sql_record($clempagemov->sql_query($mov, "e81_valor as valor, z01_numcgm as numcgm_cre,z01_nome as nome_cre,z01_munic as munic_cre"));
         if($clempagemov->numrows == 0){
           db_msgbox("Movimento $mov não encontrado.");
           exit;
         }
-     
+
         db_fieldsmemory($result, 0);
-     
+
         $sqlpar = "select k29_saldoemitechq from caiparametro where k29_instit = ".db_getsession("DB_instit");
         $resultpar = pg_query($sqlpar);
         $linhaspar = pg_num_rows($resultpar);
@@ -191,30 +191,30 @@ if(isset($atualizar) || isset($prever)){
 	          $erro_msg = "Conta sem saldo disponível para este valor. Verifique.\\n\\nCheque não gerado.";
 	          break;
 	        }
-		    
+
 	        ///////////////////////////////////////////////////////
 	        ///////////////////////////////////////////////////////
           }
         }
         $valoratualsaltes -= $valor;
-     
+
         $tot_valor += $valor;
-     
-        // Rotina para pegar apenas os nomes diferentes 
+
+        // Rotina para pegar apenas os nomes diferentes
         if(!array_key_exists($numcgm_cre, $arr_m)){
           $arr_m[$numcgm_cre] = $numcgm_cre;
           $nomes .= "     ".$nome_cre.' - '.$munic_cre.'\n';
         }
-     
+
         // Rotina que verifica se exitem CGM's diferentes
         if($cgmprinc == ""){
           $cgmprinc = $numcgm_cre;
         }
-     
+
         if($cgmprinc!='' && $cgmprinc!=$numcgm_cre){
           $nome_nominal = true;
         }
-     
+
       }
     }
 
@@ -229,7 +229,7 @@ if(isset($atualizar) || isset($prever)){
       }
 
       $sql = "select c63_banco as codbco,
-		     k13_descr 
+		     k13_descr
 		  from conplanoreduz
 		   inner join conplanoconta on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 		   inner join saltes        on  k13_conta = c61_reduz
@@ -376,7 +376,7 @@ if(isset($atualizar) && $sqlerro==false){
     $arr_movs[$mov] = $e81_valor;
   }
 
- 
+
   $val = (float) trim(db_formatar(($tot_valor / $cheques), 'p', '', 2));
   $tot_val = '0';
 
@@ -397,8 +397,8 @@ if(isset($atualizar) && $sqlerro==false){
 	      }
 	    }
 	    $arr_cheque[$s] = $val;
-	
-	  
+
+
 	    $vals .= $sep.$val;
 	    $sep = '#';
 	    $cheq = $arr_chequeseq[$s];
@@ -580,31 +580,31 @@ $ip_imprime = db_getsession("DB_ip");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="760" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="375" align="left" valign="top" bgcolor="#CCCCCC">
       <?
       $clrotulo = new rotulocampo;
       $clrotulo->label("e80_data");
 
-     // Sempre que ja existir agenda entra nesta opcao  
+     // Sempre que ja existir agenda entra nesta opcao
       if(isset ($e80_codage) && empty ($pesquisar)) {
 	    include ("forms/db_frmempageconf.php");
-        // Pela primeira vez que entrar neste arquivo, entra nesta opcao para digitar a data da agenda 
+        // Pela primeira vez que entrar neste arquivo, entra nesta opcao para digitar a data da agenda
         // entra nesta opcao para escolher uma das agendas ou então selecionar uma jah existente
       }else{
       ?>
       <table>
         <tr>
-	      <td nowrap> 
-            <fieldset><legend><b>Manutenção de agenda</b></legend> 
+	      <td nowrap>
+            <fieldset><legend><b>Manutenção de agenda</b></legend>
               <form name="form1" method="post" action="">
 	          <br>
               <table>
 	            <tr>
 	              <td nowrap title="<?=@$Te80_data?>" align='right'>
 	                <?=$Le80_data?>
-	              </td>	
-	              <td nowrap>	
+	              </td>
+	              <td nowrap>
 	                <?
                     db_inputdata('e80_data', @ $e80_data_dia, @ $e80_data_mes, @ $e80_data_ano, true, 'text', 1);
                     ?>
@@ -626,7 +626,7 @@ $ip_imprime = db_getsession("DB_ip");
                   <td class='bordas'>
                     <small>
                     <?
-                    // Variável setada apenas quando o usuario pesquisar na func 
+                    // Variável setada apenas quando o usuario pesquisar na func
                     if(isset($pri_codage)){
                       $e80_codage = $pri_codage;
                     }
@@ -644,14 +644,14 @@ $ip_imprime = db_getsession("DB_ip");
                   <td colspan="2" align="center">
                     <br>
                     <input name="alterar" type="submit" value="Atualizar selecionada" <?=($numrows01==0?"disabled":"")?> >
-                  </td>	
+                  </td>
                 </tr>
               </table>
-              </form>	 
+              </form>
             </fieldset>
           </td>
-        </tr>  
-      </table>  
+        </tr>
+      </table>
       <?
       }
       ?>
@@ -667,7 +667,7 @@ function js_cria(campo,valor){
   obj.setAttribute('type','hidden');
   obj.setAttribute('value',valor);
   document.form1.appendChild(obj);
-}	   
+}
 function js_verso(ver){
   retorna = false;
   <?
@@ -686,7 +686,7 @@ function js_verso(ver){
     //location.href='emp4_empageconf001.php?e80_codage=<?=$e80_codage?>';
     parent.location.href='emp4_empage001.php?e80_codage=<?=$e80_codage?>&dtp_dia=<?=$dtin_dia?>&dtp_mes=<?=$dtin_mes?>&dtp_ano=<?=$dtin_ano?>';
   }
-}	 
+}
 </script>
 <?
 // Rotina que alerta caso tenha ocorrido algum problema nas transações
@@ -749,7 +749,7 @@ if((isset($emite_vals) && $emite_vals != '' && empty($prever)  || isset($reemite
 
   $arr_vals = split("#", $emite_vals);
   $arr_cheque = split(",", $cheque_imp);
-  
+
   $reemitevalor=$total;
 
   $tot_vals = '';
@@ -790,7 +790,7 @@ if (isset($reemite)){
 }
 
     echo "<script>";
-       if (isset($reemite)){ 
+       if (isset($reemite)){
         echo "retorna = confirm('$texto');\n";
         $reemite=true;
       }else {
@@ -804,14 +804,14 @@ if (isset($reemite)){
                obj.setAttribute('name','emite_vals');\n
                obj.setAttribute('type','hidden');\n
                obj.setAttribute('value','$tot_vals');\n
-               
+
                document.form1.appendChild(obj);\n
                obj=document.createElement('input');\n
                obj.setAttribute('name','reemite');\n
                obj.setAttribute('type','hidden');\n
                obj.setAttribute('value','$reemite');\n
                document.form1.appendChild(obj);\n
-              
+
                obj=document.createElement('input');\n
                obj.setAttribute('name','chequenovamente');\n
                obj.setAttribute('type','hidden');\n
@@ -833,7 +833,7 @@ if (isset($reemite)){
     echo "</script>";
   }else{
     // db_msgbox('pergunta se imprime verso?');
-    
+
     echo "<script>";
     echo "  document.form1.emite_vals.value   = '';";
     echo "  js_verso('$verso_imp');";
@@ -887,7 +887,7 @@ if(isset($emiteverso)){
               document.form1.submit();\n
             }else{\n
               parent.location.href='emp4_empage001.php?e80_codage=$e80_codage';\n
-            }\n   
+            }\n
           </script>";
   }else{
     echo "<script>parent.location.href='emp4_empage001.php?e80_codage=$e80_codage';</script>";
@@ -897,7 +897,7 @@ if(isset($emiteverso)){
 <script>
 // Script responsável para selecionar a agenda...
 function js_empage(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
 }
 
 function js_mostra(codage,data){

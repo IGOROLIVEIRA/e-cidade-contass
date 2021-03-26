@@ -567,7 +567,7 @@ $oGet = db_utils::postMemory($_GET);
     function pesquisaAbertura() {
 
       js_OpenJanelaIframe(
-        'top.corpo',
+        'CurrentWindow.corpo',
         'db_iframe_solicitaregistropreco',
         'func_solicitaregistropreco.php?formacontrole=2&funcao_js=parent.preencheAbertura|0|1&anuladas=1&estimativas=1',
         'Pesquisa de Abertura de Registro de Preço por Valor',
@@ -594,7 +594,7 @@ $oGet = db_utils::postMemory($_GET);
         sCaminho = "func_pcmatersolicita.php?lServico=true&pesquisa_chave="+oMaterial.value+"&funcao_js=parent.completaServico";
       }
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_pcmater',
         sCaminho,
         'Pesquisa de Serviços',

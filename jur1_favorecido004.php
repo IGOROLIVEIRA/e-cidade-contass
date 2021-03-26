@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -38,7 +38,7 @@ $oPost         = db_utils::postMemory($_POST);
 $oGet          = db_utils::postMemory($_GET);
 $clfavorecido  = new cl_favorecido;
 $db_opcao      = isset($oGet->db_opcao) ? $oGet->db_opcao : 1;
-$db_botao      = true; 
+$db_botao      = true;
 $sBtnSalvar    = $db_opcao == 1 ? "Salvar"      : "Excluir";
 $sJsBtnSalvar  = $db_opcao == 1 ? "js_salvar()" : "js_exluir()";
 
@@ -71,7 +71,7 @@ if ( isset($oGet->chavepesquisa) ) {
 <meta http-equiv="Expires" CONTENT="0">
 <?
   db_app::load("scripts.js");
-  db_app::load("prototype.js"); 
+  db_app::load("prototype.js");
   db_app::load("strings.js");
   db_app::load("dbautocomplete.widget.js");
   db_app::load("DBViewContaBancaria.js");
@@ -93,16 +93,16 @@ if ( isset($oGet->chavepesquisa) ) {
             <? db_ancora ( $Lz01_nome, "js_pesquisacgm(true)", 1 )?>
           </td>
           <td>
-            <? 
+            <?
               db_input ( "z01_numcgm", 10, $Iz01_numcgm, true, "text", 1, " onchange='js_pesquisacgm(false);' " );
               db_input ( "z01_nome", 41, $Iz01_nome, true, "text", 3 );
             ?>
-            
+
         </td>
        </tr>
-       <!-- 
+       <!--
          Comentado por causa do cadastro antigo de de CGM
-       <tr> 
+       <tr>
          <td colspan="3" align="center">
             <input type='button' value='Novo CGM' onclick="js_novoCgm()">
             <input type='button' value='Alterar CGM'onclick="js_alterarCgm($F('z01_numcgm'))">
@@ -111,18 +111,18 @@ if ( isset($oGet->chavepesquisa) ) {
         -->
        <tr>
       <td>
-        Conta Interna Contábil:                     
+        Conta Interna Contábil:
       </td>
       <td>
         <? db_input('v86_containterna',55,$Iv86_containterna,true,'text',$db_opcao,''); ?>
-      </td>    
+      </td>
     </tr>
     </table>
   </fieldset>
-  <div id="ctnContaBancaria"></div> 
-  <input id="btnSalvar"    type ="submit" value="Salvar"    onclick="js_salvar();" > 
-  <input id="btnExcluir"   type ="button" value="Excluir"   onclick="js_excluir();" disabled="disabled"> 
-  <input id="btnPesquisar" type ="button" value="Pesquisar" onclick="js_pesquisa();"> 
+  <div id="ctnContaBancaria"></div>
+  <input id="btnSalvar"    type ="submit" value="Salvar"    onclick="js_salvar();" >
+  <input id="btnExcluir"   type ="button" value="Excluir"   onclick="js_excluir();" disabled="disabled">
+  <input id="btnPesquisar" type ="button" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 </body>
 </html>
@@ -134,14 +134,14 @@ if ( isset($oGet->chavepesquisa) ) {
 								        'db_iframe_favorecido',
 								        sUrl,
 								        'Pesquisa Favorecido',
-								        true, 
+								        true,
 								        20,
-								        screen.availWidth/4, 
+								        screen.availWidth/4,
 								        screen.availWidth/2,600);
   }
 
   function js_mostrafavorecido(chave1, chave2) {
-    
+
     $('z01_nome').value   = chave1;
     $('z01_numcgm').value = chave2;
     db_iframe_favorecido.hide();
@@ -162,10 +162,10 @@ if ( isset($oGet->chavepesquisa) ) {
     js_divCarregando('Salvando dados do Favorecido...', 'msgBox');
     var oAjax = new Ajax.Request("jur1_favorecido.RPC.php",
                                  {method    : 'post',
-                                  parameters: 'json='+Object.toJSON(oParam), 
-                                  onComplete: 
+                                  parameters: 'json='+Object.toJSON(oParam),
+                                  onComplete:
                                     function(oAjax) {
-        
+
                                       js_removeObj('msgBox');
                                       var oRetorno = JSON.parse(oAjax.responseText);
 
@@ -175,10 +175,10 @@ if ( isset($oGet->chavepesquisa) ) {
                                       }
 
                                       parent.document.formaba.favorecidotaxas.disabled = false;
-                                      top.corpo.iframe_favorecidotaxas.location.href='jur1_favorecidotaxa001.php?v86_sequencial=' + oRetorno.registroSalvo;
+                                      CurrentWindow.corpo.iframe_favorecidotaxas.location.href='jur1_favorecidotaxa001.php?v86_sequencial=' + oRetorno.registroSalvo;
                                       alert(oRetorno.message.urlDecode());
                                       parent.mo_camada('favorecidotaxas');
-                                      
+
                                     }
                                  }
                                 ) ;
@@ -193,10 +193,10 @@ if ( isset($oGet->chavepesquisa) ) {
       js_divCarregando('Excluindo Favorecido...', 'msgBox');
       var oAjax = new Ajax.Request("jur1_favorecido.RPC.php",
                                    {method    : 'post',
-                                    parameters: 'json='+Object.toJSON(oParam), 
-                                    onComplete: 
+                                    parameters: 'json='+Object.toJSON(oParam),
+                                    onComplete:
                                       function(oAjax) {
-          
+
                                         js_removeObj('msgBox');
                                         var oRetorno = eval("("+oAjax.responseText.urlDecode()+")");
                                         alert(oRetorno.message.urlDecode());
@@ -212,13 +212,13 @@ if ( isset($oGet->chavepesquisa) ) {
   function js_pesquisacgm(lMostra){
 
     if (lMostra) {
-       js_OpenJanelaIframe('', 
-                           'db_iframe_cgm', 
+       js_OpenJanelaIframe('',
+                           'db_iframe_cgm',
                            'func_nome.php?funcao_js=parent.js_mostracgm1|z01_nome|z01_numcgm',
                            'Pesquisar CGM',
                            true,'0');
     } else {
-      if(document.form1.z01_numcgm.value != ''){ 
+      if(document.form1.z01_numcgm.value != ''){
          js_OpenJanelaIframe('',
                              'db_iframe_acordogrupo',
                              'func_nome.php?pesquisa_chave='+$F('z01_numcgm')+
@@ -227,26 +227,26 @@ if ( isset($oGet->chavepesquisa) ) {
                              false,
                              '0');
       } else {
-        document.form1.z01_numcgm.value = ''; 
+        document.form1.z01_numcgm.value = '';
       }
     }
   }
 
   function js_mostracgm(erro, chave){
 
-    if(erro == true) { 
-    
-      document.form1.z01_numcgm.focus(); 
-      document.form1.z01_numcgm.value = ''; 
+    if(erro == true) {
+
+      document.form1.z01_numcgm.focus();
+      document.form1.z01_numcgm.value = '';
     } else {
-      document.form1.z01_nome.value = chave; 
+      document.form1.z01_nome.value = chave;
       js_getDadosFavorecido($F('z01_numcgm'));
     }
 
   }
 
   function js_mostracgm1(chave1, chave2) {
-    
+
     $('z01_nome').value   = chave1;
     $('z01_numcgm').value = chave2;
     db_iframe_cgm.hide();
@@ -255,9 +255,9 @@ if ( isset($oGet->chavepesquisa) ) {
 
   function js_novoCgm() {
 
-    js_OpenJanelaIframe('', 
-                        'db_iframe_novocgm', 
-                        'prot1_cadgeralmunic001.php?lMenu=false&lFisico=true&funcaoRetorno=top.corpo.iframe_favorecido.retornoCgm',
+    js_OpenJanelaIframe('',
+                        'db_iframe_novocgm',
+                        'prot1_cadgeralmunic001.php?lMenu=false&lFisico=true&funcaoRetorno=CurrentWindow.corpo.iframe_favorecido.retornoCgm',
                         'Novo CGM',
                         true,
                         '0');
@@ -266,74 +266,74 @@ if ( isset($oGet->chavepesquisa) ) {
   function js_alterarCgm(iCgm) {
 
     if (iCgm != "") {
-      js_OpenJanelaIframe('', 
-                          'db_iframe_novocgm', 
+      js_OpenJanelaIframe('',
+                          'db_iframe_novocgm',
                           'prot1_cadgeralmunic002.php?chavepesquisa='+iCgm+
-                          '&lMenu=false&lCpf=true&funcaoRetorno=top.corpo.iframe_favorecido.retornoCgm',
+                          '&lMenu=false&lCpf=true&funcaoRetorno=CurrentWindow.corpo.iframe_favorecido.retornoCgm',
                           'Novo CGM',
                           true,
                           '0');
     }
-    
+
   }
 
   function retornoCgm(iCgm) {
-    
+
     db_iframe_novocgm.hide();
     $('z01_numcgm').value = iCgm;
-    js_pesquisacgm(false); 
+    js_pesquisacgm(false);
   }
   js_tabulacaoforms("form1","z01_numcgm",true,1,"z01_numcgm",true);
 
   function js_getDadosFavorecido(iCgm){
-    
+
     var oParam = new Object();
     oParam.exec = 'getDadosFavorecido';
     oParam.iCgm = iCgm;
-    
+
     js_divCarregando('Verificando dados do favorecido.', 'msgBox');
     var oAjax = new Ajax.Request(
                  "jur1_favorecido.RPC.php",
                  {
                  method    : 'post',
-                 parameters: 'json='+Object.toJSON(oParam), 
-                 onComplete: 
+                 parameters: 'json='+Object.toJSON(oParam),
+                 onComplete:
                    function(oAjax) {
-                             
+
                      js_removeObj('msgBox');
                      var oRetorno = eval("("+oAjax.responseText+")");
-                     
+
                      if (oRetorno.status== "2") {
                        alert(oRetorno.message.urlDecode());
                      } else {
-                       
+
                        js_liberaBotoes(true);
-                       $('btnExcluir').disabled=true;      
-                       
+                       $('btnExcluir').disabled=true;
+
                        if(oRetorno.numrows > 0){
 
                          $('v86_containterna').setValue(oRetorno.v86_containterna);
                          oContaBancaria.getDados(oRetorno.v86_contabancaria);
-                         $('btnExcluir').disabled=false;      
+                         $('btnExcluir').disabled=false;
                          parent.document.formaba.favorecidotaxas.disabled = false;
-                         top.corpo.iframe_favorecidotaxas.location.href='jur1_favorecidotaxa001.php?v86_sequencial=' + oRetorno.v86_sequencial;
-                        
+                         CurrentWindow.corpo.iframe_favorecidotaxas.location.href='jur1_favorecidotaxa001.php?v86_sequencial=' + oRetorno.v86_sequencial;
+
 //                         parent.mo_camada('favorecidotaxas');
                        }
                      }
-                   } 
+                   }
                  }
                 );
-    
+
   }
  function js_liberaBotoes(lOpcao){
-   
+
    if(lOpcao){
       $('btnSalvar').disabled=false;
      } else {
       $('btnSalvar').disabled=false;
      }
-   } 	   
+   }
 </script>
 <script>
 

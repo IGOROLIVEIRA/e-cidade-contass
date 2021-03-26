@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -44,7 +44,7 @@ $sSqlAutorizacao = null;
  */
 
 if (!empty($oGet->dtDataInicial)) {
-  $dtDataInicial = implode("-", array_reverse(explode("/", $oGet->dtDataInicial))); 
+  $dtDataInicial = implode("-", array_reverse(explode("/", $oGet->dtDataInicial)));
 }
 if (!empty($oGet->dtDataFinal)) {
   $dtDataFinal  = implode("-", array_reverse(explode("/", $oGet->dtDataFinal)));
@@ -60,18 +60,18 @@ if (!empty($oGet->dtDataInicial) && empty($oGet->dtDataFinal)) {
 }
 
 if (isset($oGet->iCodigoAutorizacao) && !empty($oGet->iCodigoAutorizacao)) {
-  
+
   $sSqlAutorizacao = $oDaoEmpAutoriza->sql_query(null, $sCamposPadrao, null, "e54_autori = {$oGet->iCodigoAutorizacao} {$sWherePadrao}");
-  
+
 } else if (isset($oGet->iCodigoDotacao) && !empty($oGet->iCodigoDotacao)) {
-  
+
   $sWhereDotacao    = "e54_autori in (select e56_autori";
   $sWhereDotacao   .= "                 from empautidot";
   $sWhereDotacao   .= "                where e56_coddot = {$oGet->iCodigoDotacao} ";
   $sWhereDotacao   .= "             order by e56_autori)";
   $sWhereDotacao   .= "and e54_anousu=".db_getsession("DB_anousu")." {$sDataEmissao} {$sWherePadrao}";
   $sSqlAutorizacao  = $oDaoEmpAutoriza->sql_query(null, $sCamposPadrao, null, $sWhereDotacao);
-  
+
 } else if (isset($oGet->iCodigoMaterial) && $oGet->iCodigoMaterial) {
 
   $sWhereMaterial  = "    e55_item = {$oGet->iCodigoMaterial}";
@@ -79,18 +79,18 @@ if (isset($oGet->iCodigoAutorizacao) && !empty($oGet->iCodigoAutorizacao)) {
   $sSqlAutorizacao = $oDaoEmpAutoriza->sql_query_itemmaterial(null, $sCamposPadrao, null, $sWhereMaterial);
 
 } else if (isset($oGet->iCodigoFornecedor) && $oGet->iCodigoFornecedor) {
-  
+
   $sWhereFornecedor = "e54_numcgm = {$oGet->iCodigoFornecedor} {$sDataEmissao} {$sWherePadrao}";
-  $sSqlAutorizacao  = $oDaoEmpAutoriza->sql_query(null, $sCamposPadrao, null, $sWhereFornecedor);  
+  $sSqlAutorizacao  = $oDaoEmpAutoriza->sql_query(null, $sCamposPadrao, null, $sWhereFornecedor);
 
 } else if (!empty($sDataEmissao)) {
-  
+
   $sWhereDataEmissao = substr($sDataEmissao, 4) ."{$sWherePadrao}";
   $sSqlAutorizacao   = $oDaoEmpAutoriza->sql_query(null, $sCamposPadrao, null, $sWhereDataEmissao);
 }
 
 if ($sSqlAutorizacao == null) {
-  
+
   $sSqlAutorizacao  = "   select e54_autori,";
   $sSqlAutorizacao .= "          e54_emiss,";
   $sSqlAutorizacao .= "          e54_anulad,";
@@ -121,7 +121,7 @@ if ($sSqlAutorizacao == null) {
     <tr>
       <td><b>Período:</b></td>
       <td>
-        <?php 
+        <?php
           db_inputdata('dtDataInicial',"","","",true,'text',1,"");
           echo " <b>à</b> ";
           db_inputdata('dtDataFinal',"","","",true,'text',1,"");
@@ -137,7 +137,7 @@ if ($sSqlAutorizacao == null) {
 
 <fieldset style="width: 10px">
   <legend><b>Autorizações Encontradas</b></legend>
-  <?php 
+  <?php
     db_lovrot($sSqlAutorizacao, 15, "()", "", "js_abreConsultaAutorizacao|e54_autori");
   ?>
 </fieldset>
@@ -149,6 +149,6 @@ if ($sSqlAutorizacao == null) {
 function js_abreConsultaAutorizacao(iCodigoAutorizacao) {
 
   var sUrlConsultaAutorizacao = "emp1_consultaautorizacaoempenho002.php?iCodigoAutorizacao="+iCodigoAutorizacao
-  js_OpenJanelaIframe('top.corpo','db_iframe_consultaautorizacaoempenho002', sUrlConsultaAutorizacao, 'Consulta Autorização de Empenho: '+iCodigoAutorizacao, true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaautorizacaoempenho002', sUrlConsultaAutorizacao, 'Consulta Autorização de Empenho: '+iCodigoAutorizacao, true);
 }
 </script>

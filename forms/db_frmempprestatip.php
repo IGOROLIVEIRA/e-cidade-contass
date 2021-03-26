@@ -85,7 +85,7 @@ $clempprestatip->rotulo->label();
 <script>
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empprestatip','func_empprestatip.php?funcao_js=parent.js_preenchepesquisa|e44_tipo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empprestatip','func_empprestatip.php?funcao_js=parent.js_preenchepesquisa|e44_tipo','Pesquisa',true);
   }
 
   function js_preenchepesquisa(chave){

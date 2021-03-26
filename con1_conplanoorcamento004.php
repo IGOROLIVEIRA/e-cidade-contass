@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,11 +46,11 @@ $oGet = db_utils::postMemory($_GET);
 <html>
 <head>
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <?
   db_app::load("scripts.js");
-  db_app::load("prototype.js"); 
+  db_app::load("prototype.js");
   db_app::load("strings.js, grid.style.css, datagrid.widget.js");
 ?>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -65,7 +65,7 @@ $oGet = db_utils::postMemory($_GET);
         <tr>
           <td><b>Código Conta:</b></td>
           <td>
-            <?php 
+            <?php
               db_input("iCodigoConta", 10, null, true, "text", 3);
             ?>
           </td>
@@ -73,20 +73,20 @@ $oGet = db_utils::postMemory($_GET);
         <tr>
           <td><b>Reduzido:</b></td>
           <td>
-            <?php 
+            <?php
               db_input("iCodigoReduzido", 10, null, true, "text", 3);
             ?>
           </td>
         </tr>
         <tr>
           <td>
-            <?php 
+            <?php
               db_ancora("<b>Instituição:</b>", "js_pesquisaInstituicao(true)", 1, "", "ancoraInstituicao");
             ?>
              <span id='ancoraDesabilitada' style='display:none'><b>Instituição:</b></span>
           </td>
           <td>
-            <?php 
+            <?php
               db_input("iCodigoInstituicao", 10, null, false, "text", 1, "onchange='js_pesquisaInstituicao(false);'");
               db_input("sDescricaoInstituicao", 50, null, true, "text", 3);
             ?>
@@ -94,18 +94,18 @@ $oGet = db_utils::postMemory($_GET);
         </tr>
         <tr>
           <td>
-            <?php 
+            <?php
               db_ancora("<b>Recurso:</b>", "js_pesquisaRecurso(true)", 1);
             ?>
           </td>
           <td>
-            <?php 
+            <?php
               db_input("iCodigoRecurso", 10, null, false, "text", 1, "onchange='js_pesquisaRecurso(false);'");
               db_input("sDescricaoRecurso", 50, null, true, "text", 3);
             ?>
           </td>
         </tr>
-      </table>      
+      </table>
     </fieldset>
     <p><input type="button" name="btnIncluirReduzido" id="btnIncluirReduzido" value="Incluir"></p>
     <fieldset>
@@ -123,7 +123,7 @@ $oGet = db_utils::postMemory($_GET);
 
 var sCaminhoMensagem = "financeiro.contabilidade.con1_conplanoorcamento.";
 var oUrl             = js_urlToObject();
-            
+
 var oGridReduzido              = new DBGrid('oGridRecibo');
     oGridReduzido.nameInstance = 'oGridReduzido';
     oGridReduzido.sName        = 'oGridReduzido';
@@ -138,7 +138,7 @@ var oGridReduzido              = new DBGrid('oGridRecibo');
 function js_carregaReduzidos() {
 
   js_divCarregando("Aguarde, carregando reduzidos...", "msgBox");
-  
+
   var oParam          = new Object();
   oParam.exec         = "getReduzidos";
   oParam.iCodigoConta = document.getElementById('iCodigoConta').value;
@@ -149,7 +149,7 @@ function js_carregaReduzidos() {
                                  onComplete: js_preencheGridReduzidos
                                 }
                                );
-  
+
 }
 
 function js_preencheGridReduzidos(oAjax) {
@@ -162,7 +162,7 @@ function js_preencheGridReduzidos(oAjax) {
     oRetorno.aContasReduzidas.each(function (oReduz, iLinha) {
 
       var aLinha = new Array();
-      aLinha[0]  = oReduz.c61_codcon; 
+      aLinha[0]  = oReduz.c61_codcon;
       aLinha[1]  = oReduz.c61_reduz;
       aLinha[2]  = oReduz.codigo +" - "+ oReduz.nomeinst;
       aLinha[3]  = oReduz.o15_codigo +" - "+ oReduz.o15_descr;
@@ -182,20 +182,20 @@ function js_preencheGridReduzidos(oAjax) {
 function js_alterarReduzido(iLinha, iReduzido) {
 
   var oRowGrid = oGridReduzido.aRows[iLinha];
-  
+
   $('iCodigoReduzido').value    = oRowGrid.aCells[1].getValue();
   $('iCodigoInstituicao').value = oRowGrid.aCells[5].getValue();
   $('iCodigoRecurso').value     = oRowGrid.aCells[6].getValue();
 
   js_pesquisaRecurso(false);
   js_pesquisaInstituicao(false);
-  
+
   $('iCodigoInstituicao').disabled         = true;
   $('iCodigoInstituicao').style.background = "#DEB887";
 
   $('ancoraInstituicao').style.display     = "none";
   $('ancoraDesabilitada').style.display    = "";
-  
+
   $('btnIncluirReduzido').value = "Alterar";
 }
 
@@ -204,7 +204,7 @@ function js_excluirReduzido(iReduzido, iInstituicao) {
   if (!confirm("Confirma a exclusão do reduzido "+iReduzido+", instituição "+iInstituicao+"?")) {
     return false;
   }
-  
+
   var oParam               = new Object();
   oParam.exec              = "excluirReduzido";
   oParam.iCodigoReduzido   = iReduzido;
@@ -220,7 +220,7 @@ function js_excluirReduzido(iReduzido, iInstituicao) {
                                  }
                                 }
                                );
-                               
+
   js_carregaReduzidos();
 }
 
@@ -246,7 +246,7 @@ $("btnIncluirReduzido").observe("click", function() {
   }
 
   js_divCarregando("Cadastrando reduzido, aguarde...", "msgBox");
-  
+
   var oParam                    = new Object();
       oParam.exec               = "salvarReduzido";
       oParam.iCodigoPlanoConta  = iCodigoPlanoConta;
@@ -301,7 +301,7 @@ function js_retornoSalvarReduzidos(oAjax) {
 
     for (var iIndice = 0; iIndice < iTotalDocumentos; iIndice++ ) {
 
-      var oEventoContabilVinculado = oRetorno.aEventoContabilVinculado[iIndice]; 
+      var oEventoContabilVinculado = oRetorno.aEventoContabilVinculado[iIndice];
       var iDocumento = oEventoContabilVinculado.iDocumento;
       var sDescricaoDocumento = oEventoContabilVinculado.sDescricao.urlDecode();
 
@@ -313,11 +313,11 @@ function js_retornoSalvarReduzidos(oAjax) {
 
     /**
      * perguntar se quer vincular
-     */ 
-    if (confirm(sMensagemPergunta)) { 
-      
+     */
+    if (confirm(sMensagemPergunta)) {
+
       js_divCarregando(_M( sCaminhoMensagem + "vinculandoReduzido"), "msgBox");
-      
+
       var oParam = new Object();
 
       oParam.exec                  = "vincularReduzido";
@@ -336,30 +336,30 @@ function js_retornoSalvarReduzidos(oAjax) {
 
   js_carregaReduzidos();
 }
- 
+
 function js_retornoVincularReduzidos(oAjax) {
 
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
-  alert(oRetorno.message.urlDecode()); 
-} 
- 
+  alert(oRetorno.message.urlDecode());
+}
+
 /**
  * Funções de pesquisa das instituições cadastradas
  */
 function js_pesquisaInstituicao(lMostraWindow) {
 
   if (lMostraWindow) {
-  
+
     var sUrl = 'func_instit.php?funcao_js=parent.js_preencheInstituicao|codigo|nomeinst';
-    js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',true,'0');
   } else {
     if($("iCodigoInstituicao").value != ''){
-     
+
       var sUrl = 'func_instit.php?pesquisa_chave='+$("iCodigoInstituicao").value+'&funcao_js=parent.js_completaInstituicao';
-      js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',false);
     } else {
-      $("sDescricaoInstituicao").value = ''; 
+      $("sDescricaoInstituicao").value = '';
     }
   }
 }
@@ -376,7 +376,7 @@ function js_completaInstituicao(sNomeInstit, lErro) {
   if (!lErro) {
     $('sDescricaoInstituicao').value = sNomeInstit;
   } else {
-  
+
     $('iCodigoInstituicao').value    = '';
     $('sDescricaoInstituicao').value = sNomeInstit;
   }
@@ -385,16 +385,16 @@ function js_completaInstituicao(sNomeInstit, lErro) {
 function js_pesquisaRecurso(lMostraWindow) {
 
   if (lMostraWindow) {
-  
+
     var sUrl = 'func_orctiporec.php?funcao_js=parent.js_preencheRecurso|o15_codigo|o15_descr';
-    js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',true,'0');
   } else {
     if($("iCodigoRecurso").value != ''){
-     
+
       var sUrl = 'func_orctiporec.php?pesquisa_chave='+$("iCodigoRecurso").value+'&funcao_js=parent.js_completaRecurso';
-      js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',false);
     } else {
-      $("sDescricaoRecurso").value = ''; 
+      $("sDescricaoRecurso").value = '';
     }
   }
 }
@@ -411,7 +411,7 @@ function js_completaRecurso(sDescricaoRecurso, lErro) {
   if (!lErro) {
     $('sDescricaoRecurso').value = sDescricaoRecurso;
   } else {
-  
+
     $('iCodigoRecurso').value    = '';
     $('sDescricaoRecurso').value = sDescricaoRecurso;
   }

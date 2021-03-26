@@ -2,27 +2,27 @@
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlibwebseller.php");
@@ -35,7 +35,7 @@ require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 
 if ( !isset($ed60_d_datamatricula_dia) ) {
-  
+
   $ed60_d_datamatricula_dia = date("d",db_getsession("DB_datausu"));
   $ed60_d_datamatricula_mes = date("m",db_getsession("DB_datausu"));
   $ed60_d_datamatricula_ano = date("Y",db_getsession("DB_datausu"));
@@ -67,11 +67,11 @@ $escola   = db_getsession("DB_coddepto");
 $result_parametros = $cledu_parametros->sql_record( $cledu_parametros->sql_query( "", "*", "", "ed233_i_escola = {$escola}" ) );
 
 if ( $cledu_parametros->numrows > 0 ) {
-  db_fieldsmemory( $result_parametros, 0 );	
+  db_fieldsmemory( $result_parametros, 0 );
 } else {
-  
+
   echo "Erro! Parâmetros não informados";
-  exit;	
+  exit;
 }
 
 if ( isset( $incluir ) ) {
@@ -95,7 +95,7 @@ if ( isset( $incluir ) ) {
 
     $aTurnosSelecionados[] = $check_turno2;
     if ($iNumeroCandidatos > $disponiveis2) {
-      $lTurmaSemVagas = true; 
+      $lTurmaSemVagas = true;
     }
   }
   if ( isset($check_turno3) ) {
@@ -103,7 +103,7 @@ if ( isset( $incluir ) ) {
     $aTurnosSelecionados[] = $check_turno3;
     if ($iNumeroCandidatos > $disponiveis3) {
 
-      $lTurmaSemVagas = true; 
+      $lTurmaSemVagas = true;
     }
   }
 
@@ -112,9 +112,9 @@ if ( isset( $incluir ) ) {
     db_msgbox("Número de alunos selecionados é maior que as vagas disponíveis");
     db_redireciona("edu1_matricula001.php?chavepesquisa={$ed60_i_turma}");
   } else {
-    
+
     $lErroTransacao = false;
-    
+
     /**
      * Busca os códigos dos turnos refenrentes da turma, com base no que foi selecionado;
      * Sempre que turma tivér um turno integral e não for de ensino infantil, será incluso a matrícula
@@ -130,58 +130,58 @@ if ( isset( $incluir ) ) {
       $lErroTransacao = true;
     }
     $iTotalTurmaTurnoReferente = pg_num_rows( $rsTurmaTurnoReferente );
-    
+
     $msg_mat = "";
     db_inicio_transacao();
-    
+
     for ( $i = 0; $i < $iNumeroCandidatos; $i++ ) {
-      
-      $erro_mat       = false;  
+
+      $erro_mat       = false;
       $sSqlMatricula2 = "select fc_codetapaturma($ed60_i_turma) as etapasturma";
       $rsMatricula2   = $oDaoMatricula->sql_record( $sSqlMatricula2 );
       db_fieldsmemory( $rsMatricula2, 0 );
-      
+
       $sCamposMatricula  = "ed60_i_codigo as jatem, ed47_v_nome as nometem, turma.ed57_c_descr as turmatem";
       $sCamposMatricula .= ", calendario.ed52_c_descr as caltem";
       $sWhereMatricula   = " ed60_i_aluno = {$alunos[$i]} AND turma.ed57_i_calendario = {$ed57_i_calendario}";
       $sWhereMatricula  .= "AND ed60_c_situacao != 'AVANÇADO' AND ed60_c_situacao != 'CLASSIFICADO'";
       $sSqlMatricula     = $clmatricula->sql_query( "", $sCamposMatricula, "", $sWhereMatricula );
       $result_verif      = $clmatricula->sql_record( $sSqlMatricula );
-      
+
       if ( $clmatricula->numrows > 0 ) {
-        
+
        db_fieldsmemory( $result_verif, 0 );
        $msg_mat .= "ATENÇÃO:\\n\\nAluno(a) {$nometem} já está matriculado(a) na turma {$turmatem} no calendário {$caltem}!\\n\\n";
        $erro_mat = true;
       } else if ( VerUltimoRegHistorico($alunos[$i],$codetapa,$etapasturma) == true && $ed233_c_consistirmat == 'S' ) {
-        
+
         $msg_mat  .= $msgequiv;// $msgequiv -> variável global da função VerUltimoRegHistorico
         $erro_mat  = true;
         unset( $msgequiv );
       }
-      
+
       if ( $erro_mat == false ) {
-        
+
         $sCamposAlunoPossib = "ed56_i_codigo, ed79_i_codigo, ed79_c_resulant, ed79_i_turmaant";
         $sSqlAlunoPossib    = $clalunopossib->sql_query( "", $sCamposAlunoPossib, "", " ed56_i_aluno = {$alunos[$i]}");
         $result1            = $clalunopossib->sql_record( $sSqlAlunoPossib );
         db_fieldsmemory( $result1, 0 );
-        
+
         $ed79_i_turmaant = $ed79_i_turmaant == "0" ? "" : $ed79_i_turmaant;
         $sSqlMatricula   = $clmatricula->sql_query_file( "", "max(ed60_i_numaluno)", "", " ed60_i_turma = {$ed60_i_turma}" );
         $result2         = $clmatricula->sql_record( $sSqlMatricula );
         db_fieldsmemory( $result2, 0 );
-        
+
         $max            = $max == "" ? "" : ( $max + 1 );
         $sSqlAlunoCurso = $clalunocurso->sql_query_file( "", "ed56_c_situacao as sitanterior", "", " ed56_i_aluno = {$alunos[$i]}" );
         $result3        = $clalunocurso->sql_record( $sSqlAlunoCurso );
-        
+
         $sitanterior     = pg_result( $result3, 0, 0 );
         $sitmatricula    = trim( $sitanterior ) == "CANDIDATO" ? "MATRICULAR" : "REMATRICULAR";
         $sitmatricula1   = trim( $sitanterior ) == "CANDIDATO" ? "MATRICULADO" : "REMATRICULADO";
         $tipomatricula   = trim( $sitanterior ) == "CANDIDATO" ? "N" : "R";
         $ed79_i_turmaant = $ed79_i_turmaant == "" ? "null" : $ed79_i_turmaant;
-        
+
         $clmatricula->ed60_i_numaluno     = $max;
         $clmatricula->ed60_i_aluno        = $alunos[$i];
         $clmatricula->ed60_c_situacao     = "MATRICULADO";
@@ -198,7 +198,7 @@ if ( isset( $incluir ) ) {
         $clmatricula->ed60_matricula      = null;
         $clmatricula->ed60_i_codigo       = null;
         $clmatricula->incluir( null );
-        
+
         $ultima                               = $clmatricula->ed60_i_codigo;
         $clmatriculamov->ed229_i_matricula    = $ultima;
         $clmatriculamov->ed229_i_usuario      = db_getsession("DB_id_usuario");
@@ -208,46 +208,46 @@ if ( isset( $incluir ) ) {
         $clmatriculamov->ed229_c_horaevento   = date("H:i");
         $clmatriculamov->ed229_d_data         = date("Y-m-d",db_getsession("DB_datausu"));
         $clmatriculamov->incluir( null );
-        
+
         $clmatriculaserie->ed221_i_matricula = $ultima;
         $clmatriculaserie->ed221_i_serie     = $codetapa;
         $clmatriculaserie->ed221_c_origem    = "S";
         $clmatriculaserie->incluir( null );
-        
+
         $clalunocurso->ed56_c_situacao   = "MATRICULADO";
         $clalunocurso->ed56_i_calendario = $ed57_i_calendario;
         $clalunocurso->ed56_i_base       = $ed57_i_base;
         $clalunocurso->ed56_i_escola     = $ed57_i_escola;
         $clalunocurso->ed56_i_codigo     = $ed56_i_codigo;
         $clalunocurso->alterar( $ed56_i_codigo );
-        
+
         $clalunopossib->ed79_i_serie  = $codetapa;
         $clalunopossib->ed79_i_turno  = $ed57_i_turno;
         $clalunopossib->ed79_i_codigo = $ed79_i_codigo;
         $clalunopossib->alterar( $ed79_i_codigo );
-        
+
         $sql2    = "UPDATE historico ";
         $sql2   .= "   SET ed61_i_escola = {$ed57_i_escola} ";
         $sql2   .= " WHERE ed61_i_aluno  = {$alunos[$i]} ";
         $query2  = db_query( $sql2 );
-        
-        
+
+
         if ( $rsTurmaTurnoReferente && $iTotalTurmaTurnoReferente > 0 ) {
-        
+
           /**
            * Percorre os turnos vinculados e inclui um novo registro na tabela matriculaturnoreferente, vinculando a
            * matrícula ao turno da turma
            */
           for ( $iContador = 0; $iContador < $iTotalTurmaTurnoReferente; $iContador++ ) {
-        
+
             $iTurmaTurnoReferente = db_utils::fieldsMemory( $rsTurmaTurnoReferente, $iContador )->ed336_codigo;
-        
+
             $oDaoMatriculaTurnoReferente->ed337_turmaturnoreferente = $iTurmaTurnoReferente;
             $oDaoMatriculaTurnoReferente->ed337_matricula           = $ultima;
             $oDaoMatriculaTurnoReferente->incluir( null );
-        
+
             if ( $oDaoMatriculaTurnoReferente->erro_status == "0" ) {
-        
+
               $lErroTransacao  = true;
               $sMensagem       = "Erro ao salvar dados do vínculo da matrícula com o turno:\n";
               $sMensagem      .= $oDaoMatriculaTurnoReferente->erro_msg;
@@ -257,42 +257,42 @@ if ( isset( $incluir ) ) {
         }
       }
     }
-    
+
     db_fim_transacao( $lErroTransacao );
-    
+
     if ( $msg_mat != "" ) {
       db_msgbox( $msg_mat );
     } else {
-      
+
       if ( $clmatricula->erro_status != "0" ) {
         $clmatricula->erro( true, false );
       }
     }
-    
+
     db_redireciona("edu1_matricula001.php?chavepesquisa={$ed60_i_turma}");
     exit;
   }
 } else if ( isset( $chavepesquisa ) ) {
-  
+
   $db_botao = false;
   $sCamposTurma  = "turma.*, calendario.*, base.*, cursoedu.*, turno.*, fc_nomeetapaturma(ed57_i_codigo) as nometapa";
   $sCamposTurma .= ", fc_codetapaturma(ed57_i_codigo) as codetapa";
   $sSqlTurma     = $clturma->sql_query( "", $sCamposTurma, "", "ed57_i_codigo = {$chavepesquisa}" );
   $result        = $clturma->sql_record( $sSqlTurma );
   db_fieldsmemory( $result, 0 );
-  
+
   $ed60_i_turma     = $ed57_i_codigo;
   $sWhereMatricula3 = "ed60_i_turma = {$ed60_i_turma} AND ed60_c_situacao = 'MATRICULADO'";
   $sSqlMatricula3   = $clmatricula->sql_query_file( "", " count(*) ", "", $sWhereMatricula3 );
   $result1          = $clmatricula->sql_record( $sSqlMatricula3 );
   db_fieldsmemory( $result1, 0 );
-  
+
   $ed57_i_nummatr = $count;
 ?>
 <script>
   parent.document.formaba.a2.disabled    = false;
   parent.document.formaba.a2.style.color = "black";
-  top.corpo.iframe_a2.location.href      = 'edu1_alunoturma001.php?ed60_i_turma=<?=$ed57_i_codigo?>';
+  CurrentWindow.corpo.iframe_a2.location.href      = 'edu1_alunoturma001.php?ed60_i_turma=<?=$ed57_i_codigo?>';
                                                                 +'&ed57_c_descr=<?=$ed57_c_descr?>';
                                                                 +'&ed52_c_descr=<?=$ed52_c_descr?>';
 </script>
@@ -325,7 +325,7 @@ if ( isset( $incluir ) ) {
 
     $clmatricula->erro( true, false );
     $db_botao = true;
-    
+
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if ( $clmatricula->erro_campo != "" ) {
 

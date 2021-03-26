@@ -164,10 +164,10 @@ $clrotulo->label("ac16_resumoobjeto");
 
     function js_pesquisasi03_licitacao(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu', 'Pesquisa', true);
         } else {
             if (document.form1.si03_licitacao.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_liclicita.php?pesquisa_chave=' + document.form1.si03_licitacao.value + '&funcao_js=parent.js_mostraliclicita', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?pesquisa_chave=' + document.form1.si03_licitacao.value + '&funcao_js=parent.js_mostraliclicita', 'Pesquisa', false);
             } else {
                 document.form1.l20_codigo.value = '';
             }
@@ -186,7 +186,7 @@ $clrotulo->label("ac16_resumoobjeto");
         db_iframe_liclicita.hide();
     }
     function js_pesquisa() {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_apostilamento', 'func_apostilamentonovo.php?funcao_js=parent.js_preenchepesquisa|si03_sequencial', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_apostilamento', 'func_apostilamentonovo.php?funcao_js=parent.js_preenchepesquisa|si03_sequencial', 'Pesquisa', true);
     }
     function js_preenchepesquisa(chave) {
         db_iframe_apostilamento.hide();
@@ -209,7 +209,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (lMostrar == true) {
 
             var sUrl = 'func_acordonovo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura&iTipoFiltro=4';
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_acordo',
                 sUrl,
                 'Pesquisar Acordo',
@@ -221,7 +221,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 var sUrl = 'func_acordonovo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                     '&funcao_js=parent.js_mostraacordo';
 
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_acordo',
                     sUrl,
                     'Pesquisar Acordo',
@@ -675,7 +675,7 @@ $clrotulo->label("ac16_resumoobjeto");
     function mostraSaldo(chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 

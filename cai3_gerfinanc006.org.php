@@ -11,8 +11,8 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
 	$result = pg_query($sql);
 	db_fieldsmemory($result,0);
 	if($tipo==1){
-		// certidao positiva 
-		$tipocer = "CERTIDÃO POSITIVA DE DÉBITO"; 
+		// certidao positiva
+		$tipocer = "CERTIDÃO POSITIVA DE DÉBITO";
 		if(isset($matric)){
 			$codtipo = 26;
 			$sql = "select * from proprietario where j01_matric = $matric";
@@ -20,19 +20,19 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
          	db_fieldsmemory($result,0);
          	/////// TEXTOS E ASSINATURAS
          	$instit = db_getsession("DB_instit");
-         	$sqltexto = "select * from db_textos 
+         	$sqltexto = "select * from db_textos
 							where id_instit = $instit and (descrtexto like 'positiva%' or descrtexto like 'ass%')";
          	$resulttexto = pg_exec($sqltexto);
          	for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
             	db_fieldsmemory($resulttexto,$xx);
             	$text  = $descrtexto;
-            	$$text = db_geratexto($conteudotexto); 
-         	}  
+            	$$text = db_geratexto($conteudotexto);
+         	}
          	////////
          	$texto1  = $positiva_mat1;
          	$texto2  = $positiva_mat2;
          	$texto3  = $positiva_mat3;
-         	$texto4  = ''; 
+         	$texto4  = '';
          	//$texto1  = '                    CERTIFICAMOS a requerimento, que não existe cadastro em nome de '.$z01_nome.', e que nada deve à Fazenda Municipal até a presente data.'."\n".'                    Fica ressalvado o direito do Município de Sapiranga de apurar e cobrar eventuais débitos de responsabilidade do contribuinte supra identificado.'."\n".'                    E para que produza os efeitos a que se destina, emite a presente certidão que é válida por 60 (sessenta) dias a contar da data de sua expedição.';
     	}else if(isset($numcgm)){
        		$codtipo = 27;
@@ -41,14 +41,14 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
        		db_fieldsmemory($result,0);
        		/////// TEXTOS E ASSINATURAS
        		$instit = db_getsession("DB_instit");
-       		$sqltexto = "select * from db_textos 
+       		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'positiva%' or descrtexto like 'ass%')";
        		$resulttexto = pg_exec($sqltexto);
        		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
           		db_fieldsmemory($resulttexto,$xx);
           		$text  = $descrtexto;
-          		$$text = db_geratexto($conteudotexto); 
-       		}  
+          		$$text = db_geratexto($conteudotexto);
+       		}
        		////////
        		$texto1  = $positiva_cgm1;
        		$texto2  = $positiva_cgm2;
@@ -61,14 +61,14 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
        		db_fieldsmemory($result,0);
        		/////// TEXTOS E ASSINATURAS
        		$instit = db_getsession("DB_instit");
-       		$sqltexto = "select * from db_textos 
+       		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'positiva%' or descrtexto like 'ass%')";
        		$resulttexto = pg_exec($sqltexto);
        		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
           		db_fieldsmemory($resulttexto,$xx);
           		$text  = $descrtexto;
-          		$$text = db_geratexto($conteudotexto); 
-       		}  
+          		$$text = db_geratexto($conteudotexto);
+       		}
        		////////
        		$texto1 = $positiva_ins1;
        		$texto2 = $positiva_ins2;
@@ -85,14 +85,14 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
     		db_fieldsmemory($result,0);
     		/////// TEXTOS E ASSINATURAS
     		$instit = db_getsession("DB_instit");
-    		$sqltexto = "select * from db_textos 
+    		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'negativa%' or descrtexto like 'ass%')";
 			$resulttexto = pg_exec($sqltexto);
     		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
        			db_fieldsmemory($resulttexto,$xx);
        			$text  = $descrtexto;
-       			$$text = db_geratexto($conteudotexto); 
-    		}  
+       			$$text = db_geratexto($conteudotexto);
+    		}
     		////////
     		$texto1 = $negativa_mat1;
     		$texto2 = $negativa_mat2;
@@ -106,15 +106,15 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
        		db_fieldsmemory($result,0);
        		/////// TEXTOS E ASSINATURAS
        		$instit = db_getsession("DB_instit");
-       		$sqltexto = "select * from db_textos 
+       		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'negativa%' or descrtexto like 'ass%')";
        		//die($sqltexto);
        		$resulttexto = pg_exec($sqltexto);
        		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
        			db_fieldsmemory($resulttexto,$xx);
         		$text  = $descrtexto;
-        		$$text = db_geratexto($conteudotexto); 
-       		}  	
+        		$$text = db_geratexto($conteudotexto);
+       		}
        		////////
        		$texto1  = $negativa_cgm1;
        		$texto2  = $negativa_cgm2;
@@ -127,20 +127,20 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
        		db_fieldsmemory($result,0);
        		/////// TEXTOS E ASSINATURAS
        		$instit = db_getsession("DB_instit");
-       		$sqltexto = "select * from db_textos 
+       		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'negativa%' or descrtexto like 'ass%')";
        		$resulttexto = pg_exec($sqltexto);
        		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
 				db_fieldsmemory($resulttexto,$xx);
           		$text  = $descrtexto;
-          		$$text = db_geratexto($conteudotexto); 
-       		}  	
+          		$$text = db_geratexto($conteudotexto);
+       		}
        		////////
        		$texto1 = $negativa_ins1;
        		$texto2 = $negativa_ins2;
        		$texto3 = $negativa_ins3;
        		$texto4  = '';
-     	} 
+     	}
   	}else{
     	// certidao regular
      	$tipocer = "CERTIDÃO POSITIVA COM EFEITOS NEGATIVOS" ;
@@ -151,14 +151,14 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
        		db_fieldsmemory($result,0);
        		/////// TEXTOS E ASSINATURAS
        		$instit = db_getsession("DB_instit");
-       		$sqltexto = "select * from db_textos 
+       		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'regular%' or descrtexto like 'ass%')";
        		$resulttexto = pg_exec($sqltexto);
        		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
           		db_fieldsmemory($resulttexto,$xx);
           		$text  = $descrtexto;
-          		$$text = db_geratexto($conteudotexto); 
-       		}  
+          		$$text = db_geratexto($conteudotexto);
+       		}
        		////////
        		$texto1 = $regular_mat1;
        		$texto2 = $regular_mat2;
@@ -171,14 +171,14 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
        		db_fieldsmemory($result,0);
        		/////// TEXTOS E ASSINATURAS
        		$instit = db_getsession("DB_instit");
-       		$sqltexto = "select * from db_textos 
+       		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'regular%' or descrtexto like 'ass%')";
        		$resulttexto = pg_exec($sqltexto);
        		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
           		db_fieldsmemory($resulttexto,$xx);
           		$text  = $descrtexto;
-          		$$text = db_geratexto($conteudotexto); 
-       		}  
+          		$$text = db_geratexto($conteudotexto);
+       		}
        		////////
        		$texto1  = $regular_cgm1;
        		$texto2  = $regular_cgm2;
@@ -191,26 +191,26 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
        		db_fieldsmemory($result,0);
        		/////// TEXTOS E ASSINATURAS
        		$instit = db_getsession("DB_instit");
-       		$sqltexto = "select * from db_textos 
+       		$sqltexto = "select * from db_textos
 							where id_instit = $instit and ( descrtexto like 'regular%' or descrtexto like 'ass%')";
        		$resulttexto = pg_exec($sqltexto);
        		for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
           		db_fieldsmemory($resulttexto,$xx);
           		$text  = $descrtexto;
-          		$$text = db_geratexto($conteudotexto); 
-       		}  
+          		$$text = db_geratexto($conteudotexto);
+       		}
        		////////
        		$texto1 = $regular_ins1;
        		$texto2 = $regular_ins2;
        		$texto3 = $regular_ins3;
        		$texto4  = '';
-     	}	 
+     	}
   	}
- 
- 
+
+
  	//echo $codproc;
   	$head1 = "DEPARTAMENTO DE FAZENDA";
-  
+
   	//$head4 = "CERTIDÃO No. ".$codproc;
   	//$head6 = $tipocer;
   	$pdf = new PDF1(); 		// abre a classe
@@ -257,7 +257,7 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
 			$pdf->cell(40,5,"DESTINATÁRIO: ",$b,0,"L",0);
 			$pdf->SetFont('Arial','B',$TamLetra);
 			$pdf->cell(100,5,@$z01_nome,$b,1,"L",0);
-			
+
 			$pdf->SetFont('Arial','',$TamLetra);
 			$pdf->cell(40,5,"ENDEREÇO: ",$b,0,"L",0);
 			$pdf->SetFont('Arial','B',$TamLetra);
@@ -292,9 +292,9 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
 				$pdf->SetFont('Arial','B',$TamLetra);
 				$pdf->cell(20,5,@$$xcodigo1,0,1,"L",0);
 			}
-		}	
+		}
 	}
-	
+
 /*************************************************************************************************************************/
 
   	$pdf->Output();
@@ -315,15 +315,15 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
   	}else{
     	$tipo = "Negativa";
   	}
-	
+
 	$rsNumpref = pg_query("select * from numpref where k03_anousu = ".db_getsession("DB_anousu"));
 	$numrows = pg_numrows($rsNumpref);
 	if ($numrows>0){
 	   db_fieldsmemory($rsNumpref,0);
 //	   db_msgbox($k03_reccnd);
        if(isset($k03_reccnd) && $k03_reccnd == 't'){
-			echo "<script>document.form1.cadrecibo.value = '".$k03_reccnd."'</script>"; 
-//			echo "<script>alert(document.form1.cadrecibo.value);</script>"; 
+			echo "<script>document.form1.cadrecibo.value = '".$k03_reccnd."'</script>";
+//			echo "<script>alert(document.form1.cadrecibo.value);</script>";
 	   }
 	}
 
@@ -341,7 +341,7 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
         		}else{
           			if(confirm('Emite Certidão ' + document.form1.tipo.value)==true){
 					    if(document.form1.cadrecibo.value == 't'){
-						    js_recibo();	
+						    js_recibo();
 						}else{
 							jan=window.open('','certreg','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 							jan.moveTo(0,0);
@@ -357,10 +357,10 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
 			<form method="post" name="form1" target="certreg">
 				<input type="hidden" name="tipo" value="<?=$tipo_cert?>">
     			<input type="hidden" name="cadrecibo" value="">
-				<?	
+				<?
 					if(isset($matric)){
 		  		?>
-	  			<input type="hidden" name="matric" value="<?=$matric?>">	
+	  			<input type="hidden" name="matric" value="<?=$matric?>">
 	  	  		<?
 					}else if(isset($numcgm)){
 			  	?>
@@ -378,19 +378,19 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
 				?>
 				<table width="100%">
 					<tr>
-				    	<td align="center"><font face="Arial, Helvetica, sans-serif"><strong>Certid&atilde;o 
+				    	<td align="center"><font face="Arial, Helvetica, sans-serif"><strong>Certid&atilde;o
 		    		  		<?=$tipo?> de D&eacute;bitos</strong></font></td>
 		  	  		</tr>
 		  			<tr>
 		    			<td>
 		      				<table width="100%">
-		        				<tr> 
+		        				<tr>
 		          					<td width="14%" align="right"><font face="Arial, Helvetica, sans-serif">Processo:</font></td>
 		          					<td width="86%"><input name="codproc" type="text" id="codproc" size="15" maxlength="12"></td>
 		        				</tr>
-		        				<tr> 
+		        				<tr>
 		          					<td align="right" valign="top"><font face="Arial, Helvetica, sans-serif">Hist&oacute;rico:</font></td>
-		          					<td><textarea name="textarea" cols="60" rows="5"></textarea></td>	
+		          					<td><textarea name="textarea" cols="60" rows="5"></textarea></td>
 		        				</tr>
 		      				</table>
 		    			</td>
@@ -405,12 +405,12 @@ if(!isset($HTTP_POST_VARS["tipo"])) {
 </html>
 <script>
 function js_recibo(){
-    
-    js_OpenJanelaIframe('top.corpo','db_recibo','cai4_recibo001.php?mostramenu=t','Cadastro de recibo',true);
+
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_recibo','cai4_recibo001.php?mostramenu=t','Cadastro de recibo',true);
 }
 
 </script>
-<? 
+<?
 	}// fim do else do if($HTTP_POST_VARS["tipo"])
 ?>
 

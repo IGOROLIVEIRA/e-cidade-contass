@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -49,7 +49,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $testan=false;
 if(isset($confirmar)){
   $erros="";
-  if(isset($d02_contri) && $d02_contri!=""){ 
+  if(isset($d02_contri) && $d02_contri!=""){
     $resultau = $cleditalrua->sql_record($cleditalrua->sql_query("","d02_contri,d02_autori","","d02_contri=$d02_contri"));
     if($cleditalrua->numrows>0){
       $clcontrib->sql_record($clcontrib->sql_query("","","d07_contri","","d07_contri=$d02_contri"));
@@ -60,13 +60,13 @@ if(isset($confirmar)){
           exit;
         }else{
           $erros.="Contribuição $d02_contri não autorizada para cálculo.\\n";
-        }  
+        }
       }else{
         $erros.="Não foram processadas as matrículas para esta contribuição $d02_contri.\\n";
       }
     }else{
       $erros.="Contribuição $d02_contri não existe.\\n";
-    }	
+    }
   }
   if(isset($j01_matric) && $j01_matric!=""){
     $result=$clcontrib->sql_record($clcontrib->sql_query("",$j01_matric,"c.d02_autori,d07_contri,z01_nome"));
@@ -82,7 +82,7 @@ if(isset($confirmar)){
           $existe=true;
           $xx=",";
         }
-      }  
+      }
       if($existe==true){
         db_redireciona("con3_calculopar003.php?matric=$j01_matric");
         exit;
@@ -96,9 +96,9 @@ if(isset($confirmar)){
     }else{
       $erros.="Não foi encontrado contribuição para esta matricula $j01_matric.\\n";
     }
-    
+
   }
-  if(isset($j39_codigo) && $j39_codigo!=""){  
+  if(isset($j39_codigo) && $j39_codigo!=""){
     $resultas=$clcontrib->sql_record($clcontrib->sql_query("","","distinct(d07_contri),c.d02_autori",""," c.d02_codigo=$j39_codigo"));
     $numro=$clcontrib->numrows;
     if($numro>0){
@@ -109,7 +109,7 @@ if(isset($confirmar)){
         db_fieldsmemory($resultas,$r);
         if($d02_autori=="t"){
           $conts.=$xx.$d07_contri;
-          $test=true; 
+          $test=true;
           $xx=",";
         }
       }
@@ -122,7 +122,7 @@ if(isset($confirmar)){
         }else{
           $erros.="Rua incluída nas contribuições $conts  não autorizadas para cálculo.\\n";
         }
-      }  
+      }
     }else{
       $resultau = $cleditalrua->sql_record($cleditalrua->sql_query("","d02_contri,j14_nome","","d02_contri=$d02_contri"));
       $numro=$cleditalrua->numrows;
@@ -141,12 +141,12 @@ if(isset($confirmar)){
           $erros.="Rua incluída nas contribuições $conts que não foram processadas as matrículas.\\n";
         }
       }else{
-        $erros.="Não existe contribuição para esta rua. ";	
-      }  
-    } 
+        $erros.="Não existe contribuição para esta rua. ";
+      }
+    }
   }
   $testan=true;
-  
+
 }
 ?>
 <html>
@@ -158,7 +158,7 @@ if(isset($confirmar)){
 <script>
 function js_confirmar(){
   return true;
-}    
+}
 </script>
 
 
@@ -166,7 +166,7 @@ function js_confirmar(){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-<tr> 
+<tr>
 <td width="360" height="18">&nbsp;</td>
 <td width="263">&nbsp;</td>
 <td width="25">&nbsp;</td>
@@ -174,8 +174,8 @@ function js_confirmar(){
 </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-<tr> 
-<td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+<tr>
+<td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
@@ -184,16 +184,16 @@ function js_confirmar(){
 <?
 db_ancora(@$Ld02_contri,"js_contri(true);",$db_opcao);
 ?>
-</td>	
-<td>	
+</td>
+<td>
 <?
 db_input('d02_contri',5,$Id02_contri,true,'text',$db_opcao," onchange='js_contri(false);'");
 db_input('j14_nome',40,$Ij14_nome,true,'text',3,'',"j14_nome_contri");
 ?>
 </td>
 </tr>
-<tr> 
-<td>     
+<tr>
+<td>
 <?
 db_ancora($Lj01_matric,' js_matri(true); ',1);
 ?>
@@ -211,7 +211,7 @@ db_input('z01_nome',40,0,true,'text',3,"","z01_nome_matric");
 db_ancora(@$Lj39_codigo,"js_pesquisaj39_codigo(true);",$db_opcao);
 ?>
 </td>
-<td> 
+<td>
 <?
 db_input('j39_codigo',5,$Ij39_codigo,true,'text',$db_opcao," onchange='js_pesquisaj39_codigo(false);'");
 db_input('j14_nome',40,$Ij14_nome,true,'text',3);
@@ -254,27 +254,27 @@ function js_mostra(chave1,chave2){
   db_iframe.hide();
 }
 function js_mostra1(chave,erro){
-  document.form1.z01_nome_matric.value = chave; 
-  if(erro==true){ 
-    document.form1.j01_matric.focus(); 
-    document.form1.j01_matric.value = ''; 
+  document.form1.z01_nome_matric.value = chave;
+  if(erro==true){
+    document.form1.j01_matric.focus();
+    document.form1.j01_matric.value = '';
   }
 }
 function js_contri(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rua','func_editalruaalt.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rua','func_editalruaalt.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_rua','func_editalruaalt.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rua','func_editalruaalt.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
   }
 }
 function js_mostracontri(chave,erro){
-  if(erro==true){ 
-    document.form1.d02_contri.focus(); 
-    document.form1.d02_contri.value=""; 
-    document.form1.j14_nome_contri.value=""; 
+  if(erro==true){
+    document.form1.d02_contri.focus();
+    document.form1.d02_contri.value="";
+    document.form1.j14_nome_contri.value="";
   }else{
     document.form1.j14_nome_contri.value = chave;
-  }  
+  }
 }
 function js_mostracontri1(chave1,chave2){
   document.form1.d02_contri.value = chave1;
@@ -297,16 +297,16 @@ function js_mostraruas1(chave1,chave2){
   db_iframe.hide();
 }
 function js_mostraruas(chave,erro){
-  document.form1.j14_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.j39_codigo.focus(); 
-    document.form1.j39_codigo.value = ''; 
+  document.form1.j14_nome.value = chave;
+  if(erro==true){
+    document.form1.j39_codigo.focus();
+    document.form1.j39_codigo.value = '';
   }
 }
 </script>
 <?
 if($testan==true){
-  db_msgbox($erros);  
+  db_msgbox($erros);
 }
 $func_iframe = new janela('db_iframe','');
 $func_iframe->posX=1;

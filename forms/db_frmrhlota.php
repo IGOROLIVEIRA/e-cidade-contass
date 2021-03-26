@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -65,21 +65,21 @@ $r70_instit = db_getsession("DB_instit");
             <td nowrap title="<?=@$Tr70_codigo?>">
               <?=@$Lr70_codigo?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('r70_codigo',4,$Ir70_codigo,true,'text',3);
               db_input('r70_instit',4,$Ir70_instit,true,'hidden',3);
               ?>
             </td>
           </tr>
-          <?  
+          <?
           if(isset($estrutura_altera) ||   isset($chavepesquisa)&&isset($r70_estrut)){
             if(empty($estrutura_altera)){
               $estrutura_altera=$r70_estrut;
             }
             db_input('estrutura_altera',4,$Ir70_codigo,true,'hidden',3);
           }
-        
+
           $anofolha = db_anofolha();
           $mesfolha = db_mesfolha();
           $result = $clcfpess->sql_record($clcfpess->sql_query_file($anofolha,$mesfolha,db_getsession("DB_instit"),"r11_codestrut"));
@@ -113,7 +113,7 @@ $r70_instit = db_getsession("DB_instit");
             <td nowrap title="<?=@$Tr70_descr?>">
               <?=@$Lr70_descr?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('r70_descr',59,$Ir70_descr,true,'text',$db_opcao,"")
               ?>
@@ -125,7 +125,7 @@ $r70_instit = db_getsession("DB_instit");
               db_ancora(@$Lrh64_calend,"js_pesquisarh64_calend(true);",$db_opcao);
               ?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('rh64_calend',10,$Irh64_calend,true,'text',$db_opcao,"onchange='js_pesquisarh64_calend(false);'");
               db_input('rh53_descr',45,$Irh53_descr,true,'text',3,"");
@@ -161,7 +161,7 @@ $r70_instit = db_getsession("DB_instit");
                 db_input("c58_descr",45,0,true,"text",3);
               ?>
             </td>
-          </tr>					
+          </tr>
 					<tr>
 					    <td nowrap title="<?=@$Tz01_cgc?>">
 					      <?=@$Lz01_cgc?>
@@ -176,7 +176,7 @@ $r70_instit = db_getsession("DB_instit");
             <td nowrap title="<?=@$Tr70_analitica?>">
               <?=@$Lr70_analitica?>
             </td>
-            <td> 
+            <td>
               <?
               $opcao_nao_troca_analitica = $db_opcao;
               if(isset($sem_parametro_configurado)){
@@ -191,14 +191,14 @@ $r70_instit = db_getsession("DB_instit");
             <td nowrap title="<?=@$Tr70_ativo?>">
               <?=@$Lr70_ativo?>
             </td>
-            <td> 
+            <td>
               <?
               $x = array("t"=>"Ativo","f"=>"Inativo");
               db_select('r70_ativo',$x,true,$db_opcao);
               ?>
             </td>
           </tr>
-        </table>  
+        </table>
       </fieldset>
     </td>
   <tr>
@@ -212,12 +212,12 @@ $r70_instit = db_getsession("DB_instit");
       <table border='0' cellpadding='0' cellspacing='0'>
         <tr>
           <td nowrap title="<?=@$To58_coddot?>" style="min-width: 140px;">
-            <?php 
+            <?php
               db_ancora($Lo58_coddot, "js_pesquisaReduzido(true);", 1);
             ?>
           </td>
           <td>
-            <?php 
+            <?php
               db_input("o58_coddot", 8, $Io58_coddot, true, "text", 1, "onchange='js_pesquisaReduzido(false);'");
               db_input("o56_descr",40, $Io56_descr,true,"text",3);
             ?>
@@ -237,7 +237,7 @@ $r70_instit = db_getsession("DB_instit");
             db_ancora(@$Lo40_orgao,"js_pesquisaorgunid(true);",$db_opcao);
             ?>
           </td>
-          <td> 
+          <td>
             <?
             if(isset($o40_orgao) && trim($o40_orgao)!=""){
               $result_orgao = $clorcorgao->sql_record($clorcorgao->sql_query_file(db_getsession("DB_anousu"),$o40_orgao,"o40_descr"));
@@ -256,7 +256,7 @@ $r70_instit = db_getsession("DB_instit");
             db_ancora(@$Lo41_unidade,"js_pesquisaorgunid(true);",$db_opcao);
             ?>
           </td>
-          <td> 
+          <td>
             <?
             if(isset($o41_unidade) && trim($o41_unidade)!=""){
               $result_unidade = $clorcunidade->sql_record($clorcunidade->sql_query_file(db_getsession("DB_anousu"),$o40_orgao,$o41_unidade,"o41_descr"));
@@ -270,27 +270,27 @@ $r70_instit = db_getsession("DB_instit");
           </td>
         </tr>
       </table>
-      </fieldset> 
+      </fieldset>
     </td>
   </tr>
     <?
-    } 
+    }
     ?>
   <tr>
     <td colspan="2" align='center'>
-    
+
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
              type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
              <?=($db_botao==false?"disabled":"")?> <?=($db_opcao !=3 && $db_opcao != 33? "onclick='return js_validacgc();'":"")?>>
-             
+
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
-      
+
       <?
       if($db_opcao == 1 && !isset($sem_parametro_configurado)){
         echo '<input name="importar" type="button" id="importar" value="Importar" onclick="js_pesquisa_importacao();" >';
       }
       ?>
-      
+
     </td>
   </tr>
 </table>
@@ -299,32 +299,32 @@ $r70_instit = db_getsession("DB_instit");
 <script>
 
 function js_pesquisar70_concarpeculiar(mostra) {
-  
+
   if (mostra) {
-  
-    js_OpenJanelaIframe('','db_iframe_concarpeculiar', 
+
+    js_OpenJanelaIframe('','db_iframe_concarpeculiar',
                         'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr',
                         'Pesquisar',true);
   } else {
     if ( document.form1.r70_concarpeculiar.value != '' ) {
-     
+
       js_OpenJanelaIframe('','db_iframe_concarpeculiar',
                           'func_concarpeculiar.php?pesquisa_chave='+document.form1.r70_concarpeculiar.value+
-                          '&funcao_js=parent.js_mostraconcarpeculiar', 
+                          '&funcao_js=parent.js_mostraconcarpeculiar',
                           'Pesquisa',
                           false
                          );
     } else {
-      document.form1.c58_descr.value = ''; 
+      document.form1.c58_descr.value = '';
     }
   }
 }
 
 function js_mostraconcarpeculiar(chave,erro){
-  document.form1.c58_descr.value = chave; 
-  if(erro){ 
-    document.form1.r70_concarpeculiar.focus(); 
-    document.form1.r70_concarpeculiar.value = ''; 
+  document.form1.c58_descr.value = chave;
+  if(erro){
+    document.form1.r70_concarpeculiar.focus();
+    document.form1.r70_concarpeculiar.value = '';
   }
 }
 function js_mostraconcarpeculiar1(chave1,chave2){
@@ -339,32 +339,32 @@ function js_validacgc(){
 
   if (document.form1.z01_numcgm.value == "") {
 	alert('Informe o campo Numcgm');
-	return false;    
-  }	  	
-  
+	return false;
+  }
+
   if(js_verificaCGCCPF(document.form1.z01_cgc)==false){
-	alert('CPF/CNPJ do Numcgm informado inválido!');  
+	alert('CPF/CNPJ do Numcgm informado inválido!');
     document.form1.z01_numcgm.value = "";
     document.form1.z01_nome.value   = "";
     document.form1.z01_cgc.value    = "";
    return false;
   }
-    
+
 }
 
 //verifica se cnpj é válido
-//Função que pesquisa caso seja TRUE a pesquisa foi feita atraves da ancora caso seja FALSE a pesquisa foi digitada um numero de CGM 
+//Função que pesquisa caso seja TRUE a pesquisa foi feita atraves da ancora caso seja FALSE a pesquisa foi digitada um numero de CGM
 function js_pesquisaz01_numcgm(mostra)
 {
   if(mostra==true)
   {
-    js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_nome.php?funcao_js=parent.js_mostranumcgm1|z01_numcgm|z01_nome|z01_cgc&filtro=2','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_nome.php?funcao_js=parent.js_mostranumcgm1|z01_numcgm|z01_nome|z01_cgc&filtro=2','Pesquisa',true);
   }
   else
   {
      if(document.form1.z01_numcgm.value != '')
      {
-        js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostranumcgm&filtro=2','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostranumcgm&filtro=2','Pesquisa',false);
      }
      else
      {
@@ -384,9 +384,9 @@ function js_mostranumcgm(erro,chave1,chave2)
   document.form1.z01_nome.value = chave1;
   document.form1.z01_cgc.value = chave2;
   if(erro==true)
-  { 
-    document.form1.z01_numcgm.value = ''; 
-    document.form1.z01_numcgm.focus(); 
+  {
+    document.form1.z01_numcgm.value = '';
+    document.form1.z01_numcgm.focus();
   }
 }
 
@@ -400,7 +400,7 @@ function js_mostranumcgm1(chave1,chave2,chave3)
   document.form1.z01_numcgm.value = chave1;
   document.form1.z01_nome.value   = chave2;
   document.form1.z01_cgc.value    = chave3;
-  
+
   db_iframe_rhcadcalend.hide();
 }
 
@@ -409,10 +409,10 @@ function js_mostranumcgm1(chave1,chave2,chave3)
 
 function js_pesquisarh64_calend(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_rhcadcalend.php?funcao_js=top.corpo.iframe_rhlota.js_mostracalend1|rh53_calend|rh53_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_rhcadcalend.php?funcao_js=CurrentWindow.corpo.iframe_rhlota.js_mostracalend1|rh53_calend|rh53_descr','Pesquisa',true,'0');
   }else{
-     if(document.form1.rh64_calend.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_rhcadcalend.php?pesquisa_chave='+document.form1.rh64_calend.value+'&funcao_js=top.corpo.iframe_rhlota.js_mostracalend','Pesquisa',false,'0');
+     if(document.form1.rh64_calend.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_rhcadcalend','func_rhcadcalend.php?pesquisa_chave='+document.form1.rh64_calend.value+'&funcao_js=CurrentWindow.corpo.iframe_rhlota.js_mostracalend','Pesquisa',false,'0');
      }else{
        document.form1.rh53_descr.value = '';
      }
@@ -420,21 +420,21 @@ function js_pesquisarh64_calend(mostra){
 }
 function js_mostracalend(chave,erro){
   document.form1.rh53_descr.value = chave;
-  if(erro==true){ 
-    document.form1.rh64_calend.focus(); 
-    document.form1.rh64_calend.value = ''; 
-  }  
+  if(erro==true){
+    document.form1.rh64_calend.focus();
+    document.form1.rh64_calend.value = '';
+  }
 }
 function js_mostracalend1(chave1,chave2){
-  document.form1.rh64_calend.value = chave1;  
+  document.form1.rh64_calend.value = chave1;
   document.form1.rh53_descr.value = chave2;
   db_iframe_rhcadcalend.hide();
 }
 function js_pesquisaorgunid(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=top.corpo.iframe_rhlota.js_mostraorgunid1|o41_orgao|o41_unidade','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=CurrentWindow.corpo.iframe_rhlota.js_mostraorgunid1|o41_orgao|o41_unidade','Pesquisa',true,'0');
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=top.corpo.iframe_rhlota.js_mostraorgunid1|o41_orgao|o41_unidade','Pesquisa',false,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=CurrentWindow.corpo.iframe_rhlota.js_mostraorgunid1|o41_orgao|o41_unidade','Pesquisa',false,'0');
   }
 }
 function js_mostraorgunid1(chave1,chave2){
@@ -447,7 +447,7 @@ function js_troca(){
   document.form1.submit();
 }
 function js_pesquisa_importacao(){
-  js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframerhlota','func_rhlota.php?funcao_js=parent.js_retornoimportacao|r70_codigo|r70_descr&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true,0);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframerhlota','func_rhlota.php?funcao_js=parent.js_retornoimportacao|r70_codigo|r70_descr&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true,0);
 }
 function js_retornoimportacao(chave,chave2){
   db_iframerhlota.hide();
@@ -461,7 +461,7 @@ function js_retornoimportacao(chave,chave2){
   }
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframerhlota','func_rhlota.php?funcao_js=parent.js_preenchepesquisa|r70_codigo&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true,0);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframerhlota','func_rhlota.php?funcao_js=parent.js_preenchepesquisa|r70_codigo&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true,0);
 }
 function js_preenchepesquisa(chave){
   db_iframerhlota.hide();
@@ -523,7 +523,7 @@ if(isset($focar)){
           document.form1.r70_descr.focus();
         </script>
        ";
-}	    
+}
 if(isset($err_estrutural)){
   db_msgbox($err_estrutural);
   echo "<script> document.form1.r70_estrut.style.backgroundColor='#99A9AE';</script>";

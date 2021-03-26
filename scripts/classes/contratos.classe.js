@@ -586,13 +586,13 @@ contrato = function () {
             me.bloqueiaCampos();
 
             parent.document.formaba.acordoitem.disabled       = false;
-            top.corpo.iframe_acordoitem.location.href         = 'aco1_acordoitem001.php?ac20_acordo='+oRetorno.iCodigoContrato;
+            CurrentWindow.corpo.iframe_acordoitem.location.href         = 'aco1_acordoitem001.php?ac20_acordo='+oRetorno.iCodigoContrato;
             parent.document.formaba.acordogarantia.disabled   = false;
-            top.corpo.iframe_acordogarantia.location.href     = 'aco1_acordoacordogarantia001.php?ac12_acordo='+oRetorno.iCodigoContrato;
+            CurrentWindow.corpo.iframe_acordogarantia.location.href     = 'aco1_acordoacordogarantia001.php?ac12_acordo='+oRetorno.iCodigoContrato;
             parent.document.formaba.acordopenalidade.disabled = false;
-            top.corpo.iframe_acordopenalidade.location.href   = 'aco1_acordoacordopenalidade001.php?ac13_acordo='+oRetorno.iCodigoContrato;
+            CurrentWindow.corpo.iframe_acordopenalidade.location.href   = 'aco1_acordoacordopenalidade001.php?ac13_acordo='+oRetorno.iCodigoContrato;
             parent.document.formaba.acordodocumento.disabled  = false;
-            top.corpo.iframe_acordodocumento.location.href    = 'aco1_acordodocumento001.php?ac40_acordo='+oRetorno.iCodigoContrato;
+            CurrentWindow.corpo.iframe_acordodocumento.location.href    = 'aco1_acordodocumento001.php?ac40_acordo='+oRetorno.iCodigoContrato;
             alert("Acordo Salvo com Sucesso.");
             parent.mo_camada('acordoitem');
         } else {
@@ -688,10 +688,10 @@ contrato = function () {
                 $('diasvigencia').value        = js_somarDiasVigencia(dtInicio, dtTermino);
             }
             parent.document.formaba.acordogarantia.disabled = false;
-            top.corpo.iframe_acordogarantia.location.href   = 'aco1_acordoacordogarantia001.php?ac12_acordo='+
+            CurrentWindow.corpo.iframe_acordogarantia.location.href   = 'aco1_acordoacordogarantia001.php?ac12_acordo='+
                 oRetorno.contrato.iSequencial;
             parent.document.formaba.acordopenalidade.disabled = false;
-            top.corpo.iframe_acordopenalidade.location.href   = 'aco1_acordoacordopenalidade001.php?ac13_acordo='+
+            CurrentWindow.corpo.iframe_acordopenalidade.location.href   = 'aco1_acordoacordopenalidade001.php?ac13_acordo='+
                 oRetorno.contrato.iSequencial;
             js_exibeBotaoJulgamento();
 

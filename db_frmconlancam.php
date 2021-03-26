@@ -9,7 +9,7 @@ $clconlancam->rotulo->label();
     <td nowrap title="<?=@$Tc70_codlan?>">
        <?=@$Lc70_codlan?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c70_codlan',8,$Ic70_codlan,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('c70_codlan',8,$Ic70_codlan,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc70_anousu?>">
        <?=@$Lc70_anousu?>
     </td>
-    <td> 
+    <td>
 <?
 $c70_anousu = db_getsession('DB_anousu');
 db_input('c70_anousu',4,$Ic70_anousu,true,'text',3,"")
@@ -30,7 +30,7 @@ db_input('c70_anousu',4,$Ic70_anousu,true,'text',3,"")
     <td nowrap title="<?=@$Tc70_data?>">
        <?=@$Lc70_data?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('c70_data',@$c70_data_dia,@$c70_data_mes,@$c70_data_ano,true,'text',$db_opcao,"")
 ?>
@@ -43,7 +43,7 @@ db_inputdata('c70_data',@$c70_data_dia,@$c70_data_mes,@$c70_data_ano,true,'text'
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conlancam','func_conlancam.php?funcao_js=parent.js_preenchepesquisa|c70_codlan','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancam','func_conlancam.php?funcao_js=parent.js_preenchepesquisa|c70_codlan','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_conlancam.hide();

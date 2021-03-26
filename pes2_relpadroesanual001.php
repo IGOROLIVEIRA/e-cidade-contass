@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -54,12 +54,12 @@ $oPost = db_utils::postMemory($_POST);
     <style>
       select {
         width: 315px;
-      } 
+      }
       fieldset{
-        width: 500px; 
+        width: 500px;
         margin: 25px auto 10px;
       }
-    </style>  
+    </style>
   <link href="estilos.css" rel="stylesheet" type="text/css">
   </head>
   <body bgcolor=#CCCCCC>
@@ -67,7 +67,7 @@ $oPost = db_utils::postMemory($_POST);
       <fieldset>
         <table  align="center">
           <legend><strong>Relatório de Padrões Por Ano</strong></legend>
-          
+
             <tr>
               <td nowrap title="Ano de competência" >
               <strong>Ano :&nbsp;&nbsp;</strong>
@@ -84,21 +84,21 @@ $oPost = db_utils::postMemory($_POST);
                 ?>
               </td>
             </tr>
-            
-            <tr> 
-                <td title="Informe o padrão ou deixe em branco para todos."> 
+
+            <tr>
+                <td title="Informe o padrão ou deixe em branco para todos.">
                   <?
                   db_ancora("Padrão:", "js_pesquisarpadrao(true);", 1);
                   ?>
                 </td>
-                <td> 
+                <td>
                   <?
                   db_input('r02_codigo', 8, $Ir02_codigo, true, 'text', 1, " onchange='js_pesquisarpadrao(false);'");
                   db_input('r02_descr', 30, $Ir02_descr,  true, 'text', 3, '');
                   ?>
                 </td>
             </tr>
-            
+
             <tr title="Tipo de folha">
               <td><b>Regime :&nbsp;&nbsp;</b></td>
               <td>
@@ -108,7 +108,7 @@ $oPost = db_utils::postMemory($_POST);
                ?>
               </td>
             </tr>
-            
+
             <tr  title="Ordem">
               <td><b>Ordem :&nbsp;&nbsp;</b></td>
               <td>
@@ -118,7 +118,7 @@ $oPost = db_utils::postMemory($_POST);
                ?>
               </td>
             </tr>
-            
+
         </table>
       </fieldset>
       <center>
@@ -134,16 +134,16 @@ $oPost = db_utils::postMemory($_POST);
     * Realiza a busca de rubricas, retornando o código e descrição da rubrica escolhida
     */
     function js_pesquisarpadrao(lMostra) {
-        
+
       if ( lMostra) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_padrao','func_padroes.php?funcao_js=parent.js_mostrapadrao1|r02_codigo|r02_descr','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_padrao','func_padroes.php?funcao_js=parent.js_mostrapadrao1|r02_codigo|r02_descr','Pesquisa',true);
       } else {
-          
+
          if ( $F(r02_codigo) != '' ) {
-           
-           js_OpenJanelaIframe('top.corpo','db_iframe_padrao','func_padroes.php?pesquisa_chave='+$F(r02_codigo)+'&funcao_js=parent.js_mostrapadrao','Pesquisa',false);
-         } else { 
-           $(r02_descr).setValue(''); 
+
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_padrao','func_padroes.php?pesquisa_chave='+$F(r02_codigo)+'&funcao_js=parent.js_mostrapadrao','Pesquisa',false);
+         } else {
+           $(r02_descr).setValue('');
          }
       }
     }
@@ -152,10 +152,10 @@ $oPost = db_utils::postMemory($_POST);
     * Trata o retorno da função js_pesquisarrubric()
     */
     function js_mostrapadrao(sChave, lErro) {
-        
+
       $(r02_descr).setValue(sChave);
       if ( lErro ) {
-          
+
         $(r02_codigo).setValue('');
         $(r02_codigo).focus();
       }
@@ -165,7 +165,7 @@ $oPost = db_utils::postMemory($_POST);
     * Trata o retorno da função js_pesquisarrubric()
     */
     function js_mostrapadrao1(sChave1,sChave2){
-        
+
       $(r02_codigo).setValue(sChave1);
       $(r02_descr).setValue(sChave2);
       $(db_iframe_padrao).hide();
@@ -178,19 +178,19 @@ $oPost = db_utils::postMemory($_POST);
 
       /**
       * Monta um objeto com os dados do formulario, para ser enviado para a geração do relatório
-      */  
+      */
       var oDados = new Object();
       if( $F(DBtxt23) > $F(anofinal) ){
         alert('O ano final não pode ser menor que o ano inicial. Verifique!');
         return false;
       }
-      
+
       oDados.sOrdem           = $F(ordem);
       oDados.iRegime          = $F(regime);
       oDados.sPadrao          = $F(r02_codigo);
       oDados.iAno1            = $F(DBtxt23);
       oDados.iAno2            = $F(anofinal);
-          
+
         jan = window.open('pes2_relpadroesanual002.php?sParametros='+Object.toJSON(oDados),'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
         jan.moveTo(0,0);
     }

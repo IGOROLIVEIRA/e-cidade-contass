@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: juridico
@@ -36,7 +36,7 @@ $clprocessoforomovsituacao->rotulo->label();
         <td nowrap title="<?=@$Tv74_sequencial?>">
           <?=@$Lv74_sequencial?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('v74_sequencial',10,$Iv74_sequencial,true,'text',$db_opcao,"")
           ?>
@@ -46,7 +46,7 @@ $clprocessoforomovsituacao->rotulo->label();
         <td nowrap title="<?=@$Tv74_descricao?>">
           <?=@$Lv74_descricao?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('v74_descricao',50,$Iv74_descricao,true,'text',$db_opcao,"")
           ?>
@@ -56,7 +56,7 @@ $clprocessoforomovsituacao->rotulo->label();
         <td nowrap title="<?=@$Tv74_tipomovimento?>">
           <?=@$Lv74_tipomovimento?>
         </td>
-        <td> 
+        <td>
           <?
             $x = getValoresPadroesCampo('v74_tipomovimento');
             db_select('v74_tipomovimento',$x,true,$db_opcao,"");
@@ -70,7 +70,7 @@ $clprocessoforomovsituacao->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_processoforomovsituacao','func_processoforomovsituacao.php?funcao_js=parent.js_preenchepesquisa|v74_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoforomovsituacao','func_processoforomovsituacao.php?funcao_js=parent.js_preenchepesquisa|v74_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_processoforomovsituacao.hide();

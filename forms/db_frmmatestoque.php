@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: material
@@ -38,7 +38,7 @@ $clrotulo->label("descrdepto");
     <td nowrap title="<?=@$Tm70_codigo?>">
        <?=@$Lm70_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m70_codigo',10,$Im70_codigo,true,'text',$db_opcao,"")
 ?>
@@ -50,7 +50,7 @@ db_input('m70_codigo',10,$Im70_codigo,true,'text',$db_opcao,"")
        db_ancora(@$Lm70_codmatmater,"js_pesquisam70_codmatmater(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m70_codmatmater',10,$Im70_codmatmater,true,'text',$db_opcao," onchange='js_pesquisam70_codmatmater(false);'")
 ?>
@@ -65,7 +65,7 @@ db_input('m60_descr',40,$Im60_descr,true,'text',3,'')
        db_ancora(@$Lm70_coddepto,"js_pesquisam70_coddepto(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m70_coddepto',5,$Im70_coddepto,true,'text',$db_opcao," onchange='js_pesquisam70_coddepto(false);'")
 ?>
@@ -78,7 +78,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',3,'')
     <td nowrap title="<?=@$Tm70_quant?>">
        <?=@$Lm70_quant?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m70_quant',15,$Im70_quant,true,'text',$db_opcao,"")
 ?>
@@ -88,7 +88,7 @@ db_input('m70_quant',15,$Im70_quant,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tm70_valor?>">
        <?=@$Lm70_valor?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m70_valor',15,$Im70_valor,true,'text',$db_opcao,"")
 ?>
@@ -102,20 +102,20 @@ db_input('m70_valor',15,$Im70_valor,true,'text',$db_opcao,"")
 <script>
 function js_pesquisam70_codmatmater(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_matmater','func_matmater.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matmater','func_matmater.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr','Pesquisa',true);
   }else{
-     if(document.form1.m70_codmatmater.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_matmater','func_matmater.php?pesquisa_chave='+document.form1.m70_codmatmater.value+'&funcao_js=parent.js_mostramatmater','Pesquisa',false);
+     if(document.form1.m70_codmatmater.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matmater','func_matmater.php?pesquisa_chave='+document.form1.m70_codmatmater.value+'&funcao_js=parent.js_mostramatmater','Pesquisa',false);
      }else{
-       document.form1.m60_descr.value = ''; 
+       document.form1.m60_descr.value = '';
      }
   }
 }
 function js_mostramatmater(chave,erro){
-  document.form1.m60_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.m70_codmatmater.focus(); 
-    document.form1.m70_codmatmater.value = ''; 
+  document.form1.m60_descr.value = chave;
+  if(erro==true){
+    document.form1.m70_codmatmater.focus();
+    document.form1.m70_codmatmater.value = '';
   }
 }
 function js_mostramatmater1(chave1,chave2){
@@ -125,20 +125,20 @@ function js_mostramatmater1(chave1,chave2){
 }
 function js_pesquisam70_coddepto(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
   }else{
-     if(document.form1.m70_coddepto.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.m70_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
+     if(document.form1.m70_coddepto.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.m70_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
      }else{
-       document.form1.descrdepto.value = ''; 
+       document.form1.descrdepto.value = '';
      }
   }
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.m70_coddepto.focus(); 
-    document.form1.m70_coddepto.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.m70_coddepto.focus();
+    document.form1.m70_coddepto.value = '';
   }
 }
 function js_mostradb_depart1(chave1,chave2){
@@ -147,7 +147,7 @@ function js_mostradb_depart1(chave1,chave2){
   db_iframe_db_depart.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_matestoque','func_matestoque.php?funcao_js=parent.js_preenchepesquisa|m70_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matestoque','func_matestoque.php?funcao_js=parent.js_preenchepesquisa|m70_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_matestoque.hide();

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -141,7 +141,7 @@ if (isset($alterar)) {
       }
       $erro_msg = $clbens->erro_msg;
     }
-    
+
     if ($sqlerro == false) {
       $result_bensdiv=$clbensdiv->sql_record($clbensdiv->sql_query_file($t52_bem));
       if ($clbensdiv->numrows>0) {
@@ -185,7 +185,7 @@ if (isset($alterar)) {
              if ($t52_bem == $codbem && $t52_ident == $identificacao){
              $flag_grava = false;
              }
-           */          
+           */
         }
 
         //        if ($sqlerro == false && $flag_grava == true) {
@@ -205,17 +205,17 @@ if (isset($alterar)) {
             }
           }
         }
-        
+
       }
 
     	if ($sqlerro == false) {
-        
+
     		//verifica se posusi benscedente
     		$clbenscedente->sql_record($clbenscedente->sql_query(null,"*","","t09_bem = $t52_bem"));
     		if ($clbenscedente->numrows > 0) {
-    		 
+
     			$clbenscedente->excluir(null,"t09_bem = $t52_bem");
-    		 
+
     		}
     		if($t04_sequencial != "" ){
     				$clbenscedente->t09_bem = $t52_bem;
@@ -259,7 +259,7 @@ if (isset($alterar)) {
       $desabilitar_campos = 'true';
       echo "<center><b><h2> Bem Baixado </h2></b></center>";
     } else {
-    	
+
       $db_opcao = 2;
       $db_botao = true;
       $desabilitar_campos = 'false';
@@ -282,7 +282,7 @@ if (isset($alterar)) {
     if ($clbensdiv->numrows>0) {
       db_fieldsmemory($result_bensdiv,0);
     }
-    
+
     $result_placa = $clbensplaca->sql_record($clbensplaca->sql_query_file(null,"*"," t41_codigo desc limit 1 "," t41_bem=$t52_bem "));
     if ($clbensplaca->numrows>0) {
       db_fieldsmemory($result_placa,0);
@@ -324,8 +324,8 @@ if (isset($alterar)) {
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <br />
 <table width="790" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     	<?
     	  include("forms/db_frmbens.php");
@@ -358,8 +358,8 @@ if(isset($chavepesquisa)){
       function js_db_libera(){
          parent.document.formaba.bensimoveis.disabled=false;
          parent.document.formaba.bensmater.disabled=false;
-         top.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?".$parametros."db_opcaoal=22&t54_codbem=".@$chavepesquisa."';
-         top.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?".$parametros."db_opcaoal=22&t53_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?".$parametros."db_opcaoal=22&t54_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?".$parametros."db_opcaoal=22&t53_codbem=".@$chavepesquisa."';
        }\n
     js_db_libera();
   </script>\n
@@ -370,11 +370,11 @@ if(isset($chavepesquisa)){
       function js_db_bloqueia(){
          parent.document.formaba.bensimoveis.disabled=false;
          parent.document.formaba.bensmater.disabled=false;
-         top.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=33&t54_codbem=".@$chavepesquisa."';
-         top.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=33&t53_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=33&t54_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=33&t53_codbem=".@$chavepesquisa."';
       }\n
     js_db_bloqueia();
-  </script>\n   
+  </script>\n
  ";
   }
 }
@@ -382,7 +382,7 @@ if(isset($chavepesquisa)){
  if(($db_opcao==22||$db_opcao==33) && $msg_erro==""){
     echo "<script>document.form1.pesquisar.click();</script>";
  } else if ($msg_erro!=""){
-    db_msgbox($msg_erro);   
+    db_msgbox($msg_erro);
  }
 
 ?>

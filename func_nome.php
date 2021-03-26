@@ -127,7 +127,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script>
   function js_close(){
-    var nome = parent.top.corpo.aux.nomeJanela;
+    var nome = parent.CurrentWindow.corpo.aux.nomeJanela;
     eval('parent.'+nome+'.hide();');
   }
 

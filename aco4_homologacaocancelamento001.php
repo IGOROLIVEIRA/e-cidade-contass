@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -56,7 +56,7 @@ $clrotulo->label("ac10_obs");
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<?   
+<?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
@@ -74,8 +74,8 @@ fieldset table td:first-child {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_pesquisarHomologacao();">
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-  <tr> 
-    <td valign="top" align="center"> 
+  <tr>
+    <td valign="top" align="center">
       <fieldset>
         <legend><b>Cancelar Finalização do Acordo</b></legend>
         <table align="center" border="0">
@@ -117,7 +117,7 @@ fieldset table td:first-child {
                   ?>
               </fieldset>
             </td>
-          </tr> 
+          </tr>
         </table>
       </fieldset>
     </td>
@@ -127,7 +127,7 @@ fieldset table td:first-child {
   </tr>
   <tr>
     <td align="center">
-      <input id="cancelar" name="cancelar" type="button" value="Cancelar" 
+      <input id="cancelar" name="cancelar" type="button" value="Cancelar"
              onclick="return js_cancelarHomologacao();" disabled>
       <input id="pesquisar" name="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisarHomologacao();">
     </td>
@@ -152,9 +152,9 @@ function js_pesquisarHomologacao() {
   $('cancelar').disabled  = true;
   var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=11&autorizacao=false';
       sUrl += '&funcao_js=parent.js_mostrarpesquisahomologacao|ac10_sequencial';
-      
-  js_OpenJanelaIframe('top.corpo', 
-                      'db_iframe_homologacao', 
+
+  js_OpenJanelaIframe('CurrentWindow.corpo',
+                      'db_iframe_homologacao',
                       sUrl,
                       'Pesquisar Homologação',
                       true);
@@ -176,14 +176,14 @@ function js_mostrarpesquisahomologacao(chave) {
 function js_getDadosHomologacao(iCodigo) {
 
   js_divCarregando('Aguarde pesquisando dados da finalização...', 'msgBoxGetDadosHomologacao');
-   
+
   var oParam        = new Object();
   oParam.exec       = "getDadosHomologacao";
   oParam.codigo     = iCodigo;
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoGetDadosHomologacao
                                         }
                                 );
@@ -193,13 +193,13 @@ function js_getDadosHomologacao(iCodigo) {
  * Retorno dos dados da homologação
  */
 function js_retornoGetDadosHomologacao(oAjax) {
-  
+
   js_removeObj("msgBoxGetDadosHomologacao");
-  
+
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.status == 2) {
-    
+
     alert(oRetorno.erro.urlDecode());
     $('ac16_sequencial').value   = "";
     $('ac16_resumoobjeto').value = "";
@@ -218,45 +218,45 @@ function js_retornoGetDadosHomologacao(oAjax) {
 
 /**
  * Cancelamento de homologacao
- */  
+ */
 function js_cancelarHomologacao() {
-   
+
   if ($('ac16_sequencial').value == '') {
-    
+
     alert('Acordo não informado!');
     return false;
   }
-  
+
   if ($('ac10_sequencial').value == '') {
-    
+
     alert('Código homologação não informado! Verifique a pesquisa.');
     return false;
   }
-  
+
   js_divCarregando('Aguarde cancelando homologação...','msgBoxCancelarHomologacao');
-   
+
   var oParam        = new Object();
   oParam.exec       = "cancelarHomologacao";
   oParam.codigo     = $F('ac10_sequencial');
   oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoCancelamentoHomologacao
                                         }
-                                );  
+                                );
 }
-  
+
 /**
  * Retorno do cancelamento da homologacao
  */
 function js_retornoCancelamentoHomologacao(oAjax) {
-  
+
   js_removeObj("msgBoxCancelarHomologacao");
-  
-  var oRetorno = eval("("+oAjax.responseText+")");   
-     
+
+  var oRetorno = eval("("+oAjax.responseText+")");
+
   $('ac10_sequencial').value   = "";
   $('ac16_sequencial').value   = "";
   $('ac16_resumoobjeto').value = "";
@@ -268,9 +268,9 @@ function js_retornoCancelamentoHomologacao(oAjax) {
   } else {
     alert("Cancelamento efetuado com Sucesso.");
   }
-  
+
   js_pesquisarHomologacao();
-  
+
 }
 </script>
 </html>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 ?
 //MODULO: Ambulatorial
@@ -38,7 +38,7 @@ $clrotulo->label("s130_c_descricao");
     <td nowrap title="<?=@$Ts108_i_codigo?>">
        <?=@$Ls108_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('s108_i_codigo',10,$Is108_i_codigo,true,'text',3,"")
 ?>
@@ -48,7 +48,7 @@ db_input('s108_i_codigo',10,$Is108_i_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Ts108_c_exame?>">
        <?=@$Ls108_c_exame?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('s108_c_exame',40,$Is108_c_exame,true,'text',$db_opcao,"")
 ?>
@@ -58,7 +58,7 @@ db_input('s108_c_exame',40,$Is108_c_exame,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ts108_i_grupoexame?>">
        <? db_ancora('<b>Grupo:</b>',"js_pesquisa_s108_i_grupoexame(true)",$db_opcao)?>
     </td>
-    <td> 
+    <td>
 			<?
         db_input('s108_i_grupoexame',10,$Is108_i_grupoexame,true,'text',$db_opcao," onchange='js_pesquisa_s108_i_grupoexame(false);' onFocus=\"nextfield='db_opcao'\" ");
       ?>
@@ -76,11 +76,11 @@ db_input('s108_c_exame',40,$Is108_c_exame,true,'text',$db_opcao,"")
 <script type="text/javascript">
 function js_pesquisa_s108_i_grupoexame(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_sau_grupoexames','func_sau_grupoexames.php?funcao_js=parent.js_mostragrupoexame1|s130_i_codigo|s130_c_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_sau_grupoexames','func_sau_grupoexames.php?funcao_js=parent.js_mostragrupoexame1|s130_i_codigo|s130_c_descricao','Pesquisa',true);
   }else{
-     if(document.form1.s108_i_grupoexame.value != ''){ 
-        //js_OpenJanelaIframe('top.corpo','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form2.z01_i_cgsund.value+'&funcao_js=parent.IFdb_iframe_agendamento.js_mostracgs','Pesquisa',false);
-        js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_sau_grupoexames','func_sau_grupoexames.php?pesquisa_chave='+document.form1.s108_i_grupoexame.value+'&funcao_js=parent.js_mostragrupoexame','Pesquisa',false);
+     if(document.form1.s108_i_grupoexame.value != ''){
+        //js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form2.z01_i_cgsund.value+'&funcao_js=parent.IFdb_iframe_agendamento.js_mostracgs','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_sau_grupoexames','func_sau_grupoexames.php?pesquisa_chave='+document.form1.s108_i_grupoexame.value+'&funcao_js=parent.js_mostragrupoexame','Pesquisa',false);
      }else{
        document.form1.s130_i_codigo.value = '';
      }
@@ -88,12 +88,12 @@ function js_pesquisa_s108_i_grupoexame(mostra){
 }
 
 function js_mostragrupoexame(chave,erro){
-  document.form1.s130_c_descricao.value = chave; 
-  if(erro=='true'){ 
-    document.form1.s108_i_grupoexame.focus(); 
-    document.form1.s108_i_grupoexame.value = ''; 
+  document.form1.s130_c_descricao.value = chave;
+  if(erro=='true'){
+    document.form1.s108_i_grupoexame.focus();
+    document.form1.s108_i_grupoexame.value = '';
   }
-  
+
 }
 
 function js_mostragrupoexame1(chave2,chave1){

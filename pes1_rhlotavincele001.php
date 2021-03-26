@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -88,11 +88,11 @@ if(isset($incluir)){
 
 		if(empty($rh39_programa)) {
 			$clrhlotavincativ->rh39_programa  = 'null';
-		}                                     
-		if(empty($rh39_subfuncao)) {         
+		}
+		if(empty($rh39_subfuncao)) {
 			$clrhlotavincativ->rh39_subfuncao = 'null';
-		}                                     
-		if(empty($rh39_funcao)) {            
+		}
+		if(empty($rh39_funcao)) {
 			$clrhlotavincativ->rh39_funcao    = 'null';
 		}
 
@@ -121,7 +121,7 @@ if(isset($incluir)){
       $sqlerro=true;
     }
   }
-  
+
   if($sqlerro==false){
     $clrhlotavincele->excluir($rh25_codlotavinc,$rh28_codeledef);
     $erro_msg1 = $clrhlotavincele->erro_msg;
@@ -129,7 +129,7 @@ if(isset($incluir)){
       $sqlerro=true;
     }
   }
-  
+
   if($sqlerro==false){
     $clrhlotavincele->excluir($rh25_codlotavinc,$rh28_codeledef);
     $erro_msg1 = $clrhlotavincele->erro_msg;
@@ -171,7 +171,7 @@ if(isset($incluir)){
 																											rh28_codeledef,
 																											orcelemento.o56_descr	as o56_descr,
 																											rh28_codelenov,
-																											a.o56_descr as 
+																											a.o56_descr as
 																											o56_descrnov,
 																											rh43_recurso,
 																											o15_descr,
@@ -179,7 +179,7 @@ if(isset($incluir)){
 																											o53_descr,
 																											o52_descr,
                                                       o40_descr,
-                                                      o41_descr"); 
+                                                      o41_descr");
   $result = $clrhlotavincele->sql_record($sSqlLotavincele);
   if($clrhlotavinc->numrows>0){
     $db_botao = true;
@@ -200,7 +200,7 @@ if(isset($incluir)){
       db_fieldsmemory($result_lotavinc,0);
     }
   }
-  if(isset($ch) && trim($ch)!="" && isset($ch1) && trim($ch1)!=""){    
+  if(isset($ch) && trim($ch)!="" && isset($ch1) && trim($ch1)!=""){
     if($ch1!="true"){
       $result_projativ = $clorcprojativ->sql_record($clorcprojativ->sql_query_file($ch,$ch1,"o55_projativ as rh39_projativ,o55_anousu as rh39_anousu,o55_descr"));
       if($clorcprojativ->numrows>0){
@@ -244,7 +244,7 @@ if(isset($incluir)){
       $o56_descrnov = "REGISTRO NÃO ENCONTRADO";
     }
   }
-  if(isset($ch6) && trim($ch6)!="" && isset($ch7) && trim($ch7)!=""){  	
+  if(isset($ch6) && trim($ch6)!="" && isset($ch7) && trim($ch7)!=""){
     if($ch6!="true"){
       $result_recurso = $clorctiporec->sql_record($clorctiporec->sql_query_file($ch6,"o15_codigo as rh43_recurso,o15_descr"));
       if($clorctiporec->numrows >0){
@@ -271,8 +271,8 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmrhlotavincele.php");
@@ -295,12 +295,12 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
   echo "<script> location.href = 'pes1_rhlotavincele001.php?lotacao=$rh25_codigo&lotavinc=$rh25_codlotavinc';</script>";
 }
 if(isset($opcao)){
-  echo "<script> top.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = '$opcao'; </script>";
+  echo "<script> CurrentWindow.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = '$opcao'; </script>";
   if($opcao=="alterar" && trim($default)==""){
-    echo "<script> top.corpo.iframe_rhlotavinc.document.form1.defaultifra.value = '$rh28_codeledef'; </script>";
+    echo "<script> CurrentWindow.corpo.iframe_rhlotavinc.document.form1.defaultifra.value = '$rh28_codeledef'; </script>";
   }
 }else{
-  echo "<script> top.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = ''; </script>";
+  echo "<script> CurrentWindow.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = ''; </script>";
 }
 /*
 if($limpachavee1==true){

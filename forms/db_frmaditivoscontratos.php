@@ -10,7 +10,7 @@ $claditivoscontratos->rotulo->label();
     <td nowrap title="<?=@$Tsi174_sequencial?>">
        <?=@$Lsi174_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si174_sequencial',12,$Isi174_sequencial,true,'text',3,"")
 ?>
@@ -20,7 +20,7 @@ db_input('si174_sequencial',12,$Isi174_sequencial,true,'text',3,"")
     <td nowrap title="<?=@$Tsi174_codunidadesub?>">
        <?=@$Lsi174_codunidadesub?>
     </td>
-    <td> 
+    <td>
 <?
 $sql = "select distinct d.coddepto,d.descrdepto,u.db17_ordem
             from db_depusu u
@@ -41,13 +41,13 @@ $sql = "select distinct d.coddepto,d.descrdepto,u.db17_ordem
     <td nowrap title="<?=@$Tsi174_nrocontrato?>">
        <?=@$Lsi174_nrocontrato?>
     </td>
-    <td> 
+    <td>
 <?
 /*$result = $clcontratos->sql_record($clcontratos->sql_query_novo(null,"si172_nrocontrato||'/'||si172_exerciciocontrato as nrocontrato, z01_nome
   "));
 
 if (empty($nrocontrato) && $nrocontrato == "") {
-  $nrocontrato                      = db_utils::fieldsMemory($result, 0)->nrocontrato;  
+  $nrocontrato                      = db_utils::fieldsMemory($result, 0)->nrocontrato;
 }
 
 db_selectrecord("nrocontrato",$result,true,$db_opcao);
@@ -68,7 +68,7 @@ db_input('si174_nrocontrato',20,$Isi174_nomeforn,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsi174_dataassinaturacontoriginal?>">
        <?=@$Lsi174_dataassinaturacontoriginal?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si174_dataassinaturacontoriginal',@$si174_dataassinaturacontoriginal_dia,@$si174_dataassinaturacontoriginal_mes,@$si174_dataassinaturacontoriginal_ano,true,'text',$db_opcao,"")
 ?>
@@ -78,7 +78,7 @@ db_inputdata('si174_dataassinaturacontoriginal',@$si174_dataassinaturacontorigin
     <td nowrap title="<?=@$Tsi174_nroseqtermoaditivo?>">
        <?=@$Lsi174_nroseqtermoaditivo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si174_nroseqtermoaditivo',2,$Isi174_nroseqtermoaditivo,true,'text',$db_opcao,"")
 ?>
@@ -88,7 +88,7 @@ db_input('si174_nroseqtermoaditivo',2,$Isi174_nroseqtermoaditivo,true,'text',$db
     <td nowrap title="<?=@$Tsi174_dataassinaturatermoaditivo?>">
        <?=@$Lsi174_dataassinaturatermoaditivo?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si174_dataassinaturatermoaditivo',@$si174_dataassinaturatermoaditivo_dia,@$si174_dataassinaturatermoaditivo_mes,@$si174_dataassinaturatermoaditivo_ano,true,'text',$db_opcao,"")
 ?>
@@ -98,9 +98,9 @@ db_inputdata('si174_dataassinaturatermoaditivo',@$si174_dataassinaturatermoaditi
     <td nowrap title="<?=@$Tsi174_tipoalteracaovalor?>">
        <?=@$Lsi174_tipoalteracaovalor?>
     </td>
-    <td> 
+    <td>
 <?
-$x = array("1"=>"Acréscimo de valor","2"=>"Decréscimo de valor","3"=>"Não houve alteração de valor"); 
+$x = array("1"=>"Acréscimo de valor","2"=>"Decréscimo de valor","3"=>"Não houve alteração de valor");
 db_select('si174_tipoalteracaovalor',$x,true,$db_opcao,"");
 //db_input('si174_tipoalteracaovalor',1,$Isi174_tipoalteracaovalor,true,'text',$db_opcao,"")
 ?>
@@ -110,12 +110,12 @@ db_select('si174_tipoalteracaovalor',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tsi174_tipotermoaditivo?>">
        <?=@$Lsi174_tipotermoaditivo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("04"=>"Reajuste","05"=>"Recomposição (Equilíbrio Financeiro)","06"=>"Outros","07"=>"Alteração de Prazo de Vigência",
            "08"=>"Alteração de Prazo de Execução","09"=>"Acréscimo de Item(ns)","10"=>"Decréscimo de Item(ns)",
            "11"=>"Acréscimo e Decréscimo de Item(ns)","12"=>"Alteração de Projeto/Especificação",
-           "13"=>"Alteração de Prazo de vigência e Prazo de Execução","14"=>"Acréscimo/Decréscimo de item(ns) conjugado com 
+           "13"=>"Alteração de Prazo de vigência e Prazo de Execução","14"=>"Acréscimo/Decréscimo de item(ns) conjugado com
            outros tipos de termos aditivos");
 db_select('si174_tipotermoaditivo',$x,true,$db_opcao,"");
 
@@ -127,7 +127,7 @@ db_select('si174_tipotermoaditivo',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tsi174_dscalteracao?>">
        <?=@$Lsi174_dscalteracao?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('si174_dscalteracao',8,40,$Isi174_dscalteracao,true,'text',$db_opcao,"")
 ?>
@@ -137,7 +137,7 @@ db_textarea('si174_dscalteracao',8,40,$Isi174_dscalteracao,true,'text',$db_opcao
     <td nowrap title="<?=@$Tsi174_novadatatermino?>">
        <?=@$Lsi174_novadatatermino?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si174_novadatatermino',@$si174_novadatatermino_dia,@$si174_novadatatermino_mes,@$si174_novadatatermino_ano,true,'text',$db_opcao,"")
 ?>
@@ -147,7 +147,7 @@ db_inputdata('si174_novadatatermino',@$si174_novadatatermino_dia,@$si174_novadat
     <td nowrap title="<?=@$Tsi174_valoraditivo?>">
        <?=@$Lsi174_valoraditivo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si174_valoraditivo',14,$Isi174_valoraditivo,true,'text',$db_opcao,"")
 ?>
@@ -157,7 +157,7 @@ db_input('si174_valoraditivo',14,$Isi174_valoraditivo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsi174_datapublicacao?>">
        <?=@$Lsi174_datapublicacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si174_datapublicacao',@$si174_datapublicacao_dia,@$si174_datapublicacao_mes,@$si174_datapublicacao_ano,true,'text',$db_opcao,"")
 ?>
@@ -167,7 +167,7 @@ db_inputdata('si174_datapublicacao',@$si174_datapublicacao_dia,@$si174_datapubli
     <td nowrap title="<?=@$Tsi174_veiculodivulgacao?>">
        <?=@$Lsi174_veiculodivulgacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si174_veiculodivulgacao',50,$Isi174_veiculodivulgacao,true,'text',$db_opcao,"")
 ?>
@@ -194,7 +194,7 @@ function addEventsToHTML(){
 
     document.form1.nrocontrato.onchange      = changeHandler1;
     document.form1.nrocontratodescr.onchange = changeHandler2;
-    
+
     function changeHandler1(){
 
       js_ProcCod_nrocontrato('nrocontrato','nrocontratodescr');
@@ -225,10 +225,10 @@ function addEventsToHTML(){
       var param21 = document.form1.si174_veiculodivulgacao.value;
       var param22 = document.form1.nrocontratodescr.value;
       var param23 = document.form1.si174_sequencial.value;
-      
+
       if ( document.form1.controle.value == 1 ) {
 
-          top.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos004.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
+          CurrentWindow.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos004.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
           '&si174_dataassinaturacontoriginal_dia='+param4+'&si174_dataassinaturacontoriginal_mes='+param5+'&si174_dataassinaturacontoriginal_ano='+param6+'&si174_nroseqtermoaditivo='+param7+
           '&si174_dataassinaturatermoaditivo_dia='+param8+'&si174_dataassinaturatermoaditivo_mes='+param9+'&si174_dataassinaturatermoaditivo_ano='+param10+
           '&si174_tipoalteracaovalor='+param11+'&si174_tipotermoaditivo='+param12+'&si174_dscalteracao='+param13+
@@ -238,13 +238,13 @@ function addEventsToHTML(){
 
       } else {
 
-            top.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos007.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
+            CurrentWindow.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos007.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
           '&si174_dataassinaturacontoriginal_dia='+param4+'&si174_dataassinaturacontoriginal_mes='+param5+'&si174_dataassinaturacontoriginal_ano='+param6+'&si174_nroseqtermoaditivo='+param7+
           '&si174_dataassinaturatermoaditivo_dia='+param8+'&si174_dataassinaturatermoaditivo_mes='+param9+'&si174_dataassinaturatermoaditivo_ano='+param10+
           '&si174_tipoalteracaovalor='+param11+'&si174_tipotermoaditivo='+param12+'&si174_dscalteracao='+param13+
           '&si174_novadatatermino_dia='+param14+'&si174_novadatatermino_mes='+param15+'&si174_novadatatermino_ano='+param16+
           '&si174_valoraditivo='+param17+'&si174_datapublicacao_dia='+param18+'&si174_datapublicacao_mes='+param19+
-          '&si174_datapublicacao_ano='+param20+'&si174_veiculodivulgacao='+param21+'&nrocontratodescr='+param22+'&si174_sequencial='+param23;        
+          '&si174_datapublicacao_ano='+param20+'&si174_veiculodivulgacao='+param21+'&nrocontratodescr='+param22+'&si174_sequencial='+param23;
 
       }
 
@@ -283,23 +283,23 @@ function addEventsToHTML(){
 
       if ( document.form1.controle.value == 1 ) {
 
-        top.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos004.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
+        CurrentWindow.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos004.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
         '&si174_dataassinaturacontoriginal_dia='+param4+'&si174_dataassinaturacontoriginal_mes='+param5+'&si174_dataassinaturacontoriginal_ano='+param6+'&si174_nroseqtermoaditivo='+param7+
         '&si174_dataassinaturatermoaditivo_dia='+param8+'&si174_dataassinaturatermoaditivo_mes='+param9+'&si174_dataassinaturatermoaditivo_ano='+param10+
         '&si174_tipoalteracaovalor='+param11+'&si174_tipotermoaditivo='+param12+'&si174_dscalteracao='+param13+
         '&si174_novadatatermino_dia='+param14+'&si174_novadatatermino_mes='+param15+'&si174_novadatatermino_ano='+param16+
         '&si174_valoraditivo='+param17+'&si174_datapublicacao_dia='+param18+'&si174_datapublicacao_mes='+param19+
-        '&si174_datapublicacao_ano='+param20+'&si174_veiculodivulgacao='+param21+'&nrocontratodescr='+param22+'&si174_sequencial='+param23;       
+        '&si174_datapublicacao_ano='+param20+'&si174_veiculodivulgacao='+param21+'&nrocontratodescr='+param22+'&si174_sequencial='+param23;
 
       } else {
 
-        top.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos007.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
+        CurrentWindow.corpo.iframe_aditivoscontratos.location.href='sic1_aditivoscontratos007.php?si174_codunidadesub='+param2+'&nrocontrato='+param3+
         '&si174_dataassinaturacontoriginal_dia='+param4+'&si174_dataassinaturacontoriginal_mes='+param5+'&si174_dataassinaturacontoriginal_ano='+param6+'&si174_nroseqtermoaditivo='+param7+
         '&si174_dataassinaturatermoaditivo_dia='+param8+'&si174_dataassinaturatermoaditivo_mes='+param9+'&si174_dataassinaturatermoaditivo_ano='+param10+
         '&si174_tipoalteracaovalor='+param11+'&si174_tipotermoaditivo='+param12+'&si174_dscalteracao='+param13+
         '&si174_novadatatermino_dia='+param14+'&si174_novadatatermino_mes='+param15+'&si174_novadatatermino_ano='+param16+
         '&si174_valoraditivo='+param17+'&si174_datapublicacao_dia='+param18+'&si174_datapublicacao_mes='+param19+
-        '&si174_datapublicacao_ano='+param20+'&si174_veiculodivulgacao='+param21+'&nrocontratodescr='+param22+'&si174_sequencial='+param23;       
+        '&si174_datapublicacao_ano='+param20+'&si174_veiculodivulgacao='+param21+'&nrocontratodescr='+param22+'&si174_sequencial='+param23;
 
       }
 
@@ -316,7 +316,7 @@ window.onload = addEventsToHTML;
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_aditivoscontratos','db_iframe_aditivoscontratos','func_aditivoscontratos.php?funcao_js=parent.js_preenchepesquisa|si174_sequencial','Pesquisa',true,'0','1','1300','550');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aditivoscontratos','db_iframe_aditivoscontratos','func_aditivoscontratos.php?funcao_js=parent.js_preenchepesquisa|si174_sequencial','Pesquisa',true,'0','1','1300','550');
 }
 function js_preenchepesquisa(chave){
   db_iframe_aditivoscontratos.hide();

@@ -18,7 +18,7 @@ if ($db_opcao == 1) {
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
-    <?php 
+    <?php
       db_app::load('scripts.js, prototype.js, dbcomboBox.widget.js, dbtextField.widget.js, strings.js, DBHint.widget.js, DBLookUp.widget.js, AjaxRequest.js');
     ?>
     <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -34,7 +34,7 @@ if ($db_opcao == 1) {
       textarea#db148_formula {
         font-family:monospace;
       }
-      
+
     </style>
   </head>
   <body class="body-default">
@@ -84,17 +84,17 @@ if ($db_opcao == 1) {
         <input name="pesquisar" type="<?= $db_opcao == 1 ? "hidden" : "button"?>" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
       </form>
     </div>
-    <?php db_menu( db_getsession("DB_id_usuario"), 
-                   db_getsession("DB_modulo"), 
-                   db_getsession("DB_anousu"), 
+    <?php db_menu( db_getsession("DB_id_usuario"),
+                   db_getsession("DB_modulo"),
+                   db_getsession("DB_anousu"),
                    db_getsession("DB_instit") ); ?>
   </body>
   <script>
 
     function js_pesquisa() {
-      js_OpenJanelaIframe( 'top.corpo', 
-                           'db_iframe_db_formulas', 
-                           'func_db_formulas.php?funcao_js=parent.js_preenchepesquisa|db148_sequencial', 
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                           'db_iframe_db_formulas',
+                           'func_db_formulas.php?funcao_js=parent.js_preenchepesquisa|db148_sequencial',
                            'Pesquisa', true);
     }
 
@@ -110,7 +110,7 @@ if ($db_opcao == 1) {
 
     function js_verificaNomeVariavel() {
 
-      var oParametersAjaxRequest = { 
+      var oParametersAjaxRequest = {
         "exec"             : "verificaNomeVariavel",
         "sNomeVariavel"    : $F("db148_nome"),
         "db148_sequencial" : $F("db148_sequencial")
@@ -143,7 +143,7 @@ if ($db_opcao == 1) {
         alert("Preencha a descrição da variável.");
         return false;
       }
-      
+
       return js_verificaNomeVariavel();
     }
 

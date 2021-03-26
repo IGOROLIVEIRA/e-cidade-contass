@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -48,12 +48,12 @@ $clrotulo->label('k15_codigo');
 $clrotulo->label('z01_nome');
 
 if (count($clpostgresqlutils->getTableIndexes('debitos')) == 0) {
-	
+
 	db_msgbox(_M('tributario.notificacoes.not2_geratxtgeral001.problema_indices_debitos'));
-	$db_botao = false; 
+	$db_botao = false;
 	$db_opcao = 3;
 } else {
-	
+
 	$db_botao = true;
 	$db_opcao = 4;
 }
@@ -72,13 +72,13 @@ function js_emite(tiporel) {
 		alert(_M('tributario.notificacoes.not2_geratxtgeral001.selecione_lista'));
 		return false;
 	}
-	
+
   if (document.form1.modelo.value == 3) {
-    url = "cai4_emitenotificacaotxt.php"; 
+    url = "cai4_emitenotificacaotxt.php";
   } else {
     url = "not2_geratxtgeral002.php";
   }
-  
+
   url += '?ordem='+document.form1.ordem.value;
   url += '&tiporel='+tiporel;
   url += '&lista='+document.form1.k60_codigo.value;
@@ -86,19 +86,19 @@ function js_emite(tiporel) {
   url += '&tipo='+document.form1.tipo.value;
   url += '&modelo='+document.form1.modelo.value;
   url += '&k60_datavenc='+document.form1.dtvencimento.value;
-  
-  js_OpenJanelaIframe('top.corpo','db_iframe_txt',url,'Pesquisa',true);
+
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_txt',url,'Pesquisa',true);
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor="#cccccc">
 
-    
-				 
+
+
 <form class="container" name="form1" method="post" action="" >
   <fieldset>
-    <legend>Emissão Geral TXT</legend>   
+    <legend>Emissão Geral TXT</legend>
 	<table class="form-container">
 	  <tr>
 	    <td title="<?=@$Tk60_codigo?>" >
@@ -145,7 +145,7 @@ function js_emite(tiporel) {
 	        db_select('tipo',$xx,true,$db_opcao,"");
 	      ?>
 	    </td>
-	  </tr> 
+	  </tr>
 	  <tr>
 	    <td>
 	      Quantidade de registros a processar:
@@ -163,7 +163,7 @@ function js_emite(tiporel) {
 	    <td>
 	      <?
 	        $data        = date("Y-m-d",DB_getsession('DB_datausu'));
-	        $aData       = explode("-", $data); 
+	        $aData       = explode("-", $data);
 	        $dtDataVenc  = date("Y-m-d",mktime(0,0,0,$aData[1], $aData[2]+30, $aData[0]));
 	        $aDtDataVenc = explode("-", $dtDataVenc);
 	        db_inputdata("dtvencimento",$aDtDataVenc[2],$aDtDataVenc[1],$aDtDataVenc[0], $dbcadastro=true,
@@ -173,7 +173,7 @@ function js_emite(tiporel) {
 	  </tr>
 	</table>
   </fieldset>
-  <input name="db_opcao" type="button" id="db_opcao" value="Processar" onClick="js_emite(1);" 
+  <input name="db_opcao" type="button" id="db_opcao" value="Processar" onClick="js_emite(1);"
 	<?=($db_botao ? '' : 'disabled')?>>
 </form>
 
@@ -185,9 +185,9 @@ function js_emite(tiporel) {
 <script>
 function js_pesquisalista(mostra){
      if(mostra==true){
-       js_OpenJanelaIframe('top.corpo','db_iframe_lista','func_lista.php?funcao_js=parent.js_mostralista1|k60_codigo|k60_descr','Pesquisa',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lista','func_lista.php?funcao_js=parent.js_mostralista1|k60_codigo|k60_descr','Pesquisa',true);
      }else{
-       js_OpenJanelaIframe('top.corpo','db_iframe_lista','func_lista.php?pesquisa_chave='+document.form1.k60_codigo.value+'&funcao_js=parent.js_mostralista','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lista','func_lista.php?pesquisa_chave='+document.form1.k60_codigo.value+'&funcao_js=parent.js_mostralista','Pesquisa',false);
      }
 }
 
@@ -208,9 +208,9 @@ function js_mostralista1(chave1,chave2){
 // cadban
 function js_pesquisacadban(mostra){
      if(mostra==true){
-       js_OpenJanelaIframe('top.corpo','db_iframe_cadban','func_cadban.php?funcao_js=parent.js_mostracadban1|k15_codigo|z01_nome','Pesquisa',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?funcao_js=parent.js_mostracadban1|k15_codigo|z01_nome','Pesquisa',true);
      }else{
-       js_OpenJanelaIframe('top.corpo','db_iframe_cadban','func_cadban.php?pesquisa_chave='+document.form1.k15_codigo.value+'&funcao_js=parent.js_mostracadban','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?pesquisa_chave='+document.form1.k15_codigo.value+'&funcao_js=parent.js_mostracadban','Pesquisa',false);
      }
 }
 

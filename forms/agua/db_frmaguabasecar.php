@@ -14,13 +14,13 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $x30_matric = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -31,7 +31,7 @@ if(isset($db_opcaoal)){
        db_ancora(@$Lx30_matric,"js_pesquisax30_matric(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x30_matric',10,$Ix30_matric,true,'text',$db_opcao," onchange='js_pesquisax30_matric(false);'")
 ?>
@@ -44,7 +44,7 @@ db_input('x01_numcgm',10,$Ix01_numcgm,true,'text',3,'')
     <td nowrap title="<?=@$Tx30_codigo?>">
        <?=@$Lx30_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x30_codigo',10,$Ix30_codigo,true,'text',$db_opcao,"")
 ?>
@@ -59,7 +59,7 @@ db_input('x30_codigo',10,$Ix30_codigo,true,'text',$db_opcao,"")
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 //$chavepri= array("x30_codigo"=>@$x30_codigo,"x30_matric"=>@$x30_matric);
 	 $chavepri= array("x30_matric"=>@$x30_matric);
@@ -88,20 +88,20 @@ function js_cancelar(){
 }
 function js_pesquisax30_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguabasecar','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabasecar','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x30_matric.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguabasecar','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x30_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
+     if(document.form1.x30_matric.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabasecar','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x30_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
      }else{
-       document.form1.x01_numcgm.value = ''; 
+       document.form1.x01_numcgm.value = '';
      }
   }
 }
 function js_mostraaguabase(chave,erro){
-  document.form1.x01_numcgm.value = chave; 
-  if(erro==true){ 
-    document.form1.x30_matric.focus(); 
-    document.form1.x30_matric.value = ''; 
+  document.form1.x01_numcgm.value = chave;
+  if(erro==true){
+    document.form1.x30_matric.focus();
+    document.form1.x30_matric.value = '';
   }
 }
 function js_mostraaguabase1(chave1,chave2){

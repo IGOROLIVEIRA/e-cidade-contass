@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: educação
@@ -35,7 +35,7 @@ $clturnos->rotulo->label();
     <td nowrap title="<?=@$Ted10_i_codigo?>">
        <?=@$Led10_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed10_i_codigo',5,$Ied10_i_codigo,true,'text',3,"")
 ?>
@@ -45,7 +45,7 @@ db_input('ed10_i_codigo',5,$Ied10_i_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Ted10_c_nome?>">
        <?=@$Led10_c_nome?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed10_c_nome',20,$Ied10_c_nome,true,'text',$db_opcao,"")
 ?>
@@ -55,7 +55,7 @@ db_input('ed10_c_nome',20,$Ied10_c_nome,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ted10_c_abrevia?>">
        <?=@$Led10_c_abrevia?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed10_c_abrevia',3,$Ied10_c_abrevia,true,'text',$db_opcao,"")
 ?>
@@ -68,7 +68,7 @@ db_input('ed10_c_abrevia',3,$Ied10_c_abrevia,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_turnos','func_turnos.php?funcao_js=parent.js_preenchepesquisa|ed10_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_turnos','func_turnos.php?funcao_js=parent.js_preenchepesquisa|ed10_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_turnos.hide();

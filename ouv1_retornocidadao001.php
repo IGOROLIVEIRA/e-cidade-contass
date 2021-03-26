@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -42,7 +42,7 @@ $clTipoRetorno = new cl_tiporetorno();
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<? 
+<?
 	db_app::load('strings.js');
   db_app::load('scripts.js');
   db_app::load('datagrid.widget.js');
@@ -113,11 +113,11 @@ $clTipoRetorno = new cl_tiporetorno();
 											                    4=>"Telefone/Fax",
 											                    5=>"Sem Retorno");
 
-                    db_select('tiporetorno',$aTipoRetorno,true,1,'');											                    
+                    db_select('tiporetorno',$aTipoRetorno,true,1,'');
                   ?>
                 </td>
-              </tr>                             	    	      
-	    	      
+              </tr>
+
 	    	      <!-- Ancora para Atendimento  -->
 	    	      <tr>
                 <td>
@@ -133,7 +133,7 @@ $clTipoRetorno = new cl_tiporetorno();
                   ?>
                 </td>
               </tr>
-	    	      
+
 	    	    </table>
 	    	  </fieldset>
         </td>
@@ -144,7 +144,7 @@ $clTipoRetorno = new cl_tiporetorno();
         </td>
       </tr>
       <tr>
-        <td>  
+        <td>
           <fieldset>
             <legend>
               <b>Lista Processos</b>
@@ -152,7 +152,7 @@ $clTipoRetorno = new cl_tiporetorno();
             <div id="listaProcessos"></div>
           </fieldset>
         </td>
-      </tr>      
+      </tr>
 	  </table>
   </form>
 <?
@@ -163,18 +163,18 @@ $clTipoRetorno = new cl_tiporetorno();
 <script>
 
   var sUrl = 'ouv1_retornocliente.RPC.php';
-   
+
   var oDBGridListaProcessos = new DBGrid('Processos');
   oDBGridListaProcessos.nameInstance = 'oDBGridListaProcessos';
   oDBGridListaProcessos.setHeader(new Array('Processo', 'Atendimento', 'Requerente','Tipo','Data Processo','Retorno'));
   oDBGridListaProcessos.setHeight(200);
   oDBGridListaProcessos.setCellAlign(new Array('center', 'center','left','left','center','center'));
   oDBGridListaProcessos.show($('listaProcessos'));
-  
+
   function js_pesquisar(){
 
     js_divCarregando('Aguarde...','msgBox');
-   
+
     var sQuery  = 'sMethod=consultaProcessos';
         sQuery += '&iProcIni='+$F('procini');
         sQuery += '&iProcFin='+$F('procfin');
@@ -184,38 +184,38 @@ $clTipoRetorno = new cl_tiporetorno();
         sQuery += '&iTipoRetorno='+$F('tiporetorno');
         sQuery += '&iNumeroAtendimento='+$F('ov01_numero');
         sQuery += '&iAnoAtendimento='+$F('ov01_ano');
-        
+
     var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
+                                            method: 'post',
+                                            parameters: sQuery,
                                             onComplete: js_retornoDadosProcessos
                                           }
-                                  );  
+                                  );
   }
-  
-    
+
+
   function js_retornoDadosProcessos(oAjax){
-  
+
     js_removeObj("msgBox");
     var aRetorno = eval("("+oAjax.responseText+")");
-    
+
     oDBGridListaProcessos.clearAll(true);
-    
+
     if ( aRetorno.lErro ) {
       alert(aRetorno.sMsg.urlDecode());
       return false;
     } else {
       js_montaGridProcessos(aRetorno.aListaProcessos);
     }
-        
+
   }
-  
+
 
   function js_montaGridProcessos(aListaProcessos){
-  
+
     oDBGridListaProcessos.clearAll(true);
     var iNumRows = aListaProcessos.length;
-    
+
     if( iNumRows > 0 ){
       aListaProcessos.each(
         function (oProcesso,iInd){
@@ -234,88 +234,88 @@ $clTipoRetorno = new cl_tiporetorno();
     }
     oDBGridListaProcessos.renderRows();
   }
-  
-  
+
+
   function js_consultaProcesso(iCodProcesso){
-    js_OpenJanelaIframe('top.corpo','db_iframe_detalhes','ouv1_retornocidadao002.php?iCodProcesso='+iCodProcesso,'Detalhes do Processo',true);    
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_detalhes','ouv1_retornocidadao002.php?iCodProcesso='+iCodProcesso,'Detalhes do Processo',true);
   }
-  
+
   function js_pesquisaProcessoIni(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_processoIni','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoIni|p58_codproc','Processos',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoIni','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoIni|p58_codproc','Processos',true);
   }
 
   function js_mostraProcessoIni(iCodProc){
     document.form1.procini.value = iCodProc;
     db_iframe_processoIni.hide();
   }
-  
+
   function js_pesquisaProcessoFin(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_processoFin','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoFin|p58_codproc','Processos',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoFin','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoFin|p58_codproc','Processos',true);
   }
 
   function js_mostraProcessoFin(iCodProc){
     document.form1.procfin.value = iCodProc;
     db_iframe_processoFin.hide();
-  }  
-  
+  }
+
   function js_pesquisaTipoProcesso( lMostra ){
-    
+
     if( lMostra ){
-      js_OpenJanelaIframe('top.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&funcao_js=parent.js_mostraTipoProcesso1|p51_codigo|p51_descr','Tipo de Processo',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&funcao_js=parent.js_mostraTipoProcesso1|p51_codigo|p51_descr','Tipo de Processo',true);
     }else{
-       if( $F('proctipo') != '' ){ 
-         js_OpenJanelaIframe('top.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&pesquisa_chave='+$F('proctipo')+'&funcao_js=parent.js_mostraTipoProcesso','Tipo de Processo',false);
+       if( $F('proctipo') != '' ){
+         js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&pesquisa_chave='+$F('proctipo')+'&funcao_js=parent.js_mostraTipoProcesso','Tipo de Processo',false);
        }else{
-         document.form1.descrtipo.value = ''; 
+         document.form1.descrtipo.value = '';
        }
     }
-    
+
   }
-  
+
   function js_mostraTipoProcesso(chave,lErro){
-    
+
     document.form1.descrtipo.value = chave;
-     
-    if( lErro ){ 
-      document.form1.proctipo.focus(); 
+
+    if( lErro ){
+      document.form1.proctipo.focus();
       document.form1.proctipo.value = '';
-      return false; 
+      return false;
     }
-    
+
   }
-  
+
   function js_mostraTipoProcesso1(chave1,chave2){
     document.form1.proctipo.value  = chave1;
     document.form1.descrtipo.value = chave2;
     db_iframe_tipoproc.hide();
   }
 
-  
+
   /**
    * Efetua a pesquisa de número de atendimento.
    */
   function js_pesquisaNumeroAtendimento(lMostra) {
-   
+
     if ($('ov01_numero').value == '' && lMostra == false) {
-     
+
       $('ov01_numero').value      = '';
       $('ov01_ano').value         = '';
       $('ov01_solicitacao').value = '';
-      
+
     } else {
-      
+
       if (lMostra == true) {
-        
+
         var sUrlLookUp = 'func_ouvidoriaatendimento.php?funcao_js=parent.js_mostraNumeroAtendimento|ov01_numero|ov01_anousu|ov01_requerente';
       } else {
-       
+
         var sValorPesquisa = document.getElementById('ov01_numero').value;
         var sUrlLookUp     = 'func_ouvidoriaatendimento.php?requer=1&pesquisa_chave='+sValorPesquisa+'&funcao_js=parent.js_preencheNumeroAtendimento';
       }
       js_OpenJanelaIframe('', 'db_iframeouvidoriaatendimento', sUrlLookUp, 'Pesquisa Número Atendimento', lMostra);
     }
   }
-   
+
   /**
    * Insere no formulário o retorno da pesquisa de numero de atendimento.
    */
@@ -335,7 +335,7 @@ $clTipoRetorno = new cl_tiporetorno();
   function js_preencheNumeroAtendimento(iNumeroAtendimento, sRequerente, lErro, iAno) {
 
     if (sRequerente == true) {
-      
+
       $('ov01_numero').value      = "";
       $('ov01_ano').value         = "";
       $('ov01_solicitacao').value = iNumeroAtendimento;

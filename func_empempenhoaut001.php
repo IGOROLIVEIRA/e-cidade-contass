@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -113,10 +113,10 @@ if (isset($bAtestoContInt) && $bAtestoContInt == 1) {
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script>
         // function js_abre_lancamentos(){
-        //    js_OpenJanelaIframe('top.corpo','db_iframe_clonlancam002','func_conlancam002.php?chavepesquisa='+"<?=$e54_autori  ?>",'Pesquisa',true);
+        //    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clonlancam002','func_conlancam002.php?chavepesquisa='+"<?=$e54_autori  ?>",'Pesquisa',true);
         // }
         function js_abre_empempitem(){
-            js_OpenJanelaIframe('top.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_empempitem','emp1_empempitem005.php?e60_numemp='+"<?=@$e61_numemp ?>"+'&e55_autori='+"<?=@$e54_autori?>",'Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_empempitem','emp1_empempitem005.php?e60_numemp='+"<?=@$e61_numemp ?>"+'&e55_autori='+"<?=@$e54_autori?>",'Pesquisa',true);
             <?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? "parent.document.getElementById('Jandb_iframe_empempitem').style.zIndex = '2000';" : ""; ?>
         }
         function pesquisa_cgm(){
@@ -129,16 +129,16 @@ if (isset($bAtestoContInt) && $bAtestoContInt == 1) {
             js_JanelaAutomatica('empempenho','<?=@$e61_numemp ?>');
         }
         function js_abre_solicita(){
-            js_OpenJanelaIframe('top.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_solicita','func_solicita001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_solicita','func_solicita001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
             <?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? "parent.document.getElementById('Jandb_iframe_solicita').style.zIndex = '2000';" : ""; ?>
         }
         function js_abre_pcproc(){
-            js_OpenJanelaIframe('top.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_pcproc','func_pcproc001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_pcproc','func_pcproc001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
             <?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? "parent.document.getElementById('Jandb_iframe_pcproc').style.zIndex = '2000';" : ""; ?>
         }
         function js_abre_acordo(iAcordo){
 
-            js_OpenJanelaIframe('top.corpo','db_iframe_acordo','con4_consacordos003.php?lEmpenho=1&ac16_sequencial=' + iAcordo ,'Pesquisa Acordo',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_acordo','con4_consacordos003.php?lEmpenho=1&ac16_sequencial=' + iAcordo ,'Pesquisa Acordo',true);
         }
 
     </script>
@@ -146,7 +146,7 @@ if (isset($bAtestoContInt) && $bAtestoContInt == 1) {
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <!---
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td  align="center" valign="top">
  --->
 <table width="80%" border="0" align="center" cellspacing="0">

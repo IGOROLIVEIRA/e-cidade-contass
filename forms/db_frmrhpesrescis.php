@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -212,7 +212,7 @@ $clrotulo->label("rh02_codreg");
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="button" id="db_opcao" value="<?=($db_opcao==1?"Processar":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  <?if($db_opcao!=3)echo "onclick='js_verificadados();'";?>>
     </td>
   </tr>
-</table> 
+</table>
 <script>
 function js_faltas(registro){
 	qry = 'opcao=enviarescis';
@@ -221,7 +221,7 @@ function js_faltas(registro){
   qry+= '&regist='+document.form1.rh01_regist.value;
   qry+= '&rh05_recis_ano='+document.form1.rh05_recis_ano.value;
   qry+= '&rh05_recis_mes='+document.form1.rh05_recis_mes.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
 }
 function js_verificadados(){
   x = document.form1;
@@ -272,8 +272,8 @@ function js_validaaviso(opcao){
     x.rh05_aviso_mes.value = "";
     x.rh05_aviso_ano.value = "";
     x.rh05_aviso.value = "";
-//    x.rh05_aviso_dia.focus(); 
-    x.rh05_aviso.focus(); 
+//    x.rh05_aviso_dia.focus();
+    x.rh05_aviso.focus();
   }
 }
 function js_validarecis(){
@@ -371,10 +371,10 @@ function js_disabdata(valor){
 }
 function js_pesquisarh05_causa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rescisao','func_rescisaoaviso.php?testarescisao=raf&funcao_js=parent.js_mostrarescisao1|r59_causa|r59_descr|r59_caub|r59_descr1|r59_aviso|r59_menos1&chave_r59_anousu=<?=$rh02_anousu?>&chave_r59_mesusu=<?=$rh02_mesusu?>&regime='+document.form1.rh02_codreg.value,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rescisao','func_rescisaoaviso.php?testarescisao=raf&funcao_js=parent.js_mostrarescisao1|r59_causa|r59_descr|r59_caub|r59_descr1|r59_aviso|r59_menos1&chave_r59_anousu=<?=$rh02_anousu?>&chave_r59_mesusu=<?=$rh02_mesusu?>&regime='+document.form1.rh02_codreg.value,'Pesquisa',true);
   }else{
-    if(document.form1.rh05_causa.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_rescisao','func_rescisaoaviso.php?testarescisao=raf&pesquisa_chave='+document.form1.rh05_causa.value+'&funcao_js=parent.js_mostrarescisao&ano=<?=$rh02_anousu?>&mes=<?=$rh02_mesusu?>&regime='+document.form1.rh02_codreg.value,'Pesquisa',false);
+    if(document.form1.rh05_causa.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rescisao','func_rescisaoaviso.php?testarescisao=raf&pesquisa_chave='+document.form1.rh05_causa.value+'&funcao_js=parent.js_mostrarescisao&ano=<?=$rh02_anousu?>&mes=<?=$rh02_mesusu?>&regime='+document.form1.rh02_codreg.value,'Pesquisa',false);
     }else{
       document.form1.rh05_caub.value  = '';
       document.form1.r59_descr.value  = '';
@@ -389,10 +389,10 @@ function js_pesquisarh05_causa(mostra){
   }
 }
 function js_mostrarescisao(chave,chave2,chave3,chave4,chave5,erro){
-  document.form1.r59_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.rh05_causa.focus(); 
-    document.form1.rh05_causa.value = ''; 
+  document.form1.r59_descr.value = chave;
+  if(erro==true){
+    document.form1.rh05_causa.focus();
+    document.form1.rh05_causa.value = '';
     document.form1.rh05_caub.value  = '';
     document.form1.r59_descr1.value = '';
     document.form1.r59_menos1.value = '';
@@ -417,20 +417,20 @@ function js_mostrarescisao1(chave1,chave2,chave3,chave4,chave5,chave6){
   document.form1.r59_descr1.value = chave4;
   document.form1.r59_aviso.value = chave5;
   document.form1.r59_menos1.value = chave6;
-  
+
   db_iframe_rescisao.hide(); // alterado
- 
+
   js_disabdata(document.form1.rh05_taviso.value);
   js_validaaviso(1);
-  
+
  //db_iframe_rescisao.hide(); // original
 }
 function js_pesquisarh01_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc|rh30_regime&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc|rh30_regime&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
   }else{
-     if(document.form1.rh01_regist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrarhpessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
+     if(document.form1.rh01_regist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrarhpessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
        document.form1.rh01_admiss_dia.value = '';
@@ -449,7 +449,7 @@ function js_pesquisarh01_regist(mostra){
        document.form1.rh05_aviso_mes.value  = '';
        document.form1.rh05_aviso_ano.value  = '';
        document.form1.rh05_aviso.value  = '';
-       document.form1.rh05_mremun.value     = ''; 
+       document.form1.rh05_mremun.value     = '';
        document.form1.rh02_seqpes.value = '';
        document.form1.rh02_codreg.value = '';
        document.form1.rh05_taviso.options[0].selected = true;
@@ -459,12 +459,12 @@ function js_pesquisarh01_regist(mostra){
 }
 function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,chave11,erro,temresci){
   document.form1.z01_nome.value = chave;
-  if(erro==true||temresci=='s'){ 
+  if(erro==true||temresci=='s'){
 		if (temresci=='s'){
 			document.form1.z01_nome.value = "";
 		}
-    document.form1.rh01_regist.focus(); 
-    document.form1.rh01_regist.value = ''; 
+    document.form1.rh01_regist.focus();
+    document.form1.rh01_regist.value = '';
     document.form1.rh01_admiss_ano.value = '';
     document.form1.rh01_admiss_mes.value = '';
     document.form1.rh01_admiss_dia.value = '';

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlibwebseller.php");
@@ -92,7 +92,7 @@ if(isset($alterar)) {
 } else if(isset($chavepesquisa)) {
   $db_opcao  = 2;
   $db_opcao1 = 3;
-  
+
   $oDaoTurmaCensoEtapa    = new cl_turmacensoetapa();
   $sWhereTurmaCensoEtapa  = " ed132_turma = {$chavepesquisa}";
   $sSqlTurmaCensoEtapa    = $oDaoTurmaCensoEtapa->sql_query_file(null, "ed132_ano", null, $sWhereTurmaCensoEtapa);
@@ -129,13 +129,13 @@ if(isset($alterar)) {
    parent.document.formaba.a3.disabled = false;
    parent.document.formaba.a4.disabled = false;
    parent.document.formaba.a5.disabled = false;
-   top.corpo.iframe_a2.location.href='edu1_regenciaabas001.php?ed59_i_turma=<?=$ed57_i_codigo?>'+
+   CurrentWindow.corpo.iframe_a2.location.href='edu1_regenciaabas001.php?ed59_i_turma=<?=$ed57_i_codigo?>'+
                                      '&ed57_c_descr=<?=$ed57_c_descr?>';
-   top.corpo.iframe_a3.location.href='edu1_regenciahorarioabas001.php?ed59_i_turma=<?=$ed57_i_codigo?>'+
+   CurrentWindow.corpo.iframe_a3.location.href='edu1_regenciahorarioabas001.php?ed59_i_turma=<?=$ed57_i_codigo?>'+
                                      '&ed57_c_descr=<?=$ed57_c_descr?>&ed57_i_turno=<?=$ed57_i_turno?>';
-   top.corpo.iframe_a4.location.href='edu1_alunoturma001.php?ed60_i_turma=<?=$ed57_i_codigo?>'+
+   CurrentWindow.corpo.iframe_a4.location.href='edu1_alunoturma001.php?ed60_i_turma=<?=$ed57_i_codigo?>'+
                                      '&ed57_c_descr=<?=$ed57_c_descr?>&ed52_c_descr=<?=$ed52_c_descr?>';
-   top.corpo.iframe_a5.location.href='edu1_parecerturma001.php?ed105_i_turma=<?=$ed57_i_codigo?>'+
+   CurrentWindow.corpo.iframe_a5.location.href='edu1_parecerturma001.php?ed105_i_turma=<?=$ed57_i_codigo?>'+
                                      '&ed57_c_descr=<?=$ed57_c_descr?>&ed52_c_descr=<?=$ed52_c_descr?>';
   </script>
  <?

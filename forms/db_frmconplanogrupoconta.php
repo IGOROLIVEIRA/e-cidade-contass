@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("dbforms/db_classesgenericas.php");
@@ -63,7 +63,7 @@ $clrotulo->label("c64_descr");
     <td nowrap title="<?=@$Tc60_estrut?>"><?=@$Lc60_estrut?></td>
     <td nowrap><?
            db_input("c60_estrut",18,"",true,"text",3);
-    ?>  
+    ?>
     </td>
   </tr>
 	<tr>
@@ -72,7 +72,7 @@ $clrotulo->label("c64_descr");
 	</tr>
 	<tr>
 	  <td nowrap title="<?=@$Tc60_codsis?>"><?=@$Lc60_codsis?></td>
-	  <td nowrap><? 
+	  <td nowrap><?
            db_input('c60_codsis',4,$Ic60_codsis,true,'text',3,"");
  	         db_input('c52_descr',46,@$Ic52_descr,true,'text',3,"");
         ?>
@@ -87,12 +87,12 @@ $clrotulo->label("c64_descr");
 	  </td>
 	</tr>
   <tr>
-    <td nowrap colspan="2" height="50" align="center"> 
+    <td nowrap colspan="2" height="50" align="center">
       <input
-          name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
-          type="submit" id="db_opcao" 
+          name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+          type="submit" id="db_opcao"
           value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
-          <?=($db_botao==false?"disabled":"")?> 
+          <?=($db_botao==false?"disabled":"")?>
        >
        <?
           if ($db_opcao != 1) {
@@ -102,7 +102,7 @@ $clrotulo->label("c64_descr");
           }
        ?>
     </td>
-  </tr>	
+  </tr>
   <tr>
     <td nowrap colspan="2">
     <?
@@ -127,17 +127,17 @@ $clrotulo->label("c64_descr");
 <script>
 function js_pesquisac60_codcon(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_conplano','<?=$sNomeLookup;?>?funcao_js=parent.js_mostraconta1|c60_codcon|c60_descr|c60_estrut|DB_codsis|c52_descr|DB_codcla|c51_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_conplano','<?=$sNomeLookup;?>?funcao_js=parent.js_mostraconta1|c60_codcon|c60_descr|c60_estrut|DB_codsis|c52_descr|DB_codcla|c51_descr','Pesquisa',true,'0');
   }else{
-     if(document.form1.c60_codcon.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_conplano','<?=$sNomeLookup;?>?chave_c60_codcon='+document.form1.c60_codcon.value+'&funcao_js=parent.js_mostraconta&ret_congrupo=true','Pesquisa',false);
+     if(document.form1.c60_codcon.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_conplano','<?=$sNomeLookup;?>?chave_c60_codcon='+document.form1.c60_codcon.value+'&funcao_js=parent.js_mostraconta&ret_congrupo=true','Pesquisa',false);
      }else{
-       document.form1.c60_descr.value = ''; 
+       document.form1.c60_descr.value = '';
      }
   }
 }
 function js_mostraconta(chave1,chave2,chave3,chave4,chave5,chave6,erro){
-  document.form1.c60_descr.value = chave1; 
+  document.form1.c60_descr.value = chave1;
 
   if (erro==false){
     document.form1.c60_estrut.value = chave2;
@@ -147,9 +147,9 @@ function js_mostraconta(chave1,chave2,chave3,chave4,chave5,chave6,erro){
     document.form1.c51_descr.value  = chave6;
   }
 
-  if(erro==true){ 
-    document.form1.c60_codcon.focus(); 
-    document.form1.c60_codcon.value = ''; 
+  if(erro==true){
+    document.form1.c60_codcon.focus();
+    document.form1.c60_codcon.value = '';
     document.form1.c60_estrut.value = "";
     document.form1.c60_codsis.value = "";
     document.form1.c52_descr.value  = "";
@@ -169,7 +169,7 @@ function js_mostraconta1(chave1,chave2,chave3,chave4,chave5,chave6,chave7){
   db_iframe_conplano.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_conplano','<?=$sNomeLookup;?>?funcao_js=parent.js_preenchepesquisa|c60_codcon','Pesquisa',true,'0');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_conplano','<?=$sNomeLookup;?>?funcao_js=parent.js_preenchepesquisa|c60_codcon','Pesquisa',true,'0');
 }
 function js_preenchepesquisa(chave){
   db_iframe_conplano.hide();

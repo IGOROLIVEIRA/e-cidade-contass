@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: empenho
@@ -31,7 +31,7 @@ require_once("dbforms/db_classesgenericas.php");
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clempparametro = new cl_empparametro;
 
-$result_elementos = $clorcparametro->sql_record($clorcparametro->sql_query_file(null, "o50_subelem")); 
+$result_elementos = $clorcparametro->sql_record($clorcparametro->sql_query_file(null, "o50_subelem"));
 if($clorcparametro->numrows > 0){
   db_fieldsmemory($result_elementos,0);
 }
@@ -48,7 +48,7 @@ $clrotulo->label("pc01_descrmater");
 
 if (!isset($e30_numdec)){
   $e30_numdec=4;
-}  
+}
 
 if (isset($db_opcaoal)) {
     $db_opcao=3;
@@ -63,7 +63,7 @@ if (isset($opcao) && $opcao=="alterar") {
     if(isset($db_opcaoal)){
 	    $db_opcao=33;
     }
-} else {  
+} else {
     $db_opcao = 1;
     $db_botao=true;
     if (isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ) {
@@ -87,9 +87,9 @@ if (isset($opcao) && $opcao=="alterar") {
 
 function js_calcula(origem){
   obj=document.form1;
-  quant=new Number(obj.e55_quant.value); 
-  uni=new Number(obj.e55_vluni.value); 
-  tot=new Number(obj.e55_vltot.value).toFixed(2); 
+  quant=new Number(obj.e55_quant.value);
+  uni=new Number(obj.e55_vluni.value);
+  tot=new Number(obj.e55_vltot.value).toFixed(2);
   if(origem=='quant' && quant != ''){
     if(isNaN(quant)){
       //alert("Quantidade inváida!");
@@ -97,13 +97,13 @@ function js_calcula(origem){
       return false;
     }
     if(tot!=0){
-     t=new Number(tot/quant); 
+     t=new Number(tot/quant);
 	 obj.e55_vltot.value=tot;
      obj.e55_vluni.value=t.toFixed('<?=$e30_numdec?>');
     }else{
      t=new Number(uni*quant);
 	 obj.e55_vltot.value=t.toFixed(2);
-        
+
     }
   }
   if(origem=="uni"){
@@ -123,11 +123,11 @@ function js_calcula(origem){
     }
     if(quant!=0){
       t=new Number(tot/quant);
-      obj.e55_vltot.value=tot;		 
+      obj.e55_vltot.value=tot;
 	  obj.e55_vluni.value=t.toFixed('<?=$e30_numdec?>');
     }
   }
-  
+
 }
 
 function js_verificaControlaQuantidade(lControla) {
@@ -145,14 +145,14 @@ function js_verificaControlaQuantidade(lControla) {
     $("e55_quant").value = 1;
     js_calcula('uni');
   }
-} 
+}
 
 function js_troca(codele) {
 
   descr = eval("document.form1.ele_"+codele+".value");
   arr =  descr.split("#");
-  elemento  = arr[0]; 
-  descricao = arr[1]; 
+  elemento  = arr[0];
+  descricao = arr[1];
   document.form1.elemento01.value = elemento;
   document.form1.o56_descr.value = descricao;
 }
@@ -174,7 +174,7 @@ function js_troca(codele) {
     <td nowrap title="<?=@$Te55_sequen?>">
        <?=@$Le55_sequen?>
     </td>
-      <td> 
+      <td>
          <?   db_input('e55_sequen',8,$Ie55_sequen,true,'text',3)  ?>
       </td>
     </tr>
@@ -182,10 +182,10 @@ function js_troca(codele) {
       <td nowrap title="<?=@$Te55_item?>">
 	 <? db_ancora(@$Le55_item,"js_pesquisae55_item(true);",$db_opcao); ?>
       </td>
-      <td> 
+      <td>
          <?  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
 	       <?  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3,'')	 ?>
-	       
+
       </td>
     </tr>
     <tr>
@@ -198,40 +198,40 @@ function js_troca(codele) {
            for ($i = 0; $i < $numrows_unid; $i++){
                             db_fieldsmemory($result_sql_unid, $i);
                             $result_unidade[$m61_codmatunid] = $m61_descr;
-           }        
-         db_select("e55_unid", $result_unidade, true, $db_opcao,"") 
+           }
+         db_select("e55_unid", $result_unidade, true, $db_opcao,"")
       ?>
       <label style="margin-left: 20px"><b>Marca:</b></label>
       <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
       </td>
     </tr>
 
-<?if( isset($e55_item) && $e55_item!='' && (empty($liberado) || (isset($liberado) && $liberado==true) ) ){?>    
+<?if( isset($e55_item) && $e55_item!='' && (empty($liberado) || (isset($liberado) && $liberado==true) ) ){?>
     <tr style="height: 20px;">
       <td nowrap title="">
       <b>Ele. item</b>
       </td>
-      <td> 
+      <td>
        <?  db_selectrecord("pc07_codele",$result_elemento,true,$db_opcao,'','','','',"js_troca(this.value);");  ?>
       </td>
     </tr>
 <?
    }else{
-         
-	 db_input('pc07_codele',50,0,true,'hidden',1);
-   } 
 
-?>    
+	 db_input('pc07_codele',50,0,true,'hidden',1);
+   }
+
+?>
 
     <tr style="height: 20px;">
       <td><?=$Lo56_elemento?></td>
       <td>
-  <?    
+  <?
     $ero=$clempautitem->erro_msg;
 
     $result88 = $clempautitem->sql_record($clempautitem->sql_query_pcmaterele($e55_autori,null,"o56_codele as codele,o56_elemento as elemento01,o56_descr"));
     if($clempautitem->numrows>0){
-         $numrows88= $clpcmater->numrows;  
+         $numrows88= $clpcmater->numrows;
          db_fieldsmemory($result88,0);//$codele é o primeiro elemento incluido
          echo "
    	   <script>
@@ -242,7 +242,7 @@ function js_troca(codele) {
         echo "
           <script>
             parent.document.formaba.empautidot.disabled=false;\n
-          </script>   
+          </script>
         ";
         if (isset($e55_item) && $e55_item!="") {
           $result99  = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item,"o56_codele as  codele,o56_elemento as elemento01,o56_descr"));
@@ -251,19 +251,19 @@ function js_troca(codele) {
         } else {
             $elemento01='';
             $o56_descr='';
-        }   
-    }    
+        }
+    }
     $clempautitem->erro_msg=$ero;
     db_input('elemento01',20,0,true,'text',3);
     db_input('o56_descr',40,0,true,'text',3);
     if (isset($numrows99) && $numrows99>0) {
       for($i=0; $i<$numrows99; $i++){
         db_fieldsmemory($result99,$i);
-        $r="ele_$codele"; 
+        $r="ele_$codele";
         $$r = "$elemento01#$o56_descr";
         db_input("ele_$codele",20,0,true,'hidden',3);
       }
-    }      
+    }
      ?>
       </td>
     </tr>
@@ -271,7 +271,7 @@ function js_troca(codele) {
       <td nowrap title="<?=@$Te55_quant?>">
 	      <?=@$Le55_quant?>
       </td>
-      <td> 
+      <td>
         <?php
             if(isset($pc01_servico) and $pc01_servico=='t') {
 
@@ -301,7 +301,7 @@ function js_troca(codele) {
           }
           db_input('e55_vluni',14,$Ie55_vltot,true,'text',$db_opcao,"onchange=\"js_calcula('uni');\"")
         ?>
-        
+
         <?= @$Le55_vltot ?>
         <?
           if(isset($pc01_servico) and $pc01_servico=='t') {
@@ -342,25 +342,25 @@ function js_troca(codele) {
       <td nowrap title="<?=@$Te55_descr?>">
 	     <?= @$Le55_descr ?>
       </td>
-      <td> 
-         <?  
+      <td>
+         <?
 				 	 $lDisabled = false;
 					 if (empty($opcao)) {
-					 	
+
 					   if (isset($e55_item) && $e55_item != '') {
 
 					   	 $sWhere      = "pc01_codmater = {$e55_item}";
 					   	 $sSqlPcMater = $clpcmater->sql_query_file($e55_item, "pc01_complmater,pc01_liberaresumo", null, $sWhere);
 					     $result      = $clpcmater->sql_record($sSqlPcMater);
 					     if ($clpcmater->numrows > 0) {
-					     	
+
 					       db_fieldsmemory($result,0);
 	               if ($pc01_liberaresumo == 'f') {
-	                  
+
 	                 $lDisabled = true;
 	                 $e55_descr = $pc01_complmater;
 	               } else {
-	               	
+
 	               	 // PARA SAPIRANGA A VARIÁVEL TEM QUE ESTAR EM BRANCO
 					         $e55_descr = '';
 	               }
@@ -371,19 +371,19 @@ function js_troca(codele) {
 					     $e55_descr='';
 					   }
 					 }
-					 
+
 					 if ($lDisabled) {
-					   $iOpcao = 3;	
+					   $iOpcao = 3;
 					 } else {
 					 	 $iOpcao = $db_opcao;
 					 }
-					 
+
 	         db_textarea('e55_descr',3,70,$Ie55_descr,true,'text',$iOpcao,"");
 	        ?>
       </td>
     </tr>
   </table>
-  
+
 </fieldset>
   <table>
     <tr>
@@ -393,10 +393,10 @@ function js_troca(codele) {
 	 <input name="importar" type="button" id="pesquisar" value="Importar autorização" onclick="js_importar();" <?=($db_botao==false?"disabled":"")?> >
       </td>
     </tr>
-  </table> 
+  </table>
   <table width="90%" border="0" height="50%">
     <tr>
-      <td valign="top"  align='center' width="90%"  height="100%">  
+      <td valign="top"  align='center' width="90%"  height="100%">
        <?
         $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,m61_descr,e55_marca,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
         //echo $sql_item;
@@ -405,21 +405,21 @@ function js_troca(codele) {
         $cliframe_alterar_excluir->sql     = $sql_item;
         $cliframe_alterar_excluir->campos  ="e55_sequen,e55_item,pc07_codele,pc01_descrmater,e55_descr,m61_descr,e55_marca,e55_quant,e55_vlrun,e55_vltot";
         $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
-        $cliframe_alterar_excluir->strFormatar   ="";	
+        $cliframe_alterar_excluir->strFormatar   ="";
         $cliframe_alterar_excluir->iframe_height ="160";
         $cliframe_alterar_excluir->iframe_width ="100%";
-        $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);    
+        $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
        ?>
       </td>
     </tr>
     <tr>
       <td><b>Total de itens:</b>
         <?
-        $result02 = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"count(e55_sequen) as tot_item")); 
+        $result02 = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"count(e55_sequen) as tot_item"));
         db_fieldsmemory($result02,0);
 
         if($tot_item>0){
-          $result = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"sum(round(e55_vltot,2)) as tot_valor")); 
+          $result = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"sum(round(e55_vltot,2)) as tot_valor"));
           db_fieldsmemory($result,0);
           if(empty($tot_valor) ||  $tot_valor==""){
             $tot_valor='0';
@@ -428,7 +428,7 @@ function js_troca(codele) {
             $tot_valor= number_format($tot_valor,2,".","");
           }
         }else{
-          
+
           $tot_valor='0';
           $tot_item='0';
         }
@@ -437,7 +437,7 @@ function js_troca(codele) {
         <b>Total dos valores:</b>
         <?
         db_input('tot_valor',13,0,true,'text',3,"onchange=\"js_calcula('quant');\"")
-        ?> 
+        ?>
       </td>
     </tr>
     </table>
@@ -445,7 +445,7 @@ function js_troca(codele) {
   </form>
     <script>
 
-  
+
   function js_verificar() {
     vltot =  new Number(document.form1.e55_vltot.value);
     if (isNaN(vltot) || vltot==0 || vltot ==' '  ) {
@@ -455,9 +455,9 @@ function js_troca(codele) {
     }
 
     return true;
-  } 
+  }
   function js_importar(){
-    js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_empautoriza','func_empautoriza.php?funcao_js=parent.js_importar02|e54_autori','Pesquisa',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautitem','db_iframe_empautoriza','func_empautoriza.php?funcao_js=parent.js_importar02|e54_autori','Pesquisa',true,0);
   }
   function js_importar02(chave){
     db_iframe_empautoriza.hide();
@@ -479,7 +479,7 @@ function js_troca(codele) {
     document.form1.appendChild(opcao);
     <?
       if(isset($opcao) && $opcao=="alterar"){
-    ?>  
+    ?>
     var opcao = document.createElement("input");
     opcao.setAttribute("type","hidden");
     opcao.setAttribute("name","opcao");
@@ -487,7 +487,7 @@ function js_troca(codele) {
     document.form1.appendChild(opcao);
     <?
       }
-    ?>    
+    ?>
   document.form1.submit();
 }
 function js_cancelar(){
@@ -516,7 +516,7 @@ function js_pesquisae55_item(mostra){
       	}else if($e30_formvisuitemaut==2){
       		echo " qry = '&chave_o56_elemento=".$elemento01."';";
       	}else if($e30_formvisuitemaut==3){
-      		
+
       	}else{
       		echo " qry = '&chave_o56_elemento=".substr($elemento01,0,7)."';";
       	}
@@ -528,21 +528,21 @@ function js_pesquisae55_item(mostra){
   ?>
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&taxatabela=false&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele"+qry,'Pesquisa',true,"0","1");
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&taxatabela=false&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele"+qry,'Pesquisa',true,"0","1");
   }else{
-     if(document.form1.e55_item.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&taxatabela=false&pesquisa_chave='+document.form1.e55_item.value+'&funcao_js=parent.js_mostrapcmater"+qry,'Pesquisa',false);
+     if(document.form1.e55_item.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&taxatabela=false&pesquisa_chave='+document.form1.e55_item.value+'&funcao_js=parent.js_mostrapcmater"+qry,'Pesquisa',false);
      }else{
-       document.form1.pc01_descrmater.value = ''; 
+       document.form1.pc01_descrmater.value = '';
        document.form1.submit();
      }
   }
 }
 function js_mostrapcmater(chave,erro,codele){
-  document.form1.pc01_descrmater.value = chave; 
-  if(erro==true){ 
-    document.form1.e55_item.focus(); 
-    document.form1.e55_item.value = ''; 
+  document.form1.pc01_descrmater.value = chave;
+  if(erro==true){
+    document.form1.e55_item.focus();
+    document.form1.e55_item.value = '';
     document.form1.submit();
   }else{
     document.form1.pc07_codele.value = codele;
@@ -560,7 +560,7 @@ function js_mostrapcmater1(chave1,chave2,codele){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_empautitem','func_empautitem.php?funcao_js=parent.js_preenchepesquisa|e55_autori|e55_sequen','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empautitem','func_empautitem.php?funcao_js=parent.js_preenchepesquisa|e55_autori|e55_sequen','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_empautitem.hide();
@@ -573,14 +573,14 @@ function js_preenchepesquisa(chave,chave1){
 
 <?
   if(isset($incluir) || isset($alterar) || isset($excluir) ) {
-    echo "\n\ntop.corpo.iframe_empautidot.location.href =  'emp1_empautidot001.php?anulacao=true&e56_autori=$e55_autori';\n";
-  }   
+    echo "\n\nCurrentWindow.corpo.iframe_empautidot.location.href =  'emp1_empautidot001.php?anulacao=true&e56_autori=$e55_autori';\n";
+  }
 ?>
 
 <? if(isset($numrows99) && $numrows99>0) : ?>
   codele = document.form1.pc07_codele.value;
   if(codele!=''){
      js_troca(codele);
-  }  
-<? endif; ?>  
+  }
+<? endif; ?>
 </script>

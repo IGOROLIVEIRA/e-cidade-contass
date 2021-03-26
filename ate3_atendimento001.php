@@ -19,7 +19,7 @@ db_postmemory($HTTP_POST_VARS);
 function js_processa(codigo,tipo,mes,scodigo){
   dataini = document.form1.dataini_ano.value+'-'+document.form1.dataini_mes.value+'-'+document.form1.dataini_dia.value;
   datafim = document.form1.datafim_ano.value+'-'+document.form1.datafim_mes.value+'-'+document.form1.datafim_dia.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe_pesquisa','ate3_atendimento002.php?scodigo='+scodigo+'&tipoconsulta='+document.form1.tipoconsulta.value+'&mes='+mes+'&codigo='+codigo+'&tipo='+tipo+'&dataini='+dataini+'&datafim='+datafim,'Pesquisa',true,'30');
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pesquisa','ate3_atendimento002.php?scodigo='+scodigo+'&tipoconsulta='+document.form1.tipoconsulta.value+'&mes='+mes+'&codigo='+codigo+'&tipo='+tipo+'&dataini='+dataini+'&datafim='+datafim,'Pesquisa',true,'30');
 }
 
 function js_troca(valor){
@@ -42,7 +42,7 @@ function js_ordena(ordem){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -51,8 +51,8 @@ function js_ordena(ordem){
 </table>
 <form name='form1' action='' method='post'>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
     <br>
     <strong>Área:</strong>
     <?
@@ -70,7 +70,7 @@ function js_ordena(ordem){
     echo "<option value='4' ".($tipoconsulta==4?'selected':'').">Departamento</option>";
     echo "<option value='5' ".($tipoconsulta==5?'selected':'').">Procedimento</option>";
     echo "<option value='6' ".($tipoconsulta==6?'selected':'').">Cliente</option>";
-    echo "</select>";	
+    echo "</select>";
  ?>
     </td>
   </tr>
@@ -165,13 +165,13 @@ if( isset($pesquisar) ){
     from atendimento
          left join atenditem         on at02_codatend   = at05_codatend
          left join clientes on clientes.at01_codcli = at02_codcli
-         
+
          left  join tarefaitem         on at44_atenditem  = at05_seq
          left  join tarefa  t       on at44_tarefa        = t.at40_sequencial
 
          left  join atenditemtarefa      on at18_atenditem  = at05_seq
          left  join tarefa  ta       on at18_tarefa        = ta.at40_sequencial
-                  
+
          left  join tecnico         on at03_codatend   = at05_codatend
          left  join db_usuarios         on db_usuarios.id_usuario = at03_id_usuario
          left  join db_depusu           on db_usuarios.id_usuario = db_depusu.id_usuario
@@ -184,7 +184,7 @@ if( isset($pesquisar) ){
          left join db_syscadproced on at29_syscadproced = codproced
          left  join atendarea             on at02_codatend = at28_atendimento
          left  join atendcadarea          on at28_atendcadarea = at26_sequencial
-         
+
     Where 1=1
       and at01_codcli not in (25)
       and (at02_datafim >= '$dataini_ano-$dataini_mes-$dataini_dia'
@@ -194,7 +194,7 @@ if( isset($pesquisar) ){
   if( $area > 0 && $area != 9999 ){
     $sql .= " and  at28_atendcadarea = $area ";
   }
-  
+
   if($tipoconsulta > 0 ){
     if($area==9999){
       $sql .= "
@@ -215,7 +215,7 @@ if( isset($pesquisar) ){
       ) as x ";
     }else{
       $sql .= "
-        ) 
+        )
       ) as x ";
     }
   }
@@ -234,7 +234,7 @@ if( isset($pesquisar) ){
     echo "<td bgcolor='lightgreen' ><a href'#' onclick='js_ordena(\"filtro\");return false;'>Totalizador</a></td>";
   }
 
-  
+
   if($tipoconsulta > 0){
     echo "<td bgcolor='lightgreen' ><a href'#' onclick='js_ordena(\"mes\");return false;'>";
     if( $tipoconsulta == 1 ){
@@ -250,7 +250,7 @@ if( isset($pesquisar) ){
     }else if( $tipoconsulta == 6 ){
       echo "Clientes";
     }
-    echo "</a></td>";  
+    echo "</a></td>";
   }
   echo "<td bgcolor='lightgreen' title='Total de Atendimentos' align='center'><a href'#' onclick='js_ordena(\"total\");return false;'>Atendimentos</a></td>";
   echo "<td bgcolor='lightgreen' title='Atendimentos de Dúvidas' align='center'><a href'#' onclick='js_ordena(\"duvidas\");return false;'>Dúvidas</a></td>";
@@ -290,7 +290,7 @@ if( isset($pesquisar) ){
       $codigo = "";
     }
     if( $tipoconsulta > 0){
-      
+
       echo "<td align='left'>$mes</td>";
       if( $tipoconsulta == 2 ){
         $scodigo = " codmod-$scodigo ";
@@ -391,7 +391,7 @@ if( isset($pesquisar) ){
     }else if( $tipoconsulta == 6 ){
       echo "Clientes";
     }
-    echo "</a></td>";  
+    echo "</a></td>";
   }
   echo "<td bgcolor='lightgreen' title='Total de Atendimentos' align='center'><a href'#' onclick='js_ordena(\"total\");return false;'>Atendimentos</a></td>";
   echo "<td bgcolor='lightgreen' title='Percentual do Total de Atendimentos' align='center'>% Atend.</td>";
@@ -429,7 +429,7 @@ if( isset($pesquisar) ){
       $scodigo = "";
     }
     if( $tipoconsulta > 0){
-      
+
       echo "<td align='left'>$mes</td>";
       if( $tipoconsulta == 2 ){
         $scodigo = " codmod-$scodigo ";

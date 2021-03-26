@@ -41,7 +41,7 @@ function js_consultar(){
       jan = window.open('emp2_relempage002.php?query='+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       jan.moveTo(0,0);
     }else{
-      alert("Indique a agenda!");   
+      alert("Indique a agenda!");
     }
 
 
@@ -51,7 +51,7 @@ function js_consultar(){
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr> 
+    <tr>
       <td width="360" height="18">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
@@ -59,8 +59,8 @@ function js_consultar(){
     </tr>
   </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
       <table>
         <tr>
@@ -99,15 +99,15 @@ function js_consultar(){
 	   <tr>
               <td colspan="2" align="center">
 	      <br>
-	 	<input name="consultar" type="button" value="Gerar Relatório" onclick="js_consultar();"> 
-	      </td>	
+	 	<input name="consultar" type="button" value="Gerar Relatório" onclick="js_consultar();">
+	      </td>
             </tr>
 
 	 </table>
-       </form>	 
+       </form>
        </td>
-     </tr>  
-   </table>  
+     </tr>
+   </table>
     </center>
     </td>
   </tr>
@@ -120,23 +120,23 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_empage(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage','Pesquisa',true);
   }else{
-    codage =  document.form1.e80_codage.value;  
+    codage =  document.form1.e80_codage.value;
     if(codage != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_empage','func_empage.php?pesquisa_chave='+codage+'&funcao_js=parent.js_mostra02','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empage','func_empage.php?pesquisa_chave='+codage+'&funcao_js=parent.js_mostra02','Pesquisa',false);
     }
-  }    
+  }
 }
 function js_mostra(codage){
   db_iframe_empage.hide();
-  document.form1.e80_codage.value =  codage;  
+  document.form1.e80_codage.value =  codage;
 }
 
 function js_mostra02(chave,erro){
-  if(erro==true){ 
-    document.form1.e80_codage.focus(); 
-    document.form1.e80_codage.value = ''; 
+  if(erro==true){
+    document.form1.e80_codage.focus();
+    document.form1.e80_codage.value = '';
   }
 }
 

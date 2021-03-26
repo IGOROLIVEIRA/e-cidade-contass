@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -56,8 +56,8 @@ $k125_datalanc_ano = date('Y');
 
 <html>
 <head>
-<?php 
-  db_app::load("scripts.js, prototype.js, strings.js, estilos.css"); 
+<?php
+  db_app::load("scripts.js, prototype.js, strings.js, estilos.css");
 ?>
 </head>
 
@@ -67,29 +67,29 @@ $k125_datalanc_ano = date('Y');
 
   <fieldset style="margin: 25px auto; width: 600px;">
     <legend><strong>Dados do Crédito</strong></legend>
-    
+
     <table align="center">
-    
+
       <tr>
         <td title="<?php echo $Tz01_nome; ?>">
           <?php
             db_ancora($Lz01_nome, 'js_pesquisaNome(true)', 1);
           ?>
         </td>
-        
+
         <td>
           <?php
             db_input('z01_numcgm', 10, $Iz01_numcgm, true, 'text', 1, 'onchange="js_pesquisaNome(false)"');
-  
+
             db_input('z01_nome', 40, $Iz01_nome, true, 'text', 3);
           ?>
         </td>
-        
+
       </tr>
-      
+
       <tr>
         <td title="<?php echo $Tk125_datalanc?>">
-          <?php 
+          <?php
             echo $Lk125_datalanc;
           ?>
         </td>
@@ -99,31 +99,31 @@ $k125_datalanc_ano = date('Y');
           ?>
         </td>
       </tr>
-      
+
       <tr>
         <td title="<?php echo $Tk155_descricao; ?>">
           <?php
-            
+
             $sLabelRegra = '<strong>Regra Compensação:</strong>';
-            
+
             db_ancora($sLabelRegra, 'js_pesquisaRegraCompensacao(true)', 1);
-            
+
           ?>
         </td>
         <td>
           <?php
-        
+
             db_input('k155_sequencial', 10, $Ik155_sequencial, true, 'text', 1, 'onchange="js_pesquisaRegraCompensacao(false)"');
-  
+
             db_input('k155_descricao', 40, $Ik155_descricao, true, 'text', 3);
-            
+
           ?>
         </td>
       </tr>
-      
+
       <tr>
         <td title="<?php echo $Tk125_valor?>">
-          <?php 
+          <?php
             echo $Lk125_valor;
           ?>
         </td>
@@ -133,7 +133,7 @@ $k125_datalanc_ano = date('Y');
           ?>
         </td>
       </tr>
-      
+
       <tr>
         <td title="Processo registrado no protocolo do sistema">
           <strong>Processo do Sistema</strong>
@@ -143,15 +143,15 @@ $k125_datalanc_ano = date('Y');
             db_select('lProcessoSistema', array(''=>'SELECIONE', 'S' => 'SIM', 'N' => 'NÃO'), true, 1, 'onchange="js_processoSistema(this.value)" style="width: 93px;"')
           ?>
         </td>
-      </tr>  
-      
+      </tr>
+
       <tr>
         <td colspan="2">
-        
+
           <div id="processoSistemaInterno">
-          
+
             <fieldset><legend><strong>Dados do Processo</strong></legend>
-            
+
             <table align="center">
               <tr>
                 <td title="<?=@$Tp58_codproc?>">
@@ -160,30 +160,30 @@ $k125_datalanc_ano = date('Y');
                 ?>
                 </td>
                 <td>
-                <? 
-                
+                <?
+
                   db_input('p58_codproc', 10, $Ip58_codproc, true, 'text', 1, "onchange='js_pesquisaProcesso(false)'");
                   db_input('z01_nome', 40, $Iz01_nome, true, 'text', 3, "", 'z01_nomeprocesso');
-                  
+
                 ?>
                 </td>
               </tr>
             </table>
-             
+
             </fieldset>
-            
+
           </div>
-          
+
         </td>
       </tr>
-      
+
       <tr>
         <td colspan="2">
-        
+
           <div id="processoSistemaExterno">
-          
+
             <fieldset><legend><strong>Dados do Processo</strong></legend>
-            
+
             <table align="center">
               <tr>
                 <td title="<?=@$Tk160_numeroprocesso?>">
@@ -192,12 +192,12 @@ $k125_datalanc_ano = date('Y');
                 ?>
                 </td>
                 <td>
-                <? 
+                <?
                   db_input('k160_numeroprocesso', 40, $Ik160_numeroprocesso, true, 'text', 1);
                 ?>
                 </td>
               </tr>
-              
+
               <tr>
                 <td title="<?=@$Tk160_nometitular?>">
                 <?php
@@ -205,12 +205,12 @@ $k125_datalanc_ano = date('Y');
                 ?>
                 </td>
                 <td>
-                <? 
+                <?
                   db_input('k160_nometitular', 40, $Ik160_nometitular, true, 'text', 1);
                 ?>
                 </td>
               </tr>
-              
+
               <tr>
                 <td title="<?=@$Tk160_data?>">
                 <?php
@@ -218,45 +218,45 @@ $k125_datalanc_ano = date('Y');
                 ?>
                 </td>
                 <td>
-                <?php 
+                <?php
                   db_inputdata('k160_data', @$k160_data, @$k160_mes, @$k160_ano, 'text', true, 1);
-                  
+
                 ?>
                 </td>
               </tr>
-              
+
             </table>
-             
+
             </fieldset>
-            
+
           </div>
-          
+
         </td>
       </tr>
-      
+
       <tr>
         <td title="<?php echo $Tk156_observacao?>" colspan="2">
           <fieldset>
             <legend><strong><?php echo $Lk156_observacao?></strong></legend>
-            <?php 
+            <?php
                db_textarea('k156_observacao', 10, 66, $Ik156_observacao, true, 'text', 1)
             ?>
-          </fieldset>      
+          </fieldset>
         </td>
       </tr>
-    
+
     </table>
   </fieldset>
-  
+
   <center>
     <input type="button" value="Salvar" onclick="js_salvar()" />
   </center>
-   
+
 </form>
 
 <script>
 
-js_processoSistema($F('lProcessoSistema'));            
+js_processoSistema($F('lProcessoSistema'));
 
 function js_processoSistema(lProcessoSistema) {
 
@@ -270,17 +270,17 @@ function js_processoSistema(lProcessoSistema) {
 
     $('processoSistemaInterno').style.display = 'none';
     $('processoSistemaExterno').style.display = '';
-    
+
   } else {
 
     $('processoSistemaInterno').style.display = 'none';
     $('processoSistemaExterno').style.display = 'none';
-    
+
   }
 
-}            
+}
 
-sUrl = 'arr4_creditomanual.RPC.php'; 
+sUrl = 'arr4_creditomanual.RPC.php';
 
 function js_salvar() {
 
@@ -291,7 +291,7 @@ function js_salvar() {
   }
 
   if($F('k155_sequencial') == ""){
-    
+
     alert("Regra de Compensação não informado!");
     return false;
   }
@@ -313,66 +313,66 @@ function js_salvar() {
 	var oAjax = new Ajax.Request(sUrl,
 			                        {
 	                             method    : 'POST',
-                               parameters: 'json='+Object.toJSON(oParam), 
+                               parameters: 'json='+Object.toJSON(oParam),
                                onComplete: js_confirma
                               });
-	
-}            
+
+}
 
 function js_confirma(oAjax){
 
   js_removeObj('msgbox');
-  
+
   var sExpReg  = new RegExp('\\\\n','g');
-  
+
   var oRetorno = eval("("+oAjax.responseText+")");
 
   if (oRetorno.iStatus == 1) {
-    
+
     sMensagem = "Crédito lançado com sucesso para o cgm : " + $F('z01_numcgm');
 
     alert(sMensagem);
-    
+
     window.location = 'arr4_creditomanual001.php';
-    
-  } else { 
+
+  } else {
 
     alert(oRetorno.sMessage.urlDecode().replace(sExpReg,'\n'));
 
     return false;
-    
+
   }
-  
+
 }
 
 function js_pesquisaNome(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_mostraNome|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_mostraNome|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.z01_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostraNomeHide','Pesquisa',false);
+     if(document.form1.z01_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostraNomeHide','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 
 function js_mostraNomeHide(erro, chave){
-  
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.z01_numcgm.focus(); 
-    document.form1.z01_numcgm.value = ''; 
+
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.z01_numcgm.focus();
+    document.form1.z01_numcgm.value = '';
   }
-  
+
 }
 
 function js_mostraNome(chave1,chave2){
-  
+
   document.form1.z01_numcgm.value = chave1;
   document.form1.z01_nome.value   = chave2;
   db_iframe_nomes.hide();
-  
+
 }
 
 function js_pesquisaRegraCompensacao(mostra){
@@ -381,10 +381,10 @@ function js_pesquisaRegraCompensacao(mostra){
 		exemplo: &tiporegracompensacao=7
 	*/
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_regracompensacao','func_regracompensacao.php?funcao_js=parent.js_mostraRegraCompensacao|k155_sequencial|k155_descricao&tiporegracompensacao=7','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_regracompensacao','func_regracompensacao.php?funcao_js=parent.js_mostraRegraCompensacao|k155_sequencial|k155_descricao&tiporegracompensacao=7','Pesquisa',true);
   }else{
-     if(document.form1.k155_sequencial.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_regracompensacao','func_regracompensacao.php?pesquisa_chave='+document.form1.k155_sequencial.value+'&funcao_js=parent.js_mostraRegraCompensacaoHide&tiporegracompensacao=7','Pesquisa',false);
+     if(document.form1.k155_sequencial.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_regracompensacao','func_regracompensacao.php?pesquisa_chave='+document.form1.k155_sequencial.value+'&funcao_js=parent.js_mostraRegraCompensacaoHide&tiporegracompensacao=7','Pesquisa',false);
      }else{
        $('k155_descricao').value  = '';
      }
@@ -394,56 +394,56 @@ function js_pesquisaRegraCompensacao(mostra){
 function js_mostraRegraCompensacaoHide(chave, erro){
 
 	document.form1.k155_descricao.value = chave;
-   
-  if(erro==true){ 
-    document.form1.k155_sequencial.focus(); 
+
+  if(erro==true){
+    document.form1.k155_sequencial.focus();
     document.form1.k155_sequencial.value = '';
   }
 
 }
 
 function js_mostraRegraCompensacao(chave1,chave2){
-  
+
   document.form1.k155_sequencial.value = chave1;
   document.form1.k155_descricao.value  = chave2;
   db_iframe_regracompensacao.hide();
-  
+
 }
 
 function js_pesquisaProcesso(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_protprocesso.php?funcao_js=parent.js_mostraProcesso|p58_codproc|z01_nome&sCampoPesquisa=p58_codproc','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_protprocesso.php?funcao_js=parent.js_mostraProcesso|p58_codproc|z01_nome&sCampoPesquisa=p58_codproc','Pesquisa',true);
   }else{
-     if(document.form1.p58_codproc.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_protprocesso.php?pesquisa_chave='+document.form1.p58_codproc.value+'&funcao_js=parent.js_mostraProcessoHide&sCampoPesquisa=p58_codproc','Pesquisa',false);
+     if(document.form1.p58_codproc.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_protprocesso.php?pesquisa_chave='+document.form1.p58_codproc.value+'&funcao_js=parent.js_mostraProcessoHide&sCampoPesquisa=p58_codproc','Pesquisa',false);
      }else{
-       document.form1.z01_nomeprocesso.value = ''; 
+       document.form1.z01_nomeprocesso.value = '';
      }
   }
 }
 
 function js_mostraProcessoHide(erro, chave){
-  
-  document.form1.z01_nomeprocesso.value = chave; 
-  if(erro==true){ 
-    document.form1.p58_codproc.focus(); 
-    document.form1.p58_codproc.value = ''; 
+
+  document.form1.z01_nomeprocesso.value = chave;
+  if(erro==true){
+    document.form1.p58_codproc.focus();
+    document.form1.p58_codproc.value = '';
   }
-  
+
 }
 
 function js_mostraProcesso(chave1,chave2){
-  
+
   document.form1.p58_codproc.value 			= chave1;
   document.form1.z01_nomeprocesso.value = chave2;
   db_iframe_nomes.hide();
-  
+
 }
 
 </script>
 
-<?php 
-  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit")); 
+<?php
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 ?>
 </body>
 </html>

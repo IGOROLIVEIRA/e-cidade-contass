@@ -111,9 +111,9 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.iptucalcpadraoconstr.disabled=false;
-         top.corpo.iframe_iptucalcpadraoconstr.location.href='cad1_iptucalcpadraoconstr001.php?db_opcaoal=33&j11_sequencial=".@$j10_sequencial."';
+         CurrentWindow.corpo.iframe_iptucalcpadraoconstr.location.href='cad1_iptucalcpadraoconstr001.php?db_opcaoal=33&j11_sequencial=".@$j10_sequencial."';
          parent.document.formaba.iptutaxamatric.disabled=false;
-         top.corpo.iframe_iptutaxamatric.location.href='cad1_iptutaxamatric001.php?db_opcaoal=33&j09_iptutaxamatric=".@$j10_sequencial."';
+         CurrentWindow.corpo.iframe_iptutaxamatric.location.href='cad1_iptutaxamatric001.php?db_opcaoal=33&j09_iptutaxamatric=".@$j10_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('iptucalcpadraoconstr');";

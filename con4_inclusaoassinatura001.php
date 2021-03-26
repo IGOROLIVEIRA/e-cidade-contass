@@ -206,7 +206,7 @@ $clrotulo->label("ac10_obs");
   if (lMostrar == true) {
 
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
       'db_iframe_acordo',
       sUrl,
       'Pesquisar Acordo',
@@ -218,7 +218,7 @@ $clrotulo->label("ac10_obs");
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
       '&funcao_js=parent.js_mostraacordo';
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_acordo',
         sUrl,
         'Pesquisar Acordo',

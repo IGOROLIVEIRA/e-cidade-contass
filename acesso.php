@@ -77,8 +77,8 @@ if (isset($atualiza)) {
       var_dump($success);exit;
       if ($success) {
         echo "<script type='text/javascript'>
-          top.document.body.onunload = '';
-          top.document.location.href = 'extension/desktop';
+          CurrentWindow.document.body.onunload = '';
+          CurrentWindow.document.location.href = 'extension/desktop';
         </script>";
         exit;
       }

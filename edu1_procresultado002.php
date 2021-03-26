@@ -59,7 +59,7 @@ if ($oDaoEduParametros->numrows>0) {
 }
 
 function ElementosFreq($ed67_i_procresultado) {
-	
+
   $sSql    = "SELECT * FROM avalfreqres WHERE ed67_i_procresultado = {$ed67_i_procresultado}";
   $rs      = db_query($sSql);
   $iLinhas = pg_num_rows($rs);
@@ -67,13 +67,13 @@ function ElementosFreq($ed67_i_procresultado) {
 }
 
 if (isset($alterar)) {
-	
+
   $db_opcao  = 2;
   $db_opcao1 = 3;
   $db_botao  = true;
-  
+
   if ($ed43_c_obtencao != "AT" && ElementosAprov($chavepesquisa) == 0) {
-  	
+
     db_msgbox("Informe os elementos para compor este resultado!");
     ?>
     <script>
@@ -85,33 +85,33 @@ if (isset($alterar)) {
     <?php
     $semelementos = true;
   } else {
-  	
+
     db_inicio_transacao();
     if (@$minimo == "definido") {
       $ed43_c_minimoaprov = $minimodaforma;
     } else {
       $ed43_c_minimoaprov = $forma == "NOTA" ? number_format(@$ed43_c_minimoaprov, 2, ".", ".") : @$ed43_c_minimoaprov;
     }
-    
+
     if ($ed43_c_obtencao == "AT") {
-    	
+
       $oDaoAvalCompoeRes->excluir("", " ed44_i_procresultado = $ed43_i_codigo");
       $oDaoResCompoeRes->excluir("", " ed68_i_procresultado = $ed43_i_codigo");
     }
-    
+
     if ($ed43_c_geraresultado == "N") {
-    	
+
       $oDaoAvalFreqres->excluir("", " ed67_i_procresultado = $ed43_i_codigo");
       $oDaoProcResultado->ed43_c_reprovafreq = "N";
     } elseif ($ed43_c_geraresultado == "S" && ElementosFreq($ed43_i_codigo) == 0) {
       $oDaoProcResultado->ed43_c_reprovafreq = "N";
     }
-    
+
     $oDaoProcResultado->ed43_c_minimoaprov = $ed43_c_minimoaprov;
     $oDaoProcResultado->alterar($ed43_i_codigo);
     db_fim_transacao();
   }
- 
+
   $sWhereProcResultado = " ed43_i_procedimento = {$ed43_i_procedimento}";
   $sSqlProcResultado   = $oDaoProcResultado->sql_query("", "ed43_i_resultado as resjacad", "", $sWhereProcResultado);
   $rsProcResultado     = $oDaoProcResultado->sql_record($sSqlProcResultado);
@@ -131,7 +131,7 @@ if (isset($alterar)) {
     $res_cad = 0;
   }
 } else if (isset($chavepesquisa) && !isset($alterar)) {
-	
+
   $db_opcao  = 2;
   $db_opcao1 = 3;
   $db_botao  = true;
@@ -139,14 +139,14 @@ if (isset($alterar)) {
   $sSqlResultado = $oDaoProcResultado->sql_query($chavepesquisa);
   $rsResultado   = $oDaoProcResultado->sql_record($sSqlResultado);
   db_fieldsmemory($rsResultado, 0);
-  
+
   $sWhereProcAvaliacao = " ed41_i_procedimento = {$ed43_i_procedimento} AND ed37_c_tipo = '{$forma}'";
   $sSqlProcAvaliacao   = $oDaoProcAvaliacao->sql_query("", "*", "", $sWhereProcAvaliacao);
   $rsProcAvaliacao     = $oDaoProcAvaliacao->sql_record($sSqlProcAvaliacao);
   $qtdperiodos         = $oDaoProcAvaliacao->numrows;
-  
+
   if ($oDaoProcAvaliacao->numrows > 0) {
-  	
+
     ?>
     <script>
      parent.document.formaba.c2.disabled    = false;
@@ -157,12 +157,12 @@ if (isset($alterar)) {
     </script>
     <?php
   }
- 
+
   $sSqlAvaliacao = $oDaoProcAvaliacao->sql_query("", "*", "", " ed41_i_procedimento = {$ed43_i_procedimento}");
   $rsAvaliacao   = $oDaoProcAvaliacao->sql_record($sSqlAvaliacao);
-  
+
   if ($oDaoProcAvaliacao->numrows > 0) {
- 	
+
     ?>
      <script>
       parent.document.formaba.c3.disabled    = false;
@@ -173,18 +173,18 @@ if (isset($alterar)) {
      </script>
     <?php
   }
- 
+
   $sWhereProcResult = " ed43_i_procedimento = {$ed43_i_procedimento}";
   $sSqlProcResult   = $oDaoProcResultado->sql_query("", "ed43_i_resultado as resjacad", "", $sWhereProcResult);
   $rsProcResult     = $oDaoProcResultado->sql_record($sSqlProcResult);
-  
+
   if ($oDaoProcResultado->numrows > 0) {
-  	
+
     $sep     = "";
     $res_cad = "";
-    
+
     for ($c = 0; $c < $oDaoProcResultado->numrows; $c++) {
-    	
+
       db_fieldsmemory($rsProcResult, $c);
       $res_cad .= $sep.$resjacad;
       $sep      = ", ";
@@ -224,26 +224,26 @@ js_tabulacaoforms("form1", "ed43_c_obtencao", true, 1, "ed43_c_obtencao", true);
 </script>
 <?php
 if (isset($alterar)) {
-	
+
   if ($oDaoProcResultado->erro_status == "0") {
-  	
+
     $oDaoProcResultado->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    
+
     if ($oDaoProcResultado->erro_campo != "") {
-    	
+
       echo "<script> document.form1.".$oDaoProcResultado->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$oDaoProcResultado->erro_campo.".focus();</script>";
     }
   } else {
-  	
+
     $oDaoProcResultado->erro(true, false);
     if (!isset($semelementos)) {
-    	
+
       ?>
       <script>
-       top.corpo.iframe_a2.location.href = "edu1_avaliacoes.php?procedimento=<?=$ed43_i_procedimento?>"+
+       CurrentWindow.corpo.iframe_a2.location.href = "edu1_avaliacoes.php?procedimento=<?=$ed43_i_procedimento?>"+
                                            "&forma=<?=$forma?>&ed40_c_descr=<?=$ed40_c_descr?>"
       </script>
       <?php
@@ -252,12 +252,12 @@ if (isset($alterar)) {
 }
 
 function ElementosAprov($chavepesquisa) {
-	
+
   $sSqlUnion    = " SELECT ed44_i_codigo,  ";
-  $sSqlUnion   .= "        ed44_i_procavaliacao, "; 
-  $sSqlUnion   .= "        ed09_c_descr, "; 
+  $sSqlUnion   .= "        ed44_i_procavaliacao, ";
+  $sSqlUnion   .= "        ed09_c_descr, ";
   $sSqlUnion   .= "        case ";
-  $sSqlUnion   .= "          when ed44_i_codigo>0 then 'AVALIAÇÃO PERIÓDICA' end as ed14_c_descr, "; 
+  $sSqlUnion   .= "          when ed44_i_codigo>0 then 'AVALIAÇÃO PERIÓDICA' end as ed14_c_descr, ";
   $sSqlUnion   .= "        ed44_i_peso, ";
   $sSqlUnion   .= "        ed44_c_minimoaprov,  ";
   $sSqlUnion   .= "        ed44_c_obrigatorio,  ";
@@ -268,12 +268,12 @@ function ElementosAprov($chavepesquisa) {
   $sSqlUnion   .= " WHERE ed44_i_procresultado = $chavepesquisa ";
   $sSqlUnion   .= " UNION ";
   $sSqlUnion   .= " SELECT ed68_i_codigo,  ";
-  $sSqlUnion   .= "        ed68_i_procresultcomp, "; 
-  $sSqlUnion   .= "        ed42_c_descr, "; 
+  $sSqlUnion   .= "        ed68_i_procresultcomp, ";
+  $sSqlUnion   .= "        ed42_c_descr, ";
   $sSqlUnion   .= "        case ";
-  $sSqlUnion   .= "         when ed68_i_codigo>0 then 'RESULTADO' end as ed14_c_descr, "; 
+  $sSqlUnion   .= "         when ed68_i_codigo>0 then 'RESULTADO' end as ed14_c_descr, ";
   $sSqlUnion   .= "        ed68_i_peso,  ";
-  $sSqlUnion   .= "        ed68_c_minimoaprov, "; 
+  $sSqlUnion   .= "        ed68_c_minimoaprov, ";
   $sSqlUnion   .= "        ed43_c_boletim, ";
   $sSqlUnion   .= "        ed43_i_sequencia ";
   $sSqlUnion   .= " FROM rescompoeres ";

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -44,9 +44,9 @@ $oGet    = db_utils::postmemory($_GET);
 $rsTermo   = $cltermo->sql_record($cltermo->sql_query_consulta(null,"cgm.z01_numcgm as z01_numcgm,cgm.z01_nome,resp.z01_nome as nomecontr,resp.z01_numcgm as cgmcontr,termo.*, db_usuarios.nome as nome_usuario",null," v07_parcel = {$oGet->parcelamento}"));
 
 if ( $cltermo->numrows > 0 ) {
-  $oTermo  = db_utils::fieldsMemory($rsTermo,0);    
+  $oTermo  = db_utils::fieldsMemory($rsTermo,0);
 }else{
-  db_msgbox("Parcelamento não encontrado");  
+  db_msgbox("Parcelamento não encontrado");
   echo " <script> parent.db_iframe_consultaparc".$oGet->parcelamento.".hide(); </script>";
   exit;
 }
@@ -79,7 +79,7 @@ if ( $cltermo->numrows > 0 ) {
         color:black;
         text-align:center;
         padding:3px;
-      }  
+      }
 </style>
 <script>
 function js_marca(obj){
@@ -124,7 +124,7 @@ function js_marca(obj){
           <td class='texto'><?=db_formatar($oTermo->v07_datpri,'d')?>  </td>
           <td align='right'><b>Valor da parcela :</b>                  </td>
           <td class='texto'><?=db_formatar($oTermo->v07_vlrpar,'f')?>  </td>
-      </tr>    
+      </tr>
       <tr>
           <td>
           <?
@@ -138,7 +138,7 @@ function js_marca(obj){
           ?>
           </td>
           <td class='texto'><?=$oTermo->z01_nome?>   </td>
-      </tr>    
+      </tr>
       <tr>
         <td><b>Historico :</b></td>
         <td colspan="3" class='texto'><?=$oTermo->v07_hist?>   </td>
@@ -157,20 +157,20 @@ function js_marca(obj){
   <fieldset>
    <legend><b>Detalhamento : </b></legend>
      <table width='100%'>
- 
+
        <tr>
          <td width='20%' valign='top' height='100%' rowspan='2'>
-           <a class='selecionados' onclick='js_marca(this);this.blur()' href='div3_consultaParcOrigem.php?parcelamento=<?=$oGet->parcelamento;?>'    target='dados'><b> Origem     </b></a> 
+           <a class='selecionados' onclick='js_marca(this);this.blur()' href='div3_consultaParcOrigem.php?parcelamento=<?=$oGet->parcelamento;?>'    target='dados'><b> Origem     </b></a>
            <a class='dados'        onclick='js_marca(this);this.blur()' href='div3_consultaParcParcelas.php?parcelamento=<?=$oGet->parcelamento;?>'  target='dados'><b> Parcelas   </b></a>
-           <a class='dados'        onclick='js_marca(this);this.blur()' href='div3_consultaParcExercicios.php?parcelamento=<?=$oGet->parcelamento;?>'target='dados'><b> Exercícios </b></a> 
-           <a class='dados'        onclick='js_marca(this);this.blur()' href='div3_consultaParcEnvolvidos.php?parcelamento=<?=$oGet->parcelamento;?>'target='dados'><b> Envolvidos </b></a> 
+           <a class='dados'        onclick='js_marca(this);this.blur()' href='div3_consultaParcExercicios.php?parcelamento=<?=$oGet->parcelamento;?>'target='dados'><b> Exercícios </b></a>
+           <a class='dados'        onclick='js_marca(this);this.blur()' href='div3_consultaParcEnvolvidos.php?parcelamento=<?=$oGet->parcelamento;?>'target='dados'><b> Envolvidos </b></a>
          </td>
          <td valign='top' height='100%' style='border:1px inset white'>
            <iframe height='300' name='dados' frameborder='0' width='100%' src='div3_consultaParcOrigem.php?parcelamento=<?=$oGet->parcelamento;?>' style='background-color:#CCCCCC'>
            </iframe>
          </td>
        </tr>
- 
+
      </table>
   </fieldset>
 </td>
@@ -189,10 +189,10 @@ function js_pesquisaNome(codigoOrigem){
   var nomeIframe = '';
 
   arquivo    = 'prot3_conscgm002.php';
-  parametros = 'numcgm='+codigoOrigem+'&fechar=db_iframe_consultacgm';    
+  parametros = 'numcgm='+codigoOrigem+'&fechar=db_iframe_consultacgm';
   nomeIframe = 'db_iframe_consultacgm';
 
-  js_OpenJanelaIframe('top.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo',nomeIframe,arquivo+'?'+parametros,'Detalhes da Pesquisa',true);
 
 }
 </script>

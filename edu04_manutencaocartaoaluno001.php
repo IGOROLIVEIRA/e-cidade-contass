@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -127,16 +127,16 @@ $oLabel->label("ed57_c_descr");
         </center>
       </div>
       </form>
-    </center>      
+    </center>
   </body>
-</html>  
-<div style="position: absolute;padding: 3px; background-color:#FFFFCC; 
+</html>
+<div style="position: absolute;padding: 3px; background-color:#FFFFCC;
             border: 1px solid #999999; display:none;z-index:10000000"
      id='ctnDisplayFoto'>
    <img  width="95" height="120"  style='border:1px inset white' id='previewfotogrid'>
 </div>
 <?
-db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), 
+db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
         db_getsession("DB_anousu"), db_getsession("DB_instit"));
 ?>
 <script>
@@ -145,22 +145,22 @@ var sUrlRPC                = 'edu04_gerararquivocartaoaluno.RPC.php';
 function js_pesquisaAluno(mostra) {
 
   if (mostra) {
-  
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_aluno', 
-                       'func_aluno.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome', 
+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_aluno',
+                       'func_aluno.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome',
                        'Pesquisar Alunos',
                         true
                        );
   } else {
-  
+
     if ($F('ed60_i_aluno') != "") {
-    
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_aluno', 
-                       'func_aluno.php?funcao_js=parent.js_mostraaluno2&pesquisa_chave2='+$F('ed60_i_aluno'), 
+
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_aluno',
+                       'func_aluno.php?funcao_js=parent.js_mostraaluno2&pesquisa_chave2='+$F('ed60_i_aluno'),
                        'Pesquisar Alunos',
                         false
                        );
-      
+
     } else {
      $('ed47_v_nome') = "";
     }
@@ -175,11 +175,11 @@ function js_mostraaluno1(chave1,chave2) {
 }
 
 function js_mostraaluno2(chave1, lErro) {
-  
+
   $('ed47_v_nome').value   = chave1;
   if (lErro) {
-  
-    $('ed47_v_nome').value  = "Chave ("+$('ed60_i_aluno').value+") Não encontrada";  
+
+    $('ed47_v_nome').value  = "Chave ("+$('ed60_i_aluno').value+") Não encontrada";
     $('ed60_i_aluno').value = '';
     $('ed60_i_aluno').focus();
   }
@@ -188,24 +188,24 @@ function js_mostraaluno2(chave1, lErro) {
 function js_pesquisaTurma(mostra) {
 
   if (mostra) {
-  
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_turma', 
-                        'func_turma.php?funcao_js=parent.js_mostraTurma|ed57_i_codigo|ed57_c_descr', 
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_turma',
+                        'func_turma.php?funcao_js=parent.js_mostraTurma|ed57_i_codigo|ed57_c_descr',
                         'Pesquisar Turmas',
                          true
                         );
   } else {
-  
+
     if ($F('ed57_i_codigo') != "") {
-    
-      js_OpenJanelaIframe('top.corpo', 
-                          'db_iframe_turma', 
-                          'func_turma.php?funcao_js=parent.js_mostraTurma2&pesquisa_chave='+$F('ed57_i_codigo'), 
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
+                          'db_iframe_turma',
+                          'func_turma.php?funcao_js=parent.js_mostraTurma2&pesquisa_chave='+$F('ed57_i_codigo'),
                           'Pesquisar Turmas',
                            false
                           );
-                        
+
     } else {
       $('ed57_c_descr').value  = '';
     }
@@ -220,11 +220,11 @@ function js_mostraTurma(chave1,chave2) {
 }
 
 function js_mostraTurma2(chave1, chave2, chave3, chave4, chave5, lErro) {
-  
+
   $('ed57_c_descr').value   = chave1;
   if (lErro) {
-  
-    $('ed57_c_descr').value  = "Chave ("+$('ed57_i_codigo').value+") Não encontrada";  
+
+    $('ed57_c_descr').value  = "Chave ("+$('ed57_i_codigo').value+") Não encontrada";
     $('ed57_i_codigo').value = '';
     $('ed57_i_codigo').focus();
   }
@@ -232,9 +232,9 @@ function js_mostraTurma2(chave1, chave2, chave3, chave4, chave5, lErro) {
 function js_pesquisaLote(mostra) {
 
   if (mostra) {
-  
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_lote', 
-                       'func_loteimpressaocartaoidentificacaoescola.php?funcao_js=parent.js_mostrarLote1|ed305_sequencial', 
+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_lote',
+                       'func_loteimpressaocartaoidentificacaoescola.php?funcao_js=parent.js_mostrarLote1|ed305_sequencial',
                        'Pesquisar Lotes',
                         true
                        );
@@ -247,16 +247,16 @@ function js_mostrarLote1(chave1) {
   db_iframe_lote.hide();
 }
 $('btnPesquisar').observe("click", function () {
-  
+
   var oBtnPesquisar       = $('btnPesquisar');
   oBtnPesquisar.disabled  = true;
   var iWidth              = document.body.getWidth()-10;
-  oWindowManutencaoCartao = new windowAux("wndManutencaoCartao", 
-                                          "Manutenção de Cartão de Identificação", 
+  oWindowManutencaoCartao = new windowAux("wndManutencaoCartao",
+                                          "Manutenção de Cartão de Identificação",
                                           iWidth
                                          );
   oWindowManutencaoCartao.setShutDownFunction(function() {
-  
+
      oWindowManutencaoCartao.destroy();
      oBtnPesquisar.disabled  = false;
   });
@@ -278,7 +278,7 @@ $('btnPesquisar').observe("click", function () {
       sConteudo += '      <input type="button" value="Fechar" id="btnFechar">';
       sConteudo += '    </center>';
       sConteudo += '</div>';
-  oWindowManutencaoCartao.setContent(sConteudo);    
+  oWindowManutencaoCartao.setContent(sConteudo);
   var sMessagemUsuario = 'Informe a situaçao de cada cartão.';
   var oMessageBoard    = new DBMessageBoard('msgBoardAlunos',
                                             'Manuntenção de Cartões de Identificação',
@@ -291,46 +291,46 @@ $('btnPesquisar').observe("click", function () {
   oDataGridAlunos.nameInstance = 'oDataGridAlunos';
   oDataGridAlunos.setCheckbox(0);
   var aWidths                  = new Array("5%", "30%", "5%", "15%", "15%", "15%", "4%", "10%");
-  var aHeaders                 = new Array("cod.Aluno", 
+  var aHeaders                 = new Array("cod.Aluno",
                                            "Nome",
-                                           "Nasc.",  
-                                           "Pai", 
+                                           "Nasc.",
+                                           "Pai",
                                            "Mãe",
                                            "Resp. Legal",
                                            "Foto",
                                            "Situação"
                              );
-  oDataGridAlunos.setHeight(oWindowManutencaoCartao.getHeight() / 2.3); 
-  oDataGridAlunos.setCellWidth(aWidths);                             
+  oDataGridAlunos.setHeight(oWindowManutencaoCartao.getHeight() / 2.3);
+  oDataGridAlunos.setCellWidth(aWidths);
   oDataGridAlunos.setHeader(aHeaders);
-  oDataGridAlunos.show($('ctnGridAlunos'));   
+  oDataGridAlunos.show($('ctnGridAlunos'));
   oDataGridAlunos.selectSingle = function (oCheckbox, sRow, oRow) {
-   
+
     if (oCheckbox.checked) {
-    
+
       $(sRow).addClassName('marcado');
       oRow.isSelected   = true;
-      
+
     } else {
-  
+
       $(sRow).removeClassName('marcado');
       oRow.isSelected   = false;
-     
+
     }
     return true;
   }
-  
+
   $('btnFechar').observe('click', function() {
-  
+
      oWindowManutencaoCartao.destroy();
      oBtnPesquisar.disabled  = false;
   });
-  
+
   oCboSituacoes = new DBComboBox('oCboSituacoes', 'oCboSituacoes');
   oCboSituacoes.show($('ctnCboSituacoes'));
   var oSituacao = $('situacoes');
   for (var iSituacoes = 0; iSituacoes < oSituacao.options.length; iSituacoes++) {
-    
+
     var iValorSituacao     = oSituacao.options[iSituacoes].value;
     var sDescricaoSituacao = oSituacao.options[iSituacoes].innerHTML
     oCboSituacoes.addItem(iValorSituacao, sDescricaoSituacao);
@@ -338,7 +338,7 @@ $('btnPesquisar').observe("click", function () {
      * Criamos a lista dos Checkboxes para mostrar as situações das carteiras;
      */
     if (iValorSituacao != 0) {
-       
+
        var oCheckbox   = document.createElement('input');
        oCheckbox.type  = 'checkbox';
        /**
@@ -348,27 +348,27 @@ $('btnPesquisar').observe("click", function () {
        oCheckbox.id      = 'chksituacao'+iValorSituacao;
        oCheckbox.checked = true;
        oCheckbox.observe("click", function () {
-         js_filtrarSituacao(this.checked, this.value); 
+         js_filtrarSituacao(this.checked, this.value);
        });
        $('ctnCheckboxGroup').appendChild(oCheckbox);
-        
+
        var oLabelSituacao       = document.createElement('label');
        oLabelSituacao.htmlFor   = 'chksituacao'+iValorSituacao;
        oLabelSituacao.innerHTML = '<b>'+sDescricaoSituacao+'</b>';
-       $('ctnCheckboxGroup').appendChild(oLabelSituacao); 
+       $('ctnCheckboxGroup').appendChild(oLabelSituacao);
     }
   }
   $('oCboSituacoes').observe("change", function() {
- 
+
     if (oCboSituacoes.getValue() != 0) {
-     
+
       var aLinhas = oDataGridAlunos.getSelection("object");
       aLinhas.each(function(oLinha, iSeq) {
         $(oLinha.aCells[8].sId).childNodes[0].value = oCboSituacoes.getValue();
       });
     }
   });
-  js_carregarAlunos(); 
+  js_carregarAlunos();
 });
 
 function js_carregarAlunos() {
@@ -379,11 +379,11 @@ function js_carregarAlunos() {
    oParametros.iLote  = $F('ed305_sequencial');
    oParametros.iTurma = $F('ed57_i_codigo');
    oParametros.iAluno = $F('ed60_i_aluno');
-   var oAjax          = new Ajax.Request(sUrlRPC, 
+   var oAjax          = new Ajax.Request(sUrlRPC,
                                          {method:'post',
                                           parameters:'json='+Object.toJSON(oParametros),
                                           onComplete: js_preencherCartoes
-                                         }); 
+                                         });
 
 }
 
@@ -394,7 +394,7 @@ function js_preencherCartoes(oResponse) {
   var oRetorno = eval("("+oResponse.responseText+")");
   oDataGridAlunos.clearAll(true);
   oRetorno.cartoes.each(function (oCartao, iSeq) {
-  
+
      var aLinha = new Array();
      aLinha[0]  = oCartao.codigo;
      aLinha[1]  = oCartao.nome.urlDecode();
@@ -408,17 +408,17 @@ function js_preencherCartoes(oResponse) {
      oDataGridAlunos.addRow(aLinha);
      var sClassName = oCartao.descricaosituacaocarteira.urlDecode().replace(/ /g, '');
      oDataGridAlunos.aRows[iSeq].setClassName(sClassName);
-     
+
   });
   oDataGridAlunos.renderRows();
 }
 
 function js_createComboBox(iAluno, iValorPadrao) {
-    
-  var sComboBox = "<select id='situacaoAluno' style='width:155px'>"; 
+
+  var sComboBox = "<select id='situacaoAluno' style='width:155px'>";
   var oSituacao = $('situacoes');
   for (var iSituacoes = 0; iSituacoes < oSituacao.options.length; iSituacoes++) {
-  
+
     var sSelecionado       = " ";
     var iValorSituacao     = oSituacao.options[iSituacoes].value;
     var sDescricaoSituacao = oSituacao.options[iSituacoes].innerHTML
@@ -432,25 +432,25 @@ function js_createComboBox(iAluno, iValorPadrao) {
 }
 
 function js_previewImagem(sImagem, oDiv) {
-    
-  el =  oDiv; 
+
+  el =  oDiv;
   var x = 0;
   var y = el.offsetHeight;
-  
+
   /*
-   * calculamos a distancia do dropdown em relação a página, 
+   * calculamos a distancia do dropdown em relação a página,
    * para podemos renderiza-lo na posição correta.
    */
   while (el.offsetParent && el.id.toUpperCase() != 'wndAuxiliar') {
-    
-    if (el.className != "windowAux12") { 
-    
+
+    if (el.className != "windowAux12") {
+
       x += new Number(el.offsetLeft);
       y += new Number(el.offsetTop);
-      
+
     }
     el = el.offsetParent;
-    
+
   }
   x += new Number(el.offsetLeft);
   y += new Number(el.offsetTop)+4;
@@ -461,13 +461,13 @@ function js_previewImagem(sImagem, oDiv) {
   $('ctnDisplayFoto').style.top  = y-($('dbGridAlunosbody').scrollTop)-4;
   $('previewfotogrid').src       = sImagem;
   $('ctnDisplayFoto').style.display = '';
-}  
- 
+}
+
 function js_closePreview() {
-  
+
   $('previewfotogrid').src='';
   $('ctnDisplayFoto').style.display = 'none';
-} 
+}
 
 function js_filtrarSituacao(lMostrar, sClassName) {
 
@@ -481,56 +481,56 @@ function js_filtrarSituacao(lMostrar, sClassName) {
   }
 }
 function js_salvar () {
-  
+
   var aCartoesSelecionados = oDataGridAlunos.getSelection('object');
   if (aCartoesSelecionados.length == 0) {
-   
+
     alert('Nenhum cartão foi selecionado para manutenção.');
     return false;
   }
-  
+
   var aCartoesAlterar   = new Array();
   var lLinhasEscondidas = false;
   aCartoesSelecionados.each(function(oCartao, iSeq) {
-    
+
     if ($(oCartao.sId).style.display == 'none') {
       lLinhasEscondidas = true;
     }
     var oCartaoAlterar       = new Object();
     oCartaoAlterar.iAluno    = oCartao.aCells[0].getValue();
     oCartaoAlterar.iSituacao = $(oCartao.aCells[8].sId).childNodes[0].value;
-    aCartoesAlterar.push(oCartaoAlterar);      
+    aCartoesAlterar.push(oCartaoAlterar);
   });
-  
+
   delete aCartoesSelecionados;
   var sMsgUsuario = 'Confirma a alteração da situação dos cartoes selecionados?';
   if (lLinhasEscondidas) {
-    sMsgUsuario +='\nExistem cartões selecionados que nao estão sendo mostrados. Confirmar a Alteração?'; 
+    sMsgUsuario +='\nExistem cartões selecionados que nao estão sendo mostrados. Confirmar a Alteração?';
   }
   if (!confirm(sMsgUsuario)) {
     return false;
   }
-  
+
   js_divCarregando('Aguarde, salvando alterações', 'msgBox');
   var oParam      = new Object();
   oParam.exec     = 'salvarCartaoIdentificacao';
   oParam.aCartoes = aCartoesAlterar;
-  var oAjax       = new Ajax.Request(sUrlRPC, 
+  var oAjax       = new Ajax.Request(sUrlRPC,
                                     {
                                      method:'post',
                                      parameters:'json='+Object.toJSON(oParam),
                                      onComplete: function (oResponse) {
-                                        
+
                                         js_removeObj('msgBox');
                                         var oRetorno = eval("("+oResponse.responseText+")");
                                         if (oRetorno.status == 2) {
                                           alert(oRetorno.message.urlDecode());
                                         } else {
-                                          
+
                                           alert('Cartoes Alterados com sucesso.');
                                           js_carregarAlunos();
                                         }
-                                      } 
+                                      }
                                     }
                                     );
 }

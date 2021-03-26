@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -62,14 +62,14 @@ $rsLIvros   = $oDaoCertidLivro->sql_record($sSqlLivros);
 $aLivros    = array();
 $aLivros[0] = "Selecione";
 for ($i = 0; $i < $oDaoCertidLivro->numrows; $i++) {
-  
+
   $oLivro = db_utils::fieldsMemory($rsLIvros, $i);
   $aLivros[$oLivro->v25_numero] = $oLivro->v25_numero;
-  
+
 }
 $db_opcaofolhalivro = 1;
 if (isset($oGet->chave_pesquisa)) {
-   
+
   $sSqlCertidao = $oDaoCertidLivroFolha->sql_query_certidao($chave_pesquisa);
   $rsCertidao   = $oDaoCertidLivroFolha->sql_record($sSqlCertidao);
   if ($oDaoCertidLivroFolha->numrows > 0) {
@@ -83,7 +83,7 @@ if (isset($oGet->chave_pesquisa)) {
     $v26_sequencial = $oDadosCertidao->v26_sequencial;
     $livro          = $oDadosCertidao->v25_numero;
     $pagina         = $oDadosCertidao->v26_numerofolha;
-   
+
     /**
      * Verificamos se a certidao está em uma inicial.
      */
@@ -106,12 +106,12 @@ if (isset($oGet->chave_pesquisa)) {
    db_app::load("scripts.js, estilos.css, prototype.js, strings.js");
   ?>
  </head>
- <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" 
+ <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"
        onLoad="if(document.form1) document.form1.elements[1].focus()" >
 
   <form class="container" name='form1' method="post">
     <fieldset>
-      <legend> Alterar CDA </legend>         
+      <legend> Alterar CDA </legend>
       <table class="form-container">
         <tr>
           <td>
@@ -119,7 +119,7 @@ if (isset($oGet->chave_pesquisa)) {
               db_ancora(@$Lv14_certid,"js_pesquisaparcel(true)",3)
             ?>
           </td>
-          <td>        
+          <td>
             <?
               db_input('v13_certid',10,$Iv14_certid,true,'text',3,
                        "onchange='js_pesquisaparcel(false);'");
@@ -129,16 +129,16 @@ if (isset($oGet->chave_pesquisa)) {
         </tr>
         <tr>
           <td>
-            Data Emissão: 
+            Data Emissão:
           </td>
           <td>
             <?=db_inputdata('v13_dtemis',$v13_dtemis_dia,$v13_dtemis_mes,$v13_dtemis_ano,true,'text',4)?>
-          </td>            
+          </td>
         </tr>
         <tr>
           <td>
             Livro:
-          </td> 
+          </td>
           <td>
             <?
               db_select('livro', $aLivros, true, $db_opcaofolhalivro, "");
@@ -148,20 +148,20 @@ if (isset($oGet->chave_pesquisa)) {
         <tr>
           <td>
             Folha:
-          </td> 
+          </td>
           <td>
             <?
               db_input("pagina",10,4,true,"text", $db_opcaofolhalivro);
             ?>
           </td>
         </tr>
-      </table>          
-    </fieldset>      
+      </table>
+    </fieldset>
     <input type='button' value='Alterar CDA' id='processar'>
     <input type='button' value='Pesquisar CDA' id='pesquisar' onclick='js_pesquisaparcel(true)'>
   </form>
 
-  <? 
+  <?
    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
   ?>
  </body>
@@ -174,46 +174,46 @@ if (isset($oGet->chave_pesquisa)) {
  iLivroOriginal = '<?=$livro ?>';
  iFolhaOriginal = '<?=$pagina?>';
  function js_pesquisaparcel(mostra){
-     
+
      if(mostra==true){
-       js_OpenJanelaIframe('top.corpo','db_iframe',sLookUp+'?funcao_js=parent.js_mostratermo|0','Pesquisa',true);      
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe',sLookUp+'?funcao_js=parent.js_mostratermo|0','Pesquisa',true);
      }else{
-       js_OpenJanelaIframe('top.corpo','db_iframe',sLookUp+'?pesquisa_chave='+document.form1.v13_certid.value+'&funcao_js=parent.js_mostratermo','Pesquisa',false);       
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe',sLookUp+'?pesquisa_chave='+document.form1.v13_certid.value+'&funcao_js=parent.js_mostratermo','Pesquisa',false);
      }
 }
 function js_mostratermo(chave) {
-  
+
    location.href='<?=$_SERVER["PHP_SELF"]?>?chave_pesquisa='+chave;
 }
 
 function getProximaPagina() {
 
   if ($F('livro') == 0) {
-    
+
     $('pagina').value = 0;
     return ;
-    
+
   }
-  
+
   if ($F('livro') == iLivroOriginal) {
-  
+
    $('pagina').value = iFolhaOriginal;
    return false;
-   
+
   }
   var oParam          = new Object();
       oParam.exec     = "getProximaPagina";
       oParam.livro    = $F('livro');
-      
+
       var oAjax = new Ajax.Request(
-                         sUrlRPC, 
+                         sUrlRPC,
                          {
-                          method    : 'post', 
-                          parameters: 'json='+Object.toJSON(oParam), 
+                          method    : 'post',
+                          parameters: 'json='+Object.toJSON(oParam),
                           onComplete: js_retornoGetProximaPagina
                           }
                         );
-      
+
 }
 
 function js_retornoGetProximaPagina(oAjax) {
@@ -225,70 +225,70 @@ function js_retornoGetProximaPagina(oAjax) {
 }
 
 function js_alterarCda() {
-   
-   
+
+
    if ($F('v13_dtemis') == '') {
-      
+
      alert('Informe a data da CDA!');
      return false;
-     
+
    }
    if (($F('pagina') != '0' || $F('pagina') == "") && $F('livro') == 0) {
-   
+
      alert('Escolha um livro para incluir a CDA!');
      return false;
-     
+
    }
-   
+
    if ($F('livro') != "0" && ($F('pagina') == 0 ||$F('pagina') == "")) {
-   
+
      alert('Escolha uma folha para incluir a CDA!');
      return false;
-     
+
    }
-   
+
    if ($F('v26_sequencial') != "" && ($F('livro') == '0' || ($F('pagina') == ""|| $F('pagina') == "0"))) {
-      
-     var sMsg  = 'Informando um livro ou uma página inválida, a cda sera retirada do livro em que ela se encontra.\n'; 
-         sMsg += 'Confirma a alteração?'; 
+
+     var sMsg  = 'Informando um livro ou uma página inválida, a cda sera retirada do livro em que ela se encontra.\n';
+         sMsg += 'Confirma a alteração?';
      if (!confirm(sMsg)) {
          return false;
-     } 
-     
+     }
+
      $('livro').value  = 0;
      $('pagina').value = 0;
-     
+
    }
-   
+
    var oParam        = new Object();
    oParam.exec       = "alterarCDA";
    oParam.livro      = $F('livro');
    oParam.pagina     = $F('pagina');
    oParam.v13_certid = $F('v13_certid');
    oParam.v13_dtemis = $F('v13_dtemis');
-   
+
    js_divCarregando('Aguarde, Alterando informações da CDA', 'msgbox');
-   
+
    var oAjax = new Ajax.Request(
-                        sUrlRPC, 
+                        sUrlRPC,
                          {
-                          method    : 'post', 
-                          parameters: 'json='+Object.toJSON(oParam), 
+                          method    : 'post',
+                          parameters: 'json='+Object.toJSON(oParam),
                           onComplete: js_retornoAlterarCDA
                           }
                         );
-   
+
 }
 
 function js_retornoAlterarCDA(oAjax) {
-  
+
    js_removeObj('msgbox');
    var oRetorno = eval("("+oAjax.responseText+")");
    if (oRetorno.status == 1) {
-   
+
       alert('CDA alterada com sucesso');
       location.href='div4_alteracda001.php';
-      
+
    } else {
      alert(oRetorno.message.urlDecode());
    }

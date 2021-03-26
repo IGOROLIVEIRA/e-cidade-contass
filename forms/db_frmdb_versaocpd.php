@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -32,7 +32,7 @@ $cldb_versaocpd->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("db30_codversao");
 $clrotulo->label("db30_codrelease");
-      
+
 if(isset($db_opcaoal)){
    $db_opcao=33;
     $db_botao=false;
@@ -42,7 +42,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -51,7 +51,7 @@ if(isset($db_opcaoal)){
      $db33_obscpd = "";
      $db33_data = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -64,7 +64,7 @@ db_input('db33_codcpd',6,$Idb33_codcpd,true,'hidden',3,"")
     <td nowrap title="<?=@$Tdb30_codversao?>">
        <?=@$Ldb30_codversao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db30_codversao',6,$Idb30_codversao,true,'text',3);
 ?>/
@@ -72,7 +72,7 @@ db_input('db30_codversao',6,$Idb30_codversao,true,'text',3);
 db_input('db30_codrelease',6,$Idb30_codrelease,true,'text',3);
        if(@$db33_codcpd > 0){
        ?>
-       
+
        <td rowspan="19" valign="top">
           <table border="0" cellpadding="0" cellspacing="0">
              <tr><td align="center"><b>Anexos</b></td></tr>
@@ -84,7 +84,7 @@ db_input('db30_codrelease',6,$Idb30_codrelease,true,'text',3);
 		  <select name='selid' onchange='js_novo(<?=$db33_codcpd?>,1,0)'  size=3>
                    <?for($x=0;$x<$cldb_versaocpdarq->numrows;$x++){
 		     db_fieldsmemory($result,$x);
-		   ?> 		   
+		   ?>
                     <option value='<?=$db34_codarq?>'><?=$db34_descr?></option>
                    <?
 	            }
@@ -94,7 +94,7 @@ db_input('db30_codrelease',6,$Idb30_codrelease,true,'text',3);
               <tr>
                  <td align="center" >
                    <br><br>
-		 
+
                    <input type="button" name="novo" value="Manutenção" onclick="js_novo('<?=$db33_codcpd?>',1,0);">
                  </td>
               </tr>
@@ -108,10 +108,10 @@ db_input('db30_codrelease',6,$Idb30_codrelease,true,'text',3);
   <tr>
     <td nowrap title="<?=@$Tdb33_obs?>">
        <?=@$Ldb33_obs?>
-       
-									
+
+
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db33_obs',4,70,$Idb33_obs,true,'text',$db_opcao,"")
 ?>
@@ -122,7 +122,7 @@ db_textarea('db33_obs',4,70,$Idb33_obs,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb33_obscpd?>">
        <?=@$Ldb33_obscpd?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db33_obscpd',4,70,$Idb33_obscpd,true,'text',$db_opcao,"")
 ?>
@@ -132,7 +132,7 @@ db_textarea('db33_obscpd',4,70,$Idb33_obscpd,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb33_data?>">
        <?=@$Ldb33_data?>
     </td>
-    <td> 
+    <td>
 <?
 if(!isset($db33_data_dia)){
    $db33_data_dia     = date('d',db_getsession("DB_datausu") );
@@ -152,7 +152,7 @@ db_inputdata('db33_data',@$db33_data_dia,@$db33_data_mes,@$db33_data_ano,true,'t
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("db33_codcpd"=>@$db33_codcpd);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -180,20 +180,20 @@ function js_cancelar(){
 }
 function js_pesquisadb33_codver(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_db_versaocpd','db_iframe_db_versao','func_db_versao.php?funcao_js=parent.js_mostradb_versao1|db30_codver|db30_codversao','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaocpd','db_iframe_db_versao','func_db_versao.php?funcao_js=parent.js_mostradb_versao1|db30_codver|db30_codversao','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.db33_codver.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_db_versaocpd','db_iframe_db_versao','func_db_versao.php?pesquisa_chave='+document.form1.db33_codver.value+'&funcao_js=parent.js_mostradb_versao','Pesquisa',false);
+     if(document.form1.db33_codver.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaocpd','db_iframe_db_versao','func_db_versao.php?pesquisa_chave='+document.form1.db33_codver.value+'&funcao_js=parent.js_mostradb_versao','Pesquisa',false);
      }else{
-       document.form1.db30_codversao.value = ''; 
+       document.form1.db30_codversao.value = '';
      }
   }
 }
 function js_mostradb_versao(chave,erro){
-  document.form1.db30_codversao.value = chave; 
-  if(erro==true){ 
-    document.form1.db33_codver.focus(); 
-    document.form1.db33_codver.value = ''; 
+  document.form1.db30_codversao.value = chave;
+  if(erro==true){
+    document.form1.db33_codver.focus();
+    document.form1.db33_codver.value = '';
   }
 }
 function js_mostradb_versao1(chave1,chave2){
@@ -203,11 +203,11 @@ function js_mostradb_versao1(chave1,chave2){
 }
 function js_novo(codcpd,db_opcao,codarq){
   if(db_opcao == 1){
-    js_OpenJanelaIframe('top.corpo.iframe_db_versaocpd','db_iframe_novo','con1_db_versaocpdarq001.php?db_opcao='+db_opcao+'&codcpd='+codcpd+'&codarq='+codarq,'ANEXOS',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaocpd','db_iframe_novo','con1_db_versaocpdarq001.php?db_opcao='+db_opcao+'&codcpd='+codcpd+'&codarq='+codarq,'ANEXOS',true,0);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_db_versaocpd','db_iframe_novo','con1_db_versaocpdarq002.php?db_opcao='+db_opcao+'&codcpd='+codcpd+'&codarq='+codarq,'ANEXOS',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaocpd','db_iframe_novo','con1_db_versaocpdarq002.php?db_opcao='+db_opcao+'&codcpd='+codcpd+'&codarq='+codarq,'ANEXOS',true,0);
   }
-  
-}    
+
+}
 
 </script>

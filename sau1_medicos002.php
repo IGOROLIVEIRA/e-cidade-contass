@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -76,14 +76,14 @@ if (isset($alterar)) {
       parent.document.formaba.a4.disabled = false;
       parent.document.formaba.a5.disabled = false;
       parent.document.formaba.a6.disabled = false;
-      top.corpo.iframe_a2.location.href   = 'pro1_cgmdoc001.php?z02_i_cgm=<?=$sd03_i_cgm?>&z01_nome=<?=$z01_nome?>';
-      top.corpo.iframe_a3.location.href   = 'sau1_unidademedicos001.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
+      CurrentWindow.corpo.iframe_a2.location.href   = 'pro1_cgmdoc001.php?z02_i_cgm=<?=$sd03_i_cgm?>&z01_nome=<?=$z01_nome?>';
+      CurrentWindow.corpo.iframe_a3.location.href   = 'sau1_unidademedicos001.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
                                             '&z01_nome=<?=$z01_nome?>';
-      top.corpo.iframe_a4.location.href   = 'sau1_undmedhorario006.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
+      CurrentWindow.corpo.iframe_a4.location.href   = 'sau1_undmedhorario006.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
                                             '&z01_nome=<?=$z01_nome?>';
-      top.corpo.iframe_a5.location.href   = 'sau1_undmedhorario007.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
+      CurrentWindow.corpo.iframe_a5.location.href   = 'sau1_undmedhorario007.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
                                             '&z01_nome=<?=$z01_nome?>';
-      top.corpo.iframe_a6.location.href   = 'sau1_sau_procedmedagendamento001.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
+      CurrentWindow.corpo.iframe_a6.location.href   = 'sau1_sau_procedmedagendamento001.php?sd04_i_medico=<?=$sd03_i_codigo?>'+
                                             '&z01_nome=<?=$z01_nome?>';
     </script>
 <?
@@ -130,26 +130,26 @@ if (isset($alterar)) {
 if (isset($alterar)) {
 
   if ($oDaoMedicos->erro_status == '0') {
- 
+
     $oDaoMedicos->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if ($oDaoMedicos->erro_campo != '') {
-    
+
       echo "<script> document.form1.".$oDaoMedicos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$oDaoMedicos->erro_campo.".focus();</script>";
-    
+
     }
-   
+
   } else {
- 
+
     $oDaoMedicos->erro(true, false);
     $sGet = '';
     if (isset($lBotao) && $lBotao == 'true') {
       $sGet = '&lBotao=true';
     }
     db_redireciona("sau1_medicos002.php?chavepesquisa=$sd03_i_codigo$sGet");
- 
+
   }
 
 }

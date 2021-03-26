@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: atendimento
@@ -41,7 +41,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
   $db_opcao = 3;
   $db_botao=true;
-}else{  
+}else{
   $db_opcao = 1;
   $db_botao=true;
   if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -62,7 +62,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tat81_seq?>">
       <?=@$Lat81_seq?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('at81_seq',6,$Iat81_seq,true,'text',3,"")
       ?>
@@ -74,7 +74,7 @@ if(isset($db_opcaoal)){
       db_ancora(@$Lat81_codatendcli,"js_pesquisaat81_codatendcli(true);",3);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('at81_codatendcli',6,$Iat81_codatendcli,true,'text',3," onchange='js_pesquisaat81_codatendcli(false);'")
       ?>
@@ -84,7 +84,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tat81_descr?>">
       <?=@$Lat81_descr?>
     </td>
-    <td> 
+    <td>
       <?
       db_textarea('at81_descr',4,49,$Iat81_descr,true,'text',$db_opcao,"")
       ?>
@@ -96,7 +96,7 @@ if(isset($db_opcaoal)){
       db_ancora(@$Lat81_codtipo,"js_pesquisaat81_codtipo(true);",$db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('at81_codtipo',6,$Iat81_codtipo,true,'text',$db_opcao," onchange='js_pesquisaat81_codtipo(false);'")
       ?>
@@ -123,7 +123,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tat81_data?>">
       <?=@$Lat81_data?>
     </td>
-    <td> 
+    <td>
       <?
       if(!isset($at81_data_dia) || (isset($at81_data_dia) && trim($at81_data_dia) == "")){
         $at81_data_dia = date("d",db_getsession("DB_datausu"));
@@ -155,7 +155,7 @@ if(isset($db_opcaoal)){
 </table>
 <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
       <?
       $dbwhere = "at81_codatendcli = ".$at81_codatendcli;
       if(isset($at81_seq) && trim($at81_seq) != ""){
@@ -188,10 +188,10 @@ if(isset($db_opcaoal)){
 </form>
 <script>
 function js_janelaenvolvidos(){
-  js_OpenJanelaIframe('top.corpo.iframe_atendusucliitem','db_iframe_envolvidos','ate1_atendusucliitemid001.php?at83_usucliitem=<?=@$at81_seq?>','Cadastro',true,'0');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_atendusucliitem','db_iframe_envolvidos','ate1_atendusucliitemid001.php?at83_usucliitem=<?=@$at81_seq?>','Cadastro',true,'0');
 }
 function js_janelamenus(){
-  js_OpenJanelaIframe('top.corpo.iframe_atendusucliitem','db_iframe_menus','ate1_atendusucliproced001.php?at82_usucliitem=<?=@$at81_seq?>','Cadastro',true,'0');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_atendusucliitem','db_iframe_menus','ate1_atendusucliproced001.php?at82_usucliitem=<?=@$at81_seq?>','Cadastro',true,'0');
 }
 function js_setatab(){
   campo = "at81_descr";
@@ -212,20 +212,20 @@ function js_cancelar(){
 }
 function js_pesquisaat81_codatendcli(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_atendusucliitem','db_iframe_atendusucli','func_atendusucli.php?funcao_js=parent.js_mostraatendusucli1|at80_codatendcli|at80_id_usuario','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_atendusucliitem','db_iframe_atendusucli','func_atendusucli.php?funcao_js=parent.js_mostraatendusucli1|at80_codatendcli|at80_id_usuario','Pesquisa',true,'0');
   }else{
-    if(document.form1.at81_codatendcli.value != ''){ 
-      js_OpenJanelaIframe('top.corpo.iframe_atendusucliitem','db_iframe_atendusucli','func_atendusucli.php?pesquisa_chave='+document.form1.at81_codatendcli.value+'&funcao_js=parent.js_mostraatendusucli','Pesquisa',false);
+    if(document.form1.at81_codatendcli.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_atendusucliitem','db_iframe_atendusucli','func_atendusucli.php?pesquisa_chave='+document.form1.at81_codatendcli.value+'&funcao_js=parent.js_mostraatendusucli','Pesquisa',false);
     }else{
-      document.form1.at80_id_usuario.value = ''; 
+      document.form1.at80_id_usuario.value = '';
     }
   }
 }
 function js_mostraatendusucli(chave,erro){
-  document.form1.at80_id_usuario.value = chave; 
-  if(erro==true){ 
-    document.form1.at81_codatendcli.focus(); 
-    document.form1.at81_codatendcli.value = ''; 
+  document.form1.at80_id_usuario.value = chave;
+  if(erro==true){
+    document.form1.at81_codatendcli.focus();
+    document.form1.at81_codatendcli.value = '';
   }
 }
 function js_mostraatendusucli1(chave1,chave2){
@@ -235,20 +235,20 @@ function js_mostraatendusucli1(chave1,chave2){
 }
 function js_pesquisaat81_codtipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_atendusucliitem','db_iframe_tipoatend','func_tipoatend.php?funcao_js=parent.js_mostratipoatend1|at04_codtipo|at04_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_atendusucliitem','db_iframe_tipoatend','func_tipoatend.php?funcao_js=parent.js_mostratipoatend1|at04_codtipo|at04_descr','Pesquisa',true,'0');
   }else{
-    if(document.form1.at81_codtipo.value != ''){ 
-      js_OpenJanelaIframe('top.corpo.iframe_atendusucliitem','db_iframe_tipoatend','func_tipoatend.php?pesquisa_chave='+document.form1.at81_codtipo.value+'&funcao_js=parent.js_mostratipoatend','Pesquisa',false);
+    if(document.form1.at81_codtipo.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_atendusucliitem','db_iframe_tipoatend','func_tipoatend.php?pesquisa_chave='+document.form1.at81_codtipo.value+'&funcao_js=parent.js_mostratipoatend','Pesquisa',false);
     }else{
-      document.form1.at04_descr.value = ''; 
+      document.form1.at04_descr.value = '';
     }
   }
 }
 function js_mostratipoatend(chave,erro){
-  document.form1.at04_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.at81_codtipo.focus(); 
-    document.form1.at81_codtipo.value = ''; 
+  document.form1.at04_descr.value = chave;
+  if(erro==true){
+    document.form1.at81_codtipo.focus();
+    document.form1.at81_codtipo.value = '';
   }
 }
 function js_mostratipoatend1(chave1,chave2){

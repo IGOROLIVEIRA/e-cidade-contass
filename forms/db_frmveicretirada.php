@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: veiculos
@@ -36,9 +36,9 @@ $clrotulo->label("nome");
 $clrotulo->label("ve75_destino");
 
 if (!isset($ve60_datasaida)||@$ve60_datasaida==""){
-  $ve60_datasaida_dia=date("d",db_getsession("DB_datausu"));	
+  $ve60_datasaida_dia=date("d",db_getsession("DB_datausu"));
   $ve60_datasaida_mes=date("m",db_getsession("DB_datausu"));
-  $ve60_datasaida_ano=date("Y",db_getsession("DB_datausu"));	
+  $ve60_datasaida_ano=date("Y",db_getsession("DB_datausu"));
 }
 if (!isset($ve60_horasaida)||@$ve60_horasaida==""){
   $ve60_horasaida=db_hora();
@@ -53,7 +53,7 @@ if ($clveicparam->numrows > 0){
 
 if(isset($ve60_veiculo)){
 
-  $devolucao = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($ve60_veiculo)); 
+  $devolucao = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($ve60_veiculo));
 
   if ($clveiculos->numrows>0){
     db_fieldsmemory($devolucao, 0);
@@ -77,12 +77,12 @@ db_app::load("prototype.js");
         <td>
           <fieldset>
             <legend><b> Dados da Retirada</b></legend>
-            <table> 
+            <table>
             <tr>
               <td nowrap title="<?=@$Tve60_codigo?>">
                  <?=@$Lve60_codigo?>
               </td>
-              <td> 
+              <td>
                 <?
                 db_input('ve60_codigo',10,$Ive60_codigo,true,'text',3,"")
                 ?>
@@ -94,7 +94,7 @@ db_app::load("prototype.js");
                  db_ancora(@$Lve60_veiculo,"js_pesquisaveiculo();",$db_opcao);
                  ?>
               </td>
-              <td> 
+              <td>
                 <?
                  db_input('ve60_veiculo',10,$Ive60_veiculo,true,'text',3," onchange='js_pesquisave60_veiculo(false);'");
                  db_input('ve01_placa',10,$Ive01_placa,true,'text',3,'')
@@ -107,7 +107,7 @@ db_app::load("prototype.js");
                  db_ancora(@$Lve60_veicmotoristas,"js_pesquisave60_veicmotoristas(true);",$db_opcao);
                  ?>
               </td>
-              <td> 
+              <td>
               <?
               db_input('ve60_veicmotoristas',10,$Ive60_veicmotoristas,true,'text',$db_opcao,
                        " onchange='js_pesquisave60_veicmotoristas(false);'");
@@ -115,7 +115,7 @@ db_app::load("prototype.js");
                 if ($ve50_integrapessoal == 1) {
                   $pessoal = "true";
                 }
-                
+
                 if ($ve50_integrapessoal == 2) {
                  $pessoal = "false";
                 }
@@ -128,7 +128,7 @@ db_app::load("prototype.js");
               <td nowrap title="<?=@$Tve60_datasaida?>">
                  <?=@$Lve60_datasaida?>
               </td>
-              <td> 
+              <td>
                 <?
                   db_inputdata('ve60_datasaida', @$ve60_datasaida_dia, @$ve60_datasaida_mes, @$ve60_datasaida_ano, true, 'text', $db_opcao,
                     "onchange='js_pesquisa_medida();'", "", "", "none", "", "", "js_pesquisa_medida();")
@@ -139,7 +139,7 @@ db_app::load("prototype.js");
               <td nowrap title="<?=@$Tve60_horasaida?>">
                  <?=@$Lve60_horasaida?>
               </td>
-              <td> 
+              <td>
                 <?
                   db_input('ve60_horasaida', 5, $Ive60_horasaida, true, 'text', $db_opcao,
                     "onchange='js_verifica_hora(this.value,this.name);js_pesquisa_medida();' onkeypress='return js_mask(event, \"0-9|:|0-9\"); '  ");
@@ -160,7 +160,7 @@ db_app::load("prototype.js");
                   //$dData = date('Y-m-d', db_getsession("DB_datausu"));
                   $dData = '3000-12-31';
                   if (isset($ve60_datasaida) && strpos($ve60_datasaida, "-") > 0) {
-                    
+
                     $dData = $ve60_datasaida;
                   } else if (isset($ve60_datasaida)) {
                     $dData = substr(@$ve60_datasaida,6,4).'-'.substr(@$ve60_datasaida,3,2).'-'.substr(@$ve60_datasaida,0,2);
@@ -180,7 +180,7 @@ db_app::load("prototype.js");
             </tr>
             <tr>
               <td nowrap title="Medida de saída"><b>Medida de saída:</b></td>
-              <td> 
+              <td>
                <?
                 db_input('ve60_medidasaida',15,$Ive60_medidasaida,true,'text',$db_opcao,"");
                  if (isset($ve07_sigla) && trim($ve07_sigla) != ""){
@@ -197,10 +197,10 @@ db_app::load("prototype.js");
                     $dData = $ve60_datasaida;
                   } else {
                     $dData = substr(@$ve60_datasaida,6,4).'-'.substr(@$ve60_datasaida,3,2).'-'.substr(@$ve60_datasaida,0,2);
-                  }  
+                  }
                   $Queryproximamedida = $clveiculos->sql_record($clveiculos->sql_query_proximamedida(@$ve60_veiculo,@$dData,@$ve60_horasaida));
                   if($clveiculos->numrows > 0){
-                    db_fieldsmemory($Queryproximamedida,0);  
+                    db_fieldsmemory($Queryproximamedida,0);
                   }else{
                     $proximamedida = 0;
                   }
@@ -215,7 +215,7 @@ db_app::load("prototype.js");
               <td nowrap title="<?=@$Tve60_destino?>">
                <?=@$Lve60_destino?>
               </td>
-              <td> 
+              <td>
               <?
                 db_textarea('ve60_destino',5,50,$Ive60_destino,true,'text',$db_opcao,"","","",200);
               ?>
@@ -242,15 +242,15 @@ db_app::load("prototype.js");
     </tr>
       <tr>
         <td colspan="2" style="text-align: center;">
-           <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
-                  type="submit" id="db_opcao" 
+           <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+                  type="submit" id="db_opcao"
                   value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
                   <?=($db_botao==false?"disabled":"")?> onclick="return js_verificamedida();">
            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
         </td>
       </tr>
     </table>
-  </center>      
+  </center>
 </form>
 <script>
 
@@ -260,25 +260,25 @@ function js_validaHora(){
 }
 
 
-                  
+
 function js_pesquisave60_veiculo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veiculos.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veiculos.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa','Pesquisa',true);
   }else{
-     if(document.form1.ve60_veiculo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veiculos.php?pesquisa_chave='+document.form1.ve60_veiculo.value+'&funcao_js=parent.js_mostraveiculos','Pesquisa',false);
+     if(document.form1.ve60_veiculo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veiculos.php?pesquisa_chave='+document.form1.ve60_veiculo.value+'&funcao_js=parent.js_mostraveiculos','Pesquisa',false);
      }else{
-       document.form1.ve01_placa.value = ''; 
+       document.form1.ve01_placa.value = '';
      }
   }
 }
 function js_mostraveiculos(chave,erro) {
 
-  document.form1.ve01_placa.value = chave; 
-  if (erro==true) { 
-  
-    document.form1.ve60_veiculo.focus(); 
-    document.form1.ve60_veiculo.value = ''; 
+  document.form1.ve01_placa.value = chave;
+  if (erro==true) {
+
+    document.form1.ve60_veiculo.focus();
+    document.form1.ve60_veiculo.value = '';
   } else {
     js_pesquisa_medida();
   }
@@ -291,20 +291,20 @@ function js_mostraveiculos1(chave1,chave2){
 }
 function js_pesquisave60_veicmotoristas(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?pessoal=<?=$pessoal?>&funcao_js=parent.js_mostraveicmotoristas1|ve05_codigo|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?pessoal=<?=$pessoal?>&funcao_js=parent.js_mostraveicmotoristas1|ve05_codigo|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.ve60_veicmotoristas.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?pessoal=<?=$pessoal?>&pesquisa_chave='+document.form1.ve60_veicmotoristas.value+'&funcao_js=parent.js_mostraveicmotoristas','Pesquisa',false);
+     if(document.form1.ve60_veicmotoristas.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?pessoal=<?=$pessoal?>&pesquisa_chave='+document.form1.ve60_veicmotoristas.value+'&funcao_js=parent.js_mostraveicmotoristas','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostraveicmotoristas(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.ve60_veicmotoristas.focus(); 
-    document.form1.ve60_veicmotoristas.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.ve60_veicmotoristas.focus();
+    document.form1.ve60_veicmotoristas.value = '';
   }
 }
 function js_mostraveicmotoristas1(chave1,chave2){
@@ -315,10 +315,10 @@ function js_mostraveicmotoristas1(chave1,chave2){
 
 function js_pesquisave60_destinonovo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_mostradestino1|ve75_sequencial|ve75_destino','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_mostradestino1|ve75_sequencial|ve75_destino','Pesquisa',true);
   }else{
     if(document.form1.ve60_destinonovo.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?pesquisa_chave='+document.form1.ve60_destinonovo.value+'&funcao_js=parent.js_mostradestino','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?pesquisa_chave='+document.form1.ve60_destinonovo.value+'&funcao_js=parent.js_mostradestino','Pesquisa',false);
     }else{
       document.form1.ve60_destinonovo.value = '';
     }
@@ -342,20 +342,20 @@ function js_mostradestino1(chave1,chave2){
 
 function js_pesquisave60_coddepto(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
   }else{
-     if(document.form1.ve60_coddepto.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.ve60_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
+     if(document.form1.ve60_coddepto.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.ve60_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
      }else{
-       document.form1.descrdepto.value = ''; 
+       document.form1.descrdepto.value = '';
      }
   }
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.ve60_coddepto.focus(); 
-    document.form1.ve60_coddepto.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.ve60_coddepto.focus();
+    document.form1.ve60_coddepto.value = '';
   }
 }
 function js_mostradb_depart1(chave1,chave2){
@@ -365,20 +365,20 @@ function js_mostradb_depart1(chave1,chave2){
 }
 function js_pesquisave60_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
   }else{
-     if(document.form1.ve60_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.ve60_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.ve60_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.ve60_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.ve60_usuario.focus(); 
-    document.form1.ve60_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.ve60_usuario.focus();
+    document.form1.ve60_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
@@ -387,7 +387,7 @@ function js_mostradb_usuarios1(chave1,chave2){
   db_iframe_db_usuarios.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_veicretirada','func_veicretiradaalt.php?&devol=false&funcao_js=parent.js_preenchepesquisa|ve60_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicretirada','func_veicretiradaalt.php?&devol=false&funcao_js=parent.js_preenchepesquisa|ve60_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_veicretirada.hide();
@@ -399,12 +399,12 @@ function js_preenchepesquisa(chave){
 }
 function js_pesquisaveiculo(){
   baixa="1";
-  js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veiculosalt.php?baixa='+baixa+'&funcao_js=parent.js_preencheveiculo|ve01_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veiculosalt.php?baixa='+baixa+'&funcao_js=parent.js_preencheveiculo|ve01_codigo','Pesquisa',true);
 }
 function js_preencheveiculo(chave){
   db_iframe_veiculos.hide();
-  <?  
-    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?veiculo='+chave";  
+  <?
+    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?veiculo='+chave";
   ?>
 }
 
@@ -412,23 +412,23 @@ function js_preencheveiculo(chave){
 function js_verificamedida(){
   var medidasaida = new Number(document.form1.ve60_medidasaida.value);
   var ultimasaida = new Number(document.form1.ultimamedida.value);
-  var proxima     = new Number(document.form1.proximamedida.value);       
- 
+  var proxima     = new Number(document.form1.proximamedida.value);
+
   if(ultimasaida > medidasaida){
     alert ("Valor da medida menor que o valor da última medida");
     document.form1.ve60_medidasaida.style.backgroundColor='#99A9AE';
-    document.form1.ve60_medidasaida.value='';  
+    document.form1.ve60_medidasaida.value='';
     document.form1.ve60_medidasaida.focus();
     return false;
   }
-  
+
   if(proxima > 0) {
     if(proxima < medidasaida){
       alert ("Valor da medida maior que o valor da proxima medida");
       document.form1.ve60_medidasaida.style.backgroundColor='#99A9AE';
-      document.form1.ve60_medidasaida.value='';  	
-      document.form1.ve60_medidasaida.focus();	
-      return false;   	
+      document.form1.ve60_medidasaida.value='';
+      document.form1.ve60_medidasaida.focus();
+      return false;
     }
   }
 
@@ -441,7 +441,7 @@ function js_verifica_hora(valor,campo) {
   erro= 0;
   ms  = "";
   hs  = "";
-  
+
   tam = "";
   pos = "";
   tam = valor.length;
@@ -490,7 +490,7 @@ function js_verifica_hora(valor,campo) {
       minu = ms;
     }
   }
-  
+
   if (erro>0) {
     alert("Informe uma hora válida.");
   }
@@ -501,18 +501,18 @@ function js_verifica_hora(valor,campo) {
 }
 
 function js_pesquisa_medida() {
-  var databanco = document.form1.ve60_datasaida_ano.value + '-' + 
+  var databanco = document.form1.ve60_datasaida_ano.value + '-' +
                   document.form1.ve60_datasaida_mes.value + '-' +
                   document.form1.ve60_datasaida_dia.value;
   var retirada = document.form1.ve60_codigo.value;
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_ultimamedida',
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_ultimamedida',
     'func_veiculos_medida.php?metodo=ultimamedida&veiculo='+document.form1.ve60_veiculo.value+
                                                 '&data='+databanco+
                                                 '&hora='+document.form1.ve60_horasaida.value+
                                                 '&retirada='+retirada+
                                                 '&funcao_js=parent.js_mostraultimamedida', 'Pesquisa Ultima Medida', false);
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_proximamedida',
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_proximamedida',
     'func_veiculos_medida.php?metodo=proximamedida&veiculo='+document.form1.ve60_veiculo.value+
                                                  '&data='+databanco+
                                                  '&hora='+document.form1.ve60_horasaida.value+
@@ -522,12 +522,12 @@ function js_pesquisa_medida() {
 }
 
 function js_mostraultimamedida(ultimamedida,outro) {
-  document.form1.ultimamedida.value = ultimamedida; 
+  document.form1.ultimamedida.value = ultimamedida;
   return true;
 }
 
 function js_mostraproximamedida(proximamedida,outro) {
-  document.form1.proximamedida.value = proximamedida; 
+  document.form1.proximamedida.value = proximamedida;
 
   if(proximamedida != '0') {
     document.getElementById('tr_proximamedida').style.display = '';

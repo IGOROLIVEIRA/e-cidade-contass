@@ -134,7 +134,7 @@ iTipoControle = <?=$iTipoControleCustos;?>;
 function js_pesquisa() {
 
   sFiltro = "sFiltro=almox";
-  js_OpenJanelaIframe('top.corpo','db_iframe_atendrequi','func_matrequianula.php?'+sFiltro+'&funcao_js=parent.js_preenchepesquisa|m40_codigo','Pesquisa de Requisições',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atendrequi','func_matrequianula.php?'+sFiltro+'&funcao_js=parent.js_preenchepesquisa|m40_codigo','Pesquisa de Requisições',true);
 }
 
 
@@ -441,7 +441,7 @@ function js_mostraLotes(iItem) {
   sField        = new Number($('atendido'+iItem).value);
   sUrl          = 'mat4_mostraitemlotes.php?iCodMater='+iCodItem+'&iCodDepto='+iCodEstoque;
   sUrl         += '&nValor='+nValor+'&nValorSolicitado='+nValorReqItem+'&updateField='+sField;
-  js_OpenJanelaIframe('top.corpo','db_iframe_lotes',sUrl,'Lotes ',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lotes',sUrl,'Lotes ',true);
 
 }
 

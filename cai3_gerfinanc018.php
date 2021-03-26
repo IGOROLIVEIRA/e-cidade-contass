@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 set_time_limit(0);
@@ -46,7 +46,7 @@ if(!isset($_self)){
  db_fieldsmemory($res, 0);
 }
 
-//echo 
+//echo
 if ( $opcao == 'matricula' ){
   $clsqlamatriculas = new cl_iptubase;
   $sql = $clsqlamatriculas->sqlmatriculas_nome_numero($numcgm, $db21_regracgmiptu);
@@ -77,20 +77,20 @@ $result = pg_exec($sql) or die($sql);
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script>
 function js_mostracgm(cgm){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cgm','prot3_conscgm002.php?fechar=func_nome&numcgm='+cgm,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','prot3_conscgm002.php?fechar=func_nome&numcgm='+cgm,'Pesquisa',true);
 }
 function js_mostrabic_matricula(matricula){
-  js_OpenJanelaIframe('top.corpo','db_iframe_matric','cad3_conscadastro_002.php?cod_matricula='+matricula,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric','cad3_conscadastro_002.php?cod_matricula='+matricula,'Pesquisa',true);
 }
 // esta funcao é utilizada quando clicar na inscricao após pesquisar
 // a mesma
 function js_mostrabic_inscricao(inscricao){
-  js_OpenJanelaIframe('top.corpo','db_iframe_inscr','iss3_consinscr003.php?numeroDaInscricao='+inscricao,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_inscr','iss3_consinscr003.php?numeroDaInscricao='+inscricao,'Pesquisa',true);
 }
 
 
 function js_relatorio(){
-  
+
   var regracgm =  document.form1.regracgm2.value;
   if (document.form1.regracgm) {
     regracgm = document.form1.regracgm.value;
@@ -99,7 +99,7 @@ function js_relatorio(){
                      document.form1.matricula.value+'&inscricao='+document.form1.inscricao.value+
                      '&numcgm='+document.form1.numcgm.value+'&regracgm='+document.form1.regracgm.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
-	  
+
 }
 
 function js_self(){
@@ -131,7 +131,7 @@ MM_reloadPage(true);
 <center>
 
 <form name="form1" method="post">
-<input type="hidden" name="db21_regracgmiptu" value="<?=$db21_regracgmiptu?>">	
+<input type="hidden" name="db21_regracgmiptu" value="<?=$db21_regracgmiptu?>">
 <input type="hidden" name="_self" value="">
 
 <tr>
@@ -151,7 +151,7 @@ MM_reloadPage(true);
     $utilizaloc = $clcfiptu->sql_record($clcfiptu->sql_query("","j18_utilizaloc","","j18_anousu = ".db_getsession("DB_anousu")));
     if($clcfiptu->numrows > 0) {
       db_fieldsmemory($utilizaloc,0);
-    } else { 
+    } else {
       $j18_utilizaloc = 'f';
     }
 ?>
@@ -233,7 +233,7 @@ $cor="#EFE029";
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>"><a href=''>&nbsp;mais detalhes</a></td>
            </tr>
 <?
-        }elseif ( $opcao == 'inscricao' ) { 
+        }elseif ( $opcao == 'inscricao' ) {
 ?>
            <tr title="Clique aqui para verificar os dados" style="cursor: hand"  onclick='js_mostrabic_inscricao(<?=$q02_inscr?>);return false;'>
            <td align="center" style="font-size:12px" nowrap bgcolor="<?=$cor?>"><?=$q02_inscr?>&nbsp;</td>
@@ -243,7 +243,7 @@ $cor="#EFE029";
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$q02_dtbaix.'   '?></td>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>"><a href=''>&nbsp;mais detalhes</a></td>
            </tr>
-	   
+
 <?
   }elseif ( $opcao == 'socios' || $opcao == 'proprietario' ||$opcao == 'promitente' ) {
 ?>
@@ -255,7 +255,7 @@ $cor="#EFE029";
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$z01_munic?></td>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>"><a href=''>&nbsp;mais detalhes</a></td>
            </tr>
-<?  
+<?
         }
    }
 ?>
@@ -268,7 +268,7 @@ $cor="#EFE029";
 <?
 
 if($opcao == 'matricula') {
-?>	
+?>
 <tr>
 <td colspan="2">
 Regra para Emissao:
@@ -286,7 +286,7 @@ $sql_regracgm = "
 	select db_syscampodef.defcampo, db_syscampodef.defdescr
 	from db_syscampo
 	inner join db_syscampodef on db_syscampodef.codcam = db_syscampo.codcam
-	where db_syscampo.nomecam = 'db21_regracgmiptu' 
+	where db_syscampo.nomecam = 'db21_regracgmiptu'
 	and   db_syscampodef.defcampo <> '$db21_regracgmiptu';
 	";
 //die($sql_regracgm);

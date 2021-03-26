@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: tributario
@@ -41,7 +41,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -57,7 +57,7 @@ if(isset($db_opcaoal)){
      $v18_tipovalor = "";
      $v18_valor = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -65,7 +65,7 @@ if(isset($db_opcaoal)){
   <tr>
     <td nowrap>
     </td>
-    <td> 
+    <td>
 <?
 db_input('v18_sequencial',10,$Iv18_sequencial,true,'hidden',3,"")
 ?>
@@ -76,7 +76,7 @@ db_input('v18_sequencial',10,$Iv18_sequencial,true,'hidden',3,"")
        db_ancora(@$Lv18_isencao,"js_pesquisav18_isencao(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('v18_isencao',10,$Iv18_isencao,true,'text',3,"")
 ?>
@@ -110,7 +110,7 @@ db_input('v10_isencaotipo',10,$Iv10_isencaotipo,true,'hidden',3,'')
 				}
   			if(isset($k03_tipo) && $k03_tipo != ''){
 					$k03_tipoant = $k03_tipo;
-       	}  
+       	}
 				if(isset($origem) && $origem != ''){
 					$sqlCadtipo  = " select k03_tipo, ";
 					$sqlCadtipo .= "        k03_descr ";
@@ -133,14 +133,14 @@ db_input('v10_isencaotipo',10,$Iv10_isencaotipo,true,'hidden',3,'')
 						echo "</td>";
 					}else{
 						echo "<td bgcolor='#FFFFFF'>";
-						echo "<b>* Sem grupo de débito configurado para a Origem selecionada. </b>";	
+						echo "<b>* Sem grupo de débito configurado para a Origem selecionada. </b>";
 						echo "</td>";
 						$db_opcao = 3;
 						$db_botao = false;
 				  }
 				}else{
 						echo "<td bgcolor='#FFFFFF'>";
-						echo "<b>* Sem grupo de débito configurado para a Origem selecionada. </b>";	
+						echo "<b>* Sem grupo de débito configurado para a Origem selecionada. </b>";
 						echo "</td>";
 						$db_opcao = 3;
 						$db_botao = false;
@@ -154,7 +154,7 @@ db_input('v10_isencaotipo',10,$Iv10_isencaotipo,true,'hidden',3,'')
        <?
   			if(isset($v18_cadtipoitem) && $v18_cadtipoitem != ''){
 					$v18_cadtipoitemant = $v18_cadtipoitem;
-       	}  
+       	}
 				if (isset($k03_tipo) && $k03_tipo != ''){
 				  $sqlItem   = " select k09_sequencial, ";
 				  $sqlItem  .= "        k37_descr ";
@@ -177,14 +177,14 @@ db_input('v10_isencaotipo',10,$Iv10_isencaotipo,true,'hidden',3,'')
             echo "</td>";
 					}else{
             echo "<td bgcolor='#FFFFFF'>";
-					  echo "<b>* Sem item de isenção configurado para a Origem selecionada. </b>";	
+					  echo "<b>* Sem item de isenção configurado para a Origem selecionada. </b>";
             echo "</td>";
 						$db_opcao = 3;
 						$db_botao = false;
-					}					
+					}
 			  }else{
           echo "<td bgcolor='#FFFFFF'>";
-				  echo "<b>* Sem item de isenção configurado para a Origem selecionada. </b>";	
+				  echo "<b>* Sem item de isenção configurado para a Origem selecionada. </b>";
           echo "</td>";
 					$db_opcao = 3;
 					$db_botao = false;
@@ -195,7 +195,7 @@ db_input('v10_isencaotipo',10,$Iv10_isencaotipo,true,'hidden',3,'')
     <td nowrap title="<?=@$Tv18_dtini?>">
        <?=@$Lv18_dtini?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('v18_dtini',@$v18_dtini_dia,@$v18_dtini_mes,@$v18_dtini_ano,true,'text',$db_opcao,"")
 ?>
@@ -205,7 +205,7 @@ db_inputdata('v18_dtini',@$v18_dtini_dia,@$v18_dtini_mes,@$v18_dtini_ano,true,'t
     <td nowrap title="<?=@$Tv18_dtfim?>">
        <?=@$Lv18_dtfim?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('v18_dtfim',@$v18_dtfim_dia,@$v18_dtfim_mes,@$v18_dtfim_ano,true,'text',$db_opcao,"")
 ?>
@@ -215,7 +215,7 @@ db_inputdata('v18_dtfim',@$v18_dtfim_dia,@$v18_dtfim_mes,@$v18_dtfim_ano,true,'t
     <td nowrap title="<?=@$Tv18_tipovalor?>">
        <?=@$Lv18_tipovalor?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('1'=>'PERCENTUAL','2'=>'VALOR');
 db_select('v18_tipovalor',$x,true,$db_opcao,"onChange='js_controlavalor();'");
@@ -226,7 +226,7 @@ db_select('v18_tipovalor',$x,true,$db_opcao,"onChange='js_controlavalor();'");
     <td nowrap title="<?=@$Tv18_valor?>">
        <?=@$Lv18_valor?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('v18_valor',10,$Iv18_valor,true,'text',$db_opcao,"onChange='js_controlavalor();'")
 ?>
@@ -241,7 +241,7 @@ db_input('v18_valor',10,$Iv18_valor,true,'text',$db_opcao,"onChange='js_controla
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("v18_sequencial"=>@$v18_sequencial);
 	 $cliframe_alterar_excluir->chavepri    = $chavepri;
@@ -269,7 +269,7 @@ function js_controlavalor(){
 		alert('Valor percentual não pode ser maior que 100 !');
 		document.form1.v18_valor.value = '';
 		document.form1.v18_valor.focus();
-  }	
+  }
 }
 function js_ajaxRequest(obj){
 //	alert(val);
@@ -284,11 +284,11 @@ function carregaDadosSelectxxx(resposta){
 }
 function carregaDadosSelect(resposta){
 	document.form1.v18_cadtipoitem.disabled = false;
-	js_limpaSelect(document.form1.v18_cadtipoitem);  
+	js_limpaSelect(document.form1.v18_cadtipoitem);
 	js_addSelectFromStr(resposta.responseText,document.form1.v18_cadtipoitem);
 }
 function js_limpaSelect(obj){
-  obj.length  = 0;	
+  obj.length  = 0;
 }
 function js_addSelectFromStr(str,obj){
   var linhas  = str.split("|");
@@ -299,7 +299,7 @@ function js_addSelectFromStr(str,obj){
       obj.options[i].value = colunas[0];
       obj.options[i].text  = colunas[1];
 		}
-  }	
+  }
 }
 
 function js_cancelar(){
@@ -312,20 +312,20 @@ function js_cancelar(){
 }
 function js_pesquisav18_cadtipoitem(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_isencaolanc','db_iframe_cadtipoitem','func_cadtipoitem.php?funcao_js=parent.js_mostracadtipoitem1|k09_sequencial|k09_cadtipoitemgrupo','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_isencaolanc','db_iframe_cadtipoitem','func_cadtipoitem.php?funcao_js=parent.js_mostracadtipoitem1|k09_sequencial|k09_cadtipoitemgrupo','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.v18_cadtipoitem.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_isencaolanc','db_iframe_cadtipoitem','func_cadtipoitem.php?pesquisa_chave='+document.form1.v18_cadtipoitem.value+'&funcao_js=parent.js_mostracadtipoitem','Pesquisa',false);
+     if(document.form1.v18_cadtipoitem.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_isencaolanc','db_iframe_cadtipoitem','func_cadtipoitem.php?pesquisa_chave='+document.form1.v18_cadtipoitem.value+'&funcao_js=parent.js_mostracadtipoitem','Pesquisa',false);
      }else{
-       document.form1.k09_cadtipoitemgrupo.value = ''; 
+       document.form1.k09_cadtipoitemgrupo.value = '';
      }
   }
 }
 function js_mostracadtipoitem(chave,erro){
-  document.form1.k09_cadtipoitemgrupo.value = chave; 
-  if(erro==true){ 
-    document.form1.v18_cadtipoitem.focus(); 
-    document.form1.v18_cadtipoitem.value = ''; 
+  document.form1.k09_cadtipoitemgrupo.value = chave;
+  if(erro==true){
+    document.form1.v18_cadtipoitem.focus();
+    document.form1.v18_cadtipoitem.value = '';
   }
 }
 function js_mostracadtipoitem1(chave1,chave2){
@@ -335,20 +335,20 @@ function js_mostracadtipoitem1(chave1,chave2){
 }
 function js_pesquisav18_isencao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_isencaolanc','db_iframe_isencao','func_isencao.php?funcao_js=parent.js_mostraisencao1|v10_sequencial|v10_isencaotipo','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_isencaolanc','db_iframe_isencao','func_isencao.php?funcao_js=parent.js_mostraisencao1|v10_sequencial|v10_isencaotipo','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.v18_isencao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_isencaolanc','db_iframe_isencao','func_isencao.php?pesquisa_chave='+document.form1.v18_isencao.value+'&funcao_js=parent.js_mostraisencao','Pesquisa',false);
+     if(document.form1.v18_isencao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_isencaolanc','db_iframe_isencao','func_isencao.php?pesquisa_chave='+document.form1.v18_isencao.value+'&funcao_js=parent.js_mostraisencao','Pesquisa',false);
      }else{
-       document.form1.v10_isencaotipo.value = ''; 
+       document.form1.v10_isencaotipo.value = '';
      }
   }
 }
 function js_mostraisencao(chave,erro){
-  document.form1.v10_isencaotipo.value = chave; 
-  if(erro==true){ 
-    document.form1.v18_isencao.focus(); 
-    document.form1.v18_isencao.value = ''; 
+  document.form1.v10_isencaotipo.value = chave;
+  if(erro==true){
+    document.form1.v18_isencao.focus();
+    document.form1.v18_isencao.value = '';
   }
 }
 function js_mostraisencao1(chave1,chave2){

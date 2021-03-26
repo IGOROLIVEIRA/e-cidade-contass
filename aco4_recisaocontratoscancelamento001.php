@@ -256,7 +256,7 @@ function js_pesquisarRecisao() {
   var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=6';
       sUrl += '&funcao_js=parent.js_mostrarPesquisaRecisao|ac10_sequencial';
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_recisao',
                       sUrl,
                       'Pesquisar Recisão',

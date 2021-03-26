@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -68,8 +68,8 @@ fieldset table td:first-child {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-  <tr> 
-    <td valign="top" align="center"> 
+  <tr>
+    <td valign="top" align="center">
       <fieldset>
         <legend><b>Programação Financeira</b></legend>
         <table align="center" border="0">
@@ -79,7 +79,7 @@ fieldset table td:first-child {
             </td>
             <td align="left">
               <?
-                db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 
+                db_input('ac16_sequencial', 10, $Iac16_sequencial, true,
                          'text', 1, " onchange='js_pesquisaac16_sequencial(false);'");
               ?>
             </td>
@@ -108,28 +108,28 @@ $('ac16_resumoobjeto').style.width = "100%";
 function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
-    
+
     var sUrl = 'func_acordo.php?iTipoFiltro=4&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_acordo', 
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_acordo',
                         sUrl,
                         'Pesquisar Acordo',
                         true);
   } else {
-  
-    if ($('ac16_sequencial').value != '') { 
-    
+
+    if ($('ac16_sequencial').value != '') {
+
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&iTipoFiltro=4'+
                  '&funcao_js=parent.js_mostraacordo';
-                 
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           'Pesquisar Acordo',
                           false);
      } else {
-       $('ac16_sequencial').value   = ''; 
+       $('ac16_sequencial').value   = '';
        $('ac16_resumoobjeto').value = '';
      }
   }
@@ -139,15 +139,15 @@ function js_pesquisaac16_sequencial(lMostrar) {
  * Retorno da pesquisa acordos
  */
 function js_mostraacordo(chave1,chave2,erro) {
- 
+
   if (erro == true) {
-   
-    $('ac16_sequencial').value   = ''; 
+
+    $('ac16_sequencial').value   = '';
     $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial').focus(); 
+    $('ac16_sequencial').focus();
     return false;
   } else {
-  
+
     $('ac16_sequencial').value   = chave1;
     $('ac16_resumoobjeto').value = chave2;
     js_getAcordoProgramacaoFinanceira();
@@ -172,22 +172,22 @@ function js_getAcordoProgramacaoFinanceira() {
 
   var iAcordo = $('ac16_sequencial').value;
   if (iAcordo == '') {
-    
+
     alert('Informe um acordo!');
     return false;
   }
 
   js_divCarregando('Aguarde, pesquisando...',"msgBoxAcordoProgramacaoFinanceira");
-    
+
   var oParam     = new Object();
   oParam.exec    = 'getAcordoProgramacaFinanceira';
   oParam.acordo  = iAcordo;
-    
+
   var oAjax      = new Ajax.Request ('con4_contratos.RPC.php',
                                     {
-                                      method: 'post',  
+                                      method: 'post',
                                       parameters:'json='+Object.toJSON(oParam),
-                                      onComplete: js_retornoAcordoProgramacaoFinanceira 
+                                      onComplete: js_retornoAcordoProgramacaoFinanceira
                                     });
 }
 
@@ -197,17 +197,17 @@ function js_getAcordoProgramacaoFinanceira() {
 function js_retornoAcordoProgramacaoFinanceira(oAjax) {
 
   js_removeObj("msgBoxAcordoProgramacaoFinanceira");
-  
+
   var oRetorno    = eval("("+oAjax.responseText+")");
   var nValorTotal = new Number(oRetorno.valortotal.valoratual);
   if (nValorTotal == 0) {
     alert('Acordo não possui saldo disponível!');
     return false;
   }
-  
+
   var iCodigo     = '';
   if (oRetorno.programacaofinanceira != null) {
-    iCodigo = oRetorno.programacaofinanceira; 
+    iCodigo = oRetorno.programacaofinanceira;
   }
 
   js_visualizarProgramacao(iCodigo, nValorTotal);
@@ -217,37 +217,37 @@ function js_retornoAcordoProgramacaoFinanceira(oAjax) {
  * Visualiza registros programação financeira
  */
 function js_visualizarProgramacao(iCodigo, nValorTotal) {
-   
+
   oProgramacaoFinanceira = new DBViewProgramacaoFinanceira(iCodigo, "oProgramacaoFinanceira", null, document.width/1.2);
   oProgramacaoFinanceira.setValorTotal(nValorTotal);
   oProgramacaoFinanceira.setCallBack(function (iCodigo) {
-    
+
    /*
     * Inclui registro na acordo programação financeira
     */
 	  if (iCodigo == '') {
-	    
+
 	    alert('Código da programação financeira não informado!');
 	    return false;
 	  }
-	    
+
 	  var iAcordo = $('ac16_sequencial').value;
 	  if (iAcordo == '') {
-	    
+
 	    alert('Informe um acordo!');
 	    return false;
 	  }
-	    
+
 	  js_divCarregando('Aguarde, incluindo programação...',"msgBoxAcordoProgramacaoFinanceira");
-	    
+
 	  var oParam     = new Object();
 	  oParam.exec    = 'incluirAcordoProgramacaFinanceira';
 	  oParam.codigo  = iCodigo;
 	  oParam.acordo  = iAcordo;
-	    
+
 	  var oAjax      = new Ajax.Request ('con4_contratos.RPC.php',
 	                                    {
-	                                      method: 'post',  
+	                                      method: 'post',
 	                                      parameters:'json='+Object.toJSON(oParam),
 	                                      onComplete: function (oAjax) {
 	                                        js_removeObj("msgBoxAcordoProgramacaoFinanceira");

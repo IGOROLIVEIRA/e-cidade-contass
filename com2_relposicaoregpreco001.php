@@ -386,11 +386,11 @@ function js_pesquisa_pc10_numero_ini(mostra) {
   var sUrl2           = 'func_solicitacompilacao.php?pesquisa_chave='+pc10_numero_ini+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_solicitacompilacao',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicitacompilacao',sUrl1,'Pesquisa',true);
   } else {
 
      if (pc10_numero_ini != '') {
-        js_OpenJanelaIframe('top.corpo','db_iframe_solicitacompilacao',sUrl2,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicitacompilacao',sUrl2,'Pesquisa',false);
      } else {
        $('pc10_numero_ini').value = '';
      }
@@ -423,11 +423,11 @@ function js_pesquisa_pc10_numero_fim(mostra) {
   var sUrl2           = 'func_solicitacompilacao.php?pesquisa_chave='+pc10_numero_fim+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_solicitacompilacao',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicitacompilacao',sUrl1,'Pesquisa',true);
   } else {
 
      if (pc10_numero_fim != '') {
-       js_OpenJanelaIframe('top.corpo','db_iframe_solicitacompilacao',sUrl2,'Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicitacompilacao',sUrl2,'Pesquisa',false);
      } else {
        $('pc10_numero_fim').value = '';
      }
@@ -459,7 +459,7 @@ function js_pesquisa_departamento(mostra){
     }
     var numero_ini = document.form1.pc10_numero_ini.value;
     var numero_fim = document.form1.pc10_numero_fim.value;
-    js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?comp_ini='+numero_ini+
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_departamento','func_departamento.php?comp_ini='+numero_ini+
       '&comp_fim='+numero_fim+'&funcao_js=parent.js_mostradepart|coddepto|descrdepto','Pesquisa',true);
   } else {
      if (document.form1.coddepto.value != '') {
@@ -492,7 +492,7 @@ function js_pesquisa_fornelicitacao(mostra){
         }
         let numero_ini = document.form1.pc10_numero_ini.value;
         let numero_fim = document.form1.pc10_numero_fim.value;
-        js_OpenJanelaIframe('top.corpo','db_iframe_fornelicitacao','func_fornelicitacao.php?comp_ini='+numero_ini+
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_fornelicitacao','func_fornelicitacao.php?comp_ini='+numero_ini+
             '&comp_fim='+numero_fim+'&funcao_js=parent.js_mostrafornelicitacao|z01_numcgm|z01_nome','Pesquisa',true);
     } else {
         if (document.form1.z01_numcgm.value != '') {

@@ -295,7 +295,7 @@ $clrotulo->label("descrdepto");
      */
     function js_pesquisa() {
 
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_pcproc',
                            'func_excautitem.php?exc=ok&funcao_js=parent.js_pesquisa.preenche|pc80_codproc',
                            'Pesquisa de Processo de Compras',
@@ -305,7 +305,7 @@ $clrotulo->label("descrdepto");
 
     js_pesquisa.preenche = function(sCodigo) {
 
-      if (top.corpo.db_iframe_pcproc) {
+      if (CurrentWindow.corpo.db_iframe_pcproc) {
         db_iframe_pcproc.hide();
       }
 

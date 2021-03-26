@@ -1,34 +1,34 @@
 <?php
 
 /**
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
  * Representa a tela da geração do empenho.
- * 
+ *
  * @author $Author: dbmarcos $
  * @version $Revision: 1.28 $
  */
@@ -185,65 +185,65 @@ js_periodoFolha();
 js_montaCombo();
 
   function js_montaCombo() {
-  
+
   	var aPonto = new Array();
-  	
+
   	var oComboPonto = document.getElementById('ponto');
-  
+
   	oComboPonto.addClassName('DBSelectMultiplo');
-  
+
   	oComboPonto.options.length = 0;
-    
+
   	if ($F('tipo') == '1') {
-  
-  		aPonto = new Array({chave: 'r14' , valor: 'Salário'}, 
+
+  		aPonto = new Array({chave: 'r14' , valor: 'Salário'},
   		   								 {chave: 'r48' , valor: 'Complementar'},
   		   							   {chave: 'r35' , valor: '13o. Salário'},
   		   							   {chave: 'r20' , valor: 'Rescisão'},
   		   							   {chave: 'r22' , valor: 'Adiantamento'},
                          {chave: 'sup' , valor: 'Suplementar'});
-      
+
       var lDbComplementar = $('db_complementar').getValue();
-      
+
       if (lDbComplementar != true) {
         aPonto.splice(5, 1);
-      }                                    
-  
+      }
+
   	}	else {
-  
+
 		  aPonto = new Array({chave: 'r14,r48,r20' , valor: 'Mensal'},
 		                     {chave: 'r35'         , valor: '13o Salário'});
-          
-  	}	
-  
+
+  	}
+
   	for (var iIndice = 0; iIndice < aPonto.length; iIndice++) {
-  		
+
   		var oValor    = aPonto[iIndice];
   		var oOption   = document.createElement("option");
-  		
+
   		oOption.value = oValor.chave;
   		oOption.text  = oValor.valor;
-  		
+
   		oComboPonto.add(oOption);
-  	
+
   	}
   }
 
   function js_consultaFolhaComplementar(){
 
     js_divCarregando( _M( MENSAGEM + 'carregando'),'msgBox', true);
-    
+
     var oParam           = new Object();
         oParam.iAnoFolha = $F('anofolha');
         oParam.iMesFolha = $F('mesfolha');
-        
+
     if ($F("db_complementar") == "1"){
         oParam.sMethod   = "consultaComplementaresFechadas";
     } else {
         oParam.sMethod   = "consultaPontoComplementar";
         oParam.sSigla    = $F('ponto');
     }
-  
+
 	  new Ajax.Request( sUrl, {
 	                            method    : 'post',
 	                            parameters: oParam,
@@ -253,14 +253,14 @@ js_montaCombo();
   }
 
   function js_consultaFolhaSuplementar(){
-  
+
     js_divCarregando(_M( MENSAGEM + 'carregando'), 'msgBox', true);
-  
+
     var oParam           = new Object();
         oParam.sMethod   = "consultaSuplementaresFechadas";
         oParam.iAnoFolha = $F('anofolha');
         oParam.iMesFolha = $F('mesfolha');
-  
+
     new Ajax.Request( sUrl, {
                               method    : 'post',
 	                            parameters: oParam,
@@ -270,161 +270,161 @@ js_montaCombo();
   }
 
   function js_retornoFolhaPagamento(oAjax){
-  
+
     js_removeObj("msgBox");
-  
+
     var aRetorno = eval("("+oAjax.responseText+")");
-    
+
     if (aRetorno.lErro) {
-      
+
       $('gera').disabled = true;
       alert(aRetorno.sMsg.urlDecode());
       return false;
     }
-    
+
     var iLinhasSemestre = aRetorno.aSemestre.length;
-  
+
     if (iLinhasSemestre > 0) {
-      
+
       var oDBComboBox = new DBComboBox('semestre', null, []);
-      
+
       for (var iIndice = 0 ; iIndice < iLinhasSemestre; iIndice++) {
-       
+
         var oSemestre   = aRetorno.aSemestre[iIndice];
-       
-        if ($F("db_complementar") == "1"){    
+
+        if ($F("db_complementar") == "1"){
           oDBComboBox.addItem(oSemestre, oSemestre);
         } else {
           oDBComboBox.addItem(oSemestre.semestre, oSemestre.semestre);
         }
       }
-      
-      oDBComboBox.sStyle = "width: 150px;";  
+
+      oDBComboBox.sStyle = "width: 150px;";
       oDBComboBox.show($('ComboContent'));
-      
+
     } else {
-      
+
       var sLinha  = " <td> ";
           sLinha += "   <font color='red'>Sem folha.</font> ";
           sLinha += " </td> ";
       $('ComboContent').innerHTML = sLinha;
       $('gera').disabled          = true;
-      
+
     }
-  
+
     $('ComboContainer').style.display = '';
-    
+
   }
 
   function js_validaTipoPonto(lCarregaCombo) {
-  
+
     js_limparLayout();
-    
+
     var iAnoInformado  = $("anofolha").getValue();
     var iMesInformado  = $("mesfolha").getValue();
     var oCompetencia   = new DBViewFormularioFolha.CompetenciaFolha(false);
     var lCompetencia   = oCompetencia.isCompetenciaValida(iAnoInformado, iMesInformado);
-    
+
     if (!lCompetencia) {
-      
+
       $('gera').disabled = true;
       alert(_M(MENSAGEM + 'competencia_invalida'));
       return false;
     }
-  
+
     /**
 	   * Tipo salário.
 	   */
     if ($F('tipo') == '1') {
-    
+
 	    if ($F('ponto') == 'r48') {
 	      js_consultaFolhaComplementar();
 	    } else if ($F('ponto') == 'r20') {
 	      js_getRescisoes();
 	    } else if ($F('ponto') == 'sup') {
-        js_consultaFolhaSuplementar(); 
+        js_consultaFolhaSuplementar();
       }
-      
+
     }
-  
+
 	  /**
 	   * Tipo previdência.
 	   */
 	  if ( $F('tipo') == '2' ) {
-      
+
 	  	$('tabelasPrevidencia').style.display = '';
 	  	js_periodoFolha();
 	  }
-    
-	  if (lCarregaCombo) 
+
+	  if (lCarregaCombo)
 		  js_montaCombo();
 
   }
 
   function js_periodoFolha() {
-  
+
   	var iTipo     = $F('tipo');
     var iAno      = parseFloat($F('anofolha'), 10);
     var iMes      = parseFloat($F('mesfolha'), 10);
   	var iAnoFolha = $F('empenhosAnoFolha');
   	var iMesFolha = $F('empenhosMesFolha');
-  
+
   	if (iTipo != 2) {
   		return false;
   	}
-  
+
   	if($F('anofolha').length != 4 || $F('mesfolha').length < 1 || $F('mesfolha').length > 2) {
   		return false;
   	}
-  
+
   	if ( iAno == iAnoFolha && iMes == iMesFolha) {
-  
+
   		if (iMes < 10) {
   			$('mesfolha').value = '0'+iMes;
   		}
   		$('tabelasPrevidencia').style.display = '';
   		return false;
   	}
-  
+
   	js_divCarregando('Pesquisando previdências','msgBox');
   	location.href = 'rh4_gerarempenhosfolha001.php?iAno=' + $F('anofolha') + '&iMes=' + $F('mesfolha') + '&iTipo=' + iTipo;
   }
 
   function js_verifica(){
-    
+
     if ( $F('anofolha') == '' || $F('mesfolha') == '' ) {
     	alert('Ano / Mês não informado!');
     	return false;
     }
-    
+
     if ( $F('mesfolha') > 12 ) {
-    
+
       alert('Mês incorreto. Informe corretamente.');
       return false;
     }
-    
+
     if ($F('ponto') == 'r48') {
     	if (!$('semestre') || $F('semestre') == "0") {
     		alert('Complementar em aberto. Execute o fechamento');
     		return false;
     	}
     }
- 
+
     if ($F("db_complementar") == "1" && $F('ponto') == 'r14') {
-     
-      var iMesFolha = $F('mesfolha'); 
+
+      var iMesFolha = $F('mesfolha');
       var iAnoFolha = $F('anofolha');
-        
+
       var oFolhaPagamento = new DBViewFormularioFolha.ValidarFolhaPagamento();
       var lFolhaSalario   = oFolhaPagamento.verificarFolhaPagamentoAberta(oFolhaPagamento.TIPO_FOLHA_SALARIO, iAnoFolha, iMesFolha);
-        
+
       if (lFolhaSalario == true){
-       
+
         alert(_M(MENSAGEM + 'folha_salario_fechada'));
         return false;
       }
-    } 
- 
+    }
+
     js_mostraEmpenhosAGerar();
 
   }
@@ -443,7 +443,7 @@ function js_mostraEmpenhosAGerar() {
  if ($F('ponto') == 'r20' && $F('tipo') == 1) {
 	 sPrograma = 'pes4_gerarempenhosfolharescisao002.php';
  }
- js_OpenJanelaIframe('top.corpo',
+ js_OpenJanelaIframe('CurrentWindow.corpo',
 										 'db_iframe_gerarempenho',
 										 sPrograma+'?json='+js_getQueryTela(),
 										 'Gerar Empenhos - '+$F('mesfolha')+'/'+$F('anofolha'),
@@ -599,17 +599,17 @@ function js_montaGrid() {
 }
 
   /**
-   * Método responsável por limpar as DIV da tela. 
+   * Método responsável por limpar as DIV da tela.
    */
   function js_limparLayout() {
-    
+
     $('gera').disabled                    = false;
     $('tabelasPrevidencia').style.display = 'none';
     $('linhaRescisoes').style.display     = 'none';
     $('ComboContainer').style.display     = 'none';
     $('sDataInicial').value               = '';
     $('sDataFinal').value                 = '';
-    
+
   }
 
 js_montaGrid();

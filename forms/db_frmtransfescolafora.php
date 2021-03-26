@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: educação
@@ -73,7 +73,7 @@ $oClRotulo->label("nome");
                   <b>Etapa / Turma Atual:</b>
                 </td>
                 <td>
-                  <?php 
+                  <?php
                     db_input( 'turma',      40, @$turma,      true, 'text',   3 );
                     db_input( 'base',       40, @$base,       true, 'hidden', 3 );
                     db_input( 'calendario', 40, @$calendario, true, 'hidden', 3 );
@@ -172,7 +172,7 @@ $oClRotulo->label("nome");
                                                            " ed283_i_escola = $iEscola"
                                                           );
            $rsResultObs = $oDaoObsTransferencia->sql_record($sSqlObs);
-  
+
            if ($oDaoObsTransferencia->numrows>0) {
              $obs = db_utils::fieldsmemory($rsResultObs, 0)->ed283_t_mensagem;
            }
@@ -197,10 +197,10 @@ $oClRotulo->label("nome");
       </tr>
     </table>
   </fieldset>
-  <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>" 
-         type="submit" id="db_opcao" value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 
+  <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>"
+         type="submit" id="db_opcao" value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22
                                                 ?"Alterar" : "Excluir"))?>" <?=($db_botao == false ? "disabled"
-                                                : "") ?> onclick="return js_submit()" <?=isset($incluir) ? 
+                                                : "") ?> onclick="return js_submit()" <?=isset($incluir) ?
                                                 "style='visibility:hidden;'" : "" ?>>
   <input name='novaEscola' type='button' id='novaEscola' value='Nova Escola' onclick='js_incluirNovaEscola()' />
 </form>
@@ -210,7 +210,7 @@ function js_pesquisaed104_i_aluno(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_aluno',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aluno',
                         'func_alunotransffora.php?funcao_js=parent.js_getDadosMatricula|ed47_i_codigo|ed47_v_nome',
                         'Pesquisa de Alunos',true
                        );
@@ -218,7 +218,7 @@ function js_pesquisaed104_i_aluno(mostra) {
 
     if (document.form1.ed104_i_aluno.value != '') {
 
-      js_OpenJanelaIframe('top.corpo','db_iframe_aluno',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aluno',
                           'func_alunotransffora.php?pesquisa_chave='+document.form1.ed104_i_aluno.value+
                           '&funcao_js=parent.js_mostraaluno','Pesquisa',false
                          );
@@ -231,7 +231,7 @@ function js_pesquisaed104_i_aluno(mostra) {
 function js_getDadosMatricula(iAluno, sAlunoNome) {
 
     db_iframe_aluno.hide();
-    
+
     var oParam               = new Object();
 
     oParam.exec              = 'getDadosUltimaMatriculaAluno';
@@ -241,7 +241,7 @@ function js_getDadosMatricula(iAluno, sAlunoNome) {
     $('ed47_v_nome').value   = sAlunoNome;
 
     oParam.iEscola           = <?=$ed104_i_escolaorigem?>;
-    
+
     sUrl = 'edu4_escola.RPC.php';
     js_webajax(oParam, 'js_retornoGetDadosMatricula', sUrl);
 }
@@ -271,18 +271,18 @@ function js_retornoGetDadosMatricula(oRetorno) {
 }
 
 function js_pesquisaed104_i_escoladestino(mostra) {
- 
+
   if(mostra == true) {
-  
-    js_OpenJanelaIframe('top.corpo','db_iframe_escolaproc',
+
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_escolaproc',
                         'func_escolaproc.php?funcao_js=parent.js_mostraescolaproc1|ed82_i_codigo|ed82_c_nome',
                         'Pesquisa de Escolas de Procedência',true
                        );
   } else {
-    
+
     if(document.form1.ed104_i_escoladestino.value != ''){
-      
-      js_OpenJanelaIframe('top.corpo','db_iframe_escolaproc',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_escolaproc',
                           'func_escolaproc.php?pesquisa_chave='+$('ed104_i_escoladestino').value+
                           '&funcao_js=parent.js_mostraescolaproc|ed82_i_codigo|ed82_c_nome','Pesquisa',false
                          );
@@ -293,18 +293,18 @@ function js_pesquisaed104_i_escoladestino(mostra) {
 }
 
 function js_mostraescolaproc(ed82_i_codigo, ed82_c_nome){
-  
-  if (   ed82_i_codigo == undefined 
+
+  if (   ed82_i_codigo == undefined
       || ed82_i_codigo == ""
       || ed82_c_nome == undefined
       || ed82_c_nome == "") {
- 
+
     alert(_M('educacao.escola.db_frmtransfescolafora.escola_nao_encontrada_efetue_busca'));
     $('ed104_i_escoladestino').value = "";
     $('ed104_i_escoladestino').focus();
     return false;
   } else {
-  
+
     db_iframe_escolaproc.hide();
     $('ed104_i_escoladestino').value = ed82_i_codigo;
     $('ed82_c_nome').value           = ed82_c_nome;
@@ -312,15 +312,15 @@ function js_mostraescolaproc(ed82_i_codigo, ed82_c_nome){
 }
 
 function js_mostraescolaproc1(chave1, chave2) {
- 
+
   document.form1.ed104_i_escoladestino.value = chave1;
   document.form1.ed82_c_nome.value = chave2;
   db_iframe_escolaproc.hide();
 }
 
 function js_novaescola(){
-  
-  js_OpenJanelaIframe('top.corpo','db_iframe_novaescola','edu1_escolaprocnova001.php',
+
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_novaescola','edu1_escolaprocnova001.php',
                       'Nova Escola de Procedência',true
                      );
 }
@@ -393,9 +393,9 @@ function js_submit() {
     datatransf = document.form1.ed104_d_data_ano.value+"-"+
                  document.form1.ed104_d_data_mes.value+"-"+document.form1.ed104_d_data_dia.value;
     if (document.form1.concluida.value != "S") {
-   
+
       if (document.form1.ed52_d_inicio.value != "") {
-    
+
         dataini = document.form1.ed52_d_inicio.value.substr(6, 4)+"-"+
                   document.form1.ed52_d_inicio.value.substr(3, 2)+"-"+
                   document.form1.ed52_d_inicio.value.substr(0, 2);
@@ -403,7 +403,7 @@ function js_submit() {
                   document.form1.ed52_d_fim.value.substr(3, 2)+"-"+
                   document.form1.ed52_d_fim.value.substr(0, 2);
         check = js_validata(datatransf, dataini, datafim);
-        
+
         if (check == false) {
 
           data_ini = dataini.substr(8, 2)+"/"+dataini.substr(5, 2)+"/"+dataini.substr(0, 4);
@@ -415,7 +415,7 @@ function js_submit() {
         }
       }
     }
-    
+
     datatransf  = datatransf.substr(0,4)+''+datatransf.substr(5,2)+''+datatransf.substr(8,2);
     if (datamat != "") {
 
@@ -429,7 +429,7 @@ function js_submit() {
       }
     }
   }
-  
+
   document.form1.db_opcao.style.visibility = "hidden";
   return true;
 }
@@ -440,7 +440,7 @@ function js_submit() {
 function js_incluirNovaEscola() {
 
   js_OpenJanelaIframe(
-                       'top.corpo',
+                       'CurrentWindow.corpo',
                        'db_iframe_escolaprocedencia',
                        'edu1_escolaproc001.php?lOrigemTransferencia=true',
                        'Escola Procedência',

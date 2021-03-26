@@ -1041,7 +1041,7 @@ class cl_arquivo_auxiliar {
 //|30|//Cabecalho : Descrição que será utilizada no FieldSet
   var $top = null;
 //|30|//Tipo de montagem do formulário, 1=vertical ou 2=horizontal
-  var $localjan = "top.corpo";
+  var $localjan = "CurrentWindow.corpo";
 //|30|//Cabecalho : Descrição que será utilizada no FieldSet
   var $codigo = null;
 //|30|//Código    : Nome do campo para o código da âncora
@@ -1286,7 +1286,7 @@ class cl_arquivo_auxiliar {
     if($this->mostrar_botao_lancar == true)
       echo "  document.form1.".$this->nome_botao.".onclick = '';\n";
     echo "  if(chave){\n";
-    echo "    js_OpenJanelaIframe('".($this->localjan != "top.corpo"?$this->localjan:"top.corpo")."','".$this->nomeiframe."','".$this->func_arquivo."?funcao_js=parent.".$this->funcao_js."|".$this->codigo."|".$this->descr.$this->passar_query_string_para_func."'".($this->parametros != ""?$this->parametros:"").",'$this->nomejanela',true".($this->top!=null?",'".$this->top."'":"").");\n";
+    echo "    js_OpenJanelaIframe('".($this->localjan != "CurrentWindow.corpo"?$this->localjan:"CurrentWindow.corpo")."','".$this->nomeiframe."','".$this->func_arquivo."?funcao_js=parent.".$this->funcao_js."|".$this->codigo."|".$this->descr.$this->passar_query_string_para_func."'".($this->parametros != ""?$this->parametros:"").",'$this->nomejanela',true".($this->top!=null?",'".$this->CurrentWindow."'":"").");\n";
     echo "  }else{\n";
     if($this->completar_com_zeros_codigo == true){
 
@@ -1296,7 +1296,7 @@ class cl_arquivo_auxiliar {
       echo "    }\n";
     }
 
-    echo "    js_OpenJanelaIframe('".($this->localjan != "top.corpo"?$this->localjan:"top.corpo")."','".$this->nomeiframe."','".$this->func_arquivo."?pesquisa_chave='+document.form1.".$this->codigo.".value+'&funcao_js=parent.".$this->funcao_js_hide.$this->passar_query_string_para_func."'".($this->parametros != ""?$this->parametros:"").",'Pesquisa',false);\n";
+    echo "    js_OpenJanelaIframe('".($this->localjan != "CurrentWindow.corpo"?$this->localjan:"CurrentWindow.corpo")."','".$this->nomeiframe."','".$this->func_arquivo."?pesquisa_chave='+document.form1.".$this->codigo.".value+'&funcao_js=parent.".$this->funcao_js_hide.$this->passar_query_string_para_func."'".($this->parametros != ""?$this->parametros:"").",'Pesquisa',false);\n";
     echo "  }\n";
     echo "}\n";
 
@@ -2185,9 +2185,9 @@ class cl_formulario_rel_pes {
         function js_geraform_pesquisa".$tabela."(mostra,opcao){
           if(mostra==true){
             if(opcao == 1){
-              js_OpenJanelaIframe('top.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."funcao_js=parent.js_geraform_mostra".$tabela."1|".$dcampo1."|".$dcampo2."&instit=".(db_getsession("DB_instit"))."','Pesquisa',true);
+              js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."funcao_js=parent.js_geraform_mostra".$tabela."1|".$dcampo1."|".$dcampo2."&instit=".(db_getsession("DB_instit"))."','Pesquisa',true);
             }else{
-              js_OpenJanelaIframe('top.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."funcao_js=parent.js_geraform_mostra".$tabela."2|".$dcampo1."|".$dcampo2."&instit=".(db_getsession("DB_instit"))."','Pesquisa',true);
+              js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."funcao_js=parent.js_geraform_mostra".$tabela."2|".$dcampo1."|".$dcampo2."&instit=".(db_getsession("DB_instit"))."','Pesquisa',true);
             }
           }else{
     ";
@@ -2208,7 +2208,7 @@ class cl_formulario_rel_pes {
              if(opcao == 1){
                if(document.".$formula.".".$ndescri."){
                  if(document.".$formula.".".$ncampo1.".value != ''){
-                   js_OpenJanelaIframe('top.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."pesquisa_chave='+document.".$formula.".".$ncampo1.".value+'&funcao_js=parent.js_geraform_mostra".$tabela."&instit=".db_getsession("DB_instit")."','Pesquisa',false);
+                   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."pesquisa_chave='+document.".$formula.".".$ncampo1.".value+'&funcao_js=parent.js_geraform_mostra".$tabela."&instit=".db_getsession("DB_instit")."','Pesquisa',false);
                  }else{
                    document.".$formula.".".$ndescri.".value = '';
                  }

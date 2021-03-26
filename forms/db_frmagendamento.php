@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -74,15 +74,15 @@ $clrotulo->label("s165_formatocomprovanteagend");
                 <? db_ancora (@$Lsd02_i_codigo, "js_pesquisasd02_i_codigo(true);", $db_opcao_cotas); ?>
             </td>
             <td>
-              <? 
+              <?
                 db_input('sd02_i_codigo',10,$Isd02_i_codigo, true,'text',$db_opcao_cotas,
                          "onchange = 'js_pesquisasd02_i_codigo(false);'"
                         );
               ?>
             </td>
             <td colspan="2">
-              <? 
-                db_input('descrdepto',49,$Idescrdepto,true,'text',3,''); 
+              <?
+                db_input('descrdepto',49,$Idescrdepto,true,'text',3,'');
               ?>
               </td>
               </tr>
@@ -92,7 +92,7 @@ $clrotulo->label("s165_formatocomprovanteagend");
               <? db_ancora(@$Lsd04_i_cbo,"js_pesquisasd04_i_cbo(true,2);",$db_opcao); ?>
             </td>
             <td>
-              <? 
+              <?
               db_input('sd02_c_centralagenda',1,$Isd02_c_centralagenda,true,'hidden',$db_opcao,"");
               db_input('sd27_i_codigo',10,$Isd27_i_codigo,true,'hidden',$db_opcao,"");
               db_input('upssolicitante',10,@$upssolicitante,true,'hidden',$db_opcao,"");
@@ -113,11 +113,11 @@ $clrotulo->label("s165_formatocomprovanteagend");
               <? db_ancora(@$Lsd03_i_codigo,"js_pesquisasd03_i_codigo2(true);",$db_opcaoprof); ?>
             </td>
             <td valing="top" align="top">
-              <? 
+              <?
                 db_input('sd03_i_codigo',10,$Isd03_i_codigo,true,'text',$db_opcaoprof,
-                         " onchange='js_pesquisasd03_i_codigo2(false);' ". 
+                         " onchange='js_pesquisasd03_i_codigo2(false);' ".
                          "onFocus=\"nextfield='sd23_d_consulta'\""
-                        ); 
+                        );
               ?>
             </td>
             <td colspan="2">
@@ -135,14 +135,14 @@ $clrotulo->label("s165_formatocomprovanteagend");
             <td nowrap>
               <?
               db_input ( 's125_i_procedimento', 10, $Is125_i_procedimento, true, 'hidden', $db_opcao, "");
-              db_input ( 'sd63_c_procedimento', 10, $Isd63_c_procedimento, true, 'text', $db_opcao, 
-                         " onchange='js_pesquisas125_i_procedimento(false);' " 
+              db_input ( 'sd63_c_procedimento', 10, $Isd63_c_procedimento, true, 'text', $db_opcao,
+                         " onchange='js_pesquisas125_i_procedimento(false);' "
                        );
               ?>
             <td>
               <?
               db_input ( 'sd63_c_nome', 49, $Isd63_c_nome, true, 'text', 3, '' );
-              ?>       
+              ?>
             </td>
             </tr>
             <?} ?>
@@ -155,11 +155,11 @@ $clrotulo->label("s165_formatocomprovanteagend");
                                    true,
                                    'text',
                                    $db_opcao,
-                                   " onchange=\"js_diasem()\" onFocus=\"nextfield='done'\" readonly ", 
-                                   "", 
-                                   "", 
+                                   " onchange=\"js_diasem()\" onFocus=\"nextfield='done'\" readonly ",
+                                   "",
+                                   "",
                                    "parent.js_diasem(); "
-                                  ); 
+                                  );
               ?>
             </td>
             <td>
@@ -173,7 +173,7 @@ $clrotulo->label("s165_formatocomprovanteagend");
             <table style="width: 100%;">
               <tr>
               <td colspan="3">
-              <iframe id="frameagendados" name="frameagendados"  src=""   
+              <iframe id="frameagendados" name="frameagendados"  src=""
                       width="100%" height="250" scrolling="yes" frameborder="0">
               </iframe>
             </td>
@@ -184,11 +184,11 @@ $clrotulo->label("s165_formatocomprovanteagend");
         <td valign="top" height="100%">
           <fieldset>
             <legend>Calendário</legend>
-          <iframe id="framecalendario" name="framecalendario"  
+          <iframe id="framecalendario" name="framecalendario"
                   src="func_calendariosaude.php?nome_objeto_data=sd23_d_consulta"
                   width="100%" height="315" scrolling="no" frameborder="0">
             </iframe>
-          </fieldset>            
+          </fieldset>
           </td>
         </tr>
         <tr>
@@ -282,7 +282,7 @@ function js_retornoComprovante(oAjax) {
     iWidth  = screen.availWidth-35;
     sChave = 'sSessionNome='+oRetorno.sSessionNome;
 
-    js_OpenJanelaIframe ('top.corpo', 'db_iframe_visualizador', 'sau2_fichaatend002.php?'+sChave, 
+    js_OpenJanelaIframe ('CurrentWindow.corpo', 'db_iframe_visualizador', 'sau2_fichaatend002.php?'+sChave,
                          'Visualisador', true, iTop, iLeft, iWidth, iHeight
                         );
 
@@ -291,7 +291,7 @@ function js_retornoComprovante(oAjax) {
 }
 
 function js_agendados(){
-  
+
    obj = document.form1;
     obj.saldo.value='';
     obj.sd30_i_fichas.value='';
@@ -303,7 +303,7 @@ function js_agendados(){
   d =  sd23_d_consulta.substr(0,2);
   data = new Date(a,m,d);
   dia= data.getDay()+1;
-   
+
   if( sd23_d_consulta != "" && obj.sd02_c_centralagenda.value == "N" ){
      x  = 'sau4_agendamento002.php';
       x += '?sd27_i_codigo='+obj.sd27_i_codigo.value;
@@ -311,15 +311,15 @@ function js_agendados(){
         x += '&sd23_d_consulta='+sd23_d_consulta;
       x += '&sd02_i_codigo='+$('sd02_i_codigo').value;
       x += '&rh70_estrutural='+$('rh70_estrutural').value;
-      
+
     }else if( obj.sd02_c_centralagenda.value == "S" ){
      x  = 'sau4_agendamento004.php';
       x += '?sd27_i_codigo='+obj.sd27_i_codigo.value;
     x += '&sd27_i_rhcbo='+obj.rh70_sequencial.value;
       x += '&chave_diasemana='+dia;
-        x += '&sd23_d_consulta='+sd23_d_consulta;    
+        x += '&sd23_d_consulta='+sd23_d_consulta;
     }
-    
+
     //Verifica Procedimento
     if( $('sd63_c_procedimento') != undefined && $F('sd63_c_procedimento') == '' ){
       alert('Procedimento Obrigatório.');
@@ -333,7 +333,7 @@ function js_agendados(){
 function js_diasem(){
 
   obj = document.form1;
-  
+
   a =  obj.sd23_d_consulta_ano.value;
   m = (obj.sd23_d_consulta_mes.value)-1;
   d =  obj.sd23_d_consulta_dia.value;
@@ -348,10 +348,10 @@ function js_diasem(){
   semana[5]='Sexta-Feira';
   semana[6]='Sábado';
   document.form1.diasemana.value = semana[dia];
-  
-  
+
+
   js_agendados();
-  
+
 }
 
 function js_calend(){
@@ -367,7 +367,7 @@ function js_calend(){
     //alert('Pereenchimento obirgatório do procedimento.');
     $('sd63_c_procedimento').focus();
   }else{
-    
+
     x  = 'func_calendariosaude2.php';
     x += '?sd27_i_codigo='+obj.sd27_i_codigo.value;
     x += '&upssolicitante='+obj.upssolicitante.value;
@@ -381,30 +381,30 @@ function js_calend(){
     x += '&shutdown_function=parent.js_agendados()';
     iframe = document.getElementById('framecalendario');
     iframe.src = x;
-  }  
-  
+  }
+
 }
 
 
 function js_pesquisasd04_i_cbo(mostra,chama){
   if( $('s125_i_procedimento') != undefined ){
-    
+
       document.form1.sd63_c_procedimento.value = '';
       document.form1.sd63_c_nome.value = '';
       document.form1.s125_i_procedimento.value = '';
 
     }
     if ($('sd02_i_codigo').value == '') {
-        
+
       alert("Informe uma unidade prestadora antes de selecionar a especialidade.");
       return;
-       
+
     }
     if (<? echo $db_opcao_cotas;?> == 1) {
-        
+
         var sCamposcotas  = '&lApenasCotas=1&iUpssolicitante=<?=$upssolicitante?>'
         sCamposcotas     += '&iUpsprestadora='+$('sd02_i_codigo').value;
-        
+
     } else {
         var sCamposcotas = '';
     }
@@ -420,7 +420,7 @@ function js_pesquisasd04_i_cbo(mostra,chama){
                             );
       }
     }else{
-       if(document.form1.rh70_estrutural.value != ''){ 
+       if(document.form1.rh70_estrutural.value != ''){
           if( document.form1.sd02_c_centralagenda.value == "S" ){
            js_OpenJanelaIframe('','db_iframe_cboups','func_cboups.php?chave_rh70_estrutural='
                                    +document.form1.rh70_estrutural.value
@@ -430,7 +430,7 @@ function js_pesquisasd04_i_cbo(mostra,chama){
           }else{
            js_OpenJanelaIframe('','db_iframe_cboups','func_cboups.php?chave_rh70_estrutural='
                                    +document.form1.rh70_estrutural.value
-                                   +'&funcao_js=parent.js_mostrarhcbo1|rh70_sequencial|rh70_estrutural|' 
+                                   +'&funcao_js=parent.js_mostrarhcbo1|rh70_sequencial|rh70_estrutural|'
                                    +'rh70_descr&chave_sd04_i_unidade='+document.form1.sd02_i_codigo.value+sCamposcotas,
                                    'Pesquisa',false
                               );
@@ -448,19 +448,19 @@ function js_mostrarhcbo1(chave1,chave2,chave3){
   document.form1.rh70_sequencial.value = chave1;
   document.form1.rh70_estrutural.value = chave2;
   document.form1.rh70_descr.value = chave3;
-  
 
-  
+
+
    js_OpenJanelaIframe('','db_iframe_cboups','func_cboups2.php?chave_sd04_i_medico=0&funcao_js=parent.js_mostramedicos1|sd03_i_codigo|z01_nome|sd27_i_codigo&chave_sd04_i_unidade='+document.form1.sd02_i_codigo.value+'&chave_rh70_estrutural='+document.form1.rh70_estrutural.value,'Pesquisa',true);
 
   document.form1.sd03_i_codigo.value = '';
   document.form1.z01_nome.value = '';
-  
+
 
   if( document.form1.sd02_c_centralagenda.value == "S" ){
     js_calend();
   }
-  
+
   iframe = document.getElementById('frameagendados');
   iframe.src = '';
   document.getElementById('framecalendario').src = '';
@@ -476,15 +476,15 @@ function js_mostramedicos1(chave1,chave2,chave3){
   document.form1.diasemana.value = '';
 
   db_iframe_cboups.hide();
-  
+
   iframe = document.getElementById('frameagendados');
   iframe.src = '';
-  
+
   document.getElementById('framecalendario').src = '';
   js_calend();
-  
+
   js_getProcedimentoPadraoProfissional();
- 
+
 
 }
 
@@ -499,8 +499,8 @@ function js_mostrarhcbo11(chave1, chave2, chave3, chave4) {
 
   if(chave2 == ''){
 
-    document.form1.rh70_estrutural.focus(); 
-    document.form1.rh70_estrutural.value = ''; 
+    document.form1.rh70_estrutural.focus();
+    document.form1.rh70_estrutural.value = '';
 
   } else {
     js_getProcedimentoPadraoProfissional();
@@ -510,7 +510,7 @@ function js_mostrarhcbo11(chave1, chave2, chave3, chave4) {
 }
 
 /*
- * BUSCAR UPS 
+ * BUSCAR UPS
  */
 function js_pesquisasd02_i_codigo(mostra){
 
@@ -535,20 +535,20 @@ function js_pesquisasd02_i_codigo(mostra){
 
 /*
  * MOSTRAR UPS
- */ 
+ */
 function js_mostraunidade(chave1, chave2) {
-  
+
   $('sd02_i_codigo').value = chave1;
   $('descrdepto').value    = chave2;
   db_iframe_unidades.hide();
   js_limpar();
   $('rh70_estrutural').focus();
-  
+
 }
 
 /*
  * MOSTRAR UPS
- */ 
+ */
 function js_mostraunidade_2(chave1, status) {
 
   if (status == false) {
@@ -565,11 +565,11 @@ function js_limpar() {
 
   $('rh70_estrutural').value = '';
   $('rh70_sequencial').value = '';
-  $('rh70_descr').value = ''; 
+  $('rh70_descr').value = '';
   $('sd03_i_codigo').value = '';
   $('z01_nome').value = '';
   $('sd23_d_consulta').value = '';
-  $('diasemana').value = '';  
+  $('diasemana').value = '';
   $('frameagendados').src = '';
   $('framecalendario').src = '';
 
@@ -578,10 +578,10 @@ function js_limpar() {
 function js_pesquisasd03_i_codigo2(mostra,depara){
 
   if ($('sd02_i_codigo').value == '') {
-          
+
     alert("Informe uma unidade prestadora antes de selecionar a especialidade.");
       return;
-           
+
   }
   if(mostra==true){
       js_OpenJanelaIframe('','db_iframe_medicos','func_medicos.php?prof_ativo=1&funcao_js=parent.js_mostramedicos_21|z01_nome|sd03_i_codigo|sd27_i_codigo&chave_sd06_i_unidade='+document.form1.sd02_i_codigo.value,'Pesquisa',true);
@@ -605,7 +605,7 @@ function js_mostramedicos_21(chave1,chave2,chave3) {
     document.form1.sd27_i_codigo.value = chave3;
 
     db_iframe_medicos.hide();
-    
+
     js_OpenJanelaIframe('','db_iframe_especmedico','func_especmedico.php?iFiltroHorario=1&funcao_js=parent.js_mostrarhcbo11|sd27_i_codigo|rh70_estrutural|rh70_descr|sd27_i_rhcbo&chave_sd04_i_unidade='+document.form1.sd02_i_codigo.value+'&chave_sd04_i_medico='+document.form1.sd03_i_codigo.value,'Pesquisa',true);
 
     document.getElementById('sd23_d_consulta').value = '';
@@ -617,9 +617,9 @@ function js_mostramedicos_21(chave1,chave2,chave3) {
     }
     document.form1.rh70_estrutural.value = '';
     document.form1.rh70_descr.value = '';
-      document.form1.rh70_sequencial.value = '';     
-  
-    
+      document.form1.rh70_sequencial.value = '';
+
+
     iframe = document.getElementById('frameagendados');
     iframe.src = '';
     document.getElementById('framecalendario').src = '';
@@ -632,16 +632,16 @@ function js_mostramedicos_21(chave1,chave2,chave3) {
 /**
  * Ajax
  */
-function js_ajax( objParam, strCarregando, jsRetorno, strURL ){ 
+function js_ajax( objParam, strCarregando, jsRetorno, strURL ){
 
   if (strURL == undefined) {
     strURL = 'sau1_sau_individualprocedRPC.php';
   }
 
   var objAjax = new Ajax.Request(
-                         strURL, 
+                         strURL,
                          {
-                          method    : 'post', 
+                          method    : 'post',
                           parameters: 'json='+Object.toJSON(objParam),
                           onCreate  : function(){
                                   js_divCarregando( strCarregando, 'msgbox');
@@ -680,9 +680,9 @@ function js_pesquisas125_i_procedimento(mostra){
   strParam += '&campoFoco=sd63_c_procedimento&lFiltrarPadroes=true&lBotaoMostrarTodos=true';
   strParam += '&lControleOutrasRotinas=true';
   strParam += '&iEspecMed='+$F('sd27_i_codigo');
-     
+
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_sau_proccbo',strParam,'Pesquisa Procedimentos',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sau_proccbo',strParam,'Pesquisa Procedimentos',true);
   }else{
     if($F('sd63_c_procedimento') != ''){
 
@@ -690,11 +690,11 @@ function js_pesquisas125_i_procedimento(mostra){
       strParam += '&lAutomatico=true';
       js_OpenJanelaIframe('','db_iframe_sau_proccbo',strParam,'Pesquisa Procedimentos',false);
 
-    }else{     
-      $('sd63_c_nome').value = ''; 
+    }else{
+      $('sd63_c_nome').value = '';
     }
   }
-  $('sd63_c_procedimento').focus(); 
+  $('sd63_c_procedimento').focus();
 }
 function js_mostraprocedimentos1(chave1,chave2,chave3){
   if(chave1==''){
@@ -710,12 +710,12 @@ function js_mostraprocedimentos1(chave1,chave2,chave3){
 function js_getProcedimentoPadraoProfissional() {
 
   <?
-  if(!$booProced) { 
+  if(!$booProced) {
    echo 'return false;';
   }
   ?>
 
-  if ($F('rh70_sequencial') == '' || $F('rh70_estrutural') == '' || $F('sd03_i_codigo') == '' 
+  if ($F('rh70_sequencial') == '' || $F('rh70_estrutural') == '' || $F('sd03_i_codigo') == ''
       || $F('sd27_i_codigo') == '') {
     return false;
   }
@@ -742,7 +742,7 @@ function js_retornoGetProcedimentosPadraoProfissional(oRetorno) {
       js_calend();
 
     }
-    
+
   } // else { Não possui procedimento vinculado
 
 }

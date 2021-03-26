@@ -11,7 +11,7 @@ $cltetoremuneratorio->rotulo->label();
     <td nowrap title="Sequencial">
       <strong>Sequencial: </strong>
     </td>
-    <td> 
+    <td>
 <?
 db_input('te01_sequencial',10,$Ite01_sequencial,true,'text',3,"")
 ?>
@@ -31,7 +31,7 @@ db_input('te01_sequencial',10,$Ite01_sequencial,true,'text',3,"")
     <td nowrap title="Valor">
         <strong>Valor: </strong>
     </td>
-    <td> 
+    <td>
 <?
 db_input('te01_valor',10,$Ite01_valor,true,'text',$db_opcao,"")
 ?>
@@ -41,7 +41,7 @@ db_input('te01_valor',10,$Ite01_valor,true,'text',$db_opcao,"")
     <td nowrap title="Tipo cadastro">
         <strong>Tipo cadastro: </strong>
     </td>
-    <td> 
+    <td>
 <?
 //db_input('te01_tipocadastro',10,$Ite01_tipocadastro,true,'text',$db_opcao,"")
 //if($bDisable == true){
@@ -61,7 +61,7 @@ db_select("te01_tipocadastro",$x,true,$db_opcao)
     <td nowrap title="Data inicial">
         <strong>Data inicial: </strong>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('te01_dtinicial',@$te01_dtinicial_dia,@$te01_dtinicial_mes,@$te01_dtinicial_ano,false,'text',$db_opcao,"onchange='validaIntervaloDatas();'","","","parent.validaIntervaloDatas();")
 ?>
@@ -71,7 +71,7 @@ db_inputdata('te01_dtinicial',@$te01_dtinicial_dia,@$te01_dtinicial_mes,@$te01_d
     <td nowrap title="Data final">
         <strong>Data final: </strong>
     </td>
-    <td> 
+    <td>
 <?
 if($db_opcao == 1) {
     db_inputdata('te01_dtfinal', @$te01_dtfinal_dia, @$te01_dtfinal_mes, @$te01_dtfinal_ano, true, 'text', 3, "onchange='validaIntervaloDatas();'", "", "", "parent.validaIntervaloDatas();");
@@ -128,7 +128,7 @@ if($db_opcao == 1) {
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tetoremuneratorio','func_tetoremuneratorio.php?funcao_js=parent.js_preenchepesquisa|te01_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tetoremuneratorio','func_tetoremuneratorio.php?funcao_js=parent.js_preenchepesquisa|te01_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tetoremuneratorio.hide();

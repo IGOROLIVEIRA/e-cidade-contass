@@ -78,7 +78,7 @@ DBMask.prototype.insereMascaras = function(oMaskBase) {
 
   var CurrentWindow = top;
 
-  if (top.ECIDADE_DESKTOP) {
+  if (CurrentWindow.ECIDADE_DESKTOP) {
     CurrentWindow = parent.CurrentWindow;
   }
 

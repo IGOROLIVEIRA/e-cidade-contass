@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -82,10 +82,10 @@ $db_botao=true;
 	  if(!isset($passou)){
           echo "<script>
                   cont=0;
-                  contafor = top.corpo.arr_dados.length;
+                  contafor = CurrentWindow.corpo.arr_dados.length;
                   for(i=0;i<contafor;i++){
-                    if(top.corpo.arr_dados[i]=='item_".$pc11_numero."_".$pc11_codigo."'){
-                      cont++;                      
+                    if(CurrentWindow.corpo.arr_dados[i]=='item_".$pc11_numero."_".$pc11_codigo."'){
+                      cont++;
                     }
                   }";
 		  if($pc11_liberado=='f'){
@@ -93,8 +93,8 @@ $db_botao=true;
 		  }
 		  echo "
                   if(cont==0){
-		    top.corpo.arr_dados.push('item_".$pc11_numero."_".$pc11_codigo."');
-		    top.corpo.document.form1.valores.value = top.corpo.arr_dados.valueOf();
+		    CurrentWindow.corpo.arr_dados.push('item_".$pc11_numero."_".$pc11_codigo."');
+		    CurrentWindow.corpo.document.form1.valores.value = CurrentWindow.corpo.arr_dados.valueOf();
                   }
                 </script>";
 	  }
@@ -105,7 +105,7 @@ $db_botao=true;
 	$pc10_data_dia = $arr_data[0];
 	$pc10_data_mes = $arr_data[1];
 	$pc10_data_ano = $arr_data[2];
-                
+
       }
       if($clsolicitem->numrows>0){
 	db_fieldsmemory($sql_solicita,0,true);
@@ -113,7 +113,7 @@ $db_botao=true;
 	$desabilita = true;
       }
 
-      if(isset($codigo) && trim($codigo)!=""){	
+      if(isset($codigo) && trim($codigo)!=""){
         $pc10_numero = $codigo;
       }
       db_select('pc10_numero',$arr_numero,true,1,"onchange='js_mudasolicita();'");
@@ -137,7 +137,7 @@ $db_botao=true;
   </tr>
   <tr>
     <td align="right" nowrap title="<?=@$Tpc10_data?>">
-      <strong>Data: </strong>      
+      <strong>Data: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -148,7 +148,7 @@ $db_botao=true;
     ?>
     </td>
     <td align="right" nowrap title="<?=@$Tdescrdepto?>">
-      <strong>Departamento: </strong>      
+      <strong>Departamento: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -158,7 +158,7 @@ $db_botao=true;
   </tr>
   <tr>
     <td align="right" nowrap title="<?=@$Tpc10_resumo?>">
-      <strong>Resumo: </strong>      
+      <strong>Resumo: </strong>
     </td>
     <td colspan="3" nowrap>
     <?
@@ -173,32 +173,32 @@ $db_botao=true;
 </html>
 <script>
 function js_mudasolicita(){
-  for(i=0;i<top.corpo.iframe_solicitem.document.form1.length;i++){
-    if(top.corpo.iframe_solicitem.document.form1.elements[i].type == 'checkbox'){
-      if(top.corpo.iframe_solicitem.document.form1.elements[i].checked == true){
+  for(i=0;i<CurrentWindow.corpo.iframe_solicitem.document.form1.length;i++){
+    if(CurrentWindow.corpo.iframe_solicitem.document.form1.elements[i].type == 'checkbox'){
+      if(CurrentWindow.corpo.iframe_solicitem.document.form1.elements[i].checked == true){
         cont=0;
-        for(ii=0;ii<top.corpo.arr_dados.length;ii++){
-          if(top.corpo.arr_dados[ii]==top.corpo.iframe_solicitem.document.form1.elements[i].name){
+        for(ii=0;ii<CurrentWindow.corpo.arr_dados.length;ii++){
+          if(CurrentWindow.corpo.arr_dados[ii]==CurrentWindow.corpo.iframe_solicitem.document.form1.elements[i].name){
             cont++;
-          }    
+          }
         }
         if(cont==0){
-	  top.corpo.arr_dados.push(top.corpo.iframe_solicitem.document.form1.elements[i].name);
+	  CurrentWindow.corpo.arr_dados.push(CurrentWindow.corpo.iframe_solicitem.document.form1.elements[i].name);
         }
-      }else if(top.corpo.iframe_solicitem.document.form1.elements[i].checked == false){
-        for(ii=0;ii<top.corpo.arr_dados.length;ii++){
-          if(top.corpo.arr_dados[ii]==top.corpo.iframe_solicitem.document.form1.elements[i].name){
-	    top.corpo.arr_dados.splice(ii,1);
+      }else if(CurrentWindow.corpo.iframe_solicitem.document.form1.elements[i].checked == false){
+        for(ii=0;ii<CurrentWindow.corpo.arr_dados.length;ii++){
+          if(CurrentWindow.corpo.arr_dados[ii]==CurrentWindow.corpo.iframe_solicitem.document.form1.elements[i].name){
+	    CurrentWindow.corpo.arr_dados.splice(ii,1);
           }
         }
       }
     }
-  }  
-  top.corpo.document.form1.valores.value = top.corpo.arr_dados.valueOf();  
-  top.corpo.iframe_solicita.location.href = 'com1_geralibsolicita.php?passou=true&pc10_numero='+document.form1.pc10_numero.value;  
+  }
+  CurrentWindow.corpo.document.form1.valores.value = CurrentWindow.corpo.arr_dados.valueOf();
+  CurrentWindow.corpo.iframe_solicita.location.href = 'com1_geralibsolicita.php?passou=true&pc10_numero='+document.form1.pc10_numero.value;
 }
 if(document.form1.pc10_numero.value!=""){
-  top.corpo.iframe_solicitem.location.href= 'com1_geralibsolicitem.php?solicita='+document.form1.pc10_numero.value;
+  CurrentWindow.corpo.iframe_solicitem.location.href= 'com1_geralibsolicitem.php?solicita='+document.form1.pc10_numero.value;
 }
 <?
   if($desabilita==true){
@@ -206,18 +206,18 @@ if(document.form1.pc10_numero.value!=""){
     numele = parent.document.form1.length;
     cont = 0;
     for(i=0;i<numele;i++){
-      if(top.corpo.document.form1.elements[i].type=='submit' || top.corpo.document.form1.elements[i].type=='button'){
-        top.corpo.document.form1.elements[i].disabled=true;
+      if(CurrentWindow.corpo.document.form1.elements[i].type=='submit' || CurrentWindow.corpo.document.form1.elements[i].type=='button'){
+        CurrentWindow.corpo.document.form1.elements[i].disabled=true;
       }
     }
     ";
   }else{
   echo "
-    numele = top.corpo.document.form1.length;
+    numele = CurrentWindow.corpo.document.form1.length;
     cont = 0;
     for(i=0;i<numele;i++){
-      if(top.corpo.document.form1.elements[i].type=='submit' || top.corpo.document.form1.elements[i].type=='button'){
-        top.corpo.document.form1.elements[i].disabled=false;
+      if(CurrentWindow.corpo.document.form1.elements[i].type=='submit' || CurrentWindow.corpo.document.form1.elements[i].type=='button'){
+        CurrentWindow.corpo.document.form1.elements[i].disabled=false;
       }
     }
     ";

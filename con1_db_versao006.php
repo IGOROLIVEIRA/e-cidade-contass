@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -47,27 +47,27 @@ if(isset($excluir)){
 
   if($cldb_versaocpd->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $cldb_versaocpd->erro_msg; 
+  }
+  $erro_msg = $cldb_versaocpd->erro_msg;
   $cldb_versaousu->db32_codusu=$db30_codver;
   $cldb_versaousu->excluir($db30_codver);
 
   if($cldb_versaousu->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $cldb_versaousu->erro_msg; 
+  }
+  $erro_msg = $cldb_versaousu->erro_msg;
   $cldb_versao->excluir($db30_codver);
   if($cldb_versao->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $cldb_versao->erro_msg; 
+  }
+  $erro_msg = $cldb_versao->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $cldb_versao->sql_record($cldb_versao->sql_query($chavepesquisa)); 
+   $result = $cldb_versao->sql_record($cldb_versao->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -81,8 +81,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmdb_versao.php");
@@ -118,9 +118,9 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.db_versaocpd.disabled=false;
-         top.corpo.iframe_db_versaocpd.location.href='con1_db_versaocpd001.php?db_opcaoal=33&db33_codcpd=".@$db30_codver."';
+         CurrentWindow.corpo.iframe_db_versaocpd.location.href='con1_db_versaocpd001.php?db_opcaoal=33&db33_codcpd=".@$db30_codver."';
          parent.document.formaba.db_versaousu.disabled=false;
-         top.corpo.iframe_db_versaousu.location.href='con1_db_versaousu001.php?db_opcaoal=33&db32_codusu=".@$db30_codver."';
+         CurrentWindow.corpo.iframe_db_versaousu.location.href='con1_db_versaousu001.php?db_opcaoal=33&db32_codusu=".@$db30_codver."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('db_versaocpd');";

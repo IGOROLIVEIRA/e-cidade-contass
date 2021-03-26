@@ -112,7 +112,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3);
         $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null,"pc21_codorc","","pc21_codorc=$pc21_codorc"));
         if($clpcorcamforne->numrows>0){
           echo "<input name='gera'    type='submit' id='gera'    value='Gerar relatório' onclick='js_gerarel(false);' ".($db_botao==false?"disabled":"").">&nbsp;";
-          echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='top.corpo.document.location.href=\"com1_orcamlancval001.php?pc20_codorc=$pc21_codorc&sol=$solic\"' ".($db_botao==false?"disabled":"").">";
+          echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='CurrentWindow.corpo.document.location.href=\"com1_orcamlancval001.php?pc20_codorc=$pc21_codorc&sol=$solic\"' ".($db_botao==false?"disabled":"").">";
         }
       }
      ?>
@@ -201,13 +201,13 @@ function js_pesquisapc21_numcgm(mostra) {
   if (mostra == true) {
 
     var sUrl = 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome';
-    js_OpenJanelaIframe('top.corpo.iframe_fornec', 'func_nome', sUrl, 'Pesquisa', true, 0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_fornec', 'func_nome', sUrl, 'Pesquisa', true, 0);
   } else {
 
     if ($('pc21_numcgm').value != '') {
 
       var sUrl = 'func_nome.php?pesquisa_chave='+$('pc21_numcgm').value+'&funcao_js=parent.js_mostracgm';
-      js_OpenJanelaIframe('top.corpo.iframe_fornec', 'func_nome', sUrl, 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_fornec', 'func_nome', sUrl, 'Pesquisa', false);
     } else {
       $('z01_nome').value = '';
     }
@@ -226,7 +226,7 @@ function js_mostracgm(erro, chave) {
 }
 
 function js_mostracgm1(chave1, chave2) {
-  
+
   $('pc21_numcgm').value = chave1;
   $('z01_nome').value    = chave2;
   func_nome.hide();

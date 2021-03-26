@@ -68,7 +68,7 @@ if(isset($alterar)){
             "<script>
             parent.document.formaba.projecaoatuarial20.disabled=false;
             parent.mo_camada('projecaoatuarial20');
-            top.corpo.iframe_projecaoatuarial20.location.href='sic1_projecaoatuarial20001.php?codigo=".$si168_sequencial."&tipoplano=".$si168_tipoplano."&exercicio=".$si168_exercicio."';
+            CurrentWindow.corpo.iframe_projecaoatuarial20.location.href='sic1_projecaoatuarial20001.php?codigo=".$si168_sequencial."&tipoplano=".$si168_tipoplano."&exercicio=".$si168_exercicio."';
            </script>";
     }
 }

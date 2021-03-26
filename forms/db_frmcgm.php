@@ -1,34 +1,34 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
   $clrotulo = new rotulocampo;
   $clrotulo->label("DBtxt29");
-  $clrotulo->label("DBtxt30");  
-  $clrotulo->label("DBtxt31");  
+  $clrotulo->label("DBtxt30");
+  $clrotulo->label("DBtxt31");
   $clrotulo->label("z04_rhcbo");
 ?>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
@@ -36,9 +36,9 @@
 function js_importaCadastroCidadao(){
 
 	js_OpenJanelaIframe('','db_iframe_cidadao','func_cidadaovinculos.php?funcao_js=parent.js_mostracidadao1|0|4&liberado=true&ativo=true&vinculocgm=false','Pesquisa',true);
-	
+
 }
-	
+
 function js_mostracidadao1(chave1,chave2){
 		//alert(chave1,chave2);
 	  document.form1.ov02_sequencial.value 	= chave1;
@@ -117,27 +117,27 @@ if($db_opcao == 2 || $db_opcao == 3){
 $sZero               = '';
 $lPermissaoCpfZerado = '';
 if( (isset($cnpj) && trim($cnpj)!="") || (isset($cpf) && trim($cpf)!="") ){
-	
+
   if(isset($cnpj) && $cnpj != ""){
     $cgccpf              = $cnpj;
     $sZero               = "00000000000000";
     $lPermissaoCpfZerado = db_permissaomenu(db_getsession("DB_anousu"),604,4459);
-    
+
   }
   if (isset($cpf) && $cpf != "") {
-    
+
     $cgccpf = $cpf;
     $sZero               = "00000000000";
     $lPermissaoCpfZerado = db_permissaomenu(db_getsession("DB_anousu"),604,3775);
-    
+
   }
- 
+
   $cgccpf = str_replace(".","",$cgccpf);
   $cgccpf = str_replace("/","",$cgccpf);
-  $cgccpf = str_replace("-","",$cgccpf);  
+  $cgccpf = str_replace("-","",$cgccpf);
   //$result = $clcgm->sql_record($clcgm->sql_query("","cgm.z01_cgccpf,cgm.z01_numcgm",""," z01_cgccpf = '$cgccpf' and z01_cgccpf <> '' and z01_numcgm <> $z01_numcgm "));
     //if ($lPermissaoCpfZerado == "false") {
-      
+
       if (trim($cgccpf) == "{$sZero}") {
         echo "<script>";
 	    echo "   alert('Você não tem permissão para incluir CPF/CNPJ zerado, contate o administrador para obter esta permissão!');";
@@ -145,7 +145,7 @@ if( (isset($cnpj) && trim($cnpj)!="") || (isset($cpf) && trim($cpf)!="") ){
 	    db_redireciona($HTTP_REFERER);
       }
     //}
-  $result = $clcgm->sql_record($clcgm->sql_query("","z01_cgccpf,cgm.z01_numcgm","","z01_cgccpf = '$cgccpf' and z01_cgccpf <> '{$sZero}'")); 
+  $result = $clcgm->sql_record($clcgm->sql_query("","z01_cgccpf,cgm.z01_numcgm","","z01_cgccpf = '$cgccpf' and z01_cgccpf <> '{$sZero}'"));
   //echo "<script>alert('aquiiiiiiiiiii');</script>";
   if(!isset($testanome) || $vldCGM ==true){
     if($clcgm->numrows > 0){
@@ -168,15 +168,15 @@ exit;
 ?>
 <form name="form1" method="post" action="" onSubmit="return js_verifica()">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr align="left" valign="top"> 
+    <tr align="left" valign="top">
       <td>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr> 
+          <tr>
 						<td colspan="2" height="30" align="center"><br>
 							<strong>Cadastro Geral do Município</strong><br><br>
 						</td>
           </tr>
-          <tr align="center"> 
+          <tr align="center">
 						<td width="40%" align="right" title="<?=$TDBtxt30?>">
 							<strong><?=$LDBtxt30?></strong>
 						</td>
@@ -190,7 +190,7 @@ exit;
 						</td>
 						<td align="left">
 							<input style="text-align:right" type="text" value="" name="cnpj" size="18" maxlength="14" onBlur="js_verificaCGCCPF(this)" onKeyDown="return js_controla_tecla_enter(this,event);" >
-							
+
 						</td>
           </tr>
 					<tr align="center">
@@ -207,15 +207,15 @@ exit;
 					<tr>
 						<td align="center" colspan="2" height="30">
 							<input type="button" name="enviar" value="Confirma" onClick="js_confirma()">
-							
+
 							<!-- Aqui tem que validar a permissão de menu -->
-							<? 
+							<?
 								$lPermissaoImportaCidadao = db_permissaomenu(db_getsession("DB_anousu"),604,7900);
 								if($lPermissaoImportaCidadao){
 								?>
 									<input type="button" name="enviar" value="Importar Cadastro do Cidadão" onClick="js_importaCadastroCidadao();">
-																
-								<? 
+
+								<?
 								db_input('ov02_sequencial',10,'',1,'hidden',1);
 								}
 							?>
@@ -233,7 +233,7 @@ onLoad = document.form1.cpf.focus();
 if(isset($mostradadoscgm)){
 echo "
       <script>
-        js_OpenJanelaIframe('top.corpo','db_janela_Cgm','prot3_conscgm002.php?fechar=top.corpo.db_janela_Cgm&numcgm=$z01_numcgm&executalocation=prot1_cadcgm001.php','Consulta CGM - $z01_numcgm',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_janela_Cgm','prot3_conscgm002.php?fechar=CurrentWindow.corpo.db_janela_Cgm&numcgm=$z01_numcgm&executalocation=prot1_cadcgm001.php','Consulta CGM - $z01_numcgm',true);
         db_janela_Cgm.liberarJanBTFechar(false);
         db_janela_Cgm.liberarJanBTMinimizar(false);
       </script>

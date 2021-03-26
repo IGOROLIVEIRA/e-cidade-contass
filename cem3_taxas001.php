@@ -68,7 +68,7 @@ if(isset($chavepesquisa)){
        }else{
             echo "<script>";
             echo " parent.document.formaba.a4.disabled=false; ";
-            echo " top.corpo.iframe_a4.location.href='cai3_gerfinanc002.php?numpre=6765503&tipo=".pg_result($result,0,"k00_tipo")."&emrec=".pg_result($result,0,"k00_emrec")."&agnum=".pg_result($result,0,"k00_agnum")."&agpar=".pg_result($result,0,"k00_agpar")."&certidao=&k03_tipo=&k00_tipo=".pg_result($result,0,"k00_tipo")."&db_datausu=".date('Y-m-d',db_getsession("DB_datausu"))."'";
+            echo " CurrentWindow.corpo.iframe_a4.location.href='cai3_gerfinanc002.php?numpre=6765503&tipo=".pg_result($result,0,"k00_tipo")."&emrec=".pg_result($result,0,"k00_emrec")."&agnum=".pg_result($result,0,"k00_agnum")."&agpar=".pg_result($result,0,"k00_agpar")."&certidao=&k03_tipo=&k00_tipo=".pg_result($result,0,"k00_tipo")."&db_datausu=".date('Y-m-d',db_getsession("DB_datausu"))."'";
             echo "</script>";
        }
    }else{

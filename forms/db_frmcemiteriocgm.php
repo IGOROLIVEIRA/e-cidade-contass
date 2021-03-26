@@ -67,11 +67,11 @@ $clrotulo->label("z01_nome");
 <script type="text/javascript">
 function js_pesquisacm15_i_cemiterio(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cemiterio','func_cemiterio.php?funcao_js=parent.js_mostracemiterio1|cm14_i_codigo|cm14_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cemiterio','func_cemiterio.php?funcao_js=parent.js_mostracemiterio1|cm14_i_codigo|cm14_i_codigo','Pesquisa',true);
   }else{
 
      if(document.form1.cm15_i_cemiterio.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cemiterio','func_cemiterio.php?pesquisa_chave='+document.form1.cm15_i_cemiterio.value+'&funcao_js=parent.js_mostracemiterio','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cemiterio','func_cemiterio.php?pesquisa_chave='+document.form1.cm15_i_cemiterio.value+'&funcao_js=parent.js_mostracemiterio','Pesquisa',false);
      }else{
        document.form1.cm14_i_codigo.value = '';
      }
@@ -92,10 +92,10 @@ function js_mostracemiterio1(chave1,chave2){
 }
 function js_pesquisacm15_i_cgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.cm15_i_cgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.cm15_i_cgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.cm15_i_cgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
@@ -114,7 +114,7 @@ function js_mostracgm1(chave1,chave2){
   db_iframe_cgm.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cemiteriocgm','func_cemiteriocgm.php?funcao_js=parent.js_preenchepesquisa|cm15_i_cemiterio','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cemiteriocgm','func_cemiteriocgm.php?funcao_js=parent.js_preenchepesquisa|cm15_i_cemiterio','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_cemiteriocgm.hide();

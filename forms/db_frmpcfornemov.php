@@ -161,10 +161,10 @@ if(isset($db_opcaoal)){
   }
   function js_pesquisapc62_numcgm(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo.iframe_pcfornemov','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true,'0','1','775','390');
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornemov','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true,'0','1','775','390');
     }else{
       if(document.form1.pc62_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornemov','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.pc62_numcgm.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornemov','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.pc62_numcgm.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
       }else{
         document.form1.pc60_dtlanc.value = '';
       }
@@ -184,10 +184,10 @@ if(isset($db_opcaoal)){
   }
   function js_pesquisapc62_id_usuario(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo.iframe_pcfornemov','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornemov','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
     }else{
       if(document.form1.pc62_id_usuario.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornemov','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.pc62_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornemov','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.pc62_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
       }else{
         document.form1.nome.value = '';
       }

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -42,7 +42,7 @@ $clrotulo->label('rh49_mesusu');
 ?>
 <html>
 <head>
-<?php 
+<?php
 	db_app::load("scripts.js, prototype.js, strings.js, estilos.css");
 ?>
 </head>
@@ -61,9 +61,9 @@ $clrotulo->label('rh49_mesusu');
 		        $rh49_anousu = db_anofolha();
 			      db_input('rh49_anousu',4,$Irh49_anousu,true,'text',3,"");
 		      ?>
-		      
+
 		      &nbsp;/&nbsp;
-		      
+
 		      <?
 		        $rh49_mesusu = db_mesfolha();
 		      	db_input('rh49_mesusu',2,$Irh49_mesusu,true,'text',3,"");
@@ -77,13 +77,13 @@ $clrotulo->label('rh49_mesusu');
 		    <td>
 		      <?
 		      	$iAnoAfastamento = db_anofolha();
-		       
+
 		       	db_input('iAnoAfastamento',4, 1,true,'text',2,'');
 		      ?>
 		      &nbsp;/&nbsp;
 		      <?
 						$iMesAfastamento = db_mesfolha();
-		       	
+
 						db_input('iMesAfastamento',2, 1,true,'text',2,'');
 		      ?>
 		    </td>
@@ -112,10 +112,10 @@ $clrotulo->label('rh49_mesusu');
 
 function js_pesquisaSelecao(mostra) {
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_mostraSelecao1|r44_selec|r44_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_mostraSelecao1|r44_selec|r44_descr','Pesquisa',true);
   } else {
-     if ($F('r44_selec') != '') { 
-        js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave='+$F('r44_selec')+'&funcao_js=parent.js_mostraSelecao','Pesquisa',false);
+     if ($F('r44_selec') != '') {
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave='+$F('r44_selec')+'&funcao_js=parent.js_mostraSelecao','Pesquisa',false);
      } else {
        $('r44_descr').value = '';
      }
@@ -139,10 +139,10 @@ function js_mostraSelecao1 (chave1,chave2) {
 sUrl = 'pes4_rhvalealimentacaovalormensal.RPC.php';
 
 function js_processar() {
-	
+
   if (!confirm("Todos os registros serão processados. Deseja continuar?")) {
     return false;
-  } 
+  }
 
   var oParametros = new Object();
 
@@ -158,12 +158,12 @@ function js_processar() {
 	var oAjax = new Ajax.Request(sUrl,
 			                        {
 	                             method    : 'POST',
-                             	 parameters: 'json=' + Object.toJSON(oParametros), 
+                             	 parameters: 'json=' + Object.toJSON(oParametros),
                                onComplete: js_confirma
                               });
 
-  
-  
+
+
 }
 
 function js_confirma(oAjax){
@@ -171,23 +171,23 @@ function js_confirma(oAjax){
   js_removeObj('msgbox');
 
   var sExpReg  = new RegExp('\\\\n','g');
-  
+
   var oRetorno = eval("("+oAjax.responseText+")");
 
   if (oRetorno.iStatus == 1) {
-    
+
     sMensagem = "Processamento realizado com sucesso.";
 
     alert(sMensagem);
-    
-  } else { 
+
+  } else {
 
     alert(oRetorno.sMessage.urlDecode().replace(sExpReg,'\n'));
 
     return false;
-    
+
   }
-  
+
 }
 
 </script>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -132,7 +132,7 @@ $clrotulo->label("sd35_i_familia");
     <td nowrap title="<?=@$Tsd32_i_codigo?>">
        <?=@$Lsd32_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd32_i_codigo',10,$Isd32_i_codigo,true,'text',3,"")
 ?>
@@ -142,7 +142,7 @@ db_input('sd32_i_codigo',10,$Isd32_i_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tsd32_i_unidade?>">
        <?db_ancora(@$Lsd32_i_unidade,"js_pesquisasd32_i_unidade(true);",$db_opcao);?>
     </td>
-    <td> 
+    <td>
 <?
 //     $sd32_i_unidade = db_getsession("DB_coddepto");
 //     db_input('sd32_i_unidade',10,$Isd32_i_unidade,true,'text',3,"");
@@ -159,7 +159,7 @@ db_input('sd32_i_codigo',10,$Isd32_i_codigo,true,'text',3,"")
        db_ancora(@$Lsd32_i_numcgs,"js_pesquisasd32_i_numcgs(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd32_i_numcgs',10,$Isd32_i_numcgs,true,'text',3," onchange='js_pesquisasd32_i_numcgs(false);'")
 ?>
@@ -215,7 +215,7 @@ db_input('sd32_i_numcgs',10,$Isd32_i_numcgs,true,'text',3," onchange='js_pesquis
        db_ancora(@$Lsd32_i_medico,"js_pesquisasd32_i_medico(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd32_i_medico',10,$Isd32_i_medico,true,'text',$db_opcao," onchange='js_pesquisasd32_i_medico(false);'")
 ?>
@@ -232,7 +232,7 @@ db_input('z01_nome',60,$Iz01_nome,true,'text',3,'')
     <td nowrap title="<?=@$Tsd32_d_atendimento?>">
        <?=@$Lsd32_d_atendimento?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('sd32_d_atendimento',@$sd32_d_atendimento_dia,@$sd32_d_atendimento_mes,@$sd32_d_atendimento_ano,true,'text',$db_opcao,"")
 ?>
@@ -242,7 +242,7 @@ db_inputdata('sd32_d_atendimento',@$sd32_d_atendimento_dia,@$sd32_d_atendimento_
     <td nowrap title="<?=@$Tsd32_c_horaatend?>">
        <?=@$Lsd32_c_horaatend?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd32_c_horaatend',5,$Isd32_c_horaatend,true,'text',$db_opcao,"OnKeyUp=mascara_hora(this.value,'sd32_c_horaatend')")
 ?>
@@ -252,7 +252,7 @@ db_input('sd32_c_horaatend',5,$Isd32_c_horaatend,true,'text',$db_opcao,"OnKeyUp=
     <td nowrap title="<?=@$Tsd32_t_descricao?>">
        <?=@$Lsd32_t_descricao?>
     </td>
-    <td> 
+    <td>
        <?
          $sd32_t_descricao=!isset($sd32_t_descricao)?' ':$sd32_t_descricao;
          db_textarea('sd32_t_descricao',3,75,@$sd32_t_descricao,true,'text',$db_opcao," style='text-transform:uppercase;'
@@ -342,7 +342,7 @@ function js_mostraunidades1(chave1,chave2){
 }
 
 function js_novo_cgs(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgs_und','sau1_cgs_und000.php?id=1&db_menu=false','CGS',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgs_und','sau1_cgs_und000.php?id=1&db_menu=false','CGS',true);
 }
 
 
@@ -350,11 +350,11 @@ function js_novo_cgs(){
 
 function js_pesquisasd32_i_numcgs(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgs_und','func_cgs_und.php?funcao_js=parent.js_mostracgs1|z01_i_cgsund|z01_v_nome|z01_i_familiamicroarea|sd33_v_descricao|sd34_v_descricao&retornacgs=p.p.document.form1.sd32_i_numcgs.value&retornanome=p.p.document.form1.z01_v_nome.value','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgs_und','func_cgs_und.php?funcao_js=parent.js_mostracgs1|z01_i_cgsund|z01_v_nome|z01_i_familiamicroarea|sd33_v_descricao|sd34_v_descricao&retornacgs=p.p.document.form1.sd32_i_numcgs.value&retornanome=p.p.document.form1.z01_v_nome.value','Pesquisa',true);
     //js_OpenJanelaIframe('','db_iframe_cgs_und','func_cgs_und.php?funcao_js=parent.js_preenchecgs|z01_i_cgsund','Pesquisa',true);
   }else{
-     if(document.form1.sd32_i_numcgs.value != ''){ 
-        //js_OpenJanelaIframe('top.corpo','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form1.sd32_i_numcgs.value+'&funcao_js=parent.js_mostracgs','Pesquisa',true);
+     if(document.form1.sd32_i_numcgs.value != ''){
+        //js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form1.sd32_i_numcgs.value+'&funcao_js=parent.js_mostracgs','Pesquisa',true);
         js_OpenJanelaIframe('','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form1.z01_i_cgsund.value+'&funcao_js=parent.js_preenchecgs|z01_i_cgsund','Pesquisa',false);
      }else{
        document.form1.z01_v_nome.value = '';
@@ -363,8 +363,8 @@ function js_pesquisasd32_i_numcgs(mostra){
 }
 function js_mostracgs(chave,erro){
   document.form1.z01_v_nome.value = chave;
-  if(erro==true){ 
-    document.form1.sd32_i_numcgs.focus(); 
+  if(erro==true){
+    document.form1.sd32_i_numcgs.focus();
     document.form1.sd32_i_numcgs.value = '';
   }else{
      location.href='sau1_prontuariomedico001.php?chavepesquisaprontuario='+document.form1.sd32_i_numcgs.value+'&z01_v_nome='+document.form1.z01_v_nome.value;
@@ -387,12 +387,12 @@ function js_mostracgs1(chave1,chave2,chave3,chave4,chave5){
 
 function js_pesquisasd32_i_medico(mostra){
   if(mostra==true){
-    //js_OpenJanelaIframe('top.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_mostramedicos1|sd03_i_codigo|z01_nome','Pesquisa',true);
-    js_OpenJanelaIframe('top.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_mostramedicos1|sd03_i_codigo|z01_nome','Pesquisa',true);
+    //js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_mostramedicos1|sd03_i_codigo|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_mostramedicos1|sd03_i_codigo|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.sd32_i_medico.value != ''){ 
-        //js_OpenJanelaIframe('top.corpo','db_iframe_unidademedicos','func_unidademedicos.php?pesquisa_chave='+document.form1.sd32_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
-        js_OpenJanelaIframe('top.corpo','db_iframe_medicos','func_medicos.php?pesquisa_chave='+document.form1.sd32_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
+     if(document.form1.sd32_i_medico.value != ''){
+        //js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_unidademedicos','func_unidademedicos.php?pesquisa_chave='+document.form1.sd32_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_medicos','func_medicos.php?pesquisa_chave='+document.form1.sd32_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
@@ -400,9 +400,9 @@ function js_pesquisasd32_i_medico(mostra){
 }
 function js_mostramedicos(chave,erro){
   document.form1.z01_nome.value = chave;
-  if(erro==true){ 
-    document.form1.sd32_i_medico.focus(); 
-    document.form1.sd32_i_medico.value = ''; 
+  if(erro==true){
+    document.form1.sd32_i_medico.focus();
+    document.form1.sd32_i_medico.value = '';
   }
 }
 function js_mostramedicos1(chave1,chave2){
@@ -411,7 +411,7 @@ function js_mostramedicos1(chave1,chave2){
   db_iframe_medicos.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_prontuariomedico','func_prontuariomedico.php?funcao_js=parent.js_preenchepesquisa|z01_i_cgsund|z01_v_nome|z01_i_familiamicroarea','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_prontuariomedico','func_prontuariomedico.php?funcao_js=parent.js_preenchepesquisa|z01_i_cgsund|z01_v_nome|z01_i_familiamicroarea','Pesquisa',true);
 }
 function js_relatorio(){
   if( document.form1.sd32_i_numcgs.value != '' ){

@@ -9,7 +9,7 @@ $claguaconfvenc->rotulo->label();
     <td nowrap title="<?=@$Tx33_exerc?>">
        <?=@$Lx33_exerc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x33_exerc',5,$Ix33_exerc,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('x33_exerc',5,$Ix33_exerc,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx33_parcela?>">
        <?=@$Lx33_parcela?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x33_parcela',5,$Ix33_parcela,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('x33_parcela',5,$Ix33_parcela,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx33_dtvenc?>">
        <?=@$Lx33_dtvenc?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('x33_dtvenc',@$x33_dtvenc_dia,@$x33_dtvenc_mes,@$x33_dtvenc_ano,true,'text',$db_opcao,"")
 ?>
@@ -42,7 +42,7 @@ db_inputdata('x33_dtvenc',@$x33_dtvenc_dia,@$x33_dtvenc_mes,@$x33_dtvenc_ano,tru
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_aguaconfvenc','func_aguaconfvenc.php?funcao_js=parent.js_preenchepesquisa|x33_exerc|x33_parcela','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguaconfvenc','func_aguaconfvenc.php?funcao_js=parent.js_preenchepesquisa|x33_exerc|x33_parcela','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_aguaconfvenc.hide();

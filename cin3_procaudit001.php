@@ -99,24 +99,24 @@ $clrotulo->label('ci03_objaudit');
 function js_pesquisaProcessoAuditoria(lMostra) {
 
     if (lMostra) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit','Pesquisa',true);
     } else {
-        js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?pesquisa_chave='+document.form1.ci03_codproc.value+'&objetivo=true&funcao_js=parent.js_mostraProcessoAuditoria','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoaudit','func_processoaudit.php?pesquisa_chave='+document.form1.ci03_codproc.value+'&objetivo=true&funcao_js=parent.js_mostraProcessoAuditoria','Pesquisa',false);
     }
 }
 
 function js_mostraProcessoAuditoria(chave, erro) {
-    
+
     document.form1.ci03_objaudit.value = chave;
     if(erro == true) {
         document.form1.ci03_codproc.focus();
         document.form1.ci03_objaudit = '';
     }
-    
+
 }
 
 function js_mostraProcessoAuditoria1(chave1, chave2) {
-    
+
     document.form1.ci03_codproc.value = chave1;
     document.form1.ci03_objaudit.value = chave2;
     db_iframe_processoaudit.hide();
@@ -124,7 +124,7 @@ function js_mostraProcessoAuditoria1(chave1, chave2) {
 }
 
 function js_consulta() {
-    
+
     var ci03_codproc = document.form1.ci03_codproc.value;
 
     if (ci03_codproc == null || ci03_codproc == "") {
@@ -132,7 +132,7 @@ function js_consulta() {
         return;
     }
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_infprocaudit','cin3_procaudit002.php?ci03_codproc='+ci03_codproc,'Consulta Processo de Auditoria',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_infprocaudit','cin3_procaudit002.php?ci03_codproc='+ci03_codproc,'Consulta Processo de Auditoria',true);
 
 }
 

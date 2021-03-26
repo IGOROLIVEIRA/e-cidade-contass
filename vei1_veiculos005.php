@@ -301,11 +301,11 @@ db_fim_transacao($sqlerro);
  ?>
  <script>
    parent.document.formaba.veicitensobrig.disabled=false;
-   top.corpo.iframe_veicitensobrig.location.href='vei1_veicitensobrig001.php?ve09_veiculos=<?=@$chavepesquisa?>';
+   CurrentWindow.corpo.iframe_veicitensobrig.location.href='vei1_veicitensobrig001.php?ve09_veiculos=<?=@$chavepesquisa?>';
    parent.document.formaba.veicutilizacao.disabled=false;
-   top.corpo.iframe_veicutilizacao.location.href='vei1_veicutilizacao001.php?ve15_veiculos=<?=@$chavepesquisa?>';
+   CurrentWindow.corpo.iframe_veicutilizacao.location.href='vei1_veicutilizacao001.php?ve15_veiculos=<?=@$chavepesquisa?>';
    parent.document.formaba.veiccentral.disabled=true;
-   top.corpo.iframe_veiccentral.location.href='vei1_veiccentralveiculos001.php?ve09_veiculos=<?=@$chavepesquisa?>';
+   CurrentWindow.corpo.iframe_veiccentral.location.href='vei1_veiccentralveiculos001.php?ve09_veiculos=<?=@$chavepesquisa?>';
    <?
    if (isset($liberaaba) && $liberaaba == true){
     ?>

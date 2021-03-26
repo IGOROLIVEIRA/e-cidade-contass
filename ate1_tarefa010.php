@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -96,7 +96,7 @@ if($linhatarefa>0){
 	$cltarefa ->at40_ativo        = $at40_ativo;
 	$cltarefa ->at40_urgente      = $at40_urgente;
 	$cltarefa ->incluir(null);
-	
+
 	$at40_sequencial = $cltarefa -> at40_sequencial;
 	// echo "incluiu tarefa = ". $at40_sequencial;
 	if ($cltarefa->erro_status == 0) {
@@ -113,7 +113,7 @@ if($sqlerro=='false'){
 	$resulttarsyspro = pg_query($sqltarsyspro);
 	$linhatarsyspro = pg_num_rows($resulttarsyspro);
 	if($linhatarsyspro>0){
-		db_fieldsmemory($resulttarsyspro, 0); 
+		db_fieldsmemory($resulttarsyspro, 0);
 		$cl_tarefasyscadproced->at37_tarefa       = $at40_sequencial;
 		$cl_tarefasyscadproced->at37_syscadproced = $at37_syscadproced;
 		$cl_tarefasyscadproced->incluir(null);
@@ -130,7 +130,7 @@ if($sqlerro=='false'){
 	$resultmodulo = pg_query($sqlmodulo);
 	$linhamodulo = pg_num_rows($resultmodulo);
 	if($linhamodulo>0){
-		db_fieldsmemory($resultmodulo, 0); 
+		db_fieldsmemory($resultmodulo, 0);
 		$cltarefamodulo->at49_tarefa = $at40_sequencial;
 		$cltarefamodulo->at49_modulo = $at49_modulo;
 		$cltarefamodulo->incluir(null);
@@ -245,7 +245,7 @@ if($sqlerro=='false'){
 			   echo "$erro_msg";
 			   $sqlerro = true;
 			}
-		
+
 		}
 	}
 }
@@ -353,7 +353,7 @@ if($sqlerro=='false'){
 		}
 	}
 }
- 
+
 //**************tenho que ver os outros arquivos que alterei....
 
 // mostrar o frmtarefa ou char o ate1_tarefa005.php
@@ -368,12 +368,12 @@ if($sqlerro=='false'){
 	    parent.document.formaba.tarefaobs.disabled=false;
 	    parent.document.formaba.tarefaanexos.disabled=false;
 		parent.document.formaba.tarefa.disabled=false;
-   		top.corpo.iframe_tarefa.location.href='ate1_tarefa005.php?at40_sequencial=".@$at40_sequencial."&aut=0&db_opcao=2&abrefunc=f';
-	    top.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at40_sequencial."';
-	    top.corpo.iframe_tarefaanexos.location.href='ate1_tarefaanexos001.php?at25_tarefa=".@$at40_sequencial."';
-	    top.corpo.iframe_tarefaobs.location.href='ate1_tarefaobs001.php?at02_codatend=".@$at02_codatend."&at05_seq=".@$at05_seq."&at42_tarefa=".@$at40_sequencial."';
-	    top.corpo.iframe_tarefaclientes.location.href='ate1_tarefaclientes001.php?at70_tarefa=".@$at40_sequencial."';
-		top.corpo.iframe_tarefalog.location.href='ate1_tarefalogand002.php?at43_tarefa=".@$at40_sequencial."';
+   		CurrentWindow.corpo.iframe_tarefa.location.href='ate1_tarefa005.php?at40_sequencial=".@$at40_sequencial."&aut=0&db_opcao=2&abrefunc=f';
+	    CurrentWindow.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at40_sequencial."';
+	    CurrentWindow.corpo.iframe_tarefaanexos.location.href='ate1_tarefaanexos001.php?at25_tarefa=".@$at40_sequencial."';
+	    CurrentWindow.corpo.iframe_tarefaobs.location.href='ate1_tarefaobs001.php?at02_codatend=".@$at02_codatend."&at05_seq=".@$at05_seq."&at42_tarefa=".@$at40_sequencial."';
+	    CurrentWindow.corpo.iframe_tarefaclientes.location.href='ate1_tarefaclientes001.php?at70_tarefa=".@$at40_sequencial."';
+		CurrentWindow.corpo.iframe_tarefalog.location.href='ate1_tarefalogand002.php?at43_tarefa=".@$at40_sequencial."';
 	}
 	    js_db_libera();
 	  </script>\n

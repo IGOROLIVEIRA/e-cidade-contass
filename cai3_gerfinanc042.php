@@ -242,9 +242,9 @@ echo "
 </html>
 <script>
   function js_termodiv(parcel){
-      js_OpenJanelaIframe('top.corpo','db_iframe3','cai3_gerfinanc043.php?modo=<?=base64_encode($origem)?>&parcel='+parcel+'&tipo=<?=$tipo?>','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe3','cai3_gerfinanc043.php?modo=<?=base64_encode($origem)?>&parcel='+parcel+'&tipo=<?=$tipo?>','Pesquisa',true);
   }
   function js_termoini(parcel){
-      js_OpenJanelaIframe('top.corpo','db_iframe3','cai3_gerfinanc044.php?modo=<?=base64_encode($origem)?>&parcel='+parcel+'&tipo=<?=$tipo?>','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe3','cai3_gerfinanc044.php?modo=<?=base64_encode($origem)?>&parcel='+parcel+'&tipo=<?=$tipo?>','Pesquisa',true);
   }
 </script>

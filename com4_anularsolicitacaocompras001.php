@@ -167,7 +167,7 @@ $oRotulo->label('pc67_processoadministrativo');
     if (lMostra) {
       sQuery = 'lConsulta=true&tiposolicitacao=1,5&funcao_js=parent.preencheSolicitacao|pc10_numero&ativas=1';
     }
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
       'db_iframe_solicita',
       "func_solicita.php?" + sQuery,
       'Pesquisa Solicitação de Compras',

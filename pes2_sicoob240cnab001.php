@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -47,7 +47,7 @@ if(isset($emite2)){
   db_fim_transacao($sqlerro);
 }else if(isset($rh34_codarq)){
   $result = $clrharqbanco->sql_record($clrharqbanco->sql_query($rh34_codarq));
-  if($clrharqbanco->numrows > 0){ 
+  if($clrharqbanco->numrows > 0){
     db_fieldsmemory($result,0);
     $rh34_sequencial += 1;
   }
@@ -94,20 +94,20 @@ if(isset($emite2)){
         qry += '&tiparq='+document.form1.tiparq.value;
         qry += '&qfolha='+document.form1.qfolha.value;
         qry += '&opt_todosbcos='+document.form1.opt_todosbcos.value;
-        js_OpenJanelaIframe('top.corpo','db_iframe_geraarqbanco','pes2_sicoob240cnab002.php?'+qry,'Gerando Arquivo',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geraarqbanco','pes2_sicoob240cnab002.php?'+qry,'Gerando Arquivo',true);
       }
-      
+
       function js_detectaarquivo(arquivo,pdf){
         js_controlarodape(false);
-        top.corpo.db_iframe_geraarqbanco.hide();
+        CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
         listagem = arquivo+"#Download arquivo TXT (pagamento eletrônico)|";
         listagem+= pdf+"#Download relatório";
         js_montarlista(listagem,"form1");
       }
-      
+
       function js_erro(msg){
         js_controlarodape(false);
-        top.corpo.db_iframe_geraarqbanco.hide();
+        CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
         alert(msg);
       }
       function js_fechaiframe(){
@@ -121,7 +121,7 @@ if(isset($emite2)){
           parent.bstatus.document.getElementById('st').innerHTML = document.form1.rodape.value;
         }
       }
-    </script>  
+    </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
   </head>
   <body>
@@ -159,14 +159,14 @@ if(isset($emite2)){
           <tr>
             <td><b>Banco:</b></td>
             <td>
-              <?  
+              <?
               (!isset($GLOBALS['opt_todosbcos'])) ? $GLOBALS['opt_todosbcos'] = '1' : '';
               $arr_tipobanco = Array("1"=>"Sicoob", "0"=>"Todos");
               db_select("opt_todosbcos", $arr_tipobanco, true, 1, 'style="max-width: 125px;"');
               ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td title="<?=@$Trh34_codarq?>">
               <?php
                 db_ancora(@$Lrh34_codarq,"js_pesquisa(true);",1);
@@ -191,7 +191,7 @@ if(isset($emite2)){
                         db_ancora(@$Lrh34_codban,"return true;",3);
                         ?>
                       </td>
-                      <td colspan="3" rel="ignore-css" style="padding-top:3px; white-space:nowrap"> 
+                      <td colspan="3" rel="ignore-css" style="padding-top:3px; white-space:nowrap">
                         <?
                         db_input('rh34_codban',6,$Irh34_codban,true,'text',3);
                         db_input('db90_descr',31,$Idb90_descr,true,'text',3);
@@ -202,7 +202,7 @@ if(isset($emite2)){
                       <td  title="<?=@$Trh34_agencia?>">
                         <?=@$Lrh34_agencia?>
                       </td>
-                      <td > 
+                      <td >
                         <?
                         db_input('rh34_agencia',6,$Irh34_agencia,true,'text',3,"")
                         ?>
@@ -210,17 +210,17 @@ if(isset($emite2)){
                       <td  title="<?=@$Trh34_dvagencia?>" align="left" rel="ignore-css">
                        <b> DV da Agência:</b>
                       </td>
-                      <td> 
+                      <td>
                         <?
                         db_input('rh34_dvagencia',2,$Irh34_dvagencia,true,'text',3,"style='width:100%' class='readonly'");
                         ?>
                       </td>
                     </tr>
                     <tr>
-                      <td  title="<?=@$Trh34_conta?>"> 
+                      <td  title="<?=@$Trh34_conta?>">
                         <?=@$Lrh34_conta?>
                       </td>
-                      <td> 
+                      <td>
                         <?
                         db_input('rh34_conta',15,$Irh34_conta,true,'text',3,"")
                         ?>
@@ -228,7 +228,7 @@ if(isset($emite2)){
                       <td  title="<?=@$Trh34_dvconta?>" align="left" rel="ignore-css">
                         <b>DV da Conta Corrente:</b>
                       </td>
-                      <td> 
+                      <td>
                         <?
                         db_input('rh34_dvconta',2,$Irh34_dvconta,true,'text',3,"style='width:100%' class='readonly'");
                         ?>
@@ -237,13 +237,13 @@ if(isset($emite2)){
                     <tr>
                       <td  title="<?=@$Trh34_convenio?>">
                         <?=@$Lrh34_convenio?>
-                      </td> 
-                      <td colspan="3" rel="ignore-css" style="padding-top:3px;"> 
+                      </td>
+                      <td colspan="3" rel="ignore-css" style="padding-top:3px;">
                         <?
                         db_input('rh34_convenio',15,$Irh34_convenio,true,'text',3,"")
                         ?>
                       </td>
-                  </tr> 
+                  </tr>
                 </table>
               </fieldset>
             </td>
@@ -252,7 +252,7 @@ if(isset($emite2)){
             <td  title="<?=@$Trh34_sequencial?>">
               <?=@$Lrh34_sequencial?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('rh34_sequencial',15,$Irh34_sequencial,true,'text',1,"","","",'max-width: 125px;')
               ?>
@@ -286,9 +286,9 @@ if(isset($emite2)){
                                  );
 
               if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-                $arr_qfolha["5"] = "Suplementar"; 
+                $arr_qfolha["5"] = "Suplementar";
               }
-              
+
               db_select("qfolha", $arr_qfolha, true, 1);
               ?>
             </td>
@@ -311,7 +311,7 @@ function js_pesquisa(mostra){
   if (mostra==true) {
 
     js_OpenJanelaIframe(
-        'top.corpo',
+        'CurrentWindow.corpo',
         'db_iframe_rharqbanco',
         'func_rharqbanco.php?ativas=true&iCodigoBanco=756&funcao_js=parent.js_mostra1|rh34_codarq|rh34_descr',
         'Pesquisa de Arquivo Bancário',
@@ -319,13 +319,13 @@ function js_pesquisa(mostra){
 
   } else {
     if (document.form1.rh34_codarq.value != '') {
-      js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?ativas=true&pesquisa_chave='+document.form1.rh34_codarq.value+'&iCodigoBanco=756&funcao_js=parent.js_mostra','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?ativas=true&pesquisa_chave='+document.form1.rh34_codarq.value+'&iCodigoBanco=756&funcao_js=parent.js_mostra','Pesquisa',false);
     } else {
       document.form1.rh34_codarq.value = '';
       document.form1.rh34_descr.value = '';
     }
   }
-} 
+}
 function js_mostra(chave,erro){
   if (erro == true) {
     document.form1.rh34_descr.value = chave;
@@ -342,10 +342,10 @@ function js_mostra1(chave1,chave2){
 }
 function js_pesquisarh34_codban(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
   }else{
     if(document.form1.rh34_codban.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
     }else{
       document.form1.db90_descr.value = '';
     }

@@ -100,7 +100,7 @@ $cltipoisen->rotulo->label();
 <script type="text/javascript">
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tipoisen','func_tipoisen.php?funcao_js=parent.js_preenchepesquisa|j45_tipo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoisen','func_tipoisen.php?funcao_js=parent.js_preenchepesquisa|j45_tipo','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

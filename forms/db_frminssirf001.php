@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -32,8 +32,8 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clrotulo                 = new rotulocampo;
 $clinssirf->rotulo->label();
 $clrotulo->label("rh27_descr");
-$clrotulo->label("rh32_descr"); 
-$clrotulo->label("o56_descr");  
+$clrotulo->label("rh32_descr");
+$clrotulo->label("o56_descr");
 
 $clrotulo->label("rh129_regimeprevidencia");
 $clrotulo->label("rh127_descricao");
@@ -113,29 +113,29 @@ if(isset($codtab) && $codigo_tab <= 2){
         <table width="100%">
 	  <?
 	  if($alteraform == true){
-			
+
 			$sSqlInssirf = $clinssirf->sql_query_dados(null,
-																								 "r33_nome, 
-																									r33_tipo, 
-																									r33_rubmat, 
-																									a.rh27_descr as rh27_descrmat, 
-																									r33_rubsau, 
-																									b.rh27_descr as rh27_descrsau, 
-																									r33_rubaci, 
-																									c.rh27_descr as rh27_descraci, 
-																									r33_basfer, 
+																								 "r33_nome,
+																									r33_tipo,
+																									r33_rubmat,
+																									a.rh27_descr as rh27_descrmat,
+																									r33_rubsau,
+																									b.rh27_descr as rh27_descrsau,
+																									r33_rubaci,
+																									c.rh27_descr as rh27_descraci,
+																									r33_basfer,
 																									d.r08_descr as rh32_descrfer,
 																									r33_basfet,
 																									e.r08_descr as rh32_descrfet,
-																									r33_ppatro, 
+																									r33_ppatro,
 																									r33_tinati,
 																									r33_codele,
-																									o56_descr", 
+																									o56_descr",
 																									"",
-																									"r33_anousu    = ".db_anofolha()." 
-																									and r33_mesusu = ".db_mesfolha()." 
-																									and r33_instit = ".db_getsession('DB_instit')." 
-																									and r33_codtab = '".$codtab."' 
+																									"r33_anousu    = ".db_anofolha()."
+																									and r33_mesusu = ".db_mesfolha()."
+																									and r33_instit = ".db_getsession('DB_instit')."
+																									and r33_codtab = '".$codtab."'
 																									limit 1");
 	    $result_inssirf = $clinssirf->sql_record($sSqlInssirf);
 //	    $result_inssirf = $clinssirf->sql_record($clinssirf->sql_query_dados(null,"r33_nome,r33_tipo,r33_rubmat,a.rh27_descr as rh27_descrmat,r33_rubsau,b.rh27_descr as rh27_descrsau,r33_rubaci,c.rh27_descr as rh27_descraci,r33_basfer,d.rh32_descr as rh32_descrfer,r33_basfet,e.rh32_descr as rh32_descrfet,r33_ppatro,r33_tinati","","r33_anousu = ".db_anofolha()." and r33_mesusu = ".db_mesfolha()." and r33_instit = ".db_getsession('DB_instit')." and r33_codtab = '".$codtab."' limit 1"));
@@ -415,11 +415,11 @@ if(isset($opcao)){
 
 function js_pesquisarRegimePrevidencia(mostra) {
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_regimeprevidencia','func_regimeprevidencia.php?funcao_js=parent.js_mostraRegimePrevidencia1|rh127_sequencial|rh127_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_regimeprevidencia','func_regimeprevidencia.php?funcao_js=parent.js_mostraRegimePrevidencia1|rh127_sequencial|rh127_descricao','Pesquisa',true);
   } else {
     var  valor = document.form1.rh129_regimeprevidencia.value;
     if ( valor != '') {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_regimeprevidencia', 'func_regimeprevidencia.php?pesquisa_chave='+valor+'&funcao_js=parent.js_mostraRegimePrevidencia','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_regimeprevidencia', 'func_regimeprevidencia.php?pesquisa_chave='+valor+'&funcao_js=parent.js_mostraRegimePrevidencia','Pesquisa',false);
     } else {
       document.form1.rh129_regimeprevidencia.value = '';
       document.form1.rh127_descricao.value = '';
@@ -446,13 +446,13 @@ function js_mostraRegimePrevidencia(chave1, erro) {
 
 function js_pesquisabases(mostra,opcao){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhbases','func_bases.php?funcao_js=parent.js_mostrabases'+opcao+'1|r08_codigo|r08_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhbases','func_bases.php?funcao_js=parent.js_mostrabases'+opcao+'1|r08_codigo|r08_descr','Pesquisa',true);
   }else{
      eval("valor = document.form1.r33_bas"+opcao+".value");
      if(valor != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_rhbases','func_bases.php?pesquisa_chave='+valor+'&funcao_js=parent.js_mostrabases'+opcao,'Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhbases','func_bases.php?pesquisa_chave='+valor+'&funcao_js=parent.js_mostrabases'+opcao,'Pesquisa',false);
      }else{
-       eval("document.form1.rh32_descr"+opcao+".value = ''"); 
+       eval("document.form1.rh32_descr"+opcao+".value = ''");
      }
   }
 }
@@ -482,15 +482,15 @@ function js_mostrabasesfet1(chave1,chave2){
 }
 function js_pesquisarubricas(mostra,opcao){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?funcao_js=parent.js_mostrarubricas'+opcao+'1|rh27_rubric|rh27_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhrubricas','func_rhrubricas.php?funcao_js=parent.js_mostrarubricas'+opcao+'1|rh27_rubric|rh27_descr','Pesquisa',true);
   }else{
      campo = eval('document.form1.r33_rub'+opcao);
      js_completa_rubricas(campo);
      eval("valor = document.form1.r33_rub"+opcao+".value");
      if(valor != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricas.php?pesquisa_chave='+valor+'&funcao_js=parent.js_mostrarubricas'+opcao,'Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhrubricas','func_rhrubricas.php?pesquisa_chave='+valor+'&funcao_js=parent.js_mostrarubricas'+opcao,'Pesquisa',false);
      }else{
-       eval("document.form1.rh27_descr"+opcao+".value = ''"); 
+       eval("document.form1.rh27_descr"+opcao+".value = ''");
      }
   }
 }
@@ -566,7 +566,7 @@ function js_verificar_campos(){
   return false;
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_inssirf','func_inssirf.php?funcao_js=parent.js_preenchepesquisa|r33_anousu|r33_mesusu|r33_codtab','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_inssirf','func_inssirf.php?funcao_js=parent.js_preenchepesquisa|r33_anousu|r33_mesusu|r33_codtab','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2){
   db_iframe_inssirf.hide();
@@ -614,26 +614,26 @@ function js_setar_foco(){
 function js_pesquisar_codele(mostra) {
 
 	if ( mostra == true) {
-		js_OpenJanelaIframe('top.corpo', 'db_iframe_orcelemento','func_rhelementoemp.php?funcao_js=parent.js_mostraorcelemento1|rh38_codele|o56_descr','Pesquisa',true);
-		return;
-	} 
-
-	if ( document.form1.r33_codele.value != '') { 
-		js_OpenJanelaIframe('top.corpo', 'db_iframe_orcelemento','func_rhelementoemp.php?pesquisa_chave='+document.form1.r33_codele.value+'&funcao_js=parent.js_mostraorcelemento','Pesquisa',false);
+		js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcelemento','func_rhelementoemp.php?funcao_js=parent.js_mostraorcelemento1|rh38_codele|o56_descr','Pesquisa',true);
 		return;
 	}
 
-	document.form1.o56_descr.value = ''; 
+	if ( document.form1.r33_codele.value != '') {
+		js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcelemento','func_rhelementoemp.php?pesquisa_chave='+document.form1.r33_codele.value+'&funcao_js=parent.js_mostraorcelemento','Pesquisa',false);
+		return;
+	}
+
+	document.form1.o56_descr.value = '';
 }
 
 function js_mostraorcelemento(chave, erro) {
 
-	document.form1.o56_descr.value = chave; 
+	document.form1.o56_descr.value = chave;
 
-	if ( erro == true ) {  
+	if ( erro == true ) {
 
-    document.form1.r33_codele.focus(); 
-    document.form1.r33_codele.value = ''; 
+    document.form1.r33_codele.focus();
+    document.form1.r33_codele.value = '';
   }
 }
 

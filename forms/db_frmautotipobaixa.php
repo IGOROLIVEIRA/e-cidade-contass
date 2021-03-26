@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: fiscal
@@ -40,7 +40,7 @@ $clrotulo->label("y87_baixaproc");
        db_ancora(@$Ly86_codautotipo,"js_pesquisay86_codautotipo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('y86_codautotipo',8,$Iy86_codautotipo,true,'text',$db_opcao," onchange='js_pesquisay86_codautotipo(false);'")
 ?>
@@ -55,7 +55,7 @@ db_input('y59_codigo',8,$Iy59_codigo,true,'text',3,'')
        db_ancora(@$Ly86_codbaixaproc,"js_pesquisay86_codbaixaproc(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('y86_codbaixaproc',8,$Iy86_codbaixaproc,true,'text',$db_opcao," onchange='js_pesquisay86_codbaixaproc(false);'")
 ?>
@@ -72,20 +72,20 @@ db_input('y87_baixaproc',8,$Iy87_baixaproc,true,'text',3,'')
 <script>
 function js_pesquisay86_codautotipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_autotipo','func_autotipo.php?funcao_js=parent.js_mostraautotipo1|y59_codigo|y59_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autotipo','func_autotipo.php?funcao_js=parent.js_mostraautotipo1|y59_codigo|y59_codigo','Pesquisa',true);
   }else{
-     if(document.form1.y86_codautotipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_autotipo','func_autotipo.php?pesquisa_chave='+document.form1.y86_codautotipo.value+'&funcao_js=parent.js_mostraautotipo','Pesquisa',false);
+     if(document.form1.y86_codautotipo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autotipo','func_autotipo.php?pesquisa_chave='+document.form1.y86_codautotipo.value+'&funcao_js=parent.js_mostraautotipo','Pesquisa',false);
      }else{
-       document.form1.y59_codigo.value = ''; 
+       document.form1.y59_codigo.value = '';
      }
   }
 }
 function js_mostraautotipo(chave,erro){
-  document.form1.y59_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.y86_codautotipo.focus(); 
-    document.form1.y86_codautotipo.value = ''; 
+  document.form1.y59_codigo.value = chave;
+  if(erro==true){
+    document.form1.y86_codautotipo.focus();
+    document.form1.y86_codautotipo.value = '';
   }
 }
 function js_mostraautotipo1(chave1,chave2){
@@ -95,20 +95,20 @@ function js_mostraautotipo1(chave1,chave2){
 }
 function js_pesquisay86_codbaixaproc(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_autotipobaixaproc','func_autotipobaixaproc.php?funcao_js=parent.js_mostraautotipobaixaproc1|y87_baixaproc|y87_baixaproc','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autotipobaixaproc','func_autotipobaixaproc.php?funcao_js=parent.js_mostraautotipobaixaproc1|y87_baixaproc|y87_baixaproc','Pesquisa',true);
   }else{
-     if(document.form1.y86_codbaixaproc.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_autotipobaixaproc','func_autotipobaixaproc.php?pesquisa_chave='+document.form1.y86_codbaixaproc.value+'&funcao_js=parent.js_mostraautotipobaixaproc','Pesquisa',false);
+     if(document.form1.y86_codbaixaproc.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autotipobaixaproc','func_autotipobaixaproc.php?pesquisa_chave='+document.form1.y86_codbaixaproc.value+'&funcao_js=parent.js_mostraautotipobaixaproc','Pesquisa',false);
      }else{
-       document.form1.y87_baixaproc.value = ''; 
+       document.form1.y87_baixaproc.value = '';
      }
   }
 }
 function js_mostraautotipobaixaproc(chave,erro){
-  document.form1.y87_baixaproc.value = chave; 
-  if(erro==true){ 
-    document.form1.y86_codbaixaproc.focus(); 
-    document.form1.y86_codbaixaproc.value = ''; 
+  document.form1.y87_baixaproc.value = chave;
+  if(erro==true){
+    document.form1.y86_codbaixaproc.focus();
+    document.form1.y86_codbaixaproc.value = '';
   }
 }
 function js_mostraautotipobaixaproc1(chave1,chave2){
@@ -117,7 +117,7 @@ function js_mostraautotipobaixaproc1(chave1,chave2){
   db_iframe_autotipobaixaproc.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_autotipobaixa','func_autotipobaixa.php?funcao_js=parent.js_preenchepesquisa|y86_codautotipo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autotipobaixa','func_autotipobaixa.php?funcao_js=parent.js_preenchepesquisa|y86_codautotipo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_autotipobaixa.hide();

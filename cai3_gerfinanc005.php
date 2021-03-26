@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -32,7 +32,7 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
 require_once("classes/db_termoprotprocesso_classe.php");
-			  
+
 $mat_numpre = split("#",base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
 
 $iTipo  = $mat_numpre[0];
@@ -78,34 +78,34 @@ $usuario = db_getsession("DB_id_usuario");
 
 /*
  * Verificamos se o botão de Simular a anulação do parcelamento deverá estar desabilitado caso o parâmetro
- * de utilização da partilha do módulo jurídico esteja habilitado e se o parcelamento possuir recibo emitido com custas 
- * e esse recibo esteja presente em um arquivo de remessa (processoforopartilhacusta/partilhaarquivoreg) 
+ * de utilização da partilha do módulo jurídico esteja habilitado e se o parcelamento possuir recibo emitido com custas
+ * e esse recibo esteja presente em um arquivo de remessa (processoforopartilhacusta/partilhaarquivoreg)
  */
 $sBloqueio       = "";
 $oDaoParJuridico = db_utils::getDao("parjuridico");
 $rsParJuridico   = $oDaoParJuridico->sql_record($oDaoParJuridico->sql_query(db_getsession("DB_anousu"),db_getsession("DB_instit"), "v19_partilha"));
 
 if ($oDaoParJuridico->numrows > 0 ) {
-  
+
   $lPartilha = db_utils::fieldsMemory($rsParJuridico,0)->v19_partilha;
-  
+
   if ($lPartilha != "f") {
-    
+
     $sSqlVerificaRecibo  = " select *                                                                                                                                 ";
     $sSqlVerificaRecibo .= " from recibopaga                                                                                                                          ";
   	$sSqlVerificaRecibo .= "      inner join processoforopartilhacusta on processoforopartilhacusta.v77_numnov             = recibopaga.k00_numnov                    ";
   	$sSqlVerificaRecibo .= "      inner join partilhaarquivoreg        on partilhaarquivoreg.v79_processoforopartilhacusta = processoforopartilhacusta.v77_sequencial ";
   	$sSqlVerificaRecibo .= " where recibopaga.k00_numpre = {$v07_numpre}                                                                                              ";
-    
+
     $rsVerificaRecibo = db_query($sSqlVerificaRecibo);
-    
+
     if (pg_num_rows($rsVerificaRecibo) > 0 ) {
       $sBloqueio = " Parcelamento possui recibo emitido com custas em arquivo de remessa. Anulação não permitida!";
     }
-    
+
   }
-  			  
-}  
+
+}
 ?>
 <html>
 <head>
@@ -138,13 +138,13 @@ table.linhaZebrada tr td:nth-child(odd) {
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 
-function js_AbreJanelaRelatorio() { 
+function js_AbreJanelaRelatorio() {
   window.open('div2_termoparc_002.php?parcel='+document.form1.v07_parcel.value,'','width=790,height=530,scrollbars=1,location=0');
 }
 
 function js_anula() {
   var usu = <?php echo $usuario; ?>;
-  js_OpenJanelaIframe('top.corpo','db_iframe_anulaparc1','cai4_anulaparc002.php?parcel='+document.form1.v07_parcel.value+'&usu='+usu,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_anulaparc1','cai4_anulaparc002.php?parcel='+document.form1.v07_parcel.value+'&usu='+usu,'Pesquisa',true);
 }
 
 </script>
@@ -159,8 +159,8 @@ $sSqlReparcelamento .= "   from termo                                           
 $sSqlReparcelamento .= "        inner join termoreparc  on v07_parcel            = v08_parcel                      ";
 $sSqlReparcelamento .= "        inner join arrecad      on v07_numpre            = k00_numpre                      ";
 $sSqlReparcelamento .= "        inner join arreinstit   on arreinstit.k00_numpre = arrecad.k00_numpre              ";
-$sSqlReparcelamento .= "                               and arreinstit.k00_instit = ".db_getsession('DB_instit')     ; 
-$sSqlReparcelamento .= "        inner join cgm          on v07_numcgm            = z01_numcgm                      "; 
+$sSqlReparcelamento .= "                               and arreinstit.k00_instit = ".db_getsession('DB_instit')     ;
+$sSqlReparcelamento .= "        inner join cgm          on v07_numcgm            = z01_numcgm                      ";
 $sSqlReparcelamento .= "        left  join arrematric a on v07_numpre            = a.k00_numpre                    ";
 $sSqlReparcelamento .= "        left  join arreinscr  i on v07_numpre            = i.k00_numpre                    ";
 $sSqlReparcelamento .= " where v07_numpre = $numpre and v07_instit = ".db_getsession('DB_instit')                   ;
@@ -171,32 +171,32 @@ $intNumrows = pg_numrows($rsReparc);
 
 if ($intNumrows > 0) {
     db_fieldsmemory($rsReparc,0);
-    
+
 ?>
   <table width="100%">
-    <tr> 
+    <tr>
       <td align="center"><strong style="font-size:14px">Reparcelamento</strong></td>
     </tr>
-    <tr> 
+    <tr>
       <td>
         <table width="100%" border="1" cellspacing="0" bgcolor="#999999">
-          <tr> 
+          <tr>
             <td width="42%" align="right">C&oacute;digo do Parcelamento:</td>
             <td width="58%">&nbsp; <?php echo $v07_parcel; ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Data Parcelamento:</td>
             <td>&nbsp; <?php echo $v07_dtlanc; ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Total Parcelas:</td>
             <td>&nbsp; <?php echo $v07_totpar; ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Valor Total Parcelado:</td>
             <td>&nbsp; <? echo db_formatar($v07_valor,'f'); ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Valor Entrada:</td>
             <td>&nbsp; <?php echo $v07_vlrent; ?></td>
           </tr>
@@ -204,48 +204,48 @@ if ($intNumrows > 0) {
             <td align="right">Data Primeira parcela:</td>
             <td>&nbsp; <?php echo $v07_datpri; ?></td>
           </tr>
-          
+
           <form name="form1" method="post">
             <tr>
-              <td align="right">Termo:</td>     
-              <td> 
-                <input type="button" name="Submit3" value="Visualizar o Termo" onclick="js_AbreJanelaRelatorio();"> 
+              <td align="right">Termo:</td>
+              <td>
+                <input type="button" name="Submit3" value="Visualizar o Termo" onclick="js_AbreJanelaRelatorio();">
                 <input type="hidden" name="v07_parcel" value="<?php echo $v07_parcel; ?>">
             		<?php
               		$mostrabotao      = db_permissaomenu(db_getsession("DB_anousu"),81,2537);
               		$mostrabotaoBySim = db_permissaomenu(db_getsession("DB_anousu"),81,8393);
-              		
+
               		if ($mostrabotao == "true" || $mostrabotaoBySim == "true") {
               			if (@$mostra != "nao") {
               		?>
-              				<input type="button" name="anula" value="Simular Anulação de Parcelamento" onclick="js_anula();" > 
+              				<input type="button" name="anula" value="Simular Anulação de Parcelamento" onclick="js_anula();" >
               		<?php
               			}
               		}
             		?>
-              </td>          
+              </td>
             </tr>
           </form>
-          
-          <tr> 
+
+          <tr>
             <td align="right">Contribu&iacute;nte:</td>
             <td>&nbsp; <?php echo $z01_nome; ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Nome Respons&aacute;vel:</td>
             <td>&nbsp; <?php echo $z01_nome; ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">C&oacute;digo Arrecada&ccedil;&atilde;o:</td>
             <td> &nbsp; <?php echo $k00_numpre; ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Hist&oacute;rico:</td>
             <td> &nbsp; <?php echo @$v07_hist; ?> Protocolo: <?php echo $oProtocolo->v27_protprocesso; ?></td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Matr&iacute;cula Im&oacute;vel:</td>
-            <td> &nbsp; 
+            <td> &nbsp;
               <?php
                 if (@$k00_matric != "") {
                   echo $k00_matric;
@@ -253,9 +253,9 @@ if ($intNumrows > 0) {
               ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right">Inscri&ccedil;&atilde;o Alvar&aacute;:</td>
-            <td> &nbsp; 
+            <td> &nbsp;
               <?php
                 if (@$k00_inscr != "") {
                   echo $k00_inscr;
@@ -271,53 +271,53 @@ if ($intNumrows > 0) {
 } else {
 
 	if ($k03_tipo == 1) {
-	  
+
 	  // Débito tipo 1 - I.P.T.U
 	  require_once("forms/db_frmgerfinanctipo1.php");
-	
+
 	} else if ($k03_tipo == 4) {
-	  
+
 	  // Débito tipo 4 - CONTRIBUIÇÃO MELHORIA
 	  require_once("forms/db_frmgerfinanctipo4.php");
-	  
+
 	} else if ($k03_tipo == 5) {
-	  
+
 	  // Débito tipo 5 - DÍVIDA ATIVA
 	  require_once("forms/db_frmgerfinanctipo5.php");
-	  
+
 	} else if ($k03_tipo == 7) {
-	  
+
 	  // Débito tipo 7 - DIVERSOS
 	  require_once("forms/db_frmgerfinanctipo7.php");
-	  
+
 	} else if ($k03_tipo == 6 || $k03_tipo == 13 || $k03_tipo == 16 || $k03_tipo == 17  || $k03_tipo == 30 ) {
-		
+
 	  // Débito tipo 6 - PARCELAMENTO DIVIDA ATIVA
 	  //            13 - PARCELAMENTO DE INICIAL D. ATIVA
 	  //            16 - PARCELAMENTO DIVERSO
 	  //            17 - PARCELAMENTO DE CONTRIB. MELHORIA
 	  //            30 - PARCELAMENTO DO FORO
 	  require_once("forms/db_frmgerfinanctipo6.php");
-	  
+
 	} else if($k03_tipo == 2 || $k03_tipo == 9) {
-	  
+
 	  // Débito tipo 2 - ISSQN FIXO
 	  //             9 - ALVARÁ
 		require_once("forms/db_frmgerfinanctipo2.php");
-		
+
 	} else if ($k03_tipo == 3) {
-	  
+
 	  // Débito tipo 3 - ISSQN VARIÁVEL
 	  require_once("forms/db_frmgerfinanctipo3.php");
-	  
+
 	} else if ($k03_tipo == 15) {
-	  
+
 	  // Débito tipo 15 - CERTIDÃO DO FORO
 	  require_once("forms/db_frmgerfinanctipo15.php");
-	  
+
 	}
 	?>
-	
+
 <?php
 	if ($iLinhaArrejust > 0) {
 ?>
@@ -330,7 +330,7 @@ if ($intNumrows > 0) {
   	  <tr>
     	  <td>
       	  <table width="97%" cellspacing="0" class="tab_cinza" style="font-size:14px">
-        	  <tr> 
+        	  <tr>
           	  <th align="center">Parcela</th>
           		<th align="center">Data</th>
           		<th align="center">Hora</th>
@@ -350,19 +350,19 @@ if ($intNumrows > 0) {
                     		<td align='center'>$nome</td>
                     		<td align='center'>$k27_obs</td>
                   		</tr>
-                ";         
+                ";
         		}
       		?>
       		</table>
     		</td>
   		</tr>
 		</table>
-		
+
 		<br>
-		
+
 		<?php
   }
-  
+
   if ($iLinhaArrevenc > 0) {
 	  ?>
 	  <table width="100%">
@@ -374,7 +374,7 @@ if ($intNumrows > 0) {
   	  <tr>
     	  <td>
       	  <table width="97%"  cellspacing="0" class="tab_cinza" style="font-size:14px">
-        	  <tr>  	  
+        	  <tr>
           	  <th align="center">Parcela</th>
           		<th align="center">Data inicial</th>
           		<th align="center">Data final</th>
@@ -395,30 +395,30 @@ if ($intNumrows > 0) {
                       	 <td align='center'>$dDataFim</td>
                       	 <td align='center'>$oArrevenc->k00_obs</td>
                     	 </tr>
-                 ";              
+                 ";
               }
         		?>
       		</table>
     		</td>
   		</tr>
 		</table>
-		
+
 		<br>
-		
+
 		<?php
   }
 }
 
 if ($numpar > 0) {
-  
+
   require_once('classes/db_arrevenc_classe.php');
   $clarrevenc = new cl_arrevenc;
-  
+
   $sCampos = " k00_dtini,k00_dtfim,((case when k00_dtfim is null then current_date else k00_dtfim end )+1)-k00_dtini as dia ";
-  $sWhere  = " k00_numpre = {$numpre} and k00_numpar = {$numpar} "; 
-   
+  $sWhere  = " k00_numpre = {$numpre} and k00_numpar = {$numpar} ";
+
   $rsArrevenc  = $clarrevenc->sql_record($clarrevenc->sql_query("", $sCampos, "k00_dtini", $sWhere));
-  
+
   if ($rsArrevenc != false && $clarrevenc->numrows > 0 ) {
 ?>
     <table width="100%" border="1" cellspacing="0" bgcolor="#999999">
@@ -490,11 +490,11 @@ if ($rsArrehist != false && $clarrehist->numrows > 0 ) {
   <?php
    if (@$k00_tipo == 33) {
      $sArquivoIframe = 'cai3_gerfinanc666.php';
-   } else { 
+   } else {
      $sArquivoIframe = 'cai3_gerfinanc555.php';
    }
   ?>
-  <iframe width="100%" height="300" border="0" src="<?php echo $sArquivoIframe; ?>?numpre=<?php echo $numpre; ?>&numpar=<?php echo $numpar; ?>"></iframe> 
+  <iframe width="100%" height="300" border="0" src="<?php echo $sArquivoIframe; ?>?numpre=<?php echo $numpre; ?>&numpar=<?php echo $numpar; ?>"></iframe>
 </fieldset>
 
 </center>

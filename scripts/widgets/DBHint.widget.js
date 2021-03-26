@@ -190,7 +190,7 @@
 
         var iTop = 0;
 
-        switch (me.sPositionTop.toUpperCase()) {
+        switch (me.sPositionCurrentWindow.toUpperCase()) {
 
           case 'T':
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -44,7 +44,7 @@ $clmodcarneexcessao   		   = new cl_modcarneexcessao;
 $clmodcarnepadraotipo		     = new cl_modcarnepadraotipo;
 $clmodcarnepadraolayouttxt   = new cl_modcarnepadraolayouttxt;
 $clmodcarnepadraocadmodcarne = new cl_modcarnepadraocadmodcarne;
-  
+
 
 $db_opcao = 33;
 $db_botao = false;
@@ -53,53 +53,53 @@ if(isset($excluir)){
 
   $sqlerro=false;
   db_inicio_transacao();
-  
+
   $rsConsultaTipo = $clmodcarnepadrao->sql_record($clmodcarnepadrao->sql_query_func($k48_sequencial));
-  $oTipo		  = db_utils::fieldsMemory($rsConsultaTipo,0); 
-  
-  
+  $oTipo		  = db_utils::fieldsMemory($rsConsultaTipo,0);
+
+
   if (!empty($oTipo->m01_sequencial)) {
 	$clmodcarnepadraocadmodcarne->excluir($oTipo->m01_sequencial);
 	if ($clmodcarnepadraocadmodcarne->erro_status == 0) {
-	  $sqlerro = true;		  	
+	  $sqlerro = true;
 	}
 	$erro_msg = $clmodcarnepadraocadmodcarne->erro_msg;
-	
+
   } else if(!empty($oTipo->m02_sequencial)) {
 	$clmodcarnepadraolayouttxt->excluir($oTipo->m02_sequencial);
-	if ($clmodcarnepadraolayouttxt->erro_status == 0) {  	
-	  $sqlerro = true;	
+	if ($clmodcarnepadraolayouttxt->erro_status == 0) {
+	  $sqlerro = true;
 	}
 	$erro_msg = $clmodcarnepadraolayouttxt->erro_msg;
   }
-  
+
   $clmodcarnepadraotipo->excluir(null," k49_modcarnepadrao = {$k48_sequencial}");
   if($clmodcarnepadraotipo->erro_status == 0){
     $sqlerro=true;
-  } 
+  }
   $erro_msg = $clmodcarnepadraotipo->erro_msg;
 
   $clmodcarneexcessao->excluir(null," k36_modcarnepadrao = {$k48_sequencial}");
   if($clmodcarneexcessao->erro_status == 0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clmodcarneexcessao->erro_msg;  
-  
-  
+  }
+  $erro_msg = $clmodcarneexcessao->erro_msg;
+
+
   $clmodcarnepadrao->excluir($k48_sequencial);
   if($clmodcarnepadrao->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clmodcarnepadrao->erro_msg; 
+  }
+  $erro_msg = $clmodcarnepadrao->erro_msg;
   db_fim_transacao($sqlerro);
-  
+
   $db_opcao = 3;
   $db_botao = true;
-  
+
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clmodcarnepadrao->sql_record($clmodcarnepadrao->sql_query_func($chavepesquisa)); 
+   $result = $clmodcarnepadrao->sql_record($clmodcarnepadrao->sql_query_func($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -113,8 +113,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" align="center" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmmodcarnepadrao.php");
@@ -151,8 +151,8 @@ if(isset($chavepesquisa)){
       function js_db_libera(){
          parent.document.formaba.modcarnepadraotipo.disabled = false;
          parent.document.formaba.modcarneexcessao.disabled   = false;
-         top.corpo.iframe_modcarnepadraotipo.location.href='cai1_modcarnepadraotipo001.php?k49_modcarnepadrao=".@$k48_sequencial."';
-         top.corpo.iframe_modcarneexcessao.location.href='cai1_modcarneexcessao001.php?k36_modcarnepadrao=".@$k48_sequencial."';
+         CurrentWindow.corpo.iframe_modcarnepadraotipo.location.href='cai1_modcarnepadraotipo001.php?k49_modcarnepadrao=".@$k48_sequencial."';
+         CurrentWindow.corpo.iframe_modcarneexcessao.location.href='cai1_modcarneexcessao001.php?k36_modcarnepadrao=".@$k48_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('modcarnepadraotipo');";

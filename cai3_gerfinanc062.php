@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -59,12 +59,12 @@ if (isset($envia) or @$mostra == 1) {
 }
 if(!session_is_registered("DB_tipodebitoparcel")){
   session_register("DB_tipodebitoparcel");
-  db_putsession("DB_tipodebitoparcel",$tipo_debito); 
+  db_putsession("DB_tipodebitoparcel",$tipo_debito);
 }else{
-  
+
   $tb = db_getsession("DB_tipodebitoparcel")."X".@$tipo_debito;
-  db_putsession("DB_tipodebitoparcel",$tb); 
-  
+  db_putsession("DB_tipodebitoparcel",$tb);
+
 }
 $wheretipodeb = "";
 $and = "";
@@ -81,24 +81,24 @@ for($tb = 0 ; $tb< count($tipodeb); $tb++){
   }
 }
 
- 
+
 $conteudoaparcelar="";
 $valoresportipo="";
 
 $loteador = false;
 
 if (isset($ver_numcgm) and !isset($ver_matric)) {
-	
+
   $sqlloteador  = "  select *                                                                       ";
   $sqlloteador .= "    from loteam                                                                  ";
-  $sqlloteador .= "         inner join loteamcgm  on loteamcgm.j120_loteam = loteam.j34_loteam      "; 
+  $sqlloteador .= "         inner join loteamcgm  on loteamcgm.j120_loteam = loteam.j34_loteam      ";
   $sqlloteador .= "   where j120_cgm = {$ver_numcgm}                                                ";
-	
+
 	$resultloteador = db_query($sqlloteador) or die($sqlloteador);
 	if (pg_numrows($resultloteador) > 0) {
 		$loteador = true;
 	}
-	
+
 }
 
 $whereloteador = " and k40_forma <> 3";
@@ -108,7 +108,7 @@ if ($loteador == true) {
 }
 
 if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset($numpre))){
-  
+
   $vt = $HTTP_POST_VARS;
   $tam = sizeof($vt);
   $virgula = "";
@@ -119,12 +119,12 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
       $conteudoaparcelar.="XXX" . (!isset($inicial)?"NUMPRE":"INICIAL") . $vt[key($vt)];
       $numpres = $vt[key($vt)];
       $mat = split("N",$numpres);
-      
+
       for($j = 0;$j < count($mat);$j++) {
         if ($mat[$j] == ""){
 					continue;
 				}
-        $numpre = split("P",$mat[$j]);	  
+        $numpre = split("P",$mat[$j]);
         $numpar = split("P",strstr($mat[$j],"P"));
         if(!isset($inicial)){
           $numpar = split("R",$numpar[1]);
@@ -137,69 +137,69 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
         $numpre1 .= $virgula.$numpre;
         $virgula = ",";
       }
-      
+
     }
     next($vt);
   }
-  
+
   $tam = sizeof($vt);
   reset($vt);
   $numpres = "";
   for($i = 0;$i < $tam;$i++) {
     if(db_indexOf(key($vt) ,"CHECK") > 0){
-      $numpres .= "N".$vt[key($vt)];  
+      $numpres .= "N".$vt[key($vt)];
     }
     next($vt);
   }
 
 	if (isset($oPost->marcarvencidas) && isset($oPost->marcartodas)) {
-	  
+
 	  if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
-	    
+
 	    $aNumpres   = split("N",$numpres);
 	    $numpres    = "";
 	    $sNumPreAnt = "";
 	    $sAuxiliar  = "";
 	    for ($iInd = 0; $iInd < count($aNumpres); $iInd++) {
-	      
+
 	      if ($aNumpres[$iInd] == "") {
-	        continue;   
+	        continue;
 	      }
-	      
-	      $iNumpre = split("P",$aNumpres[$iInd]);  
+
+	      $iNumpre = split("P",$aNumpres[$iInd]);
 	      $iNumpar = split("P", strstr($aNumpres[$iInd],"P"));
 	      $iNumpar = split("R",$iNumpar[1]);
 	      $iReceit = $iNumpar[1];
 	      $iNumpar = $iNumpar[0];
 	      $iNumpre = $iNumpre[0];
-	      
+
 	      $sSqlArrecad  = "  select *                               ";
-	      $sSqlArrecad .= "    from arrecad                         "; 
-	      $sSqlArrecad .= "   where k00_numpre   = {$iNumpre}       "; 
+	      $sSqlArrecad .= "    from arrecad                         ";
+	      $sSqlArrecad .= "   where k00_numpre   = {$iNumpre}       ";
 	      $sSqlArrecad .= "     and k00_numpar   = {$iNumpar}       ";
 	      $sSqlArrecad .= "     and k00_dtvenc   > '{$sDataVenc}'   ";
 	      $rsSqlArrecad = db_query($sSqlArrecad);
 	      $iNumRows     = pg_num_rows($rsSqlArrecad);
 	      if ($iNumRows == 0) {
-	        
+
 	        if ($_POST["tipo_debito"] == 3 || $_POST["tipo_debito"] == 5) {
-	          
+
 	          if (empty($sNumPreAnt) || $sNumPreAnt != $iNumpre) {
-	            
+
 	            $sNumPreAnt = $iNumpre;
 	            $sAuxiliar  = "N";
 	          }
-	          
+
 	          $numpres .= "{$sAuxiliar}N".$iNumpre."P".$iNumpar."R".$iReceit;
-	          $sAuxiliar = ""; 
-	        } else { 
+	          $sAuxiliar = "";
+	        } else {
 	          $numpres .= 'N'.$iNumpre."P".$iNumpar."R".$iReceit;
 	        }
 	      }
-	  
+
 	    }
 	  }
-	
+
 	}
 
   $numpres = split("N",$numpres);
@@ -208,7 +208,7 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
     $valores = split("P",$numpres[$i]);
     $totalregistrospassados+=sizeof($valores)-1;
   }
-  
+
 } elseif (isset($numpre)) {
   $numpre1 = $numpre;
   $numpar1 = $numpar;
@@ -232,10 +232,10 @@ $iTemDesconto = 0;
 echo "Selecione a regra de parcelamento: ";
 
 $sqlcadtipoparc = "	select k40_codigo, k40_descr, k40_aplicacao, k40_ordem, tipovlr
-					from cadtipoparc 
+					from cadtipoparc
 					inner join tipoparc on k40_codigo = cadtipoparc
-                    where k40_instit = ".db_getsession('DB_instit')." 
-						  and maxparc > 1 and '". date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini 
+                    where k40_instit = ".db_getsession('DB_instit')."
+						  and maxparc > 1 and '". date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini
                           and '" . date("Y-m-d",db_getsession("DB_datausu")) . "' <= k40_dtfim $whereloteador
                           and ((
                                 $wheretipodeb
@@ -270,8 +270,8 @@ if (!isset($k40_cadtipoparc) and (pg_numrows($resultcadtipoparc) > 0)) {
 $lValidaReparcelamento = false;
 $lBtnParcelar					 = false;
 
-$sSqlDataLimite = "select k40_dtreparc,k40_qtdreparc,k40_regraunif,k40_bloqueio 
-												from cadtipoparc 
+$sSqlDataLimite = "select k40_dtreparc,k40_qtdreparc,k40_regraunif,k40_bloqueio
+												from cadtipoparc
                         where 1=1 ";
 $sSqlDataLimite .= " and k40_codigo = $k40_cadtipoparc and k40_instit = ".db_getsession('DB_instit');
 $rsSqlDataLimite = db_query($sSqlDataLimite);
@@ -282,51 +282,51 @@ if (pg_num_rows($rsSqlDataLimite) > 0) {
 	$lValidaReparcelamento 		= true;
 	$sMensagemReparcelamento 	= "Usuário:\\n\\n Não foi possível verificar a data limite para reparcelamento! Contate suporte!\\n\\nAdministrador:\\n\\n";
 }
-	
+
 if (($k03_tipo == 5 || $k03_tipo == 6 || $k03_tipo == 13 || $k03_tipo == 16 || $k03_tipo == 17) && !$lValidaReparcelamento) {
-	
+
 	if(trim($k40_dtreparc) != ""){
 		$dDataatual   = date("Ymd",db_getsession("DB_datausu"));
-		
+
 		$dDataLimite  = ereg_replace("-","",$k40_dtreparc);
 		if ($dDataatual > $dDataLimite && $k03_tipo != 5) {
 
 			$lValidaReparcelamento 		= true;
 			$lBtnParcelar 						= true;
 			$sMensagemReparcelamento 	= "Excedida data limite para reparcelamento!";
-		
+
 		}
-	}	
-	
+	}
+
 	if (!$lValidaReparcelamento) {
-		
-		
+
+
 		//Verifica o numero de reparcelamentos por numpre.
 		$aNumpres = array();
 		$matnumpres = explode("XXX",db_getsession("conteudoparc"));
 		for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 			if ($matnumpres[$contanumpres] == "") {
 				continue;
-	
+
 			}
-	
+
 	  	if (gettype(strpos($matnumpres[$contanumpres], "NUMPRE")) != "boolean") {
 				$tiporeg = "NUMPRE";
 			} else {
 				$tiporeg = "INICIAL";
 			}
 			$registro = explode($tiporeg, $matnumpres[$contanumpres]);
-	
+
 		  if ($tiporeg == "NUMPRE") {
 				$registros=explode("R", $registro[1]);
 				$numpre=explode("P", $registros[0]);
 				$numpar = $numpre[1];
 				$numpre = substr($numpre[0],1);
 				/*
-				$sqltipo = "select k03_tipo as k03_tipodebito 
+				$sqltipo = "select k03_tipo as k03_tipodebito
 									from arrecad
-									inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre 
-									                     and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
+									inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre
+									                     and arreinstit.k00_instit = ".db_getsession('DB_instit')."
 									inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo
 									where arrecad.k00_numpre = $numpre
 									limit 1";
@@ -335,7 +335,7 @@ if (($k03_tipo == 5 || $k03_tipo == 6 || $k03_tipo == 13 || $k03_tipo == 16 || $
 				*/
 			} else {
 				$numpre = substr($registro[1],1);
-	
+
 	    	//$sqlprocura = "select * from NUMPRES_CALC where k00_numpre = $numpre and k00_numpar = 0";
 			}
 			$aNumpres[]=$numpre;
@@ -346,21 +346,21 @@ if (($k03_tipo == 5 || $k03_tipo == 6 || $k03_tipo == 13 || $k03_tipo == 16 || $
 		//echo "</pre>";
 	  //exit();
 		foreach ($aNumpres as $value){
-			$sSqlQtdPar = "select count(v07_desconto) as qtd from fc_origemparcelamento($value) as o inner join termo on riparcel = v07_parcel 
+			$sSqlQtdPar = "select count(v07_desconto) as qtd from fc_origemparcelamento($value) as o inner join termo on riparcel = v07_parcel
 																	where v07_desconto = $k40_cadtipoparc";
 			$rsSqlQtdPar = db_query($sSqlQtdPar);
-			
+
 			if (pg_num_rows($rsSqlQtdPar) > 0) {
 				db_fieldsmemory($rsSqlQtdPar,0);
-				$k40_qtdreparc += 1 ; 
+				$k40_qtdreparc += 1 ;
 				if ($qtd >= $k40_qtdreparc) {
 					$lValidaReparcelamento	= true;
 					$lBtnParcelar 					= true;
 					$sMensagemReparcelamento  = "Usuário:\\n\\n Excedido limite de vezes para reparcelamento!\\n\\nAdministrador:\\n\\n";
-					break;	
+					break;
 				}
 			}
-			
+
 		}
 	}
 }
@@ -370,9 +370,9 @@ $sVirgula      = '';
 $lPermitir     = false;
 //Regra para não permitir parcelamento de uma inicial com mais de uma origem
 if($k40_regraunif == 2) {
-	
+
 	if(isset($inicial)) {
-		
+
 		if(isset($numpres)) {
 			foreach ($numpres as $iInicial) {
 				if(trim($iInicial) != '') {
@@ -381,9 +381,9 @@ if($k40_regraunif == 2) {
 				}
 			}
 		}
-		
+
 		//se for selecionado o tipo de regra as iniciais estarao na variavel inicial
-		
+
 		$sIniciaisForo = $sIniciaisForo == '' ? $oGet->inicial : $sIniciaisForo;
 		//Sql que verifica se inicial possui mais de uma origem
     $sSqlValidaOrigem  = " select distinct arrematric.k00_matric                                                 ";
@@ -395,24 +395,24 @@ if($k40_regraunif == 2) {
     $sSqlValidaOrigem .= " union                                                                                 ";
     $sSqlValidaOrigem .= " select distinct arreinscr.k00_inscr                                                   ";
     $sSqlValidaOrigem .= "            from inicial                                                               ";
-    $sSqlValidaOrigem .= "      inner join inicialnumpre on inicialnumpre.v59_inicial = inicial.v50_inicial      "; 
-    $sSqlValidaOrigem .= "      inner join arrenumcgm    on arrenumcgm.k00_numpre     = inicialnumpre.v59_numpre "; 
-    $sSqlValidaOrigem .= "      inner join arreinscr     on arreinscr.k00_numpre      = arrenumcgm.k00_numpre    "; 
+    $sSqlValidaOrigem .= "      inner join inicialnumpre on inicialnumpre.v59_inicial = inicial.v50_inicial      ";
+    $sSqlValidaOrigem .= "      inner join arrenumcgm    on arrenumcgm.k00_numpre     = inicialnumpre.v59_numpre ";
+    $sSqlValidaOrigem .= "      inner join arreinscr     on arreinscr.k00_numpre      = arrenumcgm.k00_numpre    ";
     $sSqlValidaOrigem .= "           where inicial.v50_inicial in ({$sIniciaisForo})                             ";
 
     $rsValidaOrigem = db_query($sSqlValidaOrigem) or die('Origens da inicial não encontradas');
-		
+
 		if(pg_num_rows($rsValidaOrigem) > 1) { // mais de uma origem
 			$sMensagemReparcelamento = "Usuário:\\n\\n A regra está configurada para não permitir parcelar débitos que não sejam da sua própria origem!\\n\\nAdministrador:\\n\\n";
 			$lValidaReparcelamento = true;
 			$lBtnParcelar          = true;
 			if($k40_bloqueio == 'f') {
 				$lPermitir = true;
-			} 
+			}
 		}
-		 
+
 	}
-	
+
 }
 
 if($entra == false) {
@@ -420,12 +420,12 @@ if($entra == false) {
 	$cadtipoparc = 0;
 
 	$sqltipoparc = "select *
-									from tipoparc 
+									from tipoparc
 									     inner join cadtipoparc on cadtipoparc = k40_codigo
-									where k40_instit = ".db_getsession('DB_instit')." 
-									  and maxparc > 1 
-										and '". date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini 
-										and '" . date("Y-m-d",db_getsession("DB_datausu")) . "' <= k40_dtfim 
+									where k40_instit = ".db_getsession('DB_instit')."
+									  and maxparc > 1
+										and '". date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini
+										and '" . date("Y-m-d",db_getsession("DB_datausu")) . "' <= k40_dtfim
 										and	k40_codigo = $k40_cadtipoparc $whereloteador";
   $sqltipoparc .= " order by k40_ordem ";
 	$resulttipoparc = db_query($sqltipoparc) or die($sqltipoparc);
@@ -435,8 +435,8 @@ if($entra == false) {
 		$k40_todasmarc = false;
 	}
 
-	$sqltipoparcdeb = "	select * from cadtipoparcdeb 
-											where k41_cadtipoparc = $k40_cadtipoparc 
+	$sqltipoparcdeb = "	select * from cadtipoparcdeb
+											where k41_cadtipoparc = $k40_cadtipoparc
 											limit 1";
 	$resulttipoparcdeb = db_query($sqltipoparcdeb);
 	$passar = false;
@@ -458,18 +458,18 @@ if($entra == false) {
 
 	if (!isset($totalregistrospassados)) {
 		$totalregistrospassados = 0;
-	} 
+	}
 
 	if (!isset($totregistros)) {
 		$totregistros = 0;
 	}
-	
+
 	if (pg_numrows($resulttipoparc) == 0 or ($k40_todasmarc == 't'?$totalregistrospassados <> $totregistros:false) or $passar == false) {
 		$desconto = 0;
 	} else {
 		$desconto = $k40_codigo;
 	}
-	
+
 
 	$tiposparc = "";
 
@@ -490,17 +490,17 @@ if($entra == false) {
 }
 
 if((isset($inicial) && $inicial != "") and ( $entra == false)) {
-  
+
   $numpre = $numpre1;
   $sql = " select v59_numpre,k00_numpar
            from inicialnumpre
            inner join arrecad    on v59_numpre = k00_numpre
-		   inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre 
-			                    and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
+		   inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre
+			                    and arreinstit.k00_instit = ".db_getsession('DB_instit')."
            where v59_inicial in ($numpre) ";
-  
+
   $result = db_query($sql) or die($sql);
-  $numrows= pg_numrows($result); 
+  $numrows= pg_numrows($result);
   $virgula = "";
   $numpar1 = "";
   $numpre1 = "";
@@ -617,7 +617,7 @@ db_query($sql) or die($sql);
 if (@$mostra == 1) {
 	echo $sql . ";<br>";
 }
-//db_msgbox("Teste : ".db_getsession("conteudoparc"));  
+//db_msgbox("Teste : ".db_getsession("conteudoparc"));
 $matnumpres = split("XXX",db_getsession("conteudoparc"));
 for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 	if ($matnumpres[$contanumpres] == "") {
@@ -638,10 +638,10 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 		$numpar = $numpre[1];
 		$numpre = substr($numpre[0],1);
 
-		$sqltipo = "select k03_tipo as k03_tipodebito 
+		$sqltipo = "select k03_tipo as k03_tipodebito
 								from arrecad
-								inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre 
-								                     and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
+								inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre
+								                     and arreinstit.k00_instit = ".db_getsession('DB_instit')."
 								inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo
 								where arrecad.k00_numpre = $numpre
 								limit 1";
@@ -649,7 +649,7 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 		db_fieldsmemory($resulttipo, 0);
 
     $sqlprocura = "select * from NUMPRES_CALC where k00_numpre = $numpre and k00_numpar = $numpar";
-		
+
 	} else {
 		$numpre = substr($registro[1],1);
 
@@ -658,34 +658,34 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 	$resultprocura = db_query($sqlprocura) or die($sqlprocura);
 
 	if (pg_numrows($resultprocura) == 0) {
-    
+
 		$sqlparc = "insert into NUMPRES_CALC values ($numpre,".($tiporeg == "NUMPRE"?$numpar:"0").")";
 		db_query($sqlparc) or die($sqlparc);
 
 		if ($tiporeg == "INICIAL") {
-			$sqlcalc = "select xxx.k00_numpre, 
-			                   xxx.k00_numpar, 
-												 fc_calcula(xxx.k00_numpre, xxx.k00_numpar, xxx.k00_receit, current_date, current_date, extract (year from current_date)::integer) 
-              			from (select distinct 
+			$sqlcalc = "select xxx.k00_numpre,
+			                   xxx.k00_numpar,
+												 fc_calcula(xxx.k00_numpre, xxx.k00_numpar, xxx.k00_receit, current_date, current_date, extract (year from current_date)::integer)
+              			from (select distinct
               			             arrecad.k00_numpre,
               			             arrecad.k00_numpar,
-              			             arrecad.k00_receit 
-              			        from inicialnumpre  
+              			             arrecad.k00_receit
+              			        from inicialnumpre
 										             inner join arrecad    on arrecad.k00_numpre    = v59_numpre
 																 inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre
-                     																  and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
+                     																  and arreinstit.k00_instit = ".db_getsession('DB_instit')."
 						       where v59_inicial = $numpre) as xxx";
 			$k03_tipodebito = 18;
 //	  db_msgbox("Tipo:$tiporeg");
 //		db_msgbox("$numpre-------".@$numpar);
 //	  db_msgbox("iniciallllllllllllll");
-//	  db_msgbox($k03_tipodebito);		
+//	  db_msgbox($k03_tipodebito);
 
 		} else {
-			$sqltipo = "select k03_tipo as k03_tipodebito 
+			$sqltipo = "select k03_tipo as k03_tipodebito
 									from arrecad
-									inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre 
-                    									 and arreinstit.k00_instit =	".db_getsession('DB_instit')." 
+									inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre
+                    									 and arreinstit.k00_instit =	".db_getsession('DB_instit')."
 									inner join arretipo   on arrecad.k00_tipo = arretipo.k00_tipo
 									                     and arretipo.k00_instit = ".db_getsession('DB_instit')."
 									where arrecad.k00_numpre = $numpre
@@ -695,20 +695,20 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 //	  db_msgbox("Tipo:$tiporeg");
 //		db_msgbox("$numpre-------".@$numpar);
 //	  db_msgbox("numpreeeeeeeeeee");
-//	  db_msgbox($k03_tipodebito);		
+//	  db_msgbox($k03_tipodebito);
 			$sqlcalc = "select $numpre as k00_numpre, $numpar as k00_numpar, fc_calcula($numpre, $numpar, 0, current_date, current_date, extract (year from current_date)::integer)";
 		}
 
 		$cadtipoparc = 0;
 
 		$sqltipoparc = "select *
-										from tipoparc 
+										from tipoparc
 										inner join cadtipoparc on cadtipoparc = k40_codigo
 										                      and k40_instit = ".db_getsession('DB_instit') ."
-										where maxparc > 1 
-										  and '".date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini 
-											and '".date("Y-m-d",db_getsession("DB_datausu")) . "' <= k40_dtfim 
-											and	k40_codigo = $k40_cadtipoparc 
+										where maxparc > 1
+										  and '".date("Y-m-d",db_getsession("DB_datausu")) . "' >= k40_dtini
+											and '".date("Y-m-d",db_getsession("DB_datausu")) . "' <= k40_dtfim
+											and	k40_codigo = $k40_cadtipoparc
 										$whereloteador";
     $sqltipoparc .= " order by maxparc ";
 		$resulttipoparc = db_query($sqltipoparc) or die($sqltipoparc);
@@ -718,8 +718,8 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 			$k40_todasmarc = false;
 		}
 
-		$sqltipoparcdeb = "	select * from cadtipoparcdeb 
-												where k41_cadtipoparc = $k40_cadtipoparc   
+		$sqltipoparcdeb = "	select * from cadtipoparcdeb
+												where k41_cadtipoparc = $k40_cadtipoparc
 												limit 1";
 		$resulttipoparcdeb = db_query($sqltipoparcdeb);
 		$passar = false;
@@ -733,8 +733,8 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 		if (pg_numrows($resulttipoparcdeb) == 0) {
 			$passar = true;
 		} else {
-			$sqltipoparcdeb = "	select * from cadtipoparcdeb 
-													where k41_cadtipoparc = $k40_cadtipoparc 
+			$sqltipoparcdeb = "	select * from cadtipoparcdeb
+													where k41_cadtipoparc = $k40_cadtipoparc
    													and	k41_arretipo = $tipo_debito";
 			$resulttipoparcdeb = db_query($sqltipoparcdeb);
 			if (pg_numrows($resulttipoparcdeb) > 0) {
@@ -744,21 +744,21 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 
 		if (!isset($totalregistrospassados)) {
 			$totalregistrospassados = 0;
-		} 
+		}
 
 		if (!isset($totregistros)) {
 			$totregistros = 0;
 		}
 
 //		die("numrows: " . pg_numrows($resulttipoparc) . " - todasmarc: $k40_todasmarc - totalregpassados: $totalregistrospassados - totregistros: $totregistros - passar: $passar");
-		
+
 		if (pg_numrows($resulttipoparc) == 0 or ($k40_todasmarc == 't'?$totalregistrospassados <> $totregistros:false) or $passar == false) {
 			$desconto = 0;
 		} else {
 			$desconto = $k40_codigo;
 		}
-		
-		//echo "<br>numrows: " . pg_numrows($resulttipoparc) . " - todasmarc: $k40_todasmarc - totregpas: $totalregistrospassados - totreg: $totregistros - passar: $passar - desconto: $desconto<br>"; 
+
+		//echo "<br>numrows: " . pg_numrows($resulttipoparc) . " - todasmarc: $k40_todasmarc - totregpas: $totalregistrospassados - totreg: $totregistros - passar: $passar - desconto: $desconto<br>";
 
 		$tiposparc = "";
 
@@ -771,7 +771,7 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 		  $tiposparc .= $tipoparc . "=" . $maxparc . "=" . $descmul . "=" . $descjur . "=" . (int) $k42_minentrada . "=" . $k40_forma . "=" . $descvlr . "=" . $vlrmin . "=" . $tipovlr . "=" . $minparc . "=" . ($parcelas == (pg_numrows($resulttipoparc) -1)?"":"-");
 		}
 
-		$sqlcalc_desativado = "select 
+		$sqlcalc_desativado = "select
 									 substr(fc_calcula,2,13)::float8 as vlrhis,
 									 substr(fc_calcula,15,13)::float8 as vlrcor,
 									 substr(fc_calcula,28,13)::float8 as vlrjuros,
@@ -783,7 +783,7 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 									 substr(fc_calcula,54,13)::float8) as vlrtotal
 								from ($sqlcalc) as x";
 		$resultcalc = db_query($sqlcalc) or die($sqlcalc);
-		
+
 		for ($calc=0; $calc < pg_numrows($resultcalc); $calc++) {
 			db_fieldsmemory($resultcalc, $calc);
 
@@ -797,9 +797,9 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 			if ($tiporeg == "NUMPRE") {
 				$sqlparc = "insert into NUMPRES_PARC1 values ($numpre,$numpar,$k03_tipodebito)";
 			} else {
-				$sqlparc = "insert into NUMPRES_PARC1 
-										select distinct v59_numpre, 0, 18 
-										from inicialnumpre 
+				$sqlparc = "insert into NUMPRES_PARC1
+										select distinct v59_numpre, 0, 18
+										from inicialnumpre
 										where v59_inicial = $numpre";
 			}
 			db_query($sqlparc) or die($sqlparc);
@@ -846,7 +846,7 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 	}
 
 }
-$sqltotalportipo = "select 
+$sqltotalportipo = "select
 										k03_tipodebito,
 										k03_descr,
 										k00_cadtipoparc,
@@ -878,7 +878,7 @@ if (@$mostra != 1) {
 }
 
 if(isset($envia) or (@$mostra == 1) ) {
- 	
+
   $totparc=$parc+1;
   $sql= "create temporary table NUMPRES_PARC (k00_numpre integer, k00_numpar integer, k03_tipodebito integer) on commit drop";
   if (@$mostra == 1) {
@@ -973,7 +973,7 @@ echo "<input type='hidden' name='permiteInicial'         value=''>\n";
 ?>
 <center>
 <table border="1" width="100%">
-<input type="hidden" name="matric" value="<?=@$ver_matric?>"> 
+<input type="hidden" name="matric" value="<?=@$ver_matric?>">
 <tr>
 <td  align="center" colspan="3" style='border: 1px outset #cccccc'>
 <a onclick='js_mostra()'>
@@ -990,7 +990,7 @@ echo "<input type='hidden' name='permiteInicial'         value=''>\n";
 db_ancora(@$Lv07_numcgm,"js_pesquisav07_numcgm(true);",1);
 ?>
 </td>
-<td nowrap colspan="1"> 
+<td nowrap colspan="1">
 <?
 db_input('v07_numcgm',6,$Iv07_numcgm,true,'hidden',1," onchange='js_pesquisav07_numcgm(false);'")
 ?>
@@ -1051,7 +1051,7 @@ if(isset($inicial)){
 <td nowrap title="">
 <strong>Primeiro vencimento:</strong>
 </td>
-<td> 
+<td>
 <?
 $novadata  = mktime (0, 0, 0, date('m',db_getsession("DB_datausu")), date('d',db_getsession("DB_datausu"))+10, date('Y',db_getsession("DB_datausu")) );
 if ( $oConfig->db21_codcli == 19985 ) { // marica/rj
@@ -1071,7 +1071,7 @@ db_inputdata('datpri',@$datpri_dia,@$datpri_mes,@$datpri_ano,true,'text',1,"")
 <td nowrap title="">
 <strong>Segundo vencimento:</strong>
 </td>
-<td> 
+<td>
 <?
 
 if (date("d",db_getsession("DB_datausu")) >= $k40_diapulames and $k40_diapulames > 0) {
@@ -1166,28 +1166,28 @@ db_select('arredondamento',$matarredonda,true,2,"onchange='parcelas.location.hre
 <iframe name='parcelas' src='cai3_gerfinanc063.php?valoresportipo=<?=$valoresportipo?>&valor=<?=$totaltotal?>&valorcorr=<?=$totalvlrcor?>&juros=<?=$totalvlrjuros?>&multa=<?=$totalvlrmulta?>&valorcomdesconto=<?=$totaltotal?>&arredondamento=D&temdesconto=<?=$iTemDesconto?>&tiposparc=<?=$tiposparc?>&k40_aplicacao=<?=$k40_aplicacao?>' frameborder='0' align='center' width='350' height='180'>
 </iframe>
 </td>
-</tr>  
+</tr>
 </table>
-<? 
+<?
 	if ($lValidaReparcelamento) {
 		db_msgbox($sMensagemReparcelamento);
-		
+
 		if(!$lPermitir)
 			echo "<script>parent.document.getElementById('pesquisar').click();</script>";
-	} 
-	
+	}
+
 ?>
 <script>
 function js_verifica(k03_tipo){
   f = document.form1;
   alerta = '';
-  
+
 	if(f.permitediverso.value == 't'){
-		alert('Para parcelar diverso com outro tipo de débito deve ser importado para divida.');			
+		alert('Para parcelar diverso com outro tipo de débito deve ser importado para divida.');
 		return false;
 	}
 	if(f.permiteInicial.value == 't'){
-		alert('Não é possível parcelar INICIAL DO FORO ou PARCELAMENTO DO FORO com outro tipo de débito.');			
+		alert('Não é possível parcelar INICIAL DO FORO ou PARCELAMENTO DO FORO com outro tipo de débito.');
 		return false;
 	}
   /*--------------------------------------------------------------------------------------------------------------------
@@ -1196,7 +1196,7 @@ function js_verifica(k03_tipo){
       alerta += " - Processo ou Observações\n";
     }
   ---------------------------------------------------------------------------------------------------------------------*/
-    
+
 //  if (f.v07_hist.value == '') {
 //    alerta += " - Observações\n";
 //
@@ -1226,7 +1226,7 @@ function js_verifica(k03_tipo){
   return false;
 }
 function js_troca_parc(obj){
-  
+
   if(isNaN(obj.value)){
     alert('campo parcela deve ser preenchido somente com números');
     obj.value = '';
@@ -1239,25 +1239,25 @@ function js_troca_parc(obj){
       parcelas.document.getElementById('val'+obj.value).checked = true;
       parcelas.document.getElementById('val'+obj.value).focus();
     }
-    document.form1.ent.value = total.toFixed(2);	
+    document.form1.ent.value = total.toFixed(2);
   }
 }
 var x = 0;
 var y = 0;
 
 function js_valparc(id,vlrmin) {
-  
+
 	valTotalParc = new Number( document.form1.valortotal.value);
 
   if(parcelas.document.getElementById('vt').innerHTML != document.form1.valortotal.value){
-    js_troca_valores('0'); 
+    js_troca_valores('0');
   }
 
   var descontocor = 0;
   var descontomul = 0;
   var descontojur = 0;
 	document.form1.permitediverso.value = '';
-  
+
   var tipo1 = document.form1.tiposparc.value.split("-");
   var parcela = Number(document.form1.parc.value);
   var parcela = parcela + 1;
@@ -1275,9 +1275,9 @@ function js_valparc(id,vlrmin) {
       var descontojur = tipo2[3];
       break;
     }
-    
+
     var ultparc = tipo2[1];
-    
+
   }
 
 	var valoresportipo	= document.form1.valoresportipo.value.split("=");
@@ -1306,7 +1306,7 @@ function js_valparc(id,vlrmin) {
     if (js_search_in_array(temTipos,procurar) == false) {
 			temTipos[temTipos.length] = procurar;
 		}
-    
+
 		var cadtipoparc	=	valores[1];
 		var valhist			= new Number(valores[2]);
 		var valcorr			= new Number(valores[3]);
@@ -1398,19 +1398,19 @@ function js_valparc(id,vlrmin) {
         valTotalParc      = new Number(valTotalParc);
         valComplemento    = valDecimalParcial;
         valentrada        = js_round( ( ( valTotalParc / valentrada ) + valComplemento  ),2 );
-      }    
+      }
 
-      valentrada     = js_round( valentrada,2 ); 
-      valentrada     = valentrada.toFixed(2); 
-      
+      valentrada     = js_round( valentrada,2 );
+      valentrada     = valentrada.toFixed(2);
+
     } else {
-      
+
       if (document.form1.arredondamento.value == "I" ) {
         valentrada = Math.round(valor)
       } else {
         valentrada = valor
       }
-      
+
     }
   } else {
     valentrada = valtotal;
@@ -1426,15 +1426,15 @@ function js_valparc(id,vlrmin) {
 	if ((valentrada < entradaminima) || (nPercentualEntrada > 0)) {
 		valentrada = entradaminima;
 	}
-  
+
   document.form1.ent.value = valentrada;
 
   if (document.form1.parc.value >= 1) {
 
     if (forma == 2) {
-      
+
       valtotalsemdesconto = valtotal;
-      
+
       if (document.form1.parc.value == 1) {
         x = valtotcorr;
       } else {
@@ -1445,30 +1445,30 @@ function js_valparc(id,vlrmin) {
   //    x = valtotal - eval(x +'+'+ document.form1.ent.value)
 
       document.form1.parcult.value = (valtotjuros + valtotmulta).toFixed(2);
-      
+
       parcelas.document.getElementById('vtcomdesconto').innerHTML = valtotalsemdesconto;
-      
+
     } else {
-      
+
       x = (valtotal - document.form1.ent.value)/document.form1.parc.value;
       document.form1.parcval.value = x.toFixed(2);
       x = document.form1.parc.value * document.form1.parcval.value;
-      
+
       x = valtotal - eval(x +'+'+ document.form1.ent.value)
       document.form1.parcult.value = eval(document.form1.parcval.value +'+'+ x).toFixed(2);
-      
+
       parcelas.document.getElementById('vtcomdesconto').innerHTML = valtotal;
-      
+
     }
 
   }
-  document.form1.vlrmin.value = vlrmin; 
-  <? 
+  document.form1.vlrmin.value = vlrmin;
+  <?
     if ($lBtnParcelar == true) {
-      echo "document.form1.envia.disabled=true;";  	 
+      echo "document.form1.envia.disabled=true;";
     } else {
     	echo "document.form1.envia.disabled=false;";
-    }		
+    }
   ?>
 
 }
@@ -1496,7 +1496,7 @@ function js_troca_valores(entrada){
     document.form1.envia.disabled=true;
     return false;
   }else{
-    
+
 		var tipo1 = document.form1.tiposparc.value.split("-");
 		var parcela = Number(document.form1.parc.value);
 		var parcela = parcela + 1;
@@ -1513,9 +1513,9 @@ function js_troca_valores(entrada){
 				var descontojur = tipo2[3];
 				break;
 			}
-			
+
 			var ultparc = tipo2[1];
-			
+
 		}
 
 	  valortotalcomdesconto = new Number(parcelas.document.getElementById('vtcomdesconto').innerHTML);
@@ -1532,12 +1532,12 @@ function js_troca_valores(entrada){
       return false;
     }
 
-    <? 
+    <?
     if ($lBtnParcelar == true) {
-      echo "document.form1.envia.disabled=true;";    
+      echo "document.form1.envia.disabled=true;";
     } else {
       echo "document.form1.envia.disabled=false;";
-    }   
+    }
     ?>
 
     if(entrada.indexOf(",") != -1){
@@ -1571,54 +1571,54 @@ function js_troca_valores(entrada){
 		}
 
 		valtotal = valtotal.toFixed(2);
-  
+
 		if (forma == 2) {
 
 			quantparcelas = new Number(document.form1.parc.value);
 			valorparcela = new Number(document.form1.parcval.value);
 			valorultima = new Number(document.form1.parcult.value);
 			valentrada = new Number(document.form1.ent.value);
-			
+
 			valortotal = (valorparcela * (quantparcelas - 1)) + valorultima;
 			valortotal = Number(document.form1.valorcorr.value);
-			
+
 			valcadaparcela =  (Math.round(( (valortotal - valentrada)/(quantparcelas-1)) * 100))/100;
 
 			document.form1.parcval.value = valcadaparcela;
-			
+
 			valorsomenteparcelas = document.form1.parcval.value * (quantparcelas -2);
-			
+
 			valorultima = valorultima.toFixed(2);
-			
+
 			document.form1.parcult.value = valorultima;
-			
+
 		} else {
 
 			quantparcelas = new Number(document.form1.parc.value);
 			valorparcela = new Number(document.form1.parcval.value);
 			valorultima = new Number(document.form1.parcult.value);
 			valentrada = new Number(document.form1.ent.value);
-			
+
 			valortotal = (valorparcela * (quantparcelas - 1)) + valorultima;
 			valortotal = new Number(parcelas.document.getElementById('vtcomdesconto').innerHTML);
-			
+
 			valcadaparcela =  (Math.round(( (valortotal - valentrada)/quantparcelas  ) * 100))/100;
-			
+
 			if (valcadaparcela < vlrmin) {
 				alert('Valor calculado da parcela nao pode ser menor que o valor mínimo: ' + vlrmin);
 				document.form1.envia.disabled=true;
 				return false;
 			}
-			
+
 			document.form1.parcval.value = valcadaparcela;
-			
+
 			valorsomenteparcelas = document.form1.parcval.value * (quantparcelas -1);
-			
+
 			valorultima = valortotal - valorsomenteparcelas - valentrada;
 			valorultima = valorultima.toFixed(2);
-			
+
 			document.form1.parcult.value = valorultima;
-			
+
 		}
 
 		document.form1.dia.focus();
@@ -1626,72 +1626,72 @@ function js_troca_valores(entrada){
     for(i=2;i<500;i++){
       parcelas.document.getElementById('val'+i).checked = false;
     }
-    
+
   }
-  
+
 }
 
 function js_troca_valores_parc(valor) {
 
   if (isNaN(valor)) {
-  
+
     alert('campo valor da parcela deve ser preenchido somente com números');
     document.form1.parcval.value = '';
     document.form1.parcval.focus();
     return false;
-    
+
   } else if(valor <= 0) {
-  
+
     alert('Valor da parcela deve ser maior que 0');
     document.form1.parcval.value = '';
     document.form1.parcval.focus();
     return false;
   }else{
-    
+
     valentrada = document.form1.ent.value;
     valorparcela = new Number(document.form1.parc.value);
     quantparcelas = new Number(document.form1.parcval.value);
     valorultima = new Number(document.form1.parcult.value);
-    
+
     valortotal = new Number(parcelas.document.getElementById('vtcomdesconto').innerHTML);
-    
+
     ultimaparcela = valortotal - valentrada - (quantparcelas * (valorparcela -1));
-    
+
     ultimaparcela = (Math.round(ultimaparcela*100))/100;
-    
+
     maximoparc = (valortotal - valentrada) / valorparcela;
     maximoparc = (Math.round(maximoparc*100))/100;
-    
+
     if (ultimaparcela < 0) {
-      
+
       alert('Valor de cada parcela nao pode ultrapassar ' + maximoparc);
       return false;
     } else {
       document.form1.parcult.value = ultimaparcela;
     }
-    
+
   }
-  
+
   document.form1.dia.focus();
   return true;
 }
 
 function js_pesquisav07_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?testanome=true&funcao_js=parent.debitos.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?testanome=true&funcao_js=parent.debitos.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-    if(document.form1.v07_numcgm.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?testanome=true&pesquisa_chave='+document.form1.v07_numcgm.value+'&funcao_js=parent.debitos.js_mostracgm','Pesquisa',false);
+    if(document.form1.v07_numcgm.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?testanome=true&pesquisa_chave='+document.form1.v07_numcgm.value+'&funcao_js=parent.debitos.js_mostracgm','Pesquisa',false);
     }else{
-      document.form1.z01_nome.value = ''; 
+      document.form1.z01_nome.value = '';
     }
   }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.v07_numcgm.focus(); 
-    document.form1.v07_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.v07_numcgm.focus();
+    document.form1.v07_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -1701,7 +1701,7 @@ function js_mostracgm1(chave1,chave2){
   parent.document.getElementById('id_resp_parc').value = chave1;
   if(parent.document.getElementById('resp_parc').value == "")
   parent.document.getElementById('resp_parc').value = chave2;
-  top.corpo.db_iframe_cgm.hide();
+  CurrentWindow.corpo.db_iframe_cgm.hide();
 }
 onload = js_pnome();
 function js_pnome(){
@@ -1719,27 +1719,27 @@ function js_reload(valor){
   document.form1.submit();
 }
 function js_pesquisap58_codproc(mostra){
-  var bMostra = mostra; 
+  var bMostra = mostra;
   if(bMostra==true){
     var js_funcao   = 'parent.debitos.js_preenchepesquisap58_codproc';
     var sUrl = 'func_protprocesso.php?funcao_js='+js_funcao+'|p58_codproc|p58_requer';
-    js_OpenJanelaIframe('top.corpo','db_iframe_protprocesso',sUrl,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_protprocesso',sUrl,'Pesquisa',true);
   }else{
     var p58_codproc = document.getElementById("p58_codproc").value;
     var js_funcao   = 'parent.debitos.js_preenchepesquisap58_codproc';
     var sUrl        = 'func_protprocesso.php?pesquisa_chave='+p58_codproc+'&funcao_js='+js_funcao;
-    if(p58_codproc != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_protprocesso',sUrl,'Pesquisa',false);
+    if(p58_codproc != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_protprocesso',sUrl,'Pesquisa',false);
     }else{
       document.form1.p58_codproc.value = '';
-      document.form1.p58_requer.value  = ''; 
+      document.form1.p58_requer.value  = '';
     }
   }
 }
 function js_preenchepesquisap58_codproc(chave1,chave2){
   document.form1.p58_codproc.value = chave1;
   document.form1.p58_requer.value  = chave2;
-  top.corpo.db_iframe_protprocesso.hide();
+  CurrentWindow.corpo.db_iframe_protprocesso.hide();
 }
 </script>
 </center>

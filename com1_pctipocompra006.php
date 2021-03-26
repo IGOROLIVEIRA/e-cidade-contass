@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,25 +46,25 @@ $sqlerro  = false;
 $iInstit  = db_getsession('DB_instit');
 
 if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Excluir") {
-	
+
   db_inicio_transacao();
-  
+
   $db_opcao = 3;
-  
+
   $clpctipocompra->excluir($pc50_codcom);
   $sMensagem = $clpctipocompra->erro_msg;
   if ($clpctipocompra->erro_status == 0) {
     $sqlerro = true;
   }
-  
+
   db_fim_transacao($sqlerro);
-  
+
 } else if (isset($chavepesquisa)) {
-	
+
   $db_opcao = 3;
   $db_botao = true;
-  
-  $result   = $clpctipocompra->sql_record($clpctipocompra->sql_query($chavepesquisa)); 
+
+  $result   = $clpctipocompra->sql_record($clpctipocompra->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
 }
 ?>
@@ -88,8 +88,8 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Excl
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td valign="top" bgcolor="#CCCCCC">
     <center>
       <?
         include("forms/db_frmpctipocompra.php");
@@ -102,11 +102,11 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Excl
 </html>
 <?
 if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir") {
-	
+
   if ($clpctipocompra->erro_status == "0") {
     db_msgbox($sMensagem);
   } else {
-  	
+
     db_msgbox($sMensagem);
 	  echo "
 	    <script>
@@ -120,13 +120,13 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Exclui
 }
 
 if (isset($chavepesquisa)) {
-	
+
  echo "
   <script>
       function js_db_libera(){
          parent.document.formaba.tipocompras.disabled=false;
          parent.document.formaba.faixavalores.disabled=false;
-         top.corpo.iframe_faixavalores.location.href='com1_pctipocomprafaixavalor001.php?pc50_codcom=".@$pc50_codcom."';
+         CurrentWindow.corpo.iframe_faixavalores.location.href='com1_pctipocomprafaixavalor001.php?pc50_codcom=".@$pc50_codcom."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('faixavalores');";

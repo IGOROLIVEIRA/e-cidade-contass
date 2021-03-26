@@ -120,7 +120,7 @@ function js_pesquisaac15_acordopenalidade(mostra){
 
   if (mostra) {
 
-    js_OpenJanelaIframe('top.corpo.iframe_acordopenalidade',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordopenalidade',
                         'db_iframe_acordopenalidade',
                         'func_acordopenalidade.php?funcao_js=parent.js_mostraacordopenalidade1|'+
                         'ac13_sequencial|ac13_descricao|ac13_textopadrao',
@@ -131,7 +131,7 @@ function js_pesquisaac15_acordopenalidade(mostra){
 
      if (document.form1.ac15_acordopenalidade.value != '') {
 
-        js_OpenJanelaIframe('top.corpo.iframe_acordopenalidade',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordopenalidade',
                             'db_iframe_acordopenalidade',
                             'func_acordopenalidade.php?pesquisa_chave='+
                             document.form1.ac15_acordopenalidade.value+

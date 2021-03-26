@@ -457,23 +457,23 @@ db_app::import("configuracao.DBDepartamento");
     }
 
     function js_consultaEmpenho(iNumeroEmpenho) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho001', 'func_empempenho001.php?e60_numemp=' + iNumeroEmpenho, 'Pesquisa Empenho', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho001', 'func_empempenho001.php?e60_numemp=' + iNumeroEmpenho, 'Pesquisa Empenho', true);
     }
 
     function js_consultaLicitacao(iCodigoLicitacao) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
     }
 
     function js_consultaProcessoCompras(iCodigoProcesso) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_pesquisa_processo', 'com3_pesquisaprocessocompras003.php?pc80_codproc=' + iCodigoProcesso, 'Pesquisa Processo de Compras', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pesquisa_processo', 'com3_pesquisaprocessocompras003.php?pc80_codproc=' + iCodigoProcesso, 'Pesquisa Processo de Compras', true);
     }
 
     function js_consultaAditamento(iCodAcordo,iCodAditamento) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_pesquisa_aditamento', 'func_aditamentonovo.php?ac16_sequencial='+iCodAcordo+'&ac26_sequencial='+iCodAditamento+'&aditamento=true','Pesquisa Aditamentos',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pesquisa_aditamento', 'func_aditamentonovo.php?ac16_sequencial='+iCodAcordo+'&ac26_sequencial='+iCodAditamento+'&aditamento=true','Pesquisa Aditamentos',true);
     }
 
     function js_consultaApostilamento(iCodApostilamento) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_pesquisa_apostilamento', 'func_consultaapostilamento.php?ac26_sequencial='+iCodApostilamento+'&apostilamento=true','Pesquisa Apostilamento', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pesquisa_apostilamento', 'func_consultaapostilamento.php?ac26_sequencial='+iCodApostilamento+'&apostilamento=true','Pesquisa Apostilamento', true);
     }
 
     function js_showInfoItem(oDados) {
@@ -595,7 +595,7 @@ db_app::import("configuracao.DBDepartamento");
     function js_mostraSaldo(chave){
 
         arq = 'func_saldoorcdotacao.php?o58_coddot='+chave
-        js_OpenJanelaIframe('top.corpo','db_iframe_saldos',arq,'Saldo da dotação',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saldos',arq,'Saldo da dotação',true);
         $('Jandb_iframe_saldos').style.zIndex='1500000';
     }
 

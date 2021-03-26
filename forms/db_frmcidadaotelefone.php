@@ -14,7 +14,7 @@ $clrotulo->label("ov02_sequencial");
     <td nowrap title="<?=@$Tov07_sequencial?>">
        <?=@$Lov07_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ov07_sequencial',10,$Iov07_sequencial,true,'text',$db_opcao,"")
 ?>
@@ -26,7 +26,7 @@ db_input('ov07_sequencial',10,$Iov07_sequencial,true,'text',$db_opcao,"")
        db_ancora(@$Lov07_seq,"js_pesquisaov07_seq(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ov07_seq',10,$Iov07_seq,true,'text',$db_opcao," onchange='js_pesquisaov07_seq(false);'")
 ?>
@@ -42,7 +42,7 @@ db_input('ov02_sequencial',10,$Iov02_sequencial,true,'text',3,'')
        db_ancora(@$Lov07_cidadao,"js_pesquisaov07_cidadao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ov07_cidadao',10,$Iov07_cidadao,true,'text',$db_opcao," onchange='js_pesquisaov07_cidadao(false);'")
 ?>
@@ -56,7 +56,7 @@ db_input('ov02_sequencial',10,$Iov02_sequencial,true,'text',3,'')
     <td nowrap title="<?=@$Tov07_numero?>">
        <?=@$Lov07_numero?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ov07_numero',10,$Iov07_numero,true,'text',$db_opcao,"")
 ?>
@@ -66,7 +66,7 @@ db_input('ov07_numero',10,$Iov07_numero,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tov07_tipotelefone?>">
        <?=@$Lov07_tipotelefone?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ov07_tipotelefone',10,$Iov07_tipotelefone,true,'text',$db_opcao,"")
 ?>
@@ -76,7 +76,7 @@ db_input('ov07_tipotelefone',10,$Iov07_tipotelefone,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tov07_ddd?>">
        <?=@$Lov07_ddd?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ov07_ddd',10,$Iov07_ddd,true,'text',$db_opcao,"")
 ?>
@@ -86,7 +86,7 @@ db_input('ov07_ddd',10,$Iov07_ddd,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tov07_ramal?>">
        <?=@$Lov07_ramal?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ov07_ramal',10,$Iov07_ramal,true,'text',$db_opcao,"")
 ?>
@@ -96,7 +96,7 @@ db_input('ov07_ramal',10,$Iov07_ramal,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tov07_obs?>">
        <?=@$Lov07_obs?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('ov07_obs',0,0,$Iov07_obs,true,'text',$db_opcao,"")
 ?>
@@ -110,20 +110,20 @@ db_textarea('ov07_obs',0,0,$Iov07_obs,true,'text',$db_opcao,"")
 <script>
 function js_pesquisaov07_seq(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_seq|ov02_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_seq|ov02_sequencial','Pesquisa',true);
   }else{
-     if(document.form1.ov07_seq.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_seq.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
+     if(document.form1.ov07_seq.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_seq.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
      }else{
-       document.form1.ov02_sequencial.value = ''; 
+       document.form1.ov02_sequencial.value = '';
      }
   }
 }
 function js_mostracidadao(chave,erro){
-  document.form1.ov02_sequencial.value = chave; 
-  if(erro==true){ 
-    document.form1.ov07_seq.focus(); 
-    document.form1.ov07_seq.value = ''; 
+  document.form1.ov02_sequencial.value = chave;
+  if(erro==true){
+    document.form1.ov07_seq.focus();
+    document.form1.ov07_seq.value = '';
   }
 }
 function js_mostracidadao1(chave1,chave2){
@@ -133,20 +133,20 @@ function js_mostracidadao1(chave1,chave2){
 }
 function js_pesquisaov07_seq(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_sequencial|ov02_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_sequencial|ov02_sequencial','Pesquisa',true);
   }else{
-     if(document.form1.ov07_seq.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_seq.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
+     if(document.form1.ov07_seq.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_seq.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
      }else{
-       document.form1.ov02_sequencial.value = ''; 
+       document.form1.ov02_sequencial.value = '';
      }
   }
 }
 function js_mostracidadao(chave,erro){
-  document.form1.ov02_sequencial.value = chave; 
-  if(erro==true){ 
-    document.form1.ov07_seq.focus(); 
-    document.form1.ov07_seq.value = ''; 
+  document.form1.ov02_sequencial.value = chave;
+  if(erro==true){
+    document.form1.ov07_seq.focus();
+    document.form1.ov07_seq.value = '';
   }
 }
 function js_mostracidadao1(chave1,chave2){
@@ -156,20 +156,20 @@ function js_mostracidadao1(chave1,chave2){
 }
 function js_pesquisaov07_cidadao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_seq|ov02_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_seq|ov02_sequencial','Pesquisa',true);
   }else{
-     if(document.form1.ov07_cidadao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_cidadao.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
+     if(document.form1.ov07_cidadao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_cidadao.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
      }else{
-       document.form1.ov02_sequencial.value = ''; 
+       document.form1.ov02_sequencial.value = '';
      }
   }
 }
 function js_mostracidadao(chave,erro){
-  document.form1.ov02_sequencial.value = chave; 
-  if(erro==true){ 
-    document.form1.ov07_cidadao.focus(); 
-    document.form1.ov07_cidadao.value = ''; 
+  document.form1.ov02_sequencial.value = chave;
+  if(erro==true){
+    document.form1.ov07_cidadao.focus();
+    document.form1.ov07_cidadao.value = '';
   }
 }
 function js_mostracidadao1(chave1,chave2){
@@ -179,20 +179,20 @@ function js_mostracidadao1(chave1,chave2){
 }
 function js_pesquisaov07_cidadao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_sequencial|ov02_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?funcao_js=parent.js_mostracidadao1|ov02_sequencial|ov02_sequencial','Pesquisa',true);
   }else{
-     if(document.form1.ov07_cidadao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_cidadao.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
+     if(document.form1.ov07_cidadao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadao','func_cidadao.php?pesquisa_chave='+document.form1.ov07_cidadao.value+'&funcao_js=parent.js_mostracidadao','Pesquisa',false);
      }else{
-       document.form1.ov02_sequencial.value = ''; 
+       document.form1.ov02_sequencial.value = '';
      }
   }
 }
 function js_mostracidadao(chave,erro){
-  document.form1.ov02_sequencial.value = chave; 
-  if(erro==true){ 
-    document.form1.ov07_cidadao.focus(); 
-    document.form1.ov07_cidadao.value = ''; 
+  document.form1.ov02_sequencial.value = chave;
+  if(erro==true){
+    document.form1.ov07_cidadao.focus();
+    document.form1.ov07_cidadao.value = '';
   }
 }
 function js_mostracidadao1(chave1,chave2){
@@ -201,7 +201,7 @@ function js_mostracidadao1(chave1,chave2){
   db_iframe_cidadao.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cidadaotelefone','func_cidadaotelefone.php?funcao_js=parent.js_preenchepesquisa|ov07_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cidadaotelefone','func_cidadaotelefone.php?funcao_js=parent.js_preenchepesquisa|ov07_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_cidadaotelefone.hide();

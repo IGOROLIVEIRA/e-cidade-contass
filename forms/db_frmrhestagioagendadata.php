@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: recursoshumanos
@@ -42,7 +42,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -51,9 +51,9 @@ if(isset($db_opcaoal)){
      $h64_sequencial = "";
      $h64_seqaval    = '';
    }
-} 
+}
 if ($db_opcao == 33 or $db_opcao == 3){
- 
+
    $btnOkonClick = "onclick='return confirm (\"A exclusão do agendamento ira excluir também as avaliacoes.\\nConfirmar?\")'";
    $db_botao     = false;
 }else{
@@ -65,13 +65,13 @@ if ($db_opcao == 33 or $db_opcao == 3){
 <table>
   <tr>
      <td>
-       <fieldset><legend><b>Datas</b></legend> 
+       <fieldset><legend><b>Datas</b></legend>
 <table border="0">
   <tr>
     <td nowrap title="<?=@$Th64_sequencial?>">
        <?=@$Lh64_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('h64_sequencial',10,@$Ih64_sequencial,true,'text',3,"")
 ?>
@@ -83,7 +83,7 @@ db_input('h64_sequencial',10,@$Ih64_sequencial,true,'text',3,"")
        db_ancora(@$Lh64_estagioagenda,"js_pesquisah64_estagioagenda(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('h64_estagioagenda',10,@$Ih64_estagioagenda,true,'text',$db_opcao," onchange='js_pesquisah64_estagioagenda(false);'")
 ?>
@@ -96,7 +96,7 @@ db_input('z01_nome',40,@$Ih57_sequencial,true,'text',3,'')
     <td nowrap title="<?=@$Th64_data?>">
        <?=@$Lh64_data?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('h64_data',@$h64_data_dia,@$h64_data_mes,@$h64_data_ano,true,'text',$db_opcao,"")
 ?>
@@ -108,7 +108,7 @@ db_inputdata('h64_data',@$h64_data_dia,@$h64_data_mes,@$h64_data_ano,true,'text'
        echo @$Lh64_seqaval;
        ?>
     </td>
-    <td> 
+    <td>
      <?
       db_input('h64_seqaval',10,@$Ih64_seqaval,true,'text',$db_opcao);
      ?>
@@ -119,7 +119,7 @@ db_inputdata('h64_data',@$h64_data_dia,@$h64_data_mes,@$h64_data_ano,true,'text'
   </td>
   </tr>
   <tr>
-  
+
     <td colspan="2" align="center">
  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> <?=$btnOkonClick ?> >
  <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
@@ -128,7 +128,7 @@ db_inputdata('h64_data',@$h64_data_dia,@$h64_data_mes,@$h64_data_ano,true,'text'
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("h64_sequencial"=>@$h64_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -155,20 +155,20 @@ function js_cancelar(){
 }
 function js_pesquisah64_estagioagenda(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_rhestagioagendadata','db_iframe_rhestagioagenda','func_rhestagioagenda.php?funcao_js=parent.js_mostrarhestagioagenda1|h57_sequencial|z01_nome','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhestagioagendadata','db_iframe_rhestagioagenda','func_rhestagioagenda.php?funcao_js=parent.js_mostrarhestagioagenda1|h57_sequencial|z01_nome','Pesquisa',true,'0');
   }else{
-     if(document.form1.h64_estagioagenda.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_rhestagioagendadata','db_iframe_rhestagioagenda','func_rhestagioagenda.php?pesquisa_chave='+document.form1.h64_estagioagenda.value+'&funcao_js=parent.js_mostrarhestagioagenda','Pesquisa',false);
+     if(document.form1.h64_estagioagenda.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhestagioagendadata','db_iframe_rhestagioagenda','func_rhestagioagenda.php?pesquisa_chave='+document.form1.h64_estagioagenda.value+'&funcao_js=parent.js_mostrarhestagioagenda','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostrarhestagioagenda(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.h64_estagioagenda.focus(); 
-    document.form1.h64_estagioagenda.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.h64_estagioagenda.focus();
+    document.form1.h64_estagioagenda.value = '';
   }
 }
 function js_mostrarhestagioagenda1(chave1,chave2){

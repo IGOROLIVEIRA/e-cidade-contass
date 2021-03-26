@@ -104,7 +104,7 @@ $oGet   = db_utils::postMemory($_GET);
           <tr>
           <td><b>Código TCE:</b></td>
           <td>
-            <?php 
+            <?php
               db_input("iCodigoTce", 10, null, true, 3, "text", 1);
             ?>
           </td>
@@ -172,7 +172,7 @@ function js_preencheGridReduzidos(oAjax) {
       aLinha[1]  = oReduz.c61_reduz;
       aLinha[2]  = oReduz.codigo +" - "+ oReduz.nomeinst.urlDecode();
       aLinha[3]  = oReduz.o15_codigo +" - "+ oReduz.o15_descr.urlDecode();
-      aLinha[4]  = oReduz.c61_codtce; 
+      aLinha[4]  = oReduz.c61_codtce;
       aLinha[5]  = '<input type="button" id="btnReduzAlt_'+iLinha+'"';
       aLinha[5] += '       value="A" title="Alterar Registro" onclick="js_alterarReduzido('+iLinha+');">&nbsp;';
       aLinha[5] += '<input type="button" id="btnReduzExc_'+iLinha+'" value="E"';
@@ -186,7 +186,7 @@ function js_preencheGridReduzidos(oAjax) {
   }
 
   var oEvent = new Event('change');
-  top.corpo.iframe_conta.$('sIndicadorSuperavit').dispatchEvent(oEvent);
+  CurrentWindow.corpo.iframe_conta.$('sIndicadorSuperavit').dispatchEvent(oEvent);
 }
 
 /**
@@ -315,11 +315,11 @@ function js_pesquisaInstituicao(lMostraWindow) {
 
   if (lMostraWindow) {
     var sUrl = 'func_instit.php?funcao_js=parent.js_preencheInstituicao|codigo|nomeinst';
-    js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',true,'0');
   } else {
     if($("iCodigoInstituicao").value != ''){
       var sUrl = 'func_instit.php?pesquisa_chave='+$("iCodigoInstituicao").value+'&funcao_js=parent.js_completaInstituicao';
-      js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_db_instit',sUrl,'Pesquisa',false);
     } else {
       $("sDescricaoInstituicao").value = '';
     }
@@ -344,11 +344,11 @@ function js_pesquisaRecurso(lMostraWindow) {
 
   if (lMostraWindow) {
     var sUrl = 'func_orctiporec.php?funcao_js=parent.js_preencheRecurso|o15_codigo|o15_descr';
-    js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',true,'0');
   } else {
     if($("iCodigoRecurso").value != ''){
       var sUrl = 'func_orctiporec.php?pesquisa_chave='+$("iCodigoRecurso").value+'&funcao_js=parent.js_completaRecurso';
-      js_OpenJanelaIframe('top.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_reduzido','db_iframe_recurso',sUrl,'Pesquisa',false);
     } else {
       $("sDescricaoRecurso").value = '';
     }

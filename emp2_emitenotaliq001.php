@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -134,15 +134,15 @@ db_app::load("scripts.js,
        ?>
      </td>
      </tr>
-     
+
      <tr>
-     
+
        <td colspan="2">
          <div id='ctnLancadorFornecedor'></div>
        <td>
-     
+
      </tr>
-     
+
     </table>
     </fieldset>
     </form>
@@ -177,17 +177,17 @@ function getForncedores() {
 
   var aFornecedore  = [];
   var aSelecionados = oLancadorFornecedor.getRegistros();
-  
+
   aSelecionados.each( function( oDados, iIndice){
     aFornecedore.push( oDados.sCodigo );
   });
-  
+
   return aFornecedore;
 }
-    
+
 
 function js_abre(){
-  
+
   var obj            = document.form1;
   var e50_codord     = obj.e50_codord.value;
   var e60_codemp_ini = obj.e60_codemp_ini.value;
@@ -247,20 +247,20 @@ function js_abre(){
 
 
 
-    
-    
+
+
 function js_pesquisae60_codemp(mostra){
-  
+
  var obj            = document.form1;
  var e60_codemp_ini = obj.e60_codemp_ini.value;
  var sUrl1          = 'func_empempenho.php?funcao_js=parent.js_mostracodemp1|e60_codemp';
  var sUrl2          = 'func_empempenho.php?pesquisa_chave='+e60_codemp_ini+'&funcao_js=parent.js_mostracodemp';
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
   }else{
      if(e60_codemp_ini != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl2,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl2,'Pesquisa',false);
      }else{
        obj.e60_codemp_ini.value = '';
      }
@@ -282,10 +282,10 @@ function js_mostracodemp1(chave1,x){
 
 function js_pesquisae60_numemp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostranumemp1|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostranumemp1|e60_numemp','Pesquisa',true);
   }else{
      if(document.form1.e60_numemp.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostranumemp','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostranumemp','Pesquisa',false);
      }else{
        document.form1.e60_numemp.value = '';
      }
@@ -303,10 +303,10 @@ function js_mostranumemp1(chave1,x){
 }
 function js_pesquisae50_codord(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostracodordem1|e50_codord','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostracodordem1|e50_codord','Pesquisa',true);
   }else{
      if(document.form1.e50_codord.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostracodordem','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostracodordem','Pesquisa',false);
      }else{
        document.form1.e50_codord.value = '';
      }

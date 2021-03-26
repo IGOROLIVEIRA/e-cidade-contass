@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -44,12 +44,12 @@ $clrotulo->label("o56_elemento");
 
 if(isset($qreceitas)){
   db_inicio_transacao();
-  
+
   $clorcparamfontes = new cl_orcparamfontes;
   $result = $clorcparamfontes->sql_record($clorcparamfontes->sql_query(db_getsession("DB_anousu"),$o42_codparrel));
   if($result!= false && $clorcparamfontes->numrows>0){
     $clorcparamfontes->excluir(db_getsession("DB_anousu"),$o42_codparrel);
-  } 
+  }
   if($qreceitas!=""){
     $rec = split("-",$qreceitas);
     for($i=0;$i<sizeof($rec);$i++){
@@ -61,7 +61,7 @@ if(isset($qreceitas)){
         $clorcparamfontes->erro(true,false);
       }
     }
-    
+
   }
 
   // despesa
@@ -70,7 +70,7 @@ if(isset($qreceitas)){
   $result = $clorcparamelemento->sql_record($clorcparamelemento->sql_query(db_getsession("DB_anousu"),$o42_codparrel));
   if($result!= false && $clorcparamelemento->numrows>0){
     $clorcparamelemento->excluir(db_getsession("DB_anousu"),$o42_codparrel);
-  } 
+  }
   if($qdespesas!=""){
     $rec = split("-",$qdespesas);
     for($i=0;$i<sizeof($rec);$i++){
@@ -82,7 +82,7 @@ if(isset($qreceitas)){
         $clorcparamelemento->erro(true,false);
       }
     }
-    
+
   }
 
 
@@ -123,7 +123,7 @@ function  js_atualiza(){
   document.form1.qdespesas.value = despesa;
   document.form1.qreceitas.value = receita;
   document.form1.submit();
-  
+
 }
 </script>
 
@@ -131,7 +131,7 @@ function  js_atualiza(){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -140,8 +140,8 @@ function  js_atualiza(){
 </table>
 <form name="form1" method="post">
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <table>
     <tr>
@@ -150,7 +150,7 @@ function  js_atualiza(){
        db_ancora(@$Lo42_codparrel,"js_pesquisao42_codparrel(true);",2);
        ?>
     </td>
-    <td> 
+    <td>
        <?
        db_input('o42_codparrel',8,$Io42_codparrel,true,'text',2," onchange='js_pesquisao42_codparrel(false);'")
        ?>
@@ -186,7 +186,7 @@ function  js_atualiza(){
     <?
     }
     ?>
- 
+
     </table>
     </center>
 	</td>
@@ -202,20 +202,20 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_pesquisao42_codparrel(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel','Pesquisa',true);
   }else{
-     if(document.form1.o42_codparrel.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrel','func_orcparamrel.php?pesquisa_chave='+document.form1.o42_codparrel.value+'&funcao_js=parent.js_mostraorcparamrel','Pesquisa',false);
+     if(document.form1.o42_codparrel.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrel','func_orcparamrel.php?pesquisa_chave='+document.form1.o42_codparrel.value+'&funcao_js=parent.js_mostraorcparamrel','Pesquisa',false);
      }else{
-       document.form1.o42_descrrel.value = ''; 
+       document.form1.o42_descrrel.value = '';
      }
   }
 }
 function js_mostraorcparamrel(chave,erro){
-  document.form1.o42_descrrel.value = chave; 
-  if(erro==true){ 
-    document.form1.o42_codparrel.focus(); 
-    document.form1.o42_codparrel.value = ''; 
+  document.form1.o42_descrrel.value = chave;
+  if(erro==true){
+    document.form1.o42_codparrel.focus();
+    document.form1.o42_codparrel.value = '';
   }else{
     document.form1.submit();
   }

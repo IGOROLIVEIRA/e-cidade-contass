@@ -343,10 +343,10 @@ $('inputOperacao').onkeyup = function(event) {
 */
 function js_pesquisarh02_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|rh01_numcgm','Pesquisa',true,'20',0);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|rh01_numcgm','Pesquisa',true,'20',0);
   }else{
     if(document.form1.rh02_regist.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh02_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false,20,0);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh02_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false,20,0);
     }else{
           //document.form1.rh01_numcgm.value = '';
         }

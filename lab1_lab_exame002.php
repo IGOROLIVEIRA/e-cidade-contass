@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -45,7 +45,7 @@ if(isset($alterar)){
 
   $x = isset($chk_masc)?$chk_masc:0;
   $y = isset($chk_fem)?$chk_fem:0;
-  $fator = $x+$y;  
+  $fator = $x+$y;
   $cllab_exame->la08_i_sexo=$fator;
   $x = isset($chk_mapa)?$chk_mapa:0;
   $y = isset($chk_etiqueta1)?$chk_etiqueta1:0;
@@ -55,10 +55,10 @@ if(isset($alterar)){
 
   db_inicio_transacao();
      $db_opcao = 2;
-     $cllab_exame->alterar($la08_i_codigo);  
+     $cllab_exame->alterar($la08_i_codigo);
      $iExame=$cllab_exame->la08_i_codigo;
 
-     
+
      if ($cllab_exame->erro_status != "0") {
          pg_query("delete from lab_exasinonima where la18_i_exame=$iExame");
          $vet=explode(",",$str_sinonimia);
@@ -66,7 +66,7 @@ if(isset($alterar)){
          //die("STR1:$str_sinonimia STR2:$str_sinonimia2 ");
          $cllab_exasinonima->la18_i_exame=$iExame;
          for($x=0;$x<count($vet);$x++){
-             if($cllab_exasinonima->erro_status!="0"){ 
+             if($cllab_exasinonima->erro_status!="0"){
                    if($vet[$x]==0){
                        //inclui sinonimia
                        $cllab_sinonima->la10_c_descr=$vet2[$x];
@@ -90,11 +90,11 @@ if(isset($alterar)){
          }
      }
 
-     
+
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
-   $result = $cllab_exame->sql_record($cllab_exame->sql_query($chavepesquisa)); 
+   $result = $cllab_exame->sql_record($cllab_exame->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
       $sql=$cllab_exasinonima->sql_query("","*",""," la18_i_exame = $chavepesquisa ");
       $rResult = $cllab_exasinonima->sql_record($sql);
@@ -111,11 +111,11 @@ if(isset($alterar)){
   parent.document.formaba.a4.disabled = false;
   parent.document.formaba.a5.disabled = false;
   parent.document.formaba.a6.disabled = false;
-  top.corpo.iframe_a2.location.href='lab1_lab_examematerial001.php?la19_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>';
-  top.corpo.iframe_a3.location.href='lab1_lab_exame004.php?la19_i_exame=<?=$la08_i_codigo?>&la08_i_codigo=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'
-  top.corpo.iframe_a4.location.href='lab1_lab_examerequisito001.php?la20_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'  
-  top.corpo.iframe_a5.location.href='lab1_lab_exameatributo001.php?la42_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'
-  top.corpo.iframe_a6.location.href='lab1_lab_exameproced001.php?la53_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'
+  CurrentWindow.corpo.iframe_a2.location.href='lab1_lab_examematerial001.php?la19_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>';
+  CurrentWindow.corpo.iframe_a3.location.href='lab1_lab_exame004.php?la19_i_exame=<?=$la08_i_codigo?>&la08_i_codigo=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'
+  CurrentWindow.corpo.iframe_a4.location.href='lab1_lab_examerequisito001.php?la20_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'
+  CurrentWindow.corpo.iframe_a5.location.href='lab1_lab_exameatributo001.php?la42_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'
+  CurrentWindow.corpo.iframe_a6.location.href='lab1_lab_exameproced001.php?la53_i_exame=<?=$la08_i_codigo?>&la08_c_descr=<?=$la08_c_descr?>'
  </script>
 <?}
 ?>
@@ -140,8 +140,8 @@ db_app::load("/widgets/dbautocomplete.widget.js");
 <center>
 <br><br>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <fieldset style='width: 75%;'> <legend><b>Exames</b></legend>
 	<?

@@ -32,7 +32,7 @@ $db_botao = true;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -40,8 +40,8 @@ $db_botao = true;
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <form name="form1" method="post" action="">
       <center>
       <table border="0">
@@ -110,7 +110,7 @@ $db_botao = true;
 	    db_ancora($Lnome_modulo,'js_pesquisamodulo(true)',"");
 	    ?>
 	  </td>
-	  <td colspan="3"> 
+	  <td colspan="3">
 	    <?
 	    db_input('id_item',5,$Iid_item,true,'text',1,"onchange='js_pesquisamodulo(false);'")
 	    ?>
@@ -125,7 +125,7 @@ $db_botao = true;
 	    db_ancora($Lnomeinst,'js_pesquisainstit(true)',"");
 	    ?>
 	  </td>
-	  <td colspan="3"> 
+	  <td colspan="3">
 	    <?
 	    db_sel_instit(); // Carrega dados da instituição do usuário
 	    db_input('codigo',5,$Icodigo,true,'text',1,"onchange='js_pesquisainstit(false);'")
@@ -139,7 +139,7 @@ $db_botao = true;
 	  <td nowrap title="<?=@$Tanousu?>" align="right">
 	     <?=@$Lanousu?>
 	  </td>
-	  <td> 
+	  <td>
 	    <?
 	    $arr_anousu = Array();
             $anousu = db_getsession("DB_anousu");
@@ -175,10 +175,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_pesquisainstit(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostrainstit1|codigo|nomeinst','Pesquisa',true,'20');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostrainstit1|codigo|nomeinst','Pesquisa',true,'20');
   }else{
-     if(document.form1.codigo.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.codigo.value+'&funcao_js=parent.js_mostrainstit','Pesquisa',false);
+     if(document.form1.codigo.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.codigo.value+'&funcao_js=parent.js_mostrainstit','Pesquisa',false);
      }else{
        document.form1.codigo.value = '';
        document.form1.nomeinst.value = "";
@@ -186,10 +186,10 @@ function js_pesquisainstit(mostra){
   }
 }
 function js_mostrainstit(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.codigo.focus(); 
-    document.form1.codigo.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.codigo.focus();
+    document.form1.codigo.value = '';
   }
 }
 function js_mostrainstit1(chave1,chave2){
@@ -199,10 +199,10 @@ function js_mostrainstit1(chave1,chave2){
 }
 function js_pesquisamodulo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_db_modulos.php?funcao_js=parent.js_mostramodulo1|id_item|nome_modulo','Pesquisa',true,'20');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_db_modulos.php?funcao_js=parent.js_mostramodulo1|id_item|nome_modulo','Pesquisa',true,'20');
   }else{
-     if(document.form1.id_item.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe','func_db_modulos.php?pesquisa_chave='+document.form1.id_item.value+'&funcao_js=parent.js_mostramodulo','Pesquisa',false);
+     if(document.form1.id_item.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_db_modulos.php?pesquisa_chave='+document.form1.id_item.value+'&funcao_js=parent.js_mostramodulo','Pesquisa',false);
      }else{
        document.form1.id_item.value = '';
        document.form1.nome_modulo.value = "";
@@ -210,10 +210,10 @@ function js_pesquisamodulo(mostra){
   }
 }
 function js_mostramodulo(chave,erro){
-  document.form1.nome_modulo.value = chave; 
-  if(erro==true){ 
-    document.form1.id_item.focus(); 
-    document.form1.id_item.value = ''; 
+  document.form1.nome_modulo.value = chave;
+  if(erro==true){
+    document.form1.id_item.focus();
+    document.form1.id_item.value = '';
   }
 }
 function js_mostramodulo1(chave1,chave2){

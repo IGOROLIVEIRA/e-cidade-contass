@@ -579,7 +579,7 @@ db_app::load("dbtextFieldData.widget.js");
     function js_pesquisa_liclicita(mostra){
         if(mostra==true){
 
-            js_OpenJanelaIframe('top.corpo.iframe_acordo',
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                 'db_iframe_liclicita',
                 'func_liclicita.php?situacao=10&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
                 'Pesquisa Licitações',true);
@@ -587,7 +587,7 @@ db_app::load("dbtextFieldData.widget.js");
 
             if(document.form1.ac16_licitacao.value != ''){
 
-                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                     'db_iframe_liclicita',
                     'func_liclicita.php?situacao=10&pesquisa_chave='+
                     document.form1.ac16_licitacao.value+'&funcao_js=parent.js_preencheLicitacao1',
@@ -1168,7 +1168,7 @@ db_app::load("dbtextFieldData.widget.js");
         if (mostra == true) {
 
             var sUrl = 'func_acordogrupo.php?funcao_js=parent.js_mostraacordogrupo1|ac02_sequencial|ac02_descricao';
-            js_OpenJanelaIframe('top.corpo.iframe_acordo',
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                 'db_iframe_acordogrupo',
                 sUrl,
                 'Pesquisar Grupos de Acordo',
@@ -1178,7 +1178,7 @@ db_app::load("dbtextFieldData.widget.js");
 
             if ($('ac16_acordogrupo').value != '') {
 
-                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                     'db_iframe_acordogrupo',
                     'func_acordogrupo.php?pesquisa_chave=' + $('ac16_acordogrupo').value +
                     '&funcao_js=parent.js_mostraacordogrupo',
@@ -1246,7 +1246,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         var sUrl = 'func_acordo.php?funcao_js=parent.js_preenchepesquisa|ac16_sequencial' +
             '&iTipoFiltro=1,4&lAtivo=1&lComExecucao=false';
-        js_OpenJanelaIframe('top.corpo.iframe_acordo',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
             'db_iframe_acordo',
             sUrl,
             'Pesquisar Acordos',
@@ -1279,7 +1279,7 @@ db_app::load("dbtextFieldData.widget.js");
             if (nLicitacao == '') {
                 js_pesquisaac16_contratado(true);
             }else{
-                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                     'db_iframe_contratado',
                     'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm',
                     'CGM Contratado',
@@ -1297,7 +1297,7 @@ db_app::load("dbtextFieldData.widget.js");
         if (mostra == true) {
 
             js_OpenJanelaIframe(
-                'top.corpo.iframe_acordo',
+                'CurrentWindow.corpo.iframe_acordo',
                 'db_iframe_contratado',
                 'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
                 'Pesquisa',
@@ -1311,7 +1311,7 @@ db_app::load("dbtextFieldData.widget.js");
             if ($('ac16_contratado').value != '') {
 
                 js_OpenJanelaIframe(
-                    'top.corpo.iframe_acordo',
+                    'CurrentWindow.corpo.iframe_acordo',
                     'db_iframe_contratado',
                     'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
                     'Pesquisa',
@@ -1361,7 +1361,7 @@ db_app::load("dbtextFieldData.widget.js");
         if (mostra == true) {
 
             var sUrl = 'func_db_depart.php?funcao_js=parent.js_mostradeptoresponsavel1|coddepto|descrdepto';
-            js_OpenJanelaIframe('top.corpo.iframe_acordo',
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                 'db_iframe_deptoresponsavel',
                 sUrl,
                 'Pesquisar CGM',
@@ -1371,7 +1371,7 @@ db_app::load("dbtextFieldData.widget.js");
 
             if ($('ac16_deptoresponsavel').value != '') {
 
-                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                     'db_iframe_acordogrupo',
                     'func_db_depart.php?pesquisa_chave=' + $F('ac16_deptoresponsavel') +
                     '&funcao_js=parent.js_mostradeptoresponsavel',
@@ -1407,7 +1407,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (mostra == true) {
 
-            js_OpenJanelaIframe('top.corpo.iframe_acordo',
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                 'db_iframe_comissao',
                 'func_acordocomissao.php?funcao_js=parent.js_mostracomissao1|' +
                 'ac08_sequencial|ac08_descricao',
@@ -1418,7 +1418,7 @@ db_app::load("dbtextFieldData.widget.js");
 
             if ($('ac16_acordocomissao').value != '') {
 
-                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                     'db_iframe_comissao',
                     'func_acordocomissao.php?pesquisa_chave=' + $F('ac16_acordocomissao') +
                     '&funcao_js=parent.js_mostracomissao',
@@ -1454,7 +1454,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (mostra == true) {
 
-            js_OpenJanelaIframe('top.corpo.iframe_acordo',
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                 'db_iframe_acordocategoria',
                 'func_acordocategoria.php?funcao_js=parent.js_mostraacordocategoria1|' +
                 'ac50_sequencial|ac50_descricao',
@@ -1465,7 +1465,7 @@ db_app::load("dbtextFieldData.widget.js");
 
             if ($('ac50_sequencial').value != '') {
 
-                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                     'db_iframe_acordocategoria',
                     'func_acordocategoria.php?pesquisa_chave=' + $F('ac50_sequencial') +
                     '&funcao_js=parent.js_mostraacordocategoria',
@@ -1501,7 +1501,7 @@ db_app::load("dbtextFieldData.widget.js");
         var iTipoOrigem = $('ac16_origem').value;
 
         var sUrl = 'aco2_impressaoacordo001.php?iContrato=' + iContrato + '&iTipoOrigem=' + iTipoOrigem;
-        js_OpenJanelaIframe('top.corpo.iframe_acordo',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
             'db_iframe_impressaocontrato',
             sUrl,
             'Impressão do Contrato',
@@ -1523,7 +1523,7 @@ db_app::load("dbtextFieldData.widget.js");
         $('ac16_valor').value = js_formatar($('ac16_valor').value, "f");
     });
     <?php if($afterInclusao == true): ?>
-    top.corpo.mo_camada('acordoitem');
+    CurrentWindow.corpo.mo_camada('acordoitem');
     parent.js_verificaTipoAcordo();
     <?php endif; ?>
 

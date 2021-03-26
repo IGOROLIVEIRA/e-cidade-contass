@@ -395,7 +395,7 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     function js_pesquisasi01_processocompraIni(){
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoprocomp', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcprocIni|pc80_codproc', 'Pesquisa', true, 0);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoprocomp', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcprocIni|pc80_codproc', 'Pesquisa', true, 0);
     }
 
     function js_mostrapcprocIni(chave1){
@@ -404,7 +404,7 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     function js_pesquisasi01_processocompraFim(){
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoprocomp', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcprocFim|pc80_codproc', 'Pesquisa', true, 0);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoprocomp', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcprocFim|pc80_codproc', 'Pesquisa', true, 0);
     }
 
     function js_mostrapcprocFim(chave1){
@@ -420,7 +420,7 @@ if ($oParam->e30_atestocontinterno != 't') {
 
     function js_mostraDadosProcCompra(pcompraChave) {
 
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoprocomp',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoprocomp',
             'db_iframe_pesquisa_processo',
             'com3_pesquisaprocessocompras003.php?pc80_codproc=' + pcompraChave,
             'Consulta Processo de Compras',

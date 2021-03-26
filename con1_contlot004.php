@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -63,7 +63,7 @@ $clrotulo->label("d40_codigo");
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 function js_label(liga,evt,descr,quant,vlr){
-  evt= (evt)?evt:(window.event)?window.event:""; 
+  evt= (evt)?evt:(window.event)?window.event:"";
   if(liga){
      document.getElementById('descr').innerHTML=descr;
      document.getElementById('quant').innerHTML=quant;
@@ -73,13 +73,13 @@ function js_label(liga,evt,descr,quant,vlr){
      document.getElementById('divlabel').style.visibility='visible';
   }else{
     document.getElementById('divlabel').style.visibility='hidden';
-  }  
+  }
 }
 function js_porface(){
   document.form1.confirma.style.visibility='hidden';
   document.form1.lotecontri.style.visibility='hidden';
   document.form1.conface.style.visibility='visible';
-  
+
 }
 function js_nocontri(){
   document.form1.lotecontri.style.visibility='hidden';
@@ -88,11 +88,11 @@ function js_nocontri(){
   alert("Contribuição inválida.");
 }
 function js_lotecontri(){
-  js_OpenJanelaIframe('top.corpo','db_iframe','func_lote.php?funcao_js=parent.js_lotecontri1|j34_idbql','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_lote.php?funcao_js=parent.js_lotecontri1|j34_idbql','Pesquisa',true);
 }
 function js_lotecontri1(lote){
   contri=document.form1.contri.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe','con1_contlot006.php?j34_idbql='+lote+'&d02_contri='+contri,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','con1_contlot006.php?j34_idbql='+lote+'&d02_contri='+contri,'Pesquisa',true);
 }
   function js_lotecontri2(idbql,setor,quadra,lote,zona,dad,testadas,testada){
   db_iframe.hide();
@@ -106,7 +106,7 @@ function js_pesquisa_lotes(){
   }else if(contri.match(expr)) {
           alert("Este campo deve preenchido somente com números decimais!");
           contri = document.form1.d02_contri.focus();;
-  }else{ 
+  }else{
       document.form1.seleciona.disabled=true;
       document.getElementById('matriculas').src = "con1_contlot005.php?contri="+contri;
       document.form1.confirma.style.visibility='visible';
@@ -119,7 +119,7 @@ function js_pesquisa_lotes(){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -128,13 +128,13 @@ function js_pesquisa_lotes(){
 </table>
 <form name="form1" method="post" action="">
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
       <div align="left" id="divlabel" style="position:absolute; z-index:1; top:25; left:600; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; background-color:#999999; font-weight:bold;">
-                <span id="descr"></span><br> 
-          Quant: <span id="quant"></span><br> 
-        Valor R$:<span id="vlr"></span><br> 
+                <span id="descr"></span><br>
+          Quant: <span id="quant"></span><br>
+        Valor R$:<span id="vlr"></span><br>
       </div>
       <table border="0">
         <tr>
@@ -149,15 +149,15 @@ function js_pesquisa_lotes(){
    db_ancora(@$Ld02_contri,"js_contri(true);",$db_opcao);
 ?>
           </td>
-          <td> 
+          <td>
 <?
   db_input('d02_contri',7,$Id02_contri,true,'text',$db_opcao," onchange='js_contri(false);'");
   db_input('j14_nome',40,$Ij14_nome,true,'text',3);
 ?>
           </td>
-          <td align="" width="40%">  
+          <td align="" width="40%">
             <div id='lab' style='visibility:hidden' ></div>
-          </td>	
+          </td>
         </tr>
       </table>
       <table>
@@ -186,20 +186,20 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_contri(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_editalrua.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_editalrua.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_editalrua.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_editalrua.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
   }
 }
 function js_mostracontri(chave,erro){
-  if(erro==true){ 
-    document.form1.d02_contri.focus(); 
-    document.form1.d02_contri.value=""; 
-    document.form1.j14_nome.value=""; 
+  if(erro==true){
+    document.form1.d02_contri.focus();
+    document.form1.d02_contri.value="";
+    document.form1.j14_nome.value="";
   }else{
       document.form1.seleciona.disabled=false;
       document.form1.j14_nome.value = chave;
-  }  
+  }
 }
 function js_mostracontri1(chave1,chave2){
   document.form1.seleciona.disabled=false;

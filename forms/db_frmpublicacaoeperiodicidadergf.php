@@ -142,27 +142,27 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
             }
         }
         /*VALIDAÇÕES DOS OUTROS FORMS DAS OUTRAS ABAS*/
-        if(top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value == "0"){
+        if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value == "0"){
             alert('O campo "Mês de Referência" não foi preenchido.');
             return false;
         }
         <?php if($tipoInstint == 2): ?>
-        if(top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "0" && (top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0){
+        if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "0" && (CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0){
             alert('O campo "A meta bimestral de arrecadação foi cumprida" não foi preenchido.');
             return false;
         }    <?php endif; ?>
 
         <?php if(db_getsession("DB_anousu") > 2018):?>
-        let medidas1 = top.corpo.iframe_dadoscomplementares.document.form1.metasadotadas;
+        let medidas1 = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.metasadotadas;
         let medidasadotadas1 = Array.from(medidas1.options);
         let valida = true;
 
-        if(top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "2" && (top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0 && medidasadotadas1 == ""){
+        if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "2" && (CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0 && medidasadotadas1 == ""){
             alert('Dados Complementares LRF - Nenhuma Medida Selecionada.');
             return false;
         }
         medidasadotadas1.forEach(function (itens, key) {
-            if(itens.value == 99 && top.corpo.iframe_dadoscomplementares.document.form1.c218_dscmedidasadotadas.value == ""){
+            if(itens.value == 99 && CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_dscmedidasadotadas.value == ""){
                 alert('o Campo "Descrição das Outras Medidas" não foi preenchido.');
                 valida = false;
             }
@@ -175,51 +175,51 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
         <?php if($tipoInstint == 2): ?>
         // SÓ VALIDA OPERACOES DE CREDITO SE A INSTITUIÇÃO FOR PREFEITURA
         // E O MES DE REFERENCIA FOR DEZEMBRO
-        if(top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value == "12"){
-            if(top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value == "0"){
+        if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value == "12"){
+            if(CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value == "0"){
                 alert('O campo "Contratação de Operação que não atendeu limites Art. 33 LC 101/2000" não foi preenchido.');
                 return false;
             }
-            if(top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value == "0"){
+            if(CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value == "0"){
                 alert('O campo "Realização de Operações de crédito vedadas pelo Art. 37 LC 101/2000" não foi preenchido.');
                 return false;
             }
-            if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value == "0"){
+            if(CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value == "0"){
                 alert('O campo "Tipo de realização de operações de crédito vedada (Captação)" não foi preenchido.');
                 return false;
             }
-            if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.value == "0"){
+            if(CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.value == "0"){
                 alert('O campo "Tipo de realização de operações de crédito vedada (Recebimento)" não foi preenchido.');
                 return false;
             }
-            if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.value == "0"){
+            if(CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.value == "0"){
                 alert('O campo "Tipo de realização de operações de crédito vedada (Assução direta)" não foi preenchido.');
                 return false;
             }
-            if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value == "0"){
+            if(CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value == "0"){
                 alert('O campo "Tipo de realização de operações de crédito vedada (Assução de obrigação)" não foi preenchido.');
                 return false;
             }
         }
         // VALIDA A ABA PUBLICACAO E PERIODICIDADE RREO
-        if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value == "0"){
+        if(CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value == "0"){
             alert('O campo "Houve publicação do RREO" não foi preenchido.');
             return false;
         }else{
-            if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value == "1"){
-                if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value == ""){
+            if(CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value == "1"){
+                if(CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value == ""){
                     alert('O campo "Data de publicação do RREO da LRF" não foi preenchido.');
                     return false;
                 }
-                if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_localpublicacao.value == ""){
+                if(CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_localpublicacao.value == ""){
                     alert('O campo "Onde foi dada a publicidade do RREO" não foi preenchido.');
                     return false;
                 }
-                if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.value == "0"){
+                if(CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.value == "0"){
                     alert('O campo "Bimestre a que se refere a data de publicação do RREO da LRF" não foi preenchido.');
                     return false;
                 }
-                if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_exerciciotpbimestre.value == ""){
+                if(CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_exerciciotpbimestre.value == ""){
                     alert('O campo "Exercício a que se refere o período da publicação do RREO da LRF" não foi preenchido.');
                     return false;
                 }
@@ -228,7 +228,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
 
         <?php endif; ?>
         <?php if(db_getsession("DB_anousu") > 2018):?>
-        let todasmedidas = top.corpo.iframe_dadoscomplementares.document.form1.metasadotadas;
+        let todasmedidas = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.metasadotadas;
         // console.log(todasmedidas);
         let medidas = Array.from(todasmedidas.options);
 
@@ -238,60 +238,60 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
             medidasadotadas[key] = itens.value
         });
 
-        top.corpo.dadoscomplementares.c225_metasadotadas = medidasadotadas;
+        CurrentWindow.corpo.dadoscomplementares.c225_metasadotadas = medidasadotadas;
         <?php endif;?>
-        top.corpo.dadoscomplementares.c218_sequencial = top.corpo.iframe_dadoscomplementares.document.form1.c218_sequencial.value;
-        top.corpo.dadoscomplementares.c218_mesusu = top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value;
-        top.corpo.dadoscomplementares.c218_passivosreconhecidos = top.corpo.iframe_dadoscomplementares.document.form1.c218_passivosreconhecidos.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantiainterna = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualconcgarantiainterna.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantia = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualconcgarantia.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiainterna = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualcontragarantiainterna.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiaexterna = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualcontragarantiaexterna.value;
-        top.corpo.dadoscomplementares.c218_medidascorretivas = top.corpo.iframe_dadoscomplementares.document.form1.c218_medidascorretivas.value;
-        if(top.corpo.iframe_dadoscomplementares.document.form1.medidasCorretivas.value == 2){
-            top.corpo.dadoscomplementares.c218_medidascorretivas = "";
+        CurrentWindow.corpo.dadoscomplementares.c218_sequencial = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_sequencial.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_mesusu = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_passivosreconhecidos = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_passivosreconhecidos.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantiainterna = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualconcgarantiainterna.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantia = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualconcgarantia.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiainterna = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualcontragarantiainterna.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiaexterna = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualcontragarantiaexterna.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_medidascorretivas = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_medidascorretivas.value;
+        if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.medidasCorretivas.value == 2){
+            CurrentWindow.corpo.dadoscomplementares.c218_medidascorretivas = "";
         }
-        top.corpo.dadoscomplementares.c218_recalieninvpermanente = top.corpo.iframe_dadoscomplementares.document.form1.c218_recalieninvpermanente.value;
-        top.corpo.dadoscomplementares.c218_vldotatualizadaincentcontrib = top.corpo.iframe_dadoscomplementares.document.form1.c218_vldotatualizadaincentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vlempenhadoicentcontrib = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlempenhadoicentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vldotatualizadaincentinstfinanc = top.corpo.iframe_dadoscomplementares.document.form1.c218_vldotatualizadaincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlempenhadoincentinstfinanc = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlempenhadoincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlliqincentcontrib = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlliqincentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vlliqincentinstfinanc = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlliqincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlirpnpincentcontrib = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlirpnpincentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vlirpnpincentinstfinanc = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlirpnpincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlrecursosnaoaplicados = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlrecursosnaoaplicados.value;
-        top.corpo.dadoscomplementares.c218_vlapropiacaodepositosjudiciais = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlapropiacaodepositosjudiciais.value;
-        top.corpo.dadoscomplementares.c218_vloutrosajustes = top.corpo.iframe_dadoscomplementares.document.form1.c218_vloutrosajustes.value;
-        top.corpo.dadoscomplementares.c218_metarrecada = top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value;
-        top.corpo.dadoscomplementares.c218_dscmedidasadotadas = top.corpo.iframe_dadoscomplementares.document.form1.c218_dscmedidasadotadas.value;
-        if(top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == 1){
-            top.corpo.dadoscomplementares.c218_dscmedidasadotadas = "";
+        CurrentWindow.corpo.dadoscomplementares.c218_recalieninvpermanente = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_recalieninvpermanente.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vldotatualizadaincentcontrib = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vldotatualizadaincentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlempenhadoicentcontrib = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlempenhadoicentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vldotatualizadaincentinstfinanc = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vldotatualizadaincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlempenhadoincentinstfinanc = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlempenhadoincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlliqincentcontrib = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlliqincentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlliqincentinstfinanc = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlliqincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlirpnpincentcontrib = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlirpnpincentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlirpnpincentinstfinanc = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlirpnpincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlrecursosnaoaplicados = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlrecursosnaoaplicados.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlapropiacaodepositosjudiciais = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vlapropiacaodepositosjudiciais.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vloutrosajustes = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_vloutrosajustes.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_metarrecada = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_dscmedidasadotadas = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_dscmedidasadotadas.value;
+        if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == 1){
+            CurrentWindow.corpo.dadoscomplementares.c218_dscmedidasadotadas = "";
         }
-        top.corpo.operacoesdecredito.c219_contopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value;
-        top.corpo.operacoesdecredito.c219_dsccontopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_dsccontopcredito.value;
-        top.corpo.operacoesdecredito.c219_realizopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value;
-        top.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value;
-        top.corpo.operacoesdecredito.c219_tiporealizopcreditoreceb = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.value;
-        top.corpo.operacoesdecredito.c219_tiporealizopcreditoassundir = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.value;
-        top.corpo.operacoesdecredito.c219_tiporealizopcreditoassunobg = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value;
+        CurrentWindow.corpo.operacoesdecredito.c219_contopcredito = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value;
+        CurrentWindow.corpo.operacoesdecredito.c219_dsccontopcredito = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_dsccontopcredito.value;
+        CurrentWindow.corpo.operacoesdecredito.c219_realizopcredito = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value;
+        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value;
+        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoreceb = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.value;
+        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoassundir = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.value;
+        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoassunobg = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value;
 
-        top.corpo.publicacaoeperiodicidaderreo.c220_publiclrf = top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value;
-        top.corpo.publicacaoeperiodicidaderreo.c220_dtpublicacaorelatoriolrf = top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value;
-        top.corpo.publicacaoeperiodicidaderreo.c220_localpublicacao = top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_localpublicacao.value;
-        top.corpo.publicacaoeperiodicidaderreo.c220_tpbimestre = top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.value;
-        top.corpo.publicacaoeperiodicidaderreo.c220_exerciciotpbimestre = top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_exerciciotpbimestre.value;
+        CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_publiclrf = CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value;
+        CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_dtpublicacaorelatoriolrf = CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value;
+        CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_localpublicacao = CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_localpublicacao.value;
+        CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_tpbimestre = CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.value;
+        CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_exerciciotpbimestre = CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_exerciciotpbimestre.value;
 
-        top.corpo.publicacaoeperiodicidadergf.c221_publicrgf = document.form1.c221_publicrgf.value;
-        top.corpo.publicacaoeperiodicidadergf.c221_dtpublicacaorelatoriorgf = document.form1.c221_dtpublicacaorelatoriorgf.value;
-        top.corpo.publicacaoeperiodicidadergf.c221_localpublicacaorgf = document.form1.c221_localpublicacaorgf.value;
-        top.corpo.publicacaoeperiodicidadergf.c221_tpperiodo = document.form1.c221_tpperiodo.value;
-        top.corpo.publicacaoeperiodicidadergf.c221_exerciciotpperiodo = document.form1.c221_exerciciotpperiodo.value;
+        CurrentWindow.corpo.publicacaoeperiodicidadergf.c221_publicrgf = document.form1.c221_publicrgf.value;
+        CurrentWindow.corpo.publicacaoeperiodicidadergf.c221_dtpublicacaorelatoriorgf = document.form1.c221_dtpublicacaorelatoriorgf.value;
+        CurrentWindow.corpo.publicacaoeperiodicidadergf.c221_localpublicacaorgf = document.form1.c221_localpublicacaorgf.value;
+        CurrentWindow.corpo.publicacaoeperiodicidadergf.c221_tpperiodo = document.form1.c221_tpperiodo.value;
+        CurrentWindow.corpo.publicacaoeperiodicidadergf.c221_exerciciotpperiodo = document.form1.c221_exerciciotpperiodo.value;
 
-        oParametros.dadoscomplementares = top.corpo.dadoscomplementares;
-        oParametros.operacoesdecredito = top.corpo.operacoesdecredito;
-        oParametros.publicacaoeperiodicidaderreo = top.corpo.publicacaoeperiodicidaderreo;
-        oParametros.publicacaoeperiodicidadergf = top.corpo.publicacaoeperiodicidadergf;
+        oParametros.dadoscomplementares = CurrentWindow.corpo.dadoscomplementares;
+        oParametros.operacoesdecredito = CurrentWindow.corpo.operacoesdecredito;
+        oParametros.publicacaoeperiodicidaderreo = CurrentWindow.corpo.publicacaoeperiodicidaderreo;
+        oParametros.publicacaoeperiodicidadergf = CurrentWindow.corpo.publicacaoeperiodicidadergf;
 
 
         js_divCarregando('Mensagem', 'msgBox');
@@ -315,15 +315,15 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
 
         if(oRetorno.status == "1"){
             <?php if($db_opcao != 3): ?>
-            top.corpo.location.href="sic1_dadoscomplementareslrf002.php?chave="+oRetorno.c218_sequencial;
+            CurrentWindow.corpo.location.href="sic1_dadoscomplementareslrf002.php?chave="+oRetorno.c218_sequencial;
             <?php else: ?>
-            top.corpo.location.href="sic1_dadoscomplementareslrf003.php?chave="+oRetorno.c218_sequencial;
+            CurrentWindow.corpo.location.href="sic1_dadoscomplementareslrf003.php?chave="+oRetorno.c218_sequencial;
             <?php endif; ?>
         }
         return false;
     }
     function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|c218_sequencial','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|c218_sequencial','Pesquisa',true);
     }
     function js_preenchepesquisa(chave){
         db_iframe_dadoscomplementareslrf.hide();

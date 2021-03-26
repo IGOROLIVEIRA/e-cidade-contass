@@ -182,13 +182,13 @@
 		if ( lMostra == true ) {
 
 				sUrlFuncao += "&funcao_js=parent.js_mostraRetornoIframe_" + sCampo + "|j32_descr|j32_grupo";
-		    js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrlFuncao, 'Pesquisa', true);
+		    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe', sUrlFuncao, 'Pesquisa', true);
 	  } else {
 
 	    if ( oCampo.value != '' ) {
 
 		    sUrlFuncao += '&funcao_js=parent.js_mostraRetornoDireto_' + sCampo + '&pesquisa_chave=' + oCampo.value
-	      js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrlFuncao, 'Pesquisa', false);
+	      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe', sUrlFuncao, 'Pesquisa', false);
 	    } else {
 	      document.form1['j32_descr_' + sCampo].value = '';
 	    }

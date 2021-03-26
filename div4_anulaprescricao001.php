@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -65,7 +65,7 @@ $instit = db_getsession("DB_instit");
 ?>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor="#cccccc" > 
+<body bgcolor="#cccccc" >
 <form class="container" name="form1" method="post" action="" >
   <fieldset>
 	<legend>Anular Prescrição por Lista</legend>
@@ -86,30 +86,30 @@ $instit = db_getsession("DB_instit");
       <tr>
         <td colspan="2" >
           <fieldset class="separator">
-            <legend><?=@$Lk31_obs?></legend> 
-              <? 
-                db_textarea('k31_obs',2,70,$Ik31_obs,'','text',$db_opcao,"") 
+            <legend><?=@$Lk31_obs?></legend>
+              <?
+                db_textarea('k31_obs',2,70,$Ik31_obs,'','text',$db_opcao,"")
               ?>
           </fieldset>
         </td>
   	  </tr>
     </table>
-  </fieldset>     
-  <input name="processar" type="button" id="processar" value="Processar" onclick='js_prescreve();'>      
+  </fieldset>
+  <input name="processar" type="button" id="processar" value="Processar" onclick='js_prescreve();'>
 </form>
-  
+
 <script>
 
 function js_prescreve() {
 
   if ( $F('k60_codigo') == '' ) {
-  
+
      alert('Nenhuma lista informada!');
-     
+
   } else if ($F('k31_obs') == '' ){
-  
+
      alert('Preencha o campo Observações');
-         
+
   } else if ( confirm('Deseja realmente anular as prescrições da lista informada ?')){
 
     js_divCarregando("Aguarde ...",'msgBox');
@@ -118,48 +118,48 @@ function js_prescreve() {
         oParam.exec       = 'AnulacaoLista';
         oParam.iCodLista  = $F('k60_codigo');
         oParam.obs        = $F('k31_obs');
-           
+
     var oAjax             = new Ajax.Request('div4_anulaprescricao.RPC.php',
                                                {method: "post",
                                                 parameters:'json='+Object.toJSON(oParam),
                                                 onComplete: js_retorno
-                                               });   
+                                               });
   }
 }
 
 function js_retorno(oAjax){
 
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   js_removeObj('msgBox');
-  
+
   if ( oRetorno.status == 0 ) {
     alert(""+oRetorno.message.urlDecode()+"");
     return false;
   } else {
     alert("Anulação efetuada com sucesso!");
     $('k60_codigo').value = '';
-    $('k31_obs').value    = '';    
+    $('k31_obs').value    = '';
   }
 
 }
 
 function js_pesquisalista(mostra){
 
-  if (mostra) {       
-    var sUrl = 'func_lista.php?prescricao=true&funcao_js=parent.js_mostralista1|k60_codigo|k60_descr'; 
+  if (mostra) {
+    var sUrl = 'func_lista.php?prescricao=true&funcao_js=parent.js_mostralista1|k60_codigo|k60_descr';
   } else {
     var sUrl = 'func_lista.php?prescricao=true&pesquisa_chave='+document.form1.k60_codigo.value+'&funcao_js=parent.js_mostralista';
   }
-  
-  js_OpenJanelaIframe('top.corpo','db_iframe',sUrl,'Pesquisa',mostra);
-  
+
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe',sUrl,'Pesquisa',mostra);
+
 }
 
 function js_mostralista(chave,erro){
-  
+
   document.form1.k60_descr.value = chave;
-  
+
   if (erro) {
     document.form1.k60_descr.focus();
     document.form1.k60_descr.value = '';
@@ -171,7 +171,7 @@ function js_mostralista1(chave1,chave2){
   document.form1.k60_descr.value = chave2;
   db_iframe.hide();
 }
-</script>  
+</script>
 
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));

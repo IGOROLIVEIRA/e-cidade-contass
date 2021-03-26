@@ -155,7 +155,7 @@ $clrotulo->label("ed61_i_aluno");
   function js_pesquisaed47_i_codigo(mostra) {
 
     if( mostra == true ) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_aluno','func_aluno.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aluno','func_aluno.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome','Pesquisa',true);
     }
   }
 
@@ -282,12 +282,12 @@ $clrotulo->label("ed61_i_aluno");
       } else if (iTipoHistoricoTurma == 2) {
         sResultadoFinal     = dados.$F('ed99_c_resultadofinal');
       }
-      
+
       var aDisciplinas = oDataGridDisciplinas.aRows;
       if (sResultadoFinal == 'R' && aDisciplinas.length > 0) {
 
         var lPossuiDisciplinaReprovada = false;
-        
+
         aDisciplinas.each(function(oDisciplina, iContador) {
 
           if (oDisciplina.aCells[6].getValue() == 'R') {
@@ -620,7 +620,7 @@ $clrotulo->label("ed61_i_aluno");
       }
 
       if ( oTxtAproveitamento.getValue() < parseFloat(sNotaMinima) && $F('lExibeMensagemAproveitamentoMinimo') == 'true') {
-        
+
         var oMensagem = {};
             oMensagem.sNotaMinima = sNotaMinima;
 

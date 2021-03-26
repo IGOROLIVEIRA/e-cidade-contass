@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -63,7 +63,7 @@ if(!isset($rh58_datai_dia) && !isset($rh58_datai_mes) && !isset($rh58_datai_ano)
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="25%" height="18">&nbsp;</td>
     <td width="25%">&nbsp;</td>
     <td width="25%">&nbsp;</td>
@@ -71,8 +71,8 @@ if(!isset($rh58_datai_dia) && !isset($rh58_datai_mes) && !isset($rh58_datai_ano)
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <form name="form1" method="post" action="">
       <center>
       <table border="0">
@@ -85,7 +85,7 @@ if(!isset($rh58_datai_dia) && !isset($rh58_datai_mes) && !isset($rh58_datai_ano)
                   db_ancora(@$Lrh58_data,"",3);
                   ?>
                 </td>
-                <td nowrap> 
+                <td nowrap>
                   <?
                   db_inputdata("rh58_datai", $rh58_datai_dia, $rh58_datai_mes, $rh58_datai_ano, true, 'text', 1);
                   ?>
@@ -101,7 +101,7 @@ if(!isset($rh58_datai_dia) && !isset($rh58_datai_mes) && !isset($rh58_datai_ano)
                   db_ancora(@$Lrh58_tipoocor,"js_pesquisarh58_tipoocor(true);",1);
                   ?>
                 </td>
-                <td nowrap> 
+                <td nowrap>
                   <?
                   db_input('rh58_tipoocor',8,$Irh58_tipoocor,true,'text',1," onchange='js_pesquisarh58_tipoocor(false);'")
                   ?>
@@ -158,10 +158,10 @@ function js_verifica_campos(){
 }
 function js_pesquisarh58_tipoocor(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?funcao_js=parent.js_mostrarhpagtipoocor1|rh59_codigo|rh59_descr|rh59_tipo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?funcao_js=parent.js_mostrarhpagtipoocor1|rh59_codigo|rh59_descr|rh59_tipo','Pesquisa',true);
   }else{
      if(document.form1.rh58_tipoocor.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?pesquisa_chave='+document.form1.rh58_tipoocor.value+'&funcao_js=parent.js_mostrarhpagtipoocor','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?pesquisa_chave='+document.form1.rh58_tipoocor.value+'&funcao_js=parent.js_mostrarhpagtipoocor','Pesquisa',false);
      }else{
        document.form1.rh59_descr.value = '';
      }

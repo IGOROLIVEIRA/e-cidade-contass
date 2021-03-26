@@ -62,8 +62,8 @@ $sBaixa = isset($_GET['calculo']) ? "and q02_dtbaix is null" : "";
       return;
     }
 
-    var nome = parent.top.corpo.aux.nomeJanela;
-    eval('parent.top.corpo.'+nome+'.hide();');
+    var nome = parent.CurrentWindow.corpo.aux.nomeJanela;
+    eval('parent.CurrentWindow.corpo.'+nome+'.hide();');
   }
 </script>
 </head>

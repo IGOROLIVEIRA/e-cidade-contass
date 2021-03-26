@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: contabilidade
@@ -34,7 +34,7 @@ $clcongrupo->rotulo->label();
     <td nowrap width="20" height="50" title="<?=@$Tc20_descr?>"><b>
        <? db_ancora("Grupo","js_pesquisac20_sequencial(true);",$db_opcao); ?>
     </b></td>
-    <td> 
+    <td>
 <?
 db_input("sequencial",    10,0,true,"hidden",3);
 db_input("c21_codcon",    10,0,true,"hidden",3);
@@ -71,20 +71,20 @@ db_input('c20_descr',50,$Ic20_descr,true,'text',3,"")
 <script>
 function js_pesquisac20_sequencial(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_grupos','db_iframe_grupo','func_congrupo.php?funcao_js=parent.js_mostracongrupo1|c20_sequencial|c20_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_grupos','db_iframe_grupo','func_congrupo.php?funcao_js=parent.js_mostracongrupo1|c20_sequencial|c20_descr','Pesquisa',true,'0');
   }else{
-     if(document.form1.c20_sequencial.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_grupos','db_iframe_grupo','func_congrupo.php?pesquisa_chave='+document.form1.c20_sequencial.value+'&funcao_js=parent.js_mostracongrupo','Pesquisa',false);
+     if(document.form1.c20_sequencial.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_grupos','db_iframe_grupo','func_congrupo.php?pesquisa_chave='+document.form1.c20_sequencial.value+'&funcao_js=parent.js_mostracongrupo','Pesquisa',false);
      }else{
-       document.form1.c20_descr.value = ''; 
+       document.form1.c20_descr.value = '';
      }
   }
 }
 function js_mostracongrupo(chave,erro){
-  document.form1.c20_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.c20_sequencial.focus(); 
-    document.form1.c20_sequencial.value = ''; 
+  document.form1.c20_descr.value = chave;
+  if(erro==true){
+    document.form1.c20_sequencial.focus();
+    document.form1.c20_sequencial.value = '';
   }
 }
 function js_mostracongrupo1(chave1,chave2){

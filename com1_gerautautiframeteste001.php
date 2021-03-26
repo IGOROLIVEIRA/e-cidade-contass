@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -92,8 +92,8 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <form name="form1">
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
-  <tr> 
-    <td align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <?
     db_input('valores',8,0,true,'hidden',3);
@@ -128,7 +128,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
       echo "  <td nowrap class='bordas02' align='center'><strong>Val Tot.</strong></td>\n";
       echo "  <td nowrap class='bordas02' align='center'><strong>Reserva</strong></td>\n";
       echo "</tr>\n";
-      
+
       $dot_ant = "";
       $forn_ant= "";
       $contador= 1;
@@ -168,7 +168,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 	echo "  <td nowrap class='$bordas' align='right'  >R$ ".db_formatar(($pc23_valor),"f")."</td>\n";
 	echo "  <td nowrap class='$bordas' align='center' ><strong>Não</strong></td>\n";
 	echo "</tr>\n";
-      } 
+      }
       echo "</table>\n";
       echo "</center>";
     }
@@ -180,7 +180,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 </form>
 <script>
 function js_troca(codigo,orcamento,sol){
-  top.corpo.document.location.href = 'com1_trocpcorcamtroca001.php?pc25_orcamitem='+codigo+'&orcamento='+orcamento+'&sol='+sol;
+  CurrentWindow.corpo.document.location.href = 'com1_trocpcorcamtroca001.php?pc25_orcamitem='+codigo+'&orcamento='+orcamento+'&sol='+sol;
 }
 function js_marcatudo(){
   x = document.form1;
@@ -192,7 +192,7 @@ function js_marcatudo(){
       }else{
         x.elements[(i+1)].disabled = false;
 	x.elements[i].checked=true;
-      }      
+      }
     }
   }
 }

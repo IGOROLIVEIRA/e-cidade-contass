@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 ?>
 <form name="form1" method="post" action="" >
@@ -32,11 +32,11 @@
 		   <center><b><font color='#FFFFFF'> Exclusão de pendencias antigas </font></b></center>
     </td>
 	</tr>
-  <tr> 
+  <tr>
     <td width="" height="" align="center" valign="top">
 	    <center>
-       <table> 
-          <tr> 
+       <table>
+          <tr>
             <td colspan=2>
               <fieldset>
               <Legend align="left"> <b>  Dados para pesquisa : </b> </Legend>
@@ -51,7 +51,7 @@
 										$sqlConta   .= "   from conplano  ";
                     $sqlConta   .= "        inner join conplanocontabancaria on conplanocontabancaria.c56_codcon = conplano.c60_codcon ";
                     $sqlConta   .= "                                        and conplanocontabancaria.c56_anousu = conplano.c60_anousu ";
-                    $sqlConta   .= "                                        and conplano.c60_anousu = ".db_getsession('DB_anousu'); 
+                    $sqlConta   .= "                                        and conplano.c60_anousu = ".db_getsession('DB_anousu');
                     $sqlConta   .= "        inner join contabancaria         on contabancaria.db83_sequencial    = conplanocontabancaria.c56_contabancaria ";
                     $sqlConta   .= "        inner join conplanoreduz         on conplanoreduz.c61_codcon = conplanocontabancaria.c56_codcon ";
                     $sqlConta   .= "                                        and conplanoreduz.c61_anousu = conplanocontabancaria.c56_anousu ";
@@ -64,7 +64,7 @@
 										$sqlConta   .= "                                and k84_data         = k12_data ";
 										$sqlConta   .= "                                and k84_autent       = k12_autent ";
 										$sqlConta   .= "        inner join conciliaitem  on k83_sequencial   = k84_conciliaitem ";
-										$sqlConta   .= "                                and k83_conciliatipo = 3 "; 
+										$sqlConta   .= "                                and k83_conciliatipo = 3 ";
 
 										$rsContas    = $clsaltes->sql_record($sqlConta);
 										$numrows     = $clsaltes->numrows;
@@ -79,7 +79,7 @@
 								</tr>
 								<tr>
 					       	<td>
-							      <b> Datas disponiveis : </b> 
+							      <b> Datas disponiveis : </b>
 						      </td>
 					       	<td>
                    <?
@@ -94,7 +94,7 @@
           <tr>
             <td> <input name="filtrar" type="button" id="filtrar" disabled value=" Filtrar com os dados selecionados "  onclick="return js_filtrar();"> </td>
           </tr>
-       </table> 
+       </table>
 
        <table width="70%" border="0" align="center" cellspacing="0">
           <tr>
@@ -132,19 +132,19 @@
 							 $cliframe_seleciona->iframe_nome   = "autent";
 							 $cliframe_seleciona->chaves        = "k12_id,k12_data,k12_autent";
 							 $cliframe_seleciona->marcador      = true;
-							 
+
 							 $cliframe_seleciona->dbscript      = "onClick='parent.js_selecionados();'";
 							 $cliframe_seleciona->js_marcador   = 'parent.js_selecionados();';
 							 $cliframe_seleciona->iframe_seleciona(1);
 						 }
-          
+
           ?>
           </td>
           </tr>
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="processar"    type="button" id="processar"    value="Processar" disabled onclick="js_processar()" > 
-              <input name="selecionados" type="hidden" id="selecionados" value="" > 
+          <tr>
+            <td colspan="2" align="center">
+              <input name="processar"    type="button" id="processar"    value="Processar" disabled onclick="js_processar()" >
+              <input name="selecionados" type="hidden" id="selecionados" value="" >
 						</td>
           </tr>
         </table>
@@ -167,9 +167,9 @@ function js_selecionados(){
   }
 	document.form1.selecionados.value = dados;
 	if(dados != ''){
-		$('processar').disabled = false;		
+		$('processar').disabled = false;
 	}else{
-		$('processar').disabled = true;	
+		$('processar').disabled = true;
 	}
 
 }
@@ -180,8 +180,8 @@ function js_filtrar(){
 
 function js_processar(){
 	var dados = document.form1.selecionados.value;
-	var conta = document.form1.conta.value; 
-  js_OpenJanelaIframe('top.corpo','db_iframe_processar','cai4_excluipendenciasantigas.php?dados='+dados+'&conta='+conta,'Processando',true);
+	var conta = document.form1.conta.value;
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processar','cai4_excluipendenciasantigas.php?dados='+dados+'&conta='+conta,'Processando',true);
 
 }
 
@@ -205,13 +205,13 @@ function js_enabled(){
 function carregaDadosSelect(resposta){
 //  alert(resposta.responseText);
 	document.form1.data.disabled = false;
-	js_limpaSelect(document.form1.data);  
+	js_limpaSelect(document.form1.data);
 	js_addSelectFromStr(resposta.responseText,document.form1.data);
   js_enabled();
 }
 
 function js_limpaSelect(obj){
-  obj.length  = 0;	
+  obj.length  = 0;
 }
 
 function js_addSelectFromStr(str,obj){
@@ -223,7 +223,7 @@ function js_addSelectFromStr(str,obj){
       obj.options[i].value = colunas[0];
       obj.options[i].text  = colunas[1];
     }
-  }	
+  }
 }
 
 </script>

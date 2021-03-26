@@ -131,11 +131,11 @@ if (isset($chavepesquisa)) {
          parent.document.formaba.templateata.disabled=false;
          parent.document.formaba.templateminuta.disabled=false;
          parent.document.formaba.faixavalores.disabled=false;
-         top.corpo.iframe_pccflicitapar.location.href='lic1_pccflicitapar001.php?l25_codcflicita=".@$l03_codigo."';
-         top.corpo.iframe_template.location.href='lic1_cflicitatemplate001.php?l35_cflicita=".@$l03_codigo."';
-         top.corpo.iframe_templateata.location.href='lic1_cflicitatemplateata001.php?l37_cflicita=".@$l03_codigo."';
-         top.corpo.iframe_templateminuta.location.href='lic1_cflicitatemplateminuta001.php?l41_cflicita=".@$l03_codigo."';
-         top.corpo.iframe_faixavalores.location.href='lic1_cflicitafaixavalor001.php?l37_cflicita=".@$l03_codigo."';
+         CurrentWindow.corpo.iframe_pccflicitapar.location.href='lic1_pccflicitapar001.php?l25_codcflicita=".@$l03_codigo."';
+         CurrentWindow.corpo.iframe_template.location.href='lic1_cflicitatemplate001.php?l35_cflicita=".@$l03_codigo."';
+         CurrentWindow.corpo.iframe_templateata.location.href='lic1_cflicitatemplateata001.php?l37_cflicita=".@$l03_codigo."';
+         CurrentWindow.corpo.iframe_templateminuta.location.href='lic1_cflicitatemplateminuta001.php?l41_cflicita=".@$l03_codigo."';
+         CurrentWindow.corpo.iframe_faixavalores.location.href='lic1_cflicitafaixavalor001.php?l37_cflicita=".@$l03_codigo."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('pccflicitapar');";

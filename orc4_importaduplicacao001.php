@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -61,11 +61,11 @@ $db_botao = false;
 $iTipo = $g->tipo;
 if ($iTipo == 2){
   $sDescr    = "despesa";
-  $sLblDescr = "Processa Duplicação do Orçamento da Despesa"; 
+  $sLblDescr = "Processa Duplicação do Orçamento da Despesa";
 }else if ($iTipo == 3){
 
   $sDescr = "receita";
-  $sLblDescr = "Processa Duplicação do Orçamento da Receita"; 
+  $sLblDescr = "Processa Duplicação do Orçamento da Receita";
 
 }
 $clorcduplicacao         = new cl_orcduplicacao;
@@ -86,7 +86,7 @@ if (isset($p->processa)){
     $rsDot = $clorcduplicacaodotacao->sql_record($clorcduplicacaodotacao->sql_query(null,"*",
                                                                                     '',
                                                                                     "o75_conaberturaexe=".$p->o75_conaberturaexe."
-                                                                                     and o75_importar is true")); 
+                                                                                     and o75_importar is true"));
 
       //db_msgbox($clorcduplicacaodotacao->erro_msg);
       // die($clorcduplicacaodotacao->sql_query(null,"*",'',"o75_conaberturaexe=".$p->o75_conaberturaexe."
@@ -98,7 +98,7 @@ if (isset($p->processa)){
 
           $oDot        = db_utils::fieldsMemory($rsDot,$i);
           $fValor      = $oDot->o75_valorduplicar;
-          $iAnoDestino = $oDot->c91_anousudestino; 
+          $iAnoDestino = $oDot->c91_anousudestino;
           $rsVdot      = $clorcdotacao->sql_record($clorcdotacao->sql_query($oDot->o58_anousu,$oDot->o58_coddot));
           if ($clorcdotacao->numrows == 1){
 
@@ -127,25 +127,25 @@ if (isset($p->processa)){
 
             }
             if (!$lSqlErro) {
-              
+
               $sSqlContrapartida = $clorcdotacaocontr->sql_query_file($oDot->o58_anousu,$oDot->o58_coddot);
               $rsContrapartida   = $clorcdotacaocontr->sql_record($sSqlContrapartida);
               if ($clorcdotacaocontr->numrows > 0) {
-                
+
                 $iNumRowsContrapartida = $clorcdotacaocontr->numrows;
                 for ($iInd = 0; $iInd < $iNumRowsContrapartida; $iInd++) {
-                  
+
                   $oContrapartida = db_utils::fieldsMemory($rsContrapartida);
                   $clorcdotacaocontr->o61_anousu = $iAnoDestino;
                   $clorcdotacaocontr->o61_coddot = $oContrapartida->o61_coddot;
                   $clorcdotacaocontr->o61_codigo = $oContrapartida->o61_codigo;
                   $clorcdotacaocontr->incluir(null);
                   if ($clorcdotacaocontr->erro_status == 0) {
-                    
+
                      $lSqlErro = true;
                      $sErro    = $clorcdotacaocontr->erro_msg;
                      break;
-                    
+
                   }
                 }
               }
@@ -169,7 +169,7 @@ if (isset($p->processa)){
   }elseif($iTipo == 3){
 
     $rsRec = $clorcduplicacaoreceita->sql_record($clorcduplicacaoreceita->sql_query(null,"*",'',"o75_conaberturaexe=".$p->o75_conaberturaexe."
-          and o75_importar is true")); 
+          and o75_importar is true"));
       //db_msgbox($clorcduplicacaoreceita->erro_msg);
       //die($clorcduplicacaoreceita->sql_query(null,"*",'',"o75_conaberturaexe=".$p->o75_conaberturaexe."
       //                                                 and o75_importar is true"));
@@ -262,7 +262,7 @@ if (isset($g->chavepesquisa) && $g->chavepesquisa != ''){
 
       $db_botao = false;
       $sMsgErro = "Não há nenhuma {$sDescr} Configurada! Verifique.";
-      
+
     }
   }
 }
@@ -298,7 +298,7 @@ if (isset($g->chavepesquisa) && $g->chavepesquisa != ''){
 <td nowrap title="<?=@$Tc91_anousuorigem?>">
 <?=@$Lc91_anousuorigem?>
 </td>
-<td> 
+<td>
 <?
 db_input('c91_anousuorigem',5,$Ic91_anousuorigem,true,'text',3,"")
 ?>
@@ -308,7 +308,7 @@ db_input('c91_anousuorigem',5,$Ic91_anousuorigem,true,'text',3,"")
 <td nowrap title="<?=@$Tc91_anousudestino?>">
 <?=@$Lc91_anousudestino?>
 </td>
-<td> 
+<td>
 <?
 db_input('c91_anousudestino',5,$Ic91_anousudestino,true,'text',3,"")
 ?>
@@ -323,7 +323,7 @@ db_input('c91_anousudestino',5,$Ic91_anousudestino,true,'text',3,"")
      db_input('iTotalRegistos',5,'',true,'text',3,"");
      ?>
   </td>
-</tr>  
+</tr>
 <tr>
 <td colspan='3' style='text-align: center'><input name="processa" onclick='return js_geraImp()' type="submit"
 id="db_opcao" value="Processar" <?=($db_botao==false?"disabled":"")?>></td>
@@ -336,7 +336,7 @@ id="db_opcao" value="Processar" <?=($db_botao==false?"disabled":"")?>></td>
 <script>
 //js_tabulacaoforms("form1","o75_conaberturaexe",true,1,"o75_conaberturaexe",true);
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_duplicacao','func_conaberturaexe.php?ano=1&tipo=<?=$iTipo;?>&situacao=1&funcao_js=parent.js_preenchepesquisa|c91_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_duplicacao','func_conaberturaexe.php?ano=1&tipo=<?=$iTipo;?>&situacao=1&funcao_js=parent.js_preenchepesquisa|c91_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_duplicacao.hide();

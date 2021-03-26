@@ -108,18 +108,18 @@ $db_botao = false;
 
                      echo "<script>";
                      echo " parent.document.formaba.a2.disabled=false; ";
-                     echo " top.corpo.iframe_a2.location.href='cem3_proprijazigo001.php?cm28_i_codigo=$cm28_i_codigo&cm28_i_ossoariojazigo=$cm28_i_ossoariojazigo&cm28_i_proprietario=$cm28_i_proprietario&z01_nome=$z01_nome&chavepesquisa=$cm28_i_codigo';";
+                     echo " CurrentWindow.corpo.iframe_a2.location.href='cem3_proprijazigo001.php?cm28_i_codigo=$cm28_i_codigo&cm28_i_ossoariojazigo=$cm28_i_ossoariojazigo&cm28_i_proprietario=$cm28_i_proprietario&z01_nome=$z01_nome&chavepesquisa=$cm28_i_codigo';";
                      echo "</script>";
                 }
 
                 echo "<script>";
                 echo " parent.document.formaba.a3.disabled=false; ";
-                echo " top.corpo.iframe_a3.location.href='cem3_sepultados001.php?chavepesquisa=$cm25_i_codigo&tipo=$cm25_c_tipo';";
+                echo " CurrentWindow.corpo.iframe_a3.location.href='cem3_sepultados001.php?chavepesquisa=$cm25_i_codigo&tipo=$cm25_c_tipo';";
                 echo "</script>";
 
                 echo "<script>";
                 echo " parent.document.formaba.a4.disabled=false; ";
-                echo " top.corpo.iframe_a4.location.href='cem3_taxas001.php?chavepesquisa=$cm25_i_codigo';";
+                echo " CurrentWindow.corpo.iframe_a4.location.href='cem3_taxas001.php?chavepesquisa=$cm25_i_codigo';";
                 echo "</script>";
 
             }

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -50,17 +50,17 @@ function abre() {
   var sNumeroFinal   = $F("p58_codprocfin");
 
   if (sNumeroInicial == '' || sNumeroFinal == '') {
-    
+
     alert('Selecione um intervalo de processos.');
     return false;
   }
-  
+
   url  = "pro4_capaprocesso.php?";
   url += "&numeroProcessoInicial=" + sNumeroInicial;
   url += "&numeroProcessoFinal="   + sNumeroFinal;
-  
+
   window.open(url,'','location=0');
-  
+
 }
 </script>
 </head>
@@ -119,18 +119,18 @@ $('p58_codprocfin').value = '';
 
 
 function js_pesquisaprotocolo(mostra, campo) {
-  
+
   var sCampo               = $(campo);
   var sFuncaoRetorno       = 'js_mostra1';
-  var sFuncaoRetornoChange = 'js_mostra';  
+  var sFuncaoRetornoChange = 'js_mostra';
   if (sCampo.id == 'p58_codprocfin') {
 
     sFuncaoRetorno       = 'js_mostra2';
-    sFuncaoRetornoChange = 'js_mostraFim'; 
+    sFuncaoRetornoChange = 'js_mostraFim';
   }
   if(mostra==true) {
-  
-    js_OpenJanelaIframe('top.corpo', 
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_despint',
                         //'func_procdespint.php?reimprime=1&grupo=1&funcao_js=parent.'+sFuncaoRetorno+'|p58_codproc|p58_requer',
                         'func_procdespint.php?reimprime=1&grupo=1&funcao_js=parent.'+sFuncaoRetorno+'|dl_processo|p58_requer',
@@ -138,7 +138,7 @@ function js_pesquisaprotocolo(mostra, campo) {
                         true);
   } else {
      if (sCampo.value != '') {
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_despint',
                             'func_procdespint.php?reimprime=1&grupo=1&pesquisa_chave='+sCampo.value+
                             '&funcao_js=parent.'+sFuncaoRetornoChange ,'Pesquisar Protocolo',
@@ -151,10 +151,10 @@ function js_mostra( numeroProcesso, chave, nome, erro){
 
 
   $("p58_codproc"). value = numeroProcesso;
-  if (erro == true) { 
-  
-    document.form1.p58_codproc.focus(); 
-    document.form1.p58_codproc.value = ''; 
+  if (erro == true) {
+
+    document.form1.p58_codproc.focus();
+    document.form1.p58_codproc.value = '';
   }
 }
 

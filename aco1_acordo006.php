@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -51,34 +51,34 @@ if(isset($excluir)){
 
   if($clacordoacordogarantia->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clacordoacordogarantia->erro_msg; 
+  }
+  $erro_msg = $clacordoacordogarantia->erro_msg;
   $clacordoacordopenalidade->ac15_sequencial=$ac16_sequencial;
   $clacordoacordopenalidade->excluir($ac16_sequencial);
 
   if($clacordoacordopenalidade->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clacordoacordopenalidade->erro_msg; 
+  }
+  $erro_msg = $clacordoacordopenalidade->erro_msg;
   $clacordoitem->ac20_sequencial=$ac16_sequencial;
   $clacordoitem->excluir($ac16_sequencial);
 
   if($clacordoitem->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clacordoitem->erro_msg; 
+  }
+  $erro_msg = $clacordoitem->erro_msg;
   $clacordo->excluir($ac16_sequencial);
   if($clacordo->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clacordo->erro_msg; 
+  }
+  $erro_msg = $clacordo->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clacordo->sql_record($clacordo->sql_query($chavepesquisa)); 
+   $result = $clacordo->sql_record($clacordo->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -92,8 +92,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmacordo.php");
@@ -129,13 +129,13 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.acordoacordogarantia.disabled=false;
-         top.corpo.iframe_acordoacordogarantia.location.href='aco1_acordoacordogarantia001.php?db_opcaoal=33&ac12_sequencial=".@$ac16_sequencial."';
+         CurrentWindow.corpo.iframe_acordoacordogarantia.location.href='aco1_acordoacordogarantia001.php?db_opcaoal=33&ac12_sequencial=".@$ac16_sequencial."';
          parent.document.formaba.acordoacordopenalidade.disabled=false;
-         top.corpo.iframe_acordoacordopenalidade.location.href='aco1_acordoacordopenalidade001.php?db_opcaoal=33&ac15_sequencial=".@$ac16_sequencial."';
+         CurrentWindow.corpo.iframe_acordoacordopenalidade.location.href='aco1_acordoacordopenalidade001.php?db_opcaoal=33&ac15_sequencial=".@$ac16_sequencial."';
          parent.document.formaba.acordoitem.disabled=false;
-         top.corpo.iframe_acordoitem.location.href='aco1_acordoitem001.php?db_opcaoal=33&ac20_sequencial=".@$ac16_sequencial."';
+         CurrentWindow.corpo.iframe_acordoitem.location.href='aco1_acordoitem001.php?db_opcaoal=33&ac20_sequencial=".@$ac16_sequencial."';
          parent.document.formaba.acordodocumento.disabled=false;
-         top.corpo.iframe_acordodocumento.location.href='aco1_acordodocumento001.php?ac40_acordo=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_acordodocumento.location.href='aco1_acordodocumento001.php?ac40_acordo=".@$chavepesquisa."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('acordoacordogarantia');";

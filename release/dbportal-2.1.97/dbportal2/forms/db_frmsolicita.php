@@ -19,7 +19,7 @@ $clrotulo->label("pc12_tipo");
     <td nowrap title="<?=@$Tpc10_numero?>">
        <?=@$Lpc10_numero?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc10_numero',8,$Ipc10_numero,true,'text',3)
 ?>
@@ -29,7 +29,7 @@ db_input('pc10_numero',8,$Ipc10_numero,true,'text',3)
     <td nowrap title="<?=@$Tpc10_data?>">
        <?=@$Lpc10_data?>
     </td>
-    <td> 
+    <td>
 <?
 $recebedata = db_getsession("DB_datausu");
 $recebedata = date("Y-m-d",$recebedata);
@@ -48,7 +48,7 @@ db_inputdata('pc10_data',$pc10_datadia,$pc10_datames,$pc10_dataano,true,'text',3
     <td nowrap title="<?=@$Tpc10_resumo?>">
        <?=@$Lpc10_resumo?>
     </td>
-    <td> 
+    <td>
 <?
 @$pc10_resumo = stripslashes($pc10_resumo);
 db_textarea('pc10_resumo',15,80,$Ipc10_resumo,true,'text',$db_opcao,"")
@@ -76,12 +76,12 @@ db_input('descrdepto',40,"",true,'text',3);
   <?
    $parampesquisa = true;
    if(isset($pc30_seltipo) && $pc30_seltipo=="t"){
-  ?>  
+  ?>
   <tr>
     <td nowrap title="<?=@$Tpc12_tipo?>">
        <?=@$Lpc12_tipo?>
     </td>
-    <td> 
+    <td>
     <?
     if(isset($pc12_tipo) && $pc12_tipo=='' || !isset($pc12_tipo)){
       $somadata = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_tipcom as pc12_tipo"));
@@ -98,8 +98,8 @@ db_input('descrdepto',40,"",true,'text',3);
     db_selectrecord("pc12_tipo",$result_tipocompra,true,$db_opcao);
     ?>
     </td>
-  </tr>  
-  <? 
+  </tr>
+  <?
    }
 
    if (isset($param) && trim($param) != ""){
@@ -117,7 +117,7 @@ db_input('descrdepto',40,"",true,'text',3);
 	     $flag_codproc = false;
 	}
 
-        if (isset($chavepesquisa) && trim($chavepesquisa) != "" && 
+        if (isset($chavepesquisa) && trim($chavepesquisa) != "" &&
 	     $param == "alterar"   && @$param_ant == ""){
 	     $dbwhere = "pc11_numero = $chavepesquisa and ";
 	}
@@ -133,7 +133,7 @@ db_input('descrdepto',40,"",true,'text',3);
 									            null,
 									            "$dbwhere"));
         }
-/*	
+/*
         if (isset($chavepesquisa) && trim($chavepesquisa) != "" && $liberaaba == "false"){
 	     if ($result_liclicitem->numrows > 0){
 	          for(
@@ -144,14 +144,14 @@ db_input('descrdepto',40,"",true,'text',3);
 	               $codproc      = $codproc3;
 	               $flag_codproc = true;
 	          }
-	     }	  
-        }		
+	     }
+        }
 */
 	if ($flag_liclicita == false){
 	     if ($param == "incluir"){
 	          $pc     = 1;
 		  $tranca = $pc;
-	        
+
 	     } else {
 	          $pc     = 3;
 		  $tranca = $pc + 2;
@@ -179,26 +179,26 @@ db_input('descrdepto',40,"",true,'text',3);
 	     $campo   = "";
 	}
 
-        if (isset($chavepesquisa) && trim($chavepesquisa) != "" && 
+        if (isset($chavepesquisa) && trim($chavepesquisa) != "" &&
 	    $param == "alterar"   && @$param_ant == ""){
 	       $dbwhere    = "pc11_numero = $chavepesquisa and ";
 	       $campo      = ",pc11_numero as codsol";
 	       $flag_achou = false;
 	}
 
-        if (strlen(trim(@$campo)) > 0){ 
+        if (strlen(trim(@$campo)) > 0){
              $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null,
 	                                                                                       "distinct l21_codliclicita as codliclicita3$campo",
 									                                                                       null,
                                                              								             "$dbwhere"));
         }
-/*	
+/*
         echo($clliclicitem->sql_query_inf(null,
 	                                  "distinct l21_codliclicita as codliclicita3$campo",
 	                                  null,
 				          "$dbwhere (e55_sequen is null or (e55_sequen is not null and e54_anulad is null))"
 				         ));
-*/	
+*/
 	if ($flag_codproc == false){
   ?>
      <tr>
@@ -218,7 +218,7 @@ db_input('descrdepto',40,"",true,'text',3);
   <?
            }
    }
-  ?>  
+  ?>
   </table>
   </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
@@ -231,7 +231,7 @@ if(isset($pc10_numero) || isset($chavepesquisa)){
   $result_itens = $clsolicitem->sql_record($clsolicitem->sql_query_file(null,"pc11_codigo",""," pc11_numero=$pc10_numero "));
   if($clsolicitem->numrows>0){
     echo "<input name='gera' type='submit' id='gera' value='Gerar relatório' onclick='js_gerarel();'>";
-  } 
+  }
 }
 if(isset($departusu) && trim($departusu)!=""){
   echo '<input name="importar" type="button" id="importar" value="Importar Solicitação" onclick="js_importa();">';
@@ -261,12 +261,12 @@ function js_gerarel(){
   ?>
   /*
   ini = document.form1.pc10_numero.value;
-  jan = window.open('com2_emitesolicita002.php?ini='+ini+'&fim='+ini,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');  
+  jan = window.open('com2_emitesolicita002.php?ini='+ini+'&fim='+ini,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
   */
 }
 function js_importa(){
-  js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_preencheimporta|pc10_numero&nada=true','Pesquisa',true,'0');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_preencheimporta|pc10_numero&nada=true','Pesquisa',true,'0');
 }
 function js_preencheimporta(chave){
   db_iframe_solicita.hide();
@@ -289,7 +289,7 @@ function js_pesquisa(){
         $parametro = "";
    }
 ?>
-    js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_solicita','func_solicita.php?proc=true&funcao_js=parent.js_preenchepesquisa|pc10_numero&departamento=<?=db_getsession("DB_coddepto")?><?=$parametro?>','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_solicita','func_solicita.php?proc=true&funcao_js=parent.js_preenchepesquisa|pc10_numero&departamento=<?=db_getsession("DB_coddepto")?><?=$parametro?>','Pesquisa',true,'0');
 }
 function js_preenchepesquisa(chave){
   db_iframe_solicita.hide();
@@ -308,19 +308,19 @@ function js_preenchepesquisa(chave){
 ?>
 function js_pesquisapc80_codproc(mostra){
    if (mostra == true){
-        js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc<?=$parametro2?>','Processos',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc<?=$parametro2?>','Processos',true);
    } else {
         if (document.form1.codproc.value != ""){
-             js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?pesquisa_chave='+document.form1.codproc.value+'&funcao_js=parent.js_mostrapcproc<?=$parametro2?>','Processos',false);
+             js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?pesquisa_chave='+document.form1.codproc.value+'&funcao_js=parent.js_mostrapcproc<?=$parametro2?>','Processos',false);
 	}
    }
 }
 function js_pesquisal21_codliclicita(mostra){
    if(mostra == true){
-       js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo<?=$parametro2?>','Licitações',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo<?=$parametro2?>','Licitações',true);
    } else {
-       if(document.form1.codliclicita.value != ''){ 
-           js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.codliclicita.value+'&funcao_js=parent.js_mostraliclicita<?=$parametro2?>','Licitações',false);
+       if(document.form1.codliclicita.value != ''){
+           js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.codliclicita.value+'&funcao_js=parent.js_mostraliclicita<?=$parametro2?>','Licitações',false);
        }
    }
 }
@@ -329,21 +329,21 @@ function js_mostrapcproc1(chave1){
    db_iframe_pcproc.hide();
 }
 function js_mostrapcproc(chave,erro){
-   if(erro==true){ 
-       document.form1.codproc.focus(); 
-       document.form1.codproc.value = ''; 
+   if(erro==true){
+       document.form1.codproc.focus();
+       document.form1.codproc.value = '';
        alert("Processo de compras já autorizado a empenho!");
    }
 }
 function js_mostraliclicita(chave,erro){
-  if(erro==true){ 
-      document.form1.codliclicita.value = ''; 
+  if(erro==true){
+      document.form1.codliclicita.value = '';
       document.form1.codliclicita.focus();
       alert("Licitação já autorizada a empenho!");
   }
 }
 function js_mostraliclicita1(chave1){
-   document.form1.codliclicita.value = chave1;  
+   document.form1.codliclicita.value = chave1;
    db_iframe_liclicita.hide();
 }
 </script>

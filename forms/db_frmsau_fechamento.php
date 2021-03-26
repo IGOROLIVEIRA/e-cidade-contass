@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -39,8 +39,8 @@ $oDaoSauFechamento->rotulo->label();
       <tr>
         <td nowrap title="<?=@$Tsd97_i_compmes?>">
           <b>Competência Mês/Ano:</b>
-        </td> 
-        <td> 
+        </td>
+        <td>
           <? db_input('sd97_i_compmes',2,$Isd97_i_compmes,true,'text',$db_opcao,'onchange="js_descr()"');?>
         /
           <? db_input('sd97_i_compano',4,$Isd97_i_compano,true,'text',$db_opcao,'onchange="js_descr()"');?>
@@ -50,14 +50,14 @@ $oDaoSauFechamento->rotulo->label();
         <td nowrap title="<?=@$Tsd97_d_dataini?>">
           <b>Período de Fechamento :</b>
         </td>
-        <td> 
+        <td>
           <?
-            db_inputdata('sd97_d_dataini', @$sd97_d_dataini_dia, @$sd97_d_dataini_mes, @$sd97_d_dataini_ano, true, 
+            db_inputdata('sd97_d_dataini', @$sd97_d_dataini_dia, @$sd97_d_dataini_mes, @$sd97_d_dataini_ano, true,
                          'text', $db_opcao, "");
           ?>
         À
-          <? 
-            db_inputdata('sd97_d_datafim', @$sd97_d_datafim_dia, @$sd97_d_datafim_mes, @$sd97_d_datafim_ano, true, 
+          <?
+            db_inputdata('sd97_d_datafim', @$sd97_d_datafim_dia, @$sd97_d_datafim_mes, @$sd97_d_datafim_ano, true,
                          'text', $db_opcao, "onchange=\"js_troca();\"","","","parent.js_troca();");
           ?>
         </td>
@@ -67,7 +67,7 @@ $oDaoSauFechamento->rotulo->label();
         <td colspan="3">
           <?
             $x = array();
-            $sWhere = "sd65_i_anocomp=(select max(sd65_i_anocomp) from sau_financiamento) and sd65_i_mescomp=( 
+            $sWhere = "sd65_i_anocomp=(select max(sd65_i_anocomp) from sau_financiamento) and sd65_i_mescomp=(
                        select max(sd65_i_mescomp) from sau_financiamento where sd65_i_anocomp=(
                        select max(sd65_i_anocomp) from sau_financiamento))";
             $sSql    = $oDaoSauFinanciamento->sql_query_file(null,
@@ -92,7 +92,7 @@ $oDaoSauFechamento->rotulo->label();
         <td nowrap title="<?=@$Tsd97_d_data?>">
           <?=@$Lsd97_d_data?>
         </td>
-        <td colspan="3"> 
+        <td colspan="3">
           <?
             db_inputdata('sd97_d_data',@$sd97_d_data_dia,@$sd97_d_data_mes,@$sd97_d_data_ano,true,'text',3,"");
           ?>
@@ -102,7 +102,7 @@ $oDaoSauFechamento->rotulo->label();
         <td nowrap title="<?=@$Tsd97_c_descricao?>">
           <?=@$Lsd97_c_descricao?>
         </td>
-        <td colspan="3"> 
+        <td colspan="3">
           <?
             db_input('sd97_c_descricao',58,$Isd97_c_descricao,true,'text',$db_opcao,"");
           ?>
@@ -110,15 +110,15 @@ $oDaoSauFechamento->rotulo->label();
       </tr>
     </table>
   </fieldset>
-  <table>  
+  <table>
     <tr>
       <td  width="30%">
-        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" 
-               id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" 
+        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit"
+               id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
                <?=($db_botao==false?"disabled":"")?> >
       </td>
       <td width="30%">
-        <input name="cancelar" type="button" id="cancelar" value="Cancelar" 
+        <input name="cancelar" type="button" id="cancelar" value="Cancelar"
                <?=($db_opcao==1||isset($incluir)?"disabled":"")?> onClick='location.href="sau4_fechamento001.php"'>
       </td>
     </tr>
@@ -193,7 +193,7 @@ function js_pesquisasd97_i_login(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_db_usuarios',
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_usuarios',
                         'func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome', 'Pesquisa',
                         true);
 
@@ -201,22 +201,22 @@ function js_pesquisasd97_i_login(mostra) {
 
      if (document.form1.sd97_i_login.value != '') {
 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios',
                             'func_db_usuarios.php?pesquisa_chave='+document.form1.sd97_i_login.value+
                             '&funcao_js=parent.js_mostradb_usuarios', 'Pesquisa', false);
 
      } else {
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
 
   }
 }
 function js_mostradb_usuarios(chave, erro) {
 
-  document.form1.nome.value = chave; 
+  document.form1.nome.value = chave;
   if (erro == true) {
 
-    document.form1.sd97_i_login.focus(); 
+    document.form1.sd97_i_login.focus();
     document.form1.sd97_i_login.value = '';
 
   }
@@ -231,7 +231,7 @@ function js_mostradb_usuarios1(chave1, chave2) {
 }
 function js_pesquisa() {
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_fechamento',
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_fechamento',
                       'func_sau_fechamento.php?funcao_js=parent.js_preenchepesquisa|sd97_i_codigo', 'Pesquisa' ,true);
 
 }

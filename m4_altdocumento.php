@@ -25,7 +25,7 @@ if(isset($alterar)){
   $instit = db_getsession('DB_instit');
   $rsVerify = db_query(
     "SELECT 1
-    FROM conlancam 
+    FROM conlancam
     JOIN conlancamdoc on c71_codlan = c70_codlan
     JOIN conlancaminstit on c02_codlan = c70_codlan
     JOIN condataconf ON (c99_anousu,
@@ -42,7 +42,7 @@ if(isset($alterar)){
     db_inicio_transacao();
     $cl_scripts->alteraDocumento($c70_codlan,$c45_coddoc,$coddoc);
     echo "<script>alert(\"".$cl_scripts->erro_msg."\");</script>";
-    
+
     db_fim_transacao();
 
     if($cl_scripts->erro == false){
@@ -56,7 +56,7 @@ if(isset($alterar)){
 
   $rsVerify2 = db_query(
     "SELECT 1
-    FROM conlancam 
+    FROM conlancam
     JOIN conlancamdoc on c71_codlan = c70_codlan
     JOIN conlancaminstit on c02_codlan = c70_codlan
     JOIN condataconf ON (c99_anousu,
@@ -69,11 +69,11 @@ if(isset($alterar)){
   );
 
   if(pg_num_rows($rsVerify2) == 0){
-    
+
     db_inicio_transacao();
     $cl_scripts->alteraDocumento($c70_codlan,$c45_coddoc,$coddoc);
     echo "<script>alert(\"".$cl_scripts->erro_msg."\");</script>";
-    
+
     db_fim_transacao();
 
     $coddoc = $c45_coddoc;
@@ -163,10 +163,10 @@ if(isset($alterar)){
  * lokup para lancamentos contabeis
  */
 function js_pesquisaLancamento(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conlancamlan','func_conlancamlanmanut.php?funcao_js=parent.js_preencheLancamento|c70_codlan|c53_coddoc|c53_descr','Pesquisa Lançamentos',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamlan','func_conlancamlanmanut.php?funcao_js=parent.js_preencheLancamento|c70_codlan|c53_coddoc|c53_descr','Pesquisa Lançamentos',true);
 }
 function js_preencheLancamento(chave,chave2,descr){
-  
+
   $('c70_codlan').value = chave;
   $('coddoc').value = chave2;
   $('descr').value = descr;

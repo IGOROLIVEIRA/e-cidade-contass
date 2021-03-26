@@ -61,7 +61,7 @@ function js_emitecsv(){
   jan = window.open('pes2_margemconsignavelcsv002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -103,7 +103,7 @@ function js_emitecsv(){
               ?>
 	      </b>&nbsp;&nbsp;
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
                db_input('base01',4,@$base01,true,'text',@$db_opcao,"onchange='js_pesquisabase01(false)'");
                db_input("r08_descr",30,@$Ir08_descr,true,"text",3,"","descr_base01");
@@ -117,7 +117,7 @@ function js_emitecsv(){
               ?>
 	      </b>&nbsp;&nbsp;
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
                db_input('base02',4,@$base02,true,'text',@$db_opcao,"onchange='js_pesquisabase02(false)'");
                db_input("r08_descr",30,@$Ir08_descr,true,"text",3,"","descr_base02");
@@ -131,7 +131,7 @@ function js_emitecsv(){
               ?>
 	      </b>&nbsp;&nbsp;
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
                db_input('base03',4,@$base03,true,'text',@$db_opcao,"onchange='js_pesquisabase03(false)'");
                db_input("r08_descr",30,@$Ir08_descr,true,"text",3,"","descr_base03");
@@ -173,8 +173,8 @@ function js_emitecsv(){
               <table style="width: 100%">
                 <tr>
                   <td align="right">
-                    <?php 
-                      
+                    <?php
+
                       $aux                                  = new cl_arquivo_auxiliar;
                       $aux->cabecalho                       = "<strong>MATRÍCULAS SELECIONADAS</strong>";
                       $aux->codigo                          = "rh01_regist";
@@ -197,10 +197,10 @@ function js_emitecsv(){
                       $aux->linhas                          = 10;
                       $aux->vwidth                          = "360";
                       $aux->funcao_gera_formulario();
-                      
+
                     ?>
                   </td>
-                </tr> 
+                </tr>
               </table>
             </td>
           </tr>
@@ -208,7 +208,7 @@ function js_emitecsv(){
 </fieldset>
 	<table>
     <tr>
-      <td colspan="2"align = "center"> 
+      <td colspan="2"align = "center">
         <input  name="emite1" id="emite1" type="button" value="Processar" onclick="js_emite();" >
         <input  name="emite2" id="emite2" type="button" value="Imprimir CSV" onclick="js_emitecsv();" >
       </td>
@@ -226,20 +226,20 @@ function js_emitecsv(){
 
 function js_pesquisabase01(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase011|r08_codigo|r08_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase011|r08_codigo|r08_descr','Pesquisa',true);
   }else{
-    if(document.form1.base01.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_base01','func_bases.php?pesquisa_chave='+document.form1.base01.value+'&funcao_js=parent.js_mostrabase01','Pesquisa',false);
+    if(document.form1.base01.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_base01','func_bases.php?pesquisa_chave='+document.form1.base01.value+'&funcao_js=parent.js_mostrabase01','Pesquisa',false);
     }else{
-      document.form1.descr_base01.value = ''; 
+      document.form1.descr_base01.value = '';
     }
   }
 }
 function js_mostrabase01(chave,erro){
-  document.form1.descr_base01.value = chave; 
-  if(erro==true){ 
-    document.form1.base01.focus(); 
-    document.form1.base01.value = ''; 
+  document.form1.descr_base01.value = chave;
+  if(erro==true){
+    document.form1.base01.focus();
+    document.form1.base01.value = '';
   }
 }
 function js_mostrabase011(chave1,chave2){
@@ -252,20 +252,20 @@ function js_mostrabase011(chave1,chave2){
 
 function js_pesquisabase02(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase021|r08_codigo|r08_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase021|r08_codigo|r08_descr','Pesquisa',true);
   }else{
-    if(document.form1.base02.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_base02','func_bases.php?pesquisa_chave='+document.form1.base02.value+'&funcao_js=parent.js_mostrabase02','Pesquisa',false);
+    if(document.form1.base02.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_base02','func_bases.php?pesquisa_chave='+document.form1.base02.value+'&funcao_js=parent.js_mostrabase02','Pesquisa',false);
     }else{
-      document.form1.descr_base02.value = ''; 
+      document.form1.descr_base02.value = '';
     }
   }
 }
 function js_mostrabase02(chave,erro){
-  document.form1.descr_base02.value = chave; 
-  if(erro==true){ 
-    document.form1.base02.focus(); 
-    document.form1.base02.value = ''; 
+  document.form1.descr_base02.value = chave;
+  if(erro==true){
+    document.form1.base02.focus();
+    document.form1.base02.value = '';
   }
 }
 function js_mostrabase021(chave1,chave2){
@@ -277,20 +277,20 @@ function js_mostrabase021(chave1,chave2){
 
 function js_pesquisabase03(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase031|r08_codigo|r08_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase031|r08_codigo|r08_descr','Pesquisa',true);
   }else{
-    if(document.form1.base03.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_base03','func_bases.php?pesquisa_chave='+document.form1.base03.value+'&funcao_js=parent.js_mostrabase03','Pesquisa',false);
+    if(document.form1.base03.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_base03','func_bases.php?pesquisa_chave='+document.form1.base03.value+'&funcao_js=parent.js_mostrabase03','Pesquisa',false);
     }else{
-      document.form1.descr_base03.value = ''; 
+      document.form1.descr_base03.value = '';
     }
   }
 }
 function js_mostrabase03(chave,erro){
-  document.form1.descr_base03.value = chave; 
-  if(erro==true){ 
-    document.form1.base03.focus(); 
-    document.form1.base03.value = ''; 
+  document.form1.descr_base03.value = chave;
+  if(erro==true){
+    document.form1.base03.focus();
+    document.form1.base03.value = '';
   }
 }
 function js_mostrabase031(chave1,chave2){
@@ -300,34 +300,34 @@ function js_mostrabase031(chave1,chave2){
 }
 
 function js_insere_matri () {
-    
+
     var valor = document.getElementById('matriculas_selecionadas_text').value.trim();
-    
+
     if ( valor == '' ) {
-      
+
       if ( st ) {
-        
+
         clearTimeout(st);
       }
-        
+
       return false;
     }
-      
+
     var array = valor.split(",");
-    
+
     for ( var i = 0; i < array.length; i++ ) {
-      
+
       document.getElementById('rh01_regist').value = array[i];
       js_BuscaDadosArquivomatriculas_selecionadas(false);
-      
-      document.getElementById('matriculas_selecionadas_text').value = 
+
+      document.getElementById('matriculas_selecionadas_text').value =
         ( array.slice( i + 1, array.length ).implode(',') ).trim();
-      
+
       var st = setTimeout(js_insere_matri, 500);
-      
+
       break;
     }
-    
+
   }
 
 

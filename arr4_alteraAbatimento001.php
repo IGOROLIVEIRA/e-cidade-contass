@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -60,7 +60,7 @@ include_once("libs/db_utils.php");
   	<?
   	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
   	exit;
-  } 
+  }
 ?>
 <fieldset>
 <legend> <b>Alterar Origens de Abatimento</b> </legend>
@@ -76,7 +76,7 @@ include_once("libs/db_utils.php");
          <td width="100px;">
           <?
            db_ancora("Abatimento:","js_pesquisaAbatimento();",1);
-          ?> 
+          ?>
          </td>
          <td>
           <?
@@ -110,7 +110,7 @@ include_once("libs/db_utils.php");
              db_ancora('Consultar Origens Atuais do Abatimento',"js_consultaOrigemCredito()",1,'');
             ?>
           </td>
-        </tr>        
+        </tr>
        </table>
      </fieldset>
      <fieldset>
@@ -121,9 +121,9 @@ include_once("libs/db_utils.php");
         </tr>
       </table>
      </fieldset>
-   </td>   
+   </td>
   </tr>
- </table>   
+ </table>
 </form>
 </fieldset>
 <br>
@@ -156,16 +156,16 @@ include_once("libs/db_utils.php");
 
 	$('btnSalvar').observe("click", function() {
 		js_alterarOrigensAbatimento();
-	});  
+	});
 
   function js_pesquisaAbatimento() {
 	    js_OpenJanelaIframe('','db_iframe_abatimento','func_abatimento.php?funcao_js=parent.js_mostraAbatimento1|k125_sequencial|k125_valor','Pesquisa',true);
 	}
-	
+
 	function js_mostraAbatimento1(chave1,chave2) {
-		
+
 		js_limpaTela();
-		
+
 	  $("abatimento").value    = chave1;
 	  $("vlrAbatimento").value = chave2;
 	  db_iframe_abatimento.hide();
@@ -175,44 +175,44 @@ include_once("libs/db_utils.php");
 	}
 
 	function js_consultaOrigemCredito() {
-		
+
 		var sUrl = 'func_origemabatimento.php?iAbatimento='+$("abatimento").value;
-	  js_OpenJanelaIframe('top.corpo','db_iframe_abatimento',sUrl,'Origem Crédito',true);
-	  
-	}	
+	  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_abatimento',sUrl,'Origem Crédito',true);
+
+	}
 
 	function js_buscaOrigensAbatimento(iAbatimento) {
 
 		 var oRequisicao             = new Object();
 	       oRequisicao.exec        = "getOrigensAbatimento";
 	       oRequisicao.iAbatimento = iAbatimento;
-	        
+
 	   var sJson = js_objectToJson(oRequisicao);
 	   js_divCarregando("Buscando origens do abatimento, aguarde... ","msgBox");
-	   var oAjax = new Ajax.Request( sUrlRPC, 
-	                                          { 
-	                                            method    : 'post', 
-	                                            parameters: 'json='+sJson, 
+	   var oAjax = new Ajax.Request( sUrlRPC,
+	                                          {
+	                                            method    : 'post',
+	                                            parameters: 'json='+sJson,
 	                                            onComplete: js_retornoOrigensAbatimento
 	                                          }
-	                                        );		
-		
+	                                        );
+
 	}
 
 	function js_retornoOrigensAbatimento(oAjax) {
-		
+
 		js_removeObj("msgBox");
 		var oRetorno = eval("("+oAjax.responseText+")");
 		if (oRetorno.lErro == true) {
 			alert("Nenhuma origem para o abatimento válida encontrada");
 			js_limpaTela();
 			return false;
-		}	
+		}
 
 		$('btnSalvar').disabled = false;
-		
+
 		oDBGridOrigensAbatimento.clearAll(true);
-		
+
 		oRetorno.aOrigens.each(function (oOrigem, iLinha) {
 
 		      var aLinha = new Array();
@@ -230,23 +230,23 @@ include_once("libs/db_utils.php");
 		      aLinha[8] += " size=\"5\" /> ";
 		      oDBGridOrigensAbatimento.addRow(aLinha);
 		    });
-	    
+
 		oDBGridOrigensAbatimento.renderRows();
-			
+
 	}
 
 	function js_somaOrigens() {
 
     var nValorTotal = 0;
-    
+
 		for (iInd = 0; iInd < oDBGridOrigensAbatimento.getNumRows() ; iInd++ ) {
 
 			if ($("VlrAbatido"+iInd).value != "") {
 
 				nValorTotal += new Number(oDBGridOrigensAbatimento.aRows[iInd].aCells[8].getValue());
-				
+
 			}
-			
+
 		}
 
 		$("vlrOrigens").value = nValorTotal;
@@ -255,9 +255,9 @@ include_once("libs/db_utils.php");
 		  $('btnSalvar').disabled = true;
 		} else {
 			$('btnSalvar').disabled = false;
-		}	
-	     		
-	}	
+		}
+
+	}
 
 	function js_alterarOrigensAbatimento() {
 
@@ -268,27 +268,27 @@ include_once("libs/db_utils.php");
 			if ($("VlrAbatido"+iInd).value != "") {
 
 		    var aDados = new Object();
-		    aDados.numpre = oDBGridOrigensAbatimento.aRows[iInd].aCells[0].getValue();   
+		    aDados.numpre = oDBGridOrigensAbatimento.aRows[iInd].aCells[0].getValue();
 		    aDados.numpar = oDBGridOrigensAbatimento.aRows[iInd].aCells[1].getValue();
 		    aDados.receit = oDBGridOrigensAbatimento.aRows[iInd].aCells[2].getValue();
 		    aDados.hist   = oDBGridOrigensAbatimento.aRows[iInd].aCells[4].getValue();
 		    aDados.tipo   = oDBGridOrigensAbatimento.aRows[iInd].aCells[6].getValue();
 		    aDados.valor  = oDBGridOrigensAbatimento.aRows[iInd].aCells[8].getValue();
 
-		    nValorTotal += new Number(aDados.valor);  
-		    aOrigens.push(aDados);	
+		    nValorTotal += new Number(aDados.valor);
+		    aOrigens.push(aDados);
       }
-		             
+
     }
 
 	  if (nValorTotal != $("vlrAbatimento").value) {
 		  alert("O valor das Origens do Abatimento deverá ser igual ao valor abatido!");
 		  return false;
-	  }    
+	  }
 
 		var oParam  				   = new Object();
 		    oParam.iAbatimento = $("abatimento").value;
-		    oParam.aOrigens    = aOrigens; 
+		    oParam.aOrigens    = aOrigens;
 		    oParam.exec 		   = "alterarOrigensAbatimento";
 
 		  js_divCarregando("Aguarde, processando alteração das origens do abatimento...", "msgBox");
@@ -299,8 +299,8 @@ include_once("libs/db_utils.php");
 		                                  parameters:'json='+Object.toJSON(oParam),
 		                                  onComplete: js_retornoAlterarOrigensAbatimento
 		                                }
-		                              );		
-		
+		                              );
+
 	}
 
 	function js_retornoAlterarOrigensAbatimento(oAjax){
@@ -315,14 +315,14 @@ include_once("libs/db_utils.php");
   }
 
 	function js_limpaTela() {
-		
-		$("abatimento").value    = ""; 
+
+		$("abatimento").value    = "";
 		$("vlrAbatimento").value = "";
 		$("vlrOrigens").value    = "";
 		oDBGridOrigensAbatimento.clearAll(true);
 		$("MI").style.visibility = 'hidden';
 		js_pesquisaAbatimento();
-		 
+
 	}
-		
+
 </script>

@@ -1883,9 +1883,9 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
       }
     }
   } else {
-    echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
+    echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
     if ($pc30_sugforn == 't') {
-      echo "<script> top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";
+      echo "<script> CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";
     }
     if (isset($excluir)) {
       echo "<script> document.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&selecao=".@$selecao."$parametro'; </script>";

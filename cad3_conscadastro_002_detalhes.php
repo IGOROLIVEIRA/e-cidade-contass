@@ -52,7 +52,7 @@
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 function js_averba(codigo){
-	js_OpenJanelaIframe('top.corpo','db_iframe_averba','cad3_averbacao002.php?codigo='+codigo,'Pesquisa',true);
+	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_averba','cad3_averbacao002.php?codigo='+codigo,'Pesquisa',true);
 }
 
 /*
@@ -2205,7 +2205,7 @@ order by iptucalc.j23_anousu desc
 
   function js_consultaDetalhesITBI(iGuia){
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_consulta','itb4_consultaitbi001.php?it01_guia='+iGuia,'Pesquisa',true,30);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consulta','itb4_consultaitbi001.php?it01_guia='+iGuia,'Pesquisa',true,30);
     db_iframe_consultaitbi.hide();
   }
 

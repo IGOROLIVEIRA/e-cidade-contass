@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -46,7 +46,7 @@ $iPonto = "";
 $input_botoes = true;
 
 /*
- * Alteração do valor da label. 
+ * Alteração do valor da label.
  * OBS.: Se este valor for aplicado em demais formulário deverá substituir no BD
  */
 $Sr90_regist = "Campo matrícula";
@@ -65,7 +65,7 @@ switch ($ponto) {
     if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
       try {
-        
+
         /**
          * Verifica se o ponto já foi inicializado.
          */
@@ -102,7 +102,7 @@ switch ($ponto) {
           throw new DBException(_M(FolhaPagamento::MENSAGENS . "ponto_nao_inicializado"));
         }
       } catch (Exception $e) {
-        
+
         $db_opcao     = 3;
         $input_botoes = false;
         db_msgbox($e->getMessage());
@@ -183,7 +183,7 @@ switch ($ponto) {
                * Valida rescisão
                */
               if (isset($r90_regist)) {
-                
+
                 $oDaoPessoalMov = new cl_rhpessoalmov();
                 if ($oDaoPessoalMov->isRescindido($r90_regist)) {
                   $db_opcao = 3;
@@ -205,7 +205,7 @@ switch ($ponto) {
               $rh141_mesref    = $oFolhaPagamentoSuplementar->getCompetenciaReferencia()->getMes();
             } else {
 
-              throw new DBException(_M(FolhaPagamentoSuplementar::MENSAGENS . "fechamento_folha_fechada"));              
+              throw new DBException(_M(FolhaPagamentoSuplementar::MENSAGENS . "fechamento_folha_fechada"));
             }
           }
         } else {
@@ -228,7 +228,7 @@ switch ($ponto) {
     if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
       try {
-        
+
         /**
          * Verifica se o ponto já foi inicializado.
          */
@@ -265,7 +265,7 @@ switch ($ponto) {
           throw new DBException(_M(FolhaPagamento::MENSAGENS . "ponto_nao_inicializado"));
         }
       } catch (Exception $e) {
-        
+
         $db_opcao     = 3;
         $input_botoes = false;
         db_msgbox($e->getMessage());
@@ -310,24 +310,24 @@ switch ($ponto) {
 <script>
 
 function js_getDadosPadroes() {
-  
+
   var sUrl         = 'pes1_rhrubricas.RPC.php';
   var oParametros  = new Object();
   var msgDiv       = "Pesquisando dados padrão da rubrica. Aguarde...";
-  
-  oParametros.sExecucao      = 'BuscaPadroesRubrica';  
+
+  oParametros.sExecucao      = 'BuscaPadroesRubrica';
   oParametros.sCodigoRubrica = $F('r90_rubric');
-  
+
   js_divCarregando(msgDiv,'msgBox');
 
   var oAjax = new Ajax.Request(
-    sUrl, 
+    sUrl,
     {
       method     : 'post',
       parameters : 'json=' + Object.toJSON(oParametros),
       onComplete : js_retornoDadosPadroes
     }
-  );   
+  );
 }
 
 function js_retornoDadosPadroes(oAjax) {
@@ -350,29 +350,29 @@ function js_calcular(iMatricula, iPonto){
        - tipo de filtro = s (selecionados)
        - db_debug       = 'false'
    */
-  
+
   /**
    * @todo comentar
    */
   if ( document.getElementById('r90_regist').value == null || document.getElementById('r90_regist').value == '') {
-  
+
     alert('Selecione uma matrícula.');
     return false;
   } else {
 
-    if (iPonto == 3 && !js_validaComparativoFerias(iMatricula)) {    
+    if (iPonto == 3 && !js_validaComparativoFerias(iMatricula)) {
       return false;
     }
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_ponto','pes4_gerafolha002.php?lAutomatico=1&iMatricula='+iMatricula+'&iPonto='+iPonto+'','Cálculo Financeiro',true);
-  } 
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ponto','pes4_gerafolha002.php?lAutomatico=1&iMatricula='+iMatricula+'&iPonto='+iPonto+'','Cálculo Financeiro',true);
+  }
 }
 
 /**
- * Realiza a validação para o comparativo d férias, verificando se existe 
+ * Realiza a validação para o comparativo d férias, verificando se existe
  * o cálculo de salário quando estiver sendo cálculado o ponto de férias
- * @param  {Int} iMatricula 
- * @return {boolean}           
+ * @param  {Int} iMatricula
+ * @return {boolean}
  */
 function js_validaComparativoFerias(iMatricula) {
 
@@ -400,23 +400,23 @@ function js_validaComparativoFerias(iMatricula) {
         }
       }
   });
-  
+
   return lRetorno;
 }
 
 function js_consultar(iMatricula){
-   
+
    //pes3_gerfinanc001.php
    if ( document.getElementById('r90_regist').value == null || document.getElementById('r90_regist').value == '') {
-   
+
      alert('Selecione uma matrícula.');
      return false;
    } else {
      document.location.href='pes3_gerfinanc001.php?lConsulta=1&iMatricula='+iMatricula;
-   }  
+   }
 }
 
-</script> 
+</script>
 
 <form name="form1" method="post" class="container" action="">
 
@@ -431,16 +431,16 @@ function js_consultar(iMatricula){
   if ($ponto == "com" && DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
     echo '<fieldset id="toogle">';
-    echo "  <legend>Dados da Folha Complementar</legend>";      
+    echo "  <legend>Dados da Folha Complementar</legend>";
     $sDBOpcaoAnterior            = $db_opcao;
     $db_opcao                    = 3;
     include("forms/db_frmrhfolhapagamento.php");
     $db_opcao                    = $sDBOpcaoAnterior;
     echo "</fieldset>";
-    
+
   } elseif(isset($oFolhaPagamentoSuplementar)) {
     echo '<fieldset id="toogle">';
-    echo "  <legend>Dados da Folha Suplementar</legend>";      
+    echo "  <legend>Dados da Folha Suplementar</legend>";
     $sDBOpcaoAnterior            = $db_opcao;
     $db_opcao                    = 3;
     include("forms/db_frmrhfolhapagamento.php");
@@ -455,8 +455,8 @@ function js_consultar(iMatricula){
 <!-- @TODO REMOVER LINHA -->
   <tr>
     <td title="Digite o Ano / Mes de competência" >
-      <strong>Competência:</strong> 
-      
+      <strong>Competência:</strong>
+
     </td>
     <td>
       <?php
@@ -476,7 +476,7 @@ function js_consultar(iMatricula){
       db_ancora(@ $Lr90_regist, "js_pesquisar90_regist(true);", $db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r90_regist', 8, $Ir90_regist, true, 'text', $db_opcao, " onchange='js_pesquisar90_regist(false);' tabIndex=1 ")
       ?>
@@ -491,7 +491,7 @@ function js_consultar(iMatricula){
       db_ancora(@ $Lr90_lotac, "js_pesquisar90_lotac(true);", 3);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r90_lotac', 8, $Ir90_lotac, true, 'text', 3, " onchange='js_pesquisar90_lotac(false);'")
       ?>
@@ -499,7 +499,7 @@ function js_consultar(iMatricula){
       db_input('r70_descr', 60, $Ir70_descr, true, 'text', 3, '');
       ?>
     </td>
-  </tr>  
+  </tr>
 </table>
 </fieldset>
        <fieldset>
@@ -532,7 +532,7 @@ function js_consultar(iMatricula){
             </td>
           </tr>
           <tr>
-            <td> 
+            <td>
               <?
               db_input('r90_rubric', 8, $Ir90_rubric, true, 'text', (($db_opcao==1)?"1":"3"), " onchange='js_pesquisar90_rubric(false);' tabIndex=2 ");
               db_input('rh27_descr', 30, $Irh27_descr, true, 'text', 3, '');
@@ -570,9 +570,9 @@ function js_consultar(iMatricula){
 
               db_input('r90_quant', 15, $Ir90_quant, true, 'text', $db_opcao, "onchange='js_calculaDataLimit();' tabIndex=$tabulacao ");
               $tabulacao++;
-              
+
               db_input('rh27_presta',10,'',true,'hidden',3);
-              
+
               ?>
             </td>
             <td>
@@ -587,7 +587,7 @@ function js_consultar(iMatricula){
           </tr>
         </table>
       </fieldset>
-      
+
       <?php
       if ($input_botoes){
         if($db_opcao != 1){
@@ -598,13 +598,13 @@ function js_consultar(iMatricula){
         }
       ?>
         <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  onclick="return js_vercampos();" tabIndex=<?=$tabulacao?> <?=(($db_opcao==1)?"onblur='document.form1.r90_regist.select();document.form1.r90_regist.focus();'":"onblur='document.form1.novo.focus();'")?>>
-        
+
         <input type='button' id='calcular' value='Calcular' name='calcular' onclick="js_calcular(r90_regist.value ,<?=$iPonto ?>);" />
-        
+
         <? if (!isset($_GET['lConsulta'])){ ?>
           <input type='button' id='consultar' value='Consultar' name='consultar' onclick="js_consultar(<?=$r90_regist ?>);" />
         <? } ?>
-        
+
       <?php
       }
       // $sigla - É a sigla a ser utilizada no select.
@@ -660,19 +660,19 @@ function js_consultar(iMatricula){
           $dbwhere .= " and ".$sigla."tpp||".$sigla."rubric <> '".$r29_tpp.$r90_rubric."' ";
       }
       }
-      
+
       $campos = $sigla."anousu as r90_anousu,".  $sigla."mesusu  as r90_mesusu,". $sigla."regist  as r90_regist,". $sigla."rubric as r90_rubric,
                 z01_numcgm, z01_nome".$campoextra.", rh27_descr ,".  $sigla."lotac as r90_lotac,
                 r70_descr,". $sigla."quant as r90_quant,".  $sigla."valor as r90_valor";
       $orderby= $sigla."regist,". $sigla."rubric";
 
       $chavepri = array ("r90_anousu" => @ $r90_anousu, "r90_mesusu" => @ $r90_mesusu, "r90_regist" => @ $r90_regist, "r90_rubric" => @ $r90_rubric);
-      
+
       // Seta TPP como chave primária.
       if($ponto == "fe" || $ponto == "fr"){
         $chavepri["r29_tpp"] = @$r29_tpp;
       }
-      
+
       $cliframe_alterar_excluir->chavepri = $chavepri;
       if($ponto == "fx"){
       $cliframe_alterar_excluir->sql = $clpontofx->sql_query_seleciona(
@@ -756,8 +756,8 @@ function js_consultar(iMatricula){
       echo "</fieldset>";
       ?>
     <div id="caixa_de_texto"></div>
-  </fieldset> 
-</form> 
+  </fieldset>
+</form>
 
 <script src="scripts/widgets/DBToogle.widget.js"></script>
 <script>
@@ -769,61 +769,61 @@ function js_calculaDataLimit(){
 
   var doc       = document.form1;
   var iQuant    = new Number(doc.r90_quant.value);
-  
+
   if ( doc.rh27_presta.value == 't' && doc.rh27_limdat.value == 't' ) {
-  
+
     var iMesAtu   = new Number(doc.r90_mesusu.value);
     var iAnoLimit = new Number(doc.r90_anousu.value);
     var iMesLimit = iMesAtu + (iQuant-1);
-    
+
     while ( iMesLimit > 12  ) {
       iMesLimit -= 12;
       iAnoLimit++;
     }
-    
+
     if ( iMesLimit.toString().length < 2 ) {
       iMesLimit = "0"+iMesLimit;
     }
-    
+
     doc.r90_datlim.value = iAnoLimit+'/'+iMesLimit;
-     
+
   }
-   
+
   doc.r90_valor.select();
   doc.r90_valor.focus();
 }
 
 function js_calculaQuant(sDataLimit){
-  
+
   var doc        = document.form1;
   var aDataLimit = sDataLimit.split('/');
   var iAnoLimit  = new Number(aDataLimit[0]);
   var iMesLimit  = new Number(aDataLimit[1]);
   var iAnoAtu    = new Number(doc.r90_anousu.value);
   var iMesAtu    = new Number(doc.r90_mesusu.value);
-    
+
   if ( doc.rh27_presta.value == 't' && doc.rh27_limdat.value == 't' ) {
-    
+
     var iQuant     = new Number(0);
-    
+
     if ( iAnoLimit > iAnoAtu ) {
-    
+
       while ( iAnoLimit > (iAnoAtu+1)  ) {
         iQuant += 12;
         --iAnoLimit;
       }
-      
+
       var iMesRest  = new Number(12 - iMesAtu);
-      
+
       iQuant += iMesRest + iMesLimit;
-      
+
     } else {
       iQuant += iMesLimit - iMesAtu;
     }
-    
+
     doc.r90_quant.value = iQuant+1;
-    
-  }  
+
+  }
 }
 
 function js_vercampos(){
@@ -843,7 +843,7 @@ function js_vercampos(){
           }else if(document.form1.r90_rubric.value == ""){
             alert("Rubrica não informada.");
             document.form1.r90_rubric.focus();
-            erro++;  
+            erro++;
           }else if((document.form1.r90_quant.value == "" || document.form1.r90_quant.value == "0") && (document.form1.rh27_form.value == "T" || document.form1.rh27_form.value == "t")){
             alert("Quantidade não informada.");
             document.form1.r90_quant.select();
@@ -877,7 +877,7 @@ function js_vercampos(){
             return js_testarRegraPonto();
           }
          ';
-  } 
+  }
   ?>
 
 }
@@ -950,7 +950,7 @@ function js_desabilita(TrueORFalse){
 var lTestarRegraPonto;
 
 /**
- * Realiza uma consulta no RPC para cada vez que uma Rubrica é adicionada, 
+ * Realiza uma consulta no RPC para cada vez que uma Rubrica é adicionada,
  * para verificar se a mesma possui alguma regra de lançamento.
  * - lTestarRegraPonto recebe true quando a rubrica pode ser adicionada e false quando não pode ser adicionada
  *
@@ -969,12 +969,12 @@ function js_testarRegraPonto() {
       oParametros.sExecucao  = 'testarRegistroPonto';
       oParametros.aRubricas  = aRubricas;
       oParametros.sTipoPonto = sTabela;
-      oParametros.iMatricula = iMatricula;   
+      oParametros.iMatricula = iMatricula;
 
   var oAjax  = new Ajax.Request(
     sUrl,
     {
-      method: 'post', 
+      method: 'post',
       asynchronous: false,
       parameters : 'json=' + Object.toJSON(oParametros),
       onComplete: js_retornoTestarRegraPonto
@@ -1010,7 +1010,7 @@ function js_retornoTestarRegraPonto(oRetorno) {
   }
 
   /**
-   * Se haver uma mensagem de bloqueio, exibe a mensagem para o usuario a mensgem e lTestarRegraPonto 
+   * Se haver uma mensagem de bloqueio, exibe a mensagem para o usuario a mensgem e lTestarRegraPonto
    * recebe o valor false, para a rubrica não ser adicionada ao ponto
    */
   if ( oRetorno.sMensagensBloqueio != '' ) {
@@ -1021,7 +1021,7 @@ function js_retornoTestarRegraPonto(oRetorno) {
   }
 
   /**
-   * Se haver uma mensagem de aviso, exibe a mensagem para o usuario perguntando 
+   * Se haver uma mensagem de aviso, exibe a mensagem para o usuario perguntando
    * se a rubrica deve ser adicionada ao ponto ou não.
    * - lTestarRegraPonto recebe false se o usuario clicar em cancelar
    */
@@ -1058,7 +1058,7 @@ function js_verificaposicoes(valor,TorF){
     mesi = new Number(mes);
     anot = new Number(document.form1.r90_anousu.value);
     mest = new Number(document.form1.r90_mesusu.value);
-    
+
     if(ano.match(expr)){
       erro ++;
     }else if(mes.match(expr)){
@@ -1099,7 +1099,7 @@ function js_mascaradata(valor){
       }
     }
   }
-  
+
   document.form1.r90_datlim.value = valor;
   return js_verificaposicoes(valor,'false');
 
@@ -1107,29 +1107,29 @@ function js_mascaradata(valor){
 function js_pesquisar90_regist(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r90_mesusu.value+'&chave_r01_anousu'+document.form1.r90_anousu.value,'Pesquisa Matricula',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r90_mesusu.value+'&chave_r01_anousu'+document.form1.r90_anousu.value,'Pesquisa Matricula',true);
   }else{
     if(document.form1.r90_regist.value != ''){
       <?php if (!FolhaPagamentoSalario::hasFolhaAberta()) { ?>
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&rotina_suplementar=true&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&rotina_suplementar=true&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
       <?php } else { ?>
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
       <?php } ?>
 
     }else{
       alert("Matrícula do servidor não informada.");
       document.form1.z01_nome.value = '';
-      location.href = "pes1_pontofx001.php?ponto="+document.form1.ponto.value; 
+      location.href = "pes1_pontofx001.php?ponto="+document.form1.ponto.value;
     }
   }
 }
 function js_mostrapessoal(chave,erro){
 
-  document.form1.z01_nome.value = chave; 
+  document.form1.z01_nome.value = chave;
 
-  if(erro==true){ 
-    document.form1.r90_regist.focus(); 
-    document.form1.r90_regist.value = ''; 
+  if(erro==true){
+    document.form1.r90_regist.focus();
+    document.form1.r90_regist.value = '';
   }else{
     js_submita();
   }
@@ -1149,7 +1149,7 @@ function js_pesquisar90_rubric(mostra){
     if(document.form1.r90_rubric.value != ''){
       quantcaracteres = document.form1.r90_rubric.value.length;
       for(i=quantcaracteres;i<4;i++){
-        document.form1.r90_rubric.value = "0"+document.form1.r90_rubric.value;        
+        document.form1.r90_rubric.value = "0"+document.form1.r90_rubric.value;
       }
       js_OpenJanelaIframe('','db_iframe_rhrubricas','func_rhrubricasponto.php?pesquisa_chave='+document.form1.r90_rubric.value+'&funcao_js=parent.js_mostrarubricas&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Rubrica',false);
     }else{
@@ -1159,7 +1159,7 @@ function js_pesquisar90_rubric(mostra){
       document.form1.r90_valor.value = '0';
       document.form1.r90_quant.value = '0';
       document.getElementById('caixa_de_texto').innerHTML = "";
-      js_desabilita(true); 
+      js_desabilita(true);
     }
   }
 }
@@ -1169,16 +1169,16 @@ const js_verificaBaseDasRubricas = () => {
   const oParam = new Object()
   oParam.exec = 'verificarPermissaoDaRubricaNoContexto'
   oParam.rubrica = rubrica.value
-  oParam.regist = <?=$r90_regist?> 
-  oParam.anousu = <?=$r90_anousu?> 
-  oParam.mesusu = <?=$r90_mesusu?> 
+  oParam.regist = <?=$r90_regist?>
+  oParam.anousu = <?=$r90_anousu?>
+  oParam.mesusu = <?=$r90_mesusu?>
   var oAjax = new Ajax.Request(
     'pes4_gerafolha.RPC.php',
     { method:'post',
       parameters:'json='+Object.toJSON(oParam),
       onComplete: js_emiteAlertaParaRubricasNaoPermitidas
-    } 
-    ) 
+    }
+    )
 }
 
 const js_emiteAlertaParaRubricasNaoPermitidas = oResposta => {
@@ -1263,7 +1263,7 @@ function js_mostrarubricas1(chave1,chave2,chave3,chave4,chave5,chave6){
   js_getDadosPadroes();
 
   db_iframe_rhrubricas.hide();
-  
+
 	<?
   if($ponto == "com"){
     echo "js_verificaBaseDasRubricas()";
@@ -1273,20 +1273,20 @@ function js_mostrarubricas1(chave1,chave2,chave3,chave4,chave5,chave6){
 
 function js_pesquisar90_lotac(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_lotacao.php?funcao_js=parent.js_mostralotacao1|r70_codigo|r70_descr&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r90_mesusu.value+'&chave_r70_anousu'+document.form1.r90_anousu.value,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframelotacao','func_lotacao.php?funcao_js=parent.js_mostralotacao1|r70_codigo|r70_descr&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r90_mesusu.value+'&chave_r70_anousu'+document.form1.r90_anousu.value,'Pesquisa',true);
   }else{
-    if(document.form1.r90_lotac.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_lotacao.php?pesquisa_chave='+document.form1.r90_lotac.value+'&funcao_js=parent.js_mostralotacao&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r90_mesusu.value+'&chave_r70_anousu'+document.form1.r90_anousu.value,'Pesquisa',false);
+    if(document.form1.r90_lotac.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframelotacao','func_lotacao.php?pesquisa_chave='+document.form1.r90_lotac.value+'&funcao_js=parent.js_mostralotacao&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r90_mesusu.value+'&chave_r70_anousu'+document.form1.r90_anousu.value,'Pesquisa',false);
     }else{
-      document.form1.r70_descr.value = ''; 
+      document.form1.r70_descr.value = '';
     }
   }
 }
 function js_mostralotacao(chave,erro){
-  document.form1.r70_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r90_lotac.focus(); 
-    document.form1.r90_lotac.value = ''; 
+  document.form1.r70_descr.value = chave;
+  if(erro==true){
+    document.form1.r90_lotac.focus();
+    document.form1.r90_lotac.value = '';
   }
 }
 function js_mostralotacao1(chave1,chave2){

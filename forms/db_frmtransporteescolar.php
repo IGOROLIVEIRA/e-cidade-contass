@@ -135,10 +135,10 @@ $clrotulo->label("ve01_codigo");
 <script>
     function js_pesquisav200_veiculo(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa', 'Pesquisa', true);
         } else {
             if (document.form1.v200_veiculo.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave=' + document.form1.v200_veiculo.value + '&funcao_js=parent.js_mostraveiculos', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave=' + document.form1.v200_veiculo.value + '&funcao_js=parent.js_mostraveiculos', 'Pesquisa', false);
             } else {
                 document.form1.ve01_codigo.value = '';
             }
@@ -157,7 +157,7 @@ $clrotulo->label("ve01_codigo");
         db_iframe_veiculos.hide();
     }
     function js_pesquisa() {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_transporteescolar', 'func_transporteescolar.php?funcao_js=parent.js_preenchepesquisa|v200_sequencial', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_transporteescolar', 'func_transporteescolar.php?funcao_js=parent.js_preenchepesquisa|v200_sequencial', 'Pesquisa', true);
     }
     function js_preenchepesquisa(chave) {
         db_iframe_transporteescolar.hide();
@@ -198,7 +198,7 @@ $clrotulo->label("ve01_codigo");
                         }
 
                         //oCampoDocumentoCara.setValue(oRetorno.sDocumentoCara);
-                        //oCampoCgmCara.setValue(oRetorno.sNomeCara);  
+                        //oCampoCgmCara.setValue(oRetorno.sNomeCara);
 
                     }
                 });

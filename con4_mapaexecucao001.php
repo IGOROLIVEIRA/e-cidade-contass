@@ -134,7 +134,7 @@ function js_pesquisarAcordo(lMostrar) {
   /**
    * Iframe paara pesquisar acordo
    */
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_acordo', 'func_acordomapaexecucao.php' + sQueryString, sTituloJanela, lMostrar);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_acordo', 'func_acordomapaexecucao.php' + sQueryString, sTituloJanela, lMostrar);
 
   /**
    * Funcao de retorno da pesquisa pelo ancora

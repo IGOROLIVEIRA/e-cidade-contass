@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -50,11 +50,11 @@ $oDaoRegistrosInconsistentes->rotulo->label();
   #ctnGridOpcoesPesquisa td {
     padding: 3px;
   }
-  
+
   .camposGrid {
     display: block;
   }
-  
+
   </style>
 </head>
 <body bgcolor="#CCCCCC" style="margin: 25px auto 10px auto;">
@@ -68,7 +68,7 @@ $oDaoRegistrosInconsistentes->rotulo->label();
 					    <td nowrap title="<?=@$Tdb136_sequencial?>">
 					       <?=@$Ldb136_sequencial?>
 					    </td>
-					    <td> 
+					    <td>
 								<?
 									db_input('db136_sequencial', 10, $Idb136_sequencial, true, 'text', 3, "");
 								?>
@@ -109,11 +109,11 @@ $oDaoRegistrosInconsistentes->rotulo->label();
 				    <div id='ctnAlunosErrados'></div>
 			    </fieldset>
 			    <div style="text-align: center;">
-			      <input type='button' 
-			             id='btnExcluir' 
-			             name='btnExcluir' 
-			             value='Excluir' 
-			             onclick='js_excluir()' 
+			      <input type='button'
+			             id='btnExcluir'
+			             name='btnExcluir'
+			             value='Excluir'
+			             onclick='js_excluir()'
 			             disabled='disabled' />
 			    </div>
 		    </div>
@@ -135,7 +135,7 @@ function js_montaGrid() {
   var aCabecalho   = new Array( 'Código', 'Nome do Aluno', 'Nome da Mãe', 'Data de Nascimento' );
   var aAlinhamento = new Array( 'right', 'left', 'left', 'left' );
   var aLargura     = new Array( '5%', '45%', '40%', '10%' );
-  
+
   oGridAlunosErrados              = new DBGrid('gridAlunosErrados');
   oGridAlunosErrados.nameInstance = 'oGridAlunosErrados';
   oGridAlunosErrados.setHeader(aCabecalho);
@@ -165,7 +165,7 @@ function js_buscarAlunos() {
 
   var sParametros = 'funcao_js=parent.js_buscaDadosAluno|db136_sequencial&lTabelaAlunos';
   js_OpenJanelaIframe(
-                       'top.corpo',
+                       'CurrentWindow.corpo',
                        'db_iframe_db_registrosinconsistentes',
                        'func_db_registrosinconsistentes.php?'+sParametros,
                        'Pesquisa',
@@ -180,8 +180,8 @@ function js_buscaDadosAluno( iSequencial ) {
 
   db_iframe_db_registrosinconsistentes.hide();
   $('db136_sequencial').value = iSequencial;
-  
-  var oParametro              = new Object();  
+
+  var oParametro              = new Object();
       oParametro.sExec            = "consultaInconsistencia";
       oParametro.iInconsistencia  = iSequencial;
       oParametro.iCodigoTabela    = 1010051;
@@ -191,29 +191,29 @@ function js_buscaDadosAluno( iSequencial ) {
       oDadosRequest.method     = 'post';
       oDadosRequest.parameters = 'json='+Object.toJSON(oParametro);
       oDadosRequest.onComplete = js_retornaRegistrosInconsistencia;
-      
+
   js_divCarregando("Consultando registros do sistema", "msgBox");
   new Ajax.Request (sRPCInconsistencia, oDadosRequest);
-  	
+
 }
 
 /**
  * Retorno dos dados da inconsistencia.
- * Caso tenha sido encontrado algum registro, comparamos o codigo do aluno com o codigo iCorreto, preenchendo os dados 
+ * Caso tenha sido encontrado algum registro, comparamos o codigo do aluno com o codigo iCorreto, preenchendo os dados
  * deste nos inputs. Os registros incorretos sao preenchidos na Grid
  */
 function js_retornaRegistrosInconsistencia ( oResponse ) {
-  	
+
   js_removeObj("msgBox");
 
   var oRetorno = eval("("+oResponse.responseText+")");
 
   if (oRetorno.aDadosInconsistentes.length == 0) {
-  	
+
   	alert('Nenhum Registro Encontrado');
   	return false;
   }
-  
+
   oGridAlunosErrados.clearAll(true);
   oRetorno.aDadosInconsistentes.each(function( oAluno, iAluno ) {
 
@@ -223,16 +223,16 @@ function js_retornaRegistrosInconsistencia ( oResponse ) {
       $('nomeMae').value        = oAluno.ed47_v_mae.urlDecode();
       $('dataNascimento').value = js_formatar(oAluno.ed47_d_nasc, 'd');
     } else {
-      
+
 	    var aLinha    = new Array();
 	        aLinha[0] = oAluno.ed47_i_codigo;
 	        aLinha[1] = oAluno.ed47_v_nome.urlDecode();
 	        aLinha[2] = oAluno.ed47_v_mae.urlDecode();
 	        aLinha[3] = js_formatar(oAluno.ed47_d_nasc, 'd');
-	
+
 	    oGridAlunosErrados.addRow(aLinha);
     }
-  });	  
+  });
   oGridAlunosErrados.renderRows();
   $('btnExcluir').disabled = false;
 }
@@ -243,7 +243,7 @@ function js_retornaRegistrosInconsistencia ( oResponse ) {
 function js_excluir() {
 
   if ($F('db136_sequencial') == '') {
-    
+
 		alert('Não há registros para excluir');
 		return false;
 	}
@@ -252,16 +252,16 @@ function js_excluir() {
       sMensagemExclusao += ' (lembrando a correção do mesmo não será processada) ?';
 
   if ( confirm(sMensagemExclusao) ) {
-    
-		var oParametro                       = new Object(); 
+
+		var oParametro                       = new Object();
 		    oParametro.sExec                 = "excluir";
 		    oParametro.iCodigoInconsistencia = $F('db136_sequencial');
-		
+
 		var oDadosRequest            = new Object();
 	      oDadosRequest.method     = 'post';
 	      oDadosRequest.parameters = 'json='+Object.toJSON(oParametro);
 	      oDadosRequest.onComplete = js_retornaExcluir;
-	  
+
 		js_divCarregando("Excluindo Inconsistências", "msgBox");
 		new Ajax.Request (sRPCInconsistencia, oDadosRequest);
   }
@@ -281,11 +281,11 @@ function js_retornaExcluir( oResponse ) {
 	if (oRetorno.iStatus > 1) {
 		return false;
 	}
-	
+
 	js_limparCampos();
 	js_buscarAlunos();
 }
- 
+
 js_buscarAlunos();
 js_montaGrid();
 </script>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -37,7 +37,7 @@ $clrotulo->label("ve30_descr");
 $clrotulo->label("ve05_veiccadmotoristasit");
 $clrotulo->label("ve33_descr");
 $clrotulo->label("ve05_dtvenc");
-$clrotulo->label("ve05_dtprimcnh"); 
+$clrotulo->label("ve05_dtprimcnh");
 ?>
 <html>
 <head>
@@ -60,20 +60,20 @@ function js_emite(){
 }
 function js_pesquisave05_veiccadcategcnh(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?funcao_js=parent.js_mostraveiccadcategcnh1|ve30_codigo|ve30_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?funcao_js=parent.js_mostraveiccadcategcnh1|ve30_codigo|ve30_descr','Pesquisa',true);
   }else{
-     if(document.form1.ve05_veiccadcategcnh.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?pesquisa_chave='+document.form1.ve05_veiccadcategcnh.value+'&funcao_js=parent.js_mostraveiccadcategcnh','Pesquisa',false);
+     if(document.form1.ve05_veiccadcategcnh.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?pesquisa_chave='+document.form1.ve05_veiccadcategcnh.value+'&funcao_js=parent.js_mostraveiccadcategcnh','Pesquisa',false);
      }else{
-       document.form1.ve30_descr.value = ''; 
+       document.form1.ve30_descr.value = '';
      }
   }
 }
 function js_mostraveiccadcategcnh(chave,erro){
-  document.form1.ve30_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve05_veiccadcategcnh.focus(); 
-    document.form1.ve05_veiccadcategcnh.value = ''; 
+  document.form1.ve30_descr.value = chave;
+  if(erro==true){
+    document.form1.ve05_veiccadcategcnh.focus();
+    document.form1.ve05_veiccadcategcnh.value = '';
   }
 }
 function js_mostraveiccadcategcnh1(chave1,chave2){
@@ -83,20 +83,20 @@ function js_mostraveiccadcategcnh1(chave1,chave2){
 }
 function js_pesquisave05_veiccadmotoristasit(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmotoristasit','func_veiccadmotoristasit.php?funcao_js=parent.js_mostraveiccadmotoristasit1|ve33_codigo|ve33_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmotoristasit','func_veiccadmotoristasit.php?funcao_js=parent.js_mostraveiccadmotoristasit1|ve33_codigo|ve33_descr','Pesquisa',true);
   }else{
-     if(document.form1.ve05_veiccadmotoristasit.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmotoristasit','func_veiccadmotoristasit.php?pesquisa_chave='+document.form1.ve05_veiccadmotoristasit.value+'&funcao_js=parent.js_mostraveiccadmotoristasit','Pesquisa',false);
+     if(document.form1.ve05_veiccadmotoristasit.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmotoristasit','func_veiccadmotoristasit.php?pesquisa_chave='+document.form1.ve05_veiccadmotoristasit.value+'&funcao_js=parent.js_mostraveiccadmotoristasit','Pesquisa',false);
      }else{
-       document.form1.ve33_descr.value = ''; 
+       document.form1.ve33_descr.value = '';
      }
   }
 }
 function js_mostraveiccadmotoristasit(chave,erro){
-  document.form1.ve33_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve05_veiccadmotoristasit.focus(); 
-    document.form1.ve05_veiccadmotoristasit.value = ''; 
+  document.form1.ve33_descr.value = chave;
+  if(erro==true){
+    document.form1.ve05_veiccadmotoristasit.focus();
+    document.form1.ve05_veiccadmotoristasit.value = '';
   }
 }
 function js_mostraveiccadmotoristasit1(chave1,chave2){
@@ -104,7 +104,7 @@ function js_mostraveiccadmotoristasit1(chave1,chave2){
   document.form1.ve33_descr.value = chave2;
   db_iframe_veiccadmotoristasit.hide();
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -119,7 +119,7 @@ function js_mostraveiccadmotoristasit1(chave1,chave2){
 
   <table  align="center">
     <form name="form1" method="post" action="">
-    
+
       <tr>
          <td >&nbsp;</td>
          <td >&nbsp;</td>
@@ -128,14 +128,14 @@ function js_mostraveiccadmotoristasit1(chave1,chave2){
          <td >&nbsp;</td>
          <td >&nbsp;</td>
       </tr>
-  
+
         <tr>
     <td nowrap title="<?=@$Tve05_veiccadcategcnh?>">
        <?
        db_ancora(@$Lve05_veiccadcategcnh,"js_pesquisave05_veiccadcategcnh(true);",4);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ve05_veiccadcategcnh',10,$Ive05_veiccadcategcnh,true,'text',4," onchange='js_pesquisave05_veiccadcategcnh(false);'")
 ?>
@@ -148,7 +148,7 @@ db_input('ve30_descr',40,$Ive30_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tve05_dtvenc?>">
        <?=@$Lve05_dtvenc?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('ve05_dtvenc',@$ve05_dtvenc_dia,@$ve05_dtvenc_mes,@$ve05_dtvenc_ano,true,'text',4,"");
 echo "<b> a </b>";
@@ -160,7 +160,7 @@ db_inputdata('ve05_dtvenc1',@$ve05_dtvenc_dia,@$ve05_dtvenc_mes,@$ve05_dtvenc_an
     <td nowrap title="<?=@$Tve05_dtprimcnh?>">
        <?=@$Lve05_dtprimcnh?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('ve05_dtprimcnh',@$ve05_dtprimcnh_dia,@$ve05_dtprimcnh_mes,@$ve05_dtprimcnh_ano,true,'text',4,"");
 echo "<b> a </b>";
@@ -174,7 +174,7 @@ db_inputdata('ve05_dtprimcnh1',@$ve05_dtprimcnh_dia,@$ve05_dtprimcnh_mes,@$ve05_
        db_ancora(@$Lve05_veiccadmotoristasit,"js_pesquisave05_veiccadmotoristasit(true);",4);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ve05_veiccadmotoristasit',10,$Ive05_veiccadmotoristasit,true,'text',4," onchange='js_pesquisave05_veiccadmotoristasit(false);'")
 ?>
@@ -188,7 +188,7 @@ db_input('ve33_descr',40,$Ive33_descr,true,'text',3,'')
         <strong>Ordem :&nbsp;&nbsp;</strong>
         </td>
         <td>
-	  <? 
+	  <?
 	  $tipo_ordem = array("b"=>"Numérica","a"=>"Alfabética");
 	  db_select("ordem",$tipo_ordem,true,2); ?>
         </td>
@@ -198,7 +198,7 @@ db_input('ve33_descr',40,$Ive33_descr,true,'text',3,'')
         <td >&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
         </td>
       </tr>

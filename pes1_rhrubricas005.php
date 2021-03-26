@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -72,7 +72,7 @@ if(isset($alterar) || isset($novasrubricas)){
         $calc1 = $rubricateste;
       }
     }
-    
+
     if($rh27_calc2 > 0){
       $rubricateste = $rh27_rubric + 4000;
       // die($clrhrubricas->sql_query_file($rubricateste));
@@ -104,9 +104,9 @@ if(isset($alterar) || isset($novasrubricas)){
         $varsubstr = $rh27_descr." S/ RESCISÃO";
         $descricinclui = substr($varsubstr,0,30);
       }
-      
+
       if($rubricainclui != 0){
-      	
+
         if($sqlerro == false){
           $clrhrubricas->rh27_tipo  = "2";
           $clrhrubricas->rh27_calc1 = "0";
@@ -121,14 +121,14 @@ if(isset($alterar) || isset($novasrubricas)){
             break;
           }
         }
-        
+
         if ( !$sqlerro ) {
           $clrhrubelemento->excluir($rubricainclui,db_getsession("DB_instit"));
           $erro_msg = $clrhrubelemento->erro_msg;
           if($clrhrubelemento->erro_status == 0 ){
             $sqlerro=true;
           }
-        }	
+        }
         if ( !$sqlerro ) {
         	$sWhereExcluiRetencao  = "     rh75_rubric = '{$rh27_rubric}' ";
         	$sWhereExcluiRetencao .= " and rh75_instit = ".db_getsession('DB_instit');
@@ -137,7 +137,7 @@ if(isset($alterar) || isset($novasrubricas)){
             $erro_msg = $clrhrubretencao->erro_msg;
             $sqlerro=true;
           }
-        }            
+        }
       }
     }
   }
@@ -146,7 +146,7 @@ if(isset($alterar) || isset($novasrubricas)){
     $oDaoFundamentacaoLegal = new cl_rhfundamentacaolegal();
     $sSqlFundamentacaoLegal = $oDaoFundamentacaoLegal->sql_query_file($rh27_rhfundamentacaolegal);
     $rsFundamentacao        = db_query($sSqlFundamentacaoLegal);
-   
+
     if ( !$rsFundamentacao ) {
       $sqlerro = true;
       $erro_msg = 'Não foi possível consultar a fundamentação legal informada.';
@@ -187,7 +187,7 @@ if(isset($alterar) || isset($novasrubricas)){
         $sqlerro=true;
       }
     }
-    
+
     if ( !$sqlerro ) {
       $sWhereExcluiRetencao  = "     rh75_rubric = '{$rh27_rubric}' ";
       $sWhereExcluiRetencao .= " and rh75_instit = ".db_getsession('DB_instit');
@@ -196,9 +196,9 @@ if(isset($alterar) || isset($novasrubricas)){
         $erro_msg = $clrhrubretencao->erro_msg;
         $sqlerro=true;
       }
-    }    
-    
-    
+    }
+
+
     if ( isset($tipo) ) {
     	if ( $tipo == 'e') {
 		    if( !$sqlerro && isset($rh23_codele) && trim($rh23_codele) != ""){
@@ -218,7 +218,7 @@ if(isset($alterar) || isset($novasrubricas)){
             $erro_msg = $clrhrubretencao->erro_msg;
             $sqlerro=true;
           }
-        }      		
+        }
     	}
     }
   //sqlerro = true;
@@ -234,14 +234,14 @@ if(isset($alterar) || isset($novasrubricas)){
 } else if(isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $sCampos = "rhrubricas.*, 
-              db_config.*, 
-              rhtipomedia.rh29_descr, 
+  $sCampos = "rhrubricas.*,
+              db_config.*,
+              rhtipomedia.rh29_descr,
               b.rh29_descr as rh29_descr2,
               rhfundamentacaolegal.rh137_numero||' - '||rhfundamentacaolegal.rh137_descricao as rh137_descricao ";
-  $result = $clrhrubricas->sql_record($clrhrubricas->sql_query($chavepesquisa,db_getsession("DB_instit"),$sCampos)); 
+  $result = $clrhrubricas->sql_record($clrhrubricas->sql_query($chavepesquisa,db_getsession("DB_instit"),$sCampos));
   db_fieldsmemory($result,0);
-  
+
   $rh27_cond2 = stripslashes($rh27_cond2);
   $rh27_cond3 = stripslashes($rh27_cond3);
 
@@ -249,31 +249,31 @@ if(isset($alterar) || isset($novasrubricas)){
   $sWhereRhrubelemento   .= " and rhrubelemento.rh23_instit = ". db_getsession("DB_instit");
   $sWhereRhrubelemento   .= " and o56_anousu = ". db_getsession("DB_anousu");
   $result = $clrhrubelemento->sql_record($clrhrubelemento->sql_query($chavepesquisa,db_getsession("DB_instit"), "*", " o56_anousu desc", $sWhereRhrubelemento));
-  if($clrhrubelemento->numrows > 0){ 
+  if($clrhrubelemento->numrows > 0){
     db_fieldsmemory($result, 0);
   } else {
     $rh23_codele = '';
-    $o56_descr   = '';  	
+    $o56_descr   = '';
   }
-  
+
   $sWhereRetencao   = "     rh75_rubric = '{$chavepesquisa}'";
   $sWhereRetencao  .= " and rh75_instit = ".db_getsession('DB_instit');
-  
+
   $sCamposRetencao  = " rh75_retencaotiporec,";
   $sCamposRetencao .= " e21_descricao,";
   $sCamposRetencao .= " e21_retencaotiporecgrupo";
-  
+
   $rsRetencao = $clrhrubretencao->sql_record($clrhrubretencao->sql_query(null,$sCamposRetencao,null,$sWhereRetencao));
-  
+
   if ( $clrhrubretencao->numrows > 0 ) {
     db_fieldsmemory($rsRetencao,0);
   } else {
   	$rh75_retencaotiporec = '';
   	$e21_descricao        = '';
   }
-  
+
   $oPost  = db_utils::postMemory($_POST);
-  
+
   if (isset($oPost->rh27_calc1) && $oPost->rh27_calc1 != 0) {
     $rh27_calc1 = $oPost->rh27_calc1;
   }
@@ -349,8 +349,8 @@ if(isset($alterar) || isset($novasrubricas)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
       <?
       include("forms/db_frmrhrubricas.php");
@@ -371,7 +371,7 @@ if(isset($alterar) || isset($novasrubricas)){
         echo "<script> document.form1.".$clrhrubricas->erro_campo.".focus();</script>";
       };
     }else{
-      $clrhrubricas->erro(true,true);   
+      $clrhrubricas->erro(true,true);
     }
   }else{
     $ccalculos = "";
@@ -426,12 +426,12 @@ if(isset($chavepesquisa)){
           function js_db_libera(){
             /*
             parent.document.formaba.rhrubelemento.disabled=false;
-            top.corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=".@$rh27_rubric."';
+            CurrentWindow.corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=".@$rh27_rubric."';
             */
             parent.document.formaba.rhbases.disabled=false;
             parent.document.formaba.rhbasesesocial.disabled=false;
-            top.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=".@$rh27_rubric."';
-            top.corpo.iframe_rhbasesesocial.location.href='pes1_rhbasesesocial004.php?r09_rubric=".@$rh27_rubric."';     
+            CurrentWindow.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=".@$rh27_rubric."';
+            CurrentWindow.corpo.iframe_rhbasesesocial.location.href='pes1_rhbasesesocial004.php?r09_rubric=".@$rh27_rubric."';
        ";
   if(isset($liberaaba)){
     echo "  parent.mo_camada('rhbases');";

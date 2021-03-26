@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //echo ($HTTP_SERVER_VARS['QUERY_STRING']);exit;
@@ -55,7 +55,7 @@ require_once("classes/db_matestoqueitemunid_classe.php");
 require_once("classes/db_matparam_classe.php");
 $clmatparam           = new cl_matparam;
 $clusuarios           = new cl_db_usuarios;
-$clempnota            = new cl_empnota; 
+$clempnota            = new cl_empnota;
 $clempnotaord         = new cl_empnotaord;
 $clempnotaele         = new cl_empnotaele;
 $clmatordemitem       = new cl_matordemitem;
@@ -85,7 +85,7 @@ if($clmatordem->numrows > 0) {
   //echo "<br> clmatordem->numrows --> ".$clmatordem->numrows;
   echo "<script>alert('Ordem de Compra: ".$m51_codordem." Já Anulada!');</script>";
   echo "<script>location.href='mat4_entraMaterialNota002.php';</script>";
-  
+
 }
 
 ?>
@@ -112,7 +112,7 @@ if($clmatordem->numrows > 0) {
 </head>
 <body bgcolor=#CCCCCC style='margin:1em;'>
 <table width="790" border="0" cellpadding="0" cellspacing="0" >
-<tr> 
+<tr>
 <td width="360" height="25">&nbsp;</td>
 <td width="263">&nbsp;</td>
 <td width="25">&nbsp;</td>
@@ -135,14 +135,14 @@ if (isset($confirma)){
   if($clmatestoque->erro_campo!=""){
     echo "<script> document.form1.".$clempnota->erro_campo.".style.backgroundColor='#99A9AE';</script>";
     echo "<script> document.form1.".$clempnota->erro_campo.".focus();</script>";
-  }else{ 
+  }else{
     if ($gravanota=="false"){
       $erro_msg = $clmatestoqueinimei->erro_msg;
       db_msgbox($erro_msg);
     }
     $sql="delete from matordemitement";
     $result_deleta=pg_exec($sql);
-    echo"<script>top.corpo.location.href='mat4_entraMaterialNota001.php';</script>";
+    echo"<script>CurrentWindow.corpo.location.href='mat4_entraMaterialNota001.php';</script>";
   }
 }
 ?>

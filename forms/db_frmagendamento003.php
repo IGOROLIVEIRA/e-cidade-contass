@@ -150,7 +150,7 @@ function js_pesquisaz01_i_cgsund( mostra ) {
   if( mostra == true ) {
 
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_cgs_und',
                          'func_cgs_und.php?funcao_js=parent.IFdb_iframe_agendamento.js_mostracgs1|z01_i_cgsund'
                                                                                                +'|z01_v_nome'
@@ -166,7 +166,7 @@ function js_pesquisaz01_i_cgsund( mostra ) {
     if( document.form3.z01_i_cgsund.value != '' ) {
 
       js_OpenJanelaIframe(
-                           'top.corpo',
+                           'CurrentWindow.corpo',
                            'db_iframe_cgs_und',
                            'func_cgs_und.php?chave_z01_i_cgsund='+document.form3.z01_i_cgsund.value
                                           +'&funcao_js=parent.IFdb_iframe_agendamento.js_mostracgs1|z01_i_cgsund'
@@ -194,13 +194,13 @@ function js_pesquisas115_c_cartaosus( mostra ) {
 	    strParam += '&retornanome=p.p.IFdb_iframe_agendamento.document.form3.z01_v_nome.value';
 
 	if( mostra == true ) {
-		js_OpenJanelaIframe( 'top.corpo', 'db_iframe_cgs_und', strParam, 'Pesquisa CGS', true );
+		js_OpenJanelaIframe( 'CurrentWindow.corpo', 'db_iframe_cgs_und', strParam, 'Pesquisa CGS', true );
 	} else {
 
 		if( document.form3.s115_c_cartaosus.value != '' ) {
 
 			strParam += '&chave_s115_c_cartaosus='+document.form3.s115_c_cartaosus.value;
-			js_OpenJanelaIframe( 'top.corpo', 'db_iframe_cgs_und', strParam, 'Pesquisa CGS', true );
+			js_OpenJanelaIframe( 'CurrentWindow.corpo', 'db_iframe_cgs_und', strParam, 'Pesquisa CGS', true );
 		} else {
 			document.form3.z01_v_nome.value   = '';
       document.form3.z01_v_telcel.value = '';
@@ -214,7 +214,7 @@ function js_pesquisaz01_v_nome() {
   if( document.form3.z01_v_nome.value != '' ) {
 
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_cgs_und',
                          'func_cgs_und.php?chave_z01_v_nome='+document.form3.z01_v_nome.value
                                         +'&funcao_js=parent.IFdb_iframe_agendamento.js_mostracgs1|z01_i_cgsund'

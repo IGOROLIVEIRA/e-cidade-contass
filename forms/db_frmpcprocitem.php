@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clrotulo = new rotulocampo;
@@ -80,7 +80,7 @@ if(isset($pc10_numero) && trim($pc10_numero)!=""){
     ?>
     </td>
     <td align="right" nowrap>
-      <strong>&nbsp;&nbsp;&nbsp;Data: </strong>      
+      <strong>&nbsp;&nbsp;&nbsp;Data: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -88,7 +88,7 @@ if(isset($pc10_numero) && trim($pc10_numero)!=""){
     ?>
     </td>
     <td align="right" nowrap>
-      <strong>&nbsp;&nbsp;&nbsp;Departamento: </strong>      
+      <strong>&nbsp;&nbsp;&nbsp;Departamento: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -98,7 +98,7 @@ if(isset($pc10_numero) && trim($pc10_numero)!=""){
   </tr>
   <tr height="3%">
     <td align="right" nowrap>
-      <strong>&nbsp;&nbsp;&nbsp;Resumo: </strong>      
+      <strong>&nbsp;&nbsp;&nbsp;Resumo: </strong>
     </td>
     <td colspan="5" nowrap>
     <?
@@ -116,12 +116,12 @@ if(isset($pc10_numero) && trim($pc10_numero)!=""){
   </tr>
 </table>
 </center>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onclick='top.corpo.document.form1.submit();' >
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onclick='CurrentWindow.corpo.document.form1.submit();' >
 <br><br><br>
 </form>
 <script>
-function js_mudasolicita(){  
-  parent.iframe_solicita.location.href = 'com1_pcproc004.php?pc10_numero='+document.form1.pc10_numero.value;  
+function js_mudasolicita(){
+  parent.iframe_solicita.location.href = 'com1_pcproc004.php?pc10_numero='+document.form1.pc10_numero.value;
 }
 if(document.form1.pc10_numero.value!=""){
   iframe_solicitem.location.href = 'com1_gerasolicitem.php?solicita='+document.form1.pc10_numero.value;

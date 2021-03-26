@@ -172,10 +172,10 @@ function js_cancelar(){
 }
 function js_pesquisaj09_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_iptutaxamatric','db_iframe_iptubase','func_iptubase.php?funcao_js=parent.js_mostraiptubase1|j01_matric|j01_numcgm','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_iptutaxamatric','db_iframe_iptubase','func_iptubase.php?funcao_js=parent.js_mostraiptubase1|j01_matric|j01_numcgm','Pesquisa',true,'0','1','775','390');
   }else{
      if(document.form1.j09_matric.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_iptutaxamatric','db_iframe_iptubase','func_iptubase.php?pesquisa_chave='+document.form1.j09_matric.value+'&funcao_js=parent.js_mostraiptubase','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_iptutaxamatric','db_iframe_iptubase','func_iptubase.php?pesquisa_chave='+document.form1.j09_matric.value+'&funcao_js=parent.js_mostraiptubase','Pesquisa',false);
      }else{
        document.form1.j01_numcgm.value = '';
      }
@@ -195,10 +195,10 @@ function js_mostraiptubase1(chave1,chave2){
 }
 function js_pesquisaj09_iptucadtaxaexe(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_iptutaxamatric','db_iframe_iptucadtaxaexe','func_iptucadtaxaexealt.php?funcao_js=parent.js_mostraiptucadtaxa1|j08_iptucadtaxaexe|j07_descr','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_iptutaxamatric','db_iframe_iptucadtaxaexe','func_iptucadtaxaexealt.php?funcao_js=parent.js_mostraiptucadtaxa1|j08_iptucadtaxaexe|j07_descr','Pesquisa',true,'0','1');
   }else{
      if(document.form1.j09_iptucadtaxa.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_iptutaxamatric','db_iframe_iptucadtaxaexe','func_iptucadtaxaexealt.php?pesquisa_chave='+document.form1.j09_iptucadtaxaexe.value+'&funcao_js=parent.js_mostraiptucadtaxa','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_iptutaxamatric','db_iframe_iptucadtaxaexe','func_iptucadtaxaexealt.php?pesquisa_chave='+document.form1.j09_iptucadtaxaexe.value+'&funcao_js=parent.js_mostraiptucadtaxa','Pesquisa',false);
      }else{
        document.form1.j07_descr.value = '';
      }

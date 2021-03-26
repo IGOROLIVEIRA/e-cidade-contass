@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -64,12 +64,12 @@ $oRotuloConhist->label();
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
   </head>
-  
+
   <body bgcolor="#CCCCCC" style="margin-top: 25px" >
   <center>
-  <div style="display: table;">  
+  <div style="display: table;">
   <form id="form1" name="form1">
-      <fieldset style="width: 650px;height:300; margin-top:50px;" > 
+      <fieldset style="width: 650px;height:300; margin-top:50px;" >
         <legend><b>Reconhecimento de Receita pelo Fator Gerador</b></legend>
         <table border="0">
          <!-- Receita orçamento @tabela: orcreceita -->
@@ -128,7 +128,7 @@ $oRotuloConhist->label();
             <td>
               <strong>Valor Orçado:</strong>
             </td>
-            
+
             <td>
               <?
               db_input('o70_valor', 8, $Io70_valor, true, 'text', 3);
@@ -140,7 +140,7 @@ $oRotuloConhist->label();
             <td>
               <strong>Valor Lançado:</strong>
             </td>
-            
+
             <td>
               <?
               db_input('valor_lancado', 8, $Io70_valor, true, 'text', 1);
@@ -155,7 +155,7 @@ $oRotuloConhist->label();
               </fieldset>
             </td>
           </tr>
-          
+
         </table>
       </fieldset>
     </br>
@@ -165,13 +165,13 @@ $oRotuloConhist->label();
     </center>
   </div>
   </form>
-  
+
   </div>
   </center>
 <?
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
-?>  
-  
+?>
+
   </body>
   </html>
 <script>
@@ -195,25 +195,25 @@ function js_salvarDados() {
   oParam.sMotivo            = encodeURIComponent(tagString($F('motivo')));
 
   if (oParam.o70_codrec == "") {
-    
+
     alert('Selecione uma receita orçamento.');
     return false;
   }
 
   if (oParam.sMotivo == '') {
-    
+
     alert('Preencha o motivo.');
     return false;
   }
 
   js_divCarregando("Aguarde, buscando dados das contas ...", "msgBox");
-  
+
   var oAjax = new Ajax.Request(sUrlRPC,{
                                method     : 'post',
                                parameters : 'json=' + Object.toJSON(oParam),
                                onComplete : js_retornoSalvar
                              });
-  
+
 }
 
 function js_retornoSalvar(oAjax) {
@@ -225,7 +225,7 @@ function js_retornoSalvar(oAjax) {
 }
 
 
-/* 
+/*
  * Requisição ajax que retornara a conta debito , credito, historico e valor orcado relacionada a receita selecionada.
  */
 
@@ -235,15 +235,15 @@ function js_buscaDadosReceita () {
   var oParam                = new Object();
   oParam.exec               = 'buscaDadosReceita';
   oParam.o70_codrec         = $F('o70_codrec');
-  
+
   js_divCarregando("Aguarde, buscando dados das contas ...", "msgBox");
-  
+
   var oAjax = new Ajax.Request(sUrlRPC,{
                                method     : 'post',
                                parameters : 'json=' + Object.toJSON(oParam),
                                onComplete : js_preencheDadosReceita
                              });
-  
+
 }
 
 /**
@@ -260,7 +260,7 @@ function js_preencheDadosReceita(oAjax) {
     $('form1').reset();
     return false;
   }
-  
+
 
   $('o57_codfon_debito').value  = oRetorno.o57_codfon_debito;
   $('o57_codfon_credito').value = oRetorno.o57_codfon_credito;
@@ -276,13 +276,13 @@ function js_preencheDadosReceita(oAjax) {
  * funcao de pesquisa para receitas
  */
 function js_receitas(lMostra){
-    
+
     if (lMostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_orcreceita', 'func_orcreceita.php?lReceitaLancada=true&funcao_js=parent.js_mostraReceita|o70_codrec|o57_descr', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcreceita', 'func_orcreceita.php?lReceitaLancada=true&funcao_js=parent.js_mostraReceita|o70_codrec|o57_descr', 'Pesquisa', true);
     } else {
-     
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_orcreceita', 'func_orcreceita.php?lReceitaLancada=true&pesquisa_chave=' + $F('o70_codrec') + '&funcao_js=parent.js_mostraReceita1', 'Pesquisa', false);
-    }	 
+
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcreceita', 'func_orcreceita.php?lReceitaLancada=true&pesquisa_chave=' + $F('o70_codrec') + '&funcao_js=parent.js_mostraReceita1', 'Pesquisa', false);
+    }
  }
  function js_mostraReceita(iCodigoReceita, sDescricao){
 
@@ -291,8 +291,8 @@ function js_receitas(lMostra){
    db_iframe_orcreceita.hide();
    js_buscaDadosReceita();
  }
- 
- function js_mostraReceita1(iCodigoReceita, lErro){   
+
+ function js_mostraReceita1(iCodigoReceita, lErro){
 
    if (lErro == 'false' || lErro == false) {
      $('o57_descr').value = iCodigoReceita;

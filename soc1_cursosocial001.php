@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -70,7 +70,7 @@ $oRotulo->label("as19_horaaulasdia");
           <tr>
             <td class='bold'>Curso / Oficina:</td>
             <td colspan="3">
-              <?php 
+              <?php
               db_input('as19_nome', 75, $Ias19_nome, true, 'text', $oGet->db_opcao);
               db_input('codigoCurso', 10, $Ias19_sequencial, true, 'hidden', 3);
               ?>
@@ -88,14 +88,14 @@ $oRotulo->label("as19_horaaulasdia");
             <td class='bold'>Data de Início: </td>
             <td> <?php db_inputdata('periodoInicial', "", "", "", true, 'text', $oGet->db_opcao,""); ?></td>
             <td class='bold'>Data de Fim: </td>
-            <td> 
-              <?php db_inputdata('periodoFinal', "", "", "", true, 'text', $oGet->db_opcao, 
+            <td>
+              <?php db_inputdata('periodoFinal', "", "", "", true, 'text', $oGet->db_opcao,
                                  "onchange='js_validaData()'", '', '', '', '', '', "js_validaData()"); ?></td>
           </tr>
           <tr title='Número de horas por aula'>
             <td class='bold'>Horas aula:</td>
             <td colspan="3">
-              <?php 
+              <?php
                 db_input('horaAula', 10, $Ias19_horaaulasdia, true, 'text', $oGet->db_opcao);
               ?>
             </td>
@@ -106,7 +106,7 @@ $oRotulo->label("as19_horaaulasdia");
             </td>
             <td colspan="3">
               <?php
-  				      db_input('iCgmMinistrante', 10, $Iz01_numcgm, true, 'text', $oGet->db_opcao, 
+  				      db_input('iCgmMinistrante', 10, $Iz01_numcgm, true, 'text', $oGet->db_opcao,
   				               " onchange='js_buscaMinistrante(false);'");
   				      db_input('sNomeMinistrante', 61, '', true,'text', 3,'');
   				    ?>
@@ -118,7 +118,7 @@ $oRotulo->label("as19_horaaulasdia");
             </td>
             <td colspan="3">
             <?php
-  				      db_input('iCgmResponsavel', 10, $Iz01_numcgm, true, 'text', $oGet->db_opcao, 
+  				      db_input('iCgmResponsavel', 10, $Iz01_numcgm, true, 'text', $oGet->db_opcao,
   				               " onchange='js_buscaResponsavel(false);'");
   				      db_input('sNomeResponsavel', 61, '', true,'text', 3,'');
   				    ?>
@@ -142,7 +142,7 @@ $oRotulo->label("as19_horaaulasdia");
                 <label for='sexta'>Sexta-feira</label>
                 <input class='diaSemana' id='sabado'  type="checkbox" name="sabado"  value="7">
                 <label for='sabado'>Sábado</label>
-                
+
               </fieldset>
             </td>
           </tr>
@@ -150,9 +150,9 @@ $oRotulo->label("as19_horaaulasdia");
             <td colspan="4">
               <fieldset class='separator'>
                 <legend>Detalhamento do Curso</legend>
-                <?php 
+                <?php
                   db_textarea('detalhamento', 5, 84, '', true, 'text', $oGet->db_opcao);
-                ?>               
+                ?>
               </fieldset>
             </td>
           </tr>
@@ -237,13 +237,13 @@ function js_retornoCategoria(oAjax) {
   oOption.update('Selecione');
   $('categoriaCurso').appendChild(oOption);
 
-  
+
   oRetorno.aCategorias.each(function(oCategoria) {
 
     var oOption = document.createElement('option');
     oOption.setAttribute('value', oCategoria.iCodigo);
     oOption.update(oCategoria.sDescricao.urlDecode());
-    $('categoriaCurso').appendChild(oOption);  
+    $('categoriaCurso').appendChild(oOption);
   });
 }
 
@@ -255,13 +255,13 @@ function js_pesquisaCurso() {
 }
 
 /**
- * Busca os dados do curso 
+ * Busca os dados do curso
  * @param iCurso código do curso
  */
 function js_buscaDadosCurso(iCurso) {
 
    db_iframe_cursosocial.hide();
-   
+
    var oParametro          = new Object();
    oParametro.exec         = 'getDadosCurso';
    oParametro.iCodigoCurso = iCurso;
@@ -275,9 +275,9 @@ function js_buscaDadosCurso(iCurso) {
                     }
                    );
 }
- 
+
 function js_retornoDadosCurso(oAjax) {
-  
+
   js_removeObj("msgBox");
   var oRetorno = eval('('+oAjax.responseText+')');
 
@@ -294,7 +294,7 @@ function js_retornoDadosCurso(oAjax) {
   $('detalhamento').value     = oRetorno.oCursoSocial.sDetalhamento.urlDecode();
 
   /**
-   * Marca os checkbox 
+   * Marca os checkbox
    */
   $$('input[type="checkbox"]').each(function (oElemento, i) {
 
@@ -315,12 +315,12 @@ function js_init() {
   $('excluirCurso').style.display = 'none';
   $('pesquisar').style.display    = 'none';
   js_buscaCategorias();
-  
+
   switch (oGet.db_opcao) {
-    
+
     case '2':
 
-      $('pesquisar').style.display = '';  
+      $('pesquisar').style.display = '';
       js_pesquisaCurso();
       break;
 
@@ -354,7 +354,7 @@ function js_buscaMinistrante(lMostra) {
     sUrl += 'funcao_js=parent.js_mostraMinistrante1|z01_numcgm|z01_nome';
     js_OpenJanelaIframe('', 'func_nome', sUrl, 'Pesquisa Ministrante', true);
   } else  {
-    
+
     if($F('iCgmMinistrante') != '') {
 
       sUrl += 'pesquisa_chave='+$F('iCgmMinistrante');
@@ -372,13 +372,13 @@ function js_mostraMinistrante(lErro, sNome) {
   if (lErro) {
 
     $('iCgmMinistrante').value  = '';
-    $('sNomeMinistrante').value = sNome; 
-    $('sNomeMinistrante').focus(); 
+    $('sNomeMinistrante').value = sNome;
+    $('sNomeMinistrante').focus();
   }
 }
 
 function js_mostraMinistrante1(iCgm, sNome) {
-  
+
   $('iCgmMinistrante').value  = iCgm;
   $('sNomeMinistrante').value = sNome;
   func_nome.hide();
@@ -396,12 +396,12 @@ function js_buscaResponsavel(lMostra) {
     sUrl += 'funcao_js=parent.js_mostraResponsavel1|z01_numcgm|z01_nome';
     js_OpenJanelaIframe('', 'func_nome', sUrl, 'Pesquisa Ministrante', true);
   } else  {
-    
+
     if($F('iCgmResponsavel') != '') {
 
       sUrl += 'pesquisa_chave='+$F('iCgmResponsavel');
       sUrl += '&funcao_js=parent.js_mostraResponsavel';
-      js_OpenJanelaIframe('top.corpo','func_nome', sUrl,'Pesquisa Ministrante',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','func_nome', sUrl,'Pesquisa Ministrante',false);
     } else {
       $('iCgmResponsavel').value = "";
     }
@@ -414,13 +414,13 @@ function js_mostraResponsavel(lErro, sNome) {
   if (lErro) {
 
     $('iCgmResponsavel').value  = '';
-    $('sNomeResponsavel').value = sNome; 
-    $('sNomeResponsavel').focus(); 
+    $('sNomeResponsavel').value = sNome;
+    $('sNomeResponsavel').focus();
   }
 }
 
 function js_mostraResponsavel1(iCgm, sNome) {
-  
+
   $('iCgmResponsavel').value  = iCgm;
   $('sNomeResponsavel').value = sNome;
   func_nome.hide();
@@ -435,40 +435,40 @@ function js_validaFormularioCurso() {
 
     alert('Defina o nome do curso.');
     return false;
-  }        
+  }
   if ($F('categoriaCurso') == '') {
 
     alert('Selecione uma categoria para o curso.');
     return false;
-  }   
+  }
 
   if (!js_validaData()) {
-    return false;  
+    return false;
   }
-  
+
   if ($F('horaAula') == '') {
-    
+
     alert('Informe a carga horária para um dia de aula.');
     return false;
-  }          
-  
+  }
+
   if ($F('iCgmMinistrante') == '') {
 
     alert('Selecione o ministrante para o curso.');
     return false;
-  } 
+  }
 
   if ($F('iCgmResponsavel') == '') {
-    
+
     alert('Selecione o responsável para o curso.');
     return false;
   }
-    
+
   if ($F('detalhamento') == '') {
 
     alert('Informe um detalhamento para o curso.');
     return false;
-  }     
+  }
 
   var lTemUmSelecionado = false;
   $$('input[type="checkbox"]').each(function (oElemento, i) {
@@ -479,7 +479,7 @@ function js_validaFormularioCurso() {
   });
 
   if (!lTemUmSelecionado) {
-    
+
     alert('Selecione ao menos um dia de aula na semana.');
     return false;
   }
@@ -487,12 +487,12 @@ function js_validaFormularioCurso() {
 }
 
 /**
- * Valida o intervalo de datas 
+ * Valida o intervalo de datas
  */
 function js_validaData() {
 
   if ($F('periodoInicial') == '') {
-    
+
     alert('Informe o período inicial.');
     return false;
   }
@@ -502,7 +502,7 @@ function js_validaData() {
     alert('Informe o período final.');
     return false;
   }
-  
+
   if (js_comparadata($F('periodoInicial'), $F('periodoFinal'), '>')) {
 
     $('periodoFinal').value = '';
@@ -520,36 +520,36 @@ $('salvarCurso').observe("click", function () {
   if (!js_validaFormularioCurso()) {
     return false;
   }
-  
+
   var oParametro  = new Object();
   oParametro.exec = 'salvarCurso';
 
   oParametro.iCodigoCurso  = $F('codigoCurso');
   oParametro.sNomeCurso    = $F('as19_nome');
-  oParametro.iCategoria    = $F('categoriaCurso');   
-  oParametro.sDtInicio     = $F('periodoInicial');   
-  oParametro.sDtFim        = $F('periodoFinal');     
+  oParametro.iCategoria    = $F('categoriaCurso');
+  oParametro.sDtInicio     = $F('periodoInicial');
+  oParametro.sDtFim        = $F('periodoFinal');
   oParametro.nHoraAula     = $F('horaAula');
-  oParametro.iMinistrante  = $F('iCgmMinistrante');  
+  oParametro.iMinistrante  = $F('iCgmMinistrante');
   oParametro.iResponsavel  = $F('iCgmResponsavel');
-  oParametro.sDetalhamento = encodeURIComponent(tagString($F('detalhamento')));     
+  oParametro.sDetalhamento = encodeURIComponent(tagString($F('detalhamento')));
   oParametro.aDiaSemana    = new Array();
-  
+
   $$('input[type="checkbox"]').each(function (oElemento, i) {
 
     if (oElemento.checked) {
       oParametro.aDiaSemana.push(oElemento.value);
     }
   });
-  
+
   js_divCarregando("Aguarde, salvando os dados.", "msgBox");
   new Ajax.Request(sUrlRPC,
       {method:'post',
        parameters: 'json='+Object.toJSON(oParametro),
        onComplete: js_retornoSalvarCurso
       }
-     );  
-  
+     );
+
 });
 
 function js_retornoSalvarCurso(oAjax) {
@@ -575,15 +575,15 @@ function js_retornoSalvarCurso(oAjax) {
  * Limpa campos do formulário
  */
 function js_limpaDadosFormulario() {
-  
-  form1.reset();  
+
+  form1.reset();
   form2.reset();
   oGridDiasAula.clearAll(true);
 }
 
- 
+
 /**
- * Monta a agenda do curso 
+ * Monta a agenda do curso
  * só chamada após inclusão
  */
 function js_gerarAgenda(iCodigoCurso) {
@@ -591,7 +591,7 @@ function js_gerarAgenda(iCodigoCurso) {
   var oParametro          = new Object();
   oParametro.exec         = 'gerarAgenda';
   oParametro.iCodigoCurso = iCodigoCurso;
-  
+
   js_divCarregando("Aguarde, gerando agenda de aulas.", "msgBox");
   new Ajax.Request(sUrlRPC,
       {method:'post',
@@ -631,7 +631,7 @@ function js_retornoDiasAgendaCurso(oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno = eval('('+oAjax.responseText+')');
-  
+
   oGridDiasAula.clearAll(true);
   oRetorno.aDias.each(function (oDiaAula) {
 
@@ -653,14 +653,14 @@ function js_retornoDiasAgendaCurso(oAjax) {
 
     oGridDiasAula.addRow(aLinha);
   });
-  oGridDiasAula.renderRows();  
+  oGridDiasAula.renderRows();
 }
 
 /**
  * Remove o curso
  */
 $('excluirCurso').observe("click", function () {
-  
+
   var oParametro            = new Object();
   oParametro.exec           = 'removerCurso' ;
   oParametro.iCodigoCurso   = $F('codigoCurso');
@@ -681,11 +681,11 @@ function js_retornoExcluiCurso(oAjax) {
   alert(oRetorno.message.urlDecode());
 
   if (oRetorno.status == 1) {
-    
+
     js_limpaDadosFormulario();
     js_pesquisaCurso();
   }
-  
+
 }
 
 
@@ -694,7 +694,7 @@ function js_retornoExcluiCurso(oAjax) {
  ** ************************** **/
 
 /**
- * Exclui um dia de aula 
+ * Exclui um dia de aula
  * @param iCodigoDiaAula é se o sequencial da tabela cursosocialaula
  */
 function js_excluiDiaAgenda (iCodigoDiaAula) {
@@ -727,25 +727,25 @@ function js_retornoExcluiDiaAgenda(oAjax) {
 function js_validaDataEntrePeriodo(dtNova) {
 
   if (dtNova == '') {
-    
+
     alert("Informe o dia.");
     return false;
   }
-   
+
   if (js_comparadata($F('periodoInicial'), dtNova, '>')) {
 
     $('novoDia').value = '';
     alert('Dia:' + dtNova + ' é menor que o período inicial: ' + $F('periodoInicial') + ' do curso.');
     return false;
   }
-  
+
   if (js_comparadata($F('periodoFinal'), dtNova, '<')) {
 
     $('novoDia').value = '';
     alert('Dia:' + dtNova + ' é maior que o período final: ' + $F('periodoFinal') + ' do curso.');
     return false;
   }
-  
+
   return true;
 }
 
@@ -756,7 +756,7 @@ $('adicionarDia').observe("click", function () {
 
   if ( !js_validaDataEntrePeriodo($F('novoDia')) ) {
     return false;
-  }  
+  }
 
   var oParametro          = new Object();
   oParametro.exec         = 'adicionarDiaAula' ;

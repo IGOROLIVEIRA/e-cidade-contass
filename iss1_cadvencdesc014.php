@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -75,10 +75,10 @@ if(isset($duplica)&&$duplica=='true'&&isset($cod_duplic)&&$cod_duplic!=''){
 			$clcadvencdesc->q92_diasvcto = $q92_diasvcto;
 			$clcadvencdesc->q92_vlrminimo = $q92_vlrminimo;
 			$clcadvencdesc->q92_formacalcparcvenc = $q92_formacalcparcvenc;
-			$clcadvencdesc->incluir(null);			
+			$clcadvencdesc->incluir(null);
 			$erro_msg = $clcadvencdesc->erro_msg;
 			if($clcadvencdesc->erro_status=='0'){
-      			$sqlerro = true;      		 
+      			$sqlerro = true;
   			}
   			$new_cod=$clcadvencdesc->q92_codigo;
   			$q92_descr=$clcadvencdesc->q92_descr;
@@ -95,7 +95,7 @@ if(isset($duplica)&&$duplica=='true'&&isset($cod_duplic)&&$cod_duplic!=''){
 			}
 		}
 		if ($sqlerro==false){
-	    	$result_cadvenc = $clcadvenc->sql_record($clcadvenc->sql_query_file($cod_duplic,null,"*","q82_parc"));	    	
+	    	$result_cadvenc = $clcadvenc->sql_record($clcadvenc->sql_query_file($cod_duplic,null,"*","q82_parc"));
 	    	$numrows_cadvenc = $clcadvenc->numrows;
 	    	for($w=0;$w<$numrows_cadvenc;$w++){
 	    		db_fieldsmemory($result_cadvenc,$w);
@@ -113,7 +113,7 @@ if(isset($duplica)&&$duplica=='true'&&isset($cod_duplic)&&$cod_duplic!=''){
             $clcadvenc->q82_calculaparcvenc = $q82_calculaparcvenc;
   					$clcadvenc->incluir($new_cod,$q82_parc);
   					if($clcadvenc->erro_status==0){
-    					$sqlerro=true; 
+    					$sqlerro=true;
               db_msgbox("aqui");
     					$erro_msg = $clcadvenc->erro_msg;
     					break;
@@ -128,13 +128,13 @@ if(isset($duplica)&&$duplica=='true'&&isset($cod_duplic)&&$cod_duplic!=''){
 		echo "<script>
               	function js_xy(){
                 	parent.document.formaba.cadvenc.disabled=false;\n
-					top.corpo.iframe_cadvenc.location.href='iss1_cadvenc004.php?q82_codigo=$new_cod&q92_descr=$q92_descr';\n                	
+					CurrentWindow.corpo.iframe_cadvenc.location.href='iss1_cadvenc004.php?q82_codigo=$new_cod&q92_descr=$q92_descr';\n
               	}
               	js_xy();
-              </script>";		
+              </script>";
 		db_redireciona("iss1_cadvencdesc015.php?tavainclu=true&chavepesquisa=$new_cod");
 	}else{
-		
+
 	}
 }
 ?>
@@ -148,8 +148,8 @@ if(isset($duplica)&&$duplica=='true'&&isset($cod_duplic)&&$cod_duplic!=''){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmcadvencdescalt.php");
@@ -176,13 +176,13 @@ if(isset($incluir)){
            <script>
               function js_xy(){
                 parent.document.formaba.cadvenc.disabled=false;\n
-		top.corpo.iframe_cadvenc.location.href='iss1_cadvenc004.php?q82_codigo=$q92_codigo&q92_descr=$q92_descr';\n
+		CurrentWindow.corpo.iframe_cadvenc.location.href='iss1_cadvenc004.php?q82_codigo=$q92_codigo&q92_descr=$q92_descr';\n
                 parent.mo_camada('cadvenc');
               }
               js_xy();
            </script>
          ";
          db_redireciona("iss1_cadvencdesc015.php?tavainclu=true&chavepesquisa=$q92_codigo");
- }  	 
+ }
 }
 ?>

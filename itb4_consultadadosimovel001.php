@@ -46,7 +46,7 @@ $clitburbano = new cl_itburbano();
 <body class="body-default">
 <div class="container">
   <?php
-     
+
     $sCampos  = " distinct		 	  ";
     $sCampos .= " it06_matric,		  ";
     $sCampos .= " it22_setor,  		  ";
@@ -69,6 +69,6 @@ $clitburbano = new cl_itburbano();
 </html>
 <script>
   function js_consultaDetalhes(iMatric){
-    js_OpenJanelaIframe('top.corpo',"db_iframe_procjur",'cad3_conscadastro_002.php?cod_matricula='+iMatric,'Detalhes da Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo',"db_iframe_procjur",'cad3_conscadastro_002.php?cod_matricula='+iMatric,'Detalhes da Pesquisa',true);
   }
 </script>

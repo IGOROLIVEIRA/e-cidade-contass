@@ -1,28 +1,28 @@
   <?
   /*
-   *     E-cidade Software Publico para Gestao Municipal                
-   *  Copyright (C) 2012  DBselller Servicos de Informatica             
-   *                            www.dbseller.com.br                     
-   *                         e-cidade@dbseller.com.br                   
-   *                                                                    
-   *  Este programa e software livre; voce pode redistribui-lo e/ou     
-   *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
-   *  publicada pela Free Software Foundation; tanto a versao 2 da      
-   *  Licenca como (a seu criterio) qualquer versao mais nova.          
-   *                                                                    
-   *  Este programa e distribuido na expectativa de ser util, mas SEM   
-   *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
-   *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
-   *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
-   *  detalhes.                                                         
-   *                                                                    
-   *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
-   *  junto com este programa; se nao, escreva para a Free Software     
-   *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
-   *  02111-1307, USA.                                                  
-   *  
-   *  Copia da licenca no diretorio licenca/licenca_en.txt 
-   *                                licenca/licenca_pt.txt 
+   *     E-cidade Software Publico para Gestao Municipal
+   *  Copyright (C) 2012  DBselller Servicos de Informatica
+   *                            www.dbseller.com.br
+   *                         e-cidade@dbseller.com.br
+   *
+   *  Este programa e software livre; voce pode redistribui-lo e/ou
+   *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+   *  publicada pela Free Software Foundation; tanto a versao 2 da
+   *  Licenca como (a seu criterio) qualquer versao mais nova.
+   *
+   *  Este programa e distribuido na expectativa de ser util, mas SEM
+   *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+   *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+   *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+   *  detalhes.
+   *
+   *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+   *  junto com este programa; se nao, escreva para a Free Software
+   *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   *  02111-1307, USA.
+   *
+   *  Copia da licenca no diretorio licenca/licenca_en.txt
+   *                                licenca/licenca_pt.txt
    */
 
   require_once("libs/db_stdlib.php");
@@ -80,33 +80,33 @@
     db_fieldsmemory($rsemparam, 0);
     if ($e30_notaliquidacao != '') {
       $sUrlEmpenho      = "emp4_empempenho001.php";
-    } 
-  }  
+    }
+  }
 
   $anulacao=false;//padrao
   $sqlerro =false;
 
   if ( isset($excluir) ) {
-    
+
     try {
       $oFornecedor = new fornecedor($e54_numcgm);
       $oFornecedor->verificaBloqueioAutorizacaoEmpenho(null);
-      $iStatusBloqueio = $oFornecedor->getStatusBloqueio();      
+      $iStatusBloqueio = $oFornecedor->getStatusBloqueio();
     } catch (Exception $eException) {
       $sqlerro  = true;
       $erro_msg = $eException->getMessage();
     }
-    
+
     if ( !$sqlerro ) {
-      
+
       if($iStatusBloqueio == 2){
         db_msgbox("\\nusuário:\\n\\n Fornecedor com débito na prefeitura !\\n\\n\\n\\n");
-      }   
+      }
     }
   }
 
   if(isset($excluir) && !$sqlerro ) {
-    
+
       $db_opcao = 3;
       $db_botao = true;
 
@@ -125,13 +125,13 @@
         db_msgbox('Autorização excluida com sucesso');
         db_redireciona("emp1_empautoriza008.php");
       }
-      
+
   } else if(isset($chavepesquisa)) {
-    
-    $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa)); 
+
+    $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
     db_fieldsmemory($result,0);
     if($e54_login != db_getsession("DB_id_usuario")) {
-      
+
       $result = $cldb_depusu->sql_record($cldb_depusu->sql_query_file(db_getsession("DB_id_usuario"),$e54_depto,'coddepto as cod02'));
 
       if ($cldb_depusu->numrows == 0) {
@@ -140,29 +140,29 @@
     }
     $result = $clempautpresta->sql_record($clempautpresta->sql_query_file(null,"*","e58_autori","e58_autori=$e54_autori"));
     if ($clempautpresta->numrows>0) {
-      
+
       db_fieldsmemory($result,0);
       $e44_tipo = $e58_tipo;
     }
     if (empty($erro_msg)) {
-      
+
       if ($e54_anulad != "") {
-        
+
         $anulacao=true;
         $db_opcao = 33;
         $db_botao = false;
       } else {
-        
+
         $anulacao=false;
         $db_opcao = 3;
         $db_botao = true;
       }
-       
+
       $result=$clempauthist->sql_record($clempauthist->sql_query_file($e54_autori));
       if($clempauthist->numrows>0){
          db_fieldsmemory($result,0);
       }
-      
+
       /**
        * Busca os Dados do Processo administrativo
        */
@@ -172,19 +172,19 @@
                                                                                         null,
                                                                                         $sWhereProcessoAdministrativo);
       $rsProcessoAdministrativo     = $oDaoEmpenhoProcessoAdminitrativo->sql_record($sSqlProcessoAdministrativo);
-      
+
       if ($oDaoEmpenhoProcessoAdminitrativo->numrows > 0) {
         $e150_numeroprocesso = db_utils::fieldsMemory($rsProcessoAdministrativo, 0)->e150_numeroprocesso;
       }
-    } 
-      
+    }
+
   }
 
   if(isset($e54_autori)){
     $emprocesso = false;
     $result_autoriza_de_pc = $clpcprocitem->sql_record($clpcprocitem->sql_query_itememautoriza(null,"e55_sequen",""," e55_autori=$e54_autori and e54_anulad is null "));
     if ($clpcprocitem->numrows > 0) {
-      
+
       $db_botao = true;
       $emprocesso = true;
     }
@@ -192,7 +192,7 @@
      * Verifica se autorizacao é de contrato
      */
     $oDaoAutorizaContrato = db_utils::getDao("acordoitemexecutadoempautitem");
-    $sSqlAutoriza         = $oDaoAutorizaContrato->sql_query(null,"ac20_acordoposicao", 
+    $sSqlAutoriza         = $oDaoAutorizaContrato->sql_query(null,"ac20_acordoposicao",
                                                              null, "e54_autori={$e54_autori}"
                                                             );
     $rsDadosContrato      = $oDaoAutorizaContrato->sql_record($sSqlAutoriza);
@@ -240,16 +240,16 @@
         parent.document.formaba.prazos.disabled=false;\n
         parent.document.formaba.anulacao.disabled=false;\n
                     // parent.document.formaba.empautret.disabled=false;\n
-                    // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-        top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
-        top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
-        top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-        top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
-           }   
+                    // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+        CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
+        CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
+        CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+        CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
+           }
            js_libera();
              </script>
-           ";  
-    }else{ 
+           ";
+    }else{
       if($anulacao == true){
         echo "
               <script>
@@ -259,11 +259,11 @@
                   parent.document.formaba.prazos.disabled=false;\n
                   parent.document.formaba.anulacao.disabled=false;\n
                   // parent.document.formaba.empautret.disabled=false;\n
-                  // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                  top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                  top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                  top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-                  top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                  // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
                 }
                 js_bloqueia();
               </script>
@@ -277,20 +277,20 @@
                   parent.document.formaba.prazos.disabled=true;\n
                   parent.document.formaba.anulacao.disabled=true;\n
                   // parent.document.formaba.empautret.disabled=false;\n
-                  // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                  top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                  top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                  top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
-                  top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                  // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
                 }
                 js_bloqueia();
               </script>
              ";
       }
-    }    
+    }
   } else {
     echo "<script>document.form1.pesquisar.click();</script>";
-  }  
+  }
 
 
   /////////////////////////////////////////////

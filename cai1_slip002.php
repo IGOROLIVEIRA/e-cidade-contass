@@ -396,7 +396,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </html>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?valida==1&funcao_js=parent.js_preenchepesquisa|k17_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slip.php?valida==1&funcao_js=parent.js_preenchepesquisa|k17_codigo','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

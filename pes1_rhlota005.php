@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -57,7 +57,7 @@ if(isset($alterar)){
   $anofolha = db_anofolha();
   $mesfolha = db_mesfolha();
   db_inicio_transacao();
-  
+
   $result = $clcfpess->sql_record($clcfpess->sql_query_file($anofolha,$mesfolha,db_getsession("DB_instit"),"r11_codestrut"));
   if($clcfpess->numrows>0){
     db_fieldsmemory($result,0);
@@ -70,9 +70,9 @@ if(isset($alterar)){
   $clrhlota->r70_numcgm         = $z01_numcgm;
   $clrhlota->r70_concarpeculiar = $r70_concarpeculiar;
   $clrhlota->alterar($r70_codigo);
-  
+
   $r70_codigo = $clrhlota->r70_codigo;
-  
+
   if($clrhlota->erro_status==0){
     $sqlerro=true;
     $erro_msg = $clrhlota->erro_msg;
@@ -155,7 +155,7 @@ if(isset($alterar)){
   }
 
   $result = $clrhlota->sql_record($clrhlota->sql_query($chave,"r70_codigo,r70_estrut,r70_descr,r70_analitica as testa"));
-  if($clrhlota->numrows > 0){ 
+  if($clrhlota->numrows > 0){
     db_fieldsmemory($result,0);
     if($testa=="t"){
       $campos = "o40_instit";
@@ -185,8 +185,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
       <?
       include("forms/db_frmrhlota.php");
@@ -215,11 +215,11 @@ if(isset($chavepesquisa)){
   echo "
         <script>
           parent.document.formaba.rhlotavinc.disabled = false;
-          top.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=true';
+          CurrentWindow.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=true';
        ";
   if(isset($liberaaba) && $liberaaba=="true"){
-    echo "	  
-          top.corpo.mo_camada('rhlotavinc');
+    echo "
+          CurrentWindow.corpo.mo_camada('rhlotavinc');
          ";
   }
   echo "
@@ -232,17 +232,17 @@ if(isset($chavepesquisa)){
   if(isset($alterar)){
     echo "
           parent.document.formaba.rhlotavinc.disabled = false;
-          top.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=true';
+          CurrentWindow.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=true';
          ";
     if($sqlerro == false){
-      echo "	  
-            top.corpo.mo_camada('rhlotavinc');
+      echo "
+            CurrentWindow.corpo.mo_camada('rhlotavinc');
            ";
     }
   }else{
     echo "
           parent.document.formaba.rhlotavinc.disabled = true;
-          top.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php';
+          CurrentWindow.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php';
          ";
   }
   echo "

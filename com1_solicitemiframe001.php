@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -352,7 +352,7 @@ if (isset($incluir) && $sqlerro == false) {
       }
     }
   }
-  
+
   //db_fim_transacao($sqlerro);
 } else if (isset($alterar) && $sqlerro == false) {
 
@@ -690,7 +690,7 @@ if (isset($incluir) || isset($alterar) || isset($excluir)) {
   db_fim_transacao($sqlerro);
 
   if ($sqlerro == false){
-     echo "<script> top.corpo.iframe_solicitem.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc13_codigo&pc13_codele=".@$pc13_codele."$parametro'; </script>";
+     echo "<script> CurrentWindow.corpo.iframe_solicitem.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc13_codigo&pc13_codele=".@$pc13_codele."$parametro'; </script>";
   }
 }
 
@@ -819,7 +819,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
       echo "<script> document.form1." . $clpcdotac->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1." . $clpcdotac->erro_campo . ".focus();</script>";
     } else {
-      //      echo "<script> top.corpo.iframe_solicitem.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc13_codigo&opcao=alterar'; </script>";
+      //      echo "<script> CurrentWindow.corpo.iframe_solicitem.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc13_codigo&opcao=alterar'; </script>";
     }
   }
 }

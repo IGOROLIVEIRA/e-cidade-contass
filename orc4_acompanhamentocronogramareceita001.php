@@ -230,14 +230,14 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   function js_pesquisao125_cronogramaperspectiva(mostra) {
 
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_cronogramaperspectiva',
         'func_cronogramaperspectiva.php?tipo=2&funcao_js='+
         'parent.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
         'Perspectivas do Cronograma',true);
     }else{
       if(document.form1.o124_sequencial.value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_cronogramaperspectiva',
           'func_cronogramaperspectiva.php?tipo=2&pesquisa_chave='+
           document.form1.o124_sequencial.value+
@@ -566,7 +566,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
   function js_pesquisac62_codrec(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_orctiporec',
         'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr',
         'Pesquisar Recursos',
@@ -578,7 +578,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     } else {
 
       if($('o15_codigo').value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_orctiporec',
           'func_orctiporec.php?pesquisa_chave='+$('o15_codigo').value+
           '&funcao_js=parent.js_mostraorctiporec',

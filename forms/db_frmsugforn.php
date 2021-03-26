@@ -135,12 +135,12 @@ function js_pesquisapc40_numcgm(mostra) {
   if (mostra == true) {
 
     var sUrl = 'func_nome.php?testanome=false&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome';
-    js_OpenJanelaIframe('top.corpo.iframe_sugforn', 'func_nome', sUrl, 'Pesquisa', true, 0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_sugforn', 'func_nome', sUrl, 'Pesquisa', true, 0);
   } else {
 
      var sUrl = 'func_nome.php?pesquisa_chave='+$('pc40_numcgm').value+'&funcao_js=parent.js_mostracgm';
      if ($('pc40_numcgm').value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_sugforn', 'func_nome',  sUrl, 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_sugforn', 'func_nome',  sUrl, 'Pesquisa', false);
      } else {
        $('z01_nome').value = '';
      }

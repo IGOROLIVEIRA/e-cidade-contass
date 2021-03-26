@@ -118,7 +118,7 @@ function callBackRetornoSalvar(oRetorno, lErro) {
 
 function buscarCalculo() {
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_calculocargahoraria',
                       'func_calculocargahoraria.php?funcao_js=parent.retornoBuscarCalculo|ed127_codigo|ed127_ano|2|ed127_escola',
                       'Pesquisa',
@@ -152,7 +152,7 @@ function validarAlteracao() {
 function callBackRetornoValidarAlteracao(oRetorno, lErro) {
 
   $('btn_salvar').disabled = 'disabled';
-  
+
   if (lErro) {
     return false;
   }

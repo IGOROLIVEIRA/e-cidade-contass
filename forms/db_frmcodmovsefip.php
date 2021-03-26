@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -43,7 +43,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código do recolhimento">
               <b>Código:</b>
             </td>
-            <td> 
+            <td>
               <?
               $codrec = "115";
               db_input('codrec',10,1,true,'text',3,"")
@@ -72,7 +72,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Índice recolhimento FGTS">
               <b>Índice FGTS:</b>
             </td>
-            <td> 
+            <td>
               <?
               $indrecfgts = 1;
               $arr_indrecfgts = array("0"=>"Nenhum","1"=>"GFIP no prazo","2"=>"GFIP em atraso");
@@ -82,9 +82,9 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Data recolhimento FGTS">
               <b>Data FGTS:</b>
             </td>
-            <td> 
+            <td>
               <?
-              db_inputdata("dtrecfgts", @$dtrecfgts_dia, @$dtrecfgts_mes, @$dtrecfgts_ano, true, 'text',1); 
+              db_inputdata("dtrecfgts", @$dtrecfgts_dia, @$dtrecfgts_mes, @$dtrecfgts_ano, true, 'text',1);
               ?>
             </td>
           </tr>
@@ -92,7 +92,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Índice recolhimento INSS">
               <b>Índice INSS:</b>
             </td>
-            <td> 
+            <td>
               <?
               $indrecinss = 1;
               $arr_indrecinss = array("0"=>"Não gera GPS","1"=>"GPS no prazo","2"=>"GPS em atraso");
@@ -102,9 +102,9 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Data recolhimento INSS">
               <b>Data INSS:</b>
             </td>
-            <td> 
+            <td>
               <?
-              db_inputdata("dtrecinss", @$dtrecinss_dia, @$dtrecinss_mes, @$dtrecinss_ano, true, 'text',1); 
+              db_inputdata("dtrecinss", @$dtrecinss_dia, @$dtrecinss_mes, @$dtrecinss_ano, true, 'text',1);
               ?>
             </td>
           </tr>
@@ -112,7 +112,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Índice recolhimento atraso INSS">
               <b>Atraso INSS:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('indatrasoinss',10,1,true,'text',1,"","")
               ?>
@@ -131,7 +131,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Nome do contato">
               <b>Nome:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('z01_nome',40,$Iz01_nome,true,'text',1,"","contato")
               ?>
@@ -139,7 +139,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Fone">
               <b>Fone:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('fone',10,1,true,'text',1,"","")
               ?>
@@ -158,7 +158,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Alteração de endereço">
               <b>Alteração de endereço:</b>
             </td>
-            <td> 
+            <td>
               <?
               $alteraender = "N";
               $arr_alteraender = array("S"=>"Sim","N"=>"Não");
@@ -168,7 +168,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Alteração de CNAE">
               <b>Alteração de CNAE:</b>
             </td>
-            <td> 
+            <td>
               <?
               $alteracnae = "P";
               $arr_alteracnae = array("S"=>"Sim","N"=>"Não","A"=>"Alt. Preponderante","P"=>"Não Alt. Preponderante");
@@ -180,7 +180,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código de terceiros">
               <b>Código de terceiros:</b>
             </td>
-            <td> 
+            <td>
               <?
               $codterceiro = "0000";
               db_input('codterceiro',10,1,true,'text',1,"","")
@@ -189,7 +189,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código CNAE fiscal">
               <b>Código CNAE fiscal:</b>
             </td>
-            <td> 
+            <td>
               <?
               $cnae = "8411600";
               db_input('cnae',10,1,true,'text',1,"","")
@@ -200,7 +200,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Aliquota SAT">
               <b>Aliquota SAT:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('aliqsat',2,1,true,'text',1,"","")
               ?>
@@ -208,7 +208,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código GPS">
               <b>Código GPS:</b>
             </td>
-            <td> 
+            <td>
               <?
               $codgps = "2402";
               db_input('codgps',10,1,true,'text',1,"","")
@@ -231,7 +231,7 @@ $clrotulo->label("z01_nome");
 	     $mesusu =  $r11_mes13;
 	  }
           $result_tbprev = $clinssirf->sql_record($clinssirf->sql_query_file(null,null," distinct cast(r33_codtab as integer)-2 as r33_codtab,r33_nome","r33_codtab","r33_codtab between 3 and 6 and r33_mesusu=$mesusu and r33_anousu=$anousu and r33_instit = ".db_getsession('DB_instit')));
-	  $mesusu = $mesant; 
+	  $mesusu = $mesant;
 	  for($i=0, $cont = 1; $i<$clinssirf->numrows; $i++){
 	    db_fieldsmemory($result_tbprev, $i);
 	    if(($i % 2) == 0 || $i == 0){
@@ -379,7 +379,7 @@ function js_controla_anomes(opcao){
   document.form1.submit();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_codmovsefip','func_codmovsefip.php?funcao_js=parent.js_preenchepesquisa|r66_anousu|r66_mesusu|r66_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_codmovsefip','func_codmovsefip.php?funcao_js=parent.js_preenchepesquisa|r66_anousu|r66_mesusu|r66_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2){
   db_iframe_codmovsefip.hide();

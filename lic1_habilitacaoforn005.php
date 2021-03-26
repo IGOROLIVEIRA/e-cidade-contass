@@ -20,8 +20,8 @@ if(isset($incluir)){
   $clhabilitacaoforn->incluir($l206_sequencial);
   if($clhabilitacaoforn->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clhabilitacaoforn->erro_msg; 
+  }
+  $erro_msg = $clhabilitacaoforn->erro_msg;
   db_fim_transacao($sqlerro);
    $l206_sequencial= $clhabilitacaoforn->l206_sequencial;
    $db_opcao = 1;
@@ -33,8 +33,8 @@ if(isset($alterar)){
   $clhabilitacaoforn->alterar($l206_sequencial);
   if($clhabilitacaoforn->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clhabilitacaoforn->erro_msg; 
+  }
+  $erro_msg = $clhabilitacaoforn->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 2;
    $db_botao = true;
@@ -46,13 +46,13 @@ if(isset($excluir)){
 
   if($clhabilitacaosocios->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clhabilitacaosocios->erro_msg; 
+  }
+  $erro_msg = $clhabilitacaosocios->erro_msg;
   $clhabilitacaoforn->excluir($l206_sequencial);
   if($clhabilitacaoforn->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clhabilitacaoforn->erro_msg; 
+  }
+  $erro_msg = $clhabilitacaoforn->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 2;
    $db_botao = true;
@@ -60,7 +60,7 @@ if(isset($excluir)){
 else if(isset($chavepesquisa)){
    $db_opcao = 2;
    $db_botao = true;
-   $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($chavepesquisa)); 
+   $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -74,8 +74,8 @@ else if(isset($chavepesquisa)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmhabilitacaoforn.php");
@@ -101,7 +101,7 @@ if(isset($incluir)){
   <script>
       function js_db_libera(){
          parent.document.formaba.db_habsocios.disabled=false;
-         top.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
+         CurrentWindow.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
        ";
            echo "  parent.mo_camada('db_habsocios');";
  echo"}\n
@@ -124,7 +124,7 @@ if(isset($alterar)){
   <script>
       function js_db_libera(){
          parent.document.formaba.db_habsocios.disabled=false;
-         top.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
+         CurrentWindow.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
        ";
            echo "  parent.mo_camada('db_habsocios');";
  echo"}\n
@@ -157,7 +157,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.db_habsocios.disabled=false;
-         top.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
+         CurrentWindow.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
        ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('db_habsocios');";

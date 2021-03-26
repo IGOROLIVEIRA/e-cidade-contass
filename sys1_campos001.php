@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -78,7 +78,7 @@ if(isset($HTTP_POST_VARS["incluir"])) {
   if($tamanho == "") {
     $tamanho = 0;
   }
-  
+
   if(isset($vnulo)) $nulo = 't';
   else $nulo = 'f';
   if(isset($vmaiusculo)) $maiusculo = 't';
@@ -89,25 +89,25 @@ if(isset($HTTP_POST_VARS["incluir"])) {
   $codcam = pg_result($result,0,0);
   if((substr($conteudo,0,4)=="date") && empty($valorinicial)){
     $valorinicial = "null";
-  } 
+  }
   if((substr($conteudo,0,3)=="int") && empty($valorinicial)){
     $valorinicial = "0";
-  } 
+  }
   if((substr($conteudo,0,5)=="float") && empty($valorinicial)){
     $valorinicial = "0";
-  } 
+  }
   if((substr($conteudo,0,3)=="boo") && empty($valorinicial)){
     $valorinicial = "f";
-  } 
+  }
 
   $result = pg_query("select nomecam from db_syscampo where nomecam ='$nomecam'");
   $numrows = @pg_num_rows($result);
   if($numrows>0){
     $processamento = "4";
     $erro_msg      = "Inclusão abortada! \\n O campo $nomecam já foi incluido!";
-  }else{  
+  }else{
       pg_exec("BEGIN");
-      pg_exec("insert into db_syscampo 
+      pg_exec("insert into db_syscampo
 	       values($codcam,'$nomecam','$conteudo','$descricao','$valorinicial',
 			      '$rotulo',$tamanho,'$nulo','$maiusculo','$autocompl',$aceitatipo,'$tipoobj','$rotulorel')") or die("Erro(43) inserindo em db_syscampo");
       if($codcampai!=0){
@@ -124,8 +124,8 @@ if(isset($HTTP_POST_VARS["incluir"])) {
       pg_exec("END");
       $processamento = 1;
        unset($nomecam,$conteudo,$tamanho,$descricao,$rotulo,$valorinicial,$codcampai);
-  }    
-////////////////ALTERAR////////////////  
+  }
+////////////////ALTERAR////////////////
 } else if(isset($HTTP_POST_VARS["alterar"])) {
   db_postmemory($HTTP_POST_VARS);
   if(isset($vnulo)){
@@ -154,19 +154,19 @@ if(isset($HTTP_POST_VARS["incluir"])) {
   }
   if((substr($conteudo,0,4)=="date") && empty($valorinicial)){
     $valorinicial = "null";
-  } 
+  }
   if((substr($conteudo,0,3)=="int") && empty($valorinicial)){
     $valorinicial = "0";
-  } 
+  }
   if((substr($conteudo,0,5)=="float") && empty($valorinicial)){
     $valorinicial = "0";
-  } 
+  }
   if((substr($conteudo,0,3)=="boo") && empty($valorinicial)){
     $valorinicial = "f";
-  } 
+  }
 
   $pode_ir=true;
-  
+
   $result05 = pg_query("select codcam as codcamal from db_syscampo where nomecam ='$nomecam'");
   $numrows = @pg_num_rows($result);
   if($numrows>0){
@@ -174,9 +174,9 @@ if(isset($HTTP_POST_VARS["incluir"])) {
     if($codcam!=$codcamal){
       $processamento = "4";
       $erro_msg      = "Alteração abortada! \\n O campo $nomecam já foi incluido!";
-    }   
+    }
   }
-  if($pode_ir==true){  
+  if($pode_ir==true){
     pg_exec("update db_syscampo set nomecam  = '$nomecam',
 						    conteudo = '$conteudo',
 				    descricao     = '$descricao',
@@ -206,7 +206,7 @@ if(isset($HTTP_POST_VARS["incluir"])) {
       }
     }
     $processamento = 2;
-  } 
+  }
   pg_exec("END");
 //  db_redireciona();
 ////////////////EXCLUIR//////////////
@@ -214,7 +214,7 @@ if(isset($HTTP_POST_VARS["incluir"])) {
   pg_exec("BEGIN");
   pg_exec("delete from db_syscampodef where codcam = $codcam") or die("Erro(44) Excluindo em db_syscampodef");
   pg_exec("delete from db_syscampodep where codcam = $codcam") or die("Erro(43) Excluindo em db_syscampodep");
-  pg_exec("delete from db_syscampo    where codcam = $codcam") or die("Erro(72) Excluindo em db_syscampo");			
+  pg_exec("delete from db_syscampo    where codcam = $codcam") or die("Erro(72) Excluindo em db_syscampo");
   pg_exec("END");
   $processamento = 3;
 }
@@ -229,7 +229,7 @@ if(isset($HTTP_POST_VARS["incluir"])) {
 <script>
 Botao = 'incluir';
 function js_submeter(obj) {
-  if(Botao != 'procurar') {  	
+  if(Botao != 'procurar') {
     if(obj.nomecam.value == "") {
       alert("Campo nome do campo é obrigatório");
 	  obj.nomecam.focus();
@@ -254,7 +254,7 @@ function js_submeter(obj) {
 	  return false;
     }
   }
-  obj.elements["itensdef[]"].multiple = true;	  
+  obj.elements["itensdef[]"].multiple = true;
   for(var i = 0;i < obj.itensdef.length;i++)
     obj.itensdef.options[i].selected = true;
   return true;
@@ -268,35 +268,35 @@ function js_valida(valor) {
    if(valor=='int4' || valor=='int8' || valor=='date' || valor=='oid'){
      if(valor=='oid'){
        document.form1.tamanho.value='1';
-     }  
+     }
      if(valor=='date'){
        document.form1.tamanho.value='10';
-     }  
-     document.form1.aceitatipo.options[1].selected=true;   
+     }
+     document.form1.aceitatipo.options[1].selected=true;
      return true;
-   }  
+   }
    if(valor=='char' || valor=='varchar' || valor=='text'){
      document.form1.vmaiusculo.checked=true;
      document.form1.vmaiusculo.disabled=false;
-     document.form1.aceitatipo.options[0].selected=true;   
+     document.form1.aceitatipo.options[0].selected=true;
      if(valor=='text'){
        document.form1.tamanho.value='1';
-     }  
+     }
      return true;
-   } 
+   }
    if(valor=='bool'){
-     document.form1.aceitatipo.options[5].selected=true;   
+     document.form1.aceitatipo.options[5].selected=true;
      document.form1.tamanho.value='1';
      return true;
-     
-   }  
+
+   }
    if(valor=='float4' || valor=='float8'){
-     document.form1.aceitatipo.options[4].selected=true;   
+     document.form1.aceitatipo.options[4].selected=true;
      return true;
-   } 
-   document.form1.aceitatipo.options[valor].selected=true;   
+   }
+   document.form1.aceitatipo.options[valor].selected=true;
    return true;
-	
+
 }
 function js_iniciar() {
   if(document.form1) {
@@ -314,7 +314,7 @@ function js_adddef(obj) {
 	return false;
   }
   obj.elements["itensdef[]"].options[obj.elements["itensdef[]"].length] = new Option(obj.textodef.value,obj.textodef.value + '#&' + obj.descitensdef.value);
-  obj.elements["itensdef[]"].options[obj.elements["itensdef[]"].length-1].select = true; 
+  obj.elements["itensdef[]"].options[obj.elements["itensdef[]"].length-1].select = true;
   js_trocacordeselect();
   obj.textodef.value = "";
   obj.descitensdef.value = "";
@@ -333,11 +333,11 @@ function js_alterardef(obj) {
   document.form1.adicionar.disabled = false;
   document.form1.retirar.disabled = true;
   document.form1.alterardef.disabled = true;
-  obj.elements["itensdef[]"].options[obj.elements["itensdef[]"].selectedIndex].text = obj.textodef.value; 
+  obj.elements["itensdef[]"].options[obj.elements["itensdef[]"].selectedIndex].text = obj.textodef.value;
   obj.elements["itensdef[]"].options[obj.elements["itensdef[]"].selectedIndex].value = obj.textodef.value + '#&' + obj.descitensdef.value;
   obj.textodef.value = "";
   obj.descitensdef.value = "";
-  obj.textodef.focus();  
+  obj.textodef.focus();
 }
 function js_remdef(obj) {
   if(!confirm("Excluir Item Default?"))
@@ -349,7 +349,7 @@ function js_remdef(obj) {
   document.form1.alterardef.disabled = true;
   obj.textodef.value = "";
   obj.descitensdef.value = "";
-  obj.textodef.focus();  
+  obj.textodef.focus();
 }
 function js_verifica(){
   if(document.form1.conteudo.value==0){
@@ -361,7 +361,7 @@ function js_verifica(){
     alert('Verifique o tamanho do campo!');
     document.form1.tamanho.focus();
     return false;
-  }  
+  }
   return true;
 }
 </script>
@@ -385,7 +385,7 @@ input {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_iniciar();js_trocacordeselect()">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -393,10 +393,10 @@ input {
   </tr>
 </table>
 <table width="790" align='center' border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
 	<?
-/*      if(isset($HTTP_POST_VARS["procurar"]) || isset($HTTP_POST_VARS["priNoMe"]) || isset($HTTP_POST_VARS["antNoMe"]) || isset($HTTP_POST_VARS["proxNoMe"]) || isset($HTTP_POST_VARS["ultNoMe"])) {	  
+/*      if(isset($HTTP_POST_VARS["procurar"]) || isset($HTTP_POST_VARS["priNoMe"]) || isset($HTTP_POST_VARS["antNoMe"]) || isset($HTTP_POST_VARS["proxNoMe"]) || isset($HTTP_POST_VARS["ultNoMe"])) {
 	    if(isset($HTTP_POST_VARS["filtro"]))
 		  $str = $HTTP_POST_VARS["filtro"];
 		else
@@ -409,13 +409,13 @@ input {
 	//  } else {
 	  */
 	 ?>
-	 
+
   <form method="post" name="form1" onSubmit="return js_submeter(this)">
   <br>
   <input type="hidden" name="codcam" value="<?=@$codcam?>">
         <table width="439">
 
-          <tr> 
+          <tr>
             <td nowrap><strong>Campo Principal:</strong></td>
 	    <script>
 	    function js_buscadefault(valor){
@@ -423,7 +423,7 @@ input {
                 location.href="sys1_campos001.php?campodefault="+valor;
 	      }
 	    }
-	    
+
 	    </script>
             <td> <select name="codcampai" size="1" onchange="js_buscadefault(this.value)">
                 <option value='0'>Campo Principal...</option>
@@ -437,8 +437,8 @@ input {
   	          if(pg_numrows($result)>0){
 		    db_fieldsmemory($result,0);
                      echo "<option selected value='$pai'>$nom</option>";
-		  }   
-               	}	    
+		  }
+               	}
 		/*
 		  if(!isset($codcampai)){
                      $result = pg_exec("Select codcampai from db_syscampodep where codcam = $codcam");
@@ -452,19 +452,19 @@ input {
 				  for($ic=0;$ic<pg_numrows($result);$ic++){
                     echo "<option ".(pg_result($result,$ic,'codcam')==$codcampai?"selected":"")." value='".pg_result($result,$ic,'codcam')."'>".pg_result($result,$ic,'nomecam')."</option>";
 			 	  }
-                */				  
+                */
 				?>
               </select>
 	      </td>
 	      <td>
-	      <input name="docum_principal" value="Campo Principal" type="button" onclick="js_documentacao_iframe()"> 
+	      <input name="docum_principal" value="Campo Principal" type="button" onclick="js_documentacao_iframe()">
 	      </td>
           </tr>
 
-	
-          <tr> 
+
+          <tr>
             <td width="92"><strong>Nome/Tipo:</strong></td>
-            <td width="302"> <input type="text" name="nomecam" value="<?=@$nomecam?>"> 
+            <td width="302"> <input type="text" name="nomecam" value="<?=@$nomecam?>">
               <?
 	  if(isset($conteudo)) {
 	    $v_tipo = split('\(',$conteudo);
@@ -490,11 +490,11 @@ input {
                 <option value="char" <? echo @$conteudo=="char"?"selected":"" ?>>Char</option>
                 <option value="date" <? echo @$conteudo=="date"?"selected":"" ?>>Data</option>
               </select> &nbsp;
-	      <input type="text" name="tamanho" value="<?=@$tamanho?>" size="3"     onKeyUp="js_ValidaCampos(this,1,'O tamanho do campo','f','f',event);" > 
+	      <input type="text" name="tamanho" value="<?=@$tamanho?>" size="3"     onKeyUp="js_ValidaCampos(this,1,'O tamanho do campo','f','f',event);" >
             </td>
             <td width="302" rowspan="10"><table border="0" cellpadding="0" cellspacing="0">
-                <tr> 
-                  <td> <strong>Valores default:</strong> 
+                <tr>
+                  <td> <strong>Valores default:</strong>
                     <select multiple name="itensdef[]" onChange="js_mostradef(this)" size="13" id="itensdef" style="width:300">
                       <?
 					  if(isset($retorno)){
@@ -506,90 +506,90 @@ input {
 				      ?>
                     </select> </td>
                 </tr>
-                <tr> 
-                  <td> <input name="textodef" type="text" id="textodef" style="width:245" maxlength="100"> 
-                    <input type="button" name="adicionar" onClick="js_adddef(this.form)" style="width:15" value="+"> 
-                    <input type="button" name="retirar" onClick="js_remdef(this.form)" style="width:15" value="-" disabled> 
-                    <input type="button" name="alterardef" onClick="js_alterardef(this.form)" style="width:15" value="A" disabled> 
+                <tr>
+                  <td> <input name="textodef" type="text" id="textodef" style="width:245" maxlength="100">
+                    <input type="button" name="adicionar" onClick="js_adddef(this.form)" style="width:15" value="+">
+                    <input type="button" name="retirar" onClick="js_remdef(this.form)" style="width:15" value="-" disabled>
+                    <input type="button" name="alterardef" onClick="js_alterardef(this.form)" style="width:15" value="A" disabled>
                   </td>
                 </tr>
-                <tr> 
-                  <td> <strong>Descrição Valor Default:</strong> 
-                    <textarea name="descitensdef" rows="5" id="descitensdef" style="width:300"></textarea>	
+                <tr>
+                  <td> <strong>Descrição Valor Default:</strong>
+                    <textarea name="descitensdef" rows="5" id="descitensdef" style="width:300"></textarea>
                   </td>
                 </tr>
               </table></td>
           </tr>
-          <tr> 
+          <tr>
             <td><strong>Label Forms:</strong></td>
             <td title="Label nos formulários"><input name="rotulo" type="text" id="rotulo" value="<?=@$rotulo?>" size="50" maxlength="50"></td>
           </tr>
-          <tr> 
+          <tr>
             <td title="Label nos relatórios"><strong>Label Relat.:</strong></td>
             <td><input name="rotulorel" type="text" id="rotulorel" value="<?=@$rotulorel?>" onfocus="this.value==''?this.value=rotulo.value:this.value" size="50" maxlength="40"></td>
           </tr>
- 
-          <tr> 
+
+          <tr>
             <td><strong>Default:</strong></td>
             <td><input name="valorinicial" style="background-color:#E6E4F1" type="text" id="valorinicial" value="<?=@$valorinicial?>" size="50" maxlength="100"></td>
           </tr>
-          <tr> 
+          <tr>
             <td><strong>Descrição:</strong>&nbsp;&nbsp;</td>
             <td> <textarea name="descricao" cols="50" rows="8"><?=@$descricao?></textarea></td>
           </tr>
-          <tr> 
+          <tr>
             <td><strong>Aceita Nulo:</strong></td>
             <td> <input name="vnulo" type="checkbox" id="vnulo" value="true" <?=(@$nulo=='t'?"checked":"")?>></td>
           </tr>
-          <tr> 
+          <tr>
             <td><strong>Mai&uacute;sculo:</strong></td>
             <td><input name="vmaiusculo" type="checkbox" id="maiusculo" value="false" <?=(@$maiusculo=='t'?"checked":"")?>></td>
           </tr>
-          <tr> 
+          <tr>
             <td><strong>Auto Completar:</strong></td>
             <td><input name="vautocompl" type="checkbox" id="autocompl" value="false" <?=(@$autocompl=='t'?"checked":"")?>></td>
           </tr>
-          <tr> 
+          <tr>
             <td><strong>Valida&ccedil;&atilde;o:</strong></td>
             <td><select name="aceitatipo" size="1" OnChange="js_valida(this.selectedIndex)">
                 <option value='0'>Não Valida Campo</option>
-                <option value="1" <? echo @$aceitatipo=="1"?"selected":"" ?>>Somente 
+                <option value="1" <? echo @$aceitatipo=="1"?"selected":"" ?>>Somente
                 Números</option>
-                <option value="2" <? echo @$aceitatipo=="2"?"selected":"" ?>>Somente 
+                <option value="2" <? echo @$aceitatipo=="2"?"selected":"" ?>>Somente
                 Letras</option>
-                <option value="3" <? echo @$aceitatipo=="3"?"selected":"" ?>>Números 
+                <option value="3" <? echo @$aceitatipo=="3"?"selected":"" ?>>Números
                 e Letras</option>
-                <option value="4" <? echo @$aceitatipo=="4"?"selected":"" ?>>Números 
+                <option value="4" <? echo @$aceitatipo=="4"?"selected":"" ?>>Números
                 Casa Dec.</option>
-                <option value="5" <? echo @$aceitatipo=="5"?"selected":"" ?>> 
+                <option value="5" <? echo @$aceitatipo=="5"?"selected":"" ?>>
                 Vardadeiro/Falso</option>
               </select></td>
           </tr>
-          <tr style='display:none'> 
+          <tr style='display:none'>
             <td><strong>Tipo Objeto:</strong></td>
             <td><select name="tipoobj" size="1">
-                <option <?=(@$tipoobj=='text'?"selected":"")?> value='text'>Input 
+                <option <?=(@$tipoobj=='text'?"selected":"")?> value='text'>Input
                 Text</option>
-                <option <?=(@$tipoobj=='checkbox'?"selected":"")?> value='checkbox'>Input 
+                <option <?=(@$tipoobj=='checkbox'?"selected":"")?> value='checkbox'>Input
                 Checkbox</option>
-                <option <?=(@$tipoobj=='radiobutton'?"selected":"")?> value='radiobutton'>Input 
+                <option <?=(@$tipoobj=='radiobutton'?"selected":"")?> value='radiobutton'>Input
                 Radio Button</option>
-                <option <?=(@$tipoobj=='image'?"selected":"")?> value='image'>Input 
+                <option <?=(@$tipoobj=='image'?"selected":"")?> value='image'>Input
                 Imagem</option>
                 <option <?=(@$tipoobj=='textarea'?"selected":"")?> value='textarea'>TextArea</option>
                 <option <?=(@$tipoobj=='select'?"selected":"")?> value='select'>Select</option>
-                <option <?=(@$tipoobj=='multiple'?"selected":"")?> value='multiple'>Select 
+                <option <?=(@$tipoobj=='multiple'?"selected":"")?> value='multiple'>Select
                 Multiplo</option>
               </select> </td>
           </tr>
-          <tr> 
+          <tr>
             <td colspan="3" >
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-	             <input name="incluir" onClick="return js_verifica(); Botao = 'incluir'; " accesskey="i" type="submit" id="incluir2" value="Incluir" <? echo isset($retorno)?"disabled":"" ?>> 
-              &nbsp; <input name="alterar" accesskey="a" onClick="return js_verifica();" type="submit" id="alterar2" value="Alterar" <? echo !isset($retorno)?"disabled":"" ?>> 
-              &nbsp; <input name="excluir" accesskey="e" type="submit" id="excluir2" value="Excluir" onClick="return confirm('Quer realmente excluir este registro?')" <? echo !isset($retorno)?"disabled":"" ?>> 
-	      &nbsp; <input name="docum_alteracao" value="Procurar campo" type="button" onclick="botao_pesquisa=false;js_alteracao_iframe()"> 
-              &nbsp; <input name="procurar" onClick="Botao = 'procurar'" accesskey="p" type="hidden" id="procurar2" value="Procurar">	
+                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+	             <input name="incluir" onClick="return js_verifica(); Botao = 'incluir'; " accesskey="i" type="submit" id="incluir2" value="Incluir" <? echo isset($retorno)?"disabled":"" ?>>
+              &nbsp; <input name="alterar" accesskey="a" onClick="return js_verifica();" type="submit" id="alterar2" value="Alterar" <? echo !isset($retorno)?"disabled":"" ?>>
+              &nbsp; <input name="excluir" accesskey="e" type="submit" id="excluir2" value="Excluir" onClick="return confirm('Quer realmente excluir este registro?')" <? echo !isset($retorno)?"disabled":"" ?>>
+	      &nbsp; <input name="docum_alteracao" value="Procurar campo" type="button" onclick="botao_pesquisa=false;js_alteracao_iframe()">
+              &nbsp; <input name="procurar" onClick="Botao = 'procurar'" accesskey="p" type="hidden" id="procurar2" value="Procurar">
             </td>
           </tr>
         </table>
@@ -602,37 +602,37 @@ input {
 </table>
 <?
     db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>	
+?>
 </body>
 </html>
 
 <script>
 
 function js_documentacao_iframe(){
-  js_OpenJanelaIframe('top.corpo','db_iframe','func_db_syscampo.php?funcao_js=parent.js_recebecampo|codcam|nomecam','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_db_syscampo.php?funcao_js=parent.js_recebecampo|codcam|nomecam','Pesquisa',true);
 }
 
 function js_recebecampo(chave,nome){
   db_iframe.hide();
-  if(document.form1.alterar.disabled==false || document.form1.alterar.disabled==false){ 
-    tam=document.form1.codcampai.options.length;  
-    document.form1.codcampai.options[tam]=new Option(nome,chave,true);   
+  if(document.form1.alterar.disabled==false || document.form1.alterar.disabled==false){
+    tam=document.form1.codcampai.options.length;
+    document.form1.codcampai.options[tam]=new Option(nome,chave,true);
     if(tam%2==0){
       document.form1.codcampai.options[tam].style.backgroundColor= "#D7CC06";
-    }else{  
+    }else{
       document.form1.codcampai.options[tam].style.backgroundColor= "#F8EC07";
     }
-  }else{  
+  }else{
     js_buscadefault(chave);
-  }  
+  }
 }
 function js_alteracao_iframe(){
   nomecam = document.form1.nomecam.value;1
   if(nomecam!=""){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_db_syscampo.php?chave_nomecam='+nomecam+'&funcao_js=parent.js_alteracampo|0','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_db_syscampo.php?chave_nomecam='+nomecam+'&funcao_js=parent.js_alteracampo|0','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_db_syscampo.php?funcao_js=parent.js_alteracampo|0','Pesquisa',true);
-  }    
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_db_syscampo.php?funcao_js=parent.js_alteracampo|0','Pesquisa',true);
+  }
 }
 
 function js_alteracampo(chave){

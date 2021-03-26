@@ -320,12 +320,12 @@ db_input('o70_instit',2,$Io70_instit,true,'hidden',$db_opcao);
 function js_pesquisao70_concarpeculiar(mostra){
   if (mostra==true) {
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiar',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_concarpeculiar',
                         'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr',
                         'Pesquisa',true);
   }else{
      if(document.form1.o70_concarpeculiar.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiar',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_concarpeculiar',
                             'func_concarpeculiar.php?pesquisa_chave='+document.form1.o70_concarpeculiar.value+
                             '&funcao_js=parent.js_mostraconcarpeculiar',
                             'Pesquisa',false);
@@ -348,14 +348,14 @@ function js_mostraconcarpeculiar1(chave1,chave2){
 }
 function js_pesquisao70_codfon(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|c61_codigo|o15_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|c61_codigo|o15_descr','Pesquisa',true);
   }else{
     fonte=document.form1.o50_estrutreceita.value;
     while(fonte.search(/\./)!='-1'){
 	 fonte=fonte.replace(/\./,'');
     }
     if(fonte!=''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?pesquisa_chave='+fonte+'&funcao_js=parent.js_mostraorcfontes','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcfontes','func_orcfontes.php?pesquisa_chave='+fonte+'&funcao_js=parent.js_mostraorcfontes','Pesquisa',false);
     }else{
       document.form1.o50_estrutreceita.value='';
     }
@@ -396,9 +396,9 @@ function js_mostraorcfontes1(chave1,chave2,chave3,chave4){
 
 function js_pesquisao70_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o70_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o70_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
   }
 }
 function js_mostraorctiporec(chave,erro){
@@ -414,7 +414,7 @@ function js_mostraorctiporec1(chave1,chave2){
   db_iframe_orctiporec.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orcreceita','func_orcreceita.php?funcao_js=parent.js_preenchepesquisa|o70_anousu|o70_codrec','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcreceita','func_orcreceita.php?funcao_js=parent.js_preenchepesquisa|o70_anousu|o70_codrec','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_orcreceita.hide();
@@ -441,7 +441,7 @@ if(isset($negado)){
    document.form1.o50_estrutreceita.value='';
    document.form1.o57_descr.value='';
    alert('Selecione o último nível!');\n
-   js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?chave_o57_fonte=$codigo&funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|c61_codigo|o15_descr','Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcfontes','func_orcfontes.php?chave_o57_fonte=$codigo&funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|c61_codigo|o15_descr','Pesquisa',true);
   ";
 }
 ?>

@@ -40,8 +40,8 @@ LINE 1: select * from db_usuarios  where id_usuario = 1
 #1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:98 - pg_query(select * from db_usuarios  where id_usuario = 1)
 #2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
 #3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
-#4 extension/package/Desktop/Controller/Desktop.php:148 - UsuarioSistema->__construct(1)
-#5 extension/package/Desktop/Controller/Desktop.php:83 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#4 extension/package/Desktop/Controller/DeskCurrentWindow.php:148 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/DeskCurrentWindow.php:83 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
 #6 : - ECidade\Package\Desktop\Controller\Desktop->index()
 #7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
 (
@@ -77,8 +77,8 @@ LINE 1: select * from db_usuarios  where id_usuario = 1
 #1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select * from db_usuarios  where id_usuario = 1)
 #2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
 #3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
-#4 extension/package/Desktop/Controller/Desktop.php:149 - UsuarioSistema->__construct(1)
-#5 extension/package/Desktop/Controller/Desktop.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#4 extension/package/Desktop/Controller/DeskCurrentWindow.php:149 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/DeskCurrentWindow.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
 #6 : - ECidade\Package\Desktop\Controller\Desktop->index()
 #7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
 (
@@ -119,8 +119,8 @@ LINE 1: select * from db_usuarios  where id_usuario = 1
 #1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select * from db_usuarios  where id_usuario = 1)
 #2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
 #3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
-#4 extension/package/Desktop/Controller/Desktop.php:149 - UsuarioSistema->__construct(1)
-#5 extension/package/Desktop/Controller/Desktop.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#4 extension/package/Desktop/Controller/DeskCurrentWindow.php:149 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/DeskCurrentWindow.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
 #6 : - ECidade\Package\Desktop\Controller\Desktop->index()
 #7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
 (
@@ -140,8 +140,8 @@ LINE 1: select * from db_usuarios  where id_usuario = 1
 #1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(select * from db_usuarios  where id_usuario = 1)
 #2 classes/db_db_usuarios_classe.php:583 - db_query(select * from db_usuarios  where id_usuario = 1)
 #3 model/configuracao/UsuarioSistema.model.php:139 - cl_db_usuarios->sql_record(select * from db_usuarios  where id_usuario = 1)
-#4 extension/package/Desktop/Controller/Desktop.php:149 - UsuarioSistema->__construct(1)
-#5 extension/package/Desktop/Controller/Desktop.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
+#4 extension/package/Desktop/Controller/DeskCurrentWindow.php:149 - UsuarioSistema->__construct(1)
+#5 extension/package/Desktop/Controller/DeskCurrentWindow.php:84 - ECidade\Package\Desktop\Controller\Desktop->getUsuarioSistema()
 #6 : - ECidade\Package\Desktop\Controller\Desktop->index()
 #7 src/V3/Extension/Dispatcher.php:66 - call_user_func_array(Array
 (
@@ -294,7 +294,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -374,7 +374,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -719,7 +719,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -799,7 +799,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -971,7 +971,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1051,7 +1051,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1154,7 +1154,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1234,7 +1234,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1337,7 +1337,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1417,7 +1417,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1520,7 +1520,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1600,7 +1600,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1703,7 +1703,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -1783,7 +1783,7 @@ LINE 69:                                ,265
                                ,1
                                ,31
                                ,3143302
-                               , 
+                               ,
                                ,265
                                ,null
                                ,null
@@ -2034,52 +2034,52 @@ LINE 69:                                ,265
 LINE 24:                       )
                                ^ in extension/modification/data/cache/user/dbseller/libs/db_stdlib.php on line 101
 #1 extension/modification/data/cache/user/dbseller/libs/db_stdlib.php:101 - pg_query(insert into acordocomissaomembro(
-                                       ac07_sequencial 
-                                      ,ac07_acordocomissao 
-                                      ,ac07_numcgm 
-                                      ,ac07_tipomembro 
-                                      ,ac07_datainicio 
-                                      ,ac07_datatermino 
-                                      ,ac07_numeroatodesignacao 
-                                      ,ac07_anoatodesignacao 
-                                      ,ac07_nomearquivo 
-                                      ,ac07_arquivo 
+                                       ac07_sequencial
+                                      ,ac07_acordocomissao
+                                      ,ac07_numcgm
+                                      ,ac07_tipomembro
+                                      ,ac07_datainicio
+                                      ,ac07_datatermino
+                                      ,ac07_numeroatodesignacao
+                                      ,ac07_anoatodesignacao
+                                      ,ac07_nomearquivo
+                                      ,ac07_arquivo
                        )
                 values (
-                                5 
-                               ,5 
-                               ,45 
-                               ,1 
-                               ,null 
-                               ,null 
-                               ,'' 
-                               ,0 
-                               ,'' 
-                               , 
+                                5
+                               ,5
+                               ,45
+                               ,1
+                               ,null
+                               ,null
+                               ,''
+                               ,0
+                               ,''
+                               ,
                       ))
 #2 classes/db_acordocomissaomembro_classe.php:183 - db_query(insert into acordocomissaomembro(
-                                       ac07_sequencial 
-                                      ,ac07_acordocomissao 
-                                      ,ac07_numcgm 
-                                      ,ac07_tipomembro 
-                                      ,ac07_datainicio 
-                                      ,ac07_datatermino 
-                                      ,ac07_numeroatodesignacao 
-                                      ,ac07_anoatodesignacao 
-                                      ,ac07_nomearquivo 
-                                      ,ac07_arquivo 
+                                       ac07_sequencial
+                                      ,ac07_acordocomissao
+                                      ,ac07_numcgm
+                                      ,ac07_tipomembro
+                                      ,ac07_datainicio
+                                      ,ac07_datatermino
+                                      ,ac07_numeroatodesignacao
+                                      ,ac07_anoatodesignacao
+                                      ,ac07_nomearquivo
+                                      ,ac07_arquivo
                        )
                 values (
-                                5 
-                               ,5 
-                               ,45 
-                               ,1 
-                               ,null 
-                               ,null 
-                               ,'' 
-                               ,0 
-                               ,'' 
-                               , 
+                                5
+                               ,5
+                               ,45
+                               ,1
+                               ,null
+                               ,null
+                               ,''
+                               ,0
+                               ,''
+                               ,
                       ))
 #3 model/AcordoComissaoMembro.model.php:179 - cl_acordocomissaomembro->incluir()
 #4 con4_contratos.RPC.php:261 - AcordoComissaoMembro->save()
@@ -2161,28 +2161,28 @@ LINE 1: ...ativavinculoprojativ  where      o149_projativ =  and o149_a...
 [2020-01-21 17:05:51] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;orcsubfuncao_subf_pk&quot;
 DETAIL:  Key (o53_subfuncao)=(1) already exists. in libs/db_stdlib.php on line 101
 #1 libs/db_stdlib.php:101 - pg_query(insert into orcsubfuncao(
-                                       o53_subfuncao 
-                                      ,o53_descr 
-                                      ,o53_codtri 
-                                      ,o53_finali 
+                                       o53_subfuncao
+                                      ,o53_descr
+                                      ,o53_codtri
+                                      ,o53_finali
                        )
                 values (
-                                1 
-                               ,'MIGRAÇAO' 
-                               ,'1' 
-                               ,'MIGRAÇAO' 
+                                1
+                               ,'MIGRAÇAO'
+                               ,'1'
+                               ,'MIGRAÇAO'
                       ))
 #2 classes/db_orcsubfuncao_classe.php:124 - db_query(insert into orcsubfuncao(
-                                       o53_subfuncao 
-                                      ,o53_descr 
-                                      ,o53_codtri 
-                                      ,o53_finali 
+                                       o53_subfuncao
+                                      ,o53_descr
+                                      ,o53_codtri
+                                      ,o53_finali
                        )
                 values (
-                                1 
-                               ,'MIGRAÇAO' 
-                               ,'1' 
-                               ,'MIGRAÇAO' 
+                                1
+                               ,'MIGRAÇAO'
+                               ,'1'
+                               ,'MIGRAÇAO'
                       ))
 #3 orc1_orcsubfuncao001.php:40 - cl_orcsubfuncao->incluir(1)
 #4 app.php:160 - require_once(orc1_orcsubfuncao001.php)
@@ -2195,28 +2195,28 @@ DETAIL:  Key (o53_subfuncao)=(1) already exists. in libs/db_stdlib.php on line 1
 [2020-01-21 17:06:02] ERROR: E_WARNING - pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;orcsubfuncao_subf_pk&quot;
 DETAIL:  Key (o53_subfuncao)=(1) already exists. in libs/db_stdlib.php on line 101
 #1 libs/db_stdlib.php:101 - pg_query(insert into orcsubfuncao(
-                                       o53_subfuncao 
-                                      ,o53_descr 
-                                      ,o53_codtri 
-                                      ,o53_finali 
+                                       o53_subfuncao
+                                      ,o53_descr
+                                      ,o53_codtri
+                                      ,o53_finali
                        )
                 values (
-                                1 
-                               ,'MIGRAÇAO' 
-                               ,'1' 
-                               ,'MIGRAÇAO' 
+                                1
+                               ,'MIGRAÇAO'
+                               ,'1'
+                               ,'MIGRAÇAO'
                       ))
 #2 classes/db_orcsubfuncao_classe.php:124 - db_query(insert into orcsubfuncao(
-                                       o53_subfuncao 
-                                      ,o53_descr 
-                                      ,o53_codtri 
-                                      ,o53_finali 
+                                       o53_subfuncao
+                                      ,o53_descr
+                                      ,o53_codtri
+                                      ,o53_finali
                        )
                 values (
-                                1 
-                               ,'MIGRAÇAO' 
-                               ,'1' 
-                               ,'MIGRAÇAO' 
+                                1
+                               ,'MIGRAÇAO'
+                               ,'1'
+                               ,'MIGRAÇAO'
                       ))
 #3 orc1_orcsubfuncao001.php:40 - cl_orcsubfuncao->incluir(1)
 #4 app.php:160 - require_once(orc1_orcsubfuncao001.php)

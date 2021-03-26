@@ -84,12 +84,12 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
   function js_lev(mostra){
 
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta02.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta02.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
     }else{
 
       lev = document.form1.y60_codlev.value;
       if(lev != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta02.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta02.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
       }else{
         document.form1.z01_nome.value='';
       }

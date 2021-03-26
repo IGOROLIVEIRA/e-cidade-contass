@@ -382,7 +382,7 @@ if (isset ($e50_codord)) {
 	           <script>
 		    function js_bloqueia(){
 		        parent.document.formaba.pagordemrec.disabled=false;\n
-		        top.corpo.iframe_pagordemrec.location.href='emp1_pagordemrec001.php?e52_codord=".$e50_codord."".@$query."';\n
+		        CurrentWindow.corpo.iframe_pagordemrec.location.href='emp1_pagordemrec001.php?e52_codord=".$e50_codord."".@$query."';\n
 		    }
 		    js_bloqueia();
 		 </script>

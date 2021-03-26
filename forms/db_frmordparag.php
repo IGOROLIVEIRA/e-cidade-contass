@@ -291,10 +291,10 @@ function js_preenchepesquisa(chave){
 
 function js_pesquisadb03_tipodoc(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_tipodoc','func_db_tipodoc.php?funcao_js=parent.js_mostradb_tipodoc1|db08_codigo|db08_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_tipodoc','func_db_tipodoc.php?funcao_js=parent.js_mostradb_tipodoc1|db08_codigo|db08_descr','Pesquisa',true);
   }else{
      if(document.form1.db03_tipodoc.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_tipodoc','func_db_tipodoc.php?pesquisa_chave='+document.form1.db03_tipodoc.value+'&funcao_js=parent.js_mostradb_tipodoc','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_tipodoc','func_db_tipodoc.php?pesquisa_chave='+document.form1.db03_tipodoc.value+'&funcao_js=parent.js_mostradb_tipodoc','Pesquisa',false);
      }else{
        document.form1.db08_descr.value = '';
      }

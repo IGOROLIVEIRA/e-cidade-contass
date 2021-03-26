@@ -33,7 +33,7 @@ db_input('ve75_destino',30,$Ive75_destino,true,'text',$db_opcao,"")
 <script>
 function js_pesquisa(){
   qry = "&enviadescr=true";
-  js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_preenchepesquisa|ve75_sequencial|ve75_destino'+qry,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_preenchepesquisa|ve75_sequencial|ve75_destino'+qry,'Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_veiccaddestino.hide();

@@ -172,7 +172,7 @@ function js_tipoTributacao(oElemento) {
 }
 
 function js_pesquisa() {
-	js_OpenJanelaIframe('top.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial|db121_descricao|db121_estrutural', 'Pesquisa', true);
+	js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial|db121_descricao|db121_estrutural', 'Pesquisa', true);
 }
 
 function js_preenchePesquisa(iCodigoGrupoServico, sDescricao, sEstrutural) {

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -96,7 +96,7 @@ if (isset($confirmar)) {
       $erros.="Contribuição $d02_contri não existe.\\n";
     }
   }
-  
+
 }
 ?>
 <html>
@@ -111,27 +111,27 @@ function js_confirmar(){
     alert("Selecione uma contribuição.");
     return false;
   }
-  
+
   dia=document.form1.privenc_dia.value;
   mes=document.form1.privenc_mes.value;
   ano=document.form1.privenc_ano.value;
-  
+
   parce=document.form1.parcelas;
   num= new Number(parce.value);
   if(isNaN(num) || num==""){
-    alert("Numero de parcelas inválido.");  
+    alert("Numero de parcelas inválido.");
     parce.focus();
     return false;
   }
   provenc=document.form1.provenc;
   num= new Number(provenc.value);
   if(isNaN(num) || num>31 || num==""){
-    alert("Dia inválido.");  
+    alert("Dia inválido.");
     provenc.focus();
     return false;
   }
-  return  js_VerDaTa("privenc_dia",dia,mes,ano);  
-}    
+  return  js_VerDaTa("privenc_dia",dia,mes,ano);
+}
   </script>
 
 
@@ -139,7 +139,7 @@ function js_confirmar(){
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr> 
+    <tr>
       <td width="360" height="18">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
@@ -147,8 +147,8 @@ function js_confirmar(){
     </tr>
   </table>
   <table width="790" border="0" cellspacing="0" cellpadding="0">
-    <tr> 
-      <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
   <form name="form1" method="post" action="">
   <center>
   <table border="0">
@@ -157,8 +157,8 @@ function js_confirmar(){
         <?
           db_ancora(@$Ld02_contri,"js_contri(true);",1);
         ?>
-        </td>	
-        <td>	
+        </td>
+        <td>
       <?
       db_input('d02_contri',4,$Id02_contri,true,'text',1," onchange='js_contri(false);'");
       db_input('j14_nome',40,$Ij14_nome,true,'text',3);
@@ -169,13 +169,13 @@ function js_confirmar(){
       <td nowrap title="Numero de parcelas">
       <b>Parcelas</b>
       </td>
-      <td> 
+      <td>
 <?
-  if(!isset($confirmar) && isset($d02_contri)){ 
+  if(!isset($confirmar) && isset($d02_contri)){
     $result01=$cleditalrua->sql_record($cleditalrua->sql_query_file($d02_contri,"d02_codedi,d02_autori","d02_codedi limit 1"));
     db_fieldsmemory($result01,0);
     if($d02_autori=="f"){
-       $msgerro="Contribuição não autorizada para calculo.";  
+       $msgerro="Contribuição não autorizada para calculo.";
        $db_opcao=3;
        $parcelas='';
        $provenc='';
@@ -186,10 +186,10 @@ function js_confirmar(){
       $result02=$cledital->sql_record($cledital->sql_query_file($d02_codedi,"d01_privenc as privenc,d01_numtot as parcelas"));
       db_fieldsmemory($result02,0);
       $provenc=$privenc_dia ;
-    }  
+    }
   }else{
     $db_opcao=3;
-  }  
+  }
   db_input('parcelas',4,5,true,'text',$db_opcao);
 ?>
       </td>
@@ -197,23 +197,23 @@ function js_confirmar(){
     <tr>
       <td nowrap title="Data do primeiro vencimento">
        <b>1° Vencimento</b>
-      </td>  
+      </td>
       <td nowrap title="Data do primeiro vencimento">
     <?
      db_inputdata('privenc',@$privenc_dia,@$privenc_mes,@$privenc_ano,true,'text',$db_opcao,"");
-   ?>  
+   ?>
       </td>
-    </tr>  
+    </tr>
     <tr>
       <td nowrap title="Dia dos próximos vencimentos">
         <b>Dia vencimento</b>
-      </td>  
+      </td>
       <td nowrap title="Dia dos próximos vencimentos">
     <?
      db_input('provenc',4,0,'true','text',$db_opcao,"")
-   ?>  
+   ?>
       </td>
-    </tr>  
+    </tr>
     <tr>
       <td colspan="2" align="center">
       <br>
@@ -235,17 +235,17 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_contri(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_editalruaalt.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_editalruaalt.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_editalruaalt.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_editalruaalt.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
   }
 }
 function js_mostracontri(chave,erro){
-  if(erro==true){ 
-    document.form1.d02_contri.focus(); 
-    document.form1.d02_contri.value=""; 
-    document.form1.j14_nome.value=""; 
-  }else{  
+  if(erro==true){
+    document.form1.d02_contri.focus();
+    document.form1.d02_contri.value="";
+    document.form1.j14_nome.value="";
+  }else{
     document.form1.j14_nome.value = chave;
     document.form1.submit();
   }
@@ -268,9 +268,9 @@ if(isset($confirmar)){
         db_msgbox("As matriculas $matricus não foram calculadas pois já haviam sido.");
       }else if(isset($clcontricalc->erro_status) && $clcontricalc->erro_status=="1"){
          $clcontricalc->erro(true,false);
-      }	 
-   }  
-}  
+      }
+   }
+}
 if(isset($msgerro)){
   db_msgbox($msgerro);
 }

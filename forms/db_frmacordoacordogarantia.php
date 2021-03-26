@@ -120,7 +120,7 @@ function js_pesquisaac12_acordogarantia(mostra){
 
   if (mostra) {
 
-    js_OpenJanelaIframe('top.corpo.iframe_acordogarantia',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordogarantia',
                         'db_iframe_acordogarantia',
                         'func_acordogarantia.php?funcao_js=parent.js_mostraacordogarantia1|'+
                         'ac11_sequencial|ac11_descricao|ac11_textopadrao',
@@ -131,7 +131,7 @@ function js_pesquisaac12_acordogarantia(mostra){
 
      if (document.form1.ac12_acordogarantia.value != '') {
 
-        js_OpenJanelaIframe('top.corpo.iframe_acordogarantia',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordogarantia',
                             'db_iframe_acordogarantia',
                             'func_acordogarantia.php?pesquisa_chave='+
                             document.form1.ac12_acordogarantia.value+

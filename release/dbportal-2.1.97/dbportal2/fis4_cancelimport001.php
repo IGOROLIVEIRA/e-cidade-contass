@@ -52,22 +52,22 @@ if (isset ($cancelar)) {
 	if (isset ($y60_codlev) && ($y60_codlev != "")) {
 		$codlev = $y60_codlev;
 		$result_issvarlev = $clissvarlev->sql_record($clissvarlev->sql_query_file(null, $codlev));
-  
+
 
 		for ($y = 0; $y < $clissvarlev->numrows; $y ++) {
 			db_fieldsmemory($result_issvarlev, $y);
 
-      /* se ja esta em divida nao deixa cancelar */ 
+      /* se ja esta em divida nao deixa cancelar */
       $rsIssvardiv = $clissvardiv->sql_record($clissvardiv->sql_query_file(null, $q18_codigo));
       if($clissvardiv->numrows != 0){
-          $erro_msg = "Levantamento $codlev em dívida ativa ! \\n Cancele a importação e tente novamente.";        
+          $erro_msg = "Levantamento $codlev em dívida ativa ! \\n Cancele a importação e tente novamente.";
           $sqlerro = true;
           break;
       }
 
 			$result_issvar = $clissvar->sql_record($clissvar->sql_query_file(null, "*", null, "q05_codigo=$q18_codigo"));
 			db_fieldsmemory($result_issvar, 0);
-    
+
 
 			$result_arrecant = $clarrecant->sql_record($clarrecant->sql_query_file(null, "*", null, "k00_numpre=$q05_numpre and k00_numpar=$q05_numpar"));
 			if ($clarrecant->numrows != 0) {
@@ -123,7 +123,7 @@ if (isset ($cancelar)) {
 					break;
 				}
 			}
-      $result_issvarnotasold  = $clissvarnotasold->sql_record($clissvarnotasold->sql_query(null,'*',null,"q16_codigo = $q22_codigo"));  
+      $result_issvarnotasold  = $clissvarnotasold->sql_record($clissvarnotasold->sql_query(null,'*',null,"q16_codigo = $q22_codigo"));
 			 if ($clissvarnotasold->numrows > 0){
 		     for ($xx = 0; $xx < $clissvarnotasold->numrows; $xx ++) {
 		  	  db_fieldsmemory($result_issvarnotasold, $xx);
@@ -140,7 +140,7 @@ if (isset ($cancelar)) {
 					     $sqlerro = true;
 					   break;
 					  }
-				  }				 
+				  }
 			  }
 			 }
 	   $delete = "delete from issvarold where q22_codigo=$q22_codigo";
@@ -203,7 +203,7 @@ function  js_cancel(){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -211,7 +211,7 @@ function  js_cancel(){
   </tr>
 </table>
 <table width="790" height="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	<center>
         <form name="form1" method="post" action="">
@@ -225,8 +225,8 @@ function  js_cancel(){
 
 db_ancora(@ $Ly60_codlev, "js_lev(true);", 1);
 ?>
-        </td>	
-        <td>	
+        </td>
+        <td>
       <?
 
 
@@ -247,7 +247,7 @@ db_input('z01_nome', 40, $Iz01_nome, true, 'text', 3);
 	</td>
   </tr>
 </table>
-    <? 
+    <?
 
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 ?>
@@ -256,24 +256,24 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 <script>
 function js_lev(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta03.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta03.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
   }else{
     lev = document.form1.y60_codlev.value;
     if(lev != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta03.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta03.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
     }else{
        document.form1.z01_nome.value='';
-    }     
+    }
   }
 }
 function js_mostralev(chave,erro){
-  if(erro==true){ 
-    alert('Levantamento inválido.');  
-    document.form1.y60_codlev.value=""; 
-    document.form1.y60_codev.focus(); 
+  if(erro==true){
+    alert('Levantamento inválido.');
+    document.form1.y60_codlev.value="";
+    document.form1.y60_codev.focus();
   } else{
     document.form1.z01_nome.value = chave;
-  } 
+  }
 }
 function js_mostralev1(chave1,chave2){
   document.form1.y60_codlev.value = chave1;
@@ -286,11 +286,11 @@ function js_mostralev1(chave1,chave2){
 
 if (isset ($cancelar)) {
 	if ($sqlerro == true) {
-		
+
 		db_msgbox($erro_msg);
 	} else {
 		db_msgbox("Cancelamento efetivado com sucesso!!");
-		echo "<script>top.corpo.location.href='fis4_cancelimport001.php';</script>";
+		echo "<script>CurrentWindow.corpo.location.href='fis4_cancelimport001.php';</script>";
 	}
 }
 ?>

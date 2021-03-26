@@ -72,37 +72,37 @@ include("dbforms/db_funcoes.php");
             </tr>
             <tr>
               <td style="border: 2px groove white; padding-right: 10px;" valign="top">
-                
+
                 <br><br>
 
-                <input type="checkbox" value="siacelrfdespesaconsolidadas" id="siacelrfdespesaconsolidadas" /> 
-                <label for="siacelrfdespesaconsolidadas">Despesas Correntes consolidadas</label><br> 
-                
-                <input type="checkbox" value="siacelrfdespesacapitalconsolidadas" id="siacelrfdespesacapitalconsolidadas" /> 
-                <label for="siacelrfdespesaconsolidadas">Despesas de Capital consolidadas</label><br> 
-                
-                <input type="checkbox" value="siacelrfdespesasfuncaosubfuncao" id="siacelrfdespesasfuncaosubfuncao" /> 
+                <input type="checkbox" value="siacelrfdespesaconsolidadas" id="siacelrfdespesaconsolidadas" />
+                <label for="siacelrfdespesaconsolidadas">Despesas Correntes consolidadas</label><br>
+
+                <input type="checkbox" value="siacelrfdespesacapitalconsolidadas" id="siacelrfdespesacapitalconsolidadas" />
+                <label for="siacelrfdespesaconsolidadas">Despesas de Capital consolidadas</label><br>
+
+                <input type="checkbox" value="siacelrfdespesasfuncaosubfuncao" id="siacelrfdespesasfuncaosubfuncao" />
                 <label for="siacelrfdespesasfuncaosubfuncao">Despesas por Função e Subfunção</label><br>
-                
-                <input type="checkbox" value="siacelrfreceitascorrentes" id="siacelrfreceitascorrentes" /> 
+
+                <input type="checkbox" value="siacelrfreceitascorrentes" id="siacelrfreceitascorrentes" />
                 <label for="siacelrfreceitascorrentes">Receitas Correntes</label><br>
-                
-                <input type="checkbox" value="siacelrfreceitascapital" id="siacelrfreceitascapital" /> 
+
+                <input type="checkbox" value="siacelrfreceitascapital" id="siacelrfreceitascapital" />
                 <label for="siacelrfreceitascapital">Receitas de Capital</label><br>
-                
-                <input type="checkbox" value="siacelrfdeducaoreceita" id="siacelrfdeducaoreceita" /> 
+
+                <input type="checkbox" value="siacelrfdeducaoreceita" id="siacelrfdeducaoreceita" />
                 <label for="siacelrfdeducaoreceita">Dedução Receitas</label><br>
-                
-                
-                
-                  
-                
-                
+
+
+
+
+
+
               </td>
               <td style="border: 2px groove white;" valign="top">
-  
+
               </td>
-              
+
 			  <td style="border: 2px groove white;" valign="top">
                 <div id='retorno'
                   style="width: 200px; height: 250px; overflow: scroll;">
@@ -126,24 +126,24 @@ include("dbforms/db_funcoes.php");
 <? db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
 <script type="text/javascript">
 function js_processar() {
-  
+
   var aArquivosSelecionados = new Array();
   var aArquivos             = $$("input[type='checkbox']");
   var iMesReferencia        = $("MesReferencia");
 
   /*
    * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
-   */ 
+   */
   aArquivos.each(function (oElemento, iIndice) {
-    
+
     if (oElemento.checked) {
-        
+
         aArquivosSelecionados.push(oElemento.value);
-        
+
     }
-  });  
+  });
   if (aArquivosSelecionados.length == 0) {
-    
+
     alert("Nenhum arquivo foi selecionado para ser gerado");
     return false;
   }
@@ -152,15 +152,15 @@ function js_processar() {
  // oParam.exec          = "processarSiaceLRF";
   oParam.arquivos      = aArquivosSelecionados;
   oParam.mesReferencia = iMesReferencia.value;
- 
-  var oAjax = new Ajax.Request("sia_gerarsiacelrfarquivos.php", 
+
+  var oAjax = new Ajax.Request("sia_gerarsiacelrfarquivos.php",
 		                            {
                                   method:'post',
                                   parameters:'json='+Object.toJSON(oParam),
                                   onComplete:js_retornoProcessamento
 		                            }
 	      );
-  
+
 }
 
 function js_retornoProcessamento(oAjax) {
@@ -170,25 +170,25 @@ function js_retornoProcessamento(oAjax) {
 	  var oRetorno = eval("("+oAjax.responseText+")");
 	  if (oRetorno.status == 1) {
 
-		  alert("Processo concluído com sucesso!");  
+		  alert("Processo concluído com sucesso!");
 	    var sRetorno = "<b>Arquivos Gerados:</b><br>";
 	    for (var i = 0; i < oRetorno.itens.length; i++) {
 
 	      with (oRetorno.itens[i]) {
-	            
+
 	        sRetorno += "<a  href='db_download.php?arquivo="+nome+".txt'>"+nome+"</a><br>";
 	      }
 	    }
-	    
+
 	    $('retorno').innerHTML = sRetorno;
 	  } else {
-	    
+
 	    $('retorno').innerHTML = '';
 	    alert("Ouve um erro no processamento!" + oRetorno.message.urlDecode());
 	    //alert(oRetorno.message.urlDecode());
 	    return false;
 	  }
-	} 
+	}
 function js_pesquisao125_cronogramaperspectiva(mostra) {
 
     if (mostra==true){
@@ -196,15 +196,15 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
          *passa o nome dos campos do banco para pesquisar pela função js_mostracronogramaperspectiva1
          *a variavel funcao_js é uma variável global
          *db_lovrot recebe parâmetros separados por |
-         */ 
-      js_OpenJanelaIframe('top.corpo',
+         */
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_cronogramaperspectiva',
                           'func_cronogramaperspectiva.php?funcao_js='+
                           'parent.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
                           'Perspectivas do Cronograma',true);
     }else{
-       if ($F('o124_sequencial') != ''){ 
-          js_OpenJanelaIframe('top.corpo',
+       if ($F('o124_sequencial') != ''){
+          js_OpenJanelaIframe('CurrentWindow.corpo',
                               'db_iframe_cronogramaperspectiva',
                               'func_cronogramaperspectiva.php?pesquisa_chave='+
                               $F('o124_sequencial')+
@@ -218,12 +218,12 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
   }
   //para retornar sem mostrar a tela de pesquisa. ao digitar o codigo retorna direto para o campo
   function js_mostracronogramaperspectiva(chave,erro, ano) {
-    $('o124_descricao').value = chave; 
-    if(erro==true) { 
-      
-      $('o124_sequencial').focus(); 
+    $('o124_descricao').value = chave;
+    if(erro==true) {
+
+      $('o124_sequencial').focus();
       $('o124_sequencial').value = '';
-        
+
     }
   }
   //preenche os campos do frame onde foi chamada com os valores do banco
@@ -237,14 +237,14 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
   function js_pesquisa_ppa(mostra) {
 
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_ppa',
                           'func_ppaversaosigap.php?funcao_js='+
                           'parent.js_mostrappa1|o119_sequencial|o01_descricao',
                           'Perspectivas do Cronograma',true);
     }else{
-       if( $F('o119_sequencial') != ''){ 
-          js_OpenJanelaIframe('top.corpo',
+       if( $F('o119_sequencial') != ''){
+          js_OpenJanelaIframe('CurrentWindow.corpo',
                               'db_iframe_ppa',
                               'func_ppaversaosigap.php?pesquisa_chave='+
                               $F('o119_sequencial')+
@@ -252,21 +252,21 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
                               'Perspectivas do Cronograma',
                               false);
        }else{
-       
+
          document.form1.o124_descricao.value = '';
          document.form1.ano.value             = ''
-          
+
        }
     }
   }
 
   function js_mostrappa(chave,erro, ano) {
-    $('o119_descricao').value = chave; 
-    if(erro==true) { 
-      
-      $('o119_sequencial').focus(); 
+    $('o119_descricao').value = chave;
+    if(erro==true) {
+
+      $('o119_sequencial').focus();
       $('o119_sequencial').value = '';
-        
+
     }
   }
 
@@ -282,15 +282,15 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
 	  var aCheckboxes = $$('input[type=checkbox]');
 	  aCheckboxes.each(function(oCheckbox) {
 	    oCheckbox.checked = true;
-	  }); 
+	  });
 	}
 
   function js_limpa() {
-	   
+
 	  var aCheckboxes = $$('input[type=checkbox]');
 	  aCheckboxes.each(function (oCheckbox) {
 	    oCheckbox.checked = false;
-	  }); 
+	  });
 	}
 
 </script>

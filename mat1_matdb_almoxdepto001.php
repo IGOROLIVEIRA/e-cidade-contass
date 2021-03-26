@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ if (isset($atualizar)){
     $numrows03=$cldb_almoxdepto->numrows;
     for($y=0; $y<$numrows03; $y++){
       if ($sqlerro==false){
-        db_fieldsmemory($result03,$y);  
+        db_fieldsmemory($result03,$y);
         $cldb_almoxdepto->m92_codalmox=$codalmox;
         $cldb_almoxdepto->m92_depto=$m92_depto;
         $cldb_almoxdepto->excluir($codalmox,$m92_depto);
@@ -70,14 +70,14 @@ if (isset($atualizar)){
 		if ($cldb_almoxdepto->erro_status==0){
 			$sqlerro=true;
 		}
-  }  
+  }
   $vt=$HTTP_POST_VARS;
   $ta=sizeof($vt);
   reset($vt);
   for($i=0; $i<$ta; $i++){
     $chave=key($vt);
     if(substr($chave,0,5)=="CHECK"){
-      $dados=split("_",$chave); 
+      $dados=split("_",$chave);
       $cldb_almoxdepto->m92_depto=$dados[1];
       $cldb_almoxdepto->m92_codalmox=$codalmox;
       $cldb_almoxdepto->incluir($codalmox,$dados[1]);
@@ -87,7 +87,7 @@ if (isset($atualizar)){
       }
     }
     $proximo=next($vt);
-  }  
+  }
   db_fim_transacao($sqlerro);
 }
 ?>
@@ -98,27 +98,27 @@ if (isset($atualizar)){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
-function js_marca(obj){ 
+function js_marca(obj){
   var OBJ = document.form1;
   for(i=0;i<OBJ.length;i++){
     if(OBJ.elements[i].type == 'checkbox'){
-      OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+      OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
     }
   }
   return false;
 }
-</script>  
+</script>
 <style>
 .cabec {
   text-align: center;
   color: darkblue;
-  background-color:#aacccc;       
+  background-color:#aacccc;
   border-color: darkblue;
 }
 .corpo {
   text-align: center;
   color: black;
-  background-color:#ccddcc;       
+  background-color:#ccddcc;
 }
 </style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -132,10 +132,10 @@ function js_marca(obj){
 <td ></td>
 <td ></td>
 </tr>
-<tr> 
+<tr>
 <td align="left" nowrap title="<?=$Tm92_codalmox?>"><?db_ancora(@$Lm92_codalmox,"js_pesquisam92_codalmox(true);",3);?></td>
 <td align="left" nowrap>
-<? 
+<?
 $result_descr=$cldb_almox->sql_record($cldb_almox->sql_query($codalmox,"m91_depto as depto_almox,descrdepto"));
 if ($cldb_almox->numrows>0){
   db_fieldsmemory($result_descr,0);
@@ -144,7 +144,7 @@ db_input("codalmox",6,$Im92_codalmox,true,"hidden",3,"");
 db_input("depto_almox",6,"",true,"hidden",3,"");
 $m92_codalmox=@$codalmox;
 db_input("m92_codalmox",6,$Im92_codalmox,true,"text",3,"");
-db_input("descrdepto",40,$Idescrdepto,true,"text",3);  
+db_input("descrdepto",40,$Idescrdepto,true,"text",3);
 ?>
 </td>
 </tr>
@@ -152,12 +152,12 @@ db_input("descrdepto",40,$Idescrdepto,true,"text",3);
 <td colspan="2" align="center">
 <br>
 
-<? 
+<?
 //desativa botao atualizar caso seja exclusão
 if( isset($db_opcao) == 33){
   $read = "disabled";
 } else {
-  $read = null;		
+  $read = null;
 }
 echo "<input $read name=\"atualizar\" type=\"submit\" value=\"Atualizar\">";
 ?>
@@ -176,14 +176,14 @@ $sSqlDepartamentos = $cldb_depart->sql_query_file(null,"*","coddepto"," instit =
 
   $result01=$cldb_depart->sql_record($sSqlDepartamentos);
   $numrows01=$cldb_depart->numrows;
-  if($numrows01>0){ 
+  if($numrows01>0){
     echo "<table>
     <tr>
     <td class='cabec'  title='Inverte marcação' align='center'><a  title='Inverte Marcação' href='' onclick='return js_marca(this);return false;'>M</a></td>
     <td class='cabec' align='center'  title='$Tcoddepto'>".str_replace(":","",$Lcoddepto)."</td>
     <td class='cabec' align='center'  title='$Tdescrdepto'>".str_replace(":","",$Ldescrdepto)."</td>
-    </tr>"; 	   
-  } 
+    </tr>";
+  }
   $result02=$cldb_almoxdepto->sql_record($cldb_almoxdepto->sql_query_file(null,null,"*","","m92_codalmox=$codalmox"));
   $numrows02=$cldb_almoxdepto->numrows;
   $read="";
@@ -200,32 +200,32 @@ $sSqlDepartamentos = $cldb_depart->sql_query_file(null,"*","coddepto"," instit =
       $read="disabled";
     }
     for($h=0; $h<$numrows02; $h++){
-      db_fieldsmemory($result02,$h);        
+      db_fieldsmemory($result02,$h);
       if($m92_depto==$coddepto){
         $che="checked";
-      } 
+      }
     }
     if (isset($m90_deptalmox)&&$m90_deptalmox=='t'){
     }else{
       $result_naumostra=$cldb_almoxdepto->sql_record($cldb_almoxdepto->sql_query_file(null,null,"*","","m92_depto=$coddepto and m92_codalmox<>$codalmox"));
       $numrows_naumostra=$cldb_almoxdepto->numrows;
       if ($numrows_naumostra!=0){
-        continue; 	 
+        continue;
       }
     }
-    
+
     //desativa checkbox caso seja exclusão
     if( isset($db_opcao) == "33"){
       $read = "disabled";
     }
-    
+
     echo "<tr>
     <td  class='corpo' title='Inverte a marcação' align='center'><input $read  $che type='checkbox' name='CHECK_$coddepto' id='CHECK_".$coddepto."'></td>
     <td  class='corpo'  align='center' title='$Tcoddepto'><label for='CHECK_".$coddepto."' style=\"cursor: hand\"><small>$coddepto</small></label></td>
     <td  class='corpo'  align='center' title='$Tdescrdepto'><label for='CHECK_".$coddepto."' style=\"cursor: hand\"><small>$descrdepto</small></label></td>
     </tr>";
   }
-  echo "</table>";	        
+  echo "</table>";
   ?>
   <tr >
   <td ></td>
@@ -237,14 +237,14 @@ $sSqlDepartamentos = $cldb_depart->sql_query_file(null,"*","coddepto"," instit =
 </table>
 </form>
 </center>
-<? 
+<?
 if (isset($atualizar)){
   db_msgbox($erro_msg);
   if($cldb_almoxdepto->erro_campo!=""){
     echo "<script> document.form1.".$cldb_almoxdepto->erro_campo.".style.backgroundColor='#99A9AE';</script>";
     echo "<script> document.form1.".$cldb_almoxdepto->erro_campo.".focus();</script>";
-  }else{ 
-    //echo"<script>top.corpo.location.href='mat1_matdb_almoxdepto001.php?codalmox=$codalmox';</script>";
+  }else{
+    //echo"<script>CurrentWindow.corpo.location.href='mat1_matdb_almoxdepto001.php?codalmox=$codalmox';</script>";
   }
 }
 ?>

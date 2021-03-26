@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -52,9 +52,9 @@ function js_pesquisa() {
   var sPlaca   = $F('ve01_placa');
   var iCentral = $F('ve40_veiccadcentral');
   var sUrl = 'vei2_listaveiculosconsulta.php?iVeiculo='+iVeiculo+'&sPlaca='+sPlaca+'&iCentral='+iCentral;
-  
-  js_OpenJanelaIframe('top.corpo','func_veiculo', sUrl,'Consulta de Veículos',true, '20');
-  
+
+  js_OpenJanelaIframe('CurrentWindow.corpo','func_veiculo', sUrl,'Consulta de Veículos',true, '20');
+
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -76,7 +76,7 @@ function js_pesquisa() {
           db_ancora(@$Lve01_codigo,"js_pesquisave01_codigo(true);",4);
           ?>
         </td>
-        <td> 
+        <td>
           <?
           db_input('ve01_codigo',10,$Ive01_codigo,true,'text',4," onchange='js_pesquisave01_codigo(false);'")
           ?>
@@ -101,9 +101,9 @@ function js_pesquisa() {
           db_ancora(@$Lve40_veiccadcentral,"js_pesquisacentral(true);",$db_opcao);
           ?>
         </td>
-        <td> 
+        <td>
           <?
-          db_input('ve40_veiccadcentral',10,$Ive40_veiccadcentral,true, 
+          db_input('ve40_veiccadcentral',10,$Ive40_veiccadcentral,true,
                    'text',$db_opcao," onchange='js_pesquisacentral(false);'")
           ?>
           <?
@@ -115,17 +115,17 @@ function js_pesquisa() {
    </fieldset>
    </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="center" colspan="2">
-      <input onClick="js_validarVeiculo();"  type="button" 
-             value="Pesquisar" name="pesquisar" 
+      <input onClick="js_validarVeiculo();"  type="button"
+             value="Pesquisar" name="pesquisar"
              onBlur='js_tabulacaoforms("form1","ve01_codigo",true,0,"ve01_codigo",true);'>
     </td>
       </tr>
-   </table>   
+   </table>
 </form>
 </center>
-<? 
+<?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -142,7 +142,7 @@ function js_validarVeiculo() {
   var iVeiculo = document.getElementById('ve01_codigo').value;
   var sIframe  = 'db_iframe_validar_veiculos';
   var sArquivo = 'func_veiculosconsulta.php?pesquisa_chave='+ iVeiculo +'&funcao_js=parent.js_validarVeiculo.retorno';
-  js_OpenJanelaIframe('top.corpo', sIframe, sArquivo, '', false);
+  js_OpenJanelaIframe('CurrentWindow.corpo', sIframe, sArquivo, '', false);
 }
 
 /**
@@ -153,12 +153,12 @@ function js_validarVeiculo() {
 js_validarVeiculo.retorno = function(sDescricaoVeiculo, lErro) {
 
   /**
-   * Veiculo nao encontrado 
+   * Veiculo nao encontrado
    */
   if (lErro) {
 
-    document.getElementById('ve01_codigo').focus(); 
-    document.getElementById('ve01_codigo').value = ''; 
+    document.getElementById('ve01_codigo').focus();
+    document.getElementById('ve01_codigo').value = '';
     document.getElementById('ve01_placadescr').value = sDescricaoVeiculo;
     return;
   }
@@ -168,21 +168,21 @@ js_validarVeiculo.retorno = function(sDescricaoVeiculo, lErro) {
 
 function js_pesquisave01_codigo(mostra){
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veiculosconsulta.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veiculosconsulta.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa','Pesquisa',true);
   } else {
-     if (document.form1.ve01_codigo.value != '') { 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veiculosconsulta.php?pesquisa_chave='+document.form1.ve01_codigo.value+'&funcao_js=parent.js_mostraveiculos','Pesquisa',false);
+     if (document.form1.ve01_codigo.value != '') {
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veiculosconsulta.php?pesquisa_chave='+document.form1.ve01_codigo.value+'&funcao_js=parent.js_mostraveiculos','Pesquisa',false);
      } else {
-       document.form1.ve01_placadescr.value = ''; 
+       document.form1.ve01_placadescr.value = '';
      }
   }
 }
 function js_mostraveiculos(chave,erro) {
 
-  document.form1.ve01_placadescr.value = chave; 
-  if (erro == true) { 
-    document.form1.ve01_codigo.focus(); 
-    document.form1.ve01_codigo.value = ''; 
+  document.form1.ve01_placadescr.value = chave;
+  if (erro == true) {
+    document.form1.ve01_codigo.focus();
+    document.form1.ve01_codigo.value = '';
   }
 }
 function js_mostraveiculos1(chave1,chave2) {
@@ -196,33 +196,33 @@ function js_mostraveiculos1(chave1,chave2) {
 function js_pesquisacentral(mostra) {
 
   if (mostra) {
-  
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_central', 
+
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_central',
                         'func_veiccadcentral.php?funcao_js=parent.js_mostracentral1|ve36_sequencial|descrdepto',
-                        'Pesquisa de Central', 
+                        'Pesquisa de Central',
                         true);
   } else {
-  
-     if (document.form1.ve40_veiccadcentral.value != '') { 
-        js_OpenJanelaIframe('top.corpo',
+
+     if (document.form1.ve40_veiccadcentral.value != '') {
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_central',
                             'func_veiccadcentral.php?pesquisa_chave='+document.form1.ve40_veiccadcentral.value+
-                            '&funcao_js=parent.js_mostracentral', 
+                            '&funcao_js=parent.js_mostracentral',
                             'Pesquisa de Central',
                             false);
      } else {
-       document.form1.descrdepto.value = ''; 
+       document.form1.descrdepto.value = '';
      }
   }
 }
 function js_mostracentral(chave,erro, descrdepto) {
 
-  document.form1.descrdepto.value = descrdepto; 
+  document.form1.descrdepto.value = descrdepto;
   if (erro == true) {
-   
-    document.form1.ve40_veiccadcentral.focus(); 
-    document.form1.descrdepto.value = ''; 
+
+    document.form1.ve40_veiccadcentral.focus();
+    document.form1.descrdepto.value = '';
   }
 }
 function js_mostracentral1(chave1, chave2) {

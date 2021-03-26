@@ -168,7 +168,7 @@ $oGet = db_utils::postMemory($_GET);
   }
 
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_cronogramaperspectiva', 'func_cronogramaperspectiva.php?funcao_js=parent.js_preenchepesquisa|o124_sequencial|o124_descricao&homologado=1', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cronogramaperspectiva', 'func_cronogramaperspectiva.php?funcao_js=parent.js_preenchepesquisa|o124_sequencial|o124_descricao&homologado=1', 'Pesquisa', true);
   }
 
   function js_preenchepesquisa(iChave, sDescricao) {

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -68,48 +68,48 @@ function js_verifica(){
 
 
 function js_emite(){
-  
+
 	vir = "";
   	cods= "";
   	var_obj = document.getElementById('receita').length;
   	for(y=0;y<var_obj;y++){
-	
+
 		var_if = document.getElementById('receita').options[y].value;
     	cods += vir + var_if;
 		vir = ",";
-		
+
   	}
-  
+
 	vir = "";
   	sReduzidos = "";
   	oReduzidos = document.getElementById('contas').length;
-	  
+
 	for(z=0;z<oReduzidos;z++){
 
       	sReduzido = document.getElementById('contas').options[z].value;
       	sReduzidos += vir + sReduzido;
       	vir = ",";
-	  
+
 	}
 
 	vir = "";
   	sCgms = "";
   	oCgms = document.getElementById('cgm').length;
-	  
+
 	for(w=0;w<oCgms;w++){
 
       	sCgm = document.getElementById('cgm').options[w].value;
       	sCgms += vir + sCgm;
       	vir = ",";
-	  
+
 	}
-	
+
   	if (document.form1.o15_codigo.value == 0){
        	recurso = "";
   	} else {
        	recurso = document.form1.o15_codigo.value;
 	}
-	  
+
 	qry  = "estrut="+document.form1.estrut.value;
 	qry += "&sinana="+document.form1.sinana.value;
 	qry += "&ordem="+document.form1.ordem.value;
@@ -128,7 +128,7 @@ function js_emite(){
 	jan.moveTo(0,0);
 
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style>
 	#fieldset_contas, #fieldset_cgm {
@@ -149,9 +149,9 @@ function js_emite(){
 
 <center>
 	<div style="margin-top: 25px; width: 650px">
-		<form name="form1" method="post" action="" onsubmit="return js_verifica();">	
+		<form name="form1" method="post" action="" onsubmit="return js_verifica();">
 			<fieldset><legend>RECEITAS</legend>
-				<table  align="center">				
+				<table  align="center">
 					<tr>
 						<td colspan="4" align="center">
 							<table>
@@ -182,8 +182,8 @@ function js_emite(){
 									<td>
 										<? $aux_conta = new cl_arquivo_auxiliar;
 										$aux_conta->cabecalho = "<strong>Contas</strong>";
-										$aux_conta->codigo = "k13_conta"; 
-										$aux_conta->descr  = "k13_descr";   
+										$aux_conta->codigo = "k13_conta";
+										$aux_conta->descr  = "k13_descr";
 										$aux_conta->nomeobjeto = 'contas';
 										$aux_conta->funcao_js = 'js_mostra_contas';
 										$aux_conta->funcao_js_hide = 'js_mostra_contas1';
@@ -253,7 +253,7 @@ function js_emite(){
 					</tr>
 					<tr>
 						<td align="right">
-							<strong>Tipo de Receita:</strong> 
+							<strong>Tipo de Receita:</strong>
 						</td>
 						<td>
 							<select name="tipo" onchange="js_valor();" style="width: 140px;">
@@ -264,7 +264,7 @@ function js_emite(){
 					</tr>
 					<tr>
 						<td align="right">
-							<strong>Desdobrar Receita:</strong> 
+							<strong>Desdobrar Receita:</strong>
 						</td>
 						<td>
 							<select name="desdobrar" onchange="js_valor();">
@@ -274,7 +274,7 @@ function js_emite(){
 					</tr>
 					<tr>
 						<td align="right">
-							<strong>Ordem:</strong> 
+							<strong>Ordem:</strong>
 						</td>
 						<td>
 							<select name="ordem" >
@@ -287,7 +287,7 @@ function js_emite(){
 					</tr>
 					<tr>
 						<td align="right">
-							<strong>Tipo:</strong> 
+							<strong>Tipo:</strong>
 						</td>
 						<td>
 							<select name="sinana" style="width: 175px;">
@@ -300,7 +300,7 @@ function js_emite(){
 					</tr>
 					<tr>
 						<td align="right" nowrap>
-							<strong>Referente a Emenda Parlamentar:</strong> 
+							<strong>Referente a Emenda Parlamentar:</strong>
 						</td>
 						<td>
 							<select name="emparlamentar" style="width: 175px;">
@@ -312,7 +312,7 @@ function js_emite(){
 					</tr>
 					<tr>
 						<td align="right" nowrap>
-							<strong>Regularização de Repasse:</strong> 
+							<strong>Regularização de Repasse:</strong>
 						</td>
 						<td>
 							<select name="regrepasse" style="width: 175px;">
@@ -349,12 +349,12 @@ oDBToogleCredores = new DBToogle('fieldset_cgm', false);
 
 function js_pesquisatabrec(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_conclass','func_tabrec_todas.php?funcao_js=parent.js_mostratabrec1|0|3','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_conclass','func_tabrec_todas.php?funcao_js=parent.js_mostratabrec1|0|3','Pesquisa',true,'0');
   }else{
      if(document.form1.c60_codcla.value != ''){
-     	js_OpenJanelaIframe('top.corpo.iframe_conta','db_iframe_conclass','func_tabrec_todas.php?pesquisa_chave='+document.form1.k02_codigo.value+'&funcao_js=parent.js_mostratabrec','Pesquisa',false);
+     	js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta','db_iframe_conclass','func_tabrec_todas.php?pesquisa_chave='+document.form1.k02_codigo.value+'&funcao_js=parent.js_mostratabrec','Pesquisa',false);
      }else{
-        document.form1.k02_drecei.value = ''; 
+        document.form1.k02_drecei.value = '';
      }
   }
 }
@@ -377,6 +377,6 @@ function js_mostratabrec1(chave1,chave2){
 if(isset($ordem)){
   echo "<script>
                    js_emite();
-       </script>";  
+       </script>";
 }
 ?>

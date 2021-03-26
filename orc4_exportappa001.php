@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -64,7 +64,7 @@ $instit = db_getsession("DB_instit");
 if (isset ($exportar) && $exportar == "Exportar") {
 	$erro = false;
 	/*
-	 *  exporta receitas 
+	 *  exporta receitas
 	 * ------------------------
 	 */
 	if ($exporta_fontes == "sim") {
@@ -73,15 +73,15 @@ if (isset ($exportar) && $exportar == "Exportar") {
 		 */
 		$res = $clorcpparec->sql_record(
 		       $clorcpparec->sql_query(
-		              null, 
-			      "o27_exercicio,o27_codfon,o27_valor,o27_concarpeculiar", 
-			      null, 
+		              null,
+			      "o27_exercicio,o27_codfon,o27_valor,o27_concarpeculiar",
+			      null,
 			      " o27_exercicio = $anoexe_exporta "));
 		if ($clorcpparec->numrows > 0) {
 			// db_criatabela($res);
 			for ($x = 0; $x < $clorcpparec->numrows; $x ++) {
 				db_fieldsmemory($res, $x);
-				/* 
+				/*
 				 * para cada codfon, verifica se tem recurso no conplanoreduz
 				 * -----------------------------------------------------------------------------
 				 */
@@ -89,10 +89,10 @@ if (isset ($exportar) && $exportar == "Exportar") {
 				  $clconplanoreduz->sql_query(
 				        null,
 					null,
-					"c61_codigo,c61_instit", 
-					null, 
-					"c61_codcon=$o27_codfon  and 
-					 c61_instit= $instit and 
+					"c61_codigo,c61_instit",
+					null,
+					"c61_codcon=$o27_codfon  and
+					 c61_instit= $instit and
 					 c61_anousu= $o27_exercicio"));
 				if ($clconplanoreduz->numrows > 0) {
 					for ($y = 0; $y < $clconplanoreduz->numrows; $y ++) {
@@ -102,8 +102,8 @@ if (isset ($exportar) && $exportar == "Exportar") {
 					// não migra ppa quando nao tem recurso no reduzido
 					continue;
 				} //endif
-				/* insere no orcreceita do exercicio escolhido 
-				 * ------------------------------------------------------ 
+				/* insere no orcreceita do exercicio escolhido
+				 * ------------------------------------------------------
 				 */
 				$clorcreceita->o70_codfon         = $o27_codfon;
 				$clorcreceita->o70_instit         = $c61_instit;
@@ -157,7 +157,7 @@ if (isset ($exportar) && $exportar == "Exportar") {
 			// db_criatabela($res);
 			for ($x = 0; $x < $clorcppa->numrows; $x ++) {
 				db_fieldsmemory($res, $x);
-				
+
 				$clorcdotacao->o58_anousu = $anoexe_exporta;
 				$clorcdotacao->o58_coddot = null;
 				$clorcdotacao->o58_orgao = $o23_orgao;
@@ -169,19 +169,19 @@ if (isset ($exportar) && $exportar == "Exportar") {
 				$clorcdotacao->o58_codele = $o25_codele;
 				$clorcdotacao->o58_codigo =  $o26_codigo;
 				$clorcdotacao->o58_valor =  $o24_valor;
-				$clorcdotacao->o58_instit =  $o55_instit;				
+				$clorcdotacao->o58_instit =  $o55_instit;
 				$result = $clorcparametro->sql_record(
                                 " update orcparametro set o50_coddot = o50_coddot + 1	where o50_anousu = ".$anoexe_exporta);
         		$result = $clorcparametro->sql_record(
-                              $clorcparametro->sql_query_file($anoexe_exporta,'o50_coddot as o58_coddot'));                                     
-                if($result != false && $clorcparametro->numrows>0){  
+                              $clorcparametro->sql_query_file($anoexe_exporta,'o50_coddot as o58_coddot'));
+                if($result != false && $clorcparametro->numrows>0){
                 	    db_fieldsmemory($result,0);
-                	    $clorcdotacao->incluir($anoexe_exporta,$o58_coddot); 
+                	    $clorcdotacao->incluir($anoexe_exporta,$o58_coddot);
                 	    if($clorcdotacao->erro_status==0){
-                	         db_msgbox("Falha na exportação".$clorcdotacao->erro_msg);            
-                	    	 $erro_trans=true;   
-                	    	 break;    
-                	    } 	
+                	         db_msgbox("Falha na exportação".$clorcdotacao->erro_msg);
+                	    	 $erro_trans=true;
+                	    	 break;
+                	    }
                 } // endif
 			} //endfor
 		} //endif
@@ -216,7 +216,7 @@ if (isset ($exportar) && $exportar == "Exportar") {
 db_ancora(@ $Lo21_codleippa, "js_pesquisao21_codleippa(true);", 1);
 ?>
     </td>
-    <td align='left' colspan=2> 
+    <td align='left' colspan=2>
       <?
 
 
@@ -229,8 +229,8 @@ db_input('o21_codleippa', 8, $Io21_codleippa, true, 'text', 1, " onchange='js_pe
 ?>
     </td>
   </tr>
-      
-<? 
+
+<?
  if (isset ($chavepesquisa) && $chavepesquisa != "") {
 
 	echo "<tr><td>Exercicio para exportação  </td>";
@@ -261,10 +261,10 @@ db_input('o21_codleippa', 8, $Io21_codleippa, true, 'text', 1, " onchange='js_pe
             </td>
         <td align=left>
              <? db_ancora("Fontes que não serão exportados","js_fontes_nao_exportados()",1);   ?>
-          </td>    
+          </td>
     </tr>
-    
-    
+
+
     <tr>
             <td><? db_ancora("Exportar elementos de Despesa","js_elementos()",1);   ?> </td>
             <td colspan=1><select name=exporta_elementos>
@@ -276,24 +276,24 @@ db_input('o21_codleippa', 8, $Io21_codleippa, true, 'text', 1, " onchange='js_pe
              <? db_ancora("Elementos que não serão exportados","js_elementos_nao_exportados()",1);   ?>
           </td>
     </tr>
-    
-    <tr>   
-       <td colspan=3> &nbsp; </td>       
+
+    <tr>
+       <td colspan=3> &nbsp; </td>
     </tr>
-            
-    <tr>   
+
+    <tr>
        <td colspan=3 align="center">
              <input type=submit name=exportar value=Exportar>
-       </td>       
+       </td>
     </tr>
-    
+
     <?
 
 
 
 }
 ?>
-  
+
 </form>
 </table>
 <?
@@ -305,20 +305,20 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 </body>
 <script>
 function js_pesquisao21_codleippa(){
-   js_OpenJanelaIframe('top.corpo','db_iframe_orcppalei','func_orcppalei.php?funcao_js=parent.js_mostraorcppalei1|o21_codleippa|o21_descr','Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcppalei','func_orcppalei.php?funcao_js=parent.js_mostraorcppalei1|o21_codleippa|o21_descr','Pesquisa',true);
 }
 
 function js_mostraorcppalei1(chave1,chave2){
-   document.form1.o21_codleippa.value = chave1;  
+   document.form1.o21_codleippa.value = chave1;
    db_iframe_orcppalei.hide();
    location.href='orc4_exportappa001.php?chavepesquisa='+chave1;
 }
 
 function js_fontes(){
-   js_OpenJanelaIframe('top.corpo','db_iframe_orcpparec','func_orcpparec.php?funcao_js=','Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcpparec','func_orcpparec.php?funcao_js=','Pesquisa',true);
 }
 function js_elementos(){
-   js_OpenJanelaIframe('top.corpo','db_iframe_orcppa','func_orcppa.php?funcao_js=','Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcppa','func_orcppa.php?funcao_js=','Pesquisa',true);
 }
 function js_fontes_nao_exportados(){
 	ano = document.form1.anoexe_exporta.value;

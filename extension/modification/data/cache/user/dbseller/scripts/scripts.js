@@ -133,7 +133,7 @@ function js_diferenca_datas(data1,data2,opcao){
   }else if(opcao == "a"){
     return parseInt(anos);
   }else if(opcao == "amd"){
-    return anos+' '+mess+' '+dias;    
+    return anos+' '+mess+' '+dias;
   }
 }
 
@@ -583,9 +583,9 @@ function someFrame(evt) {
     return false;
 }
 if(CurrentWindow.corpo==null){
-  
+
 }else{
-  
+
 }
 
 
@@ -2042,7 +2042,7 @@ function js_OpenJanelaIframe(aondeJanela,nomeJanela,arquivoJanela,tituloJanela,m
 //#99#// [nome da janela].liberarJanBTFechar('valor') - True para liberar e false para bloquear o botão fechar
 
   if (aondeJanela) {
-    aondeJanela = aondeJanela.replace('top.', 'CurrentWindow.');
+    aondeJanela = aondeJanela.replace('CurrentWindow.', 'CurrentWindow.');
   }
 
 var margin = {top : 20, left : 10};
@@ -2118,7 +2118,7 @@ if(mostraJanela==undefined)
 
       CurrentWindow.fixSize.divIframe[boxJanela.id] = boxJanela;
     }
-        
+
 
   }
 
@@ -4523,7 +4523,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   document.body.appendChild(camada);
 
   eval(nomeJan + " = new janela(document.getElementById('Jan" + nomeJan + "'),document.getElementById('CF" + nomeJan + "'),IF" + nomeJan + ")");
-  
+
   CurrentWindow.createLoading(document.getElementById('IF' + nomeJan), tab1Linha2);
 
   document.getElementById('IF' + nomeJan).src = arquivo;

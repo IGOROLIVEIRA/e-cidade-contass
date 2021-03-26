@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -56,7 +56,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 if (isset($excluir)) {
-	
+
   $sqlerro=false;
   db_inicio_transacao();
 
@@ -96,7 +96,7 @@ if (isset($excluir)) {
 		if($cltabrecarretipo->erro_status="0"){
 	  	$erro = true;
 			$msgerro = $cltabrecarretipo->erro_msg;
-	  } 
+	  }
   }
 	if($sqlerro == false){
 		$cltabrecdepto->k98_receit  = $k02_codigo;
@@ -114,7 +114,7 @@ if (isset($excluir)) {
       $sqlerro = true;
     }
   }
-  
+
   db_fim_transacao($sqlerro);
 } else if (isset($chavepesquisa)){
   $db_botao = true;
@@ -123,7 +123,7 @@ if (isset($excluir)) {
   $sSqltabRec = $cltabrec->sql_query($chavepesquisa,$sCampos,null,"");
   $result     = $cltabrec->sql_record($sSqltabRec);
   db_fieldsmemory($result,0);
-     
+
   $result = $cltaborc->sql_record($cltaborc->sql_query_file($anousu,$k02_codigo,"k02_codrec as codigo,k02_estorc as estrut"));
   if($cltaborc->numrows>0){
     db_fieldsmemory($result,0);
@@ -132,9 +132,9 @@ if (isset($excluir)) {
   $result = $cltabplan->sql_record($cltabplan->sql_query_file($k02_codigo,$anousu,"k02_reduz as codigo,k02_estpla as estrut"));
   if($cltabplan->numrows>0){
     db_fieldsmemory($result,0);
-  }  
-		$sqlarretipo = "select k79_arretipo,k00_descr 
-		                from tabrecarretipo 
+  }
+		$sqlarretipo = "select k79_arretipo,k00_descr
+		                from tabrecarretipo
 		                inner join arretipo on k00_tipo = k79_arretipo
 										where k79_receit = $chavepesquisa";
     $resultarretipo= pg_query($sqlarretipo);
@@ -142,15 +142,15 @@ if (isset($excluir)) {
 		if($linhasarretipo > 0){
 			db_fieldsmemory($resultarretipo,0);
 		}
-		
+
     $sCampos             = "juros.k02_descr as descr_jur,multa.k02_descr as descr_mul";
     $sSqlTabRecJurRecMul = $cltabrec->sql_query_recjur_recmul($chavepesquisa,$sCampos,null,"");
-    $result              = $cltabrec->sql_record($sSqlTabRecJurRecMul);   
-    
+    $result              = $cltabrec->sql_record($sSqlTabRecJurRecMul);
+
     if (  pg_num_rows($result) > 0 ) {
       db_fieldsmemory($result,0);
     }
-} 
+}
 ?>
 <html>
 <head>
@@ -162,7 +162,7 @@ if (isset($excluir)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_onload();">
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
       <?
@@ -182,13 +182,13 @@ if(isset($chavepesquisa) || isset($excluir)){
   echo "
         <script>
           function js_db_libera(){
-          	
+
 						parent.document.formaba.tabrec.disabled=false;
 						parent.document.formaba.tabrecregrasjm.disabled=false;
 						parent.document.formaba.tabrecdepto.disabled=false;
-            top.corpo.iframe_tabrecregrasjm.location.href='cai1_receitaregrasjm001.php?k04_receit=".@$k02_codigo."&db_opcaoal=true';
-						top.corpo.iframe_tabrecdepto.location.href='cai1_tabrec_depto001.php?k98_receit=".@$k02_codigo."&k02_descr=$k02_descr&db_opcao=3';
-           
+            CurrentWindow.corpo.iframe_tabrecregrasjm.location.href='cai1_receitaregrasjm001.php?k04_receit=".@$k02_codigo."&db_opcaoal=true';
+						CurrentWindow.corpo.iframe_tabrecdepto.location.href='cai1_tabrec_depto001.php?k98_receit=".@$k02_codigo."&k02_descr=$k02_descr&db_opcao=3';
+
           }\n
           js_db_libera();
         </script>\n

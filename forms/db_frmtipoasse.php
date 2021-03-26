@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: recursos humanos
@@ -53,7 +53,7 @@ $clrotulo->label("h38_modportariacoletiva");
   }
 </style>
 <form name="form1" method="post" action="">
-  
+
   <?php db_input('h79_db_cadattdinamico',5,'',true,'hidden',3,"");  ?>
   <center>
     <fieldset style="width:700px;text-align:right;">
@@ -201,13 +201,13 @@ $clrotulo->label("h38_modportariacoletiva");
               <label id="lbl_h12_tiporeajuste" for="h12_tiporeajuste"><?php echo $Lh12_tiporeajuste; ?></label>
             </td>
             <td>
-              <?php 
+              <?php
                 $aOh12_tiporeajuste = array(
                   "0" => "Nenhum",
                   "1" => "Real",
                   "2" => "Paridade"
                 );
-          
+
                 db_select("h12_tiporeajuste", $aOh12_tiporeajuste, true, $db_opcao, "");
               ?>
             </td>
@@ -216,12 +216,12 @@ $clrotulo->label("h38_modportariacoletiva");
               <label id="h12_natureza" for="h12_natureza"><?php echo $Lh12_natureza; ?></label>
             </td>
             <td>
-              <?php 
+              <?php
                 $aTipoNatureza = array(
                   "1" => "Padrão",
                   "2" => "Substituição"
                 );
-          
+
                 db_select("h12_natureza", $aTipoNatureza, true, $db_opcao, "");
               ?>
             </td>
@@ -329,18 +329,18 @@ $clrotulo->label("h38_modportariacoletiva");
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
   <?php endif; ?>
           <input name="lancarAtributos" type="button" id="lancarAtributos" value="Adicionar Campos" onclick="js_lancarAtributos();" />
-          
+
 
 </form>
 <script type="text/javascript">
 
 /**
- * Validação para quando for selecionado a opção "Vincula Periodo aquisitivo" obrigar 
+ * Validação para quando for selecionado a opção "Vincula Periodo aquisitivo" obrigar
  * o preenchimento do procedimento de portaria
  * @return boolean
  */
 function js_validaCampos(){
-  
+
   if (document.form1.h12_vinculaperiodoaquisitivo.value == 't' && !document.form1.h30_portariaproced.value){
 
     alert(_M('recursoshumanos.rh.rec1_tipoassenta.procedimento_portaria'));
@@ -362,7 +362,7 @@ function js_validaCampos(){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tipoasse','func_tipoasse.php?funcao_js=parent.js_preenchepesquisa|h12_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoasse','func_tipoasse.php?funcao_js=parent.js_preenchepesquisa|h12_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tipoasse.hide();
@@ -374,10 +374,10 @@ function js_preenchepesquisa(chave){
 }
 function js_pesquisa_h30_portariaenvolv(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_portariaenvolv','func_portariaenvolv.php?funcao_js=parent.js_mostrah30_portariaenvolv1|h42_sequencial|h42_descr|h42_amparolegal','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_portariaenvolv','func_portariaenvolv.php?funcao_js=parent.js_mostrah30_portariaenvolv1|h42_sequencial|h42_descr|h42_amparolegal','Pesquisa',true);
   }else{
      if(document.form1.h30_portariaenvolv.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_portariaenvolv','func_portariaenvolv.php?pesquisa_chave='+document.form1.h30_portariaenvolv.value+'&funcao_js=parent.js_mostrah30_portariaenvolv','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_portariaenvolv','func_portariaenvolv.php?pesquisa_chave='+document.form1.h30_portariaenvolv.value+'&funcao_js=parent.js_mostrah30_portariaenvolv','Pesquisa',false);
      }else{
        document.form1.h30_portariaenvolv.value = '';
      }
@@ -407,10 +407,10 @@ function js_mostrah30_portariaenvolv1(chave1,chave2,chave3){
 
 function js_pesquisaModIndividual(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_relatorio','func_db_relatorio.php?funcao_js=parent.js_mostraModIndividual1|db63_sequencial|db63_nomerelatorio','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_relatorio','func_db_relatorio.php?funcao_js=parent.js_mostraModIndividual1|db63_sequencial|db63_nomerelatorio','Pesquisa',true);
   }else{
      if(document.form1.h37_modportariaindividual.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_relatorio','func_db_relatorio.php?pesquisa_chave='+document.form1.h37_modportariaindividual.value+'&funcao_js=parent.js_mostraModIndividual','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_relatorio','func_db_relatorio.php?pesquisa_chave='+document.form1.h37_modportariaindividual.value+'&funcao_js=parent.js_mostraModIndividual','Pesquisa',false);
      }else{
        document.form1.descrModIndividual.value = '';
      }
@@ -433,10 +433,10 @@ function js_mostraModIndividual1(chave1,chave2){
 
 function js_pesquisaModColetiva(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_relatorio','func_db_relatorio.php?funcao_js=parent.js_mostraModColetiva1|db63_sequencial|db63_nomerelatorio','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_relatorio','func_db_relatorio.php?funcao_js=parent.js_mostraModColetiva1|db63_sequencial|db63_nomerelatorio','Pesquisa',true);
   }else{
      if(document.form1.h38_modportariacoletiva.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_relatorio','func_db_relatorio.php?pesquisa_chave='+document.form1.h38_modportariacoletiva.value+'&funcao_js=parent.js_mostraModColetiva','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_relatorio','func_db_relatorio.php?pesquisa_chave='+document.form1.h38_modportariacoletiva.value+'&funcao_js=parent.js_mostraModColetiva','Pesquisa',false);
      }else{
        document.form1.descrModColetiva.value = '';
      }
@@ -470,20 +470,20 @@ function js_mostraModColetiva1(chave1,chave2){
             alert("Este tipo de assentamento já possui assentamento vinculado,\nalterações nos campos dinâmicos podem ocasionar inconsistências\nde informações e erros nas fórmulas vinculadas.");
     <?php } ?>
 
-    require_once("scripts/widgets/dbmessageBoard.widget.js"); 
-    require_once("scripts/datagrid.widget.js"); 
-    require_once("scripts/widgets/dbcomboBox.widget.js");     
-    require_once("scripts/widgets/dbtextField.widget.js");    
+    require_once("scripts/widgets/dbmessageBoard.widget.js");
+    require_once("scripts/datagrid.widget.js");
+    require_once("scripts/widgets/dbcomboBox.widget.js");
+    require_once("scripts/widgets/dbtextField.widget.js");
     require_once("scripts/widgets/dbtextFieldData.widget.js");
-    require_once("scripts/widgets/windowAux.widget.js");      
+    require_once("scripts/widgets/windowAux.widget.js");
     require_once("scripts/classes/DBViewCadastroAtributoDinamico.js");
 
     var iCodigoAttDinamico        = $('h79_db_cadattdinamico').value;
     var oCadastroAtributoDinamico = new DBViewCadastroAtributoDinamico();
 
-    if (iCodigoAttDinamico == '') {  
+    if (iCodigoAttDinamico == '') {
       oCadastroAtributoDinamico.newAttribute();
-    } else {  
+    } else {
       oCadastroAtributoDinamico.loadAttribute(iCodigoAttDinamico);
     }
 
@@ -498,4 +498,3 @@ function js_mostraModColetiva1(chave1,chave2){
   }
 
 </script>
-          

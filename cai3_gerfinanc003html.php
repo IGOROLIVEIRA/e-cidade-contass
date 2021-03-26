@@ -42,7 +42,7 @@ if(!isset($emite_recibo_protocolo)){
 
   //pega os numpres da ca3_gerfinanc002.php, separa e insere em db_reciboweb
   $result = pg_exec("select k00_codbco,k00_codage,k00_descr,k00_hist1,k00_hist2,k00_hist3,k00_hist4,k00_hist5,k00_hist6,k00_hist7,k00_hist8 from arretipo where k00_tipo = $tipo");
-    
+
   if(pg_numrows($result)==0){
     echo "O código do banco não esta cadastrado no arquivo arretipo para este tipo.";
     exit;
@@ -62,8 +62,8 @@ if(!isset($emite_recibo_protocolo)){
     $numpres = "";
     for($i = 0;$i < $tam;$i++) {
       if(db_indexOf(key($vt) ,"CHECK") > 0){
-        echo "<script>window.opener.top.corpo.limpaparcela('".key($vt)."');</script>";
-        $numpres .= "N".$vt[key($vt)];  
+        echo "<script>window.opener.CurrentWindow.corpo.limpaparcela('".key($vt)."');</script>";
+        $numpres .= "N".$vt[key($vt)];
       }
       next($vt);
     }
@@ -72,17 +72,17 @@ if(!isset($emite_recibo_protocolo)){
     //  $numpres[$i] = base64_decode($numpres[$i]);
     //  $numpres[$i];
 
-      $valores = split("P",$numpres[$i]);  
+      $valores = split("P",$numpres[$i]);
       $sql = "insert into db_reciboweb values(".$valores[0].",".$valores[1].",$k03_numpre,$k00_codbco,'$k00_codage','$fc_numbco')";
-      pg_exec($sql) or die("Erro(26) inserindo em db_reciboweb: ".pg_errormessage()); 
+      pg_exec($sql) or die("Erro(26) inserindo em db_reciboweb: ".pg_errormessage());
     }
 
   }else{
 
       $sql = "insert into db_reciboweb values(".$numpre_unica.",0,$k03_numpre,$k00_codbco,'$k00_codage','$fc_numbco')";
-      pg_exec($sql) or die("Erro(26) inserindo em db_reciboweb: ".pg_errormessage()); 
-    
-      
+      pg_exec($sql) or die("Erro(26) inserindo em db_reciboweb: ".pg_errormessage());
+
+
   }
 
   //roda funcao fc_recibo pra gerar o recibo
@@ -98,7 +98,7 @@ if(isset($db_datausu)){
      echo "Data deverá se superior a : ".date('Y-m-d',db_getsession("DB_datausu"));
 	 exit;
   }
-  if(mktime(0,0,0,substr($db_datausu,5,2),substr($db_datausu,8,2),substr($db_datausu,0,4)) < 
+  if(mktime(0,0,0,substr($db_datausu,5,2),substr($db_datausu,8,2),substr($db_datausu,0,4)) <
      mktime(0,0,0,date('m',db_getsession("DB_datausu")),date('d',db_getsession("DB_datausu")),date('Y',db_getsession("DB_datausu"))) ){
      echo "Data não permitida para cálculo. <br><br>";
      echo "Data deverá se superior a : ".date('Y-m-d',db_getsession("DB_datausu"));
@@ -124,14 +124,14 @@ $k00_descr = $k00_histtxt;
 if(!isset($emite_recibo_protocolo)){
   $sql = "select r.k00_numcgm,r.k00_receit,t.k02_descr,t.k02_drecei,r.k00_dtoper as k00_dtoper,sum(r.k00_valor) as valor
                    from recibopaga r
-                   inner join tabrec t on t.k02_codigo = r.k00_receit 
+                   inner join tabrec t on t.k02_codigo = r.k00_receit
                    inner join tabrecjm on tabrecjm.k02_codjm = t.k02_codjm
 		   where r.k00_numnov = ".$k03_numpre."
                    group by r.k00_dtoper,r.k00_receit,t.k02_descr,t.k02_drecei,r.k00_numcgm";
 }else{
   $sql = "select r.k00_numcgm,r.k00_receit,t.k02_descr,t.k02_drecei,r.k00_dtoper as k00_dtoper,sum(r.k00_valor) as valor
               from recibo r
-                   inner join tabrec t on t.k02_codigo = r.k00_receit 
+                   inner join tabrec t on t.k02_codigo = r.k00_receit
                    inner join tabrecjm on tabrecjm.k02_codjm = t.k02_codjm
 		      where r.k00_numpre = ".$k03_numpre."
               group by r.k00_dtoper,r.k00_receit,t.k02_descr,t.k02_drecei,r.k00_numcgm";
@@ -161,7 +161,7 @@ $db_telef    = pg_result($DadosInstit,0,'telef');
 $db_email    = pg_result($DadosInstit,0,'email');
 
 $total_recibo += $taxabancaria;
-$valor_parm = $total_recibo; 
+$valor_parm = $total_recibo;
 //$dtvenc = str_replace('-','',db_vencimento());
 /*
 db_barras($k00_codbco,9,$total_recibo,"$fc_numbco",'8200','0461','00600000037',$datavencimento);
@@ -187,28 +187,28 @@ if(!empty($HTTP_POST_VARS["ver_matric"]) || $matricularecibo > 0 ) {
 								   z01_ender as nomepri,
 								   z01_compl as j39_compl,
 								   z01_numero as j39_numero,
-								   z01_bairro as j13_descr, 
-								   '' as sql  
+								   z01_bairro as j13_descr,
+								   '' as sql
                             from empresa
 							where q02_inscr = $numero");
 
 /*
 
-                     select cgm.z01_nome,cgm.z01_ender,cgm.z01_munic,cgm.z01_uf,cgm.z01_cep,c.j14_nome as nomepri,i.q02_compl as j39_compl,i.q02_numero as j39_numero,j13_descr, '' as sql  
+                     select cgm.z01_nome,cgm.z01_ender,cgm.z01_munic,cgm.z01_uf,cgm.z01_cep,c.j14_nome as nomepri,i.q02_compl as j39_compl,i.q02_numero as j39_numero,j13_descr, '' as sql
                      from cgm
-					 inner join issbase i 
+					 inner join issbase i
 					     on i.q02_numcgm = cgm.z01_numcgm
-					 left outer join ruas c 
-					     on c.j14_codigo = i.q02_lograd 
-					 left outer join bairro b 
-					    on b.j13_codi = i.q02_bairro 
+					 left outer join ruas c
+					     on c.j14_codigo = i.q02_lograd
+					 left outer join bairro b
+					    on b.j13_codi = i.q02_bairro
 					 where i.q02_inscr = ".$HTTP_POST_VARS["ver_inscr"]);
 */
   db_fieldsmemory($Identificacao,0);
 }else if(!empty($HTTP_POST_VARS["ver_numcgm"]) || $numcgmrecibo > 0 ) {
   $numero = @$HTTP_POST_VARS["ver_numcgm"] + $numcgmrecibo ;
   $tipoidentificacao = "Numcgm :";
-  $Identificacao = pg_exec("select z01_nome,z01_ender,z01_munic,z01_uf,z01_cep,''::bpchar as nomepri,''::bpchar as j39_compl,''::bpchar as j39_numero,z01_bairro as j13_descr, '' as sql 
+  $Identificacao = pg_exec("select z01_nome,z01_ender,z01_munic,z01_uf,z01_cep,''::bpchar as nomepri,''::bpchar as j39_compl,''::bpchar as j39_numero,z01_bairro as j13_descr, '' as sql
                      from cgm
 					 where z01_numcgm = $numero ");
   db_fieldsmemory($Identificacao,0);
@@ -232,7 +232,7 @@ if(isset($tipo_debito)){
     $sqlhist = "select distinct v01_exerc,v01_numpar
 	        from db_reciboweb
 			     left outer join divida on v01_numpre = k99_numpre and v01_numpar = k99_numpar
-	        where k99_numpre_n = $k03_numpre 
+	        where k99_numpre_n = $k03_numpre
 			group by v01_exerc,v01_numpar
 			order by v01_exerc,v01_numpar";
     $result = pg_query($sqlhist);
@@ -244,14 +244,14 @@ if(isset($tipo_debito)){
            $histparcela .= pg_result($result,$xy,0).":";
 		}
         $histparcela .= pg_result($result,$xy,1)."-";
-	  }	
+	  }
     }
   }else if($tipo_debito == 3 || $tipo_debito == 2){
     $histparcela = "Exercicio: ";
     $sqlhist = "select distinct q05_ano,q05_numpar
 	        from db_reciboweb
 			     left outer join issvar on q05_numpre = k99_numpre and q05_numpar = k99_numpar
-	        where k99_numpre_n = $k03_numpre 
+	        where k99_numpre_n = $k03_numpre
 			group by q05_ano,q05_numpar
 			order by q05_ano,q05_numpar";
     $result = pg_exec($sqlhist);
@@ -263,7 +263,7 @@ if(isset($tipo_debito)){
            $histparcela .= "  ".pg_result($result,$xy,0).": Parc:";
 		}
         $histparcela .= "-".pg_result($result,$xy,1);
-	  }	
+	  }
     }
   }else if($tipo_debito == 6 || $tipo_debito == 1){
     $histparcela = '';
@@ -271,7 +271,7 @@ if(isset($tipo_debito)){
     $sqlhist = "select v07_parcel,k99_numpar
 	        from db_reciboweb
 			     left outer join termo on v07_numpre = k99_numpre
-	        where k99_numpre_n = $k03_numpre 
+	        where k99_numpre_n = $k03_numpre
 			order by v07_parcel,k99_numpar";
     $result = pg_query($sqlhist);
     if(pg_numrows($result)!=false){
@@ -282,7 +282,7 @@ if(isset($tipo_debito)){
 	    }
             $histparcela .= pg_result($result,$xy,1)." ";
 	    $parcelamento = pg_result($result,$xy,0);
-	}	
+	}
     }
   }else{
     $histparcela = "PARCELAS: ";
@@ -291,8 +291,8 @@ if(isset($tipo_debito)){
 	        where k99_numpre_n = $k03_numpre order by k99_numpar";
     $result = pg_query($sqlhist);
 	for($xy=0;$xy<pg_numrows($result);$xy++){
-       $histparcela .= pg_result($result,$xy,0)." ";	   
-	}	
+       $histparcela .= pg_result($result,$xy,0)." ";
+	}
   }
 }
 
@@ -329,7 +329,7 @@ $result = pg_exec("select k15_local,k15_aceite,k15_carte,k15_espec,k15_ageced
                    where k15_codbco = $k00_codbco and
 				   k15_codage = '$k00_codage'");
 $idenpar = "";
-if(pg_numrows($result) > 0) {				   
+if(pg_numrows($result) > 0) {
   $idenpar  = "k15_local= ".pg_result($result,0,0);
   $idenpar .= "&k15_aceite=".pg_result($result,0,1);
   $idenpar .= "&k15_carte=".pg_result($result,0,2);
@@ -370,8 +370,8 @@ $str = base64_encode($idenpar."##".$codigobarras."##".$valor_parm."##".$datavenc
 <table width="670" height="633" border="0" cellpadding="15" cellspacing="0">
   <tr>
     <td height="633" valign="top" style="border: 1px solid #000000"><table width="100%" height="550" border="0" cellpadding="0" cellspacing="0">
-                <tr> 
-                  <td width="37%" height="130" align="right" valign="middle"><img src="imagens/logo_boleto.jpg" width="115" height="125" onclick="window.print();"> 
+                <tr>
+                  <td width="37%" height="130" align="right" valign="middle"><img src="imagens/logo_boleto.jpg" width="115" height="125" onclick="window.print();">
                   </td>
                   <td width="63%" align="center" valign="middle"><table width="100%" border="0" cellspacing="0">
                       <tr>
@@ -391,14 +391,14 @@ $str = base64_encode($idenpar."##".$codigobarras."##".$valor_parm."##".$datavenc
                       </tr>
                     </table></td>
                 </tr>
-                <tr> 
+                <tr>
                   <td height="100" colspan="2" align="left" valign="top"><table width="100%" height="99%" border="0" cellpadding="0" cellspacing="0">
-                      <tr> 
-                        <td width="70%" height="100" align="left" valign="top" style="border: 1px solid #000000"> 
+                      <tr>
+                        <td width="70%" height="100" align="left" valign="top" style="border: 1px solid #000000">
                           <font style="font-size:10px;font-weight: bold">&nbsp;Iddentifica&ccedil;&atilde;o:<br>
                           <br>
                           </font> <table border="0" cellpadding="0" cellspacing="0"  style="font-size:11px">
-                            <?				
+                            <?
 				  echo "<tr><Td nowrap>&nbsp;Nome:</td><td nowrap>".trim(pg_result($Identificacao,0,"z01_nome"))."</td></tr>\n";
 				  echo "<tr><Td nowrap>&nbsp;Endereço:</td><td nowrap>".trim(pg_result($Identificacao,0,"z01_ender"))."</td></tr>\n";
 				  echo "<tr><Td nowrap>&nbsp;Município:&nbsp;</td><td nowrap>".trim(pg_result($Identificacao,0,"z01_munic"))." - ".trim(pg_result($Identificacao,0,"z01_uf"))."</td></tr>\n";
@@ -414,68 +414,68 @@ $str = base64_encode($idenpar."##".$codigobarras."##".$valor_parm."##".$datavenc
                           </table></td>
                         <td width="3%" align="left" valign="top">&nbsp;</td>
                         <td width="27%" align="left" valign="top"> <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                            <tr> 
-                              <td height="34" valign="top" style="border: 1px solid #000000;border-bottom-style: none"> 
+                            <tr>
+                              <td height="34" valign="top" style="border: 1px solid #000000;border-bottom-style: none">
                                 <?
 								if(!empty($HTTP_POST_VARS["ver_matric"])){
 								  ?>
                                 <font style="font-size:10px;font-weight: bold">&nbsp;Matr&iacute;cula:<br>
-                                &nbsp; 
+                                &nbsp;
                                 <?=@$numero."  S/Q/L:".@$sql?>
-                                </font> 
+                                </font>
                                 <?
 
 								} else if(!empty($HTTP_POST_VARS["ver_inscr"])){
 								  ?>
                                 <font style="font-size:10px;font-weight: bold">&nbsp;Inscri&ccedil;&atilde;o:<br>
-                                &nbsp; 
+                                &nbsp;
                                 <?=@$numero?>
-                                </font> 
+                                </font>
                                 <?
 								}
 								?>
                               </td>
                             </tr>
-                            <tr> 
+                            <tr>
                               <td height="33" valign="top" style="border: 1px solid #000000;border-bottom-style: none"><font style="font-size:10px;font-weight: bold">&nbsp;Logradouro:<br>
-                                &nbsp; 
+                                &nbsp;
                                 <?=@$nomepri?>
                                 </font></td>
                             </tr>
-                            <tr> 
-                              <td height="33" valign="top" style="border: 1px solid #000000;border-bottom-style: none"> 
+                            <tr>
+                              <td height="33" valign="top" style="border: 1px solid #000000;border-bottom-style: none">
                                 <font style="font-size:10px;font-weight: bold">&nbsp;N&uacute;mero/Complemento<br>
-                                &nbsp; 
+                                &nbsp;
                                 <?=@$j39_numero.  "      ".@$j39_compl?>
                                 </font> </td>
                             </tr>
-                            <tr> 
-                              <td height="32" valign="top" style="border: 1px solid #000000"> 
+                            <tr>
+                              <td height="32" valign="top" style="border: 1px solid #000000">
                                 <font style="font-weight: bold;font-size:10px">&nbsp;Bairro:<br>
-                                </font><font style="font-size:10px;font-weight: bold"> 
-                                &nbsp; 
+                                </font><font style="font-size:10px;font-weight: bold">
+                                &nbsp;
                                 <?=@$j13_descr?>
-                                </font><font style="font-weight: bold;font-size:10px">&nbsp; 
+                                </font><font style="font-weight: bold;font-size:10px">&nbsp;
                                 </font> </td>
                             </tr>
                           </table></td>
                       </tr>
                     </table></td>
                 </tr>
-                <tr> 
+                <tr>
                   <td height="37" colspan="2" align="left" valign="middle"> <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                      <tr> 
+                      <tr>
                         <td height="27" align="center" style="font-size:12px;font-family: Arial, Helvetica, sans-serif;font-weight: bold;border: 1px solid #000000">
 						RECIBO VÁLIDO ATÉ: <font size='4' color='red'><?=date('d-m-Y',$DB_DATACALC)?></font></td>
                       </tr>
                     </table></td>
                 </tr>
-                <tr> 
-                  <td height="200" colspan="2" align="left" valign="top" style="border: 1px solid #000000"> 
+                <tr>
+                  <td height="200" colspan="2" align="left" valign="top" style="border: 1px solid #000000">
                     <table border="0" cellpadding="3" cellspacing="0">
-                      <tr> 
+                      <tr>
                         <td> <table border="0" cellpadding="0" cellspacing="0" style="font-size:11px">
-                            <tr> 
+                            <tr>
                               <Td>&nbsp;</Td>
                               <?
 			     if($taxabancaria!=0){
@@ -513,11 +513,11 @@ $str = base64_encode($idenpar."##".$codigobarras."##".$valor_parm."##".$datavenc
                       </tr>
                     </table></td>
                 </tr>
-                <tr> 
+                <tr>
                   <td height="81" colspan="2" valign="top">Hist&oacute;rico:&nbsp;&nbsp;&nbsp;<font size="2">
                     <?=@$k00_descr?>
                     <br>
-                    </font> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    </font> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td><font size="2">
@@ -525,9 +525,9 @@ $str = base64_encode($idenpar."##".$codigobarras."##".$valor_parm."##".$datavenc
                           </font></td>
                       </tr>
                     </table>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </td>
                 </tr>
               </table></td>
@@ -558,15 +558,15 @@ if($fc_numbco == '0' || $fc_numbco == "") {
                     </font></td>
                     </tr>
                     <tr align="left" valign="top" bgcolor="#FFFFFF">
-                      <td width="33%" height="40" align="right"> <font style="font-size:10px"><strong>&nbsp;Vencimento:</strong> 
+                      <td width="33%" height="40" align="right"> <font style="font-size:10px"><strong>&nbsp;Vencimento:</strong>
                         </font> <br>
 						<?=$datavencimento?>
                       </td>
-                      <td width="33%" height="40" align="right"><font style="font-size:10px"><strong>&nbsp;C&oacute;digo 
+                      <td width="33%" height="40" align="right"><font style="font-size:10px"><strong>&nbsp;C&oacute;digo
                         de Arrecada&ccedil;&atilde;o: </strong></font><br>
 						<?=$numpre?>
 						</td>
-                      <td width="34%" height="40" align="right"><font style="font-size:10px">&nbsp;<strong>Valor 
+                      <td width="34%" height="40" align="right"><font style="font-size:10px">&nbsp;<strong>Valor
                         a pagar:</strong></font><br>
 						<?=db_formatar(@$valor_parm,'f')?>
                       </td>
@@ -581,8 +581,8 @@ if($fc_numbco == '0' || $fc_numbco == "") {
         </tr>
         <tr>
           <td height="88" valign="top" bgcolor="#E6E6E6"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-              <tr> 
-                <td width="20%" height="88" align="center" valign="middle"> <img src="imagens/logo_boleto.jpg" width="85" height="85" border="0"> 
+              <tr>
+                <td width="20%" height="88" align="center" valign="middle"> <img src="imagens/logo_boleto.jpg" width="85" height="85" border="0">
                 </td>
                 <td width="80%" height="88" valign="bottom">
 				<table width="100%" border="0" cellspacing="10" cellpadding="0">
@@ -592,18 +592,18 @@ if($fc_numbco == '0' || $fc_numbco == "") {
                     <?=$linhadigitavel?>
                     </font></td>
                     </tr>
-					<tr align="left" valign="top" bgcolor="#FFFFFF"> 
-                      <td width="33%" height="40" align="right"> <font style="font-size:10px"><strong>&nbsp;Vencimento:</strong> 
+					<tr align="left" valign="top" bgcolor="#FFFFFF">
+                      <td width="33%" height="40" align="right"> <font style="font-size:10px"><strong>&nbsp;Vencimento:</strong>
                         </font> <br>
 						<?=$datavencimento?>
 						 </td>
-                      <td width="33%" height="40" align="right"><font style="font-size:10px"><strong>&nbsp;C&oacute;digo 
+                      <td width="33%" height="40" align="right"><font style="font-size:10px"><strong>&nbsp;C&oacute;digo
                         de Arrecada&ccedil;&atilde;o: </strong></font><br>
-						<?=$numpre?>						
+						<?=$numpre?>
 						</td>
-                      <td width="34%" height="40" align="right"><font style="font-size:10px">&nbsp;<strong>Valor 
+                      <td width="34%" height="40" align="right"><font style="font-size:10px">&nbsp;<strong>Valor
                         a pagar:</strong></font><br>
-						<?=db_formatar(@$valor_parm,'f')?>						
+						<?=db_formatar(@$valor_parm,'f')?>
 						 </td>
                     </tr>
                   </table></td>
@@ -621,7 +621,7 @@ if($fc_numbco == '0' || $fc_numbco == "") {
 <?
 } else {
 ?>
-<img src="boleto/imgboleto.php?<?=$str?>"> 
+<img src="boleto/imgboleto.php?<?=$str?>">
 <?
 }
 ?>
@@ -629,7 +629,7 @@ if($fc_numbco == '0' || $fc_numbco == "") {
 </tr>
 </table>
 <?
-//if(!isset($itbi) && sizeof($numpres) > 2) {  
+//if(!isset($itbi) && sizeof($numpres) > 2) {
 // comentado
 if( 1==2 && !isset($itbi) && !isset($emite_recibo_protocolo)){
   ?>
@@ -642,20 +642,20 @@ if( 1==2 && !isset($itbi) && !isset($emite_recibo_protocolo)){
     <br>
     <Br style="page-break-after: always"-->
   <table width="90%" class="parcelas" border="1" cellspacing="0" cellpadding="0">
-  <tr align="center"> 
+  <tr align="center">
       <td colspan="10" class="parcelas"><img src="imagens/logo_boleto.jpg" width="102" height="99"></td>
   </tr>
-  <tr> 
+  <tr>
     <th class="parcelas">Identificador</th>
     <th class="parcelas">Parc</th>
     <th class="parcelas">Descrição</th>
     <th class="parcelas">Dt Venc</th>
     <th class="parcelas">Valor</th>
-    <th class="parcelas">Val Corr</th>	
-    <th class="parcelas">Juros</th>	
-    <th class="parcelas">Multa</th>	
-    <th class="parcelas">Desco</th>	
-    <th class="parcelas">Tot Parc</th>		
+    <th class="parcelas">Val Corr</th>
+    <th class="parcelas">Juros</th>
+    <th class="parcelas">Multa</th>
+    <th class="parcelas">Desco</th>
+    <th class="parcelas">Tot Parc</th>
   </tr>
 <?
 
@@ -664,7 +664,7 @@ from (
       select
       distinct on (k00_numpre||k00_numpar) k00_numpre,k00_numpar,k00_hist,
       from recibopaga
-           left outer join histcalc on k01_codigo = k00_hist,   
+           left outer join histcalc on k01_codigo = k00_hist,
            ( select distinct k00_numpre as numero, k00_numpar as parcela from recibopaga where k00_numnov = $k03_numpre) as rec
       where recibopaga.k00_numpre = rec.numero and recibopaga.k00_numpar = rec.parcela and recibopaga.k00_numnov = $k03_numpre
       group by k00_numpre,k00_numpar,k00_hist
@@ -678,13 +678,13 @@ select valores.k00_numpre as identificador,
 	   valor,
 	   acrescimo,
 	   desconto,
-	   (valor+acrescimo-desconto) as total , 
+	   (valor+acrescimo-desconto) as total ,
 	   to_char(k00_dtvenc,'DD/MM/YYYY') as vencimento,
 	   k01_descr
 */
 
 
-$sql = "select arrecad.k00_numpre,arrecad.k00_numpar,arrecad.k00_receit 
+$sql = "select arrecad.k00_numpre,arrecad.k00_numpar,arrecad.k00_receit
 from arrecad,recibopaga
 where recibopaga.k00_numnov = $k03_numpre
 and arrecad.k00_numpre = recibopaga.k00_numpre
@@ -714,25 +714,25 @@ $numrows = pg_numrows($result);
     <td class=\"parcelas\" nowrap>&nbsp;".pg_result($result_receita,0,"descricao")."</td>
     <td align=\"parcelas\" class=\"parcelas\">&nbsp;".pg_result($result_receita,0,"vencimento")."</td>
     <td align=\"right\" class=\"parcelas\">".number_format($fc_calcula[1],2,".",",")."&nbsp;</td>
-    <td align=\"right\" class=\"parcelas\">".number_format($fc_calcula[2],2,".",",")."&nbsp;</td>	
-    <td align=\"right\" class=\"parcelas\">".number_format($fc_calcula[3],2,".",",")."&nbsp;</td>	
-    <td align=\"right\" class=\"parcelas\">".number_format($fc_calcula[4],2,".",",")."&nbsp;</td>	
+    <td align=\"right\" class=\"parcelas\">".number_format($fc_calcula[2],2,".",",")."&nbsp;</td>
+    <td align=\"right\" class=\"parcelas\">".number_format($fc_calcula[3],2,".",",")."&nbsp;</td>
+    <td align=\"right\" class=\"parcelas\">".number_format($fc_calcula[4],2,".",",")."&nbsp;</td>
     <td align=\"right\" class=\"parcelas\">".number_format($Desco[0],2,".",",")."&nbsp;</td>
-    <td align=\"right\" class=\"parcelas\">".number_format((($fc_calcula[2]+$fc_calcula[3]+$fc_calcula[4])-$Desco[0]),2,".",",")."&nbsp;</td>	
+    <td align=\"right\" class=\"parcelas\">".number_format((($fc_calcula[2]+$fc_calcula[3]+$fc_calcula[4])-$Desco[0]),2,".",",")."&nbsp;</td>
   </tr>\n";
   }
   ?>
-   <tr>  
+   <tr>
     <td colspan="9" align="right" class="parcelas"><strong>Total:</strong>&nbsp;</td>
     <td align="right" class="parcelas"><?=number_format(($valor_parm - $taxabancaria),2,".",",")?>&nbsp;</td>
   </tr>
-  <tr> 
+  <tr>
     <td colspan="10" class="parcelas">
 	<strong>&nbsp;Código Recibo:</strong> <?=$numpre?><Br>
 	<strong>&nbsp;Data:</strong> <?=date("m/d/Y")?><br>
 	<strong>&nbsp;Hora:</strong> <?=date("H:i:s")?><Br>
 	<strong>&nbsp;IP:</strong> <?=$_SERVER['REMOTE_ADDR']?><Br>
-	<strong>&nbsp;Linha Digitável:</strong> <?=$linhadigitavel?>	
+	<strong>&nbsp;Linha Digitável:</strong> <?=$linhadigitavel?>
 	</td>
   </tr>
 </table>

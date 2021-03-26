@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -86,7 +86,7 @@ $oRotuloCampos->label("as02_nis");
                   ?>
                 </td>
                 <td>
-                <?php 
+                <?php
                   db_input("as02_nis", 10, $Ias02_nis, true, "text", 1, "onchange='js_pesquisaCidadao(false, true);'");
                 ?>
                 </td>
@@ -105,25 +105,25 @@ $oRotuloCampos->label("as02_nis");
 <script type="text/javascript">
 
 /**
- * Função para busca e validação do NIS 
+ * Função para busca e validação do NIS
  */
 function js_pesquisaCidadao(lMostra, lNis) {
 
   var sUrl = 'func_cidadaofamiliacompleto.php?';
-  
+
   if (lMostra) {
 
-    sUrl += 'funcao_js=parent.js_mostraCidadao|ov02_sequencial|ov02_nome|as02_nis'; 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisa Cidadão',true);
+    sUrl += 'funcao_js=parent.js_mostraCidadao|ov02_sequencial|ov02_nome|as02_nis';
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisa Cidadão',true);
   } else {
 
     if ($F('as02_nis') != '' && lNis) {
       sUrl += 'pesquisa_chave='+$F('as02_nis');
       sUrl += '&lNis=true';
     }
-    
+
     if ($F('codigoCidadao') != ''  && !lNis) {
-      
+
       sUrl += 'pesquisa_chave='+$F('codigoCidadao');
       sUrl += '&lCidadao=true';
     }
@@ -131,25 +131,25 @@ function js_pesquisaCidadao(lMostra, lNis) {
     if (($F('as02_nis') == '' && lNis) || ($F('codigoCidadao') == '' && !lNis)) {
       sUrl += 'pesquisa_chave=';
     }
-    
+
     sUrl += '&funcao_js=parent.js_mostraCidadao2';
 
     if ($F('as02_nis') != '' || $F('codigoCidadao') != '') {
 
-     js_OpenJanelaIframe('top.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisa Cidadão', false);
+     js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisa Cidadão', false);
     } else {
-      
+
       $('codigoCidadao').value = "";
       $('nome').value          = "";
       $('as02_nis').value     = "";
     }
   }
 }
- 
+
 function js_mostraCidadao (iCidadao, sCidadao, iNis) {
 
   if (iCidadao != "") {
-    
+
     $('codigoCidadao').value   = iCidadao;
     $('nome').value            = sCidadao;
     $('as02_nis').value        = iNis;
@@ -162,15 +162,15 @@ function js_mostraCidadao2(lErro, iCidadao, sCidadao, iNis) {
   $('nome').value            = sCidadao;
   $('codigoCidadao').value   = iCidadao;
   $('as02_nis').value        = iNis;
-  
+
   if (lErro) {
-    
+
     $('codigoCidadao').value = "";
     $('as02_nis').value      = "";
     $('nome').value          = iCidadao;
-    
+
     if (iCidadao == '') {
-      
+
       $('as02_nis').value      = iCidadao;
       $('codigoCidadao').value = iCidadao;
     }
@@ -220,8 +220,8 @@ $('btnImprimir').observe("click", function() {
     sLocation     += "&sDataInicial="+$('dataInicial').value;
     sLocation     += "&sDataFinal="+$('dataFinal').value;
     sLocation     += "&iCodigoCidadao="+$('codigoCidadao').value;
-    jan            = window.open(sLocation, 
-                                 '', 
+    jan            = window.open(sLocation,
+                                 '',
                                  'width='+(screen.availWidth-5)+
                                  ',height='+(screen.availHeight-40)+
                                  ',scrollbars=1,location=0');

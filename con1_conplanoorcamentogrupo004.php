@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -49,7 +49,7 @@ $oGet = db_utils::postMemory($_GET);
 <meta http-equiv="Expires" CONTENT="0">
 <?
   db_app::load("scripts.js");
-  db_app::load("prototype.js"); 
+  db_app::load("prototype.js");
   db_app::load("strings.js, grid.style.css, datagrid.widget.js");
 ?>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -106,7 +106,7 @@ oGridGrupo.show($('divGridGrupo'));
 function js_carregaGrupos() {
 
   js_divCarregando("Aguarde, carregando Grupos...", "msgBox");
-  
+
   var oParam          = new Object();
   oParam.exec         = "getGrupos";
   oParam.iCodigoConta = iCodigoConta;
@@ -129,7 +129,7 @@ function js_preencheGridGrupo(oAjax) {
     oRetorno.aGrupoContas.each(function (oGrupo, iLinha) {
 
       var aLinha = new Array();
-      aLinha[0]  = oGrupo.c20_sequencial; 
+      aLinha[0]  = oGrupo.c20_sequencial;
       aLinha[1]  = oGrupo.c20_descr.urlDecode();
       aLinha[2]  = '<input type="button" id="btnReduzExc_'+iLinha+'" value="E"';
       aLinha[2] += '       title="Excluir Registro" onclick="js_excluirGrupo('+oGrupo.c20_sequencial+')">';
@@ -171,15 +171,15 @@ function js_excluiGrupo(oAjax) {
 function js_pesquisaGrupos(mostra) {
 
   if (mostra === true) {
-    js_OpenJanelaIframe("top.corpo.iframe_grupos",
+    js_OpenJanelaIframe("CurrentWindow.corpo.iframe_grupos",
                         "db_iframe_grupo",
                         "func_congrupo.php?funcao_js=parent.js_mostraGrupos|c20_sequencial|c20_descr",
                         "Pesquisa", true, '0');
-  } else { 
+  } else {
 
     var sValorCampo = $F('c20_sequencial');
     if (sValorCampo !== '') {
-      js_OpenJanelaIframe("top.corpo.iframe_grupos",
+      js_OpenJanelaIframe("CurrentWindow.corpo.iframe_grupos",
                           "db_iframe_grupo",
                           "func_congrupo.php?pesquisa_chave="+sValorCampo+"&funcao_js=parent.js_mostraGrupos",
                           "Pesquisa", false);
@@ -209,12 +209,12 @@ function js_mostraGrupos() {
 function js_incluirGrupo() {
 
   js_divCarregando('Aguarde, incluindo conta', 'msgBox');
-  
+
   var oParam = new Object();
       oParam.exec         = "incluirGrupo";
       oParam.iCodigoConta = iCodigoConta;
       oParam.iCodigoGrupo = $F('c20_sequencial');
-      
+
   var oAjax = new Ajax.Request('con1_conplanoorcamento.RPC.php',
                                {method: 'POST',
                                 parameters:'json='+Object.toJSON(oParam),
@@ -226,7 +226,7 @@ function js_retornoInclusaoGrupo(oAjax) {
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status === 1) {
-    
+
     alert('Grupo incluído com sucesso');
     $('c20_sequencial').value = '';
     $('c20_descr').value      = '';

@@ -17,31 +17,31 @@ $dados="ordem";
 <script>
 function js_mascara(evt){
   var evt = (evt) ? evt : (window.event) ? window.event : "";
-  
+
   if((evt.charCode >46 && evt.charCode <58) || evt.charCode ==0){//8:backspace|46:delete|190:.
     return true;
   }else{
     return false;
-  }  
+  }
 }
 
 function js_atualizar(opcao){
   obj = ordem.document.form1;
   var coluna='';
-  var sep=''; 
+  var sep='';
   var ncoluna='';
-  var nsep=''; 
+  var nsep='';
   for(i=0; i<obj.length; i++){
-    tipo = obj[i].type;  
+    tipo = obj[i].type;
     if(tipo=="checkbox" && obj[i].checked==true){
-      coluna += sep+obj[i].name; 
+      coluna += sep+obj[i].name;
       sep = ",";
     }else if(tipo=="checkbox" && obj[i].checked==false){
-      ncoluna += nsep+obj[i].name; 
+      ncoluna += nsep+obj[i].name;
       nsep = ",";
     }
   }
-  
+
   if(coluna != ""){
     document.form1.movs.value = coluna;
     document.form1.nmov.value = ncoluna;
@@ -60,13 +60,13 @@ function js_mostravalores(){
   valores = "";
   vir = "";
   for(i=0;i<obj.length;i++){
-    if(obj.elements[i].checked==true){     
+    if(obj.elements[i].checked==true){
       valores += vir+obj.elements[i].name;
       vir = ",";
     }
   }
   if(valores!=""){
-    js_OpenJanelaIframe('top.corpo','db_iframe_mostratotal','func_mostratotal.php?valores='+valores,'Pesquisa',true,'20','390','400','300');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostratotal','func_mostratotal.php?valores='+valores,'Pesquisa',true,'20','390','400','300');
   }else{
     alert("Selecione algum movimento.");
   }
@@ -83,7 +83,7 @@ function js_valores(opcao,valortotal,valortipo,descrtipo,codtipo){
 	  valortipo += new Number(eval("ordem.document.form1.valor_"+obj.elements[i].name+"_"+codtipo+".value"));
 	}
 	if(obj.elements[i].type=="text"){
-	  valortotal += new Number(obj.elements[i].value); 
+	  valortotal += new Number(obj.elements[i].value);
 	}
       }
     }
@@ -103,7 +103,7 @@ function js_valores(opcao,valortotal,valortipo,descrtipo,codtipo){
 <?=db_input('nmov',100,'',true,'hidden',1);?>
 <center>
 <div align="left" id="valores" style="position:absolute; z-index:1; top:360; left:420; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; background-color:#999999; font-weight:bold;">
-    <span id="descr"></span><br> 
+    <span id="descr"></span><br>
     Total tipo: <span id="valtottip"></span><br>
     Total geral: <span id="valgertot"></span><br>
 </div>
@@ -172,10 +172,10 @@ function js_valores(opcao,valortotal,valortipo,descrtipo,codtipo){
 	 $db_bancos = $db90_codban;
        }
        $arr_bancos[$db90_codban] = $db90_descr;
-     }   
-    
-     $qualdescr = ""; 
-     if(isset($db_bancos) && isset($arr_bancos[$db_bancos])){ 
+     }
+
+     $qualdescr = "";
+     if(isset($db_bancos) && isset($arr_bancos[$db_bancos])){
        $qualdescr = $arr_bancos[$db_bancos];
      }
      db_select("db_bancos",$arr_bancos,true,1,"onchange='js_reload();'");

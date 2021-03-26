@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Farmácia
@@ -52,13 +52,13 @@ $tipo = $db_opcao==1?"Inclusão":($db_opcao==2||$db_opcao==22?"Alteração":"Exclus
     <td nowrap title="<?=@$Tfa05_i_codigo?>">
        <?=@$Lfa05_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa05_i_codigo',10,$Ifa05_i_codigo,true,'text',3,"")
 ?>
     </td>
   </tr>
-  
+
   <?
 
    if(isset($estrutura_altera) || isset($chavepesquisa) && isset($fa05_c_class)){
@@ -67,8 +67,8 @@ db_input('fa05_i_codigo',10,$Ifa05_i_codigo,true,'text',3,"")
      }
       db_input('estrutura_altera',4,$Ifa05_i_codigo,true,'hidden',3);
    }
-   
-   //if(isset($db_atualizar) && (empty($estrutura_altera) || (isset($estrutura_altera) && str_replace(".","",$t64_class) != $estrutura_altera))){ 
+
+   //if(isset($db_atualizar) && (empty($estrutura_altera) || (isset($estrutura_altera) && str_replace(".","",$t64_class) != $estrutura_altera))){
    //  $cldb_estrut->db_estrut_inclusao($t64_class,$mascara,"clabens","t64_class","t64_analitica");
    //  if($cldb_estrut->erro_status==0){
    //    $err_estrutural = $cldb_estrut->erro_msg;
@@ -76,7 +76,7 @@ db_input('fa05_i_codigo',10,$Ifa05_i_codigo,true,'text',3,"")
    //    $focar=true;
    //  }
   // }
-   
+
    $cldb_estrut->autocompletar = true;
    $cldb_estrut->mascara = true;
    $cldb_estrut->reload  = true;
@@ -101,7 +101,7 @@ db_input('fa05_i_codigo',10,$Ifa05_i_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tfa05_c_descr?>">
        <?=@$Lfa05_c_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa05_c_descr',50,$Ifa05_c_descr,true,'text',$db_opcao,"")
 ?>
@@ -110,13 +110,13 @@ db_input('fa05_c_descr',50,$Ifa05_c_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tfa05_t_obs?>">
        <?=@$Lfa05_t_obs?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('fa05_t_obs',1,47,$Ifa05_t_obs,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  
+
   </table>
 	</fieldset>
   </center>
@@ -136,7 +136,7 @@ db_textarea('fa05_t_obs',1,47,$Ifa05_t_obs,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_far_class','func_far_class.php?funcao_js=parent.js_preenchepesquisa|fa05_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_class','func_far_class.php?funcao_js=parent.js_preenchepesquisa|fa05_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_far_class.hide();

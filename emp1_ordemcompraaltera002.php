@@ -263,7 +263,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 //        echo "      jan = window.open('emp2_ordemcompra002.php?cods=$m51_codordem', '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');";
 //        echo "      jan.moveTo(0,0);";
 //        echo "}";
-//        echo "top.corpo.location.href='emp1_ordemcompraaltera001.php';";
+//        echo "CurrentWindow.corpo.location.href='emp1_ordemcompraaltera001.php';";
 //    }
 //	echo "</script>";
 //}

@@ -15,13 +15,13 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $x32_codcorresp = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -32,7 +32,7 @@ if(isset($db_opcaoal)){
        db_ancora(@$Lx32_codcorresp,"js_pesquisax32_codcorresp(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x32_codcorresp',10,$Ix32_codcorresp,true,'text',$db_opcao," onchange='js_pesquisax32_codcorresp(false);'")
 ?>
@@ -47,7 +47,7 @@ db_input('x02_codcorresp',10,$Ix02_codcorresp,true,'text',3,'')
        db_ancora(@$Lx32_matric,"js_pesquisax32_matric(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x32_matric',10,$Ix32_matric,true,'text',$db_opcao," onchange='js_pesquisax32_matric(false);'")
 ?>
@@ -65,7 +65,7 @@ db_input('z01_nome',10,$Ix01_numcgm,true,'text',3,'')
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("x32_matric"=>@$x32_matric);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -93,20 +93,20 @@ function js_cancelar(){
 }
 function js_pesquisax32_codcorresp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguabasecorresp','db_iframe_aguacorresp','func_aguacorresp.php?funcao_js=parent.js_mostraaguacorresp1|x02_codcorresp|x02_codcorresp','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabasecorresp','db_iframe_aguacorresp','func_aguacorresp.php?funcao_js=parent.js_mostraaguacorresp1|x02_codcorresp|x02_codcorresp','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x32_codcorresp.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguabasecorresp','db_iframe_aguacorresp','func_aguacorresp.php?pesquisa_chave='+document.form1.x32_codcorresp.value+'&funcao_js=parent.js_mostraaguacorresp','Pesquisa',false);
+     if(document.form1.x32_codcorresp.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabasecorresp','db_iframe_aguacorresp','func_aguacorresp.php?pesquisa_chave='+document.form1.x32_codcorresp.value+'&funcao_js=parent.js_mostraaguacorresp','Pesquisa',false);
      }else{
-       document.form1.x02_codcorresp.value = ''; 
+       document.form1.x02_codcorresp.value = '';
      }
   }
 }
 function js_mostraaguacorresp(chave,erro){
-  document.form1.x02_codcorresp.value = chave; 
-  if(erro==true){ 
-    document.form1.x32_codcorresp.focus(); 
-    document.form1.x32_codcorresp.value = ''; 
+  document.form1.x02_codcorresp.value = chave;
+  if(erro==true){
+    document.form1.x32_codcorresp.focus();
+    document.form1.x32_codcorresp.value = '';
   }
 }
 function js_mostraaguacorresp1(chave1,chave2){
@@ -116,20 +116,20 @@ function js_mostraaguacorresp1(chave1,chave2){
 }
 function js_pesquisax32_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguabasecorresp','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabasecorresp','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x32_matric.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguabasecorresp','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x32_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
+     if(document.form1.x32_matric.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguabasecorresp','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x32_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
      }else{
-       document.form1.x01_numcgm.value = ''; 
+       document.form1.x01_numcgm.value = '';
      }
   }
 }
 function js_mostraaguabase(chave,erro){
-  document.form1.x01_numcgm.value = chave; 
-  if(erro==true){ 
-    document.form1.x32_matric.focus(); 
-    document.form1.x32_matric.value = ''; 
+  document.form1.x01_numcgm.value = chave;
+  if(erro==true){
+    document.form1.x32_matric.focus();
+    document.form1.x32_matric.value = '';
   }
 }
 function js_mostraaguabase1(chave1,chave2){

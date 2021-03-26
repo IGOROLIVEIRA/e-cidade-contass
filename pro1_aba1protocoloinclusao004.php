@@ -258,19 +258,19 @@ function js_pesquisaProtocolo(chave1, chave2, chave3, chave4, chave5, chave6, ch
 
 
   parent.document.formaba.autorizacaodeempenho.disabled=false;
-  top.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?pesquisa=1&protocolo='+chave1;
+  CurrentWindow.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?pesquisa=1&protocolo='+chave1;
 
   parent.document.formaba.empenho.disabled=false;
-  top.corpo.iframe_empenho.location.href='pro1_aba3protprocesso004.php?pesquisa=1&protocolo='+chave1;
+  CurrentWindow.corpo.iframe_empenho.location.href='pro1_aba3protprocesso004.php?pesquisa=1&protocolo='+chave1;
 
   parent.document.formaba.ordemdecompra.disabled=false;
-  top.corpo.iframe_ordemdecompra.location.href='pro1_aba4protprocesso004.php?pesquisa=1&protocolo='+chave1;
+  CurrentWindow.corpo.iframe_ordemdecompra.location.href='pro1_aba4protprocesso004.php?pesquisa=1&protocolo='+chave1;
 
   parent.document.formaba.ordemdepagamento.disabled=false;
-  top.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?pesquisa=1&protocolo='+chave1;
+  CurrentWindow.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?pesquisa=1&protocolo='+chave1;
 
   parent.document.formaba.slip.disabled=false;
-  top.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?pesquisa=1&protocolo='+chave1;
+  CurrentWindow.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?pesquisa=1&protocolo='+chave1;
 
   db_iframe_protocolos.hide();
 }
@@ -341,19 +341,19 @@ function incluirprotocolo(iUsuario, iOrigem, iDestino, iObservacao, iHora) {
         document.getElementById('copiar').style.display = "inline-block";
 
         parent.document.formaba.autorizacaodeempenho.disabled=false;
-        top.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?protocolo='+oRetorno.protocolo;
+        CurrentWindow.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?protocolo='+oRetorno.protocolo;
 
         parent.document.formaba.empenho.disabled=false;
-        top.corpo.iframe_empenho.location.href='pro1_aba3protprocesso004.php?protocolo='+oRetorno.protocolo;
+        CurrentWindow.corpo.iframe_empenho.location.href='pro1_aba3protprocesso004.php?protocolo='+oRetorno.protocolo;
 
         parent.document.formaba.ordemdecompra.disabled=false;
-        top.corpo.iframe_ordemdecompra.location.href='pro1_aba4protprocesso004.php?protocolo='+oRetorno.protocolo;
+        CurrentWindow.corpo.iframe_ordemdecompra.location.href='pro1_aba4protprocesso004.php?protocolo='+oRetorno.protocolo;
 
         parent.document.formaba.ordemdepagamento.disabled=false;
-        top.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?protocolo='+oRetorno.protocolo;
+        CurrentWindow.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?protocolo='+oRetorno.protocolo;
 
         parent.document.formaba.slip.disabled=false;
-        top.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?protocolo='+oRetorno.protocolo;
+        CurrentWindow.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?protocolo='+oRetorno.protocolo;
       } else {
           alert(oRetorno.erro);
         return;
@@ -454,11 +454,11 @@ function salvarCopiaProtocolo(p101_sequencial) {
     novoAjax(params, function(e) {
       var oRetorno = JSON.parse(e.responseText);
         if (oRetorno.status == 1) {
-          top.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?protocolo='+protocolo;
-          top.corpo.iframe_empenho.location.href='pro1_aba3protprocesso004.php?protocolo='+protocolo;
-          top.corpo.iframe_ordemdecompra.location.href='pro1_aba4protprocesso004.php?protocolo='+protocolo;
-          top.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?protocolo='+protocolo;
-          top.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?protocolo='+protocolo;
+          CurrentWindow.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?protocolo='+protocolo;
+          CurrentWindow.corpo.iframe_empenho.location.href='pro1_aba3protprocesso004.php?protocolo='+protocolo;
+          CurrentWindow.corpo.iframe_ordemdecompra.location.href='pro1_aba4protprocesso004.php?protocolo='+protocolo;
+          CurrentWindow.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?protocolo='+protocolo;
+          CurrentWindow.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?protocolo='+protocolo;
           alert("Protocolo copiado com sucesso!");
           db_iframe_protocolos.hide();
         } else {

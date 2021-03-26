@@ -886,7 +886,7 @@ function js_gridUnicas() {
   }
 
   function js_abrelayout(){
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_layout', 'cad4_emiteiptulayout001.php', 'Seleção de Campos ...', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_layout', 'cad4_emiteiptulayout001.php', 'Seleção de Campos ...', true);
   }
 
   function js_mostra_processando(){

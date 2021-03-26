@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -50,30 +50,30 @@ $db_botao       = false;
 if ( isset($oPost->alterar) ) {
 
   $lErroSql = false;
-  
+
   db_inicio_transacao();
   $clprocdiver->alterar($oPost->dv09_procdiver);
 
   if ( $clprocdiver->erro_status == 0 ) {
     $lErroSql = true;
   }
-   
+
   $sErroMsg = $clprocdiver->erro_msg;
   $db_opcao = 2;
   $db_botao = true;
-  
+
   db_fim_transacao($lErroSql);
-   
+
 } elseif ( isset($oGet->chavepesquisa) ) {
 
   $db_opcao        = 2;
   $db_botao        = true;
-   
+
   $sSqlProcedencia = $clprocdiver->sql_query($oGet->chavepesquisa,"*",null,"dv09_procdiver = {$oGet->chavepesquisa} and dv09_instit = ".db_getsession('DB_instit')." ");
   $rsProcedencia   = $clprocdiver->sql_record($sSqlProcedencia);
-  
+
   db_fieldsmemory($rsProcedencia,0);
-   
+
 }
 ?>
 <html>
@@ -95,22 +95,22 @@ if ( isset($oPost->alterar) ) {
 </html>
 <?
 if ( isset($alterar) ) {
-  
+
   if ( $lErroSql == true ) {
-    
+
     db_msgbox($sErroMsg);
-    
+
     if ( $clprocdiver->erro_campo != "" ) {
-      
+
       echo "<script> document.form1.".$clprocdiver->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clprocdiver->erro_campo.".focus();</script>";
-      
+
     }
-    
+
   } else {
     db_msgbox($sErroMsg);
   }
-  
+
 }
 
 if ( isset($chavepesquisa) ) {
@@ -119,13 +119,13 @@ if ( isset($chavepesquisa) ) {
   <script>
       function js_db_libera(){
          parent.document.formaba.recparprocdiver.disabled=false;
-         top.corpo.iframe_recparprocdiver.location.href='div1_recparprocdiver001.php?procdiver=".@$dv09_procdiver."';
+         CurrentWindow.corpo.iframe_recparprocdiver.location.href='div1_recparprocdiver001.php?procdiver=".@$dv09_procdiver."';
      ";
-  
+
   if( isset($liberaaba) ) {
     echo "  parent.mo_camada('recparprocdiver');";
   }
-  
+
   echo"}\n
     js_db_libera();
   </script>\n

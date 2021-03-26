@@ -211,7 +211,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
     iTipoRP = <?=$iTipoResto;?>;
     function js_pesquisa(){
 
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenhorp.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenhorp.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
     }
     function js_preenchepesquisa(chave) {
         db_iframe_empempenho.hide();

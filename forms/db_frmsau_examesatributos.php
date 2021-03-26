@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Ambulatorial
@@ -44,7 +44,7 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
     <td nowrap title="<?=@$Ts132_i_codigo?>">
        <?=@$Ls132_i_codigo?>
     </td>
-    <td> 
+    <td>
      <?
       db_input('s132_i_codigo',10,$Is132_i_codigo,true,'text',3,"")
      ?>
@@ -54,7 +54,7 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
     <td nowrap title="<?=@$Ts108_c_exame?>">
       <?=@$Ls108_c_exame?>
     </td>
-    <td> 
+    <td>
     <?
      db_input('s131_i_exames',10,@$Is131_i_exames,true,'text',3,"")
     ?>
@@ -69,7 +69,7 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
        db_ancora(@$Ls131_i_codigo,"js_pesquisas132_i_atributoexames(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
      <?
        db_input('s132_i_atributoexames',10,$Is132_i_atributoexames,true,'text',$db_opcao," onchange='js_pesquisas132_i_atributoexames(false);'")
      ?>
@@ -101,27 +101,27 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 		$cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
         ?>
 	</td>
-</tr>	
+</tr>
 </table>
 </center>
 </form>
 <script>
 function js_pesquisas132_i_atributoexames(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a3','db_iframe_sau_examesatributos','func_sau_atributoexames.php?funcao_js=parent.js_mostrasau_atributos1|s131_i_codigo|s131_c_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a3','db_iframe_sau_examesatributos','func_sau_atributoexames.php?funcao_js=parent.js_mostrasau_atributos1|s131_i_codigo|s131_c_descricao','Pesquisa',true);
   }else{
-     if(document.form1.s132_i_atributoexames.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_a3','db_iframe_sau_examesatributos','func_sau_atributoexames.php?pesquisa_chave='+document.form1.s132_i_atributoexames.value+'&funcao_js=parent.js_mostrasau_atributos','Pesquisa',false);
+     if(document.form1.s132_i_atributoexames.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a3','db_iframe_sau_examesatributos','func_sau_atributoexames.php?pesquisa_chave='+document.form1.s132_i_atributoexames.value+'&funcao_js=parent.js_mostrasau_atributos','Pesquisa',false);
      }else{
-       document.form1.s131_i_codigo.value = ''; 
+       document.form1.s131_i_codigo.value = '';
      }
   }
 }
 function js_mostrasau_atributos(chave,erro){
-  document.form1.s131_c_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.s132_i_atributoexames.focus(); 
-    document.form1.s132_i_atributoexames.value = ''; 
+  document.form1.s131_c_descricao.value = chave;
+  if(erro==true){
+    document.form1.s132_i_atributoexames.focus();
+    document.form1.s132_i_atributoexames.value = '';
   }
 }
 function js_mostrasau_atributos1(chave1,chave2){
@@ -130,7 +130,7 @@ function js_mostrasau_atributos1(chave1,chave2){
   db_iframe_sau_examesatributos.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_a3','db_iframe_sau_examesatributos','func_sau_examerequisitos.php?funcao_js=parent.js_preenchepesquisa|s132_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a3','db_iframe_sau_examesatributos','func_sau_examerequisitos.php?funcao_js=parent.js_preenchepesquisa|s132_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_sau_examesatributos.hide();

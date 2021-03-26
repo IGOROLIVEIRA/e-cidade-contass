@@ -57,22 +57,22 @@ $sql03="
        ";
 /*
          select e82_codord from empage
-		inner join empagemov   on e81_codage = e80_codage 
+		inner join empagemov   on e81_codage = e80_codage
 		inner join empord      on e82_codmov = e81_codmov
-		inner join empageconf  on e86_codmov = e81_codmov 
+		inner join empageconf  on e86_codmov = e81_codmov
 */
 
 $sql = $clpagordem->sql_query_pagordemeleempage(null,"empagemov.e81_codage as e80_codage,e50_data,o15_codigo,o15_descr,e60_emiss,e60_anousu,e60_numemp,e50_codord,z01_numcgm,z01_cgccpf, z01_nome, sum(e53_valor) as e53_valor,sum(e53_vlranu) as e53_vlranu,sum(e53_vlrpag) as e53_vlrpag, case when sum(xxx.e81_valor) is null then 0 else sum(xxx.e81_valor) end as e81_valor","","1=1 and e86_codmov is null group by e60_numemp,e50_codord,e50_data,z01_numcgm,z01_nome,e60_emiss,o15_codigo,o15_descr,e60_anousu,e81_codage,z01_cgccpf");
 
 $sql02 =  "select * from ($sql) as x
-	   where $dbwhere 
-   	   order by e50_codord	   
+	   where $dbwhere
+   	   order by e50_codord
 	";
 
 //echo($sql02);
 
-$result09 = $clpagordem->sql_record($sql02); 
-$numrows09= $clpagordem->numrows; 
+$result09 = $clpagordem->sql_record($sql02);
+$numrows09= $clpagordem->numrows;
 
 ?>
 <html>
@@ -102,14 +102,14 @@ $numrows09= $clpagordem->numrows;
 }
 </style>
 <script>
-function js_marca(obj){ 
+function js_marca(obj){
    var OBJ = document.form1;
    for(i=0;i<OBJ.length;i++){
      if(OBJ.elements[i].type == 'checkbox' && OBJ.elements[i].disabled==false){
-       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
      }
      if(OBJ.elements[i].checked==true){
-         js_colocaval(OBJ.elements[i]);      
+         js_colocaval(OBJ.elements[i]);
      }
    }
    return false;
@@ -119,19 +119,19 @@ function js_confere(campo){
 	erro_msg = '';
 
 	vlrgen= new Number(campo.value);
-        
-	
+
+
 	if(isNaN(vlrgen)){
 	    erro = true;
 	}
 	nome = campo.name.substring(6);
-	
+
 	vlrlimite = new Number(eval("document.form1.disponivel_"+nome+".value"));
 	if(vlrgen > vlrlimite){
 	  erro_msg = "Valor digitado é maior do que o disponível!";
 	  erro=true;
-	}  
-        
+	}
+
         if(vlrgen == ''){
 	   eval("document.form1."+campo.name+".value = '0.00';");
         }
@@ -140,23 +140,23 @@ function js_confere(campo){
 	}else{
 	  eval("document.form1.CHECK_"+nome+".checked=true");
 	}
-	
+
 	if(erro==false){
 	   eval("document.form1."+campo.name+".value = vlrgen.toFixed(2);");
-	}else{  
+	}else{
 	   if(erro_msg != ''){
 	     //alert(erro_msg);
 	   }
 	   eval("document.form1."+campo.name+".focus()");
 	   eval("document.form1."+campo.name+".value = vlrlimite.toFixed(2);");
 	   return false;
-	}  
-  
+	}
+
 }
 
 function js_colocaval(campo){
   if(campo.checked==true){
-    valor = new Number(eval('document.form1.disponivel_'+campo.value+'.value')); 
+    valor = new Number(eval('document.form1.disponivel_'+campo.value+'.value'));
     v = valor.toFixed(2);
    eval('document.form1.valor_'+campo.value+'.value='+v);
   }else{
@@ -174,7 +174,7 @@ function js_padrao(val){
        checa = eval("document.form1.CHECK_"+ord+".checked");
        if(checa==false){
 	 continue;
-       } 
+       }
       for(q=0; q<OBJ.elements[i].options.length; q++){
 	if(OBJ.elements[i].options[q].value==val){
 	   OBJ.elements[i].options[q].selected=true;
@@ -185,7 +185,7 @@ function js_padrao(val){
    }
 }
 function js_verificacampo(nomecampo,valforma){
-  arr_nome = nomecampo.split("_");  
+  arr_nome = nomecampo.split("_");
   numordem = arr_nome[1];
   valorcam = eval("document.form1."+nomecampo+".value");
   if(valforma=="2" && valorcam=="3"){
@@ -195,7 +195,7 @@ function js_verificacampo(nomecampo,valforma){
 }
 function js_conta(cgm,opcao,nomecampo){
   if(opcao=="button" || opcao=="n"){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecon','com1_pcfornecon001.php?novo=true&submita=true&z01_numcgm='+cgm,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecon','com1_pcfornecon001.php?novo=true&submita=true&z01_numcgm='+cgm,'Pesquisa',true);
   }
 }
 </script>
@@ -205,8 +205,8 @@ function js_conta(cgm,opcao,nomecampo){
     &nbsp;Agenda&nbsp;&nbsp;&nbsp;&nbsp; Empenho &nbsp;&nbsp;Ordem &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recurso
 </div>
 <table width="100" height="100" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
 <form name="form1" method="post" action="">
     <center>
       <table  class='bordas' border='5'>
@@ -240,7 +240,7 @@ function js_conta(cgm,opcao,nomecampo){
 	  for($i=0; $i<$numrows09; $i++){
             $dbwhere02='';
 	    db_fieldsmemory($result09,$i,true);
-            
+
 //	    if ($e60_numemp != 11808 and $e60_numemp != 8707) continue;
 
 	    $codigodaforma = "for_$e50_codord";
@@ -248,9 +248,9 @@ function js_conta(cgm,opcao,nomecampo){
 
 	    $x= "e60_numemp_$e50_codord";
 	    $$x = $e60_numemp;
-	    
 
-	   
+
+
            //--------------------------------------
 	   //rotina que verifica se tem movimento para a ordem nesta agenda.. se tiver ele marca o campo checkbox
 	   $result01 = $clempagemov->sql_record($clempagemov->sql_query_ord(null,'e81_codmov,e81_valor','',"e82_codord=$e50_codord and e81_codage=$e80_codage"));
@@ -262,7 +262,7 @@ function js_conta(cgm,opcao,nomecampo){
 	       db_fieldsmemory($result_empagemovforma,0);
 	       $$codigodaforma = $e97_codforma;
 	     }
-             
+
 	     //rotina que verifica quais movimentos eh para trazer.. se todos,selecionados e naum selecionados
                //---------------------------------------------------------
 	       //pega o tipo do movimento
@@ -271,29 +271,29 @@ function js_conta(cgm,opcao,nomecampo){
 		   db_fieldsmemory($result01,0,true);
 		   $x= "e83_codtipo_$e50_codord";
 		   $$x = $e85_codtipo;
-                   
+
 		   $dbwhere02 = " or e83_codtipo=$e85_codtipo";
-		   
+
 		 }
-              //-------------------------------------------------------------	 
+              //-------------------------------------------------------------
 	   }else{
 	     //verifica se eh para trazer apenas os selecionados
  	     $e81_valor = '0.00';
           }
-	     
+
          //coloca o valor com campo
 	   $x= "valor_$e50_codord";
 	   $$x = number_format($e81_valor,"2",".","");
 
-	  //rotina que verifica se existe valor disponivel 
+	  //rotina que verifica se existe valor disponivel
 	     $result03  = $clempagemov->sql_record($clempagemov->sql_query_ord(null,"e82_codord,sum(e81_valor) as tot_valor",""," e82_codord = $e50_codord group by e82_codord "));
 	     $numrows03 = $clempagemov->numrows;
 	     if($numrows03 > 0){
 	       db_fieldsmemory($result03,0);
 	     }else{
 	       $tot_valor ='0.00';
-	     }  
-	   
+	     }
+
 	     $result033  = $clempagemov->sql_record($clempagemov->sql_query_ord(null,"e82_codord,sum(e81_valor) as tot_valor_desta",""," e82_codord = $e50_codord and e81_codage = $e80_codage group by e82_codord "));
 	     $numrows033 = $clempagemov->numrows;
 	     if($numrows033 > 0){
@@ -301,10 +301,10 @@ function js_conta(cgm,opcao,nomecampo){
 	     } else {
 	       $tot_valor_desta = 0;
 	     }
-	     
+
 	    $total = $e53_valor - $e53_vlrpag - $e53_vlranu;
 	    $disponivel = $total - $tot_valor + $tot_valor_desta;
-             
+
 	    /*
 	    echo "<BR><BR>
 	    $total = $e53_valor - $e53_vlrpag - $e53_vlranu;
@@ -312,20 +312,20 @@ function js_conta(cgm,opcao,nomecampo){
 	    ";
 	    */
 //	    $disponivel = $total - ($tot_valor - $e81_valor);
-	    
+
 	    $x= "disponivel_$e50_codord";
 	    $$x = number_format($disponivel,"2",".","");
 	   //=-------------------------------------------
 
 //            die("ord: $e50_codord - disp: $disponivel\n");
-	   
+
 	   if( ($disponivel == 0 || $disponivel < 0)){
 	      // echo $e50_codord." sem valor disponivel!";
-              $nords .= $nvirg.$e50_codord; 
+              $nords .= $nvirg.$e50_codord;
 	      $nvirg = " ,";
               continue;
 	   }
-	    
+
 //	    echo "$disponivel = $total - ($tot_valor - $e81_valor);<br><br>";
 
           //pega os tipos
@@ -353,8 +353,8 @@ function js_conta(cgm,opcao,nomecampo){
             }
 	  }
           flush();
-        
-       
+
+
 
 	    if(isset($e83_codtipo)){
 	      $t = "e83_codtipo_$e50_codord";
@@ -363,7 +363,7 @@ function js_conta(cgm,opcao,nomecampo){
 
          //rotina que verifica se o fornecedor possui conta cadastrada para pagamento eletrônico
 	 $outr = '';
-         $result = $clpagordemconta->sql_record($clpagordemconta->sql_query($e50_codord,"e49_numcgm")); 
+         $result = $clpagordemconta->sql_record($clpagordemconta->sql_query($e50_codord,"e49_numcgm"));
          if($clpagordemconta->numrows>0){
           db_fieldsmemory($result,0);
 	   $numcgm = $e49_numcgm;
@@ -371,7 +371,7 @@ function js_conta(cgm,opcao,nomecampo){
          }else{
 	   $numcgm = $z01_numcgm;
 	 }
-         
+
 	 $arr_contas = Array();
 	 $result_contasforn = $clpcfornecon->sql_record($clpcfornecon->sql_query_file(null,"pc63_agencia,pc63_agencia_dig,pc63_banco,pc63_conta,pc63_conta_dig,pc63_contabanco,pc63_cnpjcpf",'',"pc63_numcgm=$numcgm"));
 	 $numrows_contasforn = $clpcfornecon->numrows;
@@ -388,7 +388,7 @@ function js_conta(cgm,opcao,nomecampo){
 	     if(($pc63_conta_dig)!=""){
 	       $pc63_conta_dig = "/".$pc63_conta_dig;
 	     }
-             
+
 	     $arr_contas[$pc63_contabanco] = $pc63_banco.' - '.$pc63_agencia.$pc63_agencia_dig.' - '.$pc63_conta.$pc63_conta_dig;
 	     $arr_cnpjcpf[$pc63_contabanco] = $pc63_cnpjcpf;
 	     $arr_index[$index] = $pc63_contabanco;
@@ -410,7 +410,7 @@ function js_conta(cgm,opcao,nomecampo){
 	   $result_contapad = $clpcfornecon->sql_record($clpcfornecon->sql_query_padrao(null,"pc63_contabanco as con_".$e50_codord,'',"pc63_numcgm=$numcgm"));
 	   $numrows_contapad = $clpcfornecon->numrows;
 	   if($numrows_contapad > 0){
-	     db_fieldsmemory($result_contapad,0); 
+	     db_fieldsmemory($result_contapad,0);
 	   }else{
 	     $contapad = "con_$e50_codord";
 	     $$contapad = 0;
@@ -451,7 +451,7 @@ function js_conta(cgm,opcao,nomecampo){
 	    $verificacampo = 2;
 	  }
 	  ?>
-          <td class='bordas' nowrap title='Forma de pagamento'><small>  
+          <td class='bordas' nowrap title='Forma de pagamento'><small>
 	  <?
 	    echo "
 		  <script>

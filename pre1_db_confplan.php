@@ -1,29 +1,29 @@
 <?php
 
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -280,10 +280,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
   function js_pesquisareceita(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_tabrec_retido', 'func_tabrec.php?funcao_js=parent.js_mostrareceita1|k02_codigo|k02_drecei', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_tabrec_retido', 'func_tabrec.php?funcao_js=parent.js_mostrareceita1|k02_codigo|k02_drecei', 'Pesquisa', true);
     } else {
       if (document.form1.w10_receit.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_tabrec_retido', 'func_tabrec.php?pesquisa_chave=' + document.form1.w10_receit.value + '&funcao_js=parent.js_mostrareceita', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_tabrec_retido', 'func_tabrec.php?pesquisa_chave=' + document.form1.w10_receit.value + '&funcao_js=parent.js_mostrareceita', 'Pesquisa', false);
       } else {
         document.form1.k02_descr_retido.value = '';
       }
@@ -303,10 +303,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   }
   function js_pesquisahistorico(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_histcalc_retido', 'func_histcalc.php?funcao_js=parent.js_mostrahistorico1|k01_codigo|k01_descr', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_histcalc_retido', 'func_histcalc.php?funcao_js=parent.js_mostrahistorico1|k01_codigo|k01_descr', 'Pesquisa', true);
     } else {
       if (document.form1.w10_hist.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_histcalc_retido', 'func_histcalc.php?pesquisa_chave=' + document.form1.w10_hist.value + '&funcao_js=parent.js_mostrahistorico', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_histcalc_retido', 'func_histcalc.php?pesquisa_chave=' + document.form1.w10_hist.value + '&funcao_js=parent.js_mostrahistorico', 'Pesquisa', false);
       } else {
         document.form1.k01_descr_retido.value = '';
       }
@@ -326,10 +326,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   }
   function js_pesquisatipodebito(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_arretipo_retido', 'func_arretipo.php?funcao_js=parent.js_mostratipodebito1|k00_tipo|k00_descr', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_arretipo_retido', 'func_arretipo.php?funcao_js=parent.js_mostratipodebito1|k00_tipo|k00_descr', 'Pesquisa', true);
     } else {
       if (document.form1.w10_tipo.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_arretipo_retido', 'func_arretipo.php?pesquisa_chave=' + document.form1.w10_tipo.value + '&funcao_js=parent.js_mostratipodebito', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_arretipo_retido', 'func_arretipo.php?pesquisa_chave=' + document.form1.w10_tipo.value + '&funcao_js=parent.js_mostratipodebito', 'Pesquisa', false);
       } else {
         document.form1.k00_descr_retido.value = '';
       }
@@ -349,10 +349,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   }
   function js_pesquisavencimento(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_cadvencdesc_variavel', 'func_cadvencdesc.php?funcao_js=parent.js_mostravencimento1|q92_codigo|q92_descr', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cadvencdesc_variavel', 'func_cadvencdesc.php?funcao_js=parent.js_mostravencimento1|q92_codigo|q92_descr', 'Pesquisa', true);
     } else {
       if (document.form1.q144_codvenc.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_cadvencdesc_variavel', 'func_cadvencdesc.php?pesquisa_chave=' + document.form1.q144_codvenc.value + '&funcao_js=parent.js_mostravencimento', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cadvencdesc_variavel', 'func_cadvencdesc.php?pesquisa_chave=' + document.form1.q144_codvenc.value + '&funcao_js=parent.js_mostravencimento', 'Pesquisa', false);
       } else {
         document.form1.q92_descr_variavel.value = '';
       }
@@ -372,10 +372,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   }
   function js_pesquisareceitavariavel(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_tabrec_variavel', 'func_tabrec.php?funcao_js=parent.js_mostrareceitavariavel1|k02_codigo|k02_drecei', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_tabrec_variavel', 'func_tabrec.php?funcao_js=parent.js_mostrareceitavariavel1|k02_codigo|k02_drecei', 'Pesquisa', true);
     } else {
       if (document.form1.q144_receita.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_tabrec_variavel', 'func_tabrec.php?pesquisa_chave=' + document.form1.q144_receita.value + '&funcao_js=parent.js_mostrareceitavariavel', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_tabrec_variavel', 'func_tabrec.php?pesquisa_chave=' + document.form1.q144_receita.value + '&funcao_js=parent.js_mostrareceitavariavel', 'Pesquisa', false);
       } else {
         document.form1.k02_descr_variavel.value = '';
       }
@@ -395,10 +395,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   }
   function js_pesquisatipodebitovariavel(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_arretipo_variavel', 'func_arretipo.php?funcao_js=parent.js_mostratipodebitovariavel1|k00_tipo|k00_descr', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_arretipo_variavel', 'func_arretipo.php?funcao_js=parent.js_mostratipodebitovariavel1|k00_tipo|k00_descr', 'Pesquisa', true);
     } else {
       if (document.form1.q144_tipo.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_arretipo_variavel', 'func_arretipo.php?pesquisa_chave=' + document.form1.q144_tipo.value + '&funcao_js=parent.js_mostratipodebitovariavel', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_arretipo_variavel', 'func_arretipo.php?pesquisa_chave=' + document.form1.q144_tipo.value + '&funcao_js=parent.js_mostratipodebitovariavel', 'Pesquisa', false);
       } else {
         document.form1.k00_descr_variavel.value = '';
       }
@@ -418,10 +418,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   }
   function js_pesquisahistoricovariavel(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_histcalc_variavel', 'func_histcalc.php?funcao_js=parent.js_mostrahistoricovariavel1|k01_codigo|k01_descr', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_histcalc_variavel', 'func_histcalc.php?funcao_js=parent.js_mostrahistoricovariavel1|k01_codigo|k01_descr', 'Pesquisa', true);
     } else {
       if (document.form1.q144_hist.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_histcalc_variavel', 'func_histcalc.php?pesquisa_chave=' + document.form1.q144_hist.value + '&funcao_js=parent.js_mostrahistoricovariavel', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_histcalc_variavel', 'func_histcalc.php?pesquisa_chave=' + document.form1.q144_hist.value + '&funcao_js=parent.js_mostrahistoricovariavel', 'Pesquisa', false);
       } else {
         document.form1.k01_descr_variavel.value = '';
       }

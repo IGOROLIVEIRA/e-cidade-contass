@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: compras
@@ -50,7 +50,7 @@ if(isset($opcao) && $opcao == "excluir"){
        db_ancora(@$Lp73_codcontr,"js_pesquisap73_codcontr(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('p73_codcontr',10,$Ip73_codcontr,true,'text',3," onchange='js_pesquisap73_codcontr(false);'")
 ?>
@@ -62,7 +62,7 @@ db_input('p73_codcontr',10,$Ip73_codcontr,true,'text',3," onchange='js_pesquisap
        db_ancora(@$Lp73_anousu,"js_pesquisap73_anousu(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 $p73_anousu = db_getsession('DB_anousu');
 db_input('p73_anousu',4,$Ip73_anousu,true,'text',3,"")
@@ -75,7 +75,7 @@ db_input('p73_anousu',4,$Ip73_anousu,true,'text',3,"")
        db_ancora(@$Lp73_coddot,"js_pesquisao47_coddot(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('p73_coddot',6,$Ip73_coddot,true,'text',$db_opcao," onchange='js_pesquisao47_coddot(false);'");
 db_input('p73_coddot',6,$Ip73_coddot,true,'hidden',$db_opcao," onchange='js_pesquisao47_coddot(false);'",'p73_coddot_old')
@@ -86,7 +86,7 @@ db_input('p73_coddot',6,$Ip73_coddot,true,'hidden',$db_opcao," onchange='js_pesq
     <td nowrap title="<?=@$Tp73_valor?>">
        <?=@$Lp73_valor?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('p73_valor',20,$Ip73_valor,true,'text',$db_opcao,"")
 ?>
@@ -111,25 +111,25 @@ db_input('p73_valor',20,$Ip73_valor,true,'text',$db_opcao,"")
     $cliframe_alterar_excluir->fundocabec ="#aacccc";
     $cliframe_alterar_excluir->fundocorpo ="#ccddcc";
     $cliframe_alterar_excluir->iframe_height ="170";
-    $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);    
+    $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
    ?>
    </td>
- </tr>  
+ </tr>
   </table>
   </center>
 </form>
 <script>
 function js_pesquisao47_coddot(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_dotacao','db_iframe_orcdotacao','func_permorcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_dotacao','db_iframe_orcdotacao','func_permorcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,0);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_dotacao','db_iframe_orcdotacao','func_permorcdotacao.php?pesquisa_chave='+document.form1.p73_coddot.value+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_dotacao','db_iframe_orcdotacao','func_permorcdotacao.php?pesquisa_chave='+document.form1.p73_coddot.value+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
   }
 }
 function js_mostraorcdotacao(chave,erro){
-  if(erro==true){ 
-    document.form1.p73_coddot.focus(); 
-    document.form1.p73_coddot.value = ''; 
+  if(erro==true){
+    document.form1.p73_coddot.focus();
+    document.form1.p73_coddot.value = '';
   }
 }
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
@@ -38,7 +38,7 @@ $clrotulo->label("o125_cronogramaperspectiva");
     <td nowrap title="<?=@$To125_sequencial?>">
        <?=@$Lo125_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o125_sequencial',10,$Io125_sequencial,true,'text',$db_opcao,"")
 ?>
@@ -50,7 +50,7 @@ db_input('o125_sequencial',10,$Io125_sequencial,true,'text',$db_opcao,"")
        db_ancora(@$Lo125_cronogramaperspectiva,"js_pesquisao125_cronogramaperspectiva(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o125_cronogramaperspectiva',10,$Io125_cronogramaperspectiva,true,'text',$db_opcao," onchange='js_pesquisao125_cronogramaperspectiva(false);'")
 ?>
@@ -63,7 +63,7 @@ db_input('o124_descricao',100,$Io124_descricao,true,'text',3,'')
     <td nowrap title="<?=@$To125_mes?>">
        <?=@$Lo125_mes?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o125_mes',10,$Io125_mes,true,'text',$db_opcao,"")
 ?>
@@ -73,7 +73,7 @@ db_input('o125_mes',10,$Io125_mes,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To125_ano?>">
        <?=@$Lo125_ano?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o125_ano',10,$Io125_ano,true,'text',$db_opcao,"")
 ?>
@@ -83,7 +83,7 @@ db_input('o125_ano',10,$Io125_ano,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To125_percentual?>">
        <?=@$Lo125_percentual?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o125_percentual',10,$Io125_percentual,true,'text',$db_opcao,"")
 ?>
@@ -93,7 +93,7 @@ db_input('o125_percentual',10,$Io125_percentual,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To125_valor?>">
        <?=@$Lo125_valor?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o125_valor',10,$Io125_valor,true,'text',$db_opcao,"")
 ?>
@@ -107,20 +107,20 @@ db_input('o125_valor',10,$Io125_valor,true,'text',$db_opcao,"")
 <script>
 function js_pesquisao125_cronogramaperspectiva(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cronogramaperspectiva','func_cronogramaperspectiva.php?funcao_js=parent.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cronogramaperspectiva','func_cronogramaperspectiva.php?funcao_js=parent.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao','Pesquisa',true);
   }else{
-     if(document.form1.o125_cronogramaperspectiva.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cronogramaperspectiva','func_cronogramaperspectiva.php?pesquisa_chave='+document.form1.o125_cronogramaperspectiva.value+'&funcao_js=parent.js_mostracronogramaperspectiva','Pesquisa',false);
+     if(document.form1.o125_cronogramaperspectiva.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cronogramaperspectiva','func_cronogramaperspectiva.php?pesquisa_chave='+document.form1.o125_cronogramaperspectiva.value+'&funcao_js=parent.js_mostracronogramaperspectiva','Pesquisa',false);
      }else{
-       document.form1.o124_descricao.value = ''; 
+       document.form1.o124_descricao.value = '';
      }
   }
 }
 function js_mostracronogramaperspectiva(chave,erro){
-  document.form1.o124_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.o125_cronogramaperspectiva.focus(); 
-    document.form1.o125_cronogramaperspectiva.value = ''; 
+  document.form1.o124_descricao.value = chave;
+  if(erro==true){
+    document.form1.o125_cronogramaperspectiva.focus();
+    document.form1.o125_cronogramaperspectiva.value = '';
   }
 }
 function js_mostracronogramaperspectiva1(chave1,chave2){
@@ -129,7 +129,7 @@ function js_mostracronogramaperspectiva1(chave1,chave2){
   db_iframe_cronogramaperspectiva.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cronogramabasecalculo','func_cronogramabasecalculo.php?funcao_js=parent.js_preenchepesquisa|o125_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cronogramabasecalculo','func_cronogramabasecalculo.php?funcao_js=parent.js_preenchepesquisa|o125_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_cronogramabasecalculo.hide();

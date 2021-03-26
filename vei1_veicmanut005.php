@@ -267,7 +267,7 @@ if(isset($alterar)){
       }
     }
   }
-  
+
 
     db_query("delete from veicmanutitempcmater where ve64_veicmanutitem in (select ve63_codigo from veicmanutitem where ve63_veicmanut = ".$ve62_codigo." )");
     db_query("delete from veicmanutitem where ve63_veicmanut = ".$ve62_codigo."");
@@ -291,7 +291,7 @@ if(isset($alterar)){
               }
             }
           }
-          
+
         }
       }
     }
@@ -346,7 +346,7 @@ if(isset($alterar)){
   }
   ?>
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veicmanut', 'func_veicmanut.php?funcao_js=parent.js_preenchepesquisa|ve62_codigo', 'Pesquisa', true, '0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_veicmanut', 'func_veicmanut.php?funcao_js=parent.js_preenchepesquisa|ve62_codigo', 'Pesquisa', true, '0');
   }
 
   function js_preenchepesquisa(chave) {

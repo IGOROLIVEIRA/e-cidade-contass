@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: veiculos
@@ -40,7 +40,7 @@ $clrotulo->label("z01_nome");
     <td nowrap align="right" title="<?=@$Tve17_sequencial?>">
        <?=@$Lve17_sequencial?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
 <?
 db_input('ve17_sequencial',10,$Ive17_sequencial,true,'text',3,"")
 ?>
@@ -50,7 +50,7 @@ db_input('ve17_sequencial',10,$Ive17_sequencial,true,'text',3,"")
     <td nowrap align="right" title="<?=@$Tve17_descr?>">
        <?=@$Lve17_descr?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
 <?
 db_input('ve17_descr',40,$Ive17_descr,true,'text',$db_opcao,"")
 ?>
@@ -77,7 +77,7 @@ db_input('ve17_descr',40,$Ive17_descr,true,'text',$db_opcao,"")
     <td nowrap align="right" title="<?=@$Tve17_obs?>">
        <?=@$Lve17_obs?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
 <?
 db_textarea('ve17_obs',10,80,$Ive17_obs,true,'text',$db_opcao,"")
 ?>
@@ -91,10 +91,10 @@ db_textarea('ve17_obs',10,80,$Ive17_obs,true,'text',$db_opcao,"")
 <script>
 function js_pesquisave18_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','func_nome','func_nome.php?funcao_js=parent.js_mostranumcgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_nome.php?funcao_js=parent.js_mostranumcgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
     if(document.form1.ve18_numcgm.value != ""){
-        js_OpenJanelaIframe('top.corpo','func_nome','func_nome.php?pesquisa_chave='+document.form1.ve18_numcgm.value+'&funcao_js=parent.js_mostranumcgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_nome.php?pesquisa_chave='+document.form1.ve18_numcgm.value+'&funcao_js=parent.js_mostranumcgm','Pesquisa',false);
     } else {
       document.form1.z01_nome.value = "";
     }
@@ -109,16 +109,16 @@ function js_mostranumcgm1(chave1,chave2){
 }
 function js_mostranumcgm(erro,chave){
   if (erro==false){
-    document.form1.z01_nome.value = chave; 
+    document.form1.z01_nome.value = chave;
   }
 
-  if(erro==true){ 
-    document.form1.ve18_numcgm.focus(); 
-    document.form1.ve18_numcgm.value = ""; 
+  if(erro==true){
+    document.form1.ve18_numcgm.focus();
+    document.form1.ve18_numcgm.value = "";
   }
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_veiccadconvenio','func_veiccadconvenio.php?funcao_js=parent.js_preenchepesquisa|ve17_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadconvenio','func_veiccadconvenio.php?funcao_js=parent.js_preenchepesquisa|ve17_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_veiccadconvenio.hide();

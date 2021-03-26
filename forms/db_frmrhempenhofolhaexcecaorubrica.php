@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -652,10 +652,10 @@ $clrotulo->label("rh74_tipofolha");
 
     function js_pesquisarh74_rubric(mostra) {
       if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_rhrubricas', 'func_rhrubricas.php?funcao_js=parent.js_mostrarhrubricas1|rh27_rubric|rh27_descr', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_rhrubricas', 'func_rhrubricas.php?funcao_js=parent.js_mostrarhrubricas1|rh27_rubric|rh27_descr', 'Pesquisa', true);
       } else {
         if (document.form1.rh74_rubric.value != '') {
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_rhrubricas', 'func_rhrubricas.php?pesquisa_chave=' + document.form1.rh74_rubric.value + '&funcao_js=parent.js_mostrarhrubricas', 'Pesquisa', false);
+          js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_rhrubricas', 'func_rhrubricas.php?pesquisa_chave=' + document.form1.rh74_rubric.value + '&funcao_js=parent.js_mostrarhrubricas', 'Pesquisa', false);
         } else {
           document.form1.rh27_descr.value = '';
         }
@@ -673,10 +673,10 @@ $clrotulo->label("rh74_tipofolha");
       }
 
       if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_orcunidade', 'func_orcunidade.php?orgao=' + document.form1.rh74_orgao.value + '&funcao_js=parent.js_mostraunidade1|o41_unidade|o41_descr', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcunidade', 'func_orcunidade.php?orgao=' + document.form1.rh74_orgao.value + '&funcao_js=parent.js_mostraunidade1|o41_unidade|o41_descr', 'Pesquisa', true);
       } else {
         if (document.form1.rh74_unidade.value != '') {
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_orcunidade', 'func_orcunidade.php?orgao=' + document.form1.rh74_orgao.value + '&pesquisa_chave=' + document.form1.rh74_unidade.value + '&funcao_js=parent.js_mostraunidade', 'Pesquisa', false);
+          js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcunidade', 'func_orcunidade.php?orgao=' + document.form1.rh74_orgao.value + '&pesquisa_chave=' + document.form1.rh74_unidade.value + '&funcao_js=parent.js_mostraunidade', 'Pesquisa', false);
         } else {
           document.form1.o41_descr.value = '';
         }
@@ -699,10 +699,10 @@ $clrotulo->label("rh74_tipofolha");
 
     function js_pesquisarh74_orgao(mostra) {
       if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_orcorgao', 'func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcorgao', 'func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr', 'Pesquisa', true);
       } else {
         if (document.form1.rh74_orgao.value != '') {
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_orcorgao', 'func_orcorgao.php?pesquisa_chave=' + document.form1.rh74_orgao.value + '&funcao_js=parent.js_mostraorcorgao', 'Pesquisa', false);
+          js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcorgao', 'func_orcorgao.php?pesquisa_chave=' + document.form1.rh74_orgao.value + '&funcao_js=parent.js_mostraorcorgao', 'Pesquisa', false);
         } else {
           document.form1.o40_descr.value = '';
         }
@@ -729,10 +729,10 @@ $clrotulo->label("rh74_tipofolha");
 
     function js_pesquisarh74_projativ(mostra) {
       if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_orcprojativ', 'func_orcprojativ.php?funcao_js=parent.js_mostraorcprojativ1|o55_projativ|o55_descr', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcprojativ', 'func_orcprojativ.php?funcao_js=parent.js_mostraorcprojativ1|o55_projativ|o55_descr', 'Pesquisa', true);
       } else {
         if (document.form1.rh74_projativ.value != '') {
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_orcprojativ', 'func_orcprojativ.php?pesquisa_chave=' + document.form1.rh74_projativ.value + '&funcao_js=parent.js_mostraorcprojativ', 'Pesquisa', false);
+          js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orcprojativ', 'func_orcprojativ.php?pesquisa_chave=' + document.form1.rh74_projativ.value + '&funcao_js=parent.js_mostraorcprojativ', 'Pesquisa', false);
         } else {
           document.form1.o55_descr.value = '';
         }
@@ -755,10 +755,10 @@ $clrotulo->label("rh74_tipofolha");
 
     function js_pesquisarh74_recurso(mostra) {
       if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_orctiporec', 'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orctiporec', 'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr', 'Pesquisa', true);
       } else {
         if (document.form1.rh74_recurso.value != '') {
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_orctiporec', 'func_orctiporec.php?pesquisa_chave=' + document.form1.rh74_recurso.value + '&funcao_js=parent.js_mostraorctiporec', 'Pesquisa', false);
+          js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_orctiporec', 'func_orctiporec.php?pesquisa_chave=' + document.form1.rh74_recurso.value + '&funcao_js=parent.js_mostraorctiporec', 'Pesquisa', false);
         } else {
           document.form1.o15_descr.value = '';
         }

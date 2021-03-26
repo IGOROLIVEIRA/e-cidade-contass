@@ -730,10 +730,10 @@ contratoaux = function () {
                 //$('diasvigencia').value        = js_somarDiasVigencia(dtInicio, dtTermino);
             }
             parent.document.formaba.acordogarantia.disabled = false;
-            top.corpo.iframe_acordogarantia.location.href   = 'aco1_acordoacordogarantia001.php?ac12_acordo='+
+            CurrentWindow.corpo.iframe_acordogarantia.location.href   = 'aco1_acordoacordogarantia001.php?ac12_acordo='+
                 oRetorno.contrato.iSequencial;
             parent.document.formaba.acordopenalidade.disabled = false;
-            top.corpo.iframe_acordopenalidade.location.href   = 'aco1_acordoacordopenalidade001.php?ac13_acordo='+
+            CurrentWindow.corpo.iframe_acordopenalidade.location.href   = 'aco1_acordoacordopenalidade001.php?ac13_acordo='+
                 oRetorno.contrato.iSequencial;
             js_exibeBotaoJulgamento();
 

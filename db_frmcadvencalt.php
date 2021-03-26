@@ -18,7 +18,7 @@ if(isset($opcao) && $opcao=="alterar"){
     if(isset($db_opcaoal)){
 	$db_opcao=33;
     }
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo)){
@@ -31,12 +31,12 @@ if(isset($opcao) && $opcao=="alterar"){
       $q82_hist="";
       $k01_descr="";
     }
-    
-} 
+
+}
 if(empty($excluir) && empty($alterar) && isset($opcao) && $opcao!="" && empty($db_opcaoal)){
   $result19=$clcadvenc->sql_record($clcadvenc->sql_query_file($q82_codigo,$q82_parc,'cadvenc.*'));
   db_fieldsmemory($result19,0);
-}  
+}
 ?>
 <form name="form1" method="post" action="">
 <table border="0">
@@ -48,7 +48,7 @@ if(empty($excluir) && empty($alterar) && isset($opcao) && $opcao!="" && empty($d
     <td nowrap title="<?=@$Tq82_codigo?>">
        <?=@$Lq82_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q82_codigo',4,$Iq82_codigo,true,'text',$db_opcao);
 ?>
@@ -58,7 +58,7 @@ db_input('q82_codigo',4,$Iq82_codigo,true,'text',$db_opcao);
     <td nowrap title="<?=@$Tq82_parc?>">
        <?=@$Lq82_parc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q82_parc',4,$Iq82_parc,true,'text',3)
 ?>
@@ -68,7 +68,7 @@ db_input('q82_parc',4,$Iq82_parc,true,'text',3)
     <td nowrap title="<?=@$Tq82_venc?>">
        <?=@$Lq82_venc?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('q82_venc',@$q82_venc_dia,@$q82_venc_mes,@$q82_venc_ano,true,'text',$db_opcao,"")
 ?>
@@ -78,7 +78,7 @@ db_inputdata('q82_venc',@$q82_venc_dia,@$q82_venc_mes,@$q82_venc_ano,true,'text'
     <td nowrap title="<?=@$Tq82_desc?>">
        <?=@$Lq82_desc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q82_desc',20,$Iq82_desc,true,'text',$db_opcao,"")
 ?>
@@ -88,7 +88,7 @@ db_input('q82_desc',20,$Iq82_desc,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tq82_perc?>">
        <?=@$Lq82_perc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q82_perc',15,$Iq82_perc,true,'text',$db_opcao,"")
 ?>
@@ -100,7 +100,7 @@ db_input('q82_perc',15,$Iq82_perc,true,'text',$db_opcao,"")
        db_ancora(@$Lq82_hist,"js_pesquisaq82_hist(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q82_hist',4,$Iq82_hist,true,'text',$db_opcao," onchange='js_pesquisaq82_hist(false);'")
 ?>
@@ -119,7 +119,7 @@ db_input('k01_descr',20,$Ik01_descr,true,'text',3,'')
 </td>
 </tr>
 <tr>
-  <td valign="top" colspan="2">  
+  <td valign="top" colspan="2">
    <?
     $chavepri= array("q82_codigo"=>$q82_codigo,"q82_parc"=>@$q82_parc);
     $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -127,7 +127,7 @@ db_input('k01_descr',20,$Ik01_descr,true,'text',3,'')
     $cliframe_alterar_excluir->campos  ="q82_codigo,q82_parc,q82_venc,q82_desc,q82_perc,q82_hist";
     $cliframe_alterar_excluir->legenda="DATAS DOS VENCIMENTOS";
     $cliframe_alterar_excluir->iframe_height ="170";
-    $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);    
+    $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
    ?>
    </td>
   </tr>
@@ -145,16 +145,16 @@ function js_cancelar(){
 }
 function js_pesquisaq82_hist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_cadvenc','db_iframe_histcalc','func_histcalc.php?funcao_js=parent.js_mostrahistcalc1|k01_codigo|k01_descr','Pesquisa',true,"0");
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvenc','db_iframe_histcalc','func_histcalc.php?funcao_js=parent.js_mostrahistcalc1|k01_codigo|k01_descr','Pesquisa',true,"0");
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_cadvenc','db_iframe_histcalc','func_histcalc.php?pesquisa_chave='+document.form1.q82_hist.value+'&funcao_js=parent.js_mostrahistcalc','Pesquisa',false,"0");
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvenc','db_iframe_histcalc','func_histcalc.php?pesquisa_chave='+document.form1.q82_hist.value+'&funcao_js=parent.js_mostrahistcalc','Pesquisa',false,"0");
   }
 }
 function js_mostrahistcalc(chave,erro){
-  document.form1.k01_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.q82_hist.focus(); 
-    document.form1.q82_hist.value = ''; 
+  document.form1.k01_descr.value = chave;
+  if(erro==true){
+    document.form1.q82_hist.focus();
+    document.form1.q82_hist.value = '';
   }
 }
 function js_mostrahistcalc1(chave1,chave2){
@@ -163,7 +163,7 @@ function js_mostrahistcalc1(chave1,chave2){
   db_iframe_histcalc.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_cadvenc','db_iframe_cadvenc','func_cadvenc.php?funcao_js=parent.js_preenchepesquisa|q82_codigo|1','Pesquisa',true,"0");
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvenc','db_iframe_cadvenc','func_cadvenc.php?funcao_js=parent.js_preenchepesquisa|q82_codigo|1','Pesquisa',true,"0");
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_cadvenc.hide();
@@ -172,5 +172,5 @@ function js_preenchepesquisa(chave,chave1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave;";
   }
   ?>
-}  
+}
 </script>

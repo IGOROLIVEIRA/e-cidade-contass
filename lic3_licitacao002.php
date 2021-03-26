@@ -346,7 +346,7 @@ if (!empty($oProcessoProtocolo)) {
 function consultaProcesso(sProtProcesso) {
 
   var sUrlProcesso = "pro3_consultaprocesso002.php?numero=" +  sProtProcesso;//42096/2013" ;// "lic3_licitacao002.php?l20_codigo="+iCodigoLicitacao
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_processo', sUrlProcesso, 'Consulta de Processo', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_processo', sUrlProcesso, 'Consulta de Processo', true);
 }
 
 </script>

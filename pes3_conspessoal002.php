@@ -159,7 +159,7 @@ if($clrhpessoal->numrows == 0){
   echo "
         <script>
           alert('Matrícula Não Cadastrada ou sem Movimentação.');
-          top.corpo.location.href='pes3_conspessoal001.php';
+          CurrentWindow.corpo.location.href='pes3_conspessoal001.php';
         </script>
        ";
 }
@@ -214,9 +214,9 @@ function js_Impressao() {
 }
 function js_Pesquisa(solicitacao) {
   if (solicitacao != 'assentamentos') {
-    js_OpenJanelaIframe('top.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$rh01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>','CONSULTA DE FUNCIONÁRIOS',true,'20');
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro=<?=$rh01_regist?>&ano=<?=$ano?>&mes=<?=$mes?>','CONSULTA DE FUNCIONÁRIOS',true,'20');
   } else {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'func_pesquisaassentamentos',
                         'rec3_consafastfunc002.php?codAssen=&codMatri=<?=$rh01_regist?>'+
                         '&ano=<?=$ano?>&mes=<?=$mes?>&dataIni=<?=$rh01_admiss?>',

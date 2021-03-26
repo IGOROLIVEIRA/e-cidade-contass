@@ -1,34 +1,34 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
- 
+
 /**
  * MODULO: caixa
  * Labels
- */	
+ */
 $clcadban->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
@@ -48,7 +48,7 @@ $clrotulo->label("z01_nome");
 					<td width="110" nowrap title="<?php echo $Tk15_codigo; ?>">
 						<?php echo $Lk15_codigo; ?>
 					</td>
-					<td colspan="3"> 
+					<td colspan="3">
 						<?php db_input('k15_codigo', 10, $Ik15_codigo, true, 'text', 3, ""); ?>
 					</td>
 				</tr>
@@ -57,8 +57,8 @@ $clrotulo->label("z01_nome");
 					<td nowrap title="<?php echo $Tk15_numcgm; ?>">
 						<?php db_ancora($Lk15_numcgm, "", 3); ?>
 					</td>
-					<td colspan="3"> 
-						<?php 
+					<td colspan="3">
+						<?php
 							db_input('k15_numcgm', 10, $Ik15_numcgm, true, 'text', 3, "");
 							db_input('z01_nome', 70, $Iz01_nome, true, 'text', 3, '');
 						 ?>
@@ -69,14 +69,14 @@ $clrotulo->label("z01_nome");
 					<td nowrap title="<?php echo $Tk15_codbco; ?>">
 						<?php echo $Lk15_codbco; ?>
 					</td>
-					<td width="90"> 
+					<td width="90">
 						<?php db_input('k15_codbco', 10, $Ik15_codbco, true, 'text', 3, ""); ?>
 					</td>
 
 					<td width="90" nowrap title="<?php echo $Tk15_codage; ?>">
 						<?php echo $Lk15_codage; ?>
 					</td>
-					<td> 
+					<td>
 						<?php db_input('k15_codage', 10, $Ik15_codage, true, 'text', 3, ""); ?>
 					</td>
 				</tr>
@@ -95,7 +95,7 @@ $clrotulo->label("z01_nome");
 					<td width="110" nowrap title="<?php echo $Tk15_taman; ?>">
 						<?php echo $Lk15_taman; ?>
 					</td>
-					<td> 
+					<td>
 						<?php db_input('k15_taman', 10, $Ik15_taman, true, 'text', $db_opcao, ""); ?>
 					</td>
 				</tr>
@@ -122,9 +122,9 @@ $clrotulo->label("z01_nome");
  * Monta GRID dos dados do layout
  * ---------
  * INICIO
- */	 
+ */
 
-var sUrlRPC             = 'cai1_manutencaoposicoes.RPC.php';  
+var sUrlRPC             = 'cai1_manutencaoposicoes.RPC.php';
 var aHeaderLayout       = new Array();
 var aWidthLayout        = new Array();
 var aAlinhamentosLayout = new Array();
@@ -163,7 +163,7 @@ oGridLayout.show( $('ctnGridDadosLayout') );
 oGridLayout.clearAll(true);
 
 /**
- * Busca os dados do layout no RPC 
+ * Busca os dados do layout no RPC
  * Cria função e já executa
  */
 (function js_getDadosLayout() {
@@ -171,11 +171,11 @@ oGridLayout.clearAll(true);
   var oParametros     = new Object();
   var msgDiv          = "Buscando dados do layout. \n Aguarde ...";
 
-  oParametros.exec         = 'getDadosLayout';  
+  oParametros.exec         = 'getDadosLayout';
 	oParametros.iCodigoBanco = $F('k15_codigo');
-  
+
   js_divCarregando(msgDiv, 'msgBox');
-   
+
   var oAjaxLancamentos  = new Ajax.Request(
     sUrlRPC,
     {
@@ -183,24 +183,24 @@ oGridLayout.clearAll(true);
       parameters :'json=' + Object.toJSON(oParametros),
       onComplete : js_retornoDadosLayout
     }
-  );   
+  );
 })();
 
 function js_retornoDadosLayout(oAjax) {
-  
+
   js_removeObj('msgBox');
   var oRetorno  = eval("("+oAjax.responseText+")");
 
-  var sMensagem = oRetorno.sMensagem.urlDecode().replace(/\\n/g,'\n'); 
+  var sMensagem = oRetorno.sMensagem.urlDecode().replace(/\\n/g,'\n');
 
   /**
-   * Ocorreu erro no RPC  
+   * Ocorreu erro no RPC
    */
   if (oRetorno.iStatus > 1) {
-    
+
     alert(sMensagem);
     return;
-  } 
+  }
 
   /**
    * Verifica se existe dados da baixa
@@ -216,7 +216,7 @@ function js_retornoDadosLayout(oAjax) {
 
 	/**
 	 * css do texto do header e detalhes
-	 */	 
+	 */
 	var sStyleHeaderColuna = "text-align:left;font-weight:bold; padding:2px 0;background:#f0f0f0;";
 
 	var sMensagemHeader = 'Cabeçalho do arquivo';
@@ -227,13 +227,13 @@ function js_retornoDadosLayout(oAjax) {
 
 	/**
 	 * Monta objetos globais que serão enviados pro RPC
-	 */	 
+	 */
 	oCampos              = new Object();
 	aDadosLayoutHeader   = oRetorno.aDadosLayoutHeader;
 	aDadosLayoutDetalhes = oRetorno.aDadosLayoutDetalhes;
 
   /**
-   * Monta os dados do header  
+   * Monta os dados do header
    */
   for ( var iLinha = 0; iLinha < oRetorno.aDadosLayoutHeader.length; iLinha++ ) {
 
@@ -241,14 +241,14 @@ function js_retornoDadosLayout(oAjax) {
 
 		/**
 		 * POSIÇÃO INICIAL
-		 * - Cria input para posicao inicial 
+		 * - Cria input para posicao inicial
 		 */
 		var oInputPosicao  = "new DBTextField( '"+oDados.nomeCampo + "_posicao',";
 	      oInputPosicao += "	'oCampos."+oDados.nomeCampo + "_posicao',        ";
 	      oInputPosicao += "	oDados.posicaoInicial,                           ";
 	      oInputPosicao += 	iTamanhoInput
 	      oInputPosicao += ");                                                ";
-				oCampos[oDados.nomeCampo + "_posicao"] = eval(oInputPosicao); 
+				oCampos[oDados.nomeCampo + "_posicao"] = eval(oInputPosicao);
 
 		/**
 		 * TAMANHO
@@ -259,19 +259,19 @@ function js_retornoDadosLayout(oAjax) {
 	      oInputTamanho += "	oDados.tamanho,                           ";
 	      oInputTamanho += 	iTamanhoInput
 	      oInputTamanho += ");                                                ";
-				oCampos[oDados.nomeCampo + "_tamanho"] = eval(oInputTamanho); 
+				oCampos[oDados.nomeCampo + "_tamanho"] = eval(oInputTamanho);
 
 
 		/**
 		 * Monta array para alimentar grid
-		 */	 
+		 */
 		var aLinha = new Array();
 		aLinha[0] = oDados.campo.urlDecode();
 		aLinha[1] = oCampos[oDados.nomeCampo + "_posicao"].toInnerHtml();
-		aLinha[2] = oCampos[oDados.nomeCampo + "_tamanho"].toInnerHtml();        
+		aLinha[2] = oCampos[oDados.nomeCampo + "_tamanho"].toInnerHtml();
 
 		oGridLayout.addRow(aLinha);
-  }      
+  }
 
 	var sMensagemDetalhes = 'Corpo do arquivo';
 	oGridLayout.addRow( [sMensagemDetalhes] );
@@ -279,7 +279,7 @@ function js_retornoDadosLayout(oAjax) {
 	oGridLayout.aRows[5].aCells[0].sStyle  = sStyleHeaderColuna;
 
   /**
-   * Monta os dados dos detalhes  
+   * Monta os dados dos detalhes
 	 */
   for ( var iLinha = 0; iLinha < oRetorno.aDadosLayoutDetalhes.length; iLinha++ ) {
 
@@ -287,14 +287,14 @@ function js_retornoDadosLayout(oAjax) {
 
 		/**
 		 * POSIÇÃO INICIAL
-		 * - Cria input para posicao inicial 
+		 * - Cria input para posicao inicial
 		 */
 		var oInputPosicao  = "new DBTextField( '"+oDados.nomeCampo + "_posicao', ";
 	      oInputPosicao += "	'oCampos."+oDados.nomeCampo + "_posicao',        ";
 	      oInputPosicao += "	oDados.posicaoInicial,                           ";
 	      oInputPosicao += 	iTamanhoInput
 	      oInputPosicao += ");                                                 ";
-				oCampos[oDados.nomeCampo + "_posicao"] = eval(oInputPosicao); 
+				oCampos[oDados.nomeCampo + "_posicao"] = eval(oInputPosicao);
 
 		/**
 		 * TAMANHO
@@ -305,26 +305,26 @@ function js_retornoDadosLayout(oAjax) {
 	      oInputTamanho += "	oDados.tamanho,                                  ";
 	      oInputTamanho += 	iTamanhoInput
 	      oInputTamanho += ");                                                 ";
-				oCampos[oDados.nomeCampo + "_tamanho"] = eval(oInputTamanho); 
+				oCampos[oDados.nomeCampo + "_tamanho"] = eval(oInputTamanho);
 
 
 		/**
 		 * Monta array para alimentar grid
-		 */	 
+		 */
 		var aLinha = new Array();
 		aLinha[0] = oDados.campo.urlDecode();
 		aLinha[1] = oCampos[oDados.nomeCampo + "_posicao"].toInnerHtml();
-		aLinha[2] = oCampos[oDados.nomeCampo + "_tamanho"].toInnerHtml();        
+		aLinha[2] = oCampos[oDados.nomeCampo + "_tamanho"].toInnerHtml();
 
 		oGridLayout.addRow(aLinha);
-  }                        
-         
+  }
+
   oGridLayout.renderRows();
 	return true;
-}        
+}
 
 /**
- * Função responsavel por alterar os dados do layout, enviando os dados para o RPC 
+ * Função responsavel por alterar os dados do layout, enviando os dados para o RPC
  */
 function js_alterarLayout() {
 
@@ -333,10 +333,10 @@ function js_alterarLayout() {
 
 	/**
 	 * Header
-	 * - Percore o array com os dados do heade juntando os campos posicao inicial e tamanho para passar para o RPC  
+	 * - Percore o array com os dados do heade juntando os campos posicao inicial e tamanho para passar para o RPC
 	 */
 	for ( var iIndice = 0; iIndice < aDadosLayoutHeader.length; iIndice++ ) {
-		
+
 		var oDados = aDadosLayoutHeader[iIndice];
 
 		var sPosicao = oCampos[oDados.nomeCampo + "_posicao"].getValue();
@@ -347,10 +347,10 @@ function js_alterarLayout() {
 
 	/**
 	 * Detalhes
-	 *  - Percore o array com os dados do detalhes juntando os campos posicao inicial e tamanho para passar para o RPC  
+	 *  - Percore o array com os dados do detalhes juntando os campos posicao inicial e tamanho para passar para o RPC
 	 */
 	for ( var iIndice = 0; iIndice < aDadosLayoutDetalhes.length; iIndice++ ) {
-		
+
 		var oDados = aDadosLayoutDetalhes[iIndice];
 
 		var sPosicao = oCampos[oDados.nomeCampo + "_posicao"].getValue();
@@ -362,14 +362,14 @@ function js_alterarLayout() {
   var oParametros     = new Object();
   var msgDiv          = "Alterando dados do layout. \n Aguarde ...";
 
-  oParametros.exec             = 'alterarDadosLayout';  
+  oParametros.exec             = 'alterarDadosLayout';
 	oParametros.iCodigoBanco     = $F('k15_codigo');
 	oParametros.oDadosHeader     = oDadosHeader;
 	oParametros.oDadosDetalhes   = oDadosDetalhes;
 	oParametros.iTamanhoRegistro = $F('k15_taman');
-  
+
   js_divCarregando(msgDiv, 'msgBox');
-   
+
   var oAjaxLancamentos  = new Ajax.Request(
     sUrlRPC,
     {
@@ -377,7 +377,7 @@ function js_alterarLayout() {
       parameters :'json=' + Object.toJSON(oParametros),
       onComplete : js_retornoAlterarDados
     }
-  );   
+  );
 
 }
 
@@ -386,16 +386,16 @@ function js_retornoAlterarDados(oAjax) {
   js_removeObj('msgBox');
 
   var oRetorno  = eval("("+oAjax.responseText+")");
-  var sMensagem = oRetorno.sMensagem.urlDecode().replace(/\\n/g,'\n'); 
+  var sMensagem = oRetorno.sMensagem.urlDecode().replace(/\\n/g,'\n');
 
   /**
-   * Ocorreu erro no RPC  
+   * Ocorreu erro no RPC
    */
   if (oRetorno.iStatus > 1) {
-    
+
     alert(sMensagem);
     return;
-  } 
+  }
 
 	/**
 	 * Alterou com suceso, abre tela de pesquisa
@@ -407,14 +407,14 @@ function js_retornoAlterarDados(oAjax) {
 
 /**
  * FIM
- * --------                                                            
- * Monta GRID dos dados do layout                                      
+ * --------
+ * Monta GRID dos dados do layout
  * ---------------------------------------------------------------------
- */	 
+ */
 
 
 function js_pesquisa(){
-	js_OpenJanelaIframe('top.corpo','db_iframe_cadban','func_cadban.php?funcao_js=parent.js_preenchepesquisa|k15_codigo','Pesquisa',true);
+	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?funcao_js=parent.js_preenchepesquisa|k15_codigo','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave) {

@@ -250,9 +250,9 @@ function js_mostraprotprocesso1(chave1,chave2){
 function js_mostranomes(mostra){
 
   if(mostra == true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_issalvara.php?lLibera=1&filtro=1&funcao_js=parent.js_preenche|0|1|2|3','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_issalvara.php?lLibera=1&filtro=1&funcao_js=parent.js_preenche|0|1|2|3','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_issalvara.php?lLibera=1&filtro=1&pesquisa_chave='+$F('q123_inscr')+'&funcao_js=parent.js_preenche1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_issalvara.php?lLibera=1&filtro=1&pesquisa_chave='+$F('q123_inscr')+'&funcao_js=parent.js_preenche1','Pesquisa',true);
   }
 }
 

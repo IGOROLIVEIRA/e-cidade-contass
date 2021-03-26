@@ -143,7 +143,7 @@ db_app::load("strings.js");
 </form>
 <script>
   // Pega o código da movimentacao do campo na primeira aba
-  document.form1.e45_codmov.value = top.corpo.iframe_emppresta.document.form1.e45_codmov.value;
+  document.form1.e45_codmov.value = CurrentWindow.corpo.iframe_emppresta.document.form1.e45_codmov.value;
   function calculaDesconto(val1,val2){
 
     total = document.getElementById("total"+val1);

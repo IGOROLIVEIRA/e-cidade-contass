@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -61,7 +61,7 @@ if (isset($oGet->iCentral) && trim($oGet->iCentral) != '') {
   $aWhere[] .= " ve40_veiccadcentral = {$oGet->iCentral}";
 }
 $sWhere        = implode(" and ", $aWhere);
-$slistaCampos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,"; 
+$slistaCampos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,";
 $slistaCampos .= "ve22_descr,ve23_descr,ve01_chassi,ve01_certif,ve01_anofab,ve01_anomod";
 
 $funcao_js     = 'carregaVeiculo|ve01_codigo';
@@ -80,12 +80,12 @@ $sSqlVeiculos  = $oDaoVeiculos->sql_query(null, $slistaCampos, 've01_codigo', $s
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script type="text/javascript">
   function carregaVeiculo(iCod) {
-  
+
     var iWidth = document.body.scrollWidth-100;
     var sUrl = 'vei3_veiculos002.php?veiculo='+iCod;
 
 	  parent.func_veiculo.hide();
-    js_OpenJanelaIframe('top.corpo','func_veiculo_detalhes', sUrl,'Consulta de Veículos',true, 20, 0, iWidth);
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_veiculo_detalhes', sUrl,'Consulta de Veículos',true, 20, 0, iWidth);
   }
 </script>
 </head>
@@ -94,10 +94,10 @@ $sSqlVeiculos  = $oDaoVeiculos->sql_query(null, $slistaCampos, 've01_codigo', $s
     <tr>
       <td>
 
-        <?php 
+        <?php
           db_lovrot($sSqlVeiculos, 15, "()", "%", $funcao_js, "", "NoMe", array(), true);
         ?>
-  
+
       </td>
     </tr>
   </table>

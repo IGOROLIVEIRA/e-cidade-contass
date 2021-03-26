@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: laboratorio
@@ -51,10 +51,10 @@ $oRotulo->label('sd62_c_nome');
         db_ancora(@$Lla56_i_grupo, "js_pesquisala56_i_grupo(true);", $db_opcao);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('la56_i_grupo', 10, $Ila56_i_grupo, true, 'hidden', 3, '');
-        db_input('sd60_c_grupo', 2, $Isd60_c_grupo, true, 'text', $db_opcao, 
+        db_input('sd60_c_grupo', 2, $Isd60_c_grupo, true, 'text', $db_opcao,
                  " onchange='js_pesquisala56_i_grupo(false);'"
                 );
         db_input('sd60_c_nome', 50, $Isd60_c_nome, true, 'text', 3, '');
@@ -67,10 +67,10 @@ $oRotulo->label('sd62_c_nome');
         db_ancora(@$Lla56_i_subgrupo, "js_pesquisala56_i_subgrupo(true);", $db_opcao);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('la56_i_subgrupo', 10, $Ila56_i_subgrupo, true, 'hidden', 3, '');
-        db_input('sd61_c_subgrupo', 2, $Isd61_c_subgrupo, true, 'text', $db_opcao, 
+        db_input('sd61_c_subgrupo', 2, $Isd61_c_subgrupo, true, 'text', $db_opcao,
                  " onchange='js_pesquisala56_i_subgrupo(false);'"
                 );
         db_input('sd61_c_nome', 50, $Isd61_c_nome, true, 'text', 3, '');
@@ -83,10 +83,10 @@ $oRotulo->label('sd62_c_nome');
         db_ancora(@$Lla56_i_formaorganizacao, "js_pesquisala56_i_formaorganizacao(true);", $db_opcao);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('la56_i_formaorganizacao', 10, $Ila56_i_formaorganizacao, true, 'hidden', 3, '');
-        db_input('sd62_c_formaorganizacao', 2, $Isd62_c_formaorganizacao, true, 'text', $db_opcao, 
+        db_input('sd62_c_formaorganizacao', 2, $Isd62_c_formaorganizacao, true, 'text', $db_opcao,
                  " onchange='js_pesquisala56_i_formaorganizacao(false);'"
                 );
         db_input('sd62_c_nome', 50, $Isd62_c_nome, true, 'text', 3, '');
@@ -102,9 +102,9 @@ $oRotulo->label('sd62_c_nome');
         db_ancora(@$Lla56_i_exame, "js_pesquisala56_i_exame(true);", $db_opcao);
         ?>
       </td>
-      <td> 
+      <td>
         <?
-        db_input('la56_i_exame', 10, $Ila56_i_exame, true, 'text', $db_opcao, 
+        db_input('la56_i_exame', 10, $Ila56_i_exame, true, 'text', $db_opcao,
                  " onchange='js_pesquisala56_i_exame(false);'"
                 );
         db_input('la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '');
@@ -120,9 +120,9 @@ $oRotulo->label('sd62_c_nome');
         db_ancora(@$Lla56_i_laboratorio, "js_pesquisala56_i_laboratorio(true);", $db_opcao);
         ?>
       </td>
-      <td> 
+      <td>
         <?
-        db_input('la56_i_laboratorio', 10, $Ila56_i_laboratorio, true, 'text', $db_opcao, 
+        db_input('la56_i_laboratorio', 10, $Ila56_i_laboratorio, true, 'text', $db_opcao,
                  " onchange='js_pesquisala56_i_laboratorio(false);'"
                 );
         db_input('la02_c_descr', 50, $Ila02_c_descr, true, 'text', 3, '');
@@ -157,11 +157,11 @@ $oRotulo->label('sd62_c_nome');
                   <td nowrap title="<?=@$Tla56_d_ini?>">
                     <?
                     echo $Lla56_d_ini;
-                    db_inputdata('la56_d_ini', @$la56_d_ini_dia, @$la56_d_ini_mes, @$la56_d_ini_ano, 
+                    db_inputdata('la56_d_ini', @$la56_d_ini_dia, @$la56_d_ini_mes, @$la56_d_ini_ano,
                                  true, 'text', $db_opcao, ""
                                 );
                     echo $Lla56_d_fim;
-                    db_inputdata('la56_d_fim', @$la56_d_fim_dia, @$la56_d_fim_mes, @$la56_d_fim_ano, 
+                    db_inputdata('la56_d_fim', @$la56_d_fim_dia, @$la56_d_fim_mes, @$la56_d_fim_ano,
                                  true, 'text', $db_opcao2, ""
                                 );
                     ?>
@@ -188,13 +188,13 @@ $oRotulo->label('sd62_c_nome');
   <tr>
     <td colspan="2" align="center">
       <?
-      $sParamsConfirmar = $iOperacao == 1 ? "'incluir'" : 
+      $sParamsConfirmar = $iOperacao == 1 ? "'incluir'" :
                          ($iOperacao == 2 ? "'alterar', $la56_i_codigo" : "'excluir', $la56_i_codigo");
-      $sLabelButton     = $iOperacao == 1 ? 'Incluir' : 
+      $sLabelButton     = $iOperacao == 1 ? 'Incluir' :
                          ($iOperacao == 2 ? 'Alterar' : 'Excluir');
 
       ?>
-      <input name="confirmar" type="button" id="confirmar" value="<?=$sLabelButton?>" 
+      <input name="confirmar" type="button" id="confirmar" value="<?=$sLabelButton?>"
         onclick="js_confirmar(<?=$sParamsConfirmar?>);">
       <input name="limpar" type="button" id="limpar" value="Limpar" onclick="js_limpar();">
       <?
@@ -202,7 +202,7 @@ $oRotulo->label('sd62_c_nome');
       ?>
         <input name="cancelar" type="button" id="cancelar" value="Cancelar" onclick="js_cancelar();">
       <?
-      } 
+      }
       ?>
     </td>
   </tr>
@@ -233,17 +233,17 @@ function js_ajax(oParam, jsRetorno, sUrl, lAsync) {
   if (lAsync == undefined) {
     lAsync = false;
   }
-	
-  var oAjax = new Ajax.Request(sUrl, 
+
+  var oAjax = new Ajax.Request(sUrl,
                                {
-                                 method: 'post', 
+                                 method: 'post',
                                  asynchronous: lAsync,
                                  parameters: 'json='+Object.toJSON(oParam),
                                  onComplete: function(oAjax) {
-                                    
+
                                                var evlJS           = jsRetorno+'(oAjax);';
                                                return mRetornoAjax = eval(evlJS);
-                                               
+
                                            }
                               }
                              );
@@ -290,7 +290,7 @@ function js_criaDataGrid() {
     aAligns[iInd]   = 'left';
 
   }
-  
+
   aHeader[++iInd] = 'Teto';
   aAligns[iInd]   = 'left';
   aHeader[++iInd] = 'Limite';
@@ -332,7 +332,7 @@ function js_getInfoControleFisicoFinanceiro() {
   if ((iTipoControle > 0 && iTipoControle < 7) || iTipoControle == 9) {
     oParam.iLabDepto = parent.document.getElementById('iLabDepto').value;
   }
- 
+
   oDBGridControle.clearAll(true); // Limpo o grid
 
   js_ajax(oParam, 'js_retornoGetInfoControleFisicoFinanceiro');
@@ -340,7 +340,7 @@ function js_getInfoControleFisicoFinanceiro() {
 }
 
 function js_retornoGetInfoControleFisicoFinanceiro(oRetorno) {
-  
+
   var oRetorno    = eval("("+oRetorno.responseText+")");
   var oRadios     = parent.document.getElementsByName('iRadioControles');
   var iValorRadio = 0;
@@ -351,16 +351,16 @@ function js_retornoGetInfoControleFisicoFinanceiro(oRetorno) {
 
       /* Verifico qual está marcado */
       for (var iCont = 0; iCont < oRadios.length; iCont++) {
-      
+
         if (oRadios[iCont].checked) {
 
           iValorRadio = oRadios[iCont].value;
           break;
 
         }
-      
+
       }
-      
+
       /* Verifico qual radiobox deve ser selecionado, para exibir o formulário corretamente */
       var iTipoSelecionar = 0;
       if (oRetorno.aControles[0].la56_i_tipocontrole == 1
@@ -381,7 +381,7 @@ function js_retornoGetInfoControleFisicoFinanceiro(oRetorno) {
         return false;
 
       }
-      
+
       /* Desabilito os radiobox */
       for (var iCont = 0; iCont < oRadios.length; iCont++) {
         oRadios[iCont].disabled = true;
@@ -404,7 +404,7 @@ function js_retornoGetInfoControleFisicoFinanceiro(oRetorno) {
         }
 
       }
-      
+
     }
 
     for (var iCont = 0; iCont < oRetorno.aControles.length; iCont++) {
@@ -431,7 +431,7 @@ function js_retornoGetInfoControleFisicoFinanceiro(oRetorno) {
 
           aLinha[++iInd] = la02_i_codigo;
           aLinha[++iInd] = la02_c_descr.urlDecode();
-          
+
         }
 
         aLinha[++iInd] = la56_i_teto == 1 ? 'FÍSICO' : 'FINANCEIRO';
@@ -439,31 +439,31 @@ function js_retornoGetInfoControleFisicoFinanceiro(oRetorno) {
         aLinha[++iInd] = js_formataData(la56_d_ini);
         aLinha[++iInd] = js_formataData(la56_d_fim);
         aLinha[++iInd] = la56_i_periodo == 1 ? 'DIÁRIO' : 'MENSAL';
-                
-        for (iIndx = 0; iIndx < oRetorno.aControles.length; iIndx++) { 
-             
-          if(iIndx != iCont 
+
+        for (iIndx = 0; iIndx < oRetorno.aControles.length; iIndx++) {
+
+          if(iIndx != iCont
              &&
              oRetorno.aControles[iIndx].la56_i_exame == la56_i_exame
-             && 
-             ((parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[0].toString(), 10) > 
+             &&
+             ((parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[0].toString(), 10) >
                parseInt(la56_d_fim.split("-")[0].toString(), 10))
              ||
-             (parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[0].toString(), 10) == 
+             (parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[0].toString(), 10) ==
                 parseInt(la56_d_fim.split("-")[0].toString(), 10)
                 &&
-                parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[1].toString(), 10) > 
+                parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[1].toString(), 10) >
                 parseInt(la56_d_fim.split("-")[1].toString(), 10))
              ||
-             (parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[0].toString(), 10) == 
+             (parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[0].toString(), 10) ==
                parseInt(la56_d_fim.split("-")[0].toString(), 10)
                &&
-               parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[1].toString(), 10) == 
+               parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[1].toString(), 10) ==
                parseInt(la56_d_fim.split("-")[1].toString(), 10)
                &&
-               parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[2].toString(), 10) > 
+               parseInt(oRetorno.aControles[iIndx].la56_d_fim.split("-")[2].toString(), 10) >
                parseInt(la56_d_fim.split("-")[2].toString(), 10)))){
-            
+
             sDisabled = 'disabled';
             break;
 
@@ -476,7 +476,7 @@ function js_retornoGetInfoControleFisicoFinanceiro(oRetorno) {
         aLinha[iInd]  += '&nbsp;&nbsp;&nbsp;';
         aLinha[iInd]  += '<input type="button" onclick="js_confirmar(\'excluir\','+la56_i_codigo+');" value="Excluir"';
         aLinha[iInd]  += sDisabled+'>';
-        
+
         oDBGridControle.addRow(aLinha);
 
       }
@@ -501,8 +501,8 @@ function js_alterar(iId,iGasto) {
   if (iTipoControle < 7) {
 
     parent.document.iIndexSelect = parent.document.getElementById('iLabDepto').selectedIndex;
-    parent.document.getElementById('iLabDepto').onchange = 
-      function() { 
+    parent.document.getElementById('iLabDepto').onchange =
+      function() {
         this.selectedIndex = parent.document.iIndexSelect;
       };
 
@@ -515,8 +515,8 @@ function js_cancelar() {
 
   if (iTipoControle < 7) {
 
-    parent.document.getElementById('iLabDepto').onchange = 
-      function() { 
+    parent.document.getElementById('iLabDepto').onchange =
+      function() {
         parent.window.frames['iframeControle'].js_getInfoControleFisicoFinanceiro();
       };
 
@@ -526,7 +526,7 @@ function js_cancelar() {
 }
 
 function js_formataData(dData) {
-  
+
   if (dData == undefined || dData.length != 10) {
     return dData;
   }
@@ -594,12 +594,12 @@ function js_validaEnvio() {
     var dFim = new Date(aFim[2], aFim[1], aFim[0]);
 
     if (dFim < dIni) {
-    			
+
       alert('Data final não pode ser menor que a data inicial.');
       $('la56_d_fim').value = '';
       $('la56_d_fim').focus();
       return false;
-    
+
     }
 
   }
@@ -609,11 +609,11 @@ function js_validaEnvio() {
 }
 
 function js_confirmar(sOp, iCod) {
-  
+
   var oParam     = new Object();
 
   if (sOp == 'excluir') {
-    
+
     iOperacao = 3;
 
     if (!confirm('Confirma a exclução do registro?')) {
@@ -662,7 +662,7 @@ function js_confirmar(sOp, iCod) {
       oParam.la56_i_formaorganizacao = 'null';
 
     }
-    
+
     // Verifico se tem exames
     if (iTipoControle == 2 || iTipoControle == 5 || iTipoControle == 8) {
       oParam.la56_i_exame = $F('la56_i_exame');
@@ -691,7 +691,7 @@ function js_confirmar(sOp, iCod) {
     }
 
     if (sOp == 'alterar') {
-      
+
       iOperacao = 2;
       oParam.la56_i_codigo = iCod;
 
@@ -709,14 +709,14 @@ function js_confirmar(sOp, iCod) {
 }
 
 function js_retornoConfirmar(oRetorno) {
-  
+
   oRetorno = eval("("+oRetorno.responseText+")");
 
   alert(oRetorno.sMessage.urlDecode().replace(/\\n/g, "\n"));
   if (oRetorno.iStatus == 1) {
 
     if (iOperacao == 1) {
-      
+
       js_limpar();
       js_getInfoControleFisicoFinanceiro();
 
@@ -772,7 +772,7 @@ function js_pesquisala56_i_laboratorio(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_lab_laboratorio', 'func_lab_laboratorio.php?funcao_js='+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_lab_laboratorio', 'func_lab_laboratorio.php?funcao_js='+
                         'parent.js_mostralab_laboratorio1|la02_i_codigo|la02_c_descr', 'Pesquisa', true
                        );
 
@@ -780,13 +780,13 @@ function js_pesquisala56_i_laboratorio(mostra) {
 
     if (document.form1.la56_i_laboratorio.value != '') {
 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_lab_laboratorio', 'func_lab_laboratorio.php?pesquisa_chave='+
-                           document.form1.la56_i_laboratorio.value+'&funcao_js=parent.js_mostralab_laboratorio', 
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_lab_laboratorio', 'func_lab_laboratorio.php?pesquisa_chave='+
+                           document.form1.la56_i_laboratorio.value+'&funcao_js=parent.js_mostralab_laboratorio',
                            'Pesquisa', false
                           );
 
     } else {
-      document.form1.la02_c_descr.value = ''; 
+      document.form1.la02_c_descr.value = '';
     }
 
   }
@@ -794,7 +794,7 @@ function js_pesquisala56_i_laboratorio(mostra) {
 }
 function js_mostralab_laboratorio(chave, erro) {
 
-  document.form1.la02_c_descr.value = chave; 
+  document.form1.la02_c_descr.value = chave;
   if (erro == true) {
 
     document.form1.la56_i_laboratorio.focus();
@@ -815,7 +815,7 @@ function js_pesquisala56_i_depto(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js='+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js='+
                         'parent.js_mostradb_depart1|coddepto|descrdepto', 'Pesquisa', true
                        );
 
@@ -823,13 +823,13 @@ function js_pesquisala56_i_depto(mostra) {
 
     if (document.form1.la56_i_depto.value != '') {
 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave='+
-                           document.form1.la56_i_depto.value+'&funcao_js=parent.js_mostradb_depart', 
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave='+
+                           document.form1.la56_i_depto.value+'&funcao_js=parent.js_mostradb_depart',
                            'Pesquisa', false
                           );
-       
+
     } else {
-      document.form1.descrdepto.value = ''; 
+      document.form1.descrdepto.value = '';
     }
 
   }
@@ -837,11 +837,11 @@ function js_pesquisala56_i_depto(mostra) {
 }
 function js_mostradb_depart(chave, erro) {
 
-  document.form1.descrdepto.value = chave; 
-  if (erro == true) { 
+  document.form1.descrdepto.value = chave;
+  if (erro == true) {
 
-    document.form1.la56_i_depto.focus(); 
-    document.form1.la56_i_depto.value = ''; 
+    document.form1.la56_i_depto.focus();
+    document.form1.la56_i_depto.value = '';
 
   }
 
@@ -858,20 +858,20 @@ function js_pesquisala56_i_exame(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?funcao_js='+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?funcao_js='+
                         'parent.js_mostralab_exame1|la08_i_codigo|la08_c_descr', 'Pesquisa', true
                        );
 
   } else {
 
-    if (document.form1.la56_i_exame.value != '') { 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?pesquisa_chave='+
-                           document.form1.la56_i_exame.value+'&funcao_js=parent.js_mostralab_exame', 
+    if (document.form1.la56_i_exame.value != '') {
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?pesquisa_chave='+
+                           document.form1.la56_i_exame.value+'&funcao_js=parent.js_mostralab_exame',
                            'Pesquisa', false
                           );
 
     } else {
-      document.form1.la08_c_descr.value = ''; 
+      document.form1.la08_c_descr.value = '';
     }
 
   }
@@ -879,10 +879,10 @@ function js_pesquisala56_i_exame(mostra) {
 }
 function js_mostralab_exame(chave, erro) {
 
-  document.form1.la08_c_descr.value = chave; 
+  document.form1.la08_c_descr.value = chave;
   if (erro == true) {
 
-    document.form1.la56_i_exame.focus(); 
+    document.form1.la56_i_exame.focus();
     document.form1.la56_i_exame.value = '';
 
   }
@@ -899,8 +899,8 @@ function js_pesquisala56_i_grupo(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?funcao_js='+
-                        'parent.js_mostrasau_grupo|sd60_i_codigo|sd60_c_nome|sd60_c_grupo', 
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?funcao_js='+
+                        'parent.js_mostrasau_grupo|sd60_i_codigo|sd60_c_nome|sd60_c_grupo',
                         'Pesquisa', true
                        );
 
@@ -908,9 +908,9 @@ function js_pesquisala56_i_grupo(mostra) {
 
     if (document.form1.sd60_c_grupo.value != '') {
 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?chave_sd60_c_grupo='+
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?chave_sd60_c_grupo='+
                            document.form1.sd60_c_grupo.value+'&funcao_js=parent.js_mostrasau_grupo|'+
-                           'sd60_i_codigo|sd60_c_nome|sd60_c_grupo&nao_mostra=true', 
+                           'sd60_i_codigo|sd60_c_nome|sd60_c_grupo&nao_mostra=true',
                            'Pesquisa', false
                           );
 
@@ -953,7 +953,7 @@ function js_pesquisala56_i_subgrupo(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?'+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?'+
                         'funcao_js=parent.js_mostrasau_subgrupo|sd61_i_codigo|sd61_c_nome|sd61_c_subgrupo'+
                         sGet, 'Pesquisa', true
                        );
@@ -962,9 +962,9 @@ function js_pesquisala56_i_subgrupo(mostra) {
 
     if (document.form1.sd61_c_subgrupo.value != '') {
 
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?chave_sd61_c_subgrupo='+
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?chave_sd61_c_subgrupo='+
                           document.form1.sd61_c_subgrupo.value+'&funcao_js=parent.js_mostrasau_subgrupo|'+
-                          'sd61_i_codigo|sd61_c_nome|sd61_c_subgrupo&nao_mostra=true'+sGet, 
+                          'sd61_i_codigo|sd61_c_nome|sd61_c_subgrupo&nao_mostra=true'+sGet,
                           'Pesquisa', false
                          );
 
@@ -1015,7 +1015,7 @@ function js_pesquisala56_i_formaorganizacao(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
                         'funcao_js=parent.js_mostrasau_formaorganizacao|sd62_i_codigo|sd62_c_nome|'+
                         'sd62_c_formaorganizacao'+sGet, 'Pesquisa', true
                        );
@@ -1024,7 +1024,7 @@ function js_pesquisala56_i_formaorganizacao(mostra) {
 
     if (document.form1.sd62_c_formaorganizacao.value != '') {
 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
                            'chave_sd62_c_formaorganizacao='+document.form1.sd62_c_formaorganizacao.value+
                            '&funcao_js=parent.js_mostrasau_formaorganizacao|sd62_i_codigo|sd62_c_nome|'+
                            'sd62_c_formaorganizacao&nao_mostra=true'+sGet, 'Pesquisa', false
@@ -1078,7 +1078,7 @@ function js_limiteminimo(oLimite){
 
 		alert('Quantidade não pode ser menor que o saldo já gasto!');
 		oLimite.value = '';
-		
+
 	}
 }
 </script>

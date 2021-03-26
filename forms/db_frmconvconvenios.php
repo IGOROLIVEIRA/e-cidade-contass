@@ -131,7 +131,7 @@ foreach ($tpCadastros as $tpCadastro) {
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_convconvenios','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_preenchepesquisa|c206_sequencial','Pesquisa',true,'0','1');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_convconvenios','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_preenchepesquisa|c206_sequencial','Pesquisa',true,'0','1');
 }
 function js_preenchepesquisa(chave){
   db_iframe_convconvenios.hide();

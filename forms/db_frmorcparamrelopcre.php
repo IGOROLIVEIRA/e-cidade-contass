@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
@@ -53,11 +53,11 @@ $clrotulo->label("o69_codparamrel");
               <?=@$Lo98_orcparamseq?>
             </td>
             <td>
-              <?      
+              <?
                $result = $clorcparamseq->sql_record(
                          $clorcparamseq->sql_query($oGet->c83_codrel,null, "o69_codseq,o69_descr"));
                db_selectrecord("o98_orcparamseq",$result,true,$db_opcao);
-       
+
        ?>
             </td>
           </tr>
@@ -121,47 +121,47 @@ $clrotulo->label("o69_codparamrel");
         </td>
         </table>
 
-        
+
         <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
         <?=($db_botao==false?"disabled":"")?>>
         <input name="novo" type="submit" id="Novo" value="Novo">
-      
+
       <?
        $aChavesPri                         = array(
                                                    "o98_sequencial"=>'',
                                                   );
        $cliframe_alterar_excluir->chavepri = $aChavesPri;
        $sWhere                             = " o98_anousu     = ".db_getsession("DB_anousu");
-       $sWhere                            .= " and o98_instit = ".db_getsession("DB_instit");                 
+       $sWhere                            .= " and o98_instit = ".db_getsession("DB_instit");
        $cliframe_alterar_excluir->sql      = $clorcparamrelopcre->sql_query(
                                                                             null,"*",
                                                                             "o98_sequencial",
                                                                             $sWhere
                                                                      );
        $cliframe_alterar_excluir->campos = "o69_descr, o98_identificacao, o98_credor, o98_periodo, o98_valor";
-       $cliframe_alterar_excluir->legenda= "Variaveis";     
+       $cliframe_alterar_excluir->legenda= "Variaveis";
        $cliframe_alterar_excluir->iframe_height ="240";
        $cliframe_alterar_excluir->iframe_width  ="100%";
        $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
-      ?> 
+      ?>
       </form>
       <script>
         function js_pesquisao98_orcparamseq(mostra){
           if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codparamrel|o69_codparamrel','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codparamrel|o69_codparamrel','Pesquisa',true);
           }else{
-             if(document.form1.o98_orcparamseq.value != ''){ 
-                js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamseq.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
+             if(document.form1.o98_orcparamseq.value != ''){
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamseq.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
              }else{
-               document.form1.o69_codparamrel.value = ''; 
+               document.form1.o69_codparamrel.value = '';
              }
           }
         }
         function js_mostraorcparamseq(chave,erro){
-          document.form1.o69_codparamrel.value = chave; 
-          if(erro==true){ 
-            document.form1.o98_orcparamseq.focus(); 
-            document.form1.o98_orcparamseq.value = ''; 
+          document.form1.o69_codparamrel.value = chave;
+          if(erro==true){
+            document.form1.o98_orcparamseq.focus();
+            document.form1.o98_orcparamseq.value = '';
           }
         }
         function js_mostraorcparamseq1(chave1,chave2){
@@ -171,20 +171,20 @@ $clrotulo->label("o69_codparamrel");
         }
         function js_pesquisao98_orcparamseq(mostra){
           if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codseq|o69_codparamrel','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codseq|o69_codparamrel','Pesquisa',true);
           }else{
-             if(document.form1.o98_orcparamseq.value != ''){ 
-                js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamseq.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
+             if(document.form1.o98_orcparamseq.value != ''){
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamseq.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
              }else{
-               document.form1.o69_codparamrel.value = ''; 
+               document.form1.o69_codparamrel.value = '';
              }
           }
         }
         function js_mostraorcparamseq(chave,erro){
-          document.form1.o69_codparamrel.value = chave; 
-          if(erro==true){ 
-            document.form1.o98_orcparamseq.focus(); 
-            document.form1.o98_orcparamseq.value = ''; 
+          document.form1.o69_codparamrel.value = chave;
+          if(erro==true){
+            document.form1.o98_orcparamseq.focus();
+            document.form1.o98_orcparamseq.value = '';
           }
         }
         function js_mostraorcparamseq1(chave1,chave2){
@@ -194,20 +194,20 @@ $clrotulo->label("o69_codparamrel");
         }
         function js_pesquisao98_orcparamrel(mostra){
           if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codparamrel|o69_codparamrel','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codparamrel|o69_codparamrel','Pesquisa',true);
           }else{
-             if(document.form1.o98_orcparamrel.value != ''){ 
-                js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamrel.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
+             if(document.form1.o98_orcparamrel.value != ''){
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamrel.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
              }else{
-               document.form1.o69_codparamrel.value = ''; 
+               document.form1.o69_codparamrel.value = '';
              }
           }
         }
         function js_mostraorcparamseq(chave,erro){
-          document.form1.o69_codparamrel.value = chave; 
-          if(erro==true){ 
-            document.form1.o98_orcparamrel.focus(); 
-            document.form1.o98_orcparamrel.value = ''; 
+          document.form1.o69_codparamrel.value = chave;
+          if(erro==true){
+            document.form1.o98_orcparamrel.focus();
+            document.form1.o98_orcparamrel.value = '';
           }
         }
         function js_mostraorcparamseq1(chave1,chave2){
@@ -217,20 +217,20 @@ $clrotulo->label("o69_codparamrel");
         }
         function js_pesquisao98_orcparamrel(mostra){
           if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codseq|o69_codparamrel','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?funcao_js=parent.js_mostraorcparamseq1|o69_codseq|o69_codparamrel','Pesquisa',true);
           }else{
-             if(document.form1.o98_orcparamrel.value != ''){ 
-                js_OpenJanelaIframe('top.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamrel.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
+             if(document.form1.o98_orcparamrel.value != ''){
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamseq','func_orcparamseq.php?pesquisa_chave='+document.form1.o98_orcparamrel.value+'&funcao_js=parent.js_mostraorcparamseq','Pesquisa',false);
              }else{
-               document.form1.o69_codparamrel.value = ''; 
+               document.form1.o69_codparamrel.value = '';
              }
           }
         }
         function js_mostraorcparamseq(chave,erro){
-          document.form1.o69_codparamrel.value = chave; 
-          if(erro==true){ 
-            document.form1.o98_orcparamrel.focus(); 
-            document.form1.o98_orcparamrel.value = ''; 
+          document.form1.o69_codparamrel.value = chave;
+          if(erro==true){
+            document.form1.o98_orcparamrel.focus();
+            document.form1.o98_orcparamrel.value = '';
           }
         }
         function js_mostraorcparamseq1(chave1,chave2){
@@ -239,7 +239,7 @@ $clrotulo->label("o69_codparamrel");
           db_iframe_orcparamseq.hide();
         }
         function js_pesquisa(){
-          js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrelopcre','func_orcparamrelopcre.php?funcao_js=parent.js_preenchepesquisa|o98_sequencial','Pesquisa',true);
+          js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrelopcre','func_orcparamrelopcre.php?funcao_js=parent.js_preenchepesquisa|o98_sequencial','Pesquisa',true);
         }
         function js_preenchepesquisa(chave){
           db_iframe_orcparamrelopcre.hide();

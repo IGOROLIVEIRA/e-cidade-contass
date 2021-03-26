@@ -221,11 +221,11 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.bensimoveis.disabled=false;
-         top.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=33&t54_codbem=".@$t52_bem."';
+         CurrentWindow.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=33&t54_codbem=".@$t52_bem."';
          parent.document.formaba.bensmater.disabled=false;
-         top.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=33&t53_codbem=".@$t52_bem."';
+         CurrentWindow.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=33&t53_codbem=".@$t52_bem."';
          parent.document.formaba.bensfotos.disabled=false;
-         top.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?db_opcaoal=33&t52_codbem=".@$t52_bem."';
+         CurrentWindow.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?db_opcaoal=33&t52_codbem=".@$t52_bem."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('bensimoveis');";

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -84,7 +84,7 @@ if(isset($incluir)){
                                                                         "at40_sequencial,at45_usuario","at45_tarefa=$cltarefausu->at42_tarefa"));
 		  if($cltarefa->numrows > 0) {
 			  $cldb_usuarios = new cl_db_usuarios;
-			  	
+
 		  	  for($i=0; $i < $cltarefa->numrows; $i++) {
 				  db_fieldsmemory($rs_tarefa,$i);
 			  	  $rs_usuario = $cldb_usuarios->sql_record($cldb_usuarios->sql_query($at45_usuario,"email,nome","id_usuario"));
@@ -100,9 +100,9 @@ if(isset($incluir)){
 					  	  $prioridade = "Alta";
 					  }
 				  	  $rs_resp  = $cldb_usuarios->sql_record($cldb_usuarios->sql_query($at40_responsavel,"nome as nome_resp","id_usuario"));
-					  if($cldb_usuarios->numrows > 0) {	
+					  if($cldb_usuarios->numrows > 0) {
 						  db_fieldsmemory($rs_resp,0);
-												  
+
 						  $mensagem = $nome . "<br>Você tem tarefas para fazer abaixo a descricao da sua tarefa (nao autorizada):<br>" .
 						              "Responsavel:         " . $at40_responsavel . " - " . $nome_resp . "<br>".
 						              "Descricao  :         " . $at40_descr       . "<br>".
@@ -110,8 +110,8 @@ if(isset($incluir)){
 						              "Data final prevista: " . db_formatar($at40_diafim,"d") . "<br>".
 						              "Previsto em        : " . $at40_previsao    . "\\" . $at40_tipoprevisao . "<br>" .
 						              "Prioridade         : " . $prioridade       . "<br>" .
-						              "Obs.:                " . $at40_obs         . "<br>";  
-	
+						              "Obs.:                " . $at40_obs         . "<br>";
+
 //						  $envio = $cltarefa->enviar_email($email,"Tarefa ".$cltarefausu->at42_tarefa,$mensagem);
 //						  if($envio == false) {
 //						  	  db_msgbox("Erro ao enviar e-mail para " . $email);
@@ -119,9 +119,9 @@ if(isset($incluir)){
 
 					  }
 				  }
-		  	  } 
+		  	  }
 		  }
-// Fim do Envio de e-mail		  
+// Fim do Envio de e-mail
 
 	    }
     }
@@ -149,7 +149,7 @@ if(isset($incluir)){
 				$cltarefaenvol->at45_perc       = $at42_perc;
 				$cltarefaenvol->at45_sequencial = $at45_sequencial;
 				$cltarefaenvol->alterar($at45_sequencial);
-				echo "<script>top.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at42_tarefa."'</script>";
+				echo "<script>CurrentWindow.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at42_tarefa."'</script>";
 			}
 	    }
 	}
@@ -186,8 +186,8 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmtarefausu.php");

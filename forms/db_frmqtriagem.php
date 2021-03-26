@@ -9,7 +9,7 @@ $clqtriagem->rotulo->label();
     <td nowrap title="<?=@$Tqt_codigo?>">
        <?=@$Lqt_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('qt_codigo',10,$Iqt_codigo,true,'text',3,"")
 ?>
@@ -27,7 +27,7 @@ db_input('qt_codigo',10,$Iqt_codigo,true,'text',3,"")
               db_input('qt_paciente', 10, $Iqt_paciente, true, 'text', "", "onchange='js_pesquisafa04_i_cgsund(false); js_init();'");
 
               if(!empty($qt_paciente)){
-                $result = $clcgsund->sql_record($clcgsund->sql_query($qt_paciente)); 
+                $result = $clcgsund->sql_record($clcgsund->sql_query($qt_paciente));
                 db_fieldsmemory($result,0);
               }
 
@@ -42,7 +42,7 @@ db_input('qt_codigo',10,$Iqt_codigo,true,'text',3,"")
   if(!empty($qt_paciente)){
     $date = new DateTime( $z01_d_nasc ); // data de nascimento
     $interval = $date->diff( new DateTime( date("Y-m-d") ) ); // data definida
-    //echo $interval->format( '%Y Anos, %m Meses e %d Dias' ); 
+    //echo $interval->format( '%Y Anos, %m Meses e %d Dias' );
     $idade = $interval->format('%Y');
     if($idade >= 0 && $idade <= 9){
       $tpIdadePaciente = 1;
@@ -64,7 +64,7 @@ db_input('qt_codigo',10,$Iqt_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tqt_stgravida?>">
        <?=@$Lqt_stgravida?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tpIdadePaciente', 10, $tpIdadePaciente, true, 'hidden');
 $x = array("f"=>"NAO","t"=>"SIM");
@@ -76,7 +76,7 @@ db_select('qt_stgravida',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_sthipertenso?>">
        <?=@$Lqt_sthipertenso?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_sthipertenso',$x,true,$db_opcao,"");
@@ -87,7 +87,7 @@ db_select('qt_sthipertenso',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stdiabetico?>">
        <?=@$Lqt_stdiabetico?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stdiabetico',$x,true,$db_opcao,"");
@@ -98,7 +98,7 @@ db_select('qt_stdiabetico',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_sttuberculose?>">
        <?=@$Lqt_sttuberculose?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_sttuberculose',$x,true,$db_opcao,"");
@@ -109,7 +109,7 @@ db_select('qt_sttuberculose',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_sthanseniase?>">
        <?=@$Lqt_sthanseniase?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_sthanseniase',$x,true,$db_opcao,"");
@@ -120,7 +120,7 @@ db_select('qt_sthanseniase',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stfuma?>">
        <?=@$Lqt_stfuma?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stfuma',$x,true,$db_opcao,"");
@@ -134,7 +134,7 @@ db_select('qt_stfuma',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_tpinstrucaoresponsavel?>">
        <?=@$Lqt_tpinstrucaoresponsavel?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("0"=>"","1"=>"Analfabeto","2"=>"Não Analfabeto","3"=>"Ensino fundamental, 1o grau(incompleto)","4"=>"Ensino fundamental, 1o grau(completo)"
   ,"5"=>"Ensino médio, 2o grau (incompleto)","6"=>"Ensino médio, 2o grau (completo)","7"=>"Superior (incompleto)","8"=>"Superior (completo)"
@@ -144,14 +144,14 @@ db_select('qt_tpinstrucaoresponsavel',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
-  <? 
+  <?
   }if($tpIdadePaciente == 1){
   ?>
   <tr>
     <td nowrap title="<?=@$Tqt_vlpeso?>">
        <?=@$Lqt_vlpeso?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('qt_vlpeso',10,$Iqt_vlpeso,true,'text',$db_opcao,"")
 ?>
@@ -161,7 +161,7 @@ db_input('qt_vlpeso',10,$Iqt_vlpeso,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tqt_vlaltura?>">
        <?=@$Lqt_vlaltura?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('qt_vlaltura',10,$Iqt_vlaltura,true,'text',$db_opcao,"")
 ?>
@@ -169,14 +169,14 @@ db_input('qt_vlaltura',10,$Iqt_vlaltura,true,'text',$db_opcao,"")
   </tr>
    <?
   }
-   
+
   if($tpIdadePaciente == 2 || $tpIdadePaciente == 3){
   ?>
   <tr>
     <td nowrap title="<?=@$Tqt_stpossuifilhos?>">
        <?=@$Lqt_stpossuifilhos?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stpossuifilhos',$x,true,$db_opcao,"");
@@ -187,7 +187,7 @@ db_select('qt_stpossuifilhos',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stutilizabebida?>">
        <?=@$Lqt_stutilizabebida?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stutilizabebida',$x,true,$db_opcao,"");
@@ -203,7 +203,7 @@ db_select('qt_stutilizabebida',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stsofreuqueda?>">
        <?=@$Lqt_stsofreuqueda?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stsofreuqueda',$x,true,$db_opcao,"");
@@ -214,7 +214,7 @@ db_select('qt_stsofreuqueda',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stconseguelocomover?>">
        <?=@$Lqt_stconseguelocomover?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stconseguelocomover',$x,true,$db_opcao,"");
@@ -228,7 +228,7 @@ db_select('qt_stconseguelocomover',$x,true,$db_opcao,"");
     <td nowrap title="Idade inferior a 17 ou superior a 35">
        <?=@$Lqt_stdoencagravidez?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stdoencagravidez',$x,true,$db_opcao,"");
@@ -239,7 +239,7 @@ db_select('qt_stdoencagravidez',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stcolesterolalto?>">
        <?=@$Lqt_stcolesterolalto?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stcolesterolalto',$x,true,$db_opcao,"");
@@ -250,7 +250,7 @@ db_select('qt_stcolesterolalto',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stdoencacoracaofamilia?>">
        <?=@$Lqt_stdoencacoracaofamilia?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stdoencacoracaofamilia',$x,true,$db_opcao,"");
@@ -261,7 +261,7 @@ db_select('qt_stdoencacoracaofamilia',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_tpdiabetes?>">
        <?=@$Lqt_tpdiabetes?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("1"=>"Tipo I","2"=>"Tipo II");
 db_select('qt_tpdiabetes',$x,true,$db_opcao,"");
@@ -273,7 +273,7 @@ db_select('qt_tpdiabetes',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_sttratamentotuberculose?>">
        <?=@$Lqt_sttratamentotuberculose?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_sttratamentotuberculose',$x,true,$db_opcao,"");
@@ -284,7 +284,7 @@ db_select('qt_sttratamentotuberculose',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stterminotratamento?>">
        <?=@$Lqt_stterminotratamento?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stterminotratamento',$x,true,$db_opcao,"");
@@ -295,7 +295,7 @@ db_select('qt_stterminotratamento',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_sttratamentohanseniase?>">
        <?=@$Lqt_sttratamentohanseniase?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_sttratamentohanseniase',$x,true,$db_opcao,"");
@@ -306,20 +306,20 @@ db_select('qt_sttratamentohanseniase',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tqt_stsintomashanseniase?>">
        <?=@$Lqt_stsintomashanseniase?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('qt_stsintomashanseniase',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
-  
+
 <?
 db_inputdata('qt_dataenviosigaf',@$qt_dataenviosigaf_dia,@$qt_dataenviosigaf_mes,@$qt_dataenviosigaf_ano,true,'hidden',$db_opcao,"");
 
 db_input('db_opcao', 10, $db_opcao, true, 'hidden');
 ?>
-  
+
   </table>
   </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
@@ -327,7 +327,7 @@ db_input('db_opcao', 10, $db_opcao, true, 'hidden');
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_qtriagem','func_qtriagem.php?funcao_js=parent.js_preenchepesquisa|qt_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_qtriagem','func_qtriagem.php?funcao_js=parent.js_preenchepesquisa|qt_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_qtriagem.hide();
@@ -371,7 +371,7 @@ function js_mostracgs_und(chave,erro) {
   }
 }
 function js_mostracgs_und1(chave1,chave2) {
-  
+
   document.form1.qt_paciente.value = chave1;
   document.form1.z01_v_nome.value    = chave2;
   //js_init();
@@ -389,18 +389,18 @@ function js_mostracgs_und1(chave1,chave2) {
 }
 
 function valida()
-{ 
+{
   if(document.getElementById('tpIdadePaciente').value == 1){
-    
+
     if(document.getElementById('qt_tpinstrucaoresponsavel').value == 0){
       alert('Qual seu grau de instrução é um campo obrigatório');
       document.getElementById('qt_tpinstrucaoresponsavel').focus();
-      return false;    
+      return false;
     }
     if(document.getElementById('qt_vlpeso').value == 0){
       alert('Peso da criança é um campo obrigatório');
       document.getElementById('qt_vlpeso').focus();
-      return false;    
+      return false;
     }
 
   }

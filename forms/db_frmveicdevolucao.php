@@ -266,10 +266,10 @@ function js_verificaDataDevolucao(){
 
 function js_pesquisave61_veicretirada(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veicretirada','func_veicretirada.php?funcao_js=parent.js_mostraveicretirada1|ve60_codigo|ve60_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicretirada','func_veicretirada.php?funcao_js=parent.js_mostraveicretirada1|ve60_codigo|ve60_codigo','Pesquisa',true);
   }else{
      if(document.form1.ve61_veicretirada.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_veicretirada','func_veicretirada.php?pesquisa_chave='+document.form1.ve61_veicretirada.value+'&funcao_js=parent.js_mostraveicretirada','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicretirada','func_veicretirada.php?pesquisa_chave='+document.form1.ve61_veicretirada.value+'&funcao_js=parent.js_mostraveicretirada','Pesquisa',false);
      }else{
        document.form1.ve60_codigo.value = '';
      }
@@ -289,10 +289,10 @@ function js_mostraveicretirada1(chave1,chave2){
 }
 function js_pesquisave61_veicmotoristas(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?funcao_js=parent.js_mostraveicmotoristas1|ve05_codigo|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?funcao_js=parent.js_mostraveicmotoristas1|ve05_codigo|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.ve61_veicmotoristas.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?pesquisa_chave='+document.form1.ve61_veicmotoristas.value+'&funcao_js=parent.js_mostraveicmotoristas','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicmotoristas','func_veicmotoristasalt.php?pesquisa_chave='+document.form1.ve61_veicmotoristas.value+'&funcao_js=parent.js_mostraveicmotoristas','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
@@ -312,10 +312,10 @@ function js_mostraveicmotoristas1(chave1,chave2){
 }
 function js_pesquisave61_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
   }else{
      if(document.form1.ve61_usuario.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.ve61_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.ve61_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
        document.form1.nome.value = '';
      }
@@ -334,7 +334,7 @@ function js_mostradb_usuarios1(chave1,chave2){
   db_iframe_db_usuarios.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_veicdevolucao','func_veicdevolucao.php?funcao_js=parent.js_preenchepesquisa|ve61_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicdevolucao','func_veicdevolucao.php?funcao_js=parent.js_preenchepesquisa|ve61_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_veicdevolucao.hide();
@@ -345,7 +345,7 @@ function js_preenchepesquisa(chave){
   ?>
 }
 function js_pesquisaretirada(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_veicretirada','func_veicretiradaalt.php?&devol=false&funcao_js=parent.js_preencheretirada|ve60_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicretirada','func_veicretiradaalt.php?&devol=false&funcao_js=parent.js_preencheretirada|ve60_codigo','Pesquisa',true);
 }
 function js_preencheretirada(chave){
   db_iframe_veicretirada.hide();
@@ -454,14 +454,14 @@ function js_pesquisa_medida() {
                   document.form1.ve61_datadevol_mes.value + '-' +
                   document.form1.ve61_datadevol_dia.value;
   var devolucao = document.form1.ve61_codigo.value;
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_ultimamedida',
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_ultimamedida',
     'func_veiculos_medida.php?metodo=ultimamedida&veiculo='+document.form1.ve60_veiculo.value+
                                                 '&data='+databanco+
                                                 '&hora='+document.form1.ve61_horadevol.value+
                                                 '&devolucao='+devolucao+
                                                 '&funcao_js=parent.js_mostraultimamedida', 'Pesquisa Ultima Medida', false);
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_proximamedida',
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_proximamedida',
     'func_veiculos_medida.php?metodo=proximamedida&veiculo='+document.form1.ve60_veiculo.value+
                                                  '&data='+databanco+
                                                  '&hora='+document.form1.ve61_horadevol.value+

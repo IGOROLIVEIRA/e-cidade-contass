@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -59,7 +59,7 @@ db_postmemory($HTTP_POST_VARS);
           alert( _M( sMensagens + "campo_obrigatorio", { sCampo : "ano/mês (base)" }) );
           return false;
         }
-        
+
         var iAnoInformado  = $("ano_base").getValue();
         var iMesInformado  = $("mes_base").getValue();
 
@@ -79,9 +79,9 @@ db_postmemory($HTTP_POST_VARS);
 
         var oCompetencia   = new DBViewFormularioFolha.CompetenciaFolha(false);
         var lCompetencia   = oCompetencia.isCompetenciaValida(iAnoInformado, iMesInformado);
-    
+
         if (!lCompetencia) {
-      
+
           alert(_M( sMensagens + 'base_ultrapassada'));
           return false;
         }
@@ -140,12 +140,12 @@ db_postmemory($HTTP_POST_VARS);
         qry += '&retificacao='     + document.form1.retificacao.value;
         qry += '&dataretificacao=' + document.form1.dataretificacao.value;
 
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_gerarais', 'pes4_gerarais002.php?' + qry, 'Gerando Arquivo', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_gerarais', 'pes4_gerarais002.php?' + qry, 'Gerando Arquivo', true);
       }
 
       function js_erro(msg) {
 
-        top.corpo.db_iframe_gerarais.hide();
+        CurrentWindow.corpo.db_iframe_gerarais.hide();
         alert(msg);
       }
 
@@ -166,7 +166,7 @@ db_postmemory($HTTP_POST_VARS);
 
       function js_detectaarquivo(arquivo, pdf) {
 
-        top.corpo.db_iframe_gerarais.hide();
+        CurrentWindow.corpo.db_iframe_gerarais.hide();
         listagem  = arquivo + "#Download Arquivo TXT (.dec) |";
         listagem += pdf + "#Download Relatório";
         js_montarlista(listagem,"form1");
@@ -187,7 +187,7 @@ db_postmemory($HTTP_POST_VARS);
           $$('.ajuste-style-fieldset-1').invoke('setStyle', {
             marginLeft: '40px'
           });
-        }       
+        }
       }
 
       function js_onlyNumbers(oObj) {
@@ -196,21 +196,21 @@ db_postmemory($HTTP_POST_VARS);
 
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
-    
+
     <style>
-      
+
       .ajuste-style-fieldset-1 {
-        margin-left: 54px;        
+        margin-left: 54px;
       }
-      
+
       .ajuste-style-fieldset-1 #retificacao, #obs {
-        width: 130px;        
+        width: 130px;
       }
-      
+
       .ajuste-style-fieldset-1 #dataretificacao {
-        width: 98px;        
+        width: 98px;
       }
-      
+
       .ajuste-style-fieldset-2 {
         margin-left:24px;
       }
@@ -218,25 +218,25 @@ db_postmemory($HTTP_POST_VARS);
       .ajuste-style-fieldset-2 #nome_resp {
         width: 325px;
       }
-      
+
       .ajuste-style-fieldset-2 #cpfr {
         width: 130px;
       }
-      
+
       .ajuste-style-fieldset-2 #datan  {
         width: 98px;
       }
-      
+
       .ajuste-style-fieldset-3 {
-        margin-left:0px; 
+        margin-left:0px;
       }
-      
+
       .ajuste-style-fieldset-3 input {
         width: 130px;
       }
-      
+
     </style>
-    
+
   </head>
 
   <body class="body-default">
@@ -314,10 +314,10 @@ db_postmemory($HTTP_POST_VARS);
                 <div class="ajuste-style-fieldset-1" >
                   <?php
                     $instit=db_getsession("DB_instit");
-  
+
                     $sql = "select distinct z01_numcgm,z01_cgccpf||'-'||z01_nome as z01_nome from rhlota inner join cgm on rhlota.r70_numcgm=cgm.z01_numcgm  where r70_instit=$instit;";
                     $result= db_query($sql);
-  
+
                     db_selectrecord("r70_numcgm", $result, true, @$db_opcao, "", "", "", "0", "", "2");
                   ?>
                 </div>
@@ -364,7 +364,7 @@ db_postmemory($HTTP_POST_VARS);
                     <?php
                       db_inputdata("datan", '', '', '', true, 'text', 2);
                     ?>
-                  </div>  
+                  </div>
                 </td>
               </tr>
             </table>

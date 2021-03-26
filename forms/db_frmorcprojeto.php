@@ -138,7 +138,7 @@ $clrotulo->label("o45_numlei");
 		let iTipoSup = document.getElementById('o39_tiposuplementacao').value;
 
 		if (iTipoLei == 1) {
-		
+
 			let aTipoSupPermitidosLOA = ['Selecione','1001','1002','1003','1004','1011','1018','1019','1020','1021','1022','2026'];
 			js_validaTipoSupArray(aTipoSupPermitidosLOA, iTipoSup, iTipoLei);
 
@@ -148,24 +148,24 @@ $clrotulo->label("o45_numlei");
 
 			let aTipoSupPermitidosLDO = ['Selecione','1017','1014','1015','1016','1020','1021','1022','2026'];
 			js_validaTipoSupArray(aTipoSupPermitidosLDO, iTipoSup, iTipoLei);
-		
+
 		}
 
 		if (iTipoLei == 3) {
 
 			let aTipoSupPermitidosLAO = ['Selecione','1006','1007','1008','1009','1010','1012','1013','1023','1024','1025','1014','1015','1016','2026'];
 			js_validaTipoSupArray(aTipoSupPermitidosLAO, iTipoSup, iTipoLei);
-			
+
 		}
 
 	  	if (iTipoSup == 1001 || iTipoSup == 1003 || iTipoSup == 1004) {
-			
-			document.getElementById('o39_usalimite').value = 't';	
+
+			document.getElementById('o39_usalimite').value = 't';
 			document.getElementById('o39_usalimite_select_descr').value = 'Sim';
 
 		} else {
-			
-			document.getElementById('o39_usalimite').value = 'f';	
+
+			document.getElementById('o39_usalimite').value = 'f';
 			document.getElementById('o39_usalimite_select_descr').value = 'Não';
 
 		}
@@ -174,7 +174,7 @@ $clrotulo->label("o45_numlei");
 		let bModalidadeAplic = document.getElementById('bModalidadeAplic').value;
 
 		if ( (aTiposModalidade.indexOf(iTipoSup) > -1) && bModalidadeAplic == 'f') {
-			
+
 			alert("Esse tipo de suplementação somente pode ser utilizado quando orçamento é aprovado por modalidade de aplicação!");
 			document.getElementById('o39_tiposuplementacao').options[0].selected = true;
 			document.getElementById('o39_tiposuplementacao').onchange();
@@ -191,7 +191,7 @@ $clrotulo->label("o45_numlei");
 		if(aTipoSup && iTipoSup) {
 
 			if (aTipoSup.indexOf(iTipoSup) < 0) {
-        
+
 				let eSelect 	= document.getElementById("o39_tiposuplementacaodescr");
 				let sTipoSup 	= iTipoSup +' '+ eSelect.options[eSelect.selectedIndex].text;
 				alert('Tipo de suplementação '+sTipoSup+' não permitido para o Tipo da Lei: '+aDescTipoSup[(iTipoLei-1)]);
@@ -205,7 +205,7 @@ $clrotulo->label("o45_numlei");
 		}
 
 	}
-	   
+
 	function js_validaSubmit() {
 
 		if (document.form1.o39_tiposuplementacao.value == 'Selecione') {
@@ -217,13 +217,13 @@ $clrotulo->label("o45_numlei");
 
   function js_pesquisao39_codlei(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo.iframe_projeto',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_projeto',
         'db_iframe_orclei',
         'func_orclei.php?funcao_js=parent.js_mostraorclei1|o45_codlei|o45_numlei|o45_tipolei&leimanual=1',
         'Pesquisa',true);
     }else{
      if(document.form1.o39_codlei.value != ''){
-      js_OpenJanelaIframe('top.corpo.iframe_projeto',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_projeto',
         'db_iframe_orclei',
         'func_orclei.php?pesquisa_chave='+
         document.form1.o39_codlei.value+
@@ -253,9 +253,9 @@ function js_mostraorclei1(chave1,chave2,chave3){
 function js_pesquisa(){
   <?
  //  if($db_opcao==22){
-  echo "js_OpenJanelaIframe('top.corpo.iframe_projeto','db_iframe_orcprojeto','func_orcprojeto001.php?funcao_js=parent.js_preenchepesquisa|o39_codproj','Pesquisa',true);";
+  echo "js_OpenJanelaIframe('CurrentWindow.corpo.iframe_projeto','db_iframe_orcprojeto','func_orcprojeto001.php?funcao_js=parent.js_preenchepesquisa|o39_codproj','Pesquisa',true);";
  // }else {
- //    echo "js_OpenJanelaIframe('top.corpo','db_iframe_orcprojeto','func_orcprojeto.php?funcao_js=parent.js_preenchepesquisa|o39_codproj','Pesquisa',true);";
+ //    echo "js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcprojeto','func_orcprojeto.php?funcao_js=parent.js_preenchepesquisa|o39_codproj','Pesquisa',true);";
  // }
   ?>
 }

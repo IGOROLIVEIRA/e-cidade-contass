@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -52,7 +52,7 @@ $clrotulo->label("cp06_logradouro");
 
 $db_botao = true;
 $db_opcao = 1;
-  
+
 if(isset($incluir)){
   if (isset($logs)&&$logs!=""){
     $logs_split = split(',',$logs);
@@ -64,7 +64,7 @@ if(isset($incluir)){
     	$cllogradcep->j65_ceplog = $logs_split[$i];
     	$cllogradcep->j65_lograd = $j14_codigo;
 	    // $cllogradcep->incluir($j14_codigo,$logs_split[$i]);
-	    $cllogradcep->incluir(); 
+	    $cllogradcep->incluir();
     }
   }
 }
@@ -74,7 +74,7 @@ if (isset($chavepesquisa)){
    if ($clruas->numrows > 0){
      db_fieldsmemory($res,0);
     }
-} 
+}
 ?>
 <html>
 <head>
@@ -86,7 +86,7 @@ if (isset($chavepesquisa)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#cccccc">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -94,8 +94,8 @@ if (isset($chavepesquisa)){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<form name="form1" method="post" action="">
 	<center>
@@ -109,7 +109,7 @@ if (isset($chavepesquisa)){
 		?>
 	     </td>
           </tr>
-	  
+
           <tr>
              <td nowrap>
                <?
@@ -131,7 +131,7 @@ if (isset($chavepesquisa)){
                  $aux->linhas = 10;
                  $aux->vwhidth = 400;
                  $aux->funcao_gera_formulario();
-               ?>    
+               ?>
              </td>
           </tr>
 	  <tr>
@@ -145,7 +145,7 @@ if (isset($chavepesquisa)){
 	   db_input("logs",50,"",true,"hidden",3);
 	?>
 	</form>
-    
+
     </center>
 	</td>
   </tr>
@@ -170,14 +170,14 @@ if (isset($j14_codigo)&&$j14_codigo!=""){
 <script>
 function js_pesquisa_ruas(mostra){
   if(mostra == true){
-     js_OpenJanelaIframe('top.corpo.iframe_g2','db_iframe_ruas','func_ruas.php?rural=1&funcao_js=parent.js_preencheruas|j14_codigo|j14_nome','Pesquisa',true,0);
+     js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g2','db_iframe_ruas','func_ruas.php?rural=1&funcao_js=parent.js_preencheruas|j14_codigo|j14_nome','Pesquisa',true,0);
   }else{
     if(document.form1.j14_codigo.value != ''){
-     js_OpenJanelaIframe('top.corpo.iframe_g2','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.j14_codigo.value+'&funcao_js=parent.js_preencheruas2','Pesquisa',false,0);
+     js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g2','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.j14_codigo.value+'&funcao_js=parent.js_preencheruas2','Pesquisa',false,0);
     }else{
       document.form1.j14_codigo.value = '';
       }
-   }  
+   }
 }
 function js_preencheruas(chave,chave1){
   document.form1.j14_codigo.value = chave;
@@ -195,14 +195,14 @@ function js_preencheruas2(chave_classe,erro_classe){
 
 function js_pesquisa_log(mostra){
   if(mostra == true){
-     js_OpenJanelaIframe('top.corpo.iframe_g2','db_iframe_log','func_db_config_alt.php?rural=1&funcao_js=parent.js_preenchelog|cp06_codlogradouro|cp06_logradouro','Pesquisa',true,0);
+     js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g2','db_iframe_log','func_db_config_alt.php?rural=1&funcao_js=parent.js_preenchelog|cp06_codlogradouro|cp06_logradouro','Pesquisa',true,0);
   }else{
     if(document.form1.cp06_codlogradouro.value != ''){
-     js_OpenJanelaIframe('top.corpo.iframe_g2','db_iframe_log','func_db_config_alt.php?pesquisa_chave='+document.form1.cp06_codlogradouro.value+'&funcao_js=parent.js_preenchelog2','Pesquisa',false,0);
+     js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g2','db_iframe_log','func_db_config_alt.php?pesquisa_chave='+document.form1.cp06_codlogradouro.value+'&funcao_js=parent.js_preenchelog2','Pesquisa',false,0);
     }else{
       document.form1.cp06_codlogradouro.value = '';
       }
-   }  
+   }
 }
 function js_preenchelog(chave,chave1){
   document.form1.cp06_codlogradouro.value = chave;
@@ -225,7 +225,7 @@ function js_busca_dados(){
   lista+=vir+document.form1.logradouro.options[x].value;
   vir=",";
  }
- document.form1.logs.value = lista; 
+ document.form1.logs.value = lista;
  return true;
 }
 </script>

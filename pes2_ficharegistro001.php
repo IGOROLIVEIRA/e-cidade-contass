@@ -35,7 +35,7 @@ function js_filtra(){
 }
 
 function js_processa() {
-	
+
 	   F = document.form1;
 	   if(F.filtro.value == 'M'){
 		   var listaMatriculas = [];
@@ -43,30 +43,30 @@ function js_processa() {
 		   if (F.lista) {
 		     for(i=0; i<=F.lista.length-1; i++){
 		       F.lista.options[i].selected = true;
-			   listaMatriculas[i] = F.lista.options[i].value;			
+			   listaMatriculas[i] = F.lista.options[i].value;
 		     }
-	
-		     jan = window.open('pes2_ficharegistro002.php?regist=' + listaMatriculas + '&selecao='+ F.selecao.value,			   
+
+		     jan = window.open('pes2_ficharegistro002.php?regist=' + listaMatriculas + '&selecao='+ F.selecao.value,
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   		 jan.moveTo(0,0);
-		   
+
 		   }
 		   else if (F.cod_ini){
-	
-			   jan = window.open('pes2_ficharegistro002.php?cod_ini=' + F.cod_ini.value + '&cod_fim=' + F.cod_fim.value +'&selecao='+ F.selecao.value,			   
+
+			   jan = window.open('pes2_ficharegistro002.php?cod_ini=' + F.cod_ini.value + '&cod_fim=' + F.cod_fim.value +'&selecao='+ F.selecao.value,
 		                 '',
 		                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 		   		 jan.moveTo(0,0);
-			     
+
 		   }
 		   else if (F.selecao) {
-			     
-			     jan = window.open('pes2_ficharegistro002.php?selecao='+ F.selecao.value,			   
+
+			     jan = window.open('pes2_ficharegistro002.php?selecao='+ F.selecao.value,
 		                 '',
 		                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 		   		 jan.moveTo(0,0);
-			   
+
 		  }
 	  }
 	   if(F.filtro.value == 'L'){
@@ -75,34 +75,34 @@ function js_processa() {
 		   if (F.lista) {
 		     for(i=0; i<=F.lista.length-1; i++){
 		       F.lista.options[i].selected = true;
-		       listaLotacoes[i] = F.lista.options[i].value;			
+		       listaLotacoes[i] = F.lista.options[i].value;
 		     }
-	
-		     jan = window.open('pes2_ficharegistro002.php?lotacao=' + listaLotacoes + '&selecao='+ F.selecao.value,			   
+
+		     jan = window.open('pes2_ficharegistro002.php?lotacao=' + listaLotacoes + '&selecao='+ F.selecao.value,
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   		 jan.moveTo(0,0);
-		   
+
 		   }
 		   else if (F.cod_ini){
-	
-			   jan = window.open('pes2_ficharegistro002.php?cod_iniL=' + F.cod_ini.value + '&cod_fimL=' + F.cod_fim.value +'&selecao='+ F.selecao.value,			   
+
+			   jan = window.open('pes2_ficharegistro002.php?cod_iniL=' + F.cod_ini.value + '&cod_fimL=' + F.cod_fim.value +'&selecao='+ F.selecao.value,
 		                 '',
 		                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 		   		 jan.moveTo(0,0);
-			     
+
 		   }
 		   else if (F.selecao) {
-			     
-			     jan = window.open('pes2_ficharegistro002.php?selecao='+ F.selecao.value,			   
+
+			     jan = window.open('pes2_ficharegistro002.php?selecao='+ F.selecao.value,
 		                 '',
 		                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 		   		 jan.moveTo(0,0);
-			   
+
 		  }
 	  }
 
-		   
+
 }
 
 </script>
@@ -113,7 +113,7 @@ function js_processa() {
 <fieldset style="margin-top: 50px; margin-left: 370px; width: 40%">
 	<legend style="font-weight: bold;">Ficha de Registro de Funcionários</legend>
 <table align="center" border="0" cellspacing="4" cellpadding="0" >
-  <tr> 
+  <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -135,9 +135,9 @@ function js_processa() {
 	  <?
     if(!isset($filtro)){
       $filtro = 'M';
-    }                           
+    }
 	  $arr=array("N"=>"Nenhum","M"=>"Matrícula","L"=>"Lotação");
-	  db_select("filtro",$arr,true,2,"onchange='js_filtra();'"); 
+	  db_select("filtro",$arr,true,2,"onchange='js_filtra();'");
 	  ?>
 	  </td>
 	</tr>
@@ -150,9 +150,9 @@ function js_processa() {
 	  <?
     if(!isset($filtrar)){
       $filtrar = 'S';
-    }                           
+    }
 	  $arr1=array("."=>"------------","I"=>"Intervalo","S"=>"Selecionados");
-	  db_select("filtrar",$arr1,true,2,"onchange='js_filtra();'"); 
+	  db_select("filtrar",$arr1,true,2,"onchange='js_filtra();'");
 	  ?>
 	  </td>
 	</tr>
@@ -174,18 +174,18 @@ function js_processa() {
     }
     if($filtrar=='I'){
   ?>
-  
+
         <tr>
           <td>
             <strong><?=@$info?> de</strong>
           </td>
-          <td> 
+          <td>
             <? db_input('cod_ini',8,'',true,'text',1," onchange='js_copiacampo();'","")  ?>
-            <strong> à </strong> 
+            <strong> à </strong>
             <? db_input('cod_fim',8,'',true,'text',1,"","")  ?>
           </td>
         </tr>
-    
+
   <?
     }else if ($filtrar=='S'){
   ?>
@@ -216,7 +216,7 @@ function js_processa() {
     }
   }
   ?>
-  <tr> 
+  <tr>
     <td align="center" colspan="2">
       <input onClick="js_processa();"  type="button" value="Processar" name="processar" onBlur='js_tabulacaoforms("form1","rh01_regist",true,0,"rh01_regist",true);'>
     </td>
@@ -224,7 +224,7 @@ function js_processa() {
 </table>
 </fieldset>
 </form>
-<? 
+<?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -233,20 +233,20 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
 function js_pesquisarh01_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
   }else{
-    if(document.form1.rh01_regist.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
+    if(document.form1.rh01_regist.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
     }else{
       document.form1.z01_nome.value = '';
     }
   }
 }
 function js_mostrapessoal(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.rh01_regist.focus(); 
-    document.form1.rh01_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.rh01_regist.focus();
+    document.form1.rh01_regist.value = '';
   }
 }
 function js_mostrapessoal1(chave1,chave2){

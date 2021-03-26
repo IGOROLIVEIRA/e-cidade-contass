@@ -9,7 +9,7 @@ $claguahidro->rotulo->label();
     <td nowrap title="<?=@$Tx03_codmarca?>">
        <?=@$Lx03_codmarca?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x03_codmarca',6,$Ix03_codmarca,true,'text',3,"")
 ?>
@@ -19,7 +19,7 @@ db_input('x03_codmarca',6,$Ix03_codmarca,true,'text',3,"")
     <td nowrap title="<?=@$Tx03_nomemarca?>">
        <?=@$Lx03_nomemarca?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x03_nomemarca',50,$Ix03_nomemarca,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('x03_nomemarca',50,$Ix03_nomemarca,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_aguahidro','func_aguahidro.php?funcao_js=parent.js_preenchepesquisa|x03_codmarca','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguahidro','func_aguahidro.php?funcao_js=parent.js_preenchepesquisa|x03_codmarca','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_aguahidro.hide();

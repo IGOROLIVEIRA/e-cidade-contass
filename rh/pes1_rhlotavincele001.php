@@ -71,7 +71,7 @@ if(isset($incluir)){
       $sqlerro=true;
     }
   }
-  
+
   if($sqlerro==false){
     $clrhlotavincele->excluir($rh25_codlotavinc,$rh28_codeledef);
     $erro_msg1 = $clrhlotavincele->erro_msg;
@@ -112,7 +112,7 @@ if(isset($incluir)){
       db_fieldsmemory($result_lotavinc,0);
     }
   }
-  if(isset($chave) && trim($chave)!="" && isset($chave1) && trim($chave1)!=""){    
+  if(isset($chave) && trim($chave)!="" && isset($chave1) && trim($chave1)!=""){
     //  echo "<BR><BR>".($clorcprojativ->sql_query_file($chave,$chave1,"o55_projativ as rh39_projativ,o55_anousu as rh39_anousu,o55_descr"));
     if($chave1!="true"){
       $result_projativ = $clorcprojativ->sql_record($clorcprojativ->sql_query_file($chave,$chave1,"o55_projativ as rh39_projativ,o55_anousu as rh39_anousu,o55_descr"));
@@ -159,8 +159,8 @@ if(isset($incluir)){
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="750" border="2" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="355" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="355" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmrhlotavincele.php");
@@ -183,12 +183,12 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
   echo "<script> location.href = 'pes1_rhlotavincele001.php?lotacao=$rh25_codigo&lotavinc=$rh25_codlotavinc';</script>";
 }
 if(isset($opcao)){
-  echo "<script> top.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = '$opcao'; </script>";
+  echo "<script> CurrentWindow.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = '$opcao'; </script>";
   if($opcao=="alterar" && trim($default)==""){
-    echo "<script> top.corpo.iframe_rhlotavinc.document.form1.defaultifra.value = '$rh28_codeledef'; </script>";
+    echo "<script> CurrentWindow.corpo.iframe_rhlotavinc.document.form1.defaultifra.value = '$rh28_codeledef'; </script>";
   }
 }else{
-  echo "<script> top.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = ''; </script>";
+  echo "<script> CurrentWindow.corpo.iframe_rhlotavinc.document.form1.opcaoiframe.value = ''; </script>";
 }
 /*
 if($limpachavee1==true){

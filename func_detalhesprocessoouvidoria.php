@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,7 +46,7 @@ $oDaoOuvidoriaAtend = new cl_ouvidoriaatendimento();
 $lPermissaoImpressao = db_permissaomenu(db_getsession("DB_anousu"),398, 4754);
 
 /**
- * Busca os dados do processo 
+ * Busca os dados do processo
  */
 $sCamposAtendimentoLocal  = "ov01_sequencial,";
 $sCamposAtendimentoLocal .= "p51_codigo ||' - '|| p51_descr   as tipo_processo,";
@@ -69,19 +69,19 @@ $sCamposAtendimentoLocal .= "p58_codproc as numero_processo";
  * Se nao for passado codigo atendimento por get pesquisa pelo codigo do processo
  * - consultas >> atendimento : pesquisa por atendimento
  * - consultas >> ouvidoria   : pesquisa pelo codigo do processo
- */	 
+ */
 if ( !empty($oGet->iAtendimento) ) {
 	$sWhereAtendimentoLocal  = "ouvidoriaatendimento.ov01_sequencial = {$oGet->iAtendimento}";
 } else {
 	$sWhereAtendimentoLocal  = "p58_codproc = {$oGet->iCodProcesso}";
-}  
+}
 
 $sSqlOuvAtend      = $oDaoOuvidoriaAtend->sql_query_atendimento_processo(null, $sCamposAtendimentoLocal, null, $sWhereAtendimentoLocal);
 $rsOuviAtendimento = $oDaoOuvidoriaAtend->sql_record($sSqlOuvAtend);
 $oAtendimento      = db_utils::fieldsMemory($rsOuviAtendimento, 0);
 
 /**
- * Se nao for passado codigo atendimento por get pega o atendimento encontrado no sql dos dados do processo  
+ * Se nao for passado codigo atendimento por get pega o atendimento encontrado no sql dos dados do processo
  */
 if ( empty($oGet->iAtendimento) ) {
 	$iAtendimento = $oAtendimento->ov01_sequencial;
@@ -90,7 +90,7 @@ if ( empty($oGet->iAtendimento) ) {
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<? 
+<?
   db_app::load('strings.js');
   db_app::load('scripts.js');
   db_app::load('prototype.js');
@@ -118,7 +118,7 @@ if ( empty($oGet->iAtendimento) ) {
              </td>
              <td class="valores" id ='atendimento'>
                <?=$oAtendimento->numero_atendimento;?>
-             </td> 
+             </td>
              <td align="right">
                <b>Processo:</b>
              </td>
@@ -138,7 +138,7 @@ if ( empty($oGet->iAtendimento) ) {
              </td>
              <td  class="valores">
                <?=$oAtendimento->hora_atendimento;?>
-             </td>             
+             </td>
            </tr>
            <tr>
              <td><b>Ouvidor:</b></td>
@@ -153,7 +153,7 @@ if ( empty($oGet->iAtendimento) ) {
              <td colspan="3" class="valores">
                <?=$oAtendimento->departamento_inicial;?>
              </td>
-           </tr>            
+           </tr>
            <tr>
              <td>
                <b>Tipo de Processo:</b>
@@ -169,7 +169,7 @@ if ( empty($oGet->iAtendimento) ) {
              <td colspan="3" class="valores">
                <?=utf8_decode($oAtendimento->nome_requerente);?>
              </td>
-           </tr>                       
+           </tr>
            <tr>
              <td>
                <b>Local:</b>
@@ -177,7 +177,7 @@ if ( empty($oGet->iAtendimento) ) {
              <td colspan="3" class="valores">
                <?=$oAtendimento->local;?>
              </td>
-           </tr>             
+           </tr>
            <tr>
              <td>
                <b>Data de arquivamento:</b>
@@ -185,8 +185,8 @@ if ( empty($oGet->iAtendimento) ) {
              <td colspan="3" class="valores">
                <?=db_formatar($oAtendimento->data_arquivamento, 'd');?>
              </td>
-           </tr>           
-         </table>   
+           </tr>
+         </table>
       </fieldset>
 	  </td>
 	  <td style="width: 30%;">
@@ -213,22 +213,22 @@ if ( empty($oGet->iAtendimento) ) {
   </legend>
 	<?
 		$oTabDetalhes = new verticalTab("detalhesProcesso",300);
-		
+
 		/*
 		 * Somente vai habilitar as abas se existir processo vinculado ao atendimento
 		 */
 		$lHabilitaAba = false;
 		$iNumeroProcesso = 0;
-		
+
 		if ($oAtendimento->numero_processo != "") {
 		  $lHabilitaAba = true;
 		  $iNumeroProcesso = $oAtendimento->numero_processo;
 		}
-		
+
   	$sQuery       = "?iCodProcesso={$iNumeroProcesso}";
 		$sParametros  = "&iProcesso={$oAtendimento->numero_processo}&iAtendimento={$iAtendimento}";
 		$sURL         = "ouv1_consultas.php?{$sParametros}";
-		
+
 		$oTabDetalhes->add("atendVic" , "Atendimentos Vinculados" ,"func_detalheatendimentoouvidoria.php{$sQuery}",         $lHabilitaAba);
 		$oTabDetalhes->add("despachos", "Despachos"               ,"func_detalhedespachosouvidoria.php{$sQuery}",           $lHabilitaAba);
 		$oTabDetalhes->add("retornos" , "Retornos Efetuados"      ,"func_detalheretornosouvidoria.php{$sQuery}",            $lHabilitaAba);
@@ -241,12 +241,12 @@ if ( empty($oGet->iAtendimento) ) {
 </body>
 </html>
 <script>
-  
+
   function js_imprimir(iAtendimento) {
 
     var sUrl  = 'ouv1_reldetalhesprocesso002.php?iAtendimento='+iAtendimento;
         sUrl += '&iProcesso='+<?php echo $oAtendimento->numero_processo; ?>;
-    js_OpenJanelaIframe('top.corpo','db_iframe_detalhesProc',sUrl,'Imprimir',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_detalhesProc',sUrl,'Imprimir',false);
   }
-  
+
 </script>

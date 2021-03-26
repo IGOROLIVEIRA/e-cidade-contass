@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ if(isset($alterar)){
 
   /* Verifico se existe algum usuario cadastrado neste laboratorio. Se tiver, o tipo nao pode ser alterado para interno */
   $cllab_labusuario->sql_record($cllab_labusuario->sql_query("","*",""," la05_i_laboratorio = $la02_i_codigo "));
-  if($cllab_labusuario->numrows>0) { 
+  if($cllab_labusuario->numrows>0) {
     $iBloqueioTipo = 3;
   }
 
@@ -71,7 +71,7 @@ if(isset($alterar)){
        db_redireciona(basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa=$la02_i_codigo");
 
      }
-     
+
      /* Verifico se ja existe algum registro na tabela lab_depart. Se sim, eu altero, senao eu incluo */
      $sSql = $cllab_labdepart->sql_query(null, '*', null, " la03_i_laboratorio = $la02_i_codigo ");
      $rsTmp = $cllab_labdepart->sql_record($sSql);
@@ -92,11 +92,11 @@ if(isset($alterar)){
      $cllab_labcgm->excluir(null, " la04_i_laboratorio = $la02_i_codigo "); // excluo algum registro que possa ter na lab_labcgm
 
    } else { // tipo externo
- 
+
      $sSql = $cllab_labcgm->sql_query(null, 'la04_i_codigo', null, " la04_i_laboratorio = $la02_i_codigo ");
      $rsTmp = $cllab_labcgm->sql_record($sSql);
      if($cllab_labcgm->numrows > 0) {
-       
+
        db_fieldsmemory($rsTmp, 0);
        $cllab_labcgm->la04_i_codigo = $la04_i_codigo;
        $cllab_labcgm->alterar($la04_i_codigo);
@@ -123,22 +123,22 @@ if(isset($alterar)){
      $cllab_laboratorio->alterar($la02_i_codigo);
 
    }
-    
+
    db_fim_transacao($cllab_laboratorio->erro_status == '0' ? true : false);
 
 }else if(isset($chavepesquisa)){
 
   /* Verifico se existe algum usuario cadastrado neste laboratorio. Se tiver, o tipo nao pode ser alterado para interno */
   $cllab_labusuario->sql_record($cllab_labusuario->sql_query("","*",""," la05_i_laboratorio = $chavepesquisa "));
-  if($cllab_labusuario->numrows>0) { 
+  if($cllab_labusuario->numrows>0) {
     $iBloqueioTipo = 3;
   }
   $db_botao = true;
   $db_opcao = 2;
 
-  $rResult = $cllab_laboratorio->sql_record($cllab_laboratorio->sql_query($chavepesquisa)); 
+  $rResult = $cllab_laboratorio->sql_record($cllab_laboratorio->sql_query($chavepesquisa));
   db_fieldsmemory($rResult,0);
-   
+
   //tipo interno
   $rResult = $cllab_labdepart->sql_record($cllab_labdepart->sql_query("","*",""," la03_i_laboratorio=$chavepesquisa "));
   if($cllab_labdepart->numrows>0){
@@ -153,22 +153,22 @@ if(isset($alterar)){
 
    ?>
      <script>
-         
+
          parent.document.formaba.a2.disabled = false;
          parent.document.formaba.a3.disabled = false;
          parent.document.formaba.a4.disabled = false;
          parent.document.formaba.a5.disabled = false;
          parent.document.formaba.a6.disabled = false;
-         parent.document.formaba.a7.disabled = false; 
+         parent.document.formaba.a7.disabled = false;
          parent.document.formaba.a8.disabled = false;
-         top.corpo.iframe_a2.location.href='lab1_lab_labresp001.php?la06_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
-         top.corpo.iframe_a3.location.href='lab1_lab_labusuario001.php?la05_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
-         top.corpo.iframe_a4.location.href='lab1_lab_labsetor001.php?la24_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
-         top.corpo.iframe_a5.location.href='lab1_lab_setorexame001.php?la24_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
-         top.corpo.iframe_a6.location.href='lab1_lab_horario001.php?la02_i_codigo=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
-         top.corpo.iframe_a7.location.href='lab1_lab_ausencia001.php?la02_i_codigo=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
-         top.corpo.iframe_a8.location.href='lab1_lab_paralizacao001.php?la37_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
-           
+         CurrentWindow.corpo.iframe_a2.location.href='lab1_lab_labresp001.php?la06_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
+         CurrentWindow.corpo.iframe_a3.location.href='lab1_lab_labusuario001.php?la05_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
+         CurrentWindow.corpo.iframe_a4.location.href='lab1_lab_labsetor001.php?la24_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
+         CurrentWindow.corpo.iframe_a5.location.href='lab1_lab_setorexame001.php?la24_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
+         CurrentWindow.corpo.iframe_a6.location.href='lab1_lab_horario001.php?la02_i_codigo=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
+         CurrentWindow.corpo.iframe_a7.location.href='lab1_lab_ausencia001.php?la02_i_codigo=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
+         CurrentWindow.corpo.iframe_a8.location.href='lab1_lab_paralizacao001.php?la37_i_laboratorio=<?=$chavepesquisa?>&la02_c_descr=<?=$la02_c_descr?>';
+
      </script>
    <?
 }
@@ -184,7 +184,7 @@ if(isset($alterar)){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <!--
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -193,8 +193,8 @@ if(isset($alterar)){
 </table>-->
 <center>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <br><br>
     <fieldset><legend><b> Laboratório </b></legend>

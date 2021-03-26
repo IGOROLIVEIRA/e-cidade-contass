@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: material
@@ -50,7 +50,7 @@ $clrotulo->label("m80_codigo");
       <strong>Código do lançamento:</strong>
     </td>
     <td align="left" nowrap colspan='3'>
-       <? 
+       <?
 db_input('m80_codigo',10,$Im80_codigo,true,"text",3);
        ?>
     </td>
@@ -60,10 +60,10 @@ db_input('m80_codigo',10,$Im80_codigo,true,"text",3);
       <strong>Departamento origem:</strong>
     </td>
     <td align="left" nowrap colspan='3'>
-       <? 
+       <?
 db_input('coddepto',10,$Idescrdepto,true,"text",3,"","departamentoorigem");
        ?>
-       <? 
+       <?
 db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentoorigem");
        ?>
     </td>
@@ -73,10 +73,10 @@ db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentoorigem")
       <strong>Departamento destino:</strong>
     </td>
     <td align="left" nowrap colspan='3'>
-       <? 
+       <?
 db_input('coddepto',10,$Idescrdepto,true,"text",3,"","departamentodestino");
        ?>
-       <? 
+       <?
 db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentodestino");
        ?>
     </td>
@@ -86,7 +86,7 @@ db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentodestino"
       <?=@$Lm80_obs?>
     </td>
     <td align="left" nowrap colspan='3'>
-       <? 
+       <?
 db_textarea('m80_obs',2,55,$Im80_obs,true,'text',3,"");
        ?>
     </td>
@@ -112,7 +112,7 @@ db_textarea('m80_obs',2,55,$Im80_obs,true,'text',3,"");
        $cliframe_alterar_excluir->fundocorpo ="#cccccc";
        $cliframe_alterar_excluir->opcoes = 4;
        $cliframe_alterar_excluir->fieldset = false;
-       $cliframe_alterar_excluir->iframe_alterar_excluir(1);//$db_opcao; 
+       $cliframe_alterar_excluir->iframe_alterar_excluir(1);//$db_opcao;
        if(isset($confirma)){
          db_input('confirma',10,0,true,"hidden",3);
        }
@@ -127,13 +127,13 @@ db_textarea('m80_obs',2,55,$Im80_obs,true,'text',3,"");
       <input name='cancelar'  type='submit' id='db_opcao'  value="<?=(!isset($confirma)||(isset($confirma) && $confirma=="false")?'Cancelar transferência':'Confirmar transferência')?>" <?=($db_botao==false?"":"disabled")?>>
       <input name='pesquisar' type='button' id='pesquisar' value='Pesquisar' onclick='js_pesquisar();'>
     </td>
-  </tr> 
+  </tr>
 </table>
 
 </form>
 <script>
 function js_pesquisar(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_matestoquetransf','func_matestoquetransf.php?funcao_js=parent.js_preenchepesquisa|m83_matestoqueini&chave_m80_codtipo=7&<?=(isset($confirma)?'+chave_m83_coddepto='.db_getsession("DB_coddepto"):'chave_m80_coddepto='.db_getsession("DB_coddepto"))?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matestoquetransf','func_matestoquetransf.php?funcao_js=parent.js_preenchepesquisa|m83_matestoqueini&chave_m80_codtipo=7&<?=(isset($confirma)?'+chave_m83_coddepto='.db_getsession("DB_coddepto"):'chave_m80_coddepto='.db_getsession("DB_coddepto"))?>','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_matestoquetransf.hide();

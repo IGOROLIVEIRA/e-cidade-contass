@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -51,14 +51,14 @@ if (isset($excluir)) {
   $sqlerro  = false;
   $erro_msg = "";
   db_inicio_transacao();
-  
+
   // 1o Excluir aguacortematnumpre
   $claguacortematnumpre->excluir(null, "exists (select 1 from aguacortemat where x41_codcortemat = x44_codcortemat and x41_codcorte = $x40_codcorte)");
   if ($claguacortematnumpre->erro_status=="0") {
     $sqlerro  = true;
     $erro_msg = $claguacortematnumpre->erro_msg;
   }
-  
+
   // 2o Excluir aguacortematmov
   if ($sqlerro==false) {
     $claguacortematmov->excluir(null, "exists (select 1 from aguacortemat where x41_codcortemat = x42_codcortemat and x41_codcorte = $x40_codcorte)");
@@ -67,7 +67,7 @@ if (isset($excluir)) {
       $erro_msg = $claguacortematmov->erro_msg;
     }
   }
-  
+
   // 3o Excluir aguacortemat
   if ($sqlerro==false) {
     $claguacortemat->excluir(null, "x41_codcorte = $x40_codcorte");
@@ -76,7 +76,7 @@ if (isset($excluir)) {
       $erro_msg = $claguacortemat->erro_msg;
     }
   }
-  
+
   // 4o Excluir aguacortetipodebito
   if ($sqlerro==false) {
     $claguacortetipodebito->excluir(null, "x45_codcorte = $x40_codcorte");
@@ -85,7 +85,7 @@ if (isset($excluir)) {
       $erro_msg = $claguacortetipodebito->erro_msg;
     }
   }
-  
+
   // 5o Excluir aguacorte
   if ($sqlerro==false) {
     $claguacorte->excluir($x40_codcorte);
@@ -98,7 +98,7 @@ if (isset($excluir)) {
 
   $db_opcao = 3;
   $db_botao = true;
-  
+
 } else if (isset($chavepesquisa)) {
   $db_opcao = 3;
   $db_botao = true;
@@ -116,8 +116,8 @@ if (isset($excluir)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmaguacorte.php");
@@ -153,9 +153,9 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.aguacortemat.disabled=false;
-         top.corpo.iframe_aguacortemat.location.href='agu1_aguacorte007.php?db_opcaoal=33&x41_codcorte=".@$x40_codcorte."&x40_dtinc=".@$x40_dtinc."';
+         CurrentWindow.corpo.iframe_aguacortemat.location.href='agu1_aguacorte007.php?db_opcaoal=33&x41_codcorte=".@$x40_codcorte."&x40_dtinc=".@$x40_dtinc."';
          parent.document.formaba.aguacortetipodebito.disabled=false;
-         top.corpo.iframe_aguacortetipodebito.location.href='agu1_aguacortetipodebito001.php?db_opcaoal=33&x45_codcorte=".@$x40_codcorte."&x40_dtinc=".@$x40_dtinc."';
+         CurrentWindow.corpo.iframe_aguacortetipodebito.location.href='agu1_aguacortetipodebito001.php?db_opcaoal=33&x45_codcorte=".@$x40_codcorte."&x40_dtinc=".@$x40_dtinc."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('aguacortemat');";

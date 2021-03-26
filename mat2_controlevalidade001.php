@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -98,8 +98,8 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
           </fieldset>
         </td>
       </tr>
-      
-      <tr> 
+
+      <tr>
         <td>
           <fieldset style="width:100%"><legend align='left'><b>Materiais</b></legend>
             <table  border="0"  align="center" width='100%'>
@@ -109,7 +109,7 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
                   db_ancora("<b>Material:</b>","js_pesquisam60_codmater(true);","");
                   ?>
                 </td>
-                <td nowrap> 
+                <td nowrap>
                   <?
                   db_input('m60_codmater',10,"'C&oacute;digo do material'",true,'text',1," onchange='js_pesquisam60_codmater(false);'");
                   db_input('m60_descr',55,'Descri&ccedil;&atilde; do material',true,'text',3,'');
@@ -180,7 +180,7 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
 					?>
         </td>
       </tr>
- 
+
       <tr>
         <td align='center'>
           <b>Ordena&ccedil;&atilde;o:</b>
@@ -192,7 +192,7 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
 					?>
         </td>
       </tr>
- 
+
       <tr>
         <td align='center'>
           <b>Listar estoque zerado:</b>
@@ -204,7 +204,7 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
 					?>
         </td>
       </tr>
-  
+
       <tr>
         <td align='center'>
           <b>Prazo &agrave; vencer em dias:</b>
@@ -230,7 +230,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 
 function js_modificaOrdenacaoQuebra(valor) {
-  
+
   sel = document.getElementById('ordenacao');
   if(valor == 2) {
 
@@ -239,9 +239,9 @@ function js_modificaOrdenacaoQuebra(valor) {
     sel.options[taman - 1].innerHTML = 'Alfab&eacute;tica';
     sel.options[taman] = new Option("",5);
     sel.options[taman].innerHTML = 'C&oacute;digo'
-    
+
   } else {
-    
+
     taman = sel.options.length;
     sel.options[taman - 2].value = 3;
     sel.options[taman - 2].innerHTML = 'Lote';
@@ -252,16 +252,16 @@ function js_modificaOrdenacaoQuebra(valor) {
 }
 
 function js_modificaOrdenacaoSituacao(valor) {
-  
+
   sel = document.getElementById('ordenacao');
   if(valor == 1) {
 
     for(cont = sel.options.length; cont > 1; cont--) {
 
       sel.options[cont] = new Option(sel.options[cont - 1].innerHTML,sel.options[cont - 1].value);
-    
+
     }
-    sel.options[1].value = 2;    
+    sel.options[1].value = 2;
     sel.options[1].innerHTML = 'Situa&ccedil;&atilde;o';
 
   } else {
@@ -379,17 +379,17 @@ function js_excluir_item_departamento() {
   }
 
 }
-  
+
 function js_pesquisacoddepto(mostra) {
 
   if(mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_depart','func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_depart','func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa',true);
   } else {
 
-    if(document.form1.coddepto.value != '') { 
-      js_OpenJanelaIframe('top.corpo','db_iframe_depart','func_db_depart.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart','Pesquisa',false);
+    if(document.form1.coddepto.value != '') {
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_depart','func_db_depart.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart','Pesquisa',false);
     } else {
-      document.form1.descrdepto.value = ''; 
+      document.form1.descrdepto.value = '';
     }
 
   }
@@ -398,14 +398,14 @@ function js_pesquisacoddepto(mostra) {
 
 function js_mostradepart(chave, erro) {
 
-  document.form1.descrdepto.value = chave; 
+  document.form1.descrdepto.value = chave;
   if(erro == true) {
 
-    document.form1.coddepto.focus(); 
+    document.form1.coddepto.focus();
     document.form1.coddepto.value = '';
 
   } else {
-    
+
     document.form1.descrdepto.value = chave;
     document.form1.lancar_departamento.onclick = js_incluir_item_departamento;
 
@@ -425,13 +425,13 @@ function js_mostradepart1(chave1, chave2) {
 function js_pesquisam60_codmater(mostra) {
 
   if(mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_matmater','func_matmater.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matmater','func_matmater.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr','Pesquisa',true);
   } else {
 
-    if(document.form1.m60_codmater.value != '') { 
-      js_OpenJanelaIframe('top.corpo','db_iframe_matmater','func_matmater.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostramatmater','Pesquisa',false);
+    if(document.form1.m60_codmater.value != '') {
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matmater','func_matmater.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostramatmater','Pesquisa',false);
     } else {
-      document.form1.m60_descr.value = ''; 
+      document.form1.m60_descr.value = '';
     }
 
   }
@@ -440,14 +440,14 @@ function js_pesquisam60_codmater(mostra) {
 
 function js_mostramatmater(chave,erro) {
 
-  document.form1.m60_descr.value = chave; 
+  document.form1.m60_descr.value = chave;
   if(erro == true) {
 
-    document.form1.m60_codmater.focus(); 
+    document.form1.m60_codmater.focus();
     document.form1.m60_codmater.value = '';
 
   } else {
-    
+
     document.form1.m60_descr.value=chave;
     document.form1.lancar_material.onclick = js_incluir_item_material;
 
@@ -456,7 +456,7 @@ function js_mostramatmater(chave,erro) {
 }
 
 function js_mostramatmater1(chave1, chave2) {
-  
+
   document.form1.m60_codmater.value = chave1;
   document.form1.m60_descr.value = chave2;
   db_iframe_matmater.hide();
@@ -490,7 +490,7 @@ function js_validadata() {
     return false;
 
   }
-                                   
+
   return true;
 
 }
@@ -512,7 +512,7 @@ function js_validaenvio() {
 }
 
 function js_mandadados() {
- 
+
   if(js_validaenvio()) {
 
     vir = '';
@@ -526,7 +526,7 @@ function js_mandadados() {
     departamentos = 'departamentos=';
     nomes_departamentos = '&nomes_departamentos='
     materiais = '&materiais=';
- 
+
     for(x = 0;x < document.form1.select_departamento.length; x++) {
 
       departamentos += vir + document.form1.select_departamento.options[x].value;
@@ -534,7 +534,7 @@ function js_mandadados() {
       vir = ',';
 
     }
-    
+
     vir = '';
     for(x = 0; x < document.form1.select_material.length; x++) {
 

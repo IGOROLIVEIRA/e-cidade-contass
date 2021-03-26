@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -60,7 +60,7 @@ $depto   = db_getsession('DB_coddepto');
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<? 
+<?
 	db_app::load('strings.js');
   db_app::load('scripts.js');
   db_app::load('datagrid.widget.js');
@@ -96,31 +96,31 @@ $depto   = db_getsession('DB_coddepto');
                 </td>
                 <td>
                   <?
-                    $sWhereDepart  = "     limite is null                                         "; 
+                    $sWhereDepart  = "     limite is null                                         ";
                     $sWhereDepart .= "  or limite > '".date('Y-m-d',db_getsession('DB_datausu'))."'";
                     $rsDepart = $clDBDepart->sql_record($clDBDepart->sql_query_file(null,"*","descrdepto",$sWhereDepart));
                     db_selectrecord('depto',$rsDepart,true,1,'');
                   ?>
                 </td>
-              </tr>	    	    
+              </tr>
               <tr>
                 <td>
                   <b>Usuários:</b>
                 </td>
                 <td>
                   <?
-                    $sWhereUsusarios  = " usuarioativo = 1 "; 
+                    $sWhereUsusarios  = " usuarioativo = 1 ";
                     $rsUsuarios = $clDBUsuarios->sql_record($clDBUsuarios->sql_query_file(null,"*",null,$sWhereUsusarios));
                     db_selectrecord('usuario',$rsUsuarios,true,1,'');
                   ?>
                 </td>
-              </tr>            
+              </tr>
               <?
 	    	        } else {
 	    	        	db_input('usuario',10,'',true,'hidden',1,'');
 	    	        	db_input('depto'  ,10,'',true,'hidden',1,'');
 	    	        }
-              ?>  
+              ?>
 	    	      <tr>
 	    	        <td>
 	    	          <?
@@ -172,7 +172,7 @@ $depto   = db_getsession('DB_coddepto');
                     db_input('descrtipo',40,'',true,'text',3,'');
                   ?>
                 </td>
-              </tr>              	    	      
+              </tr>
 	    	    </table>
 	    	  </fieldset>
         </td>
@@ -202,17 +202,17 @@ $depto   = db_getsession('DB_coddepto');
 <script>
 
   var sUrl = 'ouv1_controleatendimento.RPC.php';
-   
+
   var oDBGridListaProcessos = new DBGrid('Processos');
   oDBGridListaProcessos.nameInstance = 'oDBGridListaProcessos';
   oDBGridListaProcessos.setCellWidth(new Array('10%', '10%', '25%', '20%', '20%', '10%'));
-  oDBGridListaProcessos.setHeader(new Array('Processo', 'Atendimento', 'Requerente', 
+  oDBGridListaProcessos.setHeader(new Array('Processo', 'Atendimento', 'Requerente',
 		                                        'Tipo', 'Depto Atual', 'Despacho'));
   oDBGridListaProcessos.setHeight(200);
-  oDBGridListaProcessos.setCellAlign(new Array('center', 'center', 'left', 
+  oDBGridListaProcessos.setCellAlign(new Array('center', 'center', 'left',
 		                                           'left', 'left', 'center'));
   oDBGridListaProcessos.show($('listaProcessos'));
-  
+
   function js_pesquisar() {
 
     js_divCarregando('Aguarde...','msgBox');
@@ -228,22 +228,22 @@ $depto   = db_getsession('DB_coddepto');
         sQuery += '&iUsuario='+$F('usuario');
 
     var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
+                                            method: 'post',
+                                            parameters: sQuery,
                                             onComplete: js_retornoDadosProcessos
                                           }
-                                  );  
+                                  );
   }
-  
-    
+
+
   function js_retornoDadosProcessos(oAjax){
-  
+
     js_removeObj("msgBox");
     var aRetorno = eval("("+oAjax.responseText+")");
-    
+
     oDBGridListaProcessos.clearAll(true);
     $('aObjProcessos').value = Object.toJSON(aRetorno.aListaProcessos);
-    
+
     if ( aRetorno.lErro ) {
       $('relatorio').disabled = true;
       alert(aRetorno.sMsg.urlDecode());
@@ -252,15 +252,15 @@ $depto   = db_getsession('DB_coddepto');
       $('relatorio').disabled = false;
       js_montaGridProcessos(aRetorno.aListaProcessos);
     }
-        
+
   }
-  
+
 
   function js_montaGridProcessos(aListaProcessos){
-  
+
     oDBGridListaProcessos.clearAll(true);
     var iNumRows = aListaProcessos.length;
-    
+
     if( iNumRows > 0 ){
       aListaProcessos.each(
         function (oProcesso,iInd){
@@ -275,66 +275,66 @@ $depto   = db_getsession('DB_coddepto');
         }
       );
     }
-      
+
     oDBGridListaProcessos.renderRows();
-    
+
   }
-  
-  
+
+
   function js_consultaProcesso(iCodProcesso,lRecebido){
-    js_OpenJanelaIframe('top.corpo','db_iframe_detalhes','ouv1_detalhesdespacho001.php?iCodProcesso='+iCodProcesso+'&lRecebido='+lRecebido+'&iDepto='+$F('depto'),'Detalhes do Processo',true);    
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_detalhes','ouv1_detalhesdespacho001.php?iCodProcesso='+iCodProcesso+'&lRecebido='+lRecebido+'&iDepto='+$F('depto'),'Detalhes do Processo',true);
   }
-  
+
   function js_pesquisaProcessoIni(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_processoIni','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoIni|p58_codproc','Processos',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoIni','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoIni|p58_codproc','Processos',true);
   }
 
   function js_mostraProcessoIni(iCodProc){
     document.form1.procini.value = iCodProc;
     db_iframe_processoIni.hide();
   }
-  
+
   function js_pesquisaProcessoFin(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_processoFin','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoFin|p58_codproc','Processos',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoFin','func_protprocesso.php?grupo=2&funcao_js=parent.js_mostraProcessoFin|p58_codproc','Processos',true);
   }
 
   function js_mostraProcessoFin(iCodProc){
     document.form1.procfin.value = iCodProc;
     db_iframe_processoFin.hide();
-  }  
-  
+  }
+
   function js_pesquisaTipoProcesso( lMostra ){
-    
+
     if( lMostra ){
-      js_OpenJanelaIframe('top.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&funcao_js=parent.js_mostraTipoProcesso1|p51_codigo|p51_descr','Tipo de Processo',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&funcao_js=parent.js_mostraTipoProcesso1|p51_codigo|p51_descr','Tipo de Processo',true);
     }else{
-       if( $F('proctipo') != '' ){ 
-         js_OpenJanelaIframe('top.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&pesquisa_chave='+$F('proctipo')+'&funcao_js=parent.js_mostraTipoProcesso','Tipo de Processo',false);
+       if( $F('proctipo') != '' ){
+         js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoproc','func_tipoproc.php?grupo=2&pesquisa_chave='+$F('proctipo')+'&funcao_js=parent.js_mostraTipoProcesso','Tipo de Processo',false);
        }else{
-         document.form1.descrtipo.value = ''; 
+         document.form1.descrtipo.value = '';
        }
     }
-    
+
   }
-  
+
   function js_mostraTipoProcesso(chave,lErro){
-    
+
     document.form1.descrtipo.value = chave;
-     
-    if( lErro ){ 
-      document.form1.proctipo.focus(); 
+
+    if( lErro ){
+      document.form1.proctipo.focus();
       document.form1.proctipo.value = '';
-      return false; 
+      return false;
     }
-    
+
   }
-  
+
   function js_mostraTipoProcesso1(chave1,chave2){
     document.form1.proctipo.value  = chave1;
     document.form1.descrtipo.value = chave2;
     db_iframe_tipoproc.hide();
   }
-  
+
   function js_imprimeRelatorio(){
     js_OpenJanelaIframe('','db_iframe_rel','ouv1_controleatendlistaprocrel002.php?aObjProcessos='+$F('aObjProcessos'),'Relatório de Processo',false);
   }
@@ -343,36 +343,36 @@ $depto   = db_getsession('DB_coddepto');
    * Efetua a pesquisa de número de atendimento.
    */
   function js_pesquisaNumeroAtendimento(mostra) {
-   
+
     if (document.getElementById('ov01_numero').value == '' && mostra == false) {
-       
+
       $('ov01_numero').value      = '';
       $('ov01_requerente').value = '';
     } else {
       if (mostra == true) {
-       
+
         var sUrlLookUp = 'func_ouvidoriaatendimento.php?funcao_js=parent.js_mostraNumeroAtendimento|ov01_numero|ov01_requerente|true|ov01_anousu';
         js_OpenJanelaIframe('', 'db_iframe', sUrlLookUp, 'Pesquisa Número Atendimento', true);
       } else {
-       
+
         var sValorPesquisa = $('ov01_numero').value;
         var sUrlLookUp     = 'func_ouvidoriaatendimento.php?requer=1&pesquisa_chave='+sValorPesquisa+'&funcao_js=parent.js_mostraNumeroAtendimento';
         js_OpenJanelaIframe('', 'db_iframe', sUrlLookUp, 'Pesquisa Número Atendimento', false);
       }
     }
   }
-   
+
   /**
    * Insere no formulário o retorno da pesquisa de numero de atendimento.
    */
   function js_mostraNumeroAtendimento() { // tem que buscar qual o parâmetro correto pra esse método
 
     if (arguments[1] === true) {
-      
+
       $('ov01_numero').value     = '';
       $('ov01_requerente').value = arguments[0];
     } else {
-      
+
       $('ov01_numero').value     = arguments[0];
       $('ov01_requerente').value = arguments[1];
       $('ov01_anousu').value     = arguments[3];
@@ -380,5 +380,5 @@ $depto   = db_getsession('DB_coddepto');
     db_iframe.hide();
   }
 
- 
+
 </script>

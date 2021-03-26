@@ -29,9 +29,9 @@ if(isset($r70_codigo)){
 
 if(isset($excluir)){
   $sqlerro=false;
-  //rotina para verificar a estrutura 
+  //rotina para verificar a estrutura
 
-//    $cldb_estrut->db_estrut_exclusao($r70_estrut,$mascara,"rhlota","r70_estrut");      
+//    $cldb_estrut->db_estrut_exclusao($r70_estrut,$mascara,"rhlota","r70_estrut");
 //    if($cldb_estrut->erro_status==0){
 //      $erro_msg = $cldb_estrut->erro_msg;
 //      $sqlerro=true;
@@ -40,7 +40,7 @@ if(isset($excluir)){
     $anofolha = db_anofolha();
     $mesfolha = db_mesfolha();
     db_inicio_transacao();
-    
+
     //rotina que pega o campo estrut da tabela cfpess
       $result = $clcfpess->sql_record($clcfpess->sql_query_file($anofolha,$mesfolha,"r11_codestrut"));
       if($clcfpess->numrows>0){
@@ -49,7 +49,7 @@ if(isset($excluir)){
 	echo 'Não existem registros na tabela cfpess para o ano '.$anofolha.' e mês '.$mesfolha.' ...';
 	exit;
       }
-    //final 
+    //final
 
     //rotina de inclusao na tabela rhlota
       $clrhlota->r70_codigo = $r70_codigo;
@@ -61,7 +61,7 @@ if(isset($excluir)){
 	$ok_msg = $clrhlota->erro_msg;
       }
     //final
-  }  
+  }
   if($sqlerro==false){
 
       $result_excluir = $clrhlotaexe->sql_record($clrhlotaexe->sql_query_file(db_getsession("DB_anousu"),$r70_codigo));
@@ -74,7 +74,7 @@ if(isset($excluir)){
       }
 
     /*
-      $result = $cllotacao->sql_record($cllotacao->sql_query_file(null,null,$r70_codigo)); 
+      $result = $cllotacao->sql_record($cllotacao->sql_query_file(null,null,$r70_codigo));
       if($cllotacao->numrows>0){
         $cllotacao->r13_codigo = $r70_codigo;
         $cllotacao->excluir(null,null,$r70_codigo);
@@ -85,12 +85,12 @@ if(isset($excluir)){
 
       }
       */
-    //final  
-  } 
+    //final
+  }
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
-   $result = $clrhlota->sql_record($clrhlota->sql_query($chavepesquisa)); 
+   $result = $clrhlota->sql_record($clrhlota->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 
    if($r70_analitica=="t"){
@@ -100,14 +100,14 @@ if(isset($excluir)){
      }
    }
    /*
-   $result = $cllotacao->sql_record($cllotacao->sql_query_file(null,null,$r70_codigo)); 
+   $result = $cllotacao->sql_record($cllotacao->sql_query_file(null,null,$r70_codigo));
    if($cllotacao->numrows>0){
       db_fieldsmemory($result,0);
    }
    */
 /*
    if($r70_analitica=="t"){
-     $result = $cllotacao->sql_record($cllotacao->sql_query_file(null,null,$r70_codigo)); 
+     $result = $cllotacao->sql_record($cllotacao->sql_query_file(null,null,$r70_codigo));
      if($cllotacao->numrows>0){
         db_fieldsmemory($result,0);
      }
@@ -126,8 +126,8 @@ if(isset($excluir)){
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmrhlota.php");
@@ -153,7 +153,7 @@ if(isset($excluir)){
 if(isset($chavepesquisa)){
   echo "<script>
           parent.document.formaba.rhlotavinc.disabled = false;
-	  top.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=false';
+	  CurrentWindow.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=false';
 	</script>";
 }
 if($db_opcao==33){

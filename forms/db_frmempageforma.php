@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clrotulo = new rotulocampo;
@@ -46,24 +46,24 @@ $dados="ordem";
 <script>
 function js_mascara(evt){
   var evt = (evt) ? evt : (window.event) ? window.event : "";
-  
+
   if((evt.charCode >46 && evt.charCode <58) || evt.charCode ==0){//8:backspace|46:delete|190:.
     return true;
   }else{
     return false;
-  }  
+  }
 }
 
 function js_atualizar(){
   obj = ordem.document.form1;
   var coluna='';
-  var sep=''; 
+  var sep='';
   var tcoluna='';
   var tsep='';
   var asep='';
   var agens = '';
 
-  for(i=0; i<obj.length; i++){    
+  for(i=0; i<obj.length; i++){
     nome = obj[i].name.substr(0,5);
     if(nome=="CHECK" && obj[i].checked==true){
       ord     = obj[i].name.substring(6);
@@ -72,7 +72,7 @@ function js_atualizar(){
       conta   = obj[i+4].value;
       forma   = obj[i+6].value;
       valor   = obj[i+8].value;
-      
+
       coluna += sep+obj[i+9].value+"-"+obj[i].value+"-"+numemp+"-"+valor+"-"+tipo+"-"+forma+"-"+conta;
       sep= "XX";
     }
@@ -86,7 +86,7 @@ function js_atualizar(){
       }
       tcoluna+= tsep+obj[i].value;
       tsep    = "-";
-    }  
+    }
   }
   document.form1.tords.value = tcoluna;
   document.form1.ords.value = coluna;
@@ -104,7 +104,7 @@ function js_label(liga,uak1,uak2){
     document.getElementById('divlabel').style.visibility='visible';
   }else{
     document.getElementById('divlabel').style.visibility='hidden';
-  }  
+  }
 }
 
 function js_labelconta(liga,uak1,uak2,uak3){
@@ -115,7 +115,7 @@ function js_labelconta(liga,uak1,uak2,uak3){
     document.getElementById('divlabelconta').style.visibility='visible';
   }else{
     document.getElementById('divlabelconta').style.visibility='hidden';
-  }  
+  }
 }
 function js_mostravalores(){
   obj = ordem.document.form1;
@@ -127,7 +127,7 @@ function js_mostravalores(){
       ord = obj[i].name.substring(6);
       valor   = obj[i+8].value;
       tipo    = obj[i+2].value;
-      
+
       if(tipo!=0 && valor!=""){
         coluna += sep+tipo+'-'+valor;
         sep= ",";
@@ -135,7 +135,7 @@ function js_mostravalores(){
     }
   }
   if(coluna!=""){
-    js_OpenJanelaIframe('top.corpo','db_iframe_mostratotal','func_mostratotal.php?coluna='+coluna,'Pesquisa',true,'20','390','400','300');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostratotal','func_mostratotal.php?coluna='+coluna,'Pesquisa',true,'20','390','400','300');
   }else{
     alert("Selecione algum movimento.");
   }
@@ -143,13 +143,13 @@ function js_mostravalores(){
 </script>
 <BR><BR>
   <div align="left" id="divlabel" style="position:absolute; z-index:1; top:400; left:420; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; background-color:#999999; font-weight:bold;">
-      Pago:    <span id="uak1"></span><br> 
-      Anulado: <span id="uak2"></span><br> 
+      Pago:    <span id="uak1"></span><br>
+      Anulado: <span id="uak2"></span><br>
   </div>
   <div align="left" id="divlabelconta" style="position:absolute; z-index:1; top:400; left:420; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; background-color:#999999; font-weight:bold;">
-      Banco:   <span id="uak3"></span><br> 
-      Agência: <span id="uak4"></span><br> 
-      Conta Padrão:   <span id="uak5"></span><br> 
+      Banco:   <span id="uak3"></span><br>
+      Agência: <span id="uak4"></span><br>
+      Conta Padrão:   <span id="uak5"></span><br>
   </div>
 
 <form name="form1" method="post" action="">
@@ -163,19 +163,19 @@ function js_mostravalores(){
      <td nowrap title="<?=@$Te82_codord?>" align='right'>
        <? db_ancora(@$Le82_codord,"js_pesquisae82_codord(true);",$db_opcao);  ?>
      </td>
-     <td nowrap> 
+     <td nowrap>
        <? db_input('e82_codord',10,$Ie82_codord,true,'text',$db_opcao," onchange='js_pesquisae82_codord(false);'")  ?>
        <? db_ancora("<b>até:</b>","js_pesquisae82_codord02(true);",$db_opcao);  ?>
      </td>
      <td nowrap>
        <? db_input('e82_codord2',8,$Ie82_codord,true,'text',$db_opcao," onchange='js_pesquisae82_codord02(false);'","e82_codord02")?>
      </td>
-  </tr>   
+  </tr>
   <tr>
      <td align="right" nowrap title="<?=$Te60_numemp?>">
       <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",$db_opcao);  ?>
       </td>
-     <td nowrap> 
+     <td nowrap>
       <input name="e60_codemp" id='e60_codemp' title='<?=$Te60_codemp?>' size="10" type='text'  onKeyPress="return js_mascara(event);" >
     <b>Recursos:</b></td>
      <td >
@@ -187,7 +187,7 @@ function js_mostravalores(){
        $ar = array("proprios"=>"Vinculados","todos"=>"Todos");
        db_select("recursos",$ar,true,1);
      ?>
-     </td>    
+     </td>
   </tr>
   <tr>
     <td style='text-align:right'>
@@ -212,12 +212,12 @@ function js_mostravalores(){
 
         $oDaoCadBan = db_utils::getDao('cadban');
         $rsBancos   = $oDaoCadBan->sql_record($oDaoCadBan->sql_query(null,"distinct k15_codbco,z01_nome","k15_codbco"));
-        $aBancos[]  = "Todos"; 
-        $aBancosCol = db_utils::getColectionByRecord($rsBancos); 
+        $aBancos[]  = "Todos";
+        $aBancosCol = db_utils::getColectionByRecord($rsBancos);
         foreach ($aBancosCol as $oBanco) {
           $aBancos[$oBanco->k15_codbco] = $oBanco->z01_nome;
         }
-        
+
         db_select("k15_codbco",$aBancos,true,1);
       ?>
     </td>
@@ -226,9 +226,9 @@ function js_mostravalores(){
     <td nowrap title="<?=@$Tz01_numcgm?>" align='right'>
     <?
 	db_ancora("<b>Credor:</b>","js_pesquisaz01_numcgm(true);",$db_opcao);
-	?>        
+	?>
 	</td>
-	<td  colspan='4'> 
+	<td  colspan='4'>
 	<?
 	 db_input('z01_numcgm',10,$Iz01_numcgm,true,'text',$db_opcao," onchange='js_pesquisaz01_numcgm(false);'");
 	 db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
@@ -255,7 +255,7 @@ function js_mostravalores(){
       db_select("e83_codtipo",$arr,true,1,"onchange='ordem.js_padrao(this.value)';");
      ?>
      </td>
-    
+
     <td align='left'>
       <input name="pesquisar" type="button"  value="Pesquisar" onclick='return js_pesquisarOrdens();'>
       <input name="atualizar" type="submit"  value="Atualizar" onclick='return js_atualizar();'>
@@ -284,7 +284,7 @@ function js_mostravalores(){
     </td>
   </tr>
   </table>
-  </fieldset> 
+  </fieldset>
   </td>
   </tr>
   </table>
@@ -298,14 +298,14 @@ function js_reload(){
 //---ordem 01
 function js_pesquisae82_codord(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord','Pesquisa',true);
   }else{
     ord01 = new Number(document.form1.e82_codord.value);
     ord02 = new Number(document.form1.e82_codord02.value);
     if(ord01 > ord02 && ord01 != "" && ord02 != ""){
       alert("Selecione uma ordem menor que a segunda!");
-      document.form1.e82_codord.focus(); 
-      document.form1.e82_codord.value = ''; 
+      document.form1.e82_codord.focus();
+      document.form1.e82_codord.value = '';
     }
   }
 }
@@ -317,14 +317,14 @@ function js_mostrapagordem1(chave1){
 //---ordem 02
 function js_pesquisae82_codord02(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem102|e50_codord','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem102|e50_codord','Pesquisa',true);
   }else{
     ord01 = new Number(document.form1.e82_codord.value);
     ord02 = new Number(document.form1.e82_codord02.value);
     if(ord01 > ord02 && ord02 != ""  && ord01 != ""){
       alert("Selecione uma ordem maior que a primeira");
-      document.form1.e82_codord02.focus(); 
-      document.form1.e82_codord02.value = ''; 
+      document.form1.e82_codord02.focus();
+      document.form1.e82_codord02.value = '';
     }
   }
 }
@@ -334,9 +334,9 @@ function js_mostrapagordem102(chave1,chave2){
 }
 function js_pesquisae60_codemp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
   }else{
-   // js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+   // js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
   }
 }
 function js_mostraempempenho2(chave1){
@@ -348,18 +348,18 @@ function js_pesquisaz01_numcgm(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','func_nome','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.z01_numcgm.value != ''){ 
+     if(document.form1.z01_numcgm.value != ''){
         js_OpenJanelaIframe('','func_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.z01_numcgm.focus(); 
-    document.form1.z01_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.z01_numcgm.focus();
+    document.form1.z01_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -370,7 +370,7 @@ function js_mostracgm1(chave1,chave2){
 
 function js_pesquisarOrdens() {
 
-  
+
   var iOrdemIni     = $F('e82_codord');
   var iOrdemFim     = $F('e82_codord02');
   var iCodEmp       = $F('e60_codemp');
@@ -383,6 +383,6 @@ function js_pesquisarOrdens() {
   sQueryString     += "&dtDataIni="+dtDataIni+"&dtDataFim="+dtDataFim+"&iNumCgm="+iNumCgm;
   sQueryString     += "&iCodBanco="+iCodBanco+"&sRecursos="+sRecursos;
   ordem.location.href = "emp4_empageforma001_ordem.php?"+sQueryString;
-   
+
 }
 </script>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: issqn
@@ -32,7 +32,7 @@ $clrotulo->label("q17_nomearq");
 $clrotulo->label("k15_codbco");
 $clrotulo->label("k15_codage");
 ?>
-  <form name='form1' id='form1' enctype="multipart/form-data" method='post'> 
+  <form name='form1' id='form1' enctype="multipart/form-data" method='post'>
   <center>
   <table>
   <tr><td>
@@ -45,7 +45,7 @@ $clrotulo->label("k15_codage");
            ?>
            </b>
          </td>
-         <td> 
+         <td>
          <?
             db_input('q17_sequencial',10,$Iq17_sequencial,true,'text',3);
             db_input('q17_nomearq',60,$Iq17_nomearq,true,'text',3,'');
@@ -60,7 +60,7 @@ $clrotulo->label("k15_codage");
            ?>
            </b>
          </td>
-         <td> 
+         <td>
          <?
             db_input('k15_codbco',10,$Ik15_codbco,true,'text',3);
             db_input('nomebanco',60,'',true,'text',3,'');
@@ -73,7 +73,7 @@ $clrotulo->label("k15_codage");
             <?
               db_input('k15_codage',10,$Ik15_codage,true,'text',3,'');
               db_input('k15_conta',20,'',true,'text',3,'');
-              
+
               ?>
             </td>
              </tr>
@@ -86,11 +86,11 @@ $clrotulo->label("k15_codage");
              ?>
              </td>
              </tr> -->
-               </table>   
+               </table>
      </fieldset>
-   </td></tr>  
+   </td></tr>
 </table>
- 
+
   <div id='message'></div>
  </center>
 <input name="processar" type="submit" onclick='return confirm("Confirma Processamento?");' id="db_opcao" value="Processar" <?=($db_botao==false?"disabled":"")?> >
@@ -99,12 +99,12 @@ $clrotulo->label("k15_codage");
 <script>
 function js_pesquisaq17_sequencial(mostra){
   if (mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Arquivos de Retorno',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Arquivos de Retorno',true);
   }
 }
 function js_pesquisacadban(mostra){
   if (mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_cadban','func_cadban.php?method=sql_query_tabplan&funcao_js=parent.js_mostracadban|k15_codbco|k15_codage|z01_nome|k15_conta','Consulta Bancos',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?method=sql_query_tabplan&funcao_js=parent.js_mostracadban|k15_codbco|k15_codage|z01_nome|k15_conta','Consulta Bancos',true);
   }
 }
 
@@ -125,7 +125,7 @@ function js_mostracadban(chave1,chave2,chave3, chave4){
   db_iframe_cadban.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_issarqsimples.hide();

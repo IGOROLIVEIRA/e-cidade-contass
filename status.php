@@ -4,29 +4,29 @@ require ("libs/db_conecta.php");
 require_once("libs/db_app.utils.php");
 
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -74,7 +74,7 @@ function js_data() {
   var minutos = new String(data.getMinutes());
   if(minutos.length == 1)
     minutos = '0' + minutos;
-  
+
 //  document.getElementById('dthr').innerHTML = semanas[data.getDay()] + ', ' +  data.getDate() + '/' + meses[data.getMonth()] + '/' + data.getFullYear() + '-' + data.getHours() + ':' + minutos ;
 }
 
@@ -85,7 +85,7 @@ function js_mostra_log(tipo){
 }
 
 </script>
-<?php db_app::load("scripts.js, strings.js, prototype.js, estilos.css"); 
+<?php db_app::load("scripts.js, strings.js, prototype.js, estilos.css");
 
 vz
 
@@ -110,7 +110,7 @@ vz
 <div name='logtext' id='logtext' style='visibility:hidden'></div>
 </body>
 </html>
-<?php 
+<?php
 
   $sql = "select m.descricao
                   from db_permissao p
@@ -132,25 +132,25 @@ vz
   if ($x==1) {
 ?>
 
-<script>  
+<script>
 
   $("dtatual").observe("click", function() {
 
-     js_OpenJanelaIframe( "top.corpo", 
-                          "iframe_retornadatasistema", 
-                          "con4_trocadata.php?lParametroExibeMenu=false", 
-                          "Retorna Data do Sistema", 
+     js_OpenJanelaIframe( "CurrentWindow.corpo",
+                          "iframe_retornadatasistema",
+                          "con4_trocadata.php?lParametroExibeMenu=false",
+                          "Retorna Data do Sistema",
                           true,'20','1','400','400' );
 
-     top.corpo.document.getElementById('Janiframe_retornadatasistema').style.zIndex = 100;
-     top.corpo.document.getElementById('Janiframe_retornadatasistema').style.width = 400;
-     top.corpo.document.getElementById('Janiframe_retornadatasistema').style.height = 400;
-     top.corpo.document.getElementById('Janiframe_retornadatasistema').style.margin = "50px 10px 20px 400px";
+     CurrentWindow.corpo.document.getElementById('Janiframe_retornadatasistema').style.zIndex = 100;
+     CurrentWindow.corpo.document.getElementById('Janiframe_retornadatasistema').style.width = 400;
+     CurrentWindow.corpo.document.getElementById('Janiframe_retornadatasistema').style.height = 400;
+     CurrentWindow.corpo.document.getElementById('Janiframe_retornadatasistema').style.margin = "50px 10px 20px 400px";
 
   });
 
 </script>
 
-<?php 
+<?php
   }
 ?>

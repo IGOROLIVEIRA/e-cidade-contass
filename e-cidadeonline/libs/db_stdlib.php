@@ -5,7 +5,7 @@ global $configsite;
 //die("select * from confsite where w01_cod = $configsite and w01_instit = ".db_getsession("DB_instit"));
 $result = pg_query("select * from confsite where w01_cod = $configsite and w01_instit = ".db_getsession("DB_instit"));
 db_fieldsmemory($result,0);
-$result2 = pg_query("select 
+$result2 = pg_query("select
 codigo    ,
 nomeinst  ,
 ender     ,
@@ -28,7 +28,7 @@ cep       ,
 bairro    ,
 tpropri   ,
 prefeitura,
-tsocios    
+tsocios
 from db_config where codigo = ".db_getsession('DB_instit'));
 db_fieldsmemory($result2,0);
 
@@ -64,7 +64,7 @@ echo"
         border: ".$GLOBALS['w01_bordamenu']." ".$GLOBALS['w01_estilomenu'].";
         border-color: ".$GLOBALS['w01_corbordamenu'].";
         background-color: ".$GLOBALS['w01_corfundomenu'].";
-        cursor: hand;        
+        cursor: hand;
 }
 .linksmenu {
         font-style: ".$GLOBALS['w01_estilofontemenu'].";
@@ -78,13 +78,13 @@ echo"
 		font-size: ".$GLOBALS['w01_tamfontesite'].";
         font-style: ".$GLOBALS['w01_estilofontesite'].";
         font-family: ".$GLOBALS['w01_fontesite'].";
-        color: ".$GLOBALS['w01_cortexto'].";	
+        color: ".$GLOBALS['w01_cortexto'].";
 }
 .titulo{
 		font-size: ".$GLOBALS['w01_tamfontesite'].";
         font-weight: bold;
         font-family: ".$GLOBALS['w01_fontesite'].";
-        color: ".$GLOBALS['w01_cortexto'].";	
+        color: ".$GLOBALS['w01_cortexto'].";
 }
 .radioOption {
         font-size: ".$GLOBALS['w01_tamfontesite'].";
@@ -92,7 +92,7 @@ echo"
         font-family: ".$GLOBALS['w01_fontesite'].";
         font-weight: ".$GLOBALS['w01_wfontesite'].";
         color: ".$GLOBALS['w01_corfontesite'].";
-        
+
 }
 a.links {
         font-size: ".$GLOBALS['w01_tamfontesite'].";
@@ -121,7 +121,7 @@ a.links:visited {
 body {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
-        color: #000000;        
+        color: #000000;
 }
 
 input {
@@ -132,13 +132,13 @@ input {
         background-color: ".$GLOBALS['w01_corfundoinput'].";
         border: ".$GLOBALS['w01_bordainput']." ".$GLOBALS['w01_estiloinput']." ".$GLOBALS['w01_corbordainput'].";
 }
-.readonly { 
+.readonly {
         font-family: ".$GLOBALS['w01_fonteinput'].";
         font-style: ".$GLOBALS['w01_estilofonteinput'].";
         font-size: ".$GLOBALS['w01_tamfonteinput'].";
         color: #000000;
         background-color: #EEEEE2;
-        border: ".$GLOBALS['w01_bordainput']." ".$GLOBALS['w01_estiloinput']." ".$GLOBALS['w01_corbordainput']."; 
+        border: ".$GLOBALS['w01_bordainput']." ".$GLOBALS['w01_estiloinput']." ".$GLOBALS['w01_corbordainput'].";
 
  }
 
@@ -166,13 +166,13 @@ table.lov th {
 	font-family: ".$GLOBALS['w01_fontemenu'].";
     font-size: ".$GLOBALS['w01_tamfontemenu'].";
     color: ".$GLOBALS['w01_corfontemenu'].";
-}  
+}
 table.lov td {
 	border:".$GLOBALS['w01_bordainput']." ".$GLOBALS['w01_estiloinput']." ".$GLOBALS['w01_corbordamenu'].";  ;
 	font-size: ".$GLOBALS['w01_tamfontesite'].";
     font-style: ".$GLOBALS['w01_estilofontesite'].";
     font-family: ".$GLOBALS['w01_fontesite'].";
-    color: ".$GLOBALS['w01_cortexto'].";	
+    color: ".$GLOBALS['w01_cortexto'].";
 }
 table.tab {
 	border-collapse: collapse;
@@ -183,14 +183,14 @@ table.tab th {
 	font-family: ".$GLOBALS['w01_fontemenu'].";
     font-size: ".$GLOBALS['w01_tamfontemenu'].";
     color: ".$GLOBALS['w01_corfontemenu'].";
-}  
+}
 table.tab td {
 	border:".$GLOBALS['w01_bordainput']." ".$GLOBALS['w01_estiloinput']." ".$GLOBALS['w01_corbordamenu'].";  ;
 	background-color: ".$GLOBALS['w01_corbody'].";
 	font-size: ".$GLOBALS['w01_tamfontesite'].";
     font-style: ".$GLOBALS['w01_estilofontesite'].";
     font-family: ".$GLOBALS['w01_fontesite'].";
-    color: ".$GLOBALS['w01_cortexto'].";	
+    color: ".$GLOBALS['w01_cortexto'].";
 }
 
 .botao{
@@ -209,13 +209,13 @@ table.tab td {
       font-weight: ".$GLOBALS['w01_wfontebotao'].";
       color: #999999;
       background-color: #CCCCCC;
-      border:1px; 
+      border:1px;
 }
 div.menuBar,
 div.menuBar a.menuButton,
 div.menu,
 div.menu a.menuItem {
-  font-family:".$GLOBALS['w01_fontemenu']."; 
+  font-family:".$GLOBALS['w01_fontemenu'].";
   font-size:  ".$GLOBALS['w01_tamfontemenu'].";
   font-style: ".$GLOBALS['w01_estilofontemenu']." ;
   font-weight:".$GLOBALS['w01_wfontemenu']." ;
@@ -226,7 +226,7 @@ div.menu a.menuItem {
 
 div.menuBar {
   border: ".$GLOBALS['w01_bordamenu']." ".$GLOBALS['w01_estilomenu'].";
-  border-color: ".$GLOBALS['w01_corbordamenu'].";  
+  border-color: ".$GLOBALS['w01_corbordamenu'].";
   background-color: ".$GLOBALS['w01_corbody'].";
   padding: 3px 3px 3px 3px;
   text-align: left;
@@ -236,7 +236,7 @@ div.menuBar a.menuButton {
   background-color:".$GLOBALS['w01_corfundomenu'].";
   border: 1px solid;
   border-color:".$GLOBALS['w01_corbordamenu'].";
-  color: ".$GLOBALS['w01_corfontemenu'].";   
+  color: ".$GLOBALS['w01_corfontemenu'].";
   cursor: default;
   left: 0px;
   margin: 1px;
@@ -282,7 +282,7 @@ div.menu a.menuItem {
 
 div.menu a.menuItem:hover, div.menu a.menuItemHighlight {
   background-color: ".$GLOBALS['w01_corfundomenuativo']."; <!-- cor do fundo dos submenus qd passa o mouse por cima-->
-  
+
 }
 
 div.menu a.menuItem span.menuItemText {}
@@ -304,7 +304,7 @@ echo "
 <table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" >
   <tr align=\"center\"><br><hr><br>
     <td >
-      <a target=\"_blank\" href=\"http://www.rs.gov.br\"><img src=\"imagens/gov_rs.jpg\" width=\"37\" height=\"18\" border=\"0\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target=\"_blank\"  href=\"http://www.brasil.gov.br\"><img src=\"imagens/gov_br.jpg\" width=\"69\" height=\"18\" border=\"0\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target=\"_blank\"  href=\"http://www.adobe.com/products/acrobat/readstep2.html\"><img src=\"imagens/adobe.gif\" border=\"0\"></a>&nbsp;&nbsp;&nbsp;&nbsp;<font size='1'>copyright 
+      <a target=\"_blank\" href=\"http://www.rs.gov.br\"><img src=\"imagens/gov_rs.jpg\" width=\"37\" height=\"18\" border=\"0\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target=\"_blank\"  href=\"http://www.brasil.gov.br\"><img src=\"imagens/gov_br.jpg\" width=\"69\" height=\"18\" border=\"0\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target=\"_blank\"  href=\"http://www.adobe.com/products/acrobat/readstep2.html\"><img src=\"imagens/adobe.gif\" border=\"0\"></a>&nbsp;&nbsp;&nbsp;&nbsp;<font size='1'>copyright
       2005 &copy;<a href=\"http://www.dbseller.com.br\">www.dbseller.com.br </a></font></td>
    </td>
   </tr>
@@ -319,9 +319,9 @@ function db_numpre_sp($qn,$qnp="x",$qnt="x",$qnd="x"){
 //#20#//qnt : Número da quantidade de parcelas do numpre
 //#20#//qnd : Dígito verificador do numpre
 //#40#//Código de arrecadação formatado SEM os pontos
-//#99#//Exemplo: 
+//#99#//Exemplo:
 //#99#//db_numpre_sp(123456,1,12,0); // numpre 123456 - parcela 1 - total de parcelas 12 - digito 0
-//#99#//Retorno será : 001234560010120  
+//#99#//Retorno será : 001234560010120
 //#99#//
 //#99#//Para formatar os números o sistema utiliza a função |db_formatar|
   $retorno = db_formatar($qn,'s',"0",8,"e");
@@ -332,7 +332,7 @@ function db_numpre_sp($qn,$qnp="x",$qnt="x",$qnd="x"){
   if($qnt!="x"){
     $retorno .= db_formatar($qnt,'s',"0",3,"e");
   }
-  if($qnd!="x"){  
+  if($qnd!="x"){
     $retorno .= db_formatar($qnd,'s',"0",1,"e");
   }
   return $retorno;
@@ -360,7 +360,7 @@ function db_getsession($str) {
     case "dblov_query_inicial":
       return @$HTTP_SESSION_VARS["dblov_query_inicial"];
   }
-  
+
 }
 
 
@@ -387,9 +387,9 @@ if($usuario != ""){
                      from db_usuarios d
                        inner join db_usuacgm u on u.id_usuario = d.id_usuario
                      where u.cgmlogin = ".@$cgm;
-  //die($sql1);    
+  //die($sql1);
   $result = pg_exec($sql1);
-                 
+
   $nomeusuario = pg_result($result,0,'nome');
   $id_usuario  = pg_result($result,0,'id_usuario');
   $cgmlogin    = pg_result($result,0,'cgmlogin');
@@ -416,7 +416,7 @@ if($usuario != ""){
    $user .= "<a href=\"atualizaendereco.php?".base64_encode("id_usuario=".@$cgmlogin_teste."&cgmlogin=".$cgmlogin_teste)."\" target=\"CentroPref\"><b>$img Atualizar Dados</b></a><br>";
   }
 
-  if($w13_liberaescritorios=="2"){ 	
+  if($w13_liberaescritorios=="2"){
    ///verifica se é escritório para cadastrar seus clientes
    include("classes/db_cadescrito_classe.php");
    $clcadescrito = new cl_cadescrito;
@@ -430,7 +430,7 @@ if($usuario != ""){
 	               <b>$img Informar Clientes</b></a><br>";
 	   }
    }
-   
+
    if($w13_liberaescritorios=="3"){
    ///verifica se é escritório para cadastrar seus clientes
    include("classes/db_cadescrito_classe.php");
@@ -444,9 +444,9 @@ if($usuario != ""){
         $user .= "<a href=\"informe_clientes.php".$sGetVars."\" target=\"CentroPref\">
                   <b>$img Informar Clientes</b></a><br>";
 	   }
-   }  
+   }
 
-   if($w13_liberaescritorios=="4"){  	
+   if($w13_liberaescritorios=="4"){
    ///verifica se é escritório para cadastrar seus clientes
    include("classes/db_cadescrito_classe.php");
    $clcadescrito = new cl_cadescrito;
@@ -459,9 +459,9 @@ if($usuario != ""){
         $user .= "<a href=\"informe_clientes.php".$sGetVars."\" target=\"CentroPref\">
                   <b>$img Informar Clientes</b></a><br>";
 	   }
-   }   
-   
-   if($w13_liberaescritorios=="5"){  	
+   }
+
+   if($w13_liberaescritorios=="5"){
    ///verifica se é escritório para cadastrar seus clientes
    include("classes/db_cadescrito_classe.php");
    $clcadescrito = new cl_cadescrito;
@@ -473,10 +473,10 @@ if($usuario != ""){
                    ."&escrito=true&nome=".base64_encode($nomeusuario);
         $user .= "<a href=\"informe_clientes.php".$sGetVars."\" target=\"CentroPref\">
                   <b>$img Informar Clientes</b></a><br>";
-	   }   
+	   }
   }
-  
- 
+
+
   //$user .= "</span>";
   //$cor = "white";
 
@@ -537,7 +537,7 @@ if($usuario != ""){
   $user = "<span class=\"texto\">";
   $user .= "<a href=\"index.php?".base64_encode("again=1")."\"><b>$img Logout &nbsp;&nbsp;&nbsp; </b></a>";
   $user .=  "<a href=\"trocasenha.php?".base64_encode("id_usuario=".@$id_usuario)."\" target=\"CentroPref\"><b>$img Configurações</b></a><br>";
-  
+
 }
 /*
 echo "<span class=\"texto\">> <a class=\"linksmenu\" href=\"centro_pref.php\" target=\"CentroPref\">
@@ -549,7 +549,7 @@ echo "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">
        <tr>
         <td id=\"coluna\" align=\"center\" height=\"20\" class=\"bordas\" onMouseOut=\"js_restaurafundo(this,'".$GLOBALS['w01_corfundomenu']."')\" onMouseOverp;\"js_trocafundo(this,'".$GLOBALS['w01_corfundomenuativo']."')\">
          <a class=\"linksmenu\" href=\"centro_pref.php\" target=\"CentroPref\">
-       Página Inicial 
+       Página Inicial
          </a>  <br>falta colocar o login e a senha.......
         </td>
        </tr>
@@ -564,14 +564,14 @@ $nummenu =$numrows_dtw +1;
 
 echo "
 
-<table width=\"100%\" border =\"0\"  cellpadding=\"0\" cellspacing=\"0\"> 
-<tr>	
+<table width=\"100%\" border =\"0\"  cellpadding=\"0\" cellspacing=\"0\">
+<tr>
 		<td width=\"$totalmenu%\"  id=\"coluna\" align=\"center\" height=\"20\" class=\"bordas\" onMouseOut=\"js_restaurafundo(this,'".$GLOBALS['w01_corfundomenu']."')\" onMouseOver=\"js_trocafundo(this,'".$GLOBALS['w01_corfundomenuativo']."')\">
 		<a class=\"linksmenu\" href=\"centro_pref.php\" target=\"CentroPref\">
 		  Página Inicial
- 
+
 		</td>
-	";	
+	";
 for($i = 0;$i < $numrows_dtw;$i++) {
   $arquivo = pg_result($result_dtw,$i,"m_arquivo");//m_arquivo é o arquivo php q o menu chama exarquivo = digitadae.php
   $nome = substr($arquivo,0,strlen($arquivo) - 4);// substr(digitadae.php,0,"conta qts letras tem em digitadae.php - 4")
@@ -591,7 +591,7 @@ echo "<td width=\"$totalmenu%\"  id=\"coluna$i\" align=\"center\" height=\"20\" 
   */
 
 //echo "  <option value='$i'> $descricao </a></option>";
-  
+
 /*  echo"
        <table width=\"90%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">
        <tr>
@@ -601,8 +601,8 @@ echo "<td width=\"$totalmenu%\"  id=\"coluna$i\" align=\"center\" height=\"20\" 
 	 </a>
       </td>
        </tr>
-      </table>";  
-  */    
+      </table>";
+  */
   }
 echo "</tr>
 </table>";
@@ -666,16 +666,16 @@ function db_data($nome,$dia="",$mes="",$ano="") {
 
 
 function db_verifica_ip(){
-  
+
    global $SERVER, $HTTP_SERVER_VARS;
    if(isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ){
      $db_ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
    }else{
      $db_ip = $HTTP_SERVER_VARS['REMOTE_ADDR'];
    }
-  
+
    include("db_acessa.php");
-   
+
    for($i=1;$i-1<sizeof($db_acessa);$i++){
      if($db_acessa[$i][1]== $db_ip){
        if($db_acessa[$i][2]==false){
@@ -710,7 +710,7 @@ function digito_bco($num){
   $tot = 0;
   for($n=0;$n<10;$n++){
   //FOR N = 1 TO 10
-    $tot += ( substr($num,$n,1) * $y ); 
+    $tot += ( substr($num,$n,1) * $y );
     //TOT += VAL(SUBSTR(D08_CEDENT+NUM,N,1)) * Y
     $y -= 1;
         //Y -= 1
@@ -718,12 +718,12 @@ function digito_bco($num){
       $y = 9;
     }
   }
-  $u = ($tot%11); 
+  $u = ($tot%11);
   //U = (INT((TOT/11))*11-TOT)*-1
   $u = 11 - $u;
   //U = 11 - U
   if($u > 9 ){
-    $u = 0; 
+    $u = 0;
   }
   return $u;
 }
@@ -767,7 +767,7 @@ function calc_dac ( $valor_dac,$dtvenc,$numbco ){
   $banco="104";
   $moeda="9";
   //VALORAUX = VALOR_DAC * -1
-  $valor= db_formatar($valor_dac*100,'s','0',10);  
+  $valor= db_formatar($valor_dac*100,'s','0',10);
   //*
   if($dtvenc < date('Y-m-d',mktime( 0,0,0,7,3,2000))){
      $fator = "1000";
@@ -793,8 +793,8 @@ function calc_dac ( $valor_dac,$dtvenc,$numbco ){
   }
   //NEXT
   $u = ($tot_x%11);
-  //U = (INT((TOT_X/11))*11-TOT_X)*-1 
-  $u = 11 - $u; 
+  //U = (INT((TOT_X/11))*11-TOT_X)*-1
+  $u = 11 - $u;
   //U = 11 - U
   if($u<2 || $u > 9){
     $u = 1;
@@ -835,7 +835,7 @@ function calc_dac ( $valor_dac,$dtvenc,$numbco ){
   }else{
      $digitavel_5 = "000";
      //DIGITAVEL_5 = "000"
-  } 
+  }
   $digitavel_1 .= digito_mod10($digitavel_1);
   //DIGITAVEL_1 += DIGITO_MOD10(DIGITAVEL_1)
   $digitavel_2 .= digito_mod10($digitavel_2);
@@ -854,7 +854,7 @@ class cl_query {
     var $result = null;
     var $resultado = null;
     function sql_query($arquivo="cgm",$campos="*",$ordem="",$where="",$group=""){
-      $sql = " select $campos "; 
+      $sql = " select $campos ";
       if($arquivo!="")
         $sql .= " from $arquivo ";
       if($where!="")
@@ -877,8 +877,8 @@ class cl_query {
       }
     }
     function sql_result($recordset="",$linha="0",$coluna="0"){
-        $resultado = pg_result($recordset,$linha,$coluna); 
-        $this->resultado = $resultado; 
+        $resultado = pg_result($recordset,$linha,$coluna);
+        $this->resultado = $resultado;
     }
     function sql_banco($sql){
       $result = pg_query($sql);
@@ -892,12 +892,12 @@ class cl_query {
       $sqlin = "insert into $tabela values ( $dados )";
       pg_query($sqlin) or die($sqlin);
     }
-    function sql_update($tabela="", $dados="", $where="", $mostrar=false){ 
+    function sql_update($tabela="", $dados="", $where="", $mostrar=false){
       $sqlin= "update $tabela set $dados where $where";
 			if ($mostrar == true) {
 				die($sqlin);
 			}
-      pg_query($sqlin) or die($sqlin); 
+      pg_query($sqlin) or die($sqlin);
     }
 }
 function db_difdate($dat1,$dat2){
@@ -933,11 +933,11 @@ if( $ano != 0 ) {
  $diminui = 0;
   if($operacao == '-')
     $dia = $dia - $quantidade;
-  if($dia < 0 ) 
+  if($dia < 0 )
     $diminui = $dia;
   else
     $dia = $dia + $quantidade;
-  if($dia > 31 ) 
+  if($dia > 31 )
     $diminui = $dia - 31;
   while(!checkdate($mes,$dia,$ano)) {
     if( $operacao == "-" ) {
@@ -950,7 +950,7 @@ if( $ano != 0 ) {
           $ano = $ano - 1;
         }
       }
-    } else  { 
+    } else  {
       $dia = $dia + 1;
       if($dia > 31 ) {
         $dia = 1 + $diminui;
@@ -964,7 +964,7 @@ if( $ano != 0 ) {
   }
 } else {
   if(empty($mes)) {
-    return "&nbsp"; 
+    return "&nbsp";
   } else {
     $tipo = $dia;
     $ano = substr($mes,0,4);
@@ -993,11 +993,11 @@ return $retorno;
 function mostra_msgbox() {
    global $erro_mensagem;
   if($erro_mensagem!=""){
-    echo "<script>alert('".$erro_mensagem."');</script>\n";        
+    echo "<script>alert('".$erro_mensagem."');</script>\n";
   }
 }
 function db_msgbox2($str) {
-    echo "<script>alert('".$str."');</script>\n";        
+    echo "<script>alert('".$str."');</script>\n";
 }
 function postmemory($vetor,$verNomeIndices = 0) {
   if(!is_array($vetor)) {
@@ -1030,7 +1030,7 @@ function mens_OnHelp() {
   global $nome_help;
   ?>
   onhelp="MM_showHideLayers('<?=$nome_help?>','',(document.getElementById('<?=$nome_help?>').style.visibility=='visible'?'hide':'show'));<?=(isset($DB_SELLER)?'js_db_iframe_helph()':'')?>;return false"
-  <?  
+  <?
 }
 function mens_div() {
   global $larg_div;
@@ -1047,14 +1047,14 @@ function mens_div() {
 <div id="<?=$nome_help?>" style="border: 3px outset #6C6C6C;position:absolute; left:<?=$x_div?>px; top:<?=$y_div?>px; height:160px; z-index:1; background-color: <?=$cor_div?>; layer-background-color: #00FFFF; visibility: hidden;">
 <div id="div2" align="right" style="background-color: blue;">
   <table height="30" background="imagens/corcabecalho.jpg" width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom: 3px outset #cccccc; background-position-y: 0px; ">
-    <tr> 
+    <tr>
       <td width="100%" align="left" valign="top"  nowrap>
         <table border="0" style="background-repeat: no-repeat; background-position-y: 0px"  background="imagens/botaoajuda.jpg"  cellpadding="0" cellspacing="0">
           <tr>
             <td width="150"><img border="0" src="imagens/botaoajuda.jpg"></img>
             </td>
           </tr>
-        </table>  
+        </table>
         <?
         if(isset($DB_SELLER)){
           ?>
@@ -1065,7 +1065,7 @@ function mens_div() {
             <td><img border="0" onMouseOut="this.src = 'imagens/botaoconfig.jpg'" onMouseOver="this.src = 'imagens/botaoconfigon.jpg'" width="150" src="imagens/botaoconfig.jpg"></img>
             </td>
           </tr>
-        </table>  
+        </table>
           <script>
           function js_db_iframe_help(){
             MM_showHideLayers('<?=$nome_help?>','','hide');
@@ -1086,7 +1086,7 @@ function mens_div() {
             <tr>
               <td style="cursor: hand" onMouseOver="this.hideFocus=true" align="right" valign="center" ><img src="imagens/jan_mini_off.gif"></td><td><img src="imagens/jan_max_off.gif"></img></td><td><img id="figura" src="imagens/jan_fechar_on.gif" onClick="MM_showHideLayers('<?=$nome_help?>','','hide');<?=(isset($DB_SELLER)?'js_db_iframe_helph()':'')?>;return false"  onMouseDown="this.src = 'imagens/jan_fechar_off.gif'" onMouseOut="this.src = 'imagens/jan_fechar_on.gif'"></img></td>
             </tr>
-          </table>  
+          </table>
         </td>
     <tr>
   </table>
@@ -1097,7 +1097,7 @@ function mens_div() {
 if(isset($DB_SELLER)){
   ?>
   <div id="div3" style="background-color:blue;border: thin inset #CCCCCC; position:absolute;  visibility: hidden" >
-     <iframe style="width:100% ; height:100%" name="helpiframe" src="pre4_mensagens001.php?codhelp=<?=$nome_help?>"></iframe>   
+     <iframe style="width:100% ; height:100%" name="helpiframe" src="pre4_mensagens001.php?codhelp=<?=$nome_help?>"></iframe>
   </div>
   <?
 }
@@ -1118,7 +1118,7 @@ function mens_help($mens="") {
 
     $mens = basename($HTTP_SERVER_VARS['PHP_SELF']);
     $uo = strrpos($mens,"\.");
-  
+
     if($uo>0)
        $mens = substr($mens,0,$uo-1);
   }
@@ -1129,7 +1129,7 @@ function mens_help($mens="") {
   	$result = pg_exec($conn,"insert into db_confmensagem (cod,mens,alinhamento,instit) values ('{$mens}_help','Help da Página','600&80&250&150&#FFFFFF&',{$instit})");
 		$result = pg_exec($conn,"select * from db_confmensagem where cod = '{$mens}_help' and instit = {$instit}");
   }
-  
+
   $nome_help  = pg_result($result,0,"cod");
   $texto_help = pg_result($result,0,"mens");
   $param_help = split("&",pg_result($result,0,"alinhamento"));
@@ -1176,7 +1176,7 @@ class janela {
   var $tamTitulo = "11";
   var $titulo = "DBSeller Informática Ltda";
   var $janBotoes = "101";
-  
+
  function janela($nome,$arquivo) {
     $this->nome = $nome;
         $this->arquivo = $arquivo;
@@ -1224,17 +1224,17 @@ class rotulovelho {
 
           $variavel = trim("L".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = "<strong>".pg_result($result,$i,"rotulo").":</strong>";
 
             $variavel = trim("T".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,$i,"descricao")."\n\nCampo:".trim("T".pg_result($result,$i,"nomecam"));
 
-        } 
+        }
 
   }
 
@@ -1258,11 +1258,11 @@ class rotulo {
         for($i = 0;$i < $numrows;$i++) {
       /// variavel com o tipo de campo
             $variavel = trim("I".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = pg_result($result,$i,"aceitatipo");
       /// variavel para determinar o autocomplete
             $variavel = trim("A".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           if(pg_result($result,$i,"autocompl")=='f'){
             $$variavel = "off";
           }else{
@@ -1270,40 +1270,40 @@ class rotulo {
           }
       /// variavel para preenchimento obrigatorio
             $variavel = trim("U".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = pg_result($result,$i,"nulo");
       /// variavel para colocar maiusculo
             $variavel = trim("G".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = pg_result($result,$i,"maiusculo");
       /// variavel para colocar no erro do javascript de preenchimento de campo
             $variavel = trim("S".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = pg_result($result,$i,"rotulo");
       /// variavel para colocar como label de campo
           $variavel = trim("L".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = "<strong>".ucfirst(pg_result($result,$i,"rotulo")).":</strong>";
           /// vaariavel para colocat na tag title dos campos
             $variavel = trim("T".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = ucfirst(pg_result($result,$i,"descricao"))."\n\nCampo:".pg_result($result,$i,"nomecam");
           /// variavel para incluir o tamanhoda tag maxlength dos campos
             $variavel = trim("M".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = pg_result($result,$i,"tamanho");
           /// variavel para controle de campos nulos
             $variavel = trim("N".pg_result($result,$i,"nomecam"));
-          global $$variavel;          
+          global $$variavel;
           $$variavel = pg_result($result,$i,"nulo");
           if($$variavel=="t")
              $$variavel = "style=\"background-color:#E6E4F1\"";
 
-          else 
+          else
 
              $$variavel = "";
 
-        } 
+        }
 
   }
 
@@ -1321,17 +1321,17 @@ class rotulo {
 
       $variavel = trim("L".pg_result($result,0,"nomearq"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = "<strong>".pg_result($result,0,"rotulo").":</strong>";
 
             $variavel = trim("T".pg_result($result,0,"nomearq"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,0,"descricao");
 
-        } 
+        }
 
   }
 
@@ -1359,7 +1359,7 @@ class rotulocampo {
 
             $variavel = trim("I".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,$i,"aceitatipo");
 
@@ -1367,7 +1367,7 @@ class rotulocampo {
 
             $variavel = trim("A".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           if(pg_result($result,$i,"autocompl")=='f'){
 
@@ -1383,7 +1383,7 @@ class rotulocampo {
 
             $variavel = trim("U".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,$i,"nulo");
 
@@ -1391,7 +1391,7 @@ class rotulocampo {
 
             $variavel = trim("G".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,$i,"maiusculo");
 
@@ -1399,7 +1399,7 @@ class rotulocampo {
 
             $variavel = trim("S".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,$i,"rotulo");
 
@@ -1407,7 +1407,7 @@ class rotulocampo {
 
           $variavel = trim("L".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = "<strong>".ucfirst(pg_result($result,$i,"rotulo")).":</strong>";
 
@@ -1415,7 +1415,7 @@ class rotulocampo {
 
             $variavel = trim("T".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = ucfirst(pg_result($result,$i,"descricao"))."\n\nCampo:".pg_result($result,$i,"nomecam");
 
@@ -1423,7 +1423,7 @@ class rotulocampo {
 
             $variavel = trim("M".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,$i,"tamanho");
 
@@ -1431,7 +1431,7 @@ class rotulocampo {
 
             $variavel = trim("N".pg_result($result,$i,"nomecam"));
 
-          global $$variavel;          
+          global $$variavel;
 
           $$variavel = pg_result($result,$i,"nulo");
 
@@ -1439,11 +1439,11 @@ class rotulocampo {
 
              $$variavel = "style=\"background-color:#E6E4F1\"";
 
-          else 
+          else
 
              $$variavel = "";
 
-        } 
+        }
 
   }
 
@@ -1493,7 +1493,7 @@ class rotulolov {
 
          $this->tamanho = "";
 
-          } 
+          }
 
         }
 
@@ -1541,7 +1541,7 @@ if(basename($HTTP_SERVER_VARS['PHP_SELF']) != "pre4_mensagens001.php") {
 
     next($HTTP_POST_VARS);
 
-  } 
+  }
 
   $tam_vetor = sizeof($HTTP_GET_VARS);
 
@@ -1555,7 +1555,7 @@ if(basename($HTTP_SERVER_VARS['PHP_SELF']) != "pre4_mensagens001.php") {
 
     next($HTTP_GET_VARS);
 
-  } 
+  }
 
 }
 
@@ -1597,7 +1597,7 @@ function db_verfPostGet($post) {
 
     next($post);
 
-  } 
+  }
 
 }
 
@@ -1625,7 +1625,7 @@ function db_criatabela($result) {
 
   }
 
-  $cor = "#07F89D";  
+  $cor = "#07F89D";
 
   echo "</tr>\n";
 
@@ -1739,7 +1739,7 @@ function db_numpre($qn,$qnp="",$qnt="",$qnd=""){
 
   }
 
-  if($qnd!=""){  
+  if($qnd!=""){
 
     $retorno .= ".".db_formatar($qnd,'s',"0",1,"e");
 
@@ -1767,7 +1767,7 @@ function db_numpre($qn,$qnp="",$qnt="",$qnd=""){
 
 // "cnpj" formata cnpj
 
-// "s"  Preenche uma string para um certo tamanho com outra string 
+// "s"  Preenche uma string para um certo tamanho com outra string
 
 // se for "s":
 
@@ -1805,9 +1805,9 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
 
              return 'N';
 
-      }else{ 
+      }else{
 
-             return 'S';                
+             return 'S';
 
       }
 
@@ -1817,7 +1817,7 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
 
             return str_pad(number_format($str,2,",","."),15,$caracter,STR_PAD_LEFT);
 
-      else 
+      else
 
         return str_pad(number_format($str,2,",","."),$quantidade,$caracter,STR_PAD_LEFT);
 
@@ -1827,7 +1827,7 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
 
       return $data[2]."/".$data[1]."/".$data[0];
 
-    case "s":                
+    case "s":
 
           if($TipoDePreenchimento == "e") {
 
@@ -1839,7 +1839,7 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
 
           } else if($TipoDePreenchimento == "a") {
 
-        return str_pad($str,$quantidade,$caracter,STR_PAD_BOTH);          
+        return str_pad($str,$quantidade,$caracter,STR_PAD_BOTH);
 
           }
 
@@ -1892,7 +1892,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="", $mostravar=false){
   for ($i = 0;$i < $fm_numfields;$i++){
 
     $matriz[$i] = pg_fieldname($recordset,$i);
-    
+
 
     global $$matriz[$i];
 
@@ -1930,12 +1930,12 @@ function db_fieldsmemory($recordset,$indice,$formatar="", $mostravar=false){
 
                 default:
 
-          $$matriz[$i] = $aux;                                  
+          $$matriz[$i] = $aux;
 
                   break;
 
           }
-          
+
 
         } else
 
@@ -1949,27 +1949,27 @@ function db_fieldsmemory($recordset,$indice,$formatar="", $mostravar=false){
 
           global $$split_data;
 
-          $$split_data =  @$datav[2];        
+          $$split_data =  @$datav[2];
 
           $split_data = $matriz[$i]."_mes";
 
           global $$split_data;
 
-          $$split_data =  @$datav[1];        
+          $$split_data =  @$datav[1];
 
           $split_data = $matriz[$i]."_ano";
 
           global $$split_data;
 
-          $$split_data =  @$datav[0];         
+          $$split_data =  @$datav[0];
 
-          $$matriz[$i] = $aux;                                  
+          $$matriz[$i] = $aux;
 
                   break;
 
                 default:
 
-          $$matriz[$i] = $aux;                                  
+          $$matriz[$i] = $aux;
 
                   break;
 
@@ -1989,7 +1989,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="", $mostravar=false){
 
 
 
-///////  Calcula Digito Verificador 
+///////  Calcula Digito Verificador
 
 ///////  sCampo - Valor  Ipeso - Qual peso 10 11
 
@@ -2019,11 +2019,11 @@ function db_CalculaDV($sCampo, $iPeso = 11){
 
         if($mult > 9)
 
-                  $mult = 2;                  
+                  $mult = 2;
 
-        }        
+        }
 
-        $iDV1 = ($iSoma1 % 11);        
+        $iDV1 = ($iSoma1 % 11);
 
         if ($iDV1 < 2)
 
@@ -2063,7 +2063,7 @@ function db_cgccpf($str) {
 
     return substr($str,0,3).".".substr($str,3,3).".".substr($str,6,3)."-".substr($str,9,2);
 
-  else return $str;        
+  else return $str;
 
 }
 
@@ -2207,7 +2207,7 @@ function db_putsession($var,$valor) {
 
   $key = "alapuchatche";
 
-  $md = new Crypt_HCEMD5($key, $rand);  
+  $md = new Crypt_HCEMD5($key, $rand);
 
   $HTTP_SESSION_VARS[$var] = $md->encrypt($valor);
 
@@ -2222,7 +2222,7 @@ function db_putsession($var,$valor) {
 
 function db_strpos($str,$pos) {
 
-  return substr($str,0,(strpos($str,$pos)==""?strlen($str):strpos($str,$pos)));  
+  return substr($str,0,(strpos($str,$pos)==""?strlen($str):strpos($str,$pos)));
 
 }
 
@@ -2232,7 +2232,7 @@ function db_strpos($str,$pos) {
 
 function db_erro($msg,$voltar=1) {
 
-  $uri = $GLOBALS["PHP_SELF"];  
+  $uri = $GLOBALS["PHP_SELF"];
 
   echo "$msg<br>\n";
 
@@ -2286,7 +2286,7 @@ function db_hora($id_timestamp=0,$formato="H:i"){
 //#00#//db_hora
 //#10#// retorna a hora do servidor em no formato HH:MM
 //#15#//$hora = db_hora($timestamp,$formato);
-//#20#//$id_timestamp =        Data e hora no formato timestamp 
+//#20#//$id_timestamp =        Data e hora no formato timestamp
 //#20#//$formato      = Formato do retorno da hora ou data
 //#20#//                Padrao: H:i - Hora e minuto com :.
 //#99#//Os tipos de formato de retorno são:
@@ -2303,7 +2303,7 @@ function db_hora($id_timestamp=0,$formato="H:i"){
 //#99#//H        Hora no formato 24 horas 00 through 23
 //#99#//i        Minutos com zero a esquerda 00 to 59
 //#99#//j        Dia do mes sem zero a esquerda 1 to 31
-//#99#//l       Nome Dia da semana 
+//#99#//l       Nome Dia da semana
 //#99#//m        Mes numericpo com dois digitos  01 a 12
 //#99#//M        3 primeiras letras do nome do mes Jan through Dec
 //#99#//n        Mes numerico sem zero a esquerda 1 a 12
@@ -2324,7 +2324,7 @@ function db_hora($id_timestamp=0,$formato="H:i"){
      return date($formato,$id_timestamp);
    }else{
      return date($formato);
-   }   
+   }
 }
 
 
@@ -2592,10 +2592,10 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
 		echo "<script>
 	        function js_mostra_text(liga,nomediv,evt){
-	
-		  evt = (evt)?evt:(window.event)?window.event:''; 
+
+		  evt = (evt)?evt:(window.event)?window.event:'';
 		  if(liga==true){
-	
+
 		    document.getElementById(nomediv).style.top = 0; //evt.clientY;
 		    document.getElementById(nomediv).style.left = 0; //(evt.clientX+20);
 		    document.getElementById(nomediv).style.visibility = 'visible';
@@ -2609,13 +2609,13 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		  obj.setAttribute('value',valor);
 	      obj.setAttribute('style','color:#FCA;background-color:transparent;border-style:none');
 		  eval('document.'+nomeform+'.appendChild(obj)');
-		  eval('document.'+nomeform+'.'+campo+'.click()');						  
+		  eval('document.'+nomeform+'.'+campo+'.click()');
 		}
 	    function js_lanca_codigo_pesquisa(valor_recebido){
-	      document.navega_lov".$NomeForm.".codigo_pesquisa.value = valor_recebido;      
+	      document.navega_lov".$NomeForm.".codigo_pesquisa.value = valor_recebido;
 	    }
 	    function js_lanca_distinct_pesquisa(){
-	      document.navega_lov".$NomeForm.".distinct_pesquisa.value = 1;      
+	      document.navega_lov".$NomeForm.".distinct_pesquisa.value = 1;
 	    }
 	    function js_nova_quantidade_linhas(valor_recebido){
           valor_recebe = Number(valor_recebido);
@@ -2630,7 +2630,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
             }else{
 	          document.navega_lov".$NomeForm.".nova_quantidade_linhas.value = valor_recebido;
             }
-          }      
+          }
 	    }
 		</script>";
 
@@ -2695,7 +2695,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		echo "<input type=\"hidden\" name=\"filtroquery\" value=\"".str_replace("\n", "", @ $filtroquery)."\">
 	  ". ($NumRows > 0 ? "
 	  Foram retornados <font color=\"red\"><strong>".$$tot_registros."</strong></font> registros.
-	  Mostrando de <font color=\"red\"><strong>". (@ $$offset +1)."</strong></font> até 
+	  Mostrando de <font color=\"red\"><strong>". (@ $$offset +1)."</strong></font> até
 	  <font color=\"red\"><strong>". ($$tot_registros < (@ $$offset + $numlinhas) ? ($NumRows <= $numlinhas ? $$tot_registros : $NumRows) : ($$offset + $numlinhas))."</strong></font>." : "Nenhum Registro
 	  Retornado")."</form>
 	  </td></tr>\n";
@@ -2912,7 +2912,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
               <input name='recomecar' type='button' value='Recomeçar' onclick=\"js_troca_ordem('navega_lov".$NomeForm."','recomecar','0');\" class=\"botao\">
 		          <strong>Indique o Conteúdo:</strong><input title='Digite o valor a pesquisar e clique sobre o campo (cabeçalho) a pesquisar' name=indica_codigo type=text onchange='js_lanca_codigo_pesquisa(this.value)' style='background-color:#E6E4F1'>
                   <strong>Quantidade a Listar:</strong><input id=quant_lista name=quant_lista type=text onchange='js_nova_quantidade_linhas(this.value)' style='background-color:#E6E4F1' value='$numlinhas' size='5'>
-                  <strong>Mostra Diferentes:</strong><input title='Mostra os valores diferentes clicando no cabeçalho a pesquisar' name=mostra_diferentes type=checkbox onchange='js_lanca_distinct_pesquisa()' style='background-color:#E6E4F1'>                                     
+                  <strong>Mostra Diferentes:</strong><input title='Mostra os valores diferentes clicando no cabeçalho a pesquisar' name=mostra_diferentes type=checkbox onchange='js_lanca_distinct_pesquisa()' style='background-color:#E6E4F1'>
               </td>";
 		  echo "</tr>\n";
 		}
@@ -2955,12 +2955,12 @@ function db_logs($matricula,$incricao,$numcgm,$string) {
   else
     $usuario = 0;
   pg_exec("BEGIN");
-	
+
 	$sqlinsert = "INSERT INTO db_logs VALUES ('".$_SERVER["REMOTE_ADDR"]."','".date("Y-m-d")."','".date("G:i:s")."','".$_SERVER["REQUEST_URI"]."'," . (int) $matricula . "," . (int) $incricao . "," . (int) $numcgm . ",'$string',$usuario,1)";
 	$result = pg_exec($sqlinsert) or die($sqlinsert);
 
   if(pg_cmdtuples($result) > 0){
-    
+
     pg_exec("COMMIT");
 
   }else {
@@ -3010,7 +3010,7 @@ function db_menu($usuario,$modulo,$anousu,$instit) {
 
                      AND m.modulo = $modulo
 
-                                           AND i.itemativo = 1                                         
+                                           AND i.itemativo = 1
 
                                      ORDER BY m.id_item,m.id_item_filho,m.menusequencia
 
@@ -3038,7 +3038,7 @@ function db_menu($usuario,$modulo,$anousu,$instit) {
 
      }
 
-     echo "<a class=\"menuButton\" id=\"menuSomeTela\" href=\"\" onclick=\"someFrame(event,1); return false\">Tela</a>\n";         
+     echo "<a class=\"menuButton\" id=\"menuSomeTela\" href=\"\" onclick=\"someFrame(event,1); return false\">Tela</a>\n";
 
      echo "</div>\n";
 
@@ -3064,7 +3064,7 @@ function db_menu($usuario,$modulo,$anousu,$instit) {
 
                    echo "<span class=\"menuItemText\">".pg_result($menu,$a,"descricao")."</span>\n";
 
-                   echo "<span class=\"menuItemArrow\">&#9654;</span></a>\n";                           
+                   echo "<span class=\"menuItemArrow\">&#9654;</span></a>\n";
 
                                    $verifica = 0;
 
@@ -3072,7 +3072,7 @@ function db_menu($usuario,$modulo,$anousu,$instit) {
 
                                  }
 
-                           } 
+                           }
 
                            if($verifica == 1)
 
@@ -3100,7 +3100,7 @@ function db_menu($usuario,$modulo,$anousu,$instit) {
 
            $URI = pg_result($menu,$i,5) == ""?"":"http://".$HTTP_SERVER_VARS["HTTP_HOST"].substr($HTTP_SERVER_VARS["PHP_SELF"],0,strrpos($HTTP_SERVER_VARS["PHP_SELF"],"/"))."/".pg_result($menu,$i,5);
 
-       if(pg_result($menu,$i,0) != $modulo) {                                
+       if(pg_result($menu,$i,0) != $modulo) {
 
          for($j = 0;$j < $NumMenu;$j++) {
 
@@ -3108,7 +3108,7 @@ function db_menu($usuario,$modulo,$anousu,$instit) {
 
              echo "<a class=\"menuItem\" href=\"".$URI."\">".pg_result($menu,$i,3)."</a>\n";
 
-         }     
+         }
 
        }
 
@@ -3122,7 +3122,7 @@ function db_menu($usuario,$modulo,$anousu,$instit) {
 
     echo "Sem permissao de menu!";
 
-  }  
+  }
 
 
 
@@ -3339,16 +3339,16 @@ function db_criacarne($arretipo,$ip,$datahj,$instit,$tipomod){
 
     //die("///////////".$arretipo." -- ".$ip." -- ".$datahj." -- ".$instit." -- ".$tipomod);
   $sqlexe = "  select * from cadmodcarne
-                       inner join modcarnepadrao         on cadmodcarne.k47_sequencial                = modcarnepadrao.k48_cadmodcarne 
-                       left  join modcarnepadraocobranca on modcarnepadraocobranca.k22_modcarnepadrao = modcarnepadrao.k48_sequencial 
-                       inner join modcarnepadraotipo     on modcarnepadrao.k48_sequencial             = modcarnepadraotipo.k49_modcarnepadrao 
+                       inner join modcarnepadrao         on cadmodcarne.k47_sequencial                = modcarnepadrao.k48_cadmodcarne
+                       left  join modcarnepadraocobranca on modcarnepadraocobranca.k22_modcarnepadrao = modcarnepadrao.k48_sequencial
+                       inner join modcarnepadraotipo     on modcarnepadrao.k48_sequencial             = modcarnepadraotipo.k49_modcarnepadrao
                        inner join modcarneexcessao       on modcarneexcessao.k36_modcarnepadraotipo   = modcarnepadraotipo.k49_sequencial
                  where k36_ip         = '".$ip."'
                    and k49_tipo       = $arretipo
                    and k48_dataini    <='".$datahj."'
                    and k48_datafim    >='".$datahj."'
                    and k48_instit     = $instit
-                   and k48_cadtipomod = $tipomod  ";   
+                   and k48_cadtipomod = $tipomod  ";
    // die("xxxxxxxxxxxxxxxxxxx ".$sqlexe);
   $rsModexe   = pg_query($sqlexe);
   $intnumexe  = pg_numrows($rsModexe);
@@ -3359,15 +3359,15 @@ function db_criacarne($arretipo,$ip,$datahj,$instit,$tipomod){
   }
   if($achou == 0){
     $sqltipo = " select * from cadmodcarne
-                        inner join modcarnepadrao         on cadmodcarne.k47_sequencial                = modcarnepadrao.k48_cadmodcarne 
-                        left  join modcarnepadraocobranca on modcarnepadraocobranca.k22_modcarnepadrao = modcarnepadrao.k48_sequencial 
-                        inner join modcarnepadraotipo     on modcarnepadrao.k48_sequencial             = modcarnepadraotipo.k49_modcarnepadrao 
-                        left  join modcarneexcessao       on modcarneexcessao.k36_modcarnepadraotipo   = modcarnepadraotipo.k49_sequencial                
+                        inner join modcarnepadrao         on cadmodcarne.k47_sequencial                = modcarnepadrao.k48_cadmodcarne
+                        left  join modcarnepadraocobranca on modcarnepadraocobranca.k22_modcarnepadrao = modcarnepadrao.k48_sequencial
+                        inner join modcarnepadraotipo     on modcarnepadrao.k48_sequencial             = modcarnepadraotipo.k49_modcarnepadrao
+                        left  join modcarneexcessao       on modcarneexcessao.k36_modcarnepadraotipo   = modcarnepadraotipo.k49_sequencial
            where k49_tipo = $arretipo
              and k48_dataini    <='".$datahj."'
              and k48_datafim    >='".$datahj."'
              and k48_instit     = $instit
-             and k48_cadtipomod = $tipomod 
+             and k48_cadtipomod = $tipomod
              and modcarneexcessao.k36_modcarnepadraotipo is null
              ";
     //     die($sqltipo);
@@ -3381,17 +3381,17 @@ function db_criacarne($arretipo,$ip,$datahj,$instit,$tipomod){
   }
   if($achou == 0){
     $sqlgeral = " select * from cadmodcarne
-                     inner join modcarnepadrao         on cadmodcarne.k47_sequencial                = modcarnepadrao.k48_cadmodcarne 
-                     left  join modcarnepadraocobranca on modcarnepadraocobranca.k22_modcarnepadrao = modcarnepadrao.k48_sequencial 
-                     left  join modcarnepadraotipo     on modcarnepadrao.k48_sequencial             = modcarnepadraotipo.k49_modcarnepadrao 
+                     inner join modcarnepadrao         on cadmodcarne.k47_sequencial                = modcarnepadrao.k48_cadmodcarne
+                     left  join modcarnepadraocobranca on modcarnepadraocobranca.k22_modcarnepadrao = modcarnepadrao.k48_sequencial
+                     left  join modcarnepadraotipo     on modcarnepadrao.k48_sequencial             = modcarnepadraotipo.k49_modcarnepadrao
                      left  join modcarneexcessao       on modcarneexcessao.k36_modcarnepadraotipo   = modcarnepadraotipo.k49_sequencial
             where k48_dataini    <= '".$datahj."'
               and k48_datafim    >= '".$datahj."'
               and k48_instit     = $instit
-              and k48_cadtipomod = $tipomod 
+              and k48_cadtipomod = $tipomod
               and modcarnepadraotipo.k49_modcarnepadrao   is null
               and modcarneexcessao.k36_modcarnepadraotipo is null
-            ";   
+            ";
         //die("akiiii".$sqlgeral);
     $rsModgeral  = pg_query($sqlgeral);
     $intnumgeral = pg_numrows($rsModgeral);
@@ -3470,14 +3470,14 @@ function UltimoDiaMes($ano,$mes){
         $fev = 28;
       }
     }
-  }else{ 
+  }else{
   $fev = 28;
   }
   $mes = $mes-1;
   $dia= Array(31,$fev,31,30,31,30,31,31,30,31,30,31);
   $ultmodia = $dia[$mes];
   return $ultmodia;
-} 
+}
 
 function db_sel_instit($instit=null,$campos=" * "){
   if($instit == null || trim($instit) == ""){
@@ -3487,8 +3487,8 @@ function db_sel_instit($instit=null,$campos=" * "){
     $campos = " * ";
   }
   $record_config = pg_exec("select ".$campos."
-                            from db_config 
-                                 left join db_tipoinstit on db21_codtipo = db21_tipoinstit                            
+                            from db_config
+                                 left join db_tipoinstit on db21_codtipo = db21_tipoinstit
                             where codigo = ".$instit);
   if($record_config == false){
     return false;
@@ -3513,7 +3513,7 @@ function db_buscaImagemBanco($cadban,$conn){
  * $cadban = codigo k15_codigo da cadban
  * $conn   =  conexão
  */
-	
+
   $sqlcodban = "select k15_codbco from cadban where k15_codigo = $cadban";
   $resultcadban = pg_query($sqlcodban);
   $linhascadban = pg_num_rows($resultcadban);
@@ -3535,18 +3535,18 @@ function db_buscaImagemBanco($cadban,$conn){
 	  	return false;
 //	  	db_redireciona('db_erros.php?fechar=true&db_erro=Configure os dados(Digito verificador, Nome abreviado do banco e o Arquivo do logo) do Banco: '.$banco.'-'.$db90_descr.', no Cadastro de Bancos');
 	  }
-	  // seta os dados para o boleto passando as informações do logo 
+	  // seta os dados para o boleto passando as informações do logo
 	  pg_query ($conn, "begin");
 	  $caminho = "tmp/".$banco.".jpg";
       pg_lo_export  ( "$db90_logo",$caminho ,$conn);
 	  pg_query ($conn, "commit");
-	  
-	  $arr = array("numbanco"  =>$banco."-".$db90_digban, 
+
+	  $arr = array("numbanco"  =>$banco."-".$db90_digban,
 	               "banco"     =>$db90_abrev ,
 				   "imagemlogo"=>$caminho);
-	 
+
     return $arr;
-  
+
 	}else{
 		// se não tiver o banco na db_bancos
 		db_redireciona('db_erros.php?fechar=true&db_erro=Não existe Banco cadastrado para o código'.$banco.' no Cadastro de Bancos'.$sqlBanco);
@@ -3568,7 +3568,7 @@ function db_query($param1, $param2=null, $param3="SQL"){
     $dbsql    = $param2;
     $dbresult = @pg_query($param1, $dbsql);
   }
-  
+
   db_tracelog($param3, $dbsql,(!$dbresult?true:false));
 
   return $dbresult;
@@ -3582,7 +3582,7 @@ function db_tracelog($descricao, $sql, $lErro){
     } else {
       $sMensagem = "\"<b>".addSlashes($descricao).":&nbsp;&nbsp;</b>\", \"".addslashes($sql)."\", \"<b>$data</b>\"";
     }
-    echo "<script>top.js_enviaTraceLog($sMensagem)</script>";
+    echo "<script>CurrentWindow.js_enviaTraceLog($sMensagem)</script>";
     flush();
   }
 }
@@ -3600,13 +3600,13 @@ function db_tracelogsaida($tipo, $descricao, $sql) {
 
 
 function validaUsuarioLogado() {
-	
+
 	if ( !session_is_registered('DB_acesso') ) {
 	  die ('<table width="300" align="center" border="0" bordercolor="#cccccc" cellpadding="2" cellspacing="0" class="texto">
 	          <tr height="220">
 	            <td align="center">
 	              <img src="imagens/atencao.gif"><br>
-	               Usuário não logado no sistema!  
+	               Usuário não logado no sistema!
 	            </td>
 	          </tr>
 	        </table>');

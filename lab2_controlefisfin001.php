@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once('libs/db_stdlib.php');
@@ -43,7 +43,7 @@ $iTipoControle                   = 0;
 /* Verifico se algum tipo de controle físico / financeiro já foi definido. Se houver, pego qualquer um deles
    para verificar qual valor do select com as opções gerais de controle (departamento sol., lab, ...)
    eu tenho que enviar. Pego qualquer um pq se tiver um controle por departamento solicitante, por exemplo,
-   os para todos os demais departamentos o controle deve ser por departamento solicitante, 
+   os para todos os demais departamentos o controle deve ser por departamento solicitante,
    ou alguma combinação de departamento solicitante com exame, grupo de exame ou laboratório.
    Pode acontecer de um ser somente por
    departamento sol. e outro ser por exames do departamento solicitante. O que não pode é ter um controle
@@ -82,7 +82,7 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -92,8 +92,8 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
 <center>
 <br><br>
 <table width="900" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
         <fieldset style='width: 40%;'> <legend><b>Controle Físico / Financeiro</b></legend>
         <?
@@ -119,7 +119,7 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
   <tr>
   <?
   // Nenhum tipo de controle foi informado ainda, então, exibo o select com as opções
-  if (!isset($iSelectControle) || empty($iSelectControle) || $iSelectControle < 1 || $iSelectControle > 4) { 
+  if (!isset($iSelectControle) || empty($iSelectControle) || $iSelectControle < 1 || $iSelectControle > 4) {
 
     ?>
       <td nowrap title="Selecione um tipo de controle." align="center">
@@ -148,7 +148,7 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
       </tr>
       <tr>
     <?
-    if ($iSelectControle == 1) { 
+    if ($iSelectControle == 1) {
 
       $sQuebraLabel = 'Departamento'; ?>
       <td nowrap colspan="2">
@@ -165,7 +165,7 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
           $aX[$oDados->coddepto] = $oDados->coddepto.' - '.$oDados->descrdepto;
 
         }
-        db_select('iValor1', $aX, true, 1, 
+        db_select('iValor1', $aX, true, 1,
                   "onchange=\"window.frames['iframeControle'].js_getInfoControleFisicoFinanceiro();\""
                  );
         ?>
@@ -175,7 +175,7 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
       </td>
   <?
     } elseif($iSelectControle == 2) {
-      
+
       $sQuebraLabel = "Laboratorio";
   ?>
       <td nowrap align="center" colspan="2">
@@ -214,10 +214,10 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
           db_ancora(@$Lla56_i_grupo, "js_pesquisala56_i_grupo(true);", $db_opcao);
           ?>
         </td>
-        <td nowrap> 
+        <td nowrap>
           <?
           db_input('la56_i_grupo', 10, $Ila56_i_grupo, true, 'hidden', 3, '');
-          db_input('sd60_c_grupo', 2, $Isd60_c_grupo, true, 'text', $db_opcao, 
+          db_input('sd60_c_grupo', 2, $Isd60_c_grupo, true, 'text', $db_opcao,
                    " onchange='js_pesquisala56_i_grupo(false);'"
                   );
           db_input('sd60_c_nome', 50, $Isd60_c_nome, true, 'text', 3, '');
@@ -230,10 +230,10 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
           db_ancora(@$Lla56_i_subgrupo, "js_pesquisala56_i_subgrupo(true);", $db_opcao);
           ?>
         </td>
-        <td nowrap> 
+        <td nowrap>
           <?
           db_input('la56_i_subgrupo', 10, $Ila56_i_subgrupo, true, 'hidden', 3, '');
-          db_input('sd61_c_subgrupo', 2, $Isd61_c_subgrupo, true, 'text', $db_opcao, 
+          db_input('sd61_c_subgrupo', 2, $Isd61_c_subgrupo, true, 'text', $db_opcao,
                    " onchange='js_pesquisala56_i_subgrupo(false);'"
                   );
           db_input('sd61_c_nome', 50, $Isd61_c_nome, true, 'text', 3, '');
@@ -246,10 +246,10 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
           db_ancora(@$Lla56_i_formaorganizacao, "js_pesquisala56_i_formaorganizacao(true);", $db_opcao);
           ?>
         </td>
-        <td nowrap> 
+        <td nowrap>
           <?
           db_input('la56_i_formaorganizacao', 10, $Ila56_i_formaorganizacao, true, 'hidden', 3, '');
-          db_input('sd62_c_formaorganizacao', 2, $Isd62_c_formaorganizacao, true, 'text', $db_opcao, 
+          db_input('sd62_c_formaorganizacao', 2, $Isd62_c_formaorganizacao, true, 'text', $db_opcao,
                    " onchange='js_pesquisala56_i_formaorganizacao(false);'"
                   );
           db_input('sd62_c_nome', 50, $Isd62_c_nome, true, 'text', 3, '');
@@ -268,9 +268,9 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
           db_ancora(@$Lla56_i_exame, "js_pesquisala56_i_exame(true);", $db_opcao);
           ?>
         </td>
-        <td nowrap> 
+        <td nowrap>
           <?
-          db_input('iValor1', 10, $Ila56_i_exame, true, 'text', $db_opcao, 
+          db_input('iValor1', 10, $Ila56_i_exame, true, 'text', $db_opcao,
                    " onchange='js_pesquisala56_i_exame(false);'"
                   );
           db_input('la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '');
@@ -297,7 +297,7 @@ if ($oDaoLabControleFisicoFinanceiro->numrows > 0) {
 </table>
 </center>
 <?
-db_menu(db_getsession('DB_id_usuario'), db_getsession('DB_modulo'), 
+db_menu(db_getsession('DB_id_usuario'), db_getsession('DB_modulo'),
         db_getsession('DB_anousu'), db_getsession('DB_instit')
        );
 ?>
@@ -368,8 +368,8 @@ function js_pesquisala56_i_grupo(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?funcao_js='+
-                        'parent.js_mostrasau_grupo|sd60_i_codigo|sd60_c_nome|sd60_c_grupo', 
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?funcao_js='+
+                        'parent.js_mostrasau_grupo|sd60_i_codigo|sd60_c_nome|sd60_c_grupo',
                         'Pesquisa', true
                        );
 
@@ -377,9 +377,9 @@ function js_pesquisala56_i_grupo(mostra) {
 
     if (document.form1.sd60_c_grupo.value != '') {
 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?chave_sd60_c_grupo='+
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_grupo', 'func_sau_grupo.php?chave_sd60_c_grupo='+
                            document.form1.sd60_c_grupo.value+'&funcao_js=parent.js_mostrasau_grupo|'+
-                           'sd60_i_codigo|sd60_c_nome|sd60_c_grupo&nao_mostra=true', 
+                           'sd60_i_codigo|sd60_c_nome|sd60_c_grupo&nao_mostra=true',
                            'Pesquisa', false
                           );
 
@@ -422,7 +422,7 @@ function js_pesquisala56_i_subgrupo(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?'+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?'+
                         'funcao_js=parent.js_mostrasau_subgrupo|sd61_i_codigo|sd61_c_nome|sd61_c_subgrupo'+
                         sGet, 'Pesquisa', true
                        );
@@ -431,9 +431,9 @@ function js_pesquisala56_i_subgrupo(mostra) {
 
     if (document.form1.sd61_c_subgrupo.value != '') {
 
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?chave_sd61_c_subgrupo='+
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_subgrupo', 'func_sau_subgrupo.php?chave_sd61_c_subgrupo='+
                           document.form1.sd61_c_subgrupo.value+'&funcao_js=parent.js_mostrasau_subgrupo|'+
-                          'sd61_i_codigo|sd61_c_nome|sd61_c_subgrupo&nao_mostra=true'+sGet, 
+                          'sd61_i_codigo|sd61_c_nome|sd61_c_subgrupo&nao_mostra=true'+sGet,
                           'Pesquisa', false
                          );
 
@@ -484,7 +484,7 @@ function js_pesquisala56_i_formaorganizacao(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
                         'funcao_js=parent.js_mostrasau_formaorganizacao|sd62_i_codigo|sd62_c_nome|'+
                         'sd62_c_formaorganizacao'+sGet, 'Pesquisa', true
                        );
@@ -493,7 +493,7 @@ function js_pesquisala56_i_formaorganizacao(mostra) {
 
     if (document.form1.sd62_c_formaorganizacao.value != '') {
 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_formaorganizacao', 'func_sau_formaorganizacao.php?'+
                            'chave_sd62_c_formaorganizacao='+document.form1.sd62_c_formaorganizacao.value+
                            '&funcao_js=parent.js_mostrasau_formaorganizacao|sd62_i_codigo|sd62_c_nome|'+
                            'sd62_c_formaorganizacao&nao_mostra=true'+sGet, 'Pesquisa', false
@@ -547,20 +547,20 @@ function js_pesquisala56_i_exame(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?funcao_js='+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?funcao_js='+
                         'parent.js_mostralab_exame1|la08_i_codigo|la08_c_descr', 'Pesquisa', true
                        );
 
   } else {
 
-    if (document.form1.iValor1.value != '') { 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?pesquisa_chave='+
-                           document.form1.iValor1.value+'&funcao_js=parent.js_mostralab_exame', 
+    if (document.form1.iValor1.value != '') {
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_lab_exame', 'func_lab_exame.php?pesquisa_chave='+
+                           document.form1.iValor1.value+'&funcao_js=parent.js_mostralab_exame',
                            'Pesquisa', false
                           );
 
     } else {
-      document.form1.la08_c_descr.value = ''; 
+      document.form1.la08_c_descr.value = '';
     }
 
   }
@@ -568,10 +568,10 @@ function js_pesquisala56_i_exame(mostra) {
 }
 function js_mostralab_exame(chave, erro) {
 
-  document.form1.la08_c_descr.value = chave; 
+  document.form1.la08_c_descr.value = chave;
   if (erro == true) {
 
-    document.form1.iValor1.focus(); 
+    document.form1.iValor1.focus();
     document.form1.iValor1.value = '';
 
   }

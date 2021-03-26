@@ -340,7 +340,7 @@ function js_pesquisal20_codtipocom(mostra){
 	    js_OpenJanelaIframe('','db_iframe_pctipocompra','func_pctipocompra.php?funcao_js=parent.js_mostrapctipocompra1|pc50_codcom|pc50_descr','Pesquisa',true,0);
 	  }else{
 	     if(document.form1.l20_codtipocom.value != ''){
-	        js_OpenJanelaIframe('top.corpo','db_iframe_pctipocompra','func_pctipocompra.php?pesquisa_chave='+document.form1.l20_codtipocom.value+'&funcao_js=parent.js_mostrapctipocompra','Pesquisa',false);
+	        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pctipocompra','func_pctipocompra.php?pesquisa_chave='+document.form1.l20_codtipocom.value+'&funcao_js=parent.js_mostrapctipocompra','Pesquisa',false);
 	     }else{
 	       document.form1.pc50_descr.value = '';
 	     }

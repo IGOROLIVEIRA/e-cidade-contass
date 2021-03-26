@@ -11,30 +11,30 @@ $cldecretopregao->rotulo->label();
     <td nowrap title="<?=@$Tl201_sequencial?>">
        <?=@$Ll201_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l201_sequencial',10,$Il201_sequencial,true,'text',3,"")
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$Tl201_tipodecreto?>">
        <?=@$Ll201_tipodecreto?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("1"=>"REGISTRO DE PREÇO","2"=>"PREGÃO");
 db_select('l201_tipodecreto',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$Tl201_numdecreto?>">
        <?=@$Ll201_numdecreto?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l201_numdecreto',10,$Il201_numdecreto,true,'text',$db_opcao,"")
 ?>
@@ -44,7 +44,7 @@ db_input('l201_numdecreto',10,$Il201_numdecreto,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tl201_datadecreto?>">
        <?=@$Ll201_datadecreto?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l201_datadecreto',@$l201_datadecreto_dia,@$l201_datadecreto_mes,@$l201_datadecreto_ano,true,'text',$db_opcao,"")
 ?>
@@ -54,7 +54,7 @@ db_inputdata('l201_datadecreto',@$l201_datadecreto_dia,@$l201_datadecreto_mes,@$
     <td nowrap title="<?=@$Tl201_datapublicacao?>">
        <?=@$Ll201_datapublicacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l201_datapublicacao',@$l201_datapublicacao_dia,@$l201_datapublicacao_mes,@$l201_datapublicacao_ano,true,'text',$db_opcao,"")
 ?>
@@ -68,7 +68,7 @@ db_inputdata('l201_datapublicacao',@$l201_datapublicacao_dia,@$l201_datapublicac
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_decretopregao','func_decretopregao.php?funcao_js=parent.js_preenchepesquisa|l201_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_decretopregao','func_decretopregao.php?funcao_js=parent.js_preenchepesquisa|l201_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_decretopregao.hide();

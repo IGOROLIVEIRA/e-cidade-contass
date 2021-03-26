@@ -99,10 +99,10 @@ $clrotulo->label("l20_codigo");
 
 function js_pesquisa_liclicita(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?criterioadjudicacao=true&funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?criterioadjudicacao=true&funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
   }else{
      if(document.form1.l20_codigo.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
        document.form1.l20_codigo.value = '';
      }

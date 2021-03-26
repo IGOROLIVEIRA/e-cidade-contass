@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -34,7 +34,7 @@ include("classes/db_rhestagioquesitopergunta_classe.php");
 include("classes/db_rhestagioquesitoresposta_classe.php");
 $clrhestagioquesitopergunta = new cl_rhestagioquesitopergunta;
 $clrhestagioquesitoresposta = new cl_rhestagioquesitoresposta;
- 
+
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 33;
 $db_botao = false;
@@ -46,20 +46,20 @@ if(isset($excluir)){
 
   if($clrhestagioquesitoresposta->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clrhestagioquesitoresposta->erro_msg; 
+  }
+  $erro_msg = $clrhestagioquesitoresposta->erro_msg;
   $clrhestagioquesitopergunta->excluir($h53_sequencial);
   if($clrhestagioquesitopergunta->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clrhestagioquesitopergunta->erro_msg; 
+  }
+  $erro_msg = $clrhestagioquesitopergunta->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clrhestagioquesitopergunta->sql_record($clrhestagioquesitopergunta->sql_query($chavepesquisa)); 
+   $result = $clrhestagioquesitopergunta->sql_record($clrhestagioquesitopergunta->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -73,8 +73,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmrhestagioquesitopergunta.php");
@@ -110,7 +110,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.rhestagioquesitoresposta.disabled=false;
-         top.corpo.iframe_rhestagioquesitoresposta.location.href='rec1_rhestagioquesitoresposta001.php?db_opcaoal=33&h54_rhestagioquesitopergunta=".@$h53_sequencial."';
+         CurrentWindow.corpo.iframe_rhestagioquesitoresposta.location.href='rec1_rhestagioquesitoresposta001.php?db_opcaoal=33&h54_rhestagioquesitopergunta=".@$h53_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('rhestagioquesitoresposta');";

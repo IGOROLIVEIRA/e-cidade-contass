@@ -9,7 +9,7 @@ $clcodclass->rotulo->label();
     <td nowrap title="<?=@$Tc51_codcla?>">
        <?=@$Lc51_codcla?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c51_codcla',2,$Ic51_codcla,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('c51_codcla',2,$Ic51_codcla,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc51_descr?>">
        <?=@$Lc51_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c51_descr',50,$Ic51_descr,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('c51_descr',50,$Ic51_descr,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_codclass','func_codclass.php?funcao_js=parent.js_preenchepesquisa|c51_codcla','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_codclass','func_codclass.php?funcao_js=parent.js_preenchepesquisa|c51_codcla','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_codclass.hide();

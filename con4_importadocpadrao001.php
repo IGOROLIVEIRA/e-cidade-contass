@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require ("libs/db_stdlib.php");
@@ -50,13 +50,13 @@ $db_opcao = 1;
 $db_botao = true;
 $sqlerro = false;
 if (isset ($documento) && $documento != "") {
-  
+
 	db_inicio_transacao();
 	$result_doc = $cldb_documentopadrao->sql_record($cldb_documentopadrao->sql_query_file($documento));
 
   if ($cldb_documentopadrao->numrows > 0) {
 		db_fieldsmemory($result_doc,0);
-    
+
 		$cldb_documento->db03_instit = db_getsession("DB_instit");
 		$cldb_documento->db03_tipodoc = $db60_tipodoc;
 		$cldb_documento->db03_descr = substr($db60_descr,0,28)."(IMP_PADRAO)";
@@ -70,7 +70,7 @@ if (isset ($documento) && $documento != "") {
 	} else {
 		$sqlerro = true;
 	}
-  
+
 	if ($sqlerro == false) {
 		$result_paragpadrao = $cldb_docparagpadrao->sql_record($cldb_docparagpadrao->sql_query($documento, null, "*", "db62_ordem"));
 		$numrows_parag = $cldb_docparagpadrao->numrows;
@@ -78,7 +78,7 @@ if (isset ($documento) && $documento != "") {
 			db_fieldsmemory($result_paragpadrao, $w);
 			$ordem = $db62_ordem;
 			if ($sqlerro == false) {
-			
+
         $cldb_paragrafo->db02_espaca      = $db61_espaco;
 				$cldb_paragrafo->db02_inicia      = $db61_inicia;
 				$cldb_paragrafo->db02_alinha      = $db61_alinha;
@@ -124,9 +124,9 @@ if (isset ($documento) && $documento != "") {
 /*
 echo "<script>
           parent.document.formaba.parag.disabled=false;
-          top.corpo.iframe_parag.location.href='con4_docparag003.php?db03_docum=$db03_docum';
+          CurrentWindow.corpo.iframe_parag.location.href='con4_docparag003.php?db03_docum=$db03_docum';
           parent.mo_camada('parag');
-          top.corpo.iframe_doc.location.href='con4_docparag004.php?chavepesquisa=$db03_docum';
+          CurrentWindow.corpo.iframe_doc.location.href='con4_docparag004.php?chavepesquisa=$db03_docum';
       </script>";
 */
 ?>

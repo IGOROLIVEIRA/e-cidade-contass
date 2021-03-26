@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -53,8 +53,8 @@ $clempautoriza->rotulo->label();
   db_app::load("strings.js");
   db_app::load("grid.style.css");
   db_app::load("estilos.css");
-  db_app::load("widgets/dbmessageBoard.widget.js");  
-  db_app::load("dbcomboBox.widget.js");   
+  db_app::load("widgets/dbmessageBoard.widget.js");
+  db_app::load("dbcomboBox.widget.js");
 ?>
 
 
@@ -70,36 +70,36 @@ $clempautoriza->rotulo->label();
 
   <fieldset style="margin-top:50px; width: 500px;">
     <legend><strong>Filtros para Pesquisa</strong></legend>
-    
+
     <table  align="left"  cellpadding="2" cellspacing="2" border="0">
-    
-      <tr> 
+
+      <tr>
         <td  align="left" nowrap title=""> <b>
-          <? db_ancora("Autorizações de : ","js_autorizacao(1,true);",1);?>  
+          <? db_ancora("Autorizações de : ","js_autorizacao(1,true);",1);?>
         </td>
         <td align="left" nowrap>
           <?
-             db_input("autorizacao1",10,"",true,"text",4,"onchange='js_autorizacao(1,false);'"); 
+             db_input("autorizacao1",10,"",true,"text",4,"onchange='js_autorizacao(1,false);'");
           ?>
           </b>
         </td>
-        
+
         <td  align="left" nowrap title=""> <b>
-          <? db_ancora("Até : ","js_autorizacao(2,true);",1);?>  
+          <? db_ancora("Até : ","js_autorizacao(2,true);",1);?>
         </td>
         <td align="left" nowrap>
           <?
-             db_input("autorizacao2",10,"",true,"text",4,"onchange='js_autorizacao(2,false);'"); 
+             db_input("autorizacao2",10,"",true,"text",4,"onchange='js_autorizacao(2,false);'");
           ?>
           </b>
-        </td>       
-      </tr>    
-    
+        </td>
+      </tr>
+
       <tr>
         <td align="left" nowrap title="Emissão de:">
            <b>Data de Emissão de : </b>
         </td>
-        <td align="left"> 
+        <td align="left">
           <?
             db_inputdata('datainicial',null ,null, null,true,'text',1);
           ?>
@@ -107,23 +107,23 @@ $clempautoriza->rotulo->label();
         <td align="left" nowrap title="Emissão Até:">
            <b>Até : </b>
         </td>
-        <td align="left"> 
+        <td align="left">
           <?
             db_inputdata('datafinal',null ,null, null,true,'text',1);
           ?>
-        </td>       
+        </td>
       </tr>
 
       <tr>
         <td colspan="1" align="left" nowrap title="Emissão de:">
-           <b> 
-                <? 
+           <b>
+                <?
                  db_ancora("Dotação : ","js_pesquisarh72_coddot(true);", 1);
-               ?>           
-           
+               ?>
+
            </b>
         </td>
-        <td colspan="3" align="left"> 
+        <td colspan="3" align="left">
           <?
             db_input("dotacao",10,"",true,"text",1, "onchange='js_pesquisarh72_coddot(false);'");
           ?>
@@ -131,15 +131,15 @@ $clempautoriza->rotulo->label();
       </tr>
 
     </table>
-    
+
   </fieldset>
-<br>  
-<input type="button" value="Pesquisar" name="pequisar" onclick="js_pesquisar();">  
-   
-</form>  
+<br>
+<input type="button" value="Pesquisar" name="pequisar" onclick="js_pesquisar();">
+
+</form>
 
 
-</center>   
+</center>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
@@ -158,29 +158,29 @@ function js_autorizacao(tp, mostra) {
 
 	if(mostra==true){
 		if (tp == 1) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_autoriza','func_empautoriza.php?funcao_js=parent.js_mostraempautorizacao1|e54_autori&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autoriza','func_empautoriza.php?funcao_js=parent.js_mostraempautorizacao1|e54_autori&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',true);
 		} else {
-			js_OpenJanelaIframe('top.corpo','db_iframe_autoriza','func_empautoriza.php?funcao_js=parent.js_mostraempautorizacao2|e54_autori&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',true);
-		}	
+			js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autoriza','func_empautoriza.php?funcao_js=parent.js_mostraempautorizacao2|e54_autori&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',true);
+		}
   }else{
 	   if (tp == 1) {
        if(document.form1.autorizacao1.value != ''){
-          js_OpenJanelaIframe('top.corpo','db_iframe_autoriza','func_empautoriza.php?pesquisa_chave='+document.form1.autorizacao1.value+'&funcao_js=parent.js_mostraempautorizacao11&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',false);
+          js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autoriza','func_empautoriza.php?pesquisa_chave='+document.form1.autorizacao1.value+'&funcao_js=parent.js_mostraempautorizacao11&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',false);
        }else{
          document.form1.autorizacao1.value = '';
        }
 	   } else {
 	     if(document.form1.autorizacao2.value != ''){
-	        js_OpenJanelaIframe('top.corpo','db_iframe_autoriza','func_empautoriza.php?pesquisa_chave='+document.form1.autorizacao2.value+'&funcao_js=parent.js_mostraempautorizacao21&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',false);
+	        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_autoriza','func_empautoriza.php?pesquisa_chave='+document.form1.autorizacao2.value+'&funcao_js=parent.js_mostraempautorizacao21&param_depart=<?=db_getsession("DB_coddepto")?>','Pesquisa',false);
 	     }else{
 	       document.form1.autorizacao1ate.value = '';
-	     }		   
-	   }  
+	     }
+	   }
   }
 }
 
 function js_mostraempautorizacao1(chave,erro){
-	document.form1.autorizacao1.value = chave; 
+	document.form1.autorizacao1.value = chave;
   if(erro==true){
     document.form1.autorizacao1.focus();
     document.form1.autorizacao1.value = '';
@@ -192,12 +192,12 @@ function js_mostraempautorizacao11(chave1, erro) {
 	if(erro == true) {
 		alert(chave1);
 		document.form1.autorizacao1.value = '';
-	}	
+	}
   db_iframe_autoriza.hide();
 }
 
 function js_mostraempautorizacao2(chave,erro){
-	document.form1.autorizacao2.value = chave; 
+	document.form1.autorizacao2.value = chave;
   if(erro==true){
     document.form1.autorizacao2.focus();
     document.form1.autorizacao2.value = '';
@@ -209,16 +209,16 @@ function js_mostraempautorizacao21(chave1, erro) {
 	if(erro == true) {
 		alert(chave1);
 		document.form1.autorizacao2.value = '';
-	}	
+	}
   db_iframe_autoriza.hide();
 }
 
 //pesquisa dotacao
 function js_pesquisarh72_coddot(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('', 
-                        'db_iframe_orcdotacao', 
-                        'func_orcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot', 
+    js_OpenJanelaIframe('',
+                        'db_iframe_orcdotacao',
+                        'func_orcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot',
                         'Pesquisar Dotações',true);
   }else{
     js_OpenJanelaIframe('',
@@ -230,13 +230,13 @@ function js_pesquisarh72_coddot(mostra){
   }
 }
 function js_mostraorcdotacao(chave,erro) {
-  
+
   if (erro == true) {
-   
-    document.form1.dotacao.focus(); 
-    document.form1.dotacao.value = ''; 
+
+    document.form1.dotacao.focus();
+    document.form1.dotacao.value = '';
   }
-  
+
 }
 function js_mostraorcdotacao1(chave1) {
 
@@ -254,10 +254,10 @@ function js_montaWindow() {
 	      sContent += "     <td> <input type='button' value='Confirmar' onclick='js_modificarReservas();' /></td>        ";
 	      sContent += "     <td> <input type='button' value='Fechar' onclick='windowAutorizacoes.destroy();' />  </td>    ";
 	      sContent += "   </tr>                                                                                           ";
-	    	sContent += " </table>                                                                                          "; 
+	    	sContent += " </table>                                                                                          ";
 	      sContent += "</div>                                                                                             ";
 
-	     
+
 	  windowAutorizacoes  = new windowAux('wndAutorizacoes', 'Lista de Autorizações', (screen.availWidth - 130), (screen.availHeight-250));
 	  windowAutorizacoes.setContent(sContent);
 	  windowAutorizacoes.allowCloseWithEsc(false);
@@ -285,16 +285,16 @@ function js_gridAutorizacoes() {
 	                                            '150px',
 	                                            '20px'
 	                                           ));
-	  
+
 	  oGridAutorizacoes.setCellAlign(new Array( 'right'  ,
 	                                            'center'  ,
 	                                            'left',
 	                                            'right',
 	                                            'left',
-	                                            'right'  
+	                                            'right'
 	                                           ));
-	  
-	  
+
+
 	  oGridAutorizacoes.setHeader(new Array( 'Autorização',
 	                                         'Data de Emissão',
 	                                         'Credor',
@@ -302,25 +302,25 @@ function js_gridAutorizacoes() {
 	                                         'Resumo',
 	                                         'Valor'
 	                                        ));
-	                                       
+
 	  oGridAutorizacoes.setHeight((screen.availHeight-450));
 	  oGridAutorizacoes.show($('gridAutorizacoes'));
 
-	  
+
 	}
-	
+
 function js_pesquisar(){
-	
+
 	  var iAutorizacao1  = $F('autorizacao1');
 	  var iAutorizacao2  = $F('autorizacao2');
 	  var sDataIni       = $F('datainicial');
 	  var sDataFim       = $F('datafinal');
 	  var iDotacao       = $F('dotacao');
-	   
+
 	  js_montaWindow();
-	  
+
 	  oGridAutorizacoes .clearAll(true);
-	  
+
 
 	  var oParametros              = new Object();
 	  var msgDiv                   = "Carregando Lista de Autorizações\n Aguarde ...";
@@ -330,44 +330,44 @@ function js_pesquisar(){
 	  oParametros.sDataIni         = sDataIni;
 	  oParametros.sDataFim         = sDataFim;
 	  oParametros.iDotacao         = iDotacao;
-	    
-	  
+
+
 	  js_divCarregando(msgDiv,'msgBox');
-	   
+
 	   var oAjaxLista  = new Ajax.Request(sURLRPC,
 	                                             {method: "post",
 	                                              parameters:'json='+Object.toJSON(oParametros),
 	                                              onComplete: js_retornoAutorizacoes
-	                                             });   
+	                                             });
 
-	  
+
 
 	}
 
 function js_retornoAutorizacoes(oAjax) {
-    
+
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
-   
+
   if (oRetorno.status == 1) {
 
-    oRetorno.dados.each( 
-         function (oDado, iInd) {       
+    oRetorno.dados.each(
+         function (oDado, iInd) {
 
-            aRow = new Array();                                                              
+            aRow = new Array();
             aRow[0]  = oDado.autorizacao;
             aRow[1]  = oDado.dtEmis;
             aRow[2]  = oDado.credor;
             aRow[3]  = "<a onclick='js_saldoDotacao("+oDado.dotacoes+");return false;' href='#'>"+oDado.dotacoes+"</a>";;
             aRow[4]  = oDado.resumo.urlDecode();
-            aRow[5]  = js_formatar(oDado.valor, 'f');	            
+            aRow[5]  = js_formatar(oDado.valor, 'f');
             oGridAutorizacoes.addRow(aRow);
          });
-    
-    oGridAutorizacoes.renderRows();  
+
+    oGridAutorizacoes.renderRows();
     if (oRetorno.dados.length == 0) {
       oGridAutorizacoes.setStatus('Nenhuma Autorização encontrada!');
-    }  
+    }
   } else {
    alert(oRetorno.message.urlDecode());
   }
@@ -379,7 +379,7 @@ function js_modificarReservas() {
 
   var aAutorizacoesSelecionadas = oGridAutorizacoes.getSelection('object');
   if (aAutorizacoesSelecionadas.length == 0) {
-    
+
     alert('Nenhuma Autorização foi escolhida.');
     return false;
   }
@@ -400,7 +400,7 @@ function js_modificarReservas() {
                                      {method: "post",
                                       parameters:'json='+Object.toJSON(oParametros),
                                       onComplete: js_retornoModificarAutorizacoes
-                                     });   
+                                     });
 }
 
 function js_retornoModificarAutorizacoes(oAjax) {
@@ -408,7 +408,7 @@ function js_retornoModificarAutorizacoes(oAjax) {
   js_removeObj('msgBox');
   var oRetorno = eval('('+oAjax.responseText+')');
   if (oRetorno.status == 1) {
-  
+
     alert('Reservas de saldo canceladas com sucesso');
     js_pesquisar();
   } else {
@@ -421,15 +421,15 @@ function js_saldoDotacao(iDotacao) {
                       'func_saldoorcdotacao.php?o58_coddot='+iDotacao,
                       true
                      );
- $('Jandb_iframe_saldo_dotacao').style.zIndex='100000';                     
+ $('Jandb_iframe_saldo_dotacao').style.zIndex='100000';
 }
 function js_pesquisaAutorizacao(iAutorizacao) {
   js_OpenJanelaIframe('',
                       'db_iframe_autorizacao',
-                      'func_empempenhoaut001.php?fechar=top.corpo.db_iframe_autorizacao&e54_autori='+iAutorizacao,
+                      'func_empempenhoaut001.php?fechar=CurrentWindow.corpo.db_iframe_autorizacao&e54_autori='+iAutorizacao,
                       true
                      );
- $('Jandb_iframe_autorizacao').style.zIndex='100000';                     
+ $('Jandb_iframe_autorizacao').style.zIndex='100000';
 }
 
 </script>

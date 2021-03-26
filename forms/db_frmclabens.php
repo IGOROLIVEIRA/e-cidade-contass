@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: patrim
@@ -49,7 +49,7 @@ if($db_opcao==1){
 $sSql 						 = $clcfpatri->sql_query_file(null,"t06_codcla");
 $result_t06_codcla = db_query($sSql);
 
-db_fieldsmemory($result_t06_codcla,0); 
+db_fieldsmemory($result_t06_codcla,0);
 ?>
 <form class="container" name="form1" id="form1" method="post" action="<?=$ac;?>">
   <fieldset>
@@ -72,8 +72,8 @@ db_fieldsmemory($result_t06_codcla,0);
           }
            db_input('estrutura_altera',4,$It64_codcla,true,'hidden',3);
         }
-        
-        //if(isset($db_atualizar) && (empty($estrutura_altera) || (isset($estrutura_altera) && str_replace(".","",$t64_class) != $estrutura_altera))){ 
+
+        //if(isset($db_atualizar) && (empty($estrutura_altera) || (isset($estrutura_altera) && str_replace(".","",$t64_class) != $estrutura_altera))){
         //  $cldb_estrut->db_estrut_inclusao($t64_class,$mascara,"clabens","t64_class","t64_analitica");
         //  if($cldb_estrut->erro_status==0){
         //    $err_estrutural = $cldb_estrut->erro_msg;
@@ -81,7 +81,7 @@ db_fieldsmemory($result_t06_codcla,0);
         //    $focar=true;
         //  }
         // }
-        
+
         $cldb_estrut->autocompletar = true;
         $cldb_estrut->mascara = true;
         $cldb_estrut->reload  = true;
@@ -95,7 +95,7 @@ db_fieldsmemory($result_t06_codcla,0);
         <td nowrap title="<?=@$Tt64_descr?>">
           <?=@$Lt64_descr?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('t64_descr',50,$It64_descr,true,'text',$db_opcao,"")
           ?>
@@ -118,7 +118,7 @@ db_fieldsmemory($result_t06_codcla,0);
             db_ancora("Conta Plano","js_pesquisat86_conplano(true);",$db_opcao);
           ?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('t86_conplano',6,$It86_conplano,true,'text',$db_opcao," onchange='js_pesquisat86_conplano(false);'")
           ?>
@@ -134,7 +134,7 @@ db_fieldsmemory($result_t06_codcla,0);
             db_ancora("Conta Depreciação","js_pesquisat86_conplanodepreciacao(true);",$db_opcao);
           ?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('t86_conplanodepreciacao',6,$It86_conplanodepreciacao,true,'text',$db_opcao," onchange='js_pesquisat86_conplanodepreciacao(false);'")
           ?>
@@ -169,7 +169,7 @@ db_fieldsmemory($result_t06_codcla,0);
             		$x[db_utils::fieldsMemory($rsSql,$i)->t24_sequencial] = db_utils::fieldsMemory($rsSql,$i)->t24_descricao;
             	}
             }
-            
+
             db_select('t64_bemtipos',$x,true,$db_opcao,"");
           ?>
         </td>
@@ -179,7 +179,7 @@ db_fieldsmemory($result_t06_codcla,0);
           <? db_ancora($Lt64_benstipodepreciacao, "js_pesquisaTipoDepreciacao(true)", $db_opcao);?>
         </td>
         <td>
-        	<?php 
+        	<?php
         	  db_input("t64_benstipodepreciacao", 8, $It64_benstipodepreciacao, true, "text", $db_opcao, "onchange='js_pesquisaTipoDepreciacao(false);'");
         	  db_input("t46_descricao", 38, '', true, "text", 3);
         	?>
@@ -190,15 +190,15 @@ db_fieldsmemory($result_t06_codcla,0);
           <?=$Lt64_vidautil;?>
         </td>
         <td>
-        	<?php 
+        	<?php
         	  db_input("t64_vidautil", 8, $It64_vidautil, true, "text", $db_opcao);
         	?>
         </td>
-      </tr> 
+      </tr>
     </table>
   </fieldset>
-  <input onclick="return js_validaFormularioClassificacao();" 
-         name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
+  <input onclick="return js_validaFormularioClassificacao();"
+         name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
          type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
@@ -232,7 +232,7 @@ function js_validaFormularioClassificacao() {
     alert(_M("patrimonial.patrimonio.db_frmclabens.informe_observacao"));
     return false;
   }
-  
+
   if (iPlano == "") {
 
     alert(_M("patrimonial.patrimonio.db_frmclabens.informe_plano_conta"));
@@ -256,7 +256,7 @@ function js_validaFormularioClassificacao() {
     alert(_M("patrimonial.patrimonio.db_frmclabens.informe_vida_util"));
     return false;
   }
-  return true; 
+  return true;
 }
 
 
@@ -264,14 +264,14 @@ function js_pesquisaTipoDepreciacao(lMostra) {
 
   if (lMostra) {
     var sUrlOpen = "func_benstipodepreciacao.php?limita=true&funcao_js=parent.js_preencheTipoDepreciacao|t46_sequencial|t46_descricao";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_benstipodepreciacao', sUrlOpen, 'Pesquisa Depreciação', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_benstipodepreciacao', sUrlOpen, 'Pesquisa Depreciação', true);
   }else{
      if($("t64_benstipodepreciacao").value != ''){
 
  			 var sUrlOpen = "func_benstipodepreciacao.php?limita=true&pesquisa_chave="+$('t64_benstipodepreciacao').value+"&funcao_js=parent.js_completaTipoDepreciacao";
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_benstipodepreciacao', sUrlOpen, 'Pesquisa Depreciação', false); 
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_benstipodepreciacao', sUrlOpen, 'Pesquisa Depreciação', false);
      }else{
-       $("t64_benstipodepreciacao").value = ''; 
+       $("t64_benstipodepreciacao").value = '';
      }
   }
 }
@@ -287,28 +287,28 @@ function js_completaTipoDepreciacao(sDescricao, lErro) {
 
   $("t46_descricao").value = sDescricao;
   if (lErro) {
-    $("t64_benstipodepreciacao").focus(); 
-    $("t64_benstipodepreciacao").value = ""; 
+    $("t64_benstipodepreciacao").focus();
+    $("t64_benstipodepreciacao").value = "";
   }
 }
 
 
 function js_pesquisat86_conplano(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c60_codcon|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c60_codcon|c60_descr','Pesquisa',true);
   }else{
-     if(document.form1.t86_conplano.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+document.form1.t86_conplano.value+'&funcao_js=parent.js_mostraconplano','Pesquisa',false);
+     if(document.form1.t86_conplano.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+document.form1.t86_conplano.value+'&funcao_js=parent.js_mostraconplano','Pesquisa',false);
      }else{
-       document.form1.descricaoconta.value = ''; 
+       document.form1.descricaoconta.value = '';
      }
   }
 }
 function js_mostraconplano(chave,erro){
-  document.form1.descricaoconta.value = chave; 
-  if(erro==true){ 
-    document.form1.t86_conplano.focus(); 
-    document.form1.t86_conplano.value = ''; 
+  document.form1.descricaoconta.value = chave;
+  if(erro==true){
+    document.form1.t86_conplano.focus();
+    document.form1.t86_conplano.value = '';
   }
 }
 function js_mostraconplano1(chave1,chave2){
@@ -322,27 +322,27 @@ function js_mostraconplano1(chave1,chave2){
  */
 function js_pesquisat86_conplanodepreciacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplanodepreciacao1|c60_codcon|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplanodepreciacao1|c60_codcon|c60_descr','Pesquisa',true);
   }else{
-     if(document.form1.t86_conplanodepreciacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+$F('t86_conplanodepreciacao')+'&funcao_js=parent.js_mostraconplanodepreciacao','Pesquisa',false);
+     if(document.form1.t86_conplanodepreciacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+$F('t86_conplanodepreciacao')+'&funcao_js=parent.js_mostraconplanodepreciacao','Pesquisa',false);
      }else{
-       document.form1.descricaocontadepreciacao.value = ''; 
+       document.form1.descricaocontadepreciacao.value = '';
      }
   }
 }
 function js_mostraconplanodepreciacao(sDescricao,lErro) {
-  
+
   document.form1.descricaocontadepreciacao.value = sDescricao;
-   
-  if(lErro){ 
-    $('t86_conplanodepreciacao').focus(); 
-    $('t86_conplanodepreciacao').value = ''; 
+
+  if(lErro){
+    $('t86_conplanodepreciacao').focus();
+    $('t86_conplanodepreciacao').value = '';
   }
 }
 
 function js_mostraconplanodepreciacao1(iConta, sDescricao){
-  
+
   $('t86_conplanodepreciacao').value   = iConta;
   $('descricaocontadepreciacao').value = sDescricao;
   db_iframe_conplano.hide();
@@ -350,7 +350,7 @@ function js_mostraconplanodepreciacao1(iConta, sDescricao){
 
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens002.php?funcao_js=parent.js_preenchepesquisa|t64_codcla','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens002.php?funcao_js=parent.js_preenchepesquisa|t64_codcla','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_clabens.hide();

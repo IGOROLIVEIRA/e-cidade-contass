@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -88,8 +88,8 @@ db_postmemory($HTTP_POST_VARS);
           </fieldset>
         </td>
       </tr>
- 
-      <tr> 
+
+      <tr>
         <td>
           <fieldset style="width:100%"><legend align='left'><b>Medicamentos</b></legend>
             <table  border="0"  align="center" width='100%'>
@@ -101,7 +101,7 @@ db_postmemory($HTTP_POST_VARS);
                 </td>
                 <td>
                   <?
-                  db_input('fa01_i_codigo', 10, @$Ifa01_i_codigo, true, 'text', 1, 
+                  db_input('fa01_i_codigo', 10, @$Ifa01_i_codigo, true, 'text', 1,
                            " onchange='js_pesquisafa01_i_medicamento(false);'"
                           );
                   db_input('m60_descr', 55, @$Im60_descr, true, 'text', 3, '');
@@ -116,13 +116,13 @@ db_postmemory($HTTP_POST_VARS);
                   &nbsp;
                 </td>
                 <td>
-                  <select multiple size='8' name='select_medicamento[]' id='select_medicamento' 
+                  <select multiple size='8' name='select_medicamento[]' id='select_medicamento'
                     style="width: 80%;" onDblClick="js_excluir_item_medicamento();">
                   </select>
                 </td>
               </tr>
             </table>
-          </fieldset>    
+          </fieldset>
         </td>
       </tr>
 
@@ -130,15 +130,15 @@ db_postmemory($HTTP_POST_VARS);
         <td>
           <b>Tratamento sem movimentação: </b>
           <?
-          $aX = array('1' => 'Apresentar junto com os outros', '2' => 'Não apresente os pacientes', 
+          $aX = array('1' => 'Apresentar junto com os outros', '2' => 'Não apresente os pacientes',
                       '3' => 'Apresentar somente os sem movimentação'
                      );
-          db_select('iMovimentacao', $aX, true, ""); 
+          db_select('iMovimentacao', $aX, true, "");
           ?>
           &nbsp;&nbsp;  </nbr><b>Relatório exato conforme os medicamentos: </b>
           <?
           $aY = array('1' => 'NÃO', '2' => 'SIM' );
-          db_select('iExato', $aY, true, ""); 
+          db_select('iExato', $aY, true, "");
           ?>
         </td>
       </tr>
@@ -154,7 +154,7 @@ db_postmemory($HTTP_POST_VARS);
   </center>
 </form>
 <?
-        db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), 
+        db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
                 db_getsession("DB_anousu"), db_getsession("DB_instit")
                );
 ?>
@@ -216,26 +216,26 @@ function js_excluir_item_departamento() {
   }
 
 }
-  
+
 function js_pesquisacoddepto(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_almoxdepto.php?funcao_js='+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_almoxdepto.php?funcao_js='+
                         'parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true
                        );
 
   } else {
 
-    if (document.form1.coddepto.value != '') { 
+    if (document.form1.coddepto.value != '') {
 
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_almoxdepto.php?pesquisa_chave='+
-                          document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart', 
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_almoxdepto.php?pesquisa_chave='+
+                          document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart',
                           'Pesquisa', false
                          );
 
     } else {
-      document.form1.descrdepto.value = ''; 
+      document.form1.descrdepto.value = '';
     }
 
   }
@@ -244,14 +244,14 @@ function js_pesquisacoddepto(mostra) {
 
 function js_mostradepart(chave, erro) {
 
-  document.form1.descrdepto.value = chave; 
+  document.form1.descrdepto.value = chave;
   if (erro == true) {
 
-    document.form1.coddepto.focus(); 
+    document.form1.coddepto.focus();
     document.form1.coddepto.value = '';
 
   } else {
-    
+
     document.form1.descrdepto.value            = chave;
     document.form1.lancar_departamento.onclick = js_incluir_item_departamento;
 
@@ -281,7 +281,7 @@ function js_incluir_item_medicamento() {
     var testa                     = false;
 
     for(var x = 0; x < F.length; x++) {
-    
+
       if (F.options[x].value == valor) {
 
         testa = true;
@@ -331,7 +331,7 @@ function js_pesquisafa01_i_medicamento(mostra) {
   if (mostra == true) {
 
     js_OpenJanelaIframe('', 'db_iframe_far_matersaude', 'func_far_matersaude.php?funcao_js='+
-                        'parent.js_mostramatersaude1|fa01_i_codigo|m60_descr', 
+                        'parent.js_mostramatersaude1|fa01_i_codigo|m60_descr',
                         'Pesquisa Medicamento', true
                        );
 
@@ -340,7 +340,7 @@ function js_pesquisafa01_i_medicamento(mostra) {
     if (document.form1.fa01_i_codigo.value != '') {
 
       js_OpenJanelaIframe('', 'db_iframe_far_matersaude', 'func_far_matersaude.php?pesquisa_chave='+
-                          document.form1.fa01_i_codigo.value+'&funcao_js=parent.js_mostramatersaude', 
+                          document.form1.fa01_i_codigo.value+'&funcao_js=parent.js_mostramatersaude',
                           'Pesquisa Medicamento', false
                          );
 
@@ -354,10 +354,10 @@ function js_pesquisafa01_i_medicamento(mostra) {
 
 function js_mostramatersaude(chave, erro) {
 
-  document.form1.m60_descr.value = chave; 
+  document.form1.m60_descr.value = chave;
   if (erro == true) {
 
-    document.form1.fa01_i_codigo.focus(); 
+    document.form1.fa01_i_codigo.focus();
     document.form1.fa01_i_codigo.value = '';
 
   } else {
@@ -385,7 +385,7 @@ function js_validaenvio() {
 }
 
 function js_mandadados() {
- 
+
   if (js_validaenvio()) {
 
     vir                 = '';
@@ -394,16 +394,16 @@ function js_mandadados() {
     medicamentos        = '&medicamentos=';
     sMov                = '&iMovimentacao='+document.form1.iMovimentacao.value;
     iExato              = '&iExato='+document.form1.iExato.value;
-    
+
     for(x = 0; x < document.form1.select_departamento.length; x++) {
 
       departamentos       += vir + document.form1.select_departamento.options[x].value;
-      nomes_departamentos += vir + document.form1.select_departamento.options[x].value + 
+      nomes_departamentos += vir + document.form1.select_departamento.options[x].value +
                              ' - ' + document.form1.select_departamento.options[x].innerHTML;
       vir                  = ',';
 
     }
-    
+
     vir = '';
     for(x = 0; x < document.form1.select_medicamento.length; x++) {
 
@@ -411,9 +411,9 @@ function js_mandadados() {
       vir = ',';
 
     }
-      
 
-    jan = window.open('far2_admmedicamento002.php?'+departamentos+medicamentos+nomes_departamentos+sMov+iExato, '', 
+
+    jan = window.open('far2_admmedicamento002.php?'+departamentos+medicamentos+nomes_departamentos+sMov+iExato, '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 '
                      );
     jan.moveTo(0, 0);

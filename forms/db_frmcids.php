@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -35,7 +35,7 @@ $clcids->rotulo->label();
     <td nowrap title="<?=@$Tsd22_c_codigo?>">
        <?=@$Lsd22_c_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd22_c_codigo',6,$Isd22_c_codigo,true,'text',$db_opcao,"")
 ?>
@@ -45,7 +45,7 @@ db_input('sd22_c_codigo',6,$Isd22_c_codigo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsd22_v_descr?>">
        <?=@$Lsd22_v_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd22_v_descr',80,$Isd22_v_descr,true,'text',$db_opcao,"")
 ?>
@@ -55,7 +55,7 @@ db_input('sd22_v_descr',80,$Isd22_v_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsd22_d_validade?>">
        <?=@$Lsd22_d_validade?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('sd22_d_validade',@$sd22_d_validade_dia,@$sd22_d_validade_mes,@$sd22_d_validade_ano,true,'text',$db_opcao,"")
 ?>
@@ -65,7 +65,7 @@ db_inputdata('sd22_d_validade',@$sd22_d_validade_dia,@$sd22_d_validade_mes,@$sd2
     <td nowrap title="<?=@$Tsd22_c_restrsexo?>">
        <?=@$Lsd22_c_restrsexo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('H'=>'Somente Homens','F'=>'Somente Mulheres','G'=>'Tanto Homem ou Mulher');
 db_select('sd22_c_restrsexo',$x,true,$db_opcao,"");
@@ -79,7 +79,7 @@ db_select('sd22_c_restrsexo',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cids','func_cids.php?funcao_js=parent.js_preenchepesquisa|sd22_c_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cids','func_cids.php?funcao_js=parent.js_preenchepesquisa|sd22_c_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_cids.hide();

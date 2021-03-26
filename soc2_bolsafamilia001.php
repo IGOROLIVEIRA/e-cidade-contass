@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -41,7 +41,7 @@ $rsDocumentoTemplate   = $oDaoDocumento->sql_record($sSqlDocumentoTemplate);
 
 $lBloqueiaBotao = '';
 if ($oDaoDocumento->numrows == 0) {
-  $lBloqueiaBotao = 'disabled';	
+  $lBloqueiaBotao = 'disabled';
 }
 
 $oRotuloCampos = new rotulocampo();
@@ -66,7 +66,7 @@ $oRotuloCampos->label("as02_nis");
       <table>
         <tr>
           <td nowrap="nowrap" style="font-weight: bold;">
-          
+
             <? db_ancora("Código da Familia : ","js_pesquisaCidadaoFamilia(true, false);",1);?>
           <td nowrap="nowrap">
             <?php
@@ -84,7 +84,7 @@ $oRotuloCampos->label("as02_nis");
             ?>
           </td>
           <td>
-          <?php 
+          <?php
             db_input("as02_nis", 10, $Ias02_nis, true, "text", 1, "onchange='js_pesquisaCidadaoFamilia(false, true);'");
           ?>
           </td>
@@ -101,7 +101,7 @@ $oRotuloCampos->label("as02_nis");
         </tr>
       </table>
      </fieldset>
-     <input type="button" id="btnImprimir" value="Imprimir" 
+     <input type="button" id="btnImprimir" value="Imprimir"
             style="margin-top: 10px;" <?php echo $lBloqueiaBotao != ''?$lBloqueiaBotao:'';?>/>
      </form>
   </center>
@@ -112,7 +112,7 @@ $oRotuloCampos->label("as02_nis");
 
 $('btnImprimir').disabled = true;
 function limpaForm() {
-  
+
   $('iFamilia').value   											= '';
   $('favorecido').value 											= '';
   $('as02_nis').value                         = '';
@@ -123,42 +123,42 @@ function limpaForm() {
 limpaForm();
 
 /**
- * Função para busca e validação do NIS 
+ * Função para busca e validação do NIS
  */
  function js_pesquisaCidadaoFamilia(lMostra, lNis) {
 
    var sUrl = 'func_cidadaofamilia.php?';
-   
+
    if (lMostra == true) {
 
      sUrl += 'funcao_js=parent.js_mostraFamilia|as04_sequencial|ov02_nome|as15_codigofamiliarcadastrounico|as02_nis';
-   	js_OpenJanelaIframe('top.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisar Código da Família', true);
+   	js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisar Código da Família', true);
    } else {
-     
+
      sUrl += 'funcao_js=parent.js_mostraFamilia2';
      sUrl += '&sTipoRetorno=relatorio';
      sUrl += '&sNIS='+lNis;
 
      if ($F('as15_codigofamiliarcadastrounico') == '' && $F('as02_nis') == "") {
-       
+
        $('as04_sequencial').value = '';
        return false;
      }
-     
+
    	if (!lNis && $F('as15_codigofamiliarcadastrounico') != '') {
    	  sUrl += '&pesquisa_chave='+$F('as15_codigofamiliarcadastrounico');
    	} else if (lNis && $F('as02_nis') != "") {
    	  sUrl += '&pesquisa_chave='+$F('as02_nis');
      }
 
-   	js_OpenJanelaIframe('top.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisar Código da Família', false);
+   	js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cidadaofamilia', sUrl, 'Pesquisar Código da Família', false);
    }
  }
- 
+
 function js_mostraFamilia (iSeqFamilia, sFavorecido, iCodigoFamilia, iNis) {
 
   if (iSeqFamilia != "") {
-    
+
     $('iFamilia').value   											= iSeqFamilia;
     $('favorecido').value 											= sFavorecido;
     $('as15_codigofamiliarcadastrounico').value = iCodigoFamilia;
@@ -171,7 +171,7 @@ function js_mostraFamilia (iSeqFamilia, sFavorecido, iCodigoFamilia, iNis) {
 function js_mostraFamilia2 (iCodigoFamilia, lErro, sFavorecido, iSeqFamilia, iNis) {
 
   if (lErro) {
-    
+
     $('iFamilia').value                         = "";
     $('as15_codigofamiliarcadastrounico').value = "";
     $('iNis').value                             = "";
@@ -198,14 +198,14 @@ function validaImpressao() {
   var oObject         = new Object();
   oObject.exec        = "familiaAtendeCriterioTarifaSocial";
   oObject.iFamilia    = $F('iFamilia');
-  
+
   var objAjax   = new Ajax.Request (sRpc,{
                                          method:'post',
-                                         parameters:'json='+Object.toJSON(oObject), 
+                                         parameters:'json='+Object.toJSON(oObject),
                                          onComplete:js_retornoAtendeCriterioTarifaSocial
                                         }
                                    );
-  
+
 }
 
 function js_retornoAtendeCriterioTarifaSocial(oJson) {
@@ -215,7 +215,7 @@ function js_retornoAtendeCriterioTarifaSocial(oJson) {
   var oRetorno = eval("("+oJson.responseText+")");
 
   if (!oRetorno.lAtendeCriterioTarifaSocial) {
-    
+
     alert(oRetorno.message.urlDecode());
     $('btnImprimir').disabled = true;
     return false;
@@ -227,7 +227,7 @@ $('btnImprimir').observe('click', function() {
 });
 
 /**
- * Função que emite o Documento 
+ * Função que emite o Documento
  */
 function js_imprime() {
 
@@ -244,12 +244,12 @@ function js_imprime() {
 </script>
 <?php
 if ($oDaoDocumento->numrows == 0) {
-  
+
   $sCaminhoMenu = db_stdClass::getCaminhoMenu(7782);
   $sMensagem  = "Não há templates cadastrados para esse documento.\\n";
   $sMensagem .= "Para cadastrar o arquivo para template acesse o menu:\\n";
   $sMensagem .= "{$sCaminhoMenu}, \\n";
-  $sMensagem .= "e informe um template para o código 29 - Declaracao Tarifa Social."; 
+  $sMensagem .= "e informe um template para o código 29 - Declaracao Tarifa Social.";
   db_msgbox($sMensagem);
 }
 ?>

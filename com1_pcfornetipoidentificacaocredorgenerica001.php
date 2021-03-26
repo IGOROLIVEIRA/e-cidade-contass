@@ -1,30 +1,30 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
- 
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -47,18 +47,18 @@ require_once("dbforms/db_funcoes.php");
 
 <center>
   <form id="form1">
-    
+
     <fieldset style="width: 550px">
       <legend><b>Inscrição Genérica</b></legend>
       <table width="100%">
         <tr>
           <td>
-            <?php 
+            <?php
               db_ancora("<b>Inscrição Genérica:</b>", "js_pesquisaInscricaoGenerica(true);", 1);
             ?>
           </td>
           <td>
-            <?php 
+            <?php
               db_input("c25_sequencial", 10, null, true, "text", 1, "onchange='js_pesquisaInscricaoGenerica(false);'");
               db_input("c25_descricao", 40, null, true, "text", 3);
             ?>
@@ -67,10 +67,10 @@ require_once("dbforms/db_funcoes.php");
       </table>
     </fieldset>
     <br />
-    <input type="button" name="btnSalvarInscricaoGenerica" id="btnSalvarInscricaoGenerica" value="Incluir" />    
+    <input type="button" name="btnSalvarInscricaoGenerica" id="btnSalvarInscricaoGenerica" value="Incluir" />
   </form>
   <br>
-  
+
   <fieldset style="width: 550px;">
     <legend><b>Inscrições Cadastradas</b></legend>
     <div id="ctnGridInscricaoCadastrada">
@@ -102,19 +102,19 @@ $('btnSalvarInscricaoGenerica').observe('click', function() {
   js_divCarregando("Aguarde, incluindo inscrição...", "msgBox");
   var oAjax       = new Ajax.Request(sUrlRPC,
                                       {method: 'post',
-                                       parameters: 'json='+Object.toJSON(oParam), 
+                                       parameters: 'json='+Object.toJSON(oParam),
                                        onComplete: function (oAjax) {
 
                                            js_removeObj("msgBox");
                                            var oRetorno = eval("("+oAjax.responseText+")");
                                            alert(oRetorno.message.urlDecode());
                                            if (oRetorno.status == 1) {
-  
+
                                              $("c25_sequencial").value = "";
                                              $("c25_descricao").value = "";
                                              js_pesquisaInscricaoCadastrada();
                                            }
-                                         } 
+                                         }
                                       });
 });
 
@@ -142,11 +142,11 @@ function js_pesquisaInscricaoCadastrada() {
   var oParam         = new Object();
   oParam.exec        = "getInscricoesCadastradas";
   oParam.pc60_numcgm = oGet.pc81_cgmforn;
-  
+
   var oAjax       = new Ajax.Request(sUrlRPC,
                                       {method: 'post',
-                                       parameters: 'json='+Object.toJSON(oParam), 
-                                       onComplete: js_preencheGridInscricoes 
+                                       parameters: 'json='+Object.toJSON(oParam),
+                                       onComplete: js_preencheGridInscricoes
                                       });
 }
 
@@ -181,14 +181,14 @@ function js_excluirInscricao(iInscricao) {
   js_divCarregando("Aguarde, excluindo inscrição...", "msgBox");
   var oAjax       = new Ajax.Request(sUrlRPC,
                                     {method: 'post',
-                                     parameters: 'json='+Object.toJSON(oParam), 
+                                     parameters: 'json='+Object.toJSON(oParam),
                                      onComplete: function (oAjax) {
 
                                        js_removeObj("msgBox");
                                        var oRetorno = eval("("+oAjax.responseText+")");
                                        alert(oRetorno.message.urlDecode());
                                        js_pesquisaInscricaoCadastrada();
-                                     } 
+                                     }
                                     });
 }
 /**
@@ -199,11 +199,11 @@ function js_pesquisaInscricaoGenerica(lMostra) {
   if (lMostra) {
 
     var sUrlOpenTrue = 'func_tipoidentificacaocredorgenerica.php?funcao_js=parent.js_preencheInscricaoGenerica|c25_sequencial|c25_descricao';
-    js_OpenJanelaIframe('top.corpo.iframe_pcforneidentificacaocredor','db_iframe_pcforneidentificacaocredor', sUrlOpenTrue, 'Pesquisa Inscrição Genérica',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcforneidentificacaocredor','db_iframe_pcforneidentificacaocredor', sUrlOpenTrue, 'Pesquisa Inscrição Genérica',true);
   } else {
 
     var sUrlOpenFalse = 'func_tipoidentificacaocredorgenerica.php?pesquisa_chave='+$F('c25_sequencial')+'&funcao_js=parent.js_completaInscricaoGenerica';
-    js_OpenJanelaIframe('top.corpo.iframe_pcforneidentificacaocredor','db_iframe_pcforneidentificacaocredor', sUrlOpenFalse, 'Pesquisa Inscrição Genérica', false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcforneidentificacaocredor','db_iframe_pcforneidentificacaocredor', sUrlOpenFalse, 'Pesquisa Inscrição Genérica', false);
   }
 }
 

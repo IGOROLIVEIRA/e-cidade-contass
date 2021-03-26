@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_utils.php");
@@ -48,11 +48,11 @@ $iAnoUsu    = db_getsession('DB_anousu');
 $iDptoUsu   = db_getsession('DB_coddepto');
 
 if (isset($oGet->relpermempenho) && $oGet->relpermempenho = 't') {
-	
+
 	$sValueBotao   = "Imprimir";
 	$sName         = "imprimir";
 } else {
-	
+
 	$sValueBotao   = "Pesquisar";
 	$sName         = "pesquisar";
 }
@@ -82,11 +82,11 @@ if (isset($oGet->relpermempenho) && $oGet->relpermempenho = 't') {
     <td>
 			<fieldset>
 			<legend><b>Relatório de Permissões de Empenhos</b></legend>
-			  <table border="0" cellspacing="0" cellpadding="0" align="center">  
-			    <tr> 
-			      <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+			  <table border="0" cellspacing="0" cellpadding="0" align="center">
+			    <tr>
+			      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 			        <table border="0" align="center">
-			          <tr> 
+			          <tr>
 			            <td nowrap>
 			              <table border="0">
 			                <tr>
@@ -94,11 +94,11 @@ if (isset($oGet->relpermempenho) && $oGet->relpermempenho = 't') {
 			                    <fieldset>
 			                      <?
 			                        db_selinstit('',300,100);
-			                      ?>      
-			                    </fieldset>                 
+			                      ?>
+			                    </fieldset>
 			                  </td>
-			                </tr>             
-			              </table>      
+			                </tr>
+			              </table>
 			            </td>
 			          </tr>
 			          <tr>
@@ -107,7 +107,7 @@ if (isset($oGet->relpermempenho) && $oGet->relpermempenho = 't') {
 			                <tr>
 			                  <td>
 			                    <?
-			                    
+
 			                      $clauxiliarusuario = new cl_arquivo_auxiliar;
 			                      $clauxiliarusuario->nome_botao              = "db_lanca_usuarios";
 			                      $clauxiliarusuario->cabecalho               = "<strong>Usuarios Selecionados</strong>";
@@ -124,19 +124,19 @@ if (isset($oGet->relpermempenho) && $oGet->relpermempenho = 't') {
                             $clauxiliarusuario->tipo                    = 2;
                             $clauxiliarusuario->top                     = 1;
                             $clauxiliarusuario->linhas                  = 10;
-			                      $clauxiliarusuario->funcao_gera_formulario();  
-			                      
-			                    ?>                 
-			                  </td>              
-			                </tr>      
+			                      $clauxiliarusuario->funcao_gera_formulario();
+
+			                    ?>
+			                  </td>
+			                </tr>
 			              </table>
 			            </td>
 			            <td nowrap>
 			              <table border="0">
 			                <tr>
 			                  <td>
-			                    <?		                    
-			                    
+			                    <?
+
 			                      $clauxiliardbpto = new cl_arquivo_auxiliar;
 			                      $clauxiliardbpto->nome_botao              = "db_lanca_dptos";
 			                      $clauxiliardbpto->cabecalho               = "<strong>Departamentos Selecionados</strong>";
@@ -153,43 +153,43 @@ if (isset($oGet->relpermempenho) && $oGet->relpermempenho = 't') {
 			                      $clauxiliardbpto->tipo                    = 2;
 			                      $clauxiliardbpto->top                     = 1;
 			                      $clauxiliardbpto->linhas                  = 10;
-			                      $clauxiliardbpto->funcao_gera_formulario(); 
-			                      
-			                    ?>                
+			                      $clauxiliardbpto->funcao_gera_formulario();
+
+			                    ?>
 			                  </td>
-			                </tr>          
-			              </table>    
+			                </tr>
+			              </table>
 			            </td>
-			          </tr>        
+			          </tr>
 			          <tr>
 			            <td nowrap>
 			              <b>Exercício:&nbsp;</b>
 			              <?
-			                $sSqlAnoExercicio  = " select distinct db20_anousu     "; 
+			                $sSqlAnoExercicio  = " select distinct db20_anousu     ";
 			                $sSqlAnoExercicio .= " from db_permemp                 ";
-			                $sSqlAnoExercicio .= " order by db20_anousu desc       "; 
+			                $sSqlAnoExercicio .= " order by db20_anousu desc       ";
 			                $rsAnoExercicio    = db_query($sSqlAnoExercicio);
 			                $iNumRows          = pg_num_rows($rsAnoExercicio);
-			                
+
 			                $aAnoExercicio = array();
 			                if ($iNumRows > 0) {
-			                  
+
 			                  for ($iInd = 0; $iInd < $iNumRows; $iInd++) {
-			                    
+
 			                    $oAnoExercicio        = db_utils::fieldsMemory($rsAnoExercicio,$iInd);
-			                    $aAnoExercicio[$oAnoExercicio->db20_anousu] = $oAnoExercicio->db20_anousu;  
-			                  }               
+			                    $aAnoExercicio[$oAnoExercicio->db20_anousu] = $oAnoExercicio->db20_anousu;
+			                  }
 			                }
-			                
+
 			                db_select('db20_anousu',$aAnoExercicio,true,4,"");
-			              ?>          
+			              ?>
 			            </td>
 			          </tr>
 			        </table>
 			      </td>
 			    </tr>
 			  </table>
-			</fieldset>    
+			</fieldset>
     </td>
   </tr>
   <tr>
@@ -209,41 +209,41 @@ if (isset($oGet->relpermempenho) && $oGet->relpermempenho = 't') {
 </body>
 <script>
 function js_emite(){
-   
+
   var sBotao         = document.form1.botao.value;
   var sListaInstit   = document.form1.db_selinstit.value;
   var sListaFiltros  = parent.iframe_filtros.js_atualiza_variavel_retorno();
   var iExercicio     = document.form1.db20_anousu.value;
   var sListaUsuarios = "";
   var sListaDptos    = "";
-  
+
   var sVirgula = "";
   for (x = 0; x < document.form1.usuarioSel.length; x++) {
-  
+
     sListaUsuarios += sVirgula+document.form1.usuarioSel.options[x].value;
     sVirgula = ",";
-  }  
-  
+  }
+
   var sVirgula = "";
   for (i = 0; i < document.form1.deptoSel.length; i++) {
-  
+
     sListaDptos += sVirgula+document.form1.deptoSel.options[i].value;
     sVirgula = ",";
-  }   
-  
+  }
+
   var sQuery  = "?";
       sQuery += "listainstit="+sListaInstit;
       sQuery += "&listafiltros="+sListaFiltros;
       sQuery += "&listausuarios="+sListaUsuarios;
       sQuery += "&listadptos="+sListaDptos;
-      sQuery += "&anousu="+iExercicio;   
+      sQuery += "&anousu="+iExercicio;
 
   if (sBotao == 'Pesquisar') {
 
     var iTamListaFiltros = new Number(sListaFiltros.length);
-    
+
     if (iTamListaFiltros > 8060) {
-    
+
       var sMsg  = "Usuário: \n\n";
           sMsg += " Filtros selecionados não suportados!\n Filtros selecionados excedeu o tamanho limite.\n\n";
           sMsg += "Administrador: ";
@@ -252,29 +252,29 @@ function js_emite(){
     }
 
     var sUrl = 'func_origempermissao.php'+sQuery
-    js_OpenJanelaIframe('top.corpo.iframe_g1','db_iframe_origempermissao',sUrl,'Pesquisa Origem Permissão',true,'0',1); 
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g1','db_iframe_origempermissao',sUrl,'Pesquisa Origem Permissão',true,'0',1);
   } else {
 
     var variavel = 0;
         variavel++;
-        
+
     document.form1.listainstit.value   = sListaInstit;
     document.form1.listafiltros.value  = sListaFiltros;
     document.form1.listausuarios.value = sListaUsuarios;
     document.form1.listadptos.value    = sListaDptos;
     document.form1.anousu.value        = iExercicio;
 
-    var sUrl = 'con2_relpermempenho002.php';    
+    var sUrl = 'con2_relpermempenho002.php';
     var jan  = window.open("",'relempermissao','width='+(screen.availWidth-5)
                                                        +',height='+(screen.availHeight-40)
                                                        +',scrollbars=1,location=0 ');
-        jan.moveTo(0,0); 
-    
+        jan.moveTo(0,0);
+
     document.form1.target = "relempermissao";
     document.form1.method = "post";
     document.form1.action = "con2_relpermempenho002.php";
     document.form1.submit();
-  }   
+  }
 }
 </script>
 </html>

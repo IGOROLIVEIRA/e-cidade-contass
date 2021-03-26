@@ -12,7 +12,7 @@ $clsaldotransfctb->rotulo->label();
 			<input name="si202_seq" type="hidden" value="<?=@$si202_seq?>">
 			<?=@$Lsi202_codctb?>
 			</td>
-			<td> 
+			<td>
 		<?
 		db_input('si202_codctb',11,$Isi202_codctb,true,'text',$db_opcao,"")
 		?>
@@ -22,7 +22,7 @@ $clsaldotransfctb->rotulo->label();
 			<td nowrap title="<?=@$Tsi202_codfontrecursos?>">
 			<?=@$Lsi202_codfontrecursos?>
 			</td>
-			<td> 
+			<td>
 		<?
 		db_input('si202_codfontrecursos',3,$Isi202_codfontrecursos,true,'text',$db_opcao,"")
 		?>
@@ -32,7 +32,7 @@ $clsaldotransfctb->rotulo->label();
 			<td nowrap title="<?=@$Tsi202_saldofinal?>">
 			<?=@$Lsi202_saldofinal?>
 			</td>
-			<td> 
+			<td>
 		<?
 		db_input('si202_saldofinal',14,$Isi202_saldofinal,true,'text',$db_opcao,"")
 		?>
@@ -46,7 +46,7 @@ $clsaldotransfctb->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_saldotransfctb','func_saldotransfctb.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saldotransfctb','func_saldotransfctb.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_saldotransfctb.hide();

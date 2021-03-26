@@ -41,9 +41,9 @@
         var sUrl2 = 'func_nome.php?pesquisa_chave=' + numcgm + '&funcao_js=parent.js_preenchenomes1';
 
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_nomes', sUrl1, 'Pesquisa Nome Contribuinte', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_nomes', sUrl1, 'Pesquisa Nome Contribuinte', true);
         } else {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_nomes', sUrl2, 'Pesquisa Nome Contribuinte', false);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_nomes', sUrl2, 'Pesquisa Nome Contribuinte', false);
 
             if (numcgm == '') {
                 obj.z01_numcgm.value = '';
@@ -82,9 +82,9 @@
         var sUrl2 = 'func_iptubase.php?pesquisa_chave=' + matri + '&funcao_js=parent.js_preenchematriculas1';
 
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_matriculas', sUrl1, 'Pesquisa Matricula', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_matriculas', sUrl1, 'Pesquisa Matricula', true);
         } else {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_matriculas', sUrl2, 'Pesquisa Matricula', false);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_matriculas', sUrl2, 'Pesquisa Matricula', false);
 
             if (matri != '') {
                 obj.z01_nomematri.value = chave;
@@ -125,9 +125,9 @@
         var sUrl2 = 'func_issbase.php?pesquisa_chave=' + inscr + '&funcao_js=parent.js_preencheinscricoes1';
 
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_inscricoes', sUrl1, 'Pesquisa Inscrição', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_inscricoes', sUrl1, 'Pesquisa Inscrição', true);
         } else {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_inscricoes', sUrl2, 'Pesquisa Inscrição', false);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_inscricoes', sUrl2, 'Pesquisa Inscrição', false);
         }
     }
     function js_preencheinscricoes(chave1, chave2) {

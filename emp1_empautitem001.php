@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -55,9 +55,9 @@ $db_opcao = 1;
 $db_botao = true;
 
 //
-// se a opção abaixo for 'false' não é permitido incluir ítens de desdobramentos diferentes  
+// se a opção abaixo for 'false' não é permitido incluir ítens de desdobramentos diferentes
 //
-$libera_desdobramento = false; 
+$libera_desdobramento = false;
 
 if (isset ($consultando) || isset ($incluir) || isset ($alterar)) {
 
@@ -71,35 +71,35 @@ if (isset ($consultando) || isset ($incluir) || isset ($alterar)) {
 	} else {
     $pc01_servico = pg_result($result, 0, "pc01_servico");
   }
-	//  
-	// o codigo abaixo pega o primeiro ítem que foi incluido na autorização 
+	//
+	// o codigo abaixo pega o primeiro ítem que foi incluido na autorização
 	//
 	if ($sqlerro == false) {
 		$result = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori, null, "e55_item as item, e55_sequen as seq, e55_codele as desdobramento", "e55_sequen"));
     }
 	if ($sqlerro == false && $clempautitem->numrows > 0) {
 		    db_fieldsmemory($result, 0);
-  	  	    // se entramos nesta condição  é porque ja temos ítens incluidos na autorização					
-			//  este teste verifica a existencia de itens com desdobramentos diferentes 
+  	  	    // se entramos nesta condição  é porque ja temos ítens incluidos na autorização
+			//  este teste verifica a existencia de itens com desdobramentos diferentes
 			//  para prefeituras com orçamento no desdobramento isto não é permitido de fato
 			//  para prefeituras com orçamento no elemento isto é facultativo, porém o TCERS não aconselha
-			 
-            // o codigo abaixo procura o codele do item que esta sendo incluido            
+
+            // o codigo abaixo procura o codele do item que esta sendo incluido
 			$result = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item, "o56_codele as desdobramento02"));
 			db_fieldsmemory($result, 0); //$desdobramento2 é o desdobramento a ser incluido
-								
+
             /** aqui esta o código que libera ou não ítens de desdobramentos diferentes */
 			$liberado = true;
 			if ($desdobramento != $pc07_codele   &&  isset($incluir)  && $incluir=='Incluir' ){
 				$liberado = false;
-			}		     	
+			}
 			if ($liberado == false) {
 				$sqlerro = true;
 				$clempautitem->erro_status = "0";
 				$erro_msg = "Desdobramento do item diferente !";
 			} // endif
-	} // endif 
-	
+	} // endif
+
 }
 
 if (empty ($result_elemento) && isset($e55_item) && !empty($e55_item)) {
@@ -113,7 +113,7 @@ if (!isset($lControlaQuantidade)) {
 if (isset ($autori_importa)) {
 	$sqlerro = false;
 	db_inicio_transacao();
-	//rotina para importar da tabela empautitem   
+	//rotina para importar da tabela empautitem
 	if ($sqlerro == false) {
 		$atual_autori = $e55_autori;
     $result = $clempautitem->sql_record($clempautitem->sql_query_file($autori_importa));
@@ -147,7 +147,7 @@ if (isset ($autori_importa)) {
 						}
 					}
 				}
-				//final da rotina  
+				//final da rotina
 
 				if ($liberado == true) {
 
@@ -180,7 +180,7 @@ if (isset ($autori_importa)) {
 	//final
 	//$sqlerro=true;
 	db_fim_transacao($sqlerro);
-} else 
+} else
 	if (isset ($incluir)) {
 		db_inicio_transacao();
 
@@ -191,7 +191,7 @@ if (isset ($autori_importa)) {
 			if ($e55_sequen == '') {
 				$e55_sequen = 1;
 			}
-			//rotina para pegar o codele da tabela pcmaterele      
+			//rotina para pegar o codele da tabela pcmaterele
 			$codele = @ $pc07_codele;
 			//	final
 
@@ -199,10 +199,10 @@ if (isset ($autori_importa)) {
 			$clempautitem->e55_sequen = $e55_sequen;
 			$clempautitem->e55_vlrun = $e55_vluni;
 			$clempautitem->e55_marca = $e55_marca;
-			
+
       //incluindo unidade/referencia na tabela empautitem
       $clempautitem->e55_unid = $e55_unid;
-      
+
 
       $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
 			$clempautitem->incluir($e55_autori, $e55_sequen);
@@ -213,14 +213,14 @@ if (isset ($autori_importa)) {
 				$e55_sequen = $clempautitem->e55_sequen;
 				$e55_autori = $clempautitem->e55_autori;
 			}
-			$sSqlValor  = "update empautoriza "; 
+			$sSqlValor  = "update empautoriza ";
 			$sSqlValor .= "   set e54_valor = (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori} )";
 			$sSqlValor .= " where e54_autori = {$e55_autori}";
 			$rs = db_query($sSqlValor);
 		}
 		// $sqlerro=true;
 		db_fim_transacao($sqlerro);
-	} else 
+	} else
 		if (isset ($alterar)) {
 			db_inicio_transacao();
 			if ($sqlerro == false) {
@@ -230,22 +230,22 @@ if (isset ($autori_importa)) {
         $clempautitem->e55_vlrun = $e55_vluni;
 				$clempautitem->e55_servicoquantidade = $lControlaQuantidade;
 				$clempautitem->e55_marca = $e55_marca;
-        
+
         //incluindo unidade/referencia na tabela empautitem
-      	$clempautitem->e55_unid = $e55_unid;		
+      	$clempautitem->e55_unid = $e55_unid;
 
       	$clempautitem->alterar($e55_autori, $e55_sequen);
 				$erro_msg = $clempautitem->erro_msg;
 				if ($clempautitem->erro_status == "0") {
 					$sqlerro = true;
 				}
-				$sSqlValor  = "update empautoriza "; 
+				$sSqlValor  = "update empautoriza ";
 			    $sSqlValor .= "   set e54_valor = (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori} )";
 			    $sSqlValor .= " where e54_autori = {$e55_autori}";
 			    $rs = db_query($sSqlValor);
 			}
 			db_fim_transacao($sqlerro);
-		} else 
+		} else
 			if (isset ($excluir)) {
 				$sqlerro = false;
 				db_inicio_transacao();
@@ -256,7 +256,7 @@ if (isset ($autori_importa)) {
 				if ($clempautitem->erro_status == "0") {
 					$sqlerro = true;
 				}
-				$sSqlValor  = "update empautoriza "; 
+				$sSqlValor  = "update empautoriza ";
 			    $sSqlValor .= "   set e54_valor = (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori} )";
 			    $sSqlValor .= " where e54_autori = {$e55_autori}";
 		   	    $rs = db_query($sSqlValor);
@@ -269,7 +269,7 @@ if (isset ($autori_importa)) {
 	db_fieldsmemory($result, 0);
 	//echo "<BR><BR>".($clpcmaterele->sql_query(null,null,"pc07_codele,o56_descr","","pc07_codmater=$e55_item and o56_elemento = '$o56_elemento'" ));
 	$result_elemento = $clpcmaterele->sql_record($clpcmaterele->sql_query(null, null, "pc07_codele,o56_descr", "", "pc07_codmater=$e55_item and o56_elemento = '$o56_elemento'"));
-	
+
 }
 ?>
 <html>
@@ -282,8 +282,8 @@ if (isset ($autori_importa)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 		<? include ("forms/db_frmempautitem.php");?>
     </center>
@@ -307,9 +307,9 @@ if (isset ($incluir) || isset ($alterar) || isset ($excluir) || isset ($autori_i
 	} else {
 		// variavel $tot_valor é gerada no formulário
 		echo "
-			<script> 
-				top.corpo.iframe_empautidot.js_calc('$tot_valor');\n
-			</script> 
+			<script>
+				CurrentWindow.corpo.iframe_empautidot.js_calc('$tot_valor');\n
+			</script>
 		   ";
 
 		//db_msgbox($erro_msg);

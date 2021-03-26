@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Farmácia
@@ -52,7 +52,7 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
       }
       ?>
     </td>
-    <td> 
+    <td>
       <?
       if (isset($lBotao)) {
 
@@ -72,7 +72,7 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
       db_ancora(@$Lfa10_i_programa,"js_pesquisafa10_i_programa(true);",$db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('fa10_i_programa',10,@$Ifa10_i_programa,true,'text',$db_opcao," onchange='js_pesquisafa10_i_programa(false);'");
       db_input('fa12_c_descricao',50,$Ifa12_c_descricao,true,'text',3,'');
@@ -88,7 +88,7 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
       <fieldset style="width:85%"><legend><b>Lançar Medicamentos Continuados</b></legend>
         <table border="0" align="left">
           <tr>
-            <td colspan="3"> 
+            <td colspan="3">
               <?
               db_input('fa10_i_codigo', 5, $Ifa10_i_codigo, true, 'hidden', $db_opcao, '');
               db_input('fa11_i_codigo', 5, $Ifa11_i_codigo, true, 'hidden', $db_opcao, '');
@@ -102,9 +102,9 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
               db_ancora(@$Lfa10_i_medicamento, "js_pesquisafa10_i_medicamento(true);", $db_opcao);
               ?>
             </td>
-            <td colspan="2" nowrap> 
+            <td colspan="2" nowrap>
               <?
-              db_input('fa10_i_medicamento', 10, $Ifa10_i_medicamento, true, 'text', $db_opcao, 
+              db_input('fa10_i_medicamento', 10, $Ifa10_i_medicamento, true, 'text', $db_opcao,
                        " onchange='js_pesquisafa10_i_medicamento(false);'"
                       );
               db_input('m60_descr', 50, $Im60_descr, true, 'text', $db_opcao, '');
@@ -115,18 +115,18 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
             <td nowrap title="<?=@$Tfa10_i_quantidade?>">
               <?=@$Lfa10_i_quantidade?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('fa10_i_quantidade',10,$Ifa10_i_quantidade,true,'text',$db_opcao,"")
               ?>
             </td>
-            <td rowspan="3" align="right"> 
+            <td rowspan="3" align="right">
               <fieldset style="width:60%"><legend><b> Validade </b></legend>
                 <table border="0">
-                  <tr>               
+                  <tr>
           			    <td nowrap title="<?=@$Tfa10_d_dataini?>">
                       <?=@$Lfa10_d_dataini?>
-                    </td>         
+                    </td>
                     <td>
                       <?
                       if (!isset($fa10_d_dataini)) {
@@ -139,7 +139,7 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
 
                       }
                       db_inputdata('fa10_d_dataini', @$fa10_d_dataini_dia, @$fa10_d_dataini_mes, @$fa10_d_dataini_ano,
-                                   true, 'text', $db_opcao, 
+                                   true, 'text', $db_opcao,
                                    " onKeyDown='return js_controla_tecla_enter(this,event);' "
                                   );
                       ?>
@@ -149,25 +149,25 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
 	                  <td nowrap title="<?=@$Tfa10_d_datafim?>">
                       <?=@$Lfa10_d_datafim?>
                     </td>
-	                  <td> 
+	                  <td>
                       <?
-                      db_inputdata('fa10_d_datafim', @$fa10_d_datafim_dia, @$fa10_d_datafim_mes, 
-                                   @$fa10_d_datafim_ano, true, 'text', $db_opcao, 
+                      db_inputdata('fa10_d_datafim', @$fa10_d_datafim_dia, @$fa10_d_datafim_mes,
+                                   @$fa10_d_datafim_ano, true, 'text', $db_opcao,
                                    " onKeyDown='return js_controla_tecla_enter(this,event);' ".
                                    " onchange=\"js_troca();\"", '', '', 'parent.js_troca();'
                                   );
                       ?>
                     </td>
                   </tr>
-                </table> 
-              </fieldset>       
+                </table>
+              </fieldset>
             </td>
           </tr>
           <tr>
             <td nowrap title="<?=@$Tfa10_i_prazo?>">
               <?=@$Lfa10_i_prazo?>
             </td>
-            <td colspan="2"> 
+            <td colspan="2">
               <?
               db_input('fa10_i_prazo', 10, $Ifa10_i_prazo, true, 'text', $db_opcao, "onchange='js_prazo();'")
               ?>
@@ -177,7 +177,7 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
             <td nowrap title="<?=@$Tfa10_i_margem?>">
               <?=@$Lfa10_i_margem?>
             </td>
-            <td colspan="2"> 
+            <td colspan="2">
               <?
               db_input('fa10_i_margem', 10, $Ifa10_i_margem, true, 'text', $db_opcao, "onchange='js_margem();'");
               ?>
@@ -187,7 +187,7 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
             <td nowrap title="<?=@$Tfa11_t_obs?>">
               <?=@$Lfa11_t_obs?>
             </td>
-            <td colspan="2"> 
+            <td colspan="2">
               <?
               db_textarea('fa11_t_obs', 1, 60, @$Ifa11_t_obs, true, 'text', $db_opcao,
                           " onKeyDown='return js_controla_tecla_enter(this,event);' "
@@ -210,27 +210,27 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
     <td>
       <?
       if (!isset($opcao) && isset($db_opcao) && $db_opcao==3) {
-        $db_botao=false;	  
+        $db_botao=false;
       }
       ?>
-      <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>" 
-        type="submit" id="db_opcao" 
-        value="<?=($db_opcao == 1 ? "Lançar" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir"))?>" 
-        <?=($db_botao == false ? "disabled" : "")?> 
+      <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>"
+        type="submit" id="db_opcao"
+        value="<?=($db_opcao == 1 ? "Lançar" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir"))?>"
+        <?=($db_botao == false ? "disabled" : "")?>
         <?=($db_botao == false || isset($confirmar) ? "disabled" : "")?>
         onclick="return js_verifica();">
-      <input name="imprimir" type="button" id="imprimir" value="Imprimir Carteirinha" 
+      <input name="imprimir" type="button" id="imprimir" value="Imprimir Carteirinha"
         <?=(!isset($fa11_i_cgsund) ? "disabled" : "");?> onclick="js_carteirinha();">
       <?
       if (!isset($lBotao)) {
       ?>
-        <input name="controle" type="button" id="controle" value="Novo Controle" 
+        <input name="controle" type="button" id="controle" value="Novo Controle"
           onclick='location.href="far1_far_controlemed001.php"'>
       <?
       }
       ?>
-      <input name="cancelar" type="button" id="cancelar" value="Cancelar"  
-        <?=($db_opcao == 1 || isset($incluir) ? "disabled" : "")?> 
+      <input name="cancelar" type="button" id="cancelar" value="Cancelar"
+        <?=($db_opcao == 1 || isset($incluir) ? "disabled" : "")?>
         onclick='location.href="far1_far_controlemed001.php?cancelar&fa11_i_cgsund=<?=@$fa11_i_cgsund?>&z01_v_nome=<?=@$z01_v_nome?>"'>
       <?
       if (isset($lBotao)) {
@@ -248,9 +248,9 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
 <table>
   <tr>
     <td valign="top">
-      <?  
+      <?
       if (isset($fa11_i_cgsund)) {
-        
+
         $sSql   = $oDaoFarControlemed->sql_query('', 'fa11_i_codigo', '', "fa11_i_cgsund = $fa11_i_cgsund");
         $result = $oDaoFarControlemed->sql_record($sSql);
 	      if ($oDaoFarControlemed->numrows > 0) {
@@ -260,7 +260,7 @@ $hoje = date('Y-m-d', db_getsession('DB_datausu'));
        } else {
        	$controle = 0;
        }
-      
+
       $chavepri                             = array("fa10_i_codigo"=>@$fa10_i_codigo);
       $oIframeAlterarExcluir->chavepri      = $chavepri;
       $oIframeAlterarExcluir->sql           = $oDaoFarControlemed->sql_query('', '*', '', "$controle");
@@ -300,21 +300,21 @@ function js_pesquisafa10_i_medicamento(mostra) {
   if (mostra==true) {
     js_OpenJanelaIframe('','db_iframe_far_matersaude','func_far_matersaude.php?funcao_js=parent.js_mostrafar_matersaude1|fa01_i_codigo|m60_descr','Pesquisa',true);
   }else{
-     if (document.form1.fa10_i_medicamento.value != '') { 
+     if (document.form1.fa10_i_medicamento.value != '') {
         js_OpenJanelaIframe('','db_iframe_far_matersaude','func_far_matersaude.php?pesquisa_chave='+document.form1.fa10_i_medicamento.value+'&funcao_js=parent.js_mostrafar_matersaude','Pesquisa',false);
      }else{
-       document.form1.fa01_i_codigo.value = ''; 
-       document.form1.m60_descr.value = ''; 
+       document.form1.fa01_i_codigo.value = '';
+       document.form1.m60_descr.value = '';
      }
   }
 
 }
 function js_mostrafar_matersaude(chave,erro) {
 
-  document.form1.m60_descr.value = chave; 
-  if (erro==true) { 
-    document.form1.fa10_i_medicamento.focus(); 
-    document.form1.fa10_i_medicamento.value = ''; 
+  document.form1.m60_descr.value = chave;
+  if (erro==true) {
+    document.form1.fa10_i_medicamento.focus();
+    document.form1.fa10_i_medicamento.value = '';
   }
 
 }
@@ -330,20 +330,20 @@ function js_pesquisafa10_i_controle(mostra) {
   if (mostra==true) {
     js_OpenJanelaIframe('','db_iframe_far_controle','func_far_controle.php?funcao_js=parent.js_mostrafar_controle1|fa11_i_codigo|fa11_i_codigo','Pesquisa',true);
   }else{
-     if (document.form1.fa10_i_controle.value != '') { 
+     if (document.form1.fa10_i_controle.value != '') {
         js_OpenJanelaIframe('','db_iframe_far_controle','func_far_controle.php?pesquisa_chave='+document.form1.fa10_i_controle.value+'&funcao_js=parent.js_mostrafar_controle','Pesquisa',false);
      }else{
-       document.form1.fa11_i_codigo.value = ''; 
+       document.form1.fa11_i_codigo.value = '';
      }
   }
 
 }
 function js_mostrafar_controle(chave,erro) {
 
-  document.form1.fa11_i_codigo.value = chave; 
-  if (erro==true) { 
-    document.form1.fa10_i_controle.focus(); 
-    document.form1.fa10_i_controle.value = ''; 
+  document.form1.fa11_i_codigo.value = chave;
+  if (erro==true) {
+    document.form1.fa10_i_controle.focus();
+    document.form1.fa10_i_controle.value = '';
   }
 
 }
@@ -359,20 +359,20 @@ function js_pesquisafa10_i_programa(mostra) {
   if (mostra==true) {
     js_OpenJanelaIframe('','db_iframe_far_programa','func_far_programa.php?funcao_js=parent.js_mostrafar_programa1|fa12_i_codigo|fa12_c_descricao','Pesquisa',true);
   }else{
-     if (document.form1.fa10_i_programa.value != '') { 
+     if (document.form1.fa10_i_programa.value != '') {
         js_OpenJanelaIframe('','db_iframe_far_programa','func_far_programa.php?pesquisa_chave='+document.form1.fa10_i_programa.value+'&funcao_js=parent.js_mostrafar_programa','Pesquisa',false);
      }else{
-       document.form1.fa12_i_codigo.value = ''; 
+       document.form1.fa12_i_codigo.value = '';
      }
   }
 
 }
 function js_mostrafar_programa(chave,erro) {
 
-  document.form1.fa12_c_descricao.value = chave; 
-  if (erro==true) { 
-    document.form1.fa10_i_programa.focus(); 
-    document.form1.fa10_i_programa.value = ''; 
+  document.form1.fa12_c_descricao.value = chave;
+  if (erro==true) {
+    document.form1.fa10_i_programa.focus();
+    document.form1.fa10_i_programa.value = '';
   }
 
 }
@@ -391,16 +391,16 @@ function js_pesquisafa11_i_cgsund(mostra) {
      if (document.form1.fa11_i_cgsund.value != '') {
         js_OpenJanelaIframe('','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form1.fa11_i_cgsund.value+'&funcao_js=parent.js_mostracgs_und','Pesquisa',false);
      }else{
-       document.form1.z01_i_cgsund.value = ''; 
+       document.form1.z01_i_cgsund.value = '';
      }
   }
 
 }
 function js_mostracgs_und(chave,erro) {
 
-  document.form1.z01_v_nome.value = chave; 
-  if (erro==true) { 
-    document.form1.fa11_i_cgsund.focus(); 
+  document.form1.z01_v_nome.value = chave;
+  if (erro==true) {
+    document.form1.fa11_i_cgsund.focus();
     document.form1.fa11_i_cgsund.value = '';
   }else{
     document.form1.z01_v_nome.value=chave;
@@ -419,7 +419,7 @@ function js_mostracgs_und1(chave1,chave2) {
 
 
 function js_pesquisafa11_i_cgsundBotao() {
-  
+
   if (document.form1.fa11_i_cgsund.value != '') {
     js_OpenJanelaIframe('','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form1.fa11_i_cgsund.value+'&funcao_js=parent.js_mostracgs_undBotao','Pesquisa',false);
   }
@@ -427,9 +427,9 @@ function js_pesquisafa11_i_cgsundBotao() {
 }
 function js_mostracgs_undBotao(chave,erro) {
 
-  document.form1.z01_v_nome.value = chave; 
-  if (erro==true) { 
-    document.form1.fa11_i_cgsund.focus(); 
+  document.form1.z01_v_nome.value = chave;
+  if (erro==true) {
+    document.form1.fa11_i_cgsund.focus();
     document.form1.fa11_i_cgsund.value = '';
   }else{
     document.form1.z01_v_nome.value=chave;
@@ -439,7 +439,7 @@ function js_mostracgs_undBotao(chave,erro) {
 
 function js_pesquisa() {
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_far_controlemed','func_far_controlemed.php?funcao_js=parent.js_preenchepesquisa|fa10_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_controlemed','func_far_controlemed.php?funcao_js=parent.js_preenchepesquisa|fa10_i_codigo','Pesquisa',true);
 
 }
 function js_preenchepesquisa(chave) {
@@ -455,7 +455,7 @@ function js_preenchepesquisa(chave) {
 function js_carteirinha() {
 
  jan = window.open('far2_carteira001.php?fa10_i_codigo='+document.form1.fa10_i_codigo.value+'&fa11_i_cgsund='+document.form1.fa11_i_cgsund.value+'&fa10_d_dataini='+document.form1.fa10_d_dataini.value+'&fa10_d_datafim'+document.form1.fa10_d_datafim.value+'&fa10_i_medicamento'+document.form1.fa10_i_medicamento.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
- jan.moveTo(0,0);	
+ jan.moveTo(0,0);
 
 }
 function js_margem() {
@@ -463,17 +463,17 @@ function js_margem() {
 		if (Number(document.form1.fa10_i_margem.value) > (Number(document.form1.fa10_i_prazo.value)/2)) {
 			alert("Margem tem que ser menor ou igual a metade da frequência.");
 			document.form1.fa10_i_margem.value = "";
-		}	
+		}
 
 }
 function js_prazo() {
 
-	if (document.form1.fa10_i_margem.value!='') {	
+	if (document.form1.fa10_i_margem.value!='') {
 		if (Number(document.form1.fa10_i_margem.value) > (Number(document.form1.fa10_i_prazo.value)/2)) {
 			alert("Margem tem que ser menor ou igual a metade da frequência.");
 			document.form1.fa10_i_margem.value = "";
 		}
-  }	
+  }
 
 }
 function js_troca() {
@@ -486,7 +486,7 @@ function js_troca() {
     dFim = new Date(aFim[2], aFim[1], aFim[0]);
 
   	if (dFim < dIni) {
-      
+
       alert("Data final menor que a data inicial");
 			document.form1.fa10_d_datafim.value = "";
 		  document.form1.fa10_d_datafim_dia.value = "";
@@ -533,7 +533,7 @@ function js_verifica() {
       alert('Data inicial não informado!');
       return false;
    }
-   
+
    return true;
 
 }

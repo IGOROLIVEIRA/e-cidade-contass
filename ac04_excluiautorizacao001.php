@@ -131,7 +131,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
   if (lMostrar == true) {
 
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4';
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_acordo',
                         sUrl,
                         'Pesquisar Acordo',
@@ -143,7 +143,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+oTxtCodigoAcordo.getValue()+
                  '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4';
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           'Pesquisar Acordo',
@@ -209,7 +209,7 @@ function js_retornoGetAutorizacoesAcordo(oAjax) {
     oRetorno.autorizacoes.each(function (oAutorizacao, iLinha) {
 
       if ((oAutorizacao.dataanulacao != '' && oAutorizacao.empenho == '') || (oAutorizacao.dataanulacao != '' && (parseFloat(oAutorizacao.e54_valor) == parseFloat(oAutorizacao.valoranulado)))) {
-          
+
           var aLinha = new Array();
           aLinha[0]  = oAutorizacao.codigo;
           aLinha[1]  = "<a href='#' onclick='js_visualizarAutorizacao("+oAutorizacao.codigo+");return false'>";

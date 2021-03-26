@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -69,22 +69,22 @@ if ( !$db_botao ) {
       <legend>Manutenção de Regras</legend>
 
       <table border="0" align="center">
-      
+
         <tr>
           <td nowrap title="<?php echo $Trh123_descricao; ?>">
              <?php echo $Lrh123_descricao; ?>
           </td>
-          <td> 
+          <td>
             <?php db_input('rh123_descricao', 30, 0, true, 'text', $db_opcao, 'class="field-size-max"'); ?>
           </td>
         </tr>
-      
+
         <tr>
           <td nowrap title="<?php echo $Trh123_selecao; ?>">
              <?php db_ancora('<strong>Seleção:</strong>',"js_pesquisaSelecao(true);",$db_opcao); ?>
           </td>
-          <td> 
-            <?php 
+          <td>
+            <?php
               db_input('rh123_selecao', 8, $Irh123_selecao, true, 'text', $db_opcao, "onchange='js_pesquisaSelecao(false);'");
               db_input('r44_descr', 50, $Ir44_descr, true, 'text', 3);
              ?>
@@ -96,16 +96,16 @@ if ( !$db_botao ) {
             <div id="rubricas"></div>
           </td>
         </tr>
-      
+
         <tr>
           <td nowrap title="<?php echo $Trh123_comportamento; ?>">
              <?php echo $Lrh123_comportamento; ?>
           </td>
-          <td> 
+          <td>
             <?php db_select('rh123_comportamento', $aComportamento, true, $db_opcao); ?>
           </td>
         </tr>
-      
+
       </table>
 
     </fieldset>
@@ -124,17 +124,17 @@ if ( !$db_botao ) {
 <script type="text/javascript">
 
 /**
- * RPC 
+ * RPC
  */
 var sUrlRPC = 'pes1_rhrubricas.RPC.php';
 
 /**
- * Instituicao da sessao 
+ * Instituicao da sessao
  */
 var iInstituicao = '<?php echo $iInstituicao; ?>';
 
 /**
- * dbpocao 
+ * dbpocao
  * 1 - incluir
  * 2 - alterar
  * 3 - excluir
@@ -144,7 +144,7 @@ var iOpcao    = '<?php echo $db_opcao; ?>';
 var lHabilita = '<?php echo $db_botao; ?>' == '1';
 
 /**
- * Cria lancador de rubricas 
+ * Cria lancador de rubricas
  */
 var oLancadorRubricas = new DBLancador('LancadorRubricas');
 oLancadorRubricas.setNomeInstancia('oLancadorRubricas');
@@ -154,19 +154,19 @@ oLancadorRubricas.setTextoFieldset('Rubricas: ');
 oLancadorRubricas.setParametrosPesquisa('func_rhrubricas.php', ['rh27_rubric' , 'rh27_descr'], 'instit=' + iInstituicao);
 
 /**
- * Quando for exclusão, desabilita grid para lançar rubricas  
+ * Quando for exclusão, desabilita grid para lançar rubricas
  */
 oLancadorRubricas.setHabilitado( lHabilita );
 oLancadorRubricas.show( $('rubricas') );
 oLancadorRubricas.setTipoValidacao('3');
 
 /**
- * Alteração 
+ * Alteração
  */
 if ( iOpcao == 2 || iOpcao == 3 ) {
 
   /**
-   * Busca rubricas cadastrada para regra 
+   * Busca rubricas cadastrada para regra
    */
   (function() {
 
@@ -177,22 +177,22 @@ if ( iOpcao == 2 || iOpcao == 3 ) {
     }
 
     var oParametros  = new Object();
-    oParametros.sExecucao = 'getRubricasRegra';  
+    oParametros.sExecucao = 'getRubricasRegra';
     oParametros.iRegraPonto = $('rh123_sequencial').value;
-    
+
     js_divCarregando('Carregando rubricas...', 'msgBox');
-     
+
     var oAjax = new Ajax.Request(
-      sUrlRPC, 
+      sUrlRPC,
       {
         method     : 'post',
         parameters : 'json=' + Object.toJSON(oParametros),
         onComplete : js_retornoCarregarRubricas
       }
-    );   
+    );
 
     /**
-     * Retorno do RPC 
+     * Retorno do RPC
      * - Adiciona rubricas da regas a grid
      *
      * @param Object $oAjax
@@ -215,7 +215,7 @@ if ( iOpcao == 2 || iOpcao == 3 ) {
       aRubricasLancadas = new Array();
 
       /**
-       * Percorre o array retornado pelo RPC das rubricas da regra e adiciona a grid do DBLancador 
+       * Percorre o array retornado pelo RPC das rubricas da regra e adiciona a grid do DBLancador
        */
       for ( var iIndice = 0; iIndice < oRetorno.aRubricasLancadas.length; iIndice++ ) {
 
@@ -250,8 +250,8 @@ function js_processar() {
   oLancadorRubricas.getRegistros().each(function(oLinhaRubrica) {
     aRubricas.push(oLinhaRubrica.sCodigo);
   });
-  
-  oParametros.sExecucao      = $('processar').name;  
+
+  oParametros.sExecucao      = $('processar').name;
   oParametros.sDescricao     = encodeURIComponent( tagString( $('rh123_descricao').value ) );
   oParametros.iSelecao       = $('rh123_selecao').value;
   oParametros.aRubricas      = aRubricas;
@@ -260,17 +260,17 @@ function js_processar() {
   if ( iOpcao == 2 || iOpcao == 3 ) {
     oParametros.iRegraPonto = $('rh123_sequencial').value;
   }
-  
+
   js_divCarregando('Processando...', 'msgBox');
-   
+
 	var oAjax = new Ajax.Request(
-		sUrlRPC, 
+		sUrlRPC,
 		{
 			method     : 'post',
 			parameters : 'json=' + Object.toJSON(oParametros),
 			onComplete : js_retornoProcessar
 		}
-	);   
+	);
 }
 
 function js_retornoProcessar(oAjax) {
@@ -299,7 +299,7 @@ function js_retornoProcessar(oAjax) {
 function js_validarFormulario() {
 
   /**
-   * Não valida formulario quando for exclusao 
+   * Não valida formulario quando for exclusao
    */
   if ( iOpcao == 3 ) {
     return true
@@ -315,7 +315,7 @@ function js_validarFormulario() {
   }
 
   /**
-   * Selecao 
+   * Selecao
    */
   if ( $('rh123_selecao').value == '' ) {
 
@@ -324,10 +324,10 @@ function js_validarFormulario() {
   }
 
   /**
-   * Rubricas 
+   * Rubricas
    */
   if ( oLancadorRubricas.getRegistros() == '' ) {
-    
+
     alert('Nenhuma rubrica informada.');
     return false;
   }
@@ -345,29 +345,29 @@ function js_validarFormulario() {
 function js_pesquisaSelecao(lMostra) {
 
   /**
-   * Func de pesquisa da selecao, passando parametro do id do grupo 2 - regras do ponto 
+   * Func de pesquisa da selecao, passando parametro do id do grupo 2 - regras do ponto
    */
   var sPrograma = 'func_selecao.php?sGrupoSelecao=2&funcao_js=parent.';
-        
+
   if ( lMostra ) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_selecao', sPrograma + 'js_retornoPesquisaSelecaoOnClick|r44_selec|r44_descr&instit=' + iInstituicao, 'Pesquisa', true);
-    return false;
-  } 
-
-  if ( $F('rh123_selecao') == "" ) {
-
-    $('r44_descr').setValue(""); 
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_selecao', sPrograma + 'js_retornoPesquisaSelecaoOnClick|r44_selec|r44_descr&instit=' + iInstituicao, 'Pesquisa', true);
     return false;
   }
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_selecao', sPrograma + 'js_retornoPesquisaSelecaoOnChange&instit=' + iInstituicao + '&pesquisa_chave=' + $F('rh123_selecao'), 'Pesquisa',false);
+  if ( $F('rh123_selecao') == "" ) {
+
+    $('r44_descr').setValue("");
+    return false;
+  }
+
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_selecao', sPrograma + 'js_retornoPesquisaSelecaoOnChange&instit=' + iInstituicao + '&pesquisa_chave=' + $F('rh123_selecao'), 'Pesquisa',false);
 }
 
 /**
  * Pesquisar selecao - onchange selecao
  * - Caso nao encontra selecao pelo codigo
- *   limpa campo rh123_selecao 
+ *   limpa campo rh123_selecao
  *   exibe msg de no campo r44_descr
  *   Move cursor para o input
  *
@@ -377,17 +377,17 @@ function js_pesquisaSelecao(lMostra) {
  * @return void
  */
 function js_retornoPesquisaSelecaoOnChange(sDescricao, lErro) {
-  
+
   /**
    * Selecao nao encontrada
    */
-  if ( lErro ) { 
+  if ( lErro ) {
 
     $('rh123_selecao').setValue('');
-    $('rh123_selecao').focus(); 
+    $('rh123_selecao').focus();
   }
-  
-  $('r44_descr').setValue(sDescricao); 
+
+  $('r44_descr').setValue(sDescricao);
 }
 
 /**
@@ -401,18 +401,18 @@ function js_retornoPesquisaSelecaoOnChange(sDescricao, lErro) {
  * @return void
  */
 function js_retornoPesquisaSelecaoOnClick(iSelecao, sDescricao) {
-    
+
   $(rh123_selecao).setValue(iSelecao);
-  
+
   if ( $('r44_descr') ) {
     $('r44_descr').setValue(sDescricao);
   }
-  
+
   db_iframe_selecao.hide();
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_regraponto','func_regraponto.php?funcao_js=parent.js_preenchepesquisa|rh123_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_regraponto','func_regraponto.php?funcao_js=parent.js_preenchepesquisa|rh123_sequencial','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

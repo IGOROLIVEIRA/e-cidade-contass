@@ -342,7 +342,7 @@ function js_liberaBotao(valor){
 
 function js_matriculas(turma,descrturma,calendario,etapaturma){
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_matriculas','edu3_alunomatriculado002.php?turma='+turma+'&etapaturma='+etapaturma,'Alunos Matriculados na Turma '+descrturma,true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matriculas','edu3_alunomatriculado002.php?turma='+turma+'&etapaturma='+etapaturma,'Alunos Matriculados na Turma '+descrturma,true);
   location.href = "#topo";
 }
 

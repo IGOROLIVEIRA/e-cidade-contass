@@ -1,29 +1,29 @@
 <?php
 
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -68,7 +68,7 @@ $db_botao  = false;
 $sDisabled = "";
 
 /**
- * Realiza validação para o tipo de reajuste 
+ * Realiza validação para o tipo de reajuste
  * para Aposentados e pensionistas.
  */
 
@@ -96,7 +96,7 @@ if (isset($incluir) && !$lErro) {
     $erro_msg = "Erro Laudo Portador de Moléstia: ".$oException->getMessage();
     $sqlerro=true;
   }
-  
+
   if ($sqlerro == false) {
     $clrhpessoalmov->rh02_diasgozoferias = $rh02_diasgozoferias;
     $clrhpessoalmov->rh02_funcao         = $rh02_funcao;
@@ -110,13 +110,13 @@ if (isset($incluir) && !$lErro) {
     if($rh02_diasgozoferias >= 30) {
 
       $clrhpessoalmov->incluir(null,db_getsession("DB_instit"));
-      $rh02_seqpes    = $clrhpessoalmov->rh02_seqpes; 
+      $rh02_seqpes    = $clrhpessoalmov->rh02_seqpes;
       $erro_msg       = $clrhpessoalmov->erro_msg;
 
       if($clrhpessoalmov->erro_status==0){
         $sqlerro=true;
       }
-    
+
     } else {
       $sqlerro  = true;
       $erro_msg = 'Informe no mínimo 30 dias de férias padrão para o funcionário.';
@@ -130,7 +130,7 @@ if (isset($incluir) && !$lErro) {
     $clrhpessoal->alterar($oPost->rh02_regist);
     if ($clrhpessoal->erro_status == 0) {
       $sqlerro = true;
-    }	
+    }
   }
 
   if($sqlerro == false){
@@ -210,13 +210,13 @@ if (isset($incluir) && !$lErro) {
       }
     }
   }
-  
+
   if($sqlerro == false){
 
     $oServidor      = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
-    
-    if(trim($inputCodigoBanco) != ""){        
-      try {                 
+
+    if(trim($inputCodigoBanco) != ""){
+      try {
         $oContaBancaria = $oServidor->getContaBancaria();
         if ( $inputSequencialConta != "" ) {
           $oContaBancaria->setSequencialContaBancaria($inputSequencialConta);
@@ -231,7 +231,7 @@ if (isset($incluir) && !$lErro) {
         $oContaBancaria->setTipoConta($cboTipoConta);
         $oContaBancaria->salvar();
 
-      } catch ( Exception $oException ) { 
+      } catch ( Exception $oException ) {
 
         $erro_msg = "Erro ao Cadastrar dados bancários do Servidor";
         $sqlerro  = true;
@@ -241,7 +241,7 @@ if (isset($incluir) && !$lErro) {
     }
 
     $oRetorno  = ServidorRepository::persistServidor($oServidor);
-  
+
 
     if($oRetorno->erro_status == 0){
       $erro_msg = $oRetorno->erro_msg;
@@ -287,14 +287,14 @@ if (isset($incluir) && !$lErro) {
 
     if($rh02_diasgozoferias >= 30) {
 
-      $oRetorno = ServidorRepository::persistServidor(ServidorRepository::getInstanciaByCodigo($rh02_regist, 
-                                                                                      DBPessoal::getAnoFolha(), 
+      $oRetorno = ServidorRepository::persistServidor(ServidorRepository::getInstanciaByCodigo($rh02_regist,
+                                                                                      DBPessoal::getAnoFolha(),
                                                                                       DBPessoal::getMesFolha()));
-        
+
       $clrhpessoalmov->erro_status = $oRetorno->erro_status;
       $clrhpessoalmov->erro_msg    = $oRetorno->erro_msg;
       $erro_msg = $clrhpessoalmov->erro_msg;
-    
+
       if($clrhpessoalmov->erro_status==0){
         $sqlerro=true;
       }
@@ -312,8 +312,8 @@ if (isset($incluir) && !$lErro) {
     $clrhpessoal->alterar($oPost->rh02_regist);
     if ($clrhpessoal->erro_status == 0) {
       $sqlerro = true;
-    } 
-  }  
+    }
+  }
 
   if($sqlerro == false){
     if(trim($rh21_regpri)!=""){
@@ -355,14 +355,14 @@ if (isset($incluir) && !$lErro) {
   }
 
   if($sqlerro==false){
-    
+
     if(trim($inputCodigoBanco) != ""){
-    
+
       try {
 
         $oServidor      = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
         $oContaBancaria = $oServidor->getContaBancaria();
-        
+
         if ( $inputSequencialConta != "" ) {
           $oContaBancaria->setSequencialContaBancaria($inputSequencialConta);
         }
@@ -380,19 +380,19 @@ if (isset($incluir) && !$lErro) {
         $oServidor->setContaBancaria($oContaBancaria);
         $oServidor->salvar();
 
-      } catch ( Exception $oException ) { 
+      } catch ( Exception $oException ) {
 
         $erro_msg = "Erro ao Cadastrar dados bancários do Servidor" . $oException->getMessage();
         $sqlerro  = true;
       }
-    } 
+    }
 
     if (trim($inputCodigoBanco) == "") {
 
         $oDaoRhPessoalMovContaBancaria = db_utils::getDao('rhpessoalmovcontabancaria');
         $sSqlRhPessoalMovContaBancaria = $oDaoRhPessoalMovContaBancaria->sql_query(null, 'rh138_sequencial', null, "rh02_regist = {$rh02_regist}");
         $rsRhPessoalMovContaBancaria   = db_query($sSqlRhPessoalMovContaBancaria);
-        
+
         if (pg_num_rows($rsRhPessoalMovContaBancaria) > 0){
 
           $oRhPessoalMovContaBancaria = db_utils::fieldsMemory($rsRhPessoalMovContaBancaria,0);
@@ -476,17 +476,17 @@ if (isset($incluir) && !$lErro) {
        * os eventos financeiros do ponto e do histórico ponto serão excluídos.
        */
       if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-        
+
         $oCompetencia        = DBPessoal::getCompetenciaFolha();
         $oServidor           = ServidorRepository::getInstanciaByCodigo($rh02_regist, $oCompetencia->getAno(), $oCompetencia->getMes());
         $oFolhaComplementar = FolhaPagamentoComplementar::getUltimaFolha();
         $oFolhaSuplementar  = FolhaPagamentoSuplementar::getUltimaFolha();
-        
+
         /**
          * Tratamento da folha complementar.
          */
         if ($oFolhaComplementar->getSequencial() && $oFolhaComplementar->isAberto()) {
-                     
+
           /**
            * Excluí os eventos financeiros do histórico ponto.
            */
@@ -495,38 +495,38 @@ if (isset($incluir) && !$lErro) {
             $oFolhaComplementar->excluirRubricaHistoricoPonto($oEventoFinanceiro->getServidor()->getMatricula(),
                                                               $oEventoFinanceiro->getRubrica()->getCodigo());
           }
-          
+
           /**
            * Excluí os eventos financeiros do ponto.
            */
           $oPonto = $oServidor->getPonto($oFolhaComplementar->getTabelaPonto());
-          $oPonto->limpar(); 
+          $oPonto->limpar();
         }
-        
+
         /**
          * Tratamento da folha suplementar
-         */   
+         */
         if ($oFolhaSuplementar->getSequencial() && $oFolhaSuplementar->isAberto()) {
-          
+
           /**
            * Excluí os eventos financeiros do histórico ponto.
            */
           $aEventosFinanceiros = $oFolhaSuplementar->getHistoricoRegistrosPonto($oServidor);
-      
+
           foreach ($aEventosFinanceiros as $oEventoFinanceiro) {
             $oFolhaSuplementar->excluirRubricaHistoricoPonto($oEventoFinanceiro->getServidor()->getMatricula(),
                                                              $oEventoFinanceiro->getRubrica()->getCodigo());
           }
-          
+
           /**
            * Excluí os eventos financeiros do ponto.
            */
           $oPonto = $oServidor->getPonto($oFolhaSuplementar->getTabelaPonto());
           $oPonto->limpar();
         }
-          
+
       }
-      
+
     }
   }
 
@@ -691,9 +691,9 @@ if(isset($rh02_regist)){
       $limparrecis = true;
     }
     // echo "<BR><BR>".($clrhpespadrao->sql_query_padroes($rh02_seqpes,"rh03_padrao,r02_descr"));
-    // 
+    //
     $result_rhpessoal = $clrhpessoal->sql_record($clrhpessoal->sql_query_file($rh02_regist,"rh01_reajusteparidade"));
-    
+
     if($clrhpessoal->numrows > 0){
       db_fieldsmemory($result_rhpessoal,0);
     }
@@ -724,7 +724,7 @@ if(isset($rh02_regist)){
     }
 
     $result_contrato = $cltpcontra->sql_record($cltpcontra->sql_query_file($rh02_tpcont));
-    
+
     if ($cltpcontra->numrows > 0) {
       db_fieldsmemory($result_contrato,0);
     }
@@ -741,7 +741,7 @@ if(isset($limparbanco) && $limparbanco == true){
   unset($inputCodigoBanco,$inputNomeBanco,$inputNumeroAgencia,$inputDvAgencia,$inputNumeroConta,$inputDvConta);
 } else {
 
-  try { 
+  try {
 
     $oServidor           = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
     $oContaBancaria      = $oServidor->getContaBancaria();
@@ -782,7 +782,7 @@ if (isset($rh02_salari)) {
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
     <?
       db_app::load("scripts.js");
-      db_app::load("prototype.js"); 
+      db_app::load("prototype.js");
       db_app::load("strings.js");
       db_app::load("dbautocomplete.widget.js");
       db_app::load("DBViewContaBancariaServidor.js");
@@ -797,8 +797,8 @@ if (isset($rh02_salari)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_disabledtipoapos('<?=$rh30_vinculo?>');">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 			<?
 			   include("forms/db_frmrhpessoalmov.php");
@@ -813,11 +813,11 @@ if (isset($rh02_salari)) {
 <?
 
 if((isset($alterar) || isset($excluir) || isset($incluir)) && !$lErro){
-  
+
   /**
    * Configura WHERE rhpesbanco
    */
-             
+
   if(isset($inputCodigoBanco)){
     $sWherePesBanco  = "     rh44_codban    = '{$inputCodigoBanco}'   ";
     $sWherePesBanco .= " and rh44_agencia   = '{$inputNumeroAgencia}' ";
@@ -830,12 +830,12 @@ if((isset($alterar) || isset($excluir) || isset($incluir)) && !$lErro){
     $sWherePesBanco .= " and rhpesrescisao.rh05_seqpes is null";
 
     $sSqlValidaRhPesBanco = "select distinct
-                                    rh02_regist, 
-                                    z01_nome 
-                               from rhpesbanco 
+                                    rh02_regist,
+                                    z01_nome
+                               from rhpesbanco
                                     inner join rhpessoalmov  on rhpessoalmov.rh02_seqpes = rhpesbanco.rh44_seqpes
                                     inner join rhpessoal     on rhpessoal.rh01_regist    = rhpessoalmov.rh02_regist
-                                    inner join cgm           on cgm.z01_numcgm           = rhpessoal.rh01_numcgm  
+                                    inner join cgm           on cgm.z01_numcgm           = rhpessoal.rh01_numcgm
   		                               left join rhpesrescisao on rhpessoalmov.rh02_seqpes = rhpesrescisao.rh05_seqpes
   		                        where {$sWherePesBanco}";
     $rsRhPesBanco = $clrhpesbanco->sql_record($sSqlValidaRhPesBanco);
@@ -848,9 +848,9 @@ if((isset($alterar) || isset($excluir) || isset($incluir)) && !$lErro){
       db_msgbox("AVISO:\\nExistem servidores cadastrados com os mesmos dados de conta informados.\\n\\nServidor(es):\\n {$sStrDadosServidores}");
     }
   }
-  
+
   db_msgbox($erro_msg);
-  
+
   if((isset($alterar) || isset($incluir)) && !$sqlerro && !$lErro){
     echo "<script> parent.mo_camada('rhdepend'); </script>";
   }
@@ -861,27 +861,27 @@ if ($lErro) {
 }
 
 /**
- * Verifica se  o  usuário possui permissao para liberar as abas para o lançamento 
+ * Verifica se  o  usuário possui permissao para liberar as abas para o lançamento
  */
 if (isset($rh02_seqpes)) {
 
   echo "<script>
           parent.document.formaba.rhpeslocaltrab.disabled=false;
-          top.corpo.iframe_rhpeslocaltrab.location.href='pes1_rhpeslocaltrab001.php?rh56_seqpes=".@$rh02_seqpes."&rh02_regist={$rh02_regist}';
+          CurrentWindow.corpo.iframe_rhpeslocaltrab.location.href='pes1_rhpeslocaltrab001.php?rh56_seqpes=".@$rh02_seqpes."&rh02_regist={$rh02_regist}';
        ";
-  if (db_permissaomenu(db_getsession("DB_anousu"), 952,4507) == 'true'|| 
+  if (db_permissaomenu(db_getsession("DB_anousu"), 952,4507) == 'true'||
       db_permissaomenu(db_getsession("DB_anousu"), 952, 4515) == 'true') {
-   
+
     echo "parent.document.formaba.rhpontofixo.disabled=false;\n";
-    echo "top.corpo.iframe_rhpontofixo.location.href='pes1_rhpessoalponto001.php?ponto=fx&r90_regist=".@$rh02_regist."'\n";
+    echo "CurrentWindow.corpo.iframe_rhpontofixo.location.href='pes1_rhpessoalponto001.php?ponto=fx&r90_regist=".@$rh02_regist."'\n";
   }
-  if (db_permissaomenu(db_getsession("DB_anousu"), 952, 4506)  == 'true' || 
+  if (db_permissaomenu(db_getsession("DB_anousu"), 952, 4506)  == 'true' ||
       db_permissaomenu(db_getsession("DB_anousu"), 952, 4514)  =='true') {
 
     echo "parent.document.formaba.rhpontosalario.disabled=false;\n";
-    echo "top.corpo.iframe_rhpontosalario.location.href='pes1_rhpessoalponto001.php?ponto=fs&r90_regist=".@$rh02_regist."'\n";
+    echo "CurrentWindow.corpo.iframe_rhpontosalario.location.href='pes1_rhpessoalponto001.php?ponto=fs&r90_regist=".@$rh02_regist."'\n";
    }
-          
+
   echo "</script>";
 }
 

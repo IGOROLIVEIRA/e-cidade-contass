@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: contabilidade
@@ -45,18 +45,18 @@ $clrotulocampo->label("c58_descr");
     <td nowrap title="<?=@$Tc70_data?>">
        <?=@$Lc70_data?>
     </td>
-    <td> 
+    <td>
 <?
 
 if (!isset($c70_data_dia)) {
-	
+
   $c70_data_dia = date("d",db_getsession("DB_datausu"));
   $c70_data_mes = date("m",db_getsession("DB_datausu"));
   $c70_data_ano = date("Y",db_getsession("DB_datausu"));
 }
 
 if (isset($HTTP_SESSION_VARS["cdia"])) {
-	
+
   $c70_data_dia = db_getsession("cdia");
   $c70_data_mes = db_getsession("cmes");
   $c70_data_ano = db_getsession("DB_anousu");
@@ -78,7 +78,7 @@ db_inputdata('c70_data', @$c70_data_dia, @$c70_data_mes, @$c70_data_ano, true, '
     db_input('k13_descr',40,@$Ik13_descr,true,'text',3);
     ?>
     </td>
-  </tr> 
+  </tr>
   <tr>
     <td nowrap title="<?=@$To70_codrec?>">
        <?
@@ -91,7 +91,7 @@ db_inputdata('c70_data', @$c70_data_dia, @$c70_data_mes, @$c70_data_ano, true, '
     db_input('o57_descr',40,@$Io57_descr,true,'text',3);
     db_input('cadastrar',1,1,true,'hidden',1);
     ?>
-    </td> 
+    </td>
   </tr>
   <tr>
     <td nowrap="nowrap">
@@ -101,9 +101,9 @@ db_inputdata('c70_data', @$c70_data_dia, @$c70_data_mes, @$c70_data_ano, true, '
     </td>
     <td nowrap="nowrap">
       <?
-        db_input('c08_concarpeculiar', 10, $Ic08_concarpeculiar, true, 'text', $db_opcao, "onchange='js_pesquisac08_concarpeculiar(false);'");       
+        db_input('c08_concarpeculiar', 10, $Ic08_concarpeculiar, true, 'text', $db_opcao, "onchange='js_pesquisac08_concarpeculiar(false);'");
         db_input('c58_descr', 40, $Ic58_descr, true, 'text', 3);
-      ?>  
+      ?>
     </td>
   </tr>
   <tr>
@@ -138,7 +138,7 @@ db_inputdata('c70_data', @$c70_data_dia, @$c70_data_mes, @$c70_data_ano, true, '
 						    } else {
 						      $vlronly = 3;
 						    }
-						    
+
 						    db_textarea('c72_complem', 5, 60, @$Ic72_complem, true, 'text', $vlronly);
 					    ?>
 				    </td>
@@ -151,8 +151,8 @@ db_inputdata('c70_data', @$c70_data_dia, @$c70_data_mes, @$c70_data_ano, true, '
    <td align="center" colspan="3">
        <?
        if(isset($o70_codrec) && (($o70_codrec+0)!=0 && ($c70_valor+0)!=0 && ($k13_conta+0)!=0)){
-         echo '<input name="lancar" type="submit" value="Arrecada Receita">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'; 
-         echo '<input name="estornar" type="submit" value="Estorna Arrecadação Receita">'; 
+         echo '<input name="lancar" type="submit" value="Arrecada Receita">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
+         echo '<input name="estornar" type="submit" value="Estorna Arrecadação Receita">';
        }else{
          echo '<input name="confirma" type="button" value="Confirma Receita" >';
        }
@@ -167,7 +167,7 @@ db_inputdata('c70_data', @$c70_data_dia, @$c70_data_mes, @$c70_data_ano, true, '
   <?
 
 if( isset($o70_codrec) && isset($cadastrar)){
-  
+
   $sql = "select fc_estruturalreceita(".db_getsession("DB_anousu").",$o70_codrec) as o50_estrutreceita";
   $result = pg_query($sql);
   db_fieldsmemory($result,0);
@@ -182,18 +182,18 @@ if( isset($o70_codrec) && isset($cadastrar)){
       $inicia=true;
       for($x=$i; $x>=0; $x--){
 	  $codigo=$matriz[$x].$codigo;
-      } 	 
+      }
       for($y=strlen($codigo); $y<15; $y++){
 	$codigo=$codigo."0";
       }
     }
     if($inicia==true){
       $codigos=$codigo."#".$codigos;
-    }  
+    }
   }
   $matriz02= split("#",$codigos);
   $tam=count($matriz02);
-  $espaco=3;   
+  $espaco=3;
   $esp='';
   $ultimo = "ss";
   $tem_desdobramento = false;
@@ -202,30 +202,30 @@ if( isset($o70_codrec) && isset($cadastrar)){
 	      continue;
       }
       for($s=0; $s<$espaco; $s++){
-         $esp=$esp."&nbsp;"; 
-      }  
+         $esp=$esp."&nbsp;";
+      }
       $result=$clorcfontes->sql_record($clorcfontes->sql_query_file(null,null,'o57_codfon,o57_fonte,o57_descr','',"o57_fonte='".$matriz02[$i]."' and o57_anousu = ".db_getsession("DB_anousu")));
       if($clorcfontes->numrows>0){
 	db_fieldsmemory($result,0);
-	
+
 
         $result=$clorcfontesdes->sql_record($clorcfontesdes->sql_query_file(db_getsession("DB_anousu"),$o57_codfon));
 	if($clorcfontesdes->numrows>0){
 	  $tem_desdobramento = true;
 	  break;
 	}
-	
+
 	if($ultimo!=$o57_fonte){
           $ultimo = $o57_fonte;
-        if(empty($prim)){    
-  	  echo"  
+        if(empty($prim)){
+  	  echo"
 	    <tr>
 	      <td  align='left'><b>Detalhamento:</b></td>
 	      <td><small>".db_formatar($o57_fonte,"receita_int")."</small></td>
 	      <td><small>$esp $o57_descr</small></td>
 	      <td>&nbsp;</td>
 	    </tr>
-	   "; 
+	   ";
 	   $prim="false";
         }else{
 	    echo "
@@ -234,37 +234,37 @@ if( isset($o70_codrec) && isset($cadastrar)){
 		  <td><small>".db_formatar($o57_fonte,"receita_int")."</small></td>
 		  <td><small>$esp $o57_descr</small></td>
 		  <td>&nbsp;</td>
-		</tr> 
+		</tr>
 	    ";
-	}    
+	}
 	}
       }else{
 	$nops=true;
 	if($ultimo!=$o57_fonte){
           $ultimo = $o57_fonte;
-        if(empty($prim)){    
-  	  echo"  
+        if(empty($prim)){
+  	  echo"
 	    <tr>
 	      <td  align='left'><b>Detalhamento:</b></td>
 	      <td><small> ".db_formatar($matriz02[$i],"receita_int")."</small></td>
 	      <td><small>$esp Não encontrado</small></td>
 	      <td>&nbsp;</td>
 	    </tr>
-	   "; 
+	   ";
 	   $prim="false";
-	}else{   
+	}else{
 	  echo "
 	       <tr>
 					<td>&nbsp;</td>
 					<td><small> ".db_formatar($matriz02[$i],"receita_int")."</small></td>
 					<td><small>$esp Não encontrado</small></td>
 					<td>&nbsp;</td>
-	      </tr> 
+	      </tr>
 	  ";
 	}
 	}
-      }	
-      
+      }
+
   }
 
   if($tem_desdobramento==true && $c70_valor > 0){
@@ -272,14 +272,14 @@ if( isset($o70_codrec) && isset($cadastrar)){
     $clorcfontesdes = new cl_orcfontesdes;
     $clorcfontesdes->rotulo->label();
     $result = $clorcfontes->sql_record($clorcfontes->sql_query($o57_codfon,db_getsession("DB_anousu")));
-    
+
     db_fieldsmemory($result,0);
 
     $mae  = db_le_mae_rec_sin($o57_fonte,false);
 
     $sql = "select o70_codrec,o57_fonte,o57_codfon,o57_descr,o60_perc
-            from orcfontes 
-                 inner join orcfontesdes on o57_codfon = o60_codfon and o60_anousu = ".db_getsession("DB_anousu")." 
+            from orcfontes
+                 inner join orcfontesdes on o57_codfon = o60_codfon and o60_anousu = ".db_getsession("DB_anousu")."
 		 inner join orcreceita on o57_codfon = o70_codfon and o70_anousu = ".db_getsession("DB_anousu")."
 	    where o57_anousu = ".db_getsession("DB_anousu")." and o57_fonte like '$mae%'
      order by o60_perc desc";
@@ -323,12 +323,12 @@ if( isset($o70_codrec) && isset($cadastrar)){
               $flag_refazer = true;
             }
           }
-        } 
+        }
       }
-      
+
       for($i=0;$i<pg_numrows($result);$i++){
       	db_fieldsmemory($result,$i);
-	    
+
         if ($flag_refazer == false){
           if ($o60_perc == 0){
             $vlrperc = 0;
@@ -364,7 +364,7 @@ if( isset($o70_codrec) && isset($cadastrar)){
       echo "<td>";
 	echo "<tr>";
   }
-}  
+}
 ?>
   </table>
 </fieldset>
@@ -382,10 +382,10 @@ function js_confirmaarrecadacao(){
 
 function js_pesquisacodrec(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcreceita','func_orcreceita.php?funcao_js=parent.js_mostracodrec1|o70_codrec|o57_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcreceita','func_orcreceita.php?funcao_js=parent.js_mostracodrec1|o70_codrec|o57_descr','Pesquisa',true);
   }else{
     if(document.form1.o70_codrec.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_orcreceita','func_orcreceita.php?pesquisa_chave='+document.form1.o70_codrec.value+'&funcao_js=parent.js_mostracodrec','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcreceita','func_orcreceita.php?pesquisa_chave='+document.form1.o70_codrec.value+'&funcao_js=parent.js_mostracodrec','Pesquisa',false);
     }else{
       document.form1.z01_nome.value = '';
     }
@@ -411,10 +411,10 @@ function js_mostracodrec1(chave1,chave2){
 
 function js_pesquisaconta(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr','Pesquisa',true);
   }else{
     if(document.form1.k13_conta.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
     }else{
       document.form1.z01_nome.value = '';
     }
@@ -438,13 +438,13 @@ function js_mostrasaltes1(chave1,chave2){
 function js_pesquisac08_concarpeculiar(mostra) {
 
  if (mostra == true) {
- 
+
     var sUrl = 'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr';
     js_OpenJanelaIframe('', 'db_iframe_concarpeculiar', sUrl, 'Pesquisa', true);
   } else {
-    
+
     if ($('c08_concarpeculiar').value != '') {
-    
+
       var sUrl  = 'func_concarpeculiar.php?pesquisa_chave=';
           sUrl += $('c08_concarpeculiar').value+'&funcao_js=parent.js_mostraconcarpeculiar';
       js_OpenJanelaIframe('', 'db_iframe_concarpeculiar', sUrl, 'Pesquisa', false);
@@ -457,20 +457,20 @@ function js_pesquisac08_concarpeculiar(mostra) {
 function js_mostraconcarpeculiar(chave1, erro) {
 
   if (erro == true) {
-  
+
     $('c08_concarpeculiar').value = '';
     $('c58_descr').value          = chave1;
     $('c08_concarpeculiar').focus;
   } else {
     $('c58_descr').value          = chave1;
-  }   
+  }
 }
 
-function js_mostraconcarpeculiar1(chave1, chave2) {  
+function js_mostraconcarpeculiar1(chave1, chave2) {
 
   $('c08_concarpeculiar').value = chave1;
   $('c58_descr').value          = chave2;
-  
+
   db_iframe_concarpeculiar.hide();
 }
 </script>

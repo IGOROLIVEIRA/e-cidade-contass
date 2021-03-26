@@ -464,7 +464,7 @@ function js_importa(){
   //$('btnInconsistencia').style.display = 'none';
 
 
-  js_OpenJanelaIframe('top.corpo.iframe_solicita',
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita',
                       'db_iframe_solicita',
                       'func_solicita.php?funcao_js=parent.js_preencheimporta|pc10_numero|pc52_sequencial&nada=true&param_mostra_regprecos=nao',
                       'Pesquisa',true,'0');
@@ -506,11 +506,11 @@ function js_pesquisa(){
 
   if(isset($db_proc)) {
 ?>
-    js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_solicita','func_solicitaalt.php?<?=$db_proc?>&funcao_js=parent.js_preenchepesquisa|pc10_numero&departamento=<?=db_getsession("DB_coddepto")?><?=$parametro?>','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_solicita','func_solicitaalt.php?<?=$db_proc?>&funcao_js=parent.js_preenchepesquisa|pc10_numero&departamento=<?=db_getsession("DB_coddepto")?><?=$parametro?>','Pesquisa',true,'0');
 <?php
   } else {
 ?>
-    js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_solicita','func_solicitaalt.php?funcao_js=parent.js_preenchepesquisa|pc10_numero&departamento=<?=db_getsession("DB_coddepto")?><?=$parametro?>','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_solicita','func_solicitaalt.php?funcao_js=parent.js_preenchepesquisa|pc10_numero&departamento=<?=db_getsession("DB_coddepto")?><?=$parametro?>','Pesquisa',true,'0');
 <?php
   }
 ?>
@@ -533,19 +533,19 @@ function js_preenchepesquisa(chave){
 ?>
 function js_pesquisapc80_codproc(mostra){
    if (mostra == true){
-        js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc<?=$parametro2?>','Processos',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc<?=$parametro2?>','Processos',true);
    } else {
         if (document.form1.codproc.value != ""){
-             js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?pesquisa_chave='+document.form1.codproc.value+'&funcao_js=parent.js_mostrapcproc<?=$parametro2?>','Processos',false);
+             js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_pcproc','func_excautitem.php?pesquisa_chave='+document.form1.codproc.value+'&funcao_js=parent.js_mostrapcproc<?=$parametro2?>','Processos',false);
 	}
    }
 }
 function js_pesquisal21_codliclicita(mostra){
    if(mostra == true){
-       js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo<?=$parametro2?>','Licitações',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo<?=$parametro2?>','Licitações',true);
    } else {
        if(document.form1.codliclicita.value != ''){
-           js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.codliclicita.value+'&funcao_js=parent.js_mostraliclicita<?=$parametro2?>','Licitações',false);
+           js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.codliclicita.value+'&funcao_js=parent.js_mostraliclicita<?=$parametro2?>','Licitações',false);
        }
    }
 }

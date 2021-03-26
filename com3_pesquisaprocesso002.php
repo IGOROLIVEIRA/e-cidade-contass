@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("dbforms/db_funcoes.php");
@@ -42,7 +42,7 @@ if (!empty($oGet->dtFinal)) {
 }
 $sWhereProcesso = "pc10_instit = ".db_getsession("DB_instit");
 if ($oGet->dtInicial != '' && $oGet->dtFinal == '') {
-   $sWhereProcesso .= " and pc80_data >= '{$oGet->dtInicial}'"; 
+   $sWhereProcesso .= " and pc80_data >= '{$oGet->dtInicial}'";
 } else if ($oGet->dtInicial == '' && $oGet->dtFinal != '') {
   $sWhereProcesso .= " and pc80_data <= '{$oGet->dtFinal}'";
 } else if ($oGet->dtInicial != '' && $oGet->dtFinal != '') {
@@ -65,13 +65,13 @@ if ($oGet->iProcessoInicial  != "" && $oGet->iProcessoFinal == '') {
 }
 
 $oDaoPcProc = db_utils::getDao("pcproc");
-$sSqlProcessoCompras = $oDaoPcProc->sql_query_proc_solicita(null, 
-                                                            "distinct pc80_codproc, 
-                                                             pc80_data, 
+$sSqlProcessoCompras = $oDaoPcProc->sql_query_proc_solicita(null,
+                                                            "distinct pc80_codproc,
+                                                             pc80_data,
                                                              pc80_depto,
                                                              descrdepto,
-                                                             pc80_resumo", 
-                                                            "pc80_data", 
+                                                             pc80_resumo",
+                                                            "pc80_data",
                                                             $sWhereProcesso
                                                             );
 
@@ -102,12 +102,12 @@ $sSqlProcessoCompras = $oDaoPcProc->sql_query_proc_solicita(null,
 </html>
 <script>
   function js_abrePesquisaProcesso(iProcesso) {
-     
-     js_OpenJanelaIframe('top.corpo', 
+
+     js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_pesquisa_processo',
                         'com3_pesquisaprocessocompras003.php?pc80_codproc='+iProcesso,
                         'Consulta Processo de Compras',
                         true
-                       );  
+                       );
   }
 </script>

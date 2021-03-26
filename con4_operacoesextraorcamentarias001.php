@@ -303,13 +303,13 @@ function js_pesquisak17_codigo(mostra){
 
   if( mostra == true){
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
   } else {
 
     var slip01 = $("k17_codigo").value;
 
     if (slip01 != "" ){
-       js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&pesquisa_chave=' + slip01 + '&funcao_js=parent.js_mostraslip','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&pesquisa_chave=' + slip01 + '&funcao_js=parent.js_mostraslip','Pesquisa',false);
     }else{
         $("k17_codigo").value='';
     }
@@ -335,12 +335,12 @@ function js_mostraslip1(chave1, chave2 ) {
 function js_pesquisak17_codigo02(mostra){
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&funcao_js=parent.js_mostraslip12|k17_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&funcao_js=parent.js_mostraslip12|k17_codigo','Pesquisa',true);
   } else {
 
     slip01 = $("k17_codigo02").value;
     if(slip01 != ""){
-       js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip2','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slipOperacaoExtraOrcamentaria.php?iDocumento=' + $F('iDocumento') + '&pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip2','Pesquisa',false);
     } else {
         $("k17_codigo02").value = '';
     }

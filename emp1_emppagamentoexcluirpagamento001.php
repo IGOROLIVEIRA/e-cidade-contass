@@ -41,22 +41,22 @@ db_app::load("widgets/DBAncora.widget.js");
 <script>
     function js_mascara(evt){
       var evt = (evt) ? evt : (window.event) ? window.event : "";
-      
-      if( (evt.charCode >46 && evt.charCode <58) || evt.charCode ==0 ){//8:backspace|46:delete|190:. 
+
+      if( (evt.charCode >46 && evt.charCode <58) || evt.charCode ==0 ){//8:backspace|46:delete|190:.
 	return true;
       }else{
 	return false;
-      }  
+      }
     }
 </script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 
-  
+
 <center>
 <table width="790" border="0" cellspacing="0" cellpadding="0" style="margin-top:30px;">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <form name='form1' action='emp1_emppagamentoexcluirpagamento002.php'>
      <center>
       <table>
@@ -69,15 +69,15 @@ db_app::load("widgets/DBAncora.widget.js");
         		  <td nowrap title="<?=@$Te50_codord?>" align='right'>
 		            <? db_ancora("<b>Ordem de Pagamento:</b>","js_pesquisae50_codord(true);",$db_opcao);  ?>
       	 	   </td>
-		         <td> 
+		         <td>
 		           <?
                db_input('e50_codord',8,$Ie50_codord,true,'text',$db_opcao," onchange='js_pesquisae50_codord(false);'")
                ?>
 		         </td>
       		  </tr>
           </table>
-        </fieldset>  
-        </tr> 
+        </fieldset>
+        </tr>
         <tr>
   	      <td colspan='2' align='center'>
 		      <input name="entrar_codord" type="button" id="pesquisar" value="Excluir" onclick="js_entra();" >
@@ -89,7 +89,7 @@ db_app::load("widgets/DBAncora.widget.js");
     </td>
   </tr>
 </table>
-</center>  
+</center>
 
 
 <?
@@ -102,23 +102,23 @@ document.getElementById('pesquisar').disabled  = true;
 
 
 function js_pesquisae50_codord(mostra){
-	  
+
 	  document.getElementById('pesquisar').disabled  = true;
 	  if(mostra==true){
-	    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord','Pesquisa',true);
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord','Pesquisa',true);
 	  }else{
-	    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostrapagordem','Pesquisa',false);
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostrapagordem','Pesquisa',false);
 	  }
 	}
 
 	function js_mostrapagordem(chave,erro) {
-	  
+
 	  document.getElementById('pesquisar').disabled  = false;
-	  if(erro==true) { 
-	    
+	  if(erro==true) {
+
 	    document.getElementById('pesquisar').disabled  = true;
-	    document.form1.e50_codord.focus(); 
-	    document.form1.e50_codord.value = ''; 
+	    document.form1.e50_codord.focus();
+	    document.form1.e50_codord.value = '';
 	  }
 	 // js_verificaEmpenho();
 	}
@@ -130,7 +130,7 @@ function js_pesquisae50_codord(mostra){
 
 	 // js_verificaEmpenho();
 	}
-	
+
 /*
  * funcao para validar se o empenho é uma prestação de contas.
    se for nao podes estornar por essa rotina.
@@ -146,7 +146,7 @@ function js_verificaEmpenho() {
 	if ($F("e50_codord") == null || $F("e50_codord") == '') {
     return false;
 	}
-	
+
 	js_divCarregando(msgDiv,'msgBox');
 
 	new Ajax.Request(sUrlRPC,
@@ -173,28 +173,28 @@ function js_retornoVerificacaoEmpenho(oAjax) {
 function js_entra(){
   if(document.form1.e50_codord.value != ""){
 
-	  if (confirm('ATENÇÃO: Este procedimento ira EXCLUIR TODAS as Autenticações para esta Ordem! \n\nDeseja Continuar?')) { 
+	  if (confirm('ATENÇÃO: Este procedimento ira EXCLUIR TODAS as Autenticações para esta Ordem! \n\nDeseja Continuar?')) {
 			  obj=document.createElement('input');
 		      obj.setAttribute('name','pag_ord');
 		      obj.setAttribute('type','hidden');
 		      obj.setAttribute('value','true');
 		      document.form1.appendChild(obj);
 		      document.form1.submit();
-	 } else { 
+	 } else {
 		 return false;
  	 }
-      
+
   }else{
-    
+
    	alert("Selecione uma Ordem de Pagamento!");
  	  return false;
-    
+
   }
 }
 function js_pesquisae60_codemp(mostra) {
 document.getElementById('pesquisar').disabled  = true;
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
   }
 }
 function js_mostraempempenho2(chave1){
@@ -207,18 +207,18 @@ function js_mostraempempenho2(chave1){
 function js_pesquisae60_numemp(mostra) {
  document.getElementById('pesquisar').disabled  = true;
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
   }
 }
 function js_mostraempempenho(chave,erro) {
 
  document.getElementById('pesquisar').disabled  = false;
-  if (erro==true) { 
-  
-    document.form1.e60_numemp.focus(); 
-    document.form1.e60_numemp.value = ''; 
+  if (erro==true) {
+
+    document.form1.e60_numemp.focus();
+    document.form1.e60_numemp.value = '';
     document.getElementById('pesquisar').disabled  = true;
   }
 }
@@ -236,10 +236,10 @@ if(isset($erro_msg)){
   db_msgbox($erro_msg);
   if(isset($erro) && $erro != ''){
     echo "<script>";
-    echo "js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem001.php?funcao_js=parent.js_mostrapagordem1|e50_codord&chave_e50_numemp=$e60_numemp','Pesquisa',true);";
+    echo "js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem001.php?funcao_js=parent.js_mostrapagordem1|e50_codord&chave_e50_numemp=$e60_numemp','Pesquisa',true);";
     echo "</script>";
   }
-  
+
 }
 
 ?>

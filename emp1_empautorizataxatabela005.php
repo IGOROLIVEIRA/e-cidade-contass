@@ -325,7 +325,7 @@ $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
 
 if (isset($e54_numcgm) && !empty($e54_numcgm)) {
   $cgm  = db_query("
-          select z01_numcgm, z01_nome 
+          select z01_numcgm, z01_nome
           from empautoriza
           inner join cgm on z01_numcgm = e54_numcgm
               where e54_autori = {$e54_autori}
@@ -371,8 +371,8 @@ if (isset($chavepesquisa)) {
 	      function js_libera(recar){
 		      parent.document.formaba.empautitem.disabled=false;\n
 		      parent.document.formaba.empautidot.disabled=false;\n
-		      top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
-		      top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+		      CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+		      CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
 	      }
 	      js_libera();
       </script>
@@ -384,8 +384,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
               }
               js_bloqueia();
             </script>
@@ -396,8 +396,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori';\n
+                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
               }
               js_bloqueia();
             </script>

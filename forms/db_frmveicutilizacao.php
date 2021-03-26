@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clveicutilizacao->rotulo->label();
@@ -43,18 +43,18 @@ $clrotulo->label("ve17_descr");
 <table border="0" width="790">
   <tr>
     <td nowrap align="right" title="<?=@$Tve15_veiccadutilizacao?>">
-    <? 
-       db_ancora(@$Lve15_veiccadutilizacao,"js_pesquisave15_veiccadutilizacao(true);",$db_opcao) 
+    <?
+       db_ancora(@$Lve15_veiccadutilizacao,"js_pesquisave15_veiccadutilizacao(true);",$db_opcao)
     ?>
     </td>
     <td nowrap width="20">
-    <? 
-       db_input('ve15_veiccadutilizacao',10,$Ive15_veiccadutilizacao,true,'text',$db_opcao,"onChange='js_pesquisave15_veiccadutilizacao(false);'"); 
+    <?
+       db_input('ve15_veiccadutilizacao',10,$Ive15_veiccadutilizacao,true,'text',$db_opcao,"onChange='js_pesquisave15_veiccadutilizacao(false);'");
     ?>
     </td>
     <td nowrap>
-    <? 
-       db_input('ve14_descr',40,0,true,'text',3); 
+    <?
+       db_input('ve14_descr',40,0,true,'text',3);
     ?>
     </td>
   </tr>
@@ -66,12 +66,12 @@ $clrotulo->label("ve17_descr");
     </td>
     <td nowrap>
     <?
-       db_input('ve16_bens',10,$Ive16_bens,true,'text',$db_opcao,"onChange='js_pesquisave16_bens(false);'"); 
+       db_input('ve16_bens',10,$Ive16_bens,true,'text',$db_opcao,"onChange='js_pesquisave16_bens(false);'");
     ?>
     </td>
     <td nowrap>
-    <? 
-       db_input('t52_descr',40,0,true,'text',3); 
+    <?
+       db_input('t52_descr',40,0,true,'text',3);
     ?>
     </td>
   </tr>
@@ -83,21 +83,21 @@ $clrotulo->label("ve17_descr");
     </td>
     <td nowrap>
     <?
-       db_input('ve19_veiccadconvenio',10,$Ive19_veiccadconvenio,true,'text',$db_opcao,"onChange='js_pesquisave19_veiccadconvenio(false);'"); 
+       db_input('ve19_veiccadconvenio',10,$Ive19_veiccadconvenio,true,'text',$db_opcao,"onChange='js_pesquisave19_veiccadconvenio(false);'");
     ?>
     </td>
     <td nowrap>
-    <? 
-       db_input('ve17_descr',40,0,true,'text',3); 
+    <?
+       db_input('ve17_descr',40,0,true,'text',3);
     ?>
     </td>
   </tr>
   <tr>
-    <td nowrap colspan="3" height="50" align="center"> 
-      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
-          type="submit" id="db_opcao" 
+    <td nowrap colspan="3" height="50" align="center">
+      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+          type="submit" id="db_opcao"
           value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
-          <?=($db_botao==false?"disabled":"")?> 
+          <?=($db_botao==false?"disabled":"")?>
        >
        <?
           if ($db_opcao != 1) {
@@ -107,7 +107,7 @@ $clrotulo->label("ve17_descr");
           }
        ?>
     </td>
-  </tr>	
+  </tr>
   <tr>
     <td nowrap colspan="3">
     <?
@@ -128,12 +128,12 @@ $clrotulo->label("ve17_descr");
 <script>
 function js_pesquisave15_veiccadutilizacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_veicutilizacao','db_iframe_veiccadutilizacao','func_veiccadutilizacao.php?funcao_js=parent.js_mostraveiccadutilizacao1|ve14_sequencial|ve14_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicutilizacao','db_iframe_veiccadutilizacao','func_veiccadutilizacao.php?funcao_js=parent.js_mostraveiccadutilizacao1|ve14_sequencial|ve14_descr','Pesquisa',true,'0');
   }else{
-     if(document.form1.ve15_veiccadutilizacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_veicutilizacao','db_iframe_veiccadutilizacao','func_veiccadutilizacao.php?pesquisa_chave='+document.form1.ve15_veiccadutilizacao.value+'&funcao_js=parent.js_mostraveiccadutilizacao','Pesquisa',false);
+     if(document.form1.ve15_veiccadutilizacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicutilizacao','db_iframe_veiccadutilizacao','func_veiccadutilizacao.php?pesquisa_chave='+document.form1.ve15_veiccadutilizacao.value+'&funcao_js=parent.js_mostraveiccadutilizacao','Pesquisa',false);
      }else{
-       document.form1.ve14_descr.value = ''; 
+       document.form1.ve14_descr.value = '';
      }
   }
 
@@ -157,12 +157,12 @@ function js_pesquisave15_veiccadutilizacao(mostra){
 }
 function js_mostraveiccadutilizacao(chave,erro){
   if (erro==false){
-    document.form1.ve14_descr.value = chave; 
+    document.form1.ve14_descr.value = chave;
   }
 
-  if(erro==true){ 
-    document.form1.ve15_veiccadutilizacao.focus(); 
-    document.form1.ve09_veiccadutilizacao.value = ""; 
+  if(erro==true){
+    document.form1.ve15_veiccadutilizacao.focus();
+    document.form1.ve09_veiccadutilizacao.value = "";
   }
 }
 function js_mostraveiccadutilizacao1(chave1,chave2){
@@ -180,16 +180,16 @@ function js_mostraveiccadutilizacao1(chave1,chave2){
     if (chave1==1){
          var obj = document.getElementById("bens" );
               obj.style.display = "";
-       
+
     }
 
 }
 function js_pesquisave16_bens(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_veicutilizacao','db_iframe_bens','func_bens.php?funcao_js=parent.js_mostraveicutilizacaobens1|t52_bem|t52_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicutilizacao','db_iframe_bens','func_bens.php?funcao_js=parent.js_mostraveicutilizacaobens1|t52_bem|t52_descr','Pesquisa',true,'0');
   }else{
     if(document.form1.ve16_bens.value != ""){
-        js_OpenJanelaIframe('top.corpo.iframe_veicutilizacao','db_iframe_bens','func_bens.php?pesquisa_chave='+document.form1.ve16_bens.value+'&funcao_js=parent.js_mostraveicutilizacaobens','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicutilizacao','db_iframe_bens','func_bens.php?pesquisa_chave='+document.form1.ve16_bens.value+'&funcao_js=parent.js_mostraveicutilizacaobens','Pesquisa',false);
     } else {
       document.form1.t52_descr.value = "";
     }
@@ -203,20 +203,20 @@ function js_mostraveicutilizacaobens1(chave1,chave2){
 }
 function js_mostraveicutilizacaobens(chave,erro){
   if (erro==false){
-    document.form1.t52_descr.value = chave; 
+    document.form1.t52_descr.value = chave;
   }
 
-  if(erro==true){ 
-    document.form1.ve16_bens.focus(); 
-    document.form1.ve16_bens.value = ""; 
+  if(erro==true){
+    document.form1.ve16_bens.focus();
+    document.form1.ve16_bens.value = "";
   }
 }
 function js_pesquisave19_veiccadconvenio(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_veicutilizacao','db_iframe_veiccadconvenio','func_veiccadconvenio.php?funcao_js=parent.js_mostraveiccadconvenio1|ve17_sequencial|ve17_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicutilizacao','db_iframe_veiccadconvenio','func_veiccadconvenio.php?funcao_js=parent.js_mostraveiccadconvenio1|ve17_sequencial|ve17_descr','Pesquisa',true,'0');
   }else{
     if(document.form1.ve19_veiccadconvenio.value != ""){
-        js_OpenJanelaIframe('top.corpo.iframe_veicutilizacao','db_iframe_veiccadconvenio','func_veiccadconvenio.php?pesquisa_chave='+document.form1.ve19_veiccadconvenio.value+'&funcao_js=parent.js_mostraveiccadconvenio','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicutilizacao','db_iframe_veiccadconvenio','func_veiccadconvenio.php?pesquisa_chave='+document.form1.ve19_veiccadconvenio.value+'&funcao_js=parent.js_mostraveiccadconvenio','Pesquisa',false);
     } else {
       document.form1.ve17_descr.value = "";
     }
@@ -230,12 +230,12 @@ function js_mostraveiccadconvenio1(chave1,chave2){
 }
 function js_mostraveiccadconvenio(chave,erro){
   if (erro==false){
-    document.form1.ve17_descr.value = chave; 
+    document.form1.ve17_descr.value = chave;
   }
 
-  if(erro==true){ 
-    document.form1.ve19_veiccadconvenio.focus(); 
-    document.form1.ve19_veiccadconvenio.value = ""; 
+  if(erro==true){
+    document.form1.ve19_veiccadconvenio.focus();
+    document.form1.ve19_veiccadconvenio.value = "";
   }
 }
 

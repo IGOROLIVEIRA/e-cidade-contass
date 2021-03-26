@@ -96,7 +96,7 @@ function js_calcula(origem) {
 
   if (document.querySelector('#lControlaQuantidade')){
     conQt = obj.lControlaQuantidade.value;
-  } 
+  }
 
   if (conQt == 'true') {
     t = new Number(uni * quant);
@@ -541,10 +541,10 @@ function js_cancelar(){
 function js_pesquisae55_item(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem|pc94_sequencial",'Pesquisa',true,"0","1");
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem|pc94_sequencial",'Pesquisa',true,"0","1");
   }else{
      if(document.form1.e55_item.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?pesquisa=true&z01_numcgm=<?=$z01_numcgm?>&iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave="+document.form1.e55_item.value+"&funcao_js=parent.js_mostrapcmater",'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?pesquisa=true&z01_numcgm=<?=$z01_numcgm?>&iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave="+document.form1.e55_item.value+"&funcao_js=parent.js_mostrapcmater",'Pesquisa',false);
      }else{
        document.form1.pc01_descrmater.value = '';
        document.form1.submit();
@@ -625,7 +625,7 @@ function novoAjax(params, onComplete) {
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_empautitem','func_empautitem.php?funcao_js=parent.js_preenchepesquisa|e55_autori|e55_sequen','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empautitem','func_empautitem.php?funcao_js=parent.js_preenchepesquisa|e55_autori|e55_sequen','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_empautitem.hide();
@@ -650,7 +650,7 @@ function js_removeVirgula(valor){
 <?
   if(isset($incluir) || isset($alterar) || isset($excluir) ) {
 
-    echo "\n\ntop.corpo.iframe_empautidot.location.href =  'emp1_empautidottaxatabela001.php?anulacao=true&e56_autori=$e55_autori';\n";
+    echo "\n\nCurrentWindow.corpo.iframe_empautidot.location.href =  'emp1_empautidottaxatabela001.php?anulacao=true&e56_autori=$e55_autori';\n";
   }
 ?>
 

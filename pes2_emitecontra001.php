@@ -304,10 +304,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_pesquisarh56_localtrab(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?funcao_js=parent.js_mostrarhlocaltrab1|rh55_codigo|rh55_descr','Pesquisa',true,'20');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?funcao_js=parent.js_mostrarhlocaltrab1|rh55_codigo|rh55_descr','Pesquisa',true,'20');
   }else{
     if(document.form1.rh56_localtrab.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?pesquisa_chave='+document.form1.rh56_localtrab.value+'&funcao_js=parent.js_mostrarhlocaltrab','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?pesquisa_chave='+document.form1.rh56_localtrab.value+'&funcao_js=parent.js_mostrarhlocaltrab','Pesquisa',false);
     }else{
       document.form1.rh55_descr.value = '';
     }
@@ -349,10 +349,10 @@ function js_pesquisar14_lotac(mostra, oInput){
   oInputInicialFinal = oInput;
 
   if(mostra == true){
-    js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_rhlota.php?funcao_js=parent.js_mostrarhlota1|r70_codigo|r70_estrut','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframelotacao','func_rhlota.php?funcao_js=parent.js_mostrarhlota1|r70_codigo|r70_estrut','Pesquisa',true);
   }else{
     if(oInput.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_rhlota.php?pesquisa_chave='+oInput.value+'&funcao_js=parent.js_mostrarhlota','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframelotacao','func_rhlota.php?pesquisa_chave='+oInput.value+'&funcao_js=parent.js_mostrarhlota','Pesquisa',false);
     }else{
       oInput.value = '';
     }
@@ -402,7 +402,7 @@ function js_emite(evt){
 
   obj=document.form1;
   vir="";
-  dados=""; 
+  dados="";
   query="";
   if (document.form1.lista){
     for(x=0;x<document.form1.lista.length;x++){

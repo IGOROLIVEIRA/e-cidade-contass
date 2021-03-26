@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -65,66 +65,66 @@ function js_imprime(){
 <?
   $where ="";
 	if ($datainicial != "--" and $datafinal != "--"){
-       
+
 			  $where .= " and (k27_data,k27_data+k27_dias) overlaps (DATE '$datainicial' - '1 day'::interval, DATE '$datafinal'+ '1 day'::interval)";
 
-	}else{	
+	}else{
     if($datainicial!="--"){
       $where .=" and k27_data >= '$datainicial'";
    }
-  
+
     if($datafinal!="--"){
       $where .=" and k27_data <= '$datafinal'";
    }
   }
-  
-  
+
+
 	//die("ccccc".$tipo_filtro);
   if ($tipo_filtro=="CGM"){
 		 $numcgm = $cod_filtro;
 		 $sqlarrejustreg = "select k28_numpre,k28_numpar,k28_receita,nome,k27_data,k27_hora,k27_dias,k27_obs,k28_receita,
                         case when arrematric.k00_numpre is not null then 'Matricula - '|| k00_matric
-                             when arreinscr.k00_numpre is not null  then 'Inscricao - '||k00_inscr 
-                             else 'CGM - '||k00_numcgm  
-                        end as origem 
-                        from arrejustreg 
-												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre 
-												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
-                        inner join arrejust    on k28_arrejust = k27_sequencia 
-	                      inner join db_usuarios on k27_usuario  = id_usuario 
+                             when arreinscr.k00_numpre is not null  then 'Inscricao - '||k00_inscr
+                             else 'CGM - '||k00_numcgm
+                        end as origem
+                        from arrejustreg
+												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre
+												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')."
+                        inner join arrejust    on k28_arrejust = k27_sequencia
+	                      inner join db_usuarios on k27_usuario  = id_usuario
                         inner join arrenumcgm  on k28_numpre   = arrenumcgm.k00_numpre
 						            left  join arrematric  on k28_numpre   = arrematric.k00_numpre
                         left  join arreinscr   on k28_numpre   = arreinscr.k00_numpre
-                        where k00_numcgm = $cod_filtro $where";	
-	 
+                        where k00_numcgm = $cod_filtro $where";
+
   }else if ($tipo_filtro=="MATRICULA"){
 		 $matric = $cod_filtro;
-     $sqlarrejustreg = "select k28_numpre,k28_numpar,k28_receita,nome,k27_data,k27_hora,k27_dias,k27_obs,k28_receita, 'Matricula - '||k00_matric  as origem 
-		                      from arrejustreg 
-												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre 
-												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
-										 	  inner join arrejust on k28_arrejust=k27_sequencia 
-	                      inner join db_usuarios on k27_usuario = id_usuario 
-                        inner join arrematric on k28_numpre = arrematric.k00_numpre		
+     $sqlarrejustreg = "select k28_numpre,k28_numpar,k28_receita,nome,k27_data,k27_hora,k27_dias,k27_obs,k28_receita, 'Matricula - '||k00_matric  as origem
+		                      from arrejustreg
+												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre
+												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')."
+										 	  inner join arrejust on k28_arrejust=k27_sequencia
+	                      inner join db_usuarios on k27_usuario = id_usuario
+                        inner join arrematric on k28_numpre = arrematric.k00_numpre
 											  where k00_matric =  $cod_filtro $where";
   }else if ($tipo_filtro=="INSCRICAO"){
 		 $inscr = $cod_filtro;
-     $sqlarrejustreg = "select k28_numpre,k28_numpar,k28_receita,nome,k27_data,k27_hora,k27_dias,k27_obs,k28_receita, 'Inscricao - '||k00_inscr  as origem 
+     $sqlarrejustreg = "select k28_numpre,k28_numpar,k28_receita,nome,k27_data,k27_hora,k27_dias,k27_obs,k28_receita, 'Inscricao - '||k00_inscr  as origem
                         from arrejustreg
-												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre 
-												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
-                        inner join arrejust on k28_arrejust=k27_sequencia 
-	                      inner join db_usuarios on k27_usuario = id_usuario  
+												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre
+												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')."
+                        inner join arrejust on k28_arrejust=k27_sequencia
+	                      inner join db_usuarios on k27_usuario = id_usuario
                         inner join arreinscr on k28_numpre = arreinscr.k00_numpre
                         where k00_inscr = $cod_filtro $where";
   }else if ($tipo_filtro=="NUMPRE"){
 		 $numpre = $cod_filtro;
-     $sqlarrejustreg = "select k28_numpre,k28_numpar,k28_receita,nome,k27_data,k27_hora,k27_dias,k27_obs,k28_receita, 'Numpre - '||k28_numpre  as origem 
-                      	  from arrejustreg 	
-												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre 
-												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
-		                    inner join arrejust on k28_arrejust=k27_sequencia 
-	                      inner join db_usuarios on k27_usuario = id_usuario 
+     $sqlarrejustreg = "select k28_numpre,k28_numpar,k28_receita,nome,k27_data,k27_hora,k27_dias,k27_obs,k28_receita, 'Numpre - '||k28_numpre  as origem
+                      	  from arrejustreg
+												inner join arreinstit on arreinstit.k00_numpre = arrejustreg.k28_numpre
+												                     and arreinstit.k00_instit = ".db_getsession('DB_instit')."
+		                    inner join arrejust on k28_arrejust=k27_sequencia
+	                      inner join db_usuarios on k27_usuario = id_usuario
                         where k28_numpre = $cod_filtro $where";
   }
 //  die("$sqlarrejustreg");
@@ -180,24 +180,24 @@ function js_imprime(){
        $obs = substr("$k27_obs", 0, 25)."...";
 //$obs="vvvcccccccccc";
         ?>
-         
+
         <td>
           <div id="divlabel" width="9%" nowrap align="right" onmouseover="js_mostradiv('<?=$k27_obs?>',true)" onmouseout="js_mostradiv('',false)">
             <?=$obs?>
-          </div> 
+          </div>
         </td>
         <?
         echo "   <td  nowrap align='center'>  ".$origem."                    </td> ";
         echo " </tr> ";
-      
+
       //  $total += $valor;
       }
   }else{
-      db_msgbox("Débitos Justificados nao encontrados !");  
+      db_msgbox("Débitos Justificados nao encontrados !");
 			db_redireciona("cai3_gerfinanc024.php?tipo_filtro=$tipo_filtro&cod_filtro=$cod_filtro");
   }
 
-	?> 
+	?>
     <tr>
       <td  colspan="11" align="center" class="tabs">
 			  <input type="button" name="imprimir" value="Imprimir" onclick="js_imprime();">
@@ -216,8 +216,8 @@ function js_imprime(){
 function js_mostradiv(hist,mostra) {
 
   if(mostra == true){
-  
-   var camada = top.corpo.document.createElement("DIV");
+
+   var camada = CurrentWindow.corpo.document.createElement("DIV");
    camada.setAttribute("id","info");
    camada.setAttribute("align","center");
    camada.style.backgroundColor = "#FFFF99";
@@ -230,11 +230,11 @@ function js_mostradiv(hist,mostra) {
    camada.style.width = "500px";
    //camada.style.height = "60px";
    camada.innerHTML = '<table><tr><td>'+hist+'</td></tr></table>';
-   top.corpo.document.body.appendChild(camada);
+   CurrentWindow.corpo.document.body.appendChild(camada);
   }else{
-   if(top.corpo.document.getElementById("info")){
-     top.corpo.document.body.removeChild(top.corpo.document.getElementById("info"));
-    } 
+   if(CurrentWindow.corpo.document.getElementById("info")){
+     CurrentWindow.corpo.document.body.removeChild(CurrentWindow.corpo.document.getElementById("info"));
+    }
   }
 }
 </script>

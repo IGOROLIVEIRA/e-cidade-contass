@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Farmacia
@@ -39,7 +39,7 @@ $clrotulo->label("fa25_i_codigo");
     <td nowrap title="<?=@$Tfa13_i_codigo?>">
        <?=@$Lfa13_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_i_codigo',10,$Ifa13_i_codigo,true,'text',3,"")
 ?>
@@ -51,7 +51,7 @@ db_input('fa13_i_codigo',10,$Ifa13_i_codigo,true,'text',3,"")
        db_ancora(@$Lfa13_i_departamento,"js_pesquisafa13_i_departamento(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_i_departamento',10,$Ifa13_i_departamento,true,'text',$db_opcao," onchange='js_pesquisafa13_i_departamento(false);'")
 ?>
@@ -66,7 +66,7 @@ db_input('descrdepto',50,$Idescrdepto,true,'text',3,'')
        db_ancora(@$Lfa13_i_farprof,"js_pesquisafa13_i_farprof(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_i_farprof',10,$Ifa13_i_farprof,true,'text',$db_opcao," onchange='js_pesquisafa13_i_farprof(false);'")
 ?>
@@ -79,7 +79,7 @@ db_input('z01_nome',50,@$Iz01_nome,true,'text',3,'')
     <td nowrap title="<?=@$Tfa13_c_resptecnico?>">
        <?=@$Lfa13_c_resptecnico?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_resptecnico',50,$Ifa13_c_resptecnico,true,'text',$db_opcao,"")
 ?>
@@ -89,7 +89,7 @@ db_input('fa13_c_resptecnico',50,$Ifa13_c_resptecnico,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tfa13_c_autosanitaria?>">
        <?=@$Lfa13_c_autosanitaria?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_autosanitaria',50,$Ifa13_c_autosanitaria,true,'text',$db_opcao,"")
 ?>
@@ -99,18 +99,18 @@ db_input('fa13_c_autosanitaria',50,$Ifa13_c_autosanitaria,true,'text',$db_opcao,
     <td nowrap title="<?=@$Tfa13_c_inscestadual?>">
        <?=@$Lfa13_c_inscestadual?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_inscestadual',15,$Ifa13_c_inscestadual,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$Tfa13_c_crf?>">
        <?=@$Lfa13_c_crf?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_crf',15,$Ifa13_c_crf,true,'text',$db_opcao,"")
 ?>
@@ -120,7 +120,7 @@ db_input('fa13_c_crf',15,$Ifa13_c_crf,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tfa13_c_cnpj?>">
        <?=@$Lfa13_c_cnpj?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_cnpj',15,$Ifa13_c_cnpj,true,'text',$db_opcao,"")
 ?>
@@ -130,7 +130,7 @@ db_input('fa13_c_cnpj',15,$Ifa13_c_cnpj,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tfa13_c_numlicenca?>">
        <?=@$Lfa13_c_numlicenca?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_numlicenca',15,$Ifa13_c_numlicenca,true,'text',$db_opcao,"")
 ?>
@@ -140,7 +140,7 @@ db_input('fa13_c_numlicenca',15,$Ifa13_c_numlicenca,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tfa13_c_inscmf?>">
        <?=@$Lfa13_c_inscmf?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_inscmf',15,@$Ifa13_c_inscmf,true,'text',$db_opcao,"")
 ?>
@@ -150,13 +150,13 @@ db_input('fa13_c_inscmf',15,@$Ifa13_c_inscmf,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tfa13_c_regiao?>">
        <?=@$Lfa13_c_regiao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('fa13_c_regiao',15,$Ifa13_c_regiao,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  
+
   </table>
 
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
@@ -166,20 +166,20 @@ db_input('fa13_c_regiao',15,$Ifa13_c_regiao,true,'text',$db_opcao,"")
 <script>
 function js_pesquisafa13_i_departamento(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
   }else{
-     if(document.form1.fa13_i_departamento.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.fa13_i_departamento.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
+     if(document.form1.fa13_i_departamento.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.fa13_i_departamento.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
      }else{
-       document.form1.descrdepto.value = ''; 
+       document.form1.descrdepto.value = '';
      }
   }
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.fa13_i_departamento.focus(); 
-    document.form1.fa13_i_departamento.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.fa13_i_departamento.focus();
+    document.form1.fa13_i_departamento.value = '';
   }
 }
 function js_mostradb_depart1(chave1,chave2){
@@ -189,20 +189,20 @@ function js_mostradb_depart1(chave1,chave2){
 }
 function js_pesquisafa13_i_farprof(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_far_farmaceutico','func_far_farmaceutico.php?funcao_js=parent.js_mostrafar_farmaceutico1|fa25_i_codigo|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_farmaceutico','func_far_farmaceutico.php?funcao_js=parent.js_mostrafar_farmaceutico1|fa25_i_codigo|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.fa13_i_farprof.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_far_farmaceutico','func_far_farmaceutico.php?pesquisa_chave='+document.form1.fa13_i_farprof.value+'&funcao_js=parent.js_mostrafar_farmaceutico','Pesquisa',false);
+     if(document.form1.fa13_i_farprof.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_farmaceutico','func_far_farmaceutico.php?pesquisa_chave='+document.form1.fa13_i_farprof.value+'&funcao_js=parent.js_mostrafar_farmaceutico','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostrafar_farmaceutico(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.fa13_i_farprof.focus(); 
-    document.form1.fa13_i_farprof.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.fa13_i_farprof.focus();
+    document.form1.fa13_i_farprof.value = '';
   }
 }
 function js_mostrafar_farmaceutico1(chave1,chave2){
@@ -211,7 +211,7 @@ function js_mostrafar_farmaceutico1(chave1,chave2){
   db_iframe_far_farmaceutico.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_far_farmacia','func_far_farmacia.php?funcao_js=parent.js_preenchepesquisa|fa13_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_far_farmacia','func_far_farmacia.php?funcao_js=parent.js_preenchepesquisa|fa13_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_far_farmacia.hide();

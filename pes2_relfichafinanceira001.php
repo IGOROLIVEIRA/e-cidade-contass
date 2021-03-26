@@ -325,11 +325,11 @@ function js_pesquisaSelecao(lMostra) {
   if(lMostra){
 
     sUrl = 'func_selecao.php?funcao_js=parent.js_mostraSelecao|r44_selec|r44_descr&instit='+iCodigoInstituicao;
-    js_OpenJanelaIframe('top.corpo','db_iframe_selecao', sUrl, 'Pesquisa', lMostra);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_selecao', sUrl, 'Pesquisa', lMostra);
   }else{
 
     sUrl = 'func_selecao.php?pesquisa_chave='+document.form1.r44_selec.value+'&funcao_js=parent.js_mostraSelecaoHidden&instit='+iCodigoInstituicao;
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_selecao', sUrl, 'Pesquisa', lMostra);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_selecao', sUrl, 'Pesquisa', lMostra);
   }
 }
 
@@ -452,24 +452,24 @@ function js_emite(){
       if (erro == 0) {
 
     	  var frm = document.form1;
-    	  
+
     	  var sQuery = "";
     	  sQuery  = "r44_selec="+$F('r44_selec');
     	  sQuery += "&rubricas_selecionadas_text="+$F("rubricas_selecionadas_text");
     	  sQuery += "&matriculas_selecionadas_text="+$F("matriculas_selecionadas_text");
     	  if ($('rh27_rubric1')) {
-    		  sQuery += "&rh27_rubric1="+$F('rh27_rubric1');  
-    	  }	   
+    		  sQuery += "&rh27_rubric1="+$F('rh27_rubric1');
+    	  }
     	  if ($('rh27_rubric2')) {
-    		  sQuery += "&rh27_rubric2="+$F('rh27_rubric2');  
+    		  sQuery += "&rh27_rubric2="+$F('rh27_rubric2');
     	  }
     	  if ($('rh01_regist1')) {
-    		  sQuery += "&rh01_regist1="+$F('rh01_regist1');  
-    	  }	   
-    	  if ($('rh01_regist2')) {
-    		  sQuery += "&rh01_regist2="+$F('rh01_regist2');  
+    		  sQuery += "&rh01_regist1="+$F('rh01_regist1');
     	  }
-    	  
+    	  if ($('rh01_regist2')) {
+    		  sQuery += "&rh01_regist2="+$F('rh01_regist2');
+    	  }
+
     	  sQuery += "&anoi="+$F("anoi");
     		sQuery += "&mesi="+$F("mesi");
     		sQuery += "&anof="+$F("anof");
@@ -482,11 +482,11 @@ function js_emite(){
     		sQuery += "&mes_dados="+frm.mes_dados.value;
 
     		jan = window.open('pes2_relfichafinanceira002.php?'+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
-    		jan.moveTo(0,0);  
+    		jan.moveTo(0,0);
     	  return true;
 
       }
-      
+
     }else{
 
       alert(msgm);

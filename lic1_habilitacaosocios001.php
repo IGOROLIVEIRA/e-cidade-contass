@@ -29,7 +29,7 @@ if(isset($excluir)){
 
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
-   $result = $clhabilitacaosocios->sql_record($clhabilitacaosocios->sql_query($chavepesquisa)); 
+   $result = $clhabilitacaosocios->sql_record($clhabilitacaosocios->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $db_botao = true;
 }
@@ -45,8 +45,8 @@ if(isset($excluir)){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmhabilitacaosocios.php");
@@ -75,11 +75,11 @@ if(isset($incluir)){
   <script>
       function js_db_libera(){
          parent.document.formaba.db_habsocios.disabled=false;
-         top.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
+         CurrentWindow.corpo.iframe_db_habsocios.location.href='lic1_habilitacaosocios001.php?l207_habilitacao=".@$l206_sequencial."';
        ";
-        
+
            echo "  parent.mo_camada('db_hab');";
-         
+
  echo"}\n
     js_db_libera();
   </script>\n

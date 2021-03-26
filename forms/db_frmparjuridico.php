@@ -310,7 +310,7 @@ if($db_opcao == 1){
     /**
      * Abre a janela
      */
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_db_documentotemplate',
                         sArquivoPesquisa,
                         'Pesquisa Documentos Template',

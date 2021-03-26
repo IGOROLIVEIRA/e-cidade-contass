@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /*
@@ -110,12 +110,12 @@ function js_emite(){
   if(document.form1.pref_fun){
     qry += '&pref_fun=' + document.form1.pref_fun.value;
   }
-  js_OpenJanelaIframe('top.corpo','db_iframe_geradirf','pes4_geradirf002.php?'+qry,'Gerando Arquivo',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geradirf','pes4_geradirf002.php?'+qry,'Gerando Arquivo',true);
 }
 
 function js_erro(msg){
 
-  top.corpo.db_iframe_geradirf.hide();
+  CurrentWindow.corpo.db_iframe_geradirf.hide();
   alert(msg);
 }
 function js_fechaiframe(){
@@ -134,7 +134,7 @@ function js_controlarodape(mostra){
 
 function js_detectaarquivo(arquivo,pdf){
 
-  top.corpo.db_iframe_geradirf.hide();
+  CurrentWindow.corpo.db_iframe_geradirf.hide();
   listagem = arquivo+"#Download Arquivo TXT |";
   listagem+= pdf+"#Download Relatório";
   js_montarlista(listagem,"form1");
@@ -550,13 +550,13 @@ function js_tipoProcessamento() {
 
     parent.document.formaba.geradirf.disabled     = false;
     parent.document.formaba.selecionados.disabled = false;
-    top.corpo.iframe_selecionados.js_montaGrid();
+    CurrentWindow.corpo.iframe_selecionados.js_montaGrid();
     parent.mo_camada('selecionados');
   } else {
 
     parent.document.formaba.geradirf.disabled     = true;
     parent.document.formaba.selecionados.disabled = true;
-    top.corpo.iframe_selecionados.js_montaGrid();
+    CurrentWindow.corpo.iframe_selecionados.js_montaGrid();
     parent.mo_camada('geradirf');
   }
 }
@@ -619,7 +619,7 @@ function js_emitirDirf() {
   oParam.lProcessaEmpenho       = $F('dadosfinanceiros')=='s'?true:false;
   oParam.sCnpj                  = $F('cnpjpagador');
   oParam.sAcima6000             = $F('acima6000');
-  oParam.aMatriculaSelecionadas = top.corpo.iframe_selecionados.js_retornaMatriculasSelecionados();
+  oParam.aMatriculaSelecionadas = CurrentWindow.corpo.iframe_selecionados.js_retornaMatriculasSelecionados();
 
   js_divCarregando('Aguarde, Processando...','div_msg', true);
 

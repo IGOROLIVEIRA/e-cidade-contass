@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: inflatores
@@ -34,97 +34,97 @@ $clrotulo->label("i01_descr");
 ?>
 <form name="form1" method="post" action="">
     <table border="0">
-      <tr> 
-        <td nowrap title="<?=@$Ti03_codigo?>"> 
+      <tr>
+        <td nowrap title="<?=@$Ti03_codigo?>">
           <?=@$Li03_codigo?>
         </td>
-        <td> 
+        <td>
           <?
 db_input('i03_codigo',6,$Ii03_codigo,true,'text',3,"")
 ?>
         <td>
-         <td nowrap title="<?=@$Ti04_dtoper?>"> 
+         <td nowrap title="<?=@$Ti04_dtoper?>">
           <?=@$Li04_dtoper?>
         </td>
-        <td> 
+        <td>
           <?
-$i04_dtoper_dia = date("d",db_getsession("DB_datausu")); 
+$i04_dtoper_dia = date("d",db_getsession("DB_datausu"));
 $i04_dtoper_mes = date("m",db_getsession("DB_datausu"));
 $i04_dtoper_ano = date("Y",db_getsession("DB_datausu"));
 db_inputdata('i04_dtoper',@$i04_dtoper_dia,@$i04_dtoper_mes,@$i04_dtoper_ano,true,'text',$db_opcao)
 ?>
         <td>
-      </tr> 
-      <tr> 
-        <td nowrap title="<?=@$Ti03_descr?>"> 
+      </tr>
+      <tr>
+        <td nowrap title="<?=@$Ti03_descr?>">
           <?=@$Li03_descr?>
         </td>
-        <td> 
+        <td>
           <?
 db_input('i03_descr',40,$Ii03_descr,true,'text',$db_opcao,"")
 ?>
-        <td> 
-         <td nowrap title="<?=@$Ti04_dtvenc?>"> 
+        <td>
+         <td nowrap title="<?=@$Ti04_dtvenc?>">
           <?=@$Li04_dtvenc?>
         </td>
         <td>
           <?
-$i04_dtvenc_dia = date("d",db_getsession("DB_datausu")); 
+$i04_dtvenc_dia = date("d",db_getsession("DB_datausu"));
 $i04_dtvenc_mes = date("m",db_getsession("DB_datausu"));
 $i04_dtvenc_ano = date("Y",db_getsession("DB_datausu"));
 db_inputdata('i04_dtvenc',@$i04_dtvenc_dia,@$i04_dtvenc_mes,@$i04_dtvenc_ano,true,'text',$db_opcao)
 ?>
         <td>
 
-      </tr> 
-      <tr> 
-        <td nowrap title="<?=@$Ti03_numcgm?>"> 
+      </tr>
+      <tr>
+        <td nowrap title="<?=@$Ti03_numcgm?>">
           <?
        db_ancora(@$Li03_numcgm,"js_pesquisai03_numcgm(true);",$db_opcao);
        ?>
         </td>
-        <td> 
+        <td>
           <?
 db_input('i03_numcgm',8,$Ii03_numcgm,true,'text',$db_opcao," onchange='js_pesquisai03_numcgm(false);'")
 ?>
           <?
 db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
        ?>
-        <td> 
-        <td nowrap title="<?=@$Ti04_valor?>"> 
+        <td>
+        <td nowrap title="<?=@$Ti04_valor?>">
           <?
        echo $Li04_valor;
        ?>
         </td>
-        <td> 
+        <td>
           <?
 $i04_valor = 1;
 db_input('i04_valor',15,$Ii04_valor,true,'text',$db_opcao,'')
        ?>
-        <td> 
-      </tr> 
-      <tr> 
-        <td nowrap title="<?=@$Ti03_dtbase?>"> 
+        <td>
+      </tr>
+      <tr>
+        <td nowrap title="<?=@$Ti03_dtbase?>">
           <?=@$Li03_dtbase?>
         </td>
-        <td> 
+        <td>
           <?
-$i03_dtbase_dia = date("d",db_getsession("DB_datausu")); 
+$i03_dtbase_dia = date("d",db_getsession("DB_datausu"));
 $i03_dtbase_mes = date("m",db_getsession("DB_datausu"));
 $i03_dtbase_ano = date("Y",db_getsession("DB_datausu"));
 db_inputdata('i03_dtbase',@$i03_dtbase_dia,@$i03_dtbase_mes,@$i03_dtbase_ano,true,'text',$db_opcao,"")
 ?>
-        <td> 
+        <td>
 
-        <td nowrap title="<?=@$Ti04_obs?>"> 
+        <td nowrap title="<?=@$Ti04_obs?>">
           <?=@$Li04_obs?>
         </td>
-        <td> 
+        <td>
           <?
 db_input('i04_obs',20,$Ii04_obs,true,'text',$db_opcao,'')
 ?>
-        <td> 
-      </tr> 
+        <td>
+      </tr>
 
 
       <tr>
@@ -138,16 +138,16 @@ db_input('i04_obs',20,$Ii04_obs,true,'text',$db_opcao,'')
        echo @$Li04_receit;
        ?>
         </td>
-	
+
         <td>
           <?
 		  $cltabrec = new cl_tabrec;
           db_selectrecord('i04_receit',$cltabrec->sql_record($cltabrec->sql_query("","k02_codigo#k02_drecei","k02_codigo","")),true,4,"","","","","",1);
           ?>
-	
+
 	<td>
-     </tr>  
-      
+     </tr>
+
       <tr>
         <td nowrap>
           <input type="button" name="gravar"    id="gravar"    value="Gravar"    onclick="js_atualizadados();">
@@ -161,10 +161,10 @@ db_input('i04_obs',20,$Ii04_obs,true,'text',$db_opcao,'')
         <td>
           <input type="button" name="calcula" id="calcula" value="Calcular" onclick="js_atualizavalores();">
         <td>
-     </tr>  
+     </tr>
     </table>
     <table width="100%" border="0" cellspacing="0">
-      <tr> 
+      <tr>
         <td>
 		<iframe name="valores" id="valores" src="inf4_atuavalores002.php?<?=(isset($i03_codigo)?"i03_codigo=".$i03_codigo:"")?>" height="400" width="750"></iframe>
 	</td>
@@ -178,15 +178,15 @@ function js_atualizavalores(){
   db_iframe.mostraMsg();
   db_iframe.show();
   db_iframe.focus();
-} 
+}
 
 
 function js_pesquisadados(){
-  js_OpenJanelaIframe("top.corpo","db_iframe_pesquisa","func_infcab.php?funcao_js=parent.js_pesquisadadosretorno|i03_codigo","Pesquisa Valores Atualizados");
+  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_pesquisa","func_infcab.php?funcao_js=parent.js_pesquisadadosretorno|i03_codigo","Pesquisa Valores Atualizados");
 }
 
 function js_imprimir(programa){
-//  js_OpenJanelaIframe("top.corpo","db_iframe_pesquisa","func_infcab.php?funcao_js=parent.js_pesquisadadosretorno|i03_codigo","Pesquisa Valores Atualizados");
+//  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_pesquisa","func_infcab.php?funcao_js=parent.js_pesquisadadosretorno|i03_codigo","Pesquisa Valores Atualizados");
     jandb = window.open(programa,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jandb.moveTo(0,0);
 }
@@ -209,7 +209,7 @@ function js_atualizadados(){
      document.form1.i03_numcgm.focus();
      return false;
   }
-  
+
   var tab = valores.document.getElementById('tab');
 
   if ( tab.rows.length == 1 ) {
@@ -220,7 +220,7 @@ function js_atualizadados(){
   if (document.form1.i03_codigo.value != "" ) {
      valores.document.form1.i03_codigo.value  = document.form1.i03_codigo.value;
   }
-  
+
   valores.document.form1.i03_descr.value   = document.form1.i03_descr.value;
   valores.document.form1.i03_numcgm.value  = document.form1.i03_numcgm.value;
   valores.document.form1.i03_dtbase.value  = document.form1.i03_dtbase_ano.value + '-' + document.form1.i03_dtbase_mes.value + '-' + document.form1.i03_dtbase_dia.value;
@@ -238,7 +238,7 @@ function js_atualizadados(){
   obj.setAttribute("type","text");
   obj.setAttribute("value",tab.rows.length-1);
   valores.document.form1.appendChild(obj);
-  
+
   valores.document.form1.submit();
 
 }
@@ -254,10 +254,10 @@ function js_pesquisai03_numcgm(mostra){
   }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.i03_numcgm.focus(); 
-    document.form1.i03_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.i03_numcgm.focus();
+    document.form1.i03_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){

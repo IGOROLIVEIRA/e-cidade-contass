@@ -34,7 +34,7 @@ $clliclicita                  = new cl_liclicita;
 $clliclicitem                 = new cl_liclicitem;
 $clpcorcamval                 = new cl_pcorcamval;
 $oDaoTipoEmpresa              = new cl_liclicitatipoempresa;
-$oDaoPcorcamjulgamentologitem = new cl_pcorcamjulgamentologitem; 
+$oDaoPcorcamjulgamentologitem = new cl_pcorcamjulgamentologitem;
 
 
 $db_opcao = 2;
@@ -49,27 +49,27 @@ if (isset ($alterar) || isset ($excluir) || isset ($incluir) || isset ($verifica
 	$clpcorcamforne->pc21_importado = '0';
 }
 if (isset ($incluir)) {
-  
-  
+
+
 	db_inicio_transacao();
-	
-	
+
+
 	/*
 	 * logica para verifica√ß√£o de saldos das modalidades
 	 */
 
 	//$lSaldoModalidade = licitacao::verificaSaldoModalidade($l20_codigo, $iModadalidade, $iItem, $dtJulgamento)
-	
+
     //echo ("<pre>".print_r($oLicitacao, 1)."</pre>");
 	//die();
-	
+
 	$result = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo));
-	
-	
+
+
 	if ($clliclicita->numrows == 0) {
 		$result_dt = $clliclicita->sql_record($clliclicita->sql_query_file($l20_codigo));
 		db_fieldsmemory($result_dt, 0);
-		
+
 		$clpcorcam->pc20_dtate = $l20_dataaber;
 		$clpcorcam->pc20_hrate = $l20_horaaber;
 		$clpcorcam->incluir(null);
@@ -135,15 +135,15 @@ if (isset ($incluir)) {
 	}
 	db_fim_transacao($sqlerro);
 	$op = 1;
-	
-	
-	
+
+
+
 } else if (isset ($excluir)) {
 	    $result_val=$clpcorcamval->sql_record($clpcorcamval->sql_query_file($pc21_orcamforne));
 	    if ($clpcorcamval->numrows>0){
-	    	$erro_msg="Existe valor lanÁado para o fornecedor!!";	    	
-	    }else{ 	
-			db_inicio_transacao();		
+	    	$erro_msg="Existe valor lanÁado para o fornecedor!!";
+	    }else{
+			db_inicio_transacao();
 			if ($sqlerro == false) {
 				$clpcorcamfornelic->excluir($pc21_orcamforne);
 				if ($clpcorcamfornelic->erro_status == 0) {
@@ -154,7 +154,7 @@ if (isset ($incluir)) {
 
 			/**
 			 * Exclui da pcorcamjulgamentologitem
-			 */	 
+			 */
 			if ( !$sqlerro ) {
 
 				$sWhere = "pc93_pcorcamforne = {$pc21_orcamforne}";
@@ -174,13 +174,13 @@ if (isset ($incluir)) {
 				}
 			}
 			if ($sqlerro == false) {
-				
+
 			  $result_forne = $clpcorcamfornelic->sql_record($clpcorcamfornelic->sql_query(null,"*",null,"pc20_codorc=$pc20_codorc"));
-				
+
 				if ($clpcorcamfornelic->numrows==0){
-					
+
 					if ($sqlerro == false) {
-					  
+
 					  $sWhere  = "pc26_orcamitem in                                         ";
 					  $sWhere .= "(select pcorcamitem.pc22_orcamitem                        ";
 					  $sWhere .= " from pcorcamitem                                         ";
@@ -189,16 +189,16 @@ if (isset ($incluir)) {
 					  $sWhere .= "     where pcorcam.pc20_codorc ={$pc20_codorc})           ";
 					  $sWhere .= "                                                          ";
 						$clpcorcamitemlic->excluir(null, $sWhere);
-						
+
 						if ($clpcorcamitemlic->erro_status == 0) {
-						  
+
 							$sqlerro = true;
 							$erro_msg = $clpcorcamitemlic->erro_msg;
 						}
 					}
 
 					if ($sqlerro == false) {
-						
+
 					  $sWhere  = " pcorcamitem.pc22_codorc in (                          ";
 					  $sWhere .= " select pc20_codorc                                    ";
 					  $sWhere .= " from pcorcam                                          ";
@@ -206,7 +206,7 @@ if (isset ($incluir)) {
 					  $sWhere .= "         pcorcam.pc20_codorc = pcorcamitem.pc22_codorc ";
 					  $sWhere .= "   and   pcorcam.pc20_codorc = {$pc20_codorc})         ";
 					  $clpcorcamitem->excluir(null, $sWhere);
-					  
+
 						$pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
 
 						if ($clpcorcamitem->erro_status == 0) {
@@ -215,10 +215,10 @@ if (isset ($incluir)) {
 							$erro_msg = $clpcorcamitem->erro_msg;
 						}
 					}
-					
+
 					if ($sqlerro == false) {
 
-					  $clpcorcam->excluir($pc20_codorc);					
+					  $clpcorcam->excluir($pc20_codorc);
 						if ($clpcorcam->erro_status == 0) {
 
 						  $sqlerro = true;
@@ -238,9 +238,9 @@ if (isset ($incluir)) {
 			}
 			exit;
 			*/
-			$op = 1;			
+			$op = 1;
 			db_fim_transacao($sqlerro);
-	    }		
+	    }
 } else if (isset ($opcao) || (isset ($chavepesquisa) && $chavepesquisa != "")) {
 	$l20_codigo = $chavepesquisa;
 	$result = $clliclicita->sql_record($clliclicita->sql_query_pco($chavepesquisa));
@@ -251,17 +251,17 @@ if (isset ($incluir)) {
 	$op = 1;
 }
 if ($l03_pctipocompratribunal == 102) {
-		echo "<script>  
+		echo "<script>
      parent.document.formaba.db_cred.disabled=false;
     </script>";
 		$clcredenciamento = new cl_credenciamento();
 		$result_credenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_licitacao = $l20_codigo"));
-		
+
 		if (pg_num_rows($result_credenciamento) == 0) {
 			$db_botao = false;
 		}
 	}
-	
+
 ?>
 <html>
 <head>
@@ -275,7 +275,7 @@ if ($l03_pctipocompratribunal == 102) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -283,14 +283,14 @@ if ($l03_pctipocompratribunal == 102) {
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
-   
+
 	<?
 	include ("forms/db_frmforneclic.php");
 	?>
-	
+
     </center>
 	</td>
   </tr>
@@ -304,7 +304,7 @@ if (isset ($alterar) || isset ($excluir) || isset ($incluir) || isset ($verifica
 	if (isset ($excluir)&&isset($exc_tudo)&&$exc_tudo==true){
 		db_msgbox($erro_msg);
 		//echo "<script>location.href='lic1_fornec001.php';</script>";
-	}else{ 
+	}else{
 		if ($sqlerro == true) {
 			db_msgbox($erro_msg);
 			if ($clpcorcamforne->erro_campo != "") {
@@ -334,7 +334,7 @@ if ($op == 11) {
 }
 
 $sWhere = "pc21_codorc=".@ $pc20_codorc;
-$result_fornaba = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome","",$sWhere));  
+$result_fornaba = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome","",$sWhere));
 $iNumCgmForn  = db_utils::fieldsMemory($result_fornaba, 0)->pc21_numcgm;
 ?>
 
@@ -350,8 +350,8 @@ if(parent.document.formaba.db_cred.onclick != '') {
 	var param1 = $('pc20_codorc').value;
 	var param2 = $('l20_codigo').value;
 	var param3 = $('cgmaba').value;
-	
-	top.corpo.iframe_db_cred.location.href='lic1_credenciamento001.php?pc20_codorc='+param1+'&l20_codigo='+param2+'&l205_fornecedor='+param3;
+
+	CurrentWindow.corpo.iframe_db_cred.location.href='lic1_credenciamento001.php?pc20_codorc='+param1+'&l20_codigo='+param2+'&l205_fornecedor='+param3;
 	//parent.document.formaba.db_cred.disabled=false;
 	//parent.document.formaba.db_hab.disabled=false;
 
@@ -361,8 +361,8 @@ if(parent.document.formaba.db_habi.onclick != '') {
 
 	var param1 = $('pc20_codorc').value;
 	var param2 = $('l20_codigo').value;
-	
-	top.corpo.iframe_db_habi.location.href='lic1_habilitacaoforn001.php?l20_codigo='+param2+'&pc20_codorc='+param1;
+
+	CurrentWindow.corpo.iframe_db_habi.location.href='lic1_habilitacaoforn001.php?l20_codigo='+param2+'&pc20_codorc='+param1;
 	//parent.document.formaba.db_cred.disabled=false;
 	//parent.document.formaba.db_hab.disabled=false;
 

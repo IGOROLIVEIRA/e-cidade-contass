@@ -9,7 +9,7 @@ $clliclicitaoutrosorgaos->rotulo->label();
     <td nowrap title="<?=@$Tlic211_sequencial?>">
        <?=@$Llic211_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('lic211_sequencial',8,$Ilic211_sequencial,true,'text',3,"")
 ?>
@@ -21,7 +21,7 @@ db_input('lic211_sequencial',8,$Ilic211_sequencial,true,'text',3,"")
        db_ancora(@$Llic211_orgao,"js_pesquisalic211_orgao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('lic211_orgao',8,$Ilic211_orgao,true,'text',($db_opcao)," onchange='js_pesquisalic211_orgao(false);'")
 ?>
@@ -34,7 +34,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
     <td nowrap title="<?=@$Tlic211_processo?>">
        <?=@$Llic211_processo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('lic211_processo',4,$Ilic211_processo,true,'text',$db_opcao,"")
 ?>
@@ -44,7 +44,7 @@ db_input('lic211_processo',4,$Ilic211_processo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tlic211_numero?>">
        <?=@$Llic211_numero?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('lic211_numero',4,$Ilic211_numero,true,'text',$db_opcao,"")
 ?>
@@ -54,7 +54,7 @@ db_input('lic211_numero',4,$Ilic211_numero,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tlic211_anousu?>">
        <?=@$Llic211_anousu?>
     </td>
-    <td> 
+    <td>
 <?
 //$lic211_anousu = db_getsession('DB_anousu');
 db_input('lic211_anousu',4,$Ilic211_anousu,true,'text',$db_opcao,"")
@@ -65,7 +65,7 @@ db_input('lic211_anousu',4,$Ilic211_anousu,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tlic211_tipo?>">
        <?=@$Llic211_tipo?>
     </td>
-    <td> 
+    <td>
 <?
 $tipos = array(0 => '0 - Selecione',
                5 => '5 - Licitação realizada por outro órgão ou entidade',
@@ -108,7 +108,7 @@ db_input('lic211_codorgaoresplicit',4,$Ilic211_codorgaoresplicit,true,'text',$db
 <script>
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_liclicitaoutrosorgaos','func_liclicitaoutrosorgaos.php?tipodescr=true&funcao_js=parent.js_preenchepesquisa|lic211_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicitaoutrosorgaos','func_liclicitaoutrosorgaos.php?tipodescr=true&funcao_js=parent.js_preenchepesquisa|lic211_sequencial','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

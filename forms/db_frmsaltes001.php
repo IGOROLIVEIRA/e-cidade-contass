@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
  //MODULO: caixa
@@ -40,29 +40,29 @@
 
   <tr>
         <td nowrap title="<?=@$Tk13_descr?>">
-	  <? 
+	  <?
 	      if (isset($c01_reduz) && ($c01_reduz =="")){
  	           db_ancora(@$Lk13_descr,"js_contas();",1 );
 	      } else {
                    db_ancora(@$Lk13_descr,"js_contas();",3 );
-              } 
-	       
+              }
+
 	        ?></td>
         <td>
-	 <?  
+	 <?
    	    if (isset($c01_reduz) && ($c01_reduz =="")){
-	        db_input('c01_reduz',8,"",true,'text',1);	 
+	        db_input('c01_reduz',8,"",true,'text',1);
                 echo "Conta não liberada no exercício ! ";
 
 	    } else {
-                db_input('c01_reduz',8,"",true,'text',3);	
+                db_input('c01_reduz',8,"",true,'text',3);
 		echo "Conta já liberada  no exercício ! ";
-	    }  
+	    }
             echo "<br>" ;
 	    db_input('k13_descr',40,$Ik13_descr,true,'text',3,""); ?>
    </td>
   </tr>
-  
+
   <tr>
         <td nowrap title="<?=@$Tk13_saldo?>"><?=@$Lk13_saldo?> </td>
         <td><? db_input('k13_saldo',15,$Ik13_saldo,true,'text',3,"") ?>
@@ -80,11 +80,11 @@
   </tr>
   <tr>
         <td nowrap title="<?=@$Tk13_datvlr?>"> <?=@$Lk13_datvlr?> </td>
-        <td><? 
-	
+        <td><?
+
   	       @list($k13_datvlr_dia,$k13_datvlr_mes,$k13_datvlr_ano)= split("/",$k13_datvlr);
-	      db_inputdata('k13_datvlr',@$k13_datvlr_dia,@$k13_datvlr_mes,@$k13_datvlr_ano,true,'text',3,""); 
-	      
+	      db_inputdata('k13_datvlr',@$k13_datvlr_dia,@$k13_datvlr_mes,@$k13_datvlr_ano,true,'text',3,"");
+
 	      ?>
    </td>
   </tr>
@@ -96,7 +96,7 @@
 <script>
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_preenche|k13_conta','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_preenche|k13_conta','Pesquisa',true);
 }
 function js_preenche(chave){
    db_iframe_saltes.hide();
@@ -107,7 +107,7 @@ function js_preenche(chave){
    ?>
 }
 function js_contas(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes_contas001.php?funcao_js=parent.js_preenche_conta|c62_reduz|c60_descr','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes_contas001.php?funcao_js=parent.js_preenche_conta|c62_reduz|c60_descr','Pesquisa',true);
 }
 function js_preenche_conta(chave1,chave2){
     db_iframe_saltes.hide();

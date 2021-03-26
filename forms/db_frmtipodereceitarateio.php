@@ -32,7 +32,7 @@ db_input('c218_descricao',50,$Ic218_descricao,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tipodereceitarateio','func_tipodereceitarateio.php?funcao_js=parent.js_preenchepesquisa|c218_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipodereceitarateio','func_tipodereceitarateio.php?funcao_js=parent.js_preenchepesquisa|c218_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tipodereceitarateio.hide();

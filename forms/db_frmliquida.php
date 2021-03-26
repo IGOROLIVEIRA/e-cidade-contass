@@ -219,7 +219,7 @@ function js_emitir(codordem){
 }
 function js_pesquisa(iNumEmp) {
   if (iNumEmp == '') {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp', 'Pesquisa', true);
   } else {
     js_consultaEmpenho(iNumEmp,<?=$operacao?>);
   }
@@ -298,7 +298,7 @@ function js_saida(oAjax){
     $('e60_vlrliq').value = obj.e60_vlrliq;
     $('historico').value  = obj.e60_resumo.urlDecode();
     $('saldo_disp').value = obj.saldo_dis;
-    $('sEstrutElemento').value = obj.sEstrutural;    
+    $('sEstrutElemento').value = obj.sEstrutural;
     saida                 = '';
     iTotNotas             = 0;
     $('dados').innerHTML  = '';
@@ -331,7 +331,7 @@ function js_saida(oAjax){
 		                        js_strToFloat(obj.data[i].e70_vlranu)-js_strToFloat(obj.data[i].e53_vlrpag)).toFixed(2);
 
           aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
-        
+
             if (aMatrizEntrada.indexOf(estrutural) !== -1) {
                document.getElementById('competDespLabel').style.display = "table-cell";
                document.getElementById('competDespInput').style.display = "table-cell";
@@ -445,11 +445,11 @@ function js_marcaLinha(obj){
 function js_liquidar(metodo){
 
    if (metodo == "liquidarAjax") {
-       
+
        aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
-       
+
        if (aMatrizEntrada.indexOf($F('sEstrutElemento')) !== -1) {
-       
+
            if ($F('e50_compdesp') == ''){
                alert('Campo Competência da Despesa deve ser informado.');
                $('e50_compdesp').focus();
@@ -458,7 +458,7 @@ function js_liquidar(metodo){
                return false;
            }
        }
-   }  
+   }
 
    itens = js_getElementbyClass(form1,'chkmarca');
    notas = '';
@@ -557,10 +557,10 @@ function js_decodeUrl(sTexto){
 }
 function js_pesquisae49_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.e49_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.z01_credor.value = '';
      }
@@ -588,7 +588,7 @@ function removerObj(id) {
 }
 
 function js_consultaNota(iCodNota) {
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_nota', 'emp2_consultanotas002.php?e69_codnota='+iCodNota, 'Pesquisa Dados da Nota', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_nota', 'emp2_consultanotas002.php?e69_codnota='+iCodNota, 'Pesquisa Dados da Nota', true);
 }
 
 function js_emitir(codordem){
@@ -603,7 +603,7 @@ function js_lancarRetencao(iCodNota, iCodOrd, nValor){
    var lSession = <?=$operacao==2?"false":"true"?>;
    var iNumCgm  = $F('e49_numcgm');
    $('e49_numcgm').disabled = true;
-   js_OpenJanelaIframe('top.corpo', 'db_iframe_retencao',
+   js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_retencao',
                        'emp4_lancaretencoes.php?iNumNota='+iCodNota+'&iNumEmp='+iNumEmp+'&iCodOrd='+iCodOrd+
                        '&iNumCgm='+iNumCgm+
                        "&lSession="+lSession+"&nValorBase="+js_strToFloat(nValor)+"&iCodMov=&callback=true",

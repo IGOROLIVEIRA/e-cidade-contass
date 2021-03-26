@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -50,10 +50,10 @@ db_postmemory($HTTP_POST_VARS);
 <script>
 
 function js_emite(){
-  
-	var iInstit  = document.form1.db_selinstit.value;  
-	var sQry     = ""; 
-  
+
+	var iInstit  = document.form1.db_selinstit.value;
+	var sQry     = "";
+
 	if ( document.form1.orgaos1.value == "" ) {
 		alert("Favor selecionar os dados do nível 1");
 		return false;
@@ -62,14 +62,14 @@ function js_emite(){
 		alert("Favor selecionar os dados do nível 2");
 		return false;
 	}
-	
+
 	if (iInstit == 0) {
     alert('Você não escolheu nenhuma Instituição. Verifique!');
     return false;
   }else{
-		
+
 		sQry += "?instit="		  +iInstit;
-	  sQry += "&dataf="			  +document.form1.dataf.value;	
+	  sQry += "&dataf="			  +document.form1.dataf.value;
 		sQry += "&sAgrupador1=" +document.form1.sAgrupador1.value;
 	  sQry += "&sAgrupador2=" +document.form1.sAgrupador2.value;
 		sQry += "&sOrgaos1="	  +document.form1.orgaos1.value;
@@ -81,9 +81,9 @@ function js_emite(){
 }
 
 	function js_selecionar(iSelAgrupa,iValSel) {
-		
+
 		var iInstit  = document.form1.db_selinstit.value;
-	  
+
 		if ( iSelAgrupa == "SelAgrupa1") {
 			 var iVerNivelVal = document.form1.vernivel1.value;
 			 var iVerNivel		= document.form1.vernivel1.name;
@@ -99,23 +99,23 @@ function js_emite(){
 			alert('Você não escolheu nenhuma Instituição. Verifique!');
 			return false;
 	  }
-	  
+
 		if ( iVerNivelVal != '' && iVerNivelVal != iValSel){
-			
+
 			if (confirm('Você já escolheu anteriormente dados do nível selecionado , deseja altera-los?')==false) {
 				return false
 			} else {
 				js_OpenJanelaIframe('','db_iframe_orgao','func_selorcdotacao.php?nivel='+iValSel+'&db_selinstit='+iInstit+'&qvernivel='+iVerNivel+'&qorgaos='+iOrgao,'pesquisa',true);
 	  	}
-		
-		} else if (top.corpo.db_iframe_orgao != undefined) {
+
+		} else if (CurrentWindow.corpo.db_iframe_orgao != undefined) {
 
 		  if (iValSel == iVerNivelVal) {
 		 	  db_iframe_orgao.show();
 		  } else {
 			  js_OpenJanelaIframe('','db_iframe_orgao','func_selorcdotacao.php?nivel='+iValSel+'&db_selinstit='+iInstit+'&qvernivel='+iVerNivel+'&qorgaos='+iOrgao,'pesquisa',true);
 		  }
-	  
+
 		} else {
 		  js_OpenJanelaIframe('','db_iframe_orgao','func_selorcdotacao.php?nivel='+iValSel+'&db_selinstit='+iInstit+'&qvernivel='+iVerNivel+'&qorgaos='+iOrgao,'pesquisa',true);
 	  }
@@ -132,32 +132,32 @@ function js_emite(){
 		aNiveis[4] = new Array("5B","Programa");
 		aNiveis[5] = new Array("6B","Proj/Ativ");
 		aNiveis[6] = new Array("7B","Elemento");
-		aNiveis[7] = new Array("8B","Recurso");	
-		
-	  for (i=0; i<aNiveis.length; i++){	
+		aNiveis[7] = new Array("8B","Recurso");
+
+	  for (i=0; i<aNiveis.length; i++){
 				Sel.options[i] = new Option(aNiveis[i][1],aNiveis[i][0]) ;
 		}
 		Sel.options[iVal].selected = true;
-	
+
 	}
 
 	function js_mudaSelect(Sel,SelCorr){
-		
+
 		if ( SelCorr.name == "sAgrupador1" ) {
 			document.form1.vernivel1.value = "";
 			document.form1.orgaos1.value = "";
 		} else if ( SelCorr.name == "sAgrupador2" ) {
 			document.form1.vernivel2.value = "";
 			document.form1.orgaos2.value = "";
-		}	
+		}
 
-		iValSel = SelCorr.value; 
+		iValSel = SelCorr.value;
 		iValAnt = Sel.value;
-		
+
 		for (i=0; i<Sel.length;i++) {
 			Sel.options[i] = null ;
 		}
-		
+
 		var aNiveis    = new Array(8);
 				aNiveis[0] = new Array("1A","Órgão");
 				aNiveis[1] = new Array("2A","Unidade");
@@ -166,28 +166,28 @@ function js_emite(){
 				aNiveis[4] = new Array("5B","Programa");
 				aNiveis[5] = new Array("6B","Proj/Ativ");
 				aNiveis[6] = new Array("7B","Elemento");
-				aNiveis[7] = new Array("8B","Recurso");	
-	  
-		x = 0;	
-		for (i=0; i<aNiveis.length; i++){	
-			if (iValSel == aNiveis[i][0]) {		
+				aNiveis[7] = new Array("8B","Recurso");
+
+		x = 0;
+		for (i=0; i<aNiveis.length; i++){
+			if (iValSel == aNiveis[i][0]) {
 				continue;
-			} else {	
+			} else {
 				Sel.options[x] = new Option(aNiveis[i][1],aNiveis[i][0]) ;
 				x++;
 			}
 		}
-		
+
 		for (i=0; i<Sel.length;i++) {
-			if (Sel.options[i].value == iValAnt) {  
+			if (Sel.options[i].value == iValAnt) {
 				Sel.options[i].selected = true;
 			}
 		}
-		
-			
+
+
 	}
 
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -211,23 +211,23 @@ function js_emite(){
 						<table>
 							<tr>
 								<td align="left" >
-									<b>Posição Até :</b> 
+									<b>Posição Até :</b>
 								</td>
 								<td>
 									<?
 										$iDia = date("d",db_getsession("DB_datausu"));
                     $iMes = date("m",db_getsession("DB_datausu"));
                     $iAno = date("Y",db_getsession("DB_datausu"));
-										
+
 										db_inputdata("dataf",$iDia,$iMes,$iAno,true,"text",1,"");
 									?>
-									
-									<b>Despesa :</b> 
-									
+
+									<b>Despesa :</b>
+
 									<?
-										$aTipoDespesa = array("1"=>"Empenhada","2"=>"Liquidada","3"=>"Paga");									
-										db_select('iTipoDespesa',$aTipoDespesa,true,1,"");				
-									?>	
+										$aTipoDespesa = array("1"=>"Empenhada","2"=>"Liquidada","3"=>"Paga");
+										db_select('iTipoDespesa',$aTipoDespesa,true,1,"");
+									?>
 								</td>
 							</tr>
 							<tr>

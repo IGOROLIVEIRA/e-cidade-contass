@@ -21,7 +21,7 @@
 
     // Busca
     $('#menu-search').menuSearch({
-      uri: top.document.baseURI,
+      uri: CurrentWindow.document.baseURI,
       containerBounds: $('.taskbar-container'),
       onCreate: function() {
 
@@ -43,7 +43,7 @@
           iModuloId: context.modulo
         }
 
-        Desktop.Window.create(path, oParams);
+        DeskCurrentWindow.Window.create(path, oParams);
         $('#menu').trigger('menu.close');
       }
     });
@@ -209,7 +209,7 @@
             iModuloId: $('#modulos span.active').data('id')
           }
 
-          Desktop.Window.create(title, oParams);
+          DeskCurrentWindow.Window.create(title, oParams);
           $menu.trigger('menu.close');
         }
 

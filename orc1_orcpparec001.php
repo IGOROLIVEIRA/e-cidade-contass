@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -70,7 +70,7 @@ if(isset($incluir)){
       $obs   = $vt["o27_obs_$ano"];
       $sequen= $vt["o27_sequen_$ano"];
       $perc   = $vt["o27_perc_$ano"];
-      
+
       if (trim($vt["o27_concarpeculiar_$ano"]) == ""){
         $o27_concarpeculiar = "0";
       } else {
@@ -87,12 +87,12 @@ if(isset($incluir)){
 	db_fieldsmemory($result,0);
       }
      //---------------------------------------------------------------------------------------------
-       
+
       //-------PROCESSO DE INLCUÃO-----------------------------------------------------------------------
 	if(empty($proces)){
 	  $proces = '0';
 	}
-	if($sqlerro == false){ 
+	if($sqlerro == false){
 	  $clorcpparec->o27_proces         = $proces;
 	  $clorcpparec->o27_codleippa      = $o27_codleippa;
 	  $clorcpparec->o27_exercicio      = $ano;
@@ -103,16 +103,16 @@ if(isset($incluir)){
     $clorcpparec->o27_concarpeculiar = $o27_concarpeculiar;
 
 	  $clorcpparec->incluir(null);
-	} 	
+	}
 	$erro_msg = $clorcpparec->erro_msg;
 	if($clorcpparec->erro_status==0){
 	     $sqlerro=true;
 	     break;
 	}else{
 	   $seq  = $clorcpparec->o27_sequen;
-	}  	
-     //------------------------------------------------------------------------------------------   
-   
+	}
+     //------------------------------------------------------------------------------------------
+
      //alterar-----------------------------------------------------
 	if($sqlerro == false && $priproces == true){
 	    $priproces = false;
@@ -124,10 +124,10 @@ if(isset($incluir)){
 	    if($clorcpparec->erro_status==0){
 	       $sqlerro=true;
 	       break;
-	    }   
+	    }
 	}
-     //---------------------------------------------------------------- 
-    }  
+     //----------------------------------------------------------------
+    }
     next($vt);
   }
   if($sqlerro == true){
@@ -142,7 +142,7 @@ if(isset($incluir)){
   $vt=$HTTP_POST_VARS;
   $ta=sizeof($vt);
   reset($vt);
-  
+
   $priproces = true;
   for($i=0; $i<$ta; $i++){
     $chave=key($vt);
@@ -172,10 +172,10 @@ if(isset($incluir)){
 	  db_fieldsmemory($result,0);
 	}
        //---------------------------------------------------------------------------------------------
-	 
-	
+
+
 	//-------PROCESSO DE ALTERAÇÃO---------------------------------------------------------------------
-	  if($sqlerro == false){ 
+	  if($sqlerro == false){
 	    $clorcpparec->o27_proces         = $o27_proces;
 	    $clorcpparec->o27_codleippa      = $o27_codleippa;
 	    $clorcpparec->o27_exercicio      = $ano;
@@ -190,16 +190,16 @@ if(isset($incluir)){
 	    }else{
 	      $clorcpparec->o27_sequen  = $sequen;
    	      $clorcpparec->alterar($sequen);
-	    }  
-	  } 	
+	    }
+	  }
 	  $erro_msg = $clorcpparec->erro_msg;
 	  if($clorcpparec->erro_status==0){
 	       $sqlerro=true;
 	       break;
-	  }  	
-       }	  
-       //------------------------------------------------------------------------------------------   
-    }  
+	  }
+       }
+       //------------------------------------------------------------------------------------------
+    }
     next($vt);
   }
  db_fim_transacao($sqlerro);
@@ -212,10 +212,10 @@ if(isset($incluir)){
   $erro_msg = $clorcpparec->erro_msg;
   if($clorcpparec->erro_status==0){
        $sqlerro=true;
-  }  	
+  }
 
  db_fim_transacao($sqlerro);
-} 
+}
 ?>
 <html>
 <head>
@@ -227,13 +227,13 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 <?
 $libera=false;
 
-if(isset($o27_codleippa) && empty($testado)){	
+if(isset($o27_codleippa) && empty($testado)){
     $libera  = true;
 }
 
@@ -256,7 +256,7 @@ $clrotulo->label("o27_codleippa");
     <td nowrap title="<?=@$To27_codleippa?>">
        <?=$Lo27_codleippa?>
     </td>
-    <td> 
+    <td>
 <?
   $result=$clorcppalei->sql_record($clorcppalei->sql_query_file(null,"o21_codleippa,o21_descr||' '||o21_anoini||'-'||o21_anofim","o21_codleippa desc"));
   $numrows = $clorcppalei->numrows;
@@ -267,26 +267,26 @@ $clrotulo->label("o27_codleippa");
   </tr>
 
 
-  
+
   <tr>
     <td colspan='2' align='center'>
       <input name="pesquisar" type="submit" id="pesquisar" value="Entrar"  >
-    </td>  
-  </tr>    
+    </td>
+  </tr>
   </table>
 </form>
 <script>
 function js_cod(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_orcpparec','db_iframe_orcppa','func_orcppa.php?funcao_js=parent.js_mostracod1|o23_codppa','Pesquisa',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcpparec','db_iframe_orcppa','func_orcppa.php?funcao_js=parent.js_mostracod1|o23_codppa','Pesquisa',true,0);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_orcpparec','db_iframe_orcppa','func_orcppa.php?pesquisa_chave='+document.form1.o24_codppa.value+'&funcao_js=parent.js_mostracod','Pesquisa',false,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcpparec','db_iframe_orcppa','func_orcppa.php?pesquisa_chave='+document.form1.o24_codppa.value+'&funcao_js=parent.js_mostracod','Pesquisa',false,0);
   }
 }
 function js_mostracod(chave,erro){
-  if(erro==true){ 
-    document.form1.o24_codppa.focus(); 
-    document.form1.o24_codppa.value = ''; 
+  if(erro==true){
+    document.form1.o24_codppa.focus();
+    document.form1.o24_codppa.value = '';
   }
 }
 function js_mostracod1(chave1){
@@ -294,10 +294,10 @@ function js_mostracod1(chave1){
   db_iframe_orcppa.hide();
 }
 
-  
+
 </script>
 <?
-}	
+}
 ?>
     </center>
 	</td>
@@ -314,10 +314,10 @@ if(isset($incluir) || isset($alterar) || isset($excluir)){
     }
 
     if ($sqlerro == false){
-      echo "<script> 
+      echo "<script>
                     document.location.href = 'orc1_orcpparec001.php?o27_codleippa=$o27_codleippa&o27_codleippadescr=$o27_codleippadescr&testado=$testado';
                     parent.document.formaba.orcpparec02.disabled=false;
-                    top.corpo.iframe_orcpparec02.location.href='orc1_orcpparec002.php?o27_codleippa=".@$o27_codleippa."';
+                    CurrentWindow.corpo.iframe_orcpparec02.location.href='orc1_orcpparec002.php?o27_codleippa=".@$o27_codleippa."';
             </script>";
     }
 }
@@ -325,8 +325,8 @@ if( empty($opcao) &&  (($libera==true || isset($testado)) && isset($pesquisar)) 
   echo "<script>";
   echo "
        parent.document.formaba.orcpparec02.disabled=false;
-       top.corpo.iframe_orcpparec02.location.href='orc1_orcpparec002.php?o27_codleippa=".@$o27_codleippa."';
-      ";	 
+       CurrentWindow.corpo.iframe_orcpparec02.location.href='orc1_orcpparec002.php?o27_codleippa=".@$o27_codleippa."';
+      ";
   echo "</script>";
 }
 ?>

@@ -21,20 +21,20 @@ if(isset($excluir)){
 
   if($clhabilitacaosocios->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clhabilitacaosocios->erro_msg; 
+  }
+  $erro_msg = $clhabilitacaosocios->erro_msg;
   $clhabilitacaoforn->excluir($l206_sequencial);
   if($clhabilitacaoforn->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clhabilitacaoforn->erro_msg; 
+  }
+  $erro_msg = $clhabilitacaoforn->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($chavepesquisa)); 
+   $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -48,8 +48,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmhabilitacaoforn.php");
@@ -85,7 +85,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.habilitacaosocios.disabled=false;
-         top.corpo.iframe_habilitacaosocios.location.href='lic1_habilitacaosocios001.php?db_opcaoal=33&l207_sequencial=".@$l206_sequencial."';
+         CurrentWindow.corpo.iframe_habilitacaosocios.location.href='lic1_habilitacaosocios001.php?db_opcaoal=33&l207_sequencial=".@$l206_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('habilitacaosocios');";

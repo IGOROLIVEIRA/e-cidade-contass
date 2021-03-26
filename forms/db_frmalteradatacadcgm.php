@@ -88,7 +88,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 <script type="text/javascript">
 
     function js_pesquisaz09_numcgm(mostra) {
-        js_OpenJanelaIframe('top.corpo', 'func_nome', 'func_nome.php?funcao_js=parent.js_mostranumcgm|z01_numcgm|z01_nome', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'func_nome', 'func_nome.php?funcao_js=parent.js_mostranumcgm|z01_numcgm|z01_nome', 'Pesquisa', true);
     }
 
     function js_mostranumcgm(chave1, chave2) {

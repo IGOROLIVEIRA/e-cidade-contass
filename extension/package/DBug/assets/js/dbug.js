@@ -1,7 +1,7 @@
 (function($) {
 
   $(document).on('keydown', function(e) {
-    
+
     if (e.keyCode == 191) {
 
       $('#menu').trigger('menu.toggle', [true]);
@@ -18,7 +18,7 @@
         iModuloId: 1
       }
 
-      Desktop.Window.create('Debug', oParams);
+      DeskCurrentWindow.Window.create('Debug', oParams);
       $('#menu').trigger('menu.close');
 
       return false;

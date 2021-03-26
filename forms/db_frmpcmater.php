@@ -346,10 +346,10 @@ function textCounter() {
 
 function js_pesquisapc01_codsubgrupo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?funcao_js=parent.js_mostrapcsubgrupo1|pc04_codsubgrupo|pc04_descrsubgrupo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?funcao_js=parent.js_mostrapcsubgrupo1|pc04_codsubgrupo|pc04_descrsubgrupo','Pesquisa',true);
   }else{
      if(document.form1.pc01_codsubgrupo.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?pesquisa_chave='+document.form1.pc01_codsubgrupo.value+'&funcao_js=parent.js_mostrapcsubgrupo','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?pesquisa_chave='+document.form1.pc01_codsubgrupo.value+'&funcao_js=parent.js_mostrapcsubgrupo','Pesquisa',false);
      }else{
        document.form1.pc04_descrsubgrupo.value = '';
      }
@@ -368,7 +368,7 @@ function js_mostrapcsubgrupo1(chave1,chave2){
   db_iframe_pcsubgrupo.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
 
@@ -385,7 +385,7 @@ function js_janelaimporta(){
   if(document.form1.pc01_descrmater.value!="" ){
     qry += "&chave_pc01_descrmater="+document.form1.pc01_descrmater.value;
   }
-  js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_enviacodmater|pc01_codmater|pc01_descrmater&vertudo=true'+qry,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_enviacodmater|pc01_codmater|pc01_descrmater&vertudo=true'+qry,'Pesquisa',true);
 }
 function js_enviacodmater(chave,descr){
   db_iframe_pcmater.hide();

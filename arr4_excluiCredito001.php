@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -59,7 +59,7 @@ include_once("libs/db_utils.php");
    <td>
      <?
        db_ancora("Abatimento:","js_pesquisaAbatimento();",1);
-     ?> 
+     ?>
    </td>
    <td>
      <?
@@ -73,7 +73,7 @@ include_once("libs/db_utils.php");
        db_ancora('Consultar Origens Atuais do Abatimento',"js_consultaOrigemCredito()",1,'');
       ?>
     </td>
-  </tr>  
+  </tr>
  </table>
 </fieldset>
 <br>
@@ -93,14 +93,14 @@ include_once("libs/db_utils.php");
 
 	$('btnExcluir').observe("click", function() {
 		js_ExcluirCredito();
-	});  
+	});
 
   function js_pesquisaAbatimento() {
 	    js_OpenJanelaIframe('','db_iframe_abatimento','func_abatimento.php?tipo=3&funcao_js=parent.js_mostraAbatimento1|k125_sequencial|k125_valor','Pesquisa',true);
 	}
-	
+
 	function js_mostraAbatimento1(chave1,chave2) {
-		
+
 	  $("abatimento").value    = chave1;
 	  db_iframe_abatimento.hide();
 
@@ -110,11 +110,11 @@ include_once("libs/db_utils.php");
 	}
 
 	function js_consultaOrigemCredito() {
-		
+
 		var sUrl = 'func_origemabatimento.php?iAbatimento='+$("abatimento").value;
-	  js_OpenJanelaIframe('top.corpo','db_iframe_abatimento',sUrl,'Origem Crédito',true);
-	  
-	}	
+	  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_abatimento',sUrl,'Origem Crédito',true);
+
+	}
 
 	function js_ExcluirCredito() {
 
@@ -122,17 +122,17 @@ include_once("libs/db_utils.php");
 			if (confirm("Este procedimento não poderá ser revertido!\nTem certeza que deseja confirmar a operação?")) {
 		    if (confirm("Confirma a exclusão do crédito gerado pelo abatimento "+$("abatimento").value+" mesmo sabendo que a operação não poderá ser revertida?")) {
   		  	if (!confirm("Confirma exclusão do abatimento "+$("abatimento").value+"?")) {
-  	  		  return false;	
-  		  	}  	
+  	  		  return false;
+  		  	}
 	  	  } else {
-		  	  return false; 
-	  	  }  
+		  	  return false;
+	  	  }
 			} else {
 				return false;
-			}	
+			}
 		} else {
-			return false; 
-		}		  		
+			return false;
+		}
 		var oParam  				   = new Object();
 		    oParam.iAbatimento = $("abatimento").value;
 		    oParam.exec 		   = "exluirCredito";
@@ -145,8 +145,8 @@ include_once("libs/db_utils.php");
 		                                  parameters:'json='+Object.toJSON(oParam),
 		                                  onComplete: js_retornoExcluirCredito
 		                                }
-		                              );		
-		
+		                              );
+
 	}
 
 	function js_retornoExcluirCredito(oAjax){
@@ -161,12 +161,12 @@ include_once("libs/db_utils.php");
   }
 
 	function js_limpaTela() {
-		
-		$("abatimento").value    = ""; 
+
+		$("abatimento").value    = "";
 		$("MI").style.visibility = 'hidden';
 		$('btnExcluir').disabled  = true;
 		js_pesquisaAbatimento();
-		 
+
 	}
-		
+
 </script>

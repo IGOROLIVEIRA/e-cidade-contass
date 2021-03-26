@@ -166,7 +166,7 @@ $("uploadfile").observe('change', function() {
 
     startLoading();
     var iFrame = document.createElement("iframe");
-    iFrame.src = 'func_uploadfiledocumento.php?clone=top.corpo.iframe_documentos.form1';
+    iFrame.src = 'func_uploadfiledocumento.php?clone=CurrentWindow.corpo.iframe_documentos.form1';
     iFrame.id  = 'uploadIframe';
     $('teste').appendChild(iFrame);
 

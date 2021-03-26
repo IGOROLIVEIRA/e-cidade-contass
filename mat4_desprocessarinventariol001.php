@@ -345,7 +345,7 @@ function js_pesquisa(){
 
   var sQuery  = "func_inventario.php?situacao=3&funcao_js=parent.js_preenchepesquisa|t75_sequencial|t75_dataabertura|t75_periodoinicial|t75_periodofinal|t75_processo|t75_exercicio|t75_acordocomissao|ac08_descricao|t75_observacao";
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
     'db_iframe_inventario',
     sQuery,
     'Pesquisa',

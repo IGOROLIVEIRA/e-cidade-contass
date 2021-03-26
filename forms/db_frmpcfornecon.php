@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: compras
@@ -44,7 +44,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
   $db_opcao = 3;
   $db_botao=true;
-}else{  
+}else{
   $db_opcao = 1;
   $db_botao=true;
   if(isset($novo) || (isset($alterar) ||   isset($excluir) || isset($incluir) && $sqlerro==false )){
@@ -58,10 +58,10 @@ if(isset($db_opcaoal)){
     $pc63_tipoconta = "1";
     unset($pc64_contabanco);
   }
-} 
+}
 
 if($db_opcao == 1){
-  $resultx =  $clpcforne->sql_record($clpcforne->sql_query($pc63_numcgm,"z01_cgccpf as pc63_cnpjcpf, z01_nome")); 
+  $resultx =  $clpcforne->sql_record($clpcforne->sql_query($pc63_numcgm,"z01_cgccpf as pc63_cnpjcpf, z01_nome"));
   if($clpcforne->numrows>0){
     db_fieldsmemory($resultx,0);
   }
@@ -76,7 +76,7 @@ if($db_opcao == 1){
       db_ancora(@$Lpc63_numcgm,"js_pesquisapc63_numcgm(true);",3);
       ?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
       <?
       if(isset($submita)){
         db_input('submita',6,0,true,'hidden',3,"");
@@ -91,7 +91,7 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tpc63_banco?>">
       <?=@$Lpc63_banco?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
       <?
       db_input('pc63_banco',5,$Ipc63_banco,true,'text',$db_opcao,"")
       ?>
@@ -101,14 +101,14 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tpc63_agencia?>">
       <?=@$Lpc63_agencia?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('pc63_agencia',5,$Ipc63_agencia,true,'text',$db_opcao,"")
       ?>
-    <td nowrap title="<?=@$Tpc63_agencia_dig?>"> 
+    <td nowrap title="<?=@$Tpc63_agencia_dig?>">
        <b><?=@$RLpc63_agencia_dig?>:</b>
-    </td> 
-    <td> 
+    </td>
+    <td>
       <?
       db_input('pc63_agencia_dig',2,$Ipc63_agencia_dig,true,'text',$db_opcao,"");
       ?>
@@ -118,14 +118,14 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tpc63_conta?>">
       <?=@$Lpc63_conta?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('pc63_conta',17,$Ipc63_conta,true,'text',$db_opcao,"")
       ?>
     </td>
-    <td nowrap title="<?=@$Tpc63_conta_dig?>"> 
+    <td nowrap title="<?=@$Tpc63_conta_dig?>">
       <b><?=@$RLpc63_conta_dig?>:</b>
-    </td> 
+    </td>
     <td>
       <?
       db_input('pc63_conta_dig',2,$Ipc63_conta_dig,true,'text',$db_opcao,"");
@@ -133,7 +133,7 @@ if($db_opcao == 1){
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tpc63_codigooperacao?>"> 
+    <td nowrap title="<?=@$Tpc63_codigooperacao?>">
       <b><?=@$RLpc63_codigooperacao?>:</b>
     </td>
     <td>
@@ -141,7 +141,7 @@ if($db_opcao == 1){
       db_input('pc63_codigooperacao',2,$Ipc63_codigooperacao,true,'text',$db_opcao,"");
       ?>
     </td>
-    <td nowrap title="<?=@$Tpc63_tipoconta?>"> 
+    <td nowrap title="<?=@$Tpc63_tipoconta?>">
       <b><?=@$RLpc63_tipoconta?>:</b>
     </td>
     <td>
@@ -154,7 +154,7 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tpc63_cnpjcpf?>">
       <?=@$Lpc63_cnpjcpf?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('pc63_cnpjcpf',17,@$Ipc63_cnpjcpf,true,'text',$db_opcao," onBlur='js_verificaCGCCPF(this)'")
       ?>
@@ -162,7 +162,7 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tpc63_identcli?>">
       <?=@$Lpc63_identcli?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('pc63_identcli',17,@$Ipc63_identcli,true,'text',$db_opcao)
       ?>
@@ -172,7 +172,7 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tpc64_contabanco?>">
       <b>Conta padrão:</b>
     </td>
-    <td> 
+    <td>
       <?
       if(!isset($pc64_contabanco)){
       	// echo($clpcfornecon->sql_query_padrao(null,"pc63_contabanco","","pc63_numcgm=$pc63_numcgm"));
@@ -186,12 +186,12 @@ if($db_opcao == 1){
       $x = array("t"=>"SIM","f"=>"NÃO");
       db_select('pc64_contabanco',$x,true,$db_opcao,"")
       ?>
-      <input type="hidden" name="padrao" value="<?=$pc64_contabanco?>"> 
+      <input type="hidden" name="padrao" value="<?=$pc64_contabanco?>">
     </td>
     <td nowrap title="<?=@$Tpc63_dataconf?>">
       <b><?//=@$Lpc63_dataconf?>Conferido:</b>
     </td>
-    <td> 
+    <td>
       <?
       $checked = "";
       if(isset($pc63_dataconf) && trim($pc63_dataconf)!=""){
@@ -209,7 +209,7 @@ if($db_opcao == 1){
   <tr>
     <td nowrap>
     </td>
-    <td> 
+    <td>
       <?
       global $pc63_id_usuario ;
       $pc63_id_usuario = db_getsession("DB_id_usuario") ;
@@ -226,7 +226,7 @@ if($db_opcao == 1){
       if(isset($submita)){
       ?>
         <input name="fechar" type="button" value="Fechar" onclick="parent.db_iframe_pcfornecon.hide();">
-      <?     
+      <?
       }
       ?>
     </td>
@@ -234,7 +234,7 @@ if($db_opcao == 1){
 </table>
 <table width="90%" height="50%" border="0">
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
       <?
       $sql = $clpcfornecon->sql_query_lefpadrao(null,"pc63_contabanco,pc63_cnpjcpf,pc63_numcgm,pc63_banco,pc63_agencia||' - '||pc63_agencia_dig as pc63_agencia,pc63_conta||' - '||pc63_conta_dig as pc63_conta,pc63_dataconf,case when pc64_contabanco is not null then 'Padrão' else '' end as pc64_contabanco","pc63_contabanco"," pc63_numcgm = $pc63_numcgm ");
 
@@ -262,9 +262,9 @@ if(isset($submita)){
 function js_ver(){
   if(document.form1.pc63_cnpjcpf.value != 0 &&document.form1.pc63_cnpjcpf.value != '' && <?=$db_opcao?> !=3){
     return  js_verificaCGCCPF(document.form1.pc63_cnpjcpf);
-  }else{   
+  }else{
     return true;
-  }  
+  }
 }
 
 function js_cancelar(){
@@ -277,20 +277,20 @@ function js_cancelar(){
 }
 function js_pesquisapc63_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.pc63_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.pc63_numcgm.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
+     if(document.form1.pc63_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.pc63_numcgm.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
      }else{
-       document.form1.pc60_dtlanc.value = ''; 
+       document.form1.pc60_dtlanc.value = '';
      }
   }
 }
 function js_mostrapcforne(chave,erro){
-  document.form1.pc60_dtlanc.value = chave; 
-  if(erro==true){ 
-    document.form1.pc63_numcgm.focus(); 
-    document.form1.pc63_numcgm.value = ''; 
+  document.form1.pc60_dtlanc.value = chave;
+  if(erro==true){
+    document.form1.pc63_numcgm.focus();
+    document.form1.pc63_numcgm.value = '';
   }
 }
 function js_mostrapcforne1(chave1,chave2){
@@ -300,20 +300,20 @@ function js_mostrapcforne1(chave1,chave2){
 }
 function js_pesquisapc63_id_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.pc63_id_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.pc63_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.pc63_id_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornecon','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.pc63_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.pc63_id_usuario.focus(); 
-    document.form1.pc63_id_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.pc63_id_usuario.focus();
+    document.form1.pc63_id_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
@@ -332,14 +332,14 @@ function js_validaBanco() {
     document.getElementById('pc63_tipoconta').disabled      = true;
     document.getElementById('pc63_tipoconta').value         = 1;
   } else {
-    
+
     document.getElementById('pc63_codigooperacao').disabled = false;
     document.getElementById('pc63_codigooperacao').style.backgroundColor='#E6E4F1';
     document.getElementById('pc63_tipoconta').disabled      = false;
-    
+
   }
-  
-  
+
+
 }
 js_validaBanco();
 $('pc63_banco').observe('change', js_validaBanco);

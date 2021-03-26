@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ function js_matricontri(){
   db_iframe.focus();
 }
 function js_matricontri1(matric){
-  js_OpenJanelaIframe('top.corpo','db_iframe','con1_contrib006.php?j01_matric='+matric,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','con1_contrib006.php?j01_matric='+matric,'Pesquisa',true);
 }
 function js_matricontri2(matri,refant,nome,setor,quadra,lote,zona,total,desconto,idbql,testada){
   matriculas.js_incluirlinha(matri,refant,nome,setor,quadra,lote,zona,total,desconto,idbql,testada);
@@ -67,8 +67,8 @@ function js_pesquisa_lotes(){
   }else if(contri.match(expr)) {
           alert("Este campo deve preenchido somente com números decimais!");
           contri = document.form1.d02_contri.focus();;
-  }else{ 
-      document.form1.seleciona.disabled=true; 
+  }else{
+      document.form1.seleciona.disabled=true;
       document.getElementById('matriculas').src = "con1_contrib005.php?contri="+contri;
       document.form1.confirma.style.visibility='visible';
       document.form1.matricontri.style.visibility='visible';
@@ -80,7 +80,7 @@ function js_pesquisa_lotes(){
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr> 
+    <tr>
       <td width="360" height="18">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
@@ -88,8 +88,8 @@ function js_pesquisa_lotes(){
     </tr>
   </table>
   <table width="790" border="0" cellspacing="0" cellpadding="0">
-    <tr> 
-      <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
   <form name="form1" method="post" action="">
   <center>
@@ -106,7 +106,7 @@ function js_pesquisa_lotes(){
         db_ancora(@$Ld02_contri,"js_contri(true);",$db_opcao);
       ?>
       </td>
-      <td> 
+      <td>
   <?
   db_input('d02_contri',7,$Id02_contri,true,'text',$db_opcao," onchange='js_contri(false);'");
   db_input('j14_nome',40,$Ij14_nome,true,'text',3);
@@ -140,25 +140,25 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_contri(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_editalrua.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_editalrua.php?funcao_js=parent.js_mostracontri1|d02_contri|j14_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_editalrua.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
-  }  
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_editalrua.php?pesquisa_chave='+document.form1.d02_contri.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
+  }
 }
 function js_mostracontri(chave,erro){
-  if(erro==true){ 
-    document.form1.d02_contri.focus(); 
+  if(erro==true){
+    document.form1.d02_contri.focus();
     document.form1.j14_nome.value = "";
     document.form1.d02_contri.value = "";
   }else{
-     document.form1.seleciona.disabled=false; 
+     document.form1.seleciona.disabled=false;
      document.form1.j14_nome.value = chave;
-  }  
+  }
 }
 function js_mostracontri1(chave1,chave2){
   document.form1.d02_contri.value = chave1;
   document.form1.j14_nome.value = chave2;
-  document.form1.seleciona.disabled=false; 
+  document.form1.seleciona.disabled=false;
   db_iframe.hide();
 }
 </script>

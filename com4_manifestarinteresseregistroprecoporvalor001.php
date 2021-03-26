@@ -107,7 +107,7 @@ require_once "dbforms/db_funcoes.php";
         estimativaRegistroPreco = {
           pesquisar : function() {
 
-            js_OpenJanelaIframe( 'top.corpo',
+            js_OpenJanelaIframe( 'CurrentWindow.corpo',
                                  'db_iframe_solicita',
                                  'func_solicitaestimativa.php?funcao_js=parent.estimativaRegistroPreco.preenche|pc10_numero&departamento=true&anuladas=1&comcompilacao=1&formacontrole=2',
                                  'Pesquisa de Estimativa de Registro de Preço por Valor', true );
@@ -118,7 +118,7 @@ require_once "dbforms/db_funcoes.php";
               return false;
             }
 
-            if (top.corpo.db_iframe_solicita) {
+            if (CurrentWindow.corpo.db_iframe_solicita) {
               db_iframe_solicita.hide();
             }
 
@@ -166,7 +166,7 @@ require_once "dbforms/db_funcoes.php";
         aberturaRegistroPreco = {
           pesquisar : function() {
 
-            js_OpenJanelaIframe( 'top.corpo',
+            js_OpenJanelaIframe( 'CurrentWindow.corpo',
                                  'db_iframe_solicitaregistropreco',
                                  'func_solicitaregistropreco.php?funcao_js=parent.aberturaRegistroPreco.preenche|pc54_solicita'
                                  + '&liberado=true&trazsemcompilacao=1&noperiodo=1&anuladas=1&formacontrole=2',

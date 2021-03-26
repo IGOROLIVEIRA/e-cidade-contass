@@ -100,7 +100,7 @@ if(isset($e69_codnota)){
      <script>
 
       function js_conlancam(codlan){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conlancam003','func_conlancam003.php?chavepesquisa='+codlan,'Pesquisa');
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancam003','func_conlancam003.php?chavepesquisa='+codlan,'Pesquisa');
       }
 
      </script>

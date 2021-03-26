@@ -64,7 +64,7 @@ if ($db_opcao == 1) {
   <script>
 
     function js_pesquisa() {
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_setorambulatorial',
                            'func_setorambulatorial.php?funcao_js=parent.js_preenchepesquisa|sd91_codigo',
                            'Pesquisa', true);

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -69,14 +69,14 @@ if(isset($db_atualizar) || isset($alterar)){
   $db_botao = false;
 }
 if(isset($alterar)){
-	
+
    $result = $clcfpatriplaca->sql_record($clcfpatriplaca->sql_query_file(db_getsession("DB_instit")));
    if ($clcfpatriplaca->numrows > 0) {
      db_fieldsmemory($result,0);
    } else {
    	 $t07_digseqplaca = 4;
    }
-	
+
   $sqlerro=false;
   if(isset($t64_class) && trim($t64_class) == ""){
     if(isset($t52_descr) && trim($t52_descr) != ''){
@@ -106,9 +106,9 @@ if(isset($alterar)){
     $result_lote = $clbenslote->sql_record($clbenslote->sql_query_file(null,"t43_bem",null,"t43_codlote=$t42_codigo"));
     for ($w=0;$w<$clbenslote->numrows;$w++) {
     	 db_fieldsmemory($result_lote,$w);
-    	 
+
     	 if ($sqlerro == false) {
-    		 
+
     	 	if ($update_ident == "true") {
     	 		$seq = pg_result(pg_query("select max(t41_placaseq) from bensplaca where t41_placa = '$t64_class' "),0,0)+1;
     	 		if ($seq == "" || $seq == 0) {
@@ -116,23 +116,23 @@ if(isset($alterar)){
     	 		}
     		  $clbens->t52_ident = str_replace(".","",$t64_class.db_formatar($seq,'f','0',$t07_digseqplaca,'e',0));
     		}
-    		 
+
       	 $clbens->t52_bem    = $t43_bem;
       	 $clbens->t52_descr  = $t52_descr;
       	 $clbens->t52_codcla = $class;
       	 $clbens->t52_numcgm = $t52_numcgm;
       	 $clbens->t52_valaqu = $t52_valaqu;
-      	 $clbens->t52_dtaqu  = $t52_dtaqu_ano."-".$t52_dtaqu_mes."-".$t52_dtaqu_dia;      	
+      	 $clbens->t52_dtaqu  = $t52_dtaqu_ano."-".$t52_dtaqu_mes."-".$t52_dtaqu_dia;
       	 $clbens->t52_obs    = $t52_obs;
       	 $clbens->t52_depart = $t52_depart;
       	 $clbens->alterar($t43_bem);
     	   if ($clbens->erro_status==0) {
 			     $sqlerro=true;
       	 }
-      	 
+
       	 if ( $sqlerro == false && $update_ident == "true") {
       	 	 $codigo                    = pg_result($clbensplaca->sql_record($clbensplaca->sql_query_file (null,"t41_codigo",null,"t41_bem = {$t43_bem}")),0,0);
-           $clbensplaca->t41_codigo   = $codigo;      	 	 
+           $clbensplaca->t41_codigo   = $codigo;
       	 	 $clbensplaca->t41_bem      = $t43_bem;
       	 	 $clbensplaca->t41_placa    = str_replace(".","",$t64_class);
       	 	 $clbensplaca->t41_placaseq = str_replace(".","",$seq);
@@ -140,13 +140,13 @@ if(isset($alterar)){
       	 	 if ($clbensplaca->erro_status==0) {
 			       $sqlerro=true;
       	   }
-      	   
-      	 }   
+
+      	 }
 
       	$erro_msg = $clbens->erro_msg;
-      	 
+
     	}
-     
+
     if ($sqlerro == false) {
 		  $result_bensdiv=$clbensdiv->sql_record($clbensdiv->sql_query_file($t43_bem));
 		  if ($clbensdiv->numrows>0) {
@@ -154,9 +154,9 @@ if(isset($alterar)){
 			   if ($clbensdiv->erro_status==0) {
 				   $sqlerro=true;
 				   $erro_msg=$clbensdiv->erro_msg;
-			   } 
+			   }
 		  }
-		  
+
 		  if ($sqlerro == false) {
 			  if ($t33_divisao!="") {
 				  $clbensdiv->t33_divisao=$t33_divisao;
@@ -164,41 +164,41 @@ if(isset($alterar)){
 				   if ($clbensdiv->erro_status==0) {
 					   $sqlerro=true;
 					   $erro_msg=$clbensdiv->erro_msg;
-				   } 
+				   }
 			  }
 		  }
 	  }
    }
    db_fim_transacao($sqlerro);
   }
-}   
+}
 if(isset($chavepesquisa)){
 	$db_opcao = 2;
   $db_botao = true;
   $desabilitar_campos = 'false';
   $bem_trans="";
   $vir="";
-  $result = $clbenslote->sql_record($clbenslote->sql_query(null,"distinct t42_codigo,t42_descr,t52_codcla,t64_class,t64_descr,t52_numcgm,z01_nome,t52_valaqu,t52_dtaqu,t52_descr,t52_obs,t52_depart,descrdepto",null,"t43_codlote=$chavepesquisa")); 
+  $result = $clbenslote->sql_record($clbenslote->sql_query(null,"distinct t42_codigo,t42_descr,t52_codcla,t64_class,t64_descr,t52_numcgm,z01_nome,t52_valaqu,t52_dtaqu,t52_descr,t52_obs,t52_depart,descrdepto",null,"t43_codlote=$chavepesquisa"));
   if($clbenslote->numrows>1){
   	db_msgbox("Não é possivel alterar!!Existe bem que ja foi alterado individualmente!!");
   	echo "<script>location.href='pat1_bensaltlote005.php';</script>";
   	exit;
   }else if($clbenslote->numrows>0){
   	$result_lote = $clbenslote->sql_record($clbenslote->sql_query_file(null,"t43_bem",null,"t43_codlote=$chavepesquisa"));
-  	
+
     for($w=0;$w<$clbenslote->numrows;$w++){
     	db_fieldsmemory($result_lote,$w);
     	$result_transf=$clbenstransfcodigo->sql_record($clbenstransfcodigo->sql_query_file(null,"*",null," t95_codbem = $t43_bem "));
     	if ($clbenstransfcodigo->numrows>0){
     		$bem_trans .= $vir." ".$t43_bem;
-    		$vir=","; 
-    	}    	
+    		$vir=",";
+    	}
     }
     if ($bem_trans!=""){
     	db_msgbox("Não é possivel alterar!!Bens $bem_trans transferidos!!");
     }
-    db_fieldsmemory($result,0);    
-  } 
+    db_fieldsmemory($result,0);
+  }
 }
 ?>
 <html>
@@ -212,8 +212,8 @@ if(isset($chavepesquisa)){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <br><br>
 <table width="600" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	  include("forms/db_frmbensaltlote.php");
@@ -222,7 +222,7 @@ if(isset($chavepesquisa)){
     </td>
   </tr>
 </table>
-  <? 
+  <?
     db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
   ?>
 </body>
@@ -246,9 +246,9 @@ if(isset($chavepesquisa)){
          parent.document.formaba.bensbaix.disabled=false;
          parent.document.formaba.bensimoveis.disabled=false;
          parent.document.formaba.bensmater.disabled=false;
-         top.corpo.iframe_bensbaix.location.href='pat1_bensbaix001.php?t55_codbem=".@$chavepesquisa."';
-         top.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=22&t54_codbem=".@$chavepesquisa."';
-         top.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=22&t53_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensbaix.location.href='pat1_bensbaix001.php?t55_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=22&t54_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=22&t53_codbem=".@$chavepesquisa."';
        }\n
     js_db_libera();
   </script>\n
@@ -260,12 +260,12 @@ if(isset($chavepesquisa)){
 	 parent.document.formaba.bensbaix.disabled=false;
          parent.document.formaba.bensimoveis.disabled=false;
          parent.document.formaba.bensmater.disabled=false;
-         top.corpo.iframe_bensbaix.location.href='pat1_bensbaix001.php?t55_codbem=".@$chavepesquisa."';
-         top.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=33&t54_codbem=".@$chavepesquisa."';
-         top.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=33&t53_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensbaix.location.href='pat1_bensbaix001.php?t55_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=33&t54_codbem=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=33&t53_codbem=".@$chavepesquisa."';
       }\n
     js_db_bloqueia();
-  </script>\n   
+  </script>\n
  ";
   }
   */

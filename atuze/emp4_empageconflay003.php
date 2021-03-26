@@ -43,25 +43,25 @@ if(isset($e80_data_ano)){
   $sqlerro=false;
 if(isset($atualizar) ){
   $e83_convenio = $e83_conv;
-  
+
   db_inicio_transacao();
   $sqlerro = false;
 
-  $sqlinst = "select * from db_config where codigo = ".db_getsession("DB_instit"); 
+  $sqlinst = "select * from db_config where codigo = ".db_getsession("DB_instit");
   $resultinst = pg_query($sqlinst);
-  
+
   db_fieldsmemory($resultinst,0);
- 
+
   //esta variavel contem o tipo de um movimentos selecionados
-  $e83_codtipo = $codtipo;  
-  
+  $e83_codtipo = $codtipo;
+
   //rotina que traz a sequencia do cheque... executada apenas na primeira vez
    $result = $clempagetipo->sql_record($clempagetipo->sql_query($codtipo,'e83_sequencia as sequencia,e83_conta,e83_codmod'));
    if($clempagetipo->numrows>0){
        	db_fieldsmemory($result,0);
     }
   //-----------------------------------
-  
+
   //----------------------------------------
   if($sqlerro==false && $movs !=''){
     $clempagegera->e87_descgera = $e87_descgera;
@@ -73,18 +73,18 @@ if(isset($atualizar) ){
       $sqlerro = true;
     }else{
       $gera = $clempagegera->e87_codgera;
-    } 
+    }
   }
   //--------------------------
-  
+
   //-----------------------------------
  //inclui na tabela empageconf
     $arr =  split("XX",$movs);
     $tot_valor ='';
     for($i=0; $i<count($arr); $i++ ){
-       $mov = $arr[$i];  
+       $mov = $arr[$i];
 
-               
+
        //-------------
        //manutenção empagetipo
        //soh quando for banco do brasil
@@ -95,12 +95,12 @@ if(isset($atualizar) ){
 	       $erro_msg = $clempageconfgera->erro_msg;
 	       if($clempageconfgera->erro_status==0){
 		     $sqlerro = true;
-	       }     
+	       }
 	  }
-      //------- 
-    }	
+      //-------
+    }
    ///------------
-   
+
    //-------------
    //manutenção empagetipo
       if($sqlerro==false && empty($adicionar)) {
@@ -110,10 +110,10 @@ if(isset($atualizar) ){
 	   $erro_msg = $clempagetipo->erro_msg;
 	   if($clempagetipo->erro_status==0){
 		 $sqlerro = true;
-	   }     
+	   }
       }
-  //------- 
-  
+  //-------
+
 
       ///////////////////////////////////////////////////////////////////////////////////////////////////////
      /*       	começa layouts				*/
@@ -135,8 +135,8 @@ select  distinct
 	substr(z01_nome,1,40) as z01_nome,
 	pc63_cnpjcpf as z01_cgccpf,
 	cancelado
-        
-from 
+
+from
 	(select e90_codgera,
        		e90_codmov,
        		c63_banco,
@@ -146,15 +146,15 @@ from
        		e81_valor,
        		case when e60_numcgm is null then k17_numcgm else e60_numcgm end as numcgm,
        		e88_codmov as cancelado
-       
-	from empageconfgera 
-     		inner join empagemov on e90_codmov = e81_codmov 
+
+	from empageconfgera
+     		inner join empagemov on e90_codmov = e81_codmov
      		left join empempenho on e60_numemp = e81_numemp
-     		inner join empagepag on e81_codmov = e85_codmov 
-     		inner join empagetipo on e85_codtipo = e83_codtipo 
-     		left join empageslip on e81_codmov = e89_codmov 
-     		inner join conplanoreduz on e83_conta = c61_reduz 
-     		inner join conplanoconta on c63_codcon = c61_codcon 
+     		inner join empagepag on e81_codmov = e85_codmov
+     		inner join empagetipo on e85_codtipo = e83_codtipo
+     		left join empageslip on e81_codmov = e89_codmov
+     		inner join conplanoreduz on e83_conta = c61_reduz
+     		inner join conplanoconta on c63_codcon = c61_codcon
      		left join slip on slip.k17_codigo = e89_codigo
      		left join slipnum on slipnum.k17_codigo = slip.k17_codigo
      		left join empageconfcanc on e88_codmov = e90_codmov
@@ -162,9 +162,9 @@ from
 	left join cgm on z01_numcgm = numcgm
 	left join pcfornecon on z01_numcgm = pc63_numcgm
 	left join pcforneconpad on pc63_contabanco = pc64_contabanco
-	
+
 where e90_codgera = $gera
-order by c63_conta,e90_codmov		
+order by c63_conta,e90_codmov
      ";
 $result  =  @pg_query($sql);
 $numrows =  @pg_numrows($result);
@@ -181,7 +181,7 @@ if($numrows==0){
 		       lpad(e83_convenio,5,0) as convenio,
 		       c63_agencia,
 		       c63_conta
-		from empagemod 
+		from empagemod
 		     inner join empagetipo      on e84_codmod = e83_codmod
 		     inner join conplanoreduz   on c61_reduz  = e83_conta
 		     inner join conplanoconta   on c61_codcon = c63_codcon
@@ -192,12 +192,12 @@ if($numrows==0){
      db_fieldsmemory($resultcab,0);
    }else{
       db_msgbox('não possui conta');
-   }  
-          
+   }
+
 
 	  $codmovs = str_replace("XX",",","$movs");
-	
-	  $sqlmov = "select 
+
+	  $sqlmov = "select
 			  e81_codage,
 			  round(sum(e81_valor),2) as valor,
 			  e60_numcgm,
@@ -207,13 +207,13 @@ if($numrows==0){
 			  coalesce(pc63_banco,'000') as pc63_banco,
 			  pc63_agencia,
 			  pc63_conta
-		 from empage 
-		      inner join empagemov 	on e80_codage = e81_codage 
-		      inner join empempenho 	on e60_numemp = e81_numemp 
-		      inner join cgm 		on z01_numcgm = e60_numcgm 
-		      left  join pcfornecon 	on e60_numcgm = pc63_numcgm 
-		      inner join empagepag 	on e85_codmov = e81_codmov 
-		      inner join empagetipo 	on e83_codtipo = e85_codtipo 
+		 from empage
+		      inner join empagemov 	on e80_codage = e81_codage
+		      inner join empempenho 	on e60_numemp = e81_numemp
+		      inner join cgm 		on z01_numcgm = e60_numcgm
+		      left  join pcfornecon 	on e60_numcgm = pc63_numcgm
+		      inner join empagepag 	on e85_codmov = e81_codmov
+		      inner join empagetipo 	on e83_codtipo = e85_codtipo
 		      inner join empagemod 	on e83_codmod = e84_codmod
 		 where pc63_banco is not null and pc63_agencia is not null and e81_codmov in ($codmovs)
 		 group by e81_codage,e60_numcgm,z01_nome,z01_cgccpf,pc63_banco,pc63_agencia,pc63_conta
@@ -225,19 +225,19 @@ if($numrows==0){
 	    $sqlerro=true;
 	    $erro_msg='Movimento não disponivel para ser pago no banco.';
 	  }*/
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////LAYOUTS////////////////////////////////////////////////////////////////////////////////////////////////////////
     //// LAYOUT BANCO DO BANRISUL
        $registro = 0;
-   
-       
+
+
 //     $nomeinst = "Prefeitura";
        db_fieldsmemory($result,0);
 
        $data    =  $dtin_dia.$dtin_mes.$dtin_ano;
        $dat_cred = $deposito_dia.$deposito_mes.$deposito_ano;
        /// criar campo de sequencia do arquivo no empagetipo.
-       
+
 //       $nomearquivo = basename(tempnam('tmp','Modelo')).".doc";
        $nomearquivo = 'pagtbr'.$e90_codgera.'.doc';
        //indica qual será o nome do arquivo
@@ -246,25 +246,25 @@ if($numrows==0){
        if(!is_writable("tmp/")){
 	 $sqlerro= true;
 	 $erro_msg = 'Sem permissão de gravar o arquivo. Contate suporte.';
-       }  
-      
-      if($e83_codmod == 3 && $sqlerro == false){   
+       }
+
+      if($e83_codmod == 3 && $sqlerro == false){
 
      $cllayouts_bs->nomearq = "tmp/$nomearquivo";
-     
-     
+
+
      $agencia_pre = db_formatar(str_replace('.','',str_replace('-','',$c63_agencia)),'s','0',5,'e',0);
      $conta_pre   = db_formatar(str_replace('.','',str_replace('-','',$c63_conta)),'s','0',10,'e',0);
-     
+
      $numero_dia = 2;
-     
-     $seq_arq = 1; 
-     
+
+     $seq_arq = 1;
+
      ///// HEADER DO ARQUIVO
-     
+
      $cllayouts_bs->cabec101 = '041';			/// fixo 	001 - 003
      $cllayouts_bs->cabec102 = str_repeat('0',4) ;	/// zeros	004 - 007
-     $cllayouts_bs->cabec103 = '0';			/// zeros 	
+     $cllayouts_bs->cabec103 = '0';			/// zeros
      $cllayouts_bs->cabec104 = str_repeat(' ',9) ;
      $cllayouts_bs->cabec105 = '2';			/// 1 - cpf , 2 - cnpj
      $cllayouts_bs->cabec106 = $cgc;
@@ -275,8 +275,8 @@ if($numrows==0){
      $cllayouts_bs->cabec111 = '000';
      $cllayouts_bs->cabec112 = $conta_pre;
      $cllayouts_bs->cabec113 = '0';
-     $cllayouts_bs->cabec114 = db_formatar(substr(strtoupper($nomeinst),0,30),'s',' ',30,'e',0); 
-     $cllayouts_bs->cabec115 = db_formatar('BANCO BANRISUL                ','s',' ',30,'e',0); 
+     $cllayouts_bs->cabec114 = db_formatar(substr(strtoupper($nomeinst),0,30),'s',' ',30,'e',0);
+     $cllayouts_bs->cabec115 = db_formatar('BANCO BANRISUL                ','s',' ',30,'e',0);
      $cllayouts_bs->cabec116 = str_repeat(' ',10) ;
      $cllayouts_bs->cabec117 = '1';
      $cllayouts_bs->cabec118 = date("d").date("m").date("Y");
@@ -290,15 +290,15 @@ if($numrows==0){
      $cllayouts_bs->gera_cabecalho();
 
 
-     
+
    $seq_header   = 0;
    $xconta       = '';
    $registro     = 1;
    $valor_header = 0;
-   
+
    for($i = 0;$i < $numrows;$i++){
      db_fieldsmemory($result,$i);
-     
+
 
 //     $agencia_pre = db_formatar(str_replace('-','',$c63_agencia),'s','0',5,'e',0);
 //     $conta_pre   = db_formatar(str_replace('-','',$c63_conta),'s','0',10,'e',0);
@@ -306,13 +306,13 @@ if($numrows==0){
      /////  HEADER DO LOTE
      if($xconta != $c63_conta){
        $xconta = $c63_conta;
-       if($seq_header != 0){       
+       if($seq_header != 0){
           ///// TRAILLER DO LOTE
-          $cllayouts_bs->roda101 = '041'; 
+          $cllayouts_bs->roda101 = '041';
 	  $cllayouts_bs->roda102 = '0001';
 	  $cllayouts_bs->roda103 = '5';
 	  $cllayouts_bs->roda104 = str_repeat(' ',9) ;
-	  $cllayouts_bs->roda105 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0); 
+	  $cllayouts_bs->roda105 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0);
 	  $cllayouts_bs->roda106 = db_formatar(str_replace(',','',str_replace('.','',$valor_header)),'s','0',18,'e',0);
 	  $cllayouts_bs->roda107 = str_repeat('0',18) ;
 	  $cllayouts_bs->roda108 = str_repeat(' ',171);
@@ -321,26 +321,26 @@ if($numrows==0){
 //        echo 'TRAILLER LOTE '.db_formatar(str_replace(',','',str_replace('.','',$valor_header)),'s','0',18,'e',0)."<br>";
 	  $valor_header = 0;
           $registro += 1;
-	  
+
 	  ///// FINAL DO TRAILLER DO LOTE
        }
        $seq_header  += 1;
        $seq_detalhe  = 0;
        $registro    += 1;
 //     echo 'HEADER '.$seq_header."<br>";
-       
+
        $agencia_pre = db_formatar(str_replace('.','',str_replace('-','',$c63_agencia)),'s','0',5,'e',0);
        $conta_pre   = db_formatar(str_replace('.','',str_replace('-','',$c63_conta)),'s','0',10,'e',0);
-       
-       $cllayouts_bs->cabec201 = '041'; 
+
+       $cllayouts_bs->cabec201 = '041';
        $cllayouts_bs->cabec202 = db_formatar($seq_header,'s','0',4,'e',0);
        $cllayouts_bs->cabec203 = '1';
        $cllayouts_bs->cabec204 = 'C';
        $cllayouts_bs->cabec205 = '20';
-       $cllayouts_bs->cabec206 = '01'; 
+       $cllayouts_bs->cabec206 = '01';
        $cllayouts_bs->cabec207 = '020';
        $cllayouts_bs->cabec208 = ' ';
-       $cllayouts_bs->cabec209 = '2'; 
+       $cllayouts_bs->cabec209 = '2';
        $cllayouts_bs->cabec210 = $cgc;
        $cllayouts_bs->cabec211 = db_formatar(substr($convenio,0,5),'s',' ',5,'e',0);
        $cllayouts_bs->cabec212 = str_repeat(' ',15) ;
@@ -348,7 +348,7 @@ if($numrows==0){
        $cllayouts_bs->cabec214 = '0000';
        $cllayouts_bs->cabec215 = $conta_pre;
        $cllayouts_bs->cabec216 = ' ';
-       $cllayouts_bs->cabec217 = substr(strtoupper($nomeinst),0,30) ; // nome da empresa 
+       $cllayouts_bs->cabec217 = substr(strtoupper($nomeinst),0,30) ; // nome da empresa
        $cllayouts_bs->cabec218 = str_repeat(' ',40) ;
        $cllayouts_bs->cabec219 = db_formatar(strtoupper($ender),'s',' ',30,'d',0);
        $cllayouts_bs->cabec220 = db_formatar($numero,'s',' ',5,'e',0);
@@ -359,18 +359,18 @@ if($numrows==0){
        $cllayouts_bs->cabec225 = '  ';
        $cllayouts_bs->cabec226 = str_repeat(' ',16) ;
        $cllayouts_bs->gera_cabecalho02();
-     }     
+     }
 
      $seq_detalhe += 1;
      $tot_valor    = 0;
      $numero_lote  = 1;
-     
+
 //     for($i = 0;$i < $numrows;$i++){
 //       db_fieldsmemory($result,$i);
 
        $agencia_fav = db_formatar(str_replace('.','',str_replace('-','',$pc63_agencia)),'s','0',5,'e',0);
        $conta_fav   = db_formatar(str_replace('.','',str_replace('-','',$pc63_conta)),'s','0',11,'e',0);
-       
+
        if($tam == 14){
 	 $conf = 2;
 	 $cgccpf = $z01_cgccpf;
@@ -381,12 +381,12 @@ if($numrows==0){
 	 $conf = 3;
 	 $cgccpf= str_repeat('0',14);
        }
-       
+
        $registro += 1;
-       
-       
+
+
 //       echo 'DETALHE '.$registro."  VALOR ".db_formatar(str_replace(',','',str_replace('.','',$valor)),'s','0',15,'e',0)."<br>";
-       $cllayouts_bs->detalhe01 = '041'; 
+       $cllayouts_bs->detalhe01 = '041';
        $cllayouts_bs->detalhe02 = db_formatar($seq_header,'s','0',4,'e',0);
        $cllayouts_bs->detalhe03 = '3';
        $cllayouts_bs->detalhe04 = db_formatar($seq_detalhe,'s','0',5,'e',0);
@@ -397,15 +397,15 @@ if($numrows==0){
        $cllayouts_bs->detalhe09 = $pc63_banco;
        $cllayouts_bs->detalhe10 = $agencia_fav;
        $cllayouts_bs->detalhe11 = '0';
-       $cllayouts_bs->detalhe12 = '00'.$conta_fav; 
+       $cllayouts_bs->detalhe12 = '00'.$conta_fav;
        $cllayouts_bs->detalhe13 = '0';
-       $cllayouts_bs->detalhe14 = db_formatar(substr($z01_nome,0,30),'s',' ',30,'d',0) ;   // nome do favorecido 
-       $cllayouts_bs->detalhe15 = db_formatar($e90_codmov,'s',' ',15,'d',0) ; 
+       $cllayouts_bs->detalhe14 = db_formatar(substr($z01_nome,0,30),'s',' ',30,'d',0) ;   // nome do favorecido
+       $cllayouts_bs->detalhe15 = db_formatar($e90_codmov,'s',' ',15,'d',0) ;
        $cllayouts_bs->detalhe16 = '00005';
-       $cllayouts_bs->detalhe17 = $dat_cred; 
+       $cllayouts_bs->detalhe17 = $dat_cred;
        $cllayouts_bs->detalhe18 = 'BRL';
        $cllayouts_bs->detalhe19 = str_repeat('0',15) ;
-       $cllayouts_bs->detalhe20 = db_formatar(str_replace(',','',str_replace('.','',$valor)),'s','0',15,'e',0) ;  // valor 
+       $cllayouts_bs->detalhe20 = db_formatar(str_replace(',','',str_replace('.','',$valor)),'s','0',15,'e',0) ;  // valor
        $cllayouts_bs->detalhe21 = str_repeat(' ',20) ;
        $cllayouts_bs->detalhe22 = str_repeat(' ',8) ;
        $cllayouts_bs->detalhe23 = str_repeat(' ',15) ;
@@ -421,14 +421,14 @@ if($numrows==0){
 
    }
 
-   
+
           ///// TRAILLER DO LOTE
-          $cllayouts_bs->roda101 = '041'; 
-	  
+          $cllayouts_bs->roda101 = '041';
+
 	  $cllayouts_bs->roda102 = db_formatar($seq_header,'s','0',4,'e',0);;
 	  $cllayouts_bs->roda103 = '5';
 	  $cllayouts_bs->roda104 = str_repeat(' ',9) ;
-	  $cllayouts_bs->roda105 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0); 
+	  $cllayouts_bs->roda105 = db_formatar($seq_detalhe + 2,'s','0',6,'e',0);
 	  $cllayouts_bs->roda106 = db_formatar(str_replace(',','',str_replace('.','',$valor_header)),'s','0',18,'e',0);
 	  $cllayouts_bs->roda107 = str_repeat('0',18) ;
 	  $cllayouts_bs->roda108 = str_repeat(' ',171);
@@ -437,12 +437,12 @@ if($numrows==0){
 	  $cllayouts_bs->gera_trailer1();
 	  $valor_header = 0;
           $registro += 1;
-	  
+
 	  ///// FINAL DO TRAILLER DO LOTE
-	  
+
           ////  TRAILLER DO ARQUIVO
           $registro += 1;
-	  $cllayouts_bs->roda201 = '041'; 
+	  $cllayouts_bs->roda201 = '041';
 	  $cllayouts_bs->roda202 = '9999';
 	  $cllayouts_bs->roda203 = '9';
 	  $cllayouts_bs->roda204 = str_repeat(' ',9) ;
@@ -451,9 +451,9 @@ if($numrows==0){
 	  $cllayouts_bs->roda207 = str_repeat('0',6) ;
 	  $cllayouts_bs->roda208 = str_repeat(' ',205) ;
           $cllayouts_bs->gera_trailer2();
-//  exit; 
+//  exit;
           $cllayouts_bs->gera();
-	
+
       }else if($sqlerro==false){
 	$sqlerro  = true;
 	$erro_msg = "O tipo selecionado, não possui layout cadastrado para pagar no Banco Banrisul.";
@@ -481,14 +481,14 @@ if($numrows==0){
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table  border="0" cellspacing="0" cellpadding="0" height='100%'>
-  <tr> 
-    <td  height='100%' align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td  height='100%' align="left" valign="top" bgcolor="#CCCCCC">
    <?
-   
+
    $clrotulo = new rotulocampo;
    $clrotulo->label("e80_data");
    $clrotulo->label("e84_codmod");
-//sempre que ja existir agenda entra nesta opcao  
+//sempre que ja existir agenda entra nesta opcao
 	include("forms/db_frmempageconflay03.php");
 ?>
     </td>
@@ -499,17 +499,17 @@ if($numrows==0){
 <script>
 
 function js_empage(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
 }
 function js_mostra(codage,data){
   arr = data.split('-');
-  
+
   obj = document.form1;
 
   obj.e80_data_ano.value = arr[0];
   obj.e80_data_mes.value = arr[1];
   obj.e80_data_dia.value = arr[2];
- 
+
             obj=document.createElement('input');
             obj.setAttribute('name','pri_codage');
             obj.setAttribute('type','hidden');
@@ -517,9 +517,9 @@ function js_mostra(codage,data){
             document.form1.appendChild(obj);
 
   document.form1.pesquisar.click();
- 
+
   db_iframe_empage.hide();
-  
+
 }
 </script>
 <?
@@ -532,12 +532,12 @@ if(isset($atualizar) ){
       echo "
         <script>
 	 function js_emitir(){
-  //          js_OpenJanelaIframe('top.corpo','e','tmp/$nomearquivo','Pesquisa',false,0,0,0,0 );
+  //          js_OpenJanelaIframe('CurrentWindow.corpo','e','tmp/$nomearquivo','Pesquisa',false,0,0,0,0 );
 
 //  jan = window.open('tmp/$nomearquivo','',width=0,height=0,scrollbars=0,location=0 ');
   jan = window.open('tmp/$nomearquivo','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
-	 }   
+	 }
 	 js_emitir();
         </script>
       ";

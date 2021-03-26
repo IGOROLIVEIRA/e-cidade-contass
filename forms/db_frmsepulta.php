@@ -156,10 +156,10 @@ db_inputdata('cm24_d_entrada',@$cm24_d_entrada_dia,@$cm24_d_entrada_mes,@$cm24_d
 
 function js_pesquisacm24_i_sepultamento(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_mostrasepultamentos1|cm01_i_codigo|cm01_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_mostrasepultamentos1|cm01_i_codigo|cm01_i_codigo','Pesquisa',true);
   }else{
      if(document.form1.cm24_i_sepultamento.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_sepultamentos','func_sepultamentos.php?pesquisa_chave='+document.form1.cm24_i_sepultamento.value+'&funcao_js=parent.js_mostrasepultamentos','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sepultamentos','func_sepultamentos.php?pesquisa_chave='+document.form1.cm24_i_sepultamento.value+'&funcao_js=parent.js_mostrasepultamentos','Pesquisa',false);
      }else{
        document.form1.cm01_i_codigo.value = '';
      }
@@ -250,7 +250,7 @@ function js_mostrasepulturas1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,c
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_sepulta','func_sepulta.php?funcao_js=parent.js_preenchepesquisa|cm24_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sepulta','func_sepulta.php?funcao_js=parent.js_preenchepesquisa|cm24_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_sepulta.hide();

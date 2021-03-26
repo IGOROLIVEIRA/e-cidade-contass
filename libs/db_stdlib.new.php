@@ -74,7 +74,7 @@ function db_hora($id_timestamp = 0, $formato = "H:i") {
 		//#00#//db_hora
 		//#10#// retorna a hora do servidor em no formato HH:MM
 		//#15#//$hora = db_hora($timestamp,$formato);
-		//#20#//$id_timestamp =	Data e hora no formato timestamp 
+		//#20#//$id_timestamp =	Data e hora no formato timestamp
 		//#20#//$formato      = Formato do retorno da hora ou data
 		//#20#//                Padrao: H:i - Hora e minuto com :.
 		//#99#//Os tipos de formato de retorno são:
@@ -91,7 +91,7 @@ function db_hora($id_timestamp = 0, $formato = "H:i") {
 		//#99#//H	Hora no formato 24 horas 00 through 23
 		//#99#//i	Minutos com zero a esquerda 00 to 59
 		//#99#//j	Dia do mes sem zero a esquerda 1 to 31
-		//#99#//l       Nome Dia da semana 
+		//#99#//l       Nome Dia da semana
 		//#99#//m	Mes numericpo com dois digitos  01 a 12
 		//#99#//M	3 primeiras letras do nome do mes Jan through Dec
 		//#99#//n	Mes numerico sem zero a esquerda 1 a 12
@@ -120,7 +120,7 @@ function db_verifica_ip() {
 	//#10#//Verifica se o IP que esta acessando poderá abrir o dbportal, pesquisando o arquivo db_acessa
 	//#10#//e verificando as permissões
 	//#15#//db_verifica_ip();
-	//#40#//"1" para acesso permitido e "0" para não permitido 
+	//#40#//"1" para acesso permitido e "0" para não permitido
 	//#99#//O arquido db_acessa possue a matriz com os IPs que poderão efetuar o acesso
 	//#99#//Nome da matriz: db_acessa
 	//#99#//db_acessa[1][1] = Máscara do IP que pode acessar, quando colocado um astesrisco(*) no final, o sistema
@@ -196,7 +196,7 @@ class cl_abre_arquivo {
 
 function db_mes($xmes,$tipo=0) {
   //#00#//db_mes
-  //#10#//Retorna o nome do mes por extenso 
+  //#10#//Retorna o nome do mes por extenso
   //#15#//db_mes($mes);
   //#20#//mes : Número do mes 01,02,03,04,05,06,07,08,09,10,11,12 como string
   //#20#//      Número do mes 1,2,3,4,5,6,7,8,9,10,11,12 como numero
@@ -280,7 +280,7 @@ class janela {
 	//|20|//arquivo : Arquivo a ser executado no iframe
 	//|99|//(esta funcao não esta mais em uso, verifica a funcao java script |js_OpenJanelaIframe|)
 	//|99|//Exemplo:
-	//|99|//$func_iframe = new janela('db_iframe',''); // abre a classe janela     
+	//|99|//$func_iframe = new janela('db_iframe',''); // abre a classe janela
 	//|99|//$func_iframe->posX=1;                      // seta a posicao que deverá abrir em relação a esquerda
 	//|99|//$func_iframe->posY=20;                     // seta a posição que deverá abrir em relação ao topo
 	//|99|//$func_iframe->largura=780;                 // seta a largura do formulário
@@ -332,7 +332,7 @@ class rotulo {
 	//|00|//rotulo
 	//|10|//Esta classe gera as variáveis de controle do sistema de uma determinada tabela
 	//|15|//[variavel] = new rotulo($tabela);
-	//|20|//tabela  : Nome da tabela a ser pesquisada 
+	//|20|//tabela  : Nome da tabela a ser pesquisada
 	//|40|//Gera todas as variáveis de controle dos campos
 	//|99|//
 	var $tabela;
@@ -459,13 +459,13 @@ class rotulo {
 	}
 	function tlabel($nome = "") {
 			//#00#//tlabel
-		//#10#//Este método gera o label do arquivo 
+		//#10#//Este método gera o label do arquivo
 		//#15#//tlabel($nome);
-		//#20#//nome  : Nome do arquivo para ser gerado o label 
+		//#20#//nome  : Nome do arquivo para ser gerado o label
 		//#40#//Gera a variável label do arquivo "L" + nome do arquivo
 		//#99#//Variáveis geradas:
 		//#99#//"L" + nome do arquivo -> Label do arquivo
-		//#99#//"T" + nome do arquivo -> Texto para a tag title 
+		//#99#//"T" + nome do arquivo -> Texto para a tag title
 
 	$result = pg_exec("select c.nomearq,c.descricao,c.nomearq,c.rotulo
 		                   from db_sysarquivo c
@@ -487,7 +487,7 @@ class rotulocampo {
 	//|00|//rotulocampo
 	//|10|//Esta classe gera as variáveis de controle do sistema de uma determinada tabela
 	//|15|//[variavel] = new rotulocampo($campo);
-	//|20|//campo  : Nome do campo a ser pesquisada 
+	//|20|//campo  : Nome do campo a ser pesquisada
 	//|40|//Gera todas as variáveis de controle do campo
 	//|99|//Exemplo:
 	//|99|//[variavel] = new rotulocampo("z01_nome");
@@ -496,7 +496,7 @@ class rotulocampo {
 	//|99|//[variavel]->label("z01_nome");
 	function label($campo = "") {
 			//#00#//label
-		//#10#//Este método gera o label do campo 
+		//#10#//Este método gera o label do campo
 		//#15#//label($campo);
 		//#20#//nome  : Nome do campo a ser gerado as variáveis de controle
 		//#99#//Nome das variáveis geradas:
@@ -593,24 +593,24 @@ class rotulolov {
 	//|00|//rotullov
 	//|10|//Esta classe gera as variáveis para titulo, descricao e tamanho para rotina |db_lovrot|
 	//|15|//[variavel] = new rotulolov;
-	//|30|//titulo    : Propriedade que recebe o conteudo do campo |rotulo| da documentação 
+	//|30|//titulo    : Propriedade que recebe o conteudo do campo |rotulo| da documentação
 	//|30|//descricao : Propriedade que recebe o conteudo do campo |descricao| da documentação
 	//|30|//tamanho   : Propriedade que recebe o conteudo do campo |tamanho| da documentação
 	//|99|//Exemplo:
 	//|99|//[variavel] = new rotulolov;
 	//|99|//[variavel]->label("z01_nome");
 	//|99|//[variavel]->titulo    // ja com o valor atulizado pelo método label
-	//|99|//[variavel]->descricao // ja com o valor atulizado pelo método label 
-	//|99|//[variavel]->tamanho   // ja com o valor atulizado pelo método label 
+	//|99|//[variavel]->descricao // ja com o valor atulizado pelo método label
+	//|99|//[variavel]->tamanho   // ja com o valor atulizado pelo método label
 	var $titulo = null;
 	var $title = null;
 	var $tamanho = null;
 	function label($nome = "") {
 			//#00#//label
-		//#10#//Este método gera o label do campo para a funcao |db_lovrot| 
+		//#10#//Este método gera o label do campo para a funcao |db_lovrot|
 		//#15#//label($campo);
 		//#20#//nome  : Nome do campo a ser gerado as variáveis de controle para função
-		//#99#//Caso os campos comecem com dl_ não será pesquisada o label da documentação e sim o próprio 
+		//#99#//Caso os campos comecem com dl_ não será pesquisada o label da documentação e sim o próprio
 		//#99#//nome da variável sem o "dl_"
 	if (substr($nome, 0, 3) == "dl_") {
 			$this->titulo = substr($nome, 3);
@@ -679,7 +679,7 @@ function db_verfPostGet($post) {
 		}
 		if (db_indexOf(strtoupper($dbarraypost), "INSERT") > 0 || db_indexOf(strtoupper($dbarraypost), "UPDATE") > 0 || db_indexOf(strtoupper($dbarraypost), "DELETE") > 0 || db_indexOf(strtoupper($dbarraypost), "EXEC(") > 0 || db_indexOf(strtoupper($dbarraypost), "SYSTEM(") > 0 || db_indexOf(strtoupper($dbarraypost), "<SCRIPT>") > 0 || db_indexOf(strtoupper($dbarraypost), "PASSTHRU(") > 0) {
 			if(defined("TAREFA")==false) {
-				echo "<script>alert('Voce está passando parametros inválidos e sera redirecionado. Verifique INSERT/UPDATE e ... nos campos enviados.');top.corpo.location.href='instit.php'</script>\n";
+				echo "<script>alert('Voce está passando parametros inválidos e sera redirecionado. Verifique INSERT/UPDATE e ... nos campos enviados.');CurrentWindow.corpo.location.href='instit.php'</script>\n";
 				exit;
 			}
 		}
@@ -692,9 +692,9 @@ db_verfPostGet($HTTP_GET_VARS);
 
 function db_criatabela($result) {
 	//#00#//db_criatabela
-	//#10#//Esta funcao mostra os dados de um record set na tela, em uma tabela 
+	//#10#//Esta funcao mostra os dados de um record set na tela, em uma tabela
 	//#15#//db_criatabela($result);
-	//#20#//result  : Record set gerado 
+	//#20#//result  : Record set gerado
 
 	$numrows = pg_numrows($result);
 	$numcols = pg_numfields($result);
@@ -722,7 +722,7 @@ function db_criatabela($result) {
 //retorna o tamanho do maior registro
 function db_getMaxSizeField($recordset, $campo = 0) {
 		//#00#//db_getMaxSizeField
-		//#10#//Esta funcao retorna o maior valor do size de um determinado campo de um record set 
+		//#10#//Esta funcao retorna o maior valor do size de um determinado campo de um record set
 		//#15#//db_getMaxSizeField($recordset,$campo = 0);
 		//#20#//recordset : Record que será pesquisado
 		//#20#//campo     : Número do campo do record set que será pesquisado
@@ -740,7 +740,7 @@ function db_getMaxSizeField($recordset, $campo = 0) {
 //atualiza a classe dos arquivos
 function db_postmemory($vetor, $verNomeIndices = 0) {
 		//#00#//db_postmemory
-		//#10#//Esta funcao cria as veriáveis que são passadas por POST no array $HTTP_POST_VARS do apache 
+		//#10#//Esta funcao cria as veriáveis que são passadas por POST no array $HTTP_POST_VARS do apache
 		//#15#//db_postmemory($vetor,$verNomeIndices = 0);
 		//#20#//vetor         : Array que será pesquisado
 		//#20#//verNomeIndice : 1 - para gerar as variáveis
@@ -776,9 +776,9 @@ function db_numpre_sp($qn, $qnp = "x", $qnt = "x", $qnd = "x") {
 		//#20#//qnt : Número da quantidade de parcelas do numpre
 		//#20#//qnd : Dígito verificador do numpre
 		//#40#//Código de arrecadação formatado SEM os pontos
-		//#99#//Exemplo: 
+		//#99#//Exemplo:
 		//#99#//db_numpre_sp(123456,1,12,0); // numpre 123456 - parcela 1 - total de parcelas 12 - digito 0
-		//#99#//Retorno será : 001234560010120  
+		//#99#//Retorno será : 001234560010120
 		//#99#//
 		//#99#//Para formatar os números o sistema utiliza a função |db_formatar|
 	$retorno = db_formatar($qn, 's', "0", 8, "e");
@@ -804,9 +804,9 @@ function db_numpre($qn, $qnp = "x", $qnt = "x", $qnd = "x") {
 		//#20#//qnt : Número da quantidade de parcelas do numpre
 		//#20#//qnd : Dígito verificador do numpre
 		//#40#//Código de arrecadação formatado COM os pontos
-		//#99#//Exemplo: 
+		//#99#//Exemplo:
 		//#99#//db_numpre_sp(123456,1,12,0); // numpre 123456 - parcela 1 - total de parcelas 12 - digito 0
-		//#99#//Retorno será : 00123456.001.012.0  
+		//#99#//Retorno será : 00123456.001.012.0
 		//#99#//
 		//#99#//Para formatar os números o sistema utiliza a função |db_formatar|
 	$retorno = db_formatar($qn, 's', "0", 8, "e");
@@ -840,7 +840,7 @@ function db_translate($db_transforma = null){
                       "/ú|ù|û|ü/",
                       "/Ú|Ù|Û|Ü/"
                      );
-  // Array com substitutos 
+  // Array com substitutos
   $arr_replac = Array("c","C","a","A","e","E","i","I","o","O","u","U");
 
   // $arr_regexp[0] substituído por $arr_replac[0], ou seja, ç por c
@@ -895,7 +895,7 @@ function db_translate($db_transforma = null){
 // "v" tira a formatação
 // "cpf" formata cpf
 // "cnpj" formata cnpj
-// "s"  Preenche uma string para um certo tamanho com outra string 
+// "s"  Preenche uma string para um certo tamanho com outra string
 // se for "s":
 //   $caracter             caracter ou espaço pra acrecentar a esquerda, direita ou meio
 //   $quantidade           tamanho que ficará a string com os espaços ou caracteres
@@ -915,23 +915,23 @@ function db_formatar($str, $tipo, $caracter = " ", $quantidade = 0, $TipoDePreen
 		//#20#//                        b    =  Formata falso ou verdadeiro (S = Verdadeiro N = Falso )
 		//#20#//                        p    =  Formata ponto flutuante, com PONTO na casa decimal Ex: 1000.55
 		//#20#//                        f    =  Formata ponto flutuante, com VIRGULA na casa decimal Ex: 1000,55
-		//#20#//                        d    =  Formata data 
+		//#20#//                        d    =  Formata data
 		//#20#//                        s    =  Formata uma string alinhando conforme Tipo de Preenchimento
 		//#20#//                        v    =  Variavel, ou seja, imprime quantas casas decimais o valor tiver, combustivel por exemplo, valor de 1,359
-		//#20#//Caracter              : Caracter que será colocado para formatar  
+		//#20#//Caracter              : Caracter que será colocado para formatar
 		//#20#//Quantidade            : Tamanho da string que será gerada
 		//#20#//Tipo de Preenchimento : Se preenche a esquerda, direito ou centro
-		//#20#//                        e = Esquerda   d = Direita  a = Centro 
-		//#20#//Casas Decimais        : Número de casas decimais, para valores flutuantes, que será gerada 
+		//#20#//                        e = Esquerda   d = Direita  a = Centro
+		//#20#//Casas Decimais        : Número de casas decimais, para valores flutuantes, que será gerada
 		//#40#//String formatada conforme os parâmetros
-		//#99#//Exemplo: 
+		//#99#//Exemplo:
 		//#99#//db_formatar(100.55,'f','0',15,'e',2)
-		//#99#//Retorno será : 000000000100,55 
+		//#99#//Retorno será : 000000000100,55
 		//#99#//db_formatar(100.55,'f') // formatação padrão de números
 		//#99#//Retorno será : "         100,55"
 		//#99#//
 		//#99#//db_formatar(100.55,'p','0',15,'e',2)
-		//#99#//Retorno será : 000000000100.55  
+		//#99#//Retorno será : 000000000100.55
 
 	switch ($tipo) {
 		case "sistema" :
@@ -1042,7 +1042,7 @@ function db_formatar($str, $tipo, $caracter = " ", $quantidade = 0, $TipoDePreen
 		  $valretornar = str_replace(",","",$valretornar);
 		  $valretornar = str_replace(".","",$valretornar);
 		  return str_pad($valretornar,$quantidade," ",STR_PAD_LEFT);
-		    
+
 		case "f" :
 			// ponto decimal com virgula
 			/*
@@ -1122,7 +1122,7 @@ function db_fieldsmemory($recordset, $indice, $formatar = "", $mostravar = false
 		//#20#//                    true = Formatar      false = Não Formatar (Padrão = false)
 		//#20#//Mostrar Variáveis : Mostrar na tela as variáveis que estão sendo geradas
 		//#99#//Esta função é bastante utilizada quando se faz um for para percorrer um record set.
-		//#99#//Exemplo: 
+		//#99#//Exemplo:
 		//#99#//db_fieldsmemory($result,0);
 		//#99#//Cria todas as variáveis com o conteúdo de cada uma sendo o valor do campo
 	$fm_numfields = pg_numfields($recordset);
@@ -1205,7 +1205,7 @@ function db_fieldsmemory($recordset, $indice, $formatar = "", $mostravar = false
 
 }
 
-///////  Calcula Digito Verificador 
+///////  Calcula Digito Verificador
 ///////  sCampo - Valor  Ipeso - Qual peso 10 11
 
 function db_CalculaDV($sCampo, $iPeso = 11) {
@@ -1306,7 +1306,7 @@ function db_msgbox($msg) {
 //redireciona para uma url
 function db_redireciona($url = "0") {
 		//#00#//db_redireciona
-		//#10#//Esta funcao executa um redrecionamento de página utilizando o javascript 
+		//#10#//Esta funcao executa um redrecionamento de página utilizando o javascript
 		//#15#//db_redireciona($url="0")
 		//#20#//Url : Nome completo da página a ser acessada pelo redirecionamento
 		//#99#//Exemplo:
@@ -1343,7 +1343,7 @@ function db_getsession($var = "0") {
 		//#99#//DB_id_usuario   Númedo do id do usuário na taela |db_usuarios|
 		//#99#//DB_ip           Número do IP que esta acessando
 		//#99#//DB_uol_hora     Hora de acesso do usuário
-		//#99#//DB_SELLER       Variavel de controle 
+		//#99#//DB_SELLER       Variavel de controle
 		//#99#//DB_NBASE        Nome da base de dados que esta sendo acessada
 		//#99#//DB_modulo       Número do módulo que esta acessado
 		//#99#//DB_nome_modulo  Nome do módulo que esta acessado
@@ -1409,7 +1409,7 @@ function db_putsession($var, $valor) {
 	  include("db_calcula.php");
 	$rand = 195728462;
 	$key = "alapuchatche";
-	$md = new Crypt_HCEMD5($key, $rand);  
+	$md = new Crypt_HCEMD5($key, $rand);
 	$HTTP_SESSION_VARS[$var] = $md->encrypt($valor);
 	*/
 	$HTTP_SESSION_VARS[$var] = $valor;
@@ -1609,7 +1609,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
 	}
 
-	// echo "<script>alert('$NumRows')</script>"; 
+	// echo "<script>alert('$NumRows')</script>";
 
 	$NumFields = pg_numfields($result);
 	if (($NumRows < $numlinhas) && ($numlinhas < ($$tot_registros - $$offset - $numlinhas))) {
@@ -1618,10 +1618,10 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
 	echo "<script>
 	        function js_mostra_text(liga,nomediv,evt){
-	
-		  evt = (evt)?evt:(window.event)?window.event:''; 
+
+		  evt = (evt)?evt:(window.event)?window.event:'';
 		  if(liga==true){
-	
+
 		    document.getElementById(nomediv).style.top = 0; //evt.clientY;
 		    document.getElementById(nomediv).style.left = 0; //(evt.clientX+20);
 		    document.getElementById(nomediv).style.visibility = 'visible';
@@ -1635,10 +1635,10 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		  obj.setAttribute('value',valor);
 	      obj.setAttribute('style','text-decoration:underline;background-color:transparent;border-style:none');
 		  eval('document.'+nomeform+'.appendChild(obj)');
-		  eval('document.'+nomeform+'.'+campo+'.click()');						  
+		  eval('document.'+nomeform+'.'+campo+'.click()');
 		}
 	    function js_lanca_codigo_pesquisa(valor_recebido){
-	      document.navega_lov".$NomeForm.".codigo_pesquisa.value = valor_recebido;      
+	      document.navega_lov".$NomeForm.".codigo_pesquisa.value = valor_recebido;
 	    }
 		</script>";
 
@@ -1664,7 +1664,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 	echo "<input type=\"hidden\" name=\"filtroquery\" value=\"".str_replace("\n", "", @ $filtroquery)."\">
 	  ". ($NumRows > 0 ? "
 	  Foram retornados <font color=\"red\"><strong>".$$tot_registros."</strong></font> registros.
-	  Mostrando de <font color=\"red\"><strong>". (@ $$offset +1)."</strong></font> até 
+	  Mostrando de <font color=\"red\"><strong>". (@ $$offset +1)."</strong></font> até
 	  <font color=\"red\"><strong>". ($$tot_registros < (@ $$offset + $numlinhas) ? ($NumRows <= $numlinhas ? $$tot_registros : $NumRows) : ($$offset + $numlinhas))."</strong></font>." : "Nenhum Registro
 	  Retornado")."</form>
 	  </td></tr>\n";
@@ -1687,7 +1687,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 				$clrotulocab->label(pg_fieldname($result, $i));
 				//echo "<td nowrap bgcolor=\"$db_corcabec\" title=\"".$clrotulocab->title."\" align=\"center\"><b><u>".$clrotulocab->titulo."</u></b></td>\n";
 				echo "<td nowrap bgcolor=\"$db_corcabec\" title=\"".$clrotulocab->title."\" align=\"center\"><input name=\"".pg_fieldname($result, $i)."\" value=\"".ucfirst($clrotulocab->titulo)."\" type=\"button\" onclick=\"js_troca_ordem('navega_lov".$NomeForm."','ordem_dblov".pg_fieldname($result, $i)."','".pg_fieldname($result, $i)."');\" style=\"text-decoration:underline;background-color:transparent;border-style:none\"> </td>\n";
-	
+
 			} else {
 				if (strlen(strstr(pg_fieldname($result, $i), "db_m_")) != 0) {
 					echo "<td nowrap bgcolor=\"$db_corcabec\" title=\"".substr(pg_fieldname($result, $i), 5)."\" align=\"center\"><b><u>".substr(pg_fieldname($result, $i), 5)."</u></b></td>\n";
@@ -1738,7 +1738,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		        echo "<td>$resultadoRetorno<td>";
 		        exit;
 			  }else{
-		        echo "<script>JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?0:trim(pg_result($result,0,0))))."','$aonde','width=800,height=600');</script>";		 
+		        echo "<script>JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?0:trim(pg_result($result,0,0))))."','$aonde','width=800,height=600');</script>";
 		        exit;
 		 	  }
 			}
@@ -1804,17 +1804,17 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 															if (pg_fieldname($result, $j) == 'z01_numcgm')
 																echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Contribuinte/Empresa' onclick=\"js_JanelaAutomatica('cgm','". (trim(pg_result($result, $i, $j)))."');return false;\">&nbsp;Inf->&nbsp;</a>". ($arquivo != "" ? "<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ". ($arquivo == "()" ? "OnClick=\"".$resultadoRetorno.";return false\">" : "onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=". ($BrowSe == 1 ? $i : trim(pg_result($result, $i, 0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result, $i, $j))."</a>" : (trim(pg_result($result, $i, $j))))."&nbsp;</td>\n";
 								//else if(pg_fieldname($result,$j)=='o58_coddot' )
-								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Dotação Orçamentária' onclick=\"js_JanelaAutomatica('orcdotacao','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o58_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";  
+								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Dotação Orçamentária' onclick=\"js_JanelaAutomatica('orcdotacao','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o58_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";
 								//else if(pg_fieldname($result,$j)=='o59_coddot' )
-								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Dotação Orçamentária' onclick=\"js_JanelaAutomatica('orcdotacao','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o59_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";  
+								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Dotação Orçamentária' onclick=\"js_JanelaAutomatica('orcdotacao','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o59_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";
 								//else if(pg_fieldname($result,$j)=='o61_coddot' )
-								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Dotação Orçamentária' onclick=\"js_JanelaAutomatica('orcdotacao','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o61_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";  
+								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Dotação Orçamentária' onclick=\"js_JanelaAutomatica('orcdotacao','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o61_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";
 								//else if(pg_fieldname($result,$j)=='o70_codrec' )
-								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Receita Orçamentária' onclick=\"js_JanelaAutomatica('orcreceita','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o70_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";  
+								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Receita Orçamentária' onclick=\"js_JanelaAutomatica('orcreceita','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o70_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";
 								//else if(pg_fieldname($result,$j)=='o71_codrec' )
-								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Receita Orçamentária' onclick=\"js_JanelaAutomatica('orcreceita','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o71_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";  
+								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Receita Orçamentária' onclick=\"js_JanelaAutomatica('orcreceita','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o71_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";
 								//else if(pg_fieldname($result,$j)=='o74_codrec' )
-								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Receita Orçamentária' onclick=\"js_JanelaAutomatica('orcreceita','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o74_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";  
+								//  echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações Receita Orçamentária' onclick=\"js_JanelaAutomatica('orcreceita','".(trim(pg_result($result,$i,$j)))."','".(trim(pg_result($result,$i,"o74_anousu")))."');return false;\">&nbsp;Inf->&nbsp;</a>".($arquivo!=""?"<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ".($arquivo=="()"?"OnClick=\"".$resultadoRetorno.";return false\">":"onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=".($BrowSe==1?$i:trim(pg_result($result,$i,0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result,$i,$j))."</a>":(trim(pg_result($result,$i,$j))))."&nbsp;</td>\n";
 								else
 									if (pg_fieldname($result, $j) == 'e60_numemp' || pg_fieldname($result, $j) == 'e61_numemp' || pg_fieldname($result, $j) == 'e62_numemp')
 										echo "<td id=\"I".$i.$j."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a title='Informações do Empenho' onclick=\"js_JanelaAutomatica('empempenho','". (trim(pg_result($result, $i, $j)))."');return false;\">&nbsp;Inf->&nbsp;</a>". ($arquivo != "" ? "<a title=\"$mensagem\" style=\"text-decoration:none;color:#000000;\" href=\"\" ". ($arquivo == "()" ? "OnClick=\"".$resultadoRetorno.";return false\">" : "onclick=\"JanBrowse = window.open('".$arquivo."?".base64_encode("retorno=". ($BrowSe == 1 ? $i : trim(pg_result($result, $i, 0))))."','$aonde','width=800,height=600');return false\">").trim(pg_result($result, $i, $j))."</a>" : (trim(pg_result($result, $i, $j))))."&nbsp;</td>\n";
@@ -1833,7 +1833,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
 		// implamentacao de informacoes complementares
 		//    $divmostra .= "</table>";
-		//    $divmostra .= '<div id="div'.$i.'" name="div'.$i.'" style="position:absolute; left:30px; top:40px; z-index:1; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; layer-background-color: #CCCCCC;">'; 
+		//    $divmostra .= '<div id="div'.$i.'" name="div'.$i.'" style="position:absolute; left:30px; top:40px; z-index:1; visibility: hidden; border: 1px none #000000; background-color: #CCCCCC; layer-background-color: #CCCCCC;">';
 		//    $divmostra .= '<table  border=\"1\"  align=\"center\" cellspacing=\"1\">';
 		//    $divmostra .= '<tr>';
 		//    $divmostra .= '<td> '.$mostradiv;
@@ -1948,7 +1948,7 @@ function db_lov($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_sel
 		<input type=\"hidden\" name=\"filtro\" value=\"$filtro\">
 	  </form>". ($NumRows > 0 ? "
 	  Foram retornados <font color=\"red\"><strong>".$$tot_registros."</strong></font> registros.
-	  Mostrando de <font color=\"red\"><strong>". ($$offset +1)."</strong></font> até 
+	  Mostrando de <font color=\"red\"><strong>". ($$offset +1)."</strong></font> até
 	  <font color=\"red\"><strong>". ($$tot_registros < ($$offset + $numlinhas) ? $NumRows : ($$offset + $numlinhas))."</strong></font>." : "Nenhum Registro
 	  Retornado")."
 	  </td></tr>\n";
@@ -2043,9 +2043,9 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 	  $sql = "SELECT m.id_item,m.id_item_filho,m.menusequencia,i.descricao,i.help,i.funcao,i.desctec
 	     	  FROM db_menu m
 		  INNER JOIN db_itensmenu i ON i.id_item = m.id_item_filho
-	          WHERE m.modulo = $modulo AND 
+	          WHERE m.modulo = $modulo AND
 			i.itemativo = 1
-	          order by m.menusequencia		
+	          order by m.menusequencia
 			";
 	} else {
 	  $sql = "SELECT m.id_item,m.id_item_filho,m.menusequencia,i.descricao,i.help,i.funcao,i.desctec
@@ -2056,16 +2056,16 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 						   AND p.anousu = $anousu
 						   AND p.id_instit = $instit
 						   AND p.id_modulo = $modulo
-	     WHERE p.id_usuario = $usuario 
+	     WHERE p.id_usuario = $usuario
 	       AND m.modulo = $modulo AND i.itemativo = 1 ";
 
 	  if (!isset ($DB_SELLER))
 		  $sql .= " and i.libcliente = true ";
 
 	  $sql .= "
-			  
-	     UNION 
-	  
+
+	     UNION
+
 	     SELECT m.id_item,m.id_item_filho,m.menusequencia,i.descricao,i.help,i.funcao,i.desctec
 	     FROM db_menu m
 		  INNER JOIN db_permherda h on h.id_usuario = $usuario
@@ -2076,14 +2076,14 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 						   AND p.anousu = $anousu
 						   AND p.id_instit = $instit
 						   AND p.id_modulo = $modulo
-	     WHERE p.id_usuario = h.id_perfil 
+	     WHERE p.id_usuario = h.id_perfil
 	       AND m.modulo = $modulo AND i.itemativo = 1 ";
 	  if (!isset ($DB_SELLER))
 		  $sql .= " and i.libcliente = true ";
-	  $sql .= "				 
+	  $sql .= "
 	     ORDER BY MENUSEQUENCIA
 	    ";
-	} 
+	}
 	$menu = pg_exec($sql);
 	$NumMenu = pg_numrows($menu);
 	$help_descricao = "";
@@ -2105,7 +2105,7 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 				$help_descricao = pg_result($menu, $i, 'desctec');
 			}
 		}
-		//   echo "<a class=\"menuButton\" id=\"menuSomeTela\" href=\"\" onclick=\"someFrame(event,1); return false\">Tela</a>\n";	 
+		//   echo "<a class=\"menuButton\" id=\"menuSomeTela\" href=\"\" onclick=\"someFrame(event,1); return false\">Tela</a>\n";
 		echo "<a class=\"menuButton\" id=\"menuModulosTela\" href=\"\" onclick=\"return buttonClick(event,'IListaModulos');return false\">Módulos</a>\n";
 		echo "<a class=\"menuButton\" id=\"menuMostraHelp\" href=\"\" onclick=\"return buttonClick(event,'IMostraHelpMenu');return false\">Help</a>\n";
 		echo "</div>\n";
@@ -2148,15 +2148,15 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 		  $resultmodulo = pg_exec("
 					  select distinct i.id_modulo as id_item,m.nome_modulo,
 						 case when u.anousu is null then to_char(CURRENT_DATE,'YYYY')::int4 else u.anousu end
-					  from 
+					  from
 					      (
 					       select distinct i.itemativo,p.id_modulo,p.id_usuario,p.id_instit
-					       from db_permissao p 
-						    inner join db_itensmenu i on p.id_item = i.id_item 
+					       from db_permissao p
+						    inner join db_itensmenu i on p.id_item = i.id_item
 					       where i.itemativo = 1
 						    and p.id_usuario = ".db_getsession("DB_id_usuario")."
-						    and p.id_instit = ".db_getsession("DB_instit")." 
-					      ) as i						
+						    and p.id_instit = ".db_getsession("DB_instit")."
+					      ) as i
 					      inner join db_modulos m  on m.id_item = i.id_modulo
 					      inner join db_itensmenu it on it.id_item = i.id_modulo
 					      left outer join db_usumod u  on u.id_item = i.id_modulo and u.id_usuario = i.id_usuario
@@ -2165,16 +2165,16 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 					  union
 					  select distinct i.id_modulo as id_item,m.nome_modulo,
 						 case when u.anousu is null then to_char(CURRENT_DATE,'YYYY')::int4 else u.anousu end
-					  from 
+					  from
 					      (
 					       select distinct i.itemativo,p.id_modulo,p.id_usuario,p.id_instit
-					       from db_permissao p 
+					       from db_permissao p
 						    inner join db_permherda h on h.id_usuario = ".db_getsession("DB_id_usuario")."
-						    inner join db_itensmenu i on p.id_item = i.id_item 
+						    inner join db_itensmenu i on p.id_item = i.id_item
 					       where i.itemativo = 1
 						    and p.id_usuario = h.id_perfil
-						    and p.id_instit = ".db_getsession("DB_instit")." 
-					      ) as i						
+						    and p.id_instit = ".db_getsession("DB_instit")."
+					      ) as i
 					      inner join db_modulos m  on m.id_item = i.id_modulo
 					      inner join db_itensmenu it on it.id_item = i.id_modulo
 					      left outer join db_usumod u  on u.id_item = i.id_modulo and u.id_usuario = i.id_usuario
@@ -2228,10 +2228,10 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 		//}
 
 		echo "<script>
-		          parent.bstatus.document.getElementById('st').innerHTML = '&nbsp;&nbsp;$msg' ;    
-		          parent.bstatus.document.getElementById('dtatual').innerHTML = '".date("d/m/Y", db_getsession("DB_datausu"))."' ;    
+		          parent.bstatus.document.getElementById('st').innerHTML = '&nbsp;&nbsp;$msg' ;
+		          parent.bstatus.document.getElementById('dtatual').innerHTML = '".date("d/m/Y", db_getsession("DB_datausu"))."' ;
 		          parent.bstatus.document.getElementById('dtanousu').innerHTML = '".db_getsession("DB_anousu")."' ;
-		          // 
+		          //
 		          //colocar esta funcao em todos os itens dos menus
 		          //onclick='return js_db_menu_confirma();'
 		          function js_db_menu_confirma () {
@@ -2240,8 +2240,8 @@ function db_menu($usuario, $modulo, $anousu, $instit) {
 		            else
 		              var retorno = true;
 		            return retorno;
-		          } 
-		    
+		          }
+
 		          </script>";
 
 	} else {
@@ -2338,8 +2338,8 @@ function db_permissaomenu($ano, $modulo, $item) {
 	$sql = "select id_item
 	          	from db_permissao
 		  where anousu = $ano and id_modulo = $modulo and id_item = $item and id_usuario = ".db_getsession("DB_id_usuario")."union
-		  select id_item 
-			from db_permissao 
+		  select id_item
+			from db_permissao
 			inner join db_permherda on db_permherda.id_perfil = db_permissao.id_usuario
 		  where db_permissao.anousu = $ano and db_permissao.id_modulo = $modulo and db_permissao.id_item = $item and db_permherda.id_usuario = ".db_getsession("DB_id_usuario");
 	//echo $sql;exit;
@@ -2377,7 +2377,7 @@ function db_base_ativa() {
 	//#00#//db_base_ativa
 	//#10#//Esta funcao verifica se a variavel DB_NBASE esta setada para quando troca de base pelo info
 	//#15#//db_base_ativa();
-	//#20#//dbnbase=Nome da Base de Dados 
+	//#20#//dbnbase=Nome da Base de Dados
 	if (isset ($GLOBALS["DB_NBASE"])) {
 		return $GLOBALS["DB_NBASE"];
 	} else {
@@ -2393,11 +2393,11 @@ function db_criatermometro($dbnametermo='termometro',$dbtexto='Concluído',$dbcor
          $dbcor        =  cor
          $dbborda      =  borda... 0 sem borda 1 com borda(default)
        */
-	   
+
            if($borda !=1 && $borda !=0){
-          		$dbborda=1;	 
+          		$dbborda=1;
 		   }
-		   
+
            echo "<table align='center' marginwidth='0' width='790' border='0' cellspacing='0' cellpadding='0'>";
            echo "<tr>
                   <td align='center'>
@@ -2436,9 +2436,9 @@ function db_atutermometro($dblinha,$dbrows,$dbnametermo,$dbquantperc=1){
       $linha       = linha que esta atualmente
       $rows        = total de registros
       $dbnametermo = nome do termometro q foi criado com o db_criatermometro
-      $quantperc   = percentual q a barra sera atualizada 
+      $quantperc   = percentual q a barra sera atualizada
 	  */
-	  
+
       $percatual = (($dblinha+1) * 100) / $dbrows;
       if($percatual % $dbquantperc == 0){
         echo "<script>js_termo_".$dbnametermo."($percatual);</script>";

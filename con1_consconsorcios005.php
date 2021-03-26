@@ -58,8 +58,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmconsconsorcios.php");
@@ -87,15 +87,15 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.consvalorestransf.disabled=false;
-         top.corpo.iframe_consvalorestransf.location.href='con1_consvalorestransf001.php?c201_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consvalorestransf.location.href='con1_consvalorestransf001.php?c201_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consexecucaoorc.disabled=false;
-         top.corpo.iframe_consexecucaoorc.location.href='con1_consexecucaoorc001.php?c202_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consexecucaoorc.location.href='con1_consexecucaoorc001.php?c202_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consdispcaixaano.disabled=false;
-         top.corpo.iframe_consdispcaixaano.location.href='con1_consdispcaixaano001.php?c203_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consdispcaixaano.location.href='con1_consdispcaixaano001.php?c203_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consretiradaexclusao.disabled=false;
-         top.corpo.iframe_consretiradaexclusao.location.href='con1_consretiradaexclusao001.php?c204_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consretiradaexclusao.location.href='con1_consretiradaexclusao001.php?c204_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consmesreferencia.disabled=false;
-         top.corpo.iframe_consmesreferencia.location.href='con1_consmesreferencia001.php?db_opcao=2&c202_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consmesreferencia.location.href='con1_consmesreferencia001.php?db_opcao=2&c202_consconsorcios=".@$c200_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('consvalorestransf');";

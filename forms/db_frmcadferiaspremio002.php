@@ -1,28 +1,28 @@
 <?php
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBseller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBseller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -33,7 +33,7 @@ $clrotulo->label("z01_nome");
 
 db_app::load("scripts.js");
 db_app::load("prototype.js");
-  
+
 ?>
 
 <form name="form1" id='form1' method="post" action="">
@@ -45,7 +45,7 @@ db_app::load("prototype.js");
       <fieldset>
         <table>
           <tr>
-            <td colspan="2"> 
+            <td colspan="2">
               <?
               db_input('r95_sequencial',8,$Ir95_sequencial,true,'hidden',3,"")
               ?>
@@ -55,7 +55,7 @@ db_app::load("prototype.js");
             <td nowrap title="<?=@$Tr95_regist?>">
                <?=@$Lr95_regist?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('r95_regist',8,$Ir95_regist,true,'text',3,"")
               ?>
@@ -107,7 +107,7 @@ db_app::load("prototype.js");
 </form>
 <script>
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo','db_iframe_cadferiaspremio','func_cadferiaspremio.php?liberaAnoMes=true&funcao_js=parent.js_preenchepesquisa|r95_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadferiaspremio','func_cadferiaspremio.php?liberaAnoMes=true&funcao_js=parent.js_preenchepesquisa|r95_sequencial','Pesquisa',true);
   }
   function js_preenchepesquisa(chave) {
     db_iframe_cadferiaspremio.hide();

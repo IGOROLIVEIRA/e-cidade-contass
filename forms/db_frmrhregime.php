@@ -136,7 +136,7 @@ $clrhregime->rotulo->label();
 	 <tr>
            <td> <?=$Lrh30_periodogozoferias ?></td>
            <td>
-            <?   
+            <?
 	     db_input('rh30_periodogozoferias',41,$Irh30_periodogozoferias,true,'text',$db_opcao,"")
             ?>
            </td>
@@ -158,7 +158,7 @@ $clrhregime->rotulo->label();
 
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_rhregime','func_rhregime.php?funcao_js=parent.js_preenchepesquisa|rh30_codreg','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhregime','func_rhregime.php?funcao_js=parent.js_preenchepesquisa|rh30_codreg','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_rhregime.hide();

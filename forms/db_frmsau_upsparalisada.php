@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Ambulatorial
@@ -41,7 +41,7 @@ $clrotulo->label("s139_i_codigo");
     <td nowrap title="<?=@$Ts140_i_codigo?>">
        <?=@$Ls140_i_unidade?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('s140_i_unidade',10,$Is140_i_unidade,true,'text',3,"");
 db_input('descrdepto',75,$Is140_i_unidade,true,'text',3,"");
@@ -62,7 +62,7 @@ db_input('descrdepto',75,$Is140_i_unidade,true,'text',3,"");
                          <td nowrap title="<?=@$Ts140_i_unidade?>">
                            <?=@$Ls140_i_codigo?>
                          </td>
-                         <td> 
+                         <td>
                            <?
                            db_input('s140_i_codigo',10,$Is140_i_codigo,true,'text',3,"");
                            ?>
@@ -72,7 +72,7 @@ db_input('descrdepto',75,$Is140_i_unidade,true,'text',3,"");
                          <td nowrap title="<?=@$Ts140_i_tipo?>">
                           <?= @$Ls140_i_tipo?>
                          </td>
-                         <td> 
+                         <td>
                            <?
                            $sql = $clmotivo_ausencia->sql_query(null,"s139_i_codigo, s139_c_descr","s139_i_codigo");
                            $resultado = $clmotivo_ausencia->sql_record($sql);
@@ -87,7 +87,7 @@ db_input('descrdepto',75,$Is140_i_unidade,true,'text',3,"");
                          <td nowrap title="<?=@$Ts140_i_unidade?>">
                            <b>Quantidade:</b>
                          </td>
-                         <td> 
+                         <td>
                            <?
                              db_input('s140_i_quantidade',10,$Is140_i_codigo,true,'text',3,"");
                            ?>
@@ -110,7 +110,7 @@ db_input('descrdepto',75,$Is140_i_unidade,true,'text',3,"");
                                 <td nowrap title="<?=@$Ts140_d_inicio?>">
                                   <?=@$Ls140_d_inicio?>
                                 </td>
-                                <td nowrap> 
+                                <td nowrap>
                                   <?
                                   db_inputdata('s140_d_inicio',@$s140_d_inicio_dia,@$s140_d_inicio_mes,@$s140_d_inicio_ano,true,'text',$db_opcao,"")
                                   ?>
@@ -120,7 +120,7 @@ db_input('descrdepto',75,$Is140_i_unidade,true,'text',3,"");
                                 <td nowrap title="<?=@$Ts140_d_fim?>">
                                   <?=@$Ls140_d_fim?>
                                 </td>
-                                <td nowrap> 
+                                <td nowrap>
                                   <?
                                   db_inputdata('s140_d_fim',@$s140_d_fim_dia,@$s140_d_fim_mes,@$s140_d_fim_ano,true,'text',$db_opcao,"")
                                   ?>
@@ -250,20 +250,20 @@ function js_validadata(){
 
 function js_pesquisas140_i_tipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_sau_motivo_ausencia','func_sau_motivo_ausencia.php?funcao_js=parent.js_mostrasau_motivo_ausencia1|s139_i_codigo|s139_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sau_motivo_ausencia','func_sau_motivo_ausencia.php?funcao_js=parent.js_mostrasau_motivo_ausencia1|s139_i_codigo|s139_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.s140_i_tipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_sau_motivo_ausencia','func_sau_motivo_ausencia.php?pesquisa_chave='+document.form1.s140_i_tipo.value+'&funcao_js=parent.js_mostrasau_motivo_ausencia','Pesquisa',false);
+     if(document.form1.s140_i_tipo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sau_motivo_ausencia','func_sau_motivo_ausencia.php?pesquisa_chave='+document.form1.s140_i_tipo.value+'&funcao_js=parent.js_mostrasau_motivo_ausencia','Pesquisa',false);
      }else{
-       document.form1.s139_i_codigo.value = ''; 
+       document.form1.s139_i_codigo.value = '';
      }
   }
 }
 function js_mostrasau_motivo_ausencia(chave,erro){
-  document.form1.s139_i_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.s140_i_tipo.focus(); 
-    document.form1.s140_i_tipo.value = ''; 
+  document.form1.s139_i_codigo.value = chave;
+  if(erro==true){
+    document.form1.s140_i_tipo.focus();
+    document.form1.s140_i_tipo.value = '';
   }
 }
 function js_mostrasau_motivo_ausencia1(chave1,chave2){
@@ -272,7 +272,7 @@ function js_mostrasau_motivo_ausencia1(chave1,chave2){
   db_iframe_sau_motivo_ausencia.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_sau_upsparalisada','func_sau_upsparalisada.php?funcao_js=parent.js_preenchepesquisa|s140_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sau_upsparalisada','func_sau_upsparalisada.php?funcao_js=parent.js_preenchepesquisa|s140_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_sau_upsparalisada.hide();

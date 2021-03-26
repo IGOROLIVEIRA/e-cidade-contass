@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: recursoshumanos
@@ -41,7 +41,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -52,7 +52,7 @@ if(isset($db_opcaoal)){
 
 
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -65,7 +65,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Th54_sequencial?>">
        <?=@$Lh54_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('h54_sequencial',10,$Ih54_sequencial,true,'text',3,"")
 ?>
@@ -77,7 +77,7 @@ db_input('h54_sequencial',10,$Ih54_sequencial,true,'text',3,"")
        db_ancora(@$Lh54_rhestagioquesitopergunta,"js_pesquisah54_rhestagioquesitopergunta(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('h54_rhestagioquesitopergunta',10,$Ih54_rhestagioquesitopergunta,true,'text',$db_opcao," onchange='js_pesquisah54_rhestagioquesitopergunta(false);'")
 ?>
@@ -92,7 +92,7 @@ db_input('h53_sequencial',10,$Ih53_sequencial,true,'text',3,'')
        db_ancora(@$Lh54_rhestagiocriterio,"js_pesquisah54_rhestagiocriterio(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('h54_rhestagiocriterio',10,$Ih54_rhestagiocriterio,true,'text',$db_opcao," onchange='js_pesquisah54_rhestagiocriterio(false);'")
 ?>
@@ -105,7 +105,7 @@ db_input('h52_descr',40,$Ih52_descr,true,'text',3,'')
     <td nowrap title="<?=@$Th54_descr?>">
        <?=@$Lh54_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('h54_descr',6,60,$Ih54_descr,true,'text',$db_opcao,"")
 ?>
@@ -124,7 +124,7 @@ db_textarea('h54_descr',6,60,$Ih54_descr,true,'text',$db_opcao,"")
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("h54_sequencial"=>@$h54_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -151,20 +151,20 @@ function js_cancelar(){
 }
 function js_pesquisah54_rhestagioquesitopergunta(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagioquesitopergunta','func_rhestagioquesitopergunta.php?funcao_js=parent.js_mostrarhestagioquesitopergunta1|h53_sequencial|h53_sequencial','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagioquesitopergunta','func_rhestagioquesitopergunta.php?funcao_js=parent.js_mostrarhestagioquesitopergunta1|h53_sequencial|h53_sequencial','Pesquisa',true,'0');
   }else{
-     if(document.form1.h54_rhestagioquesitopergunta.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagioquesitopergunta','func_rhestagioquesitopergunta.php?pesquisa_chave='+document.form1.h54_rhestagioquesitopergunta.value+'&funcao_js=parent.js_mostrarhestagioquesitopergunta','Pesquisa',false);
+     if(document.form1.h54_rhestagioquesitopergunta.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagioquesitopergunta','func_rhestagioquesitopergunta.php?pesquisa_chave='+document.form1.h54_rhestagioquesitopergunta.value+'&funcao_js=parent.js_mostrarhestagioquesitopergunta','Pesquisa',false);
      }else{
-       document.form1.h53_sequencial.value = ''; 
+       document.form1.h53_sequencial.value = '';
      }
   }
 }
 function js_mostrarhestagioquesitopergunta(chave,erro){
-  document.form1.h53_sequencial.value = chave; 
-  if(erro==true){ 
-    document.form1.h54_rhestagioquesitopergunta.focus(); 
-    document.form1.h54_rhestagioquesitopergunta.value = ''; 
+  document.form1.h53_sequencial.value = chave;
+  if(erro==true){
+    document.form1.h54_rhestagioquesitopergunta.focus();
+    document.form1.h54_rhestagioquesitopergunta.value = '';
   }
 }
 function js_mostrarhestagioquesitopergunta1(chave1,chave2){
@@ -174,20 +174,20 @@ function js_mostrarhestagioquesitopergunta1(chave1,chave2){
 }
 function js_pesquisah54_rhestagiocriterio(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagiocriterio','func_rhestagiocriterio.php?funcao_js=parent.js_mostrarhestagiocriterio1|h52_sequencial|h52_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagiocriterio','func_rhestagiocriterio.php?funcao_js=parent.js_mostrarhestagiocriterio1|h52_sequencial|h52_descr','Pesquisa',true,'0');
   }else{
-     if(document.form1.h54_rhestagiocriterio.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagiocriterio','func_rhestagiocriterio.php?pesquisa_chave='+document.form1.h54_rhestagiocriterio.value+'&funcao_js=parent.js_mostrarhestagiocriterio','Pesquisa',false);
+     if(document.form1.h54_rhestagiocriterio.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhestagioquesitoresposta','db_iframe_rhestagiocriterio','func_rhestagiocriterio.php?pesquisa_chave='+document.form1.h54_rhestagiocriterio.value+'&funcao_js=parent.js_mostrarhestagiocriterio','Pesquisa',false);
      }else{
-       document.form1.h52_descr.value = ''; 
+       document.form1.h52_descr.value = '';
      }
   }
 }
 function js_mostrarhestagiocriterio(chave,erro){
-  document.form1.h52_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.h54_rhestagiocriterio.focus(); 
-    document.form1.h54_rhestagiocriterio.value = ''; 
+  document.form1.h52_descr.value = chave;
+  if(erro==true){
+    document.form1.h54_rhestagiocriterio.focus();
+    document.form1.h54_rhestagiocriterio.value = '';
   }
 }
 function js_mostrarhestagiocriterio1(chave1,chave2){

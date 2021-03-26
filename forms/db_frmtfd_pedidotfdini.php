@@ -315,7 +315,7 @@ function js_novoTratamento() {
   }
 
   parent.document.formaba.a2.disabled = false;
-  top.corpo.iframe_a2.location.href   = 'tfd4_tfd_pedidotfd002.php?tf01_i_cgsund='+$F('tf01_i_cgsund')+
+  CurrentWindow.corpo.iframe_a2.location.href   = 'tfd4_tfd_pedidotfd002.php?tf01_i_cgsund='+$F('tf01_i_cgsund')+
                                         '&z01_v_nome='+$F('z01_v_nome')+sEncaminhamento+sProntuario;
   parent.mo_camada('a2');
 }
@@ -464,7 +464,7 @@ function js_alterarPedido( iPedido )  {
 
   sChave                              = 'chavepesquisa='+iPedido;
   parent.document.formaba.a2.disabled = false;
-  top.corpo.iframe_a2.location.href   = 'tfd4_tfd_pedidotfd002.php?'+sChave;
+  CurrentWindow.corpo.iframe_a2.location.href   = 'tfd4_tfd_pedidotfd002.php?'+sChave;
   parent.mo_camada('a2');
 }
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: empenho
@@ -36,7 +36,7 @@ $valor_liq="false";
 if(isset($m51_codordem) && $m51_codordem!=''){
   $where = "m72_codordem=$m51_codordem";
   $and = "and";
-}    
+}
 if(isset($e69_codnota) && $e69_codnota!=''){
   $where .= "$and m72_codnota=$e69_codnota";
 }
@@ -76,7 +76,7 @@ if (isset($anula)){
 <td nowrap title="<?=@$Tm51_codordem?>">
 <b> <?db_ancora("Ordem :","js_consultaordem($m51_codordem);",1);?></b>
 </td>
-<td> 
+<td>
 <?
 db_input('m51_codordem',5,$Im51_codordem,true,'text',3);
 db_input('z01_nome',30,$Iz01_nome,true,'text',3,'');
@@ -86,7 +86,7 @@ db_input('z01_nome',30,$Iz01_nome,true,'text',3,'');
 <td nowrap title="<?=@$Te69_numero?>">
 <?=@$Le69_numero?>
 </td>
-<td> 
+<td>
 <?
 db_input('e69_numero',20,$Ie69_numero,true,'text',3,"")
 ?>
@@ -96,7 +96,7 @@ db_input('e69_numero',20,$Ie69_numero,true,'text',3,"")
 <td nowrap title="<?=@$Te69_id_usuario?>">
 <?=@$Le69_id_usuario?>
 </td>
-<td> 
+<td>
 <?
 db_input('e69_id_usuario',5,$Ie69_id_usuario,true,'text',3);
 
@@ -106,13 +106,13 @@ db_input('nome',30,$Inome,true,'text',3,'');
 <td nowrap title="<?=@$Te69_dtnota?>">
 <?=@$Le69_dtnota?>
 </td>
-<td  > 
+<td  >
 <?
 if(empty($e69_dtnota_dia)){
   $e69_dtnota_dia =  date("d",db_getsession("DB_datausu"));
   $e69_dtnota_mes =  date("m",db_getsession("DB_datausu"));
   $e69_dtnota_ano =  date("Y",db_getsession("DB_datausu"));
-  
+
 }
 db_inputdata('e69_dtnota',@$e69_dtnota_dia,@$e69_dtnota_mes,@$e69_dtnota_ano,true,'text',3,"");
 ?>
@@ -133,7 +133,7 @@ if (isset($continue)){
 <td nowrap title="<?=@$Te69_dtrecebe?>">
 <?=@$Le69_dtrecebe?>
 </td>
-<td> 
+<td>
 <?
 $ano=substr($e69_dtrecebe,0,4);
 $mes=substr($e69_dtrecebe,5,2);
@@ -176,7 +176,7 @@ for ($i=0; $clempnotaele->numrows>$i; $i++ ){
   }
 }
 if ($valor_liq=="true"){
-  
+
   ?>
   <input name="anula" type="submit"  value="Alterar" disabled >
   <input name="voltar" type="button" value="Voltar" onclick="location.href='mat1_entraordcom003.php';" >
@@ -192,7 +192,7 @@ if ($valor_liq=="true"){
     <input name="continue" type="submit"  value="Continuar" >
   <?}?>
   <input name="voltar" type="button" value="Voltar" onclick="location.href='mat1_entraordcom003.php';" >
-<?}	 
+<?}
 $m51_codordem=$m51_codordem;
 db_input("m51_codordem",5,"",true,"hidden",3);
 db_input("e69_codnota",5,"",true,"hidden",3);
@@ -222,7 +222,7 @@ db_input("qantigas",100,0,true,"hidden",3);
 </body>
 <script>
 function js_consultaordem(codordem){
-  js_OpenJanelaIframe('top.corpo','db_iframe_ordemcompra002','com3_ordemdecompra002.php?m51_codordem='+codordem,'Consulta Ordem de Compra',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ordemcompra002','com3_ordemdecompra002.php?m51_codordem='+codordem,'Consulta Ordem de Compra',true);
 }
 function js_buscavalores(){
   <?if (isset($continue)){ ?>

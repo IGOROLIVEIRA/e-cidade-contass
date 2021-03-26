@@ -354,7 +354,7 @@ function js_consultaslip(){
 		  alert('Selecione um slip para consulta.');
 		  return false;
 	  }
-	  js_OpenJanelaIframe('top.corpo','db_iframe_slip2','cai3_conslip003.php?slip='+iCodigoSlip,'Slip nº '+iCodigoSlip,true);
+	  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip2','cai3_conslip003.php?slip='+iCodigoSlip,'Slip nº '+iCodigoSlip,true);
 	}
 
 $("iSlip"). value = '';

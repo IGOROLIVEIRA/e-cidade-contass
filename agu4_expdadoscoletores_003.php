@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /*
@@ -50,27 +50,27 @@ $clrotulo = new rotulocampo ();
 $clrotulo->label ( "x46_descricao" );
 
 if (isset ( $cancelar )) {
-  
+
   db_inicio_transacao ();
-  
+
   if (trim ( $x48_motivo ) == null) {
     $x48_motivo = "Cancelamento";
   }
-  
+
   $clCancelaLeituras->setMotivo ( $x48_motivo );
-  
+
   $clCancelaLeituras->cancelaExportacao ( $x49_sequencial );
-  
+
   $clCancelaLeituras->cancelaLeiturasExportadas ();
-  
+
   //$clCancelaLeituras->ativaLeiturasExportadas ();
-  
+
   if ($clCancelaLeituras->iErroStatus == 0) {
     db_fim_transacao ( true );
   } else {
     db_fim_transacao ();
   }
-  
+
   $x49_sequencial = "";
   $x49_aguacoletor = "";
   $x46_descricao = "";
@@ -184,17 +184,17 @@ document.form1.cancelar.disabled = true;
 function js_cancelar_exportacao() {
 	if(confirm('Deseja cancelar a exportação selecionada?')) {
 		return true;
-	}else { 
+	}else {
 		return false;
 	}
 }
 
 function js_pesquisa(){
-	js_OpenJanelaIframe('top.corpo','db_iframe_aguacoletorexporta','func_aguacoletorexporta.php?funcao_js=parent.js_preenchepesquisa|x49_sequencial','Pesquisa',true);
+	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguacoletorexporta','func_aguacoletorexporta.php?funcao_js=parent.js_preenchepesquisa|x49_sequencial','Pesquisa',true);
 }
 
 function js_preenchepesquisa(codigoExportacao) {
-	db_iframe_aguacoletorexporta.hide();	
+	db_iframe_aguacoletorexporta.hide();
 
 	var oParam           = new Object();
 	oParam.exec          = 'getDadosExportacao';
@@ -202,19 +202,19 @@ function js_preenchepesquisa(codigoExportacao) {
 
 	js_divCarregando('Aguarde, pesquisando registros.', 'msgbox');
 
-	var oAjax = new Ajax.Request('agua_exportacao.RPC.php', 
+	var oAjax = new Ajax.Request('agua_exportacao.RPC.php',
 			                    {
-        						 method: 'POST', 
+        						 method: 'POST',
         						 parameters: 'json='+Object.toJSON(oParam),
         						 onComplete: js_retorno_pesquisa
         					    });
 }
 
 function js_retorno_pesquisa(oAjax) {
-	
+
 	js_removeObj('msgbox');
 	var oRetorno    = eval("("+oAjax.responseText+")");
-	
+
 	var sequencial  = document.form1.x49_sequencial;
 	var coletor     = document.form1.x49_aguacoletor;
 	var descricao   = document.form1.x46_descricao;
@@ -222,7 +222,7 @@ function js_retorno_pesquisa(oAjax) {
 	var ano         = document.form1.x49_anousu;
 	var mes         = document.form1.x49_mesusu;
 	var situacao    = document.form1.x49_situacao;
-	
+
 	if (oRetorno.status == 1) {
 		sequencial.value  = oRetorno.x49_sequencial;
 		coletor.value     = oRetorno.x49_aguacoletor;
@@ -250,11 +250,11 @@ function js_retorno_pesquisa(oAjax) {
 			document.form1.cancelar.disabled = false;
 		}
 	}
-	
+
 }
 
 function js_init_table() {
-	  
+
 	  oDataGrid = new DBGrid('grid');
 	  oDataGrid.nameInstance = 'oDataGrid';
 	  oDataGrid.setCellAlign(new Array('center', 'left', 'center', 'left', 'center', 'center'));
@@ -262,7 +262,7 @@ function js_init_table() {
 	  oDataGrid.setHeader(new Array('Cod Rota', 'Rota', 'Cod Logradouro', 'Logradouro', 'Nro Inicial', 'Nro Final'));
 	  oDataGrid.setHeight(150);
 	  oDataGrid.show($('grid'));
-	  
+
 }
 
 </script>

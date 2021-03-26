@@ -232,11 +232,11 @@ if($clempautitem->numrows==0){
     $permissao_lancar = db_permissaomenu(db_getsession("DB_anousu"),398,3489);
     if($permissao_lancar == "true"){
       ?>
-      <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="top.corpo.iframe_empautoriza.js_lanc_empenho();"  <?=($db_botao==false||$db_botao_c==false?"disabled":"")?>>
+      <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="CurrentWindow.corpo.iframe_empautoriza.js_lanc_empenho();"  <?=($db_botao==false||$db_botao_c==false?"disabled":"")?>>
     <?
     }
     ?>
-    <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="top.corpo.iframe_empautoriza.js_relatorio();"  <?=($db_botao==false||$db_botao_c==false?"disabled":"")?>>
+    <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="CurrentWindow.corpo.iframe_empautoriza.js_relatorio();"  <?=($db_botao==false||$db_botao_c==false?"disabled":"")?>>
   </form>
 <?
 if(isset($nops)){
@@ -307,16 +307,16 @@ if(isset($tot) && $tot<0 && empty($cancelar) && isset($pesquisa_dot)){
 
     }
     function js_pesquisao47_coddot(mostra){
-      elemento=top.corpo.iframe_empautitem.document.form1.elemento01.value;
+      elemento=CurrentWindow.corpo.iframe_empautitem.document.form1.elemento01.value;
       query='';
       if(elemento!=''){
         query="elemento="+elemento+"&";
       }
 
       if(mostra==true){
-        js_OpenJanelaIframe('top.corpo.iframe_empautidot','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,0);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautidot','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,0);
       }else{
-        js_OpenJanelaIframe('top.corpo.iframe_empautidot','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'pesquisa_chave='+document.form1.o47_coddot.value+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautidot','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'pesquisa_chave='+document.form1.o47_coddot.value+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
       }
     }
     function js_mostraorcdotacao(chave,erro){
@@ -338,7 +338,7 @@ if(isset($tot) && $tot<0 && empty($cancelar) && isset($pesquisa_dot)){
 
     }
     function js_pesquisa(){
-      js_OpenJanelaIframe('top.corpo','db_iframe_empautidot','func_empautidot.php?funcao_js=parent.js_preenchepesquisa|e56_autori','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empautidot','func_empautidot.php?funcao_js=parent.js_preenchepesquisa|e56_autori','Pesquisa',true);
     }
     function js_preenchepesquisa(chave){
       db_iframe_empautidot.hide();
@@ -374,7 +374,7 @@ if (isset($e56_autori) && $e56_autori != "") {
   if ($oDaoEmpAutItem->numrows > 0) {
 
     $iElemento = db_utils::fieldsMemory($rsOrcDotacao, 0)->e55_codele;
-    echo "<script> top.corpo.iframe_empautoriza.completaElemento(".$iElemento.");</script>";
+    echo "<script> CurrentWindow.corpo.iframe_empautoriza.completaElemento(".$iElemento.");</script>";
 
   }
 }

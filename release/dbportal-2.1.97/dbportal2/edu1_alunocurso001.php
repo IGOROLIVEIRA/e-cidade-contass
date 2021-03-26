@@ -352,11 +352,11 @@ if(isset($incluir)){
   db_fim_transacao();
   ?>
   <script>
-  top.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ed56_i_aluno?>';
-  top.corpo.iframe_a2.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed56_i_aluno?>';
-  top.corpo.iframe_a4.location.href='edu1_docaluno001.php?ed49_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a5.location.href='edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a6.location.href='edu1_historico000.php?ed61_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ed56_i_aluno?>';
+  CurrentWindow.corpo.iframe_a2.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed56_i_aluno?>';
+  CurrentWindow.corpo.iframe_a4.location.href='edu1_docaluno001.php?ed49_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a5.location.href='edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a6.location.href='edu1_historico000.php?ed61_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
   </script>
   <?
   $clalunocurso->erro(true,true);

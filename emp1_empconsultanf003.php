@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -41,7 +41,7 @@ $clempnotaele  = new cl_empnotaele();
 $oGet = db_utils::postMemory($HTTP_GET_VARS);
 
 $sCampos  = "e69_numero,e69_codnota, e69_dtnota,e69_dtrecebe,e69_dtservidor,e70_valor,m72_codordem";
-$sCampos .= ",case when 
+$sCampos .= ",case when
                e04_numeroprocesso is null then
                e03_numeroprocesso
               end as e04_numeroprocesso
@@ -93,7 +93,7 @@ db_app::load("estilos.css, grid.style.css,tab.style.css");
           <b>Número:</b>
         </td>
         <td style="background-color: #FFFFFF;" align="right">
-        <?php echo $oNota->e69_numero; ?> 
+        <?php echo $oNota->e69_numero; ?>
         </td>
         <td onclick="js_consultaOrdemCompra(<? echo $oNota->m72_codordem; ?>);" style="cursor: pointer;">
               <a href="#"><b>Ordem Compra:</b></a>
@@ -102,38 +102,38 @@ db_app::load("estilos.css, grid.style.css,tab.style.css");
           <? echo $oNota->m72_codordem; ?>
         </td>
       </tr>
-      <tr> 
+      <tr>
 		    <td><b>Data:</b></td>
 		    <td align="right" width="100" style="background-color: #FFFFFF;" >
 	      <?
-	       echo db_formatar($oNota->e69_dtnota,'d');   
+	       echo db_formatar($oNota->e69_dtnota,'d');
 	      ?>
 	      </td>
 	      <td><b>Data Entrada:</b></td>
         <td align="right" style="background-color: #FFFFFF;width: 60px;" >
         <?
-        echo db_formatar($oNota->e69_dtservidor,'d');   
+        echo db_formatar($oNota->e69_dtservidor,'d');
         ?>
         </td>
       </tr>
-      <tr> 
+      <tr>
         <td><b>Data Entrega:</b></td>
         <td align="right" style="background-color: #FFFFFF;width: 60px;" >
         <?
           echo db_formatar($oNota->e69_dtrecebe,'d');
-         
+
         ?>
         </td>
         <td><b>Valor:</b></td>
         <td align="right" width="100" style="background-color: #FFFFFF;">
         <?
           echo $oNota->e70_valor;
-            
+
         ?>
         </td>
       </tr>
-      
-      <tr> 
+
+      <tr>
         <td><strong>Processo Administrativo:</strong></td>
         <td align="right" style="background-color: #FFFFFF;width: 60px;" >
            <?php echo $oNota->e04_numeroprocesso ?>
@@ -141,15 +141,15 @@ db_app::load("estilos.css, grid.style.css,tab.style.css");
         <td>&nbsp;</td>
         <td align="right" width="100" > &nbsp;
         </td>
-      </tr>      
-      
-      
+      </tr>
+
+
     </table>
-  </fieldset>    
+  </fieldset>
   </td>
   </tr>
 </table>
-  
+
     <fieldset><legend><b>Outras Informações</b></legend>
     <?
 		$oTabDetalhes = new verticalTab("detalhesemp",300);
@@ -160,13 +160,13 @@ db_app::load("estilos.css, grid.style.css,tab.style.css");
 		$oTabDetalhes->add("pit"         ,"PIT"         ,"func_empconsultanf001.php?e69_codnota={$e69_codnota}&exec=pit");
 		$oTabDetalhes->show();
     ?>
-    
+
     </fieldset>
-  
+
 </form>
 </center>
 
-<? 
+<?
 //db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -177,14 +177,14 @@ function js_infoLancamento(iLancamento) {
 }
 
 function js_consultaOrdemCompra(iCodigoOrdem){
-  
+
   var sQuery = '';
   sQuery += 'm51_codordem='+iCodigoOrdem;
-  
-  js_OpenJanelaIframe('top.corpo','db_iframe_ordemcompra',
+
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ordemcompra',
                       'com3_ordemdecompra002.php?'+sQuery,
-                      'Dados da ordem de compra',true);  
-  
+                      'Dados da ordem de compra',true);
+
 }
 
 </script>

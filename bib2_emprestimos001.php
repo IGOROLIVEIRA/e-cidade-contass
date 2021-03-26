@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -135,26 +135,26 @@ $db_opcao = 1;
 </html>
 <script>
 function js_emite() {
-  
+
   obj   = document.form1;
   count = 0;
-  
-  if (   (obj.data1_dia.value != '') 
-      && (obj.data1_mes.value != '') 
-      && (obj.data1_ano.value != '') 
-      && (obj.data1_dia.value != '') 
-      && (obj.data2_mes.value != '') 
+
+  if (   (obj.data1_dia.value != '')
+      && (obj.data1_mes.value != '')
+      && (obj.data1_ano.value != '')
+      && (obj.data1_dia.value != '')
+      && (obj.data2_mes.value != '')
       && (obj.data2_ano.value != '')) {
-    
+
     query = "data1="+obj.data1_ano.value+"-"+obj.data1_mes.value+"-"+obj.data1_dia.value
           +"&data2="+obj.data2_ano.value+"-"+obj.data2_mes.value+"-"+obj.data2_dia.value;
     count = 1;
   } else {
-    
+
     alert("Preencha a data corretamente!");
     return false;
   }
-  
+
   if (obj.filtro[0].checked == true) {
     filtro = 1;
   }
@@ -184,17 +184,17 @@ function js_emite() {
 }
 
 function js_pesquisabi18_carteira(mostra) {
-  
+
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_leitor',
                         'func_leitorproc.php?funcao_js=parent.js_mostraleitor1|bi16_codigo|ov02_nome',
                         'Pesquisa',
                         true);
   } else {
-    
+
     if (document.form1.bi18_carteira.value != '') {
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_leitor',
                           'func_leitorproc.php?pesquisa_chave='+document.form1.bi18_carteira.value
                                             +'&funcao_js=parent.js_mostraleitor',
@@ -207,34 +207,34 @@ function js_pesquisabi18_carteira(mostra) {
 }
 
 function js_mostraleitor(chave, erro) {
-  
+
   document.form1.ov02_nome.value = chave;
   if (erro == true) {
-    
+
     document.form1.bi18_carteira.focus();
     document.form1.bi18_carteira.value = '';
   }
 }
 
 function js_mostraleitor1(chave1, chave2) {
-  
+
   document.form1.bi18_carteira.value = chave1;
   document.form1.ov02_nome.value     = chave2;
   db_iframe_leitor.hide();
 }
 
 function js_pesquisabi06_seq(mostra) {
-  
+
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_acervo',
                         'func_acervo.php?funcao_js=parent.js_mostraacervo1|bi06_seq|bi06_titulo',
                         'Pesquisa',
                         true);
   } else {
-    
+
     if (document.form1.bi06_seq.value != '') {
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acervo',
                           'func_acervo.php?pesquisa_chave3='+document.form1.bi06_seq.value
                                        +'&funcao_js=parent.js_mostraacervo',
@@ -247,17 +247,17 @@ function js_pesquisabi06_seq(mostra) {
 }
 
 function js_mostraacervo(chave, erro) {
-  
+
   document.form1.bi06_titulo.value = chave;
   if (erro == true) {
-    
+
     document.form1.bi06_seq.focus();
     document.form1.bi06_seq.value = '';
   }
 }
 
 function js_mostraacervo1(chave1, chave2) {
-  
+
   document.form1.bi06_seq.value    = chave1;
   document.form1.bi06_titulo.value = chave2;
   db_iframe_acervo.hide();

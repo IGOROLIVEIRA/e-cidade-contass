@@ -796,7 +796,7 @@ function js_fecha(lAlerta) {
   }
 
   parent.document.formaba.a2.disabled = true;
-  top.corpo.iframe_a1.location.href   = 'tfd4_tfd_pedidotfd001.php';
+  CurrentWindow.corpo.iframe_a1.location.href   = 'tfd4_tfd_pedidotfd001.php';
   parent.mo_camada('a1');
 
 }

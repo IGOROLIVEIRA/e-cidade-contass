@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("dbforms/db_classesgenericas.php");
@@ -59,7 +59,7 @@ if($numrows_sql==0){
   $db_botao=false;
   $result_process = $clpcprocitem->sql_record($clpcprocitem->sql_query_file(null,"pc81_solicitem","","pc81_solicitem in (select distinct pc11_codigo from solicitem where pc11_numero= ".@$pc10_numero.")"));
   if($clpcprocitem->numrows>0){
-    $impok = true;  		   
+    $impok = true;
   }
 }
 ?>
@@ -92,13 +92,13 @@ if($numrows_sql==0){
 	  <td nowrap title="<?=@$Tpc22_codorc?>">
 	     <?=@$Lpc22_codorc?>
 	  </td>
-	  <td> 
+	  <td>
       <?
       db_input('pc22_codorc',6,$Ipc22_codorc,true,'text',3);
       ?>
 	  </td>
 	  <td>
-      <?     
+      <?
         if($db_altexc == false){
           echo '<input name="incluir" type="submit" id="incluir" value="Incluir" onclick="return js_verif();" '.($db_botao==false?"disabled":"").' >';
 	}else{
@@ -112,7 +112,7 @@ if($numrows_sql==0){
   </tr>
   <tr>
     <td align='center' colspan="3">
-    <?    
+    <?
     if($numrows_sql!=0){
       $cliframe_seleciona->textocabec ="black";
       $cliframe_seleciona->textocorpo ="black";
@@ -159,7 +159,7 @@ function js_verif(){
       dad_arr += vir+arr[i];
       vir = ",";
     }
-  }  
+  }
   document.form1.valores.value = dad_arr;
 }
 function js_gerarel(){
@@ -171,7 +171,7 @@ function js_gerarel(){
 if(isset($impok)){
   echo "<script>
           alert('Usuário:\\n\\nItens desta solicitação estão em processo de compras!\\n\\nAdministrador:');";
-  echo "  top.corpo.iframe_orcam.location.href = 'com1_selsolic001.php?op=incluir&sol=true';";
-  echo "</script>";  
+  echo "  CurrentWindow.corpo.iframe_orcam.location.href = 'com1_selsolic001.php?op=incluir&sol=true';";
+  echo "</script>";
 }
 ?>

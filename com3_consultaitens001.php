@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -91,8 +91,8 @@ db_postmemory($HTTP_POST_VARS);
 <?
   if(isset($solicitacao)){
     if($solicitacao=="1"){
-      $result_itensdotac = $clsolicitem->sql_record(      
-      $clsolicitem->sql_query_rel(null,"distinct 
+      $result_itensdotac = $clsolicitem->sql_record(
+      $clsolicitem->sql_query_rel(null,"distinct
                                         pc11_codigo,
                                         pc11_seq,
                                         pc11_quant,
@@ -119,7 +119,7 @@ db_postmemory($HTTP_POST_VARS);
       echo "<legend><strong>Itens/Dotações</strong></legend>";
       echo "<table width='70%' border='0'>\n";
       for($i=0;$i<$numrows_itensdotac;$i++){
-        
+
         db_fieldsmemory($result_itensdotac,$i);
 	      echo "  <tr>\n";
         echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Item: </strong></td>\n";
@@ -134,7 +134,7 @@ db_postmemory($HTTP_POST_VARS);
         echo "    <td colspan='1' align='left'  bgcolor='#FFFFFF'><font color='#333333'>".db_formatar($pc11_vlrun,"v")."</font></td>\n";
 	      echo "  </tr>\n";
         if(isset($pc01_codmater) && trim($pc01_codmater)!=""){
-          
+
       	  echo "  <tr>\n";
       	  echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Descrição: </strong></td>\n";
       	  echo "    <td colspan='3' align='left' bgcolor='#FFFFFF'><font color='#333333'>$pc01_descrmater</font></td>\n";
@@ -152,39 +152,39 @@ db_postmemory($HTTP_POST_VARS);
       	      $m61_descr .= " ($pc17_quant UNIDADES)";
       	    }
       	    echo "  <tr>\n";
-      	    echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";       
+      	    echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";
       	    echo "    <td colspan='3' align='left' bgcolor='#FFFFFF'><font color='#333333'>$m61_descr</font></td>\n";
       	    echo "  </tr>\n";
       	  }else if($pc01_servico=='t'){
       	    echo "  <tr>\n";
-      	    echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";       
+      	    echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";
       	    echo "    <td colspan='3' align='left' bgcolor='#FFFFFF'><font color='#333333'>SERVIÇO</font></td>\n";
       	    echo "  </tr>\n";
       	  }
         }
         if(isset($pc11_resum) && trim($pc11_resum)!=""){
-          
+
       	  echo "  <tr>\n";
       	  echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Resumo: </strong></td>\n";
       	  echo "    <td colspan='3' align='left' bgcolor='#FFFFFF'><font color='#333333'>$pc11_resum</font></td>\n";
       	  echo "  </tr>\n";
         }
         if(isset($pc11_prazo) && trim($pc11_prazo)!=""){
-          
+
       	  echo "  <tr>\n";
       	  echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Prazo entrega: </strong></td>\n";
       	  echo "    <td colspan='3' align='left' bgcolor='#FFFFFF'><font color='#333333'>$pc11_prazo</font></td>\n";
       	  echo "  </tr>\n";
         }
         if(isset($pc11_just) && trim($pc11_just)!=""){
-          
+
       	  echo "  <tr>\n";
       	  echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Justificativa: </strong></td>\n";
       	  echo "    <td colspan='3' align='left' bgcolor='#FFFFFF'><font color='#333333'>$pc11_just</font></td>\n";
       	  echo "  </tr>\n";
         }
         if(isset($pc11_pgto) && trim($pc11_pgto)!=""){
-          
+
       	  echo "  <tr>\n";
       	  echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Cond. Pagamento: </strong></td>\n";
       	  echo "    <td colspan='3' align='left'  bgcolor='#FFFFFF'><font color='#333333'>$pc11_pgto</font></td>\n";
@@ -192,13 +192,13 @@ db_postmemory($HTTP_POST_VARS);
         }
         $result_dotacoes = $clpcdotac->sql_record($clpcdotac->sql_query_file($pc11_codigo,db_getsession("DB_anousu"),null,"pc13_coddot"));
         if($clpcdotac->numrows>0){
-          
+
       	  echo "  <tr>\n";
       	  echo "    <td colspan='4' align='center'  bgcolor='#CCCCCC'>";db_ancora("Clique aqui para ver dotações do item $pc11_codigo","js_verdotac($pc11_codigo,$pc01_codmater,$numero)",1);echo"</td>\n";
       	  echo "  </tr>\n";
-        } 
+        }
         if(($i+1)!=$numrows_itensdotac){
-          
+
       	  echo "  <tr>\n";
       	  echo "    <td colspan='4' align='left'  bgcolor='#CCCCCC'>&nbsp;</td>\n";
       	  echo "  </tr>\n";
@@ -250,7 +250,7 @@ db_postmemory($HTTP_POST_VARS);
 	    }
 	    if($z01_numcgm!=$antigoforn){
 	      if($i==0){
-	          
+
 	        echo "<tr>";
  	        echo "  <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>CGM: </strong></td>";
  	        echo "  <td colspan='1' nowrap='nowrap' align='left' bgcolor='#FFFFFF'><font color='#333333'>{$z01_numcgm}</font></td>";
@@ -258,7 +258,7 @@ db_postmemory($HTTP_POST_VARS);
  	        echo "  <td colspan='1' nowrap='nowrap' align='left' bgcolor='#FFFFFF'><font color='#333333'>{$z01_nome}</font></td>";
  	        echo "</tr>";
 	        if ($solicitacao=="4") {
-	          
+
 	          $sValidadeOrcamento = db_formatar($pc21_validadorc,"d");
 	          $sPrazoEntrega      = db_formatar($pc21_prazoent,"d");
 	          echo "<tr>";
@@ -291,7 +291,7 @@ db_postmemory($HTTP_POST_VARS);
 	      if(trim($pc17_codigo)!=""){
 		echo "  <tr>\n";
 		echo "    <td colspan='4' nowrap='nowrap' align='left' bgcolor='#DEB887'>
-		            <strong>Referência: </strong> 
+		            <strong>Referência: </strong>
 		            <font color='#333333'>
 			        $m61_descr";
 		if($m61_usaquant=="t"){
@@ -303,7 +303,7 @@ db_postmemory($HTTP_POST_VARS);
 		echo "  </tr>\n";
 	      }else if(isset($pc01_servico)){
 		echo "  <tr>\n";
-		echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";       
+		echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";
 		echo "    <td colspan='3' nowrap='nowrap' align='left' bgcolor='#FFFFFF'><font color='#333333'>SERVIÇO</font></td>\n";
 		echo "  </tr>\n";
 	      }
@@ -321,8 +321,8 @@ db_postmemory($HTTP_POST_VARS);
 	      echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Validade Mínima: </strong></td>\n";
 	      echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#FFFFFF'><font color='#333333'>".db_formatar($pc23_validmin,"d")."</font></td>\n";
 	      echo "    <td colspan='2' nowrap='nowrap' align='left' bgcolor='#CCCCCC'></td>\n";
-	      
-	      
+
+
 	      echo "  </tr>\n";
 	      }
 	      echo "  <tr>\n";
@@ -395,7 +395,7 @@ db_postmemory($HTTP_POST_VARS);
 	    echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Autorização: </strong></td>\n";
 	    if(trim($e54_autori)!="" && trim($e54_anulad)==""){
 	      echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#DEB887'><font color='#333333'>$e54_autori</font></td>\n";
-	    }else{                                                          
+	    }else{
 	      echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#DEB887'><font color='#333333'>Não gerada</font></td>\n";
 	    }
 	    echo "  </tr>\n";
@@ -426,7 +426,7 @@ db_postmemory($HTTP_POST_VARS);
 	      echo "  </tr>\n";
 	    }else if(isset($pc01_servico)){
 	      echo "  <tr>\n";
-	      echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";       
+	      echo "    <td colspan='1' nowrap='nowrap' align='left' bgcolor='#CCCCCC'><strong>Referência: </strong></td>\n";
 	      echo "    <td colspan='3' nowrap='nowrap' align='left' bgcolor='#FFFFFF'><font color='#333333'><strong>SERVIÇO</strong></font></td>\n";
 	      echo "  </tr>\n";
 	    }
@@ -467,7 +467,7 @@ db_postmemory($HTTP_POST_VARS);
 		echo "    <td colspan='2' width='50%' align='center' bgcolor='#DEB887'><strong>Autorizações</strong></td>\n";
 		echo "    <td colspan='2' width='50%' align='center' bgcolor='#DEB887'><strong>Empenhadas</strong></td>\n";
 		echo "  </tr>\n";
-	      }	      
+	      }
 	      if(!in_array($e54_autori."_".$e60_numemp,$arr_aut)){
 		$arr_aut[$e54_autori."_".$e60_numemp] = $e54_autori."_".$e60_numemp;
 		echo "  <tr>\n";
@@ -525,12 +525,12 @@ db_postmemory($HTTP_POST_VARS);
                 db_input('l20_codtipocom',6,$Il20_codtipocom,true,'text',4,"readonly");
 		            db_input('l03_descr',35,$Il03_descr,true,'text',4,"readonly");
               ?>
-              </td>    
+              </td>
 	    			</tr>
             <tr>
               <td nowrap="nowrap"><b><?=@$Ll20_datacria?></b>&nbsp;</td>
               <td nowrap="nowrap">
-	              <?php		
+	              <?php
                   $ano = substr(@$l20_datacria,0,4);
 	                $mes = substr(@$l20_datacria,5,2);
 	                $dia = substr(@$l20_datacria,8,2);
@@ -539,15 +539,15 @@ db_postmemory($HTTP_POST_VARS);
               </td>
               <td nowrap="nowrap"><b><?=@$Ll20_horacria?></b>&nbsp;</td>
               <td nowrap="nowrap">
-          	    <?php		
-                  db_input('l20_horacria',5,$Il20_horacria,true,'text',4,"readonly");	     
+          	    <?php
+                  db_input('l20_horacria',5,$Il20_horacria,true,'text',4,"readonly");
           	    ?>
-              </td>      
+              </td>
             </tr>
             <tr>
               <td nowrap="nowrap"><b><?=@$Ll20_dataaber?></b>&nbsp;</td>
               <td nowrap="nowrap">
-	              <?php		
+	              <?php
                   $ano1 = substr(@$l20_dataaber,0,4);
 	                $mes1 = substr(@$l20_dataaber,5,2);
 	                $dia1 = substr(@$l20_dataaber,8,2);
@@ -556,11 +556,11 @@ db_postmemory($HTTP_POST_VARS);
               </td>
               <td nowrap="nowrap"><b><?=@$Ll20_horaaber?></b>&nbsp;</td>
               <td nowrap="nowrap">
-	              <?php		
-                  db_input('l20_horaaber',5,$Il20_horaaber,true,'text',4,"readonly");	     
+	              <?php
+                  db_input('l20_horaaber',5,$Il20_horaaber,true,'text',4,"readonly");
 	              ?>
-              </td>      
-            </tr>    
+              </td>
+            </tr>
             <tr>
               <td nowrap="nowrap"><b><?=@$Ll20_dtpublic?></b>&nbsp;</td>
               <td nowrap="nowrap">
@@ -579,22 +579,22 @@ db_postmemory($HTTP_POST_VARS);
                 ?>
               </td>
             </tr>
-            <tr> 
+            <tr>
       	      <td nowrap="nowrap" colspan="1"><b><?=@$Ll20_local?></b>&nbsp;</td>
       	      <td nowrap="nowrap" colspan="3">
-      	      <? 
+      	      <?
       	        db_textarea("l20_local","","60",$Il20_local,true,'text',4,"readonly");
       	      ?>
       	      </td>
       	    </tr>
-      	    <tr> 
+      	    <tr>
        	      <td nowrap="nowrap" colspan="1"><b><?=@$Ll20_objeto?></b>&nbsp;</td>
        	      <td nowrap="nowrap" colspan="3">
-      	      <? 
+      	      <?
       	        db_textarea("l20_objeto","","60",$Il20_objeto,true,'text',4,"readonly");
       	      ?>
-      	      </td>        
-    	      </tr>  
+      	      </td>
+    	      </tr>
             <tr>
               <td nowrap="nowrap" colspan="4" align="center">
                 <table border="0" align="center">
@@ -602,7 +602,7 @@ db_postmemory($HTTP_POST_VARS);
                     <td colspan="2" align="">
                       <iframe name="itens" id="itens" src="forms/db_frminfolic.php?l20_codigo=<?=$l20_codigo?>" width="540" height="150" marginwidth="0" marginheight="0" frameborder="1"></iframe>
                     </td>
-                  </tr>     
+                  </tr>
                 </table>
 	      			</td>
             </tr>
@@ -625,19 +625,19 @@ db_postmemory($HTTP_POST_VARS);
 </form>
 </center>
 <script>
-function js_verdotac(codigo,mater,numero){  
+function js_verdotac(codigo,mater,numero){
   qry  = "";
   qry += "pc13_codigo="+codigo;
   qry += "&pc16_codmater="+mater;
   qry += "&numero="+numero;
   qry += "&consulta=consulta";
-  js_OpenJanelaIframe('top.corpo','db_iframe_dotac','com1_seldotac001.php?'+qry,'Dotações do item '+codigo,true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dotac','com1_seldotac001.php?'+qry,'Dotações do item '+codigo,true);
 }
 function js_pesquisaaut(autorizacao){
   js_JanelaAutomatica('empautoriza',autorizacao);
 }
 function js_pesquisaemp(empenho){
-  js_OpenJanelaIframe('top.corpo','iframeautoriza','func_empempenho001.php?e60_numemp='+empenho,'Empenho '+empenho,true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','iframeautoriza','func_empempenho001.php?e60_numemp='+empenho,'Empenho '+empenho,true);
 }
 </script>
 </body>

@@ -240,9 +240,9 @@ $clrotulo->label("ar12_nome");
 
     function js_pesquisagrupotaxa(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_grupotaxa','func_grupotaxa.php?funcao_js=parent.js_mostragrupotaxa1|ar37_sequencial|ar37_descricao','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_grupotaxa','func_grupotaxa.php?funcao_js=parent.js_mostragrupotaxa1|ar37_sequencial|ar37_descricao','Pesquisa',true);
         }else{
-            js_OpenJanelaIframe('top.corpo','db_iframe_grupotaxa','func_grupotaxa.php?pesquisa_chave='+document.form1.ar37_sequencial.value+'&funcao_js=parent.js_mostragrupotaxa','Pesquisa','false');
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_grupotaxa','func_grupotaxa.php?pesquisa_chave='+document.form1.ar37_sequencial.value+'&funcao_js=parent.js_mostragrupotaxa','Pesquisa','false');
         }
     }
 
@@ -420,10 +420,10 @@ $clrotulo->label("ar12_nome");
 
     function js_pesquisaBancoAgenciaCobranc(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_bancoagencia','func_bancoagencia.php?funcao_js=parent.js_mostrabancoagenciacobranc1|db89_sequencial|db89_codagencia','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bancoagencia','func_bancoagencia.php?funcao_js=parent.js_mostrabancoagenciacobranc1|db89_sequencial|db89_codagencia','Pesquisa',true);
         }else{
             if(document.form1.ar13_bancoagencia.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_bancoagencia','func_bancoagencia.php?pesquisa_chave='+document.form1.ar13_bancoagencia.value+'&funcao_js=parent.js_mostrabancoagenciacobranc','Pesquisa',false);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bancoagencia','func_bancoagencia.php?pesquisa_chave='+document.form1.ar13_bancoagencia.value+'&funcao_js=parent.js_mostrabancoagenciacobranc','Pesquisa',false);
             }else{
                 document.form1.agencia13.value = '';
             }
@@ -449,10 +449,10 @@ $clrotulo->label("ar12_nome");
 
     function js_pesquisaBancoAgenciaArrecad(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_bancoagencia','func_bancoagencia.php?funcao_js=parent.js_mostrabancoagenciaarrecad1|db89_sequencial|db89_codagencia','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bancoagencia','func_bancoagencia.php?funcao_js=parent.js_mostrabancoagenciaarrecad1|db89_sequencial|db89_codagencia','Pesquisa',true);
         }else{
             if(document.form1.ar14_bancoagencia.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_bancoagencia','func_bancoagencia.php?pesquisa_chave='+document.form1.ar14_bancoagencia.value+'&funcao_js=parent.js_mostrabancoagenciaarrecad','Pesquisa',false);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bancoagencia','func_bancoagencia.php?pesquisa_chave='+document.form1.ar14_bancoagencia.value+'&funcao_js=parent.js_mostrabancoagenciaarrecad','Pesquisa',false);
             }else{
                 document.form1.agencia14.value = '';
             }
@@ -474,7 +474,7 @@ $clrotulo->label("ar12_nome");
     }
 
     function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cadconvenio','func_cadconvenio.php?funcao_js=parent.js_preenchepesquisa|ar11_sequencial','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadconvenio','func_cadconvenio.php?funcao_js=parent.js_preenchepesquisa|ar11_sequencial','Pesquisa',true);
     }
 
     function js_preenchepesquisa(chave){

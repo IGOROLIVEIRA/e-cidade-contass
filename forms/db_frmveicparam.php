@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: veiculos
@@ -39,7 +39,7 @@ $clrotulo->label("ve30_descr");
     <td nowrap title="<?//=@$Tve50_codigo?>">
        <?//=@$Lve50_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ve50_codigo',10,$Ive50_codigo,true,'hidden',$db_opcao,"")
 ?>
@@ -51,7 +51,7 @@ db_input('ve50_codigo',10,$Ive50_codigo,true,'hidden',$db_opcao,"")
        //db_ancora(@$Lve50_instit,"js_pesquisave50_instit(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 $ve50_instit=db_getsession("DB_instit");
 db_input('ve50_instit',2,$Ive50_instit,true,'hidden',$db_opcao," onchange='js_pesquisave50_instit(false);'")
@@ -67,7 +67,7 @@ db_input('ve50_instit',2,$Ive50_instit,true,'hidden',$db_opcao," onchange='js_pe
        db_ancora(@$Lve50_veiccadtipo,"js_pesquisave50_veiccadtipo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ve50_veiccadtipo',10,$Ive50_veiccadtipo,true,'text',$db_opcao," onchange='js_pesquisave50_veiccadtipo(false);'")
 ?>
@@ -82,7 +82,7 @@ db_input('ve20_descr',40,$Ive20_descr,true,'text',3,'')
        db_ancora(@$Lve50_veiccadcategcnh,"js_pesquisave50_veiccadcategcnh(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ve50_veiccadcategcnh',10,$Ive50_veiccadcategcnh,true,'text',$db_opcao," onchange='js_pesquisave50_veiccadcategcnh(false);'")
 ?>
@@ -95,7 +95,7 @@ db_input('ve30_descr',40,$Ive30_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tve50_integrapatri?>">
        <?=@$Lve50_integrapatri?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('1'=>'Sim','0'=>'Não');
 db_select('ve50_integrapatri',$x,true,$db_opcao,"");
@@ -106,7 +106,7 @@ db_select('ve50_integrapatri',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tve50_postoproprio?>">
        <?=@$Lve50_postoproprio?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('1'=>'Sim','0'=>'Não','3'=>'Ambos');
 db_select('ve50_postoproprio',$x,true,$db_opcao,"");
@@ -130,20 +130,20 @@ db_select("ve50_integrapessoal",$x,true,$db_opcao,"");
 <script>
 function js_pesquisave50_instit(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
   }else{
-     if(document.form1.ve50_instit.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.ve50_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+     if(document.form1.ve50_instit.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.ve50_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
      }else{
-       document.form1.nomeinst.value = ''; 
+       document.form1.nomeinst.value = '';
      }
   }
 }
 function js_mostradb_config(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.ve50_instit.focus(); 
-    document.form1.ve50_instit.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.ve50_instit.focus();
+    document.form1.ve50_instit.value = '';
   }
 }
 function js_mostradb_config1(chave1,chave2){
@@ -153,20 +153,20 @@ function js_mostradb_config1(chave1,chave2){
 }
 function js_pesquisave50_veiccadtipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?funcao_js=parent.js_mostraveiccadtipo1|ve20_codigo|ve20_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?funcao_js=parent.js_mostraveiccadtipo1|ve20_codigo|ve20_descr','Pesquisa',true);
   }else{
-     if(document.form1.ve50_veiccadtipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?pesquisa_chave='+document.form1.ve50_veiccadtipo.value+'&funcao_js=parent.js_mostraveiccadtipo','Pesquisa',false);
+     if(document.form1.ve50_veiccadtipo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?pesquisa_chave='+document.form1.ve50_veiccadtipo.value+'&funcao_js=parent.js_mostraveiccadtipo','Pesquisa',false);
      }else{
-       document.form1.ve20_descr.value = ''; 
+       document.form1.ve20_descr.value = '';
      }
   }
 }
 function js_mostraveiccadtipo(chave,erro){
-  document.form1.ve20_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve50_veiccadtipo.focus(); 
-    document.form1.ve50_veiccadtipo.value = ''; 
+  document.form1.ve20_descr.value = chave;
+  if(erro==true){
+    document.form1.ve50_veiccadtipo.focus();
+    document.form1.ve50_veiccadtipo.value = '';
   }
 }
 function js_mostraveiccadtipo1(chave1,chave2){
@@ -176,20 +176,20 @@ function js_mostraveiccadtipo1(chave1,chave2){
 }
 function js_pesquisave50_veiccadcategcnh(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?funcao_js=parent.js_mostraveiccadcategcnh1|ve30_codigo|ve30_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?funcao_js=parent.js_mostraveiccadcategcnh1|ve30_codigo|ve30_descr','Pesquisa',true);
   }else{
-     if(document.form1.ve50_veiccadcategcnh.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?pesquisa_chave='+document.form1.ve50_veiccadcategcnh.value+'&funcao_js=parent.js_mostraveiccadcategcnh','Pesquisa',false);
+     if(document.form1.ve50_veiccadcategcnh.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadcategcnh','func_veiccadcategcnh.php?pesquisa_chave='+document.form1.ve50_veiccadcategcnh.value+'&funcao_js=parent.js_mostraveiccadcategcnh','Pesquisa',false);
      }else{
-       document.form1.ve30_descr.value = ''; 
+       document.form1.ve30_descr.value = '';
      }
   }
 }
 function js_mostraveiccadcategcnh(chave,erro){
-  document.form1.ve30_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve50_veiccadcategcnh.focus(); 
-    document.form1.ve50_veiccadcategcnh.value = ''; 
+  document.form1.ve30_descr.value = chave;
+  if(erro==true){
+    document.form1.ve50_veiccadcategcnh.focus();
+    document.form1.ve50_veiccadcategcnh.value = '';
   }
 }
 function js_mostraveiccadcategcnh1(chave1,chave2){
@@ -198,7 +198,7 @@ function js_mostraveiccadcategcnh1(chave1,chave2){
   db_iframe_veiccadcategcnh.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_veicparam','func_veicparam.php?funcao_js=parent.js_preenchepesquisa|ve50_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicparam','func_veicparam.php?funcao_js=parent.js_preenchepesquisa|ve50_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_veicparam.hide();

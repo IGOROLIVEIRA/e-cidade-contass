@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: material
@@ -48,9 +48,9 @@ if(isset($departamentoorigem) && trim($departamentoorigem)!=""){
   db_fieldsmemory($result_departamentoorigem,0);
 }
 if(isset($opcao) && ($opcao=='alterar' || $opcao=='excluir')){
-	
+
   if(isset($m80_codigo)){
-  	
+
     //echo "<br>".$clmatestoqueinimei->sql_query_matestoque(null,"matestoqueini.m80_codigo as valores,m60_codmater,m60_descr,sum(m82_quant) as quantlanc,(sum(m71_quant)-sum(m71_quantatend)) as quantdis,m70_codigo","matestoqueini.m80_codigo"," matestoqueini.m80_coddepto= ".@$departamentoorigem." and m83_coddepto=".@$departamentodestino." and m60_codmater = $m60_codmater and  matestoqueini.m80_codigo=$m80_codigo group by matestoqueini.m80_codigo,m60_codmater,m60_descr,m70_codigo ");
     $m80_codigo = (!empty($m80_codigo))?$m80_codigo:'null';
     $result_dadosaltexc = $clmatestoqueinimei->sql_record($clmatestoqueinimei->sql_query_matestoque(null,"matestoqueini.m80_codigo as valores,m60_codmater,m60_descr,sum(m82_quant) as quantlanc,(sum(m71_quant)-sum(m71_quantatend)) as quantdis,m70_codigo","matestoqueini.m80_codigo"," matestoqueini.m80_coddepto= ".@$departamentoorigem." and m83_coddepto=".@$departamentodestino." and m60_codmater = $m60_codmater and  matestoqueini.m80_codigo=$m80_codigo group by matestoqueini.m80_codigo,m60_codmater,m60_descr,m70_codigo "));
@@ -82,10 +82,10 @@ if(isset($opcao) && $opcao=="excluir"){
       <strong>Departamento origem:</strong>
     </td>
     <td align="left" nowrap colspan='3'>
-       <? 
+       <?
 db_input('coddepto',10,$Idescrdepto,true,"text",3,"","departamentoorigem");
        ?>
-       <? 
+       <?
 db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentoorigem");
        ?>
     </td>
@@ -95,10 +95,10 @@ db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentoorigem")
       <strong>Departamento destino:</strong>
     </td>
     <td align="left" nowrap colspan='3'>
-       <? 
+       <?
 	     db_input('coddepto',10,$Idescrdepto,true,"text",3,"","departamentodestino");
        ?>
-       <? 
+       <?
 		 db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentodestino");
        ?>
     </td>
@@ -126,13 +126,13 @@ db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentoorigem")
 	    db_fieldsmemory($result_quantidades,0);
       }
      $clmatmater = new cl_matmater();
-     $rsMaterial   = $clmatmater->sql_record($clmatmater->sql_query_file($m60_codmater)); 
+     $rsMaterial   = $clmatmater->sql_record($clmatmater->sql_query_file($m60_codmater));
 	 $oMaterial    = db_utils::fieldsMemory($rsMaterial, 0);
-	
+
      if ($oMaterial->m60_controlavalidade == 1 || $oMaterial->m60_controlavalidade == 2) {
-       
+
        echo "<tr>";
-       
+
         echo "<td align='right'><b>Lotes do Material:</b></td>";
         echo "<td><b><a href='' onclick='js_mostraLotes({$m60_codmater}, ".db_getsession("DB_coddepto").");return false;'>Ver Lotes</a></b>";
        echo "<tr>";
@@ -223,7 +223,7 @@ db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentoorigem")
     <tr>
       <td align='center' colspan='4'><BR>
   ";
-  
+
        $sql = $clmatestoqueinimei->sql_query_matestoque(null,"matestoqueini.m80_codigo,m60_codmater,m60_descr,sum(m82_quant) as m82_quant","m80_codigo"," matestoqueini.m80_coddepto= ".@$departamentoorigem." and m83_coddepto=".@$departamentodestino." $where_opcao and matestoqueini.m80_codtipo<>8 and matestoqueinill.m87_matestoqueini is null and matestoqueini.m80_codigo=".@$valores." group by matestoqueini.m80_codigo,m60_codmater,m60_descr ");
 	   //echo "$sql<br>";
        $chavepri= array("m80_codigo"=>@$m80_codigo ,"m60_codmater"=>@$m60_codmater);
@@ -244,7 +244,7 @@ db_input('descrdepto',43,$Im60_descr,true,"text",3,"","descrdepartamentoorigem")
       </td>
     </tr>
   ";
- 
+
 db_input('nosetmaterial',10,0,true,'hidden',3);
 db_input('valores',10,0,true,'hidden',3,'');
 
@@ -263,7 +263,7 @@ function js_emiteTermo (transferId) {
 }
 
 function js_verificaquantidade(valor){
-  valor = new Number(valor); 
+  valor = new Number(valor);
   VALOR = new Number(document.form1.quantdis.value);
   if(valor>VALOR){
     alert('Quantidade não disponível.');
@@ -296,10 +296,10 @@ function js_pesquisam60_codmater(mostra){
   }
   ?>
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_itens','db_iframe_matmater','func_matmaterdepto.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr'+qry,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_itens','db_iframe_matmater','func_matmaterdepto.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr'+qry,'Pesquisa',true);
   }else{
      if(document.form1.m60_codmater.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_itens','db_iframe_matmater','func_matmaterdepto.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostramatmater'+qry,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_itens','db_iframe_matmater','func_matmaterdepto.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostramatmater'+qry,'Pesquisa',false);
      }else{
        document.form1.m60_descr.value = '';
      }
@@ -321,19 +321,19 @@ function js_mostramatmater1(chave1,chave2){
   document.form1.submit();
 }
 function js_mostraLotes(iItem, iCodEstoque) {
-  
+
   iCodItem      = new Number(iItem);//código do material
   nValor        = new Number($F('quantlanc'));//Quantidade digitada pelo usuário
   nValorReqItem = new Number($F('quantlanc'));
   if (nValor  == 0) {
     alert('Informe a quantidade');
   } else {
-  
+
     sUrl  = 'mat4_mostraitemlotes.php?iCodMater='+iCodItem+'&iCodDepto='+iCodEstoque+'&nValor='+nValor;
     sUrl += '&nValorSolicitado='+nValorReqItem+'&updateField=quantlanc';
-    js_OpenJanelaIframe('top.corpo.iframe_itens','db_iframe_lotes',sUrl,'Lotes ',true);
-    
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_itens','db_iframe_lotes',sUrl,'Lotes ',true);
+
   }
-  
+
 }
 </script>

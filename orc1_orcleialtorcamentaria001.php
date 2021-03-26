@@ -33,7 +33,7 @@ if (isset($incluir)) {
         if ($clorcleialtorcamentaria->erro_status == 0) {
             $sqlerro = true;
         } else {
-            echo "<script>top.corpo.iframe_orcprojetolei.form1.suplementacao.disabled = false</script>";
+            echo "<script>CurrentWindow.corpo.iframe_orcprojetolei.form1.suplementacao.disabled = false</script>";
         }
         db_fim_transacao($sqlerro);
     }

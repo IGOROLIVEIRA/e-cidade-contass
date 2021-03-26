@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -176,12 +176,12 @@ $clrotulo->label("rh02_codreg");
       <input name="excluir" type="submit" id="db_opcao" value="Excluir" <?=($db_botao==false?"disabled":"")?>  <?if($db_opcao!=3)echo "onclick='return js_verificadados();'";?>>
     </td>
   </tr>
-</table> 
+</table>
 <script>
 function js_faltas(){
   qry = 'opcao=dadosrescis';
   qry+= '&seqpes='+document.form1.rh02_seqpes.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
 }
 function js_verificadados(){
   x = document.form1;
@@ -194,10 +194,10 @@ function js_verificadados(){
 }
 function js_pesquisarh01_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?testarescisao=af&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc|rh05_recis|rescindido&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?testarescisao=af&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc|rh05_recis|rescindido&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
   }else{
-     if(document.form1.rh01_regist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?testarescisao=af&pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrarhpessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
+     if(document.form1.rh01_regist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?testarescisao=af&pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrarhpessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
        document.form1.rh01_admiss.value = '';
@@ -217,8 +217,8 @@ function js_pesquisarh01_regist(mostra){
        document.form1.rh05_aviso_dia.value  = '';
        document.form1.rh05_aviso_mes.value  = '';
        document.form1.rh05_aviso_ano.value  = '';
-       document.form1.rh05_mremun.value     = ''; 
-       document.form1.rh05_saldofgts.value  = ''; 
+       document.form1.rh05_mremun.value     = '';
+       document.form1.rh05_saldofgts.value  = '';
      }
   }
 }
@@ -228,10 +228,10 @@ function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chav
     alert("Funcionário "+document.form1.rh01_regist.value+" ("+chave+") não rescindiu contrato.");
     erro = true;
   }
-  if(erro==true){ 
+  if(erro==true){
     document.form1.rh01_regist.value = '';
-    js_pesquisarh01_regist(false); 
-    document.form1.rh01_regist.focus(); 
+    js_pesquisarh01_regist(false);
+    document.form1.rh01_regist.focus();
   }else{
     subpes = "<?=(db_anofolha()."/".db_mesfolha())?>";
     anomes = chave11.substring(0,4)+"/"+chave11.substring(5,7);
@@ -254,7 +254,7 @@ function js_mostrarhpessoal1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,ch
   if(chave12 == ""){
     alert("Funcionário "+chave1+" ("+chave2+") não rescindiu contrato.");
     document.form1.rh01_regist.value = '';
-    js_pesquisarh01_regist(false); 
+    js_pesquisarh01_regist(false);
     document.form1.rh01_regist.focus();
   }else{
     subpes = "<?=(db_anofolha()."/".db_mesfolha())?>";

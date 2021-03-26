@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -228,7 +228,7 @@ function js_mascaraEstrutural() {
 function js_pesquisac60_codsis(mostra) {
 
   if (mostra === true) {
-    js_OpenJanelaIframe('top.corpo.iframe_conta',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                         'db_iframe_consistema',
                         'func_consistema.php?funcao_js=parent.js_mostraconsistema|c52_codsis|c52_descr',
                         'Pesquisa', true, '0');
@@ -236,7 +236,7 @@ function js_pesquisac60_codsis(mostra) {
 
     var sValorCampo = document.form1.c60_codsis.value;
     if (sValorCampo !== '') {
-      js_OpenJanelaIframe ('top.corpo.iframe_conta',
+      js_OpenJanelaIframe ('CurrentWindow.corpo.iframe_conta',
                            'db_iframe_consistema',
                            'func_consistema.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraconsistema',
                            'Pesquisa', false);
@@ -283,7 +283,7 @@ function js_mostraContaBancaria() {
 function js_pesquisac60_codcla(mostra) {
 
   if (mostra === true) {
-    js_OpenJanelaIframe('top.corpo.iframe_conta',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                         'db_iframe_conclass',
                         'func_conclass.php?funcao_js=parent.js_mostraconclass|c51_codcla|c51_descr',
                         'Pesquisa', true, '0');
@@ -291,7 +291,7 @@ function js_pesquisac60_codcla(mostra) {
 
     var sValorCampo = document.form1.c60_codcla.value;
     if (sValorCampo !== '') {
-      js_OpenJanelaIframe('top.corpo.iframe_conta',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                           'db_iframe_conclass',
                           'func_conclass.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraconclass',
                           'Pesquisa', false);
@@ -327,7 +327,7 @@ function js_mostraconclass() {
 function js_pesquisaSubsistema(mostra) {
 
   if (mostra === true) {
-    js_OpenJanelaIframe('top.corpo.iframe_conta',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                         'db_iframe_subsistema',
                         'func_consistemaconta.php?funcao_js=parent.js_mostraSubsistema|c65_sequencial|c65_descricao',
                         'Pesquisa', true, '10');
@@ -335,7 +335,7 @@ function js_pesquisaSubsistema(mostra) {
 
     var sValorCampo = document.form1.c60_consistemaconta.value;
     if (sValorCampo !== '') {
-      js_OpenJanelaIframe('top.corpo.iframe_conta',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                           'db_iframe_subsistema',
                           'func_consistemaconta.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraSubsistema',
                           'Pesquisa', false);
@@ -465,14 +465,14 @@ function js_pesquisaContaPCASP(mostra) {
 
   if (mostra === true) {
 
-    js_OpenJanelaIframe('top.corpo.iframe_conta',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                         'db_iframe_contaPcasp',
                         'func_conplano.php?funcao_js=parent.js_mostraContaPcasp|c60_codcon|c60_descr|c60_estrut',
                         'Pesquisar', true, '10');
   } else {
     var sValorCampo = $F('c72_conplano');
     if (sValorCampo !== '') {
-      js_OpenJanelaIframe('top.corpo.iframe_conta',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                           'db_iframe_contaPcasp',
                           'func_conplano.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraContaPcasp',
                           'Pesquisa', false);
@@ -524,7 +524,7 @@ function js_liberaAbasPlano(iCodigoConta, lAbaReduzidos) {
 
 function js_pesquisarConta() {
 
-  js_OpenJanelaIframe('top.corpo.iframe_conta',
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_conta',
                       'db_iframe_conta',
       'func_conplanoorcamento.php?funcao_js=parent.js_carregadadosconta|c60_codcon',
       'Pesquisar Plano Orçamentário', true, '10');
@@ -535,8 +535,8 @@ function js_carregadadosconta(iConta) {
    if (oGet.db_opcao != 1) {
 
      $("form1").reset();
-     //top.parent.iframe_reduzido.form1.reset();
-     //top.parent.iframe_grupos.form1.reset();
+     //CurrentWindow.parent.iframe_reduzido.form1.reset();
+     //CurrentWindow.parent.iframe_grupos.form1.reset();
      js_divCarregando('Aguarde, pesquisando dados da conta', 'msgbox');
 
      var oParam          = new Object();

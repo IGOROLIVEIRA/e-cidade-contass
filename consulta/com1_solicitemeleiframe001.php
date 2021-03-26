@@ -102,19 +102,19 @@ if(isset($pc80_codproc)){
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <center>
 <table width="730" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="360" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="360" align="left" valign="top" bgcolor="#CCCCCC">
       <form name="form1">
       <center>
       <table height="20" border="0">
-	<tr>  
+	<tr>
 	  <td>
 	  <center>
 	  <?
 	  db_input("valores",100,0,true,"hidden",3);
           $semitem  = false;
           if($passou==true){
-	    if($numrows_pcprocitem>0){ 
+	    if($numrows_pcprocitem>0){
 	      echo "<table height='20' border='1' width='90%'>\n";
 	      for($i=0;$i<$numrows_pcprocitem;$i++){
 		db_fieldsmemory($result_procitem,$i);
@@ -127,7 +127,7 @@ if(isset($pc80_codproc)){
 		    echo "    <td nowrap class='bordas02' colspan='6'><strong>Itens a alterar - Processo de compras N&ordm; $pc80_codproc</strong></td>\n";
 		    echo "  </tr>\n";
 		    echo "  <tr>\n";
-		    echo "    <td nowrap class='bordas02' title='Item em que será incluído o elemento selecionado' align='center'><strong>";db_ancora("M","js_marcatodos();",1);echo"</strong>\n</td>\n";  
+		    echo "    <td nowrap class='bordas02' title='Item em que será incluído o elemento selecionado' align='center'><strong>";db_ancora("M","js_marcatodos();",1);echo"</strong>\n</td>\n";
 		    echo "    <td nowrap class='bordas02' title='Sequencial do item na solicitação'                align='center'><strong>Seq. sol.</strong></td>\n";
 		    echo "    <td nowrap class='bordas02' title='Código do item no processo de compras'            align='center'><strong>Item proc.</strong></td>\n";
 		    echo "    <td nowrap class='bordas02' title='Código do tipo de material'                       align='center'><strong>Código material</strong></td>\n";
@@ -136,7 +136,7 @@ if(isset($pc80_codproc)){
 		    echo "  </tr>\n";
 		  }
 		  echo "  <tr>\n";
-		  echo "    <td nowrap class='bordas' title='Item em que será incluído o elemento selecionado' align='center'><input type='checkbox' name='item_".$pc11_codigo."' value='ele_".$pc11_codigo."' onclick='js_buscavalores();'>\n</td>\n";  
+		  echo "    <td nowrap class='bordas' title='Item em que será incluído o elemento selecionado' align='center'><input type='checkbox' name='item_".$pc11_codigo."' value='ele_".$pc11_codigo."' onclick='js_buscavalores();'>\n</td>\n";
 		  echo "    <td nowrap class='bordas' title='Sequencial do item na solicitação'                align='center'><strong>$pc11_seq</strong></td>\n";
 		  echo "    <td nowrap class='bordas' title='Código do item no processo de compras'            align='center'><strong>$pc81_codprocitem</strong></td>\n";
 		  echo "    <td nowrap class='bordas' title='Código do tipo de material'                       align='center'><strong>$pc01_codmater</strong></td>\n";
@@ -145,7 +145,7 @@ if(isset($pc80_codproc)){
 		    echo "    <td nowrap class='bordas' align='center' title='Referência do item. Ex: Caixa, unidade, ...'>\n";
 		    echo "      <strong>\n";
 		    echo "        $m61_descr ";
-		    if(($m61_usaquant)=="t"){	
+		    if(($m61_usaquant)=="t"){
 		    echo "        ($pc17_quant UNIDADES)";
 		    }
 		    echo "      </strong>\n";
@@ -219,7 +219,7 @@ if(isset($pc80_codproc)){
 	  </center>
           </td>
 	</tr>
-      </table>	
+      </table>
       </center>
       </form>
     </td>
@@ -256,26 +256,26 @@ function js_buscavalores(){
   }
 }
 function js_pesquisapc16_codmater(mostra){
-  qry = "&o56_codele="+document.form1.o56_codele.value;	
+  qry = "&o56_codele="+document.form1.o56_codele.value;
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater'+qry,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater'+qry,'Pesquisa',true);
   }else{
-     if(document.form1.pc16_codmater.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?pesquisa_chave='+document.form1.pc16_codmater.value+'&funcao_js=parent.js_mostrapcmater'+qry,'Pesquisa',false);
+     if(document.form1.pc16_codmater.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcmater','func_pcmater.php?pesquisa_chave='+document.form1.pc16_codmater.value+'&funcao_js=parent.js_mostrapcmater'+qry,'Pesquisa',false);
      }else{
-       document.form1.pc01_descrmater.value = ''; 
+       document.form1.pc01_descrmater.value = '';
      }
   }
 }
 function js_mostrapcmater(chave,erro){
-  document.form1.pc01_descrmater.value = chave; 
-  if(erro==true){ 
-    document.form1.pc16_codmater.focus(); 
-    document.form1.pc16_codmater.value = ''; 
-  }  
+  document.form1.pc01_descrmater.value = chave;
+  if(erro==true){
+    document.form1.pc16_codmater.focus();
+    document.form1.pc16_codmater.value = '';
+  }
 }
 function js_mostrapcmater1(chave1,chave2){
-  document.form1.pc16_codmater.value = chave1;  
+  document.form1.pc16_codmater.value = chave1;
   document.form1.pc01_descrmater.value = chave2;
   db_iframe_pcmater.hide();
 }
@@ -285,7 +285,7 @@ if(isset($incluir) || $semitem==true){
   if($sqlerro==true){
     db_msgbox($erro_msg);
   }else if(isset($incluir)){
-    echo "<script>top.corpo.location.href = 'com1_solicitemele001.php';</script>";
+    echo "<script>CurrentWindow.corpo.location.href = 'com1_solicitemele001.php';</script>";
   }
 }
 ?>

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clrotulo = new rotulocampo;
@@ -61,7 +61,7 @@ $db_opcao_inf = 1;
                 <td colspan='4'>
                  <input type='checkbox' id='marcamig' >
                  <label for='marcamig'>Marcar como Migrado</label>
-                </td> 
+                </td>
           </tr>
           <tr>
              <td colspan='4' nowrap>
@@ -71,19 +71,19 @@ $db_opcao_inf = 1;
                 <td nowrap>
                  <input type='checkbox' id='mostraMig'  onclick="js_filter(this,'comitem');" checked>
                  <label for='mostraMig'>Ordens Migradas</label>
-                </td> 
+                </td>
                 <td nowrap>
                  <input type='checkbox' id='mostraNota' onclick="js_filter(this,'comnotasemitem')" checked >
                  <label for='mostraNota'>Com nota sem item</label>
-                </td> 
+                </td>
                 <td nowrap>
                  <input type='checkbox' id='mostraSem'  onclick="js_filter(this,'normal')" checked >
                  <label for='mostraSem'>Sem nota</label>
-                </td> 
+                </td>
                 <td nowrap>
                  <input type='checkbox' id='mostraCom'  onclick="js_filter(this,'comordemnota')" checked >
                  <label for='mostraCom'>Com nota e ordem de compra</label>
-                </td> 
+                </td>
                 </tr>
                 <tr>
                   <td>
@@ -91,7 +91,7 @@ $db_opcao_inf = 1;
                   <label for='mostraAnul'>Anuladas</label>
                   </td>
                 </tr>
-               </table>  
+               </table>
              </fieldset>
             </td>
           </tr>
@@ -101,7 +101,7 @@ $db_opcao_inf = 1;
      <td valign='top' style='padding:0px'>
     <fieldset ><legend><b>&nbsp;Valores do Empenho&nbsp;</b></legend>
     <table style="width:200px;height:100%" >
-          <tr><td nowrap><?=@$Le60_vlremp?></td><td align=right><? db_input('e60_vlremp', 12, $Ie60_vlremp, true, 'text', 3, '','','','text-align:right')?></td></tr>  
+          <tr><td nowrap><?=@$Le60_vlremp?></td><td align=right><? db_input('e60_vlremp', 12, $Ie60_vlremp, true, 'text', 3, '','','','text-align:right')?></td></tr>
           <tr><td nowrap><?=@$Le60_vlranu?></td><td align=right><? db_input('e60_vlranu', 12, $Ie60_vlranu, true, 'text', 3, '','','','text-align:right')?></td></tr>
           <tr><td nowrap><?=@$Le60_vlrliq?></td><td align=right><? db_input('e60_vlrliq', 12, $Ie60_vlrliq, true, 'text', 3, '','','','text-align:right')?></td></tr>
           <tr><td nowrap><?=@$Le60_vlrpag?></td><td align=right><? db_input('e60_vlrpag', 12, $Ie60_vlrpag, true, 'text', 3, '','','','text-align:right')?></td></tr>
@@ -109,7 +109,7 @@ $db_opcao_inf = 1;
             <td colspan='2' style='border-top:1px outset white'>
              <input type='button' id='btnLegenda' value='Legenda' onclick='js_toggleLegend(this,event)'>
             </td>
-          </tr>  
+          </tr>
        </table>
        </fieldset>
      </td>
@@ -117,7 +117,7 @@ $db_opcao_inf = 1;
      <tr>
      <td colspan='2' style='padding:0px;'>
      <fieldset><legend><b>&nbsp;Ordens de Pagamento&nbsp;</b></legend>
-         
+
         <table id='dbgridordens'  cellspacing=0 cellpadding=0 width='100%' style='border:2px inset white'>
           <tr>
             <th class='table_header'><input type='checkbox'  style='display:none'
@@ -140,9 +140,9 @@ $db_opcao_inf = 1;
         </tr>
         <tr>
           <td colspan='2'>
-            <fieldset><legend><b>Itens do Empenho</b></legend> 
+            <fieldset><legend><b>Itens do Empenho</b></legend>
             <table id='datagrid2' style='border:2px inset white;backgorund-color:white;' width='100%' cellspacing='0' cellpadding=0>
-              <tr> 
+              <tr>
                        <td class='table_header' nowrap style="width:17px">
                        <input type='checkbox'  style='display:none'
                         id='mtodositens' onclick='js_marca()'>
@@ -158,11 +158,11 @@ $db_opcao_inf = 1;
                        <td class='table_header' id='grid2Options' style='width:17px'>
                        &nbsp;
                    </td>
-                   </tr>    
+                   </tr>
                <tbody id='dadosItens' style='height:80;width:100%;overflow:scroll;overflow-x:hidden;background-color:white'>
                <tr>
                  <td colspan='10'>&nbsp;</td>
-               </tr>  
+               </tr>
                </tbody>
                <tfoot>
                   <tr>
@@ -178,24 +178,24 @@ $db_opcao_inf = 1;
         </fieldset>
       </td>
    </tr>
-  </td> 
+  </td>
 </tr>
-</table>  
+</table>
 <input name="gerarnota" type="button" id="gerarnota" value="Gerar Nota" onclick="return js_gerarNota()">
 <input name="geraritensnota" type="button" id="geraritensnota" value="Gerar Itens da Nota" onclick="return js_gerarNotaItens()">
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
-</form>  
+</form>
 </center>
 <div id='legenda' style='display:none;width:250px;position:absolute;border:1px outset white'>
   <span style="display:block; background-color:#d1f07c">Ordem Migrada</span>
   <span style="display:block; background-color:white">Ordem sem Nota</span>
   <span style="display:block; background-color:#FFCCCC">Ordem com Nota, sem itens</span>
   <span style="display:block; background-color:#FFFFCC">Ordem com Nota, com OC, sem itens</span>
-</div>  
+</div>
 <script>
 function js_pesquisa(){
-     
- js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
+
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
  js_limpa();
 
 }
@@ -205,7 +205,7 @@ function js_preenchepesquisa(chave) {
   js_consultaEmpenho(chave);
 }
 function js_consultaEmpenho(iEmpenho){
-   
+
    js_divCarregando("Aguarde, efetuando pesquisa","msgBox");
    strJson = '{"exec":"getDadosMigra","iNumEmp":"'+iEmpenho+'"}';
    $('dados').innerHTML       = '';
@@ -215,10 +215,10 @@ function js_consultaEmpenho(iEmpenho){
    //$('pesquisar').disabled = true;
    var url     = 'emp4_migracaoNotasRPC.php';
    var oAjax   = new Ajax.Request(
-                            url, 
+                            url,
                               {
-                               method: 'post', 
-                               parameters: 'json='+strJson, 
+                               method: 'post',
+                               parameters: 'json='+strJson,
                                onComplete: js_saida
                               }
                              );
@@ -229,7 +229,7 @@ function js_saida(oAjax) {
 
   var obj = eval("(" + oAjax.responseText + ")");
   if (obj.status && obj.status == 2){
-    
+
      js_removeObj("msgBox");
      alert(obj.sMensagem.urlDecode());
      return false ;
@@ -251,23 +251,23 @@ function js_saida(oAjax) {
   var lDisabled = false;
   if (obj.aOrdensPagamento) {
     for (iInd = 0; iInd < obj.aOrdensPagamento.length; iInd++){
-     
+
       sClassName  = 'normal';
       lHabilitado = '';
       display     = '';
       with (obj.aOrdensPagamento[iInd]) {
-        
+
         //a notafiscal dessa nota já tem itens;nao pode ser migrada.
         if (notatemitem == 1) {
 
-          sClassName  = 'comitem';   
+          sClassName  = 'comitem';
           lHabilitado = ' disabled ';
           if ($('mostraMig').checked == false) {
             display = 'none';
           }
         } else if (e69_codnota != null && temordem == 1) {
 
-          sClassName  = 'comordemnota';   
+          sClassName  = 'comordemnota';
           if ($('mostraNota').checked == false) {
             display = 'none';
           }
@@ -276,18 +276,18 @@ function js_saida(oAjax) {
           if ($('mostraSem').checked == false) {
             display = 'none';
           }
-          sClassName  = 'comnotasemitem';   
+          sClassName  = 'comnotasemitem';
         }
-        var nValorAnu  = new Number(e53_vlranu); 
-        var nValorNota = new Number(e53_valor); 
+        var nValorAnu  = new Number(e53_vlranu);
+        var nValorNota = new Number(e53_valor);
         if ((nValorNota - nValorAnu) == 0  && $('mostraAnul').checked == false) {
           display = "none";
         }
         saida += "<tr id='linhachk"+e50_codord+"' class='"+sClassName+"' style='display:"+display+";height:1em'>";
         saida += "  <td class='linhagrid'>";
         saida += "     <input type='checkbox' id='chk"+e50_codord+"'";
-        saida += "      onclick=\"js_marcaLinha(this,'linha');js_setValorNota(this)\""; 
-        saida += "      value='"+e50_codord+"' class='chkmarca' "+lHabilitado+"  style='height:12px'>";      
+        saida += "      onclick=\"js_marcaLinha(this,'linha');js_setValorNota(this)\"";
+        saida += "      value='"+e50_codord+"' class='chkmarca' "+lHabilitado+"  style='height:12px'>";
         saida += "  </td>";
         saida += "  <td class='linhagrid' id='e50_codord"+e50_codord+"' style='text-align:right'>";
         saida +=       e50_codord;
@@ -309,25 +309,25 @@ function js_saida(oAjax) {
         saida += "  </td>";
         saida += "  <td class='linhagrid' id='e69_numero"+e50_codord+"' style='text-align:center'>";
         saida += "     &nbsp;<a href='' onclick='js_consultaNota("+e69_codnota+");return false'><b>";
-        saida +=      e69_numero.urlDecode(); 
+        saida +=      e69_numero.urlDecode();
         saida += "    </b><a/>";
         saida += "     <span id='e69_codnota"+e50_codord+"' style='display:none'>"+e69_codnota+"</span>";
         saida += "     <span id='tipoordem"+e50_codord+"' style='display:none'>"+sClassName+"</span>";
         saida += "  </td>";
         saida += "</tr>";
-      
+
       }
     }
     saida += "<tr style='height:auto'><td colspan='8'>&nbsp;</td></tr>";
     $('dados').innerHTML    = saida;
   }
   if (obj.aItens) {
-    
+
     var saida = '';
     for (var iInd = 0; iInd < obj.aItens.length; iInd++) {
-      
+
       with (obj.aItens[iInd]) {
-        
+
         sDisabled  = '';
         sClassName = 'normal';
         sLibera    = '';
@@ -377,13 +377,13 @@ function js_saida(oAjax) {
         saida += "    onblur='js_calculaValor("+e62_sequencial+",2,"+lServico+");' onkeypress='return js_teclas(event)'>";
         saida += "   </td>";
         saida += "</tr>";
-        
-        
+
+
       }
-      lDisabled = false;  
+      lDisabled = false;
     }
     saida += "<tr style='height:auto'><td colspan=8>&nbsp;</td></tr>";
-    $('dadosItens').innerHTML = saida; 
+    $('dadosItens').innerHTML = saida;
   }
   js_removeObj("msgBox");
 }
@@ -421,22 +421,22 @@ function js_gerarNota() {
    * verificamos se o usuário marcou ao menos um item para compor a nota.
    * o total dos itens deve ser o mesmo valor da ordem.
    */
-  
+
    var aItens = js_getElementbyClass(frmAnularEmpenho, 'chkmarcaItens',"checked==true");
    if (aItens.length > 0) {
-     
+
      sV = '';
      for (iItens = 0; iItens < aItens.length; iItens++) {
-       
+
        with (aItens[iItens]) {
 
          nValorItem   = new Number($F('vlrtot'+value));
          nQtdeItem    = new Number($F('qtdesol'+value));
          sSequen      = $('e62_sequen'+value).innerHTML;
-         nValorUni    = new Number(nValorItem/nQtdeItem); 
+         nValorUni    = new Number(nValorItem/nQtdeItem);
          nValorTotal += nValorItem;
-         sJsonItens  += sV+"{'e62_sequencial':"+value+",'vlrtot':"+nValorItem+",'quantidade':"+nQtdeItem;  
-         sJsonItens  += ",'sequen':"+sSequen+",'vlruni':"+nValorUni+"}"; 
+         sJsonItens  += sV+"{'e62_sequencial':"+value+",'vlrtot':"+nValorItem+",'quantidade':"+nQtdeItem;
+         sJsonItens  += ",'sequen':"+sSequen+",'vlruni':"+nValorUni+"}";
          sV           = ", ";
        }
      }
@@ -449,7 +449,7 @@ function js_gerarNota() {
    }
 
   /*
-   * verificamos se o total dos itens Corresponde ao total marcado da ordem   
+   * verificamos se o total dos itens Corresponde ao total marcado da ordem
    * O valor total dos itens e da ordem deve sem iguais.
    *
    */
@@ -465,10 +465,10 @@ function js_gerarNota() {
       sJson += '"dtOrdem":"'+dtOrdem+'","aItens":['+sJsonItens+'],"lMigrar":'+lMigrar+'}';
       var url     = 'emp4_migracaoNotasRPC.php';
       var oAjax   = new Ajax.Request(
-                            url, 
+                            url,
                               {
-                               method: 'post', 
-                               parameters: 'json='+sJson, 
+                               method: 'post',
+                               parameters: 'json='+sJson,
                                onComplete: js_saidaNota
                               }
                              );
@@ -479,7 +479,7 @@ function js_gerarNota() {
      alert('Os valores da ordem e itens devem ser iguais.');
 
    }
-  
+
 }
 
 function js_saidaNota(oAjax) {
@@ -487,7 +487,7 @@ function js_saidaNota(oAjax) {
   js_removeObj("msgBox");
   oRetorno =  eval("("+oAjax.responseText+")");
   if (oRetorno.iStatus == 1) {
-    
+
     alert(oRetorno.sMensagem.urlDecode());
     js_consultaEmpenho($F('e60_numemp'));
   } else {
@@ -524,23 +524,23 @@ function js_gerarNotaItens() {
    * verificamos se o usuário marcou ao menos um item para compor a nota.
    * o total dos itens deve ser o mesmo valor da ordem.
    */
-  
+
    var aItens = js_getElementbyClass(frmAnularEmpenho, 'chkmarcaItens',"checked==true");
    if (aItens.length > 0) {
-     
+
      sV = '';
      for (iItens = 0; iItens < aItens.length; iItens++) {
-       
+
        with (aItens[iItens]) {
 
          nValorItem   = new Number($F('vlrtot'+value));
          nQtdeItem    = new Number($F('qtdesol'+value));
          sSequen      = $('e62_sequen'+value).innerHTML;
-         nValorUni    = new Number(nValorItem/nQtdeItem); 
+         nValorUni    = new Number(nValorItem/nQtdeItem);
          nValorTotal += nValorItem.toFixed(2);
          nValorTotal =  nValorTotal.toFixed(2);
-         sJsonItens  += sV+"{'e62_sequencial':"+value+",'vlrtot':"+nValorItem+",'quantidade':"+nQtdeItem;  
-         sJsonItens  += ",'sequen':"+sSequen+",'vlruni':"+nValorUni+"}"; 
+         sJsonItens  += sV+"{'e62_sequencial':"+value+",'vlrtot':"+nValorItem+",'quantidade':"+nQtdeItem;
+         sJsonItens  += ",'sequen':"+sSequen+",'vlruni':"+nValorUni+"}";
          sV           = ", ";
        }
      }
@@ -553,7 +553,7 @@ function js_gerarNotaItens() {
    }
 
   /*
-   * verificamos se o total dos itens Corresponde ao total marcado da ordem   
+   * verificamos se o total dos itens Corresponde ao total marcado da ordem
    * O valor total dos itens e da ordem deve sem iguais.
    *
    */
@@ -563,16 +563,16 @@ function js_gerarNotaItens() {
         var lMigrar = true;
       }
       js_divCarregando("Aguarde, efetuando migração","msgBox");
-      sTipo       = $('tipoordem'+iCodOrd).innerHTML;   
+      sTipo       = $('tipoordem'+iCodOrd).innerHTML;
       iCodNota    = $('e69_codnota'+iCodOrd).innerHTML;
       var sJson   = '{"exec":"gerarItensNota","iOrdem":'+iCodOrd+',"nTotalOrdem":'+nTotalOrdem+',"iNumEmp":'+$F('e60_numemp')+',';
       sJson      += '"dtOrdem":"'+dtOrdem+'","aItens":['+sJsonItens+'],"sTipo":"'+sTipo+'","iCodNota":'+iCodNota+',"lMigrar":'+lMigrar+'}';
       var url     = 'emp4_migracaoNotasRPC.php';
       var oAjax   = new Ajax.Request(
-                            url, 
+                            url,
                               {
-                               method: 'post', 
-                               parameters: 'json='+sJson, 
+                               method: 'post',
+                               parameters: 'json='+sJson,
                                onComplete: js_saidaNota
                               }
                              );
@@ -581,14 +581,14 @@ function js_gerarNotaItens() {
    } else {
 
      alert('Os valores da ordem e itens devem ser iguais.');
-    
+
 
    }
-  
+
 }
 
 function js_marca(idObjeto, sClasse, sLinha){
-  
+
 	 obj = document.getElementById(idObjeto);
 	 if (obj.checked){
 		 obj.checked = false;
@@ -597,25 +597,25 @@ function js_marca(idObjeto, sClasse, sLinha){
 	 }
    itens = js_getElementbyClass(frmAnularEmpenho, sClasse);
 	 for (i = 0;i < itens.length;i++){
-     
+
      if (itens[i].disabled == false){
         if (obj.checked == true){
-	
+
           itens[i].checked=true;
           js_marcaLinha(itens[i],sLinha);
-          
+
        }else{
-         
+
 					itens[i].checked=false;
           js_marcaLinha(itens[i],sLinha);
-          
+
 			 }
      }
 	 }
 }
 
 function js_marcaLinha(obj, linha) {
- 
+
   if (obj.checked) {
     $(linha+obj.id).className='marcado';
   } else {
@@ -629,14 +629,14 @@ function js_marcaLinha(obj, linha) {
 //controle dos valores digitados no empenho.
 function js_calculaValor(id,tipo,servico){
 
-   nVlrUni        = js_strToFloat($('vlruni'+id).innerHTML); 
+   nVlrUni        = js_strToFloat($('vlruni'+id).innerHTML);
    nQtde          = $F('qtdesol'+id);
    nVlrTotal      = $F('vlrtot'+id);
    //consideramos como saldo valido os saldos do empenho menos o saldo solicitado.
    iSaldo         = (js_strToFloat($('saldo'+id).innerHTML));
    iSaldovlr      = (js_strToFloat($('saldovlr'+id).innerHTML));
    if (tipo == 1){
-      nTotal = new Number (nVlrUni*nQtde); 
+      nTotal = new Number (nVlrUni*nQtde);
       if ((nQtde <= iSaldo)){
         if (nTotal > 0){
            $('vlrtot'+id).value    = js_round(nTotal,2);
@@ -648,7 +648,7 @@ function js_calculaValor(id,tipo,servico){
 //        alert("Valor total maior que o saldo restante.");
       }
    }else if(tipo == 2) {
-      nTotal = (nVlrTotal/nVlrUni); 
+      nTotal = (nVlrTotal/nVlrUni);
       if ((nVlrTotal <= iSaldovlr)) {
         if (!servico) {
          $('qtdesol'+id).value = nTotal.toFixed(2);
@@ -666,12 +666,12 @@ function js_calculaValor(id,tipo,servico){
        }
      } else {
        if ((nVlrTotal > iSaldovlr)) {
-         
+
     //      alert("Valor total maior que o saldo restante.");
-          
+
        }
      }
-   setTotal(); 
+   setTotal();
 }
 
 function setTotal(){
@@ -679,7 +679,7 @@ function setTotal(){
    aListaValores = js_getElementbyClass(frmAnularEmpenho,'valores');
     var nTotal = 0;
     for (var i = 0; i < aListaValores.length; i++){
-       
+
        nTotal += new Number(aListaValores[i].value);
 
     }
@@ -687,11 +687,11 @@ function setTotal(){
 }
 
 function js_consultaNota(iCodNota) {
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_nota', 'emp2_consultanotas002.php?e69_codnota='+iCodNota, 'Pesquisa Dados da Nota', true);
-}  
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_nota', 'emp2_consultanotas002.php?e69_codnota='+iCodNota, 'Pesquisa Dados da Nota', true);
+}
 function js_filter(obj,sClassNeed) {
   if (obj.checked) {
-    
+
     itens = js_getElementbyClass($('dados').rows, sClassNeed);
 	  for (i = 0;i < itens.length;i++){
       if ($('mostraAnul').checked == false ){
@@ -700,7 +700,7 @@ function js_filter(obj,sClassNeed) {
         }
       } else {
         itens[i].style.display="";
-      }  
+      }
     }
   } else {
 
@@ -714,7 +714,7 @@ function js_filter(obj,sClassNeed) {
 function js_filter2(obj,sClassNeed) {
 
   if (obj.checked) {
-    
+
     itens = $('dados').rows;
 	  for (i = 0;i < itens.length;i++){
       if (js_strToFloat(itens[i].cells[4].innerHTML) - js_strToFloat(itens[i].cells[5].innerHTML) == 0) {
@@ -746,7 +746,7 @@ function js_filter2(obj,sClassNeed) {
 }
 function js_toggleLegend(obj, event) {
 
-  el =  $('btnLegenda'); 
+  el =  $('btnLegenda');
   var x = 0;
   var y = el.offsetHeight;
   while (el.offsetParent && el.tagName.toUpperCase() != 'BODY') {
@@ -771,10 +771,10 @@ function js_toggleLegend(obj, event) {
 function js_setValorNota(obj) {
 
   if (obj.checked) {
-    
+
     var nValorOrdem = js_strToFloat($('e53_valor'+obj.value).innerHTML,"f");
     var nValorAnul  = js_strToFloat($('e53_vlranu'+obj.value).innerHTML,"f");
-    var nTotalOrdem = new Number(nValorOrdem - nValorAnul); 
+    var nTotalOrdem = new Number(nValorOrdem - nValorAnul);
     $('totalnota').innerHTML = js_formatar(nTotalOrdem,'f');
   } else {
     $('totalnota').innerHTML = js_formatar(0,'f');

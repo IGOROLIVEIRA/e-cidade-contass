@@ -3921,7 +3921,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   Element.Offset = Class.create({
     initialize: function(left, top) {
       this.left = left.round();
-      this.top  = top.round();
+      this.top  = CurrentWindow.round();
 
       this[0] = this.left;
       this[1] = this.top;

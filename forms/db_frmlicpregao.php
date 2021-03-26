@@ -19,7 +19,7 @@ $l45_instit = db_getsession("DB_instit");
     <td nowrap title="<?=@$Tl45_sequencial?>">
        <?=@$Ll45_sequencial?>
     </td>
-    <td> 
+    <td>
 	<?
 	db_input('l45_sequencial',10,$Il45_sequencial,true,'text',3,"")
 	?>
@@ -29,32 +29,32 @@ $l45_instit = db_getsession("DB_instit");
     <td nowrap title="<?=@$Tl45_data?>">
        <?=@$Ll45_data?>
     </td>
-    <td> 
+    <td>
 	<?
 	db_inputdata('l45_data',@$l45_data_dia,@$l45_data_mes,@$l45_data_ano,true,'text',$db_opcao,"")
 	?>
     </td>
   </tr>
-  
-  
+
+
   <tr>
     <td nowrap title="<?=@$Tl45_descrnomeacao?>">
        <?=@$Ll45_descrnomeacao?>
     </td>
-    <td> 
+    <td>
     <?
        $arr_tipo = array("1"=>"1- Portaria ","2"=>"2- Decreto");
        db_select("l45_descrnomeacao",$arr_tipo,true,$db_opcao);
     ?>
     </td>
   </tr>
-  
-  
+
+
   <tr>
     <td nowrap title="<?=@$Tl45_numatonomeacao?>">
        <?=@$Ll45_numatonomeacao?>
     </td>
-    <td> 
+    <td>
 	<?
 	db_input('l45_numatonomeacao',20,$Il45_numatonomeacao,true,'text',$db_opcao,"")
 	?>
@@ -65,7 +65,7 @@ $l45_instit = db_getsession("DB_instit");
     <td nowrap title="<?=@$Tl45_validade?>">
        <?=@$Ll45_validade?>
     </td>
-    <td> 
+    <td>
 	<?
 	db_inputdata('l45_validade',@$l45_validade_dia,@$l45_validade_mes,@$l45_validade_ano,true,'text',$db_opcao,"")//l45_tipo
 	?>
@@ -75,7 +75,7 @@ $l45_instit = db_getsession("DB_instit");
     <td nowrap title="<?=@$Tl45_tipo?>">
        <?=@$Ll45_tipo?>
     </td>
-    <td> 
+    <td>
 	<?
 	$al45_tipo = array('1'=>'Permanente','2'=>'Especial');
 	db_select('l45_tipo',$al45_tipo,true,$db_opcao,"");
@@ -92,7 +92,7 @@ $l45_instit = db_getsession("DB_instit");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_licpregao','db_iframe_licpregao','func_licpregao.php?funcao_js=parent.js_preenchepesquisa|l45_sequencial','Pesquisa',true,'0','1');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_licpregao','db_iframe_licpregao','func_licpregao.php?funcao_js=parent.js_preenchepesquisa|l45_sequencial','Pesquisa',true,'0','1');
 }
 function js_preenchepesquisa(chave){
   db_iframe_licpregao.hide();

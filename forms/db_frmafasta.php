@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -41,7 +41,7 @@ $clrotulo->label('z01_nome');
   #r45_obs{
     width: 403px;
   }
-  
+
 
 </style>
 
@@ -152,7 +152,7 @@ $clrotulo->label('z01_nome');
     <td nowrap title="<?=@$Tr45_dtafas?>">
       <?=@$Lr45_dtafas?>
     </td>
-    <td nowrap width="40%"> 
+    <td nowrap width="40%">
       <?
       if(!isset($r45_dtafas_dia) || (isset($r45_dtafas_dia) && trim($r45_dtafas_dia) == "")){
         $r45_dtafas_dia = date("d",db_getsession("DB_datausu"));
@@ -188,11 +188,11 @@ $clrotulo->label('z01_nome');
      <td nowrap title="<?=@$Tr45_obs?>">
         <?=@$Lr45_obs?>
      </td>
-     <td colspan="3"> 
+     <td colspan="3">
       <?
         db_textarea('r45_obs',10,50,$Ir45_obs,true,'text',$db_opcao,"");
       ?>
-     </td>    
+     </td>
   </tr>
 </table>
 </fieldset>
@@ -214,22 +214,22 @@ function js_afastamentosAnteriores(iMatricula){
   var oParametros       = new Object();
   var msgDiv            = "Gerando arquivo CSV \n Aguarde ...";
   var iAno              = $F("r45_anousu");
-  var iMes              = $F("r45_mesusu");  
-  
+  var iMes              = $F("r45_mesusu");
+
   oParametros.exec       = 'possuiAnteriores';
   oParametros.iMatricula = iMatricula;
   oParametros.iAno       = iAno;
-  oParametros.iMes       = iMes;  
-  
-  
+  oParametros.iMes       = iMes;
+
+
   //js_divCarregando(msgDiv,'msgBox');
-  
-   
+
+
    var oAjaxLista  = new Ajax.Request(sUrlRPC,
                                              {method: "post",
                                               parameters:'json='+Object.toJSON(oParametros),
                                               onComplete: js_retornoAfastamentosAnteriores
-                                             }); 
+                                             });
 
 }
 
@@ -237,10 +237,10 @@ function js_retornoAfastamentosAnteriores(oAjax){
 
     //js_removeObj('msgBox');
     var oRetorno = eval("("+oAjax.responseText+")");
-    
+
     if (oRetorno.status == 1) {
-       $("anteriores").disabled = false;    
-    } else {  
+       $("anteriores").disabled = false;
+    } else {
        $("anteriores").disabled = true;
     }
 }
@@ -252,14 +252,14 @@ function js_PesquisaAfastamento(solicitacao) {
   var iMatricula = $F("r45_regist");
   var iAno       = $F("r45_anousu");
   var iMes       = $F("r45_mesusu");
-  
+
   if(iMatricula == null || iMatricula == ''){
-  
+
     alert('Selecione uma Matrícula');
     return false;
   }
-  
-  js_OpenJanelaIframe('top.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro='+iMatricula+'&ano='+iAno+'&mes='+iMes+'','CONSULTA DE FUNCIONÁRIOS',true,'20');
+
+  js_OpenJanelaIframe('CurrentWindow.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro='+iMatricula+'&ano='+iAno+'&mes='+iMes+'','CONSULTA DE FUNCIONÁRIOS',true,'20');
 }
 
 
@@ -268,7 +268,7 @@ function js_seleciona_campo_diar(){
   clearInterval(time);
 }
 function js_abrelista(){
-  js_OpenJanelaIframe("top.corpo","db_iframe_listaretorno","func_retornoafasta.php?pesquisa_chave="+document.form1.r45_codafa.value,"Pesquisa",false,"20");
+  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_listaretorno","func_retornoafasta.php?pesquisa_chave="+document.form1.r45_codafa.value,"Pesquisa",false,"20");
 }
 function js_listarretorno(str_retorno){
   x = document.form1.r45_codret;
@@ -320,7 +320,7 @@ function js_somardias(opcao){
   if(document.form1.r45_dtafas_ano.value != "" && document.form1.r45_dtafas_mes.value != "" && document.form1.r45_dtafas_dia.value != ""){
     if(opcao == 1){
 
-      dias = new Number(document.form1.dias.value);	      
+      dias = new Number(document.form1.dias.value);
       if(dias > 0){
         dias+= new Number(document.form1.r45_dtafas_dia.value);
         mess = new Number(document.form1.r45_dtafas_mes.value);
@@ -393,21 +393,21 @@ function js_somardias(opcao){
 }
 function js_pesquisar45_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe("top.corpo","db_iframe_rhpessoal","func_rhpessoalrescis.php?testarescisao=raf&funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome|r30_perai|r30_per1i|rh05_recis","Pesquisa",true,"20");
+    js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_rhpessoal","func_rhpessoalrescis.php?testarescisao=raf&funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome|r30_perai|r30_per1i|rh05_recis","Pesquisa",true,"20");
   }else{
-     if(document.form1.r45_regist.value != ""){ 
-       js_OpenJanelaIframe("top.corpo","db_iframe_rhpessoal","func_rhpessoalrescis.php?testarescisao=raf&pesquisa_chave="+document.form1.r45_regist.value+"&funcao_js=parent.js_mostraregist","Pesquisa",false,"20");
+     if(document.form1.r45_regist.value != ""){
+       js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_rhpessoal","func_rhpessoalrescis.php?testarescisao=raf&pesquisa_chave="+document.form1.r45_regist.value+"&funcao_js=parent.js_mostraregist","Pesquisa",false,"20");
      }else{
-       document.form1.z01_nome.value = ""; 
+       document.form1.z01_nome.value = "";
      }
   }
 }
 function js_mostraregist(chave,chave2,chave3,chave4,erro){
-  document.form1.z01_nome.value = chave; 
+  document.form1.z01_nome.value = chave;
   js_afastamentosAnteriores(document.form1.r45_regist.value);
-  if(erro==true){ 
-    document.form1.r45_regist.focus(); 
-    document.form1.r45_regist.value = ""; 
+  if(erro==true){
+    document.form1.r45_regist.focus();
+    document.form1.r45_regist.value = "";
   }else{
 //    js_compara_datas(chave3);
   }
@@ -438,7 +438,7 @@ function js_pesquisa(){
   	echo "qry = 'retorno=true&';";
   }
   ?>
-  js_OpenJanelaIframe('top.corpo','db_iframe_afasta','func_afasta.php?testarescisao=raf&'+qry+'funcao_js=parent.js_preenchepesquisa|r45_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_afasta','func_afasta.php?testarescisao=raf&'+qry+'funcao_js=parent.js_preenchepesquisa|r45_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_afasta.hide();

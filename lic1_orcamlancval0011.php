@@ -134,7 +134,7 @@ function js_verquant(nome,val,max,param){
     if(verpos==1){
       vltot = new Number(valpos*val);
       /*
-       *    Função js_roundDecimal() substituída pela toFixed() 
+       *    Função js_roundDecimal() substituída pela toFixed()
        */
       eval("document.form1.valor_"+param+".value='"+vltot.toFixed(2)+"'");
     }else if(verpos==2){
@@ -171,7 +171,7 @@ function js_calcvaltot(valor,param,nome){
       valor = 0;
     }
     /*
-     *    Função js_roundDecimal() substituída pela toFixed() 
+     *    Função js_roundDecimal() substituída pela toFixed()
      */
       document.getElementById("valor_"+param).value = valortotal.toFixed(2);
 
@@ -747,7 +747,7 @@ function js_abrejan(){
   orcamforn = new String("<?=@$pc21_orcamforne?>");
 
   if (orcamitem.length > 0 && orcamforn.length > 0){
-       js_OpenJanelaIframe('top.corpo','db_iframe_descla','com1_pcorcamdescla001.php?orcamitem='+orcamitem+'&pc32_orcamforne='+orcamforn,'Motivo da Desclassificacao',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_descla','com1_pcorcamdescla001.php?orcamitem='+orcamitem+'&pc32_orcamforne='+orcamforn,'Motivo da Desclassificacao',true);
   } else {
        if (orcamitem.length == 0){
             alert("Selecione um item");
@@ -791,7 +791,7 @@ function js_desclassifica(lote){
   }
 }
 function js_cancdescla(orcamento,licitacao){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cancdescla','lic1_pcorcamdesclacanc001.php?pc20_codorc='+orcamento+'&l20_codigo='+licitacao,'Cancelamento da desclassificacao',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cancdescla','lic1_pcorcamdesclacanc001.php?pc20_codorc='+orcamento+'&l20_codigo='+licitacao,'Cancelamento da desclassificacao',true);
 }
 </script>
 

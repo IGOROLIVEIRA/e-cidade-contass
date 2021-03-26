@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require ("libs/db_stdlib.php");
@@ -65,9 +65,9 @@ db_app::load('estilos.css, grid.style.css');
 <script>
 function js_pesquisa(mostra){
 	if(mostra == true) {
-	 js_OpenJanelaIframe('top.corpo','db_iframe_aguacoletor','func_aguacoletor.php?funcao_js=parent.js_preenchepesquisa|x46_sequencial|x46_descricao','Pesquisa',true);
+	 js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguacoletor','func_aguacoletor.php?funcao_js=parent.js_preenchepesquisa|x46_sequencial|x46_descricao','Pesquisa',true);
 	}else {
-		js_OpenJanelaIframe('top.corpo','db_iframe_aguacoletor','func_aguacoletor.php?pesquisa_chave='+document.form1.x46_sequencial.value+'&funcao_js=parent.js_preenchepesquisa','Pesquisa',false);
+		js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguacoletor','func_aguacoletor.php?pesquisa_chave='+document.form1.x46_sequencial.value+'&funcao_js=parent.js_preenchepesquisa','Pesquisa',false);
 	}
 }
 function js_preenchepesquisa(chave1,chave2){
@@ -78,20 +78,20 @@ function js_preenchepesquisa(chave1,chave2){
 
 function js_pesquisax21_numcgm(mostra){
   if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?funcao_js=parent.js_mostraagualeiturista1|x16_numcgm|z01_nome','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?funcao_js=parent.js_mostraagualeiturista1|x16_numcgm|z01_nome','Pesquisa',true);
     }else{
-      if(document.form1.x21_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?pesquisa_chave='+document.form1.x21_numcgm.value+'&funcao_js=parent.js_mostraagualeiturista','Pesquisa',false);
+      if(document.form1.x21_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?pesquisa_chave='+document.form1.x21_numcgm.value+'&funcao_js=parent.js_mostraagualeiturista','Pesquisa',false);
       }else{
-        document.form1.x16_numcgm.value = ''; 
+        document.form1.x16_numcgm.value = '';
       }
     }
   }
   function js_mostraagualeiturista(chave,erro){
-    document.form1.z01_nome.value = chave; 
-    if(erro==true){ 
-      document.form1.x21_numcgm.focus(); 
-      document.form1.x21_numcgm.value = ''; 
+    document.form1.z01_nome.value = chave;
+    if(erro==true){
+      document.form1.x21_numcgm.focus();
+      document.form1.x21_numcgm.value = '';
     }
   }
   function js_mostraagualeiturista1(chave1,chave2){
@@ -101,16 +101,16 @@ function js_pesquisax21_numcgm(mostra){
   }
 
 function js_processar(){
-	
+
   var virgula = "";
   var lista   = "";
 	var F       = document.form1;
-	
+
   if((F.x49_mesusu.value == '') || (F.x49_mesusu.value > 12) || (F.x49_mesusu.value <= 0)) {
 	  alert('Número do mês está vazio ou é invalido.');
 	  return false;
   }
-  
+
   if(F.x49_anousu.value == '') {
 	  alert('O filtro Ano deve ser informado. Ex.: 2010');
 	  return false;
@@ -125,18 +125,18 @@ function js_processar(){
     alert('Nenhum leiturista informado.');
     return false;
   }
-  
+
   if((F.geraDadosArquivos.checked == false) || (F.geraSituacaoLeitura.checked == false) || (F.geraLeiturista.checked == false) || (F.geraConfiguracoes.checked == false)) {
 	  alert('Nenhum arquivo foi selecionado.');
 	  return false;
   }
-  
+
   for(x = 0; x < document.form1.rota.length; x++) {
     lista += virgula+document.form1.rota.options[x].value;
     virgula=",";
     document.form1.listaRotas.value  = lista;
   }
-  
+
 	if(lista == '') {
 		alert('Nenhuma rota informada.');
 		return false;
@@ -191,7 +191,7 @@ function js_processar(){
         <?
         $result = array ("1" => "Janeiro", "2" => "Fevereiro", "3" => "Março", "4" => "Abril", "5" => "Maio", "6" => "Junho", "7" => "Julho", "8" => "Agosto", "9" => "Setembro", "10" => "Outubro", "11" => "Novembro", "12" => "Dezembro" );
         db_select ( "x49_mesusu", $result, true, 1, "style=\"width: 90px\"" );
-        
+
         ?>
       </td>
       </tr>
@@ -205,7 +205,7 @@ function js_processar(){
         <td colspan="3">
         <?
         db_input ( 'x46_sequencial', 10, $Ix46_sequencial, true, 'text', 1, "onchange=\"js_pesquisa(false);\"" )?>
-      
+
         <?
         db_input ( 'x46_descricao', 30, $Ix46_descricao, true, 'text', 3, "" )?>
       </td>
@@ -217,7 +217,7 @@ function js_processar(){
           db_ancora ( @$Lx21_numcgm, "js_pesquisax21_numcgm(true);", 1 );
         ?>
         </td>
-        <td nowrap colspan="5"> 
+        <td nowrap colspan="5">
         <?
           db_input ( 'x21_numcgm', 10, $Ix21_numcgm, true, 'text', 1, "onchange='js_pesquisax21_numcgm(false);'", "" );
         ?>
@@ -297,10 +297,10 @@ function js_processar(){
 
   <tr>
     <td align="center" colspan="3"><br />
-    <input type="hidden" name="listaRotas" id="listaRotas"> 
-    <input type="hidden" name="listaRotaRuas" id="listaRotaRuas"> 
-    <input type="hidden" name="x21_exerc" id="x21_exerc"> 
-    <input type="hidden" name="x21_mes" id="x21_mes"> 
+    <input type="hidden" name="listaRotas" id="listaRotas">
+    <input type="hidden" name="listaRotaRuas" id="listaRotaRuas">
+    <input type="hidden" name="x21_exerc" id="x21_exerc">
+    <input type="hidden" name="x21_mes" id="x21_mes">
     <input name="processar" id="processar" type="button" value="Processar" onclick="js_processar();" style="font-weight: bold; font-size: 16px; height: 20px"></td>
   </tr>
 </table>
@@ -324,7 +324,7 @@ function mostraRuas() {
 
 	js_divCarregando('Aguarde, pesquisando ruas.', 'msgbox');
 	var oAjax = new Ajax.Request(
-															 'agua_rota_rua.RPC.php', 
+															 'agua_rota_rua.RPC.php',
 															 {
 																method: 'POST',
 																parameters: 'json='+Object.toJSON(oParam),
@@ -351,14 +351,14 @@ function js_retorno_pesquisa_ruas(oAjax) {
           oParam.mesusu     = $F('x21_mes');
           oParam.rota       = x07_codrota;
           oParam.logradouro = x07_codrua;
-          
+
           obj = new Ajax.Request(
-                  'agua_exportacao.RPC.php', 
+                  'agua_exportacao.RPC.php',
                   {
                    method: 'POST',
                    asynchronous: false,
                    parameters: 'json='+Object.toJSON(oParam),
-                   onSuccess: 
+                   onSuccess:
                    function(objAjax) {
                       var oRetornoAjax = eval("("+objAjax.responseText+")");
 
@@ -368,7 +368,7 @@ function js_retorno_pesquisa_ruas(oAjax) {
                    }
                   });
 
-          
+
           if(exporta > 0) {
         	  disabledCheck = "disabled=\"disabled\"";
         	  check = "";
@@ -376,7 +376,7 @@ function js_retorno_pesquisa_ruas(oAjax) {
         	  disabledCheck = "";
         	  check         = "checked=\"checked\"";
           }
-          
+
           aLinha[0] =  "<input type='checkbox' style='margin:0;' name='checkBoxRua' "+disabledCheck+" "+check+" value='"+x07_codrotarua+'_'+x07_codrota+'_'+x07_codrua+'_'+j14_nome+'_'+x07_nroini+'_'+x07_nrofim+'_'+iQtdeLeituras+'_'+x99_quantidade+"' >";
           aLinha[1] = x07_codrota;
           aLinha[2] = x07_codrua;
@@ -389,8 +389,8 @@ function js_retorno_pesquisa_ruas(oAjax) {
 					if(exporta > 0) {
 						oDataGrid.aRows[i].setClassName('ruaBloqueada');
 					}
-          
-				}	
+
+				}
 			}
     	oDataGrid.renderRows();
 		}
@@ -400,7 +400,7 @@ function js_retorno_pesquisa_ruas(oAjax) {
 
 
 function js_init_table() {
-	  
+
   oDataGrid = new DBGrid('gridRuas');
   oDataGrid.nameInstance = 'oDataGrid';
   oDataGrid.setCellAlign(new Array('center', 'center', 'center', 'left', 'center', 'center', 'center'));
@@ -408,11 +408,11 @@ function js_init_table() {
   oDataGrid.setHeader(new Array('<input type="checkbox" style="margin:0;" name="seleciona" checked="checked" onclick="marca()" title="Inverter Selecionados">', 'Rota', 'Código', 'Logradouro', 'Nro Inicial', 'Nro Final', 'Qtd'));
   oDataGrid.setHeight(150);
   oDataGrid.show($('grid'));
-	  
+
 }
 
 function js_init_table_selecao() {
-	  
+
   oDataGridSelecao = new DBGrid('gridSelecao');
   oDataGridSelecao.nameInstance = 'oDataGrid';
   oDataGridSelecao.setCellAlign(new Array('center', 'center', 'left', 'center', 'center', 'center', 'center','center'));
@@ -420,7 +420,7 @@ function js_init_table_selecao() {
   oDataGridSelecao.setHeader(new Array('Rota', 'Código', 'Logradouro', 'Nro Inicial', 'Nro Final', 'Qtd', 'E', 'x'));
   oDataGridSelecao.setHeight(150);
   oDataGridSelecao.show($('gridSelecao'));
-  
+
   oDataGridSelecao.showColumn(false, 7);
 
 }
@@ -430,15 +430,15 @@ function marca() {
 
 	for (var i = 0; i < checkbox.length; i++) {
     if(checkbox[i].disabled == false) {
-		
+
   		if (checkbox[i].checked == true) {
-  			
+
   			checkbox[i].checked = false;
-  			
+
   		} else {
-  			
+
   			checkbox[i].checked = true;
-  			
+
   		}
     }
 	}
@@ -450,7 +450,7 @@ function addRuas(remove) {
   var gridSelecao  = Array();
   var checkBoxRuas = document.getElementsByName('checkBoxRua');
   var totalMatriculas = 0;
-	
+
 	var selecionar        = Array();
 	var selecionados      = Array();
 	var todosSelecionados = Array();
@@ -462,7 +462,7 @@ function addRuas(remove) {
 	var virgula           = "";
 	var exporta;
 	var ruasNExportadas   = "";
-	  
+
 	if(remove != null) {
     if(!confirm('Deseja excluir o logradouro da lista?')) {
   	  remove = null;
@@ -471,22 +471,22 @@ function addRuas(remove) {
 
 	if(totalLinhas > 0) {
 		var checkBoxSelecionados = document.getElementsByName('checkBoxSelecao');
-		
+
 		for(var i = 0; i < checkBoxSelecionados.length; i++) {
 
 			if(checkBoxSelecionados[i].checked == true) {
 				selecionados[selecao] = checkBoxSelecionados[i].value;
 				selecao++;
 			}
-			
+
 		}
 	}
 
 	js_divCarregando('Aguarde, processando ruas selecionadas.', 'msgbox');
 	for(var z = 0; z < checkBoxRuas.length; z++) {
-    
+
 		if(checkBoxRuas[z].checked == true) {
-			parametros      = checkBoxRuas[z].value.split("_");   
+			parametros      = checkBoxRuas[z].value.split("_");
 
 			oParam            = new Object();
 			oParam.exec       = 'vericaRotaRuaSituacao';
@@ -497,12 +497,12 @@ function addRuas(remove) {
 
 
 			obj = new Ajax.Request(
-                    'agua_exportacao.RPC.php', 
+                    'agua_exportacao.RPC.php',
                     {
                      method: 'POST',
                      asynchronous: false,
                      parameters: 'json='+Object.toJSON(oParam),
-                     onSuccess: 
+                     onSuccess:
                      function(objAjax) {
                     	  var oRetornoAjax = eval("("+objAjax.responseText+")");
 
@@ -525,22 +525,22 @@ function addRuas(remove) {
 
 	if(ruasNExportadas != '') {
     alert("O(s) seguinte(s) logradouro(s) já foram exportados para coletor, e não seram processados nessa exportação:\n"+ruasNExportadas+" .");
-	} 
-	
+	}
+
 	oDataGrid.clearAll(true);
-	
+
 	todosSelecionados = removeDuplicated(selecionados.concat(selecionar), false);
-	
+
 	todosSelecionados = todosSelecionados.sort();
 
 	if(todosSelecionados.length > 0) {
 
   	oDataGridSelecao.clearAll(true);
-  	
+
   	for (var x = 0; x < todosSelecionados.length; x++) {
 
   		var conteudoLinha = todosSelecionados[x].split("_");
-  
+
   		if(remove != null) {
   			remover = remove.split("_");
   			if((remover[1] == conteudoLinha[1]) && (remover[2] == conteudoLinha[2])) {
@@ -551,7 +551,7 @@ function addRuas(remove) {
   		lista           += virgula+conteudoLinha[0];
 	    virgula          = ",";
 	    listaRotaRuas.value  = lista;
-        
+
   		gridSelecao[0] = conteudoLinha[1];
   		gridSelecao[1] = conteudoLinha[2];
   		gridSelecao[2] = "&nbsp;"+conteudoLinha[3];
@@ -563,20 +563,20 @@ function addRuas(remove) {
       oDataGridSelecao.addRow(gridSelecao);
 
       totalMatriculas += parseInt(conteudoLinha[6]);
-      
+
   	}
 
     document.getElementById("totalMatriculas").innerHTML = totalMatriculas;
   	oDataGridSelecao.renderRows();
-    
+
 	}
 
 	if (oDataGridSelecao.getNumRows() == 0) {
 		botaoProcessar.disabled = true;
 	}else {
 		botaoProcessar.disabled = false;
-	} 
-		
+	}
+
 }
 
 //+ Carlos R. L. Rodrigues

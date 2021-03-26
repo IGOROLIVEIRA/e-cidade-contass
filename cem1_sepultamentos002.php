@@ -122,8 +122,8 @@ if(isset($incluir)){
   ?>
        <script>
              parent.document.formaba.a3.disabled=false;
-             top.corpo.iframe_a3.location.href='cem1_sepultamentos003.php?sepultamento=<?=$cm01_i_codigo?>&cemiterio=<?=$cm01_i_cemiterio?>';
-             top.corpo.iframe_a4.location.href='cem1_itenserv001.php?cm31_i_sepultamento=<?=$cm01_i_codigo?>&cm01_i_declarante=<?=$cm01_i_declarante?>&tp=1';
+             CurrentWindow.corpo.iframe_a3.location.href='cem1_sepultamentos003.php?sepultamento=<?=$cm01_i_codigo?>&cemiterio=<?=$cm01_i_cemiterio?>';
+             CurrentWindow.corpo.iframe_a4.location.href='cem1_itenserv001.php?cm31_i_sepultamento=<?=$cm01_i_codigo?>&cm01_i_declarante=<?=$cm01_i_declarante?>&tp=1';
 	           parent.mo_camada('a3');
        </script>
   <?

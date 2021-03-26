@@ -557,7 +557,7 @@ if (count($aParametrosEmpenho) > 0) {
     //---ordem 01
     function js_pesquisae82_codord(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_pagordem',
                 'func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord|z01_cgccpf',
                 'Pesquisa Ordens de Pagamento',
@@ -608,7 +608,7 @@ if (count($aParametrosEmpenho) > 0) {
     //---ordem 02
     function js_pesquisae82_codord02(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_pagordem',
                 'func_pagordem.php?funcao_js=parent.js_mostrapagordem102|e50_codord|z01_cgccpf',
                 'Pesquisa Ordens de Pagamento',
@@ -647,7 +647,7 @@ if (count($aParametrosEmpenho) > 0) {
     }
     function js_pesquisae60_codemp(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_empempenho',
                 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp|e60_anousu|z01_cgccpf',
                 'Pesquisar Empenhos',
@@ -657,7 +657,7 @@ if (count($aParametrosEmpenho) > 0) {
                 document.body.getWidth() - 12,
                 document.body.scrollHeight - 30);
         }else{
-            // js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+            // js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
         }
     }
     function js_mostraempempenho2(chave1, iAnoEmepenho, z01_cgccpf){
@@ -832,7 +832,7 @@ if (count($aParametrosEmpenho) > 0) {
 
     function js_pesquisac62_codrec(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_orctiporec',
                 'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr',
                 'Pesquisar Recursos',
@@ -843,7 +843,7 @@ if (count($aParametrosEmpenho) > 0) {
                 document.body.scrollHeight - 30);
         }else{
             if(document.form1.o15_codigo.value != ''){
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_orctiporec',
                     'func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+
                     '&funcao_js=parent.js_mostraorctiporec',
@@ -1376,7 +1376,7 @@ if (count($aParametrosEmpenho) > 0) {
     function js_novaConta(Movimento,iNumCgm, sOpcao ){
         erro = 0;
         if(sOpcao == 'n' || sOpcao == 'button'){
-            js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecon',
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecon',
                 'com1_pcfornecon001.php?novo=true&reload=true&z01_numcgm='+iNumCgm,
                 'Cadastro de Contas de Fornecedores',true);
         }
@@ -1732,7 +1732,7 @@ if (count($aParametrosEmpenho) > 0) {
             return false;
 
         }
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_retencao',
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_retencao',
             'emp4_lancaretencoes.php?iNumNota='+iCodNota+'&nValorBase='+(nValor+nValorRetido)+
             '&iNumEmp='+iNumEmp+'&iCodOrd='+iCodOrd+"&lSession="+lSession
             +'&dtPagamento='+dtPagamento+'&iCodMov='+iCodMov+'&callback=true',
@@ -2048,7 +2048,7 @@ if (count($aParametrosEmpenho) > 0) {
      */
     function js_lookupConCarPeculiar(iCodigoMovimento) {
         idLinhaSelecionada = $('ccp_'+iCodigoMovimento);
-        js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiar','func_concarpeculiar.php?funcao_js=parent.js_completaConCarPeculiar|c58_sequencial','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_concarpeculiar','func_concarpeculiar.php?funcao_js=parent.js_completaConCarPeculiar|c58_sequencial','Pesquisa',true);
     }
     /**
      *  Preenche a linha com o ID da concarpeculiar selecionada

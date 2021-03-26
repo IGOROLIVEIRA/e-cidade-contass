@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
   require("libs/db_stdlib.php");
@@ -54,8 +54,8 @@
   <body bgcolor="#CCCCCC">
     <center>
 	    <table width="790" border="0" cellpadding="0" cellspacing="0">
-	      <tr> 
-	        <td> 
+	      <tr>
+	        <td>
 				    <fieldset style="margin-top: 50px;">
 				      <legend><b>Cadastro de Hidrometros - Emissão Ficha</b></legend>
 					    <form name="form1" id="form1" method="post" action="">
@@ -115,34 +115,34 @@
 	      </tr>
 	    </table>
     </center>
-    <? 
+    <?
       db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
 
 		<script>
-		
+
 		  function js_pesquisa_aguabase(lMostra) {
 			  var sQueryString = 'func_aguabase.php?';
-		
+
 			  if(lMostra) {
 				  sQueryString += 'funcao_js=parent.js_mostra_matricula_iframe|x01_matric|z01_nome|x01_codrua|j14_nome|x01_numero|x11_complemento|x04_codhidrometro';
-			  } 
-		
-				js_OpenJanelaIframe('top.corpo', 'db_iframe_aguabase', sQueryString, 'Pesquisa', lMostra, 20);
+			  }
+
+				js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_aguabase', sQueryString, 'Pesquisa', lMostra, 20);
 		  }
-		
-		  
+
+
 		  function js_mostra_matricula_iframe(matricula, nome, codlogradouro, logradouro, numero, complemento, codhidrometro) {
-        
+
 			  if (codhidrometro) {
-          
+
 				  alert('A matrícula ' + matricula + ' já possui hidrômetro instalado.');
 				  document.getElementById('imprimir').disabled = true;
 			  } else {
-          
+
 				  document.getElementById('imprimir').disabled = false;
 			  }
-			  
+
 			  document.form1.x01_matric.value      = matricula;
 		 	  document.form1.z01_nome.value        = nome;
 		 	  document.form1.x01_codrua.value      = codlogradouro;
@@ -151,26 +151,26 @@
 			  document.form1.x11_complemento.value = complemento;
 			  db_iframe_aguabase.hide();
 		  }
-      
-      
+
+
 		  function js_imprimir() {
-		
+
 			  var iMatricula   = document.form1.x01_matric.value;
-		
+
 			  var sQueryString = 'agu1_aguahidromatricficha002.php?matricula='+iMatricula;
-		
+
 			  if(iMatricula == '') {
 				  alert('MatrÃ­cula nÃ£o informada.');
 				  return false;
 			  }
-		
+
 			  jan = window.open(sQueryString, '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
 		    jan.moveTo(0,0);
-			
+
 		  }
 
 		  document.form1.pesquisar.click();
-		  
+
 		</script>
   </body>
 </html>

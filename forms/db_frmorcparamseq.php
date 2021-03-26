@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /*
@@ -307,10 +307,10 @@ $clrotulo->label("o42_descrrel");
 <script>
 function js_pesquisao69_codparamrel(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_orcparamseq','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel|o69_codseq','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcparamseq','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel|o69_codseq','Pesquisa',true,'0','1');
   }else{
      if(document.form1.o69_codparamrel.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_orcparamseq','db_iframe_orcparamrel','func_orcparamrel.php?chave_composta='+document.form1.o69_codparamrel.value+'&funcao_js=parent.js_chavecomposta','Pesquisa',false,'0','1');
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcparamseq','db_iframe_orcparamrel','func_orcparamrel.php?chave_composta='+document.form1.o69_codparamrel.value+'&funcao_js=parent.js_chavecomposta','Pesquisa',false,'0','1');
      }else{
        document.form1.o42_descrrel.value = '';
      }
@@ -349,7 +349,7 @@ function js_mostraorcparamrel1(chave1,chave2,chave3){
   db_iframe_orcparamrel.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_orcparamseq','db_iframe_orcparamseq',
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcparamseq','db_iframe_orcparamseq',
                       'func_orcparamseq.php?funcao_js=parent.js_preenchepesquisa|o69_codparamrel|o69_codseq'+
                        '&codigo_relatorio='+document.form1.o69_codparamrel.value,
                        'Pesquisa',true,'0','1');

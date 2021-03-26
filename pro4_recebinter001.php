@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -47,7 +47,7 @@ $clprotprocesso = new cl_protprocesso;
 
 $clprocandamint->rotulo->label();
 $clprotprocesso->rotulo->label();
-$clproctransferint->rotulo->label(); 
+$clproctransferint->rotulo->label();
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("nome");
@@ -60,18 +60,18 @@ $clrotulo->label("");
 db_postmemory($HTTP_POST_VARS);
 
 if (isset($incluir)){
-  
+
   db_inicio_transacao();
   $sqlerro=false;
   $vt=$HTTP_POST_VARS;
   $ta=sizeof($vt);
   reset($vt);
   for($i = 0; $i < $ta; $i++) {
-    
+
     $chave = key($vt);
     if (substr($chave, 0, 5) == "CHECK") {
-      
-      $dados = split("_", $chave); 
+
+      $dados = split("_", $chave);
       $result_despacho = $clproctransferint->sql_record($clproctransferint->sql_query_file(null,
                                                                                            "p88_despacho as despacho,
                                                                                             p88_publico as publico",
@@ -79,19 +79,19 @@ if (isset($incluir)){
                                                                                             "p88_codigo=".$dados[1])
                                                                                             );
       db_fieldsmemory($result_despacho, 0);
-      $sql3    = $clproctransferintand->sql_query_file(null, 
-                                                      "p87_codandam", 
-                                                       null, 
+      $sql3    = $clproctransferintand->sql_query_file(null,
+                                                      "p87_codandam",
+                                                       null,
                                                        "p87_codtransferint=".$dados[1]
                                                        );
       $result3  = pg_exec($sql3);
-      $numrows3 = pg_numrows($result3); 
+      $numrows3 = pg_numrows($result3);
       for($y = 0; $y < $numrows3; $y++) {
-        
+
       	db_fieldsmemory($result3, $y);
       	$data = date("Y-m-d",db_getsession("DB_datausu"));
       	if ($sqlerro == false) {
-      	  
+
       	  $clprocandamint->p78_codandam = $p87_codandam;
       	  $clprocandamint->p78_data     = $data;
       	  $clprocandamint->p78_hora     = db_hora();
@@ -100,18 +100,18 @@ if (isset($incluir)){
       	  $clprocandamint->p78_publico  = ($publico == "t"?"1":"0");
       	  $clprocandamint->p78_transint = "true";
       	  $clprocandamint->incluir(null);
-      	  
+
       	  $erro_msg = $clprocandamint->erro_msg;
       	  if ($clprocandamint->erro_status == 0) {
       	    $sqlerro=true;
       	  }
-      	} 
+      	}
       	if ($sqlerro==false) {
-      	  
+
       	  $clprocandamintand->p86_codtrans = $dados[1];
       	  $clprocandamintand->p86_codandam = $p87_codandam;
       	  $clprocandamintand->incluir();
-      	} 
+      	}
       }
     }
     $proximo=next($vt);
@@ -127,11 +127,11 @@ if (isset($incluir)){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
-function js_marca(obj){ 
+function js_marca(obj){
    var OBJ = document.form1;
    for(i=0;i<OBJ.length;i++){
      if(OBJ.elements[i].type == 'checkbox'){
-       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
      }
    }
    return false;
@@ -139,17 +139,17 @@ function js_marca(obj){
 function js_desabilita(){
   document.form1.incluir.disabled = true;
 }
-</script>  
+</script>
 <style>
 .cabec {
 text-align: center;
 color: darkblue;
-background-color:#aacccc;       
+background-color:#aacccc;
 border-color: darkblue;
 }
 .corpo {
 color: black;
-background-color:#ccddcc;       
+background-color:#ccddcc;
 }
 </style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -183,8 +183,8 @@ background-color:#ccddcc;
 	 }
        }
        if ($soma!=$numrows){
-	 
-	 if($numrows>0){ 
+
+	 if($numrows>0){
 	    echo "
 	    <br><br>
 	    <table>
@@ -197,7 +197,7 @@ background-color:#ccddcc;
 	       <td class='cabec' align='center'  title='Nome Usuário'><b>Nome Usuário</b></td>
 	       <td class='cabec' align='center'  title='Nome Usuário'><b>Info.</b></td>
 	     </tr>
-	    "; 	   
+	    ";
 	 }else{
 	   echo"<script>js_desabilita();</script> ";
 	   echo "<br><br><b>Sem Transferências Internas para Receber!!</b>";
@@ -207,7 +207,7 @@ background-color:#ccddcc;
 	   $sql2 = $clprocandamintand->sql_query_file(null,"*",null,"p86_codtrans=$p88_codigo");
 	   $result2=pg_exec($sql2);
 	   $numrows2=pg_numrows($result2);
-	   
+
 	   if ($numrows2==0){
 	     echo"
 	       <tr>
@@ -226,8 +226,8 @@ background-color:#ccddcc;
          echo"<br><br> <b>Sem Tranferências Internas para Receber!!</b>";
        }
        echo"
-	   </table>";	        
-       
+	   </table>";
+
 
   ?>
   </td>
@@ -235,7 +235,7 @@ background-color:#ccddcc;
   </table>
   </form>
 </center>
-<? 
+<?
 
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 
@@ -244,8 +244,8 @@ if (isset($incluir)){
     if($sqlerro==true){
       echo "<script> document.form1.".$clprocandamint->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clprocandamint->erro_campo.".focus();</script>";
-    }else{ 
-      echo"<script>top.corpo.location.href='pro4_recebinter001.php';</script>";
+    }else{
+      echo"<script>CurrentWindow.corpo.location.href='pro4_recebinter001.php';</script>";
     }
 }
 
@@ -254,6 +254,6 @@ if (isset($incluir)){
 </html>
 <script>
 function js_verinfo(codigo){
-  js_OpenJanelaIframe('top.corpo','db_iframe_recebinterinfo','pro4_recebinterinfo.php?p88_codigo='+codigo,'Info.',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_recebinterinfo','pro4_recebinterinfo.php?p88_codigo='+codigo,'Info.',true);
 }
 </script>

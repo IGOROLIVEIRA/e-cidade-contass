@@ -517,7 +517,7 @@ if ( isset( $alterar ) ) {
   parent.document.formaba.a7.disabled    = false;
   parent.document.formaba.a7.style.color = "black";
 
-  top.corpo.iframe_a2.location.href = 'edu1_aluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
+  CurrentWindow.corpo.iframe_a2.location.href = 'edu1_aluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
   var sUrlCurso = 'edu1_alunocurso001.php?ed56_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
 
   if (parent.document.getElementsByTagName('form')[0].int_ed57_i_codigo.value != '') {
@@ -529,11 +529,11 @@ if ( isset( $alterar ) ) {
   if (parent.document.getElementsByTagName('form')[0].value != '') {
     sUrlCurso += '&codigo_etapa_multi='+parent.document.getElementsByTagName('form')[0].codigo_etapa_multi.value;
   }
-  top.corpo.iframe_a3.location.href = sUrlCurso;
-  top.corpo.iframe_a4.location.href = 'edu1_docaluno001.php?ed49_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a5.location.href = 'edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a6.location.href = 'edu1_alunomatcenso001.php?ed280_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a7.location.href = 'edu1_alunotransporteutilizado.php?iAluno=<?=$ed47_i_codigo?>'
+  CurrentWindow.corpo.iframe_a3.location.href = sUrlCurso;
+  CurrentWindow.corpo.iframe_a4.location.href = 'edu1_docaluno001.php?ed49_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a5.location.href = 'edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a6.location.href = 'edu1_alunomatcenso001.php?ed280_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a7.location.href = 'edu1_alunotransporteutilizado.php?iAluno=<?=$ed47_i_codigo?>'
                                                                       +'&ed47_v_nome=<?=$ed47_v_nome?>'
                                                                       +'&iUtilizaTransporte=<?=$ed47_i_transpublico?>';
  </script>

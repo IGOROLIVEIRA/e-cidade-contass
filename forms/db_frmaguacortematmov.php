@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: agua
@@ -42,12 +42,12 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
-    
+
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
-     
+
       $x42_usuario      = db_getsession("DB_id_usuario");
       $x42_data         = db_getsession("DB_datausu");
       $x42_data_dia     = date("d", $x42_data);
@@ -55,7 +55,7 @@ if(isset($db_opcaoal)){
       $x42_data_ano     = date("Y", $x42_data);
 
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -64,7 +64,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tx42_codmov?>">
        <?=@$Lx42_codmov?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x42_codmov',10,$Ix42_codmov,true,'text',3,"")
 ?>
@@ -76,7 +76,7 @@ db_input('x42_codmov',10,$Ix42_codmov,true,'text',3,"")
        //db_ancora(@$Lx42_codcortemat,"js_pesquisax42_codcortemat(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x42_codcortemat',10,$Ix42_codcortemat,true,'text',3," onchange='js_pesquisax42_codcortemat(false);'")
 ?>
@@ -92,7 +92,7 @@ db_input('x42_codcortemat',10,$Ix42_codcortemat,true,'text',3," onchange='js_pes
        db_ancora(@$Lx42_codsituacao,"js_pesquisax42_codsituacao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x42_codsituacao',10,$Ix42_codsituacao,true,'text',$db_opcao," onchange='js_pesquisax42_codsituacao(false);'")
 ?>
@@ -101,21 +101,21 @@ db_input('x43_descr',40,$Ix43_descr,true,'text',3,'')
        ?>
     </td>
   </tr>
-	
+
 	<tr>
     <td nowrap title="<?=@$Tx42_leitura?>">
        <?=@$Lx42_leitura?>
     </td>
-    <td><? 
+    <td><?
     db_input('x42_leitura',10,$Ix42_leitura, true,'text',$db_opcao);
     ?></td>
-    </tr> 
+    </tr>
 
   <tr>
     <td nowrap title="<?=@$Tx42_historico?>">
        <?=@$Lx42_historico?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('x42_historico',4,60,$Ix42_historico,true,'text',$db_opcao,"")
 ?>
@@ -125,7 +125,7 @@ db_textarea('x42_historico',4,60,$Ix42_historico,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx42_data?>">
        <?=@$Lx42_data?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('x42_data',@$x42_data_dia,@$x42_data_mes,@$x42_data_ano,true,'text',$db_opcao,"")
 ?>
@@ -135,7 +135,7 @@ db_inputdata('x42_data',@$x42_data_dia,@$x42_data_mes,@$x42_data_ano,true,'text'
     <td nowrap title="<?=@$Tx42_usuario?>">
        <?=@$Lx42_usuario?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x42_usuario',10,$Ix42_usuario,true,'text',3,"");
 db_input('nome',40,$Inome,true,'text',3,'');
@@ -151,7 +151,7 @@ db_input('nome',40,$Inome,true,'text',3,'');
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("x42_codmov"=>@$x42_codmov);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -178,20 +178,20 @@ function js_cancelar(){
 }
 function js_pesquisax42_codsituacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguacortematmov','db_iframe_aguacortesituacao','func_aguacortesituacao.php?funcao_js=parent.js_mostraaguacortesituacao1|x43_codsituacao|x43_descr','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacortematmov','db_iframe_aguacortesituacao','func_aguacortesituacao.php?funcao_js=parent.js_mostraaguacortesituacao1|x43_codsituacao|x43_descr','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x42_codsituacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguacortematmov','db_iframe_aguacortesituacao','func_aguacortesituacao.php?pesquisa_chave='+document.form1.x42_codsituacao.value+'&funcao_js=parent.js_mostraaguacortesituacao','Pesquisa',false);
+     if(document.form1.x42_codsituacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacortematmov','db_iframe_aguacortesituacao','func_aguacortesituacao.php?pesquisa_chave='+document.form1.x42_codsituacao.value+'&funcao_js=parent.js_mostraaguacortesituacao','Pesquisa',false);
      }else{
-       document.form1.x43_descr.value = ''; 
+       document.form1.x43_descr.value = '';
      }
   }
 }
 function js_mostraaguacortesituacao(chave,erro){
-  document.form1.x43_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.x42_codsituacao.focus(); 
-    document.form1.x42_codsituacao.value = ''; 
+  document.form1.x43_descr.value = chave;
+  if(erro==true){
+    document.form1.x42_codsituacao.focus();
+    document.form1.x42_codsituacao.value = '';
   }
 }
 function js_mostraaguacortesituacao1(chave1,chave2){
@@ -201,20 +201,20 @@ function js_mostraaguacortesituacao1(chave1,chave2){
 }
 function js_pesquisax42_codcortemat(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguacortematmov','db_iframe_aguacortemat','func_aguacortemat.php?funcao_js=parent.js_mostraaguacortemat1|x41_codcortemat|x41_matric','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacortematmov','db_iframe_aguacortemat','func_aguacortemat.php?funcao_js=parent.js_mostraaguacortemat1|x41_codcortemat|x41_matric','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x42_codcortemat.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguacortematmov','db_iframe_aguacortemat','func_aguacortemat.php?pesquisa_chave='+document.form1.x42_codcortemat.value+'&funcao_js=parent.js_mostraaguacortemat','Pesquisa',false);
+     if(document.form1.x42_codcortemat.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacortematmov','db_iframe_aguacortemat','func_aguacortemat.php?pesquisa_chave='+document.form1.x42_codcortemat.value+'&funcao_js=parent.js_mostraaguacortemat','Pesquisa',false);
      }else{
-       document.form1.x41_matric.value = ''; 
+       document.form1.x41_matric.value = '';
      }
   }
 }
 function js_mostraaguacortemat(chave,erro){
-  document.form1.x41_matric.value = chave; 
-  if(erro==true){ 
-    document.form1.x42_codcortemat.focus(); 
-    document.form1.x42_codcortemat.value = ''; 
+  document.form1.x41_matric.value = chave;
+  if(erro==true){
+    document.form1.x42_codcortemat.focus();
+    document.form1.x42_codcortemat.value = '';
   }
 }
 function js_mostraaguacortemat1(chave1,chave2){
@@ -224,21 +224,21 @@ function js_mostraaguacortemat1(chave1,chave2){
 }
 function js_pesquisax42_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguacortematmov','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacortematmov','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x42_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguacortematmov','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.x42_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false,'0','1','775','390');
+     if(document.form1.x42_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacortematmov','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.x42_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false,'0','1','775','390');
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.x42_usuario.focus(); 
-    document.form1.x42_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.x42_usuario.focus();
+    document.form1.x42_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){

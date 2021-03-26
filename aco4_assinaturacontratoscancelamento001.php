@@ -233,7 +233,7 @@ function js_pesquisarAssinatura() {
   var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=2&ativos=true&assinados=true';
       sUrl += '&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial';
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_assinatura',
                       sUrl,
                       'Pesquisar Assinatura',

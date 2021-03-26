@@ -375,10 +375,10 @@ if(isset($m80_codigo) && trim($m80_codigo)!="" && $db_opcao==2){
   function js_pesquisam60_codmater(mostra) {
 
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_matmater','func_matmater.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matmater','func_matmater.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr','Pesquisa',true);
     }else{
       if(document.form1.m60_codmater.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_matmater','func_matmater.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostramatmater','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matmater','func_matmater.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostramatmater','Pesquisa',false);
       }else{
         document.form1.m60_descr.value = '';
         document.form1.submit();
@@ -402,10 +402,10 @@ if(isset($m80_codigo) && trim($m80_codigo)!="" && $db_opcao==2){
   }
   function js_pesquisacoddepto(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_depart','func_db_depart_material.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_depart','func_db_depart_material.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa',true);
     }else{
       if(document.form1.coddepto.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_depart','func_db_depart_material.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_depart','func_db_depart_material.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart','Pesquisa',false);
       }else{
         document.form1.descrdepto.value = '';
       }
@@ -432,7 +432,7 @@ if(isset($m80_codigo) && trim($m80_codigo)!="" && $db_opcao==2){
       echo "qry += '&naoatendido=true';";
     }
     ?>
-    js_OpenJanelaIframe('top.corpo','db_iframe_matestoqueini','func_matestoqueini.php?funcao_js=parent.js_preenchepesquisa|m80_codigo'+qry,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matestoqueini','func_matestoqueini.php?funcao_js=parent.js_preenchepesquisa|m80_codigo'+qry,'Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_matestoqueini.hide();
@@ -457,7 +457,7 @@ if(isset($m80_codigo) && trim($m80_codigo)!="" && $db_opcao==2){
   ?>
   function js_pesquisaimplanta(){
     qry = "&chave_m80_codtipo=<?=$m80_codtipo?>";
-    js_OpenJanelaIframe('top.corpo','db_iframe_matestoqueini','func_matestoqueini.php?funcao_js=parent.js_preenchepesquisa|m60_codmater|m80_codigo'+qry,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matestoqueini','func_matestoqueini.php?funcao_js=parent.js_preenchepesquisa|m60_codmater|m80_codigo'+qry,'Pesquisa',true);
   }
   function js_verificaquant(valor){
     //  splitar = document.form1.quantrest.value.split(" / ");
@@ -558,10 +558,10 @@ if(isset($m80_codigo) && trim($m80_codigo)!="" && $db_opcao==2){
    }
   function js_pesquisam78_matfabricante(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_matfabricante','func_matfabricante.php?funcao_js=parent.js_mostramatfabricante1|m76_sequencial|m76_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matfabricante','func_matfabricante.php?funcao_js=parent.js_mostramatfabricante1|m76_sequencial|m76_nome','Pesquisa',true);
   }else{
      if(document.form1.m78_matfabricante.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_matfabricante','func_matfabricante.php?pesquisa_chave='+document.form1.m78_matfabricante.value+'&funcao_js=parent.js_mostramatfabricante','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matfabricante','func_matfabricante.php?pesquisa_chave='+document.form1.m78_matfabricante.value+'&funcao_js=parent.js_mostramatfabricante','Pesquisa',false);
      }else{
        document.form1.m76_nome.value = '';
      }

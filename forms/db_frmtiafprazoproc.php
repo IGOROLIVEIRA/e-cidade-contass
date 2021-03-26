@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: fiscal
@@ -37,15 +37,15 @@ $clrotulo->label("y90_codtiaf");
 <center>
 <?
 		$where = "";
-	    if(isset($y96_codigo) && $y96_codigo != ""){  
+	    if(isset($y96_codigo) && $y96_codigo != ""){
 	      $where = " and y96_codigo = $y96_codigo ";
 	    }
-	    if(isset($y90_codtiaf) && $y90_codtiaf != ""){  
+	    if(isset($y90_codtiaf) && $y90_codtiaf != ""){
 		    $rsResult = $cltiafprazo->sql_record($cltiafprazo->sql_query("","*","","y96_codtiaf = $y90_codtiaf ".$where));
 		    if ($cltiafdoc->numrows > 0){
 		    	db_fieldsmemory($rsResult,0);
 		    	list($y96_prazo_ano,$y96_prazo_mes,$y96_prazo_dia) = split ("-", $y96_prazo);
-		    }  
+		    }
 	    }
 	    else{
 	    	echo "<script>document.form1.novo.click;</script>";
@@ -59,7 +59,7 @@ $clrotulo->label("y90_codtiaf");
 ?>
 <table border="0">
 	<tr>
-         <td nowrap title="<?=@$Ty90_codtiaf?>"> 
+         <td nowrap title="<?=@$Ty90_codtiaf?>">
 	    <?
 	      db_ancora(@$Ly90_codtiaf,"js_pesquisay90_codtiaf(true);",$db_opcao);
 	    ?>
@@ -72,8 +72,8 @@ $clrotulo->label("y90_codtiaf");
 	 </tr>
 	 </tr>
 	 <?if (isset($opcao) && $opcao!="incluir"){?>
-	  <tr>	
-	  <td nowrap title="<?=@$Ty96_codigo?>"> 
+	  <tr>
+	  <td nowrap title="<?=@$Ty96_codigo?>">
 	    <?
 	      db_ancora(@$Ly96_codigo,"",3);
 	    ?>
@@ -84,15 +84,15 @@ $clrotulo->label("y90_codtiaf");
 	    ?>
 	 </td>
       <?}?>
-     
-  
+
+
   <tr>
     <td nowrap title="<?=@$Ty97_codproc?>">
        <?
 	       db_ancora(@$Ly97_codproc,"js_pesquisay97_codproc(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 		<?
 			db_input('y97_codproc',10,$Iy97_codproc,true,'text',$db_opcao," onchange='js_pesquisay97_codproc(false);'")
 		?>
@@ -105,13 +105,13 @@ $clrotulo->label("y90_codtiaf");
     <td nowrap title="<?=@$Ty96_prazo?>">
        <?=@$Ly96_prazo?>
     </td>
-    <td> 
+    <td>
 	<?
 		db_inputdata('y96_prazo',@$y96_prazo_dia,@$y96_prazo_mes,@$y96_prazo_ano,true,'text',$db_opcao,"")
 	?>
     </td>
   </tr>
-  
+
   </table>
   <?
        //echo($cltiafprazo->sql_query("","*","","y96_codtiaf = $y90_codtiaf"));
@@ -141,20 +141,20 @@ $clrotulo->label("y90_codtiaf");
 <script>
 function js_pesquisay97_codprazo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_tiafprazo','func_tiafprazo.php?funcao_js=parent.js_mostratiafprazo1|y96_codigo|y96_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tiafprazo','func_tiafprazo.php?funcao_js=parent.js_mostratiafprazo1|y96_codigo|y96_codigo','Pesquisa',true);
   }else{
-     if(document.form1.y97_codprazo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_tiafprazo','func_tiafprazo.php?pesquisa_chave='+document.form1.y97_codprazo.value+'&funcao_js=parent.js_mostratiafprazo','Pesquisa',false);
+     if(document.form1.y97_codprazo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tiafprazo','func_tiafprazo.php?pesquisa_chave='+document.form1.y97_codprazo.value+'&funcao_js=parent.js_mostratiafprazo','Pesquisa',false);
      }else{
-       document.form1.y96_codigo.value = ''; 
+       document.form1.y96_codigo.value = '';
      }
   }
 }
 function js_mostratiafprazo(chave,erro){
-  document.form1.y96_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.y97_codprazo.focus(); 
-    document.form1.y97_codprazo.value = ''; 
+  document.form1.y96_codigo.value = chave;
+  if(erro==true){
+    document.form1.y97_codprazo.focus();
+    document.form1.y97_codprazo.value = '';
   }
 }
 function js_mostratiafprazo1(chave1,chave2){
@@ -164,20 +164,20 @@ function js_mostratiafprazo1(chave1,chave2){
 }
 function js_pesquisay97_codproc(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_protprocesso','func_protprocesso.php?funcao_js=parent.js_mostraprotprocesso1|p58_codproc|p58_codproc','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_protprocesso','func_protprocesso.php?funcao_js=parent.js_mostraprotprocesso1|p58_codproc|p58_codproc','Pesquisa',true);
   }else{
-     if(document.form1.y97_codproc.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_protprocesso','func_protprocesso.php?pesquisa_chave='+document.form1.y97_codproc.value+'&funcao_js=parent.js_mostraprotprocesso','Pesquisa',false);
+     if(document.form1.y97_codproc.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_protprocesso','func_protprocesso.php?pesquisa_chave='+document.form1.y97_codproc.value+'&funcao_js=parent.js_mostraprotprocesso','Pesquisa',false);
      }else{
-       document.form1.p58_codproc.value = ''; 
+       document.form1.p58_codproc.value = '';
      }
   }
 }
 function js_mostraprotprocesso(chave,erro){
-  document.form1.p58_codproc.value = chave; 
-  if(erro==true){ 
-    document.form1.y97_codproc.focus(); 
-    document.form1.y97_codproc.value = ''; 
+  document.form1.p58_codproc.value = chave;
+  if(erro==true){
+    document.form1.y97_codproc.focus();
+    document.form1.y97_codproc.value = '';
   }
 }
 function js_mostraprotprocesso1(chave1,chave2){
@@ -186,7 +186,7 @@ function js_mostraprotprocesso1(chave1,chave2){
   db_iframe_protprocesso.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tiafprazoproc','func_tiafprazoproc.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tiafprazoproc','func_tiafprazoproc.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tiafprazoproc.hide();
@@ -215,7 +215,7 @@ function js_mostratiaf1(chave){
      location.href="fis1_tiafaba003.php?y90_codtiaf="+chave;
   } else if (passa == "e"){
      location.href="fis1_tiafaba004.php?y90_codtiaf="+chave;
-  }*/  
+  }*/
 }
 function js_limpacampos(chave){
   /*for(i=0;i<document.form1.length;i++){
@@ -226,7 +226,7 @@ function js_limpacampos(chave){
       document.form1.elements[i].value = '';
     }
   }*/
-  location.href="fis1_tiafprazoproc001.php?y90_codtiaf="+chave;  
+  location.href="fis1_tiafprazoproc001.php?y90_codtiaf="+chave;
 }
 
 

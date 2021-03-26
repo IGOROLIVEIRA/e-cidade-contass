@@ -249,10 +249,10 @@ $clrotulo->label("db89_codagencia");
 
 function js_pesquisadb83_bancoagencia(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_bancoagencia','func_bancoagencia.php?digito=true&funcao_js=parent.js_mostrabancoagencia1|db89_sequencial|db89_codagencia|db89_digito','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bancoagencia','func_bancoagencia.php?digito=true&funcao_js=parent.js_mostrabancoagencia1|db89_sequencial|db89_codagencia|db89_digito','Pesquisa',true);
   }else{
      if(document.form1.db83_bancoagencia.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_bancoagencia','func_bancoagencia.php?digito=true&pesquisa_chave='+document.form1.db83_bancoagencia.value+'&funcao_js=parent.js_mostrabancoagencia','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bancoagencia','func_bancoagencia.php?digito=true&pesquisa_chave='+document.form1.db83_bancoagencia.value+'&funcao_js=parent.js_mostrabancoagencia','Pesquisa',false);
      }else{
        document.form1.db89_codagencia.value = '';
      }
@@ -278,7 +278,7 @@ function js_mostrabancoagencia1(chave1,chave2,chave3){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_contabancaria','func_contabancariacadastro.php?convenio=true&funcao_js=parent.js_preenchepesquisa|db83_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_contabancaria','func_contabancariacadastro.php?convenio=true&funcao_js=parent.js_preenchepesquisa|db83_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_contabancaria.hide();

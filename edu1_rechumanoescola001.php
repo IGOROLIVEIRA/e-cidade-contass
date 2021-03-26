@@ -356,10 +356,10 @@ if (pg_num_rows($rsValidavinculo) > 0 ) {
   echo "  parent.document.formaba.a5.disabled = false;";
   echo "  parent.document.formaba.a6.disabled = false;";
   echo "  parent.document.formaba.a7.disabled = false;";
-  echo "  top.corpo.iframe_a4.location.href   = 'edu1_rechumanoativ001.php?ed75_i_rechumano={$ed75_i_rechumano}{$sComplementoUrl}'; ";
-  echo "  top.corpo.iframe_a5.location.href   = 'edu1_relacaotrabalho001.php?ed75_i_rechumano=$ed75_i_rechumano'; ";
-  echo "  top.corpo.iframe_a6.location.href   = 'edu1_rechumanohoradisp001.php?ed20_i_codigo=$ed75_i_rechumano';";
-  echo "  top.corpo.iframe_a7.location.href   = 'edu1_rechumanohorario001.php?ed20_i_codigo=$ed75_i_rechumano';";
+  echo "  CurrentWindow.corpo.iframe_a4.location.href   = 'edu1_rechumanoativ001.php?ed75_i_rechumano={$ed75_i_rechumano}{$sComplementoUrl}'; ";
+  echo "  CurrentWindow.corpo.iframe_a5.location.href   = 'edu1_relacaotrabalho001.php?ed75_i_rechumano=$ed75_i_rechumano'; ";
+  echo "  CurrentWindow.corpo.iframe_a6.location.href   = 'edu1_rechumanohoradisp001.php?ed20_i_codigo=$ed75_i_rechumano';";
+  echo "  CurrentWindow.corpo.iframe_a7.location.href   = 'edu1_rechumanohorario001.php?ed20_i_codigo=$ed75_i_rechumano';";
   echo "</script>";
 
 } else {

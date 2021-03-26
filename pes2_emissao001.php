@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
   require_once("libs/db_stdlib.php");
@@ -113,8 +113,8 @@
             <td>
               <?php
                 $aTipoArquivos = array(
-                                       'pdf' => 'PDF', 
-                                       'csv' => 'CSV' 
+                                       'pdf' => 'PDF',
+                                       'csv' => 'CSV'
                                       );
                 db_select('tipo_arquivo', $aTipoArquivos, true, 4, "");
               ?>
@@ -127,7 +127,7 @@
             <td>
               <?php
                 $aModoImpressao = array(
-                                        'r' => 'Retrato', 
+                                        'r' => 'Retrato',
                                         'p' => 'Paisagem'
                                        );
 
@@ -143,8 +143,8 @@
             <td>
               <?php
                 $aOrdem = array(
-                                'a' => 'Alfabética', 
-                                'n' => 'Numérica' 
+                                'a' => 'Alfabética',
+                                'n' => 'Numérica'
                                );
                 db_select('ordem', $aOrdem, true, 4, "");
               ?>
@@ -187,7 +187,7 @@
       <table class="form-container" width="100%">
       <tr>
         <td align="center" rel="ignore-css">
-          <input name="processar" type="button" onClick="js_processaArquivo()" value="Processar">            
+          <input name="processar" type="button" onClick="js_processaArquivo()" value="Processar">
         </td>
       </tr>
       </table>
@@ -195,7 +195,7 @@
 
   <script type="text/javascript">
 
-    
+
     /**
      * Recebe uma instância de GridView
      */
@@ -204,12 +204,12 @@
     (function() {
 
       /**
-      * Instância o Input Competencia Folha 
+      * Instância o Input Competencia Folha
       */
       var oCompetenciaFolha = new DBViewFormularioFolha.CompetenciaFolha(true);
       oCompetenciaFolha.renderizaLabel($('labelCompetencia'));
       oCompetenciaFolha.renderizaFormulario($('formularioCompetencia'));
-      oCompetenciaFolha.setCallBack(function(){ 
+      oCompetenciaFolha.setCallBack(function(){
                                       js_buscaComplementar()
                                     });
 
@@ -252,13 +252,13 @@
      */
     function js_pesquisarh45_codigo(mostra) {
       var height = document.body.clientHeight;
-      var width  = document.body.clientWidth -20; 
+      var width  = document.body.clientWidth -20;
 
       if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_relrub','func_relrub.php?funcao_js=top.corpo.js_mostracodigo1|rh45_codigo|rh45_descr','Pesquisa',true,20, 5, width, height);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_relrub','func_relrub.php?funcao_js=CurrentWindow.corpo.js_mostracodigo1|rh45_codigo|rh45_descr','Pesquisa',true,20, 5, width, height);
       } else {
-         if ($('rh45_codigo').value != '') {  
-            js_OpenJanelaIframe('top.corpo','db_iframe_relrub','func_relrub.php?pesquisa_chave='+$('rh45_codigo').value+'&funcao_js=top.corpo.js_mostracodigo','Pesquisa',false,0,0, width, height);
+         if ($('rh45_codigo').value != '') {
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_relrub','func_relrub.php?pesquisa_chave='+$('rh45_codigo').value+'&funcao_js=CurrentWindow.corpo.js_mostracodigo','Pesquisa',false,0,0, width, height);
          } else {
            $('rh45_descr').value = '';
          }
@@ -269,10 +269,10 @@
      *  Metodo de retorno do metodo js_pesquisarh45_codigo
      */
     function js_mostracodigo(chave,erro) {
-      $('rh45_descr').value = chave; 
-      if (erro==true) {  
-        $('rh45_codigo').focus(); 
-        $('rh45_codigo').value = ''; 
+      $('rh45_descr').value = chave;
+      if (erro==true) {
+        $('rh45_codigo').focus();
+        $('rh45_codigo').value = '';
       }
     }
 
@@ -289,15 +289,15 @@
      * Abrir Janela para Download do arquivo
      */
     function abrirDownload(sArquivo) {
-      
+
       var oDownload = new DBDownload();
 
       oDownload.addFile(sArquivo, 'Download CSV.');
       oDownload.show();
-    } 
+    }
 
     /**
-     * Função responsavel pela validação e tratamento 
+     * Função responsavel pela validação e tratamento
      * dos dados para geração do relatório.
      */
     function js_processaArquivo() {
@@ -337,7 +337,7 @@
       var aTipoFolhas     = [];
       var aNomeTipoFolhas = [];
       aFolhasSelecionadas.each (function(oTipoFolha, iIndice) {
-         
+
          aTipoFolhas[iIndice]     = oTipoFolha[0];
          aNomeTipoFolhas[iIndice] = oTipoFolha[2];
       })
@@ -358,7 +358,7 @@
       oQuery.sOrdem          = $F('ordem');
       oQuery.sSomenteTotais  = $F('somente_totais');
       oQuery.sVinculo        = $F('vinculo');
-      
+
       var oJanela = window.open('pes2_emissao002.php?json='+Object.toJSON(oQuery),'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       oJanela.moveTo(0,0);
       return false;
@@ -375,10 +375,10 @@
           sQuery += '&iAnoFolha='+iAno;
           sQuery += '&iMesFolha='+iMes;
           sQuery += '&sSigla="Complementar"';
-      
+
       var oAjax   = new Ajax.Request( sUrl, {
-                                              method: 'post', 
-                                              parameters: sQuery, 
+                                              method: 'post',
+                                              parameters: sQuery,
                                               onComplete: js_retornoComplementar
                                             }
                                     );
@@ -391,7 +391,7 @@
 
       $('selectComplementar').options.length = 0;
       var aRetorno = eval("("+oComplementar.responseText+")");
-      
+
       if (aRetorno.aSemestre.length > 0) {
 
         var oOptionDefault = new Option('Todos', '');
@@ -401,7 +401,7 @@
          * Percorre o Array de retorno montando os Options
          */
         for (var iIndiceComplementar = 0; iIndiceComplementar < aRetorno.aSemestre.length; iIndiceComplementar++) {
-  
+
           var iComplementar       = aRetorno.aSemestre[iIndiceComplementar].semestre;
           var oOptionComplementar = new Option(iComplementar, iComplementar);
           $('selectComplementar').add(oOptionComplementar);
@@ -410,6 +410,6 @@
     }
 
   </script>
-  <?php db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>  
+  <?php db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
   </body>
 </html>

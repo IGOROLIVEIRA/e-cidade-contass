@@ -94,7 +94,7 @@ $clrotulo->label("e21_descricao");
             <td align="right" nowrap title="<?=@$Tr52_formul?>">
               <?=@$Lr52_formul?>
             </td>
-            <td colspan="3"> 
+            <td colspan="3">
               <?
               db_textarea('r52_formul',4,69,$Ir52_formul,true,'text',$db_opcao,"onchange='js_desabilita(this.value);' tabIndex='3' onFocus='js_mostrar_dados_formula(true);' onBlur='js_mostrar_dados_formula(false);'");
               ?>
@@ -124,14 +124,14 @@ $clrotulo->label("e21_descricao");
                 db_ancora(@$Lrh77_retencaotiporec,"js_pesquisarh77_retencaotiporec(true);",$db_opcao);
               ?>
             </td>
-            <td colspan="5"> 
+            <td colspan="5">
               <?
                 db_input('rh77_retencaotiporec',8,$Irh77_retencaotiporec,true,'text',$db_opcao," onchange='js_pesquisarh77_retencaotiporec(false);'");
                 db_input('e21_descricao',60,'',true,'text',3,'');
               ?>
             </td>
-          </tr>          
-        </table>      
+          </tr>
+        </table>
         </center>
       </fieldset>
     </td>
@@ -147,7 +147,7 @@ $clrotulo->label("e21_descricao");
               db_ancora(@$Lr52_codbco,"js_pesquisar52_codbco(true);",$db_opcao);
               ?>
             </td>
-            <td nowrap colspan="3"> 
+            <td nowrap colspan="3">
               <?
               db_input('r52_codbco',4,$Ir52_codbco,true,'text',$db_opcao,"onchange='js_pesquisar52_codbco(false);' tabIndex='6' ")
               ?>
@@ -164,12 +164,12 @@ $clrotulo->label("e21_descricao");
             <td>
               <?
               db_input('r52_codage',5,$Ir52_codage,true,'text',$db_opcao," tabIndex='7' ");
-              ?>   
+              ?>
             </td>
             <td nowrap title="<?=@$Tr52_dvagencia?>" align="right">
               <?=@$Lr52_dvagencia?>
             </td>
-            <td width="20%"> 
+            <td width="20%">
               <?
               db_input('r52_dvagencia',2,$Ir52_dvagencia,true,'text',$db_opcao," tabIndex='8' ");
               ?>
@@ -190,10 +190,10 @@ $clrotulo->label("e21_descricao");
             <td>
               <?
               db_input('r52_dvconta',2,$Ir52_dvconta,true,'text',$db_opcao," tabIndex='10' ");
-              ?>   
+              ?>
             </td>
           </tr>
-        </table>      
+        </table>
         </center>
       </fieldset>
     </td>
@@ -259,18 +259,18 @@ $clrotulo->label("e21_descricao");
               ?>
             </td>
           </tr>
-        </table>      
+        </table>
         </center>
       </fieldset>
     </td>
   </tr>
   <tr>
     <td colspan="4" width="100%" align="center">
-      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
-             type="submit" id="db_opcao" 
-             value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" 
+      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+             type="submit" id="db_opcao"
+             value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
              <?=($db_botao==false?"disabled":"")?> onclick="return js_enviar();" tabIndex="14">
-      <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisar_pensao();" 
+      <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisar_pensao();"
              tabIndex="15" onblur="<?=($db_opcao==1?'document.form1.r52_regist.select();':'document.form1.novo.select();')?>">
       <?
       if($db_opcao != 1 && (!isset($db_opcaoal) || (isset($db_opcaoal) && $db_opcaoal != 33))){
@@ -314,7 +314,7 @@ $clrotulo->label("e21_descricao");
                                         ",
                                         $dbwhere
                                        );
-      $sCampos  = "z01_numcgm, z01_nome, r52_vlrpen, r52_perc, r52_formul, r52_pag13, r52_pagfer, r52_pagres, "; 
+      $sCampos  = "z01_numcgm, z01_nome, r52_vlrpen, r52_perc, r52_formul, r52_pag13, r52_pagfer, r52_pagres, ";
       $sCampos .= "r52_pagcom, r52_adiantamento13, r52_percadiantamento13";
       $chavepri= array("r52_anousu"=>$r52_anousu,"r52_mesusu"=>$r52_mesusu,"r52_regist"=>@$r52_regist,"r52_numcgm"=>@$r52_numcgm);
       $cliframe_alterar_excluir->chavepri = $chavepri;
@@ -359,21 +359,21 @@ db_input('r52_limite_ano',4,$Ir52_limite,true,'hidden',$db_opcao,"");
 <script>
 function js_pesquisarh77_retencaotiporec(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_retencaotiporec','func_retencaotiporec.php?tipo=2&funcao_js=parent.js_mostraretencaotiporec1|e21_sequencial|e21_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_retencaotiporec','func_retencaotiporec.php?tipo=2&funcao_js=parent.js_mostraretencaotiporec1|e21_sequencial|e21_descricao','Pesquisa',true);
   }else{
-     if(document.form1.rh77_retencaotiporec.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_retencaotiporec','func_retencaotiporec.php?tipo=2&pesquisa_chave='+document.form1.rh77_retencaotiporec.value+'&funcao_js=parent.js_mostraretencaotiporec','Pesquisa',false,'0');
+     if(document.form1.rh77_retencaotiporec.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_retencaotiporec','func_retencaotiporec.php?tipo=2&pesquisa_chave='+document.form1.rh77_retencaotiporec.value+'&funcao_js=parent.js_mostraretencaotiporec','Pesquisa',false,'0');
      }else{
-       document.form1.e21_descricao.value = ''; 
+       document.form1.e21_descricao.value = '';
      }
   }
 }
-          
+
 function js_mostraretencaotiporec(chave,erro){
   document.form1.e21_descricao.value = chave;
-  if(erro==true){ 
-    document.form1.rh77_retencaotiporec.focus(); 
-    document.form1.rh77_retencaotiporec.value = ''; 
+  if(erro==true){
+    document.form1.rh77_retencaotiporec.focus();
+    document.form1.rh77_retencaotiporec.value = '';
   }
 }
 function js_mostraretencaotiporec1(chave1,chave2){
@@ -433,17 +433,17 @@ function js_enviar(){
   	}
   	?>
   }
-  
+
   if (document.form1.r52_adiantamento13.value == 't') {
-  
+
 	  if (document.form1.r52_percadiantamento13.value <= 0) {
-	  
+
 	    alert("Informe um valor maior que zero para o percentual do adiantamento 13º!");
 	    document.form1.r52_percadiantamento13.focus();
 	    return false;
 	  }
   }
-  
+
   return true;
 }
 function js_desabilita() {
@@ -462,39 +462,39 @@ function js_desabilita() {
     document.form1.r52_vlrpen.readOnly=true;
     document.form1.r52_vlrpen.style.backgroundColor="#DEB887";
   }
-  
+
   if (document.form1.r52_pag13.value == 't') {
     document.form1.r52_adiantamento13.disabled = false;
   } else {
-  
+
     document.form1.r52_adiantamento13.disabled = true;
     document.form1.r52_adiantamento13.value    = 'f';
   }
-  
+
   if (document.form1.r52_adiantamento13.value == 't') {
     document.form1.r52_percadiantamento13.disabled = false;
   } else {
-  
+
     document.form1.r52_percadiantamento13.value    = '0';
     document.form1.r52_percadiantamento13.disabled = true;
   }
 }
 function js_pesquisar52_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?testanome=true&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?testanome=true&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.r52_numcgm.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?testanome=true&pesquisa_chave='+document.form1.r52_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false,'0');
+     if(document.form1.r52_numcgm.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?testanome=true&pesquisa_chave='+document.form1.r52_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false,'0');
      }else{
        document.form1.z01_nome02.value = '';
      }
   }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome02.value = chave; 
-  if(erro==true){ 
-    document.form1.r52_numcgm.focus(); 
-    document.form1.r52_numcgm.value = ''; 
+  document.form1.z01_nome02.value = chave;
+  if(erro==true){
+    document.form1.r52_numcgm.focus();
+    document.form1.r52_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -504,10 +504,10 @@ function js_mostracgm1(chave1,chave2){
 }
 function js_pesquisar52_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ra&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ra&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
   }else{
-     if(document.form1.r52_regist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ra&pesquisa_chave='+document.form1.r52_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
+     if(document.form1.r52_regist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ra&pesquisa_chave='+document.form1.r52_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
        location.href = "pes1_pensao001.php?db_opcaoal=<?=(@$db_opcaoal)?>";
@@ -515,10 +515,10 @@ function js_pesquisar52_regist(mostra){
   }
 }
 function js_mostrapessoal(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.r52_regist.focus(); 
-    document.form1.r52_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.r52_regist.focus();
+    document.form1.r52_regist.value = '';
   }else{
     location.href = "pes1_pensao001.php?db_opcaoal=<?=(@$db_opcaoal)?>&r52_regist="+document.form1.r52_regist.value;
   }
@@ -531,20 +531,20 @@ function js_mostrapessoal1(chave1,chave2){
 }
 function js_pesquisar52_codbco(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostrabancos1|db90_codban|db90_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostrabancos1|db90_codban|db90_descr','Pesquisa',true);
   }else{
-     if(document.form1.r52_codbco.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.r52_codbco.value+'&funcao_js=parent.js_mostrabancos','Pesquisa',false,0);
+     if(document.form1.r52_codbco.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.r52_codbco.value+'&funcao_js=parent.js_mostrabancos','Pesquisa',false,0);
      }else{
-       document.form1.db90_descr.value = ''; 
+       document.form1.db90_descr.value = '';
      }
   }
 }
 function js_mostrabancos(chave,erro){
-  document.form1.db90_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r52_codbco.focus(); 
-    document.form1.r52_codbco.value = ''; 
+  document.form1.db90_descr.value = chave;
+  if(erro==true){
+    document.form1.r52_codbco.focus();
+    document.form1.r52_codbco.value = '';
   }
 }
 function js_mostrabancos1(chave1,chave2){
@@ -554,7 +554,7 @@ function js_mostrabancos1(chave1,chave2){
 }
 
 function js_pesquisar_pensao(mostra){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pensao','func_pensao.php?testarescisao=ra&funcao_js=parent.js_preenchepesquisa|r52_anousu|r52_mesusu|r52_regist|r52_numcgm&chave_r52_anousu=<?=$r52_anousu?>&chave_r52_mesusu=<?=$r52_mesusu?>&instit=<?=$instit?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pensao','func_pensao.php?testarescisao=ra&funcao_js=parent.js_preenchepesquisa|r52_anousu|r52_mesusu|r52_regist|r52_numcgm&chave_r52_anousu=<?=$r52_anousu?>&chave_r52_mesusu=<?=$r52_mesusu?>&instit=<?=$instit?>','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2,chave3){
   db_iframe_pensao.hide();

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
@@ -56,28 +56,28 @@ $oDaoSolicita->rotulo->label();
 <?php
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
-	
+
 	<center>
 	<fieldset style="width:300px; margin-top:25px;">
-	
+
 		<legend><strong>Consulta Solicitação</strong></legend>
-		
+
 		<table align="center">
-		
+
 			<tr>
-			
+
 				<td><?php db_ancora('<strong>Número da solicitação: </strong>', "js_pesquisaSolicitacao(true);", 1); ?></td>
 				<td><?php db_input('pc10_numero', 8, $Ipc10_numero, true, "text", 1, " onchange = 'js_pesquisaSolicitacao(false);' "); ?></td>
-			
+
 			</tr>
-		
+
 		</table>
-	
+
 	</fieldset>
-	
+
 		<input type="button" name="btnEnviar" id="btnEnviar" onclick="js_efetuarPesquisa();" value="Enviar" />
 	</center>
-	
+
 </body>
 </html>
 
@@ -93,7 +93,7 @@ function js_pesquisaSolicitacao(lMostra){
   } else {
     var sUrlLookUp = 'func_solicita.php?pesquisa_chave='+$F('pc10_numero')+'&funcao_js=parent.js_mostraRetornoPesquisaSolicitacao2';
   }
-	js_OpenJanelaIframe('top.corpo',
+	js_OpenJanelaIframe('CurrentWindow.corpo',
 	  	                'db_iframe_solicita',
 	  	                sUrlLookUp + sQuery,
 	  	                'Pesquisa de Solicitações',
@@ -130,9 +130,9 @@ function js_mostraRetornoPesquisaSolicitacao2(sRetorno){
 function js_efetuarPesquisa(){
 
   if ($('pc10_numero').value.trim() !== ""){
-    
+
     var sUrlPesquisa = 'com3_conssolicitacao002.php?pc10_numero=' + $F('pc10_numero');
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_consulta_solicitacao',
                         sUrlPesquisa,
                         'Consulta Solicitação',

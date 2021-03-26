@@ -41,18 +41,18 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
-    if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){     
-     $j76_codigo = "";     
+    if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
+     $j76_codigo = "";
      $j76_numcgm = "";
      $z01_nome = "";
      $j76_tipo = "";
      $j76_principal = "";
    }
-} 
- $result = $claverbacao->sql_record($claverbacao->sql_query_file($j76_averbacao)); 
+}
+ $result = $claverbacao->sql_record($claverbacao->sql_query_file($j76_averbacao));
    db_fieldsmemory($result,0);
    if ($j75_situacao==2){
    	$db_opcao = 3;
@@ -66,7 +66,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?//=@$Tj76_codigo?>">
        <?//=@$Lj76_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j76_codigo',6,$Ij76_codigo,true,'hidden',3,"")
 ?>
@@ -78,10 +78,10 @@ db_input('j76_codigo',6,$Ij76_codigo,true,'hidden',3,"")
        db_ancora(@$Lj76_averbacao,"js_pesquisaj76_averbacao(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j76_averbacao',6,$Ij76_averbacao,true,'text',3," onchange='js_pesquisaj76_averbacao(false);'")
-?>       
+?>
     </td>
   </tr>
   <tr>
@@ -90,7 +90,7 @@ db_input('j76_averbacao',6,$Ij76_averbacao,true,'text',3," onchange='js_pesquisa
        db_ancora(@$Lj76_numcgm,"js_pesquisaj76_numcgm(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j76_numcgm',10,$Ij76_numcgm,true,'text',$db_opcao," onchange='js_pesquisaj76_numcgm(false);'")
 ?>
@@ -104,7 +104,7 @@ db_input('z01_nome',50,$Iz01_nome,true,'text',3,'')
     <td nowrap title="<?=@$Tj76_tipo?>">
        <?=@$Lj76_tipo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('1'=>'Proprietario','2'=>'Promitente');
 db_select('j76_tipo',$x,true,$db_opcao,"");
@@ -116,7 +116,7 @@ db_select('j76_tipo',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tj76_principal?>">
        <?=@$Lj76_principal?>
     </td>
-    <td> 
+    <td>
 <?
 
 $result_principal=$claverbacgm->sql_record($claverbacgm->sql_query_file(null,"*",null,"j76_averbacao=$j76_averbacao and j76_principal is true"));
@@ -138,7 +138,7 @@ db_select('j76_principal',$x,true,$db_opcao,"");
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("j76_codigo"=>@$j76_codigo);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -165,20 +165,20 @@ function js_cancelar(){
 }
 function js_pesquisaj76_averbacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_averbacgm','db_iframe_averbacao','func_averbacao.php?funcao_js=parent.js_mostraaverbacao1|j75_codigo|j75_codigo','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_averbacgm','db_iframe_averbacao','func_averbacao.php?funcao_js=parent.js_mostraaverbacao1|j75_codigo|j75_codigo','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.j76_averbacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_averbacgm','db_iframe_averbacao','func_averbacao.php?pesquisa_chave='+document.form1.j76_averbacao.value+'&funcao_js=parent.js_mostraaverbacao','Pesquisa',false);
+     if(document.form1.j76_averbacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_averbacgm','db_iframe_averbacao','func_averbacao.php?pesquisa_chave='+document.form1.j76_averbacao.value+'&funcao_js=parent.js_mostraaverbacao','Pesquisa',false);
      }else{
-       document.form1.j75_codigo.value = ''; 
+       document.form1.j75_codigo.value = '';
      }
   }
 }
 function js_mostraaverbacao(chave,erro){
-  document.form1.j75_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.j76_averbacao.focus(); 
-    document.form1.j76_averbacao.value = ''; 
+  document.form1.j75_codigo.value = chave;
+  if(erro==true){
+    document.form1.j76_averbacao.focus();
+    document.form1.j76_averbacao.value = '';
   }
 }
 function js_mostraaverbacao1(chave1,chave2){
@@ -188,20 +188,20 @@ function js_mostraaverbacao1(chave1,chave2){
 }
 function js_pesquisaj76_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_averbacgm','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&testanome=1','Pesquisa');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_averbacgm','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&testanome=1','Pesquisa');
   }else{
-     if(document.form1.j76_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_averbacgm','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.j76_numcgm.value+'&funcao_js=parent.js_mostracgm&testanome=1','Pesquisa',false);
+     if(document.form1.j76_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_averbacgm','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.j76_numcgm.value+'&funcao_js=parent.js_mostracgm&testanome=1','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.j76_numcgm.focus(); 
-    document.form1.j76_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.j76_numcgm.focus();
+    document.form1.j76_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){

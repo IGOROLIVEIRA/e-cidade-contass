@@ -382,12 +382,12 @@ Window.prototype = {
     this.content.contentWindow.CurrentWindow = this;
     this.content.contentWindow.Desktop = Desktop;
 
-    this.loader = new Desktop.Loader(document.querySelector('#'+ this.getId() +'_table_content'));
+    this.loader = new DeskCurrentWindow.Loader(document.querySelector('#'+ this.getId() +'_table_content'));
 
     var _this = this;
 
     function eventHandler(event) {
-      Desktop.Window.Iframe.eventHandler(event, _this);
+      DeskCurrentWindow.Window.Iframe.eventHandler(event, _this);
     }
 
     // Qualquer click em toda window

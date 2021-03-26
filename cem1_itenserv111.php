@@ -117,7 +117,7 @@ if(isset($incluir)){
     db_msgbox( $clitenserv->erro_msg );
     echo "<script>";
     echo " parent.document.formaba.a2.disabled=true; ";
-    echo " top.corpo.iframe_a1.location.href='cem1_propricemit001.php?db_opcao=1';";
+    echo " CurrentWindow.corpo.iframe_a1.location.href='cem1_propricemit001.php?db_opcao=1';";
     echo " parent.mo_camada('a1'); ";
     echo "</script>";
 

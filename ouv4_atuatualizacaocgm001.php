@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -48,12 +48,12 @@ $iGrupo		= 2; //2 proque esta na ouvidoria se protocolo = 1;
 	<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<meta http-equiv="Expires" CONTENT="0">
-	<? 
+	<?
 		db_app::load('strings.js,scripts.js,datagrid.widget.js,prototype.js');
 		db_app::load('estilos.css,grid.style.css');
 	?>
 	<script type="text/javascript">
-	
+
 	function js_pesquisaov02_sequencial(mostra){
 		if(document.getElementById('ov02_sequencial').value == "" && mostra == false){
 			document.getElementById('ov02_sequencial').value = "";
@@ -66,23 +66,23 @@ $iGrupo		= 2; //2 proque esta na ouvidoria se protocolo = 1;
 		  }
 		}
 	}
-	
+
 	function js_mostracidadao(chave,erro){
-	  document.form1.ov02_nome.value = erro; 
-	  if(erro==true){ 
+	  document.form1.ov02_nome.value = erro;
+	  if(erro==true){
 	    document.form1.ov02_nome.value = 'Chave('+document.form1.ov02_sequencial.value+') não Encontrado';
-	    document.form1.ov02_sequencial.focus(); 
-	    document.form1.ov02_sequencial.value = ''; 
-	    
-	  }  
+	    document.form1.ov02_sequencial.focus();
+	    document.form1.ov02_sequencial.value = '';
+
+	  }
 	}
-	
+
 	function js_mostracidadao1(chave1,chave2){
 	  document.form1.ov02_sequencial.value 	= chave1;
 	  document.form1.ov02_nome.value 				= chave2;
 	  db_iframe_cidadao.hide();
 	}
-	
+
 	function  js_frmListaCidadoes(){
 		oDBGridListaCidadoes = new DBGrid('listaCidadoes');
 		oDBGridListaCidadoes.nameInstance = 'oDBGridListaCidadoes';
@@ -91,14 +91,14 @@ $iGrupo		= 2; //2 proque esta na ouvidoria se protocolo = 1;
 		oDBGridListaCidadoes.setCellWidth(new Array(5,5,5,150,35,20,100,5));
 		oDBGridListaCidadoes.aHeaders[7].lDisplayed = false;
 		oDBGridListaCidadoes.setCellAlign(new Array('center','center','center','left','center','center','center','center'));
-		
+
 		oDBGridListaCidadoes.show($('listaCidadoes'));
 		js_pesquisa();
-		
+
 }
 
 function js_dataFormat(strData,formato){
-	
+
 	if(formato=='b'){
 		aData = strData.split('/');
 		return  aData[2]+'-'+aData[1]+'-'+aData[0];
@@ -122,52 +122,52 @@ function js_pesquisa(){
 	}
 	*/
 	oPesquisar = new Object();
-	
+
 	oPesquisar.ov02_sequencial 	= ov02_sequencial;
 	oPesquisar.dtfim					 	= dtfim == "" ? "" : js_dataFormat(dtfim,'b');
 	oPesquisar.dtini					 	= dtini == "" ? "" : js_dataFormat(dtini,'b');
 	oPesquisar.acao							= 'pesquisar';
-	
+
 	var sDados = Object.toJSON(oPesquisar);
-		
+
 		js_divCarregando('Aguarde Carregando dados da Pesquisa...','msgBox');
-	
+
 		sUrl = 'ouv4_atuatualizacaocgm.RPC.php';
 		var sQuery = 'dados='+sDados;
 		var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
-                                            onComplete: js_retornoPesquisaCidadao                                         
+                                            method: 'post',
+                                            parameters: sQuery,
+                                            onComplete: js_retornoPesquisaCidadao
                                            }
-                                  );			
-	
+                                  );
+
 
 }
 
 function js_retornoPesquisaCidadao(oAjax){
-		
+
 	js_removeObj("msgBox");
-  
+
   var aRetorno = eval("("+oAjax.responseText+")");
-  
+
   var sExpReg  = new RegExp('\\\\n','g');
-  
+
   if ( aRetorno.status == 0) {
     alert(aRetorno.message.urlDecode().replace(sExpReg,'\n'));
     return false;
   }else{
-  	
+
   	js_PreenchePesquisaCidadao(aRetorno.cidadoes);
   	//js_PreenchePesquisaAndamentos(aRetorno.andamentos);
-		 	
-  } 
-	
+
+  }
+
 }
 
 function js_PreenchePesquisaCidadao(aCidadoes){
 
 	oDBGridListaCidadoes.clearAll(true);
-	
+
 	var iNumRows = aCidadoes.length;
 	//alert(iNumRows);
 	if(iNumRows > 0){
@@ -175,7 +175,7 @@ function js_PreenchePesquisaCidadao(aCidadoes){
 			function (oCidadoes,iInd){
 
 				var aRow		= new Array();
-				var ov03_numcgm = oCidadoes.ov03_numcgm == "" ? 0 : oCidadoes.ov03_numcgm; 
+				var ov03_numcgm = oCidadoes.ov03_numcgm == "" ? 0 : oCidadoes.ov03_numcgm;
 				aRow[0] = js_montaLinkMI(oCidadoes.ov02_sequencial,oCidadoes.ov02_seq,ov03_numcgm);
 				aRow[1] = oCidadoes.ov02_sequencial;
 				aRow[2] = oCidadoes.ov03_numcgm;
@@ -184,14 +184,14 @@ function js_PreenchePesquisaCidadao(aCidadoes){
 				aRow[5] = oCidadoes.ov03_numcgm == '' ? 'Incluir no CGM' : 'Alterar o CGM';
 				aRow[6] = js_montaBtnAcoes(oCidadoes.ov02_sequencial,oCidadoes.ov02_seq);
 				aRow[7] = oCidadoes.ov02_seq;
-						
+
 				oDBGridListaCidadoes.addRow(aRow);
-				
-	 		}	
-				
+
+	 		}
+
 			);
 	}
-	oDBGridListaCidadoes.renderRows();	
+	oDBGridListaCidadoes.renderRows();
 }
 
 function js_montaLinkMI(ov02_sequencial,ov02_seq,ov03_numcgm){
@@ -200,60 +200,60 @@ function js_montaLinkMI(ov02_sequencial,ov02_seq,ov03_numcgm){
 function js_MICidadao(ov02_sequencial,ov02_seq,ov03_numcgm){
 	var ov02_sequencial = ov02_sequencial;
 	var ov02_seq				=	ov02_seq;
-	js_OpenJanelaIframe('top.corpo','db_iframe','ouv4_cidadaocgmdetalhe.php?ov02_sequencial='+ov02_sequencial+'&ov02_seq='+ov02_seq+'&ov03_numcgm='+ov03_numcgm,'Pesquisa',true);
+	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','ouv4_cidadaocgmdetalhe.php?ov02_sequencial='+ov02_sequencial+'&ov02_seq='+ov02_seq+'&ov03_numcgm='+ov03_numcgm,'Pesquisa',true);
 }
 
 function js_montaBtnAcoes(ov02_sequencial,ov02_seq){
-	
+
 	var ov02_sequencial	= ov02_sequencial;
 	var ov02_seq				= ov02_seq;
 	var strAcoes = '';
-	
-	strAcoes 		+= '<input type="button" value="Rejeitar" onclick="js_RejeitaCidadao('+ov02_sequencial+','+ov02_seq+')">';	
+
+	strAcoes 		+= '<input type="button" value="Rejeitar" onclick="js_RejeitaCidadao('+ov02_sequencial+','+ov02_seq+')">';
 	strAcoes 		+= '<input type="button" value="Liberar"  onclick="js_LiberaCidadao('+ov02_sequencial+','+ov02_seq+')">';
-	
-	return strAcoes;	
+
+	return strAcoes;
 
 }
 
 function js_RejeitaCidadao(ov02_sequencial,ov02_seq){
-	
+
 	var ov02_sequencial	= ov02_sequencial;
 	var ov02_seq				= ov02_seq;
 	var dtfim 					= $F('dt_fim');
 	var dtini 					= $F('dt_inicio');
-	
+
 	oRejeitar = new Object();
-	
+
 	oRejeitar.ov02_sequencial	= ov02_sequencial;
 	oRejeitar.ov02_seq				= ov02_seq;
 	oRejeitar.dtfim					 	= dtfim == "" ? "" : js_dataFormat(dtfim,'b');
 	oRejeitar.dtini					 	= dtini == "" ? "" : js_dataFormat(dtini,'b');
 	oRejeitar.acao						= 'rejeitar';
 	oDBGridListaCidadoes.getNumRows() == 1 ? oRejeitar.retorno = 0 : oRejeitar.retorno = 1;
-	
+
 	var sDados = Object.toJSON(oRejeitar);
-	
+
 		js_divCarregando('Aguarde Rejeitando Cadastro do Cidadão...','msgBox');
-	
+
 		sUrl = 'ouv4_atuatualizacaocgm.RPC.php';
 		var sQuery = 'dados='+sDados;
 		var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
-                                            onComplete: js_retornoRejeitaCidadao                                         
+                                            method: 'post',
+                                            parameters: sQuery,
+                                            onComplete: js_retornoRejeitaCidadao
                                            }
-                                  );			
-	
+                                  );
+
 }
 function js_retornoRejeitaCidadao(oAjax){
-		
+
 	js_removeObj("msgBox");
-  
+
   var aRetorno = eval("("+oAjax.responseText+")");
-  
+
   var sExpReg  = new RegExp('\\\\n','g');
-  
+
   if ( aRetorno.status == 0) {
     alert(aRetorno.message.urlDecode().replace(sExpReg,'\n'));
     return false;
@@ -262,10 +262,10 @@ function js_retornoRejeitaCidadao(oAjax){
   	$('ov02_nome').value 				= '';
   	alert(aRetorno.message.urlDecode().replace(sExpReg,'\n'));
   	js_PreenchePesquisaCidadao(aRetorno.cidadoes);
-  	
-		 	
-  } 
-	
+
+
+  }
+
 }
 
 function js_LiberaCidadao(ov02_sequencial,ov02_seq){
@@ -274,38 +274,38 @@ function js_LiberaCidadao(ov02_sequencial,ov02_seq){
 	var ov02_seq				= ov02_seq;
 	var dtfim 					= $F('dt_fim');
 	var dtini 					= $F('dt_inicio');
-	
+
 	oLiberar = new Object();
-	
+
 	oLiberar.ov02_sequencial	= ov02_sequencial;
 	oLiberar.ov02_seq					= ov02_seq;
 	oLiberar.dtfim					 	= dtfim != "" ? js_dataFormat(dtfim,'b') : '';
 	oLiberar.dtini					 	= dtini != "" ? js_dataFormat(dtini,'b') : '';
 	oLiberar.acao							= 'liberar';
 	oDBGridListaCidadoes.getNumRows() == 1 ? oLiberar.retorno = 0 : oLiberar.retorno = 1;
-	
+
 	var sDados = Object.toJSON(oLiberar);
-	
+
 		js_divCarregando('Aguarde Liberando Cadastro do Cidadão...','msgBox');
-	
+
 		sUrl = 'ouv4_atuatualizacaocgm.RPC.php';
 		var sQuery = 'dados='+sDados;
 		var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
-                                            onComplete: js_retornoLiberaCidadao                                         
+                                            method: 'post',
+                                            parameters: sQuery,
+                                            onComplete: js_retornoLiberaCidadao
                                            }
-                                  );			
-	
+                                  );
+
 }
 function js_retornoLiberaCidadao(oAjax){
-		
+
 	js_removeObj("msgBox");
-  
+
   var aRetorno = eval("("+oAjax.responseText+")");
-  
+
   var sExpReg  = new RegExp('\\\\n','g');
-  
+
   if ( aRetorno.status == 0) {
     alert(aRetorno.message.urlDecode().replace(sExpReg,'\n'));
     return false;
@@ -313,17 +313,17 @@ function js_retornoLiberaCidadao(oAjax){
   	$('ov02_sequencial').value 	= '';
   	$('ov02_nome').value 				= '';
   	alert(aRetorno.message.urlDecode().replace(sExpReg,'\n'));
-  	
+
   	if (aRetorno.retorno == 0){
- 			js_limpar(); 		
+ 			js_limpar();
   	}else{
   		js_limpar();
   		js_PreenchePesquisaCidadao(aRetorno.cidadoes);
   	}
   	//js_PreenchePesquisaAndamentos(aRetorno.andamentos);
-		 	
-  } 
-	
+
+  }
+
 }
 
 
@@ -353,7 +353,7 @@ function js_limpar(){
 					<tr>
 						<td align="left"><b>Data de Criação:</b></td>
 						<td align="left">
-						<? 
+						<?
 							db_inputdata('dt_inicio','','','',true,'text',1);
 							echo "&nbsp;à&nbsp;";
 							db_inputdata('dt_fim','','','',true,'text',1);
@@ -366,7 +366,7 @@ function js_limpar(){
 		      		db_ancora('<b>Cidadao:</b>',"js_pesquisaov02_sequencial(true);","");
 		       	?>
 		    		</td>
-						<td> 
+						<td>
 						<?
 							$ov02_sequencial	= null;
 							$ov02_nome			 	= '';
@@ -374,7 +374,7 @@ function js_limpar(){
 							db_input('ov02_nome',50,0,true,'text',3,'');
 						?>
 		    		</td>
-					</tr>					
+					</tr>
 				</table>
 
 				</fieldset>

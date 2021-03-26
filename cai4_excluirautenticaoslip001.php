@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -67,12 +67,12 @@ db_app::load("dbcomboBox.widget.js");
 <div style="margin-top: 50px; width: 450px;">
 
 	<fieldset >
-	
+
 	<legend><strong>Excluir Autenticações de SLIP</strong></legend>
-	
+
 		<table border="0" align='left'>
-		
-		  <tr> 
+
+		  <tr>
 		    <td nowrap title="Slip">
 		      <strong>
 		        <? db_ancora("Slip:","js_pesquisaSlip(true);", 1); ?>
@@ -84,12 +84,12 @@ db_app::load("dbcomboBox.widget.js");
 		      ?>
 		      <input name="consultaslip" type="button" id="consultaslip" value="Consulta Slip" onclick="js_consultaslip();">
 		    </td>
-		  </tr>  
-		  
+		  </tr>
+
 	  </table>
-	</fieldset>  
-	
-	
+	</fieldset>
+
+
 	<div style="margin-top: 10px;">
 	  <input name="processar" type="button" id="processar" disabled="disabled" value="Excluir Autenticação"  onclick="js_processar(1);">
 	  <input name="autenticar" id='autenticar' type="button"  value='Autenticar Slip' onclick='location.href="emp4_manutencaoslips001.php"'>
@@ -111,13 +111,13 @@ var sUrlRPC = "cai4_slipRPC.php";
 function js_consultaslip(){
 
   var iCodigoSlip = $F('iSlip');
-  
+
   if (iCodigoSlip == '') {
 
 	  alert('Selecione um slip para consulta.');
 	  return false;
   }
-  js_OpenJanelaIframe('top.corpo','db_iframe_slip2','cai3_conslip003.php?slip='+iCodigoSlip,'Slip nÃ‚Âº '+iCodigoSlip,true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip2','cai3_conslip003.php?slip='+iCodigoSlip,'Slip nÃ‚Âº '+iCodigoSlip,true);
 }
 
 
@@ -128,30 +128,30 @@ function js_processar(iAcao) {
     var sMsgConfirm   = "Procedimento a ser realizado: " + sOperacao  ;
     sMsgConfirm  += ".\nConfirma  excluir autenticação de SLIP?";
 
-  	
+
   if (iCodigoSlip == '') {
 
 	  alert('Selecione um slip para excluir autenticação.');
 	  return false;
 	}
-	
+
 	if (!confirm(sMsgConfirm)) {
 	  return false;
 	}
 
 	var oParametros              = new Object();
 	var msgDiv                   = "Excluindo Autenticação slip.<br> Aguarde ...";
-	oParametros.exec             = 'exclurautenticacaoSlip';  
-	oParametros.iCodigoSlip      = iCodigoSlip; 
+	oParametros.exec             = 'exclurautenticacaoSlip';
+	oParametros.iCodigoSlip      = iCodigoSlip;
 	oParametros.iAcao            = iAcao;
 
 	js_divCarregando(msgDiv,'msgBox');
-	 
+
 	 var oAjaxLista  = new Ajax.Request(sUrlRPC,
 	                                           {method: "post",
 	                                            parameters:'json='+Object.toJSON(oParametros),
 	                                            onComplete: js_retornoExcluirAutenticacao
-	                                           }); 
+	                                           });
 }
 
 function js_retornoExcluirAutenticacao(oAjax) {
@@ -161,7 +161,7 @@ function js_retornoExcluirAutenticacao(oAjax) {
 
 	alert(oRetorno.message.urlDecode());
 	$('iSlip').value   = '';
-}	
+}
 
 /*
  * funÃƒÂ§ÃƒÂ£o de esquisa para o Slip
@@ -169,7 +169,7 @@ function js_retornoExcluirAutenticacao(oAjax) {
 function js_pesquisaSlip(mostra) {
 
 	$('processar').disabled = true;
-	
+
   if (mostra == true) {
 
     var sUrl = 'func_slip.php?funcao_js=parent.js_mostraSlip1|k17_codigo|k17_situacao';
@@ -210,7 +210,7 @@ function js_mostraSlip(chave,erro) {
 
 	  $('iSlip').value    = chave1;
     js_alteraBotao(chave2);
-	  
+
 	  $('iSlip').focus();
 	  db_iframe_slip.hide();
 	  $('processar').disabled = false;
@@ -231,24 +231,24 @@ function js_alteraBotao(iSituacao) {
 		break;
 
 	  case "2":
-		  
+
 		  $('processar').value = "Estornar";
 	    $('processar').onclick= function () {
 		 	     js_processar(2);
-		  }		  
+		  }
 	    $('ctnMotivo').style.display = "table-row";
 		break;
 	}
-	
+
 }
 $("iSlip"). value = '';
 
 $('iSlip').observe('focus', function () {
-	
+
   $('processar').disabled = true;
 });
 $('iSlip').observe('blur', function () {
-	
+
 	  $('processar').disabled = false;
 });
 

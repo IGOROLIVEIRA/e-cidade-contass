@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -48,117 +48,117 @@ $clrotulo->label('j50_descr');
 $lSqlErro = false;
 
 if(isset($oPost->botao)) {
-  
+
   if($oPost->botao == 'Incluir') {
-       
+
     $rsZonapont = $clZonapont->sql_record($clZonapont->sql_query($oPost->q26_zona));
-    
+
     if($clZonapont->numrows > 0) {
-      
-      $clZonapont->erro_msg = "Pontuação da zona, código $oPost->q26_zona já cadastrado. Inclusão abortada.";   
-       
-      $lSqlErro = true;      
+
+      $clZonapont->erro_msg = "Pontuação da zona, código $oPost->q26_zona já cadastrado. Inclusão abortada.";
+
+      $lSqlErro = true;
       $db_opcao = 1;
-      
+
     } else {
-    
+
       $clZonapont->q26_zona      = $oPost->q26_zona;
       $clZonapont->q26_pontuacao = $oPost->q26_pontuacao;
-  
+
       db_inicio_transacao();
-      
+
       $clZonapont->incluir($oPost->q26_zona);
-      
+
       if($clZonapont->erro_status == "0") {
-        
+
         $lSqlErro = true;
-        
+
       }
-      
+
       db_fim_transacao($lSqlErro);
-      
+
       $db_opcao = 3;
     }
-     
+
   } else if ($oPost->botao == 'Alterar') {
-    
+
     $clZonapont->q26_zona      = $oPost->q26_zona;
     $clZonapont->q26_pontuacao = $oPost->q26_pontuacao;
-    
+
     db_inicio_transacao();
 
     $clZonapont->alterar($oPost->q26_zona);
-    
+
     if($clZonapont->erro_status == "0") {
-      
+
       $lSqlErro = true;
-      
+
     }
-    
+
     db_fim_transacao($lSqlErro);
-    
+
     $db_opcao = 3;
-    
+
   } else if ($oPost->botao == 'Excluir') {
-    
+
     $clZonapont->q26_zona    = $oPost->q26_zona;
-    
+
     db_inicio_transacao();
-    
+
     $clZonapont->excluir($oPost->q26_zona);
-    
+
     if($clZonapont->erro_status == "0") {
-      
+
       $lSqlErro = true;
-      
+
     }
-    
+
     db_fim_transacao($lSqlErro);
-    
+
     $db_opcao = 3;
-    
-  } 
-  
+
+  }
+
 } elseif(isset($oGet->zona) and ($oGet->zona != '')) {
-  
+
   $rsZonapont = $clZonapont->sql_record($clZonapont->sql_query($oGet->zona));
-  
+
   if($clZonapont->numrows > 0) {
-    
+
     $oZonapont     = db_utils::fieldsMemory($rsZonapont, 0);
     $q26_zona      = $oZonapont->q26_zona;
     $q26_pontuacao = $oZonapont->q26_pontuacao;
     $j50_descr     = $oZonapont->j50_descr;
-    
+
     $db_opcao      = 3;
-    
+
   } else {
-    
+
     $rsZona = $clZona->sql_record($clZona->sql_query_file($oGet->zona));
-    
+
     if($clZona->numrows > 0) {
-      
+
       $oZona         = db_utils::fieldsMemory($rsZona, 0);
       $q26_zona      = $oZona->j50_zona;
       $j50_descr     = $oZona->j50_descr;
       $q26_pontuacao = '';
-      
-      
-      
+
+
+
     } else {
       $q26_zona      = '';
       $q26_descr     = "CHAVE($oGet->zona) NÃO ENCONTRADO";
       $q26_pontuacao = '';
     }
-    
+
     $db_opcao      = 1;
-    
+
   }
-  
+
 } else {
-  
+
   $db_opcao      = 1;
-  
+
 }
 ?>
 <html>
@@ -175,7 +175,7 @@ if(isset($oPost->botao)) {
 <form name="form1" id="form1" method="post">
 <fieldset style="margin: 30px auto; width: 600px; text-align: center">
   <legend><strong>Zona</strong></legend>
-  
+
   <table align="center">
   <tr>
     <td>
@@ -190,7 +190,7 @@ if(isset($oPost->botao)) {
     ?>
     </td>
   </tr>
-  
+
   <tr>
     <td>
     <?=$Lq26_pontuacao ?>
@@ -201,9 +201,9 @@ if(isset($oPost->botao)) {
     ?>
     </td>
   </tr>
-  
+
   </table>
-  
+
   <?
     if($db_opcao == 1) {
       echo "<input type='submit' name='botao' id='botao' value='Incluir'>";
@@ -217,7 +217,7 @@ if(isset($oPost->botao)) {
     echo "&nbsp;";
     echo "<input type='button' name='pesquisar' id='pesquisar' value='Pesquisar' onclick='js_pesquisa()'>";
   ?>
-  
+
 </fieldset>
 
 <?
@@ -226,14 +226,14 @@ if(isset($oPost->botao)) {
 </form>
 <script type="text/javascript">
 function js_pesquisa() {
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_zonapont', 'func_zonapont.php?funcao_js=parent.js_carregaZona|q26_zona|q26_pontuacao', 'Pesquisa', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_zonapont', 'func_zonapont.php?funcao_js=parent.js_carregaZona|q26_zona|q26_pontuacao', 'Pesquisa', true);
 }
 
 function js_pesquisaZona(lMostra) {
   if(lMostra) {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_zonapont', 'func_zonas.php?funcao_js=parent.js_carregaZona|j50_zona|j50_descr', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_zonapont', 'func_zonas.php?funcao_js=parent.js_carregaZona|j50_zona|j50_descr', 'Pesquisa', true);
   } else {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_zonapont', 'func_zonas.php?pesquisa_chave='+document.form1.q26_zona.value+'&funcao_js=parent.js_carregaZonaHide', 'Pesquisa', false);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_zonapont', 'func_zonas.php?pesquisa_chave='+document.form1.q26_zona.value+'&funcao_js=parent.js_carregaZonaHide', 'Pesquisa', false);
   }
 }
 

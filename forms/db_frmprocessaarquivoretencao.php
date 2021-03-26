@@ -132,7 +132,7 @@ function js_pesquisacadban(mostra){
 
   if (mostra==true){
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_cadban',
                         'func_cadban.php?method=sql_query_tabplan&iCodigoBanco=1&funcao_js=parent.js_mostracadban1|k15_codigo|z01_nome',
                         'Consulta Bancos',
@@ -140,7 +140,7 @@ function js_pesquisacadban(mostra){
                         20);
   } else {
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_cadban',
                         'func_cadban.php?method=sql_query_tabplan&pesquisa_chave='+$F('k15_codigo')+'&iCodigoBanco=1&funcao_js=parent.js_mostracadban',
                         'Consulta Bancos',
@@ -409,7 +409,7 @@ function js_mostraissarquivoretencao(chave1, chave2, chave3, chave4){
 
 function js_pesquisa(){
 
-   js_OpenJanelaIframe( 'top.corpo',
+   js_OpenJanelaIframe( 'CurrentWindow.corpo',
                         'db_iframe_issarquivoretencao',
                         'func_issarquivoretencao.php?lProcessados=false&funcao_js=parent.js_mostraissarquivoretencao|q90_sequencial|q90_nomearquivo|q90_quantidaderegistro|q90_valortotal',
                         'Arquivos de Retorno - Retenção',

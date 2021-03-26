@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -55,20 +55,20 @@ if (isset($alterar)){
        $db_botao = true;
 } else if (isset($excluir)){
        $db_opcao = 3;
-       // exclui registros filhos 
+       // exclui registros filhos
        $codsup = $o46_codsup;
        $clorcsuplemval->sql_record($clorcsuplemval->sql_query_file($codsup));
        if($clorcsuplemval->numrows > 0 ){
 	  $clorcsuplemval->o47_codsup = $codsup;
-          $clorcsuplemval->excluir($codsup); 
+          $clorcsuplemval->excluir($codsup);
        }
        // exclui o pai
-       $clorcsuplem->excluir($codsup);  
+       $clorcsuplem->excluir($codsup);
        $projeto = db_getsession("codproj");
        echo "<script> parent.location='orc1_orcsuplem001.php?chave=$projeto'; </script>";
        //-------------------
 } else if (isset($incluir)){
-     if ($o46_data_ano == $anousu) {   
+     if ($o46_data_ano == $anousu) {
         db_inicio_transacao();
         $clorcsuplem->o46_instit=$GLOBALS["DB_instit"];
 	// $clorcsuplem->o46_codsup=null;
@@ -76,28 +76,28 @@ if (isset($alterar)){
         $o46_codsup= $clorcsuplem->o46_codsup;
         db_fim_transacao();
     }else {
-        echo "<script>\n 
+        echo "<script>\n
                alert('Data não confere com o Ano do  Exercício Atual ! ');\n
     	      </script>\n
 	      ";
-        $clorcsuplem->erro_status=0;	   
-    }    
+        $clorcsuplem->erro_status=0;
+    }
 }
  //
  if (isset($o46_tiposup)){
-         $result=$clorcsuplemtipo->sql_record($clorcsuplemtipo->sql_query_file($o46_tiposup));  
+         $result=$clorcsuplemtipo->sql_record($clorcsuplemtipo->sql_query_file($o46_tiposup));
          if ($clorcsuplemtipo->numrows > 0) {
             db_fieldsmemory($result,0);
-        }  
-  }  
+        }
+  }
   //--------
  if (isset($o46_codsup) && ($o46_codsup!="")){
         $db_opcao=2;
-        $result=$clorcsuplem->sql_record($clorcsuplem->sql_query_file($o46_codsup));  
+        $result=$clorcsuplem->sql_record($clorcsuplem->sql_query_file($o46_codsup));
         if ($clorcsuplem->numrows > 0) {
             db_fieldsmemory($result,0);
-        }  
-  }  
+        }
+  }
  //-----
 ?>
 <html>
@@ -111,8 +111,8 @@ if (isset($alterar)){
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <br><br><br>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
             include("forms/db_frmorcsuplem.php");
@@ -132,42 +132,42 @@ if (isset($o46_codsup) && ($o46_codsup!="")){
 	    echo "<script>
       	          // libera suplementação
 	          parent.document.formaba.orcsuplemrec.disabled=false;\n
-	          top.corpo.iframe_orcsuplemrec.location.href='orc1_orcsuplemrec007.php?o85_codsup=$o46_codsup';\n
+	          CurrentWindow.corpo.iframe_orcsuplemrec.location.href='orc1_orcsuplemrec007.php?o85_codsup=$o46_codsup';\n
 		  </script>
                   ";
-	 }   
+	 }
          echo "<script>
       	       // libera suplementação
 	       parent.document.formaba.orcsuplemval.disabled=false;\n
-	       top.corpo.iframe_orcsuplemval.location.href='orc1_orcsuplemval007.php?o47_codsup=$o46_codsup';\n
+	       CurrentWindow.corpo.iframe_orcsuplemval.location.href='orc1_orcsuplemval007.php?o47_codsup=$o46_codsup';\n
 	       // envia para reducao
-               parent.mo_camada('orcsuplemval');    //envia direto para outra aba     
-               </script>";    
+               parent.mo_camada('orcsuplemval');    //envia direto para outra aba
+               </script>";
 
    } else {
          if($o48_arrecadmaior!=0){
 	    echo "<script>
       	          // libera suplementação
 	          parent.document.formaba.orcsuplemrec.disabled=false;\n
-	          top.corpo.iframe_orcsuplemrec.location.href='orc1_orcsuplemrec007.php?o85_codsup=$o46_codsup';\n
+	          CurrentWindow.corpo.iframe_orcsuplemrec.location.href='orc1_orcsuplemrec007.php?o85_codsup=$o46_codsup';\n
 		  </script>
                   ";
-	 }    
+	 }
          echo "<script>
-  	       // libera reducao	         
+  	       // libera reducao
                parent.document.formaba.reducao.disabled=false;\n
-               top.corpo.iframe_reducao.location.href='orc1_orcsuplemval001.php?o47_codsup=$o46_codsup';\n
+               CurrentWindow.corpo.iframe_reducao.location.href='orc1_orcsuplemval001.php?o47_codsup=$o46_codsup';\n
                // libera suplementação
 	       parent.document.formaba.orcsuplemval.disabled=false;\n
-	       top.corpo.iframe_orcsuplemval.location.href='orc1_orcsuplemval007.php?o47_codsup=$o46_codsup';\n
+	       CurrentWindow.corpo.iframe_orcsuplemval.location.href='orc1_orcsuplemval007.php?o47_codsup=$o46_codsup';\n
 	       // envia para reducao
-               parent.mo_camada('reducao');    //envia direto para outra aba     
+               parent.mo_camada('reducao');    //envia direto para outra aba
           </script>";
 
-   }  
- 
+   }
+
 }
-//------   
+//------
 
 if (isset($incluir)){
   if($clorcsuplem->erro_status=="0"){

@@ -277,7 +277,7 @@ if (isset($pc01_codmater) and $pc01_codmater !=""){
 </html>
 <script>
 function js_abre(coddot){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orgao','func_saldoorcdotacao.php?coddot='+coddot,'pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orgao','func_saldoorcdotacao.php?coddot='+coddot,'pesquisa',true);
 }
 function js_emite(){
      e60_codemp    = "<?php echo $e60_codemp?>";

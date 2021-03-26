@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -36,7 +36,7 @@ db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clempautoriza = new cl_empautoriza;
-$sWhere        = " and e54_instit = ".db_getsession("DB_instit"); 
+$sWhere        = " and e54_instit = ".db_getsession("DB_instit");
 ?>
 <html>
 <head>
@@ -50,29 +50,29 @@ $sWhere        = " and e54_instit = ".db_getsession("DB_instit");
   <form name=form1  action="" method=POST>
   <tr><td valign=top>
   <table border=0 align=center>
-     <tr> 
+     <tr>
        <td align="center" >
         <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_empconsulta003.hide();">
        </td>
-     </tr>  
-     
+     </tr>
+
      <tr>
-     <td align="center" nowrap wrap="false"> 
+     <td align="center" nowrap wrap="false">
       Período:
-      <?  db_inputdata('dt1',@$dia,@$mes,@$ano,true,'text',1,"");   		          
+      <?  db_inputdata('dt1',@$dia,@$mes,@$ano,true,'text',1,"");
           echo " a ";
           db_inputdata('dt2',@$dia,@$mes,@$ano,true,'text',1,"");
        ?>
      </td>
-     </tr> 
+     </tr>
      <tr><td align=center><input type=submit value=Filtrar>  </td></tr>
   </form>
   </table>
   </td>
   </tr>
   <!---  end filtro --->
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
         //---
         $data1=0;
@@ -189,8 +189,8 @@ $sWhere        = " and e54_instit = ".db_getsession("DB_instit");
 </html>
 <script>
 function js_showAutori(iAutori) {
-  
-  js_OpenJanelaIframe('top.corpo',
+
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_empautoriza',
                       'func_empempenhoaut001.php?e54_autori='+iAutori,'Dados da Autorização');
 

@@ -238,10 +238,10 @@ echo "</script>\n";
 
 function js_pesquisac62_codrec(mostra){
    if(mostra==true){
-       js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr','Pesquisa',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr','Pesquisa',true);
    }else{
        if(document.form1.o15_codigo.value != ''){
-           js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
        }else{
            document.form1.o15_descr.value = '';
        }
@@ -263,12 +263,12 @@ function js_mostraorctiporec1(chave1,chave2){
 
 function js_pesquisac62_codrec2(mostra){
    if(mostra==true){
-       js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec',
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec',
                            'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec3|o15_codigo|o15_descr','Pesquisa',
                            true);
    }else{
        if(document.form1.o15_codigo2.value != ''){
-           js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec',
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec',
                                'func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo2.value+
                                '&funcao_js=parent.js_mostraorctiporec2','Pesquisa',false);
        }else{
@@ -292,13 +292,13 @@ function js_mostraorctiporec3(chave1,chave2) {
 
 function js_pesquisatabrec(mostra){
        if(mostra==true){
-         js_OpenJanelaIframe('top.corpo',
+         js_OpenJanelaIframe('CurrentWindow.corpo',
                              'db_iframe_tabrec',
                              'func_tabrec.php?tiporec=E&funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|recurso|arretipo|k00_descr'
                              ,'Pesquisa',true,'15');
        }else{
          if( document.form1.k02_codigo.value != ''){
-           js_OpenJanelaIframe('top.corpo',
+           js_OpenJanelaIframe('CurrentWindow.corpo',
                                'db_iframe_tabrec',
                                'func_tabrec.php?tiporec=E&pesquisa_chave='+
                                document.form1.k02_codigo.value+'&funcao_js=parent.js_mostratabrec',

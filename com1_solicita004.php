@@ -822,7 +822,7 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 
 				echo "<script>
 	              if (confirm('ATENÇÃO: \\n Solicitação de outro ano!!\\nDeseja incluir os itens com suas respectivas Dotações?')) {
-								  js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_dotac','com4_altdotacsol001.php?importado=$importar&codnovo=$pc10_numero','Dotações',true);
+								  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_dotac','com4_altdotacsol001.php?importado=$importar&codnovo=$pc10_numero','Dotações',true);
 								} else {
 				          location.href='com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero';
 				        }

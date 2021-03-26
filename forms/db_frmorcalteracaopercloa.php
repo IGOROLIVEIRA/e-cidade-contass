@@ -15,7 +15,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -36,7 +36,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$To201_sequencial?>">
        <?=@$Lo201_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o201_sequencial',11,$Io201_sequencial,true,'text',3,"")
 ?>
@@ -46,7 +46,7 @@ db_input('o201_sequencial',11,$Io201_sequencial,true,'text',3,"")
     <td nowrap title="<?=@$To201_orcprojetolei?>">
        <?=@$Lo201_orcprojetolei?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o201_orcprojetolei',11,$Io201_orcprojetolei,true,'text',3)
        ?>
@@ -56,7 +56,7 @@ db_input('o201_orcprojetolei',11,$Io201_orcprojetolei,true,'text',3)
     <td nowrap title="<?=@$To201_tipoleialteracao?>">
        <?=@$Lo201_tipoleialteracao?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("1"=>"Abertura de créditos suplementares","2"=>"Contratação de operações de crédito","3"=>"Contratação de operações de crédito por antecipação de receita");
 //db_input('o201_tipoleialteracao',11,$Io201_tipoleialteracao,true,'text',$db_opcao,"")
@@ -68,7 +68,7 @@ db_select('o201_tipoleialteracao', $x, true,$db_opcao);
     <td nowrap title="<?=@$To201_artleialteracao?>">
        <?=@$Lo201_artleialteracao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o201_artleialteracao',6,$Io201_artleialteracao,true,'text',$db_opcao,"")
 ?>
@@ -78,7 +78,7 @@ db_input('o201_artleialteracao',6,$Io201_artleialteracao,true,'text',$db_opcao,"
     <td nowrap title="<?=@$To201_descrartigo?>">
        <?=@$Lo201_descrartigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('o201_descrartigo',7,60,$Io201_descrartigo,true,'text',$db_opcao,"")
 ?>
@@ -88,17 +88,17 @@ db_textarea('o201_descrartigo',7,60,$Io201_descrartigo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To201_percautorizado?>">
        <?=@$Lo201_percautorizado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o201_percautorizado',14,$Io201_percautorizado,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
   </table>
-  
+
   <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("o201_sequencial"=>@$o201_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -120,20 +120,20 @@ db_input('o201_percautorizado',14,$Io201_percautorizado,true,'text',$db_opcao,""
 <script>
 function js_pesquisao201_orcprojetolei(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?funcao_js=parent.js_mostraorcprojetolei1|o138_sequencial|o138_numerolei','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?funcao_js=parent.js_mostraorcprojetolei1|o138_sequencial|o138_numerolei','Pesquisa',true);
   }else{
-     if(document.form1.o201_orcprojetolei.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?pesquisa_chave='+document.form1.o201_orcprojetolei.value+'&funcao_js=parent.js_mostraorcprojetolei','Pesquisa',false);
+     if(document.form1.o201_orcprojetolei.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcprojetolei','func_orcprojetolei.php?pesquisa_chave='+document.form1.o201_orcprojetolei.value+'&funcao_js=parent.js_mostraorcprojetolei','Pesquisa',false);
      }else{
-       document.form1.o138_numerolei.value = ''; 
+       document.form1.o138_numerolei.value = '';
      }
   }
 }
 function js_mostraorcprojetolei(chave,erro){
-  document.form1.o138_numerolei.value = chave; 
-  if(erro==true){ 
-    document.form1.o201_orcprojetolei.focus(); 
-    document.form1.o201_orcprojetolei.value = ''; 
+  document.form1.o138_numerolei.value = chave;
+  if(erro==true){
+    document.form1.o201_orcprojetolei.focus();
+    document.form1.o201_orcprojetolei.value = '';
   }
 }
 function js_mostraorcprojetolei1(chave1,chave2){
@@ -142,7 +142,7 @@ function js_mostraorcprojetolei1(chave1,chave2){
   db_iframe_orcprojetolei.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orcalteracaopercloa','func_orcalteracaopercloa.php?funcao_js=parent.js_preenchepesquisa|o201_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcalteracaopercloa','func_orcalteracaopercloa.php?funcao_js=parent.js_preenchepesquisa|o201_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_orcalteracaopercloa.hide();

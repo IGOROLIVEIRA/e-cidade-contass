@@ -581,7 +581,7 @@ if($clcfpatric->numrows > 0) {
     if (mostra == true) {
 
         if (!oLancadorDepartamentos && document.form1.coddepto.value != "") {
-             js_OpenJanelaIframe('top.corpo','db_iframe_bens',
+             js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bens',
                                  'func_bens.php?chave_depto='+document.form1.coddepto.value+
                                  '&chave_div='+document.form1.t33_divisao.value+
                                  '&funcao_js=parent.js_mostrabem1_ini|t52_bem',
@@ -613,7 +613,7 @@ if($clcfpatric->numrows > 0) {
 			        query += '&divisoes=';
 			      }
 
-  			    js_OpenJanelaIframe('top.corpo','db_iframe_bens',
+  			    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bens',
                                  'func_bens.php?chave_depto='+
                                  '&chave_div='+query+
                                  '&funcao_js=parent.js_mostrabem1_ini|t52_bem',
@@ -624,7 +624,7 @@ if($clcfpatric->numrows > 0) {
     } else {
 
       if (document.form1.t52_bem_ini.value != "") {
-           js_OpenJanelaIframe('top.corpo','db_iframe_bens',
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bens',
                                'func_bens.php?chave_coddepto='+document.form1.coddepto.value+
                                '&chave_div='+document.form1.t33_divisao.value+
                                '&funcao_js=parent.js_mostrabem_ini',
@@ -638,7 +638,7 @@ if($clcfpatric->numrows > 0) {
     if (mostra == true) {
 
       if (!oLancadorDepartamentos && document.form1.coddepto.value != ""){
-           js_OpenJanelaIframe('top.corpo','db_iframe_bens',
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bens',
                                'func_bens.php?chave_depto='+document.form1.coddepto.value+
                                '&chave_div='+document.form1.t33_divisao.value+
                                '&funcao_js=parent.js_mostrabem1_fim|t52_bem',
@@ -669,7 +669,7 @@ if($clcfpatric->numrows > 0) {
           query += '&divisoes=';
         }
 
-          js_OpenJanelaIframe('top.corpo','db_iframe_bens',
+          js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bens',
                                'func_bens.php?chave_depto='+
                                '&chave_div='+query+
                                '&funcao_js=parent.js_mostrabem1_fim|t52_bem',
@@ -680,7 +680,7 @@ if($clcfpatric->numrows > 0) {
     } else {
 
       if (document.form1.t52_bem_fim.value != "") {
-           js_OpenJanelaIframe('top.corpo','db_iframe_bens',
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bens',
                                'func_bens.php?chave_coddepto='+document.form1.coddepto.value+
                                '&chave_div='+document.form1.t33_divisao.value+
                                '&funcao_js=parent.js_mostrabem_fim',
@@ -932,13 +932,13 @@ if($clcfpatric->numrows > 0) {
   function js_coddepto(mostra){
 
       if(mostra==true){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart',
                             'func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto',
                             'Pesquisa de Departamentos',true);
       }else{
         coddepto = document.form1.coddepto.value;
         if(coddepto!=""){
-          js_OpenJanelaIframe('top.corpo','db_iframe_db_depart',
+          js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart',
                               'func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto',
                               'Pesquisa de Departamentos',false);
         }else{

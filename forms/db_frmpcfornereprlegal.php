@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: compras
@@ -42,7 +42,7 @@ if((isset($incluir) || isset($alterar) || isset($excluir)) && $clpcfornereprlega
     <td nowrap title="<?=@$Tpc81_sequencia?>">
        <?=@$Lpc81_sequencia?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc81_sequencia',8,$Ipc81_sequencia,true,'text',3,"")
 ?>
@@ -54,7 +54,7 @@ db_input('pc81_sequencia',8,$Ipc81_sequencia,true,'text',3,"")
        db_ancora(@$Lpc81_cgmforn,"",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc81_cgmforn',10,$Ipc81_cgmforn,true,'text',3)
 ?>
@@ -69,7 +69,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
        db_ancora(@$Lpc81_cgmresp,"js_pesquisapc81_cgmresp(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc81_cgmresp',10,$Ipc81_cgmresp,true,'text',$db_opcao," onchange='js_pesquisapc81_cgmresp(false);'")
 ?>
@@ -82,7 +82,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'',"z01_nome1")
     <td nowrap title="<?=@$Tpc81_datini?>">
        <?=@$Lpc81_datini?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('pc81_datini',@$pc81_datini_dia,@$pc81_datini_mes,@$pc81_datini_ano,true,'text',$db_opcao,"")
 ?>
@@ -92,7 +92,7 @@ db_inputdata('pc81_datini',@$pc81_datini_dia,@$pc81_datini_mes,@$pc81_datini_ano
     <td nowrap title="<?=@$Tpc81_datfin?>">
        <?=@$Lpc81_datfin?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('pc81_datfin',@$pc81_datfin_dia,@$pc81_datfin_mes,@$pc81_datfin_ano,true,'text',$db_opcao,"")
 ?>
@@ -102,22 +102,22 @@ db_inputdata('pc81_datfin',@$pc81_datfin_dia,@$pc81_datfin_mes,@$pc81_datfin_ano
     <td nowrap title="<?=@$Tpc81_obs?>">
        <?=@$Lpc81_obs?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('pc81_obs',3,51,$Ipc81_obs,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$Tpc81_tipopart?>">
        <?=@$Lpc81_tipopart?>
     </td>
-    <td> 
+    <td>
 <?
   $rsOrgaoReg = db_query("SELECT pc60_orgaoreg FROM pcforne WHERE pc60_numcgm = $pc81_cgmforn");
   $iOrgaoReg = db_utils::fieldsMemory($rsOrgaoReg, 0)->pc60_orgaoreg;
-  
+
   if(intval($iOrgaoReg) == 4){
       $aParticipacao = array("0" => "Selecione", "3" => "MicroEmpreendedor Individual (MEI)");
   }else{
@@ -130,7 +130,7 @@ db_textarea('pc81_obs',3,51,$Ipc81_obs,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  
+
 </table>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 <?
@@ -142,7 +142,7 @@ if($db_opcao != 1){
 ?>
 <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
       <?
       $dbwhere = "";
       if(isset($pc81_cgmforn) && trim($pc81_cgmforn) != ""){
@@ -171,22 +171,22 @@ if($db_opcao != 1){
 <script>
 function js_pesquisapc81_cgmresp(mostra){
     let anousu = "<?= db_getsession('DB_anousu')?>";
-    
+
     if(mostra==true){
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,0);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?funcao_js=CurrentWindow.corpo.iframe_pcfornereprlegal.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,0);
     }else{
         if(document.form1.pc81_cgmresp.value != ''){
-            js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.pc81_cgmresp.value+'&funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm','Pesquisa',false);
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornereprlegal','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.pc81_cgmresp.value+'&funcao_js=CurrentWindow.corpo.iframe_pcfornereprlegal.js_mostracgm','Pesquisa',false);
         }else{
             document.form1.z01_nome1.value = '';
         }
     }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome1.value = chave; 
-  if(erro==true){ 
-    document.form1.pc81_cgmresp.focus(); 
-    document.form1.pc81_cgmresp.value = ''; 
+  document.form1.z01_nome1.value = chave;
+  if(erro==true){
+    document.form1.pc81_cgmresp.focus();
+    document.form1.pc81_cgmresp.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -195,7 +195,7 @@ function js_mostracgm1(chave1,chave2){
   db_iframe_cgm.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pcfornereprlegal','func_pcfornereprlegal.php?funcao_js=parent.js_preenchepesquisa|pc81_sequencia','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornereprlegal','func_pcfornereprlegal.php?funcao_js=parent.js_preenchepesquisa|pc81_sequencia','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_pcfornereprlegal.hide();

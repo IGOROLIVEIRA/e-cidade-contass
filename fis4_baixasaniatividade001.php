@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -74,7 +74,7 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
 
     // ******** se for baixar todas as atividades do alvara, então baixa o alvara tambem**********
     if($linhasqtativ == $linhaschave){
-       
+
       //****************** NORMAL ****************************
       //para permitir ou não a baixa de sanitário que possuem débitos.(q60_sanbaixadiv da parissqn)
       //q60_sanbaixadiv =0 - não permite
@@ -87,20 +87,20 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
         db_fieldsmemory($resultpar,0);
       }
       if(($y81_oficio == 'f')&& ($y32_sanbaixadiv==0)){
-         
+
         $sqlinscr = "select * from sanitarioinscr where y18_codsani = $y83_codsani";
         $resultinscr = pg_query($sqlinscr);
         $linhasinscr = pg_num_rows($resultinscr);
         if($linhasinscr>0){
           db_fieldsmemory($resultinscr,0);
           $sqldebito = "
-		      select arrecad.k00_numpre 
-				from arreinscr 
-				inner join issbase on issbase.q02_inscr = arreinscr.k00_inscr 
-				inner join cgm on cgm.z01_numcgm = issbase.q02_numcgm 
-				inner join arrecad on arrecad.k00_numpre = arreinscr.k00_numpre 
-				inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo 
-				where  k00_inscr= $y18_inscr 
+		      select arrecad.k00_numpre
+				from arreinscr
+				inner join issbase on issbase.q02_inscr = arreinscr.k00_inscr
+				inner join cgm on cgm.z01_numcgm = issbase.q02_numcgm
+				inner join arrecad on arrecad.k00_numpre = arreinscr.k00_numpre
+				inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo
+				where  k00_inscr= $y18_inscr
 				   and k00_dtvenc < current_date
 				   and k03_tipo not in (2,9,19)";
           $resultdebito = pg_query($sqldebito);
@@ -111,13 +111,13 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
           }else{
             // verificar se tem debitos do tipo 3 vencidos
             $sqldebito3 = "
-		      select arrecad.k00_numpre 
-				from arreinscr 
-				inner join issbase on issbase.q02_inscr = arreinscr.k00_inscr 
-				inner join cgm on cgm.z01_numcgm = issbase.q02_numcgm 
-				inner join arrecad on arrecad.k00_numpre = arreinscr.k00_numpre 
-				inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo 
-				where  k00_inscr= $y18_inscr 
+		      select arrecad.k00_numpre
+				from arreinscr
+				inner join issbase on issbase.q02_inscr = arreinscr.k00_inscr
+				inner join cgm on cgm.z01_numcgm = issbase.q02_numcgm
+				inner join arrecad on arrecad.k00_numpre = arreinscr.k00_numpre
+				inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo
+				where  k00_inscr= $y18_inscr
 				   and k00_dtvenc < current_date
 				   and k03_tipo = 3";
             $resultdebito3 = pg_query($sqldebito3);
@@ -133,9 +133,9 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
       }
 
       //**********************************************
-       
+
       if($sqlerro == false){
-         
+
         $clsanitario->y80_dtbaixa= $y83_dtfim_ano."-".$y83_dtfim_mes."-".$y83_dtfim_dia;
         $clsanitario->y80_codsani=$y83_codsani;
         $clsanitario->alterar($y83_codsani);
@@ -151,7 +151,7 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
     if($sqlerro == false){
       for($i=0;$i<sizeof($chaves);$i++){
         $seq = str_replace("-","",strstr($chaves[$i],"-"));
-         
+
         if ($sqlerro==false){
           $clsaniatividade->y83_databx = $y83_dtfim_ano."-".$y83_dtfim_mes."-".$y83_dtfim_dia;
           $clsaniatividade->y83_seq = $seq;
@@ -258,7 +258,7 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
   <legend>
     <strong>Baixa de Atividade</strong>
   </legend>
-  
+
   <form name="form1" method="post" action="">
     <table border="0">
       <tr>
@@ -277,7 +277,7 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
       </tr>
       <tr>
         <td nowrap title="<?=@$Ty83_dtfim?>">
-          <?=@$Ly83_dtfim;?>        
+          <?=@$Ly83_dtfim;?>
         </td>
         <td>
           <?
@@ -306,7 +306,7 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
       </tr>
       <tr>
         <td nowrap title="<?=@$Ty81_oficio?>">
-          <?=@$Ly81_oficio?>        
+          <?=@$Ly81_oficio?>
         </td>
         <td valign="top">
           <?
@@ -319,7 +319,7 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
         <td nowrap title="<?=@$Ty81_obs?>">
           <?=@$Ly81_obs;?>
         </td>
-        <td> 
+        <td>
           <?
             db_textarea('y81_obs',0,70,@$Iy81_obs,true,'text',1);
           ?>
@@ -363,9 +363,9 @@ function js_pesquisay83_codsani(mostra){
 }
 function js_mostrasanitario(chave,erro){
   document.form1.z01_nome.value = erro;
-  if(erro==true){ 
-    document.form1.y83_codsani.focus(); 
-    document.form1.y83_codsani.value = ''; 
+  if(erro==true){
+    document.form1.y83_codsani.focus();
+    document.form1.y83_codsani.value = '';
   }
   document.form1.submit();
 }
@@ -377,12 +377,12 @@ function js_mostrasanitario1(chave1,chave2){
 }
 function js_pesquisay82_codproc(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_processo','func_protprocesso.php?funcao_js=parent.js_mostraprocesso1|p58_codproc|p58_requer','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processo','func_protprocesso.php?funcao_js=parent.js_mostraprocesso1|p58_codproc|p58_requer','Pesquisa',true);
   }else{
-     if(document.form1.y82_codproc.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_processo','func_protprocesso.php?pesquisa_chave='+document.form1.y82_codproc.value+'&funcao_js=parent.js_mostraprocesso','Pesquisa',false);
+     if(document.form1.y82_codproc.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processo','func_protprocesso.php?pesquisa_chave='+document.form1.y82_codproc.value+'&funcao_js=parent.js_mostraprocesso','Pesquisa',false);
      }else{
-       document.form1.y82_codproc.value = ''; 
+       document.form1.y82_codproc.value = '';
      }
   }
 }
@@ -394,10 +394,10 @@ function js_pesquisap58_codproc(mostra){
   }
 }
 function js_mostraprotprocesso(chave,chave1,erro){
-  document.form1.p58_requer.value = chave1; 
-  if(erro==true){ 
-    document.form1.p58_codproc.focus(); 
-    document.form1.p58_codproc.value = ''; 
+  document.form1.p58_requer.value = chave1;
+  if(erro==true){
+    document.form1.p58_codproc.focus();
+    document.form1.p58_codproc.value = '';
   }
 }
 function js_mostraprotprocesso1(chave1,chave2){

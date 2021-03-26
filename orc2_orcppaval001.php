@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -58,7 +58,7 @@ function js_emite(){
     exercicio =0;
     if (document.form1.exercicio.value != 0 ){
         exercicio = document.form1.exercicio.value;
-    }      
+    }
     qry = 'nivel='+document.form1.nivel.value;
     qry+= '&lei='+document.form1.o21_codleippa.value;
     qry+= '&exercicio='+exercicio;
@@ -68,7 +68,7 @@ function js_emite(){
     jan.moveTo(0,0);
   }
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -92,7 +92,7 @@ function js_emite(){
       db_ancora(@$Lo21_codleippa,"js_pesquisao21_codleippa(true);",1);
       ?>
     </td>
-    <td align='left' colspan='1'> 
+    <td align='left' colspan='1'>
       <?
       db_input('o21_codleippa',8,$Io21_codleippa,true,'text',1," onchange='js_pesquisao21_codleippa(false);'")
       ?>
@@ -125,11 +125,11 @@ function js_emite(){
       db_fieldsmemory($result_anosescolha,0);
       for($i=$o21_anoini;$i<=$o21_anofim;$i++){
 	  $arr_indexdescr[$i] = $i;
-          echo "<option value=$i> $i</option> "   ;      
+          echo "<option value=$i> $i</option> "   ;
       }
     }
       echo "</select>";
-    ?>  
+    ?>
     </td>
     </tr>
   <tr>
@@ -146,7 +146,7 @@ function js_emite(){
      <td height=150px> &nbsp;  </td>
   </tr>
   <tr>
-    <td colspan="2" align = "center"> 
+    <td colspan="2" align = "center">
       <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
       <input  name="orgaos" id="orgaos" type="hidden" value="" >
       <input  name="vernivel" id="vernivel" type="hidden" value="" >
@@ -161,20 +161,20 @@ function js_emite(){
 <script>
 function js_pesquisao21_codleippa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcppalei','func_orcppalei.php?funcao_js=parent.js_mostraorcppalei1|o21_codleippa|o21_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcppalei','func_orcppalei.php?funcao_js=parent.js_mostraorcppalei1|o21_codleippa|o21_descr','Pesquisa',true);
   }else{
-     if(document.form1.o21_codleippa.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcppalei','func_orcppalei.php?pesquisa_chave='+document.form1.o21_codleippa.value+'&funcao_js=parent.js_mostraorcppalei','Pesquisa',false);
+     if(document.form1.o21_codleippa.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcppalei','func_orcppalei.php?pesquisa_chave='+document.form1.o21_codleippa.value+'&funcao_js=parent.js_mostraorcppalei','Pesquisa',false);
      }else{
-       document.form1.o21_descr.value = ''; 
+       document.form1.o21_descr.value = '';
      }
   }
 }
 function js_mostraorcppalei(chave,erro){
-  document.form1.o21_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o21_codleippa.focus(); 
-    document.form1.o21_codleippa.value = ''; 
+  document.form1.o21_descr.value = chave;
+  if(erro==true){
+    document.form1.o21_codleippa.focus();
+    document.form1.o21_codleippa.value = '';
   }
 }
 function js_mostraorcppalei1(chave1,chave2){

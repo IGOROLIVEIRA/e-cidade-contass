@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -285,8 +285,8 @@ function js_pesquisaLinhas(lMostra) {
     }
   }
   sUrl += '&iEscola='+cboEscola.value;
-  
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_linhatransporte', sUrl, 'Pesquisa Linhas de Transporte', lMostra);
+
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_linhatransporte', sUrl, 'Pesquisa Linhas de Transporte', lMostra);
 }
 
 /**
@@ -341,7 +341,7 @@ function js_pesquisaPontosParada(lMostra) {
       oInputDescricaoPontoParada.value = '';
     }
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_pontoparada', sUrl, 'Pesquisa Pontos de Parada', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pontoparada', sUrl, 'Pesquisa Pontos de Parada', lMostra);
 }
 
 /**
@@ -385,19 +385,19 @@ function js_pesquisaAluno(lMostra) {
   var sUrl  = 'func_aluno.php?lPesquisaTransportePublico&iTransporte=2&iUtilizaTransporte=1';
       sUrl += '&iEscola='+ $F('cboEscola');
       sUrl += '&funcao_js=parent.js_mostraAluno';
-      
+
   if (lMostra) {
-	  
+
 	var sAlunos = '0';
 
 	oGridVinculosAluno.aRows.each(function(oRow) {
 
-		if (($F('oSelectItinerario') == 1 && oRow.aCells[6].getContent() == 'Ida') || 
+		if (($F('oSelectItinerario') == 1 && oRow.aCells[6].getContent() == 'Ida') ||
 		    ($F('oSelectItinerario') == 2 && oRow.aCells[6].getContent() == 'Volta')) {
 			sAlunos += ','+oRow.aCells[2].getContent();
 		}
     });
-	
+
     sUrl += '|ed47_i_codigo|ed47_v_nome';
     sUrl += '&sAlunos='+sAlunos;
   } else {
@@ -408,7 +408,7 @@ function js_pesquisaAluno(lMostra) {
       oInputCodigoAluno.value = '';
     }
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_aluno', sUrl, 'Pesquisa Alunos', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_aluno', sUrl, 'Pesquisa Alunos', lMostra);
 }
 
 /**
@@ -476,7 +476,7 @@ function js_retornoAdicionarVinculo(oResponse) {
 
     oInputCodigoLinha.value    = iCodigoLinha   ;
     oInputDescricaoLinha.value = sDescricaoLinha;
-    
+
     buscaHorariosLinha();
     js_getAlunosVinculados();
   }
@@ -539,7 +539,7 @@ function js_removeVinculo() {
     var oParametro         = new Object();
         oParametro.exec    = 'removerVinculoAluno';
         oParametro.aDados  = new Array();
-        
+
 
     oGridVinculosAluno.aRows.each(function(oRow) {
 
@@ -612,7 +612,7 @@ function js_retornoAlunosVinculados(oResponse) {
   var oRetorno = eval('('+oResponse.responseText+')');
 
   oGridVinculosAluno.clearAll(true);
-  
+
   if (oRetorno.aAlunos.length > 0) {
 
     oRetorno.aAlunos.each(function(oAluno) {

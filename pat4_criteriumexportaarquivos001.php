@@ -33,8 +33,8 @@ require 'dbforms/db_funcoes.php';
 						<td><?php db_ancora('<b>Código Departamento</b>',"js_pesquisacoddepto(true);",1); ?></td>
 						<td><?php db_input('coddepto',10,"",true,'text',1," onchange='js_pesquisacoddepto(false);'"); ?></td>
 						<td><?php db_input('nomedepto',40,"",true,'text',3,''); ?></td>
-					</tr>					
-					</table>	
+					</tr>
+					</table>
 				</fieldset>
 			</td>
 		</tr>
@@ -69,7 +69,7 @@ require 'dbforms/db_funcoes.php';
 		//oDBGridExportaArquivos.allowSelectColumns(true);
 		//oDBGridExportaArquivos.setCellWidth(new Array(100,100));
 		oDBGridExportaArquivos.show($('frmArquivos'));
-		
+
 		var aLinha = new Array();
 		var Tipo0 = '<select id="sltEmpresa" style="width:30%"><option value="0">Completo</option><option value="1">Atualiza</option></select>';
 		var Tipo1 = 'Completo';
@@ -87,7 +87,7 @@ require 'dbforms/db_funcoes.php';
 		var Tipo13 = '<select id="sltBem" style="width:30%"><option value="0">Completo</option><option value="1">Atualiza</option></select>';
 		var Tipo14 = '<select id="sltHistorico" style="width:30%"><option value="0">Completo</option><option value="1">Atualiza</option></select>';
 		var Tipo15 = 'Completo';
-		
+
 		aLinha[0] = new Array('EMPRESA',Tipo0,'empresa');
 		aLinha[1] = new Array('CCUSTO',Tipo1,'ccusto');
 		aLinha[2] = new Array('ESP&Eacute;CIE',Tipo2,'especie');
@@ -104,15 +104,15 @@ require 'dbforms/db_funcoes.php';
 		aLinha[13] = new Array('BEM',Tipo13,'bem');
 		aLinha[14] = new Array('HIST&Oacute;RICO',Tipo14,'historico');
 		aLinha[15] = new Array('PAR&Acirc;METROS',Tipo15,'parametros');
-		
-		
+
+
 		oDBGridExportaArquivos.clearAll(true);
 		for(i=0;i < aLinha.length; i++){
 			oDBGridExportaArquivos.addRow(aLinha[i]);
 		}
 		oDBGridExportaArquivos.renderRows();
 	}
-	
+
 	function js_envExportaArquivos(){
 		if($(t08_sequencial).value == ""){
 			alert('Nenhum usuário selecionado !');
@@ -123,25 +123,25 @@ require 'dbforms/db_funcoes.php';
 		aSelecionados =  oDBGridExportaArquivos.getSelection();
 		if(aSelecionados.length > 0){
 			for(i=0; i < aSelecionados.length; i++){
-			
+
 			  var obj   = new Object();
 			  obj.nome  = encodeURIComponent(aSelecionados[i][3]);
 			  obj.valor = aSelecionados[i][2];
 			  aParametros.push(obj);
-			  
+
 				// alert(aSelecionados[i][0]+'-'+aSelecionados[i][1]+'-'+aSelecionados[i][2]);
 			}
 			//obj.nome 	= encodeURIComponent('idusuario');
 			var idusuario = $('t08_sequencial').value;
 			var coddepto  = $('coddepto').value;
 			//aParametros.push(obj);
-			
+
 			sQueryString =  "["+aParametros.toSource().substr(1,aParametros.toSource().length-2)+"]";
 			//var sQueryString = aParametros.toSource().substr(1,aParametros.toSource().length-2));
-			
+
 			//var sQueryString = aParametros.toSource().urlEncode();
 			var sUrl         = 'pat4_criteriumexportaarquivos002.php?aParametros='+sQueryString+'&idusuario='+idusuario+'&coddepto='+coddepto;
-    	js_OpenJanelaIframe('top.corpo','db_iframe_exporta',sUrl,'Pesquisa',true);
+    	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_exporta',sUrl,'Pesquisa',true);
 
       //location.href = sUrl;
 
@@ -149,27 +149,27 @@ require 'dbforms/db_funcoes.php';
 			alert('Nenhum arquivo selecionado !');
 		}
 	}
-	
+
 function js_pesquisat08_sequencial(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_usuariocriterium.php?funcao_js=parent.js_mostradb_usuarios1|t08_sequencial|nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_usuariocriterium.php?funcao_js=parent.js_mostradb_usuarios1|t08_sequencial|nome','Pesquisa',true);
   }else{
-     if(document.form1.t08_sequencial.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_usuariocriterium.php?pesquisa_chave='+document.form1.t08_sequencial.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.t08_sequencial.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_usuariocriterium.php?pesquisa_chave='+document.form1.t08_sequencial.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.t08_sequencial.focus(); 
-    document.form1.t08_sequencial.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.t08_sequencial.focus();
+    document.form1.t08_sequencial.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
-	
+
   document.form1.t08_sequencial.value = chave1;
   document.form1.nome.value = chave2;
   db_iframe_db_usuarios.hide();
@@ -177,24 +177,24 @@ function js_mostradb_usuarios1(chave1,chave2){
 
 function js_pesquisacoddepto(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);
   }else{
-     if(document.form1.coddepto.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
+     if(document.form1.coddepto.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
      }else{
-       document.form1.nomedepto.value = ''; 
+       document.form1.nomedepto.value = '';
      }
   }
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.nomedepto.value = chave; 
-  if(erro==true){ 
-    document.form1.coddepto.focus(); 
-    document.form1.coddepto.value = ''; 
+  document.form1.nomedepto.value = chave;
+  if(erro==true){
+    document.form1.coddepto.focus();
+    document.form1.coddepto.value = '';
   }
 }
 function js_mostradb_depart1(chave1,chave2){
-	
+
   document.form1.coddepto.value = chave1;
   document.form1.nomedepto.value = chave2;
   db_iframe_db_depart.hide();

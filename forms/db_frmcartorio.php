@@ -90,11 +90,11 @@ $clrotulo->label("z01_nome");
 function js_pesquisav82_numcgm(mostra){
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','func_nome','func_cgm.php?lNovoDetalhe=1&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_cgm.php?lNovoDetalhe=1&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   } else {
 
     if(document.form1.v82_numcgm.value != ''){
-       js_OpenJanelaIframe('top.corpo','func_nome','func_cgm.php?lNovoDetalhe=1&pesquisa_chave='+document.form1.v82_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_cgm.php?lNovoDetalhe=1&pesquisa_chave='+document.form1.v82_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
     }else{
       document.form1.z01_nome.value = '';
     }
@@ -119,7 +119,7 @@ function js_mostracgm1(chave1,chave2) {
 }
 
 function js_pesquisa() {
-  js_OpenJanelaIframe('top.corpo','db_iframe_cartorio','func_cartorio.php?v82_extrajudicial='+$F('v82_extrajudicial')+'&funcao_js=parent.js_preenchepesquisa|v82_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cartorio','func_cartorio.php?v82_extrajudicial='+$F('v82_extrajudicial')+'&funcao_js=parent.js_preenchepesquisa|v82_sequencial','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave) {

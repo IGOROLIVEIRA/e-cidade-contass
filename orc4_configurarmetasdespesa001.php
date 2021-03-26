@@ -244,14 +244,14 @@ unset($_SESSION["cronogramabasespages"]);
   function js_pesquisao125_cronogramaperspectiva(mostra) {
 
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_cronogramaperspectiva',
         'func_cronogramaperspectiva.php?tipo=1&funcao_js='+
         'parent.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano&aberto=1',
         'Perspectivas do Cronograma',true);
     }else{
       if(document.form1.o124_sequencial.value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_cronogramaperspectiva',
           'func_cronogramaperspectiva.php?tipo=1&pesquisa_chave='+
           document.form1.o124_sequencial.value+
@@ -378,14 +378,14 @@ unset($_SESSION["cronogramabasespages"]);
 
             windowBaseCalculo.hide();
             $('modal').style.display     = 'none';
-            top.topo.document.getElementById('modaltopo').style.display = 'none';
+            CurrentWindow.topo.document.getElementById('modaltopo').style.display = 'none';
 
           }
         } else {
 
           windowBaseCalculo.hide();
           $('modal').style.display      = 'none';
-          top.topo.document.getElementById('modaltopo').style.display  = 'none';
+          CurrentWindow.topo.document.getElementById('modaltopo').style.display  = 'none';
 
         }
       });
@@ -524,9 +524,9 @@ unset($_SESSION["cronogramabasespages"]);
       $('modal').style.display           = '';
       $('modal').style.backgroundColor   = '';
       $('modal').style.zIndex            = '10000000';
-      top.topo.document.getElementById('modaltopo').style.width         = "99%";
-      top.topo.document.getElementById('modaltopo').style.display       = '';
-      top.topo.document.getElementById('modaltopo').style.zIndex        = '10000000';
+      CurrentWindow.topo.document.getElementById('modaltopo').style.width         = "99%";
+      CurrentWindow.topo.document.getElementById('modaltopo').style.display       = '';
+      CurrentWindow.topo.document.getElementById('modaltopo').style.zIndex        = '10000000';
       windowBaseCalculo.show(25,5);
       $('divWndDadosBase').style.display='';
       $('btninicio').disabled   = false;
@@ -580,7 +580,7 @@ unset($_SESSION["cronogramabasespages"]);
 
   function js_pesquisac62_codrec(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_orctiporec',
         'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr',
         'Pesquisar Recursos',
@@ -592,7 +592,7 @@ unset($_SESSION["cronogramabasespages"]);
     } else {
 
       if($('o15_codigo').value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_orctiporec',
           'func_orctiporec.php?pesquisa_chave='+$('o15_codigo').value+
           '&funcao_js=parent.js_mostraorctiporec',
@@ -947,9 +947,9 @@ unset($_SESSION["cronogramabasespages"]);
   }
 
   $('salvar').disabled = true;
-  if (!top.topo.document.getElementById('modaltopo')) {
+  if (!CurrentWindow.topo.document.getElementById('modaltopo')) {
 
-    var oDivModalTopo            = top.topo.document.createElement("div");
+    var oDivModalTopo            = CurrentWindow.topo.document.createElement("div");
     oDivModalTopo.id             = 'modaltopo';
     oDivModalTopo.style.height   = '100%';
     oDivModalTopo.style.position = 'absolute';
@@ -959,10 +959,10 @@ unset($_SESSION["cronogramabasespages"]);
     oDivModalTopo.style.color    = 'red';
     oDivModalTopo.style.display  = 'none';
     oDivModalTopo.style.zIndex   = '1900000';
-    oTopoMenu = top.topo.document.getElementById('menuTopo');
+    oTopoMenu = CurrentWindow.topo.document.getElementById('menuTopo');
     oTopoMenu.appendChild(oDivModalTopo);
   } else {
-    top.topo.document.getElementById('modaltopo').style.display='none';
+    CurrentWindow.topo.document.getElementById('modaltopo').style.display='none';
   }
   function js_setAjuda(sTexto,lShow) {
 

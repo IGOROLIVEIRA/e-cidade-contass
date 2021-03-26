@@ -1,32 +1,32 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
- * 
+ *
  * @author I
  * @revision $Author: dbiuri $
  * @version $Revision: 1.1 $
@@ -82,7 +82,7 @@ db_app::load("strings.js");
                  db_ancora("<b>Perspectiva:</b>","js_pesquisao125_cronogramaperspectiva(true);",$db_opcao);
                 ?>
               </td>
-              <td> 
+              <td>
                 <?
                 db_input('o124_sequencial',10,$Io124_sequencial,true,'text',
                          $db_opcao," onchange='js_pesquisao125_cronogramaperspectiva(false);'");
@@ -92,12 +92,12 @@ db_app::load("strings.js");
             <tr>
                <td>&nbsp;</td>
                <td>
-                 <? db_selinstit('',300,100); 
+                 <? db_selinstit('',300,100);
                   db_input('filtra_despesa', 10,'',true, 'hidden', 3);
                  ?>
               </td>
             </tr>
-           
+
           </table>
         </fieldset>
       </td>
@@ -154,11 +154,11 @@ db_app::load("strings.js");
                ?>
                </table>
               </td>
-            </tr>           
+            </tr>
           </table>
         </fieldset>
       </td>
-    </tr>  
+    </tr>
     <tr>
       <td colspan='2' align="center">
         <input name="imprime" type="button" id="imprime" value="Imprime"
@@ -177,33 +177,33 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
     js_OpenJanelaIframe('',
                         'db_iframe_cronogramaperspectiva',
                         'func_cronogramaperspectiva.php?funcao_js='+
-                        'top.corpo.iframe_g1.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
+                        'CurrentWindow.corpo.iframe_g1.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
                         'Perspectivas do Cronograma',true);
   }else{
-     if(document.form1.o124_sequencial.value != ''){ 
+     if(document.form1.o124_sequencial.value != ''){
         js_OpenJanelaIframe('',
                             'db_iframe_cronogramaperspectiva',
                             'func_cronogramaperspectiva.php?pesquisa_chave='+
                             document.form1.o124_sequencial.value+
-                            '&funcao_js=top.corpo.iframe_g1.js_mostracronogramaperspectiva',
+                            '&funcao_js=CurrentWindow.corpo.iframe_g1.js_mostracronogramaperspectiva',
                             'Perspectivas do Cronograma',
                             false);
      }else{
-     
+
        document.form1.o124_descricao.value = '';
        document.form1.ano.value             = ''
-        
+
      }
   }
 }
 
 function js_mostracronogramaperspectiva(chave,erro, ano){
-  document.form1.o124_descricao.value = chave; 
-  if(erro==true) { 
-    
-    document.form1.o124_sequencial.focus(); 
+  document.form1.o124_descricao.value = chave;
+  if(erro==true) {
+
+    document.form1.o124_sequencial.focus();
     document.form1.o124_sequencial.value = '';
-      
+
   }
 }
 
@@ -215,14 +215,14 @@ function js_mostracronogramaperspectiva1(chave1,chave2,chave3) {
 }
 variavel = 0;
 function js_imprimeRelatorio() {
-    
-    variavel++; 
+
+    variavel++;
     var sQuery  = "?iPerspectiva="+$F('o124_sequencial');
     /**
      * MArcamos todos os options do filtro por recurso
      */
     var aOptions = $('recursos').options;
-    
+
     for (var i = 0;i < aOptions.length; i++) {
        aOptions[i].selected = true;
     }
@@ -230,7 +230,7 @@ function js_imprimeRelatorio() {
     document.form1.target = 'safo' + variavel;
     document.form1.action = "orc2_metasreceitascotasdespesa002.php";
     document.form1.submit();
-      
-  
+
+
 }
 </script>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -39,9 +39,9 @@ $oGet  = db_utils::postMemory($_GET);
 $clhabitformaavaliacao = new cl_habitformaavaliacao;
 
 if (isset($oGet->chavepesquisa)) {
-  
+
   $sSqlFormaAvaliacao = $clhabitformaavaliacao->sql_query($oGet->chavepesquisa);
-  $rsFormaAvaliacao   = $clhabitformaavaliacao->sql_record($sSqlFormaAvaliacao); 
+  $rsFormaAvaliacao   = $clhabitformaavaliacao->sql_record($sSqlFormaAvaliacao);
   db_fieldsmemory($rsFormaAvaliacao, 0);
 }
 ?>
@@ -79,8 +79,8 @@ fieldset table td:first-child {
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td valign="top" bgcolor="#CCCCCC">
     <center>
       <?
         include("forms/db_frmhabformaavaliacao.php");
@@ -98,14 +98,14 @@ if (isset($oGet->chavepesquisa)) {
       function js_db_libera(){
          parent.document.formaba.formaavaliacao.disabled=false;
          parent.document.formaba.formaavaliacaousuario.disabled=false;
-         top.corpo.iframe_formaavaliacaousuario.location.href='hab1_formaavaliacaousuario001.php?ht07_sequencial=".@$ht07_sequencial."';
+         CurrentWindow.corpo.iframe_formaavaliacaousuario.location.href='hab1_formaavaliacaousuario001.php?ht07_sequencial=".@$ht07_sequencial."';
      ";
-  
+
   echo"}\n
     js_db_libera();
   </script>\n
  ";
-} else {  
+} else {
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

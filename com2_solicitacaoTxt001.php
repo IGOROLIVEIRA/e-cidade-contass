@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -49,29 +49,29 @@ $clsolicita->rotulo->label();
 <script>
 
 function js_emite(){
-	
+
     var codigo       = document.form1.pc10_numero.value;
     var separador    = document.form1.separador.value;
     var delimitador  = document.form1.delimitador.value;
     var layout       = document.form1.layout.value;
-    
-    var sQuery       = 'pc10_numero=' + codigo; 
-        sQuery      += '&separador='  + separador; 
-        sQuery      += '&delimitador='+ delimitador; 
+
+    var sQuery       = 'pc10_numero=' + codigo;
+        sQuery      += '&separador='  + separador;
+        sQuery      += '&delimitador='+ delimitador;
         sQuery      += '&layout='     + layout;
 
     if (codigo == '' || codigo == null) {
 
       alert("Selecione uma Solicitação.");
       return false;
-    }    
-    
+    }
+
     jan = window.open('com2_solicitacaoTxt002.php?' + sQuery, '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
     document.form1.pc10_numero.value='';
 
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -80,26 +80,26 @@ function js_emite(){
 <center>
 
   <form name="form1" method="post" action="">
-  
+
     <fieldset style="margin-top: 50px; width: 400px;">
-    
+
       <legend><strong>Gerar TXT com Itens da Solicitação</strong></legend>
-      
+
       <table  align="center" border ='0'>
-      
+
         <tr>
-          <td align="left" nowrap title="<?=$Tpc10_numero?>"> 
+          <td align="left" nowrap title="<?=$Tpc10_numero?>">
             <? db_ancora(@$Lpc10_numero,"js_pesquisapc10_numero(true);",1);?>
           </td>
           <td  align="left" nowrap title="<?=$Tl20_codigo?>">
             <b>
-              <?php 
+              <?php
                 db_input('pc10_numero',8,$Ipc10_numero,true,"text",1,"onchange='js_pesquisapc10_numero(false);'");
               ?>
-            </b> 
+            </b>
           </td>
         </tr>
-      
+
         <tr>
           <td align="left" nowrap><b>Separador Colunas :</b></td>
           <td align="left" nowrap>
@@ -111,7 +111,7 @@ function js_emite(){
             ?>
           </td>
         </tr>
-        
+
         <tr>
           <td align="left" nowrap><b>Delimitador de Campos :</b></td>
           <td align="left" nowrap>
@@ -122,7 +122,7 @@ function js_emite(){
             ?>
           </td>
         </tr>
-        
+
         <tr style="display: none;">
           <td align="left" nowrap><b>Layout:</b></td>
           <td align="left" nowrap>
@@ -133,14 +133,14 @@ function js_emite(){
             ?>
           </td>
         </tr>
-         
+
       </table>
 
-    </fieldset>  
+    </fieldset>
     <div style="margin-top: 10px;">
       <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
     </div>
-      
+
   </form>
 </center>
 </body>
@@ -153,10 +153,10 @@ function js_emite(){
 function js_pesquisapc10_numero(mostra){
 	  qry = "&nada=true";
 	  if(mostra==true){
-	    js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero'+qry,'Pesquisa Solicitação',true);
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero'+qry,'Pesquisa Solicitação',true);
 	  }else{
 	    if(document.form1.pc10_numero.value!=""){
-	      js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem&pesquisa_chave='+document.form1.pc10_numero.value+qry,'Pesquisa',false);
+	      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem&pesquisa_chave='+document.form1.pc10_numero.value+qry,'Pesquisa',false);
 	    }else{
 	      document.form1.pc10_numero.value = "";
 	    }

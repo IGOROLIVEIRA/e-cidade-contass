@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -50,7 +50,7 @@ $clrotulo->label('r08_descr');
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="25%" height="18">&nbsp;</td>
     <td width="25%">&nbsp;</td>
     <td width="25%">&nbsp;</td>
@@ -58,8 +58,8 @@ $clrotulo->label('r08_descr');
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
       <form name="form1" method="post" action="">
         <table border="0">
@@ -151,7 +151,7 @@ $clrotulo->label('r08_descr');
               }
               db_input('indcor',6,1,true,'text',1);
               ?>
-              
+
             </td>
           </tr>
           <tr>
@@ -162,7 +162,7 @@ $clrotulo->label('r08_descr');
               <?
               db_input('nrport',6,1,true,'text',1);
               ?>
-              
+
             </td>
           </tr>
           <tr>
@@ -193,7 +193,7 @@ $clrotulo->label('r08_descr');
               ?>
 	      </b>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
 
               db_input('r08_codigo',4,$Ir08_codigo,true,'text',2,"onchange='js_pesquisabase01(false)'");
@@ -261,20 +261,20 @@ function js_emite(){
 }
 function js_pesquisarh01_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe("top.corpo","db_iframe_rhpessoal","func_rhpessoal.php?funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome","Pesquisa",true,"20");
+    js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_rhpessoal","func_rhpessoal.php?funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome","Pesquisa",true,"20");
   }else{
-     if(document.form1.rh01_regist.value != ""){ 
-       js_OpenJanelaIframe("top.corpo","db_iframe_rhpessoal","func_rhpessoal.php?pesquisa_chave="+document.form1.rh01_regist.value+"&funcao_js=parent.js_mostraregist","Pesquisa",false,"20");
+     if(document.form1.rh01_regist.value != ""){
+       js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_rhpessoal","func_rhpessoal.php?pesquisa_chave="+document.form1.rh01_regist.value+"&funcao_js=parent.js_mostraregist","Pesquisa",false,"20");
      }else{
-       document.form1.z01_nome.value = ""; 
+       document.form1.z01_nome.value = "";
      }
   }
 }
 function js_mostraregist(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.rh01_regist.focus(); 
-    document.form1.rh01_regist.value = ""; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.rh01_regist.focus();
+    document.form1.rh01_regist.value = "";
   }
 }
 function js_mostraregist1(chave1,chave2){
@@ -284,20 +284,20 @@ function js_mostraregist1(chave1,chave2){
 }
 function js_pesquisai01_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe("top.corpo","db_iframe_inflan","func_inflan.php?funcao_js=parent.js_mostracodigo1|i01_codigo|i01_descr","Pesquisa",true,"20");
+    js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_inflan","func_inflan.php?funcao_js=parent.js_mostracodigo1|i01_codigo|i01_descr","Pesquisa",true,"20");
   }else{
-     if(document.form1.i01_codigo.value != ""){ 
-       js_OpenJanelaIframe("top.corpo","db_iframe_inflan","func_inflan.php?pesquisa_chave="+document.form1.i01_codigo.value+"&funcao_js=parent.js_mostracodigo","Pesquisa",false,"20");
+     if(document.form1.i01_codigo.value != ""){
+       js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_inflan","func_inflan.php?pesquisa_chave="+document.form1.i01_codigo.value+"&funcao_js=parent.js_mostracodigo","Pesquisa",false,"20");
      }else{
-       document.form1.i01_descr.value = ""; 
+       document.form1.i01_descr.value = "";
      }
   }
 }
 function js_mostracodigo(chave,erro){
-  document.form1.i01_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.i01_codigo.focus(); 
-    document.form1.i01_codigo.value = ""; 
+  document.form1.i01_descr.value = chave;
+  if(erro==true){
+    document.form1.i01_codigo.focus();
+    document.form1.i01_codigo.value = "";
   }
 }
 function js_mostracodigo1(chave1,chave2){
@@ -307,20 +307,20 @@ function js_mostracodigo1(chave1,chave2){
 }
 function js_pesquisabase01(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase011|r08_codigo|r08_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bases','func_bases.php?funcao_js=parent.js_mostrabase011|r08_codigo|r08_descr','Pesquisa',true);
   }else{
-    if(document.form1.r08_codigo.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_base01','func_bases.php?pesquisa_chave='+document.form1.r08_codigo.value+'&funcao_js=parent.js_mostrabase01','Pesquisa',false);
+    if(document.form1.r08_codigo.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_base01','func_bases.php?pesquisa_chave='+document.form1.r08_codigo.value+'&funcao_js=parent.js_mostrabase01','Pesquisa',false);
     }else{
-      document.form1.descr_base01.value = ''; 
+      document.form1.descr_base01.value = '';
     }
   }
 }
 function js_mostrabase01(chave,erro){
-  document.form1.descr_base01.value = chave; 
-  if(erro==true){ 
-    document.form1.base01.focus(); 
-    document.form1.r08_codigo.value = ''; 
+  document.form1.descr_base01.value = chave;
+  if(erro==true){
+    document.form1.base01.focus();
+    document.form1.r08_codigo.value = '';
   }
 }
 function js_mostrabase011(chave1,chave2){

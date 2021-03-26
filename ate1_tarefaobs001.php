@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 define("TAREFA",true);
@@ -69,7 +69,7 @@ $sqlerro  = false;
 $db_botao = true;
 
 if(isset($alterar)) {
-  
+
   $result = $cltarefa->sql_record($cltarefa->sql_query($at42_tarefa, "at40_autorizada"));
   if ($cltarefa->numrows > 0) {
     db_fieldsmemory($result, 0);
@@ -81,7 +81,7 @@ if(isset($alterar)) {
   } else {
     $cltarefa->at40_autorizada = "false";
   }
-  
+
   $cltarefa->at40_sequencial	= $at42_tarefa;
   $cltarefa->at40_obs 		= $at40_obs;
 
@@ -96,15 +96,15 @@ if(isset($alterar)) {
 	if($linhastar>0){
 		 db_fieldsmemory($result, 0);
 	}else{
-	
+
 		$sql = "
-			select at05_feito  from atendimento inner join atenditem on at02_codatend = at05_codatend 
+			select at05_feito  from atendimento inner join atenditem on at02_codatend = at05_codatend
 			where at05_codatend = $at02_codatend
 			and at05_seq = $at05_seq;
 		";
-		$res = pg_query($sql); 
+		$res = pg_query($sql);
 		$linhas =pg_num_rows($res);
-	
+
 	  	if ($linhas > 0) {
 		    db_fieldsmemory($res, 0);
 		    $at40_obs = $at05_feito;
@@ -130,8 +130,8 @@ $db_botao = true;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmtarefaobs.php");
@@ -152,7 +152,7 @@ if(isset($alterar)){
     };
   } else {
     db_msgbox($erro_msg);
-    echo "<script>top.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at42_tarefa."'</script>";
+    echo "<script>CurrentWindow.corpo.iframe_tarefausu.location.href='ate1_tarefausu001.php?at42_tarefa=".@$at42_tarefa."'</script>";
   }
 }
 

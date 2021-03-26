@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -75,7 +75,7 @@ if ((isset ($e60_numcgm) && $e60_numcgm != '') || (isset ($e60_numemp) && $e60_n
 	//rotina que traz os dados do empenho
 	$result = $clempempenho->sql_record($clempempenho->sql_query_empnome(null, "*", "", "$where $where1 $where2"));
 	db_fieldsmemory($result, 0, true);
-	//fim  
+	//fim
 
 }
 ?>
@@ -116,18 +116,18 @@ if ((isset ($e60_numcgm) && $e60_numcgm != '') || (isset ($e60_numemp) && $e60_n
             <td nowrap align="right" title="<?=@$z01_email?>"><?=@$Lz01_email?></td>
           <td nowrap><?db_input('z01_email',40,$Iz01_email,true,'text',3)?>
           <input name="Alterar CGM" type="button" id="alterarcgm" value="Alterar CGM" onclick="js_AlteraCGM(document.form1.e60_numcgm.value);" >
-          </td>                    
+          </td>
         </tr>
 				<?
          $result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit")));
          if ($clpcparam->numrows > 0) {
 	           db_fieldsmemory($result_pcparam, 0);
 						 if ($pc30_emiteemail == 't'){
-							  $sSql = "select usuext 
+							  $sSql = "select usuext
 								           from db_usuarios u
 													      inner join db_usuacgm c on u.id_usuario = c.id_usuario
 													where cgmlogin = $z01_numcgm";
-							$rs = pg_query($sSql);						
+							$rs = pg_query($sSql);
 							if (pg_num_rows($rs) > 0){
   							db_fieldsmemory($rs,0);
 								if ($usuext == 1){
@@ -138,14 +138,14 @@ if ((isset ($e60_numcgm) && $e60_numcgm != '') || (isset ($e60_numemp) && $e60_n
                 <td nowrap></td>
                  <td nowrap></td>
                  <td align="right"><input id='manda_email' name="manda_mail" type="checkbox" value="X"></td>
-                 <td nowrap><label for='manda_email'><b>Mandar e-mail para o fornecedor.</b></label></td>         
+                 <td nowrap><label for='manda_email'><b>Mandar e-mail para o fornecedor.</b></label></td>
               </tr>
         <?//end if parametro
 				       }
 							}
 					 }
 				 }
-				?>		 
+				?>
 
 				?>
         <tr>
@@ -213,8 +213,8 @@ if ($clmatparam->numrows > 0) {
           </td>
           <?}?>
         </tr>
-        <tr> 
-        <td colspan=2 rowspan=2> 
+        <tr>
+        <td colspan=2 rowspan=2>
 	 <!-- dados da nota -->
 	 <table border=0 style="border:1px solid #888888">
 	 <tr>
@@ -223,7 +223,7 @@ if ($clmatparam->numrows > 0) {
          </tr>
          <tr>
            <td nowrap title="<?=@$Te69_dtnota?>"><?=@$Le69_dtnota?></td>
-           <td><? 
+           <td><?
 
 
 	if (empty ($e69_dtnota_dia)) {
@@ -241,11 +241,11 @@ if ($clmatparam->numrows > 0) {
 	 </table>
 	</td>
 	<td align='right'><b>Obs:</b></td>
-        <td colspan='1' align='left'><? db_textarea("m51_obs","","50",$Im51_obs,true,'text',1); ?></td>    
-	</tr>  
+        <td colspan='1' align='left'><? db_textarea("m51_obs","","50",$Im51_obs,true,'text',1); ?></td>
+	</tr>
         <tr>
          <td> &nbsp; </td>
-        
+
           <td colspan='2' align='center'>
 	  <?if ($e60_numcgm!=""){
 	      $result=pg_exec("select * from empempenho inner join empempitem on e62_numemp = e60_numemp inner join pcmater on pc01_codmater = e62_item where e60_numcgm=$e60_numcgm");
@@ -269,7 +269,7 @@ if ($clmatparam->numrows > 0) {
      <?
 
 	if (isset ($e60_numcgm) && $pesqemp != 'true') {
-?>  
+?>
       <table  border=0 width=100%>
         <tr>
          <td>
@@ -281,7 +281,7 @@ if ($clmatparam->numrows > 0) {
 
 
 	}
-?>  
+?>
     </td>
   </tr>
     <tr>
@@ -291,17 +291,17 @@ if ($clmatparam->numrows > 0) {
 
 
 	if ($pesqemp == 'true') {
-?>  
+?>
       <table border=0 width=98%>
         <tr>
-         <td>         
+         <td>
            <iframe name="itens" id="itens" src="forms/db_frmmatordemitem_liquida.php?e60_numcgm=<?=$e60_numcgm?>&erro=false&e60_codemp=<?=@$e60_codemp?>&e60_numemp=<?=@$e60_numemp?>" width="100%" height="220" marginwidth="0" marginheight="0" frameborder="0"></iframe>
          </td>
         </tr>
       </table>
      <?
 	}
-?>  
+?>
     </td>
   </tr>
  </table>
@@ -319,14 +319,14 @@ function js_AlteraCGM(cgm) {
 }
 function js_coddepto(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
     }else{
       coddepto = document.form1.coddepto.value;
       if(coddepto!=""){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
-      }else{ 	
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
+      }else{
 	document.form1.descrdepto.value='';
-      } 	
+      }
     }
 }
 function js_mostracoddepto1(chave1,chave2){
@@ -335,13 +335,13 @@ function js_mostracoddepto1(chave1,chave2){
     db_iframe_db_depart.hide();
 }
 function js_mostracoddepto(chave,erro){
-    document.form1.descrdepto.value = chave; 
-    if(erro==true){ 
-      document.form1.coddepto.focus(); 
-      document.form1.coddepto.value = ''; 
+    document.form1.descrdepto.value = chave;
+    if(erro==true){
+      document.form1.coddepto.focus();
+      document.form1.coddepto.value = '';
     }
 }
-  
+
 function js_buscavalores(){
    var submeter=false;
    obj= itens.document.form1;
@@ -350,12 +350,12 @@ function js_buscavalores(){
    for (i=0;i<obj.elements.length;i++){
      if (obj.elements[i].name.substr(0,6)=="quant_"){
  	       cheke=obj.elements[i].name.split("_");
-    	   if (eval("obj.CHECK_"+cheke[1]+"_"+cheke[2]+".checked")==true){    	   		
+    	   if (eval("obj.CHECK_"+cheke[1]+"_"+cheke[2]+".checked")==true){
 	 			var objvalor=new Number(obj.elements[i].value);
 	 			if (objvalor!=0){
 	   				valor+=obj.elements[i].name+"_"+obj.elements[i].value;
 	   				submeter = true;
-	 			} 
+	 			}
        	   }else{
 	 	        continue;
            }
@@ -367,26 +367,26 @@ function js_buscavalores(){
              if (objvaloritem!=0){
 	 		      valoritem+=obj.elements[i].name+"_"+obj.elements[i].value;
 	 		      submeter = true;
-             } 
+             }
          }
      }
    }
    document.form1.valores.value=valor;
    document.form1.val.value=valoritem;
-   
-   
+
+
    // verifica se esta digitado numero da nota
    if (document.form1.e69_numero.value==''){
          submeter=false;
          alert('Informe o número da Nota !');
          return false;
-         
-   }  
-   if (submeter==true){
-         return true; 
-   }else {
-         alert('Selecione a menos um íten para prosseguir !');         
-   		 return false;	   		 
+
    }
-}  
+   if (submeter==true){
+         return true;
+   }else {
+         alert('Selecione a menos um íten para prosseguir !');
+   		 return false;
+   }
+}
 </script>

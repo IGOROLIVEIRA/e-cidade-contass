@@ -1,28 +1,28 @@
 <?php
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once 'libs/db_stdlib.php';
@@ -69,7 +69,7 @@ $DBtxt24 = NULL;
 $DBtxt26 = NULL;
 
 $oDaoInss = db_utils::getDao('inssirf');
-        
+
 $sCampos  = " distinct                                  ";
 $sCampos .= " case r33_codtab                           ";
 $sCampos .= "      when 2 then 0                        ";
@@ -85,7 +85,7 @@ $sCampos .= " end as r33_nome                           ";
 $sWhere   =  " r33_anousu       = ".db_anofolha();
 $sWhere  .=  "   and r33_mesusu = ".db_mesfolha();
 $sWhere  .=  "   and r33_instit = ".db_getsession('DB_instit');
-        
+
 $sQueryInss  = $oDaoInss->sql_query_file('r33_codtab',null, $sCampos, null, $sWhere);
 $rsPrevidencia = db_query($sQueryInss);
 
@@ -126,14 +126,14 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
             <td>
               <?php db_input('DBtxt23', 4, $IDBtxt23, true, 'text', 2, "class='field-size1' onchange='js_buscaComplementar(); {$js_buscaSuplementar};'"); ?>
               <?php db_input('DBtxt25', 2, $IDBtxt25, true, 'text', 2, "class='field-size1' onchange='js_buscaComplementar(); {$js_buscaSuplementar};'"); ?>
-              
+
               <label>Informar Período:</label>
               <select name="periodo" id="periodo" onchange="js_periodo()" style="width: 20%">
                 <option value='f'>Não</option>
                 <option value='t'>Sim</option>
               </select>
             </td>
-          </tr>  
+          </tr>
           <tr id="rowPeriodo">
             <td nowrap width="130" title="Ano / Mês de competência">
               <label>Ano Final / Mês Final:</label>
@@ -147,7 +147,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
                 <option value='f'>Não</option>
                 <option value='t'>Sim</option>
               </select>
-              
+
               <span id="tipoGrafico">
                 <label>Valor:</label>
                 <select name="tipo_grafico" id="tipo_grafico" style="width: 20%">
@@ -157,14 +157,14 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
                 </select>
               </span>
             </td>
-          </tr>     
+          </tr>
           <tr title="Seleção">
             <td>
               <?php db_ancora("Seleção:", "js_pesquisaSelecao(true)", 1); ?>
             </td>
-            <td> 
+            <td>
               <?php db_input('r44_selec', 8, 1, true, 'text', "", 'class="field-size2" onchange="js_pesquisaSelecao(false)"'); ?>
-              <?php db_input('r44_des', 30, "", true, 'text', 3, 'class="field-size7"'); ?> 
+              <?php db_input('r44_des', 30, "", true, 'text', 3, 'class="field-size7"'); ?>
             </td>
           </tr>
           <tr title="Regime">
@@ -194,7 +194,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
             <td colspan="2">
               <fieldset class="separator">
                 <legend>Tipo de Folha:</legend>
-                <div id="containerTipoFolha"></div>                       
+                <div id="containerTipoFolha"></div>
               </fieldset>
             </td>
           </tr>
@@ -231,21 +231,21 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
   function js_pesquisaLotacao(oInput) {
 
     var sFuncaoJS;
-    
+
     if ( oInput == 'lotai' ) {
       sFuncaoJS = 'js_mostralotacaoInicio';
     } else {
       sFuncaoJS = 'js_mostralotacaoFinal';
     }
-      
+
     js_OpenJanelaIframe(
-      'top.corpo',
+      'CurrentWindow.corpo',
       'db_iframe_selecao',
       'func_rhlota.php?funcao_js=parent.' + sFuncaoJS + '|r70_codigo&instit<?=db_getsession("DB_instit")?>',
       'Pesquisa',
       true
     );
-  } 
+  }
 
  /**
   * Trata o retorno da função js_pesquisaLotacao();
@@ -264,10 +264,10 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
    * Realiza a busca de seleções retornando o código e descrição da rubrica escolhida;
    */
   function js_pesquisaSelecao(lMostra) {
-          
+
     if (lMostra) {
       js_OpenJanelaIframe(
-        'top.corpo',
+        'CurrentWindow.corpo',
         'db_iframe_selecao',
         'func_selecao.php?funcao_js=parent.js_geraform_mostraselecao1|r44_selec|r44_descr&instit=<?=db_getsession("DB_instit")?>',
         'Pesquisa',
@@ -276,14 +276,14 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     } else {
       if ($F(r44_selec) != "") {
         js_OpenJanelaIframe(
-          'top.corpo',
+          'CurrentWindow.corpo',
           'db_iframe_selecao',
           'func_selecao.php?pesquisa_chave=' + $F(r44_selec) + '&funcao_js=parent.js_geraform_mostraselecao&instit=<?=db_getsession("DB_instit")?>',
           'Pesquisa',
           false
         );
       } else {
-        $(r44_des).setValue(""); 
+        $(r44_des).setValue("");
       }
     }
   }
@@ -292,32 +292,32 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
    * Trata o retorno da função js_pesquisaSelecao().
    */
   function js_geraform_mostraselecao(sDescricao, lErro) {
-    
-    if (lErro) { 
+
+    if (lErro) {
 
       $(r44_selec).setValue('');
-      $(r44_selec).focus(); 
+      $(r44_selec).focus();
     }
-    
-    $(r44_des).setValue(sDescricao); 
+
+    $(r44_des).setValue(sDescricao);
   }
 
   /**
    * Trata o retorno da função js_pesquisaSelecao();
    */
   function js_geraform_mostraselecao1(sChave1, sChave2) {
-      
+
     $(r44_selec).setValue(sChave1);
-    
+
     if($(r44_des)) {
       $(r44_des).setValue(sChave2);
     }
-    
+
     db_iframe_selecao.hide();
   }
 
   /**
-   * Funcao responsavel por realizar a validaçãoo dos dados e tratar os dados para a geração do relatório  
+   * Funcao responsavel por realizar a validaçãoo dos dados e tratar os dados para a geração do relatório
    */
   function js_emite() {
 
@@ -325,7 +325,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
      * Validar ano/mes vazio
      */
     if ($F('DBtxt23') == '' || $F('DBtxt25') == '') {
-      
+
       alert('Por favor, informe Ano/Mês para a emissão do relatório.');
       return false;
     }
@@ -349,13 +349,13 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
       return false;
     }
 
-    if (($F('periodo') == 't') 
+    if (($F('periodo') == 't')
         && (($F('DBtxt26') <= 0 || $F('DBtxt26') > 12) || (Number($F('DBtxt26')) <= Number($F('DBtxt25')) && Number($F('DBtxt24')) == Number($F('DBtxt23'))))) {
 
       alert('Mês Final da folha informado é invalido.');
       return false;
     }
-    
+
     /**
      * Valida se tem pelo menos uma folha selecionada
      */
@@ -374,12 +374,12 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     var oTipoFiltro    = $F('oCboTipoFiltro');
 
     if (oTipoRelatorio != 0 && oTipoFiltro == 2) {
-      
+
       var oLancadorSelecionado = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
       if (oLancadorSelecionado.length == 0) {
 
         alert('Por Favor, realize pelo menos o lançamento de 1 registro.');
-        return false 
+        return false
       }
     }
 
@@ -398,7 +398,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
     /**
      * Envia os dados para a geração do relatório.
-     */       
+     */
     var oQuery = {};
     oQuery.iAno           = $F('DBtxt23');
     oQuery.iMes           = $F('DBtxt25');
@@ -410,10 +410,10 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     oQuery.iTipoFiltro    = $F('oCboTipoFiltro');
 
     /**
-     * Verifica se o tipo escolhido foi intervalo 
+     * Verifica se o tipo escolhido foi intervalo
      */
     if (oTipoFiltro == 1) {
-       
+
       oQuery.iIntervaloInicial = $F('InputIntervaloInicial');
       oQuery.iIntervaloFinal   = $F('InputIntervaloFinal');
     }
@@ -422,7 +422,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
      * Verifica se o tipo escolhido foi seleção
      */
     if (oTipoFiltro == 2) {
-       
+
       var aSelecionados = [];
       var oTipoFiltros  = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
 
@@ -432,12 +432,12 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
       oTipoFiltros.each (function(oFiltro, iIndice) {
         aSelecionados[iIndice] = oFiltro.sCodigo;
       });
-       
+
       oQuery.iRegistros = aSelecionados;
     }
 
     oQuery.sVinculo     = $F('Vinculo');
-    
+
     var selecionados = "";
     var descrselecionados = "";
     var virgula_ssel = "";
@@ -456,9 +456,9 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
      */
     var aTipoFolhas = [];
     aFolhasSelecionadas.each(function(oTipoFolha, iIndice) {
-       
+
       aTipoFolhas[iIndice] = oTipoFolha[0];
-       
+
       //Se complementar tiver sido selecionada.
       if (oTipoFolha[0] == 'gerfcom') {
         oQuery.iComplementar = $F('selectComplementar');
@@ -487,26 +487,26 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
     oJanela.moveTo(0, 0);
     return false;
-  }    
+  }
 
   /**
    * Realiza a busca dos Complementar usando Ano e Mes.
    */
   function js_buscaComplementar() {
-    
+
     var iAno = $F('DBtxt23');
     var iMes = $F('DBtxt25');
     var sUrl = 'pes1_rhempenhofolhaRPC.php';
-    
+
     var sQuery  = 'sMethod=consultaPontoComplementar';
         sQuery += '&iAnoFolha='+iAno;
         sQuery += '&iMesFolha='+iMes;
         sQuery += '&sSigla="Complementar"';
-        
-    
+
+
     var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
+                                            method: 'post',
+                                            parameters: sQuery,
                                             onComplete: js_retornoComplementar
                                           }
                                   );
@@ -519,7 +519,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
     $('selectComplementar').options.length = 0;
     var aRetorno = eval("("+oComplementar.responseText+")");
-    
+
     if (aRetorno.aSemestre.length > 0) {
 
       var oOptionDefault = new Option('Todos', '');
@@ -542,17 +542,17 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
    * Realiza a busca dos Suplementar usando Ano e Mes.
    */
   function js_buscaSuplementar() {
-    
+
     var iAno = $F('DBtxt23');
     var iMes = $F('DBtxt25');
     var sUrl = 'pes1_rhempenhofolhaRPC.php';
-    
+
     var sQuery = 'sMethod=consultaPontoSuplementar'
                + '&iAnoFolha=' + iAno
                + '&iMesFolha=' + iMes
                + '&sSigla="Suplementar"';
-        
-    
+
+
     var oAjax   = new Ajax.Request(sUrl, {
       method: 'POST',
       parameters: sQuery,
@@ -567,7 +567,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
     $('selectSuplementar').options.length = 0;
     var aRetorno = eval("("+oSuplementar.responseText+")");
-    
+
     if (aRetorno.aSemestre.length > 0) {
 
       var oOptionDefault = new Option('Todos', '');
@@ -585,7 +585,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     }
   }
 <?php } ?>
-  
+
   (function() {
 
     /**
@@ -595,7 +595,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     var oComboVinculo      = new DBViewFormularioFolha.ComboVinculo();
     oTiposFiltrosFolha     = new DBViewFormularioFolha.DBViewTipoFiltrosFolha(<?=db_getsession("DB_instit")?>);
     oTiposFiltrosFolha.sInstancia     = 'oTiposFiltrosFolha';
-    
+
     /**
      * Renderiza os componentes em seus respectivos contaners
      */
@@ -634,10 +634,10 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
       oGridTipoFolha.addRow([oTipoFolha.folha, oTipoFolha.descricao, oTipoFolha.complementar]);
     });
     oGridTipoFolha.renderRows();
-    
+
     js_buscaComplementar();
     <?php echo $js_buscaSuplementar; ?>
-    
+
     $('selectComplementar').observe("change", function() {
       oGridTipoFolha.aRows[1].select(true);
     })
