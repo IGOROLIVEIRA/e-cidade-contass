@@ -108,7 +108,7 @@ $clempparametro->rotulo->label();
 
             <tr>
                 <td nowrap title="<?=@$Te30_trazobsultop?>">       <?=@$Le30_trazobsultop ?>    </td>
-                <td><? $matriz = array("1"=>"Não Trazer","2"=>"Trazer Geral","3"=>"Trazer por usuï¿½rio");
+                <td><? $matriz = array("1"=>"Não Trazer","2"=>"Trazer Geral","3"=>"Trazer por usuário");
                     db_select("e30_trazobsultop", $matriz,true,1);
                     ?>
                 </td>
@@ -127,6 +127,17 @@ $clempparametro->rotulo->label();
                 <td nowrap title="<?=@$Te30_empdataserv?>"><?=@$Le30_empdataserv ?></td>
                 <td><? $matriz = array("f"=>"Não","t"=>"Sim");
                     db_select("e30_empdataserv", $matriz,true,1);
+                    ?>
+                </td>
+            </tr>
+
+            <!-- Permite liquidação com data superior a data do servidor -->
+            <tr>
+                <td nowrap title="<?=@$Te30_lqddataserv?>"><?=@$Le30_lqddataserv ?></td>
+                <td>
+                    <?
+                        $matriz = array("f" => "Não", "t" => "Sim");
+                        db_select("e30_lqddataserv", $matriz, true, 1);
                     ?>
                 </td>
             </tr>
