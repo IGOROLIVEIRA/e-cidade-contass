@@ -247,7 +247,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.pesquisaAcordoByCodigo = (acordo) => {
-    
         var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + acordo +
             '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
 
@@ -262,7 +261,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     /**
      * Retorno da pesquisa acordos
      */
-    js_mostraacordo = function (chave1, chave2, erro) {
+    js_mostraacordo = function (chave1, chave2, chave3, erro) {
 
         if (erro == true) {
 
