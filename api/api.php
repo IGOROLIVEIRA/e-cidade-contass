@@ -9,65 +9,51 @@ use \ECidade\V3\Extension\Registry;
 use \ECidade\V3\Extension\Front;
 use \ECidade\V3\Extension\Request as EcidadeRequest;
 
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
 
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'libs/db_autoload.php');
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php');
-
-
+require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
 // @todo Revisar essa logica
 // Criamos um request fake para poder utilizar o recursos dos modifications.
 
 $_SERVER['REQUEST_URI'] = preg_replace('/(.*?)\/w\/\d+(.*)/', '$1$2', $_SERVER['REQUEST_URI']);
 
-//$front = new Front();
-//$ecidadeRequest = new EcidadeRequest($front->getPath());
-//Registry::set('app.request', $ecidadeRequest);
-//$front->createWindow();
-//
+$front = new Front();
+$ecidadeRequest = new EcidadeRequest($front->getPath());
+Registry::set('app.request', $ecidadeRequest);
+$front->createWindow();
+
 $app = new Application();
 
 $app['debug'] = true;
-//
+
 $app['class.loader'] = Registry::get('app.loader');
-//
-//// aplica o service provider do ServiceController
+
+// aplica o service provider do ServiceController
 $app->register(new ServiceControllerServiceProvider());
 
-require_once ("libs/db_stdlib.php");
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_conecta.php");
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_sessoes.php");
-
 // app authentication
-//$app->before(function (Request $request, Application $app) {
-//
-//  //require_once ("libs/db_stdlib.php");
-//  require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_stdlib.php");
-//  //require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_conecta.php");
-//  //require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR ."libs/db_sessoes.php");
-//    echo 'primeiro asdf'.db_getsession("DB_servidor");exit;
-//
-//  Registry::get('app.request')->session()->start();
-//
-//  /**
-//   * @see https://tools.ietf.org/html/rfc7235#section-3.1
-//   */
-//  if (empty($_SESSION) || empty($_SESSION['DB_login'])) {
-//    throw new AccessDeniedHttpException('Sessão inválida ou expirada. Tente logar novamente.');
-//  }
-//echo 'here asdf'.db_getsession("DB_servidor");exit;
+$app->before(function (Request $request, Application $app) {
+
+  require_once modification("libs/db_stdlib.php");
+  Registry::get('app.request')->session()->start();
+
+  /**
+   * @see https://tools.ietf.org/html/rfc7235#section-3.1
+   */
+  if (empty($_SESSION) || empty($_SESSION['DB_login'])) {
+    throw new AccessDeniedHttpException('Sessão inválida ou expirada. Tente logar novamente.');
+  }
+
   $DB_SERVIDOR = db_getsession("DB_servidor");
   $DB_BASE     = db_getsession("DB_base");
   $DB_PORTA    = db_getsession("DB_porta");
   $DB_USUARIO  = db_getsession("DB_user");
   $DB_SENHA    = db_getsession("DB_senha");
-//
+
   global $conn;
   $conn = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA");
-//
-//});
+
+});
 
 // app api version1 routes
 $app->register(new \ECidade\Api\V1\APIServiceProvider(), array(

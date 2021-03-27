@@ -1666,7 +1666,7 @@ Object.extend(Ajax.Responders, Enumerable);
 
 Ajax.Responders.register({
   onCreate:   function() { Ajax.activeRequestCount++ },
-  onComplete: function() { Ajax.activeRequestCount-- }
+  onComplete: function() { }
 });
 Ajax.Base = Class.create({
   initialize: function(options) {
@@ -1793,9 +1793,12 @@ Ajax.Request = Class.create(Ajax.Base, {
   },
 
   respondToReadyState: function(readyState) {
-    var state = Ajax.Request.Events[readyState], response = new Ajax.Response(this);
 
+
+    var state = Ajax.Request.Events[readyState], response = new Ajax.Response(this);
     if (state == 'Complete') {
+
+      Ajax.activeRequestCount--;
       try {
         this._complete = true;
         (this.options['on' + response.status]
@@ -3921,7 +3924,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   Element.Offset = Class.create({
     initialize: function(left, top) {
       this.left = left.round();
-      this.top  = CurrentWindow.round();
+      this.top  = top.round();
 
       this[0] = this.left;
       this[1] = this.top;

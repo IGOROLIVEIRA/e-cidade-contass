@@ -10,7 +10,7 @@ var DBViewGrupoPerguntas = function(elemento) {
 
 DBViewGrupoPerguntas.makeFromObject = function (oGrupoPerguntas, formulario) {
 
-
+  
   var oDBViewGrupoPerguntas = new DBViewGrupoPerguntas();
       oDBViewGrupoPerguntas.setCodigo(oGrupoPerguntas.codigo); 
       oDBViewGrupoPerguntas.setId(oGrupoPerguntas.id);
@@ -86,8 +86,8 @@ DBViewGrupoPerguntas.prototype = {
 
     var oElemento           = document.createElement('fieldset');
         oElemento.className = (this.perguntas.get().length === 0) ? 'notseparator' : 'separator';
-
-    oPergunta.elementoPerguntaObjetiva = this.getFormulario().getElementoRespostasObjetivas();
+    
+    oPergunta.elementoPerguntaObjetiva = this.getFormulario().getElementoRespostasObjetivas();    
     this.perguntas.add(DBViewPergunta.makeFromObject(oPergunta, oElemento));
   },  
 

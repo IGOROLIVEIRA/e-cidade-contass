@@ -670,6 +670,16 @@
       return data.join(", ");
     },
 
+    "dinheiro" : function(value) {
+
+        var numObj = parseFloat(value);
+
+        return numObj.toLocaleString('pt-BR', { 
+            style: 'currency', 
+            currency: 'BRL' 
+        });
+    },
+
     "list" : function(data) {
 
       var retorno = "<ul>\n";
@@ -680,6 +690,7 @@
       retorno += "</ul>\n";
       return retorno;
     },
+    
     "decode" : function(data) {
       return data.urlDecode();
     },

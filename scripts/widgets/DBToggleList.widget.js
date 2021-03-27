@@ -19,14 +19,19 @@ const DBTOGGLELIST_BOTTOM = 'B';
  * @param {Array} aHeaders - Headers das grids
  *   [{sWidth : '100px',
  *     sLabel : 'Número',
- *     sId    : 'numero', 
+ *     sId    : 'numero',
  *     sAlign : 'left'}];
  * @param
- *
+ * @param {string} sIdGrid - usado para compor um nome único da grid
  */
-var DBToggleList = function( aHeaders, oLabels ) {
+var DBToggleList = function( aHeaders, oLabels, sIdGrid ) {
 
-  this.iIdInstanceGrid  = DBToggleList.iQuantidadeGrids++;//ESTATICO
+  if (sIdGrid == null) {
+    this.iIdInstanceGrid  = DBToggleList.iQuantidadeGrids++;//ESTATICO
+  } else {
+    this.iIdInstanceGrid  = sIdGrid;
+  }
+
   this.aHeaders         = aHeaders;
   this.oInformacoesGrid = {};
   this.oInformacoesGrid.oLabels        = oLabels || {};
@@ -97,7 +102,7 @@ DBToggleList.iQuantidadeGrids = 0;
 /**
  * Inicializa componente, define os headers das grid pelos parametros informados no construtor
  *
- * @return void
+ * @return {void}
  */
 DBToggleList.prototype.init = function() {
 
@@ -352,6 +357,7 @@ DBToggleList.prototype.createTables = function() {
 
   this.oGridSelect   = oGridSelect;
   this.oGridSelected = oGridSelected;
+
 }
 
 /**
@@ -698,10 +704,10 @@ DBToggleList.prototype.moveRows = function(sDirecao) {
       })
 
       me.aHeaders.each(function(oElemento, i) {
-        
+
         aOrigem[oElemento.sId] = aConteudo[i];
       })
-      
+
       aOrigem = mergeObject(aRowsOrigem[iLinhaSelecao], aOrigem);
       aEnviados.push(aOrigem);
 

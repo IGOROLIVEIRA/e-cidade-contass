@@ -17,7 +17,7 @@ DBViewFormularioFolha.PesquisaLotacao = function( iInstituicao ) {
   });
   this.oInputLotacao     = new DBTextField("r70_codigo");
   this.oInputLotacao.getElement();
-
+  
   this.oInputNomeLotacao = new DBTextField("r70_descr");
   this.oInputNomeLotacao.setReadOnly(true);
 
@@ -107,7 +107,7 @@ DBViewFormularioFolha.PesquisaLotacao.prototype.fixarBotao = function( oElemento
 
 DBViewFormularioFolha.PesquisaLotacao.prototype.abrirLookUp = function( lExibeJanela ) {
 
-  var sDestino        = "CurrentWindow.corpo";
+  var sDestino        = "top.corpo";      
   var sLabelJanela    = "Pesquisa de Lotacao";;
   var sNomeObjeto     = "db_iframe_rhlota";
   var sFuncaoPesquisa = "";
@@ -118,7 +118,7 @@ DBViewFormularioFolha.PesquisaLotacao.prototype.abrirLookUp = function( lExibeJa
     /**
      * Ao clicar na Ancora
      */
-    sDestino        = "CurrentWindow.corpo";
+    sDestino        = "top.corpo";
     sLabelJanela    = "Pesquisa de Lotacao";
     sNomeObjeto     = "db_iframe_rhlota";
     sFuncaoPesquisa = "parent.DBViewFormularioFolha.PesquisaLotacao.getInstance(" + this.iCodigoInstancia + ").retornoPesquisa|r70_codigo|r70_descr";
@@ -163,7 +163,7 @@ DBViewFormularioFolha.PesquisaLotacao.prototype.retornoPesquisa= function() {
   this.oInputLotacao.getElement().value = iLotacao;
   this.oInputNomeLotacao.setValue(sNomeLotacao);
   db_iframe_rhlota.hide();
-
+  
   return;
 };
 
@@ -173,8 +173,8 @@ DBViewFormularioFolha.PesquisaLotacao.prototype.retornoPesquisa= function() {
 DBViewFormularioFolha.PesquisaLotacao.prototype.retornoPesquisaDigitada= function() {
 
   var sNomeLotacao = '';
-  var lErro        = '';
-
+  var lErro        = '';    
+  
   sNomeLotacao     = arguments[0] ;
   lErro            = arguments[1] ;
 
@@ -190,13 +190,13 @@ DBViewFormularioFolha.PesquisaLotacao.prototype.retornoPesquisaDigitada= functio
  */
 DBViewFormularioFolha.PesquisaLotacao.oInstances  = DBViewFormularioFolha.PesquisaLotacao.oInstances || {};
 DBViewFormularioFolha.PesquisaLotacao.iCounter    = DBViewFormularioFolha.PesquisaLotacao.iCounter   || 0;
-DBViewFormularioFolha.PesquisaLotacao.addInstance = function( oPesquisaLotacao ) {
+DBViewFormularioFolha.PesquisaLotacao.addInstance = function( oPesquisaLotacao ) { 
 
   var iNumeroInstancia = DBViewFormularioFolha.PesquisaLotacao.iCounter++;
   DBViewFormularioFolha.PesquisaLotacao.oInstances['PesquisaLotacao' + iNumeroInstancia] = oPesquisaLotacao;
   return iNumeroInstancia;
 }
 
-DBViewFormularioFolha.PesquisaLotacao.getInstance = function( iInstancia ) {
+DBViewFormularioFolha.PesquisaLotacao.getInstance = function( iInstancia ) { 
   return DBViewFormularioFolha.PesquisaLotacao.oInstances['PesquisaLotacao' + iInstancia];
 };

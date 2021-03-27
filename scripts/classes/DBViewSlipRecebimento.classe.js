@@ -51,6 +51,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     break;
   }
 
+  /* [Extensão] - Filtro da Despesa - parte 1 */
+
   /**
    * Código Slip
    */
@@ -473,6 +475,9 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
       }
 
       me.clearAllFields();
+      me.oDivContainerCampos.style.display = 'none';
+      me.oDivGeralGrid.style.display       = '';
+      me.pesquisaTranferenciaRecebimento();
     } else {
       alert(oRetorno.message.urlDecode());
     }
@@ -813,13 +818,15 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     var sObjetoTxtConta = "me.oTxtConta" + sFunctionCompleta + "Codigo";
     var oTxtConta       = eval(sObjetoTxtConta);
 
-    var sUrlSaltes = "func_saltesreduz.php?pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta;
+    var sUrlSaltes = "func_saltesreduz.php?ver_datalimite=1&pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta;
     if (lMostra) {
-      sUrlSaltes = "func_saltesreduz.php?funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr";
+      sUrlSaltes = "func_saltesreduz.php?ver_datalimite=1&funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr";
     }
 
     js_OpenJanelaIframe("", 'db_iframe_'+sIframe, sUrlSaltes, "Pesquisa Contas", lMostra);
   };
+
+  /* [Extensão] - Filtro da Despesa - parte 2 */
 
   me.pesquisaContaEventoContabil = function(lMostra, lCredito) {
 
@@ -1046,6 +1053,11 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     me.oTxtInstituicaoOrigemCodigo.setValue('');
     me.oTxtDescricaoInstituicaoOrigem.setValue('');
     me.oTxtCNPJInstituicaoOrigem.setValue('');
+    me.oTxtContaDebitoDescricao.setValue('');
+    me.oTxtContaDebitoCodigo.setValue('');
+    me.oTxtContaCreditoDescricao.setValue('');
+    me.oTxtContaCreditoCodigo.setValue('');
+    me.oTxtProcessoInput.setValue('');
 
     /**
      * Trazer por padrão o campo caracteristica peculiar 000

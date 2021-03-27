@@ -765,7 +765,7 @@ DBViewManutencaoLocalTrabalho.prototype.retornoSalvarLocais = function(oAjax) {
  * @param mostra
  */
 DBViewManutencaoLocalTrabalho.prototype.pesquisarLocalTrabalho = function(mostra) {
-
+   
    if ( mostra == true ) {
      
      js_OpenJanelaIframe( '',
@@ -778,7 +778,9 @@ DBViewManutencaoLocalTrabalho.prototype.pesquisarLocalTrabalho = function(mostra
                         );
    } else {
 
+   this.oBotaoLancar.disabled = true; 
    if ( this.oInputLocalTrabalhoCodigo.getValue() != '' ) {
+       
        
        js_OpenJanelaIframe( '',
                             'db_iframe_rhlocaltrab',
@@ -788,8 +790,9 @@ DBViewManutencaoLocalTrabalho.prototype.pesquisarLocalTrabalho = function(mostra
                             false
                           );
      } else {
-       
-       this.oInputLocalTrabalhoDescricao.setValue( '' );
+
+     this.oBotaoLancar.disabled = false;
+     this.oInputLocalTrabalhoDescricao.setValue( '' );
      }
    }
    
@@ -809,7 +812,7 @@ DBViewManutencaoLocalTrabalho.prototype.retornoPesquisaAncora = function() {
   
   var aArgumentos = arguments;
 
-  
+  this.oBotaoLancar.disabled = false;
   if (aArgumentos.length == 2) {
     
     this.oInputLocalTrabalhoDescricao.setValue( aArgumentos[0] );

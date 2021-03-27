@@ -240,6 +240,8 @@ DBViewFormularioEducacao.Proporcionalidade.prototype.criaJanela = function() {
   this.montaComboAlunos();
   this.montaGridPeriodos();
 
+  this.oLabelDataMatricula.setAttribute('for', 'oInputDataMatricula');
+
   $('btnSalvarProporcionalidade').onclick = function() {
     oSelf.salvar();
   };
@@ -271,6 +273,8 @@ DBViewFormularioEducacao.Proporcionalidade.prototype.montaComboAlunos = function
   this.oAlunosOrigemFora.somenteAlunosOrigemForaRede( true );
   this.oAlunosOrigemFora.onChangeCallBack( fChange );
   this.oAlunosOrigemFora.show( $('colunaSelectAlunos') );
+
+  this.oLabelAluno.setAttribute('for', this.oAlunosOrigemFora.oCboAlunos.id);
 };
 
 /**

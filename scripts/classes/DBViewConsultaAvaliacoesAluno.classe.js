@@ -45,8 +45,6 @@ DBViewConsultaAvaliacoesAluno = function(sInstancia, iMatricula) {
         sConteudo   += "  </div>                                                                      \n";
         sConteudo   += "</div>                                                                        \n";
 
-
-
     me.oWindowAuxAvaliacao.setShutDownFunction(function() {
 
       delete me.oGridAproveitamento;
@@ -244,7 +242,8 @@ DBViewConsultaAvaliacoesAluno = function(sInstancia, iMatricula) {
 
         if (oPeriodo.oAproveitamento.sFormaAvaliacao == 'NOTA') {
 
-          if (new Number(oPeriodo.oAproveitamento.nAproveitamento) < new Number(oPeriodo.oAproveitamento.nMinimoAprovacao)) {
+          // sempre que o aluno não atingir o mínimo e não estiver amparado, deve-se colocar em negrito a avaliação
+          if (!oPeriodo.oAproveitamento.lAmparado && !oPeriodo.oAproveitamento.lAtingiuMinimo ) {
             sNota += " style = 'font-weight:bold' ";
           }
 
@@ -276,7 +275,7 @@ DBViewConsultaAvaliacoesAluno = function(sInstancia, iMatricula) {
       aLinha.push(oDisciplina.oFrequencia.nPercentualFrequencia);
 
       var sNotaFinal = "<span ";
-      if (new Number(oDisciplina.oResultadoFinal.nAproveitamentoFinal) < new Number(me.mMinimoAprovacao)) {
+      if (oDisciplina.oResultadoFinal.sResultadoAprovacao != 'A') {
         sNotaFinal += " style = 'font-weight:bold' ";
       }
       sNotaFinal += ">" + oDisciplina.oResultadoFinal.nAproveitamentoFinal + "</span>";

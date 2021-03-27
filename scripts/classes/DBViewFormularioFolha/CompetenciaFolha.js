@@ -64,6 +64,8 @@ DBViewFormularioFolha.CompetenciaFolha.prototype.criaFormularioCompetencia = fun
    */
   this.oAno = new DBTextField('ano', 'ano', this.iAno, 4);
   this.oMes = new DBTextField('mes', 'mes', this.iMes, 2);
+  this.oMes.getElement().placeholder='Mês';
+  this.oAno.getElement().placeholder='Ano';
   this.oAno.setMaxLength(4);
   this.oMes.setMaxLength(2);
   

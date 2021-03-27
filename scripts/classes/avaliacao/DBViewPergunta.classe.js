@@ -20,7 +20,7 @@ var DBViewPergunta = function(elemento) {
 };
 
 DBViewPergunta.makeFromObject = function(oPergunta, oElemento) {
-
+  
   var oDBViewPergunta = new DBViewPergunta(oElemento);
   oDBViewPergunta.setCodigo(oPergunta.codigo);
   oDBViewPergunta.setId(oPergunta.id);
@@ -32,9 +32,9 @@ DBViewPergunta.makeFromObject = function(oPergunta, oElemento) {
   oDBViewPergunta.setObrigatoria(oPergunta.obrigatoria);
   oDBViewPergunta.setAtivo(oPergunta.ativo);
   oDBViewPergunta.setFormato(oPergunta.formato);
-  oDBViewPergunta.setMascara(oPergunta.mascara);
-
-
+  oDBViewPergunta.setMascara(oPergunta.mascara);  
+  
+  
   if (oPergunta.tipo_resposta == 1 && oPergunta.elementoPerguntaObjetiva == 'select') {  
     
     var aRespostas = oPergunta.respostas;    
@@ -55,9 +55,9 @@ DBViewPergunta.makeFromObject = function(oPergunta, oElemento) {
     }    
     oPergunta.respostas = [resposta];
   }
-
-  oPergunta.respostas.forEach(function(oResposta) {
-
+  
+  oPergunta.respostas.forEach(function(oResposta) {    
+    
     oResposta.pergunta = oDBViewPergunta;
     var resposta       = DBViewResposta.makeFromObject(oResposta).show(oDBViewPergunta.elemento);
     oDBViewPergunta.respostas.add(resposta);

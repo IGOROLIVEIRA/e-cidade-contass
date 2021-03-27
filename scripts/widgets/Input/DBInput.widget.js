@@ -1,101 +1,98 @@
 /**
  * Representa um campo de digitação do sistema
- *
+ * 
  * @author Rafael Nery <rafael.nery@dbseller.com.br>
  * @version  $Revision: 1.8 $
  *
  */
 (function(exports) {
 
-    require('ext/javascript/prototype.maskedinput.js');
+  require('ext/javascript/prototype.maskedinput.js');
 
-    /**
-     * Construtor da Classe
-     *
-     * @constructor
-     * @module DBInput
-     *
-     * @param inputElement {HTMLInputElement} elemento que será modificado
-     */
-    var DBInput = function(inputElement) {
-        if (!inputElement || !(inputElement instanceof HTMLInputElement)) {
-            throw new TypeError("Elemento input deve ser especificado.");
-        }
+  /**
+   * Construtor da Classe
+   *
+   * @constructor
+   * @module DBInput
+   *
+   * @param inputElement {HTMLInputElement} elemento que será modificado
+   */
+  var DBInput = function(inputElement) {
 
-        if ( !!inputElement.getAttribute("dbinput-infected") ) {
-            return inputElement.DBInput;
-        }
+    if (!inputElement || !(inputElement instanceof HTMLInputElement)) {
+      throw new TypeError("Elemento input deve ser especificado.");
+    }
+
+    if ( !!inputElement.getAttribute("dbinput-infected") ) {
+      return inputElement.DBInput;
+    }
 
 
-        this.type         = this.type || 'text'; //Com ou(||) pois na herança já vem valor
-        this.inputElement = inputElement;
-        this.writable     = true;
-        this.valid        = true;
-        this.callbackError = function (sMensagem) {
-            alert(sMensagem);
-            return false;
-        };
-        try{
-            this.__infect();
-        } catch(e) {
-            console.log(e);
-        }
+    this.type         = this.type || 'text'; //Com ou(||) pois na herança já vem valor
+    this.inputElement = inputElement;
+    this.writable     = true;
+    this.valid        = true;
+    this.callbackError = function (sMensagem) { 
+      alert(sMensagem); 
+      return false;
     };
+    this.__infect();
+  };
 
-    DBInput.create = function(inputElement) {
-        return new this(inputElement);
+  DBInput.create = function(inputElement) {
+    return new this(inputElement);
+  };
+
+  DBInput.extend = function(callback) {
+    return {
+      value : callback
     };
+  };
 
-    DBInput.extend = function(callback) {
-        return {
-            value : callback
-        };
-    };
+  DBInput.prototype = {
 
-    DBInput.prototype = {
+    '__infect' : function() {
 
-        '__infect' : function() {
+      this.inputElement.type = this.type;
+      this.inputElement.setAttribute('dbinput-infected', 'true');
+      this.inputElement.DBInput = this;
+      return this;
+    },
+      
+    'isWritable' : function(writable) {
+      this.writable = !!writable;
+    }, 
 
-            this.inputElement.type = this.type;
-            this.inputElement.setAttribute('dbinput-infected', 'true');
-            this.inputElement.DBInput = this;
-            return this;
-        },
+    'isValid' : function(event) {
+      return this.valid;
+    },
 
-        'isWritable' : function(writable) {
-            this.writable = !!writable;
-        },
+    'success' : function(event) {
+      return true;
+    },
 
-        'isValid' : function(event) {
-            return this.valid;
-        },
+    'getValue' : function() {
+      return this.inputElement.value;
+    },
 
-        'success' : function(event) {
-            return true;
-        },
+    'setValue' : function(sValue) {
+      this.inputElement.value = sValue;
+    },
 
-        'getValue' : function() {
-            return this.inputElement.value;
-        },
+    'getElement' : function() {
+      return this.inputElement;
+    },
 
-        'setValue' : function(sValue) {
-            this.inputElement.value = sValue;
-        },
+    get value() {
+      return this.getValue();
+    },
 
-        'getElement' : function() {
-            return this.inputElement;
-        },
+    set value(valor) {
+      return this.setValue(valor);
+    }
 
-        get value() {
-            return this.getValue();
-        },
+  };
 
-        set value(valor) {
-            return this.setValue(valor);
-        }
-
-    };
-
-    exports.DBInput = DBInput;
-    return DBInput;
+  exports.DBInput = DBInput;
+  return DBInput;
 })(this);

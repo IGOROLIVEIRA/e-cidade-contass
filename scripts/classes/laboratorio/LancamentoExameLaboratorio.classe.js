@@ -1,4 +1,4 @@
-/*
+/**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
@@ -23,22 +23,31 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+
 const REFERENCIA_FIXA                        = 1;
 const REFERENCIA_NUMERICA                    = 2;
 const REFERENCIA_SELECIONAVEL                = 3;
 const MENSAGENS_LANCAMENTO_EXAME_LABORATORIO = 'saude.laboratorio.LancamentoExameLaboratorio.';
+const MSG_LANCAMENTOLABCONFERENCIA           = 'saude.laboratorio.db_frmlab_conferencia.'
 
 require_once("scripts/arrays.js");
 LancamentoExameLaboratorio = function(sInstance) {
 
-  var oSelf              = this;
-  this.iCodigoExame      = '';
-  this.iCodigoRequisicao = '';
-  this.aAtributos        = [];
-  this.aAtributosFormula = [];
-  this.aAtributosCampos  = [];
-  this.sNameInstance     = sInstance;
-  this.lReadOnly         = false;
+  var oSelf                = this;
+  this.iCodigoExame        = '';
+  this.iCodigoRequisicao   = '';
+  this.aAtributos          = [];
+  this.aAtributosFormula   = [];
+  this.aAtributosCampos    = [];
+  this.sNameInstance       = sInstance;
+  this.lReadOnly           = false;
+  this.lAbrirComoJanela    = false;
+  this.aCIDs               = [];
+  this.iCodigoProcedimento = '';
+  this.iCIDConferido       = null;
+
+  this.callbackAfterSalvar   = function() {return true;}
+  this.callbackAfterConferir = function() {return true;}
 
   this.oElementoDivContainer = document.createElement("div");
 
@@ -69,6 +78,23 @@ LancamentoExameLaboratorio = function(sInstance) {
   this.oLegendObservacao           = document.createElement("legend");
   this.oLegendObservacao.innerHTML = "<b>Observação</b>";
 
+  this.oElementoDivCID                  = document.createElement("div");
+  this.oElementoDivCID.style.paddingTop = '10px';
+  this.oElementoDivCID.style.display    = 'none';
+  this.oFieldsetCID                     = document.createElement('fieldset');
+  this.oFieldsetCIDLegend               = document.createElement('legend');
+  this.oFieldsetCIDLegend               = document.createElement('legend');
+  this.oCIDLabel                        = document.createElement('label');
+  this.oCIDLabel.setAttribute('for', 'iCodigoCID');
+  this.oCIDSelect                       = document.createElement('select');
+  this.oCIDSelect.id                    = 'iCodigoCID';
+  this.oCIDSelect.addClassName('field-size-max');
+  this.oFieldsetCIDLegend.innerHTML = 'CID';
+  this.oFieldsetCID.appendChild(this.oFieldsetCIDLegend);
+  this.oCIDLabel.appendChild( this.oCIDSelect );
+  this.oFieldsetCID.appendChild(this.oCIDLabel);
+  this.oElementoDivCID.appendChild(this.oFieldsetCID);
+
   this.oElementoFieldsetObservacao.appendChild( this.oLegendObservacao );
   this.oElementoFieldsetObservacao.appendChild( this.oTextAreaObservacao );
   this.oElementoDivObservacao.appendChild( this.oElementoFieldsetObservacao );
@@ -77,12 +103,49 @@ LancamentoExameLaboratorio = function(sInstance) {
   this.oBtnSalvar.value = 'Salvar';
   this.oBtnSalvar.type  ='button';
   this.oBtnSalvar.observe('click', function() {
-    oSelf.salvar();
+    oSelf.salvar( true );
+  });
+  document.body.observe('keydown', function(event){
+
+    if (event.ctrlKey && event.which == 13 ) {
+      oSelf.oBtnSalvar.click();
+    }
   });
 
+  this.oBtnFechar                  = document.createElement("input");
+  this.oBtnFechar.id               = 'btnFechar';
+  this.oBtnFechar.value            = 'Fechar';
+  this.oBtnFechar.type             = 'button';
+  this.oBtnFechar.style.marginLeft = '5px';
+  this.oBtnFechar.style.display    = 'none';
+
+  this.oBtnConfirmar                   = document.createElement("input");
+  this.oBtnConfirmar.id                = 'btnConfirmar';
+  this.oBtnConfirmar.value             = 'Confirmar Resultado';
+  this.oBtnConfirmar.type              = 'button';
+  this.oBtnConfirmar.style.marginRight = '5px';
+  this.oBtnConfirmar.style.display     = 'none';
+
+  this.oBtnConfirmar.observe('click', function() {
+
+    oSelf.setCallbackSalvar( oSelf.confirmarExame );
+    oSelf.salvar(false);
+  });
+
+  this.oBtnLancarMedicamento                  = document.createElement("input");
+  this.oBtnLancarMedicamento.id               = 'btnMedicamento';
+  this.oBtnLancarMedicamento.value            = 'Medicamentos';
+  this.oBtnLancarMedicamento.type             = 'button';
+  this.oBtnLancarMedicamento.style.marginLeft = '5px';
+  this.oBtnLancarMedicamento.setAttribute('disabled', 'disabled');
+
+  this.oElementoDivBotao.appendChild(this.oBtnConfirmar);
   this.oElementoDivBotao.appendChild(this.oBtnSalvar);
+  this.oElementoDivBotao.appendChild(this.oBtnFechar);
+  this.oElementoDivBotao.appendChild(this.oBtnLancarMedicamento);
 
   this.oElementoFieldset.appendChild(this.oElementoDivGrid);
+  this.oElementoFieldset.appendChild(this.oElementoDivCID);
   this.oElementoFieldset.appendChild(this.oElementoDivObservacao);
   this.oElementoFieldset.appendChild(this.oElementoDivBotao);
 
@@ -90,12 +153,13 @@ LancamentoExameLaboratorio = function(sInstance) {
   this.oElementoDivContainer.appendChild(this.oElementoDivBotao);
 
   this.sUrlRPC                      = 'lab4_digitacaoexame.RPC.php';
+  this.sUrlRPCConferencia           = 'lab4_conferencia.RPC.php';
   oGridAtributosExame               = new DBGrid("gridAtributos");
   oGridAtributosExame.nameInstance  = 'oGridAtributos';
   oGridAtributosExame.setHeader(['Codigo', 'Atributo', '%', 'VA', "Referência", "codigo_ref"]);
   oGridAtributosExame.setCellWidth(['5', '35', '10', '20', '30', '1']);
   oGridAtributosExame.setCellAlign(['right']);
-  oGridAtributosExame.setHeight(400);
+  oGridAtributosExame.setHeight(300);
   oGridAtributosExame.aHeaders[5].lDisplayed = false;
 };
 
@@ -104,6 +168,8 @@ LancamentoExameLaboratorio = function(sInstance) {
  * @param oElement
  */
 LancamentoExameLaboratorio.prototype.show = function(oElement) {
+
+  var oSelf = this;
 
   oElement.appendChild(this.oElementoDivContainer);
   oGridAtributosExame.show(this.oElementoDivGrid);
@@ -117,6 +183,11 @@ LancamentoExameLaboratorio.prototype.setRequisicao = function(iRequisicaoExame) 
 
   this.iCodigoRequisicao = iRequisicaoExame;
   this.getAtributosDoExame();
+  this.oBtnLancarMedicamento.removeAttribute('disabled');
+
+  if ( !this.lAbrirComoJanela ) {
+    this.lancarMedicamentos();
+  }
 };
 
 /**
@@ -140,6 +211,10 @@ LancamentoExameLaboratorio.prototype.getAtributosDoExame = function() {
 
                        $('textAreaObservacao').value = oRetorno.sObservacao.urlDecode();
                        oSelf.aAtributos              = oRetorno.atributos;
+                       // decodifica string da titulação
+                       for ( var oAtributo of oSelf.aAtributos ) {
+                         oAtributo.titulacao = oAtributo.titulacao.urlDecode();
+                       }
                        oSelf.preencherAtributos();
                      }
                    });
@@ -153,12 +228,18 @@ LancamentoExameLaboratorio.prototype.preencherAtributos = function() {
 
   oGridAtributosExame.clearAll(true);
   var oSelf = this;
-  console.log(this.aAtributos);
+
   this.aAtributos.each(function(oAtributo, iSeq) {
+
+    var sDescricaoAtributo = oAtributo.descricao.urlDecode()
+    // quando atributo recebe valor, transforma em um link
+    if (oAtributo.tipo == 2) {
+      sDescricaoAtributo = '<a href="#" id="atributo_obs_'+oAtributo.codigo+'" title="Clique para lançar titulação." > ' + sDescricaoAtributo + '</a>';
+    }
 
     var aLinha = [];
     aLinha[0]  = oAtributo.codigo;
-    aLinha[1]  = strRepeat("&nbsp;&nbsp;", oAtributo.nivel)+oAtributo.descricao.urlDecode();
+    aLinha[1]  = strRepeat("&nbsp;&nbsp;", oAtributo.nivel) + sDescricaoAtributo;
 
     aLinha[2]  = oSelf.inputPercentual(oAtributo);
     aLinha[3]  = oSelf.inputValorAbsoluto(oAtributo);
@@ -185,7 +266,13 @@ LancamentoExameLaboratorio.prototype.preencherAtributos = function() {
   });
 
   oGridAtributosExame.renderRows();
+  var oPrimeiroAtributo = null;
   oSelf.aAtributos.each(function(oAtributo) {
+
+    // implementa ação ao link do atributo para lançar titulação
+    if ( $("atributo_obs_"+oAtributo.codigo) ) {
+      $("atributo_obs_"+oAtributo.codigo).addEventListener('click', oSelf.lancarTitulacao.bind(this, oAtributo, oSelf ));
+    }
 
     if (!$("atributo_"+oAtributo.codigo)) {
       return;
@@ -197,6 +284,10 @@ LancamentoExameLaboratorio.prototype.preencherAtributos = function() {
       $("atributo_"+oAtributo.codigo).addEventListener('drop'    , oSelf.bloqueiaEventos.bind(this, $("atributo_"+oAtributo.codigo)) );
       $("atributo_"+oAtributo.codigo).addEventListener('change'  , oSelf.validaValorInformado.bind(this, $("atributo_"+oAtributo.codigo), oAtributo, oSelf) );
       $("atributo_"+oAtributo.codigo).addEventListener('keypress', oSelf.validaValorInformado.bind(this, $("atributo_"+oAtributo.codigo), oAtributo, oSelf) );
+
+      if (oPrimeiroAtributo == null) {
+        oPrimeiroAtributo = $("atributo_"+oAtributo.codigo);
+      }
     }
 
     if ( $("atributo_"+oAtributo.codigo+"_percentual") ) {
@@ -213,12 +304,23 @@ LancamentoExameLaboratorio.prototype.preencherAtributos = function() {
 
       $("atributo_"+oAtributo.codigo+"_percentual").addEventListener('paste', oSelf.bloqueiaEventos.bind(this, $("atributo_"+oAtributo.codigo+"_percentual")) );
       $("atributo_"+oAtributo.codigo+"_percentual").addEventListener('drop' , oSelf.bloqueiaEventos.bind(this, $("atributo_"+oAtributo.codigo+"_percentual")) );
+      if (oPrimeiroAtributo == null) {
+        oPrimeiroAtributo = $("atributo_"+oAtributo.codigo+"_percentual");
+      }
     }
 
     if (oAtributo.tiporeferencia != REFERENCIA_NUMERICA) {
       return;
     }
+    if ($("atributo_"+oAtributo.codigo)) {
+      oSelf.sinalizaInput(oAtributo.codigo, $("atributo_" + oAtributo.codigo));
+    }
+
+
   });
+
+  oPrimeiroAtributo.focus();
+
 };
 
 /**
@@ -240,29 +342,29 @@ LancamentoExameLaboratorio.prototype.inputPercentual = function(oAtributo) {
   //var sFuncaoCalculo = "onchange='"+this.sNameInstance+".calcularValorAbsoluto("+oAtributo.codigo+", this)';";
   var sFuncaoCalculo = "onchange='"+this.sNameInstance+".calcularPorcentagem("+oAtributo.codigo+", this)';";
 
-  /*
+
   if (this.lReadOnly) {
 
    sBloqueioTela  = ' border:0px;';
    sFuncaoCalculo = '';
    sReadOnly      = 'readonly="readonly"';
   }
-  */
-  console.log('INPUT-PERCENTUAL: ', oAtributo);
+
+
   if (oAtributo.referencia.tipo == REFERENCIA_NUMERICA &&
      (oAtributo.referencia.tipocalculo == 2) ) { // (oAtributo.referencia.tipocalculo == 1 || oAtributo.referencia.baseparacalculo) ) {
 
-    /*if (oAtributo.referencia.baseparacalculo) {
+    if (oAtributo.referencia.baseparacalculo) {
 
       sReadOnly = 'readonly="readonly"';
       sFuncaoCalculo = '';
-    }*/
+    }
 
-    sCampo  = "<input type='text' "+sReadOnly+" style='width:99%;text-align: right;"+sBloqueioTela+"'";
+    sCampo  = "<input class='campoAtributoExame' type='text' "+sReadOnly+" style='width:99%;text-align: right;"+sBloqueioTela+"'";
     sCampo += " id='atributo_"+oAtributo.codigo+"_percentual' "+sFuncaoCalculo;
     sCampo +=  " value='"+oAtributo.valorpercentual+"' >";
   } else if(oAtributo.referencia.baseparacalculo) {
-    sCampo = '100%';
+    sCampo = '100';
   }
 
   return sCampo;
@@ -291,20 +393,20 @@ LancamentoExameLaboratorio.prototype.inputValorNumerico = function(oAtributo) {
     // Verifica se o atributo é gerado a partir de uma fórmula (Valor Absoluto). Se sim, inclui o campo na lista para checagem futura
     if(oAtributo.referencia.tipocalculo == 1) {
       oSelf.aAtributosFormula.push(oAtributo);
-      console.log('Atributo valor absoluto: ', oAtributo);
     }
   }
 
   // Inclui na lista os campos adicionados ao GRID para futura referência via código_estrutural
   oSelf.aAtributosCampos[oAtributo.codigo_estrutural] = oAtributo;
-  console.log('Campos adicionados: ', oSelf.aAtributosCampos);
 
-  /*
+
+
   if (this.lReadOnly) {
+
     oInput.setAttribute('readonly', 'readonly');
     oInput.style.border = '0px';
   }
-  */
+
 
   return oInput.outerHTML;
 };
@@ -318,17 +420,16 @@ LancamentoExameLaboratorio.prototype.inputValorNumerico = function(oAtributo) {
  */
 LancamentoExameLaboratorio.prototype.inputValorFixo = function(oAtributo) {
 
-  var sBloqueioTela = '';
-  var sReadOnly     = '';
+  var oInput = new Element('input', {type:'text', value:oAtributo.valorabsoluto.urlDecode(), style:'width:98%'});
+  oInput.setAttribute("id", 'atributo_'+oAtributo.codigo);
+
   if (this.lReadOnly) {
 
-    sReadOnly     = 'readonly';
-    sBloqueioTela = ';border:0px;';
+    oInput.style.border = "0px";
+    oInput.setAttribute("readonly", "readonly");
   }
 
-  var sInput = "<input type='text' style='width:98% "+sBloqueioTela+"' "+sReadOnly;
-  sInput    += " value='"+oAtributo.valorabsoluto+"' id='atributo_"+oAtributo.codigo+"' >";
-  return sInput;
+  return oInput.outerHTML;
 };
 
 LancamentoExameLaboratorio.prototype.comboBoxAtributos = function(oAtributo) {
@@ -381,8 +482,7 @@ LancamentoExameLaboratorio.prototype.validaValores = function(iCodigoAtributo, o
   if (nValor < sValorMinimo || nValor > sValorMaximo) {
 
     var sStringIntervalor = "("+sValorMinimo + " até ";
-    sStringIntervalor    += sValorMaximo + ") " + oAtributo.referencia.unidade.urlDecode() + ' para ' + oAtributo.descricao;
-    console.log(oAtributo);
+    sStringIntervalor    += sValorMaximo + ") " + oAtributo.referencia.unidade.urlDecode() + ' para ' + oAtributo.descricao.urlDecode();
 
     var oPropriedades        = {};
         oPropriedades.sValor = sStringIntervalor;
@@ -404,7 +504,7 @@ LancamentoExameLaboratorio.prototype.validaValores = function(iCodigoAtributo, o
 
     oSelf.aAtributos.each(function(oAtributoCalculo, iSeq) {
 
-      if (oAtributoCalculo.referencia == '' || (oAtributoCalculo.referencia.tipocalculo != 1)) {
+      if (oAtributoCalculo.referencia == '' || (oAtributoCalculo.referencia.tipocalculo != 2)) {
         return ;
       }
 
@@ -475,39 +575,40 @@ LancamentoExameLaboratorio.prototype.getAtributo = function(iCodigoAtributo) {
 LancamentoExameLaboratorio.prototype.verificaFormulas = function(iAtributo, oInput) {
 
   var oAtributoCurrent  = this.getAtributo(iAtributo);
-  var sCodigoEstrutural = oAtributoCurrent.codigo_estrtural;
+  var sCodigoEstrutural = oAtributoCurrent.codigo_estrutural;
   var _this = this;
 
-  this.aAtributosFormula.each(function(oAtributo){
+  this.aAtributosFormula.each(function(oAtributo) {
     var sFormula = oAtributo.referencia.formula;
 
     // Extrai os códigos estruturais da fórmula
     var sPattern = /([0-9]+\.[0-9]+\.[0-9]+)/g;
     var aResults = sFormula.match(sPattern);
-    console.log('MATCHES: ', aResults);
 
     var sFormulaComVariaveis = sFormula;
-    console.log(sFormulaComVariaveis);
-    aResults.each(function(codigo_estrutural){
-      if(typeof _this.aAtributosCampos[codigo_estrutural] != 'undefined' && $('atributo_' + _this.aAtributosCampos[codigo_estrutural].codigo) != undefined) {
-        var sValorSubstituir = $F('atributo_' + _this.aAtributosCampos[codigo_estrutural].codigo);
-        if(sValorSubstituir != "") {
-          sFormulaComVariaveis = sFormulaComVariaveis.replace(codigo_estrutural, sValorSubstituir);
+
+    if (aResults != null) {
+
+      aResults.each(function(codigo_estrutural){
+        if (typeof _this.aAtributosCampos[codigo_estrutural] != 'undefined' && $('atributo_' + _this.aAtributosCampos[codigo_estrutural].codigo) != undefined) {
+          var sValorSubstituir = $F('atributo_' + _this.aAtributosCampos[codigo_estrutural].codigo);
+          if(sValorSubstituir != "") {
+            sFormulaComVariaveis = sFormulaComVariaveis.replace(codigo_estrutural, sValorSubstituir);
+          }
         }
-      }
-    });
-    console.log(sFormulaComVariaveis);
+      });
 
-    if(sFormulaComVariaveis.match(sPattern) == null) {
-      console.log('OK - Calcular', 'atributo_' + oAtributo.codigo);
-      var valorFinal = eval(sFormulaComVariaveis);
-      if(oAtributo.referencia.casasdecimais > 0) {
-        console.log('Valor alterado para ' + oAtributo.referencia.casasdecimais + ' casas decimais');
-        valorFinal = parseFloat(valorFinal).toFixed(oAtributo.referencia.casasdecimais);
-      }
+      if (sFormulaComVariaveis.match(sPattern) == null) {
 
-      $('atributo_' + oAtributo.codigo).value = valorFinal;
-      _this.validaValores(oAtributo.codigo, $('atributo_' + oAtributo.codigo));
+        var valorFinal = eval(sFormulaComVariaveis);
+        if(oAtributo.referencia.casasdecimais > 0) {
+
+          valorFinal = parseFloat(valorFinal).toFixed(oAtributo.referencia.casasdecimais);
+        }
+
+        $('atributo_' + oAtributo.codigo).value = valorFinal;
+        _this.validaValores(oAtributo.codigo, $('atributo_' + oAtributo.codigo));
+      }
     }
 
   });
@@ -551,8 +652,10 @@ LancamentoExameLaboratorio.prototype.calcularPorcentagem = function(iAtributo, o
     return ;
   }
 
+  if (oInput == '') {
+    return;
+  }
   var nValorBase          = new Number($F('atributo_'+oAtributo.referencia.atributobase)).valueOf();
-  //var nPercentualBase     = new Number($F('atributo_'+oAtributo.referencia.atributobase+"_percentual")).valueOf();
   var nPercentualDigitado = new Number(oInput.value).valueOf();
   var nValorAbsoluto      = new Number((nValorBase / 100) * nPercentualDigitado);
 
@@ -598,10 +701,13 @@ LancamentoExameLaboratorio.prototype.inputValorAbsoluto = function(oLinha) {
  * Salva os dados do exame
  * @returns {boolean}
  */
-LancamentoExameLaboratorio.prototype.salvar = function() {
+LancamentoExameLaboratorio.prototype.salvar = function( lExibeMensagem ) {
 
-  if ( !confirm( _M( MENSAGENS_LANCAMENTO_EXAME_LABORATORIO + 'confirma_valores' ) ) ) {
-    return false;
+  if ( lExibeMensagem ) {
+
+    if ( !confirm( _M( MENSAGENS_LANCAMENTO_EXAME_LABORATORIO + 'confirma_valores' ) ) ) {
+      return false;
+    }
   }
 
   var oSelf      = this;
@@ -616,9 +722,10 @@ LancamentoExameLaboratorio.prototype.salvar = function() {
     var oAtributoValor = {
 
       iCodigoAtributo   : oLinha.aCells[0].getValue(),
-      nValorPercentual  : oLinha.aCells[2].getValue().trim(),
+      nValorPercentual  : parseFloat(oLinha.aCells[2].getValue().trim()),
       iCodigoReferencia : oLinha.aCells[5].getValue().trim(),
-      nValorAbsoluto    : encodeURIComponent(tagString(oLinha.aCells[3].getValue().trim()))
+      nValorAbsoluto    : encodeURIComponent(tagString(oLinha.aCells[3].getValue().trim())),
+      sTitulacao        : encodeURIComponent(tagString(oAtributo.titulacao))
     };
 
     aAtributos.push(oAtributoValor);
@@ -627,7 +734,7 @@ LancamentoExameLaboratorio.prototype.salvar = function() {
   var oParam = {
     exec         :'salvarResultadoExame',
     iCodigoExame : this.iCodigoRequisicao,
-    sObservacao  : encodeURIComponent( tagString(this.oTextAreaObservacao.value) ),
+    sObservacao  : encodeURIComponent( tagString(this.oTextAreaObservacao.value)),
     aAtributos   : aAtributos
   };
 
@@ -640,7 +747,11 @@ LancamentoExameLaboratorio.prototype.salvar = function() {
 
         js_removeObj('msgBox');
         var oRetorno     = eval("("+oResponse.responseText+")");
-        alert(oRetorno.message.urlDecode());
+
+        if ( lExibeMensagem ) {
+          alert(oRetorno.message.urlDecode());
+        }
+        oSelf.callbackAfterSalvar(oRetorno);
       }
     });
 };
@@ -662,6 +773,8 @@ LancamentoExameLaboratorio.prototype.setReadOnly = function(lReadOnly) {
  */
 LancamentoExameLaboratorio.prototype.abrirComoJanela = function( iLancamentoExame ) {
 
+  this.lAbrirComoJanela = true;
+
   var oSelf = this;
 
   if ($('wndLancamentoExame')) {
@@ -677,9 +790,6 @@ LancamentoExameLaboratorio.prototype.abrirComoJanela = function( iLancamentoExam
   var sConteudo  = '<div style="height:78%;width:97%;">';
       sConteudo += '    <div id="ctnGridResultado"></div>';
       sConteudo += '</div>';
-      sConteudo += "<div class='container'>";
-      sConteudo +=    "<input type='button' id='btnFechar' value='Fechar'>";
-      sConteudo += "</div>";
 
   this.oWindowLancamentoExame.setContent(sConteudo);
 
@@ -691,13 +801,37 @@ LancamentoExameLaboratorio.prototype.abrirComoJanela = function( iLancamentoExam
                       oSelf.oWindowLancamentoExame.getContentContainer()
                      );
 
+  if ( this.aCIDs.length ) {
+
+    this.aCIDs.forEach( function( oCID ) {
+
+      var oCIDOption = document.createElement('option');
+      oCIDOption.value     = oCID.iCodigo;
+      oCIDOption.innerHTML = oCID.sCID + " - " + oCID.sNome.urlDecode();
+
+      if ( oSelf.iCIDConferido == oCID.iCodigo ){
+        oCIDOption.selected = true;
+      }
+
+      oSelf.oCIDSelect.appendChild(oCIDOption);
+    });
+
+    this.oElementoDivCID.style.display = '';
+  }
+
+  this.oBtnConfirmar.style.display = '';
+  this.oBtnFechar.style.display = '';
+
+
   oSelf.setRequisicao(iLancamentoExame);
   this.show($('ctnGridResultado'));
   this.oWindowLancamentoExame.show();
+  this.lancarMedicamentos();
 
-  $('btnFechar').observe("click", function() {
+  this.oBtnFechar.observe("click", function() {
     oSelf.oWindowLancamentoExame.destroy();
   });
+
 };
 
 /**
@@ -771,4 +905,171 @@ LancamentoExameLaboratorio.prototype.calculaTotalPercentual = function( iAtribut
     return false;
   }
   return true;
+};
+
+LancamentoExameLaboratorio.prototype.setCallbackSalvar = function(sFunction) {
+  this.callbackAfterSalvar = sFunction;
+};
+
+LancamentoExameLaboratorio.prototype.setCallbackConferir = function(sFunction) {
+  this.callbackAfterConferir = sFunction;
+}
+
+LancamentoExameLaboratorio.prototype.clear = function(sFunction) {
+
+  $('textAreaObservacao').value = '';
+  oGridAtributosExame.clearAll(true);
+
+  this.aAtributos        = [];
+  this.aAtributosFormula = [];
+  this.aAtributosCampos  = [];
+};
+
+LancamentoExameLaboratorio.prototype.lancarMedicamentos = function (){
+
+  var oSelf = this;
+
+  this.oBtnLancarMedicamento.observe('click', function(){
+
+    var oMedicamento = new LancarMedicamentoExame('oMedicamento', oSelf.iCodigoRequisicao);
+    oMedicamento.show();
+    if (oSelf.lAbrirComoJanela) {
+
+      oMedicamento.setParentWindowAux(oSelf.oWindowLancamentoExame);
+    }
+
+  });
+};
+
+LancamentoExameLaboratorio.prototype.setCIDs = function ( aCIDs ){
+   this.aCIDs = aCIDs;
+};
+
+LancamentoExameLaboratorio.prototype.setProcedimento = function ( iCodigoProcedimento ){
+   this.iCodigoProcedimento = iCodigoProcedimento;
+};
+
+LancamentoExameLaboratorio.prototype.confirmarExame = function() {
+
+  var oSelf      = this,
+      oParametro = {};
+
+  oParametro.exec       = 'salvarConferencia';
+  oParametro.iCodigo    = $F('la22_i_codigo');
+  oParametro.lConferido = true;
+  oParametro.aExames    = [];
+
+  var oExame                    = {};
+  oExame.iCodigoRequisicaoExame = this.iCodigoRequisicao;
+  oExame.iCodigoCID             = this.oCIDSelect.value;
+  oExame.iProcedimento          = this.iCodigoProcedimento;
+  oParametro.aExames.push(oExame);
+
+  var oRequest          = {};
+  oRequest.method       = 'post';
+  oRequest.parameters   = 'json='+Object.toJSON(oParametro);
+  oRequest.asynchronous = false;
+  var oCID = null;
+
+  if ( oExame.iCodigoCID != '' ) {
+
+    var aDadosCID = this.oCIDSelect.options[this.oCIDSelect.selectedIndex].text.split(' - ');
+
+    oCID = {
+      'sEstruturalCidConferido' : aDadosCID[0],
+      'sNomeCidConferido'       : aDadosCID[1]
+    };
+  }
+
+  oRequest.onComplete   = function( oAjax ) {
+
+    js_removeObj("msgBoxB");
+
+    var oRetorno = eval( "(" + oAjax.responseText + ")" );
+    alert( oRetorno.sMensagem.urlDecode() );
+
+    if ( oRetorno.iStatus == '2' ) {
+      return false;
+    }
+
+    oSelf.callbackAfterConferir( oCID );
+  };
+  js_divCarregando( _M( MSG_LANCAMENTOLABCONFERENCIA + "aguarde_salvando_conferencia" ), "msgBoxB");
+  new Ajax.Request( oSelf.sUrlRPCConferencia , oRequest );
+};
+
+LancamentoExameLaboratorio.prototype.setCodigoCIDConferido = function( iCIDConferido ) {
+  this.iCIDConferido = iCIDConferido;
+};
+
+/**
+ * Monta a window para inserção da titulação
+ * @param  {Object}                     oAtributo
+ * @param  {LancamentoExameLaboratorio} oSelf
+ * @return {void}
+ */
+LancamentoExameLaboratorio.prototype.lancarTitulacao = function ( oAtributo, oSelf ) {
+
+  if ($("wndLancaTitulacaoAtributo")) {
+    return;
+  }
+
+  var oWindowTitulacao = new windowAux("wndLancaTitulacaoAtributo", "Titulação", 450, 240 );
+  oWindowTitulacao.setShutDownFunction(function () {
+    oWindowTitulacao.destroy();
+  });
+
+  oWindowTitulacao.allowCloseWithEsc(true);
+
+  var sConteudo    = "<div class='subcontainer'>                                                  \n";
+      sConteudo   += "  <fieldset id='ctnTitulacao'>                                           \n";
+      sConteudo   += "    <legend><label for='titulacaoAtributo'>Titulação</label></legend>   \n";
+      sConteudo   += "    <textarea rows='4' cols='50' id='titulacaoAtributo' > </textarea>    \n";
+      sConteudo   += "  </fieldset>                                                            \n";
+      sConteudo   += "  <input type='button' value='Adicionar' id='salvarTitulacao' />  \n";
+      sConteudo   += "</div>                                                                   \n";
+
+  oWindowTitulacao.setShutDownFunction(function() {
+    oWindowTitulacao.destroy();
+  });
+
+  var sHelpMsgBox  = ' Titular: <b>' +  oAtributo.descricao.urlDecode() + '</b> ';
+
+  oWindowTitulacao.setContent(sConteudo);
+  var oMessageBoard = new DBMessageBoard('msgBoardTitulacao'+oAtributo.codigo,
+                                         'Titular: <b>' + oAtributo.descricao.urlDecode() + '</b> ',
+                                         'Adicione a titulação e clique em salvar.',
+                                         oWindowTitulacao.getContentContainer()
+                                        );
+  oWindowTitulacao.show();
+
+  if ( $('wndLancaTitulacaoAtributo') ) {
+
+    setTimeout(function () {
+      $('wndLancaTitulacaoAtributo').style.zIndex = 99999;
+    }, 1 );
+  }
+
+  $('titulacaoAtributo').value = undoTagString(oAtributo.titulacao);
+  $('salvarTitulacao').addEventListener('click', oSelf.salvarTitulacao.bind(this, oAtributo.codigo, $('titulacaoAtributo'), oSelf, oWindowTitulacao ));
+};
+
+/**
+ * Salva na classe a titulação informada
+ * @param  {integer}                    iAtributo  código do atributo
+ * @param  {HTMLTextAreaElement}        oTitulacao
+ * @param  {LancamentoExameLaboratorio} oSelf
+ * @param  {windowAux}                  oWindow
+ * @return {void}
+ */
+LancamentoExameLaboratorio.prototype.salvarTitulacao = function ( iAtributo, oTitulacao, oSelf, oWindow ) {
+
+  for (var oAtributo of oSelf.aAtributos) {
+
+    if (oAtributo.codigo == iAtributo) {
+      oAtributo.titulacao = oTitulacao.value;
+    }
+  }
+
+  oWindow.destroy();
 };

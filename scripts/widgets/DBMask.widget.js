@@ -78,36 +78,50 @@ DBMask.prototype.insereMascaras = function(oMaskBase) {
 
   var CurrentWindow = top;
 
-  if (CurrentWindow.ECIDADE_DESKTOP) {
+  if (top.ECIDADE_DESKTOP) {
     CurrentWindow = parent.CurrentWindow;
   }
 
   if (this.settings.miniMask) {
 
-    this.corpoMask = this.settings.context.document.importNode(oMaskBase, true)
-    CurrentWindow.corpo.document.body.appendChild(this.corpoMask);
-    this.oMasks.push(this.corpoMask)
+    CurrentWindow.corpo.__DBMask = this.settings.context.document.importNode(oMaskBase, true);
+    CurrentWindow.corpo.document.body.appendChild(CurrentWindow.corpo.__DBMask);
+
+    this.corpoMask = CurrentWindow.corpo.__DBMask;
+    this.oMasks.push(this.corpoMask);
 
   } else {
 
     if (CurrentWindow.corpo) {
 
-      this.corpoMask = CurrentWindow.corpo.document.importNode(oMaskBase, true)
-      CurrentWindow.corpo.document.body.appendChild(this.corpoMask);
+      if (!CurrentWindow.corpo.__DBMask) {
+        CurrentWindow.corpo.__DBMask = CurrentWindow.corpo.document.importNode(oMaskBase, true)
+        CurrentWindow.corpo.document.body.appendChild(CurrentWindow.corpo.__DBMask);
+      }
+
+      this.corpoMask = CurrentWindow.corpo.__DBMask;
       this.oMasks.push(this.corpoMask)
     }
 
     if (CurrentWindow.topo) {
 
-      this.topoMask = CurrentWindow.topo.document.importNode(oMaskBase, true)
-      CurrentWindow.topo.document.body.appendChild(this.topoMask);
+      if (!CurrentWindow.topo.__DBMask) {
+        CurrentWindow.topo.__DBMask = CurrentWindow.topo.document.importNode(oMaskBase, true)
+        CurrentWindow.topo.document.body.appendChild(CurrentWindow.topo.__DBMask);
+      }
+
+      this.topoMask = CurrentWindow.topo.__DBMask;
       this.oMasks.push(this.topoMask)
     }
 
     if (CurrentWindow.bstatus) {
 
-      this.bstatusMask = CurrentWindow.bstatus.document.importNode(oMaskBase, true)
-      CurrentWindow.bstatus.document.body.appendChild(this.bstatusMask);
+      if (!CurrentWindow.bstatus.__DBMask) {
+        CurrentWindow.bstatus.__DBMask = CurrentWindow.bstatus.document.importNode(oMaskBase, true)
+        CurrentWindow.bstatus.document.body.appendChild(CurrentWindow.bstatus.__DBMask);
+      }
+
+      this.bstatusMask = CurrentWindow.bstatus.__DBMask;
       this.oMasks.push(this.bstatusMask)
     }
 
@@ -121,6 +135,11 @@ DBMask.prototype.insereMascaras = function(oMaskBase) {
 DBMask.prototype.destroy = function() {
 
   for (var indexMasks = 0; indexMasks < this.oMasks.length; indexMasks++ ) {
+
+    if (this.oMasks[indexMasks].parentNode.ownerDocument.defaultView.__DBMask) {
+      delete this.oMasks[indexMasks].parentNode.ownerDocument.defaultView.__DBMask;
+    }
+
     this.oMasks[indexMasks].parentNode.removeChild(this.oMasks[indexMasks]);
     this.oMasks[indexMasks] = null;
   }

@@ -74,11 +74,11 @@ if (isset($atualiza)) {
 
       $extensionManager = new \ECidade\V3\Extension\Manager();
       $success = $extensionManager->install('Desktop', $_SESSION['DB_login']);
-      var_dump($success);exit;
+
       if ($success) {
         echo "<script type='text/javascript'>
-          CurrentWindow.document.body.onunload = '';
-          CurrentWindow.document.location.href = 'extension/desktop';
+          top.document.body.onunload = '';
+          top.document.location.href = 'extension/desktop';
         </script>";
         exit;
       }

@@ -1,76 +1,82 @@
 require_once("scripts/classes/educacao/DBViewFormularioEducacao.classe.js");
 require_once("scripts/strings.js");
 /**
- * 
- * Cria um ComboBox com as calendarios de uma determinada escola 
+ *
+ * Cria um ComboBox com as calendarios de uma determinada escola
  * Permite mostrar os calendarios agrupados por ano, atraves do metodo agruparPorAno
  * @author Iuri Guntchnigg - iuri@dbseller.com.br
  * @revision Andrio Costa - andrio.costa@dbseller.com.br
  * @package Educacao
- * @subpackage Escola 
- * @example 
+ * @subpackage Escola
+ * @example
  * var oCboCalendarios = new DBViewFormularioEducacao.ListaCalendario();
  * oCbCalendario.setCallBackLoad(function() {
  *    alert('Carregou todos os calendarios');
- * });     
+ * });
  * oCbCalendario.show(oDiv);
- * 
- * @version $Revision: 1.7 $
+ *
+ * @version $Revision: 1.9 $
  * @returns {DBViewFormularioEducacao.ListaCalendario}
  *
  */
 DBViewFormularioEducacao.ListaCalendario = function() {
-  
+
   /**
    * Controle da exibição da opção todas
    */
   this.lOpcaoTodos = false;
-  
+
   /**
    * Elemento select
    * @var HTMLElement
    */
   this.oElement = document.createElement("select");
-  
+
   /**
    * RPC que deve ser chamado os dados
    * @var string
    */
   this.sUrlRPC = 'edu_educacaobase.RPC.php';
-  
+
   /**
    * Define se devemos trazer somente os calendários com turma vinculádas ou todos calendários da escola selecionada
    * @var Boolean
    */
   this.lSomenteCalendarioComTurmaVinculada = true;
-  
+
   /**
    * Codigo da escola
    * @var integer
    */
   this.iCodigoEscola = '';
-  
+
   /**
    * lista de calendarios padroes
    */
   this.aCalendarios = new Array();
-  
+
   /**
    * controle de calendarios com apenas turma Encerradas
    */
   this.lComTurmasEncerradas = false;
-  
+
   /**
    * Controle de calendarios ativos
    * @var boolean
    */
   this.lApenasAtivos = true;
-  
+
   /**
    * Agrupar os Calendários por ano
    * @var {Boolean}
    */
   this.lAgruparPorAno = false;
+
+  /**
+   * Controla para que sejam retornados somente calendários com turmas que tenham progressão encerrada
+   * @type {boolean}
+   */
+  this.lSomenteTurmasComProgressaoEncerrada = false;
 
   /**
    * Callback padrao chamado apos o load dos calendarios
@@ -79,9 +85,9 @@ DBViewFormularioEducacao.ListaCalendario = function() {
   this.fCallBackAfterLoad = function() {
     return true;
   }
-  
+
   /**
-  * Função callback ao selecionar um option do select 
+  * Função callback ao selecionar um option do select
   * @var function
   */
  this.fCallbackOnChange = function () {
@@ -97,21 +103,23 @@ DBViewFormularioEducacao.ListaCalendario = function() {
  * Caso foi definido  a escola retorna os dados da mesma.
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.getCalendarios = function() {
- 
+
   var oSelf = this;
   oSelf.limpar();
   js_divCarregando('Aguarde, pesquisando calendários', 'msgBoxCalendario');
 
   var oParametros  = new Object();
   oParametros.exec = "pesquisaCalendario";
-  if (!this.lSomenteCalendarioComTurmaVinculada) {
-    oParametros.exec = "pesquisaCalendarioEscola";  
-  }
-  
-  oParametros.turmas_encerradas = oSelf.lComTurmasEncerradas;
-  oParametros.apenas_ativos     = oSelf.lApenasAtivos;
 
-  if (oSelf.iCodigoEscola != '') { 
+  if (!this.lSomenteCalendarioComTurmaVinculada) {
+    oParametros.exec = "pesquisaCalendarioEscola";
+  }
+
+  oParametros.turmas_encerradas                    = oSelf.lComTurmasEncerradas;
+  oParametros.apenas_ativos                        = oSelf.lApenasAtivos;
+  oParametros.lSomenteTurmasComProgressaoEncerrada = oSelf.lSomenteTurmasComProgressaoEncerrada;
+
+  if (oSelf.iCodigoEscola != '') {
     oParametros.iEscola = oSelf.iCodigoEscola;
   }
 
@@ -130,11 +138,11 @@ DBViewFormularioEducacao.ListaCalendario.prototype.getCalendarios = function() {
  * @private
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.preencherCalendarios = function(oResponse) {
-  
+
   var oSelf = this;
   js_removeObj('msgBoxCalendario');
   var oRetorno       = eval('('+oResponse.responseText+')');
-  oSelf.aCalendarios = new Array(); 
+  oSelf.aCalendarios = new Array();
 
   oRetorno.dados.each(function(oCalendarioRetorno) {
 
@@ -156,7 +164,7 @@ DBViewFormularioEducacao.ListaCalendario.prototype.preencherCalendarios = functi
 
 /**
  * Agrupa os calendário por ano letivo
- * @return {void} 
+ * @return {void}
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.preencherCalendarioPorAno = function () {
 
@@ -165,7 +173,7 @@ DBViewFormularioEducacao.ListaCalendario.prototype.preencherCalendarioPorAno = f
 
   this.oElement.add(new Option('Selecione um Ano Letivo', ''));
 
-  oSelf.aCalendarios.each(function(oCalendario, iSeq) {  
+  oSelf.aCalendarios.each(function(oCalendario, iSeq) {
 
     if (!aAnos.in_array(oCalendario.iAno)) {
       aAnos.push(oCalendario.iAno);
@@ -183,16 +191,16 @@ DBViewFormularioEducacao.ListaCalendario.prototype.preencherCalendarioPorAno = f
 
 /**
  * Exibe os calendários letivos da escola selecionada
- * @return {} 
+ * @return {}
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.preencherCalendario = function () {
 
   var oSelf = this;
-  
+
   this.oElement.add(new Option('Selecione um Calendário', ''));
 
   oSelf.aCalendarios.each(function(oCalendario, iSeq) {
-    
+
     var oOption = new Option(oCalendario.sDescricao.urlDecode(), oCalendario.iCalendario);
     oOption.setAttribute("ano", oCalendario.iAno);
     oSelf.oElement.appendChild(oOption);
@@ -201,6 +209,8 @@ DBViewFormularioEducacao.ListaCalendario.prototype.preencherCalendario = functio
   if (oSelf.aCalendarios.length == 1) {
     oSelf.oElement.value = oSelf.aCalendarios[0].iCalendario;
   }
+
+  oSelf.fCallBackAfterLoad();
 };
 /**
  * Habilita a opção para selecionar  todas os calendarios
@@ -215,7 +225,7 @@ DBViewFormularioEducacao.ListaCalendario.prototype.habilitarOpcaoTodos = functio
  * @param {integer} iEscola codigo da escola
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.setEscola = function(iEscola) {
-  
+
   this.iCodigoEscola = iEscola;
 };
 
@@ -224,9 +234,9 @@ DBViewFormularioEducacao.ListaCalendario.prototype.setEscola = function(iEscola)
  * @param oNode Elemento que deverá ser renderizado o comboBox
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.show = function(oNode) {
-  
+
   oNode.appendChild(this.oElement);
-  //this.getCalendarios(); 
+  //this.getCalendarios();
 };
 
 /**
@@ -234,11 +244,11 @@ DBViewFormularioEducacao.ListaCalendario.prototype.show = function(oNode) {
  * @param {function} fFunction funcao de Callback que devem ser executada
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.setCallBackLoad = function(fFunction) {
-  
+
   if (typeof(fFunction) != 'function') {
-    throw exception('parametro fFunction deve ser uma função!'); 
+    throw exception('parametro fFunction deve ser uma função!');
   }
-  
+
   this.fCallBackAfterLoad = fFunction;
 };
 
@@ -247,10 +257,10 @@ DBViewFormularioEducacao.ListaCalendario.prototype.setCallBackLoad = function(fF
  * @param {function} fFunction funcao de Callback que devem ser executada
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.setOnChangeCallBack = function(fFunction) {
-  
-  var oSelf = this; 
+
+  var oSelf = this;
   if (typeof(fFunction) != 'function') {
-    throw exception('parametro fFunction deve ser uma função!'); 
+    throw exception('parametro fFunction deve ser uma função!');
   }
   this.fCallbackOnChange = fFunction;
   this.oElement.stopObserving('change');
@@ -260,11 +270,11 @@ DBViewFormularioEducacao.ListaCalendario.prototype.setOnChangeCallBack = functio
 };
 /**
  * Retorna umn Objeto com os  dados do calendario Selecionado
- * retorna {codigo, nome, ano} 
+ * retorna {codigo, nome, ano}
  * @returns Object
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.getSelecionados = function() {
-  
+
   var iSelectedIndex = this.oElement.selectedIndex;
   var mSelecionado   = null;
   if (this.lAgruparPorAno) {
@@ -276,7 +286,7 @@ DBViewFormularioEducacao.ListaCalendario.prototype.getSelecionados = function() 
         mSelecionado.push(oCalendario);
       }
     });
-   
+
   } else {
      mSelecionado = {
        iCalendario  : this.oElement.options[iSelectedIndex].value,
@@ -289,7 +299,7 @@ DBViewFormularioEducacao.ListaCalendario.prototype.getSelecionados = function() 
 
 /**
  * Retorna apenas calendarios ativos
- * @param {Boolean} lApenasAtivos 
+ * @param {Boolean} lApenasAtivos
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.apenasAtivos = function(lApenasAtivos) {
   this.lApenasAtivos = lApenasAtivos;
@@ -297,7 +307,7 @@ DBViewFormularioEducacao.ListaCalendario.prototype.apenasAtivos = function(lApen
 
 /**
  * Retorna apenas os calendarios que possuam ao menos uma turma encerrada
- * @param {boolean} lEncerradas 
+ * @param {boolean} lEncerradas
  */
 DBViewFormularioEducacao.ListaCalendario.prototype.calendariosComTurmasEncerradas = function(lEncerradas) {
   this.lComTurmasEncerradas = lEncerradas;
@@ -330,5 +340,12 @@ DBViewFormularioEducacao.ListaCalendario.prototype.permitirSelecao = function(lP
   if ( !lPermitir ) {
     this.oElement.setAttribute("disabled", "disabled");
   }
+};
 
+/**
+ * Seta se devem ser carregados calendários com turmas que tenham progressão encerrada
+ * @param {boolean} lSomenteTurmasComProgressaoEncerrada
+ */
+DBViewFormularioEducacao.ListaCalendario.prototype.somenteTurmasComProgressaoEncerrada = function( lSomenteTurmasComProgressaoEncerrada ) {
+  this.lSomenteTurmasComProgressaoEncerrada = lSomenteTurmasComProgressaoEncerrada;
 };

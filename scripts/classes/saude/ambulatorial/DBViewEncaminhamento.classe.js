@@ -88,6 +88,7 @@ DBViewEncaminhamento = function ( iLocalOrigem, iProntuario ) {
   oFieldsetObservacao.appendChild( this.oInputObservacao );
 
   var oLabelSetor          = document.createElement("label");
+  oLabelSetor.setAttribute('for', 'setorEncaminhamento');
   oLabelSetor.addClassName('bold');
   oLabelSetor.innerHTML    = "Setor:";
 
@@ -97,12 +98,15 @@ DBViewEncaminhamento = function ( iLocalOrigem, iProntuario ) {
   var oTabela = document.createElement("table");
   var oLinha1 = oTabela.insertRow(0);
   var oLinha2 = oTabela.insertRow(1);
+  var oLinha3 = oTabela.insertRow(2);
+  var oLinha4 = oTabela.insertRow(3);
+
   oLinha1.insertCell(0).addClassName('field-size3').appendChild(oLabelSetor);
   oLinha1.insertCell(1).appendChild(this.oCboSetores);
 
-  var oCelulaSegundaLinha = oLinha2.insertCell(0);
-  oCelulaSegundaLinha.setAttribute('colspan', 2);
-  oCelulaSegundaLinha.appendChild(oFieldsetObservacao);
+  var oCelulaObservacao = oLinha4.insertCell(0);
+  oCelulaObservacao.setAttribute('colspan', 2);
+  oCelulaObservacao.appendChild(oFieldsetObservacao);
 
   oForm.appendChild(oTabela);
   oFieldsetContainerForm.appendChild(oForm);
@@ -121,7 +125,63 @@ DBViewEncaminhamento = function ( iLocalOrigem, iProntuario ) {
   this.oDivContainer.appendChild( oFieldsetContainerForm );
   this.oDivContainer.appendChild( oBotaoSalvar );
 
+
+  /**
+   * campos referentens ao encaminhamento do profissional
+   */
+  oLinha2.id = 'linha-profissional';
+  oLinha3.id = 'linha-especialidade';
+  oLinha2.style.display = "none";
+  oLinha3.style.display = "none";
+
+  oLinha2.addClassName('encaminhar-profissional');
+  oLinha3.addClassName('encaminhar-profissional');
+
+  // cria os links (ancora)
+  this.oAncoraProfissional  = new Element('a', {href:'', id:'ancora-profissional'}).update('Profissional:');
+  this.oAncoraEspecialidade = new Element('a', {href:'', id:'ancora-especialidade'}).update('Especialidade:');
+  this.oAncoraProfissional.addClassName("DBAncora bold");
+  this.oAncoraEspecialidade.addClassName("DBAncora bold");
+
+  // inputs profissional
+  this.oInputCodigoProfissional  = new Element ("input", {type:'text', id : 'iMedico', name : 'iMedico' });
+  this.oInputNomeProfissional    = new Element ("input", {type:'text', id : 'sMedico', name : 'sMedico' });
+  this.oInputCodigoProfissional.addClassName('field-size2');
+  this.oInputNomeProfissional.addClassName('field-size9 readonly');
+  this.oInputNomeProfissional.setAttribute('disabled', 'disabled');
+
+  // inputs especialidade
+  var oInputCodigoEspecialidade      = new Element ("input", {type:'hidden', id:'iSequencialCbo', name:'iSequencialCbo' });
+  this.oInputEstruturalEspecialidade = new Element ("input", {type:'text', id:'iEstruturalCbo', name:'iEstruturalCbo' });
+  this.oInputNomeEspecialidade       = new Element ("input", {type:'text', id:'sEspecialidade', name:'sEspecialidade' });
+  this.oInputEstruturalEspecialidade.addClassName('field-size2');
+  this.oInputNomeEspecialidade.addClassName('field-size9 readonly');
+  this.oInputNomeEspecialidade.setAttribute('disabled', 'disabled');
+
+  var oLabelProfissional   = document.createElement("label");
+  var oLabelEspecialidade  = document.createElement("label");
+  oLabelProfissional.appendChild(this.oAncoraProfissional);
+  oLabelProfissional.setAttribute('for', 'iMedico');
+  oLabelEspecialidade.appendChild(this.oAncoraEspecialidade);
+  oLabelEspecialidade.setAttribute('for', 'iEstruturalCbo');
+  oLabelProfissional.appendChild(this.oAncoraProfissional);
+  oLabelEspecialidade.appendChild(this.oAncoraEspecialidade);
+
+  var oCelulaLabelProfissional     = oLinha2.insertCell(0);
+  var oCelulaConteudoProfissional  = oLinha2.insertCell(1);
+  var oCelulaLabelEspecialidade    = oLinha3.insertCell(0);
+  var oCelulaConteudoEspecialidade = oLinha3.insertCell(1);
+
+  oCelulaLabelProfissional.appendChild(oLabelProfissional);
+  oCelulaLabelEspecialidade.appendChild(oLabelEspecialidade);
+  oCelulaConteudoProfissional.appendChild(this.oInputCodigoProfissional);
+  oCelulaConteudoProfissional.appendChild(this.oInputNomeProfissional);
+  oCelulaConteudoEspecialidade.appendChild(oInputCodigoEspecialidade);
+  oCelulaConteudoEspecialidade.appendChild(this.oInputEstruturalEspecialidade);
+  oCelulaConteudoEspecialidade.appendChild(this.oInputNomeEspecialidade);
+
 };
+
 
 /**
  * Constantes do local de atendimento
@@ -141,7 +201,10 @@ DBViewEncaminhamento.prototype.buscaSetores = function() {
 
   var oParametros                   = {'sExecucao' : 'buscaSetoresUnidade'}
   oParametros.lFiltrarUnidadeLogada = true;
-  oParametros.aExcluirLocais        = [this.iLocalOrigem];
+
+  if  (this.iLocalOrigem != DBViewEncaminhamento.CONSULTA_MEDICA) {
+    oParametros.aExcluirLocais = [this.iLocalOrigem];
+  }
 
   var oObject          = {}
   oObject.method       = 'post';
@@ -195,7 +258,7 @@ DBViewEncaminhamento.prototype.setCallbackSalvar = function( fFunction ) {
 DBViewEncaminhamento.prototype.criaJaneja = function() {
 
   var oSelf    = this;
-  this.oWindow = new windowAux( 'oWindowEncaminhamento', 'Encaminhamento de Paciente', 800, 380 );
+  this.oWindow = new windowAux( 'oWindowEncaminhamento', 'Encaminhamento de Paciente', 800, 400 );
 
   var sMensagemTitulo = 'Encaminha o paciente para um setor.';
   var sMensagemAjuda  = "Selecione o setor para encaminhamento do paciente";
@@ -217,7 +280,35 @@ DBViewEncaminhamento.prototype.criaJaneja = function() {
     oSelf.encaminharProntuario();
   };
 
-  this.oWindow.show( null, null, true );
+  this.oWindow.show( null, null, false );
+
+  this.oCboSetores.onchange = function () {
+
+    var iLocal = $('setorEncaminhamento').options[$('setorEncaminhamento').selectedIndex].getAttribute('local');
+
+    if ( oSelf.iLocalOrigem == DBViewEncaminhamento.CONSULTA_MEDICA &&
+         iLocal             == DBViewEncaminhamento.CONSULTA_MEDICA) {
+
+      $('linha-profissional').style.display  = "table-row";
+      $('linha-especialidade').style.display = "table-row";
+    } else {
+
+      $('linha-profissional').style.display  = "none";
+      $('linha-especialidade').style.display = "none";
+      $('iMedico').value                     = '';
+      $('sMedico').value                     = '';
+      $('iSequencialCbo').value              = '';
+      $('iEstruturalCbo').value              = '';
+      $('sEspecialidade').value              = '';
+
+    }
+  }
+
+  this.oAncoraProfissional.onclick            = function() {oSelf.criaAncoraProfissional(true);   return false;};
+  this.oAncoraEspecialidade.onclick           = function() {oSelf.criaAncoraEspecialidade(true);  return false;};
+  this.oInputCodigoProfissional.onchange      = function() {oSelf.criaAncoraProfissional(false);  return false;};
+  this.oInputEstruturalEspecialidade.onchange = function() {oSelf.criaAncoraEspecialidade(false); return false;};
+
 };
 
 /**
@@ -236,8 +327,23 @@ DBViewEncaminhamento.prototype.encaminharProntuario = function() {
     alert( _M( MENSAGENS_DBVIEWENCAMINHAMENTO + 'setor_vazio' ) );
     return false;
   }
-  oParametros.iSetorDestino = this.oCboSetores.value;
-  oParametros.sObservacao   = encodeURIComponent(tagString( this.oInputObservacao.value ));
+
+  var iLocalEncaminhado = $('setorEncaminhamento').options[$('setorEncaminhamento').selectedIndex].getAttribute('local');
+
+  if ( this.iLocalOrigem == DBViewEncaminhamento.CONSULTA_MEDICA &&
+       iLocalEncaminhado == DBViewEncaminhamento.CONSULTA_MEDICA ) {
+
+    if ( $F('iEstruturalCbo') == '') {
+
+      alert(_M( MENSAGENS_DBVIEWENCAMINHAMENTO + 'informe_especialidade' ) );
+      return false;
+    }
+  }
+
+  oParametros.iMedico        = $F('iMedico');
+  oParametros.iEspecialidade = $F('iSequencialCbo');
+  oParametros.iSetorDestino  = this.oCboSetores.value;
+  oParametros.sObservacao    = encodeURIComponent(tagString( this.oInputObservacao.value ));
 
   var oObject          = {}
   oObject.method       = 'post';
@@ -270,3 +376,114 @@ DBViewEncaminhamento.prototype.show = function () {
   this.buscaSetores();
   this.criaJaneja();
 };
+
+
+DBViewEncaminhamento.prototype.criaAncoraProfissional = function(lMostra){
+
+  var sUrl  = 'func_medicos.php?';
+      sUrl += 'lFiltraDptoLogado=true';
+  if( !empty( $F('iSequencialCbo') ) ) {
+    sUrl += '&iRhcboSequencial=' + $F('iSequencialCbo');
+  }
+
+  if( lMostra ) {
+
+    sUrl += '&funcao_js=parent.DBViewEncaminhamento.retornoMedicos|sd03_i_codigo|z01_nome';
+    js_OpenJanelaIframe('', 'db_iframe_medicos', sUrl, 'Pesquisa Profissional', true);
+    $('Jandb_iframe_medicos').style.zIndex  = '510';
+
+  } else if ( $F('iMedico') != '') {
+
+    sUrl += '&pesquisa_chave='+ $F('iMedico');
+    sUrl += '&funcao_js=parent.DBViewEncaminhamento.retornoMedicos';
+    js_OpenJanelaIframe('', 'db_iframe_medicos', sUrl, 'Pesquisa Profissional', false);
+
+  } else {
+
+    $('iMedico').value = '';
+    $('sMedico').value = '';
+  }
+};
+
+DBViewEncaminhamento.retornoMedicos = function () {
+
+  if (typeof arguments[1] == 'boolean') {
+
+    $('sMedico').value = arguments[0];
+    if ( arguments[1] ) {
+
+      $('iMedico').value = '';
+      return;
+    }
+  } else {
+
+    $('iMedico').value = arguments[0];
+    $('sMedico').value = arguments[1];
+
+    db_iframe_medicos.hide();
+  }
+
+  if ( $F('iSequencialCbo') != '' ) {
+    return;
+  }
+  $('ancora-especialidade').click();
+
+}
+
+
+
+DBViewEncaminhamento.prototype.criaAncoraEspecialidade  = function(lMostra){
+
+  var sUrl  = 'func_especialidade_recepcao.php?';
+      sUrl += 'chave_sd04_i_medico=' + $F('iMedico');
+
+  var sCampos = '|rh70_estrutural|rh70_descr|rh70_sequencial';
+
+  if( lMostra ) {
+
+    sUrl += '&funcao_js=parent.DBViewEncaminhamento.retornoEspecialidade' + sCampos;
+    js_OpenJanelaIframe('', 'db_iframe_especmedico', sUrl + sCampos, 'Pesquisa Especialidade', true );
+    $('Jandb_iframe_especmedico').style.zIndex  = '510';
+
+  } else if ( $F('iEstruturalCbo') != '') {
+
+    sUrl += '&pesquisa_chave=' + $F('iEstruturalCbo');
+    sUrl += '&funcao_js=parent.DBViewEncaminhamento.retornoEspecialidade';
+
+    js_OpenJanelaIframe('', 'db_iframe_especmedico', sUrl, 'Pesquisa Especialidade', false );
+  } else {
+
+    $('iSequencialCbo').value = '';
+    $('iEstruturalCbo').value = '';
+    $('sEspecialidade').value = '';
+  }
+
+};
+
+
+DBViewEncaminhamento.retornoEspecialidade = function () {
+
+  if (typeof arguments[0] == 'boolean') {
+
+    if ( arguments[0] ) {
+
+      $('sEspecialidade').value = arguments[1];
+      $('iSequencialCbo').value = '';
+      $('iEstruturalCbo').value = '';
+
+      return;
+    } else {
+
+      $('iEstruturalCbo').value = arguments[2];
+      $('sEspecialidade').value = arguments[3];
+      $('iSequencialCbo').value = arguments[4];
+    }
+
+  } else {
+
+    $('iEstruturalCbo').value = arguments[0];
+    $('sEspecialidade').value = arguments[1];
+    $('iSequencialCbo').value = arguments[2];
+    db_iframe_especmedico.hide();
+  }
+}

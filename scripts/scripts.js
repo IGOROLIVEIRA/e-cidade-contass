@@ -1,32 +1,31 @@
-// JavaScript Document
+/**
+ * Promise Pollyfill
+ */
+!function(t){function e(){}function n(t,e){return function(){t.apply(e,arguments)}}function o(t){if("object"!=typeof this)throw new TypeError("Promises must be constructed via new");if("function"!=typeof t)throw new TypeError("not a function");this._state=0,this._handled=!1,this._value=void 0,this._deferreds=[],s(t,this)}function r(t,e){for(;3===t._state;)t=t._value;return 0===t._state?void t._deferreds.push(e):(t._handled=!0,void a(function(){var n=1===t._state?e.onFulfilled:e.onRejected;if(null===n)return void(1===t._state?i:f)(e.promise,t._value);var o;try{o=n(t._value)}catch(r){return void f(e.promise,r)}i(e.promise,o)}))}function i(t,e){try{if(e===t)throw new TypeError("A promise cannot be resolved with itself.");if(e&&("object"==typeof e||"function"==typeof e)){var r=e.then;if(e instanceof o)return t._state=3,t._value=e,void u(t);if("function"==typeof r)return void s(n(r,e),t)}t._state=1,t._value=e,u(t)}catch(i){f(t,i)}}function f(t,e){t._state=2,t._value=e,u(t)}function u(t){2===t._state&&0===t._deferreds.length&&a(function(){t._handled||d(t._value)});for(var e=0,n=t._deferreds.length;n>e;e++)r(t,t._deferreds[e]);t._deferreds=null}function c(t,e,n){this.onFulfilled="function"==typeof t?t:null,this.onRejected="function"==typeof e?e:null,this.promise=n}function s(t,e){var n=!1;try{t(function(t){n||(n=!0,i(e,t))},function(t){n||(n=!0,f(e,t))})}catch(o){if(n)return;n=!0,f(e,o)}}var l=setTimeout,a="function"==typeof setImmediate&&setImmediate||function(t){l(t,0)},d=function(t){"undefined"!=typeof console&&console&&console.warn("Possible Unhandled Promise Rejection:",t)};o.prototype["catch"]=function(t){return this.then(null,t)},o.prototype.then=function(t,n){var o=new this.constructor(e);return r(this,new c(t,n,o)),o},o.all=function(t){var e=Array.prototype.slice.call(t);return new o(function(t,n){function o(i,f){try{if(f&&("object"==typeof f||"function"==typeof f)){var u=f.then;if("function"==typeof u)return void u.call(f,function(t){o(i,t)},n)}e[i]=f,0===--r&&t(e)}catch(c){n(c)}}if(0===e.length)return t([]);for(var r=e.length,i=0;i<e.length;i++)o(i,e[i])})},o.resolve=function(t){return t&&"object"==typeof t&&t.constructor===o?t:new o(function(e){e(t)})},o.reject=function(t){return new o(function(e,n){n(t)})},o.race=function(t){return new o(function(e,n){for(var o=0,r=t.length;r>o;o++)t[o].then(e,n)})},o._setImmediateFn=function(t){a=t},o._setUnhandledRejectionFn=function(t){d=t},"undefined"!=typeof module&&module.exports?module.exports=o:t.Promise||(t.Promise=o)}(this);
+/** window.fetch polyfill */
+!function(a){"use strict";function f(a){if("string"!=typeof a&&(a=String(a)),/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(a))throw new TypeError("Invalid character in header field name");return a.toLowerCase()}function g(a){return"string"!=typeof a&&(a=String(a)),a}function h(a){var c={next:function(){var b=a.shift();return{done:void 0===b,value:b}}};return b.iterable&&(c[Symbol.iterator]=function(){return c}),c}function i(a){this.map={},a instanceof i?a.forEach(function(a,b){this.append(b,a)},this):a&&Object.getOwnPropertyNames(a).forEach(function(b){this.append(b,a[b])},this)}function j(a){return a.bodyUsed?Promise.reject(new TypeError("Already read")):void(a.bodyUsed=!0)}function k(a){return new Promise(function(b,c){a.onload=function(){b(a.result)},a.onerror=function(){c(a.error)}})}function l(a){var b=new FileReader,c=k(b);return b.readAsArrayBuffer(a),c}function m(a){var b=new FileReader,c=k(b);return b.readAsText(a),c}function n(a){for(var b=new Uint8Array(a),c=new Array(b.length),d=0;d<b.length;d++)c[d]=String.fromCharCode(b[d]);return c.join("")}function o(a){if(a.slice)return a.slice(0);var b=new Uint8Array(a.byteLength);return b.set(new Uint8Array(a)),b.buffer}function p(){return this.bodyUsed=!1,this._initBody=function(a){if(this._bodyInit=a,a)if("string"==typeof a)this._bodyText=a;else if(b.blob&&Blob.prototype.isPrototypeOf(a))this._bodyBlob=a;else if(b.formData&&FormData.prototype.isPrototypeOf(a))this._bodyFormData=a;else if(b.searchParams&&URLSearchParams.prototype.isPrototypeOf(a))this._bodyText=a.toString();else if(b.arrayBuffer&&b.blob&&d(a))this._bodyArrayBuffer=o(a.buffer),this._bodyInit=new Blob([this._bodyArrayBuffer]);else{if(!b.arrayBuffer||!ArrayBuffer.prototype.isPrototypeOf(a)&&!e(a))throw new Error("unsupported BodyInit type");this._bodyArrayBuffer=o(a)}else this._bodyText="";this.headers.get("content-type")||("string"==typeof a?this.headers.set("content-type","text/plain;charset=UTF-8"):this._bodyBlob&&this._bodyBlob.type?this.headers.set("content-type",this._bodyBlob.type):b.searchParams&&URLSearchParams.prototype.isPrototypeOf(a)&&this.headers.set("content-type","application/x-www-form-urlencoded;charset=UTF-8"))},b.blob&&(this.blob=function(){var a=j(this);if(a)return a;if(this._bodyBlob)return Promise.resolve(this._bodyBlob);if(this._bodyArrayBuffer)return Promise.resolve(new Blob([this._bodyArrayBuffer]));if(this._bodyFormData)throw new Error("could not read FormData body as blob");return Promise.resolve(new Blob([this._bodyText]))},this.arrayBuffer=function(){return this._bodyArrayBuffer?j(this)||Promise.resolve(this._bodyArrayBuffer):this.blob().then(l)}),this.text=function(){var a=j(this);if(a)return a;if(this._bodyBlob)return m(this._bodyBlob);if(this._bodyArrayBuffer)return Promise.resolve(n(this._bodyArrayBuffer));if(this._bodyFormData)throw new Error("could not read FormData body as text");return Promise.resolve(this._bodyText)},b.formData&&(this.formData=function(){return this.text().then(t)}),this.json=function(){return this.text().then(JSON.parse)},this}function r(a){var b=a.toUpperCase();return q.indexOf(b)>-1?b:a}function s(a,b){b=b||{};var c=b.body;if("string"==typeof a)this.url=a;else{if(a.bodyUsed)throw new TypeError("Already read");this.url=a.url,this.credentials=a.credentials,b.headers||(this.headers=new i(a.headers)),this.method=a.method,this.mode=a.mode,c||null==a._bodyInit||(c=a._bodyInit,a.bodyUsed=!0)}if(this.credentials=b.credentials||this.credentials||"omit",!b.headers&&this.headers||(this.headers=new i(b.headers)),this.method=r(b.method||this.method||"GET"),this.mode=b.mode||this.mode||null,this.referrer=null,("GET"===this.method||"HEAD"===this.method)&&c)throw new TypeError("Body not allowed for GET or HEAD requests");this._initBody(c)}function t(a){var b=new FormData;return a.trim().split("&").forEach(function(a){if(a){var c=a.split("="),d=c.shift().replace(/\+/g," "),e=c.join("=").replace(/\+/g," ");b.append(decodeURIComponent(d),decodeURIComponent(e))}}),b}function u(a){var b=new i;return a.split("\r\n").forEach(function(a){var c=a.split(":"),d=c.shift().trim();if(d){var e=c.join(":").trim();b.append(d,e)}}),b}function v(a,b){b||(b={}),this.type="default",this.status="status"in b?b.status:200,this.ok=this.status>=200&&this.status<300,this.statusText="statusText"in b?b.statusText:"OK",this.headers=new i(b.headers),this.url=b.url||"",this._initBody(a)}if(!a.fetch){var b={searchParams:"URLSearchParams"in a,iterable:"Symbol"in a&&"iterator"in Symbol,blob:"FileReader"in a&&"Blob"in a&&function(){try{return new Blob,!0}catch(a){return!1}}(),formData:"FormData"in a,arrayBuffer:"ArrayBuffer"in a};if(b.arrayBuffer)var c=["[object Int8Array]","[object Uint8Array]","[object Uint8ClampedArray]","[object Int16Array]","[object Uint16Array]","[object Int32Array]","[object Uint32Array]","[object Float32Array]","[object Float64Array]"],d=function(a){return a&&DataView.prototype.isPrototypeOf(a)},e=ArrayBuffer.isView||function(a){return a&&c.indexOf(Object.prototype.toString.call(a))>-1};i.prototype.append=function(a,b){a=f(a),b=g(b);var c=this.map[a];this.map[a]=c?c+","+b:b},i.prototype.delete=function(a){delete this.map[f(a)]},i.prototype.get=function(a){return a=f(a),this.has(a)?this.map[a]:null},i.prototype.has=function(a){return this.map.hasOwnProperty(f(a))},i.prototype.set=function(a,b){this.map[f(a)]=g(b)},i.prototype.forEach=function(a,b){for(var c in this.map)this.map.hasOwnProperty(c)&&a.call(b,this.map[c],c,this)},i.prototype.keys=function(){var a=[];return this.forEach(function(b,c){a.push(c)}),h(a)},i.prototype.values=function(){var a=[];return this.forEach(function(b){a.push(b)}),h(a)},i.prototype.entries=function(){var a=[];return this.forEach(function(b,c){a.push([c,b])}),h(a)},b.iterable&&(i.prototype[Symbol.iterator]=i.prototype.entries);var q=["DELETE","GET","HEAD","OPTIONS","POST","PUT"];s.prototype.clone=function(){return new s(this,{body:this._bodyInit})},p.call(s.prototype),p.call(v.prototype),v.prototype.clone=function(){return new v(this._bodyInit,{status:this.status,statusText:this.statusText,headers:new i(this.headers),url:this.url})},v.error=function(){var a=new v(null,{status:0,statusText:""});return a.type="error",a};var w=[301,302,303,307,308];v.redirect=function(a,b){if(w.indexOf(b)===-1)throw new RangeError("Invalid status code");return new v(null,{status:b,headers:{location:a}})},a.Headers=i,a.Request=s,a.Response=v,a.fetch=function(a,c){return new Promise(function(d,e){var f=new s(a,c),g=new XMLHttpRequest;g.onload=function(){var a={status:g.status,statusText:g.statusText,headers:u(g.getAllResponseHeaders()||"")};a.url="responseURL"in g?g.responseURL:a.headers.get("X-Request-URL");var b="response"in g?g.response:g.responseText;d(new v(b,a))},g.onerror=function(){e(new TypeError("Network request failed"))},g.ontimeout=function(){e(new TypeError("Network request failed"))},g.open(f.method,f.url,!0),"include"===f.credentials&&(g.withCredentials=!0),"responseType"in g&&b.blob&&(g.responseType="blob"),f.headers.forEach(function(a,b){g.setRequestHeader(b,a)}),g.send("undefined"==typeof f._bodyInit?null:f._bodyInit)})},a.fetch.polyfill=!0}}("undefined"!=typeof self?self:this);
+/** Object.assign Polyfill */
+Object.assign||Object.defineProperty(Object,"assign",{enumerable:!1,configurable:!0,writable:!0,value:function(e){"use strict";if(void 0===e||null===e)throw new TypeError("Cannot convert first argument to object");for(var r=Object(e),t=1;t<arguments.length;t++){var n=arguments[t];if(void 0!==n&&null!==n){n=Object(n);for(var o=Object.keys(Object(n)),c=0,i=o.length;c<i;c++){var a=o[c],b=Object.getOwnPropertyDescriptor(n,a);void 0!==b&&b.enumerable&&(r[a]=n[a])}}}return r}});
+
+var CurrentWindow = CurrentWindow || top;
 
 var menu_ordem_geral = 10000;
 
 // Array de Escopo Global para armazenar valores dos INPUTs
 var aInputValues = new Array();
 
+/**
+ * @deprecated
+ */
 function js_cria_objeto_div(idobjeto,texto) {
-  return true;
-  var camada = CurrentWindow.corpo.document.createElement("DIV");
-  camada.setAttribute("id",idobjeto);
-  camada.setAttribute("align","center");
-  camada.style.backgroundColor = "#5786B1";
-  camada.style.layerBackgroundColor = "black";
-  camada.style.position = "absolute";
-  camada.style.left = "350px";
-  camada.style.top = "20px";
-  camada.style.zIndex = "1000";
-  camada.style.visibility = 'visible';
-  // camada.style.width = "420px";
-   camada.style.width = (screen.availWidth-15)+'px';
-  camada.style.height = "300px";
-  camada.innerHTML = '<table border="1" width="100%" height="100%"><tr><td valign="top" align="left" >'+texto+'</td></tr></table>';
-  CurrentWindow.corpo.document.body.appendChild(camada);
+  return console.error('js_cria_objeto_div is deprecated!');
 }
+
+/**
+ * @deprecated
+ */
 function js_remove_objeto_div(idobjeto) {
-  return true;
-  if(CurrentWindow.corpo.document.getElementById(idobjeto))
-    CurrentWindow.corpo.document.body.removeChild(CurrentWindow.corpo.document.getElementById(idobjeto));
+  return console.error('js_remove_objeto_div is deprecated!');
 }
 
 function js_seleciona_combo(campoform){
@@ -95,8 +94,7 @@ function js_diferenca_datas(data1,data2,opcao){
   }else if(opcao == "a"){
     return parseInt(anos);
   }else if(opcao == "amd"){
-    return anos+' '+mess+' '+dias;
-    //return parseInt(anos)+' '+mmess+' '+mdias;
+    return anos+' '+mess+' '+dias;    
   }
 }
 
@@ -162,22 +160,10 @@ function js_tabulacaoforms(form,foco,tfoco,inicio,campo,tcampo){
       camporecebe.select();
     }
   }
-  /*
-  if(mark > 0 && 1 == 2){
-    if(xxi.elements[mark]){
-      if(xxi.elements[mark].blur){
-        xxi.elements[mark].blur = "xxi."+campo+".focus();";
-      }else{
-        xxi.elements[mark].blur = "xxi."+campo+".focus();";
-      }
-      alert(xxi.elements[mark].blur);
-    }
-  }
-  */
 }
 
 // Monta lista de arquivos para download
-function js_montarlista(lista,form){
+function js_montarlista(lista,form,callback){
   if(lista != "" && form != ""){
     if(eval("document."+form+".query_arquivo")){
       eval("document."+form+".query_arquivo.value = lista");
@@ -188,7 +174,10 @@ function js_montarlista(lista,form){
       obj.setAttribute('value',lista);
       eval("document."+form+".appendChild(obj)");
     }
-    jan = window.open('db_listaarquivos.php?form='+form,'','width=400,height=400,scrollbars=1,location=0');
+
+    var callbackName = typeof callback == 'function' ? callback.name : callback;
+
+    jan = window.open('db_listaarquivos.php?callbackName='+(callbackName||'')+'&form='+form,'','width=400,height=400,scrollbars=1,location=0');
     jan.moveTo(0,0);
   }else{
     alert("Sem parâmetros para gerar lista de downloads.");
@@ -303,7 +292,7 @@ function buttonHelp(pagina,item,modulo,helpversao){
      var divs = document.getElementsByTagName('IFRAME');
      for (var j = 0; j < divs.length; j++){
         qual_div = 'div_'+divs[j].id;
-        if( eval(qual_div+'.style.visibility') == 'visible'){
+        if( eval(qual_div+'.style.display') == 'block'){
           qual_alvo = divs[j].name;
         }
      }
@@ -953,15 +942,7 @@ function js_maxlenghttextarea(elem, event, iLimite){
           strAux  = '';
         }
       }
-      var dataFinal = js_colocaBarras(campo,strAux,false);
-
-      campo.value = dataFinal;
-
-      var matched = dataFinal.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-      if (matched) {
-        js_setDiaMesAno(campo, matched[1], matched[2], matched[3]);
-      }
-
+      campo.value = js_colocaBarras(campo,strAux,false);
       return true;
     }
   }
@@ -1163,7 +1144,7 @@ function js_Passa(nome,Dia,Mes,Ano,evt) {
 
 //verifica se o elemento existe no array
 function js_in_array(elem,vetor) {
-  js_search_in_array(vetor,elem);
+  return js_search_in_array(vetor,elem);
 }
 
 //tipo o parse int, só que pega o numero se tiver na final da straing tb!!
@@ -2022,17 +2003,23 @@ function js_OpenJanelaIframe(aondeJanela,nomeJanela,arquivoJanela,tituloJanela,m
 //#99#// [nome da janela].liberarJanBTMaximizar('valor') - True para liberar e false para bloquear o botão maximizar
 //#99#// [nome da janela].liberarJanBTFechar('valor') - True para liberar e false para bloquear o botão fechar
 
+  if (aondeJanela) {
+    aondeJanela = aondeJanela.replace('top.', 'CurrentWindow.');
+  }
+
+var margin = {top : 20, left : 10};
+
 if(mostraJanela==undefined)
     mostraJanela = true;
   if(topoJanela==undefined)
     topoJanela = '20';
   if(leftJanela==undefined)
-    leftJanela = '1';
+    leftJanela = '0';
   if(widthJanela==undefined)
     //   widthJanela = '780';
-    widthJanela =  screen.availWidth-25;
+    widthJanela =  CurrentWindow.corpo.innerWidth - margin.left;
   if(heigthJanela==undefined)
-     heigthJanela = screen.availHeight-150;
+     heigthJanela = CurrentWindow.corpo.innerHeight - margin.top;
     //    heigthJanela = '430';
 
  // if(eval((aondeJanela!=""?aondeJanela+".":"document.")+nomeJanela)){
@@ -2074,35 +2061,28 @@ function pegaPosMouse(evt) {
   }
 }
 
+/**
+ * Funcão para mostrar o calendário do sistema
+ * @param {String} obj - id do elemento
+ * @param {Function} shutdown_function -  função ao ser executada no final da execução do calendário
+ */
+function show_calendar(obj, shutdown_function) {
 
-function show_calendar(obj,shutdown_function) {
-//#01#//show_calendar
-//#10#//Funcão para mostrar o calendário do sistema
-//#20#// shutdown_function: função ao ser executada no final da execução do calendário
-//#15#//show_calendar()
+  var x = PosMouseX - window.scrollX;
+  var y = PosMouseY - window.scrollY;
 
-  if(PosMouseY >= 270)
-    PosMouseY = 270;
-  if(PosMouseX >= 600)
-    PosMouseX = 600;
+  if (window.innerWidth - x <= 200) {
+    PosMouseX = PosMouseX - 230;
+  }
 
-    js_OpenJanelaIframe('','iframe_data_'+obj,'func_calendario.php?nome_objeto_data='+obj+'&shutdown_function='+shutdown_function,'Calendário',true,PosMouseY,PosMouseX,200,230);
+  if (window.innerHeight - y <= 230) {
+    PosMouseY = PosMouseY - 230;
+  }
 
-}
-
-function show_calendar_position(obj,shutdown_function,position='') {
-//#01#//show_calendar
-//#10#//Funcão para mostrar o calendário do sistema
-//#20#// shutdown_function: função ao ser executada no final da execução do calendário
-//#15#//show_calendar()
-
-  if(PosMouseY >= 270)
-    PosMouseY = 270;
-  if(PosMouseX >= 600)
-    PosMouseX = 600;
-
-  js_OpenJanelaIframe(position,'iframe_data_'+obj,'func_calendario_position.php?nome_objeto_data='+obj+'&shutdown_function='+shutdown_function,'Calendário',true,PosMouseY,PosMouseX+600,200,230);
-
+  if ( PosMouseY < 0 ) {
+    PosMouseY = 50;
+  }
+  js_OpenJanelaIframe('','iframe_data_'+obj,'func_calendario.php?nome_objeto_data='+obj+'&shutdown_function='+shutdown_function,'Calendário',true,PosMouseY,PosMouseX,200,230);
 }
 
 function showCalendarioSaudeTodosDias(obj,shutdown_function, especmed) {
@@ -2189,7 +2169,7 @@ function js_hideshowselect(v) {
           var str = "";
         }
     if(str.indexOf("select") != -1) {
-          document.forms[i].elements[j].style.visibility = v;
+          document.forms[i].elements[j].style.display = v;
       }
     }
     }
@@ -2207,7 +2187,7 @@ function js_hideshowselect(v) {
           var str = "";
         }
     if(str.indexOf("select") != -1) {
-          F[i].elements[j].style.visibility = v;
+          F[i].elements[j].style.display = v;
       }
     }
     }
@@ -2273,371 +2253,7 @@ var activeButton = null;
 // Capture mouse clicks on the page so any active button can be
 // deactivated.
 
-if (browser.isIE)
-  document.onmousedown = pageMousedown;
-else {
-  document.addEventListener("mousedown", pageMousedown, true);
-     document.addEventListener("mousedown", function(event) {
-      CurrentWindow.corpo.pageMousedown(event);
-     }, false);
-}
 
-function pageMousedown(event) {
-
-  var el;
-
-  // If there is no active button, exit.
-
-  if (activeButton == null)
-    return;
-
-  // Find the element that was clicked on.
-
-  if (browser.isIE)
-    el = window.event.srcElement;
-  else
-    el = (event.target.tagName ? event.target : event.target.parentNode);
-
-  // If the active button was clicked on, exit.
-
-  if (el == activeButton)
-    return;
-
-  // If the element is not part of a menu, reset and clear the active
-  // button.
-
-  if (getContainerWith(el, "DIV", "menu") == null) {
-    resetButton(activeButton,event);
-    activeButton = null;
-  }
-}
-
-function buttonClick(event, menuId) {
-  if(!document.getElementById(menuId))
-    return false;
-  var button;
-  js_hideshowselect('hidden');
-  // Get the target button element.
-
-  if (browser.isIE)
-    button = window.event.srcElement;
-  else
-    button = event.currentTarget;
-
-  // Blur focus from the link to remove that annoying outline.
-
-  button.blur();
-
-  // Associate the named menu to this button if not already done.
-  // Additionally, initialize menu display.
-
-  if (button.menu == null) {
-    button.menu = document.getElementById(menuId);
-    if (button.menu.isInitialized == null)
-      menuInit(button.menu);
-  }
-
-  // Reset the currently active button, if any.
-
-  if (activeButton != null)
-    resetButton(activeButton,event);
-
-  // Activate this button, unless it was the currently active one.
-
-  if (button != activeButton) {
-    depressButton(button);
-    activeButton = button;
-  }
-  else
-    activeButton = null;
-
-  return false;
-}
-
-function buttonMouseover(event, menuId) {
-  var button;
-
-  // Find the target button element.
-
-  if (browser.isIE)
-    button = window.event.srcElement;
-  else
-    button = event.currentTarget;
-
-  // If any other button menu is active, make this one active instead.
-
-  if (activeButton != null && activeButton != button)
-    buttonClick(event, menuId);
-}
-
-function depressButton(button) {
-
-  var x, y;
-
-  // Update the button's style class to make it look like it's
-  // depressed.
-
-  button.className += " menuButtonActive";
-
-  // Position the associated drop down menu under the button and
-  // show it.
-
-  x = getPageOffsetLeft(button);
-  y = getPageOffsetTop(button) + button.offsetHeight;
-
-  // For IE, adjust position.
-
-  if (browser.isIE) {
-    x += button.offsetParent.clientLeft;
-    y += button.offsetParent.clientTop;
-  }
-
-  button.menu.style.left = x + "px";
-  button.menu.style.top  = y + "px";
-  button.menu.style.visibility = "visible";
-}
-
-function resetButton(button,evt) {
-  var evt = (evt) ? evt : (window.event) ? window.event : "sem evento";
-
-  // Restore the button's style class.
-
-  removeClassName(button, "menuButtonActive");
-
-  // Hide the button's menu, first closing any sub menus.
-
-  if (button.menu != null) {
-    closeSubMenu(button.menu);
-    button.menu.style.visibility = "hidden";
-  if(evt.type != "mouseover")
-      js_hideshowselect('visible');
-  }
-}
-
-//----------------------------------------------------------------------------
-// Code to handle the menus and sub menus.
-//----------------------------------------------------------------------------
-
-function menuMouseover(event) {
-  var menu;
-  // Find the target menu element.
-
-  if (browser.isIE)
-    menu = getContainerWith(window.event.srcElement, "DIV", "menu");
-  else
-    menu = event.currentTarget;
-
-  // Close any active sub menu.
-
-  if (menu.activeItem != null)
-    closeSubMenu(menu);
-}
-
-function menuItemMouseover(event, menuId) {
-  var item, menu, x, y;
-
-  // Find the target item element and its parent menu element.
-
-  if (browser.isIE)
-    item = getContainerWith(window.event.srcElement, "A", "menuItem");
-  else
-    item = event.currentTarget;
-  menu = getContainerWith(item, "DIV", "menu");
-
-  // Close any active sub menu and mark this one as active.
-
-  if (menu.activeItem != null)
-    closeSubMenu(menu);
-  menu.activeItem = item;
-
-  // Highlight the item element.
-
-  item.className += " menuItemHighlight";
-
-  // Initialize the sub menu, if not already done.
-
-  if (item.subMenu == null) {
-    item.subMenu = document.getElementById(menuId);
-    if (item.subMenu.isInitialized == null)
-      menuInit(item.subMenu);
-  }
-
-  // Get position for submenu based on the menu item.
-
-  x = getPageOffsetLeft(item) + item.offsetWidth;
-  y = getPageOffsetTop(item);
-
-  // Adjust position to fit in view.
-
-  var maxX, maxY;
-
-  if (browser.isNS) {
-    maxX = window.scrollX + window.innerWidth;
-    maxY = window.scrollY + window.innerHeight;
-  }
-  if (browser.isIE) {
-    maxX = (document.documentElement.scrollLeft   != 0 ? document.documentElement.scrollLeft    : document.body.scrollLeft)
-         + (document.documentElement.clientWidth  != 0 ? document.documentElement.clientWidth   : document.body.clientWidth);
-    maxY = (document.documentElement.scrollTop    != 0 ? document.documentElement.scrollTop    : document.body.scrollTop)
-         + (document.documentElement.clientHeight != 0 ? document.documentElement.clientHeight : document.body.clientHeight);
-  }
-  maxX -= item.subMenu.offsetWidth;
-  maxY -= item.subMenu.offsetHeight;
-
-  if (x > maxX)
-    x = Math.max(0, x - item.offsetWidth - item.subMenu.offsetWidth
-      + (menu.offsetWidth - item.offsetWidth));
-  y = Math.max(0, Math.min(y, maxY));
-
-  // Position and show it.
-
-  item.subMenu.style.left = x + "px";
-  item.subMenu.style.top  = y + "px";
-//  item.subMenu.style.zIndex  = 10000;
-  menu_ordem_geral = menu_ordem_geral + 1;
-  item.subMenu.style.zIndex  = menu_ordem_geral;
-  item.subMenu.style.visibility = "visible";
-
-  // Stop the event from bubbling.
-
-  if (browser.isIE)
-    window.event.cancelBubble = true;
-  else
-    event.stopPropagation();
-}
-
-function closeSubMenu(menu) {
-
-  if (menu == null || menu.activeItem == null)
-    return;
-
-  // Recursively close any sub menus.
-
-  if (menu.activeItem.subMenu != null) {
-    closeSubMenu(menu.activeItem.subMenu);
-    menu.activeItem.subMenu.style.visibility = "hidden";
-    menu.activeItem.subMenu = null;
-  }
-  removeClassName(menu.activeItem, "menuItemHighlight");
-  menu.activeItem = null;
-}
-
-//----------------------------------------------------------------------------
-// Code to initialize menus.
-//----------------------------------------------------------------------------
-
-function menuInit(menu) {
-
-  var itemList, spanList;
-  var textEl, arrowEl;
-  var itemWidth;
-  var w, dw;
-  var i, j;
-
-  // For IE, replace arrow characters.
-
-  if (browser.isIE) {
-    menu.style.lineHeight = "2.5ex";
-    spanList = menu.getElementsByTagName("SPAN");
-    for (i = 0; i < spanList.length; i++)
-      if (hasClassName(spanList[i], "menuItemArrow")) {
-        spanList[i].style.fontFamily = "Webdings";
-        spanList[i].firstChild.nodeValue = "4";
-      }
-  }
-
-  // Find the width of a menu item.
-
-  itemList = menu.getElementsByTagName("A");
-  if (itemList.length > 0)
-    itemWidth = itemList[0].offsetWidth;
-  else
-    return;
-
-  // For items with arrows, add padding to item text to make the
-  // arrows flush right.
-
-  for (i = 0; i < itemList.length; i++) {
-    spanList = itemList[i].getElementsByTagName("SPAN");
-    textEl  = null;
-    arrowEl = null;
-    for (j = 0; j < spanList.length; j++) {
-      if (hasClassName(spanList[j], "menuItemText"))
-        textEl = spanList[j];
-      if (hasClassName(spanList[j], "menuItemArrow"))
-        arrowEl = spanList[j];
-    }
-    if (textEl != null && arrowEl != null)
-      textEl.style.paddingRight = (itemWidth
-        - (textEl.offsetWidth + arrowEl.offsetWidth)) + "px";
-  }
-
-  // Fix IE hover problem by setting an explicit width on first item of
-  // the menu.
-
-  if (browser.isIE) {
-    w = itemList[0].offsetWidth;
-    itemList[0].style.width = w + "px";
-    dw = itemList[0].offsetWidth - w;
-    w -= dw;
-    itemList[0].style.width = w + "px";
-  }
-
-  // Mark menu as initialized.
-
-  menu.isInitialized = true;
-}
-
-//----------------------------------------------------------------------------
-// General utility functions.
-//----------------------------------------------------------------------------
-
-function getContainerWith(node, tagName, className) {
-
-  // Starting with the given node, find the nearest containing element
-  // with the specified tag name and style class.
-
-  while (node != null) {
-    if (node.tagName != null && node.tagName == tagName &&
-        hasClassName(node, className))
-      return node;
-    node = node.parentNode;
-  }
-
-  return node;
-}
-
-function hasClassName(el, name) {
-
-  var i, list;
-
-  // Return true if the given element currently has the given class
-  // name.
-
-  list = el.className.split(" ");
-  for (i = 0; i < list.length; i++)
-    if (list[i] == name)
-      return true;
-
-  return false;
-}
-
-function removeClassName(el, name) {
-
-  var i, curList, newList;
-
-  if (el.className == null)
-    return;
-
-  // Remove the given class name from the element's className property.
-
-  newList = new Array();
-  curList = el.className.split(" ");
-  for (i = 0; i < curList.length; i++)
-    if (curList[i] != name)
-      newList.push(curList[i]);
-  el.className = newList.join(" ");
-}
 
 function getPageOffsetLeft(el) {
 
@@ -2769,14 +2385,14 @@ function js_ajax_msg(mensagem){
    if (tipo_msg == 0) {
         // mensagem no canto esquerdo
         camada.style.left = 20+'px';
-        camada.style.top =  ((screen.availHeight-100)/4)+'px';
+        camada.style.top =  ((CurrentWindow.corpo.innerHeight-100)/4)+'px';
    } else {
         // mensagem no meio da tela
-        camada.style.left = ((screen.availWidth-400)/2)+'px';
-        camada.style.top =  ((screen.availHeight-100)/2)+'px';
+        camada.style.left = ((CurrentWindow.corpo.innerWidth-400)/2)+'px';
+        camada.style.top =  ((CurrentWindow.corpo.innerHeight-100)/2)+'px';
    }
    camada.style.zIndex = "1000";
-   camada.style.visibility = 'visible';
+   camada.style.display = 'block';
    camada.style.width = "400px";
    camada.style.height = "100px";
    if (tipo_msg==0) {
@@ -2921,21 +2537,23 @@ function js_validaPis(pis){
 
 function js_divCarregando(mensagem,id, lBloqueia){
 
+   var corpo = CurrentWindow.corpo;
+
    if (lBloqueia == null) {
      lBloqueia = true;
    }
    var expReg = /\\n\\n/gm;
    mensagem = mensagem.replace(expReg,'<br>');
 
-   var camada = document.createElement("DIV");
+   var camada = corpo.document.createElement("DIV");
    camada.setAttribute("id",id);
    camada.setAttribute("align","center");
-   camada.style.position        = "fixed";
+   camada.style.position        = "absolute";
    // mensagem no meio da tela
-   camada.style.left       = ((document.body.clientWidth / 2 ) - 100 )+'px';
-   camada.style.top        = ((screen.availHeight-450)/2)+'px';
-   camada.style.zIndex     = "1000";
-   camada.style.visibility = 'visible';
+   camada.style.left       = ((corpo.document.body.clientWidth / 2 ) - 100 )+'px';
+   camada.style.top        = ((corpo.CurrentWindow.corpo.innerHeight-450)/2)+'px';
+   camada.style.zIndex     = "11000";
+   camada.style.display = 'block';
    camada.style.width      = "200px";
    camada.className        = "DivCarregando";
    camada.style.height     = "60px";
@@ -2948,24 +2566,24 @@ function js_divCarregando(mensagem,id, lBloqueia){
      /**
       *  Criamos uma camada para bloquear o acesso aos componentes da página
       */
-     var oDisableBody = CurrentWindow.corpo.document.createElement("DIV");
+     var oDisableBody = corpo.document.createElement("DIV");
      oDisableBody.style.backgroundColor = "transparent";
      oDisableBody.id                    = id+"modal";
      oDisableBody.style.top             = "25px";
      oDisableBody.style.left            = "0";
      oDisableBody.style.width           = "99%";
      oDisableBody.style.height          = "100%";
-     oDisableBody.style.position        = 'fixed';
+     oDisableBody.style.position        = 'absolute';
      oDisableBody.style.zIndex          = '99999999';
      oDisableBody.style.opacity         = '0.0';
-     CurrentWindow.corpo.document.body.appendChild(oDisableBody);
+     corpo.document.body.appendChild(oDisableBody);
 
      /*
       * Bloqueamos  acesso ao menu
       */
 
-      oDbMenu = CurrentWindow.corpo.document.getElementById('db-menu');
-      oDisableMenu = CurrentWindow.corpo.document.createElement("DIV");
+      oDbMenu = corpo.document.getElementById('db-menu');
+      oDisableMenu = corpo.document.createElement("DIV");
       oDisableMenu.style.backgroundColor = "transparent";
       oDisableMenu.id                    = id+"disabledmenu";
 
@@ -2986,30 +2604,36 @@ function js_divCarregando(mensagem,id, lBloqueia){
       oDisableMenu.style.height          = "20px";
       oDisableMenu.style.position        = 'absolute';
       oDisableMenu.style.zIndex          = '99999999';
-      CurrentWindow.corpo.document.body.appendChild(oDisableMenu);
+      corpo.document.body.appendChild(oDisableMenu);
       oDisableMenu.onclick=function () {
 
         var sMsg  = "Há Operações sendo Executadas.\nSaindo da rotina, as informações correntes serão perdidas.\n";
         if (confirm(sMsg)) {
 
-          CurrentWindow.corpo.document.body.removeChild(oDisableMenu);
+          corpo.document.body.removeChild(oDisableMenu);
           return true;
         }
       }
      /**
       * Bloqueamos o topo
       */
-     var oDivModalTopo                   = CurrentWindow.topo.document.createElement("div");
-     oDivModalTopo.id                    = id+'modalTop';
-     oDivModalTopo.style.height          = '100%';
-     oDivModalTopo.style.position        = 'absolute';
-     oDivModalTopo.style.top             = '0px';
-     oDivModalTopo.style.left            = '0px';
-     oDivModalTopo.style.width           = '100%';
-     oDivModalTopo.style.backgroundColor = 'transparent';
-     oDivModalTopo.style.zIndex          = '1900000';
-     oTopoMenu = CurrentWindow.topo.document.getElementById('menuTopo');
-     oTopoMenu.appendChild(oDivModalTopo);
+
+     if (CurrentWindow.topo) {
+
+       var oDivModalTopo                   = CurrentWindow.topo.document.createElement("div");
+       oDivModalTopo.id                    = id+'modalTop';
+       oDivModalTopo.style.height          = '100%';
+       oDivModalTopo.style.position        = 'absolute';
+       oDivModalTopo.style.top             = '0px';
+       oDivModalTopo.style.left            = '0px';
+       oDivModalTopo.style.width           = '100%';
+       oDivModalTopo.style.backgroundColor = 'transparent';
+       oDivModalTopo.style.zIndex          = '1900000';
+       oTopoMenu = CurrentWindow.topo.document.getElementById('menuTopo');
+       oTopoMenu.appendChild(oDivModalTopo);
+
+     }
+
    }
 //   camada.style.solid      = '#000000';
 
@@ -3021,11 +2645,11 @@ function js_divCarregando(mensagem,id, lBloqueia){
                      +'        '+mensagem+''
                      +'      </td> '
                      +'      <td > '
-                     +'        <img src="imagens/files/loading.gif" height="25" width="25"/> '
+                     +'        <img src="imagens/files/loading.gif" /> '
                      +'      </td> '
                      +'    </tr> '
                      +' </table> ';
-  document.body.appendChild(camada);
+  corpo.document.body.appendChild(camada);
 }
 
 function js_fadeModal(element) {
@@ -3047,8 +2671,12 @@ function js_fadeModal(element) {
 
 function js_removeObj(idObj) {
 
-  var obj = document.getElementById(idObj);
-  document.body.removeChild(obj);
+  var obj = CurrentWindow.corpo.document.getElementById(idObj);
+
+  if (obj) {
+    CurrentWindow.corpo.document.body.removeChild(obj);
+  }
+
   if (CurrentWindow.corpo.document.getElementById(idObj+"modal")) {
 
     var objModal = CurrentWindow.corpo.document.getElementById(idObj+"modal");
@@ -3056,7 +2684,7 @@ function js_removeObj(idObj) {
 
   }
 
-  if (CurrentWindow.topo.document.getElementById(idObj+"modalTop")) {
+  if (CurrentWindow.topo && CurrentWindow.topo.document.getElementById(idObj+"modalTop")) {
 
     var objModal = CurrentWindow.topo.document.getElementById(idObj+"modalTop");
     objParent = objModal.parentNode;
@@ -3241,12 +2869,7 @@ function js_getInputValue(sIndex) {
   return aInputValues[sIndex];
 }
 function js_objectToJson(oObject) {
-
-   var sJson = oObject.toSource();
-   sJson     = sJson.replace("(","");
-   sJson     = sJson.replace(")","");
-   return sJson;
-
+  return JSON.stringify(oObject);
 }
 
 function js_mask(e,teclas) {
@@ -3308,12 +2931,7 @@ function js_mask(e,teclas) {
   }
 }
 
-window.document.captureEvents(Event.KEYDOWN);
-window.document.onkeydown  = function (event) {
-  if (event.which == 116) {
-    return false;
-  };
-}
+
 getElementsByClass = function ( searchClass, domNode, tagName) {
 
     if (domNode == null) {
@@ -3503,27 +3121,27 @@ function setFormReadOnly(oElemento, lBloquear) {
 
   });
 }
-if (typeof F2 == 'undefined') {
-	var F2        = 113;
-	var F3        = 114;
-	var F4        = 115;
-	var F5        = 116;
-	var F6        = 117;
-	var F7        = 118;
-	var F8        = 119;
-	var F9        = 120;
-	var F10       = 121;
-	var F11       = 122;
-	var F13       = 123;
-	var ESC       = 27;
-	var KEY_S     = 83;
-	var KEY_R     = 82;
-	var KEY_LEFT  = 37;
-	var KEY_UP    = 38;
-	var KEY_DOWN  = 40;
-	var KEY_RIGTH = 39;
-	var KEY_ENTER = 13; // Tecla ENTER
-}
+
+var F2        = 113;
+var F3        = 114;
+var F4        = 115;
+var F5        = 116;
+var F6        = 117;
+var F7        = 118;
+var F8        = 119;
+var F9        = 120;
+var F10       = 121;
+var F11       = 122;
+var F13       = 123;
+var ESC       = 27;
+var KEY_S     = 83;
+var KEY_R     = 82;
+var KEY_LEFT  = 37;
+var KEY_UP    = 38;
+var KEY_DOWN  = 40;
+var KEY_RIGTH = 39;
+var KEY_ENTER = 13; // Tecla ENTER
+
 window.addEventListener('keydown', function(Event) {
 
   var iTeclaPressionada = Event.which;
@@ -3569,7 +3187,7 @@ function require( sArquivo ) {
   "use strict";
 
   if ( __Requisicoes__[sArquivo] ) {
-    throw "Arquivo não pode ser sobrecarregado.";
+    return;
   }
 
   var oRequisicao = new XMLHttpRequest();
@@ -3936,34 +3554,31 @@ function validaCpfCnpj(oObjeto) {
 }
 
 /**
- * Verificao se o email é um email válido. Caso não seja, exibe uma mensagem
+ * Verificao se o e-mail é um e-mail válido
  *
- * @param string sEmail
- * @returns {Boolean}
+ * @param {string} sEmail
+ * @param {boolean} lMostraMensagem Define se deve exibir uma mensagem, padrão true
+ * @returns {boolean}
  */
-function validaEmail(sEmail){
+function validaEmail(sEmail, lMostraMensagem){
 
-  var expReg0 = new RegExp("[A-Za-z0-9_.-]+@([A-Za-z0-9_]+\.)+[A-Za-z]{2,4}");
-  var expReg1 = new RegExp("[!#$%*<>,:;?°ºª~/|]");
+  var regExpEmail     = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$/,
+      lMostraMensagem = lMostraMensagem === undefined ? true : lMostraMensagem;
 
-  if (sEmail.match(expReg1) != null || sEmail.indexOf('\\') != -1 || sEmail.indexOf(' ') != -1) {
+  if (!regExpEmail.test(sEmail)) {
 
-    var sMensagem = 'Email informado não é válido ou esta vazio!\n\n Exemplo de email: xxx@xx.xx\n\n Email ';
-        sMensagem += 'pode conter:\n  letras, números, hifen(-), sublinhado _\n\n Email não pode conter:\n  caracteres ';
-        sMensagem += 'especiais, virgula(,), ponto e virgula (;), dois pontos (:)';
-    alert(sMensagem) ;
+    if (lMostraMensagem) {
+
+      var sMensagem = 'E-mail informado não é válido!\n\n Exemplo de e-mail: xxx@xx.xx\n\n E-mail '
+                    + 'pode conter:\n  letras, números, hifen(-), sublinhado _\n\n E-mail não pode conter:\n  caracteres '
+                    + 'especiais, virgula(,), ponto e virgula (;), dois pontos (:)';
+
+      alert(sMensagem);
+    }
+
     return false;
   }
 
-  if (sEmail.match(expReg0) == null) {
-
-    var sMensagem  = 'Email informado não é válido ou esta vazio!\n\n Exemplo de email: xxx@xx.xx\n\n Email pode conter:';
-        sMensagem += '\n  letras, números, hifen(-), sublinhado _\n\n Email não pode conter:\n   caracteres especiais,';
-        sMensagem += ' virgula(,), ponto e virgula (;), dois pontos (:)';
-
-    alert(sMensagem) ;
-    return false;
-  }
   return true;
 }
 
@@ -4355,7 +3970,7 @@ function janela(janP,cFt,Iframe) {
       setPosX(JANS[this.nomeJanela].GuardaPoX);
       setPosY(JANS[this.nomeJanela].GuardaPoY);
     }
-    janP.style.visibility = 'visible';
+    janP.style.display = 'block';
   }
 
   /**
@@ -4372,7 +3987,7 @@ function janela(janP,cFt,Iframe) {
     }
     JANS[0] = aux;
     JANS[JANS.length-1].setCorFundoTitulo("#326094");
-    janP.style.visibility = 'hidden';
+    janP.style.display = 'none';
     JANS[this.nomeJanela].GuardaAlt = this.altura;
     JANS[this.nomeJanela].GuardaLar = this.largura;
     JANS[this.nomeJanela].GuardaPoX = this.posX;
@@ -4514,13 +4129,14 @@ function janela(janP,cFt,Iframe) {
 
 
   function liberarJanBTFechar(liberar){
-    var img3 = cFt.childNodes[1].childNodes[2];
+    var img3 = cFt.childNodes[1].childNodes[1];
     if(liberar == true){
       img3.src   = "skins/img.php?file=Controles/jan_fechar_on.png";
       img3.title = "Fechar";
     }else{
       img3.src   = "skins/img.php?file=Controles/jan_fechar_off.png";
       img3.title = "Fechar desabilitado";
+      img3.onclick = function() { return false };
     }
   }
 
@@ -4794,8 +4410,8 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   camada.style.position             = "absolute";
   camada.style.left                 = esquerda;
   camada.style.top                  = topo;
-  camada.style.zIndex               = "1";
-  camada.style.visibility           = 'hidden';
+  camada.style.zIndex               = "100";
+  camada.style.display              = 'none';
   camada.style.width                = altura;
   camada.style.height               = largura;
   tab2Coluna2.appendChild(img1);
@@ -4899,13 +4515,19 @@ window.onload= function () {
 function tratamentoMascaraTelefone( mValor,  isOnBlur ) {
 
   if ( mValor != '' ) {
+
     mValor = mValor.replace(/\D/g,"");
-    mValor = mValor.replace(/^(\d{2})(\d)/g,"($1) $2");
 
     if( isOnBlur ) {
+
+      if ( mValor.length < 10 ) {
+
+        alert("O formato do telefone deve iniciar com o DDD seguido de 8 ou 9 digitos. " )
+        return mValor;
+      }
+
+      mValor = mValor.replace(/^(\d{2})(\d)/g,"($1) $2");
       mValor = mValor.replace(/(\d)(\d{4})$/,"$1-$2");
-    } else {
-      mValor = mValor.replace(/(\d)(\d{3})$/,"$1-$2");
     }
   }
 
@@ -4917,25 +4539,38 @@ function tratamentoMascaraTelefone( mValor,  isOnBlur ) {
  * Formato: (xx)xxxx-xxxx | (xx)xxxxx-xxxx
  * @param oElemento - Elemento HTML que contem o telefone a ser digitado
  */
-function mascaraTelefone( oElemento ) {
+function mascaraTelefone( oElemento) {
+
+  oElemento.onfocus = function() {
+
+    oElemento.maxLength = 11;
+    var valor  = this.value;
+    this.value = tratamentoMascaraTelefone( this.value, false );
+  }
 
   oElemento.onkeypress = function (evt) {
 
+    oElemento.maxLength = 11;
     var code  = (window.event)? window.event.keyCode : evt.which;
     var valor = this.value;
 
-    if(code > 57 || (code < 48 && code != 8 && code != 9))  {
+    /**
+     * o evento keypress retorna 0 ao invés do valor ASC para algumas teclas do teclado;
+     * exemplo: Tab, DEL, Left, Right, Up, Down ...
+     *
+     * code == 8 : BackSpace
+     */
+    if((code > 57) || (code < 48 && code != 8 && code != 0 ) )  {
       return false;
-    } else {
-      this.value = tratamentoMascaraTelefone(valor, false);
     }
+    this.value = tratamentoMascaraTelefone( this.value, false );
   };
 
   oElemento.onblur = function() {
+
+    oElemento.maxLength = 15;
     this.value = tratamentoMascaraTelefone( this.value, true );
   };
-
-  oElemento.maxLength = 15;
 }
 
 /**
@@ -4975,207 +4610,18 @@ function validaMonetario(obj, e) {
   }
 }
 
+function fillFormFromObject(form, jsonObject) {
 
-//Polyfill
-if (typeof Object.toSource == "undefined") { // only if necessary
-
-    // a valid JavaScript ID RegExp
-    // https://github.com/mathiasbynens/mothereff.in/tree/master/js-variables
-    var js_id = /^(?!(?:do|if|in|for|let|new|try|var|case|else|enum|eval|null|this|true|void|with|break|catch|class|const|false|super|throw|while|yield|delete|export|import|public|return|static|switch|typeof|default|extends|finally|package|private|continue|debugger|function|arguments|interface|protected|implements|instanceof)$)[\x24A-Z\x5Fa-z\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0370-\u0374\u0376\u0377\u037A-\u037D\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u048A-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05D0-\u05EA\u05F0-\u05F2\u0620-\u064A\u066E\u066F\u0671-\u06D3\u06D5\u06E5\u06E6\u06EE\u06EF\u06FA-\u06FC\u06FF\u0710\u0712-\u072F\u074D-\u07A5\u07B1\u07CA-\u07EA\u07F4\u07F5\u07FA\u0800-\u0815\u081A\u0824\u0828\u0840-\u0858\u08A0\u08A2-\u08AC\u0904-\u0939\u093D\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097F\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD\u09CE\u09DC\u09DD\u09DF-\u09E1\u09F0\u09F1\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A59-\u0A5C\u0A5E\u0A72-\u0A74\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABD\u0AD0\u0AE0\u0AE1\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3D\u0B5C\u0B5D\u0B5F-\u0B61\u0B71\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BD0\u0C05-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C33\u0C35-\u0C39\u0C3D\u0C58\u0C59\u0C60\u0C61\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CDE\u0CE0\u0CE1\u0CF1\u0CF2\u0D05-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D\u0D4E\u0D60\u0D61\u0D7A-\u0D7F\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0E01-\u0E30\u0E32\u0E33\u0E40-\u0E46\u0E81\u0E82\u0E84\u0E87\u0E88\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7\u0EAA\u0EAB\u0EAD-\u0EB0\u0EB2\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6\u0EDC-\u0EDF\u0F00\u0F40-\u0F47\u0F49-\u0F6C\u0F88-\u0F8C\u1000-\u102A\u103F\u1050-\u1055\u105A-\u105D\u1061\u1065\u1066\u106E-\u1070\u1075-\u1081\u108E\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1380-\u138F\u13A0-\u13F4\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EE-\u16F0\u1700-\u170C\u170E-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17D7\u17DC\u1820-\u1877\u1880-\u18A8\u18AA\u18B0-\u18F5\u1900-\u191C\u1950-\u196D\u1970-\u1974\u1980-\u19AB\u19C1-\u19C7\u1A00-\u1A16\u1A20-\u1A54\u1AA7\u1B05-\u1B33\u1B45-\u1B4B\u1B83-\u1BA0\u1BAE\u1BAF\u1BBA-\u1BE5\u1C00-\u1C23\u1C4D-\u1C4F\u1C5A-\u1C7D\u1CE9-\u1CEC\u1CEE-\u1CF1\u1CF5\u1CF6\u1D00-\u1DBF\u1E00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2119-\u211D\u2124\u2126\u2128\u212A-\u212D\u212F-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2160-\u2188\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2CE4\u2CEB-\u2CEE\u2CF2\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u2E2F\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303C\u3041-\u3096\u309D-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312D\u3131-\u318E\u31A0-\u31BA\u31F0-\u31FF\u3400-\u4DB5\u4E00-\u9FCC\uA000-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA61F\uA62A\uA62B\uA640-\uA66E\uA67F-\uA697\uA6A0-\uA6EF\uA717-\uA71F\uA722-\uA788\uA78B-\uA78E\uA790-\uA793\uA7A0-\uA7AA\uA7F8-\uA801\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA840-\uA873\uA882-\uA8B3\uA8F2-\uA8F7\uA8FB\uA90A-\uA925\uA930-\uA946\uA960-\uA97C\uA984-\uA9B2\uA9CF\uAA00-\uAA28\uAA40-\uAA42\uAA44-\uAA4B\uAA60-\uAA76\uAA7A\uAA80-\uAAAF\uAAB1\uAAB5\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADD\uAAE0-\uAAEA\uAAF2-\uAAF4\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uABC0-\uABE2\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC][\x240-9A-Z\x5Fa-z\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0300-\u0374\u0376\u0377\u037A-\u037D\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u0483-\u0487\u048A-\u0527\u0531-\u0556\u0559\u0561-\u0587\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u05D0-\u05EA\u05F0-\u05F2\u0610-\u061A\u0620-\u0669\u066E-\u06D3\u06D5-\u06DC\u06DF-\u06E8\u06EA-\u06FC\u06FF\u0710-\u074A\u074D-\u07B1\u07C0-\u07F5\u07FA\u0800-\u082D\u0840-\u085B\u08A0\u08A2-\u08AC\u08E4-\u08FE\u0900-\u0963\u0966-\u096F\u0971-\u0977\u0979-\u097F\u0981-\u0983\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BC-\u09C4\u09C7\u09C8\u09CB-\u09CE\u09D7\u09DC\u09DD\u09DF-\u09E3\u09E6-\u09F1\u0A01-\u0A03\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A59-\u0A5C\u0A5E\u0A66-\u0A75\u0A81-\u0A83\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABC-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AD0\u0AE0-\u0AE3\u0AE6-\u0AEF\u0B01-\u0B03\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3C-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B56\u0B57\u0B5C\u0B5D\u0B5F-\u0B63\u0B66-\u0B6F\u0B71\u0B82\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD0\u0BD7\u0BE6-\u0BEF\u0C01-\u0C03\u0C05-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C33\u0C35-\u0C39\u0C3D-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C58\u0C59\u0C60-\u0C63\u0C66-\u0C6F\u0C82\u0C83\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBC-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CDE\u0CE0-\u0CE3\u0CE6-\u0CEF\u0CF1\u0CF2\u0D02\u0D03\u0D05-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D-\u0D44\u0D46-\u0D48\u0D4A-\u0D4E\u0D57\u0D60-\u0D63\u0D66-\u0D6F\u0D7A-\u0D7F\u0D82\u0D83\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DF2\u0DF3\u0E01-\u0E3A\u0E40-\u0E4E\u0E50-\u0E59\u0E81\u0E82\u0E84\u0E87\u0E88\u0E8A\u0E8D\u0E94-\u0E97\u0E99-\u0E9F\u0EA1-\u0EA3\u0EA5\u0EA7\u0EAA\u0EAB\u0EAD-\u0EB9\u0EBB-\u0EBD\u0EC0-\u0EC4\u0EC6\u0EC8-\u0ECD\u0ED0-\u0ED9\u0EDC-\u0EDF\u0F00\u0F18\u0F19\u0F20-\u0F29\u0F35\u0F37\u0F39\u0F3E-\u0F47\u0F49-\u0F6C\u0F71-\u0F84\u0F86-\u0F97\u0F99-\u0FBC\u0FC6\u1000-\u1049\u1050-\u109D\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u135D-\u135F\u1380-\u138F\u13A0-\u13F4\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EE-\u16F0\u1700-\u170C\u170E-\u1714\u1720-\u1734\u1740-\u1753\u1760-\u176C\u176E-\u1770\u1772\u1773\u1780-\u17D3\u17D7\u17DC\u17DD\u17E0-\u17E9\u180B-\u180D\u1810-\u1819\u1820-\u1877\u1880-\u18AA\u18B0-\u18F5\u1900-\u191C\u1920-\u192B\u1930-\u193B\u1946-\u196D\u1970-\u1974\u1980-\u19AB\u19B0-\u19C9\u19D0-\u19D9\u1A00-\u1A1B\u1A20-\u1A5E\u1A60-\u1A7C\u1A7F-\u1A89\u1A90-\u1A99\u1AA7\u1B00-\u1B4B\u1B50-\u1B59\u1B6B-\u1B73\u1B80-\u1BF3\u1C00-\u1C37\u1C40-\u1C49\u1C4D-\u1C7D\u1CD0-\u1CD2\u1CD4-\u1CF6\u1D00-\u1DE6\u1DFC-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u200C\u200D\u203F\u2040\u2054\u2071\u207F\u2090-\u209C\u20D0-\u20DC\u20E1\u20E5-\u20F0\u2102\u2107\u210A-\u2113\u2115\u2119-\u211D\u2124\u2126\u2128\u212A-\u212D\u212F-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2160-\u2188\u2C00-\u2C2E\u2C30-\u2C5E\u2C60-\u2CE4\u2CEB-\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D7F-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u2DE0-\u2DFF\u2E2F\u3005-\u3007\u3021-\u302F\u3031-\u3035\u3038-\u303C\u3041-\u3096\u3099\u309A\u309D-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312D\u3131-\u318E\u31A0-\u31BA\u31F0-\u31FF\u3400-\u4DB5\u4E00-\u9FCC\uA000-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA62B\uA640-\uA66F\uA674-\uA67D\uA67F-\uA697\uA69F-\uA6F1\uA717-\uA71F\uA722-\uA788\uA78B-\uA78E\uA790-\uA793\uA7A0-\uA7AA\uA7F8-\uA827\uA840-\uA873\uA880-\uA8C4\uA8D0-\uA8D9\uA8E0-\uA8F7\uA8FB\uA900-\uA92D\uA930-\uA953\uA960-\uA97C\uA980-\uA9C0\uA9CF-\uA9D9\uAA00-\uAA36\uAA40-\uAA4D\uAA50-\uAA59\uAA60-\uAA76\uAA7A\uAA7B\uAA80-\uAAC2\uAADB-\uAADD\uAAE0-\uAAEF\uAAF2-\uAAF6\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uABC0-\uABEA\uABEC\uABED\uABF0-\uABF9\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE00-\uFE0F\uFE20-\uFE26\uFE33\uFE34\uFE4D-\uFE4F\uFE70-\uFE74\uFE76-\uFEFC\uFF10-\uFF19\uFF21-\uFF3A\uFF3F\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]*$/;
-
-
-    /**
-     * Escapes quotes and line breaks in a string
-     */
-    function escape2(str){
-        str = str.replace(/"/g, "\\\"");
-        str = str.replace(/\n/g, "\\n");
-        str = str.replace(/\r/g, "\\r");
-        return str;
+  var aElements = form.elements;
+  for (oElement of aElements) {
+    if (jsonObject[oElement.id] != null) {
+      oElement.value = jsonObject[oElement.id];
     }
-
-    /**
-     * Returns the source of this Number
-     */
-    Number.prototype.toSource = function () {
-        return "(new Number(" + this.toString() + "))";
-    }
-
-    /**
-     * Returns the source of this Boolean
-     */
-    Boolean.prototype.toSource = function () {
-        return "(new Boolean(" + this.toString() + "))";
-    }
-
-    /**
-     * Returns the source of this String
-     */
-    String.prototype.toSource = function () {
-        var source = escape2(this);
-        return "(new String(\"" + source + "\"))";
-    }
-
-    /**
-     * Returns the source of a this Function
-     */
-    Function.prototype.toSource = function () {
-        return this.toString();
-    }
-
-    /**
-     * Returns the source of this Array
-     */
-    Array.prototype.toSource = function () {
-        return _arrayToSource(this, []);
-    };
-
-    function _arrayToSource(arr, visited) {
-        visited.push(arr);
-        var source = "[";
-
-        arr.forEach(function (el, i, arr) {
-            switch (typeof el) {
-                case "number":
-                case "boolean":
-                    source += el.toString();
-                    break;
-                case "string":
-                    var str = escape2(el);
-                    source += "\"" + str + "\"";
-                    break;
-                case "function":
-                case "object":
-                    if (el instanceof Function
-                            || el instanceof Date
-                            || el instanceof RegExp
-                            || el instanceof Error) {
-                        source += el.toSource();
-                    } else if (el instanceof Array) {
-                        source += (visited.indexOf(el) == -1)
-                            ? _arrayToSource(el, visited)
-                            : "[]";
-                    } else if (el instanceof Object) {
-                        source += (visited.indexOf(el) == -1)
-                            ? _objectToSource(el, visited)
-                            : "{}";
-                    } else {
-                        source += "null";
-                    }
-                    break;
-                default:
-                    source += "null";
-            }
-
-            if (i < arr.length - 1) source += ", ";
-        });
-
-        source += "]";
-
-        return source;
-    }
-
-    /**
-     * Returns the source of this Object
-     */
-    Object.prototype.toSource = function () {
-        return "(" + _objectToSource(this, []) + ")";
-    };
-
-    function _objectToSource(obj, visited){
-        visited.push(obj);
-        var source = "{";
-
-        var props = Object.getOwnPropertyNames(obj);
-        props.forEach(function(prop, i, arr) {
-
-            var prop2 = prop;
-            if (!js_id.test(prop2)) {
-                // to account for property names that are invalid JS IDs
-                prop2 = "'" + prop2.replace(/'/g, "\'") + "'";
-            }
-
-            switch (typeof obj[prop]) {
-                case "number":
-                case "boolean":
-                    source += prop2 + ":" + obj[prop].toString();
-                    break;
-                case "string":
-                    var str = escape2(obj[prop]);
-                    source += prop2 + ":" + "\"" + str + "\"";
-                    break;
-                case "function":
-                case "object":
-                    if (obj[prop] instanceof Function
-                            || obj[prop] instanceof Date
-                            || obj[prop] instanceof RegExp
-                            || obj[prop] instanceof Error) {
-                        source += prop2 + ":" + obj[prop].toSource();
-                    } else if (obj[prop] instanceof Array) {
-                        source += (visited.indexOf(obj[prop]) == -1)
-                            ? prop2 + ":" + _arrayToSource(obj[prop], visited)
-                            : prop2 + ":[]";
-                    } else if (obj[prop] instanceof Object) {
-                        source += (visited.indexOf(obj[prop]) == -1)
-                            ? prop2 + ":" + _objectToSource(obj[prop], visited)
-                            : prop2 + ":{}";
-                    } else {
-                        source += prop2 + ": null";
-                    }
-                    break;
-                default:
-                    source += prop2 + ": " + "null";
-            }
-
-            if (i < arr.length - 1) source += ", ";
-        });
-
-        source += "}";
-
-        return source;
-    }
-
-    /**
-     * Returns the source of this Date
-     */
-    Date.prototype.toSource = function () {
-        return "(new Date(" + this.valueOf() + "))";
-    }
-
-    /**
-     * Returns the source of this RegExp
-     */
-    RegExp.prototype.toSource = function () {
-        return this.toString();
-    }
-
-    /**
-     * Returns the source of this Error
-     */
-    Error.prototype.toSource = function () {
-        var source = "(new " + this.name + "(\""+ escape2(this.message) +"\"";
-        if (typeof this.fileName == "string") {
-            source += ", \"" + escape2(this.fileName) + "\"";
-            if (typeof err.lineNumber == "number") {
-                source += ", " + err.lineNumber;
-            }
-        }
-        source += '))';
-        return source;
-    }
+  }
+}
 
 
-    // Use Object.defineProperty to get same property descriptor as Mozilla
-    // https://github.com/oliver-moran/toSource.js/issues/1
-    if (Object.defineProperty) {
-        var objects = [Number, Boolean, String, Function, Array, Object, Date, RegExp, Error];
-        objects.forEach(function (obj) {
-            Object.defineProperty(obj.prototype, "toSource", {
-                writable: true,
-                enumerable: false,
-                value: obj.prototype.toSource
-            });
-        });
-    }
-
+function fecharDBTooltip(oElemento) {
+  oElemento.parentElement.style.display = 'none';
+  document.getElementById('listaquestionario').style.display = 'none';
 }

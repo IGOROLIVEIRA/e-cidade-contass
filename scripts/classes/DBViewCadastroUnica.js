@@ -176,6 +176,10 @@ var DBViewCadastroUnica = function(sInstance) {
 
         oRetorno.iStatus   = 2;
         oRetorno.sMensagem = "Percentual de Desconto não Informado";
+      } else if (isNaN(oDadosForm.nPercentual)) {
+
+        oRetorno.iStatus   = 2;
+        oRetorno.sMensagem = "Percentual de Desconto deve conter apenas números.";
       }
       return oRetorno;
     }

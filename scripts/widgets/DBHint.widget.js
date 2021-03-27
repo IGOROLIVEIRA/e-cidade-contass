@@ -1,18 +1,18 @@
   /**
-   * @fileoverview Esse arquivo Cria uma div semelhante a um Hint contendo textos etc;
-   * @author       Rafael Lopes rafael.lopes@dbseller.com.br
-   *               Rafael Nery  rafael.nery@dbseller.com.br
-   * @revision $Author: dbmatheus.felini $
-   * @version  $Revision: 1.14 $
+   * Esse arquivo Cria uma div semelhante a um Hint contendo textos etc;
+   * 
+   * @constructor
+   * @author       Rafael Lopes <rafael.lopes@dbseller.com.br>
+   *               Rafael Nery  <rafael.nery@dbseller.com.br>
+   * @version  $Revision: 1.17 $
+   * @revision $Author: dbrenan.silva $
    *
-   * Classe que disponibiliza uma div como um hint
-   * @param {STRING} sInstancia Nome da instancia do Objeto
+   * @param {String} sInstancia Nome da instancia do Objeto
    */
-
-
   DBHint = function(sInstancia) {
 
       var lUseMouse      = false;
+      var zIndexHint     = null;
       var me             = this;
       var sNameInstance  = sInstancia;
       var sTexto         = "";
@@ -42,25 +42,18 @@
       /**
        * Escreve as funções no elemento
        */
-      var setEvents      = function(oElemento, indiceCelula) {
+      var setEvents      = function(oElemento) {
         /**
          * Percorre eventos de Exibição
          */
-        let elemento = '';
-
-        if(indiceCelula){
-          elemento = oElemento.cells[indiceCelula];
-        }else elemento = oElemento;
-
-
         for (var i = 0; i < aShowEvents.length; i++) {
 
-          var sAttr = elemento.getAttribute(aShowEvents[i])
+          var sAttr = oElemento.getAttribute(aShowEvents[i])
             if (sAttr == null){
               sAttr = "";
             }
 
-          elemento.setAttribute(aShowEvents[i], sNameInstance + ".show(this, event);" + sAttr);
+          oElemento.setAttribute(aShowEvents[i], sNameInstance + ".show(this, event);" + sAttr);
         }
         /**
          * Percorre eventos de Ocultação
@@ -104,12 +97,12 @@
       /**
        * Constrói o componente
        */
-      this.make          = function(oElemento, indiceCelula=null) {
+      this.make          = function(oElemento) {
 
         /**
          * Define os Eventos para o elemnto mostrar/ocultar o hint
          */
-        var lEventos = setEvents(oElemento, indiceCelula);
+        var lEventos = setEvents(oElemento);
 
         if ($(sNameInstance + "divDBhintExterno")) {
           $(sNameInstance + "divDBhintExterno").parentNode.removeChild($(sNameInstance + "divDBhintExterno"));
@@ -153,6 +146,10 @@
         me.oDivContainer.style.display = '';
         me.oDivContainer.style.top     = me.getCoordinatesTop ( oCoordinates, oElemento ) + "px";
         me.oDivContainer.style.left    = me.getCoordinatesLeft( oCoordinates, oElemento ) + 'px';
+
+        if(zIndexHint != null) {
+          me.oDivContainer.style.zIndex  = zIndexHint;
+        }
       };
 
       /**
@@ -190,7 +187,7 @@
 
         var iTop = 0;
 
-        switch (me.sPositionCurrentWindow.toUpperCase()) {
+        switch (me.sPositionTop.toUpperCase()) {
 
           case 'T':
 
@@ -198,8 +195,8 @@
             break;
 
           case 'B':
-            var iTop = oCoordinates.y+(me.oDivContainer.offsetHeight + oElemento.offsetHeight) - 27;
 
+            var iTop = oCoordinates.y;
             break;
         }
         if (oScrollElement != null) {
@@ -212,14 +209,16 @@
 
 
       this.getCoordinatesLeft = function(oCoordinates, oElemento) {
+
         var iLeft = 0;
         var iJanelaCliente = document.body.clientWidth;
+
         switch (me.sPositionLeft.toUpperCase()) {
 
           case 'L':
 
             var iLeft = oCoordinates.x;
-             break;
+            break;
 
           case 'R':
 
@@ -257,6 +256,9 @@
       this.setScrollElement = function(oElement) {
         oScrollElement = oElement;
       }
+      this.setZIndexHint = function(zIx) {
+        zIndexHint = zIx;
+      }
     };
 
 
@@ -269,23 +271,20 @@
 
   /**
    * Construtor automático do widget dos hints.
+   *
    * @param  Element oElemento Elemento do DOM que receberá o hint
    * @param  Object settings  objeto de configuração do hint
    *
    * @example
    *
-   *  *** O atributo [db-action="hint"] é opcional,
-   *  *** serve para montar automaticamente o hint no elemento via DBBootstrap
-   *  ***
-   *
+   *  <!-- O atributo [db-action="hint"] é opcional -->
+   *  <!-- serve para montar automaticamente o hint no elemento via DBBootstrap -->
    *  <input id="ID_DO_INPUT" db-action="hint" db-hint-text="TEXTO DO HINT" />
    *
    * @example
-   *
    *  DBHint.build($('ID_DO_INPUT'), {text: "TEXTO DO HINT"})
    *
    * @example
-   *
    *  DBHint.build($('ID_DO_INPUT')).setText("TEXTO DO HINT")
    *
    * @return DBHint retorna a instancia da classe DBHint

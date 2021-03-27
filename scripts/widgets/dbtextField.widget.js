@@ -1,10 +1,9 @@
 /**
  * Define campo do tipo input
  *
- * @class dbTextInput
  * @constructor
  * @author Iuri Guntchnigg iuri@dbseller.com.br
- * @id  $Id: dbtextField.widget.js,v 1.22 2015/02/19 18:21:40 dbmauricio Exp $
+ * @id  $Id: dbtextField.widget.js,v 1.23 2015/12/22 17:47:43 dbrafael.nery Exp $
  *
  * @param {String} sName         - id do Objeto
  * @param {String} sNameInstance - nome da instancia do objeto, usado para referencia interna  //Obsoleto.
@@ -47,7 +46,6 @@ DBTextField = function (mName, sNameInstance, sValue, sSize) {
   this.sSize                     = sSize;
   this.sNameInstance             = sNameInstance;
   this.lReadOnly                 = false;
-  this.lRequired                 = true;
   this.sStringConteudo           = "";
   this.iMaxLength                = "";
   this.sStringTextarea           = "";
@@ -338,25 +336,6 @@ DBTextField = function (mName, sNameInstance, sValue, sSize) {
     }
     return;
   }
-
-  /**
-   * Define o campo como de preenchimento obrigatório.
-   * @param bollean lRequired true obrigatório
-   * return void
-   */
-  this.setRequired = function(lRequired) {
-
-    me.oHTMLElement.lRequired = lRequired;
-    me.lRequired             = lRequired;
-
-    if ( lRequired === true ) {
-      me.oHTMLElement.required = lRequired;
-    } else {
-      me.oHTMLElement.removeClassName("lRequired");
-    }
-    return;
-  }
-
 }
 
 /**

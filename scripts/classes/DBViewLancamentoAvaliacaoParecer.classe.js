@@ -249,6 +249,10 @@ DBViewLancamentoAvaliacaoParecer.prototype.getParecer =  function () {
 
   var me = this;
 
+  if ( me.iOrdem === null ) {
+    return;
+  }
+
   me.oGridParecer.clearAll(true);
   me.aParecer = new Array();
 

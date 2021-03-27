@@ -20,9 +20,9 @@ DBViewHelp = function() {
   this.oSpanVersao = null;
 
   /**
-   * Dados do HELP (FAQ)
+   * Dados do HELP
    */
-  this.aHelps = []
+  this.oHelp = {}
 }
 
 /**
@@ -33,9 +33,8 @@ DBViewHelp.prototype.show = function() {
   var _this = this;
 
   _this.oDBModal = new DBModal();
-  // _this.oDBModal.setDBMaskOptions({})
 
-  _this.oDBModal.setTitle("Perguntas Frequentes:");
+  _this.oDBModal.setTitle("Ajuda:");
 
   var oDivVersao         = CONTEXT.document.createElement('div');
   oDivVersao.style.color      = "#003b85";
@@ -120,37 +119,40 @@ DBViewHelp.prototype.__buildHtml = function() {
 /**
  * Método responsavel por remontar os helps do componente.
  */
-DBViewHelp.prototype.__buildHelps = function() {
+DBViewHelp.prototype.__buildHelp = function() {
 
   var _this = this
 
   /**
    * Remove todos os groups
    */
-  aGroups = _this.oDivHelp.querySelectorAll('.db-help-group')
-
-  if (aGroups.length) {
-
-    Array.prototype.slice.call(aGroups).each(function(obj) {
-      obj.parentNode.removeChild(obj);
-    })
+  if (!_this.oHelp || (_this.oHelp['error'] != undefined) || !_this.oHelp.helps_releases.group ) {
+    var div = CONTEXT.document.createElement('div');
+    div.setAttribute('class', 'db-help-group db-help-group-empty');
+    div.innerHTML = 'Não foi encontrado nenhum Help para esta rotina.';
+    _this.oDivHelp.appendChild(div)
+    return;
   }
 
   /**
-   * Insere todos baseado no array de helps
+   * Insere todos baseado no help base
    */
-  _this.aHelps.each(function(obj) {
+  var oDivDescricao = CONTEXT.document.createElement('div')
+  oDivDescricao.innerHTML = _this.oHelp.helps_releases.group.content;
+  oDivDescricao.setAttribute('class', 'db-help-resume');
 
-    var oDivHelpGroup = _this.__buildHelpGroup(obj);
+  _this.oDivHelp.appendChild(oDivDescricao);
+
+  _this.oHelp.helps_releases.group.groups.each(function(group) {
+
+    var oDivHelpGroup = _this.__buildHelpGroup(group);
+
     _this.oDivHelp.appendChild(oDivHelpGroup);
 
   });
 
-  if (_this.aHelps.length == 0) {
-    var div = CONTEXT.document.createElement('div');
-    div.setAttribute('class', 'db-help-group db-help-group-empty');
-    div.innerHTML = 'Não foi encontrado nenhum FAQ para esta rotina.';
-    _this.oDivHelp.appendChild(div)
+  if (_this.oHelp.helps_releases.group.fields.length > 0) {
+    _this.oDivHelp.appendChild(_this.__buildFields(_this.oHelp.helps_releases.group.fields));
   }
 
 }
@@ -158,10 +160,10 @@ DBViewHelp.prototype.__buildHelps = function() {
 /**
  * Seta os helps e remonta a tela
  */
-DBViewHelp.prototype.setHelps = function(aHelps) {
+DBViewHelp.prototype.setHelp = function(oHelp) {
 
-  this.aHelps = aHelps;
-  this.__buildHelps();
+  this.oHelp = oHelp;
+  this.__buildHelp();
 }
 
 /**
@@ -172,6 +174,8 @@ DBViewHelp.prototype.setHelps = function(aHelps) {
  * }
  */
 DBViewHelp.prototype.__buildHelpGroup = function(helpData) {
+
+  var _this = this;
 
   var oDivHelpGroup = CONTEXT.document.createElement('div');
   oDivHelpGroup.setAttribute('class', 'db-help-group');
@@ -197,17 +201,65 @@ DBViewHelp.prototype.__buildHelpGroup = function(helpData) {
 
   /**
    * Conteudo do help, no caso resposta da pergunta (FAQ)
-   * @type {[type]}
    */
   var oDivGroupContent = CONTEXT.document.createElement('div')
   oDivGroupContent.setAttribute('class', 'db-help-group-content');
-  oDivGroupContent.innerHTML = helpData.content;
+
+  if (helpData.content) {
+
+    var oDivGroupResume = CONTEXT.document.createElement('div')
+    oDivGroupResume.setAttribute('class', 'db-help-group-resume');
+    oDivGroupResume.innerHTML = helpData.content;
+
+    oDivGroupContent.appendChild(oDivGroupResume);
+  }
 
   oDivHelpGroup.appendChild(oDivGroupIcon);
   oDivHelpGroup.appendChild(oDivGroupTitle);
   oDivHelpGroup.appendChild(oDivGroupContent);
 
+  if (helpData.groups && helpData.groups.length > 0) {
+
+    helpData.groups.each(function(group) {
+      oDivGroupContent.appendChild(_this.__buildHelpGroup(group));
+    })
+  }
+
+  if (helpData.fields && helpData.fields.length > 0) {
+    oDivHelpGroup.appendChild(_this.__buildFields(helpData.fields));
+  }
+
   return oDivHelpGroup;
+}
+
+/**
+ * Monta o html dos campos
+ * @param  Object[] aFields Array de objetos com as informacoes dos campos
+ */
+DBViewHelp.prototype.__buildFields = function(aFields) {
+
+  var oOL = CONTEXT.document.createElement('ol');
+  oOL.setAttribute('class', 'db-help-fields');
+
+  aFields.each(function(field) {
+
+    var oSpanTitle = CONTEXT.document.createElement('span');
+    oSpanTitle.setAttribute('class', 'db-help-fields-title');
+    oSpanTitle.innerHTML = field.label + ":";
+
+    var oSpanContent = CONTEXT.document.createElement('span');
+    oSpanContent.setAttribute('class', 'db-help-fields-content');
+    oSpanContent.innerHTML = field.content;
+
+    var oItem = CONTEXT.document.createElement('li');
+
+    oItem.appendChild(oSpanTitle);
+    oItem.appendChild(oSpanContent);
+    oOL.appendChild(oItem);
+
+  })
+
+  return oOL;
 }
 
 /**
@@ -218,8 +270,8 @@ DBViewHelp.prototype.setVersao = function(sVersao) {
   if (!this.oSpanVersao) {
     throw "Elemento responvável por mostrar a versão ainda não criado.\nProvavelmente o método 'show' não foi chamado.";
   }
-
-  this.oSpanVersao.innerHTML = sVersao
+  /* @note: Removido exebicao da versão pois nao ha mais release' com a entrega continua */
+  //this.oSpanVersao.innerHTML = sVersao
 }
 
 DBViewHelp.prototype.retrieveHelpData = function() {
@@ -230,12 +282,12 @@ DBViewHelp.prototype.retrieveHelpData = function() {
     exec: "getHelpData"
   }
 
-  js_divCarregando('Aguarde...<br />Buscando os FAQ\'s', 'divCarregandoHelps', false)
+  js_divCarregando('Aguarde...<br />Buscando os Help\'s', 'divCarregandoHelps', false)
   $('divCarregandoHelps').style.zIndex = 10001
 
   var oRequisicao = {
     method: "GET",
-    parameters: "json=" + Object.toJSON(oParametros),
+    parameters: "json=" + JSON.stringify(oParametros),
     onComplete: function(oAjax) {
 
       js_removeObj('divCarregandoHelps')
@@ -248,7 +300,7 @@ DBViewHelp.prototype.retrieveHelpData = function() {
       }
 
       _this.setVersao(oRetorno.sVersao ? oRetorno.sVersao : '');
-      _this.setHelps(oRetorno.aHelps);
+      _this.setHelp(oRetorno.oHelp);
 
     }
   }
@@ -257,14 +309,11 @@ DBViewHelp.prototype.retrieveHelpData = function() {
 
 }
 
-DBViewHelp.prototype.createEcidade3Button = function() {
-  return;
-}
-
 DBViewHelp.build = function() {
 
   var dbView = new DBViewHelp();
   dbView.show();
+
 }
 
 /**

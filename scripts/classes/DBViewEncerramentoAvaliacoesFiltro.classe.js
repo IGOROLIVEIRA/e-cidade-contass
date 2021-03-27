@@ -443,7 +443,6 @@ DBViewEncerramentoAvaliacoesFiltro = function (sInstancia, iEncerra) {
       if (lDesabilitaAluno === true) {
         me.oDataGridAlunos.aRows[iSeq].setClassName('disabled');
       }
-
     });
     me.oDataGridAlunos.renderRows();
 
@@ -452,6 +451,8 @@ DBViewEncerramentoAvaliacoesFiltro = function (sInstancia, iEncerra) {
      * as pendencias
      */
     oRetorno.aDadosAlunos.each(function(oAluno, iSeq) {
+
+      /*PLUGIN DIARIO PROGRESSAO - Definido lEvadido na linha do aluno - NÃO APAGAR*/
 
       if (!me.lProgressaoParcial) {
 
@@ -465,7 +466,6 @@ DBViewEncerramentoAvaliacoesFiltro = function (sInstancia, iEncerra) {
 
         var sMensagem = "";
 
-
         var iCelulaHint = 4;
         if ( !me.lEncerramentoGeral ) {
           iCelulaHint = 5;
@@ -473,9 +473,12 @@ DBViewEncerramentoAvaliacoesFiltro = function (sInstancia, iEncerra) {
 
         if( !oAluno.lSemPendencia ) {
 
-          oAluno.aPendencias.each(function (sPendencia) {
-            sMensagem += "* "+sPendencia.urlDecode()+"<br>";
-          });
+          if ( oAluno.aPendencias ) {
+
+            oAluno.aPendencias.each(function (sPendencia) {
+              sMensagem += "* "+sPendencia.urlDecode()+"<br>";
+            });
+          }
 
           oParametros = {iWidth:'500', oPosition : {sVertical : 'B', sHorizontal : 'R'}};
           me.oDataGridAlunos.setHint(iSeq, iCelulaHint, sMensagem,  oParametros);
@@ -630,6 +633,9 @@ DBViewEncerramentoAvaliacoesFiltro = function (sInstancia, iEncerra) {
 
       var oAluno         = new Object();
       oAluno.iProgressao = oAlunoLinha.aCells[7].getValue();
+
+      /*PLUGIN DIARIO PROGRESSAO - DEFINIDO lEvadido - NÃO APAGAR*/
+
       aAlunos.push(oAluno);
     });
 
@@ -701,7 +707,11 @@ DBViewEncerramentoAvaliacoesFiltro = function (sInstancia, iEncerra) {
       return false;
     }
 
-    if (confirm('Confirmar o encerramento das Progressões selecionadas?')) {
+    var sMensagem       = 'Confirmar o encerramento das Progressões selecionadas?';
+
+    /*PLUGIN DIARIO PROGRESSAO - Mensagem evadido - NÃO APAGAR*/
+
+    if (confirm(sMensagem)) {
 
       var oParametro     = new Object();
       oParametro.exec    = 'encerrarProgressaoParcial';

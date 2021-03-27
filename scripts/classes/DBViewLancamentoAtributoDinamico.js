@@ -27,6 +27,7 @@
 require_once("scripts/widgets/dbmessageBoard.widget.js");
 require_once("scripts/widgets/dbcomboBox.widget.js");
 require_once("scripts/widgets/dbtextField.widget.js");
+require_once("scripts/strings.js");
 require_once("scripts/widgets/dbtextFieldData.widget.js");
 require_once("scripts/widgets/windowAux.widget.js");  
 require_once("scripts/datagrid.widget.js");  
@@ -43,6 +44,10 @@ DBViewLancamentoAtributoDinamico = function () {
   this.sLabelMessageBoard    = 'Atributos Dinâmicos';
   this.sDescrMessageBoard    = 'Lançamento de valores para os atributos dinâmicos';
   this.sAlignForm            = 'center';
+  this.aCombos                = [];
+  this.msgErroValidacao       = "";
+  this.aValidacaoAtributos    = [];
+  this.lErroValidacaoAtributo = false;
   
   
   /**
@@ -134,6 +139,12 @@ DBViewLancamentoAtributoDinamico = function () {
 		    oAtributo.iCodigoAtributo = input.name;
 		    oAtributo.sValor          = input.value;
         aAtr.push(oAtributo);
+        if (js_search_in_array(me.aInputsValidar, input.name)) {
+          if(!me.validaAtributo(oAtributo)){
+            alert(me.msgErroValidacao);
+            me.lErroValidacaoAtributo = true;
+          }
+        }
       }      
     }); 
     
@@ -143,7 +154,12 @@ DBViewLancamentoAtributoDinamico = function () {
     oJson.iGrupoAtributos = me.iGrupoAtributos;
     oJson.iGrupoValor     = me.iGrupoValor;
     oJson.aAtributos      = aAtr;
-
+    if (me.lErroValidacaoAtributo) {
+      
+      me.lErroValidacaoAtributo = false;
+      js_removeObj("msgBox");
+      return false;
+    }
     var oAjax = new Ajax.Request( me.sUrl, {
                                           method: 'post', 
                                           parameters: 'json='+Object.toJSON(oJson), 
@@ -229,18 +245,20 @@ DBViewLancamentoAtributoDinamico = function () {
     
     var sLookUp = "";
     
-    sLookUp += "function js_pesquisa"+sTabela+sCampo+"(mostra){";
+    var sIndex = sTabela+sCampo+sCampoForm;
+    console.log(sCampoForm);
+    sLookUp += "function js_pesquisa"+sIndex+"(mostra){";
     sLookUp += "  if (mostra) {";
-    sLookUp += "    js_OpenJanelaIframe('','db_iframe_"+sTabela+sCampo+"','func_"+sTabela+".php?funcao_js=parent.js_mostra"+sTabela+sCampo+"1|"+sCampo+"','Pesquisa',true);";
-    sLookUp += "    $('Jandb_iframe_"+sTabela+sCampo+"').style.zIndex = '999999999';";
+    sLookUp += "    js_OpenJanelaIframe('','db_iframe_"+sIndex+"','func_"+sTabela+".php?funcao_js=parent.js_mostra"+sIndex+"1|"+sCampo+"','Pesquisa',true);";
+    sLookUp += "    $('Jandb_iframe_"+sIndex+"').style.zIndex = '999999999';";
     sLookUp += "  } else {"; 
     sLookUp += "    $('"+sCampoForm+"').value = '';"; 
     sLookUp += "  }";
     sLookUp += "}\n"; 
     
-    sLookUp += "function js_mostra"+sTabela+sCampo+"1(chave1){";
+    sLookUp += "function js_mostra"+sIndex+"1(chave1){";
     sLookUp += "  $('"+sCampoForm+"').value = chave1;";
-    sLookUp += "  db_iframe_"+sTabela+sCampo+".hide();";
+    sLookUp += "  db_iframe_"+sIndex+".hide();";
     sLookUp += "}\n";
     
     return sLookUp;
@@ -262,7 +280,8 @@ DBViewLancamentoAtributoDinamico = function () {
     } 
  
     me.aInputsValidos = new Array();
-   
+    me.aInputsValidar = new Array();
+    
     aAtributos.each(function(oAtributo) {
          
       var sInput           = "";
@@ -271,7 +290,7 @@ DBViewLancamentoAtributoDinamico = function () {
       var oCampoReferencia = oAtributo.oCampoReferencia;
       var iTipo            = oAtributo.iTipo;
       
-      if (lAteracao) {
+      if (lAteracao && iTipo != 6) {
         var sValorDefault  = '';
       } else {
         var sValorDefault  = oAtributo.sValorDefault.urlDecode();
@@ -323,14 +342,39 @@ DBViewLancamentoAtributoDinamico = function () {
           sInput += " <option value='f' "+ (sValorDefault=='f'?"selected":"") +"> NÃO </option>";
           sInput += "</select>";
           break;
+  
+        case "6": //TIPO Combo
+    
+          sInput  = "<select name="+iCodigo+" id="+iCodigo+" style='width: 100%'>";
+          var aListaItens = sValorDefault.split("\|");
+          
+          
+          aListaItens.each(function(sItem) {
+            
+             var sDescricao = sItem;
+             var sCodigo    = sItem;
+             
+             if (sItem.indexOf("-") !== false) {
+               
+               var aPartesDoItemDaLista = sItem.split("-");
+               sCodigo    = aPartesDoItemDaLista[0].trim();
+               sDescricao = aPartesDoItemDaLista[1].trim();
+             }
+             
+             sInput += " <option value='"+sCodigo+"'>"+ sDescricao +"</option>";
+           
+          });
+          sInput += "</select>";
+          
+          break;
       }
       
       if (oCampoReferencia!=null) {
       
-        sDescricao = "<a class='dbancora' onclick='js_pesquisa"+oCampoReferencia.sTabela+oCampoReferencia.sNome+"(true)' href='#'>"+sDescricao+"</a>";
+        sDescricao = "<a class='dbancora' onclick='js_pesquisa"+oCampoReferencia.sTabela+oCampoReferencia.sNome+iCodigo+"(true)' href='#'>"+sDescricao+"</a>";
            
         var oScript             = document.createElement("script");
-            oScript.innerHTML  += me.geraLookUp(oCampoReferencia.sTabela, oCampoReferencia.sNome,iCodigo);
+            oScript.innerHTML  += me.geraLookUp(oCampoReferencia.sTabela, oCampoReferencia.sNome, iCodigo);
         document.getElementsByTagName("head")[0].appendChild(oScript);            
       }
          
@@ -485,6 +529,48 @@ DBViewLancamentoAtributoDinamico = function () {
    */  
   this.setAlignForm = function (sAlign) {
     me.sAlignForm = sAlign;
+  }
+  
+  this.validaAtributo = function (oAtributo) {
+    
+    this.lRetornoValido = true;
+    self = this;
+    
+    me.aValidacaoAtributos.each(function(oItemValidacaoAtributo) {
+      
+      if(oItemValidacaoAtributo.id == oAtributo.iCodigoAtributo) {
+        
+        oItemValidacaoAtributo.aValidacoes.each(function(oValidacao) {
+          
+          switch (oValidacao.sTipo) {
+            
+            case "REQUIRED":
+              if(typeof oAtributo.sValor == 'undefined' || oAtributo.sValor == null || oAtributo.sValor.trim() == '') {
+                me.msgErroValidacao = "O campo não pode estar vazio";
+                self.lRetornoValido = false;
+                throw $break;
+              }
+              break;
+            case "NUMBER_MORE_THAN":
+              if(parseInt(oAtributo.sValor) <= parseInt(oValidacao.sValor)) {
+                me.msgErroValidacao = "O campo deve ser maior que "+oValidacao.sValor;
+                self.lRetornoValido = false;
+                throw $break;
+              }
+              break;
+            case "COMBO_SELECIONE_DIFERENTE":
+              if( parseInt(oAtributo.sValor) == parseInt(oValidacao.sValor) ) {
+                me.msgErroValidacao = oValidacao.sMsg;
+                self.lRetornoValido = false;
+                throw $break;
+              }
+              break;
+          }
+        });
+      }
+    });
+    
+    return self.lRetornoValido;
   }
     
 }

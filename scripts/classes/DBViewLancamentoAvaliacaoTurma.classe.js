@@ -9,6 +9,7 @@ require_once("scripts/classes/DBViewLancamentoAvaliacao/LancamentoObservacao.cla
 require_once("scripts/classes/DBViewLancamentoAvaliacao/LancamentoAmparo.classe.js");
 require_once("scripts/classes/educacao/escola/LegendasLancamentoAvaliacao.classe.js");
 require_once("scripts/classes/educacao/escola/Proporcionalidade.classe.js");
+require_once("scripts/classes/educacao/escola/AvaliacaoAlternativa.classe.js");
 
 /**
  * Monta a grade de avaliação de uma turma
@@ -193,6 +194,7 @@ DBViewLancamentoAvaliacaoTurma = function (oDadosTurmaSelecionada ) {
   this.oBtnParecer.id                = 'btnParecer';
   this.oBtnParecer.style.marginRight = '5px';
   this.oBtnParecer.style.height      = '20px';
+  this.oBtnParecer.style.width       = '130px';
   this.oBtnParecer.disabled          = false;
 
   if (this.oDadosTurmaSelecionada.sTipoProcedimentoAvaliacao == 'PARECER' || this.lTurmaEncerrada) {
@@ -259,6 +261,13 @@ DBViewLancamentoAvaliacaoTurma = function (oDadosTurmaSelecionada ) {
   this.oBtnProporcionalidade.setAttribute( 'id', 'btnProporcionalidade' );
   this.oBtnProporcionalidade.setStyle( { 'width' : '115px' } );
 
+  this.oBtnAvaliacaoAlternativa = document.createElement( 'input' );
+  this.oBtnAvaliacaoAlternativa.setAttribute( 'type', 'button' );
+  this.oBtnAvaliacaoAlternativa.setAttribute( 'value', 'Avaliação Alternativa' );
+  this.oBtnAvaliacaoAlternativa.setAttribute( 'name', 'avaliacaoalternativa' );
+  this.oBtnAvaliacaoAlternativa.setAttribute( 'id', 'btnAvaliacaoAlternativa' );
+  this.oBtnAvaliacaoAlternativa.setStyle( { 'width' : '130px' } );
+
   this.oTabelaOpcoes = document.createElement( 'table' );
   this.oTabelaOpcoes.setAttribute( 'id', 'oTabelaOpcoes' );
 
@@ -273,6 +282,9 @@ DBViewLancamentoAvaliacaoTurma = function (oDadosTurmaSelecionada ) {
 
   this.oColunaProporcionalidade = document.createElement( 'td' );
   this.oColunaProporcionalidade.setAttribute( 'id', 'oColunaProporcionalidade' );
+
+  this.oColunaAvaliacaoAlternativa = document.createElement( 'td' );
+  this.oColunaAvaliacaoAlternativa.setAttribute( 'id', 'oColunaAvaliacaoAlternativa' );
 
   this.oLinhaDisciplinaBotoes = document.createElement( 'tr' );
   this.oLinhaDisciplinaBotoes.setAttribute( 'id', 'oLinhaDisciplinaBotoes' );
@@ -448,12 +460,15 @@ DBViewLancamentoAvaliacaoTurma.prototype.show = function() {
   $('oLinhaTrocaTurmaLegenda').appendChild( this.oColunaTrocaTurma );
   $('oLinhaTrocaTurmaLegenda').appendChild( this.oColunaBotaoLegenda );
   $('oLinhaTrocaTurmaLegenda').appendChild( this.oColunaProporcionalidade );
+  $('oLinhaTrocaTurmaLegenda').appendChild( this.oColunaAvaliacaoAlternativa );
 
   $('oColunaTrocaTurma').appendChild( this.oLabelExibirTrocaTurma );
   $('oColunaTrocaTurma').appendChild( this.oSelectExibirTrocaTurma );
 
   $('oColunaBotaoLegenda').appendChild( this.oBtnLegendas );
   $('oColunaProporcionalidade').appendChild( this.oBtnProporcionalidade );
+
+  $('oColunaAvaliacaoAlternativa').appendChild( this.oBtnAvaliacaoAlternativa );
 
   $('oLinhaDisciplinaBotoes').appendChild( this.oColunaDisciplinas );
   $('oLinhaDisciplinaBotoes').appendChild( this.oColunaOrigemNota );
@@ -743,6 +758,12 @@ DBViewLancamentoAvaliacaoTurma.prototype.populaGrid = function (oAjax) {
 
   var oRetorno = eval('('+oAjax.responseText+')');
 
+  if (oRetorno.status == 2 ) {
+
+    alert( oRetorno.message.urlDecode() );
+    return;
+  }
+
   this.sMascara              = oRetorno.sMascaraFormatacao;
   this.iTabIndex             = oRetorno.iTabIndex;
   this.lGeraResultadoParcial = oRetorno.lGeraResultadoParcial;
@@ -872,7 +893,7 @@ DBViewLancamentoAvaliacaoTurma.prototype.populaGrid = function (oAjax) {
       /**
        * caso seja um aluno com proporcionalidade, e o período não estaja configurado para o calculo do Resultado Final
        */
-      if ( oAproveitamento.lAlunoComProporcionalidade && oAproveitamento.lBloqueiaPeriodo ) {
+      if ( oAproveitamento.lBloqueiaPeriodo ) {
 
         oParametros.lReadOnlyFalta = true;
         oParametros.lReadOnlyNota  = true;
@@ -1287,10 +1308,13 @@ DBViewLancamentoAvaliacaoTurma.prototype.constroiSelectNivel = function(oAluno, 
   }
 
   /**
-   * Quando aluno esta amparado, não devemos apresentar os conceitos e sim uma string 'SUP'
+   * Quando aluno esta amparado, não devemos apresentar os conceitos e sim uma string 'AMP'
    */
+
+
   if (oAproveitamento.lAmparado) {
-    oConceito.setAttribute('value', 'SUP');
+
+    oConceito.setAttribute('value', 'AMP');
   }
 
   if (
@@ -1431,10 +1455,10 @@ DBViewLancamentoAvaliacaoTurma.prototype.constroiInputParecer = function(oAluno,
  */
 DBViewLancamentoAvaliacaoTurma.prototype.preencheNotaDisciplina = function(oAluno, oAproveitamento, oElement) {
 
-  var iMenorValor      = this.aPeriodosAvaliacao[oAproveitamento.iPeriodo].iMenorValor;
-  var iMaiorValor      = this.aPeriodosAvaliacao[oAproveitamento.iPeriodo].iMaiorValor;
-  var mMinimoAprovacao = this.aPeriodosAvaliacao[oAproveitamento.iPeriodo].mMinimoAprovacao;
-  var nVariacao        = this.aPeriodosAvaliacao[oAproveitamento.iPeriodo].nVariacao;
+  var iMenorValor      = oAproveitamento.nMenorValor;
+  var iMaiorValor      = oAproveitamento.nMaiorValor;
+  var mMinimoAprovacao = oAproveitamento.mAproveitamentoMinino;
+  var nVariacao        = oAproveitamento.nVariacao;
   var lAtingiuMinimo   = true;
 
   if (this.aPeriodosAvaliacao[oAproveitamento.iPeriodo].sFormaAvaliacao == 'NOTA') {
@@ -1582,6 +1606,14 @@ DBViewLancamentoAvaliacaoTurma.prototype.setaFuncoesNota = function (oAluno, oAp
     sStringHint  = "<b>Amparado</b> ";
     iTamanhoHint = 90;
   }
+
+  if ( oAproveitamento.lPeriodoComAvaliacaoAlternativaSemAvaliacao ) {
+
+    lSetaHint    = true;
+    iTamanhoHint = 200;
+    sStringHint  = 'Avaliação Alternativa Configurada';
+  }
+
 
   if (lSetaHint) {
 
@@ -2157,8 +2189,9 @@ DBViewLancamentoAvaliacaoTurma.prototype.liberarBotoes = function () {
 
       oSelf.oViewAlteraResultadoFinal.setCallBackWindow(function() {
 
-        oSelf.oJanelaOrigemNota = false;
+        oSelf.getPeriodosAvaliacao();
         oSelf.buscaAlunos();
+        oSelf.oJanelaOrigemNota = false;
       });
 
       oSelf.oJanelaOrigemNota = true;
@@ -2285,6 +2318,35 @@ DBViewLancamentoAvaliacaoTurma.prototype.liberarBotoes = function () {
     oSelf.oViewProporcionalidade.setCallBackSalvar( fCallBack );
     oSelf.oViewProporcionalidade.show();
   };
+
+  $('btnAvaliacaoAlternativa').onclick = function (){
+
+    if (oSelf.lGradeAlterada && !confirm(sMsgConfirm)) {
+      return false;
+    }
+
+    var fCallBack = function() {
+
+      oSelf.lGradeAlterada = true;
+      oSelf.salvarGradeAproveitamento();
+    };
+
+    oSelf.oViewAvaliacaoAlternativa = new DBViewFormularioEducacao.AvaliacaoAlternativa(
+                                                                      oSelf.oDadosTurmaSelecionada.iTurma,
+                                                                      oSelf.oDadosTurmaSelecionada.iEtapa
+                                                                    );
+
+    oSelf.oViewAvaliacaoAlternativa.setContainerPai( oSelf.oWindow );
+    if( oSelf.oJanelaOrigemNota ) {
+      return true;
+    }
+    oSelf.oJanelaOrigemNota = true;
+    oSelf.oViewAvaliacaoAlternativa.setCallBackSalvar( fCallBack );
+    oSelf.oViewAvaliacaoAlternativa.setCallBack(function () {
+      oSelf.oJanelaOrigemNota = false;
+    })
+    oSelf.oViewAvaliacaoAlternativa.show();
+  };
 };
 
 DBViewLancamentoAvaliacaoTurma.prototype.abrirParecerComplementar = function () {
@@ -2363,7 +2425,9 @@ DBViewLancamentoAvaliacaoTurma.prototype.ajustaDependenciaDoPeriodo = function(i
 
       var sTextoRecuperacao = 'dispensado';
       var iLimiteAprovacao  = new Number(oPeriodo.iLimiteReprovacao);
-      if ( iLimiteAprovacao > 0 && oAproveitamento.iTotalDisciplinasReprovadas > iLimiteAprovacao) {
+      if (    ( iLimiteAprovacao > 0 && oAproveitamento.iTotalDisciplinasReprovadas > iLimiteAprovacao )
+           || ( iLimiteAprovacao > 0 && iLimiteAprovacao != 999 && !oAproveitamento.lRecuperacao && $(sIdCampoNota).value === "" )
+         ) {
 
         lBloqueada        = true;
         sTextoRecuperacao = 'Não Habilitado';
@@ -2418,6 +2482,13 @@ DBViewLancamentoAvaliacaoTurma.prototype.bloqueiaBotoes = function() {
 
   if( !this.oDadosTurmaSelecionada.sFormaObtencaoResultado == 'SO' || !this.oDadosTurmaSelecionada.lUtilizaProporcionalidade ) {
     $('btnProporcionalidade').setAttribute( 'disabled', 'disabled' );
+  }
+
+  if( !this.oDadosTurmaSelecionada.sFormaObtencaoResultado == 'SO'
+      || !this.oDadosTurmaSelecionada.lUtilizaAvaliacaoAlternativa
+      || !this.oDadosTurmaSelecionada.lEscolaUtilizaAvaliacaoAlternativa
+    ) {
+    $('btnAvaliacaoAlternativa').setAttribute( 'disabled', 'disabled' );
   }
 };
 

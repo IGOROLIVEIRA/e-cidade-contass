@@ -17,7 +17,7 @@ DBViewFormularioFolha.PesquisaCargo = function( iInstituicao ) {
   });
   this.oInputCargo     = new DBTextField("rh37_funcao");
   this.oInputCargo.getElement();
-
+  
   this.oInputNomeCargo = new DBTextField("rh37_descr");
   this.oInputNomeCargo.setReadOnly(true);
 
@@ -107,7 +107,7 @@ DBViewFormularioFolha.PesquisaCargo.prototype.fixarBotao = function( oElemento, 
 
 DBViewFormularioFolha.PesquisaCargo.prototype.abrirLookUp = function( lExibeJanela ) {
 
-  var sDestino        = "CurrentWindow.corpo";
+  var sDestino        = "top.corpo";      
   var sLabelJanela    = "Pesquisa de Cargo";;
   var sNomeObjeto     = "db_iframe_rhfuncao";
   var sFuncaoPesquisa = "";
@@ -118,7 +118,7 @@ DBViewFormularioFolha.PesquisaCargo.prototype.abrirLookUp = function( lExibeJane
     /**
      * Ao clicar na Ancora
      */
-    sDestino        = "CurrentWindow.corpo";
+    sDestino        = "top.corpo";
     sLabelJanela    = "Pesquisa de Cargo";
     sNomeObjeto     = "db_iframe_rhfuncao";
     sFuncaoPesquisa = "parent.DBViewFormularioFolha.PesquisaCargo.getInstance(" + this.iCodigoInstancia + ").retornoPesquisa|rh37_funcao|rh37_descr";
@@ -163,7 +163,7 @@ DBViewFormularioFolha.PesquisaCargo.prototype.retornoPesquisa= function() {
   this.oInputCargo.getElement().value = iCargo;
   this.oInputNomeCargo.setValue(sNomeCargo);
   db_iframe_rhfuncao.hide();
-
+  
   return;
 };
 
@@ -190,13 +190,13 @@ DBViewFormularioFolha.PesquisaCargo.prototype.retornoPesquisaDigitada= function(
  */
 DBViewFormularioFolha.PesquisaCargo.oInstances  = DBViewFormularioFolha.PesquisaCargo.oInstances || {};
 DBViewFormularioFolha.PesquisaCargo.iCounter    = DBViewFormularioFolha.PesquisaCargo.iCounter   || 0;
-DBViewFormularioFolha.PesquisaCargo.addInstance = function( oPesquisaCargo ) {
+DBViewFormularioFolha.PesquisaCargo.addInstance = function( oPesquisaCargo ) { 
 
   var iNumeroInstancia = DBViewFormularioFolha.PesquisaCargo.iCounter++;
   DBViewFormularioFolha.PesquisaCargo.oInstances['PesquisaCargo' + iNumeroInstancia] = oPesquisaCargo;
   return iNumeroInstancia;
 }
 
-DBViewFormularioFolha.PesquisaCargo.getInstance = function( iInstancia ) {
+DBViewFormularioFolha.PesquisaCargo.getInstance = function( iInstancia ) { 
   return DBViewFormularioFolha.PesquisaCargo.oInstances['PesquisaCargo' + iInstancia];
 };

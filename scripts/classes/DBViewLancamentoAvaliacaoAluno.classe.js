@@ -1055,6 +1055,11 @@ DBViewLancamentoAvaliacaoAluno = function(sInstancia, iMatriculaAluno, aMatricul
 
 
     var oRetorno = eval('('+oResponse.responseText+')');
+    if (oRetorno.status == 2) {
+
+      alert(oRetorno.message.urlDecode())
+      return;
+    }
     if (oRetorno.status == 1) {
 
       var oPeriodoLancado                   = oInstancia.getValorAproveitamento(oRetorno.iCodigoPeriodo, oRetorno.iCodigoRegencia);

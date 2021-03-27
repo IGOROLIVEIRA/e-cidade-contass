@@ -156,7 +156,7 @@ try {
   // Remove todas as variaveis criadas neste arquivo
   // para nao ter impacto em outros arquivos, exemplo: iniciar sessao no db_conecta.php
   unset($_SESSION, $front, $request, $response, $router, $config);
-  
+
   require_once($filePath);
 
 } catch (ResponseException $exception) {

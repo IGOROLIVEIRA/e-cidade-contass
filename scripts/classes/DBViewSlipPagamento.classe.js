@@ -117,7 +117,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
       me.sPesquisaContaDebito  = "Saltes";
 
       me.sParamContaDebito     = "getContasSaltes";
-      me.sTipoTransferencia    = "Recebimento de Caução";
+      me.sTipoTransferencia    = "Outras Movimentações Extras - Recebimento";
     break;
 
     /*
@@ -134,7 +134,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
       me.sPesquisaContaDebito  = "EventoContabil";
 
       me.sParamContaDebito     = "getContaEventoContabil";
-      me.sTipoTransferencia    = "Devolução de Caução";
+      me.sTipoTransferencia    = "Outras Movimentações Extras - Pagamento";
     break;
 
     /*
@@ -172,26 +172,9 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
       me.sParamContaDebito     = "getContaEventoContabil";
 
     break;
-
-    /**
-      * Reconhecimento de perdas
-      */
-    case 15: // Inclusão
-    case 16: // Estorno
-
-      me.iTipoInclusao      = 15;
-      me.lContaDebito       = true;
-      me.sTipoTransferencia = "Reconhecimento de Perdas";
-
-      me.sPesquisaContaCredito  = "Saltes";
-      me.sPesquisaContaDebito   = "EventoContabil";
-      
-      me.sParamContaCredito     = "getContasSaltes";
-      me.sParamContaDebito      = "getContaEventoContabil";
-
-    break;
-    
   }
+
+  /* [Extensão] - Filtro da Despesa - parte 1 */
 
   me.oTxtCodigoSlip                          = new DBTextField('oTxtCodigoSlip', me.sNomeInstancia+'.oTxtCodigoSlip', '', me.iTamanhoCampo);
   me.oTxtInstituicaoOrigemCodigo             = new DBTextField('oTxtInstituicaoOrigemCodigo', me.sNomeInstancia+'.oTxtInstituicaoOrigemCodigo', '', me.iTamanhoCampo);
@@ -922,13 +905,15 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     var sObjetoTxtConta = "me.oTxtConta" + sFunctionCompleta + "Codigo";
     var oTxtConta       = eval(sObjetoTxtConta);
 
-    var sUrlSaltes = "func_saltesreduz.php?pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta+"&ver_datalimite=1"; /* Ocorrencia 2227 */
+    var sUrlSaltes = "func_saltesreduz.php?ver_datalimite=1&pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta;
     if (lMostra) {
-      sUrlSaltes = "func_saltesreduz.php?funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr&ver_datalimite=1"; /* Ocorrencia 2227 */
+      sUrlSaltes = "func_saltesreduz.php?ver_datalimite=1&funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr";
     }
 
     js_OpenJanelaIframe("", 'db_iframe_'+sIframe, sUrlSaltes, "Pesquisa Contas", lMostra);
   };
+
+  /* [Extensão] - Filtro da Despesa - parte 2 */
 
   me.pesquisaContaEventoContabil = function(lMostra, lCredito) {
 
@@ -1062,29 +1047,6 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    */
   me.preencheFavorecido = function (lErro, sNome, sCnpj) {
 
-    if(sCnpj.length == 11){
-      if(sCnpj == '00000000000'){
-        alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
-        return false
-      }
-    }else{
-      if(sCnpj == '' || sCnpj == null ){
-        alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
-        return false
-      }
-    }
-
-    if(sCnpj.length == 14){
-      if(sCnpj == '00000000000000'){
-        alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
-        return false
-      }
-    }else{
-      if(sCnpj == '' || sCnpj == null ){
-        alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
-        return false
-      }
-    }
     var sCnpjTratado = "";
     if (sCnpj != "" && sCnpj != undefined) {
       sCnpjTratado = js_formatar(sCnpj, 'cpfcnpj')+ " - ";
@@ -1100,20 +1062,6 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    * completa o favorecido da transferencia
    */
   me.completaFavorecido = function (iCodigoFavorecido, sNomeFavorecido, CNPJ) {
-
-    if(CNPJ.length = 11){
-      if(CNPJ == '00000000000'){
-        alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
-        return false
-      }
-    }
-
-    if(CNPJ.length = 14){
-      if(CNPJ == '00000000000000'){
-        alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
-        return false
-      }
-    }
 
     var sCnpjTratado = "";
     if (CNPJ != "") {
@@ -1274,7 +1222,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    */
   me.getDadosInstituicaoOrigem = function (){
 
-   js_divCarregando("Aguarde, carregando dados instituição...", "msgBox");
+   js_divCarregando("Aguarde, carregando informações...", "msgBox");
    var oParam = new Object();
    oParam.exec = "getDadosInstituicaoOrigem";
    new Ajax.Request ( me.sUrlRpc,
@@ -1290,6 +1238,11 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
                       me.oTxtDescricaoInstituicaoOrigem.setValue(oRetorno.sInstituicaoOrigem.urlDecode());
                       me.oTxtInstituicaoOrigemCodigo.setValue(oRetorno.iCodigoInstituicaoOrigem);
 
+                      if (me.iTipoTransferencia == 1) {
+                        me.oTxtFavorecidoInputCodigo.setValue(oRetorno.iCodigoCgm);
+                        me.oTxtFavorecidoInputDescricao.setValue(oRetorno.sCNPJ.urlDecode()+" - "+oRetorno.sNomeCgm.urlDecode());
+                        me.oTxtFavorecidoInputCodigo.setReadOnly(true);
+                      }
                     }
                     });
   };
@@ -1611,7 +1564,9 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
                          js_removeObj("msgBox");
                          var oRetorno = eval("("+oAjax.responseText+")");
                          alert(oRetorno.message.urlDecode());
-                         js_pesquisaSlip(true);
+                         if (oRetorno.status == 1) {
+                           js_pesquisaSlip(true);
+                         }
                         }
                       });
   }

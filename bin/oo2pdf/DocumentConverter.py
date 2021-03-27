@@ -77,7 +77,7 @@ def _unoProps(**args):
 
 
 class DocumentConverter:
-
+    
     def __init__(self, port=DEFAULT_OPENOFFICE_PORT):
         localContext = uno.getComponentContext()
         resolver = localContext.ServiceManager.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", localContext)
@@ -95,7 +95,7 @@ class DocumentConverter:
 
         inputUrl = self._fileUrl(inputFile)
         outputUrl = self._fileUrl(outputFile)
-
+        
         document = self.desktop.loadComponentFromURL(inputUrl, "_blank", 0, _unoProps(Hidden=True, ReadOnly=True))
         try:
           document.refresh()
@@ -122,20 +122,20 @@ class DocumentConverter:
         ext = splitext(path)[1]
         if ext is not None:
             return ext[1:].lower()
-
+    
     def _fileUrl(self, path):
         return uno.systemPathToFileUrl(abspath(path))
 
 
 if __name__ == "__main__":
     from sys import argv, exit
-
+    
     if len(argv) < 3:
         print "USAGE: " + argv[0] + " <input-file> <output-file>"
         exit(255)
 
     try:
-        converter = DocumentConverter()
+        converter = DocumentConverter()    
         converter.convert(argv[1], argv[2])
     except DocumentConversionException, exception:
         print "ERROR! " + str(exception)
