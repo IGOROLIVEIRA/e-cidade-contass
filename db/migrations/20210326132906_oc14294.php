@@ -83,7 +83,7 @@ class Oc14294 extends AbstractMigration
             -- verifica se pode empenhar com data anterior a do servidor ( retornaram a data )
             select e30_empdataemp,
                 e30_empdataserv,
-                e30_elqddataserv,
+                e30_elqddataserv
             into dataemp, dataserv, lqdserv
             from empparametro
             where e39_anousu = substr(p_dtfim,1,4)::integer ;
