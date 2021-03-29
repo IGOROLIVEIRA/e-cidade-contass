@@ -65,6 +65,7 @@ class Oc14294 extends AbstractMigration
 
         dataemp          boolean;  --  permite empenho com data maior que o ultimo empenho
         dataserv         boolean;  --  permite empenho com data maior que a data do servidor
+        lqdserv         boolean;  --  permite liquidacao com data maior que a data do servidor
         maxdataemp       date;
 
         begin
