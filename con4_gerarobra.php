@@ -33,6 +33,11 @@ $clrotulo->label("o15_codigo");
           src="scripts/widgets/dbmessageBoard.widget.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+    #debug{
+        color: red;
+    }
+</style>
 <body bgcolor="#cccccc" style="margin-top: 25px;">
 <center>
 
@@ -151,7 +156,9 @@ $clrotulo->label("o15_codigo");
   function js_retornoProcessamento(oAjax) {
 
     js_removeObj('msgBox');
-    $('debug').innerHTML = oAjax.responseText;
+   let text = oAjax.responseText;
+
+    $('debug').innerHTML = text.slice(0, -35);
     var oRetorno = eval("("+oAjax.responseText+")");
     if (oRetorno.status == 1) {
 
@@ -290,5 +297,6 @@ $clrotulo->label("o15_codigo");
   }
 
 </script>
-<div id='debug'>
+<div>
+    <h4 id='debug'></h4>
 </div>
