@@ -156,6 +156,9 @@ if(pg_numrows($result) == 0) {
         color: red;
         text-align: center;
         margin-top: 18px;
+        margin-bottom: -17px;
+        z-index: 1;
+        position: relative;
     }
 </style>
 <body class="body-default">
