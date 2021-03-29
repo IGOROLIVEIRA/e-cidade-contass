@@ -13,6 +13,7 @@ $db_botao = false;
 if(isset($alterar)){
    db_inicio_transacao();
    $result = $clparametroscontratos->sql_record($clparametroscontratos->sql_query());
+   $clparametroscontratos->pc01_liberargerenciamentocontratos = $pc01_liberargerenciamentocontratos;
    if($result==false || $clparametroscontratos->numrows==0){
      $clparametroscontratos->incluir();
    }else{

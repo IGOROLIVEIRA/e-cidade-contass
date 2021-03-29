@@ -489,7 +489,24 @@ if(pg_numrows($result) == 0) {
                                     </td>
                                 </tr>
                             <?php endif; ?>
-                            <?php if($modulo == 8251):?>
+                            <?php if($modulo == 8251):
+                                
+                                $rsParametro = db_query('SELECT pc01_liberargerenciamentocontratos from parametroscontratos');
+                                $iLiberarContratos = db_utils::fieldsMemory($rsParametro, 0)->pc01_liberargerenciamentocontratos;
+                                
+                                $oDaoAcordo = db_utils::getDao('acordo');
+                                
+                                $sWhere = " cast((case WHEN ac16_datafim > ac26_data THEN ac16_datafim ELSE ac26_data END) AS date) - date '" . date("Y-m-d"). "' between 0 and 30 ";
+                                $sWhere .= " and  ac16_instit = ". db_getsession('DB_instit');
+                                $sWhere .= " and (ac16_providencia is null OR ac16_providencia in (1, 2)) ";
+                                $sWhere .= " and ac16_acordosituacao = 4 ";
+                                $sWhere .= " and ac16_coddepto = ". db_getsession('DB_coddepto');
+                                $sSqlAcordos = $oDaoAcordo->sql_query_completo(null, 'distinct acordo.ac16_sequencial', '', $sWhere);
+                                $rsAcordos = $oDaoAcordo->sql_record($sSqlAcordos);
+                                
+                                if($iLiberarContratos == 't' && $oDaoAcordo->numrows):
+                            ?>
+                            
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
                                     <td>
@@ -497,6 +514,7 @@ if(pg_numrows($result) == 0) {
                                         <iframe frameborder="0"  width="100%" height="130%" id="acordos" name="acordos" src="func_acordosavencer.php" scrolling="auto"></iframe>
                                     </td>
                                 </tr>
+                                <?php endif; ?>
                             <?php endif; ?>
                             <?php
                             $sqlPermissao = "select m.id_item,m.descricao
