@@ -355,7 +355,7 @@ class Oc14294 extends AbstractMigration
             if (lqdserv = false) then
             -- nao permite liquidar com data superior a data do servidor
             if  p_dtfim > current_date  then
-                return '11 VOCÊ NÃO PODE LIQUIDAR COM DATA SUPERIOR A DATA DO SISTEMA (SERVIDOR)';
+                return '11 A liquidação não pode ser efetuada com data posterior a data do servidor';
             end if;
 
             end if;
