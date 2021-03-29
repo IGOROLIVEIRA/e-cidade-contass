@@ -155,6 +155,7 @@ if(pg_numrows($result) == 0) {
     h2{
         color: red;
         text-align: center;
+        margin-top: 18px;
     }
 </style>
 <body class="body-default">
