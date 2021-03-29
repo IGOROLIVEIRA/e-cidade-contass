@@ -25,13 +25,13 @@
  *                                licenca/licenca_pt.txt
  */
 
-chdir("../");
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conecta.php");
+
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_conecta.php"));
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 if (file_exists(base64_decode($arquivo))) {
 
-  require(base64_decode($arquivo));
+  require(modification(base64_decode($arquivo)));
 } else {
   echo "<script>parent.document.form1.submit();</script>Redirecionando . . .";
   exit;
@@ -132,7 +132,7 @@ for ($ww=0; $ww<sizeof($quais_chaves); $ww++) {
 <table border="0" cellspacing="2px" width="100%" height="100%" cellpadding="1px" bgcolor="#cccccc">
 <tr>
 <td align="center" valign="top">
-<table border='1px' width="100%" bgcolor="#cccccc" style="" cellspacing="0px">
+<table border='1px' width="100%" bgcolor="#cccccc" style="" cellspacing="0px" class="tabela_iframe_alterar_excluir">
 <?
 $result=@db_query($sql);
 $numrows=@pg_numrows($result);
@@ -373,8 +373,8 @@ if (isset($cabec) && $cabec==true) {
           echo "<td class='corpo' nowrap>";
           if ($pode == false) {
 
-            $aBusca      = array( "\r", "\n" );
-            $aAlteracoes = array( '\\r', '\\n' );
+            $aBusca      = array( "\r", "\n", "'" );
+            $aAlteracoes = array( '\\r', '\\n', '&#39;');
             $coluna      = "";
 
             if (empty($opcoes)||(isset($opcoes)&& $opcoes==2)) {

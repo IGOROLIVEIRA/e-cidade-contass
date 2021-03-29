@@ -94,7 +94,7 @@ function js_diferenca_datas(data1,data2,opcao){
   }else if(opcao == "a"){
     return parseInt(anos);
   }else if(opcao == "amd"){
-    return anos+' '+mess+' '+dias;    
+    return anos+' '+mess+' '+dias;
   }
 }
 
@@ -2093,7 +2093,7 @@ function showCalendarioSaudeTodosDias(obj,shutdown_function, especmed) {
   if(PosMouseX >= 600){
     PosMouseX = 600;
   }
-
+  alert('iframe_data_'+obj);
   js_OpenJanelaIframe('','iframe_data_'+obj,'func_agendamedica.php?nome_objeto_data='+obj+'&shutdown_function='+shutdown_function+'&sd27_i_codigo='+especmed+'&fechar=true','Calendário Agendamento',true,PosMouseY,PosMouseX,400,270);
 
 }

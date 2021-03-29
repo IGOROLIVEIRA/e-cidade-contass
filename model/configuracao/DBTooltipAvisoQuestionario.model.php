@@ -21,7 +21,6 @@ class DBTooltipAvisoQuestionario extends DBTooltipAviso {
     $oQuestionario = new AvaliacaoQuestionarioInterno();
     $aAvaliacao    = $oQuestionario->getQuestionarios($iIdItem, $iModulo, true);
 
-
     if(!empty($aAvaliacao)){
 
       $sScript  = "";
@@ -70,6 +69,7 @@ class DBTooltipAvisoQuestionario extends DBTooltipAviso {
       } else {
         $sHtml .= '<div id="questionarios" class="db-tooltip-aviso-button tooltip-esocial" >'.PHP_EOL;
       }
+
       $sHtml .= '  <div class="tooltip-close" onclick="fecharDBTooltip(this);">&#215;</div> '     .PHP_EOL;
 
       $sHtml .= '<a href="javascript:menuQuestionario()" id="exibe_questionario">Colabore</a>'.PHP_EOL;

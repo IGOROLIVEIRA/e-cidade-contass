@@ -115,7 +115,7 @@ DBViewHelpInline.prototype.registerEvents = function() {
 DBViewHelpInline.prototype.onWindowLoaded = function(context) {
 
   var _this = this, fps = 60, frame = 0, handler = context[_this.raf];
-
+  
   if (_this.runningRaf) return;
 
   var loop = function(time) {
