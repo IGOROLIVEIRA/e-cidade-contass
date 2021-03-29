@@ -83,7 +83,7 @@ class Oc14294 extends AbstractMigration
             -- verifica se pode empenhar com data anterior a do servidor ( retornaram a data )
             select e30_empdataemp,
                 e30_empdataserv,
-                e30_elqddataserv
+                e30_lqddataserv
             into dataemp, dataserv, lqdserv
             from empparametro
             where e39_anousu = substr(p_dtfim,1,4)::integer ;
@@ -353,6 +353,21 @@ class Oc14294 extends AbstractMigration
         end if;
 
         if p_doc = 3 or p_doc = 33 or p_doc = 23 then
+
+            -- verifica se pode liquidar com data postetior a do servidor
+            select
+                e30_lqddataserv
+            into lqdserv
+            from empparametro
+            where e39_anousu = substr(p_dtfim,1,4)::integer ;
+
+            if (lqdserv = false) then
+            -- nao permite liquidar com data superior a data do servidor
+            if  p_dtfim > current_date  then
+                return '11 VOCÊ NÃO PODE LIQUIDAR COM DATA SUPERIOR A DATA DO SISTEMA (SERVIDOR). INSTITUICAO ('||v_instit||')';
+            end if;
+
+            end if;
 
             -- testar liquidacao de empenho
             -- precisa ter saldo para anular ( emp - liq > 0 )
