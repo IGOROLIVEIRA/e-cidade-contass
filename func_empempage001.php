@@ -76,6 +76,7 @@ $clempagemov->rotulo->label();
              end as DL_Forma
              ,
              e86_cheque,
+             e81_numdoc,
              case when e86_codmov is not null  then e86_data 
                   else e87_dataproc 
              end as e87_dataproc,

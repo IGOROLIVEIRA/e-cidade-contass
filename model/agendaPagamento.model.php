@@ -1442,6 +1442,7 @@ class agendaPagamento {
                    {$sWhereFiltroCgm}
              order by e81_codmov desc limit 1)
         else e97_codforma end) as e97_codforma ,
+	  empagemov.e81_numdoc,
       e42_dtpagamento,
       e53_vlrpag,
       e81_valor,
@@ -1914,6 +1915,25 @@ class agendaPagamento {
         }
       }
     }
+
+	/**
+	 * Caso o número documento seja informado, atualiza movimento com o novo campo e81_numdoc
+	 */
+	if (isset($oMovimento->sNumDoc)) {
+		
+		$oDaoEmpageMov = db_utils::getDao("empagemov");
+		$oDaoEmpageMov->e81_numdoc = $oMovimento->sNumDoc;
+		$oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
+		$oDaoEmpageMov->alterar($oMovimento->iCodMov);
+		
+		if ($oDaoEmpageMov->erro_status == 0) {
+
+			$sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
+			throw new Exception($sErroMsg);
+
+		}
+
+	}
   }
 
   /**
