@@ -24,7 +24,7 @@ class Oc14294 extends AbstractMigration
 
             COMMIT;";
 
-        $this->execute($sql);
+        // $this->execute($sql);
 
       $sql = <<<SQL
 
@@ -82,9 +82,8 @@ class Oc14294 extends AbstractMigration
 
             -- verifica se pode empenhar com data anterior a do servidor ( retornaram a data )
             select e30_empdataemp,
-                e30_empdataserv,
-                e30_lqddataserv
-            into dataemp, dataserv, lqdserv
+                e30_empdataserv
+            into dataemp, dataserv
             from empparametro
             where e39_anousu = substr(p_dtfim,1,4)::integer ;
 
@@ -105,14 +104,6 @@ class Oc14294 extends AbstractMigration
             -- nao permite empenhar com data superior a data do servidor
             if  p_dtfim > current_date  then
                 return '11 VOCÊ NÃO PODE EMPENHAR COM DATA SUPERIOR A DATA DO SISTEMA (SERVIDOR). INSTITUICAO ('||v_instit||')';
-            end if;
-
-            end if;
-
-            if (lqdserv = false) then
-            -- nao permite liquidar com data superior a data do servidor
-            if  p_dtfim > current_date  then
-                return '11 VOCÊ NÃO PODE LIQUIDAR COM DATA SUPERIOR A DATA DO SISTEMA (SERVIDOR). INSTITUICAO ('||v_instit||')';
             end if;
 
             end if;
@@ -364,7 +355,7 @@ class Oc14294 extends AbstractMigration
             if (lqdserv = false) then
             -- nao permite liquidar com data superior a data do servidor
             if  p_dtfim > current_date  then
-                return '11 VOCÊ NÃO PODE LIQUIDAR COM DATA SUPERIOR A DATA DO SISTEMA (SERVIDOR). INSTITUICAO ('||v_instit||')';
+                return '11 VOCÊ NÃO PODE LIQUIDAR COM DATA SUPERIOR A DATA DO SISTEMA (SERVIDOR)';
             end if;
 
             end if;
