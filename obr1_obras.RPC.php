@@ -329,9 +329,9 @@ switch($oParam->exec) {
 
         $cllicitemobra = new cl_licitemobra();
         if($oParam->l20_codigo != ""){
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"*", null, "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't'"));
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"*", null, "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit')));
         }elseif ($oParam->pc80_codproc != ""){
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null,"*", null, "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't'"));
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null,"*", null, "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit')));
         }else{
             $oRetorno->message = "selecione um processo de compras ou uma licitacao";
         }

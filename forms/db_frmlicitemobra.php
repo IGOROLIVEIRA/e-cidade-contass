@@ -135,7 +135,7 @@ $cllicitemobra->rotulo->label();
         if(!empty($l20_codigo)) {
             $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_versaotabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,l21_ordem";
             $sOrdem   = "l21_ordem";
-            $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't'";
+            $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit');
             $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
             $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
             $aItensObras = db_utils::getCollectionByRecord($sResultitens);
@@ -145,7 +145,7 @@ $cllicitemobra->rotulo->label();
         if(!empty($pc80_codproc)){
             $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_versaotabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,pc11_seq";
             $sOrdem   = "pc11_seq";
-            $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't'";
+            $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit');
             $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
             $sResultitens = $cllicitemobra->sql_record($sSqlItemProcessodeCompras);
             $aItensObras = db_utils::getCollectionByRecord($sResultitens);
