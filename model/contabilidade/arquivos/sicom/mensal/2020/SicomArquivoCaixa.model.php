@@ -432,11 +432,11 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			}
 
-			$oGerarCAIXA = new GerarCAIXA();
-			$oGerarCAIXA->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-			$oGerarCAIXA->gerarDados();
-
 		}
+
+		$oGerarCAIXA = new GerarCAIXA();
+		$oGerarCAIXA->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+		$oGerarCAIXA->gerarDados();
 		
   	}
 

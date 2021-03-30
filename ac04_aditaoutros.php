@@ -32,13 +32,14 @@ require_once "dbforms/db_funcoes.php";
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 include("classes/db_parametroscontratos_classe.php");
+
+$oGet = db_utils::postMemory($_GET);
 $clacordo = new cl_acordo;
 $clparametroscontratos = new cl_parametroscontratos;
 $result = $clparametroscontratos->sql_record($clparametroscontratos->sql_query());
 if($result!=false && $clparametroscontratos->numrows>0){
   db_fieldsmemory($result,0);
 }
-
 ?>
 <html>
 <head>
@@ -75,7 +76,9 @@ if($result!=false && $clparametroscontratos->numrows>0){
     }
     ?>
 
-    oAditamento.show();
+    let acordo = "<?= $oGet->acordo?>";
+    
+    oAditamento.show(acordo);
   </script>
   <?php db_menu(); ?>
 </body>

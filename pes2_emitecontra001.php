@@ -143,7 +143,7 @@ function js_filtra(){
     if(!isset($filtro)){
       $filtro = 'M';
     }
-	  $arr=array("N"=>"Nenhum","M"=>"Matrícula","L"=>"Lotação");
+	  $arr=array("N"=>"Nenhum","M"=>"Matrícula","L"=>"Lotação","S"=>"Secretaria");
 	  db_select("filtro",$arr,true,2,"onchange='js_filtra();'");
 	  ?>
 	  </td>
@@ -208,6 +208,32 @@ function js_filtra(){
               db_input('cod_ini',8,'',true,'text',1," onchange='js_pesquisar14_lotac(false, document.form1.cod_ini);'","");
               db_ancora('à', "js_pesquisar14_lotac(true, document.form1.cod_fim);", 1);
               db_input('cod_fim',8,'',true,'text',1," onchange='js_pesquisar14_lotac(false, document.form1.cod_fim);'","");
+            ?>
+          </td>
+        </tr>
+<?php
+      }
+    }else if ($filtro=='S'){
+
+      $func='func_orcorgao.php';
+      $info='Secretaria';
+      $cod='o40_orgao';
+      $descr='o40_descr';
+      $aux->passar_query_string_para_func = "&instit=".db_getsession("DB_instit");
+
+      if($filtrar=='I'){
+    ?>
+
+        <tr>
+          <td align="right">
+            <?php db_ancora('Secretaria de: ', "js_pesquisao40_orgao(true, document.form1.cod_ini);", 1); ?>
+          </td>
+          <td>
+            <?php
+
+              db_input('cod_ini',8,'',true,'text',1," onchange='js_pesquisao40_orgao(false, document.form1.cod_ini);'","");
+              db_ancora('à', "js_pesquisao40_orgao(true, document.form1.cod_fim);", 1);
+              db_input('cod_fim',8,'',true,'text',1," onchange='js_pesquisao40_orgao(false, document.form1.cod_fim);'","");
             ?>
           </td>
         </tr>
@@ -302,6 +328,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </body>
 </html>
 <script>
+  var iInstit = <?=db_getsession("DB_instit") ?>;
 function js_pesquisarh56_localtrab(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?funcao_js=parent.js_mostrarhlocaltrab1|rh55_codigo|rh55_descr','Pesquisa',true,'20');
@@ -359,6 +386,21 @@ function js_pesquisar14_lotac(mostra, oInput){
   }
 }
 
+function js_pesquisao40_orgao(mostra, oInput){
+console.log("aqui");
+  oInputInicialFinal = oInput;
+
+  if(mostra == true){
+    js_OpenJanelaIframe('top.corpo','db_iframeorgao','func_orcorgao.php?funcao_js=parent.js_mostraorgao1|o40_orgao|o40_descr&instit='+iInstit,'Pesquisa',true);
+  }else{
+    if(oInput.value != ''){
+      js_OpenJanelaIframe('top.corpo','db_iframeorgao','func_orcorgao.php?pesquisa_chave='+oInput.value+'&funcao_js=parent.js_mostraorgao&instit='+iInstit,'Pesquisa',false);
+    }else{
+      oInput.value = '';
+    }
+  }
+}
+
 function js_mostrarhlota(chave,erro){
 
   if ( erro==true ) {
@@ -371,6 +413,20 @@ function js_mostrarhlota1(chave1){
 
   oInputInicialFinal.value = chave1;
   db_iframelotacao.hide();
+}
+
+function js_mostraorgao(chave,erro){
+
+  if ( erro==true ) {
+
+    alert(chave);
+    oInputInicialFinal.value = '';
+  }
+}
+function js_mostraorgao1(chave1){
+
+  oInputInicialFinal.value = chave1;
+  db_iframeorgao.hide();
 }
 
 function js_emite(evt){
