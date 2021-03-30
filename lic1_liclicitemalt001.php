@@ -38,6 +38,7 @@ require_once("classes/db_pcprocitem_classe.php");
 require_once("classes/db_pcorcamitemproc_classe.php");
 require_once("classes/db_itensregpreco_classe.php");
 require_once("classes/db_adesaoregprecos_classe.php");
+require_once("classes/db_solicitem_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -50,12 +51,12 @@ $clpcprocitem = new cl_pcprocitem;
 $clpcorcamitemproc = new cl_pcorcamitemproc;
 $clitensregpreco = new cl_itensregpreco;
 $cladesaoregprecos = new cl_adesaoregprecos;
+$clsolicitem = new cl_solicitem;
 
 $sqlerro = false;
 $erro_msg = '';
 
 if(isset($codprocesso) && $codprocesso != ''){
-    //liclicitem
 
     $sSqlLicita = $clliclicita->sql_query_pco($licitacao, ' DISTINCT liclicita.* ');
     $rsLicita = $clliclicita->sql_record($sSqlLicita);
@@ -86,35 +87,177 @@ if(!$sqlerro && $codprocesso){
         $erro_msg = 'Processo de Compra '.$codprocesso.' não excluído. Existe fornecedor lançado para a licitação.';
     }
 
-	if(!$sqlerro){
-	    $clliclicitemlote->excluir('', ' l04_liclicitem in (select l21_codigo from liclicitem
-	        where l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.'))');
+    $sSqlSolicitem = $clsolicitem->sql_query_item_licitacao('', 'solicitem.*', '', 
+    "pc81_codproc = " . $codprocesso . " and pc11_reservado = 't'");
+    $rsSolicitem = db_query($sSqlSolicitem);
+    
+    for($count = 0; $count < pg_numrows($rsSolicitem);$count++){
 
-	    if($clliclicitemlote->erro_status == '0'){
-			$sqlerro = true;
-			$erro_msg = $clpcprocitem->erro_msg;
-        }
-    }
+        $oSolicitemReservado = db_utils::fieldsMemory($rsSolicitem, $count);
 
-    if(!$sqlerro){
-	    $clliclicitem->excluir('',
-            'l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.')');
+        $oDaoItemOrigem = db_utils::getDao('solicitem');
 
-	    if($clliclicitem->erro_status == '0'){
-	        $sqlerro = true;
-	        $erro_msg = $clliclicitem->erro_msg;
-        }
-
-    }
-
-    if(!$sqlerro){
-		$clitensregpreco->excluir('',
-            'si07_sequencialadesao = (select si06_sequencial from adesaoregprecos where si06_processocompra = '.$codprocesso.')');
+        $iSeqOrigem = intval($oSolicitemReservado->pc11_seq) - 1;
+        $sWhereItem = 'pc11_seq = ' . $iSeqOrigem . ' and pc11_numero = ' . $oSolicitemReservado->pc11_numero;
+        $sSqlOrigem = $oDaoItemOrigem->sql_query_file(null, '*', null, $sWhereItem);
+        $rsOrigem = $oDaoItemOrigem->sql_record($sSqlOrigem);
         
-        if($clitensregpreco->erro_status = '0'){
-		    $sqlerro = true;
-		    $erro_msg = $clitensregpreco->erro_msg;
+        db_inicio_transacao();
+        
+        $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
+        $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
+        
+        $oDaoPcDotacOrigem = db_utils::getDao('pcdotac');
+        $oDaoPcDotacOrigem->pc13_quant = $nova_quantidade;
+        $rsDotacaoItemOrigem = db_query('SELECT pc13_sequencial from pcdotac where pc13_codigo = ' . $oItemOrigem->pc11_codigo);
+        $oDotacaoItemOrigem = db_utils::fieldsMemory($rsDotacaoItemOrigem, 0);
+
+        /**
+         * Altera a quantidade da dotação do item origem
+         */
+        $oDaoPcDotacOrigem->pc13_sequencial = $oDotacaoItemOrigem->pc13_sequencial;
+        $oDaoPcDotacOrigem->pc13_quant = $nova_quantidade;
+        $oDaoPcDotacOrigem->alterar($oDotacaoItemOrigem->pc13_sequencial);
+        
+        if($oDaoPcDotacOrigem->erro_status == '0'){
+            $erro_msg = $oDaoPcDotacOrigem->erro_msg;
+            $sqlerro = true;
         }
+
+        if(!$sqlerro){
+
+            /**
+             * Altera a quantidade do item origem na solicitemunid
+             */
+            $oDaoSolicitemUnidOrigem = db_utils::getDao('solicitemunid');
+            $oDaoSolicitemUnidOrigem->pc17_quant = $nova_quantidade;
+            $oDaoSolicitemUnidOrigem->pc17_codigo = $oItemOrigem->pc11_codigo;
+            $oDaoSolicitemUnidOrigem->alterar($oItemOrigem->pc11_codigo);
+            
+            if($oDaoSolicitemUnidOrigem->erro_status == '0'){
+                $erro_msg = $oDaoSolicitemUnidOrigem->erro_msg;
+                $sqlerro = true;
+            }
+
+        }
+
+        /**
+         * Remove os registros que o item com o valor reservado possui em outras tabelas
+         */
+
+        if(!$sqlerro){
+
+            /**
+             * Lançar erros caso não exclua nas tabelas abaixo
+             */
+
+            $oDaoDotac = db_utils::getDao('pcdotac');
+            $rsDotacaoReservado = db_query('SELECT pc13_sequencial from pcdotac where pc13_codigo = ' . $oSolicitemReservado->pc11_codigo);
+            $oItemReservado = db_utils::fieldsMemory($rsDotacaoReservado, 0);
+            $oDaoDotac->excluir($oItemReservado->pc13_sequencial);
+            $sqlerro = $oDaoDotac->erro_status == '0' ? true : false;
+        }
+
+        if(!$sqlerro){
+            $oDaoSolicitemEle = db_utils::getDao('solicitemele');
+            $oDaoSolicitemEle->excluir($oSolicitemReservado->pc11_codigo);
+            $sqlerro = $oDaoSolicitemEle->erro_status == '0' ? true : false;
+        }
+
+        if(!$sqlerro){
+            $oDaoSolicitemPcMater = db_utils::getDao('solicitempcmater');
+            $oDaoSolicitemPcMater->excluir('', $oSolicitemReservado->pc11_codigo);
+            $sqlerro = $oDaoSolicitemPcMater->erro_status == '0' ? true : false;
+        }
+
+        if(!$sqlerro){
+            $oDaoSolicitemUnid = db_utils::getDao('solicitemunid');
+            $oDaoSolicitemUnid->excluir($oSolicitemReservado->pc11_codigo);
+            $sqlerro = $oDaoSolicitemUnid->erro_status == '0' ? true : false;
+        }
+
+        if(!$sqlerro){
+            $clliclicitemlote->excluir('', ' l04_liclicitem in (select l21_codigo from liclicitem
+                where l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.'))');
+
+            if($clliclicitemlote->erro_status == '0'){
+                $sqlerro = true;
+                $erro_msg = $clpcprocitem->erro_msg;
+            }
+        }
+
+        if(!$sqlerro){
+            $clliclicitem->excluir('',
+                'l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.')');
+
+            if($clliclicitem->erro_status == '0'){
+                $sqlerro = true;
+                $erro_msg = $clliclicitem->erro_msg;
+            }
+        }
+
+        if(!$sqlerro){
+            $oDaoPcProcItem = db_utils::getDao('pcprocitem');
+            $oDaoPcProcItem->excluir('', 'pc81_solicitem = ' . $oSolicitemReservado->pc11_codigo);
+            $sqlerro = $oDaoPcProcItem->erro_status == '0' ? true : false;
+        }
+
+
+        if(!$sqlerro){
+            $oDaoReservado = db_utils::getDao('solicitem');
+            $oDaoReservado->excluir($oSolicitemReservado->pc11_codigo);
+            $sqlerro = $oDaoReservado->erro_status == '0' ? true : false;
+        }
+            
+            
+        /**
+         * Atualiza o item origem com o valor retornado do item que continha o valor reservado
+         */
+        $oDaoItemOrigem->pc11_quant = $nova_quantidade;
+        $oDaoItemOrigem->alterar($oItemOrigem->pc11_codigo);
+            
+        if($oDaoItemOrigem->erro_status == '0'){
+            $sqlerro = true;
+            $erro_msg = $oDaoItemOrigem->erro_msg;
+        }
+
+        db_fim_transacao($sqlerro);
+
+    }
+
+    if(!pg_numrows($rsSolicitem)){
+
+        if(!$sqlerro){
+            $clliclicitemlote->excluir('', ' l04_liclicitem in (select l21_codigo from liclicitem
+                where l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.'))');
+    
+            if($clliclicitemlote->erro_status == '0'){
+                $sqlerro = true;
+                $erro_msg = $clpcprocitem->erro_msg;
+            }
+        }
+    
+        if(!$sqlerro){
+            $clliclicitem->excluir('',
+                'l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.')');
+    
+            if($clliclicitem->erro_status == '0'){
+                $sqlerro = true;
+                $erro_msg = $clliclicitem->erro_msg;
+            }
+    
+        }
+    
+        if(!$sqlerro){
+            $clitensregpreco->excluir('',
+                'si07_sequencialadesao = (select si06_sequencial from adesaoregprecos where si06_processocompra = '.$codprocesso.')');
+            
+            if($clitensregpreco->erro_status = '0'){
+                $sqlerro = true;
+                $erro_msg = $clitensregpreco->erro_msg;
+            }
+        }
+
     }
 
 }

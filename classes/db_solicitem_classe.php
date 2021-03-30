@@ -358,12 +358,12 @@ class cl_solicitem {
           $sql  .= $virgula." pc11_reservado = '$this->pc11_reservado' ";
           $virgula = ",";
       }
-     $sql .= " where ";
-     if($pc11_codigo!=null){
-       $sql .= " pc11_codigo = $pc11_codigo";
-     }else{
-       $sql .= " pc11_codigo = $this->pc11_codigo";
-     }
+      $sql .= " where ";
+      if($pc11_codigo!=null){
+          $sql .= " pc11_codigo = $pc11_codigo";
+      }else{
+          $sql .= " pc11_codigo = $this->pc11_codigo";
+      }
     //  $resaco = $this->sql_record($this->sql_query_file($this->pc11_codigo));
     //  if($this->numrows>0){
     //    for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
@@ -395,7 +395,6 @@ class cl_solicitem {
     //        $resac = db_query("insert into db_acount values($acount,870,19696,'".AddSlashes(pg_result($resaco,$conresaco,'pc11_servicoquantidade'))."','$this->pc11_servicoquantidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
     //    }
     //  }
-    //  echo $sql;die();
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());

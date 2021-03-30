@@ -196,9 +196,9 @@ class cl_solicitemunid {
        }
      }
      $sql .= " where ";
-     if($pc17_codigo!=null){
-       $sql .= " pc17_codigo = $this->pc17_codigo";
-     }
+    if($pc17_codigo!=null){
+      $sql .= " pc17_codigo = $this->pc17_codigo";
+    }
      $resaco = $this->sql_record($this->sql_query_file($this->pc17_codigo));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){

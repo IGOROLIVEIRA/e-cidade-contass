@@ -360,9 +360,9 @@ class cl_pcdotac {
        }
      }
      $sql .= " where ";
-     if($pc13_sequencial!=null){
-       $sql .= " pc13_sequencial = $pc13_sequencial";
-     }
+    if($pc13_sequencial!=null){
+      $sql .= " pc13_sequencial = $pc13_sequencial";
+    }
      $resaco = $this->sql_record($this->sql_query_file(null,null,null,"*",null,"pc13_sequencial={$this->pc13_sequencial}"));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
@@ -951,7 +951,7 @@ function sql_query_dotacao ( $pc13_codigo=null,$pc13_anousu=null,$pc13_coddot=nu
 				}
 	}else if($dbwhere != ""){
 	$sql2 = " where $dbwhere";
-}
+  }
 	$sql .= $sql2;
 	if($ordem != null ){
 	$sql .= " order by ";
@@ -964,17 +964,6 @@ function sql_query_dotacao ( $pc13_codigo=null,$pc13_anousu=null,$pc13_coddot=nu
 	}
 	return $sql;
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 }
 ?>

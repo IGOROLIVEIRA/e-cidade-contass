@@ -92,6 +92,7 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
             oInputQuantidade.addStyle("width", "100%");
             oInputQuantidade.setClassName("text-right");
             oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '')");
+            oInputQuantidade.addEvent("onChange", ";" + me.sInstance + ".js_checaQtdeExclusiva("+iSeq+", this.value);");
             oInputQuantidade.setReadOnly(true);
             
             aLinha[6] = new DBComboBox('meEpp' + iSeq, 'meEpp' + iSeq,null,'100%');
@@ -155,6 +156,25 @@ function dbViewItensLicitacao(sNomeInstance, oNode) {
                 document.getElementById(`quantidade${sequencial}`).setAttribute('readonly', false);
             }
             
+        }
+
+        this.js_checaQtdeExclusiva = (sequencial, valor) => {
+            
+            valor = parseFloat(valor);
+            let valorCelula = parseFloat(me.oGridItens.aRows[sequencial].aCells[5].getContent());
+            
+            if(!valor || valor < 0){
+                alert('Quantidade Exclusiva informada inválida. Verifique!');
+                document.getElementById(`quantidade${sequencial}`).value = '';
+                document.getElementById(`quantidade${sequencial}`).focus();
+                return;
+            }
+
+            if(valor > valorCelula){
+                alert('Qtde Exclusiva informada é maior que a quantidade do item.');
+                return;
+            }
+
         }
     }
 

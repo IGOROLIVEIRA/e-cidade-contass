@@ -921,7 +921,7 @@ switch ($oParam->exec) {
                                      * Cadastra o novo item com a quantidade exclusiva na solicitem
                                      */
                                     $oItem = db_utils::fieldsMemory($rsSolicitem, 0);
-    
+                                    $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                                     $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
                                     $oDaoSolicitemReservado->pc11_seq = $oItem->pc11_seq + 1;
                                     $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
@@ -1029,7 +1029,6 @@ switch ($oParam->exec) {
                                      * setando no campo quantidade a quantidade exclusiva reservada
                                      */
                                     
-                                    $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                                     
                                     $oDaoDotacReserva = db_utils::getDao('pcdotac');
                                     $oDaoDotacReserva->pc13_anousu = $oDotacaoItem->pc13_anousu;
