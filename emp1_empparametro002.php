@@ -87,6 +87,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
         $clempparametro->e30_empdataserv="false";
     }
 
+    $clempparametro->e30_lqddataserv = ($e30_lqddataserv != "" && $e30_lqddataserv == "t") ? "true" : "false";
+
     if ($e30_empdataemp!="" && $e30_empdataemp=='t'){
         $clempparametro->e30_empdataemp="true";
     } else {
