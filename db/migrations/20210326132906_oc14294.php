@@ -24,7 +24,7 @@ class Oc14294 extends AbstractMigration
 
             COMMIT;";
 
-        // $this->execute($sql);
+      $this->execute($sql);
 
       $sql = <<<SQL
 
