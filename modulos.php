@@ -488,7 +488,7 @@ if(pg_numrows($result) == 0) {
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
                                     <td>
-                                        <h2 style="margin-bottom: 0px;">Editais pendentes de envio</h2>
+                                        <h2 style="margin-bottom: 10px;">Editais pendentes de envio</h2>
                                         <iframe frameborder="0"  width="100%" id="licitacoes" name="licitacaoes" src="func_edital.php?aguardando_envio=true&module_licitacao=true" scrolling="auto"></iframe>
                                     </td>
                                 </tr>
