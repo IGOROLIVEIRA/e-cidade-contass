@@ -35,7 +35,7 @@ $DB_NETSTAT   = "netstat";
 $DB_USUARIO   = "dbportal";  // Usuário do PostgreSQL
 $DB_SENHA     = "";          // Senha do usuário do PostgreSQL
 
-$DB_SERVIDOR  = "samuecid"; // Ip do servidor para a conexão com a base de dados
+$DB_SERVIDOR  = "localhost"; // Ip do servidor para a conexão com a base de dados
 $DB_PORTA     = "5432";      // Porta para conexao com o banco de dados (porta do Pool de Conexoes quando utilizado)
 $DB_PORTA_ALT = "5432";      // Porta para conexao direta com PostgreSQL quando tivermos um pool de conexao
 $DB_BASE      = "e-cidade";  // Nome da base de dados
