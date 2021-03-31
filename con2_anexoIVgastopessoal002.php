@@ -273,6 +273,10 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412180311020000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
         if($oDados->o57_fonte == "412100481000000"){
             $fRRCPPSJ+=$oDados->saldo_arrecadado;
         }
@@ -426,6 +430,10 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
         }
 
         if($oDados->o57_fonte == "412100484000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180311020000"){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
