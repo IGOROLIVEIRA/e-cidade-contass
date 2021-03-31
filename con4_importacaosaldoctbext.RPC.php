@@ -337,7 +337,7 @@ try {
 
 				$oConta = db_utils::fieldsMemory($rsConSaldoCtbExt,$iCont);
 
-				if ($oConta->saldoinicial != $oConta->totalconta) {
+				if ($oConta->saldoinicial != abs($oConta->totalconta)) {
 					
 					$sLogContasNaoImplantadas .= "Tipo: {$oConta->tipo}, ";
 					$sLogContasNaoImplantadas .= "Cod. Reduzido: {$oConta->reduzido}, ";
