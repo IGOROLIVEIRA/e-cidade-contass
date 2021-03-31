@@ -68,7 +68,7 @@ $db_opcao = 1;
                   <? db_ancora("<b>Slip</b>","js_pesquisak17_slip(true);",$db_opcao);  ?>
                 </td>
                 <td nowrap>
-                  <? db_input('k17_slip',10,$Ie82_codord,true,'text',$db_opcao, "onchange='js_pesquisak17_slip(false);'")?>
+                  <? $k17_slip = '65480'; db_input('k17_slip',10,$Ie82_codord,true,'text',$db_opcao, "onchange='js_pesquisak17_slip(false);'")?>
                 </td>
                 <td>
                   <? db_ancora("<b>até:</b>","js_pesquisak17_slip02(true);",$db_opcao);  ?>
@@ -239,6 +239,7 @@ $db_opcao = 1;
                 <td valign='top'>
                   <?
                   db_input("saldoatual",15,null,true,"text",3);
+				  db_input("iCheque",1,0,true,'hidden',3);
                   ?>
                 </td>
               </tr>
@@ -253,7 +254,7 @@ $db_opcao = 1;
         <td colspan='4' style='text-align: center'>
           <input name="pesquisar" id='pesquisar' type="button"  value="Pesquisar" onclick='return js_pesquisarOrdens();'>
           <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick='js_configurar()'>
-          <input name="emitecheque" id='emitecheque' type="button"  value='Emitir Cheque' onclick='location.href="emp4_empageformache001.php"'>
+          <input name="emitecheque" id='emitecheque' type="button"  value='Emitir Cheque' onclick='js_janelaEmiteCheque()' disabled="disabled" >
           <input name="emitetxt" id='emitetxt' type="button"  value='Emitir Arquivo Texto' onclick='location.href="emp4_empageconfgera001.php"'>
           <input name="excluirautentica" id='excluirautentica' type="button"  value='Excluir Pagamento' onclick='location.href="cai4_excluirautenticaoslip001.php"'>
 
@@ -415,8 +416,9 @@ $db_opcao = 1;
 
 
     js_liberaBotoes(false);
+	$('emitecheque').disabled = true;
     js_reset();
-    $('TotalForCol8').innerHTML = "0,00";
+    $('TotalForCol10').innerHTML = "0,00";
     //$('normais').checked = true;
     //Criamos um objeto que tera a requisicao
     var oParam                 = new Object();
@@ -490,8 +492,9 @@ $db_opcao = 1;
             aLinha[5]   = "<span style='display:none'>con</span>"+k17_debito+ " - "+descricaodebito.urlDecode();
           }
           aLinha[6]   = js_createComboForma(e97_codforma, e81_codmov, lDisabled);
-          aLinha[7]   = js_formatar(k17_data,"d");
-          aLinha[8]   = js_formatar(k17_valor,"f");
+          aLinha[7]   = js_createInputNumDocumento(e81_numdoc, e81_codmov, e97_codforma);
+          aLinha[8]   = js_formatar(k17_data,"d");
+          aLinha[9]   = js_formatar(k17_valor,"f");
           gridNotas.addRow(aLinha, false, lDisabled);
 
           // acrescentado no if a condicao cancelado = true, pois agora os registros da empageconfgera
@@ -549,6 +552,10 @@ $db_opcao = 1;
       }
       if (oCheckbox.checked ) {
 
+		if ($(sRow).className == 'configurada' && oRow.aCells[7].getValue() == 2) {
+			$('emitecheque').disabled = false;
+		}
+
         oRow.isSelected    = true;
         $(sRow).className  += 'marcado';
         oRow.isSelected    = true;
@@ -560,7 +567,7 @@ $db_opcao = 1;
           }
         }
         if (lVerificaSaldo) {
-          $('TotalForCol8').innerHTML = js_formatar(gridNotas.sum(9).toFixed(2),'f');
+          $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
         }
         $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)+1;
       } else {
@@ -569,7 +576,7 @@ $db_opcao = 1;
         oRow.isSelected   = false;
         $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)-1;
         if (lVerificaSaldo) {
-          $('TotalForCol8').innerHTML = js_formatar(gridNotas.sum(9).toFixed(2),'f');
+          $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
         }
       }
     }
@@ -607,15 +614,16 @@ $db_opcao = 1;
           }
         }
       }
-      $('TotalForCol8').innerHTML = js_formatar(gridNotas.sum(9).toFixed(2),'f');
+      $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
     }
     gridNotas.setCheckbox(0);
     gridNotas.allowSelectColumns(true);
     gridNotas.hasTotalizador = true;
-    gridNotas.setCellAlign(new Array("right", "right", "right", "left", "left", "left", "center", "center","right"));
+    gridNotas.setCellAlign(new Array("right", "right", "right", "left", "left", "left", "center", "center", "center","right"));
     gridNotas.setHeader(new Array("Mov.","slip","Recurso", "Cta. Pag", "Nome",
         "Banco/Ag",
         "Forma Pgto",
+        "Nº Documento",
         "Dt Slip",
         "Valor slip"
       )
@@ -623,7 +631,7 @@ $db_opcao = 1;
     gridNotas.aHeaders[1].lDisplayed = false;
     gridNotas.show(document.getElementById('gridNotas'));
     $('gridNotasstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
-    $('TotalForCol8').innerHTML    = "0,00";
+    $('TotalForCol10').innerHTML    = "0,00";
 
   }
 
@@ -693,7 +701,8 @@ $db_opcao = 1;
     if (lDisabled) {
       sDisabled = " disabled ";
     }
-    var sCombo  = "<select style='width:100%' class='formapag' id='forma"+iCodMov+"' "+sDisabled+">";
+    var sCombo  = "<select style='width:100%' class='formapag' id='forma"+iCodMov+"' "+sDisabled;
+	sCombo     += " onchange='js_validaForma("+iCodMov+",this.value)'>" ;
     sCombo     += "  <option "+(iTipoForma == 0?" selected ":" ")+" value='0'>NDA</option>";
     sCombo     += "  <option "+(iTipoForma == 1?" selected ":" ")+" value='1'>DIN</option>";
     sCombo     += "  <option "+(iTipoForma == 2?" selected ":" ")+" value='2'>CHE</option>";
@@ -702,6 +711,33 @@ $db_opcao = 1;
     sCombo     += "</select>";
     return sCombo
   }
+
+  	function js_validaForma(iCodMov, iTipoForma) {
+
+		objNumDoc = document.getElementById("numdoc"+iCodMov+"");
+
+		if (iTipoForma == 1 || iTipoForma == 2) {
+			
+			objNumDoc.value = '';
+			objNumDoc.setAttribute("disabled", "disabled");
+
+		} else {
+			objNumDoc.removeAttribute("disabled");
+		}
+
+	}
+
+  	function js_createInputNumDocumento(sNumDoc, iCodMov, iCodForma) {
+
+		let sDisabled = "";
+
+		if (iCodForma == 1 || iCodForma == 2) {
+			sDisabled = "disabled='disabled'";            
+		}
+
+		return "<input value='"+sNumDoc+"' size='13' maxlength='15' id='numdoc"+iCodMov+"' "+sDisabled+">";
+
+	}
 
   function js_createComboContasForne(aContasForne, iContaForne, iCodMov, iNumCgm, lDisabled, iCodigoUltimaConta) {
 
@@ -880,10 +916,11 @@ $db_opcao = 1;
 
       var iForma           = aMovimentos[iMov][7];
       var iCodMov          = aMovimentos[iMov][0];
-      var nValor           = js_strToFloat(aMovimentos[iMov][9]).valueOf();
+      var nValor           = js_strToFloat(aMovimentos[iMov][10]).valueOf();
       var iNota            = aMovimentos[iMov][2];
       var iContaFornecedor = aMovimentos[iMov][6];
       var iContaPagadora   = aMovimentos[iMov][4];
+	  var sNumDoc 		   = aMovimentos[iMov][8];
 
       /*
        * Fazemos a verificacao para Cheque;
@@ -927,6 +964,7 @@ $db_opcao = 1;
       oMovimento.iContaPagadora   = iContaPagadora;
       oMovimento.iCodNota         = iNota;
       oMovimento.nValorRetencao   = 0
+	  oMovimento.sNumDoc 		  = sNumDoc;
       oEnvio.aMovimentos.push(oMovimento);
     }
 
@@ -934,6 +972,7 @@ $db_opcao = 1;
 
       for (var iInd = 0; iInd < aFormasSelecionadas.length; iInd++ ) {
 
+		//alterar
         if (aFormasSelecionadas[iInd] == "2" || aFormasSelecionadas[iInd] == "3" ) {
 
           alert("Para efetuar pagamento automático somente são permitidas as forma de pagamento : Dinheiro (DIN) e Débito (DEB). Verifique.");
@@ -1115,6 +1154,7 @@ $db_opcao = 1;
     $('saldotesouraria').value = new Number(oRetorno.oSaldoTes.rnvalortesouraria);
     $('totalcheques').value    = new Number(oRetorno.oSaldoTes.rnvalorreservado);
     $('saldoatual').value      = new Number(oRetorno.oSaldoTes.rnsaldofinal).toFixed(2);
+	$('iCheque').value         = new Number(oRetorno.iCheque);
 
   }
 
@@ -1191,6 +1231,7 @@ $db_opcao = 1;
     $('saldotesouraria').value     = '';
     $('totalcheques').value        = '';
     $('saldoatual').value          = '';
+	$('iCheque').value         	   = '';
 
   }
   function js_pesquisaSlip(iCodigoSlip) {

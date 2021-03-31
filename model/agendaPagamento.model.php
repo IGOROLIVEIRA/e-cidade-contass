@@ -2214,6 +2214,7 @@ class agendaPagamento {
     $sCampos  .= "                                     end)                                                ";
     $sCampos  .= "          order by e89_codmov desc limit 1)                                              ";
     $sCampos  .= "      else e97_codforma end) as e97_codforma,                                            ";
+	$sCampos  .= "e81_numdoc, ";
 
     $sCampos  .= "e97_codmov,                                             ";
     $sCampos  .= "e83_conta,                                              ";
