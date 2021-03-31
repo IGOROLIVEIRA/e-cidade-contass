@@ -49,6 +49,7 @@ $clrotulo->label('k17_dtanu');
 $clrotulo->label('k18_motivo');
 $clrotulo->label('k17_motivoestorno');
 $clrotulo->label('k17_dtestorno');
+$clrotulo->label('e81_numdoc');
 
 $get = db_utils::postMemory($_GET);
 $sql = "         select slip.k17_codigo,
@@ -99,7 +100,8 @@ $rsSlip = $clslip->sql_record($sql);
 $oSlip = db_utils::fieldsMemory($rsSlip, 0);
 
 $sqlslipage = "select e81_codage,
-                    e91_cheque
+                    e91_cheque,
+                    e81_numdoc
                from empageslip
                     left join empagemov     on e89_codmov=e81_codmov
                     left join empageconfche on e91_codmov=e81_codmov and e91_ativo is true
@@ -284,6 +286,8 @@ if ( !empty($oFinalidadePagamento) ) {
       <td><input type='text' value="<?=db_formatar($oSlip->k17_data, "d"); ?>" size=10 readonly '>
       <td><b>Anulação:</b></td>
       <td><input type='text' value="<?=db_formatar($oSlip->k17_dtanu, "d"); ?>" size=10 readonly '>
+      <?=$Le81_numdoc; ?>
+      <input type='text' value="<?=@$aSlip->e81_numdoc; ?>" size=15 readonly '></td>
     </tr>
     
     

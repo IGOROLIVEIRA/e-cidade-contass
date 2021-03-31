@@ -1107,10 +1107,6 @@ if (count($aParametrosEmpenho) > 0) {
 
             if (oCheckbox.checked) {
 
-                if ($(sRow).className == 'configurada' && oRow.aCells[9].getValue() == 2) {
-                    $('emitecheque').disabled = false;
-                }
-
                 oRow.isSelected    = true;
                 $(sRow).className += 'marcado';
                 if (oRow.aCells[8].getValue() != "" && lVerificaSaldo) {
@@ -1127,6 +1123,11 @@ if (count($aParametrosEmpenho) > 0) {
 
                 }
                 $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)+1;
+
+                if ($(sRow).className == 'configuradamarcado' && oRow.aCells[9].getValue() == 2 && Number($('total_selecionados').innerHTML) == 1) {
+                    $('emitecheque').disabled = false;
+                }
+
             } else {
 
                 $(sRow).className = oRow.getClassName();
@@ -1194,7 +1195,7 @@ if (count($aParametrosEmpenho) > 0) {
             "Fonte",
             "CP/CA",
             "OP",
-            "Cta. Pag",
+            "Conta Pagadora",
             "Nome",
             "Banco/Ag",
             "Forma Pgto",
@@ -1711,12 +1712,12 @@ if (count($aParametrosEmpenho) > 0) {
         if (lLiberar) {
 
             $('pesquisar').disabled = false;
-            $('atualizar').disabled   = false;
+            $('atualizar').disabled = false;
 
         } else {
 
             $('pesquisar').disabled = true;
-            $('atualizar').disabled   = true;
+            $('atualizar').disabled = true;
 
         }
     }
@@ -2224,6 +2225,8 @@ if (count($aParametrosEmpenho) > 0) {
 
             var w = ((screen.width - 590) / 2);
             var h = ((screen.height / 2) - 110);
+            windowChequeItem.setIndex(5);
+            windowChequeItem.allowDrag(false);
             windowChequeItem.show(h, w);     
 
         } else {
@@ -2312,7 +2315,7 @@ if (count($aParametrosEmpenho) > 0) {
         var aData = strData.split('/');
 
         var	strData  = '<input type="text" id="'+sNomeInput+'" value="'+strData+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
-            strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\'); js_alteraIndexCalendar();" >';
+            strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\'); " >';
             strData += '<input name="'+sNomeInput+'_dia" type="hidden" title="" id="'+sNomeInput+'_dia" value="'+aData[0]+'" size="2"  maxlength="2" >';
             strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >'; 
             strData += '<input name="'+sNomeInput+'_ano" type="hidden" title="" id="'+sNomeInput+'_ano" value="'+aData[2]+'" size="4"  maxlength="4" >';
@@ -2329,10 +2332,6 @@ if (count($aParametrosEmpenho) > 0) {
             
         return strData;
 
-    }
-
-    function js_alteraIndexCalendar() {
-        document.getElementById('Janiframe_data_dtcheque').style.zIndex = "600";
     }
 
 </script>

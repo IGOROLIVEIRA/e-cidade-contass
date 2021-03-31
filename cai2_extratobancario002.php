@@ -153,7 +153,7 @@ for($linha=0;$linha<$numrows;$linha++){
         0 as receita,
 		    null::text as receita_descr,
 		    corhist.k12_histcor::text as historico,
-		    e81_numdoc::text as numdoc,
+			case when coremp.k12_cheque = 0 then e81_numdoc::text else coremp.k12_cheque::text end as numdoc,
 		    null::text as contrapartida,
 		    coremp.k12_codord as ordem,
 		    z01_nome::text as credor,
@@ -576,7 +576,7 @@ select caixa,
 		   0 as receita,
            null::text as receita_descr,
 		   slip.k17_texto::text as historico,
-		   e91_cheque::text as numdoc,
+		   case when e91_cheque is null then e81_numdoc::text else e91_cheque::text end as numdoc,
            k17_debito||' - '||c60_descr as contrapartida,
 		   0 as ordem,
 		   z01_nome::text as credor,
@@ -616,6 +616,10 @@ select caixa,
 					left join corautent	on corautent.k12_id     = corrente.k12_id
 									and corautent.k12_data   = corrente.k12_data
 									and corautent.k12_autent = corrente.k12_autent
+					left join corempagemov on corempagemov.k12_data = corautent.k12_data
+										   and corempagemov.k12_id = corautent.k12_id
+										   and corempagemov.k12_autent = corautent.k12_autent
+					left join empagemov on corempagemov.k12_codmov = e81_codmov
 			     where corlanc.k12_conta = $k13_reduz  and
 	           corlanc.k12_data between '".$datai."'  and '".$dataf."'
 
@@ -633,7 +637,7 @@ select caixa,
 		   0 as receita,
 		   null::text as receita_descr,
 		   slip.k17_texto::text as historico,
-		   e91_cheque::text as numdoc,
+		   case when e91_cheque is null then e81_numdoc::text else e91_cheque::text end as numdoc,
 		   k17_debito||' - '||c60_descr as contrapartida,
 		   0 as ordem,
 		   z01_nome::text as credor,
@@ -670,6 +674,8 @@ select caixa,
               left join corautent	on corautent.k12_id     = corrente.k12_id
 									and corautent.k12_data   = corrente.k12_data
 									and corautent.k12_autent = corrente.k12_autent
+			  left join empageslip  on empageslip.e89_codigo = slip.k17_codigo
+    		  left join empagemov   on e89_codmov=e81_codmov
 	     where corrente.k12_conta = $k13_reduz  and
 	           corrente.k12_data between '".$datai."'  and '".$dataf."'
 
