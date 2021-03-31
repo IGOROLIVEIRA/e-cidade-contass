@@ -86,7 +86,7 @@ class GerarAM
   }
 
   /**
-   * Retorna bool se número é -0,00
+   * Retorna bool se nmero  -0,00
    * @param $valor float
    * @return bool
    */
@@ -94,5 +94,6 @@ class GerarAM
   {
     return pow(number_format($valor, 2, ".", ""), -1) === -INF;
   }
+
 
 }

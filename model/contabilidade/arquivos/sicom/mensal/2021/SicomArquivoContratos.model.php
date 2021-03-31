@@ -1109,7 +1109,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }else{
                 $clcontratos13->si86_tipodocrepresentante = 3;
             }
-            $clcontratos13->si86_nrodocrepresentantelegal = substr($oDados13->nrodocrepresentantelegal, 0, 11);
+            $clcontratos13->si86_nrodocrepresentantelegal = substr($oDados13->nrodocrepresentantelegal, 0, 14);
             $clcontratos13->si86_reg10 = $clcontratos10->si83_sequencial;
             $clcontratos13->si86_instit = db_getsession("DB_instit");
             $clcontratos13->si86_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

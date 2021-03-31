@@ -566,7 +566,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102021 on
+											join ctb102020 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
@@ -577,7 +577,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102021 on
+											join ctb102019 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
@@ -588,7 +588,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102021 on
+											join ctb102018 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
@@ -599,7 +599,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102021 on
+											join ctb102017 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
@@ -610,7 +610,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102021 on
+											join ctb102016 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
@@ -621,7 +621,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102021 on
+											join ctb102015 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
 											si95_digitoverificadoragencia = c63_dvagencia and
@@ -632,7 +632,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
-											join ctb102021 on 
+											join ctb102014 on 
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and 
 											si95_digitoverificadoragencia = c63_dvagencia and

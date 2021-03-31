@@ -54,6 +54,7 @@ class cl_empparametro {
     var $e30_trazobsultop = 0;
     var $e30_empdataemp = 'f';
     var $e30_empdataserv = 'f';
+    var $e30_lqddataserv = 'f';
     var $e30_formvisuitemaut = 0;
     var $e30_verificarmatordem = 0;
     var $e30_notaliquidacao_dia = null;
@@ -83,6 +84,7 @@ class cl_empparametro {
                  e30_trazobsultop = int4 = Traz observacoes da ultima ordem de pagamento
                  e30_empdataemp = bool = Empenho c/ data anterior ao ultimo empenho
                  e30_empdataserv = bool = Empenho c/ data superior ao servidor
+                 e30_lqddataserv = bool = Liquidacao c/ data superior ao servidor
                  e30_formvisuitemaut = int4 = Visualização dos itens na autorização
                  e30_verificarmatordem = int4 = Permite anular empenho com ordem de compra
                  e30_notaliquidacao = date = Implantação Nota de liquidação
@@ -125,7 +127,7 @@ class cl_empparametro {
             $this->e30_autimportahist = ($this->e30_autimportahist == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_autimportahist"]:$this->e30_autimportahist);
             $this->e30_trazobsultop = ($this->e30_trazobsultop == ""?@$GLOBALS["HTTP_POST_VARS"]["e30_trazobsultop"]:$this->e30_trazobsultop);
             $this->e30_empdataemp = ($this->e30_empdataemp == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_empdataemp"]:$this->e30_empdataemp);
-            $this->e30_empdataserv = ($this->e30_empdataserv == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_empdataserv"]:$this->e30_empdataserv);
+            $this->e30_lqddataserv = ($this->e30_lqddataserv == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_lqddataserv"]:$this->e30_lqddataserv);
             $this->e30_formvisuitemaut = ($this->e30_formvisuitemaut == ""?@$GLOBALS["HTTP_POST_VARS"]["e30_formvisuitemaut"]:$this->e30_formvisuitemaut);
             $this->e30_verificarmatordem = ($this->e30_verificarmatordem == ""?@$GLOBALS["HTTP_POST_VARS"]["e30_verificarmatordem"]:$this->e30_verificarmatordem);
             if($this->e30_notaliquidacao == ""){
@@ -259,6 +261,17 @@ class cl_empparametro {
             $this->erro_status = "0";
             return false;
         }
+
+        if($this->e30_lqddataserv == null ){
+          $this->erro_sql = " Campo Liquidacao c/ data superior ao servidor nao Informado.";
+          $this->erro_campo = "e30_lqddataserv";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+          $this->erro_status = "0";
+          return false;
+      }
+
         if($this->e30_formvisuitemaut == null ){
             $this->erro_sql = " Campo Visualização dos itens na autorização nao Informado.";
             $this->erro_campo = "e30_formvisuitemaut";
@@ -359,6 +372,7 @@ class cl_empparametro {
                                       ,e30_trazobsultop
                                       ,e30_empdataemp
                                       ,e30_empdataserv
+                                      ,e30_lqddataserv
                                       ,e30_formvisuitemaut
                                       ,e30_verificarmatordem
                                       ,e30_notaliquidacao
@@ -384,6 +398,7 @@ class cl_empparametro {
                                ,$this->e30_trazobsultop
                                ,'$this->e30_empdataemp'
                                ,'$this->e30_empdataserv'
+                               ,'$this->e30_lqddataserv'
                                ,$this->e30_formvisuitemaut
                                ,$this->e30_verificarmatordem
                                ,".($this->e30_notaliquidacao == "null" || $this->e30_notaliquidacao == ""?"null":"'".$this->e30_notaliquidacao."'")."
@@ -437,6 +452,7 @@ class cl_empparametro {
             $resac = db_query("insert into db_acount values($acount,893,9140,'','".AddSlashes(pg_result($resaco,0,'e30_trazobsultop'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,9146,'','".AddSlashes(pg_result($resaco,0,'e30_empdataemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,9145,'','".AddSlashes(pg_result($resaco,0,'e30_empdataserv'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,893,2012491,'','".AddSlashes(pg_result($resaco,0,'e30_lqddataserv'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,9155,'','".AddSlashes(pg_result($resaco,0,'e30_formvisuitemaut'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,10172,'','".AddSlashes(pg_result($resaco,0,'e30_verificarmatordem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,11740,'','".AddSlashes(pg_result($resaco,0,'e30_notaliquidacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -612,6 +628,21 @@ class cl_empparametro {
                 return false;
             }
         }
+
+        if(trim($this->e30_lqddataserv)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e30_lqddataserv"])){
+          $sql  .= $virgula." e30_lqddataserv = '$this->e30_lqddataserv' ";
+          $virgula = ",";
+          if(trim($this->e30_lqddataserv) == null ){
+              $this->erro_sql = " Campo Liquidacao c/ data superior ao servidor nao Informado.";
+              $this->erro_campo = "e30_lqddataserv";
+              $this->erro_banco = "";
+              $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+              $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+              $this->erro_status = "0";
+              return false;
+          }
+      }
+
         if(trim($this->e30_formvisuitemaut)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e30_formvisuitemaut"])){
             $sql  .= $virgula." e30_formvisuitemaut = $this->e30_formvisuitemaut ";
             $virgula = ",";
@@ -790,6 +821,8 @@ class cl_empparametro {
                     $resac = db_query("insert into db_acount values($acount,893,9146,'".AddSlashes(pg_result($resaco,$conresaco,'e30_empdataemp'))."','$this->e30_empdataemp',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["e30_empdataserv"]) || $this->e30_empdataserv != "")
                     $resac = db_query("insert into db_acount values($acount,893,9145,'".AddSlashes(pg_result($resaco,$conresaco,'e30_empdataserv'))."','$this->e30_empdataserv',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if(isset($GLOBALS["HTTP_POST_VARS"]["e30_lqddataserv"]) || $this->e30_lqddataserv != "")
+                    $resac = db_query("insert into db_acount values($acount,893,2012491,'".AddSlashes(pg_result($resaco,$conresaco,'e30_lqddataserv'))."','$this->e30_lqddataserv',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["e30_formvisuitemaut"]) || $this->e30_formvisuitemaut != "")
                     $resac = db_query("insert into db_acount values($acount,893,9155,'".AddSlashes(pg_result($resaco,$conresaco,'e30_formvisuitemaut'))."','$this->e30_formvisuitemaut',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["e30_verificarmatordem"]) || $this->e30_verificarmatordem != "")
@@ -868,6 +901,7 @@ class cl_empparametro {
                 $resac = db_query("insert into db_acount values($acount,893,9140,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_trazobsultop'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,893,9146,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_empdataemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,893,9145,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_empdataserv'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,893,2012491,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_lqddataserv'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,893,9155,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_formvisuitemaut'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,893,10172,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_verificarmatordem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,893,11740,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_notaliquidacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");

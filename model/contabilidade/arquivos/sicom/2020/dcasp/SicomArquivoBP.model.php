@@ -83,6 +83,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
+    $lInstit            = false;
 
     if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
@@ -91,6 +92,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $aInstituicoes = array_map(function ($oItem) {
         return $oItem->codigo;
       }, $aInstits);
+
+      $lInstit = true;
 
     } else {
       $aInstituicoes = array(db_getsession("DB_instit"));
@@ -247,11 +250,10 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp10->si208_vlativocircucredicurtoprazo       = $oRetornoBP[3]->$sChave;
       $clbpdcasp10->si208_vlativocircuinvestapliccurtoprazo = $oRetornoBP[4]->$sChave;
       $clbpdcasp10->si208_vlativocircuestoques              = $oRetornoBP[5]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircumantidovenda       = 0;
       $clbpdcasp10->si208_vlativocircuvpdantecipada         = $oRetornoBP[6]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircucredilongoprazo    = $oRetornoBP[10]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuinvestemplongpraz  = $oRetornoBP[11]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuestoques           = $oRetornoBP[12]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuvpdantecipada      = $oRetornoBP[13]->$sChave;
+      $vlativonaocircurlp = $oRetornoBP[10]->$sChave + $oRetornoBP[11]->$sChave + $oRetornoBP[12]->$sChave + $oRetornoBP[13]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircurlp                = $vlativonaocircurlp;
       $clbpdcasp10->si208_vlativonaocircuinvestimentos      = $oRetornoBP[14]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuimobilizado        = $oRetornoBP[15]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuintagivel          = $oRetornoBP[16]->$sChave;
@@ -438,7 +440,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $clbpdcasp71 = new cl_bpdcasp712020();
         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
-        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
+        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($lInstit,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
         //echo "<pre>";print_r($oSaldoFontes);

@@ -77,7 +77,7 @@ $clrotulo->label("l47_numero");
     </td>
     <td class="label">
 			<?
-		  	db_input('l24_numero',8,$Il24_numero,true,'text',$db_opcao,"")
+		  	db_input('l24_numero',8,$Il24_numero,true,'text', 1,"")
 			?>
     </td>
   </tr>
@@ -90,7 +90,7 @@ $clrotulo->label("l47_numero");
     </td>
     <td colspan="2" style="display: inline-flex;">
       <?
-      db_input('l47_numero', 8, $Il47_numero, true, 'text', $db_opcao_edital, "", '', '', '', 10);
+      db_input('l47_numero', 8, $Il47_numero, true, 'text', 1, "", '', '', '', 10);
       ?>
     </td>
   </tr>
