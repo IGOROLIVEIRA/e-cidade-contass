@@ -1391,7 +1391,7 @@ function js_salvarPlanilha() {
         oReceita.iCaracteriscaPeculiar = oReceitaTela.c58_sequencial;
         oReceita.iContaTesouraria      = oReceitaTela.k81_conta;
         oReceita.sObservacao           = encodeURIComponent(tagString(oReceitaTela.k81_obs));
-        oReceita.nValor                = oReceitaTela.k81_valor;
+        oReceita.nValor                = js_round(oReceitaTela.k81_valor,2);
         oReceita.iRecurso              = oReceitaTela.recurso;
         oReceita.iRegRepasse           = oReceitaTela.k81_regrepasse;
         oReceita.iExerc                = oReceitaTela.k81_exerc;
