@@ -994,6 +994,7 @@ abstract class Transferencia {
       db_inicio_transacao();
 
       $sqlExcluirautentslip = "create temporary table w_chaveslip on commit drop as select c86_id as id,c86_data as data,c86_autent as autent from conlancamcorrente inner join conlancamslip on c84_conlancam = c86_conlancam inner join slip on k17_codigo = c84_slip where k17_codigo = $iCodSlip;
+        delete from conlancamcorrente using w_chaveslip where c86_id = id and c86_data = data and c86_autent = autent;
         delete from corlanc using w_chaveslip where k12_id = id and k12_data = data and k12_autent = autent;
         delete from corautent using w_chaveslip where k12_id = id and k12_data = data and k12_autent = autent;
         delete from corrente using w_chaveslip where k12_id = id and k12_data = data and k12_autent = autent;";
@@ -1010,12 +1011,6 @@ abstract class Transferencia {
 
       for ($iContLan=0;$iContLan < pg_num_rows($rsCodLan); $iContLan++) { 
         $aCodLan[] = db_utils::fieldsMemory($rsCodLan, $iContLan)->c84_conlancam;
-      }
-
-      $oDaoExcluirSlip = new cl_conlancamcorrente();
-      $oDaoExcluirSlip->excluir(null, "c86_conlancam IN (". implode(",", $aCodLan). ")");
-      if ($oDaoExcluirSlip->erro_status == "0") {
-        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancamcorrente");
       }
 
       $oDaoExcluirSlip = new cl_conlancamcgm();
