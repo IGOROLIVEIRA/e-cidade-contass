@@ -186,6 +186,9 @@ if (isset($incluir)) {
         $resultParamento = db_query("SELECT e30_controleprestacao FROM empparametro WHERE e39_anousu = " . db_getsession("DB_datausu"));
         db_fieldsmemory($resultParamento, 0)->e30_controleprestacao;
 
+        $erro_msg = "Usuário: Existe Prestação de Contas pendente para o Credor selecionado";
+        $sqlerro = true;
+
         if ($e30_controleprestao) {
             $resultPrestacaoContas = db_query("SELECT e60_numemp FROM empempenho e LEFT JOIN emppresta er ON e.e60_numemp = er.e45_numemp WHERE e60_numcgm = {$e54_numcgm} AND e45_acerta IS NULL LIMIT 1");
             db_fieldsmemory($resultPrestacaoContas, 0)->e60_numemp;
