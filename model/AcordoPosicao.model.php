@@ -1676,6 +1676,7 @@ class AcordoPosicao {
       $oAcordo = new Acordo($this->getAcordo());
       $oAcordo->setDataInicial($oAcordo->getUltimaPosicao(true)->getVigenciaInicial());
       $oAcordo->setDataFinal($oAcordo->getUltimaPosicao(true)->getVigenciaFinal());
+      $oAcordo->setProvidencia(1);
       $oAcordo->save();
     }
 

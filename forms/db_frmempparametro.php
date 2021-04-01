@@ -131,10 +131,20 @@ $clempparametro->rotulo->label();
                 </td>
             </tr>
 
+            <!-- Permite liquidação com data superior a data do servidor -->
+            <tr>
+                <td nowrap title="<?=@$Te30_lqddataserv?>"><?=@$Le30_lqddataserv ?></td>
+                <td>
+                    <?
+                        $matriz = array("f" => "Não", "t" => "Sim");
+                        db_select("e30_lqddataserv", $matriz, true, 1);
+                    ?>
+                </td>
+            </tr>
+
             <tr>
                 <td nowrap title="<?=@$Te30_empdataemp?>"><?=@$Le30_empdataemp ?></td>
                 <td><? $matriz = array("f"=>"Não","t"=>"Sim");
-                    db_select("e30_empdataemp", $matriz,true,1);
                     db_select("e30_empdataemp", $matriz,true,1);
                     ?>
                 </td>

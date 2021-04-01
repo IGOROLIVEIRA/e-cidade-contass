@@ -130,8 +130,7 @@ $oGet = db_utils::postMemory($_GET);
                               SET k00_numpre = debitos_hlh.k00_numpre,
                                   k00_numpar = debitos_hlh.k00_numpar
                               FROM debitos_hlh
-                              WHERE disbanco.k00_numpre = debitos_hlh.k00_numpre_old
-                                  AND disbanco.k00_numpar = debitos_hlh.k00_numpar_old
+                              WHERE disbanco.k00_numpre = debitos_hlh.numguia::int
                                   AND disbanco.codret = {$oGet->codret}";
        if (!db_query($sSqlIntegracaoHLH)) {
          throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
