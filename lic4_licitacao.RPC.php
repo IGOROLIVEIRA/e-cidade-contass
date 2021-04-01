@@ -505,7 +505,7 @@ switch ($oParam->exec) {
                                     inner join cgm            on cgm.z01_numcgm = pcorcamforne.pc21_numcgm
                               where lli.l21_codigo = liclicitem.l21_codigo) as z01_nome";
 
-            $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, ";
+            $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, pc11_reservado, ";
             $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, e54_autori,e55_quant,  {$sBuscaFornecedor}";
 
             $sOrdem   = " l21_ordem ";
@@ -563,6 +563,7 @@ switch ($oParam->exec) {
                 $oStdDadoItem->sFornecedor        = urlencode($oStdResultItem->z01_nome);
                 $oStdDadoItem->nValorUnitario     = trim(db_formatar($oStdResultItem->pc11_vlrun, "f"));
                 $oStdDadoItem->iAutorizacao       = urlencode($oStdResultItem->e54_autori);
+                $oStdDadoItem->lReservado         = $oStdResultItem->pc11_reservado;
                 //$oStdDadoItem->sObservacao        = urlencode($oStdResultItem->pc23_obs);
                 $aItensRetorno[] = $oStdDadoItem;
             }

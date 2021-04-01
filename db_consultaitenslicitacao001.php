@@ -50,6 +50,11 @@ require_once("model/licitacao/SituacaoLicitacao.model.php");
   <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+    .bensMeEpp, .bensMeEpp td{
+        background-color: #c0bfff;
+    }
+</style>
 
 <body style="margin-top: 5px; background-color: #CCCCCC;">
 <center>
@@ -58,6 +63,16 @@ require_once("model/licitacao/SituacaoLicitacao.model.php");
     <div id="ctnGridItens"></div>
   </fieldset>
 </center>
+    <div style='width: 100%; margin-bottom: 12px;'>
+        <fieldset style='width: 150px'>
+            <legend>Legenda</legend>
+            <table colspan='0' class='table__legenda'>
+                <tr>
+                    <td align='center' class='bensMeEpp' height='30px' width='150px'><b>Itens ME/EPP</b></td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
 </body>
 </html>
 
@@ -68,13 +83,15 @@ require_once("model/licitacao/SituacaoLicitacao.model.php");
                   ,"Vlr. Unitário"
                   ,"Unidade"
                   ,"Material"
-                  ,"Fornecedor"];
+                  ,"Fornecedor"
+                  ,""];
 
   var aCellAlign = ["center"
                    ,"center"
                    ,"center"
                    ,"right"
                    ,"center"
+                   ,"left"
                    ,"left"
                    ,"left"];
 
@@ -84,7 +101,8 @@ require_once("model/licitacao/SituacaoLicitacao.model.php");
                    ,"8%"
                    ,"8%"
                    ,"38%"
-                   ,"22%"];
+                   ,"22%"
+                   ,""];
 
   var oGridItens = new DBGrid("oGridItens");
   oGridItens.sNameInstance = "oGridItens";
@@ -121,17 +139,22 @@ require_once("model/licitacao/SituacaoLicitacao.model.php");
      */
     oRetorno.aItens.each(function (oItem, iIndice) {
 
-      var aLinha = [oItem.iCodigo,
+        var aLinha = [oItem.iCodigo,
                     oItem.iAutorizacao,
                     oItem.iQuantidade,
                     oItem.nValorUnitario,
                     oItem.sUnidadeDeMedida.urlDecode(),
                     oItem.sDescricaoMaterial.urlDecode().substr(0, 50),
-                    oItem.sFornecedor.urlDecode().substr(0, 35)];
+                    oItem.sFornecedor.urlDecode().substr(0, 35),
+                    oItem.lReservado
+        ]
                     //oItem.sObservacao.urlDecode().substr(0, 35)];
-      oGridItens.addRow(aLinha);
+        oGridItens.addRow(aLinha);
     });
+
     oGridItens.renderRows();
+    
+    js_setBackgroundReservado();
 
     /**
      * Adicionamos o texto completo quando o usuário passar o mouse por cima da linha
@@ -146,5 +169,15 @@ require_once("model/licitacao/SituacaoLicitacao.model.php");
       }*/
 
     });
+
+    function js_setBackgroundReservado(){
+        let aItens = document.getElementById('oGridItensbody').childNodes[0].children;
+        
+        for(let index = 0; index < aItens.length; index++){
+            if(aItens[index].cells[7].innerText.trim() == 't'){
+                aItens[index].classList.add('bensMeEpp');
+            }
+        }
+    }
   }
 </script>
