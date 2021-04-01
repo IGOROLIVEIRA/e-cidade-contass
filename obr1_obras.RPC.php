@@ -346,12 +346,15 @@ switch($oParam->exec) {
     case 'SalvarItemObra':
         $cllicitemobra = new cl_licitemobra();
 
+//        echo "<pre>"; print_r($oParam->itens);exit;
         foreach ($oParam->itens as $item){
             $pcmater = substr($item->obr06_pcmater,0,-1);
             $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null,"obr06_sequencial",null,"obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
 
             if(pg_num_rows($verificaItem) <= 0){
 //                die('incluir');
+                db_inicio_transacao();
+
                 $cllicitemobra->obr06_sequencial        = null;
                 $cllicitemobra->obr06_pcmater           = $pcmater;
                 $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
@@ -361,6 +364,7 @@ switch($oParam->exec) {
                 $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
                 $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
                 $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+//                echo "incluir";echo "<br>";
                 $cllicitemobra->incluir();
 
                 if ($cllicitemobra->erro_status == 0) {
@@ -371,10 +375,12 @@ switch($oParam->exec) {
                     $oRetorno->status = 1;
                     $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
                 }
+                db_fim_transacao();
+
             }else{
-//                die('alterar');
 
                 db_fieldsmemory($verificaItem,0);
+                db_inicio_transacao();
                 $cllicitemobra->obr06_sequencial        = $obr06_sequencial;
                 $cllicitemobra->obr06_pcmater           = $pcmater;
                 $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
@@ -384,6 +390,8 @@ switch($oParam->exec) {
                 $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
                 $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
                 $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+//                echo "alterar";echo "<br>";
+
                 $cllicitemobra->alterar($obr06_sequencial);
 
                 if ($cllicitemobra->erro_status == 0) {
@@ -394,6 +402,7 @@ switch($oParam->exec) {
                     $oRetorno->status = 1;
                     $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
                 }
+                db_fim_transacao();
             }
         }
 

@@ -133,9 +133,9 @@ $cllicitemobra->rotulo->label();
         <?php
 
         if(!empty($l20_codigo)) {
-            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_versaotabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,l21_ordem";
+            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,l21_ordem";
             $sOrdem   = "l21_ordem";
-            $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit');
+            $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and pc10_instit = ".db_getsession('DB_instit');
             $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
             $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
             $aItensObras = db_utils::getCollectionByRecord($sResultitens);
@@ -143,14 +143,16 @@ $cllicitemobra->rotulo->label();
         }
 
         if(!empty($pc80_codproc)){
-            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_versaotabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,pc11_seq";
+            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,pc11_seq";
             $sOrdem   = "pc11_seq";
-            $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit');
+            $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and pc10_instit = ".db_getsession('DB_instit');
             $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
+//            die($sSqlItemProcessodeCompras);
             $sResultitens = $cllicitemobra->sql_record($sSqlItemProcessodeCompras);
             $aItensObras = db_utils::getCollectionByRecord($sResultitens);
             $numrows = $cllicitemobra->numrows;
         }
+
         ?>
         <div style="overflow:scroll;overflow:auto">
             <table>
@@ -429,6 +431,9 @@ $cllicitemobra->rotulo->label();
             }
 
             document.getElementById('obr06_tabela_'+item.pc01_codmater+tabela).value = tabela;
+            document.getElementById('obr06_versaotabela_'+item.pc01_codmater+tabela).value = item.obr06_versaotabela;
+            document.getElementById('obr06_descricaotabela_'+item.pc01_codmater+tabela).value = item.obr06_descricaotabela;
+            document.getElementById('obr06_codigotabela_'+item.pc01_codmater+tabela).value = item.obr06_codigotabela;
             if(item.obr06_dtregistro != ""){
                document.getElementById('obr06_dtregistro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtregistro,'u');
                document.getElementById('obr06_dtcadastro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtcadastro,'u');
