@@ -5810,32 +5810,28 @@ class cl_estrutura_sistema {
         }
 
         $sql = " SELECT SUM(
-                        CASE WHEN C53_TIPO = 20 
-                            THEN ROUND(c70_VALOR, 2) 
+                        CASE WHEN c53_tipo = 20 
+                            THEN ROUND(c70_valor, 2) 
                         ELSE (
-                            CASE WHEN C53_TIPO = 21 
-                                THEN ROUND(c70_VALOR * -(1::FLOAT8),2) 
+                            CASE WHEN c53_tipo = 21 
+                                THEN ROUND(c70_valor * -(1::FLOAT8),2) 
                             ELSE 0::FLOAT8 END) 
                         END ) 
-                    AS LIQUIDADO
-                    FROM conlancamele
-                        INNER JOIN conlancam                    
-                            ON c70_codlan = c67_codlan
-                        INNER JOIN conlancamdoc
-                            ON c70_codlan = c71_codlan
-                        INNER JOIN conhistdoc 
-                            ON c53_coddoc = c71_coddoc
-                        INNER JOIN conplanoorcamentoanalitica 
-                            ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
-                        INNER JOIN conplanoorcamento 
-                            ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
-                        INNER JOIN conlancamemp 
-                            ON c70_codlan = c75_codlan
-                        INNER JOIN empempenho 
-                            ON e60_numemp = c75_numemp ";
+                    AS liquidado
+					FROM (SELECT DISTINCT ON (c70_codlan) 
+							c53_tipo, 
+							c70_valor
+						FROM conlancamele
+							INNER JOIN conlancam ON c70_codlan = c67_codlan
+							INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
+							INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+							INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
+							INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+							INNER JOIN conlancamemp ON c70_codlan = c75_codlan
+							INNER JOIN empempenho ON e60_numemp = c75_numemp ";
 
         if($fonte!="") {
-            $sql .= " INNER JOIN orcdotacao ON e60_coddot=o58_coddot AND e60_anousu=o58_anousu ";
+            $sql .= " INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu ";
         }
 
         $sql .= "WHERE ".$where;
@@ -5873,8 +5869,7 @@ class cl_estrutura_sistema {
           if($fonte!="") {
               $sql .= " AND o58_codigo IN ({$fonte}) ";
           }
-          $sql .= " {$group}";
-
+          $sql .= " {$group} ) AS x";
           return db_utils::getColectionByRecord(db_query($sql));
 
     }
