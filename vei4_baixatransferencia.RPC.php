@@ -199,7 +199,14 @@ switch ($oParam->exec){
                 $clveiculos->ve01_codunidadesub         = $aUnidadeAtual->codunidadesub;
                 $clveiculos->ve01_veiccadpotencia       = $aVeiculo->ve01_veiccadpotencia;
                 $clveiculos->ve01_instit                = $aVeiculo->ve01_instit;
-                $clveiculos->incluir(null,$aVeiculo->ve01_veiccadtipo);
+
+                $sSqlTipoVeiculo = "SELECT si04_tipoveiculo
+                FROM tipoveiculos
+                WHERE si04_veiculos = $veiculo";
+                $rsTipoVeiculo = db_query($sSqlTipoVeiculo);
+                $iTipoVeiculo = db_utils::fieldsMemory($rsTipoVeiculo, 0)->si04_tipoveiculo;
+
+                $clveiculos->incluir(null, $iTipoVeiculo);
 
                 if ($clveiculos->erro_status != 1) {
                     throw new Exception($clveiculos->erro_msg);
