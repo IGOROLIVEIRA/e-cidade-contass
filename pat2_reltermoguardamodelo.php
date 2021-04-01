@@ -14,7 +14,7 @@ db_postmemory($HTTP_POST_VARS);
 $cl_bensguardaitem = new cl_bensguardaitem;
 
 $sCampos = "t22_bem, t52_ident, t52_descr, t70_descr as situacao, t22_obs, t21_representante, t21_cpf, ";
-$sCampos .= "t21_data, a.z01_nome as responsavel, a.z01_numcgm as numcgm, t20_descr as tipoguarda, t21_obs";
+$sCampos .= "t21_data, db_depart.nomeresponsavel as responsavel, a.z01_numcgm as numcgm, a.z01_nome AS nomecgm, t20_descr as tipoguarda, t21_obs";
 $sSqlBens = $cl_bensguardaitem->sql_query_relatorio('', $sCampos, '', 't22_bensguarda = '. $oGet->iTermo);
 $rsBens = $cl_bensguardaitem->sql_record($sSqlBens);
 
@@ -144,7 +144,7 @@ $oItemPosicao1 = db_utils::fieldsMemory($rsBens, 0);
         
         <div class="div__guarda-detentor">
             <h3>Dados do Detentor da Guarda</h3>
-            <p><b>CGM:</b> <span><?=$oItemPosicao1->numcgm;?></span></p>
+            <p><b>CGM:</b> <span><?=$oItemPosicao1->numcgm;?> - <?=$oItemPosicao1->nomecgm?></span></p>
             <p><b>Representante:</b> <span><?=$oItemPosicao1->t21_representante ? $oItemPosicao1->t21_representante : ' - ';?></span></p>
             <p><b>CPF Representante:</b> <span><?=$oItemPosicao1->t21_cpf ? db_formatar($oItemPosicao1->t21_cpf, 'cpf') : ' - ';?></span></p>
         </div>
