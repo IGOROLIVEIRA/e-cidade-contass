@@ -1023,6 +1023,8 @@ if (count($aParametrosEmpenho) > 0) {
                     aLinha[14] += " class='valores' onchange='js_calculaValor(this,"+e81_codmov+")'"+sReadOnly;
                     aLinha[14] += "                 onkeypress='return js_teclas(event,this)'";
                     aLinha[14] += "       value = '"+nValorTotal+"' id='valor"+e50_codord+"' "+sDisabled+">";
+                    aLinha[15] = e91_cheque;
+                    aLinha[16] = e91_codcheque;
 
                     gridNotas.addRow(aLinha, false, lDisabled);
 
@@ -1204,11 +1206,16 @@ if (count($aParametrosEmpenho) > 0) {
             "Valor OP",
             "Vlr Aut",
             "Retenção",
-            "Valor"
+            "Valor",
+            "Nº Cheque",
+            "Cod. Cheque"
             )
         );
         gridNotas.aHeaders[1].lDisplayed = false;
         gridNotas.aHeaders[11].lDisplayed = false;
+        gridNotas.aHeaders[16].lDisplayed = false;
+        gridNotas.aHeaders[17].lDisplayed = false;
+        
         gridNotas.show(document.getElementById('gridNotas'));
         $('gridNotasstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
         // Tarefa 24652
@@ -1520,6 +1527,8 @@ if (count($aParametrosEmpenho) > 0) {
             var nValorRetencao       = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
             var lRetencaoMesAnterior = $('validarretencao'+iCodMov).innerHTML;
             var sNumDoc              = aMovimentos[iMov].aCells[10].getValue();
+            var iCheque              = aMovimentos[iMov].aCells[16].getValue();
+            var iCodCheque           = aMovimentos[iMov].aCells[17].getValue();
 
             /**
              * Se for cheque, verifica se o cheque já foi emitido
@@ -1585,6 +1594,9 @@ if (count($aParametrosEmpenho) > 0) {
             oMovimento.nValorRetencao    = nValorRetencao.valueOf();
             oMovimento.sConCarPeculiar   = sConCarPeculiar;
             oMovimento.sNumDoc           = sNumDoc;
+            oMovimento.iCheque           = iCheque;
+            oMovimento.iCodCheque        = iCodCheque;
+            
             if (dtAutoriza == "") {
                 dtAutoriza = oEnvio.dtPagamento;
             }

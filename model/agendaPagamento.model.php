@@ -1411,6 +1411,7 @@ class agendaPagamento {
       e53_valor,
       e53_vlranu,
       k12_data,
+	  e91_codcheque,
       e91_cheque,
       e91_codmov,
       e71_codnota,
@@ -1823,11 +1824,11 @@ class agendaPagamento {
       /*
        * exlcuimos, e depois incluimos na tabela empageconf,
        */
-      $oDaoEmpageConf              = db_utils::getDao("empageconf");
-      $oDaoEmpageConf->excluir($oMovimento->iCodMov);
+      $oDaoEmpageConf = db_utils::getDao("empageconf");
       if ($oMovimento->iCodForma == 3 || $oMovimento->iCodForma == 1 || $oMovimento->iCodForma == 4) {
-
-        $oDaoEmpageConf->e86_cheque  = "0";
+		
+		$oDaoEmpageConf->excluir($oMovimento->iCodMov);
+        $oDaoEmpageConf->e86_cheque  = (isset($oMovimento->iCheque) && $oMovimento->iCheque != '') ? $oMovimento->iCheque : "0";
         $oDaoEmpageConf->e86_data    = $dtPagamento;
         $oDaoEmpageConf->e86_codmov  = $oMovimento->iCodMov;
         $oDaoEmpageConf->e86_correto = "true";

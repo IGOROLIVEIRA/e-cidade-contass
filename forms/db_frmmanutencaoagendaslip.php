@@ -68,13 +68,13 @@ $db_opcao = 1;
                   <? db_ancora("<b>Slip</b>","js_pesquisak17_slip(true);",$db_opcao);  ?>
                 </td>
                 <td nowrap>
-                  <? $k17_slip = '65477'; db_input('k17_slip',10,$Ie82_codord,true,'text',$db_opcao, "onchange='js_pesquisak17_slip(false);'")?>
+                  <? db_input('k17_slip',10,$Ie82_codord,true,'text',$db_opcao, "onchange='js_pesquisak17_slip(false);'")?>
                 </td>
                 <td>
                   <? db_ancora("<b>até:</b>","js_pesquisak17_slip02(true);",$db_opcao);  ?>
                 </td>
                 <td nowrap align="left">
-                  <? $k17_slip02 = '65480'; db_input('k17_slip02',10,$Ie82_codord,true,'text',$db_opcao,
+                  <? db_input('k17_slip02',10,$Ie82_codord,true,'text',$db_opcao,
                     "onchange='js_pesquisak17_slip02(false);'")?>
                 </td>
               </tr>

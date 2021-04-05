@@ -462,29 +462,45 @@ switch($oParam->exec) {
         }
       }
 
-      /*
-       * Se o usuario marcou a opcao para "Efetuar pagamento" o sistema gera pagamento sequingo a mesma logica
-       *   da rotina de pagamento de empenho por agenda (Caixa > Procedimentos > Agenda > Pgtos Empenho p/ Agenda )
-       */
-      if ($oParam->lEfetuarPagamento) {
-        foreach ($oParam->aMovimentos as $oMovimento) {
+		/*
+		* Se o usuario marcou a opcao para "Efetuar pagamento" o sistema gera pagamento seguindo a mesma logica
+		*   da rotina de pagamento de empenho por agenda (Caixa > Procedimentos > Agenda > Pgtos Empenho p/ Agenda )
+		*/
+      	if ($oParam->lEfetuarPagamento) {
 
-          $oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota);
-          $oOrdemPagamento->setCheque(null);
-          $oOrdemPagamento->setConta($oMovimento->iContaSaltes); // temos que verificar esses parametros
-          $oOrdemPagamento->setValorPago($oMovimento->nValor);
-          $oOrdemPagamento->setMovimentoAgenda($oMovimento->iCodMov);
-          $oOrdemPagamento->setHistorico('');
-          $oOrdemPagamento->pagarOrdem();
+			if ($iCodForma == 2 && $oMovimento->iCheque == '' && $oMovimento->iCodCheque == '') {
+				throw new Exception("ERRO [2] - Para efetuar o pagamento é necessário emitir o cheque.");
+			}
 
-          $oRetorno->iItipoAutent     = $oOrdemPagamento->oAutentica->k11_tipautent;
-          $c70_codlan                 = $oOrdemPagamento->iCodLanc;
-          $oAutentica                 = new stdClass();
-          $oAutentica->iNota          = $oMovimento->iCodNota;
-          $oAutentica->sAutentica     = $oOrdemPagamento->getRetornoautenticacao();
-          $oRetorno->aAutenticacoes[] = $oAutentica;
-        }
-      }
+			foreach ($oParam->aMovimentos as $oMovimento) {
+
+				$oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota);
+				
+				if (isset($oMovimento->iCheque) && $oMovimento->iCheque != '') {
+					$oOrdemPagamento->setCheque($oMovimento->iCheque);
+				} else {
+					$oOrdemPagamento->setCheque(null);
+				}
+				
+				if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
+					$oOrdemPagamento->setChequeAgenda($oMovimento->iCodCheque);
+				}
+				
+				$oOrdemPagamento->setConta($oMovimento->iContaSaltes); // temos que verificar esses parametros
+				$oOrdemPagamento->setValorPago($oMovimento->nValor);
+				$oOrdemPagamento->setMovimentoAgenda($oMovimento->iCodMov);
+				$oOrdemPagamento->setHistorico('');
+				$oOrdemPagamento->pagarOrdem();
+
+				$oRetorno->iItipoAutent     = $oOrdemPagamento->oAutentica->k11_tipautent;
+				$c70_codlan                 = $oOrdemPagamento->iCodLanc;
+				$oAutentica                 = new stdClass();
+				$oAutentica->iNota          = $oMovimento->iCodNota;
+				$oAutentica->sAutentica     = $oOrdemPagamento->getRetornoautenticacao();
+				$oRetorno->aAutenticacoes[] = $oAutentica;
+
+			}
+      	}
 
       $oRetorno->iCodigoOrdemAuxiliar = $iCodigoOrdemAuxiliar;
       db_fim_transacao(false);
