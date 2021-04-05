@@ -581,7 +581,7 @@ if ($clempparametro->numrows > 0){
                                     echo "
                                     </td>
                                     <td align='center'  class='bordas_corp' width='15%'>";
-                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa == 'f') ? 1 : 3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+                                        db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa != 'f' || $pc01_tabela != 'f') ? 1 : 3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
                                     echo"
                                     </td>
                                 </tr>";
