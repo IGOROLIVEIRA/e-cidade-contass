@@ -22,6 +22,9 @@ class cl_exeobras102021 {
   public $si197_codunidadesub = null;
   public $si197_nrocontrato = 0;
   public $si197_exerciciolicitacao = 0;
+  public $si197_exerciciocontrato  = 0;
+  public $si197_nroprocessolicitatorio  = null;
+  public $si197_nrolote  = null;
   public $si197_codobra = 0;
   public $si197_objeto = null;
   public $si197_linkobra = null;

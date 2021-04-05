@@ -121,11 +121,11 @@ class gerarLICOBRAS extends GerarAM
                 $aCSVLICOBRAS30['si203_codobra'] = $aLICOBRAS30['si203_codobra'];
                 $aCSVLICOBRAS30['si203_codunidadesubrespestadual'] = $aLICOBRAS30['si203_codunidadesubrespestadual'];
                 $aCSVLICOBRAS30['si203_nroseqtermoaditivo'] = $aLICOBRAS30['si203_nroseqtermoaditivo'];
-                $aCSVLICOBRAS30['si203_dataassinaturatermoaditivo'] = $aLICOBRAS30['si203_dataassinaturatermoaditivo'];
+                $aCSVLICOBRAS30['si203_dataassinaturatermoaditivo'] = $this->sicomDate($aLICOBRAS30['si203_dataassinaturatermoaditivo']);
                 $aCSVLICOBRAS30['si203_tipoalteracaovalor'] = $aLICOBRAS30['si203_tipoalteracaovalor'];
                 $aCSVLICOBRAS30['si203_tipotermoaditivo'] = $aLICOBRAS30['si203_tipotermoaditivo'];
                 $aCSVLICOBRAS30['si203_dscalteracao'] = $aLICOBRAS30['si203_dscalteracao'];
-                $aCSVLICOBRAS30['si203_novadatatermino'] = $aLICOBRAS30['si203_novadatatermino'];
+                $aCSVLICOBRAS30['si203_novadatatermino'] = $this->sicomDate($aLICOBRAS30['si203_novadatatermino']);
                 $aCSVLICOBRAS30['si203_tipodetalhamento'] = $aLICOBRAS30['si203_tipodetalhamento'];
                 $aCSVLICOBRAS30['si203_valoraditivo'] = $aLICOBRAS30['si203_valoraditivo'];
                 $this->sLinha = $aCSVLICOBRAS30;
