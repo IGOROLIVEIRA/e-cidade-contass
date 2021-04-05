@@ -11,7 +11,7 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarRALI
 /**
  * Resumo da Abertura da licitacao Sicom Acompanhamento Mensal
  * @author Victor Felipe
- * @package Contabilidade
+ * @package Patrimonial
  */
 class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
@@ -79,6 +79,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       "mesExercicioRefOrc",
       "origemRecurso",
       "dscOrigemRecurso",
+      "qtdLotes"
     );
     $aElementos[11] = array(
       "tipoRegistro",
@@ -198,7 +199,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 bdi,
                 origemrecurso,
                 dscorigemrecurso,
-                sum(vlcontratacao) as vlContratacao
+                sum(vlcontratacao) as vlContratacao,
+                case when tipoJulgamento = 1 THEN 1 else qtdLotes end as qtdLotes
 FROM
     (SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (CASE
@@ -252,6 +254,11 @@ FROM
                      liclicita.l20_tipliticacao AS tipoLicitacao,
                      liclicita.l20_naturezaobjeto AS naturezaObjeto,
                      liclicita.l20_objeto AS Objeto,
+                     liclicita.l20_tipojulg AS tipoJulgamento,
+                     ( SELECT count(*)
+                        FROM liclicitemlote
+                        INNER JOIN liclicitem ON l21_codigo = l04_liclicitem
+                        WHERE l21_codliclicita = l20_codigo ) AS qtdLotes,
                      CASE
                          WHEN liclicita.l20_naturezaobjeto in ('1', '7') THEN liclicita.l20_regimexecucao
                          ELSE 0
@@ -297,6 +304,7 @@ FROM
      GROUP BY si09_codorgaotce,
               pc80_criterioadjudicacao,
               l20_codepartamento,
+              l20_codigo,
               l20_anousu,
               l20_edital,
               l44_codigotribunal,
@@ -318,7 +326,7 @@ FROM
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
          tipoCadastradoLicitacao, codmodalidadelicitacao, naturezaprocedimento, nroedital,
          exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, bdi, regimeexecucaoobras,
-         origemrecurso, dscorigemrecurso
+         origemrecurso, dscorigemrecurso, qtdLotes, tipoJulgamento
          
 ORDER BY nroprocessolicitatorio
 
@@ -327,7 +335,7 @@ ORDER BY nroprocessolicitatorio
 
     /**
      * registro 10
-     */
+     */ 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $clralic10 = new cl_ralic102020();
@@ -357,6 +365,7 @@ ORDER BY nroprocessolicitatorio
       $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao;
       $clralic10->si180_origemrecurso = $oDados10->origemrecurso;
       $clralic10->si180_dscorigemrecurso = $oDados10->dscorigemrecurso;
+      $clralic10->si180_qtdlote = $oDados10->qtdLotes;
       $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clralic10->si180_instit = db_getsession("DB_instit");
 

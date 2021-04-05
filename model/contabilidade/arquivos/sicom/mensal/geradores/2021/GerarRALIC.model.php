@@ -70,6 +70,7 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
                 $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
                 $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);
+                $aCSVRALIC10['si180_qtdlotes']                   = $aRALIC10['si180_qtdlotes'];
 
                 $this->sLinha = $aCSVRALIC10;
                 $this->adicionaLinha();
