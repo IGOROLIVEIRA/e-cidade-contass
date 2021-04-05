@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -80,28 +80,28 @@ if ($clempparametro->numrows > 0) {
   db_fieldsmemory($rsemparam, 0);
   if ($e30_notaliquidacao != '') {
     $sUrlEmpenho      = "emp4_empempenho001.php";
-  } 
-}  
+  }
+}
 
 $anulacao=false;//padrao
 $sqlerro =false;
 
 if ( isset($alterar) ) {
-	
+
   try {
     $oFornecedor = new fornecedor($e54_numcgm);
     $oFornecedor->verificaBloqueioAutorizacaoEmpenho(null);
-    $iStatusBloqueio = $oFornecedor->getStatusBloqueio();      
+    $iStatusBloqueio = $oFornecedor->getStatusBloqueio();
   } catch (Exception $eException) {
     $sqlerro  = true;
     $erro_msg = $eException->getMessage();
   }
-  
+
   if ( !$sqlerro ) {
-  	
+
 	  if($iStatusBloqueio == 2){
 	    db_msgbox("\\nusuário:\\n\\n Fornecedor com débito na prefeitura !\\n\\n\\n\\n");
-	  }	  
+	  }
   }
 }
 
@@ -112,22 +112,22 @@ if(isset($tipocompra) || isset($chavepesquisa) ){
 }else{//se for anulado tambem entra aqui
   $db_opcao = 22;
   $db_botao = false;
-}  
+}
 if(isset($alterar) && !$sqlerro ){
 
   if($sqlerro == false){
 	  $res_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_fornecdeb"));
 	  if ($clpcparam->numrows > 0){
 	       db_fieldsmemory($res_pcparam,0);
-	       
-	       $sql_fornec     = "select * from fc_tipocertidao($e54_numcgm,'c','".date("Y-m-d",db_getsession("DB_datausu"))."','') as retorno"; 
+
+	       $sql_fornec     = "select * from fc_tipocertidao($e54_numcgm,'c','".date("Y-m-d",db_getsession("DB_datausu"))."','') as retorno";
 	       $res_fornec     = @pg_query($sql_fornec);
 	       $numrows_fornec = @pg_numrows($res_fornec);
-	
+
 	       if ($numrows_fornec > 0){
 	            db_fieldsmemory($res_fornec,0);
 	       }
-	
+
 	       if (isset($retorno) && $retorno == "positiva"){
 
 	       	    //if ($pc30_fornecdeb == 3) {
@@ -182,9 +182,9 @@ if(isset($alterar) && !$sqlerro ){
        if($clempauthist->erro_status=='0'){
           $sqlerro=true;
        }
-    } 
+    }
     //fim
-    
+
     //rotina pra incluir no empauthist
     if($sqlerro==false && $e57_codhist!="0" && $e57_codhist!=""){
       $clempauthist->e57_autori=$e54_autori;
@@ -208,23 +208,23 @@ if(isset($alterar) && !$sqlerro ){
 	                    if($clempautpresta->erro_status=='0'){
 	                        $sqlerro=true;
 	                    }
-	                 }       
-		  } 
+	                 }
+		  }
 	    } else {
  	        $clempautpresta->e58_tipo = $e44_tipo;
   	        $clempautpresta->alterar($e54_autori);
 	        if($clempautpresta->erro_status=='0'){
 	            $sqlerro=true;
 	        }
-	    } 
+	    }
     }
   }
-  
+
   /**
-   * Alteração do Processo administrativo 
+   * Alteração do Processo administrativo
    */
   if (!$sqlerro) {
-    
+
     $e150_sequencial              = null;
     $sWhereProcessoAdministrativo = " e150_empautoriza = {$e54_autori}";
     $sSqlProcessoAdministrativo   = $oDaoEmpenhoProcessoAdminitrativo->sql_query_file(null,
@@ -236,27 +236,42 @@ if(isset($alterar) && !$sqlerro ){
       $e150_sequencial = db_utils::fieldsMemory($rsProcessoAdministrativo, 0)->e150_sequencial;
     }
     if (!empty($e150_sequencial)) {
-    
+
       $oDaoEmpenhoProcessoAdminitrativo->e150_numeroprocesso = $e150_numeroprocesso;
       $oDaoEmpenhoProcessoAdminitrativo->e150_empautoriza    = $e54_autori;
       $oDaoEmpenhoProcessoAdminitrativo->e150_sequencial     = $e150_sequencial;
       $oDaoEmpenhoProcessoAdminitrativo->alterar($e150_sequencial);
-    
+
       if ($oDaoEmpenhoProcessoAdminitrativo->erro_status == 0) {
-    
+
         $sqlerro  = true;
         $erro_msg = $oDaoEmpenhoProcessoAdminitrativo->erro_msg;
       }
     }
   }
-  
+
+  if ($e44_tipo == "4") {
+      $resultParamento = db_query("SELECT e30_controleprestacao FROM empparametro WHERE e39_anousu = " . date("Y", db_getsession("DB_datausu")));
+      db_fieldsmemory($resultParamento, 0)->e30_controleprestacao;
+
+      if ($e30_controleprestacao == 't') {
+          $resultPrestacaoContas = db_query("SELECT e60_numemp FROM empempenho e LEFT JOIN emppresta er ON e.e60_numemp = er.e45_numemp WHERE e60_numcgm = {$e54_numcgm} AND e45_acerta IS NULL AND er.e45_tipo = 4 LIMIT 1");
+          db_fieldsmemory($resultPrestacaoContas, 0)->e60_numemp;
+
+          if ($e60_numemp) {
+              $erro_msg = "Não é possível emitir Autorização de Empenho para credor que possua Prestação de Contas pendente!";
+              $sqlerro = true;
+          }
+      }
+  }
+
   db_fim_transacao($sqlerro);
 } else if(isset($chavepesquisa)) {
 
   $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
   if($e54_login != db_getsession("DB_id_usuario")) {
-    
+
     $result = $cldb_depusu->sql_record($cldb_depusu->sql_query_file(db_getsession("DB_id_usuario"),$e54_depto,'coddepto as cod02'));
 
     if ($cldb_depusu->numrows == 0) {
@@ -265,29 +280,29 @@ if(isset($alterar) && !$sqlerro ){
   }
   $result = $clempautpresta->sql_record($clempautpresta->sql_query_file(null,"*","e58_autori","e58_autori=$e54_autori"));
   if ($clempautpresta->numrows>0) {
-    
+
   	db_fieldsmemory($result,0);
   	$e44_tipo = $e58_tipo;
   }
   if (empty($erro_msg)) {
-    
+
     if ($e54_anulad != "") {
-      
+
 	    $anulacao=true;
 	    $db_opcao = 22;
 	    $db_botao = false;
 	  } else {
-	    
+
 	    $anulacao=false;
 	    $db_opcao = 2;
 	    $db_botao = true;
 	  }
-	   
+
     $result=$clempauthist->sql_record($clempauthist->sql_query_file($e54_autori));
     if($clempauthist->numrows>0){
        db_fieldsmemory($result,0);
     }
-    
+
     /**
      * Busca os Dados do Processo administrativo
      */
@@ -297,19 +312,19 @@ if(isset($alterar) && !$sqlerro ){
                                                                                       null,
                                                                                       $sWhereProcessoAdministrativo);
     $rsProcessoAdministrativo     = $oDaoEmpenhoProcessoAdminitrativo->sql_record($sSqlProcessoAdministrativo);
-    
+
     if ($oDaoEmpenhoProcessoAdminitrativo->numrows > 0) {
       $e150_numeroprocesso = db_utils::fieldsMemory($rsProcessoAdministrativo, 0)->e150_numeroprocesso;
     }
-  } 
-    
+  }
+
 }
 
 if(isset($e54_autori)){
   $emprocesso = false;
   $result_autoriza_de_pc = $clpcprocitem->sql_record($clpcprocitem->sql_query_itememautoriza(null,"e55_sequen",""," e55_autori=$e54_autori and e54_anulad is null "));
   if ($clpcprocitem->numrows > 0) {
-    
+
     $db_botao = true;
     $emprocesso = true;
   }
@@ -317,7 +332,7 @@ if(isset($e54_autori)){
    * Verifica se autorizacao é de contrato
    */
   $oDaoAutorizaContrato = db_utils::getDao("acordoitemexecutadoempautitem");
-  $sSqlAutoriza         = $oDaoAutorizaContrato->sql_query(null,"ac20_acordoposicao", 
+  $sSqlAutoriza         = $oDaoAutorizaContrato->sql_query(null,"ac20_acordoposicao",
                                                            null, "e54_autori={$e54_autori}"
                                                           );
   $rsDadosContrato      = $oDaoAutorizaContrato->sql_record($sSqlAutoriza);
@@ -370,11 +385,11 @@ if(isset($chavepesquisa)){
 		  top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
 		  top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
 		  top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
-	       }   
+	       }
 	       js_libera();
            </script>
-         ";  
-  }else{ 
+         ";
+  }else{
     if($anulacao == true){
       echo "
             <script>
@@ -412,8 +427,8 @@ if(isset($chavepesquisa)){
             </script>
            ";
     }
-  }    
-}  
+  }
+}
 
 /////////////////////////////////////////////
 if(isset($alterar)){
