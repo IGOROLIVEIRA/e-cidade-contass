@@ -430,6 +430,7 @@ $db_opcao = 1;
     oParam.sDtAut              = $F('e42_dtpagamento');
     oParam.iRecurso            = $F('o15_codigo');
     oParam.k145_numeroprocesso = encodeURIComponent(tagString($F("k145_numeroprocesso")));
+    oParam.lBuscaCheque        = true;
 
     var sParam           = js_objectToJson(oParam);
     js_divCarregando("Aguarde, pesquisando Movimentos.","msgBox");
@@ -468,12 +469,6 @@ $db_opcao = 1;
           nValorTotal   = new Number(nValor).toFixed(2);
           var lDisabled = false;
           var sDisabled = "";
-          if (e91_codmov != '' || e90_codmov != '' && e90_cancelado == 'f') {
-
-            lDisabled = true;
-            sDisabled = " disabled ";
-
-          }
           var aLinha  = new Array();
 
           aLinha[0]   = e81_codmov;
@@ -495,19 +490,14 @@ $db_opcao = 1;
           aLinha[7]   = js_createInputNumDocumento(e81_numdoc, e81_codmov, e97_codforma);
           aLinha[8]   = js_formatar(k17_data,"d");
           aLinha[9]   = js_formatar(k17_valor,"f");
+		  aLinha[10]  = e91_codcheque;
+
           gridNotas.addRow(aLinha, false, lDisabled);
 
           // acrescentado no if a condicao cancelado = true, pois agora os registros da empageconfgera
           // ao cancelar um arquivo, nao serão mais deletados
           if (e91_codmov != '' || e90_codmov != '' && e90_cancelado == 'f') {
 
-            if (!$('comMovs').checked) {
-
-              iTotalizador--;
-              gridNotas.aRows[iRowAtiva].lDisplayed = false;
-
-            }
-            gridNotas.aRows[iRowAtiva].aCells[0].lDisabled  = true;
             gridNotas.aRows[iRowAtiva].setClassName('comMov');
 
           } else if (e86_codmov != '' || e97_codmov != '') {
@@ -545,9 +535,6 @@ $db_opcao = 1;
     gridNotas.nameInstance = "gridNotas";
 	let iTotalItens = gridNotas.length;
     gridNotas.selectSingle = function (oCheckbox,sRow,oRow,lVerificaSaldo,iTotalItens) {
-      if (oRow.getClassName() == 'comMov') {
-        oCheckbox.checked = false;
-      }
       if (lVerificaSaldo == null) {
         var lVerificaSaldo = true;
       }
@@ -627,10 +614,12 @@ $db_opcao = 1;
         "Forma Pgto",
         "Nº Documento",
         "Dt Slip",
-        "Valor slip"
+        "Valor slip",
+		"Cod. Cheque"
       )
     );
     gridNotas.aHeaders[1].lDisplayed = false;
+	gridNotas.aHeaders[11].lDisplayed = false;
     gridNotas.show(document.getElementById('gridNotas'));
     $('gridNotasstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
     $('TotalForCol10').innerHTML    = "0,00";
@@ -923,6 +912,7 @@ $db_opcao = 1;
 		var iContaFornecedor = aMovimentos[iMov].aCells[6].getValue();
 		var iContaPagadora   = aMovimentos[iMov].aCells[4].getValue();
 		var sNumDoc 		 = aMovimentos[iMov].aCells[8].getValue();
+		var iCodCheque 		 = aMovimentos[iMov].aCells[11].getValue();
 
 	  /**
 	   * Se for cheque, verifica se o cheque já foi emitido
@@ -977,6 +967,7 @@ $db_opcao = 1;
       oMovimento.iCodNota         = iNota;
       oMovimento.nValorRetencao   = 0
 	  oMovimento.sNumDoc 		  = sNumDoc;
+	  oMovimento.iCodCheque 	  = iCodCheque;
       oEnvio.aMovimentos.push(oMovimento);
     }
 

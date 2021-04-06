@@ -2186,6 +2186,7 @@ class agendaPagamento {
     $sCampos  .= "k17_data,                                               ";
     $sCampos  .= "k17_valor,                                              ";
     $sCampos  .= "e91_codmov,                                             ";
+    $sCampos  .= "e91_codcheque,                                          ";
     $sCampos  .= "e90_codmov,                                             ";
     $sCampos  .= "e86_codmov,                                             ";
     $sCampos  .= "e83_codtipo,                                            ";

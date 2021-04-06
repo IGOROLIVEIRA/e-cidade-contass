@@ -358,6 +358,10 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+		  if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
+			$oTransferencia->setCheque($oMovimento->iCodCheque);
+		  }
+
           if ( $oTransferencia->getContaCredito() != "" ) {
               
               $oContaTesouraria = new contaTesouraria($oTransferencia->getContaCredito());
@@ -527,12 +531,20 @@ switch($oParam->exec) {
     $oAgenda = new agendaPagamento();
     $oAgenda->setUrlEncode(true);
     $sWhere  = " s.k17_instit = ".db_getsession("DB_instit");
-    $sWhere .= " and e91_codmov is null    ";
     $sWhere .= " and e81_cancelado is null ";
-    //$sWhere .= " and e90_codmov is null    ";
-    // alterada condicao do where vara ver o campo e90_cancelado = true, pois agora os registros da empageconfgera
-    // ao cancelar um arquivo, nao serão mais deletados
-    $sWhere .= " and (e90_cancelado is true or e90_cancelado is null)";
+    
+    if (isset($oParam->params[0]->lBuscaCheque) && $oParam->params[0]->lBuscaCheque == 1) {
+
+		$sWhere .= " and e91_codmov is not null    ";
+    	$sWhere .= " and (e90_cancelado is false or e90_cancelado is not null)";
+
+    } else {
+
+    	$sWhere .= " and e91_codmov is null    ";
+    	$sWhere .= " and (e90_cancelado is true or e90_cancelado is null)";
+	
+	}   
+    
     $sWhere .= "and k17_situacao in(1,3)   ";
     if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim == "") {
       $sWhere .= " and s.k17_codigo = {$oParam->params[0]->iOrdemIni}";
