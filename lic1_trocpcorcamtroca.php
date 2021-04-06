@@ -369,9 +369,9 @@ if(isset($orcamento) && trim($orcamento)!="") {
         $sWhereJulgamento   = "    pc32_orcamitem is null and pc32_orcamforne is null and l21_situacao = 0 ";
         $sWhereJulgamento  .= "and l20_codigo = $l21_codliclicita ";
         /*OC3770*/
-//        if (isset($criterioajudicacao) == true) {
-//            $sWhereJulgamento .= " AND pc24_pontuacao = 1 ";
-//        }
+        if (isset($criterioajudicacao) == true) {
+            $sWhereJulgamento .= " AND pc24_pontuacao = 1 ";
+        }
         /*FIM - OC3770*/
         $sSqlJulgamento     = "$sCamposJulgamento
 FROM liclicitemlote
