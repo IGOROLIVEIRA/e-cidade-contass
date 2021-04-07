@@ -51,10 +51,14 @@ if(isset($alterar)){
 </body>
 </html>
 <?
-echo
-"<script>
-  parent.document.formaba.projecaoatuarial20.disabled=true;
-</script>";
+if ($si168_sequencial != '' && $si168_tipoplano != '' && $si168_exercicio != '') {
+    echo
+        "<script>
+            parent.document.formaba.projecaoatuarial20.disabled=false;
+            top.corpo.iframe_projecaoatuarial20.location.href='sic1_projecaoatuarial20001.php?codigo=".$si168_sequencial."&tipoplano=".$si168_tipoplano."&exercicio=".$si168_exercicio."';
+        </script>";
+}
+
 if(isset($alterar)){
     if($sqlerro==true){
         db_msgbox($erro_msg);
