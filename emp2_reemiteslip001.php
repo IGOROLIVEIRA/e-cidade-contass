@@ -73,97 +73,13 @@ function js_abre(){
 <td ></td>
 </tr>
   <tr>
-        <td align="center" valign="top">
-            <form name='form1'>
-                <fieldset>
-                    <legend><b>Reemisão de Slip</b></legend>
-                    <table>
-                        <tr>
-                            <td align="center">
-                                <strong>Opções:</strong>
-                                <select name="ver">
-                                    <option name="condicao" value="com">Com os CGM selecionados</option>
-                                    <option name="condicao" value="sem">Sem os CGM selecionadas</option>
-                                </select>
-                            </td>
-                            <td  align="left" nowrap title="<?=$Tk17_codigo?>"> <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",1);?>  </td>
+    <td  align="left" nowrap title="<?=$Tk17_codigo?>"> <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",1);?>  </td>
     <td align="left" nowrap>
       <?
          db_input("k17_codigo",8,$Ik17_codigo,true,"text",4,"onchange='js_pesquisak17_codigo(false);'");
       ?>
     </td>
-                        </tr>
-                        <tr>
-                            <td nowrap width="50%">
-                                <?
-                                // $aux = new cl_arquivo_auxiliar;
-                                $aux->cabecalho      = "<strong>CGM</strong>";
-                                $aux->codigo         = "z01_numcgm"; //chave de retorno da func
-                                $aux->descr          = "z01_nome";   //chave de retorno
-                                $aux->nomeobjeto     = 'lista';
-                                $aux->funcao_js      = 'js_mostra';
-                                $aux->funcao_js_hide = 'js_mostra1';
-                                $aux->sql_exec       = "";
-                                $aux->func_arquivo   = "func_nome.php";  //func a executar
-                                $aux->isfuncnome     = true;
-                                $aux->nomeiframe     = "db_iframe_cgm";
-                                $aux->localjan       = "";
-                                $aux->onclick        = "";
-                                $aux->db_opcao       = 2;
-                                $aux->tipo           = 2;
-                                $aux->top            = 0;
-                                $aux->linhas         = 10;
-                                $aux->vwhidth        = 400;
-                                $aux->funcao_gera_formulario();
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td >
-                                <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",1); ?>
-                            </td>
-                            <td>
-                                <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao," onchange='js_pesquisae60_codemp(false);'","e60_codemp")  ?>
-                                <strong> à </strong>
-                                <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao,"","e60_codemp_fim" )  ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td nowrap title="<?=@$Te60_numemp?>">
-                                <? db_ancora(@$Le60_numemp,"js_pesquisae60_numemp(true);",1); ?>
-                            </td>
-                            <td>
-                                <? db_input('e60_numemp',15,$Ie60_numemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'")  ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong> Período:</strong>
-                            </td>
-                            <td>
-                                <?
-                                db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
-                                echo " à ";
-                                db_inputdata('dtfim',@$dia,@$mes,@$ano,true,'text',1,"");
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Tipo:</strong>
-                            </td>
-                            <td>
-                                <select id="tipos" name="tipos">
-                                    <option name="padrao" value="1">Padrão</option>
-                                    <option name="anexo" value="2">Com Anexos</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-            </form>
-        </td>
-    </tr>
+  </tr>
   <tr height="20px">
   <td ></td>
   <td ></td>
