@@ -870,7 +870,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
 					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
 				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
-					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
+					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11 && $oMovi->tipomovimentacao != 2) ) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $oDadosMovi21->si97_instit = db_getsession("DB_instit");
                 $oDadosMovi21->registro22 = array();
