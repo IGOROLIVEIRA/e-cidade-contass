@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -52,7 +52,7 @@ function js_abre(){
     document.form1.k17_codigo.style.backgroundColor='';
   }
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.k17_codigo.focus();" bgcolor="#cccccc">
@@ -66,20 +66,106 @@ function js_abre(){
     </table>
 <center>
 <form name="form1" method="post">
-			
+
 <table border='0'>
 <tr height="20px">
 <td ></td>
 <td ></td>
 </tr>
-  <tr> 
+  <tr>
     <td  align="left" nowrap title="<?=$Tk17_codigo?>"> <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",1);?>  </td>
     <td align="left" nowrap>
       <?
-         db_input("k17_codigo",8,$Ik17_codigo,true,"text",4,"onchange='js_pesquisak17_codigo(false);'"); 
+         db_input("k17_codigo",8,$Ik17_codigo,true,"text",4,"onchange='js_pesquisak17_codigo(false);'");
       ?>
     </td>
   </tr>
+  <tr>
+        <td align="center" valign="top">
+            <form name='form1'>
+                <fieldset>
+                    <legend><b>Emite Empenho</b></legend>
+                    <table>
+                        <tr>
+                            <td align="center">
+                                <strong>Opções:</strong>
+                                <select name="ver">
+                                    <option name="condicao" value="com">Com os CGM selecionados</option>
+                                    <option name="condicao" value="sem">Sem os CGM selecionadas</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td nowrap width="50%">
+                                <?
+                                // $aux = new cl_arquivo_auxiliar;
+                                $aux->cabecalho      = "<strong>CGM</strong>";
+                                $aux->codigo         = "z01_numcgm"; //chave de retorno da func
+                                $aux->descr          = "z01_nome";   //chave de retorno
+                                $aux->nomeobjeto     = 'lista';
+                                $aux->funcao_js      = 'js_mostra';
+                                $aux->funcao_js_hide = 'js_mostra1';
+                                $aux->sql_exec       = "";
+                                $aux->func_arquivo   = "func_nome.php";  //func a executar
+                                $aux->isfuncnome     = true;
+                                $aux->nomeiframe     = "db_iframe_cgm";
+                                $aux->localjan       = "";
+                                $aux->onclick        = "";
+                                $aux->db_opcao       = 2;
+                                $aux->tipo           = 2;
+                                $aux->top            = 0;
+                                $aux->linhas         = 10;
+                                $aux->vwhidth        = 400;
+                                $aux->funcao_gera_formulario();
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >
+                                <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",1); ?>
+                            </td>
+                            <td>
+                                <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao," onchange='js_pesquisae60_codemp(false);'","e60_codemp")  ?>
+                                <strong> à </strong>
+                                <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao,"","e60_codemp_fim" )  ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td nowrap title="<?=@$Te60_numemp?>">
+                                <? db_ancora(@$Le60_numemp,"js_pesquisae60_numemp(true);",1); ?>
+                            </td>
+                            <td>
+                                <? db_input('e60_numemp',15,$Ie60_numemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'")  ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong> Período:</strong>
+                            </td>
+                            <td>
+                                <?
+                                db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
+                                echo " à ";
+                                db_inputdata('dtfim',@$dia,@$mes,@$ano,true,'text',1,"");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Tipo:</strong>
+                            </td>
+                            <td>
+                                <select id="tipos" name="tipos">
+                                    <option name="padrao" value="1">Padrão</option>
+                                    <option name="anexo" value="2">Com Anexos</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </form>
+        </td>
+    </tr>
   <tr height="20px">
   <td ></td>
   <td ></td>
@@ -99,17 +185,17 @@ function js_pesquisak17_codigo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
   }else{
-     if(document.form1.k17_codigo.value != ''){ 
+     if(document.form1.k17_codigo.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?pesquisa_chave='+document.form1.k17_codigo.value+'&funcao_js=parent.js_mostraslip','Pesquisa',false);
      }else{
-       document.form1.t52_descr.value = ''; 
+       document.form1.t52_descr.value = '';
      }
   }
 }
 function js_mostraslip(chave,erro){
-  if(erro==true){ 
-    document.form1.k17_codigo.focus(); 
-    document.form1.k17_codigo.value = ''; 
+  if(erro==true){
+    document.form1.k17_codigo.focus();
+    document.form1.k17_codigo.value = '';
   }
 }
 function js_mostraslip1(chave1){
