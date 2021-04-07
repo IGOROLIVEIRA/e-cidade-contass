@@ -32,8 +32,6 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("k17_codigo");
-$clrotulo->label("e60_numemp");
-$clrotulo->label("e60_codemp");
 db_postmemory($HTTP_POST_VARS);
 ?>
 <html>
@@ -75,18 +73,10 @@ function js_abre(){
 <td ></td>
 </tr>
   <tr>
-    <td  align="left" nowrap title="<?=$Tk17_codigo?>"> <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",1);?>  </td>
-    <td align="left" nowrap>
-      <?
-         db_input("k17_codigo",8,$Ik17_codigo,true,"text",4,"onchange='js_pesquisak17_codigo(false);'");
-      ?>
-    </td>
-  </tr>
-  <tr>
         <td align="center" valign="top">
             <form name='form1'>
                 <fieldset>
-                    <legend><b>Emite Empenho</b></legend>
+                    <legend><b>Reemisão de Slip</b></legend>
                     <table>
                         <tr>
                             <td align="center">
@@ -96,6 +86,12 @@ function js_abre(){
                                     <option name="condicao" value="sem">Sem os CGM selecionadas</option>
                                 </select>
                             </td>
+                            <td  align="left" nowrap title="<?=$Tk17_codigo?>"> <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",1);?>  </td>
+    <td align="left" nowrap>
+      <?
+         db_input("k17_codigo",8,$Ik17_codigo,true,"text",4,"onchange='js_pesquisak17_codigo(false);'");
+      ?>
+    </td>
                         </tr>
                         <tr>
                             <td nowrap width="50%">
