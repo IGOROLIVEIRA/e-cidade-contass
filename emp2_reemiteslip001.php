@@ -32,6 +32,8 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("k17_codigo");
+$clrotulo->label("e60_numemp");
+$clrotulo->label("e60_codemp");
 db_postmemory($HTTP_POST_VARS);
 ?>
 <html>
