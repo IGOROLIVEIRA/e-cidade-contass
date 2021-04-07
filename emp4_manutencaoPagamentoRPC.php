@@ -479,14 +479,14 @@ switch($oParam->exec) {
 			foreach ($oParam->aMovimentos as $oMovimento) {
 
 				$oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota);
-				
-				if (isset($oMovimento->iCheque) && $oMovimento->iCheque != '') {
+
+				if (isset($oMovimento->iCheque) && trim($oMovimento->iCheque) != '') {
 					$oOrdemPagamento->setCheque($oMovimento->iCheque);
 				} else {
 					$oOrdemPagamento->setCheque(null);
 				}
 				
-				if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
+				if (isset($oMovimento->iCodCheque) && trim($oMovimento->iCodCheque) != '') {
 					$oOrdemPagamento->setChequeAgenda($oMovimento->iCodCheque);
 				}
 				

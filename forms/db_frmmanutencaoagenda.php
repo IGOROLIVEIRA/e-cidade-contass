@@ -1527,8 +1527,8 @@ if (count($aParametrosEmpenho) > 0) {
             var nValorRetencao       = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
             var lRetencaoMesAnterior = $('validarretencao'+iCodMov).innerHTML;
             var sNumDoc              = aMovimentos[iMov].aCells[10].getValue();
-            var iCheque              = aMovimentos[iMov].aCells[16].getValue();
-            var iCodCheque           = aMovimentos[iMov].aCells[17].getValue();
+            var iCheque              = aMovimentos[iMov].aCells[16].getValue().trim();
+            var iCodCheque           = aMovimentos[iMov].aCells[17].getValue().trim();
 
             /**
              * Se for cheque, verifica se o cheque já foi emitido
