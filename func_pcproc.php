@@ -258,7 +258,11 @@ $sWhereContrato = " and 1 = 1 ";
           $result = $clpcproc->sql_record($sql);
           if ($clpcproc->numrows!=0) {
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$pc80_codproc',false);</script>";
+            if($itemobras == "true"){
+                echo "<script>".$funcao_js."('$pc80_codproc','$pc80_resumo',false);</script>";
+            }else{
+                echo "<script>".$funcao_js."('$pc80_codproc',false);</script>";
+            }
           } else {
             echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
