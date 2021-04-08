@@ -134,24 +134,24 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
           AND DATE_PART('MONTH',acordo.ac16_dataassinatura)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $rsResult10 = db_query($sql);
 
-        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-            $clexeobras102021 = new cl_exeobras102021();
-            $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+      $clexeobras102021 = new cl_exeobras102021();
+      $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-            $clexeobras102021->si197_tiporegistro = 10;
-            $clexeobras102021->si197_codorgao = $oDados10->si197_codorgao;
-            $clexeobras102021->si197_codunidadesub = $oDados10->si197_codunidadesub;
-            $clexeobras102021->si197_nrocontrato = $oDados10->si197_nrocontrato;
-            $clexeobras102021->si197_exerciciocontrato = $oDados10->si197_exerciciocontrato;
-            $clexeobras102021->si197_exerciciolicitacao = $oDados10->si197_exerciciolicitacao;
-            $clexeobras102021->si197_nroprocessolicitatorio = $oDados10->si197_nroprocessolicitatorio;
-            $clexeobras102021->si197_nrolote = $oDados10->si197_nrolote;
-            $clexeobras102021->si197_codobra = $oDados10->si197_codobra;
-            $clexeobras102021->si197_objeto = $oDados10->si197_objeto;
-            $clexeobras102021->si197_linkobra = $oDados10->si197_linkobra;
-            $clexeobras102021->si197_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $clexeobras102021->si197_instit = db_getsession("DB_instit");
-            $clexeobras102021->incluir(null);
+      $clexeobras102021->si197_tiporegistro = 10;
+      $clexeobras102021->si197_codorgao = $oDados10->si197_codorgao;
+      $clexeobras102021->si197_codunidadesub = $oDados10->si197_codunidadesub;
+      $clexeobras102021->si197_nrocontrato = $oDados10->si197_nrocontrato;
+      $clexeobras102021->si197_exerciciocontrato = $oDados10->si197_exerciciocontrato;
+      $clexeobras102021->si197_exerciciolicitacao = $oDados10->si197_exerciciolicitacao;
+      $clexeobras102021->si197_nroprocessolicitatorio = $oDados10->si197_nroprocessolicitatorio;
+      $clexeobras102021->si197_nrolote = $oDados10->si197_nrolote;
+      $clexeobras102021->si197_codobra = $oDados10->si197_codobra;
+      $clexeobras102021->si197_objeto = $oDados10->si197_objeto;
+      $clexeobras102021->si197_linkobra = $oDados10->si197_linkobra;
+      $clexeobras102021->si197_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clexeobras102021->si197_instit = db_getsession("DB_instit");
+      $clexeobras102021->incluir(null);
 
             if ($clexeobras102021->erro_status == 0) {
                 throw new Exception($clexeobras102021->erro_msg);
