@@ -277,7 +277,7 @@ $cllicitemobra->rotulo->label();
 
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_liclicita',
-                'func_liclicita.php?situacao=10&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
+                'func_liclicita.php?funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
                 'Pesquisa Licitações', true);
         } else {
 
@@ -285,7 +285,7 @@ $cllicitemobra->rotulo->label();
 
                 js_OpenJanelaIframe('top.corpo',
                     'db_iframe_liclicita',
-                    'func_liclicita.php?situacao=10&pesquisa_chave=' +
+                    'func_liclicita.php?pesquisa_chave=' +
                     document.form1.l20_codigo.value + '&funcao_js=parent.js_preencheLicitacao2',
                     'Pesquisa', false);
             } else {

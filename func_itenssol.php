@@ -70,17 +70,17 @@ if (isset($oGet->pc16_codmater) && !empty($oGet->pc16_codmater)) {
 	}
 }
 
-if ( ! empty($oGet->pc11_codigo) ) {
-
-  $oDaoSolicitem   = new cl_solicitem();
-  $sSqlBuscaResumo = $oDaoSolicitem->sql_query_file($oGet->pc11_codigo, 'pc11_resum');
-  $rsBuscaResumo   = $oDaoSolicitem->sql_record($sSqlBuscaResumo);
-  if ($oDaoSolicitem->numrows == 1) {
-
-    $sResumoSolicitem = db_utils::fieldsMemory($rsBuscaResumo, 0)->pc11_resum;
-    $pc11_resum = empty($sResumoSolicitem) ? $pc11_resum : $sResumoSolicitem;
-  }
-}
+//if ( ! empty($oGet->pc11_codigo) ) {
+//
+//  $oDaoSolicitem   = new cl_solicitem();
+//  $sSqlBuscaResumo = $oDaoSolicitem->sql_query_file($oGet->pc11_codigo, 'pc11_resum');
+////  $rsBuscaResumo   = $oDaoSolicitem->sql_record($sSqlBuscaResumo);
+//  if ($oDaoSolicitem->numrows == 1) {
+//
+//    $sResumoSolicitem = db_utils::fieldsMemory($rsBuscaResumo, 0)->pc11_resum;
+//    $pc11_resum = empty($sResumoSolicitem) ? $pc11_resum : $sResumoSolicitem;
+//  }
+//}
 
 ?>
 <html>

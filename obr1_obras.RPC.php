@@ -345,67 +345,88 @@ switch($oParam->exec) {
 
     case 'SalvarItemObra':
         $cllicitemobra = new cl_licitemobra();
+        $clcondataconf = new cl_condataconf;
 
-//        echo "<pre>"; print_r($oParam->itens);exit;
-        foreach ($oParam->itens as $item){
-            $pcmater = substr($item->obr06_pcmater,0,-1);
-            $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null,"obr06_sequencial",null,"obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
+        try{
 
-            if(pg_num_rows($verificaItem) <= 0){
-//                die('incluir');
-                db_inicio_transacao();
+            foreach ($oParam->itens as $item){
 
-                $cllicitemobra->obr06_sequencial        = null;
-                $cllicitemobra->obr06_pcmater           = $pcmater;
-                $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
-                $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
-                $cllicitemobra->obr06_codigotabela      = $item->obr06_codigotabela;
-                $cllicitemobra->obr06_versaotabela      = $item->obr06_versaotabela;
-                $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
-                $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
-                $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
-//                echo "incluir";echo "<br>";
-                $cllicitemobra->incluir();
+                /**
+                //     * validação com sicom
+                //     */
+                $dtcadastro = DateTime::createFromFormat('d/m/Y', $item->obr06_dtcadastro);
 
-                if ($cllicitemobra->erro_status == 0) {
-                    $erro = $cllicitemobra->erro_msg;
-                    $oRetorno->message = urlencode($erro);
-                    $oRetorno->status = 2;
-                } else {
-                    $oRetorno->status = 1;
-                    $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
+                if(!empty($dtcadastro)){
+                    $anousu = db_getsession('DB_anousu');
+                    $instituicao = db_getsession('DB_instit');
+                    $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+                    db_fieldsmemory($result);
+                    $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
+                    $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
+
+                    if ($dtcadastro <= $dtencerramento) {
+                        throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+                    }
                 }
-                db_fim_transacao();
 
-            }else{
+                $pcmater = substr($item->obr06_pcmater,0,-1);
+                $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null,"obr06_sequencial",null,"obr06_pcmater = $pcmater and obr06_tabela = $item->obr06_tabela"));
 
-                db_fieldsmemory($verificaItem,0);
-                db_inicio_transacao();
-                $cllicitemobra->obr06_sequencial        = $obr06_sequencial;
-                $cllicitemobra->obr06_pcmater           = $pcmater;
-                $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
-                $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
-                $cllicitemobra->obr06_codigotabela      = $item->obr06_codigotabela;
-                $cllicitemobra->obr06_versaotabela      = $item->obr06_versaotabela;
-                $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
-                $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
-                $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
-//                echo "alterar";echo "<br>";
+                if(pg_num_rows($verificaItem) <= 0){
+                    db_inicio_transacao();
 
-                $cllicitemobra->alterar($obr06_sequencial);
+                    $cllicitemobra->obr06_sequencial        = null;
+                    $cllicitemobra->obr06_pcmater           = $pcmater;
+                    $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
+                    $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
+                    $cllicitemobra->obr06_codigotabela      = $item->obr06_codigotabela;
+                    $cllicitemobra->obr06_versaotabela      = $item->obr06_versaotabela;
+                    $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
+                    $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
+                    $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+                    $cllicitemobra->incluir();
 
-                if ($cllicitemobra->erro_status == 0) {
-                    $erro = $cllicitemobra->erro_msg;
-                    $oRetorno->message = urlencode($erro);
-                    $oRetorno->status = 2;
-                } else {
-                    $oRetorno->status = 1;
-                    $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
+                    if ($cllicitemobra->erro_status == 0) {
+                        $erro = $cllicitemobra->erro_msg;
+                        $oRetorno->message = urlencode($erro);
+                        $oRetorno->status = 2;
+                    } else {
+                        $oRetorno->status = 1;
+                        $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
+                    }
+                    db_fim_transacao();
+
+                }else{
+
+                    db_fieldsmemory($verificaItem,0);
+                    db_inicio_transacao();
+                    $cllicitemobra->obr06_sequencial        = $obr06_sequencial;
+                    $cllicitemobra->obr06_pcmater           = $pcmater;
+                    $cllicitemobra->obr06_tabela            = $item->obr06_tabela;
+                    $cllicitemobra->obr06_descricaotabela   = $item->obr06_descricaotabela;
+                    $cllicitemobra->obr06_codigotabela      = $item->obr06_codigotabela;
+                    $cllicitemobra->obr06_versaotabela      = $item->obr06_versaotabela;
+                    $cllicitemobra->obr06_dtregistro        = $item->obr06_dtregistro;
+                    $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
+                    $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
+
+                    $cllicitemobra->alterar($obr06_sequencial);
+
+                    if ($cllicitemobra->erro_status == 0) {
+                        $erro = $cllicitemobra->erro_msg;
+                        $oRetorno->message = urlencode($erro);
+                        $oRetorno->status = 2;
+                    } else {
+                        $oRetorno->status = 1;
+                        $oRetorno->message = urlencode("Itens salvo com Sucesso!.");
+                    }
+                    db_fim_transacao();
                 }
-                db_fim_transacao();
             }
+        }catch (Exception $eErro){
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
         }
-
         break;
     case 'ExcluirItemObra':
 
