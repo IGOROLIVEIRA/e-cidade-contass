@@ -1,8 +1,8 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use Classes\PostgresMigration;
 
-class CreateUserValdecirContass extends AbstractMigration
+class CreateUserValdecirContass extends PostgresMigration
 {
     public function up()
     {
