@@ -70,7 +70,7 @@ $clrotulo->label("c61_reduz");
             </td>
             <td width="96%" align="left" nowrap> 
               <?
-		       db_input("c60_estrut",15,$Ic60_estrut,true,"text",4,"","chave_c60_estrut");
+		       db_input("c60_estrut",50,$Ic60_estrut,true,"text",4,"","chave_c60_estrut");
 		       ?>
             </td>
           </tr>
