@@ -195,7 +195,7 @@ try {
             }
 
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);//var_dump($oParam->sVigenciaalterada);
-            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada);
+            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia);
 
             break;
 

@@ -19,8 +19,10 @@ e-cidade			5432	mctrans
 e-cidade            5432    cmarinos
 e-cidade            5432    pmlagoadospatos
 
+e-cidade            5432    pmsaoromao
+e-cidade            5432    pmubai
+
 pmcapitaoeneas      5432    prefeituras
-pmsaoromao          5432    prefeituras
 pmcristalia         5432    prefeituras
 pmluislandia        5432    prefeituras
 pmitacambira        5432    prefeituras
@@ -82,7 +84,6 @@ cmnavarro           5432    e-cidade
 cmluislandia        5432    e-cidade
 cisnorte            5432    e-cidade
 
-pmubai              5432    e-cidadenovosclientes
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
 pmnovaporteirinha   5432    e-cidadenovosclientes

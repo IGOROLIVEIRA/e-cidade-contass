@@ -186,37 +186,43 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                        AND si124_desdobrasubtipo = '".$cExt10->si124_desdobrasubtipo."'
                                        AND si124_mes             <= ".$this->sDataFinal['5'].$this->sDataFinal['6'];
                    $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext102021
+                                    SELECT 1 FROM ext102020
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext102021
+                                    SELECT 1 FROM ext102019
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext102021
+                                    SELECT 1 FROM ext102018
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext102021
+                                    SELECT 1 FROM ext102017
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext102021
+                                    SELECT 1 FROM ext102016
                                      WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                        AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
                                        AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                        AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
                 $sSqlVerifica  .= " UNION ALL
-                                    SELECT 1 FROM ext102021
+                                    SELECT 1 FROM ext102015
+                                    WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
+                                      AND si124_tipolancamento    = '".$cExt10->si124_tipolancamento."'
+                                      AND si124_subtipo           = '".$cExt10->si124_subtipo."'
+                                      AND si124_desdobrasubtipo   = '".$cExt10->si124_desdobrasubtipo."' ";
+				$sSqlVerifica  .= " UNION ALL
+                                    SELECT 1 FROM ext102014
                                     WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
                                       AND si124_tipolancamento    = '".$cExt10->si124_tipolancamento."'
                                       AND si124_subtipo           = '".$cExt10->si124_subtipo."'

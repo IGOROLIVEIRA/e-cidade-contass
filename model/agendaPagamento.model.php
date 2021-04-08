@@ -190,7 +190,7 @@ class agendaPagamento {
    * @return array|\stdClass[]
    * @throws \Exception
    */
-  public function getContasRecurso($iCodigoOrdem, $lRetornaContasVinculadas = true, $lSomenteCorrente = false) {
+  public function getContasRecurso($iCodigoOrdem, $lRetornaContasVinculadas = true, $lSomenteCorrente = false, $lContaUnicaFundeb = false) {
 
     if (empty($iCodigoOrdem)) {
       throw new Exception("Metodo GetContasRecurso - Código do Empenho não informado.");
@@ -199,7 +199,7 @@ class agendaPagamento {
     $oDaoEmpAgeTipo = db_utils::getDao("empagetipo");
     $sWhere         = " e50_codord = {$iCodigoOrdem} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
     $sCampos        = " distinct e83_conta, e83_descr,e83_codtipo,c61_codigo ";
-    $sSqlContas     = $oDaoEmpAgeTipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere,$lRetornaContasVinculadas , $iCodigoOrdem);
+    $sSqlContas     = $oDaoEmpAgeTipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere,$lRetornaContasVinculadas , $iCodigoOrdem, $lContaUnicaFundeb);
     /* [Extensão] - Filtro da Despesa - getContasRecurso */
     
     if ($lSomenteCorrente) {
@@ -1373,7 +1373,7 @@ class agendaPagamento {
    * @param string $sJoin joins extras
    * @return array com movimentos
    */
-  function getMovimentosAgenda($sWhere = null, $sJoin, $lTrazfornecedor = true, $lTrazContaPagadora = true,$sCamposAdicionais='', $lVinculadas=true, $sCredorCgm = null) {
+  function getMovimentosAgenda($sWhere = null, $sJoin, $lTrazfornecedor = true, $lTrazContaPagadora = true,$sCamposAdicionais='', $lVinculadas=true, $sCredorCgm = null, $lContaUnicaFundeb = false) {
 
     $sOrderBy = "e81_codmov, e50_codord";
     if ($this->orderBy != null) {
@@ -1469,7 +1469,7 @@ class agendaPagamento {
         $oMovimento        = db_utils::fieldsMemory($rsMovimento, $iMovimentos,false, false, $this->getUrlEncode());
         $oMovimento->validaretencao = $oMovimento->validaretencao=="t"?true:false;
         if ($lTrazContaPagadora) {
-          $aContasVinculadas = $this->getContasRecurso($oMovimento->e50_codord, $lVinculadas, true);
+          $aContasVinculadas = $this->getContasRecurso($oMovimento->e50_codord, $lVinculadas, true, $lContaUnicaFundeb);
           $oMovimento->aContasVinculadas = $aContasVinculadas;
         }
         if ($lTrazfornecedor) {
