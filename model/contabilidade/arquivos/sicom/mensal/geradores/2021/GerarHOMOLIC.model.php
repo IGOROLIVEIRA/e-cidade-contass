@@ -26,7 +26,7 @@ class GerarHOMOLIC extends GerarAM
     $sSql = "select * from homolic102021 where si63_mes = " . $this->iMes . " and si63_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC10 = db_query($sSql);
 
-    $sSql2 = "select * from homolic202121 where si64_mes = " . $this->iMes . " and si64_instit=" . db_getsession("DB_instit");
+    $sSql2 = "select * from homolic202021 where si64_mes = " . $this->iMes . " and si64_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC20 = db_query($sSql2);
 
   	$sSql3 = "select * from homolic302021 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");

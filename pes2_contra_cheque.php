@@ -90,6 +90,8 @@ if (isset($filtro)&&$filtro!='N'){
     $campo=$sigla."lotac::integer";
   }else if ($filtro=='T'){
     $campo= "rh56_localtrab";
+  }else if ($filtro=='S'){
+    $campo= "o40_orgao";
   }
   if (isset($dados)&&$dados!=""){
     $txt_where = " $campo in ($dados) ";
@@ -156,6 +158,11 @@ $sql1= "select distinct
           left join rhpeslocaltrab on rh56_seqpes = rh02_seqpes
                                   and rh56_princ  = true
           left join rhpesdoc on rh16_regist = rh01_regist
+          left  join rhlotaexe    on rh26_codigo = r70_codigo  
+                            and rh26_anousu = $ano        
+          left join orcorgao      on o40_orgao   = rh26_orgao  
+                            and o40_anousu  = $ano        
+                            and o40_instit  = rh02_instit 
 
 	        where $txt_where $wherepes
 	        ";

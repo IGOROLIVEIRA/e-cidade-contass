@@ -72,6 +72,7 @@ try {
     $sWhereVerificaSefip  = "        rh90_ativa is true       ";
     $sWhereVerificaSefip .= "    and rh90_anousu = {$iAnoUsu} "; 
     $sWhereVerificaSefip .= "    and rh90_mesusu = {$iMesUsu} ";
+    $sWhereVerificaSefip .= "    and rh90_instit = ".db_getsession("DB_instit");
     
     $rsVerificaSefip      = $clRHSefip->sql_record($clRHSefip->sql_query_file(null,"*",null,$sWhereVerificaSefip)); 		
  		
@@ -155,6 +156,7 @@ try {
     $sSqlConsultaAutonomos .= "          and retencaotiporec.e21_retencaotipocalc in (1,2,3,7)                                                           ";
     $sSqlConsultaAutonomos .= "          and retencaoreceitas.e23_dtcalculo > '{$sDataCompIni}'::date ";
     $sSqlConsultaAutonomos .= "          and length(trim(cgm.z01_cgccpf)) <= 11 																																				 ";
+    $sSqlConsultaAutonomos .= "          AND e60_instit = ".db_getsession("DB_instit");
     $sSqlConsultaAutonomos .= "        group by e20_pagordem,                                                                                            ";
     $sSqlConsultaAutonomos .= "              e23_dtcalculo,                                                                                              ";
     $sSqlConsultaAutonomos .= "              z01_nome,                                                                                                   ";
@@ -227,6 +229,7 @@ try {
     $sWhereVerificaSefip  = "        rh90_ativa is true               ";
     $sWhereVerificaSefip .= "    and rh90_anousu = {$oParam->iAnoUsu} "; 
     $sWhereVerificaSefip .= "    and rh90_mesusu = {$oParam->iMesUsu} ";
+    $sWhereVerificaSefip .= "    and rh90_instit = ".db_getsession("DB_instit");
     
     $rsVerificaSefip      = $clRHSefip->sql_record($clRHSefip->sql_query_file(null,"*",null,$sWhereVerificaSefip));
     
@@ -249,6 +252,7 @@ try {
     $sWhereSefip  = "     rh90_ativa is true       ";
     $sWhereSefip .= " and rh90_anousu = {$iAnoUsu} ";
     $sWhereSefip .= " and rh90_mesusu = {$iMesUsu} ";
+    $sWhereSefip .= " and rh90_instit = ".db_getsession("DB_instit");
     
     $rsDadosSefip = $clRHSefip->sql_record($clRHSefip->sql_query_file(null,"rh90_sequencial",null,$sWhereSefip)); 
     

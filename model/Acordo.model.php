@@ -443,6 +443,12 @@ class Acordo
     private $lSituacaoVigencia;
 
     /**
+     * Valor da providência do acordo acordo.ac16_providencia
+     * @var integer
+     */
+    private $lProvidencia;
+
+    /**
      * @return mixed
      */
     public function getiLicoutroorgao()
@@ -1583,6 +1589,16 @@ class Acordo
         if ($oDaoAcordoVigencia->erro_status == 0) {
             throw new Exception("Erro ao definir vigência do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
         }
+
+        $oDaoAcordo = db_utils::getDao('acordo');
+        $oDaoAcordo->ac16_sequencial  = $this->getCodigo();
+        $oDaoAcordo->ac16_providencia = $this->getProvidencia();
+        $oDaoAcordo->alterar($this->getCodigo());
+
+        if($oDaoAcordo->erro_status == 0){
+            throw new Exception("Erro ao alterar contrato.\n{$oDaoAcordo->erro_msg}");
+        }
+
     }
 
     /**
@@ -1628,6 +1644,7 @@ class Acordo
         $oDaoAcordo->ac16_licoutroorgao            = $this->getiLicoutroorgao();
         $oDaoAcordo->ac16_adesaoregpreco           = $this->getiAdesaoregpreco();
         $oDaoAcordo->ac16_tipocadastro             = $this->getITipocadastro();
+        $oDaoAcordo->ac16_providencia              = $this->getProvidencia();
         $iCodigoAcordo                             = $this->getCodigoAcordo();
 
         /**
@@ -2959,7 +2976,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia)
     {
         $nValorItens = 0;
 
@@ -3006,6 +3023,12 @@ class Acordo
         $sAtualDtFim     = new DBDate($this->getDataFinal());
         $this->setDataInicial($dtVigenciaInicial);
         $this->setDataFinal($dtVigenciaFinal);
+        /**
+         * A providência do contrato é alterada para 2 (finalizada), se tiver sido redirecionado a partir do arquivo modulos.php
+         */
+        if($lProvidencia){
+            $this->setProvidencia(2);
+        }
         $this->salvarAlteracoesContrato();
         if (in_array($iTipoAditamento, array(
             5,
@@ -3608,6 +3631,24 @@ class Acordo
     public function setNumeroAcordo($iNumeroAcordo)
     {
         $this->iNumeroAcordo = $iNumeroAcordo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProvidencia(){
+
+        return $this->lProvidencia;
+    }
+
+    /**
+     * @param int $lProvidencia
+     * @return $lProvidencia
+     */
+
+    public function setProvidencia($lProvidencia){
+
+        $this->lProvidencia = $lProvidencia;
     }
 
     /**

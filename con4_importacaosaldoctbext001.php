@@ -64,9 +64,22 @@ $iAnoSessao = db_getsession("DB_anousu");
               ?>
             </td>
           </tr>
+		  <tr>
+			<td>
+                <label for="contaCorrente"><b>Implantação Conta Corrente:</b></label><br>
+			</td>
+			<td>
+				<select name="contaCorrente" id="contaCorrente" style="width: 84px;">
+				<option value="1">Sim</option>
+				<option value="0">Não</option>
+				</select>
+			</td>
+		  </tr>
         </table>
       </fieldset>
       <input style="margin-top:10px;" type="button" name="btnProcessar" id="btnProcessar" value="Processar" onclick="processar()"/>
+	  <br><br>
+	  <div id='retorno'></div>
     </form>
   </center>
  </body>
@@ -87,6 +100,7 @@ $iAnoSessao = db_getsession("DB_anousu");
 
   function processar() {
 
+	$('retorno').innerHTML = "";
     //var iAnoSessao = document.form1.iAnoSessao.value;
 
     /*if (!iAnoSessao) {
@@ -94,15 +108,23 @@ $iAnoSessao = db_getsession("DB_anousu");
       return false;
     }*/
 
+	let iContaCorrente = document.form1.contaCorrente.value;
+	let exec = iContaCorrente == 1 ? 'importSaldoCtbExtContaCorrenteDetalhe' : 'importSaldoCtbExt';
+
     js_divCarregando('Aguarde', 'div_aguarde');
     var params = {
-      exec: 'importSaldoCtbExt',
+      exec: exec,
       ano: iAnoSessao,
     };
 
     novoAjax(params, function(e) {
       var oRetorno = JSON.parse(e.responseText);
       js_removeObj('div_aguarde');
+		console.log(oRetorno.sArquivoLog);
+	  if (oRetorno.sArquivoLog != '') {
+		$('retorno').innerHTML = "<b>Contas não implantadas: </b>"
+	  	$('retorno').innerHTML += "<a href='db_download.php?arquivo="+oRetorno.sArquivoLog+"'>"+oRetorno.sArquivoLog+"</a><br>";
+	  }
       alert(oRetorno.message.urlDecode());
     });
   }

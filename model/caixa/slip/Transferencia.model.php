@@ -45,13 +45,13 @@ abstract class Transferencia {
   protected $oSlip;
 
   /**
-   * Tipo de operaÁ„o da tansferencia
+   * Tipo de opera√ß√£o da tansferencia
    * @var integer
    */
   protected $iTipoOperacao;
 
   /**
-   * CÛdigo do LanÁamento cont·bil executado pela transferencia
+   * C√≥digo do Lan√ßamento cont√°bil executado pela transferencia
    * @var integer
    */
   protected $iCodigoLancamento;
@@ -74,13 +74,13 @@ abstract class Transferencia {
    */
 
   /**
-   * string para autenticaÁ„o
+   * string para autentica√ß√£o
    * @var string
    */
   private $sStringAutenticacao;
 
   /**
-   * Data da autenticaÁ„o
+   * Data da autentica√ß√£o
    * @var date
    */
   private $dtDataAutenticacao;
@@ -92,7 +92,7 @@ abstract class Transferencia {
   private $oFinalidadePagamentoFundebCredito;
 
   /**
-   * Conta crÈdito do plano de contas
+   * Conta cr√©dito do plano de contas
    * @var ContaPlanoPCASP
    */
   private $oContaPlanoCredito;
@@ -110,7 +110,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o cÛdigo do lanÁamento
+   * Retorna o c√≥digo do lan√ßamento
    * @return integer
    */
   public function getCodigoLancamento() {
@@ -187,7 +187,7 @@ abstract class Transferencia {
     $rsBuscaCorrente         = db_query($sSqlBuscaContaCorrente);
 
     if (pg_num_rows($rsBuscaCorrente) == 0) {
-      throw new Exception("N„o foi possÌvel buscar os dados da autenticaÁ„o para execuÁ„o dos lanÁamentos cont·beis.");
+      throw new Exception("N√£o foi poss√≠vel buscar os dados da autentica√ß√£o para execu√ß√£o dos lan√ßamentos cont√°beis.");
     }
 
     $oDadosAutenticao        = db_utils::fieldsMemory($rsBuscaCorrente, 0);
@@ -233,7 +233,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o tipo de operacao que usu·rio incluiu de acordo com a tabela sliptipooperacao
+   * Retorna o tipo de operacao que usu√°rio incluiu de acordo com a tabela sliptipooperacao
    * @throws Exception
    * @return integer codigo do tipo da operacao (sliptipooperacao)
    */
@@ -242,13 +242,13 @@ abstract class Transferencia {
     if (empty($this->iTipoOperacao)) {
 
       /*
-       * Busca o tipo de inclus„o para descobrirmos qual documento vamos executar
+       * Busca o tipo de inclus√£o para descobrirmos qual documento vamos executar
        */
       $oDaoSlipTipoOperacao  = db_utils::getDao('sliptipooperacaovinculo');
       $sSqlBuscaTipoOperacao = $oDaoSlipTipoOperacao->sql_query_file($this->getCodigoSlip());
       $rsBuscaTipoOperacao   = $oDaoSlipTipoOperacao->sql_record($sSqlBuscaTipoOperacao);
       if ($oDaoSlipTipoOperacao->numrows == 0) {
-        throw new Exception("N„o foi possÌvel localizar o tipo de operaÁ„o do slip {$this->getCodigoSlip()}.");
+        throw new Exception("N√£o foi poss√≠vel localizar o tipo de opera√ß√£o do slip {$this->getCodigoSlip()}.");
       }
       $iTipoOperacao       = db_utils::fieldsMemory($rsBuscaTipoOperacao, 0)->k153_slipoperacaotipo;
       $this->iTipoOperacao = $iTipoOperacao;
@@ -287,11 +287,11 @@ abstract class Transferencia {
     $sSqlExecutaAutenticacao = "select fc_auttransf({$iCodigoSlip}, '{$dtSessao}', '{$iIp}', true, 0, {$iCodigoInstituicao}) as fc_autenticacao";
     $rsExecutaAutenticacao = db_query($sSqlExecutaAutenticacao);
     if (!$rsExecutaAutenticacao) {
-      throw new Exception("N„o foi possÌvel realizar a autenticaÁ„o");
+      throw new Exception("N√£o foi poss√≠vel realizar a autentica√ß√£o");
     }
     $sStringAutenticacao = db_utils::fieldsMemory($rsExecutaAutenticacao, 0)->fc_autenticacao;
     if (substr($sStringAutenticacao, 0, 1) != 1) {
-      throw new Exception("N„o foi possÌvel executar a autenticaÁ„o.\n\n{$sStringAutenticacao}");
+      throw new Exception("N√£o foi poss√≠vel executar a autentica√ß√£o.\n\n{$sStringAutenticacao}");
     }
 
     $this->setIDTerminal($iCodigoTerminal);
@@ -303,9 +303,9 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o documento por tipo de inclus„o
+   * Retorna o documento por tipo de inclus√£o
    * @throws Exception
-   * @return integer - Codigo do documento que ser· executado no lanÁamento cont·bil
+   * @return integer - Codigo do documento que ser√° executado no lan√ßamento cont√°bil
    */
   public function getDocumentoPorTipoInclusao() {
 
@@ -340,7 +340,7 @@ abstract class Transferencia {
         break;
 
       /**
-       * CauÁ„o
+       * Cau√ß√£o
        */
       case 7:
         $iCodigoDocumento = 150;
@@ -356,7 +356,7 @@ abstract class Transferencia {
         break;
 
       /**
-       * DepÛsito de Diversas Origens
+       * Dep√≥sito de Diversas Origens
        */
       case 11:
         $iCodigoDocumento = 160;
@@ -400,7 +400,7 @@ abstract class Transferencia {
   }
 
   /**
-   * CÛdigo sequencial do Slip
+   * C√≥digo sequencial do Slip
    * @return int
    */
   public function getCodigoSlip() {
@@ -615,14 +615,14 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna a instituiÁ„o que criou a transferencia
+   * Retorna a institui√ß√£o que criou a transferencia
    * @return integer
    */
   public function getInstituicao() {
     return $this->oSlip->getInstituicao();
   }
   /**
-   * Seta a instituiÁ„o que criou a transferencia
+   * Seta a institui√ß√£o que criou a transferencia
    * @param integer
    */
   public function setInstituicao($iInstituicao) {
@@ -662,7 +662,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Seta o tipo de operaÁ„o
+   * Seta o tipo de opera√ß√£o
    * @param integer $iTipoOperacao
    */
   public function setTipoOperacao($iTipoOperacao) {
@@ -670,7 +670,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Retorna o tipo de operaÁ„o de um slip
+   * Retorna o tipo de opera√ß√£o de um slip
    * @return integer
    */
   public function getTipoOperacao() {
@@ -752,7 +752,7 @@ abstract class Transferencia {
     $sLocalizacao = "contabilidade.caixa.Transferencia.";
 
     if (empty($this->oFinalidadePagamentoFundebCredito)) {
-      throw new BusinessException("N„o È possÌvel executar o mÈtodo. Objetos FinalidadePagamentoFundeb n„o foram setados.");
+      throw new BusinessException("N√£o √© poss√≠vel executar o m√©todo. Objetos FinalidadePagamentoFundeb n√£o foram setados.");
     }
 
     if ($this->getDataAutenticacao() != "") {
@@ -834,7 +834,7 @@ abstract class Transferencia {
   protected function vinculaSlipTipoDeOperacao() {
 
     /**
-     * Excluimos o vÌnculo para incluirmos novamente
+     * Excluimos o v√≠nculo para incluirmos novamente
      */
     $this->excluiVinculoTipoDeOperacao();
 
@@ -852,7 +852,7 @@ abstract class Transferencia {
   }
 
   /**
-   * MÈtodo que verifica se o slip j· possui alguma autenticaÁ„o
+   * M√©todo que verifica se o slip j√° possui alguma autentica√ß√£o
    * @return boolean
    */
   public function possuiAutenticacao() {
@@ -867,7 +867,7 @@ abstract class Transferencia {
   }
 
   /**
-   * Exclui o slip em caso de n„o ter sido autenticado nenhuma vez.
+   * Exclui o slip em caso de n√£o ter sido autenticado nenhuma vez.
    * @throws BusinessException
    * @return boolean true
    */
@@ -875,7 +875,7 @@ abstract class Transferencia {
 
     /**
      * OC 12180
-     * Exclus„o de Slips anulados ou n„o autenticados.
+     * Exclus√£o de Slips anulados ou n√£o autenticados.
      */
     if ($this->possuiAutenticacao()) {
             $oDaoLancamento      = new cl_conlancamslip();
@@ -956,12 +956,12 @@ abstract class Transferencia {
       $iCodSlip = $this->getCodigoSlip();
 
       $oDaoExcluirSlip = new cl_slipanul();
-      $oDaoExcluirSlip->excluir($this->getCodigoSlip());
+      $oDaoExcluirSlip->excluir(null, "k18_codigo = {$this->getCodigoSlip()}");
       if ($oDaoExcluirSlip->erro_status == "0") {
         throw new BusinessException("financeiro.caixa.Transferencia.exclusao_anulacao_slip");
       }
 
-      if ($this->atualizaSaldos($iCodSlip)) {
+    if ($this->atualizaSaldos($iCodSlip)) {
           
           $oDaoExcluirSlip = new cl_slip();
           $oDaoExcluirSlip->excluir($this->getCodigoSlip());
@@ -984,13 +984,107 @@ abstract class Transferencia {
   public function atualizaSaldos($iCodSlip) {
 
   $clTransferencia = new cl_conlancamslip();
-  $sSqlSlip = $clTransferencia->sql_query_lancamento_slip(null, "date_part('y', k17_data) as ano, k17_instit", null, "c84_slip = $iCodSlip and k17_situacao in (1, 4)");
+  $sSqlSlip = $clTransferencia->sql_query_lancamento_slip(null, "date_part('y', k17_data) as ano, k17_instit,c70_codlan lancam", null, "c84_slip = $iCodSlip and k17_situacao in (1, 4)");
   $resultSlip = db_utils::fieldsMemory($result = db_query($sSqlSlip),0);
   $sql = "select fc_removeslip($iCodSlip, $resultSlip->ano, $resultSlip->k17_instit)";
+
+      /*
+       * exclus√£o movimenta√ß√£o caixa/tesouraria
+       */
+      db_inicio_transacao();
+
+      $sqlExcluirautentslip = "create temporary table w_chaveslip on commit drop as select c86_id as id,c86_data as data,c86_autent as autent from conlancamcorrente inner join conlancamslip on c84_conlancam = c86_conlancam inner join slip on k17_codigo = c84_slip where k17_codigo = $iCodSlip;
+        delete from conlancamcorrente using w_chaveslip where c86_id = id and c86_data = data and c86_autent = autent;
+        delete from corlanc using w_chaveslip where k12_id = id and k12_data = data and k12_autent = autent;
+        delete from corautent using w_chaveslip where k12_id = id and k12_data = data and k12_autent = autent;
+        delete from corrente using w_chaveslip where k12_id = id and k12_data = data and k12_autent = autent;";
+
+      $sqlExcluirautentslip = db_query($sqlExcluirautentslip);
+
+      /*
+       * exclus√£o lancamentos contabeis vinculados ao slip
+       */
+
+      $rsCodLan = db_query("select c84_conlancam from conlancamslip WHERE c84_slip = $iCodSlip");
+
+      $aCodLan = array();
+
+      for ($iContLan=0;$iContLan < pg_num_rows($rsCodLan); $iContLan++) { 
+        $aCodLan[] = db_utils::fieldsMemory($rsCodLan, $iContLan)->c84_conlancam;
+      }
+
+      $oDaoExcluirSlip = new cl_conlancamcgm();
+      $oDaoExcluirSlip->excluir(null, "c76_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancamcgm");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancamdoc();
+      $oDaoExcluirSlip->excluir(null, "c71_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancamdoc");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancamdoc();
+      $oDaoExcluirSlip->excluir(null, "c71_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancamdoc");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancamcompl();
+      $oDaoExcluirSlip->excluir(null, "c72_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancamcompl");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancampag();
+      $oDaoExcluirSlip->excluir(null, "c82_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancampag");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancaminstit();
+      $oDaoExcluirSlip->excluir(null, "c02_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancaminstit");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancamordem();
+      $oDaoExcluirSlip->excluir(null, "c03_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancamordem");
+      }
+
+      $oDaoExcluirSlip = new cl_contacorrentedetalheconlancamval();
+      $oDaoExcluirSlip->excluir(null, "c28_conlancamval IN (SELECT c69_sequen FROM conlancamval WHERE c69_codlan IN (". implode(",", $aCodLan). "))");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("Erro ao excluir Slip. Verificar encerramento do periodo contabil");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancamval();
+      $oDaoExcluirSlip->excluir(null, "c69_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("Erro ao excluir Slip. Verificar encerramento do periodo contabil");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancamslip();
+      $oDaoExcluirSlip->excluir(null, "c84_conlancam IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancamslip");
+      }
+
+      $oDaoExcluirSlip = new cl_conlancam();
+      $oDaoExcluirSlip->excluir(null, "c70_codlan IN (". implode(",", $aCodLan). ")");
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_conlancam");
+      }
+
 
   $rsResultFcRemoveSlip = db_query($sql);
 
   $sRetorno = db_utils::fieldsMemory($rsResultFcRemoveSlip, 0);
+
+  db_fim_transacao($sqlerro);
 
   if($sRetorno == 1) {
     return true;
@@ -1055,7 +1149,7 @@ abstract class Transferencia {
 
 
   /**
-   * Executa o lanÁamento na contabilidade com os dados autenticados na tesouraria
+   * Executa o lan√ßamento na contabilidade com os dados autenticados na tesouraria
    * @param AutenticacaoTesouraria $oAutenticacao
    * @return bool
    */

@@ -152,7 +152,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                       $iFonteAlterada = $oDadosRPSD->codfontrecursos;
                   }
                   $clrpsd10->si189_tiporegistro = $oDadosRPSD->tiporegistro;
-                  $clrpsd10->si189_codreduzidorsp = $oDadosRPSD->codreduzidorsp;
+                  $clrpsd10->si189_codreduzidorsp = $oDadosRPSD->codreduzidorsp.$oDadosRPSD->tipopagamentorsp;
                   $clrpsd10->si189_codorgao = $oDadosRPSD->codorgao;
                   $clrpsd10->si189_nroempenho = $oDadosRPSD->nroempenho;
                   $clrpsd10->si189_exercicioempenho = $oDadosRPSD->exercicioempenho;
