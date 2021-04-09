@@ -10,7 +10,7 @@ e-cidade			5432	pmsaojoaodaponte
 e-cidade			5432	cmuba
 e-cidade			5432	pmpirapora
 e-cidade			5432	cisaje
-e-cidade        		5432	prevmoc
+e-cidade        	5432	prevmoc
 e-cidade			5432	pmverdelandia
 e-cidade			5432	pmvarzelandia
 e-cidade			5432	pmclarodospocoes
@@ -83,6 +83,7 @@ cisaje              5432    e-cidade
 cmnavarro           5432    e-cidade
 cmluislandia        5432    e-cidade
 cisnorte            5432    e-cidade
+cisarp              5432    e-cidade
 
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
