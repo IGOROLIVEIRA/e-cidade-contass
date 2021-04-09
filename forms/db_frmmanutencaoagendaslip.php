@@ -469,6 +469,13 @@ $db_opcao = 1;
           nValorTotal   = new Number(nValor).toFixed(2);
           var lDisabled = false;
           var sDisabled = "";
+          if (e91_codmov != '' || e90_codmov != '' && e90_cancelado == 'f') {
+              
+            lDisabled = true;
+            sDisabled = " disabled ";
+
+          }
+
           var aLinha  = new Array();
 
           aLinha[0]   = e81_codmov;
@@ -487,10 +494,20 @@ $db_opcao = 1;
             aLinha[5]   = "<span style='display:none'>con</span>"+k17_debito+ " - "+descricaodebito.urlDecode();
           }
           aLinha[6]   = js_createComboForma(e97_codforma, e81_codmov, lDisabled);
-          aLinha[7]   = js_createInputNumDocumento(e81_numdoc, e81_codmov, e97_codforma);
+          
+          if (e91_cheque != '') {
+            aLinha[7]   = e91_cheque;
+          } else {
+            aLinha[7]   = js_createInputNumDocumento(e81_numdoc, e81_codmov, e97_codforma);
+          }
+          
           aLinha[8]   = js_formatar(k17_data,"d");
           aLinha[9]   = js_formatar(k17_valor,"f");
 		  aLinha[10]  = e91_codcheque;
+
+          if (e97_codforma == 2) {
+              lDisabled = false;
+          }
 
           gridNotas.addRow(aLinha, false, lDisabled);
 
@@ -555,9 +572,6 @@ $db_opcao = 1;
         }
         $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)+1;
 
-		if ($(sRow).className == 'configuradamarcado' && oRow.aCells[7].getValue() == 2 && Number($('total_selecionados').innerHTML) == 1) {
-			$('emitecheque').disabled = false;
-		}
       } else {
 
         $(sRow).className = oRow.getClassName();
@@ -566,8 +580,9 @@ $db_opcao = 1;
         if (lVerificaSaldo) {
           $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
         }
-		$('emitecheque').disabled = true;
       }
+
+      js_trataBotaoEmitirCheque();
     }
     gridNotas.selectAll = function(idObjeto, sClasse, sLinha) {
 
@@ -911,8 +926,14 @@ $db_opcao = 1;
 		var iNota            = aMovimentos[iMov].aCells[2].getValue();
 		var iContaFornecedor = aMovimentos[iMov].aCells[6].getValue();
 		var iContaPagadora   = aMovimentos[iMov].aCells[4].getValue();
-		var sNumDoc 		 = aMovimentos[iMov].aCells[8].getValue();
-		var iCodCheque 		 = aMovimentos[iMov].aCells[11].getValue();
+        
+        if (iForma != 1 && iForma != 2) {
+            var sNumDoc      = aMovimentos[iMov].aCells[8].getValue().trim();
+        }
+        
+        if (iForma == 2) {                
+            var iCodCheque   = aMovimentos[iMov].aCells[11].getValue().trim();
+        }  
 
 	  /**
 	   * Se for cheque, verifica se o cheque já foi emitido
@@ -966,8 +987,15 @@ $db_opcao = 1;
       oMovimento.iContaPagadora   = iContaPagadora;
       oMovimento.iCodNota         = iNota;
       oMovimento.nValorRetencao   = 0
-	  oMovimento.sNumDoc 		  = sNumDoc;
-	  oMovimento.iCodCheque 	  = iCodCheque;
+
+      if (iForma != 1 && iForma != 2) {
+        oMovimento.sNumDoc 		  = sNumDoc;
+      }
+      
+      if (iForma == 2) {                
+        oMovimento.iCodCheque 	  = iCodCheque;
+      } 
+      
       oEnvio.aMovimentos.push(oMovimento);
     }
 
@@ -1247,7 +1275,7 @@ $db_opcao = 1;
 
 		var aMovimentos = gridNotas.getSelection();
 
-		if (aMovimentos.length == 1) {
+		if (aMovimentos.length > 0) {
 			
 			var dtBase      = $F('e42_dtpagamento');
 			var iCheque     = $('iCheque').value;
@@ -1314,23 +1342,41 @@ $db_opcao = 1;
 
 		windowChequeItem.destroy();
 
-		oNota   = new Object();
-		oCheque = new Object();
-		oParam  = new Object();
+        let aNotas = [];
+        let lCredorUnico = true;
 
-		oNota.iCodAgenda = null;
-		oNota.iCodMov    = aMovimentos[0][0];
-		oNota.iCodNota   = aMovimentos[0][2];
-		oNota.iNumEmp    = "0";
-		oNota.nValor     = js_strToFloat(aMovimentos[0][10]);
-		oNota.iCodTipo   = aMovimentos[0][4];
+        aMovimentos.each(function(aMovimento){
+
+            if (encodeURIComponent(aMovimentos[0][5]) != encodeURIComponent(aMovimento[5])) {
+                lCredorUnico = false;
+            }
+
+            oNota   = new Object();
+            oNota.iCodAgenda = null;
+            oNota.iCodMov    = aMovimento[0];
+            oNota.iCodNota   = aMovimento[2];
+            oNota.iNumEmp    = "0";
+
+            oNota.nValor     = js_strToFloat(aMovimento[10]);
+            oNota.iCodTipo   = aMovimento[4];
+            
+            aNotas.push(oNota);
+
+        });
+
+        if (!lCredorUnico) {
+            alert('Só é permitido gerar mais de um cheque para o mesmo credor');
+            return false;
+        }
+
+		oCheque = new Object();
+		oParam  = new Object();		
 
 		oCheque.sCredor             = encodeURIComponent(aMovimentos[0][5]);
 		oCheque.dtData              = dtData;
 		oCheque.aTotCheques         = [];
 		oCheque.numeroCheque        = iNumCheque;
-		oCheque.aNotasLiquidacao    = [];
-		oCheque.aNotasLiquidacao[0] = oNota;        
+		oCheque.aNotasLiquidacao    = aNotas;
 
 		oParam.exec         = 'emitirCheque';
 		oParam.params       = [];
@@ -1394,6 +1440,32 @@ $db_opcao = 1;
 		return strData;
 
 	}
+
+    function js_trataBotaoEmitirCheque() {
+
+        var aMovimentos = gridNotas.getSelection("object");
+        let lDisabled = false;
+
+        aMovimentos.each(function (aMovimento) {
+
+            console.log(aMovimento);
+
+            if (aMovimento.getClassName() == 'configurada' && aMovimento.aCells[7].getValue() == 2) {
+                return;
+            } else {
+                lDisabled = true;
+            }
+
+        });
+
+        if (aMovimentos.length == 0) {
+            $('emitecheque').disabled = true;
+        } else {
+            $('emitecheque').disabled = lDisabled;
+        }
+
+    }
+
 
   js_init();
 </script>
