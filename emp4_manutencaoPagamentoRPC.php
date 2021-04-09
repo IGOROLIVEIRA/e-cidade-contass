@@ -533,17 +533,12 @@ switch($oParam->exec) {
     $sWhere  = " s.k17_instit = ".db_getsession("DB_instit");
     $sWhere .= " and e81_cancelado is null ";
     
-    if (isset($oParam->params[0]->lBuscaCheque) && $oParam->params[0]->lBuscaCheque == 1) {
+    if (!isset($oParam->params[0]->lBuscaCheque) && $oParam->params[0]->lBuscaCheque != 1) {
 
-		$sWhere .= " and e91_codmov is not null    ";
-    	$sWhere .= " and (e90_cancelado is false or e90_cancelado is not null)";
-
-    } else {
-
-    	$sWhere .= " and e91_codmov is null    ";
+      	$sWhere .= " and e91_codmov is null    ";
     	$sWhere .= " and (e90_cancelado is true or e90_cancelado is null)";
-	
-	}   
+
+    }
     
     $sWhere .= "and k17_situacao in(1,3)   ";
     if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim == "") {

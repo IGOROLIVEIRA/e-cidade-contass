@@ -1111,7 +1111,7 @@ if (count($aParametrosEmpenho) > 0) {
 
                 oRow.isSelected    = true;
                 $(sRow).className += 'marcado';
-                if (oRow.aCells[8].getValue() != "" && lVerificaSaldo) {
+                if (oRow.aCells[6].getValue() != "" && lVerificaSaldo) {
                     if ($('ctapag' + oRow.aCells[1].getValue())) {
                         js_getSaldos(oRow.aCells[1].getValue());
                     }
