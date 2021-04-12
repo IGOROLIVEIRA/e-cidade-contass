@@ -75,12 +75,12 @@ if (USE_PCASP) {
                    conplanoconta_deb.c63_agencia||'-'||conplanoconta_deb.c63_dvagencia as agencia_debito,
                    conplanoconta_deb.c63_conta||'-'||conplanoconta_deb.c63_dvconta as conta_debito,
                    case when
-                        conplanoconta_cred.c63_codcon is not null then reduz_credito.c61_codigo::text 
-                        else '' 
+                        conplanoconta_cred.c63_codcon is not null then reduz_credito.c61_codigo::text
+                        else ''
                    end as fonte_credito,
                    case when
                         conplanoconta_deb.c63_codcon is not null then reduz_debito.c61_codigo::text
-                        else '' 
+                        else ''
                    end as fonte_debito
             from slip
                  left join db_usuarios on db_usuarios.id_usuario = slip.k17_id_usuario
@@ -118,12 +118,18 @@ if (USE_PCASP) {
                  left join identificacaoresponsaveis ordenador on ordenador.si166_instit= k17_instit and ordenador.si166_tiporesponsavel=1
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',ordenador.si166_dataini) AND DATE_PART('YEAR',ordenador.si166_datafim)
                  left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm
-
-
-           where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');
-
+            WHERE k17_instit = " . db_getsession('DB_instit');
+        // Condição da OC14441
+        if ($numslip)
+            $sql .= " AND slip.k17_codigo = {$numslip} ";
+        if ($numslip_de)
+            $sql .= " AND slip.k17_codigo BETWEEN {$numslip_de} AND {$numslip_ate} ";
+        if ($dtini AND $dtfim)
+            $sql .= " AND slip.k17_data BETWEEN '" . date("Y-m-d", strtotime($dtini)) . "' AND '" . date("Y-m-d", strtotime($dtfim)) . "' ";
+        if ($listacgm)
+            $sql .= " AND cgm.z01_numcgm IN ({$listacgm}) ";
+        $sql .= " ORDER BY slip.k17_codigo ";
 } else {
-
     $sql = "select slip.*,
           z01_cgccpf,
           z01_numcgm ,
@@ -145,7 +151,17 @@ if (USE_PCASP) {
           c60_anousu = ".db_getsession("DB_anousu")."
           left outer join saltes p2   on slip.k17_credito = p2.k13_reduz
           left outer join conhist     on slip.k17_hist = conhist.c50_codhist
-          where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');
+          where k17_instit = ".db_getsession('DB_instit');
+    // Condição da OC14441
+    if ($numslip)
+        $sql .= " AND slip.k17_codigo = {$numslip} ";
+    if ($numslip_de)
+        $sql .= " AND slip.k17_codigo BETWEEN {$numslip_de} AND {$numslip_ate} ";
+    if ($dtini)
+        $sql .= " AND slip.k17_data BETWEEN '" . date("Y-m-d", strtotime($dtini)) . "' AND '" . date("Y-m-d", strtotime($dtfim)) . "' ";
+    if ($listacgm)
+        $sql .= " AND cgm.z01_numcgm IN ({$listacgm}) ";
+    $sql .= " ORDER BY slip.k17_codigo ";
 }
 
 try {
@@ -158,21 +174,23 @@ try {
         $aMotivo = db_fieldsMemory($dados,0);
         $motivo  = $k18_motivo;
         if (USE_PCASP) {
-
             $sEvento = $k152_sequencial . " - " . $k152_descricao;
         }
     }
-
 
     // seleciona os recursos envolvidos, ligados a conta recebedora do slip
     $sql = "select k29_recurso,
                  o15_descr,
                  k29_valor
           from sliprecurso
-        inner join orctiporec on o15_codigo = k29_recurso
-    where k29_slip= $numslip
-    order by k29_recurso
-         ";
+        inner join orctiporec on o15_codigo = k29_recurso";
+    // Condição da OC14441
+    if ($numslip)
+        $sql .= " where k29_slip = {$numslip} ";
+    if ($numslip_de)
+        $sql .= " where k29_slip BETWEEN {$numslip_de} AND {$numslip_ate} ";
+    $sql .= "order by k29_recurso";
+
     $recursos  = db_query($sql);
     // se houverem registros, monta um array
     $array_recursos =  array();
@@ -189,7 +207,7 @@ try {
     if (pg_numrows($dados) == 0) {
         throw new Exception('Documento de Slip não Cadastrado.');
     }
-
+    // LOOP AQUI
     db_fieldsmemory($dados,0);
 
     $sqlcai = "select * from caiparametro where k29_instit = ".db_getsession('DB_instit');
@@ -225,11 +243,13 @@ try {
         $codmodelo = $k29_modslipnormal;
     }
 
+    // Criando o pdf do modelo
     $pdf1 = new scpdf();
     $pdf1->Open();
+
     $pdf = new db_impcarne($pdf1, $codmodelo);
-    $pdf->objpdf->AddPage();
     $pdf->objpdf->SetTextColor(0, 0, 0);
+    $pdf->objpdf->AddPage();
 
     // trecho para relatorio
     $head1 = "Texto numero 1";
@@ -257,17 +277,17 @@ try {
     $iCpfCnpjCredor       = $z01_numcgm;
     $oDaoPcfornecon      = db_utils::getDao('pcfornecon');
     $sCamposDadosCredor  = "pc63_banco, pc63_agencia, pc63_agencia_dig, pc63_conta, pc63_conta_dig,";
-    $sCamposDadosCredor .= "(select db90_descr from db_bancos where db90_codban = pc63_banco) as descricrao_banco, ";
-    $sCamposDadosCredor .= "pc64_contabanco";
+    $sCamposDadosCredor  .= "(select db90_descr from db_bancos where db90_codban = pc63_banco) as descricrao_banco, ";
+    $sCamposDadosCredor  .= "pc64_contabanco";
     $sWhereDadosCredor   = "pc63_numcgm = {$iCpfCnpjCredor} ";
-    $sWhereDadosCredor  .= "ORDER BY pc64_contabanco ";
+    $sWhereDadosCredor   .= "ORDER BY pc64_contabanco ";
     $sSqlDadosCredor     = $oDaoPcfornecon->sql_query_padrao(null, $sCamposDadosCredor, null, $sWhereDadosCredor);
     $rsDadosCredor       = db_query($sSqlDadosCredor);
+
     /**
      * Erro no sql
      */
-    if ( !$rsDadosCredor ) {
-
+    if (!$rsDadosCredor) {
         $sMensagemErro = "Erro ao buscar dados do credor.\n\n" . pg_last_error();
         throw new Exception($sMensagemErro);
     }
@@ -275,8 +295,7 @@ try {
     /**
      * Dados bancarios da conta padrao
      */
-    if ( pg_num_rows($rsDadosCredor) > 0 ) {
-
+    if (pg_num_rows($rsDadosCredor) > 0) {
         $oDadosCredor         = db_utils::fieldsMemory($rsDadosCredor, 0);
         $oDadosBancarioCredor = new StdClass();
 
@@ -289,7 +308,6 @@ try {
 
         $pdf->oDadosBancarioCredor = $oDadosBancarioCredor;
     }
-
 
     /**
      * assinturas
@@ -315,14 +333,11 @@ try {
     $pdf->logo     = $logo;
     $pdf->motivo   = $motivo;
     $pdf->sEvento  = $sEvento;
-    $pdf->objpdf->AliasNbPages();
-    $pdf->objpdf->settopmargin(1);
 
+    $pdf->objpdf->AliasNbPages();
     $pdf->imprime();
     $pdf->objpdf->Output();
-
 } catch (Exception $oErro) {
-
     $sErro = str_replace("\n", '\n', $oErro->getMessage());
 
     $sMensagemErro .= "<script>                                 ";

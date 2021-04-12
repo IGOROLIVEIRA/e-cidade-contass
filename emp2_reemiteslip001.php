@@ -29,7 +29,9 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
+require_once("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
+$aux = new cl_arquivo_auxiliar;
 $clrotulo = new rotulocampo;
 $clrotulo->label("k17_codigo");
 db_postmemory($HTTP_POST_VARS);
@@ -40,83 +42,187 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script>
-function js_abre(){
-  if(document.form1.k17_codigo.value == ""){
-    document.form1.k17_codigo.style.backgroundColor='#99A9AE';
-    document.form1.k17_codigo.focus();
-    alert("Informe o código Slip.");
-  }else{
-    jan = window.open('cai1_slip003.php?numslip='+document.form1.k17_codigo.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    jan.moveTo(0,0);
-    document.form1.k17_codigo.style.backgroundColor='';
-  }
-}
-</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
-  </head>
-  <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.k17_codigo.focus();" bgcolor="#cccccc">
-    <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-      <tr>
-	<td width="360" height="18">&nbsp;</td>
-	<td width="263">&nbsp;</td>
-	<td width="25">&nbsp;</td>
-	<td width="140">&nbsp;</td>
-      </tr>
-    </table>
-<center>
-<form name="form1" method="post">
+</head>
 
-<table border='0'>
-<tr height="20px">
-<td ></td>
-<td ></td>
-</tr>
-  <tr>
-    <td  align="left" nowrap title="<?=$Tk17_codigo?>"> <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",1);?>  </td>
-    <td align="left" nowrap>
-      <?
-         db_input("k17_codigo",8,$Ik17_codigo,true,"text",4,"onchange='js_pesquisak17_codigo(false);'");
-      ?>
-    </td>
-  </tr>
-  <tr height="20px">
-  <td ></td>
-  <td ></td>
-  </tr>
-  <tr>
-  <td colspan="2" align="center">
-    <input name="relatorio" type="button" onclick='js_abre();'  value="Gerar relatório">
-  </td>
-  </tr>
-  </table>
-  </form>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.k17_codigo_de.focus();" bgcolor="#cccccc">
+    <table valign="top" marginwidth="0" border="0" cellspacing="0" cellpadding="0" align="center">
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td align="center" valign="top">
+                <form name='form1'>
+                    <fieldset>
+                        <legend><b>Reemissão de Slip</b></legend>
+                        <table border='0'>
+                            <tr height="20px"><td></td></tr>
+                            <tr>
+                                <td nowrap>
+                                    <?
+                                        // $aux = new cl_arquivo_auxiliar;
+                                        $aux->cabecalho      = "<strong>CGM</strong>";
+                                        $aux->codigo         = "z01_numcgm"; //chave de retorno da func
+                                        $aux->descr          = "z01_nome";   //chave de retorno
+                                        $aux->nomeobjeto     = 'lista';
+                                        $aux->funcao_js      = 'js_mostra';
+                                        $aux->funcao_js_hide = 'js_mostra1';
+                                        $aux->sql_exec       = "";
+                                        $aux->func_arquivo   = "func_nome.php";  //func a executar
+                                        $aux->isfuncnome     = true;
+                                        $aux->nomeiframe     = "db_iframe_cgm";
+                                        $aux->localjan       = "";
+                                        $aux->onclick        = "";
+                                        $aux->db_opcao       = 2;
+                                        $aux->tipo           = 2;
+                                        $aux->top            = 0;
+                                        $aux->linhas         = 10;
+                                        $aux->vwhidth        = 400;
+                                        $aux->funcao_gera_formulario();
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap title="<?=$Tk17_codigo?>"><? db_ancora("<b>Slip</b>", "js_pesquisak17_codigo_de(true);", 1); ?></td>
+                                <td nowrap>
+                                    <? db_input("k17_codigo_de", 15, $Ik17_codigo, true, "text", 4, "onchange='js_pesquisak17_codigo_de(false);'"); ?>
+                                    <? db_ancora("<b>à</b>", "js_pesquisak17_codigo_ate(true);", 1); ?>
+                                    <? db_input("k17_codigo_ate", 15, $Ik17_codigo, true, "text", 4, "onchange='js_pesquisak17_codigo_ate(false);'", "k17_codigo_ate"); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong> Período:</strong></td>
+                                <td>
+                                    <? db_inputdata('dtini', @$dia, @$mes, @$ano, true, 'text', 1, ""); ?>
+                                    à
+                                    <? db_inputdata('dtfim', @$dia, @$mes, @$ano, true, 'text', 1, ""); ?>
+                                </td>
+                            </tr>
+                            <tr height="20px">
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" align="center">
+                                    <input name="relatorio" type="button" onclick='js_abre();' value="Imprimir">
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            </td>
+        </tr>
+    </table>
 </center>
-<? db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));?>
+<? db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit")); ?>
 <script>
-//--------------------------------
-function js_pesquisak17_codigo(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
-  }else{
-     if(document.form1.k17_codigo.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?pesquisa_chave='+document.form1.k17_codigo.value+'&funcao_js=parent.js_mostraslip','Pesquisa',false);
-     }else{
-       document.form1.t52_descr.value = '';
-     }
-  }
-}
-function js_mostraslip(chave,erro){
-  if(erro==true){
-    document.form1.k17_codigo.focus();
-    document.form1.k17_codigo.value = '';
-  }
-}
-function js_mostraslip1(chave1){
-  document.form1.k17_codigo.value = chave1;
-  db_iframe_slip.hide();
-}
-//--------------------------------
+    var k17_codigo_de  = document.form1.k17_codigo_de;
+    var k17_codigo_ate = document.form1.k17_codigo_ate;
+    var t52_descr      = document.form1.t52_descr;
+    var dtini          = document.form1.dtini;
+    var dtfim          = document.form1.dtfim;
+    var lista          = document.form1.lista;
+    //--------------------------------
+    function js_pesquisak17_codigo_de(mostra){
+        if (mostra == true) {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_slip', 'func_slip.php?funcao_js=parent.js_mostraslip1_de|k17_codigo', 'Pesquisa', true);
+        } else {
+            if (k17_codigo_de != '') {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_slip', 'func_slip.php?pesquisa_chave=' + k17_codigo_de.value + '&funcao_js=parent.js_mostraslip_de','Pesquisa', false);
+            } else {
+                t52_descr.value = '';
+            }
+        }
+    }
+
+    function js_pesquisak17_codigo_ate(mostra){
+        if (mostra == true) {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_slip', 'func_slip.php?funcao_js=parent.js_mostraslip1_ate|k17_codigo', 'Pesquisa', true);
+        } else {
+            if (k17_codigo_ate != '') {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_slip', 'func_slip.php?pesquisa_chave=' + k17_codigo_ate.value + '&funcao_js=parent.js_mostraslip_ate','Pesquisa', false);
+            } else {
+                t52_descr.value = '';
+            }
+        }
+    }
+
+    function js_mostraslip_de(chave, erro) {
+        if (erro == true) {
+            k17_codigo_de.focus();
+            k17_codigo_de.value = '';
+        }
+    }
+
+    function js_mostraslip_ate(chave, erro) {
+        if (erro == true) {
+            k17_codigo_ate.focus();
+            k17_codigo_ate.value = '';
+        }
+    }
+
+    function js_mostraslip1_de(chave1) {
+        k17_codigo_de.value = chave1;
+        db_iframe_slip.hide();
+    }
+
+    function js_mostraslip1_ate(chave1) {
+        k17_codigo_ate.value = chave1;
+        db_iframe_slip.hide();
+    }
+
+    function trata_data(data) {
+        var dataFinal = data.split("/");
+        return dataFinal[2] + "-" + dataFinal[1] + "-" + dataFinal[0];
+    }
+
+    function js_abre() {
+        var query = "";
+        var error = false;
+
+        if (k17_codigo_de.value == "" && (dtini.value == '' && dtfim.value == '') && lista.length == 0) {
+            k17_codigo_de.style.backgroundColor='#99A9AE';
+            k17_codigo_de.focus();
+            alert("Informe o código Slip, CGM ou um período");
+            error = true;
+        } else {
+            if (k17_codigo_de.value != "")
+                query += "numslip_de=" + k17_codigo_de.value;
+            if ((dtini.value != '') && (dtfim.value != '')) {
+                if (k17_codigo_de.value != "")
+                    query += "&";
+                query += "dtini=" + trata_data(dtini.value) + "&dtfim=" + trata_data(dtfim.value);
+            }
+            var vir      = "";
+            var listacgm = "";
+
+            for (x = 0; x < lista.length; x++) {
+                listacgm += vir + lista.options[x].value;
+                vir       = ",";
+            }
+
+            query += "&listacgm=" + listacgm;
+        }
+
+        if (k17_codigo_de.value != "" && k17_codigo_ate.value != "" && !error) {
+            if (Number(k17_codigo_de.value) > Number(k17_codigo_ate.value)) {
+                alert("Slip inicial maior que a slip final. Verifique!");
+                k17_codigo_ate.value = "";
+                error = true;
+            } else {
+                query += "&numslip_ate=" + k17_codigo_ate.value;
+            }
+        } else {
+            if (k17_codigo_de.value != "")
+               query += "&numslip_ate=" + k17_codigo_de.value;
+        }
+
+        if (!error) {
+            jan = window.open('cai1_slip003.php?' + query, '', 'width=' + (screen.availWidth - 5) + ', height=' + (screen.availHeight - 40) +', scrollbars=1,location=0');
+            jan.moveTo(0,0);
+            k17_codigo_de.style.backgroundColor = '';
+        }
+    }
+    //--------------------------------
 </script>
 </body>
 </html>
