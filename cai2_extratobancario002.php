@@ -66,6 +66,9 @@ $sql ="	    select   k13_reduz,
                      c60_estrut,
                      c60_codsis,
 	                   c63_conta,
+                       c63_dvconta,
+                       c63_agencia,
+                       c63_dvagencia,
 	                   substr(fc_saltessaldo,2,13)::float8 as anterior,
 	                   substr(fc_saltessaldo,15,13)::float8 as debitado ,
 	                   substr(fc_saltessaldo,28,13)::float8 as creditado,
@@ -77,6 +80,9 @@ $sql ="	    select   k13_reduz,
 	                         c60_estrut,
 		                       c60_codsis,
 		                       c63_conta,
+                               c63_dvconta,
+                               c63_agencia,
+                               c63_dvagencia,
 	                         fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',null," . db_getsession("DB_instit") . ")
 	                  from   saltes
 	                         inner join conplanoexe   on k13_reduz = c62_reduz
@@ -124,6 +130,8 @@ for($linha=0;$linha<$numrows;$linha++){
 	// escreve a conta e a descrição + saldo inicial
 	$aContas[$k13_reduz]->k13_reduz = $k13_reduz;
 	$aContas[$k13_reduz]->k13_descr = $k13_descr;
+    $aContas[$k13_reduz]->c63_conta = $c63_conta.'-'.$c63_dvconta;
+    $aContas[$k13_reduz]->c63_agencia = $c63_agencia.'-'.$c63_dvagencia;
 	$aContas[$k13_reduz]->k13_dtimplantacao = $k13_dtimplantacao;
 
 	// para contas bancárias, saldo positivo = debito, negativos indica debito
@@ -1264,6 +1272,23 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 
 	}
 	$aContas = $aContasNovas;
+} else if ($agrupapor == 1 && $pagempenhos == 1 ){
+
+    foreach ($aContas as $key2=>$oConta){
+		$aContasNovas[$key2] = $oConta;
+		foreach ($oConta->data as $key1=>$oData){
+
+			foreach ($oData->movimentacoes as $oMovimento){
+
+                if($oMovimento->tipo == "empenho" && $oMovimento->empenho != ""){
+                    $oMovimento->contrapartida = $oMovimento->codigocredor." - ".$oMovimento->credor;
+                }
+
+            }
+
+        }
+
+    }
 }
 
 
@@ -1282,8 +1307,6 @@ if($imprime_pdf == 'p'){
 	$pdf->AutoPageBreak = false;
 	$pdf->AddPage("L");
 
-
-	//imprimeConta($pdf,$aContas[4826]->k13_reduz,$aContas[4826]->k13_descr,$aContas[4826]->debito,$aContas[4826]->credito);
 	$quebra_data = "";
 	$lQuebra_Historico = false;
 	foreach ($aContas as $oConta) {
@@ -1293,9 +1316,7 @@ if($imprime_pdf == 'p'){
 			$pdf->AddPage("L");
 		}
 
-		//imprimeTotalMovConta($pdf,$oConta->debitado,$oConta->creditado,$oConta->atual);
-
-		imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr, $oConta->k13_dtimplantacao, $oConta->debito,$oConta->credito,$lImprimeSaldo);
+		imprimeConta($pdf,$oConta,$lImprimeSaldo);
 		$lImprimeSaldo = false;
 		imprimeCabecalho($pdf);
 
@@ -1319,7 +1340,7 @@ if($imprime_pdf == 'p'){
 
 						$pdf->AddPage("L");
 
-						imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 						imprimeCabecalho($pdf);
 
 					}
@@ -1327,7 +1348,7 @@ if($imprime_pdf == 'p'){
 
 
 					if($lQuebra_Historico){
-						imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 						imprimeCabecalho($pdf);
 						$lQuebra_Historico = false;
 					}
@@ -1350,7 +1371,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 								imprimeCabecalho($pdf);
 
 							}
@@ -1362,7 +1383,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 								imprimeCabecalho($pdf);
 
 							}
@@ -1375,7 +1396,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 								imprimeCabecalho($pdf);
 
 							}
@@ -1436,7 +1457,7 @@ if($imprime_pdf == 'p'){
 	}
 
 
-
+    // die;
 	$pdf->Output();
 	exit();
 }else{
@@ -1611,22 +1632,27 @@ if($imprime_pdf == 'p'){
 	exit();
 }
 
-function imprimeConta($pdf,$codigo,$descricao,$dtimplantacao,$debito,$credito,$lImprimeSaldo){
+// imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+// function imprimeConta($pdf,$codigo,$descricao,$dtimplantacao,$debito,$credito,$lImprimeSaldo){
+function imprimeConta($pdf,$oConta,$lImprimeSaldo){
 	$pdf->SetFont('Arial','b',8);
 	$pdf->Cell(12,5,"CONTA:"								,0,0,"L",0);
 	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(90,5,$codigo." - ".$descricao,0,0,"L",0);
-	$pdf->SetFont('Arial','b',8);
-
-	$pdf->Cell(72,5,"DATA IMPLANTAÇÃO DA CONTA NA TESOURARIA: " ,0,0,"L",0);
-	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(10,5,db_formatar($dtimplantacao,'d'),0,0,"L",0);
+	$pdf->Cell(95,5,$oConta->k13_reduz." - ".$oConta->k13_descr,0,0,"L",0);
+    $pdf->SetFont('Arial','b',8);
+    $pdf->Cell(10,5,"Nº:"								,0,0,"L",0);
+    $pdf->SetFont('Arial','',8);
+    $pdf->Cell(15,5,$oConta->c63_conta,0,0,"L",0);
+    $pdf->SetFont('Arial','b',8);
+    $pdf->Cell(10,5,"AG:"								,0,0,"L",0);
+    $pdf->SetFont('Arial','',8);
+    $pdf->Cell(15,5,$oConta->c63_agencia,0,0,"L",0);
 	$pdf->SetFont('Arial','b',8);
 
 	if($lImprimeSaldo){
-		$pdf->Cell(40,5,"SALDO ANTERIOR:"				,0,0,"R",0);
-		$pdf->Cell(25,5,$debito  == 0 ? "" : db_formatar($debito,'f')	,0,0,"R",0);
-		$pdf->Cell(25,5,$credito == 0 ? "" : db_formatar($credito,'f'),0,0,"R",0);
+		$pdf->Cell(73,5,"SALDO ANTERIOR:"				,0,0,"R",0);
+		$pdf->Cell(25,5,$oConta->debito  == 0 ? "" : db_formatar($oConta->debito,'f')	,0,0,"R",0);
+		$pdf->Cell(25,5,$oConta->credito == 0 ? "" : db_formatar($oConta->credito,'f'),0,0,"R",0);
 	}
 	$pdf->ln();
 	$pdf->SetFont('Arial','',7);
