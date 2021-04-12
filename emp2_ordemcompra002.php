@@ -148,7 +148,7 @@ for($i = 0;$i < $num;$i++){
                                                               else  pcprocitem.pc81_codproc end as pc81_codproc,
                                                          case when solrp.pc11_numero is not null then solrp.pc11_numero
                                                               else  solicitem.pc11_numero end as pc11_numero,
-                                                         case WHEN e55_marca IS NOT NULL AND trim(e55_marca) != '' THEN e55_marca 
+                                                         case WHEN e55_marca IS NOT NULL AND trim(e55_marca) != '' THEN e55_marca
                                                          when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '')
                                                               when  pcorcamval.pc23_obs is null then coalesce(trim(pcorcamvalsl.pc23_obs),trim(pcorcamvalac.pc23_obs), '')
                                                               else  coalesce(trim(pcorcamval.pc23_obs),trim(pcorcamvalac.pc23_obs), '') end as pc23_obs,
