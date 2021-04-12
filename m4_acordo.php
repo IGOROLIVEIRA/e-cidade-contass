@@ -33,12 +33,15 @@ db_postmemory($HTTP_POST_VARS);
 
 if(isset($alterar)){
     $sqlerro=false;
+    $aditivo=false;
     db_inicio_transacao();
     //print_r($_POST);exit;
-
+    $ac16_datainicio = implode("-",array_reverse(explode("/",$ac16_datainicio)));
+    $ac16_datafim    = implode("-",array_reverse(explode("/",$ac16_datafim)));
 
     $rsPosicoes = db_query(
-                "SELECT distinct ac26_sequencial as POSICAO
+                "SELECT distinct ac26_sequencial as POSICAO,
+                ac16_datainicio, ac16_datafim
         FROM acordo
         inner join acordoposicao on  ac16_sequencial = ac26_acordo
         inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
@@ -49,11 +52,43 @@ if(isset($alterar)){
         WHERE ac16_sequencial = '$ac16_sequencial'"
     );
     //db_criatabela($rsPosicoes);exit;
+    if(pg_num_rows($rsPosicoes) > 1){
+        $aditivo = true;
+    }
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
         $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
         //print_r($oPosicao->posicao);
-        $rsPosicoes = db_query(
-            "SELECT distinct ac26_sequencial as POSICAO
+        //echo "update acordovigencia  set ac18_datainicio = '$ac16_datainicio', ac18_datafim  = '$ac16_datafim' where ac18_acordoposicao  = '$ac16_sequencial'";exit;
+        //db_query("update acordoposicaoperiodo set ac36_datainicial = '$ac16_datainicial', ac36_datafinal = '$ac16_datafinal' where ac36_acordoposicao = '$ac16_sequencial'");
+        db_query("update acordovigencia  set ac18_datainicio = '$ac18_datainicio', ac18_datafim  = '$ac18_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+        db_query("update acordoitemperiodo set ac41_datainicial = '$ac18_datainicio', ac41_datafinal = '$ac18_datafim' where ac41_acordoposicao = '$oPosicao->posicao'");
+
+        $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+        $seq   = pg_result($resmanut,0,0);
+        $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: ".$oPosicao->ac16_datainicio ." - ".$oPosicao->ac16_datafim." atual: ".$ac16_datainicio ." - ".$ac16_datafim."  ',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    }
+    $clacordo->alterar($ac16_sequencial);
+
+    if ($clacordo->erro_status == "0") {
+        $erro_msg = $clacordo->erro_msg;
+        $sqlerro = true;
+    }
+
+    if ($sqlerro == false) {
+        echo "<script>alert('Alteração efetuada');</script>";
+    }
+    db_fim_transacao($sqlerro);
+    $db_opcao = 2;
+    $db_botao = true;
+}else if(isset($chavepesquisa)) {
+    $db_opcao = 2;
+    $db_botao = true;
+    $result = $clacordo->sql_record($clacordo->sql_query($chavepesquisa));
+    //db_criatabela($result);
+    db_fieldsmemory($result,0);
+
+    $rsPosicoes = db_query(
+        "SELECT distinct ac26_sequencial as POSICAO
         FROM acordo
         inner join acordoposicao on  ac16_sequencial = ac26_acordo
         inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
@@ -62,33 +97,31 @@ if(isset($alterar)){
         inner join acordoitem on ac20_acordoposicao = ac26_sequencial
         inner join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
         WHERE ac16_sequencial = '$ac16_sequencial'"
+    );
+    //db_criatabela($rsPosicoes);exit;
+    if(pg_num_rows($rsPosicoes) > 1){
+        $aditivo = true;
+
+        $rsAditivo = db_query(
+            "SELECT distinct ac26_sequencial as POSICAO,
+                ac16_datainicio,
+                ac16_datafim,
+                ac18_datainicio,
+                ac18_datafim,
+                ac36_datainicial,
+                ac36_datafinal,
+                ac36_acordoposicao
+        FROM acordo
+        inner join acordoposicao on  ac16_sequencial = ac26_acordo
+        inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+        inner join acordovigencia on ac18_acordoposicao = ac26_sequencial
+        inner join acordoposicaotipo on ac27_sequencial = ac26_acordoposicaotipo
+        inner join acordoitem on ac20_acordoposicao = ac26_sequencial
+        inner join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
+        WHERE ac16_sequencial = '$ac16_sequencial' order by posicao desc limit 1 "
         );
-        db_criatabela($rsPosicoes);exit;
     }
-    exit;
-
-    if(pg_num_rows($rsVerify) == 0){
-        db_inicio_transacao();
-        //$cl_scripts->excluiEmpenho($e60_numemp);
-        echo "<script>alert(\"".$cl_scripts->erro_msg."\");</script>";
-        //echo "<script>alert(\"periodo vazio\");</script>";
-        db_fim_transacao();
-    }
-
-
-    //$clacordo->alterar($ac16_sequencial);
-    if($clacordo->erro_status==0){
-        $sqlerro=true;
-    }
-    $erro_msg = $clacordo->erro_msg;
-    db_fim_transacao($sqlerro);
-    $db_opcao = 2;
-    $db_botao = true;
-}else if(isset($chavepesquisa)) {
-    $db_opcao = 2;
-    $db_botao = true;
-    $result = $clacordo->sql_record($clacordo->sql_query($chavepesquisa));
-    db_fieldsmemory($result,0);
+    db_fieldsmemory($rsAditivo,0);
 }
 
 ?>
@@ -118,7 +151,7 @@ if(isset($alterar)){
 <?php
 $sContass = explode(".",db_getsession("DB_login"));
 
-if ($sContass[1] == 'contass') {
+if ($sContass[1] != 'contass') {
 
     echo "<br><center><br><H2>Essa rotina apenas pode ser usada por usuários da contass</h2></center>";
 } else {
@@ -183,34 +216,58 @@ if ($sContass[1] == 'contass') {
                                             "", "", "return parent.js_somardias();");
                                         ?>
                                     </td>
-                                    <td>
-                                        <b>Dias:</b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('diasvigencia', 10, "", true, 'text', 3);
-                                        ?>
-                                    </td>
-                                </tr>
-<!--                                <tr>-->
-<!--                                    <td nowrap title="Prazo de Execução">-->
-<!--                                        <strong>Unid.Execução/Entrega:</strong>-->
+<!--                                    <td>-->
+<!--                                        <b>Dias:</b>-->
 <!--                                    </td>-->
 <!--                                    <td>-->
 <!--                                        --><?//
-//                                        db_input('ac16_qtdperiodo', 2, @$Iac16_qtdperiodo, true, 'text', $db_opcao,
-//                                            "", "", "");
-//                                        $aTipoUnidades = array_merge(array(0=>'Selecione'), getValoresPadroesCampo("ac16_tipounidtempoperiodo"));
-//
-//                                        db_select("ac16_tipounidtempoperiodo", $aTipoUnidades,
-//                                            true, $db_opcao);
+//                                        db_input('diasvigencia', 10, "", true, 'text', 3);
 //                                        ?>
 <!--                                    </td>-->
-<!--                                </tr>-->
+                                </tr>
                             </table>
                         </fieldset>
                     </td>
                 </tr>
+                <?php if($aditivo): ?>
+                <tr>
+                    <td colspan="2">
+                        <fieldset class='fieldsetinterno'>
+                            <legend>
+                                <b>Vigência Aditivos</b>
+                            </legend>
+                            <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                                <tr>
+                                    <td width="1%">
+                                        <b>Inicio:</b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $iCampo = 2;
+
+                                        db_inputdata('ac18_datainicio', @$ac18_datainicio_dia, @$ac18_datainicio_mes,
+                                            @$ac18_datainicio_ano, true, 'text', $iCampo,
+                                            "onchange='return js_somardias();'", "", "",
+                                            "return parent.js_somardias();");
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <b>Fim:</b>
+                                    </td>
+                                    <td>
+                                        <?
+
+                                        db_inputdata('ac18_datafim', @$ac18_datafim_dia, @$ac18_datafim_mes, @$ac18_datafim_ano,
+                                            true, 'text', $iCampo, "onchange='return js_somardias();'",
+                                            "", "", "return parent.js_somardias();");
+                                        ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+                <?php endif; ?>
             </table>
         </fieldset>
         <input name="alterar" type="submit" id="alterar" value="Alterar" <?=($db_botao==false?"disabled":"")?> >
@@ -270,15 +327,14 @@ if ($sContass[1] == 'contass') {
             ?>
         }
 
-        function js_somardias() {
-            alert('here');
-            var sDataInicio = $('ac16_datainicio').value;
-            var sDataFim = $('ac16_datafim').value;
-
-            if (js_somarDiasVigencia(sDataInicio, sDataFim) != false) {
-                $('diasvigencia').value = js_somarDiasVigencia(sDataInicio, sDataFim);
-            }
-        }
+        // function js_somardias() {
+        //     var sDataInicio = $('ac16_datainicio').value;
+        //     var sDataFim = $('ac16_datafim').value;
+        //
+        //     if (js_somarDiasVigencia(sDataInicio, sDataFim) != false) {
+        //         $('diasvigencia').value = js_somarDiasVigencia(sDataInicio, sDataFim);
+        //     }
+        // }
     </script>
 <?
 }

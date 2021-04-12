@@ -121,6 +121,9 @@ if(isset($alterar)){
         }
 
         if ($sqlerro == false) {
+            $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+            $seq   = pg_result($resmanut,0,0);
+            $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: ".$oPosicao->ac16_datainicio ." - ".$oPosicao->ac16_datafim." atual: ".$ac16_datainicio ." - ".$ac16_datafim."  ',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             echo "<script>alert('Alteração efetuada');</script>";
         }
     }
@@ -172,7 +175,7 @@ if(isset($alterar)){
 <?php
 $sContass = explode(".",db_getsession("DB_login"));
 
-if ($sContass[1] == 'contass') {
+if ($sContass[1] != 'contass') {
 
     echo "<br><center><br><H2>Essa rotina apenas pode ser usada por usuários da contass</h2></center>";
 } else {

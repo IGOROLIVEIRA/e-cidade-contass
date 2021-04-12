@@ -59,7 +59,6 @@ if (!isset($db_opcao)){
         <tr>
             <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
                 <?
-
                     $clcriaabas->identifica = array("licitacao"=>"Licitacao","acordo"=>"Acordo");
                     $clcriaabas->sizecampo  = array("licitacao"=>"20","acordo"=>"20");
                     $clcriaabas->title      = array("licitacao"=>"Licitacao","acordo"=>"Acordo");
@@ -68,7 +67,6 @@ if (!isset($db_opcao)){
                         $clcriaabas->disabled   =  array("licitacao"=>"false","acordo"=>"false");
                     }
                     $clcriaabas->cria_abas();
-
                 ?>
             </td>
         </tr>

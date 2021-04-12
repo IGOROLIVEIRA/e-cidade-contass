@@ -6,6 +6,7 @@ class Oc14439 extends AbstractMigration
 {
   public function up()
   {
+
     $sql = "
         INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Manutenção de Lançamentos (Patrimonial)', 'Manutenção de Lançamentos (Patrimonial)', 'm4_lancamentospatrimonial.php', 1, 1, 'Manutenção de Lançamentos (Patrimonial)', 't');
 
