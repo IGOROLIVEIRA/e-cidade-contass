@@ -187,10 +187,15 @@ db_postmemory($HTTP_POST_VARS);
         } else {
             if (k17_codigo_de.value != "")
                 query += "numslip_de=" + k17_codigo_de.value;
-            if ((dtini.value != '') && (dtfim.value != '')) {
+            if ((dtini.value != '')) {
                 if (k17_codigo_de.value != "")
                     query += "&";
-                query += "dtini=" + trata_data(dtini.value) + "&dtfim=" + trata_data(dtfim.value);
+                query += "dtini=" + trata_data(dtini.value);
+            }
+            if (dtfim.value != '') {
+                if (k17_codigo_de.value != "" || dtini != "")
+                    query += "&";
+                query += "dtfim=" + trata_data(dtfim.value);
             }
             var vir      = "";
             var listacgm = "";

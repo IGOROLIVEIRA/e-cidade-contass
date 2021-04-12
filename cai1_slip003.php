@@ -124,8 +124,10 @@ if (USE_PCASP) {
             $sql .= " AND slip.k17_codigo = {$numslip} ";
         if ($numslip_de)
             $sql .= " AND slip.k17_codigo BETWEEN {$numslip_de} AND {$numslip_ate} ";
-        if ($dtini AND $dtfim)
-            $sql .= " AND slip.k17_data BETWEEN '" . date("Y-m-d", strtotime($dtini)) . "' AND '" . date("Y-m-d", strtotime($dtfim)) . "' ";
+        if ($dtini)
+            $sql .= " AND slip.k17_data >= '" . date("Y-m-d", strtotime($dtini)) . "' ";
+        if ($dtfim)
+            $sql .= " AND slip.k17_data <= '" . date("Y-m-d", strtotime($dtfim)) . "' ";
         if ($listacgm)
             $sql .= " AND cgm.z01_numcgm IN ({$listacgm}) ";
         $sql .= " ORDER BY slip.k17_codigo ";
@@ -158,7 +160,9 @@ if (USE_PCASP) {
     if ($numslip_de)
         $sql .= " AND slip.k17_codigo BETWEEN {$numslip_de} AND {$numslip_ate} ";
     if ($dtini)
-        $sql .= " AND slip.k17_data BETWEEN '" . date("Y-m-d", strtotime($dtini)) . "' AND '" . date("Y-m-d", strtotime($dtfim)) . "' ";
+        $sql .= " AND slip.k17_data >= '" . date("Y-m-d", strtotime($dtini)) . "' ";
+    if ($dtfim)
+        $sql .= " AND slip.k17_data <= '" . date("Y-m-d", strtotime($dtfim)) . "' ";
     if ($listacgm)
         $sql .= " AND cgm.z01_numcgm IN ({$listacgm}) ";
     $sql .= " ORDER BY slip.k17_codigo ";
@@ -203,11 +207,9 @@ try {
     }
     // print_r($array_recursos); exit;
 
-
     if (pg_numrows($dados) == 0) {
-        throw new Exception('Documento de Slip não Cadastrado.');
+        db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
     }
-    // LOOP AQUI
     db_fieldsmemory($dados,0);
 
     $sqlcai = "select * from caiparametro where k29_instit = ".db_getsession('DB_instit');
