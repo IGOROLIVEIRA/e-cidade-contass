@@ -56,77 +56,80 @@ $instit=db_getsession("DB_instit");
 if(isset($alterar)){
 
     $result_geral=$clliclicita->sql_record($clliclicita->sql_query_file(null,"max(l20_edital) as edital",null,"l20_instit=$instit and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
-
-    if ($clliclicita->numrows>0){
-        db_fieldsmemory($result_geral,0,1);
-        //verifica se existe edital maior ou igual.
-        if ($l24_numero>=$edital){
-            $numero=$l24_numero+1;
-            $numero_geral=$clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_edital",null,"l20_edital=$numero and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
-            if ($clliclicita->numrows>0){
-                db_msgbox("Já existe licitação com o processo licitatório edital número $numero");
-                $erro=true;
+    if($l20_edital != $l20_edital_old) {
+        if ($clliclicita->numrows > 0) {
+            db_fieldsmemory($result_geral, 0, 1);
+            //verifica se existe edital maior ou igual.
+            if ($l20_edital >= $l20_edital_old) {
+                $numero = $l20_edital + 1;
+                $numero_geral = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_edital", null, "l20_edital=$numero and l20_instit = " . db_getsession('DB_instit') . "and l20_anousu = " . db_getsession("DB_anousu")));
+                if ($clliclicita->numrows > 0) {
+                    db_msgbox("Já existe licitação com o processo licitatório edital número $numero");
+                    $erro = true;
+                }
             }
-        }
 
-        //verifica se existe edital menor
-        if ($l24_numero<$edital){
-            $numero=$l24_numero+1;
-            $numero_geral=$clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_edital",null,"l20_edital=$numero and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
-            if ($clliclicita->numrows==0){
-                $l20_edital=$l24_numero;
-            }else{
-                db_msgbox("Já existe licitação com o processo licitatório edital número $numero");
-                $erro=true;
+            //verifica se existe edital menor
+            if ($l20_edital < $l20_edital_old) {
+                $numero = $l20_edital + 1;
+                $numero_geral = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_edital", null, "l20_edital=$numero and l20_instit = " . db_getsession('DB_instit') . "and l20_anousu = " . db_getsession("DB_anousu")));
+                if ($clliclicita->numrows == 0) {
+                    $l20_edital = $l20_edital;
+                } else {
+                    db_msgbox("Já existe licitação com o processo licitatório edital número $numero");
+                    $erro = true;
+                }
             }
         }
     }
 
-    /* Tratamento do campo l20_nroedital. */
-    $clliclicita_edital = new cl_liclicita;
-    $sSqlMaxEdital = $clliclicita_edital->sql_query_file(null, "max(l20_nroedital) as nroedital", null, "l20_instit = $instit and l20_anousu = ".db_getsession("DB_anousu"));
-    $result_geral_edital = $clliclicita_edital->sql_record($sSqlMaxEdital);
+    if($l20_nroedital != $l20_nroedital_old) {
+        /* Tratamento do campo l20_nroedital. */
+        $clliclicita_edital = new cl_liclicita;
+        $sSqlMaxEdital = $clliclicita_edital->sql_query_file(null, "max(l20_nroedital) as nroedital", null, "l20_instit = $instit and l20_anousu = " . db_getsession("DB_anousu"));
+        $result_geral_edital = $clliclicita_edital->sql_record($sSqlMaxEdital);
 
-    if ($clliclicita_edital->numrows > 0){
+        if ($clliclicita_edital->numrows > 0) {
 
-        db_fieldsmemory($result_geral_edital, 0, 1);
-        //verifica se existe edital maior ou igual.
+            db_fieldsmemory($result_geral_edital, 0, 1);
+            //verifica se existe edital maior ou igual.
 
-        $numero = $l47_numero+1;
+            $numero = $l20_nroedital + 1;
 
-        $sWhere = "l20_nroedital = $numero and l20_instit = $instit and l20_anousu = $anousu";
-        $numero_geral = $clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null, "l20_nroedital", null, $sWhere));
+            $sWhere = "l20_nroedital = $numero and l20_instit = $instit and l20_anousu = $anousu";
+            $numero_geral = $clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null, "l20_nroedital", null, $sWhere));
 
-        if ($clliclicita_edital->numrows > 0){
-            db_msgbox("Já existe licitação com o edital número $numero");
-            $erro_edital=true;
-        }else{
-            $l20_nroedital=$l47_numero;
+            if ($clliclicita_edital->numrows > 0) {
+                db_msgbox("Já existe licitação com o edital número $numero");
+                $erro_edital = true;
+            }
         }
+
     }
 
     if (!isset($erro) && !$erro_edital) {
-        //print_r($_POST);exit;
-        $clliclicita->l20_numero = $l20_numero;
-        $clliclicita->l20_nroedital = $l20_nroedital;
-        $clliclicita->l20_codtipocom = $l20_codtipocom;
+         //print_r($_POST);exit;
+         $clliclicita->l20_numero = $l20_numero;
+         $clliclicita->l20_nroedital = $l20_nroedital;
+         $clliclicita->l20_codtipocom = $l20_codtipocom;
 
-        $clliclicita->alterar($l20_codigo, $descricao);
+         $clliclicita->alterar($l20_codigo, $descricao);
 
-        $db_opcao = 2;
+         $db_opcao = 2;
 
-        if ($clliclicita->erro_status == "0") {
-            $erro_msg = $clliclicita->erro_msg;
-            $sqlerro = true;
-        }
+         if ($clliclicita->erro_status == "0") {
+             $erro_msg = $clliclicita->erro_msg;
+             $sqlerro = true;
+         }
 
-        if ($sqlerro == false) {
-            $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
-            $seq   = pg_result($resmanut,0,0);
-            $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: ".$oPosicao->ac16_datainicio ." - ".$oPosicao->ac16_datafim." atual: ".$ac16_datainicio ." - ".$ac16_datafim."  ',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            echo "<script>alert('Alteração efetuada');</script>";
-        }
+         if ($sqlerro == false) {
+             $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+             $seq = pg_result($resmanut, 0, 0);
+             $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . " - " . $oPosicao->ac16_datafim . " atual: " . $ac16_datainicio . " - " . $ac16_datafim . "  '," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+             echo "<script>alert('Alteração efetuada');</script>";
+         }
     }
+
 
 }else if(isset($chavepesquisa)) {
 
@@ -154,6 +157,10 @@ if(isset($alterar)){
             $p58_numero = "{$p58_numero}/{$p58_ano}";
             $l34_protprocesso = $p58_codproc;
         }
+
+        $l20_edital_old    = $l20_edital;
+        $l20_numero_old    = $l20_numero;
+        $l20_nroedital_old = $l20_nroedital;
     }
 
 }
@@ -207,6 +214,9 @@ if ($sContass[1] != 'contass') {
                             ?>
                         </td>
                     </tr>
+                    <?php
+                    db_input('l20_edital_old',10,$Il20_edital,true,'hidden',2,"");
+                    ?>
                     <tr>
                         <td nowrap title="Numeração">
                             <strong>Modalidade:</strong>
@@ -217,6 +227,9 @@ if ($sContass[1] != 'contass') {
                             ?>
                         </td>
                     </tr>
+                    <?php
+                    db_input('l20_numero_old',10,$Il20_numero,true,'hidden',2,"");
+                    ?>
                     <tr id="linha_nroedital">
                         <td nowrap title="<?=@$Tl20_nroedital?>">
                             <?=@$Ll20_nroedital?>
@@ -229,6 +242,10 @@ if ($sContass[1] != 'contass') {
                             ?>
                         </td>
                     </tr>
+                    <?php
+                        db_input('l20_nroedital_old',10,$Il20_nroedital,true,'hidden',2,"");
+                    ?>
+
 
                 <?php endif;?>
             </table>
