@@ -69,6 +69,16 @@ foreach ($aPeriodos as $oPeriodo) {
             } else {
                 document.form1.action = "con2_anexoIVgastopessoal002.php";
             }
+
+            if (document.form1.o116_periodo.value == 0) {
+                alert("Você não escolheu um período. Verifique!");
+                return false;
+            }
+
+            if (document.form1.tipoCalculo.value == 0) {
+                alert("Você não escolheu um cálculo com base nos valores. Verifique!");
+                return false;
+            }
             // pega dados da func_selorcdotacao_aba.php
             jan = window.open('', 'safo' + variavel, 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
             document.form1.target = 'safo' + variavel++;
@@ -111,6 +121,18 @@ foreach ($aPeriodos as $oPeriodo) {
         <tr>
             <td><label for="o116_periodo"><b>Período:</b></label></td>
             <td><?php db_select("o116_periodo", $aListaPeriodos, true, 1); ?></td>
+        </tr>
+
+        <tr>
+            <td><label><b>Cálculo com base nos valores:</b></label></td>
+            <? 
+                $aTipo = array(
+                    '0' => 'Selecione', 
+                    '1' => 'Empenhados',
+                    '2' => 'Liquidados'
+                );
+            ?>
+            <td><?php db_select("tipoCalculo", $aTipo, true, 1); ?></td>
         </tr>
 
 
