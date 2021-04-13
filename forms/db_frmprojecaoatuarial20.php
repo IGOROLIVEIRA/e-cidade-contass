@@ -26,9 +26,9 @@ $projecaoaturialano = $anousu10 + 74;
         <br>
         <table class="DBGrid">
         <tr>
-            <th class="table_header" style="width: 70px;">Exercicio</th>
-            <th class="table_header" style="width: 70px;">Receita</th>
-            <th class="table_header" style="width: 70px;">Despesa</th>
+            <th class="table_header" style="width: 120px;">Exercicio</th>
+            <th class="table_header" style="width: 120px;">Receita</th>
+            <th class="table_header" style="width: 120px;">Despesa</th>
             <th class="table_header" style="width: 150px;">Data</th>
         </tr>
         </table>
@@ -37,17 +37,17 @@ $projecaoaturialano = $anousu10 + 74;
     <? for ($ano = $anousu10 + 1; $ano <= $projecaoaturialano; $ano++):?>
         <table class="DBGrid">
             <tr>
-                <td class="linhagrid" style="width: 70px;">
+                <td class="linhagrid" style="width: 120px;">
                     <?= $ano ?>
-                    <input type="hidden" style="width: 70px;" name="exercicio[<?= $ano ?>]" value="" id="">
+                    <input type="hidden" style="width: 120px;" name="exercicio[<?= $ano ?>]" value="" id="">
                 </td>
 
-                <td class="linhagrid" style="width: 70px;">
-                    <input type="text" style="width: 70px;" name="receita[<?=$ano?>]" onkeypress="GetChar(event);" value="0">
+                <td class="linhagrid" style="width: 120px;">
+                    <input type="text" style="width: 120px;" name="receita[<?=$ano?>]" value="" maxlength="14" oninput="js_validaValores(this);">
                 </td>
 
-                <td class="linhagrid" style="width: 70px;">
-                    <input type="text" style="width: 70px;" name="despesa[<?=$ano?>]" onkeypress="GetChar(event);" value="0">
+                <td class="linhagrid" style="width: 120px;">
+                    <input type="text" style="width: 120px;" name="despesa[<?=$ano?>]" value="" maxlength="14" oninput="js_validaValores(this);">
                 </td>
 
                 <td class="linhagrid" style="width: 150px;">
@@ -67,10 +67,16 @@ $projecaoaturialano = $anousu10 + 74;
 </form>
 <script>
 
-    function GetChar(event){
-      if(event.key === ",") {
-        event.preventDefault();
-      }
+    function js_validaValores(obj) {
+
+        if( js_countOccurs(obj.value, '.') > 1 ) {
+            obj.value = js_strToFloat(obj.value);
+        }
+
+        if( js_countOccurs(obj.value, ',') > 0 ) {
+            obj.value = obj.value.replace(',', '.');
+        }
+
     }
 
     function js_aplicar(){
@@ -99,8 +105,8 @@ $projecaoaturialano = $anousu10 + 74;
     function js_carregaritens(oRetorno) {
         let projecao = JSON.parse(oRetorno.responseText);
         projecao.itens.forEach(function (item,key) {
-            document.form1['receita[' + item.si169_exercicio + ']'].value  = item.si169_vlreceitaprevidenciaria;
-            document.form1['despesa[' + item.si169_exercicio + ']'].value  = item.si169_vldespesaprevidenciaria;
+            document.form1['receita[' + item.si169_exercicio + ']'].value  = item.si169_vlreceitaprevidenciaria == 0 ? '' : item.si169_vlreceitaprevidenciaria;
+            document.form1['despesa[' + item.si169_exercicio + ']'].value  = item.si169_vldespesaprevidenciaria == 0 ? '' : item.si169_vldespesaprevidenciaria;
             item.si169_data = item.si169_data.substr(0, 10).split('-').reverse().join('/');
             document.form1['data_' + item.si169_exercicio  ].value  = item.si169_data;
         })
