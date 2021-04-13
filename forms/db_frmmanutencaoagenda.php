@@ -211,15 +211,15 @@ if (count($aParametrosEmpenho) > 0) {
                                                 </td>
                                                 <td colspan=3 nowrap>
                                                     <?php
-                                                    $sWhere = "";
+                                                    $sWhere = "c63_tipoconta = 1";
                                                     /* [Extensão] - Filtro da Despesa */
 
 
                                                     $sSqlBuscaContaPagadora =
-                                                        $clempagetipo->sql_query(
+                                                        $clempagetipo->sql_query_conplanoconta(
                                                             null,
                                                             "e83_conta, e83_codtipo as codtipo,
-                              e83_descr, c61_codigo ",
+                                                            e83_descr, c61_codigo ",
                                                             "e83_descr",
                                                             $sWhere
                                                         );
