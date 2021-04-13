@@ -184,7 +184,7 @@ class cl_licobras102021 {
     }
 
     if ($this->si195_nrocontrato == null ) {
-      $this->erro_sql = " Campo numero do contrato não informado.";
+      $this->erro_sql = " Contrato não localizado. Codigo da Obra: $this->si195_codobra";
       $this->erro_campo = "si195_nrocontrato";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -204,7 +204,7 @@ class cl_licobras102021 {
     }
 
     if ($this->si195_dataassinatura == null ) {
-      $this->erro_sql = " Campo data assinatura não informado.";
+      $this->erro_sql = "Contrato Nº $this->si195_nrocontrato não assinado!";
       $this->erro_campo = "si195_dataassinatura";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
