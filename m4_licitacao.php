@@ -64,7 +64,7 @@ if(isset($alterar)){
                 $numero = $l20_edital + 1;
                 $numero_geral = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_edital", null, "l20_edital=$numero and l20_instit = " . db_getsession('DB_instit') . "and l20_anousu = " . db_getsession("DB_anousu")));
                 if ($clliclicita->numrows > 0) {
-                    db_msgbox("Já existe licitação com o processo licitatório edital número $numero");
+                    db_msgbox("Já existe licitação com o processo licitatório $numero");
                     $erro = true;
                 }
             }
@@ -76,11 +76,35 @@ if(isset($alterar)){
                 if ($clliclicita->numrows == 0) {
                     $l20_edital = $l20_edital;
                 } else {
-                    db_msgbox("Já existe licitação com o processo licitatório edital número $numero");
+                    db_msgbox("Já existe licitação com o processo licitatório $numero");
                     $erro = true;
                 }
             }
         }
+    }
+
+    if($l20_numero != $l20_numero_old) {
+        /* Tratamento do campo l20_numero. */
+        $clliclicita_edital = new cl_liclicita;
+        $sSqlMaxEdital = $clliclicita_edital->sql_query_file(null, "max(l20_numero) as numero", null, "l20_instit = $instit and l20_anousu = " . db_getsession("DB_anousu"));
+        $result_geral_edital = $clliclicita_edital->sql_record($sSqlMaxEdital);
+
+        if ($clliclicita_edital->numrows > 0) {
+
+            db_fieldsmemory($result_geral_edital, 0, 1);
+            //verifica se existe edital maior ou igual.
+
+            $numero = $l20_numero + 1;
+
+            $sWhere = "l20_numero = $numero and l20_instit = $instit and l20_anousu = $anousu";
+            $numero_geral = $clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null, "l20_numero", null, $sWhere));
+
+            if ($clliclicita_edital->numrows > 0) {
+                db_msgbox("Já existe licitação com a modalidade $numero");
+                $erro_edital = true;
+            }
+        }
+
     }
 
     if($l20_nroedital != $l20_nroedital_old) {
