@@ -97,7 +97,12 @@ if($iCont == 1 && in_array("1",$aTipoistituicao)){
     $iVerifica = 3;
 }
 
-$valoresperado = $tipoCalculo == 1 ? 'empenhado' : 'liquidado';
+/**
+ * Adição de filtro no relatório para buscar valor empenhado líquido
+ * Além do liquidado que já buscava anteriormente
+ * */
+$valoresperado  = $tipoCalculo == 1 ? "empenhado" : "liquidado";
+$valorcalculo = $tipoCalculo == 1 ? "sum(empenhado) - sum(anulado) as {$valoresperado}" : "sum(liquidado) as {$valoresperado}";
 
 db_inicio_transacao();
 function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
@@ -617,7 +622,7 @@ ob_start();
 
             <?php
             $fSubTotal = 0;
-            $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr,sum({$valoresperado}) as {$valoresperado}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+            $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
             foreach ($aDespesas as $oDespesa) :
 
                 if ($oDespesa->o58_elemento == '3317170000000') {
@@ -643,7 +648,7 @@ ob_start();
                 <td class="s3 bdleft" colspan="2">3.3.00.00.00 - OUTRAS DESPESAS CORRENTES</td>
                 <td class="s4"></td>
             </tr>
-            <?php $aDespesas2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum({$valoresperado}) as {$valoresperado}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+            <?php $aDespesas2 = getSaldoDespesa(null, "o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
             foreach ($aDespesas2 as $oDespesa) :
                 $fSubTotal += $oDespesa->$valoresperado;
             ?>
@@ -757,11 +762,11 @@ ob_start();
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
                     if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA || $oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_CAMARA) {
-                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum({$valoresperado}) as {$valoresperado}", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,{$valorcalculo}", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
                         $fSaldo1 = ($aSaldoEstrut1[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut1[0]->o58_anousu <= 2018) ? $aSaldoEstrut1[0]->$valoresperado : 0;
-                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum({$valoresperado}) as {$valoresperado}", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
                         $fSaldo2 = ($aSaldoEstrut2[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut2[0]->o58_anousu <= 2018) ? $aSaldoEstrut2[0]->$valoresperado : 0;
-                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum({$valoresperado}) as {$valoresperado}", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr, {$valorcalculo}", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
                         $fSaldo3 = ($aSaldoEstrut3[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut3[0]->o58_anousu <= 2018) ? $aSaldoEstrut3[0]->$valoresperado : 0;
                         $fSaldoAposentadoriaPensoesTesouro += $fSaldo1 + $fSaldo2 + $fSaldo3;
                     }
