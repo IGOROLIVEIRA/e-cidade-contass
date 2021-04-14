@@ -142,7 +142,7 @@ if (isset($_POST["processar"])) {
 
         $sSqlDelLancSlip  = "drop table if EXISTS  w_lancamentos; ";
         $sSqlDelLancSlip .= "create temporary table w_lancamentos on commit drop as ";
-        $sSqlDelLancSlip .= "SELECT c84_conlancam AS lancam FROM conlancamslip WHERE c84_conlancam IN ($oDadosAutenticacao->lancam);";
+        $sSqlDelLancSlip .= "SELECT c84_conlancam AS lancam, c69_sequen AS seqlan FROM conlancamslip INNER JOIN conlancamval on c84_conlancam = c69_codlan WHERE c84_conlancam IN ($oDadosAutenticacao->lancam);";
         $sSqlDelLancSlip .= "DELETE FROM conlancamemp WHERE c75_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancambol WHERE c77_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancamcgm WHERE c76_codlan IN (SELECT lancam FROM w_lancamentos); ";
@@ -151,8 +151,8 @@ if (isset($_POST["processar"])) {
         $sSqlDelLancSlip .= "DELETE FROM conlancamdot WHERE c73_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancamord WHERE c80_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancamrec WHERE c74_codlan IN (SELECT lancam FROM w_lancamentos); ";
-        $sSqlDelLancSlip .= "DELETE FROM contacorrentedetalhe WHERE c19_sequencial IN (SELECT c28_sequencial FROM contacorrentedetalheconlancamval WHERE c28_conlancamval IN (SELECT lancam FROM w_lancamentos)); ";
-        $sSqlDelLancSlip .= "DELETE FROM contacorrentedetalheconlancamval WHERE c28_conlancamval IN (SELECT c69_sequen FROM conlancamval WHERE c69_codlan IN (SELECT lancam FROM w_lancamentos)); ";
+        $sSqlDelLancSlip .= "DELETE FROM contacorrentedetalheconlancamval WHERE c28_conlancamval IN (SELECT seqlan FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM contacorrentedetalhe WHERE c19_sequencial IN (SELECT c28_contacorrentedetalhe FROM contacorrentedetalheconlancamval WHERE c28_conlancamval IN (SELECT seqlan FROM w_lancamentos)); ";        
         $sSqlDelLancSlip .= "DELETE FROM conlancamval WHERE c69_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancamcompl WHERE c72_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancampag WHERE c82_codlan IN (SELECT lancam FROM w_lancamentos); ";
