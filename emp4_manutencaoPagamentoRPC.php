@@ -419,7 +419,7 @@ switch($oParam->exec) {
       foreach ($oParam->aMovimentos as $oMovimento) {
 
 
-        $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar);
+        $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar, $oParam->lEfetuarPagamento);
 
         if ( isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "" ) {
             

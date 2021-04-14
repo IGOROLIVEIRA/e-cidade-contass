@@ -1586,8 +1586,10 @@ class agendaPagamento {
    * @param stdClass $oMovimento objeto com os dados do movimento.
    * @param integer  $iCodigoOrdemAuxiliar  define qual ordem auxilar o movimento ira compor.
    *                                        caso nulo ira procurar a ultima ordem do dia e ira por na ordme encontrada
+   * @param bool $lEfetuarPagamento por padrão será falso, só será verdadeiro quando for pagamento de cheque na rotina 
+   *                                agenda - manutenção de pagamentos que passou a aceitar pagamento de cheque
    */
-  function configurarPagamentos($dtPagamento, stdClass $oMovimento, $iCodigoOrdemAuxiliar = null, $lGerarOpAuxiliar=true) {
+  function configurarPagamentos($dtPagamento, stdClass $oMovimento, $iCodigoOrdemAuxiliar = null, $lGerarOpAuxiliar=true, $lEfetuarPagamento=false) {
 
 
     $oDaoOrdemAgenda->e42_sequencial = null;
@@ -1825,7 +1827,14 @@ class agendaPagamento {
        * exlcuimos, e depois incluimos na tabela empageconf,
        */
       $oDaoEmpageConf = db_utils::getDao("empageconf");
-      $oDaoEmpageConf->excluir($oMovimento->iCodMov);
+      
+      /**
+       * Não exclui se for pagamento de cheque, pois na rotina Agenda - Manutenção de pagamento passou a permitir
+       * pagamento de emissão e pagamento de cheque direto da tela
+       */
+      if ($oMovimento->iCodForma != 2 && !$lEfetuarPagamento) {
+        $oDaoEmpageConf->excluir($oMovimento->iCodMov);
+      }
       if ($oMovimento->iCodForma == 3 || $oMovimento->iCodForma == 1 || $oMovimento->iCodForma == 4) {
 		
         $oDaoEmpageConf->e86_cheque  = (isset($oMovimento->iCheque) && $oMovimento->iCheque != '') ? $oMovimento->iCheque : "0";
