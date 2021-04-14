@@ -1825,9 +1825,9 @@ class agendaPagamento {
        * exlcuimos, e depois incluimos na tabela empageconf,
        */
       $oDaoEmpageConf = db_utils::getDao("empageconf");
+      $oDaoEmpageConf->excluir($oMovimento->iCodMov);
       if ($oMovimento->iCodForma == 3 || $oMovimento->iCodForma == 1 || $oMovimento->iCodForma == 4) {
 		
-		$oDaoEmpageConf->excluir($oMovimento->iCodMov);
         $oDaoEmpageConf->e86_cheque  = (isset($oMovimento->iCheque) && $oMovimento->iCheque != '') ? $oMovimento->iCheque : "0";
         $oDaoEmpageConf->e86_data    = $dtPagamento;
         $oDaoEmpageConf->e86_codmov  = $oMovimento->iCodMov;
