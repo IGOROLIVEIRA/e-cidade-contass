@@ -25,9 +25,9 @@
  *                                licenca/licenca_pt.txt
  */
 
-//MODULO: Configuracoes
-//CLASSE DA ENTIDADE obrasdadoscomplementares
-class cl_obrasdadoscomplementares
+//MODULO: Licitações
+//CLASSE DA ENTIDADE obrasdadoscomplementareslote
+class cl_obrasdadoscomplementareslote
 {
 	// cria variaveis de erro
 	var $rotulo = null;
@@ -52,12 +52,8 @@ class cl_obrasdadoscomplementares
 	var $db150_bairro = '';
 	var $db150_numero = 0;
 	var $db150_logradouro = '';
-	var $db150_grauslatitude = 0;
-	var $db150_minutolatitude = 0;
-	var $db150_segundolatitude = 0;
-	var $db150_grauslongitude = 0;
-	var $db150_minutolongitude = 0;
-	var $db150_segundolongitude = 0;
+	var $db150_latitude = 0;
+	var $db150_longitude = 0;
 	var $db150_classeobjeto = 0;
 	var $db150_grupobempublico = 0;
 	var $db150_subgrupobempublico = 0;
@@ -66,6 +62,7 @@ class cl_obrasdadoscomplementares
 	var $db150_descratividadeservico = '';
 	var $db150_atividadeservicoesp = 0;
 	var $db150_descratividadeservicoesp = '';
+	var $db150_lote = null;
 	var $db150_bdi = 0;
 	var $db150_cep = 0;
 
@@ -81,11 +78,7 @@ class cl_obrasdadoscomplementares
                     db150_numero = int4 = Número do local da obra
                     db150_logradouro = varchar(150) = Logradouro
                     db150_grauslatitude = int4 = Graus da Latitude
-                    db150_minutolatitude = int4 = Minuto da Latitude 
-                    db150_segundolatitude = numeric = Segundo da Latitude
                     db150_grauslongitude = int4 = Graus da Longitude
-                    db150_minutolongitude = int4 = Minuto da Longitude
-                    db150_segundolongitude = numeric = Segundo da Latitude
                     db150_classeobjeto =  int4 = Classe do objeto
                     db150_grupobempublico = int4 = Grupo Bem Público
                     db150_subgrupobempublico = int4 = Subgrupo Bem Público
@@ -94,15 +87,16 @@ class cl_obrasdadoscomplementares
                     db150_descratividadeservico = varchar(150) = Descrição da Atividade do Serviço
                     db150_atividadeservicoesp = int4 = Atividade do Serviço Especializado
                     db150_descratividadeservicoesp = varchar(150) = Descrição da Atividade do Serviço Especializado
+					db150_lote = real = Número do lote
                     db150_bdi = numeric = BDI
                     db150_cep = char(8) = CEP
                   ";
 
 	//funcao construtor da classe
-	function cl_obrasdadoscomplementares()
+	function cl_obrasdadoscomplementareslote()
 	{
 		//classes dos rotulos dos campos
-		$this->rotulo = new rotulo("obrasdadoscomplementares");
+		$this->rotulo = new rotulo("obrasdadoscomplementareslote");
 		$this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
 	}
 
@@ -121,6 +115,7 @@ class cl_obrasdadoscomplementares
 	function atualizacampos($exclusao = false)
 	{
 		if ($exclusao == false) {
+
 			$this->db150_sequencial = ($this->db150_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["db150_sequencial"] : $this->db150_sequencial);
 			$this->db150_codobra = ($this->db150_codobra == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_codobra"] : $this->db150_codobra);
 			$this->db150_pais = ($this->db150_pais == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_pais"] : $this->db150_pais);
@@ -130,12 +125,8 @@ class cl_obrasdadoscomplementares
 			$this->db150_bairro = ($this->db150_bairro == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_bairro"] : $this->db150_bairro);
 			$this->db150_numero = ($this->db150_numero == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_numero"] : $this->db150_numero);
 			$this->db150_logradouro = ($this->db150_logradouro == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_logradouro"] : $this->db150_logradouro);
-			$this->db150_grauslatitude = ($this->db150_grauslatitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_grauslatitude"] : $this->db150_grauslatitude);
-			$this->db150_minutolatitude = ($this->db150_minutolatitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_minutolatitude"] : $this->db150_minutolatitude);
-			$this->db150_segundolatitude = ($this->db150_segundolatitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_segundolatitude"] : $this->db150_segundolatitude);
-			$this->db150_grauslongitude = ($this->db150_grauslongitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_grauslongitude"] : $this->db150_grauslongitude);
-			$this->db150_minutolongitude = ($this->db150_minutolongitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_minutolongitude"] : $this->db150_minutolongitude);
-			$this->db150_segundolongitude = ($this->db150_segundolongitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_segundolongitude"] : $this->db150_segundolongitude);
+			$this->db150_latitude = ($this->db150_latitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_latitude"] : $this->db150_latitude);
+			$this->db150_longitude = ($this->db150_longitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_longitude"] : $this->db150_longitude);
 			$this->db150_classeobjeto = ($this->db150_classeobjeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_classeobjeto"] : $this->db150_classeobjeto);
 			$this->db150_atividadeobra = ($this->db150_atividadeobra == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_atividadeobra"] : $this->db150_atividadeobra);
 			$this->db150_atividadeservico = ($this->db150_atividadeservico == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_atividadeservico"] : $this->db150_atividadeservico);
@@ -146,6 +137,7 @@ class cl_obrasdadoscomplementares
 			$this->db150_subgrupobempublico = ($this->db150_subgrupobempublico == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_subgrupobempublico"] : $this->db150_subgrupobempublico);
 			$this->db150_bdi = ($this->db150_bdi == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_bdi"] : $this->db150_bdi);
 			$this->db150_cep = ($this->db150_cep == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_cep"] : $this->db150_cep);
+			$this->db150_lote = ($this->db150_lote == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->db150_lote"] : $this->db150_lote);
 
 		} else {
 			$this->db150_sequencial = ($this->db150_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["db150_sequencial"] : $this->db150_sequencial);
@@ -167,10 +159,10 @@ class cl_obrasdadoscomplementares
 			return false;
 		}
 		if ($db150_sequencial == "" || $db150_sequencial == null) {
-			$result = db_query("select nextval('obrasdadoscomplementares_db150_sequencial_seq')");
+			$result = db_query("select nextval('obrasdadoscomplementareslote_db150_sequencial_seq')");
 			if ($result == false) {
 				$this->erro_banco = str_replace("\n", "", @pg_last_error());
-				$this->erro_sql = "Verifique o cadastro da sequencia: obrasdadoscomplementares_db150_sequencial_seq do campo: db150_sequencial";
+				$this->erro_sql = "Verifique o cadastro da sequencia: obrasdadoscomplementareslote_db150_sequencial_seq do campo: db150_sequencial";
 				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 				$this->erro_status = "0";
@@ -178,7 +170,7 @@ class cl_obrasdadoscomplementares
 			}
 			$this->db150_sequencial = pg_result($result, 0, 0);
 		} else {
-			$result = db_query("select last_value from obrasdadoscomplementares_db150_sequencial_seq");
+			$result = db_query("select last_value from obrasdadoscomplementareslote_db150_sequencial_seq");
 			if (($result != false) && (pg_result($result, 0, 0) < $db150_sequencial)) {
 				$this->erro_sql = " Campo db150_sequencial maior que último número da sequencia.";
 				$this->erro_banco = "Sequencia menor que este número.";
@@ -260,7 +252,7 @@ class cl_obrasdadoscomplementares
 		if(!$this->db150_numero){
 			$this->db150_numero = 'null';
 		}
-		$sql = "insert into obrasdadoscomplementares(
+		$sql = "insert into obrasdadoscomplementareslote(
                                         db150_sequencial
                                         ,db150_codobra
                                         ,db150_pais
@@ -270,12 +262,8 @@ class cl_obrasdadoscomplementares
                                         ,db150_logradouro
                                         ,db150_bairro
                                         ,db150_numero
-                                        ,db150_grauslatitude
-                                        ,db150_minutolatitude
-                                        ,db150_segundolatitude
-                                        ,db150_grauslongitude
-                                        ,db150_minutolongitude
-                                        ,db150_segundolongitude
+                                        ,db150_latitude
+                                        ,db150_longitude
                                         ,db150_classeobjeto
                                         ,db150_atividadeobra
                                         ,db150_atividadeservico
@@ -286,6 +274,7 @@ class cl_obrasdadoscomplementares
                                         ,db150_subgrupobempublico
                                         ,db150_bdi
                                         ,db150_cep
+										,db150_lote
                         )
                 values (
                                 $this->db150_sequencial
@@ -297,12 +286,8 @@ class cl_obrasdadoscomplementares
                                ,'$this->db150_logradouro'
                                ,'$this->db150_bairro'
                                ,$this->db150_numero
-                               ,'$this->db150_grauslatitude'
-                               ,'$this->db150_minutolatitude'
-                               ,'$this->db150_segundolatitude'
-                               ,'$this->db150_grauslongitude'
-                               ,'$this->db150_minutolongitude'
-                               ,'$this->db150_segundolongitude'
+                               ,$this->db150_latitude
+                               ,$this->db150_longitude
                                ,$this->db150_classeobjeto
                                ,$this->db150_atividadeobra
                                ,$this->db150_atividadeservico
@@ -313,6 +298,7 @@ class cl_obrasdadoscomplementares
                                ,$this->db150_subgrupobempublico
                                ,$this->db150_bdi
                                ,'$this->db150_cep'
+							   ,$this->db150_lote
                       )";
 		$result = db_query($sql);
 
@@ -343,10 +329,10 @@ class cl_obrasdadoscomplementares
 	}
 
 	// funcao para alteracao
-	function alterar($db150_sequencial = null)
+	function alterar($db150_sequencial = null, $sWhere = null)
 	{
 		$this->atualizacampos();
-		$sql = " update obrasdadoscomplementares set ";
+		$sql = " update obrasdadoscomplementareslote set ";
 		$virgula = "";
 		if (trim($this->db150_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_sequencial"])) {
 			$sql .= $virgula . " db150_sequencial = $this->db150_sequencial ";
@@ -389,47 +375,36 @@ class cl_obrasdadoscomplementares
 		if (trim($this->db150_distrito) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_distrito"])) {
 			$sql .= $virgula . " db150_distrito = '$this->db150_distrito' ";
 			$virgula = ",";
-		}else{
-			$sql .= $virgula . " db150_distrito = null ";
-			$virgula = ",";
 		}
+		// else{
+		// 	$sql .= $virgula . " db150_distrito = null ";
+		// 	$virgula = ",";
+		// }
 		if (trim($this->db150_bairro) != null || isset($GLOBALS["HTTP_POST_VARS"]["db150_bairro"])) {
 			$sql .= $virgula . " db150_bairro = '$this->db150_bairro' ";
 			$virgula = ",";
-		}else{
-			$sql .= $virgula . " db150_bairro = null ";
+		}
+		// else{
+		// 	$sql .= $virgula . " db150_bairro = null ";
+		// 	$virgula = ",";
+		// }
+		if (trim($this->db150_numero) != null || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])) {
+			$sql .= $virgula . " db150_numero = '$this->db150_numero' ";
 			$virgula = ",";
 		}
+		// $sql .= $virgula . " db150_numero = ".(!$this->db150_numero ? 'null' : $this->db150_numero);
+		// $virgula = ",";
 
-		$sql .= $virgula . " db150_numero = ".(!$this->db150_numero ? 'null' : $this->db150_numero);
-		$virgula = ",";
-		
 		if (trim($this->db150_logradouro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_logradouro"])) {
 			$sql .= $virgula . " db150_logradouro = '$this->db150_logradouro' ";
 			$virgula = ",";
 		}
-		if (trim($this->db150_grauslatitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_grauslatitude"])) {
-			$sql .= $virgula . " db150_grauslatitude = '$this->db150_grauslatitude' ";
+		if (trim($this->db150_latitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_latitude"])) {
+			$sql .= $virgula . " db150_latitude = '$this->db150_latitude' ";
 			$virgula = ",";
 		}
-		if (trim($this->db150_minutolatitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_minutolatitude"])) {
-			$sql .= $virgula . " db150_minutolatitude = '$this->db150_minutolatitude' ";
-			$virgula = ",";
-		}
-		if (trim($this->db150_segundolatitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_segundolatitude"])) {
-			$sql .= $virgula . " db150_segundolatitude = '$this->db150_segundolatitude' ";
-			$virgula = ",";
-		}
-		if (trim($this->db150_grauslongitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_grauslongitude"])) {
-			$sql .= $virgula . " db150_grauslongitude = '$this->db150_grauslongitude' ";
-			$virgula = ",";
-		}
-		if (trim($this->db150_minutolongitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_minutolongitude"])) {
-			$sql .= $virgula . " db150_minutolongitude = '$this->db150_minutolongitude' ";
-			$virgula = ",";
-		}
-		if (trim($this->db150_segundolongitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_segundolongitude"])) {
-			$sql .= $virgula . " db150_segundolongitude = '$this->db150_segundolongitude' ";
+		if (trim($this->db150_longitude) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_longitude"])) {
+			$sql .= $virgula . " db150_longitude = '$this->db150_longitude' ";
 			$virgula = ",";
 		}
 		if (trim($this->db150_classeobjeto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_classeobjeto"])) {
@@ -466,16 +441,21 @@ class cl_obrasdadoscomplementares
 		}
 		if (trim($this->db150_bdi) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bdi"])) {
 			$sql .= $virgula . " db150_bdi = $this->db150_bdi ";
-		}else{
-			$sql .= $virgula . " db150_bdi = null ";
 		}
+		// else{
+		// 	$sql .= $virgula . " db150_bdi = null ";
+		// }
 		if (trim($this->db150_cep) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_cep"])) {
 			$sql .= $virgula . " db150_cep = $this->db150_cep ";
 		}
 		$sql .= " where ";
 
-		if ($db150_sequencial != null) {
-			$sql .= " db150_sequencial = $db150_sequencial";
+		if($sWhere != null){
+			$sql .= $sWhere;
+		}else{
+			if ($db150_sequencial != null) {
+				$sql .= " db150_sequencial = $db150_sequencial";
+			}
 		}
 		$result = db_query($sql);
 		if ($result == false) {
@@ -513,7 +493,7 @@ class cl_obrasdadoscomplementares
 	// funcao para exclusao
 	function excluir($db150_sequencial = null, $dbwhere = null)
 	{
-		$sql = " delete from obrasdadoscomplementares
+		$sql = " delete from obrasdadoscomplementareslote
                         where ";
 		$sql2 = "";
 		if ($dbwhere == null || $dbwhere == "") {
@@ -576,7 +556,7 @@ class cl_obrasdadoscomplementares
 		$this->numrows = pg_numrows($result);
 		if ($this->numrows == 0) {
 			$this->erro_banco = "";
-			$this->erro_sql = "Record Vazio na Tabela:obrasdadoscomplementares";
+			$this->erro_sql = "Record Vazio na Tabela:obrasdadoscomplementareslote";
 			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
@@ -599,7 +579,7 @@ class cl_obrasdadoscomplementares
 		} else {
 			$sql .= $campos;
 		}
-		$sql .= " from obrasdadoscomplementares ";
+		$sql .= " from obrasdadoscomplementareslote ";
 		$sql .= " join obrascodigos on db151_codigoobra = db150_codobra ";
 		$sql2 = "";
 		if ($dbwhere == "") {
@@ -635,9 +615,9 @@ class cl_obrasdadoscomplementares
 		} else {
 			$sql .= $campos;
 		}
-		$sql .= " from obrasdadoscomplementares ";
-		$sql .= " JOIN obrascodigos on db151_codigoobra = db150_codobra ";
-		$sql .= " JOIN liclicita on l20_codigo = db151_liclicita ";
+		$sql .= " from obrasdadoscomplementareslote ";
+		$sql .= " INNER JOIN obrascodigos on db151_codigoobra = db150_codobra ";
+		$sql .= " INNER JOIN liclicitemlote on l04_codigo = db150_lote ";
 		$sql .= " INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio ";
 		$sql2 = "";
 		if ($dbwhere == "") {
@@ -674,11 +654,11 @@ class cl_obrasdadoscomplementares
 		} else {
 			$sql .= $campos;
 		}
-		$sql .= " from obrasdadoscomplementares ";
+		$sql .= " from obrasdadoscomplementareslote ";
 		$sql2 = "";
 		if ($dbwhere == "") {
 			if ($db150_sequencial != null) {
-				$sql2 .= " where obrasdadoscomplementares.db150_sequencial = $db150_sequencial ";
+				$sql2 .= " where db150_sequencial = $db150_sequencial ";
 			}
 		} else if ($dbwhere != "") {
 			$sql2 = " where $dbwhere";

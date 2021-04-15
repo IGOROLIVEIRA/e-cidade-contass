@@ -36,12 +36,23 @@ class obrasDadosComplementares
 	private $bairro = '';
 	private $numero = '';
 	private $logradouro = '';
+
+	/**
+	 * Usados apenas se não existir lote para a licitação
+	 */
 	private $grauslatitude = null;
 	private $minutolatitude = null;
 	private $segundolatitude = null;
 	private $grauslongitude = null;
 	private $minutolongitude = null;
 	private $segundolongitude = null;
+
+	/**
+	 * Usados quando existir lote para a licitação
+	 */
+	private $latitude = null;
+	private $longitude = null;
+
 	private $classeobjeto = null;
 	private $atividadeobra = null;
 	private $atividadeservico = null;
@@ -52,18 +63,23 @@ class obrasDadosComplementares
 	private $subgrupobempublico = null;
 	private $bdi = null;
 	private $sequencial = null;
+	private $sLote = null;
 
 
 	/**
 	 *
 	 */
-	function __construct($iCodigoObra = null)
+	function __construct($iCodigoObra = null, $sLote)
 	{
 
 		if ($iCodigoObra != null) {
 			$sWhere = " db150_codobra = " . $iCodigoObra;
 
-			$oDaoLocal = db_utils::getDao('obrasdadoscomplementares');
+			if(!$sLote){
+				$oDaoLocal = db_utils::getDao('obrasdadoscomplementares');
+			}else{
+				$oDaoLocal = db_utils::getDao('obrasdadoscomplementareslote');
+			}
 			$sQueryLocal = $oDaoLocal->sql_query(null, "*", null, $sWhere);
 			$rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
 
@@ -82,12 +98,21 @@ class obrasDadosComplementares
 			$this->setCodigoObra($oDados->db150_codobra);
 			$this->setDistrito($oDados->db150_distrito);
 			$this->setLogradouro($oDados->db150_logradouro);
-			$this->setGrausLatitude($oDados->db150_grauslatitude);
-			$this->setMinutoLatitude($oDados->db150_minutolatitude);
-			$this->setSegundoLatitude($oDados->db150_segundolatitude);
-			$this->setGrausLongitude($oDados->db150_grauslongitude);
-			$this->setMinutoLongitude($oDados->db150_minutolongitude);
-			$this->setSegundoLongitude($oDados->db150_segundolongitude);
+
+			if(!$sLote){
+
+				$this->setGrausLatitude($oDados->db150_grauslatitude);
+				$this->setMinutoLatitude($oDados->db150_minutolatitude);
+				$this->setSegundoLatitude($oDados->db150_segundolatitude);
+				$this->setGrausLongitude($oDados->db150_grauslongitude);
+				$this->setMinutoLongitude($oDados->db150_minutolongitude);
+				$this->setSegundoLongitude($oDados->db150_segundolongitude);
+
+			}else{
+				$this->setLatitude($oDados->db150_latitude);
+				$this->setLongitude($oDados->db150_longitude);
+			}
+
 			$this->setClasseObjeto($oDados->db150_classeobjeto);
 			$this->setAtividadeObra($oDados->db150_atividadeObra);
 			$this->setAtividadeServico($oDados->db150_atividadeservico);
@@ -156,6 +181,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para setar a propriedade Graus Latitude
+	 * Usado apenas quando não existir lote
 	 * @param integer grauslatitude
 	 * @return void
 	 */
@@ -165,6 +191,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para retornar a propriedade grauslatitude
+	 * Usado apenas quando não existir lote
 	 * @return integer grauslatitude
 	 */
 	public function getGrausLatitude()	{
@@ -173,6 +200,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para setar a propriedade minutolatitude
+	 * Usado apenas quando não existir lote
 	 * @param integer minutolatitude
 	 * @return void
 	 */
@@ -182,6 +210,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para retornar a propriedade minutolatitude
+	 * Usado apenas quando não existir lote
 	 * @return integer minutolatitude
 	 */
 	public function getMinutoLatitude()	{
@@ -190,6 +219,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para setar a propriedade segundolatitude
+	 * Usado apenas quando não existir lote
 	 * @param float segundolatitude
 	 * @return void
 	 */
@@ -199,6 +229,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para retornar a propriedade segundolatitude
+	 * Usado apenas quando não existir lote
 	 * @return float segundolatitude
 	 */
 	public function getSegundoLatitude(){
@@ -207,6 +238,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para setar a propriedade Graus Longitude
+	 * Usado apenas quando não existir lote
 	 * @param integer grauslongitude
 	 * @return void
 	 */
@@ -216,6 +248,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para retornar a propriedade grauslongitude
+	 * Usado apenas quando não existir lote
 	 * @return integer grauslongitude
 	 */
 	public function getGrausLongitude(){
@@ -224,6 +257,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para setar a propriedade minutolongitude
+	 * Usado apenas quando não existir lote
 	 * @param integer minutolongitude
 	 * @return void
 	 */
@@ -233,6 +267,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para retornar a propriedade minutolongitude
+	 * Usado apenas quando não existir lote
 	 * @return integer minutolongitude
 	 */
 	public function getMinutoLongitude(){
@@ -241,6 +276,7 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para setar a propriedade segundolongitude
+	 * Usado apenas quando não existir lote
 	 * @param float segundolongitude
 	 * @return void
 	 */
@@ -250,10 +286,49 @@ class obrasDadosComplementares
 
 	/**
 	 * Metodo para retornar a propriedade segundolongitude
+	 * Usado apenas quando não existir lote
 	 * @return float segundolongitude
 	 */
 	public function getSegundoLongitude(){
 		return $this->segundolongitude;
+	}
+
+	/**
+	 * Metodo para setar a propriedade longitude
+	 * Usado apenas quando existir lote
+	 * @param float longitude
+	 * @return void
+	 */
+	public function setLongitude($iLongitude)	{
+		$this->longitude = $iLongitude;
+	}
+
+	/**
+	 * Metodo para retornar a propriedade longitude
+	 * Usado apenas quando existir lote
+	 * @return float longitude
+	 */
+	public function getLongitude(){
+		return $this->longitude;
+	}
+
+	/**
+	 * Metodo para setar a propriedade latitude
+	 * Usado apenas quando existir lote
+	 * @param float latitude
+	 * @return void
+	 */
+	public function setLatitude($iLatitude)	{
+		$this->latitude = $iLatitude;
+	}
+
+	/**
+	 * Metodo para retornar a propriedade latitude
+	 * Usado apenas quando existir lote
+	 * @return float latitude
+	 */
+	public function getLatitude(){
+		return $this->latitude;
 	}
 
 	/**
@@ -546,22 +621,45 @@ class obrasDadosComplementares
 	}
 
 	/**
+	 * Método para setar a string com o numero dos lote
+	 * @param string
+	 * @return void
+	 */
+	public function setLote($sLote){
+		$this->lote = $sLote;
+	}
+
+	/**
+	 * Método para retornar a string do lote
+	 * @return string
+	 */
+
+	 public function getLote(){
+		 return $this->lote;
+	 }
+
+	/**
 	 * Método para salvar um endereço da obra
 	 * caso ele não esteja cadastrado
 	 */
 	public function salvaDadosComplementares($incluir){
+
 		if (!db_utils::inTransaction()) {
 			throw new Exception('Processamento Cancelado não existe transação ativa.');
 		}
-		$oDaoObras = db_utils::getDao('obrasdadoscomplementares');
+
+		
+		$tabela_base = !$this->getLote() ? 'obrasdadoscomplementares' : 'obrasdadoscomplementareslote';
+		$oDaoObras = db_utils::getDao($tabela_base);
 		$oDaoObrasCodigo = db_utils::getDao('obrascodigos');
 
 		$sSqlCodigo = $oDaoObrasCodigo->sql_query($this->getCodigoObra(), 'db151_codigoobra, db151_liclicita','','db151_liclicita = '.$this->getLicita());
 		$rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
-		$oObra = db_utils::fieldsMemory($rsCodigo, 0);
 
 		if($incluir){
+
 			if(!$oDaoObrasCodigo->numrows){
+
 				$oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
 				$oDaoObrasCodigo->db151_liclicita = $this->getLicita();
 				$oDaoObrasCodigo->incluir();
@@ -569,9 +667,10 @@ class obrasDadosComplementares
 				if($oDaoObrasCodigo->erro_status == '0'){
 					throw new Exception($oDaoObrasCodigo->erro_msg);
 				}
+
 			}
 
-			$this->preencheObjeto($incluir);
+			!$this->getLote() ? $this->preencheObjetoItem($incluir) : $this->preencheObjetoLote($incluir);
 
 		}else{
 
@@ -590,7 +689,7 @@ class obrasDadosComplementares
 
 				$updateRegisters = $oDaoObras->sql_query_completo('','db150_sequencial','','db151_liclicita = '.$this->getLicita());
 				$rsRegisters = $oDaoObras->sql_record($updateRegisters);
-
+				
 				for($count=0;$count<pg_num_rows($rsRegisters);$count++) {
 					$iSequencial = db_utils::fieldsMemory($rsRegisters, $count)->db150_sequencial;
 					$oDaoObras->db150_codobra = $this->getCodigoObra();
@@ -611,14 +710,21 @@ class obrasDadosComplementares
 				}
 			}
 
-			$this->preencheObjeto($incluir);
-
+			if(!$this->getLote()){
+				$this->preencheObjetoItem($incluir);
+			}else{
+				$this->preencheObjetoLote($incluir);
+			}
+			
 		}
 
 		return $oRetorno;
 	}
 
-	public function preencheObjeto($inclusao){
+	/**
+	 * @todo renomear todos os metodos para preencheObjetoItem
+	 */
+	public function preencheObjetoItem($inclusao){
 
 		$sSqlNatureza = db_query('SELECT l20_naturezaobjeto as natureza from liclicita where l20_codigo = '.$this->getLicita());
 		$iNatureza = db_utils::fieldsMemory($sSqlNatureza, 0)->natureza;
@@ -665,72 +771,228 @@ class obrasDadosComplementares
 		}
 	}
 
+	public function preencheObjetoLote($inclusao){
+		
+		$sSqlNatureza = db_query('SELECT l20_naturezaobjeto as natureza from liclicita where l20_codigo = '.$this->getLicita());
+		$iNatureza = db_utils::fieldsMemory($sSqlNatureza, 0)->natureza;
+
+		$aLotes = explode(',', $this->getLote());
+
+		for($count = 0; $count < count($aLotes); $count++){
+
+			$oDaoObras = db_utils::getDao('obrasdadoscomplementareslote');
+
+			$oDaoObras->db150_codobra = $this->getCodigoObra();
+			$oDaoObras->db150_pais = $this->getPais();
+			$oDaoObras->db150_estado = $this->getEstado();
+			$oDaoObras->db150_municipio = $this->getMunicipio();
+			$oDaoObras->db150_distrito = $this->getDistrito();
+			$oDaoObras->db150_bairro = $this->getBairro();
+			$oDaoObras->db150_numero = $this->getNumero();
+			$oDaoObras->db150_logradouro = $this->getLogradouro();
+			$oDaoObras->db150_latitude = $this->getLatitude();
+			$oDaoObras->db150_longitude = $this->getLongitude();
+			$oDaoObras->db150_lote = $aLotes[$count];
+			$oDaoObras->db150_classeobjeto = $this->getClasseObjeto();
+			$oDaoObras->db150_grupobempublico = $this->getGrupoBemPublico();
+			$oDaoObras->db150_subgrupobempublico = $this->getSubGrupoBemPublico();
+			$oDaoObras->db150_atividadeobra = $this->getAtividadeObra();
+			$oDaoObras->db150_atividadeservico = $this->getAtividadeServico();
+			$oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
+			$oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
+			$oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
+
+			if(!$this->getBdi() && $iNatureza == '1'){
+				throw new Exception('Campo BDI não informado!');
+			}
+
+			$oDaoObras->db150_bdi = $this->getBdi();
+			$oDaoObras->db150_cep = $this->getCep();
+			
+			if(!$inclusao){
+				$oDaoObras->alterar('', ' db150_lote = ' . $aLotes[$count]);
+			}else{
+				$oDaoObras->incluir();
+			}
+
+			if($oDaoObras->erro_status == '0'){
+				throw new Exception($oDaoObras->erro_msg);
+			}
+
+		}
+
+		
+	}
+
+	/**
+	 * Retorna mais de um item se a licitação tiver o tipo de julgamento por lote,
+	 * caso contrário retorna apenas um item
+	 * @return array
+	 */
 	static function findObraByCodigo($iSequencial, $iLicitacao, $lEncode = true)
 	{
 		$aRetorno = false;
 
-		$sCampos = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db72_descricao as descrMunicipio, db150_distrito as distrito, ";
-		$sCampos .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
-		$sCampos .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
-		$sCampos .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
-		$sCampos .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, 
-        db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep, db150_sequencial as sequencial";
+		$tabela_base = self::checkTable($iLicitacao);
 
-		$oDaoObra = db_utils::getDao('obrasdadoscomplementares');
+		$sCampos = "distinct $tabela_base.*, db72_descricao as descrMunicipio";
+		$sCampos .= $tabela_base === 'obrasdadoscomplementareslote' ? ',l04_descricao' : '';
+
+		$oDaoObra = db_utils::getDao($tabela_base);
 
 		if (trim($iSequencial) != "") {
 			$sWhere = " db150_sequencial = " . $iSequencial;
 		}else{
-			$sWhere = " db150_sequencial = (select max(db150_sequencial) from obrasdadoscomplementares join obrascodigos on db151_codigoobra = db150_codobra where db151_liclicita =".$iLicitacao.")";
+			$sWhere = " db150_codobra = (select max(db150_codobra) from $tabela_base join obrascodigos on db151_codigoobra = db150_codobra where db151_liclicita =".$iLicitacao.")";
 		}
 
-		$sQueryObra = $oDaoObra->sql_query_completo(null, $sCampos, null, $sWhere);
-		$rsQueryObra = $oDaoObra->sql_record($sQueryObra);
+		$sSqlObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
+		// echo $sSqlObra;
+		
+		$rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
-		if ($rsQueryObra !== false) {
-			$aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
-		}
-		return $aRetorno;
-	}
-
-	static function findObrasByLicitacao($iCodigoLicitacao, $lEncode = true)
-	{
-		$aRetorno = false;
-
-		if (trim($iCodigoLicitacao) != "") {
-
-			$oDaoObra = db_utils::getDao('obrasdadoscomplementares');
-			$sCampos = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db72_descricao as descrMunicipio, db150_distrito as distrito, ";
-			$sCampos .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
-			$sCampos .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
-			$sCampos .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
-			$sCampos .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico,";
-			$sCampos .= " db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep, db150_sequencial as sequencial";
-
-			$sWhere = " db151_liclicita = " . $iCodigoLicitacao;
-
-			$sQueryObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
-			$rsQueryObra = $oDaoObra->sql_record($sQueryObra);
+		if($tabela_base === 'obrasdadoscomplementareslote'){
+			$aRetorno = self::retorno($rsQueryObra);
+		}else{
 
 			if ($rsQueryObra !== false) {
 				$aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
 			}
+
 		}
+
+
 		return $aRetorno;
+
 	}
 
-	static function isLastRegister($iSequencial, $iLicitacao){
-		$oDaoObra = db_utils::getDao('obrasdadoscomplementares');
+	/**
+	 * Método que retorna as obras cadastradas. E se tiver mais de um item para o mesmo lote,
+	 * os códigos dos lotes são concatenados na propriedade db150_lote
+	 * @return array
+	 */
+	static function retorno($rs){
+
+		if(pg_numrows($rs)){
+
+			$aObras = array();
+
+			$aPesquisa = db_utils::getCollectionByRecord($rs, false, false, true);
+			
+			for($count = 0; $count < count($aPesquisa); $count++){
+
+				$indice = $aPesquisa[$count]->l04_descricao;
+				
+				if(!$aObras[$indice]){
+					$aObras[$indice] = $aPesquisa[$count];
+				}else{
+					$aObras[$indice]->db150_lote .= ', ' . $aPesquisa[$count]->db150_lote;
+				}
+			
+			}
+
+			$aAuxiliar = array();
+
+			foreach ($aObras as $key => $obra) {
+				$aAuxiliar[] = $aObras[$key];
+			}
+
+		}
+
+		return $aAuxiliar;
+
+	}
+
+	static function findObrasByLicitacao($iCodigoLicitacao, $lEncode = true)
+	{
+
+		$aRetorno = false;
+		$tabela_base = '';
+
+		if (trim($iCodigoLicitacao) != "") {
+
+			$tabela_base = self::checkTable($iCodigoLicitacao);
+
+			$oDaoObra = db_utils::getDao($tabela_base);
+			$sCampos = 'distinct db72_descricao as descrMunicipio, ';
+			$sCampos .= "$tabela_base.*";
+			$sCampos .= $tabela_base === 'obrasdadoscomplementareslote' ? ',l04_descricao' : '';
+			
+			$sWhere = " db151_liclicita = " . $iCodigoLicitacao;
+
+			$sSqlObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
+			$rsQueryObra = $oDaoObra->sql_record($sSqlObra);
+			
+			if($tabela_base === 'obrasdadoscomplementareslote'){
+				$aRetorno = self::retorno($rsQueryObra);
+			}else{
+				if ($rsQueryObra !== false) {
+					$aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
+				}
+			}
+
+		}
+
+		return $aRetorno;
+
+	}
+
+	/**
+	 * Checa se o endereço cadastrado é o último existente da obra.
+	 * Caso encontre lote para os itens da licitação e o tipo do julgamento for lote retornará false
+	 * @return boolean
+	 */
+	static function isManyRegisters($iSequencial, $iLicitacao){
+
+		$table_base = self::checkTable($iLicitacao);
+		$oDaoObra = db_utils::getDao($table_base);
 		$sCampos = " min(db150_sequencial) as seq_minimo, count(db150_sequencial) as registersCount";
 		$sSql = $oDaoObra->sql_query_completo('', $sCampos, 'db150_codobra', 'db151_liclicita = '.$iLicitacao.' group by db150_codobra');
+
 		$rsSql = $oDaoObra->sql_record($sSql);
 		$oObras = db_utils::fieldsMemory($rsSql, 0);
+		
+		if($table_base == 'obrasdadoscomplementares'){
+			if($oObras->seq_minimo == $iSequencial && intval($oObras->registerscount) > 1){
+				return true;
+			}
+		}else{
+			$sCampos = " DISTINCT liclicitemlote.l04_descricao ";
+			$sSql = $oDaoObra->sql_query_completo('', $sCampos, '', 'db151_liclicita = '.$iLicitacao);
+			$rsSql = $oDaoObra->sql_record($sSql);
 
-		if($oObras->seq_minimo == $iSequencial && intval($oObras->registerscount) > 1){
-			return true;
+			if($oObras->seq_minimo == $iSequencial && pg_numrows($rsSql) > 1){
+				return true;
+			}
+			
 		}
+
 		return false;
 	}
+
+	/**
+	 * Checa se o tipo de julgamento da licitação foi por item ou por lote.
+	 * Caso for item retorna a tabela obrasdadoscomplementareslote,
+	 * senão retorna a obrasdadoscomplementares
+	 * @return string
+	 */
+
+	static function checkTable($iLicitacao){
+
+		$sSql = " SELECT distinct l20_anousu, l20_tipojulg
+					FROM liclicitemlote
+					INNER JOIN liclicitem ON l04_liclicitem = l21_codigo
+					INNER JOIN liclicita ON l20_codigo = l21_codliclicita
+					WHERE l20_codigo = $iLicitacao ";
+
+		$rsSql = db_query($sSql);
+		$oLicitacao = db_utils::fieldsMemory($rsSql, 0);
+
+		$table_base = $oLicitacao->l20_anousu >= 2021 && $oLicitacao->l20_tipojulg == 3 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+		return $table_base; 
+
+	}
+
 }
 
 

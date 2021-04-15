@@ -74,6 +74,8 @@ if(!isset($alterar)){
     $natureza_objeto = $oDados->l20_naturezaobjeto;
     $sequencial = $oDados->l47_sequencial;
     $codigolicitacao = $oDados->l20_codigo;
+    $anoLicitacao = $oDados->l20_anousu;
+    $iTipoJulgamento = $oDados->l20_tipojulg;
 }
 
 if(isset($alterar)){

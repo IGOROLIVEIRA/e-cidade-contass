@@ -765,6 +765,56 @@ switch ($oParam->exec) {
 			$oRetorno->itens[] = $oParecer;
 		}
 
-		break;
+    break;
+
+    case 'getLotesPendentes':
+
+        $oDaoLiclicitemLote = db_utils::getDao('liclicitemlote');
+        $sWhere = ' l20_codigo = ' . $oParam->iLicitacao;
+        $sWhere .= ' and l04_codigo not in (select db150_lote from obrasdadoscomplementareslote) ';
+        $sSqlLote = $oDaoLiclicitemLote->sql_query('', 'liclicitemlote.*', '', $sWhere);
+        
+        $rsLote = $oDaoLiclicitemLote->sql_record($sSqlLote);
+
+        for($count = 0; $count < pg_numrows($rsLote); $count++){
+
+            $oDadosLote = db_utils::fieldsMemory($rsLote, $count);
+
+            $oLote = new stdClass();
+            $oLote->codigo = $oDadosLote->l04_codigo;
+            $oLote->descricao = $oDadosLote->l04_descricao;
+
+            $oRetorno->itens[] = $oLote;
+        }
+
+    break;
+
+    case 'getTipoJulgamento':
+
+        $rsTipo = db_query('SELECT l20_tipojulg, l20_anousu from liclicita where l20_codigo = '.$oParam->licitacao);
+        $oLicitacao = db_utils::fieldsMemory($rsTipo, 0);
+        $oRetorno->tipo = $oLicitacao->l20_tipojulg;
+        $oRetorno->ano = $oLicitacao->l20_anousu;
+
+        break;
+
+    case 'getLotes':
+
+        $sSqlLotes = "
+        SELECT l04_descricao,
+               l04_codigo
+               FROM liclicitemlote
+               WHERE l04_descricao =
+                        (SELECT l04_descricao
+                        FROM liclicitemlote
+                        WHERE l04_codigo =
+                            (SELECT db150_lote
+                            FROM obrasdadoscomplementareslote WHERE db150_sequencial = $oParam->loteReferencia))
+        ";
+
+        $rsLotes = db_query($sSqlLotes);
+        $oRetorno->itens = db_utils::getCollectionByRecord($rsLotes,'','',true);
+       
+        break;
 }
 echo $oJson->encode($oRetorno);

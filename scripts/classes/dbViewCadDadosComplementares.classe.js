@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto) {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto, sLote='', sDescricaoLote='') {
     var me = this;
 
     this.iCodigoPais = '';
@@ -47,8 +47,88 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.iLicitacao = '';
     this.acao = incluir;
     this.iNaturezaObjeto = iNaturezaObjeto;
-    this.callBackFunction = function () {
+    this.sLote = sLote;
+    this.sDescricaoLote = sDescricaoLote;
+    this.exibeLote = false;
 
+
+    this.buscaLotes = (sequencial) => {
+        let oParam = new Object();
+        oParam.exec = 'getLotes';
+        oParam.loteReferencia = sequencial;
+
+        let oAjax = new Ajax.Request(
+            'lic4_licitacao.RPC.php',
+            {
+                parameters: 'json=' + Object.toJSON(oParam),
+                method: 'post',
+                asynchronous: false,
+                onComplete: (objeto) => {
+
+                    let response = eval('('+objeto.responseText+')');
+                    let itens = response.itens;
+
+                    let aLotes = [];
+                    itens.map(item => {
+                        if(!me.sDescricaoLote){
+                            me.sDescricaoLote = item.l04_descricao.urlDecode();
+                        }
+                        aLotes.push(item.l04_codigo);
+                    });
+
+                    me.sLote = aLotes.join(',');
+
+                }
+            }
+        )
+    }
+
+    if(this.sLote && !this.sDescricaoLote){
+        me.buscaLotes(this.sLote);
+    }
+
+    /**
+     * Acréscimo do atributo sLote para atender as alterações do Edital para 2021
+     * e identificar os lotes que serão cadastrados para o endereço
+     */
+    this.verificaTipoJulgamento = () => {
+        
+        let oParam = new Object();
+        oParam.exec = 'getTipoJulgamento';
+        oParam.licitacao = codLicitacao;
+
+        let oAjax = new Ajax.Request(
+            'lic4_licitacao.RPC.php',
+            {
+                parameters: 'json=' + Object.toJSON(oParam),
+                method: 'post',
+                asynchronous: false,
+                onComplete: (objeto) => {
+                    let response = eval('('+objeto.responseText+')');
+                    me.exibeLote = response.tipo == '3' && parseInt(response.ano) >= 2021;
+                }
+            }
+        )
+        
+    }
+
+    me.verificaTipoJulgamento();
+
+    this.callBackFunction = function () {
+        let oParam = new Object();
+        oParam.exec = 'getCodigoObra';
+        /**
+         * @todo Substituir parametro codLicitacao pelo getLicitacao()
+         */
+        oParam.licitacao = codLicitacao;
+        var oAjax = new Ajax.Request(
+            me.sUrlRpc,
+            {
+                parameters: 'json=' + Object.toJSON(oParam),
+                method: 'post',
+                onComplete: retornoCodigoObra
+            }
+        );
     }
 
     this.sUrlRpc = 'con4_endereco.RPC.php';
@@ -137,45 +217,65 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "         </td>";
     sContent += "       </tr>";
 
-    sContent += "       <tr valign='top'>";
-    sContent += "          <td id='ctnLabelGrausLatitude" + sId + "' style='width:10%;'>";
-    sContent += "           <b>Graus Latitude:</b>";
-    sContent += "          </td>"
-    sContent += "          <td id='ctnGrausLatitude" + sId + "' style='width:25%;'>";
-    sContent += "          </td>";
+    if(!me.exibeLote){
 
-    sContent += "          <td id='ctnLabelMinutoLatitude" + sId + "'>";
-    sContent += "           <b>Minuto da Latitude:</b>";
-    sContent += "          </td>";
-    sContent += "          <td id='ctnMinutoLatitude" + sId + "'>";
-    sContent += "          </td>";
+        sContent += "       <tr valign='top'>";
+        sContent += "          <td id='ctnLabelGrausLatitude" + sId + "' style='width:10%;'>";
+        sContent += "           <b>Graus Latitude:</b>";
+        sContent += "          </td>"
+        sContent += "          <td id='ctnGrausLatitude" + sId + "' style='width:25%;'>";
+        sContent += "          </td>";
+    
+        sContent += "          <td id='ctnLabelMinutoLatitude" + sId + "'>";
+        sContent += "           <b>Minuto da Latitude:</b>";
+        sContent += "          </td>";
+        sContent += "          <td id='ctnMinutoLatitude" + sId + "'>";
+        sContent += "          </td>";
+    
+        sContent += "          <td id='ctnLabelSegundoLatitude" + sId + "' style='padding-left: 51px;'>";
+        sContent += "           <b>Segundo da Latitude:</b>";
+        sContent += "          </td>";
+        sContent += "          <td id='ctnSegundoLatitude" + sId + "'>";
+        sContent += "          </td>";
+        sContent += "        </tr>";
+    
+        sContent += "       <tr valign='top'>";
+        sContent += "          <td id='ctnLabelGrausLongitude" + sId + "' style='width:10%;'>";
+        sContent += "           <b>Graus Longitude:</b>";
+        sContent += "          </td>";
+        sContent += "          <td id='ctnGrausLongitude" + sId + "' style='width:25%;'>";
+        sContent += "          </td>";
+    
+        sContent += "          <td id='ctnLabelMinutoLongitude" + sId + "'>";
+        sContent += "           <b>Minuto da Longitude:</b>";
+        sContent += "          </td>";
+        sContent += "          <td id='ctnMinutoLongitude" + sId + "'>";
+        sContent += "          </td>";
+    
+        sContent += "          <td id='ctnLabelSegundoLongitude" + sId + "' style='padding-left: 51px;'>";
+        sContent += "           <b>Segundo da Longitude:</b>";
+        sContent += "          </td>";
+        sContent += "          <td id='ctnSegundoLongitude" + sId + "'>";
+        sContent += "          </td>";
+        sContent += "        </tr>";
 
-    sContent += "          <td id='ctnLabelSegundoLatitude" + sId + "' style='padding-left: 51px;'>";
-    sContent += "           <b>Segundo da Latitude:</b>";
-    sContent += "          </td>";
-    sContent += "          <td id='ctnSegundoLatitude" + sId + "'>";
-    sContent += "          </td>";
-    sContent += "        </tr>";
+    }else{
 
-    sContent += "       <tr valign='top'>";
-    sContent += "          <td id='ctnLabelGrausLongitude" + sId + "' style='width:10%;'>";
-    sContent += "           <b>Graus Longitude:</b>";
-    sContent += "          </td>";
-    sContent += "          <td id='ctnGrausLongitude" + sId + "' style='width:25%;'>";
-    sContent += "          </td>";
+        sContent += "      <tr valign='top'>";
+        sContent += "          <td id='ctnLabelLatitude" + sId + "' style='width:10%;'>";
+        sContent += "           <b>Latitude:</b>";
+        sContent += "          </td>";
+        sContent += "          <td id='ctnLatitude" + sId + "' style='width:25%;'>";
+        sContent += "          </td>";
+    
+        sContent += "          <td id='ctnLabelLongitude" + sId + "'>";
+        sContent += "           <b>Longitude:</b>";
+        sContent += "          </td>";
+        sContent += "          <td id='ctnLongitude" + sId + "'>";
+        sContent += "          </td>";
+        sContent += "      </tr>";
 
-    sContent += "          <td id='ctnLabelMinutoLongitude" + sId + "'>";
-    sContent += "           <b>Minuto da Longitude:</b>";
-    sContent += "          </td>";
-    sContent += "          <td id='ctnMinutoLongitude" + sId + "'>";
-    sContent += "          </td>";
-
-    sContent += "          <td id='ctnLabelSegundoLongitude" + sId + "' style='padding-left: 51px;'>";
-    sContent += "           <b>Segundo da Longitude:</b>";
-    sContent += "          </td>";
-    sContent += "          <td id='ctnSegundoLongitude" + sId + "'>";
-    sContent += "          </td>";
-    sContent += "        </tr>";
+    }
 
     sContent += "       <tr style='display: none'>";
     sContent += "         <td id='ctnCodigoCepEnd" + sId + "' >";
@@ -289,8 +389,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
     me.oWindowEndereco.setShutDownFunction(me.close);
     me.oWindowEndereco.allowCloseWithEsc(false);
+    
+    let sMessageBoard = me.exibeLote ? 'Dados Complementares do ' + me.sDescricaoLote : 'Dados Complementares';
+
     this.oMessageBoardEndereco = new DBMessageBoard('msgBoardEndereco' + sId,
-        'Dados Complementares',
+        sMessageBoard,
         '',
         $('ctnMessageBoard')
     );
@@ -537,6 +640,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     if(incluir){
         let oParam = new Object();
         oParam.exec = 'getCodigoObra';
+        /**
+         * @todo Substituir parametro codLicitacao pelo getLicitacao()
+         */
         oParam.licitacao = codLicitacao;
         var oAjax = new Ajax.Request(
             me.sUrlRpc,
@@ -2466,6 +2572,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 //-------------------------------------Início da Manipulação do Grau Latitude------------------------------------------
      /**
      * Seta o valor do Grau Latitude
+     * Só será usado se o tipo de julgamento da licitação for por item
      * @param {integer} iGrausLatitude
      * @return void
      */
@@ -2475,28 +2582,125 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
      /**
      * Retorna o valor do Grau Latitude
+     * Só será usado se o tipo de julgamento da licitação for por item
      * @return void
      */
     this.getGrausLatitude = function () {
         return this.iGrausLatitude;
     }
 
-    this.changeGrausLatitude = (event) => {
-        let valor = event.target.value;
-        if(valor < 14 || valor > 24){
-            alert('Informe um valor entre o intervalo 14 a 24.');
-            $('txtGrausLatitude' + sId).value = '';
-            return;
-        }
-        me.setGrausLatitude(event.target.value);
+    /**
+     * Seta o valor da Latitude
+     * Só será usado se o tipo de julgamento da licitação for por lote
+     * @param {float} iLatitude
+     * @return void
+     */
+     this.setLatitude = (iLatitude) => {
+        this.iLatitude = iLatitude;
     }
 
-    me.oGrausLatitude = new DBTextField('txtGrausLatitude' + sId, 'txtGrausLatitude' + sId, '');
-    me.oGrausLatitude.addStyle('width', '40%');
-    me.oGrausLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Graus Latitude\",\"f\",\"f\",event)");
-    me.oGrausLatitude.setMaxLength(2);
-    me.oGrausLatitude.show($('ctnGrausLatitude' + sId));
-    $('ctnGrausLatitude' + sId).observe('change', me.changeGrausLatitude);
+    /**
+     * Retorna o valor da Latitude
+     * Só será usado se o tipo de julgamento da licitação for por lote
+     * @return void
+     */
+    this.getLatitude =  () => {
+        return this.iLatitude;
+    }
+
+    this.checaTamanho = (campo, nomecampo) => {
+        let valor = campo.value;
+
+        if(valor.length > 9){
+            valor = valor.substr(0, valor.length - 1);
+            
+            if(!valor.includes('.')){
+                campo.value = valor.substr(0, 2) + '.' + valor.substr(2,);
+            }
+        }
+        
+        if(valor.length == 9){
+            if(!valor.includes('.')){
+                campo.value = valor.substr(0, 2) + '.' + valor.substr(2,);
+            }
+        }
+
+        return false;
+    }
+
+    this.preencheComZero = (novaString, tamanho) => {
+        
+        for(let count = 0; count < (8 - tamanho); count++){
+            novaString += '0';
+        }
+
+        return novaString;
+    }
+
+    this.changeValor = (event) => {
+
+        let valor = event.target.value;
+        valor = valor.replace(/\,/g, '');
+        
+
+        if(valor.indexOf('.') == 2 && valor.length < 9){
+            console.log('1: ', valor.substr(0,3));
+            console.log('2: ', valor.substr(3,).replace(/\./g, ''));
+            valor = valor.substr(0, 3) + valor.substr(2,).replace(/\./g, '');
+            valor = me.preencheComZero(valor, valor.length);
+        }
+
+        if(valor.indexOf('.') != 2 && valor.length < 9){
+            valor = valor.replace(/\./g, '');
+            valor = valor.substr(0, 2)+'.'+valor.substr(2, );
+            valor = me.preencheComZero(valor, valor.length)
+        }
+
+        event.target.value = valor;
+       
+        valor = parseFloat(valor);
+        
+        return valor;
+    }
+
+    if(!me.exibeLote){
+
+        this.changeGrausLatitude = (event) => {
+            let valor = event.target.value;
+            if(valor < 14 || valor > 24){
+                alert('Informe um valor entre o intervalo 14 a 24.');
+                $('txtGrausLatitude' + sId).value = '';
+                return;
+            }
+            me.setGrausLatitude(event.target.value);
+        }
+
+        me.oGrausLatitude = new DBTextField('txtGrausLatitude' + sId, 'txtGrausLatitude' + sId, '');
+        me.oGrausLatitude.addStyle('width', '40%');
+        me.oGrausLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Graus Latitude\",\"f\",\"f\",event)");
+        me.oGrausLatitude.setMaxLength(2);
+        me.oGrausLatitude.show($('ctnGrausLatitude' + sId));
+        $('ctnGrausLatitude' + sId).observe('change', me.changeGrausLatitude);
+
+    }else{
+        /**
+         * Alterações para atender o Edital para 2021
+         */
+
+        this.changeLatitude = (event) => {
+            me.setLatitude(me.changeValor(event));
+        }
+        
+        me.oLatitude = new DBTextField('txtLatitude' + sId, 'txtLatitude' + sId, '');
+        me.oLatitude.addStyle('width', '40%');
+        $('ctnLatitude' + sId).observe('keyup', () => {
+            me.checaTamanho($('txtLatitude'+sId), 'latitude');
+        });
+        me.oLatitude.setMaxLength(9);
+        me.oLatitude.show($('ctnLatitude' + sId));
+        $('ctnLatitude' + sId).observe('change', me.changeLatitude);
+        
+    }
 
 //-------------------------------------Fim da Manipulação do Graus Latitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Minuto Latitude--------------------------------------------
@@ -2517,19 +2721,23 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         return this.iMinutoLatitude;
     }
 
-    this.changeMinutoLatitude = (event) => {
-        if(!me.checaValor(event.target.value)){
-            $('txtMinutoLatitude'+sId).value = '';
-        }
-        me.setMinutosLatitude(event.target.value);
-    }
+    if(!me.exibeLote){
 
-    me.oMinutoLatitude = new DBTextField('txtMinutoLatitude' + sId, 'txtMinutoLatitude' + sId, '');
-    me.oMinutoLatitude.addStyle('width', '80px');
-    me.oMinutoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Minuto Latitude\",\"f\",\"f\",event)");
-    me.oMinutoLatitude.setMaxLength(2);
-    me.oMinutoLatitude.show($('ctnMinutoLatitude' + sId));
-    $('ctnMinutoLatitude' + sId).observe('change', me.changeMinutoLatitude);
+        this.changeMinutoLatitude = (event) => {
+            if(!me.checaValor(event.target.value)){
+                $('txtMinutoLatitude'+sId).value = '';
+            }
+            me.setMinutosLatitude(event.target.value);
+        }
+    
+        me.oMinutoLatitude = new DBTextField('txtMinutoLatitude' + sId, 'txtMinutoLatitude' + sId, '');
+        me.oMinutoLatitude.addStyle('width', '80px');
+        me.oMinutoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Minuto Latitude\",\"f\",\"f\",event)");
+        me.oMinutoLatitude.setMaxLength(2);
+        me.oMinutoLatitude.show($('ctnMinutoLatitude' + sId));
+        $('ctnMinutoLatitude' + sId).observe('change', me.changeMinutoLatitude);
+
+    }
 //-------------------------------------Fim da Manipulação do Minuto Latitude--------------------------------------------
 //-------------------------------------Início da Manipulação do Segundo Latitude--------------------------------------------
      /**
@@ -2564,20 +2772,25 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
        }
     }
 
-    me.oSegundoLatitude = new DBTextField('txtSegundoLatitude' + sId, 'txtSegundoLatitude' + sId, '');
-    me.oSegundoLatitude.addStyle('width', '80px');
-    me.oSegundoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Latitude\",\"f\",\"t\",event)");
-    me.oSegundoLatitude.setMaxLength(6);
-    me.oSegundoLatitude.show($('ctnSegundoLatitude' + sId));
-    $('ctnSegundoLatitude' + sId).observe('change', me.changeSegundoLatitude);
-    $('ctnSegundoLatitude' + sId).observe('keyup',() => {
-        me.js_formataValor($('txtSegundoLatitude' + sId), 5);
-    });
+    if(!me.exibeLote){
+
+        me.oSegundoLatitude = new DBTextField('txtSegundoLatitude' + sId, 'txtSegundoLatitude' + sId, '');
+        me.oSegundoLatitude.addStyle('width', '80px');
+        me.oSegundoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Latitude\",\"f\",\"t\",event)");
+        me.oSegundoLatitude.setMaxLength(6);
+        me.oSegundoLatitude.show($('ctnSegundoLatitude' + sId));
+        $('ctnSegundoLatitude' + sId).observe('change', me.changeSegundoLatitude);
+        $('ctnSegundoLatitude' + sId).observe('keyup',() => {
+            me.js_formataValor($('txtSegundoLatitude' + sId), 5);
+        });
+
+    }
 
 //-------------------------------------Fim da Manipulação do Segundo Latitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Grau Longitude----------------------------------------------
      /**
      * Seta o valor do Grau Longitude
+     * Só será usado se o tipo de julgamento da licitação for por item
      * @param {integer} iGrausLongitude
      * @return void
      */
@@ -2587,28 +2800,69 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
      /**
      * Retorna o valor do Grau Longitude
+     * Só será usado se o tipo de julgamento da licitação for por item
      * @return void
      */
     this.getGrausLongitude = function () {
         return this.iGrausLongitude;
     }
 
-    this.changeGrausLongitude = (event) => {
-        let valor = event.target.value;
-        if(valor < 39 || valor > 51){
-            alert('Informe um valor entre o intervalo 39 a 51.');
-            $('txtGrausLongitude' + sId).value = '';
-            return;
-        }
-        me.setGrausLongitude(event.target.value);
+
+    /**
+     * Seta o valor da Longitude
+     * Só será usado se o tipo de julgamento da licitação for por lote
+     * @param {float} iLongitude
+     * @return void
+     */
+        this.setLongitude = (iLongitude) => {
+        this.iLongitude = iLongitude;
     }
 
-    me.oGrausLongitude = new DBTextField('txtGrausLongitude' + sId, 'txtGrausLongitude' + sId, '');
-    me.oGrausLongitude.addStyle('width', '40%');
-    me.oGrausLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Graus Longitude\",\"f\",\"f\",event)");
-    me.oGrausLongitude.setMaxLength(2);
-    me.oGrausLongitude.show($('ctnGrausLongitude' + sId));
-    $('ctnGrausLongitude' + sId).observe('change', me.changeGrausLongitude);
+    /**
+     * Retorna o valor da Longitude
+     * Só será usado se o tipo de julgamento da licitação for por lote
+     * @return void
+     */
+    this.getLongitude = () => {
+        return this.iLongitude;
+    }
+
+    if(!me.exibeLote){
+
+        this.changeGrausLongitude = (event) => {
+            let valor = event.target.value;
+            if(valor < 39 || valor > 51){
+                alert('Informe um valor entre o intervalo 39 a 51.');
+                $('txtGrausLongitude' + sId).value = '';
+                return;
+            }
+            me.setGrausLongitude(event.target.value);
+        }
+    
+        me.oGrausLongitude = new DBTextField('txtGrausLongitude' + sId, 'txtGrausLongitude' + sId, '');
+        me.oGrausLongitude.addStyle('width', '40%');
+        me.oGrausLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Graus Longitude\",\"f\",\"f\",event)");
+        me.oGrausLongitude.setMaxLength(2);
+        me.oGrausLongitude.show($('ctnGrausLongitude' + sId));
+        $('ctnGrausLongitude' + sId).observe('change', me.changeGrausLongitude);
+
+    }else{
+
+        this.changeLongitude = (event) => {
+            me.setLongitude(me.changeValor(event));
+        }
+        
+        me.oLongitude = new DBTextField('txtLongitude' + sId, 'txtLongitude' + sId, '');
+        me.oLongitude.addStyle('width', '40%');
+        $('ctnLongitude' + sId).observe('keyup', () => {
+            me.checaTamanho($('txtLongitude'+sId), 'longitude');
+        });
+        me.oLongitude.setMaxLength(9);
+        me.oLongitude.show($('ctnLongitude' + sId));
+        $('ctnLongitude' + sId).observe('change', me.changeLongitude);
+
+    }
+
 //-------------------------------------Fim da Manipulação do Graus Longitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Minuto Longitude----------------------------------------------
      /**
@@ -2628,19 +2882,23 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         return this.iMinutoLongitude;
     }
 
-    this.changeMinutoLongitude = (event) => {
-        if(!me.checaValor(event.target.value)){
-            $('txtMinutoLongitude'+sId).value = '';
-        }
-        me.setMinutoLongitude(event.target.value);
-    }
+    if(!me.exibeLote){
 
-    me.oMinutosLongitude = new DBTextField('txtMinutoLongitude' + sId, 'txtMinutoLongitude' + sId, '');
-    me.oMinutosLongitude.addStyle('width', '80px');
-    me.oMinutosLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Minuto Longitude\",\"f\",\"f\",event)");
-    me.oMinutosLongitude.setMaxLength(2);
-    me.oMinutosLongitude.show($('ctnMinutoLongitude' + sId));
-    $('ctnMinutoLongitude' + sId).observe('change', me.changeMinutoLongitude);
+        this.changeMinutoLongitude = (event) => {
+            if(!me.checaValor(event.target.value)){
+                $('txtMinutoLongitude'+sId).value = '';
+            }
+            me.setMinutoLongitude(event.target.value);
+        }
+    
+        me.oMinutosLongitude = new DBTextField('txtMinutoLongitude' + sId, 'txtMinutoLongitude' + sId, '');
+        me.oMinutosLongitude.addStyle('width', '80px');
+        me.oMinutosLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Minuto Longitude\",\"f\",\"f\",event)");
+        me.oMinutosLongitude.setMaxLength(2);
+        me.oMinutosLongitude.show($('ctnMinutoLongitude' + sId));
+        $('ctnMinutoLongitude' + sId).observe('change', me.changeMinutoLongitude);
+
+    }
 
 //-------------------------------------Fim da Manipulação do Minutos Longitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Segundo Longitude-------------------------------------------------
@@ -2669,23 +2927,27 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         return true;
     }
 
-    this.changeSegundoLongitude = (event) => {
-        if(!me.checaValor(event.target.value)){
-            $('txtSegundoLongitude'+sId).value = '';
+    if(!me.exibeLote){
+
+        this.changeSegundoLongitude = (event) => {
+            if(!me.checaValor(event.target.value)){
+                $('txtSegundoLongitude'+sId).value = '';
+            }
+            me.setSegundosLongitude(event.target.value);
+    
         }
-        me.setSegundosLongitude(event.target.value);
+    
+        me.oSegundoLongitude = new DBTextField('txtSegundoLongitude' + sId, 'txtSegundoLongitude' + sId, '');
+        me.oSegundoLongitude.addStyle('width', '80px');
+        me.oSegundoLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Longitude\",\"f\",\"t\",event)");
+        me.oSegundoLongitude.setMaxLength(6);
+        me.oSegundoLongitude.show($('ctnSegundoLongitude' + sId));
+        $('ctnSegundoLongitude' + sId).observe('change', me.changeSegundoLongitude);
+        $('ctnSegundoLongitude' + sId).observe('keyup',() => {
+            me.js_formataValor($('txtSegundoLongitude' + sId), 5);
+        });
 
     }
-
-    me.oSegundoLongitude = new DBTextField('txtSegundoLongitude' + sId, 'txtSegundoLongitude' + sId, '');
-    me.oSegundoLongitude.addStyle('width', '80px');
-    me.oSegundoLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Longitude\",\"f\",\"t\",event)");
-    me.oSegundoLongitude.setMaxLength(6);
-    me.oSegundoLongitude.show($('ctnSegundoLongitude' + sId));
-    $('ctnSegundoLongitude' + sId).observe('change', me.changeSegundoLongitude);
-    $('ctnSegundoLongitude' + sId).observe('keyup',() => {
-        me.js_formataValor($('txtSegundoLongitude' + sId), 5);
-    });
 
 //-------------------------------------Fim da Manipulação do Segundos Longitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Loteamento----------------------------------------------
@@ -3536,18 +3798,25 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 me.setLogradouro('');
                 $('txtDistrito' + sId).value = '';
                 me.setDistrito('');
-                $('txtGrausLatitude' + sId).value = '';
-                me.setGrausLatitude('');
-                $('txtMinutoLatitude' + sId).value = '';
-                me.setMinutosLatitude('');
-                $('txtSegundoLatitude' + sId).value = '';
-                me.setSegundosLatitude('');
-                $('txtGrausLongitude' + sId).value = '';
-                me.setGrausLongitude('');
-                $('txtMinutoLongitude' + sId).value = '';
-                me.setMinutoLongitude('');
-                $('txtSegundoLongitude' + sId).value = '';
-                me.setSegundosLongitude('');
+                if(!me.exibeLote){
+                    $('txtGrausLatitude' + sId).value = '';
+                    me.setGrausLatitude('');
+                    $('txtMinutoLatitude' + sId).value = '';
+                    me.setMinutosLatitude('');
+                    $('txtSegundoLatitude' + sId).value = '';
+                    me.setSegundosLatitude('');
+                    $('txtGrausLongitude' + sId).value = '';
+                    me.setGrausLongitude('');
+                    $('txtMinutoLongitude' + sId).value = '';
+                    me.setMinutoLongitude('');
+                    $('txtSegundoLongitude' + sId).value = '';
+                    me.setSegundosLongitude('');
+                }else{
+                    $('txtLatitude' + sId).value = '';
+                    me.setLatitude('');
+                    $('txtLongitude' + sId).value = '';
+                    me.setLongitude('');
+                }
                 $('txtLogradouro' + sId).value = '';
                 me.setLogradouro('');
                 $('cboClasseObjeto' + sId).value = 0;
@@ -3709,8 +3978,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
         var oEndereco = new Object();
 
-        //
-        //   //Verifica se o País foi informado
+        //Verifica se o País foi informado
         if ($F('cboCodigoPais' + sId).value == '' || $F('cboCodigoPais' + sId).value == 0) {
             $('cboCodigoPais' + sId).focus();
             alert("usuário:\n\n\País não informado!\n\n");
@@ -3727,58 +3995,65 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             me.setNomeMunicipio('');
         }
 
-        // Verifica se o código da obra foi informado
         if ($F('txtCodigoObra' + sId).trim() == '') {
             alert('Campo Código Obra é obrigatório!\n\n');
             return false;
         }
 
-        //Verifica se o Bairro foi informado
-        // if ($F('txtDescrBairro' + sId).trim() == '' && me.getTipoValidacao() == 1) {
-        //
-        //     $('txtCodigoBairro' + sId).focus();
-        //     alert("Usuário:\n\n\Bairro não informado!\n\n");
-        //     return false;
-        // } else if (me.getTipoValidacao() == 2 && $F('txtDescrBairro' + sId).trim() == '') {
-        //     me.setBairro('0');
-        //     me.setNomeBairro('');
-        // }
+        if(!me.exibeLote){
 
-        if ($F('txtGrausLatitude' + sId).trim() == '') {
-            $('txtGrausLatitude' + sId).focus();
-            alert("Usuário:\n\n\Graus da Latitude não informado!\n\n");
-            return false;
+            if ($F('txtGrausLatitude' + sId).trim() == '') {
+                $('txtGrausLatitude' + sId).focus();
+                alert("Usuário:\n\n\Graus da Latitude não informado!\n\n");
+                return false;
+            }
+    
+            if ($F('txtMinutoLatitude' + sId).trim() == '') {
+                $('txtMinutoLatitude' + sId).focus();
+                alert("Usuário:\n\n\Minuto da Latitude não informado!\n\n");
+                return false;
+            }
+    
+            if ($F('txtSegundoLatitude' + sId).trim() == '') {
+                $('txtSegundoLatitude' + sId).focus();
+                alert("Usuário:\n\n\Segundo da Latitude não informado!\n\n");
+                return false;
+            }
+    
+            if ($F('txtGrausLongitude' + sId).trim() == '') {
+                $('txtGrausLongitude' + sId).focus();
+                alert("Usuário:\n\n\Graus da Longitude não informado!\n\n");
+                return false;
+            }
+    
+            if ($F('txtMinutoLongitude' + sId).trim() == '') {
+                $('txtMinutoLongitude' + sId).focus();
+                alert("Usuário:\n\n\Minuto da Longitude não informado!\n\n");
+                return false;
+            }
+    
+            if ($F('txtSegundoLongitude' + sId).trim() == '') {
+                $('txtSegundoLongitude' + sId).focus();
+                alert("Usuário:\n\n\Segundo da Longitude não informado!\n\n");
+                return false;
+            }
+
+        }else{
+
+            if (!$F('txtLatitude'+sId).trim()) {
+                $('txtLatitude'+sId).focus();
+                alert("Usuário:\n\n\ Latitude não informado!\n\n");
+                return false;
+            }
+
+            if (!$F('txtLongitude'+sId).trim()) {
+                $('txtLongitude'+sId).focus();
+                alert("Usuário:\n\n\ Longitude não informado!\n\n");
+                return false;
+            }
+
         }
 
-        if ($F('txtMinutoLatitude' + sId).trim() == '') {
-            $('txtMinutoLatitude' + sId).focus();
-            alert("Usuário:\n\n\Minuto da Latitude não informado!\n\n");
-            return false;
-        }
-
-        if ($F('txtSegundoLatitude' + sId).trim() == '') {
-            $('txtSegundoLatitude' + sId).focus();
-            alert("Usuário:\n\n\Segundo da Latitude não informado!\n\n");
-            return false;
-        }
-
-        if ($F('txtGrausLongitude' + sId).trim() == '') {
-            $('txtGrausLongitude' + sId).focus();
-            alert("Usuário:\n\n\Graus da Longitude não informado!\n\n");
-            return false;
-        }
-
-        if ($F('txtMinutoLongitude' + sId).trim() == '') {
-            $('txtMinutoLongitude' + sId).focus();
-            alert("Usuário:\n\n\Minuto da Longitude não informado!\n\n");
-            return false;
-        }
-
-        if ($F('txtSegundoLongitude' + sId).trim() == '') {
-            $('txtSegundoLongitude' + sId).focus();
-            alert("Usuário:\n\n\Segundo da Longitude não informado!\n\n");
-            return false;
-        }
 
         if ($F('cboClasseObjeto' + sId) == 0) {
             $('cboClasseObjeto' + sId).focus();
@@ -3827,12 +4102,17 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         oEndereco.cep = $('txtCep' + sId).value;
         oEndereco.codigoObra = me.getCodigoObra();
         oEndereco.logradouro = me.getLogradouro();
-        oEndereco.grausLatitude = me.getGrausLatitude();
-        oEndereco.minutoLatitude = me.getMinutosLatitude();
-        oEndereco.segundoLatitude = me.getSegundosLatitude();
-        oEndereco.grausLongitude = me.getGrausLongitude();
-        oEndereco.minutoLongitude = me.getMinutoLongitude();
-        oEndereco.segundoLongitude = me.getSegundosLongitude();
+        if(!me.exibeLote){
+            oEndereco.grausLatitude = me.getGrausLatitude();
+            oEndereco.minutoLatitude = me.getMinutosLatitude();
+            oEndereco.segundoLatitude = me.getSegundosLatitude();
+            oEndereco.grausLongitude = me.getGrausLongitude();
+            oEndereco.minutoLongitude = me.getMinutoLongitude();
+            oEndereco.segundoLongitude = me.getSegundosLongitude();
+        }else{
+            oEndereco.latitude = me.getLatitude();
+            oEndereco.longitude = me.getLongitude();
+        }
         oEndereco.classeObjeto = me.getClassesObjeto();
         oEndereco.atividadeObra = me.getAtividadeObra();
         oEndereco.atividadeServico = me.getAtividadeServico();
@@ -3843,6 +4123,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         oEndereco.licitacao = me.getLicitacao();
         oEndereco.descrBairro = $('txtDescrBairro' + sId).value;
         oEndereco.sequencial = me.getSequencial();
+        oEndereco.sLote = me.sLote;
 
         oDados = new Object();
         oDados.exec = 'salvarDadosComplementares';
@@ -3866,8 +4147,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.retornoSalvaEndereco = function (oAjax) {
 
         js_removeObj('msgBox');
-
+        
         var oRetorno = eval('(' + oAjax.responseText + ')');
+
+        let parametros = JSON.parse(oAjax.request.parameters.json);
         var sExpReg = new RegExp('\\\\n', 'g');
         if (oRetorno.status == 1) {
             // me.setCodigoEndereco(oRetorno.icodigoEndereco);
@@ -3878,9 +4161,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             // $('txtCodigoRua'+sId).value       = oRetorno.icodigoRua;
             // me.setRua(oRetorno.icodigoRua);
             //Fecha a janela e preenche o campo com o endereco informado
+            me.callBackFunction();
             alert('Dados salvos com sucesso!');
             me.close();
-            me.callBackFunction();
             return false;
         } else {
             alert(oRetorno.message.urlDecode().replace(sExpReg, '\n'));
@@ -3947,6 +4230,14 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         this.iTipoValidacao = iTipoValidacao;
     }
 
+    this.getLote = () => {
+        return this.sLote;
+    }
+
+    this.setLote = function (sLote){
+        this.sLote = sLote
+    }
+
     me.buscaEndereco();
 
     this.limpaForm = function () {
@@ -3999,9 +4290,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.preencheCampos = function (codObra) {
-        var oPesquisa = new Object();
-        oPesquisa.exec = 'findDadosObra';
-        oPesquisa.iSequencial = codObra;
+        var oParam = new Object();
+        oParam.exec = 'findDadosObra';
+        oParam.licitacao = me.getLicitacao();
+        oParam.iSequencial = codObra;
 
         var msgDiv = "Aguarde carregando lista de estados.";
         js_divCarregando(msgDiv, 'msgBox');
@@ -4010,7 +4302,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             me.sUrlRpc,
             {
                 asynchronous: false,
-                parameters: 'json=' + Object.toJSON(oPesquisa),
+                parameters: 'json=' + Object.toJSON(oParam),
                 method: 'post',
                 onComplete: me.retornoCampos
             }
@@ -4020,53 +4312,70 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.retornoCampos = function (oAjax) {
         js_removeObj('msgBox');
         var oRetorno = eval('(' + oAjax.responseText + ')');
-        let dadoscomplementares = oRetorno.dadoscomplementares[0];
-        me.setSequencial(dadoscomplementares.sequencial);
-        $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
-        $('txtLogradouro' + sId).value = decodeURI(dadoscomplementares.logradouro).replace(/\+/g, ' ');
-        me.setLogradouro(dadoscomplementares.logradouro);
-        $('txtDistrito' + sId).value = decodeURI(dadoscomplementares.distrito).replace(/\+/g, ' ');
-        me.setDistrito(dadoscomplementares.distrito);
-        $('txtCodigoObra' + sId).value = dadoscomplementares.codigoobra;
-        me.setCodigoObra(dadoscomplementares.codigoobra);
-        $('txtBdi' + sId).value = dadoscomplementares.bdi;
-        me.setBdi(dadoscomplementares.bdi);
-        $('txtGrausLatitude' + sId).value = dadoscomplementares.grauslatitude;
-        me.setGrausLatitude(dadoscomplementares.grauslatitude);
-        $('txtMinutoLatitude' + sId).value = dadoscomplementares.minutolatitude;
-        me.setMinutosLatitude(dadoscomplementares.minutolatitude);
-        $('txtSegundoLatitude' + sId).value = dadoscomplementares.segundolatitude;
-        me.setSegundosLatitude(dadoscomplementares.segundolatitude);
-        $('txtGrausLongitude' + sId).value = dadoscomplementares.grauslongitude;
-        me.setGrausLongitude(dadoscomplementares.grauslongitude);
-        $('txtMinutoLongitude' + sId).value = dadoscomplementares.minutolongitude;
-        me.setMinutoLongitude(dadoscomplementares.minutolongitude);
-        $('txtSegundoLongitude' + sId).value = dadoscomplementares.segundolongitude;
-        me.setSegundosLongitude(dadoscomplementares.segundolongitude);
-        $('txtCodigoNumero' + sId).value = dadoscomplementares.numero;
-        me.setNumero(dadoscomplementares.numero);
-        $('cboClasseObjeto' + sId).selectedIndex = dadoscomplementares.classeobjeto;
-        me.setClassesObjeto(dadoscomplementares.classeobjeto);
-        $('cboAtividadeObra' + sId).disabled = dadoscomplementares.atividadeobra > 0 ? false : true;
-        $('cboAtividadeObra' + sId).value = dadoscomplementares.atividadeobra;
-        me.setAtividadeObra(dadoscomplementares.atividadeobra);
-        $('cboAtividadeServico' + sId).disabled = dadoscomplementares.atividadeservico > 0 ? false : true;
-        $('cboAtividadeServico' + sId).value = dadoscomplementares.atividadeservico;
-        me.setAtividadeServico(dadoscomplementares.atividadeservico);
+        let dados = oRetorno.dadoscomplementares[0];
+
+        me.setSequencial(dados.db150_sequencial);
+        $('cboCodigoMunicipio' + sId).value = dados.db150_municipio;
+        $('txtLogradouro' + sId).value = decodeURI(dados.db150_logradouro).replace(/\+/g, ' ');
+        me.setLogradouro(dados.db150_logradouro);
+        $('txtDistrito' + sId).value = decodeURI(dados.db150_distrito).replace(/\+/g, ' ');
+        me.setDistrito(dados.db150_distrito);
+        $('txtCodigoObra' + sId).value = dados.db150_codobra;
+        me.setCodigoObra(dados.db150_codobra);
+        $('txtBdi' + sId).value = dados.db150_bdi;
+        me.setBdi(dados.db150_bdi);
+        
+        if(!me.exibeLote){
+
+            $('txtGrausLatitude' + sId).value = dados.db150_grauslatitude;
+            me.setGrausLatitude(dados.db150_grauslatitude);
+            $('txtMinutoLatitude' + sId).value = dados.db150_minutolatitude;
+            me.setMinutosLatitude(dados.db150_minutolatitude);
+            $('txtSegundoLatitude' + sId).value = dados.db150_segundolatitude;
+            me.setSegundosLatitude(dados.db150_segundolatitude);
+            $('txtGrausLongitude' + sId).value = dados.db150_grauslongitude;
+            me.setGrausLongitude(dados.db150_grauslongitude);
+            $('txtMinutoLongitude' + sId).value = dados.db150_minutolongitude;
+            me.setMinutoLongitude(dados.db150_minutolongitude);
+            $('txtSegundoLongitude' + sId).value = dados.db150_segundolongitude;
+            me.setSegundosLongitude(dados.db150_segundolongitude);
+
+        }else{
+
+            me.setLatitude(dados.db150_latitude);
+            $('txtLatitude' + sId).value = dados.db150_latitude;
+            me.setLongitude(dados.db150_longitude);
+            $('txtLongitude' + sId).value = dados.db150_longitude;
+
+        }
+
+        $('txtCodigoNumero' + sId).value = dados.db150_numero;
+        me.setNumero(dados.db150_numero);
+        $('cboClasseObjeto' + sId).selectedIndex = dados.db150_classeobjeto;
+        me.setClassesObjeto(dados.db150_classeobjeto);
+        dados.db150_atividadeobra = !dados.db150_atividadeobra ? 0 : dados.db150_atividadeobra;
+        $('cboAtividadeObra' + sId).disabled = dados.db150_atividadeobra > 0 ? false : true;
+        $('cboAtividadeObra' + sId).value = dados.db150_atividadeobra;
+        me.setAtividadeObra(dados.db150_atividadeobra);
+        dados.db150_atividadeservico = !dados.db150_atividadeservico ? 0 : dados.db150_atividadeservico;
+        $('cboAtividadeServico' + sId).disabled = dados.db150_atividadeservico > 0 ? false : true;
+        $('cboAtividadeServico' + sId).value = dados.db150_atividadeservico;
+        me.setAtividadeServico(dados.db150_atividadeservico);
         document.getElementById('trAtividadeServico'+sId).style.display = (me.getAtividadeServico() == '99') ? '' : 'none';
-        $('cboAtividadeServicoEsp' + sId).disabled = dadoscomplementares.atividadeservicoesp > 0 ? false : true;
-        $('cboAtividadeServicoEsp' + sId).value = dadoscomplementares.atividadeservicoesp;
-        me.setAtividadeServicoEspecializado(dadoscomplementares.atividadeservicoesp);
+        dados.db150_atividadeservicoesp = !dados.db150_atividadeservicoesp ? 0 : dados.db150_atividadeservicoesp;
+        $('cboAtividadeServicoEsp' + sId).disabled = dados.db150_atividadeservicoesp > 0 ? false : true;
+        $('cboAtividadeServicoEsp' + sId).value = dados.db150_atividadeservicoesp == null ? 0 : dados.db150_atividadeservicoesp;
+        me.setAtividadeServicoEspecializado(dados.db150_atividadeservicoesp);
         document.getElementById('trAtividadeServicoEsp'+sId).style.display = (me.getAtividadeServicoEspecializado() == '99') ? '' : 'none';
-        $('cboGrupoBemPub' + sId).value = dadoscomplementares.grupobempublico;
-        me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
-        me.preencheSubGrupo(dadoscomplementares.grupobempublico);
-        $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
-        me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
-        $('txtDescrBairro' + sId).value = decodeURI(dadoscomplementares.bairro).replace(/\+/g, ' ');
-        $('txtCep' + sId).value = dadoscomplementares.cep;
-        $('txtDescrAtividadeServico' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' '));
-        $('txtDescrAtividadeServicoEsp' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' '));
+        $('cboGrupoBemPub' + sId).value = dados.db150_grupobempublico;
+        me.setGrupoBemPublico(dados.db150_grupobempublico);
+        me.preencheSubGrupo(dados.db150_grupobempublico);
+        $('cboSubGrupoBemPub' + sId).value = dados.db150_subgrupobempublico;
+        me.setSubGrupoBemPublico(dados.db150_subgrupobempublico);
+        $('txtDescrBairro' + sId).value = decodeURI(dados.db150_bairro).replace(/\+/g, ' ');
+        $('txtCep' + sId).value = dados.db150_cep;
+        $('txtDescrAtividadeServico' + sId).value = unescape(decodeURI(dados.db150_descratividadeservico).replace(/\+/g, ' '));
+        $('txtDescrAtividadeServicoEsp' + sId).value = unescape(decodeURI(dados.db150_descratividadeservicoesp).replace(/\+/g, ' '));
 
         if(me.getGrupoBemPublico() == '99'){
             me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
@@ -4078,11 +4387,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     }
 
-    this.checkFirstRegister = function(sequencial){
+    this.checkFirstRegister = (sequencial) => {
         var oPesquisa = new Object();
         oPesquisa.exec = 'isFirstRegister';
         oPesquisa.iCodigo = $('txtCodigoObra'+sId).value;
         oPesquisa.iSequencial = sequencial;
+        oPesquisa.sLote = me.sDescricaoLote;
 
         var oAjax = new Ajax.Request(
             me.sUrlRpc,
