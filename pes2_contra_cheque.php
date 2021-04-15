@@ -131,7 +131,7 @@ $sql1= "select distinct
       		substr(r70_estrut,1,7) as estrut,
 	       	".$sigla."regist as regist,
 	        substr(db_fxxx(".$sigla."regist,$ano,$mes,".db_getsession("DB_instit")."),111,11) as f010, 
-        	substr(db_fxxx(".$sigla."regist,$ano,$mes,".db_getsession("DB_instit")."),210,8) as padrao
+        	substr(db_fxxx(".$sigla."regist,$ano,$mes,".db_getsession("DB_instit")."),221,10) as padrao
           from (select distinct ".$sigla."regist,
                                 ".$sigla."anousu,
                                 ".$sigla."mesusu,
