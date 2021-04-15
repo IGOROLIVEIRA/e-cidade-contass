@@ -534,9 +534,17 @@ $header = <<<HEADER
 </header>
 HEADER;
 
+$filtroRelatorio = $tipoCalculo == 1 ? "Empenhado (TCE)" : "Liquidado";
+
 $footer = <<<FOOTER
-<div style='border-top:1px solid #000;width:100%;text-align:right;font-family:sans-serif;font-size:10px;height:10px;'>
-  {PAGENO}
+<div style='border-top:1px solid #000;width:100%;font-family:sans-serif;font-size:10px;height:10px;'>
+    <div style='text-align:left;font-style:italic;width:50%;float:left;'>
+        {$filtroRelatorio}
+    </div>
+    <div style='text-align:right;float:right;width:50%;'>
+        {PAGENO}
+    </div>
+  
 </div>
 FOOTER;
 

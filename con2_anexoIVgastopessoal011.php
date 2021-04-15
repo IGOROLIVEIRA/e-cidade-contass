@@ -88,6 +88,11 @@ foreach ($aPeriodos as $oPeriodo) {
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        #o116_periodo, #tipoCalculo {
+            width: 130px;
+        }
+    </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
 <table align="center">
@@ -128,7 +133,7 @@ foreach ($aPeriodos as $oPeriodo) {
             <? 
                 $aTipo = array(
                     '0' => 'Selecione', 
-                    '1' => 'Empenhados',
+                    '1' => 'Empenhados (TCE)',
                     '2' => 'Liquidados'
                 );
             ?>
