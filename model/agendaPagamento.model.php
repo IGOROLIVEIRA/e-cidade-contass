@@ -1832,9 +1832,9 @@ class agendaPagamento {
        * Não exclui se for pagamento de cheque, pois na rotina Agenda - Manutenção de pagamento passou a permitir
        * pagamento de emissão e pagamento de cheque direto da tela
        */
-      if ($oMovimento->iCodForma != 2 && !$lEfetuarPagamento) {
-        $oDaoEmpageConf->excluir($oMovimento->iCodMov);
-      }
+      if ( !($oMovimento->iCodForma == 2 && $lEfetuarPagamento) ) {
+          $oDaoEmpageConf->excluir($oMovimento->iCodMov);
+      }      
       if ($oMovimento->iCodForma == 3 || $oMovimento->iCodForma == 1 || $oMovimento->iCodForma == 4) {
 		
         $oDaoEmpageConf->e86_cheque  = (isset($oMovimento->iCheque) && $oMovimento->iCheque != '') ? $oMovimento->iCheque : "0";
