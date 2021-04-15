@@ -847,7 +847,6 @@ class obrasDadosComplementares
 		}
 
 		$sSqlObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
-		// echo $sSqlObra;
 		
 		$rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
@@ -860,7 +859,6 @@ class obrasDadosComplementares
 			}
 
 		}
-
 
 		return $aRetorno;
 
