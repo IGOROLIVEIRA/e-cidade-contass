@@ -32,6 +32,11 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $head3 = "EFETIVIDADE REFERENTE A ".$mes." / ".$ano;
 
+if($ordem == "a") {
+  $sOrder  = " z01_nome";
+} else {
+  $sOrder  = " rh01_regist ";
+}
 /**
  * $tipo > l - Lotação
  *         o - Secretaria
@@ -40,7 +45,9 @@ $head3 = "EFETIVIDADE REFERENTE A ".$mes." / ".$ano;
 if($tipo == 'c') {
 
  $sCampos = " rh37_funcao||' - '|| rh37_descr as imprime ";
- $sOrder  = ' rh37_descr,z01_nome';
+ if($quebrar == 's') {
+   $sOrder  = " rh37_descr,{$sOrder} ";
+ }
  if(isset($cai) && trim($cai) != "" && isset($caf) && trim($caf) != ""){
     // Se for por intervalos e vier lotação inicial e final
     $sWhere     .= " and rh37_funcao between '".$cai."' and '".$caf."' ";
@@ -56,8 +63,10 @@ if($tipo == 'c') {
   }
 }elseif($tipo == 'l'){
 
- $sCampos = " r70_estrut||' - '||r70_descr as imprime ";
-  $sOrder = ' r70_descr,z01_nome';
+  $sCampos = " r70_estrut||' - '||r70_descr as imprime ";
+  if($quebrar == 's') {
+    $sOrder  = " r70_descr,{$sOrder} ";
+  }
   if(isset($lti) && trim($lti) != "" && isset($ltf) && trim($ltf) != ""){
     // Se for por intervalos e vier local inicial e final
     $sWhere    .= " and r70_estrut between '".$lti."' and '".$ltf."' ";
@@ -74,7 +83,9 @@ if($tipo == 'c') {
 
 }else{
   $sCampos = " o40_orgao||' - '||o40_descr as imprime ";
-  $sOrder = ' o40_descr,z01_nome';
+  if($quebrar == 's') {
+    $sOrder  = " o40_descr,{$sOrder} ";
+  }
   if(isset($ori) && trim($ori) != "" && isset($orf) && trim($orf) != ""){
     // Se for por intervalos e vier órgão inicial e final
     $sWhere    .= " and o40_orgao between ".$ori." and ".$orf;

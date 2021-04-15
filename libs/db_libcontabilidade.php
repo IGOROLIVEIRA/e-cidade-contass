@@ -5809,33 +5809,30 @@ class cl_estrutura_sistema {
             $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtFim;
         }
 
-        $sql = " SELECT SUM(
-                        CASE WHEN C53_TIPO = 20 
-                            THEN ROUND(c70_VALOR, 2) 
-                        ELSE (
-                            CASE WHEN C53_TIPO = 21 
-                                THEN ROUND(c70_VALOR * -(1::FLOAT8),2) 
-                            ELSE 0::FLOAT8 END) 
-                        END ) 
-                    AS LIQUIDADO
-                    FROM conlancamele
-                        INNER JOIN conlancam                    
-                            ON c70_codlan = c67_codlan
-                        INNER JOIN conlancamdoc
-                            ON c70_codlan = c71_codlan
-                        INNER JOIN conhistdoc 
-                            ON c53_coddoc = c71_coddoc
-                        INNER JOIN conplanoorcamentoanalitica 
-                            ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
-                        INNER JOIN conplanoorcamento 
-                            ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
-                        INNER JOIN conlancamemp 
-                            ON c70_codlan = c75_codlan
-                        INNER JOIN empempenho 
-                            ON e60_numemp = c75_numemp ";
+        $sql = " SELECT COALESCE(SUM(CASE 
+                                WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2) 
+                                WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2) 
+                                ELSE 0::FLOAT8 
+                            END),0) AS liquidado,
+                        COALESCE(SUM(CASE
+                                WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                                WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                                ELSE 0::FLOAT8
+                            END),0) AS empenhado
+					FROM (SELECT DISTINCT ON (c70_codlan) 
+							c53_tipo, 
+							c70_valor
+						FROM conlancamele
+							INNER JOIN conlancam ON c70_codlan = c67_codlan
+							INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
+							INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+							INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
+							INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+							INNER JOIN conlancamemp ON c70_codlan = c75_codlan
+							INNER JOIN empempenho ON e60_numemp = c75_numemp ";
 
         if($fonte!="") {
-            $sql .= " INNER JOIN orcdotacao ON e60_coddot=o58_coddot AND e60_anousu=o58_anousu ";
+            $sql .= " INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu ";
         }
 
         $sql .= "WHERE ".$where;
@@ -5847,7 +5844,7 @@ class cl_estrutura_sistema {
         }
         $sql .= " AND e60_instit = {$instit}";
         $sql .= " AND c61_instit = {$instit}";
-        $sql .= " AND c53_tipo IN (20, 21)";
+        $sql .= " AND c53_tipo IN (10, 11, 20, 21)";
         $sql .= " AND (";
         $i = 1;
         foreach($aAnousu as $anousu) {
@@ -5873,8 +5870,7 @@ class cl_estrutura_sistema {
           if($fonte!="") {
               $sql .= " AND o58_codigo IN ({$fonte}) ";
           }
-          $sql .= " {$group}";
-
+          $sql .= " {$group} ) AS x";
           return db_utils::getColectionByRecord(db_query($sql));
 
     }
@@ -5918,12 +5914,17 @@ class cl_estrutura_sistema {
                     SUM (CASE
                         WHEN e50_compdesp IS NOT NULL THEN liquidado_compdesp
                         ELSE liquidado
-                    END) AS liquidado
+                    END) AS liquidado,
+                    SUM (CASE
+                        WHEN e50_compdesp IS NOT NULL THEN empenhado_compdesp
+                        ELSE empenhado
+                    END) AS empenhado
                     FROM
                     (SELECT  
                             o58_elemento,
                           o56_descr,
                           liquidado,
+                          empenhado,
                           e50_compdesp,
                           (SELECT SUM(
                               CASE
@@ -5938,12 +5939,27 @@ class cl_estrutura_sistema {
                                 INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
                               WHERE e50_numemp = e60_numemp 
                                 AND e50_compdesp < '{$dtIni}'
-                                AND e50_codord = x.e50_codord) as liquidado_compdesp                    
+                                AND e50_codord = x.e50_codord) as liquidado_compdesp,
+                           (SELECT SUM(
+                              CASE
+                                  WHEN C53_TIPO = 10 THEN ROUND(C70_VALOR,2)::FLOAT8 
+                                  WHEN C53_TIPO = 11 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                              ELSE 0::FLOAT8 END) AS empenhado_compdesp
+                              FROM pagordem 
+                                INNER JOIN conlancamord ON c80_codord = e50_codord
+                                INNER JOIN conlancamemp ON c80_codlan = c75_codlan
+                                INNER JOIN conlancam ON c75_codlan = c70_codlan
+                                INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                                INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                              WHERE e50_numemp = e60_numemp 
+                                AND e50_compdesp < '{$dtIni}'
+                                AND e50_codord = x.e50_codord) as empenhado_compdesp
                     FROM
                       (SELECT o58_elemento,
                               o56_descr,
                               e60_numemp,
                               liquidado,
+                              empenhado,
                               e50_compdesp,
                               e50_codord
                       FROM work_dotacao

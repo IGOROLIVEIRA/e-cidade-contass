@@ -864,13 +864,14 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oDadosMovi21->si97_tipoentrsaida = $iTipoEntrSaida;
 				$oDadosMovi21->si97_valorentrsaida = $nValor;
 				$oDadosMovi21->si97_saldocec = $oMovi->saldocec;
-                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
+                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : 
+                    ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
                 $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta) 
 					&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
                 $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
 					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
 				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
-					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
+					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11 && $oMovi->tipomovimentacao != 2) ) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $oDadosMovi21->si97_instit = db_getsession("DB_instit");
                 $oDadosMovi21->registro22 = array();
@@ -997,7 +998,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
 		  $cCtb21->si97_saldocec = $oCtb21agrupado->si97_saldocec;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
-          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ' ');
+          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : 
+            ($cCtb21->si97_tipoentrsaida == 10 ? $oCtb21agrupado->si97_dscoutrasmov : ' '));
           $cCtb21->si97_codctbtransf = $oCtb21agrupado->si97_codctbtransf;
           $cCtb21->si97_codfontectbtransf = $oCtb21agrupado->si97_codfontectbtransf;
 		  $cCtb21->si97_saldocectransf = $oCtb21agrupado->si97_saldocectransf; 
