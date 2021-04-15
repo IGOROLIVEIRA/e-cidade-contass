@@ -150,7 +150,7 @@ for($linha=0;$linha<$numrows;$linha++){
   /* empenhos- despesa orçamentaria */
   /*   EMPENHO */
 
-  select
+  select distinct
         corrente.k12_id as caixa,
         corrente.k12_data as data,
 		0 as valor_debito,
@@ -161,7 +161,11 @@ for($linha=0;$linha<$numrows;$linha++){
         0 as receita,
 		null::text as receita_descr,
 		corhist.k12_histcor::text as historico,
-		case when coremp.k12_cheque = 0 then e81_numdoc::text else 'CHE '||coremp.k12_cheque::text end as numdoc,
+		case 
+            when e86_cheque is not null and e86_cheque <> '0' then 'CHE '||e86_cheque::text
+            when coremp.k12_cheque = 0 then e81_numdoc::text 
+            else 'CHE '||coremp.k12_cheque::text 
+            end as numdoc,
 		    null::text as contrapartida,
 		    coremp.k12_codord as ordem,
 		    z01_nome::text as credor,
@@ -178,11 +182,8 @@ for($linha=0;$linha<$numrows;$linha++){
                                                            and coremp.k12_autent = corrente.k12_autent
       inner join empempenho on e60_numemp = coremp.k12_empen
       inner join cgm on z01_numcgm = e60_numcgm
-		    /*
-		      se habilitar o left abaixo e o empenho tiver mais de um cheque os registros ficam duplicados
-		      left join empord on e82_codord = coremp.k12_codord
-		     left join empageconfche on e91_codcheque = e82_codmov
-		   */
+	  left join empord on e82_codord = coremp.k12_codord
+	  left join empageconfche on e91_codcheque = e82_codmov
 	    left join corhist on  corhist.k12_id     = corrente.k12_id    and corhist.k12_data   = corrente.k12_data  and
 					                                                              corhist.k12_autent = corrente.k12_autent
       left join corautent	on corautent.k12_id     = corrente.k12_id   and corautent.k12_data   = corrente.k12_data
@@ -190,6 +191,7 @@ for($linha=0;$linha<$numrows;$linha++){
       left join corgrupocorrente on corrente.k12_data = k105_data and corrente.k12_id = k105_id and corrente.k12_autent = k105_autent
 	  left join corempagemov 	on corempagemov.k12_data = coremp.k12_data and corempagemov.k12_id = coremp.k12_id and corempagemov.k12_autent = coremp.k12_autent
 	  left join empagemov       on k12_codmov  = e81_codmov
+      left join empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
  where corrente.k12_conta = $k13_reduz  and corrente.k12_data between '".$datai."'
                                         and '".$dataf."'
                                         and corrente.k12_instit = ".db_getsession("DB_instit")."
