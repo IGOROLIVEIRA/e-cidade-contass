@@ -534,7 +534,7 @@ $header = <<<HEADER
 </header>
 HEADER;
 
-$filtroRelatorio = $tipoCalculo == 1 ? "Empenhado (TCE)" : "Liquidado";
+$filtroRelatorio = $tipoCalculo == 1 ? "Cálculo com base nos valores empenhados" : "Cálculo com base nos valores liquidados";
 
 $footer = <<<FOOTER
 <div style='border-top:1px solid #000;width:100%;font-family:sans-serif;font-size:10px;height:10px;'>
