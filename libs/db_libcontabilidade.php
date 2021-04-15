@@ -5844,7 +5844,7 @@ class cl_estrutura_sistema {
         }
         $sql .= " AND e60_instit = {$instit}";
         $sql .= " AND c61_instit = {$instit}";
-        $sql .= " AND c53_tipo IN (20, 21)";
+        $sql .= " AND c53_tipo IN (10, 11, 20, 21)";
         $sql .= " AND (";
         $i = 1;
         foreach($aAnousu as $anousu) {
