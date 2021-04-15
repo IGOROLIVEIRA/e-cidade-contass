@@ -2294,11 +2294,16 @@ if (count($aParametrosEmpenho) > 0) {
 
         let aNotas = [];
         let lCredorUnico = true;
+        let lContaPagadoraUnica = true;    
 
         aMovimentos.each(function (aMovimento) {
 
             if (encodeURIComponent(aMovimentos[0][7]) != encodeURIComponent(aMovimento[7])) {
                 lCredorUnico = false;
+            }
+
+            if (aMovimentos[0][6] != aMovimento[6]) {
+                lContaPagadoraUnica = false;
             }
 
             oNota   = new Object();
@@ -2314,7 +2319,12 @@ if (count($aParametrosEmpenho) > 0) {
         });
 
         if (!lCredorUnico) {
-            alert('Só é permitido gerar mais de um cheque para o mesmo credor');
+            alert('Só é permitido gerar mais de um cheque para o mesmo credor!');
+            return false;
+        }
+
+        if (!lContaPagadoraUnica) {
+            alert('Só é permitido gerar mais de um cheque para a mesma conta pagadora!');
             return false;
         }
         
