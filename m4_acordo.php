@@ -35,9 +35,16 @@ if(isset($alterar)){
     $sqlerro=false;
     $aditivo=false;
     db_inicio_transacao();
-    //print_r($_POST);exit;
+
     $ac16_datainicio = implode("-",array_reverse(explode("/",$ac16_datainicio)));
     $ac16_datafim    = implode("-",array_reverse(explode("/",$ac16_datafim)));
+
+    $sWhere = "ac16_numeroacordo = '$ac16_numeroacordo'";
+    $numero_geral = $clacordo->sql_record($clacordo->sql_query_file(null, "*", null, $sWhere));
+    if ($clacordo->numrows > 0) {
+        db_msgbox("Já existe acordo com o número $ac16_numeroacordo");
+        $erro = true;
+    }
 
     $rsPosicoes = db_query(
                 "SELECT distinct ac26_sequencial as POSICAO,
@@ -51,33 +58,36 @@ if(isset($alterar)){
         inner join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
         WHERE ac16_sequencial = '$ac16_sequencial'"
     );
-    //db_criatabela($rsPosicoes);exit;
+
     if(pg_num_rows($rsPosicoes) > 1){
         $aditivo = true;
     }
-    for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
-        $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
-        //print_r($oPosicao->posicao);
-        //echo "update acordovigencia  set ac18_datainicio = '$ac16_datainicio', ac18_datafim  = '$ac16_datafim' where ac18_acordoposicao  = '$ac16_sequencial'";exit;
-        //db_query("update acordoposicaoperiodo set ac36_datainicial = '$ac16_datainicial', ac36_datafinal = '$ac16_datafinal' where ac36_acordoposicao = '$ac16_sequencial'");
-        db_query("update acordovigencia  set ac18_datainicio = '$ac18_datainicio', ac18_datafim  = '$ac18_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
-        db_query("update acordoitemperiodo set ac41_datainicial = '$ac18_datainicio', ac41_datafinal = '$ac18_datafim' where ac41_acordoposicao = '$oPosicao->posicao'");
+    if (!isset($erro)) {
 
-        $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
-        $seq   = pg_result($resmanut,0,0);
-        $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: ".$oPosicao->ac16_datainicio ." - ".$oPosicao->ac16_datafim." atual: ".$ac16_datainicio ." - ".$ac16_datafim."  ',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-    }
-    $clacordo->alterar($ac16_sequencial);
+        for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
+            $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
 
-    if ($clacordo->erro_status == "0") {
-        $erro_msg = $clacordo->erro_msg;
-        $sqlerro = true;
-    }
+            db_query("update acordovigencia  set ac18_datainicio = '$ac18_datainicio', ac18_datafim  = '$ac18_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+            db_query("update acordoitemperiodo set ac41_datainicial = '$ac18_datainicio', ac41_datafinal = '$ac18_datafim' where ac41_acordoposicao = '$oPosicao->posicao'");
 
-    if ($sqlerro == false) {
-        echo "<script>alert('Alteração efetuada');</script>";
+            $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+            $seq   = pg_result($resmanut,0,0);
+            $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: ".$oPosicao->ac16_datainicio ." - ".$oPosicao->ac16_datafim." atual: ".$ac16_datainicio ." - ".$ac16_datafim."  ',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        }
+
+        $clacordo->alterar($ac16_sequencial);
+
+        if ($clacordo->erro_status == "0") {
+            $erro_msg = $clacordo->erro_msg;
+            $sqlerro = true;
+        }
+
+        if ($sqlerro == false) {
+            echo "<script>alert('Alteração efetuada');</script>";
+        }
     }
     db_fim_transacao($sqlerro);
+
     $db_opcao = 2;
     $db_botao = true;
 }else if(isset($chavepesquisa)) {

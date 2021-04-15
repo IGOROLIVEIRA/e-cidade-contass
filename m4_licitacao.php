@@ -53,15 +53,16 @@ $cl_scripts = new cl_scripts;
 
 $anousu=db_getsession("DB_anousu");
 $instit=db_getsession("DB_instit");
-if(isset($alterar)){
 
+if(isset($alterar)){
     $result_geral=$clliclicita->sql_record($clliclicita->sql_query_file(null,"max(l20_edital) as edital",null,"l20_instit=$instit and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
     if($l20_edital != $l20_edital_old) {
+        $change = true;
         if ($clliclicita->numrows > 0) {
             db_fieldsmemory($result_geral, 0, 1);
             //verifica se existe edital maior ou igual.
             if ($l20_edital >= $l20_edital_old) {
-                $numero = $l20_edital + 1;
+                $numero = $l20_edital;
                 $numero_geral = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_edital", null, "l20_edital=$numero and l20_instit = " . db_getsession('DB_instit') . "and l20_anousu = " . db_getsession("DB_anousu")));
                 if ($clliclicita->numrows > 0) {
                     db_msgbox("Já existe licitação com o processo licitatório $numero");
@@ -71,7 +72,7 @@ if(isset($alterar)){
 
             //verifica se existe edital menor
             if ($l20_edital < $l20_edital_old) {
-                $numero = $l20_edital + 1;
+                $numero = $l20_edital;
                 $numero_geral = $clliclicita->sql_record($clliclicita->sql_query_file(null, "l20_edital", null, "l20_edital=$numero and l20_instit = " . db_getsession('DB_instit') . "and l20_anousu = " . db_getsession("DB_anousu")));
                 if ($clliclicita->numrows == 0) {
                     $l20_edital = $l20_edital;
@@ -84,6 +85,7 @@ if(isset($alterar)){
     }
 
     if($l20_numero != $l20_numero_old) {
+        $change = true;
         /* Tratamento do campo l20_numero. */
         $clliclicita_edital = new cl_liclicita;
         $sSqlMaxEdital = $clliclicita_edital->sql_query_file(null, "max(l20_numero) as numero", null, "l20_instit = $instit and l20_anousu = " . db_getsession("DB_anousu"));
@@ -94,7 +96,7 @@ if(isset($alterar)){
             db_fieldsmemory($result_geral_edital, 0, 1);
             //verifica se existe edital maior ou igual.
 
-            $numero = $l20_numero + 1;
+            $numero = $l20_numero;
 
             $sWhere = "l20_numero = $numero and l20_instit = $instit and l20_anousu = $anousu";
             $numero_geral = $clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null, "l20_numero", null, $sWhere));
@@ -108,6 +110,7 @@ if(isset($alterar)){
     }
 
     if($l20_nroedital != $l20_nroedital_old) {
+        $change = true;
         /* Tratamento do campo l20_nroedital. */
         $clliclicita_edital = new cl_liclicita;
         $sSqlMaxEdital = $clliclicita_edital->sql_query_file(null, "max(l20_nroedital) as nroedital", null, "l20_instit = $instit and l20_anousu = " . db_getsession("DB_anousu"));
@@ -118,7 +121,7 @@ if(isset($alterar)){
             db_fieldsmemory($result_geral_edital, 0, 1);
             //verifica se existe edital maior ou igual.
 
-            $numero = $l20_nroedital + 1;
+            $numero = $l20_nroedital;
 
             $sWhere = "l20_nroedital = $numero and l20_instit = $instit and l20_anousu = $anousu";
             $numero_geral = $clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null, "l20_nroedital", null, $sWhere));
@@ -131,7 +134,7 @@ if(isset($alterar)){
 
     }
 
-    if (!isset($erro) && !$erro_edital) {
+    if (!isset($erro) && !$erro_edital && $change == true) {
          //print_r($_POST);exit;
          $clliclicita->l20_numero = $l20_numero;
          $clliclicita->l20_nroedital = $l20_nroedital;
@@ -152,6 +155,8 @@ if(isset($alterar)){
              $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . " - " . $oPosicao->ac16_datafim . " atual: " . $ac16_datainicio . " - " . $ac16_datafim . "  '," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
              echo "<script>alert('Alteração efetuada');</script>";
          }
+    }else{
+        echo "<script>alert('Você não fez nenhuma mudança');</script>";
     }
 
 
