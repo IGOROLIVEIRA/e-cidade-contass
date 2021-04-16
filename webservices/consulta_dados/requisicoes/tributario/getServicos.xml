@@ -10,6 +10,7 @@
     <campo campo="q136_valor"       label="aliq"         />
     <campo campo="q136_valor_reduzido" label="aliq_reduz"   />
     <campo campo="db121_estrutural" label="estrutural"   />
+    <campo campo="q136_exercicio" label="exercicio"   />
   </campos>
   <from tabela="ativid"/>
   <juncoes>
