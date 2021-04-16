@@ -32,6 +32,15 @@ define('DB_CLASSES', '../../');
 define('DB_DBFORMS', '../../');
 define('DB_LOGDIR',  '../../');
 
-$aConfiguracoes = parse_ini_file('config.ini');
-define('EXERCICIO_BASE', $aConfiguracoes['exercicioBase']);
-define('INTEGRACOES_TRANSPARENCIA',  $aConfiguracoes['integracoes']);
+if (file_exists('libs/config.ini')) {
+	$aConfiguracoes = parse_ini_file('config.ini');
+	define('EXERCICIO_BASE', $aConfiguracoes['exercicioBase']);
+	define('INTEGRACOES_TRANSPARENCIA',  $aConfiguracoes['integracoes']);
+	define('ANO_ESPECIFICO_FOLHA', $aConfiguracoes['anoEspecificoFolha']);
+	define('INSTIT_ESPECIFICO_FOLHA', $aConfiguracoes['institEspecificoFolha']);
+} else {
+	define('EXERCICIO_BASE', 2005);
+	define('INTEGRACOES_TRANSPARENCIA',  'IntegracaoLicitacao');
+	define('ANO_ESPECIFICO_FOLHA', NULL);
+	define('INSTIT_ESPECIFICO_FOLHA', NULL);
+}

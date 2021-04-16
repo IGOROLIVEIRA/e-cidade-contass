@@ -69,10 +69,16 @@
                 JOIN conlancamemp ON c70_codlan = c75_codlan
                 WHERE c75_numemp = ".$oDado->e60_numemp.";
 
+                 CREATE TEMP TABLE empenhos ON COMMIT DROP AS
+                SELECT * FROM empempenho
+                WHERE e60_anousu = ".db_getsession("DB_datausu")." 
+                  AND e60_numemp = ".$oDado->e60_numemp.";
+
                 CREATE TEMP TABLE autoriza ON COMMIT DROP AS
-                SELECT * FROM empempaut
-                WHERE e61_numemp IN
-                        (SELECT empenho FROM w_lancamentos);
+                     (SELECT * FROM empempaut
+                      WHERE e61_numemp IN
+                       (SELECT e60_numemp FROM empenhos));
+    
 
                 -- ## EXCLUSÃO DOS LANÇAMENTOS DOS EMPENHOS
 
@@ -382,32 +388,62 @@
                 DELETE
                 FROM empautidot
                 WHERE e56_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empautitempcprocitem
                 WHERE e73_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM acordoitemexecutadoempautitem
+                WHERE ac19_autori IN
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empautitem
                 WHERE e55_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empempaut
                 WHERE e61_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empauthist
                 WHERE e57_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM acordoempautoriza
+                WHERE ac45_empautoriza IN
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM protempautoriza
+                WHERE p102_autorizacao IN
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM empautorizaprocesso
+                WHERE e150_empautoriza IN
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empautoriza
                 WHERE e54_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 -- # RETORNA A DATA AO FINAL DAS EXCLUSÕES
 
@@ -431,6 +467,27 @@
           }
 
         }
+      break;
+
+      case "getVerify" :
+        try {
+            $sql = "(SELECT distinct m52_numemp FROM matordemitem where m52_numemp = $oParam->iEmpenho
+                UNION
+            SELECT distinct e69_numemp FROM empnota where e69_numemp = $oParam->iEmpenho)";
+
+            $resultado = db_query($sql);
+            $empenhos = db_utils::getCollectionByRecord($resultado,0);
+            if(isset($empenhos)){
+                $oRetorno->message = utf8_encode("Não é possível excluir empenhos que tenham movimentações de ordem de compra por esta rotina. Contate o suporte");
+                $oRetorno->status   = 2;
+            }
+
+        } catch (Exception $eExeption) {
+            //$oRetorno->message  = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->message = utf8_encode(pg_last_error());
+            $oRetorno->status   = 2;
+        }
+
       break;
 
   }

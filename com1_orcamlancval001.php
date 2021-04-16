@@ -207,7 +207,7 @@ if(isset($alterar) || isset($incluir)){
 
         $clpcorcamval->pc23_validmin  = $validmin;
         $clpcorcamval->pc23_vlrun     = $valorunit;
-
+        $clpcorcamval->importado      = $importado;
         $clpcorcamval->incluir($pc21_orcamforne,$orcamitem);
 
         $erro_msg = $clpcorcamval->erro_msg;
@@ -387,6 +387,10 @@ if(isset($alterar) || isset($incluir)){
 </head>
   <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
+  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
+  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
+  db_app::load("estilos.css,grid.style.css");
   ?>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">

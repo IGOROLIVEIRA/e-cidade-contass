@@ -102,6 +102,16 @@ if (isset ($consultando) || isset ($incluir) || isset ($alterar)) {
       } // endif
   } // endif
 
+    $sWhere = "
+            l20_codigo = (SELECT e54_codlicitacao
+                                        FROM empautoriza
+                                        WHERE e54_autori = {$e55_autori}) AND pcmater.pc01_codmater = {$e55_item}
+                        AND pc24_pontuacao = 1 AND (pcmater.pc01_tabela = 't' OR pcmater.pc01_taxa = 't')
+                        AND pcmater.pc01_codmater NOT IN (SELECT pc94_codmater FROM pctabela)
+    ";
+
+
+
 }
 
 if (empty ($result_elemento) && isset($e55_item) && !empty($e55_item)) {
@@ -341,8 +351,31 @@ if (isset ($consultando)) {
   } else {
     echo "<script>document.form1.e55_quant.focus();</script>";
   }
+	$result = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen));
+	$oItem = db_utils::fieldsmemory($result, 0);
+	if($opcao == 'alterar'){
+	    echo "<script>";
+        echo "document.form1.e55_quant.value = $oItem->e55_quant;";
+        echo "document.form1.e55_vluni.value = $oItem->e55_vlrun;";
+        echo "document.form1.e55_vltot.value = $oItem->e55_vltot;";
+    	echo "</script>";
+    }
 } else {
-  echo "<script>document.form1.e55_item.focus();</script>";
+    if($opcao == 'alterar' && isset($e55_item)){
+        echo "<script>js_pesquisae55_item(false);</script>";
+        return;
+    }
+
+    echo "<script>document.form1.e55_item.focus();</script>";
+    if($e55_item == ''){
+        echo "<script>";
+        echo "document.form1.e55_quant.value = '';";
+        echo "document.form1.e55_vluni.value = '';";
+        echo "document.form1.e55_vltot.value = '';";
+        echo "document.form1.utilizado.value = '';";
+        echo "document.form1.disponivel.value = '';";
+        echo "</script>";
+    }
 }
 ?>
 <script>

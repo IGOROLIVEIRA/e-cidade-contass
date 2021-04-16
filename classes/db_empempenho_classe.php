@@ -1604,6 +1604,10 @@ class cl_empempenho {
         $sql .= " INNER JOIN empempaut ON e61_numemp = e60_numemp ";
         $sql .= " INNER JOIN empautoriza ON e54_autori = e61_autori ";
         $sql .= " INNER JOIN db_depart ON e54_gestaut = coddepto ";
+
+        $sql .= " left join empempenhocontrato on  empempenho.e60_numemp = empempenhocontrato.e100_numemp    ";
+        $sql .= " left join acordo ON ac16_sequencial = e100_acordo ";
+
         $sql .= $sqlanulado;
 
         $sql2 = "";
@@ -1725,7 +1729,7 @@ class cl_empempenho {
                                      END) AS vlranu,
                                  sum(CASE
                                          WHEN c71_coddoc IN (502,412,84,310,506,306,23,3) THEN round(c70_valor,2)
-                                         WHEN c71_coddoc IN (4,24,85,307,311,413,503,507) THEN round(c70_valor,2) *-1
+                                         WHEN c71_coddoc IN (4,24,25,85,307,311,413,503,507) THEN round(c70_valor,2) *-1
                                          ELSE 0
                                      END) AS vlrliq,
                                  sum(CASE

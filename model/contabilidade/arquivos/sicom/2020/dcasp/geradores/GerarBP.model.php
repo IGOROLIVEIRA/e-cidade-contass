@@ -18,28 +18,28 @@ class GerarBP extends GerarAM
     $this->sArquivo = "BP";
     $this->abreArquivo();
 
-    $sSql = "select * from bpdcasp102019 where si208_ano = {$this->iAno} AND si208_periodo = {$this->iPeriodo} AND si208_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp102020 where si208_ano = {$this->iAno} AND si208_periodo = {$this->iPeriodo} AND si208_institu = " . db_getsession("DB_instit");
     $rsBP10 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp202019 where si209_ano = {$this->iAno} AND si209_periodo = {$this->iPeriodo} AND si209_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp202020 where si209_ano = {$this->iAno} AND si209_periodo = {$this->iPeriodo} AND si209_institu = " . db_getsession("DB_instit");
     $rsBP20 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp302019 where si210_ano = {$this->iAno} AND si210_periodo = {$this->iPeriodo} AND si210_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp302020 where si210_ano = {$this->iAno} AND si210_periodo = {$this->iPeriodo} AND si210_institu = " . db_getsession("DB_instit");
     $rsBP30 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp402019 where si211_ano = {$this->iAno} AND si211_periodo = {$this->iPeriodo} AND si211_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp402020 where si211_ano = {$this->iAno} AND si211_periodo = {$this->iPeriodo} AND si211_institu = " . db_getsession("DB_instit");
     $rsBP40 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp502019 where si212_ano = {$this->iAno} AND si212_periodo = {$this->iPeriodo} AND si212_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp502020 where si212_ano = {$this->iAno} AND si212_periodo = {$this->iPeriodo} AND si212_institu = " . db_getsession("DB_instit");
     $rsBP50 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp602019 where si213_ano = {$this->iAno} AND si213_periodo = {$this->iPeriodo} AND si213_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp602020 where si213_ano = {$this->iAno} AND si213_periodo = {$this->iPeriodo} AND si213_institu = " . db_getsession("DB_instit");
     $rsBP60 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp702019 where si214_ano = {$this->iAno} AND si214_periodo = {$this->iPeriodo} AND si214_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp702020 where si214_ano = {$this->iAno} AND si214_periodo = {$this->iPeriodo} AND si214_institu = " . db_getsession("DB_instit");
     $rsBP70 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp712019 where si215_ano = {$this->iAno} AND si215_periodo = {$this->iPeriodo} AND si215_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp712020 where si215_ano = {$this->iAno} AND si215_periodo = {$this->iPeriodo} AND si215_institu = " . db_getsession("DB_instit");
     $rsBP71 = db_query($sSql);
 
 
@@ -70,12 +70,9 @@ class GerarBP extends GerarAM
         $aCSVBP10['si208_vlativocircucredicurtoprazo']        = $this->sicomNumberReal($aBP10['si208_vlativocircucredicurtoprazo'], 2);
         $aCSVBP10['si208_vlativocircuinvestapliccurtoprazo']  = $this->sicomNumberReal($aBP10['si208_vlativocircuinvestapliccurtoprazo'], 2);
         $aCSVBP10['si208_vlativocircuestoques']               = $this->sicomNumberReal($aBP10['si208_vlativocircuestoques'], 2);
-        $aCSVBP10['si208_vlAtivoNaoCircuMantidoVenda']        = $this->sicomNumberReal(0, 2);
+        $aCSVBP10['si208_vlativonaocircumantidovenda']        = $this->sicomNumberReal($aBP10['si208_vlativonaocircumantidovenda'], 2);
         $aCSVBP10['si208_vlativocircuvpdantecipada']          = $this->sicomNumberReal($aBP10['si208_vlativocircuvpdantecipada'], 2);
-        $aCSVBP10['si208_vlativonaocircucredilongoprazo']     = $this->sicomNumberReal($aBP10['si208_vlativonaocircucredilongoprazo'], 2);
-        $aCSVBP10['si208_vlativonaocircuinvestemplongpraz']   = $this->sicomNumberReal($aBP10['si208_vlativonaocircuinvestemplongpraz'], 2);
-        $aCSVBP10['si208_vlativonaocircuestoques']            = $this->sicomNumberReal($aBP10['si208_vlativonaocircuestoques'], 2);
-        $aCSVBP10['si208_vlativonaocircuvpdantecipada']       = $this->sicomNumberReal($aBP10['si208_vlativonaocircuvpdantecipada'], 2);
+        $aCSVBP10['si208_vlativonaocircurlp']                 = $this->sicomNumberReal($aBP10['si208_vlativonaocircurlp'], 2);
         $aCSVBP10['si208_vlativonaocircuinvestimentos']       = $this->sicomNumberReal($aBP10['si208_vlativonaocircuinvestimentos'], 2);
         $aCSVBP10['si208_vlativonaocircuimobilizado']         = $this->sicomNumberReal($aBP10['si208_vlativonaocircuimobilizado'], 2);
         $aCSVBP10['si208_vlativonaocircuintagivel']           = $this->sicomNumberReal($aBP10['si208_vlativonaocircuintagivel'], 2);
@@ -219,7 +216,7 @@ class GerarBP extends GerarAM
         $aCSVBP71 = array();
         $aCSVBP71['si215_tiporegistro']     = $this->padLeftZero($aBP71['si215_tiporegistro'], 2);
         $aCSVBP71['si215_codfontrecursos']  = $this->padLeftZero($aBP71['si215_codfontrecursos'], 3);
-        $aCSVBP71['si215_vlsaldofonte']     = $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
+        $aCSVBP71['si215_vlsaldofonte']     = $this->isZeroNegativo($aBP71['si215_vlsaldofonte']) ? '0,00' : $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
 
         $this->sLinha = $aCSVBP71;
         $this->adicionaLinha();

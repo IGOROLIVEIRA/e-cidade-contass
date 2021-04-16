@@ -93,12 +93,12 @@ contratoaux = function () {
             $('ac16_deptoresponsavel').focus();
             return false;
         }
-        if (iComissao == "") {
+        // if (iComissao == "") {
 
-            alert('Informe a comissão de vistoria do acordo.');
-            $('ac16_acordocomissão').focus();
-            return false;
-        }
+        //     alert('Informe a comissão de vistoria do acordo.');
+        //     $('ac16_acordocomissão').focus();
+        //     return false;
+        // }
         if (iAnousu == "") {
 
             alert('Informe o ano do contrato.');
@@ -481,6 +481,28 @@ contratoaux = function () {
         var iLicitacao                = $F('ac16_licitacao');
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
+
+        /* Novas validações para atender o SICOM */
+
+        if(iOrigem == '3') {
+            if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
+                alert('Informe uma Licitação.');
+                $('ac16_licitacao').focus();
+                return false;
+            }
+
+            if(iTipoOrigem == '4' && !iAdesaoregpreco){
+                alert('Informe uma Adesão de Registro de Preço.');
+                $('ac16_adesaoregpreco').focus();
+                return false;
+            }
+
+            if(['5', '6', '7', '8', '9'].includes(iTipoOrigem) && !iLicoutroorgao){
+                alert('Informe uma Licitação por Outro Órgão.');
+                $('ac16_licoutroorgao').focus();
+                return false;
+            }
+        }
 
         if (iOrigem == "0") {
 

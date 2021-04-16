@@ -206,10 +206,10 @@ db_app::load("estilos.css, grid.style.css");
                   ?>
                 </td>
 
-                <td>
+                <td id="tdlabelservico">
                   <b>Serviço Controlado por Quantidades:</b>
                 </td>
-                <td>
+                <td id="tdselectservico">
                   <?
                   db_select("ac20_servicoquantidade", array("f" => "NÂO", "t" => "SIM"), true, $db_opcao, "onChange='js_verificaServico();'");
                   ?>
@@ -397,7 +397,14 @@ db_app::load("estilos.css, grid.style.css");
 
   }
 
-  function js_mostrapcmater2(chave, erro) {
+  function js_mostrapcmater2(chave, erro, chave2) {
+      if(chave2 === 'f'){
+          $('tdlabelservico').style.display = 'none';
+          $('tdselectservico').style.display = 'none';
+      }else{
+          $('tdlabelservico').style.display = '';
+          $('tdselectservico').style.display = '';
+      }
     let params = {
       exec: 'verificaItemContratoAcordo',
       ac20_pcmater: document.form1.ac20_pcmater.value
@@ -424,6 +431,14 @@ db_app::load("estilos.css, grid.style.css");
 
   function js_mostrapcmater1(chave1, chave2, chave3) {
 
+if(chave3 === 'f'){
+    $('tdlabelservico').style.display = 'none';
+    $('tdselectservico').style.display = 'none';
+}else{
+    $('tdlabelservico').style.display = '';
+    $('tdselectservico').style.display = '';
+}
+      ac20_servicoquantidade
     let params = {
       exec: 'verificaItemContratoAcordo',
       ac20_pcmater: chave1
@@ -636,12 +651,12 @@ db_app::load("estilos.css, grid.style.css");
             aLinha[0] = ordem;
             aLinha[1] = codigomaterial;
             aLinha[2] = material.urlDecode();
-            aLinha[3] = quantidade;
+            aLinha[3] = js_formatar(quantidade,'f',4);
             var iCasas = js_getNumeroCasasDecimais(valorunitario);
             if (iCasas < 2) {
               iCasas = 2;
             }
-            aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
+            aLinha[4] = js_formatar(valorunitario, 'f', 4);
             aLinha[5] = js_formatar(valortotal, 'f');
             aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
             aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
@@ -698,7 +713,8 @@ db_app::load("estilos.css, grid.style.css");
         oRetorno.itens.each(function (oLinha, id) {
           with (oLinha) {
             var sCor = '';
-            if (valortotal == totaldotacoes) {
+
+            if (valortotal.toFixed(2) == totaldotacoes) {
               var sCor = '';
               if (aPeriodosItem.length == 0) {
                 var sCor = 'background-color: #fcd032;';
@@ -712,12 +728,8 @@ db_app::load("estilos.css, grid.style.css");
             aLinha[0] = ordem;
             aLinha[1] = codigomaterial;
             aLinha[2] = material.urlDecode();
-            aLinha[3] = quantidade;
-            var iCasas = js_getNumeroCasasDecimais(valorunitario);
-            if (iCasas < 2) {
-              iCasas = 2;
-            }
-            aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
+            aLinha[3] = js_formatar(quantidade,'f',4);
+            aLinha[4] = js_formatar(valorunitario, 'f', 4);
             aLinha[5] = js_formatar(valortotal, 'f');
             aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
             aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
@@ -1128,9 +1140,9 @@ db_app::load("estilos.css, grid.style.css");
     oTxtValorDotacao.setReadOnly(true);
 
     oTxtQuantidadeDotacao = new DBTextField('oTxtQuantidadeDotacao', 'oTxtQuantidadeDotacao', '', 10);
-    var nValorMaximo = oDadosItem.aCells[3].getValue();
+    var nValorMaximo = oDadosItem.aCells[3].getValue().replace('.', '').replace(',', '.');
     var nValorUnitario = js_strToFloat(oDadosItem.aCells[4].getValue()).valueOf();
-    var sEvent = ";js_validaValorDotacao(this," + nValorMaximo + "," + nValorUnitario + ",\"oTxtValorDotacao\");";
+    var sEvent = "js_validaValorDotacao(this," + nValorMaximo + "," + nValorUnitario + ",\"oTxtValorDotacao\");";
     oTxtQuantidadeDotacao.addEvent("onChange", sEvent);
     oTxtQuantidadeDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
     oTxtQuantidadeDotacao.show($('inputquantidadedotacao'));
@@ -1232,15 +1244,14 @@ db_app::load("estilos.css, grid.style.css");
   }
 
   function js_validaValorDotacao(obj, iQuantMax, nValUnitario, oValorTotal) {
-
-    if (js_strToFloat(obj.value) > iQuantMax) {
+    if (obj.value.replace(',','.') > iQuantMax) {
       obj.value = iQuantMax;
     } else if (obj.value == 0) {
       obj.value = iQuantMax;
     }
 
     var nValorTotal = js_strToFloat(obj.value) * nValUnitario;
-    $(oValorTotal).value = js_formatar(nValorTotal, 'f');
+    $(oValorTotal).value = js_formatar(nValorTotal.toFixed(4), 'f');
   }
 
   function js_saveDotacao() {
@@ -1583,7 +1594,7 @@ db_app::load("estilos.css, grid.style.css");
         oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
 
         oTxtQtdContratada = new DBTextField('QtdContratada' + oRow.codigo, 'oTxtQtdContratada', null, 10);
-        oTxtQtdContratada.addEvent("onBlur", "js_ValidaCamposText(this,1)");
+        oTxtQtdContratada.addEvent("onBlur", "js_ValidaCampos(this, 4)");
 
         aLinha[0] = oRow.codigo;
         aLinha[1] = iTotalLinhas;

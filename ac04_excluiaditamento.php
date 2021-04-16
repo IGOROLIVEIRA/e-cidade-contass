@@ -309,7 +309,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?lDepartamento=1&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4&lGeraAutorizacao=true';
+    var sUrl = 'func_acordo.php?lDepartamento=1&aditamentos=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4&lGeraAutorizacao=true';
     js_OpenJanelaIframe('top.corpo',
                         'db_iframe_acordo',
                         sUrl,
@@ -320,7 +320,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
     if (oTxtCodigoAcordo.getValue() != '') {
 
       var sUrl = 'func_acordo.php?lDepartamento=1&descricao=true&pesquisa_chave='+oTxtCodigoAcordo.getValue()+
-                 '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&lGeraAutorizacao=true';
+                 '&aditamentos=true&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&lGeraAutorizacao=true';
 
       js_OpenJanelaIframe('top.corpo',
                           'db_iframe_acordo',
@@ -366,6 +366,7 @@ function js_main() {
 
    oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', 'oTxtCodigoAcordo','', 10);
    oTxtCodigoAcordo.addEvent("onChange",";js_pesquisaac16_sequencial(false);");
+   oTxtCodigoAcordo.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
    oTxtCodigoAcordo.show($('ctnTxtCodigoAcordo'));
 
    oTxtDescricaoAcordo = new DBTextField('oTxtDescricaoAcordo', 'oTxtDescricaoAcordo','', 50);

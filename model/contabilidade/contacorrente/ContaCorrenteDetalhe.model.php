@@ -52,6 +52,10 @@ class ContaCorrenteDetalhe {
    */
   private $oInstituicao;
 
+  /**
+   * @var int
+   */
+  private $iEmParlamentar;
 
   /**
    * @var object ContaPlano
@@ -231,5 +235,24 @@ class ContaCorrenteDetalhe {
     } else {
       return "F";
     }
+  }
+
+  /**
+   * Seta o tipo da arrecadação da receita
+   * 1 = Emenda Parlamentar Individual
+   * 2 = Emenda Parlamentar de Bancada
+   * 3 = Não se aplica
+   * @param integer $iEmParlamentar
+   */
+  public function setEmendaParlamentar($iEmParlamentar) {
+    $this->iEmParlamentar = $iEmParlamentar;
+  }
+
+  /**
+   * Retorna o tipo da arrecadação da receita
+   * @return integer
+   */
+  public function getEmendaParlamentar() {
+    return $this->iEmParlamentar;
   }
 }

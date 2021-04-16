@@ -215,12 +215,15 @@ class lancamentoContabil {
     $this->aLancamentos["lancamSup"]["c79_data"]   = $this->dDataLanc;
   }
 
-  function setReceita($iReceita) {
+  function setReceita($iReceita, $iRecurso = null, $sEstrutural = null) {
 
     $this->aLancamentos["lancamRec"]["set"]        = 1;
     $this->aLancamentos["lancamRec"]["c74_codrec"] = $iReceita;
     $this->aLancamentos["lancamRec"]["c74_data"]   = $this->dDataLanc;
-    $this->aLancamentos["lancamRec"]["c74_anousu"] = $this->iAnoUsu;
+	$this->aLancamentos["lancamRec"]["c74_anousu"] = $this->iAnoUsu;
+	$this->aLancamentos["lancamRec"]["o70_codigo"] = $iRecurso;
+	$this->aLancamentos["lancamRec"]["o57_fonte"]  = $sEstrutural;
+
   }
   /**
    * salva os Lancamentos no banco;
@@ -446,6 +449,31 @@ class lancamentoContabil {
           unset($oDotacao);
           unset($oContaCorrenteCredito);
           unset($oContaCorrenteDebito);
+        } else if ( $this->aLancamentos["lancamRec"]["set"] == 1 && $this->aLancamentos["lancamRec"]["o70_codigo"] != null && $this->aLancamentos["lancamRec"]["o57_fonte"] != null ) {
+
+			$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+			$oContaCorrenteDetalhe->setRecurso(new Recurso($this->aLancamentos["lancamRec"]["o70_codigo"]));
+			$oContaCorrenteDetalhe->setEstrutural($this->aLancamentos["lancamRec"]["o57_fonte"]);
+			  
+			$oLancamentoAuxiliar = new LancamentoAuxiliarSuplementacao();
+          	$oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+            
+			$oContaCredito = ContaCorrenteFactory::getInstance($oConLancamVal->c69_sequen, 
+				$oConLancamVal->c69_credito, 
+				$oLancamentoAuxiliar);
+
+			$oContaDebito  = ContaCorrenteFactory::getInstance($oConLancamVal->c69_sequen, 
+				$oConLancamVal->c69_debito, 
+				$oLancamentoAuxiliar);
+
+            if ($oContaCredito !== false) {
+              $oContaCredito->salvar($c70_data);
+            }
+
+            if ($oContaDebito !== false) {
+              $oContaDebito->salvar($c70_data);
+            }
+
         }
       }
 
@@ -575,6 +603,7 @@ class lancamentoContabil {
 
       //restos a pagar.;
       case 4  :
+      case 25 : // Estorno de liquidacao - documento criado OC12836
       case 85 : // Estorno de Liquidacao Passivo
       case 307: // ESTORNO DA LIQUIDACAO DA PROVISAO DE FERIAS
       case 311: // ESTORNO DA LIQUIDACAO DA PROVISAO DE 13º SALARIO

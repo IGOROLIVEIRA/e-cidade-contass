@@ -598,11 +598,15 @@ if(isset($incluir)) {
             $rsResultEle = db_query($sqlElemento);
             db_fieldsmemory($rsResultEle, 0);
 
-            $elementos = array('331900101','331900102','331900301','331900302','331900501','331900502','331900503','331909102',
+            $aElementosDesdobramento = array('331900101','331900102','331900301','331900302','331900501','331900502','331900503','331909102',
                 '331909103','331909201','331909202','331909203','331909403','331919102','331919103','331919201',
                 '331919202','331919203','331969102','331969103','331969201','331969202','331969203','331969403');
 
-            if(($tipoinstit == 5 || $tipoinstit == 6) && in_array(substr($o56_elemento, 0 , -4), $elementos)){
+            $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
+
+            if ( ($tipoinstit == 5 || $tipoinstit == 6) && 
+                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) ) 
+                ) {
                 if($e60_tipodespesa != 0) {
                     $clempempenho->e60_tipodespesa = $e60_tipodespesa;
                     $sqlerro = false;
@@ -642,6 +646,11 @@ if(isset($incluir)) {
                         $sqlerro = true;
                         $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
                     }
+                }else{
+                    if ($z01_cgccpf == '' || $z01_cgccpf == null) {
+                        $sqlerro = true;
+                        $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+                    }
                 }
 
                 if (strlen($z01_cgccpf) == 11) {
@@ -649,8 +658,12 @@ if(isset($incluir)) {
                         $sqlerro = true;
                         $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
                     }
+                }else{
+                    if ($z01_cgccpf == '' || $z01_cgccpf == null) {
+                        $sqlerro = true;
+                        $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+                    }
                 }
-
             }
             //FIM OC 7037
 
@@ -666,6 +679,14 @@ if(isset($incluir)) {
                 $erro_msg = "Usuário: Esta autorização de empenho ainda não recebeu o Atesto do Controle Interno. Aguarde a liberação para emissão do empenho!";
             }
 
+            $sSqlDataAutEmp = "select e54_emiss from empautoriza where e54_autori = {$e54_autori} limit 1";
+
+            if(pg_num_rows(db_query($sSqlDataAutEmp))) {
+                if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss) > db_getsession('DB_datausu')) {
+                    $sqlerro = true;
+                    $erro_msg = "Não é permitido emitir empenho cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").";
+                }
+            }
 
             if($sqlerro == false) {
 

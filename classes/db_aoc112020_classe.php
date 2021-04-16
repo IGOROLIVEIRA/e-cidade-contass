@@ -28,15 +28,15 @@ class cl_aoc112020
   var $si39_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si39_sequencial = int8 = sequencial 
-                 si39_tiporegistro = int8 = Tipo do registro 
-                 si39_codreduzidodecreto = int8 = Código do decreto 
-                 si39_nrodecreto = int8 = Número do Decreto 
-                 si39_tipodecretoalteracao = int8 = Tipo de Decreto 
-                 si39_valoraberto = float8 = Valor aberto 
-                 si39_mes = int8 = Mês 
-                 si39_reg10 = int8 = reg10 
-                 si39_instit = int8 = Instituição 
+                 si39_sequencial = int8 = sequencial
+                 si39_tiporegistro = int8 = Tipo do registro
+                 si39_codreduzidodecreto = int8 = Código do decreto
+                 si39_nrodecreto = int8 = Número do Decreto
+                 si39_tipodecretoalteracao = int8 = Tipo de Decreto
+                 si39_valoraberto = float8 = Valor aberto
+                 si39_mes = int8 = Mês
+                 si39_reg10 = int8 = reg10
+                 si39_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -162,26 +162,26 @@ class cl_aoc112020
       return false;
     }
     $sql = "insert into aoc112020(
-                                       si39_sequencial 
-                                      ,si39_tiporegistro 
-                                      ,si39_codreduzidodecreto 
-                                      ,si39_nrodecreto 
-                                      ,si39_tipodecretoalteracao 
-                                      ,si39_valoraberto 
-                                      ,si39_mes 
-                                      ,si39_reg10 
-                                      ,si39_instit 
+                                       si39_sequencial
+                                      ,si39_tiporegistro
+                                      ,si39_codreduzidodecreto
+                                      ,si39_nrodecreto
+                                      ,si39_tipodecretoalteracao
+                                      ,si39_valoraberto
+                                      ,si39_mes
+                                      ,si39_reg10
+                                      ,si39_instit
                        )
                 values (
-                                $this->si39_sequencial 
-                               ,$this->si39_tiporegistro 
-                               ,$this->si39_codreduzidodecreto 
-                               ,$this->si39_nrodecreto 
-                               ,$this->si39_tipodecretoalteracao 
-                               ,$this->si39_valoraberto 
-                               ,$this->si39_mes 
-                               ,$this->si39_reg10 
-                               ,$this->si39_instit 
+                                $this->si39_sequencial
+                               ,$this->si39_tiporegistro
+                               ,$this->si39_codreduzidodecreto
+                               ,'$this->si39_nrodecreto'
+                               ,$this->si39_tipodecretoalteracao
+                               ,$this->si39_valoraberto
+                               ,$this->si39_mes
+                               ,$this->si39_reg10
+                               ,$this->si39_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {

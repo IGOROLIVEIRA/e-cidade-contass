@@ -483,7 +483,7 @@ if (count($aParametrosEmpenho) > 0) {
                     <span>
           <fieldset>
             <legend><b>Mostrar</b></legend>
-            <input type="checkbox" id='configuradas' onclick='js_showFiltro("configurada",this.checked)' />
+            <input type="checkbox" id='configuradas' checked onclick='js_showFiltro("configurada",this.checked)' />
             <label for="configuradas" style='padding:1px;border: 1px solid black; background-color:#d1f07c'>
               <b>Atualizados</b>
             </label>
@@ -491,7 +491,7 @@ if (count($aParametrosEmpenho) > 0) {
             <label for="normais" style='padding:1px;border: 1px solid black;background-color:white'>
               <b>Não Atualizados</b>
             </label>
-            <input type="checkbox" id='comMovs'  onclick='js_showFiltro("comMov",this.checked)' />
+            <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("comMov",this.checked)' />
             <label for="comMovs" style='padding:1px;border: 1px solid black;background-color:rgb(222, 184, 135)'>
               <b>Com cheque/em Arquivo</b>
             </label>
@@ -578,15 +578,25 @@ if (count($aParametrosEmpenho) > 0) {
         }
     }
     function js_mostrapagordem1(chave1,z01_cgccpf){
-        if(z01_cgccpf.length = 11){
+        if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
-        if(z01_cgccpf.length = 14){
+        if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
+                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
@@ -651,16 +661,26 @@ if (count($aParametrosEmpenho) > 0) {
         }
     }
     function js_mostraempempenho2(chave1, iAnoEmepenho, z01_cgccpf){
-        if(z01_cgccpf.length = 11){
+        if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
-        if(z01_cgccpf.length = 14){
+        if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
                 alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }

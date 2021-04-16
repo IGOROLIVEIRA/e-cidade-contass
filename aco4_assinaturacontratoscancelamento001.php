@@ -230,7 +230,7 @@ var sUrl = 'con4_contratosmovimento.RPC.php';
 function js_pesquisarAssinatura() {
 
   $('cancelar').disabled  = true;
-  var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=2';
+  var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=2&ativos=true&assinados=true';
       sUrl += '&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial';
 
   js_OpenJanelaIframe('top.corpo',

@@ -96,12 +96,11 @@ $db_opcao = 1;
                 case 102:
                 case 103:
                 case 106:
-                  if($natureza_objeto != 1 && $natureza_objeto != 7){
-                    $aTipos[] = 'Selecione';
+                  if($natureza_objeto != 1 || $natureza_objeto == 7){
                     $aTipos['td'] = 'Termo de Dispensa';
                   }else{
                     $aTipos[] = 'Selecione';
-                    $aTipos['dp'] = 'Dispensa';
+                    $aTipos['td'] = 'Termo da Dispensa';
                     $aTipos['mc'] = 'Minuta do Contrato';
                     $aTipos['po'] = 'Planilha Orçamentária';
                     $aTipos['cr'] = 'Cronograma';
@@ -111,8 +110,7 @@ $db_opcao = 1;
                   break;
 
                 default:
-                  if($natureza_objeto != 1 && $natureza_objeto != 7){
-                    $aTipos[] = 'Selecione';
+                  if($natureza_objeto != 1 || $natureza_objeto == 7){
                     $aTipos['ed'] = 'Edital';
                   }else{
                     $aTipos[] = 'Selecione';
@@ -242,6 +240,7 @@ $db_opcao = 1;
         if($('caddocumento').length == 2)
             $('caddocumento').selectedIndex = 1;
 
+        document.getElementById('caddocumento').selectedIndex = 0;
     }
 
     function js_getDocumento() {
@@ -281,9 +280,6 @@ $db_opcao = 1;
             case 'fl':
                 nova_sigla = 'Fotos do local';
                 break;
-            case 'dp':
-                nova_sigla = 'Dispensa';
-                break;
         }
         return nova_sigla;
     }
@@ -291,7 +287,7 @@ $db_opcao = 1;
     function js_retornoGetDocumento(oAjax) {
 
         var oRetorno = eval('('+oAjax.responseText+")");
-        console.log('Valor retornado: ', oRetorno);
+
         oGridDocumento.clearAll(true);
 
         if (oRetorno.dados.length == 0) {

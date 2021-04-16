@@ -253,12 +253,12 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_nroprocessolicitatorio = $oDados10->si06_numeroprc;
       $regadesao10->si67_codmodalidadelicitacao = $oDados10->si06_modalidade;
       $regadesao10->si67_nroedital = $oDados10->si06_edital;
-      $regadesao10->si67_exercicioedital = $oDados10->si06_exercicioedital;
+      $regadesao10->si67_exercicioedital = $oDados10->exerciciolicitacao;
       $regadesao10->si67_dtataregpreco = $oDados10->si06_dataata;
       $regadesao10->si67_dtvalidade = $oDados10->si06_datavalidade;
       $regadesao10->si67_naturezaprocedimento = $oDados10->si06_orgarparticipante;
       $regadesao10->si67_dtpublicacaoavisointencao = $oDados10->si06_publicacaoaviso;
-      $regadesao10->si67_objetoadesao = preg_replace('~[[:cntrl:]]~', '', $oDados10->si06_objetoadesao);
+      $regadesao10->si67_objetoadesao = $this->removeCaracteres($oDados10->si06_objetoadesao);
       $regadesao10->si67_cpfresponsavel = $oDados10->cpfresponsavel;
       $regadesao10->si67_descontotabela = $oDados10->si06_descontotabela;
       $regadesao10->si67_processoporlote = $oDados10->si06_processoporlote;
@@ -285,7 +285,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao11->si68_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao11->si68_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao11->si68_nrolote = $oDados11->si07_numerolote;
-        $regadesao11->si68_dsclote = $oDados11->desclote;
+        $regadesao11->si68_dsclote = $this->removeCaracteres($oDados11->desclote);
         $regadesao11->si68_instit = db_getsession("DB_instit");
         $regadesao11->si68_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $regadesao11->si68_reg10 = $regadesao10->si67_sequencial;

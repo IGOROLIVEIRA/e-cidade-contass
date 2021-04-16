@@ -339,7 +339,7 @@ if(isset($incluir)) {
                 "",null,null,null,null,
                 "
           regist,
-          z01_nome,
+          substring(z01_nome, 0, 40) as z01_nome,
           z01_numcgm,
           rh30_regime as rh02_codreg,
           rh02_lota as lotac,

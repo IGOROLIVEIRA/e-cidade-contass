@@ -52,8 +52,7 @@ db_inicio_transacao();
 try {
   /*CONULTA*/
 
-  $sSql        = $oForne->sql_query(null,"*",'pc60_databloqueio_ini', $where);
-
+  $sSql        = $oForne->sql_query(null,"*",'z01_nome asc', $where);
   $rsSql       = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
   /*TRATAMENTO DE ERRO*/

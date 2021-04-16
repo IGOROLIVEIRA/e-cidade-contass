@@ -443,6 +443,12 @@ class Acordo
     private $lSituacaoVigencia;
 
     /**
+     * Valor da providência do acordo acordo.ac16_providencia
+     * @var integer
+     */
+    private $lProvidencia;
+
+    /**
      * @return mixed
      */
     public function getiLicoutroorgao()
@@ -1583,6 +1589,16 @@ class Acordo
         if ($oDaoAcordoVigencia->erro_status == 0) {
             throw new Exception("Erro ao definir vigência do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
         }
+
+        $oDaoAcordo = db_utils::getDao('acordo');
+        $oDaoAcordo->ac16_sequencial  = $this->getCodigo();
+        $oDaoAcordo->ac16_providencia = $this->getProvidencia();
+        $oDaoAcordo->alterar($this->getCodigo());
+
+        if($oDaoAcordo->erro_status == 0){
+            throw new Exception("Erro ao alterar contrato.\n{$oDaoAcordo->erro_msg}");
+        }
+
     }
 
     /**
@@ -1628,6 +1644,7 @@ class Acordo
         $oDaoAcordo->ac16_licoutroorgao            = $this->getiLicoutroorgao();
         $oDaoAcordo->ac16_adesaoregpreco           = $this->getiAdesaoregpreco();
         $oDaoAcordo->ac16_tipocadastro             = $this->getITipocadastro();
+        $oDaoAcordo->ac16_providencia              = $this->getProvidencia();
         $iCodigoAcordo                             = $this->getCodigoAcordo();
 
         /**
@@ -1736,7 +1753,6 @@ class Acordo
              * incluimos uma posição inicial para o contrato:
              */
             $oPosicao = new AcordoPosicao();
-            $oPosicao->setPosicaoPeriodo($this->getDataInicial(), $this->getDataFinal(), $oDaoAcordo->ac16_periodocomercial);
             $oPosicao->setAcordo($this->iCodigoAcordo);
             $oPosicao->setNumero(1);
             $oPosicao->setTipo(1);
@@ -1863,7 +1879,6 @@ class Acordo
      */
     function getUltimaPosicao($bCancelados = false)
     {
-
 
         if ($this->oUltimaPosicao == null) {
 
@@ -2290,7 +2305,6 @@ class Acordo
                 if (isset($aItensEmpempItem[$oItem->ac20_pcmater])) {
                     $oItem->quantidade = $aItensEmpempItem[$oItem->ac20_pcmater]->quantidade;
                     $oItem->valor      = $aItensEmpempItem[$oItem->ac20_pcmater]->vlrtot;
-
                     /**
                      * incluirmos na tabela acordoitemexecutado
                      */
@@ -2689,7 +2703,7 @@ class Acordo
      * @param integer [$iAutoriza] codigo da Autorizacao
      * @return array
      */
-    public function getAutorizacoes($iAutoriza = '')
+    public function getAutorizacoes($iAutoriza = '', $iCheckedYear = '')
     {
 
         $sSqlAutorizacoes = "select  e54_autori as codigo,";
@@ -2708,6 +2722,10 @@ class Acordo
         $sSqlAutorizacoes .= "        left join empempaut on e61_autori = e54_autori ";
         $sSqlAutorizacoes .= "        left join empempenho on e61_numemp = e60_numemp ";
         $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+
+        if($iCheckedYear != ''){
+			$sSqlAutorizacoes .= " AND extract(YEAR FROM e54_emiss) = {$iCheckedYear} ";
+		}
 
         if ($iAutoriza != '') {
             $sSqlAutorizacoes .= " and e54_autori = {$iAutoriza}";
@@ -2739,7 +2757,13 @@ class Acordo
         $sSqlAutorizacoes .= "        left join empempaut      on e60_numemp  = e61_numemp ";
         $sSqlAutorizacoes .= "        inner join empautoriza   on e54_autori  = e61_autori ";
         $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+
+		if($iCheckedYear != ''){
+			$sSqlAutorizacoes .= " AND extract(YEAR FROM e54_emiss) = {$iCheckedYear} ";
+		}
+
         $sSqlAutorizacoes .= "  order by codigo";
+
         $rsAutorizacoes = db_query($sSqlAutorizacoes);
 
         return db_utils::getCollectionByRecord($rsAutorizacoes);
@@ -2952,7 +2976,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia)
     {
         $nValorItens = 0;
 
@@ -2999,6 +3023,12 @@ class Acordo
         $sAtualDtFim     = new DBDate($this->getDataFinal());
         $this->setDataInicial($dtVigenciaInicial);
         $this->setDataFinal($dtVigenciaFinal);
+        /**
+         * A providência do contrato é alterada para 2 (finalizada), se tiver sido redirecionado a partir do arquivo modulos.php
+         */
+        if($lProvidencia){
+            $this->setProvidencia(2);
+        }
         $this->salvarAlteracoesContrato();
         if (in_array($iTipoAditamento, array(
             5,
@@ -3066,27 +3096,33 @@ class Acordo
                 $oNovoItem->setResumo(utf8_decode(db_stdClass::db_stripTagsJson($oItem->resumo)));
                 $oNovoItem->setUnidade($oItem->unidade);
                 $oNovoItem->setTipoControle(AcordoItem::CONTROLE_DIVISAO_QUANTIDADE);
+                if($oItem->controlaServico == "true"){
+                    $oNovoItem->setServicoQuantidade(true);
+                }else{
+                    $oNovoItem->setServicoQuantidade(false);
+                }
 
                 if (!empty($oItem->aPeriodos)) {
                     $oNovoItem->setPeriodos($oItem->aPeriodos);
                 }
             }
-            if (in_array($iTipoAditamento, array(
-                    4,
-                    7
-                )) && in_array($oItem->codigoitem, $aSelecionados) && empty($oItem->tipoalteracaoitem)) {
-                /**
-                 * Verifica se houve alteração de quantidade/valor
-                 */
-                if ($oItem->quantidade > $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario > $oItemContrato->getValorUnitario()) {
-                    $aTiposAlteracao[] = AcordoPosicao::TIPO_ACRESCIMOITEM;
-                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_ACRESCIMOITEM);
-                } elseif ($oItem->quantidade < $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario < $oItemContrato->getValorUnitario()) {
-                    $aTiposAlteracao[] = AcordoPosicao::TIPO_DECRESCIMOITEM;
-                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_DECRESCIMOITEM);
-                }
-
-            }
+            //removido OC12680
+//            if (in_array($iTipoAditamento, array(
+//                    4,
+//                    7
+//                )) && in_array($oItem->codigoitem, $aSelecionados) && empty($oItem->tipoalteracaoitem)) {
+//                /**
+//                 * Verifica se houve alteração de quantidade/valor
+//                 */
+//                if ($oItem->quantidade > $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario > $oItemContrato->getValorUnitario()) {
+//                    $aTiposAlteracao[] = AcordoPosicao::TIPO_ACRESCIMOITEM;
+//                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_ACRESCIMOITEM);
+//                } elseif ($oItem->quantidade < $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario < $oItemContrato->getValorUnitario()) {
+//                    $aTiposAlteracao[] = AcordoPosicao::TIPO_DECRESCIMOITEM;
+//                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_DECRESCIMOITEM);
+//                }
+//
+//            }
             $oNovoItem->setQuantidade((float) $oItem->quantidade);
             $oNovoItem->setValorAditado((float) $oItem->valoraditado); //OC5304
             $oNovoItem->setQuantiAditada((float) $oItem->quantiaditada); //OC5304
@@ -3598,6 +3634,24 @@ class Acordo
     }
 
     /**
+     * @return int
+     */
+    public function getProvidencia(){
+
+        return $this->lProvidencia;
+    }
+
+    /**
+     * @param int $lProvidencia
+     * @return $lProvidencia
+     */
+
+    public function setProvidencia($lProvidencia){
+
+        $this->lProvidencia = $lProvidencia;
+    }
+
+    /**
      *
      * função para reativar um contrato apos um periodo de paralisação
      *
@@ -3821,6 +3875,37 @@ class Acordo
 
     }
 
+    public function getSaldoItemPosicao($iPcmater,$iPosicao){
+        $oSaldo                             = new stdClass();
+
+        $sSqlSaldos  = "SELECT coalesce(sum(case when ac29_tipo = 1 then ac29_valor end), 0) as valorAutorizado,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 1 then  ac29_quantidade end), 0) as quantidadeautorizada,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 2 then ac29_valor end),0) as valorExecutado,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 2 then  ac29_quantidade end),0) as quantidadeexecutada,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 1 and ac29_automatico is false ";
+        $sSqlSaldos .= "                         then ac29_valor end), 0) as valorAutorizadoManual,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 1 and ac29_automatico is false ";
+        $sSqlSaldos .= "                         then  ac29_quantidade end), 0) as quantidadeautorizadaManual";
+        $sSqlSaldos .= "  from acordoitemexecutado ";
+        $sSqlSaldos .= "  inner join acordoitem on ac29_acordoitem = ac20_sequencial ";
+        $sSqlSaldos .= "  inner join acordoposicao on ac20_acordoposicao = ac26_sequencial ";
+        $sSqlSaldos .= " where ac20_pcmater = $iPcmater and ac26_sequencial = $iPosicao";
+        $rsSaldos    = db_query($sSqlSaldos);
+
+          $oCalculoSaldo                       = db_utils::fieldsMemory($rsSaldos, 0);
+//        $oSaldo->valorautorizado             = $oCalculoSaldo->valorautorizado;
+//        $oSaldo->valorexecutado              = $oCalculoSaldo->valorexecutado;
+        $oSaldo->quantidadeautorizada        = $oCalculoSaldo->quantidadeautorizada;
+        $oSaldo->quantidadeexecutada         = $oCalculoSaldo->quantidadeexecutada;
+//        $oSaldo->valorautorizar             -= $oSaldo->valorautorizado;
+//        $oSaldo->quantidadeautorizar        -= $oSaldo->quantidadeautorizada;
+//        $oSaldo->valorexecutar              -= $oSaldo->valorexecutado;
+//        $oSaldo->quantidadeexecutar         -= $oSaldo->quantidadeexecutada;
+//        $oSaldo->quantidadeautorizadamanual  = $oCalculoSaldo->quantidadeautorizadamanual;
+//        $oSaldo->valorautorizadomanual       = $oCalculoSaldo->valorautorizado;
+        return $oSaldo->quantidadeautorizada;
+    }
+
     /**
      * retorna os itens na possição inicial
      * @return Acordoitem[]
@@ -4010,4 +4095,49 @@ class Acordo
 
         return $this;
     }
+
+    function getObras($iAcordo)
+    {
+        $sCampo          = "*";
+        $sSql            = "SELECT $sCampo
+                              FROM acordo
+                              INNER JOIN liclicita ON l20_codigo = ac16_licitacao
+                              INNER JOIN licobras ON obr01_licitacao = l20_codigo
+                            WHERE ac16_sequencial = $iAcordo";
+        $rsObras = db_query($sSql);
+        $obra = db_utils::fieldsMemory($rsObras, 0)->obr01_sequencial;
+        return $obra;
+    }
+
+    function getNaturezaAcordo($iAcordo)
+    {
+        $sSql            = "SELECT ac02_acordonatureza
+                              FROM acordo
+                            INNER JOIN acordogrupo on ac16_acordogrupo = ac02_sequencial
+                            WHERE ac16_sequencial = $iAcordo";
+        $rsNatureza = db_query($sSql);
+        $sNatureza = db_utils::fieldsMemory($rsNatureza, 0)->ac02_acordonatureza;
+        return $sNatureza;
+    }
+//
+//    function getSaldosItens($iAcordo,$iPosicao){
+//            $oContrato = new Acordo($iAcordo);
+//            $aItens    = array();
+//
+//            foreach ($oContrato->getPosicoes() as $oPosicaoContrato) {
+//
+//                if ($oPosicaoContrato->getCodigo() == $iPosicao) {
+//
+//                    foreach ($oPosicaoContrato->getItens() as $oItem) {
+//                        $oItemRetorno                 = new stdClass();
+//                        $oItemRetorno->saldos         = $oItem->getSaldosItem($oItem->getCodigo());
+//                        echo "<pre>";
+//                        print_r($oItemRetorno);
+//                        $itens[]                      = $oItemRetorno;
+//                    }
+//                }
+//            }
+////            exit;
+//    }
+
 }

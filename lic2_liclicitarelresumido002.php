@@ -87,8 +87,8 @@ if ($situac != '') {
 
 $where .= $and . " l20_instit = " . db_getsession("DB_instit");
 
-$result = $clliclicita->sql_record($clliclicita->sql_query(null, "*", "l20_codtipocom,l20_numero", $where));
-//die ($clliclicita->sql_query(null,"*","l20_codtipocom,l20_numero",$where));
+$result = $clliclicita->sql_record($clliclicita->sql_query_relatorio(null, "*", "l20_codtipocom,l20_numero", $where));
+//die ($clliclicita->sql_query_relatorio(null,"*","l20_codtipocom,l20_numero",$where));
 $numrows = $clliclicita->numrows;
 if ($numrows == 0) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado.');

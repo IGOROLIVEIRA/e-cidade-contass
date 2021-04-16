@@ -112,7 +112,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
            AND db01_anousu = o41_anousu
            JOIN orcorgao ON o40_orgao = o41_orgao
            AND o40_anousu = o41_anousu
-           WHERE db01_coddepto=ac16_coddepto
+           WHERE db01_coddepto=ac16_deptoresponsavel
                AND db01_anousu=" . db_getsession("DB_anousu") . "
            LIMIT 1) AS si197_codunidadesub,
              ac16_numeroacordo AS si197_nrocontrato,
@@ -126,7 +126,9 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
       INNER JOIN cflicita ON l20_codtipocom = l03_codigo
       INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
       LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-      WHERE DATE_PART('YEAR',acordo.ac16_dataassinatura)= " . db_getsession("DB_anousu") . "
+      WHERE si09_tipoinstit in (1,2,3,4,5,6,8,9)
+          AND ac16_instit = ".db_getsession("DB_instit")."
+          AND DATE_PART('YEAR',acordo.ac16_dataassinatura)= " . db_getsession("DB_anousu") . "
           AND DATE_PART('MONTH',acordo.ac16_dataassinatura)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult10 = db_query($sql);
 

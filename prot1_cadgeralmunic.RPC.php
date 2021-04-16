@@ -37,6 +37,7 @@ require_once("model/endereco.model.php");
 require_once("model/configuracao/endereco/Estado.model.php");
 require_once("model/configuracao/endereco/Municipio.model.php");
 require_once("classes/db_condataconf_classe.php");
+require_once("classes/db_historicocgm_classe.php");
 
 $oJson    = new services_json();
 $oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
@@ -330,8 +331,8 @@ switch ($oParam->exec) {
     case 'incluirAlterar' :
 
         $sqlErro = false;
-        $clcondataconf = new cl_condataconf;
-
+        $clcondataconf        = new cl_condataconf;
+        $clhistoricocgm      = new cl_historicocgm;
         $oRetorno->action     = $oParam->action;
 
         db_inicio_transacao();
@@ -454,19 +455,40 @@ switch ($oParam->exec) {
                 $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-                if ($oParam->pessoa->z01_ultalt <= $c99_datapat) {
+                if ($oParam->pessoa->z01_ultalt <= $c99_datapat && $c99_datapat != '') {
                     $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                     $sqlErro  = true;
                 }
             }
+            if ($oParam->action == "alterar") {
+                //HISTORICOCGM OC12852
+                $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null, "z09_sequencial", "", "z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
+                if (pg_num_rows($result) > 0) {
+                    db_fieldsmemory($result, 0);
+                    $clhistoricocgm->excluir($z09_sequencial);
+                }
+            }
+
+            $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));;
+            $clhistoricocgm->z09_motivo        = utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs));
+            $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
+            $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
+            $clhistoricocgm->z09_datacadastro  = $date;
+            if($oParam->action == 'incluir'){
+                $clhistoricocgm->z09_tipo          = 1;
+            }else{
+                $clhistoricocgm->z09_tipo          = 2;
+            }
+            $clhistoricocgm->incluir();
+            //fim OC12852
 
             if (!$sqlErro) {
                 try {
 
                     $oCgm->save();
-                    if ($oParam->action == "incluir") {
 
-                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
+                    if ($oParam->action == "incluir") {
+                    	$oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
                     } else if ($oParam->action == "alterar") {
 
                         $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (".$oCgm->getCodigo().")\\n\\n");
@@ -513,6 +535,7 @@ switch ($oParam->exec) {
                             "ov02_sequencial = ".$oParam->cidadao->ov02_sequencial." and
                                         ov02_seq = ".$oParam->cidadao->ov02_seq
                         );
+
                         if ($oDaoCidado->erro_status == 0) {
 
                             $oRetorno->status = 2;
@@ -523,7 +546,7 @@ switch ($oParam->exec) {
                 }
             }
 
-            //Aqui manipula cgm Pessoa Jurídica
+		    //Aqui manipula cgm Pessoa Jurídica
         } else if ($oParam->lPessoaFisica == false) {
 
             $sqlErro = false;
@@ -620,16 +643,37 @@ switch ($oParam->exec) {
                 $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-                if ($oParam->pessoa->z01_ultalt <= $c99_datapat) {
+                if ($oParam->pessoa->z01_ultalt <= $c99_datapat && $c99_datapat != '') {
                     $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                     $sqlErro  = true;
                 }
             }
 
+            if ($oParam->action == 'alterar'){
+                //HISTORICOCGM OC12852
+                $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
+                if(pg_num_rows($result) > 0 ) {
+                    db_fieldsmemory($result, 0);
+                    $clhistoricocgm->excluir($z09_sequencial);
+                }
+            }
+            $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));;
+
+            $clhistoricocgm->z09_motivo        = utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs));
+            $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
+            $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
+            $clhistoricocgm->z09_datacadastro  = $date;
+            if($oParam->action == 'incluir'){
+                $clhistoricocgm->z09_tipo          = 1;
+            }else{
+                $clhistoricocgm->z09_tipo          = 2;
+            }
+            $clhistoricocgm->incluir();
+            //fim OC12852
+
             if (!$sqlErro) {
                 try {
-
-                    $oCgm->save();
+					$oCgm->save();
                     if ($oParam->action == "incluir") {
 
                         $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
@@ -695,8 +739,7 @@ switch ($oParam->exec) {
         }
 
         if (!$sqlErro) {
-
-            /*----------------------------Processa Tipo Empresa--------------------------------------------------*/
+			/*----------------------------Processa Tipo Empresa--------------------------------------------------*/
             /**
              * Verifica se existe resgistro na cgmendereco se existir deleta
              */
@@ -732,12 +775,16 @@ switch ($oParam->exec) {
         db_fim_transacao($sqlErro);
 
         if (!$sqlErro) {
-
             $oRetorno->z01_numcgm = $oCgm->getCodigo();
         }
 
-        echo $oJson->encode($oRetorno);
-        break;
+		if($oParam->action == "incluir" && !$sqlErro){
+			CgmFactory::setHistoricoCgm($oCgm->getCodigo(), $oCgm->getCadastro());
+		}
+
+		echo $oJson->encode($oRetorno);
+
+		break;
 
     case 'findEnderecoByCodigo' :
 
@@ -1005,4 +1052,31 @@ switch ($oParam->exec) {
         }
         echo $oJson->encode($oRetorno);
         break ;
+
+	case 'getDataCadCGM':
+		try{
+			$oCgm  = db_utils::getDao('cgm');
+			$oHistoricoCgm  = db_utils::getDao('historicocgm');
+
+			$sSqlHistorico  = $oHistoricoCgm->sql_query_file('', 'z09_datacadastro','','z09_numcgm = '.$oParam->numcgm.'and z09_tipo = 1' );
+			$rsSqlHistorico = $oHistoricoCgm->sql_record($sSqlHistorico);
+			$data_cadastro = db_utils::fieldsMemory($rsSqlHistorico, 0)->z09_datacadastro;
+
+			if(!$data_cadastro){
+				$sSql  = $oCgm->sql_query_file($oParam->numcgm, 'z01_cadast');
+				$rsSql = $oCgm->sql_record($sSql);
+				$data_cadastro = db_utils::fieldsMemory($rsSql, 0)->z01_cadast;
+				$data_cadastro = $data_cadastro ? $data_cadastro : '2019-12-31';
+			}
+
+			$oRetorno->z09_cadastro = $data_cadastro;
+			$oRetorno->status = 1;
+
+		}catch(Exception $exception){
+
+			$oRetorno->status = 2;
+			$oRetorno->message = urlencode($eErro->getMessage());
+		}
+		echo $oJson->encode($oRetorno);
+		break;
 }

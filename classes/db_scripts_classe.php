@@ -1,15 +1,108 @@
 <?
-//CLASSE DA ENTIDADE
-class cl_scripts { 
+
+class cl_scripts {
 
   var $erro_msg   = null;
+  var $erro       = false;
 
-  function cl_scripts() { 
+  function cl_scripts() {
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
    // funcões
-  function excluiEmpenho ($seq_emp){ 
+  function alteraDocumento ($lancamento,$proximodoc, $anteriordoc){
+
+  if(in_array($anteriordoc, array('200','208','210','212','214'))){
+    if(!in_array($proximodoc, array('200','208','210','212','214'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 200, 208, 210, 212, 214";
+        $this->erro = true;
+        return false;
+    }
+  }
+  if(in_array($anteriordoc, array('201','209','211','213','215'))){
+    if(!in_array($proximodoc, array('201','209','211','213','215'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 209, 211, 213 e 215";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if(in_array($anteriordoc, array('39','3','23','202','204','206','33'))){
+    if(!in_array($proximodoc, array('39','3','23','202','204','206','33'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 39, 3, 23, 202, 204, 206, 33";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+    if(in_array($anteriordoc, array('40','4','24','203','205','207','34'))){
+    if(!in_array($proximodoc, array('40','4','24','203','205','207','34'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 40, 4, 24, 203, 205, 207, 34";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+
+  if(in_array($anteriordoc, array('160','150','130'))){
+    if(!in_array($proximodoc, array('160','150','130'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 160, 150 e 130";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if(in_array($anteriordoc, array('161','151','120'))){
+    if(!in_array($proximodoc, array('161','151','120'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 161, 151 e 120";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if(in_array($anteriordoc, array('162','152','131'))){
+    if(!in_array($proximodoc, array('162','152','131'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 152 e 131";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if(in_array($anteriordoc, array('163','153','121'))){
+    if(!in_array($proximodoc, array('163','153','121'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 163, 153 e 121";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if(in_array($anteriordoc, array('100','101','115','116','122','123','124','125','126','127','418','419'))){
+    if(!in_array($proximodoc, array('100','101','115','116','122','123','124','125','126','127','418','419'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 100,101,115,116,122,123,124,125,126,127,418 e 419";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+    $result = db_query("update conlancamdoc set c71_coddoc=$proximodoc where c71_codlan = '$lancamento'");
+
+    if($result===false){
+       $this->erro_msg = @pg_last_error();
+       $this->erro = true;
+       return false;
+    }
+
+     $this->erro_msg = "";
+     $this->erro_msg = "Alteração efetuada com Sucesso\\n Aviso: é necessário realizar o reprocessamento do lançamento no Módulo Contabilidade - Procedimentos - Utilitários da Contabilidade - Processa Lançamentos";
+
+     $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+     $seq   = pg_result($resmanut,0,0);
+     $result = db_query("insert into db_manut_log values($seq,'Alt Documento: ".$anteriordoc." para ".$proximodoc." no lançamento ". $lancamento ."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+
+     return true;
+  }
+
+  function excluiEmpenho ($seq_emp){
 
     $ano    = db_getsession('DB_anousu');
     $instit = db_getsession('DB_instit');
@@ -26,7 +119,7 @@ class cl_scripts {
       SET c99_data = '$anousu'
       WHERE c99_anousu = $ano
         AND c99_instit = $instit;
-      
+
 
       CREATE TEMP TABLE reduzidos_lanc ON COMMIT DROP AS
     SELECT * FROM conplanoexesaldo
@@ -58,9 +151,9 @@ class cl_scripts {
          (SELECT * FROM empempaut
           WHERE e61_numemp IN
            (SELECT e60_numemp FROM empenhos));
-    
 
-    
+
+
 
     CREATE TEMPORARY TABLE w_matordem ON COMMIT DROP AS
     SELECT m52_codordem AS m51_codordem
@@ -108,7 +201,7 @@ class cl_scripts {
         (SELECT m51_codordem
          FROM w_matordem);
 
-    
+
 
     CREATE TEMPORARY TABLE w_lancamentos ON COMMIT DROP AS
     SELECT c70_codlan AS lancam
@@ -216,7 +309,7 @@ class cl_scripts {
         (SELECT lancam
          FROM w_lancamentos);
 
-    
+
 
     CREATE TEMP TABLE w_notas ON COMMIT DROP AS
     SELECT * FROM empnota
@@ -226,6 +319,15 @@ class cl_scripts {
     WHERE e70_codnota IN
         (SELECT e69_codnota
          FROM w_notas);
+
+    DELETE
+    FROM empnotaitembenspendente
+    WHERE e137_empnotaitem IN
+        (SELECT e72_sequencial
+         FROM empnotaitem
+         WHERE e72_codnota IN
+            (SELECT e69_codnota
+             FROM w_notas));
 
     DELETE FROM empnotaitem
     WHERE e72_codnota IN
@@ -242,7 +344,7 @@ class cl_scripts {
         (SELECT e69_codnota
          FROM w_notas);
 
-    
+
 
     CREATE TEMP TABLE w_empenhos ON COMMIT DROP AS
     SELECT * FROM empempenho
@@ -394,6 +496,14 @@ class cl_scripts {
                      (SELECT e60_numemp
                       FROM w_empenhos));
 
+    DELETE FROM autprotpagordem
+    WHERE p107_codord IN
+        (SELECT e50_codord
+         FROM pagordem
+         WHERE e50_numemp IN
+             (SELECT e60_numemp
+              FROM w_empenhos));
+
     DELETE FROM pagordem
     WHERE e50_codord IN
         (SELECT e50_codord
@@ -464,7 +574,7 @@ class cl_scripts {
     WHERE e45_numemp IN
             (SELECT e60_numemp FROM w_empenhos);
 
-    
+
 
     DELETE FROM empautidot
     WHERE e56_autori IN
@@ -516,7 +626,7 @@ class cl_scripts {
              (SELECT e61_autori
                 FROM autoriza);
 
-    
+
 
     DELETE FROM conplanoexesaldo
     USING reduzidos_lanc
@@ -569,22 +679,22 @@ class cl_scripts {
       AND c99_instit = $instit;
 
     ");
-    
+
 
      if($result===false){
        echo @pg_last_error();exit;
      }
- 
+
      $this->erro_msg = "";
      $this->erro_msg = "Exclusão efetuada com Sucesso\\n";
- 
+
      $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
      $seq   = pg_result($resmanut,0,0);
      $result = db_query("insert into db_manut_log values($seq,'Empenho: ".$seq_emp."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     
+
      return true;
- 
-} 
+
+    }
 
 }
 ?>

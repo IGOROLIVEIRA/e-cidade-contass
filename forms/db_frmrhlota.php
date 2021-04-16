@@ -40,6 +40,8 @@ $clrotulo->label("z01_numcgm");
 $clrotulo->label("z01_nome");
 $clrotulo->label("z01_cgccpf");
 $clrotulo->label("z01_cgc");
+$clrotulo->label("o58_coddot");
+$clrotulo->label("o56_descr");
 if($db_opcao==1){
   $ac="pes1_rhlota004.php";
 }else if($db_opcao==22 || $db_opcao==2){
@@ -151,6 +153,10 @@ $r70_instit = db_getsession("DB_instit");
             </td>
             <td>
               <?
+                if ($db_opcao == 1) {
+                  $r70_concarpeculiar = '000';
+                  $c58_descr = 'NÃO SE APLICA';
+                }
                 db_input("r70_concarpeculiar",10,$Ir70_concarpeculiar,true,"text",$db_opcao,"onChange='js_pesquisar70_concarpeculiar(false);'");
                 db_input("c58_descr",45,0,true,"text",3);
               ?>
@@ -199,13 +205,34 @@ $r70_instit = db_getsession("DB_instit");
     <?
     if(isset($r70_analitica) && $r70_analitica=="t"){
     ?>
+
+  <tr>
+    <td>
+      <fieldset><legend><b>Pesquisar Órgão / Unidade</b></legend>
+      <table border='0' cellpadding='0' cellspacing='0'>
+        <tr>
+          <td nowrap title="<?=@$To58_coddot?>" style="min-width: 140px;">
+            <?php 
+              db_ancora($Lo58_coddot, "js_pesquisaReduzido(true);", 1);
+            ?>
+          </td>
+          <td>
+            <?php 
+              db_input("o58_coddot", 8, $Io58_coddot, true, "text", 1, "onchange='js_pesquisaReduzido(false);'");
+              db_input("o56_descr",40, $Io56_descr,true,"text",3);
+            ?>
+          </td>
+        </tr>
+      </table>
+      </fieldset>
+    </td>
+  </tr>
   <tr>
     <td>
       <fieldset><legend><b>Órgão / Unidade</b></legend>
-      <center>
       <table border='0' cellpadding='0' cellspacing='0'>
         <tr>
-          <td nowrap title="<?=@$To40_orgao?>">
+          <td nowrap title="<?=@$To40_orgao?>" style="min-width: 140px;">
             <?
             db_ancora(@$Lo40_orgao,"js_pesquisaorgunid(true);",$db_opcao);
             ?>
@@ -224,7 +251,7 @@ $r70_instit = db_getsession("DB_instit");
           </td>
         </tr>
         <tr>
-          <td nowrap title="<?=@$To41_unidade?>">
+          <td nowrap title="<?=@$To41_unidade?>" style="min-width: 140px;">
             <?
             db_ancora(@$Lo41_unidade,"js_pesquisaorgunid(true);",$db_opcao);
             ?>
@@ -243,7 +270,6 @@ $r70_instit = db_getsession("DB_instit");
           </td>
         </tr>
       </table>
-      </center>
       </fieldset> 
     </td>
   </tr>
@@ -450,6 +476,45 @@ if(isset($r70_estrut) && trim($r70_estrut)!=""){
   echo "\njs_mascara03_r70_estrut(document.form1.r70_estrut.value);\n";
 }
 ?>
+var dbopcao = <?=$db_opcao?>;
+function js_pesquisaReduzido (lMostra) {
+  var sUrlOpen = "func_orcdotacaorhlota.php?pesquisa_chave="+document.form1.o58_coddot.value+"&funcao_js=parent.js_completaReduzido";
+  if (lMostra) {
+    sUrlOpen = "func_orcdotacaorhlota.php?funcao_js=parent.js_preencheReduzido|o58_coddot|o55_descr|o40_orgao|o40_descr|o41_unidade|o41_descr";
+  }
+  js_OpenJanelaIframe('', 'db_iframe_orcdotacao', sUrlOpen, 'Pesquisa Reduzido Dotação', lMostra);
+}
+function js_preencheReduzido (iCodigoReduzido, sDescricao, o40_orgao, o40_descr, o41_unidade, o41_descr) {
+
+  document.form1.o58_coddot.value = iCodigoReduzido;
+  document.form1.o56_descr.value = sDescricao;
+  document.form1.o40_orgao.value = o40_orgao;
+  document.form1.o40_descr.value = o40_descr;
+  document.form1.o41_unidade.value = o41_unidade;
+  document.form1.o41_descr.value = o41_descr;
+  if (dbopcao == 1) {
+    document.form1.r70_descr.value = sDescricao;
+  }
+  db_iframe_orcdotacao.hide();
+}
+function js_completaReduzido (sDescricao, lErro, o40_orgao, o40_descr, o41_unidade, o41_descr) {
+  document.form1.o56_descr.value = sDescricao;
+  if (lErro || typeof(o40_orgao) === "undefined") {
+    document.form1.o58_coddot.value = "";
+    document.form1.o40_orgao.value = "";
+    document.form1.o40_descr.value = "";
+    document.form1.o41_unidade.value = "";
+    document.form1.o41_descr.value = "";
+  } else {
+    document.form1.o40_orgao.value = o40_orgao;
+    document.form1.o40_descr.value = o40_descr;
+    document.form1.o41_unidade.value = o41_unidade;
+    document.form1.o41_descr.value = o41_descr;
+  }
+  if (dbopcao == 1) {
+    document.form1.r70_descr.value = sDescricao;
+  }
+}
 </script>
 <?
 if(isset($focar)){

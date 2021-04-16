@@ -63,6 +63,7 @@ class cl_contacorrentedetalhe {
    var $c19_orcdotacaoanousu = 0;
    var $c19_programa = 0;
    var $c19_projativ = 0;
+   var $c19_emparlamentar = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  c19_sequencial = int4 = Sequencial
@@ -86,6 +87,7 @@ class cl_contacorrentedetalhe {
                  c19_orcdotacaoanousu = int4 = Orcdotação Ano
                  c19_programa = varchar(4) = Código do Programa
                  c19_projativ = varchar(4) = Código da Ação
+                 c19_emparlamentar = int4 = Referente a Emenda Parlamentar
                  ";
    //funcao construtor da classe
    function cl_contacorrentedetalhe() {
@@ -126,6 +128,7 @@ class cl_contacorrentedetalhe {
        $this->c19_orcdotacaoanousu = ($this->c19_orcdotacaoanousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_orcdotacaoanousu"]:$this->c19_orcdotacaoanousu);
        $this->c19_programa = ($this->c19_programa == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_programa"]:$this->c19_programa);
        $this->c19_projativ = ($this->c19_projativ == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_projativ"]:$this->c19_projativ);
+       $this->c19_emparlamentar = ($this->c19_emparlamentar == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_emparlamentar"]:$this->c19_emparlamentar);
      }else{
        $this->c19_sequencial = ($this->c19_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_sequencial"]:$this->c19_sequencial);
      }
@@ -193,6 +196,9 @@ class cl_contacorrentedetalhe {
      if($this->c19_projativ == null ){
        $this->c19_projativ = "null";
      }
+     if($this->c19_emparlamentar == null ){
+      $this->c19_emparlamentar = "null";
+    }
      if($c19_sequencial == "" || $c19_sequencial == null ){
        $result = db_query("select nextval('contacorrentedetalhe_c19_sequencial_seq')");
        if($result==false){
@@ -247,6 +253,7 @@ class cl_contacorrentedetalhe {
                                       ,c19_orcdotacaoanousu
                                       ,c19_programa
                                       ,c19_projativ
+                                      ,c19_emparlamentar
                        )
                 values (
                                 $this->c19_sequencial
@@ -270,6 +277,7 @@ class cl_contacorrentedetalhe {
                                ,$this->c19_orcdotacaoanousu
                                ,'$this->c19_programa'
                                ,'$this->c19_projativ'
+                               ,$this->c19_emparlamentar
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -481,6 +489,13 @@ class cl_contacorrentedetalhe {
        $sql  .= $virgula." c19_projativ = '$this->c19_projativ'";
        $virgula = ",";
      }
+     if(trim($this->c19_emparlamentar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c19_emparlamentar"])){
+      if(trim($this->c19_emparlamentar)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c19_emparlamentar"])){
+         $this->c19_emparlamentar = "0" ;
+      }
+      $sql  .= $virgula." c19_emparlamentar = $this->c19_emparlamentar ";
+      $virgula = ",";
+    }
      $sql .= " where ";
      if($c19_sequencial!=null){
        $sql .= " c19_sequencial = $this->c19_sequencial";

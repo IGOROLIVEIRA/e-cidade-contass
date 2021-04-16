@@ -38,6 +38,7 @@ require_once("classes/db_licobrasanexo_classe.php");
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clrotulo = new rotulocampo;
+$cllicobrasanexo = new cl_licobrasanexo();
 
 $lFail    = false;
 if(isset($uploadfile)) {
@@ -51,39 +52,44 @@ if(isset($uploadfile)) {
   // Nome do novo arquivo
   $nomearq = $_FILES["uploadfile"]["name"];
 
+  // Nome do arquivo temporário gerado no /tmp
+  $nometmp = $_FILES["uploadfile"]["tmp_name"];
+
   $extensao = strtolower(substr($nomearq,-4));
 
-  if($extensao == "jpeg"){
-    $novo_nome = md5(time()).".".$extensao;
-  }else{
+  if($extensao != ".pdf"){
+     db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo PDF");
+     unlink($nometmp);
+     $lFail = true;
+     return false;
+  }
+
+  if($extensao == ".pdf"){
     $novo_nome = md5(time()).$extensao;
   }
 
-  $diretorio = "imagens/obras/";
-
-  // Nome do arquivo temporário gerado no /tmp
-  $nometmp = $_FILES["uploadfile"]["tmp_name"];
+  $diretorio = "tmp/";
 
   // Seta o nome do arquivo destino do upload
   $arquivoDocument = "$diretorio"."$novo_nome";
 
-  if($extensao != ".png" && $extensao != "jpeg" && $extensao != ".jpg" ){
-    db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo JPEG ou PNG");
-    unlink($nometmp);
-    $lFail = true;
-    return false;
-  }
-
-  $cllicobrasanexo = new cl_licobrasanexo();
-  $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
-  $cllicobrasanexo->obr04_codimagem       = $novo_nome;
-  $cllicobrasanexo->obr04_legenda         = "foto sem legenda";
-  $cllicobrasanexo->incluir();
+//  $sqlanexo = $cllicobrasanexo->sql_query(null,"*",null,"obr04_licobrasmedicao = $medicao");
+//  $rsAnexo = $cllicobrasanexo->sql_record($sqlanexo);
+//  db_fieldsmemory($rsAnexo);
+//  if(pg_num_rows($rsAnexo) > 0){
+//      db_msgbox("Já existe anexo para esta Medição.");
+//      unlink($nometmp);
+//      db_redireciona("obr1_licobrasmedicao002.php?chavepesquisa=$obr04_licobrasmedicao");
+//  }else{
+//      $cllicobrasanexo = new cl_licobrasanexo();
+//      $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
+//      $cllicobrasanexo->obr04_codimagem       = $novo_nome;
+//      $cllicobrasanexo->obr04_legenda         = "foto sem legenda";
+//      $cllicobrasanexo->incluir();
+//  }
 
   // Faz um upload do arquivo para o local especificado
   if(  move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$diretorio.$novo_nome)) {
-//    echo $medicao;exit;
-
 
     $href = $arquivoDocument;
 
@@ -98,33 +104,55 @@ if(isset($uploadfile)) {
 ?>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link href="estilos.css" rel="stylesheet" type="text/css">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-  <?php
-  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
-  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
-  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
-  db_app::load("estilos.css,grid.style.css");
-  ?>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+    <script>
+        function js_enviar(){
+            parent.document.form1.localrecebefoto.value = "<?=@$arquivoDocument?>";
+            parent.document.getElementById("fotofunc").innerHTML = "<?=@$href?>";
+            parent.db_iframe_localfoto.hide();
+        }
+        function js_testacampo(){
+            if(document.form1.arquivofoto.value != ""){
+                document.form1.submit();
+            }else{
+                alert("Informe o arquivo.");
+            }
+        }
+    </script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<div id="teste2">
-  <input type="text" value="<?=@$novo_nome;?>" id="nomeanexo">
-</div>
+<center id='teste'>
+    <table border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+        <?=@$href;?>
+    </table>
+</center>
 </body>
 </html>
 <script>
-  <? if (isset($_GET["clone"]) && !isset($href)) {
-  echo "var cloneFormulario='{$_GET["clone"]}';\n";
-  ?>
+    <? if (isset($_GET["clone"]) && !isset($href)) {
+    echo "var cloneFormulario='{$_GET["clone"]}';\n";
+    ?>
 
-  if (parent.$(cloneFormulario)) {
-    var formteste = parent.$(cloneFormulario).cloneNode(true);
-    $('teste2').appendChild(formteste);
-    formteste.submit();
-  }
-  <?}?>
+    if (parent.$(cloneFormulario)) {
+        var formteste = parent.$(cloneFormulario).cloneNode(true);
+        $('teste').appendChild(formteste);
+        formteste.submit();
+    }
+    <?}
+    if (isset($href)) {
+
+        if (!$lFail) {
+
+            echo "parent.$('namefile').value=\"{$href}\";\n";
+        }
+        echo "parent.endLoading();";
+        echo "parent.$('teste').removeChild(parent.$('uploadIframe'));";
+
+
+    }
+    ?>
 
 </script>

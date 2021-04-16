@@ -154,15 +154,49 @@ if (isset($incluir)) {
                 $sqlerro = true;
                 $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
             }
+        }else{
+            if ($z01_cgccpf == '' || $z01_cgccpf == null) {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
         }
 
         if (strlen($z01_cgccpf) == 11) {
             if ($z01_cgccpf == '00000000000') {
-                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
                 $sqlerro = true;
+                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
+        }else{
+            if ($z01_cgccpf == '' || $z01_cgccpf == null) {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
             }
         }
 
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$e54_numcgm} and z09_tipo = 1");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+
+        $e54_emiss   = date("Y-m-d",db_getsession("DB_datausu"));
+
+        if($e54_emiss < $z09_datacadastro){
+            $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+            $sqlerro = true;
+        }
+
+        if ($e44_tipo == "4") {
+            $resultParamento = db_query("SELECT e30_controleprestacao FROM empparametro WHERE e39_anousu = " . date("Y", db_getsession("DB_datausu")));
+            db_fieldsmemory($resultParamento, 0)->e30_controleprestacao;
+
+            if ($e30_controleprestacao == 't') {
+                $resultPrestacaoContas = db_query("SELECT e60_numemp FROM empempenho e LEFT JOIN emppresta er ON e.e60_numemp = er.e45_numemp WHERE e60_numcgm = {$e54_numcgm} AND e45_acerta IS NULL AND er.e45_tipo = 4 LIMIT 1");
+                db_fieldsmemory($resultPrestacaoContas, 0)->e60_numemp;
+
+                if ($e60_numemp) {
+                    $erro_msg = "Não é possível emitir Autorização de Empenho para credor que possua Prestação de Contas pendente!";
+                    $sqlerro = true;
+                }
+            }
+        }
     }
 
   db_inicio_transacao();

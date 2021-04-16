@@ -86,7 +86,7 @@ $clorclei->rotulo->label("o45_numlei");
       <?
       $sWhere = '1=1';
       if (isset($leimanual)) {
-        $sWhere .= " and o45_tipolei = 1 and extract (year from o45_datafim) = ".db_getsession("DB_anousu");   
+        $sWhere .= " and o45_tipolei in (1, 2, 3) and extract (year from o45_datafim) = ".db_getsession("DB_anousu");   
       }
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
@@ -96,6 +96,11 @@ $clorclei->rotulo->label("o45_numlei");
            $campos = "orclei.*";
            }
         }
+        $campos .= ", case 
+                        when o45_tipolei = 1 then '1 - LOA'::char(7)
+                        when o45_tipolei = 2 then '2 - LDO'::char(7)
+                        when o45_tipolei = 3 then '3 - LAO'::char(7)
+                        end as o45_tipolei ";
         if(isset($chave_o45_codlei) && (trim($chave_o45_codlei)!="") ){
 	         $sql = $clorclei->sql_query($chave_o45_codlei,$campos,"o45_codlei");
         }else if(isset($chave_o45_numlei) && (trim($chave_o45_numlei)!="") ){
@@ -106,11 +111,16 @@ $clorclei->rotulo->label("o45_numlei");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clorclei->sql_record($clorclei->sql_query(null, null,"*", 
+          $result = $clorclei->sql_record($clorclei->sql_query(null, "*",null, 
                                                                "o45_codlei = {$pesquisa_chave} and {$sWhere}"));
+                                                               
           if($clorclei->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$o45_numlei',false);</script>";
+            if (isset($bTipoLei) && $bTipoLei == 'true') {
+              echo "<script>".$funcao_js."('$o45_numlei', '$o45_tipolei',false);</script>";
+            } else {
+              echo "<script>".$funcao_js."('$o45_numlei',false);</script>";
+            }
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

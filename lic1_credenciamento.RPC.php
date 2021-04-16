@@ -13,6 +13,7 @@ include("classes/db_credenciamento_classe.php");
 include("classes/db_habilitacaoforn_classe.php");
 include("classes/db_parecerlicitacao_classe.php");
 include("classes/db_licitemobra_classe.php");
+include("classes/db_acordo_classe.php");
 
 $cllicitemobra         = new cl_licitemobra;
 $clcredenciamento      = new cl_credenciamento;
@@ -23,6 +24,7 @@ $clliclicita           = new cl_liclicita;
 $clliclicitasituacao   = new cl_liclicitasituacao;
 $clhabilitacaoforn     = new cl_habilitacaoforn();
 $clparecerlicitacao    = new cl_parecerlicitacao();
+$clacordo              = new cl_acordo();
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -39,48 +41,99 @@ try{
 
         case 'SalvarCred':
 
-            $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento",null,null));
-            db_fieldsmemory($rsLimiteCred,0)->l20_dtlimitecredenciamento;
-            $dtLimitecredenciamento = (implode("/",(array_reverse(explode("-",$l20_dtlimitecredenciamento)))));
+            db_inicio_transacao();
 
-          foreach ($oParam->itens as $item){
+            $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento,l20_datacria,l20_dtpubratificacao",null,null));
+            db_fieldsmemory($rsLimiteCred,0);
+
+            foreach ($oParam->itens as $item){
+
                 $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query_file(null,"l206_datahab",null,"l206_fornecedor = $item->l205_fornecedor and l206_licitacao = $item->l205_licitacao"));
                 db_fieldsmemory($rsHabilitacao,0);
-                $dtHabilitacaoforne = (implode("/",(array_reverse(explode("-",$l206_datahab)))));
 
                 $clcredenciamento->l205_fornecedor = $item->l205_fornecedor;
-                $clcredenciamento->l205_datacred = $item->l205_datacred;
+                $clcredenciamento->l205_datacred = $item->l205_datacreditem;
                 $clcredenciamento->l205_item = $item->l205_item;
                 $clcredenciamento->l205_licitacao = $item->l205_licitacao;
                 $clcredenciamento->l205_datacreditem = $item->l205_datacreditem == "" || $item->l205_datacreditem == null ? $item->l205_datacred : $item->l205_datacreditem;
 
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
-                db_fieldsmemory($rsItem,0)->l205_sequencial;
 
-                if($item->l205_datacred < $dtHabilitacaoforne){
-                   throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
-                }
+                $dtcred = join('-', array_reverse(explode('/', $item->l205_datacreditem)));
+                
+                if (!$rsItem) {
+                    if($dtcred < $l206_datahab){
+                        throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
+                    }
+  
+                    if($l20_dtlimitecredenciamento != ""){
+                        if($item->l205_datacred > $l20_dtlimitecredenciamento){
+                            throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
+                        }
+                    }
+  
+                    if($dtcred < $l20_datacria){
+                        throw new Exception ("Erro: Data de credenciamento menor que a data de abertura do procedimento adm.");
+                    }
+  
+                    if($l20_dtpubratificacao != ""){
+                        if($dtcred < $l20_dtpubratificacao){
+                            throw new Exception ("Erro: A data de credenciamento deve ser maior ou igual a data de publicação do Termo de Ratificação");
+                        }
+                    }
 
-                if($dtLimitecredenciamento != ""){
-                  if($item->l205_datacred > $dtLimitecredenciamento){
-                    throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
-                  }
-                }
-
-                if ($rsItem == 0) {
                     $clcredenciamento->incluir(null);
+
+                    if ($clcredenciamento->erro_status == 0) {
+                        $sqlerro = true;
+                        $erro_msg = $clcredenciamento->erro_msg;
+                        break;
+                    }
+
                 } else {
-                    $clcredenciamento->l205_sequencial = $l205_sequencial;
-                    $clcredenciamento->alterar();
+
+                    $oCredenciamento = db_utils::fieldsMemory($rsItem, 0);
+                    
+                    if($oCredenciamento->l205_datacreditem != $dtcred){
+                        
+                        if($dtcred < $l206_datahab){
+                            throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
+                        }
+      
+                        if($l20_dtlimitecredenciamento != ""){
+                            if($item->l205_datacred > $l20_dtlimitecredenciamento){
+                                throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
+                            }
+                        }
+      
+                        if($dtcred < $l20_datacria){
+                            throw new Exception ("Erro: Data de credenciamento menor que a data de abertura do procedimento adm.");
+                        }
+      
+                        if($l20_dtpubratificacao != ""){
+                            if($dtcred < $l20_dtpubratificacao){
+                                throw new Exception ("Erro: A data de credenciamento deve ser maior ou igual a data de publicação do Termo de Ratificação");
+                            }
+                        }
+
+                        $clcredenciamento->l205_sequencial = $oCredenciamento->l205_sequencial;
+                    
+                        $clcredenciamento->alterar();
+
+                        if ($clcredenciamento->erro_status == 0) {
+                            $sqlerro = true;
+                            $erro_msg = $clcredenciamento->erro_msg;
+                            break;
+                        }
+                    }
+
                 }
 
-                if ($clcredenciamento->erro_status == 0) {
-                    $sqlerro = true;
-                    $erro_msg = $clcredenciamento->erro_msg;
-                    break;
-                }
-              $oRetorno->sequecialforne = $item->sequenciaforne;
+                $oRetorno->sequecialforne = $item->sequenciaforne;
+            
             }
+            
+            db_fim_transacao($sqlerro);
 
             break;
 
@@ -135,7 +188,15 @@ try{
 
         case 'salvarHomo':
 
-            /**
+        	$sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+			$rsSql = db_query($sSql);
+			$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+			if($datapat >= join('-',array_reverse(explode('/', $oParam->l20_dtpubratificacao)))){
+            	throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			};
+
+        	/**
              * busco o codtipocom
              */
 
@@ -207,22 +268,6 @@ try{
                 throw new Exception ("Usuário: Campo veículo de divulgação não Informado.");
             }
 
-//            if($oParam->l20_justificativa == null || $oParam->l20_justificativa == ""){
-//                throw new Exception ("Usuário: Campo Justificativa não Informado.");
-//            }
-
-//            if($oParam->l20_razao == null || $oParam->l20_razao == ""){
-//                throw new Exception ("Usuário: Campo Razão não Informado.");
-//            }
-
-//            if (strlen($oParam->l20_razao) < 10 || strlen($oParam->l20_razao) > 250) {
-//                throw new Exception ("O campo Razão deve ter no mínimo 10 caracteres e no máximo 250");
-//            }
-
-//            if (strlen($oParam->l20_justificativa) < 10 || strlen($oParam->l20_justificativa) > 250) {
-//                throw new Exception ("O campo justificativa deve ter no mínimo 10 caracteres e no máximo 250");
-//            }
-
             if (strlen($oParam->l20_veicdivulgacao) < 10 || strlen($oParam->l20_veicdivulgacao) > 80) {
                 throw new Exception ("O campo Veiculo deve ter no mínimo 10 caracteres e no máximo 80");
             }
@@ -235,8 +280,6 @@ try{
             $clliclicita->l20_dtpubratificacao = $oParam->l20_dtpubratificacao;
             $clliclicita->l20_dtlimitecredenciamento = $oParam->l20_dtlimitecredenciamento;
             $clliclicita->l20_veicdivulgacao = $oParam->l20_veicdivulgacao;
-//            $clliclicita->l20_justificativa = $oParam->l20_justificativa;
-//            $clliclicita->l20_razao = $oParam->l20_razao;
             $clliclicita->alterar($oParam->licitacao,null,null);
 
             if ($clliclicita->erro_status == "0") {
@@ -302,6 +345,30 @@ try{
 
         case 'alterarHomo':
 
+			$sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+			$rsSql = db_query($sSql);
+			$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+			if($datapat >= join('-',array_reverse(explode('/', $oParam->l20_dtpubratificacao)))){
+				throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			};
+
+            /**
+             * verifico tipo de compra da licitacao
+             */
+            $rsTipoCompra = $clliclicita->sql_record($clliclicita->getTipocomTribunal($oParam->licitacao));
+            db_fieldsmemory($rsTipoCompra, 0)->l03_pctipocompratribunal;
+
+            if($l03_pctipocompratribunal == "100" || $l03_pctipocompratribunal == "101") {
+
+                /**
+                 * verifica se existe acordo para bloquear alteração
+                 */
+                $rsAcordos = $clacordo->sql_record($clacordo->sql_queryLicitacoesVinculadas(null, "*", null, "and l20_codigo= $oParam->licitacao"));
+                if (pg_num_rows($rsAcordos) >= 1) {
+                    throw new Exception('Existe contratos cadastrados para essa Licitação não e possível Alterar.');
+                }
+            }
             /**
              * busco sequencial da homologação
              */
@@ -313,17 +380,27 @@ try{
              * busco o codtipocom
              */
 
-            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom",null,"l20_codigo = $oParam->licitacao"));
+            $rsResult = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom,l20_datacria",null,"l20_codigo = $oParam->licitacao"));
+            db_fieldsmemory($rsResult,0);
 
-            $l20_codtipocom = pg_result($result,0,0);
+            $l20_datacria = implode("/",(array_reverse(explode("-",$l20_datacria))));
+            $datapublicacao = DateTime::createFromFormat('d/m/Y', $oParam->l20_dtpubratificacao);
+            $datacriacao = DateTime::createFromFormat('d/m/Y', $l20_datacria);
+
+            if($datapublicacao < $datacriacao){
+                throw new Exception('Usuário: Campo Data Publicação Termo Ratificação menor que data de criação da licitação.');
+                $sqlerro = true;
+            }
 
             /**
              * alterando a data de homologação e adjundicação
              */
 
-            $clhomologacaoadjudica->l202_dataadjudicacao = $oParam->l20_dtpubratificacao;
-            $clhomologacaoadjudica->l202_datahomologacao = $oParam->l20_dtpubratificacao;
-            $clhomologacaoadjudica->alterar($l203_homologaadjudicacao);
+            if($sqlerro == false){
+                $clhomologacaoadjudica->l202_dataadjudicacao = $oParam->l20_dtpubratificacao;
+                $clhomologacaoadjudica->l202_datahomologacao = $oParam->l20_dtpubratificacao;
+                $clhomologacaoadjudica->alterar($l203_homologaadjudicacao);
+            }
 
             if ($clhomologacaoadjudica->erro_status == "0") {
                 $erro_msg = $clhomologacaoadjudica->erro_msg;
@@ -376,6 +453,34 @@ try{
 
         case 'excluirHomo':
             db_inicio_transacao();
+
+            /*
+             * Verifica o período de encerramento patrimonial
+             * */
+
+            $sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+            $rsSql = db_query($sSql);
+            $datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+            if($datapat >= join('-',array_reverse(explode('/', $oParam->ratificacao)))){
+            	throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			}
+
+            /**
+             * verifico tipo de compra da licitacao
+             */
+            $rsTipoCompra = $clliclicita->sql_record($clliclicita->getTipocomTribunal($oParam->licitacao));
+            db_fieldsmemory($rsTipoCompra, 0)->l03_pctipocompratribunal;
+
+            if($l03_pctipocompratribunal == "100" || $l03_pctipocompratribunal == "101" || $l03_pctipocompratribunal == "102" || $l03_pctipocompratribunal == "103"){
+                /**
+                 * verifica se existe acordo para bloquear exclusão
+                 */
+                $rsAcordos = $clacordo->sql_record($clacordo->sql_queryLicitacoesVinculadas(null, "*", null, "and l20_codigo= $oParam->licitacao"));
+                if (pg_num_rows($rsAcordos) >= 1) {
+                    throw new Exception('Existe contratos cadastrados para essa Licitação não e possível excluir.');
+                }
+            }
 
             /**
              * busco sequencial da homologação

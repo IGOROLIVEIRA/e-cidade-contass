@@ -6,7 +6,7 @@ $cllicobrasmedicao->rotulo->label();
   <legend>Medição da Obra</legend>
   <form name="form1" method="post" action="">
     <table border="0" style="margin-left: -4%;">
-      <tr style="display: none">
+      <tr style="">
         <td nowrap title="<?=@$Tobr03_sequencial?>">
           <input name="oid" type="hidden" value="<?=@$oid?>">
           <?=@$Lobr03_sequencial?>
@@ -251,7 +251,7 @@ $cllicobrasmedicao->rotulo->label();
 
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_licobrasituacao',
-        'func_licobras.php?funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
+        'func_licobras.php?pesquisa=true&funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
         'Pesquisa Obras',true);
     }else{
 
@@ -259,7 +259,7 @@ $cllicobrasmedicao->rotulo->label();
 
         js_OpenJanelaIframe('top.corpo',
           'db_iframe_licobrasituacao',
-          'func_licobras.php?pesquisa_chave='+
+          'func_licobras.php?pesquisa=true&pesquisa_chave='+
           document.form1.obr03_seqobra.value+'&funcao_js=parent.js_preencheObra2',
           'Pesquisa',false);
       }else{
@@ -305,97 +305,92 @@ $cllicobrasmedicao->rotulo->label();
 
   js_getAnexo();
 
-  function js_salvarAnexo() {
-    var medicao = $F('obr03_sequencial');
+  /**
+   * Cria um listener para subir a imagem, e criar um preview da mesma
+   */
+  $("uploadfile").observe('change', function() {
 
-    if (medicao == '') {
-      alert('Escolha uma medição!');
-      return false;
-    }
-    var iFrame = document.createElement("iframe");
-    iFrame.src = 'func_uploadfilemedicao.php?clone=form2&medicao='+$F('obr03_sequencial')+'&descricao='+$F('obr04_legenda');
-    iFrame.id  = 'uploadIframe';
-    $('anexo').appendChild(iFrame);
-  }
+      // startLoading();
+      var iFrame = document.createElement("iframe");
+      iFrame.src = 'func_uploadfilemedicao.php?clone=form2';
+      iFrame.id  = 'uploadIframe';
+      $('anexo').appendChild(iFrame);
 
-  $('btnAnexar').observe("click",js_alterarAnexo);
-  $('uploadfile').observe("change",js_salvarAnexo);
+  });
 
   function js_getAnexo() {
 
-    var oParam        = new Object();
-    oParam.exec       = 'getAnexos';
-    oParam.codmedicao = $F('obr03_sequencial');
-    js_divCarregando('Aguarde... Carregando Foto','msgbox');
-    var oAjax         = new Ajax.Request(
-      'obr1_obras.RPC.php',
-      { parameters: 'json='+Object.toJSON(oParam),
-        asynchronous:false,
-        method: 'post',
-        onComplete : js_retornoGetAnexo
-      });
+      var oParam        = new Object();
+      oParam.exec       = 'getAnexos';
+      oParam.codmedicao = $F('obr03_sequencial');
+      js_divCarregando('Aguarde... Carregando Foto','msgbox');
+      var oAjax         = new Ajax.Request(
+          'obr1_obras.RPC.php',
+          { parameters: 'json='+Object.toJSON(oParam),
+              asynchronous:false,
+              method: 'post',
+              onComplete : js_retornoGetAnexo
+          });
   }
 
   function js_retornoGetAnexo(oAjax) {
-    js_removeObj("msgbox");
-    var oRetorno = eval('('+oAjax.responseText+")");
-    oGridDocumento.clearAll(true);
+      js_removeObj("msgbox");
+      var oRetorno = eval('('+oAjax.responseText+")");
+      oGridDocumento.clearAll(true);
 
-    if (oRetorno.dados.length == 0) {
-      return false;
-    }
-    oRetorno.dados.each(function (oDocumento, iSeq) {
-      var aLinha = new Array();
-      aLinha[0]  = oDocumento.iCodigo;
-      aLinha[1]  = decodeURIComponent(oDocumento.sLegenda.replace(/\+/g,  " "));
-      aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')"><input type="button" value="Download" onclick="js_DownloadAnexo('+oDocumento.iCodigo+')">';
-      oGridDocumento.addRow(aLinha);
-    });
-    oGridDocumento.renderRows();
-  }
-
-  function js_alterarAnexo() {
-
-    if ($F('uploadfile') == '') {
-
-      alert('Escolha uma Foto!');
-      return false;
-    }
-
-    if ($F('obr04_legenda') == '') {
-
-      alert('Informe uma Legenda para a foto!');
-      return false;
-    }
-
-    var oParam        = new Object();
-    oParam.exec       = 'alterarAnexo';
-    oParam.codmedicao = $F('obr03_sequencial');
-    oParam.legenda    = $F('obr04_legenda');
-    js_divCarregando('Aguarde... Anexando Foto','msgbox');
-    var oAjax         = new Ajax.Request(
-      'obr1_obras.RPC.php',
-      { parameters: 'json='+Object.toJSON(oParam),
-        asynchronous:false,
-        method: 'post',
-        onComplete : js_retornoAlterarAnexo
+      if (oRetorno.dados.length == 0) {
+          return false;
+      }
+      oRetorno.dados.each(function (oDocumento, iSeq) {
+          var aLinha = new Array();
+          aLinha[0]  = oDocumento.iCodigo;
+          aLinha[1]  = decodeURIComponent(oDocumento.sLegenda.replace(/\+/g,  " "));
+          aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')"><input type="button" value="Download" onclick="js_DownloadAnexo('+oDocumento.iCodigo+')">';
+          oGridDocumento.addRow(aLinha);
       });
+      oGridDocumento.renderRows();
   }
 
-  function js_retornoAlterarAnexo(oAjax) {
-    js_removeObj("msgbox");
-    var oRetorno = eval('('+oAjax.responseText+")");
+  function js_salvarDocumento() {
 
-    if (oRetorno.status == 2) {
-      alert(oRetorno.message);
-    }else {
-      alert("Anexo Salvo com Sucesso !");
-      $('uploadfile').value     = '';
-      $('namefile').value       = '';
-      $("obr04_legenda").value  = "";
-      js_getAnexo();
-    }
+      if ($F('obr04_legenda') == '') {
+
+          alert('Informe uma legenda para o documento!');
+          return false;
+      }
+
+      var oParam        = new Object();
+      oParam.exec       = 'salvarDocumento';
+      oParam.medicao       = $F('obr03_sequencial');
+      oParam.legenda    = encodeURIComponent($F('obr04_legenda').replace(/\\/g,  "<contrabarra>"));
+      oParam.arquivo    = $F('namefile');
+      js_divCarregando('Aguarde... Salvando Documento','msgbox');
+      var oAjax        = new Ajax.Request(
+          'obr1_obras.RPC.php',
+          { parameters: 'json='+Object.toJSON(oParam),
+              method: 'post',
+              asynchronous:false,
+              onComplete : js_retornoSalvarFoto
+          });
   }
+
+  function js_retornoSalvarFoto(oAjax) {
+
+      js_removeObj("msgbox");
+      var oRetorno = eval('('+oAjax.responseText+")");
+      if (oRetorno.status == 1) {
+
+          $('uploadfile').value     = '';
+          $("obr04_legenda").value = "";
+          js_getAnexo();
+      } else {
+          alert(oRetorno.message.urlDecode());
+      }
+  }
+
+  $('btnAnexar').observe("click",js_salvarDocumento);
+
+
 
   function js_excluirAnexo(iCodigoDocumento) {
 

@@ -110,7 +110,7 @@ db_app::load("estilos.css");
               </td>
               <td>
                 <?
-                db_input('ve73_veicretirada', 10, $Ive73_veicretirada, true, 'text', $db_opcao, " onchange='js_pesquisave73_veicretirada(false);'")
+                db_input('ve73_veicretirada', 10, $Ive73_veicretirada, true, 'text', 3, " onchange='js_pesquisave73_veicretirada(false);'")
                 ?>
               </td>
             </tr>
@@ -983,7 +983,7 @@ db_app::load("estilos.css");
         js_pesquisa_ultimamedida();
 
       };
-
+      js_pesquisa_ultimamedida();
       js_formataHora();
       js_pesquisae60_codemp(false);
 

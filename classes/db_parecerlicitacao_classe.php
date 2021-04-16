@@ -75,7 +75,7 @@ class cl_parecerlicitacao {
    function incluir ($l200_sequencial){ 
       $this->atualizacampos();
      if($this->l200_licitacao == null ){ 
-       $this->erro_sql = " Campo Licicitação nao Informado.";
+       $this->erro_sql = " Campo Licitação nao Informado.";
        $this->erro_campo = "l200_licitacao";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -230,7 +230,7 @@ class cl_parecerlicitacao {
        $sql  .= $virgula." l200_licitacao = $this->l200_licitacao ";
        $virgula = ",";
        if(trim($this->l200_licitacao) == null ){ 
-         $this->erro_sql = " Campo Licicitação nao Informado.";
+         $this->erro_sql = " Campo Licitação nao Informado.";
          $this->erro_campo = "l200_licitacao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

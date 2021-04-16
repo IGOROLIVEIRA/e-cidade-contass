@@ -25,597 +25,712 @@
  *                                licenca/licenca_pt.txt
  */
 
-  class obrasDadosComplementares {
-    private $db150_codobra = null;
-    private $db150_cep = null;
-    private $db150_pais = null;
-    private $db150_estado = null;
-    private $db150_municipio = null;
-    private $db150_distrito = '';
-    private $db150_bairro = '';
-    private $db150_numero = '';
-    private $db150_logradouro = '';
-    private $db150_grauslatitude = null;
-    private $db150_minutolatitude = null;
-    private $db150_segundolatitude = null;
-    private $db150_grauslongitude = null;
-    private $db150_minutolongitude = null;
-    private $db150_segundolongitude = null;
-    private $db150_classeobjeto = null;
-    private $db150_atividadeobra = null;
-    private $db150_atividadeservico = null;
-    private $db150_descratividadeservico = null;
-    private $db150_atividadeservicoesp = null;
-    private $db150_descratividadeservicoesp = null;
-    private $db150_grupobempublico = null;
-    private $db150_subgrupobempublico = null;
-    private $db150_bdi = null;
+class obrasDadosComplementares
+{
+	private $codobra = null;
+	private $cep = null;
+	private $pais = null;
+	private $estado = null;
+	private $municipio = null;
+	private $distrito = '';
+	private $bairro = '';
+	private $numero = '';
+	private $logradouro = '';
+	private $grauslatitude = null;
+	private $minutolatitude = null;
+	private $segundolatitude = null;
+	private $grauslongitude = null;
+	private $minutolongitude = null;
+	private $segundolongitude = null;
+	private $classeobjeto = null;
+	private $atividadeobra = null;
+	private $atividadeservico = null;
+	private $descratividadeservico = null;
+	private $atividadeservicoesp = null;
+	private $descratividadeservicoesp = null;
+	private $grupobempublico = null;
+	private $subgrupobempublico = null;
+	private $bdi = null;
+	private $sequencial = null;
 
 
-  /**
-    *
-    */
-    function __construct($iCodigoObra=null) {
+	/**
+	 *
+	 */
+	function __construct($iCodigoObra = null)
+	{
 
-      if ($iCodigoObra != null) {
-        $sWhere       = " db150_codobra = ".$iCodigoObra;
+		if ($iCodigoObra != null) {
+			$sWhere = " db150_codobra = " . $iCodigoObra;
 
-        $oDaoLocal    = db_utils::getDao('obrasdadoscomplementares');
-        $sQueryLocal  = $oDaoLocal->sql_query(null, "*", null, $sWhere);
-        $rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
+			$oDaoLocal = db_utils::getDao('obrasdadoscomplementares');
+			$sQueryLocal = $oDaoLocal->sql_query(null, "*", null, $sWhere);
+			$rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
 
-        if ($rsQueryLocal === false ){
-          throw new Exception('Nenhum endereço da obra encontrado para o código informado('.$iCodigoObra.').');
-        }
+			if ($rsQueryLocal === false) {
+				throw new Exception('Nenhum endereço da obra encontrado para o código informado(' . $iCodigoObra . ').');
+			}
 
-        $oDados = db_utils::fieldsMemory($rsQueryLocal,0);
+			$oDados = db_utils::fieldsMemory($rsQueryLocal, 0);
 //
-        $this->setEstado($oDados->db150_estado);
-        $this->setPais($oDados->db150_pais);
-        $this->setMunicipio($oDados->db150_municipio);
-        $this->setBairro($oDados->db150_bairro);
-        $this->setNumero($oDados->db150_numero);
-        $this->setCep($oDados->db150_cep);
-        $this->setCodigoObra($oDados->db150_codobra);
-        $this->setDistrito($oDados->db150_distrito);
-        $this->setLogradouro($oDados->db150_logradouro);
-        $this->setGrausLatitude($oDados->db150_grauslatitude);
-        $this->setMinutoLatitude($oDados->db150_minutolatitude);
-        $this->setSegundoLatitude($oDados->db150_segundolatitude);
-        $this->setGrausLongitude($oDados->db150_grauslongitude);
-        $this->setMinutoLongitude($oDados->db150_minutolongitude);
-        $this->setSegundoLongitude($oDados->db150_segundolongitude);
-        $this->setClasseObjeto($oDados->db150_classeobjeto);
-        $this->setAtividadeObra($oDados->db150_atividadeObra);
-        $this->setAtividadeServico($oDados->db150_atividadeservico);
-        $this->setDescrAtividadeServico($oDados->db150_descrAtividadeServico);
-        $this->setAtividadeServicoEsp($oDados->db150_atividadeservicoesp);
-        $this->setDescrAtividadeServicoEsp($oDados->db150_descratividadeservicoesp);
-        $this->setGrupoBemPublico($oDados->db150_grupobempublico);
-        $this->setSubGrupoBemPublico($oDados->db150_subgrupobempublico);
-        $this->setBdi($oDados->db150_bdi);
-        $this->setLicita($oDados->db150_liclicita);
-      }
+			$this->setEstado($oDados->db150_estado);
+			$this->setPais($oDados->db150_pais);
+			$this->setMunicipio($oDados->db150_municipio);
+			$this->setBairro($oDados->db150_bairro);
+			$this->setNumero($oDados->db150_numero);
+			$this->setCep($oDados->db150_cep);
+			$this->setCodigoObra($oDados->db150_codobra);
+			$this->setDistrito($oDados->db150_distrito);
+			$this->setLogradouro($oDados->db150_logradouro);
+			$this->setGrausLatitude($oDados->db150_grauslatitude);
+			$this->setMinutoLatitude($oDados->db150_minutolatitude);
+			$this->setSegundoLatitude($oDados->db150_segundolatitude);
+			$this->setGrausLongitude($oDados->db150_grauslongitude);
+			$this->setMinutoLongitude($oDados->db150_minutolongitude);
+			$this->setSegundoLongitude($oDados->db150_segundolongitude);
+			$this->setClasseObjeto($oDados->db150_classeobjeto);
+			$this->setAtividadeObra($oDados->db150_atividadeObra);
+			$this->setAtividadeServico($oDados->db150_atividadeservico);
+			$this->setDescrAtividadeServico($oDados->db150_descrAtividadeServico);
+			$this->setAtividadeServicoEsp($oDados->db150_atividadeservicoesp);
+			$this->setDescrAtividadeServicoEsp($oDados->db150_descratividadeservicoesp);
+			$this->setGrupoBemPublico($oDados->db150_grupobempublico);
+			$this->setSubGrupoBemPublico($oDados->db150_subgrupobempublico);
+			$this->setBdi($oDados->db150_bdi);
+			$this->setLicita($oDados->db151_liclicita);
+			$this->setSequencial($oDados->db150_sequencial);
+		}
 
-  }
+	}
 
-    /**
-     * Metodo para setar a propriedade codigo obra
-     * @param integer cep
-     * @return void
-     */
-    public function setCodigoObra($iCodigoObra) {
-      $this->db150_codobra = $iCodigoObra;
-    }
-    /**
-     * Metodo para retornar a propriedade c?digo obra
-     * @return integer codigoobra
-     */
-    public function getCodigoObra() {
-      return $this->db150_codobra;
-    }
+	/**
+	 * Metodo para setar a propriedade codigo obra
+	 * @param integer cep
+	 * @return void
+	 */
+	public function setCodigoObra($iCodigoObra){
+		$this->codobra = $iCodigoObra;
+	}
 
-    /**
-     * Metodo para setar a propriedade descri??o do Distrito
-     * @param string distrito
-     * @return void
-     */
-    public function setDistrito($sDistrito) {
-      $this->db150_distrito = $sDistrito;
-    }
-    /**
-     * Metodo para retornar a propriedade descri??o do Distrito
-     * @return string distrito
-     */
-    public function getDistrito() {
-      return $this->db150_distrito;
-    }
+	/**
+	 * Metodo para retornar a propriedade código obra
+	 * @return integer codigoobra
+	 */
+	public function getCodigoObra()	{
+		return $this->codobra;
+	}
 
-    /**
-     * Metodo para setar a propriedade logradouro
-     * @param string logradouro
-     * @return void
-     */
-    public function setLogradouro($sLogradouro) {
-      $this->db150_logradouro = $sLogradouro;
-    }
-    /**
-     * Metodo para retornar a propriedade Logradouro
-     * @return string logradouro
-     */
-    public function getLogradouro() {
-      return $this->db150_logradouro;
-    }
+	/**
+	 * Metodo para setar a propriedade descrição do Distrito
+	 * @param string distrito
+	 * @return void
+	 */
+	public function setDistrito($sDistrito)	{
+		$this->distrito = $sDistrito;
+	}
 
-    /**
-     * Metodo para setar a propriedade Graus Latitude
-     * @param integer grauslatitude
-     * @return void
-     */
-    public function setGrausLatitude($iGrausLatitude) {
-      $this->db150_grauslatitude = $iGrausLatitude;
-    }
-    /**
-     * Metodo para retornar a propriedade grauslatitude
-     * @return integer grauslatitude
-     */
-    public function getGrausLatitude() {
-      return $this->db150_grauslatitude;
-    }
+	/**
+	 * Metodo para retornar a propriedade descrição do Distrito
+	 * @return string distrito
+	 */
+	public function getDistrito(){
+		return $this->distrito;
+	}
 
-    /**
-     * Metodo para setar a propriedade minutolatitude
-     * @param integer minutolatitude
-     * @return void
-     */
-    public function setMinutoLatitude($iMinutoLatitude) {
-      $this->db150_minutolatitude = $iMinutoLatitude;
-    }
-    /**
-     * Metodo para retornar a propriedade minutolatitude
-     * @return integer minutolatitude
-     */
-    public function getMinutoLatitude() {
-      return $this->db150_minutolatitude;
-    }
+	/**
+	 * Metodo para setar a propriedade logradouro
+	 * @param string logradouro
+	 * @return void
+	 */
+	public function setLogradouro($sLogradouro){
+		$this->logradouro = $sLogradouro;
+	}
 
-    /**
-     * Metodo para setar a propriedade segundolatitude
-     * @param float segundolatitude
-     * @return void
-     */
-    public function setSegundoLatitude($iSegundoLatitude) {
-      $this->db150_segundolatitude = $iSegundoLatitude;
-    }
-    /**
-     * Metodo para retornar a propriedade segundolatitude
-     * @return float segundolatitude
-     */
-    public function getSegundoLatitude() {
-      return $this->db150_segundolatitude;
-    }
+	/**
+	 * Metodo para retornar a propriedade Logradouro
+	 * @return string logradouro
+	 */
+	public function getLogradouro()	{
+		return $this->logradouro;
+	}
 
-    /**
-     * Metodo para setar a propriedade Graus Longitude
-     * @param integer grauslongitude
-     * @return void
-     */
-    public function setGrausLongitude($iGrausLongitude) {
-      $this->db150_grauslongitude = $iGrausLongitude;
-    }
-    /**
-     * Metodo para retornar a propriedade grauslongitude
-     * @return integer grauslongitude
-     */
-    public function getGrausLongitude() {
-      return $this->db150_grauslongitude;
-    }
+	/**
+	 * Metodo para setar a propriedade Graus Latitude
+	 * @param integer grauslatitude
+	 * @return void
+	 */
+	public function setGrausLatitude($iGrausLatitude)	{
+		$this->grauslatitude = $iGrausLatitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade minutolongitude
-     * @param integer minutolongitude
-     * @return void
-     */
-    public function setMinutoLongitude($iMinutoLongitude) {
-      $this->db150_minutolongitude = $iMinutoLongitude;
-    }
-    /**
-     * Metodo para retornar a propriedade minutolongitude
-     * @return integer minutolongitude
-     */
-    public function getMinutoLongitude() {
-      return $this->db150_minutolongitude;
-    }
+	/**
+	 * Metodo para retornar a propriedade grauslatitude
+	 * @return integer grauslatitude
+	 */
+	public function getGrausLatitude()	{
+		return $this->grauslatitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade segundolongitude
-     * @param float segundolongitude
-     * @return void
-     */
-    public function setSegundoLongitude($iSegundoLongitude) {
-      $this->db150_segundolongitude = $iSegundoLongitude;
-    }
-    /**
-     * Metodo para retornar a propriedade segundolongitude
-     * @return float segundolongitude
-     */
-    public function getSegundoLongitude() {
-      return $this->db150_segundolongitude;
-    }
+	/**
+	 * Metodo para setar a propriedade minutolatitude
+	 * @param integer minutolatitude
+	 * @return void
+	 */
+	public function setMinutoLatitude($iMinutoLatitude)	{
+		$this->minutolatitude = $iMinutoLatitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade classeobjeto
-     * @param integer classeobjeto
-     * @return void
-     */
-    public function setClasseObjeto($iClasseObjeto) {
-      $this->db150_classeobjeto = $iClasseObjeto;
-    }
-    /**
-     * Metodo para retornar a propriedade classeobjeto
-     * @return integer classeobjeto
-     */
-    public function getClasseObjeto() {
-      return $this->db150_classeobjeto;
-    }
+	/**
+	 * Metodo para retornar a propriedade minutolatitude
+	 * @return integer minutolatitude
+	 */
+	public function getMinutoLatitude()	{
+		return $this->minutolatitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade atividadeobra
-     * @param integer atividadeobra
-     * @return void
-     */
-    public function setAtividadeObra($iAtividadeObra) {
-      $this->db150_atividadeobra = $iAtividadeObra;
-    }
-    /**
-     * Metodo para retornar a propriedade atividadeobra
-     * @return integer atividadeobra
-     */
-    public function getAtividadeObra() {
-      return $this->db150_atividadeobra;
-    }
+	/**
+	 * Metodo para setar a propriedade segundolatitude
+	 * @param float segundolatitude
+	 * @return void
+	 */
+	public function setSegundoLatitude($iSegundoLatitude)	{
+		$this->segundolatitude = $iSegundoLatitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade atividadeservico
-     * @param integer atividadeservico
-     * @return void
-     */
-    public function setAtividadeServico($iAtividadeServico) {
-      $this->db150_atividadeservico = $iAtividadeServico;
-    }
-    /**
-     * Metodo para retornar a propriedade atividadeservico
-     * @return integer atividadeservico
-     */
-    public function getAtividadeServico() {
-      return $this->db150_atividadeservico;
-    }
-    /**
-     * Metodo para setar a descrição atividadeservico
-     * @param string atividadeservico
-     * @return void
-     */
-    public function setDescrAtividadeServico($sAtividadeServico) {
-      $this->db150_descratividadeservico = $sAtividadeServico;
-    }
-    /**
-     * Metodo para retornar a descrição atividadeservico
-     * @return string satividadeservico
-     */
-    public function getDescrAtividadeServico() {
-      return $this->db150_descratividadeservico;
-    }
-    /**
-     * Metodo para setar a propriedade atividadeservicoesp
-     * @param integer atividadeservicoesp
-     * @return void
-     */
+	/**
+	 * Metodo para retornar a propriedade segundolatitude
+	 * @return float segundolatitude
+	 */
+	public function getSegundoLatitude(){
+		return $this->segundolatitude;
+	}
 
-    public function setAtividadeServicoEsp($iAtividadeServicoEsp) {
-      $this->db150_atividadeservicoesp = $iAtividadeServicoEsp;
-    }
-    /**
-     * Metodo para retornar a propriedade atividadeservicoesp
-     * @return integer atividadeservicoesp
-     */
-    public function getAtividadeServicoEsp() {
-      return $this->db150_atividadeservicoesp;
-    }
-    /**
-     * Metodo para setar a descrição atividadeservicoesp
-     * @param string atividadeservicoesp
-     * @return void
-     */
-    public function setDescrAtividadeServicoEsp($sAtividadeServicoEsp) {
-      $this->db150_descratividadeservicoesp = $sAtividadeServicoEsp;
-    }
-    /**
-     * Metodo para retornar a descrição atividadeservicoesp
-     * @return string satividadeservicoesp
-     */
-    public function getDescrAtividadeServicoEsp() {
-      return $this->db150_descratividadeservicoesp;
-    }
+	/**
+	 * Metodo para setar a propriedade Graus Longitude
+	 * @param integer grauslongitude
+	 * @return void
+	 */
+	public function setGrausLongitude($iGrausLongitude){
+		$this->grauslongitude = $iGrausLongitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade grupobempublico
-     * @param integer grupobempublico
-     * @return void
-     */
-    public function setGrupoBemPublico($iGrupoBemPublico) {
-      $this->db150_grupobempublico = $iGrupoBemPublico;
-    }
-    /**
-     * Metodo para retornar a propriedade grupobempublico
-     * @return integer grupobempublico
-     */
-    public function getGrupoBemPublico() {
-      return $this->db150_grupobempublico;
-    }
+	/**
+	 * Metodo para retornar a propriedade grauslongitude
+	 * @return integer grauslongitude
+	 */
+	public function getGrausLongitude(){
+		return $this->grauslongitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade subgrupobempublico
-     * @param integer subgrupobempublico
-     * @return void
-     */
-    public function setSubGrupoBemPublico($iSubGrupoBemPublico) {
-      $this->db150_subgrupobempublico = $iSubGrupoBemPublico;
-    }
-    /**
-     * Metodo para retornar a propriedade subgrupobempublico
-     * @return integer subgrupobempublico
-     */
-    public function getSubGrupoBemPublico() {
-      return $this->db150_subgrupobempublico;
-    }
+	/**
+	 * Metodo para setar a propriedade minutolongitude
+	 * @param integer minutolongitude
+	 * @return void
+	 */
+	public function setMinutoLongitude($iMinutoLongitude){
+		$this->minutolongitude = $iMinutoLongitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade bdi
-     * @param float bdi
-     * @return void
-     */
-    public function setBdi($ibdi) {
-      $this->db150_bdi = $ibdi;
-    }
-    /**
-     * Metodo para retornar a propriedade bdi
-     * @return float bdi
-     */
-    public function getBdi() {
-      return $this->db150_bdi;
-    }
+	/**
+	 * Metodo para retornar a propriedade minutolongitude
+	 * @return integer minutolongitude
+	 */
+	public function getMinutoLongitude(){
+		return $this->minutolongitude;
+	}
 
-    /**
-     * Metodo para setar a propriedade cep do enderco
-     * @param string cep
-     * @return void
-     */
-    public function setCep($sCep) {
+	/**
+	 * Metodo para setar a propriedade segundolongitude
+	 * @param float segundolongitude
+	 * @return void
+	 */
+	public function setSegundoLongitude($iSegundoLongitude)	{
+		$this->segundolongitude = $iSegundoLongitude;
+	}
 
-      $this->db150_cep = $sCep;
-    }
-    /**
-     * Metodo para retornar a propriedade cep do enderco
-     * @return string cep
-     */
-    public function getCep() {
+	/**
+	 * Metodo para retornar a propriedade segundolongitude
+	 * @return float segundolongitude
+	 */
+	public function getSegundoLongitude(){
+		return $this->segundolongitude;
+	}
 
-      return $this->db150_cep;
-    }
+	/**
+	 * Metodo para setar a propriedade classeobjeto
+	 * @param integer classeobjeto
+	 * @return void
+	 */
+	public function setClasseObjeto($iClasseObjeto)	{
+		$this->classeobjeto = $iClasseObjeto;
+	}
 
-    /**
-     * Metodo para setar a propriedade Estado
-     * @param integer estado
-     * @return void
-     */
-    public function setEstado($iEstado) {
+	/**
+	 * Metodo para retornar a propriedade classeobjeto
+	 * @return integer classeobjeto
+	 */
+	public function getClasseObjeto(){
+		return $this->classeobjeto;
+	}
 
-      $this->db150_estado = $iEstado;
-    }
-    /**
-     * Metodo para retornar a propriedade estado
-     * @return integer estado
-     */
-    public function getEstado() {
+	/**
+	 * Metodo para setar a propriedade atividadeobra
+	 * @param integer atividadeobra
+	 * @return void
+	 */
+	public function setAtividadeObra($iAtividadeObra){
+		$this->atividadeobra = $iAtividadeObra;
+	}
 
-      return $this->db150_estado;
-    }
+	/**
+	 * Metodo para retornar a propriedade atividadeobra
+	 * @return integer atividadeobra
+	 */
+	public function getAtividadeObra(){
+		return $this->atividadeobra;
+	}
 
-    /**
-     * Metodo para setar a propriedade País
-     * @param integer pais
-     * @return void
-     */
-    public function setPais($iPais) {
+	/**
+	 * Metodo para setar a propriedade atividadeservico
+	 * @param integer atividadeservico
+	 * @return void
+	 */
+	public function setAtividadeServico($iAtividadeServico)	{
+		$this->atividadeservico = $iAtividadeServico;
+	}
 
-      $this->db150_pais = $iPais;
-    }
-    /**
-     * Metodo para retornar a propriedade País
-     * @return integer pais
-     */
-    public function getPais() {
+	/**
+	 * Metodo para retornar a propriedade atividadeservico
+	 * @return integer atividadeservico
+	 */
+	public function getAtividadeServico(){
+		return $this->atividadeservico;
+	}
 
-      return $this->db150_pais;
-    }
+	/**
+	 * Metodo para setar a descrição atividadeservico
+	 * @param string atividadeservico
+	 * @return void
+	 */
+	public function setDescrAtividadeServico($sAtividadeServico){
+		$this->descratividadeservico = $sAtividadeServico;
+	}
 
-    /**
-     * Metodo para setar a propriedade Municipio
-     * @param integer municipio
-     * @return void
-     */
-    public function setMunicipio($iMunicipio) {
-      $this->db150_municipio = $iMunicipio;
-    }
-    /**
-     * Metodo para retornar a propriedade Municipio
-     * @return integer municipio
-     */
-    public function getMunicipio() {
-      return $this->db150_municipio;
-    }
+	/**
+	 * Metodo para retornar a descrição atividadeservico
+	 * @return string satividadeservico
+	 */
+	public function getDescrAtividadeServico(){
+		return $this->descratividadeservico;
+	}
 
-    /**
-     * Metodo para setar a propriedade Bairro
-     * @param string bairro
-     * @return void
-     */
-    public function setBairro($sBairro) {
-      $this->db150_bairro = $sBairro;
-    }
-    /**
-     * Metodo para retornar a propriedade bairro
-     * @return string bairro
-     */
-    public function getBairro() {
-      return $this->db150_bairro;
-    }
+	/**
+	 * Metodo para setar a propriedade atividadeservicoesp
+	 * @param integer atividadeservicoesp
+	 * @return void
+	 */
 
-    /**
-     * Metodo para setar a propriedade Numero
-     * @param integer numero
-     * @return void
-     */
-    public function setNumero($iNumero) {
+	public function setAtividadeServicoEsp($iAtividadeServicoEsp){
+		$this->atividadeservicoesp = $iAtividadeServicoEsp;
+	}
 
-      $this->db150_numero = $iNumero;
-    }
-    /**
-     * Metodo para retornar a propriedade Numero
-     * @return integer numero
-     */
-    public function getNumero() {
+	/**
+	 * Metodo para retornar a propriedade atividadeservicoesp
+	 * @return integer atividadeservicoesp
+	 */
+	public function getAtividadeServicoEsp(){
+		return $this->atividadeservicoesp;
+	}
 
-      return $this->db150_numero;
-    }
+	/**
+	 * Metodo para setar a descrição atividadeservicoesp
+	 * @param string atividadeservicoesp
+	 * @return void
+	 */
+	public function setDescrAtividadeServicoEsp($sAtividadeServicoEsp){
+		$this->descratividadeservicoesp = $sAtividadeServicoEsp;
+	}
 
-    /**
-     * Metodo para setar a propriedade Numero da Licitação
-     * @param integer numero
-     * @return void
-     */
-    public function setLicita($iLicita) {
+	/**
+	 * Metodo para retornar a descrição atividadeservicoesp
+	 * @return string satividadeservicoesp
+	 */
+	public function getDescrAtividadeServicoEsp(){
+		return $this->descratividadeservicoesp;
+	}
 
-      $this->db150_liclicita = $iLicita;
-    }
-    /**
-     * Metodo para retornar a propriedade Numero da Licitação
-     * @return integer numero
-     */
-    public function getLicita() {
+	/**
+	 * Metodo para setar a propriedade grupobempublico
+	 * @param integer grupobempublico
+	 * @return void
+	 */
+	public function setGrupoBemPublico($iGrupoBemPublico){
+		$this->grupobempublico = $iGrupoBemPublico;
+	}
 
-      return $this->db150_liclicita;
-    }
-   /**
-   * Método para salvar um endereço da obra
-   * caso ele não esteja cadastrado
-   */
-  public function salvaDadosComplementares($incluir) {
+	/**
+	 * Metodo para retornar a propriedade grupobempublico
+	 * @return integer grupobempublico
+	 */
+	public function getGrupoBemPublico(){
+		return $this->grupobempublico;
+	}
 
-    if (!db_utils::inTransaction()) {
-      throw new Exception('Processamento Cancelado não existe transação ativa.');
-    }
-    $oDaoObras = db_utils::getDao('obrasdadoscomplementares');
-    $sSqlQuery = $oDaoObras->sql_query('', '*', null, 'db150_codobra ='.$this->getCodigoObra());
-    $rsQuery   = $oDaoObras->sql_record($sSqlQuery);
+	/**
+	 * Metodo para setar a propriedade subgrupobempublico
+	 * @param integer subgrupobempublico
+	 * @return void
+	 */
+	public function setSubGrupoBemPublico($iSubGrupoBemPublico){
+		$this->subgrupobempublico = $iSubGrupoBemPublico;
+	}
 
-    if($oDaoObras->numrows && $incluir){
-      throw new Exception('Código da Obra já cadastrado.');
-    }
+	/**
+	 * Metodo para retornar a propriedade subgrupobempublico
+	 * @return integer subgrupobempublico
+	 */
+	public function getSubGrupoBemPublico()	{
+		return $this->subgrupobempublico;
+	}
 
-    $oDados = db_utils::fieldsMemory($rsQuery, 0);
+	/**
+	 * Metodo para setar a propriedade bdi
+	 * @param float bdi
+	 * @return void
+	 */
+	public function setBdi($ibdi){
+		$this->bdi = $ibdi;
+	}
 
-    $oDaoObras->db150_codobra = $this->getCodigoObra();
-    $oDaoObras->db150_pais = $this->getPais();
-    $oDaoObras->db150_estado = $this->getEstado();
-    $oDaoObras->db150_municipio = $this->getMunicipio();
-    $oDaoObras->db150_distrito = $this->getDistrito();
-    $oDaoObras->db150_bairro = $this->getBairro();
-    $oDaoObras->db150_numero = $this->getNumero();
-    $oDaoObras->db150_logradouro = $this->getLogradouro();
-    $oDaoObras->db150_grauslatitude = $this->getGrausLatitude();
-    $oDaoObras->db150_minutolatitude = $this->getMinutoLatitude();
-    $oDaoObras->db150_segundolatitude = $this->getSegundoLatitude();
-    $oDaoObras->db150_grauslongitude = $this->getGrausLongitude();
-    $oDaoObras->db150_minutolongitude = $this->getMinutoLongitude();
-    $oDaoObras->db150_segundolongitude = $this->getSegundoLongitude();
-    $oDaoObras->db150_classeobjeto = $this->getClasseObjeto();
-    $oDaoObras->db150_grupobempublico = $this->getGrupoBemPublico();
-    $oDaoObras->db150_subgrupobempublico = $this->getSubGrupoBemPublico();
-    $oDaoObras->db150_atividadeobra = $this->getAtividadeObra();
-    $oDaoObras->db150_atividadeservico = $this->getAtividadeServico();
-    $oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
-    $oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
-    $oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
-    $oDaoObras->db150_bdi = $this->getBdi();
-    $oDaoObras->db150_liclicita = $this->getLicita();
-    $oDaoObras->db150_cep = $this->getCep();
+	/**
+	 * Metodo para retornar a propriedade bdi
+	 * @return float bdi
+	 */
+	public function getBdi(){
+		return $this->bdi;
+	}
 
-    if(!$oDaoObras->numrows){
+	/**
+	 * Metodo para setar a propriedade cep do enderco
+	 * @param string cep
+	 * @return void
+	 */
+	public function setCep($sCep){
+		$this->cep = $sCep;
+	}
 
-      $oDaoObras->incluir(null);
-      if ($oDaoObras->erro_status == '0') {
-        throw new Exception($oDaoObras->erro_sql);
-      } else {
-        $this->setCodigoObra($oDaoObras->db150_codobra);
-      }
-    }else{
-      $oDaoObras->alterar($oDados->db150_sequencial);
-      if ($oDaoObras->erro_status == '0') {
-        throw new Exception($oDaoObras->erro_sql);
-      }
-    }
+	/**
+	 * Metodo para retornar a propriedade cep do enderco
+	 * @return string cep
+	 */
+	public function getCep(){
+		return $this->cep;
+	}
 
-  }
+	/**
+	 * Metodo para setar a propriedade Estado
+	 * @param integer estado
+	 * @return void
+	 */
+	public function setEstado($iEstado){
+		$this->estado = $iEstado;
+	}
 
-    static function findObraByCodigo($iCodigoObra, $lEncode=true) {
-      $aRetorno = false;
+	/**
+	 * Metodo para retornar a propriedade estado
+	 * @return integer estado
+	 */
+	public function getEstado()	{
+		return $this->estado;
+	}
 
-      if (trim($iCodigoObra) != "") {
+	/**
+	 * Metodo para setar a propriedade País
+	 * @param integer pais
+	 * @return void
+	 */
+	public function setPais($iPais)	{
+		$this->pais = $iPais;
+	}
 
-        $oDaoObra  = db_utils::getDao('obrasdadoscomplementares');
-        $sCampos   = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db72_descricao as descrMunicipio, db150_distrito as distrito, ";
-        $sCampos  .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
-        $sCampos  .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
-        $sCampos  .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
-        $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, 
-        db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep";
+	/**
+	 * Metodo para retornar a propriedade País
+	 * @return integer pais
+	 */
+	public function getPais(){
+		return $this->pais;
+	}
 
-        $sWhere   = " db150_codobra = ".$iCodigoObra;
+	/**
+	 * Metodo para setar a propriedade Municipio
+	 * @param integer municipio
+	 * @return void
+	 */
+	public function setMunicipio($iMunicipio){
+		$this->municipio = $iMunicipio;
+	}
 
-        $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,null,$sWhere);
-        $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
+	/**
+	 * Metodo para retornar a propriedade Municipio
+	 * @return integer municipio
+	 */
+	public function getMunicipio(){
+		return $this->municipio;
+	}
 
-        if( $rsQueryObra !== false) {
-          $aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
-        }
-      }
-      return $aRetorno;
-    }
+	/**
+	 * Metodo para setar a propriedade Bairro
+	 * @param string bairro
+	 * @return void
+	 */
+	public function setBairro($sBairro){
+		$this->bairro = $sBairro;
+	}
 
-    static function findObrasByLicitacao($iCodigoLicitacao, $lEncode=true) {
-      $aRetorno = false;
+	/**
+	 * Metodo para retornar a propriedade bairro
+	 * @return string bairro
+	 */
+	public function getBairro()	{
+		return $this->bairro;
+	}
 
-      if (trim($iCodigoLicitacao) != "") {
+	/**
+	 * Metodo para setar a propriedade Numero
+	 * @param integer numero
+	 * @return void
+	 */
+	public function setNumero($iNumero)	{
+		$this->numero = $iNumero;
+	}
 
-        $oDaoObra  = db_utils::getDao('obrasdadoscomplementares');
-        $sCampos   = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db72_descricao as descrMunicipio, db150_distrito as distrito, ";
-        $sCampos  .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
-        $sCampos  .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
-        $sCampos  .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
-        $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep";
+	/**
+	 * Metodo para retornar a propriedade Numero
+	 * @return integer numero
+	 */
+	public function getNumero(){
+		return $this->numero;
+	}
 
-        $sWhere   = " db150_liclicita = ".$iCodigoLicitacao;
+	/**
+	 * Metodo para setar a propriedade Numero da Licitação
+	 * @param integer numero
+	 * @return void
+	 */
+	public function setLicita($iLicita){
+		$this->liclicita = $iLicita;
+	}
 
-        $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,'db150_codobra',$sWhere);
-        $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
+	/**
+	 * Metodo para retornar a propriedade Numero da Licitação
+	 * @return integer numero
+	 */
+	public function getLicita(){
+		return $this->liclicita;
+	}
+	/**
+	 * Metodo para setar a propriedade Sequencial da Obra
+	 * @param integer numero
+	 * @return void
+	 */
+	public function setSequencial($iSequencial){
+		$this->sequencial = $iSequencial;
+	}
 
-        if( $rsQueryObra !== false) {
-          $aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
-        }
-      }
-      return $aRetorno;
-    }
+	/**
+	 * Metodo para retornar a propriedade Sequencial da Obra
+	 * @return integer numero
+	 */
+	public function getSequencial(){
+		return $this->sequencial;
+	}
+
+	/**
+	 * Método para salvar um endereço da obra
+	 * caso ele não esteja cadastrado
+	 */
+	public function salvaDadosComplementares($incluir){
+		if (!db_utils::inTransaction()) {
+			throw new Exception('Processamento Cancelado não existe transação ativa.');
+		}
+		$oDaoObras = db_utils::getDao('obrasdadoscomplementares');
+		$oDaoObrasCodigo = db_utils::getDao('obrascodigos');
+
+		$sSqlCodigo = $oDaoObrasCodigo->sql_query($this->getCodigoObra(), 'db151_codigoobra, db151_liclicita','','db151_liclicita = '.$this->getLicita());
+		$rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
+		$oObra = db_utils::fieldsMemory($rsCodigo, 0);
+
+		if($incluir){
+			if(!$oDaoObrasCodigo->numrows){
+				$oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
+				$oDaoObrasCodigo->db151_liclicita = $this->getLicita();
+				$oDaoObrasCodigo->incluir();
+
+				if($oDaoObrasCodigo->erro_status == '0'){
+					throw new Exception($oDaoObrasCodigo->erro_msg);
+				}
+			}
+
+			$this->preencheObjeto($incluir);
+
+		}else{
+
+			$sSqlCodigo = $oDaoObrasCodigo->sql_query('', 'db151_liclicita', '', 'db151_codigoobra = '.$this->getCodigoObra());
+			$rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
+			$iLicitacao = db_utils::fieldsMemory($rsCodigo, 0)->db151_liclicita;
+
+			if(pg_num_rows($rsCodigo) && $iLicitacao != $this->getLicita()){
+				throw new Exception('Código da Obra já cadastrado.');
+			}
+
+			if(!pg_num_rows($rsCodigo)){
+				$oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
+				$oDaoObrasCodigo->db151_liclicita = $this->getLicita();
+				$oDaoObrasCodigo->incluir();
+
+				$updateRegisters = $oDaoObras->sql_query_completo('','db150_sequencial','','db151_liclicita = '.$this->getLicita());
+				$rsRegisters = $oDaoObras->sql_record($updateRegisters);
+
+				for($count=0;$count<pg_num_rows($rsRegisters);$count++) {
+					$iSequencial = db_utils::fieldsMemory($rsRegisters, $count)->db150_sequencial;
+					$oDaoObras->db150_codobra = $this->getCodigoObra();
+					$oDaoObras->alterar($iSequencial);
+
+					if($oDaoObras->erro_status == '0'){
+						throw new Exception($oDaoObrasCodigo->erro_msg);
+					}
+				}
+
+				$sSqlMinimo = $oDaoObrasCodigo->sql_query('', 'min(db151_sequencial) as minimo', '', 'db151_liclicita = '.$this->getLicita());
+				$rsMinimo = $oDaoObrasCodigo->sql_record($sSqlMinimo);
+				$iMinimo = db_utils::fieldsMemory($rsMinimo, 0)->minimo;
+
+				$oDaoObrasCodigo->excluir('', 'db151_sequencial ='.$iMinimo);
+				if($oDaoObrasCodigo->status == '0'){
+					throw new Exception($oDaoObrasCodigo->erro_msg);
+				}
+			}
+
+			$this->preencheObjeto($incluir);
+
+		}
+
+		return $oRetorno;
+	}
+
+	public function preencheObjeto($inclusao){
+
+		$sSqlNatureza = db_query('SELECT l20_naturezaobjeto as natureza from liclicita where l20_codigo = '.$this->getLicita());
+		$iNatureza = db_utils::fieldsMemory($sSqlNatureza, 0)->natureza;
+
+		$oDaoObras = db_utils::getDao('obrasdadoscomplementares');
+		$oDaoObras->db150_codobra = $this->getCodigoObra();
+		$oDaoObras->db150_pais = $this->getPais();
+		$oDaoObras->db150_estado = $this->getEstado();
+		$oDaoObras->db150_municipio = $this->getMunicipio();
+		$oDaoObras->db150_distrito = $this->getDistrito();
+		$oDaoObras->db150_bairro = $this->getBairro();
+		$oDaoObras->db150_numero = $this->getNumero();
+		$oDaoObras->db150_logradouro = $this->getLogradouro();
+		$oDaoObras->db150_grauslatitude = $this->getGrausLatitude();
+		$oDaoObras->db150_minutolatitude = $this->getMinutoLatitude();
+		$oDaoObras->db150_segundolatitude = $this->getSegundoLatitude();
+		$oDaoObras->db150_grauslongitude = $this->getGrausLongitude();
+		$oDaoObras->db150_minutolongitude = $this->getMinutoLongitude();
+		$oDaoObras->db150_segundolongitude = $this->getSegundoLongitude();
+		$oDaoObras->db150_classeobjeto = $this->getClasseObjeto();
+		$oDaoObras->db150_grupobempublico = $this->getGrupoBemPublico();
+		$oDaoObras->db150_subgrupobempublico = $this->getSubGrupoBemPublico();
+		$oDaoObras->db150_atividadeobra = $this->getAtividadeObra();
+		$oDaoObras->db150_atividadeservico = $this->getAtividadeServico();
+		$oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
+		$oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
+		$oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
+
+		if(!$this->getBdi() && $iNatureza == '1'){
+			throw new Exception('Campo BDI não informado!');
+		}
+
+		$oDaoObras->db150_bdi = $this->getBdi();
+		$oDaoObras->db150_cep = $this->getCep();
+
+		if(!$inclusao){
+			$oDaoObras->alterar($this->getSequencial());
+		}else{
+			$oDaoObras->incluir();
+		}
+
+		if($oDaoObras->erro_status == '0'){
+			throw new Exception($oDaoObras->erro_msg);
+		}
+	}
+
+	static function findObraByCodigo($iSequencial, $iLicitacao, $lEncode = true)
+	{
+		$aRetorno = false;
+
+		$sCampos = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db72_descricao as descrMunicipio, db150_distrito as distrito, ";
+		$sCampos .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
+		$sCampos .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
+		$sCampos .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
+		$sCampos .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, 
+        db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep, db150_sequencial as sequencial";
+
+		$oDaoObra = db_utils::getDao('obrasdadoscomplementares');
+
+		if (trim($iSequencial) != "") {
+			$sWhere = " db150_sequencial = " . $iSequencial;
+		}else{
+			$sWhere = " db150_sequencial = (select max(db150_sequencial) from obrasdadoscomplementares join obrascodigos on db151_codigoobra = db150_codobra where db151_liclicita =".$iLicitacao.")";
+		}
+
+		$sQueryObra = $oDaoObra->sql_query_completo(null, $sCampos, null, $sWhere);
+		$rsQueryObra = $oDaoObra->sql_record($sQueryObra);
+
+		if ($rsQueryObra !== false) {
+			$aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
+		}
+		return $aRetorno;
+	}
+
+	static function findObrasByLicitacao($iCodigoLicitacao, $lEncode = true)
+	{
+		$aRetorno = false;
+
+		if (trim($iCodigoLicitacao) != "") {
+
+			$oDaoObra = db_utils::getDao('obrasdadoscomplementares');
+			$sCampos = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db72_descricao as descrMunicipio, db150_distrito as distrito, ";
+			$sCampos .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
+			$sCampos .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
+			$sCampos .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
+			$sCampos .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico,";
+			$sCampos .= " db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep, db150_sequencial as sequencial";
+
+			$sWhere = " db151_liclicita = " . $iCodigoLicitacao;
+
+			$sQueryObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
+			$rsQueryObra = $oDaoObra->sql_record($sQueryObra);
+
+			if ($rsQueryObra !== false) {
+				$aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
+			}
+		}
+		return $aRetorno;
+	}
+
+	static function isLastRegister($iSequencial, $iLicitacao){
+		$oDaoObra = db_utils::getDao('obrasdadoscomplementares');
+		$sCampos = " min(db150_sequencial) as seq_minimo, count(db150_sequencial) as registersCount";
+		$sSql = $oDaoObra->sql_query_completo('', $sCampos, 'db150_codobra', 'db151_liclicita = '.$iLicitacao.' group by db150_codobra');
+		$rsSql = $oDaoObra->sql_record($sSql);
+		$oObras = db_utils::fieldsMemory($rsSql, 0);
+
+		if($oObras->seq_minimo == $iSequencial && intval($oObras->registerscount) > 1){
+			return true;
+		}
+		return false;
+	}
 }
 
 

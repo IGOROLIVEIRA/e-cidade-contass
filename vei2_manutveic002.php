@@ -193,9 +193,9 @@ HTML;
                     INNER JOIN veiccadmarca ON veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca
                     INNER JOIN veiccadmodelo ON veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo
                     INNER JOIN ceplocalidades ON ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades
-                    INNER JOIN veiccadtipo ON veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo
-                    INNER JOIN veiccadcor ON veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor
-                    INNER JOIN veiccadtipocapacidade ON veiccadtipocapacidade.ve24_codigo = veiculos.ve01_veiccadtipocapacidade
+                    LEFT JOIN veiccadtipo ON veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo
+                    LEFT JOIN veiccadcor ON veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor
+                    LEFT JOIN veiccadtipocapacidade ON veiccadtipocapacidade.ve24_codigo = veiculos.ve01_veiccadtipocapacidade
                     LEFT JOIN veicmanutretirada ON veicmanutretirada.ve65_veicmanut = veicmanut.ve62_codigo
                     INNER JOIN veicmanutoficina ON veicmanutoficina.ve66_veicmanut = veicmanut.ve62_codigo
                     LEFT JOIN empempenho ON ve62_numemp = e60_numemp

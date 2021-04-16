@@ -475,13 +475,47 @@ class AcordoItem {
         "ac22_acordoitem={$this->getCodigo()}
         and ac22_anousu=".db_getsession("DB_anousu").""
         );
-
       $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
       $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
     }
 
     return $this->aDotacoes;
   }
+
+    public function getDotacoesAdesao() {
+
+        if (count($this->aDotacoes) == 0) {
+
+            $oDaoAcordoItemDotacao  = new cl_acordoitemdotacao;
+            $sSqlDotacoes           = "select
+	o58_coddot as dotacao,
+	pc13_quant as quantidade,
+	pc13_sequencial as codigodotacaoitem,
+	pc13_valor as valor,
+	o80_codres as reserva,
+	o80_valor as valorreserva,
+	pc13_anousu as ano
+from acordoitem
+join acordopcprocitem on (ac23_acordoitem) = (ac20_sequencial)	
+join pcprocitem  ON (ac23_pcprocitem) = (pc81_codprocitem)
+join solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
+join pcdotac on (pcdotac.pc13_codigo = solicitem.pc11_codigo)
+join orcdotacao on (pc13_anousu, pc13_coddot) = (o58_anousu, o58_coddot)
+left join orcreservasol on (o82_solicitem) = (pc11_codigo)
+left join orcreserva on (o82_codres) = (o80_codres)
+--join solicitempcmater on (pc16_solicitem) = solicitem(pc11_codigo)
+where
+	ac20_sequencial = {$this->getCodigo()}
+	and pc13_anousu = ".db_getsession("DB_anousu")."
+order by
+	pc13_coddot";
+
+            $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
+            $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
+        }
+
+        return $this->aDotacoes;
+    }
 
   /**
    * @param unknown_type $aDotacoes
@@ -544,6 +578,64 @@ class AcordoItem {
     }
   }
 
+	/**
+	 * Realiza a alteração de uma determinada dotação por outra.
+	 *
+	 * @param integer $iCodigoDotacaoItem Código da dotação do item pcdotac.pc13_sequencial;
+	 * @param integer $iCodigoDotacao     Codigo da Dotação no ano
+	 * @param integer $iAnoDotacao        Ano da Dotação;
+	 * @throws Exception
+	 */
+	public function alterarDotacao($oItem) {
+
+		$iAnoSessao = db_getsession("DB_anousu");
+
+		if (empty($oItem->iCodigoDotacao)) {
+			throw new Exception("ERRO [ 0 ] - Dotação não Informada.");
+		}
+
+		if (empty($oItem->iAnoDotacao)) {
+			$oItem->iAnoDotacao = $iAnoSessao;
+		}
+
+		if ($oItem->iAnoDotacao > $iAnoSessao) {
+			throw new Exception("Dotacao {$oItem->iCodigoDotacao}/{$oItem->iAnoDotacao} deve ser uma dotação do Exercício");
+		}
+
+		/* Remove a dotação do item */
+		$oItemAcordoDotacao = db_utils::getDao('acordoitemdotacao');
+
+		$oItemAcordoDotacao->excluir('', "ac22_coddot = $oItem->iCodigoDotacaoItem AND ac22_acordoitem = $oItem->iCodigoItem AND ac22_anousu = $oItem->iAnoDotAnterior");
+
+		$sSqlVlr = " SELECT ac20_sequencial,
+                      ac20_valorunitario,
+                      ac20_quantidade
+               FROM acordoposicao
+               JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+               WHERE ac20_acordoposicao =
+                    (SELECT max(ac26_sequencial)
+                     FROM acordoposicao
+                     WHERE ac26_acordo = $oItem->iAcordo) and ac20_sequencial = ".$oItem->iCodigoItem;
+
+		$rsItem = db_query($sSqlVlr);
+		$oNewItem = db_utils::fieldsMemory($rsItem, 0);
+
+		/*
+		 * Insere a nova dotação do item
+		 * */
+
+		$oItemAcordoDotacao->ac22_coddot = $oItem->iCodigoDotacao;
+		$oItemAcordoDotacao->ac22_anousu = $iAnoSessao;
+		$oItemAcordoDotacao->ac22_acordoitem = $oNewItem->ac20_sequencial;
+		$oItemAcordoDotacao->ac22_valor = $oNewItem->ac20_valorunitario;
+		$oItemAcordoDotacao->ac22_quantidade = $oNewItem->ac20_quantidade;
+
+		$oItemAcordoDotacao->incluir();
+
+		if($oItemAcordoDotacao->erro_status == '0'){
+			throw new Exception($oItemAcordoDotacao->erro_msg);
+		}
+	}
   /**
    * Busca o código do período da previsão
    * @return integer

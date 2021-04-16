@@ -116,7 +116,7 @@ class cl_licitemobra {
       return false;
     }
     if ($this->obr06_tabela == null || $this->obr06_tabela == "0") {
-      $this->erro_sql = " Campo Tabela não informado.";
+      $this->erro_sql = " Campo Tabela não informado. Item: $this->obr06_pcmater";
       $this->erro_campo = "obr06_tabela";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -129,8 +129,7 @@ class cl_licitemobra {
         $this->erro_sql = " Campo Descrição da Tabela não informado.";
         $this->erro_campo = "obr06_descricaotabela";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_msg   = "Usuário: tabelas do tipo 3 - outras tabelas oficiais e obrigatorio informar o campo descrição da tabela. Item: $this->obr06_pcmater";
         $this->erro_status = "0";
         return false;
       }
@@ -270,7 +269,7 @@ class cl_licitemobra {
       $sql  .= $virgula." obr06_tabela = $this->obr06_tabela ";
       $virgula = ",";
       if (trim($this->obr06_tabela) == null ) {
-        $this->erro_sql = " Campo Tabela não informado.";
+        $this->erro_sql = " Campo Tabela não informado. Item: $this->obr06_pcmater";
         $this->erro_campo = "obr06_tabela";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -279,18 +278,34 @@ class cl_licitemobra {
         return false;
       }
     }
-    if (trim($this->obr06_descricaotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_descricaotabela"])) {
-      $sql  .= $virgula." obr06_descricaotabela = '$this->obr06_descricaotabela' ";
-      $virgula = ",";
-      if (trim($this->obr06_descricaotabela) == null ) {
-        $this->erro_sql = " Campo Descrição da Tabela não informado.";
-        $this->erro_campo = "obr06_descricaotabela";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+    if($this->obr06_tabela == "3"){
+        if (trim($this->obr06_descricaotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_descricaotabela"])) {
+            $sql  .= $virgula." obr06_descricaotabela = '$this->obr06_descricaotabela' ";
+            $virgula = ",";
+            if (trim($this->obr06_descricaotabela) == "") {
+                $this->erro_sql = " Campo Descrição da Tabela não informado. Item: $this->obr06_pcmater";
+                $this->erro_campo = "obr06_descricaotabela";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+    }else{
+        if (trim($this->obr06_descricaotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_descricaotabela"])) {
+            $sql  .= $virgula." obr06_descricaotabela = '$this->obr06_descricaotabela' ";
+            $virgula = ",";
+            if (trim($this->obr06_descricaotabela) == null ) {
+                $this->erro_sql = " Campo Descrição da Tabela não informado.";
+                $this->erro_campo = "obr06_descricaotabela";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
     }
     if (trim($this->obr06_codigotabela)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_codigotabela"])) {
       $sql  .= $virgula." obr06_codigotabela = '$this->obr06_codigotabela' ";
@@ -386,7 +401,8 @@ class cl_licitemobra {
       }
     }
     $sql .= " where ";
-    $sql .= "obr06_sequencial = '$obr06_sequencial'";
+    $sql .= "obr06_sequencial = $this->obr06_sequencial";
+//    die($sql);
     $result = db_query($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -549,5 +565,86 @@ class cl_licitemobra {
     }
     return $sql;
   }
+
+    // funcao do sql
+    function sql_query_itens_obras_licitacao ( $l20_codigo = null,$campos="*",$ordem=null,$dbwhere="") {
+        $sql = "select ";
+        if ($campos != "*" ) {
+            $campos_sql = explode("#", $campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from liclicitem ";
+        $sql .= " INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem ";
+        $sql .= " INNER JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
+        $sql .= " INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc ";
+        $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
+        $sql .= " INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem ";
+        $sql .= " INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero ";
+        $sql .= " INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo ";
+        $sql .= " INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
+        $sql .= " LEFT JOIN licitemobra ON obr06_pcmater = pc01_codmater ";
+        $sql2 = "";
+        if ($dbwhere=="") {
+          $sql2 = "where l20_codigo = $l20_codigo";
+        } else if ($dbwhere != "") {
+            $sql2 = "where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null ) {
+            $sql .= " order by ";
+            $campos_sql = explode("#", $ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+    // funcao do sql
+    function sql_query_itens_obras_processodecompras ( $pc80_codproc = null,$campos="*",$ordem=null,$dbwhere="") {
+        $sql = "select ";
+        if ($campos != "*" ) {
+            $campos_sql = explode("#", $campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from pcproc ";
+        $sql .= " INNER JOIN pcprocitem ON pc81_codproc = pc80_codproc ";
+        $sql .= " INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem ";
+        $sql .= " INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero ";
+        $sql .= " INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo ";
+        $sql .= " INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
+        $sql .= " LEFT JOIN licitemobra ON obr06_pcmater = pc01_codmater ";
+        $sql2 = "";
+        if ($dbwhere=="") {
+            $sql2 = "where pc80_codproc = $pc80_codproc";
+        } else if ($dbwhere != "") {
+            $sql2 = "where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null ) {
+            $sql .= " order by ";
+            $campos_sql = explode("#", $ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 }
 ?>

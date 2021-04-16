@@ -49,9 +49,10 @@ if(isset($alterar)){
       throw new Exception("Usuário: Entrega da Medição deve ser igual ou maior que Fim da Medição.");
     }
 
-    $resulMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query(null,"obr03_nummedicao",null,"obr03_nummedicao = $obr03_nummedicao and obr03_sequencial != $obr03_sequencial"));
+    $resulMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query_file(null,"*",null,"obr03_nummedicao = $obr03_nummedicao and obr03_sequencial != $obr03_sequencial"));
+//    echo $cllicobrasmedicao->sql_query_file(null,"*",null,"obr03_nummedicao = $obr03_nummedicao and obr03_sequencial != $obr03_sequencial");exit;
     if(pg_num_rows($resulMedicao) > 0){
-      throw new Exception("Usuário: Numero da Medicao ja utilizado !");
+      throw new Exception("Usuário: Numero da Medicao já utilizado !");
     }
     db_inicio_transacao();
     $db_opcao = 2;

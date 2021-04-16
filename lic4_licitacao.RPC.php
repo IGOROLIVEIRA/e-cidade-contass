@@ -600,65 +600,16 @@ switch ($oParam->exec) {
 
     		$erro = false;
 
-			$target_dir = "anexos/";
-			if(!is_dir($target_dir)){
-				mkdir($target_dir, 0775);
-			}
-
-			$nometmp = $oParam->arquivo;
-
-			// Nome do arquivo temporário gerado no /tmp
-			$path = pathinfo($oParam->arquivo);
-			$filename = md5(time());
-			$ext = $path['extension'];
-
-			$anexo = db_utils::getDao('db_config');
-			$sSqlCliente = $anexo->sql_query(null, 'munic', null, "codigo = ".db_getsession('DB_instit'));
-			$rsSqlCliente = $anexo->sql_record($sSqlCliente);
-			$nomeCliente = strtolower(db_utils::fieldsMemory($rsSqlCliente, 0)->munic);
-			$nomePasta = str_replace(' ', '', $nomeCliente);
-
-			/* Verifica se já existe diretório para a instituição corrente */
-			if(!is_dir($target_dir.$nomePasta)){
-				mkdir($target_dir.$nomePasta, 0775);
-			}
-			$target_dir .= $nomePasta.'/';
-
-			/* Verifica se já existe diretório para a instituição corrente */
-			if(!is_dir($target_dir.'instit_'.db_getsession('DB_instit'))){
-				mkdir($target_dir.'instit_'.db_getsession('DB_instit'), 0775);
-			}
-			$target_dir .= 'instit_'.db_getsession('DB_instit').'/';
-
-			/* Verifica se já existe diretório para o ano corrente */
-			if(!is_dir($target_dir.'/'.db_getsession('DB_anousu'))){
-				mkdir($target_dir.'/'.db_getsession('DB_anousu'), 0775);
-			}
-
-			$target_dir .= db_getsession('DB_anousu').'/';
-
-			/* Verifica se já existe diretório para a licitação corrente */
-			if(!is_dir($target_dir.'/'.$oParam->licitacao)){
-				mkdir($target_dir.'/'.$oParam->licitacao, 0775);
-			}
-			$target_dir .= $oParam->licitacao.'/';
-			// Seta o nome do arquivo destino do upload
-			$arquivoDocument = $target_dir.$filename.".".$ext;
-
-			// Move o arquivo da tmp para o local especificado
-			if(!copy($nometmp, $arquivoDocument)){
-				$erro = true;
-			}
-			unlink($nometmp);
+			$nometmp = explode('/', $oParam->arquivo);
+			$novoNome = strlen($nometmp[1]) > 100 ? substr($nometmp[1],0,100) : $nometmp[1];
 
 			if(!$erro){
 				$oEdital = new EditalDocumento;
 				$oEdital->setCodigo('');
 				$oEdital->setTipo($oParam->tipo);
-				$nome = explode('/', $nometmp);
 				$oEdital->setLicLicita($oParam->licitacao);
-				$oEdital->setNomeArquivo($nome[1]);
-				$oEdital->setCaminho($arquivoDocument);
+				$oEdital->setNomeArquivo($novoNome);
+				$oEdital->setArquivo($oParam->arquivo);
 				$oEdital->salvar();
 				$oRetorno->message = 'Anexo cadastrado com sucesso!';
 			}
@@ -692,8 +643,7 @@ switch ($oParam->exec) {
 	case "excluirDocumento":
 		try {
 			$oEdital          = new EditalDocumento($oParam->codigoDocumento);
-			unlink($oEdital->getCaminho());
-       		$oEdital->remover();
+			$oEdital->remover();
        		$oRetorno->message = 'Documento removido com sucesso!';
 
     	} catch (Exception $oErro) {
@@ -705,9 +655,10 @@ switch ($oParam->exec) {
 
 	case "downloadDocumento":
 		$oDocumento = new EditalDocumento($oParam->iCodigoDocumento);
-	    $sNomeArquivo = $oDocumento->getNomeArquivo();
-		file_put_contents( $sNomeArquivo, file_get_contents($oDocumento->getCaminho()));
-		ini_set('display_errors', 1);
+	    $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
+	    db_inicio_transacao();
+	    pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
+	    db_fim_transacao();
 		$oRetorno->nomearquivo = $sNomeArquivo;
     break;
 
@@ -752,6 +703,7 @@ switch ($oParam->exec) {
                      WHEN pc50_pctipocompratribunal IN (100,
                                                         101,
                                                         102,
+                                                        103,
                                                         106)
                           AND liclicita.l20_datacria IS NOT NULL THEN liclicita.l20_datacria
                  END) AS data_Referencia
@@ -760,7 +712,7 @@ switch ($oParam->exec) {
     $sWhere = "
     	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 106) 
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                                 END) >= 2020;
     ";
@@ -769,5 +721,50 @@ switch ($oParam->exec) {
     $oDados = db_utils::fieldsMemory($rsLicEdital, 0);
     $oRetorno->dadosLicitacao = $oDados;
     break;
+
+	case 'findTipos':
+		$sSql = "
+			SELECT DISTINCT l03_pctipocompratribunal,
+                			l03_codcom,
+                			l20_objeto
+					FROM liclicita
+					INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
+					INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
+					WHERE liclicita.l20_codigo = $oParam->iLicitacao
+		";
+
+		$oDaoLicitacao = db_utils::getDao('liclicita');
+		$rsSql = $oDaoLicitacao->sql_record($sSql);
+		$oDados = db_utils::fieldsMemory($rsSql, 0);
+		$oRetorno->dadosLicitacao = $oDados;
+	break;
+
+	case 'parecerLicitacao':
+
+		$oDaoParecer = db_utils::getDao('parecerlicitacao');
+		$sql = $oDaoParecer->sql_query('', "l200_sequencial, l200_data, 
+		(CASE 
+			WHEN l200_tipoparecer = 1 THEN 'Técnico'
+			WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
+			WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
+			ELSE 						   'Juridico - Outros'
+		END) as l200_tipoparecer, z01_nome", "",
+			"l200_licitacao = $oParam->iCodigoLicitacao");
+		$result = $oDaoParecer->sql_record($sql);
+
+		for($count = 0; $count < pg_num_rows($result); $count++){
+			$oDados = db_utils::fieldsMemory($result, $count);
+			$oParecer = new stdClass();
+
+			$oParecer->sequencial = $oDados->l200_sequencial;
+			$oParecer->dataparecer = $oDados->l200_data;
+			$oParecer->tipoparecer = urlencode($oDados->l200_tipoparecer);
+			$oParecer->nomeresp = urlencode($oDados->z01_nome);
+
+			$oRetorno->itens[] = $oParecer;
+		}
+
+		break;
 }
 echo $oJson->encode($oRetorno);

@@ -190,6 +190,16 @@ if  ( isset($k145_numeroprocesso) && !empty($k145_numeroprocesso)) {
   $sWhere .= " and k145_numeroprocesso = '{$k145_numeroprocesso}'";
 }
 
+if ($agrupar == 1) {
+    $sAgrupar = "cgm.z01_numcgm";
+} elseif ($agrupar == 2) {
+    $sAgrupar = "slip.k17_debito";
+} elseif ($agrupar == 3) {
+    $sAgrupar = "slip.k17_credito";
+} else {
+    $sAgrupar = "slip.k17_codigo";
+}
+
 $head3 = "CADASTRO DE SLIP ";
 $head4 = $info;
 $head5 = "ORDEM: Numérica";
@@ -226,7 +236,7 @@ $sql = "         select slip.k17_codigo {$sCampoProcesso},
 		             left join slipprocesso on slip.k17_codigo = k145_slip
                  left join sliptipooperacaovinculo on slip.k17_codigo = sliptipooperacaovinculo.k153_slip
            where {$sWhere} {$where1} {$sWhere3}
-		      order by slip.k17_codigo" ;
+		      order by {$sAgrupar}" ;
 
 
 $result = db_query($sql);
@@ -246,43 +256,96 @@ $troca = 1;
 $prenc = 0;
 $alt   = 4;
 $total = 0;
-$total_valor = 0;
-$total_credito = 0;
-$total_debito =0;
+$total_grupo          = 0;
+$total_valor          = 0;
+$total_valor_grupo    = 0;
+$total_credito        = 0;
+$total_credito_grupo  = 0;
+$total_debito         = 0;
+$total_debito_grupo   = 0;
+$num_rows             = pg_numrows($result);
 for($x = 0; $x < pg_numrows($result);$x++){
-   db_fieldsmemory($result,$x);
+    
+    db_fieldsmemory($result,$x);
 
-   if ( isset($sprocesso) && !empty($sprocesso)) {
+    if ( isset($sprocesso) && !empty($sprocesso)) {
+        $head7 = "PROCESSO ADMINISTRATIVO: {$sprocesso}";
+    }
 
-     $head7 = "PROCESSO ADMINISTRATIVO: {$sprocesso}";
-   }
+    if ( $agrupar != 0 && $repete == "" ) {
 
-   if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
-      $pdf->addpage("L");
-      $pdf->setfont('arial','b',8);
-      $pdf->cell(20,$alt+4,$RLk17_codigo,1,0,"C",1);
-			$y  = $pdf->getY();
-      $pdf->cell(30,$alt,"Datas",1,1,"C",1);
-			$pdf->setx(30);
-      $pdf->cell(15,$alt,'Emissão',1,0,"C",1);
-      $pdf->cell(15,$alt,'Autentic',1,0,"R",1);
-      $pdf->setxy(60,$y);
-      $pdf->cell(15,$alt+4,"C. Débito",1,0,"C",1);
-      $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1);
-      $pdf->cell(15,$alt+4,"C. Crédito",1,0,"C",1);
-      $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1);
-      $pdf->cell(40,$alt+4,"Situação",1,0,"C",1);
-      $pdf->cell(30,$alt+4,$RLk17_valor,1,1,"C",1);
-      $pdf->cell(65,$alt,$RLz01_nome,1,0,"C",1);
-      $pdf->cell(215,$alt,$RLk17_texto,1,1,"C",1);
+        if ($agrupar == 1) {
+            $nome_variavel = "z01_numcgm";
+        } elseif ($agrupar == 2) {
+            $nome_variavel = "k17_debito";
+        } elseif ($agrupar == 3) {
+            $nome_variavel = "k17_credito";
+        }
 
-      $troca = 0;
-      $prenc = 1;
-   }
+    }
 
-   if ($prenc == 0){
-      $prenc = 1;
-     }else $prenc = 0;
+    if ( $agrupar != 0 && $repete != "" && $repete != $$nome_variavel ) {
+      
+        $pdf->setfont('arial','b',8);
+        $pdf->cell(50, $alt, "TOTAL DE ".db_formatar($total_grupo, "s")." SLIP". ($total_grupo == 1 ? "" : "S"),  "B", 0, "C", 1);
+        $pdf->cell(80, $alt, "TOTAL DEBITO: ".db_formatar($total_debito_grupo,'f'), "B", 0, "C", 1);
+        $pdf->cell(80, $alt, "TOTAL CREDITO: ".db_formatar($total_credito_grupo,'f'),  "B", 0, "C", 1);
+        $pdf->cell(70, $alt, "TOTAL: ".db_formatar($total_valor_grupo,'f'),  "B", 0, "R", 1);
+        $pdf->Ln();
+
+        $total_grupo = 0;
+        $total_debito_grupo = 0;
+        $total_credito_grupo = 0;
+        $total_valor_grupo = 0;
+    
+    }
+
+    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
+      
+        $pdf->addpage("L");
+        $pdf->setfont('arial','b',8);
+        $pdf->cell(20,$alt+4,$RLk17_codigo,1,0,"C",1);
+        $y  = $pdf->getY();
+        $pdf->cell(30,$alt,"Datas",1,1,"C",1);
+        $pdf->setx(30);
+        $pdf->cell(15,$alt,'Emissão',1,0,"C",1);
+        $pdf->cell(15,$alt,'Autentic',1,0,"R",1);
+        $pdf->setxy(60,$y);
+        $pdf->cell(15,$alt+4,"C. Débito",1,0,"C",1);
+        $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1);
+        $pdf->cell(15,$alt+4,"C. Crédito",1,0,"C",1);
+        $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1);
+        $pdf->cell(40,$alt+4,"Situação",1,0,"C",1);
+        $pdf->cell(30,$alt+4,$RLk17_valor,1,1,"C",1);
+        $pdf->cell(65,$alt,$RLz01_nome,1,0,"C",1);
+        $pdf->cell(215,$alt,$RLk17_texto,1,1,"C",1);
+
+        $troca = 0;
+        $prenc = 1;
+    
+    }
+
+    if ($prenc == 0){
+        $prenc = 1;
+    } else $prenc = 0;
+
+    if ($agrupar != 0 && $total_grupo == 0) {
+
+        $pdf->setfont('arial','b',8);
+
+        if ($agrupar == 1) {            
+            $pdf->cell(280, $alt, "CREDOR: ".$z01_nome, 0, 0, "L", 0);
+            $pdf->Ln();
+        } elseif ($agrupar == 2) {
+            $pdf->cell(280, $alt, "CONTA DEBITO: ".$k17_debito.' - '.$debito_descr, 0, 0, "L", 0);
+            $pdf->Ln();
+        } elseif ($agrupar == 3) {
+            $pdf->cell(280, $alt, "CONTA CREDITO: ".$k17_credito.' - '.$credito_descr, 0, 0, "L", 0);
+            $pdf->Ln();
+        }
+        
+
+    }
 
    $pdf->setfont('arial','',7);
    $pdf->cell(20,$alt,$k17_codigo,0,0,"C",$prenc);
@@ -295,13 +358,47 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $pdf->cell(40,$alt,$k17_situacao,0,0,"C",$prenc);
    $pdf->cell(30,$alt,db_formatar($k17_valor,'f'),0,1,"R",$prenc);
    $pdf->cell(65,$alt,substr($z01_nome,0,35),0,0,"L",$prenc);
-   $pdf->multicell(200,$alt,$k17_texto,0,"L",$prenc);
+   $pdf->multicell(215,$alt,$k17_texto,0,"L",$prenc);
    $total++;
    $total_valor += $k17_valor;
-   if($k17_credito==$codconta)
-    $total_credito += $k17_valor;
-   else if($k17_debito==$codconta)
-    $total_debito += $k17_valor;
+   
+   $total_grupo++;
+   $total_valor_grupo += $k17_valor;
+   
+   if($k17_credito==$codconta) {
+      
+      $total_credito += $k17_valor;
+      $total_credito_grupo += $k17_valor;
+   
+   } else if($k17_debito==$codconta) {
+        
+      $total_debito += $k17_valor;
+      $total_debito_grupo += $k17_valor;
+   
+   }
+
+   if ( $agrupar != 0 && $num_rows == $total ) {
+      $pdf->setfont('arial','b',8);
+      $pdf->cell(50, $alt, "TOTAL DE ".db_formatar($total_grupo, "s")." SLIP". ($total_grupo == 1 ? "" : "S"),  "B", 0, "C", 1);
+      $pdf->cell(80, $alt, "TOTAL DEBITO: ".db_formatar($total_debito_grupo,'f'), "B", 0, "C", 1);
+      $pdf->cell(80, $alt, "TOTAL CREDITO: ".db_formatar($total_credito_grupo,'f'),  "B", 0, "C", 1);
+      $pdf->cell(70, $alt, "TOTAL: ".db_formatar($total_valor_grupo,'f'),  "B", 0, "R", 1);
+      $pdf->Ln();
+      $pdf->Ln();
+  }
+
+   if ($agrupar != 0) {
+      
+      if ($agrupar == 1) {
+          $repete = $z01_numcgm;
+      } elseif ($agrupar == 2) {
+          $repete = $k17_debito;
+      } elseif ($agrupar == 3) {
+          $repete = $k17_credito;
+      }
+
+  }
+
 }
 
 $pdf->setfont('arial','b',8);

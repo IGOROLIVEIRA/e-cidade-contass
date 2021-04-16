@@ -52,6 +52,9 @@ class cl_pagordem {
    var $e50_id_usuario = 0; 
    var $e50_hora = null; 
    var $e50_anousu = 0; 
+   var $e50_compdesp_dia = null;
+   var $e50_compdesp_mes = null;
+   var $e50_compdesp_ano = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  e50_codord = int4 = Ordem 
@@ -61,6 +64,7 @@ class cl_pagordem {
                  e50_id_usuario = int4 = Usuario 
                  e50_hora = char(5) = Hora 
                  e50_anousu = int4 = Ano da Ordem 
+                 e50_compdesp = date = Competencia da Despesa
                  ";
    //funcao construtor da classe 
    function cl_pagordem() { 
@@ -94,6 +98,14 @@ class cl_pagordem {
        $this->e50_id_usuario = ($this->e50_id_usuario == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"]:$this->e50_id_usuario);
        $this->e50_hora = ($this->e50_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_hora"]:$this->e50_hora);
        $this->e50_anousu = ($this->e50_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_anousu"]:$this->e50_anousu);
+       if($this->e50_compdesp == ""){
+         $this->e50_compdesp_dia = ($this->e50_compdesp_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"]:$this->e50_compdesp_dia);
+         $this->e50_compdesp_mes = ($this->e50_compdesp_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_mes"]:$this->e50_compdesp_mes);
+         $this->e50_compdesp_ano = ($this->e50_compdesp_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_ano"]:$this->e50_compdesp_ano);
+         if($this->e50_compdesp_dia != ""){
+            $this->e50_compdesp = $this->e50_compdesp_ano."-".$this->e50_compdesp_mes."-".$this->e50_compdesp_dia;
+         }
+       }
      }else{
        $this->e50_codord = ($this->e50_codord == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_codord"]:$this->e50_codord);
      }
@@ -186,6 +198,7 @@ class cl_pagordem {
                                       ,e50_id_usuario 
                                       ,e50_hora 
                                       ,e50_anousu 
+                                      ,e50_compdesp 
                        )
                 values (
                                 $this->e50_codord 
@@ -195,6 +208,7 @@ class cl_pagordem {
                                ,$this->e50_id_usuario 
                                ,'$this->e50_hora' 
                                ,$this->e50_anousu 
+                               ,".($this->e50_compdesp == "null" || $this->e50_compdesp == ""?"null":"'".$this->e50_compdesp."'")." 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -237,7 +251,7 @@ class cl_pagordem {
      return true;
    } 
    // funcao para alteracao
-   function alterar ($e50_codord=null) { 
+   function alterar ($e50_codord=null,$o56_elemento=null) { 
       $this->atualizacampos();
      $sql = " update pagordem set ";
      $virgula = "";
@@ -335,6 +349,33 @@ class cl_pagordem {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
+       }
+     }
+     if(trim($this->e50_compdesp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"] !="") ){ 
+       $sql  .= $virgula." e50_compdesp = '$this->e50_compdesp' ";
+       $virgula = ",";
+       if(trim($this->e50_compdesp) == null ){ 
+         $this->erro_sql = " Campo Competência da Despesa nao Informado.";
+         $this->erro_campo = "e50_compdesp_dia";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }     else{ 
+       if(isset($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"])){ 
+         $sql  .= $virgula." e50_compdesp = null ";
+         $virgula = ",";
+         if(trim($this->e50_compdesp) == null && in_array(substr($o56_elemento,0,7),array("3319092","3319192","3319592","3319692"))){ 
+           $this->erro_sql = " Campo Competência da Despesa nao Informado.";
+           $this->erro_campo = "e50_compdesp_dia";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+         }
        }
      }
      $sql .= " where ";
@@ -913,27 +954,16 @@ class cl_pagordem {
     }else{
       $sql .= $campos;
     }
-    $sql .= " from pagordem ";
-    $sql .= "      inner join pagordemele  on  pagordemele.e53_codord = pagordem.e50_codord";
-    $sql .= "      inner join empempenho  on  empempenho.e60_numemp = pagordem.e50_numemp";
-    $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
-    $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
-    $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
-    $sql .= "      inner join orctiporec on  orctiporec.o15_codigo =  orcdotacao.o58_codigo    ";
-    $sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
-    /*		 
-    //     $sql .= "      left join (select e82_codord, 
-    //                                      sum(e81_valor) as e81_valor,
-    //				                              max(e81_codmov) as e81_codmov,
-    //				                              (select empagemov2.e81_cancelado from empagemov empagemov2 where empagemov2.e81_codmov = max(empagemov.e81_codmov))
-    //			                         from empord 
-    //			                              inner join empagemov on e82_codmov = e81_codmov 
-    //			                         group by e82_codord
-    //			                         ) as xxx on xxx.e82_codord = pagordemele.e53_codord ";
-    //     $sql .= "      left  join empord        on empord.e82_codord         = pagordem.e50_codord ";     
-    //     $sql .= "      left join empageconf     on empageconf.e86_codmov     = xxx.e81_codmov ";
-    //     $sql .= "      left join empageconfgera on empageconfgera.e90_codmov = xxx.e81_codmov ";
-     */
+    $sql .= " FROM pagordem ";
+    $sql .= " INNER JOIN pagordemele ON pagordemele.e53_codord = pagordem.e50_codord";
+    $sql .= " INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp";
+    $sql .= " INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm";
+    $sql .= " INNER JOIN db_config ON db_config.codigo = empempenho.e60_instit";
+    $sql .= " INNER JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
+    $sql .= " INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo";
+    $sql .= " INNER JOIN emptipo ON emptipo.e41_codtipo = empempenho.e60_codtipo";
+    $sql .= " LEFT JOIN orcelemento ON (o56_codele, o56_anousu) = (e53_codele, e60_anousu)";
+        
     $sql2 = "";
     if($dbwhere==""){
       if($e50_codord!=null ){

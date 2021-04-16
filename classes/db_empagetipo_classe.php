@@ -779,7 +779,7 @@ class cl_empagetipo {
     }
     return $sql;
   }
-   function sql_query_contas_vinculadas ($e83_codtipo=null,$campos="*",$ordem=null,$sWhere, $lVinculadas = false , $op = null) {
+   function sql_query_contas_vinculadas ($e83_codtipo=null,$campos="*",$ordem=null,$sWhere, $lVinculadas = false , $op = null, $lContaUnicaFundeb = false) {
 
    $sSql = "select ";
     if($campos != "*" ){
@@ -808,6 +808,8 @@ class cl_empagetipo {
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('105','205','103')) and";
     }elseif(substr($iFonteEmpenho, 1, 2) == '54') {
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('154','154','159')) and";
+    }elseif($lContaUnicaFundeb && (substr($iFonteEmpenho, 1, 2) == '18' || substr($iFonteEmpenho, 1, 2) == '19')){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('118','218','119', '219')) and";
     }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
       $whereFonte = " ";
       $whereFonte2 = " AND (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";
@@ -834,6 +836,10 @@ class cl_empagetipo {
     /* OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100 */
     if(substr($iFonteEmpenho, 1, 2) == '60') {
       $sSql .= " and e83_descr like '%FEP' ";
+    }
+    /* OC12503 Verificação adicionada para permitir utilização do recurso 161/261 na fonte 100 */
+    if(substr($iFonteEmpenho, 1, 2) == '61') {
+        $sSql .= " or e83_descr ilike '%fpm%' ";
     }
     if ($lVinculadas) {
 

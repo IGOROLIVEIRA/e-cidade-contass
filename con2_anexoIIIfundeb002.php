@@ -190,12 +190,9 @@ $commovfiltro = "Todos";
 
 $sOpImpressao = 'Sintético';
 
-
-$sExercicio = db_getsession("DB_anousu") - 1;
-
 $sql_order = " order by o58_orgao,e60_anousu,e60_codemp::integer";
 $sql_where_externo .= "  ";
-$sql_where_externo .= ' and e60_anousu = ' . $sExercicio;
+$sql_where_externo .= ' and e60_anousu < ' . db_getsession("DB_anousu");
 $sql_where_externo .= " and " . $sql_filtro;
 
 $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
@@ -498,9 +495,11 @@ $aPagoAcumulado = array();
             <td class="s26"><? echo db_formatar(array_sum($aRecursos), "f"); ?></td>
         </tr>
         <tr style='height:20px;'>
-            <td class="s24 bdleft" colspan="7">Valor Legal Mínimo 60 % ..............................................................................................................=</td>
+            <? $porcentagem = $anousu >= 2021 ? 70 : 60; ?>
+
+            <td class="s24 bdleft" colspan="7">Valor Legal Mínimo <?= $porcentagem ?> % ..............................................................................................................=</td>
             <?
-            $valorLegal = array_sum($aRecursos) * 0.6;
+            $valorLegal = array_sum($aRecursos) * ($porcentagem/100);
             ?>
             <td class="s26"><? echo db_formatar($valorLegal,'f') ?></td>
         </tr>

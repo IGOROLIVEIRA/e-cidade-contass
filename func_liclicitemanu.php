@@ -123,7 +123,7 @@ $clrotulo->label("l03_descr");
            $campos = "liclicita.*";
            }
         }
-
+        $campos .= ', l08_descr as dl_Situação';
         if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
 	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l20_codigo=$chave_l20_codigo and $dbwhere_instit");
         }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){

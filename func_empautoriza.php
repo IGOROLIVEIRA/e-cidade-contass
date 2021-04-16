@@ -110,13 +110,13 @@ $rotulo->label("z01_nome");
                      empempenho.e60_destin";
           
           if (isset($chave_e54_autori) && (trim($chave_e54_autori)!="") ) {
-            $sql = $clempautoriza->sql_query(null,$campos,"e54_autori"," e54_autori=$chave_e54_autori $where_anul ");
+            $sql = $clempautoriza->sql_query(null,$campos,"e54_autori"," e54_autori=$chave_e54_autori $where_anul ", $possuiPC);
           } else if (isset($chave_e54_anousu) && (trim($chave_e54_anousu)!="") ) {
-            $sql = $clempautoriza->sql_query("",$campos,"e54_anousu"," e54_anousu like '$chave_e54_anousu%' $where_anul ");
+            $sql = $clempautoriza->sql_query("",$campos,"e54_anousu"," e54_anousu like '$chave_e54_anousu%' $where_anul ", $possuiPC);
           } else if (isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ) {
-            $sql = $clempautoriza->sql_query("",$campos,"e54_anousu"," z01_nome like '$chave_z01_nome%' $where_anul ");
+            $sql = $clempautoriza->sql_query("",$campos,"e54_anousu"," z01_nome like '$chave_z01_nome%' $where_anul ", $possuiPC);
           } else {
-            $sql = "";
+            $sql = $clempautoriza->sql_query(null,$campos,null,"", $possuiPC);
           }
           db_lovrot($sql,15,"()","",$funcao_js);
         } else {

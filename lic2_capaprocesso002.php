@@ -55,18 +55,21 @@ $pdf->MultiCell(0,4,"{$ender} No {$numero} {$bairro}",0,"C",0);
 $pdf->Ln(32);
 $pdf->SetFont('Arial','B',14);
 $pdf->SetFillColor(235);
-$pdf->Cell(190,10,"Processo Licitatório: {$oLicitacao->getNumeroLicitacao()}/{$oLicitacao->getAno()}",1,1,"C",0);
+$pdf->Cell(190,10,"Processo Licitatório: {$oLicitacao->getEdital()}/{$oLicitacao->getAno()}",1,1,"C",0);
 $pdf->Ln();
-$pdf->MultiCell(0,4,"{$oLicitacao->getModalidade()->getDescricao()} No:{$oLicitacao->getEdital()}/{$oLicitacao->getAno()}",0,"C",0);
+$pdf->MultiCell(0,4,"{$oLicitacao->getModalidade()->getDescricao()} No:{$oLicitacao->getNumeroLicitacao()}/{$oLicitacao->getAno()}",0,"C",0);
 $pdf->Ln(12);
 $pdf->SetFont('Arial','',12);
 $pdf->MultiCell(0,4,"Objeto: {$oLicitacao->getObjeto()}",0,"C",0);
 $pdf->Ln(7);
-$pdf->MultiCell(0,4,"Comissão:",0,"C",0);
-$pdf->Ln();
-$pdf->SetFont('Arial','',8);
-foreach($oLicitacao->getComissao() as $oMembro) {
-    $pdf->MultiCell(0, 4, "{$oMembro->z01_nome} - {$oMembro->l46_tipo}", 0, "C", 0);
+$arrayDispensa = array(100,101,102);
+if(!in_array($oLicitacao->iTipoCompraTribunal, $arrayDispensa)){
+    $pdf->MultiCell(0,4,"Comissão:",0,"C",0);
+    $pdf->Ln();
+    $pdf->SetFont('Arial','',8);
+    foreach($oLicitacao->getComissao() as $oMembro) {
+        $pdf->MultiCell(0, 4, "{$oMembro->z01_nome} - {$oMembro->l46_tipo}", 0, "C", 0);
+    }
 }
 $pdf->Output();
 ?>

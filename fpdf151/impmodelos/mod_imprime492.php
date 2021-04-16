@@ -304,7 +304,7 @@ if ($lTomadorEhPrefeitura) {
 }
 
 $this->objpdf->setX(125);
-$this->objpdf->cell(40, 5, "Valor Total da Nota", 1, 0);
+$this->objpdf->cell(40, 5, "Valor Líquido da Nota", 1, 0);
 $this->objpdf->Setfont('Arial', '', 10);
 $this->objpdf->cell(35, 5, "R$ " . number_format(($fTotalNota), 2, ",", "."), 1, 1, "R");
 

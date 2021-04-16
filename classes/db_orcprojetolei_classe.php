@@ -552,5 +552,42 @@ class cl_orcprojetolei {
      }
      return $sql;
   }
+
+  function sql_query_orcprojetolei_suplem ( $o138_sequencial=null, $campos="*", $ordem=null, $dbwhere="" ) {
+    $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from orcprojetolei ";
+     $sql .= "      inner join orclei on o45_numlei = o138_numerolei";
+     $sql .= "      inner join orcprojeto on o39_codlei = o45_codlei";
+     $sql .= "      inner join orcsuplem on  orcprojeto.o39_codproj = orcsuplem.o46_codlei";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($o138_sequencial!=null ){
+         $sql2 .= " where orcprojetolei.o138_sequencial = $o138_sequencial "; 
+       } 
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
 }
 ?>

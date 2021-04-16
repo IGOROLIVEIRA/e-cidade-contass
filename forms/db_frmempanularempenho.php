@@ -155,6 +155,7 @@ if (empty ($e60_numemp)) {
                                                                                     id='mtodositens' onclick='js_marca()'>
                                                         <a onclick='js_marca("mtodositens","chkmarca","tr")' style='cursor:pointer'>M</a></b></th>
                                                     <th class='table_header'>Sequência</th>
+                                                    <th class='table_header'>Cod. Item</th>
                                                     <th class='table_header'>Item</th>
                                                     <th class='table_header'>Vlr Unitário</th>
                                                     <th class='table_header'>Quantidade</th>
@@ -192,6 +193,7 @@ if (empty ($e60_numemp)) {
                                                 <tr>
                                                     <th class='table_header'>&nbsp;</th>
                                                     <th class='table_header'>Sequência</th>
+                                                    <th class='table_header'>Cod. Item</th>
                                                     <th class='table_header'>Item</th>
                                                     <th class='table_header'>Quantidade solicitada</th>
                                                     <th class='table_header'>Valor Solicitado</th>
@@ -285,10 +287,10 @@ if (empty ($e60_numemp)) {
         } else {
             lDisabled = "disabled";
         }
-        //console.log(obj.data);
+
         if (obj.numnotas > 0){
             for (var i = 0; i < obj.data.length;i++){
-
+                console.log(obj);
 
                 sClassName = "normal"
                 if (lDisabled == "disabled") {
@@ -340,45 +342,54 @@ if (empty ($e60_numemp)) {
                 saida += "    class='chkmarca' name='chk"+obj.data[i].e62_sequen+"' id='chkmarca"+obj.data[i].e62_sequen+"'";
                 saida += "    value='"+obj.data[i].e62_sequen+"' style='height:12px'></td>";
                 saida += "<td class='linhagrid' style='text-align:right'>"+obj.data[i].e62_sequen+"</td>";
+
+
+                saida += "<td class='linhagrid' style='text-align:right'>"+obj.data[i].e62_item+"</td>";
+
+
                 saida += "<td class='linhagrid' style='text-align:left'>"+descrmater+"</td>";
-                saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f', 3)+"</td>";
+                saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f', 4)+"</td>";
                 saida += "<td class='linhagrid' id='saldo"+obj.data[i].e62_sequen+"'  style='text-align:right'>"+obj.data[i].saldo+"</td>";
                 saida += "<td class='linhagrid' id='saldovlr"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrtot, 'f')+"</td>";
 
-                console.log(obj.data[i].pc01_servico);
-                console.log(obj.data[i].servicoquantidade);
                 if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 'f'){
+                    lDisabledQuantidade = ' disabled';
+                    sDisableValor       = ' ';
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='1' readonly style='text-align:right' size='5' onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)' ></td>";
+                    saida += " value='1' readonly style='text-align:right;background-color:#DEB887;' size='5' onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)' ></td>";
 
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)'></td></tr>";
+                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)'></td></tr>";
 
                 }else if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 't'){
+                    lDisabledQuantidade = ' ';
+                    sDisableValor       = ' disabled';
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+                    saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
 
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                    saida += "<input type='text' "+lDisabled+" style='text-align:right; background-color:#DEB887' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
 
                 }else if(obj.data[i].pc01_servico == 'f' && obj.data[i].servicoquantidade == 'f'){
+                    lDisabledQuantidade = ' ';
+                    sDisableValor       = ' disabled';
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
                     saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+                    saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
 
 
                     saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                    saida += "<input type='text' "+lDisabled+" style='text-align:right;background-color:#DEB887;' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
 
                 }
 
@@ -401,6 +412,7 @@ if (empty ($e60_numemp)) {
         //grid dos itens solicitados para anular
         saida                 = '';
         if (obj.itensAnulados.length > 0){
+            //console.log(obj.itensAnulados);
             for (var i = 0; i < obj.itensAnulados.length;i++){
 
                 descrmater = obj.itensAnulados[i].pc01_descrmater.replace(/\+/g," ");
@@ -413,6 +425,17 @@ if (empty ($e60_numemp)) {
                 saida += "    name ='chkanulado"+obj.itensAnulados[i].e62_sequen+"' id='chkmarcaanulado"+obj.itensAnulados[i].e62_sequen+"'";
                 saida += "    value='"+obj.itensAnulados[i].e62_sequen+"' style='height:12px'></td>";
                 saida += "  <td class='linhagrid' style='text-align:right'>"+obj.itensAnulados[i].e62_sequen+"</td>";
+
+
+
+
+                saida += "  <td class='linhagrid' style='text-align:right'>"+obj.itensAnulados[i].e62_item+"</td>";
+
+
+
+
+
+
                 saida += "  <td class='linhagrid' style='text-align:left'>"+descrmater+"</td>";
                 saida += "  <td class='linhagrid' id='qtdsolic"+obj.itensAnulados[i].e62_sequen+"' style='text-align:right'>"+obj.itensAnulados[i].e36_qtdanu+"</td>";
                 saida += "  <td class='linhagrid' id='vlrsolic"+obj.itensAnulados[i].e62_sequen+"' style='text-align:right'>"+obj.itensAnulados[i].e36_vrlanu+"</td>";
@@ -507,9 +530,9 @@ if (empty ($e60_numemp)) {
             //$('vlrtot'+id).disabled = true;
         }else if (nQtde == 0) {
 
-            $('vlrtot'+id).disabled = false;
+            // $('vlrtot'+id).disabled = false;
             if (tipo == 1) {
-                $('vlrtot'+id).value    = "";
+                $('vlrtot'+id).value    = 0;
             }
 
         }

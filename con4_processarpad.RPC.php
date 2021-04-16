@@ -122,7 +122,15 @@ switch($oParam->exec) {
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
       echo pg_last_error();
 
-      $sql = "select si201_codobra,si201_tipomedicao,si201_nummedicao from cadobras302020 where si201_mes = $oParam->mesReferencia";
+//      $sql = "select si201_codobra,si201_tipomedicao,si201_nummedicao
+// from cadobras302020 where si201_mes = $oParam->mesReferencia and si201_tipomedicao in(1,3,4,5)";
+      $sql = "SELECT si201_codobra,
+                       si201_tipomedicao,
+                       si201_nummedicao
+                FROM cadobras30".db_getsession('DB_anousu')."
+                INNER JOIN licobrasmedicao ON obr03_nummedicao::int = si201_nummedicao::int
+                INNER JOIN licobrasanexo ON obr03_sequencial = obr04_licobrasmedicao
+                WHERE si201_instit = ".db_getsession("DB_instit")." and si201_mes = $oParam->mesReferencia";
       $rsRegistro30 = db_query($sql);
 
       $arquivosgerados = array();
@@ -174,14 +182,12 @@ switch($oParam->exec) {
       }
       system("rm -f OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
       system("bin/zip -q OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
-//echo "<pre>"; print_r($arquivosgerados);exit;
+
       if($arquivosgerados[0] != null){
 
         foreach ($arquivosgerados as $arq) {
           $aListaArquivospdf .= " ".$arq;
-          if (file_exists("$arq")){
             $oEscritorPDF->adicionarArquivo("$arq", "$arq");
-          }
         }
         $oEscritorPDF->zip("FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
 
@@ -388,8 +394,16 @@ switch($oParam->exec) {
      $oArquivo->setDataInicial($sDataInicial);
      $oArquivo->setDataFinal($sDataFinal);
      if ($sArquivo == "MetasFisicasRealizadas"){
-      $oArquivo->setCodigoPespectiva($oParam->pespectivappa);
-    }
+      	$oArquivo->setCodigoPespectiva($oParam->pespectivappa);
+	 }
+	 if (db_getsession("DB_anousu") >= 2020 && $sArquivo == "ContasBancarias" && $oParam->encerraCtb == 1) {
+		$oArquivo->setEncerramentoCtb($oParam->encerraCtb);
+	 }
+
+   if (db_getsession("DB_anousu") >= 2020 && $sArquivo == "DetalhamentoExtraOrcamentariasPorFonte" && $oParam->encerraExt == 1) {
+		$oArquivo->setEncerramentoExt($oParam->encerraExt);
+	 }
+
     $oArquivoCsv = new stdClass();
     try {
 
@@ -653,7 +667,8 @@ case "processarBalancete" :
 
     case "processarPCA" :
 
-    $sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+    //$sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+    $sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit")." where codigo = ".db_getsession("DB_instit");
     $rsInst = db_query($sSql);
     $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
     $iTipoInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
@@ -669,17 +684,26 @@ case "processarBalancete" :
       /*
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
        */
-
+      //print_r($oParam->arquivos);
       foreach ($oParam->arquivos as $sArquivo) {
-
 
         if (file_exists("{$sArquivo}_{$iAnoReferencia}.pdf")) {
 
         	$oArquivoCsv          = new stdClass();
-          $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.pdf";
-          $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.pdf";
-          $aArrayArquivos[] = $oArquivoCsv;
+        	$oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.pdf";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.pdf";
+            $aArrayArquivos[] = $oArquivoCsv;
 
+        }elseif(file_exists("{$sArquivo}_{$iAnoReferencia}.xls")){
+            $oArquivoCsv          = new stdClass();
+            $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.xls";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.xls";
+            $aArrayArquivos[] = $oArquivoCsv;
+        }elseif(file_exists("{$sArquivo}_{$iAnoReferencia}.xlsx")){
+            $oArquivoCsv          = new stdClass();
+            $oArquivoCsv->nome    = "{$sArquivo}_{$iAnoReferencia}.xlsx";
+            $oArquivoCsv->caminho = "{$sArquivo}_{$iAnoReferencia}.xlsx";
+            $aArrayArquivos[] = $oArquivoCsv;
         } else {
 
           if($iTipoInst == 5 && $sArquivo == 'DRAA') {
@@ -971,7 +995,7 @@ case "processarBalancete" :
 			$oEscritorProgramasCSV = new padArquivoEscritorCSV();
 
 			/*
-			* instanciar cada arqivo selecionado e gerar o CSV correspondente
+			* instanciar cada arquivo selecionado e gerar o CSV correspondente
 			*/
 			$aArrayArquivos = array();
 			$sDataFinal = $oParam->diaReferencia;
@@ -1004,12 +1028,14 @@ case "processarBalancete" :
 					}
 				}
 			}
+
 			if(in_array('ResumoAberturaLicitacao', $oParam->arquivos) || in_array('ResumoDispensaInexigibilidade', $oParam->arquivos)) {
 				/*    Consulta os arquivos anexos */
 				$dia = join('-', array_reverse(explode('/', $oParam->diaReferencia)));
-				$sSql = "
+				$sql = "
 					SELECT l47_dataenvio AS dataenvio,
-						   editaldocumentos.l48_caminho AS caminho,
+						   editaldocumentos.l48_arquivo AS arquivo,
+						   editaldocumentos.l48_nomearquivo AS nomearquivo,
 						   editaldocumentos.l48_tipo as tipo,
 						   editaldocumentos.l48_sequencial as sequencial,
 						   liclicita.l20_edital AS nroprocesso,
@@ -1062,7 +1088,7 @@ case "processarBalancete" :
 					WHERE liclancedital.l47_dataenvio = '$dia'
 				";
 
-				$rsAnexos = db_query($sSql);
+				$rsAnexos = db_query($sql);
 
 				$aListaAnexos = " ";
 
@@ -1099,13 +1125,20 @@ case "processarBalancete" :
 							$novoNome .= 'FOTO_LOCAL_';
 							break;
 					}
-					$valores = explode('/', $oAnexo->caminho);
-					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
-					$extensao = explode('.', $nomeArq);
+
+					$aNomeArquivo = explode('.', $oAnexo->nomearquivo);
+
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
-					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$extensao[1]";
+					$ext_position = count($aNomeArquivo) - 1;
+
+					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$aNomeArquivo[$ext_position]";
+
+					db_inicio_transacao();
+					pg_lo_export($conn, $oAnexo->arquivo, $novoNome);
+					db_fim_transacao();
+
 					$aListaAnexos .= $novoNome . ' ';
-					system("cp {$oAnexo->caminho} ./{$novoNome}");
+
 				}
 
 				$ano = explode('/', $oParam->diaReferencia);
@@ -1129,6 +1162,7 @@ case "processarBalancete" :
 				}
 			}
 			$aListaArquivos = " ";
+
 			foreach ($aArrayArquivos as $oArquivo){
 				$aListaArquivos .= " ".$oArquivo->caminho;
 			}

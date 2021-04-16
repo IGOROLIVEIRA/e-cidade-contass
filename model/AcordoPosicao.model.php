@@ -605,6 +605,7 @@ class AcordoPosicao {
     if ($oDaoLiclicitem->numrows == 1) {
 
       $oItemLicitacao = db_utils::fieldsMemory($rsDadosItem, 0);
+
       $oItem = new AcordoItem();
       $oItem->setCodigoPosicao($this->getCodigo());
       $oItem->setMaterial(new MaterialCompras($oItemLicitacao->pc01_codmater));
@@ -628,7 +629,7 @@ class AcordoPosicao {
       $aDotacoes        = db_utils::getCollectionByRecord($rsDotacoes);
 
       foreach ($aDotacoes as $oDotacaoItem) {
-
+//echo "<pre>"; echo $oItemLicitacao->pc23_vlrun;exit;
         $oDotacao    = new stdClass();
 
         /*
@@ -640,19 +641,20 @@ class AcordoPosicao {
         /*
          * calcula o percentual da dotação em relacao ao valor total
          */
-        $nPercentualDotacao = 100;
-        if ( $oDotacaoItem->pc11_vlrun > 0 ) {
-          $nPercentualDotacao = ($oDotacaoItem->pc13_valor*100)/($oDotacaoItem->pc11_quant*$oDotacaoItem->pc11_vlrun);
-        }
-        /**
-         * retorna o valor novo da dotacao; (pode ter um aumento/diminuicao do valor)
-         */
-        $oDotacao->valor      = round(($oItemLicitacao->pc23_valor * $nPercentualDotacao)/100, 2);
+//        $nPercentualDotacao = 100;
+//        if ( $oDotacaoItem->pc11_vlrun > 0 ) {
+//          $nPercentualDotacao = ($oDotacaoItem->pc13_valor*100)/($oDotacaoItem->pc11_quant*$oDotacaoItem->pc11_vlrun);
+//        }
+//        /**
+//         * retorna o valor novo da dotacao; (pode ter um aumento/diminuicao do valor)
+//         */
+        $oDotacao->valor      = round(($oItemLicitacao->pc23_vlrun * $oDotacaoItem->pc13_quant), 2);
 
         $oDotacao->ano        = $oDotacaoItem->pc13_anousu;
         $oDotacao->dotacao    = $oDotacaoItem->pc13_coddot;
         $oDotacao->quantidade = $oDotacaoItem->pc13_quant;
-        $oItem->adicionarDotacoes($oDotacao);
+
+          $oItem->adicionarDotacoes($oDotacao);
         /**
          * Deletamos as reservas da solicitacao
          */
@@ -1674,6 +1676,7 @@ class AcordoPosicao {
       $oAcordo = new Acordo($this->getAcordo());
       $oAcordo->setDataInicial($oAcordo->getUltimaPosicao(true)->getVigenciaInicial());
       $oAcordo->setDataFinal($oAcordo->getUltimaPosicao(true)->getVigenciaFinal());
+      $oAcordo->setProvidencia(1);
       $oAcordo->save();
     }
 

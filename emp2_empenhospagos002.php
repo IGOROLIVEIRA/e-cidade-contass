@@ -57,6 +57,7 @@ $dtDataFinalBanco   = implode("-", array_reverse(explode("/", $oPost->dtDataFina
 $oPost->lQuebraConta == "t" ? $oPost->lQuebraConta = true : $oPost->lQuebraConta = false;
 $oPost->lQuebraCredor == "t" ? $oPost->lQuebraCredor = true : $oPost->lQuebraCredor = false;
 $oPost->lQuebraRecurso == "t" ? $oPost->lQuebraRecurso = true : $oPost->lQuebraRecurso = false;
+$oPost->lQuebraAcordo == "t" ? $oPost->lQuebraAcordo = true : $oPost->lQuebraAcordo = false;
 
 $aOrderBy    = array();
 $aGroup_by   = array();
@@ -81,7 +82,7 @@ if ($oPost->sTipoOrdem == "empenho") {
                                todo.k12_data,
                                todo.o15_codtri,
                                todo.k13_descr,
-                               todo.k106_sequencial, todo.e60_coddot ";
+                               todo.k106_sequencial, todo.e60_coddot, todo.e60_resumo, todo.ac16_sequencial,todo.ac16_anousu, todo.ac16_numero ";
         $aOrderBy[] = "ORDER BY k12_data,
                                 e60_numcgm,
                                 tipo,
@@ -105,16 +106,32 @@ if ($oPost->sTipoOrdem == "empenho") {
                                todo.k12_data,
                                todo.o15_codtri,
                                todo.k13_descr,
-                               todo.k106_sequencial,todo.e60_coddot ";
+                               todo.k106_sequencial,todo.e60_coddot, todo.e60_resumo, todo.ac16_sequencial, todo.ac16_anousu, todo.ac16_numero";
         $aOrderBy[] = "ORDER BY k12_data,
                          e60_numcgm,
                          o15_codtri,
                          tipo,
                          k13_conta,
                          e60_codemp ";
-    }
-
-  else {
+    }else if ($oPost->lQuebraAcordo){
+    $aGroup_by[] = "GROUP BY e60_numcgm,
+                               todo.z01_nome,
+                               k13_conta,
+                               tipo,
+                               e60_numemp,
+                               todo.k12_empen,
+                               todo.e60_codemp,
+                               todo.e60_anousu,
+                               todo.e50_codord,
+                               todo.k12_valor,
+                               todo.k12_cheque,
+                               todo.k12_autent,
+                               todo.k12_data,
+                               todo.o15_codtri,
+                               todo.k13_descr,
+                               todo.k106_sequencial,todo.e60_coddot, todo.e60_resumo, todo.ac16_sequencial, todo.ac16_anousu, todo.ac16_numero";
+    $aOrderBy[] = "ORDER BY todo.ac16_numero ";
+  }else {
 		$aOrderBy[] = "ORDER BY k12_data,
 		                        tipo,
 		                        e60_codemp ";
@@ -175,6 +192,12 @@ if (!empty($oPost->sRecursosSelecionados))  {
   $aWhere[]                   = $sWhereRecursosSelecionados;
 }
 
+$sWhereAcordosSelecionados = "";
+if (!empty($oPost->sAcordosSelecionados))  {
+  $sWhereAcordosSelecionados = "todo.ac16_sequencial in ({$oPost->sAcordosSelecionados})";
+  $aWhere[]                   = $sWhereAcordosSelecionados;
+}
+
 $sWhereEmpenho = "";
 if ($oPost->iListaEmpenho == 0) {
   $sWhereEmpenho = '1 = 1';
@@ -224,7 +247,7 @@ $sSqlBuscaEmpenhos .= "            CASE                                         
 $sSqlBuscaEmpenhos .= "                WHEN e60_anousu < {$iAnoUsoSessao} THEN 'RP'                                                          												";
 $sSqlBuscaEmpenhos .= "                ELSE 'Emp'                                                          																					";
 $sSqlBuscaEmpenhos .= "            END AS tipo,                                                          																					";
-$sSqlBuscaEmpenhos .= "            k106_sequencial, e60_coddot                                                          																				";
+$sSqlBuscaEmpenhos .= "            k106_sequencial, e60_coddot, e60_resumo, ac16_sequencial , ac16_anousu, ac16_numero                                                       																				";
 $sSqlBuscaEmpenhos .= "     FROM coremp                                                          																							";
 $sSqlBuscaEmpenhos .= "     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                      					";
 $sSqlBuscaEmpenhos .= "     INNER JOIN empelemento ON e60_numemp = e64_numemp                                                      					";
@@ -239,6 +262,8 @@ $sSqlBuscaEmpenhos .= "     LEFT  JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49
 $sSqlBuscaEmpenhos .= "     INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta                                                          											";
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupocorrente ON k105_id = corrente.k12_id AND k105_data = corrente.k12_data AND k105_autent = corrente.k12_autent            					";
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupotipo ON k106_sequencial = k105_corgrupotipo                                                                              ";
+$sSqlBuscaEmpenhos .= "      LEFT JOIN empempenhocontrato on  empempenho.e60_numemp = empempenhocontrato.e100_numemp    ";
+$sSqlBuscaEmpenhos .= "      LEFT JOIN acordo ON ac16_sequencial = e100_acordo ";
 $sSqlBuscaEmpenhos .= "     where {$sele_work}{$sele_desdobramentos}                                                          										";
 $sSqlBuscaEmpenhos .= "     UNION                                                          																									";
 $sSqlBuscaEmpenhos .= "     SELECT k12_empen,                                                          																						";
@@ -256,7 +281,7 @@ $sSqlBuscaEmpenhos .= "                  credito AS k13_conta,                  
 $sSqlBuscaEmpenhos .= "                  o15_codtri,                                                          																				";
 $sSqlBuscaEmpenhos .= "                  descr_credito AS k13_descr,                                                          																";
 $sSqlBuscaEmpenhos .= "                  tipo,                                                           																					";
-$sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial, 0 as e60_coddot                                                          																		";
+$sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial, 0 as e60_coddot , '' as e60_resumo, ac16_sequencial,ac16_anousu, ac16_numero                                                         																		";
 $sSqlBuscaEmpenhos .= "     FROM                                                          																									";
 $sSqlBuscaEmpenhos .= "         (SELECT k12_id,                                                          																					";
 $sSqlBuscaEmpenhos .= "                 k12_autent,                                                          																				";
@@ -288,7 +313,7 @@ $sSqlBuscaEmpenhos .= "                 k17_numcgm,                             
 $sSqlBuscaEmpenhos .= "                 z01_nome,                                                          																					";
 $sSqlBuscaEmpenhos .= "                 corhi AS k12_histcor,                                                          																		";
 $sSqlBuscaEmpenhos .= "                 sl_txt AS k17_texto,                                                          																		";
-$sSqlBuscaEmpenhos .= "                 e91_cheque                                                          																				";
+$sSqlBuscaEmpenhos .= "                 e91_cheque, ac16_sequencial, ac16_anousu, ac16_numero                                                          																				";
 $sSqlBuscaEmpenhos .= "          FROM                                                          																								";
 $sSqlBuscaEmpenhos .= "              (SELECT k12_id,                                                          																				";
 $sSqlBuscaEmpenhos .= "                      k12_autent,                                                          																			";
@@ -307,7 +332,7 @@ $sSqlBuscaEmpenhos .= "                      k17_numcgm,                        
 $sSqlBuscaEmpenhos .= "                      z01_nome,                                                          																			";
 $sSqlBuscaEmpenhos .= "                      corh AS corhi,                                                          																		";
 $sSqlBuscaEmpenhos .= "                      slp_txt AS sl_txt,                                                          																	";
-$sSqlBuscaEmpenhos .= "                      e91_cheque                                                          																			";
+$sSqlBuscaEmpenhos .= "                      e91_cheque, ac16_sequencial, ac16_anousu, ac16_numero                                                          																			";
 $sSqlBuscaEmpenhos .= "               FROM                                                          																						";
 $sSqlBuscaEmpenhos .= "                   (SELECT *,                                                          																				";
 $sSqlBuscaEmpenhos .= "                           CASE                                                          																			";
@@ -333,7 +358,7 @@ $sSqlBuscaEmpenhos .= "                                slipnum.k17_numcgm,      
 $sSqlBuscaEmpenhos .= "                                cgm.z01_nome,                                                          																";
 $sSqlBuscaEmpenhos .= "                                corhist.k12_histcor AS corh,                                                          												";
 $sSqlBuscaEmpenhos .= "                                slip.k17_texto AS slp_txt,                                                          													";
-$sSqlBuscaEmpenhos .= "                                e91_cheque                                                          																	";
+$sSqlBuscaEmpenhos .= "                                e91_cheque, ac16_sequencial, ac16_anousu, ac16_numero                                                          																	";
 $sSqlBuscaEmpenhos .= "                         FROM corrente                                                          																		";
 $sSqlBuscaEmpenhos .= "                         INNER JOIN corlanc b ON corrente.k12_id = b.k12_id AND corrente.k12_autent = b.k12_autent AND corrente.k12_data = b.k12_data                ";
 $sSqlBuscaEmpenhos .= "                         LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id AND corconf.k12_data = corrente.k12_data AND corconf.k12_autent = corrente.k12_autent ";
@@ -344,6 +369,8 @@ $sSqlBuscaEmpenhos .= "                         INNER JOIN cgm ON slipnum.k17_nu
 $sSqlBuscaEmpenhos .= "                         LEFT JOIN corhist ON corhist.k12_id = b.k12_id AND corhist.k12_data = b.k12_data AND corhist.k12_autent = b.k12_autent                      ";
 $sSqlBuscaEmpenhos .= "                         LEFT JOIN coremp p ON corrente.k12_id = p.k12_id AND corrente.k12_autent=p.k12_autent AND corrente.k12_data = p.k12_data                    ";
 $sSqlBuscaEmpenhos .= "                         LEFT JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                       ";
+$sSqlBuscaEmpenhos .= "      LEFT JOIN empempenhocontrato on  empempenho.e60_numemp = empempenhocontrato.e100_numemp    ";
+$sSqlBuscaEmpenhos .= "      LEFT JOIN acordo ON ac16_sequencial = e100_acordo ";
 $sSqlBuscaEmpenhos .= "                         LEFT JOIN saltes c ON c.k13_conta = corrente.k12_conta                                                          							";
 $sSqlBuscaEmpenhos .= "                         LEFT JOIN saltes d ON d.k13_conta = b.k12_conta                                                          									";
 $sSqlBuscaEmpenhos .= "                         WHERE corrente.k12_instit = {$iInstituicaoSessao}                                                          									";
@@ -442,6 +469,8 @@ foreach ($aDadosImprimir as $iIndice => $oDadoEmpenho) {
       $aDadosAgrupados[$oDadoEmpenho->k13_conta][] = $oDadoEmpenho;
   } else if ($oPost->lQuebraRecurso) {
       $aDadosAgrupados[$oDadoEmpenho->o15_codtri][] = $oDadoEmpenho;
+  } else if ($oPost->lQuebraAcordo) {
+    $aDadosAgrupados[$oDadoEmpenho->ac16_numero][] = $oDadoEmpenho;
   }
   else $aDadosAgrupados[$oDadoEmpenho->k12_data][] = $oDadoEmpenho;
 }
@@ -461,7 +490,7 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $sepnotas = "";
     $oPdf->setfont('arial', '', 7);
     $oPdf->cell(19, $iAltura, db_formatar($oDadoEmpenho->k12_data, 'd'), 0, 0, "C", 0);
-    $oPdf->cell(14, $iAltura, $oDadoEmpenho->k12_autent, 0, 0, "C", 0);
+    //$oPdf->cell(14, $iAltura, $oDadoEmpenho->k12_autent, 0, 0, "C", 0);
     $oPdf->cell(14, $iAltura, $oDadoEmpenho->k13_conta, 0, 0, "C", 0);
     $oPdf->cell(39, $iAltura, substr($oDadoEmpenho->k13_descr, 0, 25), 0, 0, "L", 0);
 
@@ -479,17 +508,26 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $iXold = $oPdf->getx();
     $oPdf->multicell(28, 3, $sNotasEncontradas, 0, "L", 0);
     $iYlinha = $oPdf->gety();
-    $oPdf->setxy($iXold + 28, $iYold);
-    $oPdf->cell(60, $iAltura, $oDadoEmpenho->z01_nome, 0, 0, "L", 0);
+    $oPdf->setxy($iXold + 22, $iYold);
+    $oPdf->cell(60, $iAltura, strlen($oDadoEmpenho->z01_nome) > 36 ? substr($oDadoEmpenho->z01_nome,0,36).'...' : $oDadoEmpenho->z01_nome , 0, 0, "L", 0);
     $oPdf->cell(20, $iAltura, db_formatar($oDadoEmpenho->k12_valor, 'f'), 0, 0, "R", 0);
     $oPdf->cell(20, $iAltura, $oDadoEmpenho->k12_cheque, 0, 0, "R", 0);
-    $oPdf->cell(15, $iAltura, $oDadoEmpenho->tipo, 0, 1, "C", 0);
+    $oPdf->cell(15, $iAltura, $oDadoEmpenho->tipo, 0, 0, "C", 0);
+    if($oDadoEmpenho->ac16_numero != null)
+      $oPdf->cell(15, $iAltura, $oDadoEmpenho->ac16_numero . '/' . $oDadoEmpenho->ac16_anousu, 0, 1, "C", 0);
+    else
+      $oPdf->cell(15, $iAltura, '', 0, 1, "C", 0);
     $oPdf->sety($iYlinha + 1);
+
+    if($oPost->iPrestacaoConta==2) {
+      $oPdf->cell(240, $iAltura, "Histórico: " . $oDadoEmpenho->e60_resumo, 0, 0, "L", 0);
+      $oPdf->sety($iYlinha + 6);
+    }
 
     $total_nadata += $oDadoEmpenho->k12_valor;
     $count_dados += 1;
   }
-  $total_geral += $total_nadata;
+  $total_geral += $total_nadata;$oPdf->sety($iYlinha + 1);
   $oPdf->setfont('arial', 'B', 7);
   $oPdf->cell(226, 4, "SubTotal :", 1, 0, "R", 1);
   $oPdf->cell(20, 4, db_formatar($total_nadata, 'f'), 1, 0, "R", 1);
@@ -509,17 +547,18 @@ function imprimeCabecalho($oPdf, $iAltura) {
   $oPdf->addpage("L");
   $oPdf->SetFont('arial','b',8);
   $oPdf->cell(19, $iAltura, "Data Autent",     1, 0, "C", 1);
-  $oPdf->cell(14, $iAltura, "Cod.Aut.",        1, 0, "C", 1);
+  //$oPdf->cell(14, $iAltura, "Cod.Aut.",        1, 0, "C", 1);
   $oPdf->cell(14, $iAltura, "Cod.Con.",        1, 0, "C", 1);
   $oPdf->cell(39, $iAltura, "Descrição Conta", 1, 0, "C", 1);
   $oPdf->cell(12, $iAltura, "Fonte",           1, 0, "C", 1);
   $oPdf->cell(12, $iAltura, "Dot.",           1, 0, "C", 1);
   $oPdf->cell(15, $iAltura, "Emp/Slip",        1, 0, "C", 1);
   $oPdf->cell(15, $iAltura, "Ordem",           1, 0, "C", 1);
-  $oPdf->cell(28, $iAltura, "Notas Fiscais",   1, 0, "C", 1);
+  $oPdf->cell(23, $iAltura, "Notas Fiscais",   1, 0, "C", 1);
   $oPdf->cell(60, $iAltura, "Credor",          1, 0, "C", 1);
   $oPdf->cell(20, $iAltura, "Vlr. Autent",     1, 0, "C", 1);
   $oPdf->cell(20, $iAltura, "N° Cheque",       1, 0, "C", 1);
-  $oPdf->cell(15, $iAltura, "Tipo",            1, 1, "C", 1);
+  $oPdf->cell(15, $iAltura, "Tipo",            1, 0, "C", 1);
+  $oPdf->cell(17, $iAltura, "Contrato",       1, 1, "C", 1);
   $iYlinha = $oPdf->getY();
 }

@@ -17,25 +17,35 @@ $clconsdispcaixaano = new cl_consdispcaixaano;
 $clconsretiradaexclusao = new cl_consretiradaexclusao;
   */
 db_postmemory($HTTP_POST_VARS);
-   $db_opcao = 22;
+$db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  $sqlerro=false;
-  db_inicio_transacao();
-  $clconsconsorcios->c200_instit = db_getsession("DB_instit");
-  $clconsconsorcios->alterar($c200_sequencial);
-  if($clconsconsorcios->erro_status==0){
-    $sqlerro=true;
-  } 
-  $erro_msg = $clconsconsorcios->erro_msg; 
-  db_fim_transacao($sqlerro);
-   $db_opcao = 2;
-   $db_botao = true;
+    $sqlerro=false;
+    db_inicio_transacao();
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$c200_numcgm} and z09_tipo = 1");
+    db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+    $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
+
+    $dtcadastrocgm = DateTime::createFromFormat('d/m/Y', $z09_datacadastro);
+    $dtcadastroadesao =   DateTime::createFromFormat('d/m/Y', $c200_dataadesao);
+
+    if($dtcadastroadesao < $dtcadastrocgm){
+        $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+        $sqlerro = true;
+    }
+    if($sqlerro==false) {
+        $clconsconsorcios->c200_instit = db_getsession("DB_instit");
+        $clconsconsorcios->alterar($c200_sequencial);
+        $erro_msg = $clconsconsorcios->erro_msg;
+    }
+    db_fim_transacao($sqlerro);
+    $db_opcao = 2;
+    $db_botao = true;
 }else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $db_botao = true;
-   $result = $clconsconsorcios->sql_record($clconsconsorcios->sql_query($chavepesquisa)); 
-   db_fieldsmemory($result,0);
+    $db_opcao = 2;
+    $db_botao = true;
+    $result = $clconsconsorcios->sql_record($clconsconsorcios->sql_query($chavepesquisa));
+    db_fieldsmemory($result,0);
 }
 ?>
 <html>
@@ -84,6 +94,8 @@ if(isset($chavepesquisa)){
          top.corpo.iframe_consdispcaixaano.location.href='con1_consdispcaixaano001.php?c203_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consretiradaexclusao.disabled=false;
          top.corpo.iframe_consretiradaexclusao.location.href='con1_consretiradaexclusao001.php?c204_consconsorcios=".@$c200_sequencial."';
+         parent.document.formaba.consmesreferencia.disabled=false;
+         top.corpo.iframe_consmesreferencia.location.href='con1_consmesreferencia001.php?db_opcao=2&c202_consconsorcios=".@$c200_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('consvalorestransf');";

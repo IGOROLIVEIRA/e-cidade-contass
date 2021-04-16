@@ -96,15 +96,15 @@ $anousu = db_getsession("DB_anousu");
 	                                             and o39_anousu=$anousu
 	                                             and o39_codproj not in (select o51_codproj from orcprojlan ) ");
         }else if(isset($chave_o39_numero) && (trim($chave_o39_numero)!="") ){
-	    $sql = $clorcprojeto->sql_query_projeto("",$campos,"o39_descr"," 
+	    $sql = $clorcprojeto->sql_query_projeto("",$campos,"o39_codproj desc, o39_descr"," 
 	                                            o39_numero like '$chave_o39_numero%' and o39_anousu=$anousu 
 	                                            and o39_codproj not in (select o51_codproj from orcprojlan )");	         
         }else if(isset($chave_o39_descr) && (trim($chave_o39_descr)!="") ){
-	    $sql = $clorcprojeto->sql_query_projeto("",$campos,"o39_descr",
-	                                            "o39_descr like '$chave_o39_descr%' 
+	    $sql = $clorcprojeto->sql_query_projeto("",$campos,"o39_codproj desc, o39_descr",
+	                                            "o39_descr ilike '$chave_o39_descr%' 
 	                                             and o39_anousu=$anousu and o39_codproj not in (select o51_codproj from orcprojlan ) ");
         }else{
-            $sql = $clorcprojeto->sql_query_projeto("",$campos,"o39_codproj","o39_anousu=$anousu and o39_codproj not in (select o51_codproj from orcprojlan )");
+            $sql = $clorcprojeto->sql_query_projeto("",$campos,"o39_codproj desc","o39_anousu=$anousu and o39_codproj not in (select o51_codproj from orcprojlan )");
         }
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{

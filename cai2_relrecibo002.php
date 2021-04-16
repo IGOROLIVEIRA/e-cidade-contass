@@ -87,6 +87,11 @@ if($busca == "p") {
 	$where .= " and arrepaga.k00_dtpaga is null ";
 }
 
+if(trim($historico) != ""){
+  $busca_inf .= "Histórico contém ".utf8_decode($historico).".";
+  $where .= " and arrehist.k00_histtxt ilike '%".utf8_decode($historico)."%' ";
+}
+
 $head3 = "Relatório de Recibos da Receita";
 $head4 = @$busca_inf;
 $head5 = @$info;

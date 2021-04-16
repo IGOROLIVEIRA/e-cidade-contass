@@ -180,20 +180,6 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
-                                                <td nowrap>
-                                                    <?
-                                                    db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
-                                                        "onchange='js_pesquisa_liclicita(false)'");
-                                                    db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
-                                                    ?>
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <td nowrap title="<?= @$Tac16_tipoorigem ?>">
                                                     <?= @$Lac16_tipoorigem ?>
@@ -215,6 +201,20 @@ db_app::load("dbtextFieldData.widget.js");
                                                     db_select('ac16_tipoorigem', $aValores, true, $db_opcao,"onchange='js_verificatipoorigem()'","style='width:100%;'");
 
                                                     ?>
+                                                </td>
+                                            </tr>
+                                            <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                                                <td nowrap>
+													<?
+													db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
+													?>
+                                                </td>
+                                                <td>
+													<?
+													db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
+														"onchange='js_pesquisa_liclicita(false)'");
+													db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
+													?>
                                                 </td>
                                             </tr>
                                             <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
@@ -1228,15 +1228,25 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_mostracontratado(erro, chave, z01_cgccpf) {
 
-        if(z01_cgccpf.length = 11){
+        if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
-        if(z01_cgccpf.length = 14){
+        if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
+                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }else{
+            if(z01_cgccpf == '' || z01_cgccpf == null ){
                 alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }

@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir) {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto) {
     var me = this;
 
     this.iCodigoPais = '';
@@ -46,14 +46,14 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.iBdi = '';
     this.iLicitacao = '';
     this.acao = incluir;
+    this.iNaturezaObjeto = iNaturezaObjeto;
     this.callBackFunction = function () {
 
     }
+
     this.sUrlRpc = 'con4_endereco.RPC.php';
 
-//  var iWidth = document.width / 1.7;
     var iWidth = 790;
-//var iWheigth = window.innerHeight / 1.5;
     var iWheigth = 460;
 
     this.oWindowEndereco = new windowAux('wndEndereco' + me.sId, 'Dados complementares', iWidth, iWheigth);
@@ -534,7 +534,30 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oTxtCep.setMaxLength(8);
     me.oTxtCep.show($('ctnCodigoCep' + sId));
 
-    /**/
+    if(incluir){
+        let oParam = new Object();
+        oParam.exec = 'getCodigoObra';
+        oParam.licitacao = codLicitacao;
+        var oAjax = new Ajax.Request(
+            me.sUrlRpc,
+            {
+                parameters: 'json=' + Object.toJSON(oParam),
+                method: 'post',
+                onComplete: retornoCodigoObra
+            }
+        );
+    }
+
+    function retornoCodigoObra(oAjax){
+        let oRetorno = eval('(' + oAjax.responseText + ')');
+
+        if(oRetorno.status == 1){
+            me.setCodigoObra(oRetorno.obra);
+            $('txtCodigoObra'+sId).value = oRetorno.obra;
+            $('txtCodigoObra'+sId).setAttribute('class', 'readonly');
+            $('txtCodigoObra'+sId).setAttribute('disabled', 'disabled');
+        }
+    }
 
     /**
      *Retorna o Código da Obra
@@ -550,6 +573,22 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
      */
     this.setCodigoObra = function (iCodigoObra) {
         this.iCodigoObra = iCodigoObra;
+    }
+
+    /**
+     *Retorna o Sequencial de cadastro dos dados complementares
+     *@return {integer} iSequencial
+     */
+    this.getSequencial = function () {
+        return this.iSequencial;
+    }
+
+    /**
+     *Retorna o Sequencial de cadastro dos dados complementares
+     *@return {integer} iSequencial
+     */
+    this.setSequencial = function (iSequencial) {
+        this.iSequencial = iSequencial;
     }
 
     this.changeValorObra = (e) => {
@@ -903,16 +942,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             me.setMunicipio(iCodigoMunicipio);
         }
 
-        // let municipio = codigoMunicipio;
-        // let estado = codigoEstado;
-
-        // if(municipio && estado){
-        //   console.log('1s ', municipio);
-        //   console.log('2s ', estado);
         me.buscaDescricoes();
-        //   codigoMunicipio = '';
-        //   codigoEstado = '';
-        // }
 
     }
 
@@ -1438,6 +1468,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     this.changeSubGrupoBemPub = (e) => {
         me.setSubGrupoBemPublico(e.target.value);
+        $('cboSubGrupoBemPub'+sId).disabled = false;
     }
 
     me.oCboSubGrupoBemPub = new DBComboBox('cboSubGrupoBemPub' + sId, 'cboSubGrupoBemPub' + sId);
@@ -1456,7 +1487,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oCboGrupoBemPub.addItem(8, 'Definição do bem público da assistência social');
     me.oCboGrupoBemPub.addItem(10, 'Definição do bem público da saúde');
     me.oCboGrupoBemPub.addItem(12, 'Definição do bem público da educação');
-    me.oCboGrupoBemPub.addItem(13, 'Definição do bem público de saúde');
+    me.oCboGrupoBemPub.addItem(13, 'Definição do bem público de cultura');
     me.oCboGrupoBemPub.addItem(15, 'Definição do bem público de urbanismo');
     me.oCboGrupoBemPub.addItem(16, 'Definição do bem público de habitação');
     me.oCboGrupoBemPub.addItem(17, 'Definição do bem público de saneamento');
@@ -2391,6 +2422,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
+    if(me.iNaturezaObjeto == '7'){
+        $('txtBdi'+sId).setAttribute('class', 'readonly');
+        $('txtBdi'+sId).setAttribute('disabled', 'disabled');
+    }
+
     $('ctnBdi' + sId).observe('change', me.changeBdi);
     $('ctnBdi' + sId).observe('keyup',() => {
         me.js_formataValor($('txtBdi' + sId), 4);
@@ -2446,6 +2482,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeGrausLatitude = (event) => {
+        let valor = event.target.value;
+        if(valor < 14 || valor > 24){
+            alert('Informe um valor entre o intervalo 14 a 24.');
+            $('txtGrausLatitude' + sId).value = '';
+            return;
+        }
         me.setGrausLatitude(event.target.value);
     }
 
@@ -2476,6 +2518,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeMinutoLatitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtMinutoLatitude'+sId).value = '';
+        }
         me.setMinutosLatitude(event.target.value);
     }
 
@@ -2505,6 +2550,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeSegundoLatitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtSegundoLatitude'+sId).value = '';
+        }
         me.setSegundosLatitude(event.target.value);
     }
 
@@ -2546,6 +2594,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeGrausLongitude = (event) => {
+        let valor = event.target.value;
+        if(valor < 39 || valor > 51){
+            alert('Informe um valor entre o intervalo 39 a 51.');
+            $('txtGrausLongitude' + sId).value = '';
+            return;
+        }
         me.setGrausLongitude(event.target.value);
     }
 
@@ -2575,6 +2629,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeMinutoLongitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtMinutoLongitude'+sId).value = '';
+        }
         me.setMinutoLongitude(event.target.value);
     }
 
@@ -2604,8 +2661,20 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         return this.iSegundoLongitude;
     }
 
+    this.checaValor = (valor) => {
+        if(valor < 0 || valor > 60){
+            alert('Valor informado não está no intervalo entre 0 e 60.');
+            return false;
+        }
+        return true;
+    }
+
     this.changeSegundoLongitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtSegundoLongitude'+sId).value = '';
+        }
         me.setSegundosLongitude(event.target.value);
+
     }
 
     me.oSegundoLongitude = new DBTextField('txtSegundoLongitude' + sId, 'txtSegundoLongitude' + sId, '');
@@ -3464,8 +3533,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 $('txtCodigoIbge' + sId).value = '';
                 me.setCodigoIbge('');
                 $('txtLogradouro' + sId).value = '';
-                me.setCodigoObra('');
-                $('txtCodigoObra' + sId).value = '';
                 me.setLogradouro('');
                 $('txtDistrito' + sId).value = '';
                 me.setDistrito('');
@@ -3746,11 +3813,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             return false;
         }
 
-        if (!$F('txtBdi' + sId)) {
-            alert('Campo BDI é obrigatório!\n\n');
-            return false;
-        }
-
         if (!$F('txtLogradouro' + sId)) {
             alert('Campo Logradouro é obrigatório!\n\n');
             return false;
@@ -3780,6 +3842,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         oEndereco.bdi = me.getBdi();
         oEndereco.licitacao = me.getLicitacao();
         oEndereco.descrBairro = $('txtDescrBairro' + sId).value;
+        oEndereco.sequencial = me.getSequencial();
 
         oDados = new Object();
         oDados.exec = 'salvarDadosComplementares';
@@ -3938,7 +4001,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.preencheCampos = function (codObra) {
         var oPesquisa = new Object();
         oPesquisa.exec = 'findDadosObra';
-        oPesquisa.iCodigoObra = codObra;
+        oPesquisa.iSequencial = codObra;
 
         var msgDiv = "Aguarde carregando lista de estados.";
         js_divCarregando(msgDiv, 'msgBox');
@@ -3958,6 +4021,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         js_removeObj('msgBox');
         var oRetorno = eval('(' + oAjax.responseText + ')');
         let dadoscomplementares = oRetorno.dadoscomplementares[0];
+        me.setSequencial(dadoscomplementares.sequencial);
         $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
         $('txtLogradouro' + sId).value = decodeURI(dadoscomplementares.logradouro).replace(/\+/g, ' ');
         me.setLogradouro(dadoscomplementares.logradouro);
@@ -3989,9 +4053,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('cboAtividadeServico' + sId).disabled = dadoscomplementares.atividadeservico > 0 ? false : true;
         $('cboAtividadeServico' + sId).value = dadoscomplementares.atividadeservico;
         me.setAtividadeServico(dadoscomplementares.atividadeservico);
+        document.getElementById('trAtividadeServico'+sId).style.display = (me.getAtividadeServico() == '99') ? '' : 'none';
         $('cboAtividadeServicoEsp' + sId).disabled = dadoscomplementares.atividadeservicoesp > 0 ? false : true;
         $('cboAtividadeServicoEsp' + sId).value = dadoscomplementares.atividadeservicoesp;
         me.setAtividadeServicoEspecializado(dadoscomplementares.atividadeservicoesp);
+        document.getElementById('trAtividadeServicoEsp'+sId).style.display = (me.getAtividadeServicoEspecializado() == '99') ? '' : 'none';
         $('cboGrupoBemPub' + sId).value = dadoscomplementares.grupobempublico;
         me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
@@ -3999,10 +4065,43 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
         $('txtDescrBairro' + sId).value = decodeURI(dadoscomplementares.bairro).replace(/\+/g, ' ');
         $('txtCep' + sId).value = dadoscomplementares.cep;
-        $('txtDescrAtividadeServico' + sId).value = decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' ');
-        $('txtDescrAtividadeServicoEsp' + sId).value = decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' ');
+        $('txtDescrAtividadeServico' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' '));
+        $('txtDescrAtividadeServicoEsp' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' '));
+
+        if(me.getGrupoBemPublico() == '99'){
+            me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+            $('cboSubGrupoBemPub'+sId).disabled = true;
+            me.oCboSubGrupoBemPub.show();
+        }
+        let params = eval('('+oAjax.request.parameters.json+')');
+        me.checkFirstRegister(params.iSequencial);
 
     }
 
+    this.checkFirstRegister = function(sequencial){
+        var oPesquisa = new Object();
+        oPesquisa.exec = 'isFirstRegister';
+        oPesquisa.iCodigo = $('txtCodigoObra'+sId).value;
+        oPesquisa.iSequencial = sequencial;
+
+        var oAjax = new Ajax.Request(
+            me.sUrlRpc,
+            {
+                asynchronous: false,
+                parameters: 'json=' + Object.toJSON(oPesquisa),
+                method: 'post',
+                onComplete: me.returnCheckRegister
+            }
+        );
+    }
+
+    this.returnCheckRegister = function(oAjax){
+        let response = eval('('+oAjax.responseText+')');
+
+        if(response.status == 2){
+            $('txtCodigoObra'+sId).setAttribute('class', 'readonly');
+            $('txtCodigoObra'+sId).setAttribute('disabled', 'disabled');
+        }
+    }
 }
 

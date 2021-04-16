@@ -790,7 +790,9 @@ function SetFont($family,$style='',$size=0)
         if($family=='times' or $family=='helvetica')
           $file.=strtolower($style);
         $file.='.php';
-        if(defined('FPDF_FONTPATH'))
+        if (!defined('FPDF_FONTPATH')){
+          define('FPDF_FONTPATH','font/');
+        }
           $file=FPDF_FONTPATH.$file;
         include($file);
         if(!isset($fpdf_charwidths[$fontkey]))

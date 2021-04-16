@@ -227,7 +227,8 @@ function js_verifica_hora(valor,campo){
   }
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_orcam','db_iframe_pcorcam','func_pcorcamlancval.php?bloqueiaRegistroPreco=1&exc=true&sol=false&funcao_js=parent.js_preenchepesquisa|pc20_codorc','Pesquisa',true,'0');
+  let sParams = 'bloqueiaRegistroPreco=1&exc=true&sol=false&validaprecoreferencia=true&filtra_instit=true';
+  js_OpenJanelaIframe('top.corpo.iframe_orcam','db_iframe_pcorcam','func_pcorcamlancval.php?'+sParams+'&funcao_js=parent.js_preenchepesquisa|pc20_codorc','Pesquisa',true,'0');
 }
 function js_preenchepesquisa(chave){
   db_iframe_pcorcam.hide();

@@ -118,7 +118,6 @@ $r59_descr = $descr;
               db_input('r59_menos1',4,0,true,'hidden',3);
               db_input('r30_regist', 7, 0, true, 'hidden', 3);
               db_input('campomatriculas', 4, 0, true, 'hidden', 3);
-              db_input('r30_regist', 7, 0, true, 'hidden', 3);
               db_input('selecao', 4, 0, true, 'hidden', 3);
               db_input('tipo', 4, 0, true, 'hidden', 3);
               db_input('r59_anousu', 4, 0, true, 'hidden', 3);
@@ -293,7 +292,6 @@ function js_validarecis(){
       }else if(anoatual > anorecis){
         alert("ALERTA: Data da rescisão com ano anterior ao atual.");
       }else if(anomesatual < anomesrecis){
-        alert("anomesatual :  "+anomesatual+"  anomesrecis : "+anomesrecis);
         alert("ALERTA: Data da rescisão posterior ao ano / mês atual..");
       }
     }

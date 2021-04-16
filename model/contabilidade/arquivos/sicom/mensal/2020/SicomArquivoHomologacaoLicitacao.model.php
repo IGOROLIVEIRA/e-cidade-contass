@@ -339,10 +339,12 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
     LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
     LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
+    LEFT JOIN aberlic102020 on (aberlic102020.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     LEFT JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote  and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
     LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
     WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
-    and liclicita.l20_codigo in (".implode(',', $aLicitacoes).") order by liclicita.l20_edital";
+    AND liclicita.l20_codigo in (".implode(',', $aLicitacoes).") 
+    AND aberlic102020.si46_exerciciolicitacao = " . db_getsession('DB_anousu') . " order by liclicita.l20_edital ";
 
 		$rsResult20 = db_query($sSql);
 		$aDadosAgrupados20 = array();
@@ -352,8 +354,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 			if($oDados20->criterioadjudicacao == 1){
 
-				$sHash10 = $oDados20->exerciciolicitacao . $oDados20->nroprocessolicitatorio . $oDados20->nrodocumento . $oDados20->nrolote . $oDados20->coditem;
-				$sHash20 = '20'.$sHash10;
+				$sHash20 = '20'.$oDados20->exerciciolicitacao . $oDados20->nroprocessolicitatorio . $oDados20->nrodocumento . $oDados20->nrolote . $oDados20->coditem;
 
 				if(!$aDadosAgrupados20[$sHash20]){
 					$clhomolic20 = new cl_homolic202020();
@@ -441,8 +442,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 			$oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
 			if($oDados30->criterioadjudicacao == 2){
-				$sHash10 = $oDados30->exerciciolicitacao . $oDados30->nroprocessolicitatorio . $oDados30->nrodocumento . $oDados30->nrolote . $oDados30->coditem;
-				$sHash30 = '30'.$sHash10;
+				$sHash30 = '30'.$oDados30->exerciciolicitacao . $oDados30->nroprocessolicitatorio . $oDados30->nrodocumento . $oDados30->nrolote . $oDados30->coditem;;
 
 				if(!$aDadosAgrupados30[$sHash30]){
 					$clhomolic30 = new cl_homolic302020();
@@ -497,14 +497,13 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 
 		$rsResult40 = db_query($sSql);
-//    db_criatabela($rsResult40);
+
 		$aDadosAgrupados40 = array();
 		for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
 			$clhomolic40 = new cl_homolic402020();
 			$oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
-			$sHash10 = $oDados40->exerciciolicitacao . $oDados40->nroprocessolicitatorio . $oDados40->nrodocumento . $oDados40->nrolote . $oDados40->coditem;
-			$sHash40 = '40'.$sHash10;
+			$sHash40 = '40'.$oDados40->exerciciolicitacao . $oDados40->nroprocessolicitatorio . $oDados40->nrodocumento . $oDados40->nrolote . $oDados40->coditem;
 
 			if(!$aDadosAgrupados40[$sHash40]){
 				$clhomolic40 = new cl_homolic402020();

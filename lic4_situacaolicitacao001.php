@@ -141,7 +141,7 @@ switch ($iOpcao) {
                         <fieldset>
                             <legend><b>Motivo</legend>
                             <?
-                            db_textarea("l11_obs", 10, 60, "", true, "text", $iOpcao);
+                            db_textarea("l11_obs", 10, 60, "", true, "text", $iOpcao, "", "","",300);
                             ?>
                         </fieldset>
                     </td>

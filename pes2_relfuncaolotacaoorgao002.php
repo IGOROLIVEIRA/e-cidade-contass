@@ -147,17 +147,10 @@ if($tipo == 'c'){
 $sWhereSelecao = '';
 if( !empty( $oRequest->selecao ) ) {
   $oDaoSelecao   = new cl_selecao();
-  $sWhereSelecao = $oDaoSelecao->getCondicaoSelecao($oRequest->selecao);
-}
-
-/**
- * Caso seja selecionada selação sera o unico criterio do where
- */
-if( !empty( $sWhereSelecao ) ){
-	$sWhere = ' and ' . $sWhereSelecao;
-}else{
-	$head3 .= $sFiltro;
-	$head3 .= $sIntervalo;
+  $sWhere .= ' and ' . $oDaoSelecao->getCondicaoSelecao($oRequest->selecao);
+} else {
+  $head3 .= $sFiltro;
+  $head3 .= $sIntervalo;
 }
 
 /**

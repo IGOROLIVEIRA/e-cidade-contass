@@ -37,9 +37,15 @@ if (isset($incluir)) {
     $oDaoOrcLei = db_utils::getDao("orclei");
     $oDaoOrcLei->o45_dataini = db_getsession("DB_anousu")."-01-01";
     $oDaoOrcLei->o45_datafim = db_getsession("DB_anousu")."-12-31";
-    $oDaoOrcLei->o45_descr   = "Lei do Projeto de lei {$o138_numerolei}";
+    $oDaoOrcLei->o45_descr   = "Lei de Alteração Orçamentária Número {$o138_numerolei}";
     $oDaoOrcLei->o45_numlei  = "{$o138_numerolei}";
-    $oDaoOrcLei->o45_tipolei = 2;
+    $oDaoOrcLei->o45_datalei = "{$o138_data}";
+    if ($o138_altpercsuplementacao == 1) {
+      $oDaoOrcLei->o45_tipolei = 4;
+    } else {
+      $oDaoOrcLei->o45_tipolei = 3;
+    }
+    
     $oDaoOrcLei->incluir(null);
     if ($oDaoOrcLei->erro_status == 0) {
 
@@ -64,43 +70,6 @@ if (isset($incluir)) {
     }
   }
 
-  /**
-   * incluimos o decreto
-   */
-  if (!$lErro) {
-
-    $oDaoDecreto               = db_utils::getDao("orcprojeto");
-    $oDaoDecreto->o39_anousu   = db_getsession("DB_anousu");
-    $oDaoDecreto->o39_codlei   = $oDaoOrcLei->o45_codlei;
-    $oDaoDecreto->o39_data     = date("Y-m-d", db_getsession("DB_datausu"));
-    $oDaoDecreto->o39_descr    = "Decreto do Projeto de lei {$o138_numerolei}";
-    $oDaoDecreto->o39_lei      = "{$o138_numerolei}";
-    $oDaoDecreto->o39_numero   = "{$o138_numerolei}";
-    $oDaoDecreto->o39_texto    = "Decreto do Projeto de lei {$o138_numerolei}";
-    $oDaoDecreto->o39_tipoproj = "2";
-    //$oDaoDecreto->o39_tiposuplementacao = $o39_tiposuplementacao;
-    $oDaoDecreto->incluir(null);
-    if ($oDaoDecreto->erro_status == 0) {
-
-      $lErro     = true;
-      $sErroMsg .= $oDaoDecreto->erro_msg;
-    }
-  }
-  /**
-   * incluimos a ligação do projeto com o decreto
-   */
-  if (!$lErro) {
-
-    $oDaoProjetoDecreto = db_utils::getDao("orcprojetoorcprojetolei");
-    $oDaoProjetoDecreto->o139_orcprojeto    = $oDaoDecreto->o39_codproj;
-    $oDaoProjetoDecreto->o139_orcprojetolei = $clorcprojetolei->o138_sequencial;
-    $oDaoProjetoDecreto->incluir(null);
-    if ($oDaoProjetoDecreto->erro_status == 0) {
-
-      $lErro     = true;
-      $sErroMsg .= $oDaoProjetoDecreto->erro_msg;
-    }
-  }
   if ($lErro) {
 
     $clorcprojetolei->erro_status = "0";

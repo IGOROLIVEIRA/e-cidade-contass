@@ -114,7 +114,7 @@ $rotulo->label("e60_numemp");
        e53_valor,
        e53_vlranu,
        e53_vlrpag,
-       cgm.z01_cgccpf";
+       cgm.z01_cgccpf";       
 	      
         if (isset($campos)==false) {
         	
@@ -150,8 +150,18 @@ $rotulo->label("e60_numemp");
           if (strlen($whereage) > 0){
 	             $sql = $clpagordem->sql_query_pagordemagenda("",$campos,"e50_numemp","$dbwhere and e60_codemp =  '".$arr[0]."' $dbwhere_ano and $whereage ");
           } else {
-	             $sql = $clpagordem->sql_query_pagordemele("",$campos,"e50_numemp","$dbwhere and e60_codemp =  '".$arr[0]."' $dbwhere_ano");
-          }
+              
+                $aMatrizEntrada = array('3319092', '3319192', '3319592', '3319692');
+                
+                $sSql = $clpagordem->sql_query_pagordemele("","substr(o56_elemento,1,7) AS o56_elemento","e50_codord","$dbwhere and e60_codemp =  '".$arr[0]."' $dbwhere_ano");
+                $rsElementDesp = db_query($sSql);
+                if (in_array(db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento, $aMatrizEntrada)) {
+                    $elemento = db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento;
+                    $campos .= ", e50_compdesp, '{$elemento}' as elemento";
+                }
+                
+                $sql = $clpagordem->sql_query_pagordemele("",$campos,"e50_numemp","$dbwhere and e60_codemp =  '".$arr[0]."' $dbwhere_ano");
+            }
 
         } else {
 

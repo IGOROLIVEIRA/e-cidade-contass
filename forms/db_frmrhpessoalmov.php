@@ -59,6 +59,8 @@ $clrotulo->label("rh01_reajusteparidade");
 $clrotulo->label("rh03_padraoprev");
 $clrotulo->label("r02_descrprev");
 
+const REGIME_CLT = 2;
+
 if(isset($db_opcaoal)){
 
     $db_opcao=33;
@@ -141,7 +143,7 @@ if(isset($db_opcaoal)){
         width: 329px;
     }
 </style>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" enctype="multipart/form-data" >
     <center>
         <table border="0">
             <tr>
@@ -595,6 +597,15 @@ if(isset($db_opcaoal)){
                                     $result_tipodeficiencia = $cltipodeficiencia->sql_record($cltipodeficiencia->sql_query_file(null,"rh150_sequencial, rh150_descricao", 'rh150_sequencial asc', null));
                                     db_selectrecord("rh02_tipodeficiencia",$result_tipodeficiencia,true,$db_opcao,"","","","");
                                     ?>
+
+                                    <?=@$Lrh02_laudodeficiencia?>
+                                    <?
+                                    db_input('rh02_laudodeficiencia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
+                                    if (!empty($GLOBALS['rh02_laudodeficiencia'])) {
+                                        db_input('rh02_laudodeficiencia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
+                                        ?> <input type="button" name="imprimir_laudodeficiencia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudodeficiencia');"> <?
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -604,8 +615,19 @@ if(isset($db_opcaoal)){
                                 <td colspan="2" nowrap>
                                     <?$clrotulo->label("rh02_portadormolestia ");
                                     $aMolestia = array('f' => 'Não','t'=>'Sim');
-                                    db_select("rh02_portadormolestia",$aMolestia,true,$db_opcao,"");
+                                    db_select("rh02_portadormolestia",$aMolestia,true,$db_opcao,"onchange='js_informarLaudoPortadorMolestia()'");
                                     ?>
+
+                                    <span id="laudoportadormolestia" <? echo ($GLOBALS['rh02_portadormolestia'] == 't') ? '' : 'style="display: none;"' ?>>
+                                        <?=@$Lrh02_laudoportadormolestia?>
+                                        <?
+                                        db_input('rh02_laudoportadormolestia_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
+                                        if (!empty($GLOBALS['rh02_laudoportadormolestia'])) {
+                                            db_input('rh02_laudoportadormolestia', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
+                                            ?> <input type="button" name="imprimir_laudoportadormolestia" value="Imprimir" onclick="js_imprimir_laudo('rh02_laudoportadormolestia');"> <?
+                                        }
+                                        ?>
+                                    </span>
                                 </td>
                             </tr>
                             <tr>
@@ -751,9 +773,18 @@ if(isset($db_opcaoal)){
                                     <td title="<?php echo $Trh05_codigoseguranca; ?>">
                                         <?php echo $Lrh05_codigoseguranca; ?>
                                     </td>
-                                    <td colspan="3">
+                                    <td>
                                         <?php db_input('rh05_codigoseguranca', 10, $Irh05_codigoseguranca, true, 'text', $db_opcao); ?>
                                     </td>
+
+                                    <?php if($rh30_regime == REGIME_CLT) { ?>
+                                    <td title="<?php echo $Trh05_saldofgts; ?>" align="right">
+                                        <?php echo $Lrh05_saldofgts; ?>
+                                    </td>
+                                    <td>
+                                        <?php db_input('rh05_saldofgts', 10, $Irh05_saldofgts, true, 'text', $db_opcao); ?>
+                                    </td>
+                                    <?php } ?>
                                 </tr>
 
                                 <tr>
@@ -1479,6 +1510,21 @@ if(isset($db_opcaoal)){
             }
 
             /**
+             * Habilita campo para informar o laudo de portador de molestia
+             */
+            function js_informarLaudoPortadorMolestia() {
+
+                var nodePortadorMolestia      = $("rh02_portadormolestia");
+                var nodeLaudoMolestia = $("laudoportadormolestia");
+
+                if (nodePortadorMolestia.value == 't' || nodePortadorMolestia.value.toLowerCase().indexOf('sim') > -1 ) {
+                    nodeLaudoMolestia.show();
+                } else if (nodePortadorMolestia.value == 'f' || nodePortadorMolestia.value.toLowerCase().indexOf('não') > -1 ) {
+                    nodeLaudoMolestia.hide();
+                }
+            }
+
+            /**
              * Valida tipo de deficiência
              */
             function js_validaTipoDeficiencia() {
@@ -1586,6 +1632,12 @@ if(isset($db_opcaoal)){
                 }
             }
             js_desctipoparentescoinst();
+
+            function js_imprimir_laudo(laudo) {
+                let iOid = document.getElementById(laudo).value;
+                jan = window.open('pes2_imprimirlaudo002.php?oid='+iOid,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+                jan.moveTo(0,0);
+            }
 
         </script>
         <?

@@ -440,26 +440,28 @@ class cl_pcorcamitem {
      $sql .= " from pcorcamitem ";
      $sql .= "      inner join pcorcam  on  pcorcam.pc20_codorc = pcorcamitem.pc22_codorc";
      $sql .= "      left  join pcorcamforne  on  pcorcamforne.pc21_codorc = pcorcam.pc20_codorc";
+     $sql .= "      left  join cgm on cgm.z01_numcgm = pcorcamforne.pc21_numcgm";
      $sql .= "      inner join pcorcamitemlic  on  pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem";
      $sql .= "      inner join liclicitem  on  pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo";
      $sql .= "      inner join liclicita   on liclicita.l20_codigo = liclicitem.l21_codliclicita";
      $sql .= "      inner join pcprocitem  on  pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem";
      $sql .= "      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
      $sql .= "      inner join solicita  on solicita.pc10_numero = solicitem.pc11_numero";
-     $sql .= "       left join solicitaregistropreco on solicitaregistropreco.pc54_solicita = solicita.pc10_numero";
-     $sql .= "      left join solicitemunid  on  solicitemunid.pc17_codigo = solicitem.pc11_codigo";
-     $sql .= "      left join matunid  on  matunid.m61_codmatunid = solicitemunid.pc17_unid";
+     $sql .= "      left  join solicitaregistropreco on solicitaregistropreco.pc54_solicita = solicita.pc10_numero";
+     $sql .= "      left  join solicitemunid  on  solicitemunid.pc17_codigo = solicitem.pc11_codigo";
+     $sql .= "      left  join matunid  on  matunid.m61_codmatunid = solicitemunid.pc17_unid";
      $sql .= "      left  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo";
      $sql .= "      left  join pcmater  on  pcmater.pc01_codmater = solicitempcmater.pc16_codmater";
      $sql .= "      left  join pcorcamval  on  pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
-                                          and  pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne ";
+                    and  pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne ";
      $sql .= "      left  join pcorcamdescla  on  pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
-                                          and  pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne ";
+                    and  pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne ";
      $sql .= "      left  join liclicitemlote on liclicitemlote.l04_liclicitem = liclicitem.l21_codigo ";
      $sql .= "      left  join licsituacao on  liclicita.l20_licsituacao = licsituacao.l08_sequencial ";
      /*OC3770*/
-     $sql .= "      LEFT JOIN pcproc ON  pcproc.pc80_codproc = pcprocitem.pc81_codproc ";
-     $sql .= " LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne ";
+     $sql .= "      left join pcproc on  pcproc.pc80_codproc = pcprocitem.pc81_codproc ";
+     $sql .= "      left join pcorcamjulg on pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem 
+                    and pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne ";
      /*FIM - OC3770*/
 
      $sql2 = "";
@@ -482,6 +484,67 @@ class cl_pcorcamitem {
      }
      return $sql;
   }
+
+    function sql_query_homologados ( $pc22_orcamitem=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from pcorcamitem ";
+        $sql .= "      inner join pcorcam  on  pcorcam.pc20_codorc = pcorcamitem.pc22_codorc";
+        $sql .= "      left  join pcorcamforne  on  pcorcamforne.pc21_codorc = pcorcam.pc20_codorc";
+        $sql .= "      inner join pcorcamitemlic  on  pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem";
+        $sql .= "      inner join liclicitem  on  pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo";
+        $sql .= "      inner join liclicita   on liclicita.l20_codigo = liclicitem.l21_codliclicita";
+        $sql .= "      inner join pcprocitem  on  pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem";
+        $sql .= "      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
+        $sql .= "      inner join solicita  on solicita.pc10_numero = solicitem.pc11_numero";
+        $sql .= "       left join solicitaregistropreco on solicitaregistropreco.pc54_solicita = solicita.pc10_numero";
+        $sql .= "      left join solicitemunid  on  solicitemunid.pc17_codigo = solicitem.pc11_codigo";
+        $sql .= "      left join matunid  on  matunid.m61_codmatunid = solicitemunid.pc17_unid";
+        $sql .= "      left  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo";
+        $sql .= "      left  join pcmater  on  pcmater.pc01_codmater = solicitempcmater.pc16_codmater";
+        $sql .= "      left  join pcorcamval  on  pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+                                          and  pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne ";
+        $sql .= "      left  join pcorcamdescla  on  pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
+                                          and  pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne ";
+        $sql .= "      left  join liclicitemlote on liclicitemlote.l04_liclicitem = liclicitem.l21_codigo ";
+        $sql .= "      left  join licsituacao on  liclicita.l20_licsituacao = licsituacao.l08_sequencial ";
+        /*OC3770*/
+        $sql .= "      left  join pcproc ON  pcproc.pc80_codproc = pcprocitem.pc81_codproc ";
+        $sql .= "      left  join pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne ";
+        /*FIM - OC3770*/
+        $sql .= "      left join itenshomologacao on l203_item = l21_codpcprocitem ";
+
+        $sql2 = "";
+        if($dbwhere==""){
+            if($pc22_orcamitem!=null ){
+                $sql2 .= " where pcorcamitem.pc22_orcamitem = $pc22_orcamitem ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+
    function sql_query_pcmaterproc ( $pc22_orcamitem=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){

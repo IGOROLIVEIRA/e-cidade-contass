@@ -103,7 +103,43 @@ if(isset($alterar)){
     $lIncluiProc = true;
   }
 
-  if ( $lIncluiProc && !$sqlerro && $lprocsis == 's') {
+    $sqlerro    = false;
+    // ID's do l03_pctipocompratribunal com base no l20_codtipocom escolhido pelo usurio
+    $sSql = $clcflicita->sql_query_file((int)$oPost->l20_codtipocom,'distinct(l03_pctipocompratribunal)');
+    $aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
+    $iTipoCompraTribunal = (int)$aCf[0]->l03_pctipocompratribunal;
+
+    //Casos em que o Tipo de Licitao e Natureza do Procedimento devem ser verificados
+    $aTipoLicNatProc = array(50,48,49,53,52,54);
+
+    $erro_msg = '';
+
+    /*
+      Verifica se os Campos "Tipo de Licitao", "Natureza do Procedimento" no foram selecionados.
+    */
+    if(in_array($iTipoCompraTribunal,$aTipoLicNatProc)){
+
+        if( $oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao) ){
+            $erro_msg .= 'Campo Tipo de Licitacao nao informado\n\n';
+            $sqlerro = true;
+        }
+        if( $oPost->l20_tipnaturezaproced == '0' || empty($oPost->l20_tipnaturezaproced) ){
+            $erro_msg .= 'Campo Natureza do Procedimento nao informado\n\n';
+            $sqlerro = true;
+        }
+
+    }
+
+    /*
+      Verifica se o Campo "Natureza do Objeto" no foi selecionado.
+    */
+    if( $oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto) ){
+        $erro_msg .= 'Campo Natureza do Objeto nao informado\n\n';
+        $sqlerro = true;
+    }
+
+
+    if ( $lIncluiProc && !$sqlerro && $lprocsis == 's') {
 
     $clliclicitaproc->l34_liclicita    = $l20_codigo;
     $clliclicitaproc->l34_protprocesso = $l34_protprocesso;
@@ -220,8 +256,12 @@ if(isset($alterar)){
     /**
      * Verificar Encerramento Periodo Patrimonial
      */
-
-    $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+    if(in_array($modalidade_tribunal, array(100, 101, 102, 103))){
+		$dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+    }else{
+        $sSql = db_query($clhomologacao->sql_query_file('',"l202_datahomologacao",'','l202_licitacao = '.$l20_codigo));
+		$dtpubratificacao = db_utils::fieldsMemory($sSql, 0)->l202_datahomologacao;
+    }
 
     if (!empty($dtpubratificacao)) {
         $clcondataconf = new cl_condataconf;

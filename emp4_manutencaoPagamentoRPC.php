@@ -288,7 +288,14 @@ switch($oParam->exec) {
       $oAgenda->setOrdemConsultas("case when trim(a.z01_nome)   is not null then a.z01_nome   else cgm.z01_nome end");
     }
 
-    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere,$sJoin,$lTrazContasFornecedor , $lTrazContasRecurso,'',$oParam->params[0]->lVinculadas, $sCredorCgm);
+	$lContaUnicaFundeb = false;
+    $aParametrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_instit")));
+    
+	if (count($aParametrosCaixa) > 0) {
+      $lContaUnicaFundeb = $aParametrosCaixa[0]->k29_cotaunicafundeb == "t" ? true : false;
+    }
+
+    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere,$sJoin,$lTrazContasFornecedor , $lTrazContasRecurso,'',$oParam->params[0]->lVinculadas, $sCredorCgm, $lContaUnicaFundeb);
 
     if (!empty($oParam->params[0]->lTratarMovimentosConfigurados) && $oParam->params[0]->lTratarMovimentosConfigurados) {
 
@@ -351,6 +358,13 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+          if ( $oTransferencia->getContaCredito() != "" ) {
+              
+              $oContaTesouraria = new contaTesouraria($oTransferencia->getContaCredito());
+              $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
+
+          }
+
           $oTransferencia->executaAutenticacao();
 
           if (USE_PCASP) {
@@ -402,6 +416,13 @@ switch($oParam->exec) {
 
 
         $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar);
+
+        if ( isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "" ) {
+            
+            $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
+            $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
+
+        }
 
         $iCodForma = $oMovimento->iCodForma;
         $iCodMov   = $oMovimento->iCodMov;

@@ -978,9 +978,8 @@ function situacao_funcionario($registro = null, $datafim = null)
   $data_afastamento = date("Y-m-d", db_getsession("DB_datausu"));
   $condicaoaux = " and r45_regist =" . db_sqlformat($registro) . " order by r45_regist, r45_dtafas desc";
   global $afasta;
-  if (db_selectmax("afasta", "select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux)) {
-
-    if (db_mktime($afasta[0]["r45_dtreto"]) >= db_mktime($dtini) || db_empty($afasta[0]["r45_dtreto"])) {
+  if ((db_selectmax("afasta", "select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux)) 
+    && (db_mktime($afasta[0]["r45_dtreto"]) >= db_mktime($dtini) || db_empty($afasta[0]["r45_dtreto"])) ) {
 
       /**
        * Caso Afastamento de doença for do tipo mais de 30 dias considera como afastamento
@@ -1034,7 +1033,6 @@ function situacao_funcionario($registro = null, $datafim = null)
         }
         $data_afastamento = $afasta[0]["r45_dtafas"];
       }
-    }
   } else {
     if (
       db_year($pessoal[$Ipessoal]["r01_admiss"]) == db_val(db_substr($subpes, 1, 4))
@@ -1063,7 +1061,7 @@ function situacao_funcionario($registro = null, $datafim = null)
 
         //echo "<BR> Rescisao efetuada no ano e mes da folha";
 
-        $dias_pagamento_sf = db_day($pessoal[$Ipessoal]["r01_recis"]);
+        $dias_pagamento_sf = (db_day($pessoal[$Ipessoal]["r01_recis"]) > 30 ? 30 : db_day($pessoal[$Ipessoal]["r01_recis"]));
       } elseif ((db_year($pessoal[$Ipessoal]["r01_recis"]) < db_val(db_substr($subpes, 1, 4)))
         || (db_year($pessoal[$Ipessoal]["r01_recis"]) == db_val(db_substr($subpes, 1, 4))
           && db_month($pessoal[$Ipessoal]["r01_recis"]) < db_val(db_substr($subpes, -2)))

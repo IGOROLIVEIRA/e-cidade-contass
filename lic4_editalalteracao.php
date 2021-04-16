@@ -87,19 +87,23 @@ if(isset($alterar)){
 	$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
 	$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
-	if($natureza_objeto == 1){
+    if($natureza_objeto == 1){
 		$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
 		$aSelecionados = array();
 		foreach ($aTipos as $tipo){
 			$aSelecionados[] = $tipo->l48_tipo;
 		}
 
-		$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
+		if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
+			$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td'));
+		}elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
+			$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+		}
         if($cleditaldocumento->numrows == 0){
 			$sqlerro = true;
 			$erro_msg = 'Nenhum documento anexo à licitação';
 		}else{
-			if(count($tiposCadastrados) < 4){
+			if(count($tiposCadastrados) < 5){
 				$sqlerro = true;
 				$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
 			}
@@ -107,7 +111,7 @@ if(isset($alterar)){
 
 		/* Verifica se tem dados complementares vinculados à licitação */
 		if(!$sqlerro){
-			$sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
+			$sSqlObras = $clobrasdadoscomplementares->sql_query_completo(null, '*', null, 'db151_liclicita = '.$licitacao);
 			$rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
 			if($clobrasdadoscomplementares->numrows == 0){
 				$sqlerro = true;
@@ -116,7 +120,7 @@ if(isset($alterar)){
 		}
 
 	}else{
-		if(!$cleditaldocumento->numrows){
+        if(!$cleditaldocumento->numrows && !$sqlerro){
 			$sqlerro = true;
 			$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
 		}

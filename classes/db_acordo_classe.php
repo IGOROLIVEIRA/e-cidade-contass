@@ -96,6 +96,11 @@ class cl_acordo {
     var $ac16_licoutroorgao = null;
     var $ac16_adesaoregpreco = null;
     var $ac16_tipocadastro = null;
+    var $ac16_providencia = null;
+    /**
+     * A descrição do status do campo ac16_providencia podem ser checados na tabela providencia
+     */
+
     // cria propriedade com as variaveis do arquivo
     var $campos = "
  ac16_sequencial = int4 = Acordo
@@ -136,6 +141,7 @@ class cl_acordo {
  ac16_licoutroorgao = int8 = licitacao de outros orgaos
  ac16_adesaoregpreco = int8 = adesao de registro de precos
  ac16_tipocadastro   = int8 = tipo de cadastro
+ ac16_providencia = int4 = Status da Providência do Acordo
  ";
     //funcao construtor da classe
     function cl_acordo() {
@@ -232,6 +238,7 @@ class cl_acordo {
             $this->ac16_licoutroorgao = ($this->ac16_licoutroorgao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_licoutroorgao"]:$this->ac16_licoutroorgao);
             $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"]:$this->ac16_adesaoregpreco);
             $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"]:$this->ac16_tipocadastro);
+            $this->ac16_providencia = ($this->ac16_providencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_providencia"]:$this->ac16_providencia);
         }else{
             $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
         }
@@ -349,13 +356,14 @@ class cl_acordo {
             return false;
         }
         if($this->ac16_acordocomissao == null ){
-            $this->erro_sql = " Campo Acordo Comissão não informado.";
-            $this->erro_campo = "ac16_acordocomissao";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->ac16_acordocomissao = "null";
+        //     $this->erro_sql = " Campo Acordo Comissão não informado.";
+        //     $this->erro_campo = "ac16_acordocomissao";
+        //     $this->erro_banco = "";
+        //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //     $this->erro_status = "0";
+        //     return false;
         }
         if($this->ac16_acordogrupo == null ){
             $this->erro_sql = " Campo Acordo Grupo não informado.";
@@ -366,7 +374,7 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        if($this->ac16_origem == null ){
+        if($this->ac16_origem == null || !$this->ac16_origem){
             $this->erro_sql = " Campo Origem não informado.";
             $this->erro_campo = "ac16_origem";
             $this->erro_banco = "";
@@ -376,13 +384,14 @@ class cl_acordo {
             return false;
         }
         if($this->ac16_qtdrenovacao == null ){
-            $this->erro_sql = " Campo Quantidade de Renovação não informado.";
-            $this->erro_campo = "ac16_qtdrenovacao";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->ac16_qtdrenovacao = "null";
+        //     $this->erro_sql = " Campo Quantidade de Renovação não informado.";
+        //     $this->erro_campo = "ac16_qtdrenovacao";
+        //     $this->erro_banco = "";
+        //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //     $this->erro_status = "0";
+        //     return false;
         }
         if($this->ac16_tipounidtempo == null ){
             $this->erro_sql = " Campo Unidade do Tempo não informado.";
@@ -402,21 +411,28 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
-        if($this->ac16_periodocomercial == null ){
-            $this->erro_sql = " Campo Período Comercial não informado.";
-            $this->erro_campo = "ac16_periodocomercial";
+        // if($this->ac16_periodocomercial == null ){
+        //     $this->erro_sql = " Campo Período Comercial não informado.";
+        //     $this->erro_campo = "ac16_periodocomercial";
+        //     $this->erro_banco = "";
+        //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //     $this->erro_status = "0";
+        //     return false;
+        // }
+        if($this->ac16_qtdperiodo == null ){
+            $this->ac16_qtdperiodo = "0";
+        }
+        if($this->ac16_tipounidtempoperiodo == null || !$this->ac16_tipounidtempoperiodo){
+            $this->erro_sql = " Campo Unid. Execução/Entrega não informado.";
+            $this->erro_campo = "ac16_tipounidtempoperiodo";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->ac16_qtdperiodo == null ){
-            $this->ac16_qtdperiodo = "0";
-        }
-        if($this->ac16_tipounidtempoperiodo == null ){
-            $this->ac16_tipounidtempoperiodo = "0";
-        }
+        
         if($this->ac16_acordocategoria == null ){
             $this->ac16_acordocategoria = "0";
         }
@@ -480,6 +496,11 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
+
+        if(($this->ac16_tipocadastro == null) || ($this->ac16_tipocadastro == "") ){
+            $this->ac16_tipocadastro = 1;
+        }
+
         $sql = "insert into acordo(
       ac16_sequencial
      ,ac16_acordosituacao
@@ -693,8 +714,13 @@ class cl_acordo {
                 return false;
             }
         }
-        if(trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="") ){
+
+        if((trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&
+            ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="")) && $this->ac16_dataassinatura != 'null'){
             $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
+            $virgula = ",";
+        }elseif($this->ac16_dataassinatura == 'null'){
+            $sql  .= $virgula." ac16_dataassinatura = null ";
             $virgula = ",";
         }
 
@@ -813,15 +839,15 @@ class cl_acordo {
         if(trim($this->ac16_acordocomissao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_acordocomissao"])){
             $sql  .= $virgula." ac16_acordocomissao = $this->ac16_acordocomissao ";
             $virgula = ",";
-            if(trim($this->ac16_acordocomissao) == null ){
-                $this->erro_sql = " Campo Acordo Comissão não informado.";
-                $this->erro_campo = "ac16_acordocomissao";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if(trim($this->ac16_acordocomissao) == null ){
+            //     $this->erro_sql = " Campo Acordo Comissão não informado.";
+            //     $this->erro_campo = "ac16_acordocomissao";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         }
         if(trim($this->ac16_lei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_lei"])){
             $sql  .= $virgula." ac16_lei = ".($this->ac16_lei == "" || $this->ac16_lei == 0 ? 'null' : $this->ac16_lei);
@@ -843,7 +869,7 @@ class cl_acordo {
         if(trim($this->ac16_origem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_origem"])){
             $sql  .= $virgula." ac16_origem = $this->ac16_origem ";
             $virgula = ",";
-            if(trim($this->ac16_origem) == null ){
+            if(trim($this->ac16_origem) == null || !$this->ac16_origem){
                 $this->erro_sql = " Campo Origem não informado.";
                 $this->erro_campo = "ac16_origem";
                 $this->erro_banco = "";
@@ -856,15 +882,15 @@ class cl_acordo {
         if(trim($this->ac16_qtdrenovacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdrenovacao"])){
             $sql  .= $virgula." ac16_qtdrenovacao = $this->ac16_qtdrenovacao ";
             $virgula = ",";
-            if(trim($this->ac16_qtdrenovacao) == null ){
-                $this->erro_sql = " Campo Quantidade de Renovação não informado.";
-                $this->erro_campo = "ac16_qtdrenovacao";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if(trim($this->ac16_qtdrenovacao) == null ){
+            //     $this->erro_sql = " Campo Quantidade de Renovação não informado.";
+            //     $this->erro_campo = "ac16_qtdrenovacao";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         }
         if(trim($this->ac16_tipounidtempo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_tipounidtempo"])){
             $sql  .= $virgula." ac16_tipounidtempo = $this->ac16_tipounidtempo ";
@@ -899,15 +925,15 @@ class cl_acordo {
         if(trim($this->ac16_periodocomercial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_periodocomercial"])){
             $sql  .= $virgula." ac16_periodocomercial = '$this->ac16_periodocomercial' ";
             $virgula = ",";
-            if(trim($this->ac16_periodocomercial) == null ){
-                $this->erro_sql = " Campo Período Comercial não informado.";
-                $this->erro_campo = "ac16_periodocomercial";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if(trim($this->ac16_periodocomercial) == null ){
+            //     $this->erro_sql = " Campo Período Comercial não informado.";
+            //     $this->erro_campo = "ac16_periodocomercial";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            //     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         }
         if(trim($this->ac16_qtdperiodo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdperiodo"])){
             if(trim($this->ac16_qtdperiodo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdperiodo"])){
@@ -1062,8 +1088,13 @@ class cl_acordo {
 
 
         if(trim($this->ac16_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])){
-            $sql  .= $virgula." ac16_licitacao = $this->ac16_licitacao ";
+            $sql .= $virgula . " ac16_licitacao = $this->ac16_licitacao ";
         }
+
+        if(trim($this->ac16_providencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_providencia"])){
+            $sql .= $virgula . " ac16_providencia = $this->ac16_providencia ";
+        }
+
         $sql .= " where ";
         if($ac16_sequencial!=null){
             $sql .= " ac16_sequencial = $this->ac16_sequencial";
@@ -1306,9 +1337,10 @@ class cl_acordo {
         $sql .= " from acordo ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = acordo.ac16_contratado";
         $sql .= "      inner join db_depart  on  db_depart.coddepto = acordo.ac16_coddepto";
+        $sql .= "      inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel";
         $sql .= "      inner join acordogrupo  on  acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo";
         $sql .= "      inner join acordosituacao  on  acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
-        $sql .= "      inner join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
+        $sql .= "      left join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
         //$sql .= "      left  join acordocategoria  on  acordocategoria.ac50_sequencial = acordo.ac16_acordocategoria";
         //$sql .= "      inner join acordoclassificacao  on  acordoclassificacao.ac46_sequencial = acordo.ac16_acordoclassificacao";
         $sql .= "      inner join db_config  on  db_config.codigo = db_depart.instit";
@@ -1387,6 +1419,7 @@ class cl_acordo {
         $sSql .= "            left join liclicitem       on liclicitem.l21_codigo            = acordoliclicitem.ac24_liclicitem";
         $sSql .= "            inner join liclicita        on liclicita.l20_codigo             = liclicitem.l21_codliclicita
  or liclicita.l20_codigo = acordo.ac16_licitacao ";
+        $sSql .= "            left join cgm on z01_numcgm = ac16_contratado ";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 
@@ -1410,16 +1443,16 @@ class cl_acordo {
                        inner join db_depart depresp on depresp.coddepto = acordo.ac16_deptoresponsavel";
         $sql .= "      inner join acordogrupo    on acordogrupo.ac02_sequencial    = acordo.ac16_acordogrupo";
         $sql .= "      inner join acordosituacao on acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
-        $sql .= "      inner join acordocomissao on acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
+        $sql .= "      left join acordocomissao on acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
         $sql .= "      inner join acordonatureza on acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
         $sql .= "      inner join acordotipo     on acordotipo.ac04_sequencial     = acordogrupo.ac02_acordotipo";
         $sql .= "      inner join acordoorigem   on acordoorigem.ac28_sequencial   = acordo.ac16_origem";
         $sql .= "      left  join acordoleis   on acordo.ac16_lei   = acordoleis.ac54_sequencial";
         $sql .= "
             LEFT JOIN (
-                select max(ac26_sequencial) as ac26_sequencial,ac26_acordo
+                select max(ac26_sequencial) as ac26_sequencial,ac26_acordo,ac26_data
                 from acordoposicao
-                    GROUP BY ac26_acordo
+                    GROUP BY ac26_acordo, ac26_data
             ) acordoposicao ON acordoposicao.ac26_acordo = ac16_sequencial
             LEFT JOIN acordoitem on ac20_acordoposicao=ac26_sequencial
             LEFT JOIN acordopcprocitem on ac23_acordoitem=ac20_sequencial
@@ -1432,7 +1465,8 @@ class cl_acordo {
             LEFT JOIN liclicitem on l21_codpcprocitem=pclic.pc81_codprocitem
             LEFT JOIN liclicita on l20_codigo=l21_codliclicita
             LEFT JOIN cflicita on l03_codigo=l20_codtipocom
-            LEFT JOIN pctipocompra on pc50_codcom=l03_codcom";
+            LEFT JOIN pctipocompra on pc50_codcom=l03_codcom
+            LEFT JOIN providencia on providencia.codigo=ac16_providencia";
 
         $sql2 = "";
         if($dbwhere==""){
@@ -1473,7 +1507,7 @@ class cl_acordo {
 
         return $sSql;
     }
-    function sql_query_acordoitemexecutado ( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_acordoitemexecutado ( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere="",$apostilamento = false){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -1488,9 +1522,10 @@ class cl_acordo {
         $sql .= " from acordo ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = acordo.ac16_contratado";
         $sql .= "      inner join db_depart  on  db_depart.coddepto = acordo.ac16_coddepto";
+        $sql .= "      inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel";
         $sql .= "      inner join acordogrupo  on  acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo";
         $sql .= "      inner join acordosituacao  on  acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
-        $sql .= "      inner join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
+        $sql .= "      left join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
         $sql .= "      inner join db_config  on  db_config.codigo = db_depart.instit";
         $sql .= "      inner join acordonatureza  on  acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
         $sql .= "      inner join acordotipo  on  acordotipo.ac04_sequencial = acordogrupo.ac02_acordotipo";
@@ -1498,6 +1533,11 @@ class cl_acordo {
         $sql .= "      left  join acordoitem          on acordoitem.ac20_acordoposicao       = acordoposicao.ac26_sequencial";
         $sql .= "      left  join acordoorigem        on acordoorigem.ac28_sequencial        = acordo.ac16_origem";
         $sql .= "      left  join acordomovimentacao  on acordomovimentacao.ac10_acordo      = acordo.ac16_sequencial";
+
+        if($apostilamento){
+            $sql .= " INNER JOIN apostilamento ON apostilamento.si03_acordo = acordo.ac16_sequencial ";
+        }
+
         $sql2 = "";
         if($dbwhere==""){
             if($ac16_sequencial!=null ){

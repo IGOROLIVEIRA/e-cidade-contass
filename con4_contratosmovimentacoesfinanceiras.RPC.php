@@ -184,11 +184,10 @@ switch($oParam->exec) {
 
             $oPosicao        = new stdClass();
 
-            if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_INCLUSAO) {
+            if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_INCLUSAO || $oPosicaoContrato->getNumeroAditamento()) {
                 continue;
             }
             $iTipoPosicao =  $oPosicaoContrato->getTipo();
-
             $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
             $oPosicao->data           = $oPosicaoContrato->getData();
             $oPosicao->tipo           = $oPosicaoContrato->getTipo();
@@ -326,7 +325,7 @@ switch($oParam->exec) {
 
                 $oAcordoItem     = new AcordoItem($oItem->codigo);
                 $nValorTotalItem = $oAcordoItem->getValorTotal();
-
+                //print_r($oItem->dotacoes);
                 foreach ($oItem->dotacoes as $iDotacoes => $oDotacoes) {
 
                     $nTotalExecutar += $oDotacoes->valorexecutar;

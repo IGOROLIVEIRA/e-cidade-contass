@@ -22,6 +22,7 @@ class cl_parpps202020
   var $si155_codorgao = null;
   var $si155_tipoplano = 0;
   var $si155_exercicio = 0;
+  var $si155_dtavaliacao = null;
   var $si155_vlreceitaprevidenciaria = 0;
   var $si155_vldespesaprevidenciaria = 0;
   var $si155_mes = 0;
@@ -33,6 +34,7 @@ class cl_parpps202020
                  si155_codorgao = varchar(2) = Código do órgão
                  si155_tipoplano = float8 = Tipo do plano
                  si155_exercicio = int8 = Exercício
+                 si155_dtavaliacao = date = Data de cadastro
                  si155_vlreceitaprevidenciaria = float8 = Valor projetado  das receitas
                  si155_vldespesaprevidenciaria = float8 = Valor projetado das despesas
                  si155_mes = int8 = Mês
@@ -67,6 +69,7 @@ class cl_parpps202020
       $this->si155_codorgao = ($this->si155_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si155_codorgao"] : $this->si155_codorgao);
       $this->si155_tipoplano = ($this->si155_tipoplano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si155_tipoplano"] : $this->si155_tipoplano);
       $this->si155_exercicio = ($this->si155_exercicio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si155_exercicio"] : $this->si155_exercicio);
+      $this->si155_dtavaliacao = ($this->si155_dtavaliacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si155_dtavaliacao"]:$this->si155_dtavaliacao);
       $this->si155_vlreceitaprevidenciaria = ($this->si155_vlreceitaprevidenciaria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si155_vlreceitaprevidenciaria"] : $this->si155_vlreceitaprevidenciaria);
       $this->si155_vldespesaprevidenciaria = ($this->si155_vldespesaprevidenciaria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si155_vldespesaprevidenciaria"] : $this->si155_vldespesaprevidenciaria);
       $this->si155_mes = ($this->si155_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si155_mes"] : $this->si155_mes);
@@ -161,6 +164,7 @@ class cl_parpps202020
                                       ,si155_codorgao
                                       ,si155_tipoplano
                                       ,si155_exercicio
+                                      ,si155_dtavaliacao
                                       ,si155_vlreceitaprevidenciaria
                                       ,si155_vldespesaprevidenciaria
                                       ,si155_mes
@@ -172,12 +176,14 @@ class cl_parpps202020
                                ,'$this->si155_codorgao'
                                ,$this->si155_tipoplano
                                ,$this->si155_exercicio
+                               ,".($this->si155_dtavaliacao == "null" || $this->si155_dtavaliacao == ""?"null":"'".$this->si155_dtavaliacao."'")."
                                ,$this->si155_vlreceitaprevidenciaria
                                ,$this->si155_vldespesaprevidenciaria
                                ,$this->si155_mes
                                ,$this->si155_instit
                       )";
     $result = db_query($sql);
+    //echo $sql;exit;
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
@@ -262,6 +268,10 @@ class cl_parpps202020
         $this->si155_exercicio = "0";
       }
       $sql .= $virgula . " si155_exercicio = $this->si155_exercicio ";
+      $virgula = ",";
+    }
+    if (trim($this->si155_dtavaliacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si155_dtavaliacao"])) {
+      $sql .= $virgula . " si155_dtavaliacao = '$this->si155_dtavaliacao' ";
       $virgula = ",";
     }
     if (trim($this->si155_vlreceitaprevidenciaria) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si155_vlreceitaprevidenciaria"])) {

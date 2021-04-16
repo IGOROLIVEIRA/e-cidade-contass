@@ -51,7 +51,7 @@ class Caspweb {
         $dtFim = new \DateTime();
 
         $this->dtIni = $dtIni->format('Y-m-d');
-        $this->dtFim = $dtFim->modify("last day of {$this->getMes($this->iMes)}")->format('Y-m-d');
+        $this->dtFim = $this->iAnoUsu.'-'.$this->iMes.'-'.$dtFim->modify("last day of {$this->getMes($this->iMes)}")->format('d');
 
     }
 
@@ -87,7 +87,10 @@ class Caspweb {
                                         exercicio,
                                         mes,
                                         contacontabil,
-                                        indsuperavit,
+                                        CASE 
+                                            WHEN contacontabil = '21892980400000000' THEN 'P' 
+                                            ELSE indsuperavit 
+                                        END AS indsuperavit,
                                         codbanco, 
                                         codagencia, 
                                         codconta,
@@ -121,7 +124,7 @@ class Caspweb {
                                             ELSE substr(c63_agencia, 1, 7)
                                         END AS codagencia, 
                                         CASE 
-                                            WHEN c63_conta = '2' OR c63_conta = '001' THEN '06000002-2'
+                                            WHEN ltrim(c63_conta,'0') = '2' OR c63_conta = '001' THEN '06000002-2'
                                             ELSE substr(c63_conta, 1, 15) 
                                         END AS codconta,
                                         CASE 

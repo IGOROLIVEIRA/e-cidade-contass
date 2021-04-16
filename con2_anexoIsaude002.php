@@ -270,14 +270,9 @@ $commovfiltro = "Todos";
 
 $sOpImpressao = 'Sintético';
 
-
-$sExercicio = db_getsession("DB_anousu") - 1;
-
-
-
 $sql_order = " order by o58_orgao,e60_anousu,e60_codemp::integer";
 $sql_where_externo .= "  ";
-$sql_where_externo .= ' and e60_anousu = ' . $sExercicio;
+$sql_where_externo .= ' and e60_anousu < ' . db_getsession("DB_anousu");
 $sql_where_externo .= " and " . $sql_filtro;
 
 $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
@@ -882,7 +877,7 @@ ob_start();
                   db_fim_transacao();
                   $fTotalAnexoII = getTotalAnexoIISaude($instits,$dtini,$dtfim,$anousu);
                   ?>
-                  <td class="s20 bdleft" dir="ltr"  colspan="8">05 - Restos a pagar pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
+                  <td class="s20 bdleft" dir="ltr"  colspan="8">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
                   <td class="s21" colspan="2"><?= db_formatar($iRestosAPagar,"f") ?></td>
                 </tr>
 
@@ -1269,7 +1264,7 @@ ob_start();
                 db_fim_transacao();
                 $fTotalAnexoII = getTotalAnexoIISaude($instits,$dtini,$dtfim,$anousu);
                 ?>
-                <td class="s20 bdleft" dir="ltr"  colspan="8">05 - Restos a pagar processados pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
+                <td class="s20 bdleft" dir="ltr"  colspan="8">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
                 <td class="s21" colspan="2"><?= db_formatar($iRestosAPagar,"f") ?></td>
               </tr>
 

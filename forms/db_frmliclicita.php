@@ -156,7 +156,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-										$mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1 ? 3 : 1;
+										$mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
+                                            || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
                                         db_input('l20_nroedital',10,$Il20_nroedital,true,'text',$mostra,"");
                                         ?>
                                     </td>
@@ -380,7 +381,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        db_inputdata('l20_dtpublic',@$l20_dtpublic_dia,@$l20_dtpublic_mes,@$l20_dtpublic_ano,true,'text',$db_opcao,"");
+                                        db_inputdata('l20_dtpublic',@$l20_dtpublic_dia,@$l20_dtpublic_mes,@$l20_dtpublic_ano,true,'text',$db_opcao,"","","#ffffff");
                                         ?>
                                     </td>
                                 </tr>
@@ -453,14 +454,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $al20_critdesempate = array("2"=>"Não","1"=>"Sim");
+                                        $al20_critdesempate = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_critdesempate",$al20_critdesempate,true,$db_opcao);
                                         ?>
                                     <td>
                                         <?=@$Ll20_subcontratacao?>
                                     </td>
                                     <td>
-                                        <?$al20_subcontratacao = array("2"=>"Não","1"=>"Sim");
+                                        <?$al20_subcontratacao = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_subcontratacao",$al20_subcontratacao,true,$db_opcao);
                                         ?>
                                     </td>
@@ -472,14 +473,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $al20_destexclusiva = array("2"=>"Não","1"=>"Sim");
+                                        $al20_destexclusiva = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_destexclusiva",$al20_destexclusiva,true,$db_opcao);
                                         ?>
                                     <td>
                                         <?=@$Ll20_limitecontratacao?>
                                     </td>
                                     <td>
-                                        <?$al20_limitcontratacao = array("2"=>"Não","1"=>"Sim");
+                                        <?$al20_limitcontratacao = array("0"=>"Selecione","2"=>"Não","1"=>"Sim");
                                         db_select("l20_limitcontratacao",$al20_limitcontratacao,true,$db_opcao);
                                         ?>
                                     </td>
@@ -962,6 +963,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         let aModalidades = ['48', '49', '50', '52', '53', '54'];
         let anousu = <?=db_getsession('DB_anousu');?>;
 
+        if(anousu >= 2021){
+            aModalidades.push('102', '103');
+        }
+
         if(aModalidades.includes(oRetorno.tribunal) && anousu >= 2020){
           document.getElementById('linha_nroedital').style.display = '';
         }else{
@@ -1013,7 +1018,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
     campo=campo.replace(" ", "");
-    if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
+    if([100,101,102,103].includes(oRetorno.tribunal)){
+    // if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
     //     document.getElementById("l20_veicdivulgacao").disabled=false;
     //     document.getElementById("l20_dtpubratificacao").disabled=false;
         document.getElementById("l20_justificativa").disabled=false;

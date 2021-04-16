@@ -19,6 +19,12 @@
                 ?>
             </td>
         </tr>
+        
+        <!-- OC 12746 -->        
+        <td style="display: none" id="competDespInput"><b>Competência Despesa: </b>
+            <?db_inputData('e50_compdesp', '', '', '', true, 'text', 1); ?>
+        </td>        
+
         <tr>
             <td nowrap title="<?=@$Te50_obs?>" colspan="3">
                 <fieldset>
@@ -52,7 +58,7 @@
         js_OpenJanelaIframe(
             '',
             'db_iframe_alteracaoop',
-            'func_pagordem.php?chave_e60_codemp='+e60_codemp+'&funcao_js=parent.js_mostraordem|e50_codord|e50_obs',
+            'func_pagordem.php?chave_e60_codemp='+e60_codemp+'&funcao_js=parent.js_mostraordem|e50_codord|e50_obs|e50_compdesp|elemento',
             'Pesquisa',
             true,
             '0',
@@ -61,13 +67,28 @@
 
     }
 
-    function js_mostraordem(e50_codord, e50_obs) {
-
+    
+    function js_mostraordem(e50_codord, e50_obs, e50_compdesp, elemento) {
+        
+        
         $('e50_codord').value = e50_codord;
         $('e50_obs').value = e50_obs;
+        
+        if (e50_compdesp != '') {
+            data = new Date(e50_compdesp);
+            e50_compdesp = ((data.getDate()+1) + "/" + ("0" + (data.getMonth() + 1)).substr(-2) + "/" + data.getFullYear());            
+        }
 
+        aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
+        
+        if (aMatrizEntrada.indexOf(elemento) !== -1) {
+            $('e50_compdesp').value = e50_compdesp;
+            document.getElementById('competDespInput').style.display = "table-cell";
+        } else {
+            document.getElementById('competDespInput').style.display = "none";
+        }
+        
         db_iframe_alteracaoop.hide();
 
     }
-
 </script>

@@ -56,7 +56,9 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-  <link href="estilos.css" rel="stylesheet" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBAncora.widget.js"></script>
+
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 
 </head>
 <body style="background-color: #CCCCCC">
@@ -67,39 +69,63 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
         <legend class="bold">Filtros</legend>
 
         <table border="0" align="center" cellspacing="0">
-          <tr>
-            <td width="4%" align="left" nowrap title="<?php echo $Tac16_sequencial; ?>">
-              <?php echo $Lac16_sequencial; ?>
-            </td>
-            <td width="96%" align="left" nowrap>
-              <?php
-              db_input("ac16_sequencial",10,$Iac16_sequencial,true,"text",4,"","chave_ac16_sequencial");
-              ?>
-            </td>
-          </tr>
+            <tr>
+                <td width="4%" align="left" nowrap title="<?php echo $Tac16_sequencial; ?>">
+                    <?php echo $Lac16_sequencial; ?>
+                </td>
+                <td width="96%" align="left" nowrap>
+                    <?php
+                    db_input("ac16_sequencial",10,$Iac16_sequencial,true,"text",4,"","chave_ac16_sequencial");
+                    ?>
+                </td>
+            </tr>
 
-          <tr>
-            <td width="4%" align="left" nowrap title="<?php echo $Tac16_numeroacordo; ?>" class="bold">
-              Número do Acordo:
-            </td>
-            <td width="96%" align="left" nowrap>
-              <?php db_input("ac16_numeroacordo", 10, 0, true, "text", 4); ?>
-            </td>
-          </tr>
+            <tr>
+                <td width="4%" align="left" nowrap title="<?php echo $Tac16_numeroacordo; ?>" class="bold">
+                    Número do Acordo:
+                </td>
+                <td width="96%" align="left" nowrap>
+                    <?php db_input("ac16_numeroacordo", 10, 0, true, "text", 4); ?>
+                </td>
+            </tr>
 
-          <tr>
-            <td nowrap title="<?php echo @$Tac16_acordogrupo; ?>" class="bold" align="">
-              <?php
-              db_ancora("Grupo:", "js_pesquisaac16_acordogrupo(true);", 1);
-              ?>
-            </td>
-            <td>
-              <?php
-              db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', 1, "onchange='js_pesquisaac16_acordogrupo(false);'");
-              db_input('ac02_descricao', 30, "", true, 'text', 3);
-              ?>
-            </td>
-          </tr>
+            <tr>
+                <td nowrap title="<?php echo @$Tac16_acordogrupo; ?>" class="bold" align="">
+                    <?php
+                    db_ancora("Grupo:", "js_pesquisaac16_acordogrupo(true);", 1);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                    db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', 1, "onchange='js_pesquisaac16_acordogrupo(false);'");
+                    db_input('ac02_descricao', 30, "", true, 'text', 3);
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php db_ancora('Depto. de Inclusão:', "js_pesquisa_depart(true);", 1); ?>
+                </td>
+                <td>
+                    <?php
+                    db_input("coddeptoinc", 10, $Icoddepto, true, "text", 4, "style='width: 90px;'onchange='js_pesquisa_depart(false);'");
+                    ?>
+
+                    <?php db_input("descrdeptoinc", 50, $Idescrdepto, true, "text", 3);?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php db_ancora('Depto. Responsável',"js_pesquisa_departamento(true);",1); ?>
+                </td>
+                <td>
+                    <?php
+                    db_input('coddeptoresp',10,'',true,'text',4," style='width: 90px;'onchange='js_pesquisa_departamento(false);'");
+                    ?>
+
+                    <?php db_input('descrdeptoresp', 50, '', true, 'text', 3,"",""); ?>
+                </td>
+            </tr>
         </table>
 
       </fieldset>
@@ -195,8 +221,8 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             }
           }
 
-          if (isset($lHomologados) && $lHomologados == true && $pc01_liberaautorizacao <> 't') {
-            //$sWhere .= " and (ac16_acordosituacao = 4)";
+          if (isset($Homologados)) {
+            $sWhere .= " and ac16_acordosituacao = 4";
           }
 
           if (isset($lGeraAutorizacao) && $lGeraAutorizacao == "true") {
@@ -214,6 +240,14 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             $sWhere .= " and ac10_acordomovimentacaotipo = {$iTipo} ";
           }
 
+          if(!empty($aditamentos)){
+              $sWhere .= " AND ac26_acordoposicaotipo in (2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14) ";
+          }
+
+          if(!empty($apostilamento)){
+              $sWhere .= " AND ac26_acordoposicaotipo NOT IN (2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14) ";
+          }
+
         }
 
         if (!isset($pesquisa_chave)) {
@@ -223,21 +257,18 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             if (file_exists("funcoes/db_func_acordo.php") == true) {
 
               $campos  = "distinct acordo.ac16_sequencial, ";
-              $campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END ac16_numeroacordo, ";
+              $campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END dl_Nº_Acordo, ";
               $campos .= "ac17_descricao as dl_Situação, ";
               $campos .= "acordo.ac16_contratado, ";
               $campos .= "cgm.z01_nome, ";
               $campos .= "acordo.ac16_resumoobjeto::text, ";
-              $campos .= "acordo.ac16_origem::text, ";
-              //$campos .= "codigo, ";
-              //$campos .= "nomeinst, ";
-              //$campos .= "acordo.ac16_numero, ";
+              $campos .= "acordo.ac16_valor, ";
               $campos .= "acordo.ac16_dataassinatura, ";
               $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, ";
               $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, ";
-              $campos .= "ac28_descricao as dl_Origem,";
-              $campos .= "acordo.ac16_coddepto, ";
-              $campos .= "descrdepto ";
+              $campos .= "CASE WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras' WHEN acordo.ac16_origem = 2 THEN 'Licitação' ELSE 'Manual' END ac16_origem, ";
+              $campos .= "db_depart.descrdepto as dl_Dpto_de_Inclusao, ";
+              $campos .= "responsavel.descrdepto as dl_Dpto_Responsavel";
 
             } else {
               $campos = "acordo.*";
@@ -258,18 +289,27 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             $sWhere  = "ac16_numeroacordo = {$iNumero} and ac16_anousu = {$iAno} and ac16_instit = {$iInstituicaoSessao} and {$sDepartamentos}";
 
           }
+            $sql_departamentos = "";
+
+          if (isset($coddeptoinc) && (trim($coddeptoinc)!="")){
+              $sql_departamentos = "and ac16_coddepto = {$coddeptoinc}";
+          }
+
+          if (isset($coddeptoresp) && (trim($coddeptoresp)!="")){
+              $sql_departamentos .= "and ac16_deptoresponsavel = {$coddeptoresp}";
+          }
 
           if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial)!="")) {
 
             $sql = $clacordo->sql_query_acordoitemexecutado(null, $campos,"ac16_sequencial desc",
-              "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}");
+              "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos}", $apostilamento);
 
           } else if (isset($ac16_acordogrupo) && (trim($ac16_acordogrupo)!="")) {
 
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc",
-              "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}");
+              "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos}", $apostilamento);
           } else {
-            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} " );
+            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos} ", $apostilamento);
           }
 
           $repassa = array();
@@ -277,7 +317,6 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           if (isset($chave_ac16_sequencial)) {
             $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
           }
-          
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
 
         } else {
@@ -291,7 +330,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
               "*",
               null,
               "ac16_sequencial = {$pesquisa_chave}
-              and {$sWhere}");
+              and {$sWhere}", $apostilamento);
 
 
             $result = $clacordo->sql_record($sSqlBuscaAcordo);
@@ -421,5 +460,56 @@ if (!isset($pesquisa_chave)) {
     $('ac16_acordogrupo').focus();
 
     db_iframe_acordogrupo.hide();
+  }
+
+  function js_pesquisa_depart(mostra) {
+      if (mostra == true) {
+          js_OpenJanelaIframe('','db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
+      } else {
+          if (document.form1.coddeptoinc.value != '') {
+              js_OpenJanelaIframe('','db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddeptoinc.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
+          } else {
+              $('descrdeptoinc').value = '';
+          }
+      }
+  }
+
+  function js_mostradepart(chave, erro) {
+      $('descrdeptoinc').value = chave;
+      if (erro == true) {
+          $('coddeptoinc').focus();
+          $('coddeptoinc').value = '';
+      }
+  }
+
+  function js_mostradepart1(chave1, chave2) {
+      $('coddeptoinc').value = chave1;
+      $('descrdeptoinc').value = chave2;
+      db_iframe_db_depart.hide();
+  }
+
+  function js_pesquisa_departamento(mostra){
+      if (mostra==true) {
+          js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepartamento1|coddepto|descrdepto','Pesquisa',true);
+      } else {
+          if ($('coddeptoresp').value != '') {
+              js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+$('coddeptoresp').value+'&funcao_js=parent.js_mostradepartamento','Pesquisa',false);
+          } else {
+              $('descrdeptoresp').value = '';
+          }
+      }
+  }
+
+  function js_mostradepartamento1(chave1, chave2, erro) {
+      $('coddeptoresp').value = chave1;
+      $('descrdeptoresp').value = chave2;
+      db_iframe_departamento.hide();
+  }
+
+  function js_mostradepartamento(chave1,erro) {
+      if(!erro){
+          $('descrdeptoresp').value = chave1;
+      }
+      db_iframe_departamento.hide();
   }
 </script>

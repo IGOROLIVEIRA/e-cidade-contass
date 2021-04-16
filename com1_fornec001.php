@@ -35,6 +35,7 @@ require_once "dbforms/db_funcoes.php";
 require_once "model/CgmFactory.model.php";
 require_once "model/fornecedor.model.php";
 require_once ("classes/db_pcorcamval_classe.php");
+require_once ("classes/db_condataconf_classe.php");
 
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -109,9 +110,33 @@ if (isset($incluir)) {
         }
     }
 
+    if($sqlerro==false){
+
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$pc21_numcgm} and z09_tipo = 1");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
+
+        if($dtsession < $z09_datacadastro){
+            $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+            $sqlerro = true;
+        }
+
+        /**
+         * controle de encerramento peri. Patrimonial
+         */
+        $clcondataconf = new cl_condataconf;
+        $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+        db_fieldsmemory($resultControle,0);
+
+        if($dtsession <= $c99_datapat){
+            $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+            $sqlerro = true;
+        }
+    }
+
     //VERIFICA CPF E CNPJ ZERADOS OC 7037
     if ($sqlerro==false) {
-        $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$pc21_numcgm}");
+        $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$pc21_numcgm} ");
         db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
         if (strlen($z01_cgccpf) == 14) {
@@ -119,10 +144,20 @@ if (isset($incluir)) {
                 $sqlerro = true;
                 $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
             }
+        }else{
+            if ($z01_cgccpf == '' || $z01_cgccpf == null) {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
         }
 
         if (strlen($z01_cgccpf) == 11) {
             if ($z01_cgccpf == '00000000000') {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
+        }else{
+            if ($z01_cgccpf == '' || $z01_cgccpf == null) {
                 $sqlerro = true;
                 $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
             }
@@ -193,6 +228,11 @@ if (isset($incluir)) {
     db_app::load("estilos.css, grid.style.css");
     ?>
 </head>
+<style>
+    #db_opcao, #exportarxls, #xlsbranco {
+        width: 110px;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>

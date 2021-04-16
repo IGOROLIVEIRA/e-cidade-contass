@@ -199,7 +199,7 @@ $cllicobrasituacao->rotulo->label();
       </fieldset>
     </fieldset>
   </center>
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
   <input name="Nova Situação" type="button" id="Nova Situação" value="Nova Situação" onclick="js_novasituacao();" >
 </form>
@@ -228,7 +228,7 @@ $cllicobrasituacao->rotulo->label();
 
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_licobrasituacao',
-        'func_licobras.php?funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
+        'func_licobras.php?pesquisa=true&funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
         'Pesquisa Obras',true);
     }else{
 
@@ -236,7 +236,7 @@ $cllicobrasituacao->rotulo->label();
 
         js_OpenJanelaIframe('top.corpo',
           'db_iframe_licobrasituacao',
-          'func_licobras.php?pesquisa_chave='+
+          'func_licobras.php?pesquisa=true&pesquisa_chave='+
           document.form1.obr02_seqobra.value+'&funcao_js=parent.js_preencheObra2',
           'Pesquisa',false);
       }else{

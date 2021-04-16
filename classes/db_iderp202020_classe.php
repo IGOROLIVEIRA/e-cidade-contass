@@ -126,24 +126,24 @@ class cl_iderp202020 {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->si181_vlrestituiveisrecolher == null ) {
-       $this->erro_sql = " Campo Valores restituíveis a recolher não informado.";
-       $this->erro_campo = "si181_vlrestituiveisrecolher";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if ($this->si181_vlrestituiveisativofinanceiro == null ) {
-       $this->erro_sql = " Campo Valores restituíveis registrados no Ativ não informado.";
-       $this->erro_campo = "si181_vlrestituiveisativofinanceiro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+//     if ($this->si181_vlrestituiveisrecolher == null ) {
+//       $this->erro_sql = " Campo Valores restituíveis a recolher não informado.";
+//       $this->erro_campo = "si181_vlrestituiveisrecolher";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
+//     if ($this->si181_vlrestituiveisativofinanceiro == null ) {
+//       $this->erro_sql = " Campo Valores restituíveis registrados no Ativ não informado.";
+//       $this->erro_campo = "si181_vlrestituiveisativofinanceiro";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
      if ($this->si181_vlsaldodispcaixa == null ) {
        $this->erro_sql = " Campo Saldo da disponibilidade de caixa não informado.";
        $this->erro_campo = "si181_vlsaldodispcaixa";
@@ -221,11 +221,11 @@ class cl_iderp202020 {
                                ,$this->si181_tiporegistro
                                ,'$this->si181_codorgao'
                                ,$this->si181_codfontrecursos
-                               ,$this->si181_vlcaixabruta
-                               ,$this->si181_vlrspexerciciosanteriores
-                               ,$this->si181_vlrestituiveisrecolher
-                               ,$this->si181_vlrestituiveisativofinanceiro
-                               ,$this->si181_vlsaldodispcaixa
+                               ,'$this->si181_vlcaixabruta'
+                               ,'$this->si181_vlrspexerciciosanteriores'
+                               ,".($this->si181_vlrestituiveisrecolher == "null" || $this->si181_vlrestituiveisrecolher == ""?"null":"'".$this->si181_vlrestituiveisrecolher."'")."
+                               ,".($this->si181_vlrestituiveisativofinanceiro == "null" || $this->si181_vlrestituiveisativofinanceiro == ""?"null":"'".$this->si181_vlrestituiveisativofinanceiro."'")."
+                               ,'$this->si181_vlsaldodispcaixa'
                                ,$this->si181_mes
                                ,$this->si181_instit
                       )";

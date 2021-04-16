@@ -1510,4 +1510,195 @@ class Bem {
     }
     return true;
   }
+    /**
+     * Adiciona uma foto ao cadastro do Bem
+     *
+     * @param string $sCaminhoArquivoFoto Caminho da imagem
+     * @param boolean $lPrincipal foto princpal
+     * @param boolean $lAtiva   foto ativa
+     */
+    public function adicionarFoto($sCaminhoArquivoFoto, $lPrincipal = true, $lAtiva = true) {
+
+        global $conn;
+        $oDaoBemFoto                  = db_utils::getDao("bemfoto");
+
+        if (!file_exists($sCaminhoArquivoFoto)) {
+            throw new Exception("Arquivo da foto não Encontrado.");
+        }
+        if ($lPrincipal) {
+            $sSqlFotos   = $oDaoBemFoto->sql_query_file(null,"*", "t54_sequencial","t54_numbem ={$this->getCodigoBem()}");
+            $rsFotos     = $oDaoBemFoto->sql_record($sSqlFotos);
+            $iTotalFotos = $oDaoBemFoto->numrows;
+            for ($iFoto = 0; $iFoto < $iTotalFotos; $iFoto++) {
+
+                $oDadosFoto       = db_utils::fieldsMemory($rsFotos, $iFoto);
+                $oDaoBemFoto->t54_sequencial = $oDadosFoto->t54_sequencial;
+                $oDaoBemFoto->t54_principal  = "false";
+                $oDaoBemFoto->alterar($oDadosFoto->t54_sequencial);
+                unset($oDadosFoto);
+            }
+        }
+        $rFoto      = fopen($sCaminhoArquivoFoto, "rb");
+        $rDadosFoto = fread($rFoto, filesize($sCaminhoArquivoFoto));
+        fclose($rFoto);
+        $oOidBanco   = pg_lo_create();
+        $oDaoBemFoto->t54_data        = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaoBemFoto->t54_id_usuario  = db_getsession("DB_id_usuario");
+        $oDaoBemFoto->t54_hora        = db_hora();
+        $oDaoBemFoto->t54_fotoativa   = $lAtiva?"true":"false";
+        $oDaoBemFoto->t54_principal   = $lPrincipal?"true":"false";
+        $oDaoBemFoto->t54_arquivofoto = $oOidBanco;
+        $oDaoBemFoto->t54_numbem      = $this->getCodigoBem();
+        $oDaoBemFoto->incluir(null);
+        if ($oDaoBemFoto->erro_status == 0) {
+            throw new Exception($oDaoBemFoto->erro_msg);
+        }
+        $oObjetoBanco = pg_lo_open($conn, $oOidBanco, "w");
+        pg_lo_write($oObjetoBanco, $rDadosFoto);
+        pg_lo_close($oObjetoBanco);
+        return $this;
+    }
+
+    /**
+     * retorna as fotos cadastradas para o bem
+     *
+     * @return array com as fotos
+     */
+    public function getFotos() {
+
+        $aFotos      = array();
+        $oDaoBemFoto = db_utils::getDao("bemfoto");
+        $sSqlFotos   = $oDaoBemFoto->sql_query_file(null,"*", "t54_sequencial","t54_numbem ={$this->getCodigoBem()}");
+        $rsFotos     = $oDaoBemFoto->sql_record($sSqlFotos);
+        $iTotalFotos = $oDaoBemFoto->numrows;
+        for ($iFoto = 0; $iFoto < $iTotalFotos; $iFoto++) {
+
+            $oDadosFoto       = db_utils::fieldsMemory($rsFotos, $iFoto);
+            $oFoto            = new stdClass();
+            $oFoto->codigo    = $oDadosFoto->t54_sequencial;
+            $oFoto->data      = $oDadosFoto->t54_data;
+            $oFoto->hora      = $oDadosFoto->t54_hora;
+            $oFoto->principal = $oDadosFoto->t54_principal == "t"?true:false;
+            $oFoto->ativa     = $oDadosFoto->t54_fotoativa == "t"?true:false;
+            $oFoto->oid       = $oDadosFoto->t54_arquivofoto;
+            $aFotos[]         = $oFoto;
+            unset($oDadosFoto);
+        }
+        return $aFotos;
+    }
+
+    public function excluirFoto($iFoto) {
+
+        global $conn;
+
+        $oDaoBemFoto = db_utils::getDao("bemfoto");
+        $oDadosFoto  = $this->getInfoFoto($iFoto);
+
+        /**
+         * Exclui oid's do banco
+         */
+        pg_lo_unlink($conn,$oDadosFoto->oid);
+        $oDaoBemFoto->excluir($iFoto);
+
+        if ($oDaoBemFoto->erro_status == 0) {
+            throw new Exception($oDaoBemFoto->erro_msg);
+        }
+        return $this;
+    }
+
+    /**
+     * Retorna a Foto principal do BEM
+     */
+    function getFotoPrincipal() {
+
+        $iFoto       = null;
+        $oDaoBemFoto = db_utils::getDao("bemfoto");
+        $sSqlFotos   = $oDaoBemFoto->sql_query_file(null,"*",
+            "t54_sequencial",
+            "t54_numbem = {$this->getCodigoBem()}
+                                               and t54_principal is true
+                                               and t54_fotoativa is true");
+        $rsFotos     = $oDaoBemFoto->sql_record($sSqlFotos);
+        if ($oDaoBemFoto->numrows > 0) {
+            $iFoto = db_utils::fieldsMemory($rsFotos, 0)->t54_arquivofoto;
+        }
+        return $iFoto;
+    }
+
+    /**
+     * Retorna o ID da foto principal do BEM
+     * @return null|integer
+     */
+    function getIdFotoPrincipal() {
+
+        $iIdFoto     = null;
+        $oDaoBemFoto = db_utils::getDao("bemfoto");
+        $sSqlFotos   = $oDaoBemFoto->sql_query_file(null,"*",
+            "t54_sequencial",
+            "t54_numbem = {$this->getCodigoBem()}
+                                               and t54_principal is true
+                                               and t54_fotoativa is true");
+        $rsFotos = $oDaoBemFoto->sql_record($sSqlFotos);
+        if ($oDaoBemFoto->numrows > 0) {
+            $iIdFoto = db_utils::fieldsMemory($rsFotos, 0)->t54_sequencial;
+        }
+
+        return $iIdFoto;
+    }
+
+    /**
+     * Retorna as informacoes da foto
+     *
+     * @param  integer $iFoto Codigo sequencial da foto (t54_sequencial)
+     * @return Objeto com os dados da foto
+     */
+    function getInfoFoto($iFoto) {
+
+        $oFoto       = null;
+        $oDaoBemFoto = db_utils::getDao("bemfoto");
+        $sSqlFotos   = $oDaoBemFoto->sql_query_file(null,"*",
+            "t54_sequencial",
+            "t54_sequencial = {$iFoto}");
+        $rsFotos     = $oDaoBemFoto->sql_record($sSqlFotos);
+        if ($oDaoBemFoto->numrows > 0) {
+
+            $oDadosFoto       = db_utils::fieldsMemory($rsFotos, 0);
+            $oFoto->codigo    = $oDadosFoto->t54_sequencial;
+            $oFoto->data      = $oDadosFoto->t54_data;
+            $oFoto->hora      = $oDadosFoto->t54_hora;
+            $oFoto->principal = $oDadosFoto->t54_principal == "t"?true:false;
+            $oFoto->ativa     = $oDadosFoto->t54_fotoativa == "t"?true:false;
+            $oFoto->oid       = $oDadosFoto->t54_arquivofoto;
+            unset($oDadosFoto);
+        }
+
+        return $oFoto;
+    }
+
+    public function alterarFoto($iFoto, $lPrincipal, $lAtiva) {
+
+        $oDaoBemFoto                  = db_utils::getDao("bemfoto");
+        if ($lPrincipal) {
+
+            $sSqlFotos   = $oDaoBemFoto->sql_query_file(null,"*", "t54_sequencial","t54_numbem ={$this->getCodigoBem()}");
+            $rsFotos     = $oDaoBemFoto->sql_record($sSqlFotos);
+            $iTotalFotos = $oDaoBemFoto->numrows;
+            for ($i = 0; $i < $iTotalFotos; $i++) {
+
+                $oDadosFoto       = db_utils::fieldsMemory($rsFotos, $i);
+                $oDaoBemFoto->t54_sequencial = $oDadosFoto->t54_sequencial;
+                $oDaoBemFoto->t54_principal  = "false";
+                $oDaoBemFoto->alterar($oDadosFoto->t54_sequencial);
+                unset($oDadosFoto);
+            }
+        }
+        $oDaoBemFoto->t54_fotoativa   = $lAtiva?"true":"false";
+        $oDaoBemFoto->t54_principal   = $lPrincipal?"true":"false";
+        $oDaoBemFoto->t54_numbem      = $this->getCodigoBem();
+        $oDaoBemFoto->t54_sequencial  = $iFoto;
+        $oDaoBemFoto->alterar($iFoto);
+        if ($oDaoBemFoto->erro_status == 0) {
+            throw new Exception($oDaoBemFoto->erro_msg);
+        }
+    }
 }

@@ -56,6 +56,11 @@ $clliclancedital   = new cl_liclancedital;
 $db_opcao=1;
 $db_botao=true;
 
+if($incluir && empty($chaves)){
+    $sqlerro = true;
+	db_msgbox("Informe ao menos um item!");
+}
+
 if (!empty($chaves) && isset($chaves)){
   $result_itens=$clpcprocitem->sql_record($clpcprocitem->sql_query_file(null,"*",null,"pc81_codproc=$codprocant"));
 
@@ -228,11 +233,12 @@ if (!empty($chaves) && isset($chaves)){
                * Tipo de julgamento por Lote
                * pega o lote do processo de compras e ja vem sugerido
                */
-              if ($tipojulg == 3) {
-                $clliclicitemlote->l04_descricao = $pc68_nome;
-              }
+              // Comentado por causa da Oc13887
+              // if ($tipojulg == 3) {
+              //   $clliclicitemlote->l04_descricao = $pc68_nome;
+              // }
 
-              if (!empty($clliclicitemlote->l04_descricao)) {
+              if (!empty($clliclicitemlote->l04_descricao) && in_array($tipojulg, array(1, 2))) {
 
                 $clliclicitemlote->incluir(null);
 
@@ -314,7 +320,7 @@ if (!empty($chaves) && isset($chaves)){
       $nroedital = db_utils::fieldsMemory($rsSql, 0)->l20_nroedital;
       $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
 
-      if(in_array(intval($natureza_objeto), array(1,7)) && $licitacao && !$sequencial){
+      if(in_array(intval($natureza_objeto), array(1, 7)) && $licitacao && !$sequencial){
         echo"<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
       }
     }else{
@@ -374,6 +380,7 @@ if (!empty($chaves) && isset($chaves)){
           db_input('codproc'   ,10,'',true,'hidden',3);
           db_input('codprocant',10,'',true,'hidden',3);
           db_input('cods'      ,10,'',true,'hidden',3);
+          db_input('codprocanu',10,'',true,'hidden',3);
 
           if (isset($codproc)&&$codproc!=""){
             $sql = $clpcprocitem->sql_query_pcmater(null,

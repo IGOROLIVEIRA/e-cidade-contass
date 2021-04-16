@@ -737,7 +737,61 @@ class cl_matordemitem {
      }
      return $sql;
   }
-  function sql_query_emiteordem ( $m52_codlanc=null,$campos="*",$ordem=null,$dbwhere=""){ 
+	function sql_query_completo ( $m52_codlanc=null, $campos="*", $ordem=null, $dbwhere=""){
+		$sql = "select ";
+		if($campos != "*" ){
+			$campos_sql = split("#",$campos);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}else{
+			$sql .= $campos;
+		}
+		$sql .= "	from matordemitem ";
+		$sql .= "   	inner join empempitem  on  empempitem.e62_numemp = matordemitem.m52_numemp
+                                          and  empempitem.e62_sequen = matordemitem.m52_sequen";
+		$sql .= "      	inner join matordem  on  matordem.m51_codordem = matordemitem.m52_codordem";
+		$sql .= "      	inner join orcelemento  on  orcelemento.o56_codele = empempitem.e62_codele
+		 					AND orcelemento.o56_anousu = ".db_getsession("DB_anousu");
+		$sql .= "      	inner join pcmater  on  pcmater.pc01_codmater = empempitem.e62_item";
+		$sql .= "      	inner join empempenho  on  empempenho.e60_numemp = empempitem.e62_numemp";
+		$sql .= "      	inner join cgm  on  cgm.z01_numcgm = matordem.m51_numcgm";
+		$sql .= "      	inner join pcsubgrupo on pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo";
+		$sql .= "      	inner join pctipo on pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo ";
+		$sql .= "		left join empempaut ON empempaut.e61_numemp = empempenho.e60_numemp";
+		$sql .= " 		left join empautoriza ON empempaut.e61_autori = empautoriza.e54_autori";
+		$sql .= " 		LEFT JOIN empautitem ON empempaut.e61_autori = empautitem.e55_autori
+		 					AND empempitem.e62_sequen = empautitem.e55_sequen";
+		$sql .= " 		LEFT JOIN empautitempcprocitem pcprocitemaut ON pcprocitemaut.e73_autori = empautitem.e55_autori
+		 					AND pcprocitemaut.e73_sequen = empautitem.e55_sequen";
+		$sql .= " 		LEFT JOIN pcprocitem ON pcprocitem.pc81_codprocitem = pcprocitemaut.e73_pcprocitem";
+		$sql .= " 		LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
+		$sql .= " 		LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo";
+		$sql .= " 		LEFT JOIN matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid";
+
+		$sql2 = "";
+		if($dbwhere==""){
+			if($m52_codlanc!=null ){
+				$sql2 .= " where matordemitem.m52_codlanc = $m52_codlanc ";
+			}
+		}else if($dbwhere != ""){
+			$sql2 = " where $dbwhere";
+		}
+		$sql .= $sql2;
+		if($ordem != null ){
+			$sql .= " order by ";
+			$campos_sql = split("#",$ordem);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}
+		return $sql;
+	}
+  function sql_query_emiteordem ( $m52_codlanc=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);

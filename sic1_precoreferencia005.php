@@ -92,6 +92,7 @@ echo "Preço de Referência \n";
 echo "Processo de Compra: $codigo_preco \n";
 echo "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao))) ." \n";
 
+echo "SEQ;";
 echo "ITEM;";
 echo "DESCRICAO DO ITEM;";
 echo "VALOR UN;";
@@ -107,20 +108,22 @@ $nTotalItens = 0;
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
     //if($quant_casas == 2){
-      $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
+      $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $oResult->pc11_quant;
     //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
     $nTotalItens += $lTotal;
 
     $oDadosDaLinha = new stdClass();
-    $oDadosDaLinha->item = $iCont + 1;
+    $oDadosDaLinha->seq = $iCont + 1;
+    $oDadosDaLinha->item = $oResult->pc01_codmater;
     $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
-    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,$quant_casas, ",", ".");
+    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,$oGet->quant_casas, ",", ".");
     $oDadosDaLinha->quantidade = $oResult->pc11_quant;
     $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
 
+    echo "$oDadosDaLinha->seq;";
     echo "$oDadosDaLinha->item;";
     echo "$oDadosDaLinha->descricao;";
     echo "R$ $oDadosDaLinha->valorUnitario;";

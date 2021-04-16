@@ -47,6 +47,20 @@ function js_emite(){
   jan = window.open('pes2_margemconsignavel002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
+
+function js_emitecsv(){
+  qry = 'base1='+document.form1.base01.value+
+  '&base2='+document.form1.base02.value+
+  '&base3='+document.form1.base03.value+
+  '&perc='+document.form1.perc.value+
+  '&tipo_margem='+document.form1.tipo_margem.value+
+  '&ordem='+document.form1.ordem.value+
+  '&ano='+document.form1.DBtxt23.value+
+  '&mes='+document.form1.DBtxt25.value+
+  '&aMatriculas=' + js_campo_recebe_valores();
+  jan = window.open('pes2_margemconsignavelcsv002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan.moveTo(0,0);
+}
 </script>  
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -195,7 +209,8 @@ function js_emite(){
 	<table>
     <tr>
       <td colspan="2"align = "center"> 
-        <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
+        <input  name="emite1" id="emite1" type="button" value="Processar" onclick="js_emite();" >
+        <input  name="emite2" id="emite2" type="button" value="Imprimir CSV" onclick="js_emitecsv();" >
       </td>
     </tr>
   </table>

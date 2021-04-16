@@ -28,17 +28,17 @@ class cl_ctb202019
   var $si96_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si96_sequencial = int8 = sequencial 
-                 si96_tiporegistro = int8 = Tipo do  registro 
-                 si96_codorgao = varchar(2) = Código do órgão 
-                 si96_codctb = int8 = Código Identificador da Conta Bancária 
-                 si96_codfontrecursos = int8 = Código da fonte de recursos 
-                 si96_vlsaldoinicialfonte = float8 = Valor do Saldo do  Início do Mês 
-                 si96_vlsaldofinalfonte = float8 = Valor do Saldo do  Final do Mês 
-                 si96_mes = int8 = Mês 
-                 si96_instit = int8 = Instituição 
+                 si96_sequencial = int8 = sequencial
+                 si96_tiporegistro = int8 = Tipo do  registro
+                 si96_codorgao = varchar(2) = Código do órgão
+                 si96_codctb = int8 = Código Identificador da Conta Bancária
+                 si96_codfontrecursos = int8 = Código da fonte de recursos
+                 si96_vlsaldoinicialfonte = float8 = Valor do Saldo do  Início do Mês
+                 si96_vlsaldofinalfonte = float8 = Valor do Saldo do  Final do Mês
+                 si96_mes = int8 = Mês
+                 si96_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_ctb202019()
   {
@@ -46,7 +46,7 @@ class cl_ctb202019
     $this->rotulo = new rotulo("ctb202019");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -57,7 +57,7 @@ class cl_ctb202019
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -75,7 +75,7 @@ class cl_ctb202019
       $this->si96_sequencial = ($this->si96_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si96_sequencial"] : $this->si96_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si96_sequencial)
   {
@@ -87,7 +87,7 @@ class cl_ctb202019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si96_codctb == null) {
@@ -109,7 +109,7 @@ class cl_ctb202019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si96_instit == null) {
@@ -119,7 +119,7 @@ class cl_ctb202019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si96_sequencial == "" || $si96_sequencial == null) {
@@ -131,7 +131,7 @@ class cl_ctb202019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si96_sequencial = pg_result($result, 0, 0);
@@ -143,7 +143,7 @@ class cl_ctb202019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si96_sequencial = $si96_sequencial;
@@ -155,30 +155,30 @@ class cl_ctb202019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into ctb202019(
-                                       si96_sequencial 
-                                      ,si96_tiporegistro 
-                                      ,si96_codorgao 
-                                      ,si96_codctb 
-                                      ,si96_codfontrecursos 
-                                      ,si96_vlsaldoinicialfonte 
-                                      ,si96_vlsaldofinalfonte 
-                                      ,si96_mes 
-                                      ,si96_instit 
+                                       si96_sequencial
+                                      ,si96_tiporegistro
+                                      ,si96_codorgao
+                                      ,si96_codctb
+                                      ,si96_codfontrecursos
+                                      ,si96_vlsaldoinicialfonte
+                                      ,si96_vlsaldofinalfonte
+                                      ,si96_mes
+                                      ,si96_instit
                        )
                 values (
-                                $this->si96_sequencial 
-                               ,$this->si96_tiporegistro 
-                               ,'$this->si96_codorgao' 
-                               ,$this->si96_codctb 
-                               ,$this->si96_codfontrecursos 
-                               ,$this->si96_vlsaldoinicialfonte 
-                               ,$this->si96_vlsaldofinalfonte 
-                               ,$this->si96_mes 
-                               ,$this->si96_instit 
+                                $this->si96_sequencial
+                               ,$this->si96_tiporegistro
+                               ,'$this->si96_codorgao'
+                               ,$this->si96_codctb
+                               ,$this->si96_codfontrecursos
+                               ,$this->si96_vlsaldoinicialfonte
+                               ,$this->si96_vlsaldofinalfonte
+                               ,$this->si96_mes
+                               ,$this->si96_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -196,7 +196,7 @@ class cl_ctb202019
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -222,10 +222,10 @@ class cl_ctb202019
 //      $resac = db_query("insert into db_acount values($acount,2010325,2010568,'','" . AddSlashes(pg_result($resaco, 0, 'si96_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
 //      $resac = db_query("insert into db_acount values($acount,2010325,2011608,'','" . AddSlashes(pg_result($resaco, 0, 'si96_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
 //    }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si96_sequencial = null)
   {
@@ -249,7 +249,7 @@ class cl_ctb202019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -295,7 +295,7 @@ class cl_ctb202019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -309,7 +309,7 @@ class cl_ctb202019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -363,7 +363,7 @@ class cl_ctb202019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -374,7 +374,7 @@ class cl_ctb202019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -384,12 +384,12 @@ class cl_ctb202019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si96_sequencial = null, $dbwhere = null)
   {
@@ -438,7 +438,7 @@ class cl_ctb202019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -449,7 +449,7 @@ class cl_ctb202019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -459,12 +459,12 @@ class cl_ctb202019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -477,7 +477,7 @@ class cl_ctb202019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -487,13 +487,13 @@ class cl_ctb202019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
-      return false;
+
+      //return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si96_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -529,10 +529,10 @@ class cl_ctb202019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si96_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -568,7 +568,7 @@ class cl_ctb202019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

@@ -170,7 +170,7 @@ function imp_gradeefetividade($cparam,$matric,$datacert,$matriz_tot_assent=null,
    }
 
    global $assenta,$Iassenta;
-   if( db_selectmax("assenta",$csql." order by h16_dtconc, h16_assent ")){
+   if( db_selectmax("assenta",$csql." order by h16_assent,h16_dtconc ")){
 
      $Iassenta = 0;
      if( $cparam == 2 ){

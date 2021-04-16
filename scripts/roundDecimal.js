@@ -44,7 +44,7 @@ function js_roundDecimal(x,qtdCasasDecimais) {
 
     render = String(Math.floor(x)+temp)+"."+render;
 
-    console.log("js_roundDecimal saida: "+render);
+
 
     return parseFloat(render);
 }

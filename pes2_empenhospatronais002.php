@@ -24,9 +24,15 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
-
+require("libs/db_stdlib.php");
+require("libs/db_conecta.php");
+include("libs/db_sessoes.php");
+include("libs/db_usuariosonline.php");
+include("libs/db_utils.php");
+include("dbforms/db_funcoes.php");
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
+include("classes/db_relempenhospatronais_classe.php");
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('r06_codigo');
@@ -34,9 +40,46 @@ $clrotulo->label('r06_descr');
 $clrotulo->label('r06_elemen');
 $clrotulo->label('r06_pd');
 
+const SALARIO_FAMILIA = "salarioFamilia";
+const SALARIO_MATERNIDADE = "salarioMaternidade";
+
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //db_postmemory($HTTP_SERVER_VARS,2);
 
+db_inicio_transacao();
+$clrelempenhospatronais = new cl_relempenhospatronais;
+$clrelempenhospatronais->excluir(null,"rh170_tipo = '".SALARIO_FAMILIA."' AND rh170_usuario = ".db_getsession("DB_id_usuario")." AND rh170_instit = ".db_getsession("DB_instit"));
+$clrelempenhospatronais->excluir(null,"rh170_tipo = '".SALARIO_MATERNIDADE."' AND rh170_usuario = ".db_getsession("DB_id_usuario")." AND rh170_instit = ".db_getsession("DB_instit"));
+
+$arrSalarioFamilia = explode(",", $salarioFamilia);
+foreach($arrSalarioFamilia as $rubrica) {
+  $clrelempenhospatronais->rh170_tipo = SALARIO_FAMILIA;
+  $clrelempenhospatronais->rh170_rubric = $rubrica;
+  $clrelempenhospatronais->rh170_instit = db_getsession("DB_instit");
+  $clrelempenhospatronais->rh170_usuario = db_getsession("DB_id_usuario");
+  $clrelempenhospatronais->incluir();
+  if($clrelempenhospatronais->erro_status == 0){
+    db_fim_transacao(true);
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$clrelempenhospatronais->erro_banco);
+  }
+}
+
+$arrSalarioMaternidade = explode(",", $salarioMaternidade);
+foreach($arrSalarioMaternidade as $rubrica) {
+  $clrelempenhospatronais->rh170_tipo = SALARIO_MATERNIDADE;
+  $clrelempenhospatronais->rh170_rubric = $rubrica;
+  $clrelempenhospatronais->rh170_instit = db_getsession("DB_instit");
+  $clrelempenhospatronais->rh170_usuario = db_getsession("DB_id_usuario");
+  $clrelempenhospatronais->incluir();
+  if($clrelempenhospatronais->erro_status == 0){
+    db_fim_transacao(true);
+    db_redireciona('db_erros.php?fechar=true&db_erro='.$clrelempenhospatronais->erro_banco);
+  }
+}
+db_fim_transacao(false);
+
+$salarioFamilia = str_replace(',',"','","'$salarioFamilia'");
+$salarioMaternidade = str_replace(',',"','","'$salarioMaternidade'");
 
 $sql_prev1 = "select distinct r33_ppatro
         from inssirf 
@@ -47,44 +90,16 @@ $sql_prev1 = "select distinct r33_ppatro
           and r33_instit = ".db_getsession('DB_instit') ;
 
 $res_prev1 = pg_query($sql_prev1);
-$rub_ded1 = '';
-$rub_virg = '';
 if(pg_numrows($res_prev1) > 1){
    db_redireciona('db_erros.php?fechar=true&db_erro=As previdência escolhidas possuem percentuais patronais diferentes. Verifique!');
 }elseif(pg_numrows($res_prev1) > 0){
   db_fieldsmemory($res_prev1,0);
   $rub_base    = 'R992';
-  $rub_ded     = '';
-  if(isset($R918) || isset($R919) || isset($R920) ){
-    if(isset($R918)){
-      $rub_ded1 .= $rub_virg." 'R918'";
-      $rub_virg = ', ';
-    }
-    if(isset($R919)){
-      $rub_ded1 .= $rub_virg." 'R919'";
-      $rub_virg = ', ';
-    }
-    if(isset($R920)){
-      $rub_ded1 .= $rub_virg." 'R920'";
-    }
-    $rub_ded     = ",".$rub_ded1;
-  }
 }else{
   $r33_ppatro = 8;
   $rub_base   = 'R991';
   $rub_ded    = '';
 }
-
-
-
-
-
-
-
-
-
-
-
 
 $sql_prev = "select distinct (cast(r33_codtab as integer)- 2) as r33_codtab,
               case when r33_codtab = 2 then 'FGTS' else r33_nome end as r33_nome
@@ -127,7 +142,8 @@ if($salario == 's'){
          rh25_recurso,
          o15_descr,
          inss,
-         ded
+         salario_familia,
+         salario_maternidade
   from 
   (
   select 
@@ -140,7 +156,8 @@ if($salario == 's'){
          rh25_recurso,
          o15_descr,
          round(sum(inss),2) as inss, 
-         round(sum(ded),2) as ded 
+         round(sum(salario_familia),2) as salario_familia, 
+         round(sum(salario_maternidade),2) as salario_maternidade
 
   from 
 
@@ -150,8 +167,9 @@ if($salario == 's'){
          rh02_lota,
          rh03_padrao as r01_padrao,
          rh02_instit,
-         case when r14_rubric = '$rub_base' then r14_valor else 0 end as inss
-         ".($rub_base == 'R991' || $rub_ded1== ''?',0 as ded':",case when r14_rubric in ($rub_ded1) then r14_valor else 0 end as ded")."
+         case when r14_rubric = '$rub_base' then r14_valor else 0 end as inss,
+         case when r14_rubric in ({$salarioFamilia}) then r14_valor else 0 end as salario_familia,
+         case when r14_rubric in ({$salarioMaternidade}) then r14_valor else 0 end as salario_maternidade
   from gerfsal 
        inner join rhpessoalmov on rh02_anousu = r14_anousu 
                               and rh02_mesusu = r14_mesusu 
@@ -163,7 +181,7 @@ if($salario == 's'){
   where r14_anousu = $ano 
     and r14_mesusu = $mes
     and r14_instit = ".db_getsession("DB_instit")."
-    and r14_rubric in ('$rub_base'$rub_ded)
+    and r14_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade})
     ".($tab_prev == 0?'':" and rh02_tbprev in ($tab_prev)")."
 
   union all
@@ -173,8 +191,9 @@ if($salario == 's'){
          rh02_lota,
          rh03_padrao as r01_padrao,
          rh02_instit,
-         case when r48_rubric = '$rub_base' then r48_valor else 0 end as inss
-         ".($rub_base == 'R991' || $rub_ded1== ''?',0 as ded':",case when r48_rubric in ($rub_ded1) then r48_valor else 0 end as ded")."
+         case when r48_rubric = '$rub_base' then r48_valor else 0 end as inss,
+         case when r48_rubric in ({$salarioFamilia}) then r48_valor else 0 end as salario_familia,
+         case when r48_rubric in ({$salarioMaternidade}) then r48_valor else 0 end as salario_maternidade
   from gerfcom
        inner join rhpessoalmov on rh02_anousu = r48_anousu 
                               and rh02_mesusu = r48_mesusu 
@@ -186,7 +205,7 @@ if($salario == 's'){
   where r48_anousu = $ano
     and r48_mesusu = $mes
     and r48_instit = ".db_getsession("DB_instit")."
-    and r48_rubric in ('$rub_base'$rub_ded)
+    and r48_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade})
     ".($tab_prev == 0?'':" and rh02_tbprev in ($tab_prev)")."
                    
   union all
@@ -196,8 +215,9 @@ if($salario == 's'){
          rh02_lota,
          rh03_padrao as r01_padrao,
          rh02_instit,
-         case when r20_rubric = '$rub_base' then r20_valor else 0 end as inss
-         ".($rub_base == 'R991' || $rub_ded1== ''?',0 as ded':",case when r20_rubric in ($rub_ded1) then r20_valor else 0 end as ded")."
+         case when r20_rubric = '$rub_base' then r20_valor else 0 end as inss,
+         case when r20_rubric in ({$salarioFamilia}) then r20_valor else 0 end as salario_familia,
+         case when r20_rubric in ({$salarioMaternidade}) then r20_valor else 0 end as salario_maternidade
   from gerfres
        inner join rhpessoalmov on rh02_anousu = r20_anousu 
                               and rh02_mesusu = r20_mesusu 
@@ -209,7 +229,7 @@ if($salario == 's'){
   where r20_anousu = $ano
     and r20_mesusu = $mes
     and r20_instit = ".db_getsession("DB_instit")."
-    and r20_rubric in ('$rub_base'$rub_ded)
+    and r20_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade})
     ".($tab_prev == 0?'':" and rh02_tbprev in ($tab_prev)")."
                    
   ) as x
@@ -260,7 +280,8 @@ if($salario == 's'){
          rh25_recurso,
          o15_descr,
          inss,
-         ded
+         salario_familia,
+         salario_maternidade
   from 
   (
   select 
@@ -273,7 +294,8 @@ if($salario == 's'){
          rh25_recurso,
          o15_descr,
          round(sum(inss),2) as inss, 
-         round(sum(ded),2) as ded 
+         round(sum(salario_familia),2) as salario_familia, 
+         round(sum(salario_maternidade),2) as salario_maternidade 
 
   from 
 
@@ -283,8 +305,9 @@ if($salario == 's'){
          rh02_lota,
          rh03_padrao as r01_padrao,
          rh02_instit,
-         case when r35_rubric = '$rub_base' then r35_valor else 0 end as inss
-         ".($rub_base == 'R991' || $rub_ded1== ''?',0 as ded':",case when r35_rubric in ($rub_ded1) then r35_valor else 0 end as ded")."
+         case when r35_rubric = '$rub_base' then r35_valor else 0 end as inss,
+         case when r35_rubric in ({$salarioFamilia}) then r35_valor else 0 end as salario_familia,
+         case when r35_rubric in ({$salarioMaternidade}) then r35_valor else 0 end as salario_maternidade
   from gerfs13 
        inner join rhpessoalmov on rh02_anousu = r35_anousu 
                               and rh02_mesusu = r35_mesusu 
@@ -296,7 +319,7 @@ if($salario == 's'){
   where r35_anousu = $ano 
     and r35_mesusu = $mes
     and r35_instit = ".db_getsession("DB_instit")."
-    and r35_rubric in ('$rub_base'$rub_ded)
+    and r35_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade})
     ".($tab_prev == 0?'':" and rh02_tbprev in ($tab_prev)")."
   ) as x
   left join rhlota on rh02_lota = r70_codigo
@@ -373,42 +396,48 @@ $pat40        = 0;
 $pat          = 0;
 $teste        = 0;
 $extra        = 0;
-
+$totalSalarioFamilia = 0;
+$totalSalarioMaternidade = 0;
+$width_perc_extra = 0;
+if(trim($perc_extra) != '' ){
+  $width_perc_extra = 3;
+}
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage();
       $pdf->setfont('arial','B',7);
-      $pdf->cell(95,$alt,'DESCRIÇÃO',1,0,"C",0);
-      $pdf->cell(18,$alt,'BASE',1,0,"R",0);
+      $pdf->cell(95-$width_perc_extra,$alt,'DESCRIÇÃO',1,0,"C",0);
+      $pdf->cell(18-$width_perc_extra,$alt,'BASE',1,0,"R",0);
       if($tab_prev == 0){
         $pdf->cell(18,$alt,"SEG. $r33_ppatro%",1,0,"R",0);
         $pdf->cell(18,$alt,'TOTAL',1,1,"R",0);
       }else{
-        $pdf->cell(18,$alt,'PATRONAL',1,0,"R",0);
+        $pdf->cell(18-$width_perc_extra,$alt,'PATRONAL',1,0,"R",0);
         if(trim($perc_extra) != '' ){
-          $pdf->cell(18,$alt,"EXTRA $perc_extra %",1,0,"R",0);
+          $pdf->cell(18,$alt,"EXTRA {$perc_extra} %",1,0,"R",0);
         }
-        $pdf->cell(18,$alt,'DEDUÇÕES',1,0,"R",0);
-        $pdf->cell(18,$alt,'TOTAL',1,1,"R",0);
+        $pdf->cell(18-$width_perc_extra,$alt,'S/FAMÍLIA',1,0,"R",0);
+        $pdf->cell(22-$width_perc_extra,$alt,'S/MATERN.',1,0,"R",0);
+        $pdf->cell(18-$width_perc_extra,$alt,'TOTAL',1,1,"R",0);
       }
       $troca = 0;
    }
    $pdf->setfont('arial','B',7);
    if($orgao != $rh26_orgao){
-     $pdf->cell(18,$alt,db_formatar($rh26_orgao,'orgao'),0,0,"C",1);
+     $pdf->cell(15,$alt,db_formatar($rh26_orgao,'orgao'),0,0,"C",1);
      $pdf->cell(0,$alt,$o40_descr,0,1,"L",1);
      $orgao = $rh26_orgao;
    }
    if($unidade != $rh26_orgao.$rh26_unidade){
      $pdf->cell(5,$alt,'',0,0,"C",1);
-     $pdf->cell(18,$alt,db_formatar($rh26_orgao,'orgao').db_formatar($rh26_unidade,'orgao'),0,0,"C",1);
+     $pdf->cell(14,$alt,db_formatar($rh26_orgao,'orgao').db_formatar($rh26_unidade,'orgao'),0,0,"C",1);
      $pdf->cell(0,$alt,$o41_descr,0,1,"L",1);
      $unidade = $rh26_orgao.$rh26_unidade;
    }
    if($proj != $rh25_projativ){
      $pdf->cell(5,$alt,'',0,0,"C",1);
-     $pdf->cell(18,$alt,$rh25_projativ,0,0,"C",1);
+     $pdf->cell(14,$alt,$rh25_projativ,0,0,"C",1);
      $pdf->cell(0,$alt,$o55_descr,0,1,"L",1);
      $proj= $rh25_projativ;
    }
@@ -418,19 +447,27 @@ for($x = 0; $x < pg_numrows($result);$x++){
 //     }else{
        $pat   = round($inss / 100 * $r33_ppatro,2);
 //     }
-     $pdf->cell(10,$alt,'',0,0,"C",0);
-     $pdf->cell(15,$alt,$rh25_recurso,0,0,"C",0);
-     $pdf->cell(70,$alt,$o15_descr,0,0,"L",0);
-     $pdf->cell(18,$alt,db_formatar($inss,'f'),0,0,"R",0);
-     $pdf->cell(18,$alt,db_formatar($pat,'f'),0,0,"R",0);
+     $aDescRecurso = quebrarTexto($o15_descr, 60);
+     
+     $altNovo = $alt*count($aDescRecurso);
+     $pdf->cell(10,$altNovo,'',0,0,"C",0);
+     $pdf->cell(15-$width_perc_extra,$altNovo,$rh25_recurso,0,0,"C",0);
+     if (count($aDescRecurso) > 1) {
+       multiCell($pdf, $aDescRecurso, $alt, $altNovo, 70);
+     } else {
+       $pdf->cell(70,$altNovo,$o15_descr,0,0,"L",0);
+     }
+     $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($inss,'f'),0,0,"R",0);
+     $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($pat,'f'),0,0,"R",0);
      if(trim($perc_extra) != '' ){
        $extra = round($inss / 100 * $perc_extra,2);
-       $pdf->cell(18,$alt,db_formatar($extra,'f'),0,0,"R",0);
+       $pdf->cell(18,$altNovo,trim(db_formatar($extra,'f')),0,0,"R",0);
      }
      if($tab_prev != 0){
-       $pdf->cell(18,$alt,db_formatar($ded,'f'),0,0,"R",0);
+       $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($salario_familia,'f'),0,0,"R",0);
+       $pdf->cell(22-$width_perc_extra,$altNovo,db_formatar($salario_maternidade,'f'),0,0,"R",0);
      }
-     $pdf->cell(18,$alt,db_formatar(($pat + $extra - $ded),'f'),0,1,"R",0);
+     $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar(($pat + $extra - $salario_familia - $salario_maternidade),'f'),0,1,"R",0);
 //   if(db_formatar($rh26_orgao,'orgao').db_formatar($rh26_unidade,'orgao') == '0203'){ 
 //     $val_pat      += (($inss+$sub)/100)*20;
 //   }else{
@@ -438,22 +475,58 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $val_extra    += round((($inss)/100)*$perc_extra,2);
 //   }
    $val_fgts     += $inss;
-   $val_ded      += $ded;
+   $val_ded      += ($salario_familia+$salario_maternidade);
+   $totalSalarioFamilia += $salario_familia;
+   $totalSalarioMaternidade += $salario_maternidade;
 }
 
 //echo $teste;exit;
    $pdf->setfont('arial','B',7);
-   $pdf->cell(95,$alt,'TOTAL ',0,0,"C",0);
-   $pdf->cell(18,$alt,db_formatar($val_fgts,'f'),0,0,"R",0);
-   $pdf->cell(18,$alt,db_formatar($val_pat,'f'),0,0,"R",0);
+   $pdf->cell(95-$width_perc_extra,$alt,'TOTAL ',0,0,"C",0);
+   $pdf->cell(18-$width_perc_extra,$alt,db_formatar($val_fgts,'f'),0,0,"R",0);
+   $pdf->cell(18-$width_perc_extra,$alt,db_formatar($val_pat,'f'),0,0,"R",0);
    if(trim($perc_extra) != '' ){
      $pdf->cell(18,$alt,db_formatar($val_extra,'f'),0,0,"R",0);
    }
    if($tab_prev != 0){
-     $pdf->cell(18,$alt,db_formatar($val_ded,'f'),0,0,"R",0);
+     $pdf->cell(18-$width_perc_extra,$alt,db_formatar($totalSalarioFamilia,'f'),0,0,"R",0);
+     $pdf->cell(22-$width_perc_extra,$alt,db_formatar($totalSalarioMaternidade,'f'),0,0,"R",0);
    }
-   $pdf->cell(18,$alt,db_formatar($val_pat + $val_extra - $val_ded,'f'),0,1,"R",0);
+   $pdf->cell(18-$width_perc_extra,$alt,db_formatar($val_pat + $val_extra - $val_ded,'f'),0,1,"R",0);
 
 $pdf->Output();
+
+function quebrarTexto($texto,$tamanho){
+
+  $aTexto = explode(" ", $texto);
+  $string_atual = "";
+  foreach ($aTexto as $word) {
+    $string_ant = $string_atual;
+    $string_atual .= " ".$word;
+    if (strlen($string_atual) > $tamanho) {
+      $aTextoNovo[] = $string_ant;
+      $string_ant   = "";
+      $string_atual = $word;
+    }
+  }
+  $aTextoNovo[] = $string_atual;
+  return $aTextoNovo;
+
+}
+
+function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo) {
+    $pos_x = $oPdf->x;
+    $pos_y = $oPdf->y;
+    $oPdf->cell($iTamCampo, $iTam, "", 0, 0, 'L');
+    $oPdf->x = $pos_x;
+    $oPdf->y = $pos_y;
+    foreach ($aTexto as $sProcedimento) {
+      $sProcedimento=ltrim($sProcedimento);
+      $oPdf->cell($iTamCampo, $iTamFixo, $sProcedimento, 0, 1, 'L');
+      $oPdf->x=$pos_x;
+    }
+    $oPdf->x = $pos_x+$iTamCampo;
+    $oPdf->y = $pos_y;
+}
    
 ?>

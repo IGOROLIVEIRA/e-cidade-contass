@@ -18,7 +18,7 @@ class GerarIDE extends GerarAM
     $this->sArquivo = "IDE";
     $this->abreArquivo();
 
-    $sSql = "select * from idedcasp2019 where si200_anousu = {$this->iAnousu} and si200_instit = {$this->iCodInstit}";
+    $sSql = "select * from idedcasp2020 where si200_anousu = {$this->iAnousu} and si200_instit = {$this->iCodInstit}";
     $rsIDE = db_query($sSql);
 
     if (pg_num_rows($rsIDE) == 0) {

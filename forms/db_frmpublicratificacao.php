@@ -2,6 +2,15 @@
 //MODULO: licitacao
 $clliclicita->rotulo->label();
 
+$sSqlTipo = 'SELECT l03_pctipocompratribunal,
+                    l20_tipojulg
+                        FROM liclicita
+                        JOIN cflicita ON l20_codtipocom = l03_codigo WHERE l20_codigo = '.$l20_codigo;
+
+$rsTipo = db_query($sSqlTipo);
+$l20_tipoprocesso = db_utils::fieldsMemory($rsTipo, 0)->l03_pctipocompratribunal;
+$l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
+
 ?>
 <form name="form1" method="post" action="" style="margin-left: 20%;margin-top: 2%;" onsubmit="return js_IHomologacao(this);">
     <fieldset style="width: 62.5%">
@@ -65,7 +74,7 @@ $clliclicita->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
+                    db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff",50);
                     ?>
                 </td>
             </tr>
@@ -97,15 +106,28 @@ $clliclicita->rotulo->label();
 
     if(!empty($l20_codigo)) {
 
-        $sCampos  = "DISTINCT pc81_codprocitem,pc11_seq,pc11_codigo,pc11_quant,pc11_vlrun,m61_descr,pc01_codmater,pc01_descrmater,pc11_resum";
+        $sCampos  = "DISTINCT pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, m61_descr, pc01_codmater, pc01_descrmater, pc11_resum";
+
+        $joinPrecoReferencia = false;
+
+        if(in_array($l03_pctipocompratribunal, array(102, 103)) || in_array($l20_tipoprocesso, array(102, 103))){
+            $sCampos .= ", si02_vlprecoreferencia";
+            $valorUnitario = 'si02_vlprecoreferencia';
+            $joinPrecoReferencia = true;
+        }elseif($l20_tipojulg == 3 && in_array($l03_pctipocompratribunal, array(100, 101)) || in_array($l20_tipoprocesso, array(100, 101))){
+            $sCampos .= ",'-' as pc23_vlrun";
+            $valorUnitario = '';
+		}else{
+            $valorUnitario = 'pc11_vlrun';
+        }
         $sOrdem   = "pc11_seq";
         $sWhere   = "liclicitem.l21_codliclicita = {$l20_codigo} ";
-//        var_dump($l20_tipoprocesso);
+
         if($l20_tipoprocesso != "103" && $l20_tipoprocesso != "102"){
             $sWhere  .= "and pc24_pontuacao = 1";
         }
-        $sSqlItemLicitacao = $clhomologacaoadjudica->sql_query_itens(null, $sCampos, $sOrdem, $sWhere);
-//        die($sSqlItemLicitacao);
+
+        $sSqlItemLicitacao = $clhomologacaoadjudica->sql_query_itens(null, $sCampos, $sOrdem, $sWhere, $joinPrecoReferencia);
         $sResultitens = $clhomologacaoadjudica->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clhomologacaoadjudica->numrows;
@@ -120,7 +142,9 @@ $clliclicita->rotulo->label();
             <td class="table_header" style="width: 50px">Item</td>
             <td class="table_header" style="width: 235px">Descrição Item</td>
             <td class="table_header" style="width: 50px">Unidade</td>
-            <td class="table_header" style="width: 72px">Valor Unitário</td>
+            <? if($valorUnitario != ''): ?>
+                <td class="table_header" style="width: 72px">Valor Unitário</td>
+            <? endif; ?>
             <td class="table_header" style="width: 125px">Quantidade Licitada</td>
         </tr>
     </table>
@@ -133,36 +157,38 @@ $clliclicita->rotulo->label();
 
                     ?>
                     <table class="DBgrid">
-                        <th class="table_header" style="width: 32px">
+                        <th class="table_header" style="width: <?= !$valorUnitario ? '40px': '32px'?>">
                             <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
                         </th>
 
-                        <td class="linhagrid" style="width: 44px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '51px' : '44px'?>">
                             <?= $aItem->pc11_seq ?>
                             <input type="hidden" name="" value="<?= $aItem->pc11_seq ?>" id="<?= $iItem?>">
                         </td>
 
-                        <td class="linhagrid" style="width: 52px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '64px' : '52px'?>">
                             <?= $aItem->pc81_codprocitem ?>
                             <input type="hidden" name="" value="<?= $aItem->pc81_codprocitem ?>" id="<?= $iItem?>">
                         </td>
 
-                        <td class="linhagrid" style="width: 260px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '298px' : '260px'?>">
                             <?= $aItem->pc01_descrmater ?>
                             <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem?>">
                         </td>
 
-                        <td class="linhagrid" style="width: 55px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '64px' : '55px'?>">
                             <?= $aItem->m61_descr ?>
                             <input type="hidden" name="" value="<?= $aItem->m61_descr ?>" id="<?= $iItem?>">
                         </td>
 
+                        <?php if($valorUnitario != ''): ?>
                         <td class="linhagrid" style="width: 80px">
-                            <?= $aItem->pc11_vlrun ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc11_vlrun ?>" id="<?= $iItem?>">
+                            <?= $aItem->$valorUnitario ?>
+                            <input type="hidden" name="" value="<?= $aItem->$valorUnitario ?>" id="<?= $iItem?>">
                         </td>
+                        <? endif;?>
 
-                        <td class="linhagrid" style="width: 120px">
+                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '145px' : '120px'?>">
                             <?= $aItem->pc11_quant ?>
                             <input type="hidden" name="" value="<?= $aItem->pc11_quant ?>" id="<?= $iItem?>">
                         </td>
@@ -190,23 +216,37 @@ $clliclicita->rotulo->label();
 </form>
 
 <script>
+
+    db_opcao = <?= $db_opcao?>;
+
     js_verificatipoproc();
 
     function js_pesquisa(ratificacao=false){
         if(ratificacao) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao',
+                'func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
         }else {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao',
+                'func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
         }
     }
 
-    function js_preenchepesquisa(chave,tipocompratribunal){
+    function js_preenchepesquisa(chave){
+        js_findTipos(chave);
+    }
+
+    function js_retornoConsulta(chave, licitacao){
         db_iframe_publicratificacao.hide();
-        let db_opcao = <?= $db_opcao?>;
+
         if(db_opcao === 33 || db_opcao === 3){
-            window.location.href = "lic1_publicratificacao003.php?chavepesquisa="+chave+"&l20_tipoprocesso="+tipocompratribunal;
+            window.location.href = "lic1_publicratificacao003.php?chavepesquisa="+chave+"&l20_tipoprocesso="+
+                licitacao.l03_pctipocompratribunal;
         }else if(db_opcao === 22 || db_opcao === 2){
-            window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+chave+"&l20_tipoprocesso="+tipocompratribunal;
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+chave+"&l20_tipoprocesso="+
+                licitacao.l03_pctipocompratribunal+"&l20_objeto="+licitacao.l20_objeto;
+        }else if(db_opcao == 1){
+            window.location.href = "lic1_publicratificacao001.php?l20_codigo="+chave+"&l20_tipoprocesso="+
+                licitacao.l03_pctipocompratribunal+"&l20_objeto="+licitacao.l20_objeto;
         }
     }
 
@@ -246,22 +286,17 @@ $clliclicita->rotulo->label();
      *
      */
     function js_pesquisaLicitacao(mostra){
-        let opcao = <?=$db_opcao?>;
         if(mostra==true){
-            if(opcao == 1){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
-            }else{
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
-            }
+            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+(db_opcao == 1 ? '&situacao=1&ratificacao=false' : '&situacao=10&ratificacao=true')+
+            '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
         }else{
             if(document.form1.l20_codigo.value != ''){
-                if(opcao == 1){
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
-                }else{
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
-                }
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+
+                    (db_opcao == 1 ? '&situacao=1' : '&situacao=10')+
+                    '&enviada=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
             }else{
                 document.form1.l20_codigo.value = '';
+                js_limpaCampos();
             }
         }
     }
@@ -271,13 +306,25 @@ $clliclicita->rotulo->label();
             document.form1.l20_codigo.focus();
             document.form1.l20_codigo.value = '';
         }else{
-            window.location.href = "lic1_publicratificacao001.php?l20_codigo="+document.form1.l20_codigo.value+"&l20_objeto="+chave+"&l20_tipoprocesso="+chave2;
+            if(db_opcao == 1){
+                window.location.href = "lic1_publicratificacao001.php?l20_codigo="+
+                    document.form1.l20_codigo.value+"&l20_objeto="+chave+"&l20_tipoprocesso="+chave2;
+            }else{
+                window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+
+                    document.form1.l20_codigo.value+"&l20_tipoprocesso="+chave2;
+            }
         }
 
     }
 
     function js_mostraliclicita1(chave1,chave2,chave3){
-        window.location.href = "lic1_publicratificacao001.php?l20_codigo="+chave1+"&l20_objeto="+chave2+"&l20_tipoprocesso="+chave3;
+        // let caminho = db_opcao == 1 ? "lic1_publicratificacao001.php?" : "lic1_publicratificacao002.php?";
+        if(db_opcao == 1){
+            let caminho = "lic1_publicratificacao001.php?";
+            window.location.href = caminho +"l20_codigo="+chave1+"&l20_objeto="+chave2+"&l20_tipoprocesso="+chave3;
+        }else{
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+chave1+"&l20_tipoprocesso="+chave3;
+        }
         db_iframe_liclicita.hide();
     }
 
@@ -342,6 +389,11 @@ $clliclicita->rotulo->label();
 
     function js_IHomologacao() {
         let itens = getItensMarcados();
+
+        if (document.getElementById('l20_dtpubratificacao').value == '') {
+            alert('Campo Data Publicação Termo de Ratificação não informado');
+            return false;
+        }
 
         if (itens.length < 1) {
             alert('Selecione pelo menos um item da lista.');
@@ -409,6 +461,11 @@ $clliclicita->rotulo->label();
             return false;
         }
 
+        if(document.getElementById('l20_dtpubratificacao').value == ''){
+            alert('Campo Data Publicação Termo de Ratificação não informado.');
+            return false;
+        }
+
         var itensEnviar = [];
 
         try {
@@ -450,8 +507,9 @@ $clliclicita->rotulo->label();
 
     function oRetornoAjax(res) {
         var response = JSON.parse(res.responseText);
-        if (response.status != 1) {
-            alert(urlDecode(response.message));
+
+        if (response.status == 2) {
+            alert(response.message.urlDecode());
         } else if (response.erro == false) {
             alert('Salvo com sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
@@ -510,10 +568,17 @@ $clliclicita->rotulo->label();
      *
      */
     function js_EHomologacao() {
+
+        if(document.getElementById('l20_dtpubratificacao').value == ''){
+            alert('Campo Data Publicação Termo de Ratificação não informado.');
+            return false;
+        }
+
         try {
             excluirhomologacao({
                 exec: 'excluirHomo',
                 licitacao: document.getElementById('l20_codigo').value,
+                ratificacao: document.form1.l20_dtpubratificacao.value
             }, oretornoexclusao);
         } catch(e) {
             alert(e.toString());
@@ -535,11 +600,38 @@ $clliclicita->rotulo->label();
 
     function oretornoexclusao(res) {
         var oRetornoitens = JSON.parse(res.responseText);
-        if (oRetornoitens.status != 1) {
-            alert(oRetornoitens);
+
+        if (oRetornoitens.status == 2) {
+            alert(oRetornoitens.message.urlDecode());
         } else if (oRetornoitens.erro == false) {
             alert('Homologação excluida com sucesso !');
             window.location.href = "lic1_publicratificacao003.php";
         }
+    }
+
+    function js_findTipos(licitacao){
+        let request = new Ajax.Request('lic4_licitacao.RPC.php', {
+            method:'post',
+            exec: 'findTipos',
+            asynchronous: false,
+            parameters:'json=' + JSON.stringify({
+                exec: 'findTipos',
+                iLicitacao: licitacao
+            }),
+            onComplete: (res) => {
+                js_onCompleteTipo(licitacao, res);
+            }
+        });
+    }
+
+    function js_onCompleteTipo(licitacao, response){
+        let oTipos = JSON.parse(response.responseText);
+        js_retornoConsulta(licitacao, oTipos.dadosLicitacao);
+    }
+
+    function js_limpaCampos(){
+        document.getElementById('l20_tipoprocesso_select_descr').value = '';
+        document.getElementById('l20_objeto').value = '';
+        document.getElementsByName("aItonsMarcados").value = '';
     }
 </script>

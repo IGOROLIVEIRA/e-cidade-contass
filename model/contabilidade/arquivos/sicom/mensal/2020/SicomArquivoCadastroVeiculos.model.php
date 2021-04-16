@@ -210,7 +210,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       LEFT JOIN infocomplementaresinstit ON si09_instit = db_depart.instit
       LEFT JOIN cgm ON tipoveiculos.si04_numcgm = cgm.z01_numcgm
       WHERE db_config.codigo = " . db_getsession("DB_instit") . "
-          AND veicbaixa.ve04_veiccadtipobaixa = 7
+          AND veicbaixa.ve04_veiccadtipobaixa != 7
           AND DATE_PART('YEAR',veicbaixa.ve04_data) = " . db_getsession("DB_anousu") . "
           AND DATE_PART('MONTH',veicbaixa.ve04_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -268,8 +268,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     $clcvc10->si146_tpveiculo = $oDados10->tpveiculo;
                     $clcvc10->si146_subtipoveiculo = $oDados10->subtipoveiculo;
                     $clcvc10->si146_descveiculo = $this->removeCaracteres($oDados10->descveiculo);
-                    $clcvc10->si146_marca = $oDados10->marca;
-                    $clcvc10->si146_modelo = $oDados10->modelo;
+                    $clcvc10->si146_marca = $this->removeCaracteres($oDados10->marca);
+                    $clcvc10->si146_modelo = $this->removeCaracteres($oDados10->modelo);
                     $clcvc10->si146_ano = $oDados10->ano;
                     $clcvc10->si146_placa = $oDados10->tpveiculo == 3 ? $oDados10->placa : ' ';
                     $clcvc10->si146_chassi = $oDados10->tpveiculo == 3 ? $oDados10->chassi : ' ';
@@ -472,6 +472,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     INNER JOIN configuracoes.db_depart AS db_depart ON (veicretirada.ve60_coddepto =db_depart.coddepto)
                     INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
                     INNER JOIN veiculos.veicabast AS veicabast ON (veiculos.ve01_codigo=veicabast.ve70_veiculos)
+                    LEFT JOIN veicabastanu ON veicabastanu.ve74_veicabast = veicabast.ve70_codigo
                     LEFT JOIN empveiculos ON (veicabast.ve70_codigo = empveiculos.si05_codabast)
                     LEFT JOIN empenho.empempenho AS empempenho ON (empveiculos.si05_numemp = empempenho.e60_numemp)
                     LEFT JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
@@ -485,6 +486,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                    AND veicabastanu.ve74_data IS NULL
                     GROUP BY infocomplementaresinstit.si09_codorgaotce,
                              unveic.o41_codtri,
 		                     orveic.o40_codtri,
@@ -503,7 +505,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		                     unveic.o41_subunidade,
 		                     codmater) as teste";
 
-        $rsResult20 = db_query($sSql) or die(pg_last_error());
+        $rsResult20 = db_query($sSql); //echo $sSql; db_criatabela($rsResult20);die();
         /**
          * registro 20
          */
@@ -546,7 +548,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $oDados20->si147_qtdeutilizada = $oResult20->qtdeutilizada;
                 $oDados20->si147_vlgasto = $oResult20->vlgasto;
                 if(in_array( $oResult20->tipogasto , array(8,9,99))){
-                    $oDados20->si147_dscpecasservicos = substr($oResult20->dscpecasservicos, 0, 49);
+                    $oDados20->si147_dscpecasservicos = $this->removeCaracteres(substr($oResult20->dscpecasservicos, 0, 49));
                 }else{
                     $oDados20->si147_dscpecasservicos = " ";
                 }
@@ -781,7 +783,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc40->si149_codveiculo = $oDados40->codveiculo;
                 $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
                 if($oDados40->tipobaixa == 99){
-                    $clcvc40->si149_descbaixa = $oDados40->descbaixa;
+                    $clcvc40->si149_descbaixa = $this->removeCaracteres($oDados40->descbaixa);
                 }else{
                     $clcvc40->si149_descbaixa = " ";
                 }

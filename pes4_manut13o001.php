@@ -197,6 +197,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     $geraform->testarescisaoregi = "r";
     $geraform->onchpad      = true;                 // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
     $geraform->tipresumo    = "Seleção";            // LABEL DA SELEÇÃO
+    $geraform->aligntdtext  = "right";              // ALINHAMENTO TEXTO TD
     $geraform->gera_form(null,null);
     ?>
   <?php if($opcao == 3 && $mesfolha != $r11_mes13){?>

@@ -16,6 +16,7 @@ require_once("model/configuracao/Instituicao.model.php");
 require_once("model/CgmFactory.model.php");
 require_once("model/agendaPagamento.model.php");
 require_once "model/contabilidade/planoconta/ContaPlano.model.php";
+require_once 'classes/db_historicocgm_classe.php';
 
 db_app::import("MaterialCompras");
 db_app::import("caixa.*");
@@ -151,9 +152,34 @@ switch ($oParam->exec) {
     db_inicio_transacao();
     try {
 
+      if ($oParam->iCGM != "") {
+
+        $cl_historicocgm = new cl_historicocgm();
+        $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',"z09_sequencial desc","z09_numcgm = $oParam->iCGM"));
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $dtlancamento = date("Y-m-d",db_getsession("DB_datausu"));
+        if($dtlancamento < $z09_datacadastro){
+          throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+        }
+
+      }
+
       $iCodigoSlip = null;
       if (isset($oParam->k17_codigo) && !empty($oParam->k17_codigo)) {
         $iCodigoSlip = $oParam->k17_codigo;
+      }
+
+      if ( in_array($oParam->iCodigoTipoOperacao, array(5, 7, 11)) ) {
+
+          $oContaTesouraria = new contaTesouraria($oParam->k17_debito);
+          $oContaTesouraria->validaContaPorDataMovimento(date("Y-m-d",db_getsession("DB_datausu")), 1);
+
+          if ($oParam->iCodigoTipoOperacao == 5) {
+
+              $oContaTesouraria = new contaTesouraria($oParam->k17_credito);
+              $oContaTesouraria->validaContaPorDataMovimento(date("Y-m-d",db_getsession("DB_datausu")), 2);
+
+          }
       }
 
       $oTransferencia = TransferenciaFactory::getInstance($oParam->iCodigoTipoOperacao, $iCodigoSlip);
@@ -819,7 +845,12 @@ function getDocumentoPorTipoInclusao($iTipoOperacao) {
   	case 13:
   	case 14:
   	  $iCodigoDocumento = 161;
-	  break;
+    break;
+
+    case 15:
+    case 16:
+      $iCodigoDocumento = 164;
+    break;
   }
 
   return $iCodigoDocumento;

@@ -75,7 +75,21 @@ if ($sfileName == "emp4_anularrpproc.php"){
                             <td nowrap><? db_input('o15_codigo', 5, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 33, $Io15_descr, true, 'text', 3)?></td>
                         </tr>
                         <tr>
-                            <td><b>Motivo:</b></td>
+                          <td><b>Ato que autorizou o cancelamento: </b></td>
+                          <td colspan=3><? db_input('ato', 20, 'ato', true, 'text', 1, "","","","","20");?></td>
+                        </tr>
+                      <tr>
+                        <td nowrap title="Data do ato">
+                          <b>Data do ato: </b>
+                        </td>
+                        <td>
+                          <?
+                          db_inputdata('data_ato',@$dataini_dia,@$data_ato_mes,@$data_ato_ano,true,'text',$db_opcao,"")
+                          ?>
+                        </td>
+                      </tr>
+                        <tr>
+                            <td><b>Jusitificativa:</b></td>
                             <td colspan='4'>
                                 <textarea id="motivo" name="motivo" rows="2" cols="70"></textarea>
                         </tr>
@@ -408,6 +422,8 @@ if ($sfileName == "emp4_anularrpproc.php"){
 
         var iEmpenho      = $F('e60_numemp');
         var nSaldoEmpenho = js_strToFloat($('saldoRP').value);
+        var sAto          = new String($F('ato'));
+        var DataAto       = $F('data_ato');
         var sMotivo       = new String($F('motivo'));
         var nTotalNotas   = new Number(0);
         var nTotalItens   = new Number(0);
@@ -428,6 +444,23 @@ if ($sfileName == "emp4_anularrpproc.php"){
         if (!confirm("Confirma Anulação do Empenho?")) {
             return false;
         }
+
+        if (sAto.trim() == '') {
+
+          alert('Preenchimento do ato da anulação é Obrigatório.');
+          $('ato').focus();
+          return false;
+
+        }
+
+        if (DataAto.trim() == '') {
+
+          alert('Preenchimento da data do ato da anulação é Obrigatório.');
+          $('data_ato').focus();
+          return false;
+
+        }
+
         if (sMotivo.trim() == '') {
 
             alert('Preenchimento do motivo da anulação é Obrigatório.');
@@ -504,6 +537,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
         }else if (iTipo == 1) {
 
             var aItens = js_getElementbyClass(frmAnularEmpenho, 'chkmarcaItens');
+
             var sVirg  = '';
             for (i = 0; i < aItens.length; i++) {
 
@@ -520,7 +554,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
                         var nValorItem = new Number($F('vlrtot' + value));
                         var nQtdItem   = new Number($F('qtdesol' + value));
                         nTotalItens   += nValorItem;
-                        sJsonItens    += sVirg+"{'iCodItem':" + value + ",'nVlrTotal':" + nValorItem + ",'nQtde':"+nQtdItem+"}";
+                        sJsonItens    += sVirg+"{'iCodItem':" + value + ",'vlrtot':" + nValorItem + ",'quantidade':"+nQtdItem+"}";
                         sVirg = ',';
                     }
                 }
@@ -541,6 +575,8 @@ if ($sfileName == "emp4_anularrpproc.php"){
         sSenderJson     += "'iEmpenho':"+iEmpenho+",'sValorEstornar':"+(nTotalNotas+nTotalItens)+",";
         sSenderJson     += "'aNotas':["+sJsonNotas+"],";
         sSenderJson     += "'iTipo':"+iTipo+",'method':'estornarRP','sMotivo':'"+$F('motivo')+"',";
+        sSenderJson     += "'sAto':'"+$F('ato')+"',";
+        sSenderJson     += "'dDataAto':'"+$F('data_ato')+"',";
         sSenderJson     += "'tipoAnulacao':"+$('e94_empanuladotipo').value+",";
         sSenderJson     += "'aItens':["+sJsonItens+"]";
         sSenderJson     += "}";

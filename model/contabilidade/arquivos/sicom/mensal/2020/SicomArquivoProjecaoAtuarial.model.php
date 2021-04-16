@@ -19,23 +19,23 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
    * @var Integer
    */
   protected $iCodigoLayout;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'PARPPS';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -45,7 +45,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
@@ -54,14 +54,14 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
 
   }
-  
+
   /**
    * selecionar os dados de Projeção Atuarial do RPPS do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
   {
-    
+
     $clparpps10 = new cl_parpps102020();
     $clparpps20 = new cl_parpps202020();
 
@@ -76,7 +76,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
         throw new Exception($clparpps10->erro_msg);
       }
     }
-    
+
     /*
      * excluir informacoes do mes selecionado registro 20
      */
@@ -89,7 +89,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
     }
     db_fim_transacao();
     db_inicio_transacao();
-    
+
     $sSql = "SELECT si09_codorgaotce AS codorgao,si09_tipoinstit AS tipoinstit
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
@@ -132,8 +132,13 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
       /*
        * selecionar informacoes registro 20
        */
-      $sSql = "select * from projecaoatuarial20 where si169_exercicio >= " . (db_getsession("DB_anousu") - 1) . "
-	                   and si169_instit = " . db_getsession("DB_instit") . " limit 75";
+      $sSql = "select * from projecaoatuarial20 
+                        where si169_exercicio >= " . (db_getsession("DB_anousu") - 1) . "
+	                    	and si169_tipoplano = $oDados10->si168_tipoplano
+                        	and si169_instit = " . db_getsession("DB_instit") . "
+                        	and si169_projecaoatuarial10 = $oDados10->si168_sequencial 
+						order by si169_exercicio 
+						limit 75";
       $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
 
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -145,6 +150,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
         $clparpps20->si155_codorgao = $sCodorgao;
         $clparpps20->si155_tipoplano = $oDados10->si168_tipoplano;
         $clparpps20->si155_exercicio = $oDados20->si169_exercicio;
+        $clparpps20->si155_dtavaliacao = $oDados20->si169_data;
         $clparpps20->si155_vlreceitaprevidenciaria = $oDados20->si169_vlreceitaprevidenciaria;
         $clparpps20->si155_vldespesaprevidenciaria = $oDados20->si169_vldespesaprevidenciaria;
         $clparpps20->si155_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -158,11 +164,11 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
       }
     }
     db_fim_transacao();
-    
+
     $oGerarPARPPS = new GerarPARPPS();
     $oGerarPARPPS->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarPARPPS->gerarDados();
-    
+
   }
 
 }

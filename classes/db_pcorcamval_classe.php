@@ -55,6 +55,7 @@ class cl_pcorcamval {
    var $pc23_percentualdesconto = 0;
    /*OC3770*/
    var $pc23_perctaxadesctabela  = 0;
+   var $importado = null;
    /*FIM - OC3770*/
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -208,9 +209,20 @@ class cl_pcorcamval {
        $this->numrows_incluir= 0;
        return false;
      }
+
+     //INSERINDO REGISTROS DE LOG OC12764
+     $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+     $seq   = pg_result($resmanut,0,0);
+
+     if($this->importado == "1"){
+         $result = db_query("insert into db_manut_log values($seq,'Inc Item: ".$this->pc23_orcamitem." Fornecedor: ".$this->pc23_orcamforne." Vlr:".$this->pc23_vlrun." Qtd:".$this->pc23_quant." PercDesc:".$this->pc23_percentualdesconto." PercTx:".$this->pc23_perctaxadesctabela."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",863,1)");
+     }else{
+         $result = db_query("insert into db_manut_log values($seq,'Inc Item: ".$this->pc23_orcamitem." Fornecedor: ".$this->pc23_orcamforne." Vlr:".$this->pc23_vlrun." Qtd:".$this->pc23_quant." PercDesc:".$this->pc23_percentualdesconto." PercTx:".$this->pc23_perctaxadesctabela." (Importação)',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",863,1)");
+     }
+
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-         $this->erro_sql .= "Valores : ".$this->pc23_orcamforne."-".$this->pc23_orcamitem;
+     $this->erro_sql .= "Valores : ".$this->pc23_orcamforne."-".$this->pc23_orcamitem;
      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
@@ -406,7 +418,17 @@ class cl_pcorcamval {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
-         return true;
+
+         if($this->pc23_orcamitem != null){
+           //INSERINDO REGISTROS DE LOG OC12764
+           $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+           $seq   = pg_result($resmanut,0,0);
+           if($this->importado == "1"){
+               $result = db_query("insert into db_manut_log values($seq,'Alt Item: ".$this->pc23_orcamitem." Fornecedor: ".$this->pc23_orcamforne." Vlr:".$this->pc23_vlrun." Qtd:".$this->pc23_quant." PercDesc:".$this->pc23_percentualdesconto." PercTx:".$this->pc23_perctaxadesctabela."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",863,2)");
+           }else{
+               $result = db_query("insert into db_manut_log values($seq,'Alt Item: ".$this->pc23_orcamitem." Fornecedor: ".$this->pc23_orcamforne." Vlr:".$this->pc23_vlrun." Qtd:".$this->pc23_quant." PercDesc:".$this->pc23_percentualdesconto." PercTx:".$this->pc23_perctaxadesctabela." (Importação)',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",863,2)");
+           }
+         }
        }
      }
    }
@@ -490,6 +512,11 @@ class cl_pcorcamval {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
+
+         //INSERINDO REGISTROS DE LOG OC12764
+         $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+         $seq   = pg_result($resmanut,0,0);
+         $result = db_query("insert into db_manut_log values($seq,'Del Item: ".$this->pc23_orcamitem." Fornecedor: ".$this->pc23_orcamforne." Vlr:".$this->pc23_vlrun." Qtd:".$this->pc23_quant." PercDesc:".$this->pc23_percentualdesconto." PercTx:".$this->pc23_perctaxadesctabela."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",863,3)");
          return true;
        }
      }

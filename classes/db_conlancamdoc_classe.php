@@ -749,9 +749,9 @@ if($dbwhere==""){
         $oNovaDotacao->valorpago              = isset($oDotacao->pag) ? $oDotacao->pag : 0;
         $oNovaDotacao->valorpagoanulado       = isset($oDotacao->paganulado) ? $oDotacao->paganulado : 0;
 
-        $oNovaDotacao->valorempenhado = ($oNovaDotacao->valorempenhado * $nPercentual) / 100;
-        $oNovaDotacao->valorliquidado = ($oNovaDotacao->valorliquidado * $nPercentual) / 100;
-        $oNovaDotacao->valorpago      = ($oNovaDotacao->valorpago * $nPercentual) / 100;
+        $oNovaDotacao->valorempenhado = round(($oNovaDotacao->valorempenhado * $nPercentual) / 100,2);
+        $oNovaDotacao->valorliquidado = round(($oNovaDotacao->valorliquidado * $nPercentual) / 100,2);
+        $oNovaDotacao->valorpago      = round(($oNovaDotacao->valorpago * $nPercentual) / 100,2);
 
         $oEnte->dotacoes[$sHash] = $oNovaDotacao;
 

@@ -812,7 +812,7 @@ class cl_liclicita
         }
 
         /*valida combos */
-        if ($this->l20_critdesempate == null) {
+        if ($this->l20_critdesempate == null || !$this->l20_critdesempate) {
             $this->erro_sql = " Campo  Critério de desempate não foi informado.";
             $this->erro_campo = "l20_critdesempate";
             $this->erro_banco = "";
@@ -821,7 +821,7 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_destexclusiva == null) {
+        if ($this->l20_destexclusiva == null || !$this->l20_destexclusiva) {
             $this->erro_sql = " Campo Destinação Exclusiva não foi informada.";
             $this->erro_campo = "l20_destexclusiva";
             $this->erro_banco = "";
@@ -830,7 +830,7 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_subcontratacao == null) {
+        if ($this->l20_subcontratacao == null || !$this->l20_subcontratacao) {
             $this->erro_sql = " Campo Sub. Contratação  não foi informada.";
             $this->erro_campo = "l20_subcontratacao ";
             $this->erro_banco = "";
@@ -839,7 +839,7 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_limitcontratacao == null) {
+        if ($this->l20_limitcontratacao == null || !$this->l20_limitcontratacao) {
             $this->erro_sql = " Campo Limite Contratação não foi informada.";
             $this->erro_campo = "l20_limitcontratacao";
             $this->erro_banco = "";
@@ -935,13 +935,8 @@ class cl_liclicita
         }
 
         if(db_getsession('DB_anousu') >= 2020){
-            if (!$this->l20_cadinicial) {
-                $this->l20_cadinicial = 1;
-            };
-
-            if (!$this->l20_exercicioedital) {
-                $this->l20_exercicioedital = db_getsession('DB_anousu');
-            };
+            $this->l20_cadinicial = 1;
+            $this->l20_exercicioedital = db_getsession('DB_anousu');
         }else{
             $this->l20_cadinicial = 'null';
             $this->l20_exercicioedital = 'null';
@@ -1256,9 +1251,6 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             }
-        } else {
-            $sql .= $virgula . " l20_dtpubratificacao = null";
-            $virgula = ",";
         }
 
         if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
@@ -1474,7 +1466,6 @@ class cl_liclicita
         }
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
-            if ($tribunal != 50) {
                 if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
                     $sql .= $virgula . " l20_recdocumentacao = null ";
                     $virgula = ",";
@@ -1490,7 +1481,6 @@ class cl_liclicita
                     $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
                     $virgula = ",";
                 }
-            }
         }
 
         if (trim($this->l20_dataaber != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
@@ -1820,7 +1810,7 @@ class cl_liclicita
         if (trim($this->l20_critdesempate != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_critdesempate"]))) {
             $sql .= $virgula . " l20_critdesempate = $this->l20_critdesempate ";
             $virgula = ",";
-            if ($this->l20_critdesempate == null) {
+            if ($this->l20_critdesempate == null || !$this->l20_critdesempate) {
                 $this->erro_sql = " Campo  Critério de desempate nao foi informado.";
                 $this->erro_campo = "l20_critdesempate";
                 $this->erro_banco = "";
@@ -1834,7 +1824,7 @@ class cl_liclicita
         if (trim($this->l20_destexclusiva != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_destexclusiva"]))) {
             $sql .= $virgula . " l20_destexclusiva = $this->l20_destexclusiva ";
             $virgula = ",";
-            if ($this->l20_destexclusiva == null) {
+            if ($this->l20_destexclusiva == null || !$this->l20_destexclusiva) {
                 $this->erro_sql = " Campo Destinação Exclusiva  nao foi informada.";
                 $this->erro_campo = "l20_destexclusiva";
                 $this->erro_banco = "";
@@ -1848,7 +1838,7 @@ class cl_liclicita
         if (trim($this->l20_subcontratacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_subcontratacao"]))) {
             $sql .= $virgula . " l20_subcontratacao = $this->l20_subcontratacao ";
             $virgula = ",";
-            if ($this->l20_subcontratacao == null) {
+            if ($this->l20_subcontratacao == null || !$this->l20_subcontratacao) {
                 $this->erro_sql = " Campo Sub. Contratação  nao foi informada.";
                 $this->erro_campo = "l20_subcontratacao ";
                 $this->erro_banco = "";
@@ -1862,7 +1852,7 @@ class cl_liclicita
         if (trim($this->l20_limitcontratacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_limitcontratacao"]))) {
             $sql .= $virgula . " l20_limitcontratacao = $this->l20_limitcontratacao ";
             $virgula = ",";
-            if ($this->l20_subcontratacao == null) {
+            if ($this->l20_limitcontratacao == null || !$this->l20_limitcontratacao) {
                 $this->erro_sql = " Campo Limite Contratação nao foi informada.";
                 $this->erro_campo = "l20_limitcontratacao";
                 $this->erro_banco = "";
@@ -2310,6 +2300,69 @@ class cl_liclicita
         return $sql;
     }
 
+  function sql_query_relatorio($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from liclicita ";
+    $sql .= "      inner join db_config         on db_config.codigo = liclicita.l20_instit";
+    $sql .= "      inner join db_usuarios       on db_usuarios.id_usuario = liclicita.l20_id_usucria";
+    $sql .= "      inner join cflicita          on cflicita.l03_codigo = liclicita.l20_codtipocom";
+    $sql .= "      inner join pctipocompratribunal on pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal";
+    $sql .= "      inner join liclocal          on liclocal.l26_codigo = liclicita.l20_liclocal";
+    $sql .= "      inner join liccomissao       on liccomissao.l30_codigo = liclicita.l20_liccomissao";
+    $sql .= "      inner join licsituacao       on licsituacao.l08_sequencial = liclicita.l20_licsituacao";
+    $sql .= "      inner join cgm               on  cgm.z01_numcgm = db_config.numcgm";
+    $sql .= "      inner join db_config as dbconfig on  dbconfig.codigo = cflicita.l03_instit";
+    $sql .= "      inner join pctipocompra      on pctipocompra.pc50_codcom = cflicita.l03_codcom";
+    $sql .= "      inner join bairro            on bairro.j13_codi = liclocal.l26_bairro";
+    $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
+//    $sql .= "      left join homologacaoadjudica on l202_licitacao = l20_codigo";
+//    $sql .= "      left join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
+//    $sql .= "      left join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
+//    $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
+//    $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($l20_codigo != null) {
+        $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($groupby != null) {
+      $sql .= " group by ";
+      $campos_sql = split("#", $groupby);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $groupby;
+    }
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = split("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
     function sql_query_edital($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
     {
         $sql = "select ";
@@ -2422,6 +2475,8 @@ class cl_liclicita
         $sql .= "       left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
         $sql .= "       left join pcorcam on pc20_codorc = pc22_codorc";
         $sql .= "       inner join licpregao on l45_sequencial = l20_equipepregao";
+        $sql .= "       inner join liccomissaocgm on l31_licitacao = l20_codigo";
+        $sql .= "       inner join cgm cgmrepresentante on cgmrepresentante.z01_numcgm = l31_numcgm";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l20_codigo != null) {
@@ -2523,6 +2578,7 @@ class cl_liclicita
         $sql .= "       left join protprocesso          on protprocesso.p58_codproc    = liclicitaproc.l34_protprocesso";
         $sql .= "       left join liclicitem            on liclicita.l20_codigo        = l21_codliclicita ";
         $sql .= "       left join acordoliclicitem      on liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem ";
+        $sql .= "       left join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {
@@ -2577,6 +2633,7 @@ class cl_liclicita
         $sql .= "       left join acordoliclicitem      on liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem ";
         $sql .= "      inner join parecerlicitacao     on parecerlicitacao.l200_licitacao     = liclicita.l20_codigo ";
         $sql .= "      inner join liclicitasituacao     on liclicitasituacao.l11_liclicita     = liclicita.l20_codigo ";
+        $sql .= "      left  join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {
@@ -3445,7 +3502,7 @@ class cl_liclicita
                   inner join solicitem on pc11_codigo = pc81_solicitem
                   inner join solicitempcmater on pc16_solicitem = pc11_codigo
                   inner join pcmater on pc01_codmater = pc16_codmater
-                  where l21_codliclicita = $liclicita and pc01_obras = 't'";
+                  where l21_codliclicita = $liclicita";
         $rsResult = db_query($sql);
         $aItensPcmater = array();
         for ($icont = 0; $icont < pg_num_rows($rsResult); $icont++) {

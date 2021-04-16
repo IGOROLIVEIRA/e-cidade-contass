@@ -26,14 +26,24 @@
  */
 
 $campos  = "acordo.ac16_sequencial, ";
-$campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END ac16_numeroacordo, ";
-$campos .= "acordo.ac16_dataassinatura, ";
-$campos .= "acordo.ac16_contratado, cgm.z01_nome,";
+$campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END dl_Nº_Acordo, ";
+$campos .= "acordosituacao.ac17_descricao as dl_Situação, ";
+$campos .= "acordo.ac16_contratado, ";
+$campos .= "cgm.z01_nome,";
+$campos .= "acordo.ac16_resumoobjeto::text, ";
 $campos .= "acordo.ac16_valor,";
-$campos .= "acordo.ac16_datapublicacao,";
+$campos .= "acordo.ac16_dataassinatura, ";
 $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, ";
-$campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim ";
+$campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, ";
+$campos .= "CASE 
+       	   		WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras'
+       	   		WHEN acordo.ac16_origem = 2 THEN 'Licitação'
+       	   			ELSE 'Manual'
+       		END ac16_origem,";
+$campos .= "db_depart.descrdepto as dl_Dpto_de_Inclusao,";
+$campos .= "responsavel.descrdepto as dl_Dpto_Responsavel";
 /*$campos .= "acordo.ac16_acordosituacao,acordo.ac16_coddepto, ";
+$campos .= "acordo.ac16_datapublicacao,";
 $campos .= "descrdepto,codigo, ";
 $campos .= "nomeinst, ";
 $campos .= "acordo.ac16_resumoobjeto::text, ";

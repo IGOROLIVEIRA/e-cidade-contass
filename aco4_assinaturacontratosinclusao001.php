@@ -33,6 +33,7 @@ require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_acordo_classe.php");
+require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_acordomovimentacao_classe.php");
 require_once("classes/db_acordoitemdotacao_classe.php");
 
@@ -42,6 +43,7 @@ $oGet  = db_utils::postMemory($_GET);
 $clacordo             = new cl_acordo;
 $clacordomovimentacao = new cl_acordomovimentacao;
 $clacordoitemdotacao  = new cl_acordoitemdotacao;
+$clcondataconf        = new cl_condataconf;
 
 $db_opcao = 1;
 
@@ -52,49 +54,6 @@ $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
-
-// funcao do sql
-function sql_query_file ( $c99_anousu=null,$c99_instit=null,$campos="*",$ordem=null,$dbwhere=""){
-    $sql = "select ";
-    if($campos != "*" ){
-        $campos_sql = split("#",$campos);
-        $virgula = "";
-        for($i=0;$i<sizeof($campos_sql);$i++){
-            $sql .= $virgula.$campos_sql[$i];
-            $virgula = ",";
-        }
-    }else{
-        $sql .= $campos;
-    }
-    $sql .= " from condataconf ";
-    $sql2 = "";
-    if($dbwhere==""){
-        if($c99_anousu!=null ){
-            $sql2 .= " where condataconf.c99_anousu = $c99_anousu ";
-        }
-        if($c99_instit!=null ){
-            if($sql2!=""){
-                $sql2 .= " and ";
-            }else{
-                $sql2 .= " where ";
-            }
-            $sql2 .= " condataconf.c99_instit = $c99_instit ";
-        }
-    }else if($dbwhere != ""){
-        $sql2 = " where $dbwhere";
-    }
-    $sql .= $sql2;
-    if($ordem != null ){
-        $sql .= " order by ";
-        $campos_sql = split("#",$ordem);
-        $virgula = "";
-        for($i=0;$i<sizeof($campos_sql);$i++){
-            $sql .= $virgula.$campos_sql[$i];
-            $virgula = ",";
-        }
-    }
-    return $sql;
-}
 
 $anousu = db_getsession('DB_anousu');
 
@@ -108,30 +67,13 @@ $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
 
 $sNSQL = "";
 if ($anousu > $maxC99_datapat) {
-  $sNSQL = sql_query_file($maxC99_datapat,db_getsession('DB_instit'),'c99_datapat');
+  $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat,db_getsession('DB_instit'),'c99_datapat');
 } else {
-    $sNSQL = sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat');
+    $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat');
 }
 
 $result = db_query($sNSQL);
 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
-
-
-if($_POST['json']){
-  $sequencial_valor = str_replace('\\','', $_POST);
-    $sequencial_valor = json_decode($sequencial_valor['json']);
-    $valoresTotais = array();
-    $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial,'ac16_valor');
-    $rsAcordo = $clacordo->sql_record($sSqlAcordo);
-    $valorTotal = db_utils::fieldsMemory($rsAcordo, 0);
-    $valoresTotais[] = $valorTotal->ac16_valor;
-    $sSqlItensDotados = $clacordoitemdotacao->sql_buscaSomaItens('sum(ac22_valor)',null,"ac16_sequencial = $sequencial_valor->sequencial and ac26_acordoposicaotipo = 1");
-    $valorDotado = $clacordoitemdotacao->sql_record($sSqlItensDotados);
-    $valor = db_utils::fieldsMemory($valorDotado, 0);
-    $valoresTotais[] = $valor->sum;
-    echo json_encode($valoresTotais);
-    die();
-}
 
 ?>
 <html>
@@ -219,7 +161,7 @@ fieldset table td:first-child {
                   </td>
                   <td align="left" colspan="2">
                       <?
-                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao);
+                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao, '', '', '', '', 50);
                       ?>
                   </td>
 
@@ -269,7 +211,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_origem';
+    let sUrl = 'func_acordo.php?semvigencia=true&assinatura=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_origem';
     js_OpenJanelaIframe('top.corpo',
                         'db_iframe_acordo',
                         sUrl,
@@ -279,7 +221,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
     if ($('ac16_sequencial').value != '') {
 
-      var sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
+      let sUrl = 'func_acordo.php?semvigencia=true&descricao=true&assinatura=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo';
 
       js_OpenJanelaIframe('top.corpo',
@@ -316,7 +258,19 @@ function js_mostraacordo(chave1,chave2,chave3,erro) {
 function js_mostraacordo1(chave1,chave2,chave3) {
   $('ac16_sequencial').value    = chave1;
   $('ac16_resumoobjeto').value  = chave2;
-  $('ac16_origem').value = chave3;
+  let origem = '';
+  switch(chave3.toLowerCase()){
+      case 'manual':
+          origem = 3;
+          break;
+      case 'processo de compras':
+          origem = 1;
+          break;
+      case 'licitação':
+          origem = 2;
+          break;
+  }
+  $('ac16_origem').value = origem;
   db_iframe_acordo.hide();
 }
 
@@ -326,10 +280,15 @@ function js_mostraacordo1(chave1,chave2,chave3) {
 
 function js_checaValor(){
 
+    if(document.getElementById('ac16_veiculodivulgacao').value.replace(/\s/g, '') == ''){
+        alert('Campo Veículo de Divulgação está vazio!');
+        return;
+    }
+
   var oParam = new Object();
   oParam.sequencial = $('ac16_sequencial').value;
-  var sUrl = 'aco4_assinaturacontratosinclusao001.php';
-  var oAjax   = new Ajax.Request( sUrl, {
+  oParam.exec = 'checaValoresItensAcordo';
+  var oAjax   = new Ajax.Request( 'aco4_acordo.RPC.php', {
                                           method: 'post',
                                           parameters:'json='+Object.toJSON(oParam),
                                           onComplete: js_assinarContrato
@@ -338,16 +297,11 @@ function js_checaValor(){
 }
 
 function js_assinarContrato(obj) {
-    var valor = JSON.parse(obj.responseText);
-    var valorAcordo = parseFloat(valor[0]);
-    var valorDotado = parseFloat(valor[1]);
-    var origem = $('ac16_origem').value;
-
-    if(origem == '3'){
-        if(valorAcordo != valorDotado){
-            alert('Existem itens sem dotações, realize as alterações e tente novamente');
-            return;
-        }
+    let response = JSON.parse(obj.responseText);
+    
+    if(response.erro){
+        alert(response.message.urlDecode());
+        return;
     }
 
   try {

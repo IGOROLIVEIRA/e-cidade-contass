@@ -9,11 +9,11 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
 switch ($oGet->tipoprecoreferencia) {
-    case 2:
+    case '2':
         $tipoReferencia = " MAX(pc23_vlrun) ";
         break;
 
-    case 3:
+    case '3':
         $tipoReferencia = " MIN(pc23_vlrun) ";
         break;
 
@@ -115,9 +115,20 @@ $sWhere .= " AND db03_instit = db02_instit ";
 $sWhere .= " AND db02_instit = ".db_getsession('DB_instit');
 
 $cl_docparag = new cl_db_docparag;
+
 $sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
 $rs = $cl_docparag->sql_record($sAssinatura);
 $oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
+
+
+$sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
+//$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+$sWhere .= " AND db03_instit = db02_instit ";
+$sWhere .= " AND db02_instit = ".db_getsession('DB_instit');
+
+$sSqlCotacao = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+$rsCotacao = $cl_docparag->sql_record($sSqlCotacao);
+$sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
 
 //echo $sSql; db_criatabela($rsResult);exit;
 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
@@ -152,12 +163,6 @@ ob_start();
             background: url("imagens/px_preto.jpg") repeat center;
             background-repeat: repeat-y;
             background-position: 0 50px;
-        }
-
-        .table .tr {
-        }
-        .col-valor_total-valor,
-        .col-valor_total-text {
         }
 
         .col-item { width: 45px; }
@@ -196,10 +201,10 @@ ob_start();
         .linha-vertical {
             border-top: 2px solid;
             text-align: center;
-            margin-top: 100px;
+            margin-top: 80px;
             margin-left: 19%;
             width: 50%;
-
+            line-height: 1.3em;
         }
 
 
@@ -209,7 +214,7 @@ ob_start();
             font-weight: bold;
         }
 
-        .item-text-descicao {
+        .item-text-descricao {
             border: 1px solid #000000;
             text-align: justify;
         }
@@ -241,6 +246,7 @@ if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
 
     <table class="table">
         <tr class="">
+            <td class="item-menu item-menu-color">SEQ</td>
             <td class="item-menu item-menu-color">ITEM</td>
             <td class="item-menu item-menu-color">DESCRIÇÃO DO ITEM</td>
             <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
@@ -254,6 +260,7 @@ HTML;
     echo <<<HTML
   <div class="table" autosize="1">
     <div class="tr bg_eb">
+      <div class="th col-item align-center">SEQ</div>
       <div class="th col-item align-center">ITEM</div>
       <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
       <div class="th col-valor_un align-right">VALOR UN</div>
@@ -271,9 +278,9 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-    if($quant_casas){
-        $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
-    }
+//    if($quant_casas){
+        $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->pc11_quant;
+//    }
     // if($quant_casas == 2){
     //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
     // }
@@ -281,7 +288,8 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $nTotalItens += $lTotal;
     $oDadosDaLinha = new stdClass();
-    $oDadosDaLinha->item = $iCont + 1;
+    $oDadosDaLinha->seq = $iCont + 1;
+    $oDadosDaLinha->item = $oResult->pc01_codmater;
     $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
     if($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t"){
         $oDadosDaLinha->valorUnitario = "-";
@@ -294,7 +302,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
         $oDadosDaLinha->unidadeDeMedida = "-";
         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
     }else{
-        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
+        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
         if($oResult->mediapercentual == 0){
             $oDadosDaLinha->mediapercentual = "-";
@@ -308,8 +316,9 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
         echo <<<HTML
         <tr class="">
+          <td class="item-text">{$oDadosDaLinha->seq}</td>
           <td class="item-text">{$oDadosDaLinha->item}</td>
-          <td class="item-text-descicao">{$oDadosDaLinha->descricao}</td>
+          <td class="item-text-descricao">{$oDadosDaLinha->descricao}</td>
           <td class="item-text">{$oDadosDaLinha->mediapercentual}</td>
           <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>          
           <td class="item-text">{$oDadosDaLinha->quantidade}</td>
@@ -321,6 +330,9 @@ HTML;
     }else{
         echo <<<HTML
          <div class="tr row">
+          <div class="td col-item align-center">
+            {$oDadosDaLinha->seq}
+          </div>
           <div class="td col-item align-center">
             {$oDadosDaLinha->item}
           </div>
@@ -370,20 +382,59 @@ HTML;
 
 </table>
 </div>
-<div class="linha-vertical">
-    <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
-</div>
+    <?php
+
+    $chars = array('ç', 'ã', 'â', 'à', 'á', 'é', 'è', 'ê', 'ó', 'ò', 'ô', 'ú', 'ù');
+    $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù');
+
+    $dadosAssinatura = explode('\n', $sAssinaturaCotacao);
+    $sCotacao = '';
+
+    if(count($dadosAssinatura) > 1){
+        $sCotacao = '<div class="linha-vertical">';
+        for($count=0; $count < count($dadosAssinatura); $count++){
+			$sCotacao .= "<strong>".strtoupper(str_replace($chars, $byChars, $dadosAssinatura[$count]))."</strong>";
+			$sCotacao .= $count ? '' : "<br/>";
+        }
+		$sCotacao .= "</div>";
+		echo <<<HTML
+            $sCotacao
+HTML;
+	}else{
+		echo <<<HTML
+                <div class="linha-vertical">
+                    <strong>{$dadosAssinatura[0]}</strong>
+                </div>   
+HTML;
+    }
+
+    ?>
 
 
 <?php
 if($oLinha!=null || trim($oLinha)!=""){
+    $dadosLinha = explode('\n', $oLinha);
+    $stringHtml = '';
 
-    echo <<<HTML
-            <div class="linha-vertical">
-                <strong>{$oLinha}</strong>
-            </div>   
-
+    if(count($dadosLinha) > 1){
+		$stringHtml = '<div class="linha-vertical">';
+        for($count=0; $count < count($dadosLinha); $count++){
+            $stringHtml .= "<strong>".strtoupper(str_replace($chars, $byChars, $dadosLinha[$count]))."</strong>";
+            $stringHtml .= $count ? '' : "<br/>";
+        }
+    $stringHtml .= "</div>";
+        echo <<<HTML
+            $stringHtml
 HTML;
+    }else{
+        echo <<<HTML
+                <div class="linha-vertical">
+                    <strong>{$dadosLinha[0]}</strong>
+                </div>   
+HTML;
+
+    }
+
 
 }
 ?>

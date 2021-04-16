@@ -36,7 +36,7 @@ require_once("libs/db_sessoes.php");
 $oGet                = db_utils::postMemory($_GET);
 
 $sSqlAcordo  = " select distinct 
-                        ac16_sequencial,
+                        ac16_numero,
                         ac16_datainicio,
                         ac16_datafim,
                         ac16_objeto
@@ -61,19 +61,15 @@ $sSqlAcordo  = " select distinct
     <link href="estilos.css" rel="stylesheet" type="text/css">
   </head>
   <body bgcolor="#cccccc" onload="">
-    <center>
-      <form name="form1" method="post">
         <div style="display: table; float:left; margin-left:10%;">
           <fieldset>
             <legend><b>Contratos da Licitação</b></legend>
           <?
           
-           db_lovrot($sSqlAcordo, 15, "()", "", "js_mostraContrato|ac16_sequencial");
+           db_lovrot(@$sSqlAcordo, 15, "", "", "js_mostraContrato|ac16_sequencial");
           ?>
           </fieldset>
         </div>
-      </form>
-    </center>
   </body>
 </html>
 <script>

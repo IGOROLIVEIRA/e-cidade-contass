@@ -157,7 +157,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
     /**
      * Este arquivo não gera para camaras.
      */
-    if ($iTipoInstit != 1) {
+    if ($iTipoInstit == 2) {
       /*
        * selecionar informacoes registro 10
        */

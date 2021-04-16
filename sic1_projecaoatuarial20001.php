@@ -6,6 +6,7 @@ include("libs/db_usuariosonline.php");
 include("classes/db_projecaoatuarial20_classe.php");
 include("classes/db_projecaoatuarial10_classe.php");
 include("dbforms/db_funcoes.php");
+require_once ("dbforms/db_classesgenericas.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprojecaoatuarial20 = new cl_projecaoatuarial20;
@@ -31,6 +32,9 @@ if(isset($salvar)) {
         $clprojecaoatuarial20->si169_projecaoatuarial10 = $oResult10->si168_sequencial;
         $clprojecaoatuarial20->si169_tipoplano = $oResult10->si168_tipoplano;
 
+        $data = 'data_'.$ano;
+        $clprojecaoatuarial20->si169_data = implode("-", array_reverse(explode("/", $$data)));
+
         $result20 = $clprojecaoatuarial20->sql_record($clprojecaoatuarial20->sql_query(null, "*", null, "si169_projecaoatuarial10={$oResult10->si168_sequencial} and si169_exercicio = {$ano} and si169_tipoplano = {$oResult10->si168_tipoplano}"));
         db_fieldsmemory($result20,0);
 
@@ -41,6 +45,9 @@ if(isset($salvar)) {
             }
         } else {
             $clprojecaoatuarial20->si169_sequencial = $si169_sequencial;
+            $data = 'data_'.$ano;
+            $clprojecaoatuarial20->si169_data = implode("-", array_reverse(explode("/", $$data)));
+            $clprojecaoatuarial20->si169_projecaoatuarial10 = $oResult10->si168_sequencial;
             $clprojecaoatuarial20->alterar($si169_sequencial);
             if ($clprojecaoatuarial20->erro_status == 0) {
                 throw new Exception($clprojecaoatuarial20->erro_msg);
@@ -56,10 +63,12 @@ if(isset($salvar)) {
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
+
 </head>
 <body class="body-default">
 <center>

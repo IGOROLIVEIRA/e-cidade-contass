@@ -467,7 +467,7 @@ AND z01_cgccpf NOT IN
           /**
            * pesquisa quem não tem cadastro de data de nascimento
            */
-          $rsResultTeste = db_query("select z01_numcgm,z01_nome,z01_cgccpf,z01_nasc from cgm where z01_cgccpf = '$oDadosTeste->z01_cgccpf' and z01_nasc is null");
+          $rsResultTeste = db_query("select z01_numcgm,z01_nome,z01_cgccpf,z01_nasc from cgm join rhpessoal on z01_numcgm = rh01_numcgm where z01_cgccpf = '$oDadosTeste->z01_cgccpf' and z01_nasc is null and rh01_nasc is null");
           if(pg_num_rows($rsResultTeste) > 0)
             db_criatabela($rsResultTeste);
 

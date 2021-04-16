@@ -32,6 +32,8 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitem_classe.php");
+require_once("classes/db_licobraslicitacao_classe.php");
+require_once("classes/db_db_usuarios_classe.php");
 
 db_postmemory($_GET);
 db_postmemory($_POST);
@@ -41,6 +43,8 @@ parse_str($_SERVER["QUERY_STRING"]);
 
 $clliclicitem = new cl_liclicitem;
 $clliclicita  = new cl_liclicita;
+$cllicobraslicitacao = new cl_licobraslicitacao;
+$cldbusuarios = new cl_db_usuarios();
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
@@ -171,8 +175,7 @@ $sWhereContratos = " and 1 = 1 ";
              }*/
 
 
-
-            if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
+            if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1"){
 
                 $dbwhere .= "l20_licsituacao in ($situacao) and ";
             }else{
@@ -215,10 +218,19 @@ $sWhereContratos = " and 1 = 1 ";
 				$dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
 			}
 
+            if($listacred == 'false'){
+                $dbwhere .= " l03_pctipocompratribunal NOT IN (102, 103) AND ";
+            }
+
 			if($ratificacao == 'true'){
 				$dbwhere .= " l20_dtpubratificacao IS NOT NULL AND ";
             }elseif($ratificacao == 'false'){
 				$dbwhere .= " l20_dtpubratificacao IS NULL AND ";
+            }
+
+			if($enviada == 'true'){
+				$dbwhere .= " (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
+                                      else true end) AND ";
             }
 
 			if(!isset($pesquisa_chave)){
@@ -232,9 +244,34 @@ $sWhereContratos = " and 1 = 1 ";
                     }
                 }
 
-                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
-                $campos .= ", l03_codcom as tipcom";
-                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+                if($dispensas){
+					$campos = "distinct liclicita.l20_codigo,
+					                    liclicita.l20_edital,
+                                        l20_anousu,
+                                        pctipocompra.pc50_descr,
+                                        liclicita.l20_numero, ";
+
+					if(db_getsession('DB_anousu') >= 2021){
+					    $campos .= " case when l20_nroedital is not null then l20_nroedital::varchar
+                                        else '-' END as l20_nroedital, ";
+                    }
+
+					if(!$ocultacampos) {
+
+						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
+                                        liclicita.l20_dtpublic as dl_Data_Publicação_DO,
+                                        liclicita.l20_objeto";
+					}else{
+						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_objeto";
+                    }
+                }
+
+//                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
+//                $campos .= ", l03_codcom as tipcom";
+//                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+                $campos .= ', l08_descr as dl_Situação';
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
@@ -320,7 +357,9 @@ $sWhereContratos = " and 1 = 1 ";
                     $sql = "
                       SELECT DISTINCT liclicita.l20_codigo,
                             liclicita.l20_edital,
-                            liclicita.l20_nroedital,
+                            (CASE WHEN l20_nroedital IS NULL THEN '-'
+                                ELSE l20_nroedital::varchar
+                            END) as l20_nroedital,
                             liclicita.l20_anousu,
                             pctipocompra.pc50_descr,
                             liclicita.l20_numero,
@@ -362,14 +401,13 @@ $sWhereContratos = " and 1 = 1 ";
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
                                      WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
-                                END) >= 2020 $sWhere AND liclicita.l20_naturezaobjeto IN (1, 7)
+                                END) >= 2020 $sWhere AND liclicita.l20_naturezaobjeto = 1
                             AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
                         ORDER BY l20_codigo
           ";
                 }
                 $aRepassa = array();
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
-
 
             } else {
 
@@ -464,13 +502,23 @@ $sWhereContratos = " and 1 = 1 ";
                     }
                     else {
                         if($obras == "true"){
-                          $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+                          if($licitacaosistema == "1"){
+                              $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
 
-                          if($clliclicita->numrows != 0){
-                            db_fieldsmemory($result,0);
-                            echo "<script>".$funcao_js."('$l20_objeto','$l20_numero','$l03_descr',false);</script>";
-                          } else {
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                              if($clliclicita->numrows != 0){
+                                  db_fieldsmemory($result,0);
+                                  echo "<script>".$funcao_js."($l20_numero','$l20_numero','$l03_descr',false);</script>";
+                              } else {
+                                  echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                              }
+                          }else{
+                              $result = $cllicobraslicitacao->sql_record($cllicobraslicitacao->sql_query($pesquisa_chave));
+                              if($cllicobraslicitacao->numrows!=0){
+                                  db_fieldsmemory($result,0);
+                                  echo "<script>".$funcao_js."('$l44_descricao','$obr07_objeto','$l20_numero',$false);</script>";
+                              }else{
+                                  echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                              }
                           }
                         }else{
                           $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));

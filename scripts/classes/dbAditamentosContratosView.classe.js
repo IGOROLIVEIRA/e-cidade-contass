@@ -10,6 +10,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.lBloqueiaItem = false;
     this.lObrigaDescricao = false;
     this.lTipoAlteracao = false;
+    this.lProvidencia = false;
 
     switch (iTipoAditamento) {
 
@@ -245,10 +246,22 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
     }
 
+    this.pesquisaAcordoByCodigo = (acordo) => {
+        var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + acordo +
+            '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
+
+        js_OpenJanelaIframe('top.corpo',
+            'db_iframe_acordo',
+            sUrl,
+            'Pesquisa de Acordo',
+            false);
+
+    }
+
     /**
      * Retorno da pesquisa acordos
      */
-    js_mostraacordo = function (chave1, chave2, erro) {
+    js_mostraacordo = function (chave1, chave2, chave3, erro) {
 
         if (erro == true) {
 
@@ -521,6 +534,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      */
     this.ajusteDotacao = function (iLinha, iElemento) {
 
+        let valorItem = me.oGridItens.aRows[iLinha].aCells[1].getValue();
+
+        document.getElementById(`chkoGridItens${valorItem}`).checked = true;
+
+        me.oGridItens.aRows[iLinha].removeClassName('normal');
+        me.oGridItens.aRows[iLinha].addClassName('marcado');
+        me.oGridItens.aRows[iLinha].isSelected = true;
+
         iElementoDotacao = iElemento;
 
         if ($('wndDotacoesItem')) {
@@ -571,7 +592,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         windowDotacaoItem.setContent(sContent);
         oMessageBoard = new DBMessageBoard('msgboard1',
             'Adicionar Dotacoes',
-            'Dotações Item ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
+            'Dotações Item ' + oDadosItem.aCells[1].getValue() + ' - ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
             oDadosItem.aCells[5].getValue() + "</b>)",
             $('windowwndDotacoesItem_content'));
 
@@ -824,10 +845,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         });
     }
 
-    me.show = function () {
+    me.show = function (acordo = null) {
 
         me.main();
-        me.pesquisaAcordo(true);
+
+        /**
+         * 
+         */
+        if(acordo){
+            me.pesquisaAcordoByCodigo(acordo);
+            me.lProvidencia = true;
+        }else{
+            me.pesquisaAcordo(true);
+        }
     }
 
     this.aditar = function () {
@@ -909,7 +939,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),
             aItens: [],
             aSelecionados: iSelecionados,
-            sVigenciaalterada: vigenciaalterada
+            sVigenciaalterada: vigenciaalterada,
+            lProvidencia: me.lProvidencia
         }
 
         var dti     = me.oTxtDataInicial.getValue().split("/");
@@ -950,7 +981,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.valor          = oItem.valor;
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
-            // oItemAdicionar.controlaServico = oItem.
+            oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
 
 
             // console.log('Qtde anterior: ', oItem.qtdeanterior);
@@ -997,6 +1028,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[13].getValue();
                 oItemAdicionar.tipoalteracaoitem = oSelecionados[iIndice].aCells[14].getValue();
                 oItemAdicionar.servico = oItem.servico;
+                oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
 
                 var qtanter = oSelecionados[iIndice].aCells[3].getValue().getNumber();
                 var vlranter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
@@ -1545,14 +1577,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             aLinha[4] = oInputQuantidade.toInnerHtml();
 
-            oInputUnitario = new DBTextField('valorunitario' + iSeq, 'valorunitario' + iSeq, js_formatar(nUnitario, "f", 3)); //
+            oInputUnitario = new DBTextField('valorunitario' + iSeq, 'valorunitario' + iSeq, js_formatar(nUnitario, "f", 4)); //
             oInputUnitario.addStyle("width", "100%");
             oInputUnitario.setClassName("text-right");
             oInputUnitario.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
                 oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueiquantidade("+ iSeq +","+$('oCboTipoAditivo').value +")");
-                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
+                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
                 oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 

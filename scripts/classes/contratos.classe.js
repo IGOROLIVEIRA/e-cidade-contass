@@ -3,6 +3,24 @@ contrato = function () {
     me = this;
     this.verificaLicitacoes = function () {
 
+        let negation = '';
+        let tipoCompras = '';
+        let iOrigem = $('ac16_origem').value;
+        let iTipoOrigem = $('ac16_tipoorigem').value;
+
+        if( iOrigem == '2'){
+            if(iTipoOrigem == '2'){
+                negation = ' not ';
+                tipoCompras = '100, 101, 102, 103';
+            }
+
+            if(iTipoOrigem == '3'){
+                negation = '';
+                tipoCompras = $('tipodispenca').value == '2' ? '100, 101' : $('tipodispenca').value == '1' ? '102, 103' : '';
+            }
+
+        }
+
         var sFuncao = '';
         if ($F('ac16_origem') == 2) {
             sFuncao = 'getLicitacoesContratado';
@@ -18,6 +36,8 @@ contrato = function () {
         oParam.iContrato   = $F('ac16_sequencial');
         oParam.iTipoOrigem = $F('ac16_tipoorigem');
         oParam.credenciamento = $F('tipodispenca');
+        oParam.addNegation    = negation;
+        oParam.tipoCompras = tipoCompras;
         js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,
@@ -39,14 +59,15 @@ contrato = function () {
         } else {
             sTitulo = "Licitações";
         }
-        var iLarguraJanela = document.body.getWidth();
-        var iAlturaJanela  = document.body.clientHeight / 1.5;
+        var iLarguraJanela = 1200;
+        var iAlturaJanela  = document.body.clientHeight;
 
         oJanela       = new windowAux('wndLicitacoesVencidas', sTitulo,
             iLarguraJanela,
             iAlturaJanela);
-        var sContent  = '  <fieldset style="width: 97%"><legend><b>'+sTitulo+'</b></legend>';
-        sContent     += '    <div id="cntDados"></div>' ;
+
+        let sContent     = '  <fieldset style="width: 97%"><legend><b>'+sTitulo+'</b></legend>';
+        sContent     += '    <div id="cntDados" style="width:1175px"></div>' ;
         sContent     += '  </fieldset>';
         sContent     += '  <center> ';
         sContent     += '   <input type="button" value="Confirmar" id="btnConfirmarObjetos">';
@@ -99,13 +120,13 @@ contrato = function () {
             return true;
         };
 
-        oGridDados.setCellWidth(new Array("5%", "5%", "60%", "10%", "10%"));
+        oGridDados.setCellWidth(new Array("5%", "4%", "60%", "11%", "10%"));
         oGridDados.setCellAlign(new Array("right", "right", "left", "right", "right"));
         oGridDados.setHeader(new Array("Código","Número", "Objeto", "Número do Exercício", "Data da Inclusão"));
         oGridDados.show($('cntDados'));
 
 
-        oJanela.show(1,0);
+        oJanela.show(1,70);
         js_divCarregando("Aguarde, carregando itens...", "msgBox");
         me.preencheDadosItens(oRetorno);
     };
@@ -138,6 +159,7 @@ contrato = function () {
 
             oGridDados.renderRows();
             oGridDados.setStatus("");
+            me.setPropertiesCss();
         } else {
 
             oGridDados.setStatus("Não foram Encontrados registros");
@@ -145,6 +167,25 @@ contrato = function () {
     };
 
 
+    this.setPropertiesCss = () => {
+
+        let aTrs = document.querySelectorAll('#gridDadosbody tr');
+
+        for( let i=0; i < aTrs.length; i++){
+
+            aTrs[i].children[0].style.textAlign = 'center';
+            aTrs[i].children[0].style.width = '88px';
+            aTrs[i].children[1].style.textAlign = 'center';
+            aTrs[i].children[2].style.textAlign = 'center';
+            aTrs[i].children[4].style.textAlign = 'center';
+            aTrs[i].children[5].style.textAlign = 'center';
+
+        }
+
+        document.getElementById('cntDados').style.width = '1198px';
+        document.getElementById('messageboardlicitacao').style.width = '1215px';
+
+    }
 
     this.confirmaSelecao = function() {
 
@@ -297,6 +338,29 @@ contrato = function () {
         var iLicitacao                = $F('ac16_licitacao');
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
+        var iLei                      = $F('ac16_lei');
+
+        /* Novas validações para atender o SICOM */
+
+        if(iOrigem == '3') {
+            if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
+                alert('Informe uma Licitação.');
+                $('ac16_licitacao').focus();
+                return false;
+            }
+
+            if(iTipoOrigem == '4' && !iAdesaoregpreco){
+                alert('Informe uma Adesão de Registro de Preço.');
+                $('ac16_adesaoregpreco').focus();
+                return false;
+            }
+
+            if(['5', '6', '7', '8', '9'].includes(iTipoOrigem) && !iLicoutroorgao){
+                alert('Informe uma Licitação por Outro Órgão.');
+                $('ac16_licoutroorgao').focus();
+                return false;
+            }
+        }
 
         if (iOrigem == "0") {
 
@@ -336,12 +400,12 @@ contrato = function () {
             $('ac16_deptoresponsavel').focus();
             return false;
         }
-        if (iComissao == "") {
+        // if (iComissao == "") {
 
-            alert('Informe a comissão de vistoria do acordo.');
-            $('ac16_acordocomissão').focus();
-            return false;
-        }
+        //     alert('Informe a comissão de vistoria do acordo.');
+        //     $('ac16_acordocomissão').focus();
+        //     return false;
+        // }
 
         if (iAnousu == "") {
 
@@ -444,6 +508,7 @@ contrato = function () {
         oParam.contrato.iLicitacao                = iLicitacao;
         oParam.contrato.iAdesaoregpreco           = iAdesaoregpreco;
         oParam.contrato.iLicoutroorgao            = iLicoutroorgao;
+        oParam.contrato.iLei                      = iLei;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,

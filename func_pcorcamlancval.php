@@ -243,6 +243,17 @@ if (isset($datafinal)){
         $where_sol .= "            )                                                                                                     ";
       }
 
+      if($validaprecoreferencia == "true"){
+        $where_sol .= "AND NOT EXISTS (";
+        $where_sol .= "SELECT 1";
+        $where_sol .= "FROM precoreferencia ";
+        $where_sol .= "WHERE si01_processocompra = pcproc.pc80_codproc)";
+      }
+
+      if($filtra_instit){
+          $where_sol .= " AND f.instit = " . db_getsession('DB_instit');
+      }
+
       $campos = " distinct ".$campos;
       if(isset($rel) && $rel=="true"){
         if(isset($sol) && $sol=='true'){
@@ -270,7 +281,7 @@ if (isset($datafinal)){
         } else {
           $sql = $clpcorcam->sql_query_solproc(null,$campos,"pc80_codproc desc",' 1=1 '.$where_sol);
         }
-//print_r($sql);die;
+// print_r($sql);
         db_lovrot($sql,15,"()","",$funcao_js, "", "NoMe", array(), false);
       } else {
         if ($pesquisa_chave!=null && $pesquisa_chave!="") {
