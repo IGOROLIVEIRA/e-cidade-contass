@@ -118,6 +118,31 @@ abstract class Transferencia {
   }
 
   /**
+   * Codigo do cheque
+   *
+   * @var integer
+   */
+  public $iCodCheque = null;
+    /**
+   * Seta o cheque
+   * @param integer $iCodCheque codigo do cheque
+   */
+  function setCheque($iCodCheque) {
+    $this->iCodCheque = $iCodCheque;
+  }
+  /**
+   * Retorna o cheque
+   * @return integer
+   */
+  function getCheque() {
+
+    if ($this->iCodCheque == null) {
+      $this->iCodCheque = 0;
+    }
+    return $this->iCodCheque;
+  }
+
+  /**
    * Salva os dados do slip
    */
   public function salvar() {
@@ -284,7 +309,7 @@ abstract class Transferencia {
     $iCodigoInstituicao = db_getsession("DB_instit");
     $dtSessao           = date("Y-m-d", db_getsession("DB_datausu"));
 
-    $sSqlExecutaAutenticacao = "select fc_auttransf({$iCodigoSlip}, '{$dtSessao}', '{$iIp}', true, 0, {$iCodigoInstituicao}) as fc_autenticacao";
+    $sSqlExecutaAutenticacao = "select fc_auttransf({$iCodigoSlip}, '{$dtSessao}', '{$iIp}', true, {$this->getCheque()}, {$iCodigoInstituicao}) as fc_autenticacao";
     $rsExecutaAutenticacao = db_query($sSqlExecutaAutenticacao);
     if (!$rsExecutaAutenticacao) {
       throw new Exception("Não foi possível realizar a autenticação");

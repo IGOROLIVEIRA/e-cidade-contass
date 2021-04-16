@@ -422,10 +422,15 @@ function js_RenderGridCheques(aDados){
 		if(iNumRows > 0){
 			aDados.each(
 				function (oDado,iInd){
-											
+						
 						var aRow	= new Array();
-						var link = "<a href='#' onClick='js_hist_cheque(\"e91_cheque="+oDado.e91_cheque;
-						link +="&c63_agencia="+oDado.c63_agencia+"&c63_banco="+oDado.c63_banco+"&c63_conta="+oDado.c63_conta+"\");'>"+oDado.e91_cheque+"</a>";
+						var params 	= "\"e91_cheque="+oDado.e91_cheque;
+						params 		+= "&c63_agencia="+oDado.c63_agencia;
+						params 		+= "&c63_banco="+oDado.c63_banco;
+						params 		+= "&c63_conta="+oDado.c63_conta;
+						params 		+= "&e86_data="+oDado.e86_data+"\"";
+
+						var link 	= "<a href='#' onClick='js_hist_cheque("+params+");'>"+oDado.e91_cheque+"</a>";
 						aRow[0] 	= link;
 						aRow[1] 	= oDado.empenho.urlDecode();
 						aRow[2] 	= oDado.codigo_origem;
