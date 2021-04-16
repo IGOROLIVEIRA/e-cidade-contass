@@ -1927,23 +1927,21 @@ class agendaPagamento {
     }
 
 	/**
-	 * Caso o número documento seja informado, atualiza movimento com o novo campo e81_numdoc
+	 * Atualiza movimento com o novo campo e81_numdoc informado na tela de pagamento
 	 */
-	if (isset($oMovimento->sNumDoc)) {
 		
-		$oDaoEmpageMov = db_utils::getDao("empagemov");
-		$oDaoEmpageMov->e81_numdoc = $oMovimento->sNumDoc;
-		$oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
-		$oDaoEmpageMov->alterar($oMovimento->iCodMov);
-		
-		if ($oDaoEmpageMov->erro_status == 0) {
+    $oDaoEmpageMov = db_utils::getDao("empagemov");
+    $oDaoEmpageMov->e81_numdoc = (isset($oMovimento->sNumDoc) && $oMovimento->sNumDoc != '') ? $oMovimento->sNumDoc : '';
+    $oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
+    $oDaoEmpageMov->alterar($oMovimento->iCodMov);
+    
+    if ($oDaoEmpageMov->erro_status == 0) {
 
-			$sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
-			throw new Exception($sErroMsg);
+        $sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
+        throw new Exception($sErroMsg);
 
-		}
+    }
 
-	}
   }
 
   /**
