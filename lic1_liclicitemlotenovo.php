@@ -302,6 +302,11 @@ if (isset($db_opcao)&&$db_opcao==3){
 
 if (isset($erro_msg)&&trim($erro_msg)!="") {
      db_msgbox($erro_msg);
+
+     if(!$sqlerro && $erro_msg && $db_opcao != 3){
+          echo"<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+     }
+
      echo "<script>
               document.form2.l04_descricao.select();
               document.form2.l04_descricao.focus();
