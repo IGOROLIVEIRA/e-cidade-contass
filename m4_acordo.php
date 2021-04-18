@@ -39,11 +39,13 @@ if(isset($alterar)){
     $ac16_datainicio = implode("-",array_reverse(explode("/",$ac16_datainicio)));
     $ac16_datafim    = implode("-",array_reverse(explode("/",$ac16_datafim)));
 
-    $sWhere = "ac16_numeroacordo = '$ac16_numeroacordo'";
-    $numero_geral = $clacordo->sql_record($clacordo->sql_query_file(null, "*", null, $sWhere));
-    if ($clacordo->numrows > 0) {
-        db_msgbox("Já existe acordo com o número $ac16_numeroacordo");
-        $erro = true;
+    if($l20_nroedital != $l20_nroedital_old) {
+        $sWhere = "ac16_numeroacordo = '$ac16_numeroacordo'";
+        $numero_geral = $clacordo->sql_record($clacordo->sql_query_file(null, "*", null, $sWhere));
+        if ($clacordo->numrows > 0) {
+            db_msgbox("Já existe acordo com o número $ac16_numeroacordo");
+            $erro = true;
+        }
     }
 
     $rsPosicoes = db_query(
@@ -132,6 +134,9 @@ if(isset($alterar)){
         );
     }
     db_fieldsmemory($rsAditivo,0);
+
+    $ac16_numeroacordo_old = $ac16_numeroacordo;
+
 }
 
 ?>
@@ -191,6 +196,8 @@ if ($sContass[1] != 'contass') {
                         <?
                         //$ac16_numeroacordo = $ac16_numeroacordo != "" ? $ac16_numeroacordo : Acordo::getProximoNumeroDoAno($ac16_anousu,db_getsession('DB_instit'));
                         db_input('ac16_numeroacordo', 10, $Iac16_numeroacordo, true, 'text', $db_opcao);
+
+                        db_input('ac16_numeroacordo_old',10,$Iac16_numeroacordo,true,'hidden',2,"");
                         ?>
                     </td>
                 </tr>
@@ -226,14 +233,6 @@ if ($sContass[1] != 'contass') {
                                             "", "", "return parent.js_somardias();");
                                         ?>
                                     </td>
-<!--                                    <td>-->
-<!--                                        <b>Dias:</b>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                        --><?//
-//                                        db_input('diasvigencia', 10, "", true, 'text', 3);
-//                                        ?>
-<!--                                    </td>-->
                                 </tr>
                             </table>
                         </fieldset>

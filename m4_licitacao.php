@@ -53,8 +53,9 @@ $cl_scripts = new cl_scripts;
 
 $anousu=db_getsession("DB_anousu");
 $instit=db_getsession("DB_instit");
-
+$db_opcao=3;
 if(isset($alterar)){
+    $bmsg = false;
     $result_geral=$clliclicita->sql_record($clliclicita->sql_query_file(null,"max(l20_edital) as edital",null,"l20_instit=$instit and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
     if($l20_edital != $l20_edital_old) {
         $change = true;
@@ -67,6 +68,7 @@ if(isset($alterar)){
                 if ($clliclicita->numrows > 0) {
                     db_msgbox("Já existe licitação com o processo licitatório $numero");
                     $erro = true;
+                    $bmsg = true;
                 }
             }
 
@@ -79,6 +81,7 @@ if(isset($alterar)){
                 } else {
                     db_msgbox("Já existe licitação com o processo licitatório $numero");
                     $erro = true;
+                    $bmsg = true;
                 }
             }
         }
@@ -88,23 +91,21 @@ if(isset($alterar)){
         $change = true;
         /* Tratamento do campo l20_numero. */
         $clliclicita_edital = new cl_liclicita;
-        $sSqlMaxEdital = $clliclicita_edital->sql_query_file(null, "max(l20_numero) as numero", null, "l20_instit = $instit and l20_anousu = " . db_getsession("DB_anousu"));
-        $result_geral_edital = $clliclicita_edital->sql_record($sSqlMaxEdital);
 
+        $sSqlModalidadeAtual    = $clliclicita_edital->sql_query_edital(null, "distinct pc50_pctipocompratribunal as codtribunalatual", null, "l20_instit = $instit and l20_codigo = $l20_codigo and l20_anousu = " . db_getsession("DB_anousu"));
+        $result_modalidadeAtual = $clliclicita_edital->sql_record($sSqlModalidadeAtual);
+//        echo $sSqlModalidadeAtual;
+//        db_criatabela($result_modalidadeAtual);exit;
+        db_fieldsmemory($result_modalidadeAtual, 0, 1);
+
+        $sSqlModalidade    = $clliclicita_edital->sql_query_edital(null, "distinct pc50_pctipocompratribunal as searchcodtribunal,l20_numero", null, "l20_instit = $instit and l20_numero = $l20_numero and pc50_pctipocompratribunal = $codtribunalatual and l20_anousu = " . db_getsession("DB_anousu"));
+        $result_modalidade = $clliclicita_edital->sql_record($sSqlModalidade);
+//        echo $sSqlModalidade;
+//        db_criatabela($result_modalidade);exit;
         if ($clliclicita_edital->numrows > 0) {
-
-            db_fieldsmemory($result_geral_edital, 0, 1);
-            //verifica se existe edital maior ou igual.
-
-            $numero = $l20_numero;
-
-            $sWhere = "l20_numero = $numero and l20_instit = $instit and l20_anousu = $anousu";
-            $numero_geral = $clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null, "l20_numero", null, $sWhere));
-
-            if ($clliclicita_edital->numrows > 0) {
-                db_msgbox("Já existe licitação com a modalidade $numero");
-                $erro_edital = true;
-            }
+           db_msgbox("Já existe licitação com a modalidade $l20_numero");
+           $erro_edital = true;
+           $bmsg = true;
         }
 
     }
@@ -129,6 +130,7 @@ if(isset($alterar)){
             if ($clliclicita_edital->numrows > 0) {
                 db_msgbox("Já existe licitação com o edital número $numero");
                 $erro_edital = true;
+                $bmsg = true;
             }
         }
 
@@ -154,9 +156,13 @@ if(isset($alterar)){
              $seq = pg_result($resmanut, 0, 0);
              $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . " - " . $oPosicao->ac16_datafim . " atual: " . $ac16_datainicio . " - " . $ac16_datafim . "  '," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
              echo "<script>alert('Alteração efetuada');</script>";
+             $db_opcao=3;
+             $l20_codigo='';
          }
     }else{
-        echo "<script>alert('Você não fez nenhuma mudança');</script>";
+        if($bmsg == false) {
+            echo "<script>alert('Você não fez nenhuma mudança');</script>";
+        }
     }
 
 
@@ -228,11 +234,11 @@ if ($sContass[1] != 'contass') {
                     </td>
                     <td align="left" nowrap="nowrap">
                         <?
-                        db_input("l20_codigo",10,$Il20_codigo,true,"text",2,"onchange='js_pesquisa_liclicita(false);'");
+                        db_input("l20_codigo",10,$Il20_codigo,true,"text",3,"onchange='js_pesquisa_liclicita(false);'");
                         ?>
                     </td>
                 </tr>
-                <?php if($l20_anousu >= 2020 && $db_opcao == 2 || $l20_anousu == null && $db_opcao == 1):?>
+                <?php if($db_opcao == 2):?>
                     <tr>
                         <td nowrap title="Processo Licitatório">
                             <strong>Processo Licitatório:</strong>
@@ -259,6 +265,8 @@ if ($sContass[1] != 'contass') {
                     <?php
                     db_input('l20_numero_old',10,$Il20_numero,true,'hidden',2,"");
                     ?>
+
+                    <?php if($chavepesquisa == 101 || $chavepesquisa == 100): ?>
                     <tr id="linha_nroedital">
                         <td nowrap title="<?=@$Tl20_nroedital?>">
                             <?=@$Ll20_nroedital?>
@@ -275,11 +283,12 @@ if ($sContass[1] != 'contass') {
                         db_input('l20_nroedital_old',10,$Il20_nroedital,true,'hidden',2,"");
                     ?>
 
+                    <?php endif; ?>
 
-                <?php endif;?>
+            <?php endif;?>
             </table>
         </fieldset>
-        <input name="alterar" type="submit" id="alterar" value="Alterar" >
+        <input name="alterar"   type="submit" value="Alterar" <?=($db_opcao == 2?"":"disabled")?>>
     </div>
 </form>
 </div>
@@ -301,11 +310,11 @@ if ($sContass[1] != 'contass') {
         function js_pesquisa_liclicita(mostra) {
 
             if (mostra) {
-                js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
+                js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicitamanutencao.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_pctipocompratribunal','Pesquisa',true);
             } else {
 
                 if (document.form1.l20_codigo.value != '') {
-                    js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+                    js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicitamanutencao.php?pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
                 } else {
                     document.form1.l20_codigo.value = '';
                 }
@@ -324,13 +333,13 @@ if ($sContass[1] != 'contass') {
             ?>
 
         }
-        function js_mostraliclicita1(chave1) {
+        function js_mostraliclicita1(chave1,chave2) {
 
             document.form1.l20_codigo.value = chave1;
             db_iframe_liclicita.hide();
 
             <?
-            echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave1;";
+            echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave1+'&chavepesquisa2='+chave2";
             ?>
 
         }
