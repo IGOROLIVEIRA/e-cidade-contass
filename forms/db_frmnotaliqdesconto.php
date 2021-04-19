@@ -35,6 +35,11 @@ $clempempenho->rotulo->label();
 $db_opcao_inf=1;
 ?>
 <center>
+<style type="text/css">
+    #data_ato{
+        width: 74px;
+    }
+</style>
   <form name='frmDesconto' id='frmDesconto' action="" method="POST">
     <table width='80%' cellspacing='0' style='padding:0px' border='0'>
       <tr><td  style='padding:0px' valign="top">
@@ -59,13 +64,13 @@ $db_opcao_inf=1;
               </tr>
               <tr style="display:none;" id="trAto">
                 <td nowrap><b>Ato que autorizou o cancelamento: </b></td>
-                <td><? db_input('ato', 20, 'ato', true, 'text', 1, "","","","","20");?></td>
+                <td><? db_input('ato', 13, 'ato', true, 'text', 1, "","","","","20");?></td>
               </tr>
               <tr style="display:none;" id="trDtAto">
                 <td nowrap title="Data do ato">
                     <b>Data do ato: </b>
                 </td>
-                <td>
+                <td nowrap>
                     <?
                     db_inputdata('data_ato',@$dataini_dia,@$data_ato_mes,@$data_ato_ano,true,'text',$db_opcao,"")
                     ?>
