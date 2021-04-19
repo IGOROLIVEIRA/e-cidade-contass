@@ -266,7 +266,10 @@ if ($sContass[1] != 'contass') {
                     db_input('l20_numero_old',10,$Il20_numero,true,'hidden',2,"");
                     ?>
 
-                    <?php if($chavepesquisa == 101 || $chavepesquisa == 100): ?>
+                    <?php
+                    if($chavepesquisa2 != 101):
+                    if($chavepesquisa2 != 100):
+                    ?>
                     <tr id="linha_nroedital">
                         <td nowrap title="<?=@$Tl20_nroedital?>">
                             <?=@$Ll20_nroedital?>
@@ -283,7 +286,10 @@ if ($sContass[1] != 'contass') {
                         db_input('l20_nroedital_old',10,$Il20_nroedital,true,'hidden',2,"");
                     ?>
 
-                    <?php endif; ?>
+                    <?php
+                    endif;
+                    endif;
+                    ?>
 
             <?php endif;?>
             </table>
@@ -334,7 +340,7 @@ if ($sContass[1] != 'contass') {
 
         }
         function js_mostraliclicita1(chave1,chave2) {
-
+            
             document.form1.l20_codigo.value = chave1;
             db_iframe_liclicita.hide();
 
