@@ -30,7 +30,8 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 //$cliframe_seleciona = new cl_iframe_seleciona;
-
+$anousu=db_getsession("DB_anousu");
+$instit=db_getsession("DB_instit");
 if(isset($alterar)){
     $sqlerro=false;
     $aditivo=false;
@@ -39,9 +40,11 @@ if(isset($alterar)){
     $ac16_datainicio = implode("-",array_reverse(explode("/",$ac16_datainicio)));
     $ac16_datafim    = implode("-",array_reverse(explode("/",$ac16_datafim)));
 
-    if($l20_nroedital != $l20_nroedital_old) {
-        $sWhere = "ac16_numeroacordo = '$ac16_numeroacordo'";
+    if($ac16_numeroacordo != $ac16_numeroacordo_old) {
+        $sWhere = "ac16_numeroacordo = '$ac16_numeroacordo' and ac16_anousu = $anousu and ac16_instit = $instit ";
+
         $numero_geral = $clacordo->sql_record($clacordo->sql_query_file(null, "*", null, $sWhere));
+
         if ($clacordo->numrows > 0) {
             db_msgbox("Já existe acordo com o número $ac16_numeroacordo");
             $erro = true;
@@ -69,23 +72,28 @@ if(isset($alterar)){
         for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
             $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
 
-            db_query("update acordovigencia  set ac18_datainicio = '$ac18_datainicio', ac18_datafim  = '$ac18_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
-            db_query("update acordoitemperiodo set ac41_datainicial = '$ac18_datainicio', ac41_datafinal = '$ac18_datafim' where ac41_acordoposicao = '$oPosicao->posicao'");
+            if(isset($ac18_datainicio)) {
+                db_query("update acordovigencia  set ac18_datainicio = '$ac18_datainicio', ac18_datafim  = '$ac18_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+                db_query("update acordoitemperiodo set ac41_datainicial = '$ac18_datainicio', ac41_datafinal = '$ac18_datafim' where ac41_acordoposicao = '$oPosicao->posicao'");
+            }else{
+                db_query("update acordovigencia  set ac18_datainicio = '$ac16_datainicio', ac18_datafim  = '$ac16_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+            }
 
             $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
-            $seq   = pg_result($resmanut,0,0);
+            $seq      = pg_result($resmanut,0,0);
+
             $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: ".$oPosicao->ac16_datainicio ." - ".$oPosicao->ac16_datafim." atual: ".$ac16_datainicio ." - ".$ac16_datafim."  ',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         }
 
         $clacordo->alterar($ac16_sequencial);
 
         if ($clacordo->erro_status == "0") {
-            $erro_msg = $clacordo->erro_msg;
+            db_msgbox($clacordo->erro_msg);
             $sqlerro = true;
         }
 
         if ($sqlerro == false) {
-            echo "<script>alert('Alteração efetuada');</script>";
+            db_msgbox('Alteração efetuada');
         }
     }
     db_fim_transacao($sqlerro);
