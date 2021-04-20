@@ -68,6 +68,7 @@ class SiopeDespesa extends Siope {
         $sele_work  = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($this->iInstit) and  o58_anousu=$this->iAnoUsu  ";
         $sqlprinc   = db_dotacaosaldo(8, 1, 4, true, $sele_work, $this->iAnoUsu, $this->dtIni, $this->dtFim, 8, 0, true);
         $result     = db_query($sqlprinc) or die(pg_last_error());
+        // db_criatabela($result);
 
         if (pg_num_rows($result) == 0) {
             throw new Exception ("Nenhum registro encontrado.");
@@ -84,15 +85,72 @@ class SiopeDespesa extends Siope {
             if ($oDespesa->o58_codigo > 0) {
 
                 if ($oDespesa->o58_elemento != "") {
+                    // echo '<pre>';print_r($oDespesa);echo '</pre>';
 
-                    $sele_work2         = " 1=1 and o58_orgao in ({$oDespesa->o58_orgao}) and ( ( o58_orgao = {$oDespesa->o58_orgao} and o58_unidade = {$oDespesa->o58_unidade} ) ) and o58_funcao in ({$oDespesa->o58_funcao}) and o58_subfuncao in ({$oDespesa->o58_subfuncao}) and o58_programa in ({$oDespesa->o58_programa}) and o58_projativ in ({$oDespesa->o58_projativ}) and (o56_elemento like '" . substr($oDespesa->o58_elemento, 0, 7) . "%') and o58_codigo in ({$oDespesa->o58_codigo}) and o58_instit in ({$this->iInstit}) and o58_anousu={$this->iAnoUsu} ";
-                    $cldesdobramento    = new cl_desdobramento();
-                    $sSqlDesd           = $cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})",'');
+                    // $sele_work2         = " 1=1 and o58_orgao in ({$oDespesa->o58_orgao}) and ( ( o58_orgao = {$oDespesa->o58_orgao} and o58_unidade = {$oDespesa->o58_unidade} ) ) and o58_funcao in ({$oDespesa->o58_funcao}) and o58_subfuncao in ({$oDespesa->o58_subfuncao}) and o58_programa in ({$oDespesa->o58_programa}) and o58_projativ in ({$oDespesa->o58_projativ}) and (o56_elemento like '" . substr($oDespesa->o58_elemento, 0, 7) . "%') and o58_codigo in ({$oDespesa->o58_codigo}) and o58_instit in ({$this->iInstit}) and o58_anousu={$this->iAnoUsu} ";
+                    // $cldesdobramento    = new cl_desdobramento();
+                    // $sSqlDesd           = $cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})",'');
+                    // $resDepsMes         = db_query($sSqlDesd) or die($sSqlDesd . pg_last_error());
+                    // db_criatabela($resDepsMes);
+                    $sSqlDesd = "   SELECT  conplanoorcamento.c60_estrut,
+                                            conplanoorcamento.c60_descr,
+                                            substr(ele.o56_elemento||'00',1,15) AS o56_elemento,
+                                            ele.o56_descr,
+                                            c207_esferaconcedente,
+                                            COALESCE(SUM(CASE
+                                                WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                                                WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                                                ELSE 0::FLOAT8
+                                            END),0) AS empenhado,
+                                            COALESCE(SUM(CASE
+                                                WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
+                                                WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                                                ELSE 0::FLOAT8
+                                            END),0) AS liquidado,
+                                            COALESCE(SUM(CASE
+                                                WHEN c53_tipo = 30 THEN ROUND(c70_valor, 2)
+                                                WHEN c53_tipo = 31 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                                                ELSE 0::FLOAT8
+                                            END),0) AS pago
+                                    FROM conlancamele
+                                        INNER JOIN conlancam ON c67_codlan = c70_codlan
+                                        INNER JOIN conlancamemp ON c75_codlan = c70_codlan
+                                        INNER JOIN empempenho ON e60_numemp = c75_numemp AND e60_anousu = {$this->iAnoUsu}
+                                        INNER JOIN orcdotacao ON o58_coddot = empempenho.e60_coddot AND o58_anousu = e60_anousu
+                                        INNER JOIN conplanoorcamento ON c60_codcon = orcdotacao.o58_codele AND c60_anousu = {$this->iAnoUsu}
+                                        INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                                        INNER JOIN conhistdoc ON c71_coddoc = c53_coddoc
+                                        INNER JOIN orcelemento ele ON ele.o56_codele = conlancamele.c67_codele AND ele.o56_anousu = o58_anousu
+                                        LEFT JOIN convconvenios ON e60_numconvenio = c206_sequencial
+                                        LEFT JOIN convdetalhaconcedentes ON c207_codconvenio = c206_sequencial
+                                    WHERE o58_orgao IN ({$oDespesa->o58_orgao})
+                                        AND ((o58_orgao = {$oDespesa->o58_orgao} AND o58_unidade = {$oDespesa->o58_unidade}))
+                                        AND o58_funcao IN ({$oDespesa->o58_funcao})
+                                        AND o58_subfuncao IN ({$oDespesa->o58_subfuncao})
+                                        AND o58_programa IN ({$oDespesa->o58_programa})
+                                        AND o58_projativ IN ({$oDespesa->o58_projativ})
+                                        AND (o56_elemento LIKE '" . substr($oDespesa->o58_elemento, 0, 7) . "%')
+                                        AND o58_codigo IN ({$oDespesa->o58_codigo})
+                                        AND o58_instit IN ({$this->iInstit})
+                                        AND o58_anousu = {$this->iAnoUsu}
+                                        AND empempenho.e60_instit IN ({$this->iInstit})
+                                        AND (conlancam.c70_data >= '{$this->dtIni}' AND conlancam.c70_data <= '{$this->dtFim}')
+                                        AND conhistdoc.c53_tipo IN (10, 11, 20, 21, 30, 31)
+                                    GROUP BY c60_estrut,
+                                            c60_descr,
+                                            o56_elemento,
+                                            o56_descr,
+                                            c207_esferaconcedente
+                                    ORDER BY o56_elemento";
+
+                    echo $sSqlDesd.'<br>';
                     $resDepsMes         = db_query($sSqlDesd) or die($sSqlDesd . pg_last_error());
+                    db_criatabela($resDepsMes);
                     $sHashDesp          = $oDespesa->o58_elemento;
                     $aDadosAgrupados    = array();
 
                     if (!isset($aDadosAgrupados[$sHashDesp])) {
+                        // echo 'sempre<br>';
 
                         $aArrayTemp     = array();
 
@@ -106,7 +164,7 @@ class SiopeDespesa extends Siope {
                             $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
                         }
 
-                        $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespecidade;
+                        $aArrayTemp['elemento_siope']   = $oNaturdessiope->c222_natdespsiope;
                         $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
                         $aArrayTemp['dot_atualizada']   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
                         $aArrayTemp['empenhado']        = 0;
@@ -114,6 +172,8 @@ class SiopeDespesa extends Siope {
                         $aArrayTemp['pagamento']        = 0;
 
                         array_push($this->aDespesas, $aArrayTemp);
+                        // $this->aDespesas[$sHashDesp] = $aArrayTemp;
+                        
 
                     }
 
@@ -123,6 +183,7 @@ class SiopeDespesa extends Siope {
                         $sHashDespDesd      = $oDadosMes->o56_elemento;
 
                         if (isset($aDadosAgrupados[$sHashDesp])) {
+                            echo 'aqui1<br>';
 
                             $aArrayDesdTemp = array();
 
@@ -146,6 +207,7 @@ class SiopeDespesa extends Siope {
                             array_push($this->aDespesas, $aArrayDesdTemp);
 
                         } else {
+                            // echo 'aqui2<br>';
 
                             $aArrayDesdTemp = array();
 
@@ -177,6 +239,7 @@ class SiopeDespesa extends Siope {
             }
 
         }
+        echo '<pre>';print_r($this->aDespesas);echo '</pre>';
 
         /**
          * Organiza despesas do ano subsequente.
@@ -527,7 +590,9 @@ class SiopeDespesa extends Siope {
     public function getNaturDesSiope($elemento, $previdencia) {
 
         $clnaturdessiope    = new cl_naturdessiope();
+        echo $clnaturdessiope->sql_query_siope(substr($elemento, 0, 11),"", $this->iAnoUsu, $previdencia).'<br>';
         $rsNaturdessiope    = db_query($clnaturdessiope->sql_query_siope(substr($elemento, 0, 11),"", $this->iAnoUsu, $previdencia));
+        db_criatabela($rsNaturdessiope);
 
         if (pg_num_rows($rsNaturdessiope) > 0) {
             $oNaturdessiope = db_utils::fieldsMemory($rsNaturdessiope, 0);
