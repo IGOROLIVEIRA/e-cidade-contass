@@ -266,7 +266,7 @@ $db_botao = true;
     }
 
     function js_exibeDadosCompl(iSequencial = null, incluir = true){
-        
+
         if(anoLicitacao >= 2021 && iSequencial == null && tipoJulgamento == '3'){
             oDadosLotesPendentes = new DBViewLotesPendentes('oDadosLotesPendentes');
             oDadosLotesPendentes.setLicitacao(codigoLicitacao);
@@ -428,7 +428,6 @@ $db_botao = true;
             aLinha[2] = descricaoLinha;
             aLinha[3] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+dado.db150_sequencial+'"'+");'>"+
                 "<input type='button' value='E' onclick='js_excluiDados("+'"'+dado.db150_sequencial+'",'+'"'+dado.l04_descricao+'"'+");'>";
-
             oDBGrid.addRow(aLinha);
         });
 
@@ -448,22 +447,23 @@ $db_botao = true;
             { parameters: 'json='+Object.toJSON(oParam),
                 asynchronous:false,
                 method: 'post',
-                onComplete : function(oAjax){
-                  let response = eval('('+oAjax.responseText+')');
-                  console.log('Resposta pega: ', response.itens);
-                  let aLotes = [];
-                  response.itens.map(item => {
-                      if(!aLotes.includes(item.descricao))
-                        aLotes.push(item.descricao);
-                  });
-                  
-                  if(!aLotes.length){
-                      alert('Não há mais lotes a serem cadastrados!');
-                  }else{
-                      js_exibeDadosCompl();
-                  }
+                onComplete : (oAjax) => {
+                    let response = eval('('+oAjax.responseText+')');
+                    let aLotes = [];
+
+                    response.itens.map(item => {
+
+                        if(!aLotes.includes(item.descricao)){
+                            aLotes.push(item.descricao);
+                        }
+                        
+                    });
+
+                    !aLotes.length ? alert('Não há mais lotes a serem cadastrados!') : js_exibeDadosCompl();
+
                 }
-            })
+            }
+          )
         
     }
 
@@ -472,11 +472,10 @@ $db_botao = true;
         js_exibeDadosCompl(valor, false);
     }
 
-    function js_excluiDados(valor, lote=null){
-
+    function js_excluiDados(valor, lote){
         let mensagem = '';
 
-        if(lote != 'undefined'){
+        if(lote != 'undefined' && lote){
             mensagem = `Deseja excluir o endereço do ${lote.urlDecode()}?`;
         }else{
             mensagem = `Deseja excluir o endereço do código da obra ${valor}?`;

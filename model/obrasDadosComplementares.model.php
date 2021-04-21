@@ -64,6 +64,7 @@ class obrasDadosComplementares
 	private $bdi = null;
 	private $sequencial = null;
 	private $sLote = null;
+	private $lLote = false;
 
 
 	/**
@@ -88,7 +89,7 @@ class obrasDadosComplementares
 			}
 
 			$oDados = db_utils::fieldsMemory($rsQueryLocal, 0);
-//
+
 			$this->setEstado($oDados->db150_estado);
 			$this->setPais($oDados->db150_pais);
 			$this->setMunicipio($oDados->db150_municipio);
@@ -637,6 +638,24 @@ class obrasDadosComplementares
 	 public function getLote(){
 		 return $this->lote;
 	 }
+	
+	/**
+	 * Método para setar true ou false para saber se os dados vão ser cadastrados na tabela obrasdadoscomplementareslote
+	 * @param boolean
+	 * @return void
+	 */
+	public function setFlagLote($lLote){
+		$this->lLote = $lLote;
+	}
+
+	/**
+	 * Método para retornar o boolean do lote
+	 * @return boolean
+	 */
+
+	 public function getFlagLote(){
+		 return $this->lLote;
+	 }
 
 	/**
 	 * Método para salvar um endereço da obra
@@ -648,8 +667,7 @@ class obrasDadosComplementares
 			throw new Exception('Processamento Cancelado não existe transação ativa.');
 		}
 
-		
-		$tabela_base = !$this->getLote() ? 'obrasdadoscomplementares' : 'obrasdadoscomplementareslote';
+		$tabela_base = !$this->getFlagLote() ? 'obrasdadoscomplementares' : 'obrasdadoscomplementareslote';
 		$oDaoObras = db_utils::getDao($tabela_base);
 		$oDaoObrasCodigo = db_utils::getDao('obrascodigos');
 
@@ -670,7 +688,7 @@ class obrasDadosComplementares
 
 			}
 
-			!$this->getLote() ? $this->preencheObjetoItem($incluir) : $this->preencheObjetoLote($incluir);
+			!$this->getFlagLote() ? $this->preencheObjetoItem($incluir) : $this->preencheObjetoLote($incluir);
 
 		}else{
 
@@ -710,7 +728,7 @@ class obrasDadosComplementares
 				}
 			}
 
-			if(!$this->getLote()){
+			if(!$this->getFlagLote()){
 				$this->preencheObjetoItem($incluir);
 			}else{
 				$this->preencheObjetoLote($incluir);
@@ -810,7 +828,13 @@ class obrasDadosComplementares
 			$oDaoObras->db150_cep = $this->getCep();
 			
 			if(!$inclusao){
-				$oDaoObras->alterar('', ' db150_lote = ' . $aLotes[$count]);
+				$sWhere = '';
+				if($aLotes[$count]){
+				    $sWhere = ' db150_lote = ' . $aLotes[$count];
+				}else{
+					$sWhere = ' db150_codobra = ' . $this->getCodigoObra();
+				}
+				$oDaoObras->alterar('', $sWhere);
 			}else{
 				$oDaoObras->incluir();
 			}
@@ -910,11 +934,11 @@ class obrasDadosComplementares
 		if (trim($iCodigoLicitacao) != "") {
 
 			$tabela_base = self::checkTable($iCodigoLicitacao);
-
+			
 			$oDaoObra = db_utils::getDao($tabela_base);
-			$sCampos = 'distinct db72_descricao as descrMunicipio, ';
+			$sCampos  = 'distinct db72_descricao as descrMunicipio, ';
 			$sCampos .= "$tabela_base.*";
-			$sCampos .= $tabela_base === 'obrasdadoscomplementareslote' ? ',l04_descricao' : '';
+			$sCampos .= $tabela_base === 'obrasdadoscomplementareslote' ? ',l04_descricao, l04_codigo' : '';
 			
 			$sWhere = " db151_liclicita = " . $iCodigoLicitacao;
 
@@ -986,7 +1010,7 @@ class obrasDadosComplementares
 		$rsSql = db_query($sSql);
 		$oLicitacao = db_utils::fieldsMemory($rsSql, 0);
 
-		$table_base = $oLicitacao->l20_anousu >= 2021 && $oLicitacao->l20_tipojulg == 3 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+		$table_base = $oLicitacao->l20_anousu >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
 		return $table_base; 
 
 	}

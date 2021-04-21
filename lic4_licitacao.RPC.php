@@ -771,20 +771,34 @@ switch ($oParam->exec) {
 
         $oDaoLiclicitemLote = db_utils::getDao('liclicitemlote');
         $sWhere = ' l20_codigo = ' . $oParam->iLicitacao;
-        $sWhere .= ' and l04_codigo not in (select db150_lote from obrasdadoscomplementareslote) ';
-        $sSqlLote = $oDaoLiclicitemLote->sql_query('', 'liclicitemlote.*', '', $sWhere);
+        $sSqlLote = $oDaoLiclicitemLote->sql_query('', 'liclicitemlote.*', 'l04_descricao', $sWhere);
         
         $rsLote = $oDaoLiclicitemLote->sql_record($sSqlLote);
-
+        $descInicial = '';
+        $countLote = 0;
+        
         for($count = 0; $count < pg_numrows($rsLote); $count++){
 
             $oDadosLote = db_utils::fieldsMemory($rsLote, $count);
+            if($descInicial != $oDadosLote->l04_descricao){
+                $descInicial = $oDadosLote->l04_descricao;
+                $countLote += 1;
+            }
 
-            $oLote = new stdClass();
-            $oLote->codigo = $oDadosLote->l04_codigo;
-            $oLote->descricao = $oDadosLote->l04_descricao;
+            $sSqlLoteCad = 'SELECT * from obrasdadoscomplementareslote where db150_lote = ' . $oDadosLote->l04_codigo;
+            $rsLoteCad   = db_query($sSqlLoteCad);
+            
+            if(!pg_numrows($rsLoteCad)){
 
-            $oRetorno->itens[] = $oLote;
+                $oLote = new stdClass();
+                $oLote->sequencial = $countLote;
+                $oLote->codigo     = $oDadosLote->l04_codigo;
+                $oLote->descricao  = $oDadosLote->l04_descricao;
+    
+                $oRetorno->itens[] = $oLote;
+
+            }
+
         }
 
     break;

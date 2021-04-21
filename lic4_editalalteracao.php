@@ -165,6 +165,7 @@ if(isset($alterar)){
   <script language="JavaScript" type="text/javascript" src="scripts/prototype.maskedinput.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/classes/dbViewCadDadosComplementares.classe.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/classes/DBViewLotesPendentesLicitacao.classe.js"></script>
 
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>

@@ -105,7 +105,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 asynchronous: false,
                 onComplete: (objeto) => {
                     let response = eval('('+objeto.responseText+')');
-                    me.exibeLote = response.tipo == '3' && parseInt(response.ano) >= 2021;
+                    me.exibeLote = parseInt(response.ano) >= 2021;
                 }
             }
         )
@@ -2609,19 +2609,23 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.checaTamanho = (campo, nomecampo) => {
+
         let valor = campo.value;
 
         if(valor.length > 9){
-            valor = valor.substr(0, valor.length - 1);
             
             if(!valor.includes('.')){
+                valor = valor.substr(0, valor.length - 1);
                 campo.value = valor.substr(0, 2) + '.' + valor.substr(2,);
+            }else{
+                campo.value = valor.substr(0, valor.length - 1);
             }
+
         }
         
         if(valor.length == 9){
             if(!valor.includes('.')){
-                campo.value = valor.substr(0, 2) + '.' + valor.substr(2,);
+                campo.value = valor.substr(0, 2) + '.' + valor.substr(2, valor.length - 3);
             }
         }
 
@@ -2630,7 +2634,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     this.preencheComZero = (novaString, tamanho) => {
         
-        for(let count = 0; count < (8 - tamanho); count++){
+        for(let count = 0; count < (9 - tamanho); count++){
             novaString += '0';
         }
 
@@ -2641,11 +2645,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
         let valor = event.target.value;
         valor = valor.replace(/\,/g, '');
-        
 
         if(valor.indexOf('.') == 2 && valor.length < 9){
-            console.log('1: ', valor.substr(0,3));
-            console.log('2: ', valor.substr(3,).replace(/\./g, ''));
             valor = valor.substr(0, 3) + valor.substr(2,).replace(/\./g, '');
             valor = me.preencheComZero(valor, valor.length);
         }
@@ -2657,8 +2658,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         }
 
         event.target.value = valor;
-       
-        valor = parseFloat(valor);
         
         return valor;
     }
@@ -4124,6 +4123,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         oEndereco.descrBairro = $('txtDescrBairro' + sId).value;
         oEndereco.sequencial = me.getSequencial();
         oEndereco.sLote = me.sLote;
+        oEndereco.lLote = me.exibeLote;
 
         oDados = new Object();
         oDados.exec = 'salvarDadosComplementares';

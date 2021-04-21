@@ -40,13 +40,13 @@ $clliclancedital = new cl_liclancedital;
 $clliclicita = new cl_liclicita;
 $clcflicita = new cl_cflicita;
 $cleditaldocumento = new cl_editaldocumento;
-$clobrasdadoscomplementares = new cl_obrasdadoscomplementares;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $sqlerro = false;
 $db_opcao = 1;
 //  Realizar busca pelos campos
+
 if ($licitacao) {
 
 	$sWhere = "
@@ -72,6 +72,10 @@ if ($licitacao) {
 	$numero_edital = $oDadosLicitacao->l20_nroedital;
     $anoLicitacao = $oDadosLicitacao->l20_anousu;
     $iTipoJulgamento = $oDadosLicitacao->l20_tipojulg;
+
+    $tabela_base = ($iTipoJulgamento == 3 && $anoLicitacao >= 2021) ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+    $clobrasdadoscomplementares = db_utils::getDao($tabela_base);
+
 }
 
 if (isset($incluir) && isset($licitacao)) {
@@ -169,7 +173,6 @@ if (isset($incluir) && isset($licitacao)) {
 	}
 
 }
-
 
 ?>
 <html>

@@ -427,7 +427,7 @@ switch ($oParam->exec) {
                 $oEndereco->setDistrito($oParam->endereco->distrito);
                 $oEndereco->setLogradouro($oParam->endereco->logradouro);
                 
-                if(!$oParam->endereco->sLote){
+                if(!$oParam->endereco->lLote){
                   
                     $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
                     $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
@@ -441,6 +441,7 @@ switch ($oParam->exec) {
                     $oEndereco->setLatitude($oParam->endereco->latitude);
                     $oEndereco->setLongitude($oParam->endereco->longitude);
                     $oEndereco->setLote($oParam->endereco->sLote);
+                    $oEndereco->setFlagLote($oParam->endereco->lLote);
 
                 }
 
@@ -502,7 +503,7 @@ switch ($oParam->exec) {
 
                     $rsLicitacao = db_query('select l20_anousu, l20_tipojulg from liclicita where l20_codigo = ' . $oParam->licitacao);
                     $oLicitacao = db_utils::fieldsMemory($rsLicitacao, 0);
-                    $tabela = $oLicitacao->l20_anousu >= 2021 && $oLicitacao->l20_tipojulg == 3 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+                    $tabela = $oLicitacao->l20_anousu >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
                     
                     $clObras = db_utils::getDao($tabela);
                     $sSql = $clObras->sql_query_completo('','db150_sequencial','', 'db151_liclicita = '.$oParam->licitacao);
@@ -542,17 +543,29 @@ switch ($oParam->exec) {
                                              WHERE db150_sequencial = $oParam->sequencial)))";
 
                         $rsLotes = db_query($sSqlLotes);
-                        $aLotes  = db_utils::getCollectionByRecord($rsLotes);
 
-                        for($count=0; $count < count($aLotes); $count++){
+                        if(pg_numrows($rsLotes)){
 
-                            $clDadosComplementares = db_utils::getDao('obrasdadoscomplementareslote');
-                            $clDadosComplementares->excluir($aLotes[$count]->db150_sequencial);
-
-                            if(!$clDadosComplementares->numrows_excluir){
-                                throw new Exception('Registros dos dados complementares do lote não podem ser excluídos');
+                            $aLotes  = db_utils::getCollectionByRecord($rsLotes);
+                            
+                            for($count=0; $count < count($aLotes); $count++){
+    
+                                $clDadosComplementares = db_utils::getDao('obrasdadoscomplementareslote');
+                                $clDadosComplementares->excluir($aLotes[$count]->db150_sequencial);
+    
+                                if(!$clDadosComplementares->numrows_excluir){
+                                    throw new Exception('Registros dos dados complementares do lote não podem ser excluídos');
+                                }
+    
                             }
 
+                        }else{
+                            $clDadosComplementares = db_utils::getDao('obrasdadoscomplementareslote');
+                            $clDadosComplementares->excluir($oParam->sequencial);
+
+                            if(!$clDadosComplementares->numrows_excluir){
+                                throw new Exception('Registros dos dados complementares do lote não pode ser excluído');
+                            }
                         }
 
                         $sSqlItens = "

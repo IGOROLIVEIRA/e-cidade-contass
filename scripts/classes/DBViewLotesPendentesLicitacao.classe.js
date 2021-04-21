@@ -94,11 +94,11 @@ DBViewLotesPendentes = function(sNameInstance) {
         oGridLotesPendentes.clearAll(true);
         let oRetorno = eval("("+oAjax.responseText+")");
         let aTemporario = [];
-        
         oRetorno.itens.each(oLotePendente => {
 
             let aLinha    = new Array();
-            
+  
+            aLinha[0] = oLotePendente.sequencial;
             aLinha[1] = oLotePendente.descricao;
             aLinha[2] = oLotePendente.codigo;
 
@@ -114,27 +114,21 @@ DBViewLotesPendentes = function(sNameInstance) {
                 });
                 
                 if(!flag){
-                    aTemporario.push(aLinha);  
+                    aTemporario.push(aLinha);
                 }
 
             }else{
-                aLinha[0] = 1;
                 aTemporario.push(aLinha);
             }
             
         });
           
         for(let count = 0; count < aTemporario.length; count++){
-            aTemporario[count][0] = count+1;
             oGridLotesPendentes.addRow(aTemporario[count]);
             oGridLotesPendentes.aRows[count].sEvents = "ondblclick='" + me.sNameInstance+".loadCallBackDoubleClick("+count+");'";     
         }
-        
-        if(aTemporario.length){
-            oGridLotesPendentes.renderRows();
-        }else{
-            me.oWindowLotesPendentes.destroy();
-        }
+
+        aTemporario.length ? oGridLotesPendentes.renderRows() : me.oWindowLotesPendentes.destroy();
 
     }
   

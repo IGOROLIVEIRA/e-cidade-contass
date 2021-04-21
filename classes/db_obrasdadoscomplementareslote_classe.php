@@ -252,6 +252,11 @@ class cl_obrasdadoscomplementareslote
 		if(!$this->db150_numero){
 			$this->db150_numero = 'null';
 		}
+
+		if(!$this->db150_lote){
+			$this->db150_lote = 'null';
+		}
+
 		$sql = "insert into obrasdadoscomplementareslote(
                                         db150_sequencial
                                         ,db150_codobra
@@ -617,7 +622,7 @@ class cl_obrasdadoscomplementareslote
 		}
 		$sql .= " from obrasdadoscomplementareslote ";
 		$sql .= " INNER JOIN obrascodigos on db151_codigoobra = db150_codobra ";
-		$sql .= " INNER JOIN liclicitemlote on l04_codigo = db150_lote ";
+		$sql .= " LEFT JOIN liclicitemlote on l04_codigo = db150_lote ";
 		$sql .= " INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio ";
 		$sql2 = "";
 		if ($dbwhere == "") {
