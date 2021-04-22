@@ -178,7 +178,6 @@ if (isset($licitacao)&&trim($licitacao)!=""){
    $campos       = "l21_codigo,pc81_codprocitem,pc01_descrmater,l04_codigo,l04_descricao";
    $sql          = $clliclicitemlote->sql_query_licitacao(null,"distinct $campos","pc81_codprocitem","l21_codliclicita = $licitacao and l21_situacao = 0");
    $sql_disabled = $clliclicitemlote->sql_query_licitacao(null,"distinct $campos","pc81_codprocitem","l21_codliclicita = $licitacao and l21_situacao = 0 and l04_codigo is not null");
-
    $res_itenslote_desab = $clliclicitemlote->sql_record($sql_disabled);
    $numrows_desab       = $clliclicitemlote->numrows;
    $res_itenslote       = $clliclicitemlote->sql_record($sql);
@@ -302,6 +301,12 @@ if (isset($db_opcao)&&$db_opcao==3){
 
 if (isset($erro_msg)&&trim($erro_msg)!="") {
      db_msgbox($erro_msg);
+     if($erro_msg && !$sqlerro && $db_opcao != 3){
+          echo "
+               <script>
+                    parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';
+               </script>";
+     }
      echo "<script>
               document.form2.l04_descricao.select();
               document.form2.l04_descricao.focus();

@@ -878,7 +878,7 @@ switch ($oParam->exec) {
             $sql_ult_ordem .= "order by l21_codigo desc limit 1";
 
             $res_ult_ordem  = @db_query($sql_ult_ordem);
-            
+
             if (pg_numrows($res_ult_ordem)){
                 $seq = pg_result($res_ult_ordem, 0, "l21_ordem");
                 $seq++;
@@ -887,11 +887,10 @@ switch ($oParam->exec) {
             }
 
             for($count = 0; $count < count($aItens); $count++){
-                
                 $nova_qtd = 0;
 
                 if(isset($aItens[$count])){
-                    
+
                     if(!$sqlerro){
 
                         $achou = false;
@@ -910,10 +909,10 @@ switch ($oParam->exec) {
                             $oDaoSolicitemReservado = db_utils::getDao('solicitem');
                             $sWhereSolicitem = ' pc81_codproc = ' . $aItens[$count]->codproc;
                             $sWhereSolicitem .= ' AND pc11_seq = ' . $aItens[$count]->sequencial;
-                            $sSqlSolicitem = $oDaoSolicitemReservado->sql_query_pcmater('', 'solicitem.*', '', $sWhereSolicitem);
+                            $sWhereSolicitem .= ' AND pc81_codprocitem = ' . $aItens[$count]->codprocitem;
+                            $sSqlSolicitem = $oDaoSolicitemReservado->sql_query_pcmater('', 'distinct solicitem.*', '', $sWhereSolicitem);
 
                             $rsSolicitem = $oDaoSolicitemReservado->sql_record($sSqlSolicitem);
-                            
                             if(pg_numrows($rsSolicitem)){
 
                                 if($aItens[$count]->qtdexclusiva){
@@ -1233,14 +1232,21 @@ switch ($oParam->exec) {
                             if (!empty($clliclicitemlotereservado->l04_descricao) && in_array($oParam->tipojulg, array(1, 2))) {
         
                                 $oDaoLoteReservado = db_utils::getDao('liclicitemlote');
-                                $oDaoLoteReservado->l04_descricao = $clliclicitemlotereservado->l04_descricao;
-                                $oDaoLoteReservado->l04_liclicitem = $clliclicitemlotereservado->l04_liclicitem;
-                                $oDaoLoteReservado->incluir();
+                                $sqlItemLote = 'SELECT * from liclicitemlote where l04_liclicitem = ' . $clliclicitemlotereservado->l04_liclicitem;
+                                $rsItemLote = db_query($sqlItemLote);
                                 
-                                if (!$oDaoLoteReservado->numrows_incluir){
-                                    $erro_msg = $oDaoLoteReservado->erro_msg;
-                                    $sqlerro = true;
-                                    break;
+                                if(!pg_numrows($rsItemLote)){
+
+                                    $oDaoLoteReservado->l04_descricao = $clliclicitemlotereservado->l04_descricao;
+                                    $oDaoLoteReservado->l04_liclicitem = $clliclicitemlotereservado->l04_liclicitem;
+                                    $oDaoLoteReservado->incluir();
+                                    
+                                    if (!$oDaoLoteReservado->numrows_incluir){
+                                        $erro_msg = $oDaoLoteReservado->erro_msg;
+                                        $sqlerro = true;
+                                        break;
+                                    }
+
                                 }
 
                             }
@@ -1333,7 +1339,7 @@ switch ($oParam->exec) {
                                         $clpcorcamitemlicreservado->pc26_orcamitem = $pc22_orcamitemreservado;
                                         $clpcorcamitemlicreservado->pc26_liclicitem = $oItem->l21_codigo;
                                         $clpcorcamitemlicreservado->incluir(null);
-    
+                                        
                                         if (!$clpcorcamitemlicreservado->erro_status){
                                             $sqlerro = true;
                                             $erro_msg = $clpcorcamitemlicreservado->erro_msg;
@@ -1356,8 +1362,31 @@ switch ($oParam->exec) {
          */
 
         db_fim_transacao($sqlerro);
-        $oRetorno->erro_msg = $erro_msg;
+
+        if($sqlerro){
+            $oRetorno->status = 2;
+        }
+        $oRetorno->erro_msg = urlencode($erro_msg);
 
         break;
+
+    case 'getRedirecionaEdital':
+
+        $clliclancedital = db_utils::getDao('liclancedital');
+        $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l47_sequencial', '', 'l20_codigo = '.$oParam->licitacao);
+        $rsSql = $clliclancedital->sql_record($sSql);
+
+        $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
+        $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
+
+        if(in_array(intval($natureza_objeto), array(1, 7)) && $oParam->licitacao && !$sequencial){
+            $oRetorno->redireciona_edital = true;
+        }else{
+            $oRetorno->redireciona_edital = false;
+        }
+
+
+        break;
+
 }
 echo $oJson->encode($oRetorno);

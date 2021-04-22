@@ -362,15 +362,10 @@ function js_calcvaltaxa(valor,param,nome){
     border-color: red;
 }       
 
-.bordas_orcamento td:first-child{
-  /* border: 1px solid red; */
-  border-right-color: red;
+.bordas_orcamento input{
+    border-color: red;
 }
 
-.bordas_orcamento td:last-child{
-  /* border: 1px solid red; */
-  border-left-color: red;
-}
 .bensDesclassificados{
   background-color: <?=$corfundo?>;
 }
@@ -840,7 +835,8 @@ function js_cancdescla(orcamento,licitacao){
 function js_insereBordasItens(objeto){
     
     let aItens = document.querySelectorAll('tr.bordas_corp');
-    let indexVlUnitario  = "<?=$l20_usaregistropreco?>" == 't' ? 11 : 9 ;
+    let registro_preco = "<?=$l20_usaregistropreco?>";
+    let indexVlUnitario  =  registro_preco == 't' ? 11 : 9 ;
 
     for(let count = 2; count < aItens.length; count++){
         
@@ -852,7 +848,23 @@ function js_insereBordasItens(objeto){
         let valorUnit = aItens[count].cells[indexVlUnitario].children[0].value;
 
         if(!objeto && valorUnit == ''){
-            aItens[count].classList.add('bordas_orcamento');
+            aItens[count].cells[4].classList.add('bordas_orcamento');
+
+            if(registro_preco == 't'){
+                if(aItens[count].cells[11].children[0].readOnly){
+                  aItens[count].cells[10].classList.add('bordas_orcamento');    
+                }else{
+                    aItens[count].cells[11].classList.add('bordas_orcamento');
+                }
+
+                if(!aItens[count].cells[12].children[0].readOnly){
+                    aItens[count].cells[12].classList.add('bordas_orcamento');
+                }
+                
+            }else{
+                aItens[count].cells[9].classList.add('bordas_orcamento');
+                aItens[count].cells[10].classList.add('bordas_orcamento');
+            }
         }
 
         if(objeto){

@@ -190,8 +190,12 @@ $clrotulo = new rotulocampo;
         background-color: red;
     }
 
+    .bensDesclassificados, .bensMeEpp, .bensSemCotacao{
+        font-size: 9px;
+    }
+
     .table__legenda td{
-        font-family: 'Times';
+        font-family: 'Arial, Helvetica, sans-serif';
     }
 
     #form2{
@@ -398,7 +402,7 @@ $clrotulo = new rotulocampo;
                     echo "  
                     <tr>
                         <td align='center' colspan='2'>
-                            <iframe name='elementos' id='elementos'  marginwidth='0' marginheight='0' frameborder='0' src='lic1_orcamlancval0011.php?pc20_codorc=$pc20_codorc&db_opcao=$db_opcao".$qry."&lic=".@$lic."' width='1200' height='310'>
+                            <iframe name='elementos' id='elementos'  marginwidth='0' marginheight='0' frameborder='0' src='lic1_orcamlancval0011.php?pc20_codorc=$pc20_codorc&db_opcao=$db_opcao".$qry."&lic=".@$lic."' width='1200' height='300'>
                             </iframe>
                         <td>
                     </tr>\n";
@@ -408,13 +412,13 @@ $clrotulo = new rotulocampo;
                     <tr>
                         <td>
                             <div style='width: 100%; margin-bottom: 12px;'>
-                                <fieldset style='width: 450px'>
+                                <fieldset style='width: 340px'>
                                     <legend>Legenda</legend>
                                     <table colspan='0' class='table__legenda'>
                                         <tr>
-                                        <td align='center' class='bensDesclassificados' height='30px' width='150px'><b>Itens desclassificados</b></td>
-                                        <td align='center' class='bensSemCotacao' height='30px' width='150px'><b>Itens sem cotação</b></td>
-                                        <td align='center' class='bensMeEpp' height='30px' width='150px'><b>Itens ME/EPP</b></td>
+                                        <td align='center' class='bensDesclassificados' height='15px' width='120px'><b>Itens desclassificados</b></td>
+                                        <td align='center' class='bensSemCotacao' height='15px' width='120px'><b>Itens sem cotação</b></td>
+                                        <td align='center' class='bensMeEpp' height='15px' width='100px'><b>Itens ME/EPP</b></td>
                                         </tr>
                                     </table>
                                 </fieldset>

@@ -457,9 +457,39 @@ $db_botao=true;
     function js_retornoItens(oAjax){
         
         let oRetorno = eval("("+oAjax.responseText+")");
+        let tipoJulgamento = "<?=$tipojulg?>";
+        let licitacao = "<?=$licitacao?>";
 
         if(oRetorno.status == 1){
             alert('Item incluído com sucesso!');
+            
+            parent.parent.iframe_liclicita.bloquearRegistroPreco;
+
+            if (tipoJulgamento == '3'){
+                parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
+                parent.parent.document.formaba.liclicitemlote.disabled=false;
+            }
+
+            let oParam = new Object();
+            oParam.exec = 'getRedirecionaEdital';
+            oParam.licitacao = licitacao;
+            var oAjax = new Ajax.Request('lic4_licitacao.RPC.php',
+                                  { method    : 'POST',
+                                    parameters: 'json='+Object.toJSON(oParam), 
+                                    onComplete: (oAjax) => {
+
+                                        let response = eval('('+oAjax.responseText+')');
+
+                                        if(response.redireciona_edital && tipoJulgamento != '3'){
+                                            parent.parent.window.location.href=`lic4_editalabas.php?licitacao=${licitacao}`;
+                                        }else{
+                                            parent.parent.mo_camada('liclicitemlote');
+                                        }
+                                    }
+                                  }
+                            );
+
+            
         }else{
             alert(oRetorno.erro_msg.urlDecode());
         }
