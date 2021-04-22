@@ -24,6 +24,7 @@ class cl_empagemov {
    var $e81_cancelado_mes = null;
    var $e81_cancelado_ano = null;
    var $e81_cancelado = null;
+   var $e81_numdoc = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e81_codmov = int4 = Movimento
@@ -31,6 +32,7 @@ class cl_empagemov {
                  e81_numemp = int4 = Número
                  e81_valor = float8 = Valor
                  e81_cancelado = date = Data cancelado
+                 e81_numdoc = varchar(15) = Número Documento
                  ";
    //funcao construtor da classe
    function cl_empagemov() {
@@ -54,6 +56,7 @@ class cl_empagemov {
        $this->e81_codage = ($this->e81_codage == ""?@$GLOBALS["HTTP_POST_VARS"]["e81_codage"]:$this->e81_codage);
        $this->e81_numemp = ($this->e81_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["e81_numemp"]:$this->e81_numemp);
        $this->e81_valor = ($this->e81_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["e81_valor"]:$this->e81_valor);
+       $this->e81_numdoc = ($this->e81_numdoc == ""?@$GLOBALS["HTTP_POST_VARS"]["e81_numdoc"]:$this->e81_numdoc);
        if($this->e81_cancelado == ""){
          $this->e81_cancelado_dia = ($this->e81_cancelado_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e81_cancelado_dia"]:$this->e81_cancelado_dia);
          $this->e81_cancelado_mes = ($this->e81_cancelado_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e81_cancelado_mes"]:$this->e81_cancelado_mes);
@@ -99,6 +102,9 @@ class cl_empagemov {
      if($this->e81_cancelado == null ){
        $this->e81_cancelado = "null";
      }
+     if($this->e81_numdoc == null ){
+      $this->e81_numdoc = null;
+    }
      if($e81_codmov == "" || $e81_codmov == null ){
        $result = db_query("select nextval('empagemov_e81_codmov_seq')");
        if($result==false){
@@ -137,6 +143,7 @@ class cl_empagemov {
                                       ,e81_numemp
                                       ,e81_valor
                                       ,e81_cancelado
+                                      ,e81_numdoc
                        )
                 values (
                                 $this->e81_codmov
@@ -144,6 +151,7 @@ class cl_empagemov {
                                ,$this->e81_numemp
                                ,$this->e81_valor
                                ,".($this->e81_cancelado == "null" || $this->e81_cancelado == ""?"null":"'".$this->e81_cancelado."'")."
+                               ,'$this->e81_numdoc'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -249,6 +257,13 @@ class cl_empagemov {
          $virgula = ",";
        }
      }
+     if(trim($this->e81_numdoc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e81_numdoc"])){ 
+      $sql  .= $virgula." e81_numdoc = '$this->e81_numdoc' ";
+      $virgula = ",";
+    } elseif(trim($this->e81_numdoc) == null ){ 
+      $sql  .= $virgula." e81_numdoc = null ";
+      $virgula = ",";
+    }
      $sql .= " where ";
      if($e81_codmov!=null){
        $sql .= " e81_codmov = $this->e81_codmov";

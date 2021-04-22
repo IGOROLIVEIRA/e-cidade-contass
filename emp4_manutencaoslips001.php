@@ -90,6 +90,7 @@ db_app::load("datagrid.widget.js");
 db_app::load("strings.js");
 db_app::load("grid.style.css");
 db_app::load("estilos.css");
+db_app::load("widgets/windowAux.widget.js");
 ?>
 <style>
 <?$cor="#999999"?>
