@@ -132,6 +132,7 @@ class SiopeDespesa extends Siope {
                                             conplanoorcamento.c60_descr,
                                             substr(ele.o56_elemento||'00',1,15) AS o56_elemento,
                                             ele.o56_descr,
+                                            e60_numconvenio,
                                             c207_esferaconcedente,
                                             COALESCE(SUM(CASE
                                                 WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
@@ -176,10 +177,12 @@ class SiopeDespesa extends Siope {
                                             c60_descr,
                                             o56_elemento,
                                             o56_descr,
+                                            e60_numconvenio,
                                             c207_esferaconcedente
                                     ORDER BY o56_elemento";
 
                     $resDepsMes = db_query($sSqlDesd) or die($sSqlDesd . pg_last_error());                    
+                    // db_criatabela($resDepsMes);
 
                     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsMes); $contDesp++) {
 
