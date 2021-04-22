@@ -96,6 +96,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     $cCtb41 = new cl_ctb412021();
     $cCtb50 = new cl_ctb502021();
 
+    // matriz de entrada
+    $what = array("°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
+
+    // matriz de saída
+    $by   = array('','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
 
     /**
      * selecionar arquivo xml com dados das receitas
@@ -246,7 +251,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->si95_tipoconta = $oRegistro10->tipoconta;
           $cCtb10->si95_tipoaplicacao = $oRegistro10->tipoaplicacao;
           $cCtb10->si95_nroseqaplicacao = $oRegistro10->nroseqaplicacao;
-          $cCtb10->si95_desccontabancaria = substr($oRegistro10->desccontabancaria, 0, 50);
+          $cCtb10->si95_desccontabancaria = preg_replace("/[^a-zA-Z0-9 ]/", "",str_replace($what, $by,  substr($oRegistro10->desccontabancaria, 0, 50)));
           $cCtb10->si95_contaconvenio = $oRegistro10->contaconvenio;
           $cCtb10->si95_nroconvenio = $oRegistro10->nroconvenio;
           $cCtb10->si95_dataassinaturaconvenio = $oRegistro10->dataassinaturaconvenio;
@@ -864,7 +869,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oDadosMovi21->si97_tipoentrsaida = $iTipoEntrSaida;
 				$oDadosMovi21->si97_valorentrsaida = $nValor;
 				$oDadosMovi21->si97_saldocec = $oMovi->saldocec;
-                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : 
+                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' : 
                     ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
                 $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta) 
 					&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
@@ -998,7 +1003,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
 		  $cCtb21->si97_saldocec = $oCtb21agrupado->si97_saldocec;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
-          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : 
+          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' : 
             ($cCtb21->si97_tipoentrsaida == 10 ? $oCtb21agrupado->si97_dscoutrasmov : ' '));
           $cCtb21->si97_codctbtransf = $oCtb21agrupado->si97_codctbtransf;
           $cCtb21->si97_codfontectbtransf = $oCtb21agrupado->si97_codfontectbtransf;
