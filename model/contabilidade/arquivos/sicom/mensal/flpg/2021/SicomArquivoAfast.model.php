@@ -137,7 +137,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
-            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2021-11-01') {
+            if ($oDados->si199_tipoafastamento == 7) {
               continue;
             }
 
@@ -308,7 +308,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace(";", " ", $oDadosAfast->si199_dscoutrosafastamentos); //usei essas 3 formas que achei
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace("\n", " ", $oDadosAfast->si199_dscoutrosafastamentos); //usei essas 3 formas que achei
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace("\r", " ", $oDadosAfast->si199_dscoutrosafastamentos); //na net pra tentar eliminar a quebra
-                $oDadosAfast->si199_dscoutrosafastamentos = preg_replace('/\s/', ' ', $oDadosAfast->si199_dscoutrosafastamentos);//de linha, mas atÃ© o momento sem sucesso :/
+                $oDadosAfast->si199_dscoutrosafastamentos = preg_replace('/\s/', ' ', $oDadosAfast->si199_dscoutrosafastamentos);//de linha, mas até o momento sem sucesso :/
 
                 $clafast->si199_dscoutrosafastamentos = '';
 
