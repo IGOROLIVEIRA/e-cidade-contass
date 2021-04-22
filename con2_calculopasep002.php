@@ -68,6 +68,7 @@ $fCIDE = 0;
 $fCFH = 0;
 $fFEX = 0;
 $fSTN = 0;
+$fTEUEDM = 0;
 
 foreach ($aReceitas as $Receitas) {
 
@@ -85,7 +86,7 @@ foreach ($aReceitas as $Receitas) {
   if(strstr($Receitas->o57_fonte, '17180211000000'))$fCFH+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17189911000000'))$fFEX+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17280131000000'))$fSTN+=$Receitas->saldo_arrecadado;
-
+  if(strstr($Receitas->o57_fonte, '95172801110100')||strstr($Receitas->o57_fonte, '95172801210100'))$fTEUEDM+=abs($Receitas->saldo_arrecadado);
 }
 db_query("drop table if exists work_receita");
 
@@ -339,7 +340,7 @@ ob_start();
               <br>como às autarquias dessas entidades (Solução de Consulta RFB n.º 31, de 28 de fevereiro de
               <br>2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
             </td>
-            <td class="s4"><?=db_formatar($fTEUEDM = 0,"f")?></td>
+            <td class="s4"><?=db_formatar($fTEUEDM,"f")?></td>
           </tr>
           <tr style=''>
             <td class="s3 bdleft">
@@ -675,11 +676,9 @@ ob_start();
           </tr>
           <tr style=''>
             <td class="s3 bdleft">
-              Transferências efetuadas à União, aos Estados, ao Distrito Federal e a outros Municípios, bem
-              <br>como às autarquias dessas entidades (Solução de Consulta RFB n.º 31, de 28 de fevereiro de
-              <br>2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
+                Transferências efetuadas à União, aos Estados, ao Distrito Federal e a outros Municípios, bem como às autarquias dessas entidades.
             </td>
-            <td class="s4"><?=db_formatar($fTEUEDM = 0,"f")?></td>
+            <td class="s4"><?=db_formatar($fTEUEDM,"f")?></td>
           </tr>
           <tr style=''>
             <td class="s3 bdleft">
