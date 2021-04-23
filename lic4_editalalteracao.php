@@ -34,7 +34,6 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclancedital_classe.php");
 require_once("classes/db_editaldocumento_classe.php");
-require_once("classes/db_obrasdadoscomplementares_classe.php");
 require_once("classes/db_cflicita_classe.php");
 include("dbforms/db_classesgenericas.php");
 
@@ -42,7 +41,7 @@ $clliclicita = new cl_liclicita;
 $clliclancedital = new cl_liclancedital;
 $clcflicita  = new cl_cflicita;
 $cleditaldocumento = new cl_editaldocumento;
-$clobrasdadoscomplementares = new cl_obrasdadoscomplementares;
+
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -76,6 +75,9 @@ if(!isset($alterar)){
     $codigolicitacao = $oDados->l20_codigo;
     $anoLicitacao = $oDados->l20_anousu;
     $iTipoJulgamento = $oDados->l20_tipojulg;
+
+    $tabela_base = $anoLicitacao >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+    $clobrasdadoscomplementares = db_utils::getDao($tabela_base);
 }
 
 if(isset($alterar)){

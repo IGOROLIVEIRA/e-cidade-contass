@@ -73,7 +73,7 @@ if ($licitacao) {
     $anoLicitacao = $oDadosLicitacao->l20_anousu;
     $iTipoJulgamento = $oDadosLicitacao->l20_tipojulg;
 
-    $tabela_base = ($iTipoJulgamento == 3 && $anoLicitacao >= 2021) ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+    $tabela_base = $anoLicitacao >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
     $clobrasdadoscomplementares = db_utils::getDao($tabela_base);
 
 }
