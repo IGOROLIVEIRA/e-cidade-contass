@@ -39,7 +39,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   /**
    * @var array Fontes encerradas em 2020
    */
-  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+  protected $sFontesEncerradas = "'148', '149', '150', '151', '152', '248', '249', '250', '251', '252'";
 
   /**
    * @var array Tipo Entrada/Saída que devem informar conta
@@ -434,7 +434,12 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       foreach ($oContaAgrupada->contas as $oConta) {
 
 
-        $sSql20Fonte = "select distinct codctb, fontemovimento from (
+        $sSql20Fonte = "select distinct codctb, 
+                                case 
+                                    when fontemovimento in ({$this->sFontesEncerradas}) then substr(fontemovimento,1,1)||'59' 
+                                    else fontemovimento 
+                                end as fontemovimento
+                                from (
 									select c61_reduz  as codctb, o15_codtri  as fontemovimento
 									  from conplano
 								inner join conplanoreduz on conplanoreduz.c61_codcon = conplano.c60_codcon and conplanoreduz.c61_anousu = conplano.c60_anousu
@@ -519,8 +524,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           //db_criatabela($rsTotalMov);
           //echo $sSqlMov;
           $oTotalMov = db_utils::fieldsMemory($rsTotalMov);
-
-		  $iFonte = in_array($iFonte, $this->aFontesEncerradas) ? substr($iFonte, 0, 1).'59' : $iFonte;
 
           $sHash20 = $oContaAgrupada->si95_codctb . $iFonte;
           if (!$aCtb20Agrupado[$sHash20]) {
