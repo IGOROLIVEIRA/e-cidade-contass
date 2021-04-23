@@ -581,144 +581,118 @@ class SiopeDespesa extends Siope {
             case 130:
             case 131:
                 switch ($iTipoEnsino) {
-
                     case 2:
-                        switch ($iTipoPasta) {
-                            
+                        switch ($iTipoPasta) {                            
                             case 1: return 257;
                             case 2: return 258;
                             default: return 1398;
-
                         }                    
                     case 3:
                         switch ($iTipoPasta) {
-
                             case 1: return 296;
                             case 2: return 299;
                             default: return 1399;
-
                         }
                     case 4:
                         switch ($iTipoPasta) {
-
                             case 2: return 308;
                             default: return 1400;
-
                         }
                     case 5:
                         switch ($iTipoPasta) {
-
                             case 1: return 710;
                             case 2: return 714;
                             default: return 1401;
-
                         }
                     case 6:
-                        switch ($iTipoPasta) {
-                            
+                        switch ($iTipoPasta) {                            
                             case 1: return 137;
                             case 2: return 315;
                             default: return 1402;
-
                         }
                     default:                        
                         switch ($iTipoPasta) {
-
                             case 1: return 5;
                             case 2: return 246;
                             default: return 1397;
-
                         }
                 }                
             case 361:
                 switch ($iTipoPasta) {
-
                     case 1: return 5;
                     case 2: return 246;
                     default: return 7;
-
                 }
             case 362:
                 switch ($iTipoPasta) {
-
                     case 1: return 257;
                     case 2: return 258;
                     default: return 189;
-
                 }
             case 363:
                 switch ($iTipoPasta) {
-
                     case 1: return 296;
                     case 2: return 299;
                     default: return 298;
-
                 }
             case 364:
                 switch ($iTipoPasta) {
-
                     case 2: return 308;
                     default: return 307;
-
                 }
             case 366:
                 switch ($iTipoEnsino) {
-
                     case 2:
                         switch ($iTipoPasta) {
-
                             case 1: return 257;
                             case 2: return 258;
                             default: return 1417;
-
                         }
                     default:
                         switch ($iTipoPasta) {
-
                             case 1: return 5;
                             case 2: return 246;
                             default: return 1415;
-
                         }
                         
                 }
             case 367:
-                switch ($iTipoEnsino) {
+                switch ($iTipoEnsino) {                    
                     case 2:
-                        switch ($iTipoPasta) {
+                        switch ($iTipoPasta) {                            
                             case 1: return 257;
                             case 2: return 258;
                             default: return 1418;
                         }
                     case 5:
-                        switch ($iTipoPasta) {
+                        switch ($iTipoPasta) {                            
                             case 1: return 710;
                             case 2: return 714;
                             default: return 1419;
                         }
                     case 6:
-                        switch ($iTipoPasta) {
+                        switch ($iTipoPasta) {                            
                             case 1: return 137;
                             case 2: return 315;
                             default: return 1420;
                         }
                     default:
-                        switch ($iTipoPasta) {
+                        switch ($iTipoPasta) {                            
                             case 1: return 5;
                             case 2: return 246;
                             default: return 1416;
                         }
                 }
             case 365:
-                switch ($iTipoEnsino) {
+                switch ($iTipoEnsino) {                    
                     case 5:
-                        switch ($iTipoPasta) {
+                        switch ($iTipoPasta) {                            
                             case 1: return 710;
                             case 2: return 714;
                             default: return 712;
                         }
                     default:
-                        switch ($iTipoPasta) {
+                        switch ($iTipoPasta) {                            
                             case 1: return 137;
                             case 2: return 315;
                             default: return 11;
@@ -726,10 +700,63 @@ class SiopeDespesa extends Siope {
                 }
             case 306:
                 switch ($iTipoEnsino) {
+                    case 2: return 257;
+                    case 3: return 296;
+                    case 5: return 710; 
+                    case 6: return 137; 
+                    default: return 5;
 
                 }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 258;
+                    case 3: return 299;
+                    case 4: return 308;
+                    case 5: return 714; 
+                    case 6: return 315; 
+                    default: return 246;
 
-                
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 257;
+                            case 2: return 258;
+                            default: return 189;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 296;
+                            case 2: return 299;
+                            default: return 298;
+                        }
+                    case 4:
+                        switch ($iTipoPasta) {
+                            case 2: return 308;
+                            default: return 307;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 710;
+                            case 2: return 714;
+                            default: return 712;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 137;
+                            case 2: return 315;
+                            default: return 11;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 5;
+                            case 2: return 246;
+                            default: return 7;
+                        }
+                }                
         }
 
         if ($iSubFuncao == 242) {
