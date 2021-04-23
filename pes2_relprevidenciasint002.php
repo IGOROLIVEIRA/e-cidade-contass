@@ -91,6 +91,10 @@ if($folha == 'r14'){
 
 $instit = db_getsession('DB_instit');
 
+$sAliquota = "";
+if (!empty($campoextra)) {
+  $sAliquota = "round(base/100*$campoextra,2) as aliquotacomp, ";
+}
    $sql = "
  
    select z01_nome,
@@ -99,6 +103,7 @@ $instit = db_getsession('DB_instit');
           round(base,2) as base, 
           round(segurado,2) as segurado ,
           round(base/100*$r33_ppatro,2) as patronal, 
+          {$sAliquota}
           round((base/100*$r33_ppatro) + segurado,2) as total
    from 
    (
@@ -147,6 +152,7 @@ $instit = db_getsession('DB_instit');
   $total_seg  = 0;
   $total_base = 0;
   $total_patro= 0;
+  $total_aliquotacomp = 0;
   $total_total= 0;
   
   for($x = 0; $x < pg_numrows($result);$x++){
@@ -160,6 +166,9 @@ $instit = db_getsession('DB_instit');
         $pdf->cell(20,$alt,'BASE',1,0,"C",1);
         $pdf->cell(20,$alt,'SEGURADO',1,0,"C",1);
         $pdf->cell(20,$alt,'PATRON',1,0,"C",1);
+        if (!empty($campoextra)) {
+          $pdf->cell(20,$alt,'ALÍQUOTA',1,0,"C",1);
+        }
         $pdf->cell(20,$alt,'TOTAL',1,1,"C",1);
         $troca = 0;
         $pre = 1;
@@ -176,12 +185,18 @@ $instit = db_getsession('DB_instit');
      $pdf->cell(20,$alt,db_formatar($base,'f'),0,0,"R",$pre);
      $pdf->cell(20,$alt,db_formatar($segurado,'f'),0,0,"R",$pre);
      $pdf->cell(20,$alt,db_formatar($patronal,'f'),0,0,"R",$pre);
+     if (!empty($campoextra)) {
+       $pdf->cell(20,$alt,db_formatar($aliquotacomp,'f'),0,0,"R",$pre);
+     }
      $pdf->cell(20,$alt,db_formatar($total,'f'),0,1,"R",$pre);
      $total_fun   += 1;
      $total_prov  += $proventos;
      $total_base  += $base ;
      $total_seg   += $segurado ;
      $total_patro += $patronal;
+     if (!empty($campoextra)) {
+       $total_aliquotacomp += $aliquotacomp;
+     }
      $total_total += $total;
   }
   $pdf->setfont('arial','b',8);
@@ -190,6 +205,9 @@ $instit = db_getsession('DB_instit');
   $pdf->cell(20,$alt,db_formatar($total_base,'f'),"T",0,"C",0);
   $pdf->cell(20,$alt,db_formatar($total_seg,'f'),"T",0,"C",0);
   $pdf->cell(20,$alt,db_formatar($total_patro,'f'),"T",0,"C",0);
+  if (!empty($campoextra)) {
+    $pdf->cell(20,$alt,db_formatar($total_aliquotacomp,'f'),"T",0,"C",0);
+  }
   $pdf->cell(20,$alt,db_formatar($total_total,'f'),"T",1,"C",0);
   $pdf->Output();
      
