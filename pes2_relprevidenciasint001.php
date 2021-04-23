@@ -66,6 +66,7 @@ function js_emite(){
                                         '&vinculo='+document.form1.vinculo.value+
                                         '&sembase='+document.form1.sembase.value+
                                         '&ordem='+document.form1.ordem.value+
+                                        '&campoextra='+document.form1.campoextra.value+
                                         '&mes='+document.form1.DBtxt25.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -163,6 +164,16 @@ function js_emite(){
           ?>
        </td>
      </tr>
+     <tr>
+        <td align="right">
+           <strong>Alíquota complementar %:</strong>
+        </td>
+        <td align="left" >
+          <?
+          db_input('campoextra',4,4,true,'text',2,'');
+          ?>
+        </td>
+      </tr>
       <tr>
         <td >&nbsp;</td>
         <td >&nbsp;</td>

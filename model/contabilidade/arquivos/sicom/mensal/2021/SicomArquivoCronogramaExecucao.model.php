@@ -121,10 +121,10 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
 
     $sCampos  = "o202_unidade,o202_orgao,o202_elemento,".$aMeses[$sMes].",";
     $sCampos .= "(SELECT lpad(si09_codorgaotce::VARCHAR,2,0) FROM infocomplementaresinstit WHERE si09_instit = ".db_getsession("DB_instit").") as codorgao,";
-    $sCampos .= "lpad((CASE WHEN orcorgao.o40_codtri = '0'
-         OR NULL THEN orcorgao.o40_orgao::VARCHAR ELSE orcorgao.o40_codtri END),2,0)||lpad((CASE WHEN orcunidade.o41_codtri = '0'
-           OR NULL THEN orcunidade.o41_unidade::VARCHAR ELSE orcunidade.o41_codtri END),3,0)||(CASE WHEN orcunidade.o41_subunidade = '0'
-           OR NULL THEN '' ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0) END) as codunidadesub";
+    $sCampos .= "
+          lpad((CASE WHEN orcorgao.o40_codtri   = '0' OR orcorgao.o40_codtri is NULL THEN orcorgao.o40_orgao::VARCHAR ELSE orcorgao.o40_codtri END),2,0)
+        ||lpad((CASE WHEN orcunidade.o41_codtri = '0' OR orcunidade.o41_codtri is NULL THEN orcunidade.o41_unidade::VARCHAR ELSE orcunidade.o41_codtri END),3,0)
+        ||(CASE WHEN orcunidade.o41_subunidade  = '0' OR orcunidade.o41_subunidade is NULL THEN '' ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0) END) as codunidadesub";
     
     $sSql = $clcronogramamesdesembolso->sql_query(null,$sCampos,"",$sWhere);
 
