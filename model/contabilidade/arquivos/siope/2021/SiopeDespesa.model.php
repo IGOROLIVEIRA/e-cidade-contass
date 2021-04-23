@@ -86,6 +86,8 @@ class SiopeDespesa extends Siope {
 
                 if ($oDespesa->o58_elemento != "") {
 
+                    echo '<pre>';print_r($oDespesa);echo '</pre>';
+
                     $iCodPlan = $this->getCodPlanilha($oDespesa);
 
                     if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
@@ -93,7 +95,9 @@ class SiopeDespesa extends Siope {
                     } else {
                         $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
                     }
-
+                    if ((substr($oDespesa->o58_codigo,1,2) == 22)) {
+                        // echo '<pre>';print_r($oDespesa);echo '</pre>';
+                    }
                     if ((substr($oDespesa->o58_codigo,1,2) == 18 || substr($oDespesa->o58_codigo,1,2) == 19) && (substr($oNaturdessiope->c222_natdespsiope, 0, 3) == 331)) {
                         $sHashDesp = $oDespesa->o58_codigo.$iCodPlan.$oNaturdessiope->c222_natdespsiope;
                     } else {
@@ -113,6 +117,7 @@ class SiopeDespesa extends Siope {
                         $aArrayTemp['empenhado']        = 0;
                         $aArrayTemp['liquidado']        = 0;
                         $aArrayTemp['pagamento']        = 0;
+                        $aArrayTemp['tipo']             = 'sintetico';
 
                         $this->aDespesas[$sHashDesp] = $aArrayTemp;                  
 
@@ -187,6 +192,7 @@ class SiopeDespesa extends Siope {
                     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsMes); $contDesp++) {
 
                         $oDadosMes = db_utils::fieldsMemory($resDepsMes, $contDesp);
+                        echo '<pre>';print_r($oDadosMes);echo '</pre>';
                         
                         if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
                             $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento, 't');
@@ -213,11 +219,14 @@ class SiopeDespesa extends Siope {
                             $aArrayDesdTemp['empenhado']        = $oDadosMes->empenhado;
                             $aArrayDesdTemp['liquidado']        = $oDadosMes->liquidado;
                             $aArrayDesdTemp['pagamento']        = $oDadosMes->pago;
+                            $aArrayDesdTemp['tipo']             = 'analitico';
+                            $aArrayDesdTemp['c207_esferaconcedente'] = $oDadosMes->c207_esferaconcedente;
 
                             $this->aDespesas[$sHashDespDesd] = $aArrayDesdTemp;
 
                         } else {
 
+                            $this->aDespesas[$sHashDespDesd]['c207_esferaconcedente'] = $oDadosMes->c207_esferaconcedente;
                             $this->aDespesas[$sHashDespDesd]['empenhado'] += $oDadosMes->empenhado;
                             $this->aDespesas[$sHashDespDesd]['liquidado'] += $oDadosMes->liquidado;
                             $this->aDespesas[$sHashDespDesd]['pagamento'] += $oDadosMes->pago;
@@ -498,27 +507,27 @@ class SiopeDespesa extends Siope {
      */
     public function getCodPlanilha($oDespesa) {
 
-        if ($oDespesa->o58_codigo == 101 || $oDespesa->o58_codigo == 201) {
+        if (substr($oDespesa->o58_codigo,1,2) == 01) {
             return $this->getCod101201($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 118 || $oDespesa->o58_codigo == 218) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 18) {
             return $this->getCod118218($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 119 || $oDespesa->o58_codigo == 219) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 19) {
             return $this->getCod119219($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 107 || $oDespesa->o58_codigo == 207) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 07) {
             return $this->getCod107207($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 144 || $oDespesa->o58_codigo == 244) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 44) {
             return $this->getCod144244($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 145 || $oDespesa->o58_codigo == 245) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 45) {
             return $this->getCod145245($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 143 || $oDespesa->o58_codigo == 243) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 43) {
             return $this->getCod143243($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 122 || $oDespesa->o58_codigo == 222) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 22) {
             return $this->getCod122222($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 146 || $oDespesa->o58_codigo == 246) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 46) {
             return $this->getCod146246($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 147 || $oDespesa->o58_codigo == 247) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 47) {
             return $this->getCod147247($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif($oDespesa->o58_codigo == 106 || $oDespesa->o58_codigo == 206) {
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 06) {
             return $this->getCod106206($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } else {
             return $this->getCodGenerico($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
@@ -549,6 +558,179 @@ class SiopeDespesa extends Siope {
     }
 
     public function getCod101201($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        switch ($iSubFuncao) {
+
+            case 271: return 238;
+            case 272: return 239;
+            case 273: return 240;
+            case 274: return 173;
+            case 392: return 337;
+            case 722: return 338;
+            case 812: return 602;
+            case 813: return 609;
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:
+                switch ($iTipoEnsino) {
+
+                    case 2:
+                        switch ($iTipoPasta) {
+                            
+                            case 1: return 257;
+                            case 2: return 258;
+                            default: return 1398;
+
+                        }                    
+                    case 3:
+                        switch ($iTipoPasta) {
+
+                            case 1: return 296;
+                            case 2: return 299;
+                            default: return 1399;
+
+                        }
+                    case 4:
+                        switch ($iTipoPasta) {
+
+                            case 2: return 308;
+                            default: return 1400;
+
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+
+                            case 1: return 710;
+                            case 2: return 714;
+                            default: return 1401;
+
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            
+                            case 1: return 137;
+                            case 2: return 315;
+                            default: return 1402;
+
+                        }
+                    default:                        
+                        switch ($iTipoPasta) {
+
+                            case 1: return 5;
+                            case 2: return 246;
+                            default: return 1397;
+
+                        }
+                }                
+            case 361:
+                switch ($iTipoPasta) {
+
+                    case 1: return 5;
+                    case 2: return 246;
+                    default: return 7;
+
+                }
+            case 362:
+                switch ($iTipoPasta) {
+
+                    case 1: return 257;
+                    case 2: return 258;
+                    default: return 189;
+
+                }
+            case 363:
+                switch ($iTipoPasta) {
+
+                    case 1: return 296;
+                    case 2: return 299;
+                    default: return 298;
+
+                }
+            case 364:
+                switch ($iTipoPasta) {
+
+                    case 2: return 308;
+                    default: return 307;
+
+                }
+            case 366:
+                switch ($iTipoEnsino) {
+
+                    case 2:
+                        switch ($iTipoPasta) {
+
+                            case 1: return 257;
+                            case 2: return 258;
+                            default: return 1417;
+
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+
+                            case 1: return 5;
+                            case 2: return 246;
+                            default: return 1415;
+
+                        }
+                        
+                }
+            case 367:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 257;
+                            case 2: return 258;
+                            default: return 1418;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 710;
+                            case 2: return 714;
+                            default: return 1419;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 137;
+                            case 2: return 315;
+                            default: return 1420;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 5;
+                            case 2: return 246;
+                            default: return 1416;
+                        }
+                }
+            case 365:
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 710;
+                            case 2: return 714;
+                            default: return 712;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 137;
+                            case 2: return 315;
+                            default: return 11;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+
+                }
+
+                
+        }
 
         if ($iSubFuncao == 242) {
             return 664;
