@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE ralic102020
-class cl_ralic102020
+//CLASSE DA ENTIDADE ralic102021
+class cl_ralic102021
 {
   // cria variaveis de erro
   var $rotulo = null;
@@ -79,10 +79,10 @@ class cl_ralic102020
   // cria propriedade com as variaveis do arquivo
 
   //funcao construtor da classe
-  function cl_ralic102020()
+  function cl_ralic102021()
   {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("ralic102020");
+    $this->rotulo = new rotulo("ralic102021");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
@@ -214,11 +214,11 @@ class cl_ralic102020
       return false;
     }
     if ($si180_sequencial == "" || $si180_sequencial == null) {
-      $result = db_query("select nextval('ralic102020_si180_sequencial_seq')");
+      $result = db_query("select nextval('ralic102021_si180_sequencial_seq')");
       if ($result == false) {
         $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-        $this->erro_sql = "Verifique o cadastro da sequencia: ralic102020_si180_sequencial_seq do campo: si180_sequencial";
+        $this->erro_sql = "Verifique o cadastro da sequencia: ralic102021_si180_sequencial_seq do campo: si180_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
@@ -227,7 +227,7 @@ class cl_ralic102020
       }
       $this->si180_sequencial = pg_result($result, 0, 0);
     } else {
-      $result = db_query("select last_value from ralic102020_si180_sequencial_seq");
+      $result = db_query("select last_value from ralic102021_si180_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $si180_sequencial)) {
         $this->erro_sql = " Campo si180_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -271,7 +271,7 @@ class cl_ralic102020
         $this->si180_qtdlotes = 'null';
     }
 
-    $sql = "insert into ralic102020(
+    $sql = "insert into ralic102021(
                                        si180_sequencial
                                       ,si180_tiporegistro
                                       ,si180_codorgaoresp
@@ -334,12 +334,12 @@ class cl_ralic102020
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "ralic102020 ($this->si180_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "ralic102021 ($this->si180_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_banco = "ralic102020 já Cadastrado";
+        $this->erro_banco = "ralic102021 já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       } else {
-        $this->erro_sql = "ralic102020 ($this->si180_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql = "ralic102021 ($this->si180_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       }
@@ -364,7 +364,7 @@ class cl_ralic102020
   function alterar($si180_sequencial = null)
   {
     $this->atualizacampos();
-    $sql = " update ralic102020 set ";
+    $sql = " update ralic102021 set ";
     $virgula = "";
     if (trim($this->si180_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_sequencial"])) {
       if (trim($this->si180_sequencial) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si180_sequencial"])) {
@@ -499,7 +499,7 @@ class cl_ralic102020
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "ralic102020 nao Alterado. Alteracao Abortada.\n";
+      $this->erro_sql = "ralic102021 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si180_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -510,7 +510,7 @@ class cl_ralic102020
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "ralic102020 nao foi Alterado. Alteracao Executada.\n";
+        $this->erro_sql = "ralic102021 nao foi Alterado. Alteracao Executada.\n";
         $this->erro_sql .= "Valores : " . $this->si180_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -540,7 +540,7 @@ class cl_ralic102020
     } else {
       $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
     }
-    $sql = " delete from ralic102020
+    $sql = " delete from ralic102021
                     where ";
     $sql2 = "";
     if ($dbwhere == null || $dbwhere == "") {
@@ -557,7 +557,7 @@ class cl_ralic102020
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
-      $this->erro_sql = "ralic102020 nao Excluído. Exclusão Abortada.\n";
+      $this->erro_sql = "ralic102021 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si180_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -568,7 +568,7 @@ class cl_ralic102020
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "ralic102020 nao Encontrado. Exclusão não Efetuada.\n";
+        $this->erro_sql = "ralic102021 nao Encontrado. Exclusão não Efetuada.\n";
         $this->erro_sql .= "Valores : " . $si180_sequencial;
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -608,7 +608,7 @@ class cl_ralic102020
     $this->numrows = pg_numrows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = "";
-      $this->erro_sql = "Record Vazio na Tabela:ralic102020";
+      $this->erro_sql = "Record Vazio na Tabela:ralic102021";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
@@ -633,11 +633,11 @@ class cl_ralic102020
     } else {
       $sql .= $campos;
     }
-    $sql .= " from ralic102020 ";
+    $sql .= " from ralic102021 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si180_sequencial != null) {
-        $sql2 .= " where ralic102020.si180_sequencial = $si180_sequencial ";
+        $sql2 .= " where ralic102021.si180_sequencial = $si180_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -670,11 +670,11 @@ class cl_ralic102020
     } else {
       $sql .= $campos;
     }
-    $sql .= " from ralic102020 ";
+    $sql .= " from ralic102021 ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si180_sequencial != null) {
-        $sql2 .= " where ralic102020.si180_sequencial = $si180_sequencial ";
+        $sql2 .= " where ralic102021.si180_sequencial = $si180_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";

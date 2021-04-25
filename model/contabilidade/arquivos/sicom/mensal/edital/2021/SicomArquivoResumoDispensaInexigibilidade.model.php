@@ -1,15 +1,16 @@
 <?php
+
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_redispi102020_classe.php");
-require_once("classes/db_redispi112020_classe.php");
-require_once("classes/db_redispi122020_classe.php");
+require_once("classes/db_redispi102021_classe.php");
+require_once("classes/db_redispi112021_classe.php");
+require_once("classes/db_redispi122021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarREDISPI.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarREDISPI.model.php");
 
 
 /**
- * Resumo da Dsipensa ou Inexigibilidade
+ * Resumo da Dispensa ou Inexigibilidade
  * @author Victor Felipe
  * @package Contabilidade
  */
@@ -70,7 +71,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             "justificativa",
             "razao",
             "vlRecurso",
-            "bdi"
+            "bdi",
+            "link"
         );
         $aElementos[11] = array(
             "tipoRegistro",
@@ -104,12 +106,9 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             "bairro",
             "cidade",
             "cep",
-            "grauLatitude",
-            "minutoLatitude",
-            "segundoLatitude",
-            "grauLongitude",
-            "minutoLongitude",
-            "segundoLongitude"
+            "latitude",
+            "longitude",
+            "codBemPublico"
         );
 
         return $aElementos;
@@ -125,9 +124,9 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clredispi10 = new cl_redispi102020();
-        $clredispi11 = new cl_redispi112020();
-        $clredispi12 = new cl_redispi122020();
+        $clredispi10 = new cl_redispi102021();
+        $clredispi11 = new cl_redispi112021();
+        $clredispi12 = new cl_redispi122021();
 
 
         /**
@@ -216,7 +215,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                 liclicita.l20_objeto AS objeto,
                                 liclicita.l20_justificativa AS justificativa,
                                 liclicita.l20_razao AS razao,
-                                obrasdadoscomplementares.db150_bdi AS bdi,
+                                obrasdadoscomplementareslote.db150_bdi AS bdi,
+                                liclancedital.l47_linkpub as linkpub,
                                 (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
                                  FROM
                                      (SELECT DISTINCT pc11_seq,
@@ -268,7 +268,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                 INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-				INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
+				INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = db150_codobra
                 WHERE db_config.codigo = ".db_getsession('DB_instit')." AND liclancedital.l47_dataenvio = '".$this->sDataFinal."'
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 ";
@@ -280,8 +280,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
     $aDadosAgrupados10 = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-    	$clredispi10 = new cl_redispi102020();
-
+    	$clredispi10 = new cl_redispi102021();
         $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
         $chave = $oDados10->nroprocesso;
@@ -303,11 +302,13 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 			$clredispi10->si183_razao = $oDados10->razao;
 			$clredispi10->si183_vlrecurso = $oDados10->vlrecurso == null ? 0 : $oDados10->vlrecurso;
 			$clredispi10->si183_bdi = $oDados10->bdi;
+            $clredispi10->si183_link = $oDados10->linkpub;
 			$clredispi10->si183_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 			$clredispi10->si183_instit = db_getsession("DB_instit");
 
 			$clredispi10->incluir(null);
-			if ($clredispi10->erro_status == 0) {
+
+            if ($clredispi10->erro_status == 0) {
 			  throw new Exception($clredispi10->erro_msg);
 			}
 
@@ -353,17 +354,17 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   pctipocompratribunal.l44_codigotribunal AS tipoProcesso,
 						   liclicita.l20_anousu AS exercicioProcesso,
 						   liclicita.l20_edital AS nroProcesso,
-						   obrasdadoscomplementares.db150_sequencial as sequencial,
-						   obrasdadoscomplementares.db150_codobra as codObraLocal,
-						   obrasdadoscomplementares.db150_classeobjeto as classeObjeto,
-						   obrasdadoscomplementares.db150_atividadeobra as tipoAtividadeObra,
-						   obrasdadoscomplementares.db150_atividadeservico as tipoAtividadeServico,
-						   obrasdadoscomplementares.db150_descratividadeservico as dscAtividadeServico,
-						   obrasdadoscomplementares.db150_atividadeservicoesp as tipoAtividadeServEspecializado,
-						   obrasdadoscomplementares.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
+						   obrasdadoscomplementareslote.db150_sequencial as sequencial,
+						   obrasdadoscomplementareslote.db150_codobra as codObraLocal,
+						   obrasdadoscomplementareslote.db150_classeobjeto as classeObjeto,
+						   obrasdadoscomplementareslote.db150_atividadeobra as tipoAtividadeObra,
+						   obrasdadoscomplementareslote.db150_atividadeservico as tipoAtividadeServico,
+						   obrasdadoscomplementareslote.db150_descratividadeservico as dscAtividadeServico,
+						   obrasdadoscomplementareslote.db150_atividadeservicoesp as tipoAtividadeServEspecializado,
+						   obrasdadoscomplementareslote.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
 						   orcdotacao.o58_funcao AS codFuncao,
 						   orcdotacao.o58_subfuncao AS codSubFuncao,
-						   obrasdadoscomplementares.db150_subgrupobempublico as codBemPublico
+						   obrasdadoscomplementareslote.db150_subgrupobempublico as codBemPublico
 					FROM liclicita
 					INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
 					INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -375,9 +376,9 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 					LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
 					INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
 					INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-					INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
+					INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
 					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = ".$oDados10->nroprocesso."
-						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106) ORDER BY obrasdadoscomplementares.db150_sequencial limit 1"; /* Limite inserido depois das alterações lançadas pelo tribunal de contas*/
+						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106) ORDER BY obrasdadoscomplementareslote.db150_sequencial limit 1"; /* Limite inserido depois das alterações lançadas pelo tribunal de contas*/
 
 					$rsResult11 = db_query($sSql);
 					$aDadosAgrupados11 = array();
@@ -390,8 +391,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 
 						if (!isset($aDadosAgrupados11[$sHash11])) {
 
-							$clredispi11 = new cl_redispi112020();
-
+							$clredispi11 = new cl_redispi112021();
 							$clredispi11->si184_tiporegistro = 11;
 							$clredispi11->si184_codorgaoresp = $oResult11->codorgaoresp;
 							$clredispi11->si184_codunidadesubresp = $oResult11->codunidadesubresp;
@@ -427,7 +427,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 				*
 				* */
 
-				$sSql = "
+				$sSql12 = "
 					SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
 						(SELECT CASE
 									WHEN o41_subunidade != 0
@@ -464,20 +464,16 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   '' AS codUnidadeSubRespEstadual,
 						   liclicita.l20_anousu AS exercicioProcesso,
 						   liclicita.l20_edital AS nroProcesso,
-						   obrasdadoscomplementares.db150_codobra AS codObraLocal,
-						   obrasdadoscomplementares.db150_logradouro AS logradouro,
-						   obrasdadoscomplementares.db150_numero AS numero,
-						   obrasdadoscomplementares.db150_bairro AS bairro,
+						   obrasdadoscomplementareslote.db150_codobra AS codObraLocal,
+						   obrasdadoscomplementareslote.db150_logradouro AS logradouro,
+						   obrasdadoscomplementareslote.db150_numero AS numero,
+						   obrasdadoscomplementareslote.db150_bairro AS bairro,
 						   cadendermunicipio.db72_descricao AS cidade,
-						   obrasdadoscomplementares.db150_distrito AS distrito,
-						   obrasdadoscomplementares.db150_cep AS cep,
-						   obrasdadoscomplementares.db150_grauslatitude AS grauslatitude,
-						   obrasdadoscomplementares.db150_minutolatitude AS minutolatitude,
-						   obrasdadoscomplementares.db150_segundolatitude AS segundolatitude,
-						   obrasdadoscomplementares.db150_grauslongitude AS grauslongitude,
-						   obrasdadoscomplementares.db150_minutolongitude AS minutolongitude,
-						   obrasdadoscomplementares.db150_segundolongitude AS segundolongitude,
-						   obrasdadoscomplementares.db150_sequencial as sequencial
+						   obrasdadoscomplementareslote.db150_distrito AS distrito,
+						   obrasdadoscomplementareslote.db150_cep AS cep,
+						   obrasdadoscomplementareslote.db150_latitude AS latitude,
+						   obrasdadoscomplementareslote.db150_longitude AS longitude,
+                           obrasdadoscomplementareslote.db150_subgrupobempublico as codBemPublico
 					FROM liclicita
 					INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
 					INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -485,12 +481,12 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 					LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
 					INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
 					INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-					INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
-					INNER JOIN cadendermunicipio on obrasdadoscomplementares.db150_municipio = db72_sequencial
+					INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
+					INNER JOIN cadendermunicipio on obrasdadoscomplementareslote.db150_municipio = db72_sequencial
 					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = ".$oDados10->nroprocesso."
 						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 				";
-				$rsResult12 = db_query($sSql);
+				$rsResult12 = db_query($sSql12);
 
 				$aDadosAgrupados12 = array();
 				for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
@@ -501,8 +497,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 
 					if (!isset($aDadosAgrupados12[$sHash12])) {
 
-						$clredispi12 = new cl_redispi122020();
-
+						$clredispi12 = new cl_redispi122021();
 						$clredispi12->si185_tiporegistro = 12;
 						$clredispi12->si185_codorgaoresp = $oResult12->codorgaoresp;
 						$clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
@@ -516,12 +511,9 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						$clredispi12->si185_cidade = $oResult12->cidade;
 						$clredispi12->si185_distrito = $oResult12->distrito;
 						$clredispi12->si185_cep = $oResult12->cep;
-						$clredispi12->si185_graulatitude = $oResult12->grauslatitude;
-						$clredispi12->si185_minutolatitude = $oResult12->minutolatitude;
-						$clredispi12->si185_segundolatitude = $oResult12->segundolatitude;
-						$clredispi12->si185_graulongitude = $oResult12->grauslongitude;
-						$clredispi12->si185_minutolongitude = $oResult12->minutolongitude;
-						$clredispi12->si185_segundolongitude = $oResult12->segundolongitude;
+						$clredispi12->si185_latitude = $oResult12->latitude;
+						$clredispi12->si185_longitude = $oResult12->longitude;
+                        $clredispi12->si185_codbempublico = $oResult12->codbempublico;
 						$clredispi12->si185_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 						$clredispi12->si185_reg10 = $clredispi10->si183_sequencial;// chave estrangeira
 						$clredispi12->si185_instit = db_getsession("DB_instit");

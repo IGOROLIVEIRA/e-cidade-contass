@@ -1,12 +1,11 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_ralic102020_classe.php");
-require_once("classes/db_ralic112020_classe.php");
-require_once("classes/db_ralic122020_classe.php");
+require_once("classes/db_ralic102021_classe.php");
+require_once("classes/db_ralic112021_classe.php");
+require_once("classes/db_ralic122021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarRALIC.model.php");
-
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarRALIC.model.php");
 
 /**
  * Resumo da Abertura da licitacao Sicom Acompanhamento Mensal
@@ -97,7 +96,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       "dscAtividadeServEspecializado",
       "codFuncao",
       "codSubFuncao",
-      "codBemPublico"
+      "codBemPublico",
+      "nrolote"
     );
     $aElementos[12] = array(
       "tipoRegistro",
@@ -113,12 +113,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       "distrito",
       "municipio",
       "cep",
-      "grauLatitude",
-      "minutoLatitude",
-      "segundoLatitude",
-      "grauLongitude",
-      "minutoLongitude",
-      "segundoLongitude"
+      "latitude",
+      "longitude"
     );
 
     return $aElementos;
@@ -134,9 +130,9 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clralic10 = new cl_ralic102020();
-    $clralic11 = new cl_ralic112020();
-    $clralic12 = new cl_ralic122020();
+    $clralic10 = new cl_ralic102021();
+    $clralic11 = new cl_ralic112021();
+    $clralic12 = new cl_ralic122021();
 
     /**
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -255,10 +251,11 @@ FROM
                      liclicita.l20_naturezaobjeto AS naturezaObjeto,
                      liclicita.l20_objeto AS Objeto,
                      liclicita.l20_tipojulg AS tipoJulgamento,
-                     ( SELECT count(*)
-                        FROM liclicitemlote
-                        INNER JOIN liclicitem ON l21_codigo = l04_liclicitem
-                        WHERE l21_codliclicita = l20_codigo ) AS qtdLotes,
+                     (SELECT count(*) FROM
+                        (SELECT DISTINCT l04_descricao
+                            FROM liclicitemlote
+                            INNER JOIN liclicitem ON l21_codigo = l04_liclicitem
+                            WHERE l21_codliclicita = l20_codigo) as countLotes) as qtdLotes,
                      CASE
                          WHEN liclicita.l20_naturezaobjeto in ('1', '7') THEN liclicita.l20_regimexecucao
                          ELSE 0
@@ -331,7 +328,6 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
 ORDER BY nroprocessolicitatorio
 
                   ";
-    echo $sSql;
     $rsResult10 = db_query($sSql);
 
     /**
@@ -339,7 +335,7 @@ ORDER BY nroprocessolicitatorio
      */ 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-      $clralic10 = new cl_ralic102020();
+      $clralic10 = new cl_ralic102021();
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
@@ -366,7 +362,7 @@ ORDER BY nroprocessolicitatorio
       $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao;
       $clralic10->si180_origemrecurso = $oDados10->origemrecurso;
       $clralic10->si180_dscorigemrecurso = $oDados10->dscorigemrecurso;
-      $clralic10->si180_qtdlote = $oDados10->qtdLotes;
+      $clralic10->si180_qtdlotes = $oDados10->qtdlotes;
       $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clralic10->si180_instit = db_getsession("DB_instit");
 
@@ -379,8 +375,9 @@ ORDER BY nroprocessolicitatorio
       if($oDados10->naturezaobjeto == 1){
            /**
            * Selecionar informações do registro 11
+           * @todo checar a obrigatoriedade do pcdotac
            */
-		  $sSql = "
+		  $sSql11 = "
               SELECT (CASE
                         WHEN o41_subunidade != 0
                             OR NOT NULL THEN lpad((CASE
@@ -404,91 +401,100 @@ ORDER BY nroprocessolicitatorio
                     END) AS codunidadesubresp,
                   liclicita.l20_anousu AS exercicioLicitacao,
                   liclicita.l20_edital AS nroProcessoLicitatorio,
-                  obrasdadoscomplementares.db150_codobra AS codObraLocal,
-                  obrasdadoscomplementares.db150_classeobjeto AS classeObjeto,
-                  obrasdadoscomplementares.db150_atividadeobra AS tipoAtividadeObra,
-                  obrasdadoscomplementares.db150_atividadeservico AS tipoAtividadeServico,
-                  obrasdadoscomplementares.db150_descratividadeservico AS dscAtividadeServico,
-                  obrasdadoscomplementares.db150_atividadeservicoesp AS tipoAtividadeServEspecializado,
-                  obrasdadoscomplementares.db150_descratividadeservicoesp AS dscAtividadeServEspecializado,
-                  obrasdadoscomplementares.db150_sequencial AS dscAtividadeServEspecializado,
+                  obrasdadoscomplementareslote.db150_codobra AS codObraLocal,
+                  obrasdadoscomplementareslote.db150_classeobjeto AS classeObjeto,
+                  obrasdadoscomplementareslote.db150_atividadeobra AS tipoAtividadeObra,
+                  obrasdadoscomplementareslote.db150_atividadeservico AS tipoAtividadeServico,
+                  obrasdadoscomplementareslote.db150_descratividadeservico AS dscAtividadeServico,
+                  obrasdadoscomplementareslote.db150_atividadeservicoesp AS tipoAtividadeServEspecializado,
+                  obrasdadoscomplementareslote.db150_descratividadeservicoesp AS dscAtividadeServEspecializado,
+                  obrasdadoscomplementareslote.db150_sequencial AS dscAtividadeServEspecializado,
                   orcdotacao.o58_funcao AS codFuncao,
                   orcdotacao.o58_subfuncao AS codSubFuncao,
-                  obrasdadoscomplementares.db150_subgrupobempublico AS codBemPublico
-            FROM db_depart
-            INNER JOIN liclicita ON l20_codepartamento = coddepto
-            INNER JOIN cflicita ON l03_codigo = l20_codtipocom
-            INNER JOIN db_departorg ON db01_coddepto = coddepto
-            INNER JOIN orcunidade ON o41_unidade = db01_unidade
-            INNER JOIN orcorgao ON o40_orgao = o41_orgao
-            INNER JOIN orcdotacao ON (o58_anousu,
-                                      o58_orgao) = (o40_anousu,
-                                                    o40_orgao)
-            INNER JOIN db_config ON (liclicita.l20_instit = db_config.codigo)
-            LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-            INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
-            INNER JOIN obrascodigos ON obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-            INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_codobra = obrascodigos.db151_codigoobra
-            WHERE db_config.codigo = ".db_getsession('DB_instit')."
-                AND l03_pctipocompratribunal NOT IN ('100',
+                  obrasdadoscomplementareslote.db150_subgrupobempublico AS codBemPublico
+                FROM liclicita
+                INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
+                INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
+                INNER JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+                INNER JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu
+                                          AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
+                INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
+                INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+                INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
+                INNER JOIN db_depart ON codigo = instit
+                INNER JOIN db_departorg ON db01_coddepto = coddepto AND db01_anousu = ".db_getsession('DB_anousu')." AND db01_coddepto=l20_codepartamento
+                INNER JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade = o41_unidade AND db01_anousu = o41_anousu
+                INNER JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+                LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
+                INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+                INNER JOIN obrascodigos ON obrascodigos.db151_liclicita = liclancedital.l47_liclicita
+                INNER JOIN obrasdadoscomplementareslote ON db150_codobra = obrascodigos.db151_codigoobra
+              WHERE db_config.codigo = ".db_getsession('DB_instit')."
+              AND l03_pctipocompratribunal NOT IN ('100',
                                                     '101',
                                                     '102',
                                                     '103',
                                                     '106')
-                AND liclicita.l20_edital = $oDados10->nroprocessolicitatorio 
-				    ORDER BY obrasdadoscomplementares.db150_codobra limit 1"; /* Limite inserido depois das alterações lançadas pelo tribunal de contas*/
+              AND liclicita.l20_edital = $oDados10->nroprocessolicitatorio 
+				    ORDER BY obrasdadoscomplementareslote.db150_codobra"; 
 
-		  $rsResult11 = db_query($sSql);
+      $rsResult11 = db_query($sSql11);
 
-		  $aDadosAgrupados11 = array();
-          for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
+		      $aDadosAgrupados11 = array();
 
-            $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-            $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
-              $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-              $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
+          if(pg_numrows($rsResult11)){
 
-            if (!isset($aDadosAgrupados11[$sHash11])) {
+              for ($iCont11 = 0; $iCont11 < intval($oDados10->qtdlotes); $iCont11++) {
 
-              $clralic11 = new cl_ralic112020();
+                  $oResult11 = db_utils::fieldsMemory($rsResult11, 0);
+                  $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
+                  $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
+                  $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
 
-              $clralic11->si181_tiporegistro = 11;
-              $clralic11->si181_codorgaoresp = $oResult11->codorgaoresp;
-              $clralic11->si181_codunidadesubresp = $oResult11->codunidadesubresp;
-              $clralic11->si181_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;
-              $clralic11->si181_exerciciolicitacao = $oResult11->exerciciolicitacao;
-              $clralic11->si181_nroprocessolicitatorio = $oResult11->nroprocessolicitatorio;
-              $clralic11->si181_codobralocal = $oResult11->codobralocal;
-              $clralic11->si181_classeobjeto = $oResult11->classeobjeto;
-              $clralic11->si181_tipoatividadeobra = $oResult11->tipoatividadeobra;
-              $clralic11->si181_tipoatividadeservico = $oResult11->tipoatividadeservico == 0 ? '' : $oResult11->tipoatividadeservico;
-              $clralic11->si181_dscatividadeservico = $oResult11->dscatividadeservico;
-              $clralic11->si181_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;
-              $clralic11->si181_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
-              $clralic11->si181_codfuncao = $oResult11->codfuncao;
-              $clralic11->si181_codsubfuncao = $oResult11->codsubfuncao;
-              $clralic11->si181_codbempublico = $oResult11->codbempublico ? $oResult11->codbempublico : 9900;
-              $clralic11->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-              $clralic11->si181_reg10 = $clralic10->si180_sequencial;// chave estrangeira
-              $clralic11->si181_instit = db_getsession("DB_instit");
+                  if (!isset($aDadosAgrupados11[$sHash11])) {
 
-              $clralic11->incluir(null);
-              if ($clralic11->erro_status == 0) {
-                throw new Exception($clralic11->erro_msg);
+                      $clralic11 = new cl_ralic112021();
+
+                      $clralic11->si181_tiporegistro = 11;
+                      $clralic11->si181_codorgaoresp = $oResult11->codorgaoresp;
+                      $clralic11->si181_codunidadesubresp = $oResult11->codunidadesubresp;
+                      $clralic11->si181_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;
+                      $clralic11->si181_exerciciolicitacao = $oResult11->exerciciolicitacao;
+                      $clralic11->si181_nroprocessolicitatorio = $oResult11->nroprocessolicitatorio;
+                      $clralic11->si181_codobralocal = $oResult11->codobralocal;
+                      $clralic11->si181_classeobjeto = $oResult11->classeobjeto;
+                      $clralic11->si181_tipoatividadeobra = $oResult11->tipoatividadeobra;
+                      $clralic11->si181_tipoatividadeservico = $oResult11->tipoatividadeservico == 0 ? '' : $oResult11->tipoatividadeservico;
+                      $clralic11->si181_dscatividadeservico = $oResult11->dscatividadeservico;
+                      $clralic11->si181_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;
+                      $clralic11->si181_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
+                      $clralic11->si181_codfuncao = $oResult11->codfuncao;
+                      $clralic11->si181_codsubfuncao = $oResult11->codsubfuncao;
+                      $clralic11->si181_codbempublico = $oResult11->codbempublico ? $oResult11->codbempublico : 9900;
+                      $clralic11->si181_nrolote = $oDados10->qtdlotes == '1' ? '' : $iCont11 + 1; 
+                      $clralic11->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                      $clralic11->si181_reg10 = $clralic10->si180_sequencial;
+                      $clralic11->si181_instit = db_getsession("DB_instit");
+
+                      $clralic11->incluir(null);
+                      
+                      if ($clralic11->erro_status == 0) {
+                          throw new Exception($clralic11->erro_msg);
+                      }
+                  
+                      $aDadosAgrupados11[$sHash11] = $clralic11;
+
+                  }
+
               }
-              $aDadosAgrupados11[$sHash11] = $clralic11;
-
-            }
-
           }
-
           /*
            * Seleção dos registros 12 do RALIC
            *
            * */
 
-        $sSql = "
-                SELECT '12' AS tipoRegistro,
+        $sSql12 = "
+                SELECT DISTINCT '12' AS tipoRegistro,
                        infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                     (SELECT CASE
                                 WHEN o41_subunidade != 0
@@ -524,20 +530,16 @@ ORDER BY nroprocessolicitatorio
                      LIMIT 1) AS codUnidadeSubResp,
                        liclicita.l20_anousu AS exercicioProcesso,
                        liclicita.l20_edital AS nroProcessoLicitatorio,
-                       obrasdadoscomplementares.db150_codobra as codObraLocal,
-                       obrasdadoscomplementares.db150_logradouro as logradouro,
-                       obrasdadoscomplementares.db150_numero as numero,
-                       obrasdadoscomplementares.db150_bairro as bairro,
-                       obrasdadoscomplementares.db150_distrito as distrito,
+                       obrasdadoscomplementareslote.db150_codobra as codObraLocal,
+                       obrasdadoscomplementareslote.db150_logradouro as logradouro,
+                       obrasdadoscomplementareslote.db150_numero as numero,
+                       obrasdadoscomplementareslote.db150_bairro as bairro,
+                       obrasdadoscomplementareslote.db150_distrito as distrito,
                        db72_descricao AS municipio,
-                       obrasdadoscomplementares.db150_cep as cep,
-                       obrasdadoscomplementares.db150_grauslatitude as graulatitude,
-                       obrasdadoscomplementares.db150_minutolatitude as minutolatitude,
-                       obrasdadoscomplementares.db150_segundolatitude as segundolatitude,
-                       obrasdadoscomplementares.db150_grauslongitude as graulongitude,
-                       obrasdadoscomplementares.db150_minutolongitude as minutolongitude,
-                       obrasdadoscomplementares.db150_segundolongitude as segundolongitude,
-                       obrasdadoscomplementares.db150_sequencial as sequencial
+                       obrasdadoscomplementareslote.db150_cep as cep,
+                       obrasdadoscomplementareslote.db150_latitude as latitude,
+                       obrasdadoscomplementareslote.db150_longitude as longitude,
+                       obrasdadoscomplementareslote.db150_subgrupobempublico AS codBemPublico
                 FROM liclicita
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -545,7 +547,7 @@ ORDER BY nroprocessolicitatorio
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                 INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-				INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
+				        INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
                 INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
@@ -553,18 +555,18 @@ ORDER BY nroprocessolicitatorio
                                                                     '102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
     ";
 
-        	$rsResult12 = db_query($sSql);
+        	$rsResult12 = db_query($sSql12);
 
             $aDadosAgrupados12 = array();
             for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
                 $oResult12 = db_utils::fieldsMemory($rsResult12, $iCont12);
                 $sHash12 = '12' . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->codunidadesubrespestadual .
-                $oResult12->exercicioprocesso . $oResult12->nroprocessolicitatorio . $oResult12->codobralocal . $oResult12->cep . $oResult12->sequencial;
+                $oResult12->exercicioprocesso . $oResult12->nroprocessolicitatorio . $oResult12->codobralocal . $oResult12->cep;
 
                 if (!isset($aDadosAgrupados12[$sHash12])) {
 
-                    $clralic12 = new cl_ralic122020();
+                    $clralic12 = new cl_ralic122021();
 
                     $clralic12->si182_tiporegistro = 12;
                     $clralic12->si182_codorgaoresp = $oResult12->codorgaoresp;
@@ -579,21 +581,22 @@ ORDER BY nroprocessolicitatorio
                     $clralic12->si182_distrito = $oResult12->distrito;
                     $clralic12->si182_municipio = $oResult12->municipio;
                     $clralic12->si182_cep = $oResult12->cep;
-                    $clralic12->si182_graulatitude = $oResult12->graulatitude;
-                    $clralic12->si182_minutolatitude = $oResult12->minutolatitude;
-                    $clralic12->si182_segundolatitude = $oResult12->segundolatitude;
-                    $clralic12->si182_graulongitude = $oResult12->graulongitude;
-                    $clralic12->si182_minutolongitude = $oResult12->minutolongitude;
-                    $clralic12->si182_segundolongitude = $oResult12->segundolongitude;
+                    $clralic12->si182_latitude = $oResult12->latitude;
+                    $clralic12->si182_longitude = $oResult12->longitude;
+                    $clralic12->si182_codbempublico = $oResult12->codbempublico;
+                    $clralic12->si182_nrolote = $oDados10->qtdlotes == '1' ? '' : $iCont11 + 1; 
                     $clralic12->si182_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clralic12->si182_reg10 = $clralic10->si180_sequencial;// chave estrangeira
                     $clralic12->si182_instit = db_getsession("DB_instit");
 
                     $clralic12->incluir(null);
+
                     if ($clralic12->erro_status == 0) {
                         throw new Exception($clralic12->erro_msg);
                     }
+
                     $aDadosAgrupados12[$sHash12] = $clralic12;
+
                 }
             }
         }

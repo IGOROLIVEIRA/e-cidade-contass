@@ -54,6 +54,40 @@ class Oc14432 extends AbstractMigration
             
             ALTER TABLE ONLY obrasdadoscomplementareslote
                   ADD CONSTRAINT obrasdadoscomplementareslote_sequ_pk PRIMARY KEY (db150_sequencial);
+
+
+            ALTER TABLE ralic122021
+                DROP COLUMN si182_graulatitude,
+                DROP COLUMN si182_minutolatitude,
+                DROP COLUMN si182_segundolatitude,
+                DROP COLUMN si182_graulongitude,
+                DROP COLUMN si182_minutolongitude,
+                DROP COLUMN si182_segundolongitude;
+                  
+            ALTER TABLE ralic122021 
+                ADD COLUMN si182_latitude numeric,
+                ADD COLUMN si182_longitude numeric,
+                ADD COLUMN si182_nrolote integer;
+
+            -- Alteração das tabelas do REDISPI
+
+            ALTER TABLE redispi102021 
+                ADD COLUMN si183_link varchar(200);
+
+            ALTER TABLE redispi122021
+                DROP COLUMN si185_graulatitude,
+                DROP COLUMN si185_minutolatitude,
+                DROP COLUMN si185_segundolatitude,
+                DROP COLUMN si185_graulongitude,
+                DROP COLUMN si185_minutolongitude,
+                DROP COLUMN si185_segundolongitude;
+                
+            ALTER TABLE redispi122021 
+                ADD COLUMN si185_latitude numeric, 
+                ADD COLUMN si185_longitude numeric,
+                ADD COLUMN si185_codbempublico integer;
+
+
             COMMIT;
 
         ";

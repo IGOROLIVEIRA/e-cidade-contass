@@ -95,6 +95,7 @@ class GerarRALIC extends GerarAM
                         $aCSVRALIC11['si181_codfuncao']                       = $this->padLeftZero(intval($aRALIC11['si181_codfuncao']), 2);
                         $aCSVRALIC11['si181_codsubfuncao']                    = $this->padLeftZero(intval($aRALIC11['si181_codsubfuncao']), 3);
                         $aCSVRALIC11['si181_codbempublico']                   = $this->padLeftZero($aRALIC11['si181_codbempublico'], 4);
+                        $aCSVRALIC11['si181_nrolote']                         = $aRALIC11['si181_nrolote'];
 
                         $this->sLinha = $aCSVRALIC11;
                         $this->adicionaLinha();
@@ -117,12 +118,10 @@ class GerarRALIC extends GerarAM
 							$aCSVRALIC12['si182_distrito']                    = utf8_decode($aRALIC12['si182_distrito']);
 							$aCSVRALIC12['si182_municipio']                   = utf8_decode($aRALIC12['si182_municipio']);
 							$aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
-							$aCSVRALIC12['si182_graulatitude']                = $aRALIC12['si182_graulatitude'];
-							$aCSVRALIC12['si182_minutolatitude']              = $aRALIC12['si182_minutolatitude'];
-							$aCSVRALIC12['si182_segundolatitude']             = $this->sicomNumberReal($aRALIC12['si182_segundolatitude'],2);
-							$aCSVRALIC12['si182_graulongitude']               = $aRALIC12['si182_graulongitude'];
-							$aCSVRALIC12['si182_minutolongitude']             = $aRALIC12['si182_minutolongitude'];
-							$aCSVRALIC12['si182_segundolongitude']            = $this->sicomNumberReal($aRALIC12['si182_segundolongitude'], 2);
+							$aCSVRALIC12['si182_latitude']                    = $aRALIC12['si182_latitude'];
+							$aCSVRALIC12['si182_longitude']                   = $aRALIC12['si182_longitude'];
+                            $aCSVRALIC12['si182_codbempublico']               = $aRALIC12['si182_codbempublico'];
+                            $aCSVRALIC12['si182_nrolote']                     = $aRALIC12['si182_nrolote'];
 
 							$this->sLinha = $aCSVRALIC12;
 							$this->adicionaLinha();
