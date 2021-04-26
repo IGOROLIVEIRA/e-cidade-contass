@@ -52,6 +52,7 @@ class Oc14395 extends AbstractMigration
               si195_nrocontrato bigint,
               si195_exerciciocontrato bigint,
               si195_dataassinatura date,
+              si195_vlcontrato numeric,
               si195_undmedidaprazoexecucao bigint,
               si195_prazoexecucao bigint,
               si195_mes bigint,

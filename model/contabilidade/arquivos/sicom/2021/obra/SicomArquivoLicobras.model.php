@@ -136,6 +136,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    ac16_numeroacordo as si195_nrocontrato,
                    ac16_anousu as si195_exerciciocontrato,
                    ac16_dataassinatura as si195_dataassinatura,
+                   ac16_valor as si195_vlcontrato,
                    ac16_tipounidtempoperiodo as si195_undmedidaprazoexecucao,
                    ac16_qtdperiodo as si195_prazoexecucao
             FROM licobras
@@ -177,6 +178,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
           $cllicobras102021->si195_nrocontrato = $oDados10->si195_nrocontrato;
           $cllicobras102021->si195_exerciciocontrato = $oDados10->si195_exerciciocontrato;
           $cllicobras102021->si195_dataassinatura = $oDados10->si195_dataassinatura;
+          $cllicobras102021->si195_vlcontrato = $oDados10->si195_vlcontrato;
           $cllicobras102021->si195_undmedidaprazoexecucao = $oDados10->si195_undmedidaprazoexecucao;
           $cllicobras102021->si195_prazoexecucao = $oDados10->si195_prazoexecucao;
           $cllicobras102021->si195_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
