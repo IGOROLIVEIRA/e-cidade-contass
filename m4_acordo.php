@@ -25,12 +25,11 @@ $clrotulo->label("z01_nome");
 $clrotulo->label("ac16_licitacao");
 $clrotulo->label("l20_objeto");
 $clrotulo->label("ac16_dataassinatura");
-
+$clrotulo->label("ac35_dataassinaturatermoaditivo");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
-//$cliframe_seleciona = new cl_iframe_seleciona;
 $anousu=db_getsession("DB_anousu");
 $instit=db_getsession("DB_instit");
 if(isset($alterar)){
@@ -53,16 +52,39 @@ if(isset($alterar)){
     }
 
     $rsPosicoes = db_query(
-                "SELECT distinct ac26_sequencial as POSICAO,
-                ac16_datainicio, ac16_datafim
-        FROM acordo
-        inner join acordoposicao on  ac16_sequencial = ac26_acordo
-        inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
-        inner join acordovigencia on ac18_acordoposicao = ac26_sequencial
-        inner join acordoposicaotipo on ac27_sequencial = ac26_acordoposicaotipo
-        inner join acordoitem on ac20_acordoposicao = ac26_sequencial
-        inner join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
-        WHERE ac16_sequencial = '$ac16_sequencial'"
+                "select
+                ac26_sequencial as POSICAO,
+                            ac18_sequencial,
+                            ac16_datainicio,
+                            ac16_datafim,
+                            ac18_datainicio,
+                            ac18_datafim,
+                            ac36_datainicial,
+                            ac36_datafinal,
+                            ac36_acordoposicao,
+                            ac35_dataassinaturatermoaditivo
+              from
+                acordoposicao
+              inner join acordo on
+                acordo.ac16_sequencial = acordoposicao.ac26_acordo
+              inner join acordoposicaotipo on
+                acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
+              inner join cgm on
+                cgm.z01_numcgm = acordo.ac16_contratado
+              inner join db_depart on
+                db_depart.coddepto = acordo.ac16_coddepto
+              inner join acordogrupo on
+                acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+              inner join acordosituacao on
+                acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+              inner join acordocomissao on
+                acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+              inner join acordovigencia on
+                ac26_sequencial = ac18_acordoposicao
+              inner join acordoposicaoaditamento on
+                ac26_sequencial = ac35_acordoposicao
+              inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+                where ac16_sequencial = '$ac16_sequencial'"
     );
 
     if(pg_num_rows($rsPosicoes) > 1){
@@ -73,11 +95,23 @@ if(isset($alterar)){
         for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
             $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
 
+            $inicio       = 'ac18_datainicio_'.$oPosicao->ac18_sequencial;
+            $fim          = 'ac18_datafim_'.$oPosicao->ac18_sequencial;
+            $dataaditivo  = 'ac35_dataassinaturatermoaditivo_'.$oPosicao->ac18_sequencial;
+
+            $dTinicio     = implode("-", array_reverse(explode("/",$$inicio)));
+            $dTfim        = implode("-", array_reverse(explode("/",$$fim)));
+            $dTassaditivo = implode("-", array_reverse(explode("/",$$dataaditivo)));
+
             if(isset($ac18_datainicio)) {
-                db_query("update acordovigencia  set ac18_datainicio = '$ac18_datainicio', ac18_datafim  = '$ac18_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
-                db_query("update acordoitemperiodo set ac41_datainicial = '$ac18_datainicio', ac41_datafinal = '$ac18_datafim' where ac41_acordoposicao = '$oPosicao->posicao'");
+                db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+                db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
+
+                db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
             }else{
-                db_query("update acordovigencia  set ac18_datainicio = '$ac16_datainicio', ac18_datafim  = '$ac16_datafim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+                db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+
+                db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
             }
 
             $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
@@ -105,7 +139,7 @@ if(isset($alterar)){
     $db_opcao = 2;
     $db_botao = true;
     $result = $clacordo->sql_record($clacordo->sql_query($chavepesquisa));
-    //db_criatabela($result);
+
     db_fieldsmemory($result,0);
 
     $rsPosicoes = db_query(
@@ -119,29 +153,49 @@ if(isset($alterar)){
         inner join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
         WHERE ac16_sequencial = '$ac16_sequencial'"
     );
-    //db_criatabela($rsPosicoes);exit;
+
     if(pg_num_rows($rsPosicoes) > 1){
         $aditivo = true;
 
         $rsAditivo = db_query(
-            "SELECT distinct ac26_sequencial as POSICAO,
-                ac16_datainicio,
-                ac16_datafim,
-                ac18_datainicio,
-                ac18_datafim,
-                ac36_datainicial,
-                ac36_datafinal,
-                ac36_acordoposicao
-        FROM acordo
-        inner join acordoposicao on  ac16_sequencial = ac26_acordo
+          "select
+          ac26_sequencial as POSICAO,
+                      ac18_sequencial,
+                      ac16_datainicio,
+                      ac16_datafim,
+                      ac18_datainicio,
+                      ac18_datafim,
+                      ac36_datainicial,
+                      ac36_datafinal,
+                      ac36_acordoposicao,
+                      ac35_dataassinaturatermoaditivo
+        from
+          acordoposicao
+        inner join acordo on
+          acordo.ac16_sequencial = acordoposicao.ac26_acordo
+        inner join acordoposicaotipo on
+          acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
+        inner join cgm on
+          cgm.z01_numcgm = acordo.ac16_contratado
+        inner join db_depart on
+          db_depart.coddepto = acordo.ac16_coddepto
+        inner join acordogrupo on
+          acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+        inner join acordosituacao on
+          acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        inner join acordocomissao on
+          acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+        inner join acordovigencia on
+          ac26_sequencial = ac18_acordoposicao
+        inner join acordoposicaoaditamento on
+          ac26_sequencial = ac35_acordoposicao
         inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
-        inner join acordovigencia on ac18_acordoposicao = ac26_sequencial
-        inner join acordoposicaotipo on ac27_sequencial = ac26_acordoposicaotipo
-        inner join acordoitem on ac20_acordoposicao = ac26_sequencial
-        inner join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
-        WHERE ac16_sequencial = '$ac16_sequencial' order by posicao desc limit 1 "
-        );
+          where ac16_sequencial = '$ac16_sequencial' order by posicao"
+      );
+
     }
+
+    //db_criatabela($rsAditivo);
     db_fieldsmemory($rsAditivo,0);
 
     $ac16_numeroacordo_old = $ac16_numeroacordo;
@@ -256,12 +310,17 @@ if ($sContass[1] != 'contass') {
                         </fieldset>
                     </td>
                 </tr>
-                <?php if($aditivo): ?>
+                <?php if($aditivo):
+                  for($i=0;$i<pg_numrows($rsAditivo);$i++){
+
+                    db_fieldsmemory($rsAditivo,$i);
+
+                ?>
                 <tr>
                     <td colspan="2">
                         <fieldset class='fieldsetinterno'>
                             <legend>
-                                <b>Vigência Aditivos</b>
+                                <b>Vigência Aditivos <?php echo $posicao ?></b>
                             </legend>
                             <table cellpadding="0" border="0" width="100%" class="table-vigencia">
                                 <tr>
@@ -272,10 +331,8 @@ if ($sContass[1] != 'contass') {
                                         <?
                                         $iCampo = 2;
 
-                                        db_inputdata('ac18_datainicio', @$ac18_datainicio_dia, @$ac18_datainicio_mes,
-                                            @$ac18_datainicio_ano, true, 'text', $iCampo,
-                                            "onchange='return js_somardias();'", "", "",
-                                            "return parent.js_somardias();");
+                                        db_inputdata("ac18_datainicio_$ac18_sequencial", @$ac18_datainicio_dia, @$ac18_datainicio_mes,
+                                            @$ac18_datainicio_ano, true, 'text', $iCampo);
                                         ?>
                                     </td>
                                     <td>
@@ -284,17 +341,28 @@ if ($sContass[1] != 'contass') {
                                     <td>
                                         <?
 
-                                        db_inputdata('ac18_datafim', @$ac18_datafim_dia, @$ac18_datafim_mes, @$ac18_datafim_ano,
-                                            true, 'text', $iCampo, "onchange='return js_somardias();'",
-                                            "", "", "return parent.js_somardias();");
+                                        db_inputdata("ac18_datafim_$ac18_sequencial", @$ac18_datafim_dia, @$ac18_datafim_mes, @$ac18_datafim_ano,
+                                            true, 'text', $iCampo);
                                         ?>
+                                    </td>
+                                    <td nowrap><?=$Lac16_dataassinatura?></td>
+                                    <td>
+                                      <?
+                                        db_inputdata("ac35_dataassinaturatermoaditivo_$ac18_sequencial", @$ac35_dataassinaturatermoaditivo_dia, @$ac35_dataassinaturatermoaditivo_mes,
+                                                    @$ac35_dataassinaturatermoaditivo_ano, true, 'text', $iOpcao);
+                                      ?>
                                     </td>
                                 </tr>
                             </table>
                         </fieldset>
                     </td>
                 </tr>
-                <?php endif; ?>
+                <?php
+
+                  }
+                  endif;
+
+                ?>
             </table>
         </fieldset>
         <input name="alterar" type="submit" id="alterar" value="Alterar" <?=($db_botao==false?"disabled":"")?> >
