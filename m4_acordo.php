@@ -24,6 +24,7 @@ $clrotulo->label("ac50_descricao");
 $clrotulo->label("z01_nome");
 $clrotulo->label("ac16_licitacao");
 $clrotulo->label("l20_objeto");
+$clrotulo->label("ac16_dataassinatura");
 
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -208,6 +209,15 @@ if ($sContass[1] != 'contass') {
                         db_input('ac16_numeroacordo_old',10,$Iac16_numeroacordo,true,'hidden',2,"");
                         ?>
                     </td>
+                </tr>
+                <tr>
+                  <td nowrap><?=$Lac16_dataassinatura?></td>
+                  <td>
+                    <?
+                      db_inputdata('ac16_dataassinatura', @$ac16_dataassinatura_dia, @$ac16_dataassinatura_mes,
+                                  @$ac16_dataassinatura_ano, true, 'text', $iOpcao);
+                    ?>
+                  </td>
                 </tr>
                 <tr>
                     <td colspan="2">
