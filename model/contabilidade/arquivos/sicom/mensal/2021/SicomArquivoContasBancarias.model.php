@@ -39,7 +39,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   /**
    * @var array Fontes encerradas em 2020
    */
-  protected $sFontesEncerradas = "'148', '149', '150', '151', '152', '248', '249', '250', '251', '252'";
+  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
   /**
    * @var array Tipo Entrada/Saída que devem informar conta
@@ -440,10 +440,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 
         $sSql20Fonte = "select distinct codctb, 
-                                case 
-                                    when fontemovimento in ({$this->sFontesEncerradas}) then substr(fontemovimento,1,1)||'59' 
-                                    else fontemovimento 
-                                end as fontemovimento
+                                fontemovimento
                                 from (
 									select c61_reduz  as codctb, o15_codtri  as fontemovimento
 									  from conplano
@@ -515,20 +512,21 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsReg20Fonte); $iCont20++) {
 
           /* DADOS REGISTRO 20*/
-          $iFonte = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->fontemovimento;
-
+          $iFonteMovimento = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->fontemovimento;
 
           $sSqlMov = "select
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),29,15)::float8,2)::float8 as saldo_anterior,
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),43,15)::float8,2)::float8 as debitomes,
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),57,15)::float8,2)::float8 as creditomes,
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),72,15)::float8,2)::float8 as saldo_final,
-						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),87,1)::varchar(1) as  sinalanterior,
-						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),89,1)::varchar(1) as  sinalfinal ";
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),29,15)::float8,2)::float8 as saldo_anterior,
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),43,15)::float8,2)::float8 as debitomes,
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),57,15)::float8,2)::float8 as creditomes,
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),72,15)::float8,2)::float8 as saldo_final,
+						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),87,1)::varchar(1) as  sinalanterior,
+						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),89,1)::varchar(1) as  sinalfinal ";
           $rsTotalMov = db_query($sSqlMov) or die($sSqlMov);
           //db_criatabela($rsTotalMov);
           //echo $sSqlMov;
           $oTotalMov = db_utils::fieldsMemory($rsTotalMov);
+
+          $iFonte = (in_array($iFonteMovimento, $this->aFontesEncerradas)) ? substr($iFonteMovimento,0,1).'59' : $iFonteMovimento;
 
           $sHash20 = $oContaAgrupada->si95_codctb . $iFonte;
           if (!$aCtb20Agrupado[$sHash20]) {
@@ -768,7 +766,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                              LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
                              LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . " 
                                   AND DATE_PART('MONTH',conlancamdoc.c71_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND conlancamval.c69_debito = {$oConta->codctb} ) AS xx
-                        WHERE fontemovimento::integer = $iFonte";
+                        WHERE fontemovimento::integer = $iFonteMovimento";
 
           $rsMovi21 = db_query($sSqlReg21);
 
