@@ -517,22 +517,24 @@ class SiopeDespesa extends Siope {
             return $this->getCod118218($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } elseif(substr($oDespesa->o58_codigo,1,2) == 19) {
             return $this->getCod119219($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 66) {
-            return $this->getCod166266($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 67) {
-            return $this->getCod167267($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 22) {
+            return $this->getCod122222($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 43) {
+            return $this->getCod143243($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } elseif(substr($oDespesa->o58_codigo,1,2) == 44) {
             return $this->getCod144244($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);//aqui
         } elseif(substr($oDespesa->o58_codigo,1,2) == 45) {
             return $this->getCod145245($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 43) {
-            return $this->getCod143243($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 22) {
-            return $this->getCod122222($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } elseif(substr($oDespesa->o58_codigo,1,2) == 46) {
             return $this->getCod146246($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } elseif(substr($oDespesa->o58_codigo,1,2) == 47) {
             return $this->getCod147247($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 66) {
+            return $this->getCod166266($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 67) {
+            return $this->getCod167267($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 90 || substr($oDespesa->o58_codigo,1,2) == 91) {
+            return $this->getCod190191290291($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } else {
             return $this->getCodGenerico($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         }
@@ -1073,6 +1075,594 @@ class SiopeDespesa extends Siope {
         }
     }
 
+    public function getCod122222($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        
+    }
+    
+    public function getCod143243($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        switch ($iSubFuncao) {
+         
+             case 121: 
+             case 122: 
+             case 123: 
+             case 124: 
+             case 125: 
+             case 126: 
+             case 127: 
+             case 128: 
+             case 129: 
+             case 130:
+             case 131:
+                 switch ($iTipoEnsino) {
+                     case 2:
+                         switch ($iTipoPasta) {
+                             case 1: return 1013;
+                             case 2: return 1016;
+                             default: return 1485;
+                         }
+                     case 3: 
+                         switch ($iTipoPasta) {
+                             case 1: return 1023;
+                             case 2: return 1026;
+                             default: return 1486;
+                         }
+                     case 5:
+                         switch ($iTipoPasta) {
+                             case 1: return 1033;
+                             case 3: return 1036;
+                             default: return 1487;
+                         }
+                     case 6:
+                         switch ($iTipoPasta) {
+                             case 1: return 1043;
+                             case 2: return 1046;
+                             default: return 1488;
+                         }
+                     default:
+                         switch ($iTipoPasta) {
+                             case 1: return 1003;
+                             case 2: return 1006;
+                             default: return 1484;
+                         }
+                 }
+             case 361:
+                 switch ($iTipoPasta) {
+                     case 1: return 1003;
+                     case 2: return 1006;
+                     default: return 1147;
+                 }
+             case 362:
+                 switch ($iTipoPasta) {
+                     case 1: return 1013;
+                     case 2: return 1016;
+                     default: return 1149;
+                 }
+             case 363:
+                 switch ($iTipoPasta) {
+                     case 1: return 1023;
+                     case 2: return 1026;
+                     default: return 1151;
+                 }
+             case 366:
+                 switch ($iTipoEnsino) {
+                     case 2:
+                         switch ($iTipoPasta) {
+                             case 1: return 1013;
+                             case 2: return 1016;
+                             default: return 1447;
+                         }
+                     default:
+                         switch ($iTipoPasta) {
+                             case 1: return 1003;
+                             case 2: return 1006;
+                             default: return 1445;
+                         }
+                 }
+             case 367:
+                 switch ($iTipoEnsino) {
+                     case 2:
+                         switch ($iTipoPasta) {
+                             case 1: return 1013;
+                             case 2: return 1016;
+                             default: return 1448;
+                         }
+                     case 5:
+                         switch ($iTipoPasta) {
+                             case 1: return 1033;
+                             case 2: return 1036;
+                             default: return 1449;
+                         }
+                     case 6:
+                         switch ($iTipoPasta) {
+                             case 1: return 1043;
+                             case 2: return 1046;
+                             default: return 1450;
+                         }
+                     default:
+                         switch ($iTipoPasta) {
+                             case 1: return 1003;
+                             case 2: return 1006;
+                             default: return 1446;
+                         }
+                 }
+             case 365:
+                 switch ($iTipoEnsino) {
+                     case 5:
+                         switch ($iTipoPasta) {
+                             case 1: return 1033;
+                             case 2: return 1036;
+                             default: return 1152;
+                         }
+                     default:
+                         switch ($iTipoPasta) {
+                             case 1: return 1043;
+                             case 2: return 1046;
+                             default: return 1153;
+                         }
+                 }
+             case 306:
+                 switch ($iTipoEnsino) {
+                     case 2: return 1013;
+                     case 3: return 1023;
+                     case 5: return 1033;
+                     case 6: return 1043;
+                     default: return 1003;
+                 }
+             case 782:
+             case 784:
+             case 785:
+                 switch ($iTipoEnsino) {
+                     case 2: return 1016;
+                     case 3: return 1026;
+                     case 5: return 1036;
+                     case 6: return 1046;
+                     default: return 1006;
+                 }
+             default:
+                 switch ($iTipoEnsino) {
+                     case 2:
+                         switch ($iTipoPasta) {
+                             case 1: return 1013;
+                             case 2: return 1016;
+                             default: return 1149;
+                         }
+                     case 3:
+                         switch ($iTipoPasta) {
+                             case 1: return 1023;
+                             case 2: return 1026;
+                             default: return 1151;
+                         }
+                     case 5:
+                         switch ($iTipoPasta) {
+                             case 1: return 1033;
+                             case 2: return 1036;
+                             default: return 1152;
+                         }
+                     case 6:
+                         switch ($iTipoPasta) {
+                             case 1: return 1043;
+                             case 2: return 1046;
+                             default: return 1153;
+                         }
+                     default:
+                         switch ($iTipoPasta) {
+                             case 1: return 1003;
+                             case 2: return 1006;
+                             default: return 1147;
+                         }
+                 }
+ 
+        }
+ 
+     }
+ 
+     public function getCod144244($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+ 
+         switch ($iSubFuncao) {
+ 
+             case 361: return 867;
+             case 362: return 880;
+             case 363: return 893;
+             case 365:
+                 switch ($iTipoEnsino) {
+                     case 5: return 904;
+                     default: return 916;
+                 }
+             default:
+                 switch ($iTipoEnsino) {
+                     case 2: return 880;
+                     case 3: return 893;
+                     case 5: return 904;
+                     case 6: return 916;
+                     default: return 867;
+                 }
+         
+         }
+ 
+     }
+ 
+     public function getCod145245($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+ 
+         switch ($iSubFuncao) {
+ 
+             case 361: return 933;
+             case 362: return 946;
+             case 363: return 957;
+             case 365:
+                 switch ($iTipoEnsino) {
+                     case 5: return 969;
+                     default: return 981;
+                 }
+             default:
+                 switch ($iTipoEnsino) {
+                     case 2: return 946;
+                     case 3: return 957;
+                     case 5: return 969;
+                     case 6: return 981;
+                     default: return 933;
+                 }
+ 
+         }
+ 
+     }
+ 
+ 
+     public function getCod146246($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        switch ($iSubFuncao) {
+
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1063;
+                            case 2: return 1066;
+                            default: return 1490;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 1073;
+                            case 2: return 1076;
+                            default: return 1491;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1083;
+                            case 2: return 1086;
+                            default: return 1492;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1093;
+                            case 2: return 1096;
+                            default: return 1493;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1053;
+                            case 2: return 1056;
+                            default: return 1489;
+                        }
+                }
+            case 361:
+                switch ($iTipoPasta) {
+                    case 1: return 1053;
+                    case 2: return 1056;
+                    default: return 1154;
+                }
+            case 362:
+                switch ($iTipoPasta) {
+                    case 1: return 1063;
+                    case 2: return 1066;
+                    default: return 1156;
+                }
+            case 363:
+                switch ($iTipoPasta) {
+                    case 1: return 1073;
+                    case 2: return 1076;
+                    default: return 1158;
+                }
+            case 366:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1063;
+                            case 2: return 1066;
+                            default: return 1453;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1053;
+                            case 2: return 1056;
+                            default: return 1451;
+                        }
+                }
+            case 367:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1063;
+                            case 2: return 1066;
+                            default: return 1454;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1083;
+                            case 2: return 1086;
+                            default: return 1455;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1093;
+                            case 2: return 1096;
+                            default: return 1456;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1053;
+                            case 2: return 1056;
+                            default: return 1452;
+                        }
+                }
+            case 365: 
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1083;
+                            case 2: return 1086;
+                            default: return 1159;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1093;
+                            case 2: return 1096;
+                            default: return 1160;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+                    case 2: return 1063;
+                    case 3: return 1073;
+                    case 5: return 1083;
+                    case 6: return 1093;
+                    default: return 1053;
+                }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 1066;
+                    case 3: return 1076;
+                    case 5: return 1096;
+                    default: return 1056;
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1063;
+                            case 2: return 1066;
+                            default: return 1156;
+                        }
+                    case 3: 
+                        switch ($iTipoPasta) {
+                            case 1: return 1073;
+                            case 2: return 1076;
+                            default: return 1158;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1083;
+                            case 2: return 1086;
+                            default: return 1159;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1093;
+                            case 2: return 1096;
+                            default: return 1160;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1053;
+                            case 2: return 1056;
+                            default: return 1154;
+                        }
+                }
+        
+        }
+ 
+     }
+ 
+     public function getCod147247($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+        
+        switch ($iSubFuncao) {
+
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 782;
+                            case 2: return 787;
+                            default: return 1511;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 795;
+                            case 2: return 798;
+                            default: return 1512;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 806;
+                            case 2: return 810;
+                            default: return 1513;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 818;
+                            case 2: return 822;
+                            default: return 1514;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 769;
+                            case 2: return 774;
+                            default: return 1510;
+                        }
+                }
+            case 361:
+                switch ($iTipoPasta) {
+                    case 1: return 769;
+                    case 2: return 774;
+                    default: return 771;
+                }
+            case 362:
+                switch ($iTipoPasta) {
+                    case 1: return 782;
+                    case 2: return 787;
+                    default: return 784;
+                }
+            case 363:
+                switch ($iTipoPasta) {
+                    case 1: return 795;
+                    case 2: return 798;
+                    default: return 797;
+                }
+            case 366:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 782;
+                            case 2: return 787;
+                            default: return 1477;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 769;
+                            case 2: return 774;
+                            default: return 1475;
+                        }
+                }
+            case 367:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 782;
+                            case 2: return 787;
+                            default: return 1478;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 806;
+                            case 2: return 810;
+                            default: return 1479;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 818;
+                            case 2: return 822;
+                            default: return 1480;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 769;
+                            case 2: return 774;
+                            default: return 1476;
+                        }
+                }
+            case 365:
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 806;
+                            case 2: return 810;
+                            default: return 808;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 818;
+                            case 2: return 822;
+                            default: return 820;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+                    case 2: return 782;
+                    case 3: return 795;
+                    case 5: return 806;
+                    case 6: return 818;
+                    default: return 769;
+                }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 787;
+                    case 3: return 798;
+                    case 5: return 810;
+                    case 6: return 822;
+                    default: return 774;
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 782;
+                            case 2: return 787;
+                            default: return 784;
+                        }
+                    case 3: 
+                        switch ($iTipoPasta) {
+                            case 1: return 795;
+                            case 2: return 798;
+                            default: return 797;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 806;
+                            case 2: return 810;
+                            default: return 808;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 818;
+                            case 2: return 822;
+                            default: return 820;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 769;
+                            case 2: return 774;
+                            default: return 771;
+                        }
+                }
+        }
+         
+     }
+
     public function getCod166266($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
 
         switch ($iSubFuncao) {
@@ -1221,1304 +1811,200 @@ class SiopeDespesa extends Siope {
         }
     }
 
-    public function getCod144244($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+    public function getCod190191290291($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
 
-        if ($iSubFuncao == 361) {
-            return 867;
-        } elseif ($iSubFuncao == 362) {
-            return 880;
-        } elseif ($iSubFuncao == 363) {
-            return 893;
-        } elseif ($iSubFuncao == 365) {
+        switch ($iSubFuncao) {
 
-            if ($iTipoEnsino == 5) {
-                return 904;
-            } else {
-                return 916;
-            }
-
-        } else {
-
-            if ($iTipoEnsino == 2) {
-                return 880;
-            } elseif ($iTipoEnsino == 3) {
-                return 893;
-            } elseif ($iTipoEnsino == 5) {
-                return 904;
-            } elseif ($iTipoEnsino == 6) {
-                return 916;
-            } else {
-                return 867;
-            }
-
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:            
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1581;
+                            case 2: return 1620;
+                            default: return 1580;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 1585;
+                            case 2: return 1622;
+                            default: return 1584;
+                        }
+                    case 4:
+                        switch ($iTipoPasta) {
+                            case 1: return 1588;
+                            case 2: return 1624;
+                            default: return 1587;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1591;
+                            case 2: return 1627;
+                            default: return 1590;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1594;
+                            case 2: return 1630;
+                            default: return 1593;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1577;
+                            case 2: return 1619;
+                            default: return 1576;
+                        }
+                }
+            case 361:
+                switch ($iTipoPasta) {
+                    case 1: return 1577;
+                    case 2: return 1619;
+                    default: return 1578;
+                }
+            case 362:
+                switch ($iTipoPasta) {
+                    case 1: return 1581;
+                    case 2: return 1620;
+                    default: return 1582;
+                }
+            case 363:
+                switch ($iTipoPasta) {
+                    case 1: return 1585;
+                    case 2: return 1622;
+                    default: return 1621;
+                }
+            case 364:
+                switch ($iTipoPasta) {
+                    case 1: return 1588;
+                    case 2: return 1624;
+                    default: return 1623;
+                }
+            case 366:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1581;
+                            case 2: return 1620;
+                            default: return 1641;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1577;
+                            case 2: return 1619;
+                            default: return 1639;
+                        }
+                }
+            case 367;
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1581;
+                            case 2: return 1620;
+                            default: return 1642;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1591;
+                            case 2: return 1627;
+                            default: return 1626;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1594;
+                            case 2: return 1630;
+                            default: return 1629;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1577;
+                            case 2: return 1619;
+                            default: return 1640;
+                        }
+                }
+            case 365:
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1591;
+                            case 2: return 1627;
+                            default: return 1625;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1594;
+                            case 2: return 1630;
+                            default: return 1628;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+                    case 2: return 1581;
+                    case 3: return 1585;
+                    case 4: return 1588;
+                    case 5: return 1591;
+                    case 6: return 1594;
+                    default: return 1577;
+                }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 1620;
+                    case 3: return 1622;
+                    case 4: return 1624;
+                    case 5: return 1627;
+                    case 6: return 1630;
+                    default: return 1619;
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2: 
+                        switch ($iTipoPasta) {
+                            case 1: return 1581;
+                            case 2: return 1620;
+                            default: return 1582;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 1585;
+                            case 2: return 1622;
+                            default: return 1621;
+                        }
+                    case 4:
+                        switch ($iTipoPasta) {
+                            case 1: return 1588;
+                            case 2: return 1624;
+                            default: return 1623;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1591;
+                            case 2: return 1627;
+                            default: return 1625;
+                        }
+                    case 6: 
+                        switch ($iTipoPasta) {
+                            case 1: return 1594;
+                            case 2: return 1630;
+                            default: return 1628;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1577;
+                            case 2: return 1619;
+                            default: return 1578;
+                        }
+                }
         }
-
-    }
-
-    public function getCod145245($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
-
-        if ($iSubFuncao == 361) {
-            return 933;
-        } elseif ($iSubFuncao == 362) {
-            return 946;
-        } elseif ($iSubFuncao == 363) {
-            return 957;
-        } elseif ($iSubFuncao == 365) {
-
-            if ($iTipoEnsino == 5) {
-                return 969;
-            } else {
-                return 981;
-            }
-
-        } else {
-
-            if ($iTipoEnsino == 2) {
-                return 946;
-            } elseif ($iTipoEnsino == 3) {
-                return 957;
-            } elseif ($iTipoEnsino == 5) {
-                return 969;
-            } elseif ($iTipoEnsino == 6) {
-                return 981;
-            } else {
-                return 933;
-            }
-
-        }
-
-    }
-
-    public function getCod143243($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
-
-        if ($iSubFuncao == 121) {
-
-            if ($iTipoEnsino == 2) {
-                return 983;
-            } elseif ($iTipoEnsino == 3) {
-                return 984;
-            } elseif ($iTipoEnsino == 5) {
-                return 985;
-            } elseif ($iTipoEnsino == 6) {
-                return 986;
-            } else {
-                return 982;
-            }
-
-        } elseif ($iSubFuncao == 122) {
-
-            if ($iTipoEnsino == 2) {
-                return 1007;
-            } elseif ($iTipoEnsino == 3) {
-                return 1017;
-            } elseif ($iTipoEnsino == 5) {
-                return 1027;
-            } elseif ($iTipoEnsino == 6) {
-                return 1037;
-            } else {
-                return 997;
-            }
-
-        } elseif ($iSubFuncao == 123) {
-
-            if ($iTipoEnsino == 2) {
-                return 1008;
-            } elseif ($iTipoEnsino == 3) {
-                return 1018;
-            } elseif ($iTipoEnsino == 5) {
-                return 1028;
-            } elseif ($iTipoEnsino == 6) {
-                return 1038;
-            } else {
-                return 998;
-            }
-
-        } elseif ($iSubFuncao == 124) {
-
-            if ($iTipoEnsino == 2) {
-                return 1009;
-            } elseif ($iTipoEnsino == 3) {
-                return 1019;
-            } elseif ($iTipoEnsino == 5) {
-                return 1029;
-            } elseif ($iTipoEnsino == 6) {
-                return 1039;
-            } else {
-                return 999;
-            }
-
-        } elseif ($iSubFuncao == 126) {
-
-            if ($iTipoEnsino == 2) {
-                return 1010;
-            } elseif ($iTipoEnsino == 3) {
-                return 1020;
-            } elseif ($iTipoEnsino == 5) {
-                return 1030;
-            } elseif ($iTipoEnsino == 6) {
-                return 1040;
-            } else {
-                return 1000;
-            }
-
-        } elseif ($iSubFuncao == 128) {
-
-            if ($iTipoEnsino == 2) {
-                return 1011;
-            } elseif ($iTipoEnsino == 3) {
-                return 1021;
-            } elseif ($iTipoEnsino == 5) {
-                return 1031;
-            } elseif ($iTipoEnsino == 6) {
-                return 1041;
-            } else {
-                return 1001;
-            }
-
-        } elseif ($iSubFuncao == 131) {
-
-            if ($iTipoEnsino == 2) {
-                return 1012;
-            } elseif ($iTipoEnsino == 3) {
-                return 1022;
-            } elseif ($iTipoEnsino == 5) {
-                return 1032;
-            } elseif ($iTipoEnsino == 6) {
-                return 1042;
-            } else {
-                return 1002;
-            }
-
-        } elseif ($iSubFuncao == 331) {
-
-            if ($iTipoEnsino == 2) {
-                return 1014;
-            } elseif ($iTipoEnsino == 3) {
-                return 1024;
-            } elseif ($iTipoEnsino == 5) {
-                return 1034;
-            } elseif ($iTipoEnsino == 6) {
-                return 1044;
-            } else {
-                return 1004;
-            }
-
-        } elseif ($iSubFuncao == 361) {
-
-            if ($iTipoPasta == 1) {
-                return 1003;
-            } elseif ($iTipoPasta == 2) {
-                return 1006;
-            } else {
-                return 1147;
-            }
-
-        } elseif ($iSubFuncao == 362) {
-
-            if ($iTipoEnsino == 1) {
-                return 1013;
-            } elseif ($iTipoEnsino == 2) {
-                return 1016;
-            } else {
-                return 1149;
-            }
-
-        } elseif ($iSubFuncao == 363) {
-
-            if ($iTipoPasta == 1) {
-                return 1023;
-            } elseif ($iTipoPasta == 2) {
-                return 1026;
-            } else {
-                return 1151;
-            }
-
-        } elseif ($iSubFuncao == 366) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1013;
-                } elseif ($iTipoPasta == 2) {
-                    return 1016;
-                } else {
-                    return 1150;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1003;
-                } elseif ($iTipoPasta == 2) {
-                    return 1006;
-                } else {
-                    return 1148;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 367) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1013;
-                } elseif ($iTipoPasta == 2) {
-                    return 1016;
-                } else {
-                    return 1015;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1033;
-                } elseif ($iTipoPasta == 2) {
-                    return 1036;
-                } else {
-                    return 1035;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 1043;
-                } elseif ($iTipoPasta == 2) {
-                    return 1046;
-                } else {
-                    return 1045;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1003;
-                } elseif ($iTipoPasta == 2) {
-                    return 1006;
-                } else {
-                    return 1005;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 365) {
-
-            if ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1033;
-                } elseif ($iTipoPasta == 2) {
-                    return 1036;
-                } else {
-                    return 1152;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1043;
-                } elseif ($iTipoPasta == 2) {
-                    return 1046;
-                } else {
-                    return 1153;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 306) {
-
-            if ($iTipoEnsino == 2) {
-                return 1013;
-            } elseif ($iTipoEnsino == 3) {
-                return  1023;
-            } elseif ($iTipoEnsino == 5) {
-                return 1033;
-            } elseif ($iTipoEnsino == 6) {
-                return 1043;
-            } else {
-                return 1003;
-            }
-
-        } else {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1013;
-                } elseif ($iTipoPasta == 2) {
-                    return 1016;
-                } else {
-                    return 1007;
-                }
-
-            } elseif ($iTipoEnsino == 3) {
-
-                if ($iTipoPasta == 1) {
-                    return 1023;
-                } elseif ($iTipoPasta == 2) {
-                    return 1026;
-                } else {
-                    return 1017;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1033;
-                } elseif ($iTipoPasta == 2) {
-                    return 1036;
-                } else {
-                    return 1027;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 1043;
-                } elseif ($iTipoPasta == 2) {
-                    return 1046;
-                } else {
-                    return 1037;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1003;
-                } elseif ($iTipoPasta == 2) {
-                    return 1006;
-                } else {
-                    return 997;
-                }
-
-            }
-
-        }
-
-    }
-
-    public function getCod122222($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
-
-        if ($iSubFuncao == 121) {
-
-            if ($iTipoEnsino == 2) {
-                return 988;
-            } elseif ($iTipoEnsino == 3) {
-                return 989;
-            } elseif ($iTipoEnsino == 5) {
-                return 990;
-            } elseif ($iTipoEnsino == 6) {
-                return 991;
-            } else {
-                return 987;
-            }
-
-        } elseif ($iSubFuncao == 122) {
-
-            if ($iTipoEnsino == 2) {
-                return 1057;
-            } elseif ($iTipoEnsino == 3) {
-                return 1067;
-            } elseif ($iTipoEnsino == 5) {
-                return 1077;
-            } elseif ($iTipoEnsino == 6) {
-                return 1087;
-            } else {
-                return 1047;
-            }
-
-        } elseif ($iSubFuncao == 123) {
-
-            if ($iTipoEnsino == 2) {
-                return 1058;
-            } elseif ($iTipoEnsino == 3) {
-                return 1068;
-            } elseif ($iTipoEnsino == 5) {
-                return 1078;
-            } elseif ($iTipoEnsino == 6) {
-                return 1088;
-            } else {
-                return 1048;
-            }
-
-        } elseif ($iSubFuncao == 124) {
-
-            if ($iTipoEnsino == 2) {
-                return 1059;
-            } elseif ($iTipoEnsino == 3) {
-                return 1069;
-            } elseif ($iTipoEnsino == 5) {
-                return 1079;
-            } elseif ($iTipoEnsino == 6) {
-                return 1089;
-            } else {
-                return 1049;
-            }
-
-        } elseif ($iSubFuncao == 126) {
-
-            if ($iTipoEnsino == 2) {
-                return 1060;
-            } elseif ($iTipoEnsino == 3) {
-                return 1070;
-            } elseif ($iTipoEnsino == 5) {
-                return 1080;
-            } elseif ($iTipoEnsino == 6) {
-                return 1090;
-            } else {
-                return 1050;
-            }
-
-        } elseif ($iSubFuncao == 128) {
-
-            if ($iTipoEnsino == 2) {
-                return 1061;
-            } elseif ($iTipoEnsino == 3) {
-                return 1071;
-            } elseif ($iTipoEnsino == 5) {
-                return 1081;
-            } elseif ($iTipoEnsino == 6) {
-                return 1091;
-            } else {
-                return 1051;
-            }
-
-        } elseif ($iSubFuncao == 131) {
-
-            if ($iTipoEnsino == 2) {
-                return 1062;
-            } elseif ($iTipoEnsino == 3) {
-                return 1072;
-            } elseif ($iTipoEnsino == 5) {
-                return 1082;
-            } elseif ($iTipoEnsino == 6) {
-                return 1092;
-            } else {
-                return 1052;
-            }
-
-        } elseif ($iSubFuncao == 331) {
-
-            if ($iTipoEnsino == 2) {
-                return 1064;
-            } elseif ($iTipoEnsino == 3) {
-                return 1074;
-            } elseif ($iTipoEnsino == 5) {
-                return 1084;
-            } elseif ($iTipoEnsino == 6) {
-                return 1094;
-            } else {
-                return 1054;
-            }
-
-        } elseif ($iSubFuncao == 361) {
-
-            if ($iTipoPasta == 1) {
-                return 1053;
-            } elseif ($iTipoPasta == 2) {
-                return 1056;
-            } else {
-                return 1154;
-            }
-
-        } elseif ($iSubFuncao == 362) {
-
-            if ($iTipoPasta == 1) {
-                return 1063;
-            } elseif ($iTipoPasta == 2) {
-                return 1066;
-            } else {
-                return 1156;
-            }
-
-        } elseif ($iSubFuncao == 363) {
-
-            if ($iTipoPasta == 1) {
-                return 1073;
-            } elseif ($iTipoPasta == 2) {
-                return 1076;
-            } else {
-                return 1158;
-            }
-
-        } elseif ($iSubFuncao == 366) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1063;
-                } elseif ($iTipoPasta == 2) {
-                    return 1066;
-                } else {
-                    return 1157;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1053;
-                } elseif ($iTipoPasta == 2) {
-                    return 1056;
-                } else {
-                    return 1155;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 367) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1063;
-                } elseif ($iTipoPasta == 2) {
-                    return 1066;
-                } else {
-                    return 1065;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1083;
-                } elseif ($iTipoPasta == 2) {
-                    return 1086;
-                } else {
-                    return 1085;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 1093;
-                } elseif ($iTipoPasta == 2) {
-                    return 1096;
-                } else {
-                    return 1095;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1053;
-                } elseif ($iTipoPasta == 2) {
-                    return 1056;
-                } else {
-                    return 1055;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 365) {
-
-            if ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1083;
-                } elseif ($iTipoPasta == 2) {
-                    return 1086;
-                } else {
-                    return 1159;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1093;
-                } elseif ($iTipoPasta == 2) {
-                    return 1096;
-                } else {
-                    return 1160;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 306) {
-
-            if ($iTipoEnsino == 2) {
-                return 1063;
-            } elseif ($iTipoEnsino == 3) {
-                return 1073;
-            } elseif ($iTipoEnsino == 5) {
-                return 1083;
-            } elseif ($iTipoEnsino == 6) {
-                return 1093;
-            } else {
-                return 1053;
-            }
-
-        } else {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1063;
-                } elseif ($iTipoPasta == 2) {
-                    return 1066;
-                } else {
-                    return 1057;
-                }
-
-            } elseif ($iTipoEnsino == 3) {
-
-                if ($iTipoPasta == 1) {
-                    return 1073;
-                } elseif ($iTipoPasta == 2) {
-                    return 1076;
-                } else {
-                    return 1067;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1083;
-                } elseif ($iTipoPasta == 2) {
-                    return 1086;
-                } else {
-                    return 1077;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 1093;
-                } elseif ($iTipoPasta == 2) {
-                    return 1096;
-                } else {
-                    return 1087;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1053;
-                } elseif ($iTipoPasta == 2) {
-                    return 1056;
-                } else {
-                    return 1047;
-                }
-
-            }
-
-        }
-
-    }
-
-    public function getCod146246($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
-
-        if ($iSubFuncao == 121) {
-
-            if ($iTipoEnsino == 2) {
-                return 993;
-            } elseif ($iTipoEnsino == 3) {
-                return 994;
-            } elseif ($iTipoEnsino == 5) {
-                return 995;
-            } elseif ($iTipoEnsino == 6) {
-                return 996;
-            } else {
-                return 982;
-            }
-
-        } elseif ($iSubFuncao == 122) {
-
-            if ($iTipoEnsino == 2) {
-                return 1107;
-            } elseif ($iTipoEnsino == 3) {
-                return 1117;
-            } elseif ($iTipoEnsino == 5) {
-                return 1127;
-            } elseif ($iTipoEnsino == 6) {
-                return 1137;
-            } else {
-                return 1097;
-            }
-
-        } elseif ($iSubFuncao == 123) {
-
-            if ($iTipoEnsino == 2) {
-                return 1108;
-            } elseif ($iTipoEnsino == 3) {
-                return 1118;
-            } elseif ($iTipoEnsino == 5) {
-                return 1128;
-            } elseif ($iTipoEnsino == 6) {
-                return 1138;
-            } else {
-                return 1098;
-            }
-
-        } elseif ($iSubFuncao == 124) {
-
-            if ($iTipoEnsino == 2) {
-                return 1109;
-            } elseif ($iTipoEnsino == 3) {
-                return 1119;
-            } elseif ($iTipoEnsino == 5) {
-                return 1129;
-            } elseif ($iTipoEnsino == 6) {
-                return 1139;
-            } else {
-                return 1099;
-            }
-
-        } elseif ($iSubFuncao == 126) {
-
-            if ($iTipoEnsino == 2) {
-                return 1110;
-            } elseif ($iTipoEnsino == 3) {
-                return 1120;
-            } elseif ($iTipoEnsino == 5) {
-                return 1130;
-            } elseif ($iTipoEnsino == 6) {
-                return 1140;
-            } else {
-                return 1100;
-            }
-
-        } elseif ($iSubFuncao == 128) {
-
-            if ($iTipoEnsino == 2) {
-                return 1111;
-            } elseif ($iTipoEnsino == 3) {
-                return 1121;
-            } elseif ($iTipoEnsino == 5) {
-                return 1131;
-            } elseif ($iTipoEnsino == 6) {
-                return 1141;
-            } else {
-                return 1101;
-            }
-
-        } elseif ($iSubFuncao == 131) {
-
-            if ($iTipoEnsino == 2) {
-                return 1112;
-            } elseif ($iTipoEnsino == 3) {
-                return 1122;
-            } elseif ($iTipoEnsino == 5) {
-                return 1132;
-            } elseif ($iTipoEnsino == 6) {
-                return 1142;
-            } else {
-                return 1102;
-            }
-
-        } elseif ($iSubFuncao == 331) {
-
-            if ($iTipoEnsino == 2) {
-                return 1114;
-            } elseif ($iTipoEnsino == 3) {
-                return 1124;
-            } elseif ($iTipoEnsino == 5) {
-                return 1134;
-            } elseif ($iTipoEnsino == 6) {
-                return 1144;
-            } else {
-                return 1104;
-            }
-
-        } elseif ($iSubFuncao == 361) {
-
-            if ($iTipoPasta == 1) {
-                return 1103;
-            } elseif ($iTipoPasta == 2) {
-                return 1106;
-            } else {
-                return 1161;
-            }
-
-        } elseif ($iSubFuncao == 362) {
-
-            if ($iTipoPasta == 1) {
-                return 1113;
-            } elseif ($iTipoPasta == 2) {
-                return 1116;
-            } else {
-                return 1163;
-            }
-
-        } elseif ($iSubFuncao == 363) {
-
-            if ($iTipoPasta == 1) {
-                return 1123;
-            } elseif ($iTipoPasta == 2) {
-                return 1126;
-            } else {
-                return 1125;
-            }
-
-        } elseif ($iSubFuncao == 366) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1113;
-                } elseif ($iTipoPasta == 2) {
-                    return 1116;
-                } else {
-                    return 1164;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1103;
-                } elseif ($iTipoPasta == 2) {
-                    return 1106;
-                } else {
-                    return 1162;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 367) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1113;
-                } elseif ($iTipoPasta == 2) {
-                    return 1116;
-                } else {
-                    return 1115;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1133;
-                } elseif ($iTipoPasta == 2) {
-                    return 1136;
-                } else {
-                    return 1135;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 1143;
-                } elseif ($iTipoPasta == 2) {
-                    return 1146;
-                } else {
-                    return 1145;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1103;
-                } elseif ($iTipoPasta == 2) {
-                    return 1106;
-                } else {
-                    return 1105;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 365) {
-
-            if ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1133;
-                } elseif ($iTipoPasta == 2) {
-                    return 1136;
-                } else {
-                    return 1165;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1143;
-                } elseif ($iTipoPasta == 2) {
-                    return 1146;
-                } else {
-                    return 1166;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 306) {
-
-            if ($iTipoEnsino == 2) {
-                return 1113;
-            } elseif ($iTipoEnsino == 3) {
-                return 1123;
-            } elseif ($iTipoEnsino == 5) {
-                return 1133;
-            } elseif ($iTipoEnsino == 6) {
-                return 1143;
-            } else {
-                return 1103;
-            }
-
-        } else {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 1113;
-                } elseif ($iTipoPasta == 2) {
-                    return 1116;
-                } else {
-                    return 1107;
-                }
-
-            } elseif ($iTipoEnsino == 3) {
-
-                if ($iTipoPasta == 1) {
-                    return 1123;
-                } elseif ($iTipoPasta == 2) {
-                    return 1126;
-                } else {
-                    return 1117;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 1133;
-                } elseif ($iTipoPasta == 2) {
-                    return 1136;
-                } else {
-                    return 1127;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 1143;
-                } elseif ($iTipoPasta == 2) {
-                    return 1146;
-                } else {
-                    return 1137;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 1103;
-                } elseif ($iTipoPasta == 2) {
-                    return 1106;
-                } else {
-                    return 1097;
-                }
-
-            }
-
-        }
-
-    }
-
-    public function getCod147247($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
-
-        if ($iSubFuncao == 121) {
-
-            if ($iTipoEnsino == 2) {
-                return 775;
-            } elseif ($iTipoEnsino == 3) {
-                return 788;
-            } elseif ($iTipoEnsino == 5) {
-                return 799;
-            } elseif ($iTipoEnsino == 6) {
-                return 811;
-            } else {
-                return 762;
-            }
-
-        } elseif ($iSubFuncao == 122) {
-
-            if ($iTipoEnsino == 2) {
-                return 776;
-            } elseif ($iTipoEnsino == 3) {
-                return 789;
-            } elseif ($iTipoEnsino == 5) {
-                return 800;
-            } elseif ($iTipoEnsino == 6) {
-                return 812;
-            } else {
-                return 763;
-            }
-
-        } elseif ($iSubFuncao == 123) {
-
-            if ($iTipoEnsino == 2) {
-                return 777;
-            } elseif ($iTipoEnsino == 3) {
-                return 790;
-            } elseif ($iTipoEnsino == 5) {
-                return 801;
-            } elseif ($iTipoEnsino == 6) {
-                return 813;
-            } else {
-                return 764;
-            }
-
-        } elseif ($iSubFuncao == 124) {
-
-            if ($iTipoEnsino == 2) {
-                return 778;
-            } elseif ($iTipoEnsino == 3) {
-                return 791;
-            } elseif ($iTipoEnsino == 5) {
-                return 802;
-            } elseif ($iTipoEnsino == 6) {
-                return 814;
-            } else {
-                return 765;
-            }
-
-        } elseif ($iSubFuncao == 126) {
-
-            if ($iTipoEnsino == 2) {
-                return 779;
-            } elseif ($iTipoEnsino == 3) {
-                return 792;
-            } elseif ($iTipoEnsino == 5) {
-                return 803;
-            } elseif ($iTipoEnsino == 6) {
-                return 815;
-            } else {
-                return 766;
-            }
-
-        } elseif ($iSubFuncao == 128) {
-
-            if ($iTipoEnsino == 2) {
-                return 780;
-            } elseif ($iTipoEnsino == 3) {
-                return 793;
-            } elseif ($iTipoEnsino == 5) {
-                return 804;
-            } elseif ($iTipoEnsino == 6) {
-                return 816;
-            } else {
-                return 767;
-            }
-
-        } elseif ($iSubFuncao == 131) {
-
-            if ($iTipoEnsino == 2) {
-                return 781;
-            } elseif ($iTipoEnsino == 3) {
-                return 794;
-            } elseif ($iTipoEnsino == 5) {
-                return 805;
-            } elseif ($iTipoEnsino == 6) {
-                return 817;
-            } else {
-                return 768;
-            }
-
-        } elseif ($iSubFuncao == 331) {
-
-            if ($iTipoEnsino == 2) {
-                return 783;
-            } elseif ($iTipoEnsino == 3) {
-                return 796;
-            } elseif ($iTipoEnsino == 5) {
-                return 807;
-            } elseif ($iTipoEnsino == 6) {
-                return 819;
-            } else {
-                return 770;
-            }
-
-        } elseif ($iSubFuncao == 361) {
-
-            if ($iTipoPasta == 1) {
-                return 769;
-            } elseif ($iTipoPasta == 2) {
-                return 774;
-            } else {
-                return 771;
-            }
-
-        } elseif ($iSubFuncao == 362) {
-
-            if ($iTipoPasta == 1) {
-                return 782;
-            } elseif ($iTipoPasta == 2) {
-                return 787;
-            } else {
-                return 784;
-            }
-
-        } elseif ($iSubFuncao == 363) {
-
-            if ($iTipoPasta == 1) {
-                return 795;
-            } elseif ($iTipoPasta == 2) {
-                return 798;
-            } else {
-                return 797;
-            }
-
-        } elseif ($iSubFuncao == 366) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 782;
-                } elseif ($iTipoPasta == 2) {
-                    return 787;
-                } else {
-                    return 785;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 769;
-                } elseif ($iTipoPasta == 2) {
-                    return 774;
-                } else {
-                    return 772;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 367) {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 782;
-                } elseif ($iTipoPasta == 2) {
-                    return 787;
-                } else {
-                    return 786;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 806;
-                } elseif ($iTipoPasta == 2) {
-                    return 810;
-                } else {
-                    return 809;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 818;
-                } elseif ($iTipoPasta == 2) {
-                    return 822;
-                } else {
-                    return 821;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 769;
-                } elseif ($iTipoPasta == 2) {
-                    return 774;
-                } else {
-                    return 773;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 365) {
-
-            if ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 806;
-                } elseif ($iTipoPasta == 2) {
-                    return 810;
-                } else {
-                    return 808;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 818;
-                } elseif ($iTipoPasta == 2) {
-                    return 822;
-                } else {
-                    return 820;
-                }
-
-            }
-
-        } elseif ($iSubFuncao == 306) {
-
-            if ($iTipoEnsino == 2) {
-                return 782;
-            } elseif ($iTipoEnsino == 3) {
-                return 795;
-            } elseif ($iTipoEnsino == 5) {
-                return 806;
-            } elseif ($iTipoEnsino == 6) {
-                return 818;
-            } else {
-                return 769;
-            }
-
-        } else {
-
-            if ($iTipoEnsino == 2) {
-
-                if ($iTipoPasta == 1) {
-                    return 782;
-                } elseif ($iTipoPasta == 2) {
-                    return 787;
-                } else {
-                    return 776;
-                }
-
-            } elseif ($iTipoEnsino == 3) {
-
-                if ($iTipoPasta == 1) {
-                    return 795;
-                } elseif ($iTipoPasta == 2) {
-                    return 798;
-                } else {
-                    return 789;
-                }
-
-            } elseif ($iTipoEnsino == 5) {
-
-                if ($iTipoPasta == 1) {
-                    return 806;
-                } elseif ($iTipoPasta == 2) {
-                    return 810;
-                } else {
-                    return 800;
-                }
-
-            } elseif ($iTipoEnsino == 6) {
-
-                if ($iTipoPasta == 1) {
-                    return 818;
-                } elseif ($iTipoPasta == 2) {
-                    return 822;
-                } else {
-                    return 812;
-                }
-
-            } else {
-
-                if ($iTipoPasta == 1) {
-                    return 769;
-                } elseif ($iTipoPasta == 2) {
-                    return 774;
-                } else {
-                    return 763;
-                }
-
-            }
-
-        }
-
     }
 
     public function getCodGenerico($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
