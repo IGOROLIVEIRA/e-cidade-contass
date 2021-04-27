@@ -242,7 +242,7 @@ $sAnd    = "";
 $sAnd = $sWhere != "" ? " and " : "";
 
 $sFrom = "arrepaga";
-$selectOid =' arrepaga.oid, ';
+$selectOid = " arrepaga.oid, ";
 
 //Verifica se foi escolhido a opção 1-Processamento
 if ($oGet->cboData == 1 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != "")){
@@ -264,7 +264,7 @@ if ($oGet->cboData == 1 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != ""
 //Verifica se foi escolhido a opção 2-Efetivo Pagamento    
 } else if ($oGet->cboData == 2 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != "")){
   
-  $selectOid =' disbanco.oid, ';
+  $selectOid = " disbanco.oid, ";
 
 	$sFrom  = "            disbanco                                                                      ";
 	$sFrom .= "            inner join arreidret  on arreidret.idret       = disbanco.idret               ";
@@ -453,7 +453,7 @@ $sGroup .= "        perc_origem                                                 
 
 $sGroup .= "        ) as pagamentos                                                                 ";
 $sGroup .= "  group by k02_codigo,                                                                  ";
-$sGroup .= "        oid,                                                                      ";
+$sGroup .= "        oid,                                                                            ";
 $sGroup .= "        k02_descr,                                                                      ";
 $sGroup .= "        k00_tipo,                                                                       ";
 $sGroup .= "        k00_descr,                                                                      ";
@@ -466,7 +466,7 @@ $sGroup .= "        perc_origem,                                                
 $sGroup .= "        valor_pago                                                                      ";
 
 $sSql = $sSql . $sWhere . $sGroup . $sOrdenar;
-//echo $sSql;die();
+
 //Fim do Filtro do Relatório
 $oDaoArrepaga = db_utils::getDao("arrepaga"); 
 $rsSql        = $oDaoArrepaga->sql_record($sSql);
