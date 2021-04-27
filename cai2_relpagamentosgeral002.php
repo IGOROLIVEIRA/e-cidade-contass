@@ -242,6 +242,7 @@ $sAnd    = "";
 $sAnd = $sWhere != "" ? " and " : "";
 
 $sFrom = "arrepaga";
+$selectOid =' arrepaga.oid, ';
 
 //Verifica se foi escolhido a opção 1-Processamento
 if ($oGet->cboData == 1 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != "")){
@@ -263,6 +264,8 @@ if ($oGet->cboData == 1 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != ""
 //Verifica se foi escolhido a opção 2-Efetivo Pagamento    
 } else if ($oGet->cboData == 2 && (trim($oGet->dtini) != "" || trim($oGet->dtfim) != "")){
   
+  $selectOid =' disbanco.oid, ';
+
 	$sFrom  = "            disbanco                                                                      ";
 	$sFrom .= "            inner join arreidret  on arreidret.idret       = disbanco.idret               ";
 	$sFrom .= "            inner join arrepaga   on arrepaga.k00_numpre   = arreidret.k00_numpre         ";
@@ -358,7 +361,23 @@ if ($sWhere != "") {
   $sWhere = " where ". $sWhere;
 } 
 
-$sSql  = "select k02_codigo,                                                                         ";
+$sSql  = "SELECT k02_codigo,                                                                        ";
+$sSql .= "       oid,                                                                               ";
+$sSql .= "       k02_descr,                                                                         ";
+$sSql .= "       k00_tipo,                                                                          ";
+$sSql .= "       k00_descr,                                                                         ";
+$sSql .= "       k00_tipo_recibo,                                                                   ";
+$sSql .= "       k00_descr_recibo,                                                                  ";
+$sSql .= "       z01_numcgm,                                                                        ";
+$sSql .= "       z01_nome,                                                                          ";
+$sSql .= "       tipo_origem,                                                                       ";
+$sSql .= "       array_to_string(array_agg(distinct origem),',') AS origem,                         ";
+$sSql .= "       perc_origem,                                                                       ";
+$sSql .= "       valor_pago                                                                         ";
+$sSql .= "       FROM (                                                                             ";
+
+$sSql .= "select k02_codigo,                                                                        ";
+$sSql .= "        oid,                                                                              ";
 $sSql .= "        k02_descr,                                                                        ";
 $sSql .= "        k00_tipo,                                                                         ";
 $sSql .= "        k00_descr,                                                                        ";
@@ -371,7 +390,7 @@ $sSql .= "        origem,                                                       
 $sSql .= "        perc_origem,                                                                      ";
 $sSql .= "        sum((k00_valor * perc_origem)/100) as valor_pago                                  ";
 $sSql .= "   from (                                                                                 ";
-$sSql .= "     select tabrec.k02_codigo,                                                            ";
+$sSql .= "     select $selectOid tabrec.k02_codigo,                                                 ";
 $sSql .= "            tabrec.k02_descr,                                                             ";
 $sSql .= "            ( select k00_tipo                                       ";
 $sSql .= "               from arrecant                                                              ";
@@ -417,9 +436,10 @@ $sSql .= "            inner join cgm        on cgm.z01_numcgm        = arrepaga.
 $sSql .= "            left join arrematric  on arrematric.k00_numpre = arrepaga.k00_numpre          ";
 $sSql .= "            left join arreinscr   on arreinscr.k00_numpre  = arrepaga.k00_numpre          ";
 
-$sGroup  = "        ) as pagamentos                                                                 ";
+$sGroup  = "        ) as xpagamentos                                                                ";
 $sGroup .= "  group                                                                                 ";
 $sGroup .= "     by k02_codigo,                                                                     ";
+$sGroup .= "        oid,                                                                            ";
 $sGroup .= "        k02_descr,                                                                      ";
 $sGroup .= "        k00_tipo,                                                                       ";
 $sGroup .= "        k00_descr,                                                                      ";
@@ -431,8 +451,22 @@ $sGroup .= "        tipo_origem,                                                
 $sGroup .= "        origem,                                                                         ";
 $sGroup .= "        perc_origem                                                                     ";
 
-$sSql = $sSql . $sWhere . $sGroup . $sOrdenar;
+$sGroup .= "        ) as pagamentos                                                                 ";
+$sGroup .= "  group by k02_codigo,                                                                  ";
+$sGroup .= "        oid,                                                                      ";
+$sGroup .= "        k02_descr,                                                                      ";
+$sGroup .= "        k00_tipo,                                                                       ";
+$sGroup .= "        k00_descr,                                                                      ";
+$sGroup .= "        k00_tipo_recibo,                                                                ";
+$sGroup .= "        k00_descr_recibo,                                                               ";
+$sGroup .= "        z01_numcgm,                                                                     ";
+$sGroup .= "        z01_nome,                                                                       ";
+$sGroup .= "        tipo_origem,                                                                    ";
+$sGroup .= "        perc_origem,                                                                    ";
+$sGroup .= "        valor_pago                                                                      ";
 
+$sSql = $sSql . $sWhere . $sGroup . $sOrdenar;
+//echo $sSql;die();
 //Fim do Filtro do Relatório
 $oDaoArrepaga = db_utils::getDao("arrepaga"); 
 $rsSql        = $oDaoArrepaga->sql_record($sSql);
