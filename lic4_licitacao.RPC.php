@@ -203,7 +203,7 @@ switch ($oParam->exec) {
                 }
             }
             /**
-             * Verificamos se o o item nao está Bloqueado ou em desistencia
+             * Verificamos se o o item nao est? Bloqueado ou em desistencia
              */
             if (isset($oParam->iFornecedor) && $oParam->iFornecedor != "") {
 
@@ -222,7 +222,7 @@ switch ($oParam->exec) {
                     if ($oBloqueio->datainicial != "" && $oBloqueio->datafinal != "") {
 
                         $oItemRetono->bloqueado  = true;
-                        $sMsgLegenda             = "Item com desistência de <b>".db_formatar($oBloqueio->datainicial,"d")."</b> a ";
+                        $sMsgLegenda             = "Item com desist?ncia de <b>".db_formatar($oBloqueio->datainicial,"d")."</b> a ";
                         $sMsgLegenda            .= "<b>".db_formatar($oBloqueio->datafinal, "d")."</b>";
                         $oItemRetono->legenda    = urlencode($sMsgLegenda);
                     }
@@ -355,7 +355,7 @@ switch ($oParam->exec) {
     case "salvarDesistencia":
 
         /**
-         * Verificamos se o usuário selecionou algum item
+         * Verificamos se o usu?rio selecionou algum item
          */
 
         if (isset($_SESSION["RP_fornecedores"])) {
@@ -512,7 +512,7 @@ switch ($oParam->exec) {
             $sWhere   = " l21_codliclicita = {$oParam->iCodigoLicitacao} ";
 
             /**
-             * adicionado essa condição pois licitações do tipo 102 e 103 nao tem julgamento OC8339
+             * adicionado essa condi??o pois licita??es do tipo 102 e 103 nao tem julgamento OC8339
              */
             $result = $clliclicita->sql_record($clliclicita->sql_query(null,"l03_pctipocompratribunal",null,"l20_codigo = {$oParam->iCodigoLicitacao} limit 1"));
 
@@ -711,9 +711,9 @@ switch ($oParam->exec) {
     ";
 
     $sWhere = "
-    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54)
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106)
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                                 END) >= 2020;
     ";
@@ -744,9 +744,9 @@ switch ($oParam->exec) {
 	case 'parecerLicitacao':
 
 		$oDaoParecer = db_utils::getDao('parecerlicitacao');
-		$sql = $oDaoParecer->sql_query('', "l200_sequencial, l200_data, 
-		(CASE 
-			WHEN l200_tipoparecer = 1 THEN 'Técnico'
+		$sql = $oDaoParecer->sql_query('', "l200_sequencial, l200_data,
+		(CASE
+			WHEN l200_tipoparecer = 1 THEN 'T?cnico'
 			WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
 			WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
 			ELSE 						   'Juridico - Outros'
@@ -785,18 +785,18 @@ switch ($oParam->exec) {
               "pc81_codproc=$oParam->iProcCompra and pc23_valor <> 0",true);
 
         $rsSql = $oDaoProcItem->sql_record($sSql);
-        
+
         $sWhere = 'pc81_codproc='.$oParam->iProcCompra.' AND (l21_codliclicita <> ' . $oParam->iLicitacao. '
                         or l21_codliclicita = ' . $oParam->iLicitacao .' and l21_codigo IS NOT NULL
                         or (e54_anulad IS NULL and e55_sequen IS NOT NULL))';
-        
+
         $sSqlMarcados = $oDaoProcItem->sql_query_pcmater('null', 'DISTINCT pc81_codprocitem', '', $sWhere, true);
         $rsMarcados = db_query($sSqlMarcados);
-        
+
         for($count=0; $count < pg_numrows($rsSql); $count++){
 
             $oItem = db_utils::fieldsMemory($rsSql, $count);
-            
+
             $oItemLicitacao = new stdClass();
             $oItem->codigoitem = $oItem->codigoitem;
             $oItem->seqitem = $oItem->seqitem;
@@ -823,12 +823,12 @@ switch ($oParam->exec) {
 
 
         $oRetorno->erro = pg_numrows($rsSql) ? false : true;
-        
+
         break;
-        
+
     case 'insereItens':
 
-        $aItens = $oParam->aItens;    
+        $aItens = $oParam->aItens;
 
         db_inicio_transacao();
 
@@ -841,15 +841,15 @@ switch ($oParam->exec) {
 
             $itens_incluidos = "";
             $separador       = "";
-        
+
             for($x = 0; $x < $numrows_lote; $x++){
 
                 db_fieldsmemory($rsLote,$x);
                 $itens_incluidos .= $separador.$l21_codpcprocitem;
                 $separador        = ", ";
-                
+
             }
-    
+
             if (strlen(trim($itens_incluidos)) > 0){
                 $arr_itens = split(",", $itens_incluidos);
             }
@@ -864,7 +864,7 @@ switch ($oParam->exec) {
 
         $oDaoLiclicitem = db_utils::getDao('liclicitem');
         $oDaoLiclicitem->excluir(null, " l21_codliclicita = $oParam->licitacao $dbwhere ");
-        
+
         if (!$oDaoLiclicitem->erro_status){
             $sqlerro = true;
             $erro_msg = $oDaoLiclicitem->erro_msg;
@@ -896,14 +896,14 @@ switch ($oParam->exec) {
                         $achou = false;
 
                         for($x = 0; $x < count(@$arr_itens); $x++){
-                            
+
                             if (trim($arr_itens[$x]) == trim($aItens[$x]->codprocitem)){
                                 $achou = true;
                                 break;
                             }
 
                         }
-        
+
                         if (!$achou){
 
                             $oDaoSolicitemReservado = db_utils::getDao('solicitem');
@@ -916,7 +916,7 @@ switch ($oParam->exec) {
                             if(pg_numrows($rsSolicitem)){
 
                                 if($aItens[$count]->qtdexclusiva){
-                                    
+
                                     /**
                                      * Cadastra o novo item com a quantidade exclusiva na solicitem
                                      */
@@ -933,9 +933,9 @@ switch ($oParam->exec) {
                                     $oDaoSolicitemReservado->pc11_liberado = $oItem->pc11_liberado;
                                     $oDaoSolicitemReservado->pc11_servicoquantidade = $oItem->pc11_servicoquantidade;
                                     $oDaoSolicitemReservado->pc11_reservado = 'true';
-    
+
                                     $oDaoSolicitemReservado->incluir(null);
-    
+
                                     if(!$oDaoSolicitemReservado->numrows_incluir){
                                         $erro_msg = $oDaoSolicitemReservado->erro_msg;
                                         $sqlerro = true;
@@ -947,7 +947,7 @@ switch ($oParam->exec) {
                                      */
 
                                     if($oDaoSolicitemReservado->numrows_incluir){
-                                        
+
                                         $oItemAlterado = db_utils::getDao('solicitem');
                                         $oItemAlterado->pc11_quant = $nova_qtd;
                                         $oItemAlterado->pc11_codigo = $oItem->pc11_codigo;
@@ -964,14 +964,14 @@ switch ($oParam->exec) {
                                     /**
                                      * Busca os dados do item de origem na tabela solicitemele e inclui na tabela solicitemele
                                      */
-                                    
+
                                     $sSqlElemento = 'SELECT pc18_codele FROM solicitemele where pc18_solicitem = ' . $oItem->pc11_codigo;
                                     $rsElemento = db_query($sSqlElemento);
-                                    $iSolicitemElemento = db_utils::fieldsMemory($rsElemento, $count)->pc18_codele;
-                                    
+                                    $iSolicitemElemento = db_utils::fieldsMemory($rsElemento, 0)->pc18_codele;
+
                                     $oDaoSolicitemElem = db_utils::getDao('solicitemele');
                                     $oDaoSolicitemElem->incluir($oDaoSolicitemReservado->pc11_codigo, $iSolicitemElemento);
-                                    
+
                                     if(!$oDaoSolicitemElem->numrows_incluir){
                                         $erro_msg = $oDaoSolicitemElem->erro_msg;
                                         $sqlerro = true;
@@ -981,39 +981,39 @@ switch ($oParam->exec) {
                                     /**
                                      * Insere o item reservado na tabela pcprocitem
                                      */
-                                    
+
                                     $oDaopcprocitem = db_utils::getDao('pcprocitem');
                                     $oDaopcprocitem->pc81_codproc = $aItens[$count]->codproc;
                                     $oDaopcprocitem->pc81_solicitem = $oDaoSolicitemReservado->pc11_codigo;
                                     $oDaopcprocitem->incluir();
-                                    
+
                                     if(!$oDaopcprocitem->numrows_incluir){
                                         $erro_msg = $oDaopcprocitem->erro_msg;
                                         $sqlerro = true;
                                         break;
                                     }
-                                    
+
                                     $codprocitemreservado = $oDaopcprocitem->pc81_codprocitem;
 
                                     /**
-                                     * Busca o código do material e insere as informações na tabela solicitempcmater
+                                     * Busca o c?digo do material e insere as informa??es na tabela solicitempcmater
                                      */
-                                    
+
                                     $sSqlMaterial = "SELECT pc16_codmater from solicitempcmater where pc16_solicitem = " . $oItem->pc11_codigo;
                                     $rsMaterial = db_query($sSqlMaterial);
                                     $iMaterial = db_utils::fieldsMemory($rsMaterial, 0)->pc16_codmater;
-                                    
+
                                     $oDaoSolicitempcmater = db_utils::getDao('solicitempcmater');
                                     $oDaoSolicitempcmater->incluir($iMaterial, $oDaoSolicitemReservado->pc11_codigo);
-                                    
+
                                     if(!$oDaoSolicitempcmater->numrows_incluir){
                                         $erro_msg = $oDaoSolicitempcmater->erro_msg;
                                         $sqlerro = true;
                                         break;
                                     }
-                                    
+
                                     /**
-                                     * Busca informações da dotação vinculada ao item na pcdotac
+                                     * Busca informa??es da dota??o vinculada ao item na pcdotac
                                      */
 
                                     $sSqlDotacaoItem = ' SELECT pcdotac.*
@@ -1023,23 +1023,23 @@ switch ($oParam->exec) {
                                                              and pc11_seq = '.$aItens[$count]->sequencial;
                                     $rsSqlDotacaoItem = db_query($sSqlDotacaoItem);
                                     $oDotacaoItem = db_utils::fieldsMemory($rsSqlDotacaoItem, 0);
-                                    
+
                                     /**
-                                     * Insere a dotação do item já cadastrado no novo item reservado,
+                                     * Insere a dota??o do item j? cadastrado no novo item reservado,
                                      * setando no campo quantidade a quantidade exclusiva reservada
                                      */
-                                    
-                                    
+
+
                                     $oDaoDotacReserva = db_utils::getDao('pcdotac');
                                     $oDaoDotacReserva->pc13_anousu = $oDotacaoItem->pc13_anousu;
                                     $oDaoDotacReserva->pc13_coddot = $oDotacaoItem->pc13_coddot;
                                     $oDaoDotacReserva->pc13_codigo = $oDaoSolicitemReservado->pc11_codigo;
-                                    $oDaoDotacReserva->pc13_depto  = $oDotacaoItem->pc13_depto; 
-                                    $oDaoDotacReserva->pc13_quant  = $aItens[$count]->qtdexclusiva; 
-                                    $oDaoDotacReserva->pc13_valor  = $oDotacaoItem->pc13_valor; 
-                                    $oDaoDotacReserva->pc13_codele = $oDotacaoItem->pc13_codele; 
+                                    $oDaoDotacReserva->pc13_depto  = $oDotacaoItem->pc13_depto;
+                                    $oDaoDotacReserva->pc13_quant  = $aItens[$count]->qtdexclusiva;
+                                    $oDaoDotacReserva->pc13_valor  = $oDotacaoItem->pc13_valor;
+                                    $oDaoDotacReserva->pc13_codele = $oDotacaoItem->pc13_codele;
                                     $oDaoDotacReserva->incluir();
-                                    
+
                                     if(!$oDaoDotacReserva->numrows_incluir){
                                         $erro_msg = $oDaoDotacReserva->erro_msg;
                                         $sqlerro = true;
@@ -1047,14 +1047,14 @@ switch ($oParam->exec) {
                                     }
 
                                     /**
-                                     * Depois de incluir a dotação reservada, deve-se alterar o valor da dotação original
+                                     * Depois de incluir a dota??o reservada, deve-se alterar o valor da dota??o original
                                      */
 
                                     $oDaoDotacao = db_utils::getDao('pcdotac');
                                     $oDaoDotacao->pc13_quant = $nova_qtd;
                                     $oDaoDotacao->pc13_sequencial = $oDotacaoItem->pc13_sequencial;
                                     $oDaoDotacao->alterar($oDotacaoItem->pc13_sequencial);
-                                
+
                                     if(!$oDaoDotacao->numrows_alterar){
                                         $erro_msg = $oDaoDotacao->erro_msg;
                                         $sqlerro = true;
@@ -1062,12 +1062,12 @@ switch ($oParam->exec) {
                                     }
 
                                     /**
-                                     * Busca as informações do item na tabela solicitemunid incluindo o novo item reservado
+                                     * Busca as informa??es do item na tabela solicitemunid incluindo o novo item reservado
                                      */
 
                                     $sSqlSolicitemUnid = "SELECT * from solicitemunid where pc17_codigo = " . $oItem->pc11_codigo;
                                     $rsSolicitemUnid = db_query($sSqlSolicitemUnid);
-                                    $oSolicitemUnid = db_utils::fieldsMemory($rsSolicitemUnid, $count);
+                                    $oSolicitemUnid = db_utils::fieldsMemory($rsSolicitemUnid, 0);
 
                                     $oDaoSolicitemUnidReservado = db_utils::getDao('solicitemunid');
                                     $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
@@ -1078,11 +1078,11 @@ switch ($oParam->exec) {
                                     if(!$oDaoSolicitemUnidReservado->numrows_incluir){
                                         $erro_msg = $oDaoSolicitemUnidReservado->erro_msg;
                                         $sqlerro = true;
-                                        break;                        
+                                        break;
                                     }
 
                                     /**
-                                     * Depois de incluindo o item reservado, altera-se a quantidade do item. 
+                                     * Depois de incluindo o item reservado, altera-se a quantidade do item.
                                      */
 
                                     $oDaoSolicitemUnid = db_utils::getDao('solicitemunid');
@@ -1095,7 +1095,7 @@ switch ($oParam->exec) {
                                         $sqlerror = true;
                                         break;
                                     }
-                                
+
                                 }
 
                             }
@@ -1103,29 +1103,29 @@ switch ($oParam->exec) {
                             /**
                              * Insere o novo item na liclicitem
                              */
-                            
+
                             $clliclicitem = db_utils::getDao('liclicitem');
                             $clliclicitem->l21_codliclicita  = $oParam->licitacao;
                             $clliclicitem->l21_codpcprocitem = $aItens[$count]->codprocitem;
                             $clliclicitem->l21_situacao      = "0";
                             $clliclicitem->l21_ordem         = $seq;
                             $clliclicitem->incluir(null);
-                            
+
                             if (!$clliclicitem->erro_status){
                                 $erro_msg = $clliclicitem->erro_msg;
                                 $sqlerro = true;
                                 break;
                             }
-                            
+
                             $seq++;
-                            
+
                             /**
-                             * Se o item tiver quantidade exclusiva reservada, cadastra-se um novo item 
+                             * Se o item tiver quantidade exclusiva reservada, cadastra-se um novo item
                              * na liclicitem com o valor reservado
                              */
 
                             if($aItens[$count]->qtdexclusiva){
-                                
+
                                 $clliclicitemreservado = db_utils::getDao('liclicitem');
                                 $clliclicitemreservado->l21_codliclicita  = $clliclicitem->l21_codliclicita;
                                 $clliclicitemreservado->l21_codpcprocitem = $codprocitemreservado;
@@ -1133,13 +1133,13 @@ switch ($oParam->exec) {
                                 $clliclicitemreservado->l21_ordem         = $seq;
                                 $clliclicitemreservado->l21_reservado     = $aItens[$count]->qtdexclusiva ? true : false;
                                 $clliclicitemreservado->incluir(null);
-                                
+
                                 if(!$clliclicitemreservado->numrows_incluir){
                                     $erro_msg = $clliclicitemreservado->erro_msg;
                                     $sqlerro = true;
                                     break;
                                 }
-    
+
                                 $seq++;
 
                             }
@@ -1147,28 +1147,28 @@ switch ($oParam->exec) {
                         }
 
                     }
-        
+
 
                     if (!$sqlerro) {
 
                         if (!$achou) {
-        
+
                             $coditem = $clliclicitem->l21_codigo;
-                            
+
                             if($clliclicitemreservado->l21_reservado){
                                 $coditemreservado = $clliclicitemreservado->l21_codigo;
                             }
-                            
+
                             /**
                              * Vincula os itens ao lote
                              **/
 
                             $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_sol($coditem,"pc11_codigo, pc68_nome"));
-                            
+
                             if ($clliclicitem->numrows > 0){
                                 db_fieldsmemory($res_liclicitem,0);
                             }
-        
+
                             $clliclicitemlote->l04_liclicitem = $coditem;
 
                             /**
@@ -1176,19 +1176,19 @@ switch ($oParam->exec) {
                              **/
 
                             if($clliclicitemreservado->l21_reservado){
-                                
+
                                 $res_liclicitemreservado = $clliclicitemreservado->sql_record(
                                     $clliclicitemreservado->sql_query_sol($coditemreservado,"pc11_codigo, pc68_nome"));
-    
+
                                 if ($clliclicitemreservado->numrows > 0){
                                     $oItemReservado = db_utils::fieldsMemory($res_liclicitemreservado, 0);
                                 }
-            
+
                                 $clliclicitemlotereservado->l04_liclicitem = $coditemreservado;
 
                             }
 
-        
+
                             /**
                              * Tipo de julgamento por item
                              */
@@ -1200,7 +1200,7 @@ switch ($oParam->exec) {
                                 }
 
                             }
-        
+
                             /**
                              * Tipo de julgamento Global
                              */
@@ -1211,12 +1211,12 @@ switch ($oParam->exec) {
                                     $clliclicitemlotereservado->l04_descricao = "GLOBAL";
                                 }
                             }
-        
-                            
+
+
                             if (!empty($clliclicitemlote->l04_descricao) && in_array($oParam->tipojulg, array(1, 2))) {
-        
+
                                 $clliclicitemlote->incluir(null);
-                            
+
                                 if ($clliclicitemlote->erro_status == 0){
                                     $erro_msg = $clliclicitemlote->erro_msg;
                                     $sqlerro = true;
@@ -1226,21 +1226,21 @@ switch ($oParam->exec) {
                             }
 
                             /**
-                             * Inclusão na tabela liclicitemlote para o novo item com valor reservado
+                             * Inclus?o na tabela liclicitemlote para o novo item com valor reservado
                              */
 
                             if (!empty($clliclicitemlotereservado->l04_descricao) && in_array($oParam->tipojulg, array(1, 2))) {
-        
+
                                 $oDaoLoteReservado = db_utils::getDao('liclicitemlote');
                                 $sqlItemLote = 'SELECT * from liclicitemlote where l04_liclicitem = ' . $clliclicitemlotereservado->l04_liclicitem;
                                 $rsItemLote = db_query($sqlItemLote);
-                                
+
                                 if(!pg_numrows($rsItemLote)){
 
                                     $oDaoLoteReservado->l04_descricao = $clliclicitemlotereservado->l04_descricao;
                                     $oDaoLoteReservado->l04_liclicitem = $clliclicitemlotereservado->l04_liclicitem;
                                     $oDaoLoteReservado->incluir();
-                                    
+
                                     if (!$oDaoLoteReservado->numrows_incluir){
                                         $erro_msg = $oDaoLoteReservado->erro_msg;
                                         $sqlerro = true;
@@ -1250,7 +1250,7 @@ switch ($oParam->exec) {
                                 }
 
                             }
-        
+
                         }
                     }
                 }
@@ -1262,31 +1262,31 @@ switch ($oParam->exec) {
 
             $clpcorcamitem = db_utils::getDao('pcorcamitem');
             $res_pcorcam = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_codorc",null,"l20_codigo = $oParam->licitacao limit 1"));
-            
-            if ($clpcorcamitem->numrows > 0){   // Tem orçamento para esta Licitacao
+
+            if ($clpcorcamitem->numrows > 0){   // Tem or?amento para esta Licitacao
 
                 db_fieldsmemory($res_pcorcam,0);
 
                 for($x = 0; $x < count($aItens); $x++){
-                    
+
                     if ($aItens[$x]->codprocitem){
-                        
+
                         $clpcorcamitemlic = db_utils::getDao('pcorcamitemlic');
                         $clpcorcamitemlic->sql_record($clpcorcamitemlic->sql_query(null,"*",null,"pc81_codprocitem = ".$aItens[$x]->codprocitem));
-                        
+
                         if (!$clpcorcamitemlic->numrows){
                             $clliclicitem = db_utils::getDao('liclicitem');
                             $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codpcprocitem = ".$aItens[$x]->codprocitem));
-                            
+
                             $clliclicitemreservado = db_utils::getDao('liclicitem');
                             $res_liclicitemreservado = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codpcprocitem = " . $codprocitemreservado));
 
                             if ($clliclicitem->numrows > 0){
                                 db_fieldsmemory($res_liclicitem,0);
-      
+
                                 $clpcorcamitem->pc22_codorc = $pc22_codorc;
                                 $clpcorcamitem->incluir(null);
-                                
+
                                 if ($clpcorcamitem->erro_status == 0){
                                     $sqlerro  = true;
                                     $erro_msg = $clpcorcamitem->erro_msg;
@@ -1310,13 +1310,13 @@ switch ($oParam->exec) {
                                 }
 
                                 /**
-                                 * @todo verificar se será incluído o novo item reservado na pcorcamitemlic
+                                 * @todo verificar se ser? inclu?do o novo item reservado na pcorcamitemlic
                                  */
-      
+
                                 if (!$sqlerro){
 
                                     $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
-        
+
                                     $clpcorcamitemlic->pc26_orcamitem  = $pc22_orcamitem;
                                     $clpcorcamitemlic->pc26_liclicitem = $l21_codigo;
                                     $clpcorcamitemlic->incluir(null);
@@ -1332,14 +1332,14 @@ switch ($oParam->exec) {
                                         /**
                                          * Inclui o item reservado na pcorcamitemlic
                                          */
-    
+
                                         $oItem = db_utils::fieldsMemory($res_liclicitemreservado, 0);
-    
+
                                         $clpcorcamitemlicreservado = db_utils::getDao('pcorcamitemlic');
                                         $clpcorcamitemlicreservado->pc26_orcamitem = $pc22_orcamitemreservado;
                                         $clpcorcamitemlicreservado->pc26_liclicitem = $oItem->l21_codigo;
                                         $clpcorcamitemlicreservado->incluir(null);
-                                        
+
                                         if (!$clpcorcamitemlicreservado->erro_status){
                                             $sqlerro = true;
                                             $erro_msg = $clpcorcamitemlicreservado->erro_msg;
@@ -1352,7 +1352,7 @@ switch ($oParam->exec) {
                         }
                     }
                 }
-      
+
             }
         }
 
