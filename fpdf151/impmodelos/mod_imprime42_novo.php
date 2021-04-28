@@ -10,10 +10,19 @@ if(strlen(trim($this->telefinstit)) == 10 ){
 
 $this->objpdf->sety(20);
 $this->objpdf->setx(85);
-$this->objpdf->Setfont("times", "b", 10);
-if($telefone){
-  $this->objpdf->cell(40, 5, "TELEFONE: ".$telefone, 0, 0, 'R');
+$this->objpdf->Setfont("times", "b", 9);
+
+//if($telefone){
+//  $this->objpdf->cell(40, 5, , 0, 1, 'C');
+//}
+//var_dump($this->enderfinstit);exit;
+if($this->enderfinstit){
+    $this->objpdf->cell(40, 5, $this->enderfinstit." TELEFONE: ".$telefone, 0, 1, 'C');
 }
+if($this->emailfinstit){
+    $this->objpdf->cell(190, 5, $this->emailfinstit, 0, 1, 'C');
+}
+
 
 $this->objpdf->sety(10);
 $this->objpdf->setx(170);
@@ -191,9 +200,10 @@ if ($numrows_doc > 0) {
 $this->objpdf->Setfont("Times", "", 12);
 $this->objpdf->rect(15, 240, 89, 25, '');
 $this->objpdf->SetXY(15, 243);
-$this->objpdf->cell(89, 25, "Requerente / Titular", 0, 0, 'C');
+$this->objpdf->cell(89, 25, "Responsável / Titular", 0, 0, 'C');
 $this->objpdf->SetXY(18, 238);
 $this->objpdf->cell(80, 20, " ", 0, 1, 'L', 0, '', '_');
+$this->objpdf->cell(65, 8, "Data ____/____/_______", 0, 1, 'R');
 $this->objpdf->rect(104, 240, 89, 25, '');
 $this->objpdf->SetXY(104, 243);
 $this->objpdf->cell(89, 25, "Instituição", 0, 0, 'C');

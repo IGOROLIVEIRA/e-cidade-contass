@@ -37,6 +37,12 @@ require_once('model/arrecadacao/boletos/EmissaoBoletoWebService.model.php');
  */
 class GeracaoGuiaPrestadorWebService {
 
+  const SERVICO_TOMADO       = 'e';
+  const SERVICO_PRESTADO     = 's';
+  const TIPO_DEBITO_VARIAVEL = 'P';
+  const TIPO_DEBITO_VARIAVEL_AVULSO = 'A';
+  const TIPO_DEBITO_RETIDO   = 'T';
+
   /**
    * Tipo do Imposto
    * @var string
@@ -278,6 +284,16 @@ class GeracaoGuiaPrestadorWebService {
         $oPlanilha->valor_imposto = 0;
         $oPlanilha->valor_servico = 0;
 
+        /**
+         * Quando é nota avulsa, existe apenas uma nota por guia.
+         * Portanto, colocamos o numero da nota e sua competencia
+         * na descrição da guia para facilitar a rastreamento da mesma.
+         */
+        if($this->sTipoDebito == self::TIPO_DEBITO_VARIAVEL_AVULSO) {
+          $oPlanilha->numeroNotaAvulsa = $oNotaPlanilha->getNumeroNota();
+          $oPlanilha->dataNotaAvulsa = $oNotaPlanilha->getDataNota()->getDate('d/m/Y');
+        }
+
         $aListaPlanilhas[$oNotaPlanilha->getCodigoPlanilha()] = $oPlanilha;
       }
 
@@ -299,7 +315,7 @@ class GeracaoGuiaPrestadorWebService {
 
       // Verifica se for uma guia de nfse e tiver registos para a competência informada mantem o numpre e altera apenas
       // os valores e datas devidos.
-      if ($this->sTipoDebito == 'P' && pg_num_rows($rsDadosCompentencia) > 0) {
+      if ($this->sTipoDebito == self::TIPO_DEBITO_VARIAVEL && pg_num_rows($rsDadosCompentencia) > 0) {
         $iNumpreGerado = db_utils::fieldsMemory($rsDadosCompentencia, 0)->k00_numpre;
       } else {
         $iNumpreGerado = db_utils::fieldsMemory($rsNumpre, 0)->k03_numpre;
@@ -313,9 +329,18 @@ class GeracaoGuiaPrestadorWebService {
       $aDebitos[] = $iNumpreGerado;
 
       // Trata a mensagem de observação do débito
-      $sTipoDebito  = ($this->sTipoDebito == 'P') ? '- NFS-e' : '- DMS';
-      $sObservacao  = 'Recebido pelo WebService';
-      $sObservacao .= (is_null($this->iCodigoGuia)) ? '' : ' #' . $this->iCodigoGuia;
+      switch($this->sTipoDebito){
+        case self::TIPO_DEBITO_VARIAVEL:
+              $sTipoDebito = ' - NFS-e';
+              break;
+        case self::TIPO_DEBITO_VARIAVEL_AVULSO:
+              $sTipoDebito = ' - NFS-e Avulsa #'.$oPlanilha->numeroNotaAvulsa.' de '.$oPlanilha->dataNotaAvulsa;
+              break;
+        default:
+              $sTipoDebito = ' - DMS';
+      }
+      $sObservacao  = 'Recebido do sistema NFS-e via WebServices';
+      $sObservacao .= (is_null($this->iCodigoGuia)) ? '' : ' Cód. Guia #' . $this->iCodigoGuia;
       $sObservacao .= $sTipoDebito;
 
       // Trata os dados para incluir o ISSQN variável complementar.
@@ -331,7 +356,7 @@ class GeracaoGuiaPrestadorWebService {
       $oDaoIssVar->q05_bruto  = '0';
       $oDaoIssVar->q05_vlrinf = 'null';
 
-      if ($this->sTipoDebito == 'P') {
+      if (in_array($this->sTipoDebito, array(self::TIPO_DEBITO_VARIAVEL, self::TIPO_DEBITO_VARIAVEL_AVULSO))) {
         if (!$oDaoIssVar->incluir_issvar_nfse(array(), $this->iInscricao, $this->iNumcgm)) {
           throw new Exception("Ocorreu um erro ao incluir o issqn.{$oDaoIssVar->erro_msg}");
         }

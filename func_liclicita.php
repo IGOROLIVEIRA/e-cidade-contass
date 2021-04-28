@@ -219,7 +219,7 @@ $sWhereContratos = " and 1 = 1 ";
 			}
 
             if($listacred == 'false'){
-                $dbwhere .= " l03_pctipocompratribunal IN (100, 101) AND ";
+                $dbwhere .= " l03_pctipocompratribunal NOT IN (102, 103) AND ";
             }
 
 			if($ratificacao == 'true'){

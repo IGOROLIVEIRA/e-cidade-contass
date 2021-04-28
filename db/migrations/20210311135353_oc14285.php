@@ -6,12 +6,15 @@ class Oc14285 extends PostgresMigration
 {
     public function up()
     {
-        $sql = "
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu),'Arquivo Bradesco CNAB 240', 'Arquivo Bradesco CNAB 240','pes2_bradesco240cnab001.php',1,1,'','t');
-        INSERT INTO db_menu VALUES (7908,(SELECT id_item FROM db_itensmenu WHERE funcao = 'pes2_bradesco240cnab001.php'),(SELECT MAX(menusequencia)+1 FROM db_menu WHERE id_item = 7908),952);
+        if ($this->checkMenu()) {
+            
+            $sql = "
+          INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu),'Arquivo Bradesco CNAB 240', 'Arquivo Bradesco CNAB 240','pes2_bradesco240cnab001.php',1,1,'','t');
+          INSERT INTO db_menu VALUES (7908,(SELECT id_item FROM db_itensmenu WHERE funcao = 'pes2_bradesco240cnab001.php'),(SELECT MAX(menusequencia)+1 FROM db_menu WHERE id_item = 7908),952);
 
-        ";
-        $this->execute($sql);
+          ";
+          $this->execute($sql);
+        }
 
         if ($this->checkLayout()) {
             $this->insertLayout();
@@ -28,9 +31,18 @@ class Oc14285 extends PostgresMigration
         $this->execute($sql);
     }
 
-     private function checkLayout()
+    private function checkLayout()
     {
         $result = $this->fetchRow("SELECT * FROM configuracoes.db_layouttxt WHERE db50_descr = 'CNAB240 BANCO BRADESCO'");
+        if (empty($result)) {
+            return true;
+        }
+        return false;
+    }
+
+    private function checkMenu()
+    {
+        $result = $this->fetchRow("SELECT id_item FROM db_itensmenu WHERE funcao = 'pes2_bradesco240cnab001.php'");
         if (empty($result)) {
             return true;
         }

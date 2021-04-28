@@ -398,43 +398,46 @@ $teste        = 0;
 $extra        = 0;
 $totalSalarioFamilia = 0;
 $totalSalarioMaternidade = 0;
-
+$width_perc_extra = 0;
+if(trim($perc_extra) != '' ){
+  $width_perc_extra = 3;
+}
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage();
       $pdf->setfont('arial','B',7);
-      $pdf->cell(95,$alt,'DESCRIÇÃO',1,0,"C",0);
-      $pdf->cell(18,$alt,'BASE',1,0,"R",0);
+      $pdf->cell(95-$width_perc_extra,$alt,'DESCRIÇÃO',1,0,"C",0);
+      $pdf->cell(18-$width_perc_extra,$alt,'BASE',1,0,"R",0);
       if($tab_prev == 0){
         $pdf->cell(18,$alt,"SEG. $r33_ppatro%",1,0,"R",0);
         $pdf->cell(18,$alt,'TOTAL',1,1,"R",0);
       }else{
-        $pdf->cell(18,$alt,'PATRONAL',1,0,"R",0);
+        $pdf->cell(18-$width_perc_extra,$alt,'PATRONAL',1,0,"R",0);
         if(trim($perc_extra) != '' ){
-          $pdf->cell(18,$alt,"EXTRA $perc_extra %",1,0,"R",0);
+          $pdf->cell(18,$alt,"EXTRA {$perc_extra} %",1,0,"R",0);
         }
-        $pdf->cell(18,$alt,'S/FAMÍLIA   ',1,0,"R",0);
-        $pdf->cell(22,$alt,'S/MATERNIDADE',1,0,"R",0);
-        $pdf->cell(18,$alt,'TOTAL',1,1,"R",0);
+        $pdf->cell(18-$width_perc_extra,$alt,'S/FAMÍLIA',1,0,"R",0);
+        $pdf->cell(22-$width_perc_extra,$alt,'S/MATERN.',1,0,"R",0);
+        $pdf->cell(18-$width_perc_extra,$alt,'TOTAL',1,1,"R",0);
       }
       $troca = 0;
    }
    $pdf->setfont('arial','B',7);
    if($orgao != $rh26_orgao){
-     $pdf->cell(18,$alt,db_formatar($rh26_orgao,'orgao'),0,0,"C",1);
+     $pdf->cell(15,$alt,db_formatar($rh26_orgao,'orgao'),0,0,"C",1);
      $pdf->cell(0,$alt,$o40_descr,0,1,"L",1);
      $orgao = $rh26_orgao;
    }
    if($unidade != $rh26_orgao.$rh26_unidade){
      $pdf->cell(5,$alt,'',0,0,"C",1);
-     $pdf->cell(18,$alt,db_formatar($rh26_orgao,'orgao').db_formatar($rh26_unidade,'orgao'),0,0,"C",1);
+     $pdf->cell(14,$alt,db_formatar($rh26_orgao,'orgao').db_formatar($rh26_unidade,'orgao'),0,0,"C",1);
      $pdf->cell(0,$alt,$o41_descr,0,1,"L",1);
      $unidade = $rh26_orgao.$rh26_unidade;
    }
    if($proj != $rh25_projativ){
      $pdf->cell(5,$alt,'',0,0,"C",1);
-     $pdf->cell(18,$alt,$rh25_projativ,0,0,"C",1);
+     $pdf->cell(14,$alt,$rh25_projativ,0,0,"C",1);
      $pdf->cell(0,$alt,$o55_descr,0,1,"L",1);
      $proj= $rh25_projativ;
    }
@@ -448,23 +451,23 @@ for($x = 0; $x < pg_numrows($result);$x++){
      
      $altNovo = $alt*count($aDescRecurso);
      $pdf->cell(10,$altNovo,'',0,0,"C",0);
-     $pdf->cell(15,$altNovo,$rh25_recurso,0,0,"C",0);
+     $pdf->cell(15-$width_perc_extra,$altNovo,$rh25_recurso,0,0,"C",0);
      if (count($aDescRecurso) > 1) {
        multiCell($pdf, $aDescRecurso, $alt, $altNovo, 70);
      } else {
        $pdf->cell(70,$altNovo,$o15_descr,0,0,"L",0);
      }
-     $pdf->cell(18,$altNovo,db_formatar($inss,'f'),0,0,"R",0);
-     $pdf->cell(18,$altNovo,db_formatar($pat,'f'),0,0,"R",0);
+     $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($inss,'f'),0,0,"R",0);
+     $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($pat,'f'),0,0,"R",0);
      if(trim($perc_extra) != '' ){
        $extra = round($inss / 100 * $perc_extra,2);
-       $pdf->cell(18,$altNovo,db_formatar($extra,'f'),0,0,"R",0);
+       $pdf->cell(18,$altNovo,trim(db_formatar($extra,'f')),0,0,"R",0);
      }
      if($tab_prev != 0){
-       $pdf->cell(18,$altNovo,db_formatar($salario_familia,'f'),0,0,"R",0);
-       $pdf->cell(22,$altNovo,db_formatar($salario_maternidade,'f'),0,0,"R",0);
+       $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($salario_familia,'f'),0,0,"R",0);
+       $pdf->cell(22-$width_perc_extra,$altNovo,db_formatar($salario_maternidade,'f'),0,0,"R",0);
      }
-     $pdf->cell(18,$altNovo,db_formatar(($pat + $extra - $salario_familia - $salario_maternidade),'f'),0,1,"R",0);
+     $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar(($pat + $extra - $salario_familia - $salario_maternidade),'f'),0,1,"R",0);
 //   if(db_formatar($rh26_orgao,'orgao').db_formatar($rh26_unidade,'orgao') == '0203'){ 
 //     $val_pat      += (($inss+$sub)/100)*20;
 //   }else{
@@ -479,17 +482,17 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
 //echo $teste;exit;
    $pdf->setfont('arial','B',7);
-   $pdf->cell(95,$alt,'TOTAL ',0,0,"C",0);
-   $pdf->cell(18,$alt,db_formatar($val_fgts,'f'),0,0,"R",0);
-   $pdf->cell(18,$alt,db_formatar($val_pat,'f'),0,0,"R",0);
+   $pdf->cell(95-$width_perc_extra,$alt,'TOTAL ',0,0,"C",0);
+   $pdf->cell(18-$width_perc_extra,$alt,db_formatar($val_fgts,'f'),0,0,"R",0);
+   $pdf->cell(18-$width_perc_extra,$alt,db_formatar($val_pat,'f'),0,0,"R",0);
    if(trim($perc_extra) != '' ){
      $pdf->cell(18,$alt,db_formatar($val_extra,'f'),0,0,"R",0);
    }
    if($tab_prev != 0){
-     $pdf->cell(18,$alt,db_formatar($totalSalarioFamilia,'f'),0,0,"R",0);
-     $pdf->cell(22,$alt,db_formatar($totalSalarioMaternidade,'f'),0,0,"R",0);
+     $pdf->cell(18-$width_perc_extra,$alt,db_formatar($totalSalarioFamilia,'f'),0,0,"R",0);
+     $pdf->cell(22-$width_perc_extra,$alt,db_formatar($totalSalarioMaternidade,'f'),0,0,"R",0);
    }
-   $pdf->cell(18,$alt,db_formatar($val_pat + $val_extra - $val_ded,'f'),0,1,"R",0);
+   $pdf->cell(18-$width_perc_extra,$alt,db_formatar($val_pat + $val_extra - $val_ded,'f'),0,1,"R",0);
 
 $pdf->Output();
 

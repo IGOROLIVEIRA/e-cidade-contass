@@ -1179,7 +1179,7 @@ function js_addReceita () {
 
 	//Dados Adicionais
 	if (js_isReceitaFundeb()) {
-		oReceita.k81_valor = (new Number($F('k81_valor'))*0.70);
+		oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 118);
 	} else {
 		oReceita.k81_valor = $F('k81_valor');
 	}
@@ -1278,7 +1278,7 @@ function js_criaLinhaReceita(oAjax){
 
 		//Dados Adicionais
 		if (js_isReceitaFundeb()) {
-			oReceita.k81_valor = (new Number($F('k81_valor'))*0.30);
+			oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119);
 		} else {
 			oReceita.k81_valor = (new Number($F('k81_valor'))*0.20)*(-1);
 		}
@@ -1391,7 +1391,7 @@ function js_salvarPlanilha() {
         oReceita.iCaracteriscaPeculiar = oReceitaTela.c58_sequencial;
         oReceita.iContaTesouraria      = oReceitaTela.k81_conta;
         oReceita.sObservacao           = encodeURIComponent(tagString(oReceitaTela.k81_obs));
-        oReceita.nValor                = oReceitaTela.k81_valor;
+        oReceita.nValor                = js_round(oReceitaTela.k81_valor,2);
         oReceita.iRecurso              = oReceitaTela.recurso;
         oReceita.iRegRepasse           = oReceitaTela.k81_regrepasse;
         oReceita.iExerc                = oReceitaTela.k81_exerc;
@@ -1806,6 +1806,33 @@ function js_isReceitaFundeb() {
 	let iAno 		= $('anoUsu').value;
 
 	return ( iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911') ) ? true : false;
+
+}
+
+/**
+ * Em arrecadações do fundeb, a receita é desdobrada em duas fontes: 
+ * 70% para fonte 118 e 30% para fonte 119.
+ * Em algumas situações a função js_round arredonda os valores causando diferença de 0.01 no valor total da arrecadação. 
+ * Essa função verifica se há divergência no valor final, e, caso exista,
+ * a diferença é atribuída para fonte 118.
+ */
+function js_arredondamentoFundeb(fValor, iTipo) {    
+
+    let fTotal  = js_round((new Number(fValor)),2);    
+    let fVl118  = js_round((new Number(fValor)*0.70),2);
+    let fVl119  = js_round((new Number(fValor)*0.30),2);
+
+    let fDif = js_round((fTotal - (fVl118 + fVl119)),2);    
+
+    if (fDif > 0) {
+        fVl118 += fDif;
+        fVl119 = js_round((fTotal - fVl118),2);
+    } else {
+        fVl119 += fDif;
+        fVl118 = js_round((fTotal - fVl119),2);
+    }
+
+    return iTipo == 118 ? fVl118 : fVl119;
 
 }
 
