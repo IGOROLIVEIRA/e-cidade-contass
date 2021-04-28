@@ -16,7 +16,7 @@ $cl_bensguardaitemdev = new cl_bensguardaitemdev;
 $sCampos = "t22_bem, t52_ident, t52_descr, t70_descr as situacao, t22_obs, t21_representante, t21_cpf, ";
 $sCampos .= "t21_data, z01_nome as responsavel, z01_numcgm as numcgm, t20_descr as tipoguarda, t23_obs";
 $sSqlBens = $cl_bensguardaitemdev->sql_query_relatorio('', $sCampos, '', 't22_bensguarda = '. $oGet->iTermo);
-
+echo $sSqlBens;
 $rsBens = $cl_bensguardaitemdev->sql_record($sSqlBens);
 
 $mPDF = new mpdf('', 'A4', 0, '', 10, 10, 30, 10, 5, 5);
@@ -113,7 +113,7 @@ ob_start();
 <body>
     <div class="grid-container" dir="ltr">
         <div class="div__atestado">
-            <p style="text-align: center;">Atestamos que os bens relacionados abaixo foram desenvolvidos em <?=date('d/m/Y', db_getsession('DB_datausu'));?>,
+            <p style="text-align: center;">Atestamos que os bens relacionados abaixo foram devolvidos em <?=date('d/m/Y', db_getsession('DB_datausu'));?>,
             nas seguintes condições:
             </p>
             <ul>
@@ -128,13 +128,10 @@ ob_start();
             <?php
                 $aBens = db_utils::fieldsMemory($rsBens, 0);
 
-                for($count=0;$count< pg_numrows($rsBens);$count++){
-                    $oItemPosicao = db_utils::fieldsMemory($rsBens, $count);
+                $oItemPosicao = db_utils::fieldsMemory($rsBens, 0);
             ?>
-                    <p style="font-size: 10px"><?= $count+1 . ($oItemPosicao->t23_obs ? ' - '.$oItemPosicao->t23_obs : ' - ' . 'NENHUMA OBSERVAÇÃO INFORMADA.');?></p>
-            <?php
-                }
-            ?>
+                <p style="font-size: 10px"><?= trim($oItemPosicao->t23_obs) ? $oItemPosicao->t23_obs : ' - '; ?></p>
+            
         </div>
         <br>
         <table class="table__dados" cellspacing="0" cellpadding="0">

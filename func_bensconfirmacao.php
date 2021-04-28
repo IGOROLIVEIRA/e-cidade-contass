@@ -158,16 +158,18 @@ db_fieldsmemory($result,0);
       $where_bem .= " ) ";
 
       $where_bem = " and (t52_bem NOT IN (SELECT DISTINCT t22_bem FROM bensguardaitem)  
-                     OR t52_bem in (SELECT DISTINCT t22_bem 
-                                        FROM bensguardaitem
-                                    INNER JOIN bensguarda ON t21_codigo = t22_bensguarda
-                                    INNER JOIN bensguardaitemdev ON bensguardaitemdev.t23_guardaitem = bensguardaitem.t22_codigo";
+                     OR (t52_bem NOT IN (SELECT DISTINCT t22_bem FROM bensguardaitem) 
+                          AND t52_bem in (
+                            SELECT DISTINCT t22_bem 
+                              FROM bensguardaitem
+                              INNER JOIN bensguarda ON t21_codigo = t22_bensguarda
+                              INNER JOIN bensguardaitemdev ON bensguardaitemdev.t23_guardaitem = bensguardaitem.t22_codigo";
 
       if(isset($guarda)){
           $where_bem .= " where t22_bensguarda != $guarda";
       }
 
-      $where_bem .= "))";
+      $where_bem .= ")))";
 
       if (isset($campos)==false) {
         if(file_exists("funcoes/db_func_bens.php")==true){
