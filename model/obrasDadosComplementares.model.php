@@ -874,7 +874,10 @@ class obrasDadosComplementares
 		
 		$rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
-		if($tabela_base === 'obrasdadoscomplementareslote'){
+		$rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iLicitacao);
+		$iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0 );
+
+		if($tabela_base === 'obrasdadoscomplementareslote' && $iTipoJulgamento == 3){
 			$aRetorno = self::retorno($rsQueryObra);
 		}else{
 
@@ -900,7 +903,7 @@ class obrasDadosComplementares
 			$aObras = array();
 
 			$aPesquisa = db_utils::getCollectionByRecord($rs, false, false, true);
-			
+		
 			for($count = 0; $count < count($aPesquisa); $count++){
 
 				$indice = $aPesquisa[$count]->l04_descricao;
@@ -945,7 +948,10 @@ class obrasDadosComplementares
 			$sSqlObra = $oDaoObra->sql_query_completo(null, $sCampos, 'db150_sequencial', $sWhere);
 			$rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 			
-			if($tabela_base === 'obrasdadoscomplementareslote'){
+			$rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iCodigoLicitacao);
+			$iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0);
+
+			if($tabela_base === 'obrasdadoscomplementareslote' && $iTipoJulgamento == 3){
 				$aRetorno = self::retorno($rsQueryObra);
 			}else{
 				if ($rsQueryObra !== false) {

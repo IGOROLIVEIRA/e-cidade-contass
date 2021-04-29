@@ -42,7 +42,6 @@ $clliclancedital = new cl_liclancedital;
 $clcflicita  = new cl_cflicita;
 $cleditaldocumento = new cl_editaldocumento;
 
-
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -88,51 +87,61 @@ if(isset($alterar)){
     $natureza_objeto = $oDadosEdital->l20_naturezaobjeto;
     $codigolicitacao = $oDadosEdital->l20_codigo;
 
-	$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
-	$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
+	  $sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
+	  $rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
     if($natureza_objeto == 1){
-		$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
-		$aSelecionados = array();
-		foreach ($aTipos as $tipo){
-			$aSelecionados[] = $tipo->l48_tipo;
-		}
 
-		if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
-			$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td'));
-		}elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
-			$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
-		}
-        if($cleditaldocumento->numrows == 0){
-			$sqlerro = true;
-			$erro_msg = 'Nenhum documento anexo à licitação';
-		}else{
-			if(count($tiposCadastrados) < 5){
-				$sqlerro = true;
-				$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
-			}
-		}
+        $aTipos = db_utils::getCollectionByRecord($rsDocumentos);
+        $aSelecionados = array();
+		
+        foreach ($aTipos as $tipo){
+			      $aSelecionados[] = $tipo->l48_tipo;
+		    }
+
+      if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
+          $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td'));
+      }elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
+          $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+      }
+
+      if($cleditaldocumento->numrows == 0){
+          $sqlerro = true;
+          $erro_msg = 'Nenhum documento anexo à licitação';
+		  }else{
+        if(count($tiposCadastrados) < 5){
+          $sqlerro = true;
+          $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+        }
+	  	}
 
 		/* Verifica se tem dados complementares vinculados à licitação */
 		if(!$sqlerro){
-			$sSqlObras = $clobrasdadoscomplementares->sql_query_completo(null, '*', null, 'db151_liclicita = '.$licitacao);
-			$rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
-			if($clobrasdadoscomplementares->numrows == 0){
-				$sqlerro = true;
-				$erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
-			}
+        if(!trim($anoLicitacao)){
+            $anoLicitacao = explode('/', $data_referencia);
+            $tabela_base = $anoLicitacao >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+            $clobrasdadoscomplementares = db_utils::getDao($tabela_base);
+        }
+        $sSqlObras = $clobrasdadoscomplementares->sql_query_completo(null, '*', null, 'db151_liclicita = '.$licitacao);
+        $rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
+        
+        if($clobrasdadoscomplementares->numrows == 0){
+            $sqlerro = true;
+            $erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
+        }
 		}
 
 	}else{
-        if(!$cleditaldocumento->numrows && !$sqlerro){
-			$sqlerro = true;
-			$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
-		}
+      if(!$cleditaldocumento->numrows && !$sqlerro){
+          $sqlerro = true;
+          $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+      }
 	}
 
+  
 	if(!$sqlerro){
 	    if(isset($oDadosEdital->l47_sequencial)){
-	        $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
+	          $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
             $clliclancedital->l47_linkpub = $links;
             $clliclancedital->l47_origemrecurso = $origem_recurso;
             $clliclancedital->l47_descrecurso = $descricao_recurso;
@@ -140,6 +149,7 @@ if(isset($alterar)){
             $clliclancedital->l47_liclicita = $oDadosEdital->l20_codigo;
 
             $clliclancedital->alterar($oDadosEdital->l47_sequencial);
+            var_dump($clliclancedital);
             $erro_msg = $clliclancedital->erro_sql;
             if ($clliclancedital->erro_status == '0'){
                 $sqlerro=true;

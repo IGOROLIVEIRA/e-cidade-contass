@@ -581,7 +581,11 @@ switch ($oParam->exec) {
                             $oObrasCodigos->excluir('', 'db151_liclicita = ' . $oParam->licitacao);
                         }
 
-                        $msg = urlencode('Endereço do lote excluído com sucesso!'); 
+                        if($oLicitacao->l20_tipojulg == 1){
+                            $msg = urlencode('Endereço da obra excluído com sucesso!'); 
+                        }else{
+                            $msg = urlencode('Endereço do lote excluído com sucesso!'); 
+                        }
 
                     }
 
