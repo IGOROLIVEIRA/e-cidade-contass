@@ -158,12 +158,10 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       $cllicobras102021 = new cl_licobras102021();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-//      echo "<pre>"; var_dump($oDados10);exit;
       if($oDados10->ac16_sequecial = ""){
           $aObrasSemContratos[] = $oDados10->si195_codobra;
       }
 
-//      echo "<pre>"; print_r($aObrasSemContratos);exit;
       if(empty($aObrasSemContratos)){
 
           $cllicobras102021->si195_tiporegistro = 10;
@@ -204,6 +202,12 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    db_config.db21_codigomunicipoestado as si195_codunidadesubrespestadual,
                    l20_anousu AS si195_exerciciolicitacao,
                    l20_edital AS si195_nroprocessolicitatorio,
+                   CASE
+                       WHEN l03_pctipocompratribunal = 101 THEN '1'
+                       WHEN l03_pctipocompratribunal = 100 THEN '2'
+                       WHEN l03_pctipocompratribunal = 102 THEN '3'
+                       WHEN l03_pctipocompratribunal = 103 THEN '4'
+                   END AS si196_tipoprocesso,
                    obr01_numeroobra AS si195_codobra,
                    l20_objeto AS si195_objeto,
                    obr01_linkobra AS si195_linkobra,
@@ -220,14 +224,14 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
-	              AND l03_pctipocompratribunal not in (100,101)
+	              AND l03_pctipocompratribunal in (100,101,102,103)
 	              AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
                 AND DATE_PART('YEAR',licobras.obr01_dtlancamento)= " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobras.obr01_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $rsResult20 = db_query($sql);
+    $rsResult20 = db_query($sql);//echo $sql;db_criatabela($rsResult20);die();
 
     if(pg_num_rows($rsResult20) > 0) {
-      for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult10); $iCont20++) {
+      for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
         $cllicobras202021 = new cl_licobras202021();
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
@@ -236,6 +240,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras202021->si196_codunidadesubrespestadual = substr($oDados20->si195_codunidadesubrespestadual, 0, 4);
         $cllicobras202021->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
         $cllicobras202021->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
+        $cllicobras202021->si196_tipoprocesso = $oDados20->si196_tipoprocesso;
         $cllicobras202021->si196_codobra = $oDados20->si195_codobra;
         $cllicobras202021->si196_objeto = $oDados20->si195_objeto;
         $cllicobras202021->si196_linkobra = $oDados20->si195_linkobra;
@@ -247,6 +252,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras202021->si196_prazoexecucao = $oDados20->si196_prazoexecucao;
         $cllicobras202021->si196_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $cllicobras202021->si196_instit = db_getsession("DB_instit");
+//        echo '<pre>'; var_dump($cllicobras202021);exit;
         $cllicobras202021->incluir(null);
 
         if ($cllicobras202021->erro_status == 0) {

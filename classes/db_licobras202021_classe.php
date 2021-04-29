@@ -22,6 +22,7 @@ class cl_licobras202021 {
     public $si196_codunidadesubrespestadual = null;
     public $si196_exerciciolicitacao = 0;
     public $si196_nroprocessolicitatorio = null;
+    public $si196_tipoprocesso = null;
     public $si196_codobra = 0;
     public $si196_objeto = null;
     public $si196_linkobra = null;
@@ -41,6 +42,7 @@ class cl_licobras202021 {
                  si196_codunidadesubrespestadual = text = codUnidadeSubRespEstadual
                  si196_exerciciolicitacao = int4 = exercicioLicitacao
                  si196_nroprocessolicitatorio = text = nroProcessoLicitatorio
+                 si196_tipoprocesso = int8 = si196_tipoprocesso
                  si196_codobra = int8 = codigoobra
                  si196_objeto = text = objeto
                  si196_linkobra = text = linkobra
@@ -80,6 +82,7 @@ class cl_licobras202021 {
             $this->si196_codunidadesubrespestadual = ($this->si196_codunidadesubrespestadual == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codunidadesubrespestadual"]:$this->si196_codunidadesubrespestadual);
             $this->si196_exerciciolicitacao = ($this->si196_exerciciolicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_exerciciolicitacao"]:$this->si196_exerciciolicitacao);
             $this->si196_nroprocessolicitatorio = ($this->si196_nroprocessolicitatorio == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_nroprocessolicitatorio"]:$this->si196_nroprocessolicitatorio);
+            $this->si196_tipoprocesso = ($this->si196_tipoprocesso == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tipoprocesso"]:$this->si196_tipoprocesso);
             $this->si196_codobra = ($this->si196_codobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codobra"]:$this->si196_codobra);
             $this->si196_objeto = ($this->si196_objeto == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_objeto"]:$this->si196_objeto);
             $this->si196_linkobra = ($this->si196_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_linkobra"]:$this->si196_linkobra);
@@ -148,6 +151,15 @@ class cl_licobras202021 {
         if ($this->si196_nroprocessolicitatorio == null ) {
             $this->erro_sql = " Campo nroProcessoLicitatorio não informado.";
             $this->erro_campo = "si196_nroprocessolicitatorio";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->si196_tipoprocesso == null ) {
+            $this->erro_sql = " Campo Tipo de Processo não informado.";
+            $this->erro_campo = "si196_tipoprocesso";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -267,6 +279,7 @@ class cl_licobras202021 {
                                       ,si196_codunidadesubrespestadual
                                       ,si196_exerciciolicitacao
                                       ,si196_nroprocessolicitatorio
+                                      ,si196_tipoprocesso
                                       ,si196_codobra
                                       ,si196_objeto
                                       ,si196_linkobra
@@ -286,6 +299,7 @@ class cl_licobras202021 {
                                ,'$this->si196_codunidadesubrespestadual'
                                ,$this->si196_exerciciolicitacao
                                ,'$this->si196_nroprocessolicitatorio'
+                               ,$this->si196_tipoprocesso
                                ,$this->si196_codobra
                                ,'$this->si196_objeto'
                                ,'$this->si196_linkobra'
