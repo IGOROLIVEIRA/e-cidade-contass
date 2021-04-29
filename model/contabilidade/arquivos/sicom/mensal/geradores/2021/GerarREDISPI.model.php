@@ -122,6 +122,7 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI12['si185_cep']                         = $aREDISPI12['si185_cep'];
                         $aCSVREDISPI12['si185_latitude']                    = $aREDISPI12['si185_latitude'];
                         $aCSVREDISPI12['si185_longitude']                   = $aREDISPI12['si185_longitude'];
+                        $aCSVREDISPI12['si185_codbempublico']               = $aREDISPI12['si185_codbempublico'];
 
                         $this->sLinha = $aCSVREDISPI12;
                         $this->adicionaLinha();
