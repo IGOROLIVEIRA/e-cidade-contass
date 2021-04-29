@@ -1827,6 +1827,9 @@ function js_arredondamentoFundeb(fValor, iTipo) {
     if (fDif > 0) {
         fVl118 += fDif;
         fVl119 = js_round((fTotal - fVl118),2);
+    } else {
+        fVl119 += fDif;
+        fVl118 = js_round((fTotal - fVl119),2);
     }
 
     return iTipo == 118 ? fVl118 : fVl119;
