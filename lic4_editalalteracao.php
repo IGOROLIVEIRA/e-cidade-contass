@@ -149,7 +149,6 @@ if(isset($alterar)){
             $clliclancedital->l47_liclicita = $oDadosEdital->l20_codigo;
 
             $clliclancedital->alterar($oDadosEdital->l47_sequencial);
-            var_dump($clliclancedital);
             $erro_msg = $clliclancedital->erro_sql;
             if ($clliclancedital->erro_status == '0'){
                 $sqlerro=true;
