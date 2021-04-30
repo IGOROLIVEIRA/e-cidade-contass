@@ -158,7 +158,7 @@ db_fieldsmemory($result,0);
       $where_bem .= " ) ";
 
       $where_bem = " and (t52_bem NOT IN (SELECT DISTINCT t22_bem FROM bensguardaitem)  
-                     OR (t52_bem NOT IN (SELECT DISTINCT t22_bem FROM bensguardaitem) 
+                     OR (t52_bem IN (SELECT DISTINCT t22_bem FROM bensguardaitem) 
                           AND t52_bem in (
                             SELECT DISTINCT t22_bem 
                               FROM bensguardaitem
