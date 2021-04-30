@@ -126,9 +126,7 @@ ob_start();
             </ul>
             <p><b>Observações: </b></p>
             <?php
-                $aBens = db_utils::fieldsMemory($rsBens, 0);
-
-                $oItemPosicao = db_utils::fieldsMemory($rsBens, 0);
+                $oItemPosicao = db_utils::fieldsMemory($rsBens, pg_numrows($rsBens) - 1);
             ?>
                 <p style="font-size: 10px"><?= trim($oItemPosicao->t23_obs) ? $oItemPosicao->t23_obs : ' - '; ?></p>
             
