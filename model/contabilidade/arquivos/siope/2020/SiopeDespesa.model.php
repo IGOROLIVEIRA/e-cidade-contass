@@ -115,7 +115,7 @@ class SiopeDespesa extends Siope {
                             $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
                         }
 
-                        $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespecidade;
+                        $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespsiope;
                         $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
                         $aArrayTemp['dot_atualizada']   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
                         $aArrayTemp['empenhado']        = 0;
@@ -145,7 +145,7 @@ class SiopeDespesa extends Siope {
                                 $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento, 'f');
                             }
 
-                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
+                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespsiope;
                             $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
                             $aArrayDesdTemp['dot_atualizada']   = 0;
                             $aArrayDesdTemp['empenhado']        = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
@@ -168,7 +168,7 @@ class SiopeDespesa extends Siope {
                                 $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento, 'f');
                             }
 
-                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
+                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespsiope;
                             $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
 
                             $aArrayDesdTemp['dot_atualizada']   = 0;
@@ -220,7 +220,7 @@ class SiopeDespesa extends Siope {
                                 $oNaturdessiope = $this->getNaturDesSiope($oDespesaAnoSeg->o58_elemento, 'f');
                             }
 
-                            $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespecidade;
+                            $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespsiope;
                             $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
 
                             $aArrayTemp['desp_orcada'] = $oDespesaAnoSeg->dot_ini;

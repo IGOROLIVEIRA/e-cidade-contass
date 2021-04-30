@@ -393,7 +393,7 @@ class cl_naturdessiope {
             $sql .= $campos;
         }
         $sql .= " from naturdessiope ";
-        $sql .= ' inner join eledessiope on eledessiope.c223_eledespecidade = naturdessiope.c222_natdespsiope and naturdessiope.c222_anousu = eledessiope.c223_anousu ';
+        $sql .= ' inner join eledessiope on eledessiope.c223_eledespsiope = naturdessiope.c222_natdespsiope and naturdessiope.c222_anousu = eledessiope.c223_anousu ';
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c222_natdespecidade!=null ) {

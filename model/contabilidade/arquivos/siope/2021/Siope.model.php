@@ -23,7 +23,9 @@ class Siope {
     //@var integer
     public $status;
     //@var string
-    public $sMensagem;
+    public $sMensagemDePara = "";
+    //@var string
+    public $sMensagemConvenio = "";
 
     public function setNomeArquivo($sNomeArq) {
         $this->sNomeArquivo = $sNomeArq;
@@ -96,7 +98,7 @@ class Siope {
     }
 
     public function getElementoFormat($elemento) {
-        return substr($elemento, 0, 1).".".substr($elemento, 1, 2).".".substr($elemento, 3, 2).".".substr($elemento, 5, 2).".".substr($elemento, 7, 2).".".substr($elemento, 9, 2);
+        return substr($elemento, 0, 1).".".substr($elemento, 1, 1).".".substr($elemento, 2, 2).".".substr($elemento, 4, 2).".".substr($elemento, 6, 2);
     }
 
 }

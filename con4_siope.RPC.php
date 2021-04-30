@@ -55,14 +55,19 @@ switch ($oParam->exec) {
                             }
                             $siopeDespesa->setDespesas();
                             $siopeDespesa->agrupaDespesas();
-                            $siopeDespesa->geraLinhaVazia();
-                            $siopeDespesa->ordenaDespesas();
+                            if ($iAnoUsu <= 2020) {
+                                $siopeDespesa->geraLinhaVazia();
+                                $siopeDespesa->ordenaDespesas();
+                            }
                             $siopeDespesa->setNomeArquivo($sNomeArqDespesa);
                             $siopeDespesa->gerarSiope();
 
                             if ($siopeDespesa->status == 2) {
-                                $oRetorno->message = "Não foi possível gerar a Despesa. De/Para dos seguintes elementos não encontrado: {$siopeDespesa->sMensagem}";
-                                $oRetorno->status = 2;
+
+                                $sMensagem = substr($siopeDespesa->sMensagemDePara, 0, -2)." \n \n ";
+                                $sMensagem .= substr($siopeDespesa->sMensagemConvenio, 0, -2);
+
+                                throw new Exception ($sMensagem);
                             }
 
                             if ($siopeDespesa->getErroSQL() > 0) {
