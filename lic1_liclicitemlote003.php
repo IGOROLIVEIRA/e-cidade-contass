@@ -43,24 +43,59 @@ $clliclicitemlote->rotulo->label();
 
 $erro_msg = "";
 
-if (isset($excluir)&&trim($excluir)!=""){
+if (isset($excluir) && trim($excluir)!=""){
      $vetor_lotes = split(",",$l04_descricao);
      $sqlerro     = false;
+     $sLotesVinculados = '';
 
      db_inicio_transacao();
 
      for($i = 0; $i < sizeof($vetor_lotes); $i++){
-          $clliclicitemlote->excluir(null,"l04_descricao = '".trim($vetor_lotes[$i])."'");
-
-          if ($clliclicitemlote->erro_status == 0){
-               $erro_msg = $clliclicitemlote->erro_msg;
-               $sqlerro  = true;
-               break;
-          }
+         $sLotesVinculados = $sLotesVinculados ? $sLotesVinculados . ',' : '';
+         $sLotesVinculados .= "'" . trim($vetor_lotes[$i]) . "'";
      }
 
-     if ($sqlerro == false){
-          $erro_msg   = $clliclicitemlote->erro_msg;
+     if($sLotesVinculados){
+          $sSqlDadosCompLote = "
+               SELECT db150_lote
+                   FROM obrasdadoscomplementareslote
+                   WHERE db150_lote in
+                       (SELECT l04_codigo
+                           FROM liclicitemlote
+                           WHERE l04_descricao in (" . $sLotesVinculados . "));
+               ";
+          
+          $rsDadosCompLote = db_query($sSqlDadosCompLote);
+          
+          if(pg_numrows($rsDadosCompLote)){
+               if(pg_numrows($rsDadosCompLote) == 1){
+                   $erro_msg = "Não foi possível excluir o lote " . str_replace("'", '', $sLotesVinculados);
+               }else{
+                   $erro_msg = "Não foi possível excluir os lotes " . str_replace("'", '', $sLotesVinculados);
+               }
+       
+               $sqlerro  = true;
+               $erro_msg .= '\nExclua os dados complementares vinculados primeiro!';
+          }
+     }
+          
+     if(!$sqlerro){
+
+          for($i = 0; $i < sizeof($vetor_lotes); $i++){
+     
+               $clliclicitemlote->excluir(null,"l04_descricao = '".trim($vetor_lotes[$i])."'");
+     
+               if ($clliclicitemlote->erro_status == 0){
+                    $erro_msg = $clliclicitemlote->erro_msg;
+                    $sqlerro = true;
+                    break;
+               }
+          }
+
+     }
+
+     if (!$sqlerro){
+          $erro_msg = $clliclicitemlote->erro_msg;
      }
 
      db_fim_transacao($sqlerro);
