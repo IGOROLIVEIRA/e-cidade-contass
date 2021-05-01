@@ -38,7 +38,13 @@ $clliclancedital = new cl_liclancedital;
 
 $clcriaabas     = new cl_criaabas;
 
-if ($oGet->edital){
+$sSqlEdital = 'SELECT *
+                FROM liclancedital
+                WHERE l47_liclicita = ' . $oGet->licitacao;
+
+$rsEdital = db_query($sSqlEdital);
+
+if ($oGet->edital || !pg_numrows($rsEdital)){
   $db_opcao = 1;
 }else{
   $db_opcao = 2;
@@ -72,7 +78,7 @@ if ($oGet->edital){
         $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
         $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
         $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
-        if($oGet->edital || !$oGet->licitacao){
+        if($db_opcao == 1){
             $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?licitacao=$oGet->licitacao", "documentos" => "lic4_editaldocumentos.php");
         }else{
             $clcriaabas->src = array("editais" => "lic4_editalalteracao.php?licitacao=$oGet->licitacao", "documentos" => "lic4_editaldocumentos.php");

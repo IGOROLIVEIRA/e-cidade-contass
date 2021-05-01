@@ -50,6 +50,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.sLote = sLote;
     this.sDescricaoLote = sDescricaoLote;
     this.exibeLote = false;
+    // Por padrão seta o julgamento por item
+    this.iTipoJulgamento = 1;
 
 
     this.buscaLotes = (sequencial) => {
@@ -106,6 +108,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 onComplete: (objeto) => {
                     let response = eval('('+objeto.responseText+')');
                     me.exibeLote = parseInt(response.ano) >= 2021;
+                    me.iTipoJulgamento = response.tipo;
                 }
             }
         )
@@ -390,7 +393,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oWindowEndereco.setShutDownFunction(me.close);
     me.oWindowEndereco.allowCloseWithEsc(false);
     
-    let sMessageBoard = me.exibeLote ? 'Dados Complementares do ' + me.sDescricaoLote : 'Dados Complementares';
+    let sMessageBoard = me.exibeLote && me.iTipoJulgamento == 3 ? 'Dados Complementares do ' + me.sDescricaoLote : 'Dados Complementares';
 
     this.oMessageBoardEndereco = new DBMessageBoard('msgBoardEndereco' + sId,
         sMessageBoard,
