@@ -42,9 +42,6 @@ class Oc14432 extends AbstractMigration
                     FOREIGN KEY(db150_codobra) REFERENCES obrascodigos(db151_codigoobra)
             );
             
-            ALTER TABLE obrasdadoscomplementareslote ADD CONSTRAINT db150_lote_fk
-            FOREIGN key(db150_lote) REFERENCES liclicitemlote(l04_codigo);
-            
             CREATE SEQUENCE obrasdadoscomplementareslote_db150_sequencial_seq
               START WITH 1
               INCREMENT BY 1
