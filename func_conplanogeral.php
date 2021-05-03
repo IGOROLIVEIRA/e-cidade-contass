@@ -70,7 +70,7 @@ $clrotulo->label("c61_reduz");
             </td>
             <td width="96%" align="left" nowrap> 
               <?
-		       db_input("c60_estrut",15,$Ic60_estrut,true,"text",4,"","chave_c60_estrut");
+		       db_input("c60_estrut",50,$Ic60_estrut,true,"text",4,"","chave_c60_estrut");
 		       ?>
             </td>
           </tr>
@@ -92,6 +92,16 @@ $clrotulo->label("c61_reduz");
 		       ?>
             </td>
           </tr>
+		  <tr>
+		  	<td width="4%" align="right" nowrap title="<?=$Tc61_codtce?>">
+			  	<b>Código TCE:</b>
+	    	</td>
+            <td width="96%" align="left" nowrap> 
+              	<?
+		       	db_input("c61_codtce",10,$Ic61_codtce,true,"text",4,"","chave_c61_codtce");
+		       	?>
+            </td>
+		  </tr>
           <tr> 
             <td colspan="4" align="center"> 
               <input type="hidden" value="1" name="pesquisa_geral">
@@ -137,7 +147,9 @@ $clrotulo->label("c61_reduz");
 	         $sql = $clconplano->sql_query_geral("",null,$campos,"c60_codcon"," c60_anousu=$anousu and c60_estrut like '$chave_c60_estrut%' ");
         }else if(isset($chave_c60_descr) && (trim($chave_c60_descr)!="") ){
 	         $sql = $clconplano->sql_query_geral("",null,$campos,"c60_descr"," c60_anousu=$anousu and   upper(c60_descr) like '$chave_c60_descr%' ");
-        }else if( isset($tipo_sql) ){         
+        }else if(isset($chave_c61_codtce) && (trim($chave_c61_codtce)!="") ){
+			$sql = $clconplano->sql_query_geral("",null,$campos,"c60_codcon"," c60_anousu=$anousu and c61_codtce = $chave_c61_codtce");
+	   	}else if( isset($tipo_sql) ){         
              $sql = $clconplano->sql_query_reduz("",$campos.",c61_reduz as db_c61_reduz,c60_estrut as db_c60_estrut","c60_estrut","c60_anousu=$anousu");
         }elseif($pesquisa_geral == 1){        	
              $sql = $clconplano->sql_query_geral("",$anousu,$campos,"c60_estrut","c60_anousu=".db_getsession("DB_anousu"));

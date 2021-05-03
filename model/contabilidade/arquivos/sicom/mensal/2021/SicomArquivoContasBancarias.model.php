@@ -42,6 +42,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
   /**
+   * @var array Tipo Entrada/Saída que devem informar conta
+   */
+  protected $aTiposObrigConta = array(5,6,7,9);
+
+  /**
+   * @var array Tipo Entrada/Saída que devem informar fonte
+   */
+  protected $aTiposObrigFonte = array(5,6,7,9,11);
+
+  /**
    *
    * Construtor da classe
    */
@@ -86,6 +96,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     $cCtb41 = new cl_ctb412021();
     $cCtb50 = new cl_ctb502021();
 
+    // matriz de entrada
+    $what = array("°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
+
+    // matriz de saída
+    $by   = array('','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
 
     /**
      * selecionar arquivo xml com dados das receitas
@@ -236,7 +251,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->si95_tipoconta = $oRegistro10->tipoconta;
           $cCtb10->si95_tipoaplicacao = $oRegistro10->tipoaplicacao;
           $cCtb10->si95_nroseqaplicacao = $oRegistro10->nroseqaplicacao;
-          $cCtb10->si95_desccontabancaria = substr($oRegistro10->desccontabancaria, 0, 50);
+          $cCtb10->si95_desccontabancaria = preg_replace("/[^a-zA-Z0-9 ]/", "",str_replace($what, $by,  substr($oRegistro10->desccontabancaria, 0, 50)));
           $cCtb10->si95_contaconvenio = $oRegistro10->contaconvenio;
           $cCtb10->si95_nroconvenio = $oRegistro10->nroconvenio;
           $cCtb10->si95_dataassinaturaconvenio = $oRegistro10->dataassinaturaconvenio;
@@ -397,10 +412,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $aBancosAgrupados[$aHash] = $cCtb10;
 
         } else {
-		  $oConta->codctb 	= $oRegistro10->codctb;
-		  $oConta->saldocec = $oRegistro10->saldocec;
-		 
-		  $aBancosAgrupados[$aHash]->contas[] = $oConta;
+			$oConta = new stdClass();
+			$oConta->codctb 	= $oRegistro10->codctb;
+			$oConta->saldocec = $oRegistro10->saldocec;
+
+			$aBancosAgrupados[$aHash]->contas[] = $oConta;
         }
 
 
@@ -423,7 +439,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       foreach ($oContaAgrupada->contas as $oConta) {
 
 
-        $sSql20Fonte = "select distinct codctb, fontemovimento from (
+        $sSql20Fonte = "select distinct codctb, 
+                                fontemovimento
+                                from (
 									select c61_reduz  as codctb, o15_codtri  as fontemovimento
 									  from conplano
 								inner join conplanoreduz on conplanoreduz.c61_codcon = conplano.c60_codcon and conplanoreduz.c61_anousu = conplano.c60_anousu
@@ -494,22 +512,21 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsReg20Fonte); $iCont20++) {
 
           /* DADOS REGISTRO 20*/
-          $iFonte = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->fontemovimento;
-
+          $iFonteMovimento = db_utils::fieldsMemory($rsReg20Fonte, $iCont20)->fontemovimento;
 
           $sSqlMov = "select
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),29,15)::float8,2)::float8 as saldo_anterior,
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),43,15)::float8,2)::float8 as debitomes,
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),57,15)::float8,2)::float8 as creditomes,
-						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),72,15)::float8,2)::float8 as saldo_final,
-						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),87,1)::varchar(1) as  sinalanterior,
-						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonte . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),89,1)::varchar(1) as  sinalfinal ";
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),29,15)::float8,2)::float8 as saldo_anterior,
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),43,15)::float8,2)::float8 as debitomes,
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),57,15)::float8,2)::float8 as creditomes,
+						round(substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),72,15)::float8,2)::float8 as saldo_final,
+						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),87,1)::varchar(1) as  sinalanterior,
+						substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$oConta->codctb,'" . $iFonteMovimento . "'," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),89,1)::varchar(1) as  sinalfinal ";
           $rsTotalMov = db_query($sSqlMov) or die($sSqlMov);
           //db_criatabela($rsTotalMov);
           //echo $sSqlMov;
           $oTotalMov = db_utils::fieldsMemory($rsTotalMov);
 
-		  $iFonte = in_array($iFonte, $this->aFontesEncerradas) ? substr($iFonte, 0, 1).'59' : $iFonte;
+          $iFonte = (in_array($iFonteMovimento, $this->aFontesEncerradas)) ? substr($iFonteMovimento,0,1).'59' : $iFonteMovimento;
 
           $sHash20 = $oContaAgrupada->si95_codctb . $iFonte;
           if (!$aCtb20Agrupado[$sHash20]) {
@@ -749,7 +766,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                              LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
                              LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . " 
                                   AND DATE_PART('MONTH',conlancamdoc.c71_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND conlancamval.c69_debito = {$oConta->codctb} ) AS xx
-                        WHERE fontemovimento::integer = $iFonte";
+                        WHERE fontemovimento::integer = $iFonteMovimento";
 
           $rsMovi21 = db_query($sSqlReg21);
 
@@ -822,11 +839,14 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
               $sHash .= $oCtb20->si96_codctb;
               $sHash .= $oCtb20->si96_codfontrecursos;
               $sHash .= $oMovi->tipomovimentacao;
+			  $sHash .= $oMovi->saldocec;
               /**
                * quando o codctb for igual codctbtransf, serÃ¡ agrupado a movimentaÃ§Ã£o no tipoentrsaida 99
                */
 
-			  if ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 1 ) {
+			  if ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 2 ) {
+				$iTipoEntrSaida = '11';  
+			  } elseif ( ($iCodSis != '' || $iCodSis != 0) && ($oMovi->codsisctb == 6 && $iCodSis == 5) && $oMovi->tipomovimentacao == 1 ) {
 				$iTipoEntrSaida = '18';
 			  } elseif (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) {
 				$iTipoEntrSaida = '99';
@@ -835,11 +855,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			  }
 
               $sHash .= $iTipoEntrSaida;
-              $sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
-                && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0);
-              $sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
-                && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0);
-
+              $sHash .= (in_array($oMovi->tipoentrsaida, $this->aTiposObrigConta) && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
+              $sHash .= ((in_array($oMovi->tipoentrsaida, $this->aTiposObrigFonte) && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0);
 
               if (!isset($oCtb20->ext21[$sHash])) {
 
@@ -853,13 +870,14 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oDadosMovi21->si97_tipoentrsaida = $iTipoEntrSaida;
 				$oDadosMovi21->si97_valorentrsaida = $nValor;
 				$oDadosMovi21->si97_saldocec = $oMovi->saldocec;
-                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ($oDadosMovi21->si97_tipoentrsaida == 10 ? 'Estorno de recebimentos' : ' '));
-                $oDadosMovi21->si97_codctbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
-                  && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
-                $oDadosMovi21->si97_codfontectbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
-				  && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
-				$oDadosMovi21->si97_saldocectransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
-				&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
+                $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' : 
+                    ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
+                $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta) 
+					&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
+                $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
+					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
+				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
+					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11 && $oMovi->tipomovimentacao != 2) ) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $oDadosMovi21->si97_instit = db_getsession("DB_instit");
                 $oDadosMovi21->registro22 = array();
@@ -986,9 +1004,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb21->si97_tipoentrsaida = $oCtb21agrupado->si97_tipoentrsaida;
 		  $cCtb21->si97_saldocec = $oCtb21agrupado->si97_saldocec;
           $cCtb21->si97_valorentrsaida = abs($oCtb21agrupado->si97_valorentrsaida);
-          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário': ' ');
-          $cCtb21->si97_codctbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codctbtransf : 0;
-          $cCtb21->si97_codfontectbtransf = ($oCtb21agrupado->si97_tipoentrsaida == 5 || $oCtb21agrupado->si97_tipoentrsaida == 6 || $oCtb21agrupado->si97_tipoentrsaida == 7 || $oCtb21agrupado->si97_tipoentrsaida == 9) ? $oCtb21agrupado->si97_codfontectbtransf : 0;
+          $cCtb21->si97_dscoutrasmov = ($oCtb21agrupado->si97_tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' : 
+            ($cCtb21->si97_tipoentrsaida == 10 ? $oCtb21agrupado->si97_dscoutrasmov : ' '));
+          $cCtb21->si97_codctbtransf = $oCtb21agrupado->si97_codctbtransf;
+          $cCtb21->si97_codfontectbtransf = $oCtb21agrupado->si97_codfontectbtransf;
 		  $cCtb21->si97_saldocectransf = $oCtb21agrupado->si97_saldocectransf; 
 		  $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
           $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;

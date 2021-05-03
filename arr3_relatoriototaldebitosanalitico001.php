@@ -793,8 +793,8 @@ foreach ($aDadosRelatorio as $aDadosOrigem) {
              $oPdf->Cell( 13, 4 , db_formatar($aDadosNumpre->dtoper, "d")                ,"R"   ,0, "C", 0);
              $oPdf->Cell( 13, 4 , db_formatar($aDadosNumpre->dtvenc, "d")                ,"R"   ,0, "C", 0);
              $oPdf->cell( 13, 4 , $aDadosNumpre->origem                                  ,"R"   ,0, "L", 0);
-             $oPdf->cell( 13, 4 , $aDadosRegImovel->j04_quadraregimo                     ,"R"   ,0, "L", 0);
              $oPdf->cell( 13, 4 , $aDadosRegImovel->j04_loteregimo                       ,"R"   ,0, "L", 0);
+             $oPdf->cell( 13, 4 , $aDadosRegImovel->j04_quadraregimo                     ,"R"   ,0, "L", 0);
              $oPdf->Cell( 30, 4 , substr(trim($aDadosNumpre->histcalc_descricao) ,0,20)  ,"R"   ,0, "L", 0);
              $oPdf->Cell( 6 , 4 , $aDadosNumpre->receita                                 ,"R"   ,0, "C", 0);
              $oPdf->Cell( 81, 4 , substr(trim($aDadosNumpre->receita_descricao) ,0,15)   ,"R"   ,0, "L", 0);

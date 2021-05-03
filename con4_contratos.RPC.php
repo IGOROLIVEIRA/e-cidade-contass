@@ -1623,6 +1623,24 @@ switch($oParam->exec) {
       $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
     }
     break;
+
+    case 'updateProvidencia':
+
+        try{
+            
+            $oDaoAcordo = db_utils::getDao('acordo');
+            // Muda o status da providência do contratos para 1 (Finalizado)
+            $oDaoAcordo->ac16_providencia = 1;
+            $oDaoAcordo->ac16_sequencial = $oParam->acordo;
+            $oDaoAcordo->alterar($oParam->acordo);
+
+        }catch(Exception $e){
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+        }
+
+
+        break;
 }
 /**
  * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação
