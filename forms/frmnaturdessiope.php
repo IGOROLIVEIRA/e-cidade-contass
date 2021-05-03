@@ -1,6 +1,12 @@
 <?
 //MODULO: contabilidade
 $clnaturdessiope->rotulo->label();
+$iAnoUsu = db_getsession('DB_anousu');
+if ($iAnoUsu < 2021) {
+    $tam_cmapo = 11;
+} else {
+    $tam_cmapo = 15;
+}
 ?>
 <form name="form1" method="post" action="">
     <fieldset style="width: 350px; height: 90px; margin-bottom:10px;"><legend><b>Código da Despesa:</b></legend>
@@ -18,15 +24,15 @@ $clnaturdessiope->rotulo->label();
                 </td>
             </tr>
             <tr>
-                <td><strong>Código da Despesa:</strong></td>
+                <td nowrap><strong>Código da Despesa:</strong></td>
                 <td>
                     <?
-                    db_input('c222_natdespecidade',11,$Ic222_natdespecidade,true,'text',1,"")
+                    db_input('c222_natdespecidade',$tam_cmapo,$Ic222_natdespecidade,true,'text',1,"")
                     ?>
                 </td>
                 <td>
                     <?
-                    db_input('c222_natdespsiope',11,$Ic222_natdespsiope,true,'text',1,"")
+                    db_input('c222_natdespsiope',$tam_cmapo,$Ic222_natdespsiope,true,'text',1,"")
                     ?>
                 </td>
                 <td>
@@ -81,6 +87,14 @@ $clnaturdessiope->rotulo->label();
         document.form1.c222_natdespecidade.value = "";
         document.form1.c222_natdespsiope.value = "";
 
+    }
+
+    let iAnoUsu = <?= $iAnoUsu ?>;
+    
+    if (iAnoUsu >= 2021) {
+        document.getElementById("c222_previdencia").disabled        = true;        
+        document.getElementById("c222_natdespecidade").maxLength    = 15;
+        document.getElementById("c222_natdespsiope").maxLength      = 15;
     }
 
 </script>
