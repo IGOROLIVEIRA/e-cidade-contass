@@ -120,8 +120,8 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI12['si185_distrito']                    = $aREDISPI12['si185_distrito'];
                         $aCSVREDISPI12['si185_cidade']                      = $aREDISPI12['si185_cidade'];
                         $aCSVREDISPI12['si185_cep']                         = $aREDISPI12['si185_cep'];
-                        $aCSVREDISPI12['si185_latitude']                    = $aREDISPI12['si185_latitude'];
-                        $aCSVREDISPI12['si185_longitude']                   = $aREDISPI12['si185_longitude'];
+                        $aCSVREDISPI12['si185_latitude']                    = $this->sicomNumberReal($aREDISPI12['si185_latitude'],6);
+                        $aCSVREDISPI12['si185_longitude']                   = $this->sicomNumberReal($aREDISPI12['si185_longitude'], 6);
                         $aCSVREDISPI12['si185_codbempublico']               = $this->padLeftZero($aREDISPI12['si185_codbempublico'], 4);
 
                         $this->sLinha = $aCSVREDISPI12;

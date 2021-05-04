@@ -215,6 +215,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                 liclicita.l20_objeto AS objeto,
                                 liclicita.l20_justificativa AS justificativa,
                                 liclicita.l20_razao AS razao,
+                                liclicita.l20_tipojulg,
                                 obrasdadoscomplementareslote.db150_bdi AS bdi,
                                 liclancedital.l47_linkpub as linkpub,
                                 (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
@@ -368,8 +369,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 					FROM liclicita
 					INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
 					INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
-					INNER JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
-					INNER JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
+					LEFT JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+					LEFT JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
 					INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
 					INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 					INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -378,16 +379,26 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 					INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
 					INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
 					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = ".$oDados10->nroprocesso."
-						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106) ORDER BY obrasdadoscomplementareslote.db150_sequencial limit 1"; /* Limite inserido depois das alterações lançadas pelo tribunal de contas*/
+						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106) 
+                        ORDER BY obrasdadoscomplementareslote.db150_sequencial";
 
 					$rsResult11 = db_query($sSql);
 					$aDadosAgrupados11 = array();
+
 					for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
 						$oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 						$sHash11 = $oResult11->tiporegistro . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->exercicioprocesso .
 							$oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-							$oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao;
+							$oResult11->tipoatividadeservespecializado . $oResult11->codsubfuncao;
+                        
+                        if($oDados10->l20_tipojulg == 1){
+                            $sHash11 .= $oResult11->codfuncao;
+                        }
+
+                        /**
+                         * @todo Corrigir busca pela função e subfunção
+                         */
 
 						if (!isset($aDadosAgrupados11[$sHash11])) {
 

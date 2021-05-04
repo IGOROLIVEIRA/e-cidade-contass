@@ -64,7 +64,8 @@ class Oc14432 extends AbstractMigration
             ALTER TABLE ralic122021 
                 ADD COLUMN si182_latitude numeric,
                 ADD COLUMN si182_longitude numeric,
-                ADD COLUMN si182_nrolote integer;
+                ADD COLUMN si182_nrolote integer,
+                ADD COLUMN si182_codbempublico smallint;
 
             -- Alteração das tabelas do REDISPI
 

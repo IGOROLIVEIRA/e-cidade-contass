@@ -260,7 +260,7 @@ FROM
                          WHEN liclicita.l20_naturezaobjeto in ('1', '7') THEN liclicita.l20_regimexecucao
                          ELSE 0
                      END AS regimeExecucaoObras,
-                     obrasdadoscomplementares.db150_bdi AS bdi,
+                     obrasdadoscomplementareslote.db150_bdi AS bdi,
                      liclancedital.l47_origemrecurso AS origemRecurso,
                      liclancedital.l47_descrecurso AS dscOrigemRecurso
      FROM liclicita
@@ -269,8 +269,9 @@ FROM
      INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
      LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
      INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
-     INNER JOIN obrascodigos ON liclancedital.l47_liclicita = obrascodigos.db151_liclicita
-     LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_codobra = obrascodigos.db151_codigoobra
+     LEFT JOIN obrascodigos ON liclancedital.l47_liclicita = obrascodigos.db151_liclicita
+     LEFT JOIN obrasdadoscomplementareslote ON obrasdadoscomplementareslote.db150_codobra = obrascodigos.db151_codigoobra
+          AND obrasdadoscomplementareslote.db150_bdi = ( select max(db150_bdi) from obrasdadoscomplementareslote WHERE db150_codobra = obrascodigos.db151_codigoobra)
      JOIN liclicitem ON l21_codliclicita = l20_codigo
      JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
      JOIN pcproc ON pc80_codproc = pc81_codproc
@@ -415,8 +416,8 @@ ORDER BY nroprocessolicitatorio
                 FROM liclicita
                 INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                 INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
-                INNER JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
-                INNER JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu
+                LEFT JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+                LEFT JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu
                                           AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -449,8 +450,15 @@ ORDER BY nroprocessolicitatorio
                   $oResult11 = db_utils::fieldsMemory($rsResult11, 0);
                   $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
                   $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-                  $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
+                  $oResult11->tipoatividadeservespecializado . $oResult11->codsubfuncao . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
 
+                  if($oDados10->tipojulgamento == 1){
+                      $sHash11 .= $oResult11->codfuncao;
+                  }
+
+                  /**
+                   * @todo Corrigir busca pela função e subfunção
+                   */
                   if (!isset($aDadosAgrupados11[$sHash11])) {
 
                       $clralic11 = new cl_ralic112021();
