@@ -157,14 +157,14 @@ $sWhereContratos = " and 1 = 1 ";
         <td align="center" valign="top">
             <?
             $and            = "and ";
-            $dbwhere          = "l20_licsituacao = 0 or (cflicita.l03_pctipocompratribunal in (102,103) and l20_licsituacao = 10) and ";
+            // $dbwhere          = "l20_licsituacao = 0 or (cflicita.l03_pctipocompratribunal in (102,103) and l20_licsituacao = 10) and ";
 
             if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
-                $dbwhere .= "l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102,103) and l20_licsituacao in ($situacao,10,11)) and ";
+                $dbwhere .= "(l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102,103) and l20_licsituacao in ($situacao,10,11))) ";
             }
 
             if (!empty($oGet->validasaldo)){
-                $dbwhere .= " $sWhere and ";
+                $dbwhere .= " $sWhere ";
             }
 
             $sWhereModalidade = "";
@@ -179,9 +179,9 @@ $sWhereContratos = " and 1 = 1 ";
 
             if ($validafornecedor == "1"){
                 if($dbwhere != ""){
-                    $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+                    $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) ";
                 }else{
-                    $dbwhere .= " exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+                    $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) ";
                 }
             }
 
@@ -199,39 +199,38 @@ $sWhereContratos = " and 1 = 1 ";
 //                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
 				$campos .= ', l08_descr as dl_Situação';
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null," " . $campos,"l20_codigo","$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
+                    $sql = $clliclicita->sql_queryContratos(null," " . $campos,"l20_codigo","$dbwhere $and l20_codigo = $chave_l20_codigo and $dbwhere_instit");
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere l20_numero=$chave_l20_numero  and $dbwhere_instit");
+                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere $and l20_numero=$chave_l20_numero  and $dbwhere_instit");
                 }else if(isset($chave_l03_descr) && (trim($chave_l03_descr)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere l03_descr like '$chave_l03_descr%'  and $dbwhere_instit");
+                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere $and l03_descr like '$chave_l03_descr%'  and $dbwhere_instit");
                 }else if(isset($chave_l03_codigo) && (trim($chave_l03_codigo)!="") ){
-                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere l03_codigo=$chave_l03_codigo  and $dbwhere_instit");
+                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere $and l03_codigo=$chave_l03_codigo  and $dbwhere_instit");
                 }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
-                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere l20_edital=$chave_l20_edital  and $dbwhere_instit");
+                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere $and l20_edital=$chave_l20_edital  and $dbwhere_instit");
                 }else if(isset($l20_anousu) && (trim($l20_anousu)!="")){
-                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit and l20_anousu = {$l20_anousu}");
+                    $sql = $clliclicita->sql_queryContratos(null," " .$campos,"l20_codigo","($dbwhere) and $dbwhere_instit and l20_anousu = {$l20_anousu}");
                 }else{
-                    $sql = $clliclicita->sql_queryContratos(""," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit");
+                    $sql = $clliclicita->sql_queryContratos(""," " .$campos,"l20_codigo","($dbwhere) and $dbwhere_instit");
                 }
 
                 if (isset($param) && trim($param) != ""){
 
                     $dbwhere = " and (e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))";
                     if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l20_codigo = $chave_l20_codigo");
+                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere $and l20_codigo = $chave_l20_codigo");
                     }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l20_numero=$chave_l20_numero");
+                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere $and l20_numero=$chave_l20_numero");
                     }else if(isset($chave_l03_descr) && (trim($chave_l03_descr)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l03_descr like '$chave_l03_descr%'");
+                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere $and l03_descr like '$chave_l03_descr%'");
                     }else if(isset($chave_l03_codigo) && (trim($chave_l03_codigo)!="") ){
-                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere l03_codigo=$chave_l03_codigo");
+                        $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","$dbwhere $and l03_codigo=$chave_l03_codigo");
                     } else {
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","$dbwhere 1=1");
                     }
                 }
 
                 $aRepassa = array();
-
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
             } else {

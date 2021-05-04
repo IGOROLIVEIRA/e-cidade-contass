@@ -250,4 +250,5 @@ function retornofindCpfCnpj(oAjax) {
  parent.document.getElementById('cgm').style.display        = 'none';
  parent.document.getElementById('documentos').style.display = 'none';
  parent.document.getElementById('fotos').style.display      = 'none';
+ parent.document.getElementById('contasbanco').style.display      = 'none';
 </script>

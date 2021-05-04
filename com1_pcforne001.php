@@ -57,7 +57,7 @@ $db_opcao = 1;
      <?
 	 $clcriaabas->identifica = array("pcforne"                    => "Fornecedor",
                                    "pcfornereprlegal"           => "Representantes Legais",
-                                   "pcfornecon"                 => "Contas Banco",
+                                   "pcfornecon"                 => "Contas Bancárias",
                                    "pcfornemov"                 => "Movimento",
                                    "subgrupo"                   => "Subgrupo",
                                    "pcforneidentificacaocredor" => "Identificação do Fornecedor");

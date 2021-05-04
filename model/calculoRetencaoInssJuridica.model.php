@@ -136,9 +136,6 @@ class calculoRetencaoInssJuridica implements iCalculoRetencao {
     /**
      * Calculamos o valor da retencao, multiplicando  a base de calculo pela aliquota;
      */
-   if (empty($this->nAliquota) || $this->nAliquota == 0) {
-      throw  new Exception("Erro [1] Valor da Aliquota Inválido!");
-    }
     
     $nValorRetido = $this->nValorBaseCalculo * ($this->nAliquota/100);
     if ($nValorRetido < 0) {

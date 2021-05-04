@@ -73,12 +73,20 @@ switch ($oParam->exec) {
 
         $oNotaLiquidacao = new ordemPagamento($oParam->aNotas[$i]->e50_codord);
 
+        $dtAto = '';
+
+        if (isset($oParam->dtAto) && $oParam->dtAto != '') {
+            $dtAto = implode("-", array_reverse(explode("/", $oParam->dtAto)));
+        }
+
         /* #1 - modification: ContratosPADRS */
 
         $lDesconto = $oNotaLiquidacao->desconto(
           $oParam->aNotas[$i],
           $oParam->aNotas[$i]->nValorDesconto,
-          db_stdClass::db_stripTagsJson(utf8_decode($oParam->sMotivo))
+          db_stdClass::db_stripTagsJson(utf8_decode($oParam->sMotivo)),
+          $oParam->sAto,
+          $dtAto
         );
 
         if ( !$lDesconto ) {

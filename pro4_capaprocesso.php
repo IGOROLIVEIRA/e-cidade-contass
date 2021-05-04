@@ -169,6 +169,8 @@ if ($oProtParam->p90_modelcapaproc != 3) {
   }
   $pdf1 = new db_impcarne($pdf, "$modelo");
   $pdf1->telefinstit = pg_result(db_query("select telef from db_config where codigo = ".db_getsession("DB_instit")),0,0);
+  $pdf1->enderfinstit = pg_result(db_query("select ender||' - '||bairro||' nº '||numero from db_config where codigo = ".db_getsession("DB_instit")),0,0);
+  $pdf1->emailfinstit = pg_result(db_query("select email from db_config where codigo = ".db_getsession("DB_instit")),0,0);
 
   for($w=0;$w<$numrows;$w++){
     db_fieldsmemory($result,$w);

@@ -622,7 +622,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             if($oDados10->ac02_acordonatureza == '4' || $oDados10->ac02_acordonatureza == '5'){
                 $clcontratos10->si83_formafornecimento = '';
                 $clcontratos10->si83_formapagamento = '';
-                $clcontratos10->si83_unidadedemedidaprazoexex = '';
+                $clcontratos10->si83_unidadedemedidaprazoexec = '';
                 $clcontratos10->si83_prazoexecucao = '';
                 $clcontratos10->si83_multarescisoria = '';
                 $clcontratos10->si83_multainadimplemento = '';
@@ -630,7 +630,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }else{
                 $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
                 $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
-                $clcontratos10->si83_unidadedemedidaprazoexex = $oDados10->ac16_tipounidtempoperiodo;
+                $clcontratos10->si83_unidadedemedidaprazoexec = $oDados10->ac16_tipounidtempoperiodo;
                 $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo;
                 $clcontratos10->si83_multarescisoria = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 1)), 0, 99);
                 $clcontratos10->si83_multainadimplemento = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 2)), 0, 99);
@@ -1089,7 +1089,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
             //FIM OC10386
             $sSql = "select case when length(fornecedor.z01_cgccpf) = 11 then 1 else 2 end as tipodocumento,fornecedor.z01_cgccpf as nrodocumento,
-      representante.z01_cgccpf as cpfrepresentantelegal
+      representante.z01_cgccpf as nrodocrepresentantelegal
       from cgm as fornecedor
       join pcfornereprlegal on fornecedor.z01_numcgm = pcfornereprlegal.pc81_cgmforn
       join cgm as representante on pcfornereprlegal.pc81_cgmresp = representante.z01_numcgm
@@ -1097,13 +1097,19 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $rsResult13 = db_query($sSql);//db_criatabela($rsResult13);
             $oDados13 = db_utils::fieldsMemory($rsResult13, 0);
-
             $clcontratos13 = new cl_contratos132021;
             $clcontratos13->si86_tiporegistro = 13;
             $clcontratos13->si86_codcontrato = $oAcordo->getCodigo();
             $clcontratos13->si86_tipodocumento = $oDados13->tipodocumento;
             $clcontratos13->si86_nrodocumento = $oDados13->nrodocumento;
-            $clcontratos13->si86_cpfrepresentantelegal = substr($oDados13->cpfrepresentantelegal, 0, 11);
+            if(strlen($oDados13->nrodocrepresentantelegal) == 11){
+                $clcontratos13->si86_tipodocrepresentante = 1;
+            }elseif(strlen($oDados13->nrodocrepresentantelegal) == 14){
+                $clcontratos13->si86_tipodocrepresentante = 2;
+            }else{
+                $clcontratos13->si86_tipodocrepresentante = 3;
+            }
+            $clcontratos13->si86_nrodocrepresentantelegal = substr($oDados13->nrodocrepresentantelegal, 0, 14);
             $clcontratos13->si86_reg10 = $clcontratos10->si83_sequencial;
             $clcontratos13->si86_instit = db_getsession("DB_instit");
             $clcontratos13->si86_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

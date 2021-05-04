@@ -1,10 +1,10 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_afast102020_classe.php");
-require_once ("classes/db_afast202020_classe.php");
-require_once ("classes/db_afast302020_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2020/flpg/GerarAFAST.model.php");
+require_once ("classes/db_afast102021_classe.php");
+require_once ("classes/db_afast202021_classe.php");
+require_once ("classes/db_afast302021_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2021/flpg/GerarAFAST.model.php");
 
 
 /**
@@ -70,9 +70,9 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-        $clafast = new cl_afast102020();
-        $clafast20 = new cl_afast202020();
-        $clafast30 = new cl_afast302020();
+        $clafast = new cl_afast102021();
+        $clafast20 = new cl_afast202021();
+        $clafast30 = new cl_afast302021();
 
         /**
          * inserir informacoes no banco de dados
@@ -137,7 +137,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
-            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2021-11-01') {
+            if ($oDados->si199_tipoafastamento == 7) {
               continue;
             }
 
@@ -203,15 +203,19 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                 AND (
                                         (DATE_PART('YEAR',r45_dtafas) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',r45_dtafas) = 01)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2020 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2019 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2018 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2017 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
-                                        (DATE_PART('YEAR',r45_dtafas) = 2021 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        (DATE_PART('YEAR',r45_dtafas) = 2016 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        or
+                                        (DATE_PART('YEAR',r45_dtafas) = 2015 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                        or
+                                        (DATE_PART('YEAR',r45_dtafas) = 2014 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                         or
                                         (DATE_PART('YEAR',r45_dtafas) = 2013 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                     )
@@ -292,7 +296,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
             foreach ($aDadosAfast as $oDadosAfast) {
              
-                $clafast = new cl_afast102020();
+                $clafast = new cl_afast102021();
 
                 $clafast->si199_tiporegistro = 10;
                 $clafast->si199_codvinculopessoa = $oDadosAfast->si199_codvinculopessoa;
@@ -304,7 +308,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace(";", " ", $oDadosAfast->si199_dscoutrosafastamentos); //usei essas 3 formas que achei
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace("\n", " ", $oDadosAfast->si199_dscoutrosafastamentos); //usei essas 3 formas que achei
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace("\r", " ", $oDadosAfast->si199_dscoutrosafastamentos); //na net pra tentar eliminar a quebra
-                $oDadosAfast->si199_dscoutrosafastamentos = preg_replace('/\s/', ' ', $oDadosAfast->si199_dscoutrosafastamentos);//de linha, mas atÃ© o momento sem sucesso :/
+                $oDadosAfast->si199_dscoutrosafastamentos = preg_replace('/\s/', ' ', $oDadosAfast->si199_dscoutrosafastamentos);//de linha, mas até o momento sem sucesso :/
 
                 $clafast->si199_dscoutrosafastamentos = '';
 
@@ -375,7 +379,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
                 if ( pg_num_rows($rsResult20) > 0 ) {
 
-                    $clafast = new cl_afast202020();
+                    $clafast = new cl_afast202021();
 
                     $clafast->si200_tiporegistro = 20;
                     $clafast->si200_codvinculopessoa = $oDadosAfast20->si199_codvinculopessoa;
@@ -445,7 +449,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
                 $aRegistros30[] = $oDados->si201_codvinculopessoa;
                 
-                $clafast = new cl_afast302020();
+                $clafast = new cl_afast302021();
 
                 $clafast->si201_tiporegistro = 30;
                 $clafast->si201_codvinculopessoa = $oDados->si201_codvinculopessoa;

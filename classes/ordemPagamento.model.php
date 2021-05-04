@@ -1361,7 +1361,7 @@ class ordemPagamento {
    * faz um estorno de liquidacao, e uma anulacao.
    * @param float $nValor valor a descontar;
    */
-  function desconto($oNota, $nValor, $sMotivo = '') {
+  function desconto($oNota, $nValor, $sMotivo = '', $sAto = '', $dtAto = '') {
 
     $oDadosOrdem = $this->getDadosOrdem();
 
@@ -1822,6 +1822,8 @@ class ordemPagamento {
     /*OC 4401*/
     $clempanulado->e94_id_usuario     = db_getsession("DB_id_usuario");
     /*Fim - OC 4401*/
+    $clempanulado->e94_ato            = $sAto;
+    $clempanulado->e94_dataato        = $dtAto;
     $clempanulado->incluir(null);
 
     if ($clempanulado->erro_status == 0) {

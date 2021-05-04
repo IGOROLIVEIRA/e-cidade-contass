@@ -805,7 +805,7 @@ class MSCEncerramento {
                             INNER JOIN db_config ON codigo = r.c61_instit
                             INNER JOIN contacorrentedetalhe ON c19_conplanoreduzanousu = c61_anousu AND c19_reduz = c61_reduz
                             LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
-                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
+                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
                             LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
                             LEFT JOIN natdespmsc ON (substr(c19_estrutural,2,8), p.c60_anousu) = (c212_natdespestrut, c212_anousu)
                         WHERE {$this->getTipoMatriz()} c60_infcompmsc = 6 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
@@ -911,7 +911,7 @@ class MSCEncerramento {
                             LEFT JOIN orcelemento ON o56_codele = e64_codele AND o56_anousu = e60_anousu
                             LEFT JOIN elemdespmsc ON (substr(o56_elemento,2,8), o56_anousu) = (c211_elemdespestrut, c211_anousu)
                             LEFT outer JOIN consistema ON c60_codsis = c52_codsis
-                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
+                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
                             LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
                         WHERE {$this->getTipoMatriz()} c19_contacorrente = 102 AND c60_infcompmsc = 7 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
                         ORDER BY p.c60_estrut
@@ -1014,7 +1014,7 @@ class MSCEncerramento {
                             INNER JOIN orcdotacao ON c19_orcdotacao= o58_coddot AND o58_anousu=c19_orcdotacaoanousu
                             LEFT JOIN elemdespmsc ON  (substr(c19_estrutural,2,8), $iAno) = (c211_elemdespestrut, c211_anousu)
                             LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
-                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,2,8), $iAno) = (c210_pcaspestrut, c210_anousu)
+                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,1,9), $iAno) = (c210_pcaspestrut, c210_anousu)
                             LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
                             LEFT JOIN empempenho ON e60_numemp = c19_numemp
                         WHERE {$this->getTipoMatriz()} c19_contacorrente=101 AND c60_infcompmsc = 7 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
@@ -1175,7 +1175,7 @@ class MSCEncerramento {
                             INNER JOIN empempenho ON c19_numemp=e60_numemp
                             LEFT JOIN elemdespmsc ON (substr(c19_estrutural,2,8), c60_anousu) = (c211_elemdespestrut, c211_anousu)
                             LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
-                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
+                            LEFT JOIN vinculopcaspmsc ON (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
                             LEFT JOIN orctiporec ON o58_codigo = o15_codigo
                         WHERE {$this->getTipoMatriz()} c19_contacorrente=102 AND c60_infcompmsc = 9 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL
                         ORDER BY p.c60_estrut

@@ -35,6 +35,11 @@ $clempempenho->rotulo->label();
 $db_opcao_inf=1;
 ?>
 <center>
+<style type="text/css">
+    #data_ato{
+        width: 74px;
+    }
+</style>
   <form name='frmDesconto' id='frmDesconto' action="" method="POST">
     <table width='80%' cellspacing='0' style='padding:0px' border='0'>
       <tr><td  style='padding:0px' valign="top">
@@ -56,6 +61,20 @@ $db_opcao_inf=1;
                 <td nowrap ><? db_input('e60_coddot', 13, $Ie60_coddot, true, 'text', 3); ?></td>
                 <td><?=db_ancora($Lo15_codigo,"",3)?></td>
                 <td nowrap><? db_input('o15_codigo', 5, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 33, $Io15_descr, true, 'text', 3)?></td>
+              </tr>
+              <tr style="display:none;" id="trAto">
+                <td nowrap><b>Ato que autorizou o cancelamento: </b></td>
+                <td><? db_input('ato', 13, 'ato', true, 'text', 1, "","","","","20");?></td>
+              </tr>
+              <tr style="display:none;" id="trDtAto">
+                <td nowrap title="Data do ato">
+                    <b>Data do ato: </b>
+                </td>
+                <td nowrap>
+                    <?
+                    db_inputdata('data_ato',@$dataini_dia,@$data_ato_mes,@$data_ato_ano,true,'text',$db_opcao,"")
+                    ?>
+                </td>
               </tr>
               <tr>
                 <td colspan="4">
@@ -115,6 +134,7 @@ $db_opcao_inf=1;
    * Dados das notas e dos itens!
    */
   var aNotas = new Array();
+  var lRestoPagar = false;
 
   function js_pesquisa(){
 
@@ -179,6 +199,20 @@ $db_opcao_inf=1;
     $('saldo_dis').value  = js_formatar(oRetorno.e60_vlremp - oRetorno.e60_vlrpag - oRetorno.e60_vlranu,"f");
     saida                 = '';
     $('gridNotas').innerHTML  = '';
+
+    if (oRetorno.isRestoPagar) {
+
+        lRestoPagar = true;
+        document.getElementById('trAto').style.display      = '';
+        document.getElementById('trDtAto').style.display    = '';        
+
+    } else {
+
+        lRestoPagar = false;
+        document.getElementById('trAto').style.display      = 'none';
+        document.getElementById('trDtAto').style.display    = 'none';
+
+    }
 
 
     /**
@@ -557,6 +591,22 @@ $db_opcao_inf=1;
 
     }
 
+    if (lRestoPagar && $F('ato').trim() == '') {
+
+        alert('Preenchimento do ato da anulação é obrigatório.');
+        $('ato').focus();
+        return false;
+
+    }
+
+    if (lRestoPagar && $F('data_ato').trim() == '') {
+
+        alert('Preenchimento da data do ato da anulação é obrigatório.');
+        $('data_ato').focus();
+        return false;
+
+    }  
+
     sMsgConfirma  = 'A confirmação desta operação de desconto implicará em anulação do empenho neste valor.';
     sMsgConfirma += " Este processo é irreversível.\nVocê tem certeza que deseja prosseguir?";
     if (!confirm(sMsgConfirma)) {
@@ -573,6 +623,8 @@ $db_opcao_inf=1;
     oParam.exec     = "desconto";
     oParam.aNotas   = new Array();
     oParam.sMotivo  = encodeURIComponent(tagString($F('motivo')));
+    oParam.sAto     = $F('ato');
+    oParam.dtAto    = $F('data_ato');
     var lConfirmar  = false;
     var lRetencao   = false;
     sUrlRpc = "emp4_notaliquidacao.php";
@@ -714,6 +766,10 @@ $db_opcao_inf=1;
           ',scrollbars=1,location=0 ');
         jan.moveTo(0,0);
       }
+
+      document.getElementById('ato').value      = '';
+      document.getElementById('data_ato').value = '';
+
       js_consultaEmpenho($F('e60_numemp'));
     }
   }

@@ -199,7 +199,7 @@ switch($oParam->exec) {
       //echo ("<pre>".print_r($aCheques, 1)."</pre>"); die();
       
       db_fim_transacao(false);
-      $sMessage     = "cheques emitidos com sucesso";
+      $sMessage     = "Cheques emitidos com sucesso!";
       $iStatus      = 1;
       $aInfoCheques = $aCheques;
     }

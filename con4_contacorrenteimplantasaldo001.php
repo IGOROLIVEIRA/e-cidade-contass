@@ -873,8 +873,9 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         for (iLinha = 0; iLinha < iTotalLinhas; iLinha++) {
 
             nValorLinha = oGridDetalhamento.aRows[iLinha].aCells[3].getValue();
-
-            nTotal += parseFloat(nValorLinha).toFixed(2);
+            if (nValorLinha != '') {
+                nTotal += parseFloat(nValorLinha).toFixed(2);
+            }
         }
 
         $('TotalForCol3').innerHTML = js_formatar(parseFloat(Math.abs(nTotal)).toFixed(2), 'f');
@@ -1030,6 +1031,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
                 aRow[3].addEvent("onBlur", "qtditem" + iInd + ".sValue=this.value;");
                 //aRow[2].addEvent("onKeyPress"," return js_teclas(event,this); ");
                 aRow[3].addEvent("onChange", "js_somavalores();");
+                aRow[3].addEvent("onInput", "js_validavalores(this, 'Saldo a Implantar');");
 
                 oGridDetalhamento.addRow(aRow);
                 oGridDetalhamento.aRows[iInd].aCells[0].sEvents = "ondblclick='js_viewDetalhamentos(" + oDado.iCodigo + ");'";
@@ -1145,6 +1147,29 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     function js_escondeNovoDetalhamento() {
 
         $('windowNovoDetalhes').style.display = 'none';
+    }
+
+    function js_validavalores(obj, nome) {
+        
+        if ( js_countOccurs(obj.value, '.') > 1 ) {
+            obj.value = js_strToFloat(obj.value);
+        }
+
+        if( js_countOccurs(obj.value, ',') > 0 ) {
+            obj.value = obj.value.replace(',', '.');
+        }
+
+        var regDecimal = /^(-|)(|[0-9]+)(|(\.|,)(|[0-9]+))$/;
+
+        if ( !regDecimal.test(obj.value) ) {
+            obj.disabled = true;
+            alert( nome + " deve ser preenchido somente com nmeros decimais!" );
+            obj.disabled = false;
+            obj.value = '0';
+            obj.focus();
+            return false;
+        }
+
     }
     js_criaGridDetalhamento();
 

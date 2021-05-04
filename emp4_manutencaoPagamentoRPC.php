@@ -288,7 +288,14 @@ switch($oParam->exec) {
       $oAgenda->setOrdemConsultas("case when trim(a.z01_nome)   is not null then a.z01_nome   else cgm.z01_nome end");
     }
 
-    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere,$sJoin,$lTrazContasFornecedor , $lTrazContasRecurso,'',$oParam->params[0]->lVinculadas, $sCredorCgm);
+	$lContaUnicaFundeb = false;
+    $aParametrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_instit")));
+    
+	if (count($aParametrosCaixa) > 0) {
+      $lContaUnicaFundeb = $aParametrosCaixa[0]->k29_cotaunicafundeb == "t" ? true : false;
+    }
+
+    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere,$sJoin,$lTrazContasFornecedor , $lTrazContasRecurso,'',$oParam->params[0]->lVinculadas, $sCredorCgm, $lContaUnicaFundeb);
 
     if (!empty($oParam->params[0]->lTratarMovimentosConfigurados) && $oParam->params[0]->lTratarMovimentosConfigurados) {
 
@@ -351,6 +358,10 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+		  if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
+			$oTransferencia->setCheque($oMovimento->iCodCheque);
+		  }
+
           if ( $oTransferencia->getContaCredito() != "" ) {
               
               $oContaTesouraria = new contaTesouraria($oTransferencia->getContaCredito());
@@ -408,7 +419,7 @@ switch($oParam->exec) {
       foreach ($oParam->aMovimentos as $oMovimento) {
 
 
-        $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar);
+        $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar, $oParam->lEfetuarPagamento);
 
         if ( isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "" ) {
             
@@ -455,29 +466,45 @@ switch($oParam->exec) {
         }
       }
 
-      /*
-       * Se o usuario marcou a opcao para "Efetuar pagamento" o sistema gera pagamento sequingo a mesma logica
-       *   da rotina de pagamento de empenho por agenda (Caixa > Procedimentos > Agenda > Pgtos Empenho p/ Agenda )
-       */
-      if ($oParam->lEfetuarPagamento) {
-        foreach ($oParam->aMovimentos as $oMovimento) {
+		/*
+		* Se o usuario marcou a opcao para "Efetuar pagamento" o sistema gera pagamento seguindo a mesma logica
+		*   da rotina de pagamento de empenho por agenda (Caixa > Procedimentos > Agenda > Pgtos Empenho p/ Agenda )
+		*/
+      	if ($oParam->lEfetuarPagamento) {
 
-          $oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota);
-          $oOrdemPagamento->setCheque(null);
-          $oOrdemPagamento->setConta($oMovimento->iContaSaltes); // temos que verificar esses parametros
-          $oOrdemPagamento->setValorPago($oMovimento->nValor);
-          $oOrdemPagamento->setMovimentoAgenda($oMovimento->iCodMov);
-          $oOrdemPagamento->setHistorico('');
-          $oOrdemPagamento->pagarOrdem();
+			if ($iCodForma == 2 && $oMovimento->iCheque == '' && $oMovimento->iCodCheque == '') {
+				throw new Exception("ERRO [2] - Para efetuar o pagamento é necessário emitir o cheque.");
+			}
 
-          $oRetorno->iItipoAutent     = $oOrdemPagamento->oAutentica->k11_tipautent;
-          $c70_codlan                 = $oOrdemPagamento->iCodLanc;
-          $oAutentica                 = new stdClass();
-          $oAutentica->iNota          = $oMovimento->iCodNota;
-          $oAutentica->sAutentica     = $oOrdemPagamento->getRetornoautenticacao();
-          $oRetorno->aAutenticacoes[] = $oAutentica;
-        }
-      }
+			foreach ($oParam->aMovimentos as $oMovimento) {
+
+				$oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota);
+
+				if (isset($oMovimento->iCheque) && trim($oMovimento->iCheque) != '') {
+					$oOrdemPagamento->setCheque($oMovimento->iCheque);
+				} else {
+					$oOrdemPagamento->setCheque(null);
+				}
+				
+				if (isset($oMovimento->iCodCheque) && trim($oMovimento->iCodCheque) != '') {
+					$oOrdemPagamento->setChequeAgenda($oMovimento->iCodCheque);
+				}
+				
+				$oOrdemPagamento->setConta($oMovimento->iContaSaltes); // temos que verificar esses parametros
+				$oOrdemPagamento->setValorPago($oMovimento->nValor);
+				$oOrdemPagamento->setMovimentoAgenda($oMovimento->iCodMov);
+				$oOrdemPagamento->setHistorico('');
+				$oOrdemPagamento->pagarOrdem();
+
+				$oRetorno->iItipoAutent     = $oOrdemPagamento->oAutentica->k11_tipautent;
+				$c70_codlan                 = $oOrdemPagamento->iCodLanc;
+				$oAutentica                 = new stdClass();
+				$oAutentica->iNota          = $oMovimento->iCodNota;
+				$oAutentica->sAutentica     = $oOrdemPagamento->getRetornoautenticacao();
+				$oRetorno->aAutenticacoes[] = $oAutentica;
+
+			}
+      	}
 
       $oRetorno->iCodigoOrdemAuxiliar = $iCodigoOrdemAuxiliar;
       db_fim_transacao(false);
@@ -504,12 +531,15 @@ switch($oParam->exec) {
     $oAgenda = new agendaPagamento();
     $oAgenda->setUrlEncode(true);
     $sWhere  = " s.k17_instit = ".db_getsession("DB_instit");
-    $sWhere .= " and e91_codmov is null    ";
     $sWhere .= " and e81_cancelado is null ";
-    //$sWhere .= " and e90_codmov is null    ";
-    // alterada condicao do where vara ver o campo e90_cancelado = true, pois agora os registros da empageconfgera
-    // ao cancelar um arquivo, nao serão mais deletados
-    $sWhere .= " and (e90_cancelado is true or e90_cancelado is null)";
+    
+    if (!isset($oParam->params[0]->lBuscaCheque) && $oParam->params[0]->lBuscaCheque != 1) {
+
+      	$sWhere .= " and e91_codmov is null    ";
+    	$sWhere .= " and (e90_cancelado is true or e90_cancelado is null)";
+
+    }
+    
     $sWhere .= "and k17_situacao in(1,3)   ";
     if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim == "") {
       $sWhere .= " and s.k17_codigo = {$oParam->params[0]->iOrdemIni}";

@@ -323,6 +323,9 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
           Instituicao::COD_CLI_PMGRAOMOGOL,
           Instituicao::COD_CLI_SANTAFEMINAS,
           Instituicao::COD_CLI_SAOJOAOMISSOES,
+          Instituicao::COD_CLI_NOVAPORTEIRINHA,
+          Instituicao::COD_CLI_CURRAL_DE_DENTRO,
+          
       )
   )) {
 

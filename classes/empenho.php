@@ -6024,4 +6024,22 @@ class empenho {
       return true;
     }
   }
+
+    /**
+   * Verifica se o empenho está cadastrado como resto a pagar no ano corrente.
+   * @param integer $iNumEmp Código do empenho
+   * @return boolean;
+   */
+
+  function isRestoPagar(){
+
+    $oEmpResto  = db_utils::getDao("empresto", true);
+    $rsEmpResto = $oEmpResto->sql_record($oEmpResto->sql_query_empenho($this->iAnoUsu, $this->getEmpenho()));
+    if ($oEmpResto->numrows > 0 ) {
+      return true;
+    } else{
+      return false;
+    }
+
+  }
 }

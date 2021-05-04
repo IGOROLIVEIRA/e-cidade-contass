@@ -49,6 +49,7 @@ $clrotulo->label('k17_dtanu');
 $clrotulo->label('k18_motivo');
 $clrotulo->label('k17_motivoestorno');
 $clrotulo->label('k17_dtestorno');
+$clrotulo->label('e81_numdoc');
 
 $get = db_utils::postMemory($_GET);
 $sql = "         select slip.k17_codigo,
@@ -99,7 +100,8 @@ $rsSlip = $clslip->sql_record($sql);
 $oSlip = db_utils::fieldsMemory($rsSlip, 0);
 
 $sqlslipage = "select e81_codage,
-                    e91_cheque
+                    e91_cheque,
+                    e81_numdoc
                from empageslip
                     left join empagemov     on e89_codmov=e81_codmov
                     left join empageconfche on e91_codmov=e81_codmov and e91_ativo is true
@@ -181,7 +183,7 @@ if ( !empty($oFinalidadePagamento) ) {
 <center>
 <table>
 <tr>
-  <td><fieldset><legend><b>SLIP <?=$get->slip; ?></b></legend>
+  <td><fieldset style="width:850px"><legend><b>SLIP <?=$get->slip; ?></b></legend>
 	<table >
 	  <tr>
 		   <td>
@@ -190,46 +192,46 @@ if ( !empty($oFinalidadePagamento) ) {
 			 <td>
 			 <input type='text' value="<?=$oSlip->k17_codigo; ?>" size="10" readonly >
        </td>
-			 <td>
+			 <td style="width: 100px;">
 			 <strong>Situação:</strong>
        </td>
-			 <td><input type='text' value="<?=$oSlip->k17_situacao; ?>" size=42 readonly '></td>
+			 <td><input type='text' value="<?=$oSlip->k17_situacao; ?>" size=15 readonly '></td>
 		</tr>
 		<tr>
 		   <td>
          <?=$Lk17_debito; ?>
 			 </td>
-			 <td colspan=4>
+			 <td colspan=5>
 			 <input type='text' value="<?=$oSlip->k17_debito; ?>" size=10 readonly '>
 			 &nbsp;
-			 <input type='text' size=50 readonly value='<?=$oSlip->debito_descr; ?>' '>
+			 <input type='text' size=80 readonly value='<?=$oSlip->debito_descr; ?>' '>
        </td>
 	  </tr>
 	  <tr>
 		   <td>
          <b>CP/CA Débito:</b>
 			 </td>
-			 <td colspan=4>
+			 <td colspan=5>
 			 <input type='text' value="<?=$sCodigoCPDebito; ?>" size=10 readonly '>
 			 &nbsp;
-			 <input type='text' size=50 readonly value='<?=$sDescricaoCPDebito; ?>' '>
+			 <input type='text' size=80 readonly value='<?=$sDescricaoCPDebito; ?>' '>
        </td>
 	  </tr>
 		<tr>
 		   <td>
          <?=$Lk17_credito; ?>
 			 </td>
-			 <td colspan=4>
+			 <td colspan=5>
 			 <input type='text' value="<?=$oSlip->k17_credito; ?>" size=10 readonly '>
 			 &nbsp;
-			 <input type='text' size=50 readonly value='<?=$oSlip->credito_descr; ?>' '>
+			 <input type='text' size=80 readonly value='<?=$oSlip->credito_descr; ?>' '>
        </td>
 	  </tr>
 	  <tr>
 		   <td>
          <b>CP/CA Crédito:</b>
 			 </td>
-			 <td colspan=4>
+			 <td colspan=5>
 			 <input type='text' value="<?=$sCodigoCPCredito; ?>" size=10 readonly '>
 			 &nbsp;
 			 <input type='text' size=80 readonly value='<?=$sDescricaoCPCredito; ?>' '>
@@ -239,7 +241,7 @@ if ( !empty($oFinalidadePagamento) ) {
 		  <td>
         <b>Finalidade FUNDEB (Crédito):</b>
 			</td>
-			<td colspan=4>
+			<td colspan=5>
 			<input type='text' value="<?=$sCodigoFinalidadeFundeb; ?>" size=10 readonly '>
 			&nbsp;
 			<input type='text' size=80 readonly value='<?=$sDescricaoFinalidadeFundeb; ?>' '>
@@ -249,18 +251,18 @@ if ( !empty($oFinalidadePagamento) ) {
 		   <td>
          <?=$Lk17_hist; ?>
 			 </td>
-			 <td colspan=4>
+			 <td colspan=5>
 			 <input type='text' value="<?=$oSlip->k17_hist; ?>" size=10 readonly '>
 			 &nbsp;
-			 <input type='text' size=50 readonly value='<?=$oSlip->c50_descr; ?>' '>
+			 <input type='text' size=80 readonly value='<?=$oSlip->c50_descr; ?>' '>
        </td>
 			 </tr>
 		<tr>
 		   <td nowrap>
          <?=$Lz01_nome; ?>
 			 </td>
-			 <td colspan=4>
-			 <input type='text' value="<?= "{$oSlip->z01_numcgm} - {$oSlip->z01_nome}"; ?>" size=64 readonly '>
+			 <td colspan=5>
+			 <input type='text' value="<?= "{$oSlip->z01_numcgm} - {$oSlip->z01_nome}"; ?>" size=93 readonly '>
 			 <td>
 			 </tr>
 	       <tr>
@@ -273,9 +275,9 @@ if ( !empty($oFinalidadePagamento) ) {
 			 <td>
 			 <strong>Cheque:</strong>
        </td>
-			 <td><input type='text' value="<?=@$aSlip->e91_cheque; ?>" size=10 readonly '>
-		    <strong>Agenda:</strong>
-      <input type='text' size=6 readonly ' value=<?=@$aSlip->e81_codage; ?>>
+			 <td><input type='text' value="<?=@$aSlip->e91_cheque; ?>" size=15 readonly '></td>
+		    <td><strong>Agenda:</strong></td>
+      <td><input type='text' size=15 readonly ' value=<?=@$aSlip->e81_codage; ?>>
       <td>
 
     </tr>
@@ -283,22 +285,26 @@ if ( !empty($oFinalidadePagamento) ) {
     	<td><b>Data Emissao:</b></td>
       <td><input type='text' value="<?=db_formatar($oSlip->k17_data, "d"); ?>" size=10 readonly '>
       <td><b>Anulação:</b></td>
-      <td><input type='text' value="<?=db_formatar($oSlip->k17_dtanu, "d"); ?>" size=10 readonly '>
+      <td><input type='text' value="<?=db_formatar($oSlip->k17_dtanu, "d"); ?>" size=15 readonly '>
+      </td>
     </tr>
     
     
     <tr>
     	<td><strong>Processo Administrativo:</strong></td>
       <td><input type='text' value="<?=$oSlip->k145_numeroprocesso; ?>" size=10 readonly '>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
+      <td><?=$Le81_numdoc; ?></td>
+      <td><input type='text' value="<?=@$aSlip->e81_numdoc; ?>" size=15 readonly></td>
+	  
+      
+	  
     </tr>    
     
     <tr>
-		  <td valign="top" colspan="4">
+		  <td valign="top" colspan="6">
 		    <fieldset>
 		      <legend><b><?=$Lk17_texto; ?></b></legend>
-  		    <textarea style="width: 100%; height: 100px;" readonly><?= str_replace('\n', "\n", $oSlip->k17_texto); ?></textarea>
+  		    <textarea style="width: 100%; height: 60px;" readonly><?= str_replace('\n', "\n", $oSlip->k17_texto); ?></textarea>
 		    </fieldset>
 		  </td>
     </tr>
@@ -307,7 +313,7 @@ if ( !empty($oFinalidadePagamento) ) {
       <td valign="top" colspan=4>
         <fieldset>
           <legend><b><?=$Lk18_motivo; ?></b></legend>
-          <textarea style="width: 100%; height: 100px;" readonly><?=$oSlip->k18_motivo; ?></textarea>
+          <textarea style="width: 100%; height: 70px;" readonly><?=$oSlip->k18_motivo; ?></textarea>
         </fieldset>
       </td>
     </tr>
@@ -321,7 +327,7 @@ if ( !empty($oFinalidadePagamento) ) {
      	<td valign="top" colspan="4">
      	  <fieldset>
      	    <legend><b><?=$Lk17_motivoestorno; ?></b></legend>
-      		<textarea  style="width: 100%; height: 100px;" readonly><?= str_replace('\n', "\n", $oSlip->k17_motivoestorno); ?></textarea>
+      		<textarea  style="width: 100%; height: 70px;" readonly><?= str_replace('\n', "\n", $oSlip->k17_motivoestorno); ?></textarea>
      	  </fieldset>
    	  </td>
     </tr>
@@ -332,7 +338,7 @@ if ( !empty($oFinalidadePagamento) ) {
 </tr>
 </table>
 <center>
-  <fieldset style="width:890px">
+  <fieldset style="width:850px">
     <legend><b>Autenticações</b></legend>
     <div id="ctnGridAutenticacao">
     </div>
@@ -418,7 +424,7 @@ var aWidth   = new Array("10%", "10%", "10%", "10%%", "20%", "10%", "30%");
 
 var oGridAutenticacao          = new DBGrid('ctnGridAutenticacao');
 oGridAutenticacao.nameInstance = 'oGridAutenticacao';
-oGridAutenticacao.setHeight(200);
+oGridAutenticacao.setHeight(80);
 oGridAutenticacao.setHeader(aHeaders);
 oGridAutenticacao.setCellWidth(aWidth);
 oGridAutenticacao.setCellAlign(aAlign);
