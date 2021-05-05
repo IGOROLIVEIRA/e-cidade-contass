@@ -647,16 +647,17 @@ class cl_placaixa {
   }
   function sql_exluir_autenticacao($k80_codpla = null){
     $sql = "create temp table w_planilhas on commit drop as
-                  select c86_id,c86_data,c86_autent, c86_conlancam
+                  select k12_id,k12_data,k12_autent, c86_conlancam
                  from placaixarec 
            inner join corplacaixa on k82_seqpla = k81_seqpla 
-           inner join conlancamcorrente  on c86_data = k82_data and c86_autent = k82_autent and c86_id = k82_id
+           left join corrente  on k12_data = k82_data and k12_autent = k82_autent and k12_id = k82_id
+           left join conlancamcorrente  on c86_data = k82_data and c86_autent = k82_autent and c86_id = k82_id
                 where k81_codpla = {$k80_codpla};
           update placaixa set k80_dtaut = null where k80_codpla in (select k81_codpla 
                             from placaixarec 
                             join corplacaixa on k82_seqpla = k81_seqpla 
-                            join w_planilhas on c86_id = k82_id 
-                             and c86_data = k82_data and c86_autent = k82_autent);
+                            join w_planilhas on k12_id = k82_id 
+                             and k12_data = k82_data and k12_autent = k82_autent);
           delete from conlancamcorgrupocorrente where c23_conlancam in (select c86_conlancam from w_planilhas);
           delete from conlancamcgm   where c76_codlan in (select c86_conlancam from w_planilhas);
           delete from conlancamrec   where c74_codlan in (select c86_conlancam from w_planilhas);
@@ -676,34 +677,34 @@ class cl_placaixa {
           delete from conlancam               where c70_codlan in (select c86_conlancam from w_planilhas);
           delete from corgrupocorrente
                 using w_planilhas 
-                where corgrupocorrente.k105_id = w_planilhas.c86_id 
-                  and corgrupocorrente.k105_data = w_planilhas.c86_data 
-                  and corgrupocorrente.k105_autent = w_planilhas.c86_autent;
+                where corgrupocorrente.k105_id = w_planilhas.k12_id 
+                  and corgrupocorrente.k105_data = w_planilhas.k12_data 
+                  and corgrupocorrente.k105_autent = w_planilhas.k12_autent;
           delete from corautent
                 using w_planilhas 
-                where corautent.k12_id = w_planilhas.c86_id 
-                  and corautent.k12_data = w_planilhas.c86_data 
-                  and corautent.k12_autent = w_planilhas.c86_autent;
+                where corautent.k12_id = w_planilhas.k12_id 
+                  and corautent.k12_data = w_planilhas.k12_data 
+                  and corautent.k12_autent = w_planilhas.k12_autent;
           delete from cornump 
                 using w_planilhas
-                where cornump.k12_id = w_planilhas.c86_id
-                  and cornump.k12_data = w_planilhas.c86_data 
-                  and cornump.k12_autent = w_planilhas.c86_autent;
+                where cornump.k12_id = w_planilhas.k12_id
+                  and cornump.k12_data = w_planilhas.k12_data 
+                  and cornump.k12_autent = w_planilhas.k12_autent;
           delete from corplacaixa
                 using w_planilhas
-                where corplacaixa.k82_id = w_planilhas.c86_id 
-                  and corplacaixa.k82_data = w_planilhas.c86_data 
-                  and corplacaixa.k82_autent = w_planilhas.c86_autent;
+                where corplacaixa.k82_id = w_planilhas.k12_id 
+                  and corplacaixa.k82_data = w_planilhas.k12_data 
+                  and corplacaixa.k82_autent = w_planilhas.k12_autent;
           delete from corhist
                 using w_planilhas 
-                where corhist.k12_id = w_planilhas.c86_id 
-                  and corhist.k12_data = w_planilhas.c86_data 
-                  and corhist.k12_autent = w_planilhas.c86_autent;
+                where corhist.k12_id = w_planilhas.k12_id 
+                  and corhist.k12_data = w_planilhas.k12_data 
+                  and corhist.k12_autent = w_planilhas.k12_autent;
           delete from corrente 
                 using w_planilhas
-                where corrente.k12_id = w_planilhas.c86_id
-                  and corrente.k12_data = w_planilhas.c86_data 
-                  and corrente.k12_autent = w_planilhas.c86_autent; ";
+                where corrente.k12_id = w_planilhas.k12_id
+                  and corrente.k12_data = w_planilhas.k12_data 
+                  and corrente.k12_autent = w_planilhas.k12_autent; ";
       $result = db_query($sql);
       if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());

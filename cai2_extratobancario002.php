@@ -66,6 +66,9 @@ $sql ="	    select   k13_reduz,
                      c60_estrut,
                      c60_codsis,
 	                   c63_conta,
+                       c63_dvconta,
+                       c63_agencia,
+                       c63_dvagencia,
 	                   substr(fc_saltessaldo,2,13)::float8 as anterior,
 	                   substr(fc_saltessaldo,15,13)::float8 as debitado ,
 	                   substr(fc_saltessaldo,28,13)::float8 as creditado,
@@ -77,6 +80,9 @@ $sql ="	    select   k13_reduz,
 	                         c60_estrut,
 		                       c60_codsis,
 		                       c63_conta,
+                               c63_dvconta,
+                               c63_agencia,
+                               c63_dvagencia,
 	                         fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',null," . db_getsession("DB_instit") . ")
 	                  from   saltes
 	                         inner join conplanoexe   on k13_reduz = c62_reduz
@@ -124,6 +130,8 @@ for($linha=0;$linha<$numrows;$linha++){
 	// escreve a conta e a descrição + saldo inicial
 	$aContas[$k13_reduz]->k13_reduz = $k13_reduz;
 	$aContas[$k13_reduz]->k13_descr = $k13_descr;
+    $aContas[$k13_reduz]->c63_conta = $c63_conta.'-'.$c63_dvconta;
+    $aContas[$k13_reduz]->c63_agencia = $c63_agencia.'-'.$c63_dvagencia;
 	$aContas[$k13_reduz]->k13_dtimplantacao = $k13_dtimplantacao;
 
 	// para contas bancárias, saldo positivo = debito, negativos indica debito
@@ -142,18 +150,22 @@ for($linha=0;$linha<$numrows;$linha++){
   /* empenhos- despesa orçamentaria */
   /*   EMPENHO */
 
-  select
+  select distinct
         corrente.k12_id as caixa,
         corrente.k12_data as data,
-		    0 as valor_debito,
-		    corrente.k12_valor as valor_credito,
-	      'Pgto. Emp. '||e60_codemp||'/'||e60_anousu::text||' OP: '||coremp.k12_codord::text as tipo_movimentacao,
+		0 as valor_debito,
+		corrente.k12_valor as valor_credito,
+	    'Pgto. Emp. '||e60_codemp||'/'||e60_anousu::text||' OP: '||coremp.k12_codord::text as tipo_movimentacao,
         e60_codemp||'/'||e60_anousu::text as codigo,
         'empenho'::text as tipo,
         0 as receita,
-		    null::text as receita_descr,
-		    corhist.k12_histcor::text as historico,
-		    coremp.k12_cheque::text as cheque,
+		null::text as receita_descr,
+		corhist.k12_histcor::text as historico,
+		case 
+            when e86_cheque is not null and e86_cheque <> '0' then 'CHE '||e86_cheque::text
+            when coremp.k12_cheque = 0 then e81_numdoc::text 
+            else 'CHE '||coremp.k12_cheque::text 
+            end as numdoc,
 		    null::text as contrapartida,
 		    coremp.k12_codord as ordem,
 		    z01_nome::text as credor,
@@ -170,16 +182,16 @@ for($linha=0;$linha<$numrows;$linha++){
                                                            and coremp.k12_autent = corrente.k12_autent
       inner join empempenho on e60_numemp = coremp.k12_empen
       inner join cgm on z01_numcgm = e60_numcgm
-		    /*
-		      se habilitar o left abaixo e o empenho tiver mais de um cheque os registros ficam duplicados
-		      left join empord on e82_codord = coremp.k12_codord
-		     left join empageconfche on e91_codcheque = e82_codmov
-		   */
+	  left join empord on e82_codord = coremp.k12_codord
+	  left join empageconfche on e91_codcheque = e82_codmov
 	    left join corhist on  corhist.k12_id     = corrente.k12_id    and corhist.k12_data   = corrente.k12_data  and
 					                                                              corhist.k12_autent = corrente.k12_autent
       left join corautent	on corautent.k12_id     = corrente.k12_id   and corautent.k12_data   = corrente.k12_data
 							                                                        and corautent.k12_autent = corrente.k12_autent
       left join corgrupocorrente on corrente.k12_data = k105_data and corrente.k12_id = k105_id and corrente.k12_autent = k105_autent
+	  left join corempagemov 	on corempagemov.k12_data = coremp.k12_data and corempagemov.k12_id = coremp.k12_id and corempagemov.k12_autent = coremp.k12_autent
+	  left join empagemov       on k12_codmov  = e81_codmov
+      left join empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
  where corrente.k12_conta = $k13_reduz  and corrente.k12_data between '".$datai."'
                                         and '".$dataf."'
                                         and corrente.k12_instit = ".db_getsession("DB_instit")."
@@ -201,7 +213,7 @@ for($linha=0;$linha<$numrows;$linha++){
 		   receita,
        receita_descr,
 		   historico,
-		   cheque,
+		   numdoc,
 		   contrapartida,
        ordem,
 		   credor,
@@ -225,7 +237,7 @@ for($linha=0;$linha<$numrows;$linha++){
 		               receita,
                    receita_descr::text,
 		               historico::text,
-		               cheque::text,
+		               numdoc::text,
 		               null::text as contrapartida,
 		               ordem,
 		               credor::text,
@@ -243,7 +255,7 @@ for($linha=0;$linha<$numrows;$linha++){
 		                    cornump.k12_receit as receita,
 			                  tabrec.k02_drecei::text as receita_descr,
 			                  (coalesce(corhist.k12_histcor,'.'))::text as historico,
-			                  null::text as cheque,
+			                  null::text as numdoc,
 			                  null::text as contrapartida,
 			                  e20_pagordem as ordem,
 		                   (select z01_nome::text from arrepaga inner join cgm on z01_numcgm = k00_numcgm where k00_numpre=cornump.k12_numpre limit 1 ) as credor,			  k12_codautent
@@ -281,7 +293,7 @@ for($linha=0;$linha<$numrows;$linha++){
 			   receita,
                receita_descr,
 			   historico,
-			   cheque,
+			   numdoc,
 			   contrapartida,
 			   ordem,
 			   credor,
@@ -303,7 +315,7 @@ union all
 		         receita,
 		         receita_descr,
 		         historico,
-		         cheque,
+		         numdoc,
              contrapartida,
 		         ordem,
 		         credor,
@@ -327,7 +339,7 @@ union all
 		               receita,
 		               receita_descr::text,
 		               historico::text,
-		               cheque::text,
+		               numdoc::text,
 		               null::text as contrapartida,
 		               ordem,
 		               credor::text	,
@@ -345,7 +357,7 @@ union all
 		   	                 k81_receita as receita,
                          tabrec.k02_drecei as receita_descr,
 		                     (coalesce(placaixarec.k81_obs,'.'))::text as historico,
-		                     null::text as cheque,
+		                     null::text as numdoc,
 			                   null::text as contrapartida,
 		                     0 as ordem,
 			                   null::text as credor ,
@@ -377,7 +389,7 @@ union all
 			     receita,
 			     receita_descr,
 			     historico,
-           cheque,
+           numdoc,
 	         contrapartida,
 			     ordem,
 			     credor,
@@ -399,7 +411,7 @@ union all
 		         receita,
              receita_descr,
 		         historico,
-		         cheque,
+		         numdoc,
 		         contrapartida,
              ordem,
 		         credor,
@@ -423,7 +435,7 @@ union all
 		              receita,
                   receita_descr::text,
 		              historico::text,
-		              cheque::text,
+		              numdoc::text,
 		              null::text as contrapartida,
 		              ordem,
 		              credor::text,
@@ -444,7 +456,7 @@ union all
 		                    cornump.k12_receit as receita,
 		                    tabrec.k02_drecei::text as receita_descr,
 		                    (coalesce(corhist.k12_histcor,'.'))::text as historico,
-		                    null::text as cheque,
+		                    null::text as numdoc,
 		                    null::text as contrapartida,
 			                  0 as ordem,
 			                  disarq.codret as codret,
@@ -494,7 +506,7 @@ union all
 			         receita,
                receita_descr,
 			         historico,
-			         cheque,
+			         numdoc,
 			         contrapartida,
 			         ordem,
 			         credor,
@@ -519,7 +531,7 @@ union all
        0 as receita,
        null::text as receita_descr,
        historico,
-       cheque,
+       numdoc,
        contrapartida,
        ordem,
        credor,
@@ -539,7 +551,7 @@ select caixa,
        codigo,
        tipo,
        historico,
-       cheque,
+       numdoc,
        contrapartida,
        ordem,
        credor,
@@ -551,7 +563,7 @@ select caixa,
 	    codigo,
 		tipo,
 		historico,
-		cheque,
+		numdoc,
 		contrapartida,
 		ordem,
 		credor,
@@ -574,7 +586,7 @@ select caixa,
 		   0 as receita,
            null::text as receita_descr,
 		   slip.k17_texto::text as historico,
-		   e91_cheque::text as cheque,
+		   case when e91_cheque is null then e81_numdoc::text else 'CHE '||e91_cheque::text end as numdoc,
            k17_debito||' - '||c60_descr as contrapartida,
 		   0 as ordem,
 		   z01_nome::text as credor,
@@ -614,6 +626,10 @@ select caixa,
 					left join corautent	on corautent.k12_id     = corrente.k12_id
 									and corautent.k12_data   = corrente.k12_data
 									and corautent.k12_autent = corrente.k12_autent
+					left join corempagemov on corempagemov.k12_data = corautent.k12_data
+										   and corempagemov.k12_id = corautent.k12_id
+										   and corempagemov.k12_autent = corautent.k12_autent
+					left join empagemov on corempagemov.k12_codmov = e81_codmov
 			     where corlanc.k12_conta = $k13_reduz  and
 	           corlanc.k12_data between '".$datai."'  and '".$dataf."'
 
@@ -631,7 +647,7 @@ select caixa,
 		   0 as receita,
 		   null::text as receita_descr,
 		   slip.k17_texto::text as historico,
-		   e91_cheque::text as cheque,
+		   case when e91_cheque is null then e81_numdoc::text else 'CHE '||e91_cheque::text end as numdoc,
 		   k17_debito||' - '||c60_descr as contrapartida,
 		   0 as ordem,
 		   z01_nome::text as credor,
@@ -668,6 +684,8 @@ select caixa,
               left join corautent	on corautent.k12_id     = corrente.k12_id
 									and corautent.k12_data   = corrente.k12_data
 									and corautent.k12_autent = corrente.k12_autent
+			  left join empageslip  on empageslip.e89_codigo = slip.k17_codigo
+    		  left join empagemov   on e89_codmov=e81_codmov
 	     where corrente.k12_conta = $k13_reduz  and
 	           corrente.k12_data between '".$datai."'  and '".$dataf."'
 
@@ -684,7 +702,8 @@ select caixa,
 	$sqltotal = $sqlempenho." union all ".$sqlanalitico.$sqlslip;
 	//die($sqltotal);
 	$resmovimentacao = db_query($sqltotal);
-	//db_criatabela($resmovimentacao);exit;
+	// echo $sqltotal;
+	// db_criatabela($resmovimentacao);exit;
 	$quebra_data = '';
 	$saldo_dia_final   = $anterior;
 
@@ -774,7 +793,7 @@ select caixa,
 				$oMovimentacao->empenho		= "";
 				$oMovimentacao->ordem 		= $ordem;
 			}
-			$oMovimentacao->cheque 			= $cheque;
+			$oMovimentacao->numdoc 			= $numdoc;
 
 			if($tipo=='slip'){
 				//$pdf->Cell(15,$alt,$codigo,0,0,"C",0);
@@ -932,7 +951,7 @@ if($agrupapor != 1 || $receitaspor == 2 ){
 						$aMovimentacao[$chave]->planilha				= "";
 						$aMovimentacao[$chave]->empenho					= "";
 						$aMovimentacao[$chave]->ordem						= "";
-						$aMovimentacao[$chave]->cheque					= "";
+						$aMovimentacao[$chave]->numdoc					= "";
 						$aMovimentacao[$chave]->slip						= "";
 						$aMovimentacao[$chave]->contrapartida		= "Baixa Bancária ref Arquivo ";
 						$aMovimentacao[$chave]->contrapartida  .= $oMovimento->arqret.", do dia ";
@@ -975,7 +994,7 @@ if($agrupapor != 1 || $receitaspor == 2 ){
 							$aMovimentacao[$chave]->planilha				= "";
 							$aMovimentacao[$chave]->empenho					= "";
 							$aMovimentacao[$chave]->ordem						= "";
-							$aMovimentacao[$chave]->cheque					= "";
+							$aMovimentacao[$chave]->numdoc					= "";
 							$aMovimentacao[$chave]->slip						= "";
 							$aMovimentacao[$chave]->contrapartida		= $oMovimento->contrapartida;
 							$aMovimentacao[$chave]->credor					= "";
@@ -1009,7 +1028,7 @@ if($agrupapor != 1 || $receitaspor == 2 ){
 						$aMovimentacao[$chave]->planilha				= "";
 						//$aMovimentacao[$chave]->empenho					= "";
 						$aMovimentacao[$chave]->ordem						= "";
-						$aMovimentacao[$chave]->cheque					= "";
+						$aMovimentacao[$chave]->numdoc					= "";
 						$aMovimentacao[$chave]->slip						= "";
 						$aMovimentacao[$chave]->contrapartida		= $oMovimento->credor;
 						$aMovimentacao[$chave]->credor					= "";
@@ -1084,7 +1103,7 @@ if($agrupapor != 1 || $receitaspor == 2 ){
 								$aMovimentacao[$chave]->planilha				= "";
 								//$aMovimentacao[$chave]->empenho					= "";
 								//$aMovimentacao[$chave]->ordem						= "";
-								$aMovimentacao[$chave]->cheque					= "";
+								$aMovimentacao[$chave]->numdoc					= "";
 								$aMovimentacao[$chave]->slip						= "";
 								$aMovimentacao[$chave]->contrapartida		= $oMovimento->credor;
 								$aMovimentacao[$chave]->credor					= "";
@@ -1255,6 +1274,23 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 
 	}
 	$aContas = $aContasNovas;
+} else if ($agrupapor == 1 && $pagempenhos == 1 ){
+
+    foreach ($aContas as $key2=>$oConta){
+		$aContasNovas[$key2] = $oConta;
+		foreach ($oConta->data as $key1=>$oData){
+
+			foreach ($oData->movimentacoes as $oMovimento){
+
+                if($oMovimento->tipo == "empenho" && $oMovimento->empenho != ""){
+                    $oMovimento->contrapartida = $oMovimento->codigocredor." - ".$oMovimento->credor;
+                }
+
+            }
+
+        }
+
+    }
 }
 
 
@@ -1273,8 +1309,6 @@ if($imprime_pdf == 'p'){
 	$pdf->AutoPageBreak = false;
 	$pdf->AddPage("L");
 
-
-	//imprimeConta($pdf,$aContas[4826]->k13_reduz,$aContas[4826]->k13_descr,$aContas[4826]->debito,$aContas[4826]->credito);
 	$quebra_data = "";
 	$lQuebra_Historico = false;
 	foreach ($aContas as $oConta) {
@@ -1284,9 +1318,7 @@ if($imprime_pdf == 'p'){
 			$pdf->AddPage("L");
 		}
 
-		//imprimeTotalMovConta($pdf,$oConta->debitado,$oConta->creditado,$oConta->atual);
-
-		imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr, $oConta->k13_dtimplantacao, $oConta->debito,$oConta->credito,$lImprimeSaldo);
+		imprimeConta($pdf,$oConta,$lImprimeSaldo);
 		$lImprimeSaldo = false;
 		imprimeCabecalho($pdf);
 
@@ -1310,7 +1342,7 @@ if($imprime_pdf == 'p'){
 
 						$pdf->AddPage("L");
 
-						imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 						imprimeCabecalho($pdf);
 
 					}
@@ -1318,7 +1350,7 @@ if($imprime_pdf == 'p'){
 
 
 					if($lQuebra_Historico){
-						imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 						imprimeCabecalho($pdf);
 						$lQuebra_Historico = false;
 					}
@@ -1328,7 +1360,7 @@ if($imprime_pdf == 'p'){
 					$pdf->Cell(25,5,$oMovimento->planilha			,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->empenho			,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->ordem 	== "0" ? "" : $oMovimento->ordem,"T",0,"C",0);
-					$pdf->Cell(25,5,$oMovimento->cheque == "0" ? ""	: $oMovimento->cheque,"T",0,"C",0);
+					$pdf->Cell(25,5,$oMovimento->numdoc == "0" ? ""	: $oMovimento->numdoc,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->slip					,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->valor_debito == 0	? "" : db_formatar($oMovimento->valor_debito,"f")	,"T",0,"R",0);
 					$pdf->Cell(25,5,$oMovimento->valor_credito == 0	? "" : db_formatar($oMovimento->valor_credito,"f")	,"T",0,"R",0);
@@ -1341,7 +1373,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 								imprimeCabecalho($pdf);
 
 							}
@@ -1353,7 +1385,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 								imprimeCabecalho($pdf);
 
 							}
@@ -1366,7 +1398,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
 								imprimeCabecalho($pdf);
 
 							}
@@ -1427,7 +1459,7 @@ if($imprime_pdf == 'p'){
 	}
 
 
-
+    // die;
 	$pdf->Output();
 	exit();
 }else{
@@ -1484,7 +1516,7 @@ if($imprime_pdf == 'p'){
 				$aLinhaDados[2] = $oMovimento->planilha     ;
 				$aLinhaDados[3] = $oMovimento->empenho      ;
 				$aLinhaDados[4] = $oMovimento->ordem  == "0" ? "" : $oMovimento->ordem;
-				$aLinhaDados[5] = $oMovimento->cheque == "0" ? "" : $oMovimento->cheque;
+				$aLinhaDados[5] = $oMovimento->numdoc == "0" ? "" : $oMovimento->numdoc;
 				$aLinhaDados[6] = $oMovimento->slip         ;
 				$aLinhaDados[7] = $oMovimento->valor_debito == 0  ? "" : db_formatar($oMovimento->valor_debito,"f");
 				$aLinhaDados[8] = $oMovimento->valor_credito == 0 ? "" : db_formatar($oMovimento->valor_credito,"f");
@@ -1602,22 +1634,27 @@ if($imprime_pdf == 'p'){
 	exit();
 }
 
-function imprimeConta($pdf,$codigo,$descricao,$dtimplantacao,$debito,$credito,$lImprimeSaldo){
+// imprimeConta($pdf,$oConta->k13_reduz,$oConta->k13_descr,$oConta->k13_dtimplantacao,$oConta->debito,$oConta->credito,$lImprimeSaldo);
+// function imprimeConta($pdf,$codigo,$descricao,$dtimplantacao,$debito,$credito,$lImprimeSaldo){
+function imprimeConta($pdf,$oConta,$lImprimeSaldo){
 	$pdf->SetFont('Arial','b',8);
 	$pdf->Cell(12,5,"CONTA:"								,0,0,"L",0);
 	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(90,5,$codigo." - ".$descricao,0,0,"L",0);
-	$pdf->SetFont('Arial','b',8);
-
-	$pdf->Cell(72,5,"DATA IMPLANTAÇÃO DA CONTA NA TESOURARIA: " ,0,0,"L",0);
-	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(10,5,db_formatar($dtimplantacao,'d'),0,0,"L",0);
+	$pdf->Cell(95,5,$oConta->k13_reduz." - ".$oConta->k13_descr,0,0,"L",0);
+    $pdf->SetFont('Arial','b',8);
+    $pdf->Cell(10,5,"Nº:"								,0,0,"L",0);
+    $pdf->SetFont('Arial','',8);
+    $pdf->Cell(15,5,$oConta->c63_conta,0,0,"L",0);
+    $pdf->SetFont('Arial','b',8);
+    $pdf->Cell(10,5,"AG:"								,0,0,"L",0);
+    $pdf->SetFont('Arial','',8);
+    $pdf->Cell(15,5,$oConta->c63_agencia,0,0,"L",0);
 	$pdf->SetFont('Arial','b',8);
 
 	if($lImprimeSaldo){
-		$pdf->Cell(40,5,"SALDO ANTERIOR:"				,0,0,"R",0);
-		$pdf->Cell(25,5,$debito  == 0 ? "" : db_formatar($debito,'f')	,0,0,"R",0);
-		$pdf->Cell(25,5,$credito == 0 ? "" : db_formatar($credito,'f'),0,0,"R",0);
+		$pdf->Cell(73,5,"SALDO ANTERIOR:"				,0,0,"R",0);
+		$pdf->Cell(25,5,$oConta->debito  == 0 ? "" : db_formatar($oConta->debito,'f')	,0,0,"R",0);
+		$pdf->Cell(25,5,$oConta->credito == 0 ? "" : db_formatar($oConta->credito,'f'),0,0,"R",0);
 	}
 	$pdf->ln();
 	$pdf->SetFont('Arial','',7);
@@ -1630,7 +1667,7 @@ function imprimeCabecalho($pdf){
 	$pdf->Cell(25,5,"PLANILHA"			,"TL",0,"C",1);
 	$pdf->Cell(25,5,"EMPENHO"			,"TL",0,"C",1);
 	$pdf->Cell(25,5,"ORDEM"					,"TL",0,"C",1);
-	$pdf->Cell(25,5,"CHEQUE"				,"TL",0,"C",1);
+	$pdf->Cell(25,5,"Nº DOCUMENTO"				,"TL",0,"C",1);
 	$pdf->Cell(25,5,"SLIP"					,"TL",0,"C",1);
 	$pdf->Cell(25,5,"DÉBITO"				,"TL",0,"C",1);
 	$pdf->Cell(25,5,"CRÉDITO"				,"TL",0,"C",1);
@@ -1714,7 +1751,7 @@ function imprimeCabecalhoTxt($fp){
 	$aLinhaCabecalho[2]  = "PLANILHA";
 	$aLinhaCabecalho[3]  = "EMPENHO";
 	$aLinhaCabecalho[4]  = "ORDEM";
-	$aLinhaCabecalho[5]  = "CHEQUE";
+	$aLinhaCabecalho[5]  = "Nº DOCUMENTO";
 	$aLinhaCabecalho[6]  = "SLIP";
 	$aLinhaCabecalho[7]  = "DÉBITO";
 	$aLinhaCabecalho[8]  = "CRÉDITO";

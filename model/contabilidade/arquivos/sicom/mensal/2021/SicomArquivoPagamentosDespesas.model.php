@@ -383,7 +383,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                 ELSE e96_descr
                             END desctipodocumentoop,
                             c23_conlancam AS codlan,
-                            e81_codmov
+                            e81_codmov,
+                            e81_numdoc
                      FROM empagemov
                      INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
                      INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
@@ -564,13 +565,19 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_tiporegistro = $reg12->tiporegistro;
             $clops12->si134_codreduzidoop = $reg11->codreduzidoop;
             $clops12->si134_tipodocumentoop = $reg12->tipodocumentoop;
-            $clops12->si134_nrodocumento = $reg12->nrodocumento;
+            $clops12->si134_nrodocumento = ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') ? ' ' : $reg12->nrodocumento;
             $clops12->si134_codctb = $ContaPag;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
             if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
                 $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
             }
-            $clops12->si134_desctipodocumentoop = $reg12->tipodocumentoop == "99" ? "TED" : ' ';
+            if ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') {
+				$clops12->si134_desctipodocumentoop = $reg12->e81_numdoc;
+            } elseif ($reg12->tipodocumentoop == '99') {
+				$clops12->si134_desctipodocumentoop = 'TED';
+			} else {
+				$clops12->si134_desctipodocumentoop = ' ';
+			}            
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
             $clops12->si134_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -988,7 +995,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                              e50_data AS dtemissao,
                              k12_valor AS vldocumento,
                              c23_conlancam AS codlan,
-                             e81_codmov
+                             e81_codmov,
+                             e81_numdoc
                       FROM empagemov
                       INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
                       INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
@@ -1025,6 +1033,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                         AND e81_cancelado IS NULL";
 
           $rsPagOrd12 = db_query($sSql12) or die($sSql12);
+          $rsPagOrd12 = db_query($sSql12);
 
           $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
@@ -1173,13 +1182,19 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_tiporegistro = $reg12->tiporegistro;
             $clops12->si134_codreduzidoop = $reg11->codreduzidoop;
             $clops12->si134_tipodocumentoop = $reg12->tipodocumentoop;
-            $clops12->si134_nrodocumento = $reg12->nrodocumento;
+            $clops12->si134_nrodocumento = ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') ? ' ' : $reg12->nrodocumento;
             $clops12->si134_codctb = $ContaPag;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
             if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
                 $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
             }
-            $clops12->si134_desctipodocumentoop = $reg12->tipodocumentoop == "99" ? "TED" : ' ';
+			if ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') {
+				$clops12->si134_desctipodocumentoop = $reg12->e81_numdoc;
+            } elseif ($reg12->tipodocumentoop == '99') {
+				$clops12->si134_desctipodocumentoop = 'TED';
+			} else {
+				$clops12->si134_desctipodocumentoop = ' ';
+			}
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
             $clops12->si134_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
