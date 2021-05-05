@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -33,15 +35,15 @@ require_once(modification("model/configuracao/SkinService.service.php"));
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $cldb_versao = new cl_db_versao;
-$result      = $cldb_versao->sql_record($cldb_versao->sql_query(null,"db30_codversao,db30_codrelease","db30_codver desc limit 1"));
-db_criatabela($result);exit;
+$result      = $cldb_versao->sql_record($cldb_versao->sql_query(null, "db30_codversao,db30_codrelease", "db30_codver desc limit 1"));
+//db_criatabela($result);exit;
 
-if ( $cldb_versao->numrows == 0 ) {
+if ($cldb_versao->numrows == 0) {
 
   $db30_codversao  = "1";
   $db30_codrelease = "1";
 } else {
-  db_fieldsmemory($result,0);
+  db_fieldsmemory($result, 0);
 }
 
 /**
@@ -55,20 +57,21 @@ db_logsmanual_demais("Acesso Liberado ao sistema - Login: " . db_getsession("DB_
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <html>
-  <head>
-    <title>DBSeller Inform&aacute;tica Ltda - e-cidade</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0">
-    <meta name="ecidade:version" content="2.<?php echo "{$db30_codversao}.{$db30_codrelease}"; ?>" />
-    <script>
 
-      function js_fechaJanela() {
-        window.open('encerrar.php', '', 'width=400,height=400');
-      }
-    </script>
-  </head>
-  <?php
-    $oSkin = new SkinService();
-    include(modification( $oSkin->getPathFile("inicio.php")) );
-  ?>
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - e-cidade</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <meta name="ecidade:version" content="2.<?php echo "{$db30_codversao}.{$db30_codrelease}"; ?>" />
+  <script>
+    function js_fechaJanela() {
+      window.open('encerrar.php', '', 'width=400,height=400');
+    }
+  </script>
+</head>
+<?php
+$oSkin = new SkinService();
+include(modification($oSkin->getPathFile("inicio.php")));
+?>
+
 </html>

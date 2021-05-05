@@ -13,3 +13,120 @@
 [2018-02-22 15:23:50] ERROR: modification() - update file: libs/db_conn.php : Arquivo n�o existe: libs/db_conn.php
 [2018-02-22 15:24:01] ERROR: modification() - update file: libs/db_conn.php : Arquivo n�o existe: libs/db_conn.php
 [2018-02-22 15:24:06] ERROR: modification() - update file: libs/db_conn.php : Arquivo n�o existe: libs/db_conn.php
+[2021-05-05 14:06:51] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:06:59] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:01] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:01] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:01] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:01] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:01] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:01] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:02] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:02] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:02] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:11] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:13] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:53] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:53] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:54] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:54] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:07:55] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:04] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:06] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:24] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:35] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:37] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:37] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:37] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:37] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:37] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:37] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:38] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:38] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:08:38] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:29] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:15:40] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:17:26] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:18:02] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:04] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:33:09] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:20] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:41:23] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:13] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: inicio.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 14:52:16] ERROR: modification() - update file: libs/db_conecta.php : Não foi possível abrir o arquivo para escrita: /var/www/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2021-05-05 16:28:07] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c797efc09/user/dbseller/libs
+[2021-05-05 16:28:10] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79a78afd/user/dbseller/libs
+[2021-05-05 16:28:10] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79a7857c/user/dbseller/libs
+[2021-05-05 16:28:10] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79a7a57e/user/dbseller/libs
+[2021-05-05 16:28:10] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79a7bce1/user/dbseller/libs
+[2021-05-05 16:28:10] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79a7b173/user/dbseller/libs
+[2021-05-05 16:28:10] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79a84f0b/user/dbseller/skins/default/estilos
+[2021-05-05 16:28:10] ERROR: modification() - update file: inicio.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79ab17ef/user/dbseller
+[2021-05-05 16:28:10] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79ab323e/user/dbseller/libs
+[2021-05-05 16:28:10] ERROR: modification() - update file: libs/db_conecta.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c79ab9669/user/dbseller/libs
+[2021-05-05 16:29:20] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e0a9f54/user/dbseller/libs
+[2021-05-05 16:29:24] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e468e58/user/dbseller/libs
+[2021-05-05 16:29:24] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e4691a3/user/dbseller/libs
+[2021-05-05 16:29:24] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e46916d/user/dbseller/libs
+[2021-05-05 16:29:24] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e4688c3/user/dbseller/libs
+[2021-05-05 16:29:24] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e468e5f/user/dbseller/libs
+[2021-05-05 16:29:24] ERROR: modification() - update file: skins/default/estilos/estilos.css : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e47262d/user/dbseller/skins/default/estilos
+[2021-05-05 16:29:24] ERROR: modification() - update file: inicio.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e49c685/user/dbseller
+[2021-05-05 16:29:24] ERROR: modification() - update file: libs/db_stdlib.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e49ef26/user/dbseller/libs
+[2021-05-05 16:29:24] ERROR: modification() - update file: libs/db_conecta.php : Não foi possivel criar diretório de cache: /var/www/e-cidade/extension/modification/data/cache/parsing-6092c7e4a548c/user/dbseller/libs
