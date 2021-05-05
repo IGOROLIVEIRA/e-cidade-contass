@@ -176,15 +176,15 @@ class cl_licobras302021 {
             return false;
         }
 
-        if ($this->si203_dscalteracao == null ) {
-            $this->erro_sql = " Campo descricao alteracao não informado.";
-            $this->erro_campo = "si203_dscalteracao";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
+//        if ($this->si203_dscalteracao == null ) {
+//            $this->erro_sql = " Campo descricao alteracao não informado.";
+//            $this->erro_campo = "si203_dscalteracao";
+//            $this->erro_banco = "";
+//            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//            $this->erro_status = "0";
+//            return false;
+//        }
 
         if ($this->si203_novadatatermino == null ) {
             $this->erro_sql = " Campo nova data de termino não informado.";
@@ -207,13 +207,7 @@ class cl_licobras302021 {
         }
 
         if ($this->si203_valoraditivo == null ) {
-            $this->erro_sql = " Campo valor aditivo não informado.";
-            $this->erro_campo = "si203_valoraditivo";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->si203_valoraditivo = 0;
         }
 
         if ($this->si203_mes == null ) {
@@ -236,6 +230,7 @@ class cl_licobras302021 {
             return false;
         }
 
+
         $sql = "insert into licobras302021(
                                        si203_sequencial
                                       ,si203_tiporegistro
@@ -257,15 +252,15 @@ class cl_licobras302021 {
                                 $this->si203_sequencial
                                ,$this->si203_tiporegistro
                                ,'$this->si203_codorgaoresp'
-                               ,'$this->si203_codobra'
-                               ,$this->si203_codunidadesubrespestadual
-                               ,'$this->si203_nroseqtermoaditivo'
-                               ,$this->si203_dataassinaturatermoaditivo
-                               ,'$this->si203_tipoalteracaovalor'
+                               ,$this->si203_codobra
+                               ,'$this->si203_codunidadesubrespestadual'
+                               ,$this->si203_nroseqtermoaditivo
+                               ,'$this->si203_dataassinaturatermoaditivo'
+                               ,$this->si203_tipoalteracaovalor
                                ,'$this->si203_tipotermoaditivo'
-                               ,$this->si203_dscalteracao           
-                               ,$this->si203_novadatatermino     
-                               ,'$this->si203_tipodetalhamento'        
+                               ,'$this->si203_dscalteracao'           
+                               ,'$this->si203_novadatatermino'     
+                               ,$this->si203_tipodetalhamento        
                                ,$this->si203_valoraditivo            
                                ,$this->si203_mes
                                ,$this->si203_instit

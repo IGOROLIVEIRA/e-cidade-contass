@@ -21,9 +21,9 @@ class cl_exeobras102021 {
   public $si197_codorgao = null;
   public $si197_codunidadesub = null;
   public $si197_nrocontrato = 0;
-  public $si197_exerciciolicitacao = 0;
   public $si197_exerciciocontrato  = 0;
   public $si197_nroprocessolicitatorio  = null;
+  public $si197_exerciciolicitacao = 0;
   public $si197_nrolote  = null;
   public $si197_codobra = 0;
   public $si197_objeto = null;
@@ -37,7 +37,10 @@ class cl_exeobras102021 {
                  si197_codorgao = text = codorgaoresp
                  si197_codunidadesub = text = codUnidadeSubRespEstadual
                  si197_nrocontrato = int8 = nroContrato
-                 si197_exerciciolicitacao = int4 = exercicioLicitacao
+                 si197_exerciciocontrato = int4 = si197_exerciciocontrato
+                 si197_nroprocessolicitatorio = int4 = si197_nroprocessolicitatorio
+                 si197_exerciciolicitacao = int4 = si197_exerciciolicitacao
+                 si197_nrolote = int4 = numero do lote
                  si197_codobra = int8 = codigoobra
                  si197_objeto = text = objeto
                  si197_linkobra = text = linkobra
@@ -70,7 +73,10 @@ class cl_exeobras102021 {
       $this->si197_codorgao = ($this->si197_codorgao == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codorgao"]:$this->si197_codorgao);
       $this->si197_codunidadesub = ($this->si197_codunidadesub == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codunidadesub"]:$this->si197_codunidadesub);
       $this->si197_nrocontrato = ($this->si197_nrocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrocontrato"]:$this->si197_nrocontrato);
+      $this->si197_exerciciocontrato = ($this->si197_exerciciocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_exerciciocontrato"]:$this->si197_exerciciocontrato);
+      $this->si197_nroprocessolicitatorio = ($this->si197_nroprocessolicitatorio == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nroprocessolicitatorio"]:$this->si197_nroprocessolicitatorio);
       $this->si197_exerciciolicitacao = ($this->si197_exerciciolicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_exerciciolicitacao"]:$this->si197_exerciciolicitacao);
+      $this->si197_nrolote = ($this->si197_nrolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrolote"]:$this->si197_nrolote);
       $this->si197_codobra = ($this->si197_codobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codobra"]:$this->si197_codobra);
       $this->si197_objeto = ($this->si197_objeto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_objeto"]:$this->si197_objeto);
       $this->si197_linkobra = ($this->si197_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_linkobra"]:$this->si197_linkobra);
@@ -131,9 +137,36 @@ class cl_exeobras102021 {
       $this->erro_status = "0";
       return false;
     }
+    if ($this->si197_exerciciocontrato == null ) {
+      $this->erro_sql = " Campo exercicio do contrato não informado.";
+      $this->erro_campo = "si197_exerciciocontrato";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si197_nroprocessolicitatorio == null ) {
+      $this->erro_sql = " Campo numero processo licitatorio não informado.";
+      $this->erro_campo = "si197_nroprocessolicitatorio";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     if ($this->si197_exerciciolicitacao == null ) {
-      $this->erro_sql = " Campo exercicioLicitacao não informado.";
+      $this->erro_sql = " Campo exercicio da licitação não informado.";
       $this->erro_campo = "si197_exerciciolicitacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si197_nrolote == null ) {
+      $this->erro_sql = " Campo numero do lote não informado.";
+      $this->erro_campo = "si197_nrolote";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -191,7 +224,10 @@ class cl_exeobras102021 {
                                       ,si197_codorgao
                                       ,si197_codunidadesub
                                       ,si197_nrocontrato
+                                      ,si197_exerciciocontrato
                                       ,si197_exerciciolicitacao
+                                      ,si197_nroprocessolicitatorio
+                                      ,si197_nrolote
                                       ,si197_codobra
                                       ,si197_objeto
                                       ,si197_linkobra
@@ -204,7 +240,10 @@ class cl_exeobras102021 {
                                ,'$this->si197_codorgao'
                                ,'$this->si197_codunidadesub'
                                ,$this->si197_nrocontrato
+                               ,$this->si197_exerciciocontrato
                                ,$this->si197_exerciciolicitacao
+                               ,$this->si197_nroprocessolicitatorio
+                               ,$this->si197_nrolote
                                ,$this->si197_codobra
                                ,'$this->si197_objeto'
                                ,'$this->si197_linkobra'

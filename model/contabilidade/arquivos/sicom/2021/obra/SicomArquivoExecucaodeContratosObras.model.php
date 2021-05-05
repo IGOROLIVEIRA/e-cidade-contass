@@ -6,7 +6,7 @@ require_once("classes/db_exeobras102021_classe.php");
 require_once("classes/db_exeobras202021_classe.php");
 
 /**
- * Dados Cadastro de Reponsaveis Sicom Obras
+ * Execução dos Contratos de Obras e Serviços de Engenharia
  * @author Mario Junior
  * @package Obras
  */
@@ -117,13 +117,17 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
                AND db01_anousu=" . db_getsession("DB_anousu") . "
            LIMIT 1) AS si197_codunidadesub,
              ac16_numeroacordo AS si197_nrocontrato,
+             l20_processo as si197_nroprocessolicitatorio,
              l20_anousu as si197_exerciciolicitacao,
              ac16_anousu AS si197_exerciciocontrato,
              obr01_numeroobra AS si197_codobra,
              ac16_objeto AS si197_objeto,
-             obr01_linkobra AS si197_linkobra
+             obr01_linkobra AS si197_linkobra,
+             l04_codigo as si197_nrolote
       FROM acordo
       INNER JOIN liclicita ON l20_codigo = ac16_licitacao
+      inner join liclicitem on l21_codliclicita = l20_codigo
+      inner join liclicitemlote on l04_liclicitem = l21_codigo
       INNER JOIN licobras ON obr01_licitacao = l20_codigo
       INNER JOIN cflicita ON l20_codtipocom = l03_codigo
       INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -198,6 +202,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
            LIMIT 1) AS si204_codunidadesub,
              ac16_numeroacordo AS si204_nrocontrato,
              ac16_anousu AS si204_exerciciocontrato,
+             l20_anousu AS si204_exercicioprocesso,
              l20_edital as si204_nroprocesso,
              case when l03_pctipocompratribunal = 101 then 1
              when l03_pctipocompratribunal = 100 then 2
@@ -228,6 +233,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
             $clexeobras202021->si204_codunidadesub = $oDados20->si204_codunidadesub;
             $clexeobras202021->si204_nrocontrato = $oDados20->si204_nrocontrato;
             $clexeobras202021->si204_exerciciocontrato = $oDados20->si204_exerciciocontrato;
+            $clexeobras202021->si204_exercicioprocesso = $oDados20->si204_exercicioprocesso;
             $clexeobras202021->si204_nroprocesso = $oDados20->si204_nroprocesso;
             $clexeobras202021->si204_tipoprocesso = $oDados20->si204_tipoprocesso;
             $clexeobras202021->si204_codobra = $oDados20->si204_codobra;

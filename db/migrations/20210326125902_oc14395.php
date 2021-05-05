@@ -125,6 +125,15 @@ class Oc14395 extends AbstractMigration
             ALTER TABLE licobras302021
               OWNER TO dbportal;
             
+            -- cria sequencia da tabela
+            
+            CREATE SEQUENCE licobras302021_si203_sequencial_seq
+            INCREMENT 1
+            MINVALUE 1
+            MAXVALUE 9223372036854775807
+            START 1
+            CACHE 1;
+            
             
             -- Table: exeobras102020
             
@@ -165,6 +174,7 @@ class Oc14395 extends AbstractMigration
               si204_codunidadesub character varying(8),
               si204_nrocontrato bigint,
               si204_exerciciocontrato bigint,
+              si204_exercicioprocesso bigint,
               si204_nroprocesso character varying(12),
               si204_tipoprocesso bigint,
               si204_codobra bigint,

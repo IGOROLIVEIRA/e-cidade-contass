@@ -48,7 +48,7 @@ class gerarLICOBRAS extends GerarAM
 
                 $aCSVLICOBRAS10['si195_tiporegistro'] = str_pad($alICOBRAS10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVLICOBRAS10['si195_codorgaoresp'] = str_pad($alICOBRAS10['si195_codorgaoresp'], 3, "0",STR_PAD_LEFT);
-                $aCSVLICOBRAS10['si195_codunidadesubrespestadual'] = str_pad($alICOBRAS10['si195_codunidadesubrespestadual'], 3, "0",STR_PAD_LEFT);
+                $aCSVLICOBRAS10['si195_codunidadesubrespestadual'] = str_pad($alICOBRAS10['si195_codunidadesubrespestadual'], 4, "0",STR_PAD_LEFT);
                 $aCSVLICOBRAS10['si195_exerciciolicitacao'] = $alICOBRAS10['si195_exerciciolicitacao'];
                 $aCSVLICOBRAS10['si195_nroprocessolicitatorio'] = $alICOBRAS10['si195_nroprocessolicitatorio'];
                 $aCSVLICOBRAS10['si195_codobra'] = $alICOBRAS10['si195_codobra'];
@@ -84,12 +84,13 @@ class gerarLICOBRAS extends GerarAM
 
                 $aCSVLICOBRAS20['si196_tiporegistro'] = str_pad($aLICOBRAS20['si196_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVLICOBRAS20['si196_codorgaoresp'] = str_pad($aLICOBRAS20['si196_codorgaoresp'], 3, "0",STR_PAD_LEFT);
-                $aCSVLICOBRAS20['si196_codunidadesubrespestadual'] = $aLICOBRAS20['si196_codunidadesubrespestadual'];
-                $aCSVLICOBRAS20['si196_codunidadesubrespestadual'] = $aLICOBRAS20['si196_codunidadesubrespestadual'];
+                $aCSVLICOBRAS20['si196_codunidadesubrespestadual'] = str_pad($aLICOBRAS20['si196_codunidadesubrespestadual'],4,"0",STR_PAD_LEFT);
                 $aCSVLICOBRAS20['si196_exerciciolicitacao'] = $aLICOBRAS20['si196_exerciciolicitacao'];
                 $aCSVLICOBRAS20['si196_nroprocessolicitatorio'] = $aLICOBRAS20['si196_nroprocessolicitatorio'];
+                $aCSVLICOBRAS20['si196_tipoprocesso'] = $aLICOBRAS20['si196_tipoprocesso'];
                 $aCSVLICOBRAS20['si196_codobra'] = $aLICOBRAS20['si196_codobra'];
                 $aCSVLICOBRAS20['si196_objeto'] = $aLICOBRAS20['si196_objeto'];
+                $aCSVLICOBRAS20['si196_linkobra'] = $aLICOBRAS20['si196_linkobra'];
                 $aCSVLICOBRAS20['si196_nrocontrato'] = $aLICOBRAS20['si196_nrocontrato'];
                 $aCSVLICOBRAS20['si196_exerciciocontrato'] = $aLICOBRAS20['si196_exerciciocontrato'];
                 $aCSVLICOBRAS20['si196_dataassinatura'] = $aLICOBRAS20['si196_dataassinatura'];
@@ -120,7 +121,7 @@ class gerarLICOBRAS extends GerarAM
                 $aCSVLICOBRAS30['si203_tiporegistro'] = str_pad($aLICOBRAS30['si203_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVLICOBRAS30['si203_codorgaoresp'] = str_pad($aLICOBRAS30['si203_codorgaoresp'], 3, "0",STR_PAD_LEFT);
                 $aCSVLICOBRAS30['si203_codobra'] = $aLICOBRAS30['si203_codobra'];
-                $aCSVLICOBRAS30['si203_codunidadesubrespestadual'] = $aLICOBRAS30['si203_codunidadesubrespestadual'];
+                $aCSVLICOBRAS30['si203_codunidadesubrespestadual'] = str_pad($aLICOBRAS30['si203_codunidadesubrespestadual'],4, "0",STR_PAD_LEFT);
                 $aCSVLICOBRAS30['si203_nroseqtermoaditivo'] = $aLICOBRAS30['si203_nroseqtermoaditivo'];
                 $aCSVLICOBRAS30['si203_dataassinaturatermoaditivo'] = $this->sicomDate($aLICOBRAS30['si203_dataassinaturatermoaditivo']);
                 $aCSVLICOBRAS30['si203_tipoalteracaovalor'] = $aLICOBRAS30['si203_tipoalteracaovalor'];

@@ -150,8 +150,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                 AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
                 AND DATE_PART('YEAR',licobras.obr01_dtlancamento)  = " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobras.obr01_dtlancamento) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-
-    $rsResult10 = db_query($sql);//echo $sql;db_criatabela($rsResult10);exit;
+    $rsResult10 = db_query($sql);
 
     $aObrasSemContratos = array();
 
@@ -228,7 +227,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
 	              AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
                 AND DATE_PART('YEAR',licobras.obr01_dtlancamento)= " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobras.obr01_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $rsResult20 = db_query($sql);//echo $sql;db_criatabela($rsResult20);die();
+    $rsResult20 = db_query($sql);
 
     if(pg_num_rows($rsResult20) > 0) {
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -252,7 +251,6 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $cllicobras202021->si196_prazoexecucao = $oDados20->si196_prazoexecucao;
         $cllicobras202021->si196_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $cllicobras202021->si196_instit = db_getsession("DB_instit");
-//        echo '<pre>'; var_dump($cllicobras202021);exit;
         $cllicobras202021->incluir(null);
 
         if ($cllicobras202021->erro_status == 0) {
@@ -274,12 +272,16 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                    ac26_acordoposicaotipo as si203_tipotermoaditivo,
                    ac35_descricaoalteracao as si203_dscalteracao,
                    ac26_data as si203_novadatatermino,
-                   1 as si203_tipodetalhamento,
-                   ac35_valor as si203_valoraditivo
+                   CASE
+                       WHEN l03_pctipocompratribunal IN (100,101,102,103 ) THEN '2'
+                       ELSE '1'
+                   END as si203_tipodetalhamento,
+                   ac20_valoraditado as si203_valoraditivo
             FROM licobras
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             INNER JOIN acordo on ac16_licitacao = l20_codigo
             INNER JOIN acordoposicao on ac26_acordo = ac16_sequencial
+            INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
             inner join acordoposicaoaditamento on ac26_sequencial = ac35_acordoposicao
             INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
@@ -290,7 +292,6 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
                 AND DATE_PART('YEAR',licobras.obr01_dtlancamento)= " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobras.obr01_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $rsResult30 = db_query($sql);
-
 
       if(pg_num_rows($rsResult30) > 0) {
           for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
@@ -303,12 +304,19 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
               $cllicobras302021->si203_codunidadesubrespestadual = substr($oDados30->si203_codunidadesubrespestadual, 0, 4);
               $cllicobras302021->si203_nroseqtermoaditivo = $oDados30->si203_nroseqtermoaditivo;
               $cllicobras302021->si203_dataassinaturatermoaditivo = $oDados30->si203_dataassinaturatermoaditivo;
-              $cllicobras302021->si203_tipoalteracaovalor = $oDados30->si203_tipoalteracaovalor;
+              if ($oDados30->si203_valoraditivo > 0) {
+                  $iTipoAlteracaoValor = 1;
+              } else if ($oDados30->si203_valoraditivo < 0) {
+                  $iTipoAlteracaoValor = 2;
+              }else{
+                  $iTipoAlteracaoValor = 3;
+              }
+              $cllicobras302021->si203_tipoalteracaovalor = $iTipoAlteracaoValor;
               $cllicobras302021->si203_tipotermoaditivo = $oDados30->si203_tipotermoaditivo;
               $cllicobras302021->si203_dscalteracao = $oDados30->si203_dscalteracao;
               $cllicobras302021->si203_novadatatermino = $oDados30->si203_novadatatermino;
               $cllicobras302021->si203_tipodetalhamento = $oDados30->si203_tipodetalhamento;
-              $cllicobras302021->si203_valoraditivo = $oDados30->si203_valoraditivo;
+              $cllicobras302021->si203_valoraditivo = abs($oDados30->si203_valoraditivo);
               $cllicobras302021->si203_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
               $cllicobras302021->si203_instit = db_getsession("DB_instit");
               $cllicobras302021->incluir(null);

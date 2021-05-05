@@ -22,6 +22,7 @@ class cl_exeobras202021 {
     public $si204_codunidadesub = null;
     public $si204_nrocontrato = 0;
     public $si204_exerciciocontrato = 0;
+    public $si204_exercicioprocesso = 0;
     public $si204_nroprocesso  = null;
     public $si204_tipoprocesso  = null;
     public $si204_codobra = 0;
@@ -37,6 +38,7 @@ class cl_exeobras202021 {
                  si204_codunidadesub = text = codUnidadeSubRespEstadual
                  si204_nrocontrato = int8 = nroContrato
                  si204_exerciciocontrato = int4 = exercicioLicitacao
+                 si204_exercicioprocesso = int4 = si204_exercicioprocesso
                  si204_nroprocesso = int4 = numero do processo
                  si204_tipoprocesso = int4 = tipo processo
                  si204_codobra = int8 = codigoobra
@@ -72,6 +74,7 @@ class cl_exeobras202021 {
             $this->si204_codunidadesub = ($this->si204_codunidadesub == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_codunidadesub"]:$this->si204_codunidadesub);
             $this->si204_nrocontrato = ($this->si204_nrocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_nrocontrato"]:$this->si204_nrocontrato);
             $this->si204_exerciciocontrato = ($this->si204_exerciciocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_exerciciocontrato"]:$this->si204_exerciciocontrato);
+            $this->si204_exercicioprocesso = ($this->si204_exercicioprocesso == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_exercicioprocesso"]:$this->si204_exercicioprocesso);
             $this->si204_nroprocesso = ($this->si204_nroprocesso == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_nroprocesso"]:$this->si204_nroprocesso);
             $this->si204_tipoprocesso = ($this->si204_tipoprocesso == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_tipoprocesso"]:$this->si204_tipoprocesso);
             $this->si204_objeto = ($this->si204_objeto == ""?@$GLOBALS["HTTP_POST_VARS"]["si204_objeto"]:$this->si204_objeto);
@@ -142,6 +145,15 @@ class cl_exeobras202021 {
             $this->erro_status = "0";
             return false;
         }
+        if ($this->si204_exercicioprocesso == null ) {
+            $this->erro_sql = " Campo exercicioprocesso não informado.";
+            $this->erro_campo = "si204_exercicioprocesso";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
         if ($this->si204_codobra == null ) {
             $this->erro_sql = " Campo codigoobra não informado.";
             $this->erro_campo = "si204_codobra";
@@ -194,6 +206,7 @@ class cl_exeobras202021 {
                                       ,si204_codunidadesub
                                       ,si204_nrocontrato
                                       ,si204_exerciciocontrato
+                                      ,si204_exercicioprocesso
                                       ,si204_nroprocesso
                                       ,si204_tipoprocesso
                                       ,si204_codobra
@@ -209,6 +222,7 @@ class cl_exeobras202021 {
                                ,'$this->si204_codunidadesub'
                                ,$this->si204_nrocontrato
                                ,$this->si204_exerciciocontrato
+                               ,$this->si204_exercicioprocesso
                                ,$this->si204_nroprocesso
                                ,$this->si204_tipoprocesso
                                ,$this->si204_codobra
