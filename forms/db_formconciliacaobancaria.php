@@ -125,7 +125,7 @@ db_app::load("widgets/windowAux.widget.js");
             <tr>
                 <td>
                     <fieldset>
-                        <legend><b>ConciliaÁ„o Banc·ria</b></legend>
+                        <legend><b>Concilia√ß√£o Banc√°ria</b></legend>
                         <table width="100%">
                             <tr>
                                 <td width="50%" valign="top">
@@ -159,25 +159,25 @@ db_app::load("widgets/windowAux.widget.js");
                                                 <td><b>Tipo de Movimento:</b></td>
                                                 <td align="left" colspan="4">
                                                     <?
-                                                    $tipo_movimento = array("0" => "Selecione", "E" => "Entrada", "S" => "SaÌda");
+                                                    $tipo_movimento = array("0" => "Selecione", "E" => "Entrada", "S" => "Sa√≠da");
                                                     db_select("tipo_movimento", $tipo_movimento, true, 1, "style='width:100%'");
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><b>Tipo de LanÁamento:</b></td>
+                                                <td><b>Tipo de Lan√ßamento:</b></td>
                                                 <td align="left" colspan="4">
                                                     <?
-                                                    $tipo_lancamento = array("Selecione", "PGTO. EMPENHO", "EST. PGTO EMPENHO", "REC. OR«AMENT¡RIA",
-                                                        "EST. REC. OR«AMENT¡RIA", "PGTO EXTRA OR«AMENT¡RIO", "EST. PGTO EXTRA OR«AMENT¡RIO",
-                                                        "REC. EXTRA OR«AMENT¡RIA", "EST. REC. EXTRA OR«AMENT¡RIA", "PERDAS", "ESTORNO PERDAS",
-                                                        "TRANSFER NCIA", "EST. TRANSFER NCIA", "PEND NCIA", "IMPLANTA«√O");
+                                                    $tipo_lancamento = array("Selecione", "PGTO. EMPENHO", "EST. PGTO EMPENHO", "REC. OR√áAMENT√ÅRIA",
+                                                    "EST. REC. OR√áAMENT√ÅRIA", "PGTO EXTRA OR√áAMENT√ÅRIO", "EST. PGTO EXTRA OR√áAMENT√ÅRIO",
+                                                    "REC. EXTRA OR√áAMENT√ÅRIA", "EST. REC. EXTRA OR√áAMENT√ÅRIA", "PERDAS", "ESTORNO PERDAS",
+                                                    "TRANSFER√äNCIA", "EST. TRANSFER√äNCIA", "PEND√äNCIA", "IMPLANTA√á√ÉO");
                                                     db_select("tipo_lancamento", $tipo_lancamento, true, 1, "style='width:100%'");
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><b>Data da ConciliaÁ„o:</b></td>
+                                                <td><b>Data da Concilia√ß√£o:</b></td>
                                                 <td align="left">
                                                     <? db_inputdata("data_conciliacao", null, null, null, true, "text", 1) ?>
                                                 </td>
@@ -204,7 +204,7 @@ db_app::load("widgets/windowAux.widget.js");
                                                 </td>
                                                 <td valign='top'>
                                                     <?
-                                                    db_input("saldotesouraria",15,null,true,"text",3);
+                                                    db_input("saldo_inicial_tesouraria", 15, null, true, "text", 3);
                                                     ?>
                                                 </td>
                                             </tr>
@@ -214,17 +214,17 @@ db_app::load("widgets/windowAux.widget.js");
                                                 </td>
                                                 <td valign='top'>
                                                     <?
-                                                    db_input("totalcheques",15,null,true,"text",3);
+                                                    db_input("total_entradas", 15, null, true, "text", 3);
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Total de SaÌdas:</b>
+                                                    <b>Total de Sa√≠das:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
-                                                    db_input("saldoatual",15,null,true,"text",3);
+                                                    db_input("total_saidas", 15, null, true, "text", 3);
                                                     ?>
                                                 </td>
                                             </tr>
@@ -234,17 +234,17 @@ db_app::load("widgets/windowAux.widget.js");
                                                 </td>
                                                 <td valign='top'>
                                                     <?
-                                                    db_input("saldoatual",15,null,true,"text",3);
+                                                    db_input("saldo_conciliado", 15, null, true, "text", 3);
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>DiferenÁa:</b>
+                                                    <b>Diferen√ßa:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
-                                                    db_input("saldoatual",15,null,true,"text",3);
+                                                    db_input("diferenca", 15, null, true, "text", 3);
                                                     ?>
                                                 </td>
                                             </tr>
@@ -262,11 +262,11 @@ db_app::load("widgets/windowAux.widget.js");
                 <td colspan='4' style='text-align: center'>
                     <fieldset>
                         <input name="pesquisar" id='pesquisar' type="button"  value="Pesquisar" onclick='js_pesquisar_lancamentos();' />
-                        <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick='js_configurar()' />
-                        <input name="desprocessar" id='desprocessar' type="button" value='Desprocessar' onclick='#' />
+                        <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick="js_processar()" />
+                        <input name="desprocessar" id='desprocessar' type="button" value='Desprocessar' onclick='js_desprocessar()' />
                         <input name="emitir_capa" id='emitir_capa' type="button" value='Emitir Capa' onclick='#' />
-                        <input name="incluir_pendencias" id='incluir_pendencias' type="button" value='Incluir PendÍncias' onclick='#' />
-                        <input name="nova_conciliacao" id='nova_conciliacao' type="button" value='Nova ConciliaÁ„o' onclick='#' />
+                        <input name="incluir_pendencias" id='incluir_pendencias' type="button" value='Incluir Pend√™ncias' onclick='js_janelaPendencia()' />
+                        <input name="nova_conciliacao" id='nova_conciliacao' type="button" value='Nova Concilia√ß√£o' onclick="js_reset()" />
                     </fieldset>
                 </td>
             <tr>
@@ -279,22 +279,22 @@ db_app::load("widgets/windowAux.widget.js");
             </tr>
             <tr>
                 <td colspan='5' align='left'>
-                    <b><span >**</span>Exibir LanÁamentos</b>
+                    <b><span >**</span>Exibir Lan√ßamentos</b>
                     <br />
                     <span>
           <fieldset>
             <legend><b>Exibir</b></legend>
-            <input type="checkbox" id='configuradas' checked onclick='js_showFiltro("configurada",this.checked)' />
+            <input type="checkbox" id='configuradas' checked onclick='js_showFiltro("conciliado", this.checked)' />
             <label for="configuradas" style='padding:1px;border: 1px solid black; background-color:#d1f07c'>
               <b>Conciliados</b>
             </label>
-            <input type="checkbox" id='normais' checked onclick='js_showFiltro("normal",this.checked)' />
+            <input type="checkbox" id='normais' checked onclick='js_showFiltro("normal", this.checked)' />
             <label for="normais" style='padding:1px;border: 1px solid black;background-color:white'>
-              <b>N„o Conciliados</b>
+              <b>N√£o Conciliados</b>
             </label>
-            <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("comMov",this.checked)' />
+            <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("comMov", this.checked)' />
             <label for="comMovs" style='padding:1px;border: 1px solid black;background-color:rgb(222, 184, 135)'>
-              <b>PendÍncia/ImplantaÁ„o</b>
+              <b>Pend√™ncia/Implanta√ß√£o</b>
             </label>
           </fieldset>
       </span>
@@ -317,9 +317,11 @@ db_app::load("widgets/windowAux.widget.js");
     sDataDia = "<?=date("d/m/Y",db_getsession("DB_datausu"))?>";
     iTipoControleRetencaoMesAnterior = <?=$iTipoControleRetencaoMesAnterior?>;
     var aAutenticacoesGlobal = new Array();
+    var dados_complementares_numcgm = new Array();
+    var dados_complementares_coddoc = new Array();
 
     // ----------------------------------------
-    // FunÁ„o verificadas
+    // Fun√ß√£o verificadas
     js_verifica_campos();
     js_init();
 
@@ -352,33 +354,111 @@ db_app::load("widgets/windowAux.widget.js");
         db_iframe_saltes.hide();
     }
 
-    function js_verifica_campos()
-    {
-        if (document.form1.k13_conta.value != "" && document.form1.k13_descr.value != "" && document.form1.data_inicial.value != "" && document.form1.data_final.value != "") {
-            js_libera_botoes(true);
+    function js_verifica_campos() {
+        if (document.form1.data_inicial.value != "" && document.form1.data_final.value != "") {
+            js_verifica_datas();
+            if (document.form1.k13_conta.value != "" && document.form1.k13_descr.value != ""
+                && document.form1.data_inicial.value != "" && document.form1.data_final.value != "") {
+                if (js_verifica_datas()) {
+                    js_busca_extrato();
+                    js_libera_botoes(true, 'pesquisar');
+                }
+            } else {
+                js_libera_botoes(false);
+            }
         } else {
             js_libera_botoes(false);
         }
     }
 
-    function js_libera_botoes(liberar) {
+    function js_verifica_datas() {
+        if (document.form1.data_inicial.value > document.form1.data_final.value) {
+            alert("Data Final inferior a Data Inicial!");
+            document.form1.data_final.value = '';
+            document.form1.data_final.focus();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function js_libera_botoes(liberar, botao = null) {
+        if (botao) {
+            if (liberar) {
+                $(botao).disabled = false;
+            } else {
+                $(botao).disabled = true;
+            }
+        }
         if (liberar) {
             $('pesquisar').disabled = false;
             $('atualizar').disabled = false;
+            $('tipo_movimento').disabled = false;
+            $('tipo_lancamento').disabled = false;
+            $('data_conciliacao').disabled = false;
+            $('saldo_final_extrato').disabled = false;
+            $('desprocessar').disabled = false;
+            $('emitir_capa').disabled = false;
+            $('incluir_pendencias').disabled = false;
+            $('nova_conciliacao').disabled = false;
         } else {
             $('pesquisar').disabled = true;
             $('atualizar').disabled = true;
+            $('tipo_movimento').disabled = true;
+            $('tipo_lancamento').disabled = true;
+            $('data_conciliacao').disabled = true;
+            $('saldo_final_extrato').disabled = true;
+            $('desprocessar').disabled = true;
+            $('emitir_capa').disabled = true;
+            $('incluir_pendencias').disabled = true;
+            $('nova_conciliacao').disabled = true;
+        }
+    }
+
+    function js_busca_extrato() {
+        oParam = new Object();
+        oParam.conta = document.form1.k13_conta.value;
+        oParam.data_inicial = document.form1.data_inicial.value;
+        oParam.data_final = document.form1.data_final.value;
+        var sParam = js_objectToJson(oParam);
+        var url = 'cai4_conciliacaoBancariaNovo.RPC.php';
+        var sJson = '{"exec": "getDadosExtrato", "params": ['+ sParam + ']}';
+        var oAjax = new Ajax.Request(url,
+            {
+                method    : 'post',
+                parameters: 'json=' + sJson,
+                onComplete: js_retorno_dados_extrato
+            }
+        );
+    }
+
+    function js_retorno_dados_extrato(oAjax) {
+        // console.log(oAjax);
+        var oResponse = eval("(" + oAjax.responseText + ")");
+        console.log(oResponse);
+        if (oResponse.status == 1) {
+            // console.log(oResponse.aLinhasExtrato);
+            for (var i = 0; i < oResponse.aLinhasExtrato.length; i++) {
+                // console.log(oResponse.aLinhasExtrato[i]);
+                with (oResponse.aLinhasExtrato[i]) {
+                    document.form1.saldo_inicial_tesouraria.value = js_formatar(saldo_anterior, "f");
+                    document.form1.total_entradas.value = js_formatar(total_entradas, "f");
+                    document.form1.total_saidas.value = js_formatar(total_saidas, "f");
+                    document.form1.saldo_conciliado.value = js_formatar(saldo_anterior + total_entradas - total_saidas, "f");
+                    document.form1.saldo_final_extrato.value = saldo_final;
+                    document.form1.diferenca.value = js_formatar(0, "f");
+                }
+            }
         }
     }
 
     function js_pesquisar_lancamentos() {
-        js_divCarregando("Aguarde, pesquisando LanÁamentos.", "msgBox");
+        js_divCarregando("Aguarde, pesquisando Lan√ßamentos.", "msgBox");
         js_liberaBotoes(false);
-        js_reset();
-        oParam                 = new Object();
-        oParam.k13_conta       = document.form1.k13_conta.value;
-        oParam.data_inicial    = document.form1.data_inicial.value;
-        oParam.data_final      = document.form1.data_final.value;
+        oParam = new Object();
+        oParam.conta = document.form1.k13_conta.value;
+        oParam.data_inicial = document.form1.data_inicial.value;
+        oParam.data_final = document.form1.data_final.value;
         oParam.tipo_lancamento = document.form1.tipo_lancamento.value;
         oParam.tipo_movimento  = document.form1.tipo_movimento.value;
 
@@ -397,14 +477,18 @@ db_app::load("widgets/windowAux.widget.js");
     function js_retorno_consulta_lancamentos(oAjax) {
         js_removeObj("msgBox");
         js_liberaBotoes(true);
+        // console.log(oAjax);
         var oResponse = eval("(" + oAjax.responseText + ")");
         var iRowAtiva     = 0;
         var iTotalizador  = 0;
+        // console.log(oResponse);
+
         gridLancamentos.clearAll(true);
         gridLancamentos.setStatus("");
 
         if (oResponse.status == 1) {
             for (var iNotas = 0; iNotas < oResponse.aLinhasExtrato.length; iNotas++) {
+                // console.log(oResponse.aLinhasExtrato[iNotas]);
                 with (oResponse.aLinhasExtrato[iNotas]) {
                     var nValor = valor;
                     var lDisabled = false;
@@ -418,7 +502,7 @@ db_app::load("widgets/windowAux.widget.js");
                     iTotalizador++;
 
                     var aLinha  = new Array();
-                    aLinha[0] = identificador;
+                    aLinha[0] = iNotas + 1;
                     aLinha[1] = data_lancamento;
                     aLinha[2] = data_conciliacao;
                     aLinha[3] = credor;
@@ -429,7 +513,13 @@ db_app::load("widgets/windowAux.widget.js");
                     aLinha[8] = js_formatar(nValor, "f");
                     aLinha[9] = historico;
 
+                    dados_complementares_numcgm[iNotas + 1] = numcgm;
+                    dados_complementares_coddoc[iNotas + 1] = cod_doc;
+
                     gridLancamentos.addRow(aLinha, false, lDisabled);
+
+                    js_linha_conciliada(iNotas, data_conciliacao);
+
                     iRowAtiva++;
                 }
             }
@@ -438,8 +528,30 @@ db_app::load("widgets/windowAux.widget.js");
             gridLancamentos.setNumRows(iTotalizador);
             $('gridLancamentosstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
         } else if (oResponse.status == 2) {
-            gridLancamentos.setStatus("<b>N„o foram encontrados movimentos.</b>");
+            gridLancamentos.setStatus("<b>N√£o foram encontrados movimentos.</b>");
         }
+    }
+
+    function js_linha_conciliada(row, data_conciliacao) {
+        if (data_conciliacao != '')
+            gridLancamentos.aRows[row].setClassName('conciliado');
+    }
+
+   function js_showFiltro(sQualFiltro, lMostrar) {
+        var aMatched = gridLancamentos.getElementsByClass(sQualFiltro);
+        aMatched = aMatched.concat(gridLancamentos.getElementsByClass(sQualFiltro + "marcado"));
+        var iTotalizador = 0;
+        for (var i = 0; i < aMatched.length; i++) {
+            if (lMostrar) {
+                aMatched[i].style.display = '';
+                iTotalizador++;
+            } else {
+                aMatched[i].style.display = 'none';
+                iTotalizador--;
+            }
+        }
+        var iTotal  = gridLancamentos.getNumRows();
+        gridLancamentos.setNumRows(iTotal +iTotalizador);
     }
 
     function js_init() {
@@ -465,7 +577,7 @@ db_app::load("widgets/windowAux.widget.js");
                 obj.checked = true;
             }
 
-            itens = this.getElementsByClass(sClasse);
+            itens = this.getElementsByClass('configurada');
             for (var i = 0;i < itens.length; i++) {
                 if (itens[i].disabled == false) {
                     if (obj.checked == true) {
@@ -488,37 +600,33 @@ db_app::load("widgets/windowAux.widget.js");
         gridLancamentos.setCheckbox(0);
         gridLancamentos.hasTotalizador = true;
         gridLancamentos.allowSelectColumns(true);
-        gridLancamentos.setCellWidth(new Array("5%", "10%", "10%", "27%", "15%", "8%", "7%", "3%", "5%", "10%"));
+        gridLancamentos.setCellWidth(new Array("5%", "10%", "10%", "28%", "15%", "8%", "7%", "3%", "5%", "10%"));
         gridLancamentos.setCellAlign(new Array("center", "center", "center", "left", "left", "center", "center", "center", "right", "left"));
-        gridLancamentos.setHeader(new Array("M", "D. LanÁamento", "D. ConciliaÁ„o", "Credor", "Tipo", "OP/REC/SLIP", "Documento", "Mov", "Valor", "HistÛrico"));
+        gridLancamentos.setHeader(new Array("M", "D. Lan√ßamento", "D. Concilia√ß√£o", "Credor", "Tipo", "OP/REC/SLIP", "Documento", "Mov", "Valor", "Hist√≥rico"));
         gridLancamentos.aHeaders[1].lDisplayed = false;
         gridLancamentos.show(document.getElementById('gridLancamentos'));
         $('gridLancamentosstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
         document.form1.data_inicial.focus();
-
-
-
     }
 
     function js_janelaAgrupados(lancamentos) {
         var dtBase      = 1;
         var iCheque     = 2;
 
-        windowChequeItem = new windowAux('wndChequeItem', 'InformaÁıes Detalhadas', 1000, 250);
+        windowLancamentoItem = new windowAux('wndChequeItem', 'Informa√ß√µes Detalhadas', 1000, 250);
 
         var sContent = "<div class='grid_detalhamentos' id='grid_detalhamentos' style='margin: 0 auto; width: 100%; text-align: center'>";
         sContent += "       <table id='tabela-lancamentos'>";
         sContent += "           <thead>";
         sContent += "               <tr>";
-        sContent += "                   <th>D. LanÁamento</th>";
-        sContent += "                   <th>D. ConciliaÁ„o</th>";
+        sContent += "                   <th>D. Lan√ßamento</th>";
         sContent += "                   <th>Credor</th>";
         sContent += "                   <th>Tipo</th>";
         sContent += "                   <th>OP/REC/SLIP</th>";
         sContent += "                   <th>Documento</th>";
         sContent += "                   <th>Mov</th>";
         sContent += "                   <th>Valor</th>";
-        sContent += "                   <th>HistÛrico</th>";
+        sContent += "                   <th>Hist√≥rico</th>";
         sContent += "               </tr>";
         sContent += "           </thead>";
         sContent += "           <tbody>";
@@ -526,7 +634,6 @@ db_app::load("widgets/windowAux.widget.js");
         lancamentos.forEach(function (data, index) {
             sContent += "           <tr>";
             sContent += "                   <td>" + data.data_lancamento + "</td>";
-            sContent += "                   <td>" + data.data_conciliacao + "</td>";
             sContent += "                   <td>" + data.credor + "</td>";
             sContent += "                   <td>" + data.tipo + "</td>";
             sContent += "                   <td>" + data.op_rec_slip + "</td>";
@@ -541,19 +648,158 @@ db_app::load("widgets/windowAux.widget.js");
         sContent += "       </table>";
         sContent += "</div>";
 
-        windowChequeItem.setContent(sContent);
+        windowLancamentoItem.setContent(sContent);
 
-        windowChequeItem.setShutDownFunction(function () {
-            windowChequeItem.destroy();
+        windowLancamentoItem.setShutDownFunction(function () {
+            windowLancamentoItem.destroy();
         });
 
         var w = ((screen.width - 1000) / 2);
         var h = ((screen.height / 2) - 300);
-        windowChequeItem.setIndex(5);
-        windowChequeItem.allowDrag(false);
-        windowChequeItem.show(h, w);
-}
-    // Final das FunÁıes verificadas
+        windowLancamentoItem.setIndex(5);
+        windowLancamentoItem.allowDrag(false);
+        windowLancamentoItem.show(h, w);
+    }
+
+    function js_janelaPendencia() {
+        js_OpenJanelaIframe('top.corpo','db_iframe_extratobancariapendencia',
+            'cai4_concbancpendencia001.php?novo=true&reload=true&conta=' + document.form1.k13_conta.value,
+            'Cadastro de Pend√™ncias', true);
+    }
+
+    function js_processar() {
+        var movimentos = gridLancamentos.getSelection();
+        var sem_erro = true;
+        var aviso    = "";
+
+        if (!js_validar_campos_processar(movimentos))
+            return false;
+
+        js_divCarregando("Aguarde, processando Lan√ßamentos.", "msgBox");
+
+        oParam = new Object();
+        oParam.conta = document.form1.k13_conta.value;
+        oParam.data_final = document.form1.data_final.value;
+        oParam.data_conciliacao = document.form1.data_conciliacao.value;
+        oParam.saldo_final_extrato = document.form1.saldo_final_extrato.value;
+        oParam.movimentos = new Array();
+
+        for (var iMov = 0; iMov < movimentos.length; iMov++) {
+            var lancamento = js_preenche_lancamento(movimentos[iMov]);
+            oParam.movimentos.push(lancamento);
+        }
+        // console.log(oParam);
+        // Final dos movimentos
+        var sParam = js_objectToJson(oParam);
+        url = 'cai4_conciliacaoBancariaNovo.RPC.php';
+        var sJson = '{"exec": "Processar", "params": ['+ sParam + ']}';
+        var oAjax = new Ajax.Request(url,
+            {
+                method    : 'post',
+                parameters: 'json=' + sJson,
+                onComplete: js_retorno_processar_lancamentos
+            }
+        );
+    }
+
+    function js_retorno_processar_lancamentos(oAjax) {
+        js_removeObj("msgBox");
+        // console.log("Antes da resposta");
+        console.log(oAjax.responseText);
+        // console.log(oAjax);
+        var oResponse = eval("(" + oAjax.responseText + ")");
+        js_pesquisar_lancamentos();
+        js_busca_extrato();
+    }
+
+    function js_desprocessar() {
+        var movimentos = gridLancamentos.getSelection();
+        var sem_erro = true;
+        var aviso    = "";
+
+        if (!js_validar_campos_processar(movimentos))
+            return false;
+
+        js_divCarregando("Aguarde, processando Lan√ßamentos.", "msgBox");
+
+        oParam = new Object();
+        oParam.conta = document.form1.k13_conta.value;
+        oParam.data_final = document.form1.data_final.value;
+        oParam.data_conciliacao = document.form1.data_conciliacao.value;
+        oParam.saldo_final_extrato = document.form1.saldo_final_extrato.value;
+        oParam.movimentos = new Array();
+
+        for (var iMov = 0; iMov < movimentos.length; iMov++) {
+            var lancamento = js_preenche_lancamento(movimentos[iMov]);
+            oParam.movimentos.push(lancamento);
+        }
+        // console.log(oParam);
+        // Final dos movimentos
+        var sParam = js_objectToJson(oParam);
+        url = 'cai4_conciliacaoBancariaNovo.RPC.php';
+        var sJson = '{"exec": "Desprocessar", "params": ['+ sParam + ']}';
+        var oAjax = new Ajax.Request(url,
+            {
+                method    : 'post',
+                parameters: 'json=' + sJson,
+                onComplete: js_retorno_processar_lancamentos
+            }
+        );
+    }
+
+    function js_preenche_lancamento(movimento) {
+        lancamento = new Object();
+        lancamento.data_lancamento = movimento[2];
+        lancamento.data_conciliacao = movimento[3];
+        lancamento.cgm = dados_complementares_numcgm[movimento[1]];
+        lancamento.tipo = dados_complementares_coddoc[movimento[1]];
+        lancamento.codigo = movimento[6];
+        lancamento.documento = movimento[7];
+        lancamento.movimentacao = movimento[8];
+        lancamento.valor = movimento[9];
+        return lancamento;
+    }
+
+    // Fun√ß√£o que valida os campos para o processamento da concilia√ß√£o
+    function js_validar_campos_processar(movimentos) {
+        if (movimentos.length == 0) {
+            alert("N√£o h√° nenhum lan√ßamento selecionado.");
+            return false;
+        }
+
+        if ($F("data_conciliacao") == "") {
+            alert("Informe a Data da Concilia√ß√£o!");
+            $F("data_conciliacao") = "";
+            return false;
+        }
+
+        if (js_comparadata($F("data_conciliacao"), $F("data_inicial"), "<") || js_comparadata($F("data_conciliacao"), $F("data_final"), ">")) {
+            alert("Data de Concilia√ß√£o fora do per√≠odo informado!");
+            $F("data_conciliacao") = "";
+            return false;
+        }
+
+        if ($F("saldo_final_extrato") == "") {
+            alert("Informe o saldo final do extrato banc√°rio!");
+            return false;
+        }
+
+        return true;
+    }
+
+    function js_reset() {
+        document.form1.k13_conta.value = "";
+        document.form1.k13_descr.value = "";
+        document.form1.data_inicial.value = "";
+        document.form1.data_final.value = "";
+        document.form1.tipo_lancamento.selectedIndex = 0;
+        document.form1.tipo_movimento.selectedIndex = 0;
+        document.form1.data_conciliacao.value = "";
+        document.form1.saldo_final_extrato.value = "";
+        js_verifica_campos();
+        js_init();
+    }
+    // Final das fun√ß√µes verificadas
 
 
 
@@ -565,24 +811,24 @@ db_app::load("widgets/windowAux.widget.js");
     function js_mostrapagordem1(chave1,z01_cgccpf){
         if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
-                alert("ERRO: N˙mero do CPF est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CPF est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }else{
             if(z01_cgccpf == '' || z01_cgccpf == null ){
-                alert("ERRO: N˙mero do CPF est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CPF est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
         if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
-                alert("ERRO: N˙mero do CNPJ est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CNPJ est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }else{
             if(z01_cgccpf == '' || z01_cgccpf == null ){
-                alert("ERRO: N˙mero do CNPJ est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CNPJ est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
@@ -616,14 +862,14 @@ db_app::load("widgets/windowAux.widget.js");
     function js_mostrapagordem102(chave1,z01_cgccpf){
         if(z01_cgccpf.length = 11){
             if(z01_cgccpf == '00000000000'){
-                alert("ERRO: N˙mero do CPF est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CPF est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
         if(z01_cgccpf.length = 14){
             if(z01_cgccpf == '00000000000000'){
-                alert("ERRO: N˙mero do CNPJ est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CNPJ est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
@@ -648,24 +894,24 @@ db_app::load("widgets/windowAux.widget.js");
     function js_mostraempempenho2(chave1, iAnoEmepenho, z01_cgccpf){
         if(z01_cgccpf.length == 11){
             if(z01_cgccpf == '00000000000'){
-                alert("ERRO: N˙mero do CPF est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CPF est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }else{
             if(z01_cgccpf == '' || z01_cgccpf == null ){
-                alert("ERRO: N˙mero do CPF est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CPF est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
 
         if(z01_cgccpf.length == 14){
             if(z01_cgccpf == '00000000000000'){
-                alert("ERRO: N˙mero do CNPJ est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CNPJ est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }else{
             if(z01_cgccpf == '' || z01_cgccpf == null ){
-                alert("ERRO: N˙mero do CPF est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                alert("ERRO: N¬ùmero do CPF est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                 return false
             }
         }
@@ -919,14 +1165,14 @@ db_app::load("widgets/windowAux.widget.js");
 
                     if(CNPJ.length = 11){
                         if(CNPJ == '00000000000'){
-                            alert("ERRO: N˙mero do CPF est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                            alert("ERRO: N¬ùmero do CPF est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                             return false
                         }
                     }
 
                     if(CNPJ.length = 14){
                         if(CNPJ == '00000000000000'){
-                            alert("ERRO: N˙mero do CNPJ est· zerado. Corrija o CGM do fornecedor e tente novamente");
+                            alert("ERRO: N¬ùmero do CNPJ est¬ù zerado. Corrija o CGM do fornecedor e tente novamente");
                             return false
                         }
                     }
@@ -960,13 +1206,13 @@ db_app::load("widgets/windowAux.widget.js");
                     aLinha[2]   = o15_codigo;
 
                     /**
-                     * Cria a express„o regular para efetuar a alteraÁ„o dos pontos por vazio.
+                     * Cria a express¬ùo regular para efetuar a altera¬ù¬ùo dos pontos por vazio.
                      */
 
                     var sRegExpressao = /\./g;
                     var sConCarPeculiar       = e60_concarpeculiar.replace(sRegExpressao, "");
                     /**
-                     *  Caso seja vazio, permite o usu·rio selecionar um id. Do contr·rio mostra a concarpeculiar selecionada
+                     *  Caso seja vazio, permite o usu¬ùrio selecionar um id. Do contr¬ùrio mostra a concarpeculiar selecionada
                      */
                     if ( sConCarPeculiar == '' || new Number(sConCarPeculiar) == 0 ) {
                         if (e79_concarpeculiar == '') {
@@ -1081,7 +1327,7 @@ db_app::load("widgets/windowAux.widget.js");
                 $('totalizadores').innerHTML = sTotais;
             }
         } else if (oResponse.status == 2) {
-            gridNotas.setStatus("<b>N„o foram encontrados movimentos.</b>");
+            gridNotas.setStatus("<b>N√£o foram encontrados movimentos.</b>");
         }
     }
 
@@ -1179,22 +1425,21 @@ db_app::load("widgets/windowAux.widget.js");
         gridNotas.setCellWidth(new Array("5%","7%", "5%", "5%","5%","15%","10%", "10%", "10%", "10%", "5%", "5%", "5%", "5%"));
         gridNotas.setCellAlign(new Array("right", "center","right", "center", "right", "left", "left", "center", "center", "center","right","right","right"));
         gridNotas.setHeader(new Array("M",
-            "D. LanÁamento",
-            "D. ConciliaÁ„o",
+            "D. Lan¬ùamento",
+            "D. Concilia¬ù¬ùo",
             "Credor",
             "Tipo",
             "OP/REC/SLIP",
             "Documento",
             "Mov",
             "Valor",
-            "HistÛrico"
+            "Hist¬ùrico"
             )
         );
         gridNotas.aHeaders[1].lDisplayed = false;
         gridNotas.show(document.getElementById('gridNotas'));
         $('gridNotasstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
         // Tarefa 24652
-        alert("Estou aqui dentro");
         document.form1.k13_conta.focus();
     }
 
@@ -1238,29 +1483,6 @@ db_app::load("widgets/windowAux.widget.js");
         return sJson;
 
     }
-
-    function js_showFiltro(sQualFiltro,lMostrar) {
-
-        var aMatched     = gridNotas.getElementsByClass(sQualFiltro);
-        aMatched     = aMatched.concat(gridNotas.getElementsByClass(sQualFiltro+"marcado"));
-        var iTotalizador = 0;
-        for (var i = 0; i < aMatched.length; i++) {
-            if (lMostrar) {
-
-                aMatched[i].style.display = '';
-                iTotalizador++;
-
-            } else {
-
-                aMatched[i].style.display = 'none';
-                iTotalizador--;
-
-            }
-        }
-        var iTotal  = gridNotas.getNumRows();
-        gridNotas.setNumRows(iTotal +iTotalizador);
-    }
-
     function js_createComboForma(iTipoForma, iCodMov, lDisabled) {
 
         var sDisabled = "";
@@ -1301,7 +1523,7 @@ db_app::load("widgets/windowAux.widget.js");
                 function (oConta, iLinha) {
 
                     var sSelecionado = "";
-                    /*comentado por solicitaÁ„o de barbara OC 6184*/
+                    /*comentado por solicita¬ù¬ùo de barbara OC 6184*/
                     // if (oConta.pc63_contabanco == oConta.conta_historico_fornecedor && iContaForne == "") {
                     //   sSelecionado = " selected ";
                     // } else if (iContaForne != "" && iContaForne == oConta.pc63_contabanco) {
@@ -1394,8 +1616,8 @@ db_app::load("widgets/windowAux.widget.js");
         var aMovimentos = gridNotas.getSelection();
         /*
          * Validamos o movimento configurado, conforme a forma de pagamento escolhido.
-         * - cheque, È obrigatorio ter informado a conta pagadora, e o valor;
-         * - Transmissao È obrigatorio ter informado a conta pagadora, e a conta do fornecedor
+         * - cheque, ¬ù obrigatorio ter informado a conta pagadora, e o valor;
+         * - Transmissao ¬ù obrigatorio ter informado a conta pagadora, e a conta do fornecedor
          * - Dinheiro , apenas obrigatorio informar  valor.
          * - NDA, ignoramos o registro.
          */
@@ -1406,7 +1628,7 @@ db_app::load("widgets/windowAux.widget.js");
 
         if (aMovimentos.length == 0) {
 
-            alert('N„o h· nenhum movimento selecionado.');
+            alert('N√£o h¬ù nenhum movimento selecionado.');
             return false;
 
         }
@@ -1419,7 +1641,7 @@ db_app::load("widgets/windowAux.widget.js");
         }
         if (js_comparadata(sDataDia,$F('e42_dtpagamento'),">")) {
 
-            alert("Data Informada Inv·lida.\nData menor que a data do sistema");
+            alert("Data Informada Inv¬ùlida.\nData menor que a data do sistema");
             return false;
 
         }
@@ -1437,7 +1659,7 @@ db_app::load("widgets/windowAux.widget.js");
 
             if (($('opmanutencaoincluir').checked && !$('opmanutencaoexcluir').checked) && oEnvio.lEmitirOrdeAuxiliar) {
 
-                alert('ConfiguraÁıes escolhidas est„o em conflito: emitir OrdemAuxiliar e incluir movimentos na ordem auxlilar selecionada.');
+                alert('Configura¬ù¬ùes escolhidas est¬ùo em conflito: emitir OrdemAuxiliar e incluir movimentos na ordem auxlilar selecionada.');
                 return false;
 
             } else if ($('opmanutencaoincluir').checked && !$('opmanutencaoexcluir').checked) {
@@ -1446,7 +1668,7 @@ db_app::load("widgets/windowAux.widget.js");
 
             if (($('opmanutencaoexcluir').checked && !$('opmanutencaoincluir').checked) && oEnvio.lEmitirOrdeAuxiliar) {
 
-                alert('ConfiguraÁıes escolhidas est„o em conflito: emitir Ordem Auxiliar e Excluir movimentos na ordem auxlilar selecionada.');
+                alert('Configura¬ù¬ùes escolhidas est¬ùo em conflito: emitir Ordem Auxiliar e Excluir movimentos na ordem auxlilar selecionada.');
                 return false;
 
             } else if ($('opmanutencaoexcluir').checked && !$('opmanutencaoincluir').checked) {
@@ -1459,7 +1681,7 @@ db_app::load("widgets/windowAux.widget.js");
 
         var aFormasSelecionadas     = new Array();
         var lMostraMsgErroRetencao  = false;
-        var sMsgRetencaoMesAnterior = "AtenÁ„o:\n";
+        var sMsgRetencaoMesAnterior = "Aten¬ù¬ùo:\n";
         var sVirgula                = "";
         for (var iMov = 0; iMov < aMovimentos.length; iMov++) {
 
@@ -1503,8 +1725,8 @@ db_app::load("widgets/windowAux.widget.js");
             if (lRetencaoMesAnterior == "true") {
 
                 lMostraMsgErroRetencao   = true;
-                sMsgRetencaoMesAnterior += sVirgula+"Movimento "+iCodMov+" da OP "+iNota+" possui retenÁıes ";
-                sMsgRetencaoMesAnterior += " configuradas em mÍs  diferente do mÍs atual\n";
+                sMsgRetencaoMesAnterior += sVirgula+"Movimento "+iCodMov+" da OP "+iNota+" possui reten¬ù¬ùes ";
+                sMsgRetencaoMesAnterior += " configuradas em m¬ùs  diferente do m¬ùs atual\n";
                 sVirgula = ", ";
 
             }
@@ -1545,16 +1767,16 @@ db_app::load("widgets/windowAux.widget.js");
         if (lEfetuarPagamento) {
             for (var iInd = 0; iInd < aFormasSelecionadas.length; iInd++ ) {
                 if (aFormasSelecionadas[iInd] != "1" && aFormasSelecionadas[iInd] != "4" ) {
-                    alert("Para efetuar pagamento autom·tico somente s„o permitidas as forma de pagamento : Dinheiro (DIN) e DÈbito (DEB). Verifique.");
+                    alert("Para efetuar pagamento autom¬ùtico somente s¬ùo permitidas as forma de pagamento : Dinheiro (DIN) e D¬ùbito (DEB). Verifique.");
                     return false;
                 }
             }
 
             /**
-             * verificamos o parametro para controle de retencıes em meses anteriores.
-             * caso seje 0 - n„o faz nenhuma critica ao usu·rio. apenas realiza o pagamento.
-             *           1 - Avisa ao usu·rio e pede uma confirmaÁ„o para realizar o pagamento.
-             *           2 - Avisa ao usu·rio e cancela o pagamento do movimento
+             * verificamos o parametro para controle de retenc¬ùes em meses anteriores.
+             * caso seje 0 - n¬ùo faz nenhuma critica ao usu¬ùrio. apenas realiza o pagamento.
+             *           1 - Avisa ao usu¬ùrio e pede uma confirma¬ù¬ùo para realizar o pagamento.
+             *           2 - Avisa ao usu¬ùrio e cancela o pagamento do movimento
              */
             var sMsgConfirmaPagamento = "Deseja realmente efetuar pagamento para os movimentos selecionados?";
             if (iTipoControleRetencaoMesAnterior == 1) {
@@ -1562,7 +1784,7 @@ db_app::load("widgets/windowAux.widget.js");
                 if (lMostraMsgErroRetencao) {
 
                     sMsgConfirmaPagamento  =  sMsgRetencaoMesAnterior;
-                    sMsgConfirmaPagamento += "… Recomend·vel recalcular as retenÁıes.\n";
+                    sMsgConfirmaPagamento += "¬ù Recomend¬ùvel recalcular as reten¬ù¬ùes.\n";
                     sMsgConfirmaPagamento += "Deseja realmente efetuar pagamento para os movimentos selecionados?";
 
                 }
@@ -1571,7 +1793,7 @@ db_app::load("widgets/windowAux.widget.js");
                 if (lMostraMsgErroRetencao) {
 
                     sMsgConfirmaPagamento    =  sMsgRetencaoMesAnterior;
-                    sMsgRetencaoMesAnterior += "Recalcule as RetenÁıes do movimento.";
+                    sMsgRetencaoMesAnterior += "Recalcule as Reten¬ù¬ùes do movimento.";
                     alert(sMsgRetencaoMesAnterior);
                     return false;
 
@@ -1718,7 +1940,7 @@ db_app::load("widgets/windowAux.widget.js");
             'emp4_lancaretencoes.php?iNumNota='+iCodNota+'&nValorBase='+(nValor+nValorRetido)+
             '&iNumEmp='+iNumEmp+'&iCodOrd='+iCodOrd+"&lSession="+lSession
             +'&dtPagamento='+dtPagamento+'&iCodMov='+iCodMov+'&callback=true',
-            'Lancar RetenÁıes',
+            'Lancar Reten¬ù¬ùes',
             true,
             22,
             0,
@@ -1779,15 +2001,6 @@ db_app::load("widgets/windowAux.widget.js");
                 aItens[i].value = $F('e96_codigo');
             }
         }
-    }
-
-    function js_reset() {
-
-        $('descrConta').innerHTML      = '';
-        $('saldotesouraria').value     = '';
-        $('totalcheques').value        = '';
-        $('saldoatual').value          = '';
-
     }
 
     function js_autenticar(oAutentica, lReautentica) {
@@ -1926,7 +2139,7 @@ db_app::load("widgets/windowAux.widget.js");
 
         /**
          * - O movimento nao pode estar configurado.
-         * - N„o pode haver retencoes lanÁadas para o movimento
+         * - N√£o pode haver retencoes lan¬ùadas para o movimento
          */
         var oParam                = new Object();
         oParam.exec               = "agruparMovimentos";
@@ -1950,14 +2163,14 @@ db_app::load("widgets/windowAux.widget.js");
             }
             if (aMovimentos[i].getClassName() != "normal") {
 
-                alert('Movimento '+iMovimento+' da OP '+iOP+' Est· Configurada.');
+                alert('Movimento '+iMovimento+' da OP '+iOP+' Est¬ù Configurada.');
                 return false;
 
             }
 
             if (nValorRetencao != 0) {
 
-                alert('Movimento '+iMovimento+' da OP '+iOP+' possui retenÁıes lancadas.');
+                alert('Movimento '+iMovimento+' da OP '+iOP+' possui reten¬ù¬ùes lancadas.');
                 return false;
 
             }
@@ -2071,7 +2284,7 @@ db_app::load("widgets/windowAux.widget.js");
             function (oRetorno, lErro) {
 
                 if (!oRetorno.possuiCadastro) {
-                    alert ("IP "+oRetorno.ip_usuario.urlDecode()+" n„o cadastrado como autenticadora.");
+                    alert ("IP "+oRetorno.ip_usuario.urlDecode()+" n¬ùo cadastrado como autenticadora.");
                 }
             }
         ).setMessage('Aguarde, verificando cadastro de autenticadora...').execute();
