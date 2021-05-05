@@ -83,7 +83,7 @@ class obrasDadosComplementares
 			}
 			$sQueryLocal = $oDaoLocal->sql_query(null, "*", null, $sWhere);
 			$rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
-
+			
 			if ($rsQueryLocal === false) {
 				throw new Exception('Nenhum endereço da obra encontrado para o código informado(' . $iCodigoObra . ').');
 			}

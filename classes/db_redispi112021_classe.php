@@ -184,7 +184,15 @@ class cl_redispi112021
     }
 
     if($this->si184_codobralocal == null){
-      $this->si184_codobralocal = 0;
+        $this->si184_codobralocal = 0;
+    }
+
+    if($this->si184_tipoatividadeobra == null){
+        $this->si184_tipoatividadeobra = 0;
+    }
+
+    if($this->si184_tipoatividadeservespecializado == null){
+        $this->si184_tipoatividadeservespecializado = 0;
     }
 
 

@@ -366,18 +366,22 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   orcdotacao.o58_funcao AS codFuncao,
 						   orcdotacao.o58_subfuncao AS codSubFuncao,
 						   obrasdadoscomplementareslote.db150_subgrupobempublico as codBemPublico
-					FROM liclicita
-					INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
-					INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
-					LEFT JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
-					LEFT JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
-					INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
-					INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
-					INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
-					LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-					INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
-					INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-					INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
+                        FROM liclicita
+                        INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
+                        INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
+                        LEFT JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+                        INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
+                        INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+                        INNER JOIN db_depart ON l20_codepartamento = coddepto
+                        INNER JOIN db_departorg ON db01_coddepto = coddepto AND db01_anousu = ".db_getsession('DB_anousu')." 
+                        INNER JOIN db_config ON (instit=codigo)
+                        INNER JOIN orcorgao ON o40_instit = codigo
+                        INNER JOIN orcdotacao on (o58_anousu, o58_orgao)=(o40_anousu, o40_orgao) and o58_anousu=l20_anousu
+                        INNER JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade = o41_unidade AND db01_anousu = o41_anousu
+                        LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
+                        INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+                        INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
+                        INNER JOIN obrasdadoscomplementareslote ON db151_codigoobra = db150_codobra
 					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = ".$oDados10->nroprocesso."
 						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106) 
                         ORDER BY obrasdadoscomplementareslote.db150_sequencial";
@@ -389,8 +393,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 
 						$oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 						$sHash11 = $oResult11->tiporegistro . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->exercicioprocesso .
-							$oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-							$oResult11->tipoatividadeservespecializado . $oResult11->codsubfuncao;
+                        $oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
+                        $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codbempublico;
                         
                         if($oDados10->l20_tipojulg == 1){
                             $sHash11 .= $oResult11->codfuncao;

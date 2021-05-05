@@ -58,6 +58,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         let oParam = new Object();
         oParam.exec = 'getLotes';
         oParam.loteReferencia = sequencial;
+        oParam.iLicitacao = codLicitacao;
 
         let oAjax = new Ajax.Request(
             'lic4_licitacao.RPC.php',

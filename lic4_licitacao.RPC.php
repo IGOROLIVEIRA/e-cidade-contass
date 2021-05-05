@@ -772,7 +772,7 @@ switch ($oParam->exec) {
         $oDaoLiclicitemLote = db_utils::getDao('liclicitemlote');
         $sWhere = ' l20_codigo = ' . $oParam->iLicitacao;
         $sSqlLote = $oDaoLiclicitemLote->sql_query('', 'liclicitemlote.*', 'l04_descricao', $sWhere);
-        
+
         $rsLote = $oDaoLiclicitemLote->sql_record($sSqlLote);
         $descInicial = '';
         $countLote = 0;
@@ -818,7 +818,9 @@ switch ($oParam->exec) {
         SELECT l04_descricao,
                l04_codigo
                FROM liclicitemlote
-               WHERE l04_descricao =
+               INNER JOIN liclicitem ON l04_liclicitem = l21_codigo
+               INNER JOIN liclicita ON l21_codliclicita = l20_codigo
+               WHERE l20_codigo = $oParam->iLicitacao and l04_descricao =
                         (SELECT l04_descricao
                         FROM liclicitemlote
                         WHERE l04_codigo =
