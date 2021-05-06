@@ -37,7 +37,7 @@ $clcodmovsefip->rotulo->label();
     </td>
     <td> 
 <?
-db_input('r66_anousu',4,$Ir66_anousu,true,'text',3,"")
+db_input('r66_anousu',4,$Ir66_anousu,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
@@ -47,7 +47,7 @@ db_input('r66_anousu',4,$Ir66_anousu,true,'text',3,"")
     </td>
     <td> 
 <?
-db_input('r66_mesusu',2,$Ir66_mesusu,true,'text',3,"")
+db_input('r66_mesusu',2,$Ir66_mesusu,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
@@ -57,7 +57,7 @@ db_input('r66_mesusu',2,$Ir66_mesusu,true,'text',3,"")
     </td>
     <td> 
 <?
-db_input('r66_codigo',2,$Ir66_codigo,true,'text',3,"")
+db_input('r66_codigo',2,$Ir66_codigo,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
