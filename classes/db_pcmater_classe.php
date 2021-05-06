@@ -564,15 +564,15 @@ class cl_pcmater {
      if(trim($this->pc01_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_justificativa"])){
       $sql  .= $virgula." pc01_justificativa = '$this->pc01_justificativa' ";
       $virgula = ",";
-      if(trim($this->pc01_justificativa) == null ){
-        $this->erro_sql = " Campo Justificativa Alteração não Informado.";
-        $this->erro_campo = "pc01_justificativa";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+//      if(trim($this->pc01_justificativa) == null ){
+//        $this->erro_sql = " Campo Justificativa Alteração não Informado.";
+//        $this->erro_campo = "pc01_justificativa";
+//        $this->erro_banco = "";
+//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//        $this->erro_status = "0";
+//        return false;
+//      }
     }
     if(trim($this->pc01_dataalteracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_dataalteracao"])){
       $sql  .= $virgula." pc01_dataalteracao = '$this->pc01_dataalteracao' ";
