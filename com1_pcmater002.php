@@ -62,7 +62,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
     $sqlerro  = true;
     db_msgbox($erro_msg);
   }
-  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater as pc01_descrmateranterior",null,"pc01_codmater = $pc01_codmater"));
+  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater as pc01_descrmateranterior,pc01_justificativa as pc01_justificativaanterior",null,"pc01_codmater = $pc01_codmater"));
   db_fieldsmemory($result_pesquisa_material,0);
 
   if($pc01_descrmateranterior != $pc01_descrmater){
@@ -76,6 +76,12 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
           $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
           $sqlerro  = true;
           db_msgbox($erro_msg);
+      }
+
+      if($pc01_justificativaanterior == $pc01_justificativa){
+          $erro_msgg = "Campo Justificativa não Atualizado !";
+          $sqlerro  = true;
+          db_msgbox($erro_msgg);
       }
   }
 
