@@ -438,26 +438,21 @@ ORDER BY nroprocessolicitatorio
               AND liclicita.l20_edital = $oDados10->nroprocessolicitatorio 
 				    ORDER BY obrasdadoscomplementareslote.db150_codobra"; 
 
-      $rsResult11 = db_query($sSql11);
+          $rsResult11 = db_query($sSql11);
 
 		      $aDadosAgrupados11 = array();
 
           if(pg_numrows($rsResult11)){
 
-              for ($iCont11 = 0; $iCont11 < intval($oDados10->qtdlotes); $iCont11++) {
+              $iNumRows = intval($oDados10->qtdlotes) > 1 ? intval($oDados10->qtdlotes): pg_numrows($rsResult11);
 
-                  $oResult11 = db_utils::fieldsMemory($rsResult11, 0);
+              for ($iCont11 = 0; $iCont11 < $iNumRows; $iCont11++) {
+
+                  $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
                   $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
                   $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-                  $oResult11->tipoatividadeservespecializado . $oResult11->codsubfuncao . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
+                  $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
 
-                  if($oDados10->tipojulgamento == 1){
-                      $sHash11 .= $oResult11->codfuncao;
-                  }
-
-                  /**
-                   * @todo Corrigir busca pela função e subfunção
-                   */
                   if (!isset($aDadosAgrupados11[$sHash11])) {
 
                       $clralic11 = new cl_ralic112021();

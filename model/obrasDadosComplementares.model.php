@@ -740,7 +740,8 @@ class obrasDadosComplementares
 	}
 
 	/**
-	 * @todo renomear todos os metodos para preencheObjetoItem
+	 * Caso for licitação com julgamento por item
+	 * Preenche o objeto e inclui ou altera, conforme o parametro passado
 	 */
 	public function preencheObjetoItem($inclusao){
 
@@ -789,6 +790,10 @@ class obrasDadosComplementares
 		}
 	}
 
+	/**
+	 * Caso for licitação com julgamento por lote
+	 * Preenche o objeto e inclui ou altera, conforme o parametro passado
+	 */
 	public function preencheObjetoLote($inclusao){
 		
 		$sSqlNatureza = db_query('SELECT l20_naturezaobjeto as natureza from liclicita where l20_codigo = '.$this->getLicita());
@@ -875,7 +880,7 @@ class obrasDadosComplementares
 		$rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 
 		$rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iLicitacao);
-		$iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0 );
+		$iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
 
 		if($tabela_base === 'obrasdadoscomplementareslote' && $iTipoJulgamento == 3){
 			$aRetorno = self::retorno($rsQueryObra);
@@ -949,9 +954,9 @@ class obrasDadosComplementares
 			$rsQueryObra = $oDaoObra->sql_record($sSqlObra);
 			
 			$rsTipoJulg = db_query('SELECT l20_tipojulg from liclicita where l20_codigo = ' . $iCodigoLicitacao);
-			$iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0);
+			$iTipoJulgamento = db_utils::fieldsMemory($rsTipoJulg, 0)->l20_tipojulg;
 
-			if($tabela_base === 'obrasdadoscomplementareslote' && $iTipoJulgamento == 3){
+			if($tabela_base == 'obrasdadoscomplementareslote' && $iTipoJulgamento == 3){
 				$aRetorno = self::retorno($rsQueryObra);
 			}else{
 				if ($rsQueryObra !== false) {
@@ -999,9 +1004,7 @@ class obrasDadosComplementares
 	}
 
 	/**
-	 * Checa se o tipo de julgamento da licitação foi por item ou por lote.
-	 * Caso for item retorna a tabela obrasdadoscomplementareslote,
-	 * senão retorna a obrasdadoscomplementares
+	 * Se o ano for igual ou superior a 2021 retorna o nome da tabela obrasdadoscomplementareslote
 	 * @return string
 	 */
 

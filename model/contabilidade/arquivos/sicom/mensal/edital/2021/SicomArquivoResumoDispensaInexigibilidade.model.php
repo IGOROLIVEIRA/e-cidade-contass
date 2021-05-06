@@ -396,10 +396,6 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                         $oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
                         $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codbempublico;
                         
-                        if($oDados10->l20_tipojulg == 1){
-                            $sHash11 .= $oResult11->codfuncao;
-                        }
-
                         /**
                          * @todo Corrigir busca pela função e subfunção
                          */
