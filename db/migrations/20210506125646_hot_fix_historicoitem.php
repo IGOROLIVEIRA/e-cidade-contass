@@ -10,7 +10,7 @@ class HotFixHistoricoitem extends PostgresMigration
 
         BEGIN;
 
-        alter table historicoitem alter column pc96_descricaoanterior  type text
+        alter table historicoitem alter column pc96_descricaoanterior  type text;
 
         COMMIT;
 SQL;
