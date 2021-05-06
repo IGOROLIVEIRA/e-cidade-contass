@@ -324,7 +324,7 @@ class SiopeDespesa extends Siope {
     public function agrupaDespesas() {
 
         $aDespAgrup = array();
-
+        // $this->imprimeTabela($this->aDespesas);
         /**
          * Agrupa despesas.
          */
@@ -380,7 +380,6 @@ class SiopeDespesa extends Siope {
                     
                     $this->aDespesasAgrupadas[$sHash]->empenhado += $oDespesa->empenhado;
                     $this->aDespesasAgrupadas[$sHash]->pagamento += $oDespesa->pagamento;
-                    $this->aDespesasAgrupadas[$sHash]->pagamento += $oDespesa->pagamento;
                     $this->aDespesasAgrupadas[$sHash]->liquidado += $oDespesa->liquidado;
                     $this->aDespesasAgrupadas[$sHash]->rp_processado += ($oDespesa->liquidado - $oDespesa->pagamento);
                     $this->aDespesasAgrupadas[$sHash]->rp_nprocessado += ($oDespesa->empenhado - $oDespesa->liquidado);
@@ -415,7 +414,6 @@ class SiopeDespesa extends Siope {
 
                     $this->aDespesasAgrupadas[$sHash]->dot_atualizada += $oDespesa->dot_atualizada;                    
                     $this->aDespesasAgrupadas[$sHash]->empenhado += $oDespesa->empenhado;
-                    $this->aDespesasAgrupadas[$sHash]->pagamento += $oDespesa->pagamento;
                     $this->aDespesasAgrupadas[$sHash]->pagamento += $oDespesa->pagamento;
                     $this->aDespesasAgrupadas[$sHash]->liquidado += $oDespesa->liquidado;
                     $this->aDespesasAgrupadas[$sHash]->rp_processado += ($oDespesa->liquidado - $oDespesa->pagamento);
