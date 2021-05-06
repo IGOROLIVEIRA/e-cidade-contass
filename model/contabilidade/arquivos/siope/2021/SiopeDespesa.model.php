@@ -139,7 +139,7 @@ class SiopeDespesa extends Siope {
                             o58_projativ,                 
                             o58_codigo,
                             o58_subfuncao,
-                            o58_elemento,
+                            o58_elemento as o56_elemento,
                             o56_descr,
                             o55_tipoensino,
                             o55_tipopasta,
@@ -175,7 +175,7 @@ class SiopeDespesa extends Siope {
             $sHashDesp .= $oDespesa->o58_codigo;
             $sHashDesp .= $oDespesa->o55_tipoensino;
             $sHashDesp .= $oDespesa->o55_tipopasta;
-            $sHashDesp .= $oDespesa->o58_elemento;
+            $sHashDesp .= $oDespesa->o56_elemento;
 
             if (!isset($this->aDespesas[$sHashDesp])) {
 
@@ -185,7 +185,7 @@ class SiopeDespesa extends Siope {
                 $oDesp->o58_subfuncao    = $oDespesa->o58_subfuncao;
                 $oDesp->o55_tipoensino   = $oDespesa->o55_tipoensino;
                 $oDesp->o55_tipopasta    = $oDespesa->o55_tipopasta;
-                $oDesp->elemento         = $oDespesa->o58_elemento;
+                $oDesp->elemento         = $oDespesa->o56_elemento;
                 $oDesp->elemento_siope   = $oDespesa->c222_natdespsiope;
                 $oDesp->descricao_siope  = $oDespesa->c223_descricao;
                 $oDesp->dot_atualizada   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
@@ -243,7 +243,7 @@ class SiopeDespesa extends Siope {
                                 AND o58_subfuncao IN ({$oDespesa->o58_subfuncao})
                                 AND o58_programa IN ({$oDespesa->o58_programa})
                                 AND o58_projativ IN ({$oDespesa->o58_projativ})
-                                AND (o56_elemento LIKE '" . substr($oDespesa->o58_elemento, 0, 7) . "%')
+                                AND (o56_elemento LIKE '" . substr($oDespesa->o56_elemento, 0, 7) . "%')
                                 AND o58_codigo IN ({$oDespesa->o58_codigo})
                                 AND o58_instit IN ({$this->iInstit})
                                 AND o58_anousu = {$this->iAnoUsu}
@@ -497,8 +497,8 @@ class SiopeDespesa extends Siope {
                 $this->sMensagemDePara = "Não foi possível gerar a Despesa. De/Para do(s) seguinte(s) elemento(s) não encontrado(s): ";
             }
 
-            if (strpos($this->sMensagemDePara, $oDespesa->o58_elemento) === false){
-                $this->sMensagemDePara .= "{$oDespesa->o58_elemento}, ";
+            if (strpos($this->sMensagemDePara, $oDespesa->o56_elemento) === false){
+                $this->sMensagemDePara .= "{$oDespesa->o56_elemento}, ";
             }
 
         }
