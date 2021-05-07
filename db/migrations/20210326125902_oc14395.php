@@ -216,6 +216,11 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE cadobras102021
               OWNER TO dbportal;
+              
+            --ALTERA TABELA licobrasresponsaveis
+            
+            ALTER TABLE licobrasresponsaveis ADD COLUMN obr05_dscoutroconselho varchar(40);
+  
         COMMIT;
 
 SQL;
