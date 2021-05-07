@@ -215,6 +215,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                 liclicita.l20_justificativa AS justificativa,
                                 liclicita.l20_razao AS razao,
                                 liclicita.l20_tipojulg,
+                                liclicita.l20_usaregistropreco,
                                 obrasdadoscomplementareslote.db150_bdi AS bdi,
                                 liclancedital.l47_linkpub as linkpub,
                                 (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
@@ -365,7 +366,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   obrasdadoscomplementareslote.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
 						   orcdotacao.o58_funcao AS codFuncao,
 						   orcdotacao.o58_subfuncao AS codSubFuncao,
-						   obrasdadoscomplementareslote.db150_subgrupobempublico as codBemPublico
+						   CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico
                         FROM liclicita
                         INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                         INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
@@ -389,12 +390,18 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
           $rsResult11 = db_query($sSql);
           $aDadosAgrupados11 = array();
 
+          // $iNumRows = $oDados10->l20_usaregistropreco == 'f' ? 1 : pg_num_rows($rsResult11);
+
           for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
             $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
             $sHash11 = $oResult11->tiporegistro . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->exercicioprocesso .
               $oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-              $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codbempublico;
+              $oResult11->tipoatividadeservespecializado . $oResult11->codbempublico;
+
+            if($oDados10->l20_usaregistropreco == 't'){
+                $sHash11 .= $oResult11->codfuncao . $oResult11->codsubfuncao;
+            }
 
             /**
              * @todo Corrigir busca pela função e subfunção
@@ -482,7 +489,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   obrasdadoscomplementareslote.db150_cep AS cep,
 						   obrasdadoscomplementareslote.db150_latitude AS latitude,
 						   obrasdadoscomplementareslote.db150_longitude AS longitude,
-                           obrasdadoscomplementareslote.db150_subgrupobempublico as codBemPublico
+               CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico
 					FROM liclicita
 					INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
 					INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
