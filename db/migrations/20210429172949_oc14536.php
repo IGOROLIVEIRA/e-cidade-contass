@@ -3144,6 +3144,18 @@ class Oc14536 extends PostgresMigration
             ('46990000', 'Modalidade Genérica', 2021),
             ('99999999', 'Reserva de Contingência /Reserva do Rpps', 2021);
 
+        UPDATE db_syscampo SET nomecam = 'c225_natrecsiope' WHERE nomecam = 'c225_elerececidade';
+
+        ALTER TABLE elerecsiope RENAME COLUMN c225_elerececidade TO c225_natrecsiope;
+
+        DROP INDEX elerecsiope_index;
+
+        CREATE UNIQUE INDEX elerecsiope_index ON elerecsiope(c225_natrecsiope, c225_anousu);
+
+        DELETE FROM naturrecsiope WHERE c224_anousu = 2021;
+
+        DELETE FROM elerecsiope WHERE c225_anousu = 2021;
+
         COMMIT;
 
 SQL;

@@ -100,61 +100,7 @@ class SiopeReceita extends Siope {
             $this->aReceitasAgrupadas[$aAgrupado['natureza']] = $aAgrupado;
         }
 
-        if ($this->lOrcada) {
-
-            $aRecAgrupAnoSeg = array();
-
-            /**
-             * Agrupa receitas do ano seguinte.
-             */
-            foreach ($this->aReceitasAnoSeg as $index => $row) {
-
-                list($natureza, $descricao, $rec_orcada) = array_values($row);
-
-                $iSubTotalRecOrc = isset($aRecAgrupAnoSeg[$natureza]['rec_orcada']) ? $aRecAgrupAnoSeg[$natureza]['rec_orcada'] : 0;
-
-                $aRecAgrupAnoSeg[$natureza]['natureza']     = $natureza;
-                $aRecAgrupAnoSeg[$natureza]['descricao']    = $descricao;
-                $aRecAgrupAnoSeg[$natureza]['rec_orcada']   = ($iSubTotalRecOrc + $rec_orcada);
-
-            }
-
-            foreach ($aRecAgrupAnoSeg as $aAgrupado) {
-                $this->aReceitasAnoSegAgrupadas[$aAgrupado['natureza']] = $aAgrupado;
-            }
-
-            /**
-             * Une os dois arrays do ano corrente com o ano seguinte.
-             * ***Pode haver registros no ano seguinte que não estão no ano corrente.***
-             */
-            foreach ($this->aReceitasAgrupadas as $index => $receita) {
-
-                if (isset($this->aReceitasAnoSegAgrupadas[$index])) {
-                    $receita['rec_orcada'] = $this->aReceitasAnoSegAgrupadas[$index]['rec_orcada'];
-                    $this->aReceitasAnoSegAgrupadas[$index]['flag'] = 1;
-                    array_push($this->aReceitasAgrupadasFinal, $receita);
-                } else {
-                    $this->aReceitasAnoSegAgrupadas[$index]['flag'] = 1;
-                    array_push($this->aReceitasAgrupadasFinal, $receita);
-                }
-
-            }
-
-            foreach ($this->aReceitasAnoSegAgrupadas as $index => $receita) {
-
-                if (!isset($receita['flag']) || $receita['flag'] != 1) {
-                    $receita['dot_atualizada'] = isset($this->aReceitasAgrupadas[$index]['prev_atualizada']) ? $this->aReceitasAgrupadas[$index]['prev_atualizada'] : 0;
-                    $receita['empenhado'] = isset($this->aReceitasAgrupadas[$index]['rec_realizada']) ? $this->aReceitasAgrupadas[$index]['rec_realizada'] : 0;
-                    array_push($this->aReceitasAgrupadasFinal, $receita);
-                }
-
-            }
-
-        } else {
-
-            $this->aReceitasAgrupadasFinal = $this->aReceitasAgrupadas;
-
-        }
+        $this->aReceitasAgrupadasFinal = $this->aReceitasAgrupadas;
 
     }
 
@@ -166,79 +112,62 @@ class SiopeReceita extends Siope {
      */
     public function setReceitas() {
 
-        $result = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,false,' * ',true,0);
+        // $result = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,false,' * ',true,0);
+        $sSqlPrinc = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,true,' * ',true,0);
+        
+        $sSql = "   SELECT  
+                            -- o57_fonte, 
+                            -- c224_natrececidade,
+                            CASE 
+                                WHEN c224_natrececidade IS NOT NULL THEN substr(c224_natrececidade,2,12)
+                                ELSE substr(o57_fonte,2,12)
+                            END AS naturezareceita,
+                            CASE 
+                                WHEN c224_natrececidade IS NOT NULL THEN c225_descricao
+                                ELSE o57_descr
+                            END AS descricao,
+                            -- o57_descr,
+                            -- c225_descricao,
+                            o70_codrec,
+                            saldo_inicial,
+                            saldo_prevadic_acum,
+                            saldo_arrecadado
+                            
+                    
+                    FROM ($sSqlPrinc) AS principal
+                    LEFT JOIN naturrecsiope ON o57_fonte = c224_natrececidade AND c224_anousu = {$this->iAnoUsu}
+                    LEFT JOIN elerecsiope ON substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_natrecsiope AND naturrecsiope.c224_anousu = elerecsiope.c225_anousu
+
+                    WHERE o70_codrec > 0
+                    ";
+        $result = db_query($sSql);
+        // db_criatabela($result);
 
         for ($i = 0; $i < pg_num_rows($result); $i++) {
 
             $oReceita = db_utils::fieldsMemory($result, $i);
 
-            if ($oReceita->o70_codrec > 0) {
-
-                $oNaturrecsiope = $this->getNaturRecSiope($oReceita->o57_fonte);
-
-                $aReceita = array();
-
-                $aReceita['natureza']           = $oNaturrecsiope->c225_elerececidade;
-                $aReceita['descricao']          = $oNaturrecsiope->c225_descricao;
-                $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
-                $aReceita['rec_realizada']      = abs($oReceita->saldo_arrecadado);
-
-                array_push($this->aReceitas, $aReceita);
-
+            $sHash = $oReceita->naturezareceita;
+            
+            if (substr($oReceita->naturezareceita,0,1) == 7 || substr($oReceita->naturezareceita,0,1) == 8) {
+                echo $sHash.'<br>';
+                $sHash = substr($oReceita->naturezareceita,0,1) == 7 ? '1' : '2';
+                $sHash .= substr($oReceita->naturezareceita,1,12);
+                echo $sHash.'<br>';
+                echo '<pre>';print_r($oReceita);echo '</pre>';  
             }
 
-        }
+            // $oNaturrecsiope = $this->getNaturRecSiope($oReceita->o57_fonte);
 
-        /**
-         * Caso seja 6º Bimestre, campo ORÇADO será alimentado através do relatório Balancete da Receita no exercício subsequente ao de referência.
-         */
-        if ($this->lOrcada) {
+            // $aReceita = array();
 
-            db_query('drop table work_receita');
-            $iAnoSeg = $this->iAnoUsu+1;
-            $resultAnoSeg = db_receitasaldo(11, 1, 3, true, $this->sFiltros, $iAnoSeg, "{$iAnoSeg}-01-01", "{$iAnoSeg}-01-01", false, ' * ', true, 0);
+            // $aReceita['natureza']           = $oNaturrecsiope->c225_natrecsiope;
+            // $aReceita['descricao']          = $oNaturrecsiope->c225_descricao;
+            // $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+            // $aReceita['rec_realizada']      = abs($oReceita->saldo_arrecadado);
 
-            for ($i = 0; $i < pg_num_rows($resultAnoSeg); $i++) {
+            // array_push($this->aReceitas, $aReceita);
 
-                $oReceitaAnoSeg = db_utils::fieldsMemory($resultAnoSeg, $i);
-
-                if ($oReceitaAnoSeg->o70_codrec > 0) {
-
-                    $oNaturrecsiope = $this->getNaturRecSiope($oReceitaAnoSeg->o57_fonte);
-
-                    $aReceitaAnoSeg = array();
-
-                    $aReceitaAnoSeg['natureza']     = $oNaturrecsiope->c225_elerececidade;
-                    $aReceitaAnoSeg['descricao']    = $oNaturrecsiope->c225_descricao;
-                    $aReceitaAnoSeg['rec_orcada']   = abs($oReceitaAnoSeg->saldo_inicial);
-
-                    array_push($this->aReceitasAnoSeg, $aReceitaAnoSeg);
-
-                }
-
-            }
-
-        }
-
-    }
-
-    /**
-     * Realiza De/Para da Natureza da despesa com tabela elerecsiope composta pela Natureza Receita e Descrição
-     */
-    public function getNaturRecSiope($natureza) {
-
-
-        $clnaturrecsiope    = new cl_naturrecsiope();
-        $rsNaturrecsiope    = db_query($clnaturrecsiope->sql_query_siope(substr($natureza, 0, 15),"", $this->iAnoUsu));
-
-        if (pg_num_rows($rsNaturrecsiope) > 0) {
-            $oNaturrecsiope = db_utils::fieldsMemory($rsNaturrecsiope, 0);
-            return $oNaturrecsiope;
-        } else {
-            $this->status = 2;
-            if (strpos($this->sMensagem, $natureza) === false){
-                $this->sMensagem .= "{$natureza} ";
-            }
         }
 
     }

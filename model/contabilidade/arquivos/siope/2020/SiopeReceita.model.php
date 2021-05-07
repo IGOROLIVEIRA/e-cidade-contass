@@ -178,7 +178,7 @@ class SiopeReceita extends Siope {
 
                 $aReceita = array();
 
-                $aReceita['natureza']           = $oNaturrecsiope->c225_elerececidade;
+                $aReceita['natureza']           = $oNaturrecsiope->c225_natrecsiope;
                 $aReceita['descricao']          = $oNaturrecsiope->c225_descricao;
                 $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
                 $aReceita['rec_realizada']      = abs($oReceita->saldo_arrecadado);
@@ -208,7 +208,7 @@ class SiopeReceita extends Siope {
 
                     $aReceitaAnoSeg = array();
 
-                    $aReceitaAnoSeg['natureza']     = $oNaturrecsiope->c225_elerececidade;
+                    $aReceitaAnoSeg['natureza']     = $oNaturrecsiope->c225_natrecsiope;
                     $aReceitaAnoSeg['descricao']    = $oNaturrecsiope->c225_descricao;
                     $aReceitaAnoSeg['rec_orcada']   = abs($oReceitaAnoSeg->saldo_inicial);
 
