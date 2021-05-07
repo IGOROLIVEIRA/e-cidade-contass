@@ -33,6 +33,7 @@ class cl_ralic122021
   var $si182_cep = '';
   var $si182_latitude = '';
   var $si182_longitude = '';
+  var $si182_nrolote = '';
   var $si182_codbempublico = '';
   var $si182_mes = 0;
   var $si182_instit = 0;
@@ -54,11 +55,12 @@ class cl_ralic122021
                  si182_cep = int8 = Número do CEP
                  si182_latitude = int4 = Graus da Latitude
                  si182_longitude = int4 = Graus da Longitude
+                 si182_nrolote = int4 = Número Lote
                  si182_codbempublico = int4 = Código Bem Público
                  si182_mes = int8 = Mês
                  si182_instit = int8 = Instituição
                  si182_reg10 = int8 = Registro 10
-                 
+
                  ";
   // cria propriedade com as variaveis do arquivo
 
@@ -101,6 +103,7 @@ class cl_ralic122021
       $this->si182_cep = ($this->si182_cep == "" ? @$GLOBALS["HTTP_POST_VARS"]["si182_cep"] : $this->si182_cep);
       $this->si182_latitude = ($this->si182_latitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->si182_latitude"] : $this->si182_latitude);
       $this->si182_longitude = ($this->si182_longitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->si182_longitude"] : $this->si182_longitude);
+      $this->si182_nrolote = ($this->si182_nrolote == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->si182_nrolote"] : $this->si182_nrolote);
       $this->si182_codbempublico = ($this->si182_codbempublico == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->si182_codbempublico"] : $this->si182_codbempublico);
       $this->si182_reg10 = ($this->si182_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si182_reg10"] : $this->si182_reg10);
       $this->si182_mes = ($this->si182_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si182_mes"] : $this->si182_mes);
@@ -195,8 +198,8 @@ class cl_ralic122021
       return false;
     }
 
-    if(!$this->si182_numero || $this->si182_numero == null){
-        $this->si182_numero = 0;
+    if (!$this->si182_numero || $this->si182_numero == null) {
+      $this->si182_numero = 0;
     }
     $sql = "insert into ralic122021(
                                        si182_sequencial
@@ -215,6 +218,7 @@ class cl_ralic122021
                                       ,si182_cep
                                       ,si182_latitude
                                       ,si182_longitude
+                                      ,si182_nrolote
                                       ,si182_codbempublico
                                       ,si182_reg10
                                       ,si182_mes
@@ -237,11 +241,13 @@ class cl_ralic122021
                                ,$this->si182_cep
                                ,$this->si182_latitude
                                ,$this->si182_longitude
+                               ,$this->si182_nrolote
                                ,$this->si182_codbempublico
                                ,$this->si182_reg10
                                ,$this->si182_mes
                                ,$this->si182_instit
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -554,5 +560,3 @@ class cl_ralic122021
     return $sql;
   }
 }
-
-?>
