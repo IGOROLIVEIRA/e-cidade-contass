@@ -837,7 +837,7 @@ class obrasDadosComplementares
 				if($aLotes[$count]){
 				    $sWhere = ' db150_lote = ' . $aLotes[$count];
 				}else{
-					$sWhere = ' db150_codobra = ' . $this->getCodigoObra();
+					$sWhere = ' db150_sequencial = ' . $this->getSequencial();
 				}
 				$oDaoObras->alterar('', $sWhere);
 			}else{
