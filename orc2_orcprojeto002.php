@@ -233,21 +233,19 @@ if ($timbre =='s'){
 
 
     if ($projeto_tipo == "1"){ // decreto
-       $res= $cldbconfig->sql_record($cldbconfig->sql_query(db_getsession("DB_instit")));
-       db_fieldsmemory($res,0);
-       $pdf->setX(20);
-       $pref = ucfirst($pref);
+        $res= $cldbconfig->sql_record($cldbconfig->sql_query(db_getsession("DB_instit")));
+        db_fieldsmemory($res,0);
+        $pdf->setX(20);
+        $pref = ucfirst($pref);
+        $nomeinst = ucwords($nomeinst);
 
-      // $pref = 'VIVIAN LITIA FLORES DA SILVA';
-
-     //  $txt="$pref, PREFEITA MUNICIPAL EM EXERCÍCIO DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
-     if($si09_tipoinstit == 51){
-      $txt="$pref, PRESIDENTE DO CONSÓRICO MUNICIPAL localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
-     }else if ( $db21_codcli == 34 ) {
-         $txt="$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal n" . chr(186) ." $o45_numlei";
-       }  else {
-         $txt="$pref, PREFEITO MUNICIPAL DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
-       }
+        if ($si09_tipoinstit == 3 || $si09_tipoinstit == 4 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51) {
+            $txt = "$pref, PRESIDENTE DO $nomeinst localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
+        } else if ($si09_tipoinstit == 1) {
+            $txt = "$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal n" . chr(186) ." $o45_numlei";
+        } else {
+            $txt = "$pref, PREFEITO MUNICIPAL DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
+        }
        if($o39_compllei != ""){
          $txt .= ", $o39_compllei, DECRETA:";
        }else{
@@ -265,12 +263,14 @@ if ($timbre =='s'){
 
        $pdf->setX(20);
        $pref = strtoupper($pref);
-       if($si09_tipoinstit == 51){
-        $txt="$pref, PRESIDENTE DO CONSÓRICO MUNICIPAL localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
-       }else if ( $db21_codcli == 34 ) {
-         $txt="$pref, PREFEITO MUNICIPAL DE $munic, $uf.";
+       $nomeinst = ucwords($nomeinst);
+       
+       if($si09_tipoinstit == 3 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51){
+            $txt = "$pref, PRESIDENTE DO $nomeinst localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
+        } else if ($si09_tipoinstit == 1) {
+            $txt = "$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf.";
        } else {
-         $txt="$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf.";
+            $txt = "$pref, PREFEITO MUNICIPAL DE $munic, $uf.";
        }
        $pdf->multicell(170,4,$txt,'0','J','0');
        $pdf->Ln(7);
@@ -668,10 +668,19 @@ if ($timbre =='s'){
 
  // if($)
  if($ass=='s'){
+
+    if ($si09_tipoinstit == 3 || $si09_tipoinstit == 4 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51) {
+        $cargo="PRESIDENTE DO $nomeinst - $munic, $uf";
+    }else if ($si09_tipoinstit == 1) {
+        $cargo="PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf.";
+    } else {
+        $cargo="PREFEITO MUNICIPAL DE $munic, $uf.";
+    }
+
       $pdf->ln();
       $assin      =  "\n\n_______________________________________________________"."\n";
       $assin     .=  $pref."\n";
-      $assin     .= " PREFEITO MUNICIPAL DE ".$munic." - ".$uf;
+      $assin     .=  $cargo;
 
       $ass_pref     = $classinatura->assinatura(1000,$assin);
       if( $pdf->gety() > ( $pdf->h - 35 ) )
