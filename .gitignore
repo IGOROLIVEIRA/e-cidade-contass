@@ -30,3 +30,6 @@ integracao_externa/portal_transparencia/libs/config.ini
 e-cidade.sublime-workspace
 e-cidade.sublime-project
 sftp-config.json
+extension/modification/log/dbportal-v3-desktop
+extension/log/application.log
+.gitignore
