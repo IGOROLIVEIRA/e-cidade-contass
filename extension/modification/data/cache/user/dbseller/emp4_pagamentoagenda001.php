@@ -25,14 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once(modification("libs/db_stdlib.php"));
-require_once(modification("std/db_stdClass.php"));
-require_once(modification("libs/db_app.utils.php"));
-require_once(modification("libs/db_utils.php"));
-require_once(modification("libs/db_conecta.php"));
-require_once(modification("libs/db_sessoes.php"));
-require_once(modification("libs/db_usuariosonline.php"));
-require_once(modification("dbforms/db_funcoes.php"));
+require_once("libs/db_stdlib.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
 $oGet = db_utils::postMemory($_GET);
 
 if ($oGet->iForma == 1) {
@@ -53,6 +53,7 @@ if (count($aParametrosEmpenho) > 0) {
 <head>
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" CONTENT="0">
 <?php
 db_app::load("scripts.js");
 db_app::load("prototype.js");
@@ -103,7 +104,7 @@ db_app::load("estilos.css");
 
   </div>
   <input type='button' value='Pagar Selecionados' onclick='js_pagarEmpenhos()'>
-  <input type="checkbox" id='autenticar' checked><label for="autenticar">Autenticar no documento</label>
+  <input type="checkbox" id='autenticar' unchecked><label for="autenticar">Autenticar no documento</label>
   <input type="checkbox" id='emiterelatorio'><label for="emiterelatorio">Emite Relatório de Pagamento</label>
   <input type="checkbox" id='emiterecibo'><label for="emiterecibo">Emite Reciboderetencoes</label>
 </body>
@@ -169,13 +170,7 @@ function js_init() {
                                     "left",
                                     "left"));
   gridNotas.setHeader(new Array("Mov.", "Cod. Cheque", "Empenho", "Recurso", "Ordem", "Conta Pagadora", "Nome",
-                                "data Pag",
-                                "Valor nota",
-                                "Retenção",
-                                "Pagar",
-                                "Histórico",
-                                "Cheque"
-                                )
+                                "Data Pgto", "Vlr Atual Nota", "Retenção", "Pagar", "Histórico", "Cheque")
                      );
   gridNotas.aHeaders[2].lDisplayed  = false;
   if (iForma != 2) {
@@ -204,6 +199,7 @@ function js_getNotas(iForma) {
   oParam.sNumeroCheque = parent.$F('cheque');
   oParam.sDtAut        = parent.$F('e42_dtpagamento');
   oParam.iOPauxiliar   = parent.$F('e42_sequencial');
+  oParam.iOrdemBanc    = parent.$F('k00_codseqpag');
   oParam.iForma        = iForma;
   var sParam           = js_objectToJson(oParam);
   var sJson = '{"exec":"getNotas","params":['+sParam+']}';
@@ -235,7 +231,7 @@ function js_retornoGetNotas(oAjax) {
            if (e81_valor == 0) {
              nValor = valorretencao;
            } else {
-             nValor   =  (e81_valor - valorretencao - e53_vlranu);
+             nValor   =  (e81_valor - valorretencao);
            }
          } else {
            nValor = e91_valor;
@@ -383,6 +379,7 @@ function js_pagarEmpenhos() {
   }
   oRequisicao             = new Object();
   oRequisicao.exec            = "pagarMovimento";
+  oRequisicao.dtPagamento     = parent.$F('data_para_pagamento');
   oRequisicao.aMovimentos     = new Array();
   var lMostraMsgErroRetencao  = false;
   var sMsgRetencaoMesAnterior = "Atenção:\n";
@@ -561,7 +558,7 @@ function js_emiteRecibo() {
     }
   }
   if ($('emiterecibo').checked) {
-     jan = window.open('emp4_emitereciboretencao002.php?listaordens='+aListaRequisicao,
+     jan = window.open('emp4_emitereciboretencao002?listaordens='+aListaRequisicao,
                       '',
                       'height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   }

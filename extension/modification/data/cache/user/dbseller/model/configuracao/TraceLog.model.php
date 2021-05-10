@@ -41,7 +41,7 @@ class TraceLog {
   private $lShowFunctionName= false;
   private $lShowTime        = true;
   private $lShowBackTrace   = false;
-  private $sDiretorio       = "./";
+  private $sDiretorio       = ECIDADE_PATH;
 
   /**
    * Caminho do Arquivo do Tracelog
@@ -56,7 +56,7 @@ class TraceLog {
    * @access private
    * @param string $sDiretorio
    */
-  private function __construct($sDiretorio = "./") {
+  private function __construct($sDiretorio = ECIDADE_PATH) {
 
   	$this->sDiretorio = $sDiretorio;
 

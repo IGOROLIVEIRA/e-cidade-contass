@@ -36,9 +36,9 @@ $clrotulo->label("z01_numcgm");
 $clrotulo->label("z01_nome");
 $clrotulo->label("e48_cgm");
 
-require_once(modification("libs/db_utils.php"));
+require_once("libs/db_utils.php");
 $clsaltes = db_utils::getDao("saltes");
-require_once(modification("libs/JSON.php"));
+require_once("libs/JSON.php");
 // seleciona conta a creditar
 $db_opcao = 1;
 
@@ -195,14 +195,20 @@ echo "</script>\n";
             ?>
             </td>
           </tr>
+          <tr>
+             <td colspan="4" style='text-align:center'>
+              <input type='button' value='Pesquisar' onclick="js_getMovimentos()">
+             </td>
+          </tr>
         </table>
+
       </fieldset>
     </td>
   </tr>
   <tr>
-    <td colspan="4" style='text-align:center'>
-      <input type='button' value='Pesquisar' onclick="js_getMovimentos()">
-    </td>
+     <td colspan="2" style='text-align:center'>
+        <input type='button' value='Processar' onclick="js_gerarsLip();">
+     </td>
   </tr>
 </table>
 <table width="70%">
@@ -214,11 +220,6 @@ echo "</script>\n";
     </div>
   </fieldset>
   </td>
-  </tr>
-  <tr>
-    <td colspan="2" style='text-align:center'>
-      <input type='button' value='Processar' onclick="js_gerarsLip();">
-    </td>
   </tr>
 </table>
 </form>
@@ -237,10 +238,10 @@ echo "</script>\n";
 
 function js_pesquisac62_codrec(mostra){
    if(mostra==true){
-       js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr','Pesquisa',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr','Pesquisa',true);
    }else{
        if(document.form1.o15_codigo.value != ''){
-           js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
        }else{
            document.form1.o15_descr.value = '';
        }
@@ -262,12 +263,12 @@ function js_mostraorctiporec1(chave1,chave2){
 
 function js_pesquisac62_codrec2(mostra){
    if(mostra==true){
-       js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec',
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec',
                            'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec3|o15_codigo|o15_descr','Pesquisa',
                            true);
    }else{
        if(document.form1.o15_codigo2.value != ''){
-           js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec',
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orctiporec',
                                'func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo2.value+
                                '&funcao_js=parent.js_mostraorctiporec2','Pesquisa',false);
        }else{
@@ -291,13 +292,13 @@ function js_mostraorctiporec3(chave1,chave2) {
 
 function js_pesquisatabrec(mostra){
        if(mostra==true){
-         js_OpenJanelaIframe('top.corpo',
+         js_OpenJanelaIframe('CurrentWindow.corpo',
                              'db_iframe_tabrec',
                              'func_tabrec.php?tiporec=E&funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|recurso|arretipo|k00_descr'
                              ,'Pesquisa',true,'15');
        }else{
          if( document.form1.k02_codigo.value != ''){
-           js_OpenJanelaIframe('top.corpo',
+           js_OpenJanelaIframe('CurrentWindow.corpo',
                                'db_iframe_tabrec',
                                'func_tabrec.php?tiporec=E&pesquisa_chave='+
                                document.form1.k02_codigo.value+'&funcao_js=parent.js_mostratabrec',
@@ -571,7 +572,6 @@ function js_gerarsLip() {
     oSlip.iRecurso     = aItens[i].aCells[6].getValue(6);
     oSlip.iArrecadacao = aItens[i].aCells[1].getValue();
     oSlip.iCGM         = aItens[i].aCells[9].getValue();
-    oSlip.iOrdem       = aItens[i].aCells[2].getValue();
     oSlip.nValor       = js_strToFloat(aItens[i].aCells[8].getValue()).valueOf();
 
     oRequisicao.aSlips.push(oSlip);

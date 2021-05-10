@@ -25,26 +25,26 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once(modification("libs/db_stdlib.php"));
-require_once(modification("libs/db_conecta.php"));
-require_once(modification("libs/db_sessoes.php"));
-require_once(modification("libs/db_usuariosonline.php"));
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
 
-require_once(modification("classes/db_iptubase_classe.php"));
-require_once(modification("classes/db_issbase_classe.php"));
-require_once(modification("classes/db_arreprescr_classe.php"));
-require_once(modification("classes/db_cgm_classe.php"));
-require_once(modification("classes/db_numpref_classe.php"));
-require_once(modification("classes/db_termoanu_classe.php"));
-require_once(modification("classes/db_fiscal_classe.php"));
-require_once(modification("classes/db_levanta_classe.php"));
-require_once(modification("classes/db_db_config_classe.php"));
+require_once("classes/db_iptubase_classe.php");
+require_once("classes/db_issbase_classe.php");
+require_once("classes/db_arreprescr_classe.php");
+require_once("classes/db_cgm_classe.php");
+require_once("classes/db_numpref_classe.php");
+require_once("classes/db_termoanu_classe.php");
+require_once("classes/db_fiscal_classe.php");
+require_once("classes/db_levanta_classe.php");
+require_once("classes/db_db_config_classe.php");
 
-require_once(modification("dbforms/db_funcoes.php"));
-require_once(modification("libs/db_sql.php"));
+require_once("dbforms/db_funcoes.php");
+require_once("libs/db_sql.php");
 
-require_once(modification("libs/db_utils.php"));
-require_once(modification("libs/db_app.utils.php"));
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
 
 parse_str($HTTP_SERVER_VARS ['QUERY_STRING']);
 
@@ -107,7 +107,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
     <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/classes/DBViewImportacaoDiversos.classe.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
 
     <style type="text/css">
       <!--
@@ -288,13 +287,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
       }
 
       function js_emiterecibo() {
-
-        if ($F('k00_dtoper') == "") {
-
-          alert("Campo Data Pagamento é de preenchimento obrigatório!");
-          return;
-
-        }
 
         if(document.getElementById('forcarvencimento')){
 
@@ -794,7 +786,7 @@ if (isset($HTTP_POST_VARS ["pesquisar"]) || isset($matricula) || isset($inscrica
     db_fieldsmemory($resultprinc, 0);
 
     if ($db21_usasisagua == true) {
-      require_once(modification("agu3_conscadastro_002_classe.php"));
+      require_once ("agu3_conscadastro_002_classe.php");
       $Consulta = new ConsultaAguaBase($HTTP_POST_VARS ["j01_matric"]);
       $sqlcorte = $Consulta->GetAguaCorteMatMovSQL();
       $resultcorte = db_query($sqlcorte) or die($sqlcorte);
@@ -997,15 +989,15 @@ if (isset($HTTP_POST_VARS ["pesquisar"]) || isset($matricula) || isset($inscrica
             }
           }
 
-          for($reg2 = 0; $reg2 < sizeof($matriz_numpre); $reg2 ++) {
-            if (substr($matriz_numpre [$reg2], 0, 1) == "C") {
+          for($reg = 0; $reg < sizeof($matriz_numpre); $reg ++) {
+            if (substr($matriz_numpre [$reg], 0, 1) == "C") {
               $expr_orig .= "CGM";
-            } elseif (substr($matriz_numpre [$reg2], 0, 1) == "M") {
+            } elseif (substr($matriz_numpre [$reg], 0, 1) == "M") {
               $expr_orig .= "MATRÍCULA";
-            } elseif (substr($matriz_numpre [$reg2], 0, 1) == "I") {
+            } elseif (substr($matriz_numpre [$reg], 0, 1) == "I") {
               $expr_orig .= "INSCRIÇÃO";
             }
-            $expr_orig .= ": " . substr($matriz_numpre [$reg2], 1, strlen($matriz_numpre [$reg2])) . " - ";
+            $expr_orig .= ": " . substr($matriz_numpre [$reg], 1, strlen($matriz_numpre [$reg])) . " - ";
           }
 
         }
@@ -1994,56 +1986,29 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
 
   if ($tipo_pesq[0] == "numcgm") {
 
-    $sInnerCredito     = " inner join arrenumcgm on arrenumcgm.k00_numpre = abatimentorecibo.k127_numprerecibo ";
-    $sInnerCompensacao = " inner join arrenumcgm on arrenumcgm.k00_numpre = abatimentoutilizacaodestino.k170_numpre ";
-    $sInnerDevolucao   = " inner join arrenumcgm on arrenumcgm.k00_numpre = arreckey.k00_numpre ";
-
-    $sWhereCredito     = " and arrenumcgm.k00_numcgm = ".$tipo_pesq[1];
-    $sWhereCompensacao = $sWhereCredito;
-    $sWhereDevolucao   = $sWhereCompensacao;
-
-    $sPesquisaOrigem   = " exists ( select 1 from arrenumcgm where k00_numcgm = {$tipo_pesq[1]} and arrenumcgm.k00_numpre = arreckey.k00_numpre)";
+    $sInnerCredito   = " inner join arrenumcgm on arrenumcgm.k00_numpre = abatimentorecibo.k127_numprerecibo ";
+    $sWhereCredito   = " and arrenumcgm.k00_numcgm = ".$tipo_pesq[1];
+    $sPesquisaOrigem = " exists ( select 1 from arrenumcgm where k00_numcgm = {$tipo_pesq[1]} and arrenumcgm.k00_numpre = arreckey.k00_numpre)";
   } else if ($tipo_pesq[0] == "matric") {
 
-    $sInnerCredito     = " inner join arrematric on arrematric.k00_numpre = abatimentorecibo.k127_numprerecibo ";
-    $sInnerCompensacao = " inner join arrematric on arrematric.k00_numpre = abatimentoutilizacaodestino.k170_numpre ";
-    $sInnerDevolucao   = " inner join arrematric on arrematric.k00_numpre = arreckey.k00_numpre ";
-
-    $sWhereCredito     = " and arrematric.k00_matric = ".$tipo_pesq[1];
-    $sWhereCompensacao = $sWhereCredito;
-    $sWhereDevolucao   = $sWhereCompensacao;
-
-    $sPesquisaOrigem   = " exists ( select 1 from arrematric where k00_matric = {$tipo_pesq[1]} and arrematric.k00_numpre = arreckey.k00_numpre)";
+    $sInnerCredito   = " inner join arrematric on arrematric.k00_numpre = abatimentorecibo.k127_numprerecibo ";
+    $sWhereCredito   = " and arrematric.k00_matric = ".$tipo_pesq[1];
+    $sPesquisaOrigem = " exists ( select 1 from arrematric where k00_matric = {$tipo_pesq[1]} and arrematric.k00_numpre = arreckey.k00_numpre)";
   } else if ($tipo_pesq[0] == "inscr") {
 
-    $sInnerCredito     = " inner join arreinscr on arreinscr.k00_numpre = abatimentorecibo.k127_numprerecibo ";
-    $sInnerCompensacao = " inner join arreinscr on arreinscr.k00_numpre = abatimentoutilizacaodestino.k170_numpre ";
-    $sInnerDevolucao   = " inner join arreinscr on arreinscr.k00_numpre = arreckey.k00_numpre ";
-
-    $sWhereCredito     = " and arreinscr.k00_inscr = ".$tipo_pesq[1];
-    $sWhereCompensacao = $sWhereCredito;
-    $sWhereDevolucao   = $sWhereCompensacao;
-
-    $sPesquisaOrigem   = " exists ( select 1 from arreinscr where k00_inscr = {$tipo_pesq[1]} and arreinscr.k00_numpre = arreckey.k00_numpre)";
+    $sInnerCredito   = " inner join arreinscr on arreinscr.k00_numpre = abatimentorecibo.k127_numprerecibo ";
+    $sWhereCredito   = " and arreinscr.k00_inscr = ".$tipo_pesq[1];
+    $sPesquisaOrigem = " exists ( select 1 from arreinscr where k00_inscr = {$tipo_pesq[1]} and arreinscr.k00_numpre = arreckey.k00_numpre)";
   } else {
-
-    $sInnerCredito     = "";
-    $sInnerCompensacao = "";
-    $sInnerDevolucao   = "";
-
-    $sWhereCredito     = " and abatimentorecibo.k127_numprerecibo  = ". $tipo_pesq[1];
-    $sWhereCompensacao = " abatimentoutilizacaodestino.k170_numpre = ". $tipo_pesq[1];
-    $sWhereDevolucao   = " arreckey.k00_numpre                     = ". $tipo_pesq[1];
+    $sInnerCredito   = "";
+    $sWhereCredito   = " and abatimentorecibo.k127_numprerecibo = ".$tipo_pesq[1];
   }
 
-  /**
-   * @todo mover lógica das compensações para dao
-   */
   $sSqlCreditosDisponiveis  = " select *                                                                                      ";
   $sSqlCreditosDisponiveis .= "   from abatimentorecibo                                                                       ";
   $sSqlCreditosDisponiveis .= "        inner join abatimento on abatimento.k125_sequencial = abatimentorecibo.k127_abatimento ";
   $sSqlCreditosDisponiveis .= "        {$sInnerCredito}                                                                       ";
-  $sSqlCreditosDisponiveis .= "  where abatimento.k125_tipoabatimento = 3 and k125_instit = ".db_getsession('DB_instit');
+  $sSqlCreditosDisponiveis .= "  where abatimento.k125_tipoabatimento = 3                                                     ";
   $sSqlCreditosDisponiveis .= "        {$sWhereCredito}                                                                       ";
   $sSqlCreditosDisponiveis .= "   limit 1                                                                                     ";
 
@@ -2061,61 +2026,26 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
            </table> ";
   }
 
-  $sSqlDevolucoesCredito  = " select 'DEVOLUÇÕES DE CREDITO'::varchar                                                                                            \n";
-  $sSqlDevolucoesCredito .= "   from abatimentoutilizacao                                                                                                        \n";
-  $sSqlDevolucoesCredito .= "        left join abatimentoutilizacaodestino on abatimentoutilizacao.k157_sequencial = abatimentoutilizacaodestino.k170_utilizacao \n";
-  $sSqlDevolucoesCredito .= "        inner join abatimento           on abatimento.k125_sequencial = abatimentoutilizacao.k157_abatimento                        \n";
-  $sSqlDevolucoesCredito .= "        inner join abatimentoarreckey on abatimentoarreckey.k128_abatimento = abatimento.k125_sequencial                            \n";
-  $sSqlDevolucoesCredito .= "        inner join arreckey on arreckey.k00_sequencial = abatimentoarreckey.k128_arreckey                                           \n";
-  $sSqlDevolucoesCredito .= "        {$sInnerDevolucao}                                                                                                          \n";
-  $sSqlDevolucoesCredito .= "  where ".str_replace('and', '', $sWhereCompensacao)."                                                                              \n";
-  $sSqlDevolucoesCredito .= "   and abatimentoutilizacaodestino.k170_utilizacao is null and k125_instit = ".db_getsession('DB_instit')."  limit 1                \n";
 
-  $rsDevolucoesCredito    = db_query($sSqlDevolucoesCredito);
-
-  if ( $rsDevolucoesCredito && pg_num_rows($rsDevolucoesCredito) > 0 ) {
-
-    echo " <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-              <tr>
-                <td valign=\"top\" class=\"links2\" id=\"tiposemdeb81\">
-                  <a class=\"links2\" onClick=\"js_MudaLink('tiposemdeb81')\" id=\"tiposemdeb81\"  href=\"cai3_gerfinanc052.php?".$arg."&tipo=4&devolucao=1\" target=\"debitos\">DEVOLUÇÕES DE CREDITO</a>
-                </td>
-              </tr>
-           </table> ";
-  }
-
-  $sSqlCompensacoesDisponiveis  = "select distinct * from (                                                                                                      \n";
-  $sSqlCompensacoesDisponiveis .= " select 'COMPENSACAO'::varchar                                                                                                \n";
-  $sSqlCompensacoesDisponiveis .= "   from abatimentorecibo                                                                                                      \n";
-  $sSqlCompensacoesDisponiveis .= "        inner join abatimento on abatimento.k125_sequencial = abatimentorecibo.k127_abatimento                                \n";
-  $sSqlCompensacoesDisponiveis .= "        {$sInnerCredito}                                                                                                      \n";
-  $sSqlCompensacoesDisponiveis .= "  where abatimento.k125_tipoabatimento = 4  and k125_instit = ".db_getsession('DB_instit')."                                  \n";
-  $sSqlCompensacoesDisponiveis .= "        {$sWhereCredito}                                                                                                      \n";
-  $sSqlCompensacoesDisponiveis .= "                                                                                                                              \n";
-  $sSqlCompensacoesDisponiveis .= " UNION all                                                                                                                    \n";
-  $sSqlCompensacoesDisponiveis .= " select 'COMPENSACAO'::varchar                                                                                                \n";
-  $sSqlCompensacoesDisponiveis .= "   from abatimentoutilizacaodestino                                                                                           \n";
-  $sSqlCompensacoesDisponiveis .= "        inner join abatimentoutilizacao on abatimentoutilizacao.k157_sequencial = abatimentoutilizacaodestino.k170_utilizacao \n";
-  $sSqlCompensacoesDisponiveis .= "        inner join abatimento           on abatimento.k125_sequencial = abatimentoutilizacao.k157_abatimento                  \n";
-  $sSqlCompensacoesDisponiveis .= "        {$sInnerCompensacao}                                                                                                  \n";
-  $sSqlCompensacoesDisponiveis .= "  where ".str_replace('and', '', $sWhereCompensacao)." and k125_instit = ".db_getsession('DB_instit')."                       \n";
-  $sSqlCompensacoesDisponiveis .= "   limit 1                                                                                                                    \n";
-
-  $sSqlCompensacoesDisponiveis .= ")      as x      ";
-
+  $sSqlCompensacoesDisponiveis  = "select * from (                                                                                \n";
+  $sSqlCompensacoesDisponiveis .= " select 'COMPENSACAO'::varchar                                                                 \n";
+  $sSqlCompensacoesDisponiveis .= "   from abatimentorecibo                                                                       \n";
+  $sSqlCompensacoesDisponiveis .= "        inner join abatimento on abatimento.k125_sequencial = abatimentorecibo.k127_abatimento \n";
+  $sSqlCompensacoesDisponiveis .= "        {$sInnerCredito}                                                                       \n";
+  $sSqlCompensacoesDisponiveis .= "  where abatimento.k125_tipoabatimento = 4                                                     \n";
+  $sSqlCompensacoesDisponiveis .= "        {$sWhereCredito}                                                                       \n";
+  $sSqlCompensacoesDisponiveis .= "   limit 1)      as x                                                                          \n";
 
   if (isset( $sPesquisaOrigem) ) {
-
-    $sSqlCompensacoesDisponiveis .= " union                                                                                                           \n";
-    $sSqlCompensacoesDisponiveis .= " select * from (                                                                                                 \n";
-    $sSqlCompensacoesDisponiveis .= " select 'DESCONTO'::varchar                                                                                      \n";
-    $sSqlCompensacoesDisponiveis .= "   from abatimento                                                                                               \n";
-    $sSqlCompensacoesDisponiveis .= "        inner join abatimentoarreckey akey on akey.k128_abatimento    = abatimento.k125_sequencial               \n";
-    $sSqlCompensacoesDisponiveis .= "        inner join arreckey                on arreckey.k00_sequencial = akey.k128_arreckey                       \n";
-    $sSqlCompensacoesDisponiveis .= "  where abatimento.k125_tipoabatimento = 2 and $sPesquisaOrigem and k125_instit = ".db_getsession('DB_instit')." \n";
-    $sSqlCompensacoesDisponiveis .= "  limit 1) as y                                                                                                  \n";
+    $sSqlCompensacoesDisponiveis .= " union                                                                                             \n";
+    $sSqlCompensacoesDisponiveis .= " select * from (                                                                                   \n";
+    $sSqlCompensacoesDisponiveis .= " select 'DESCONTO'::varchar                                                                        \n";
+    $sSqlCompensacoesDisponiveis .= "   from abatimento                                                                                 \n";
+    $sSqlCompensacoesDisponiveis .= "        inner join abatimentoarreckey akey on akey.k128_abatimento    = abatimento.k125_sequencial \n";
+    $sSqlCompensacoesDisponiveis .= "        inner join arreckey                on arreckey.k00_sequencial = akey.k128_arreckey         \n";
+    $sSqlCompensacoesDisponiveis .= "  where abatimento.k125_tipoabatimento = 2 and $sPesquisaOrigem                                    \n";
+    $sSqlCompensacoesDisponiveis .= "  limit 1) as y                                                                                    \n";
   }
-
   $rsCompensacoesDisponiveis    = db_query($sSqlCompensacoesDisponiveis);
 
   if ( $rsCompensacoesDisponiveis && pg_num_rows($rsCompensacoesDisponiveis) > 0 ) {
@@ -2123,7 +2053,7 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
     echo " <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
               <tr>
                 <td valign=\"top\" class=\"links2\" id=\"tiposemdeb8\">
-                  <a class=\"links2\" onClick=\"js_MudaLink('tiposemdeb8')\" id=\"tiposemdeb8\"  href=\"cai3_gerfinanc052.php?".$arg."&tipo=4&compensacao=1\" target=\"debitos\">COMPENSAÇÕES UTILIZADAS</a>
+                  <a class=\"links2\" onClick=\"js_MudaLink('tiposemdeb8')\" id=\"tiposemdeb8\"  href=\"cai3_gerfinanc052.php?".$arg."&tipo=4\" target=\"debitos\">COMPENSAÇÕES UTILIZADAS</a>
                 </td>
               </tr>
            </table> ";
@@ -2278,7 +2208,7 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
   ?>
   </td>
           </tr>
-          <td height="2">
+          <td height="2"></td>
           </form>
 
         </table>
@@ -2362,13 +2292,16 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
           <input type="button" name="btmarcavencidas" id="btmarcavencidas"  value="Marcar Vencidas"   onClick="debitos.js_marca_vencidas()" >
           <input type="button" name="geranotif"       id="geranotif"        value="Gerar Notificação" onClick="js_geraNotif()" disabled>
 
+          <!-- colocado display:none para esconder o botao pois não será utilizado momentaneamente -->
           <input type="button" name="btnSuspender"    id="btnSuspender"     value="Suspender"         onClick="js_suspender()" disabled>
           <input type="button" name="enviar"          id="enviar"           value="Recibo"            onClick="return js_emiterecibo()" disabled>
           <input type="button" name="btcarne"         id="btcarne"          value="Carne Banco"       onClick="js_emitecarne(true)" disabled>
 
+          <!--  <input type="button" id="btcarnep" name="btcarnep" onClick="js_emitecarne(false)" value="Carne Pref." disabled> -->
 	        <input type="button" name="relatorio"       id="relatorio"        value="" style="display: none">
 
-	        <input type="button" name="btparc"          id="btparc"           value="Parcelamento"          onClick="js_parcelamento()"            disabled />
+	        <!-- colocado display:none para esconder o botao que nao servia para nada -->
+	        <input type="button" name="btparc"          id="btparc"           value="Parcelamento"          onClick="js_parc()"                    disabled />
 	        <input type="button" name="btcda"           id="btcda"            value="CDA"                   onClick="js_certidao()"                disabled />
 	        <input type="button" name="btcancela"       id="btcancela"        value="Cancela Débito"        onClick="js_cancela()"                 disabled />
 	        <input type="button" name="btjust"          id="btjust"           value="Justifica"             onClick="js_justifica()"               disabled />
@@ -2426,6 +2359,7 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
         function js_justifica(){
           debitos.document.form1.action = 'cai3_gerfinanc066.php?valor='+document.getElementById('total2').innerHTML;
           debitos.document.form1.target = '_self';
+          debitos.document.form1.elements['numpreNumparChecked'].removeAttribute('disabled');
           debitos.document.form1.submit();
         }
       </script>
@@ -2495,10 +2429,10 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
     session_register("valoresparc");
     db_putsession("valoresparc", "");
   } else {
-
     db_putsession("conteudoparc", "");
     db_putsession("valoresparc", "");
   }
+
   ?>
   <div class="container">
     <form name="form1" method="post">
@@ -2717,11 +2651,6 @@ function js_mostradetalhes(chave){
 //-------------func Situação Fiscal - Por /*Rogerio Baum*/ -----------------------
 
 function js_situacao_fiscal(cod,tipo){
-
-  if ($F('cod_filtro') != cod) {
-    cod = $F('cod_filtro');
-  }
-
   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sitfiscal','cai3_consitfiscal002.php?cod='+cod+'&tipo='+tipo,'Situação Fiscal',true);
 }
 
@@ -2926,194 +2855,4 @@ function js_windowCertidao( fCallBack, iTipoCertidao ) {
 		this.value = this.value.replace(/[^0-9]/, '');
 	})
 }
-
-function js_parcelamento(){
-
-  x      = 0;
-  var vir = "";
-  var inicial = "";
-  numpre = "";
-  nump   = "";
-  deb    = debitos.document.form1;
-  var qtdeTotalDebitos  = 0;
-
-  for(i = 0; i < deb.length; i++){
-
-    if(deb.elements[i].type == "checkbox"){
-      deb.elements[i].value.split("N").each(function(item){
-        if(item.trim() != null && item.trim() != '') {
-          qtdeTotalDebitos++;
-        }
-      });
-    }
-
-    if(deb.k03_parcelamento.value == 't'){
-
-      if(deb.elements[i].type == "checkbox"){
-        if(deb.elements[i].checked == true){
-
-          numpre = deb.elements[i].value.split("N");
-          numpre = numpre[0].split("P");
-
-          if(nump == ""){
-            nump = numpre[0];
-          }else{
-
-            if(numpre[0] != nump){
-
-              alert('Você deve reparcelar um parcelamento de cada vez!');
-              x = 1;
-              break;
-            }
-
-            nump = numpre[0];
-          }
-        }
-      }
-    }
-
-    if ( typeof deb.inicial != 'undefined' ) {
-      if ( deb.inicial.value == 't' ) {
-        if (deb.elements[i].type == "checkbox") {
-          if (deb.elements[i].checked == true) {
-            inicial += vir + deb.elements[i].value;
-            vir = ",";
-          }
-        }
-      }
-    }
-  }
-
-  if(x == 0){
-
-    var oParans = {
-      valor        : document.getElementById('total2').innerHTML,
-      valorcorr    : document.getElementById('valorcorr2').innerHTML,
-      juros        : document.getElementById('juros2').innerHTML,
-      multa        : document.getElementById('multa2').innerHTML,
-      totregistros : qtdeTotalDebitos
-    }
-
-    if(inicial != ""){
-      oParans.inicial = inicial;
-    } else {
-
-      oParans.japarcelou       = document.form1.japarcelou.value;
-      oParans.numpresaparcelar = document.form1.numpresaparcelar.value;
-      oParans.numparaparcelar  = document.form1.numparaparcelar.value;
-    }
-
-    var oDBDocumentDebitos = new DBDocumentDebitos('cai3_gerfinanc062.php', '_self', oParans);
-
-    oDBDocumentDebitos.getParameters().submit();
-
-    return false;
-  }
-
-}
-
-/**
- * Classe responsavel pela administração do submit de muitos debitos da Geral Financeira
- * @param string sFormPathFile
- * @param string sFormTarget
- * @param object oFormParameters
- */
-function DBDocumentDebitos(sFormPathFile, sFormTarget, oFormParameters){
-
-  this.oDocument = CurrentWindow.corpo.debitos.document; //debitos.document;
-
-  this.oForm     =  CurrentWindow.corpo.debitos.document.form1; //debitos.document.form1;
-
-  this.oTable    =  CurrentWindow.corpo.debitos.document.getElementById('tabdebitos'); // debitos.document.getElementById('tabdebitos');
-
-  this.sRpc = "cai3_gerfinanc.RPC.php";
-
-  this.sMensagem = "Aguarde...";
-
-  this.oParameters = {};
-
-  this.sFormPathFile = sFormPathFile;
-
-  this.sFormTarget = sFormTarget;
-
-  this.oFormParameters = oFormParameters;
-
-  this.getParameters = function(){
-
-    this.oParameters.sExecucao = 'geralFinanceiraDebitosRequest';
-
-    var iCheckBox = 0;
-    var iValores  = 0;
-
-    // Percorre elementos do form carpurando checkbox de numpres selecionados e soma ao JSON de parametros
-
-    for(i = 0; i < this.oForm.length; i++){
-
-      var oElement = this.oForm.elements[i];
-
-      if(oElement.type == "checkbox"){
-
-        var oCheckbox = this.oDocument.getElementById("CHECK"    + iCheckBox);
-
-        if (!this.oDocument.getElementById("_VALORES" + iValores) && iValores == 0) {
-          iValores = 1;
-        }
-
-        var oHidden   = this.oDocument.getElementById("_VALORES" + iValores);
-
-        var aDebito = {
-          "sNumpres" : oCheckbox.value,
-          "sValores" : ((!oHidden) ? ' ' : oHidden.value),
-          "lChecked" : oCheckbox.checked
-        }
-
-        this.oParameters[iCheckBox] = aDebito;
-
-        iCheckBox++;
-        iValores++;
-      }
-    }
-
-    return this;
-  }
-
-  this.submit = function(){
-
-    new AjaxRequest(this.sRpc, this.oParameters, function(oRetorno, lErro){
-
-      if(lErro) {
-
-        alert(oRetorno.sMessage.urlDecode());
-        return false;
-      }
-
-      var sAction = '';
-      var iLenght = 0;
-      var iMax    = Object.keys(this.oFormParameters).length;
-
-      // Forma string do action do form
-      for(var sIndex in this.oFormParameters){
-
-        sAction += sIndex + '=' + this.oFormParameters[sIndex];
-
-        if(iLenght < iMax){
-          sAction += '&';
-        }
-        iLenght++;
-      }
-
-      // Remove todos os elementos da table contidos dentro do form
-      this.oTable.innerHTML = '';
-
-      // Adiciona propriedades e submeter form
-      this.oForm.action     = this.sFormPathFile + '?' + sAction;
-      this.oForm.target     = this.sFormTarget;
-      this.oForm.submit();
-
-    }.bind(this)).setMessage(this.sMensagem).execute();
-
-    return this;
-  }
-}
-
 </script>

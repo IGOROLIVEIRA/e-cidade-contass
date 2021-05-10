@@ -82,9 +82,10 @@ if (!isset($reimpressao)) {  // quando reimpessão não precisa validar
 
       $clempprestaitem = new cl_empprestaitem();
       $sSql            = $clempprestaitem->sql_query( null,
-        "sum(e46_valor) as total_prestado, e45_conferido",
+        "coalesce(sum(e46_valor)-(sum(e46_desconto)+(select coalesce(sum(e999_desconto),0) from empdescontonota where e999_empenho  = emppresta.e45_numemp)),0) AS total_prestado, e45_conferido",
         null,
-        "e45_numemp = {$e50_numemp} and e45_codmov = {$e81_codmov} group by e45_conferido" );
+        "e45_numemp = {$e50_numemp} and e45_codmov = {$e81_codmov} group by e45_conferido,e45_numemp" );
+
       $result          = $clempprestaitem->sql_record( $sSql );
 
       $sql             = $clempagemov->sql_query_file( null,
@@ -336,6 +337,14 @@ if ($oDaoPagOrdemConta->numrows > 0) {
                   <? db_textarea('c72_complem', 2, 50, 0, true, 'text', $db_opcao, "") ?>
                 </td>
               </tr>
+              <tr>
+                <td nowrap title="Data de lançamento">
+                  <b>Data de lançamento</b>
+                </td>
+                <td>
+                  <?  db_inputdata('dataLancamento','','','',true,'text',2); ?>
+                </td>
+              </tr>
             </table>
           </fieldset>
         </td>
@@ -573,9 +582,9 @@ if ($oDaoPagOrdemConta->numrows > 0) {
 
   function js_pesquisak13_conta(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?funcao_js=parent.js_mostrasaltes1|k13_conta|k13_descr','Pesquisa',true);
     }else{
-      js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_saltes.php?pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes','func_saltes.php?pesquisa_chave='+document.form1.k13_conta.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
     }
   }
   function js_mostrasaltes(chave,erro){
@@ -591,7 +600,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     db_iframe_saltes.hide();
   }
   function js_pesquisa_pagamentos(empenho){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem002.php?e60_numemp='+empenho,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem002.php?e60_numemp='+empenho,'Pesquisa',true);
   }
 
   <?
@@ -640,7 +649,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
   ?>
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_empempenho.hide();
@@ -672,7 +681,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
 
 
   function js_cheque(abrejanela, fFuncRetorno){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cheque',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cheque',
       'emp4_movimentosgenda.php?js_funcao=' + 'parent.' + fFuncRetorno
       + '|e91_codcheque|e83_conta|e91_cheque|k13_descr|k12_valor|e81_codmov|k105_corgrupotipo'
       +'&e50_codord=<?=@$e50_codord?>&e60_numemp=<?=@$e60_numemp?>'
@@ -858,6 +867,10 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     if ($('estornarpagamento').checked) {
       lEstornarPagamento = true;
     }
+    if($F('dataLancamento')==''){
+      alert('Data de lançamento não informada.');
+      return false;
+    }
     var aRetencoes             = gridRetencoes.getSelection();
 
     if (!lEstornarPagamento && aRetencoes.length == 0) {
@@ -895,6 +908,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     oRequisicao.iCheque        = $F('k12_cheque');
     oRequisicao.iNota          = $F('e50_codord');
     oRequisicao.iConta         = $F('k13_conta');
+    oRequisicao.dataLancamento = $F('dataLancamento');
     oRequisicao.lEstornaCheque = $('estornarcheque').checked;
     oRequisicao.lEstornarPgto  = lEstornarPagamento;
     oRequisicao.sHistorico     = encodeURIComponent($F('c72_complem').replace(/\"/g, "<aspa>"));

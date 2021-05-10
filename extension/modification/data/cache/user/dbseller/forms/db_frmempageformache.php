@@ -40,7 +40,7 @@ $clrotulo->label("e60_emiss");
 $clrotulo->label("e87_descrgera");
 $clrotulo->label("o15_descr");
 $clrotulo->label("o15_codigo");
-
+$clrotulo->label("numerocheque");
 $clempagepag= new cl_empagepag;
 $dbwhere = '';
 //$dbwhere = " e80_instit = " . db_getsession("DB_instit") . " and e90_codmov is null and e97_codforma=2 ";
@@ -304,9 +304,9 @@ function js_anular(){
                     </tr>
                      </table>
                      <hr>
-                     <b>Número do próximo cheque:</b>
+                     <b>Número do Cheque:</b>
                       <?
-                       db_input("numerocheque",15,null,true,"text",3);
+                       db_input('numerocheque',9,1,true,'text',$db_opcao,"");
                       ?>
                 </fieldset>
                 </td>
@@ -368,7 +368,7 @@ function js_anular(){
         <td colspan='5' align='left'>
           <span>
           <fieldset><legend><b>Mostrar Movimentos</b></legend>
-            <input type="checkbox" id='disabled'  onclick='js_showFiltro("comcheque",this.checked)'>
+            <input type="checkbox" id='disabled' checked onclick='js_showFiltro("comcheque",this.checked)'>
             <label for="disabled" ><b>Com cheque Emitido</b></label>
             <input type="checkbox" id='normal' checked onclick='js_showFiltro("normal",this.checked)'>
             <label for="normal" style='color:black'><b>Sem Cheque</b></label>
@@ -393,7 +393,7 @@ iTipoControleRetencaoMesAnterior = <?=$iTipoControleRetencaoMesAnterior?>;
 function js_fechariframe(con) {
 
   document.form1.cheques.options[(con-1)].selected = true;
-  (window.CurrentWindow || parent.CurrentWindow).corpo.db_iframe_informar_valores.hide();
+  CurrentWindow.corpo.db_iframe_informar_valores.hide();
   js_liberar_botao(false);
 }
 
@@ -411,7 +411,7 @@ function js_recebeval(con,valores_cheques){
   }
   $('total_dos_cheques').value = nTotalCheques;
   aQtdCheques                  = aCheques;
-  (window.CurrentWindow || parent.CurrentWindow).corpo.db_iframe_informar_valores.hide();
+  CurrentWindow.corpo.db_iframe_informar_valores.hide();
   js_liberar_botao(false);
 
 }
@@ -1049,7 +1049,7 @@ function js_emiteCheques() {
     //js_bloqueiaBotoes(true);
     js_divCarregando("Aguarde, Efetuando emissão do cheques.","msgBox");
     var sJson  = '{"exec":"emitirCheque","params":[{"sCredor":"'+encodeURIComponent($F('credor'))+'","dtData":"'+$F('dtimp')+'",';
-    sJson     += '"aNotasLiquidacao":['+sJsonItens+'],"aTotCheques":'+aQtdCheques.toSource()+'}]}';
+    sJson     += '"aNotasLiquidacao":['+sJsonItens+'],"aTotCheques":'+aQtdCheques.toSource()+',"numeroCheque":"'+$F('numerocheque')+'"}]}';
     url        = 'emp4_agendaPagamentoRPC.php';
     var oAjax  = new Ajax.Request(
                            url,
