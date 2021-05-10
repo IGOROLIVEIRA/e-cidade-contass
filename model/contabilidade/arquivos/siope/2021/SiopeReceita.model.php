@@ -4,18 +4,10 @@ class SiopeReceita extends Siope {
 
     //@var array
     public $aReceitas = array();
-    //@var array
-    public $aReceitasAnoSeg = array();
-    //@var array
-    public $aReceitasAgrupadas = array();
-    //@var array
-    public $aReceitasAnoSegAgrupadas = array();
-    //@var boolean
-    public $aReceitasAgrupadasFinal = array();
 
     public function gerarSiope() {
 
-        $aDados = $this->aReceitasAgrupadasFinal;
+        $aDados = $this->aReceitas;
 
         if (file_exists("model/contabilidade/arquivos/siope/{$this->iAnoUsu}/SiopeCsv.model.php")) {
 
@@ -59,66 +51,35 @@ class SiopeReceita extends Siope {
     }
 
     /**
-     * Ordena receitas com base na substr da natureza 4.11.12 para permaneça agrupadas.
+     * Ordena receitas com base na natureza.
      */
     public function ordenaReceitas() {
 
         $sort = array();
-        foreach ($this->aReceitasAgrupadasFinal as $k => $v) {
-            $sort[$k] = substr($v['natureza'], 0, 5);
+
+        foreach ($this->aReceitas as $k => $v) {
+            $sort[$k] = $v->natureza;
         }
 
-        array_multisort($sort, SORT_ASC, $this->aReceitasAgrupadasFinal);
+        array_multisort($sort, SORT_ASC, $this->aReceitas);
 
     }
 
     /**
      * Agrupa receitas pela natureza da receita.
      */
-    public function agrupaReceitas() {
-
-        $aRecAgrup = array();
-
-        /**
-         * Agrupa receitas do ano corrente.
-         */
-        foreach($this->aReceitas as $index => $row) {
-
-            list($natureza, $descricao, $prev_atualizada, $rec_realizada) = array_values($row);
-
-            $iSubTotalPrev      = isset($aRecAgrup[$natureza]['prev_atualizada']) ? $aRecAgrup[$natureza]['prev_atualizada'] : 0;
-            $iSubTotalRec       = isset($aRecAgrup[$natureza]['rec_realizada']) ? $aRecAgrup[$natureza]['rec_realizada'] : 0;
-
-            $aRecAgrup[$natureza]['natureza']          = $natureza;
-            $aRecAgrup[$natureza]['descricao']         = $descricao;
-            $aRecAgrup[$natureza]['prev_atualizada']   = ($iSubTotalPrev + $prev_atualizada);
-            $aRecAgrup[$natureza]['rec_realizada']     = ($iSubTotalRec + $rec_realizada);
-
-        }
-
-        foreach ($aRecAgrup as $aAgrupado) {
-            $this->aReceitasAgrupadas[$aAgrupado['natureza']] = $aAgrupado;
-        }
-
-        $this->aReceitasAgrupadasFinal = $this->aReceitasAgrupadas;
-
-    }
+    public function agrupaReceitas() {}
 
     /**
      * Busca as receitas conforme relatório do Balancete da Receita
      * Especificamente: PREVISÃO ATUALIZADA DA RECEITA (previsão inicial + previsão adicional da receita), RECEITA REALIZADA e NATUREZA DA RECEITA.
      *
-     * Busca também a RECEITA ORÇADA do ano seguinte.
      */
     public function setReceitas() {
 
-        // $result = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,false,' * ',true,0);
         $sSqlPrinc = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,true,' * ',true,0);
         
-        $sSql = "   SELECT  
-                            -- o57_fonte, 
-                            -- c224_natrececidade,
-                            CASE 
+        $sSql = "   SELECT  CASE 
                                 WHEN c224_natrececidade IS NOT NULL THEN substr(c224_natrececidade,2,12)
                                 ELSE substr(o57_fonte,2,12)
                             END AS naturezareceita,
@@ -126,8 +87,6 @@ class SiopeReceita extends Siope {
                                 WHEN c224_natrececidade IS NOT NULL THEN c225_descricao
                                 ELSE o57_descr
                             END AS descricao,
-                            -- o57_descr,
-                            -- c225_descricao,
                             o70_codrec,
                             saldo_inicial,
                             saldo_prevadic_acum,
@@ -141,35 +100,89 @@ class SiopeReceita extends Siope {
                     WHERE o70_codrec > 0
                     ";
         $result = db_query($sSql);
-        // db_criatabela($result);
 
         for ($i = 0; $i < pg_num_rows($result); $i++) {
 
             $oReceita = db_utils::fieldsMemory($result, $i);
-
-            $sHash = $oReceita->naturezareceita;
             
-            if (substr($oReceita->naturezareceita,0,1) == 7 || substr($oReceita->naturezareceita,0,1) == 8) {
-                echo $sHash.'<br>';
-                $sHash = substr($oReceita->naturezareceita,0,1) == 7 ? '1' : '2';
-                $sHash .= substr($oReceita->naturezareceita,1,12);
-                echo $sHash.'<br>';
-                echo '<pre>';print_r($oReceita);echo '</pre>';  
+            if (substr($oReceita->naturezareceita,0,1) == 7 || substr($oReceita->naturezareceita,0,1) == 8) {              
+                
+                $sNatureza = substr($oReceita->naturezareceita,0,1) == 7 ? '1' : '2';
+                $sNatureza .= substr($oReceita->naturezareceita,1,7);
+
+                if (!isset($this->aReceitas[$sNatureza])) {
+
+                    $oRec = new stdClass();
+
+                    $oRec->natureza         = $sNatureza;
+                    $oRec->descricao        = $oReceita->descricao;
+                    $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $oRec->rec_realizada    = 0;
+                    $oRec->ded_fundeb       = 0;
+                    $oRec->outras_ded       = 0;
+                    $oRec->intra            = abs($oReceita->saldo_arrecadado);
+
+                    $this->aReceitas[$sNatureza] = $oRec;
+
+                } else {
+                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $this->aReceitas[$sNatureza]->intra             += abs($oReceita->saldo_arrecadado);
+                }
+
+            } elseif (substr($oReceita->naturezareceita,0,2) == 95) {
+
+                $sNatureza = substr($oReceita->naturezareceita,2,8);
+
+                if (!isset($this->aReceitas[$sNatureza])) {
+
+                    $oRec = new stdClass();
+
+                    $oRec->natureza         = $sNatureza;
+                    $oRec->descricao        = $oReceita->descricao;
+                    $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $oRec->rec_realizada    = 0;
+                    $oRec->ded_fundeb       = abs($oReceita->saldo_arrecadado);
+                    $oRec->outras_ded       = 0;
+                    $oRec->intra            = 0;
+
+                    $this->aReceitas[$sNatureza] = $oRec;
+
+                } else {
+                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
+                }
+
+            } elseif (in_array(substr($oReceita->naturezareceita,0,2), array(91, 92, 93, 96, 98, 99))) {
+
+                $sNatureza = substr($oReceita->naturezareceita,2,8);
+
+                if (!isset($this->aReceitas[$sNatureza])) {
+
+                    $oRec = new stdClass();
+
+                    $oRec->natureza         = $sNatureza;
+                    $oRec->descricao        = $oReceita->descricao;
+                    $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $oRec->rec_realizada    = 0;
+                    $oRec->ded_fundeb       = 0;
+                    $oRec->outras_ded       = abs($oReceita->saldo_arrecadado);
+                    $oRec->intra            = 0;
+
+                    $this->aReceitas[$sNatureza] = $oRec;
+
+                } else {
+                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
+                }
+
             }
-
-            // $oNaturrecsiope = $this->getNaturRecSiope($oReceita->o57_fonte);
-
-            // $aReceita = array();
-
-            // $aReceita['natureza']           = $oNaturrecsiope->c225_natrecsiope;
-            // $aReceita['descricao']          = $oNaturrecsiope->c225_descricao;
-            // $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
-            // $aReceita['rec_realizada']      = abs($oReceita->saldo_arrecadado);
-
-            // array_push($this->aReceitas, $aReceita);
 
         }
 
+    }
+
+    public function getElementoFormat($elemento) {
+        return substr($elemento, 0, 1).".".substr($elemento, 1, 1).".".substr($elemento, 2, 1).".".substr($elemento, 3, 1).".".substr($elemento, 4, 2).".".substr($elemento, 6, 1).".".substr($elemento, 7, 1);
     }
 
 }
