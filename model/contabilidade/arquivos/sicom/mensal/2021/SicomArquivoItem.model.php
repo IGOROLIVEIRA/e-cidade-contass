@@ -78,7 +78,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $sSql = "select distinct
     '10'  AS  tipoRegistro ,
-    pc11_codigo || '' || m61_codmatunid as coditem,
+    pc01_codmater || '' || m61_codmatunid as coditem,
     pc01_descrmater as dscitem,
     m61_descr AS  unidademedida,
     case
@@ -137,7 +137,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
   union
   select distinct
     '10'  AS  tipoRegistro ,
-    pc11_codigo || '' || m61_codmatunid as coditem,
+    pc01_codmater || '' || m61_codmatunid as coditem,
     pc01_descrmater as dscitem,
     m61_descr AS  unidademedida,
     case when pc01_dataalteracao is null then 1
@@ -250,7 +250,10 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
            WHERE si43_instit = " . db_getsession("DB_instit") . ")
         )";
 
-    $rsResult10 = db_query($sSql); //echo $sSql;db_criatabela($rsResult10);die($sSql);
+    $rsResult10 = db_query($sSql);
+    // echo $sSql;
+    // db_criatabela($rsResult10);
+    // die($sSql);
     //$aCaracteres = array("/","\","'","\"","°","ª","º","§");
     // matriz de entrada
     $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
