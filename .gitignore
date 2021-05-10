@@ -33,3 +33,4 @@ sftp-config.json
 extension/modification/log/dbportal-v3-desktop
 extension/log/application.log
 .gitignore
+extension/log/error.log

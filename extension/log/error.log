@@ -5302,3 +5302,10 @@ DETAIL:  Key (o53_subfuncao)=(1) already exists. in libs/db_stdlib.php on line 1
 #11 app.php:160 - require_once(skins/estilos.php)
 #12 FrontController.php:7 - require(app.php)
 
+[2021-05-10 14:03:22] ERROR: E_WARNING - file_put_contents(config/preferencias.json): failed to open stream: Permission denied in model/configuracao/Preferencia.model.php on line 102
+#1 model/configuracao/Preferencia.model.php:102 - file_put_contents(config/preferencias.json, {"db":{"oPreferenciaTelaLogin":{"iDataAlteracao":1620655402,"sClassAtiva":"imagem01"},"sSkinDefault":"default"}})
+#2 model/configuracao/PreferenciaEcidade.model.php:52 - Preferencia->salvarPreferencias()
+#3 login.php:69 - PreferenciaEcidade->salvarPreferencias()
+#4 app.php:160 - require_once(login.php)
+#5 FrontController.php:7 - require(app.php)
+
