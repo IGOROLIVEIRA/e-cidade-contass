@@ -640,7 +640,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE31['si243_saldoinicialcre']         = $this->sicomNumberReal($aBALACETE31['si243_saldoinicialcre'], 2);
                         $aCSVBALANCETE31['si243_naturezasaldoinicialcre'] = $this->padLeftZero($aBALACETE31['si243_naturezasaldoinicialcre'], 1);
                         $aCSVBALANCETE31['si243_totaldebitoscre']         = $this->sicomNumberReal($aBALACETE31['si243_totaldebitoscre'], 2);
-                        $aCSVBALANCETE31['si243_totalcreeditoscre']       = $this->sicomNumberReal($aBALACETE31['si243_totalcreeditoscre'], 2);
+                        $aCSVBALANCETE31['si243_totalcreditoscre']        = $this->sicomNumberReal($aBALACETE31['si243_totalcreditoscre'], 2);
                         $aCSVBALANCETE31['si243_saldofinalcre']           = $this->sicomNumberReal($aBALACETE31['si243_saldofinalcre'], 2);
                         $aCSVBALANCETE31['si243_naturezasaldofinalcre']   = $this->padLeftZero($aBALACETE31['si243_naturezasaldofinalcre'], 1);
 
