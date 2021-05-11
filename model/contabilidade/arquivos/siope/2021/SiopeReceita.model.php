@@ -175,6 +175,28 @@ class SiopeReceita extends Siope {
                     $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
                 }
 
+            } else {
+
+                $sNatureza = substr($oReceita->naturezareceita,0,8);
+
+                if (!isset($this->aReceitas[$sNatureza])) {
+
+                    $oRec = new stdClass();
+
+                    $oRec->natureza         = $sNatureza;
+                    $oRec->descricao        = $oReceita->descricao;
+                    $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $oRec->rec_realizada    = abs($oReceita->saldo_arrecadado);
+                    $oRec->ded_fundeb       = 0;
+                    $oRec->outras_ded       = 0;
+                    $oRec->intra            = 0;
+
+                    $this->aReceitas[$sNatureza] = $oRec;
+
+                } else {
+                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                    $this->aReceitas[$sNatureza]->rec_realizada        += abs($oReceita->saldo_arrecadado);
+                }
             }
 
         }
