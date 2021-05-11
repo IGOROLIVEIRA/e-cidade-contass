@@ -95,7 +95,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
      * e identificar os lotes que serão cadastrados para o endereço
      */
     this.verificaTipoJulgamento = () => {
-        
+
         let oParam = new Object();
         oParam.exec = 'getTipoJulgamento';
         oParam.licitacao = codLicitacao;
@@ -108,12 +108,13 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 asynchronous: false,
                 onComplete: (objeto) => {
                     let response = eval('('+objeto.responseText+')');
-                    me.exibeLote = parseInt(response.ano) >= 2021;
+                    me.exibeLote = (parseInt(response.ano) >= 2021 && response.mes >= 05 )? true : false;
+                    console.log('exibe',me.exibeLote);
                     me.iTipoJulgamento = response.tipo;
                 }
             }
         )
-        
+
     }
 
     me.verificaTipoJulgamento();
@@ -229,33 +230,33 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         sContent += "          </td>"
         sContent += "          <td id='ctnGrausLatitude" + sId + "' style='width:25%;'>";
         sContent += "          </td>";
-    
+
         sContent += "          <td id='ctnLabelMinutoLatitude" + sId + "'>";
         sContent += "           <b>Minuto da Latitude:</b>";
         sContent += "          </td>";
         sContent += "          <td id='ctnMinutoLatitude" + sId + "'>";
         sContent += "          </td>";
-    
+
         sContent += "          <td id='ctnLabelSegundoLatitude" + sId + "' style='padding-left: 51px;'>";
         sContent += "           <b>Segundo da Latitude:</b>";
         sContent += "          </td>";
         sContent += "          <td id='ctnSegundoLatitude" + sId + "'>";
         sContent += "          </td>";
         sContent += "        </tr>";
-    
+
         sContent += "       <tr valign='top'>";
         sContent += "          <td id='ctnLabelGrausLongitude" + sId + "' style='width:10%;'>";
         sContent += "           <b>Graus Longitude:</b>";
         sContent += "          </td>";
         sContent += "          <td id='ctnGrausLongitude" + sId + "' style='width:25%;'>";
         sContent += "          </td>";
-    
+
         sContent += "          <td id='ctnLabelMinutoLongitude" + sId + "'>";
         sContent += "           <b>Minuto da Longitude:</b>";
         sContent += "          </td>";
         sContent += "          <td id='ctnMinutoLongitude" + sId + "'>";
         sContent += "          </td>";
-    
+
         sContent += "          <td id='ctnLabelSegundoLongitude" + sId + "' style='padding-left: 51px;'>";
         sContent += "           <b>Segundo da Longitude:</b>";
         sContent += "          </td>";
@@ -271,7 +272,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         sContent += "          </td>";
         sContent += "          <td id='ctnLatitude" + sId + "' style='width:25%;'>";
         sContent += "          </td>";
-    
+
         sContent += "          <td id='ctnLabelLongitude" + sId + "'>";
         sContent += "           <b>Longitude:</b>";
         sContent += "          </td>";
@@ -393,7 +394,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
     me.oWindowEndereco.setShutDownFunction(me.close);
     me.oWindowEndereco.allowCloseWithEsc(false);
-    
+
     let sMessageBoard = me.exibeLote && me.iTipoJulgamento == 3 ? 'Dados Complementares do ' + me.sDescricaoLote : 'Dados Complementares';
 
     this.oMessageBoardEndereco = new DBMessageBoard('msgBoardEndereco' + sId,
@@ -2617,7 +2618,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         let valor = campo.value;
 
         if(valor.length > 9){
-            
+
             if(!valor.includes('.')){
                 valor = valor.substr(0, valor.length - 1);
                 campo.value = valor.substr(0, 2) + '.' + valor.substr(2,);
@@ -2626,7 +2627,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             }
 
         }
-        
+
         if(valor.length == 9){
             if(!valor.includes('.')){
                 campo.value = valor.substr(0, 2) + '.' + valor.substr(2, valor.length - 3);
@@ -2637,7 +2638,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.preencheComZero = (novaString, tamanho) => {
-        
+
         for(let count = 0; count < (9 - tamanho); count++){
             novaString += '0';
         }
@@ -2662,7 +2663,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         }
 
         event.target.value = valor;
-        
+
         return valor;
     }
 
@@ -2693,7 +2694,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         this.changeLatitude = (event) => {
             me.setLatitude(me.changeValor(event));
         }
-        
+
         me.oLatitude = new DBTextField('txtLatitude' + sId, 'txtLatitude' + sId, '');
         me.oLatitude.addStyle('width', '40%');
         $('ctnLatitude' + sId).observe('keyup', () => {
@@ -2702,7 +2703,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.oLatitude.setMaxLength(9);
         me.oLatitude.show($('ctnLatitude' + sId));
         $('ctnLatitude' + sId).observe('change', me.changeLatitude);
-        
+
     }
 
 //-------------------------------------Fim da Manipulação do Graus Latitude-------------------------------------------------
@@ -2732,7 +2733,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             }
             me.setMinutosLatitude(event.target.value);
         }
-    
+
         me.oMinutoLatitude = new DBTextField('txtMinutoLatitude' + sId, 'txtMinutoLatitude' + sId, '');
         me.oMinutoLatitude.addStyle('width', '80px');
         me.oMinutoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Minuto Latitude\",\"f\",\"f\",event)");
@@ -2841,7 +2842,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             }
             me.setGrausLongitude(event.target.value);
         }
-    
+
         me.oGrausLongitude = new DBTextField('txtGrausLongitude' + sId, 'txtGrausLongitude' + sId, '');
         me.oGrausLongitude.addStyle('width', '40%');
         me.oGrausLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Graus Longitude\",\"f\",\"f\",event)");
@@ -2854,7 +2855,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         this.changeLongitude = (event) => {
             me.setLongitude(me.changeValor(event));
         }
-        
+
         me.oLongitude = new DBTextField('txtLongitude' + sId, 'txtLongitude' + sId, '');
         me.oLongitude.addStyle('width', '40%');
         $('ctnLongitude' + sId).observe('keyup', () => {
@@ -2893,7 +2894,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             }
             me.setMinutoLongitude(event.target.value);
         }
-    
+
         me.oMinutosLongitude = new DBTextField('txtMinutoLongitude' + sId, 'txtMinutoLongitude' + sId, '');
         me.oMinutosLongitude.addStyle('width', '80px');
         me.oMinutosLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Minuto Longitude\",\"f\",\"f\",event)");
@@ -2937,9 +2938,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 $('txtSegundoLongitude'+sId).value = '';
             }
             me.setSegundosLongitude(event.target.value);
-    
+
         }
-    
+
         me.oSegundoLongitude = new DBTextField('txtSegundoLongitude' + sId, 'txtSegundoLongitude' + sId, '');
         me.oSegundoLongitude.addStyle('width', '80px');
         me.oSegundoLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Longitude\",\"f\",\"t\",event)");
@@ -4010,31 +4011,31 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 alert("Usuário:\n\n\Graus da Latitude não informado!\n\n");
                 return false;
             }
-    
+
             if ($F('txtMinutoLatitude' + sId).trim() == '') {
                 $('txtMinutoLatitude' + sId).focus();
                 alert("Usuário:\n\n\Minuto da Latitude não informado!\n\n");
                 return false;
             }
-    
+
             if ($F('txtSegundoLatitude' + sId).trim() == '') {
                 $('txtSegundoLatitude' + sId).focus();
                 alert("Usuário:\n\n\Segundo da Latitude não informado!\n\n");
                 return false;
             }
-    
+
             if ($F('txtGrausLongitude' + sId).trim() == '') {
                 $('txtGrausLongitude' + sId).focus();
                 alert("Usuário:\n\n\Graus da Longitude não informado!\n\n");
                 return false;
             }
-    
+
             if ($F('txtMinutoLongitude' + sId).trim() == '') {
                 $('txtMinutoLongitude' + sId).focus();
                 alert("Usuário:\n\n\Minuto da Longitude não informado!\n\n");
                 return false;
             }
-    
+
             if ($F('txtSegundoLongitude' + sId).trim() == '') {
                 $('txtSegundoLongitude' + sId).focus();
                 alert("Usuário:\n\n\Segundo da Longitude não informado!\n\n");
@@ -4151,7 +4152,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.retornoSalvaEndereco = function (oAjax) {
 
         js_removeObj('msgBox');
-        
+
         var oRetorno = eval('(' + oAjax.responseText + ')');
 
         let parametros = JSON.parse(oAjax.request.parameters.json);
@@ -4328,7 +4329,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.setCodigoObra(dados.db150_codobra);
         $('txtBdi' + sId).value = dados.db150_bdi;
         me.setBdi(dados.db150_bdi);
-        
+
         if(!me.exibeLote){
 
             $('txtGrausLatitude' + sId).value = dados.db150_grauslatitude;
