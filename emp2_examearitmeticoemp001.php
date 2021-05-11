@@ -70,6 +70,20 @@ include("dbforms/db_classesgenericas.php");
                       </select>
                   </td>
               </tr>
+            <tr>
+                <td>
+                    <strong>Tipo:</strong>
+                </td>
+                <td>
+                    <select name="iTipo" id="iTipo">
+                        <option value="">Selecione</option>
+                        <option value="1">Saúde</option>
+                        <option value="2">Educação</option>
+                        <option value="3">Fundeb</option>
+                        <option value="4">Geral</option>
+                    </select>
+                </td>
+            </tr>
 
             <tr>
              <!--  <td><b>Tipos de Pastas:</b></td>-->
@@ -123,6 +137,8 @@ function js_abre(){
 	   query += "&recursos="+js_campo_recebe_valores_recursos ();
        query += "&ExibirHistoricoDoEmpenho="+obj.ExibirHistoricoDoEmpenho.value;
        query += "&ordenar="+obj.ordenar.value;
+       query += "&iTipo="+obj.iTipo.value;
+       query += "&filtros="+parent.iframe_filtro.js_atualiza_variavel_retorno();
 
 	   jan = window.open('emp2_examearitmetico002.php?'+query,
 	                 '',
