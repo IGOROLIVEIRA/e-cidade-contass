@@ -135,7 +135,9 @@ $clrotulo->label("o45_numlei");
   	function js_validaTipoSup() {
 
 		let iTipoLei = document.getElementById('iTipoLei').value;
+        console.log(iTipoLei);
 		let iTipoSup = document.getElementById('o39_tiposuplementacao').value;
+        console.log(iTipoSup);
 
 		if (iTipoLei == 1) {
 		
@@ -158,7 +160,7 @@ $clrotulo->label("o45_numlei");
 			
 		}
 
-	  	if (iTipoSup == 1001 || iTipoSup == 1003 || iTipoSup == 1004) {
+	  	if (iTipoSup == 1001 || iTipoSup == 1002 || iTipoSup == 1003 || iTipoSup == 1004) {
 			
 			document.getElementById('o39_usalimite').value = 't';	
 			document.getElementById('o39_usalimite_select_descr').value = 'Sim';
