@@ -81,7 +81,7 @@ include("dbforms/db_classesgenericas.php");
                 </td>
                 <td>
                     <select name="iTipo" id="iTipo">
-                        <option value="">Selecione</option>
+                        <option value="">Todos</option>
                         <option value="1">Saúde</option>
                         <option value="2">Educação</option>
                         <option value="3">Fundeb</option>

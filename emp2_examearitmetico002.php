@@ -70,7 +70,7 @@ if ($recursos != '') {
     $sTipoPasta = $recursos;
 } else {
     $sWhere .= '';
-    $sTipoPasta = "Geral";
+    $sTipoPasta = "Todos";
 }
 
 if (isset($iTipo) && $iTipo != '') {
