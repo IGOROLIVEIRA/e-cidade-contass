@@ -13,6 +13,11 @@ include("dbforms/db_classesgenericas.php");
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #MesReferencia, #ExibirHistoricoDoEmpenho, #ordenar, #iTipo {
+        width: 80px;
+    }
+</style>
 
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >

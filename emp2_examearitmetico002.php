@@ -91,7 +91,7 @@ if (isset($iTipo) && $iTipo != '') {
         $sTipoPasta = "Fundeb (118, 119, 218, 219)";
 
     } elseif ($iTipo == 4) {
-        $sWhere .= " and o15_codigo in (101, 102, 118, 119, 202, 201, 218, 219) ";
+        $sWhere .= " and o15_codigo not in (101, 102, 118, 119, 202, 201, 218, 219) ";
     }
 
 }
