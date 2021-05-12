@@ -389,7 +389,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 
           $rsResult11 = db_query($sSql);
           $aDadosAgrupados11 = array();
-
+          // echo $sSql;
+          // db_criatabela($rsResult11);
           // $iNumRows = $oDados10->l20_usaregistropreco == 'f' ? 1 : pg_num_rows($rsResult11);
 
           for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
@@ -399,8 +400,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
               $oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
               $oResult11->tipoatividadeservespecializado . $oResult11->codbempublico;
 
-            if($oDados10->l20_usaregistropreco == 't'){
-                $sHash11 .= $oResult11->codfuncao . $oResult11->codsubfuncao;
+            if ($oDados10->l20_usaregistropreco == 't') {
+              $sHash11 .= $oResult11->codfuncao . $oResult11->codsubfuncao;
             }
 
             /**
@@ -511,36 +512,37 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             $sHash12 = $oResult12->tiporegistro . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->codunidadesubrespestadual .
               $oResult12->exercicioprocesso . $oResult12->nroprocesso . $oResult12->codobralocal . $oResult12->cep;
 
-            if (!isset($aDadosAgrupados12[$sHash12])) {
+            //if (!isset($aDadosAgrupados12[$sHash12])) {
 
-              $clredispi12 = new cl_redispi122021();
-              $clredispi12->si185_tiporegistro = 12;
-              $clredispi12->si185_codorgaoresp = $oResult12->codorgaoresp;
-              $clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
-              $clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
-              $clredispi12->si185_exercicioprocesso = $oResult12->exercicioprocesso;
-              $clredispi12->si185_nroprocesso = $oResult12->nroprocesso;
-              $clredispi12->si185_codobralocal = $oResult12->codobralocal;
-              $clredispi12->si185_logradouro = $oResult12->logradouro;
-              $clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
-              $clredispi12->si185_bairro = $oResult12->bairro;
-              $clredispi12->si185_cidade = $oResult12->cidade;
-              $clredispi12->si185_distrito = $oResult12->distrito;
-              $clredispi12->si185_cep = $oResult12->cep;
-              $clredispi12->si185_latitude = $oResult12->latitude;
-              $clredispi12->si185_longitude = $oResult12->longitude;
-              $clredispi12->si185_codbempublico = $oResult12->codbempublico;
-              $clredispi12->si185_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-              $clredispi12->si185_reg10 = $clredispi10->si183_sequencial; // chave estrangeira
-              $clredispi12->si185_instit = db_getsession("DB_instit");
-              $clredispi12->incluir(null);
-              if ($clredispi12->erro_status == 0) {
-                throw new Exception($clredispi12->erro_msg);
-              }
-              $aDadosAgrupados12[$sHash12] = $clredispi12;
+            $clredispi12 = new cl_redispi122021();
+            $clredispi12->si185_tiporegistro = 12;
+            $clredispi12->si185_codorgaoresp = $oResult12->codorgaoresp;
+            $clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
+            $clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
+            $clredispi12->si185_exercicioprocesso = $oResult12->exercicioprocesso;
+            $clredispi12->si185_nroprocesso = $oResult12->nroprocesso;
+            $clredispi12->si185_codobralocal = $oResult12->codobralocal;
+            $clredispi12->si185_logradouro = $oResult12->logradouro;
+            $clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
+            $clredispi12->si185_bairro = $oResult12->bairro;
+            $clredispi12->si185_cidade = $oResult12->cidade;
+            $clredispi12->si185_distrito = $oResult12->distrito;
+            $clredispi12->si185_cep = $oResult12->cep;
+            $clredispi12->si185_latitude = $oResult12->latitude;
+            $clredispi12->si185_longitude = $oResult12->longitude;
+            $clredispi12->si185_codbempublico = $oResult12->codbempublico;
+            $clredispi12->si185_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $clredispi12->si185_reg10 = $clredispi10->si183_sequencial; // chave estrangeira
+            $clredispi12->si185_instit = db_getsession("DB_instit");
+            $clredispi12->incluir(null);
+            if ($clredispi12->erro_status == 0) {
+              throw new Exception($clredispi12->erro_msg);
             }
+            $aDadosAgrupados12[$sHash12] = $clredispi12;
+            //}
           }
         }
+        //exit;
       }
     }
 
