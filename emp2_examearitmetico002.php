@@ -2,6 +2,9 @@
 include("fpdf151/pdf.php");
 include("classes/db_cgm_classe.php");
 require_once("libs/db_utils.php");
+include("libs/db_liborcamento.php");
+
+$clselorcdotacao = new cl_selorcdotacao();
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
@@ -11,6 +14,16 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $iUltimoDiaMes = date("d", mktime(0, 0, 0, $MesReferencia + 1, 0, db_getsession("DB_anousu")));
 $sDataInicial = db_getsession("DB_anousu") . "-{$MesReferencia}-01";
 $sDataFinal = db_getsession("DB_anousu") . "-{$MesReferencia}-{$iUltimoDiaMes}";
+
+$sWhere = "";
+
+if (isset($filtros) && $filtros != '') {
+    
+    $clselorcdotacao->setDados($filtros);
+    $sql_filtro = $clselorcdotacao->getDados(false);
+    $sWhere .= $sql_filtro;
+
+}
 
 switch ($MesReferencia) {
     case "01":
@@ -57,9 +70,31 @@ if ($recursos != '') {
     $sTipoPasta = $recursos;
 } else {
     $sWhere .= '';
-    $sTipoPasta = "Geral";
+    $sTipoPasta = "Todos";
 }
 
+if (isset($iTipo) && $iTipo != '') {
+    
+    if ($iTipo == 1) {
+        
+        $sWhere .= " and o15_codigo in (102, 202) ";
+        $sTipoPasta = "Saúde (102, 202)";
+
+    } elseif ($iTipo == 2) {
+
+        $sWhere .= " and o15_codigo in (101, 201) ";
+        $sTipoPasta = "Educação (101, 201)";
+
+    } elseif ($iTipo == 3) {
+        
+        $sWhere .= " and o15_codigo in (118, 119, 218, 219) ";
+        $sTipoPasta = "Fundeb (118, 119, 218, 219)";
+
+    } elseif ($iTipo == 4) {
+        $sWhere .= " and o15_codigo not in (101, 102, 118, 119, 202, 201, 218, 219) ";
+    }
+
+}
 
 $head3 = "Exame Aritmético";
 
@@ -120,7 +155,7 @@ if($ordenar == 01) {
 		inner join cgm on cgm.z01_numcgm = e60_numcgm
 		left join cgm cgmordem on cgmordem.z01_numcgm = e49_numcgm
 		inner join saltes on saltes.k13_conta = corrente.k12_conta
-	  where coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
+	  where " . $sWhere . " and coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' 
 	  order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
 }else{
     $sSql = "SELECT *
@@ -156,7 +191,7 @@ FROM
      INNER JOIN cgm ON cgm.z01_numcgm = e60_numcgm
      LEFT JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49_numcgm
      INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta
-     WHERE coremp.k12_data BETWEEN '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
+     WHERE " . $sWhere . " and coremp.k12_data BETWEEN '" . $sDataInicial . "' and '" . $sDataFinal . "'
      ORDER BY o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_funcao,o58_programa,o58_projativ,o56_elemento,e60_codemp) AS xxxxx
 WHERE 1 = 1";
 }
@@ -192,11 +227,11 @@ foreach ($aDadosAgrupados as $oResult) {
             $pdf->SetFont("", "B", "");
             $pdf->Cell(25, $tam, "DOTAÇÃO:", 1, 0, "C", 1);
             $pdf->Cell(25, $tam, "REDUZIDO: " . $oResult->o58_coddot, 1, 0, "C", 1);
-            $pdf->Cell(150, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
+            $pdf->Cell(135, $tam, str_pad($oResult->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_unidade, 3, "0", STR_PAD_LEFT) .
                 str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
                 str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
                 str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
-            $pdf->Cell(82, $tam, $oResult->o15_descr, 1, 1, "C", 1);
+            $pdf->Cell(97, $tam, substr($oResult->o15_codtri.' - '.$oResult->o15_descr,0,55), 1, 1, "C", 1);
 
             $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
             $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);
@@ -432,7 +467,7 @@ foreach ($aDadosAgrupados as $oResult) {
                 str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
                 str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
                 str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
-            $pdf->Cell(82, $tam, $oResult->o15_descr, 1, 1, "C", 1);
+            $pdf->Cell(82, $tam, $oResult->o15_codtri.' - '.$oResult->o15_descr, 1, 1, "C", 1);
 
             $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
             $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);
