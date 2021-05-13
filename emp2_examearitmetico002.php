@@ -429,7 +429,7 @@ $sSql = "select * from
 		inner join cgm on cgm.z01_numcgm = e60_numcgm
 		left join cgm cgmordem on cgmordem.z01_numcgm = e49_numcgm
 		inner join saltes on saltes.k13_conta = corrente.k12_conta
-	  where coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
+	  where " . $sWhere . " and coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' 
 	  order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento) as xxxxx
 	  where 1 = 1 and tipo = 'RP' order by z01_nome";
 
