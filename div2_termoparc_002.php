@@ -675,10 +675,13 @@ if (pg_numrows($result_reparc) > 0) {
       $sql .= "   from termodiv  ";
       $sql .= "        inner join	divida		on v01_coddiv = coddiv ";
       $sql .= "                            and v01_instit = ".db_getsession('DB_instit');
-      $sql .= "        inner join	arreold		on v01_numpre = arreold.k00_numpre ";
+      $sql .= "        left join	arreold		on v01_numpre = arreold.k00_numpre ";
       $sql .= "                            and v01_numpar = arreold.k00_numpar ";
-      $sql .= "                            and arreold.k00_valor > 0 ";
-      $sql .= "        inner join arretipo  on arreold.k00_tipo = arretipo.k00_tipo ";
+      $sql .= "                            and arreold.k00_valor > 0 ";      
+      $sql .= "        left join arrecad   on v01_numpre = arrecad.k00_numpre ";
+      $sql .= "                            and v01_numpar = arrecad.k00_numpar ";
+      $sql .= "                            and arrecad.k00_valor > 0 ";
+      $sql .= "        inner join arretipo  on (arreold.k00_tipo = arretipo.k00_tipo or arrecad.k00_tipo = arretipo.k00_tipo) ";
       $sql .= "                            and arretipo.k00_instit = ".db_getsession('DB_instit');
       $sql .= "        inner join	proced		on v01_proced = v03_codigo ";
       $sql .= "        left outer join	arrematric on arrematric.k00_numpre = divida.v01_numpre ";
@@ -1275,5 +1278,5 @@ foreach ($parag as $chave ) {
 
 if(!defined('DB_BIBLIOT'))
 
-  $pdf->Output();
+$pdf->Output();
 ?>
