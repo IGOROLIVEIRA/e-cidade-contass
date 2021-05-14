@@ -1072,7 +1072,7 @@ class obrasDadosComplementares
     $ano = date("Y", db_getsession("DB_datausu"));
     $mes = date("m", db_getsession("DB_datausu"));
 
-    $table_base = ($oLicitacao->l20_anousu >= 2021) ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+    $table_base = ($oLicitacao->l20_anousu >= 2021 && $mes >= 05) ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
 
     return $table_base;
   }

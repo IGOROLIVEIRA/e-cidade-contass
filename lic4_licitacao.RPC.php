@@ -710,9 +710,9 @@ switch ($oParam->exec) {
     ";
 
     $sWhere = "
-    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54)
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106)
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                                 END) >= 2020;
     ";
@@ -743,8 +743,8 @@ switch ($oParam->exec) {
 	case 'parecerLicitacao':
 
 		$oDaoParecer = db_utils::getDao('parecerlicitacao');
-		$sql = $oDaoParecer->sql_query('', "l200_sequencial, l200_data, 
-		(CASE 
+		$sql = $oDaoParecer->sql_query('', "l200_sequencial, l200_data,
+		(CASE
 			WHEN l200_tipoparecer = 1 THEN 'Técnico'
 			WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
 			WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
@@ -776,7 +776,7 @@ switch ($oParam->exec) {
         $rsLote = $oDaoLiclicitemLote->sql_record($sSqlLote);
         $descInicial = '';
         $countLote = 0;
-        
+
         for($count = 0; $count < pg_numrows($rsLote); $count++){
 
             $oDadosLote = db_utils::fieldsMemory($rsLote, $count);
@@ -787,14 +787,14 @@ switch ($oParam->exec) {
 
             $sSqlLoteCad = 'SELECT * from obrasdadoscomplementareslote where db150_lote = ' . $oDadosLote->l04_codigo;
             $rsLoteCad   = db_query($sSqlLoteCad);
-            
+
             if(!pg_numrows($rsLoteCad)){
 
                 $oLote = new stdClass();
                 $oLote->sequencial = $countLote;
                 $oLote->codigo     = $oDadosLote->l04_codigo;
                 $oLote->descricao  = $oDadosLote->l04_descricao;
-    
+
                 $oRetorno->itens[] = $oLote;
 
             }
@@ -809,7 +809,7 @@ switch ($oParam->exec) {
         $oLicitacao = db_utils::fieldsMemory($rsTipo, 0);
         $oRetorno->tipo = $oLicitacao->l20_tipojulg;
         $oRetorno->ano = $oLicitacao->l20_anousu;
-
+        $oRetorno->mes = date("m", db_getsession("DB_datausu"));
         break;
 
     case 'getLotes':
@@ -830,7 +830,7 @@ switch ($oParam->exec) {
 
         $rsLotes = db_query($sSqlLotes);
         $oRetorno->itens = db_utils::getCollectionByRecord($rsLotes,'','',true);
-       
+
         break;
 }
 echo $oJson->encode($oRetorno);

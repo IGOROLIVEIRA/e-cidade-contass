@@ -108,7 +108,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 asynchronous: false,
                 onComplete: (objeto) => {
                     let response = eval('('+objeto.responseText+')');
-                    me.exibeLote = parseInt(response.ano) >= 2021;
+                    me.exibeLote = (parseInt(response.ano) >= 2021 && response.mes >= 05 )? true : false;
                     console.log('exibe',me.exibeLote);
                     me.iTipoJulgamento = response.tipo;
                 }
