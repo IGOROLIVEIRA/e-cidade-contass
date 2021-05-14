@@ -44,7 +44,6 @@ $clpcgrupo = new cl_pcgrupo;
 $clpcsubgrupo = new cl_pcsubgrupo;
 $clhistoricoitem = new cl_historicoitem;
 $clcondataconf = new cl_condataconf;
-
 $db_opcao = 22;
 $db_botao = false;
 
@@ -63,18 +62,26 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
     $sqlerro  = true;
     db_msgbox($erro_msg);
   }
+  $result_pesquisa_material = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater as pc01_descrmateranterior,pc01_justificativa as pc01_justificativaanterior",null,"pc01_codmater = $pc01_codmater"));
+  db_fieldsmemory($result_pesquisa_material,0);
 
-
-  if(!empty($pc01_data)){
+  if($pc01_descrmateranterior != $pc01_descrmater){
+      $dt_session = date("Y-m-d", db_getsession("DB_datausu"));
       $anousu = db_getsession('DB_anousu');
       $instituicao = db_getsession('DB_instit');
       $result = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),"c99_datapat",null,null));
       $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-      if (strtotime($pc01_data) <= strtotime($c99_datapat)) {
+      if (strtotime($dt_session) <= strtotime($c99_datapat)) {
           $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
           $sqlerro  = true;
           db_msgbox($erro_msg);
+      }
+
+      if($pc01_justificativaanterior == $pc01_justificativa){
+          $erro_msgg = "Campo Justificativa não Atualizado !";
+          $sqlerro  = true;
+          db_msgbox($erro_msgg);
       }
   }
 

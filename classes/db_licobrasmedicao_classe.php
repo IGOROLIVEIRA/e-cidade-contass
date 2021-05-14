@@ -627,8 +627,8 @@ $sql .= "obr03_sequencial = '$obr03_sequencial'";     $result = db_query($sql);
      }
      $sql .= " from licobrasmedicao ";
      $sql .= " inner join licobras on licobras.obr01_sequencial = licobrasmedicao.obr03_seqobra";
-     $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
-     $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom  ";
+     $sql .= " left join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
+     $sql .= " left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom  ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ( $obr03_sequencial != "" && $obr03_sequencial != null) {
