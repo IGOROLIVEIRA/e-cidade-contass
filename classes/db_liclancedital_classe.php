@@ -127,11 +127,12 @@ class cl_liclancedital
 	{
 		$this->atualizacampos();
 
-		$sql = db_query('SELECT l03_pctipocompratribunal
+		$sql = db_query('SELECT l03_pctipocompratribunal, l20_anousu
 							FROM liclicita
 							INNER JOIN cflicita ON l03_codigo = l20_codtipocom
 							WHERE l20_codigo =  '.$this->l47_liclicita);
 		$iTribunal = db_utils::fieldsMemory($sql, 0)->l03_pctipocompratribunal;
+		$iAnoUsu = db_utils::fieldsMemory($sql, 0)->l20_anousu;
 
 		if ($l47_sequencial == "" || $l47_sequencial == null) {
 			$result = db_query("select nextval('liclancedital_l47_sequencial_seq')");
@@ -189,6 +190,15 @@ class cl_liclancedital
 			}
 		}
 
+		if ((!$this->l47_linkpub || $this->l47_linkpub == null) && in_array($iTribunal, array(100, 101, 102, 103)) && $iAnoUsu >= 2021) {
+			$this->erro_banco = str_replace("\n", "", @pg_last_error());
+			$this->erro_sql = "Verifique o Link da Publicação";
+			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+			$this->erro_status = "0";
+			return false;
+		}
+
 		if ($this->l47_origemrecurso == 9) {
 			if (!$this->l47_descrecurso == null || trim($this->l47_descrecurso) == '') {
 				$this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -209,13 +219,13 @@ class cl_liclancedital
                          ,l47_liclicita
                 )
                 values (
-                 $this->l47_sequencial
-                ,'$this->l47_linkpub'
-                ,$this->l47_origemrecurso
-                ,'$this->l47_descrecurso'
-                ," . ($this->l47_dataenvio == "null" || $this->l47_dataenvio == "" ? "null" : "'" . $this->l47_dataenvio . "'") . "
-                ,$this->l47_liclicita
-                )";
+						$this->l47_sequencial
+						,'$this->l47_linkpub'
+						,$this->l47_origemrecurso
+						,'$this->l47_descrecurso'
+						," . ($this->l47_dataenvio == "null" || $this->l47_dataenvio == "" ? "null" : "'" . $this->l47_dataenvio . "'") . "
+						,$this->l47_liclicita
+                	)";
 
 		$result = db_query($sql);
 		if ($result == false) {
@@ -249,17 +259,28 @@ class cl_liclancedital
 	function alterar($l47_sequencial = null)
 	{
 		$this->atualizacampos();
-		$sql = db_query('SELECT l03_pctipocompratribunal
+		$sql = db_query('SELECT l03_pctipocompratribunal, l20_anousu
 							FROM liclicita
 							INNER JOIN cflicita ON l03_codigo = l20_codtipocom
 							WHERE l20_codigo =  '.$this->l47_liclicita);
 		$iTribunal = db_utils::fieldsMemory($sql, 0)->l03_pctipocompratribunal;
+		$iAnoUsu =db_utils::fieldsMemory($sql, 0)->l20_anousu;
 
 		$virgula = " ";
 		$sql = " update liclancedital set ";
 		if (trim($this->l47_linkpub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_linkpub"])) {
 			$sql .= $virgula . " l47_linkpub = '$this->l47_linkpub' ";
 			$virgula = ",";
+		}else{
+			if($iAnoUsu >= 2021 && in_array($iTribunal, array('100', '101', '102', '103'))){
+				$this->erro_sql = " Campo Link da Publicação não Informado.";
+				$this->erro_campo = "l47_linkpub";
+				$this->erro_banco = "";
+				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+				$this->erro_status = "0";
+				return false;
+			}
 		}
 
 		if (trim($this->l47_origemrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"])) {
@@ -277,18 +298,18 @@ class cl_liclancedital
 			}
 		}
 
-			if (trim($this->l47_dataenvio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenvio"])) {
-				$sql .= $virgula . " l47_dataenvio = '$this->l47_dataenvio' ";
-				$virgula = ",";
-			} else {
-					$this->erro_sql = " Campo Data Envio não Informado.";
-					$this->erro_campo = "l47_dataenvio";
-					$this->erro_banco = "";
-					$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-					$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-					$this->erro_status = "0";
-					return false;
-			}
+		if (trim($this->l47_dataenvio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenvio"])) {
+			$sql .= $virgula . " l47_dataenvio = '$this->l47_dataenvio' ";
+			$virgula = ",";
+		} else {
+				$this->erro_sql = " Campo Data Envio não Informado.";
+				$this->erro_campo = "l47_dataenvio";
+				$this->erro_banco = "";
+				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+				$this->erro_status = "0";
+				return false;
+		}
 
 		if (trim($this->l47_dataenviosicom) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenviosicom"])) {
 			$sql .= $virgula . " l47_dataenviosicom = '$this->l47_dataenviosicom' ";
