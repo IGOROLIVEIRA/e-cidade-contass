@@ -249,7 +249,7 @@ try {
 $aParagrafos = (empty($aParagrafos) ? array() : $aParagrafos);
 
 for ($x = 0; $x < pg_numrows($result); $x++) {
-
+  
   db_fieldsmemory($result, $x);
 
   /**
@@ -528,23 +528,51 @@ for ($x = 0; $x < pg_numrows($result); $x++) {
   $pdf->setfont('arial','',7);
   $pdf->cell(12, $alt, $t52_bem,   0, 0, "C", 0);
   $pdf->cell(25, $alt, $t52_ident, 0, 0, "C", 0);
+  
+  
+  if($pdf->GetStringWidth($t52_descr)<80){
+    $line = 1;
+  }else{
+    $textLenght = strlen($t52_descr);
+    $errMargin = 10;
+    $startChar = 0;
+    $maxChar = 0;
+    $textArray = array();
+    $tmpString ="";
+
+    while($startChar < $textLenght){
+      while($pdf->GetStringWidth($tmpString)<(80-$errMargin)&&($startChar+$maxChar)<$textLenght){
+        $maxChar++;
+        $tmpString = substr($t52_descr,$startChar,$maxChar);
+      }
+      $startChar = $startChar+$maxChar;
+      array_push($textArray,$tmpString);
+    }
+    $line = count($textArray);
+  } 
 
   $iCelula = 80 + ($lClassificacao ? 0 : 100) + ($lValor ? 0 : 15);
+  
+  $xPos = $pdf->GetX();
+  $yPos = $pdf->GetY();
 
-  $pdf->cell($iCelula, $alt, $t52_descr, 0, 0, "L", 0);
+  $pdf->multicell($iCelula, $alt, $t52_descr, 0, "L", 0);
+
+  $pdf->SetXY($xPos + $iCelula, $yPos+($line*3));
 
   if ($lClassificacao) {
-    $pdf->cell(20, $alt, $t64_class, 0, 0, "C", 0);
-    $pdf->cell(80,$alt,substr($t64_descr,0,48),0,0,"L",0);
+    $pdf->cell(20, ($line - $alt) , $t64_class, 0, 0, "C", 0);
+    $pdf->cell(80,($line - $alt),substr($t64_descr,0,48),0,0,"L",0);
   }
 
-  $pdf->cell(20,$alt,db_formatar($t52_dtaqu ,'d'),0,0,"C",0);
-  $pdf->cell(25,$alt,substr(@$t70_descr,0,48),0,0,"C",0);
-
+  $pdf->cell(20,($line - $alt),db_formatar($t52_dtaqu ,'d'),0,0,"C",0);
+  $pdf->cell(25,($line - $alt),substr(@$t70_descr,0,48),0,0,"C",0);
+  
   if ($lValor) {
-    $pdf->cell(15,$alt,db_formatar($t52_valaqu,"f") , 0, 1, "R", 0);
+    $pdf->cell(15,($alt),db_formatar($t52_valaqu,"f"),1,1,"R", 0);
+    //$pdf->ln($line);
   } else {
-    $pdf->ln();
+    $pdf->ln(5);
   }
 
   if ($opcao_obs == "S") {
@@ -561,13 +589,13 @@ for ($x = 0; $x < pg_numrows($result); $x++) {
 
       foreach ( $aLinhasObservacao as $sObservacao ) {
 
-        $iAlturaLinhaObservacoes = $pdf->NbLines(277, $sObservacao) * 5;
+        $iAlturaLinhaObservacoes = $pdf->NbLines(277, mb_strimwidth($sObservacao,0,250,"...")) * 5;
 
         if ( $pdf->gety() + $iAlturaLinhaObservacoes > $pdf->h - 20 ) {
           $pdf->addpage('L');
         }
 
-        $pdf->multicell(277, 5, $sObservacao, 0, "L", $p);
+        $pdf->multicell(277, 5, mb_strimwidth($sObservacao,0,250,"..."), 0, "L", $p);
       }
     }
   }
