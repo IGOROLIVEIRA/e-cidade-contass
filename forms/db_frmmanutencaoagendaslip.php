@@ -239,6 +239,7 @@ $db_opcao = 1;
                 <td valign='top'>
                   <?
                   db_input("saldoatual",15,null,true,"text",3);
+				  db_input("iCheque",1,0,true,'hidden',3);
                   ?>
                 </td>
               </tr>
@@ -253,7 +254,7 @@ $db_opcao = 1;
         <td colspan='4' style='text-align: center'>
           <input name="pesquisar" id='pesquisar' type="button"  value="Pesquisar" onclick='return js_pesquisarOrdens();'>
           <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick='js_configurar()'>
-          <input name="emitecheque" id='emitecheque' type="button"  value='Emitir Cheque' onclick='location.href="emp4_empageformache001.php"'>
+          <input name="emitecheque" id='emitecheque' type="button"  value='Emitir Cheque' onclick='js_janelaEmiteCheque()' disabled="disabled" >
           <input name="emitetxt" id='emitetxt' type="button"  value='Emitir Arquivo Texto' onclick='location.href="emp4_empageconfgera001.php"'>
           <input name="excluirautentica" id='excluirautentica' type="button"  value='Excluir Pagamento' onclick='location.href="cai4_excluirautenticaoslip001.php"'>
 
@@ -278,11 +279,11 @@ $db_opcao = 1;
           <br>
       <span>
         <fieldset><legend><b>Mostrar</b></legend>
-          <input type="checkbox" id='configuradas' onclick='js_showFiltro("configurada",this.checked)'>
+          <input type="checkbox" id='configuradas' checked onclick='js_showFiltro("configurada",this.checked)'>
           <label for="configuradas" style='padding:1px;border: 1px solid black; background-color:#d1f07c'><b>Atualizados</b></label>
           <input type="checkbox" id='normais' checked onclick='js_showFiltro("normal",this.checked)'>
           <label for="normais" style='padding:1px;border: 1px solid black;background-color:white'><b>Não Atualizados</b></label>
-          <input type="checkbox" id='comMovs'  onclick='js_showFiltro("comMov",this.checked)'>
+          <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("comMov",this.checked)'>
           <label for="comMovs" style='padding:1px;border: 1px solid black;background-color:rgb(222, 184, 135)'>
             <b>Com cheque/em Arquivo</b>
           </label>
@@ -415,8 +416,9 @@ $db_opcao = 1;
 
 
     js_liberaBotoes(false);
+	$('emitecheque').disabled = true;
     js_reset();
-    $('TotalForCol8').innerHTML = "0,00";
+    $('TotalForCol10').innerHTML = "0,00";
     //$('normais').checked = true;
     //Criamos um objeto que tera a requisicao
     var oParam                 = new Object();
@@ -428,6 +430,7 @@ $db_opcao = 1;
     oParam.sDtAut              = $F('e42_dtpagamento');
     oParam.iRecurso            = $F('o15_codigo');
     oParam.k145_numeroprocesso = encodeURIComponent(tagString($F("k145_numeroprocesso")));
+    oParam.lBuscaCheque        = true;
 
     var sParam           = js_objectToJson(oParam);
     js_divCarregando("Aguarde, pesquisando Movimentos.","msgBox");
@@ -467,11 +470,12 @@ $db_opcao = 1;
           var lDisabled = false;
           var sDisabled = "";
           if (e91_codmov != '' || e90_codmov != '' && e90_cancelado == 'f') {
-
+              
             lDisabled = true;
             sDisabled = " disabled ";
 
           }
+
           var aLinha  = new Array();
 
           aLinha[0]   = e81_codmov;
@@ -490,21 +494,27 @@ $db_opcao = 1;
             aLinha[5]   = "<span style='display:none'>con</span>"+k17_debito+ " - "+descricaodebito.urlDecode();
           }
           aLinha[6]   = js_createComboForma(e97_codforma, e81_codmov, lDisabled);
-          aLinha[7]   = js_formatar(k17_data,"d");
-          aLinha[8]   = js_formatar(k17_valor,"f");
+          
+          if (e91_cheque != '') {
+            aLinha[7]   = e91_cheque;
+          } else {
+            aLinha[7]   = js_createInputNumDocumento(e81_numdoc, e81_codmov, e97_codforma);
+          }
+          
+          aLinha[8]   = js_formatar(k17_data,"d");
+          aLinha[9]   = js_formatar(k17_valor,"f");
+		  aLinha[10]  = e91_codcheque;
+
+          if (e97_codforma == 2) {
+              lDisabled = false;
+          }
+
           gridNotas.addRow(aLinha, false, lDisabled);
 
           // acrescentado no if a condicao cancelado = true, pois agora os registros da empageconfgera
           // ao cancelar um arquivo, nao serão mais deletados
           if (e91_codmov != '' || e90_codmov != '' && e90_cancelado == 'f') {
 
-            if (!$('comMovs').checked) {
-
-              iTotalizador--;
-              gridNotas.aRows[iRowAtiva].lDisplayed = false;
-
-            }
-            gridNotas.aRows[iRowAtiva].aCells[0].lDisabled  = true;
             gridNotas.aRows[iRowAtiva].setClassName('comMov');
 
           } else if (e86_codmov != '' || e97_codmov != '') {
@@ -540,10 +550,8 @@ $db_opcao = 1;
 
     gridNotas              = new DBGrid("gridNotas");
     gridNotas.nameInstance = "gridNotas";
-    gridNotas.selectSingle = function (oCheckbox,sRow,oRow,lVerificaSaldo) {
-      if (oRow.getClassName() == 'comMov') {
-        oCheckbox.checked = false;
-      }
+	let iTotalItens = gridNotas.length;
+    gridNotas.selectSingle = function (oCheckbox,sRow,oRow,lVerificaSaldo,iTotalItens) {
       if (lVerificaSaldo == null) {
         var lVerificaSaldo = true;
       }
@@ -560,18 +568,21 @@ $db_opcao = 1;
           }
         }
         if (lVerificaSaldo) {
-          $('TotalForCol8').innerHTML = js_formatar(gridNotas.sum(9).toFixed(2),'f');
+          $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
         }
         $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)+1;
+
       } else {
 
         $(sRow).className = oRow.getClassName();
         oRow.isSelected   = false;
         $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)-1;
         if (lVerificaSaldo) {
-          $('TotalForCol8').innerHTML = js_formatar(gridNotas.sum(9).toFixed(2),'f');
+          $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
         }
       }
+
+      js_trataBotaoEmitirCheque();
     }
     gridNotas.selectAll = function(idObjeto, sClasse, sLinha) {
 
@@ -607,23 +618,26 @@ $db_opcao = 1;
           }
         }
       }
-      $('TotalForCol8').innerHTML = js_formatar(gridNotas.sum(9).toFixed(2),'f');
+      $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
     }
     gridNotas.setCheckbox(0);
     gridNotas.allowSelectColumns(true);
     gridNotas.hasTotalizador = true;
-    gridNotas.setCellAlign(new Array("right", "right", "right", "left", "left", "left", "center", "center","right"));
-    gridNotas.setHeader(new Array("Mov.","slip","Recurso", "Cta. Pag", "Nome",
+    gridNotas.setCellAlign(new Array("right", "right", "right", "left", "left", "left", "center", "center", "center","right"));
+    gridNotas.setHeader(new Array("Mov.","slip","Fonte", "Conta Pagadora", "Nome",
         "Banco/Ag",
         "Forma Pgto",
+        "Nº Documento",
         "Dt Slip",
-        "Valor slip"
+        "Valor slip",
+		"Cod. Cheque"
       )
     );
     gridNotas.aHeaders[1].lDisplayed = false;
+	gridNotas.aHeaders[11].lDisplayed = false;
     gridNotas.show(document.getElementById('gridNotas'));
     $('gridNotasstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
-    $('TotalForCol8').innerHTML    = "0,00";
+    $('TotalForCol10').innerHTML    = "0,00";
 
   }
 
@@ -693,7 +707,8 @@ $db_opcao = 1;
     if (lDisabled) {
       sDisabled = " disabled ";
     }
-    var sCombo  = "<select style='width:100%' class='formapag' id='forma"+iCodMov+"' "+sDisabled+">";
+    var sCombo  = "<select style='width:100%' class='formapag' id='forma"+iCodMov+"' "+sDisabled;
+	sCombo     += " onchange='js_validaForma("+iCodMov+",this.value)'>" ;
     sCombo     += "  <option "+(iTipoForma == 0?" selected ":" ")+" value='0'>NDA</option>";
     sCombo     += "  <option "+(iTipoForma == 1?" selected ":" ")+" value='1'>DIN</option>";
     sCombo     += "  <option "+(iTipoForma == 2?" selected ":" ")+" value='2'>CHE</option>";
@@ -702,6 +717,33 @@ $db_opcao = 1;
     sCombo     += "</select>";
     return sCombo
   }
+
+  	function js_validaForma(iCodMov, iTipoForma) {
+
+		objNumDoc = document.getElementById("numdoc"+iCodMov+"");
+
+		if (iTipoForma == 1 || iTipoForma == 2) {
+			
+			objNumDoc.value = '';
+			objNumDoc.setAttribute("disabled", "disabled");
+
+		} else {
+			objNumDoc.removeAttribute("disabled");
+		}
+
+	}
+
+  	function js_createInputNumDocumento(sNumDoc, iCodMov, iCodForma) {
+
+		let sDisabled = "";
+
+		if (iCodForma == 1 || iCodForma == 2) {
+			sDisabled = "disabled='disabled'";            
+		}
+
+		return "<input value='"+sNumDoc+"' size='13' maxlength='15' id='numdoc"+iCodMov+"' "+sDisabled+">";
+
+	}
 
   function js_createComboContasForne(aContasForne, iContaForne, iCodMov, iNumCgm, lDisabled, iCodigoUltimaConta) {
 
@@ -824,7 +866,7 @@ $db_opcao = 1;
 
   function js_configurar() {
 
-    var aMovimentos = gridNotas.getSelection();
+    var aMovimentos = gridNotas.getSelection("object");
     /*
      * Validamos o movimento configurado, conforme a forma de pagamento escolhido.
      * - cheque, é obrigatorio ter informado a conta pagadora, e o valor;
@@ -878,15 +920,33 @@ $db_opcao = 1;
 
     for (var iMov = 0; iMov < aMovimentos.length; iMov++) {
 
-      var iForma           = aMovimentos[iMov][7];
-      var iCodMov          = aMovimentos[iMov][0];
-      var nValor           = js_strToFloat(aMovimentos[iMov][9]).valueOf();
-      var iNota            = aMovimentos[iMov][2];
-      var iContaFornecedor = aMovimentos[iMov][6];
-      var iContaPagadora   = aMovimentos[iMov][4];
+		var iForma           = aMovimentos[iMov].aCells[7].getValue();
+		var iCodMov          = aMovimentos[iMov].aCells[0].getValue();
+		var nValor           = js_strToFloat(aMovimentos[iMov].aCells[10].getValue()).valueOf();
+		var iNota            = aMovimentos[iMov].aCells[2].getValue();
+		var iContaFornecedor = aMovimentos[iMov].aCells[6].getValue();
+		var iContaPagadora   = aMovimentos[iMov].aCells[4].getValue();
+        
+        if (iForma != 1 && iForma != 2) {
+            var sNumDoc      = aMovimentos[iMov].aCells[8].getValue().trim();
+        }
+        
+        if (iForma == 2) {                
+            var iCodCheque   = aMovimentos[iMov].aCells[11].getValue().trim();
+        }  
+
+	  /**
+	   * Se for cheque, verifica se o cheque já foi emitido
+	   */
+		if ($('efetuarpagamento').checked && iForma == 2 && aMovimentos[iMov].getClassName() != 'comMov') {
+		
+			alert("Para efetuar o pagamento é necessário emitir o cheque.");
+			return false;
+
+		}
 
       /*
-       * Fazemos a verificacao para Cheque;
+       * Fazemos a verificacao para Nda;
        */
       aFormasSelecionadas.push(iForma);
 
@@ -927,6 +987,15 @@ $db_opcao = 1;
       oMovimento.iContaPagadora   = iContaPagadora;
       oMovimento.iCodNota         = iNota;
       oMovimento.nValorRetencao   = 0
+
+      if (iForma != 1 && iForma != 2) {
+        oMovimento.sNumDoc 		  = sNumDoc;
+      }
+      
+      if (iForma == 2) {                
+        oMovimento.iCodCheque 	  = iCodCheque;
+      } 
+      
       oEnvio.aMovimentos.push(oMovimento);
     }
 
@@ -934,14 +1003,16 @@ $db_opcao = 1;
 
       for (var iInd = 0; iInd < aFormasSelecionadas.length; iInd++ ) {
 
-        if (aFormasSelecionadas[iInd] == "2" || aFormasSelecionadas[iInd] == "3" ) {
+        if (aFormasSelecionadas[iInd] == "0") {
 
-          alert("Para efetuar pagamento automático somente são permitidas as forma de pagamento : Dinheiro (DIN) e Débito (DEB). Verifique.");
+          alert("Não é possível efetuar o pagamento com a forma de pagamento NDA.");
           return false;
+
         }
       }
     }
 
+	// console.log(oEnvio);return false;
     js_divCarregando("Aguarde, Configurando Movimentos.","msgBox");
     js_liberaBotoes(false);
     var sJson = js_objectToJson(oEnvio);
@@ -1115,6 +1186,7 @@ $db_opcao = 1;
     $('saldotesouraria').value = new Number(oRetorno.oSaldoTes.rnvalortesouraria);
     $('totalcheques').value    = new Number(oRetorno.oSaldoTes.rnvalorreservado);
     $('saldoatual').value      = new Number(oRetorno.oSaldoTes.rnsaldofinal).toFixed(2);
+	$('iCheque').value         = new Number(oRetorno.iCheque);
 
   }
 
@@ -1191,12 +1263,209 @@ $db_opcao = 1;
     $('saldotesouraria').value     = '';
     $('totalcheques').value        = '';
     $('saldoatual').value          = '';
+	$('iCheque').value         	   = '';
 
   }
   function js_pesquisaSlip(iCodigoSlip) {
     js_OpenJanelaIframe('top.corpo','db_iframe_slip2',
       'cai3_conslip003.php?slip='+iCodigoSlip,'Consulta Lançamento',true);
   }
+
+  	function js_janelaEmiteCheque() {
+
+		var aMovimentos = gridNotas.getSelection();
+
+		if (aMovimentos.length > 0) {
+			
+			var dtBase      = $F('e42_dtpagamento');
+			var iCheque     = $('iCheque').value;
+
+			windowChequeItem = new windowAux('wndChequeItem', 'Emitir Cheque', 520, 180);     
+
+			var sContent = "<div class='subcontainer' style='margin-top:30px;'>";
+			sContent += "   <fieldset><legend>Informação para o cheque</legend>";
+			sContent += "       <table>";
+			sContent += "           <tr>";
+			sContent += "               <td>";
+			sContent += "                   <b>Número do Cheque: </b>";
+			sContent += "                   <input id='numerocheque' name='numerocheque' type='text' value='"+iCheque+"' size='9'";
+			sContent += "                       oninput='js_ValidaCampos(this,1,\"\",\"\",\"\",event);'>";
+			sContent += "                   <b>Data:</b>";
+			sContent +=                     js_inputdata('dtcheque', dtBase);
+			sContent += "               </td>";
+			sContent += "           </tr>";
+			sContent += "           <tr>";
+			sContent += "               <td id='inputvalordotacao'></td>";
+			sContent += "           </tr>";
+			sContent += "       </table>";
+			sContent += "   </fieldset>";
+			sContent += "   <input type='button' value='Salvar' id='btnEmitirCheque' >";
+			sContent += "</div>";
+
+			windowChequeItem.setContent(sContent);
+
+			windowChequeItem.setShutDownFunction(function () {
+				windowChequeItem.destroy();
+			});
+
+			$('btnEmitirCheque').observe("click", function () {
+				js_emitirCheque(aMovimentos);
+			});
+
+			var w = ((screen.width - 590) / 2);
+			var h = ((screen.height / 2) - 190);
+			windowChequeItem.setIndex(5);
+			windowChequeItem.allowDrag(false);
+			windowChequeItem.show(h, w);     
+
+		} else {
+			alert('Selecione um movimento.');
+			return false;
+		}
+
+	}
+
+	function js_emitirCheque(aMovimentos) {
+
+		iNumCheque  = $('numerocheque').value;
+		dtData      = $('dtcheque').value;
+
+		if (iNumCheque == '') {
+			alert('Informe o Número do cheque!');
+			return false;
+		}
+
+		if (dtData == '') {
+			alert('Informe a Data do cheque!');
+			return false;
+		}
+
+		windowChequeItem.destroy();
+
+        let aNotas = [];
+        let lCredorUnico = true;
+
+        aMovimentos.each(function(aMovimento){
+
+            if (encodeURIComponent(aMovimentos[0][5]) != encodeURIComponent(aMovimento[5])) {
+                lCredorUnico = false;
+            }
+
+            oNota   = new Object();
+            oNota.iCodAgenda = null;
+            oNota.iCodMov    = aMovimento[0];
+            oNota.iCodNota   = aMovimento[2];
+            oNota.iNumEmp    = "0";
+
+            oNota.nValor     = js_strToFloat(aMovimento[10]);
+            oNota.iCodTipo   = aMovimento[4];
+            
+            aNotas.push(oNota);
+
+        });
+
+        if (!lCredorUnico) {
+            alert('Só é permitido gerar mais de um cheque para o mesmo credor');
+            return false;
+        }
+
+		oCheque = new Object();
+		oParam  = new Object();		
+
+		oCheque.sCredor             = encodeURIComponent(aMovimentos[0][5]);
+		oCheque.dtData              = dtData;
+		oCheque.aTotCheques         = [];
+		oCheque.numeroCheque        = iNumCheque;
+		oCheque.aNotasLiquidacao    = aNotas;
+
+		oParam.exec         = 'emitirCheque';
+		oParam.params       = [];
+		oParam.params[0]    = oCheque;
+
+		js_divCarregando("Aguarde, Efetuando emissão do cheques.","msgBox");
+
+		var oAjax  = new Ajax.Request('emp4_agendaPagamentoRPC.php', {
+			method    : 'post', 
+			parameters: 'json='+Object.toJSON(oParam), 
+			onComplete: js_retornoEmissaoCheque
+		});
+
+	}
+
+	function js_retornoEmissaoCheque(oAjax) {
+
+		js_removeObj("msgBox");
+
+		var oRetorno = eval("("+oAjax.responseText+")");
+
+		if (oRetorno.status == 1) {
+
+			aInfoCheques = oRetorno.aInfoCheques;
+			
+			if (aInfoCheques.length > 0) {
+				
+				alert(oRetorno.message.urlDecode());
+				js_pesquisarOrdens();
+
+			} else {
+				alert('Cheque não emitido.');
+			}
+
+		} else {
+			alert(oRetorno.message.urlDecode());
+		}
+
+	}
+
+	function js_inputdata(sNomeInput, strData = null) {
+			
+		var aData = strData.split('/');
+
+		var	strData  = '<input type="text" id="'+sNomeInput+'" value="'+strData+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
+			strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\'); " >';
+			strData += '<input name="'+sNomeInput+'_dia" type="hidden" title="" id="'+sNomeInput+'_dia" value="'+aData[0]+'" size="2"  maxlength="2" >';
+			strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >'; 
+			strData += '<input name="'+sNomeInput+'_ano" type="hidden" title="" id="'+sNomeInput+'_ano" value="'+aData[2]+'" size="4"  maxlength="4" >';
+			
+		var sStringFunction  = "js_comparaDatas"+sNomeInput+" = function(dia,mes,ano){ \n";
+			sStringFunction += "  var objData        = document.getElementById('"+sNomeInput+"'); \n";
+			sStringFunction += "  objData.value      = dia+'/'+mes+'/'+ano; \n";
+			sStringFunction += "} \n";  
+
+		var script = document.createElement("SCRIPT");        
+		script.innerHTML = sStringFunction;
+
+		document.body.appendChild(script);    
+			
+		return strData;
+
+	}
+
+    function js_trataBotaoEmitirCheque() {
+
+        var aMovimentos = gridNotas.getSelection("object");
+        let lDisabled = false;
+
+        aMovimentos.each(function (aMovimento) {
+
+            console.log(aMovimento);
+
+            if (aMovimento.getClassName() == 'configurada' && aMovimento.aCells[7].getValue() == 2) {
+                return;
+            } else {
+                lDisabled = true;
+            }
+
+        });
+
+        if (aMovimentos.length == 0) {
+            $('emitecheque').disabled = true;
+        } else {
+            $('emitecheque').disabled = lDisabled;
+        }
+
+    }
+
 
   js_init();
 </script>

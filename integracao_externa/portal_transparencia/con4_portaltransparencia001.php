@@ -101,6 +101,7 @@ require_once(DB_MODEL."model/dataManager.php");
 $iExercicioBase = EXERCICIO_BASE;
 $iAnoEspecificoFolha = ANO_ESPECIFICO_FOLHA;
 $iInstitEspecificoFolha = INSTIT_ESPECIFICO_FOLHA;
+$institParam = FILTRO_INSTITUICAO;
 $aIntegracoesRealizar = array();
 if (defined("INTEGRACOES_TRANSPARENCIA")) {
     $aIntegracoesRealizar = explode(",", INTEGRACOES_TRANSPARENCIA);
@@ -216,7 +217,7 @@ try {
     $oRequisitante = db_utils::fieldsMemory($rsRequisitantes,$iInd);
     $sSqlInserirRequisitante = "INSERT INTO requisitantes_transparencia
     (db149_matricula,db149_cpf,db149_nome,db149_data)
-    VALUES 
+    VALUES
     ({$oRequisitante->matricula},'{$oRequisitante->cpf}','{$oRequisitante->nome}','{$oRequisitante->data}')";
 
     if ( !db_query($connOrigem, $sSqlInserirRequisitante)) {
@@ -662,7 +663,10 @@ try {
     $sSqlOrgao .= "        o40_orgao  as codorgao,         ";
     $sSqlOrgao .= "        o40_descr  as descricao,        ";
     $sSqlOrgao .= "        o40_anousu as exercicio         ";
-    $sSqlOrgao .= "   from orcorgao                        ";
+    $sSqlOrgao .= " from orcorgao                          ";
+    if (!empty($institParam)){
+      $sSqlOrgao .= " where o40_instit IN ({$institParam}) ";
+    }
 
     $rsOrgao    = db_query($connOrigem,$sSqlOrgao);
     $iRowsOrgao = pg_num_rows($rsOrgao);
@@ -745,7 +749,10 @@ try {
     $sSqlUnidade .= "        o41_unidade as codunidade,      ";
     $sSqlUnidade .= "        o41_descr   as descricao,       ";
     $sSqlUnidade .= "        o41_anousu  as exercicio        ";
-    $sSqlUnidade .= "   from orcunidade                      ";
+    $sSqlUnidade .= " from orcunidade                        ";
+    if (!empty($institParam)){
+      $sSqlUnidade .= " where o41_instit IN ({$institParam}) ";
+    }
 
     $rsUnidade    = db_query($connOrigem,$sSqlUnidade);
     $iRowsUnidade = pg_num_rows($rsUnidade);
@@ -1184,6 +1191,9 @@ try {
     $sSqlProjeto .= "        o55_descr    as descricao,      ";
     $sSqlProjeto .= "        o55_anousu   as exercicio       ";
     $sSqlProjeto .= "   from orcprojativ                     ";
+    if (!empty($institParam)){
+      $sSqlProjeto .= " where o55_instit IN ({$institParam})    ";
+    }
 
     $rsProjeto    = db_query($connOrigem,$sSqlProjeto);
     $iRowsProjeto = pg_num_rows($rsProjeto);
@@ -1664,6 +1674,9 @@ try {
     // RECEITAS *******************************************************************************************************//
 
     $sSqlInstitPref = "SELECT db21_tipoinstit FROM configuracoes.db_config WHERE db21_tipoinstit NOT IN (2, 12)";
+    if (!empty($institParam)){
+      $sSqlInstitPref .= " AND codigo IN ({$institParam})";
+    }
     $rsInstitPref   = db_query($connOrigem,$sSqlInstitPref);
     $sInstitPref    = pg_result($rsInstitPref,0,0);
     if (!empty($sInstitPref)) {
@@ -1680,8 +1693,9 @@ try {
         $sSqlReceita .= "        o70_instit as codinstit,        ";
         $sSqlReceita .= "        o70_valor  as previsaoinicial   ";
         $sSqlReceita .= "   from orcreceita                      ";
-
-//    echo $sSqlReceita; exit;
+        if (!empty($institParam)){
+          $sSqlReceita .= " where o70_instit IN ({$institParam})    ";
+        }
 
         $rsReceita = db_query($connOrigem, $sSqlReceita);
         $iRowsReceita = pg_num_rows($rsReceita);
@@ -1815,6 +1829,9 @@ try {
         $sSqlReceitaMovimentacao .= "       inner join conlancamdoc   on conlancamdoc.c71_codlan = conlancam.c70_codlan          ";
         $sSqlReceitaMovimentacao .= "       inner join conhistdoc     on conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc         ";
         $sSqlReceitaMovimentacao .= "       inner join conhistdoctipo on conhistdoc.c53_tipo     = conhistdoctipo.c57_sequencial ";
+        if (!empty($institParam)){
+          $sSqlReceitaMovimentacao .= " where o70_instit IN ({$institParam})                                                        ";
+        }
         $sSqlReceitaMovimentacao .= " group by o70_codrec,o70_anousu,c70_data                                                    ";
 
 
@@ -1939,6 +1956,9 @@ try {
     $sSqlDotacao .= " FROM orcdotacao ";
     $sSqlDotacao .= " JOIN orcelemento ON o56_codele = o58_codele AND o58_anousu = o56_anousu ";
     $sSqlDotacao .= " JOIN conplano ON o56_elemento = substr(c60_estrut,1,13) AND o56_anousu = c60_anousu ";
+    if (!empty($institParam)){
+      $sSqlDotacao .= " WHERE o58_instit IN ({$institParam})";
+    }
     $sSqlDotacao .= " UNION ";
     $sSqlDotacao .= " SELECT o58_coddot,  ";
     $sSqlDotacao .= "        o58_orgao, ";
@@ -1953,7 +1973,11 @@ try {
     $sSqlDotacao .= "        o58_codigo,  ";
     $sSqlDotacao .= "        o58_codele ";
     $sSqlDotacao .= " FROM orcdotacao ";
-    $sSqlDotacao .= " WHERE o58_anousu >= 2013) as x  ";
+    if(!empty($institParam)){
+      $sSqlDotacao .= " WHERE o58_anousu >= 2013 AND o58_instit IN ({$institParam})) as x ";
+    }else{
+      $sSqlDotacao .= " WHERE o58_anousu >= 2013) as x ";
+    }
 
 
     $rsDotacao    = db_query($connOrigem,$sSqlDotacao);
@@ -2099,6 +2123,11 @@ try {
     $sSqlEmpenho .= "                         inner join conlancam on conlancam.c70_codlan = conlancamemp.c75_codlan ";
     $sSqlEmpenho .= "                   where c75_numemp = e60_numemp                                                ";
     $sSqlEmpenho .= "                     and c70_data >= '{$iExercicioBase}-01-01'::date )                          ";
+
+    if (!empty($institParam)){
+      $sSqlEmpenho .= " AND empempenho.e60_instit IN ({$institParam})                                                   ";
+    }
+
     $sSqlEmpenho .= "    and exists (  select 1                                                                      ";
     $sSqlEmpenho .= "                    from empempitem                                                             ";
     $sSqlEmpenho .= "                   where empempitem.e62_numemp = empempenho.e60_numemp )                        ";
@@ -2294,13 +2323,11 @@ try {
         }
 
         // Consulta Processos do Empenho
-        $sSqlProcessoEmpenho    = " select pc81_codproc as processo
-    from empempaut
-    inner join empautitem           on e55_autori = e61_autori
-    inner join empautitempcprocitem on e73_autori = e55_autori
-    and e73_sequen = e55_sequen
-    inner join pcprocitem           on pc81_codprocitem = e73_pcprocitem
-    where e61_numemp = {$oEmpenho->codempenho} ";
+        $sSqlProcessoEmpenho    = " select pc81_codproc as processo from empempaut
+                                    inner join empautitem on e55_autori = e61_autori
+                                    inner join empautitempcprocitem on e73_autori = e55_autori and e73_sequen = e55_sequen
+                                    inner join pcprocitem on pc81_codprocitem = e73_pcprocitem
+                                    where e61_numemp = {$oEmpenho->codempenho} ";
 
         $rsDadosProcessoEmpenho  = db_query($connOrigem,$sSqlProcessoEmpenho);
         $iLinhasProcessoEmpenho = pg_num_rows($rsDadosProcessoEmpenho);
@@ -2354,9 +2381,14 @@ try {
     $sSqlEmpenhoMovimentacao .= " INNER JOIN conhistdoc ON conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc          ";
     $sSqlEmpenhoMovimentacao .= " LEFT  JOIN conlancamcompl ON conlancamcompl.c72_codlan = conlancamemp.c75_codlan  ";
     $sSqlEmpenhoMovimentacao .= " WHERE EXISTS ( SELECT * FROM empempitem JOIN empempenho ON e62_numemp = e60_numemp";
-    $sSqlEmpenhoMovimentacao .= " WHERE empempitem.e62_numemp = conlancamemp.c75_numemp                             ";
-    $sSqlEmpenhoMovimentacao .= " AND empempenho.e60_emiss >= '{$iExercicioBase}-01-01'::date)                      ";
-    $sSqlEmpenhoMovimentacao .= " AND c70_data >= '{$iExercicioBase}-01-01'::date                                   ";
+    $sSqlEmpenhoMovimentacao .= "                WHERE empempitem.e62_numemp = conlancamemp.c75_numemp              ";
+
+    if (!empty($institParam)){
+      $sSqlEmpenhoMovimentacao .= "                AND empempenho.e60_instit IN ({$institParam})                        ";
+    }
+
+    $sSqlEmpenhoMovimentacao .= "                  AND empempenho.e60_emiss >= '{$iExercicioBase}-01-01'::date)     ";
+    $sSqlEmpenhoMovimentacao .= "   AND c70_data >= '{$iExercicioBase}-01-01'::date                                 ";
 
 
     $rsEmpenhoMovimentacao    = db_query($connOrigem,$sSqlEmpenhoMovimentacao);
@@ -2448,8 +2480,8 @@ try {
     $sSqlServidores .= "       z01_cgccpf  as cpf,                                   ";
     $sSqlServidores .= "       rh37_descr  as cargo,                                 ";
     $sSqlServidores .= "       r70_descr   as lotacao,                               ";
-    $sSqlServidores .= "       case 
-                                    when rh55_descr is not null then rh55_descr                         
+    $sSqlServidores .= "       case
+                                    when rh55_descr is not null then rh55_descr
                                     else r70_descr
                                     end as localtrabalho,
                                ";
@@ -2475,11 +2507,14 @@ try {
     $sSqlServidores .= "       AND rhlocaltrab.rh55_instit =  rhpessoal.rh01_instit";
     $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} AND rh01_sicom = 1";
     if (!empty($iAnoEspecificoFolha) && !empty($iInstitEspecificoFolha)) {
-      $sSqlServidores .= " AND ( 
+      $sSqlServidores .= " AND (
         (rh02_anousu >= {$iAnoEspecificoFolha} AND rh02_instit = {$iInstitEspecificoFolha})
         OR
         (rh02_instit != {$iInstitEspecificoFolha})
       )";
+    }
+    if (!empty($institParam)){
+      $sSqlServidores .= "AND rh02_instit IN ({$institParam})";
     }
     $sSqlServidores .= " AND
     (rh02_anousu::varchar||lpad(rh02_mesusu::varchar, 2, '0'))::integer <
@@ -2500,15 +2535,6 @@ try {
     $sSqlAnalyse = "analyze dados_servidor ";
     db_query($connOrigem, $sSqlAnalyse);
 
-
-    // $sSqlDadosCadastraisServidor  = " select matricula as id,                         ";
-    // $sSqlDadosCadastraisServidor .= "         nome,                                    ";
-    // $sSqlDadosCadastraisServidor .= "        cpf,                                     ";
-    // $sSqlDadosCadastraisServidor .= "        instit_servidor as instituicao,          ";
-    // $sSqlDadosCadastraisServidor .= "        admissao,                                ";
-    // $sSqlDadosCadastraisServidor .= "        max(rescisao) as rescisao                ";
-    // $sSqlDadosCadastraisServidor .= "   from dados_servidor                           ";
-    // $sSqlDadosCadastraisServidor .= "   group by id, nome, cpf, instit_servidor, admissao ";
 
     $sSqlDadosCadastraisServidor  = " select dados_servidor.matricula as id,";
     $sSqlDadosCadastraisServidor .= "        nome,                                    ";

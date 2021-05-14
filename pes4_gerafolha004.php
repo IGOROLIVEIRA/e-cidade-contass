@@ -2846,7 +2846,7 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
       db_selectmax( "rub_", "select * from rhrubricas ".$condicaoaux );
       $r20_pd = $rub_[0]["rh27_pd"];
 
-      if($db_debug == true){ echo "[gerfres] 4 - chamando a função calc_rubrica() <br>"; }
+      if($db_debug == true){ echo "[gerfres] 4 - chamando a função calc_rubrica(). Rubrica - ".$pontofr[$Ipontofr]["r19_rubric"]." <br>"; }
       $r07_form = calc_rubrica($pontofr[$Ipontofr]["r19_rubric"],"pontofr","r19","r20",$recno_110,false);
 
       if( db_empty($r07_form) || (!db_empty($r07_form) && !db_empty($pontofr[$Ipontofr]["r19_valor"]))){
@@ -8769,7 +8769,7 @@ function le_tbprev($r20_rubr=null, $area=null, $sigla=null, $sigla2=null, $nro_d
       $r20_rubr = "R986";
     }
 
-    if($db_debug == true){ echo "[le_tbprev] 26 - chamando a função calc_rubrica() <br>"; }
+    if($db_debug == true){ echo "[le_tbprev] 26 - chamando a função calc_rubrica(). Rubrica - {$r20_rubr} <br>"; }
     $r07_valor  = calc_rubrica($r20_rubr, $area, $sigla, $sigla2,$nro_do_registro, $operacao);
 
     if($db_debug == true) {
@@ -9598,6 +9598,17 @@ function rle_var_bxxx ($formula=null, $area0=null, $area1=null, $sigla=null, $si
        }
            }
            if($achou){
+            
+            /**
+             * Condicao adicionada para nao incluir valor das rubricas deste intervalo, nas rubricas marcadas nas bases do in_array
+             */
+            if( (intval($campo_rubrica) >= 2000 && intval($campo_rubrica) <= 3999) && (in_array($base, array("B001","B002","B004","B005")))
+               && (('f' == $rescisao[0]["r59_finss"])
+               || ('f' == $rescisao[0]["r59_firrf"]))
+              ) { 
+              continue;
+            }
+
               if( $area0 == "pontoprovfer" ){
                     $tpgto = $pontoprovfer[$i]["r91_tpp"];
               }else if($area0 == " pontofr"){

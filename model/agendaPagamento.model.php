@@ -1411,6 +1411,7 @@ class agendaPagamento {
       e53_valor,
       e53_vlranu,
       k12_data,
+	  e91_codcheque,
       e91_cheque,
       e91_codmov,
       e71_codnota,
@@ -1442,6 +1443,7 @@ class agendaPagamento {
                    {$sWhereFiltroCgm}
              order by e81_codmov desc limit 1)
         else e97_codforma end) as e97_codforma ,
+	  empagemov.e81_numdoc,
       e42_dtpagamento,
       e53_vlrpag,
       e81_valor,
@@ -1584,8 +1586,10 @@ class agendaPagamento {
    * @param stdClass $oMovimento objeto com os dados do movimento.
    * @param integer  $iCodigoOrdemAuxiliar  define qual ordem auxilar o movimento ira compor.
    *                                        caso nulo ira procurar a ultima ordem do dia e ira por na ordme encontrada
+   * @param bool $lEfetuarPagamento por padrão será falso, só será verdadeiro quando for pagamento de cheque na rotina 
+   *                                agenda - manutenção de pagamentos que passou a aceitar pagamento de cheque
    */
-  function configurarPagamentos($dtPagamento, stdClass $oMovimento, $iCodigoOrdemAuxiliar = null, $lGerarOpAuxiliar=true) {
+  function configurarPagamentos($dtPagamento, stdClass $oMovimento, $iCodigoOrdemAuxiliar = null, $lGerarOpAuxiliar=true, $lEfetuarPagamento=false) {
 
 
     $oDaoOrdemAgenda->e42_sequencial = null;
@@ -1822,11 +1826,18 @@ class agendaPagamento {
       /*
        * exlcuimos, e depois incluimos na tabela empageconf,
        */
-      $oDaoEmpageConf              = db_utils::getDao("empageconf");
-      $oDaoEmpageConf->excluir($oMovimento->iCodMov);
-      if ($oMovimento->iCodForma == 3 || $oMovimento->iCodForma == 1 || $oMovimento->iCodForma == 4) {
-
-        $oDaoEmpageConf->e86_cheque  = "0";
+      $oDaoEmpageConf = db_utils::getDao("empageconf");
+      
+      /**
+       * Não exclui se for pagamento de cheque, pois na rotina Agenda - Manutenção de pagamento passou a permitir
+       * pagamento de emissão e pagamento de cheque direto da tela
+       */
+      if ( !($oMovimento->iCodForma == 2 && $oMovimento->iCheque == '') ) {
+          $oDaoEmpageConf->excluir($oMovimento->iCodMov);
+      }      
+      if ($oMovimento->iCodForma == 3 || $oMovimento->iCodForma == 1 || $oMovimento->iCodForma == 4 || ($oMovimento->iCodForma == 2 && $oMovimento->iCheque != '')) {
+        
+        $oDaoEmpageConf->e86_cheque  = (isset($oMovimento->iCheque) && $oMovimento->iCheque != '') ? $oMovimento->iCheque : "0";
         $oDaoEmpageConf->e86_data    = $dtPagamento;
         $oDaoEmpageConf->e86_codmov  = $oMovimento->iCodMov;
         $oDaoEmpageConf->e86_correto = "true";
@@ -1914,6 +1925,23 @@ class agendaPagamento {
         }
       }
     }
+
+	/**
+	 * Atualiza movimento com o novo campo e81_numdoc informado na tela de pagamento
+	 */
+		
+    $oDaoEmpageMov = db_utils::getDao("empagemov");
+    $oDaoEmpageMov->e81_numdoc = (isset($oMovimento->sNumDoc) && $oMovimento->sNumDoc != '') ? $oMovimento->sNumDoc : '';
+    $oDaoEmpageMov->e81_codmov = $oMovimento->iCodMov;
+    $oDaoEmpageMov->alterar($oMovimento->iCodMov);
+    
+    if ($oDaoEmpageMov->erro_status == 0) {
+
+        $sErroMsg = "Erro [8] - Não foi possivel incluir o número do documento ao movimento.";
+        throw new Exception($sErroMsg);
+
+    }
+
   }
 
   /**
@@ -2165,6 +2193,8 @@ class agendaPagamento {
     $sCampos  .= "k17_data,                                               ";
     $sCampos  .= "k17_valor,                                              ";
     $sCampos  .= "e91_codmov,                                             ";
+    $sCampos  .= "e91_codcheque,                                          ";
+    $sCampos  .= "e91_cheque,                                             ";
     $sCampos  .= "e90_codmov,                                             ";
     $sCampos  .= "e86_codmov,                                             ";
     $sCampos  .= "e83_codtipo,                                            ";
@@ -2194,6 +2224,7 @@ class agendaPagamento {
     $sCampos  .= "                                     end)                                                ";
     $sCampos  .= "          order by e89_codmov desc limit 1)                                              ";
     $sCampos  .= "      else e97_codforma end) as e97_codforma,                                            ";
+	$sCampos  .= "e81_numdoc, ";
 
     $sCampos  .= "e97_codmov,                                             ";
     $sCampos  .= "e83_conta,                                              ";

@@ -656,6 +656,52 @@ switch ($oParam->exec){
             $oRetorno->message = urlencode($eErro->getMessage());
         }
         break ;
+
+
+    case 'excluiTermoGuarda':
+
+        $oRetorno->status = 1;
+        $clbensguardaitemdev = db_utils::getDao('bensguardaitemdev');
+        $clbensguardaitem = db_utils::getDao('bensguardaitem');
+        $sSqlGuardaDev = $clbensguardaitemdev->sql_query('', 'count(*)', '', 't21_codigo = '. $oParam->t21_codigo);
+        $rsGuardaDev = $clbensguardaitemdev->sql_record($sSqlGuardaDev);
+
+        $iLinhas = db_utils::fieldsMemory($rsGuardaDev, 0)->count;
+        $sqlerro = false;
+        
+        if($iLinhas){
+            $sqlerro = true;
+            $erro_msg = 'Exclusão não efetuada. Já existe devolução para essa guarda!';
+        }else{
+
+            $clbensguardaitem->excluir('', "t22_bensguarda = $oParam->t21_codigo");
+            
+            if ($clbensguardaitem->erro_status == 0) {
+                $sqlerro = true;
+            }
+
+        }
+
+        if(!$sqlerro){
+            $clbensguarda = db_utils::getDao('bensguarda');
+            $clbensguarda->excluir($oParam->t21_codigo);
+
+            if ($clbensguarda->erro_status == 0) {
+                $sqlerro = true;
+            }
+
+            $erro_msg = $clbensguarda->erro_msg;
+
+        }
+        
+        if($sqlerro){
+            $oRetorno->status = 2;
+        }
+
+        $oRetorno->msg = urlencode($erro_msg);
+
+        break;
+
 }
 
 /**

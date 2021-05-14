@@ -122,7 +122,7 @@ class GerarCTB extends GerarAM
 
                         if ($aCTB21['si97_tipomovimentacao'] == 2 && $aCTB21['si97_tipoentrsaida'] == 99){
 
-                            $aCSVCTB21['si97_dscoutrasmov']   = "Pagamento Extra-Orçamentário";
+                            $aCSVCTB21['si97_dscoutrasmov']   = "Pagamento Extra Orcamentario";
 
                         } else {
 

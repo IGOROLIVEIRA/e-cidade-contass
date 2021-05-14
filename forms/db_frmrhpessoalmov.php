@@ -191,8 +191,26 @@ if(isset($db_opcaoal)){
                                         15 => 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.',
                                         16 => 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.',
                                     );
-                                    db_select("rh02_tipcatprof",$tipcatprof,true,$db_opcao);
+                                    db_select("rh02_tipcatprof",$tipcatprof,true,$db_opcao, "onchange='js_mostrar_segatuacao();'");
                                     ?>
+                                    <span id="divSegatuacao">
+                                        <strong><?=@$Lrh02_segatuacao ?> </strong>
+                                        <?
+                                        $segatuacao = array(
+                                            0 => 'Selecione',
+                                            1 => 'Creche',
+                                            2 => 'Pré-escola',
+                                            3 => 'Fundamental 1',
+                                            4 => 'Fundamental 2',
+                                            5 => 'Médio',
+                                            6 => 'Profissional',
+                                            7 => 'Administrativo',
+                                            8 => 'EJA',
+                                            9 => 'Especial',
+                                        );
+                                        db_select("rh02_segatuacao",$segatuacao,true,$db_opcao);
+                                        ?>
+                                    </span>
                                 </td>
                             </tr>
                             <tr>
@@ -1639,6 +1657,15 @@ if(isset($db_opcaoal)){
                 jan.moveTo(0,0);
             }
 
+            function js_mostrar_segatuacao() {
+                if($('rh02_tipcatprof').value != '0') {
+                    $('divSegatuacao').show();
+                } else {
+                    $('rh02_segatuacao').value = '0';
+                    $('divSegatuacao').hide();
+                }
+            }
+            js_mostrar_segatuacao();
         </script>
         <?
 

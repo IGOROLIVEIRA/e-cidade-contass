@@ -176,7 +176,7 @@ function js_relatorio2() {
 			<tr>
 				<td align="right" nowrap title="<?="Pagamentos de empenhos"?>"><b>Pagamentos de empenhos:</b></td>
 				<td align="left" nowrap><?
-				$x = array(3=>"Agrupar por Fornecedor",2=>"Agrupar",1=>"Detalhar",);
+				$x = array(1=>"Detalhar",3=>"Agrupar por Fornecedor",2=>"Agrupar");
 				db_select("pagempenhos",$x,true,1);
 				?></td>
 			</tr>

@@ -716,6 +716,9 @@ switch ($objJson->method) {
         }
       }
     }
+
+    $objEmpenho->dadosEmpenho->isRestoPagar = $objEmpenho->isRestoPagar() || $objEmpenho->dadosEmpenho->e60_anousu < db_getsession("DB_anousu");
+
     echo $json->encode($objEmpenho->dadosEmpenho);
     break;
 

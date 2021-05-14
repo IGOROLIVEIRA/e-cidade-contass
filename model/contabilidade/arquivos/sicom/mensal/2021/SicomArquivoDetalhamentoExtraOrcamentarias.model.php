@@ -475,7 +475,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											         K17_debito AS codctb,
 											         o15_codtri AS codfontectb,
 											         k17_data AS dtemissao,
-											         k17_valor AS vldocumento
+											         k17_valor AS vldocumento,
+													 e81_numdoc
 											      FROM slip
 											INNER JOIN conplanoreduz cr ON cr.c61_reduz  = k17_credito and cr.c61_anousu = EXTRACT(YEAR from k17_data)::int
 											INNER JOIN conplano      ON c61_codcon = c60_codcon and c60_anousu = c61_anousu
@@ -506,7 +507,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											         K17_credito AS codctb,
 											         o15_codtri AS codfontectb,
 											         k17_data AS dtemissao,
-											         k17_valor AS vldocumento
+											         k17_valor AS vldocumento,
+													 e81_numdoc
 											      FROM slip
 											INNER JOIN conplanoreduz cr ON cr.c61_reduz  = k17_debito and cr.c61_anousu = EXTRACT(YEAR from k17_data)::int
 											INNER JOIN conplano      ON c61_codcon = c60_codcon and c60_anousu = c61_anousu
@@ -648,10 +650,16 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 								$cExt31->si127_tiporegistro = $oExt31->tiporegistro;
 								$cExt31->si127_codreduzidoop = $oExt30->codreduzidoop;
 								$cExt31->si127_tipodocumentoop = $oExt31->tipodocumentoop;
-								$cExt31->si127_nrodocumento = $oExt31->nrodocumento;
+								$cExt31->si127_nrodocumento = ($oExt31->tipodocumentoop == '99' && $oExt31->e81_numdoc != '') ? ' ' : $oExt31->nrodocumento;
 								$cExt31->si127_codctb = $oExt31->tipodocumentoop == 5 ? 0 : $oConta->conta;
 								$cExt31->si127_codfontectb = $oExt31->tipodocumentoop == 5 ? 100 : $oConta->fonte;
-								$cExt31->si127_desctipodocumentoop = $oExt31->tipodocumentoop == "99" ? 'TED' : ' ';
+								if ($oExt31->tipodocumentoop == '99' && $oExt31->e81_numdoc != '') {
+									$cExt31->si127_desctipodocumentoop = $oExt31->e81_numdoc;
+								} elseif ($oExt31->tipodocumentoop == '99') {
+									$cExt31->si127_desctipodocumentoop = 'TED';
+								} else {
+									$cExt31->si127_desctipodocumentoop = ' ';
+								}
 								$cExt31->si127_dtemissao = $oExt30->dtpagamento;
 								$cExt31->si127_vldocumento = $oExt31->vldocumento;
 								$cExt31->si127_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
