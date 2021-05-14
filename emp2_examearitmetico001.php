@@ -29,11 +29,13 @@ $clcriaabas     = new cl_criaabas;
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-     <?
-	 $clcriaabas->identifica = array("db_empenhos"=>"Empenho","db_slip"=>"Slip");
-	 $clcriaabas->src = array("db_empenhos"=>"emp2_examearitmeticoemp001.php","db_slip"=>"emp2_examearitmeticoslip001.php");
-	 $clcriaabas->cria_abas();
-       ?>
+    <?
+        $iInstit = db_getsession("DB_instit");
+
+        $clcriaabas->identifica = array("g1"=>"Empenho","db_slip"=>"Slip","filtro"=>"Filtro");
+	    $clcriaabas->src = array("g1"=>"emp2_examearitmeticoemp001.php","db_slip"=>"emp2_examearitmeticoslip001.php","filtro"=>"func_selorcdotacao_aba.php?instit=$iInstit");
+	    $clcriaabas->cria_abas();
+    ?>
        </td>
     </tr>
   </table>

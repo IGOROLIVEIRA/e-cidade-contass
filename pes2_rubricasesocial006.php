@@ -133,6 +133,7 @@ if(isset($chavepesquisa)){
  }
  foreach ($aBasesEsocial as $b) {
    $basesSelecionados[$b->e991_rubricas] = $bases[$b->e991_rubricas];
+   unset($bases[$b->e991_rubricas]);
  }
 
  db_fieldsmemory($orubrica);

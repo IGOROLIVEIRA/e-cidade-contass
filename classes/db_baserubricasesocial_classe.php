@@ -167,9 +167,9 @@ class cl_baserubricasesocial {
         $sql2 = "e991_rubricas = '$e991_rubricas'";
         if($e991_rubricasesocial!=null){
             if($e991_rubricas!=null){
-                $sql2 .= " and e991_rubricasesocial <> '$e991_rubricasesocial'";
+                $sql2 .= " and e991_rubricasesocial = '$e991_rubricasesocial'";
             }else{
-                $sql2 = "e991_rubricasesocial <> '$e991_rubricasesocial'";
+                $sql2 = "e991_rubricasesocial = '$e991_rubricasesocial'";
             }
         }
         if($e991_instit!=null){

@@ -240,7 +240,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 				left join pagordemprocesso on pagordem.e50_codord = pagordemprocesso.e03_pagordem
 				where pagordem.e50_codord = {$e50_codord} ) as x
         inner join cgm on cgm.z01_numcgm = _numcgm
-        left join pcfornecon on pc63_numcgm = _numcgm  and pc63_tipoconta=1
+        left join pcfornecon on pc63_numcgm = _numcgm
         left join pcforneconpad ON pc64_contabanco = pc63_contabanco
         ORDER BY pc64_contabanco
 	   ";

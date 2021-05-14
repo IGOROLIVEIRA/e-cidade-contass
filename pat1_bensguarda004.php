@@ -42,15 +42,43 @@ $db_opcao = 1;
 $db_botao = true;
 if (isset($incluir)) {
   
-  $sqlerro = false;
-  db_inicio_transacao();
-  $clbensguarda->incluir($t21_codigo);
-  if ($clbensguarda->erro_status == 0) {
-    $sqlerro = true;
-  }
-  $erro_msg = $clbensguarda->erro_msg;
+    $sqlerro = false;
+    db_inicio_transacao();
+
+    if($t21_numcgm){
+        $sSql = "SELECT z01_cgccpf from cgm where z01_numcgm = " . $t21_numcgm;
+        $rsSql = db_query($sSql);
+        $iCnpj = db_utils::fieldsMemory($rsSql, 0)->z01_cgccpf;
+    }
+  
+    if(!$t21_cpf && strlen($iCnpj) == 14){
+      $erro_msg = 'Campo CPF não informado. Verifique!';
+      $sqlerro = true;
+    }
+  
+    if(!$t21_representante && strlen($iCnpj) == 14){
+        $erro_msg = 'Campo Representante não informado. Verifique!';
+        $sqlerro = true;
+    }
+
+    if(!$sqlerro){
+        if($t21_cpf){
+            $clbensguarda->t21_cpf = str_replace('-', '', str_replace('.', '', $t21_cpf));
+        }
+        $clbensguarda->incluir($t21_codigo);
+        $erro_msg = $clbensguarda->erro_msg;
+    }
+
+    if ($clbensguarda->erro_status == 0 && !$sqlerro) {
+        $sqlerro = true;
+        $erro_msg = $clbensguarda->erro_msg;
+    }
+
+    if(!$sqlerro){
+        $t21_codigo = $clbensguarda->t21_codigo;
+    }
+    
   db_fim_transacao($sqlerro);
-  $t21_codigo = $clbensguarda->t21_codigo;
   $db_opcao = 1;
   $db_botao = true;
 }
