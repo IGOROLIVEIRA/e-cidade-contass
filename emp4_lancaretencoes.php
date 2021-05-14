@@ -912,7 +912,7 @@ $sSQLRetencao = $oDaoRetencao->sql_query(null,
                                           e21_aliquota",
                                           "e21_sequencial",
                                           "e21_instit=".db_getsession("DB_instit")."
-                                          and e21_retencaotiporecgrupo = 1");
+                                          and e21_retencaotiporecgrupo in (1,2)");
 $rsRetencao   = $oDaoRetencao->sql_record($sSQLRetencao);
 if (strlen($oNota->z01_cgccpf) == 14) {
   $sPessoa  = "J";
