@@ -169,7 +169,7 @@ switch ($oParam->exec){
                 $rsultimamedida = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($veiculo));
                 $aUltimamedida = db_utils::fieldsMemory($rsultimamedida,0);
 
-                $dtsession = date("Y-m-d", db_getsession("DB_datausu"));
+                $dtsession = date($data, db_getsession("DB_datausu"));
 
                 //Novo Veiculo
                 $clveiculos->ve01_placa                 = $aVeiculo->ve01_placa;
