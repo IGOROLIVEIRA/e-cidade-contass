@@ -40,16 +40,6 @@ $clrotulo->label("l20_naturezaobjeto");
 $clrotulo->label("l20_nroedital");
 require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
-
-//verificação do tipo de usuário por login => .conttas 
-$lusuario = db_getsession("DB_login");
-$uLogin = explode(".",$lusuario,2);
-
-//url identificada para validação de campo modalidade da para uso de inclusão 
-$url_atual= "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-$ulr_particao = explode("_",$url_atual,2);
-
-
 if ($db_opcao == 1) {
 
     /*
@@ -115,7 +105,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             <tr><td>
 
                     <fieldset>
-                        <legend><strong>Licitação </strong></legend>
+                        <legend><strong>Licitação</strong></legend>
 
                         <fieldset style="border:0px;">
 
@@ -191,13 +181,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             $db_botao = false;
                                             db_input("l20_codtipocom",10,"",true,"text");
                                             db_input("l20_codtipocom",40,"",true,"text");
-                                        } elseif($uLogin[1] === "contass" || $ulr_particao[1]=== "liclicita001.php") {
+                                        } else {
                                             db_selectrecord("l20_codtipocom",@$result_tipo,true,$db_opcao,"js_mostraRegistroPreco()");
-                                            if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
-                                                echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
-                                            }
-                                        }else{
-                                            db_selectrecord("l20_codtipocom",@$result_tipo,true,3,"js_mostraRegistroPreco()");
                                             if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
                                                 echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
                                             }
