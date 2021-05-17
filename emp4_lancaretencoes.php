@@ -592,7 +592,7 @@ function js_atualizaCampos (iNumRow) {
    */
 
   var aSelecionados                       = gridRetencoes.getSelection();
-  if (aSelecionados[0][7] == 1) {
+  if (aSelecionados[0][7] == 1 || aSelecionados[0][7] == 2) {
 
     $('e21_sequencial').value               = aSelecionados[0][0];//Codigo da retencao
     $('e21_sequencialdescr').value          = aSelecionados[0][0];//descricao da retencao
