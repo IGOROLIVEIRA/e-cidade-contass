@@ -4,14 +4,15 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
-include("classes/db_naturdessiope_classe.php.php");
+include("classes/db_naturdessiope_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clnaturdessiope = new cl_naturdessiope;
 
 if(isset($incluir)){
     db_inicio_transacao();
-    $clnaturdessiope->incluir($c222_natdespecidade,$c222_natdespsiope, $c222_anousu, $c222_previdencia);
+    $clnaturdessiope->c222_previdencia = $c222_previdencia ? $c222_previdencia : 'f';
+    $clnaturdessiope->incluir();
     db_fim_transacao();
 }
 
