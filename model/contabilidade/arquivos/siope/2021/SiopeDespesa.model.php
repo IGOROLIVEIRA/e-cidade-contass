@@ -324,7 +324,7 @@ class SiopeDespesa extends Siope {
     public function agrupaDespesas() {
 
         $aDespAgrup = array();
-        // $this->imprimeTabela($this->aDespesas);
+
         /**
          * Agrupa despesas.
          */
@@ -365,8 +365,7 @@ class SiopeDespesa extends Siope {
                     $oDesp->liquidado           = $oDespesa->liquidado;
                     $oDesp->pagamento           = $oDespesa->pagamento;
                     $oDesp->rp_processado       = ($oDespesa->liquidado - $oDespesa->pagamento);
-                    $oDesp->rp_nprocessado      = ($oDespesa->empenhado - $oDespesa->liquidado);                    
-                    // $oDesp->esferaconcedente      = $oDespesa->esferaconcedente;       
+                    $oDesp->rp_nprocessado      = ($oDespesa->empenhado - $oDespesa->liquidado);                         
 
                     $this->aDespesasAgrupadas[$sHash] = $oDesp;
                     
@@ -406,7 +405,6 @@ class SiopeDespesa extends Siope {
                     $oDesp->pagamento           = $oDespesa->pagamento;
                     $oDesp->rp_processado       = ($oDespesa->liquidado - $oDespesa->pagamento);
                     $oDesp->rp_nprocessado      = ($oDespesa->empenhado - $oDespesa->liquidado);  
-                    // $oDesp->esferaconcedente      = $oDespesa->esferaconcedente;            
 
                     $this->aDespesasAgrupadas[$sHash] = $oDesp;
                     
@@ -423,65 +421,6 @@ class SiopeDespesa extends Siope {
             }
 
         }
-        
-        // echo '<pre>';print_r($this->aDespesasAgrupadas);echo '</pre>';die;
-        // $this->imprimeTabela($this->aDespesasAgrupadas);
-        // die;
-
-    }
-
-    public function imprimeTabela($array) {
-        
-        echo '<table border=1 cellpadding=0 cellspacing=0>';
-        echo '<thead>';
-        echo '<th>codplan</th>';
-        echo '<th>fonte</th>';
-        echo '<th>chave</th>';
-        // echo '<th>ensino</th>';
-        // echo '<th>pasta</th>';
-        // echo '<th>elemento</th>';
-        echo '<th>elemento_siope</th>';
-        echo '<th>descricao</th>';
-        echo '<th>dot_atualizada</th>';
-        echo '<th>empenhado</th>';
-        echo '<th>liquidado</th>';
-        echo '<th>pago</th>';
-        // echo '<th>tipo</th>';
-        echo '<th>rp proc</th>';
-        echo '<th>rp n proc</th>';
-        // echo '<th>convenio</th>';
-        echo '<th>esfera</th>';
-        echo '</thead>';
-        echo '<tbody>';
-        foreach ($array as $row) {
-
-            // if (/*substr($row->o58_codigo,1,2) == 22 ||*/ substr($row->o58_codigo,1,2) == 22) {
-
-                echo '<tr>';
-                echo "<td>". $row->cod_planilha."</td>";
-                echo "<td>". $row->o58_codigo ."</td>";
-                echo "<td>".$row->o58_codigo .' ;'. $row->cod_planilha.';'.$this->getElementoFormat($row->elemento_siope)."</td>";
-                // echo "<td>". $row->o58_subfuncao ."</td>";
-                // echo "<td>". $row->o55_tipoensino ."</td>";
-                // echo "<td>". $row->o55_tipopasta ."</td>";
-                // echo "<td>". $row->elemento ."</td>";
-                echo "<td>". $row->elemento_siope ."</td>";
-                echo "<td>". substr($row->descricao_siope,0,15) ."</td>";
-                echo "<td>". $row->dot_atualizada ."</td>";
-                echo "<td>". $row->empenhado ."</td>";
-                echo "<td>". $row->liquidado ."</td>";
-                echo "<td>". $row->pagamento ."</td>";
-                echo "<td>". $row->rp_processado ."</td>";
-                echo "<td>". $row->rp_nprocessado ."</td>";
-                // echo "<td>". $row->tipo ."</td>";
-                // echo "<td>". $row->e60_numconvenio ."</td>";
-                echo "<td>". $row->esferaconcedente ."</td>";
-                echo '</tr>';
-
-            // }
-        }
-        echo '</tbody>';
-        echo '</table><br>';
 
     }
 
