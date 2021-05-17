@@ -280,10 +280,10 @@ switch ($oParam->exec) {
 
 
       db_inicio_transacao();
-      $dataLancamento = new DBDate($oParam->dataLancamento);
-      $dataLancamento = $dataLancamento->getDate();
-
-      $oOrdemPagamento = new ordemPagamento($oParam->iNota, $dataLancamento);
+      $dtDataLancamento = new DBDate($oParam->dataLancamento);
+      $iAnoLancamento   = $dtDataLancamento->getAno();
+      $sDataLancamento  = $dtDataLancamento->getDate();
+      $oOrdemPagamento = new ordemPagamento($oParam->iNota, $sDataLancamento);
       $oOrdemPagamento->setCheque($oParam->iCheque);
       $oOrdemPagamento->setChequeAgenda($oParam->iCodCheque);
       $oOrdemPagamento->setConta($oParam->iConta);
@@ -292,24 +292,25 @@ switch ($oParam->exec) {
       $oOrdemPagamento->setHistorico($oParam->sHistorico);
       $nEmpenho = $oOrdemPagamento->getDadosOrdem()->e50_numemp;
 
+      $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
+      $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);
 
+      if (pg_num_rows($rsConsultaFimPeriodoContabil) > 0) {
+      
+        $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
-      if(pg_num_rows(db_query("SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." "))>0){
-      $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE (c99_data < '$dataLancamento' OR c99_data IS NULL) AND c99_anousu = ".db_getsession('DB_anousu')." ");
-
-      if(pg_num_rows($oConsultaFimPeriodoContabil) == 0){
-        throw new Exception("Data informada inferior à data do fim do período contábil.");
+        if ($oFimPeriodoContabil->c99_data != '' && $dtDataLancamento->getTimeStamp() < db_strtotime($oFimPeriodoContabil->c99_data)) {
+            throw new Exception("Data informada inferior à data do fim do período contábil.");    
         }
+
       }
 
-      $oConsultaDataLancamento = db_query("SELECT *
-        FROM conlancamemp
-        JOIN conlancam ON c75_codlan=c70_codlan
-        WHERE c75_numemp = {$nEmpenho} AND c75_data > '$dataLancamento'
-        ORDER by c75_data DESC");
+      if ($iAnoLancamento != $oOrdemPagamento->getDataPagamento()->c70_anousu) {
+        throw new Exception("Não é possível estornar pagamentos de anos anteriores.");
+      }
 
-      if(pg_num_rows($oConsultaDataLancamento) > 0){
-        throw new Exception("Já existe um lançamento com a data posterior à informada.");
+      if ($dtDataLancamento->getTimeStamp() < db_strtotime($oOrdemPagamento->getDataPagamento()->c70_data)) {
+        throw new Exception("Não é possível estornar com data anterior ao pagamento.");
       }
 
       if ($oParam->lEstornarPgto) {
