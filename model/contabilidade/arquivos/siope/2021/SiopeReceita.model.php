@@ -90,9 +90,7 @@ class SiopeReceita extends Siope {
                             o70_codrec,
                             saldo_inicial,
                             saldo_prevadic_acum,
-                            saldo_arrecadado
-                            
-                    
+                            saldo_arrecadado                    
                     FROM ($sSqlPrinc) AS principal
                     LEFT JOIN naturrecsiope ON o57_fonte = c224_natrececidade AND c224_anousu = {$this->iAnoUsu}
                     LEFT JOIN elerecsiope ON substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_natrecsiope AND naturrecsiope.c224_anousu = elerecsiope.c225_anousu

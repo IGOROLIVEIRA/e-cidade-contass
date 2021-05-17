@@ -3,9 +3,9 @@
 $clnaturdessiope->rotulo->label();
 $iAnoUsu = db_getsession('DB_anousu');
 if ($iAnoUsu < 2021) {
-    $tam_cmapo = 11;
+    $tam_campo = 11;
 } else {
-    $tam_cmapo = 15;
+    $tam_campo = 15;
 }
 ?>
 <form name="form1" method="post" action="">
@@ -27,12 +27,12 @@ if ($iAnoUsu < 2021) {
                 <td nowrap><strong>Código da Despesa:</strong></td>
                 <td>
                     <?
-                    db_input('c222_natdespecidade',$tam_cmapo,$Ic222_natdespecidade,true,'text',1,"")
+                    db_input('c222_natdespecidade',$tam_campo,$Ic222_natdespecidade,true,'text',1,"")
                     ?>
                 </td>
                 <td>
                     <?
-                    db_input('c222_natdespsiope',$tam_cmapo,$Ic222_natdespsiope,true,'text',1,"")
+                    db_input('c222_natdespsiope',$tam_campo,$Ic222_natdespsiope,true,'text',1,"")
                     ?>
                 </td>
                 <td>
