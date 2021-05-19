@@ -504,7 +504,6 @@ $head6 = $sFiltroOrigem;
 $head7 = $sFiltroOrdenacao;
 $head8 = $sFiltroDemonstracao;
 $head9 = $sFiltroTotalizacao;
-$head10 = 'Novo';
 
 //$aDados = db_utils::getColectionByRecord($rsSql);
 
