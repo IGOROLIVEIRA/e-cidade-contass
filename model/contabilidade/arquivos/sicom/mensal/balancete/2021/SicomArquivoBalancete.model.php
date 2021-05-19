@@ -542,7 +542,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                o58_programa as codprograma,
 					                o58_projativ as idacao,
 					                o55_origemacao as idsubacao,
-					                substr(o56_elemento,2,6) as naturezadadespesa,
+					                substr(o56_elemento,2,12) as naturezadadespesa,
 					                '00' as subelemento,
 					                o15_codtri as codfontrecursos, si08_orcmodalidadeaplic,
                                     case
@@ -828,14 +828,17 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     
                                     foreach ($oElementos as $oElemento) {
 
+                                        $sElementoXml = $oElemento->getAttribute('elementoEcidade');
+                                        $iElementoXmlDesdobramento = $oElemento->getAttribute('deParaDesdobramento');
+
                                         if ($nContaCorrente == 101) {
                                             if (substr($sElementoXml, 0, 6) == $sElemento) {
                                                 $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
                                                 $sSubElemento = '00';
                                             }
                                         } else {
-                                            if ($oElemento->getAttribute('deParaDesdobramento') != '' && $oElemento->getAttribute('deParaDesdobramento') == 1) {
-                                                if($oElemento->getAttribute('elementoEcidade') == $oReg11->naturezadadespesa) {
+                                            if ($iElementoXmlDesdobramento != '' && $iElementoXmlDesdobramento == 1) {
+                                                if($sElementoXml == $oReg11->naturezadadespesa) {
                                                     $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
                                                     $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
                                                 }
@@ -1430,7 +1433,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     o58_programa as codprograma,
                                     o58_projativ as idacao,
                                     o55_origemacao as idsubacao,
-                                    substr(o56_elemento,2,6) as naturezadadespesa,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
                                     substr(o56_elemento,8,2) as subelemento,
                                     o15_codtri as codfontrecursos,
                                     e60_codemp nroempenho,
@@ -1465,7 +1468,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     o58_programa as codprograma,
                                     o58_projativ as idacao,
                                     o55_origemacao as idsubacao,
-                                    substr(o56_elemento,2,6) as naturezadadespesa,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
                                     substr(o56_elemento,8,2) as subelemento,
                                     o15_codtri as codfontrecursos,
                                     e60_codemp nroempenho,
@@ -1502,7 +1505,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     o58_programa as codprograma,
                                     o58_projativ as idacao,
                                     o55_origemacao as idsubacao,
-                                    substr(o56_elemento,2,6) as naturezadadespesa,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
                                     substr(o56_elemento,8,2) as subelemento,
                                     o15_codtri as codfontrecursos,
                                     e60_codemp nroempenho,
@@ -1537,7 +1540,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     o58_programa as codprograma,
                                     o58_projativ as idacao,
                                     o55_origemacao as idsubacao,
-                                    substr(o56_elemento,2,6) as naturezadadespesa,
+                                    substr(o56_elemento,2,12) as naturezadadespesa,
                                     substr(o56_elemento,8,2) as subelemento,
                                     o15_codtri as codfontrecursos,
                                     e60_codemp nroempenho,
@@ -1665,17 +1668,28 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         if (!(($oReg14Saldo->saldoanterior == "" || $oReg14Saldo->saldoanterior == 0) && $oReg14Saldo->debitos == "" && $oReg14Saldo->creditos == "")) {
 
-                            $sElemento = $oReg14->naturezadadespesa;
-                            $sSubElemento = $oReg14->subelemento;
+                            $sElemento      = substr($oReg14->naturezadadespesa, 0, 6);
+                            $sSubElemento   = $oReg14->subelemento;                            
                             /**
                              * percorrer xml elemento despesa
                              */
                             if($this->iDeParaNatureza == 1) {
+                                
                                 foreach ($oElementos as $oElemento) {
 
                                     $sElementoXml = $oElemento->getAttribute('elementoEcidade');
+                                    $iElementoXmlDesdobramento = $oElemento->getAttribute('deParaDesdobramento');
 
-                                    if ($sElementoXml == $sElemento . $sSubElemento) {
+                                    if ($iElementoXmlDesdobramento != '' && $iElementoXmlDesdobramento == 1) {
+                                        
+                                        if($sElementoXml == $oReg14->naturezadadespesa) {
+
+                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                            $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
+
+                                        }
+
+                                    } elseif ($sElementoXml == $sElemento . $sSubElemento) {
 
                                         $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
                                         $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
@@ -1683,6 +1697,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     }
 
                                 }
+
                             }
 
                             /**
