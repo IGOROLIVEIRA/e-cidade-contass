@@ -49,7 +49,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
   /**
    * @var array Tipo Entrada/Saída que devem informar fonte
    */
-  protected $aTiposObrigFonte = array(5,6,7,9,11);
+  protected $aTiposObrigFonte = array(5,6,7,9,11,18);
 
   /**
    *
@@ -875,7 +875,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta) 
 					&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
                 $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
-					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11)) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
+					&& ($iCodSis != 5 || ($iCodSis == 5 && ($iTipoEntrSaida == 11 || $iTipoEntrSaida == 18))) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
 				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte) 
 					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11 && $oMovi->tipomovimentacao != 2) ) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
