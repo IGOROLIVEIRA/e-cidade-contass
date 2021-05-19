@@ -55,7 +55,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+17,$xlin+23,':  '.$this->dotacao);
   $this->objpdf->text($xcol+17,$xlin+27,':  '.db_formatar($this->elemento,'elemento'));
   $this->objpdf->text($xcol+17,$xlin+30,'   '.$this->descr_elemento);
-  $this->objpdf->text($xcol+17,$xlin+34,':  '.$this->recurso.' - '.$this->descr_recurso);
+  $this->objpdf->text($xcol+17,$xlin+34,':  '.substr($this->recurso.' - '.$this->descr_recurso,0,50));
   $this->objpdf->text($xcol+17,$xlin+38,':  '.$this->processo);
   $this->objpdf->text($xcol+85,$xlin+38,$this->coddot);
 
@@ -167,7 +167,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     
     $this->objpdf->Setfont('Arial','',7);
     $this->objpdf->Row(array((pg_result($this->recorddositens,$ii,$this->elementoitem)),   
-	                            (pg_result($this->recorddositens,$ii,$this->descr_elementoitem)),
+	                            (substr(pg_result($this->recorddositens,$ii,$this->descr_elementoitem),0,48)),
                               db_formatar(pg_result($this->recorddositens,$ii,$this->vlremp),'f'),
                               db_formatar(pg_result($this->recorddositens,$ii,$this->vlranu),'f'),
                               db_formatar(pg_result($this->recorddositens,$ii,$this->vlrpag),'f'),
@@ -201,7 +201,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   
   $this->objpdf->Setfont('Arial','b',7);
   $this->objpdf->SetX($this->objpdf->GetX() -8);
-  $this->objpdf->cell(10,0,'REC.',0,0,"L");
+  $this->objpdf->cell(10,0,'COD.',0,0,"L");
   $this->objpdf->cell(55,0,'DESCRIÇÃO',0,0,"L");//Cabeçalho da primeira coluna de retenções
   $this->objpdf->cell(26,0,'VALOR',0,1,"R");
 
@@ -209,6 +209,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $total_ret                = 0;
   $total_ret_outras         = 0;
   $iTotalRetencaoRecolhido  = 0;
+//   echo '<pre>';print_r($this->aRetencoes);echo '</pre>';die;
   if (is_array($this->aRetencoes) && count($this->aRetencoes) > 0 ) {
     
     for ($ii = 0; $ii < count($this->aRetencoes); $ii++) {
@@ -218,7 +219,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             $this->objpdf->SetWidths(array(12,63,23));
             $this->objpdf->Setfont('Arial','b',7);
             $this->objpdf->setxy($xcol+97,$xlin+134);
-            $this->objpdf->cell(10,0,'REC.',0,0,"L");
+            $this->objpdf->cell(10,0,'COD.',0,0,"L");
             $this->objpdf->cell(60,0,'DESCRIÇÃO',0,0,"L");//Cabeçalho da segunda coluna de retenções
             $this->objpdf->cell(26,0,'VALOR',0,1,"R");
 
@@ -234,7 +235,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
       if ($ii < 25) {
 
          $this->objpdf->Setfont('Arial','',7);
-         $this->objpdf->Row(array($this->aRetencoes[$ii]->e23_sequencial,
+         $this->objpdf->Row(array($this->aRetencoes[$ii]->e21_sequencial,
                             substr($this->aRetencoes[$ii]->e21_descricao,0,40),
                             db_formatar($this->aRetencoes[$ii]->e23_valorretencao,'f'))
          ,6,
@@ -302,7 +303,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   // total das retenções
   $this->objpdf->setxy($xcol+127,$xlin+172);
   $this->objpdf->Setfont('Arial','B',7);
-  $this->objpdf->cell(42,5,'TOTAL: ',0,0,"R");
+  $this->objpdf->cell(42,5,'VALOR TOTAL DAS RETENÇÕES: ',0,0,"R");
   $this->objpdf->cell(23,5,db_formatar($total_ret,'f'),0,1,"R");
   
   // total dos repasses
@@ -312,7 +313,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   // liquido da ordem de pagamento
   $this->objpdf->setxy($xcol+127,$xlin+181);
   $this->objpdf->Setfont('Arial','B',7);
-  $this->objpdf->cell(43,1,'LÍQUIDO DA ORDEM DE PAGAMENTO: ',0,0,"R");
+  $this->objpdf->cell(43,1,'VALOR LÍQUIDO DA ORDEM DE PAGAMENTO: ',0,0,"R");
   $this->objpdf->Setfont('Arial','B',9);
   
   /**
