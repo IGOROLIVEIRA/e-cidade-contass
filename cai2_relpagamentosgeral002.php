@@ -75,6 +75,8 @@ $sFiltroTotalizacao  = "Totalização: ";
 $sFiltroPeriodo      = "Período: ";
 $sFiltroValorInicial = "Valor: ";
 
+$FiltroComplementar_Matricula   = '';
+$FiltroComplementar_Cgm         = '';
 
 if ($oGet->cboTotalizacao == 1) {
   $sFiltroTotalizacao .= " Imprimir Dados e Totalizações ";  
@@ -331,12 +333,23 @@ $sAnd = $sWhere != "" ? " and " : "";
 
 if (trim($oGet->matric) != "") {
 
+  $resultComplementar_Matricula = db_query("select string_agg(trim('Matric.'||j01_matric||' => '||tipopri||'.'||nomepri||', nº '||j39_numero||', B. '||j13_descr)||'.', '; ') as endermatric 
+                                            from proprietario_ender where j01_matric in (".$oGet->matric.")");
+  db_fieldsmemory($resultComplementar_Matricula, 0);
+  $FiltroComplementar_Matricula = "Matrícula Selecionada: ".$endermatric;
+
   $sWhere .= $sAnd." EXISTS (SELECT 1 FROM arrematric where arrepaga.k00_numpre = arrematric.k00_numpre and arrematric.k00_matric = ".$oGet->matric.")";
 }
 
 $sAnd = $sWhere != "" ? " and " : "";
 
 if (trim($oGet->cgm) != "") {
+
+  
+  $resultComplementar_Cgm = db_query("select string_agg(trim(z01_numcgm||'-'||z01_nome), ',') as nomecgm 
+                                from cgm where z01_numcgm in (".$oGet->cgm.")");
+  db_fieldsmemory($resultComplementar_Cgm, 0);
+  $FiltroComplementar_Cgm = "CGM(s) Selecionado(s): ".$nomecgm."";
 
   $sWhere .= $sAnd." arrepaga.k00_numcgm in (".$oGet->cgm.")";
 }
@@ -491,6 +504,7 @@ $head6 = $sFiltroOrigem;
 $head7 = $sFiltroOrdenacao;
 $head8 = $sFiltroDemonstracao;
 $head9 = $sFiltroTotalizacao;
+$head10 = 'Novo';
 
 //$aDados = db_utils::getColectionByRecord($rsSql);
 
@@ -867,10 +881,19 @@ if ($oGet->cboTotalizacao <> 2) {
   
       case 1:
         if ($lNovaPagina) {
-           $pdf->AddPage();    
+          $pdf->AddPage();    
           $lNovaPagina = false;
-           cabecalhoTipoDebito($pdf, $alt);
-           $pdf->ln(3);
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
+          cabecalhoTipoDebito($pdf, $alt);
+          $pdf->ln(3);
         }
         $pdf->setfont('arial','b',7);
         $pdf->cell(25, $alt, $oCgm->codigoTipoDebito    , 0, 0, "R", 0);
@@ -886,6 +909,15 @@ if ($oGet->cboTotalizacao <> 2) {
             
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+            
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -920,6 +952,15 @@ if ($oGet->cboTotalizacao <> 2) {
           
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoReceita($pdf, $alt);
           $pdf->ln(3);
         }
@@ -951,6 +992,15 @@ if ($oGet->cboTotalizacao <> 2) {
         if ($lNovaPagina) {
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoMatricula($pdf, $alt);
           $pdf->ln(3);
         }
@@ -969,6 +1019,15 @@ if ($oGet->cboTotalizacao <> 2) {
           if ($lNovaPagina) {
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+            
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -1005,6 +1064,15 @@ if ($oGet->cboTotalizacao <> 2) {
         if ($lNovaPagina) {
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoInscricao($pdf, $alt);
           $pdf->ln(3);
         }
@@ -1023,6 +1091,15 @@ if ($oGet->cboTotalizacao <> 2) {
           if ($lNovaPagina) {
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+            
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -1059,6 +1136,15 @@ if ($oGet->cboTotalizacao <> 2) {
         if ($lNovaPagina) {
           $pdf->AddPage();    
           $lNovaPagina = false;
+          
+          if( trim($FiltroComplementar_Matricula) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+          }
+          if( trim($FiltroComplementar_Cgm) != ""){
+            $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+          }
+          $pdf->multicell(0,3,'',0,"J",0);
+          
           cabecalhoCGM($pdf, $alt);
           $pdf->ln(3);
         }
@@ -1077,6 +1163,15 @@ if ($oGet->cboTotalizacao <> 2) {
           if ($lNovaPagina) {
             $pdf->AddPage();    
             $lNovaPagina = false;
+            
+            if( trim($FiltroComplementar_Matricula) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Matricula,0,"J",0);
+            }
+            if( trim($FiltroComplementar_Cgm) != ""){
+              $pdf->multicell(0,3,$FiltroComplementar_Cgm,0,"J",0);
+            }
+            $pdf->multicell(0,3,'',0,"J",0);
+          
             cabecalhoTipoDebito($pdf, $alt);
             $pdf->ln(3);
           }
@@ -1260,7 +1355,6 @@ function cabecalhoInscricao($pdf, $alt) {
 }
 
 function cabecalhoCGM($pdf, $alt) {
-  
   $pdf->setfont('arial','b',8);
   $pdf->cell(15, $alt, "CGM"            , 1, 0, "C", 1);
   $pdf->cell(57, $alt, "Nome do Contribuinte" , 1, 0, "C", 1);
