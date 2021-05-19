@@ -1,6 +1,6 @@
 <?php
 
-class SiopeCsv extends SiopeReceita {
+class SiopeCsv extends Siope {
 
     //@var String
     protected $sArquivo;
@@ -27,7 +27,7 @@ class SiopeCsv extends SiopeReceita {
                 $aSiope[0] = 'V';
                 $aSiope[1] = '1';
                 $aSiope[2] = $oDespesa->cod_planilha;
-                $aSiope[3] = $this->getElementoFormat($oDespesa->elemento_siope);
+                $aSiope[3] = $this->getElementoDespesaFormat($oDespesa->elemento_siope);
                 $aSiope[4] = $oDespesa->descricao_siope;                
                 $aSiope[5] = number_format($oDespesa->dot_atualizada, 2, ',', '');
                 $aSiope[6] = number_format($oDespesa->empenhado, 2, ',', '');
@@ -57,7 +57,7 @@ class SiopeCsv extends SiopeReceita {
                     $aSiope[0] = 'V';
                     $aSiope[1] = '1';
                     $aSiope[2] = '1';
-                    $aSiope[3] = $this->getElementoFormat($oReceita->natureza);
+                    $aSiope[3] = $this->getElementoReceitaFormat($oReceita->natureza);
                     $aSiope[4] = $oReceita->descricao;
                     $aSiope[5] = number_format($oReceita->prev_atualizada, 2, ',', '');
                     $aSiope[6] = number_format($oReceita->rec_realizada, 2, ',', '');
@@ -85,12 +85,13 @@ class SiopeCsv extends SiopeReceita {
                 $aSiope[0] = 'V';
                 $aSiope[1] = '1';
                 $aSiope[2] = '1705';
-                $aSiope[3] = $value->descricao;
-                $aSiope[4] =  number_format($value->empenhado, 2, ',', '');
-                $aSiope[5] =  number_format($value->liquidado, 2, ',', '');
-                $aSiope[6] =  number_format($value->pagamento, 2, ',', '');
-                $aSiope[7] =  number_format($value->rp_nprocessado, 2, ',', '');
-                $aSiope[8] =  number_format($value->rp_nprocscx, 2, ',', ''); 
+                $aSiope[3] = $iCodLinha;
+                $aSiope[4] = $value->descricao;
+                $aSiope[5] =  number_format($value->empenhado, 2, ',', '');
+                $aSiope[6] =  number_format($value->liquidado, 2, ',', '');
+                $aSiope[7] =  number_format($value->pagamento, 2, ',', '');
+                $aSiope[8] =  number_format($value->rp_nprocessado, 2, ',', '');
+                $aSiope[9] =  number_format($value->rp_nprocscx, 2, ',', ''); 
 
                 $this->sLinha = $aSiope;
                 $this->adicionaLinha();

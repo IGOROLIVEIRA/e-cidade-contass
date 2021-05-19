@@ -137,7 +137,7 @@ class SiopeReceita extends Siope {
 
                     $oRec->natureza         = $sNatureza;
                     $oRec->descricao        = $oReceita->descricao;
-                    $oRec->prev_atualizada  = 0;
+                    $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
                     $oRec->rec_realizada    = 0;
                     $oRec->ded_fundeb       = abs($oReceita->saldo_arrecadado);
                     $oRec->outras_ded       = 0;
@@ -146,7 +146,8 @@ class SiopeReceita extends Siope {
                     $this->aReceitas[$sNatureza] = $oRec;
 
                 } else {
-                    $this->aReceitas[$sNatureza]->ded_fundeb += abs($oReceita->saldo_arrecadado);
+                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
+                    $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
                 }
 
             } elseif (in_array(substr($oReceita->naturezareceita,0,2), array(91, 92, 93, 96, 98, 99))) {
@@ -159,7 +160,7 @@ class SiopeReceita extends Siope {
 
                     $oRec->natureza         = $sNatureza;
                     $oRec->descricao        = $oReceita->descricao;
-                    $oRec->prev_atualizada  = 0;
+                    $oRec->prev_atualizada  = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
                     $oRec->rec_realizada    = 0;
                     $oRec->ded_fundeb       = 0;
                     $oRec->outras_ded       = abs($oReceita->saldo_arrecadado);
@@ -168,7 +169,8 @@ class SiopeReceita extends Siope {
                     $this->aReceitas[$sNatureza] = $oRec;
 
                 } else {
-                    $this->aReceitas[$sNatureza]->ded_fundeb += abs($oReceita->saldo_arrecadado);
+                    $this->aReceitas[$sNatureza]->prev_atualizada   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
+                    $this->aReceitas[$sNatureza]->ded_fundeb        += abs($oReceita->saldo_arrecadado);
                 }
 
             } else {
@@ -197,10 +199,6 @@ class SiopeReceita extends Siope {
 
         }
 
-    }
-
-    public function getElementoFormat($elemento) {
-        return substr($elemento, 0, 1).".".substr($elemento, 1, 1).".".substr($elemento, 2, 1).".".substr($elemento, 3, 1).".".substr($elemento, 4, 2).".".substr($elemento, 6, 1).".".substr($elemento, 7, 1);
     }
 
 }
