@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -31,6 +31,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
+include("classes/db_liclancedital_classe.php");
 include("classes/db_liclicitemlote_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -38,6 +39,7 @@ db_postmemory($HTTP_POST_VARS);
 
 $clliclicitemlote        = new cl_liclicitemlote;
 $cliframe_seleciona_lote = new cl_iframe_seleciona;
+$clliclancedital   = new cl_liclancedital;
 
 $clliclicitemlote->rotulo->label();
 
@@ -62,8 +64,8 @@ if (isset($incluir)&&trim($incluir)!=""){
      db_inicio_transacao();
 
 // Verifica descricao vazia
-     if (isset($l04_descricao)      && 
-         trim($l04_descricao) == "" && 
+     if (isset($l04_descricao)      &&
+         trim($l04_descricao) == "" &&
          substr(trim($l04_descricao),0,9) != "AUTO_LOTE"){
           $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null,"substr(l04_descricao,11,5) as sequencial","l04_codigo desc limit 1","l21_codliclicita = $licitacao"));
           if ($clliclicitemlote->numrows > 0){
@@ -118,7 +120,7 @@ if (isset($incluir)&&trim($incluir)!=""){
      if ($flag_auto == true){
           $auto_descr    = "AUTO_LOTE_";
           $sequencial    = 1;
-   
+
           $res_licitacao = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_licitacao(null,"substr(l04_descricao,11,5) as sequencial","l04_codigo desc limit 1","l21_codliclicita = $licitacao and l04_descricao like 'AUTO_LOTE_%'"));
           if ($clliclicitemlote->numrows > 0){
                db_fieldsmemory($res_licitacao,0);
@@ -205,7 +207,7 @@ if (isset($licitacao)&&trim($licitacao)!=""){
    }
 
    $db_opcao = $db_tranca;
-?>    
+?>
 <form name="form2" method="post" action="lic1_liclicitemlotenovo.php">
 <table border="0" cellspacing="2" cellpadding="0" align="center">
 <tr><td colspan="2">&nbsp;</td></tr>
@@ -221,7 +223,7 @@ if (isset($licitacao)&&trim($licitacao)!=""){
       db_input("l04_codigo",10,$Il04_codigo,true,"text",3);
   ?>
   </td>
-</tr> 
+</tr>
 <tr>
   <td nowrap align="right" title="<?=@$Tl04_descricao?>"><?=@$Ll04_descricao?></td>
   <td nowrap align="left">
@@ -229,7 +231,7 @@ if (isset($licitacao)&&trim($licitacao)!=""){
       db_input("l04_descricao",40,$Il04_descricao,true,"text",$db_opcao);
   ?>
   </td>
-</tr> 
+</tr>
 <tr><td colspan="2">&nbsp;</td></tr>
 <tr>
   <td nowrap align="center" colspan="2">
@@ -240,7 +242,7 @@ if (isset($licitacao)&&trim($licitacao)!=""){
 <script>
    function js_valida_dados(){
        var contador = 0;
-/*       
+/*
        if (document.form2.l04_descricao.value == ""){
             alert("Falta a descricao do lote");
             document.form2.l04_descricao.select();
@@ -248,13 +250,13 @@ if (isset($licitacao)&&trim($licitacao)!=""){
             document.form2.l04_descricao.focus();
             return false;
        }
-*/      
+*/
        var lista_itens = "";
-       var separador   = ""; 
+       var separador   = "";
        for(i = 0; i < lote.document.form1.elements.length; i++){
             if (lote.document.form1.elements[i].type == "checkbox"){
                  if (lote.document.form1.elements[i].checked == true ){
-                      lista_itens += separador+lote.document.form1.elements[i].value;   
+                      lista_itens += separador+lote.document.form1.elements[i].value;
                       separador    = ", ";
                       contador++;
                  }
@@ -267,13 +269,13 @@ if (isset($licitacao)&&trim($licitacao)!=""){
        } else {
             document.form2.l04_liclicitem.value = lista_itens;
        }
-       
+
        document.form2.submit();
        return true;
    }
 
    function js_fechar(){
-       parent.db_iframe_lotenovo.hide();     
+       parent.db_iframe_lotenovo.hide();
        parent.itens_lote.location.href = 'lic1_liclicitemlote011.php?licitacao=<?=$licitacao?>';
    }
 </script>
@@ -289,13 +291,13 @@ if (isset($db_opcao)&&$db_opcao==3){
           $erro_msg = "Nenhum item cadastrado para esta licitação.";
           echo "<script>
                    document.form2.incluir.disabled = true;
-                </script>";          
+                </script>";
      } else {
           if ($numrows == $numrows_desab){
-               $erro_msg = 'Todos os itens desta licitação já possuem lote.\nPara incluir novo lote, excluir lote(s).';      
+               $erro_msg = 'Todos os itens desta licitação já possuem lote.\nPara incluir novo lote, excluir lote(s).';
                echo "<script>
                         document.form2.incluir.disabled = true;
-                     </script>";          
+                     </script>";
           }
      }
 }
@@ -309,7 +311,7 @@ if (isset($erro_msg)&&trim($erro_msg)!="") {
 
       $sSqlCodigos = "SELECT distinct l21_codigo FROM liclicitem WHERE l21_codliclicita = $licitacao";
       $rsCodigos   = db_query($sSqlCodigos);
-      
+
       $sSqlLotes = "SELECT distinct liclicitemlote.*
                     FROM liclicitemlote
                     WHERE l04_liclicitem IN
@@ -318,8 +320,15 @@ if (isset($erro_msg)&&trim($erro_msg)!="") {
                          WHERE l21_codliclicita = $licitacao)";
       $rsLotes = db_query($sSqlLotes);
 
+      $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = '.$licitacao);
+      $rsSql = $clliclancedital->sql_record($sSql);
+
+      $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
+      //db_criatabela($rsSql);exit;
      if(!$sqlerro && $incluir && pg_numrows($rsLotes) == pg_numrows($rsCodigos)){
+      if(in_array(intval($natureza_objeto), array(1, 7))){
           echo"<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+      }
      }
 
      echo "<script>
