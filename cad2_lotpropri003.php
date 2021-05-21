@@ -81,6 +81,23 @@ $aux = new cl_arquivo_auxiliar;
                 </select>
           </td>
        </tr>
+       <tr>
+            <td align="right" nowrap title="<?=@$Tj16_bairro?>">
+            <b>
+               <?
+               db_ancora("Bairro:","js_bairro(true);",$db_opcao);
+               ?>
+              </b>
+            </td>
+            <td> 
+              <?
+              db_input('j16_bairro',10,$Ij16_bairro,true,'text',$db_opcao," onchange='js_bairro(false);'")
+              ?>
+                     <?
+              db_input('j13_descr',30,$Ij13_descr,true,'text',3,'')
+                     ?>
+            </td>
+          </tr>
       <tr >
         <td colspan=2 ><?
                  // $aux = new cl_arquivo_auxiliar;
@@ -103,8 +120,7 @@ $aux = new cl_arquivo_auxiliar;
                  $aux->funcao_gera_formulario();
         	?>
        </td>
-      </tr>
-      
+      </tr>      
       <tr align="center" >
        <td colspan=2>
          <table>
@@ -118,7 +134,7 @@ $aux = new cl_arquivo_auxiliar;
 	       db_select("ordem",$tipo_ordem,true,2); ?>
             </td>
 	  </tr>
-       <tr>
+    <tr>
              <td align="right"  title="Tipo" >
                <strong>Listar:&nbsp;&nbsp;</strong>
                </td>
@@ -218,6 +234,8 @@ function js_mandadados(){
  query+='&tipo1='+document.form1.tipo1.value;
  query+='&tipo2='+document.form1.tipo2.value;
  query+='&ordem='+document.form1.ordem.value;
+ query+='&bairro='+document.form1.j16_bairro.value;
+ query+='&descrbairro='+document.form1.j13_descr.value;
 
  
  
@@ -226,4 +244,26 @@ function js_mandadados(){
  jan.moveTo(0,0);
  
 }
+
+function js_bairro(mostra){
+  if(mostra == true){
+    js_OpenJanelaIframe('','db_iframe_bairros','func_bairro.php?funcao_js=parent.js_preenchebairro|j13_codi|j13_descr','pesquisa',true);
+  }else{
+    js_OpenJanelaIframe('','db_iframe_bairros','func_bairro.php?funcao_js=parent.js_preenchebairro1&pesquisa_chave='+document.form1.j16_bairro.value,'pesquisa',false);
+  }
+}
+function js_preenchebairro(chave,chave1){
+  document.form1.j16_bairro.value = chave;
+  document.form1.j13_descr.value = chave1;
+  db_iframe_bairros.hide();
+}
+function js_preenchebairro1(chave,erro){
+  document.form1.j13_descr.value = chave;
+  if(erro == true){
+    document.form1.j16_bairro.focus();
+    document.form1.j16_bairro.value='';
+  }
+  db_iframe_bairros.hide();
+}
+
 </script>

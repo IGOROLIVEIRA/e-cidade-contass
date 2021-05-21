@@ -160,7 +160,7 @@ $rotulo->label("z01_cgccpf");
           if(isset($pegaAnousu)){
             $dbwhere .= " and e60_anousu = ". db_getsession("DB_anousu");
           }
-          
+
           if (isset($anul) && $anul == false) {
             $dbwhere .= " and e60_vlranu<e60_vlremp ";
           }
@@ -179,6 +179,7 @@ $rotulo->label("z01_cgccpf");
                                OR (date_part('year', empempenho.e60_emiss) = date_part('year', date '".$ve70_abast."') AND date_part('month', empempenho.e60_emiss) <= date_part('month', date '".$ve70_abast."')))";
                   $filtroempelemento = 1;
                 }
+
                 /**
                  * Filtro $filtromanut
                  * Busca pelo elemento do empenho para manutencao
@@ -186,7 +187,14 @@ $rotulo->label("z01_cgccpf");
                  *
                  */
                 if ($filtromanut == 1) {
-                  $dbwhere .= " and elementoempenho.o56_elemento in ('3339039990400','3339039990000','3339039170000','3339039160000','3339039150000','3339039050000','3339036990000','3339036170000','3339036160000','3339036060000','3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000') ";
+
+                  $anoant = db_getsession("DB_anousu") - 1;
+
+                  $dbwhere .= "and ((e91_anousu >= $anoant and e60_anousu >= ".db_getsession("DB_anousu")."  ) or (e60_anousu >= ".db_getsession("DB_anousu")."))";
+
+                  $dbwhere .= " and (elementoempenho.o56_elemento like '3339039%' ";
+                  $dbwhere .= " or elementoempenho.o56_elemento like '3339036%' ";
+                  $dbwhere .= " or elementoempenho.o56_elemento in ('3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000') )";
                   $dbwhere .= " and empempenho.e60_emiss <= '$ve62_dtmanut'";
                   $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date'".$ve62_dtmanut."')";
                   $filtroempelemento = 1;
@@ -209,7 +217,7 @@ $rotulo->label("z01_cgccpf");
                 }
 
                 if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
-                  $sql = $clempempenho->sql_query($chave_e60_numemp,$campos,"e60_numemp","$dbwhere and e60_numemp=$chave_e60_numemp ",$filtroempelemento);
+                  $sql = $clempempenho->sql_query($chave_e60_numemp,$campos,"empempenho.e60_emiss desc","$dbwhere and e60_numemp=$chave_e60_numemp ",$filtroempelemento);
                 } elseif (isset($chave_e60_codemp) && !empty($chave_e60_codemp)) {
                   $arr = split("/",$chave_e60_codemp);
                   if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ) {
@@ -219,13 +227,13 @@ $rotulo->label("z01_cgccpf");
                   } else {
                     $dbwhere_ano = "";
                   }
-                  $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and e60_codemp='".$arr[0]."'$dbwhere_ano",$filtroempelemento);
+                  $sql = $clempempenho->sql_query("",$campos,"empempenho.e60_emiss desc","$dbwhere and e60_codemp='".$arr[0]."'$dbwhere_ano",$filtroempelemento);
                 } elseif (isset($chave_z01_nome) && !empty($chave_z01_nome)) {
-                  $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and z01_nome like '$chave_z01_nome%'",$filtroempelemento);
+                  $sql = $clempempenho->sql_query("",$campos,"empempenho.e60_emiss desc","$dbwhere and z01_nome like '$chave_z01_nome%'",$filtroempelemento);
                 } elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
-                  $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'",$filtroempelemento);
+                  $sql = $clempempenho->sql_query("",$campos,"empempenho.e60_emiss desc","$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'",$filtroempelemento);
                 } else {
-                  $sql = $clempempenho->sql_query("",$campos,"e60_numemp","{$dbwhere}",$filtroempelemento);
+                  $sql = $clempempenho->sql_query("",$campos,"empempenho.e60_emiss desc","{$dbwhere}",$filtroempelemento);
                 }
 
                 $repassa = array(
@@ -265,7 +273,7 @@ $rotulo->label("z01_cgccpf");
                  $sql = $clempempenho->sql_query(null,$campos,null,$whereRelCompra);
 
                }
-               //echo $sql;exit;
+               //echo $sql;
                $result = $clempempenho->sql_record($sql);
 
                ?>
@@ -387,7 +395,7 @@ $rotulo->label("z01_cgccpf");
                           }
                         }
 
-                      } else { 
+                      } else {
                       echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado', true);</script>";
                     }
                   } else {

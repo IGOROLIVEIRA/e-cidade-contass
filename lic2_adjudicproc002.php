@@ -51,6 +51,8 @@ $dbinstit=db_getsession("DB_instit");
 
 $rsLicitacao=$clliclicita->sql_record($clliclicita->sql_query(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
 
+$rsLicitacaoPregao=$clliclicita->sql_record($clliclicita->sql_query_equipepregao(null,"l45_numatonomeacao ","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
+
 if ($clliclicita->numrows == 0){
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não Julgada, ou licitação revogada');
     exit;
@@ -79,6 +81,8 @@ if ( $oLibDocumento->lErro ){
 }
 
 db_fieldsmemory($rsLicitacao,0);
+
+db_fieldsmemory($rsLicitacaoPregao,0);
 
 /*pega a equipe de pregao*/
 
@@ -139,7 +143,7 @@ $oPDF->cell(0,8,"PROCESSO LICITATORIO : $l20_edital/$l20_datacria",0,1,"C",0);
 $oPDF->cell(0,8,"$l03_descr Nº $l20_numero/$l20_datacria",0,1,"C",0);
 $oPDF->setfont('arial','',8);
 $oPDF->ln();
-$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais adjudicou o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." ".converte_charespeciais($l03_descr)." Nº ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Foi adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
+$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais adjudicou o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." ".converte_charespeciais($l03_descr)." Nº ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Foi adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l45_numatonomeacao.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
 $result_munic=pg_exec("select * from db_config where codigo=$dbinstit");
 db_fieldsmemory($result_munic,0);
 

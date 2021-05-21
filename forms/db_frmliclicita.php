@@ -125,7 +125,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             <tr><td>
 
                     <fieldset>
-                        <legend><strong>Licitação </strong></legend>
+                        <legend><strong>Licitação</strong></legend>
 
                         <fieldset style="border:0px;">
 
@@ -202,6 +202,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             db_input("l20_codtipocom",10,"",true,"text");
                                             db_input("l20_codtipocom",40,"",true,"text");
                                         }
+                                        } else {
                                             db_selectrecord("l20_codtipocom",@$result_tipo,true,$db_opcao,"js_mostraRegistroPreco()");
                                             if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
                                                 echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
@@ -210,6 +211,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <input  type="hidden" id="vUsuario" name="vUsuario" value="<?echo $uLogin[1];?>">
                                         <input  type="hidden" id="vInclu" name="vInclu" value="<?echo $url_particao[1];?>" >
                                         <input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
+                                        }
+                                        ?><input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
 
                                     </td>
                                 </tr>
@@ -521,7 +524,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $arr_tipo = array("1"=>"Por item","3"=>"Por lote");
+                                        $arr_tipo = array("0"=>"Selecione", "1"=>"Por item","3"=>"Por lote");
                                         db_select("l20_tipojulg",$arr_tipo,true, $lBloqueadoRegistroPreco);
                                         db_input("tipojulg",1,"",true,"hidden",3,"");
                                         db_input("confirmado",1,"",true,"hidden",3,"");
