@@ -202,17 +202,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             db_input("l20_codtipocom",10,"",true,"text");
                                             db_input("l20_codtipocom",40,"",true,"text");
                                         }
-                                        } else {
+                                        else {
                                             db_selectrecord("l20_codtipocom",@$result_tipo,true,$db_opcao,"js_mostraRegistroPreco()");
                                             if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
                                                 echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
                                             }
+                                        }
                                         ?>
+                                        <input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
                                         <input  type="hidden" id="vUsuario" name="vUsuario" value="<?echo $uLogin[1];?>">
                                         <input  type="hidden" id="vInclu" name="vInclu" value="<?echo $url_particao[1];?>" >
-                                        <input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
-                                        }
-                                        ?><input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
 
                                     </td>
                                 </tr>
