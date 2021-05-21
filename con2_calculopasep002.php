@@ -67,6 +67,7 @@ $fCFM = 0;
 $fCIDE = 0;
 $fCFH = 0;
 $fFEX = 0;
+$fIPM = 0;
 $fSTN = 0;
 $fTEUEDM = 0;
 
@@ -81,11 +82,11 @@ foreach ($aReceitas as $Receitas) {
   if(strstr($Receitas->o57_fonte, '17180261000000'))$fFEP+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17180611000000'))$fICMS+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17180151000000'))$fITR+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '17280221000000'))$fCFM+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '17280221000000')||strstr($Receitas->o57_fonte, '17180221000000'))$fCFM+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17280141000000'))$fCIDE+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17180211000000'))$fCFH+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17189911000000'))$fFEX+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '17280131000000'))$fSTN+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '17280131000000'))$fIPM+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '95172801110100')||strstr($Receitas->o57_fonte, '95172801210100'))$fTEUEDM+=abs($Receitas->saldo_arrecadado);
 }
 db_query("drop table if exists work_receita");
@@ -776,6 +777,14 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
+              <td class="s3 bdleft">IPM - IPI Exportação</td>
+              <td class="s4">
+                <?php
+                echo db_formatar($fIPM, "f");
+                ?>
+              </td>
+            </tr>
+            <tr style=''>
               <td class="s3 bdleft" dir="ltr">
                 Outras transferências correntes e de capital recebidas, se comprovada a retenção na fonte, pela Secretaria do Tesouro Nacional - STN, da contribuição incidente sobre tais valores.
               </td>
@@ -789,7 +798,7 @@ ob_start();
               <td class="s1 bdleft">TOTAL DAS RECEITAS COM RETENÇÕES DO PASEP NA FONTE (IV)</td>
               <td class="s5">
                 <?php
-                $fTotalRetidosIV = array_sum(array($fPFM,$fFEP,$fICMS,$fITR,$fCFM,$fCIDE,$fCFH,$fFEX,$fSTN));
+                $fTotalRetidosIV = array_sum(array($fPFM,$fFEP,$fICMS,$fITR,$fCFM,$fCIDE,$fCFH,$fFEX,$fIPM,$fSTN));
                 echo db_formatar($fTotalRetidosIV,"f");
                 ?>
               </td>
@@ -804,15 +813,16 @@ ob_start();
             </tr>
             <tr style=''>
               <td class="s3 bdleft">b) 1% sobre total das Receitas (a*1%) </td>
-              <td class="s5"><?=db_formatar($fTotalRecLiqIII*0.01,"f")?></td>
+              <td class="s5"><?=db_formatar(floatval(number_format(($fTotalRecLiqIII*0.01),2,'.','')),"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s3 bdleft">c) PASEP retido na Fonte (IV*1%)</td>
-              <td class="s5"><?=db_formatar($fTotalRetidosIV*0.01,"f")?></td>
+              <td class="s3 bdleft">c) PASEP retido na Fonte</td>
+              <?php $fPASEPRETIDO = ( ($fPFM + $fFEP + $fICMS +  $fCFM + $fCIDE + $fCFH + $fFEX + $fSTN) * 0.01 ) + ( ($fITR + $fIPM ) * 0.008 ) ?>
+              <td class="s5"><?=db_formatar(floatval(number_format($fPASEPRETIDO,2,'.','')),"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s7 bdleft">RESULTADO DO CÁLCULO (b-c)</td>
-              <td class="s8"><?=db_formatar(($fTotalRecLiqIII*0.01)-($fTotalRetidosIV*0.01),"f")?></td>
+              <td class="s7 bdleft">RESULTADO DO CÁLCULO (b-c)</td>              
+              <td class="s8"><?=db_formatar(floatval(number_format(($fTotalRecLiqIII*0.01),2,'.',''))-floatval(number_format($fPASEPRETIDO,2,'.','')),'f')?></td>
             </tr>
           </tbody>
         </table>
