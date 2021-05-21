@@ -74,22 +74,50 @@ if($vinculo == 'A'){
 
 
 $rubric = 'R993';
-$arquivo = '';
+$aArquivo = array();
 if($folha == 'r14'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - SALÁRIO";
-  $arquivo = 'gerfsal';
+  $aArquivo[$folha] = 'gerfsal';
 }elseif($folha == 'r35'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - 13o. SALÁRIO";
-  $arquivo = 'gerfs13';
+  $aArquivo[$folha] = 'gerfs13';
 }elseif($folha == 'r48'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - COMPLEMENTAR";
-  $arquivo = 'gerfcom';
+  $aArquivo[$folha] = 'gerfcom';
 }elseif($folha == 'r20'){
   $head5 = "PATRONAL : ".$r33_ppatro."% - RESCISÃO";
-  $arquivo = 'gerfres';
+  $aArquivo[$folha] = 'gerfres';
+}elseif($folha == 'todas'){
+  $head5 = "PATRONAL : ".$r33_ppatro."% - TODOS";
+  $aArquivo = array(
+    "r14" => "gerfsal",
+    "r35" => "gerfs13",
+    "r48" => "gerfcom",
+    "r20" => "gerfres"
+  );
 }
 
 $instit = db_getsession('DB_instit');
+$sJoinFolha = "(select r14_regist as r14_regist,
+           sum(proventos) as proventos,
+           sum(base) as base,
+           sum(segurado) as segurado
+           FROM
+(";
+$aJoinFolha = array();
+foreach ($aArquivo as $sigla => $arquivo) {
+  $aJoinFolha[] = " 
+   select ".$sigla."_regist as r14_regist,
+           sum( case when {$sigla}_pd = 1                            then {$sigla}_valor else 0 end ) as proventos,
+           sum( case when {$sigla}_rubric = 'R992'                   then {$sigla}_valor else 0 end ) as base,
+           sum( case when {$sigla}_rubric = '$rubric'                then {$sigla}_valor else 0 end ) as segurado
+   from    {$arquivo}
+   where   {$sigla}_anousu = $ano
+   and     {$sigla}_mesusu = $mes
+   and     {$sigla}_instit = $instit
+   group by {$sigla}_regist";
+}
+$sJoinFolha .= implode(" UNION ", $aJoinFolha).") AS valores group by r14_regist) AS x";
 
 $sAliquota = "";
 if (!empty($campoextra)) {
@@ -106,17 +134,8 @@ if (!empty($campoextra)) {
           {$sAliquota}
           round((base/100*$r33_ppatro) + segurado,2) as total
    from 
-   (
-   select ".$folha."_regist as r14_regist,
-           sum( case when ".$folha."_pd = 1                            then ".$folha."_valor else 0 end ) as proventos,
-           sum( case when ".$folha."_rubric = 'R992'                   then ".$folha."_valor else 0 end ) as base,
-           sum( case when ".$folha."_rubric = '$rubric'                then ".$folha."_valor else 0 end ) as segurado
-   from    ".$arquivo."
-   where   ".$folha."_anousu = $ano
-   and     ".$folha."_mesusu = $mes
-   and     ".$folha."_instit = $instit
-   group by ".$folha."_regist) as x
-   	inner join rhpessoal on r14_regist = rh01_regist
+   {$sJoinFolha}
+    inner join rhpessoal on r14_regist = rh01_regist
    	inner join rhpessoalmov on rh02_anousu = $ano
    	                       and rh02_mesusu = $mes
    			                   and rh02_regist = rh01_regist
