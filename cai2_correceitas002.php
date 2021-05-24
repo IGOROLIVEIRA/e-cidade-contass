@@ -125,7 +125,7 @@ if ($recurso != ""){
                     left outer join conplanoreduz c2 on c2.c61_anousu = p.k02_anousu and
                                                         c2.c61_reduz  = p.k02_reduz";
 
-     $where    .= " c1.c61_codigo = ".$recurso." and ";
+     $where    .= " and c1.c61_codigo = ".$recurso;
 }
 
 $head3 = "RELATÓRIO DE RECEITAS ARRECADADAS";
