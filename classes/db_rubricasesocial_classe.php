@@ -213,6 +213,7 @@ class cl_rubricasesocial {
        $sql .= $campos;
      }
      $sql .= " from rubricasesocial ";
+     $sql .= " INNER JOIN baserubricasesocial ON rubricasesocial.e990_sequencial = baserubricasesocial.e991_rubricasesocial";
      $sql2 = "";
      if($dbwhere==""){
        if( $e990_sequencial != "" && $e990_sequencial != null){
