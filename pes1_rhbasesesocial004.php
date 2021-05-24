@@ -63,7 +63,7 @@ if(isset($incluir)){
     for($i=0;$i<sizeof($arr_dados);$i++){
       $base = $arr_dados[$i];
 
-      $clbaserubricasesocial->excluir_novo($r09_rubric,$base,db_getsession("DB_instit"));
+      $clbaserubricasesocial->excluir_novo($r09_rubric,null,db_getsession("DB_instit"));
       $erro_msg = $clbaserubricasesocial->erro_msg;
       if($clbaserubricasesocial->erro_status==0){
           $sqlerro=true;
