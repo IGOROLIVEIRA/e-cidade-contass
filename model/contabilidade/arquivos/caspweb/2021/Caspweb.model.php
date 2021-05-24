@@ -210,7 +210,7 @@ class Caspweb {
     public function gerarMapaRsp () {
 
         $aContasContRSP = "'531200000000000', '532200000000000', '631100000000000', '631200000000000', '631300000000000', 
-                            '631400000000000', '631910000000000', '632100000000000', '632200000000000', '632910000000000', '631990000000000'";
+                            '631400000000000', '631910000000000', '632100000000000', '632200000000000', '632910000000000', '631990000000000', '632990000000000'";
 
         $sSqlContasContabeis = "    SELECT 
                                         reduz,
@@ -222,8 +222,8 @@ class Caspweb {
                                             WHEN c232_estrutcaspweb IS NULL THEN c60_estrut
                                             ELSE c232_estrutcaspweb
                                         END AS contacontabil,
-                                        (SELECT sum(c69_valor) FROM conlancamval WHERE c69_credito = c61_reduz AND c69_data BETWEEN '2020-01-01' AND '2020-01-31') AS credito,
-                                        (SELECT sum(c69_valor) FROM conlancamval WHERE c69_debito = c61_reduz AND c69_data BETWEEN '2020-01-01' AND '2020-01-31') AS debito
+                                        (SELECT sum(c69_valor) FROM conlancamval WHERE c69_credito = c61_reduz AND c69_data BETWEEN '$this->dtIni' AND '$this->dtFim') AS credito,
+                                        (SELECT sum(c69_valor) FROM conlancamval WHERE c69_debito = c61_reduz AND c69_data BETWEEN '$this->dtIni' AND '$this->dtFim') AS debito
                                     FROM contabilidade.conplano
                                     INNER JOIN conplanoreduz ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu AND c61_instit = $this->iInstit
                                     INNER JOIN conplanoexe ON c62_reduz = c61_reduz AND c61_anousu = c62_anousu
