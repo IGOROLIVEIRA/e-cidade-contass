@@ -33,7 +33,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text(40, $xlin +1, db_formatar($this->cgcpref, 'cnpj'));
   
   // retangulo dos dados da dotação
-  $this->objpdf->rect($xcol,$xlin+2,$xcol+90,39,2,'DF','1234');
+  $this->objpdf->rect($xcol,$xlin+2,$xcol+90,41,2,'DF','1234');
   $this->objpdf->Setfont('Arial','B',8);
   
   $this->objpdf->text($xcol+2,$xlin+7,'Órgão');
@@ -45,6 +45,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+2,$xlin+27,'Elemento');
   $this->objpdf->text($xcol+2,$xlin+34,'Recurso');
   $this->objpdf->text($xcol+2,$xlin+38,'Processo');
+  $this->objpdf->text($xcol+2,$xlin+42,'Tipo Compra');
   $this->objpdf->text($xcol+70,$xlin+38,'Reduzido:');
   $this->objpdf->Setfont('Arial','',8);
   $this->objpdf->text($xcol+17,$xlin+7,':  '.db_formatar($this->orgao,'orgao').' - '.substr($this->descr_orgao,0,46));
@@ -57,6 +58,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+17,$xlin+30,'   '.$this->descr_elemento);
   $this->objpdf->text($xcol+17,$xlin+34,':  '.substr($this->recurso.' - '.$this->descr_recurso,0,50));
   $this->objpdf->text($xcol+17,$xlin+38,':  '.$this->processo);
+  $this->objpdf->text($xcol+21,$xlin+42,':  '.$this->descr_tipocompra);
   $this->objpdf->text($xcol+85,$xlin+38,$this->coddot);
 
   if ($ano < db_getsession("DB_anousu")) {
@@ -138,7 +140,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+170,$xlin+40,db_formatar($this->empenhado,'f'));
 	
   $this->objpdf->Setfont('Arial','B',10);
-  $this->objpdf->text($xcol+2,$xlin+46,'Dados da Ordem de Pagamento');
+  $this->objpdf->text($xcol+2,$xlin+47,'Dados da Ordem de Pagamento');
   $this->objpdf->Setfont('Arial','B',6);
   
   // título do corpo do empenho
