@@ -48,6 +48,42 @@ contrato = function () {
             }
         );
     }
+    this.verificaNaturezadoObjeto = function(){
+        var oParam         = new Object();
+        oParam.exec  = "buscarNatureza";
+        oParam.iContratado = $F('ac16_contratado');
+        var oAjax = new Ajax.Request(
+            sURL,{
+                method  :'post',
+                parameters: 'json='+Object.toJSON(oParam),
+                onComplete: me.mostraNaturezaObjeto
+            }
+            
+        );
+    
+    }
+
+    this.mostraNaturezaObjeto = function(oAjax)  {
+        var oRetorno = eval("("+oAjax.responseText+")");
+        
+        if (oRetorno.status == 1) {
+            var cont = Object.keys(oRetorno.numero).length;
+            var op = 0;
+            let oAcordo = $('ac16_acordogrupo').value;
+            for (i = 0; i<cont; i++){
+                valorObjeto = oRetorno.numero[i];
+                
+                if(oRetorno.numero[i]===oAcordo){
+                    op = 1;
+                }
+            }
+            $('ac16_contratado_Natu').value = op;
+        } else {
+
+            alert(oRetorno.message.urlDecode());
+            return false;
+        }
+    }
 
     this.mostraLicitacoesContratado = function(oResponse)  {
 
@@ -318,6 +354,7 @@ contrato = function () {
         var iOrigem                   = $F('ac16_origem');
         var iTipoOrigem               = $F('ac16_tipoorigem');
         var iContratado               = $F('ac16_contratado');
+        var iContratdo_Nat            = $F('ac16_contratado_Natu');
         var iDepartamentoResponsavel  = $F('ac16_deptoresponsavel');
         var iComissao                 = $F('ac16_acordocomissao');
         var dtInicio                  = $F('ac16_datainicio');
@@ -394,6 +431,15 @@ contrato = function () {
             $('ac16_contratado').focus();
             return false;
         }
+
+        if (iContratdo_Nat == 0) {
+
+            alert('Natureza do Contrato Divergente do Contratado');
+            $('ac16_contratado').focus();
+            $('ac16_acordogrupo').focus();
+            return false;
+        }
+
         if (iDepartamentoResponsavel == "") {
 
             alert('Informe o Departamento Responsável.');
