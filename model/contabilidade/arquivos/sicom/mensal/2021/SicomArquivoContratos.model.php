@@ -1205,15 +1205,17 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                    JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                    where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oDados20->ac16_deptoresponsavel;
       $result = db_query($sSql);
+      // db_criatabela($rsResult20);
+      // exit;
       $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
 
       $clcontratos20->si87_tiporegistro = 20;
       $clcontratos20->si87_codaditivo = $oDados20->ac26_sequencial;
       $clcontratos20->si87_codorgao = $sCodorgao;
-      if (empty($clcontratos20->manutac_codunidsubanterior)) {
+      if (empty($oDados20->manutac_codunidsubanterior)) {
         $clcontratos20->si87_codunidadesub = $sCodUnidade;
       } else {
-        $clcontratos20->si87_codunidadesub = $clcontratos20->manutac_codunidsubanterior;
+        $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior;
       }
       $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero;
       $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura;
