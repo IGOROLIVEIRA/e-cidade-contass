@@ -198,13 +198,13 @@ $clrotulo->label("rh02_salari");
         <center>
         <table cellspacing="8" cellpadding="0">
       	  <tr>
-            <td align='right'>Valor padro:</td>
+            <td align='right'>Valor padrão:</td>
             <td align='left'>
               <?
               db_input('rh02_salari',10, $Irh02_salari, true, 'text', 1, "onchange='js_lancarvalor(\"v\",this.value);'", 'valor');
               ?>
             </td>
-            <td align='right'>Percentual padro:</td>
+            <td align='right'>Percentual padrão:</td>
             <td align='left'>
               <?
               db_input('rh02_salari',10, $Irh02_salari, true, 'text', 1, "onchange='js_lancarvalor(\"p\",this.value, \"".$rh02_salari."\");'", 'perce');
