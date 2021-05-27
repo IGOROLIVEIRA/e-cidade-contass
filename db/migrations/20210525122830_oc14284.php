@@ -27,15 +27,13 @@ class Oc14284 extends AbstractMigration
      */
     public function up()
     {
-        $sSql = <<<SQL
-         BEGIN;
+        $sSql = "SQL
+        BEGIN;
 
-        ALTER TABLE matparaminstit ADD COLUMN m10_consumo_imediato boolean;
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'm10_consumo_imediato'	 		,'boolean' ,'Consumo imediato automático'			,'', 'Consumo imediato automático'			 ,11	,false, false, false, 1, 'boolean', 'Consumo imediato automático');
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'm10_consumo_imediato')		 	, 1, 0);
-
+            ALTER TABLE matparaminstit ADD COLUMN m10_consumo_imediato boolean;
+       
         COMMIT;
-        SQL;
+        ";
         $this->execute($sSql);
     }
 }
