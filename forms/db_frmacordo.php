@@ -1308,7 +1308,7 @@ db_app::load("dbtextFieldData.widget.js");
         $('ac16_contratado').value = chave2; //chaves
         $('nomecontratado').value = chave1;
         oContrato.verificaLicitacoes();
-        oContrato.verificaNaturezadoObjeto(); 
+        oContrato.verificaNaturezadoObjeto();  
 
         if ($('ac16_origem').value == 6) {
             //js_MostraEmpenhos();

@@ -126,7 +126,7 @@ switch($oParam->exec) {
   case 'buscarNatureza':
     
     try {
-      $oDaoAcordo                = new cl_habilitacaoforn();
+      $oDaoAcordo                = new cl_habilitacaoforn(); 
       $oRetorno->numero          = array();
       $sSql1="SELECT l.l20_naturezaobjeto
               FROM habilitacaoforn h INNER JOIN liclicita l ON l.l20_codigo = h.l206_licitacao where h.l206_fornecedor=$oParam->iContratado";

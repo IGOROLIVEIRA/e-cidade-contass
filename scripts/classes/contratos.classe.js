@@ -434,7 +434,7 @@ contrato = function () {
 
         if (iContratdo_Nat == 0) {
 
-            alert('Natureza do contrato divergente da natureza do objeto da Licitação');
+            alert('Natureza do contrato divergente da natureza do objeto da Licitação'); 
             $('ac16_contratado').focus();
             $('ac16_acordogrupo').focus();
             return false;
