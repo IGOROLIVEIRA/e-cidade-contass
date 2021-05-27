@@ -4044,12 +4044,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
         }else{
 
-            var lat = $F('txtLatitude'+sId).trim();
-            lat = lat.replace(".","");
-            if (lat < 15709283 || lat > 16114259) {
-              alert("A Latitude deve estar entre 15.709283 e 16.114259");
-              return false;
-            }
+            // var lat = $F('txtLatitude'+sId).trim();
+            // lat = lat.replace(".","");
+            // if (lat < 15709283 || lat > 16114259) {
+            //   alert("A Latitude deve estar entre 15.709283 e 16.114259");
+            //   return false;
+            // }
 
             if (!$F('txtLatitude'+sId).trim()) {
                 $('txtLatitude'+sId).focus();
