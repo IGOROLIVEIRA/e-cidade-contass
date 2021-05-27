@@ -79,23 +79,23 @@ if (isset($alterar)) {
                 acordoposicao
               inner join acordo on
                 acordo.ac16_sequencial = acordoposicao.ac26_acordo
-                left join acordoposicaotipo on
+                inner join acordoposicaotipo on
                 acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
-                left join cgm on
+                inner join cgm on
                 cgm.z01_numcgm = acordo.ac16_contratado
-                left join db_depart on
+                inner join db_depart on
                 db_depart.coddepto = acordo.ac16_coddepto
-                left join acordogrupo on
+                inner join acordogrupo on
                 acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
-                left join acordosituacao on
+                inner join acordosituacao on
                 acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-                left join acordocomissao on
+                inner join acordocomissao on
                 acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
-                left join acordovigencia on
+                inner join acordovigencia on
                 ac26_sequencial = ac18_acordoposicao
-                left join acordoposicaoaditamento on
+                inner join acordoposicaoaditamento on
                 ac26_sequencial = ac35_acordoposicao
-                left join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+                inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
                 where ac16_sequencial = '$ac16_sequencial'"
   );
 
@@ -138,7 +138,7 @@ if (isset($alterar)) {
 
       $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . ' - ' . $oPosicao->ac16_datafim . ' atual: ' . $ac16_datainicio . ' - ' . $ac16_datafim . "  '," . db_getsession('DB_datausu') . ',' . db_getsession('DB_id_usuario') . ')');
     }
-
+    $clacordo->ac16_numero = $ac16_numeroacordo;
     $clacordo->alterar($ac16_sequencial);
 
     if ($clacordo->erro_status == '0') {
@@ -178,23 +178,23 @@ if (isset($alterar)) {
                 acordoposicao
               inner join acordo on
                 acordo.ac16_sequencial = acordoposicao.ac26_acordo
-                left join acordoposicaotipo on
+                inner join acordoposicaotipo on
                 acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
-                left join cgm on
+                inner join cgm on
                 cgm.z01_numcgm = acordo.ac16_contratado
-                left join db_depart on
+                inner join db_depart on
                 db_depart.coddepto = acordo.ac16_coddepto
-                left join acordogrupo on
+                inner join acordogrupo on
                 acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
-                left join acordosituacao on
+                inner join acordosituacao on
                 acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-                left join acordocomissao on
+                inner join acordocomissao on
                 acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
-                left join acordovigencia on
+                inner join acordovigencia on
                 ac26_sequencial = ac18_acordoposicao
-                left join acordoposicaoaditamento on
+                inner join acordoposicaoaditamento on
                 ac26_sequencial = ac35_acordoposicao
-                left join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+                inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
                 where ac16_sequencial = '$ac16_sequencial' order by posicao"
         );
       }
@@ -215,12 +215,12 @@ if (isset($alterar)) {
   $rsPosicoes = db_query(
     "SELECT distinct ac26_sequencial as POSICAO
         FROM acordo
-        left join acordoposicao on  ac16_sequencial = ac26_acordo
-        left join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
-        left join acordovigencia on ac18_acordoposicao = ac26_sequencial
-        left join acordoposicaotipo on ac27_sequencial = ac26_acordoposicaotipo
-        left join acordoitem on ac20_acordoposicao = ac26_sequencial
-        left join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
+        inner join acordoposicao on  ac16_sequencial = ac26_acordo
+        inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+        inner join acordovigencia on ac18_acordoposicao = ac26_sequencial
+        inner join acordoposicaotipo on ac27_sequencial = ac26_acordoposicaotipo
+        inner join acordoitem on ac20_acordoposicao = ac26_sequencial
+        inner join acordoitemperiodo on ac20_sequencial = ac41_acordoitem
         WHERE ac16_sequencial = '$ac16_sequencial'"
   );
 
@@ -240,23 +240,23 @@ if (isset($alterar)) {
             acordoposicao
           inner join acordo on
             acordo.ac16_sequencial = acordoposicao.ac26_acordo
-            left join acordoposicaotipo on
+            inner join acordoposicaotipo on
             acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
-            left join cgm on
+            inner join cgm on
             cgm.z01_numcgm = acordo.ac16_contratado
-            left join db_depart on
+            inner join db_depart on
             db_depart.coddepto = acordo.ac16_coddepto
-            left join acordogrupo on
+            inner join acordogrupo on
             acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
-            left join acordosituacao on
+            inner join acordosituacao on
             acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-            left join acordocomissao on
+            inner join acordocomissao on
             acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
-            left join acordovigencia on
+            inner join acordovigencia on
             ac26_sequencial = ac18_acordoposicao
-            left join acordoposicaoaditamento on
+            inner join acordoposicaoaditamento on
             ac26_sequencial = ac35_acordoposicao
-            left join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+            inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
             where ac16_sequencial = '$ac16_sequencial' order by posicao"
     );
   }
