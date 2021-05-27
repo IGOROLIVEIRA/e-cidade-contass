@@ -312,9 +312,8 @@ db_app::load("dbtextFieldData.widget.js");
                                                     <?
                                                     db_input('ac16_contratado', 10, $Iac16_contratado, true, 'text', 3,
                                                         "onchange='js_pesquisaac16_contratado(false);'");
-                                                    db_input('nomecontratado', 30, $Iz01_nome, true, 'text', 3);                                                
+                                                    db_input('nomecontratado', 30, $Iz01_nome, true, 'text', 3);
                                                     ?>
-                                                    <input type="hidden" id="ac16_contratado_Natu" name="ac16_contratado_Natu">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1132,10 +1131,6 @@ db_app::load("dbtextFieldData.widget.js");
         $('ac16_acordogrupo').value = chave1;
         $('ac02_descricao').value = chave2;
         $('ac16_acordogrupo').focus();
-        var valor_contratado_natu = document.getElementById("ac16_contratado_Natu").value;
-        if(valor_contratado_natu !=""){
-            oContrato.verificaNaturezadoObjeto();
-        }
 
         js_verificaNatureza(chave1);
         var oGet = js_urlToObject();
@@ -1218,7 +1213,9 @@ db_app::load("dbtextFieldData.widget.js");
     }
 
     function js_pesquisaac16_contratado(mostra) {
+
         if (mostra == true) {
+
             js_OpenJanelaIframe(
                 'top.corpo.iframe_acordo',
                 'db_iframe_contratado',
@@ -1305,10 +1302,10 @@ db_app::load("dbtextFieldData.widget.js");
                 return false
             }
         }
-        $('ac16_contratado').value = chave2; //chaves
+
+        $('ac16_contratado').value = chave2;
         $('nomecontratado').value = chave1;
         oContrato.verificaLicitacoes();
-        oContrato.verificaNaturezadoObjeto();  
 
         if ($('ac16_origem').value == 6) {
             //js_MostraEmpenhos();
