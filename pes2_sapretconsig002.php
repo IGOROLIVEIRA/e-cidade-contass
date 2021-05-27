@@ -205,7 +205,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
   // $cor = ($cor == 0 ? 1 : 0);
   $cor = 0;
-  if (strlen($o15_descr) > 55 ) {
+  if (strlen($o15_descr) > 45 ) {
     $altcol = 2;
   } else {
     $altcol = 1;
