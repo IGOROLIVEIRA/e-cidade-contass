@@ -235,7 +235,7 @@ class cl_rubricasesocial {
      return $sql;
   }
    // funcao do sql
-   function sql_query_file ( $e990_descricao = null,$campos="*",$ordem=null,$dbwhere=""){
+   function sql_query_file ( $e990_sequencial = null, $campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -250,6 +250,9 @@ class cl_rubricasesocial {
      $sql .= " from rubricasesocial ";
      $sql2 = "";
      if($dbwhere==""){
+       if( $e990_sequencial != "" && $e990_sequencial != null){
+          $sql2 = " where rubricasesocial.e990_sequencial = '$e990_sequencial'";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
