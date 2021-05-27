@@ -7,11 +7,6 @@ class Oc14765 extends PostgresMigration
 
     public function up()
     {
-        $this->insertCampoCodFundoTceMg();
-    }
-
-    public function insertCampoCodFundoTceMg()
-    {
         $sql = <<<SQL
 
         BEGIN;
@@ -42,7 +37,6 @@ class Oc14765 extends PostgresMigration
         COMMIT;
 
 SQL;
-        $this->execute($sql);
 
+        $this->execute($sql);
     }
-}
