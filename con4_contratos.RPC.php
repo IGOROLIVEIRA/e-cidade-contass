@@ -130,9 +130,7 @@ switch($oParam->exec) {
       $oRetorno->numero          = array();
       $sSql1="SELECT l.l20_naturezaobjeto
               FROM habilitacaoforn h INNER JOIN liclicita l ON l.l20_codigo = h.l206_licitacao where h.l206_fornecedor=$oParam->iContratado";
-      $sSql                      = $oDaoAcordo->sql_query(NULL, "liclicita.l20_naturezaobjeto", "", "l206_fornecedor={$oParam->iContratado}");
       $rsNatuObejto              = $oDaoAcordo->sql_record($sSql1);
-      $oNatuObjeto               = db_utils::getCollectionByRecord($rsNatuObejto,false,false,true);
 
       for ($iCont = 0; $iCont < pg_num_rows($rsNatuObejto); $iCont++) {
 
