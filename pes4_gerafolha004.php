@@ -2752,7 +2752,6 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
    $condicaoaux  = " and r59_regime = ".db_sqlformat( $pessoal[$Ipessoal]["r01_regime"] );
    $condicaoaux .= " and r59_causa = ".db_sqlformat( $pessoal[$Ipessoal]["r01_causa"] );
    $condicaoaux .= " and r59_caub = ".db_sqlformat( $pessoal[$Ipessoal]["r01_caub"] );
-   $condicaoaux .= " and lower(r59_menos1) = ".db_sqlformat( $menos_um_ano );
    global $rescisao;
 
 //echo "<BR> condicaoaux --> $condicaoaux";
