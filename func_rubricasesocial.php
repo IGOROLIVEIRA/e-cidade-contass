@@ -26,11 +26,11 @@ $clrubricasesocial = new cl_rubricasesocial;
            $campos = "e990_sequencial,e990_descricao";
 
         }
-	      $sql = $clrubricasesocial->sql_query(null,"*","e990_sequencial");
+	      $sql = $clrubricasesocial->sql_query_file(null,"*","e990_sequencial");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clrubricasesocial->sql_record($clrubricasesocial->sql_query($pesquisa_chave, "*", "e990_sequencial asc"));
+          $result = $clrubricasesocial->sql_record($clrubricasesocial->sql_query_file($pesquisa_chave, "*", "e990_sequencial asc"));
           if($clrubricasesocial->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$e990_sequencial',false);</script>";
