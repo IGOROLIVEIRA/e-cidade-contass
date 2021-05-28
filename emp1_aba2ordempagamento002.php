@@ -59,19 +59,42 @@ if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
     $empenho = $aFiltros['empenho'];
 }
 
+$sqlerro = false;
+
 db_inicio_transacao();
-if(isset($alterar)){
-    $aEmpenho = explode("/",$e60_codemp);
-    $sSql = $clpagordem->sql_query_pagordemele("","substr(o56_elemento,1,7) AS o56_elemento","e50_codord","e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit"));
-    $rsElementDesp = db_query($sSql);
-    $sqlerro=false;
-    $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
-    if($clpagordem->erro_status == 0) {
-        $sqlerro=true;
+if (isset($alterar)) {
+
+    $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
+    $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);
+
+    if (pg_num_rows($rsConsultaFimPeriodoContabil) > 0) {
+      
+        $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
+
+        if ($oFimPeriodoContabil->c99_data != '' && db_getsession("DB_datausu") < db_strtotime($oFimPeriodoContabil->c99_data)) {
+
+            $erro_msg = "Data inferior à data do fim do período contábil.";
+            $sqlerro = true;
+
+        }
+
     }
-    $erro_msg = $clpagordem->erro_msg;
+
+    if (!$sqlerro) {
+    
+        $aEmpenho = explode("/",$e60_codemp);
+        $sSql = $clpagordem->sql_query_pagordemele("","substr(o56_elemento,1,7) AS o56_elemento","e50_codord","e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit"));
+        $rsElementDesp = db_query($sSql);
+    
+        $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
+        if($clpagordem->erro_status == 0) {
+            $sqlerro = true;
+        }
+        $erro_msg = $clpagordem->erro_msg;
+
+    }
 }
-db_fim_transacao();
+db_fim_transacao($sqlerro);
 
 ?>
 <html>
