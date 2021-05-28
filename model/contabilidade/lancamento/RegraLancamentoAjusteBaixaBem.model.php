@@ -49,8 +49,14 @@ class RegraLancamentoAjusteBaixaBem implements IRegraLancamentoContabil {
     $iContaDepreciacaoClassificacao = $oLancamentoAuxiliar->getBem()->getClassificacao()->getContaDepreciacao()->getReduzido();
     
     $oRegraLancamentoContabil = new RegraLancamentoContabil();
-    $oRegraLancamentoContabil->setContaCredito($iContaContabilClassificacao);
-    $oRegraLancamentoContabil->setContaDebito($iContaDepreciacaoClassificacao);
+
+    if ($iCodigoDocumento == 703) {
+        $oRegraLancamentoContabil->setContaCredito($iContaContabilClassificacao);
+        $oRegraLancamentoContabil->setContaDebito($iContaDepreciacaoClassificacao);
+    } elseif ($iCodigoDocumento == 704) {
+        $oRegraLancamentoContabil->setContaCredito($iContaDepreciacaoClassificacao);
+        $oRegraLancamentoContabil->setContaDebito($iContaContabilClassificacao);
+    }
 
     return $oRegraLancamentoContabil;
   }
