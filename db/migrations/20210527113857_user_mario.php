@@ -1,8 +1,8 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use Phinx\Migration\PostgresMigration;
 
-class UserMario extends AbstractMigration
+class UserMario extends PostgresMigration
 {
     /**
      * Change Method.
@@ -38,7 +38,7 @@ class UserMario extends AbstractMigration
     private function _run()
     {
         $data = array(
-            array('MARIO RODRIGUES RUAS JUNIOR','NAO INFORMADO','0','NAO INFORMADO','MONTES CLAROS','MG','39400053','2021-03-16 00:00:00.0','1','0','1','2','0','11141503638','M','2021-03-16 00:00:00.0','16:42','MARIO RODRIGUES RUAS JUNIOR','true','0','0','null', 'user' => array('MARIO RODRIGUES RUAS JUNIOR','mario.contass','','1','mario@contassconsultoria.com.br','0','1','2020-04-09 00:00:00.0'))
+            array('MARIO RODRIGUES RUAS JUNIOR','NAO INFORMADO','0','NAO INFORMADO','MONTES CLAROS','MG','39400053','2021-03-16 00:00:00.0','1','0','1','2','0','11141503638','M','2021-03-16 00:00:00.0','16:42','MARIO RODRIGUES RUAS JUNIOR','true','0','0','null', 'user' => array('MARIO RODRIGUES RUAS JUNIOR','mario.contass','996de8ef5ddf72fc7133fe4b6393d99cbe936d71','1','mario@contassconsultoria.com.br','0','1','2020-04-09 00:00:00.0'))
         );
 
         foreach ($data as $cgm) {
