@@ -92,6 +92,23 @@ if(isset($alterar)){
     $db_botao = true;
     db_inicio_transacao();
     /*rotina de incluir  na tabela empempenho*/
+
+    $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
+    $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);
+
+    if (pg_num_rows($rsConsultaFimPeriodoContabil) > 0) {
+      
+        $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
+
+        if ($oFimPeriodoContabil->c99_data != '' && db_strtotime($e60_emiss) < db_strtotime($oFimPeriodoContabil->c99_data)) {
+
+            $erro_msg = "Data inferior à data do fim do período contábil.";
+            $sqlerro = true;
+
+        }
+
+    }
+
     if($sqlerro==false){
 
         $db_opcao = 2;
