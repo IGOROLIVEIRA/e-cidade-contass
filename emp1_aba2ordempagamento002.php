@@ -71,7 +71,7 @@ if (isset($alterar)) {
       
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
-        if ($oFimPeriodoContabil->c99_data != '' && db_getsession("DB_datausu") < db_strtotime($oFimPeriodoContabil->c99_data)) {
+        if ($oFimPeriodoContabil->c99_data != '' && db_strtotime($e50_data) < db_strtotime($oFimPeriodoContabil->c99_data)) {
 
             $erro_msg = "Data inferior à data do fim do período contábil.";
             $sqlerro = true;
