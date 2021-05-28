@@ -1,6 +1,6 @@
 <?php
 
-use Phinx\Migration\PostgresMigration;
+use Classes\PostgresMigration;
 
 class UserMario extends PostgresMigration
 {
