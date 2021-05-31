@@ -55,7 +55,7 @@ $sCampos .= "r11_confer, r11_ultreg   , r11_concatdv , r11_altfer      , r11_mes
 $sCampos .= "r11_conver, r11_codestrut, r11_localtrab, r11_databaseatra, r11_infla , r11_baseipe, r11_txadm , r11_mensagempadraotxt,                                ";
 $sCampos .= "r11_relatoriocontracheque, r11_relatorioempenhofolha, r11_relatoriocomprovanterendimentos, r11_relatoriotermorescisao,                                 ";
 $sCampos .= "r11_geraretencaoempenho, r11_datainiciovigenciarpps, r11_sistemacontroleponto, db77_descr,db77_descr as db77_descr1, i01_descr, rh32_descr, c50_descr, ";
-$sCampos .= "r11_suplementar                                                                                                                                        ";
+$sCampos .= "r11_suplementar,r11_diasliberarcontracheque";
 
 $sSql     = $clcfpess->sql_query(db_anofolha(),db_mesfolha(),db_getsession("DB_instit"),$sCampos);
 $result   = $clcfpess->sql_record($sSql);
