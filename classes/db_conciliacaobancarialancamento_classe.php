@@ -100,16 +100,6 @@ class cl_conciliacaobancarialancamento
             return false;
         }
 
-        if ($this->k172_coddoc == null) {
-            $this->erro_sql = " Campo CodDoc não Informado.";
-            $this->erro_campo = "k172_valor";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-
         if ($this->k172_codigo == null) {
             $this->erro_sql = " Campo Código do Documento não Informado.";
             $this->erro_campo = "k172_codigo";
@@ -150,7 +140,7 @@ class cl_conciliacaobancarialancamento
             return false;
         }
 
-        $sql = "insert into conciliacaobancarialancamento (k172_conta, k172_data, k172_numcgm, k172_coddoc, k172_codigo, k172_valor, k172_dataconciliacao, k172_mov) values ($this->k172_conta, " . ($this->k172_data == "null" || $this->k172_data == "" ? "null" : "'" . $this->k172_data . "'") . ", " . ($this->k172_numcgm != "" ? $this->k172_numcgm : 'null') . " , $this->k172_coddoc, " . ($this->k172_codigo == "Â " ? 'null' : "'{$this->k172_codigo}'") . ", $this->k172_valor, " . ($this->k172_dataconciliacao == "null" || $this->k172_dataconciliacao == "" ? "null" : "'" . $this->k172_dataconciliacao) . "', {$this->k172_mov})";
+        $sql = "insert into conciliacaobancarialancamento (k172_conta, k172_data, k172_numcgm, k172_coddoc, k172_codigo, k172_valor, k172_dataconciliacao, k172_mov) values ($this->k172_conta, " . ($this->k172_data == "null" || $this->k172_data == "" ? "null" : "'" . $this->k172_data . "'") . ", " . ($this->k172_numcgm != "" ? $this->k172_numcgm : 'null') . " , " . ($this->k172_coddoc != "" ? $this->k172_coddoc : 'null') . ", " . ($this->k172_codigo == "Â " ? "null" : "'{$this->k172_codigo}'") . ", $this->k172_valor, " . ($this->k172_dataconciliacao == "null" || $this->k172_dataconciliacao == "" ? "null" : "'" . $this->k172_dataconciliacao) . "', {$this->k172_mov})";
         $result = db_query($sql);
 
         if ($result == false) {
@@ -164,7 +154,7 @@ class cl_conciliacaobancarialancamento
                 $this->erro_sql   = "Conciliacao Bancaria para o Lancamento da conta ({$this->k172_conta}) nao Incluido. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg  .=  str_replace('"', "",str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                // $this->erro_msg  =  $sql;
+                $this->erro_msg  =  $sql;
             }
             $this->erro_status = "0";
             $this->numrows_incluir = 0;
