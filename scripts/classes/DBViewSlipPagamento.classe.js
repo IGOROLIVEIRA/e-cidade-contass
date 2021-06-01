@@ -181,7 +181,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
 
       me.iTipoInclusao      = 15;
       me.lContaDebito       = true;
-      me.sTipoTransferencia = "Reconhecimento de Perdas";
+      me.sTipoTransferencia = "Reconhecimento de Perdas RPPS";
 
       me.sPesquisaContaCredito  = "Saltes";
       me.sPesquisaContaDebito   = "EventoContabil";
@@ -189,6 +189,24 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
       me.sParamContaCredito     = "getContasSaltes";
       me.sParamContaDebito      = "getContaEventoContabil";
 
+    break;
+
+    /**
+     * Reconhecimento de ganhos RPPS
+     */
+
+    case 17: // Inclusão
+    case 18: // Estorno
+
+      me.iTipoInclusao      = 17;
+      me.lContaCredito      = true;
+      me.sTipoTransferencia = "Reconhecimento de Ganhos RPPS";
+
+      me.sPesquisaContaCredito = "EventoContabil";
+      me.sPesquisaContaDebito  = "Saltes";
+
+      me.sParamContaCredito    = "getContaEventoContabil";
+      me.sParamContaDebito     = "getContasSaltes";
     break;
     
   }

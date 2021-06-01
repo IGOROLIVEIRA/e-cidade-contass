@@ -154,7 +154,7 @@
             </div>
           </div>
 
-          <div id="logoDBSeller" ondblclick="<?php if ($lPermiteRotinaEspecial === true) { echo "js_direcionarUsuarioRotinaEspecial();"; } else { echo ""; } ?>" >
+          <div id="logoDBSeller" ondblclick="<?php if ($lPermiteRotinaEspecial === true) { echo "js_direcionarUsuarioRotinaEspecial();"; } else { echo "js_direcionarUsuarioRotinaEspecial()"; } ?>" >
             <h1>Contass</h1>
           </div>
 

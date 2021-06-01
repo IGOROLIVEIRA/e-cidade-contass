@@ -405,6 +405,16 @@ abstract class Transferencia {
       case 16:
         $iCodigoDocumento = 165;
       break;
+
+      /**
+       * Reconhecimento de ganhos RPPS
+       */
+      case 17:
+        $iCodigoDocumento = 166;
+      break;
+      case 18:
+        $iCodigoDocumento = 167;
+      break;
     }
     return $iCodigoDocumento;
   }
