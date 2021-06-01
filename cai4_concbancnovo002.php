@@ -1158,7 +1158,7 @@ foreach ($aContas as $oConta) {
 	}
 
 	imprimeConta($pdf,$oConta,$lImprimeSaldo);
-  imprimeSaldoExtratoBancario($pdf, 0, 100.00, 0);
+  imprimeSaldoExtratoBancario($pdf, 0);
 	$lImprimeSaldo = false;
 	imprimeCabecalho($pdf);
 
@@ -1302,12 +1302,12 @@ function imprimeCabecalho($pdf){
 	$pdf->ln();
 }
 
-function imprimeSaldoExtratoBancario($pdf, $saldo_debitado, $saldo_creditado, $total){
+function imprimeSaldoExtratoBancario($pdf, $valor){
     $pdf->SetFont('Arial', 'b', 8);
     $pdf->Cell(20,5,""																	,"TB",0,"R",1);
     $pdf->Cell(122,5, "Saldo do Extrato Bancário (1):" ,"TB",0,"R",1);
-    $pdf->Cell(25,5,$saldo_debitado 	== 0 ? "" : db_formatar($saldo_debitado,'f')	,"TLB",0,"R",1);
-    $pdf->Cell(25,5,$saldo_creditado	== 0 ? "" : db_formatar($saldo_creditado,'f')	,"TB",0,"R",1);
+    $pdf->Cell(25,5,"","TLB",0,"R",1);
+    $pdf->Cell(25,5,$valor	== 0 ? "" : db_formatar($valor,'f')	,"TB",0,"R",1);
     $pdf->ln();
     $pdf->SetFont('Arial','',7);
 }
