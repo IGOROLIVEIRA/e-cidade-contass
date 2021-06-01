@@ -839,7 +839,7 @@ db_app::load("widgets/windowAux.widget.js");
     }
 
     document.form1.emitir_capa.onclick = function() {
-        sUrl = "cai4_concbancnovo002.php?conta_nova=" + $F("k13_conta") + "&data_inicial=" + js_data($F("data_inicial")) + "&data_final=" + js_data($F("data_final") + "&saldo_extrato=" + $F("#saldo_final_extrato"));
+        sUrl = "cai4_concbancnovo002.php?conta_nova=" + $F("k13_conta") + "&data_inicial=" + js_data($F("data_inicial")) + "&data_final=" + js_data($F("data_final")) + "&saldo_extrato=" + $F("#saldo_final_extrato");
         alert(sUrl);
         window.open(sUrl, '', 'location=0');
     }
