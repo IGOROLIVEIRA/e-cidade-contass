@@ -1741,10 +1741,9 @@ function js_verificaEmendaParlamentar() {
 
     let sReceita = $('estrutural').value.substr(0, 9);
     let sRecurso = $('recurso').value;
-    let iAnoUsu  = $('anoUsu').value;
 
     lEmendaParlamentarObrigatoria = ( 
-        (sReceita == '417189911' && sRecurso == '100' && iAnoUsu == 2020)
+        (sReceita == '417189911' && sRecurso == '100')
         || (sReceita == '417189911' && sRecurso == '164')
         || (sReceita == '424189911' && sRecurso == '100')
         || (sReceita == '424189911' && sRecurso == '164')
@@ -1809,10 +1808,10 @@ function js_verificaEmendaParlamentar() {
         || (sReceita == '424280311' && sRecurso == '155')
     );
 
-    if (lEmendaParlamentarObrigatoria) {
-        document.getElementById("k81_emparlamentar").options[0].selected = true;
-    } else if (sRecurso == '164') {
+    if (sRecurso == '164') {
         document.getElementById("k81_emparlamentar").options[1].selected = true;
+    } else if (lEmendaParlamentarObrigatoria) {
+        document.getElementById("k81_emparlamentar").options[0].selected = true;
     } else {
         document.getElementById("k81_emparlamentar").options[3].selected = true;
     }
