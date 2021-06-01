@@ -1161,8 +1161,6 @@ foreach ($aContas as $oConta) {
 	$lImprimeSaldo = false;
 	imprimeCabecalho($pdf);
   imprimeSaldoExtratoBancario($pdf, $saldo_extrato);
-  echo "Parei no saldo do extrato" . $saldo_extrato;
-  die($saldo_extrato);
 
 	// Entradas não consideradas pelo banco
 	imprimeCabecalhoSub($pdf, "(2) ENTRADAS NÃO CONSIDERADAS PELO BANCO");
