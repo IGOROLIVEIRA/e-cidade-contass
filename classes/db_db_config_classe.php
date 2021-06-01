@@ -1586,7 +1586,7 @@ class cl_db_config {
      $sql .= " from db_config ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
-     $sql .= "      left join infocomplementaresinstit  on  si09_instit = cgm.z01_numcgm";
+     $sql .= "      left join infocomplementaresinstit  on  si09_instit = codigo";
      $sql2 = "";
      if($dbwhere==""){
        if($codigo!=null ){

@@ -636,7 +636,7 @@ select caixa,
 	     union all
 /* SLIP CREDITO */
 
-	     select
+	     select distinct on (data, caixa, k12_codautent, codigo)
 	           corrente.k12_id as caixa,
 	           corlanc.k12_data as data,
 		   0                  as valor_debito,

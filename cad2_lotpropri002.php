@@ -111,6 +111,14 @@ if (isset($tipo2)&&$tipo2=="pr"){
   $and = " and ";
   $info2 = "Tipo: Territorial";  
 }
+
+$info4 = "";
+if (isset($bairro)&&$bairro > 0){
+  $where .= $and."j13_codi = ".$bairro;
+  $and = " and "; 
+  $info4 = "Bairro:".$descrbairro; 
+}
+
 $order = "";
 $info3 = "";
 if (isset($ordem)&&$ordem=="pr"){
@@ -135,6 +143,7 @@ $head2 = "Lotes por Setor/Quadra/Proprietario";
 $head3 = @$info3;
 $head4 = @$info1;
 $head5 = @$info2;
+$head6 = @$info4;
 
 $sql = "select * from (
       select proprietario.j01_matric,

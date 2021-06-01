@@ -50,6 +50,17 @@ $clmatparaminstit->rotulo->label();
             ?>
           </td>
         </tr>
+        <tr>
+          <th>
+             Consumo Imediato Automático:
+          </th>
+          <td> 
+            <?
+            $y = array('t'=>'Sim','f'=>'Não');
+            db_select('m10_consumo_imediato',$y,true,$db_opcao,"");
+            ?>
+          </td>
+        </tr>
       </table>
     </fieldset>    
   </table>

@@ -32,7 +32,7 @@ require_once("libs/db_utils.php");
 require_once("classes/db_pagordem_classe.php");
 require_once("classes/db_pagordemele_classe.php");
 require_once("model/retencaoNota.model.php");
-
+require_once("classes/db_empautitem_classe.php");
 
 /*
  * Configurações GED
@@ -44,6 +44,7 @@ require_once ("libs/exceptions/BusinessException.php");
 $oGet           = db_utils::postMemory($_GET);
 $clpagordem     = new cl_pagordem;
 $clpagordemele  = new cl_pagordemele;
+$clempautitem   = new cl_empautitem;
 
 $sFornecedor = null;
 if ( isset($oGet) && !empty($oGet) ) {
@@ -191,7 +192,9 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
              contad.si166_crccontador as crc,
              controleinterno.z01_nome as controleinterno,
 
-             (select nome from db_usuarios where id_usuario = pagordem.e50_id_usuario) as usuario
+             (select nome from db_usuarios where id_usuario = pagordem.e50_id_usuario) as usuario,
+             e54_autori,
+             pc50_descr
            from pagordem
 				inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
         inner join cgm on cgm.z01_numcgm = empempenho.e60_numcgm
@@ -238,9 +241,12 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
      		LEFT JOIN cgm AS ordenapagamento ON ordenapagamento.z01_numcgm = ordenapaga.si166_numcgm
 				left join pagordemconta on e50_codord = e49_codord
 				left join pagordemprocesso on pagordem.e50_codord = pagordemprocesso.e03_pagordem
+        left outer join empempaut on e60_numemp = e61_numemp
+        left join empautoriza ON e61_autori = e54_autori
+        left join pctipocompra on pc50_codcom = e60_codcom
 				where pagordem.e50_codord = {$e50_codord} ) as x
         inner join cgm on cgm.z01_numcgm = _numcgm
-        left join pcfornecon on pc63_numcgm = _numcgm  and pc63_tipoconta=1
+        left join pcfornecon on pc63_numcgm = _numcgm
         left join pcforneconpad ON pc64_contabanco = pc63_contabanco
         ORDER BY pc64_contabanco
 	   ";
@@ -463,6 +469,70 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    	 $pdf1->valor_ordem = "";
    	 $pdf1->obs 		= "$e50_obs";
    }
+
+   //tipo Direta
+    if ($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
+    
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+
+        if ($clempautitem->numrows > 0) {         
+
+            db_fieldsmemory($result_empaut, 0);
+            $pdf1->processo = $e54_numerl;
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+
+    }
+
+    //tipo licitacao de outros orgaos
+    if ($e54_tipoautorizacao == 2) {
+        
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+        
+        if ($clempautitem->numrows > 0) {
+
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->processo = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+    
+    }
+
+    //tipo licitacao
+    if ($e54_tipoautorizacao == 3) {
+        
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+        
+        if ($clempautitem->numrows > 0) {
+
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->processo = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+
+    }
+
+    //tipo Adesao regpreco
+    if ($e54_tipoautorizacao == 4 ) {
+        
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+        
+        if ($clempautitem->numrows > 0) {
+        
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->processo = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+
+    }
+    
    $pdf1->imprime();
 }
 

@@ -82,6 +82,7 @@ class cl_rhpessoalmov {
     var $rh02_desctipoparentescoinst = null;
     var $rh02_laudodeficiencia = 0;
     var $rh02_laudoportadormolestia = 0;
+    var $rh02_segatuacao = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh02_instit = int4 = Cod. Instituição
@@ -118,6 +119,7 @@ class cl_rhpessoalmov {
                  rh02_desctipoparentescoinst = Text = Descrição do Tipo de Parentesco
                  rh02_laudodeficiencia = oid = Laudo Médico
                  rh02_laudoportadormolestia = oid = Laudo Médico
+                 rh02_segatuacao = oid = Segmento de Atuação
                  ";
     //funcao construtor da classe
     function cl_rhpessoalmov() {
@@ -185,13 +187,14 @@ class cl_rhpessoalmov {
             $this->rh02_desctipoparentescoinst = ($this->rh02_desctipoparentescoinst == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_desctipoparentescoinst"]:$this->rh02_desctipoparentescoinst);
             $this->rh02_laudodeficiencia = ($this->rh02_laudodeficiencia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudodeficiencia"]:$this->rh02_laudodeficiencia);
             $this->rh02_laudoportadormolestia = ($this->rh02_laudoportadormolestia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudoportadormolestia"]:$this->rh02_laudoportadormolestia);
+            $this->rh02_segatuacao = ($this->rh02_segatuacao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_segatuacao"]:$this->rh02_segatuacao);
         }else{
             $this->rh02_instit = ($this->rh02_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_instit"]:$this->rh02_instit);
             $this->rh02_seqpes = ($this->rh02_seqpes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"]:$this->rh02_seqpes);
         }
     }
     // funcao para Inclusão
-    function incluir ($rh02_seqpes,$rh02_instit){
+    function incluir ($rh02_seqpes,$rh02_instit, $bValida = true){
         $this->atualizacampos();
         if($this->rh02_anousu == null ){
             $this->erro_sql = " Campo Ano do Exercício não informado.";
@@ -370,6 +373,18 @@ class cl_rhpessoalmov {
         if($this->rh02_laudoportadormolestia == null ){
             $this->rh02_laudoportadormolestia = "null";
         }
+        if($this->rh02_segatuacao == null ){
+            $this->rh02_segatuacao = "null";
+            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
+                $this->erro_sql = " Campo Segmento de Atuação não informado.";
+                $this->erro_campo = "rh02_segatuacao";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
         /*if($this->rh02_diasgozoferias == null ){
           $this->erro_sql = " Campo Dias padrão a Gozar não informado.";
           $this->erro_campo = "rh02_diasgozoferias";
@@ -465,6 +480,7 @@ class cl_rhpessoalmov {
                                       ,rh02_desctipoparentescoinst
                                       ,rh02_laudodeficiencia
                                       ,rh02_laudoportadormolestia
+                                      ,rh02_segatuacao
                        )
                 values (
                                 $this->rh02_instit
@@ -501,6 +517,7 @@ class cl_rhpessoalmov {
                                ,".($this->rh02_desctipoparentescoinst == "null" || $this->rh02_desctipoparentescoinst == ""?"null":"'".$this->rh02_desctipoparentescoinst."'")."
                                ,".($this->rh02_laudodeficiencia == "null" || $this->rh02_laudodeficiencia == ""?"null":"'".$this->rh02_laudodeficiencia."'")."
                                ,".($this->rh02_laudoportadormolestia == "null" || $this->rh02_laudoportadormolestia == ""?"null":"'".$this->rh02_laudoportadormolestia."'")."
+                               ,".($this->rh02_segatuacao == "null" || $this->rh02_segatuacao == ""?"null":"'".$this->rh02_segatuacao."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -570,7 +587,7 @@ class cl_rhpessoalmov {
         return true;
     }
     // funcao para alteracao
-    public function alterar ($rh02_seqpes=null,$rh02_instit=null) {
+    public function alterar ($rh02_seqpes=null,$rh02_instit=null, $bValida = true) {
         $this->atualizacampos();
         $sql = " update rhpessoalmov set ";
         $virgula = "";
@@ -929,6 +946,24 @@ class cl_rhpessoalmov {
             }else{
                 $sql  .= $virgula." rh02_laudoportadormolestia = $this->rh02_laudoportadormolestia";
                 $virgula = ",";
+            }
+        }
+        if(trim($this->rh02_segatuacao)=="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_segatuacao"])) {
+            if($this->rh02_segatuacao == "") {
+                $sql  .= $virgula." rh02_segatuacao = null";
+                $virgula = ",";
+            } else {
+                $sql  .= $virgula." rh02_segatuacao = $this->rh02_segatuacao";
+                $virgula = ",";
+            }
+            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
+                $this->erro_sql = " Campo Segmento de Atuação não informado.";
+                $this->erro_campo = "rh02_segatuacao";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
             }
         }
 

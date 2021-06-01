@@ -321,7 +321,11 @@ if (!empty($chaves) && isset($chaves)){
       $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
 
       if(in_array(intval($natureza_objeto), array(1, 7)) && $licitacao && !$sequencial){
-        echo"<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+        if($tipojulg != 3){
+          echo"<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+        }else{
+          echo"<script> parent.parent.mo_camada('liclicitemlote'); </script>";
+        }
       }
     }else{
       //db_msgbox(@$erro_msg);

@@ -1,178 +1,176 @@
 <?php
+
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once("classes/db_redispi102020_classe.php");
-require_once("classes/db_redispi112020_classe.php");
-require_once("classes/db_redispi122020_classe.php");
+require_once("classes/db_redispi102021_classe.php");
+require_once("classes/db_redispi112021_classe.php");
+require_once("classes/db_redispi122021_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarREDISPI.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2021/GerarREDISPI.model.php");
 
 
 /**
- * Resumo da Dsipensa ou Inexigibilidade
+ * Resumo da Dispensa ou Inexigibilidade
  * @author Victor Felipe
  * @package Contabilidade
  */
 class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
-    /**
-    *
-    * Codigo do layout. (db_layouttxt.db50_codigo)
-    * @var Integer
-    */
-    protected $iCodigoLayout = 154;
+  /**
+   *
+   * Codigo do layout. (db_layouttxt.db50_codigo)
+   * @var Integer
+   */
+  protected $iCodigoLayout = 154;
+
+  /**
+   *
+   * Nome do arquivo a ser criado
+   * @var String
+   */
+  protected $sNomeArquivo = 'REDISPI';
+
+  /**
+   *
+   * Construtor da classe
+   */
+  public function __construct()
+  {
+  }
+
+  /**
+   * Retorna o codigo do layout
+   *
+   * @return Integer
+   */
+  public function getCodigoLayout()
+  {
+    return $this->iCodigoLayout;
+  }
+
+  /**
+   *metodo para passar os dados das Acoes e Metas para o $this->aDados
+   */
+  public function getCampos()
+  {
+
+    $aElementos[10] = array(
+      "tipoRegistro",
+      "codOrgaoResp",
+      "codUnidadeSubResp",
+      "codUnidadeSubRespEstadual",
+      "exercicioProcesso",
+      "nroProcesso",
+      "tipoProcesso",
+      "tipoCadastradoDispensaInexigibilidade",
+      "dtAbertura",
+      "naturezaObjeto",
+      "objeto",
+      "justificativa",
+      "razao",
+      "vlRecurso",
+      "bdi",
+      "link"
+    );
+    $aElementos[11] = array(
+      "tipoRegistro",
+      "codOrgaoResp",
+      "codUnidadeSubResp",
+      "codUnidadeSubRespEstadual",
+      "exercicioProcesso",
+      "nroProcesso",
+      "codObraLocal",
+      "tipoProcesso",
+      "classeObjeto",
+      "tipoAtividadeObra",
+      "tipoAtividadeServico",
+      "dscAtividadeServico",
+      "tipoAtividadeServEspecializado",
+      "dscAtividadeServEspecializado",
+      "codFuncao",
+      "codSubFuncao",
+      "codBemPublico"
+    );
+    $aElementos[12] = array(
+      "tipoRegistro",
+      "codOrgaoResp",
+      "codUnidadeSubResp",
+      "codUnidadeSubRespEstadual",
+      "exercicioProcesso",
+      "nroProcesso",
+      "codObraLocal",
+      "logradouro",
+      "numero",
+      "bairro",
+      "cidade",
+      "cep",
+      "latitude",
+      "longitude",
+      "codBemPublico"
+    );
+
+    return $aElementos;
+  }
+
+  /**
+   * selecionar os dados dos pagamentos de despesa do mes para gerar o arquivo
+   * @see iPadArquivoBase::gerarDados()
+   */
+  public function gerarDados()
+  {
 
     /**
-    *
-    * Nome do arquivo a ser criado
-    * @var String
-    */
-    protected $sNomeArquivo = 'REDISPI';
-
-    /**
-    *
-    * Construtor da classe
-    */
-    public function __construct()
-    {
-
-    }
-
-    /**
-    * Retorna o codigo do layout
-    *
-    * @return Integer
-    */
-    public function getCodigoLayout()
-    {
-      return $this->iCodigoLayout;
-    }
-
-    /**
-     *metodo para passar os dados das Acoes e Metas para o $this->aDados
+     * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    public function getCampos()
-    {
+    $clredispi10 = new cl_redispi102021();
+    $clredispi11 = new cl_redispi112021();
+    $clredispi12 = new cl_redispi122021();
 
-        $aElementos[10] = array(
-            "tipoRegistro",
-            "codOrgaoResp",
-            "codUnidadeSubResp",
-            "codUnidadeSubRespEstadual",
-            "exercicioProcesso",
-            "nroProcesso",
-            "tipoProcesso",
-            "tipoCadastradoDispensaInexigibilidade",
-            "dtAbertura",
-            "naturezaObjeto",
-            "objeto",
-            "justificativa",
-            "razao",
-            "vlRecurso",
-            "bdi"
-        );
-        $aElementos[11] = array(
-            "tipoRegistro",
-            "codOrgaoResp",
-            "codUnidadeSubResp",
-            "codUnidadeSubRespEstadual",
-            "exercicioProcesso",
-            "nroProcesso",
-            "codObraLocal",
-            "tipoProcesso",
-            "classeObjeto",
-            "tipoAtividadeObra",
-            "tipoAtividadeServico",
-            "dscAtividadeServico",
-            "tipoAtividadeServEspecializado",
-            "dscAtividadeServEspecializado",
-            "codFuncao",
-            "codSubFuncao",
-            "codBemPublico"
-        );
-        $aElementos[12] = array(
-            "tipoRegistro",
-            "codOrgaoResp",
-            "codUnidadeSubResp",
-            "codUnidadeSubRespEstadual",
-            "exercicioProcesso",
-            "nroProcesso",
-            "codObraLocal",
-            "logradouro",
-            "numero",
-            "bairro",
-            "cidade",
-            "cep",
-            "grauLatitude",
-            "minutoLatitude",
-            "segundoLatitude",
-            "grauLongitude",
-            "minutoLongitude",
-            "segundoLongitude"
-        );
 
-        return $aElementos;
+    /**
+     * excluir informacoes do mes selecioado para evitar duplicacao de registros
+     */
+    db_inicio_transacao();
+
+    /**
+     * registro 12
+     */
+    $result = db_query($clredispi12->sql_query(null, "*", null, "si185_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si185_instit=" . db_getsession("DB_instit")));
+    if (pg_num_rows($result) > 0) {
+      $clredispi12->excluir(null, "si185_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si185_instit=" . db_getsession("DB_instit"));
+      if ($clredispi12->erro_status == 0) {
+        throw new Exception($clredispi12->erro_msg);
+      }
     }
 
     /**
-     * selecionar os dados dos pagamentos de despesa do mes para gerar o arquivo
-     * @see iPadArquivoBase::gerarDados()
+     * registro 11
      */
-    public function gerarDados()
-    {
+    $result = db_query($clredispi11->sql_query(null, "*", null, "si184_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si184_instit=" . db_getsession("DB_instit")));
+    if (pg_num_rows($result) > 0) {
+      $clredispi11->excluir(null, "si184_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si184_instit=" . db_getsession("DB_instit"));
+      if ($clredispi11->erro_status == 0) {
+        throw new Exception($clredispi11->erro_msg);
+      }
+    }
 
-        /**
-         * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
-         */
-        $clredispi10 = new cl_redispi102020();
-        $clredispi11 = new cl_redispi112020();
-        $clredispi12 = new cl_redispi122020();
+    /**
+     * registro 10
+     */
+    $result = db_query($clredispi10->sql_query(null, "*", null, "si183_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si183_instit=" . db_getsession("DB_instit")));
 
+    if (pg_num_rows($result) > 0) {
+      $clredispi10->excluir(null, "si183_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si183_instit=" . db_getsession("DB_instit"));
+      if ($clredispi10->erro_status == 0) {
+        throw new Exception($clredispi10->erro_msg);
+      }
+    }
 
-        /**
-         * excluir informacoes do mes selecioado para evitar duplicacao de registros
-         */
-        db_inicio_transacao();
-
-        /**
-         * registro 12
-         */
-        $result = db_query($clredispi12->sql_query(null, "*", null, "si185_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si185_instit=" . db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
-            $clredispi12->excluir(null, "si185_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si185_instit=" . db_getsession("DB_instit"));
-            if ($clredispi12->erro_status == 0) {
-                throw new Exception($clredispi12->erro_msg);
-            }
-        }
-
-        /**
-         * registro 11
-         */
-        $result = db_query($clredispi11->sql_query(null, "*", null, "si184_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si184_instit=" . db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
-            $clredispi11->excluir(null, "si184_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si184_instit=" . db_getsession("DB_instit"));
-            if ($clredispi11->erro_status == 0) {
-                throw new Exception($clredispi11->erro_msg);
-            }
-        }
-
-        /**
-         * registro 10
-         */
-        $result = db_query($clredispi10->sql_query(null, "*", null, "si183_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si183_instit=" . db_getsession("DB_instit")));
-
-        if (pg_num_rows($result) > 0) {
-            $clredispi10->excluir(null, "si183_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si183_instit=" . db_getsession("DB_instit"));
-            if ($clredispi10->erro_status == 0) {
-                throw new Exception($clredispi10->erro_msg);
-            }
-        }
-
-        $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
+    $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
                      infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (SELECT CASE
-                                WHEN o41_subunidade != 0 OR NOT NULL 
+                                WHEN o41_subunidade != 0 OR NOT NULL
                                     THEN lpad((CASE
                                                 WHEN o40_codtri = '0' OR NULL
                                                     THEN o40_orgao::varchar
@@ -194,13 +192,13 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                 END AS codunidadesub
                      FROM db_departorg
                      JOIN infocomplementares ON si08_anousu = db01_anousu
-                     AND si08_instit = ".db_getsession('DB_instit')."
+                     AND si08_instit = " . db_getsession('DB_instit') . "
                      JOIN orcunidade ON db01_orgao=o41_orgao
                      AND db01_unidade = o41_unidade
                      AND db01_anousu = o41_anousu
                      JOIN orcorgao ON o40_orgao = o41_orgao
                      AND o40_anousu = o41_anousu
-                     WHERE db01_coddepto=l20_codepartamento AND db01_anousu=".db_getsession('DB_anousu')."
+                     WHERE db01_coddepto=l20_codepartamento AND db01_anousu=" . db_getsession('DB_anousu') . "
                      LIMIT 1) AS codUnidadeSubResp,
                                 '0' AS codUnidadeSubRespEstadual,
                                 liclicita.l20_anousu AS exercicioProcesso,
@@ -216,7 +214,10 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                 liclicita.l20_objeto AS objeto,
                                 liclicita.l20_justificativa AS justificativa,
                                 liclicita.l20_razao AS razao,
-                                obrasdadoscomplementares.db150_bdi AS bdi,
+                                liclicita.l20_tipojulg,
+                                liclicita.l20_usaregistropreco,
+                                obrasdadoscomplementareslote.db150_bdi AS bdi,
+                                liclancedital.l47_linkpub as linkpub,
                                 (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
                                  FROM
                                      (SELECT DISTINCT pc11_seq,
@@ -268,11 +269,11 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                 INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-				INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
-                WHERE db_config.codigo = ".db_getsession('DB_instit')." AND liclancedital.l47_dataenvio = '".$this->sDataFinal."'
+				INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = db150_codobra
+                WHERE db_config.codigo = " . db_getsession('DB_instit') . " AND liclancedital.l47_dataenvio = '" . $this->sDataFinal . "'
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 ";
-	$rsResult10 = db_query($sSql);
+    $rsResult10 = db_query($sSql);
 
     /**
      * registro 10
@@ -280,44 +281,45 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
     $aDadosAgrupados10 = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-    	$clredispi10 = new cl_redispi102020();
+      $clredispi10 = new cl_redispi102021();
+      $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-        $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+      $chave = $oDados10->nroprocesso;
+      if (!in_array($chave, $aDadosAgrupados10)) {
+        $aDadosAgrupados10[] = $chave;
+        $clredispi10->si183_tiporegistro = 10;
+        $clredispi10->si183_codorgaoresp          = $oDados10->codorgaoresp;
+        $clredispi10->si183_codunidadesubresp = $oDados10->codunidadesubresp;
+        $clredispi10->si183_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual;
+        $clredispi10->si183_exercicioprocesso = $oDados10->exercicioprocesso;
+        $clredispi10->si183_nroprocesso = $oDados10->nroprocesso;
+        $clredispi10->si183_tipoprocesso = $oDados10->tipoprocesso;
+        $clredispi10->si183_tipocadastradodispensainexigibilidade = $oDados10->tipocadastradodispensainexigibilidade;
+        $clredispi10->si183_dsccadastrolicitatorio = $oDados10->dsccadastrolicitatorio;
+        $clredispi10->si183_dtabertura = $oDados10->dtabertura;
+        $clredispi10->si183_naturezaobjeto = $oDados10->naturezaobjeto;
+        $clredispi10->si183_objeto = $oDados10->objeto;
+        $clredispi10->si183_justificativa = $oDados10->justificativa;
+        $clredispi10->si183_razao = $oDados10->razao;
+        $clredispi10->si183_vlrecurso = $oDados10->vlrecurso == null ? 0 : $oDados10->vlrecurso;
+        $clredispi10->si183_bdi = $oDados10->bdi;
+        $clredispi10->si183_link = $oDados10->linkpub;
+        $clredispi10->si183_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $clredispi10->si183_instit = db_getsession("DB_instit");
 
-        $chave = $oDados10->nroprocesso;
-        if(!in_array($chave, $aDadosAgrupados10)){
-        	$aDadosAgrupados10[] = $chave;
-			$clredispi10->si183_tiporegistro = 10;
-			$clredispi10->si183_codorgaoresp          = $oDados10->codorgaoresp;
-			$clredispi10->si183_codunidadesubresp = $oDados10->codunidadesubresp;
-			$clredispi10->si183_codunidadesubrespestadual = $oDados10->codunidadesubrespestadual;
-			$clredispi10->si183_exercicioprocesso = $oDados10->exercicioprocesso;
-			$clredispi10->si183_nroprocesso = $oDados10->nroprocesso;
-			$clredispi10->si183_tipoprocesso = $oDados10->tipoprocesso;
-			$clredispi10->si183_tipocadastradodispensainexigibilidade = $oDados10->tipocadastradodispensainexigibilidade;
-			$clredispi10->si183_dsccadastrolicitatorio = $oDados10->dsccadastrolicitatorio;
-			$clredispi10->si183_dtabertura = $oDados10->dtabertura;
-			$clredispi10->si183_naturezaobjeto = $oDados10->naturezaobjeto;
-			$clredispi10->si183_objeto = $oDados10->objeto;
-			$clredispi10->si183_justificativa = $oDados10->justificativa;
-			$clredispi10->si183_razao = $oDados10->razao;
-			$clredispi10->si183_vlrecurso = $oDados10->vlrecurso == null ? 0 : $oDados10->vlrecurso;
-			$clredispi10->si183_bdi = $oDados10->bdi;
-			$clredispi10->si183_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-			$clredispi10->si183_instit = db_getsession("DB_instit");
+        $clredispi10->incluir(null);
 
-			$clredispi10->incluir(null);
-			if ($clredispi10->erro_status == 0) {
-			  throw new Exception($clredispi10->erro_msg);
-			}
+        if ($clredispi10->erro_status == 0) {
+          throw new Exception($clredispi10->erro_msg);
+        }
 
-			// Consertar validação para só entrar na condicional quando a natureza do objeto for igual a 1,
-			if($oDados10->naturezaobjeto == 1) {
-				/**
-				 * Selecionar informações do registro 11
-				 */
+        // Consertar validação para só entrar na condicional quando a natureza do objeto for igual a 1,
+        if ($oDados10->naturezaobjeto == 1) {
+          /**
+           * Selecionar informações do registro 11
+           */
 
-				$sSql = "SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
+          $sSql = "SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
 						(SELECT CASE
 									WHEN o41_subunidade != 0
 										 OR NOT NULL THEN lpad((CASE
@@ -353,81 +355,96 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   pctipocompratribunal.l44_codigotribunal AS tipoProcesso,
 						   liclicita.l20_anousu AS exercicioProcesso,
 						   liclicita.l20_edital AS nroProcesso,
-						   obrasdadoscomplementares.db150_sequencial as sequencial,
-						   obrasdadoscomplementares.db150_codobra as codObraLocal,
-						   obrasdadoscomplementares.db150_classeobjeto as classeObjeto,
-						   obrasdadoscomplementares.db150_atividadeobra as tipoAtividadeObra,
-						   obrasdadoscomplementares.db150_atividadeservico as tipoAtividadeServico,
-						   obrasdadoscomplementares.db150_descratividadeservico as dscAtividadeServico,
-						   obrasdadoscomplementares.db150_atividadeservicoesp as tipoAtividadeServEspecializado,
-						   obrasdadoscomplementares.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
+						   obrasdadoscomplementareslote.db150_sequencial as sequencial,
+						   obrasdadoscomplementareslote.db150_codobra as codObraLocal,
+						   obrasdadoscomplementareslote.db150_classeobjeto as classeObjeto,
+						   obrasdadoscomplementareslote.db150_atividadeobra as tipoAtividadeObra,
+						   case when obrasdadoscomplementareslote.db150_atividadeservico is null then 0
+                    else obrasdadoscomplementareslote.db150_atividadeservico end as tipoAtividadeServico,
+						   obrasdadoscomplementareslote.db150_descratividadeservico as dscAtividadeServico,
+						   obrasdadoscomplementareslote.db150_atividadeservicoesp as tipoAtividadeServEspecializado,
+						   obrasdadoscomplementareslote.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
 						   orcdotacao.o58_funcao AS codFuncao,
 						   orcdotacao.o58_subfuncao AS codSubFuncao,
-						   obrasdadoscomplementares.db150_subgrupobempublico as codBemPublico
-					FROM liclicita
-					INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
-					INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
-					INNER JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
-					INNER JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
-					INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
-					INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
-					INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
-					LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-					INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
-					INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-					INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
-					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = ".$oDados10->nroprocesso."
-						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106) ORDER BY obrasdadoscomplementares.db150_sequencial limit 1"; /* Limite inserido depois das alterações lançadas pelo tribunal de contas*/
+						   CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico
+                        FROM liclicita
+                        INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
+                        INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
+                        LEFT JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+                        INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
+                        INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+                        INNER JOIN db_depart ON l20_codepartamento = coddepto
+                        INNER JOIN db_departorg ON db01_coddepto = coddepto AND db01_anousu = " . db_getsession('DB_anousu') . "
+                        INNER JOIN db_config ON (instit=codigo)
+                        INNER JOIN orcorgao ON o40_instit = codigo
+                        INNER JOIN orcdotacao on (o58_anousu, o58_orgao)=(o40_anousu, o40_orgao) and o58_anousu=l20_anousu
+                        INNER JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade = o41_unidade AND db01_anousu = o41_anousu
+                        LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
+                        INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+                        INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
+                        INNER JOIN obrasdadoscomplementareslote ON db151_codigoobra = db150_codobra
+					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = " . $oDados10->nroprocesso . "
+						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
+                        ORDER BY obrasdadoscomplementareslote.db150_sequencial";
 
-					$rsResult11 = db_query($sSql);
-					$aDadosAgrupados11 = array();
-					for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
+          $rsResult11 = db_query($sSql);
+          $aDadosAgrupados11 = array();
+          // echo $sSql;
+          // db_criatabela($rsResult11);
+          // $iNumRows = $oDados10->l20_usaregistropreco == 'f' ? 1 : pg_num_rows($rsResult11);
 
-						$oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-						$sHash11 = $oResult11->tiporegistro . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->exercicioprocesso .
-							$oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-							$oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao;
+          for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-						if (!isset($aDadosAgrupados11[$sHash11])) {
+            $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
+            $sHash11 = $oResult11->tiporegistro . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->exercicioprocesso .
+              $oResult11->nroprocesso . $oResult11->tipoprocesso . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
+              $oResult11->tipoatividadeservespecializado . $oResult11->codbempublico;
 
-							$clredispi11 = new cl_redispi112020();
+            if ($oDados10->l20_usaregistropreco == 't') {
+              $sHash11 .= $oResult11->codfuncao . $oResult11->codsubfuncao;
+            }
 
-							$clredispi11->si184_tiporegistro = 11;
-							$clredispi11->si184_codorgaoresp = $oResult11->codorgaoresp;
-							$clredispi11->si184_codunidadesubresp = $oResult11->codunidadesubresp;
-							$clredispi11->si184_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;
-							$clredispi11->si184_exercicioprocesso = $oResult11->exercicioprocesso;
-							$clredispi11->si184_nroprocesso = $oResult11->nroprocesso;
-							$clredispi11->si184_codobralocal = $oResult11->codobralocal;
-							$clredispi11->si184_tipoprocesso = $oResult11->tipoprocesso;
-							$clredispi11->si184_classeobjeto = intval($oResult11->classeobjeto);
-							$clredispi11->si184_tipoatividadeobra = $oResult11->tipoatividadeobra;
-							$clredispi11->si184_tipoatividadeservico = $oResult11->tipoatividadeservico;
-							$clredispi11->si184_dscatividadeservico = $oResult11->dscatividadeservico;
-							$clredispi11->si184_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;
-							$clredispi11->si184_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
-							$clredispi11->si184_codfuncao = $oResult11->codfuncao;
-							$clredispi11->si184_codsubfuncao = $oResult11->codsubfuncao;
-							$clredispi11->si184_codbempublico = $oResult11->codbempublico;
-							$clredispi11->si184_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-							$clredispi11->si184_reg10 = $clredispi10->si183_sequencial;// chave estrangeira
-							$clredispi11->si184_instit = db_getsession("DB_instit");
-							$clredispi11->incluir(null);
-							if ($clredispi11->erro_status == 0) {
-								throw new Exception($clredispi11->erro_msg);
-							}
-							$aDadosAgrupados11[$sHash11] = $clredispi11;
+            /**
+             * @todo Corrigir busca pela função e subfunção
+             */
 
-						}
+            if (!isset($aDadosAgrupados11[$sHash11])) {
 
-					}
+              $clredispi11 = new cl_redispi112021();
+              $clredispi11->si184_tiporegistro = 11;
+              $clredispi11->si184_codorgaoresp = $oResult11->codorgaoresp;
+              $clredispi11->si184_codunidadesubresp = $oResult11->codunidadesubresp;
+              $clredispi11->si184_codunidadesubrespestadual = $oResult11->codunidadesubrespestadual;
+              $clredispi11->si184_exercicioprocesso = $oResult11->exercicioprocesso;
+              $clredispi11->si184_nroprocesso = $oResult11->nroprocesso;
+              $clredispi11->si184_codobralocal = $oResult11->codobralocal;
+              $clredispi11->si184_tipoprocesso = $oResult11->tipoprocesso;
+              $clredispi11->si184_classeobjeto = intval($oResult11->classeobjeto);
+              $clredispi11->si184_tipoatividadeobra = $oResult11->tipoatividadeobra;
+              $clredispi11->si184_tipoatividadeservico = $oResult11->tipoatividadeservico;
+              $clredispi11->si184_dscatividadeservico = $oResult11->dscatividadeservico;
+              $clredispi11->si184_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;
+              $clredispi11->si184_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
+              $clredispi11->si184_codfuncao = $oResult11->codfuncao;
+              $clredispi11->si184_codsubfuncao = $oResult11->codsubfuncao;
+              $clredispi11->si184_codbempublico = $oResult11->codbempublico;
+              $clredispi11->si184_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              $clredispi11->si184_reg10 = $clredispi10->si183_sequencial; // chave estrangeira
+              $clredispi11->si184_instit = db_getsession("DB_instit");
+              $clredispi11->incluir(null);
+              if ($clredispi11->erro_status == 0) {
+                throw new Exception($clredispi11->erro_msg);
+              }
+              $aDadosAgrupados11[$sHash11] = $clredispi11;
+            }
+          }
 
-				/*
+          /*
 				* Seleção dos registros 12 do RALIC
 				*
 				* */
 
-				$sSql = "
+          $sSql12 = "
 					SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
 						(SELECT CASE
 									WHEN o41_subunidade != 0
@@ -464,20 +481,16 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   '' AS codUnidadeSubRespEstadual,
 						   liclicita.l20_anousu AS exercicioProcesso,
 						   liclicita.l20_edital AS nroProcesso,
-						   obrasdadoscomplementares.db150_codobra AS codObraLocal,
-						   obrasdadoscomplementares.db150_logradouro AS logradouro,
-						   obrasdadoscomplementares.db150_numero AS numero,
-						   obrasdadoscomplementares.db150_bairro AS bairro,
+						   obrasdadoscomplementareslote.db150_codobra AS codObraLocal,
+						   obrasdadoscomplementareslote.db150_logradouro AS logradouro,
+						   obrasdadoscomplementareslote.db150_numero AS numero,
+						   obrasdadoscomplementareslote.db150_bairro AS bairro,
 						   cadendermunicipio.db72_descricao AS cidade,
-						   obrasdadoscomplementares.db150_distrito AS distrito,
-						   obrasdadoscomplementares.db150_cep AS cep,
-						   obrasdadoscomplementares.db150_grauslatitude AS grauslatitude,
-						   obrasdadoscomplementares.db150_minutolatitude AS minutolatitude,
-						   obrasdadoscomplementares.db150_segundolatitude AS segundolatitude,
-						   obrasdadoscomplementares.db150_grauslongitude AS grauslongitude,
-						   obrasdadoscomplementares.db150_minutolongitude AS minutolongitude,
-						   obrasdadoscomplementares.db150_segundolongitude AS segundolongitude,
-						   obrasdadoscomplementares.db150_sequencial as sequencial
+						   obrasdadoscomplementareslote.db150_distrito AS distrito,
+						   obrasdadoscomplementareslote.db150_cep AS cep,
+						   obrasdadoscomplementareslote.db150_latitude AS latitude,
+						   obrasdadoscomplementareslote.db150_longitude AS longitude,
+               CASE WHEN db150_grupobempublico <> 99 THEN db150_subgrupobempublico ELSE '9900' END AS codBemPublico
 					FROM liclicita
 					INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
 					INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -485,62 +498,57 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 					LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
 					INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
 					INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
-					INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
-					INNER JOIN cadendermunicipio on obrasdadoscomplementares.db150_municipio = db72_sequencial
-					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = ".$oDados10->nroprocesso."
+					INNER JOIN obrasdadoscomplementareslote ON obrascodigos.db151_codigoobra = obrasdadoscomplementareslote.db150_codobra
+					INNER JOIN cadendermunicipio on obrasdadoscomplementareslote.db150_municipio = db72_sequencial
+					WHERE db_config.codigo= " . db_getsession('DB_instit') . " AND liclicita.l20_edital = " . $oDados10->nroprocesso . "
 						AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
 				";
-				$rsResult12 = db_query($sSql);
+          $rsResult12 = db_query($sSql12);
 
-				$aDadosAgrupados12 = array();
-				for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
+          $aDadosAgrupados12 = array();
+          for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
-					$oResult12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-					$sHash12 = $oResult12->tiporegistro . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->codunidadesubrespestadual .
-						$oResult12->exercicioprocesso . $oResult12->nroprocesso . $oResult12->codobralocal . $oResult12->cep;
+            $oResult12 = db_utils::fieldsMemory($rsResult12, $iCont12);
+            $sHash12 = $oResult12->tiporegistro . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->codunidadesubrespestadual .
+              $oResult12->exercicioprocesso . $oResult12->nroprocesso . $oResult12->codobralocal . $oResult12->cep;
 
-					if (!isset($aDadosAgrupados12[$sHash12])) {
+            //if (!isset($aDadosAgrupados12[$sHash12])) {
 
-						$clredispi12 = new cl_redispi122020();
-
-						$clredispi12->si185_tiporegistro = 12;
-						$clredispi12->si185_codorgaoresp = $oResult12->codorgaoresp;
-						$clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
-						$clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
-						$clredispi12->si185_exercicioprocesso = $oResult12->exercicioprocesso;
-						$clredispi12->si185_nroprocesso = $oResult12->nroprocesso;
-						$clredispi12->si185_codobralocal = $oResult12->codobralocal;
-						$clredispi12->si185_logradouro = $oResult12->logradouro;
-						$clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
-						$clredispi12->si185_bairro = $oResult12->bairro;
-						$clredispi12->si185_cidade = $oResult12->cidade;
-						$clredispi12->si185_distrito = $oResult12->distrito;
-						$clredispi12->si185_cep = $oResult12->cep;
-						$clredispi12->si185_graulatitude = $oResult12->grauslatitude;
-						$clredispi12->si185_minutolatitude = $oResult12->minutolatitude;
-						$clredispi12->si185_segundolatitude = $oResult12->segundolatitude;
-						$clredispi12->si185_graulongitude = $oResult12->grauslongitude;
-						$clredispi12->si185_minutolongitude = $oResult12->minutolongitude;
-						$clredispi12->si185_segundolongitude = $oResult12->segundolongitude;
-						$clredispi12->si185_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-						$clredispi12->si185_reg10 = $clredispi10->si183_sequencial;// chave estrangeira
-						$clredispi12->si185_instit = db_getsession("DB_instit");
-						$clredispi12->incluir(null);
-						if ($clredispi12->erro_status == 0) {
-							throw new Exception($clredispi12->erro_msg);
-						}
-						$aDadosAgrupados12[$sHash12] = $clredispi12;
-					}
-				}
-			}
+            $clredispi12 = new cl_redispi122021();
+            $clredispi12->si185_tiporegistro = 12;
+            $clredispi12->si185_codorgaoresp = $oResult12->codorgaoresp;
+            $clredispi12->si185_codunidadesubresp = $oResult12->codunidadesubresp;
+            $clredispi12->si185_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
+            $clredispi12->si185_exercicioprocesso = $oResult12->exercicioprocesso;
+            $clredispi12->si185_nroprocesso = $oResult12->nroprocesso;
+            $clredispi12->si185_codobralocal = $oResult12->codobralocal;
+            $clredispi12->si185_logradouro = $oResult12->logradouro;
+            $clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
+            $clredispi12->si185_bairro = $oResult12->bairro;
+            $clredispi12->si185_cidade = $oResult12->cidade;
+            $clredispi12->si185_distrito = $oResult12->distrito;
+            $clredispi12->si185_cep = $oResult12->cep;
+            $clredispi12->si185_latitude = $oResult12->latitude;
+            $clredispi12->si185_longitude = $oResult12->longitude;
+            $clredispi12->si185_codbempublico = $oResult12->codbempublico;
+            $clredispi12->si185_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $clredispi12->si185_reg10 = $clredispi10->si183_sequencial; // chave estrangeira
+            $clredispi12->si185_instit = db_getsession("DB_instit");
+            $clredispi12->incluir(null);
+            if ($clredispi12->erro_status == 0) {
+              throw new Exception($clredispi12->erro_msg);
+            }
+            $aDadosAgrupados12[$sHash12] = $clredispi12;
+            //}
+          }
         }
+        //exit;
+      }
     }
 
     db_fim_transacao();
     $oGerarREDISPI = new GerarREDISPI();
     $oGerarREDISPI->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarREDISPI->gerarDados();
-
   }
-
 }

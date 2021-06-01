@@ -134,7 +134,7 @@ function js_verquant(nome,val,max,param){
     if(verpos==1){
       vltot = new Number(valpos*val);
       /*
-       *    Função js_roundDecimal() substituída pela toFixed() 
+       *    Função js_roundDecimal() substituída pela toFixed()
        */
       eval("document.form1.valor_"+param+".value='"+vltot.toFixed(2)+"'");
     }else if(verpos==2){
@@ -171,7 +171,7 @@ function js_calcvaltot(valor,param,nome){
       valor = 0;
     }
     /*
-     *    Função js_roundDecimal() substituída pela toFixed() 
+     *    Função js_roundDecimal() substituída pela toFixed()
      */
       document.getElementById("valor_"+param).value = valortotal.toFixed(2);
 
@@ -628,7 +628,17 @@ db_inputdata("pc23_validmin_$pc22_orcamitem",@$$dia,@$$mes,@$$ano,true,"text",$d
        echo "
           </td>
     <td align='center'  class='$class' width='15%'>";
-    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa != 'f') ? 1 : 3,"onchange=\"js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);\" $disabled");
+                //Tabela = Valor total Desbloqueado;
+                // Se for Taxa = Valor Total Bloqueado;
+                // Se for Outros +Item quantidade = Valor total Bloqueado;
+                // Se for Outros +Item +serviço +Controlado por VALOR = Valor Total tbm bloqueado
+                // 23/04/2021
+                if($pc01_tabela == "t") {
+                    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',1,"onchange=\"js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);\" $disabled");
+                }else{
+
+                    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',3,"onchange=\"js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);\" $disabled");
+                }
         echo"
           </td>
         </tr>";

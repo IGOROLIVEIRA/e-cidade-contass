@@ -205,6 +205,11 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
   // $cor = ($cor == 0 ? 1 : 0);
   $cor = 0;
+  if (strlen($o15_descr) > 45 ) {
+    $altcol = 2;
+  } else {
+    $altcol = 1;
+  }
 
   if($rubri_ant != $rubrica || $proxpag == true){
     if($rubri_ant != $rubrica && $rubri_ant != ""){
@@ -216,16 +221,22 @@ for($x = 0; $x < pg_numrows($result);$x++){
       $cor = 0;
     }
     $pdf->setfont('arial','',7);
-    $pdf->cell(15,$alt,$rubrica,0,0,"C",$cor);
-    $pdf->cell(75,$alt,$rh27_descr,0,0,"L",$cor);
+    $pdf->cell(15,$alt*$altcol,$rubrica,0,0,"C",$cor);
+    $pdf->cell(75,$alt*$altcol,$rh27_descr,0,0,"L",$cor);
   }else{
     $pdf->setfont('arial','',7);
-    $pdf->cell(15,$alt,"",0,0,"C",$cor);
-    $pdf->cell(75,$alt,"",0,0,"L",$cor);
+    $pdf->cell(15,$alt*$altcol,"",0,0,"C",$cor);
+    $pdf->cell(75,$alt*$altcol,"",0,0,"L",$cor);
   }
 
-  $pdf->cell(75,$alt,$rh25_recurso . " - " .$o15_descr,0,0,"L",$cor);
-  $pdf->cell(25,$alt,db_formatar($valor,"f"),0,1,"R",$cor);
+  // $pdf->cell(75,$alt*$altcol,$rh25_recurso . " - " .$o15_descr,0,0,"L",$cor);
+  $pos_x = $pdf->x;
+  $pos_y = $pdf->y;
+  $pdf->multicell(75,$alt,$rh25_recurso . " - " .$o15_descr,0,"L",0,0);
+  $pdf->x = $pos_x+75;
+  $pdf->y = $pos_y;
+
+  $pdf->cell(25,$alt*$altcol,db_formatar($valor,"f"),0,1,"R",$cor);
   $total_rub += $valor;
   $total_ger += $valor;
   $rubri_ant = $rubrica;

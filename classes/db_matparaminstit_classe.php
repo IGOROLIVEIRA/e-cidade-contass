@@ -43,11 +43,13 @@ class cl_matparaminstit {
    var $pagina_retorno = null; 
    // cria variaveis do arquivo 
    var $m10_instit = 0; 
-   var $m10_controlapit = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $m10_controlapit = 0;
+   var $m10_consumo_imediato = false;  
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  m10_instit = int4 = Código 
-                 m10_controlapit = int4 = Controla Pit 
+                 m10_controlapit = int4 = Controla Pit
+                 m10_consumo_imediato = bool = Consumo imediato automático 
                  ";
    //funcao construtor da classe 
    function cl_matparaminstit() { 
@@ -69,6 +71,12 @@ class cl_matparaminstit {
      if($exclusao==false){
        $this->m10_instit = ($this->m10_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["m10_instit"]:$this->m10_instit);
        $this->m10_controlapit = ($this->m10_controlapit == ""?@$GLOBALS["HTTP_POST_VARS"]["m10_controlapit"]:$this->m10_controlapit);
+       $this->m10_consumo_imediato = ($this->m10_consumo_imediato == ""?@$GLOBALS["HTTP_POST_VARS"]["m10_consumo_imediato"]:$this->m10_consumo_imediato);
+       if($this->m10_consumo_imediato == "t"){
+        $this->m10_consumo_imediato = "true";
+       }else{
+        $this->m10_consumo_imediato = "false";
+       }
      }else{
        $this->m10_instit = ($this->m10_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["m10_instit"]:$this->m10_instit);
      }
@@ -94,13 +102,23 @@ class cl_matparaminstit {
        $this->erro_status = "0";
        return false;
      }
+     if(($this->m10_consumo_imediato == null)){ 
+      $this->erro_sql = " Campo m10_consumo_imediato nao declarado.";
+      $this->erro_banco = "m10_consumo_imediato";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      $sql = "insert into matparaminstit(
                                        m10_instit 
-                                      ,m10_controlapit 
+                                      ,m10_controlapit
+                                      ,m10_consumo_imediato 
                        )
                 values (
                                 $this->m10_instit 
-                               ,$this->m10_controlapit 
+                               ,$this->m10_controlapit
+                               ,$this->m10_consumo_imediato  
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -168,6 +186,19 @@ class cl_matparaminstit {
          return false;
        }
      }
+     if(trim($this->m10_consumo_imediato)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m10_consumo_imediato"])){ 
+      $sql  .= $virgula." m10_consumo_imediato = $this->m10_consumo_imediato ";
+      $virgula = ",";
+      if(trim($this->m10_consumo_imediato) == null ){ 
+        $this->erro_sql = " Campo Cosumo Imediato nao Informado.";
+        $this->erro_campo = "m10_consumo_imediato";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($m10_instit!=null){
        $sql .= " m10_instit = $this->m10_instit";

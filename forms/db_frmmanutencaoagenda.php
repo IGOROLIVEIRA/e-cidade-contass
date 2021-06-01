@@ -1544,8 +1544,8 @@ if (count($aParametrosEmpenho) > 0) {
             
             if (iForma == 2) {
                 
-                var iCheque          = aMovimentos[iMov].aCells[16].getValue().trim();
-                var iCodCheque       = aMovimentos[iMov].aCells[10].getValue().trim();
+                var iCodCheque        = aMovimentos[iMov].aCells[16].getValue().trim();
+                var iCheque           = aMovimentos[iMov].aCells[10].getValue().trim();
 
             }      
 
