@@ -153,11 +153,11 @@ try {
             $data_final = data($oParam->params[0]->data_final);
             $data_conciliacao = data($oParam->params[0]->data_conciliacao);
             $saldo_final_extrato = number_format($oParam->params[0]->saldo_final_extrato, 2, ".", "");
-            // busca conciliaCÃ£o
+            // busca conciliaCão
             $oSql = $oDaoConciliacaoBancaria->sql_query_file(null, "*", null, "k171_conta = {$conta} AND k171_data = '{$data_final}' ");
             $oDaoConciliacaoBancaria->sql_record($oSql);
             $oRetorno->aLinhasExtrato = array();
-            // $oRetorno->aLinhasExtrato[] = $oParam->params[0];
+            $oRetorno->aLinhasExtrato[] = $oParam->params[0];
             // Tratativas
             if ($oDaoConciliacaoBancaria->numrows > 0) {
                 $oDaoConciliacaoBancaria->k171_conta = $conta;
@@ -174,7 +174,7 @@ try {
                 $oDaoConciliacaoBancaria->incluir();
                 // $oRetorno->aLinhasExtrato[] = $oDaoConciliacaoBancaria;
             }
-            // Preenche a movimentaCÃ£o
+            // Preenche a movimentaCão
             $oRetorno->aLinhasExtrato[] = lancamentos_conciliados($oParam->params[0]->movimentos, $conta, $data_conciliacao);
             db_fim_transacao(false);
             break;
@@ -187,9 +187,9 @@ try {
             $data_final = data($oParam->params[0]->data_final);
             $data_conciliacao = data($oParam->params[0]->data_conciliacao);
             $saldo_final_extrato = number_format($oParam->params[0]->saldo_final_extrato, 2, ".", "");
-            // busca conciliaCÃ£o
+            // busca conciliaCão
             $oRetorno->aLinhasExtrato[] = $oDaoConciliacaoBancaria->excluir(null, "k171_conta = {$conta} AND k171_data = '{$data_final}' AND k171_dataconciliacao = '{$data_conciliacao}'");
-            // Preenche a movimentaCÃ£o
+            // Preenche a movimentaCão
             $oRetorno->aLinhasExtrato[] = excluir_lancamentos_conciliados($oParam->params[0]->movimentos, $conta, $data_conciliacao);
             db_fim_transacao(false);
         break;
@@ -284,7 +284,7 @@ function movimentacao_extrato($conta, $data_inicial, $data_final, $movimentacao)
     $query = pg_query($sqlPendencias);
 
     while ($data = pg_fetch_object($query)) {
-        // RelÃ¡torio busca apenas nÃ£o conciliados
+        // Relátorio busca apenas não conciliados
         if (!conciliado($data->k173_conta, $data->k173_data, $data->k173_numcgm, $data->k173_tipomovimento, $data->k173_documento, $data->k173_codigo, $data->k173_valor, $movimentacao)) {
             $valor += $data->k173_valor;
         }
@@ -412,13 +412,13 @@ function descricaoHistorico($tipo, $codigo, $historico)
 {
     switch ($tipo) {
         case "OP":
-            return "Empenho NÂº {$codigo}";
+            return "Empenho Nº {$codigo}";
             break;
         case "SLIP":
-            return "Slip NÂº {$codigo}";
+            return "Slip Nº {$codigo}";
             break;
         case "REC":
-            return "Planilha NÂº {$codigo}";
+            return "Planilha Nº {$codigo}";
             break;
         default:
             return $historico;
@@ -789,7 +789,7 @@ function query_recibos($conta, $data_inicial, $data_final, $condicao_lancamento,
                                 left join corplacaixa on corrente.k12_id = k82_id
                                 and corrente.k12_data = k82_data
                                 and corrente.k12_autent = k82_autent
-                                /* InclusÃ£o do tipo doc */
+                                /* Inclusão do tipo doc */
                                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                                 AND conlancamcorrente.c86_data = corrente.k12_data
                                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -897,7 +897,7 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                                 inner join corautent on corautent.k12_id = corrente.k12_id
                                 and corautent.k12_data = corrente.k12_data
                                 and corautent.k12_autent = corrente.k12_autent
-                                /* InclusÃ£o do tipo doc */
+                                /* Inclusão do tipo doc */
                                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                                 AND conlancamcorrente.c86_data = corrente.k12_data
                                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1037,7 +1037,7 @@ function query_bancos($conta, $data_inicial, $data_final, $condicao_lancamento, 
                                 left join corplacaixa on corplacaixa.k82_id = corrente.k12_id
                                 and corplacaixa.k82_data = corrente.k12_data
                                 and corplacaixa.k82_autent = corrente.k12_autent
-                                /* InclusÃ£o do tipo doc */
+                                /* Inclusão do tipo doc */
                                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                                 AND conlancamcorrente.c86_data = corrente.k12_data
                                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1130,7 +1130,7 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
                 left join corautent on corautent.k12_id = corrente.k12_id
                 and corautent.k12_data = corrente.k12_data
                 and corautent.k12_autent = corrente.k12_autent
-                /* InclusÃ£o do tipo doc */
+                /* Inclusão do tipo doc */
                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                 AND conlancamcorrente.c86_data = corrente.k12_data
                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1197,7 +1197,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             left join corautent on corautent.k12_id = corrente.k12_id
             and corautent.k12_data = corrente.k12_data
             and corautent.k12_autent = corrente.k12_autent
-            /* InclusÃ£o do tipo doc */
+            /* Inclusão do tipo doc */
             LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
             AND conlancamcorrente.c86_data = corrente.k12_data
             AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1218,7 +1218,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
 }
 
 /**
- * Retorna a data da conciliaÃ§Ã£o atraves dos filtros de lancamentos
+ * Retorna a data da conciliação atraves dos filtros de lancamentos
  * @return Bool
  */
 function conciliado($conta, $data, $numcgm, $cod_doc, $documento, $cheque, $valor, $mov)

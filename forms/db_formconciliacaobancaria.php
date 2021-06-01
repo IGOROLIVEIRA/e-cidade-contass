@@ -122,7 +122,7 @@ db_app::load("widgets/windowAux.widget.js");
             <tr>
                 <td>
                     <fieldset>
-                        <legend><b>ConciliaÃ§Ã£o BancÃ¡ria</b></legend>
+                        <legend><b>Conciliação Bancária</b></legend>
                         <table width="100%">
                             <tr>
                                 <td width="50%" valign="top">
@@ -156,25 +156,25 @@ db_app::load("widgets/windowAux.widget.js");
                                                 <td><b>Tipo de Movimento:</b></td>
                                                 <td align="left" colspan="4">
                                                     <?
-                                                    $tipo_movimento = array("0" => "Todos", "E" => "Entrada", "S" => "SaÃ­da");
+                                                    $tipo_movimento = array("0" => "Todos", "E" => "Entrada", "S" => "Saída");
                                                     db_select("tipo_movimento", $tipo_movimento, true, 1, "style='width:100%'");
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><b>Tipo de LanÃ§amento:</b></td>
+                                                <td><b>Tipo de Lançamento:</b></td>
                                                 <td align="left" colspan="4">
                                                     <?
-                                                    $tipo_lancamento = array("Todos", "PGTO. EMPENHO", "EST. PGTO EMPENHO", "REC. ORÃ‡AMENTÃRIA",
-                                                    "EST. REC. ORÃ‡AMENTÃRIA", "PGTO EXTRA ORÃ‡AMENTÃRIO", "EST. PGTO EXTRA ORÃ‡AMENTÃRIO",
-                                                    "REC. EXTRA ORÃ‡AMENTÃRIA", "EST. REC. EXTRA ORÃ‡AMENTÃRIA", "PERDAS", "ESTORNO PERDAS",
-                                                    "TRANSFERÃŠNCIA", "EST. TRANSFERÃŠNCIA", "PENDÃŠNCIA", "IMPLANTAÃ‡ÃƒO");
+                                                    $tipo_lancamento = array("Todos", "PGTO. EMPENHO", "EST. PGTO EMPENHO", "REC. ORÇAMENTÁRIA",
+                                                    "EST. REC. ORÇAMENTÁRIA", "PGTO EXTRA ORÇAMENTÁRIO", "EST. PGTO EXTRA ORÇAMENTÁRIO",
+                                                    "REC. EXTRA ORÇAMENTÁRIA", "EST. REC. EXTRA ORÇAMENTÁRIA", "PERDAS", "ESTORNO PERDAS",
+                                                    "TRANSFERÊNCIA", "EST. TRANSFERÊNCIA", "PENDÊNCIA", "IMPLANTAÇÃO");
                                                     db_select("tipo_lancamento", $tipo_lancamento, true, 1, "style='width:100%'");
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><b>Data da ConciliaÃ§Ã£o:</b></td>
+                                                <td><b>Data da Conciliação:</b></td>
                                                 <td align="left">
                                                     <? db_inputdata("data_conciliacao", null, null, null, true, "text", 1) ?>
                                                 </td>
@@ -217,7 +217,7 @@ db_app::load("widgets/windowAux.widget.js");
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Total de SaÃ­das:</b>
+                                                    <b>Total de Saídas:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
@@ -237,7 +237,7 @@ db_app::load("widgets/windowAux.widget.js");
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>DiferenÃ§a:</b>
+                                                    <b>Diferença:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
@@ -262,8 +262,8 @@ db_app::load("widgets/windowAux.widget.js");
                         <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick="js_processar()" />
                         <input name="desprocessar" id='desprocessar' type="button" value='Desprocessar' onclick='js_desprocessar()' />
                         <input name="emitir_capa" id='emitir_capa' type="button" value='Emitir Capa'/>
-                        <input name="incluir_pendencias" id='incluir_pendencias' type="button" value='Incluir PendÃªncias' onclick='js_janelaPendencia()' />
-                        <input name="nova_conciliacao" id='nova_conciliacao' type="button" value='Nova ConciliaÃ§Ã£o' onclick="js_reset()" />
+                        <input name="incluir_pendencias" id='incluir_pendencias' type="button" value='Incluir Pendências' onclick='js_janelaPendencia()' />
+                        <input name="nova_conciliacao" id='nova_conciliacao' type="button" value='Nova Conciliação' onclick="js_reset()" />
                     </fieldset>
                 </td>
             <tr>
@@ -276,7 +276,7 @@ db_app::load("widgets/windowAux.widget.js");
             </tr>
             <tr>
                 <td colspan='5' align='left'>
-                    <b><span >**</span>Exibir LanÃ§amentos</b>
+                    <b><span >**</span>Exibir Lançamentos</b>
                     <br />
                     <span>
                         <fieldset>
@@ -287,11 +287,11 @@ db_app::load("widgets/windowAux.widget.js");
                             </label>
                             <input type="checkbox" id='normais' checked onclick='js_showFiltro("normal", this.checked)' />
                             <label for="normais" style='padding:1px;border: 1px solid black;background-color:white'>
-                                <b>NÃ£o Conciliados</b>
+                                <b>Não Conciliados</b>
                             </label>
                             <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("pendente", this.checked)' />
                             <label for="comMovs" style='padding:1px;border: 1px solid black;background-color:rgb(222, 184, 135)'>
-                                <b>PendÃªncia/ImplantaÃ§Ã£o</b>
+                                <b>Pendência/Implantação</b>
                             </label>
                         </fieldset>
                     </span>
@@ -319,7 +319,7 @@ db_app::load("widgets/windowAux.widget.js");
     var dados_complementares_valor_individual = new Array();
 
     // ----------------------------------------
-    // FunÃ§Ã£o verificadas
+    // Função verificadas
     js_reset();
     js_verifica_campos();
     js_init();
@@ -452,7 +452,7 @@ db_app::load("widgets/windowAux.widget.js");
     }
 
     function js_pesquisar_lancamentos() {
-        js_divCarregando("Aguarde, pesquisando LanÃ§amentos.", "msgBox");
+        js_divCarregando("Aguarde, pesquisando Lançamentos.", "msgBox");
         js_libera_botoes(false);
 
         oParam = new Object();
@@ -541,7 +541,7 @@ db_app::load("widgets/windowAux.widget.js");
             gridLancamentos.setNumRows(iTotalizador);
             $('gridLancamentosstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
         } else if (oResponse.status == 2) {
-            gridLancamentos.setStatus("<b>NÃ£o foram encontrados movimentos.</b>");
+            gridLancamentos.setStatus("<b>Não foram encontrados movimentos.</b>");
         }
     }
 
@@ -621,7 +621,7 @@ db_app::load("widgets/windowAux.widget.js");
         gridLancamentos.allowSelectColumns(true);
         gridLancamentos.setCellWidth(new Array("5%", "10%", "10%", "28%", "15%", "8%", "7%", "3%", "5%", "10%"));
         gridLancamentos.setCellAlign(new Array("center", "center", "center", "left", "left", "center", "center", "center", "right", "left"));
-        gridLancamentos.setHeader(new Array("M", "D. LanÃ§amento", "D. ConciliaÃ§Ã£o", "Credor", "Tipo", "OP/REC/SLIP", "Documento", "Mov", "Valor", "HistÃ³rico"));
+        gridLancamentos.setHeader(new Array("M", "D. Lançamento", "D. Conciliação", "Credor", "Tipo", "OP/REC/SLIP", "Documento", "Mov", "Valor", "Histórico"));
         gridLancamentos.aHeaders[1].lDisplayed = false;
         gridLancamentos.show(document.getElementById('gridLancamentos'));
         $('gridLancamentosstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
@@ -632,20 +632,20 @@ db_app::load("widgets/windowAux.widget.js");
         var dtBase      = 1;
         var iCheque     = 2;
 
-        windowLancamentoItem = new windowAux('wndChequeItem', 'InformaÃ§Ãµes Detalhadas', 1000, 250);
+        windowLancamentoItem = new windowAux('wndChequeItem', 'Informações Detalhadas', 1000, 250);
 
         var sContent = "<div class='grid_detalhamentos' id='grid_detalhamentos' style='margin: 0 auto; width: 100%; text-align: center'>";
         sContent += "       <table id='tabela-lancamentos'>";
         sContent += "           <thead>";
         sContent += "               <tr>";
-        sContent += "                   <th>D. LanÃ§amento</th>";
+        sContent += "                   <th>D. Lançamento</th>";
         sContent += "                   <th>Credor</th>";
         sContent += "                   <th>Tipo</th>";
         sContent += "                   <th>OP/REC/SLIP</th>";
         sContent += "                   <th>Documento</th>";
         sContent += "                   <th>Mov</th>";
         sContent += "                   <th>Valor</th>";
-        sContent += "                   <th>HistÃ³rico</th>";
+        sContent += "                   <th>Histórico</th>";
         sContent += "               </tr>";
         sContent += "           </thead>";
         sContent += "           <tbody>";
@@ -683,7 +683,7 @@ db_app::load("widgets/windowAux.widget.js");
     function js_janelaPendencia() {
         js_OpenJanelaIframe('top.corpo','db_iframe_extratobancariapendencia',
             'cai4_concbancpendencia001.php?novo=true&reload=true&conta=' + $F("k13_conta") + "&data_inicial=" + $F("data_inicial"),
-            'Cadastro de PendÃªncias', true);
+            'Cadastro de Pendências', true);
     }
 
     function js_processar() {
@@ -694,7 +694,7 @@ db_app::load("widgets/windowAux.widget.js");
         if (!js_validar_campos_processar(movimentos))
             return false;
 
-        js_divCarregando("Aguarde, processando LanÃ§amentos.", "msgBox");
+        js_divCarregando("Aguarde, processando Lançamentos.", "msgBox");
 
         oParam = new Object();
         oParam.conta = document.form1.k13_conta.value;
@@ -739,7 +739,7 @@ db_app::load("widgets/windowAux.widget.js");
         if (!js_validar_campos_processar(movimentos))
             return false;
 
-        js_divCarregando("Aguarde, processando LanÃ§amentos.", "msgBox");
+        js_divCarregando("Aguarde, processando Lançamentos.", "msgBox");
 
         oParam = new Object();
         oParam.conta = document.form1.k13_conta.value;
@@ -779,34 +779,34 @@ db_app::load("widgets/windowAux.widget.js");
         return lancamento;
     }
 
-    // FunÃ§Ã£o que valida os campos para o processamento da conciliaÃ§Ã£o
+    // Função que valida os campos para o processamento da conciliação
     function js_validar_campos_processar(movimentos) {
         if (movimentos.length == 0) {
-            alert("NÃ£o hÃ¡ nenhum lanÃ§amento selecionado.");
+            alert("Não há nenhum lançamento selecionado.");
             return false;
         }
 
         if ($F("data_conciliacao") == "") {
-            alert("Informe a Data da ConciliaÃ§Ã£o!");
+            alert("Informe a Data da Conciliação!");
             $F("data_conciliacao") = "";
             return false;
         }
 
         if (encerramento_contabil != "") {
             if (js_comparadata($F("data_conciliacao"), encerramento_contabil, ">")) {
-                alert("NÃ£o foi possÃ­vel processar a conciliaÃ§Ã£o pois jÃ¡ existe encerramento de perÃ­odo contÃ¡bil para esta data.");
+                alert("Não foi possível processar a conciliação pois já existe encerramento de período contábil para esta data.");
                 return false;
             }
         }
 
         if (js_comparadata($F("data_conciliacao"), $F("data_inicial"), "<") || js_comparadata($F("data_conciliacao"), $F("data_final"), ">")) {
-            alert("Data de ConciliaÃ§Ã£o fora do perÃ­odo informado!");
+            alert("Data de Conciliação fora do período informado!");
             $F("data_conciliacao") = "";
             return false;
         }
 
         if ($F("saldo_final_extrato") == "") {
-            alert("Informe o saldo final do extrato bancÃ¡rio!");
+            alert("Informe o saldo final do extrato bancário!");
             return false;
         }
 
@@ -842,5 +842,5 @@ db_app::load("widgets/windowAux.widget.js");
         sUrl = "cai4_concbancnovo002.php?conta_nova=" + $F("k13_conta") + "&data_inicial=" + js_data($F("data_inicial")) + "&data_final=" + js_data($F("data_final")) + "&saldo_extrato=" + $F("saldo_final_extrato");
         window.open(sUrl, '', 'location=0');
     }
-    // Final das funÃ§Ãµes verificadas
+    // Final das funções verificadas
 </script>

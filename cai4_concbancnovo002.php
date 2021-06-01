@@ -1160,7 +1160,7 @@ foreach ($aContas as $oConta) {
 	imprimeConta($pdf,$oConta,$lImprimeSaldo);
 	$lImprimeSaldo = false;
 	imprimeCabecalho($pdf);
-  imprimeSaldoExtratoBancario($pdf, $saldo_extrato);
+    imprimeSaldoExtratoBancario($pdf, $saldo_extrato);
 
 	// Entradas não consideradas pelo banco
 	imprimeCabecalhoSub($pdf, "(2) ENTRADAS NÃO CONSIDERADAS PELO BANCO");
