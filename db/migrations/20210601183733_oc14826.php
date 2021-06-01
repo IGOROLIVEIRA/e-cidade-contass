@@ -2,7 +2,7 @@
 
 use Classes\PostgresMigration;
 
-class Oc12629 extends PostgresMigration
+class Oc14826 extends PostgresMigration
 {
 
   public function up()
