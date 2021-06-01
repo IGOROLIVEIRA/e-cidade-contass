@@ -33,10 +33,10 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 // echo($HTTP_SERVER_VARS["QUERY_STRING"]); exit;
 
-$head1 = "Concilia√ß√£o Banc√°ria";
+$head1 = "ConciliaÁ„o Banc·ria";
 
-//$head3 = "PER√çODO : ".db_formatar(@$datai,"d")." A ".db_formatar(@$dataf,"d");
-$head3 = "PER√çODO : ".db_formatar(@$data_inicial, "d")." A ".db_formatar(@$data_final,"d");
+//$head3 = "PERÕODO : ".db_formatar(@$datai,"d")." A ".db_formatar(@$dataf,"d");
+$head3 = "PERÕODO : ".db_formatar(@$data_inicial, "d")." A ".db_formatar(@$data_final,"d");
 
 /// CONTAS MOVIMENTO
 $sql ="	    select   k13_reduz,
@@ -79,7 +79,7 @@ $sql .= " order by substr(k13_descr,1,3),k13_reduz ";
 $resultcontasmovimento = db_query($sql);
 
 if(pg_numrows($resultcontasmovimento) == 0){
-	db_redireciona('db_erros.php?fechar=true&db_erro=N√£o existem dados neste periodo.');
+	db_redireciona('db_erros.php?fechar=true&db_erro=N„o existem dados neste periodo.');
 }
 
 $saldo_dia_credito = 0;
@@ -96,14 +96,14 @@ for($linha=0;$linha<$numrows;$linha++){
 		continue;
 	}
 
-	// escreve a conta e a descri√ß√£o + saldo inicial
+	// escreve a conta e a descriÁ„o + saldo inicial
 	$aContas[$k13_reduz]->k13_reduz = $k13_reduz;
 	$aContas[$k13_reduz]->k13_descr = $k13_descr;
     $aContas[$k13_reduz]->c63_conta = $c63_conta.'-'.$c63_dvconta;
     $aContas[$k13_reduz]->c63_agencia = $c63_agencia.'-'.$c63_dvagencia;
 	$aContas[$k13_reduz]->k13_dtimplantacao = $k13_dtimplantacao;
 
-	// para contas banc√°rias, saldo positivo = debito, negativos indica debito
+	// para contas banc·rias, saldo positivo = debito, negativos indica debito
 	if ($anterior > 0 ){
 		$aContas[$k13_reduz]->debito 	= $anterior;
 		$aContas[$k13_reduz]->credito = 0;
@@ -116,7 +116,7 @@ for($linha=0;$linha<$numrows;$linha++){
 
 	// *********************  EMPENHO ***************************
 	$sqlempenho = "
-  /* empenhos- despesa or√ßamentaria */
+  /* empenhos- despesa orÁamentaria */
   /*   EMPENHO */
 
   select distinct
@@ -691,7 +691,7 @@ select caixa,
 
 			db_fieldsmemory($resmovimentacao,$i);
 
-			//quando agrupar os pagamentos o sistema vai retirar as reten√ß√µes do relatorio.
+			//quando agrupar os pagamentos o sistema vai retirar as retenÁıes do relatorio.
             if($pagempenhos==3){
 				if (  $ordem > 0 and ($k105_corgrupotipo == 5 or $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2)  ) {
 					continue;
@@ -782,7 +782,7 @@ select caixa,
 			if ($valor_debito ==0 &&  $valor_credito != 0  ){
 				//$pdf->Cell(20,$alt,'','L',0,"R",0);
 				$oMovimentacao->valor_debito = "";
-				//Modifica√ß√£o feita para acertar a forma quando √© mostrada os valores relativos as planilha de dedu√ß√£o
+				//ModificaÁ„o feita para acertar a forma quando È mostrada os valores relativos as planilha de deduÁ„o
 				if ($tipo == "planilha") {
 					$valor_credito = $valor_credito*-1;
 					$oMovimentacao->valor_credito = $valor_credito;
@@ -897,7 +897,7 @@ foreach ($aContas as $key2=>$oConta){
 	foreach ($oConta->data as $key1=>$oData){
 		//$aContasNovas[$oConta->k13_reduz]->data[$key1] = $oData;
 		foreach ($oData->movimentacoes as $oMovimento){
-			//se por baixa banc√°ria
+			//se por baixa banc·ria
 			if($receitaspor== 2 && $oMovimento->tipo == "Baixa"){
 				$controle = false;
 				foreach ($aMovimentacao as $key=>$oValor) {
@@ -920,7 +920,7 @@ foreach ($aContas as $key2=>$oConta){
 					$aMovimentacao[$chave]->ordem						= "";
 					$aMovimentacao[$chave]->numdoc					= "";
 					$aMovimentacao[$chave]->slip						= "";
-					$aMovimentacao[$chave]->contrapartida		= "Baixa Banc√°ria ref Arquivo ";
+					$aMovimentacao[$chave]->contrapartida		= "Baixa Banc·ria ref Arquivo ";
 					$aMovimentacao[$chave]->contrapartida  .= $oMovimento->arqret.", do dia ";
 					$aMovimentacao[$chave]->contrapartida  .= $oMovimento->dtarquivo.", retorno ";
 					$aMovimentacao[$chave]->contrapartida  .= $oMovimento->codret." de ";
@@ -1117,7 +1117,7 @@ $sqlPendencias = "SELECT
 $query = pg_query($sqlPendencias);
 
 while ($row = pg_fetch_object($query)) {
-	// Rel√°torio busca apenas n√£o conciliados
+	// Rel·torio busca apenas n„o conciliados
 	$pendencias[$row->k173_mov][] = $row;
 }
 
@@ -1139,7 +1139,7 @@ while ($row = pg_fetch_object($query)) {
 	$lancamentos[$movimento][] = $data;
 }
 
-// Definindo a impress√£o
+// Definindo a impress„o
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
@@ -1158,11 +1158,12 @@ foreach ($aContas as $oConta) {
 	}
 
 	imprimeConta($pdf,$oConta,$lImprimeSaldo);
+  imprimeSaldoExtratoBancario($pdf, 0, 100.00, 0);
 	$lImprimeSaldo = false;
 	imprimeCabecalho($pdf);
 
-	// Entradas n√£o consideradas pelo banco
-	imprimeCabecalhoSub($pdf, "(2) ENTRADAS N√ÉO CONSIDERADAS PELO BANCO");
+	// Entradas n„o consideradas pelo banco
+	imprimeCabecalhoSub($pdf, "(2) ENTRADAS N√O CONSIDERADAS PELO BANCO");
 	$totalMovimentacao = 0;
 	$totalMovimentacaoGeral = 0;
 	foreach ($lancamentos[1] as $lancamento) {
@@ -1183,8 +1184,8 @@ foreach ($aContas as $oConta) {
 	imprimeTotalMovConta($pdf, 0, $totalMovimentacao, 2);
 	$pdf->Ln(5);
 
-	// Sa√≠das n√£o consideradas pela contabilidade
-	imprimeCabecalhoSub($pdf, "(3) SA√çDAS N√ÉO CONSIDERADAS PELA CONTABILIDADE");
+	// SaÌdas n„o consideradas pela contabilidade
+	imprimeCabecalhoSub($pdf, "(3) SAÕDAS N√O CONSIDERADAS PELA CONTABILIDADE");
 	$totalMovimentacao = 0;
 	foreach ($pendencias[2] as $lancamento) {
 		if ($pdf->GetY() > $pdf->h - 25){
@@ -1204,8 +1205,8 @@ foreach ($aContas as $oConta) {
 	imprimeTotalMovConta($pdf, 0, $totalMovimentacao, 3);
 	$pdf->Ln(5);
 
-	// Sa√≠das n√£o consideradas pelo banco
-	imprimeCabecalhoSub($pdf, "(4) SA√≠DAS N√ÉO CONSIDERADAS PELO BANCO");
+	// SaÌdas n„o consideradas pelo banco
+	imprimeCabecalhoSub($pdf, "(4) SAÌDAS N√O CONSIDERADAS PELO BANCO");
 	$totalMovimentacao = 0;
 	foreach ($lancamentos[2] as $lancamento) {
 		if ($pdf->GetY() > $pdf->h - 25){
@@ -1225,8 +1226,8 @@ foreach ($aContas as $oConta) {
 	imprimeTotalMovConta($pdf, 0, $totalMovimentacao, 4);
 	$pdf->Ln(5);
 
-	// Entradas n√£o consideradas pela contabilidade
-	imprimeCabecalhoSub($pdf, "(5) ENTRADAS N√ÉO CONSIDERADAS PELA CONTABILIDADE");
+	// Entradas n„o consideradas pela contabilidade
+	imprimeCabecalhoSub($pdf, "(5) ENTRADAS N√O CONSIDERADAS PELA CONTABILIDADE");
 	$totalMovimentacao = 0;
 	foreach ($pendencias[1] as $lancamento) {
 		if ($pdf->GetY() > $pdf->h - 25){
@@ -1264,7 +1265,7 @@ function imprimeConta($pdf,$oConta,$lImprimeSaldo){
 	$pdf->SetFont('Arial','',8);
 	$pdf->Cell(95,5,$oConta->k13_reduz." - ".$oConta->k13_descr,0,0,"L",0);
     $pdf->SetFont('Arial','b',8);
-    $pdf->Cell(10,5,"N¬∫:"								,0,0,"L",0);
+    $pdf->Cell(10,5,"N∫:"								,0,0,"L",0);
     $pdf->SetFont('Arial','',8);
     $pdf->Cell(15,5,$oConta->c63_conta,0,0,"L",0);
     $pdf->SetFont('Arial','b',8);
@@ -1295,10 +1296,20 @@ function imprimeCabecalho($pdf){
 	$pdf->Cell(25, 5, "DATA", "T", 0, "C", 1);
 	$pdf->Cell(25, 5, "OPS/REC/SLIP", "TL", 0, "C", 1);
 	$pdf->Cell(25, 5, "DOCUMENTO", "TL", 0, "C", 1);
-	$pdf->Cell(92, 5, "HIST√ìRICO", "TL", 0, "C", 1);
+	$pdf->Cell(92, 5, "HIST”RICO", "TL", 0, "C", 1);
 	$pdf->Cell(25, 5, "VALOR", "TL", 0, "C", 1);
 	$pdf->SetFont('Arial','',7);
 	$pdf->ln();
+}
+
+function imprimeSaldoExtratoBancario($pdf, $saldo_debitado, $saldo_creditado, $total){
+    $pdf->SetFont('Arial', 'b', 8);
+    $pdf->Cell(20,5,""																	,"TB",0,"R",1);
+    $pdf->Cell(122,5, "Saldo do Extrato Banc·rio (1):" ,"TB",0,"R",1);
+    $pdf->Cell(25,5,$saldo_debitado 	== 0 ? "" : db_formatar($saldo_debitado,'f')	,"TLB",0,"R",1);
+    $pdf->Cell(25,5,$saldo_creditado	== 0 ? "" : db_formatar($saldo_creditado,'f')	,"TB",0,"R",1);
+    $pdf->ln();
+    $pdf->SetFont('Arial','',7);
 }
 
 function imprimeTotalMovConta($pdf, $saldo_debitado, $saldo_creditado, $total){
@@ -1322,7 +1333,7 @@ function imprimeTotalMovContabilidade($pdf, $saldo_debitado, $saldo_creditado){
 }
 
 /**
- * Retorna a data da concilia√ß√£o atraves dos filtros de lancamentos
+ * Retorna a data da conciliaÁ„o atraves dos filtros de lancamentos
  * @return Bool
  */
 function conciliado($conta, $data, $numcgm, $cod_doc, $documento, $cheque, $valor)
@@ -1502,7 +1513,7 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                                 inner join corautent on corautent.k12_id = corrente.k12_id
                                 and corautent.k12_data = corrente.k12_data
                                 and corautent.k12_autent = corrente.k12_autent
-                                /* Inclus√£o do tipo doc */
+                                /* Inclus„o do tipo doc */
                                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                                 AND conlancamcorrente.c86_data = corrente.k12_data
                                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1641,7 +1652,7 @@ function query_bancos($conta, $data_inicial, $data_final, $condicao_lancamento, 
                                 left join corplacaixa on corplacaixa.k82_id = corrente.k12_id
                                 and corplacaixa.k82_data = corrente.k12_data
                                 and corplacaixa.k82_autent = corrente.k12_autent
-                                /* Inclus√£o do tipo doc */
+                                /* Inclus„o do tipo doc */
                                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                                 AND conlancamcorrente.c86_data = corrente.k12_data
                                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1734,7 +1745,7 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
                 left join corautent on corautent.k12_id = corrente.k12_id
                 and corautent.k12_data = corrente.k12_data
                 and corautent.k12_autent = corrente.k12_autent
-                /* Inclus√£o do tipo doc */
+                /* Inclus„o do tipo doc */
                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                 AND conlancamcorrente.c86_data = corrente.k12_data
                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1801,7 +1812,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             left join corautent on corautent.k12_id = corrente.k12_id
             and corautent.k12_data = corrente.k12_data
             and corautent.k12_autent = corrente.k12_autent
-            /* Inclus√£o do tipo doc */
+            /* Inclus„o do tipo doc */
             LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
             AND conlancamcorrente.c86_data = corrente.k12_data
             AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -1834,16 +1845,16 @@ function descricaoHistorico($tipo, $codigo)
 {
     switch ($tipo) {
         case "OP":
-            return "Empenho N¬∫ {$codigo}";
+            return "Empenho N∫ {$codigo}";
             break;
         case "SLIP":
-            return "Slip N¬∫ {$codigo}";
+            return "Slip N∫ {$codigo}";
             break;
         case "Baixa":
-            return "Baixa N¬∫ {$codigo}";
+            return "Baixa N∫ {$codigo}";
             break;
         case "REC":
-            return "Planilha N¬∫ {$codigo}";
+            return "Planilha N∫ {$codigo}";
             break;
     }
 }
