@@ -14,11 +14,11 @@ if(isset($alterar)){
   
     db_inicio_transacao();
     $db_opcao = 2;
-  
-    $sSqlVerifica = $cldotacaorpsicom->sql_query_file(null, "*", null, "si177_numemp = {$si177_numemp}");
+
+    $sSqlVerifica = $cldotacaorpsicom->sql_query_file(null, "*", null, "si177_numemp = {$si177_numemp} and si177_sequencial != {$si177_sequencial}");
     $rsVerifica = db_query($sSqlVerifica);
   
-    if (pg_num_rows($rsVerifica) > 1) {
+    if (pg_num_rows($rsVerifica) > 0) {
      
         $cldotacaorpsicom->erro_msg = "Já existe registro para o empenho selecionado.";
         $cldotacaorpsicom->erro_status = 0;
