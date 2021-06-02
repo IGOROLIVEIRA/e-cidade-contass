@@ -83,7 +83,7 @@
   }
 
   /**
-   * Reajusta iframes setando o topo para 75 ao invés de 60 como no default
+   * Reajusta iframes setando o topo para 75 ao invï¿½s de 60 como no default
    */
   var oFrameQuadroPrincipal = parent.document.getElementById("quadroprincipal");
 
@@ -92,7 +92,7 @@
   }
 
   /**
-   * Função para controle de pull do topo
+   * Funï¿½ï¿½o para controle de pull do topo
    */
   function js_minimizaTopo(){
 
@@ -147,14 +147,14 @@
                     <li><a href="instit.php" target="corpo">Institui&ccedil;&otilde;es</a></li>
                     <li><a href="area.php" target="corpo">&Aacute;reas</a></li>
                     <li><a href="corpo.php?link='modulos'" target="corpo">M&oacute;dulos</a></li>
-                    <li><a href="acesso.php" onMouseOut="js_remDIV()" onMouseOver="js_criaDIV()" target="corpo" id="mostraPreferencias">Preferências</a></li>
+                    <li><a href="acesso.php" onMouseOut="js_remDIV()" onMouseOver="js_criaDIV()" target="corpo" id="mostraPreferencias">Preferï¿½ncias</a></li>
                     <li><a href="#" onClick="if(!confirm('Deseja realmente sair do sistema?')){ return false ; }else{ parent.window.close(); }" style="text-decoration:none;color:white" target="_top">Fechar</a></li>
                   </ul>
                 </nav>
             </div>
           </div>
 
-          <div id="logoDBSeller" ondblclick="<?php if ($lPermiteRotinaEspecial === true) { echo "js_direcionarUsuarioRotinaEspecial();"; } else { echo "js_direcionarUsuarioRotinaEspecial()"; } ?>" >
+          <div id="logoDBSeller" ondblclick="<?php if ($lPermiteRotinaEspecial === true) { echo "js_direcionarUsuarioRotinaEspecial();"; } else { echo ""; } ?>" >
             <h1>Contass</h1>
           </div>
 
