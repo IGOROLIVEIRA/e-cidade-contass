@@ -561,6 +561,11 @@ if ( isset($oPost->gerar) ) {
             }
           }
 
+          if (!empty($oPessoal->rh05_recis) && $nBaseINSS <= 0 
+            && (int) db_subdata($oPessoal->rh05_recis,"m") == $iMesUsu 
+            && (int) db_subdata($oPessoal->rh05_recis,"a") == $iAnoUsu) {
+            $nBaseINSS = 0.01;
+          }
           $aSalarioMaternidade[$oPessoal->rh01_regist] = $nSalarioMaternidade;
           $aSalarioFamilia    [$oPessoal->rh01_regist] = $nSalarioFamilia;
           $aBaseFGTS          [$oPessoal->rh01_regist] = $nBaseFGTS;

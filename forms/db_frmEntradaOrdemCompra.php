@@ -28,9 +28,11 @@
 require_once("classes/db_db_depusu_classe.php");
 require_once("classes/db_db_almoxdepto_classe.php");
 require_once("classes/db_empparametro_classe.php");
-$cldb_depusu     = new cl_db_depusu();
-$cldb_almoxdepto = new cl_db_almoxdepto();
-$clrotulo        = new rotulocampo();
+require_once("classes/db_matparaminstit_classe.php");
+$clmatparaminstit = new cl_matparaminstit;
+$cldb_depusu      = new cl_db_depusu();
+$cldb_almoxdepto  = new cl_db_almoxdepto();
+$clrotulo         = new rotulocampo();
 $clrotulo->label("nome");
 $clrotulo->label("z01_nome");
 $clrotulo->label("m51_numcgm");
@@ -286,6 +288,17 @@ if (count($aParametrosEmpenho) > 0) {
           <?php
           db_textarea("m53_obs", "", "85", '', true, 'text', 1);
           ?>
+        </td>
+        <td>
+        <?
+        $result = $clmatparaminstit->sql_record($clmatparaminstit->sql_query(DB_getsession("DB_instit")));
+          for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
+
+            $dados = db_utils::fieldsMemory($result, $iCont);
+            $valor = $dados->m10_consumo_imediato;
+          }
+        ?>
+        <input type="hidden" id="consumo_imediato" name="consumo_imediato" value="<?echo $valor;?>">
         </td>
       </tr>
     </table>
@@ -841,6 +854,7 @@ if (count($aParametrosEmpenho) > 0) {
      */
     js_removeObj("msgBox");
     js_bloqueiaLiberaBotao(false);
+    var campo_consumo_imediato = document.getElementById("consumo_imediato").value;
     
     if ($F('sJson') != '' && lSalvo == false) {
 
@@ -867,7 +881,7 @@ if (count($aParametrosEmpenho) > 0) {
       if ($F('m77_dtvalidade') != oItemAnt.m77_dtvalidade) {
         lModificado = true;
       }
-      if ($F('consumoImediato') != oItemAnt.consumoImediato) {
+      if (campo_consumo_imediato =="f" && $F('consumoImediato') != oItemAnt.consumoImediato) {
         lModificado = true;
       }
       if (lModificado) {
@@ -883,7 +897,13 @@ if (count($aParametrosEmpenho) > 0) {
     oItemAtivo = eval("(" + oAjax.responseText + ")");
     $('m77_lote').value = oItemAtivo.m77_lote;
     $('m77_dtvalidade').value = oItemAtivo.m77_dtvalidade;
-    $('consumoImediato').value = oItemAtivo.consumoImediato;
+
+    if(campo_consumo_imediato =="t"){
+      $('consumoImediato').value = oItemAtivo.m52_quant;
+    }else{
+      $('consumoImediato').value = oItemAtivo.consumoImediato;
+    }
+    
     $('qtdeRecebido').value = oItemAtivo.m52_quant;
     $('valorRecebido').value = new Number(oItemAtivo.m52_valor).toFixed(2);
     $('saldovalor').innerHTML = new Number(oItemAtivo.saldovalor).toFixed(2);
@@ -1839,7 +1859,7 @@ if (count($aParametrosEmpenho) > 0) {
         var sId = itens[i].id.replace('chk', '');
         var nValorLinha = new Number($('saldovalor' + sId).innerHTML);
         if (obj.checked == true) {
-
+          
           itens[i].checked = true;
           nValorLancado += nValorLinha;
           js_marcaItensSession(true);

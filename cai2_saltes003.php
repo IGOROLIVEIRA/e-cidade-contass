@@ -47,11 +47,20 @@ $pdf->setY(40);
 
 if ($tipo == "conta") {
 	$pdf->Cell(20, $alt, "CODIGO", "LRTB", 0, "C", 0);
-	$pdf->Cell(100, $alt, "DESCRICAO", "LRTB", 0, "C", 0);
-	$pdf->Cell(35, $alt, "SALD.ANTERIOR", "LRTB", 0, "C", 0);
-	$pdf->Cell(35, $alt, "VLR.DEBITO", "LRTB", 0, "C", 0);
-	$pdf->Cell(35, $alt, "VLR.CREDITO", "LRTB", 0, "C", 0);
-	$pdf->Cell(35, $alt, "SALDO ATUAL", "LRTB", 1, "C", 0);
+	$pdf->Cell(130, $alt, "DESCRICAO", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "SALD.ANTERIOR", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "VLR.DEBITO", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "VLR.CREDITO", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "SALDO ATUAL", "LRTB", 1, "C", 0);
+
+} else
+    if ($tipo == "recurso") {
+	$pdf->Cell(10, $alt, "R.", "LRTB", 0, "C", 0);
+	$pdf->Cell(140, $alt, "DESCRICAO", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "SALD.ANTERIOR", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "VLR.DEBITO", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "VLR.CREDITO", "LRTB", 0, "C", 0);
+	$pdf->Cell(32, $alt, "SALDO ATUAL", "LRTB", 1, "C", 0);
 
 } else {
 	$pdf->Cell(20, $alt, "R.", "LRTB", 0, "C", 0);
@@ -125,17 +134,17 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 		$valor = preg_split("/\s+/", $valor);
 
 		$pdf->Cell(20, $alt, "$k13_conta", "LRTB", 0, "C", 0);
-		$pdf->Cell(100, $alt, "$k13_descr", "LRTB", 0, "L", 0);
+		$pdf->Cell(130, $alt, "$k13_descr", "LRTB", 0, "L", 0);
 		if ($valor[0] == "2")
 			$pdf->Cell(20, $alt, "Nada no Corrente", "LRTB", 0, "L", 0);
 		else
 			if ($valor[0] == "3")
 				$pdf->Cell(20, $alt, "Nada no cfautent", "LRTB", 0, "L", 0);
 			else {
-				$pdf->Cell(35, $alt, db_formatar($valor[1], 'f'), "LRTB", 0, "R", 0);
-				$pdf->Cell(35, $alt, db_formatar($valor[2], 'f'), "LRTB", 0, "R", 0);
-				$pdf->Cell(35, $alt, db_formatar($valor[3], 'f'), "LRTB", 0, "R", 0);
-				$pdf->Cell(35, $alt, db_formatar($valor[4], 'f'), "LRTB", 0, "R", 0);
+				$pdf->Cell(32, $alt, db_formatar($valor[1], 'f'), "LRTB", 0, "R", 0);
+				$pdf->Cell(32, $alt, db_formatar($valor[2], 'f'), "LRTB", 0, "R", 0);
+				$pdf->Cell(32, $alt, db_formatar($valor[3], 'f'), "LRTB", 0, "R", 0);
+				$pdf->Cell(32, $alt, db_formatar($valor[4], 'f'), "LRTB", 0, "R", 0);
 
 				$totval1 += (float) str_replace(",", "", $valor[1]);
 				$totval2 += (float) str_replace(",", "", $valor[2]);
@@ -146,8 +155,8 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 	} else
 		if ($tipo == "recurso") { // tipo = recurso
 			// imprime recurso e totaliza contas
-			$pdf->Cell(20, $alt, "$c61_codigo", "LRTB", 0, "C", 0);
-			$pdf->Cell(100, $alt, "$o15_descr", "LRTB", 0, "L", 0);
+			$pdf->Cell(10, $alt, "$c61_codigo", "LRTB", 0, "C", 0);
+			$pdf->Cell(140, $alt, "$o15_descr", "LRTB", 0, "L", 0);
 			$sql = "select k13_conta
 									                 from saltes 
 										               inner join conplanoexe on c62_anousu = ".db_getsession("DB_anousu")."
@@ -174,10 +183,10 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 					$tval4 += (float) str_replace(",", "", $valor[4]);
 				}
 			}
-			$pdf->Cell(35, $alt, db_formatar($tval1, 'f'), "LRTB", 0, "R", 0);
-			$pdf->Cell(35, $alt, db_formatar($tval2, 'f'), "LRTB", 0, "R", 0);
-			$pdf->Cell(35, $alt, db_formatar($tval3, 'f'), "LRTB", 0, "R", 0);
-			$pdf->Cell(35, $alt, db_formatar($tval4, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(32, $alt, db_formatar($tval1, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(32, $alt, db_formatar($tval2, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(32, $alt, db_formatar($tval3, 'f'), "LRTB", 0, "R", 0);
+			$pdf->Cell(32, $alt, db_formatar($tval4, 'f'), "LRTB", 0, "R", 0);
 
 			$pdf->Ln();
 
@@ -370,11 +379,11 @@ for ($i = 0; $i < pg_numrows($result); $i ++) {
 }
 
 $pdf->Ln(7);
-$pdf->Cell(60, $alt, "Totais", "LRTB", 0, "C", 0);
-$pdf->Cell(50, $alt, "Anterior:".db_formatar($totval1, 'f'), "LRTB", 0, "R", 0);
-$pdf->Cell(50, $alt, "Debito  :".db_formatar($totval2, 'f'), "LRTB", 0, "R", 0);
-$pdf->Cell(50, $alt, "Credito :".db_formatar($totval3, 'f'), "LRTB", 0, "R", 0);
-$pdf->Cell(50, $alt, "Atual   :".db_formatar($totval4, 'f'), "LRTB", 0, "R", 0);
+$pdf->Cell(70, $alt, "Totais", "LRTB", 0, "C", 0);
+$pdf->Cell(52, $alt, "Anterior:".db_formatar($totval1, 'f'), "LRTB", 0, "R", 0);
+$pdf->Cell(52, $alt, "Debito  :".db_formatar($totval2, 'f'), "LRTB", 0, "R", 0);
+$pdf->Cell(52, $alt, "Credito :".db_formatar($totval3, 'f'), "LRTB", 0, "R", 0);
+$pdf->Cell(52, $alt, "Atual   :".db_formatar($totval4, 'f'), "LRTB", 0, "R", 0);
 
 $pdf->Output();
 ?>

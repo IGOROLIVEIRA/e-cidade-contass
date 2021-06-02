@@ -109,7 +109,7 @@ if(isset($incluir)){
                 <b>Demais Bases</b>
               </Legend>
 <?
-  $result_bases = $clrubricasesocial->sql_record($clrubricasesocial->sql_query(null,'*',null));
+  $result_bases = $clrubricasesocial->sql_record($clrubricasesocial->sql_query_file(null,'*',null));
   $numrows_bases = $clrubricasesocial->numrows;
 
   $result_selecionadas = $clbaserubricasesocial->sql_record($clbaserubricasesocial->sql_query(null,'distinct e991_rubricasesocial as bsel ,e990_descricao as dsel',null,"e991_rubricas = '$r09_rubric' and  e991_instit = ".db_getsession("DB_instit")));

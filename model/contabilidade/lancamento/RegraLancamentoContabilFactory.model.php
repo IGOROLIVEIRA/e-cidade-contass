@@ -167,6 +167,7 @@ class RegraLancamentoContabilFactory {
     ,701 => "RegraLancamentoIncorporacaoBem"
     ,702 => "RegraLancamentoIncorporacaoBem"
     ,703 => "RegraLancamentoAjusteBaixaBem"
+    ,704 => "RegraLancamentoAjusteBaixaBem"
     ,900 => "RegraLancamentoAcordo"
     ,901 => "RegraLancamentoAcordo"
     ,903 => "RegraLancamentoAcordo"
