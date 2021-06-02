@@ -6,11 +6,11 @@ class Oc14425 extends AbstractMigration
 {
     public function up()
     {
-        $this->conciliacaoBancaria();
-        $this->createTableConciliacaoBancaria();
-        $this->createTableConciliacaoBancariaPendencia();
-        $this->createTableConciliacaoBancariaLancamento();
-        $this->inserirCamposConciliacaoBancariaPendencia();
+        // $this->conciliacaoBancaria();
+        // $this->createTableConciliacaoBancaria();
+        // $this->createTableConciliacaoBancariaPendencia();
+        // $this->createTableConciliacaoBancariaLancamento();
+        // $this->inserirCamposConciliacaoBancariaPendencia();
         $this->inserirTabelasConciliacaoBancariaPendencia();
     }
 
@@ -53,6 +53,11 @@ class Oc14425 extends AbstractMigration
 
                 INSERT INTO db_sysarqcamp
                 VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia'),
+                    (SELECT codcam FROM db_syscampo WHERE nomecam = 'k173_sequencial'),
+                    (SELECT max(seqarq) + 1 FROM db_sysarqcamp WHERE codarq = (SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia')), 0);
+
+                INSERT INTO db_sysarqcamp
+                VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia'),
                     (SELECT codcam FROM db_syscampo WHERE nomecam = 'k173_conta'),
                     (SELECT max(seqarq) + 1 FROM db_sysarqcamp WHERE codarq = (SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia')), 0);
 
@@ -60,6 +65,12 @@ class Oc14425 extends AbstractMigration
                 VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia'),
                     (SELECT codcam FROM db_syscampo WHERE nomecam = 'k173_mov'),
                     (SELECT max(seqarq) + 1 FROM db_sysarqcamp WHERE codarq = (SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia')), 0);
+
+                    INSERT INTO db_syscampo
+                    VALUES (
+                        (SELECT max(codcam) + 1 FROM db_syscampo), 'k173_tipomovimento', 'int8', 'Tipo de Movimentação',
+                        NULL, 'Tipo de Movimentação', 10, TRUE, FALSE, FALSE, 1, 'text', 'Tipo de Movimentação');
+
 
                 INSERT INTO db_sysarqcamp
                 VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia'),
@@ -110,6 +121,7 @@ class Oc14425 extends AbstractMigration
             BEGIN;
             SELECT fc_startsession();
             CREATE TABLE caixa.conciliacaobancariapendencia (
+                k173_sequencial serial,
                 k173_conta int8,
                 k173_tipolancamento int4,
                 k173_mov int8,
@@ -166,6 +178,11 @@ class Oc14425 extends AbstractMigration
             BEGIN;
                 SELECT fc_startsession();
                 -- Insere novo campo
+                INSERT INTO db_syscampo
+                VALUES (
+                    (SELECT max(codcam) + 1 FROM db_syscampo), 'k173_sequencial', 'int8', 'Sequencial',
+                    NULL, 'Sequencial', 10, TRUE, FALSE, FALSE, 1, 'text', 'Sequencial');
+
                 INSERT INTO db_syscampo
                 VALUES (
                     (SELECT max(codcam) + 1 FROM db_syscampo), 'k173_conta', 'int8', 'Conta Corrente',

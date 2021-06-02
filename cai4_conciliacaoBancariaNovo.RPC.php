@@ -105,7 +105,10 @@ try {
                         $lancamentos[$chave]["movimento"] = $movimento;
                         $lancamentos[$chave]["valor"] = $valor_debito <> 0 ? $valor_debito : $valor_credito;
                         $lancamentos[$chave]["valor_individual"][] = $valor_debito <> 0 ? $valor_debito : $valor_credito;
-                        $lancamentos[$chave]["historico"] = descricaoHistorico($tipo, $codigo, $historico);
+                        if ($tipo_lancamento == 0)
+                            $lancamentos[$chave]["historico"] = descricaoHistorico($tipo, $codigo, $historico);
+                        else
+                            $lancamentos[$chave]["historico"] = "<a href='#' onclick='js_janelaPendenciaAlterarPendencia(" . $historico . ")'>(+) Mais Detalhes</a>";
                         $lancamentos[$chave]["cod_doc"][] = $cod_doc;
                         $lancamentos[$chave]["numcgm"] = $numcgm;
                         $lancamentos[$chave]["agrupado"] = false;
@@ -595,7 +598,7 @@ function query_pendencias($conta, $data_inicial, $data_final, $tipo)
                 '' as ordem,
                 z01_nome credor,
                 k173_numcgm::text numcgm,
-                k173_historico as historico
+                k173_sequencial::text as historico
             FROM
                 conciliacaobancariapendencia
             LEFT JOIN cgm ON z01_numcgm = k173_numcgm

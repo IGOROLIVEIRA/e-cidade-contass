@@ -300,7 +300,7 @@ class cl_conciliacaobancariapendencia
         }
 
         if (trim($this->k173_tipomovimento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k173_tipomovimento"])) {
-            $sql .= $virgula." k173_tipomovimento = $this->k173_tipomovimento ";
+            $sql .= $virgula." k173_tipomovimento = '$this->k173_tipomovimento' ";
             $virgula = ",";
             if (trim($this->k173_tipomovimento) == null) {
                 $this->erro_sql = " Campo Mov. não Informado.";
@@ -314,7 +314,7 @@ class cl_conciliacaobancariapendencia
         }
 
         if (trim($this->k173_historico) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k173_historico"])) {
-            $sql .= $virgula." k173_historico = $this->k173_historico ";
+            $sql .= $virgula." k173_historico = '$this->k173_historico' ";
             $virgula = ",";
             if (trim($this->k173_historico) == null) {
                 $this->erro_sql = " Campo Historico não Informado.";
@@ -384,36 +384,10 @@ class cl_conciliacaobancariapendencia
         }
 
         $sql .= " where ";
-        if ($this->k173_conta != null) {
-            $sql .= " k173_conta = $this->k173_conta ";
+        if ($this->k173_sequencial != null) {
+            $sql .= " k173_sequencial = $this->k173_sequencial ";
         }
-        if ($this->k173_data != null) {
-            $sql .= " AND k173_data = '$this->k173_data' ";
-        }
-        if ($this->k173_numcgm != null) {
-            $sql .= " AND k173_numcgm = $this->k173_numcgm ";
-        }
-        if ($this->k173_mov != null) {
-            $sql .= " AND k173_mov = $this->k173_mov ";
-        }
-        if ($this->k173_tipolancamento != null) {
-            $sql .= " AND k173_tipolancamento = $this->k173_tipolancamento ";
-        }
-        if ($this->k173_tipomovimento != null) {
-            $sql .= " AND k173_tipomovimento = $this->k173_tipomovimento ";
-        }
-        if ($this->k173_historico != null) {
-            $sql .= " AND k173_historico = '$this->k173_historico' ";
-        }
-        if ($this->k173_codigo != null) {
-            $sql .= " AND k173_codigo = '{$this->k173_codigo}' ";
-        }
-        if ($this->k173_documento != null) {
-            $sql .= " AND k173_documento = '{$this->k173_documento}' ";
-        }
-        if ($this->k173_valor != null) {
-            $sql .= " AND k173_valor = $this->k173_valor ";
-        }
+
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
         if (isset($lSessaoDesativarAccount) && $lSessaoDesativarAccount === false) {
             $resaco = $this->sql_record($this->sql_query_file($this->k173_conta));
@@ -450,6 +424,7 @@ class cl_conciliacaobancariapendencia
                 $this->erro_sql .= "Valores : " . $this->k173_conta;
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg = $sql;
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
@@ -467,11 +442,11 @@ class cl_conciliacaobancariapendencia
     }
 
     // funcao para exclusao
-    function excluir($k173_conta = null, $dbwhere = null) {
+    function excluir($k173_sequencial = null, $dbwhere = null) {
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
         if (isset($lSessaoDesativarAccount) && $lSessaoDesativarAccount === false) {
             if ($dbwhere == null || $dbwhere == "") {
-                $resaco = $this->sql_record($this->sql_query_file($k173_conta));
+                $resaco = $this->sql_record($this->sql_query_file($k173_sequencial));
             } else {
                 $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
             }
@@ -481,7 +456,7 @@ class cl_conciliacaobancariapendencia
                     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
                     $acount = pg_result($resac, 0, 0);
                     $resac = db_query("insert into db_acountacesso values($acount, ". db_getsession("DB_acessado") . ")");
-                    $resac = db_query("insert into db_acountkey values($acount, 5213, '$k173_conta', 'E')");
+                    $resac = db_query("insert into db_acountkey values($acount, 5213, '$k173_sequencial', 'E')");
                     $resac = db_query("insert into db_acount values($acount, 764, 5213, '', '" . AddSlashes(pg_result($resaco, $iresaco, 'k173_conta')) . "', " . db_getsession('DB_datausu') . ", " . db_getsession('DB_id_usuario') . ")");
                     $resac = db_query("insert into db_acount values($acount, 764, 5214, '', '" . AddSlashes(pg_result($resaco, $iresaco, 'k173_valor')) . "', " . db_getsession('DB_datausu') . ", " . db_getsession('DB_id_usuario') . ")");
                     $resac = db_query("insert into db_acount values($acount, 764, 5898, '', '" . AddSlashes(pg_result($resaco, $iresaco, 'k173_data')) . "', " . db_getsession('DB_datausu') . ", " . db_getsession('DB_id_usuario') . ")");
@@ -491,65 +466,8 @@ class cl_conciliacaobancariapendencia
         $sql = " delete from conciliacaobancariapendencia where ";
         $sql2 = "";
         if  ($dbwhere == null || $dbwhere == "") {
-            if ($this->k173_conta != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_conta = $this->k173_conta ";
-            }
-            if ($k173_data != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_data = '$this->k173_data' ";
-            }
-            if ($k173_numcmg != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_numcmg = $this->k173_numcmg ";
-            }
-            if ($k173_mov != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_mov = $this->k173_mov ";
-            }
-            if ($k173_tipolancamento != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_tipolancamento = $this->k173_tipolancamento ";
-            }
-            if ($k173_tipomovimento != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_tipomovimento = $this->k173_tipomovimento ";
-            }
-            if ($this->k173_historico != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_historico = $this->k173_historico ";
-            }
-            if ($k173_codigo != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_codigo = $this->k173_codigo ";
-            }
-            if ($k173_documento != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_documento = $this->k173_documento ";
-            }
-            if ($k173_valor != "") {
-                if ($sql2 != "") {
-                    $sql2 .= " and ";
-                }
-                $sql2 .= " k173_valor = $this->k173_valor ";
+            if ($k173_sequencial != null) {
+                $sql2 .= " conciliacaobancariapendencia.k173_sequencial = $k173_sequencial ";
             }
         } else {
             $sql2 = $dbwhere;
@@ -558,9 +476,10 @@ class cl_conciliacaobancariapendencia
         if ($result == false) {
             $this->erro_banco = str_replace("\n","",@pg_last_error());
             $this->erro_sql = "Documento Automático Lançamento nao Excluído. Exclusão Abortada.\\n";
-            $this->erro_sql .= "Valores : " . $k173_conta;
+            $this->erro_sql .= "Valores : " . $k173_sequencial;
             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_msg = $sql;
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
             return false;
@@ -568,7 +487,7 @@ class cl_conciliacaobancariapendencia
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "Documento Automático Lançamento nao Encontrado. Exclusão não Efetuada.\\n";
-                $this->erro_sql .= "Valores : " . $k173_conta;
+                $this->erro_sql .= "Valores : " . $k173_sequencial;
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -577,7 +496,7 @@ class cl_conciliacaobancariapendencia
             } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : " . $k173_conta;
+                $this->erro_sql .= "Valores : " . $k173_sequencial;
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -611,7 +530,7 @@ class cl_conciliacaobancariapendencia
         return $result;
     }
 
-    function sql_query($k173_conta = null, $campos = "*", $ordem = null, $dbwhere = "") {
+    function sql_query($k173_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "") {
         $sql = "select ";
         if ($campos != "*") {
             $campos_sql = split("#", $campos);
@@ -626,8 +545,8 @@ class cl_conciliacaobancariapendencia
         $sql .= " from conciliacaobancariapendencia ";
         $sql2 = "";
         if ($dbwhere == "") {
-            if ($k173_conta != null) {
-                $sql2 .= " where conciliacaobancariapendencia.k173_conta = $k173_conta ";
+            if ($k173_sequencial != null) {
+                $sql2 .= " where conciliacaobancariapendencia.k173_sequencial = $k173_sequencial ";
             }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere ";
@@ -645,7 +564,7 @@ class cl_conciliacaobancariapendencia
         return $sql;
     }
 
-    function sql_query_file($k173_conta = null, $campos = "*", $ordem = null, $dbwhere = "") {
+    function sql_query_file($k173_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "") {
         $sql = "select ";
         if ($campos != "*") {
             $campos_sql = split("#", $campos);
@@ -660,8 +579,8 @@ class cl_conciliacaobancariapendencia
         $sql .= " from conciliacaobancariapendencia ";
         $sql2 = "";
         if ($dbwhere == "") {
-            if ($k173_conta != null) {
-                $sql2 .= " where conciliacaobancariapendencia.k173_conta = $k173_conta ";
+            if ($k173_sequencial != null) {
+                $sql2 .= " where conciliacaobancariapendencia.k173_sequencial = $k173_sequencial ";
             }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";

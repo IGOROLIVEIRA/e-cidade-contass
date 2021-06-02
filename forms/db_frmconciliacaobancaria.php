@@ -629,8 +629,8 @@ db_app::load("widgets/windowAux.widget.js");
     }
 
     function js_janelaAgrupados(lancamentos) {
-        var dtBase      = 1;
-        var iCheque     = 2;
+        var dtBase = 1;
+        var iCheque = 2;
 
         windowLancamentoItem = new windowAux('wndChequeItem', 'Informações Detalhadas', 1000, 250);
 
@@ -684,6 +684,11 @@ db_app::load("widgets/windowAux.widget.js");
         js_OpenJanelaIframe('top.corpo','db_iframe_extratobancariapendencia',
             'cai4_concbancpendencia001.php?novo=true&reload=true&conta=' + $F("k13_conta") + "&data_inicial=" + $F("data_inicial"),
             'Cadastro de Pendências', true);
+    }
+
+    function js_janelaPendenciaAlterarPendencia(id) {
+        var url = 'cai4_concbancpendencia001.php?novo=false&reload=true&conta=' + $F("k13_conta") + "&data_inicial=" + $F("data_inicial") + "&sequencial=" + id;
+        js_OpenJanelaIframe('top.corpo','db_iframe_extratobancariapendencia', url, 'Cadastro de Pendências', true);
     }
 
     function js_processar() {
