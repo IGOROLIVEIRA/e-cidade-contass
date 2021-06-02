@@ -222,8 +222,8 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 		$sWhere .= "  and orcprojeto.o39_tipoproj=2  ";
 	}
 
-	if (isset($o39_codproj) && $o39_codproj != '') {
-		$sWhere .= " and orcprojeto.o39_codproj = {$o39_codproj} ";
+	if (isset($iCodProj) && $iCodProj != '') {
+		$sWhere .= " and orcprojeto.o39_codproj = {$iCodProj} ";
 	}
 
 	$sql .= $sWhere;

@@ -36,10 +36,12 @@ require_once("classes/db_iptubase_classe.php");
 require_once("classes/db_issbase_classe.php");
 require_once("classes/db_propri_classe.php");
 require_once("classes/db_promitente_classe.php");
+require_once("classes/db_rubricasesocial_classe.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $xtipo = "'x'";
+$clrubricasesocial = new cl_rubricasesocial;
 
 switch ($opcao) {
   case 'salario':
@@ -263,71 +265,64 @@ MM_reloadPage(true);
 <?
 
 $aDados = array();
-$aRubricasSemBase = array();
-$tipoR931 = "";
 for ($x=0;$x<pg_numrows($result);$x++) {
-  db_fieldsmemory($result,$x,true);
-  $sWhereBase = '';
-  if ($rubrica == "R931") {
-    $tipo = $tipoR931;
-  }
 
-  if ((intval($rubrica) >= 2000 && intval($rubrica) <= 3999) || $rubrica == 'R931') {
-    if ($opcao != 'rescisao') {
-      $sWhereBase = "AND e990_sequencial = '1020'";
-    } else if ($opcao == 'rescisao' && $tipo == 'P') {
-      $sWhereBase = "AND e990_sequencial = '6006'";
-      $tipoR931 = "P";
-    } else if ($opcao == 'rescisao' && $tipo == 'V') {
-      $sWhereBase = "AND e990_sequencial = '6007'";
-      if ($tipoR931 == "") {
-        $tipoR931 = "V";
+  db_fieldsmemory($result,$x,true);
+
+  /**
+   * Rúricas especiais do eSocial na rescisão
+   */
+  if ($opcao == 'rescisao') {
+
+    $rsRubEspeciais = db_query($clrubricasesocial->sql_query(null, "e990_sequencial,e990_descricao", null, "baserubricasesocial.e991_rubricas = '{$rubrica}' AND e990_sequencial IN ('1000','5001','1020')"));
+    if (pg_num_rows($rsRubEspeciais) > 0) {
+      $oRubEspeciais = db_utils::fieldsMemory($rsRubEspeciais);
+      switch ($oRubEspeciais->e990_sequencial) {
+        case '1000':
+          $rubrica = '9000';
+          $rh27_descr = 'Saldo de Salário na Rescisão';
+          break;
+        case '5001':
+          $rubrica = '9001';
+          $rh27_descr = '13º Salário na Rescisão';
+          break;
+        case '1020' && $tipo == 'P':
+          $rubrica = '9002';
+          $rh27_descr = 'Férias Proporcional na Rescisão';
+          break;
+        case '1020' && $tipo == 'V':
+          $rubrica = '9003';
+          $rh27_descr = 'Férias Vencidas na Rescisão';
+          break;
+        
+        default:
+          break;
       }
     }
-  } else if (intval($rubrica) >= 4000 && intval($rubrica) <= 5999) {
-    if ($opcao != 'rescisao') {
-      $sWhereBase = "AND e990_sequencial = '5001'";
-    } else {
-      $sWhereBase = "AND e990_sequencial = '6002'";
-    }
-  } else if ($opcao == 'salario') {
-    $sWhereBase = "AND e990_sequencial != '6000'";
-  } else if ($opcao == 'rescisao') {
-    $sWhereBase = "AND e990_sequencial != '1000'";
-  }
-  $sql = "SELECT e990_sequencial,e990_descricao FROM rubricasesocial
-  JOIN baserubricasesocial ON rubricasesocial.e990_sequencial = baserubricasesocial.e991_rubricasesocial
-  WHERE baserubricasesocial.e991_rubricas = '{$rubrica}' {$sWhereBase}";
-  $rsResult = db_query($sql);
-  $oResult = db_utils::fieldsMemory($rsResult);
-  if (pg_num_rows($rsResult) == 0) {
-    $aRubricasSemBase[] = $rubrica;
   }
   
-  if (!isset($aDados[$oResult->e990_sequencial])) {
-    $oDados = $oResult;
+  if (!isset($aDados[$rubrica])) {
+    $oDados = new stdClass();
+    $oDados->rubrica = $rubrica;
+    $oDados->rh27_descr = $rh27_descr;
     $oDados->provento = $provento;
     $oDados->desconto = $desconto;
-    $aDados[$oResult->e990_sequencial] = $oDados;
+    $aDados[$rubrica] = $oDados;
   } else {
-    $aDados[$oResult->e990_sequencial]->provento += $provento;
-    $aDados[$oResult->e990_sequencial]->desconto += $desconto;
+    $aDados[$rubrica]->provento += $provento;
+    $aDados[$rubrica]->desconto += $desconto;
   }
 }    
 $nTotalProventos = 0;
 $nTotalDescontos = 0;
-if (count($aRubricasSemBase) == 1) {
-  $aviso = "* A rubrica (".$aRubricasSemBase[0].") não se encontra marcada na base do e-Social. Faça a marcação.";
-} else if (count($aRubricasSemBase) > 1) {
-  $aviso = "* As rubricas (".implode(",",$aRubricasSemBase).") não se encontram marcadas na base do e-Social. Faça a marcação.";
-}
+
 foreach ($aDados as $oDados) {
   $nTotalProventos += $oDados->provento;
   $nTotalDescontos += $oDados->desconto;
 ?>
   <tr>
-    <td align="center" style="font-size:12px" nowrap >&nbsp;<?=$oDados->e990_sequencial?>&nbsp;</td>
-    <td align="left" style="font-size:12px" nowrap >&nbsp;<?=strtoupper(db_translate($oDados->e990_descricao))?>&nbsp;</td>
+    <td align="center" style="font-size:12px" nowrap >&nbsp;<?=$oDados->rubrica?>&nbsp;</td>
+    <td align="left" style="font-size:12px" nowrap >&nbsp;<?=strtoupper(db_translate($oDados->rh27_descr))?>&nbsp;</td>
     <td align="right" style="font-size:12px" nowrap >&nbsp;<?=db_formatar($oDados->provento,'f')?>&nbsp;</td>
     <td align="right" style="font-size:12px" nowrap >&nbsp;<?=db_formatar($oDados->desconto,'f')?>&nbsp;</td>
   </tr>

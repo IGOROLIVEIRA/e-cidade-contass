@@ -2015,7 +2015,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete29->si241_contacontabil = $oContas10->si177_contacontaabil;
                                     $obalancete29->si241_codfundo = $sCodFundo;
                                     $obalancete29->si241_atributosf = $oContas10->identificadorfinanceiro;
-                                    $obalancete29->si241_codfontrecursos = ($oContas10->identificadorfinanceiro == 'F') ? $oReg29Font->codfontrecursos : 0;
+                                    $obalancete29->si241_codfontrecursos = ($oContas10->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
                                     $obalancete29->si241_dividaconsolidada = substr($oContas10->si177_contacontaabil,0,2) == '22' ? 1 : 2;
                                     $obalancete29->si241_saldoinicialfontsf = $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior;
                                     $obalancete29->si241_naturezasaldoinicialfontsf = $oReg16Saldo->saldoanterior >= 0 ? 'D' : 'C';

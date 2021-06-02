@@ -279,6 +279,13 @@ if ( (isset($incluir) && !isset($alertconfirma)) || (isset($pontonovo) && !isset
     $rh27_descr = "";
   }
 
+  if (in_array($r90_rubric, array('9000','9001','9002','9003'))) {
+    $sqlerro = true;
+    $erro_msg = "Rubrica ".$r90_rubric." não pode ser utilizada por ser uma rúbrica automática.";
+    $r90_rubric = "";
+    $rh27_descr = "";
+  }
+
   /**
    * PONTO FIXO 
    */

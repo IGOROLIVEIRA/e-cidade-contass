@@ -208,8 +208,8 @@ if ( $numcgm == '' && $opcao != 'socios' ){
    $pdf->cell(15,4,'Área M2'     ,1,0,"C",1);
    if($j18_utilizaloc != 'f'){
     $pdf->cell(17,4,'Setorloc'   ,1,0,"C",1);
-    $pdf->cell(17,4,'Quadraloc'  ,1,0,"C",1);   
-    $pdf->cell(17,4,'Loteloc'    ,1,0,"C",1);
+    $pdf->cell(17,4,'Quadrareg'  ,1,0,"C",1);   
+    $pdf->cell(17,4,'Lotereg'    ,1,0,"C",1);
    }
    $pdf->cell(17,4,'Baixa'       ,1,0,"C",1);
    $pdf->cell(92,4,""            ,1,1,"C",1);
@@ -264,8 +264,12 @@ if ( $numcgm == '' && $opcao != 'socios' ){
         db_fieldsmemory($resultloc,0);
        }
        $pdf->cell(17,4,@$j06_setorloc  ,"B",0,"C",$lPrint);
-       $pdf->cell(17,4,@$j06_quadraloc ,"B",0,"C",$lPrint);
-       $pdf->cell(17,4,@$j06_lote      ,"B",0,"C",$lPrint);
+       
+       $sqlreg = "select j04_loteregimo,j04_quadraregimo from cadastro.iptubaseregimovel where j04_matric = $j01_matric";
+       $resultreg = pg_exec($sqlreg);
+       db_fieldsmemory($resultreg,0);       
+       $pdf->cell(17,4,@$j04_quadraregimo ,"B",0,"C",$lPrint);
+       $pdf->cell(17,4,@$j04_loteregimo      ,"B",0,"C",$lPrint);
       }
       $pdf->cell(17,4,$j01_baixa       ,"B",0,"C",$lPrint);
       $pdf->cell(92,4,""               ,"B",1,"C",$lPrint);
