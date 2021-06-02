@@ -761,7 +761,13 @@ abstract class ServidorRepository {
       $oRetorno->servidor = $oServidor;
     } else {
 
-      $iCodigoContaBancaria          = $oServidor->getContaBancaria()->salvar();
+      try {
+        $iCodigoContaBancaria  = $oServidor->getContaBancaria()->salvar();
+      } catch ( Exception $oException ) { 
+        $oRetorno->erro_msg    = $oException->getMessage();
+        $oRetorno->erro_status = 0;
+        return $oRetorno;
+      }
       $oDaoRHPessoalMovContaBancaria = new cl_rhpessoalmovcontabancaria();
       db_query("delete from rhpessoalmovcontabancaria where rh138_rhpessoalmov = {$oServidor->getCodigoMovimentacao()};");
       $oDaoRHPessoalMovContaBancaria->rh138_rhpessoalmov = $oServidor->getCodigoMovimentacao();
