@@ -12,7 +12,7 @@ class Oc14826 extends PostgresMigration
         BEGIN;
         SELECT fc_startsession();
 
-        --  Cria os documentos 166 e 167, que serão utilizados para reconhecimento de perdas.
+        --  Cria os documentos 166 e 167, que serï¿½o utilizados para reconhecimento de perdas.
         
         INSERT INTO conhistdoctipo VALUES (166, 'RECONHECIMENTO DE GANHOS RPPS');
         INSERT INTO conhistdoctipo VALUES (167, 'RECONHECIMENTO DE GANHOS RPPS - ESTORNO');
@@ -37,9 +37,9 @@ class Oc14826 extends PostgresMigration
          'SELECT 1 FROM conhistdoc WHERE c53_coddoc = 167',
          2021);
 
-        -- Criando as transações, regras e vinculando as contas para os novos documentos 166 e 167
+        -- Criando as transaï¿½ï¿½es, regras e vinculando as contas para os novos documentos 166 e 167
         
-        --Cria função temporária para buscar instituições
+        --Cria funï¿½ï¿½o temporï¿½ria para buscar instituiï¿½ï¿½es
         
         CREATE TEMP TABLE instituicoes(
             sequencial SERIAL,
@@ -77,7 +77,7 @@ class Oc14826 extends PostgresMigration
                                 AND c45_anousu = 2021
                                 AND c45_instit = r.inst
                               LIMIT 1), 
-                            9030,
+                            9500,
                             'PRIMEIRO LANCAMENTO',
                             0,
                             FALSE,
@@ -92,7 +92,7 @@ class Oc14826 extends PostgresMigration
                                 AND c45_anousu = 2021
                                 AND c45_instit = r.inst
                               LIMIT 1), 
-                            9030,
+                            9500,
                             'SEGUNDO LANCAMENTO',
                             0,
                             FALSE,
@@ -271,17 +271,17 @@ class Oc14826 extends PostgresMigration
 		-- --Cria itens do menu
         INSERT INTO db_itensmenu VALUES ((select max(id_item) + 1 from db_itensmenu),'Reconhecimento de Ganhos RPPS', 'Reconhecimento de Ganhos RPPS','',1,1,'Reconhecimento de Ganhos RPPS','t');
 
-        INSERT INTO db_menu VALUES ((SELECT id_item FROM db_itensmenu WHERE descricao = 'Operação Financeira Extra Orçamentária' LIMIT 1), (SELECT MAX(id_item) FROM db_itensmenu),  (SELECT MAX(menusequencia)+1 FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operação Financeira Extra Orçamentária' LIMIT 1)), (SELECT modulo FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operação Financeira Extra Orçamentária' LIMIT 1) LIMIT 1));
+        INSERT INTO db_menu VALUES ((SELECT id_item FROM db_itensmenu WHERE descricao = 'Operaï¿½ï¿½o Financeira Extra Orï¿½amentï¿½ria' LIMIT 1), (SELECT MAX(id_item) FROM db_itensmenu),  (SELECT MAX(menusequencia)+1 FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operaï¿½ï¿½o Financeira Extra Orï¿½amentï¿½ria' LIMIT 1)), (SELECT modulo FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operaï¿½ï¿½o Financeira Extra Orï¿½amentï¿½ria' LIMIT 1) LIMIT 1));
 
-        INSERT INTO db_itensmenu VALUES ((select max(id_item) + 1 from db_itensmenu),'Inclusão', 'Inclusão','cai4_reconhecimentodeganhosrpps001.php',1,1,'Inclusão','t');
+        INSERT INTO db_itensmenu VALUES ((select max(id_item) + 1 from db_itensmenu),'Inclusï¿½o', 'Inclusï¿½o','cai4_reconhecimentodeganhosrpps001.php',1,1,'Inclusï¿½o','t');
 
         INSERT INTO db_itensmenu VALUES ((select max(id_item) + 1 from db_itensmenu),'Estorno', 'Estorno','cai4_reconhecimentodeganhosrpps002.php',1,1,'Estorno','t');
 
-        INSERT INTO db_menu VALUES ((SELECT id_item FROM db_itensmenu WHERE descricao = 'Reconhecimento de Ganhos RPPS' LIMIT 1), (SELECT MAX(id_item)-1 FROM db_itensmenu), 1, (SELECT modulo FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operação Financeira Extra Orçamentária' LIMIT 1) LIMIT 1));
+        INSERT INTO db_menu VALUES ((SELECT id_item FROM db_itensmenu WHERE descricao = 'Reconhecimento de Ganhos RPPS' LIMIT 1), (SELECT MAX(id_item)-1 FROM db_itensmenu), 1, (SELECT modulo FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operaï¿½ï¿½o Financeira Extra Orï¿½amentï¿½ria' LIMIT 1) LIMIT 1));
 
-        INSERT INTO db_menu VALUES ((SELECT id_item FROM db_itensmenu WHERE descricao = 'Reconhecimento de Ganhos RPPS' LIMIT 1), (SELECT MAX(id_item) FROM db_itensmenu), 2, (SELECT modulo FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operação Financeira Extra Orçamentária' LIMIT 1) LIMIT 1));
+        INSERT INTO db_menu VALUES ((SELECT id_item FROM db_itensmenu WHERE descricao = 'Reconhecimento de Ganhos RPPS' LIMIT 1), (SELECT MAX(id_item) FROM db_itensmenu), 2, (SELECT modulo FROM db_menu JOIN db_itensmenu ON db_itensmenu.id_item = db_menu.id_item_filho WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Operaï¿½ï¿½o Financeira Extra Orï¿½amentï¿½ria' LIMIT 1) LIMIT 1));
 
-        -- -- Cria tipo operação slip
+        -- -- Cria tipo operaï¿½ï¿½o slip
         INSERT INTO sliptipooperacao VALUES ((SELECT MAX(k152_sequencial)+1 FROM sliptipooperacao), 'RECONHECIMENTO DE GANHOS RPPS');
           
         INSERT INTO sliptipooperacao VALUES ((SELECT MAX(k152_sequencial)+1 FROM sliptipooperacao), 'RECONHECIMENTO DE GANHOS RPPS - ESTORNO');
