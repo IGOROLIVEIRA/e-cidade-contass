@@ -1,8 +1,8 @@
 <?php
 
-use Classes\PostgresMigration;
+use Phinx\Migration\AbstractMigration;
 
-class IsertNewItensServico extends PostgresMigration
+class InsertNewItensServico extends AbstractMigration
 {
 
     public function up()
