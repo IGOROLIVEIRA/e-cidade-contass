@@ -173,7 +173,7 @@ if (isset($incluir)) {
         }
       }
 
-      $arr_possiveis = Array(2,3,4,5,6,7,8);
+      $arr_possiveis = Array(2,3,4,5,6,7,8,10);
       if(in_array($r45_situac,$arr_possiveis)){
 
         $result_pontofx = $clpontofx->sql_record($clpontofx->sql_query_file(db_anofolha(),db_mesfolha(),$r45_regist));
