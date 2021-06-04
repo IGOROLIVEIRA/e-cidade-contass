@@ -39,6 +39,8 @@ include("classes/db_pontofx_classe.php");
 include("classes/db_pontofs_classe.php");
 include("classes/db_rhrubricas_classe.php");
 include("classes/db_inssirf_classe.php");
+require_once("classes/db_assenta_classe.php");
+require_once("classes/db_afastaassenta_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clafasta = new cl_afasta;
@@ -66,6 +68,20 @@ if(isset($alterar)){
   $erro_msg = $clafasta->erro_msg;
   if($clafasta->erro_status == "0"){
     $sqlerro = true;
+  }
+  $clafastaassenta   = new cl_afastaassenta;
+  $classenta         = new cl_assenta;
+  $sSqlAfastaAssenta = $clafastaassenta->sql_query_file(null, "h81_assenta", null, " h81_afasta = {$r45_codigo}");
+  $rsAfastaAssenta   = db_query($sSqlAfastaAssenta);
+  if(pg_num_rows($rsAfastaAssenta) > 0){
+
+    $oAfastaAssenta = db_utils::fieldsmemory($rsAfastaAssenta, 0);
+    $classenta->h16_dtterm = $clafasta->r45_dtreto;
+    $classenta->alterar($oAfastaAssenta->h81_assenta);
+    if($classenta->erro_status == "0") {
+      $sqlerro  = true;
+      $erro_msg = $classenta->erro_msg;
+    }
   }
 
   if($sqlerro == false){

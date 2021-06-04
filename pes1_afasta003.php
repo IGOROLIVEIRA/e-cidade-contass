@@ -38,6 +38,8 @@ include("classes/db_pontofx_classe.php");
 include("classes/db_pontofs_classe.php");
 include("classes/db_cfpess_classe.php");
 include("classes/db_rhrubricas_classe.php");
+require_once("classes/db_assenta_classe.php");
+require_once("classes/db_afastaassenta_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clafasta          = new cl_afasta;
@@ -49,6 +51,7 @@ $clpontofs         = new cl_pontofs;
 $clcfpess          = new cl_cfpess;
 $clrhrubricas      = new cl_rhrubricas;
 $clafastaassenta   = new cl_afastaassenta;
+$classenta         = new cl_assenta;
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $db_botao = false;
 $db_opcao = 33;
@@ -57,18 +60,29 @@ if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
 
-  $sSqlAfastaAssenta = $clafastaassenta->sql_query(null, "*", null, " h81_afasta = {$r45_codigo}");
+  $sSqlAfastaAssenta = $clafastaassenta->sql_query_file(null, "h81_assenta", null, " h81_afasta = {$r45_codigo}");
   $rsAfastaAssenta   = db_query($sSqlAfastaAssenta);
 
-  if(!$rsAfastaAssenta || pg_num_rows($rsAfastaAssenta) == 0){
+  if(pg_num_rows($rsAfastaAssenta) > 0){
 
+    $oAfastaAssenta = db_utils::fieldsmemory($rsAfastaAssenta, 0);
+    $clafastaassenta->excluir(null,"h81_afasta = {$r45_codigo} and h81_assenta = {$oAfastaAssenta->h81_assenta}");
+    if ($clafastaassenta->erro_status == "0") {
+      $clafasta->erro_status = "0";
+      $clafasta->erro_msg    = $clafastaassenta->erro_msg;
+    }
+    if ($clafasta->erro_status != "0") {
+
+      $classenta->excluir(null,"h16_codigo = {$oAfastaAssenta->h81_assenta}");
+      if ($classenta->erro_status == "0") {
+        $clafasta->erro_status = "0";
+        $clafasta->erro_msg    = $classenta->erro_msg;
+      }
+    }
+
+  }
+  if ($clafasta->erro_status != "0") {
     $clafasta->excluir($r45_codigo);
-
-  } elseif(pg_num_rows($rsAfastaAssenta) > 0) {
-
-    $clafasta->erro_status = "0";
-    $clafasta->erro_msg    = 'Para a exclusão deste registro é necessário excluir o assentamento no RH vinculado ao afastamento.';
-
   }
 
   if($clafasta->erro_status != "0"){

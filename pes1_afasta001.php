@@ -39,6 +39,9 @@ require_once("classes/db_pontofx_classe.php");
 require_once("classes/db_pontofs_classe.php");
 require_once("classes/db_rhrubricas_classe.php");
 require_once("classes/db_inssirf_classe.php");
+require_once("classes/db_assenta_classe.php");
+require_once("classes/db_tipoasse_classe.php");
+require_once("classes/db_afastaassenta_classe.php");
 require_once("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_POST_VARS);
@@ -136,19 +139,39 @@ if (isset($incluir)) {
     if($sqlerro == false){
 
       /**
-       * Incluimos na tabela assenta e criamos uma relação entre os assentamentos do pessoal e do rh
-       * incluindo as chaves na tabela afastaassenta
+       * $r45_situac == 2 - Afastado sem remuneração
+       * $r45_situac == 7 - Licença sem vencimento, cessão sem ônus
        */
-  
-      $classenta             = new cl_assenta();
-      $classenta->h16_histor = $h16_histor;
-      $classenta->h16_hist2  = '';
-      $classenta->h16_perc   = "0";
-      $classenta->h16_dtlanc = date("Y-m-d",db_getsession("DB_datausu"));
-      $classenta->h16_conver = "false";
-      $classenta->h16_login  = db_getsession("DB_id_usuario");
-      $classenta->h16_assent = $h16_assent;
-      $classenta->incluir($h16_codigo);
+      if (in_array($r45_situac, array(2,7))) {
+
+        $classenta  = new cl_assenta();
+        $cltipoasse = new cl_tipoasse();
+        $clafastaassenta   = new cl_afastaassenta;
+        
+        $classenta->h16_dtconc = $r45_dtafas;
+        $classenta->h16_dtterm = $r45_dtreto;
+        $classenta->h16_regist = $r45_regist;
+        $classenta->h16_histor = $h16_histor;
+        $classenta->h16_hist2  = '';
+        $classenta->h16_perc   = "0";
+        $classenta->h16_dtlanc = date("Y-m-d",db_getsession("DB_datausu"));
+        $classenta->h16_conver = "false";
+        $classenta->h16_login  = db_getsession("DB_id_usuario");
+        $classenta->h16_assent = db_utils::fieldsMemory(db_query($cltipoasse->sql_query_file(null,"h12_codigo",null,"trim(h12_assent) = 'LTIP'")), 0)->h12_codigo;
+        $classenta->incluir(null);
+        if($clafasta->erro_status == "0") {
+          $sqlerro  = true;
+          $erro_msg = $classenta->erro_msg;
+        }
+
+        $clafastaassenta->h81_afasta = $clafasta->r45_codigo;
+        $clafastaassenta->h81_assenta = $classenta->h16_codigo;
+        $clafastaassenta->incluir(null);
+        if($clafasta->erro_status == "0") {
+          $sqlerro  = true;
+          $erro_msg = $clafastaassenta->erro_msg;
+        }
+      }
 
       $arr_possiveis = Array(2,3,4,5,6,7,8);
       if(in_array($r45_situac,$arr_possiveis)){
