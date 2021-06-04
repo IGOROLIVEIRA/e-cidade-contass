@@ -509,6 +509,7 @@ oHint  = new oDbHint("oHint");
                                            when '6' then 'Doença'
                                            when '7' then 'Sem Vencimentos/Sem Ônus'
                                            when '8' then 'Doença'
+                                           when '10' then 'Afastado doença -15 dias'
                                       end as r45_situac,
                                       r45_dtafas,
                                       r45_dtreto,
