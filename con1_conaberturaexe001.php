@@ -276,7 +276,7 @@ if (isset($p->incluir)) {
           $clconplano->c60_tipolancamento          = $oConp->c60_tipolancamento;
           $clconplano->c60_desdobramneto           = $oConp->c60_desdobramneto;
           $clconplano->c60_subtipolancamento       = $oConp->c60_subtipolancamento;
-          $clconplano->c60_nregobrig			         = $oConp->c60_nregobrig==''?1:$oConp->c60_nregobrig;
+          $clconplano->c60_nregobrig			   = $oConp->c60_nregobrig == '' ? 1 : $oConp->c60_nregobrig;
           $clconplano->c60_cgmpessoa               = $oConp->c60_cgmpessoa;
           $clconplano->c60_naturezadareceita       = $oConp->c60_naturezadareceita;
           $clconplano->c60_infcompmsc              = $oConp->c60_infcompmsc;
@@ -317,7 +317,7 @@ if (isset($p->incluir)) {
                                                                         null,
         																																"*",
                                                                         "",
-                                                                        "c60_anousu={$clconaberturaexe->c91_anousuorigem}");
+                                                                        "c60_anousu={$clconaberturaexe->c91_anousuorigem} AND substr(c60_estrut,1,1) IN ('3','4') ");
         $rsPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
         $iNumRows            = $oDaoPlanoOrcamentario->numrows;
         if ($iNumRows > 0) {
@@ -336,7 +336,21 @@ if (isset($p->incluir)) {
             $oDaoPlanoOrcamentario->c60_codcla                  = $oPlanoOrcarmento->c60_codcla;
             $oDaoPlanoOrcamentario->c60_consistemaconta         = $oPlanoOrcarmento->c60_consistemaconta;
             $oDaoPlanoOrcamentario->c60_identificadorfinanceiro = $oPlanoOrcarmento->c60_identificadorfinanceiro;
-            $oDaoPlanoOrcamentario->c60_naturezasaldo           = $oPlanoOrcarmento->c60_naturezasaldo;
+            
+            if ($oPlanoOrcarmento->c60_naturezasaldo == "" || $oPlanoOrcarmento->c60_naturezasaldo == NULL) {
+                
+                if (substr($oPlanoOrcarmento->c60_estrut,0,1) == 3) {
+                    $oDaoPlanoOrcamentario->c60_naturezasaldo = 1;
+                } elseif (substr($oPlanoOrcarmento->c60_estrut,0,1) == 4) {
+                    $oDaoPlanoOrcamentario->c60_naturezasaldo = 2;
+                } else {
+                    $oDaoPlanoOrcamentario->c60_naturezasaldo = 0;
+                }
+
+            } else {
+                $oDaoPlanoOrcamentario->c60_naturezasaldo = $oPlanoOrcarmento->c60_naturezasaldo;
+            }
+            
             $oDaoPlanoOrcamentario->c60_funcao                  = addslashes($oPlanoOrcarmento->c60_funcao == "" ? "" : $oPlanoOrcarmento->c60_funcao);
             $oDaoPlanoOrcamentario->incluir($oPlanoOrcarmento->c60_codcon, $oDaoPlanoOrcamentario->c60_anousu);
 
@@ -491,6 +505,7 @@ if (isset($p->incluir)) {
           $clconplanoconta->c63_dvconta       = $oConc->c63_dvconta == '' ? 'x' : $oConc->c63_dvconta;
           $clconplanoconta->c63_dvagencia     = $oConc->c63_dvagencia == '' ? 'x' : $oConc->c63_dvagencia;
           $clconplanoconta->c63_identificador = $oConc->c63_identificador == '' ? 0 : $oConc->c63_identificador;
+          $clconplanoconta->c63_codigooperacao = $oConc->c63_codigooperacao == '' ? 0 : $oConc->c63_codigooperacao;
           $clconplanoconta->incluir($oConc->c63_codcon, $clconplanoconta->c63_anousu);
 
           if ($clconplanoconta->erro_status == "0") {
@@ -512,7 +527,8 @@ if (isset($p->incluir)) {
     $iNumRows           = 0;
     $oDaoOrcamentoConta = db_utils::getDao("conplanoorcamentoconta");
     $sWhere             = "c63_anousu = {$clconaberturaexe->c91_anousudestino}";
-    $sSqlOrcamentoConta = $oDaoOrcamentoConta->sql_query_file (null, null, "1", null, $sWhere);
+    $sWhere             .= " and substr(c60_estrut,1,1) IN ('3','4')";
+    $sSqlOrcamentoConta = $oDaoOrcamentoConta->sql_query_conplanoorcamento (null, null, "1", null, $sWhere);
     $rsOrcamentoConta   = $oDaoOrcamentoConta->sql_record($sSqlOrcamentoConta);
     $iNumRows           = $oDaoOrcamentoConta->numrows;
 
@@ -522,7 +538,8 @@ if (isset($p->incluir)) {
       $iNumRows           = 0;
       $rsOrcamentoConta   = null;
       $sWhere             = "c63_anousu = {$clconaberturaexe->c91_anousuorigem}";
-      $sSqlOrcamentoConta = $oDaoOrcamentoConta->sql_query_file (null,
+      $sWhere             .= " and substr(c60_estrut,1,1) IN ('3','4')";
+      $sSqlOrcamentoConta = $oDaoOrcamentoConta->sql_query_conplanoorcamento (null,
                                                                  null,
                                                                  "*",
                                                                  "",
@@ -984,7 +1001,7 @@ if (isset($p->incluir)) {
 
     $rsConpCtaCor = $clconplanocontacorrente->sql_record($sqlConpCtaCor);
 
-    if ($rsConpCtaCor->numrows > 0) {
+    if (pg_num_rows($rsConpCtaCor) > 0) {
 
       ( int ) $iNumRows = $clconplanocontacorrente->numrows;
       for($i = 0; $i < $iNumRows; $i ++) {
@@ -997,7 +1014,7 @@ if (isset($p->incluir)) {
         $clconplanocontacorrente->c18_anousu        = $clconaberturaexe->c91_anousudestino;
         $clconplanocontacorrente->c18_contacorrente = $oConpCtaCor->c18_contacorrente;
 
-        $clconplanocontacorrente->incluir($oConpCtaCor->c18_codcon, $clconaberturaexe->c91_anousudestino);
+        $clconplanocontacorrente->incluir($oConpCtaCor->c18_sequencial);
 
         if ($clconplanocontacorrente->erro_status == "0") {
 
@@ -1027,7 +1044,7 @@ if (isset($p->incluir)) {
 
     $rsConpCtaBanc = $clconplanocontabancaria->sql_record($sqlConpCtaBanc);
 
-    if ($rsConpCtaBanc->numrows > 0) {
+    if (pg_num_rows($rsConpCtaBanc) > 0) {
 
       ( int ) $iNumRows = $clconplanocontabancaria->numrows;
       for($i = 0; $i < $iNumRows; $i ++) {
@@ -1040,7 +1057,7 @@ if (isset($p->incluir)) {
         $clconplanocontabancaria->c56_anousu        = $clconaberturaexe->c91_anousudestino;
         $clconplanocontabancaria->c56_codcon        = $oConpCtaBanc->c56_codcon;
 
-        $clconplanocontabancaria->incluir($oConpCtaBanc->c56_codcon, $clconaberturaexe->c91_anousudestino);
+        $clconplanocontabancaria->incluir($oConpCtaBanc->c56_sequencial);
 
         if ($clconplanocontabancaria->erro_status == "0") {
 

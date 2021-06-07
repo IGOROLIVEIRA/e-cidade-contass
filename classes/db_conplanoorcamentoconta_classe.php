@@ -604,5 +604,48 @@ class cl_conplanoorcamentoconta {
      }
      return $sql;
   }
+
+  function sql_query_conplanoorcamento ( $c63_codcon=null,$c63_anousu=null,$campos="*",$ordem=null,$dbwhere=""){ 
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from conplanoorcamentoconta ";
+    $sql .= "      inner join conplanoorcamento  on  conplanoorcamento.c60_codcon = conplanoorcamentoconta.c63_codcon and  conplanoorcamento.c60_anousu = conplanoorcamentoconta.c63_anousu";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($c63_codcon!=null ){
+        $sql2 .= " where conplanoorcamentoconta.c63_codcon = $c63_codcon "; 
+      } 
+      if($c63_anousu!=null ){
+        if($sql2!=""){
+           $sql2 .= " and ";
+        }else{
+           $sql2 .= " where ";
+        } 
+        $sql2 .= " conplanoorcamentoconta.c63_anousu = $c63_anousu "; 
+      } 
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+ }
 }
 ?>
