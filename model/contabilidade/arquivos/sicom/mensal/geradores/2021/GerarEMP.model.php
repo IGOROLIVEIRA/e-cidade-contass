@@ -43,14 +43,13 @@ class GerarEMP extends GerarAM
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
-
     }
 
     /**
      *
      * Registros 10, 11, 12
      */
-    if (pg_num_rows($rsEMP10) > 0){
+    if (pg_num_rows($rsEMP10) > 0) {
       for ($iCont = 0; $iCont < pg_num_rows($rsEMP10); $iCont++) {
 
         $aEMP10 = pg_fetch_array($rsEMP10, $iCont);
@@ -73,7 +72,10 @@ class GerarEMP extends GerarAM
         $aCSVEMP10['si106_especificacaoempenho']          = substr($aEMP10['si106_especificacaoempenho'], 0, 200);
         $aCSVEMP10['si106_despdeccontrato']               = $this->padLeftZero($aEMP10['si106_despdeccontrato'], 1);
         $aCSVEMP10['si106_codorgaorespcontrato']          = $aEMP10['si106_codorgaorespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codorgaorespcontrato'], 2); // campo 18
-        $aCSVEMP10['si106_codunidadesubrespcontrato']     = $aEMP10['si106_codunidadesubrespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubrespcontrato'], 5); // campo 19
+        if (strlen($aEMP10['si106_codunidadesubrespcontrato']) > 5)
+          $aCSVEMP10['si106_codunidadesubrespcontrato']     = $aEMP10['si106_codunidadesubrespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubrespcontrato'], 8); // campo 19
+        else
+          $aCSVEMP10['si106_codunidadesubrespcontrato']     = $aEMP10['si106_codunidadesubrespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubrespcontrato'], 5); // campo 19
         $aCSVEMP10['si106_nrocontrato']                   = $aEMP10['si106_nrocontrato'] == 0 ? ' ' : substr($aEMP10['si106_nrocontrato'], 0, 14); // campo 20
         $aCSVEMP10['si106_dtassinaturacontrato']          = $aEMP10['si106_dtassinaturacontrato'] == '' ? ' ' : $this->sicomDate($aEMP10['si106_dtassinaturacontrato']); // campo 21
         $aCSVEMP10['si106_nrosequencialtermoaditivo']     = $aEMP10['si106_nrosequencialtermoaditivo'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_nrosequencialtermoaditivo'], 2);  // campo 22
@@ -112,7 +114,6 @@ class GerarEMP extends GerarAM
             $this->sLinha = $aCSVEMP11;
             $this->adicionaLinha();
           }
-
         }
 
         for ($iCont3 = 0; $iCont3 < pg_num_rows($rsEMP12); $iCont3++) {
@@ -130,20 +131,18 @@ class GerarEMP extends GerarAM
             $this->sLinha = $aCSVEMP12;
             $this->adicionaLinha();
           }
-
         }
-
       }
     }
 
     /**
      * Registro 30
      */
-    if(pg_num_rows($rsEMP30) > 0) {
+    if (pg_num_rows($rsEMP30) > 0) {
 
       for ($iCont30 = 0; $iCont30 < pg_num_rows($rsEMP30); $iCont30++) {
         $aEMP30 = pg_fetch_array($rsEMP30, $iCont30);
-  
+
         $aCSVEMP30['si206_tiporegistro']                  = $this->padLeftZero($aEMP30['si206_tiporegistro'], 2);
         $aCSVEMP30['si206_codorgao']                      = $this->padLeftZero($aEMP30['si206_codorgao'], 2);
         $aCSVEMP30['si206_codunidadesub']                 = $aEMP30['si206_codunidadesub'];
@@ -158,13 +157,13 @@ class GerarEMP extends GerarAM
         $aCSVEMP30['si206_dtassinaturaconvenio']          = $aEMP30['si206_dtassinaturaconvenio'] == '' ? ' ' : $this->sicomDate($aEMP30['si206_dtassinaturaconvenio']);  // campo 25
         $aCSVEMP30['si206_nroconvenioconge']              = $aEMP30['si206_nroconvenioconge'] == 0 ? ' ' : substr($aEMP30['si206_nroconvenioconge'], 0, 30); // campo 27
         $aCSVEMP30['si206_dtassinaturaconge']             = $aEMP30['si206_dtassinaturaconge'] == 0 ? ' ' : substr($aEMP30['si206_dtassinaturaconge'], 0, 30); // campo 28
-  
+
         $this->sLinha = $aCSVEMP30;
         $this->adicionaLinha();
       }
     }
 
-    if(pg_num_rows($rsEMP20) > 0) {
+    if (pg_num_rows($rsEMP20) > 0) {
       /**
        * Ao que parece, não tá gerando
        * Registros 20
@@ -175,9 +174,9 @@ class GerarEMP extends GerarAM
 
         $aCSVEMP20['si109_tiporegistro']    = $this->padLeftZero($aEMP20['si109_tiporegistro'], 2);
         $aCSVEMP20['si109_codorgao']        = $this->padLeftZero($aEMP20['si109_codorgao'], 2);
-//        $aCSVEMP20['si109_codunidadesub'] = $this->padLeftZero($aEMP20['si109_tiporegistro'], 8);
+        //        $aCSVEMP20['si109_codunidadesub'] = $this->padLeftZero($aEMP20['si109_tiporegistro'], 8);
         $aCSVEMP20['si109_codunidadesub']   = $this->padLeftZero($aEMP20['si109_codunidadesub'], 8, strlen($aEMP20['si109_codunidadesub']) > 5 ? 8 : 5);
-//        $aCSVEMP20['si109_nroempenho'] = substr($aEMP20['si109_descrmovimentacao'], 0, 22);
+        //        $aCSVEMP20['si109_nroempenho'] = substr($aEMP20['si109_descrmovimentacao'], 0, 22);
         $aCSVEMP20['si109_nroempenho']      = substr($aEMP20['si109_nroempenho'], 0, 22);
         $aCSVEMP20['si109_dtempenho']       = $this->sicomDate($aEMP20['si109_dtempenho']);
         $aCSVEMP20['si109_nroreforco']      = substr($aEMP20['si109_nroreforco'], 0, 22);
@@ -187,11 +186,9 @@ class GerarEMP extends GerarAM
 
         $this->sLinha = $aCSVEMP20;
         $this->adicionaLinha();
-
       }
     }
 
-      $this->fechaArquivo();
-
+    $this->fechaArquivo();
   }
 }
