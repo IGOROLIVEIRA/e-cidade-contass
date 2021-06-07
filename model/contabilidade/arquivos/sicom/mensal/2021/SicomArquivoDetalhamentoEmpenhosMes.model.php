@@ -533,7 +533,6 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         } else {
           $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->manutac_codunidsubanterior; // campo 19
         }
-
         $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->nrocontrato; // campo 20
         $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
         $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oEmpenho10->nrosequencialtermoaditivo; // campo 22
