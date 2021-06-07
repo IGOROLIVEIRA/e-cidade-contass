@@ -11,10 +11,24 @@ $cldotacaorpsicom = new cl_dotacaorpsicom;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $cldotacaorpsicom->alterar($si177_sequencial);
-  db_fim_transacao();
+  
+    db_inicio_transacao();
+    $db_opcao = 2;
+
+    $sSqlVerifica = $cldotacaorpsicom->sql_query_file(null, "*", null, "si177_numemp = {$si177_numemp} and si177_sequencial != {$si177_sequencial}");
+    $rsVerifica = db_query($sSqlVerifica);
+  
+    if (pg_num_rows($rsVerifica) > 0) {
+     
+        $cldotacaorpsicom->erro_msg = "Já existe registro para o empenho selecionado.";
+        $cldotacaorpsicom->erro_status = 0;
+
+    } else {
+    
+        $cldotacaorpsicom->alterar($si177_sequencial);
+        db_fim_transacao();
+
+    }
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
    $result = $cldotacaorpsicom->sql_record($cldotacaorpsicom->sql_query($chavepesquisa)); 

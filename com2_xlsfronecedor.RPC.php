@@ -40,7 +40,9 @@ switch($oParam->exec) {
         db_fieldsmemory($result_fornecedores,0);
 
         //monto o nome do arquivo
-        $arquivo = "libs/Pat_xls_import/prc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
+        $dir = "libs/Pat_xls_import/";
+        $files1 = scandir($dir,1);
+        $arquivo = "libs/Pat_xls_import/".$files1[0];
 
         //verificar se existe o arquivo
         if (!file_exists($arquivo)) {
@@ -111,7 +113,9 @@ switch($oParam->exec) {
         db_fieldsmemory($result_fornecedores,0);
 
         //monto o nome do arquivo
-        $arquivo = "libs/Pat_xls_import/licprc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
+        $dir = "libs/Pat_xls_import/";
+        $files1 = scandir($dir,1);
+        $arquivo = "libs/Pat_xls_import/".$files1[0];
 
         //verificar se existe o arquivo
         if (!file_exists($arquivo)) {
