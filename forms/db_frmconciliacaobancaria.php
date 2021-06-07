@@ -165,10 +165,10 @@ db_app::load("widgets/windowAux.widget.js");
                                                 <td><b>Tipo de Lançamento:</b></td>
                                                 <td align="left" colspan="4">
                                                     <?
-                                                    $tipo_lancamento = array("Todos", "PGTO. EMPENHO", "EST. PGTO EMPENHO", "REC. ORÇAMENTÁRIA",
-                                                    "EST. REC. ORÇAMENTÁRIA", "PGTO EXTRA ORÇAMENTÁRIO", "EST. PGTO EXTRA ORÇAMENTÁRIO",
-                                                    "REC. EXTRA ORÇAMENTÁRIA", "EST. REC. EXTRA ORÇAMENTÁRIA", "PERDAS", "ESTORNO PERDAS",
-                                                    "TRANSFERÊNCIA", "EST. TRANSFERÊNCIA", "PENDÊNCIA", "IMPLANTAÇÃO");
+                                                    $tipo_lancamento = array("Todos", "PGTO. EMPENHO", "EST. PGTO EMPENHO", "REC. ORCAMENTARIA",
+                                                    "EST. REC. ORCAMENTARIA", "PGTO EXTRA ORCAMENTARIA", "EST. PGTO EXTRA ORCAMENTARIA",
+                                                    "REC. EXTRA ORCAMENTARIA", "EST. REC. EXTRA ORCAMENTARIA", "PERDAS", "ESTORNO PERDAS",
+                                                    "TRANSFERENCIA", "EST. TRANSFERENCIA", "PENDENCIA", "IMPLANTACAO");
                                                     db_select("tipo_lancamento", $tipo_lancamento, true, 1, "style='width:100%'");
                                                     ?>
                                                 </td>
@@ -259,7 +259,7 @@ db_app::load("widgets/windowAux.widget.js");
                 <td colspan='4' style='text-align: center'>
                     <fieldset>
                         <input name="pesquisar" id='pesquisar' type="button"  value="Pesquisar" onclick='js_pesquisar_lancamentos();' />
-                        <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick="js_processar()" />
+                        <input name="atualizar" id='atualizar' type="button"  value="Conciliar" onclick="js_processar()" />
                         <input name="desprocessar" id='desprocessar' type="button" value='Desprocessar' onclick='js_desprocessar()' />
                         <input name="emitir_capa" id='emitir_capa' type="button" value='Emitir Capa'/>
                         <input name="incluir_pendencias" id='incluir_pendencias' type="button" value='Incluir Pendências' onclick='js_janelaPendencia()' />
@@ -371,7 +371,12 @@ db_app::load("widgets/windowAux.widget.js");
     }
 
     function js_verifica_datas() {
-        if (document.form1.data_inicial.value > document.form1.data_final.value) {
+        var dataInicial = document.form1.data_inicial.value;
+        var dataInicial = new Date(dataInicial.split('/').reverse().join('/'));
+        var dataFinal = document.form1.data_final.value;
+        var dataFinal = new Date(dataFinal.split('/').reverse().join('/'));
+      // dataInicial = new Date(document.form1.data_inicialdia.value,qualmesi,evaldiai.value);
+        if (dataInicial > dataFinal) {
             alert("Data Final inferior a Data Inicial!");
             document.form1.data_final.value = '';
             document.form1.data_final.focus();
@@ -658,7 +663,7 @@ db_app::load("widgets/windowAux.widget.js");
             sContent += "                   <td>" + data.op_rec_slip + "</td>";
             sContent += "                   <td>" + data.documento + "</td>";
             sContent += "                   <td>" + data.movimento + "</td>";
-            sContent += "                   <td>" + js_formatar(data.valor, "f"); + "</td>";
+            sContent += "                   <td style='text-align: right'>" + js_formatar(data.valor, "f"); + "</td>";
             sContent += "                   <td>" + data.historico + "</td>";
             sContent += "           </tr>";
         });
@@ -683,7 +688,7 @@ db_app::load("widgets/windowAux.widget.js");
     function js_janelaPendencia() {
         js_OpenJanelaIframe('top.corpo','db_iframe_extratobancariapendencia',
             'cai4_concbancpendencia001.php?novo=true&reload=true&conta=' + $F("k13_conta") + "&data_inicial=" + $F("data_inicial"),
-            'Cadastro de Pendências', true);
+            'Cadastro de Pend?ncias', true);
     }
 
     function js_janelaPendenciaAlterarPendencia(id) {
@@ -811,7 +816,7 @@ db_app::load("widgets/windowAux.widget.js");
         }
 
         if ($F("saldo_final_extrato") == "") {
-            alert("Informe o saldo final do extrato bancário!");
+            alert("Informe o saldo final do extrato banc?rio!");
             return false;
         }
 

@@ -82,7 +82,7 @@ try {
                     $agrupado[$chave][] = array("identificador" => $caixa,
                             "data_lancamento" => date("d/m/Y", strtotime($data)),
                             "data_conciliacao" => $data_conciliacao ? date("d/m/Y", strtotime($data_conciliacao)) : "",
-                            "credor" => $credor,
+                            "credor" => utf8_encode($credor),
                             "numcgm" => $numcgm,
                             "tipo" => descricaoTipoLancamento($cod_doc),
                             "op_rec_slip" => !$documento ? "" : $documento,
@@ -130,14 +130,14 @@ try {
                     $oDadosLinha->identificador = $lancamento["caixa"];
                     $oDadosLinha->data_lancamento  = $lancamento["data_lancamento"];
                     $oDadosLinha->data_conciliacao = $lancamento["data_conciliacao"];
-                    $oDadosLinha->credor = $lancamento["credor"];
+                    $oDadosLinha->credor = utf8_encode($lancamento["credor"]);
                     $oDadosLinha->tipo = $lancamento["tipo"];
                     $oDadosLinha->op_rec_slip = $lancamento["op_rec_slip"];
                     $oDadosLinha->documento = $lancamento["documento"];
                     $oDadosLinha->movimento = $lancamento["movimento"];
                     $oDadosLinha->valor_individual = $lancamento["valor_individual"];
                     $oDadosLinha->valor = abs($lancamento["valor"]);
-                    $oDadosLinha->historico = $lancamento["historico"];
+                    $oDadosLinha->historico = utf8_encode($lancamento["historico"]);
                     $oDadosLinha->numcgm = $lancamento["numcgm"];
                     $oDadosLinha->cod_doc = $lancamento["cod_doc"];
                     $oDadosLinha->tipo_lancamento = $lancamento["tipo_lancamento"];
@@ -155,7 +155,7 @@ try {
             $data_final = data($oParam->params[0]->data_final);
             $data_conciliacao = data($oParam->params[0]->data_conciliacao);
             $saldo_final_extrato = number_format($oParam->params[0]->saldo_final_extrato, 2, ".", "");
-            // busca conciliaCão
+            // busca conciliação
             $oSql = $oDaoConciliacaoBancaria->sql_query_file(null, "*", null, "k171_conta = {$conta} AND k171_data = '{$data_final}' ");
             $oDaoConciliacaoBancaria->sql_record($oSql);
             $oRetorno->aLinhasExtrato = array();
@@ -176,7 +176,7 @@ try {
                 $oDaoConciliacaoBancaria->incluir();
                 // $oRetorno->aLinhasExtrato[] = $oDaoConciliacaoBancaria;
             }
-            // Preenche a movimentaCão
+            // Preenche a movimentaCï¿½o
             $oRetorno->aLinhasExtrato[] = lancamentos_conciliados($oParam->params[0]->movimentos, $conta, $data_conciliacao);
             db_fim_transacao(false);
             break;
@@ -189,9 +189,9 @@ try {
             $data_final = data($oParam->params[0]->data_final);
             $data_conciliacao = data($oParam->params[0]->data_conciliacao);
             $saldo_final_extrato = number_format($oParam->params[0]->saldo_final_extrato, 2, ".", "");
-            // busca conciliaCão
+            // busca conciliaCï¿½o
             $oRetorno->aLinhasExtrato[] = $oDaoConciliacaoBancaria->excluir(null, "k171_conta = {$conta} AND k171_data = '{$data_final}' AND k171_dataconciliacao = '{$data_conciliacao}'");
-            // Preenche a movimentaCão
+            // Preenche a movimentaCï¿½o
             $oRetorno->aLinhasExtrato[] = excluir_lancamentos_conciliados($oParam->params[0]->movimentos, $conta, $data_conciliacao);
             db_fim_transacao(false);
         break;
@@ -286,7 +286,7 @@ function movimentacao_extrato($conta, $data_inicial, $data_final, $movimentacao)
     $query = pg_query($sqlPendencias);
 
     while ($data = pg_fetch_object($query)) {
-        // Relátorio busca apenas não conciliados
+        // Relï¿½torio busca apenas nï¿½o conciliados
         if (!conciliado($data->k173_conta, $data->k173_data, $data->k173_numcgm, $data->k173_tipomovimento, $data->k173_documento, $data->k173_codigo, $data->k173_valor, $movimentacao)) {
             $valor += $data->k173_valor;
         }
@@ -346,10 +346,10 @@ function tipoDocumentoLancamento($tipo_lancamento)
             return "121, 163";
             break;
         case "EST. REC. EXTRA ORCAMENTARIA":
-            return "131, 151, 153, 162";
+            return "131, 151, 153, 162, 167";
             break;
         case "REC. EXTRA ORCAMENTARIA":
-            return "130, 150, 152, 160";
+            return "130, 150, 152, 160, 166";
             break;
         case "PERDAS":
             return "164";
@@ -387,10 +387,10 @@ function descricaoTipoLancamento($cod_doc)
         case in_array($cod_doc, array("121", "163")):
             return "EST. PGTO EXTRA ORCAMENTARIO";
             break;
-        case in_array($cod_doc, array("131", "151", "153", "162")):
+        case in_array($cod_doc, array("131", "151", "153", "162", "167")):
             return "EST. REC. EXTRA ORCAMENTARIA";
             break;
-        case in_array($cod_doc, array("130", "150", "152", "160")):
+        case in_array($cod_doc, array("130", "150", "152", "160", "166")):
             return "REC. EXTRA ORCAMENTARIA";
             break;
         case "164":
@@ -414,13 +414,13 @@ function descricaoHistorico($tipo, $codigo, $historico)
 {
     switch ($tipo) {
         case "OP":
-            return "Empenho Nº {$codigo}";
+            return utf8_encode("Empenho Nº {$codigo}");
             break;
         case "SLIP":
-            return "Slip Nº {$codigo}";
+            return utf8_encode("Slip Nº {$codigo}");
             break;
         case "REC":
-            return "Planilha Nº {$codigo}";
+            return utf8_encode("Planilha Nº {$codigo}");
             break;
         default:
             return $historico;
@@ -468,7 +468,8 @@ function excluir_lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
 
 function where_conciliados($conta, $data, $tipo, $valor, $data_conciliacao, $numcgm, $documento)
 {
-    $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND k172_valor = {$valor} AND k172_dataconciliacao = '{$data_conciliacao}'";
+    $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND k172_valor = {$valor} ";
+    $where .= $data_conciliacao ? " AND k172_dataconciliacao = '{$data_conciliacao}' " : " ";
     $where .= $tipo ? " AND k172_coddoc = {$tipo} " : " AND k172_coddoc IS NULL ";
     $where .= $numcgm ? " AND k172_numcgm = {$numcgm} " :  " AND k172_numcgm IS NULL ";
     // $documento = preg_replace( "~\x{00a0}~siu", "", $documento);
@@ -490,7 +491,7 @@ function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
             $numcgm = trim($movimento->cgm);
             $documento = trim($movimento->codigo[$i] . $movimento->documento[$i]);
             $data = data($movimento->data_lancamento);
-            $where = where_conciliados($conta, $data, $tipo, $valor, $data_conciliacao, $numcgm, $documento);
+            $where = where_conciliados($conta, $data, $tipo, $valor, NULL, $numcgm, $documento);
 
             $conciliacao = new cl_conciliacaobancarialancamento();
 
@@ -678,18 +679,18 @@ function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento
                         AND corrente.k12_valor < 0
                     )
                 )
-                LEFT JOIN conciliacaobancarialancamento conc ON
-                    conc.k172_conta = corrente.k12_conta
-                    AND conc.k172_data = corrente.k12_data
-                    AND conc.k172_coddoc = conlancamdoc.c71_coddoc
-                    AND conc.k172_codigo = coremp.k12_codord::text || coremp.k12_cheque::text
-                LEFT JOIN retencaopagordem ON e20_pagordem = coremp.k12_codord
-                LEFT join retencaoreceitas on  e23_retencaopagordem = e20_sequencial  AND k12_valor = e23_valorretencao
                 LEFT JOIN corempagemov ON corempagemov.k12_id = coremp.k12_id
                 AND corempagemov.k12_autent = coremp.k12_autent
                 AND corempagemov.k12_data = coremp.k12_data
-                left join empagemov on e60_numemp = empagemov.e81_numemp
-                  AND k12_codmov = e81_codmov
+              left join empagemov on e60_numemp = empagemov.e81_numemp
+                AND k12_codmov = e81_codmov
+                LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
+                AND conc.k172_data = corrente.k12_data
+                AND conc.k172_coddoc = conlancamdoc.c71_coddoc
+                AND conc.k172_codigo = concat_ws('', coremp.k12_codord :: text, e81_numdoc::text)
+                LEFT JOIN retencaopagordem ON e20_pagordem = coremp.k12_codord
+                LEFT join retencaoreceitas on e23_retencaopagordem = e20_sequencial
+                AND k12_valor = e23_valorretencao
             WHERE
                 corrente.k12_conta = {$conta}
                 AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}') {$condicao_implantacao} OR (k172_dataconciliacao BETWEEN '{$data_inicial}'
@@ -722,7 +723,7 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                 cheque,
                 ordem::text,
                 credor,
-                ''::text as numcgm,
+                numcgm::text as numcgm,
                 '' as historico
             from
                 (
@@ -737,7 +738,8 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
             tipo :: text,
             cheque :: text,
             ordem,
-            credor :: text
+            credor :: text,
+            numcgm
         from
                         (
                         SELECT
@@ -755,7 +757,8 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                                 (coalesce(placaixarec.k81_obs, '.')) :: text as historico,
                                 null :: text as cheque,
                                 0 as ordem,
-                                null :: text as credor
+                                z01_nome as credor,
+                                z01_numcgm as numcgm
                             from
                                 corrente
                                 inner join corplacaixa on k12_id = k82_id
@@ -770,13 +773,12 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                                 inner join corautent on corautent.k12_id = corrente.k12_id
                                 and corautent.k12_data = corrente.k12_data
                                 and corautent.k12_autent = corrente.k12_autent
-                                /* Inclusão do tipo doc */
                                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                                 AND conlancamcorrente.c86_data = corrente.k12_data
                                 AND conlancamcorrente.c86_autent = corrente.k12_autent
                                 LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
                                 LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
-
+                                inner join cgm on cgm.z01_numcgm = placaixarec.k81_numcgm
                             where
                                 corrente.k12_conta = {$conta}
                                 and corrente.k12_instit = " . db_getsession("DB_instit") . " {$condicao_lancamento}
@@ -784,6 +786,7 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                                 LEFT JOIN  conciliacaobancarialancamento conc ON conc.k172_conta = conta
                     AND conc.k172_data = data
                     AND conc.k172_coddoc = cod_doc
+                    AND conc.k172_codigo =  codigo
                     WHERE
                      ((data between '{$data_inicial}' AND '{$data_final}') {$condicao_implantacao} OR (k172_dataconciliacao BETWEEN '{$data_inicial}'
                                 AND '{$data_final}'))
@@ -799,7 +802,7 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
 
                     historico,
                     cheque,
-
+                          numcgm,
                     ordem,
                     credor
                 ) as xx";
@@ -855,7 +858,7 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
                 left join corautent on corautent.k12_id = corrente.k12_id
                 and corautent.k12_data = corrente.k12_data
                 and corautent.k12_autent = corrente.k12_autent
-                /* Inclusão do tipo doc */
+                /* Inclusï¿½o do tipo doc */
                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
                 AND conlancamcorrente.c86_data = corrente.k12_data
                 AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -922,7 +925,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             left join corautent on corautent.k12_id = corrente.k12_id
             and corautent.k12_data = corrente.k12_data
             and corautent.k12_autent = corrente.k12_autent
-            /* Inclusão do tipo doc */
+            /* Inclusï¿½o do tipo doc */
             LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
             AND conlancamcorrente.c86_data = corrente.k12_data
             AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -943,7 +946,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
 }
 
 /**
- * Retorna a data da conciliação atraves dos filtros de lancamentos
+ * Retorna a data da conciliaï¿½ï¿½o atraves dos filtros de lancamentos
  * @return Bool
  */
 function conciliado($conta, $data, $numcgm, $cod_doc, $documento, $cheque, $valor, $mov)
