@@ -356,7 +356,6 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         AND o56_anousu = " . db_getsession("DB_anousu") . "
         AND o58_anousu = " . db_getsession("DB_anousu") . "
         AND e60_instit = " . db_getsession("DB_instit") . "
-        and e60_codemp = '305'
         AND e60_emiss between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'  order by e60_codemp";
 
     $rsEmpenho10 = db_query($sSql);
