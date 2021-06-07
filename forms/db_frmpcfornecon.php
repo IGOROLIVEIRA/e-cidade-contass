@@ -322,6 +322,10 @@ function js_mostradb_usuarios1(chave1,chave2){
   db_iframe_db_usuarios.hide();
 }
 
+
+/*
+  OC14892 - desconsiderar validação de banco
+
 function js_validaBanco() {
 
   if (document.getElementById('pc63_banco').value != '104') {
@@ -342,5 +346,5 @@ function js_validaBanco() {
   
 }
 js_validaBanco();
-$('pc63_banco').observe('change', js_validaBanco);
+$('pc63_banco').observe('change', js_validaBanco);*/
 </script>
