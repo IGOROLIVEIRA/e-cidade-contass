@@ -320,7 +320,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         NULL as si106_dataassinaturaconvenioconge,
         e60_tipodespesa,
         manutac_codunidsubanterior,
-        manutlic_codunidsubanterior
+        manutlic_codunidsubanterior,
+        l20_usaregistropreco
 
         FROM empempenho
         JOIN orcdotacao ON e60_coddot = o58_coddot
@@ -359,6 +360,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $rsEmpenho10 = db_query($sSql);
 
+    // echo $sSql;
+    // db_criatabela($rsEmpenho10);
+    // exit;
     $aCaracteres = array("°", chr(13), chr(10), "'", ";");
     // matriz de entrada
     $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
@@ -477,16 +481,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         } else {
           $oDadosEmpenho10->si106_codorgaorespcontrato = ''; // campo 18
         }
-        if (empty($oDadosEmpenho10->manutac_codunidsubanterior)) {
+        if (empty($oEmpenho10->manutac_codunidsubanterior)) {
           $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
           $oDadosEmpenho10->si106_nrocontrato = ''; // campo 20
           $oDadosEmpenho10->si106_dtassinaturacontrato = ''; // campo 21
           $oDadosEmpenho10->si106_nrosequencialtermoaditivo = ''; // campo 22
         } else {
-          $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oDadosEmpenho10->manutac_codunidsubanterior; // campo 19
-          $oDadosEmpenho10->si106_nrocontrato = $oDadosEmpenho10->nrocontrato; // campo 20
-          $oDadosEmpenho10->si106_dtassinaturacontrato = $oDadosEmpenho10->dataassinaturacontrato; // campo 21
-          $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oDadosEmpenho10->nrosequencialtermoaditivo; // campo 22
+          $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->manutac_codunidsubanterior; // campo 19
+          $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->nrocontrato; // campo 20
+          $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
+          $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oEmpenho10->nrosequencialtermoaditivo; // campo 22
         }
       } elseif (((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturatermoaditivo)) &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturatermoaditivo)))
         && $oEmpenho10->nrosequencialtermoaditivo != '') || ($oEmpenho10->dataassinaturatermoaditivo == '' && $oEmpenho10->nrosequencialtermoaditivo != '')) {
@@ -498,10 +502,14 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oDadosEmpenho10->si106_codorgaorespcontrato = ''; // campo 18
         }
 
-        if (in_array($oEmpenho10->despdeccontrato, array(1, 3))) {
-          $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->codunidadesubrespcontrato; // campo 19
+        if (empty($oEmpenho10->manutac_codunidsubanterior)) {
+          if (in_array($oEmpenho10->despdeccontrato, array(1, 3))) {
+            $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->codunidadesubrespcontrato; // campo 19
+          } else {
+            $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
+          }
         } else {
-          $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
+          $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oDadosEmpenho10->manutac_codunidsubanterior; // campo 19
         }
         $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->nrocontrato; // campo 20
         $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
@@ -515,10 +523,14 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oDadosEmpenho10->si106_codorgaorespcontrato = ''; // campo 18
         }
 
-        if (in_array($oEmpenho10->despdeccontrato, array(1, 3))) {
-          $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->codunidadesubrespcontrato; // campo 19
+        if (empty($oEmpenho10->manutac_codunidsubanterior)) {
+          if (in_array($oEmpenho10->despdeccontrato, array(1, 3))) {
+            $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->codunidadesubrespcontrato; // campo 19
+          } else {
+            $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
+          }
         } else {
-          $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
+          $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->manutac_codunidsubanterior; // campo 19
         }
         $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->nrocontrato; // campo 20
         $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
@@ -533,14 +545,22 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       $oDadosEmpenho10->si106_dataassinaturaconvenioconge = $oEmpenho10->si106_dataassinaturaconvenioconge; // campo 28
       $aHomologa = explode("-", $oEmpenho10->datahomologacao);
       if (empty($oEmpenho10->manutlic_codunidsubanterior)) {
-        $oDadosEmpenho10->si106_despdeclicitacao = 1; // campo 29
-        $oDadosEmpenho10->si106_codunidadesubresplicit = null; // campo 30
-        $oDadosEmpenho10->si106_nroprocessolicitatorio = null; // campo 31
-        $oDadosEmpenho10->si106_exercicioprocessolicitatorio = null; // campo 32
-        $oDadosEmpenho10->si106_tipoprocesso = null; // campo 33
+        if ($oEmpenho10->l20_usaregistropreco != 't') {
+          $oDadosEmpenho10->si106_despdeclicitacao = 1; // campo 29
+          $oDadosEmpenho10->si106_codunidadesubresplicit = null; // campo 30
+          $oDadosEmpenho10->si106_nroprocessolicitatorio = null; // campo 31
+          $oDadosEmpenho10->si106_exercicioprocessolicitatorio = null; // campo 32
+          $oDadosEmpenho10->si106_tipoprocesso = null; // campo 33
+        } else {
+          $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
+          $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->codunidadesubresplicit; // campo 30
+          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->nroprocessolicitatorio; // campo 31
+          $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->exercicioprocessolicitatorio; // campo 32
+          $oDadosEmpenho10->si106_tipoprocesso = $oEmpenho10->tipoprocesso; // campo 33
+        }
       } else {
         $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
-        $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->codunidadesubresplicit; // campo 30
+        $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->manutlic_codunidsubanterior; // campo 30
         $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->nroprocessolicitatorio; // campo 31
         $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->exercicioprocessolicitatorio; // campo 32
         $oDadosEmpenho10->si106_tipoprocesso = $oEmpenho10->tipoprocesso; // campo 33
