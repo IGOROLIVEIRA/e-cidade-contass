@@ -545,19 +545,19 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       $oDadosEmpenho10->si106_dataassinaturaconvenioconge = $oEmpenho10->si106_dataassinaturaconvenioconge; // campo 28
       $aHomologa = explode("-", $oEmpenho10->datahomologacao);
       if (empty($oEmpenho10->manutlic_codunidsubanterior)) {
-        if ($oEmpenho10->l20_usaregistropreco != 't') {
-          $oDadosEmpenho10->si106_despdeclicitacao = 1; // campo 29
-          $oDadosEmpenho10->si106_codunidadesubresplicit = null; // campo 30
-          $oDadosEmpenho10->si106_nroprocessolicitatorio = null; // campo 31
-          $oDadosEmpenho10->si106_exercicioprocessolicitatorio = null; // campo 32
-          $oDadosEmpenho10->si106_tipoprocesso = null; // campo 33
-        } else {
-          $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
-          $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->codunidadesubresplicit; // campo 30
-          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->nroprocessolicitatorio; // campo 31
-          $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->exercicioprocessolicitatorio; // campo 32
-          $oDadosEmpenho10->si106_tipoprocesso = $oEmpenho10->tipoprocesso; // campo 33
-        }
+        // if ($oEmpenho10->l20_usaregistropreco != 't') {
+        //   $oDadosEmpenho10->si106_despdeclicitacao = 1; // campo 29
+        //   $oDadosEmpenho10->si106_codunidadesubresplicit = null; // campo 30
+        //   $oDadosEmpenho10->si106_nroprocessolicitatorio = null; // campo 31
+        //   $oDadosEmpenho10->si106_exercicioprocessolicitatorio = null; // campo 32
+        //   $oDadosEmpenho10->si106_tipoprocesso = null; // campo 33
+        // } else {
+        $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
+        $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->codunidadesubresplicit; // campo 30
+        $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->nroprocessolicitatorio; // campo 31
+        $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->exercicioprocessolicitatorio; // campo 32
+        $oDadosEmpenho10->si106_tipoprocesso = $oEmpenho10->tipoprocesso; // campo 33
+        //}
       } else {
         $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
         $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->manutlic_codunidsubanterior; // campo 30
