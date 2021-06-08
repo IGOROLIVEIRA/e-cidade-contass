@@ -952,6 +952,43 @@ switch ($oParam->exec) {
                     }
                   }
 
+                  /**
+                   * Cadastra o novo item com a quantidade exclusiva na solicitemregistropreco
+                   */
+
+                  $oDaoSolicitemRegPrecoAlterado = db_utils::getDao('solicitemregistropreco');
+                  $sWhereSolicitem = ' pc57_solicitem = ' . $oItem->pc11_codigo;
+                  $sSqlSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_query('', 'distinct pc57_sequencial', '', $sWhereSolicitem);
+
+                  $rsSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_record($sSqlSolicitemRegPreco);
+                  $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
+
+                  $oDaoSolicitemRegPrecoAlterado->pc57_quantmax = $nova_qtd;
+                  $oDaoSolicitemRegPrecoAlterado->alterar($oSolicitemRegPreco->pc57_sequencial);
+
+                  if (!$oDaoSolicitemRegPrecoAlterado->numrows_alterar) {
+                    $erro_msg = $oDaoSolicitemRegPrecoAlterado->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+
+                  $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+
+                  $oDaoSolicitemRegPreco->pc57_solicitem = $oItem->pc11_codigo;
+                  $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
+                  $oDaoSolicitemRegPreco->pc57_quantmin = 1;
+                  $oDaoSolicitemRegPreco->pc57_itemorigem = $oSolicitemRegPreco->pc57_itemorigem;
+                  $oDaoSolicitemRegPreco->pc57_ativo = $oSolicitemRegPreco->pc57_ativo;
+                  $oDaoSolicitemRegPreco->pc57_quantidadeexecedente = 0;
+
+                  $oDaoSolicitemRegPreco->incluir(null);
+
+                  if (!$oDaoSolicitemRegPreco->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+
                   $clliclicita = db_utils::getDao('liclicita');
                   $sSqlLiclicita = $clliclicita->sql_query_file(null, "l20_usaregistropreco", null, "l20_codigo=$oParam->licitacao");
                   $rsLiclicita = $clliclicita->sql_record($sSqlLiclicita);
