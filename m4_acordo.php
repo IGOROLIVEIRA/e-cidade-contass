@@ -640,16 +640,20 @@ if (isset($alterar)) {
 </div>
 <script>
   function js_acordo(mostra) {
-    var sUrl = 'func_acordoinstit.php?funcao_js=parent.js_preenchepesquisa|ac16_sequencial' +
-      '&iTipoFiltro=1,4&lAtivo=1&lComExecucao=false';
-    js_OpenJanelaIframe('top.corpo.iframe_acordo',
-      'db_iframe_acordo',
-      sUrl,
-      'Pesquisar Acordos',
-      true,
-      '0',
-      '1'
-    );
+    if (mostra == true) {
+      js_OpenJanelaIframe('', 'db_iframe_acordo',
+        'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|z01_nome',
+        'Pesquisa', true);
+    } else {
+      if ($F('ac16_sequencial').trim() != '') {
+        js_OpenJanelaIframe('', 'db_iframe_depart',
+          'func_acordoinstit.php?pesquisa_chave=' + $F('ac16_sequencial') + '&funcao_js=parent.js_mostraAcordo' +
+          '&descricao=true',
+          'Pesquisa', false);
+      } else {
+        $('ac16_resumoobjeto').value = '';
+      }
+    }
   }
 
   function js_preenchepesquisa(chave) {
@@ -663,30 +667,30 @@ if (isset($alterar)) {
 
   }
 
-  // function js_mostraAcordo(chave, descricao, erro) {
+  function js_mostraAcordo(chave, descricao, erro) {
 
-  //   $('ac16_resumoobjeto').value = descricao;
-  //   if (erro == true) {
-  //     $('ac16_sequencial').focus();
-  //     $('ac16_sequencial').value = '';
-  //   }
+    $('ac16_resumoobjeto').value = descricao;
+    if (erro == true) {
+      $('ac16_sequencial').focus();
+      $('ac16_sequencial').value = '';
+    }
 
-  //   <?php
-        //   echo " location.href = '" . basename($GLOBALS['HTTP_SERVER_VARS']['PHP_SELF']) .
-        //     "?chavepesquisa='+chave;";
-        ?>
-  // }
+    <?php
+    echo " location.href = '" . basename($GLOBALS['HTTP_SERVER_VARS']['PHP_SELF']) .
+      "?chavepesquisa='+chave;";
+    ?>
+  }
 
-  // function js_mostraAcordo1(chave1, chave2) {
-  //   $('ac16_sequencial').value = chave1;
-  //   $('ac16_resumoobjeto').value = chave2;
-  //   db_iframe_acordo.hide();
+  function js_mostraAcordo1(chave1, chave2) {
+    $('ac16_sequencial').value = chave1;
+    $('ac16_resumoobjeto').value = chave2;
+    db_iframe_acordo.hide();
 
-  //   <?php
-        //   echo " location.href = '" . basename($GLOBALS['HTTP_SERVER_VARS']['PHP_SELF']) .
-        //     "?chavepesquisa='+chave1;";
-        ?>
-  // }
+    <?php
+    echo " location.href = '" . basename($GLOBALS['HTTP_SERVER_VARS']['PHP_SELF']) .
+      "?chavepesquisa='+chave1;";
+    ?>
+  }
 
   function js_pesquisa_liclicita(mostra) {
     if (mostra == true) {
