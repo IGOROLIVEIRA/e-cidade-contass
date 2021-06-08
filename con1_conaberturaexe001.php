@@ -251,7 +251,33 @@ if (isset($p->incluir)) {
     $rs = db_query($sql1);
     if (pg_num_rows($rs) == 0) {
 
-      $rsPl = $clconplano->sql_record($clconplano->sql_query_file(null, null, "*", "", "c60_anousu=" . $clconaberturaexe->c91_anousuorigem));
+      $sCampos = "  c60_codcon,
+                    c60_anousu,
+                    c60_estrut,
+                    c60_descr,
+                    c60_finali,
+                    c60_codsis,
+                    c60_codcla,
+                    c60_consistemaconta,
+                    c60_identificadorfinanceiro,
+                    CASE
+                        WHEN c60_naturezasaldo IS NULL THEN 
+                            CASE
+                                WHEN substr(c60_estrut,1,1) IN ('1','3','5','7') THEN 1
+                                WHEN substr(c60_estrut,1,1) IN ('2','4','6','8') THEN 2
+                            END
+                        ELSE c60_naturezasaldo
+                    END AS c60_naturezasaldo,
+                    c60_funcao,
+                    c60_tipolancamento,
+                    c60_desdobramneto,
+                    c60_subtipolancamento,
+                    c60_nregobrig,
+                    c60_cgmpessoa,
+                    c60_naturezadareceita,
+                    c60_infcompmsc";
+
+      $rsPl = $clconplano->sql_record($clconplano->sql_query_file(null, null, $sCampos, "", "c60_anousu=" . $clconaberturaexe->c91_anousuorigem));
       if ($clconplano->numrows > 0) {
 
         echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Plano de Contas - {$iAno}'</script>";
