@@ -64,7 +64,17 @@
 
       // ################################# Public Functions
 
+      function formatCnpjCpf($value)
+      {
+          $CPF_LENGTH = 11;
+          $cnpj_cpf = preg_replace("/\D/", '', $value);
 
+          if (strlen($cnpj_cpf) === $CPF_LENGTH) {
+              return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "\$1.\$2.\$3-\$4", $cnpj_cpf);
+          }
+
+          return preg_replace("/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/", "\$1.\$2.\$3/\$4-\$5", $cnpj_cpf);
+      }
 
 
   //Page header
@@ -115,6 +125,8 @@
   $this->MultiCell(0,4,$db12_extenso,0,"C",0);
   $this->SetFont($Letra,'B',13);
   $this->MultiCell(0,6,$nomeinst,0,"C",0);
+  $this->SetFont($Letra,'',13);
+  $this->MultiCell(0,6,$cgc,0,"C",0);
   $this->SetFont($Letra,'B',12);
   $this->MultiCell(0,4,@$GLOBALS["head1"],0,"C",0);
   $this->Ln(10);

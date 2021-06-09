@@ -2299,6 +2299,39 @@ class cl_rhpessoalmov {
         return $sSql;
     }
 
+    function sql_getDadosServidoresTempoServicoCGM($sCampos = '*', $iAnoFolha, $iMesFolha, $iRegist){
+
+        $sSql  = "select $sCampos                                                                           ";
+        $sSql .= " from rhpessoalmov                                                                        ";
+        $sSql .= "      inner join rhpessoal      on rhpessoal.rh01_regist       = rhpessoalmov.rh02_regist ";
+        $sSql .= "      left  join rhpesdoc       on rh16_regist                 = rh01_regist              ";
+        $sSql .= "      inner join rhlota         on rhlota.r70_codigo           = rhpessoalmov.rh02_lota   ";
+        $sSql .= "                               and rhlota.r70_instit           = rhpessoalmov.rh02_instit ";
+        $sSql .= "      inner join cgm            on cgm.z01_numcgm              = rhpessoal.rh01_numcgm    ";
+        $sSql .= "      left join rhpesrescisao   on rhpesrescisao.rh05_seqpes   = rhpessoalmov.rh02_seqpes ";
+        $sSql .= "      left join rhpespadrao     on rhpespadrao.rh03_seqpes     = rhpessoalmov.rh02_seqpes ";
+        $sSql .= "      left join rhregime        on rhregime.rh30_codreg        = rhpessoalmov.rh02_codreg ";
+        $sSql .= "                               and rhregime.rh30_instit        = rhpessoalmov.rh02_instit ";
+        $sSql .= "      left join rhpesrubcalc    on rhpesrubcalc.rh65_seqpes    = rhpessoalmov.rh02_seqpes ";
+        $sSql .= "                               and (rh65_rubric = 'R927' or rh65_rubric = 'R929')         ";
+        $sSql .= "      left join rhpesfgts       on rhpesfgts.rh15_regist       = rhpessoalmov.rh02_regist ";
+        $sSql .= "      left join tpcontra        on tpcontra.h13_codigo         = rh02_tpcont              ";
+        $sSql .= "      left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes              ";
+        $sSql .= "      left join rhpesprop       on rh19_regist                 = rh02_regist              ";
+        $sSql .= "      left join rhfuncao        on rh37_funcao                 = rh01_funcao              ";
+        $sSql .= "                               and rh37_instit                 = rh02_instit              ";
+        $sSql .= "      left join padroes         on rh03_anousu                 = r02_anousu               ";
+        $sSql .= "                               and rh03_mesusu                 = r02_mesusu               ";
+        $sSql .= "                               and rh03_regime                 = r02_regime               ";
+        $sSql .= "                               and rh03_padrao                 = r02_codigo               ";
+        $sSql .= "                               and r02_instit                  = rh02_instit              ";
+        $sSql .= "where rh02_anousu = $iAnoFolha                                                            ";
+        $sSql .= "  and rh02_mesusu = $iMesFolha                                                            ";
+        $sSql .= "  and z01_numcgm = $iRegist                                                               ";
+
+        return $sSql;
+    }
+
     function sql_query_arquivo_iapep($sFolha, $sSigla, $sBase, $iAno, $iMes, $iTipo_Folha, $sRub_Permanencia, $sWhere) {
 
         $iInstit = db_getsession("DB_instit");
