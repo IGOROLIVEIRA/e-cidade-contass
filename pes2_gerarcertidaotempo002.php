@@ -31,6 +31,64 @@ if($oGet->numcert == ""){
     $ncertidao = $oGet->numcert;
 }
 
+function getTotaldeDiasTrabalhadosCGM($regist){
+    $sCampos  = "rh01_regist";
+
+    $oDaoRhPessoalmov = db_utils::getDao('rhpessoalmov');
+
+    $sSqlRhPessoalmovCGM = $oDaoRhPessoalmov->sql_getDadosServidoresTempoServicoCGM( $sCampos,
+        db_anofolha(),
+        db_mesfolha(),
+        $regist
+    );
+    $rsRhPessoalmovCGM = db_query($sSqlRhPessoalmovCGM);
+
+    for ($iContCGM = 0; $iContCGM < pg_num_rows($rsRhPessoalmovCGM); $iContCGM++) {
+        $oDadosResponsavelCGM = db_utils::fieldsMemory($rsRhPessoalmovCGM, $iContCGM);
+        $sCampos  = "cgm.z01_nome,cgm.z01_cgccpf,rhpessoal.rh01_admiss,rhpesrescisao.rh05_recis,
+                        CASE
+                           WHEN rh02_tbprev = 2 THEN 'FUNDO PREV.MUN'
+                           WHEN rh02_tbprev = 1 THEN 'INSS'
+                           WHEN rh02_tbprev = 3 THEN 'AUTONOMOS INSS'
+                           WHEN rh02_tbprev = 0 THEN 'Nenhum'
+                       END AS rh02_tbprev,
+                       rh37_descr,
+                       rh01_regist";
+
+        $oDaoRhPessoalmov = db_utils::getDao('rhpessoalmov');
+
+        $sSqlRhPessoalmov = $oDaoRhPessoalmov->sql_getDadosServidoresTempoServico( $sCampos,
+            db_anofolha(),
+            db_mesfolha(),
+            $oDadosResponsavelCGM->rh01_regist
+        );
+        $rsRhPessoalmov = db_query($sSqlRhPessoalmov);
+
+        $oDadosPessoal = db_utils::fieldsMemory($rsRhPessoalmov, 0);
+
+        //formato a data
+        $dtadmiss = (implode("/",(array_reverse(explode("-",$oDadosPessoal->rh01_admiss)))));
+        if($oDadosPessoal->rh05_recis == null || $oDadosPessoal->rh05_recis == ""){
+            $date = (implode("-",(array_reverse(explode("-",$oGet->datacert)))));
+        }else{
+            $date = (implode("-",(array_reverse(explode("-",$oDadosPessoal->rh05_recis)))));
+        }
+        //subitraindo dias de falta do periodo
+        $dataRecisao= date('d/m/Y', strtotime('-'.$oGet->diasfalta.'days', strtotime($date)));
+        $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
+        //criacao do timesteamp
+        $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
+        $dataRecisao = DateTime::createFromFormat('d/m/Y', $dataRecisao);
+
+        //Periodo total
+        $periodo = date_diff($dataAdmissao , $dataRecisao);
+
+        return $periodo;
+    }
+}
+
+$Totaldias = getTotaldeDiasTrabalhadosCGM($regist);
+
 switch($tiporelatorio) {
     case 'cgm':
         $sCampos  = "rh01_regist";
@@ -42,7 +100,6 @@ switch($tiporelatorio) {
             db_mesfolha(),
             $regist
         );
-
         $rsRhPessoalmovCGM = db_query($sSqlRhPessoalmovCGM);
         if (pg_numrows($rsRhPessoalmovCGM) == 0) {
 
@@ -64,10 +121,9 @@ switch($tiporelatorio) {
         $pdf->cell($w,$alt,"Certidão Nº: ".$ncertidao,0,1,"C",0);
         $pdf->ln($alt+4);
         $pdf->setfont('arial','',12);
-        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$oDadosPessoal->z01_nome.", inscrito no CPF sob o nº ".$oDadosPessoal->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $periodo->days dias.",0,"J",0,0);
+        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$oDadosPessoal->z01_nome.", inscrito no CPF sob o nº ".$oDadosPessoal->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $Totaldias->days dias.",0,"J",0,0);
         $pdf->setfont('arial','b',12);
         $pdf->ln($alt+4);
-//db_criatabela($rsRhPessoalmovCGM);exit;
         for ($iContCGM = 0; $iContCGM < pg_num_rows($rsRhPessoalmovCGM); $iContCGM++) {
             $oDadosResponsavelCGM = db_utils::fieldsMemory($rsRhPessoalmovCGM, $iContCGM);
 
@@ -96,7 +152,7 @@ switch($tiporelatorio) {
                 db_redireciona('db_erros.php?fechar=true&db_erro='.$sErro);
                 exit;
             }
-//            db_criatabela($rsRhPessoalmov);
+
             $oDadosPessoal = db_utils::fieldsMemory($rsRhPessoalmov, 0);
 
             //formato a data
@@ -115,6 +171,9 @@ switch($tiporelatorio) {
 
             //Periodo total
             $periodo = date_diff($dataAdmissao , $dataRecisao);
+            $periodoTotalAnos += $periodo->y;
+            $periodoTotalmeses += $periodo->m;
+            $periodoTotaldias += $periodo->days;
 
             $pdf->cell($w+20,$alt,"Matrícula"             ,0,0,"C",0);
             $pdf->cell($w+80,$alt,"Período"               ,0,0,"C",0);
@@ -128,7 +187,7 @@ switch($tiporelatorio) {
             $pdf->cell($w+40,$alt,$oDadosPessoal->rh37_descr ,0,1,"C",0);
             $pdf->setfont('arial','b',12);
             $pdf->ln($alt);
-            $pdf->cell($w+190,$alt,"Dias de Licenças"     ,0,1,"C",0);
+            $pdf->cell($w+190,$alt,"Dias de Licenças"     ,0,1,"L",0);
             $pdf->ln($alt+3);
 
             //busco dados do cgm emissor
@@ -175,7 +234,7 @@ switch($tiporelatorio) {
                 $pdf->cell($w+80,$alt+2,$dtreto,1,1,"C",0);
             }
 
-            $pdf->ln($alt+30);
+            $pdf->ln($alt+10);
 
             $pdf->setfont('arial','b',12);
             $pdf->cell($w+30,$alt,"Dias de Faltas:  "        ,0,0,"L",0);
@@ -189,17 +248,17 @@ switch($tiporelatorio) {
             $pdf->cell($w+190,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
             $pdf->ln($alt+3);
             $pdf->setfont('arial','b',12);
-            $pdf->cell($w+50,$alt,"Tempo total de Serviço:",0,0,"L",0);
-            $pdf->setfont('arial','',12);
-            $pdf->cell($w+140,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
+            $pdf->cell($w+190,$alt,"___________________________________________________________" ,0,1,"C",0);
             $pdf->ln($alt+3);
-            $pdf->setfont('arial','b',12);
-
 
         }
+        $pdf->cell($w+50,$alt,"Tempo total de Serviço:",0,0,"L",0);
+        $pdf->setfont('arial','',12);
+        $pdf->cell($w+140,$alt,$periodoTotalAnos." anos " ,0,1,"L",0);
+        $pdf->ln($alt+3);
         $pdf->setfont('arial','',12);
         $pdf->ln($alt+6);
-        $pdf->cell($w+25,$alt,"Data:"                 ,0,0,"L",0);
+        $pdf->cell($w+12,$alt,"Data:"                 ,0,0,"L",0);
         $pdf->cell($w+165,$alt,$dtcertidao                ,0,0,"L",0);
         $pdf->ln($alt+3);
         $pdf->cell($w+25,$alt,"Visado por:"           ,0,0,"L",0);
