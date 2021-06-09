@@ -157,7 +157,7 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', 'B', 5);
     $this->objpdf->text(12, $xlin + 12, 'NOME/RAZAO SOCIAL');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text(14, $xlin + 14.2, $this->dadosTomador->z01_nome);
+    $this->objpdf->text(14, $xlin + 14.2, $this->dadosTomador->z01_nomecomple);
     $this->objpdf->line(10, $xlin + 15, 200, $xlin + 15);
     //Endereco
     $this->objpdf->Setfont('Arial', 'B', 5);
