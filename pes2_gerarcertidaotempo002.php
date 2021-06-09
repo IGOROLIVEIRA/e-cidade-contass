@@ -136,6 +136,7 @@ switch($tiporelatorio) {
         $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$dadosMatricula->z01_nome.", inscrito no CPF sob o nº ".$dadosMatricula->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $Totaldias->days dias.",0,"J",0,0);
         $pdf->setfont('arial','b',12);
         $pdf->ln($alt+4);
+        $alt = 5;
         for ($iContCGM = 0; $iContCGM < pg_num_rows($rsRhPessoalmovCGM); $iContCGM++) {
             $oDadosResponsavelCGM = db_utils::fieldsMemory($rsRhPessoalmovCGM, $iContCGM);
 
@@ -184,7 +185,7 @@ switch($tiporelatorio) {
             //Periodo total
             $periodo = date_diff($dataAdmissao , $dataRecisao);
 
-            $pdf->cell($w+20,$alt,"Matrícula"             ,1,0,"C",1);
+            $pdf->cell($w+25,$alt,"Matrícula"             ,1,0,"C",1);
             $pdf->cell($w+80,$alt,"Período"               ,1,0,"C",1);
             $pdf->cell($w+50,$alt,"Previdência"           ,1,0,"C",1);
             $pdf->cell($w+40,$alt,"Cargo"                 ,1,1,"C",1);
@@ -249,36 +250,34 @@ switch($tiporelatorio) {
             $pdf->cell($w+50,$alt,"Total de Dias Afastado: "             ,0,0,"L",0);
             $pdf->setfont('arial','',12);
             $pdf->cell($w+32,$alt,"$diasAfastado dias."                  ,0,0,"L",0);
-            $pdf->ln($alt+10);
-
-            $pdf->setfont('arial','b',12);
-            $pdf->cell($w+32,$alt,"Dias de Faltas:"             ,0,0,"L",0);
-            $pdf->setfont('arial','',12);
-            $pdf->cell($w+30,$alt,$oGet->diasfalta              ,0,0,"L",0);
+            $pdf->ln($alt+4);
             $pdf->setfont('arial','b',12);
             $pdf->ln($alt+4);
-            $pdf->cell($w+190,$alt,"Tempo de Serviço"           ,0,1,"L",0);
-            $pdf->ln($alt);
+            $pdf->cell($w+40,$alt,"Tempo de Serviço: "           ,0,0,"L",0);
             $pdf->setfont('arial','',12);
             $pdf->cell($w+190,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
-//            $pdf->ln($alt+3);
             $pdf->setfont('arial','b',12);
-
+            $pdf->ln($alt+10);
         }
-//exit;
+
         $pdf->cell($w+190,$alt,"________________________________________________________________________________",0,1,"C",0);
         $pdf->ln($alt+3);
-
-        $pdf->cell($w+50,$alt,"Tempo total de Serviço:",0,0,"L",0);
+        $pdf->setfont('arial','b',12);
+        $pdf->cell($w+32,$alt+1,"Dias de Faltas:"                                          ,0,0,"L",0);
         $pdf->setfont('arial','',12);
-        $pdf->cell($w+140,$alt,$periodoTotalAnos." anos e ". $periodoTotalmeses." meses" ,0,1,"L",0);
-        $pdf->ln($alt+3);
+        $pdf->cell($w+30,$alt+1,$oGet->diasfalta                                           ,0,1,"L",0);
+        $pdf->setfont('arial','b',12);
+        $pdf->cell($w+50,$alt+1,"Tempo total de Serviço:"                                  ,0,0,"L",0);
         $pdf->setfont('arial','',12);
-        $pdf->cell($w+12,$alt,"Data:"                 ,0,0,"L",0);
-        $pdf->cell($w+165,$alt,$dtcertidao                ,0,0,"L",0);
-        $pdf->ln($alt+3);
-        $pdf->cell($w+25,$alt,"Visado por:"           ,0,0,"L",0);
-        $pdf->cell($w+165,$alt,$oDadosEmissor->z01_nome   ,0,1,"L",0);
+        $pdf->cell($w+140,$alt+1,$periodoTotalAnos." anos e ". $periodoTotalmeses." meses" ,0,1,"L",0);
+        $pdf->setfont('arial','b',12);
+        $pdf->cell($w+12,$alt+1,"Data:"                                                    ,0,0,"L",0);
+        $pdf->setfont('arial','',12);
+        $pdf->cell($w+165,$alt+1,$dtcertidao                                               ,0,1,"L",0);
+        $pdf->setfont('arial','b',12);
+        $pdf->cell($w+25,$alt+1,"Visado por:"                                              ,0,0,"L",0);
+        $pdf->setfont('arial','',12);
+        $pdf->cell($w+165,$alt,$oDadosEmissor->z01_nome                                  ,0,1,"L",0);
         $pdf->ln($alt);
         $pdf->cell($w+190,$alt,"Assinatura Emissor:________________________________________________________________",0,0,"L",0);
         break;
