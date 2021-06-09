@@ -145,11 +145,7 @@ $this->objpdf->rect(10, $xlin + 10, 190, 20);
 $this->objpdf->Setfont('Arial', 'B', 5);
 $this->objpdf->text(12, $xlin + 12, 'NOME/RAZAO SOCIAL');
 $this->objpdf->Setfont('Arial', '', 7);
-if(strlen($this->dadosTomador->z01_nomecomple) > 5){
-    $nometomador = $this->dadosTomador->z01_nomecomple;
-}else{
-    $nometomador = $this->dadosTomador->z01_nome;
-}
+$nometomador = trim($this->dadosTomador->z01_nomecomple) == false ? $this->dadosTomador->z01_nome : $this->dadosTomador->z01_nomecomple;
 $this->objpdf->text(14, $xlin + 14.2, $nometomador);
 $this->objpdf->line(10, $xlin + 15, 200, $xlin + 15);
 //Endereco
