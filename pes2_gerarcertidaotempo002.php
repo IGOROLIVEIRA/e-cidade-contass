@@ -87,10 +87,22 @@ function getTotaldeDiasTrabalhadosCGM($regist){
     }
 }
 
+function getDadosNumCGM($cgm){
+    $sCampos  = "z01_nome,z01_cgccpf";
+
+    $oDaoDadosCGM = db_utils::getDao('cgm');
+    $sSqlDadosCGM = $oDaoDadosCGM->sql_query_file($cgm,$sCampos);
+    $rsDadosCGM = db_query($sSqlDadosCGM);
+    $oDadosCgm = db_utils::fieldsMemory($rsDadosCGM, 0);
+
+    return $oDadosCgm;
+}
+
 $Totaldias = getTotaldeDiasTrabalhadosCGM($regist);
 
 switch($tiporelatorio) {
     case 'cgm':
+        $dadosMatricula = getDadosNumCGM($regist);
         $sCampos  = "rh01_regist";
 
         $oDaoRhPessoalmov = db_utils::getDao('rhpessoalmov');
@@ -115,13 +127,13 @@ switch($tiporelatorio) {
         $pdf->setfillcolor(235);
         $pdf->setfont('arial','b',12);
         $w = 0; //Largura da célula. Se 0, a célula se extende até a margem direita.
-        $alt = 4; //Altura da célula. Valor padrão: 0.
+        $alt = 7; //Altura da célula. Valor padrão: 0.
         $pdf->cell($w,$alt,"Certidão de Contagem de Tempo de Serviço",0,1,"C",0);
         $pdf->ln($alt+4);
         $pdf->cell($w,$alt,"Certidão Nº: ".$ncertidao,0,1,"C",0);
         $pdf->ln($alt+4);
         $pdf->setfont('arial','',12);
-        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$oDadosPessoal->z01_nome.", inscrito no CPF sob o nº ".$oDadosPessoal->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $Totaldias->days dias.",0,"J",0,0);
+        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$dadosMatricula->z01_nome.", inscrito no CPF sob o nº ".$dadosMatricula->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $Totaldias->days dias.",0,"J",0,0);
         $pdf->setfont('arial','b',12);
         $pdf->ln($alt+4);
         for ($iContCGM = 0; $iContCGM < pg_num_rows($rsRhPessoalmovCGM); $iContCGM++) {
@@ -171,14 +183,11 @@ switch($tiporelatorio) {
 
             //Periodo total
             $periodo = date_diff($dataAdmissao , $dataRecisao);
-            $periodoTotalAnos += $periodo->y;
-            $periodoTotalmeses += $periodo->m;
-            $periodoTotaldias += $periodo->days;
 
-            $pdf->cell($w+20,$alt,"Matrícula"             ,0,0,"C",0);
-            $pdf->cell($w+80,$alt,"Período"               ,0,0,"C",0);
-            $pdf->cell($w+50,$alt,"Previdência"           ,0,0,"C",0);
-            $pdf->cell($w+40,$alt,"Cargo"                 ,0,1,"C",0);
+            $pdf->cell($w+20,$alt,"Matrícula"             ,1,0,"C",1);
+            $pdf->cell($w+80,$alt,"Período"               ,1,0,"C",1);
+            $pdf->cell($w+50,$alt,"Previdência"           ,1,0,"C",1);
+            $pdf->cell($w+40,$alt,"Cargo"                 ,1,1,"C",1);
             $pdf->setfont('arial','',12);
             $pdf->ln($alt);
             $pdf->cell($w+20,$alt,$oDadosPessoal->rh01_regist ,0,0,"C",0);
@@ -187,7 +196,7 @@ switch($tiporelatorio) {
             $pdf->cell($w+40,$alt,$oDadosPessoal->rh37_descr ,0,1,"C",0);
             $pdf->setfont('arial','b',12);
             $pdf->ln($alt);
-            $pdf->cell($w+190,$alt,"Dias de Licenças"     ,0,1,"L",0);
+            $pdf->cell($w+190,$alt,"Dias de Licenças:"     ,0,1,"L",0);
             $pdf->ln($alt+3);
 
             //busco dados do cgm emissor
@@ -213,9 +222,10 @@ switch($tiporelatorio) {
             $rsAfastamentos = $oDaoAtastamentoMatricula->sql_record($sqlAfastamento);
             //Inicio da tabela
             $pdf->setfont('arial','b',11);
-            $pdf->cell($w+60,$alt,"Tipo Afastamento",1,0,"C",1);
-            $pdf->cell($w+50,$alt,"Data Saida",1,0,"C",1);
-            $pdf->cell($w+80,$alt,"Data Retorno",1,1,"C",1);
+            $pdf->cell($w+60,$alt,"Tipo Afastamento"    ,0,0,"C",1);
+            $pdf->cell($w+50,$alt,"Data Saida"          ,0,0,"C",1);
+            $pdf->cell($w+40,$alt,"Data Retorno"        ,0,0,"C",1);
+            $pdf->cell($w+40,$alt,"Dias Afastado"       ,0,1,"C",1);
 
             for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
                 $oDadosResponsavel = db_utils::fieldsMemory($rsAfastamentos, $iCont);
@@ -226,45 +236,51 @@ switch($tiporelatorio) {
                 $dtAfastamento = DateTime::createFromFormat('d/m/Y', $dtafas);
                 $dtRetorno = DateTime::createFromFormat('d/m/Y', $dtreto);
                 $oPeriodoAfastamento = date_diff($dtAfastamento , $dtRetorno);
-                $diasAfastado += $oPeriodoAfastamento->d;
+                $diasAfastado += $oPeriodoAfastamento->days;
 
                 $pdf->setfont('arial','',11);
-                $pdf->cell($w+60,$alt+2,$oDadosResponsavel->descrafastamento,1,0,"C",0);
-                $pdf->cell($w+50,$alt+2,$dtafas,1,0,"C",0);
-                $pdf->cell($w+80,$alt+2,$dtreto,1,1,"C",0);
+                $pdf->cell($w+60,$alt+2,$oDadosResponsavel->descrafastamento,0,0,"C",0);
+                $pdf->cell($w+50,$alt+2,$dtafas                             ,0,0,"C",0);
+                $pdf->cell($w+40,$alt+2,$dtreto                             ,0,0,"C",0);
+                $pdf->cell($w+40,$alt+2,$oPeriodoAfastamento->days          ,0,1,"C",0);
             }
-
+            $pdf->ln($alt+3);
+            $pdf->setfont('arial','b',12);
+            $pdf->cell($w+50,$alt,"Total de Dias Afastado: "             ,0,0,"L",0);
+            $pdf->setfont('arial','',12);
+            $pdf->cell($w+32,$alt,"$diasAfastado dias."                  ,0,0,"L",0);
             $pdf->ln($alt+10);
 
             $pdf->setfont('arial','b',12);
-            $pdf->cell($w+30,$alt,"Dias de Faltas:  "        ,0,0,"L",0);
+            $pdf->cell($w+32,$alt,"Dias de Faltas:"             ,0,0,"L",0);
             $pdf->setfont('arial','',12);
             $pdf->cell($w+30,$alt,$oGet->diasfalta              ,0,0,"L",0);
             $pdf->setfont('arial','b',12);
             $pdf->ln($alt+4);
-            $pdf->cell($w+190,$alt,"Tempo de Serviço"       ,0,1,"L",0);
+            $pdf->cell($w+190,$alt,"Tempo de Serviço"           ,0,1,"L",0);
             $pdf->ln($alt);
             $pdf->setfont('arial','',12);
             $pdf->cell($w+190,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
-            $pdf->ln($alt+3);
+//            $pdf->ln($alt+3);
             $pdf->setfont('arial','b',12);
-            $pdf->cell($w+190,$alt,"___________________________________________________________" ,0,1,"C",0);
-            $pdf->ln($alt+3);
 
         }
+//exit;
+        $pdf->cell($w+190,$alt,"________________________________________________________________________________",0,1,"C",0);
+        $pdf->ln($alt+3);
+
         $pdf->cell($w+50,$alt,"Tempo total de Serviço:",0,0,"L",0);
         $pdf->setfont('arial','',12);
-        $pdf->cell($w+140,$alt,$periodoTotalAnos." anos " ,0,1,"L",0);
+        $pdf->cell($w+140,$alt,$periodoTotalAnos." anos e ". $periodoTotalmeses." meses" ,0,1,"L",0);
         $pdf->ln($alt+3);
         $pdf->setfont('arial','',12);
-        $pdf->ln($alt+6);
         $pdf->cell($w+12,$alt,"Data:"                 ,0,0,"L",0);
         $pdf->cell($w+165,$alt,$dtcertidao                ,0,0,"L",0);
         $pdf->ln($alt+3);
         $pdf->cell($w+25,$alt,"Visado por:"           ,0,0,"L",0);
         $pdf->cell($w+165,$alt,$oDadosEmissor->z01_nome   ,0,1,"L",0);
         $pdf->ln($alt);
-        $pdf->cell($w+155,$alt,"Assinatura Emissor:__________________________________________"           ,0,0,"L",0);
+        $pdf->cell($w+190,$alt,"Assinatura Emissor:________________________________________________________________",0,0,"L",0);
         break;
 
     case 'matricula':
@@ -366,9 +382,9 @@ switch($tiporelatorio) {
         $rsAfastamentos = $oDaoAtastamentoMatricula->sql_record($sqlAfastamento);
         //Inicio da tabela
         $pdf->setfont('arial','b',11);
-        $pdf->cell($w+60,$alt,"Tipo Afastamento",1,0,"C",1);
-        $pdf->cell($w+50,$alt,"Data Saida",1,0,"C",1);
-        $pdf->cell($w+80,$alt,"Data Retorno",1,1,"C",1);
+        $pdf->cell($w+60,$alt,"Tipo Afastamento"    ,1,0,"C",1);
+        $pdf->cell($w+50,$alt,"Data Saida"          ,1,0,"C",1);
+        $pdf->cell($w+80,$alt,"Data Retorno"        ,1,1,"C",1);
 
         for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
             $oDadosResponsavel = db_utils::fieldsMemory($rsAfastamentos, $iCont);
