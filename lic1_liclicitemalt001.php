@@ -184,13 +184,15 @@ if (!$sqlerro && $codprocesso) {
 
       if ($l20_usaregistropreco == 't') {
         $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
-        $rsSolicitemRegPreco = db_query('SELECT pc57_sequencial from solicitemregistropreco where pc57_solicitem = ' . $oSolicitemReservado->pc11_codigo);
-        echo 'SELECT pc57_sequencial from solicitemregistropreco where pc57_solicitem = ' . $oItemOrigem->pc11_codigo;
-        db_criatabela($rsSolicitemRegPreco);
-        exit;
-        // $oItemReservado = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
-        // $oDaoSolicitemRegPreco->excluir($oItemReservado->pc57_sequencial);
-        // $sqlerro = $oDaoSolicitemRegPreco->erro_status == '0' ? true : false;
+        $sSqlSolicitemRegPreco = "select * from solicitemregistropreco left join solicitem on pc11_codigo = pc57_solicitem where pc11_numero = $oItemOrigem->pc11_numero";
+        $rsSolicitemRegPreco = $oDaoSolicitemRegPreco->sql_record($sSqlSolicitemRegPreco);
+        // db_criatabela($rsSolicitemRegPreco);
+        // exit;
+        for ($iContador = 0; $iContador < $oDaoSolicitemRegPreco->numrows; $iContador++) {
+          $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, $iContador);
+          $oDaoSolicitemRegPreco->excluir($oSolicitemRegPreco->pc57_sequencial);
+          $sqlerro = $oDaoSolicitemRegPreco->erro_status == '0' ? true : false;
+        }
       }
     }
 

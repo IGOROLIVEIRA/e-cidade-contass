@@ -905,6 +905,7 @@ switch ($oParam->exec) {
               $sSqlSolicitem = $oDaoSolicitemReservado->sql_query_pcmater('', 'distinct solicitem.*', '', $sWhereSolicitem);
 
               $rsSolicitem = $oDaoSolicitemReservado->sql_record($sSqlSolicitem);
+
               if (pg_numrows($rsSolicitem)) {
 
                 if ($aItens[$count]->qtdexclusiva) {
@@ -963,7 +964,7 @@ switch ($oParam->exec) {
                     $oDaoSolicitemRegPreco->pc57_solicitem = $oItem->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
                     $oDaoSolicitemRegPreco->pc57_quantmin = 1;
-                    $oDaoSolicitemRegPreco->pc57_itemorigem = $oSolicitemRegPreco->pc57_itemorigem;
+                    $oDaoSolicitemRegPreco->pc57_itemorigem = $oItem->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_ativo = 't';
                     $oDaoSolicitemRegPreco->pc57_quantidadeexecedente = 0;
 
