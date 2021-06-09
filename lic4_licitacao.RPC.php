@@ -915,7 +915,7 @@ switch ($oParam->exec) {
                   $oItem = db_utils::fieldsMemory($rsSolicitem, 0);
                   $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                   $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
-                  $oDaoSolicitemReservado->pc11_seq = $oItem->pc11_seq + 1;
+                  $oDaoSolicitemReservado->pc11_seq = $oItem->pc11_seq + 2;
                   $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
                   $oDaoSolicitemReservado->pc11_vlrun = $oItem->pc11_vlrun;
                   $oDaoSolicitemReservado->pc11_prazo = $oItem->pc11_prazo;
@@ -952,41 +952,45 @@ switch ($oParam->exec) {
                     }
                   }
 
-                  /**
-                   * Cadastra o novo item com a quantidade exclusiva na solicitemregistropreco
-                   */
+                  if ($l20_usaregistropreco == 't') {
 
-                  $oDaoSolicitemRegPrecoAlterado = db_utils::getDao('solicitemregistropreco');
-                  $sWhereSolicitem = ' pc57_solicitem = ' . $oItem->pc11_codigo;
-                  $sSqlSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_query('', 'distinct pc57_sequencial', '', $sWhereSolicitem);
+                    /**
+                     * Cadastra o novo item com a quantidade exclusiva na solicitemregistropreco
+                     */
 
-                  $rsSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_record($sSqlSolicitemRegPreco);
-                  $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
+                    $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
 
-                  $oDaoSolicitemRegPrecoAlterado->pc57_quantmax = $nova_qtd;
-                  $oDaoSolicitemRegPrecoAlterado->alterar($oSolicitemRegPreco->pc57_sequencial);
+                    $oDaoSolicitemRegPreco->pc57_solicitem = $oItem->pc11_codigo;
+                    $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
+                    $oDaoSolicitemRegPreco->pc57_quantmin = 1;
+                    $oDaoSolicitemRegPreco->pc57_itemorigem = $oSolicitemRegPreco->pc57_itemorigem;
+                    $oDaoSolicitemRegPreco->pc57_ativo = 't';
+                    $oDaoSolicitemRegPreco->pc57_quantidadeexecedente = 0;
 
-                  if (!$oDaoSolicitemRegPrecoAlterado->numrows_alterar) {
-                    $erro_msg = $oDaoSolicitemRegPrecoAlterado->erro_msg;
-                    $sqlerro = true;
-                    break;
-                  }
+                    $oDaoSolicitemRegPreco->incluir(null);
 
-                  $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+                    if (!$oDaoSolicitemRegPreco->numrows_incluir) {
+                      $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
+                      $sqlerro = true;
+                      break;
+                    }
 
-                  $oDaoSolicitemRegPreco->pc57_solicitem = $oItem->pc11_codigo;
-                  $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
-                  $oDaoSolicitemRegPreco->pc57_quantmin = 1;
-                  $oDaoSolicitemRegPreco->pc57_itemorigem = $oSolicitemRegPreco->pc57_itemorigem;
-                  $oDaoSolicitemRegPreco->pc57_ativo = $oSolicitemRegPreco->pc57_ativo;
-                  $oDaoSolicitemRegPreco->pc57_quantidadeexecedente = 0;
+                    // $sWhereSolicitem = ' pc57_solicitem = ' . $oItem->pc11_codigo;
+                    // $sSqlSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_query('', 'distinct pc57_sequencial', '', $sWhereSolicitem);
+                    // echo $sSqlSolicitemRegPreco;
+                    // $rsSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_record($sSqlSolicitemRegPreco);
+                    // $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
 
-                  $oDaoSolicitemRegPreco->incluir(null);
+                    // print_r($oSolicitemRegPreco);
+                    // exit;
+                    // $oDaoSolicitemRegPrecoAlterado->pc57_quantmax = $nova_qtd;
+                    // $oDaoSolicitemRegPrecoAlterado->alterar($oSolicitemRegPreco->pc57_sequencial);
 
-                  if (!$oDaoSolicitemRegPreco->numrows_incluir) {
-                    $erro_msg = $oDaoSolicitemRegPreco->erro_msg;
-                    $sqlerro = true;
-                    break;
+                    // if (!$oDaoSolicitemRegPrecoAlterado->numrows_alterar) {
+                    //   $erro_msg = $oDaoSolicitemRegPrecoAlterado->erro_msg;
+                    //   $sqlerro = true;
+                    //   break;
+                    // }
                   }
 
                   $clliclicita = db_utils::getDao('liclicita');

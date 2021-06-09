@@ -181,6 +181,17 @@ if (!$sqlerro && $codprocesso) {
         $oDaoDotac->excluir($oItemReservado->pc13_sequencial);
         $sqlerro = $oDaoDotac->erro_status == '0' ? true : false;
       }
+
+      if ($l20_usaregistropreco == 't') {
+        $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+        $rsSolicitemRegPreco = db_query('SELECT pc57_sequencial from solicitemregistropreco where pc57_solicitem = ' . $oSolicitemReservado->pc11_codigo);
+        echo 'SELECT pc57_sequencial from solicitemregistropreco where pc57_solicitem = ' . $oItemOrigem->pc11_codigo;
+        db_criatabela($rsSolicitemRegPreco);
+        exit;
+        // $oItemReservado = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
+        // $oDaoSolicitemRegPreco->excluir($oItemReservado->pc57_sequencial);
+        // $sqlerro = $oDaoSolicitemRegPreco->erro_status == '0' ? true : false;
+      }
     }
 
     if (!$sqlerro) {
