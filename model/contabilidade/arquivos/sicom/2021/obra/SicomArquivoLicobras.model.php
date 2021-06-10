@@ -146,7 +146,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
             LEFT  JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
-	            AND l03_pctipocompratribunal not in (100,101)
+	            AND l03_pctipocompratribunal not in (100,101,102,103)
                 AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
                 AND DATE_PART('YEAR',licobras.obr01_dtlancamento)  = " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobras.obr01_dtlancamento) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
