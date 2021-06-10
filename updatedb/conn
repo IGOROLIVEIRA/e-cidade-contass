@@ -90,3 +90,5 @@ pmsantafeminas      5432    e-cidadenovosclientes
 pmnovaporteirinha   5432    e-cidadenovosclientes
 pmgraomogol         5432    e-cidadenovosclientes
 pmburitizeiro       5432    e-cidadenovosclientes
+
+e-cidade            5432    pmnovaporteirinha
