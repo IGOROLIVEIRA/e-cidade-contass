@@ -106,6 +106,7 @@ try {
     case 'estornar':
 
       $oParametros->sJustificativa = db_stdClass::normalizeStringJsonEscapeString($oParametros->sJustificativa);
+      $oParametros->sDescricaoItem = db_stdClass::normalizeStringJsonEscapeString($oParametros->sDescricaoItem);
       $sWhere = "e139_empnotaitem = {$oParametros->iCodigoEmpNotaItem}";
       $sSqlBensDispensaTombamento = $oDaoBensDispensaTombamento->sql_query_file(null,"*",null,$sWhere);
       $rsBensDispensaTombamento   = db_query($sSqlBensDispensaTombamento);
@@ -235,8 +236,8 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $nValorNota = str_replace('.', '', $nValorNota);
   $nValorNota = str_replace(',', '.', $nValorNota);
 
-  $sObservacao = "{$oParametros->sJustificativa} | Nome do item: {$oParametros->sDescricaoItem}, ";
-  $sObservacao .= " quantidade: {$oParametros->iQuantidadeItem}, número da nota: {$oParametros->iCodigoNota}.";
+  $sObservacao = "{$oParametros->sJustificativa} | ITEM: {$oParametros->sDescricaoItem}, ";
+  $sObservacao .= " QUANTIDADE ADQUIRIDA: {$oParametros->iQuantidadeItem}, NOTA FISCAL: {$oParametros->iCodigoNota}.";
 
   $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
   $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
