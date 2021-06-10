@@ -19,6 +19,15 @@ class Oc14872 extends PostgresMigration
 
         ALTER TABLE empparametro ADD COLUMN e30_obrigactapagliq boolean DEFAULT 'f';
 
+        -- ADICIONA CAMPO DA CONTA PAGADORA A ORDEM
+        ALTER TABLE pagordem ADD COLUMN e50_contapag INTEGER;
+
+        ALTER TABLE pagordem ADD CONSTRAINT empagetipo_conta_fk FOREIGN KEY (e50_contapag) REFERENCES empagetipo (e83_codtipo);
+
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'e50_contapag','int4','Conta Pagadora','','Conta Pagadora',11,false,false,false,0,'int4','Conta Pagadora');
+
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT codarq FROM db_sysarquivo where nomearq = 'pagordem' LIMIT 1), (SELECT codcam FROM db_syscampo WHERE nomecam = 'e50_contapag'), 8, 0);
+
         COMMIT;
 
 SQL;

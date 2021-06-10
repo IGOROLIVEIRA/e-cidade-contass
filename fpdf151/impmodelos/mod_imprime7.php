@@ -192,6 +192,13 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
    $this->datanota  = pg_result($rsNotas,0,1);
    $this->objpdf->cell(102,4,"Ref. Nota Fiscal nº: ".$this->numeronota.", de ".db_formatar($this->datanota,'d'),0,1,"L");
   }
+
+  if (isset($this->conta_pagadora) && $this->conta_pagadora != '') {
+    $this->objpdf->Setfont('Arial','B',7);
+    $this->objpdf->text($xcol+1,$xlin+62,'Conta Pagadora: ');
+    $this->objpdf->Setfont('Arial','',7);
+    $this->objpdf->text($xcol+22,$xlin+62,substr($this->conta_pagadora,0,60));
+  }
   
   // monta os dados das retenções da ordem de compra
   $this->objpdf->SetWidths(array(12,58,23));

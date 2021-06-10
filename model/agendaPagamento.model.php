@@ -1417,7 +1417,8 @@ class agendaPagamento {
       e71_codnota,
       e79_concarpeculiar,
       e60_concarpeculiar,
-      (case when e85_codmov is null then
+      (case when e50_contapag is not null then e50_contapag
+            when e85_codmov is null then
            (select e28_empagetipo
          from empageformacgm
         where e28_numcgm = e60_numcgm)

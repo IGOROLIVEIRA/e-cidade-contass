@@ -779,7 +779,7 @@ class cl_empagetipo {
     }
     return $sql;
   }
-   function sql_query_contas_vinculadas ($e83_codtipo=null,$campos="*",$ordem=null,$sWhere, $lVinculadas = false , $op = null, $lContaUnicaFundeb = false) {
+   function sql_query_contas_vinculadas ($e83_codtipo=null,$campos="*",$ordem=null,$sWhere, $lVinculadas = false , $op = null, $lContaUnicaFundeb = false, $sWhere2 = null) {
 
    $sSql = "select ";
     if($campos != "*" ){
@@ -847,6 +847,10 @@ class cl_empagetipo {
       $sSql .= " (select c61_reduz from conplanoreduz where c61_anousu =".db_getsession("DB_anousu");
       $sSql .= " and c61_codigo = 1 and c61_instit = ".db_getsession("DB_instit").")";
 
+    }
+
+    if (isset($sWhere2) && $sWhere2 != '') {
+        $sSql .= " and {$sWhere2} ";
     }
 
     return $sSql;

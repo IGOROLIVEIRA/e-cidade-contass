@@ -117,6 +117,15 @@ if (USE_PCASP) {
                 <td width="20"><?=db_ancora($Lo15_codigo,"",3)?></td>
                 <td nowrap><? db_input('o15_codigo', 5, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 33, $Io15_descr, true, 'text', 3)?></td>
               </tr>
+              <tr>
+                <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
+                <td>
+                    <? 
+                    db_input("e83_codtipo",13,1,true,"text",4,"onchange='js_pesquisa_contapagadora(false);'"); 
+                    ?>
+                </td>
+                <td colspan='3'><? db_input("e83_descr",50,"",true,"text",3); ?></td>
+              </tr>
               <tr id='controlepit' style='display: <?=$iControlaPit==1?"":"none"?>'>
                 <td><b>Tipo da Entrada: </b></td>
                 <td colspan="4">
@@ -960,6 +969,7 @@ if (USE_PCASP) {
       oParam.e03_numeroprocesso = encodeURIComponent($F('e03_numeroprocesso'));
       oParam.verificaChave = 1;
       oParam.e50_compdesp = $F('e50_compdesp');
+      oParam.e83_codtipo  = $F('e83_codtipo');  
 
 
       var oInfoNota                      = new Object();
@@ -1398,4 +1408,39 @@ if (USE_PCASP) {
     }
 
   }
+
+    function js_pesquisa_contapagadora(mostra) {
+	
+        if (mostra==true) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?e60_numemp='+$('e60_numemp').value+'&funcao_js=parent.js_mostracontapagadora1|e83_codtipo|e83_descr','Pesquisa',true);
+        } else {
+        
+            if ($('e83_codtipo').value != '') { 
+                js_OpenJanelaIframe('top.corpo','db_iframe_empagetipo','func_empagetipo.php?pesquisa_chave='+$('e83_codtipo').value+'&e60_numemp='+$('e60_numemp').value+'&e83_codtipo='+$('e83_codtipo').value+'&funcao_js=parent.js_mostracontapagadora','Pesquisa',false);
+            } else {
+                $('e83_descr').value = ''; 
+            }
+        }
+
+    }
+
+    function js_mostracontapagadora(chave1,erro) {
+        
+        $('e83_descr').value = chave1; 
+        if (erro == true) { 
+            
+            $('e83_codtipo').value = ''; 
+            $('e83_codtipo').focus(); 
+
+        }
+    
+    }
+
+    function js_mostracontapagadora1(chave1,chave2) {
+            
+        $('e83_codtipo').value = chave1;  
+        $('e83_descr').value = chave2;
+        db_iframe_empagetipo.hide();
+
+    }
 </script>

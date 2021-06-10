@@ -479,7 +479,7 @@ if (count($aParametrosEmpenho) > 0) {
             </tr>
             <tr>
                 <td colspan='5' align='left'>
-                    <b><span >**</span>Conta conferida</b>
+                    <b><span >**</span>Para selecionar a Conta Pagadora digite os dados da conta no box e em seguida pressione a tecla tab.</b>
                     <br />
                     <span>
           <fieldset>
@@ -551,6 +551,7 @@ if (count($aParametrosEmpenho) > 0) {
     sDataDia = "<?=date("d/m/Y",db_getsession("DB_datausu"))?>";
     iTipoControleRetencaoMesAnterior = <?=$iTipoControleRetencaoMesAnterior?>;
     var aAutenticacoesGlobal = new Array();
+    let aContasPagadorasPermitidas = [];
     function js_reload(){
         document.form1.submit();
     }
@@ -883,6 +884,7 @@ if (count($aParametrosEmpenho) > 0) {
         $('TotalForCol14').innerHTML = js_formatar(0,'f');
         $('TotalForCol13').innerHTML = js_formatar(0,'f');
         $('TotalForCol12').innerHTML  = js_formatar(0,'f');
+        aContasPagadorasPermitidas = [];
         //Criamos um objeto que tera a requisicao
         var oParam                = new Object();
         oParam.iOrdemIni          = $F('e82_codord');
@@ -1250,6 +1252,12 @@ if (count($aParametrosEmpenho) > 0) {
         if (aContas != null) {
 
             for (var i = 0; i < aContas.length; i++) {
+
+                //Guarda contas pagadoras permitidas para op
+                if (aContasPagadorasPermitidas.indexOf(aContas[i].e83_codtipo) == -1) {
+                    aContasPagadorasPermitidas.push(aContas[i].e83_codtipo);
+                }
+
                 var sDescrConta =  aContas[i].e83_conta+" - "+aContas[i].e83_descr.urlDecode()+" - "+aContas[i].c61_codigo;
                 sComboUL += "<li onclick='selecionarConta(this,"+iCodMov+")'><div class='codtipo'>"+aContas[i].e83_codtipo+"</div><span>"+sDescrConta+"</span></li>";
                 if (iContaConfig == aContas[i].e83_codtipo) {
@@ -1849,7 +1857,7 @@ if (count($aParametrosEmpenho) > 0) {
         var contaPadrao = document.getElementById("e83_codtipo");
         for (var i = 0; i < aItens.length; i++) {
 
-            if ($F('e83_codtipo') == "0") {
+            if ($F('e83_codtipo') == "0" || (aContasPagadorasPermitidas.indexOf(iCodigoConta) == -1)) {
                 aItens[i].value = "";
             }else{
                 aItens[i].value = contaPadrao.options[contaPadrao.selectedIndex].text;
