@@ -22,37 +22,37 @@ $rotulocampo->label("rh01_regist");
 $rotulocampo->label("rh02_seqpes");
 $rotulocampo->label("z01_nome");
 
-if(empty($rh01_regist)){
+//if(empty($rh01_regist)){
+//
+//    $datai_dia = '';
+//    $datai_mes = '';
+//    $datai_ano = '';
+//}
 
-    $datai_dia = '';
-    $datai_mes = '';
-    $datai_ano = '';
-}
-
-if (isset($rh01_regist) && !empty($rh01_regist)) {
-
-    $ano             = db_anofolha();
-    $mes             = db_mesfolha();
-    $rsRhpesrescisao = $clrhpesrescisao->sql_record( $clrhpesrescisao->sql_query_ngeraferias( null,
-        'rh05_recis',
-        null,
-        "rh02_regist = $rh01_regist and rh02_anousu = $ano and rh02_mesusu = $mes" ));
-
-    if ($rsRhpesrescisao && $clrhpesrescisao->numrows > 0) {
-
-        $oRecisao = db_utils::fieldsMemory($rsRhpesrescisao, 0);
-
-        $datai_dia = date('d', strtotime($oRecisao->rh05_recis));
-        $datai_mes = date('m', strtotime($oRecisao->rh05_recis));
-        $datai_ano = date('Y', strtotime($oRecisao->rh05_recis));
-    } else {
-
-        $datai_dia = date('d', db_getsession('DB_datausu'));
-        $datai_mes = date('m', db_getsession('DB_datausu'));
-        $datai_ano = date('Y', db_getsession('DB_datausu'));
-    }
-
-}
+//if (isset($rh01_regist) && !empty($rh01_regist)) {
+//
+//    $ano             = db_anofolha();
+//    $mes             = db_mesfolha();
+//    $rsRhpesrescisao = $clrhpesrescisao->sql_record( $clrhpesrescisao->sql_query_ngeraferias( null,
+//        'rh05_recis',
+//        null,
+//        "rh02_regist = $rh01_regist and rh02_anousu = $ano and rh02_mesusu = $mes" ));
+//
+//    if ($rsRhpesrescisao && $clrhpesrescisao->numrows > 0) {
+//
+//        $oRecisao = db_utils::fieldsMemory($rsRhpesrescisao, 0);
+//
+//        $datai_dia = date('d', strtotime($oRecisao->rh05_recis));
+//        $datai_mes = date('m', strtotime($oRecisao->rh05_recis));
+//        $datai_ano = date('Y', strtotime($oRecisao->rh05_recis));
+//    } else {
+//
+//        $datai_dia = date('d', db_getsession('DB_datausu'));
+//        $datai_mes = date('m', db_getsession('DB_datausu'));
+//        $datai_ano = date('Y', db_getsession('DB_datausu'));
+//    }
+//
+//}
 ?>
 <html>
 <head>
