@@ -241,16 +241,6 @@ $clrotulo->label("pc63_conta");
 			  	</td>
 			  </tr>
 			<?php } ?>
-			<tr>
-				<td>
-					<strong>Observação: </strong>
-				</td>
-				<td class="valores" colspan="5">
-					<?php 
-					  echo $oCgmModel->getObs();
-					?>
-				</td>
-			</tr>
             <tr>
                 <td>
                     <strong><?= $Lpc63_banco ?></strong>
@@ -270,7 +260,17 @@ $clrotulo->label("pc63_conta");
                 <td class="valores">
                     <?= $oContaFornecedor->pc63_conta != NULL ? $oContaFornecedor->pc63_conta."-".$oContaFornecedor->pc63_conta_dig : '' ?>
                 </td>
-            </tr>            
+            </tr>           
+			<tr>
+				<td>
+					<strong>Observação: </strong>
+				</td>
+				<td class="valores" colspan="5">
+					<?php 
+					  echo $oCgmModel->getObs();
+					?>
+				</td>
+			</tr> 
 		</table>
 	</fieldset>
 	<fieldset>
