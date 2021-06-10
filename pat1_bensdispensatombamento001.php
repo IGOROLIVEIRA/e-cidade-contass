@@ -80,6 +80,7 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
     <?php db_input('iNumeroEmpenho',      10, 0, true, 'hidden', 3); ?>
     <?php db_input('nValorNota',          10, 0, true, 'hidden', 3); ?>
     <?php db_input('iCodigoNota',         10, 0, true, 'hidden', 3); ?>
+    <?php db_input('iQuantidadeItem',     10, 0, true, 'hidden', 3); ?>
 
     <fieldset class='container' style="width:500px;">
 
@@ -182,6 +183,7 @@ function js_preencheDadosNotaPendente(oDadosLinha) {
   $('iNumeroEmpenho').value   = oDadosLinha.iNumeroEmpenho;
   $('nValorNota').value       = oDadosLinha.nValorNota;
   $('iCodigoNota').value      = oDadosLinha.iCodigoNota;
+  $('iQuantidadeItem').value  = oDadosLinha.iQuantidadeItem;
 
   /**
    * Esconde janela do WindowAux
@@ -278,6 +280,8 @@ function js_processar() {
   oParametros.iCodigoNota        = $F('iCodigoNota');
   oParametros.sJustificativa     = encodeURIComponent(tagString($F('e139_justificativa')));
   oParametros.iClassificacao     = $F('t64_codcla');
+  oParametros.sDescricaoItem     = encodeURIComponent(tagString($F('pc01_descrmater')));
+  oParametros.iQuantidadeItem    = $F('iQuantidadeItem');
 
   var oAjax = new Ajax.Request(sRPC, {
                                method     : "post",
@@ -330,7 +334,7 @@ function js_pesquisa() {
 
   js_OpenJanelaIframe('top.corpo',
                       'db_iframe_bensdispensatombamento',
-                      'func_bensdispensatombamento.php?funcao_js=parent.js_preenchePesquisa|e139_empnotaitem|pc01_descrmater|e69_numemp|e72_valor|e72_codnota|t64_codcla|t64_class|t64_descr',
+                      'func_bensdispensatombamento.php?funcao_js=parent.js_preenchePesquisa|e139_empnotaitem|pc01_descrmater|e69_numemp|e72_valor|e72_codnota|t64_codcla|t64_class|t64_descr|e72_qtd',
                       'Pesquisa',
                       true);
 }
@@ -348,7 +352,7 @@ function js_pesquisa() {
  * @access public
  * @return void
  */
-function js_preenchePesquisa(iCodigoEmpNotaItem, sDescricaoItem, iNumeroEmpenho, nValorItemNota, iCodigoNota, iCodCla, sClassific, sDescrClass) {
+function js_preenchePesquisa(iCodigoEmpNotaItem, sDescricaoItem, iNumeroEmpenho, nValorItemNota, iCodigoNota, iCodCla, sClassific, sDescrClass, iQuantidadeItem) {
 
   $('iNumeroEmpenho').value      = iNumeroEmpenho;
   $('e139_empnotaitem').value    = iCodigoEmpNotaItem;
@@ -358,6 +362,7 @@ function js_preenchePesquisa(iCodigoEmpNotaItem, sDescricaoItem, iNumeroEmpenho,
   $('t64_codcla').value          = iCodCla;
   $('t64_class').value           = sClassific;
   $('t64_descr').value           = sDescrClass;
+  $('iQuantidadeItem').value     = iQuantidadeItem;
   db_iframe_bensdispensatombamento.hide();
 }
 

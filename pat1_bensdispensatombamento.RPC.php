@@ -62,6 +62,7 @@ try {
     case 'processar':
 
       $oParametros->sJustificativa = db_stdClass::normalizeStringJsonEscapeString($oParametros->sJustificativa);
+      $oParametros->sDescricaoItem = db_stdClass::normalizeStringJsonEscapeString($oParametros->sDescricaoItem);
 
       $sWhere               = "e137_empnotaitem = {$oParametros->iCodigoEmpNotaItem}";
       $sSqlBensNotaPendente = $oDaoEmpnotaitembenspendente->sql_query_file(null,"*",null,$sWhere);
@@ -234,6 +235,9 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $nValorNota = str_replace('.', '', $nValorNota);
   $nValorNota = str_replace(',', '.', $nValorNota);
 
+  $sObservacao = "{$oParametros->sJustificativa} | Nome do item: {$oParametros->sDescricaoItem}, ";
+  $sObservacao .= " quantidade: {$oParametros->iQuantidadeItem}, número da nota: {$oParametros->iCodigoNota}.";
+
   $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
   $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
   $oContaCorrenteDetalhe->setDotacao($oEmpenhoFinanceiro->getDotacao());
@@ -241,7 +245,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $oContaCorrenteDetalhe->setRecurso($oRecurso);
   $oLancamentoAuxiliarEmLiquidacao = new LancamentoAuxiliarEmLiquidacaoMaterialPermanente();
   $oLancamentoAuxiliarEmLiquidacao->setClassificacao(new BemClassificacao($oParametros->iClassificacao));
-  $oLancamentoAuxiliarEmLiquidacao->setObservacaoHistorico($oParametros->sJustificativa);
+  $oLancamentoAuxiliarEmLiquidacao->setObservacaoHistorico($sObservacao);
   $oLancamentoAuxiliarEmLiquidacao->setFavorecido($oEmpenhoFinanceiro->getFornecedor()->getCodigo());
   $oLancamentoAuxiliarEmLiquidacao->setCodigoElemento($aItensEmpenho[0]->getCodigoElemento());
   $oLancamentoAuxiliarEmLiquidacao->setNumeroEmpenho($oParametros->iNumeroEmpenho);
