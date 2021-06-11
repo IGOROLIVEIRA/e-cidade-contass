@@ -237,7 +237,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $nValorNota = str_replace(',', '.', $nValorNota);
 
   $sObservacao = "{$oParametros->sJustificativa} | ITEM: {$oParametros->sDescricaoItem}, ";
-  $sObservacao .= " QUANTIDADE ADQUIRIDA: {$oParametros->iQuantidadeItem}, NOTA FISCAL: {$oParametros->iCodigoNota}.";
+  $sObservacao .= " QUANTIDADE ADQUIRIDA: {$oParametros->iQuantidadeItem}, NOTA FISCAL: {$iCodigoNotaLiquidacao}.";
 
   $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
   $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
