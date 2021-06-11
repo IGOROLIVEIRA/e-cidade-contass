@@ -67,7 +67,8 @@ if ($rsBuscaCGM == false) {
 $oCgmModel = CgmFactory::getInstance('', $oCgm->z01_numcgm);
 
 $oDaoContaFornecedor        = db_utils::getDao('pcfornecon');
-$sSqlBuscaContaFornecedor   = $oDaoContaFornecedor->sql_query_file(null, "*", null, "pc63_numcgm = {$oCgmModel->getCodigo()}");
+$sWhere                     = "pc63_numcgm = {$oCgmModel->getCodigo()} AND pc64_contabanco IS NOT NULL";
+$sSqlBuscaContaFornecedor   = $oDaoContaFornecedor->sql_query_padrao(null, "*", null, $sWhere);
 $rsBuscaContaFornecedor     = $oDaoContaFornecedor->sql_record($sSqlBuscaContaFornecedor);
 
 if ($oDaoContaFornecedor->numrows > 0) {
