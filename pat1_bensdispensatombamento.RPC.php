@@ -190,7 +190,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
    * Busca codigo da nota de liquidacao pelo codigo do item
    */
   $oDaoEmpnotaitem  = db_utils::getDao('empnotaitem');
-  $sSqlNotaLiquidacao = $oDaoEmpnotaitem->sql_query_file($iCodigoItemNota);
+  $sSqlNotaLiquidacao = $oDaoEmpnotaitem->sql_query_empenho_item($iCodigoItemNota);
   $rsNotaLiquidacao = $oDaoEmpnotaitem->sql_record($sSqlNotaLiquidacao);
 
   if ( $oDaoEmpnotaitem->erro_status == "0" ) {
@@ -198,6 +198,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   }
 
   $iCodigoNotaLiquidacao = db_utils::fieldsMemory($rsNotaLiquidacao, 0)->e72_codnota;
+  $iNumeroNotaLiquidacao = db_utils::fieldsMemory($rsNotaLiquidacao, 0)->e69_numero;
 
   $oDaoMaterialEstoqueGrupo = db_utils::getDao('materialestoquegrupo');
   $sWhere                   = "m71_codlanc = {$iCodigoItemEstoque}";
@@ -237,7 +238,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $nValorNota = str_replace(',', '.', $nValorNota);
 
   $sObservacao = "{$oParametros->sJustificativa} | ITEM: {$oParametros->sDescricaoItem}, ";
-  $sObservacao .= " QUANTIDADE ADQUIRIDA: {$oParametros->iQuantidadeItem}, NOTA FISCAL: {$iCodigoNotaLiquidacao}.";
+  $sObservacao .= " QUANTIDADE ADQUIRIDA: {$oParametros->iQuantidadeItem}, NOTA FISCAL: {$iNumeroNotaLiquidacao}.";
 
   $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
   $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
