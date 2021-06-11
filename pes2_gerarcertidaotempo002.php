@@ -225,10 +225,11 @@ switch($tiporelatorio) {
            WHEN r45_situac = 7 THEN 'Licença sem vencimento, cessão sem ônus'
            WHEN r45_situac = 8 THEN 'Afastado doença +30 dias'
            WHEN r45_situac = 9 THEN 'Licença por Motivo de Afastamento do Cônjuge'
-        END AS descrAfastamento","","r45_regist = $oDadosPessoal->rh01_regist and r45_situac in ($oGet->vinculoselecionados)");
+        END AS descrAfastamento","r45_dtafas","r45_anousu = ".db_anofolha()."
+        AND r45_mesusu = ".db_mesfolha()."
+        AND r45_regist = $oDadosPessoal->rh01_regist and r45_situac in ($oGet->vinculoselecionados)");
 
             $rsAfastamentos = $oDaoAtastamentoMatricula->sql_record($sqlAfastamento);
-//            echo $sqlAfastamento; db_criatabela($rsAfastamentos);exit;
             //Inicio da tabela
             $pdf->setfont('arial','b',11);
             $pdf->cell($w+80,$alt,"Tipo Afastamento"    ,0,0,"C",1);
@@ -390,8 +391,10 @@ switch($tiporelatorio) {
            WHEN r45_situac = 7 THEN 'Licença sem vencimento, cessão sem ônus'
            WHEN r45_situac = 8 THEN 'Afastado doença +30 dias'
            WHEN r45_situac = 9 THEN 'Licença por Motivo de Afastamento do Cônjuge'
-        END AS descrAfastamento","","r45_regist = $oGet->regist and r45_situac in ($oGet->vinculoselecionados)");
-
+        END AS descrAfastamento","r45_dtafas","r45_anousu = ".db_anofolha()."
+        AND r45_mesusu = ".db_mesfolha()."
+        AND r45_regist = $oDadosPessoal->rh01_regist and r45_situac in ($oGet->vinculoselecionados)");
+//die($sqlAfastamento);
         $rsAfastamentos = $oDaoAtastamentoMatricula->sql_record($sqlAfastamento);
         //Inicio da tabela
         $pdf->setfont('arial','b',11);
