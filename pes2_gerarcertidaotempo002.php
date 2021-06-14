@@ -205,16 +205,6 @@ switch($tiporelatorio) {
             }
             $finalPeriodo = (implode("/",(explode("-",$date))));
 
-            //subitraindo dias de falta do periodo
-            $dataRecisao= date('d/m/Y', $date);
-            $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
-            //criacao do timesteamp
-            $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
-            $dataRecisao = DateTime::createFromFormat('d/m/Y', $finalPeriodo);
-
-            //Periodo total
-            $periodo = date_diff($dataAdmissao , $dataRecisao);
-
             $pdf->cell($w+25,$alt,"Matrícula"             ,1,0,"C",1);
             $pdf->cell($w+50,$alt,"Período"               ,1,0,"C",1);
             $pdf->cell($w+60,$alt,"Previdência"           ,1,0,"C",1);
@@ -278,6 +268,17 @@ switch($tiporelatorio) {
                 $pdf->cell($w+40,$alt+2,$dtreto                             ,0,0,"C",0);
                 $pdf->cell($w+30,$alt+2,$oPeriodoAfastamento->days          ,0,1,"C",0);
             }
+
+            //subitraindo dias de falta do periodo
+            $dataRecisao= date('d/m/Y', strtotime('-'.$diasAfastado.'days', strtotime($date)));
+            $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
+            //criacao do timesteamp
+            $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
+            $dataRecisao = DateTime::createFromFormat('d/m/Y', $finalPeriodo);
+
+            //Periodo total
+            $periodo = date_diff($dataAdmissao , $dataRecisao);
+
             $pdf->ln($alt+3);
             $pdf->setfont('arial','b',10);
             $pdf->cell($w+50,$alt,"Total de Dias Afastado: "                ,0,0,"L",0);
@@ -352,15 +353,7 @@ switch($tiporelatorio) {
         }else{
             $date = (implode("-",(array_reverse(explode("-",$oDadosPessoal->rh05_recis)))));
         }
-        //subitraindo dias de falta do periodo
-        $dataRecisao= date('d/m/Y', strtotime('-'.$oGet->diasfalta.'days', strtotime($date)));
-        $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
-        //criacao do timesteamp
-        $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
-        $dataRecisao = DateTime::createFromFormat('d/m/Y', $dataRecisao);
 
-        //Periodo total
-        $periodo = date_diff($dataAdmissao , $dataRecisao);
         //inicio do PDF
         $pdf = new PDF1();
         $pdf->Open();
@@ -452,6 +445,17 @@ switch($tiporelatorio) {
         }else{
             $pdf->cell($w+32,$alt,"$diasAfastado dias."                 ,0,0,"L",0);
         }
+
+        $diasAfastado = $diasAfastado + $oGet->diasfalta;
+        //subitraindo dias de falta do periodo
+        $dataRecisao= date('d/m/Y', strtotime('-'.$diasAfastado.'days', strtotime($date)));
+        $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
+        //criacao do timesteamp
+        $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
+        $dataRecisao = DateTime::createFromFormat('d/m/Y', $dataRecisao);
+
+        //Periodo total
+        $periodo = date_diff($dataAdmissao , $dataRecisao);
 
         $pdf->ln($alt+3);
         $pdf->cell($w+190,$alt,"________________________________________________________________________________",0,1,"C",0);
