@@ -281,21 +281,23 @@ switch($tiporelatorio) {
 
             $pdf->ln($alt+3);
             $pdf->setfont('arial','b',10);
-            $pdf->cell($w+50,$alt,"Total de Dias Afastado: "                ,0,0,"L",0);
-            $pdf->setfont('arial','',10);
-            if($diasAfastado == null){
-                $pdf->cell($w+32,$alt,"Nenhum dia afastado."                ,0,0,"L",0);
-            }else{
-                $pdf->cell($w+32,$alt,"$diasAfastado dias."                 ,0,0,"L",0);
+            if(pg_num_rows($rsAfastamentos) > 0){
+                $pdf->cell($w+50,$alt,"Total de Dias Afastado: "                ,0,0,"L",0);
+                $pdf->setfont('arial','',10);
+                if($diasAfastado == null){
+                    $pdf->cell($w+32,$alt,"Nenhum dia afastado."                ,0,0,"L",0);
+                }else{
+                    $pdf->cell($w+32,$alt,"$diasAfastado dias."                 ,0,0,"L",0);
+                }
+                $pdf->ln($alt+4);
+                $pdf->setfont('arial','b',10);
+                $pdf->ln($alt+4);
+                $pdf->cell($w+40,$alt,"Tempo de Serviço: "           ,0,0,"L",0);
+                $pdf->setfont('arial','',10);
+                $pdf->cell($w+190,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
+                $pdf->setfont('arial','b',10);
+                $pdf->ln($alt+10);
             }
-            $pdf->ln($alt+4);
-            $pdf->setfont('arial','b',10);
-            $pdf->ln($alt+4);
-            $pdf->cell($w+40,$alt,"Tempo de Serviço: "           ,0,0,"L",0);
-            $pdf->setfont('arial','',10);
-            $pdf->cell($w+190,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
-            $pdf->setfont('arial','b',10);
-            $pdf->ln($alt+10);
         }
 
         $pdf->cell($w+190,$alt,"________________________________________________________________________________",0,1,"C",0);
