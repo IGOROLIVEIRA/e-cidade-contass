@@ -138,25 +138,29 @@ class empenho {
 
 
   function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='', 
-                    $iContaPagadora = null) {
+                    $iContaPagadora = null, $lVerificaContaPagadora = true) {
 
     /*
      * Caso o usuário tenha marcado a opção 'Obriga Conta Pagadora na Liquidação'
      * obriga informar a conta pagadora
      */
-    $clempparametro = $this->usarDao("empparametro", true);
-    $rsParametros   = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"*"));
-    if ($clempparametro->numrows > 0){
-        $oParametros = db_utils::fieldsMemory($rsParametros,0);
-    } else {
-        $this->erro_status = '0';
-        $this->erro_msg    = "Não foi possível encontrar parâmetros do empenho para o ano.";
-        return false;
-    }
-    if (isset($oParametros->e30_obrigactapagliq) && $oParametros->e30_obrigactapagliq == "t" && ($iContaPagadora == null || $iContaPagadora == '')) {
-        $this->erro_status = '0';
-        $this->erro_msg    = "Conta pagadora não informada.";
-        return false;
+    if ($lVerificaContaPagadora) {
+        
+        $clempparametro = $this->usarDao("empparametro", true);
+        $rsParametros   = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"*"));
+        if ($clempparametro->numrows > 0){
+            $oParametros = db_utils::fieldsMemory($rsParametros,0);
+        } else {
+            $this->erro_status = '0';
+            $this->erro_msg    = "Não foi possível encontrar parâmetros do empenho para o ano.";
+            return false;
+        }
+        if (isset($oParametros->e30_obrigactapagliq) && $oParametros->e30_obrigactapagliq == "t" && ($iContaPagadora == null || $iContaPagadora == '')) {
+            $this->erro_status = '0';
+            $this->erro_msg    = "Conta pagadora não informada.";
+            return false;
+        }
+        
     }
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
@@ -2013,7 +2017,7 @@ class empenho {
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
                             $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null, 
-                            $iCompDesp = '', $iContaPagadora = null){
+                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2342,7 +2346,15 @@ class empenho {
     }
     if ($lLiquidar && !$this->lSqlErro){
 
-      $this->liquidar($this->numemp, $objEmpElem->e64_codele, $objEmpNota->e69_codnota, $nTotal,$sHistorico, '', $iCompDesp, $iContaPagadora);
+      $this->liquidar(  
+                $this->numemp, 
+                $objEmpElem->e64_codele, 
+                $objEmpNota->e69_codnota, 
+                $nTotal,$sHistorico, 
+                '', 
+                $iCompDesp, 
+                $iContaPagadora, 
+                $lVerificaContaPagadora);
       if ($this->erro_status == "0"){
 
         $this->lSqlErro = true;
