@@ -213,7 +213,7 @@ class cl_pagordem {
                                ,'$this->e50_hora' 
                                ,$this->e50_anousu 
                                ,".($this->e50_compdesp == "null" || $this->e50_compdesp == ""?"null":"'".$this->e50_compdesp."'")." 
-                               ,$this->e50_contapag
+                               ,".($this->e50_contapag == "null" || $this->e50_contapag == ""?"null":$this->e50_contapag)." 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
