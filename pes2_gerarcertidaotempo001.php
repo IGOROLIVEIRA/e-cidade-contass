@@ -22,37 +22,37 @@ $rotulocampo->label("rh01_regist");
 $rotulocampo->label("rh02_seqpes");
 $rotulocampo->label("z01_nome");
 
-//if(empty($rh01_regist)){
-//
-//    $datai_dia = '';
-//    $datai_mes = '';
-//    $datai_ano = '';
-//}
+if(empty($rh01_regist)){
 
-//if (isset($rh01_regist) && !empty($rh01_regist)) {
-//
-//    $ano             = db_anofolha();
-//    $mes             = db_mesfolha();
-//    $rsRhpesrescisao = $clrhpesrescisao->sql_record( $clrhpesrescisao->sql_query_ngeraferias( null,
-//        'rh05_recis',
-//        null,
-//        "rh02_regist = $rh01_regist and rh02_anousu = $ano and rh02_mesusu = $mes" ));
-//
-//    if ($rsRhpesrescisao && $clrhpesrescisao->numrows > 0) {
-//
-//        $oRecisao = db_utils::fieldsMemory($rsRhpesrescisao, 0);
-//
-//        $datai_dia = date('d', strtotime($oRecisao->rh05_recis));
-//        $datai_mes = date('m', strtotime($oRecisao->rh05_recis));
-//        $datai_ano = date('Y', strtotime($oRecisao->rh05_recis));
-//    } else {
-//
-//        $datai_dia = date('d', db_getsession('DB_datausu'));
-//        $datai_mes = date('m', db_getsession('DB_datausu'));
-//        $datai_ano = date('Y', db_getsession('DB_datausu'));
-//    }
-//
-//}
+    $datai_dia = '';
+    $datai_mes = '';
+    $datai_ano = '';
+}
+
+if (isset($rh01_regist) && !empty($rh01_regist)) {
+
+    $ano             = db_anofolha();
+    $mes             = db_mesfolha();
+    $rsRhpesrescisao = $clrhpesrescisao->sql_record( $clrhpesrescisao->sql_query_ngeraferias( null,
+        'rh05_recis',
+        null,
+        "rh02_regist = $rh01_regist and rh02_anousu = $ano and rh02_mesusu = $mes" ));
+
+    if ($rsRhpesrescisao && $clrhpesrescisao->numrows > 0) {
+
+        $oRecisao = db_utils::fieldsMemory($rsRhpesrescisao, 0);
+
+        $datai_dia = date('d', strtotime($oRecisao->rh05_recis));
+        $datai_mes = date('m', strtotime($oRecisao->rh05_recis));
+        $datai_ano = date('Y', strtotime($oRecisao->rh05_recis));
+    } else {
+
+        $datai_dia = date('d', db_getsession('DB_datausu'));
+        $datai_mes = date('m', db_getsession('DB_datausu'));
+        $datai_ano = date('Y', db_getsession('DB_datausu'));
+    }
+
+}
 ?>
 <html>
 <head>
@@ -195,62 +195,7 @@ db_menu( db_getsession("DB_id_usuario"),
 <script>
     var sMensagens = "recursoshumanos.rh.rec2_certcomprobatorio.";
 
-    function js_limparCampos(){
-
-        $('rh01_regist').value = '';
-        $('z01_nome').value    = '';
-        $('datai').value       = '';
-        $('numcert').value     = '';
-        $('emissor').value     = '';
-        $('z01_nomeemissor').value = '';
-    }
-
     function js_emite() {
-
-        // if (isNaN(document.form1.rh01_regist.value)) {
-        //
-        //     alert( _M( sMensagens + "matricula_invalida") );
-        //     $('rh01_regist').value = '';
-        //     document.form1.rh01_regist.focus();
-        //     return false
-        // }
-
-        // if (document.form1.rh01_regist.value == '' || isNaN(document.form1.rh01_regist.value)) {
-        //     alert( _M( sMensagens + "matricula_obrigatoria") );
-        //     document.form1.rh01_regist.focus();
-        //     return false
-        // }
-
-        // if (document.form1.datai_dia.value == '') {
-        //     alert( _M(sMensagens + "data_invalida") );
-        //     document.form1.datai.focus();
-        //     return false
-        // }
-
-        // if (document.form1.numcert.value.trim() != '') {
-        //
-        //     if (isNaN(document.form1.numcert.value)) {
-        //
-        //         alert( _M( sMensagens + "numerocertidao_invalido") );
-        //         $('numcert').value = '';
-        //         document.form1.numcert.focus();
-        //         return false
-        //     }
-        // }
-
-        // if (isNaN(document.form1.emissor.value)) {
-        //
-        //     alert( _M( sMensagens + "emissor_invalido") );
-        //     $('emissor').value = '';
-        //     document.form1.emissor.focus();
-        //     return false
-        // }
-
-        // if (document.form1.emissor.value == '' || isNaN(document.form1.emissor.value)) {
-        //     alert( _M(sMensagens + "emissor_obrigatorio") );
-        //     document.form1.emissor.focus();
-        //     return false
-        // }
 
         selecionados = "";
         virgula_ssel = "";
@@ -271,7 +216,6 @@ db_menu( db_getsession("DB_id_usuario"),
             'width=' + (screen.availWidth-5) + ',height='+(screen.availHeight-40) + ',scrollbars=1,location=0 ' );
         jan.moveTo(0,0);
 
-        js_limparCampos();
     }
 
     function js_pesquisaemissor(mostra){
@@ -304,7 +248,6 @@ db_menu( db_getsession("DB_id_usuario"),
     }
 
     function js_mostraemissor1(chave1, chave2) {
-
         document.form1.emissor.value         = chave1;
         document.form1.z01_nomeemissor.value = chave2;
         db_iframe_rhpessoal.hide();
@@ -337,6 +280,8 @@ db_menu( db_getsession("DB_id_usuario"),
     function js_mostrapessoal(chave, erro) {
 
         document.form1.z01_nome.value = chave;
+        document.form1.rh01_numcgm.value = '';
+        document.form1.z01_nomecgm.value = '';
         if (erro == true) {
 
             document.form1.rh01_regist.focus();
@@ -350,6 +295,8 @@ db_menu( db_getsession("DB_id_usuario"),
 
         document.form1.rh01_regist.value = chave1;
         document.form1.z01_nome.value    = chave3;
+        document.form1.rh01_numcgm.value = '';
+        document.form1.z01_nomecgm.value = '';
 
         db_iframe_rhpessoal.hide();
         document.form1.submit();
