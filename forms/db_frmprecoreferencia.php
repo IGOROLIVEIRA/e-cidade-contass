@@ -67,7 +67,8 @@
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
   <?php if ($db_opcao == 2) : ?>
     <input name="imprimir" type="submit" id="imprimir" value="Imprimir PDF">
-    <input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
+      <input name="imprimirword" type="submit" id="imprimirword" value="Imprimir Word">
+      <input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
   <?php endif; ?>
   <b>Quantidade de casas decimais:</b>
   <?php
