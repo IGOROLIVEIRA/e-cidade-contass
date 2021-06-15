@@ -720,7 +720,7 @@ if (isset($p->incluir)) {
           $oConc = db_utils::fieldsMemory($rsPro, $i);
           $clorcprograma->o54_anousu       = $clconaberturaexe->c91_anousudestino;
           $clorcprograma->o54_programa     = $oConc->o54_programa;
-          $clorcprograma->o54_codtri       = $oConc->o54_codtri;
+          $clorcprograma->o54_codtri       = $oConc->o54_codtri == "" ? $oConc->o54_programa : $oConc->o54_codtri;
           $clorcprograma->o54_descr        = $oConc->o54_descr;
           $clorcprograma->o54_finali       = $oConc->o54_finali;
           $clorcprograma->o54_tipoprograma = $oConc->o54_tipoprograma == ""?"0":$oConc->o54_tipoprograma;
@@ -981,7 +981,8 @@ if (isset($p->incluir)) {
 
       $iNumRows      = 0;
       $sWhere        = "c72_anousu = {$clconaberturaexe->c91_anousuorigem}";
-      $sSqlOrcamento = $oDaoConplano->sql_query_file(null, "*", null, $sWhere);
+      $sWhere        .= " and substr(c60_estrut,1,1) IN ('3','4')";
+      $sSqlOrcamento = $oDaoConplano->sql_query_conplanoorcamento(null, "*", null, $sWhere);
       $rsOrcamento   = $oDaoConplano->sql_record($sSqlOrcamento);
       $iNumRows      = $oDaoConplano->numrows;
 
