@@ -292,8 +292,7 @@ switch($tiporelatorio) {
             }
                 $pdf->ln($alt+4);
                 $pdf->setfont('arial','b',10);
-                $pdf->ln($alt+4);
-                $pdf->cell($w+40,$alt,"Tempo de Serviço: "           ,0,0,"L",0);
+                $pdf->cell($w+33,$alt,"Tempo de Serviço: "           ,0,0,"L",0);
                 $pdf->setfont('arial','',10);
                 $pdf->cell($w+190,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
                 $pdf->setfont('arial','b',10);
@@ -304,11 +303,11 @@ switch($tiporelatorio) {
         $pdf->cell($w+190,$alt,"________________________________________________________________________________",0,1,"C",0);
         $pdf->ln($alt+3);
         $pdf->setfont('arial','b',10);
-        $pdf->cell($w+32,$alt+1,"Dias de Faltas:"                                          ,0,0,"L",0);
+        $pdf->cell($w+30,$alt+1,"Dias de Faltas:"                                          ,0,0,"L",0);
         $pdf->setfont('arial','',10);
         $pdf->cell($w+30,$alt+1,$oGet->diasfalta                                           ,0,1,"L",0);
         $pdf->setfont('arial','b',10);
-        $pdf->cell($w+50,$alt+1,"Tempo total de Serviço:"                                  ,0,0,"L",0);
+        $pdf->cell($w+41,$alt+1,"Tempo total de Serviço:"                                  ,0,0,"L",0);
         $pdf->setfont('arial','',10);
         $pdf->cell($w+140,$alt+1,$periodoTotalServico->y." anos ". $periodoTotalServico->m." meses e ".$periodoTotalServico->d." dias" ,0,1,"L",0);
         $pdf->setfont('arial','b',10);
