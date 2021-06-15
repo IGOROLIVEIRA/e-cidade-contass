@@ -126,20 +126,6 @@ function getDadosNumCGM($cgm){
 
 $Totaldias = getTotaldeDiasTrabalhadosCGM($regist,$oGet);
 
-$datePartida = getDtAdmissao($regist);
-
-//retirando ferias
-$dtPartidaSemferias = date('d/m/Y', strtotime('-'.$diasfalta.'days', strtotime($datePartida)));
-
-//somando dias trabalhados
-$timetotal= date('d/m/Y', strtotime('+'.$Totaldias->days.'days', strtotime($dtPartidaSemferias)));
-
-//criacao do timesteamp
-$dataInicio = DateTime::createFromFormat('d/m/Y', $datePartida);
-$dataFim = DateTime::createFromFormat('d/m/Y', $timetotal);
-//Periodo total
-$periodoTotalServico = date_diff($dataInicio , $dataFim);
-
 switch($tiporelatorio) {
     case 'cgm':
         $dadosMatricula = getDadosNumCGM($regist);
@@ -278,6 +264,12 @@ switch($tiporelatorio) {
 
             //Periodo total
             $periodo = date_diff($dataAdmissao , $dataRecisao);
+            //total de anos
+            $anosTrabalhados += $periodo->y;
+            //total de anos
+            $mesesTrabalhados += $periodo->m;
+            //total de dias
+            $diasTrabalhados += $periodo->days;
 
             $pdf->ln($alt+3);
             $pdf->setfont('arial','b',10);
@@ -299,6 +291,11 @@ switch($tiporelatorio) {
                 $pdf->ln($alt+10);
 
         }
+        $diasTrabalhados = $diasTrabalhados - $oGet->diasfalta;
+        $anos = explode('.',$diasTrabalhados / 365);
+        $mesesRestantes = abs(($anos[0] * 365) - $diasTrabalhados);
+        $meses = explode('.',$mesesRestantes / 30);
+        $diasRestantes = abs(($meses[0] * 30) - $mesesRestantes);
 
         $pdf->cell($w+190,$alt,"________________________________________________________________________________",0,1,"C",0);
         $pdf->ln($alt+3);
@@ -309,7 +306,7 @@ switch($tiporelatorio) {
         $pdf->setfont('arial','b',10);
         $pdf->cell($w+41,$alt+1,"Tempo total de Serviço:"                                  ,0,0,"L",0);
         $pdf->setfont('arial','',10);
-        $pdf->cell($w+140,$alt+1,$periodoTotalServico->y." anos ". $periodoTotalServico->m." meses e ".$periodoTotalServico->d." dias" ,0,1,"L",0);
+        $pdf->cell($w+140,$alt+1,$anos[0]." anos ". $meses[0]." meses e ".$diasRestantes." dias" ,0,1,"L",0);
         $pdf->setfont('arial','b',10);
         $pdf->cell($w+10,$alt+1,"Data:"                                                    ,0,0,"L",0);
         $pdf->setfont('arial','',10);
