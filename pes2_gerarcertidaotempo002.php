@@ -250,7 +250,7 @@ switch($tiporelatorio) {
             $pdf->cell($w+40,$alt,"Data Saida"          ,0,0,"C",1);
             $pdf->cell($w+40,$alt,"Data Retorno"        ,0,0,"C",1);
             $pdf->cell($w+30,$alt,"Dias Afastado"       ,0,1,"C",1);
-
+            $diasAfastado = 0;
             for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
                 $oDadosResponsavel = db_utils::fieldsMemory($rsAfastamentos, $iCont);
 
