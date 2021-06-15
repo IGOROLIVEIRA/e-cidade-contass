@@ -157,8 +157,7 @@ ob_start();
 <?php
 if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
     echo <<<HTML
-
-        <table>
+        <table style="border: 1px solid black">
             <tr>
                 <td>SEQ</td>
                 <td>ITEM</td>
@@ -169,7 +168,7 @@ if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
                 <td>UN</td>
                 <td>TOTAL/VLR ESTIMADO</td>
             </tr>
-        </table>
+
 HTML;
 }else{
     echo <<<HTML
@@ -180,6 +179,7 @@ HTML;
                 <td>DESCRIÇÃO DO ITEM</td>
                 <td>VALOR UN</td>
                 <td>QUANT</td>
+                <td>UN</td>
                 <td>TOTAL</td>
             </tr>
 HTML;
@@ -222,35 +222,35 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){
         echo <<<HTML
         <tr>
-              <td aaaaa</td>
-              <td {$oDadosDaLinha->item}</td>
-              <td {$oDadosDaLinha->descricao}</td>
-              <td {$oDadosDaLinha->mediapercentual}</td>
-              <td {$oDadosDaLinha->valorUnitario}</td>          
-              <td {$oDadosDaLinha->quantidade}</td>
-              <td {$oDadosDaLinha->unidadeDeMedida}</td>
-              <td {$oDadosDaLinha->total}</td>
+          <td>{$oDadosDaLinha->seq}</td>
+          <td>{$oDadosDaLinha->item}</td>
+          <td>{$oDadosDaLinha->descricao}</td>
+          <td>{$oDadosDaLinha->mediapercentual}</td>
+          <td>{$oDadosDaLinha->valorUnitario}</td>          
+          <td>{$oDadosDaLinha->quantidade}</td>
+          <td>{$oDadosDaLinha->unidadeDeMedida}</td>
+          <td>{$oDadosDaLinha->total}</td>
         </tr>
         </table>
 HTML;
     }else{
         echo <<<HTML
-          <tr>
-              <td aaaaaa</td>
-              <td {$oDadosDaLinha->item}</td>
-              <td {$oDadosDaLinha->descricao}</td>
-              <td {$oDadosDaLinha->mediapercentual}</td>
-              <td R$ {$oDadosDaLinha->valorUnitario}</td>          
-              <td {$oDadosDaLinha->quantidade}</td>
-              <td {$oDadosDaLinha->unidadeDeMedida}</td>
-              <td R$ {$oDadosDaLinha->total}</td>
+        <tr>
+            <td> $oDadosDaLinha->seq               </td>
+            <td> {$oDadosDaLinha->item}            </td>
+            <td> {$oDadosDaLinha->descricao}       </td>
+            <td> {$oDadosDaLinha->valorUnitario}   </td>
+            <td> {$oDadosDaLinha->quantidade}      </td>          
+            <td> {$oDadosDaLinha->unidadeDeMedida} </td>
+            <td> {$oDadosDaLinha->total}           </td>
         </tr>
-        </table>
+        
 HTML;
     }
 
 }
 ?>
+</table>
     </body>
 </html>
 <?php
