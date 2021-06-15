@@ -184,10 +184,6 @@ HTML;
             </tr>
 HTML;
 }
-echo <<<HTML
-    </body>
-    </html>
-HTML;
 
 $nTotalItens = 0;
 
@@ -226,7 +222,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){
         echo <<<HTML
         <tr>
-              <td {$oDadosDaLinha->seq}</td>
+              <td aaaaa</td>
               <td {$oDadosDaLinha->item}</td>
               <td {$oDadosDaLinha->descricao}</td>
               <td {$oDadosDaLinha->mediapercentual}</td>
@@ -240,7 +236,7 @@ HTML;
     }else{
         echo <<<HTML
           <tr>
-              <td {$oDadosDaLinha->seq}</td>
+              <td aaaaaa</td>
               <td {$oDadosDaLinha->item}</td>
               <td {$oDadosDaLinha->descricao}</td>
               <td {$oDadosDaLinha->mediapercentual}</td>
@@ -255,7 +251,8 @@ HTML;
 
 }
 ?>
-
+    </body>
+</html>
 <?php
 header("Content-type: application/vnd.ms-word; charset=UTF-8");
 header("Content-Disposition: attachment; Filename=teste.doc");
