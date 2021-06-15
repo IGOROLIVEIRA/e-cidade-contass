@@ -183,11 +183,11 @@ if (!$sqlerro && $codprocesso) {
       }
 
       if ($l20_usaregistropreco == 't') {
+
         $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
         $sSqlSolicitemRegPreco = "select * from solicitemregistropreco left join solicitem on pc11_codigo = pc57_solicitem where pc11_numero = $oItemOrigem->pc11_numero";
         $rsSolicitemRegPreco = $oDaoSolicitemRegPreco->sql_record($sSqlSolicitemRegPreco);
-        // db_criatabela($rsSolicitemRegPreco);
-        // exit;
+        //db_criatabela($rsSolicitemRegPreco);
         for ($iContador = 0; $iContador < $oDaoSolicitemRegPreco->numrows; $iContador++) {
           $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, $iContador);
           $oDaoSolicitemRegPreco->excluir($oSolicitemRegPreco->pc57_sequencial);

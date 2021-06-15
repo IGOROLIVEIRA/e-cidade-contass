@@ -909,6 +909,8 @@ switch ($oParam->exec) {
               if (pg_numrows($rsSolicitem)) {
 
                 if ($aItens[$count]->qtdexclusiva) {
+                  // db_criatabela($rsSolicitem);
+                  // echo $aItens[$count]->qtdexclusiva;
 
                   /**
                    * Cadastra o novo item com a quantidade exclusiva na solicitem
@@ -934,7 +936,8 @@ switch ($oParam->exec) {
                     $sqlerro = true;
                     break;
                   }
-
+                  // echo ' ' . $oDaoSolicitemReservado->pc11_codigo;
+                  // exit;
                   /**
                    * Altera a quantidade do item origem na solicitem
                    */
@@ -948,6 +951,30 @@ switch ($oParam->exec) {
 
                     if (!$oItemAlterado->numrows_alterar) {
                       $erro_msg = $oItemAlterado->erro_msg;
+                      $sqlerro = true;
+                      break;
+                    }
+                  }
+
+                  $clliclicita = db_utils::getDao('liclicita');
+                  $sSqlLiclicita = $clliclicita->sql_query_file(null, "l20_usaregistropreco", null, "l20_codigo=$oParam->licitacao");
+                  $rsLiclicita = $clliclicita->sql_record($sSqlLiclicita);
+                  db_fieldsmemory($rsLiclicita, 0);
+
+                  if ($l20_usaregistropreco != 't') {
+
+                    /**
+                     * Busca os dados do item de origem na tabela solicitemele e inclui na tabela solicitemele
+                     */
+
+                    $sSqlElemento = 'SELECT pc18_codele FROM solicitemele where pc18_solicitem = ' . $oItem->pc11_codigo;
+                    $rsElemento = db_query($sSqlElemento);
+                    $iSolicitemElemento = db_utils::fieldsMemory($rsElemento, 0)->pc18_codele;
+                    $oDaoSolicitemElem = db_utils::getDao('solicitemele');
+                    $oDaoSolicitemElem->incluir($oDaoSolicitemReservado->pc11_codigo, $iSolicitemElemento);
+
+                    if (!$oDaoSolicitemElem->numrows_incluir) {
+                      $erro_msg = $oDaoSolicitemElem->erro_msg;
                       $sqlerro = true;
                       break;
                     }
@@ -992,30 +1019,6 @@ switch ($oParam->exec) {
                     //   $sqlerro = true;
                     //   break;
                     // }
-                  }
-
-                  $clliclicita = db_utils::getDao('liclicita');
-                  $sSqlLiclicita = $clliclicita->sql_query_file(null, "l20_usaregistropreco", null, "l20_codigo=$oParam->licitacao");
-                  $rsLiclicita = $clliclicita->sql_record($sSqlLiclicita);
-                  db_fieldsmemory($rsLiclicita, 0);
-
-                  if ($l20_usaregistropreco != 't') {
-
-                    /**
-                     * Busca os dados do item de origem na tabela solicitemele e inclui na tabela solicitemele
-                     */
-
-                    $sSqlElemento = 'SELECT pc18_codele FROM solicitemele where pc18_solicitem = ' . $oItem->pc11_codigo;
-                    $rsElemento = db_query($sSqlElemento);
-                    $iSolicitemElemento = db_utils::fieldsMemory($rsElemento, 0)->pc18_codele;
-                    $oDaoSolicitemElem = db_utils::getDao('solicitemele');
-                    $oDaoSolicitemElem->incluir($oDaoSolicitemReservado->pc11_codigo, $iSolicitemElemento);
-
-                    if (!$oDaoSolicitemElem->numrows_incluir) {
-                      $erro_msg = $oDaoSolicitemElem->erro_msg;
-                      $sqlerro = true;
-                      break;
-                    }
                   }
 
                   /**
