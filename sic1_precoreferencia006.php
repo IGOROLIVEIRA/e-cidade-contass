@@ -151,18 +151,112 @@ ob_start();
     <html xmlns="http://www.w3.org/1999/html">
     <head>
         <title>Relatório</title>
-        <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
+        <meta charset="UTF-8"/>
     </head>
     <body>
+<?php
+if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
+    echo <<<HTML
+
         <table>
             <tr>
-                <td>teste</td>
+                <td>SEQ</td>
+                <td>ITEM</td>
+                <td>DESCRIÇÃO DO ITEM</td>
+                <td><strong>TAXA/TABELA</strong></td>
+                <td>VALOR UN</td>
+                <td>QUANT</td>
+                <td>UN</td>
+                <td>TOTAL/VLR ESTIMADO</td>
             </tr>
         </table>
+HTML;
+}else{
+    echo <<<HTML
+        <table>
+            <tr>
+                <td>SEQ</td>
+                <td>ITEM</td>
+                <td>DESCRIÇÃO DO ITEM</td>
+                <td>VALOR UN</td>
+                <td>QUANT</td>
+                <td>TOTAL</td>
+            </tr>
+HTML;
+}
+echo <<<HTML
     </body>
     </html>
+HTML;
+
+$nTotalItens = 0;
+
+for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+    $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+    $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->pc11_quant;
+
+    $nTotalItens += $lTotal;
+    $oDadosDaLinha = new stdClass();
+    $oDadosDaLinha->seq = $iCont + 1;
+    $oDadosDaLinha->item = $oResult->pc01_codmater;
+    $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+    if($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t"){
+        $oDadosDaLinha->valorUnitario = "-";
+        $oDadosDaLinha->quantidade = "-";
+        if($oResult->mediapercentual == 0){
+            $oDadosDaLinha->mediapercentual = "";
+        }else{
+            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
+        }
+        $oDadosDaLinha->unidadeDeMedida = "-";
+        $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+    }else{
+        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+        $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+        if($oResult->mediapercentual == 0){
+            $oDadosDaLinha->mediapercentual = "-";
+        }else{
+            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
+        }
+        $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+        $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+    }
+
+    if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){
+        echo <<<HTML
+        <tr>
+              <td {$oDadosDaLinha->seq}</td>
+              <td {$oDadosDaLinha->item}</td>
+              <td {$oDadosDaLinha->descricao}</td>
+              <td {$oDadosDaLinha->mediapercentual}</td>
+              <td {$oDadosDaLinha->valorUnitario}</td>          
+              <td {$oDadosDaLinha->quantidade}</td>
+              <td {$oDadosDaLinha->unidadeDeMedida}</td>
+              <td {$oDadosDaLinha->total}</td>
+        </tr>
+        </table>
+HTML;
+    }else{
+        echo <<<HTML
+          <tr>
+              <td {$oDadosDaLinha->seq}</td>
+              <td {$oDadosDaLinha->item}</td>
+              <td {$oDadosDaLinha->descricao}</td>
+              <td {$oDadosDaLinha->mediapercentual}</td>
+              <td R$ {$oDadosDaLinha->valorUnitario}</td>          
+              <td {$oDadosDaLinha->quantidade}</td>
+              <td {$oDadosDaLinha->unidadeDeMedida}</td>
+              <td R$ {$oDadosDaLinha->total}</td>
+        </tr>
+        </table>
+HTML;
+    }
+
+}
+?>
 
 <?php
-//header("Content-type: application/vnd.ms-word");
-//header("Content-Disposition: attachment; Filename=teste.doc")
-//?>
+header("Content-type: application/vnd.ms-word; charset=UTF-8");
+header("Content-Disposition: attachment; Filename=teste.doc");
+?>
