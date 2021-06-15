@@ -25,9 +25,8 @@ switch ($oParam->exec) {
     $sSqlSysArqCamp = $oDaoSysArqCamp->sql_query_modulo('', '', '', '*', '', "db_sysmodulo.codmod = $oParam->iModulo");
     $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
     if ($oDaoSysArqCamp->numrows > 0) {
-
       $oDados = db_utils::fieldsMemory($rsSysArqCamp, 0);
-      // $oRetorno->l03_usaregistropreco = $oDados->l03_usaregistropreco;
+      $oRetorno->itens = $oDados;
     }
 
 

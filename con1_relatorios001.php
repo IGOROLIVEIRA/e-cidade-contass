@@ -65,6 +65,17 @@ if (isset($incluir)) {
       </td>
     </tr>
   </table>
+  <fieldset>
+    <legend><b>Legenda</b></legend>
+    <table id="legendas">
+      <tr>
+        <th align="right">Campos:</th>
+      </tr>
+      <tr>
+        <td align="right">l20_codigo</td>
+      </tr>
+    </table>
+  </fieldset>
   <?
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>

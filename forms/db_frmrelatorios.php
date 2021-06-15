@@ -146,29 +146,4 @@ $clrotulo->label("nomemod");
     }
     ?>
   }
-
-  function js_main() {
-
-    oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', 'oTxtCodigoAcordo', '', 10);
-    oTxtCodigoAcordo.addEvent("onChange", ";js_pesquisaac16_sequencial(false);");
-    oTxtCodigoAcordo.addEvent("onKeyUp", ";js_verificaAcordo(this.value);");
-    oTxtCodigoAcordo.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
-    oTxtCodigoAcordo.show($('ctnTxtCodigoAcordo'));
-
-    oTxtDescricaoAcordo = new DBTextField('oTxtDescricaoAcordo', 'oTxtDescricaoAcordo', '', 80);
-    oTxtDescricaoAcordo.show($('ctnTxtDescricaoAcordo'));
-    oTxtDescricaoAcordo.setReadOnly(true);
-
-    oGridAutorizacoes = new DBGrid('oGridAutorizacoes');
-    oGridAutorizacoes.nameInstance = 'oGridAutorizacoes';
-    oGridAutorizacoes.setCheckbox(0);
-    oGridAutorizacoes.setCellAlign(new Array('right', 'right', "center", 'right'));
-    oGridAutorizacoes.setHeader(new Array("cod", 'Autorização', 'Data', 'Valor'));
-    oGridAutorizacoes.aHeaders[1].lDisplayed = false;
-    oGridAutorizacoes.setHeight(250);
-    oGridAutorizacoes.show($('ctnGridAutorizacoes'));
-
-    $('btnPesquisarAutorizacoes').onclick = js_pesquisarAutorizacoesContrato;
-  }
-  js_main();
 </script>
