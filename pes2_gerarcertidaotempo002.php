@@ -270,25 +270,26 @@ switch($tiporelatorio) {
             }
 
             //subitraindo dias de falta do periodo
-            $dataRecisao= date('d/m/Y', strtotime('-'.$diasAfastado.'days', strtotime($date)));
+            $dataRecisaocomafasta= date('d/m/Y', strtotime('-'.$diasAfastado.'days', strtotime($date)));
             $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
             //criacao do timesteamp
             $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
-            $dataRecisao = DateTime::createFromFormat('d/m/Y', $finalPeriodo);
+            $dataRecisao = DateTime::createFromFormat('d/m/Y', $dataRecisaocomafasta);
 
             //Periodo total
             $periodo = date_diff($dataAdmissao , $dataRecisao);
 
             $pdf->ln($alt+3);
             $pdf->setfont('arial','b',10);
-            if(pg_num_rows($rsAfastamentos) > 0){
-                $pdf->cell($w+50,$alt,"Total de Dias Afastado: "                ,0,0,"L",0);
-                $pdf->setfont('arial','',10);
-                if($diasAfastado == null){
-                    $pdf->cell($w+32,$alt,"Nenhum dia afastado."                ,0,0,"L",0);
-                }else{
-                    $pdf->cell($w+32,$alt,"$diasAfastado dias."                 ,0,0,"L",0);
+            if(pg_num_rows($rsAfastamentos) > 0) {
+                $pdf->cell($w + 50, $alt, "Total de Dias Afastado: ", 0, 0, "L", 0);
+                $pdf->setfont('arial', '', 10);
+                if ($diasAfastado == null) {
+                    $pdf->cell($w + 32, $alt, "Nenhum dia afastado.", 0, 0, "L", 0);
+                } else {
+                    $pdf->cell($w + 32, $alt, "$diasAfastado dias.", 0, 0, "L", 0);
                 }
+            }
                 $pdf->ln($alt+4);
                 $pdf->setfont('arial','b',10);
                 $pdf->ln($alt+4);
@@ -297,7 +298,7 @@ switch($tiporelatorio) {
                 $pdf->cell($w+190,$alt,$periodo->y." anos ".$periodo->m." meses e ".$periodo->d." dias." ,0,1,"L",0);
                 $pdf->setfont('arial','b',10);
                 $pdf->ln($alt+10);
-            }
+
         }
 
         $pdf->cell($w+190,$alt,"________________________________________________________________________________",0,1,"C",0);
