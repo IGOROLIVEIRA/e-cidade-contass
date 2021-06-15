@@ -916,7 +916,7 @@ switch ($oParam->exec) {
                   $oItem = db_utils::fieldsMemory($rsSolicitem, 0);
                   $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                   $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
-                  $oDaoSolicitemReservado->pc11_seq = $oItem->pc11_seq + 2;
+                  $oDaoSolicitemReservado->pc11_seq = $oItem->pc11_seq + 1;
                   $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
                   $oDaoSolicitemReservado->pc11_vlrun = $oItem->pc11_vlrun;
                   $oDaoSolicitemReservado->pc11_prazo = $oItem->pc11_prazo;
@@ -961,8 +961,8 @@ switch ($oParam->exec) {
 
                     $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
 
-                    $oDaoSolicitemRegPreco->pc57_solicitem = $oItem->pc11_codigo;
-                    $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
+                    $oDaoSolicitemRegPreco->pc57_solicitem = $oDaoSolicitemReservado->pc11_codigo;
+                    $oDaoSolicitemRegPreco->pc57_quantmax = $nova_qtd;
                     $oDaoSolicitemRegPreco->pc57_quantmin = 1;
                     $oDaoSolicitemRegPreco->pc57_itemorigem = $oItem->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_ativo = 't';
