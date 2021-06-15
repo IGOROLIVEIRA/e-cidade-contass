@@ -1299,20 +1299,22 @@ class Bem {
         $oDadosReavaliacao = InventarioBem::buscaDadosDaReavaliacaoBem($this);
         $oDadosUltimaDepreciacao = BemDepreciacao::getInstance($this);
         if (!empty($oDadosReavaliacao) && !empty($oDadosUltimaDepreciacao)) {
+            
             $nValorLancamentoAjuste = $oDadosReavaliacao->getValorDepreciavel() - $oDadosUltimaDepreciacao->getValorAtual();
+
+            $sHistoricoLancamento = "LANÇAMENTO DE ESTORNO DE AJUSTE DA BAIXA DO BEM {$this->getDescricao()}, ";
+            $sHistoricoLancamento .= "PLACA {$this->getPlaca()->getPlacaSeq()}, CÓDIGO {$this->getCodigoBem()}.";
+
+            $oEventoContabil        = new EventoContabil(704, db_getsession('DB_anousu'));
+            $aLancamentos           = $oEventoContabil->getEventoContabilLancamento();
+            $oLancamentoAuxiliarBem = new LancamentoAuxiliarBem();
+            $oLancamentoAuxiliarBem->setBem($this);
+            $oLancamentoAuxiliarBem->setValorTotal($nValorLancamentoAjuste);
+            $oLancamentoAuxiliarBem->setObservacaoHistorico(strtoupper($sHistoricoLancamento));
+            $oLancamentoAuxiliarBem->setHistorico($aLancamentos[0]->getHistorico());
+            $oEventoContabil->executaLancamento($oLancamentoAuxiliarBem);
+
         }
-
-        $sHistoricoLancamento = "LANÇAMENTO DE ESTORNO DE AJUSTE DA BAIXA DO BEM {$this->getDescricao()}, ";
-        $sHistoricoLancamento .= "PLACA {$this->getPlaca()->getPlacaSeq()}, CÓDIGO {$this->getCodigoBem()}.";
-
-        $oEventoContabil        = new EventoContabil(704, db_getsession('DB_anousu'));
-        $aLancamentos           = $oEventoContabil->getEventoContabilLancamento();
-        $oLancamentoAuxiliarBem = new LancamentoAuxiliarBem();
-        $oLancamentoAuxiliarBem->setBem($this);
-        $oLancamentoAuxiliarBem->setValorTotal($nValorLancamentoAjuste);
-        $oLancamentoAuxiliarBem->setObservacaoHistorico(strtoupper($sHistoricoLancamento));
-        $oLancamentoAuxiliarBem->setHistorico($aLancamentos[0]->getHistorico());
-        $oEventoContabil->executaLancamento($oLancamentoAuxiliarBem);
 
       }
     }
