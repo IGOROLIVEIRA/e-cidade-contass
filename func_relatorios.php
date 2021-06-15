@@ -10,11 +10,13 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clrelatorios = new cl_relatorios;
 ?>
 <html>
+
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>
   <link href='estilos.css' rel='stylesheet' type='text/css'>
   <script language='JavaScript' type='text/javascript' src='scripts/scripts.js'></script>
 </head>
+
 <body>
   <form name="form2" method="post" action="" class="container">
     <fieldset>
@@ -23,47 +25,48 @@ $clrelatorios = new cl_relatorios;
       </table>
     </fieldset>
     <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-    <input name="limpar" type="reset" id="limpar" value="Limpar" >
+    <input name="limpar" type="reset" id="limpar" value="Limpar">
     <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_relatorios.hide();">
   </form>
-      <?
-      if(!isset($pesquisa_chave)){
-        if(isset($campos)==false){
-           if(file_exists("funcoes/db_func_relatorios.php")==true){
-             include("funcoes/db_func_relatorios.php");
-           }else{
-           $campos = "relatorios.oid,relatorios.*";
-           }
-        }
-	         $sql = $clrelatorios->sql_query();
-        $repassa = array();
-        echo '<div class="container">';
-        echo '  <fieldset>';
-        echo '    <legend>Resultado da Pesquisa</legend>';
-          db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
-        echo '  </fieldset>';
-        echo '</div>';
-      }else{
-        if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clrelatorios->sql_record($clrelatorios->sql_query($pesquisa_chave));
-          if($clrelatorios->numrows!=0){
-            db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$oid',false);</script>";
-          }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
-          }
-        }else{
-	       echo "<script>".$funcao_js."('',false);</script>";
-        }
+  <?
+  if (!isset($pesquisa_chave)) {
+    if (isset($campos) == false) {
+      if (file_exists("funcoes/db_func_relatorios.php") == true) {
+        include("funcoes/db_func_relatorios.php");
+      } else {
+        $campos = "relatorios.oid,relatorios.*";
       }
-      ?>
+    }
+    $sql = $clrelatorios->sql_query();
+    $repassa = array();
+    echo '<div class="container">';
+    echo '  <fieldset>';
+    echo '    <legend>Resultado da Pesquisa</legend>';
+    db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
+    echo '  </fieldset>';
+    echo '</div>';
+  } else {
+    if ($pesquisa_chave != null && $pesquisa_chave != "") {
+      $result = $clrelatorios->sql_record($clrelatorios->sql_query($pesquisa_chave));
+      if ($clrelatorios->numrows != 0) {
+        db_fieldsmemory($result, 0);
+        echo "<script>" . $funcao_js . "('$oid',false);</script>";
+      } else {
+        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+      }
+    } else {
+      echo "<script>" . $funcao_js . "('',false);</script>";
+    }
+  }
+  ?>
 </body>
+
 </html>
 <?
-if(!isset($pesquisa_chave)){
-  ?>
+if (!isset($pesquisa_chave)) {
+?>
   <script>
   </script>
-  <?
+<?
 }
 ?>

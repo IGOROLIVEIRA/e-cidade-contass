@@ -22,8 +22,27 @@ if (isset($incluir)) {
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta http-equiv="Expires" CONTENT="0">
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <script language="JavaScript" type="text/javascript" src="scripts/tinymce.min.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
+  <style>
+    .fora {
+      background-color: #d1f07c;
+    }
+
+    #fieldset_depart_inclusao,
+    #fieldset_depart_responsavel {
+      width: 500px;
+    }
+
+    #fieldset_depart_inclusao table,
+    #fieldset_depart_responsavel table {
+      margin: 0 auto;
+    }
+  </style>
+  <?
+  db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
+  db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
+  db_app::load("estilos.css, grid.style.css");
+  ?>
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
