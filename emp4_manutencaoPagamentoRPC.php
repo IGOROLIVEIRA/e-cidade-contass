@@ -464,6 +464,31 @@ switch($oParam->exec) {
             }
           }
         }
+        
+
+        /**
+         * Verifica se a conta pagadora padrão informada na liquidação foi alterada no momento 
+         * da configuração do movimento.
+         */
+        if (isset($oMovimento->iCodNota) && $oMovimento->iCodNota != '') {
+
+            $oDaoPagOrdem   = db_utils::getDao("pagordem");
+            $rsOrdem        = $oDaoPagOrdem->sql_record($oDaoPagOrdem->sql_query_file($oMovimento->iCodNota));
+            
+            if ($oDaoPagOrdem->numrows > 0) {
+                
+                if ($oMovimento->iContaPagadora != db_utils::fieldsMemory($rsOrdem,0)->e50_contapag) {
+                    
+                    $oDaoPagOrdem->e50_codord   = $oMovimento->iCodNota;
+                    $oDaoPagOrdem->e50_contapag = $oMovimento->iContaPagadora;
+                    $oDaoPagOrdem->alterar($oMovimento->iCodNota);
+
+                    if ($oDaoPagOrdem->erro_status == 0) {
+                        throw new Exception("Erro ao alterar a conta pagadora da ordem de pagamento ($oMovimento->iCodNota).");
+                    }                    
+                }
+            }        
+        }
       }
 
 		/*

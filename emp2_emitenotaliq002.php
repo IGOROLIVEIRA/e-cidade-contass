@@ -545,7 +545,9 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
         if ($clempagetipo->numrows > 0) {
             
             db_fieldsmemory($rsContaPagadora, 0);
-            $pdf1->conta_pagadora = "Reduz. {$e83_conta} - {$e83_descr} - Ag. {$c63_agencia}-{$c63_dvagencia} - Conta {$c63_conta}-{$c63_dvconta}.";
+            $pdf1->conta_pagadora_reduz     = $e83_conta;
+            $pdf1->conta_pagadora_agencia   = "{$c63_agencia}-{$c63_dvagencia}";
+            $pdf1->conta_pagadora_conta     = "{$c63_conta}-{$c63_dvconta} {$e83_descr}";
 
         }
     }

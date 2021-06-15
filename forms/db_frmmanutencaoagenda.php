@@ -76,6 +76,7 @@ if (count($aParametrosEmpenho) > 0) {
 
     .pesquisaConta li:hover:not(.header) {
         background-color: #eee;
+        cursor: pointer;
     }
 
     .codtipo {
@@ -999,7 +1000,7 @@ if (count($aParametrosEmpenho) > 0) {
                         aLinha[3] = e60_concarpeculiar;
                     }
                     aLinha[4]   = e50_codord;
-                    aLinha[5]   = js_createComboContasPag(e81_codmov, aContasVinculadas, e85_codtipo, lDisabled);
+                    aLinha[5]   = js_createComboContasPag(e81_codmov, aContasVinculadas, e85_codtipo, e50_contapag, lDisabled);
                     aLinha[6]   = z01_nome.urlDecode().substring(0,20);
                     aLinha[7]   = js_createComboContasForne(aContasFornecedor, e98_contabanco, e81_codmov, z01_numcgm);
                     aLinha[8]   = js_createComboForma(e97_codforma,e81_codmov, lDisabled);
@@ -1235,7 +1236,7 @@ if (count($aParametrosEmpenho) > 0) {
         document.form1.e82_codord.focus();
     }
 
-    function js_createComboContasPag(iCodMov, aContas, iContaConfig, lDisabled) {
+    function js_createComboContasPag(iCodMov, aContas, iContaConfig, iContaPagadoraPadrao, lDisabled) {
 
         var sDisabled = "";
         if (lDisabled == null) {
@@ -1246,6 +1247,7 @@ if (count($aParametrosEmpenho) > 0) {
         }
 
         var sComboInputHidden  = "<input type='hidden' id='tipoconta"+iCodMov+"' ";
+        var sContaPagPadHidden = "<input type='hidden' id='contapagpadrao"+iCodMov+"' value='"+iContaPagadoraPadrao+"' />";
         var sComboInputText = "<input type='text' id='ctapag"+iCodMov+"' class='ctapag' onfocus='this.select();mostrarPesquisa("+iCodMov+")' onkeyup='pesquisaConta("+iCodMov+",event)' onkeydown='pesquisaConta("+iCodMov+",event)' onclick='this.select();' onblur='fecharPesquisa("+iCodMov+");js_getSaldos("+iCodMov+")' placeholder='Selecione' title='' "+sDisabled;
 
         var sComboUL = "<ul id='pesquisaConta"+iCodMov+"' class='pesquisaConta'>";
@@ -1270,7 +1272,7 @@ if (count($aParametrosEmpenho) > 0) {
         sComboInputHidden += " /> ";
         sComboInputText += " /> ";
 
-        return sComboInputHidden+sComboInputText+sComboUL;
+        return sComboInputHidden+sComboInputText+sContaPagPadHidden+sComboUL;
     }
 
     function js_createInputNumDocumento(sNumDoc, iCodMov, iCodForma) {
@@ -2221,12 +2223,30 @@ if (count($aParametrosEmpenho) > 0) {
     function fecharPesquisa(conta) {
         setTimeout(function(){
             document.getElementById("pesquisaConta"+conta).style.display = "none";
-        }, 100);
+        }, 500);
     }
 
     function selecionarConta(elemento,conta) {
-        document.getElementById("tipoconta"+conta).value = elemento.getElementsByTagName("div")[0].textContent;
-        document.getElementById("ctapag"+conta).value = elemento.getElementsByTagName("span")[0].textContent;
+        
+        
+        iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+conta).value;
+        iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
+        sDescConta              = elemento.getElementsByTagName("span")[0].textContent
+
+        if (iContaPagadoraPadrao != '') {
+            
+            if (iContaSelecionada != iContaPagadoraPadrao) {
+                
+                if (!confirm('Conta selecionada diferente da conta pagadora padrão. \n \nDeseja prosseguir?')){
+                    return false;
+                }
+
+            }
+
+        }
+
+        document.getElementById("tipoconta"+conta).value = iContaSelecionada;
+        document.getElementById("ctapag"+conta).value = sDescConta;
     }
 
     function js_janelaEmiteCheque() {

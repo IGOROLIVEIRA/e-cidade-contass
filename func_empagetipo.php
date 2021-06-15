@@ -112,7 +112,7 @@ $clempagetipo->rotulo->label("e83_descr");
             $sDataAtual = date('Y-m-d', db_getsession('DB_datausu'));
             $sWhere     = " e60_numemp = {$e60_numemp} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
             $sCampos    = " distinct e83_codtipo, e83_descr, e83_conta, c61_codigo ";
-            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere);
+            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, true);
 
         } else {
             $sql = $clempagetipo->sql_query("",$campos,"e83_codtipo","");
@@ -128,7 +128,7 @@ $clempagetipo->rotulo->label("e83_descr");
             $sWhere     = " e60_numemp = {$e60_numemp} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
             $sWhere2    = " e83_codtipo = {$e83_codtipo} ";
             $sCampos    = " distinct e83_codtipo, e83_descr, e83_conta, c61_codigo ";
-            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, false, $sWhere2);
+            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, false, true, false, $sWhere2);
             $result     = $clempagetipo->sql_record($sql);
             
             if ($clempagetipo->numrows != 0) {

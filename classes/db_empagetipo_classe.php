@@ -779,7 +779,8 @@ class cl_empagetipo {
     }
     return $sql;
   }
-   function sql_query_contas_vinculadas ($e83_codtipo=null,$campos="*",$ordem=null,$sWhere, $lVinculadas = false , $op = null, $lContaUnicaFundeb = false, $sWhere2 = null) {
+   function sql_query_contas_vinculadas ($e83_codtipo = null, $campos = "*", $ordem = null, $sWhere, $lVinculadas = false, 
+                                        $op = null, $lSomenteCorrente = false, $lContaUnicaFundeb = false, $sWhere2 = null) {
 
    $sSql = "select ";
     if($campos != "*" ){
@@ -851,6 +852,16 @@ class cl_empagetipo {
 
     if (isset($sWhere2) && $sWhere2 != '') {
         $sSql .= " and {$sWhere2} ";
+    }
+
+    if ($lSomenteCorrente) {
+        $sSql .= " AND EXISTS (SELECT contabancaria.*,c60_codcon,c60_descr,c61_anousu FROM conplanoreduz 
+        JOIN conplano ON conplanoreduz.c61_codcon = conplano.c60_codcon 
+        AND conplanoreduz.c61_anousu = conplllano.c60_anousu
+        JOIN conplanocontabancaria ON conplano.c60_codcon = conplanocontabancaria.c56_codcon 
+        AND conplano.c60_anousu = conplanocontabancaria.c56_anousu
+        JOIN contabancaria ON conplanocontabancaria.c56_contabancaria = contabancaria.db83_sequencial
+        WHERE conplanoreduz.c61_anousu = ". db_getsession('DB_anousu') ." AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
     }
 
     return $sSql;
