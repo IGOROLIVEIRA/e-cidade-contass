@@ -51,7 +51,89 @@ function getTotaldeDiasTrabalhadosCGM($regist,$oGet){
         $regist
     );
     $rsRhPessoalmovCGM = db_query($sSqlRhPessoalmovCGM);
+    $diasAfastado = 1;
+    $diasTrabalhados = 0;
 
+    for ($iContCGM = 0; $iContCGM < pg_num_rows($rsRhPessoalmovCGM); $iContCGM++) {
+        $oDadosResponsavelCGM = db_utils::fieldsMemory($rsRhPessoalmovCGM, $iContCGM);
+        $sCampos = "cgm.z01_nome,cgm.z01_cgccpf,rhpessoal.rh01_admiss,rhpesrescisao.rh05_recis,
+                        CASE
+                           WHEN rh02_tbprev = 2 THEN 'FUNDO PREV.MUN'
+                           WHEN rh02_tbprev = 1 THEN 'INSS'
+                           WHEN rh02_tbprev = 3 THEN 'AUTONOMOS INSS'
+                           WHEN rh02_tbprev = 0 THEN 'Nenhum'
+                       END AS rh02_tbprev,
+                       rh37_descr,
+                       rh01_regist";
+
+        $oDaoRhPessoalmov = db_utils::getDao('rhpessoalmov');
+
+        $sSqlRhPessoalmov = $oDaoRhPessoalmov->sql_getDadosServidoresTempoServico($sCampos,
+            db_anofolha(),
+            db_mesfolha(),
+            $oDadosResponsavelCGM->rh01_regist
+        );
+        $rsRhPessoalmov = db_query($sSqlRhPessoalmov);
+
+        $oDadosPessoal = db_utils::fieldsMemory($rsRhPessoalmov, 0);
+
+        //busco afastamento
+        $oDaoAtastamentoMatricula = new cl_afasta();
+        $sqlAfastamento = $oDaoAtastamentoMatricula->sql_query(null, "r45_dtafas,r45_dtreto", "r45_dtafas", "r45_anousu = " . db_anofolha() . "
+        AND r45_mesusu = " . db_mesfolha() . "
+        AND r45_regist = $oDadosPessoal->rh01_regist and r45_situac in ($oGet->vinculoselecionados)");
+
+        $rsAfastamentos = $oDaoAtastamentoMatricula->sql_record($sqlAfastamento);
+
+        for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
+            $oDadosResponsavel = db_utils::fieldsMemory($rsAfastamentos, $iCont);
+
+            $dtafas = (implode("/", (array_reverse(explode("-", $oDadosResponsavel->r45_dtafas)))));
+            $dtreto = (implode("/", (array_reverse(explode("-", $oDadosResponsavel->r45_dtreto)))));
+
+            $dtAfastamento = DateTime::createFromFormat('d/m/Y', $dtafas);
+            $dtRetorno = DateTime::createFromFormat('d/m/Y', $dtreto);
+            $oPeriodoAfastamento = date_diff($dtAfastamento, $dtRetorno);
+            $diasAfastado += $oPeriodoAfastamento->days;
+        }
+
+        //formato a data
+        $dtadmiss = (implode("/", (array_reverse(explode("-", $oDadosPessoal->rh01_admiss)))));
+        if ($oDadosPessoal->rh05_recis == "") {
+            $date = (implode("-", (array_reverse(explode("-", $oGet->datacert)))));
+        } else {
+            $date = (implode("-", (array_reverse(explode("-", $oDadosPessoal->rh05_recis)))));
+        }
+
+        //subitraindo dias de falta do periodo
+        $dataRecisao = date('d/m/Y', strtotime($date));
+        $dtcertidao = (implode("/", (array_reverse(explode("-", $oGet->datacert)))));
+
+        //criacao do timesteamp
+        $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
+        $dataRecisao = DateTime::createFromFormat('d/m/Y', $dataRecisao);
+
+        //Periodo total
+        $periodo = date_diff($dataAdmissao, $dataRecisao);
+        $diasTrabalhados += $periodo->days;
+    }
+    $diasTrabalhados = $diasTrabalhados - $diasAfastado - $oGet->diasfalta;
+
+    return $diasTrabalhados;
+}
+
+function getTotaldeDiasTrabalhadosMatricula($regist,$oGet){
+    $sCampos  = "rh01_regist";
+
+    $oDaoRhPessoalmov = db_utils::getDao('rhpessoalmov');
+
+    $sSqlRhPessoalmovCGM = $oDaoRhPessoalmov->sql_getDadosServidoresTempoServico( $sCampos,
+        db_anofolha(),
+        db_mesfolha(),
+        $regist
+    );
+    $rsRhPessoalmovCGM = db_query($sSqlRhPessoalmovCGM);
+    $diasTrabalhados = 0;
     for ($iContCGM = 0; $iContCGM < pg_num_rows($rsRhPessoalmovCGM); $iContCGM++) {
         $oDadosResponsavelCGM = db_utils::fieldsMemory($rsRhPessoalmovCGM, $iContCGM);
         $sCampos  = "cgm.z01_nome,cgm.z01_cgccpf,rhpessoal.rh01_admiss,rhpesrescisao.rh05_recis,
@@ -74,6 +156,27 @@ function getTotaldeDiasTrabalhadosCGM($regist,$oGet){
         $rsRhPessoalmov = db_query($sSqlRhPessoalmov);
 
         $oDadosPessoal = db_utils::fieldsMemory($rsRhPessoalmov, 0);
+
+        //busco afastamento
+        $oDaoAtastamentoMatricula = new cl_afasta();
+        $sqlAfastamento = $oDaoAtastamentoMatricula->sql_query(null,"r45_dtafas,r45_dtreto","r45_dtafas","r45_anousu = ".db_anofolha()."
+        AND r45_mesusu = ".db_mesfolha()."
+        AND r45_regist = $oDadosPessoal->rh01_regist and r45_situac in ($oGet->vinculoselecionados)");
+
+        $rsAfastamentos = $oDaoAtastamentoMatricula->sql_record($sqlAfastamento);
+        $diasAfastado = 1;
+
+        for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
+            $oDadosResponsavel = db_utils::fieldsMemory($rsAfastamentos, $iCont);
+
+            $dtafas = (implode("/",(array_reverse(explode("-",$oDadosResponsavel->r45_dtafas)))));
+            $dtreto = (implode("/",(array_reverse(explode("-",$oDadosResponsavel->r45_dtreto)))));
+
+            $dtAfastamento = DateTime::createFromFormat('d/m/Y', $dtafas);
+            $dtRetorno = DateTime::createFromFormat('d/m/Y', $dtreto);
+            $oPeriodoAfastamento = date_diff($dtAfastamento , $dtRetorno);
+            $diasAfastado += $oPeriodoAfastamento->days;
+        }
         //formato a data
         $dtadmiss = (implode("/",(array_reverse(explode("-",$oDadosPessoal->rh01_admiss)))));
         if($oDadosPessoal->rh05_recis == ""){
@@ -83,7 +186,7 @@ function getTotaldeDiasTrabalhadosCGM($regist,$oGet){
         }
 
         //subitraindo dias de falta do periodo
-        $dataRecisao= date('d/m/Y', strtotime('-'.$oGet->diasfalta.'days', strtotime($date)));
+        $dataRecisao= date('d/m/Y', strtotime($date));
         $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
         //criacao do timesteamp
         $dataAdmissao = DateTime::createFromFormat('d/m/Y', $dtadmiss);
@@ -91,9 +194,10 @@ function getTotaldeDiasTrabalhadosCGM($regist,$oGet){
 
         //Periodo total
         $periodo = date_diff($dataAdmissao , $dataRecisao);
-
-        return $periodo;
+        $diasTrabalhados += $periodo->days;
+        $diasTrabalhados = $diasTrabalhados - $diasAfastado - $oGet->diasfalta;
     }
+    return $diasTrabalhados;
 }
 
 function getDtAdmissao($regist){
@@ -125,6 +229,7 @@ function getDadosNumCGM($cgm){
 }
 
 $Totaldias = getTotaldeDiasTrabalhadosCGM($regist,$oGet);
+$TotaldiasMatricula = getTotaldeDiasTrabalhadosMatricula($regist,$oGet);
 
 switch($tiporelatorio) {
     case 'cgm':
@@ -153,7 +258,7 @@ switch($tiporelatorio) {
         $pdf->cell($w,$alt,"Certidão Nº: ".$ncertidao,0,1,"C",0);
         $pdf->ln($alt+4);
         $pdf->setfont('arial','',10);
-        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$dadosMatricula->z01_nome.", inscrito no CPF sob o nº ".$dadosMatricula->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $Totaldias->days dias.",0,"J",0,0);
+        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$dadosMatricula->z01_nome.", inscrito no CPF sob o nº ".$dadosMatricula->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $Totaldias dias.",0,"J",0,0);
         $pdf->setfont('arial','b',10);
         $pdf->ln($alt+4);
         $alt = 5;
@@ -236,7 +341,7 @@ switch($tiporelatorio) {
             $pdf->cell($w+40,$alt,"Data Saida"          ,0,0,"C",1);
             $pdf->cell($w+40,$alt,"Data Retorno"        ,0,0,"C",1);
             $pdf->cell($w+30,$alt,"Dias Afastado"       ,0,1,"C",1);
-            $diasAfastado = 0;
+            $diasAfastado = 1;
             for ($iCont = 0; $iCont < pg_num_rows($rsAfastamentos); $iCont++) {
                 $oDadosResponsavel = db_utils::fieldsMemory($rsAfastamentos, $iCont);
 
@@ -252,9 +357,8 @@ switch($tiporelatorio) {
                 $pdf->cell($w+80,$alt+2,$oDadosResponsavel->descrafastamento,0,0,"C",0);
                 $pdf->cell($w+40,$alt+2,$dtafas                             ,0,0,"C",0);
                 $pdf->cell($w+40,$alt+2,$dtreto                             ,0,0,"C",0);
-                $pdf->cell($w+30,$alt+2,$oPeriodoAfastamento->days          ,0,1,"C",0);
+                $pdf->cell($w+30,$alt+2,$oPeriodoAfastamento->days + 1      ,0,1,"C",0);
             }
-
             //subitraindo dias de falta do periodo
             $dataRecisaocomafasta= date('d/m/Y', strtotime('-'.$diasAfastado.'days', strtotime($date)));
             $dtcertidao = (implode("/",(array_reverse(explode("-",$oGet->datacert)))));
@@ -367,7 +471,7 @@ switch($tiporelatorio) {
         $pdf->cell($w,$alt,"Certidão Nº: ".$ncertidao,0,1,"C",0);
         $pdf->ln($alt+4);
         $pdf->setfont('arial','',10);
-        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$oDadosPessoal->z01_nome.", inscrito no CPF sob o nº ".$oDadosPessoal->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $periodo->days dias.",0,"J",0,0);
+        $pdf->MultiCell($w,$alt,"           Certificamos, para os devidos fins, que o(a) Sr(a) ".$oDadosPessoal->z01_nome.", inscrito no CPF sob o nº ".$oDadosPessoal->z01_cgccpf.", foi servidor(a) deste Órgão, conforme discriminação abaixo, contando no período um total de $TotaldiasMatricula dias.",0,"J",0,0);
         $pdf->setfont('arial','b',10);
         $pdf->ln($alt+4);
         $alt = 5;
@@ -433,8 +537,9 @@ switch($tiporelatorio) {
             $pdf->cell($w+80,$alt+2,$oDadosResponsavel->descrafastamento,0,0,"C",0);
             $pdf->cell($w+40,$alt+2,$dtafas                             ,0,0,"C",0);
             $pdf->cell($w+40,$alt+2,$dtreto                             ,0,0,"C",0);
-            $pdf->cell($w+30,$alt+2,$oPeriodoAfastamento->days          ,0,1,"C",0);
+            $pdf->cell($w+30,$alt+2,$oPeriodoAfastamento->days + 1         ,0,1,"C",0);
         }
+        $diasAfastado = $diasAfastado + 1;
         $pdf->ln($alt+3);
         $pdf->setfont('arial','b',10);
         $pdf->cell($w+50,$alt,"Total de Dias Afastado: "                ,0,0,"L",0);
