@@ -151,7 +151,7 @@ ob_start();
     <html xmlns="http://www.w3.org/1999/html">
     <head>
         <title>Relatório</title>
-        <meta charset="UTF-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
     <body>
 <?php
