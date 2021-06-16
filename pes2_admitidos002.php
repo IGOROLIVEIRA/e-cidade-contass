@@ -92,6 +92,53 @@ if($lota == "l"){
   }
 }
 
+$sWhere = "";
+if($tiporesumo == 'c'){
+ if(isset($cai) && trim($cai) != "" && isset($caf) && trim($caf) != ""){
+    // Se for por intervalos e vier lotação inicial e final
+    $sWhere     .= " and rh37_funcao between '".$cai."' and '".$caf."' ";
+  }else if(isset($cai) && trim($cai) != ""){
+    // Se for por intervalos e vier somente lotação inicial
+    $sWhere    .= " and rh37_funcao >= '".$cai."' ";
+  }else if(isset($caf) && trim($caf) != ""){
+    // Se for por intervalos e vier somente lotação final
+    $sWhere    .= " and rh37_funcao <= '".$caf."' ";
+  }else if(isset($fca) && trim($fca) != ""){
+    // Se for por selecionados
+    $sWhere  .= " and rh37_funcao in ('".str_replace(",","','",$fca)."') ";
+  }
+}elseif($tiporesumo == 'l'){
+  if(isset($lti) && trim($lti) != "" && isset($ltf) && trim($ltf) != ""){
+    // Se for por intervalos e vier local inicial e final
+    $sWhere    .= " and r70_estrut between '".$lti."' and '".$ltf."' ";
+  }else if(isset($lti) && trim($lti) != ""){
+    // Se for por intervalos e vier somente local inicial
+    $sWhere    .= " and r70_estrut >= '".$lti."' ";
+  }else if(isset($ltf) && trim($ltf) != ""){
+    // Se for por intervalos e vier somente local final
+    $sWhere    .= " and r70_estrut <= '".$ltf."' ";
+  }else if(isset($flt) && trim($flt) != ""){
+    // Se for por selecionados
+    $sWhere  .= " and r70_estrut in ('".str_replace(",","','",$flt)."') ";
+  }
+
+}else{
+  if(isset($ori) && trim($ori) != "" && isset($orf) && trim($orf) != ""){
+    // Se for por intervalos e vier órgão inicial e final
+    $sWhere    .= " and o40_orgao between ".$ori." and ".$orf;
+    $sIntervalo.= " DE ".$ori." A ".$orf;
+  }else if(isset($ori) && trim($ori) != ""){
+    // Se for por intervalos e vier somente órgão inicial
+    $sWhere .= " and o40_orgao >= ".$ori;
+  }else if(isset($orf) && trim($orf) != ""){
+    // Se for por intervalos e vier somente órgão final
+    $sWhere    .= " and o40_orgao <= ".$orf;
+  }else if(isset($for) && trim($for) != ""){
+    // Se for por selecionados
+    $sWhere  .= " and o40_orgao in (".$for.") ";
+  }
+}
+
 $dbwhere = " rh02_anousu = ".$ano." and rh02_mesusu = ".$mes." and rh02_instit = ".db_getsession("DB_instit")." and ";
 
 if($regime != ""){
@@ -138,7 +185,7 @@ if(isset($listarescis) || $adm_dem == 'd' ) {
 }
 
 
-$dbwhere .= $dbwhereinativo.$dbwhererescis;
+$dbwhere .= $dbwhereinativo.$dbwhererescis.$sWhere;
 
 $sql_dados = $clrhpessoal->sql_query_lotafuncres(null,"rh01_regist, z01_nome, rh01_admiss, r70_estrut, r70_descr, rh37_funcao, rh37_descr,rh03_padrao,rh05_recis".$camposQuebra,$orderby,$dbwhere);
 //echo $sql_dados;exit;
