@@ -10,9 +10,21 @@ $cldotacaorpsicom = new cl_dotacaorpsicom;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  db_inicio_transacao();
-  $cldotacaorpsicom->incluir($si177_sequencial);
-  db_fim_transacao();
+  
+    db_inicio_transacao();
+  
+    $sSqlVerifica = $cldotacaorpsicom->sql_query_file(null, "*", null, "si177_numemp = {$si177_numemp}");
+    $rsVerifica = db_query($sSqlVerifica);
+  
+    if (pg_num_rows($rsVerifica) > 0) {
+        $cldotacaorpsicom->erro_msg = "Já existe registro para o empenho selecionado.";
+        $cldotacaorpsicom->erro_status = 0;
+    } else {
+    
+        $cldotacaorpsicom->incluir($si177_sequencial);
+        db_fim_transacao();
+
+    }
 }
 ?>
 <html>

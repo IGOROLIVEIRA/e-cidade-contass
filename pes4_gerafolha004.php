@@ -2752,7 +2752,6 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
    $condicaoaux  = " and r59_regime = ".db_sqlformat( $pessoal[$Ipessoal]["r01_regime"] );
    $condicaoaux .= " and r59_causa = ".db_sqlformat( $pessoal[$Ipessoal]["r01_causa"] );
    $condicaoaux .= " and r59_caub = ".db_sqlformat( $pessoal[$Ipessoal]["r01_caub"] );
-   $condicaoaux .= " and lower(r59_menos1) = ".db_sqlformat( $menos_um_ano );
    global $rescisao;
 
 //echo "<BR> condicaoaux --> $condicaoaux";
@@ -9353,6 +9352,7 @@ function rle_var_bxxx ($formula=null, $area0=null, $area1=null, $sigla=null, $si
 
 
   global $subpes,$rescisao,$bases, $transacao2, $gerfant, $transacao1,$basesr;
+  global $opcao_geral;
 
 //echo "<BR> formula 1 --> $formula";
  $pos_base = strpos("#".$formula,"B")+0;
@@ -9602,7 +9602,7 @@ function rle_var_bxxx ($formula=null, $area0=null, $area1=null, $sigla=null, $si
             /**
              * Condicao adicionada para nao incluir valor das rubricas deste intervalo, nas rubricas marcadas nas bases do in_array
              */
-            if( (intval($campo_rubrica) >= 2000 && intval($campo_rubrica) <= 3999) && (in_array($base, array("B001","B002","B004","B005")))
+            if( ((intval($campo_rubrica) >= 2000 && intval($campo_rubrica) <= 3999) || ($campo_rubrica == 'R931' && $opcao_geral == "4")) && (in_array($base, array("B001","B002","B004","B005")))
                && (('f' == $rescisao[0]["r59_finss"])
                || ('f' == $rescisao[0]["r59_firrf"]))
               ) { 

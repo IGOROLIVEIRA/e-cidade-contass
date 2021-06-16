@@ -2161,6 +2161,9 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
           $loop     .= $caracter . "'";
           $loop     .= addslashes( str_replace( '"', '', @pg_result( $result, $i, ( strlen( $arrayFuncao[$cont] ) < 4 ? (int) $arrayFuncao[$cont] : $arrayFuncao[$cont] ) ) ) ) . "'";
+          
+          // remove quebras de linhas que o usuário informa, mas causa o erro 'unescaped line break'
+          $loop      = preg_replace( "/\r|\n/", "", $loop );
           $caracter  = ",";
         }
 

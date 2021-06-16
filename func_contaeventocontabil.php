@@ -233,6 +233,14 @@ function getDocumentoPorTipoInclusao($iTipoOperacao) {
     case 16:
       $iCodigoDocumento = 164;
     break;
+
+    /**
+     * Reconhecimento de ganhos RPPS
+     */
+    case 17:
+    case 18:
+        $iCodigoDocumento = 166;
+    break;
   }
 
   return $iCodigoDocumento;

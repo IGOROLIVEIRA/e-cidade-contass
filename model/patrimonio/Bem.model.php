@@ -1166,7 +1166,7 @@ class Bem {
       $oBemDepreciacao = BemDepreciacao::getInstance($this);
       $nValorAtual     = $this->nValorAquisicao;
       if (!empty($oBemDepreciacao)) {
-        $nValorAtual   = $oBemDepreciacao->getValorAtual();
+        $nValorAtual   = ($oBemDepreciacao->getValorAtual() + $this->getValorResidual());
       }
 
       /**
@@ -1174,10 +1174,14 @@ class Bem {
        */
       if (!empty($nValorAtual)) {
 
+        $sHistoricoLancamento = strtoupper($sObservacao).". ";
+        $sHistoricoLancamento .= "LANÇAMENTO DE BAIXA DO BEM {$this->getDescricao()}, ";
+        $sHistoricoLancamento .= "PLACA {$this->getPlaca()->getPlacaSeq()}, CÓDIGO {$this->getCodigoBem()}.";
+
         $oLancamentoauxiliarBem = new LancamentoAuxiliarBem();
         $oLancamentoauxiliarBem->setValorTotal($nValorAtual);
         $oLancamentoauxiliarBem->setBem($this);
-        $oLancamentoauxiliarBem->setObservacaoHistorico($sObservacao);
+        $oLancamentoauxiliarBem->setObservacaoHistorico($sHistoricoLancamento);
         $oLancamentoauxiliarBem->setEstorno(true);
         $oEventoContabil       = new EventoContabil(701, db_getsession('DB_anousu'));
         $aLancamentos          = $oEventoContabil->getEventoContabilLancamento();
@@ -1260,7 +1264,7 @@ class Bem {
       }
     }
 
-    if (USE_PCASP && empty($oNota) && $lIntegracaoFinanceiro ) {
+    if (USE_PCASP && $lIntegracaoFinanceiro ) {
 
       /**
        *  Realiza acerto nas contas de depreciação e classificação, caso seja necessário
@@ -1272,19 +1276,46 @@ class Bem {
       $nValorAtual     = $this->nValorAquisicao;
 
       if (!empty($oBemDepreciacao)) {
-        $nValorAtual   = $oBemDepreciacao->getValorAtual();
+        $nValorAtual   = $oBemDepreciacao->getValorAtual() + $this->getValorResidual();
       }
 
       if ($nValorAtual != 0) {
+
+        $sHistoricoLancamento = strtoupper($sObservacao).". ";
+        $sHistoricoLancamento .= "LANÇAMENTO DE ESTORNO DE BAIXA DO BEM {$this->getDescricao()}, ";
+        $sHistoricoLancamento .= "PLACA {$this->getPlaca()->getPlacaSeq()}, CÓDIGO {$this->getCodigoBem()}.";
+
         $oLancamentoauxiliarBem = new LancamentoAuxiliarBem();
         $oLancamentoauxiliarBem->setValorTotal($nValorAtual);
         $oLancamentoauxiliarBem->setBem($this);
-        $oLancamentoauxiliarBem->setObservacaoHistorico($sObservacao);
+        $oLancamentoauxiliarBem->setObservacaoHistorico($sHistoricoLancamento);
         $oLancamentoauxiliarBem->setEstorno(true);
         $oEventoContabil       = new EventoContabil(702, db_getsession('DB_anousu'));
         $aLancamentos          = $oEventoContabil->getEventoContabilLancamento();
         $oLancamentoauxiliarBem->setHistorico($aLancamentos[0]->getHistorico());
         $oEventoContabil->executaLancamento($oLancamentoauxiliarBem);
+
+        //Lançamento documento 704
+        $oDadosReavaliacao = InventarioBem::buscaDadosDaReavaliacaoBem($this);
+        $oDadosUltimaDepreciacao = BemDepreciacao::getInstance($this);
+        if (!empty($oDadosReavaliacao) && !empty($oDadosUltimaDepreciacao)) {
+            
+            $nValorLancamentoAjuste = $oDadosReavaliacao->getValorDepreciavel() - $oDadosUltimaDepreciacao->getValorAtual();
+
+            $sHistoricoLancamento = "LANÇAMENTO DE ESTORNO DE AJUSTE DA BAIXA DO BEM {$this->getDescricao()}, ";
+            $sHistoricoLancamento .= "PLACA {$this->getPlaca()->getPlacaSeq()}, CÓDIGO {$this->getCodigoBem()}.";
+
+            $oEventoContabil        = new EventoContabil(704, db_getsession('DB_anousu'));
+            $aLancamentos           = $oEventoContabil->getEventoContabilLancamento();
+            $oLancamentoAuxiliarBem = new LancamentoAuxiliarBem();
+            $oLancamentoAuxiliarBem->setBem($this);
+            $oLancamentoAuxiliarBem->setValorTotal($nValorLancamentoAjuste);
+            $oLancamentoAuxiliarBem->setObservacaoHistorico(strtoupper($sHistoricoLancamento));
+            $oLancamentoAuxiliarBem->setHistorico($aLancamentos[0]->getHistorico());
+            $oEventoContabil->executaLancamento($oLancamentoAuxiliarBem);
+
+        }
+
       }
     }
   }

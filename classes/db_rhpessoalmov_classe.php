@@ -194,7 +194,7 @@ class cl_rhpessoalmov {
         }
     }
     // funcao para Inclusão
-    function incluir ($rh02_seqpes,$rh02_instit){
+    function incluir ($rh02_seqpes,$rh02_instit, $bValida = true){
         $this->atualizacampos();
         if($this->rh02_anousu == null ){
             $this->erro_sql = " Campo Ano do Exercício não informado.";
@@ -375,7 +375,7 @@ class cl_rhpessoalmov {
         }
         if($this->rh02_segatuacao == null ){
             $this->rh02_segatuacao = "null";
-            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0") {
+            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
                 $this->erro_sql = " Campo Segmento de Atuação não informado.";
                 $this->erro_campo = "rh02_segatuacao";
                 $this->erro_banco = "";
@@ -587,7 +587,7 @@ class cl_rhpessoalmov {
         return true;
     }
     // funcao para alteracao
-    public function alterar ($rh02_seqpes=null,$rh02_instit=null) {
+    public function alterar ($rh02_seqpes=null,$rh02_instit=null, $bValida = true) {
         $this->atualizacampos();
         $sql = " update rhpessoalmov set ";
         $virgula = "";
@@ -956,7 +956,7 @@ class cl_rhpessoalmov {
                 $sql  .= $virgula." rh02_segatuacao = $this->rh02_segatuacao";
                 $virgula = ",";
             }
-            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0") {
+            if((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
                 $this->erro_sql = " Campo Segmento de Atuação não informado.";
                 $this->erro_campo = "rh02_segatuacao";
                 $this->erro_banco = "";

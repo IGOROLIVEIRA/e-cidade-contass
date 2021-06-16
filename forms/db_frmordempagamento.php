@@ -16,6 +16,7 @@
             <td>
                 <?
                 db_input('e50_codord',10,'',true,'text',3);
+                db_input('e50_data',50,"",true,'hidden',3);
                 ?>
             </td>
         </tr>
@@ -58,7 +59,7 @@
         js_OpenJanelaIframe(
             '',
             'db_iframe_alteracaoop',
-            'func_pagordem.php?chave_e60_codemp='+e60_codemp+'&funcao_js=parent.js_mostraordem|e50_codord|e50_obs|e50_compdesp|elemento',
+            'func_pagordem.php?chave_e60_codemp='+e60_codemp+'&funcao_js=parent.js_mostraordem|e50_codord|e50_obs|e50_compdesp|elemento|e50_data',
             'Pesquisa',
             true,
             '0',
@@ -68,11 +69,11 @@
     }
 
     
-    function js_mostraordem(e50_codord, e50_obs, e50_compdesp, elemento) {
+    function js_mostraordem(e50_codord, e50_obs, e50_compdesp, elemento, e50_data) {
         
-        
-        $('e50_codord').value = e50_codord;
-        $('e50_obs').value = e50_obs;
+        $('e50_codord').value   = e50_codord;
+        $('e50_obs').value      = e50_obs;
+        $('e50_data').value     = e50_data;
         
         if (e50_compdesp != '') {
             data = new Date(e50_compdesp);
