@@ -5,7 +5,7 @@
 ?>
 <form name="form1" method="post" action="">
   <center>
-    <fieldset style="margin-left: 80px; margin-top: 10px;">
+    <fieldset style="margin-left: 50%; margin-top: 10px;">
       <legend>Preço de Referência</legend>
       <table border="0">
         <tr>
@@ -63,18 +63,20 @@
       </table>
     </fieldset>
   </center>
-  <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir e Imprimir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
-  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
-  <?php if ($db_opcao == 2) : ?>
-    <input name="imprimir" type="submit" id="imprimir" value="Imprimir PDF">
-      <input name="imprimirword" type="submit" id="imprimirword" value="Imprimir Word">
-      <input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
-  <?php endif; ?>
-  <b>Quantidade de casas decimais:</b>
-  <?php
-    $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
-    db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
-  ?>
+    <div style="margin-left: 41%; width: 100%">
+        <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir e Imprimir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
+        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
+        <?php if ($db_opcao == 2) : ?>
+            <input name="imprimir" type="submit" id="imprimir" value="Imprimir PDF">
+            <input name="imprimirword" type="submit" id="imprimirword" value="Imprimir Word">
+            <input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
+        <?php endif; ?>
+        <b>Qtd. de casas decimais:</b>
+        <?php
+        $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
+        db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
+        ?>
+    </div>
 </form>
 <script>
   function js_pesquisasi01_processocompra(mostra) {

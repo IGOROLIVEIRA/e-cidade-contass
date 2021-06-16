@@ -132,9 +132,8 @@ $sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
 
 //echo $sSql; db_criatabela($rsResult);exit;
 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
-$head3 = "Preço de Referência";
-$head5 = "Processo de Compra: $codigo_preco";
-$head8 = "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao)));
+
+$data = "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao)));
 
 $mPDF = new Relatorio('', 'A4-L',0,"",7,7,50);
 
@@ -154,10 +153,19 @@ ob_start();
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
     <body>
+    <div>
+        <strong>Preço de Referência</strong>
+    </div>
+    <div>
+        <p>Processo de Compras: <?=$codigo_preco?></p>
+    </div>
+    <div>
+        <p>Data: <?=$data?></p>
+    </div>
 <?php
 if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
     echo <<<HTML
-        <table style="border: 1px solid black">
+        <table>
             <tr>
                 <td>SEQ</td>
                 <td>ITEM</td>
