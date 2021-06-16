@@ -106,14 +106,18 @@ if (!$sqlerro && $codprocesso) {
 
     $iSeqOrigem = intval($oSolicitemReservado->pc11_seq) - 1;
     $sWhereItem = 'pc11_seq = ' . $iSeqOrigem . ' and pc11_numero = ' . $oSolicitemReservado->pc11_numero;
-    $sSqlOrigem = $oDaoItemOrigem->sql_query_file(null, '*', null, $sWhereItem);
+    $sSqlOrigem = $oDaoItemOrigem->sql_query_file(null, '*', 'pc11_codigo asc limit 1', $sWhereItem);
     $rsOrigem = $oDaoItemOrigem->sql_record($sSqlOrigem);
 
     db_inicio_transacao();
 
     $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
     $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
-
+    //echo $sSqlOrigem;
+    //echo $sSqlSolicitem;
+    //echo $codprocesso;
+    // echo $nova_quantidade;
+    // exit;
     $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco, l20_nroedital, l20_naturezaobjeto"));
     if ($clliclicita->numrows > 0) {
       db_fieldsmemory($result, 0);
@@ -185,14 +189,28 @@ if (!$sqlerro && $codprocesso) {
       if ($l20_usaregistropreco == 't') {
 
         $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
-        $sSqlSolicitemRegPreco = "select * from solicitemregistropreco left join solicitem on pc11_codigo = pc57_solicitem where pc11_numero = $oItemOrigem->pc11_numero";
+        $sSqlSolicitemRegPreco = "select * from solicitemregistropreco left join solicitem on pc11_codigo = pc57_solicitem where pc11_numero = $oItemOrigem->pc11_numero and pc11_reservado = true";
         $rsSolicitemRegPreco = $oDaoSolicitemRegPreco->sql_record($sSqlSolicitemRegPreco);
-        //db_criatabela($rsSolicitemRegPreco);
+
+        // db_criatabela($rsSolicitemRegPreco);
+        // print_r($oItemOrigem);
+        // exit;
+
         for ($iContador = 0; $iContador < $oDaoSolicitemRegPreco->numrows; $iContador++) {
           $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, $iContador);
           $oDaoSolicitemRegPreco->excluir($oSolicitemRegPreco->pc57_sequencial);
           $sqlerro = $oDaoSolicitemRegPreco->erro_status == '0' ? true : false;
         }
+
+        $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+        $sSqlSolicitemRegPreco = "select pc57_sequencial from solicitemregistropreco where pc57_solicitem = $oItemOrigem->pc11_codigo";
+        $rsSolicitemRegPreco = $oDaoSolicitemRegPreco->sql_record($sSqlSolicitemRegPreco);
+
+        $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
+
+        $oDaoSolicitemRegPreco->pc57_quantmax = $nova_quantidade;
+        $oDaoSolicitemRegPreco->pc57_sequencial = $oSolicitemRegPreco->pc57_sequencial;
+        $oDaoSolicitemRegPreco->alterar($oSolicitemRegPreco->pc57_sequencial);
       }
     }
 

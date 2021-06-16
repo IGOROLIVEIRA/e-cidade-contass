@@ -821,7 +821,8 @@ switch ($oParam->exec) {
     break;
 
   case 'insereItens':
-
+    // ini_set('display_errors', 'On');
+    // error_reporting(E_ALL);
     $aItens = $oParam->aItens;
 
     db_inicio_transacao();
@@ -916,6 +917,7 @@ switch ($oParam->exec) {
                    * Cadastra o novo item com a quantidade exclusiva na solicitem
                    */
                   $oItem = db_utils::fieldsMemory($rsSolicitem, 0);
+
                   $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                   $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
                   $oDaoSolicitemReservado->pc11_seq = $oItem->pc11_seq + 1;
@@ -982,17 +984,16 @@ switch ($oParam->exec) {
 
                   if ($l20_usaregistropreco == 't') {
 
-                    $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
+                    $oDaoSolicitemRegPrecoAlterado = db_utils::getDao('solicitemregistropreco');
 
                     $sWhereSolicitem = ' pc57_solicitem = ' . $oItem->pc11_codigo;
                     $sSqlSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_query('', 'distinct pc57_sequencial', '', $sWhereSolicitem);
-                    // echo $sSqlSolicitemRegPreco;
                     $rsSolicitemRegPreco = $oDaoSolicitemRegPrecoAlterado->sql_record($sSqlSolicitemRegPreco);
+
                     $oSolicitemRegPreco = db_utils::fieldsMemory($rsSolicitemRegPreco, 0);
 
-                    // print_r($oSolicitemRegPreco);
-                    // exit;
                     $oDaoSolicitemRegPrecoAlterado->pc57_quantmax = $nova_qtd;
+                    $oDaoSolicitemRegPrecoAlterado->pc57_sequencial = $oSolicitemRegPreco->pc57_sequencial;
                     $oDaoSolicitemRegPrecoAlterado->alterar($oSolicitemRegPreco->pc57_sequencial);
 
                     if (!$oDaoSolicitemRegPrecoAlterado->numrows_alterar) {
@@ -1009,7 +1010,7 @@ switch ($oParam->exec) {
                     $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
 
                     $oDaoSolicitemRegPreco->pc57_solicitem = $oDaoSolicitemReservado->pc11_codigo;
-                    $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
+                    $oDaoSolicitemRegPreco->pc57_quantmax = $nova_qtd;
                     $oDaoSolicitemRegPreco->pc57_quantmin = 1;
                     $oDaoSolicitemRegPreco->pc57_itemorigem = $oDaoSolicitemReservado->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_ativo = 't';
