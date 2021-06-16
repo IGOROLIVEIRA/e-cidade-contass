@@ -2226,27 +2226,64 @@ if (count($aParametrosEmpenho) > 0) {
         }, 500);
     }
 
-    function selecionarConta(elemento,conta) {
+    function selecionarConta(elemento, iCodMov) {    
         
-        
-        iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+conta).value;
+        iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+iCodMov).value;
         iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
         sDescConta              = elemento.getElementsByTagName("span")[0].textContent
 
         if (iContaPagadoraPadrao != '') {
             
             if (iContaSelecionada != iContaPagadoraPadrao) {
+
+                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada na liquidação. '; 
+                sMsgConfirm += 'Essa alteração substitui a conta informada anteriormente. \n \nDeseja prosseguir?';
                 
-                if (!confirm('Conta selecionada diferente da conta pagadora padrão. \n \nDeseja prosseguir?')){
+                if (!confirm(sMsgConfirm)){
                     return false;
+                } else {
+                    js_atualizaContaPagadoraPadrao(iContaSelecionada, iCodMov);
                 }
 
             }
 
         }
 
-        document.getElementById("tipoconta"+conta).value = iContaSelecionada;
-        document.getElementById("ctapag"+conta).value = sDescConta;
+        document.getElementById("tipoconta"+iCodMov).value      = iContaSelecionada;
+        document.getElementById("contapagpadrao"+iCodMov).value = iContaSelecionada;
+        document.getElementById("ctapag"+iCodMov).value         = sDescConta;
+    }
+
+    function js_atualizaContaPagadoraPadrao(iConta, iCodMov) {
+
+        oParam  = new Object();
+
+        oParam.iConta  = iConta;
+        oParam.iCodMov = iCodMov;
+        oParam.exec     = 'atualizaContaPagadoraPadrao';
+
+        js_divCarregando("Aguarde, Atualizando Conta Pagadora.","msgBox");
+
+        var oAjax  = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
+            method    : 'post', 
+            parameters: 'json='+Object.toJSON(oParam), 
+            onComplete: js_retornoAtualizaContaPagadoraPadrao
+        });
+
+    }
+
+    function js_retornoAtualizaContaPagadoraPadrao(oAjax) {
+        
+        js_removeObj("msgBox");
+
+        var oRetorno = eval("("+oAjax.responseText+")");
+
+        if (oRetorno.status == 1) {                
+            alert(oRetorno.message.urlDecode());
+        } else {
+            alert(oRetorno.message.urlDecode());
+        }
+
     }
 
     function js_janelaEmiteCheque() {

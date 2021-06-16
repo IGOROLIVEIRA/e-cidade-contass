@@ -464,31 +464,6 @@ switch($oParam->exec) {
             }
           }
         }
-        
-
-        /**
-         * Verifica se a conta pagadora padrão informada na liquidação foi alterada no momento 
-         * da configuração do movimento.
-         */
-        if (isset($oMovimento->iCodNota) && $oMovimento->iCodNota != '') {
-
-            $oDaoPagOrdem   = db_utils::getDao("pagordem");
-            $rsOrdem        = $oDaoPagOrdem->sql_record($oDaoPagOrdem->sql_query_file($oMovimento->iCodNota));
-            
-            if ($oDaoPagOrdem->numrows > 0) {
-                
-                if ($oMovimento->iContaPagadora != db_utils::fieldsMemory($rsOrdem,0)->e50_contapag) {
-                    
-                    $oDaoPagOrdem->e50_codord   = $oMovimento->iCodNota;
-                    $oDaoPagOrdem->e50_contapag = $oMovimento->iContaPagadora;
-                    $oDaoPagOrdem->alterar($oMovimento->iCodNota);
-
-                    if ($oDaoPagOrdem->erro_status == 0) {
-                        throw new Exception("Erro ao alterar a conta pagadora da ordem de pagamento ($oMovimento->iCodNota).");
-                    }                    
-                }
-            }        
-        }
       }
 
 		/*
@@ -670,6 +645,55 @@ switch($oParam->exec) {
       $oRetorno->message              = urlencode($eErro->getMessage());
 
     }
+    echo $oJson->encode($oRetorno);
+    break;
+
+    case "atualizaContaPagadoraPadrao":
+
+        try {
+
+            db_inicio_transacao();
+
+            /**
+             * Altera conta pagadora padrão que foi definida na liquidação
+             */
+            if (isset($oParam->iCodMov) && $oParam->iCodMov != '') {
+
+                $oDaoPagOrdem   = db_utils::getDao("pagordem");
+                $sWhere         = " e81_codmov = {$oParam->iCodMov}";
+                $rsOrdem        = $oDaoPagOrdem->sql_record($oDaoPagOrdem->sql_query_pagordemagenda(null, "pagordem.*", null, $sWhere));
+                
+                if ($oDaoPagOrdem->numrows > 0) {
+
+                    $oPagOrdem = db_utils::fieldsMemory($rsOrdem,0);
+                    
+                    if ($oParam->iConta != $oPagOrdem->e50_contapag) {
+                        
+                        $oDaoPagOrdem->e50_codord   = $oPagOrdem->e50_codord;
+                        $oDaoPagOrdem->e50_contapag = $oParam->iConta;
+                        $oDaoPagOrdem->alterar($oPagOrdem->e50_codord);
+
+                        if ($oDaoPagOrdem->erro_status == 0) {
+                            throw new Exception("Erro ao alterar a conta pagadora da ordem de pagamento ($oPagOrdem->e50_codord).");
+                        }                    
+                    }
+                }        
+            }
+            
+            $oRetorno           = new stdClass();
+            $oRetorno->status   = 1;
+            $oRetorno->message  = 'Conta Pagadora alterada.';
+
+            db_fim_transacao(false);
+
+        } catch (Exception $eErro) {
+            
+            db_fim_transacao(true);
+
+            $oRetorno->status   = 2;
+            $oRetorno->message  = urlencode($eErro->getMessage());
+
+        }
     echo $oJson->encode($oRetorno);
     break;
 }

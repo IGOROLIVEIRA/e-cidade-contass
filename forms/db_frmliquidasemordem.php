@@ -41,7 +41,6 @@ $clrotulo->label("e11_valoricms");
 $clrotulo->label("e12_descricao");
 $clrotulo->label("e10_descricao");
 $db_opcao = 1;
-$db_data  = date("d/m/Y");
 $clorctiporec->rotulo->label();
 $clempempenho->rotulo->label();
 $clorcdotacao->rotulo->label();
@@ -407,6 +406,11 @@ if (USE_PCASP) {
     jan.moveTo(0,0);
   }
   function js_pesquisa(){
+    
+    $('e83_codtipo').value  = '';
+    $('e83_descr').value    = '';
+    $('e69_dtnota').value   = '';
+
     js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino','Pesquisa',true);
   }
   function js_preenchepesquisa(chave,chave2,chave3,chave4){
@@ -578,7 +582,6 @@ if (USE_PCASP) {
     $('historico').value   = obj.e60_resumo.urlDecode();
     $('saldodis').value    = obj.saldo_dis;
     $('e69_numnota').value = '';
-    $('e69_dtnota').value  = '<?=$db_data;?>';
     $('sEstrutElemento').value = obj.sEstrutural;
     saida = '';
     $('dados').innerHTML   = '';
