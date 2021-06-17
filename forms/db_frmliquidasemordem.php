@@ -405,12 +405,8 @@ if (USE_PCASP) {
     jan = window.open('emp2_emitenotaliq002.php?codordem='+codordem,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
     jan.moveTo(0,0);
   }
-  function js_pesquisa(){
-    
-    $('e83_codtipo').value  = '';
-    $('e83_descr').value    = '';
-    $('e69_dtnota').value   = '';
-
+  function js_pesquisa(){    
+    document.form1.reset();
     js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino','Pesquisa',true);
   }
   function js_preenchepesquisa(chave,chave2,chave3,chave4){
