@@ -145,13 +145,13 @@ contrato = function () {
     }
         
     this.mostraNaturezaObjeto = function(oAjax) {
+        
         var oRetorno = eval("("+oAjax.responseText+")");
-
         if (oRetorno.status == 1) {
-
+            
             var cont = Object.keys(oRetorno.numero).length;
             var op = 0;
-            let oAcordo = $('ac16_acordogrupo').value;
+            let oAcordo = $('ac02_natureza_obj').value;
             for (i = 0; i<cont; i++){
                 valorObjeto = oRetorno.numero[i];
                 if(oRetorno.numero[i]===oAcordo){
@@ -432,7 +432,7 @@ contrato = function () {
         }
         if (iContratdo_Nat == 0 && iOrigem == 2) {
 
-            alert('Natureza do contrato divergente da natureza do objeto da Licitação'); 
+            alert('Natureza do contrato divergente da natureza do objeto da Licitação');
             $('ac16_contratado').focus();
             $('ac16_acordogrupo').focus();
             return false;

@@ -134,7 +134,7 @@ switch($oParam->exec) {
         for ($iCont = 0; $iCont < pg_num_rows($rsNatuObejto); $iCont++) {
   
           $dados = db_utils::fieldsMemory($rsNatuObejto, $iCont);
-          $valor = $dados->l20_naturezaobjeto;
+          $valor = $dados->l20_naturezaobjeto; 
           $oRetorno->numero[$iCont] = $valor;
         }
   
