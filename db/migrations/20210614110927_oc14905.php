@@ -40,21 +40,21 @@ class Oc14905 extends AbstractMigration
     CREATE TABLE relatorios(
     rel_sequencial		int4 NOT NULL default 0,
     rel_descricao		varchar(50) NOT NULL ,
-    rel_modulo		int4 NOT NULL default 0,
+    rel_arquivo		int4 NOT NULL default 0,
     rel_corpo		varchar(500) ,
     CONSTRAINT relatorios_sequ_pk PRIMARY KEY (rel_sequencial));
 
     -- CHAVE ESTRANGEIRA
     ALTER TABLE relatorios
-    ADD CONSTRAINT relatorios_modulo_fk FOREIGN KEY (rel_modulo)
-    REFERENCES db_modulos;
+    ADD CONSTRAINT relatorios_arquivo_fk FOREIGN KEY (rel_arquivo)
+    REFERENCES db_sysarquivo;
 
     INSERT INTO configuracoes.db_syscampo
     (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
     VALUES((select max(codcam)+1 from db_syscampo), 'rel_corpo                               ', 'varchar(500)                            ', 'Corpo', '', 'Corpo', 500, false, true, false, 0, 'text', 'Corpo');
     INSERT INTO configuracoes.db_syscampo
     (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
-    VALUES((select max(codcam)+1 from db_syscampo), 'rel_modulo                              ', 'int4                                    ', 'Modulo', '0', 'Modulo', 10, false, false, false, 1, 'text', 'Modulo');
+    VALUES((select max(codcam)+1 from db_syscampo), 'rel_arquivo                              ', 'int4                                    ', 'Modulo', '0', 'Modulo', 10, false, false, false, 1, 'text', 'Modulo');
     INSERT INTO configuracoes.db_syscampo
     (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
     VALUES((select max(codcam)+1 from db_syscampo), 'rel_descricao                           ', 'varchar(50)                             ', 'Descrição', '', 'Descrição', 50, false, true, false, 0, 'text', 'Descrição');
@@ -64,7 +64,7 @@ class Oc14905 extends AbstractMigration
 
     INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'rel_sequencial')		 	, 1, 0);
     INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'rel_descricao')		 	, 2, 0);
-    INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'rel_modulo')		 	, 3, 0);
+    INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'rel_arquivo')		 	, 3, 0);
     INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'rel_corpo')		 	, 4, 0);
 
 

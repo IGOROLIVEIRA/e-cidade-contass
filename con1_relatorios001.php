@@ -7,14 +7,36 @@ include("classes/db_relatorios_classe.php");
 include("classes/db_db_sysprocedarq_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
+
 $clrelatorios = new cl_relatorios;
 $cldb_sysprocedarq = new cl_db_sysprocedarq;
 $db_opcao = 1;
 $db_botao = true;
 if (isset($incluir)) {
   db_inicio_transacao();
+  $clrelatorios->rel_arquivo = $codarq;
   $clrelatorios->incluir($rel_sequencial);
   db_fim_transacao();
+}
+if (isset($alterar)) {
+  db_inicio_transacao();
+  $db_opcao = 2;
+  $clrelatorios->rel_arquivo = $codarq;
+  $clrelatorios->alterar($rel_sequencial);
+  db_fim_transacao();
+}
+if (isset($excluir)) {
+  db_inicio_transacao();
+  $db_opcao = 3;
+  $clrelatorios->excluir($rel_sequencial);
+  db_fim_transacao();
+}
+if (isset($chavepesquisa)) {
+  $db_opcao = 2;
+  $result = $clrelatorios->sql_record($clrelatorios->sql_query($chavepesquisa));
+  db_fieldsmemory($result, 0);
+  $codarq = $rel_arquivo;
+  $db_botao = true;
 }
 ?>
 <html>
@@ -96,4 +118,25 @@ if (isset($incluir)) {
     $clrelatorios->erro(true, true);
   }
 }
+if (isset($alterar)) {
+  if ($clrelatorios->erro_status == "0") {
+    $clrelatorios->erro(true, false);
+    $db_botao = true;
+    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    if ($clrelatorios->erro_campo != "") {
+      echo "<script> document.form1." . $clrelatorios->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clrelatorios->erro_campo . ".focus();</script>";
+    }
+  } else {
+    $clrelatorios->erro(true, true);
+  }
+}
+if (isset($excluir)) {
+  if ($clrelatorios->erro_status == "0") {
+    $clrelatorios->erro(true, false);
+  } else {
+    $clrelatorios->erro(true, true);
+  }
+}
+
 ?>
