@@ -1,8 +1,12 @@
 <?
 //MODULO: configuracoes
 $clrelatorios->rotulo->label();
+$cldb_sysprocedarq->rotulo->label();
+
 $clrotulo = new rotulocampo;
 $clrotulo->label("nomemod");
+$clrotulo->label("nomearq");
+$clrotulo->label("descrproced");
 ?>
 <form name="form1" method="post" action="">
   <div class="container">
@@ -29,7 +33,7 @@ $clrotulo->label("nomemod");
             ?>
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td nowrap title="<?= @$Trel_modulo ?>">
             <?
             db_ancora(@$Lrel_modulo, "js_pesquisarel_modulo(true);", $db_opcao);
@@ -41,6 +45,21 @@ $clrotulo->label("nomemod");
             ?>
             <?
             db_input('nomemod', 20, $Inomemod, true, 'text', 3, '')
+            ?>
+          </td>
+        </tr> -->
+        <tr>
+          <td nowrap title="<?= @$Tcodarq ?>">
+            <?
+            db_ancora(@$Lcodarq, "js_pesquisacodarq(true);", $db_opcao);
+            ?>
+          </td>
+          <td>
+            <?
+            db_input('codarq', 10, $Icodarq, true, 'text', $db_opcao, " onchange='js_pesquisacodarq(false);'")
+            ?>
+            <?
+            db_input('nomearq', 50, $Inomearq, true, 'text', 3, '')
             ?>
           </td>
         </tr>
@@ -61,77 +80,124 @@ $clrotulo->label("nomemod");
   </div>
 </form>
 <script>
-  function js_pesquisarel_modulo(mostra) {
+  var sUrl = "rel_gerenciamento.RPC.php";
+
+  function js_pesquisacodarq(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_db_modulos', 'func_db_sysmodulo.php?funcao_js=parent.js_mostradb_modulos1|codmod|nomemod', 'Pesquisa', true);
+      js_OpenJanelaIframe('top.corpo', 'db_iframe_db_sysarquivo', 'func_db_sysarquivo.php?funcao_js=parent.js_mostradb_sysarquivo1|codarq|nomearq', 'Pesquisa', true, '0');
     } else {
-      if (document.form1.rel_modulo.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_db_modulos', 'func_db_sysmodulo.php?pesquisa_chave=' + document.form1.rel_modulo.value + '&funcao_js=parent.js_mostradb_modulos', 'Pesquisa', false);
+      if (document.form1.codarq.value != '') {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_db_sysarquivo', 'func_db_sysarquivo.php?pesquisa_chave=' + document.form1.codarq.value + '&funcao_js=parent.js_mostradb_sysarquivo', 'Pesquisa', false);
       } else {
-        document.form1.nomemod.value = '';
+        document.form1.nomearq.value = '';
       }
     }
   }
 
-  var sUrl = "rel_gerenciamento.RPC.php";
-
-  function js_mostradb_modulos(chave, erro) {
-
-    document.form1.nomemod.value = chave;
+  function js_mostradb_sysarquivo(chave, erro) {
+    document.form1.nomearq.value = chave;
     if (erro == true) {
-      document.form1.rel_modulo.focus();
-      document.form1.rel_modulo.value = '';
+      document.form1.codarq.focus();
+      document.form1.codarq.value = '';
     }
-
     js_divCarregando("Aguarde, pesquisando dados do modulo.", "msgBox");
     var oParam = new Object();
-    oParam.exec = "verificaModulo";
-    oParam.iModulo = chave;
-
+    oParam.exec = "verificaArquivo";
+    oParam.iArquivo = chave1;
     var oAjax = new Ajax.Request(sUrl, {
       method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoVerificaModulo
+      onComplete: js_retornoVerificaArquivo
     });
 
   }
 
-  function js_mostradb_modulos1(chave1, chave2) {
-    alert('teste2');
-
-    document.form1.rel_modulo.value = chave1;
-    document.form1.nomemod.value = chave2;
+  function js_mostradb_sysarquivo1(chave1, chave2) {
+    document.form1.codarq.value = chave1;
+    document.form1.nomearq.value = chave2;
 
     js_divCarregando("Aguarde, pesquisando dados do modulo.", "msgBox");
     var oParam = new Object();
-    oParam.exec = "verificaModulo";
-    oParam.iModulo = chave1;
-    console.log(oParam);
+    oParam.exec = "verificaArquivo";
+    oParam.iArquivo = chave1;
     var oAjax = new Ajax.Request(sUrl, {
       method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoVerificaModulo
+      onComplete: js_retornoVerificaArquivo
     });
-
-
-    db_iframe_db_modulos.hide();
+    db_iframe_db_sysarquivo.hide();
   }
 
-  function js_retornoVerificaModulo(oAjax) {
+  // function js_pesquisarel_modulo(mostra) {
+  //   if (mostra == true) {
+  //     js_OpenJanelaIframe('top.corpo', 'db_iframe_db_modulos', 'func_db_sysmodulo.php?funcao_js=parent.js_mostradb_modulos1|codmod|nomemod', 'Pesquisa', true);
+  //   } else {
+  //     if (document.form1.rel_modulo.value != '') {
+  //       js_OpenJanelaIframe('top.corpo', 'db_iframe_db_modulos', 'func_db_sysmodulo.php?pesquisa_chave=' + document.form1.rel_modulo.value + '&funcao_js=parent.js_mostradb_modulos', 'Pesquisa', false);
+  //     } else {
+  //       document.form1.nomemod.value = '';
+  //     }
+  //   }
+  // }
+
+
+
+  // function js_mostradb_modulos(chave, erro) {
+
+  //   document.form1.nomemod.value = chave;
+  //   if (erro == true) {
+  //     document.form1.rel_modulo.focus();
+  //     document.form1.rel_modulo.value = '';
+  //   }
+
+  // }
+
+  // function js_mostradb_modulos1(chave1, chave2) {
+
+  //   document.form1.rel_modulo.value = chave1;
+  //   document.form1.nomemod.value = chave2;
+
+  //   db_iframe_db_modulos.hide();
+  // }
+
+  function js_retornoVerificaArquivo(oAjax) {
 
     js_removeObj("msgBox");
     var oRetorno = eval("(" + oAjax.responseText + ")");
+    //console.log(oRetorno);
+    if (oRetorno.status == 1) {
+      //$("#tableLegenda").remove();
+      var table = document.createElement('table');
+      table.setAttribute('id', 'tableLegenda');
 
-    // $("l20_usaregistropreco").options.length = 0;
-    // if (oRetorno.l03_usaregistropreco == 't') {
-    //   //true pode por sim nao no campo l20_usaregistropreco
+      var arrHead = new Array();
+      arrHead = ['Descrição', 'Nome Campo'];
 
-    //   $("l20_usaregistropreco").options[0] = new Option("Não", "f");
-    //   $("l20_usaregistropreco").options[1] = new Option("Sim", "t");
-    // } else {
-    //   // false somentenao
-    //   $("l20_usaregistropreco").options[0] = new Option("Não", "f");
-    // }
+      var arrValue = new Array();
+      oRetorno.itens.each(function(oItem, iLinha) {
+        arrValue.push([oItem.descricao, oItem.nomecam]);
+      });
+      var tr = table.insertRow(-1);
+
+      for (var h = 0; h < arrHead.length; h++) {
+        var th = document.createElement('th'); // TABLE HEADER.
+        th.innerHTML = arrHead[h];
+        tr.appendChild(th);
+      }
+
+      for (var c = 0; c <= arrValue.length - 1; c++) {
+        tr = table.insertRow(-1);
+        for (var j = 0; j < arrHead.length; j++) {
+          var td = document.createElement('td'); // TABLE DEFINITION.
+          td = tr.insertCell(-1);
+          td.innerHTML = arrValue[c][j]; // ADD VALUES TO EACH CELL.
+        }
+      }
+
+      document.body.appendChild(table);
+
+    }
+
   }
 
   function js_pesquisa() {

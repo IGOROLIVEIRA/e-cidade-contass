@@ -8,7 +8,7 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_db_sysarqcamp_classe.php");
-
+$oDaoSysArqCamp = new cl_db_sysarqcamp();
 $oJson             = new services_json();
 $oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 $oRetorno          = new stdClass();
@@ -19,17 +19,19 @@ $dtDia             = date("Y-m-d", db_getsession("DB_datausu"));
 
 switch ($oParam->exec) {
 
-  case 'verificaModulo':
+  case 'verificaArquivo':
 
-    $oDaoSysArqCamp = new cl_db_sysarqcamp();
-    $sSqlSysArqCamp = $oDaoSysArqCamp->sql_query_modulo('', '', '', '*', '', "db_sysmodulo.codmod = $oParam->iModulo");
+    $sSqlSysArqCamp = $oDaoSysArqCamp->sql_query($oParam->iArquivo, '', '', 'db_syscampo.*');
+    // echo $oParam->iArquivo;
+    //echo $sSqlSysArqCamp;
     $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
     if ($oDaoSysArqCamp->numrows > 0) {
-      $oDados = db_utils::fieldsMemory($rsSysArqCamp, 0);
-      $oRetorno->itens = $oDados;
+      for ($i = 0; $i < pg_numrows($rsSysArqCamp); $i++) {
+
+        $oDados = db_utils::fieldsMemory($rsSysArqCamp, $i);
+        $oRetorno->itens[] = $oDados;
+      }
     }
-
-
     break;
 }
 echo $oJson->encode($oRetorno);

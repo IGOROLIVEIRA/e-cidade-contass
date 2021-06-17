@@ -4,9 +4,11 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_relatorios_classe.php");
+include("classes/db_db_sysprocedarq_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clrelatorios = new cl_relatorios;
+$cldb_sysprocedarq = new cl_db_sysprocedarq;
 $db_opcao = 1;
 $db_botao = true;
 if (isset($incluir)) {
@@ -37,6 +39,12 @@ if (isset($incluir)) {
     #fieldset_depart_responsavel table {
       margin: 0 auto;
     }
+
+    #tableLegenda,
+    #tableLegenda th,
+    #tableLegenda td {
+      border: 1px solid black;
+    }
   </style>
   <?
   db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
@@ -65,17 +73,6 @@ if (isset($incluir)) {
       </td>
     </tr>
   </table>
-  <fieldset>
-    <legend><b>Legenda</b></legend>
-    <table id="legendas">
-      <tr>
-        <th align="right">Campos:</th>
-      </tr>
-      <tr>
-        <td align="right">l20_codigo</td>
-      </tr>
-    </table>
-  </fieldset>
   <?
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
