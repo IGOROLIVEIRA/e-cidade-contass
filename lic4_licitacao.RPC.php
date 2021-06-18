@@ -1010,7 +1010,7 @@ switch ($oParam->exec) {
                     $oDaoSolicitemRegPreco = db_utils::getDao('solicitemregistropreco');
 
                     $oDaoSolicitemRegPreco->pc57_solicitem = $oDaoSolicitemReservado->pc11_codigo;
-                    $oDaoSolicitemRegPreco->pc57_quantmax = $nova_qtd;
+                    $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
                     $oDaoSolicitemRegPreco->pc57_quantmin = 1;
                     $oDaoSolicitemRegPreco->pc57_itemorigem = $oDaoSolicitemReservado->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_ativo = 't';
