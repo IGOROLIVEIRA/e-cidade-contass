@@ -168,8 +168,8 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     db_fieldsmemory($this->recorddositens,$ii);
     
     $this->objpdf->Setfont('Arial','',7);
-    $this->objpdf->Row(array((pg_result($this->recorddositens,$ii,$this->elementoitem)),   
-	                            (substr(pg_result($this->recorddositens,$ii,$this->descr_elementoitem),0,48)),
+    $this->objpdf->Row(array((substr(pg_result($this->recorddositens,$ii,$this->elementoitem),1)),   
+	                            (substr(pg_result($this->recorddositens,$ii,$this->descr_elementoitem),0,50)),
                               db_formatar(pg_result($this->recorddositens,$ii,$this->vlremp),'f'),
                               db_formatar(pg_result($this->recorddositens,$ii,$this->vlranu),'f'),
                               db_formatar(pg_result($this->recorddositens,$ii,$this->vlrpag),'f'),
@@ -191,6 +191,18 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
    $this->numeronota = pg_result($rsNotas,0,0);									  
    $this->datanota  = pg_result($rsNotas,0,1);
    $this->objpdf->cell(102,4,"Ref. Nota Fiscal nº: ".$this->numeronota.", de ".db_formatar($this->datanota,'d'),0,1,"L");
+  }
+
+  if (isset($this->conta_pagadora_reduz) && $this->conta_pagadora_reduz != '') {
+    $this->objpdf->Setfont('Arial','B',7);
+    $this->objpdf->text($xcol+1,$xlin+66,'CONTA PAGADORA');
+    $this->objpdf->text($xcol+1,$xlin+70,'Reduzido: ');
+    $this->objpdf->text($xcol+1,$xlin+74,'Agência: ');
+    $this->objpdf->text($xcol+1,$xlin+78,'Conta: ');
+    $this->objpdf->Setfont('Arial','',7);
+    $this->objpdf->text($xcol+14,$xlin+70,$this->conta_pagadora_reduz);
+    $this->objpdf->text($xcol+12,$xlin+74,$this->conta_pagadora_agencia);
+    $this->objpdf->text($xcol+10,$xlin+78,substr($this->conta_pagadora_conta,0,60));
   }
   
   // monta os dados das retenções da ordem de compra
