@@ -888,7 +888,7 @@ class Bem {
         if (!empty($oGrupo) && $oGrupo->getCodigo() == 9) {
 
           $sObs .= "LANÇAMENTO EM LIQUIDAÇÃO DO TOMBAMENTO DO BEM {$this->getDescricao()}, ";
-          $sObs .= "CÓDIGO {$this->getCodigoBem()}, PLACA {$this->getPlaca()->getPlacaSeq()}, NÚMERO DA NOTA FISCAL {$oNota->getCodigoNota()}.";
+          $sObs .= "CÓDIGO {$this->getCodigoBem()}, PLACA {$this->getPlaca()->getPlacaSeq()}, NÚMERO DA NOTA FISCAL {$oNota->getNumeroNota()}.";
 
           if ( $lIntegracaoFinanceiro ) {
 
