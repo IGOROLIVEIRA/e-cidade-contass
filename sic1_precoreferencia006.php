@@ -152,29 +152,40 @@ ob_start();
         <title>Relatório</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
+    <style>
+        div{
+            font-size: 14px;
+            text-align: center;
+            /*border: 1px solid black;*/
+        }
+        table{
+            font-size: 12px;
+        }
+    </style>
     <body>
-    <div>
-        <strong>Preço de Referência</strong>
-    </div>
-    <div>
-        <p>Processo de Compras: <?=$codigo_preco?></p>
-    </div>
-    <div>
-        <p>Data: <?=$data?></p>
-    </div>
+    <center>
+        <div>
+            <strong>Preço de Referência</strong>
+        </div>
+        <div>
+            <p>Processo de Compras: <?=$codigo_preco?></p>
+        </div>
+        <div>
+            <p>Data: <?=$data?></p>
+        </div>
 <?php
 if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
     echo <<<HTML
         <table>
             <tr>
-                <td>SEQ</td>
-                <td>ITEM</td>
-                <td>DESCRIÇÃO DO ITEM</td>
+                <td><strong>SEQ</strong></td>
+                <td><strong>ITEM</strong></td>
+                <td><strong>DESCRIÇÃO DO ITEM</strong></td>
                 <td><strong>TAXA/TABELA</strong></td>
-                <td>VALOR UN</td>
-                <td>QUANT</td>
-                <td>UN</td>
-                <td>TOTAL/VLR ESTIMADO</td>
+                <td><strong>VALOR UN</strong></td>
+                <td><strong>QUANT</strong></td>
+                <td><strong>UN</strong></td>
+                <td><strong>TOTAL/VLR ESTIMADO</strong></td>
             </tr>
 
 HTML;
@@ -182,13 +193,13 @@ HTML;
     echo <<<HTML
         <table>
             <tr>
-                <td>SEQ</td>
-                <td>ITEM</td>
-                <td>DESCRIÇÃO DO ITEM</td>
-                <td>VALOR UN</td>
-                <td>QUANT</td>
-                <td>UN</td>
-                <td>TOTAL</td>
+                <td><strong>SEQ</strong></td>
+                <td><strong>ITEM</strong></td>
+                <td><strong>DESCRIÇÃO DO ITEM</strong></td>
+                <td><strong>VALOR UN</strong></td>
+                <td><strong>QUANT</strong></td>
+                <td><strong>UN</strong></td>
+                <td><strong>TOTAL</strong></td>
             </tr>
 HTML;
 }
@@ -259,6 +270,7 @@ HTML;
 }
 ?>
 </table>
+    </center>
     </body>
 </html>
 <?php
