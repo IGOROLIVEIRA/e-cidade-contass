@@ -289,6 +289,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         "onchange='js_pesquisaac16_acordogrupo(false);'");
                                                     db_input('ac02_descricao', 30, $Iac02_sequencial, true, 'text', 3);
                                                     ?>
+                                                    <input type="hidden" id="ac02_natureza_obj" name="ac02_natureza_obj"> 
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1070,7 +1071,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (mostra == true) {
 
-            var sUrl = 'func_acordogrupo.php?funcao_js=parent.js_mostraacordogrupo1|ac02_sequencial|ac02_descricao';
+            var sUrl = 'func_acordogrupo.php?funcao_js=parent.js_mostraacordogrupo1|ac02_sequencial|ac02_descricao|ac02_acordonatureza';
             js_OpenJanelaIframe('top.corpo.iframe_acordo',
                 'db_iframe_acordogrupo',
                 sUrl,
@@ -1126,10 +1127,11 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostraacordogrupo1(chave1, chave2) {
+    function js_mostraacordogrupo1(chave1, chave2,chave3) {
 
         $('ac16_acordogrupo').value = chave1;
         $('ac02_descricao').value = chave2;
+        $('ac02_natureza_obj').value = chave3;
         $('ac16_acordogrupo').focus();
 
         js_verificaNatureza(chave1);
