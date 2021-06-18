@@ -70,12 +70,26 @@ class Oc14905 extends AbstractMigration
 
 
     -- MENU
-    INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Gerenciamento de Contratos', 'Gerenciamento de Contratos', 'con1_relatorios001.php', 1, 1, 'Gerenciamento de Contratos', 't');
+    INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Gerenciamento de Contratos', 'Gerenciamento de Contratos', '', 1, 1, 'Gerenciamento de Contratos', 't');
 
     INSERT INTO db_menu VALUES (32,
-                    (SELECT max(id_item) FROM db_itensmenu),
-                    (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 32 and modulo = 1),
-                    1);
+                        (SELECT max(id_item) FROM db_itensmenu),
+                        (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 32 and modulo = 1),
+                        1);
+
+    INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Cadastro', 'Cadastro', 'con1_relatorios001.php', 1, 1, 'Cadastro', 't');
+
+    INSERT INTO db_menu VALUES ((select id_item from db_itensmenu where descricao = 'Gerenciamento de Contratos'),
+                        (SELECT max(id_item) FROM db_itensmenu),
+                        (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 32 and modulo = 1),
+                        1);
+
+    INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Gerador', 'Gerador', 'con1_relatorios002.php', 1, 1, 'Gerador', 't');
+
+    INSERT INTO db_menu VALUES ((select id_item from db_itensmenu where descricao = 'Gerenciamento de Contratos'),
+                        (SELECT max(id_item) FROM db_itensmenu),
+                        (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 32 and modulo = 1),
+                        1);
 SQL;
 
     $this->execute($sSql);
