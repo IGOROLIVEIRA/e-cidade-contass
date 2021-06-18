@@ -64,9 +64,6 @@
 
       // ################################# Public Functions
 
-
-
-
   //Page header
     function Header() {
   //$dados = @db_query("select nomeinst,ender,munic,uf,telef,email,url,logo from db_config where codigo = ".@$GLOBALS["DB_instit"]);
@@ -111,10 +108,12 @@
   //$this->Image("imagens/files/logo_boleto.png",$posini,8,20);
   $this->Image('imagens/files/'.$logo,$posini,8,20);
   $this->Ln(1);
-  $this->SetFont($Letra,'',10);
+  $this->SetFont($Letra,'B',10);
   $this->MultiCell(0,4,$db12_extenso,0,"C",0);
   $this->SetFont($Letra,'B',13);
   $this->MultiCell(0,6,$nomeinst,0,"C",0);
+  $this->SetFont($Letra,'',13);
+  $this->MultiCell(0,6,$cgc,0,"C",0);
   $this->SetFont($Letra,'B',12);
   $this->MultiCell(0,4,@$GLOBALS["head1"],0,"C",0);
   $this->Ln(10);

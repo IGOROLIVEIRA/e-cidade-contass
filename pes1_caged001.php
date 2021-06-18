@@ -311,7 +311,7 @@ if (isset($gerar)) {
               }
 
               $rh01_sexo     = ((strtoupper($rh01_sexo) == "M") ? "1" : "2");
-              $r02_valor     = (($rh02_salari == 0) ? (($r02_valor > 0) ? $r02_valor : 1) : $r02_valor);
+              $r02_valor     = (($rh02_salari == 0) ? (($r02_valor > 0) ? $r02_valor : 1) : $rh02_salari);
               $rh02_hrssem   = ((trim($rh02_hrssem) != "" && (int)$rh02_hrssem > 0) ? $rh02_hrssem : ((trim($r02_hrssem) != "" && (int)$r02_hrssem > 0) ? $r02_hrssem : 2));
               $tipomovimento = tpmov($rh05_causa, $rh01_tipadm, $rh05_recis, $rh02_tpcont);
               $diarescisao   = ((trim($rh05_recis) != "") ? db_subdata($rh05_recis, "d") : "  ");
