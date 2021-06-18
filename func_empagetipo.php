@@ -126,16 +126,16 @@ $clempagetipo->rotulo->label("e83_descr");
 
             $sDataAtual = date('Y-m-d', db_getsession('DB_datausu'));
             $sWhere     = " e60_numemp = {$e60_numemp} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
-            $sWhere2    = " e83_codtipo = {$e83_codtipo} ";
+            $sWhere2    = " e83_conta = {$e83_conta} ";
             $sCampos    = " distinct e83_codtipo, e83_descr, e83_conta, c61_codigo ";
             $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, true, false, $sWhere2);
             $result     = $clempagetipo->sql_record($sql);
             
             if ($clempagetipo->numrows != 0) {
                 db_fieldsmemory($result,0);
-                echo "<script>".$funcao_js."('$e83_descr',false);</script>";
+                echo "<script>".$funcao_js."('$e83_descr','$e83_codtipo',false);</script>";
             } else {                 
-                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','',true);</script>";
             }
 
         } else if (isset($e83_conta) && $e83_conta != ""){
