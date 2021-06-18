@@ -275,7 +275,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
            AND e60_anousu = o58_anousu
            INNER JOIN pagordem ON e50_numemp = e60_numemp 
            WHERE e50_codord = {$e50_codord} 
-           AND o41_anousu = DATE_PART('YEAR',pagordem.e50_data)
+           ORDER BY o41_anousu DESC LIMIT 1;
       ";
 
   $resultordass = db_query($sql1);
