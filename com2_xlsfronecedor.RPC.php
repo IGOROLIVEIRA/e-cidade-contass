@@ -82,6 +82,11 @@ switch($oParam->exec) {
                             //busco codigo do item na tabela orcamitem para preencher valor dos itens na tela
                             $rsOrcamitem = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"pc22_orcamitem",null,"pc20_codorc = $oParam->pc20_codorc AND pc21_orcamforne = $oParam->pc21_orcamforne AND pc01_codmater = $cell"));
                             $objItensPlanilha->item =  db_utils::fieldsMemory($rsOrcamitem, 0)->pc22_orcamitem;
+                            if($objItensPlanilha->item == null){
+                                $oRetorno->status = 2;
+                                $oRetorno->message = urlencode("Erro! Item:".$cell." invalido para o orçamento verifique a planilha.");
+                                $erro = true;
+                            }
                         }
                         if($keyCel == 14){
                             $objItensPlanilha->quantidade    =  $cell;
@@ -154,6 +159,11 @@ switch($oParam->exec) {
                             //busco codigo do item na tabela orcamitem para preencher valor dos itens na tela
                             $rsOrcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_orcamitem",null,"pc20_codorc = $oParam->pc20_codorc AND pc21_orcamforne = $oParam->pc21_orcamforne AND pc01_codmater = $cell"));
                             $objItensPlanilha->item =  db_utils::fieldsMemory($rsOrcamitem, 0)->pc22_orcamitem;
+                            if($objItensPlanilha->item == null){
+                                $oRetorno->status = 2;
+                                $oRetorno->message = urlencode("Erro! Item:".$cell." invalido para o orçamento verifique a planilha.");
+                                $erro = true;
+                            }
                         }
                         if($keyCel == 14){
                             $objItensPlanilha->quantidade    =  $cell;

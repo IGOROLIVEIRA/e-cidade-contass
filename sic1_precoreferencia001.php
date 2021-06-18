@@ -116,6 +116,9 @@ if (isset($incluir)) {
       jan.moveTo(0,0);
       </script>";
     }
+    if ($clprecoreferencia->erro_status != 0) {
+        db_redireciona("sic1_precoreferencia002.php?chavepesquisa=".$clprecoreferencia->si01_sequencial);
+    }
 }
 ?>
     <html>
