@@ -1600,6 +1600,8 @@ class cl_rhpessoal {
                                             and  rhregime.rh30_instit      = rhpessoalmov.rh02_instit ";
      $sql .= "      left  join rhpesrescisao on  rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes ";
      $sql .= "      left  join rhpespadrao   on  rhpespadrao.rh03_seqpes  = rhpessoalmov.rh02_seqpes ";
+     $sql .= "      left  join rhlotaexe     on rh26_codigo               = r70_codigo and rh26_anousu = rh02_anousu";
+     $sql .= "      left  join orcorgao      on o40_orgao = rh26_orgao and o40_anousu = rhpessoalmov.rh02_anousu and o40_instit = rhpessoalmov.rh02_instit";
      $sql2 = "";
      if($dbwhere==""){
        if($rh01_regist!=null ){

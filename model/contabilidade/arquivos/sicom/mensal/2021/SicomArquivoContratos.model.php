@@ -222,7 +222,6 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 			INNER JOIN pcproc ON si06_processocompra = pc80_codproc
 			LEFT JOIN infocomplementaresinstit ON adesaoregprecos.si06_instit = infocomplementaresinstit.si09_instit
 			WHERE si06_instit= " . db_getsession('DB_instit') . "
-				AND date_part('month',si06_dataadesao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 				AND date_part('year',si06_dataadesao) = " . db_getsession('DB_anousu') . "
 		  		AND ac16_sequencial = " . $sequencial . "
 	  ";
