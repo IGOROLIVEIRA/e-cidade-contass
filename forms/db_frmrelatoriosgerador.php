@@ -28,28 +28,17 @@ $clrotulo->label("descrproced");
             ?>
           </td>
         </tr>
-        <!-- <tr>
-          <td nowrap title="Relatorios">
-            <?
-            db_ancora("Relatorios", "js_pesquisarelatorios(true);", $db_opcao);
-            ?>
-          </td>
-          <td>
-            <?
-            db_input('rel_sequencial', 10, $Irel_sequencial, true, 'text', $db_opcao, " onchange='js_pesquisarelatorios(false);'")
-            ?>
-            <?
-            db_input('rel_descricao', 50, $Irel_descricao, true, 'text', 3, '')
-            ?>
-          </td>
-        </tr> -->
+        <tr>
+          <td id="tdArquivoAncora"></td>
+          <td id="tdArquivoInput"></td>
+        </tr>
         <tr>
           <td nowrap title="<?= @$Trel_corpo ?>">
             <?= @$Lrel_corpo ?>
           </td>
           <td>
             <?
-            db_textarea('rel_corpo', 15, 90, 'rel_corpo', true, 'text', $db_opcao, "")
+            db_textarea('rel_corpo', 15, 90, 'rel_corpo', true, 'text', 3, "")
             ?>
           </td>
         </tr>
@@ -88,26 +77,24 @@ $clrotulo->label("descrproced");
     document.form1.rel_sequencial.value = chave1;
     document.form1.rel_descricao.value = chave2;
     document.form1.rel_corpo.value = chave3;
-
     js_divCarregando("Aguarde, pesquisando dados do arquivo.", "msgBox");
     var oParam = new Object();
-    oParam.exec = "verificaArquivo";
-    oParam.iArquivo = chave1;
+    oParam.exec = "getArquivo";
+    oParam.iArquivo = chave4;
     var oAjax = new Ajax.Request(sUrl, {
       method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoVerificaArquivo
+      onComplete: js_retornoArquivo
     });
     db_iframe_relatorios.hide();
   }
 
-  function js_retornoVerificaArquivo(oAjax) {
+  function js_retornoArquivo(oAjax) {
 
     js_removeObj("msgBox");
     var oRetorno = eval("(" + oAjax.responseText + ")");
-    console.log(oRetorno);
     if (oRetorno.status == 1) {
-
+      js_generateAncora(oRetorno.arquivo.nomearq);
     }
 
   }
@@ -119,9 +106,69 @@ $clrotulo->label("descrproced");
   function js_preenchepesquisa(chave) {
     db_iframe_relatorios.hide();
     <?
-    //if ($db_opcao != 1) {
     echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
-    //}
     ?>
+  }
+
+  function js_generateAncora(sArq) {
+    const sArquivo = sArq[0].toUpperCase() + sArq.substr(1);
+    var tdArquivoAncora = document.getElementById("tdArquivoAncora");
+    var ancora = document.createElement('a');
+    ancora.setAttribute('class', 'dbancora');
+    ancora.setAttribute('onclick', 'js_pesquisa' + sArq + '(true)');
+    ancora.setAttribute("style", "text-decoration:underline;");
+    ancora.setAttribute("id", "ancora_arquivo");
+    ancora.setAttribute("href", "#");
+    tdArquivoAncora.appendChild(ancora);
+    document.getElementById("ancora_arquivo").innerHTML = sArquivo;
+
+    var tdArquivoInput = document.getElementById("tdArquivoInput");
+
+    var input = document.createElement('input');
+    input.setAttribute('class', 'dbinput');
+    input.setAttribute('type', 'text');
+    input.setAttribute('maxlength', '10');
+    //input.setAttribute('onchange', '');
+    input.setAttribute('onblur', "js_ValidaMaiusculo(this,'f',event)");
+    input.setAttribute('oninput', "js_ValidaCampos(this,1,'Sequencial','f','f',event)");
+    input.setAttribute('onkeydown', "return js_controla_tecla_enter(this,event)");
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("tabindex", "1");
+    input.setAttribute("id", "input_arquivo");
+    input.setAttribute("name", "input_arquivo");
+    input.setAttribute("href", "#");
+
+    tdArquivoInput.appendChild(input);
+
+    var input2 = document.createElement('input');
+    input2.setAttribute('class', 'dbinput');
+    input2.setAttribute('type', 'text');
+    input2.setAttribute('maxlength', '50');
+    input2.setAttribute('title', 'Descrição Campo:rel_descricao');
+    //input2.setAttribute('onchange', '');
+    input2.setAttribute('style', "background-color:#DEB887;text-transform:uppercase");
+    input2.setAttribute("autocomplete", "off");
+    input2.setAttribute("tabindex", "1");
+    input2.setAttribute("id", "input_arquivo_descricao");
+    input2.setAttribute("name", "input_arquivo_descricao");
+    input2.setAttribute("href", "#");
+    input2.setAttribute("size", "50");
+
+    tdArquivoInput.appendChild(input2);
+
+    var script = document.createElement('script');
+
+    script.innerText = "function js_pesquisa" + sArq + "(mostra) { ";
+    script.innerText += "if (mostra == true) {";
+    script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?funcao_js=parent.js_mostrafunc_" + sArq + "1|rel_sequencial|rel_descricao|rel_corpo|rel_arquivo', 'Pesquisa', true, '0');"
+    script.innerText += "} else {";
+    script.innerText += " if (document.form1.input_arquivo.value != '') {";
+    script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?pesquisa_chave=' + document.form1.input_arquivo.value + '&funcao_js=parent.js_mostrafunc_" + sArq + "', 'Pesquisa', false);";
+    script.innerText += "} else {"
+    script.innerText += " document.form1.input_arquivo_descricao.value = '';"
+    script.innerText += "}";
+    script.innerText += "}";
+    script.innerText += "}";
+    document.body.appendChild(script);
   }
 </script>

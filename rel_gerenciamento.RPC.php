@@ -8,7 +8,9 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_db_sysarqcamp_classe.php");
+require_once("classes/db_db_sysarquivo_classe.php");
 $oDaoSysArqCamp = new cl_db_sysarqcamp();
+$oDaoSysArquivo = new cl_db_sysarquivo();
 $oJson             = new services_json();
 $oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 $oRetorno          = new stdClass();
@@ -23,7 +25,8 @@ switch ($oParam->exec) {
 
     $sSqlSysArqCamp = $oDaoSysArqCamp->sql_query($oParam->iArquivo, '', '', 'db_syscampo.*');
     // echo $oParam->iArquivo;
-    //echo $sSqlSysArqCamp;
+    // echo $sSqlSysArqCamp;
+    // exit;
     $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
     if ($oDaoSysArqCamp->numrows > 0) {
       for ($i = 0; $i < pg_numrows($rsSysArqCamp); $i++) {
@@ -32,6 +35,14 @@ switch ($oParam->exec) {
         $oRetorno->itens[] = $oDados;
       }
     }
+    break;
+
+  case 'getArquivo':
+
+    $sSqlSysArqCamp = $oDaoSysArquivo->sql_query($oParam->iArquivo);
+    $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
+    $oDados = db_utils::fieldsMemory($rsSysArqCamp, 0);
+    $oRetorno->arquivo = $oDados;
     break;
 }
 echo $oJson->encode($oRetorno);
