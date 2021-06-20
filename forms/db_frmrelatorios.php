@@ -50,11 +50,12 @@ $clrotulo->label("descrproced");
         </tr>
         <tr>
           <td nowrap title="<?= @$Trel_corpo ?>">
-            <?= @$Lrel_corpo ?>
+            <strong>Texto Padrão:</strong>
           </td>
           <td>
             <?
-            db_textarea('rel_corpo', 15, 90, 'rel_corpo', true, 'text', $db_opcao, "")
+            db_textarea('rel_corpo', 10, 85, 'rel_corpo', true, 'text', $db_opcao, "");
+            db_textarea('p110_textoemail', 10, 85, $Ip110_textoemail, true, 'text', $db_opcao, "");
             ?>
           </td>
         </tr>
@@ -122,7 +123,6 @@ $clrotulo->label("descrproced");
 
     js_removeObj("msgBox");
     var oRetorno = eval("(" + oAjax.responseText + ")");
-    //console.log(oRetorno);
     if (oRetorno.status == 1) {
       const pai = document.getElementById("legendas");
       const filho = pai.querySelector("#tableLegenda");

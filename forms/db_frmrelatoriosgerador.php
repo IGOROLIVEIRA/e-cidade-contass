@@ -89,16 +89,6 @@ $clrotulo->label("descrproced");
     db_iframe_relatorios.hide();
   }
 
-  function js_retornoArquivo(oAjax) {
-
-    js_removeObj("msgBox");
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    if (oRetorno.status == 1) {
-      js_generateAncora(oRetorno.arquivo.nomearq);
-    }
-
-  }
-
   function js_pesquisa() {
     js_OpenJanelaIframe('top.corpo', 'db_iframe_relatorios', 'func_relatorios.php?funcao_js=parent.js_preenchepesquisa|rel_sequencial', 'Pesquisa', true);
   }
@@ -110,8 +100,18 @@ $clrotulo->label("descrproced");
     ?>
   }
 
-  function js_generateAncora(sArq) {
+  function js_retornoArquivo(oAjax) {
+
+    js_removeObj("msgBox");
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    if (oRetorno.status == 1) {
+      js_generateAncora(oRetorno.arquivo.nometabela, oRetorno.arquivo.nomecampo);
+    }
+  }
+
+  function js_generateAncora(sArq, sCamp) {
     const sArquivo = sArq[0].toUpperCase() + sArq.substr(1);
+
     var tdArquivoAncora = document.getElementById("tdArquivoAncora");
     var ancora = document.createElement('a');
     ancora.setAttribute('class', 'dbancora');
@@ -137,30 +137,32 @@ $clrotulo->label("descrproced");
     input.setAttribute("id", "input_arquivo");
     input.setAttribute("name", "input_arquivo");
     input.setAttribute("href", "#");
+    input.setAttribute("readonly", "");
+    input.setAttribute("style", "background-color:#DEB887;text-transform:uppercase;");
 
     tdArquivoInput.appendChild(input);
 
-    var input2 = document.createElement('input');
-    input2.setAttribute('class', 'dbinput');
-    input2.setAttribute('type', 'text');
-    input2.setAttribute('maxlength', '50');
-    input2.setAttribute('title', 'Descrição Campo:rel_descricao');
-    //input2.setAttribute('onchange', '');
-    input2.setAttribute('style', "background-color:#DEB887;text-transform:uppercase");
-    input2.setAttribute("autocomplete", "off");
-    input2.setAttribute("tabindex", "1");
-    input2.setAttribute("id", "input_arquivo_descricao");
-    input2.setAttribute("name", "input_arquivo_descricao");
-    input2.setAttribute("href", "#");
-    input2.setAttribute("size", "50");
+    // var input2 = document.createElement('input');
+    // input2.setAttribute('class', 'dbinput');
+    // input2.setAttribute('type', 'text');
+    // input2.setAttribute('maxlength', '50');
+    // input2.setAttribute('title', 'Descrição Campo:rel_descricao');
+    // //input2.setAttribute('onchange', '');
+    // input2.setAttribute('style', "background-color:#DEB887;text-transform:uppercase");
+    // input2.setAttribute("autocomplete", "off");
+    // input2.setAttribute("tabindex", "1");
+    // input2.setAttribute("id", "input_arquivo_descricao");
+    // input2.setAttribute("name", "input_arquivo_descricao");
+    // input2.setAttribute("href", "#");
+    // input2.setAttribute("size", "50");
 
-    tdArquivoInput.appendChild(input2);
+    // tdArquivoInput.appendChild(input2);
 
     var script = document.createElement('script');
 
     script.innerText = "function js_pesquisa" + sArq + "(mostra) { ";
     script.innerText += "if (mostra == true) {";
-    script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?funcao_js=parent.js_mostrafunc_" + sArq + "1|rel_sequencial|rel_descricao|rel_corpo|rel_arquivo', 'Pesquisa', true, '0');"
+    script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?funcao_js=parent.js_mostrafunc_" + sArq + "1|" + sCamp + "', 'Pesquisa', true, '0');"
     script.innerText += "} else {";
     script.innerText += " if (document.form1.input_arquivo.value != '') {";
     script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?pesquisa_chave=' + document.form1.input_arquivo.value + '&funcao_js=parent.js_mostrafunc_" + sArq + "', 'Pesquisa', false);";
@@ -170,5 +172,13 @@ $clrotulo->label("descrproced");
     script.innerText += "}";
     script.innerText += "}";
     document.body.appendChild(script);
+
+    var script2 = document.createElement('script');
+    script2.innerText = "function js_mostrafunc_" + sArq + "1(chave1) {";
+    script2.innerText += "document.form1.input_arquivo.value = chave1;";
+    script2.innerText += "db_iframe_" + sArq + ".hide();";
+    script2.innerText += "}";
+    document.body.appendChild(script2);
+
   }
 </script>

@@ -39,7 +39,7 @@ switch ($oParam->exec) {
 
   case 'getArquivo':
 
-    $sSqlSysArqCamp = $oDaoSysArquivo->sql_query($oParam->iArquivo);
+    $sSqlSysArqCamp = $oDaoSysArquivo->sql_query_buscaCamposPorTabela($oParam->iArquivo);
     $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
     $oDados = db_utils::fieldsMemory($rsSysArqCamp, 0);
     $oRetorno->arquivo = $oDados;

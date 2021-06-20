@@ -51,13 +51,13 @@ class Oc14905 extends AbstractMigration
 
     INSERT INTO configuracoes.db_syscampo
     (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
-    VALUES((select max(codcam)+1 from db_syscampo), 'rel_corpo                               ', 'varchar(500)                            ', 'Corpo', '', 'Corpo', 500, false, true, false, 0, 'text', 'Corpo');
+    VALUES((select max(codcam)+1 from db_syscampo), 'rel_corpo                               ', 'varchar(500)                            ', 'Corpo', '', 'Corpo', 500, false, false, false, 0, 'text', 'Corpo');
     INSERT INTO configuracoes.db_syscampo
     (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
     VALUES((select max(codcam)+1 from db_syscampo), 'rel_arquivo                              ', 'int4                                    ', 'Modulo', '0', 'Modulo', 10, false, false, false, 1, 'text', 'Modulo');
     INSERT INTO configuracoes.db_syscampo
     (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
-    VALUES((select max(codcam)+1 from db_syscampo), 'rel_descricao                           ', 'varchar(50)                             ', 'Descrição', '', 'Descrição', 50, false, true, false, 0, 'text', 'Descrição');
+    VALUES((select max(codcam)+1 from db_syscampo), 'rel_descricao                           ', 'varchar(50)                             ', 'Descrição', '', 'Descrição', 50, false, false, false, 0, 'text', 'Descrição');
     INSERT INTO configuracoes.db_syscampo
     (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
     VALUES((select max(codcam)+1 from db_syscampo), 'rel_sequencial                          ', 'int4                                    ', 'Sequencial', '0', 'Sequencial', 10, false, false, false, 1, 'text', 'Sequencial');
