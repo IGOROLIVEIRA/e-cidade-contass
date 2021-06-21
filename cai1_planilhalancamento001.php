@@ -1808,9 +1808,7 @@ function js_verificaEmendaParlamentar() {
         || (sReceita == '424280311' && sRecurso == '155')
     );
 
-    if (sRecurso == '164') {
-        document.getElementById("k81_emparlamentar").options[1].selected = true;
-    } else if (lEmendaParlamentarObrigatoria) {
+    if (lEmendaParlamentarObrigatoria) {
         document.getElementById("k81_emparlamentar").options[0].selected = true;
     } else {
         document.getElementById("k81_emparlamentar").options[3].selected = true;
