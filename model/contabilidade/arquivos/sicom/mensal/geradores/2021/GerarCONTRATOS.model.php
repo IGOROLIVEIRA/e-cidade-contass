@@ -206,15 +206,10 @@ class GerarCONTRATOS extends GerarAM
         $aCSVCONTRATOS20['si87_codaditivo']                    =  substr($aCONTRATOS20['si87_codaditivo'], 0, 15);
         $aCSVCONTRATOS20['si87_codorgao']                      =  str_pad($aCONTRATOS20['si87_codorgao'], 2, "0", STR_PAD_LEFT);
 
-        if (strlen($aCONTRATOS20['si87_codunidadesub']) > 5) {
-          $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 8); // campo 19
+        if (strlen($aCONTRATOS20['si87_codunidadesub']) == 5) {
+          $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 5); // campo 19
         } else {
-          if (strlen($aCONTRATOS20['si87_codunidadesub']) == 5) {
-            $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 6); // campo 19
-          }
-          if (strlen($aCONTRATOS20['si87_codunidadesub']) < 5) {
-            $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 5); // campo 19
-          }
+          $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 8); // campo 19
         }
 
         //$aCSVCONTRATOS20['si87_codunidadesub']                 =  str_pad($aCONTRATOS20['si87_codunidadesub'], 5, "0", STR_PAD_LEFT);
