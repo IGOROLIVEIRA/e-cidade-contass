@@ -42,15 +42,12 @@ $rotulocampo->label("z01_nome");
 
             <table>
                 <tr>
-                    <td nowrap title="<?php echo $Trh01_regist; ?>">
-                        <label class="bold" for="rh01_regist" id="lbl_rh01_regist">
-                            <?php db_ancora($Srh01_regist . ':', "js_pesquisarh01_regist(true);", 1); ?>
-                        </label>
+                    <td>
+                        <strong>Data Notificação: </strong>
                     </td>
                     <td>
-                        <?php
-                        db_input('rh01_regist', 10, $Irh01_regist, true, 'text', 1, " onchange='js_pesquisarh01_regist(false);'");
-                        db_input('z01_nome', 60, $Iz01_nome, true, 'text', 3, '');
+                        <?
+                        db_inputdata('dtnotificacao',null, null, null, true, 'text', 1);
                         ?>
                     </td>
                 </tr>
@@ -89,51 +86,6 @@ db_menu( db_getsession("DB_id_usuario"),
 <script>
     var oTiposFiltrosFolha;
 
-    function js_pesquisarh01_regist(mostra) {
-
-        if (mostra == true) {
-            js_OpenJanelaIframe( 'top.corpo',
-                'db_iframe_rhpessoal',
-                'func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>',
-                'Pesquisa',
-                true );
-        } else {
-
-            if (document.form1.rh01_regist.value != '') {
-                js_OpenJanelaIframe( 'top.corpo',
-                    'db_iframe_rhpessoal',
-                    'func_rhpessoal.php?testarescisao=true&pesquisa_chave=' + document.form1.rh01_regist.value
-                    + '&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>',
-                    'Pesquisa',
-                    false );
-            } else {
-                document.form1.z01_nome.value = '';
-                document.form1.submit();
-            }
-        }
-    }
-
-    function js_mostrapessoal(chave, erro) {
-
-        document.form1.z01_nome.value = chave;
-        if (erro == true) {
-
-            document.form1.rh01_regist.focus();
-            document.form1.rh01_regist.value = '';
-        } else {
-            document.form1.submit();
-        }
-    }
-
-    function js_mostrapessoal1(chave1, chave3) {
-
-        document.form1.rh01_regist.value = chave1;
-        document.form1.z01_nome.value    = chave3;
-
-        db_iframe_rhpessoal.hide();
-        document.form1.submit();
-    }
-
     (function() {
 
         /**
@@ -162,9 +114,10 @@ db_menu( db_getsession("DB_id_usuario"),
             }
         }
 
-        oQuery = '?matricula='+ $F('rh01_regist');
-        oQuery +='&dtinicio=' + $F('inicioperiodo');
-        oQuery +='&dtfim='    + $F('fimperiodo');
+        oQuery = '?dtnotificacao='   + $F('dtnotificacao');
+        oQuery +='&dtinicio='        + $F('inicioperiodo');
+        oQuery +='&dtfim='           + $F('fimperiodo');
+        oQuery +='&tiporegistro='    + $F('oCboTipoRelatorio');
 
         if(oCboTipoRelatorio != 0) {
             var aSelecionados = [];
