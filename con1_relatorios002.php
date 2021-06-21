@@ -6,17 +6,30 @@ include("libs/db_usuariosonline.php");
 include("classes/db_relatorios_classe.php");
 include("classes/db_db_sysprocedarq_classe.php");
 include("dbforms/db_funcoes.php");
+include("vendor/mpdf/mpdf/mpdf.php");
+
 db_postmemory($HTTP_POST_VARS);
+parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $clrelatorios = new cl_relatorios;
 $cldb_sysprocedarq = new cl_db_sysprocedarq;
 $db_opcao = 1;
 $db_botao = true;
-if (isset($gerar)) {
-  db_inicio_transacao();
-  $clrelatorios->rel_arquivo = $codarq;
-  $clrelatorios->gerar($rel_sequencial);
-  db_fim_transacao();
+if (isset($Gerar)) {
+
+  require_once("classes/db_" . $arquivo . "_classe.php");
+
+  $class = "cl_" . $arquivo;
+  $cl_arquivo = new $class;
+  $rsArquivo = $cl_arquivo->sql_record($cl_arquivo->sql_query($input_arquivo));
+  db_fieldsmemory($rsArquivo, 0);
+
+  $mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
+
+  $html = $rel_corpo;
+  $mPDF->WriteHTML(utf8_encode($html));
+  //$mPDF->Output();
+  $mPDF->Output('filename.pdf', \Mpdf\Output\Destination::FILE);
 }
 ?>
 <html>

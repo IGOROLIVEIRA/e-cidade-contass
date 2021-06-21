@@ -7,8 +7,11 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_relatorios_classe.php");
 require_once("classes/db_db_sysarqcamp_classe.php");
 require_once("classes/db_db_sysarquivo_classe.php");
+
+$clrelatorios = new cl_relatorios;
 $oDaoSysArqCamp = new cl_db_sysarqcamp();
 $oDaoSysArquivo = new cl_db_sysarquivo();
 $oJson             = new services_json();
@@ -24,9 +27,6 @@ switch ($oParam->exec) {
   case 'verificaArquivo':
 
     $sSqlSysArqCamp = $oDaoSysArqCamp->sql_query($oParam->iArquivo, '', '', 'db_syscampo.*');
-    // echo $oParam->iArquivo;
-    // echo $sSqlSysArqCamp;
-    // exit;
     $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
     if ($oDaoSysArqCamp->numrows > 0) {
       for ($i = 0; $i < pg_numrows($rsSysArqCamp); $i++) {

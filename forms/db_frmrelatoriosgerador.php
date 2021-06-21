@@ -45,8 +45,7 @@ $clrotulo->label("descrproced");
       </table>
 
     </fieldset>
-    <input name="Gerar" type="submit" id="db_opcao" value="Gerar" onclick="js_pesquisa();">
-    <!-- <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();"> -->
+    <input name="Gerar" type="submit" id="db_opcao" value="gerar">
   </div>
 </form>
 <script>
@@ -128,7 +127,6 @@ $clrotulo->label("descrproced");
     input.setAttribute('class', 'dbinput');
     input.setAttribute('type', 'text');
     input.setAttribute('maxlength', '10');
-    //input.setAttribute('onchange', '');
     input.setAttribute('onblur', "js_ValidaMaiusculo(this,'f',event)");
     input.setAttribute('oninput', "js_ValidaCampos(this,1,'Sequencial','f','f',event)");
     input.setAttribute('onkeydown', "return js_controla_tecla_enter(this,event)");
@@ -142,21 +140,14 @@ $clrotulo->label("descrproced");
 
     tdArquivoInput.appendChild(input);
 
-    // var input2 = document.createElement('input');
-    // input2.setAttribute('class', 'dbinput');
-    // input2.setAttribute('type', 'text');
-    // input2.setAttribute('maxlength', '50');
-    // input2.setAttribute('title', 'Descrição Campo:rel_descricao');
-    // //input2.setAttribute('onchange', '');
-    // input2.setAttribute('style', "background-color:#DEB887;text-transform:uppercase");
-    // input2.setAttribute("autocomplete", "off");
-    // input2.setAttribute("tabindex", "1");
-    // input2.setAttribute("id", "input_arquivo_descricao");
-    // input2.setAttribute("name", "input_arquivo_descricao");
-    // input2.setAttribute("href", "#");
-    // input2.setAttribute("size", "50");
+    var input2 = document.createElement('input');
+    input2.setAttribute('class', 'dbinput');
+    input2.setAttribute("id", "arquivo");
+    input2.setAttribute("name", "arquivo");
+    input2.setAttribute("type", "hidden");
+    input2.setAttribute("value", sArq);
 
-    // tdArquivoInput.appendChild(input2);
+    tdArquivoInput.appendChild(input2);
 
     var script = document.createElement('script');
 
@@ -179,6 +170,45 @@ $clrotulo->label("descrproced");
     script2.innerText += "db_iframe_" + sArq + ".hide();";
     script2.innerText += "}";
     document.body.appendChild(script2);
+
+  }
+
+  function js_gerar() {
+
+    var oParam = new Object();
+
+    oParam.sExec = 'gerar';
+    oParam.sequencial = $F('rel_sequencial');
+    oParam.arquivo = $F('input_arquivo');
+
+    js_divCarregando('Gerando Relatório, aguarde.', 'msgbox');
+
+    var oAjax = new Ajax.Request(sUrl, {
+      method: 'POST',
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_confirma
+    });
+
+  }
+
+  function js_confirma(oAjax) {
+
+    js_removeObj('msgbox');
+
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+
+    if (oRetorno.iStatus == 1) {
+
+      sMensagem = "Relatório Gerado";
+
+      //alert(sMensagem);
+
+    } else {
+
+      //alert(oRetorno.sMensagem.urlDecode());
+      return false;
+
+    }
 
   }
 </script>
