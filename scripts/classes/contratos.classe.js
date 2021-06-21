@@ -353,7 +353,6 @@ contrato = function () {
         var iOrigem                   = $F('ac16_origem');
         var iTipoOrigem               = $F('ac16_tipoorigem');
         var iContratado               = $F('ac16_contratado');
-        var iContratdo_Nat            = $F('ac16_contratado_Natu');
         var iDepartamentoResponsavel  = $F('ac16_deptoresponsavel');
         var iComissao                 = $F('ac16_acordocomissao');
         var dtInicio                  = $F('ac16_datainicio');
@@ -430,13 +429,13 @@ contrato = function () {
             $('ac16_contratado').focus();
             return false;
         }
-        if (iContratdo_Nat == 0 && iOrigem == 2) {
+        // if (iContratdo_Nat == 0 && iOrigem == 2) {
 
-            alert('Natureza do contrato divergente da natureza do objeto da Licitação');
-            $('ac16_contratado').focus();
-            $('ac16_acordogrupo').focus();
-            return false;
-        }
+        //     alert('Natureza do contrato divergente da natureza do objeto da Licitação');
+        //     $('ac16_contratado').focus();
+        //     $('ac16_acordogrupo').focus();
+        //     return false;
+        // }
         if (iDepartamentoResponsavel == "") {
 
             alert('Informe o Departamento Responsável.');
