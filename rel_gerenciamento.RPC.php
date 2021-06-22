@@ -32,6 +32,7 @@ switch ($oParam->exec) {
       for ($i = 0; $i < pg_numrows($rsSysArqCamp); $i++) {
 
         $oDados = db_utils::fieldsMemory($rsSysArqCamp, $i);
+        $oDados->descricao = utf8_encode($oDados->descricao);
         $oRetorno->itens[] = $oDados;
       }
     }
@@ -39,7 +40,7 @@ switch ($oParam->exec) {
 
   case 'getArquivo':
 
-    $sSqlSysArqCamp = $oDaoSysArquivo->sql_query_buscaCamposPorTabela($oParam->iArquivo);
+    $sSqlSysArqCamp = $oDaoSysArquivo->sql_query_buscaCamposPkPorTabela($oParam->iArquivo);
     $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
     $oDados = db_utils::fieldsMemory($rsSysArqCamp, 0);
     $oRetorno->arquivo = $oDados;

@@ -55,7 +55,6 @@ $clrotulo->label("descrproced");
           <td>
             <?
             db_textarea('rel_corpo', 10, 85, 'rel_corpo', true, 'text', $db_opcao, "");
-            db_textarea('p110_textoemail', 10, 85, $Ip110_textoemail, true, 'text', $db_opcao, "");
             ?>
           </td>
         </tr>
@@ -123,6 +122,7 @@ $clrotulo->label("descrproced");
 
     js_removeObj("msgBox");
     var oRetorno = eval("(" + oAjax.responseText + ")");
+    console.log(oRetorno);
     if (oRetorno.status == 1) {
       const pai = document.getElementById("legendas");
       const filho = pai.querySelector("#tableLegenda");
@@ -138,11 +138,11 @@ $clrotulo->label("descrproced");
       table.setAttribute('id', 'tableLegenda');
 
       var arrHead = new Array();
-      arrHead = ['Descrição', 'Nome Campo'];
+      arrHead = ['Descrição', 'Nome do campo'];
 
       var arrValue = new Array();
       oRetorno.itens.each(function(oItem, iLinha) {
-        arrValue.push([oItem.descricao, oItem.nomecam]);
+        arrValue.push([unescape(oItem.descricao), '#$' + oItem.nomecam]);
       });
       var tr = table.insertRow(-1);
 
