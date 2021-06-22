@@ -56,6 +56,7 @@ $clrotulo->label("descrproced");
             <?
             db_textarea('rel_corpo', 10, 85, 'rel_corpo', true, 'text', $db_opcao, "");
             ?>
+            <textarea id="mytextarea">Hello, World!</textarea>
           </td>
         </tr>
       </table>
@@ -128,10 +129,10 @@ $clrotulo->label("descrproced");
       const filho = pai.querySelector("#tableLegenda");
 
       if (filho !== null) {
-        console.log("O elemento #filho existe em #pai");
+        // console.log("O elemento #filho existe em #pai");
         filho.remove();
       } else {
-        console.log("O elemento #filho não existe em #pai");
+        // console.log("O elemento #filho não existe em #pai");
       }
 
       var table = document.createElement('table');
@@ -142,7 +143,7 @@ $clrotulo->label("descrproced");
 
       var arrValue = new Array();
       oRetorno.itens.each(function(oItem, iLinha) {
-        arrValue.push([unescape(oItem.descricao), '#$' + oItem.nomecam]);
+        arrValue.push([unescape(oItem.descricao), '#$' + oItem.nomecam + '#']);
       });
       var tr = table.insertRow(-1);
 

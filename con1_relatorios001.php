@@ -71,6 +71,12 @@ if (isset($chavepesquisa)) {
   db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
   db_app::load("estilos.css, grid.style.css");
   ?>
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script type="text/javascript">
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script>
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
