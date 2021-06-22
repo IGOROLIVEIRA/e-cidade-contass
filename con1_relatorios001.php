@@ -47,20 +47,6 @@ if (isset($chavepesquisa)) {
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta http-equiv="Expires" CONTENT="0">
   <style>
-    .fora {
-      background-color: #d1f07c;
-    }
-
-    #fieldset_depart_inclusao,
-    #fieldset_depart_responsavel {
-      width: 500px;
-    }
-
-    #fieldset_depart_inclusao table,
-    #fieldset_depart_responsavel table {
-      margin: 0 auto;
-    }
-
     #tableLegenda,
     #tableLegenda th,
     #tableLegenda td {

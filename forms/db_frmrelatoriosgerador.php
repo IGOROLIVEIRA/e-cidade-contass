@@ -45,7 +45,7 @@ $clrotulo->label("descrproced");
       </table>
 
     </fieldset>
-    <input name="Gerar" type="submit" id="db_opcao" value="gerar">
+    <input name="Gerar" type="submit" id="db_opcao" value="Gerar">
   </div>
 </form>
 <script>
@@ -53,7 +53,7 @@ $clrotulo->label("descrproced");
 
   function js_pesquisarelatorios(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_relatorios', 'func_relatorios.php?funcao_js=parent.js_mostrafunc_relatorios1|rel_sequencial|rel_descricao|rel_corpo|rel_arquivo', 'Pesquisa', true, '0');
+      js_OpenJanelaIframe('top.corpo', 'db_iframe_relatorios', 'func_relatorios.php?funcao_js=parent.js_mostrafunc_relatorios1|rel_sequencial|rel_descricao|rel_corpo|rel_arquivo', 'Pesquisa', true);
     } else {
       if (document.form1.rel_sequencial.value != '') {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_relatorios', 'func_relatorios.php?pesquisa_chave=' + document.form1.rel_sequencial.value + '&funcao_js=parent.js_mostrafunc_relatorios', 'Pesquisa', false);
@@ -75,7 +75,10 @@ $clrotulo->label("descrproced");
   function js_mostrafunc_relatorios1(chave1, chave2, chave3, chave4) {
     document.form1.rel_sequencial.value = chave1;
     document.form1.rel_descricao.value = chave2;
-    document.form1.rel_corpo.value = chave3;
+    //document.form1.rel_corpo.value = chave3;
+    tinymce.activeEditor.execCommand('mceNewDocument');
+    tinymce.activeEditor.execCommand('mceInsertContent', false, chave3);
+
     js_divCarregando("Aguarde, pesquisando dados do arquivo.", "msgBox");
     var oParam = new Object();
     oParam.exec = "getArquivo";
@@ -123,6 +126,9 @@ $clrotulo->label("descrproced");
 
     var tdArquivoInput = document.getElementById("tdArquivoInput");
 
+    if (document.getElementById("input_arquivo"))
+      document.getElementById("input_arquivo").remove();
+
     var input = document.createElement('input');
     input.setAttribute('class', 'dbinput');
     input.setAttribute('type', 'text');
@@ -153,7 +159,7 @@ $clrotulo->label("descrproced");
 
     script.innerText = "function js_pesquisa" + sArq + "(mostra) { ";
     script.innerText += "if (mostra == true) {";
-    script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?funcao_js=parent.js_mostrafunc_" + sArq + "1|" + sCamp + "', 'Pesquisa', true, '0');"
+    script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?funcao_js=parent.js_mostrafunc_" + sArq + "1|" + sCamp + "', 'Pesquisa', true);"
     script.innerText += "} else {";
     script.innerText += " if (document.form1.input_arquivo.value != '') {";
     script.innerText += " js_OpenJanelaIframe('top.corpo', 'db_iframe_" + sArq + "', 'func_" + sArq + ".php?pesquisa_chave=' + document.form1.input_arquivo.value + '&funcao_js=parent.js_mostrafunc_" + sArq + "', 'Pesquisa', false);";
@@ -196,19 +202,11 @@ $clrotulo->label("descrproced");
     js_removeObj('msgbox');
 
     var oRetorno = eval("(" + oAjax.responseText + ")");
-
     if (oRetorno.iStatus == 1) {
-
       sMensagem = "Relatório Gerado";
-
-      //alert(sMensagem);
-
     } else {
-
       //alert(oRetorno.sMensagem.urlDecode());
       return false;
-
     }
-
   }
 </script>

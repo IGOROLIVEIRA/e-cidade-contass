@@ -37,18 +37,28 @@ $clrelatorios = new cl_relatorios;
         $campos = "relatorios.oid,relatorios.*";
       }
     }
-    $sql = $clrelatorios->sql_query();
+
+    if (db_getsession("DB_modulo") == 1)
+      $sql = $clrelatorios->sql_query();
+    else
+      $sql = $clrelatorios->sql_query('', '*', '', "db_modulos.id_item = " . db_getsession("DB_modulo"));
+    echo $sql;
     $repassa = array();
     echo '<div class="container">';
     echo '  <fieldset>';
     echo '    <legend>Resultado da Pesquisa</legend>';
-    echo $sql;
     db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
     echo '  </fieldset>';
     echo '</div>';
   } else {
     if ($pesquisa_chave != null && $pesquisa_chave != "") {
-      $result = $clrelatorios->sql_record($clrelatorios->sql_query($pesquisa_chave));
+
+      if (db_getsession("DB_modulo") == 1)
+        $sql = $clrelatorios->sql_query($pesquisa_chave);
+      else
+        $sql = $clrelatorios->sql_query($pesquisa_chave, '*', '', "db_modulos.id_item = " . db_getsession("DB_modulo"));
+
+      $result = $clrelatorios->sql_record($sql);
       if ($clrelatorios->numrows != 0) {
         db_fieldsmemory($result, 0);
         echo "<script>" . $funcao_js . "('$oid',false);</script>";

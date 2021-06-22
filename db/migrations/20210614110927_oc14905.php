@@ -70,7 +70,7 @@ class Oc14905 extends AbstractMigration
 
 
     -- MENU
-    INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Gerenciamento de Contratos', 'Gerenciamento de Contratos', '', 1, 1, 'Gerenciamento de Contratos', 't');
+    INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Gerenciamento de Relatórios', 'Gerenciamento de Relatórios', '', 1, 1, 'Gerenciamento de Relatórios', 't');
 
     INSERT INTO db_menu VALUES (32,
                         (SELECT max(id_item) FROM db_itensmenu),
@@ -79,17 +79,24 @@ class Oc14905 extends AbstractMigration
 
     INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Cadastro', 'Cadastro', 'con1_relatorios001.php', 1, 1, 'Cadastro', 't');
 
-    INSERT INTO db_menu VALUES ((select id_item from db_itensmenu where descricao = 'Gerenciamento de Contratos'),
+    INSERT INTO db_menu VALUES ((select id_item from db_itensmenu where descricao = 'Gerenciamento de Relatórios'),
                         (SELECT max(id_item) FROM db_itensmenu),
                         (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 32 and modulo = 1),
                         1);
 
     INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Gerador', 'Gerador', 'con1_relatorios002.php', 1, 1, 'Gerador', 't');
 
-    INSERT INTO db_menu VALUES ((select id_item from db_itensmenu where descricao = 'Gerenciamento de Contratos'),
+    INSERT INTO db_menu VALUES ((select id_item from db_itensmenu where descricao = 'Gerenciamento de Relatórios'),
                         (SELECT max(id_item) FROM db_itensmenu),
                         (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 32 and modulo = 1),
                         1);
+    --Licitação
+    INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Gerador de relatórios', 'Gerador de relatórios', 'con1_relatorios002.php', 1, 1, 'Gerador de relatórios', 't');
+
+    INSERT INTO db_menu VALUES (1797,
+                        (SELECT max(id_item) FROM db_itensmenu),
+                        (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 1797 and modulo = 381),
+                        381);
 SQL;
 
     $this->execute($sSql);

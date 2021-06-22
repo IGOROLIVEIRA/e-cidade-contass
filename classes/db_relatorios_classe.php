@@ -415,6 +415,9 @@ class cl_relatorios
     }
     $sql .= " from relatorios ";
     $sql .= "      inner join db_sysarquivo  on  db_sysarquivo.codarq = relatorios.rel_arquivo";
+    $sql .= "      left join db_sysarqmod  on  db_sysarqmod.codarq = db_sysarquivo.codarq";
+    $sql .= "      left join db_sysmodulo on db_sysarqmod.codmod = db_sysmodulo.codmod";
+    $sql .= "      left join db_modulos on nome_manual = nomemod";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($rel_sequencial != null) {
