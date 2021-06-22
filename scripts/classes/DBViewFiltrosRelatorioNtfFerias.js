@@ -57,7 +57,7 @@ DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.trocaTipoRelatorio = func
 
         this.oElementosHTML.oLinhaIntervalos.style.display = 'none';
         this.oElementosHTML.oLinhaLancadores.style.display = 'none';
-        this.oElementosHTML.oLinhaTipoFiltro.style.display = '';
+        this.oElementosHTML.oLinhaTipoFiltro.style.display = 'none';
     }
 
     /**
@@ -126,33 +126,6 @@ DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.getInstanciaLancador = fu
 
         switch (sNomeLancador) {
 
-            case 'Orgao':
-
-                oLancadorOrgao = new DBLancador('LancadorOrgao');
-                oLancadorOrgao.setNomeInstancia('oLancadorOrgao');
-                oLancadorOrgao.setGridHeight(150);
-                oLancadorOrgao.setLabelAncora('Órgão:');
-                oLancadorOrgao.setParametrosPesquisa('func_orcorgao.php',
-                    ['o40_orgao' , 'o40_descr'],
-                    'instit=' + this.iInstituicao);
-                oLancadorOrgao.show(this.oElementosHTML.oDivOrgao);
-                oLancador = oLancadorOrgao;
-                break;
-            case 'Lotacao':
-
-                oLancadorLotacao = new DBLancador('LancadorLotacao');
-                oLancadorLotacao.setNomeInstancia('oLancadorLotacao');
-                oLancadorLotacao.setGridHeight(150);
-                oLancadorLotacao.setTituloJanela('Pesquisa Lotação');
-                oLancadorLotacao.setLabelAncora('Lotação:');
-                oLancadorLotacao.setParametrosPesquisa(
-                    'func_rhlota.php',
-                    ['r70_codigo' , 'r70_descr'],
-                    'instit=' + this.iInstituicao
-                );
-                oLancadorLotacao.show(this.oElementosHTML.oDivLotacao);
-                oLancador = oLancadorLotacao;
-                break;
             case 'Matricula':
 
                 oLancadorMatricula = new DBLancador('LancadorMatricula');
@@ -168,18 +141,7 @@ DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.getInstanciaLancador = fu
                 oLancadorMatricula.show(this.oElementosHTML.oDivMatricula);
                 oLancador = oLancadorMatricula;
                 break;
-            case 'LocaisTrabalho':
 
-                oLancadorLocaisTrabalho = new DBLancador('LancadorLocaisTrabalho');
-                oLancadorLocaisTrabalho.setNomeInstancia('oLancadorLocaisTrabalho');
-                oLancadorLocaisTrabalho.setGridHeight(150);
-                oLancadorLocaisTrabalho.setLabelAncora('Locais de trabalho:');
-                oLancadorLocaisTrabalho.setParametrosPesquisa('func_rhlocaltrab.php',
-                    ['rh55_codigo' , 'rh55_descr'],
-                    'instit=' + this.iInstituicao);
-                oLancadorLocaisTrabalho.show(this.oElementosHTML.oDivLocaisTrabalho);
-                oLancador = oLancadorLocaisTrabalho;
-                break;
             case 'Cargo':
 
                 oLancadorCargo = new DBLancador('LancadorCargo');
@@ -192,17 +154,6 @@ DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.getInstanciaLancador = fu
                     'instit=' + this.iInstituicao);
                 oLancadorCargo.show(this.oElementosHTML.oDivCargo);
                 oLancador = oLancadorCargo;
-                break;
-            case 'Recurso':
-                oLancadorRecurso = new DBLancador('LancadorRecurso');
-                oLancadorRecurso.setNomeInstancia('oLancadorRecurso');
-                oLancadorRecurso.setGridHeight(150);
-                oLancadorRecurso.setLabelAncora('Recurso:');
-                oLancadorRecurso.setParametrosPesquisa('func_orctiporec.php',
-                    ['o15_codigo' , 'o15_descr'],
-                    'instit=' + this.iInstituicao);
-                oLancadorRecurso.show(this.oElementosHTML.oDivRecurso);
-                oLancador = oLancadorRecurso;
                 break;
             default:
                 throw 'Não existe lançador para o parametro ' + sNomeLancador + '.';
@@ -387,7 +338,8 @@ DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.gerarElementosHTML = func
 DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.adicionarComponentes = function() {
 
     var oSelf = this;
-
+    // oSelf.trocaTipoRelatorio(3);
+    // oSelf.trocaTipoFiltro(2);
     /**
      * Monta o Combo com os tipos de relatório.
      */
@@ -517,13 +469,6 @@ DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.getTipoRelatorio = functi
 DBViewFormularioFolha.DBViewTipoFiltrosFolha.prototype.trocaTipoFiltro = function (iTipoFiltro) {
 
     switch (iTipoFiltro) {
-
-        case '0':
-
-            this.oElementosHTML.oLinhaIntervalos.style.display = 'none';
-            this.oElementosHTML.oLinhaLancadores.style.display = 'none';
-
-            break;
 
         case '1':
 
