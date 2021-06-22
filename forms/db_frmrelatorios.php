@@ -14,32 +14,32 @@ $clrotulo->label("descrproced");
       <legend><b></b></legend>
       <table border="0">
         <tr>
-          <td nowrap title="<?= @$Trel_sequencial ?>">
+          <td nowrap title="<?= @$Trel_sequencial ?>" align="left">
             <?= @$Lrel_sequencial ?>
           </td>
-          <td>
+          <td align="left">
             <?
             db_input('rel_sequencial', 10, $Irel_sequencial, true, 'text', 3, "")
             ?>
           </td>
         </tr>
         <tr>
-          <td nowrap title="<?= @$Trel_descricao ?>">
+          <td nowrap title="<?= @$Trel_descricao ?>" align="left">
             <?= @$Lrel_descricao ?>
           </td>
-          <td>
+          <td align="left">
             <?
             db_input('rel_descricao', 50, $Irel_descricao, true, 'text', $db_opcao, "")
             ?>
           </td>
         </tr>
         <tr>
-          <td nowrap title="<?= @$Tcodarq ?>">
+          <td nowrap title="<?= @$Tcodarq ?>" align="left">
             <?
             db_ancora(@$Lcodarq, "js_pesquisacodarq(true);", $db_opcao);
             ?>
           </td>
-          <td>
+          <td align="left">
             <?
             db_input('codarq', 10, $Icodarq, true, 'text', $db_opcao, " onchange='js_pesquisacodarq(false);'")
             ?>
@@ -49,14 +49,13 @@ $clrotulo->label("descrproced");
           </td>
         </tr>
         <tr>
-          <td nowrap title="<?= @$Trel_corpo ?>">
+          <td nowrap title="<?= @$Trel_corpo ?>" align="left">
             <strong>Texto Padrão:</strong>
           </td>
           <td>
             <?
             db_textarea('rel_corpo', 10, 85, 'rel_corpo', true, 'text', $db_opcao, "");
             ?>
-            <textarea id="mytextarea">Hello, World!</textarea>
           </td>
         </tr>
       </table>
@@ -75,10 +74,10 @@ $clrotulo->label("descrproced");
 
   function js_pesquisacodarq(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_db_sysarquivo', 'func_db_sysarquivo.php?funcao_js=parent.js_mostradb_sysarquivo1|codarq|nomearq', 'Pesquisa', true, '0');
+      js_OpenJanelaIframe('top.corpo', 'db_iframe_db_sysarquivo', 'func_db_sysarquivo.php?funcao_js=parent.js_mostradb_sysarquivo1|codarq|nomearq', 'Pesquisa', true, '0', '1', '800', '600');
     } else {
       if (document.form1.codarq.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_db_sysarquivo', 'func_db_sysarquivo.php?pesquisa_chave=' + document.form1.codarq.value + '&funcao_js=parent.js_mostradb_sysarquivo', 'Pesquisa', false);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_db_sysarquivo', 'func_db_sysarquivo.php?pesquisa_chave=' + document.form1.codarq.value + '&funcao_js=parent.js_mostradb_sysarquivo', 'Pesquisa', false, '0', '1', '800', '600');
       } else {
         document.form1.nomearq.value = '';
       }
@@ -169,7 +168,7 @@ $clrotulo->label("descrproced");
   }
 
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_relatorios', 'func_relatorios.php?funcao_js=parent.js_preenchepesquisa|rel_sequencial', 'Pesquisa', true);
+    js_OpenJanelaIframe('top.corpo', 'db_iframe_relatorios', 'func_relatorios.php?funcao_js=parent.js_preenchepesquisa|rel_sequencial', 'Pesquisa', true, '0', '1', '800', '600');
   }
 
   function js_preenchepesquisa(chave) {
