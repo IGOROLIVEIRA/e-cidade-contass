@@ -73,7 +73,7 @@ class GerarEMP extends GerarAM
         $aCSVEMP10['si106_despdeccontrato']               = $this->padLeftZero($aEMP10['si106_despdeccontrato'], 1);
         $aCSVEMP10['si106_codorgaorespcontrato']          = $aEMP10['si106_codorgaorespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codorgaorespcontrato'], 2); // campo 18
 
-        if (strlen($aEMP10['si106_codunidadesubrespcontrato']) == 8) {
+        if (strlen($aEMP10['si106_codunidadesubrespcontrato']) > 5) {
           $aCSVEMP10['si106_codunidadesubrespcontrato']     = $aEMP10['si106_codunidadesubrespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubrespcontrato'], 8); // campo 19
         } else {
           $aCSVEMP10['si106_codunidadesubrespcontrato']     = $aEMP10['si106_codunidadesubrespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubrespcontrato'], 5); // campo 19
@@ -92,7 +92,7 @@ class GerarEMP extends GerarAM
         $aCSVEMP10['si106_despdeclicitacao']              = $this->padLeftZero($aEMP10['si106_despdeclicitacao'], 1);
         $aCSVEMP10['si106_codorgaoresplicit']             = $aEMP10['si106_codorgaoresplicit'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codorgaoresplicit'], 2);
 
-        if (strlen($aEMP10['si106_codunidadesubresplicit']) == 8) {
+        if (strlen($aEMP10['si106_codunidadesubresplicit']) > 5) {
           $aCSVEMP10['si106_codunidadesubresplicit']        = $aEMP10['si106_codunidadesubresplicit'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubresplicit'], 8);
         } else {
           $aCSVEMP10['si106_codunidadesubresplicit']        = $aEMP10['si106_codunidadesubresplicit'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubresplicit'], 5);
