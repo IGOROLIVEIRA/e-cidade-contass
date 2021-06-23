@@ -419,6 +419,7 @@ class cl_relatorios
     $sql .= "      left join db_sysmodulo on db_sysarqmod.codmod = db_sysmodulo.codmod";
     $sql .= "      left join db_modulos on nome_manual = nomemod";
     $sql2 = "";
+
     if ($dbwhere == "") {
       if ($rel_sequencial != null) {
         $sql2 .= " where relatorios.rel_sequencial = $rel_sequencial ";

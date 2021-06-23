@@ -42,7 +42,7 @@ $clrelatorios = new cl_relatorios;
       $sql = $clrelatorios->sql_query();
     else
       $sql = $clrelatorios->sql_query('', '*', '', "db_modulos.id_item = " . db_getsession("DB_modulo"));
-    echo $sql;
+
     $repassa = array();
     echo '<div class="container">';
     echo '  <fieldset>';
