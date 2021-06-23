@@ -111,7 +111,7 @@ $clempagetipo->rotulo->label("e83_descr");
 
             $sDataAtual = date('Y-m-d', db_getsession('DB_datausu'));
             $sWhere     = " e60_numemp = {$e60_numemp} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
-            $sCampos    = " distinct e83_codtipo, e83_conta, db83_conta, e83_descr, c61_codigo ";
+            $sCampos    = " distinct e83_codtipo, e83_conta, (db83_conta||'-'||db83_dvconta)::varchar as dl_Numero_da_Conta, e83_descr, c61_codigo ";
             $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, true);
 
         } else {
