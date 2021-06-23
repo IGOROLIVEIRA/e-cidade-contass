@@ -365,7 +365,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                       WHEN (unemp.o41_codtri::INT = 0
                       AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(o58_unidade,3,0)
                       WHEN (unemp.o41_codtri::INT != 0
-                      AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unveic.o41_subunidade::int,3,0)
+                      AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unemp.o41_codtri,3,0)
                   ELSE lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)
                   END AS codUnidadeSubEmpenho,
                      e60_codemp AS nroEmpenho,
@@ -442,7 +442,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     2 AS origemGasto,
                     CASE WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT = 0) THEN lpad(o58_orgao,2,0)||lpad(unemp.o41_codtri,3,0)
                     WHEN (unemp.o41_codtri::INT = 0 AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(o58_unidade,3,0)
-                    WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unemp.o41_subunidade::int,3,0)
+                    WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unemp.o41_codtri,3,0)
                         ELSE lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) END AS codUnidadeSubEmpenho,
                     e60_codemp AS nroEmpenho,
                     e60_emiss::VARCHAR  AS dtEmpenho,
@@ -501,7 +501,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		                     veicabast.ve70_veiculoscomb,
 		                     empveiculos.si05_atestado,
 		                     unveic.o41_subunidade,
-                             unemp.o41_subunidade,
 		                     codmater) as teste";
 
         $rsResult20 = db_query($sSql);// echo $sSql; db_criatabela($rsResult20);die();
