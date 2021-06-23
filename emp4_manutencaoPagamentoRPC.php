@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
@@ -169,16 +168,17 @@ require_once 'model/impressaoAutenticacao.php';
 
 $oGet     = db_utils::postMemory($_GET);
 $oJson    = new services_json();
-$oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam   = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
-switch($oParam->exec) {
+switch ($oParam->exec) {
 
-  case "getMovimentos" :
+  case "getMovimentos":
 
     // variavel de controle para configuração de arquivos padrao OBN
     $lArquivoObn = false;
     $lTrazContasFornecedor = true;
     $lTrazContasRecurso    = true;
+
     if (!empty($oParam->params[0]->lObn)) {
 
       $lTrazContasFornecedor = false;
@@ -192,8 +192,8 @@ switch($oParam->exec) {
     $sWhereIni  = " ((round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2)) > 0 ";
     $sWhereIni .= " and (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) > 0) ";
     $sWhereIni .= " and corempagemov.k12_codmov is null and e81_cancelado is null";
-    $sWhereIni .= " and e80_data  <= '".date("Y-m-d",db_getsession("DB_datausu"))."'";
-    $sWhereIni .= " and e60_instit = ".db_getsession("DB_instit");
+    $sWhereIni .= " and e80_data  <= '" . date("Y-m-d", db_getsession("DB_datausu")) . "'";
+    $sWhereIni .= " and e60_instit = " . db_getsession("DB_instit");
     $sWhere     = $sWhereIni;
     $oAgenda->setOrdemConsultas("e82_codord, e81_codmov");
     if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim == "") {
@@ -203,31 +203,28 @@ switch($oParam->exec) {
     }
 
     if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim == "") {
-      $sWhere .= " and e50_data = '".implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)))."'";
+      $sWhere .= " and e50_data = '" . implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataIni))) . "'";
     } else if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim != "") {
 
-      $dtDataIni = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)));
-      $dtDataFim = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
+      $dtDataIni = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataIni)));
+      $dtDataFim = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataFim)));
       $sWhere .= " and e50_data between '{$dtDataIni}' and '{$dtDataFim}'";
-
     } else if ($oParam->params[0]->dtDataIni == "" && $oParam->params[0]->dtDataFim != "") {
 
-      $dtDataFim  = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
+      $dtDataFim  = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataFim)));
       $sWhere    .= " and e50_data <= '{$dtDataFim}'";
     }
 
     //Filtro para Empenho
-    if ($oParam->params[0]->iCodEmp!= '') {
+    if ($oParam->params[0]->iCodEmp != '') {
 
-      if (strpos($oParam->params[0]->iCodEmp,"/")) {
+      if (strpos($oParam->params[0]->iCodEmp, "/")) {
 
-        $aEmpenho = explode("/",$oParam->params[0]->iCodEmp);
+        $aEmpenho = explode("/", $oParam->params[0]->iCodEmp);
         $sWhere .= " and e60_codemp = '{$aEmpenho[0]}' and e60_anousu={$aEmpenho[1]}";
-
       } else {
-        $sWhere .= " and e60_codemp = '{$oParam->params[0]->iCodEmp}' and e60_anousu=".db_getsession("DB_anousu");
+        $sWhere .= " and e60_codemp = '{$oParam->params[0]->iCodEmp}' and e60_anousu=" . db_getsession("DB_anousu");
       }
-
     }
 
     $sCredorCgm = '';
@@ -245,12 +242,10 @@ switch($oParam->exec) {
 
         $sDtAut   = implode("-", array_reverse(explode("/", $oParam->params[0]->sDtAut)));
         $sWhere .= " and e42_dtpagamento = '{$sDtAut}'";
-
       }
 
 
       $sWhere .= " and e43_autorizado is true ";
-
     } else if ($oParam->params[0]->iAutorizadas == 3) {
 
       $sWhere .= " and e43_empagemov is null";
@@ -268,7 +263,6 @@ switch($oParam->exec) {
 
       $sWhere .= " or ( e42_sequencial = {$oParam->params[0]->iOPManutencao}  and $sWhereIni)";
       $oAgenda->setOrdemConsultas("e42_sequencial,e43_sequencial, e81_codmov,e50_codord");
-
     } else if (!empty($oParam->params[0]->e03_numeroprocesso)) {
 
       $sProcesso = addslashes(db_stdClass::normalizeStringJson($oParam->params[0]->e03_numeroprocesso));
@@ -288,14 +282,14 @@ switch($oParam->exec) {
       $oAgenda->setOrdemConsultas("case when trim(a.z01_nome)   is not null then a.z01_nome   else cgm.z01_nome end");
     }
 
-	$lContaUnicaFundeb = false;
+    $lContaUnicaFundeb = false;
     $aParametrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_instit")));
-    
-	if (count($aParametrosCaixa) > 0) {
+
+    if (count($aParametrosCaixa) > 0) {
       $lContaUnicaFundeb = $aParametrosCaixa[0]->k29_cotaunicafundeb == "t" ? true : false;
     }
 
-    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere,$sJoin,$lTrazContasFornecedor , $lTrazContasRecurso,'',$oParam->params[0]->lVinculadas, $sCredorCgm, $lContaUnicaFundeb);
+    $aOrdensAgenda = $oAgenda->getMovimentosAgenda($sWhere, $sJoin, $lTrazContasFornecedor, $lTrazContasRecurso, '', $oParam->params[0]->lVinculadas, $sCredorCgm, $lContaUnicaFundeb);
 
     if (!empty($oParam->params[0]->lTratarMovimentosConfigurados) && $oParam->params[0]->lTratarMovimentosConfigurados) {
 
@@ -317,14 +311,12 @@ switch($oParam->exec) {
       $oRetono->totais           = $oAgenda->getTotaisAgenda($sWhere);
       $oRetono->aNotasLiquidacao = $aOrdensAgenda;
       echo $oJson->encode($oRetono);
-
     } else {
 
       $oRetono->status           = 2;
       $oRetono->mensagem         = "";
       $oRetono->aNotasLiquidacao = array();
       echo $oJson->encode($oRetono);
-
     }
     break;
 
@@ -358,11 +350,10 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
-          if ( $oTransferencia->getContaCredito() != "" ) {
-              
-              $oContaTesouraria = new contaTesouraria($oTransferencia->getContaCredito());
-              $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
+          if ($oTransferencia->getContaCredito() != "") {
 
+            $oContaTesouraria = new contaTesouraria($oTransferencia->getContaCredito());
+            $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
           }
 
           $oTransferencia->executaAutenticacao();
@@ -378,19 +369,17 @@ switch($oParam->exec) {
         }
       }
       db_fim_transacao(false);
-
     } catch (Exception $eErro) {
 
       db_fim_transacao(true);
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
-
     }
     echo $oJson->encode($oRetorno);
 
     break;
 
-  case "configurarPagamento" :
+  case "configurarPagamento":
 
     $oAgenda                       = new agendaPagamento();
     $oRetorno                       = new stdClass();
@@ -417,11 +406,10 @@ switch($oParam->exec) {
 
         $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar);
 
-        if ( isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "" ) {
-            
-            $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
-            $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
+        if (isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "") {
 
+          $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
+          $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
         }
 
         $iCodForma = $oMovimento->iCodForma;
@@ -442,12 +430,11 @@ switch($oParam->exec) {
           if ($oDaoDetalheTransmissao->erro_status == "0") {
             throw new BusinessException("Não foi possível excluir as configurações do movimento {$iCodMov}.");
           }
-
         } else {
 
-          $oDaoEmpAgeMovTipoTransmissao->excluir (null, "e25_empagemov = {$iCodMov}");
+          $oDaoEmpAgeMovTipoTransmissao->excluir(null, "e25_empagemov = {$iCodMov}");
           if ($oDaoEmpAgeMovTipoTransmissao->erro_status == 0) {
-            throw new Exception("ERRO [0] - Vinculando Movimento Tipo Transmissao - " .$oDaoEmpAgeMovTipoTransmissao->erro_msg );
+            throw new Exception("ERRO [0] - Vinculando Movimento Tipo Transmissao - " . $oDaoEmpAgeMovTipoTransmissao->erro_msg);
           }
 
           if ($iCodForma == 3) {
@@ -456,7 +443,7 @@ switch($oParam->exec) {
             $oDaoEmpAgeMovTipoTransmissao->e25_empagetipotransmissao = ParametroCaixa::getTipoTransmissaoPadrao();
             $oDaoEmpAgeMovTipoTransmissao->incluir(null);
             if ($oDaoEmpAgeMovTipoTransmissao->erro_status == 0) {
-               throw new Exception("ERRO [1] - Vinculando Movimento Tipo Transmissao - " .$oDaoEmpAgeMovTipoTransmissao->erro_msg );
+              throw new Exception("ERRO [1] - Vinculando Movimento Tipo Transmissao - " . $oDaoEmpAgeMovTipoTransmissao->erro_msg);
             }
           }
         }
@@ -488,14 +475,11 @@ switch($oParam->exec) {
 
       $oRetorno->iCodigoOrdemAuxiliar = $iCodigoOrdemAuxiliar;
       db_fim_transacao(false);
-
-    }
-    catch (Exception $eErro) {
+    } catch (Exception $eErro) {
 
       db_fim_transacao(true);
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
-
     }
     echo $oJson->encode($oRetorno);
     break;
@@ -510,7 +494,7 @@ switch($oParam->exec) {
 
     $oAgenda = new agendaPagamento();
     $oAgenda->setUrlEncode(true);
-    $sWhere  = " s.k17_instit = ".db_getsession("DB_instit");
+    $sWhere  = " s.k17_instit = " . db_getsession("DB_instit");
     $sWhere .= " and e91_codmov is null    ";
     $sWhere .= " and e81_cancelado is null ";
     //$sWhere .= " and e90_codmov is null    ";
@@ -525,16 +509,15 @@ switch($oParam->exec) {
     }
 
     if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim == "") {
-      $sWhere .= " and k17_data = '".implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)))."'";
+      $sWhere .= " and k17_data = '" . implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataIni))) . "'";
     } else if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim != "") {
 
-      $dtDataIni = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)));
-      $dtDataFim = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
+      $dtDataIni = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataIni)));
+      $dtDataFim = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataFim)));
       $sWhere .= " and k17_data between '{$dtDataIni}' and '{$dtDataFim}'";
-
     } else if ($oParam->params[0]->dtDataIni == "" && $oParam->params[0]->dtDataFim != "") {
 
-      $dtDataFim  = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
+      $dtDataFim  = implode("-", array_reverse(explode("/", $oParam->params[0]->dtDataFim)));
       $sWhere    .= " and k17_data <= '{$dtDataFim}'";
     }
 
@@ -551,7 +534,7 @@ switch($oParam->exec) {
       $sWhere .= " and empagemovforma.e97_codforma = 3 ";
     }
 
-    if ( isset($oParam->params[0]->k145_numeroprocesso) && !empty($oParam->params[0]->k145_numeroprocesso) ) {
+    if (isset($oParam->params[0]->k145_numeroprocesso) && !empty($oParam->params[0]->k145_numeroprocesso)) {
 
       $sProcesso = db_stdClass::normalizeStringJsonEscapeString($oParam->params[0]->k145_numeroprocesso);
       $sWhere .= " and k145_numeroprocesso = '{$sProcesso}' ";
@@ -564,13 +547,11 @@ switch($oParam->exec) {
       $oRetono->mensagem         = 1;
       $oRetono->aSlips           = $aSlipsAgenda;
       echo $oJson->encode($oRetono);
-
     } else {
 
       $oRetono->status           = 2;
       $oRetono->mensagem         = "";
       echo $oJson->encode($oRetono);
-
     }
     break;
 
@@ -591,13 +572,11 @@ switch($oParam->exec) {
       }
       $oRetono->iCodigoOrdemAuxiliar = $iCodigoOrdemAuxiliar;
       db_fim_transacao(false);
-    }
-    catch (Exception $eErro) {
+    } catch (Exception $eErro) {
 
       db_fim_transacao(true);
       $oRetono->status  = 2;
       $oRetono->message = urlencode($eErro->getMessage());
-
     }
     echo $oJson->encode($oRetono);
     break;
@@ -607,20 +586,18 @@ switch($oParam->exec) {
     $oRetorno                       = new stdClass();
     $oRetorno->status               = 1;
     $oRetorno->message              = '1';
-    $oRetorno->totalagrupados       = "".count($oParam->aMovimentosAgrupar)."";
+    $oRetorno->totalagrupados       = "" . count($oParam->aMovimentosAgrupar) . "";
     $oAgenda                       = new agendaPagamento();
     try {
 
       db_inicio_transacao();
       $oAgenda->agruparMovimentos($oParam->aMovimentosAgrupar);
       db_fim_transacao(false);
-
     } catch (Exception $eErro) {
 
       db_fim_transacao(true);
       $oRetorno->status               = 2;
       $oRetorno->message              = urlencode($eErro->getMessage());
-
     }
     echo $oJson->encode($oRetorno);
     break;
