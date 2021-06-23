@@ -97,6 +97,36 @@ class Oc14905 extends AbstractMigration
                         (SELECT max(id_item) FROM db_itensmenu),
                         (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 1797 and modulo = 381),
                         381);
+
+    	-- Auto-generated SQL script #202106222154
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='meioambiente'
+        WHERE id_item=7808;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='custos'
+        WHERE id_item=7029;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='docente'
+        WHERE id_item=7836;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='gestor'
+        WHERE id_item=7756;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='laboratorio'
+        WHERE id_item=8167;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='hiperdia'
+        WHERE id_item=9053;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='transporteescolar'
+        WHERE id_item=7147;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='licitacao'
+        WHERE id_item=381;
+      UPDATE configuracoes.db_modulos
+        SET nome_manual='esocial'
+        WHERE id_item=10216;
+
 SQL;
 
     $this->execute($sSql);
