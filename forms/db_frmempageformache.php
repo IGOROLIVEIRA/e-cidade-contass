@@ -834,7 +834,7 @@ function js_retornoConsultaOrdens(oAjax) {
 }
 function js_objectToJson(oObject) {
 
-   var sJson = oObject.toSource();
+   var sJson = JSON.stringify(oObject);;
    sJson     = sJson.replace("(","");
    sJson     = sJson.replace(")","");
    return sJson;

@@ -1065,7 +1065,7 @@ function js_createComboContasPag(iCodMov, aContas, iContaConfig, lDisabled) {
 
 function js_objectToJson(oObject) {
 
-   var sJson = oObject.toSource();
+   var sJson = JSON.stringify(oObject);;
    sJson     = sJson.replace("(","");
    sJson     = sJson.replace(")","");
    return sJson;
