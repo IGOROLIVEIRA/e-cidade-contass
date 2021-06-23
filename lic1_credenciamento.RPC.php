@@ -60,6 +60,7 @@ try{
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
 
                 $dtcred = join('-', array_reverse(explode('/', $item->l205_datacreditem)));
+                $l205_dtcred = join('-', array_reverse(explode('/', $item->l205_datacred)));
                 
                 if (!$rsItem) {
                     if($dtcred < $l206_datahab){
@@ -67,7 +68,7 @@ try{
                     }
   
                     if($l20_dtlimitecredenciamento != ""){
-                        if($item->l205_datacred > $l20_dtlimitecredenciamento){
+                        if(strtotime($l205_dtcred)>strtotime($l20_dtlimitecredenciamento)){
                             throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
                         }
                     }

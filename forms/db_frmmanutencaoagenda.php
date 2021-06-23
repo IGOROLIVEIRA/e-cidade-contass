@@ -76,6 +76,7 @@ if (count($aParametrosEmpenho) > 0) {
 
     .pesquisaConta li:hover:not(.header) {
         background-color: #eee;
+        cursor: pointer;
     }
 
     .codtipo {
@@ -479,7 +480,7 @@ if (count($aParametrosEmpenho) > 0) {
             </tr>
             <tr>
                 <td colspan='5' align='left'>
-                    <b><span >**</span>Conta conferida</b>
+                    <b><span >**</span>Para selecionar a Conta Pagadora digite os dados da conta no box e em seguida pressione a tecla tab.</b>
                     <br />
                     <span>
           <fieldset>
@@ -535,6 +536,7 @@ if (count($aParametrosEmpenho) > 0) {
                 </td>
             </tr>
         </table>
+        <input type="hidden" name="lObrigaContaPagadora" id="lObrigaContaPagadora" value="<?= $oParam->e30_obrigactapagliq ?>" />
 </form>
 </center>
 <div style='position:absolute;top: 200px; left:15px;
@@ -551,6 +553,7 @@ if (count($aParametrosEmpenho) > 0) {
     sDataDia = "<?=date("d/m/Y",db_getsession("DB_datausu"))?>";
     iTipoControleRetencaoMesAnterior = <?=$iTipoControleRetencaoMesAnterior?>;
     var aAutenticacoesGlobal = new Array();
+    let aContasPagadorasPermitidas = [];
     function js_reload(){
         document.form1.submit();
     }
@@ -883,6 +886,7 @@ if (count($aParametrosEmpenho) > 0) {
         $('TotalForCol14').innerHTML = js_formatar(0,'f');
         $('TotalForCol13').innerHTML = js_formatar(0,'f');
         $('TotalForCol12').innerHTML  = js_formatar(0,'f');
+        aContasPagadorasPermitidas = [];
         //Criamos um objeto que tera a requisicao
         var oParam                = new Object();
         oParam.iOrdemIni          = $F('e82_codord');
@@ -997,7 +1001,7 @@ if (count($aParametrosEmpenho) > 0) {
                         aLinha[3] = e60_concarpeculiar;
                     }
                     aLinha[4]   = e50_codord;
-                    aLinha[5]   = js_createComboContasPag(e81_codmov, aContasVinculadas, e85_codtipo, lDisabled);
+                    aLinha[5]   = js_createComboContasPag(e81_codmov, aContasVinculadas, e85_codtipo, e50_contapag, lDisabled);
                     aLinha[6]   = z01_nome.urlDecode().substring(0,20);
                     aLinha[7]   = js_createComboContasForne(aContasFornecedor, e98_contabanco, e81_codmov, z01_numcgm);
                     aLinha[8]   = js_createComboForma(e97_codforma,e81_codmov, lDisabled);
@@ -1233,7 +1237,7 @@ if (count($aParametrosEmpenho) > 0) {
         document.form1.e82_codord.focus();
     }
 
-    function js_createComboContasPag(iCodMov, aContas, iContaConfig, lDisabled) {
+    function js_createComboContasPag(iCodMov, aContas, iContaConfig, iContaPagadoraPadrao, lDisabled) {
 
         var sDisabled = "";
         if (lDisabled == null) {
@@ -1244,12 +1248,19 @@ if (count($aParametrosEmpenho) > 0) {
         }
 
         var sComboInputHidden  = "<input type='hidden' id='tipoconta"+iCodMov+"' ";
+        var sContaPagPadHidden = "<input type='hidden' id='contapagpadrao"+iCodMov+"' value='"+iContaPagadoraPadrao+"' />";
         var sComboInputText = "<input type='text' id='ctapag"+iCodMov+"' class='ctapag' onfocus='this.select();mostrarPesquisa("+iCodMov+")' onkeyup='pesquisaConta("+iCodMov+",event)' onkeydown='pesquisaConta("+iCodMov+",event)' onclick='this.select();' onblur='fecharPesquisa("+iCodMov+");js_getSaldos("+iCodMov+")' placeholder='Selecione' title='' "+sDisabled;
 
         var sComboUL = "<ul id='pesquisaConta"+iCodMov+"' class='pesquisaConta'>";
         if (aContas != null) {
 
             for (var i = 0; i < aContas.length; i++) {
+
+                //Guarda contas pagadoras permitidas para op
+                if (aContasPagadorasPermitidas.indexOf(aContas[i].e83_codtipo) == -1) {
+                    aContasPagadorasPermitidas.push(aContas[i].e83_codtipo);
+                }
+
                 var sDescrConta =  aContas[i].e83_conta+" - "+aContas[i].e83_descr.urlDecode()+" - "+aContas[i].c61_codigo;
                 sComboUL += "<li onclick='selecionarConta(this,"+iCodMov+")'><div class='codtipo'>"+aContas[i].e83_codtipo+"</div><span>"+sDescrConta+"</span></li>";
                 if (iContaConfig == aContas[i].e83_codtipo) {
@@ -1262,7 +1273,7 @@ if (count($aParametrosEmpenho) > 0) {
         sComboInputHidden += " /> ";
         sComboInputText += " /> ";
 
-        return sComboInputHidden+sComboInputText+sComboUL;
+        return sComboInputHidden+sComboInputText+sContaPagPadHidden+sComboUL;
     }
 
     function js_createInputNumDocumento(sNumDoc, iCodMov, iCodForma) {
@@ -1849,7 +1860,7 @@ if (count($aParametrosEmpenho) > 0) {
         var contaPadrao = document.getElementById("e83_codtipo");
         for (var i = 0; i < aItens.length; i++) {
 
-            if ($F('e83_codtipo') == "0") {
+            if ($F('e83_codtipo') == "0" || (aContasPagadorasPermitidas.indexOf(iCodigoConta) == -1)) {
                 aItens[i].value = "";
             }else{
                 aItens[i].value = contaPadrao.options[contaPadrao.selectedIndex].text;
@@ -2213,12 +2224,67 @@ if (count($aParametrosEmpenho) > 0) {
     function fecharPesquisa(conta) {
         setTimeout(function(){
             document.getElementById("pesquisaConta"+conta).style.display = "none";
-        }, 100);
+        }, 500);
     }
 
-    function selecionarConta(elemento,conta) {
-        document.getElementById("tipoconta"+conta).value = elemento.getElementsByTagName("div")[0].textContent;
-        document.getElementById("ctapag"+conta).value = elemento.getElementsByTagName("span")[0].textContent;
+    function selecionarConta(elemento, iCodMov) {    
+        
+        iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+iCodMov).value;
+        iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
+        sDescConta              = elemento.getElementsByTagName("span")[0].textContent
+
+        if (iContaPagadoraPadrao != '' && $('lObrigaContaPagadora').value == 't') {
+            
+            if (iContaSelecionada != iContaPagadoraPadrao) {
+
+                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada na liquidação. '; 
+                sMsgConfirm += 'Essa alteração substitui a conta informada anteriormente. \n \nDeseja prosseguir?';
+                
+                if (!confirm(sMsgConfirm)){
+                    return false;
+                } else {
+                    js_atualizaContaPagadoraPadrao(iContaSelecionada, iCodMov);
+                }
+
+            }
+
+        }
+
+        document.getElementById("tipoconta"+iCodMov).value      = iContaSelecionada;
+        document.getElementById("contapagpadrao"+iCodMov).value = iContaSelecionada;
+        document.getElementById("ctapag"+iCodMov).value         = sDescConta;
+    }
+
+    function js_atualizaContaPagadoraPadrao(iConta, iCodMov) {
+
+        oParam  = new Object();
+
+        oParam.iConta  = iConta;
+        oParam.iCodMov = iCodMov;
+        oParam.exec     = 'atualizaContaPagadoraPadrao';
+
+        js_divCarregando("Aguarde, Atualizando Conta Pagadora.","msgBox");
+
+        var oAjax  = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
+            method    : 'post', 
+            parameters: 'json='+Object.toJSON(oParam), 
+            onComplete: js_retornoAtualizaContaPagadoraPadrao
+        });
+
+    }
+
+    function js_retornoAtualizaContaPagadoraPadrao(oAjax) {
+        
+        js_removeObj("msgBox");
+
+        var oRetorno = eval("("+oAjax.responseText+")");
+
+        if (oRetorno.status == 1) {                
+            alert(oRetorno.message.urlDecode());
+        } else {
+            alert(oRetorno.message.urlDecode());
+        }
+
     }
 
     function js_janelaEmiteCheque() {

@@ -281,10 +281,6 @@ if ( $filtro == 0 || $filtro == 1 ) {
 
       $oDadosPrev = db_utils::fieldsMemory($rsDadosPrev,$iInd);
 
-      if ($oDadosPrev->r993 == 0) {
-        continue;
-      }
-
       $oDadosRegist = new stdClass();
       $oDadosRegist->sNome   = $oDadosPrev->z01_nome;
       $oDadosRegist->iRegime = $oDadosPrev->rh30_regime;
@@ -312,6 +308,7 @@ if ( $filtro == 0 || $filtro == 1 ) {
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nDesconto           += $oDadosPrev->r993;
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nDeducao            += $oDadosPrev->ded_inss;
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nPatronal           += round($nBase/100*$r33_ppatro, 2);
+        $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nAliquota           += round($nBase/100*$campoextra, 2);
       } else {
 
         $oDadosRegist->nSalarioFamilia     = $oDadosPrev->valsf;
@@ -320,6 +317,7 @@ if ( $filtro == 0 || $filtro == 1 ) {
         $oDadosRegist->nDesconto           = $oDadosPrev->r993;
         $oDadosRegist->nDeducao            = $oDadosPrev->ded_inss;
         $oDadosRegist->nPatronal           = round($nBase/100*$r33_ppatro, 2);
+        $oDadosRegist->nAliquota           = round($nBase/100*$campoextra, 2);
 
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist] = $oDadosRegist;
       }
@@ -360,11 +358,13 @@ if ( ( $filtro == 0 || $filtro == 2 ) && $tfol == 'r14' ) {
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]->nBase     += $oDadosAutonomo->rh89_valorserv;
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]->nDesconto += $oDadosAutonomo->rh89_valorretinss;
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]->nPatronal += ($oDadosAutonomo->rh89_valorserv/100*20);
+      $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]->nAliquota += ($oDadosAutonomo->rh89_valorserv/100*$campoextra);
     } else {
 
       $oDadosRegist->nBase     = $oDadosAutonomo->rh89_valorserv;
       $oDadosRegist->nDesconto = $oDadosAutonomo->rh89_valorretinss;
       $oDadosRegist->nPatronal = ($oDadosAutonomo->rh89_valorserv/100*20);
+      $oDadosRegist->nAliquota = ($oDadosAutonomo->rh89_valorserv/100*$campoextra);
 
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm] = $oDadosRegist;
     }
@@ -415,6 +415,7 @@ $aTotalGeral['nBase']               = 0;
 $aTotalGeral['nDesconto']           = 0;
 $aTotalGeral['nDeducao']            = 0;
 $aTotalGeral['nPatronal']           = 0;
+$aTotalGeral['nAliquota']           = 0;
 $lPrimeiro = true;
 
 
@@ -426,6 +427,7 @@ foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
   $aSubTotal['nDesconto']           = 0;
   $aSubTotal['nDeducao']            = 0;
   $aSubTotal['nPatronal']           = 0;
+  $aSubTotal['nAliquota']           = 0;
 
   if ( $oPdf->gety() > $oPdf->h - 30 || $lPrimeiro || $quebra_pagina == "s" ) {
 
@@ -500,12 +502,14 @@ foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
     $aSubTotal['nDesconto']             += $oDadosRegist->nDesconto;
     $aSubTotal['nDeducao']              += $oDadosRegist->nDeducao;
     $aSubTotal['nPatronal']             += $oDadosRegist->nPatronal;
+    $aSubTotal['nAliquota']             += $oDadosRegist->nAliquota;
 
     $aTotalGeral['nSalarioFamilia']     += $oDadosRegist->nSalarioFamilia;
     $aTotalGeral['nSalarioMaternidade'] += $oDadosRegist->nSalarioMaternidade;
     $aTotalGeral['nBase']               += $oDadosRegist->nBase;
     $aTotalGeral['nDesconto']           += $oDadosRegist->nDesconto;
     $aTotalGeral['nPatronal']           += $oDadosRegist->nPatronal;
+    $aTotalGeral['nAliquota']           += $oDadosRegist->nAliquota;
 
   }
 
@@ -521,16 +525,17 @@ foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
     $oPdf->cell(20,$iAlt,db_formatar($aSubTotal['nDesconto']          ,'f'),"T",1,"R",0);
 
     $oPdf->ln(3);
-    $oPdf->cell(50,6,'DEDU합ES .... :  '.db_formatar($aSubTotal['nDeducao'] ,'f'),0,0,"R",0);
+    $oPdf->cell(36,6,'DEDU합ES .... :  '.db_formatar($aSubTotal['nDeducao'] ,'f'),0,0,"R",0);
     $oPdf->cell(50,6,'BASE BRUTA .. :  '.db_formatar($aSubTotal['nBase']    ,'f'),0,0,"R",0);
-    $oPdf->cell(50,6,'PERC.PATRONAL :  '.db_formatar($aSubTotal['nPatronal'],'f'),0,1,"R",0);
+    $oPdf->cell(50,6,'PERC.PATRONAL :  '.db_formatar($aSubTotal['nPatronal'],'f'),0,0,"R",0);
+    $oPdf->cell(40,6,'ALIQUOTA :  '.db_formatar($aSubTotal['nAliquota'],'f'),0,1,"R",0);
 
     $nPatronalIndividualQuebra += round($aSubTotal['nPatronal'],2);
 
     if( $prev != $r11_tbprev ){
       $oPdf->cell(50,6,'',0,0,"R",0);
       $oPdf->cell(50,6,'TX. ADMIN   :  '.db_formatar(($aSubTotal['nBase']/100*$r11_txadm ),'f'),0,0,"R",0);
-      $oPdf->cell(50,6,'TOTAL       :  '.db_formatar(($aSubTotal['nBase']/100*$r11_txadm )+$aSubTotal['nPatronal']+$aSubTotal['nDesconto'],'f'),0,1,"R",0);
+      $oPdf->cell(50,6,'TOTAL       :  '.db_formatar(($aSubTotal['nBase']/100*$r11_txadm )+$aSubTotal['nPatronal']+$aSubTotal['nDesconto']+$aSubTotal['nAliquota'],'f'),0,1,"R",0);
     }
   }
 }
@@ -544,9 +549,10 @@ $oPdf->cell(20,$iAlt,db_formatar($aTotalGeral['nBase']              ,'f'),"T",0,
 $oPdf->cell(20,$iAlt,db_formatar($aTotalGeral['nDesconto']          ,'f'),"T",1,"R",0);
 
 $oPdf->ln(3);
-$oPdf->cell(50,6,'DEDU합ES .... :  '.db_formatar($aTotalGeral['nDeducao']   ,'f'),0,0,"R",0);
+$oPdf->cell(36,6,'DEDU합ES .... :  '.db_formatar($aTotalGeral['nDeducao']   ,'f'),0,0,"R",0);
 $oPdf->cell(50,6,'BASE BRUTA .. :  '.db_formatar($aTotalGeral['nBase']      ,'f'),0,0,"R",0);
-$oPdf->cell(50,6,'PERC.PATRONAL :  '.db_formatar($aTotalGeral['nPatronal']  ,'f'),0,1,"R",0);
+$oPdf->cell(50,6,'PERC.PATRONAL :  '.db_formatar($aTotalGeral['nPatronal']  ,'f'),0,0,"R",0);
+$oPdf->cell(40,6,'ALIQUOTA :  '.db_formatar($aTotalGeral['nAliquota']  ,'f'),0,1,"R",0);
 
 
 if ( $nPatronalIndividualQuebra == 0 ) {
@@ -558,7 +564,7 @@ if ( $nPatronalIndividualQuebra == 0 ) {
 if( $prev != $r11_tbprev){
   $oPdf->cell(50,6,'',0,0,"R",0);
   $oPdf->cell(50,6,'TX. ADMIN   :  '.db_formatar(($aTotalGeral['nBase']/100*$r11_txadm ),'f'),0,0,"R",0);
-  $oPdf->cell(50,6,'TOTAL       :  '.db_formatar(($aTotalGeral['nBase']/100*$r11_txadm )+$aTotalGeral['nPatronal']+$aTotalGeral['nDesconto'],'f'),0,1,"R",0);
+  $oPdf->cell(50,6,'TOTAL       :  '.db_formatar(($aTotalGeral['nBase']/100*$r11_txadm )+$aTotalGeral['nPatronal']+$aTotalGeral['nDesconto']+$aTotalGeral['nAliquota'],'f'),0,1,"R",0);
 }
 
 $oPdf->Output();

@@ -736,7 +736,7 @@ switch ($oParam->exec) {
       '',
       "l200_sequencial, l200_data,
 		(CASE
-			WHEN l200_tipoparecer = 1 THEN 'T?cnico'
+			WHEN l200_tipoparecer = 1 THEN 'Técnico'
 			WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
 			WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
 			ELSE 						   'Juridico - Outros'
@@ -1402,6 +1402,70 @@ switch ($oParam->exec) {
       $oRetorno->status = 2;
     }
     $oRetorno->erro_msg = urlencode($erro_msg);
+
+    break;
+
+  case 'getLotesPendentes':
+
+    $oDaoLiclicitemLote = db_utils::getDao('liclicitemlote');
+    $sWhere = ' l20_codigo = ' . $oParam->iLicitacao;
+    $sSqlLote = $oDaoLiclicitemLote->sql_query('', 'liclicitemlote.*', 'l04_descricao', $sWhere);
+
+    $rsLote = $oDaoLiclicitemLote->sql_record($sSqlLote);
+    $descInicial = '';
+    $countLote = 0;
+
+    for ($count = 0; $count < pg_numrows($rsLote); $count++) {
+
+      $oDadosLote = db_utils::fieldsMemory($rsLote, $count);
+      if ($descInicial != $oDadosLote->l04_descricao) {
+        $descInicial = $oDadosLote->l04_descricao;
+        $countLote += 1;
+      }
+
+      $sSqlLoteCad = 'SELECT * from obrasdadoscomplementareslote where db150_lote = ' . $oDadosLote->l04_codigo;
+      $rsLoteCad   = db_query($sSqlLoteCad);
+
+      if (!pg_numrows($rsLoteCad)) {
+
+        $oLote = new stdClass();
+        $oLote->sequencial = $countLote;
+        $oLote->codigo     = $oDadosLote->l04_codigo;
+        $oLote->descricao  = $oDadosLote->l04_descricao;
+
+        $oRetorno->itens[] = $oLote;
+      }
+    }
+
+    break;
+
+  case 'getTipoJulgamento':
+
+    $rsTipo = db_query('SELECT l20_tipojulg, l20_anousu from liclicita where l20_codigo = ' . $oParam->licitacao);
+    $oLicitacao = db_utils::fieldsMemory($rsTipo, 0);
+    $oRetorno->tipo = $oLicitacao->l20_tipojulg;
+    $oRetorno->ano = $oLicitacao->l20_anousu;
+    $oRetorno->mes = date("m", db_getsession("DB_datausu"));
+    break;
+
+  case 'getLotes':
+
+    $sSqlLotes = "
+      SELECT l04_descricao,
+             l04_codigo
+             FROM liclicitemlote
+             INNER JOIN liclicitem ON l04_liclicitem = l21_codigo
+             INNER JOIN liclicita ON l21_codliclicita = l20_codigo
+             WHERE l20_codigo = $oParam->iLicitacao and l04_descricao =
+                      (SELECT l04_descricao
+                      FROM liclicitemlote
+                      WHERE l04_codigo =
+                          (SELECT db150_lote
+                          FROM obrasdadoscomplementareslote WHERE db150_sequencial = $oParam->loteReferencia))
+      ";
+
+    $rsLotes = db_query($sSqlLotes);
+    $oRetorno->itens = db_utils::getCollectionByRecord($rsLotes, '', '', true);
 
     break;
 

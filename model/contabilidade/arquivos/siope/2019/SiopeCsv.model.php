@@ -1,7 +1,5 @@
 <?php
 
-require_once("model/contabilidade/arquivos/siope/" . db_getsession("DB_anousu") . "/Siope.model.php");
-
 class SiopeCsv extends Siope {
 
     //@var String
@@ -50,7 +48,7 @@ class SiopeCsv extends Siope {
                 if (!($value['prev_atualizada'] == 0 && $value['rec_realizada'] == 0 && $value['rec_orcada'] == 0)) {
 
                     $sLinha = "V;1;1" . $this->sDelim;
-                    $sLinha .= $this->getNaturezaFormat($value['natureza']) . $this->sDelim;
+                    $sLinha .= $this->getElementoFormat($value['natureza']) . $this->sDelim;
                     $sLinha .= $value['descricao'] . $this->sDelim;
                     $sLinha .= number_format($value['prev_atualizada'], 2, ',', '') . $this->sDelim;
                     $sLinha .= number_format($value['rec_realizada'], 2, ',', '') . $this->sDelim;

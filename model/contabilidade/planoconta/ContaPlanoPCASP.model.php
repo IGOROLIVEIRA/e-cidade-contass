@@ -503,7 +503,7 @@ class ContaPlanoPCASP extends ContaPlano {
              * da maneira em que está ele exclui somente o reduzido do ano.
              */
 
-            $oDaoConPlanoReduz->excluir (null, null, "c61_reduz = {$iCodigoReduzido}");
+            $oDaoConPlanoReduz->excluir (null, null, "c61_reduz = {$iCodigoReduzido} and c61_anousu >= {$iAnoFor}");
             if ($oDaoConPlanoReduz->erro_status == 0) {
 
                 $sMsgConPlanoReduz  = "Não é possível excluir as contas reduzidas deste plano.\n\n";

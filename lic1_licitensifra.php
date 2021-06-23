@@ -487,9 +487,9 @@ $db_botao = true;
         }
       });
 
-
     } else {
-      alert(oRetorno.erro_msg.urlDecode());
+      //db_msgbox(@$erro_msg);
+      db_msgbox("Operação Cancelada!!Contate Suporte!!");
     }
     parent.procs.document.form1.submit();
     oItensLicitacao.oGridItens.clearAll(true);

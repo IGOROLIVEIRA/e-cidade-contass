@@ -30,14 +30,13 @@ require("model/configuracao/TraceLog.model.php");
 require("libs/db_stdlib.php");
 require("libs/db_conn.php");
 
-
 if ( $argv[2] == "SERVIDOR_MANUAL") {
- 
-   $DB_SERVIDOR = "";
-   $DB_BASE     = "";
-   $DB_PORTA    = "";
-   $DB_USUARIO  = "";
-   $DB_SENHA    = "";
+
+   $DB_SERVIDOR = "localhost";
+   $DB_BASE     = $argv[3];
+   $DB_PORTA    = $argv[4];
+   $DB_USUARIO  = "dbportal";
+   $DB_SENHA    = "dbportal";
 }
 
 // Funcao para dar Echo dos Logs - retorna o TimeStamp
@@ -189,7 +188,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
 
         $v_log .= "processando tabela $nomearq";
         db_logduplos("processando tabela $nomearq - codigo: $codarq");
-        
+
         // ver se tabela existe no banco...
         $sql2  = "select relname ";
         $sql2 .= "	from pg_class ";
@@ -302,7 +301,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
 
                 }
                 db_logduplos("sql5 = $sql5");
-                
+
                 switch ($nomearq) {
                 case "inicial":
                   break;
@@ -544,7 +543,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                   break;
 
                 case "pensao" :
-                  
+
                   $sSqlPensaoErrado = "select * from pensao where r52_numcgm = $v_cgmerrado ";
                   $rsPensaoErrado   = db_query($sSqlPensaoErrado);
 
@@ -838,34 +837,34 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 break;
 
                 case 'pensao':
-                  
+
                   /**
                    * Consulta das pensões do cgm errado.
                    */
                   db_logduplos("Pensao: Buscando as pensoes do CGM ERRADO({$v_cgmerrado})");
-                  
+
                   $sSqlPensaoErrado        = "select * from pensao where r52_numcgm = {$v_cgmerrado} ";
                   $rsPensaoErrado          = db_query($sSqlPensaoErrado);
                   $iQuantidadePensaoErrado = pg_num_rows($rsPensaoErrado);
-              
+
                   $v_log .= $sSqlPensaoErrado . "\n";
-                  
+
                   db_logduplos("Pensao: Quantidades de pensoes do cgm errado: {$iQuantidadePensaoErrado}");
-                  
+
                   /**
                    * Insere registros de pensão para o cgm correto, caso ele não exista.
                    */
                   if ($iQuantidadePensaoErrado > 0) {
-    
+
                     for ($iIndPensao = 0; $iIndPensao < $iQuantidadePensaoErrado; $iIndPensao++) {
 
                       db_fieldsmemory($rsPensaoErrado, $iIndPensao);
-                      
+
                       /**
                        * Consulta as pensões do cgm certo.
                        */
                       db_logduplos("Pensao: Buscando as pensoes do CGM CORRETO({$v_cgmcerto})");
-                      
+
                       $sSqlPensaoCorreto       = "select *                         ";
                       $sSqlPensaoCorreto      .= " from pensao                     ";
                       $sSqlPensaoCorreto      .= "where r52_anousu = {$r52_anousu} ";
@@ -874,11 +873,11 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                       $sSqlPensaoCorreto      .= "  and r52_numcgm = {$v_cgmcerto} ";
                       $rsPensaoCorreto         = db_query($sSqlPensaoCorreto);
                       $iQuantidadePensaoCerto  = pg_num_rows($rsPensaoCorreto);
-                      
+
                       $v_log .= $sSqlPensaoCorreto . "\n";
 
                       db_logduplos("Pensao: Quantidades de pensoes do cgm certo: {$iQuantidadePensaoCerto}");
-                      
+
                       /**
                        * Insere a pensão para o cgm correto com os mesmos dados da pensao do cgm errado, caso ele não exista.
                        */
@@ -950,24 +949,24 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                      */
                     $sSqlUpdatePensaoRetencao = "update pensaoretencao set rh77_numcgm = {$v_cgmcerto} where rh77_numcgm = {$v_cgmerrado}";
                     $rsUpdatePensaoRetencao   = db_query($sSqlUpdatePensaoRetencao) or die(db_logduplos("Erro: " . pg_ErrorMessage()));
-                    
+
                     db_logduplos("Pensao: Alterando a pensao retencao do CGM ERRADO para o CGM CORRETO");
                     $v_log .= $sSqlPensaoInserir . "\n";
 
                     db_query("select fc_putsession('DB_disable_trigger', 'true');");
-                    
+
                     /**
-                     * Armazena os dados da pensão bancária do cgm errado, logo faz a exclusão dos dados no banco de dados. 
+                     * Armazena os dados da pensão bancária do cgm errado, logo faz a exclusão dos dados no banco de dados.
                      */
                     $rsBuscaPensaoContaBancaria = db_query("select * from pensaocontabancaria where rh139_numcgm = {$v_cgmerrado}");
                     $aPensaoContaBancaria       = db_utils::getCollectionByRecord($rsBuscaPensaoContaBancaria);
                     $rsDeleteContaBancaria      = db_query("delete from pensaocontabancaria where rh139_numcgm = {$v_cgmerrado}");
-                    
+
                     /**
-                     * Caso exista pensão bancária do cgm errado, é salvo a nova pensão bancária com o cgm correto. 
+                     * Caso exista pensão bancária do cgm errado, é salvo a nova pensão bancária com o cgm correto.
                      */
                     foreach ($aPensaoContaBancaria as $oStdPensaoContaBancaria) {
-              
+
                       $sSqlPensaoBancaria          = "select 1 as registros                                                       ";
                       $sSqlPensaoBancaria         .= "  from pensaocontabancaria                                                  ";
                       $sSqlPensaoBancaria         .= "where rh139_numcgm        = {$v_cgmcerto}                                   ";
@@ -977,9 +976,9 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                       $sSqlPensaoBancaria         .= "  and rh139_contabancaria = {$oStdPensaoContaBancaria->rh139_contabancaria} ";
                       $rsPensaoBancaria            = db_query($sSqlPensaoBancaria);
                       $iQuantidadesPensaoBancaria  = pg_num_rows($rsPensaoBancaria);
-                      
+
                       if ($iQuantidadesPensaoBancaria == 0) {
-                        
+
                         $sSqlInserirPensaoBancaria  = "insert into pensaocontabancaria values                ";
                         $sSqlInserirPensaoBancaria .= "  ( {$oStdPensaoContaBancaria->rh139_sequencial}      ";
                         $sSqlInserirPensaoBancaria .= "   ,{$oStdPensaoContaBancaria->rh139_regist}          ";
@@ -993,7 +992,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                           db_logduplos("Erro: Erro ao incluir na tabela [pensaocontabancaria] o CGM CERTO = {$v_cgmcerto} | CGM_ERRADO = {$v_cgmerrado}. -> ".pg_last_error());
                           die();
                         }
-                        
+
                         db_logduplos("Pensao: Alterando a pensao bancaria do CGM ERRADO para o CGM CORRETO");
                       }
                     }
@@ -1008,7 +1007,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                     db_logduplos("Pensao: Excluído a pensao do CGM ERRADO ({$v_cgmerrado})");
                     $v_log .= $sSqlExclusaoPensao . "\n";
                   }
-                  
+
                   break;
 
               default:

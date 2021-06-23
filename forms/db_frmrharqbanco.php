@@ -286,13 +286,6 @@ function js_submit() {
 		 $('rh34_dvconta').focus();
 		 return false;
 	 }*/
-	 
-	 if ( $F('rh34_convenio') != "" && !oRegex.test( $F('rh34_convenio') ) ) {
-		 alert( _M( MENSAGEM + 'somente_numeros', {sCampo: '<?=@$LSrh34_convenio?>'}) );
-		 $('rh34_convenio').value = '';
-		 $('rh34_convenio').focus();
-		 return false;
-	 }
 
 	 return true;
 	  

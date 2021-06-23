@@ -1,67 +1,68 @@
 <?php
 
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
 
- /**
-  * Sicom Acompanhamento Mensal
-  * @author marcelo
-  * @package Contabilidade
-  */
+/**
+ * Sicom Acompanhamento Mensal
+ * @author marcelo
+ * @package Contabilidade
+ */
 
-class GerarCONTRATOS extends GerarAM {
+class GerarCONTRATOS extends GerarAM
+{
 
-   /**
-  *
-  * Mes de referência
-  * @var Integer
-  */
+  /**
+   *
+   * Mes de referência
+   * @var Integer
+   */
   public $iMes;
 
-  public function gerarDados() {
+  public function gerarDados()
+  {
 
     $this->sArquivo = "CONTRATOS";
     $this->abreArquivo();
 
-    $sSql = "select * from contratos102021 where si83_mes = ". $this->iMes ." and si83_instit = ". db_getsession("DB_instit");
+    $sSql = "select * from contratos102021 where si83_mes = " . $this->iMes . " and si83_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS10    = db_query($sSql);
 
-    $sSql2 = "select * from contratos112021 where si84_mes = ". $this->iMes ." and si84_instit = ". db_getsession("DB_instit");
+    $sSql2 = "select * from contratos112021 where si84_mes = " . $this->iMes . " and si84_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS11    = db_query($sSql2);
 
-    $sSql3 = "select * from contratos122021 where si85_mes = ". $this->iMes ." and si85_instit = ". db_getsession("DB_instit");
+    $sSql3 = "select * from contratos122021 where si85_mes = " . $this->iMes . " and si85_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS12    = db_query($sSql3);
 
-    $sSql4 = "select * from contratos132021 where si86_mes = ". $this->iMes ." and si86_instit = ". db_getsession("DB_instit");
+    $sSql4 = "select * from contratos132021 where si86_mes = " . $this->iMes . " and si86_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS13    = db_query($sSql4);
 
-    $sSql5 = "select * from contratos202021 where si87_mes = ". $this->iMes ." and si87_instit = ". db_getsession("DB_instit");
+    $sSql5 = "select * from contratos202021 where si87_mes = " . $this->iMes . " and si87_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS20    = db_query($sSql5);
 
-    $sSql6 = "select * from contratos212021 where si88_mes = ". $this->iMes ." and si88_instit = ". db_getsession("DB_instit");
+    $sSql6 = "select * from contratos212021 where si88_mes = " . $this->iMes . " and si88_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS21    = db_query($sSql6);
 
-    $sSql7 = "select * from contratos302021 where si89_mes = ". $this->iMes ." and si89_instit = ". db_getsession("DB_instit");
+    $sSql7 = "select * from contratos302021 where si89_mes = " . $this->iMes . " and si89_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS30    = db_query($sSql7);
 
-    $sSql8 = "select * from contratos402021 where si91_mes = ". $this->iMes ." and si91_instit = ". db_getsession("DB_instit");
+    $sSql8 = "select * from contratos402021 where si91_mes = " . $this->iMes . " and si91_instit = " . db_getsession("DB_instit");
     $rsCONTRATOS40    = db_query($sSql8);
 
 
-  if (pg_num_rows($rsCONTRATOS10) == 0 && pg_num_rows($rsCONTRATOS20) == 0 && pg_num_rows($rsCONTRATOS30) == 0 && pg_num_rows($rsCONTRATOS40) == 0) {
+    if (pg_num_rows($rsCONTRATOS10) == 0 && pg_num_rows($rsCONTRATOS20) == 0 && pg_num_rows($rsCONTRATOS30) == 0 && pg_num_rows($rsCONTRATOS40) == 0) {
 
       $aCSV['tiporegistro']       =   '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
-
-  } else {
+    } else {
 
       /**
-      *
-      * Registros 10, 11, 12, 13, 14, 15
-      */
-      for ($iCont = 0;$iCont < pg_num_rows($rsCONTRATOS10); $iCont++) {
+       *
+       * Registros 10, 11, 12, 13, 14, 15
+       */
+      for ($iCont = 0; $iCont < pg_num_rows($rsCONTRATOS10); $iCont++) {
 
-        $aCONTRATOS10  = pg_fetch_array($rsCONTRATOS10,$iCont);
+        $aCONTRATOS10  = pg_fetch_array($rsCONTRATOS10, $iCont);
 
         $aCSVCONTRATOS10['si83_tiporegistro']                 =   str_pad($aCONTRATOS10['si83_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS10['si83_tipocadastro']                 =   $aCONTRATOS10['si83_tipocadastro'];
@@ -101,10 +102,10 @@ class GerarCONTRATOS extends GerarAM {
          * OC11837
          */
 
-        if($aCONTRATOS10['si83_naturezaobjeto'] == "7" || $aCONTRATOS10['si83_naturezaobjeto'] == "1"){
-          for ($iCont2 = 0;$iCont2 < pg_num_rows($rsCONTRATOS11); $iCont2++) {
+        if ($aCONTRATOS10['si83_naturezaobjeto'] == "7" || $aCONTRATOS10['si83_naturezaobjeto'] == "1") {
+          for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCONTRATOS11); $iCont2++) {
 
-            $aCONTRATOS11  = pg_fetch_array($rsCONTRATOS11,$iCont2);
+            $aCONTRATOS11  = pg_fetch_array($rsCONTRATOS11, $iCont2);
 
             if ($aCONTRATOS10['si83_sequencial'] == $aCONTRATOS11['si84_reg10']) {
 
@@ -123,12 +124,11 @@ class GerarCONTRATOS extends GerarAM {
               $this->sLinha = $aCSVCONTRATOS11;
               $this->adicionaLinha();
             }
-
           }
-        }else{
-          for ($iCont2 = 0;$iCont2 < pg_num_rows($rsCONTRATOS11); $iCont2++) {
+        } else {
+          for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCONTRATOS11); $iCont2++) {
 
-            $aCONTRATOS11  = pg_fetch_array($rsCONTRATOS11,$iCont2);
+            $aCONTRATOS11  = pg_fetch_array($rsCONTRATOS11, $iCont2);
 
             if ($aCONTRATOS10['si83_sequencial'] == $aCONTRATOS11['si84_reg10']) {
 
@@ -147,17 +147,16 @@ class GerarCONTRATOS extends GerarAM {
               $this->sLinha = $aCSVCONTRATOS11;
               $this->adicionaLinha();
             }
-
           }
         }
 
-        for ($iCont3 = 0;$iCont3 < pg_num_rows($rsCONTRATOS12); $iCont3++) {
+        for ($iCont3 = 0; $iCont3 < pg_num_rows($rsCONTRATOS12); $iCont3++) {
 
-          $aCONTRATOS12  = pg_fetch_array($rsCONTRATOS12,$iCont3);
+          $aCONTRATOS12  = pg_fetch_array($rsCONTRATOS12, $iCont3);
 
           if ($aCONTRATOS10['si83_sequencial'] == $aCONTRATOS12['si85_reg10']) {
 
-          	$aCSVCONTRATOS12 = array();
+            $aCSVCONTRATOS12 = array();
             $aCSVCONTRATOS12['si85_tiporegistro']          =   str_pad($aCONTRATOS12['si85_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVCONTRATOS12['si85_codcontrato']           =   substr($aCONTRATOS12['si85_codcontrato'], 0, 15);
             $aCSVCONTRATOS12['si85_codorgao']              =   str_pad($aCONTRATOS12['si85_codorgao'], 2, "0", STR_PAD_LEFT);
@@ -174,12 +173,11 @@ class GerarCONTRATOS extends GerarAM {
             $this->sLinha = $aCSVCONTRATOS12;
             $this->adicionaLinha();
           }
-
         }
 
-        for ($iCont4 = 0;$iCont4 < pg_num_rows($rsCONTRATOS13); $iCont4++) {
+        for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCONTRATOS13); $iCont4++) {
 
-          $aCONTRATOS13  = pg_fetch_array($rsCONTRATOS13,$iCont4);
+          $aCONTRATOS13  = pg_fetch_array($rsCONTRATOS13, $iCont4);
 
           if ($aCONTRATOS10['si83_sequencial'] == $aCONTRATOS13['si86_reg10']) {
 
@@ -193,23 +191,28 @@ class GerarCONTRATOS extends GerarAM {
             $this->sLinha = $aCSVCONTRATOS13;
             $this->adicionaLinha();
           }
-
         }
-
       }
 
       /**
-      *
-      * Registros 20, 21
-      */
-      for ($iCont5 = 0;$iCont5 < pg_num_rows($rsCONTRATOS20); $iCont5++) {
+       *
+       * Registros 20, 21
+       */
+      for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONTRATOS20); $iCont5++) {
 
-        $aCONTRATOS20  = pg_fetch_array($rsCONTRATOS20,$iCont5);
+        $aCONTRATOS20  = pg_fetch_array($rsCONTRATOS20, $iCont5);
 
         $aCSVCONTRATOS20['si87_tiporegistro']                  =  str_pad($aCONTRATOS20['si87_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS20['si87_codaditivo']                    =  substr($aCONTRATOS20['si87_codaditivo'], 0, 15);
         $aCSVCONTRATOS20['si87_codorgao']                      =  str_pad($aCONTRATOS20['si87_codorgao'], 2, "0", STR_PAD_LEFT);
-        $aCSVCONTRATOS20['si87_codunidadesub']                 =  str_pad($aCONTRATOS20['si87_codunidadesub'], 5, "0", STR_PAD_LEFT);
+
+        if (strlen($aCONTRATOS20['si87_codunidadesub']) == 5) {
+          $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 5); // campo 19
+        } else {
+          $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 8); // campo 19
+        }
+
+        //$aCSVCONTRATOS20['si87_codunidadesub']                 =  str_pad($aCONTRATOS20['si87_codunidadesub'], 5, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS20['si87_nrocontrato']                   =  substr($aCONTRATOS20['si87_nrocontrato'], 0, 14);
         $aCSVCONTRATOS20['si87_dtassinaturacontoriginal']      =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_dtassinaturacontoriginal'])));
         $aCSVCONTRATOS20['si87_nroseqtermoaditivo']            =  str_pad($aCONTRATOS20['si87_nroseqtermoaditivo'], 2, "0", STR_PAD_LEFT);
@@ -225,14 +228,14 @@ class GerarCONTRATOS extends GerarAM {
         $this->sLinha = $aCSVCONTRATOS20;
         $this->adicionaLinha();
 
-        for ($iCont6 = 0;$iCont6 < pg_num_rows($rsCONTRATOS21); $iCont6++) {
+        for ($iCont6 = 0; $iCont6 < pg_num_rows($rsCONTRATOS21); $iCont6++) {
 
-          $aCONTRATOS21  = pg_fetch_array($rsCONTRATOS21,$iCont6);
+          $aCONTRATOS21  = pg_fetch_array($rsCONTRATOS21, $iCont6);
           /**
            * OBRAS
            * OC11837
            */
-          if($aCONTRATOS21['si88_tipomaterial'] != "0" || $aCONTRATOS21['si88_tipomaterial'] != NULL ){
+          if ($aCONTRATOS21['si88_tipomaterial'] != "0" || $aCONTRATOS21['si88_tipomaterial'] != NULL) {
 
             if ($aCONTRATOS20['si87_sequencial'] == $aCONTRATOS21['si88_reg20']) {
 
@@ -243,7 +246,7 @@ class GerarCONTRATOS extends GerarAM {
               $aCSVCONTRATOS21['si88_coditemsinapi']         =   $aCONTRATOS21['si88_coditemsinapi']        == "0" ? '' : $aCONTRATOS21['si88_coditemsinapi'];
               $aCSVCONTRATOS21['si88_coditemsimcro']         =   $aCONTRATOS21['si88_coditemsimcro']        == "0" ? '' : $aCONTRATOS21['si88_coditemsimcro'];
               $aCSVCONTRATOS21['si88_descoutrosmateriais']   =   $aCONTRATOS21['si88_descoutrosmateriais']  == "0" ? '' : $aCONTRATOS21['si88_descoutrosmateriais'];
-              $aCSVCONTRATOS21['si88_itemplanilha']          =   $aCONTRATOS21['si88_itemplanilha']         == "0" ? '' : substr($aCONTRATOS21['si88_itemplanilha'],0,15);
+              $aCSVCONTRATOS21['si88_itemplanilha']          =   $aCONTRATOS21['si88_itemplanilha']         == "0" ? '' : substr($aCONTRATOS21['si88_itemplanilha'], 0, 15);
               $aCSVCONTRATOS21['si88_tipoalteracaoitem']    =  str_pad($aCONTRATOS21['si88_tipoalteracaoitem'], 1, "0", STR_PAD_LEFT);
               $aCSVCONTRATOS21['si88_quantacrescdecresc']   =  number_format($aCONTRATOS21['si88_quantacrescdecresc'], 4, ",", "");
               $aCSVCONTRATOS21['si88_valorunitarioitem']    =  number_format($aCONTRATOS21['si88_valorunitarioitem'], 4, ",", "");
@@ -251,8 +254,7 @@ class GerarCONTRATOS extends GerarAM {
               $this->sLinha = $aCSVCONTRATOS21;
               $this->adicionaLinha();
             }
-
-          }else{
+          } else {
             if ($aCONTRATOS20['si87_sequencial'] == $aCONTRATOS21['si88_reg20']) {
 
               $aCSVCONTRATOS21['si88_tiporegistro']         =  str_pad($aCONTRATOS21['si88_tiporegistro'], 2, "0", STR_PAD_LEFT);
@@ -268,16 +270,15 @@ class GerarCONTRATOS extends GerarAM {
             }
           }
         }
-
       }
 
       /**
-      *
-      * Registros 30
-      */
-      for ($iCont7 = 0;$iCont7 < pg_num_rows($rsCONTRATOS30); $iCont7++) {
+       *
+       * Registros 30
+       */
+      for ($iCont7 = 0; $iCont7 < pg_num_rows($rsCONTRATOS30); $iCont7++) {
 
-        $aCONTRATOS30  = pg_fetch_array($rsCONTRATOS30,$iCont7);
+        $aCONTRATOS30  = pg_fetch_array($rsCONTRATOS30, $iCont7);
 
         $aCSVCONTRATOS30['si89_tiporegistro']                  =  str_pad($aCONTRATOS30['si89_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS30['si89_codorgao']                      =  str_pad($aCONTRATOS30['si89_codorgao'], 2, "0", STR_PAD_LEFT);
@@ -293,16 +294,15 @@ class GerarCONTRATOS extends GerarAM {
 
         $this->sLinha = $aCSVCONTRATOS30;
         $this->adicionaLinha();
-
       }
 
       /**
-      *
-      * Registros 40
-      */
-      for ($iCont8 = 0;$iCont8 < pg_num_rows($rsCONTRATOS40); $iCont8++) {
+       *
+       * Registros 40
+       */
+      for ($iCont8 = 0; $iCont8 < pg_num_rows($rsCONTRATOS40); $iCont8++) {
 
-        $aCONTRATOS40  = pg_fetch_array($rsCONTRATOS40,$iCont8);
+        $aCONTRATOS40  = pg_fetch_array($rsCONTRATOS40, $iCont8);
 
         $aCSVCONTRATOS40['si91_tiporegistro']                  =  str_pad($aCONTRATOS40['si91_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS40['si91_codorgao']                      =  str_pad($aCONTRATOS40['si91_codorgao'], 2, "0", STR_PAD_LEFT);
@@ -314,13 +314,9 @@ class GerarCONTRATOS extends GerarAM {
 
         $this->sLinha = $aCSVCONTRATOS40;
         $this->adicionaLinha();
-
       }
 
       $this->fechaArquivo();
-
     }
-
   }
-
 }

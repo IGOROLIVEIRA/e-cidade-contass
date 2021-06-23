@@ -40,6 +40,16 @@ $clrotulo->label("l20_naturezaobjeto");
 $clrotulo->label("l20_nroedital");
 require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
+
+//verificação do tipo de usuário por login => .conttas 
+$lusuario = db_getsession("DB_login");
+$uLogin = explode(".",$lusuario,2);
+
+//url identificada para validação de campo modalidade da para uso de inclusão 
+$url_atual= "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$url_particao = explode("_",$url_atual,2);
+
+
 if ($db_opcao == 1) {
 
     /*
@@ -96,6 +106,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         width: 180px;
         white-space: nowrap
     }
+    select:disabled{
+        background-color: #DEB887;
+        text-transform: uppercase;
+        color: black;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-indent: 1px;
+        text-overflow: '';
+    }
+
 </style>
 <form name="form1" method="post" action="" onsubmit="js_ativaregistro()">
 <input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
@@ -181,13 +201,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             $db_botao = false;
                                             db_input("l20_codtipocom",10,"",true,"text");
                                             db_input("l20_codtipocom",40,"",true,"text");
-                                        } else {
+                                        }
+                                        else {
                                             db_selectrecord("l20_codtipocom",@$result_tipo,true,$db_opcao,"js_mostraRegistroPreco()");
                                             if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
                                                 echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
                                             }
                                         }
-                                        ?><input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
+                                        ?>
+                                        <input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
+                                        <input  type="hidden" id="vUsuario" name="vUsuario" value="<?echo $uLogin[1];?>">
+                                        <input  type="hidden" id="vInclu" name="vInclu" value="<?echo $url_particao[1];?>" >
 
                                     </td>
                                 </tr>
@@ -499,7 +523,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $arr_tipo = array("1"=>"Por item","3"=>"Por lote");
+                                        $arr_tipo = array("0"=>"Selecione", "1"=>"Por item","3"=>"Por lote");
                                         db_select("l20_tipojulg",$arr_tipo,true, $lBloqueadoRegistroPreco);
                                         db_input("tipojulg",1,"",true,"hidden",3,"");
                                         db_input("confirmado",1,"",true,"hidden",3,"");
@@ -832,8 +856,15 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     function js_retornolicitacao(oAjax) {
 
 
-        var oRetorno = eval("("+oAjax.responseText+")");
+        var oRetorno = eval("("+oAjax.responseText+")"); 
         var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
+        
+        var vUsua = document.getElementById("vUsuario").value;
+        var vInclu = document.getElementById("vInclu").value;
+        if(vUsua!="contass"&&vInclu!="liclicita001.php"){
+            document.getElementById("l20_codtipocom").disabled = true;
+            document.getElementById("l20_codtipocomdescr").disabled = true;
+        }
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
         // verifica se e do tipo convite
         if(oRetorno.tribunal==48){
@@ -1066,6 +1097,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_ativaregistro() {
 
+      document.getElementById("l20_codtipocom").disabled = false;
+      document.getElementById("l20_codtipocomdescr").disabled = false;   
       var campo=$(l20_tipnaturezaproced).value;
       $('l20_usaregistropreco').disabled="";
       var campo         = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;

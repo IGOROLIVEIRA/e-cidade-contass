@@ -1046,9 +1046,12 @@ function js_addReceita () {
 
 	if($('anoUsu').value >= 2020) {
 
-		aEstruts = ['41728011', '41728012', '41758011', '41728991'];
+		aEstruts    = ['41728011', '41728012', '41758011', '41728991'];
+        aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
 
-		if (aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+		if (aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1 
+            || aEstrutsDed.indexOf($('estrutural').value.substr(0, 10)) > -1
+            || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
 			if ($('k81_regrepasse').value == '') {
 				alert("É obrigatório informar o Regularização de Repasse.");
 				return false;
@@ -1766,15 +1769,21 @@ function js_verificaEmendaParlamentar() {
         document.getElementById("k81_emparlamentar").options[3].selected = true;
     } else if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424') {
         document.getElementById("k81_emparlamentar").options[0].selected = true;
+    } else {
+        document.getElementById("k81_emparlamentar").options[3].selected = true;
     }
 
 }
 
 function js_verificaRegularizaRepasse() {
+    
+    aEstruts    = ['41728011', '41728012', '41758011', '41728991'];
+    aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
 
-    estruts = ['41728011', '41728012', '41758011', '41728991'];
-
-    if (estruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+    if (aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1
+        || aEstrutsDed.indexOf($('estrutural').value.substr(0, 10)) > -1 
+        || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+        
         document.getElementById('regrepasse').style.display = "table-row";
         if ($('k81_regrepasse').value != '') {
             document.getElementById("k81_regrepasse").options[$('k81_regrepasse').value].selected = true;
@@ -1827,6 +1836,9 @@ function js_arredondamentoFundeb(fValor, iTipo) {
     if (fDif > 0) {
         fVl118 += fDif;
         fVl119 = js_round((fTotal - fVl118),2);
+    } else {
+        fVl119 += fDif;
+        fVl118 = js_round((fTotal - fVl119),2);
     }
 
     return iTipo == 118 ? fVl118 : fVl119;

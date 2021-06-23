@@ -255,6 +255,16 @@ $clempparametro->rotulo->label();
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td nowrap title="<?=@$Te30_obrigactapagliq ?>">
+                    <?=@$Le30_obrigactapagliq ?>
+                </td>
+                <td><?
+                    $matriz = array("f"=>"Não","t"=>"Sim");
+                    db_select("e30_obrigactapagliq",$matriz,true,1);
+                    ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <center>

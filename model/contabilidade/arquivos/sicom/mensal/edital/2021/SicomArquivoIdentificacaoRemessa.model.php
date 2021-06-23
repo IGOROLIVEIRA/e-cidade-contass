@@ -121,7 +121,8 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 							FROM
 							(SELECT DISTINCT l47_dataenvio
 				 				FROM liclancedital
-				 					WHERE extract(MONTH FROM l47_dataenvio) = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+				 					WHERE extract(YEAR FROM l47_dataenvio) = ".db_getsession("DB_anousu")."
+                                    AND extract(MONTH FROM l47_dataenvio) = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 				 		ORDER BY l47_dataenvio) AS tabela";
 			$rsSqlSeq = db_query($sSqlSeq);
 

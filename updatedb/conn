@@ -83,9 +83,13 @@ cmnavarro           5432    e-cidade
 cmluislandia        5432    e-cidade
 cisnorte            5432    e-cidade
 cisarp              5432    e-cidade
+hrjanauba           5432    e-cidade
+cmitacambira        5432    e-cidade
 
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
 pmnovaporteirinha   5432    e-cidadenovosclientes
 pmgraomogol         5432    e-cidadenovosclientes
 pmburitizeiro       5432    e-cidadenovosclientes
+
+e-cidade            5432    pmnovaporteirinha

@@ -219,7 +219,8 @@ $aSituacoes = Array(
   5 => "Afastado licença gestante",
   6 => "Afastado doença +15 dias",
   7 => "Licença sem vencimento, cessão sem ônus",
-  8 => "Afastado doença +30 dias"
+  8 => "Afastado doença +30 dias",
+  10 => "Afastado doença -15 dias"
 );
 
 $iAltura = 4;

@@ -60,7 +60,8 @@ select r30_regist,
        r30_peraf,
        case when r30_proc1 = '$ano/$mes' then r30_per1i else r30_per2i end as r30_per1i,
        case when r30_proc1 = '$ano/$mes' then r30_per1f else r30_per2f end as r30_per1f,
-       case when r30_paga13 = 't' then 'sim' else 'nao' end as r30_paga13
+       case when r30_paga13 = 't' then 'sim' else 'nao' end as r30_paga13,
+       r30_periodogozrecini,r30_periodogozrecfim
        from cadferia
                 inner join rhpessoal    on rh01_regist = r30_regist
 								inner join rhpessoalmov on rh02_anousu = r30_anousu
@@ -126,8 +127,8 @@ $pre = 1;
   $pdf->cell(70,$alt,$z01_nome,0,0,"L",$pre);
   $pdf->cell(20,$alt,db_formatar($r30_perai,'d'),0,0,"C",$pre);
   $pdf->cell(20,$alt,db_formatar($r30_peraf,'d'),0,0,"C",$pre);
-  $pdf->cell(20,$alt,db_formatar($r30_per1i,'d'),0,0,"C",$pre);
-  $pdf->cell(20,$alt,db_formatar($r30_per1f,'d'),0,0,"C",$pre);
+  $pdf->cell(20,$alt,db_formatar((!empty($r30_periodogozrecini) ? $r30_periodogozrecini : $r30_per1i),'d'),0,0,"C",$pre);
+  $pdf->cell(20,$alt,db_formatar((!empty($r30_periodogozrecfim) ? $r30_periodogozrecfim : $r30_per1f),'d'),0,0,"C",$pre);
   $pdf->cell(10,$alt,$r30_paga13,0,1,"C",$pre); 
   
 }
