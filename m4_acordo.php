@@ -697,7 +697,7 @@ if (isset($alterar)) {
 
       js_OpenJanelaIframe('top.corpo.iframe_acordo',
         'db_iframe_liclicita',
-        'func_liclicita.php?situacao=10&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
+        'func_liclicita.php?&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
         'Pesquisa Licitações', true);
     } else {
 
@@ -705,7 +705,7 @@ if (isset($alterar)) {
 
         js_OpenJanelaIframe('top.corpo.iframe_acordo',
           'db_iframe_liclicita',
-          'func_liclicita.php?situacao=10&pesquisa_chave=' +
+          'func_liclicita.php?&pesquisa_chave=' +
           document.form1.ac16_licitacao.value + '&funcao_js=parent.js_preencheLicitacao1',
           'Pesquisa', false);
       } else {
