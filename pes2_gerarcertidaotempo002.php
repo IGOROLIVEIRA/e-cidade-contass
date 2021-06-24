@@ -12,6 +12,7 @@ require_once("libs/db_sql.php");
 require_once("libs/db_libpessoal.php");
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_afasta_classe.php");
+require_once("classes/db_rhpessoal_classe.php");
 
 db_postmemory($HTTP_GET_VARS);
 
@@ -313,9 +314,9 @@ switch($tiporelatorio) {
             $pdf->ln($alt+3);
 
             //busco dados do cgm emissor
-            $oDaoCgmEmissor = new cl_cgm();
-            $sqlEmissor = $oDaoCgmEmissor->sql_query($oGet->emissor,"z01_nome",null,null);
-            $rsNomeEmissor = $oDaoCgmEmissor->sql_record($sqlEmissor);
+            $oDaoEmissor = new cl_rhpessoal();
+            $sqlEmissor = $oDaoEmissor->sql_query_cgmmov($oGet->emissor,"z01_nome",null,null);
+            $rsNomeEmissor = $oDaoEmissor->sql_record($sqlEmissor);
             $oDadosEmissor = db_utils::fieldsMemory($rsNomeEmissor, 0);
 
             //busco afastamento
@@ -493,9 +494,9 @@ switch($tiporelatorio) {
         $pdf->ln($alt+3);
 
         //busco dados do cgm emissor
-        $oDaoCgmEmissor = new cl_cgm();
-        $sqlEmissor = $oDaoCgmEmissor->sql_query($oGet->emissor,"z01_nome",null,null);
-        $rsNomeEmissor = $oDaoCgmEmissor->sql_record($sqlEmissor);
+        $oDaoEmissor = new cl_rhpessoal();
+        $sqlEmissor = $oDaoEmissor->sql_query_cgmmov($oGet->emissor,"z01_nome",null,null);
+        $rsNomeEmissor = $oDaoEmissor->sql_record($sqlEmissor);
         $oDadosEmissor = db_utils::fieldsMemory($rsNomeEmissor, 0);
 
         //busco afastamento
