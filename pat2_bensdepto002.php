@@ -178,7 +178,7 @@ if (isset($dtini) && $dtini != "" && isset($dtfim) && $dtfim != "") {
   $where .= " $and t52_dtaqu <= '".$dtfim."'";
 }
 
-$sCampos  = "t52_bem, t52_descr, t52_codcla, t52_obs, t64_descr, t52_ident, t52_depart, descrdepto, t52_dtaqu, ";
+$sCampos  = "t52_bem, t52_descr, t52_codcla, t52_obs, t64_descr, CAST(t52_ident AS NUMERIC), t52_depart, descrdepto, t52_dtaqu, ";
 $sCampos .= "t54_codbem, t53_codbem, t64_class,t30_codigo,t30_descr ";
 
 $lValor = false;
@@ -206,7 +206,7 @@ switch ( $iTipoAgrupamento ) {
 
   default : 
    // $sOrder = "t52_depart, t52_bem";
-	$sOrder = "t52_ident, t52_depart";
+	$sOrder = "CAST(t52_ident AS NUMERIC), t52_depart";
   break;
 }
 
