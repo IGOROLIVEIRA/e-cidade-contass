@@ -62,6 +62,7 @@ if (isset($incluir)) {
         echo "<script>alert('Erro ao inserir a pendência!')</script>";
     }
     db_fim_transacao();
+    echo "<script>{$funcao_js}();</script>";
 }
 
 if (isset($alterar)) {
@@ -85,6 +86,7 @@ if (isset($alterar)) {
             echo "<script>alert('Erro ao alterar a pendência!')</script>";
         }
         db_fim_transacao();
+        echo "<script>{$funcao_js}();</script>";
     } else {
         $pendencia = new cl_conciliacaobancariapendencia;
         $pendencia->k173_sequencial = $sequencial;
@@ -93,6 +95,7 @@ if (isset($alterar)) {
         } else {
             echo "<script>alert('Erro ao excluir a pendência!')</script>";
         }
+        echo "<script>{$funcao_js}();</script>";
     }
 }
 
@@ -132,6 +135,9 @@ function descricaoTipoDocumentoLancamento($tipo_lancamento)
         case "121":
             return "4";
             break;
+        case "130":
+            return "2";
+            break;
         case "131":
             return "2";
             break;
@@ -156,7 +162,7 @@ function descricaoTipoDocumentoLancamento($tipo_lancamento)
 function tipoDocumentoLancamento($tipo_lancamento)
 {
     switch ($tipo_lancamento) {
-        case "PGTO. EMPENHO":
+        case "PGTO EMPENHO":
             return "30";
             break;
         case "EST. PGTO EMPENHO":
@@ -168,10 +174,10 @@ function tipoDocumentoLancamento($tipo_lancamento)
         case "EST. REC. ORCAMENTARIA":
             return "101";
             break;
-        case "PGTO EXTRA ORCAMENTARIO":
+        case "PGTO EXTRA ORCAMENTARIA":
             return "120";
             break;
-        case "EST. PGTO EXTRA ORCAMENTARIO":
+        case "EST. PGTO EXTRA ORCAMENTARIA":
             return "121";
             break;
         case "EST. REC. EXTRA ORCAMENTARIA":
@@ -214,7 +220,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
                 <?php } else { ?>
                     <input type="hidden" value="alterar" name="alterar" />
                 <?php } ?>
-                <fieldset style="margin-top: 20px; width: 750px;">
+                <fieldset style="margin-top: 20px; width: 850px;">
                     <legend><b>Lançamento de pendência</b></legend>
                     <table width="100%">
                         <tr>
@@ -231,15 +237,15 @@ function tipoDocumentoLancamento($tipo_lancamento)
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><b>Movimento:</b></td>
-                                            <td align="left">
+                                            <td width="320px"><b>Movimento:</b></td>
+                                            <td align="left"  width="160px">
                                             <?
                                                 $tipo_movimento = array("0" => "Selecione", "E" => "Entrada", "S" => "Saí­da");
                                                 db_select("movimento", $tipo_movimento, true, 1, "onchange='js_seleciona_tipo_movimento()' style='width:100%'");
                                             ?>
                                             </td>
-                                            <td><b>Tipo de Movimento:</b></td>
-                                            <td align="left" >
+                                            <td  width="160px"><b>Tipo de Movimento:</b></td>
+                                            <td align="left"  width="160px">
                                             <?
                                                 $tipo_lancamento = array("Selecione");
                                                 db_select("tipo_movimento", $tipo_lancamento, true, 1, "style='width:100%'");
@@ -254,23 +260,23 @@ function tipoDocumentoLancamento($tipo_lancamento)
                                             </td>
                                             <td  nowrap>
                                             <?
-                                                db_input('z01_numcgm',25,$k173_numcgm,true,'text',$db_opcao," onchange='js_pesquisaz01_numcgm(false);'");
+                                                db_input('z01_numcgm',27,$k173_numcgm,true,'text',$db_opcao," onchange='js_pesquisaz01_numcgm(false);'");
                                             ?>
                                             </td>
                                             <td colspan="2">
                                                 <?
-                                                db_input('z01_nome',70,$Iz01_nome,true,'text',3,'');
+                                                db_input('z01_nome',72,$Iz01_nome,true,'text',3,'');
                                             ?>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td><b>OP/REC/SLIP:</b></td>
                                             <td nowrap>
-                                                <? db_input('codigo', 25, null, true, 'text', 1, ''); ?>
+                                                <? db_input('codigo', 27, null, true, 'text', 1, ''); ?>
                                             </td>
                                             <td><b>Doc. Extrato:</b></td>
                                             <td nowrap align="">
-                                                <? db_input('documento', 50, $k173_documento, true, 'text', 1, ''); ?>
+                                                <? db_input('documento', 39, null, true, 'text', 1, ''); ?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -282,7 +288,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
                                         <tr>
                                             <td><b>Valor:</b></td>
                                             <td align="left">
-                                                <? db_input("valor", 25, 0, true, "text", 1, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\""); ?>
+                                                <? db_input("valor", 27, 0, true, "text", 1, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\""); ?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -299,10 +305,12 @@ function tipoDocumentoLancamento($tipo_lancamento)
                         </tr>
                         <tr>
                             <td colspan='4' style='text-align: center'>
-                                <? if ($novo == 'false') { ?>
+                                <? if (!$conciliacao) { ?>
+                                  <input name="salvar" id='salvar' type="submit"  value="<? if ($novo != 'false') { echo "Salvar"; } else { echo "Alterar"; }  ?>"/>
+                                <? } ?>
+                                <? if ($novo == 'false' AND !$conciliacao) { ?>
                                     <input name="cancelar" id='cancelar' type="button" value="Excluir" onclick="js_cancelar()" />
                                 <? } ?>
-                                <input name="salvar" id='salvar' type="submit"  value="<? if ($novo != 'false') { echo "Salvar"; } else { echo "Alterar"; }  ?>"/>
                                 <input name="voltar" id='voltar' type="button"  value="Voltar" onclick="parent.db_iframe_extratobancariapendencia.hide();"/>
                             </td>
                         </tr>
@@ -451,8 +459,10 @@ function tipoDocumentoLancamento($tipo_lancamento)
     function js_cancelar()
     {
         document.form1.alterar.value = 'excluir';
-        if (js_valida_dados())
-            document.form1.submit();
+        if (js_valida_dados()) {
+            if (confirm("Tem certeza que deseja excluir esse lançamento?"))
+                document.form1.submit();
+        }
     }
 
     function js_valida_dados()
@@ -497,10 +507,16 @@ function tipoDocumentoLancamento($tipo_lancamento)
                 return false;
         }
 
-        if (encerramentoContabil != "") {
-            if (js_comparadata($F("tipo_lancamento"), encerramentoContabil, ">")) {
-                alert("Não foi possí­vel processar a conciliação pois já existe encerramento de período contábil para esta data.");
-                return false;
+        if ($F("tipo_lancamento") == "2") {
+            if (js_comparadata($F("data_lancamento"), dataConciliacaoBancaria, "<=")) {
+
+            } else {
+                if (encerramentoContabil != "") {
+                    if (js_comparadata($F("data_lancamento"), encerramentoContabil, "<")) {
+                        alert("Não foi possí­vel processar a conciliação pois já existe encerramento de período contábil para esta data.");
+                        return false;
+                    }
+                }
             }
         }
         return true;

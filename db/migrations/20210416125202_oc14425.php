@@ -6,11 +6,11 @@ class Oc14425 extends AbstractMigration
 {
     public function up()
     {
-        // $this->conciliacaoBancaria();
-        // $this->createTableConciliacaoBancaria();
-        // $this->createTableConciliacaoBancariaPendencia();
-        // $this->createTableConciliacaoBancariaLancamento();
-        // $this->inserirCamposConciliacaoBancariaPendencia();
+        $this->conciliacaoBancaria();
+        $this->createTableConciliacaoBancaria();
+        $this->createTableConciliacaoBancariaPendencia();
+        $this->createTableConciliacaoBancariaLancamento();
+        $this->inserirCamposConciliacaoBancariaPendencia();
         $this->inserirTabelasConciliacaoBancariaPendencia();
     }
 
@@ -54,7 +54,7 @@ class Oc14425 extends AbstractMigration
                 INSERT INTO db_sysarqcamp
                 VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia'),
                     (SELECT codcam FROM db_syscampo WHERE nomecam = 'k173_sequencial'),
-                    (SELECT max(seqarq) + 1 FROM db_sysarqcamp WHERE codarq = (SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia')), 0);
+                    1, 0);
 
                 INSERT INTO db_sysarqcamp
                 VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia'),
@@ -66,11 +66,10 @@ class Oc14425 extends AbstractMigration
                     (SELECT codcam FROM db_syscampo WHERE nomecam = 'k173_mov'),
                     (SELECT max(seqarq) + 1 FROM db_sysarqcamp WHERE codarq = (SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia')), 0);
 
-                    INSERT INTO db_syscampo
-                    VALUES (
-                        (SELECT max(codcam) + 1 FROM db_syscampo), 'k173_tipomovimento', 'int8', 'Tipo de Movimentação',
-                        NULL, 'Tipo de Movimentação', 10, TRUE, FALSE, FALSE, 1, 'text', 'Tipo de Movimentação');
-
+                INSERT INTO db_syscampo
+                VALUES (
+                    (SELECT max(codcam) + 1 FROM db_syscampo), 'k173_tipomovimento', 'int8', 'Tipo de Movimento',
+                    NULL, 'Tipo de Movimento', 10, TRUE, FALSE, FALSE, 1, 'text', 'Tipo de Movimento');
 
                 INSERT INTO db_sysarqcamp
                 VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq = 'conciliacaobancariapendencia'),

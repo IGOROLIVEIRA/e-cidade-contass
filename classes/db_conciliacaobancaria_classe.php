@@ -288,6 +288,7 @@ class cl_conciliacaobancaria
                 $this->erro_sql .= "Valores : " . $this->k171_conta;
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql." \\n\\n";
                 $this->erro_msg .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_msg .= $sql;
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
                 return true;
