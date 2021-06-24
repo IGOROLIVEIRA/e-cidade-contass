@@ -485,6 +485,8 @@ try {
 				$rsListaEmpenhos   = db_query($sSqlListaEmpenhosRescisao);
 				$oParam->aEmpenhos = db_utils::getCollectionByRecord($rsListaEmpenhos);
 			}
+
+            $aEmpenhosFinaceirosGerados = array();
 			 
 			foreach ($oParam->aEmpenhos as $oEmpenhoFolha) {
 				 
@@ -504,6 +506,8 @@ try {
 				}
 				 
 				$oEmpenho->gerarEmpenho($oParam->iNumCgm);
+                
+                $aEmpenhosFinaceirosGerados[] = $oEmpenho->getNumeroEmpenhoFinanceiro();
 				 
 				/**
 				 * caso for folha de rescisao, devemos atualizar a rescisao como empenhada
@@ -519,7 +523,8 @@ try {
 			}
 
 			$oRetorno->e42_sequencial = $iOPAuxiliar = $oParam->lOPporRecurso?implode(", ", $aRecursos):$iOPAuxiliar;
-			 
+            $oRetorno->empenhos_financeiros_gerados = count($aEmpenhosFinaceirosGerados) > 1 ? implode(',',$aEmpenhosFinaceirosGerados) : '';
+    
 			db_fim_transacao(false);
 			 
 			break;

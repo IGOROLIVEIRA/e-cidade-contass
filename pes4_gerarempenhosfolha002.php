@@ -1880,11 +1880,29 @@ function js_retornoGerarEmpenhos(oRequest) {
   if (oRetorno.status == 1) {
 
     alert('Empenhos Gerados com sucesso\nOrdem Auxiliar Nº'+oRetorno.e42_sequencial);
+    
+    if(confirm("Deseja imprimir as ordens de pagamento e os empenhos?")) {
+        js_emiteRelatorioOrdemEmpenho(oRetorno.empenhos_financeiros_gerados);
+    }
     js_init();
 
   } else {
     alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
   }
+
+}
+
+function js_emiteRelatorioOrdemEmpenho(sEmpenhosGerados = '') {
+
+    if (sEmpenhosGerados != '') {
+    
+        js_init();
+        jan = window.open('pes2_rhempenhoordemcomprafolha002.php?sEmpenhosGerados='+sEmpenhosGerados,
+                            '',
+                            'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        jan.moveTo(0,0);
+
+    }
 
 }
 

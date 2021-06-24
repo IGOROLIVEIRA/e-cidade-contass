@@ -162,6 +162,26 @@ class empenhoFolha {
    */
   protected $caracteristica;
 
+  /**
+   * Código do empenho financeiro gerado empempenho.e60_numemp
+   * @var integer
+   */
+  protected $iNumeroEmpenhoFinanceiro = null;
+
+  /**
+   * @param integer $iNumeroEmpenhoFinanceiro
+   */
+  function setNumeroEmpenhoFinanceiro($iNumeroEmpenhoFinanceiro) {
+    $this->iNumeroEmpenhoFinanceiro = $iNumeroEmpenhoFinanceiro;
+  }
+
+  /**
+   * @return integer
+   */
+  public function getNumeroEmpenhoFinanceiro() {
+    return $this->iNumeroEmpenhoFinanceiro;
+  }
+
 
   function __construct($iEmpenhoFolha) {
 
@@ -820,6 +840,9 @@ class empenhoFolha {
       $sErroMsg .= "Erro ao incluir empenho \n{$oDaoEmpenho->erro_msg}";
       throw new DBException($sErroMsg);
 	  }
+
+      $this->setNumeroEmpenhoFinanceiro($oDaoEmpenho->e60_numemp);
+
 	  /**
 	   * Incluimos o elemento do empenho
 	   */
