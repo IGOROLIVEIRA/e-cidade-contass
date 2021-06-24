@@ -224,7 +224,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
         $where_ativo .= " pc10_numero = pc11_numero";
         $where_ativo .= " left join solicitaanulada on";
         $where_ativo .= " pc10_numero = pc67_solicita";
-        $where_ativo .= " where pc10_depto = 1";
+        $where_ativo .= " where pc10_depto = " . db_getsession("DB_coddepto") . "";
         $where_ativo .= " and pc55_solicitemfilho = solicitem.pc11_codigo";
         $where_ativo .= " and pc67_solicita is null)";
 
