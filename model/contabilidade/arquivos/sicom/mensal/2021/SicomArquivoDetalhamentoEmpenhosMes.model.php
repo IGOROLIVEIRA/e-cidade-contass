@@ -696,6 +696,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
             FROM empempenho
             JOIN orcdotacao ON e60_coddot = o58_coddot
+                  and e60_anousu = o58_anousu
             JOIN empelemento ON e60_numemp = e64_numemp
             JOIN orcelemento ON e64_codele = o56_codele
             JOIN orctiporec ON o58_codigo = o15_codigo
