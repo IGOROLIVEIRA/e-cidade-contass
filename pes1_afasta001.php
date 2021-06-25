@@ -68,8 +68,6 @@ if (isset($incluir)) {
 
   $r45_dtafas = $r45_dtafas_ano."-".$r45_dtafas_mes."-".$r45_dtafas_dia;
   $r45_dtreto = null;
-  $dbwhere1 = " r45_dtafas <= '".$r45_dtafas."' ";
-  $dbwhere2 = " (r45_dtafas >= '".$r45_dtafas."' and r45_dtreto >= '".$r45_dtafas."') ";
   
   if(trim($r45_dtreto_ano) != "" && trim($r45_dtreto_mes) != "" && trim($r45_dtreto_dia) != ""){
     $r45_dtreto = $r45_dtreto_ano."-".$r45_dtreto_mes."-".$r45_dtreto_dia;
@@ -81,7 +79,7 @@ if (isset($incluir)) {
   $sSqlRetornoNulo  = $clafasta->sql_query_file(null, "r45_codigo", null, "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} and r45_dtreto is null ");
   $rsSqlRetornoNulo = $clafasta->sql_record($sSqlRetornoNulo);
   $aRetornoNulo     = db_utils::getCollectionByRecord($rsSqlRetornoNulo);
-  if(count($aRetornoNulo) > 0){
+  if(count($aRetornoNulo) > 0) {
     
     $sqlerro  = true;
     $erro_msg = "O Servidor já possui afastamento sem retorno \\n Verifique afastamentos Anteriores";
@@ -89,16 +87,10 @@ if (isset($incluir)) {
   
   //r45_dtreto
   $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
-  $dtRetorno                 = "";
-  $dtLancamento              = implode("-", array_reverse(explode("/",$r45_dtafas)));
-  
   if($r45_dtreto != null || $r45_dtreto != ''){
-  	
-  	$dtRetorno                  = implode("-", array_reverse(explode("/",$r45_dtreto)));
-  	$sWhereVerificaAfastamento .= " and  ( r45_dtafas ,  r45_dtreto) overlaps ";
-  	$sWhereVerificaAfastamento .= "      (  '{$dtLancamento}'::date,  '{$dtRetorno}'::date) ";
+  	$sWhereVerificaAfastamento .= " and ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
   } else {
-  	$sWhereVerificaAfastamento .= " and  r45_dtafas >= '{$dtLancamento}' ";
+  	$sWhereVerificaAfastamento .= " and  r45_dtafas >= '{$r45_dtafas}' ";
   }
   
   $sSqlVerificaAfastamento   = $clafasta->sql_query_file(null, "r45_codigo", null, $sWhereVerificaAfastamento);
@@ -173,7 +165,7 @@ if (isset($incluir)) {
         }
       }
 
-      $arr_possiveis = Array(2,3,4,5,6,7,8,10);
+      $arr_possiveis = Array(2,3,4,5,6,7,8,10,12);
       if(in_array($r45_situac,$arr_possiveis)){
 
         $result_pontofx = $clpontofx->sql_record($clpontofx->sql_query_file(db_anofolha(),db_mesfolha(),$r45_regist));
