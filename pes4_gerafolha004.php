@@ -3151,6 +3151,7 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
 //  echo "<BR> 1.2 passou aqui !!!";
 
    $datafim = db_ctod(db_str(ndias(db_substr($subpes,-2)."/".db_substr($subpes,1,4)),2,0,"0")."/".db_substr($subpes,-2)."/".db_substr($subpes,1,4));
+   global $dias_afasta_sempag;
    $situacao_funcionario = situacao_funcionario($pessoal[$Ipessoal]["r01_regist"],$datafim);
 
 
@@ -4310,8 +4311,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
     db_atutermometro($Ipessoal,count($pessoal),'calculo_folha',1);
 
-    $tot_prov = 0;
-    $tot_desc = 0;
 
     if ($chamada_geral == "p"  ) {
 
@@ -4375,8 +4374,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
     $r14_valor  = 0;
     $r14_quant  = 0;
     $salfamilia = 0;
-    $tot_prov   = 0;
-    $tot_desc   = 0;
 
     $r110_regist = $pessoal[$Ipessoal]["r01_regist"];
     $r110_lotac  = $pessoal[$Ipessoal]["r01_lotac"];
@@ -4407,11 +4404,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
                 if (!db_empty($pessoal[$Ipessoal]["r01_arredn"])) {
 
-                  $tot_desc += $pessoal[$Ipessoal]["r01_arredn"];
-                  if ($db_debug == true) {
-                    echo "[gerfsal] 10 - tot_desc: $tot_desc<br>";
-                  }
-                  $tot_prov += $pessoal[$Ipessoal]["r01_arredn"];
                   $gerou_rubrica_calculo = true;
 
                   $matriz1 = array();
@@ -4505,13 +4497,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
           verifica_ferias_100();
           //echo "<BR><BR>sai Verifica férias 2";
-        } else {
-
-          $tot_prov =0;
-          $tot_desc =0;
-          if ($db_debug == true) {
-            echo "[gerfsal] 23 - tot_desc: $tot_desc<br>";
-          }
         }
       } else {
 
@@ -4532,11 +4517,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
       if (!db_selectmax("pontocom", "select * from pontocom ".bb_condicaosubpes("r47_" ).$condicaoaux )) {
         if ($F019 != 30) {//OC6996
           // F019 - Numero de dias a pagar no mes
-          $tot_prov =0;
-          $tot_desc =0;
-          if ($db_debug == true) {
-            echo "[gerfsal] 24 - tot_desc: $tot_desc<br>";
-          }
 
           //echo "<BR><BR>entra Verifica férias 4";
           verifica_ferias_100();
@@ -4552,9 +4532,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           //echo "<BR><BR>entra Verifica férias 5";
           verifica_ferias_100();
           //echo "<BR><BR>sai Verifica férias 5";
-        } else {
-          $tot_prov = 0;
-          $tot_desc = 0;
         }
       } else {
         if ($F019 > 0 || $F020 > 0 || $F023 > 0) {
@@ -4570,6 +4547,11 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
     $situacao_afastado = false;
     if ($opcao_geral == 1) {
+      /**
+       * Variavel dias_afasta_sempag utilizada para descontar os dias 
+       * de afastamento tipo 2 para calcular somente os dias de um afastamento especifico
+       */
+      global $dias_afasta_sempag;
       $situacao_funcionario = situacao_funcionario($pessoal[$Ipessoal]["r01_regist"]);
     } else {
       $situacao_funcionario = 1;
@@ -4669,11 +4651,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           //echo "<BR><BR> 2 Continue";
           if (!db_empty($pessoal[$Ipessoal]["r01_arredn"])) {
             //echo "<BR><BR> 3 Continue";
-            $tot_desc += $pessoal[$Ipessoal]["r01_arredn"];
-            if ($db_debug == true) {
-              echo "[gerfsal] 11 - tot_desc: $tot_desc<br>";
-            }
-            $tot_prov += $pessoal[$Ipessoal]["r01_arredn"];
             $gerou_rubrica_calculo = true;
 
             $matriz1 = array();
@@ -5085,9 +5062,14 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           }
 
           /*OC6893*/
-          if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7), true)) {
+          if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7,10))) {
             $r14_quant = $dias_pagamento;
             $r14_valor = ( $r14_valor / 30 ) * $r14_quant;
+          } else if ($situacao_funcionario == 5 && $dias_pagamento == 0 && $pontofs[$Iponto]["rh27_calcp"] == 't') {
+            $r14_valor = 0;
+          }
+          if ($db_debug == true) {
+             echo("[gerfsal] dias_pagamento = $dias_pagamento -- dias_afasta_sempag = $dias_afasta_sempag -- r14_quant ".$r14_quant." -- situacao_funcionario = $situacao_funcionario");
           }
 
 // Fim --> Calcula conforme a formula da quantidade da rubrica
@@ -5134,10 +5116,9 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           $matriz2[8] = $anousu;
           $matriz2[9] = $mesusu;
           $matriz2[10] = $DB_instit;
-          //echo "<BR> rubrica 23 -->".$pontofs[$Iponto]["r10_rubric"]."  valor --> $r14_valor quant --> $r14_quant" ;
-          // reis
 
           if ($db_debug == true) {
+            echo "<BR> rubrica 23 -->".$pontofs[$Iponto]["r10_rubric"]."  valor --> $r14_valor quant --> $r14_quant" ;
             echo "[gerfsal] 5 - Insert: Gerfsal<br>";
             echo "Dados: <br>";
             echo "r14_regist: ".$matriz2[1]."<br>";
@@ -5158,25 +5139,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           //if (strtolower($d08_carnes)=="sapiranga") {
           if ( ($pontofs[$Iponto]["r10_rubric"] == "R916") || $pontofs[$Iponto]["r10_rubric"] < "R800" && $r14_pd <> 3 && db_at($pontofs[$Iponto]["r10_rubric"],$rubricas_calc_integral) == 0 ) {
             //echo "<BR>  db_at(".$pontofs[$Iponto]["r10_rubric"].",$rubricas_calc_integral) > 0 ) --> ".db_at($pontofs[$Iponto]["r10_rubric"],$rubricas_calc_integral);
-            if ($r14_pd == 2 ) {
-              $tot_desc += round($r14_valor,2);
-               if ($db_debug == true) {
-                echo "[gerfsal] 12 - tot_desc: $tot_desc<br>";
-              }
-            } else {
-              $tot_prov += round($r14_valor,2);
-            }
-
           }
-          //} else {
-          //  if ($r14_pd == 1 && $pontofs[$Iponto]["r10_rubric"] < "R800") {
-          //    $tot_prov += round($r14_valor,2);
-          //    //       echo "<BR> 1 passou aqui !!! tot_prov --> $tot_prov";
-          //  } else if ($pontofs[$Iponto]["r10_rubric"] < "R800" ) {
-          //    $tot_desc += round($r14_valor,2);
-          //    //       echo "<BR> 2 passou aqui !!! tot_desc --> $tot_desc";
-          //  }
-          //}
         }
       } else {
 
@@ -5263,14 +5226,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
           db_insert("gerfcom", $matriz1, $matriz2 );
           $r14_quant = 0;
-          if ($r14_pd == 1 && $pontocom[$Iponto]["r47_rubric"] < "R800") {
-            $tot_prov += round($r14_valor,2);
-          } else if ($pontocom[$Iponto]["r47_rubric"] < "R800" ) {
-            $tot_desc += round($r14_valor,2);
-            if ($db_debug == true) {
-              echo "[gerfsal] 13 - tot_desc: $tot_desc<br>";
-            }
-          }
         }
       }
     }
@@ -5288,6 +5243,11 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
       // Afastado Licenca Gestante
       $condicaoaux = " and substr(r14_rubric,1,1) <> 'R' and rh27_calcp = 't' and r14_regist = ".db_sqlformat($r110_regist );
       $condicaoaux1 = " and substr(r53_rubric,1,1) <> 'R' and rh27_calcp = 't' and r53_regist = ".db_sqlformat($r110_regist );
+      if ($db_debug == true) { 
+         echo "[gerfsal] Sql Valores gerfx para salário maternidade<br>";
+         echo "select gerffx.*,rh27_rubric,rh27_pd,rh27_calcp,rh27_propq from gerffx inner join rhrubricas on r53_instit = rh27_instit and r53_rubric = rh27_rubric ".bb_condicaosubpes("r53_").$condicaoaux1."<br>";
+         db_criatabela(db_query("select gerffx.*,rh27_rubric,rh27_pd,rh27_calcp,rh27_propq from gerffx inner join rhrubricas on r53_instit = rh27_instit and r53_rubric = rh27_rubric ".bb_condicaosubpes("r53_").$condicaoaux1));
+      }
       if (db_selectmax("transacao", "select gerffx.*,rh27_rubric,rh27_pd,rh27_calcp,rh27_propq from gerffx inner join rhrubricas on r53_instit = rh27_instit and r53_rubric = rh27_rubric ".bb_condicaosubpes("r53_").$condicaoaux1 )) {
         for ($Itransacao=0; $Itransacao< count($transacao); $Itransacao++) {
           //       echo "<BR> r14_rubric --> ".$transacao[$Itransacao]["r14_rubric"];
@@ -5295,7 +5255,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           $qtd_salario = $transacao[$Itransacao]["r53_quant"];
           $dividir_por = 30;
           if ($db_debug == true) { echo "[gerfsal] Salario:".$salario." - ".$dias_pagamento."<br>"; }
-          $valor_salario_fam =  round(( $salario / 30 ) * ( 30 - $dias_pagamento ),2);
+          $valor_salario_fam =  round(( $salario / 30 ) * ( 30 - ($dias_pagamento+$dias_afasta_sempag) ),2);
 
           if ( $transacao[$Itransacao]["rh27_pd"] == 2 ) {
             $valor_salario_maternidade -= $valor_salario_fam;
@@ -5304,15 +5264,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           }
 
           if ($db_debug == true) { echo "[gerfsal] >>".$inssirf_[0]["r33_rubmat"]." - ".$rubricas[0]["rh27_pd"]." - $valor_salario_fam<br>"; }
-
-          if (db_empty($inssirf_[0]["r33_rubmat"])) {
-            if ( $rubricas[0]["rh27_pd"] == 2 ) {
-              $tot_desc -= $valor_salario_fam;
-              if ($db_debug == true) {  echo "[gerfsal] 14 - tot_desc: $tot_desc<br>"; }
-            } else {
-              $tot_prov -= $valor_salario_fam;
-            }
-          }
 
           $valor_ferias_ = 0;
           // F019 - Numero de dias a pagar no mes
@@ -5327,15 +5278,9 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
             if (round(( $transacao[$Itransacao]["r53_valor"] - ($valor_salario_fam)
             -(strtolower($d08_carnes)=="riogrande"?0:$valor_ferias_ )),2) <= 0 ) {
-               if ($transacao[$Itransacao]["rh27_pd"] == 2) {
-                $tot_desc -= ($valor_ferias_);
-                if ($db_debug == true) { echo "[gerfsal] 15 - tot_desc: $tot_desc<br>"; }
-              } else {
-                $tot_prov -= ($valor_ferias_);
-              }
               db_delete("gerfsal", bb_condicaosubpes("r14_").$condicaoaux );
             } else {
-              $valor = ( $transacao[$Itransacao]["r53_valor"] - ($valor_salario_fam)
+              $valor = ( (round(( $salario / 30 ) * $dias_pagamento ,2))
               - (strtolower($d08_carnes)=="riogrande"? 0:$valor_ferias_ ));
 
               $matriz1 = array();
@@ -5386,7 +5331,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         $matriz2[2] = $inssirf_[0]["r33_rubmat"];
         $matriz2[3] = $pessoal[$Ipessoal]["r01_lotac"];
         $matriz2[4] = round($valor_salario_maternidade,2);
-        $matriz2[5] = (30 - $dias_pagamento);
+        $matriz2[5] = (30 - ($dias_pagamento+$dias_afasta_sempag));
         $matriz2[6] = 1;
         $matriz2[7] = 0;
         $matriz2[8] = $anousu;
@@ -5416,7 +5361,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 // as rubricas marcadas para afastamento proporcional
 
     $vlr_sal_saude_ou_acidente = 0;
-    if (($situacao_funcionario == 6  && !db_empty($rubrica_licenca_saude ) ) // Afastado Doenca + 15 Dias
+    if ((in_array($situacao_funcionario, array(6,10))  && !db_empty($rubrica_licenca_saude ) ) // Afastado Doenca + 15 Dias ou - 15 Dias
     ||( $situacao_funcionario ==  3  && !db_empty($rubrica_acidente )) ) {
       $xvalor_salario = 0;
       $xvalor_ferias = 0;
@@ -5432,9 +5377,9 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           if (substr("#".$transacao[$Itransacao]["r53_rubric"],1,1) != "R" ) {
             $xvalor_salario =  db_val(db_str(( $transacao[$Itransacao]["r53_valor"] / 30 ) *  ( 30 - $dias_pagamento ),15,2));
             if ($transacao[$Itransacao]["rh27_pd"] == 2 ) {
-              $vlr_sal_saude_ou_acidente -= $xvalor_salario;
+              $vlr_sal_saude_ou_acidente -= db_val(db_str(( $transacao[$Itransacao]["r53_valor"] / 30 ) *  ( 30 - ($dias_pagamento+$dias_afasta_sempag) ),15,2));
             } else {
-              $vlr_sal_saude_ou_acidente += $xvalor_salario;
+              $vlr_sal_saude_ou_acidente += db_val(db_str(( $transacao[$Itransacao]["r53_valor"] / 30 ) *  ( 30 - ($dias_pagamento+$dias_afasta_sempag) ),15,2));
             }
             // F019 - Numero de dias a pagar no mes
             if ($F019> 0 && 'f' == $cadferia[0]["r30_paga13"] ) {
@@ -5487,10 +5432,10 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         $matriz1[10] = "r14_instit";
 
         $matriz2[1] = $r110_regist;
-        $matriz2[2] = ($situacao_funcionario == 6?$rubrica_licenca_saude:$rubrica_acidente);
+        $matriz2[2] = (in_array($situacao_funcionario, array(6,10))?$rubrica_licenca_saude:$rubrica_acidente);
         $matriz2[3] = $pessoal[$Ipessoal]["r01_lotac"];
         $matriz2[4] = round($vlr_sal_saude_ou_acidente,2);
-        $matriz2[5] = 30 - $dias_pagamento;
+        $matriz2[5] = 30 - ($dias_pagamento+$dias_afasta_sempag);
         $matriz2[6] = 1;
         $matriz2[7] = 0;
         $matriz2[8] = $anousu;
@@ -5521,14 +5466,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
 // Fim --> Proporcionaliza o Ponto conforme os dias trabalhados (licenca saude ou acidente )
 
-    if (strtolower($d08_carnes) == "viamao" && $opcao_geral == 1 ) {
-      // D912 VALOR DO SALARIO MINIMO
-      if ($tot_prov < $D912) {
-        viamao_equiparacao_salarial();
-      }
-    }
-
-
     $r14_valor = 0;
     if ($db_debug == true) { echo "[gerfsal] 31 - r14_valor = $r14_valor  <br>"; }
     if ($opcao_geral == 1 ) {
@@ -5548,8 +5485,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         if ($db_debug == true) { echo "[gerfsal] Inicio --> Grava no Gerfsal o arredondamento do mes anterior<br>"; }
 
         if (!db_empty($pessoal[$Ipessoal]["r01_arredn"]) && round($pessoal[$Ipessoal]["r01_arredn"], 2) > 0) {
-          $tot_desc += $pessoal[$Ipessoal]["r01_arredn"];
-          if ($db_debug == true) { echo "[gerfsal] 16 - tot_desc: $tot_desc<br>"; }
           $gerou_rubrica_calculo = true;
 
           $matriz1 = array();
@@ -5614,8 +5549,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         global $gerfadi;
         if (db_selectmax("gerfadi", "select * from gerfadi ".bb_condicaosubpes("r22_" ).$condicaoaux )) {
           for ($Igerfadi=0; $Igerfadi < count($gerfadi); $Igerfadi++) {
-            $tot_desc += $gerfadi[$Igerfadi]["r22_valor"];
-            if ($db_debug == true) { echo "[gerfsal] 17 - tot_desc: $tot_desc<br>"; }
             $gerou_rubrica_calculo = true;
             $matriz1 = array();
             $matriz2 = array();
@@ -5693,6 +5626,13 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         calculos_especificos_itaqui($opcao_geral,$pessoal[$Ipessoal]["r01_regist"],$pessoal[$Ipessoal]["r01_lotac"]);
       } else {
         if ($db_debug == true) { echo "[gerfsal] 5 - calcula R928 - Total de desconto: $tot_desc Loop $Ipessoal<br>"; }
+
+        $condicaoaux  = " and r14_regist = ".$pessoal[$Ipessoal]["r01_regist"];
+        db_selectmax("transacao", "select sum(case when r14_pd = 1 then r14_valor else 0 end ) as tot_prov,
+                                            sum(case when r14_pd = 2 then r14_valor else 0 end ) as tot_desc
+                                       from gerfsal ".bb_condicaosubpes("r14_" ).$condicaoaux );
+        $tot_prov = $transacao[0]["tot_prov"];
+        $tot_desc = $transacao[0]["tot_desc"];
         calcula_r928($pessoal[$Ipessoal]["r01_regist"],$pessoal[$Ipessoal]["r01_lotac"],$opcao_geral);
       }
     }
@@ -7988,7 +7928,7 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
     echo "[le_var_bxxx] INICIANDO PROCESSAMENTO DA FUNÇÃO le_var_bxxx...<br>";
   }
 
-  global $array_rubricas,$situacao_funcionario,$vlr_base_prev_ferias_D,$vlr_base_prev_ferias_F,$m_rubr, $qtd_chamadas;
+  global $array_rubricas,$situacao_funcionario, $dias_afasta_sempag ,$vlr_base_prev_ferias_D,$vlr_base_prev_ferias_F,$m_rubr, $qtd_chamadas;
   // $pos_base = db_at("B",$formula);
   $pos_base = strpos("#".$formula,"B")+0;
   if ($pos_base > 0 && db_val(substr("#".$formula,$pos_base+1,3)) > 0 ) {
@@ -8418,6 +8358,10 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
                   echo " [le_var_bxxx] R989 DEDUCOES P/IRRF(13.SALARIO) { abate tambem a pensao alimenticia }<br> ";
                   echo " [le_var_bxxx] R979 DEDUCOES P/IRRF (FERIAS) { abate tambem a pensao alimenticia }<br> ";
                 }
+                if ($db_debug == true) {
+                    echo "select * from ".$area1." ".bb_condicaosubpes($sigla2."_" ).$condicaoaux;
+                    db_criatabela(db_query("select * from ".$area1." ".bb_condicaosubpes($sigla2."_" ).$condicaoaux));
+                }
                 global $transacao;
                 if (db_selectmax("transacao","select * from ".$area1." ".bb_condicaosubpes($sigla2."_" ).$condicaoaux )) {
 
@@ -8652,7 +8596,7 @@ function le_tbprev($r20_rubr=null, $area=null, $sigla=null, $sigla2=null, $nro_d
   $F022, $F023, $F006_clt, $F024, $F003, $F025, $F026, $F027, $F028;
 
 
-  global $naoencontroupontosalario,$dias_pagamento,$valor_salario_maternidade,$vlr_sal_saude_ou_acidente;
+  global $naoencontroupontosalario,$dias_pagamento, $dias_afasta_sempag,$valor_salario_maternidade,$vlr_sal_saude_ou_acidente;
 
   global $quais_diversos;
   eval($quais_diversos);
@@ -8815,12 +8759,9 @@ function le_tbprev($r20_rubr=null, $area=null, $sigla=null, $sigla2=null, $nro_d
         }
       } else if (( ($situacao_funcionario == 5 ) && !db_empty($rubrica_maternidade ) )) {
 
-        if ($dias_pagamento > 0 ) {
-
           $r07_valor += $valor_salario_maternidade;
           if($db_debug == true) { echo "[le_tbprev] Acrescenta o Valor da Licenca Maternidade a Base da Previdencia --> $r07_valor += $valor_salario_maternidade <br>"; }
 
-        }
       }
 
     }
@@ -9753,7 +9694,7 @@ function grava_base_prev($area_grava) {
   global $rubrica_maternidade, $rubrica_licenca_saude, $rubrica_acidente;
   global $anousu, $mesusu, $DB_instit, $db_debug;
 
-  global $base_prev,$situacao_funcionario,$dias_pagamento;
+  global $base_prev,$situacao_funcionario,$dias_pagamento,$dias_afasta_sempag;
   global $valor_salario_maternidade,$cfpess,$subpes,$prev_desc,$base_irfb,$situacao_funcionario,$r110_lotac,$r14_quant,$r14_valor,$r20_rubr;
   global $vlr_sal_saude_ou_acidente,$pessoal,$Ipessoal;
   global $teto_prev;
@@ -9772,10 +9713,8 @@ function grava_base_prev($area_grava) {
       if ($db_debug == true) { echo "[grava_base_prev] 81 - r14_valor = $r14_valor  <br>"; }
     }
   } else if (( ( $situacao_funcionario == 5) && !db_empty($rubrica_maternidade ) ) ) {
-    if ($dias_pagamento > 0) {
       $r14_valor += $valor_salario_maternidade;
       if ($db_debug == true) { echo "[grava_base_prev] 82 - r14_valor = $r14_valor  <br>"; }
-    }
   }
   $r20_rubr  = "R992";
   // R992 BASE PREVIDENCIA
@@ -9789,11 +9728,9 @@ function grava_base_prev($area_grava) {
     $r14_valor = $base_prev;
     if ($db_debug == true) { echo "[grava_base_prev] 83 - r14_valor = $r14_valor  <br>"; }
     if (!db_empty($rubrica_maternidade)) {
-      if ($dias_pagamento > 0) {
 //        echo $r14_valor." += ".$valor_salario_maternidade."<br>";
         $r14_valor += $valor_salario_maternidade;
         if ($db_debug == true) { echo "[grava_base_prev] 84 - r14_valor = $r14_valor  <br>"; }
-      }
     }
     if (db_empty($rubrica_maternidade) || ( !db_empty($rubrica_maternidade) && $dias_pagamento == 0 ) ) {
       $r20_rubr  = "R990";
@@ -9842,7 +9779,7 @@ function grava_base_prev($area_grava) {
 // R952 BASE IRRF FERIAS -COMPLEMENTAR
 function gravb_base_irf ($area_grava,$r20_rubrp){
   global $r20_rubr,$cfpess,$subpes,$naoencontroupontosalario,$base_folha_complementar,$r14_valor, $db_debug,
-         $base_irfb,$situacao_funcionario,$r110_lotac,$r14_quant,$dias_pagamento,$rubrica_maternidade,
+         $base_irfb,$situacao_funcionario,$r110_lotac,$r14_quant,$dias_pagamento, $dias_afasta_sempag,$rubrica_maternidade,
          $valor_salario_maternidade ,$vlr_sal_saude_ou_acidente ,$rubrica_acidente,$rubrica_licenca_saude;
   global $anousu, $mesusu, $DB_instit,$pessoal, $Ipessoal;
 
@@ -9888,10 +9825,8 @@ function gravb_base_irf ($area_grava,$r20_rubrp){
           }
        } else if( $situacao_funcionario == 5){
           if( !db_empty( $rubrica_maternidade ) ){
-             if( $dias_pagamento > 0){
                $r14_valor += $valor_salario_maternidade;
                if ($db_debug == true) { echo "[gravb_base_irf] 90 - r14_valor = $r14_valor  <br>"; }
-             }
           }
        }
 //       echo "desconto IRRF $area_grava R975<br>";
@@ -12038,6 +11973,15 @@ function calc_irf($r20_rubr_=null, $area=null, $sigla=null, $sigla2=null, $nro_d
 
     $r14_valor = round(le_irf($r07_valor,"1"),2) ;
     if ($db_debug == true) { echo "[calc_irf] 98 - r14_valor = $r14_valor  <br>"; }
+
+    /*if ($opcao_geral == 4 && in_array($r20_rubr, array("R913","R914","R915"))) {
+      $condicaoaux  = " and r48_regist = ".db_sqlformat($pessoal[$Ipessoal]["r01_regist"] );
+      $condicaoaux .= " and r48_rubric = '{$r20_rubr}'";
+      if (db_selectmax("gerfcom_", "select * from gerfcom ".bb_condicaosubpes("r48_" ).$condicaoaux )) {
+        $r14_valor  -= $gerfcom_[0]["r48_valor"];
+        if($db_debug == true) { echo "[calc_irf] Descontado o que foi já lançado na complementar  r14_valor -> $r14_valor <br>"; }
+      }
+    }*/
 
     //echo "<BR> Valor do IRRF ------------------------------> $r14_valor ";
 

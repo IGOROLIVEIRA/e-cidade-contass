@@ -37,6 +37,11 @@ $campos = "afasta.r45_codigo as db_r45_codigo,
 					      when 5 then 'Afastado licença gestante'
 					      when 6 then 'Afastado doença +15 dias'
 					      when 7 then 'Licença sem vencimento, cessão sem ônus'
+                          when 8 then 'Afastado doença +30 dias'
+                          when 9 then 'Licença por Motivo de Afastamento do Cônjuge'
+                          when 10 then 'Afastado doença -15 dias'
+                          when 11 then 'Licença para concorrer a mandato eletivo'
+                          when 12 then 'Prorrogação Licença Maternidade'
 					 end as r45_situac,
            afasta.r45_dtlanc,
            afasta.r45_dtafas,
