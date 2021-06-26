@@ -1016,7 +1016,7 @@ if ( isset($oPost->gerar) ) {
                       $cllayout_SEFIP->SFPRegistro32_052_053 = $oPessoal->h13_tpcont;
                       $cllayout_SEFIP->SFPRegistro32_054_123 = $oPessoal->z01_nome;
                       $cllayout_SEFIP->SFPRegistro32_124_125 = $r45_codafa;
-                      $cllayout_SEFIP->SFPRegistro32_126_133 = db_formatar($dataafasta,'d');
+                      $cllayout_SEFIP->SFPRegistro32_126_133 = (in_array($r45_codafa, array('P1','P3')) ? date_create($r45_dtafas)->modify('-1 days')->format('dmY') : db_formatar($dataafasta,'d') );
                       $cllayout_SEFIP->SFPRegistro32_134_134 = $indfgts;
 
 
@@ -1032,7 +1032,7 @@ if ( isset($oPost->gerar) ) {
                     $cllayout_SEFIP->SFPRegistro32_052_053 = $oPessoal->h13_tpcont;
                     $cllayout_SEFIP->SFPRegistro32_054_123 = $oPessoal->z01_nome;
                     $cllayout_SEFIP->SFPRegistro32_124_125 = $codmov;
-                    $cllayout_SEFIP->SFPRegistro32_126_133 = db_formatar($datamov,'d');
+                    $cllayout_SEFIP->SFPRegistro32_126_133 = (in_array($codmov, array('P1','P3')) ? date_create($r45_dtafas)->modify('-1 days')->format('dmY') : db_formatar($datamov,'d') );
                     $cllayout_SEFIP->SFPRegistro32_134_134 = $indfgts;
                       
                       
