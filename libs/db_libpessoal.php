@@ -984,8 +984,6 @@ function situacao_funcionario($registro = null, $datafim = null)
   $condicaoaux  = " and ((r45_dtafas between '{$dtini}' and '{$dtfim}' or r45_dtreto between '{$dtini}' and '{$dtfim}') or r45_dtreto > '{$dtfim}')";
   $condicaoaux .= " and r45_situac != 11 and r45_regist =" . db_sqlformat($registro) . " order by r45_regist, r45_dtafas";
   global $afasta;
-  echo "select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux;
-  db_criatabela(db_query("select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux));
   if (db_selectmax("afasta", "select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux)) {
 
     for($iCont = 0; $iCont < count($afasta); $iCont++) {
