@@ -5062,7 +5062,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           }
 
           /*OC6893*/
-          if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7,10))) {
+          if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7,10)) && $pontofs[$Iponto]["rh27_pd"] == 1) {
             $r14_quant = $dias_pagamento;
             $r14_valor = ( $r14_valor / 30 ) * $r14_quant;
           } else if ($situacao_funcionario == 5 && $dias_pagamento == 0 && $pontofs[$Iponto]["rh27_calcp"] == 't') {
@@ -7522,11 +7522,11 @@ function carrega_r9xx($area, $sigla, $sigla2, $nro_do_registro,$opcao_tipo) {
     $valor_base_sal_familia = calc_rubrica("R917",$area,$sigla,$sigla2,$nro_do_registro,true);
     //echo "<BR> 1 -- valor_base_sal_familia --> $valor_base_sal_familia";
     // R917 BASE P/SALARIO FAMILIA , Pesquisando na Complementar.
-    if($vlr_sal_saude_ou_acidente > 0 && $dias_pagamento > 0){
+    if($vlr_sal_saude_ou_acidente > 0){
        $valor_base_sal_familia += $vlr_sal_saude_ou_acidente;
        //echo "<BR> 1 -- valor_base_sal_familia --> $valor_base_sal_familia vlr_sal_saude_ou_acidente --> $vlr_sal_saude_ou_acidente";
     }
-    if ($valor_salario_maternidade > 0 && $dias_pagamento > 0){
+    if ($valor_salario_maternidade > 0){
       $valor_base_sal_familia += $valor_salario_maternidade;
        //echo "<BR> 2 -- valor_base_sal_familia --> $valor_base_sal_familia valor_salario_maternidade --> $valor_salario_maternidade";
     }
@@ -7572,7 +7572,7 @@ function carrega_r9xx($area, $sigla, $sigla2, $nro_do_registro,$opcao_tipo) {
         //echo "<BR> r33_rubmat --> ".$inssirf_[0]["r33_rubmat"];
         if (( db_selectmax("inssirf_", "select * from inssirf ".bb_condicaosubpes("r33_" ).$condicaoaux )
         && !db_empty($inssirf_[0]["r33_rubmat"] ) )
-        || $dias_pagamento > 0 ) {
+        ) {
           $gerar_salario_familia = true;
         }
       } else {
@@ -11907,6 +11907,10 @@ function calc_irf($r20_rubr_=null, $area=null, $sigla=null, $sigla2=null, $nro_d
         if ($dias_pagamento > 0 && !db_empty($rubrica_licenca_saude ) ) {
           $base_irf += $vlr_sal_saude_ou_acidente;
           $r07_valor += $vlr_sal_saude_ou_acidente;
+        } else
+        if ($r07_valor <= 0 && !db_empty($rubrica_licenca_saude ) ) {
+          $base_irf += $vlr_sal_saude_ou_acidente;
+          $r07_valor += $vlr_sal_saude_ou_acidente;
         }
       } else if (( $situacao_funcionario == 3 ) ) {
         // Afastado Acidente de Trabalho + 15 Dias
@@ -11915,6 +11919,10 @@ function calc_irf($r20_rubr_=null, $area=null, $sigla=null, $sigla2=null, $nro_d
           $r07_valor -= $vlr_sal_saude_ou_acidente;
         }
         if ($dias_pagamento > 0 && !db_empty($rubrica_acidente )) {
+          $base_irf += $vlr_sal_saude_ou_acidente;
+          $r07_valor += $vlr_sal_saude_ou_acidente;
+        } else
+        if ($r07_valor <= 0 && !db_empty($rubrica_acidente ) ) {
           $base_irf += $vlr_sal_saude_ou_acidente;
           $r07_valor += $vlr_sal_saude_ou_acidente;
         }
@@ -11926,6 +11934,10 @@ function calc_irf($r20_rubr_=null, $area=null, $sigla=null, $sigla2=null, $nro_d
         }
         if ($dias_pagamento > 0 && !db_empty($rubrica_maternidade )) {
           $base_irf  += $valor_salario_maternidade;
+          $r07_valor += $valor_salario_maternidade;
+        } else
+        if ($r07_valor <= 0 && !db_empty($rubrica_maternidade ) ) {
+          $base_irf += $valor_salario_maternidade;
           $r07_valor += $valor_salario_maternidade;
         }
       }
