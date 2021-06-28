@@ -112,7 +112,6 @@ $clrotulo->label("descrproced");
   }
 
   function js_generateAncora(sArq, sCamp) {
-    const sArquivo = sArq[0].toUpperCase() + sArq.substr(1);
 
     var tdArquivoAncora = document.getElementById("tdArquivoAncora");
     var ancora = document.createElement('a');
@@ -122,7 +121,11 @@ $clrotulo->label("descrproced");
     ancora.setAttribute("id", "ancora_arquivo");
     ancora.setAttribute("href", "#");
     tdArquivoAncora.appendChild(ancora);
-    document.getElementById("ancora_arquivo").innerHTML = sArquivo;
+    if (sArq != 'liclicita') {
+      document.getElementById("ancora_arquivo").innerHTML = sArq[0].toUpperCase() + sArq.substr(1);
+    } else {
+      document.getElementById("ancora_arquivo").innerHTML = 'Licitações';
+    }
 
     var tdArquivoInput = document.getElementById("tdArquivoInput");
 

@@ -6,7 +6,8 @@ include("libs/db_usuariosonline.php");
 include("classes/db_relatorios_classe.php");
 include("classes/db_db_sysprocedarq_classe.php");
 include("dbforms/db_funcoes.php");
-include("vendor/mpdf/mpdf/mpdf.php");
+// include("vendor/mpdf/mpdf/mpdf.php");
+require_once("model/relatorios/Relatorio.php");
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -31,8 +32,12 @@ if (isset($Gerar)) {
 
   $corpo = db_geratexto($rel_corpo);
 
-  $mPDF = new mpdf();
   $html = $corpo;
+
+  $mPDF = new Relatorio('', 'A4-L');
+
+  $mPDF->addInfo($rel_descricao, 2);
+
   $mPDF->WriteHTML(utf8_encode($html));
 
   $mPDF->Output($arquivo . '.pdf', "D");

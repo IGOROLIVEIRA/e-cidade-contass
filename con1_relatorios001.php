@@ -124,6 +124,7 @@ if (isset($alterar)) {
 }
 if (isset($excluir)) {
   if ($clrelatorios->erro_status == "0") {
+    $clrelatorios->erro_msg = 'Excluído com sucesso';
     $clrelatorios->erro(true, false);
   } else {
     $clrelatorios->erro(true, true);
