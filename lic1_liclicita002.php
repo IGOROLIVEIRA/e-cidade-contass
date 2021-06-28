@@ -40,6 +40,8 @@ require_once("classes/db_db_usuarios_classe.php");
 require_once("classes/db_liclicitemlote_classe.php");
 require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_pcorcamitemlic_classe.php");
+require_once("classes/db_pcprocitem_classe.php");
+require_once("classes/db_pcproc_classe.php");
 require_once("classes/db_pcorcamdescla_classe.php");
 require_once("classes/db_cflicita_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
@@ -65,12 +67,15 @@ $oDaoLicitaPar        = new cl_pccflicitapar;
 $clhomologacao        = new cl_homologacaoadjudica;
 $clliccomissaocgm     = new cl_liccomissaocgm;
 $clpccfeditalnum      = new cl_pccfeditalnum;
+$clpcprocitem         = new cl_pcprocitem;
+$clpcproc             = new cl_pcproc;
 
 $db_opcao = 22;
 $db_botao = true;
 $sqlerro  = false;
 $instit     = db_getsession("DB_instit") ;
 $anousu     = db_getsession("DB_anousu");
+$mostrar  = 0; 
 
 if(isset($alterar)){
   db_inicio_transacao();
@@ -240,6 +245,51 @@ if(isset($alterar)){
         $sqlerro  = true;
       }
     }
+
+    $res_liclicitem     = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo,l21_codpcprocitem","l21_codigo","l21_codliclicita = $l20_codigo"));
+    $numrows_liclicitem = $clliclicitem->numrows;
+     if($numrows_liclicitem>0){
+       for ($i = 0; $i < $numrows_liclicitem; $i++){ 
+
+         db_fieldsmemory($res_liclicitem,$i);
+                                    
+         $valores_codpcprocitem[$i]       = $l21_codpcprocitem;
+                                            
+      }
+                                        
+      for($i = 0; $i < $numrows_liclicitem; $i++){
+                                            
+          $res_pcprocitem    = $clpcprocitem->sql_record($clpcprocitem->sql_query_file(null,"pc81_codproc","pc81_codproc","pc81_codprocitem = $valores_codpcprocitem[$i]"));
+          $numrows_pcprocitem = $clpcprocitem->numrows;
+          db_fieldsmemory($res_pcprocitem,0);
+          $valores_codproc[$i] = $pc81_codproc;
+      }
+                                        
+      $val = 0;
+      $op  = 0;
+      for($i = 0; $i < $numrows_liclicitem; $i++){
+                                            
+          $res_pcproc    = $clpcproc->sql_record($clpcproc->sql_query_file(null,"pc80_criterioadjudicacao","pc80_criterioadjudicacao","pc80_codproc = $valores_codproc[$i]"));
+          $numrows_pcproc = $clpcproc->numrows;
+          db_fieldsmemory($res_pcproc,0);
+                                                
+          if($val!=0){
+            if($val==$pc80_criterioadjudicacao)
+            $op++;
+          }else{
+            $val = $pc80_criterioadjudicacao;
+          }
+      } 
+
+    }
+    if($val!="" && $val!=$l20_criterioadjudicacao){
+      $erro_msg = "Critério de adjudicação não corresponde aos itens de compras já inseridos";
+      $sqlerro = true;
+      $mostrar = 1;
+    }else if($val==""){
+      $sqlerro = false;
+    }
+
   }
 //  /**
 //   * Verificar Encerramento Periodo Contabil
@@ -291,7 +341,6 @@ if(isset($alterar)){
 
     }
 
-
   if ($sqlerro == false ){
     $clliclicita->l20_numero       = $iNumero;
     $clliclicita->l20_procadmin    = $sProcAdmin;
@@ -337,7 +386,7 @@ if(isset($alterar)){
       $lista_l21_codigo   = "";
       $virgula            = "";
 
-      for ($i = 0; $i < $numrows_liclicitem; $i++){
+      for ($i = 0; $i < $numrows_liclicitem; $i++){ 
 
         db_fieldsmemory($res_liclicitem,$i);
 
@@ -669,13 +718,15 @@ function js_confirmar(){
 <?
 if(isset($alterar)){
   if($sqlerro == true){
-
-    db_msgbox($erro_msg);
+    if($mostrar==0){
+      db_msgbox($erro_msg);
+    }
     $clliclicita->erro_msg = $erro_msg;
     $clliclicita->erro_status = 0;
     $clliclicita->erro(true,false);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    echo "<script>location.href='lic1_liclicita002.php?chavepesquisa=$l20_codigo';</script>";
     if($clliclicita->erro_campo!=""){
       echo "<script> document.form1.".$clliclicita->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clliclicita->erro_campo.".focus();</script>";
