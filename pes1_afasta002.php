@@ -68,7 +68,10 @@ if(isset($alterar)){
   $r45_dtreto = $r45_dtreto_ano."-".$r45_dtreto_mes."-".$r45_dtreto_dia;
   $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
   $sWhereVerificaAfastamento .= " and r45_codigo != '{$r45_codigo}' ";
-  $sWhereVerificaAfastamento .= " and ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date ) ";
+  $sWhereVerificaAfastamento .= " and (";
+  $sWhereVerificaAfastamento .= " ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
+  $sWhereVerificaAfastamento .= " or ( '{$r45_dtafas}'::date between r45_dtafas and r45_dtreto or '{$r45_dtreto}'::date between r45_dtafas and r45_dtreto )";
+  $sWhereVerificaAfastamento .= " )";
   
   $sSqlVerificaAfastamento   = $clafasta->sql_query_file(null, "r45_codigo", null, $sWhereVerificaAfastamento);
   $rsVerificaAfastamento     = $clafasta->sql_record($sSqlVerificaAfastamento);
