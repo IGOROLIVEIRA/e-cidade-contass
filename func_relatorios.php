@@ -34,14 +34,13 @@ $clrelatorios = new cl_relatorios;
       if (file_exists("funcoes/db_func_relatorios.php") == true) {
         include("funcoes/db_func_relatorios.php");
       } else {
-        $campos = "relatorios.oid,relatorios.*";
+        $campos = "relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo";
       }
     }
-
     if (db_getsession("DB_modulo") == 1)
-      $sql = $clrelatorios->sql_query();
+      $sql = $clrelatorios->sql_query('', "relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo");
     else
-      $sql = $clrelatorios->sql_query('', '*', '', "db_modulos.id_item = " . db_getsession("DB_modulo"));
+      $sql = $clrelatorios->sql_query('', $campos, '', "db_modulos.id_item = " . db_getsession("DB_modulo"));
 
     $repassa = array();
     echo '<div class="container">';

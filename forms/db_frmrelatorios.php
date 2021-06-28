@@ -11,7 +11,7 @@ $clrotulo->label("descrproced");
 <form name="form1" method="post" action="">
   <div class="container">
     <fieldset>
-      <legend><b></b></legend>
+      <legend><b>Cadastro</b></legend>
       <table border="0">
         <tr>
           <td nowrap title="<?= @$Trel_sequencial ?>" align="left">
