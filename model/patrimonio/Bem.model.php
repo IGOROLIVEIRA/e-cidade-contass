@@ -887,7 +887,8 @@ class Bem {
         $oGrupo = GrupoContaOrcamento::getGrupoConta($oNota->getDesdobramento(), db_getsession("DB_anousu"));
         if (!empty($oGrupo) && $oGrupo->getCodigo() == 9) {
 
-          $sObs = "Lançamento em liquidação do tombamento do bem {$this->getCodigoBem()}.";
+          $sObs .= "LANÇAMENTO EM LIQUIDAÇÃO DO TOMBAMENTO DO BEM {$this->getDescricao()}, ";
+          $sObs .= "CÓDIGO {$this->getCodigoBem()}, PLACA {$this->getPlaca()->getPlacaSeq()}, NÚMERO DA NOTA FISCAL {$oNota->getNumeroNota()}.";
 
           if ( $lIntegracaoFinanceiro ) {
 

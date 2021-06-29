@@ -25,34 +25,22 @@
  *                                licenca/licenca_pt.txt
  */
 $clrotulo = new rotulocampo;
-$clrotulo->label("e80_data");
-$clrotulo->label("e83_codtipo");
-$clrotulo->label("e80_codage");
-$clrotulo->label("e50_codord");
-$clrotulo->label("e50_numemp");
-$clrotulo->label("e60_numemp");
-$clrotulo->label("e60_codemp");
-$clrotulo->label("z01_numcgm");
-$clrotulo->label("z01_nome");
-$clrotulo->label("e60_emiss");
-$clrotulo->label("e82_codord");
-$clrotulo->label("e87_descgera");
-$clrotulo->label("o15_descr");
-$clrotulo->label("o15_codigo");
-$dados="ordem";
+$clrotulo->label("k13_dtvlr");
+$clrotulo->label("k13_conta");
+
+$dados = "ordem";
 require_once("std/db_stdClass.php");
 $iTipoControleRetencaoMesAnterior = 0;
 $lUsaData    = true;
-$aParametrosEmpenho = db_stdClass::getParametro("empparametro",array(db_getsession("DB_anousu")));
-if (count($aParametrosEmpenho) > 0) {
-
-    $iTipoControleRetencaoMesAnterior = $aParametrosEmpenho[0]->e30_retencaomesanterior;
-    $lUsaData = $aParametrosEmpenho[0]->e30_usadataagenda=="t"?true:false;
-
+/** Verificar utilidade
+$aParamentrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_anousu")));
+if (count($aParamentrosCaixa) > 0) {
+    $iTipoControleRetencaoMesAnterior = $aParamentrosCaixa[0]->e30_retencaomesanterior;
+    $lUsaData = $aParamentrosCaixa[0]->e30_usadataagenda=="t"?true:false;
 }
+*/
 ?>
 <style type="text/css">
-
     .pesquisaConta {
         list-style-type: none;
         padding: 0;
@@ -76,7 +64,6 @@ if (count($aParametrosEmpenho) > 0) {
 
     .pesquisaConta li:hover:not(.header) {
         background-color: #eee;
-        cursor: pointer;
     }
 
     .codtipo {
@@ -106,71 +93,22 @@ if (count($aParametrosEmpenho) > 0) {
             <tr>
                 <td>
                     <fieldset>
-                        <legend>
-                            <a  id='esconderfiltros' style="-moz-user-select: none;cursor: pointer">
-                                <b>Opções</b>
-                                <img src='imagens/setabaixo.gif' id='togglefiltros' border='0'>
-                            </a>
-                        </legend>
+                        <legend><b>Conciliação Bancária</b></legend>
                         <table width="100%">
                             <tr>
-                                <td width="35%" valign="top">
+                                <td width="50%" valign="top">
                                     <fieldset class='filtros'>
                                         <legend>
                                             <b>Filtros</b>
                                         </legend>
                                         <table border="0" align="left" >
-
-                                            <tr>
-                                                <td nowrap title="<?=@$Te82_codord?>">
-                                                    <?db_ancora(@$Le82_codord,"js_pesquisae82_codord(true);",$db_opcao);  ?>
-                                                </td>
-                                                <td nowrap>
-                                                    <?
-                                                    db_input('e82_codord',10,$Ie82_codord,true,'text',$db_opcao," onchange='js_pesquisae82_codord(false);'");
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_ancora("<b>até:</b>","js_pesquisae82_codord02(true);",$db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td nowrap align="left">
-                                                    <?
-                                                    db_input('e82_codord2',10,$Ie82_codord,true,'text',$db_opcao,
-                                                        "onchange='js_pesquisae82_codord02(false);'","e82_codord02");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td  nowrap title="<?=$Te60_numemp?>">
-                                                    <?
-                                                    db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",$db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td nowrap>
-                                                    <input name="e60_codemp" id='e60_codemp'
-                                                           title='<?=$Te60_codemp?>' size="10" type='text'  onKeyPress="return js_mascara(event);" >
-                                                </td>
-                                                <td>
-                                                    <b>Recursos:</b></td>
-                                                <td align="left">
-                                                    <?
-                                                    if (!isset($recursos)){
-                                                        $recursos = "false";
-                                                    }
-                                                    $ar = array("false"=>"Vinculados","true"=>"Todos");
-                                                    db_select("recursosvinculados",$ar,true,1,"style='width:100%'");
-                                                    ?>
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <td>
                                                     <b>Data Inicial:</b>
                                                 </td>
                                                 <td nowrap>
                                                     <?
-                                                    db_inputdata("dataordeminicial",null,null,null,true,"text", 1);
+                                                    db_inputdata("k13_dtvlr_inicial", null, null, null, true, "text", 1);
                                                     ?>
                                                 </td>
                                                 <td>
@@ -178,170 +116,47 @@ if (count($aParametrosEmpenho) > 0) {
                                                 </td>
                                                 <td nowrap align="">
                                                     <?
-                                                    db_inputdata("dataordemfinal",null,null,null,true,"text", 1);
+                                                    db_inputdata("k13_dtvlr_final", null, null, null, true, "text", 1);
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td nowrap title="<?=@$Tz01_numcgm?>">
-                                                    <?
-                                                    db_ancora("<b>Credor:</b>","js_pesquisaz01_numcgm(true);",$db_opcao);
-                                                    ?>
+                                                <td nowrap title="<?=@$Tk13_conta?>">
+                                                    <? db_ancora(@$Lk13_conta, "js_pesquisak13_conta(true);", $db_opcao); ?>
                                                 </td>
                                                 <td  colspan='4' nowrap>
                                                     <?
-                                                    db_input('z01_numcgm',10,$Iz01_numcgm,true,'text',$db_opcao," onchange='js_pesquisaz01_numcgm(false);'");
-                                                    db_input('z01_nome',40,$Iz01_nome,true,'text',3,'');
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr nowrap>
-                                                <td nowrap title="<?=@$To15_codigo?>">
-                                                    <? db_ancora(@$Lo15_codigo,"js_pesquisac62_codrec(true);",$db_opcao); ?>
-                                                </td>
-                                                <td colspan=3 nowrap>
-                                                    <?
-                                                    db_input('o15_codigo',10,$Io15_codigo,true,'text',$db_opcao," onchange='js_pesquisac62_codrec(false);'");
-                                                    db_input('o15_descr',40,$Io15_descr,true,'text',3,'');
+                                                    db_input('k13_conta', 10, $Ik13_conta, true, 'text', $db_opcao, " onchange='js_pesquisaz01_numcgm(false);'");
+                                                    db_input('k13_descr', 46, $Ik13_descr, true, 'text', 3, '');
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td nowrap>
-                                                    <b>Conta pagadora padrão:</b>
-                                                </td>
-                                                <td colspan=3 nowrap>
-                                                    <?php
-                                                    $sWhere = "db83_tipoconta = 1";
-                                                    /* [Extensão] - Filtro da Despesa */
-
-
-                                                    $sSqlBuscaContaPagadora =
-                                                        $clempagetipo->sql_query_conplano_conta_bancaria(
-                                                            null,
-                                                            "e83_conta, e83_codtipo as codtipo,
-                                                            e83_descr, c61_codigo ",
-                                                            "e83_descr",
-                                                            $sWhere
-                                                        );
-
-                                                    $result05  = $clempagetipo->sql_record($sSqlBuscaContaPagadora);
-                                                    $numrows05 = $clempagetipo->numrows;
-                                                    $arr['0']="Nenhum";
-                                                    for ($r = 0; $r < $numrows05; $r++) {
-                                                        db_fieldsmemory($result05,$r);
-                                                        $arr[$codtipo] = "{$e83_conta} - {$e83_descr} - {$c61_codigo}";
-
-                                                    }
-                                                    $e83_codtipo ='0';
-                                                    db_select("e83_codtipo",$arr,true,1,"onchange='js_setContaPadrao(this.value);' style='width:26em'");
+                                                <td><b>Tipo de Movimento:</b></td>
+                                                <td align="left" colspan="4">
+                                                    <?
+                                                    $ar = array("false" => "Selecione");
+                                                    db_select("tipomovimento", $ar, true, 1, "style='width:100%'");
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td nowrap>
-                                                    <b>Forma de Pagamento padrão:</b></td>
-                                                <td  nowrap>
+                                                <td><b>Tipo de Lançamento:</b></td>
+                                                <td align="left" colspan="4">
                                                     <?
-                                                    $rsFormaPagamento  = $clempageforma->sql_record($clempageforma->sql_query(null));
-                                                    $iNumRowsPagamento = $clempageforma->numrows;
-                                                    $aFormaPagamento['0']="NDA";
-                                                    for ($r = 0; $r < $iNumRowsPagamento; $r++) {
-
-                                                        $oFormaPagamento = db_utils::fieldsMemory($rsFormaPagamento, $r);
-                                                        $aFormaPagamento[$oFormaPagamento->e96_codigo] = $oFormaPagamento->e96_descr;
-
-                                                    }
-                                                    $e96_codigo ='0';
-                                                    db_select("e96_codigo",$aFormaPagamento,true,1,"onchange='js_setFormaPadrao(this.value);' style='width:10em'");
+                                                    $ar = array("false" => "Selecione");
+                                                    db_select("tipolancamento", $ar, true, 1, "style='width:100%'");
                                                     ?>
-                                                </td>
-
-                                                <td nowrap="nowrap">
-                                                    <strong>Processo Administrativo:</strong>
-                                                </td>
-
-                                                <td>
-                                                    <?php  db_input('e03_numeroprocesso',10,null,true,'text',1,null,null,null,null,15); ?>
-                                                </td>
-
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <b>Data de Pagamento: </b>
-                                                </td>
-                                                <td colspan='1'>
-                                                    <?
-                                                    if ($lUsaData) {
-
-                                                        $data = explode("-",date("d-m-Y",DB_getsession("DB_datausu")));
-                                                        db_inputdata("e42_dtpagamento", $data[0],$data[1],$data[2],true,"text", 1);
-
-                                                    } else {
-                                                        db_inputdata("e42_dtpagamento",null,null,null,true,"text", 1);
-                                                    }
-                                                    ?>
-                                                <td>
-                                                    <b>
-                                                        <? db_ancora("<b>OP auxiliar</b>","js_pesquisae42_sequencial(true);",$db_opcao);  ?>
-                                                    </b>
-                                                </td>
-                                                <td>
-                                                    <input type='text' size="10" id='e42_sequencial'
-                                                           onchange='js_pesquisae42_sequencial(false);' name='e42_sequencial'>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <b>Ordens Autorizadas:</b>
+                                                <td><b>Data da Conciliação:</b></td>
+                                                <td align="left">
+                                                    <? db_inputdata("data_conciliacao", null, null, null, true, "text", 1) ?>
                                                 </td>
-                                                <td colspan='1' nowrap>
-                                                    <?
-                                                    if (db_permissaomenu(db_getsession("DB_anousu"),39,6956) == "true") {
-
-                                                        $aAutorizadas = array(
-                                                            1 => "Ambas",
-                                                            2 => "Autorizadas",
-                                                            3 => "Não Autorizadas",
-                                                        );
-                                                    } else {
-
-                                                        $aAutorizadas = array(
-                                                            2 => "Autorizadas",
-                                                        );
-
-                                                    }
-                                                    db_select("ordensautorizadas",$aAutorizadas,true,1);
-                                                    ?>
-                                                </td>
-                                                <td colspan='2'>
-                                                    <input type='checkbox' id='emitirordemauxiliar'>
-                                                    <label for='emitirordemauxiliar'><b>Emitir Ordem Auxiliar</b></label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td valign="top"><b>Ordenar</b></td>
-                                                <td valign="top">
-                                                    <?
-                                                    $x = array("e82_codord"=>"Ordem",
-                                                        "e60_numemp"=>"Empenho",
-                                                        "cgm.z01_nome"=>"Credor",
-                                                        "o15_codigo"=>"Recurso"
-                                                    );
-                                                    db_select("orderby",$x,true,1);
-                                                    ?>
-                                                </td>
-                                                <td colspan='2'>
-                                                    <input type='checkbox' id='efetuarpagamento' onclick="js_showAutenticar(this)" />
-                                                    <label for='efetuarpagamento'><b>Efetuar Pagamento</b></label><br>
-                                                    <span id='showautenticar' style='visibility:hidden'>
-               <input type="checkbox"  id='autenticar' />
-               <label for="autenticar"><b>Autenticar</b></label>
-             </span>
-                                                    <span id='showreemissao' style='visibility:hidden'>
-               <input type="checkbox"  id='reemisaoop' onclick="js_reemissaoOP(this);">
-               <label for="reemisaoop" ><b>Reemitir OP</b></label>
-             </span>
+                                                <td><b>Saldo Final Extrato:</b></td>
+                                                <td align="left">
+                                                    <? db_input("saldo_final_extrato", 16, null, null, true, "text", 1); ?>
                                                 </td>
                                             </tr>
                                         </table>
@@ -358,10 +173,7 @@ if (count($aParametrosEmpenho) > 0) {
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Tesouraria:</b>
-                                                </td>
-                                                <td style='text-align:right'>
-                                                    <pre>(+)</pre>
+                                                    <b>Saldo Inicial Tesouraria:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
@@ -371,10 +183,7 @@ if (count($aParametrosEmpenho) > 0) {
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Movimentos:</b>
-                                                </td>
-                                                <td style='text-align:right'>
-                                                    <pre>(-)</pre>
+                                                    <b>Total de Entradas:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
@@ -384,52 +193,32 @@ if (count($aParametrosEmpenho) > 0) {
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
-                                                    <b>Disponível:</b>
-                                                </td>
-                                                <td style='text-align:right' valign="">
-                                                    <pre>(=)</pre>
+                                                    <b>Total de Saídas:</b>
                                                 </td>
                                                 <td valign='top'>
                                                     <?
                                                     db_input("saldoatual",15,null,true,"text",3);
-                                                    db_input("iCheque",1,0,true,'hidden',3);
                                                     ?>
                                                 </td>
                                             </tr>
-                                        </table>
-                                    </fieldset>
-                                    <fieldset class='filtros'>
-                                        <legend>
-                                            <b>Op Auxiliar</b>
-                                        </legend>
-                                        <table>
                                             <tr>
-                                                <td nowrap>
-                                                    <b>
-                                                        <? db_ancora("<b>OP auxiliar</b>","js_pesquisae42_sequencialmanutencao(true);",$db_opcao);  ?>
-                                                    </b>
+                                                <td valign='top'>
+                                                    <b>Saldo Conciliado:</b>
                                                 </td>
-                                                <td>
-                                                    <input type='text' size="10" id='e42_sequencialmanutencao'
-                                                           onchange='js_pesquisae42_sequencialmanutencao(false);' name='e42_sequencialmanutencao' />
-                                                </td>
-                                                <td>
-                                                    <b>Data:</b>
-                                                </td>
-                                                <td colspan='1'>
+                                                <td valign='top'>
                                                     <?
-                                                    db_inputdata("e42_dtpagamentomanutencao", null, null,null,true,"text", 3);
+                                                    db_input("saldoatual",15,null,true,"text",3);
                                                     ?>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" nowrap>
-                                                    <input type="radio" id="opmanutencaonda" name="opmanutencao" checked="checked" / >
-                                                    <label for="opmanutencaonda" >NDA</label><br>
-                                                    <input type="radio" id="opmanutencaoincluir" name="opmanutencao" />
-                                                    <label for="opmanutencaoincluir">Incluir Movimentos na OP selecionada</label><br>
-                                                    <input type="radio" id="opmanutencaoexcluir" name="opmanutencao" />
-                                                    <label for="opmanutencaoexcluir">Excluir Movimentos na OP selecionada</label>
+                                                <td valign='top'>
+                                                    <b>Diferença:</b>
+                                                </td>
+                                                <td valign='top'>
+                                                    <?
+                                                    db_input("saldoatual",15,null,true,"text",3);
+                                                    ?>
                                                 </td>
                                             </tr>
                                         </table>
@@ -444,35 +233,17 @@ if (count($aParametrosEmpenho) > 0) {
             </tr>
             <tr>
                 <td colspan='4' style='text-align: center'>
-                    <fieldset><legend><b>Ações</b></legend>
                         <input name="pesquisar" id='pesquisar' type="button"  value="Pesquisar" onclick='js_pesquisarOrdens();' />
                         <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick='js_configurar()' />
-                        <input name="emitecheque" id='emitecheque' type="button"
-                               value='Emitir Cheque' onclick='js_janelaEmiteCheque()' disabled="disabled" />
-                        <input name="emitetxt" id='emitetxt' type="button"
-                               value='Emitir Arquivo Texto' onclick='location.href="emp4_empageconfgera001.php"' />
-                        <input name='agruparmovimentos' id='agruparmovimentos' value='Agrupar Movimentos' type='button' />
-                        <input name='relatorioagenda' id='relatorioagenda' value='Relatório' type='button'
-                               onclick="js_visualizarRelatorio()" />
-                        <?php
-
-                        /**
-                         * Podemos remover após o OBN entrar em produção.
-                         */
-                        if (db_permissaomenu(db_getsession("DB_anousu"), db_getsession("DB_modulo"), 9755) === "true") {
-
-                            echo "<input name='btnConfigurarMovimentos' id='btnConfigurarMovimentos' value='Configurações de Envio' type='button'";
-                            echo "onclick=\"window.location='emp4_configuracaoarquivoenvio001.php'\" />";
-                        }
-
-                        ?>
+                        <input name="desprocessar" id='desprocessar' type="button" value='Desprocessar' onclick='#' />
+                        <input name="emitir_capa" id='emitir_capa' type="button" value='Emitir Capa' onclick='#' />
+                        <input name="incluir_pendencias" id='incluir_pendencias' type="button" value='Incluir Pendências' onclick='#' />
+                        <input name="nova_conciliacao" id='nova_conciliacao' type="button" value='Nova Conciliação' onclick='#' />
                     </fieldset>
-
                 </td>
             <tr>
                 <td colspan='3'>
                     <fieldset>
-                        <legend><b>Ordens</b></legend>
                         <div id='gridNotas' style="width: 100%">
                         </div>
                     </fieldset>
@@ -480,63 +251,28 @@ if (count($aParametrosEmpenho) > 0) {
             </tr>
             <tr>
                 <td colspan='5' align='left'>
-                    <b><span >**</span>Para selecionar a Conta Pagadora digite os dados da conta no box e em seguida pressione a tecla tab.</b>
+                    <b><span >**</span>Exibir Lançamentos</b>
                     <br />
                     <span>
           <fieldset>
-            <legend><b>Mostrar</b></legend>
+            <legend><b>Exibir</b></legend>
             <input type="checkbox" id='configuradas' checked onclick='js_showFiltro("configurada",this.checked)' />
             <label for="configuradas" style='padding:1px;border: 1px solid black; background-color:#d1f07c'>
-              <b>Atualizados</b>
+              <b>Conciliados</b>
             </label>
             <input type="checkbox" id='normais' checked onclick='js_showFiltro("normal",this.checked)' />
             <label for="normais" style='padding:1px;border: 1px solid black;background-color:white'>
-              <b>Não Atualizados</b>
+              <b>Não Conciliados</b>
             </label>
             <input type="checkbox" id='comMovs' checked onclick='js_showFiltro("comMov",this.checked)' />
             <label for="comMovs" style='padding:1px;border: 1px solid black;background-color:rgb(222, 184, 135)'>
-              <b>Com cheque/em Arquivo</b>
+              <b>Pendência/Implantação</b>
             </label>
           </fieldset>
       </span>
                 </td>
             </tr>
-            <tr>
-                <td colspan="5">
-                    <fieldset>
-                        <legend>
-                            <a  id='esconderTotais' style="-moz-user-select: none;cursor: pointer">
-                                <b>Totais</b>
-                                <img src='imagens/seta.gif' id='toggletotais' border='0'>
-                            </a>
-                        </legend>
-                        <table cellpadding="0" class='tabelatotais'
-                               cellspacing="0"
-                               width="50%"
-                               style="display: none;border: 2px inset white;">
-                            <thead>
-                            <th class='table_header'>
-                                Tipo
-                            </th>
-                            <th class='table_header'>
-                                Atualizado
-                            </th>
-                            <th class='table_header'>
-                                com Cheque Emitido/Arquivo
-                            </th>
-                            <th class='table_header'>
-                                Não Configurado
-                            </th>
-                            </thead>
-                            <tbody id='totalizadores' style="background-color: white">
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </td>
-                </td>
-            </tr>
         </table>
-        <input type="hidden" name="lObrigaContaPagadora" id="lObrigaContaPagadora" value="<?= $oParam->e30_obrigactapagliq ?>" />
 </form>
 </center>
 <div style='position:absolute;top: 200px; left:15px;
@@ -553,13 +289,12 @@ if (count($aParametrosEmpenho) > 0) {
     sDataDia = "<?=date("d/m/Y",db_getsession("DB_datausu"))?>";
     iTipoControleRetencaoMesAnterior = <?=$iTipoControleRetencaoMesAnterior?>;
     var aAutenticacoesGlobal = new Array();
-    let aContasPagadorasPermitidas = [];
     function js_reload(){
         document.form1.submit();
     }
     //-----------------------------------------------------------
     //---ordem 01
-    function js_pesquisae82_codord(mostra){
+    function js_pesquisak13_conta(mostra){
         if(mostra==true){
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_pagordem',
@@ -879,14 +614,12 @@ if (count($aParametrosEmpenho) > 0) {
 
         js_divCarregando("Aguarde, pesquisando Movimentos.","msgBox");
         js_liberaBotoes(false);
-        $('emitecheque').disabled = true;
         js_reset();
         $('normais').checked = true;
-        $('TotalForCol15').innerHTML = js_formatar(0,'f');
         $('TotalForCol14').innerHTML = js_formatar(0,'f');
         $('TotalForCol13').innerHTML = js_formatar(0,'f');
-        $('TotalForCol12').innerHTML  = js_formatar(0,'f');
-        aContasPagadorasPermitidas = [];
+        $('TotalForCol12').innerHTML = js_formatar(0,'f');
+        $('TotalForCol11').innerHTML  = js_formatar(0,'f');
         //Criamos um objeto que tera a requisicao
         var oParam                = new Object();
         oParam.iOrdemIni          = $F('e82_codord');
@@ -959,13 +692,11 @@ if (count($aParametrosEmpenho) > 0) {
                     var lDisabled = false;
                     var lDisabledContaFornecedor = false;
                     var sDisabled = "";
-
                     if (e91_codmov != '' || e90_codmov != '') {
 
                         lDisabled                = true;
                         lDisabledContaFornecedor = true;
                         sDisabled                = " disabled ";
-
                     }
 
                     if (e97_codforma != 3) {
@@ -1001,34 +732,26 @@ if (count($aParametrosEmpenho) > 0) {
                         aLinha[3] = e60_concarpeculiar;
                     }
                     aLinha[4]   = e50_codord;
-                    aLinha[5]   = js_createComboContasPag(e81_codmov, aContasVinculadas, e85_codtipo, e50_contapag, lDisabled);
+                    aLinha[5]   = js_createComboContasPag(e81_codmov, aContasVinculadas, e85_codtipo, lDisabled);
                     aLinha[6]   = z01_nome.urlDecode().substring(0,20);
                     aLinha[7]   = js_createComboContasForne(aContasFornecedor, e98_contabanco, e81_codmov, z01_numcgm);
                     aLinha[8]   = js_createComboForma(e97_codforma,e81_codmov, lDisabled);
-
-                    if (e91_cheque != '') {
-                        aLinha[9]   = e91_cheque;
-                    } else {
-                        aLinha[9]   = js_createInputNumDocumento(e81_numdoc, e81_codmov, e97_codforma);
-                    }
-                    
                     if (e43_sequencial != "") {
-                        aLinha[10]   = "("+e42_sequencial+") - "+js_formatar(e42_dtpagamento,'d');
+                        aLinha[9]   = "("+e42_sequencial+") - "+js_formatar(e42_dtpagamento,'d');
                     } else {
-                        aLinha[10]   = "";
+                        aLinha[9]   = "";
                     }
-                    aLinha[11]   = "<span id='valor_com_desconto"+e81_codmov+"'>"+js_formatar( (e53_valor),"f")+"</span>";
-                    aLinha[12]   = "<span id='valoraut"+e81_codmov+"'>"+js_formatar(nValor, "f")+"</span>";
+                    aLinha[10]   = "<span id='valor_com_desconto"+e81_codmov+"'>"+js_formatar( (e53_valor),"f")+"</span>";
+                    aLinha[11]   = "<span id='valoraut"+e81_codmov+"'>"+js_formatar(nValor, "f")+"</span>";
 
                     if (lDisabled) {
-                        aLinha[13]  = "<a id='retencao"+e81_codmov+"'>"+js_formatar(valorretencao,"f")+"</a>";
-                        aLinha[13] += "<span style='display:none' id='validarretencao"+e81_codmov+"'>"+validaretencao+"</span>";
+                        aLinha[12]  = "<a id='retencao"+e81_codmov+"'>"+js_formatar(valorretencao,"f")+"</a>";
                     } else {
 
-                        aLinha[13]  = "<a href='#'  id='retencao"+e81_codmov+"'";
-                        aLinha[13] += " onclick='js_lancarRetencao("+e71_codnota+","+e50_codord+","+e60_numemp+","+e81_codmov+");'>";
-                        aLinha[13] += js_formatar(valorretencao,"f")+"</a>";
-                        aLinha[13] += "<span style='display:none' id='validarretencao"+e81_codmov+"'>"+validaretencao+"</span>";
+                        aLinha[12]  = "<a href='#'  id='retencao"+e81_codmov+"'";
+                        aLinha[12] += " onclick='js_lancarRetencao("+e71_codnota+","+e50_codord+","+e60_numemp+","+e81_codmov+");'>";
+                        aLinha[12] += js_formatar(valorretencao,"f")+"</a>";
+                        aLinha[12] += "<span style='display:none' id='validarretencao"+e81_codmov+"'>"+validaretencao+"</span>";
 
                     }
                     var sReadOnly = '';
@@ -1036,20 +759,24 @@ if (count($aParametrosEmpenho) > 0) {
                         sReadOnly  = ' readonly ';
                     }
 
-                    aLinha[14]  = "<input type = 'text' id='valorrow"+e81_codmov+"' size='9' style='width:100%;height:100%;text-align:right;border:1px inset'";
-                    aLinha[14] += " class='valores' onchange='js_calculaValor(this,"+e81_codmov+")'"+sReadOnly;
-                    aLinha[14] += "                 onkeypress='return js_teclas(event,this)'";
-                    aLinha[14] += "       value = '"+nValorTotal+"' id='valor"+e50_codord+"' "+sDisabled+">";
-                    aLinha[15] = e91_codcheque;
+//          nValorTotal = (nValorTotal - e53_vlranu).toFixed(2);
 
-                    if (e97_codforma == 2) {
-                        lDisabled = false;
-                    }
+                    aLinha[13]  = "<input type = 'text' id='valorrow"+e81_codmov+"' size='9' style='width:100%;height:100%;text-align:right;border:1px inset'";
+                    aLinha[13] += " class='valores' onchange='js_calculaValor(this,"+e81_codmov+")'"+sReadOnly;
+                    aLinha[13] += "                 onkeypress='return js_teclas(event,this)'";
+                    aLinha[13] += "       value = '"+nValorTotal+"' id='valor"+e50_codord+"' "+sDisabled+">";
 
                     gridNotas.addRow(aLinha, false, lDisabled);
 
                     if (e91_codmov != '' || e90_codmov != '') {
 
+                        if (!$('comMovs').checked) {
+
+                            iTotalizador--;
+                            gridNotas.aRows[iRowAtiva].lDisplayed = false;
+
+                        }
+                        gridNotas.aRows[iRowAtiva].aCells[0].lDisabled  = true;
                         gridNotas.aRows[iRowAtiva].setClassName('comMov');
 
                     } else if (e86_codmov != '' || e97_codmov != '') {
@@ -1131,38 +858,34 @@ if (count($aParametrosEmpenho) > 0) {
 
                 oRow.isSelected    = true;
                 $(sRow).className += 'marcado';
-                if (oRow.aCells[6].getValue() != "" && lVerificaSaldo) {
+                if (oRow.aCells[8].getValue() != "" && lVerificaSaldo) {
                     if ($('ctapag' + oRow.aCells[1].getValue())) {
                         js_getSaldos(oRow.aCells[1].getValue());
                     }
                 }
                 if (lVerificaSaldo) {
 
-                    $('TotalForCol15').innerHTML = js_formatar(gridNotas.sum(15).toFixed(2),'f');
                     $('TotalForCol14').innerHTML = js_formatar(gridNotas.sum(14).toFixed(2),'f');
                     $('TotalForCol13').innerHTML = js_formatar(gridNotas.sum(13).toFixed(2),'f');
-                    $('TotalForCol12').innerHTML  = js_formatar(gridNotas.sum(12).toFixed(2),'f');
+                    $('TotalForCol12').innerHTML = js_formatar(gridNotas.sum(12).toFixed(2),'f');
+                    $('TotalForCol11').innerHTML  = js_formatar(gridNotas.sum(11).toFixed(2),'f');
 
                 }
                 $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)+1;
-
             } else {
 
                 $(sRow).className = oRow.getClassName();
                 oRow.isSelected   = false;
                 if (lVerificaSaldo) {
 
-                    $('TotalForCol15').innerHTML = js_formatar(gridNotas.sum(15).toFixed(2),'f');
                     $('TotalForCol14').innerHTML = js_formatar(gridNotas.sum(14).toFixed(2),'f');
                     $('TotalForCol13').innerHTML = js_formatar(gridNotas.sum(13).toFixed(2),'f');
-                    $('TotalForCol12').innerHTML  = js_formatar(gridNotas.sum(12).toFixed(2),'f');
+                    $('TotalForCol12').innerHTML = js_formatar(gridNotas.sum(12).toFixed(2),'f');
+                    $('TotalForCol11').innerHTML  = js_formatar(gridNotas.sum(11).toFixed(2),'f');
 
                 }
                 $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)-1;
-
             }
-
-            js_trataBotaoEmitirCheque();
         }
         gridNotas.selectAll = function(idObjeto, sClasse, sLinha) {
 
@@ -1199,45 +922,37 @@ if (count($aParametrosEmpenho) > 0) {
                 }
             }
 
-            $('TotalForCol15').innerHTML = js_formatar(gridNotas.sum(15).toFixed(2),'f');
             $('TotalForCol14').innerHTML = js_formatar(gridNotas.sum(14).toFixed(2),'f');
             $('TotalForCol13').innerHTML = js_formatar(gridNotas.sum(13).toFixed(2),'f');
-            $('TotalForCol12').innerHTML  = js_formatar(gridNotas.sum(12).toFixed(2),'f');
+            $('TotalForCol12').innerHTML = js_formatar(gridNotas.sum(12).toFixed(2),'f');
+            $('TotalForCol11').innerHTML  = js_formatar(gridNotas.sum(11).toFixed(2),'f');
         }
         gridNotas.setCheckbox(0);
         gridNotas.hasTotalizador = true;
         gridNotas.allowSelectColumns(true);
-        gridNotas.setCellWidth(new Array("5%","7%", "3%", "5%","5%","15%","12%", "12%", "7%", "9%", "5%", "5%", "5%", "5%"));
-        gridNotas.setCellAlign(new Array("right", "center","center", "center", "right", "left", "left", "center", "center", "center","right","right","right"));
-        gridNotas.setHeader(new Array("Mov.",
-            "Empenho",
-            "Fonte",
-            "CP/CA",
-            "OP",
-            "Conta Pagadora",
-            "Nome",
-            "Banco/Ag",
-            "Forma Pgto",
-            "Nº Documento",
-            "Dt Aut",
-            "Valor OP",
-            "Vlr Aut",
-            "Retenção",
+        gridNotas.setCellWidth(new Array("5%","7%", "5%", "5%","5%","15%","10%", "10%", "10%", "10%", "5%", "5%", "5%", "5%"));
+        gridNotas.setCellAlign(new Array("right", "center","right", "center", "right", "left", "left", "center", "center", "center","right","right","right"));
+        gridNotas.setHeader(new Array("M",
+            "D. Lançamento",
+            "D. Conciliação",
+            "Credor",
+            "Tipo",
+            "OP/REC/SLIP",
+            "Documento",
+            "Mov",
             "Valor",
-            "Cod. Cheque"
+            "Histórico"
             )
         );
         gridNotas.aHeaders[1].lDisplayed = false;
-        gridNotas.aHeaders[11].lDisplayed = false;
-        gridNotas.aHeaders[16].lDisplayed = false;
-        
         gridNotas.show(document.getElementById('gridNotas'));
         $('gridNotasstatus').innerHTML = "&nbsp;<span style='color:blue' id ='total_selecionados'>0</span> Selecionados";
         // Tarefa 24652
-        document.form1.e82_codord.focus();
+        alert("Estou aqui dentro");
+        document.form1.k13_conta.focus();
     }
 
-    function js_createComboContasPag(iCodMov, aContas, iContaConfig, iContaPagadoraPadrao, lDisabled) {
+    function js_createComboContasPag(iCodMov, aContas, iContaConfig, lDisabled) {
 
         var sDisabled = "";
         if (lDisabled == null) {
@@ -1248,19 +963,12 @@ if (count($aParametrosEmpenho) > 0) {
         }
 
         var sComboInputHidden  = "<input type='hidden' id='tipoconta"+iCodMov+"' ";
-        var sContaPagPadHidden = "<input type='hidden' id='contapagpadrao"+iCodMov+"' value='"+iContaPagadoraPadrao+"' />";
         var sComboInputText = "<input type='text' id='ctapag"+iCodMov+"' class='ctapag' onfocus='this.select();mostrarPesquisa("+iCodMov+")' onkeyup='pesquisaConta("+iCodMov+",event)' onkeydown='pesquisaConta("+iCodMov+",event)' onclick='this.select();' onblur='fecharPesquisa("+iCodMov+");js_getSaldos("+iCodMov+")' placeholder='Selecione' title='' "+sDisabled;
 
         var sComboUL = "<ul id='pesquisaConta"+iCodMov+"' class='pesquisaConta'>";
         if (aContas != null) {
 
             for (var i = 0; i < aContas.length; i++) {
-
-                //Guarda contas pagadoras permitidas para op
-                if (aContasPagadorasPermitidas.indexOf(aContas[i].e83_codtipo) == -1) {
-                    aContasPagadorasPermitidas.push(aContas[i].e83_codtipo);
-                }
-
                 var sDescrConta =  aContas[i].e83_conta+" - "+aContas[i].e83_descr.urlDecode()+" - "+aContas[i].c61_codigo;
                 sComboUL += "<li onclick='selecionarConta(this,"+iCodMov+")'><div class='codtipo'>"+aContas[i].e83_codtipo+"</div><span>"+sDescrConta+"</span></li>";
                 if (iContaConfig == aContas[i].e83_codtipo) {
@@ -1273,19 +981,7 @@ if (count($aParametrosEmpenho) > 0) {
         sComboInputHidden += " /> ";
         sComboInputText += " /> ";
 
-        return sComboInputHidden+sComboInputText+sContaPagPadHidden+sComboUL;
-    }
-
-    function js_createInputNumDocumento(sNumDoc, iCodMov, iCodForma) {
-
-        let sDisabled = "";
-
-        if (iCodForma == 1 || iCodForma == 2) {
-            sDisabled = "disabled='disabled'";            
-        }
-
-        return "<input value='"+sNumDoc+"' size='13' maxlength='15' id='numdoc"+iCodMov+"' "+sDisabled+">";
-        
+        return sComboInputHidden+sComboInputText+sComboUL;
     }
 
     function js_objectToJson(oObject) {
@@ -1328,8 +1024,7 @@ if (count($aParametrosEmpenho) > 0) {
         if (lDisabled) {
             sDisabled = " disabled ";
         }
-        var sCombo  = "<select style='width:100%' class='formapag' id='forma"+iCodMov+"' "+sDisabled;
-        sCombo     += " onchange='js_validaForma("+iCodMov+",this.value)'>" ;
+        var sCombo  = "<select style='width:100%' class='formapag' id='forma"+iCodMov+"' "+sDisabled+">";
         sCombo     += "  <option "+(iTipoForma == 0?" selected ":" ")+" value='0'>NDA</option>";
         sCombo     += "  <option "+(iTipoForma == 1?" selected ":" ")+" value='1'>DIN</option>";
         sCombo     += "  <option "+(iTipoForma == 2?" selected ":" ")+" value='2'>CHE</option>";
@@ -1337,21 +1032,6 @@ if (count($aParametrosEmpenho) > 0) {
         sCombo     += "  <option "+(iTipoForma == 4?" selected ":" ")+" value='4'>DEB</option>";
         sCombo     += "</select>";
         return sCombo
-    }
-
-    function js_validaForma(iCodMov, iTipoForma) {
-
-        objNumDoc = document.getElementById("numdoc"+iCodMov+"");
-
-        if (iTipoForma == 1 || iTipoForma == 2) {
-            
-            objNumDoc.value = '';
-            objNumDoc.setAttribute("disabled", "disabled");
-
-        } else {
-            objNumDoc.removeAttribute("disabled");
-        }
-
     }
 
     function js_createComboContasForne(aContasForne, iContaForne, iCodMov, iNumCgm, lDisabled) {
@@ -1465,7 +1145,7 @@ if (count($aParametrosEmpenho) > 0) {
 
     function js_configurar() {
 
-        var aMovimentos = gridNotas.getSelection("object");
+        var aMovimentos = gridNotas.getSelection();
         /*
          * Validamos o movimento configurado, conforme a forma de pagamento escolhido.
          * - cheque, é obrigatorio ter informado a conta pagadora, e o valor;
@@ -1537,38 +1217,17 @@ if (count($aParametrosEmpenho) > 0) {
         var sVirgula                = "";
         for (var iMov = 0; iMov < aMovimentos.length; iMov++) {
 
-            var iForma               = aMovimentos[iMov].aCells[9].getValue();
-            var iCodMov              = aMovimentos[iMov].aCells[0].getValue();
-            var nValor               = new Number(aMovimentos[iMov].aCells[15].getValue());
-            var sConCarPeculiar      = aMovimentos[iMov].aCells[4].getValue();
-            var iNota                = aMovimentos[iMov].aCells[5].getValue();
-            var iContaFornecedor     = aMovimentos[iMov].aCells[8].getValue();
-            var iContaPagadora       = aMovimentos[iMov].aCells[6].getValue();
-            var iContaSaltes         = js_getContaSaltes( $('ctapag'+aMovimentos[iMov].aCells[0].getValue()) );
+            var iForma               = aMovimentos[iMov][9];
+            var iCodMov              = aMovimentos[iMov][0];
+            var nValor               = new Number(aMovimentos[iMov][14]);
+            var sConCarPeculiar      = aMovimentos[iMov][4];
+            var iNota                = aMovimentos[iMov][5];
+            var iContaFornecedor     = aMovimentos[iMov][8];
+            var iContaPagadora       = aMovimentos[iMov][6];
+            var iContaSaltes         = js_getContaSaltes( $('ctapag'+aMovimentos[iMov][0]) );
             var dtAutoriza           = $F('e42_dtpagamento');
-            var nValorRetencao       = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
+            var nValorRetencao       = js_strToFloat(aMovimentos[iMov][13]);
             var lRetencaoMesAnterior = $('validarretencao'+iCodMov).innerHTML;
-            
-            if (iForma != 1 && iForma != 2) {
-                var sNumDoc          = aMovimentos[iMov].aCells[10].getValue().trim();
-            }
-            
-            if (iForma == 2) {
-                
-                var iCodCheque        = aMovimentos[iMov].aCells[16].getValue().trim();
-                var iCheque           = aMovimentos[iMov].aCells[10].getValue().trim();
-
-            }      
-
-            /**
-             * Se for cheque, verifica se o cheque já foi emitido
-             */
-            if (lEfetuarPagamento && iForma == 2 && aMovimentos[iMov].getClassName() != 'comMov') {
-                
-                alert("Para efetuar o pagamento é necessário emitir o cheque.");
-                return false;
-
-            }
 
             /*
              * Fazemos a verificacao para Cheque;
@@ -1623,18 +1282,6 @@ if (count($aParametrosEmpenho) > 0) {
             oMovimento.iCodNota          = iNota;
             oMovimento.nValorRetencao    = nValorRetencao.valueOf();
             oMovimento.sConCarPeculiar   = sConCarPeculiar;
-            
-            if (iForma != 1 && iForma != 2) {
-                oMovimento.sNumDoc       = sNumDoc;
-            }
-            
-            if (iForma == 2) {
-                
-                oMovimento.iCheque       = iCheque;
-                oMovimento.iCodCheque    = iCodCheque;
-
-            }
-
             if (dtAutoriza == "") {
                 dtAutoriza = oEnvio.dtPagamento;
             }
@@ -1645,14 +1292,14 @@ if (count($aParametrosEmpenho) > 0) {
 
         /*
          * For verificando se todas as formas de pagamento para os movimentos selecionados
-         *   sao válidas (diferente de NDA), caso nao seja obrigamos o usuario a corrigir a
+         *   sao dinheiro(DIN) ou debito(DEB) caso nao for obrigamos o usuario a corrigir a
          *   forma de pagamento ou desmarcar a opcao de "Efetuar pagamento"
          *
          */
         if (lEfetuarPagamento) {
             for (var iInd = 0; iInd < aFormasSelecionadas.length; iInd++ ) {
-                if (aFormasSelecionadas[iInd] == "0") {
-                    alert("Não é possível efetuar o pagamento com a forma de pagamento NDA.");
+                if (aFormasSelecionadas[iInd] != "1" && aFormasSelecionadas[iInd] != "4" ) {
+                    alert("Para efetuar pagamento automático somente são permitidas as forma de pagamento : Dinheiro (DIN) e Débito (DEB). Verifique.");
                     return false;
                 }
             }
@@ -1762,12 +1409,12 @@ if (count($aParametrosEmpenho) > 0) {
         if (lLiberar) {
 
             $('pesquisar').disabled = false;
-            $('atualizar').disabled = false;
+            $('atualizar').disabled   = false;
 
         } else {
 
             $('pesquisar').disabled = true;
-            $('atualizar').disabled = true;
+            $('atualizar').disabled   = true;
 
         }
     }
@@ -1807,7 +1454,6 @@ if (count($aParametrosEmpenho) > 0) {
         $('saldotesouraria').value = new Number(oRetorno.oSaldoTes.rnvalortesouraria);
         $('totalcheques').value    = new Number(oRetorno.oSaldoTes.rnvalorreservado);
         $('saldoatual').value      = new Number(oRetorno.oSaldoTes.rnsaldofinal).toFixed(2);
-        $('iCheque').value         = new Number(oRetorno.iCheque);
     }
 
     function js_lancarRetencao(iCodNota, iCodOrd, iNumEmp, iCodMov){
@@ -1848,8 +1494,8 @@ if (count($aParametrosEmpenho) > 0) {
             $('validarretencao'+iCodMov).innerHTML = lValidar;
         }
         db_iframe_retencao.hide();
-        $('TotalForCol15').innerHTML = js_formatar(gridNotas.sum(15).toFixed(2),'f');
         $('TotalForCol14').innerHTML = js_formatar(gridNotas.sum(14).toFixed(2),'f');
+        $('TotalForCol13').innerHTML = js_formatar(gridNotas.sum(13).toFixed(2),'f');
 
     }
 
@@ -1860,7 +1506,7 @@ if (count($aParametrosEmpenho) > 0) {
         var contaPadrao = document.getElementById("e83_codtipo");
         for (var i = 0; i < aItens.length; i++) {
 
-            if ($F('e83_codtipo') == "0" || (aContasPagadorasPermitidas.indexOf(iCodigoConta) == -1)) {
+            if ($F('e83_codtipo') == "0") {
                 aItens[i].value = "";
             }else{
                 aItens[i].value = contaPadrao.options[contaPadrao.selectedIndex].text;
@@ -1895,7 +1541,6 @@ if (count($aParametrosEmpenho) > 0) {
         $('saldotesouraria').value     = '';
         $('totalcheques').value        = '';
         $('saldoatual').value          = '';
-        $('iCheque').value             = '';
 
     }
 
@@ -2048,9 +1693,9 @@ if (count($aParametrosEmpenho) > 0) {
             var oMovimento      = new Object();
             var iMovimento      = aMovimentos[i].aCells[1].getValue();
             var iOP             = aMovimentos[i].aCells[5].getValue();
-            var nValor          = aMovimentos[i].aCells[15].getValue();
+            var nValor          = aMovimentos[i].aCells[14].getValue();
             var sConCarPeculiar = aMovimentos[i].aCells[4].getValue();
-            var nValorRetencao = js_strToFloat(aMovimentos[i].aCells[14].getValue()).valueOf();
+            var nValorRetencao = js_strToFloat(aMovimentos[i].aCells[13].getValue()).valueOf();
             if (i > 0 && iOPAnterior !=  iOP ) {
 
                 alert('Foram Selecionados Movimentos de OP diferentes!\nProcedimento Cancelado');
@@ -2224,269 +1869,11 @@ if (count($aParametrosEmpenho) > 0) {
     function fecharPesquisa(conta) {
         setTimeout(function(){
             document.getElementById("pesquisaConta"+conta).style.display = "none";
-        }, 500);
+        }, 100);
     }
 
-    function selecionarConta(elemento, iCodMov) {    
-        
-        iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+iCodMov).value;
-        iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
-        sDescConta              = elemento.getElementsByTagName("span")[0].textContent
-
-        if (iContaPagadoraPadrao != '' && $('lObrigaContaPagadora').value == 't') {
-            
-            if (iContaSelecionada != iContaPagadoraPadrao) {
-
-                sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada na liquidação. '; 
-                sMsgConfirm += 'Essa alteração substitui a conta informada anteriormente. \n \nDeseja prosseguir?';
-                
-                if (!confirm(sMsgConfirm)){
-                    return false;
-                } else {
-                    js_atualizaContaPagadoraPadrao(iContaSelecionada, iCodMov);
-                }
-
-            }
-
-        }
-
-        document.getElementById("tipoconta"+iCodMov).value      = iContaSelecionada;
-        document.getElementById("contapagpadrao"+iCodMov).value = iContaSelecionada;
-        document.getElementById("ctapag"+iCodMov).value         = sDescConta;
+    function selecionarConta(elemento,conta) {
+        document.getElementById("tipoconta"+conta).value = elemento.getElementsByTagName("div")[0].textContent;
+        document.getElementById("ctapag"+conta).value = elemento.getElementsByTagName("span")[0].textContent;
     }
-
-    function js_atualizaContaPagadoraPadrao(iConta, iCodMov) {
-
-        oParam  = new Object();
-
-        oParam.iConta  = iConta;
-        oParam.iCodMov = iCodMov;
-        oParam.exec     = 'atualizaContaPagadoraPadrao';
-
-        js_divCarregando("Aguarde, Atualizando Conta Pagadora.","msgBox");
-
-        var oAjax  = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
-            method    : 'post', 
-            parameters: 'json='+Object.toJSON(oParam), 
-            onComplete: js_retornoAtualizaContaPagadoraPadrao
-        });
-
-    }
-
-    function js_retornoAtualizaContaPagadoraPadrao(oAjax) {
-        
-        js_removeObj("msgBox");
-
-        var oRetorno = eval("("+oAjax.responseText+")");
-
-        if (oRetorno.status == 1) {                
-            alert(oRetorno.message.urlDecode());
-        } else {
-            alert(oRetorno.message.urlDecode());
-        }
-
-    }
-
-    function js_janelaEmiteCheque() {
-
-        var aMovimentos = gridNotas.getSelection();
-
-        if (aMovimentos.length > 0) {
-            
-            var dtBase      = $F('e42_dtpagamento');
-            var iCheque     = $('iCheque').value;
-
-            windowChequeItem = new windowAux('wndChequeItem', 'Emitir Cheque', 520, 180);     
-
-            var sContent = "<div class='subcontainer' style='margin-top:30px;'>";
-            sContent += "   <fieldset><legend>Informação para o cheque</legend>";
-            sContent += "       <table>";
-            sContent += "           <tr>";
-            sContent += "               <td>";
-            sContent += "                   <b>Número do Cheque: </b>";
-            sContent += "                   <input id='numerocheque' name='numerocheque' type='text' value='"+iCheque+"' size='9'";
-            sContent += "                       oninput='js_ValidaCampos(this,1,\"\",\"\",\"\",event);'>";
-            sContent += "                   <b>Data:</b>";
-            sContent +=                     js_inputdata('dtcheque', dtBase);
-            sContent += "               </td>";
-            sContent += "           </tr>";
-            sContent += "           <tr>";
-            sContent += "               <td id='inputvalordotacao'></td>";
-            sContent += "           </tr>";
-            sContent += "       </table>";
-            sContent += "   </fieldset>";
-            sContent += "   <input type='button' value='Salvar' id='btnEmitirCheque' >";
-            sContent += "</div>";
-
-            windowChequeItem.setContent(sContent);
-
-            windowChequeItem.setShutDownFunction(function () {
-                windowChequeItem.destroy();
-            });
-
-            $('btnEmitirCheque').observe("click", function () {
-                js_emitirCheque(aMovimentos);
-            });
-
-            var w = ((screen.width - 590) / 2);
-            var h = ((screen.height / 2) - 110);
-            windowChequeItem.setIndex(5);
-            windowChequeItem.allowDrag(false);
-            windowChequeItem.show(h, w);     
-
-        } else {
-            alert('Selecione um movimento.');
-            return false;
-        }
-
-    }
-
-    function js_emitirCheque(aMovimentos) {
-
-        iNumCheque  = $('numerocheque').value;
-        dtData      = $('dtcheque').value;
-
-        if (iNumCheque == '') {
-            alert('Informe o Número do cheque!');
-            return false;
-        }
-
-        if (dtData == '') {
-            alert('Informe a Data do cheque!');
-            return false;
-        }
-
-        windowChequeItem.destroy();
-
-        let aNotas = [];
-        let lCredorUnico = true;
-        let lContaPagadoraUnica = true;    
-
-        aMovimentos.each(function (aMovimento) {
-
-            if (encodeURIComponent(aMovimentos[0][7]) != encodeURIComponent(aMovimento[7])) {
-                lCredorUnico = false;
-            }
-
-            if (aMovimentos[0][6] != aMovimento[6]) {
-                lContaPagadoraUnica = false;
-            }
-
-            oNota   = new Object();
-            oNota.iCodAgenda = null;
-            oNota.iCodMov    = aMovimento[0];
-            oNota.iCodNota   = aMovimento[5];
-            oNota.iNumEmp    = aMovimento[2];
-            oNota.nValor     = new Number(aMovimento[15]);
-            oNota.iCodTipo   = aMovimento[6];
-
-            aNotas.push(oNota);
-
-        });
-
-        if (!lCredorUnico) {
-            alert('Só é permitido gerar mais de um cheque para o mesmo credor!');
-            return false;
-        }
-
-        if (!lContaPagadoraUnica) {
-            alert('Só é permitido gerar mais de um cheque para a mesma conta pagadora!');
-            return false;
-        }
-        
-        oCheque = new Object();
-        oParam  = new Object();        
-        
-        oCheque.sCredor             = encodeURIComponent(aMovimentos[0][7]);
-        oCheque.dtData              = dtData;
-        oCheque.aTotCheques         = [];
-        oCheque.numeroCheque        = iNumCheque;
-        oCheque.aNotasLiquidacao    = aNotas;      
-
-        oParam.exec         = 'emitirCheque';
-        oParam.params       = [];
-        oParam.params[0]    = oCheque;
-
-        js_divCarregando("Aguarde, Efetuando emissão do cheques.","msgBox");
-
-        var oAjax  = new Ajax.Request('emp4_agendaPagamentoRPC.php', {
-            method    : 'post', 
-            parameters: 'json='+Object.toJSON(oParam), 
-            onComplete: js_retornoEmissaoCheque
-        });
-
-    }
-
-    function js_retornoEmissaoCheque(oAjax) {
-
-        js_removeObj("msgBox");
-
-        var oRetorno = eval("("+oAjax.responseText+")");
-
-        if (oRetorno.status == 1) {
-
-            aInfoCheques = oRetorno.aInfoCheques;
-            
-            if (aInfoCheques.length > 0) {
-                
-                alert(oRetorno.message.urlDecode());
-                js_pesquisarOrdens();
-
-            } else {
-                alert('Cheque não emitido.');
-            }
-
-        } else {
-            alert(oRetorno.message.urlDecode());
-        }
-
-    }
-
-    function js_inputdata(sNomeInput, strData = null) {
-            
-        var aData = strData.split('/');
-
-        var	strData  = '<input type="text" id="'+sNomeInput+'" value="'+strData+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
-            strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\'); " >';
-            strData += '<input name="'+sNomeInput+'_dia" type="hidden" title="" id="'+sNomeInput+'_dia" value="'+aData[0]+'" size="2"  maxlength="2" >';
-            strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >'; 
-            strData += '<input name="'+sNomeInput+'_ano" type="hidden" title="" id="'+sNomeInput+'_ano" value="'+aData[2]+'" size="4"  maxlength="4" >';
-            
-        var sStringFunction  = "js_comparaDatas"+sNomeInput+" = function(dia,mes,ano){ \n";
-            sStringFunction += "  var objData        = document.getElementById('"+sNomeInput+"'); \n";
-            sStringFunction += "  objData.value      = dia+'/'+mes+'/'+ano; \n";
-            sStringFunction += "} \n";  
-
-        var script = document.createElement("SCRIPT");        
-        script.innerHTML = sStringFunction;
-
-        document.body.appendChild(script);    
-            
-        return strData;
-
-    }
-
-    function js_trataBotaoEmitirCheque() {
-
-        var aMovimentos = gridNotas.getSelection("object");
-        let lDisabled = false;
-
-        aMovimentos.each(function (aMovimento) {
-
-            if (aMovimento.getClassName() == 'configurada' && aMovimento.aCells[9].getValue() == 2) {
-                return;
-            } else {
-                lDisabled = true;
-            }
-    
-        });
-
-        if (aMovimentos.length == 0) {
-            $('emitecheque').disabled = true;
-        } else {
-            $('emitecheque').disabled = lDisabled;
-        }
-
-    }
-
 </script>

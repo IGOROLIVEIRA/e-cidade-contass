@@ -176,10 +176,10 @@ $sheet->getStyle('A7:S7')->applyFromArray($styleItens2);
 //cria protecao na planilha
 //senha para alteração
 $sheet->getProtection()->setPassword('PHPExcel');
-$sheet->getProtection()->setSheet(true);
-$sheet->getProtection()->setSort(true);
-$sheet->getProtection()->setInsertRows(true);
-$sheet->getProtection()->setFormatCells(true);
+$sheet->getProtection()->setSheet(false);
+$sheet->getProtection()->setSort(false);
+$sheet->getProtection()->setInsertRows(false);
+$sheet->getProtection()->setFormatCells(false);
 $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 //itens orcamento
 $result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant","pc11_seq","pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));

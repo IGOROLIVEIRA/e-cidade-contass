@@ -71,6 +71,7 @@ class cl_empparametro {
     var $e30_atestocontinterno = 'f';
     var $e30_prazoentordcompra = 0;
     var $e30_controleprestacao = 'f';
+    var $e30_obrigactapagliq = 'f';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  e39_anousu = int4 = Exercício
@@ -99,6 +100,7 @@ class cl_empparametro {
                  e30_atestocontinterno = boll = Atesto do Controle Interno
                  e30_prazoentordcompra = int4 = Dias de prazo para entrada da ordem de compra
                  e30_controleprestacao = bool = Controla Empenho de Prestação de Contas
+                 e30_obrigactapagliq = bool = Obriga Conta Pagadora na Liquidação
                  ";
     //funcao construtor da classe
     function cl_empparametro() {
@@ -150,6 +152,7 @@ class cl_empparametro {
             $this->e30_tipoanulacaopadrao = ($this->e30_tipoanulacaopadrao == ""?@$GLOBALS["HTTP_POST_VARS"]["e30_tipoanulacaopadrao"]:$this->e30_tipoanulacaopadrao);
             $this->e30_atestocontinterno = ($this->e30_atestocontinterno == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_atestocontinterno"]:$this->e30_atestocontinterno);
             $this->e30_prazoentordcompra = ($this->e30_prazoentordcompra == ""?@$GLOBALS["HTTP_POST_VARS"]["e30_prazoentordcompra"]:$this->e30_prazoentordcompra);
+            $this->e30_obrigactapagliq = ($this->e30_obrigactapagliq == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_obrigactapagliq"]:$this->e30_obrigactapagliq);
         }else{
         }
     }
@@ -372,6 +375,15 @@ class cl_empparametro {
             $this->erro_status = "0";
             return false;
         }
+        if($this->e30_obrigactapagliq == null ){
+            $this->erro_sql = " Campo Obriga Conta Pagadora na Liquidação nao Informado.";
+            $this->erro_campo = "e30_obrigactapagliq";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
         $sql = "insert into empparametro(
                                        e39_anousu
                                       ,e30_codemp
@@ -398,6 +410,7 @@ class cl_empparametro {
                                       ,e30_dadosbancoempenho
                                       ,e30_atestocontinterno
                                       ,e30_prazoentordcompra
+                                      ,e30_obrigactapagliq
                        )
                 values (
                                 $this->e39_anousu
@@ -425,6 +438,7 @@ class cl_empparametro {
                                ,'$this->e30_dadosbancoempenho'
                                ,'$this->e30_atestocontinterno'
                                ,$this->e30_prazoentordcompra
+                               ,$this->e30_obrigactapagliq
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -480,6 +494,7 @@ class cl_empparametro {
             $resac = db_query("insert into db_acount values($acount,893,17307,'','".AddSlashes(pg_result($resaco,0,'e30_dadosbancoempenho'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,2012352,'','".AddSlashes(pg_result($resaco,0,'e30_atestocontinterno'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,893,2012400,'','".AddSlashes(pg_result($resaco,0,'e30_prazoentordcompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,893,2012515,'','".AddSlashes(pg_result($resaco,0,'e30_obrigactapagliq'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");            
         }
         return true;
     }
@@ -816,6 +831,19 @@ class cl_empparametro {
                 return false;
             }
         }
+        if(trim($this->e30_obrigactapagliq)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e30_obrigactapagliq"])){
+            $sql  .= $virgula." e30_obrigactapagliq = '$this->e30_obrigactapagliq' ";
+            $virgula = ",";
+            if(trim($this->e30_obrigactapagliq) == null ){
+                $this->erro_sql = " Campo Obriga Conta Pagadora na Liquidação nao Informado.";
+                $this->erro_campo = "e30_obrigactapagliq";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
         $sql .= " where ";
         if($e39_anousu!=null){
             $sql .= " e39_anousu = $this->e39_anousu";
@@ -877,6 +905,8 @@ class cl_empparametro {
                     $resac = db_query("insert into db_acount values($acount,893,2012352,'".AddSlashes(pg_result($resaco,$conresaco,'e30_atestocontinterno'))."','$this->e30_atestocontinterno',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["e30_prazoentordcompra"]) || $this->e30_prazoentordcompra != "")
                     $resac = db_query("insert into db_acount values($acount,893,2012400,'".AddSlashes(pg_result($resaco,$conresaco,'e30_prazoentordcompra'))."','$this->e30_prazoentordcompra',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if(isset($GLOBALS["HTTP_POST_VARS"]["e30_obrigactapagliq"]) || $this->e30_obrigactapagliq != "")
+                    $resac = db_query("insert into db_acount values($acount,893,2012515,'".AddSlashes(pg_result($resaco,$conresaco,'e30_obrigactapagliq'))."','$this->e30_obrigactapagliq',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             }
         }
         $result = db_query($sql);
@@ -946,6 +976,7 @@ class cl_empparametro {
                 $resac = db_query("insert into db_acount values($acount,893,17307,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_dadosbancoempenho'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,893,2012352,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_atestocontinterno'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,893,2012400,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_prazoentordcompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,893,2012515,'','".AddSlashes(pg_result($resaco,$iresaco,'e30_obrigactapagliq'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             }
         }
         $sql = " delete from empparametro

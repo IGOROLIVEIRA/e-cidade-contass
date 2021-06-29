@@ -179,10 +179,10 @@ $sheet->getStyle('A7:S7')->applyFromArray($styleItens2);
 //cria protecao na planilha
 //senha para alteração
 $sheet->getProtection()->setPassword('PHPExcel');
-$sheet->getProtection()->setSheet(true);
-$sheet->getProtection()->setSort(true);
-$sheet->getProtection()->setInsertRows(true);
-$sheet->getProtection()->setFormatCells(true);
+$sheet->getProtection()->setSheet(false);
+$sheet->getProtection()->setSort(false);
+$sheet->getProtection()->setInsertRows(false);
+$sheet->getProtection()->setFormatCells(false);
 $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 $sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 

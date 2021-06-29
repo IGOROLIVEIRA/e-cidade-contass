@@ -55,6 +55,7 @@ class cl_pagordem {
    var $e50_compdesp_dia = null;
    var $e50_compdesp_mes = null;
    var $e50_compdesp_ano = null;
+   var $e50_contapag = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  e50_codord = int4 = Ordem 
@@ -65,6 +66,7 @@ class cl_pagordem {
                  e50_hora = char(5) = Hora 
                  e50_anousu = int4 = Ano da Ordem 
                  e50_compdesp = date = Competencia da Despesa
+                 e50_contapag = int4 = Conta Pagadora
                  ";
    //funcao construtor da classe 
    function cl_pagordem() { 
@@ -106,6 +108,7 @@ class cl_pagordem {
             $this->e50_compdesp = $this->e50_compdesp_ano."-".$this->e50_compdesp_mes."-".$this->e50_compdesp_dia;
          }
        }
+       $this->e50_contapag = ($this->e50_contapag == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_contapag"]:$this->e50_contapag);
      }else{
        $this->e50_codord = ($this->e50_codord == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_codord"]:$this->e50_codord);
      }
@@ -199,6 +202,7 @@ class cl_pagordem {
                                       ,e50_hora 
                                       ,e50_anousu 
                                       ,e50_compdesp 
+                                      ,e50_contapag
                        )
                 values (
                                 $this->e50_codord 
@@ -209,6 +213,7 @@ class cl_pagordem {
                                ,'$this->e50_hora' 
                                ,$this->e50_anousu 
                                ,".($this->e50_compdesp == "null" || $this->e50_compdesp == ""?"null":"'".$this->e50_compdesp."'")." 
+                               ,".($this->e50_contapag == "null" || $this->e50_contapag == ""?"null":$this->e50_contapag)." 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -378,6 +383,10 @@ class cl_pagordem {
          }
        }
      }
+     if(trim($this->e50_contapag)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_contapag"])){ 
+        $sql  .= $virgula." e50_contapag = $this->e50_contapag ";
+        $virgula = ",";
+      }
      $sql .= " where ";
      if($e50_codord!=null){
        $sql .= " e50_codord = $this->e50_codord";
