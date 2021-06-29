@@ -547,7 +547,7 @@ db_app::load("widgets/windowAux.widget.js");
         var oResponse = eval("(" + oAjax.responseText + ")");
         var iRowAtiva     = 0;
         var iTotalizador  = 0;
-        // console.log(oResponse);
+        console.log(oResponse);
         gridLancamentos.clearAll(true);
         gridLancamentos.setStatus("");
 
