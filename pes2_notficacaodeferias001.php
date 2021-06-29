@@ -114,6 +114,33 @@ db_menu( db_getsession("DB_id_usuario"),
             }
         }
 
+        var dtnotificacao                 = $F('dtnotificacao');
+        var inicioperiodo                 = $F('inicioperiodo');
+        var fimperiodo                    = $F('fimperiodo');
+
+        if(dtnotificacao == ""){
+            alert('Data de Notificação não informada');
+            $('dtnotificacao').focus();
+            return false
+        }
+
+        if(inicioperiodo == ""){
+            alert('Data Inicial não informada');
+            $('inicioperiodo').focus();
+            return false
+        }
+
+        if(fimperiodo == ""){
+            alert('Data Final não informada');
+            return false
+        }
+
+        if($F('oCboTipoRelatorio') == 0){
+            alert('Tipo de Resumo não informado');
+            return false
+
+        }
+
         oQuery = '?dtnotificacao='   + $F('dtnotificacao');
         oQuery +='&dtinicio='        + $F('inicioperiodo');
         oQuery +='&dtfim='           + $F('fimperiodo');
