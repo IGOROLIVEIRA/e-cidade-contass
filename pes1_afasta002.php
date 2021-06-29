@@ -218,6 +218,7 @@ if(isset($alterar)){
   db_fieldsmemory($result,0);
   $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
   $sWhereVerificaAfastamento .= " and r45_dtafas >= '{$r45_dtreto}' ";
+  $sWhereVerificaAfastamento .= " and r45_codigo != '{$r45_codigo}' ";
 
   $sSqlVerificaAfastamento   = $clafasta->sql_query_file(null, "r45_codigo", null, $sWhereVerificaAfastamento);
   $rsVerificaAfastamento     = $clafasta->sql_record($sSqlVerificaAfastamento);
