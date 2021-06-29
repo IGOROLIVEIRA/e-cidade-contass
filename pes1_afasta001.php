@@ -88,7 +88,10 @@ if (isset($incluir)) {
   //r45_dtreto
   $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
   if($r45_dtreto != null || $r45_dtreto != ''){
-  	$sWhereVerificaAfastamento .= " and ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
+    $sWhereVerificaAfastamento .= " and (";
+  	$sWhereVerificaAfastamento .= " ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
+    $sWhereVerificaAfastamento .= " or ( '{$r45_dtafas}'::date between r45_dtafas and r45_dtreto or '{$r45_dtreto}'::date between r45_dtafas and r45_dtreto )";
+    $sWhereVerificaAfastamento .= " )";
   } else {
   	$sWhereVerificaAfastamento .= " and  r45_dtafas >= '{$r45_dtafas}' ";
   }
