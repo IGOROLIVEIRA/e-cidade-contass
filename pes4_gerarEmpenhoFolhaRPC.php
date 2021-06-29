@@ -167,8 +167,7 @@ try {
 				$sSqlEmpenhos  .= "        order by rh72_recurso,rh72_orgao,rh72_unidade,rh72_projativ,rh72_coddot,rh72_codele ";
 
 				$rsDadosEmpenho = db_query($sSqlEmpenhos);
-                // echo $sSqlEmpenhos.'<br>';
-                // db_criatabela($rsDadosEmpenho);
+                
 				$aEmpenhos      = db_utils::getCollectionByRecord($rsDadosEmpenho, false, false, true);
 				$iTotalEmpenhos = count($aEmpenhos);
 				for ($iEmpenho = 0; $iEmpenho < $iTotalEmpenhos; $iEmpenho++) {
