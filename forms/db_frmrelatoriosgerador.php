@@ -75,9 +75,11 @@ $clrotulo->label("descrproced");
   function js_mostrafunc_relatorios1(chave1, chave2, chave3, chave4) {
     document.form1.rel_sequencial.value = chave1;
     document.form1.rel_descricao.value = chave2;
-    //document.form1.rel_corpo.value = chave3;
+
+    console.log(chave3);
     tinymce.activeEditor.execCommand('mceNewDocument');
     tinymce.activeEditor.execCommand('mceInsertContent', false, chave3);
+    //tinymce.execInstanceCommand('rel_corpo', 'mceInsertContent', false, chave3);
 
     js_divCarregando("Aguarde, pesquisando dados do arquivo.", "msgBox");
     var oParam = new Object();
