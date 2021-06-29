@@ -141,7 +141,7 @@ if (isset($alterar)) {
     $change = true;
 
     $sSqlMaxManutLic = $clmanutencaolicitacao->sql_query_file(null, "max(manutlic_sequencial)", null, "manutlic_licitacao = $l20_codigo");
-    $clmanutencaolicitacao->sql_record($sSqlMaxEdital);
+    $clmanutencaolicitacao->sql_record($sSqlMaxManutLic);
 
     if ($clmanutencaolicitacao->numrows > 0) {
       $clmanutencaolicitacao->excluir('', "manutlic_licitacao = $l20_codigo");
