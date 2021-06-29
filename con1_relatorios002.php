@@ -116,8 +116,7 @@ CONTAINER;
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta http-equiv="Expires" CONTENT="0">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <link href="estilos.css" rel="stylesheet" type="text/css">
+
   <style>
     #tableLegenda,
     #tableLegenda th,
@@ -132,9 +131,9 @@ CONTAINER;
   ?>
   <script src='https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y'></script>
   <script type="text/javascript">
-    tinymce.init({
-      selector: '#rel_corpo'
-    });
+    // tinymce.init({
+    //   selector: '#rel_corpo'
+    // });
   </script>
 </head>
 

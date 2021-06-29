@@ -77,9 +77,9 @@ $clrotulo->label("descrproced");
     document.form1.rel_descricao.value = chave2;
 
     console.log(chave3);
-    tinymce.activeEditor.execCommand('mceNewDocument');
-    tinymce.activeEditor.execCommand('mceInsertContent', false, chave3);
-    //tinymce.execInstanceCommand('rel_corpo', 'mceInsertContent', false, chave3);
+    //tinymce.activeEditor.execCommand('mceNewDocument');
+    document.form1.rel_corpo.value = chave3;
+    //tinymce.activeEditor.execCommand('mceInsertContent', false, chave3);
 
     js_divCarregando("Aguarde, pesquisando dados do arquivo.", "msgBox");
     var oParam = new Object();
@@ -105,7 +105,9 @@ $clrotulo->label("descrproced");
   }
 
   function js_retornoArquivo(oAjax) {
-
+    tinymce.init({
+      selector: '#rel_corpo'
+    });
     js_removeObj("msgBox");
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
