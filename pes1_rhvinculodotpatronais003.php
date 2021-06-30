@@ -38,7 +38,16 @@ if (isset($excluir)) {
 } else if(isset($chavepesquisa)) {
 
     $db_opcao = 3;
-    $result = $clrhvinculodotpatronais->sql_record($clrhvinculodotpatronais->sql_query($chavepesquisa)); 
+    $sCampos = " rhvinculodotpatronais.*, 
+                orgaoorig.o40_descr         as o40_descr_orig,
+                orgaonov.o40_descr          as o40_descr_nov,
+                unidadeorig.o41_descr       as o41_descr_orig,
+                unidadenov.o41_descr        as o41_descr_nov,
+                orcprojativorig.o55_descr   as o55_descr_orig,
+                orcprojativnov.o55_descr    as o55_descr_nov,
+                orctiporecorig.o15_descr    as o15_descr_orig,
+                orctiporecnov.o15_descr     as o15_descr_nov";
+    $result = $clrhvinculodotpatronais->sql_record($clrhvinculodotpatronais->sql_query($chavepesquisa, $sCampos)); 
     db_fieldsmemory($result,0);
     $db_botao = true;
 

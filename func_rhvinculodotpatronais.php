@@ -17,6 +17,7 @@ $clrhvinculodotpatronais->rotulo->label();
     <script language='JavaScript' type='text/javascript' src='scripts/scripts.js'></script>
 </head>
 <body>
+    <center>
     <form name="form2" method="post" action="" class="container">
         <fieldset>
             <legend>Dados para Pesquisa</legend>
@@ -99,5 +100,6 @@ $clrhvinculodotpatronais->rotulo->label();
         }
     }
       ?>
+</center>
 </body>
 </html>

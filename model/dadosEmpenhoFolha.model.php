@@ -2121,9 +2121,10 @@ class dadosEmpenhoFolha {
    * @param  integer $iLotacao
    * @param  string  $sVinculo
    * @param  integer $iElemento
+   * @param  integer $iMesUsu
    * @return object 
    */
-  public function getEstrututal($iAnoUsu,$iLotacao,$sVinculo,$iElemento){
+  public function getEstrututal($iAnoUsu,$iLotacao,$sVinculo,$iElemento,$iMesUsu=null){
 
   	if ( trim($iAnoUsu) == '' ) {
   		throw new Exception('Exercício não informado!');
@@ -2146,6 +2147,7 @@ class dadosEmpenhoFolha {
     $oDaorhLotaVincEle              = db_utils::getDao('rhlotavincele');
     $oDaorhLotaVincRec              = db_utils::getDao('rhlotavincrec');
     $oDaorhLotaVincAtiv             = db_utils::getDao('rhlotavincativ');
+    $oDaorhvinculodotpatronais      = db_utils::getDao('rhvinculodotpatronais');
     
     $sSqlParametro = $oDaoOrcParametro->sql_query_file($iAnoUsu,'o50_subelem');
     $rsParametro   = $oDaoOrcParametro->sql_record($sSqlParametro);
@@ -2273,7 +2275,35 @@ class dadosEmpenhoFolha {
       }
               
     }
-            
+
+    /**
+     * De/para para dotação realizado de acordo com OC14986
+     */
+    $iInstit = db_getsession("DB_instit");
+    $sCampos = "rh171_orgaonov      as orgao,
+                rh171_unidadenov    as unidade,
+                rh171_projativnov   as projativ,
+                rh171_recursonov    as recurso";
+    $sWhere = " rh171_orgaoorig         = {$iOrgao}
+                and rh171_unidadeorig   = {$iUnidade}
+                and rh171_projativorig  = {$iProjAtiv}
+                and rh171_recursoorig   = {$iRecurso}
+                and rh171_mes           = {$iMesUsu}
+                and rh171_instit        = {$iInstit}
+                and rh171_anousu        = {$iAnoUsu}";
+    
+    $sSqlVinculoDotPatronais    = $oDaorhvinculodotpatronais->sql_query_file(null, $sCampos, null, $sWhere);
+    $rsVinculoDotPatronais      = $oDaorhvinculodotpatronais->sql_record($sSqlVinculoDotPatronais);
+
+    if ($oDaorhvinculodotpatronais->numrows > 0) {
+        
+        $oVinculoDotPatronais = db_utils::fieldsMemory($rsVinculoDotPatronais,0);
+        $iOrgao     = $oVinculoDotPatronais->orgao;
+        $iUnidade   = $oVinculoDotPatronais->unidade;
+        $iProjAtiv  = $oVinculoDotPatronais->projativ;
+        $iRecurso   = $oVinculoDotPatronais->recurso;
+    
+    }            
             
     if ( $oParametro->o50_subelem == "f" ) {
               
@@ -3019,7 +3049,7 @@ class dadosEmpenhoFolha {
           
           try {
             
-            $oEstrututal = $this->getEstrututal(db_getsession('DB_anousu'),$oGerador->lotacao,$oGerador->vinculo,$oGerador->elemento);
+            $oEstrututal = $this->getEstrututal(db_getsession('DB_anousu'),$oGerador->lotacao,$oGerador->vinculo,$oGerador->elemento,$iMesUsu);
             
             $iOrgao     = $oEstrututal->iOrgao; 
             $iUnidade   = $oEstrututal->iUnidade;
