@@ -45,9 +45,9 @@ class Oc14425Hotfix extends AbstractMigration
                 COMMIT;
             ';
 
-        $this->execute($sql);
+        // $this->execute($sql);
         $sql = "INSERT INTO db_docparagpadrao VALUES (" . $this->getDb60CodDoc("ASSINATURA DA CONCILIACAO") . ", " . $this->getDb61CodParag("ASSINATURA DA CONCILIACAO") . ", 1)";
-        $this->execute($sql);
+        // $this->execute($sql);
     }
 
     public function getDb61CodParag($descricao)
