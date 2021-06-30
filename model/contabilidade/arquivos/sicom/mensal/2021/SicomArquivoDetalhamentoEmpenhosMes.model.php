@@ -225,8 +225,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
         CASE
         WHEN ac16_sequencial IS NULL THEN NULL
-        WHEN ac16_numero IS NULL THEN ac16_numeroacordo
-        ELSE ac16_numero
+        WHEN ac16_numeroacordo IS NULL THEN ac16_numero
+        ELSE ac16_numeroacordo
         END AS nrocontrato,
         CASE
         WHEN ac16_sequencial IS NULL THEN NULL
