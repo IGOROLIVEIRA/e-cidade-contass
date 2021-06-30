@@ -58,7 +58,7 @@ try {
             $oRetorno->aLinhasExtrato = array();
             $data_inicial = data($oParam->params[0]->data_inicial);
             $data_final = data($oParam->params[0]->data_final);
-            $condicao_lancamento = $oParam->params[0]->tipo_lancamento > 0 ? " AND conlancamdoc.c71_coddoc IN (" . tipoDocumentoLancamento($oParam->params[0]->tipo_lancamento) . ") " : "";
+            $condicao_lancamento = $oParam->params[0]->tipo_lancamento > 0 ? " AND conhistdoc.c53_coddoc IN (" . tipoDocumentoLancamento($oParam->params[0]->tipo_lancamento) . ") " : "";
             $sql = query_lancamentos($oParam->params[0]->conta, $data_inicial, $data_final, $condicao_lancamento, $oParam->params[0]->tipo_lancamento);
             // $oRetorno->aLinhasExtrato[] = $sql;
             $resultado = db_query($sql);
@@ -229,7 +229,7 @@ try {
             $conta = $oParam->params[0]->conta;
             // Preenche os dados para retorno
             $oDadosLinha = new StdClass();
-            $oDadosLinha->saldo_anterior = saldo_anterior_extrato($conta, $data_final);
+            $oDadosLinha->saldo_anterior = saldo_anterior_extrato($conta, $data_inicial, $data_final);
             $oDadosLinha->total_entradas = queryMovimentacaoSaldo($conta, $data_inicial, $data_final, 1);
             $oDadosLinha->total_saidas = queryMovimentacaoSaldo($conta, $data_inicial, $data_final, 2);
             $oDadosLinha->saldo_final = saldo_final_extrato($conta, $data_final);
@@ -258,13 +258,13 @@ function valor_conciliado($conta, $data) {
     return 0;
 }
 
-function saldo_anterior_extrato($conta, $data) {
+function saldo_anterior_extrato($conta, $inicio, $data) {
     $sql = "select
             substr(fc_saltessaldo,41,13)::float8 as saldo_anterior
             from
                 (
                     select
-                        fc_saltessaldo(k13_reduz, '{$data}', '{$data}', null, 1)
+                        fc_saltessaldo(k13_reduz, '{$inicio}', '{$data}', null, " . db_getsession("DB_instit") . ")
                     from
                         saltes
                         inner join conplanoexe on k13_reduz = c62_reduz
@@ -364,7 +364,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
 {
     switch (tipoLancamento($tipo_lancamento)) {
         case "PGTO. EMPENHO":
-            return "30, 5, 37";
+            return "30, 35, 5, 37";
             break;
         case "EST. PGTO EMPENHO":
             return "31, 6";
@@ -405,7 +405,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
 function descricaoTipoLancamento($cod_doc)
 {
     switch ($cod_doc) {
-        case in_array($cod_doc, array("5", "30", "37")):
+        case in_array($cod_doc, array("5", "30", "35", "37")):
             return "PGTO. EMPENHO";
             break;
         case in_array($cod_doc, array("6", "31")):
@@ -685,7 +685,7 @@ function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento
                 0 as tipo_lancamento,
                 corrente.k12_data as data,
                 k172_dataconciliacao data_conciliacao,
-                conlancamdoc.c71_coddoc::text cod_doc,
+                conhistdoc.c53_coddoc::text cod_doc,
                 0 as valor_debito,
                 corrente.k12_valor as valor_credito,
                 e60_codemp || '/' || e60_anousu :: text as codigo,
@@ -730,9 +730,11 @@ function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento
                 AND corempagemov.k12_data = coremp.k12_data
               left join empagemov on e60_numemp = empagemov.e81_numemp
                 AND k12_codmov = e81_codmov
+                LEFT JOIN conhistdoc ON
+                    conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
                 LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
                 AND conc.k172_data = corrente.k12_data
-                AND conc.k172_coddoc = conlancamdoc.c71_coddoc
+                AND conc.k172_coddoc = conhistdoc.c53_coddoc
                 AND conc.k172_codigo = concat_ws('', coremp.k12_codord :: text, e81_numdoc::text)
                 LEFT JOIN retencaopagordem ON e20_pagordem = coremp.k12_codord
                 LEFT join retencaoreceitas on e23_retencaopagordem = e20_sequencial
@@ -795,7 +797,7 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                                 corrente.k12_data as data,
                                 case
                                     when conlancamdoc.c71_coddoc = 116 then 100
-                                    else conlancamdoc.c71_coddoc
+                                    else conhistdoc.c53_coddoc
                                 end as cod_doc,
                                 k12_valor,
                                 ('planilha :' || k81_codpla) :: text as tipo_movimentacao,
@@ -826,6 +828,8 @@ function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancament
                                 LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
                                 LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
                                 inner join cgm on cgm.z01_numcgm = placaixarec.k81_numcgm
+                                LEFT JOIN conhistdoc ON
+                                    conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
                             where
                                 corrente.k12_conta = {$conta}
                                 and corrente.k12_instit = " . db_getsession("DB_instit") . " {$condicao_lancamento}
@@ -869,7 +873,7 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
                 0 as tipo_lancamento,
                 corlanc.k12_data as data,
                 k172_dataconciliacao data_conciliacao,
-                conlancamdoc.c71_coddoc::text cod_doc,
+                conhistdoc.c53_coddoc::text cod_doc,
                 corrente.k12_valor as valor_debito,
                 0 as valor_credito,
                 k12_codigo::text as codigo,
@@ -911,9 +915,11 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
                 AND conlancamcorrente.c86_autent = corrente.k12_autent
                 LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
                 LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
+                LEFT JOIN conhistdoc ON
+                conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
                 LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
                 AND conc.k172_data = corrente.k12_data
-                AND conc.k172_coddoc = conlancamdoc.c71_coddoc
+                AND conc.k172_coddoc = conhistdoc.c53_coddoc
                 AND conc.k172_valor = corrente.k12_valor
                 AND conc.k172_codigo = concat_ws('', k12_codigo::text, e91_cheque::text)
             where
@@ -937,7 +943,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             0 as tipo_lancamento,
             corlanc.k12_data as data,
             k172_dataconciliacao data_conciliacao,
-            conlancamdoc.c71_coddoc::text cod_doc,
+            conhistdoc.c53_coddoc::text cod_doc,
             0 as valor_debito,
             corrente.k12_valor as valor_credito,
             k12_codigo::text as codigo,
@@ -979,9 +985,11 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             AND conlancamcorrente.c86_autent = corrente.k12_autent
             LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
             LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
-       LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
+            LEFT JOIN conhistdoc ON
+            conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
+            LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
             AND conc.k172_data = corrente.k12_data
-            AND conc.k172_coddoc = conlancamdoc.c71_coddoc
+            AND conc.k172_coddoc = conhistdoc.c53_coddoc
             AND conc.k172_valor = corrente.k12_valor
             AND conc.k172_codigo = concat_ws('', k12_codigo::text, e91_cheque::text)
         where
