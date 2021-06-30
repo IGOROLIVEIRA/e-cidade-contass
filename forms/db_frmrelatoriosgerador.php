@@ -38,7 +38,7 @@ $clrotulo->label("descrproced");
           </td>
           <td>
             <?
-            db_textarea('rel_corpo', 15, 90, 'rel_corpo', true, 'text', 3, "")
+            db_textarea('rel_corpo', 15, 90, 'rel_corpo', true, 'text', 3, "");
             ?>
           </td>
         </tr>
@@ -75,11 +75,7 @@ $clrotulo->label("descrproced");
   function js_mostrafunc_relatorios1(chave1, chave2, chave3, chave4) {
     document.form1.rel_sequencial.value = chave1;
     document.form1.rel_descricao.value = chave2;
-
-    console.log(chave3);
-    //tinymce.activeEditor.execCommand('mceNewDocument');
-    document.form1.rel_corpo.value = chave3;
-    //tinymce.activeEditor.execCommand('mceInsertContent', false, chave3);
+    //document.form1.rel_corpo_oculto.value = chave3;
 
     js_divCarregando("Aguarde, pesquisando dados do arquivo.", "msgBox");
     var oParam = new Object();
@@ -105,9 +101,6 @@ $clrotulo->label("descrproced");
   }
 
   function js_retornoArquivo(oAjax) {
-    tinymce.init({
-      selector: '#rel_corpo'
-    });
     js_removeObj("msgBox");
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
@@ -184,6 +177,24 @@ $clrotulo->label("descrproced");
     script2.innerText += "}";
     document.body.appendChild(script2);
 
+    js_divCarregando("Aguarde, pesquisando corpo do relatório.", "msgBox");
+    var oParam = new Object();
+    oParam.exec = "getCorpo";
+    oParam.iSequencial = $F('rel_sequencial');
+    var oAjax = new Ajax.Request(sUrl, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoCorpo
+    });
+
+  }
+
+  function js_retornoCorpo(oAjax) {
+    js_removeObj("msgBox");
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    tinymce.activeEditor.execCommand('mceNewDocument');
+    tinymce.activeEditor.execCommand('mceInsertContent', false, oRetorno.itens[0].rel_corpo);
+    if (oRetorno.status == 1) {}
   }
 
   function js_gerar() {

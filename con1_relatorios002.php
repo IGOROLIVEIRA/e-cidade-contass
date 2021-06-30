@@ -6,20 +6,27 @@ include("libs/db_usuariosonline.php");
 include("classes/db_relatorios_classe.php");
 include("classes/db_db_sysprocedarq_classe.php");
 include("dbforms/db_funcoes.php");
-// include("vendor/mpdf/mpdf/mpdf.php");
 require_once("model/relatorios/Relatorio.php");
 
 db_postmemory($HTTP_POST_VARS);
-parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
-$iInstit        = db_getsession('DB_instit');
-$oInstit        = new Instituicao($iInstit);
+// $result = $clrelatorios->sql_record($clrelatorios->sql_query($chavepesquisa));
+//   db_fieldsmemory($result, 0);
 
-$clrelatorios = new cl_relatorios;
+$iInstit           = db_getsession('DB_instit');
+$oInstit           = new Instituicao($iInstit);
+$clrelatorios      = new cl_relatorios;
 $cldb_sysprocedarq = new cl_db_sysprocedarq;
 $db_opcao = 1;
 $db_botao = true;
 if (isset($Gerar)) {
+  $content = file_get_contents($_POST);
+  print_r($content);
+  exit;
+  // $result = $clrelatorios->sql_record($clrelatorios->sql_query($rel_sequencial));
+  // db_criatabela($result);
+  // exit;
+  // db_fieldsmemory($result, 0);
 
   require_once("classes/db_" . $arquivo . "_classe.php");
 
@@ -103,13 +110,14 @@ FOOTER;
 
 CONTAINER;
 
-  $html = $container;
+  $html = $corpo;
 
   $mPDF->WriteHTML(utf8_encode($html));
 
   $mPDF->Output($rel_descricao . '.pdf', "D");
 }
 ?>
+
 <html>
 
 <head>
@@ -129,11 +137,35 @@ CONTAINER;
   db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
   db_app::load("estilos.css, grid.style.css");
   ?>
-  <script src='https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y'></script>
+  <script script src='https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y'>
+  </script>
   <script type="text/javascript">
-    // tinymce.init({
-    //   selector: '#rel_corpo'
-    // });
+    tinymce.init({
+      selector: "#rel_corpo",
+
+      //////////////////this was added to make the "required" attribute work///////////////////
+      setup: function(editor) {
+        editor.on('change', function() {
+          tinymce.triggerSave();
+          chkSubmit();
+        });
+      }
+    });
+
+    $(document).on('click', '#db_opcao', chkSubmit);
+
+    function chkSubmit() {
+
+      var msg = tinymce.get("rel_corpo").getContent();
+
+      tinymce.activeEditor.plugins.export.download('clientpdf', {});
+      // tinymce.activeEditor.execCommand('mceExportDownload', false, {
+      //   format: 'clientpdf',
+      //   settings: {}
+      // });
+
+
+    }
   </script>
 </head>
 

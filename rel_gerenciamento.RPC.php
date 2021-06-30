@@ -45,5 +45,11 @@ switch ($oParam->exec) {
     $oDados = db_utils::fieldsMemory($rsSysArqCamp, 0);
     $oRetorno->arquivo = $oDados;
     break;
+
+  case 'getCorpo':
+    $rsCorpo = $clrelatorios->sql_record($clrelatorios->sql_query($oParam->iSequencial, 'rel_corpo'));
+    $oDados = db_utils::fieldsMemory($rsCorpo, 0);
+    $oRetorno->itens[] = $oDados;
+    break;
 }
 echo $oJson->encode($oRetorno);

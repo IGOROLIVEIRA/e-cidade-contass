@@ -60,6 +60,7 @@ $clrelatorios = new cl_relatorios;
       $result = $clrelatorios->sql_record($sql);
       if ($clrelatorios->numrows != 0) {
         db_fieldsmemory($result, 0);
+
         echo "<script>" . $funcao_js . "('$oid',false);</script>";
       } else {
         echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
