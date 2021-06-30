@@ -45,7 +45,7 @@ $clrotulo->label("descrproced");
       </table>
 
     </fieldset>
-    <input name="Gerar" type="submit" id="db_opcao" value="Gerar">
+    <input name="Gerar" type="button" id="db_opcao" value="Gerar">
   </div>
 </form>
 <script>
@@ -197,20 +197,41 @@ $clrotulo->label("descrproced");
     if (oRetorno.status == 1) {}
   }
 
-  function js_gerar() {
+  // function js_gerar() {
 
-    var oParam = new Object();
+  //   var oParam = new Object();
 
-    oParam.sExec = 'gerar';
-    oParam.sequencial = $F('rel_sequencial');
-    oParam.arquivo = $F('input_arquivo');
+  //   oParam.sExec = 'gerar';
+  //   oParam.sequencial = $F('rel_sequencial');
+  //   oParam.arquivo = $F('input_arquivo');
+
+  //   js_divCarregando('Gerando Relatório, aguarde.', 'msgbox');
+
+  //   var oAjax = new Ajax.Request(sUrl, {
+  //     method: 'POST',
+  //     parameters: 'json=' + Object.toJSON(oParam),
+  //     onComplete: js_confirma
+  //   });
+
+  // }
+
+  $(document).on('click', '#db_opcao', chkSubmit);
+
+  function chkSubmit() {
+
+    tinymce.get("rel_corpo").getContent();
 
     js_divCarregando('Gerando Relatório, aguarde.', 'msgbox');
 
+    var oParam = new Object();
+    oParam.exec = "Print";
+    oParam.iSequencial = $F('rel_sequencial');
+    oParam.iArquivo = $F('input_arquivo');
+    oParam.sCorpo = tinymce.get("rel_corpo").getContent();
     var oAjax = new Ajax.Request(sUrl, {
-      method: 'POST',
+      method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_confirma
+      onComplete: js_retornoCorpo
     });
 
   }
