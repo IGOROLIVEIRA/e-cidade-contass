@@ -7733,6 +7733,9 @@ function carrega_r9xx($area, $sigla, $sigla2, $nro_do_registro,$opcao_tipo) {
       if ($dias_pagamento > 0  && $situacao_funcionario == 5) {
         $r14_valor += $valor_salario_maternidade;
         if ($db_debug == true) { echo "[carrega_r9xx] 58 - r14_valor = $r14_valor  <br>"; }
+      } else
+      if ($r14_valor <= 0 && $situacao_funcionario == 5 ) {
+        $r14_valor += $valor_salario_maternidade;
       }
 
       if ($db_debug == true) { echo "[carrega_r9xx] 12 - Chamando a função grava_gerf() <br>"; }
