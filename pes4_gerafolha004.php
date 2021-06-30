@@ -5061,11 +5061,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
           }
 
-          /*OC6893*/
-          if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7,10)) && $pontofs[$Iponto]["rh27_pd"] == 1) {
-            $r14_quant = $dias_pagamento;
-            $r14_valor = ( $r14_valor / 30 ) * $r14_quant;
-          } else if ($situacao_funcionario == 5 && $dias_pagamento == 0 && $pontofs[$Iponto]["rh27_calcp"] == 't') {
+          if ($situacao_funcionario == 5 && $dias_pagamento == 0 && $pontofs[$Iponto]["rh27_calcp"] == 't') {
             $r14_valor = 0;
           }
           if ($db_debug == true) {
