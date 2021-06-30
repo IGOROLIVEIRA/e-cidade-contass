@@ -1711,6 +1711,72 @@ class cl_rhpessoalmov {
         return $sSql;
     }
 
+    /**
+     * Retorna informacoes dos servidores com dados do cgm OC14942
+     *
+     * @param  integer $iAno
+     * @param  integer $iMes
+     * @param  integer $iInstituicao
+     * @param  integer $iMatricula
+     * @param  string  $sCampos
+     * @access public
+     * @return string
+     */
+    public function sql_queryDadosServidoresCgm( $iAno, $iMes, $iInstituicao, $iMatricula, $sCampos = '' ) {
+
+        if ( empty($sCampos) ) {
+            $sCampos = "*";
+        }
+        $sSql  = " select $sCampos                                                                    \n";
+        $sSql .= "   from rhpessoal                                                                   \n";
+        $sSql .= "        left join rhpessoalmov on rhpessoalmov.rh02_regist = rhpessoal.rh01_regist  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_anousu = $iAno                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_mesusu = $iMes                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_instit = $iInstituicao          \n";
+        $sSql .= "        inner join cgm on rhpessoal.rh01_numcgm = cgm.z01_numcgm                    \n";
+        $sSql .= "        inner join rhfuncao on rhfuncao.rh37_funcao = rhpessoal.rh01_funcao         \n";
+        $sSql .= "        inner join rhlota on rhlota.r70_codigo = rhpessoalmov.rh02_lota             \n";
+        $sSql .= "        left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes \n";
+        $sSql .= "                            and rhpessoalmov.rh02_anousu = {$iAno}                ";
+        $sSql .= "                            and rhpessoalmov.rh02_mesusu = {$iMes}                ";
+        $sSql .= "  where rh01_regist in ($iMatricula) and rh05_recis is null                     \n";
+
+        return $sSql;
+    }
+
+    /**
+     * Retorna informacoes de todos os servidores a partir do cargo OC14942
+     *
+     * @param  integer $iAno
+     * @param  integer $iMes
+     * @param  integer $iInstituicao
+     * @param  integer $iMatricula
+     * @param  string  $sCampos
+     * @access public
+     * @return string
+     */
+    public function sql_queryDadosServidoresCargo( $iAno, $iMes, $iInstituicao, $iCargo, $sCampos = '' ) {
+
+        if ( empty($sCampos) ) {
+            $sCampos = "*";
+        }
+        $sSql  = " select $sCampos                                                                    \n";
+        $sSql .= "   from rhpessoal                                                                   \n";
+        $sSql .= "        left join rhpessoalmov on rhpessoalmov.rh02_regist = rhpessoal.rh01_regist  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_anousu = $iAno                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_mesusu = $iMes                  \n";
+        $sSql .= "                              and rhpessoalmov.rh02_instit = $iInstituicao          \n";
+        $sSql .= "        inner join cgm on rhpessoal.rh01_numcgm = cgm.z01_numcgm                    \n";
+        $sSql .= "        inner join rhfuncao on rhfuncao.rh37_funcao = rhpessoal.rh01_funcao         \n";
+        $sSql .= "        inner join rhlota on rhlota.r70_codigo = rhpessoalmov.rh02_lota             \n";
+        $sSql .= "        left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes \n";
+        $sSql .= "                            and rhpessoalmov.rh02_anousu = {$iAno}                ";
+        $sSql .= "                            and rhpessoalmov.rh02_mesusu = {$iMes}                ";
+        $sSql .= "  where rh37_funcao in ($iCargo) and rh05_recis is null                        \n";
+
+        return $sSql;
+    }
+
     public function sql_queryValorVariaveisCalculo( $iAnoFolha, $iMesFolha, $iMatricula, $iInstituicao ) {
 
         $sSql  = "select substr(valor_variaveis_calculo, 111, 11) as variavel_salario_base_progressao";
