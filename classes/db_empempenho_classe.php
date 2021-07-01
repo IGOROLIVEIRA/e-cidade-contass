@@ -1077,7 +1077,7 @@ class cl_empempenho {
         $sql .= "       left join empempenhocontrato   on empempenho.e60_numemp = empempenhocontrato.e100_numemp ";
         $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
         $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
-
+        $sql .= "       left join empresto on e91_numemp = e60_numemp";
         $sql2 = "";
         if($dbwhere==""){
             if($e60_numemp!=null ){

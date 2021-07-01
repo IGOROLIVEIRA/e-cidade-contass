@@ -1491,13 +1491,49 @@ class Acordo
         }
         $aGarantias      = $this->getGarantias();
         $iTotalGarantias = count($aGarantias);
-        for ($i = 0; $i < $iTotalGarantias; $i++) {
+        
+        
+        if($iTotalGarantias==1){
+                
+                $oDaoAcordoGarantia = db_utils::getDao("acordoacordogarantia");
+                $oDaoAcordoGarantia->excluir(null, "ac12_acordo={$this->getCodigoAcordo()}");
+                $this->aGarantias = "";
+                $op=1;
 
-            if ($this->aGarantias[$i]->getCodigo() == $iGarantia) {
-                array_splice($this->aGarantias, $i, 1);
-                break;
-            }
+                
+        }else{
+
+            $oDaoGarantias = db_utils::getDao("acordoacordogarantia");
+            $sSqlGarantias = $oDaoGarantias->sql_query(null, "ac12_acordogarantia,
+          ac12_texto", "ac12_sequencial", "ac12_acordo={$this->getCodigoAcordo()}");
+            $rsGarantias   = $oDaoGarantias->sql_record($sSqlGarantias);
+            if ($oDaoGarantias->numrows > 0) {
+
+                for ($i = 0; $i < $oDaoGarantias->numrows; $i++) {
+
+                    $oGarantiaPadrao = db_utils::fieldsMemory($rsGarantias, $i);
+                    $valor_ac12_acordogarantia = $oGarantiaPadrao->ac12_acordogarantia;
+                    if($valor_ac12_acordogarantia==$iGarantia){
+                        array_splice($this->aGarantias, $i, 1);
+                        break;
+                    }
+                }
+            }/*
+            for ($i = 0; $i < $iTotalGarantias; $i++) {
+                
+                if($op==1){
+                    break;
+                }
+                if ($this->aGarantias[$i]->getCodigo() == $iGarantia) {
+                    
+                    array_splice($this->aGarantias, $i, 1);
+                    break;
+                }         
+            }*/
         }
+
+        
+          
         return $this;
     }
 
@@ -1538,6 +1574,35 @@ class Acordo
         }
         $aPenalidades      = $this->getPenalidades();
         $iTotalPenalidades = count($aPenalidades);
+
+        if($iTotalPenalidades==1){
+                
+            $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
+            $oDaoPenalidades->excluir(null, "ac15_acordo={$this->getCodigoAcordo()}");
+            $this->aPenalidades = ""; 
+           
+
+            
+    }else{
+
+        $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
+            $sSqlPenalidades = $oDaoPenalidades->sql_query(null, "ac15_acordopenalidade,
+          ac15_texto", "ac15_sequencial", "ac15_acordo={$this->getCodigoAcordo()}");
+            $rsPenalidades   = $oDaoPenalidades->sql_record($sSqlPenalidades);
+            if ($oDaoPenalidades->numrows > 0) {
+
+                for ($i = 0; $i < $oDaoPenalidades->numrows; $i++) {
+
+                    $oPenalidadePadrao = db_utils::fieldsMemory($rsPenalidades, $i);
+                    $valor_penalidade = $oPenalidadePadrao->ac15_acordopenalidade;
+                    if($valor_penalidade==$iPenalidade){
+                        array_splice($this->aPenalidades, $i, 1);
+                        break;
+                    }
+
+                }
+            }
+        /*
         for ($i = 0; $i < $iTotalPenalidades; $i++) {
 
             if ($this->aPenalidades[$i]->getCodigo() == $iPenalidade) {
@@ -1545,7 +1610,8 @@ class Acordo
                 array_splice($this->aPenalidades, $i, 1);
                 break;
             }
-        }
+        }*/
+    }
         return $this;
     }
 

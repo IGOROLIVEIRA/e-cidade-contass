@@ -259,7 +259,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 if (!in_array($oDados11->tipodecretoalteracao, $aTipoDecretoNaoObrigReg12)) {
 
                     if ($oDados10->tipodecreto == 1) {
-                        $sSql = "select '12' as tiporegistro,
+                        $sSql = "select distinct '12' as tiporegistro,
                                         o39_codproj as codReduzidoDecreto,
                                         o45_numlei as nroLeiAlteracao,
                                         o45_datalei as dataLeiAlteracao, 
@@ -270,19 +270,20 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                             when o45_tipolei = 4 then 'LAOP'
                                             else ''
                                         end as tipoLei,
-                                        case 
-                                            when o200_tipoleialteracao is not null then o200_tipoleialteracao
-                                            else 0
-                                        end as tipoLeiAlteracao,
+                                        (case
+                                            when o46_tiposup in (1006, 1007, 1008, 1009, 1010, 1012) then 2
+                                            when o46_tiposup in (1023, 1024, 1025) then 5
+                                            when o46_tiposup in (1014, 1015, 1016) then 3
+                                            else 1
+                                        END ) AS tipoLeiAlteracao,
                                         1 as sql
                                     from orcprojeto
                                         join orclei on o39_codlei = o45_codlei
-                                        left join orcprojetolei on o45_numlei = o138_numerolei
-                                        left join orcleialtorcamentaria on o200_orcprojetolei = o138_sequencial
+                                        join orcsuplem on o46_codlei = o39_codproj
                                     where o39_codproj in ({$oDados10->codigovinc}) ";
 
                     } else {
-                        $sSql = "select '12' as tiporegistro,
+                        $sSql = "select distinct '12' as tiporegistro,
                                         o39_codproj as codReduzidoDecreto,
                                         o138_numerolei as nroLeiAlteracao,
                                         o138_data as dataLeiAlteracao,
@@ -290,15 +291,17 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                             when o138_altpercsuplementacao = 1 then 'LAOP' 
                                             else 'LAO' 
                                         end tipoLei, 
-                                        case 
-                                            when o200_tipoleialteracao is not null then o200_tipoleialteracao
-                                            else 0
-                                        end as tipoLeiAlteracao,
+                                        (case
+                                            when o46_tiposup in (1006, 1007, 1008, 1009, 1010, 1012) then 2
+                                            when o46_tiposup in (1023, 1024, 1025) then 5
+                                            when o46_tiposup in (1014, 1015, 1016) then 3
+                                            else 1
+                                        END ) AS tipoLeiAlteracao,
                                         2 as sql
                                 from orcprojeto
                                     join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto
                                     join orcprojetolei on o139_orcprojetolei = o138_sequencial
-                                    left join orcleialtorcamentaria on o200_orcprojetolei = o138_sequencial
+                                    join orcsuplem on o46_codlei = o39_codproj
                         where o39_codproj in ({$oDados10->codigovinc})";
 
                     }

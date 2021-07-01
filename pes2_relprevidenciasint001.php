@@ -128,7 +128,7 @@ function js_emite(){
         </td>
         <td>
           <?
-          $arr_folha = array("r14"=>"Salário", "r35"=>"13o. Salário","r48"=>"Complementar","r20"=>"Rescisão",);
+          $arr_folha = array("r14"=>"Salário", "r35"=>"13o. Salário","r48"=>"Complementar","r20"=>"Rescisão","todas"=>"Todas");
           db_select('folha',$arr_folha,true,4);
           ?>
        </td>

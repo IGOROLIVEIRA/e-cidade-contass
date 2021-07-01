@@ -130,14 +130,7 @@ class cl_balancete292021
       return false;
     }
     if ($this->si241_codfontrecursos == null) {
-      $this->erro_sql = " Campo si241_codfontrecursos não informado.";
-      $this->erro_campo = "si241_codfontrecursos";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-      $this->erro_status = "0";
-      
-      return false;
+        $this->si241_codfontrecursos = 0;
     }
     if ($this->si241_dividaconsolidada == null) {
         $this->erro_sql = " Campo si241_dividaconsolidada não informado.";

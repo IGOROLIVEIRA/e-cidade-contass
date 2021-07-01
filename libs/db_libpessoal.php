@@ -965,7 +965,7 @@ function situacao_funcionario($registro = null, $datafim = null)
 {
   // variaveis publicas
 
-  global $dias_pagamento, $data_afastamento, $dias_pagamento_sf, $dtfim, $subpes, $pessoal, $Ipessoal;
+  global $dias_pagamento, $data_afastamento, $dias_pagamento_sf, $dtfim, $subpes, $pessoal, $Ipessoal, $dias_afasta_sempag, $rubrica_licenca_saude;
 
   //echo "<BR 1.10 - ndias --> ";
   $dias_mes = ndias(db_substr($subpes, -2) . "/" . db_substr($subpes, 1, 4));
@@ -973,14 +973,20 @@ function situacao_funcionario($registro = null, $datafim = null)
   $dtini = db_ctod("01/" . db_substr($subpes, -2) . "/" . db_substr($subpes, 1, 4));
   $dtfim = db_ctod(db_str($dias_mes, 2, 0, "0") . "/" . db_substr($subpes, -2) . "/" . db_substr($subpes, 1, 4));
   $dias_pagamento = 30;
+  /**
+   * Variavel dias_afasta_sempag utilizada para descontar os dias 
+   * de afastamento tipo 2 para calcular somente os dias de um afastamento especifico
+   */
+  $dias_afasta_sempag = 0;
   $dias_pagamento_sf = 30;
   $afastado = 1;
   $data_afastamento = date("Y-m-d", db_getsession("DB_datausu"));
-  $condicaoaux = " and r45_regist =" . db_sqlformat($registro) . " order by r45_regist, r45_dtafas desc";
+  $condicaoaux  = " and ((r45_dtafas between '{$dtini}' and '{$dtfim}' or r45_dtreto between '{$dtini}' and '{$dtfim}') or r45_dtreto > '{$dtfim}')";
+  $condicaoaux .= " and r45_situac != 11 and r45_regist =" . db_sqlformat($registro) . " order by r45_regist, r45_dtafas";
   global $afasta;
-  if ((db_selectmax("afasta", "select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux)) 
-    && (db_mktime($afasta[0]["r45_dtreto"]) >= db_mktime($dtini) || db_empty($afasta[0]["r45_dtreto"])) ) {
+  if (db_selectmax("afasta", "select * from afasta " . bb_condicaosubpes("r45_") . $condicaoaux)) {
 
+    for($iCont = 0; $iCont < count($afasta); $iCont++) {
       /**
        * Caso Afastamento de doença for do tipo mais de 30 dias considera como afastamento
        * somente o período superior aos 30 para isso adianta a data em 30 dias
@@ -995,44 +1001,59 @@ function situacao_funcionario($registro = null, $datafim = null)
 
       // Caso acha afastamento e data de retorno for maior ou igual da de afastamento ou retornou
 
-      $afastado = $afasta[0]["r45_situac"];
-      if (!db_empty($afasta[0]["r45_dtreto"])) {
-        if (db_mktime($afasta[0]["r45_dtafas"]) > db_mktime($dtfim)) {
-          $afastado = 1;
+      $dias_pagamento_aux = 30;
+      $afastado_aux = $afasta[$iCont]["r45_situac"];
+      if (!db_empty($afasta[$iCont]["r45_dtreto"])) {
+        if (db_mktime($afasta[$iCont]["r45_dtafas"]) > db_mktime($dtfim)) {
+          $afastado_aux = 1;
         }
         if (isset($datafim) || !db_empty($datafim)) {
-          if (db_mktime($afasta[0]["r45_dtreto"]) < db_mktime($datafim)) {
-            $afastado = 1;
+          if (db_mktime($afasta[$iCont]["r45_dtreto"]) < db_mktime($datafim)) {
+            $afastado_aux = 1;
           }
         }
       }
-      //echo "<BR> ".$afasta[0]["r45_dtreto"]." > ".$dtfim."  && ".$afasta[0]["r45_dtafas"]." < ".$dtini;
-      if ($afastado != 1) {
-        if ((db_mktime($afasta[0]["r45_dtreto"]) == 0 || db_mktime($afasta[0]["r45_dtreto"]) > db_mktime($dtfim)) && db_mktime($afasta[0]["r45_dtafas"]) >= db_mktime($dtini)) {
-          $dias_pagamento = db_datedif($afasta[0]["r45_dtafas"], $dtini);
-        } else if ((db_empty($afasta[0]["r45_dtreto"]) || db_mktime($afasta[0]["r45_dtreto"]) > db_mktime($dtfim)) && db_mktime($afasta[0]["r45_dtafas"]) < db_mktime($dtini)) {
-          $dias_pagamento = 0;
-        } else if (db_mktime($afasta[0]["r45_dtafas"]) < db_mktime($dtini) && db_mktime($afasta[0]["r45_dtreto"]) <= db_mktime($dtfim)) {
-          $dias_pagamento = db_datedif($dtfim, $afasta[0]["r45_dtreto"]);
-          if ($dias_pagamento > 0) {
+      //echo "<BR> ".$afasta[$iCont]["r45_dtreto"]." > ".$dtfim."  && ".$afasta[$iCont]["r45_dtafas"]." < ".$dtini;
+      if ($afastado_aux != 1) {
+        if ((db_mktime($afasta[$iCont]["r45_dtreto"]) == 0 || db_mktime($afasta[$iCont]["r45_dtreto"]) > db_mktime($dtfim)) && db_mktime($afasta[$iCont]["r45_dtafas"]) >= db_mktime($dtini)) {
+          $dias_pagamento_aux = db_datedif($afasta[$iCont]["r45_dtafas"], $dtini);
+        } else if ((db_empty($afasta[$iCont]["r45_dtreto"]) || db_mktime($afasta[$iCont]["r45_dtreto"]) > db_mktime($dtfim)) && db_mktime($afasta[$iCont]["r45_dtafas"]) < db_mktime($dtini)) {
+          $dias_pagamento_aux = 0;
+        } else if (db_mktime($afasta[$iCont]["r45_dtafas"]) < db_mktime($dtini) && db_mktime($afasta[$iCont]["r45_dtreto"]) <= db_mktime($dtfim)) {
+          $dias_pagamento_aux = db_datedif($dtfim, $afasta[$iCont]["r45_dtreto"]);
+          if ($dias_pagamento_aux > 0) {
             if ($dias_mes > 30) {
-              $dias_pagamento -= 1;
+              $dias_pagamento_aux -= 1;
             } else if ($dias_mes == 29) {
-              $dias_pagamento = (30 - db_day($afasta[0]["r45_dtreto"]));
+              $dias_pagamento_aux = (30 - db_day($afasta[$iCont]["r45_dtreto"]));
             }
           }
-        } else if (db_mktime($afasta[0]["r45_dtafas"]) >= db_mktime($dtini) && db_mktime($afasta[0]["r45_dtreto"]) <= db_mktime($dtfim)) {
-          $dias_pagamento = ceil(((db_mktime($dtfim) - db_mktime($afasta[0]["r45_dtreto"]) + db_mktime($afasta[0]["r45_dtafas"]) - db_mktime($dtini)) / 86400));
-          if (!db_empty($dias_pagamento)) {
+        } else if (db_mktime($afasta[$iCont]["r45_dtafas"]) >= db_mktime($dtini) && db_mktime($afasta[$iCont]["r45_dtreto"]) <= db_mktime($dtfim)) {
+          $dias_pagamento_aux = ceil(((db_mktime($dtfim) - db_mktime($afasta[$iCont]["r45_dtreto"]) + db_mktime($afasta[$iCont]["r45_dtafas"]) - db_mktime($dtini)) / 86400));
+          if (!db_empty($dias_pagamento_aux)) {
             if ($dias_mes > 30) {
-              $dias_pagamento -= 1;
+              $dias_pagamento_aux -= 1;
             } else if ($dias_mes < 30) {
-              $dias_pagamento += (30 - $dias_mes);
+              $dias_pagamento_aux += (30 - $dias_mes);
             }
           }
         }
-        $data_afastamento = $afasta[0]["r45_dtafas"];
+        $data_afastamento = $afasta[$iCont]["r45_dtafas"];
       }
+      if ($afastado == 1 && $afastado_aux == 2) {
+        $afastado = 2;
+        $dias_afasta_sempag = (30-$dias_pagamento_aux);
+      } else if ($afastado_aux == 2) {
+        $dias_afasta_sempag = (30-$dias_pagamento_aux);
+      }
+      if ($afastado_aux != 2) {
+        $afastado = $afastado_aux;
+      }
+      if ($afastado_aux == 10 && empty($rubrica_licenca_saude)) {
+        $dias_pagamento_aux = 30;
+      }
+      $dias_pagamento -= (30-$dias_pagamento_aux);
+    }
   } else {
     if (
       db_year($pessoal[$Ipessoal]["r01_admiss"]) == db_val(db_substr($subpes, 1, 4))

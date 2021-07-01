@@ -40,7 +40,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    */
   public function __construct()
   {
-
   }
 
   /**
@@ -309,7 +308,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	liclicita.l20_dtpubratificacao as dtPublicacaoTermoRatificacao,
 	l20_codigo as codlicitacao,
 	liclicita.l20_veicdivulgacao as veiculoPublicacao,
-	 (CASE 
+	 (CASE
         WHEN liclicita.l20_cadInicial is null or liclicita.l20_cadInicial = 0 and liclicita.l20_anousu >= 2021 THEN 1
      	ELSE liclicita.l20_cadInicial
      END) as cadInicial,
@@ -395,7 +394,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		AND liclicita.l20_tipojulg = 3
 		AND liclicita.l20_codigo={$oDados10->codlicitacao}";
 
-      $rsResult11 = db_query($sSql);//db_criatabela($rsResult11);
+      $rsResult11 = db_query($sSql); //db_criatabela($rsResult11);
       $aDadosAgrupados11 = array();
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
@@ -423,9 +422,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
             throw new Exception($dispensa11->erro_msg);
           }
           $aDadosAgrupados11[$sHash11] = $dispensa11;
-
         }
-
       }
 
       $sSql = "select DISTINCT '12' as tipoRegistro,
@@ -541,7 +538,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		AND liclicita.l20_tipojulg = 3
 		AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
 
-      $rsResult13 = db_query($sSql);//db_criatabela($rsResult13);
+      $rsResult13 = db_query($sSql); //db_criatabela($rsResult13);
 
       for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
@@ -640,7 +637,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
 		AND liclicita.l20_codigo= {$oDados10->codlicitacao} AND liccomissaocgm.l31_tipo in('1','2','3','4','8')";
 
-      $rsResult14 = db_query($sSql);//db_criatabela($rsResult14);echo $sSql;
+      $rsResult14 = db_query($sSql); //db_criatabela($rsResult14);echo $sSql;
 
       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
@@ -716,7 +713,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
 
 
-      $rsResult15 = db_query($sSql);//db_criatabela($rsResult15);
+      $rsResult15 = db_query($sSql); //db_criatabela($rsResult15);
       $aDadosAgrupados15 = array();
       for ($iCont15 = 0; $iCont15 < pg_num_rows($rsResult15); $iCont15++) {
 
@@ -741,11 +738,9 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
           $oDados15->si79_instit = db_getsession("DB_instit");
           $oDados15->si79_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
           $aDadosAgrupados15[$sHash15] = $oDados15;
-
         } else {
           $aDadosAgrupados15[$sHash15]->si79_quantidade += $oResult15->quantidade;
         }
-
       }
 
       foreach ($aDadosAgrupados15 as $oDadosAgrupados15) {
@@ -890,7 +885,15 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	(CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
 		ELSE 2
 	END) as tipoDocumento,
-	cgm.z01_cgccpf as nroDocumento,
+	(
+    select
+    z01_cgccpf
+    from
+      cgm
+    join pcorcamforne pof on
+      pof.pc21_numcgm = cgm.z01_numcgm
+    where
+      pof.pc21_orcamforne = pcorcamforne.pc21_orcamforne) as nroDocumento,
 	pcforne.pc60_inscriestadual as nroInscricaoEstadual,
 	pcforne.pc60_uf as ufInscricaoEstadual,
 	habilitacaoforn.l206_numcertidaoinss as nroCertidaoRegularidadeINSS,
@@ -915,24 +918,36 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
 	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )
 	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)
-	INNER JOIN pcorcamjulg ON (pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem )
-	INNER JOIN pcorcamforne ON (pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne)
-	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
+
+	inner join pcorcam on pc20_codorc = pc22_codorc
+
+inner join pcorcamforne on
+	(pcorcam.pc20_codorc = pcorcamforne.pc21_codorc)
+
+
+inner join pcorcamjulg on
+	(pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem
+	and pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne)
+
+  INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
 	LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem AND liclicita.l20_tipojulg = 3)
 	LEFT  JOIN dispensa112021 on (liclicitemlote.l04_descricao = dispensa112021.si75_dsclote and dispensa112021.si75_nroprocesso = liclicita.l20_edital::varchar)
-	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
+	LEFT JOIN pcorcamjulg as julgamento ON julgamento.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+  AND pcorcamforne.pc21_orcamforne = julgamento.pc24_orcamforne
+  INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
-	AND liclicita.l20_codigo= {$oDados10->codlicitacao} AND pctipocompratribunal.l44_sequencial in (100,101)";
+	AND liclicita.l20_codigo= {$oDados10->codlicitacao} AND pctipocompratribunal.l44_sequencial in (100,101) AND julgamento.pc24_pontuacao=1";
 
-
-      $rsResult17 = db_query($sSql);//db_criatabela($rsResult17);
+      // echo $sSql;
+      // exit;
+      $rsResult17 = db_query($sSql); //db_criatabela($rsResult17);
       $aDadosAgrupados17 = array();
       for ($iCont17 = 0; $iCont17 < pg_num_rows($rsResult17); $iCont17++) {
 
@@ -970,11 +985,9 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
           $oDados17->si81_reg10 = $dispensa10->si74_sequencial;
 
           $aDadosAgrupados17[$sHash17] = $oDados17;
-
         } else {
           $aDadosAgrupados17[$sHash17]->si81_quantidade += $oResult17->quantidade;
         }
-
       }
 
       foreach ($aDadosAgrupados17 as $oDadosAgrupados17) {
@@ -1013,7 +1026,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
         if ($dispensa17->erro_status == 0) {
           throw new Exception($dispensa17->erro_msg);
         }
-
       }
     }
     $sSql = "select DISTINCT '20' as tipoRegistro,
@@ -1078,11 +1090,11 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . "
-	AND DATE_PART('YEAR',credenciamento.l205_datacred)= ". db_getsession("DB_anousu")."
-  AND DATE_PART('MONTH',credenciamento.l205_datacred)=".$this->sDataFinal['5'] . $this->sDataFinal['6'];
+	AND DATE_PART('YEAR',credenciamento.l205_datacred)= " . db_getsession("DB_anousu") . "
+  AND DATE_PART('MONTH',credenciamento.l205_datacred)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
 
-    $rsResult18 = db_query($sSql);//echo $sSql; db_criatabela($rsResult18);die();
+    $rsResult18 = db_query($sSql); //echo $sSql; db_criatabela($rsResult18);die();
 
     for ($iCont18 = 0; $iCont18 < pg_num_rows($rsResult18); $iCont18++) {
 
@@ -1128,9 +1140,5 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
     $oGerarDISPENSA = new GerarDISPENSA();
     $oGerarDISPENSA->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarDISPENSA->gerarDados();
-
   }
 }
-
-
-

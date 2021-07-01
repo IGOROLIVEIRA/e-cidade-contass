@@ -931,38 +931,6 @@ ob_start();
                 ?>
             </td>
         </tr>
-        <?php
-        $fTotalDeducoes = 0;
-        $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '492%'");
-        foreach ($aDadoDeducao as $oDeducao) {
-            ?>
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">
-                    <?php echo db_formatar($oDespesa->o57_fonte, "receita") . " - " . $oDespesa->o57_descr; ?>
-                </td>
-                <td class="s5">
-                    <?php
-                    $fTotalDeducoes += $oDespesa->saldo_arrecadado;
-                    echo db_formatar($oDespesa->saldo_arrecadado, "f");
-                    ?>
-                </td>
-            </tr>
-        <?php }
-
-        $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '499%'");
-        foreach ($aDadoDeducao as $oDeducao) { ?>
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">
-                    <?php echo db_formatar($oDespesa->o57_fonte, "receita") . " - " . $oDespesa->o57_descr; ?>
-                </td>
-                <td class="s5">
-                    <?php
-                    $fTotalDeducoes += $oDespesa->saldo_arrecadado;
-                    echo db_formatar($oDespesa->saldo_arrecadado, "f");
-                    ?>
-                </td>
-            </tr>
-        <?php } ?>
 
         <tr style='height:20px;'>
             <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA AJUSTADA = BASE DE CÁLCULO</td>

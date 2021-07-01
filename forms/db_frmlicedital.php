@@ -133,19 +133,17 @@ $db_botao = true;
 						  ?>
                       </td>
                   </tr>
-                  <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104))):?>
-                   <tr>
-                      <td class="label-textarea" nowrap title="Links da publicação">
-                        <b>Links da publicação:</b>
-                      </td>
-                      <td>
-                        <?
-                        db_textarea('links',4,56,'',true,'text',1, '', '', '', 200);
-                        ?>
-                      </td>
-                    </tr>
-                  <?php endif;?>
-
+                  <tr>
+                    <td class="label-textarea" nowrap title="Links da publicação">
+                      <b>Links da publicação:</b>
+                    </td>
+                    <td>
+                      <?
+                      db_textarea('links',4,56,'',true,'text',1, '', '', '', 200);
+                      ?>
+                    </td>
+                  </tr>
+                  
                   <tr id="td_obras" style="display: <?= $natureza_objeto == 1 ? '' : 'none' ?>;">
                     <td colspan="3">
                       <fieldset>
@@ -154,12 +152,12 @@ $db_botao = true;
                           <tr>
                             <td>
                               <?
-                              db_ancora('Dados Complementares:', 'js_exibeDadosCompl();', 1, '', '');
+                                db_ancora('Dados Complementares:', 'js_liberaAncoraDados()', '', '', 'ancora_dados');
                               ?>
                             </td>
                             <td>
                               <?php
-                              db_input('dados_complementares', 45,'',true,'text',3,"onchange='';");
+                              db_input('dados_complementares', 45,'',true,'text',3,"");
                               db_input ('idObra', 10, '', true, 'hidden', $db_opcao);
                               ?>
                               <input type="button" value="Lançar" id="btnLancarDados" onclick="js_lancaDadosObra();"/>
@@ -200,9 +198,11 @@ $db_botao = true;
 </form>
 
 <script>
-    let iSequencial = '<?= $sequencial; ?>';
-    let codigoLicitacao = "<?= $codigolicitacao;?>";
-    let origem_rec = "<?= $origem_recurso?>";
+    iSequencial = '<?= $sequencial; ?>';
+    codigoLicitacao = "<?= $codigolicitacao;?>";
+    origem_rec = "<?= $origem_recurso?>";
+    anoLicitacao = "<?= $anoLicitacao?>";
+    tipoJulgamento = "<?= $iTipoJulgamento?>"
 
     function js_mostraDescricao(valor){
         if(valor != 9){
@@ -247,7 +247,7 @@ $db_botao = true;
     function js_retornoDadosLicitacao(oAjax){
         let oRetorno = eval('('+oAjax.responseText+')');
         let dadoslicitacao = oRetorno.dadosLicitacao;
-
+        
         switch (dadoslicitacao.l20_cadinicial) {
             case '1':
                 document.location.href="lic4_editalinclusao.php?licitacao="+dadoslicitacao.l20_codigo;
@@ -265,25 +265,51 @@ $db_botao = true;
 
     }
 
-    function js_exibeDadosCompl(idObra = null, incluir = true){
-        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir, codigoLicitacao, "<?=$natureza_objeto?>");
-        oDadosComplementares.setObjetoRetorno($('idObra'));
-        oDadosComplementares.setLicitacao(codigoLicitacao);
-        if(idObra){
-            oDadosComplementares.preencheCampos(idObra);
-        }else{
-          oDadosComplementares.setCallBackFunction(() => {
-              js_lancaDadosCompCallBack();
-          });
+    function js_exibeDadosCompl(iSequencial = null, incluir = true){
+
+        if(anoLicitacao >= 2021 && iSequencial == null && tipoJulgamento == '3'){
+            oDadosLotesPendentes = new DBViewLotesPendentes('oDadosLotesPendentes');
+            oDadosLotesPendentes.setLicitacao(codigoLicitacao);
+            
+            oDadosLotesPendentes.setCallBackDoubleClick((oDadosLinha) => {
+                oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir, 
+                codigoLicitacao, "<?=$natureza_objeto?>", oDadosLinha.sLote, oDadosLinha.sDescricao);
+                oDadosComplementares.setObjetoRetorno($('idObra'));
+                oDadosComplementares.setLicitacao(codigoLicitacao);
+                oDadosComplementares.setCallBackFunction(() => {
+                    oDadosLotesPendentes.getLotesPendentes();
+                    js_buscaDadosComplementares();
+                });
+                oDadosComplementares.show();
+            });
+
+            oDadosLotesPendentes.show();
+            document.getElementById('tablectnGridLotesPendentesheader').style.width = '557px';
+
+        }else{ 
+
+            oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir, 
+            codigoLicitacao, "<?=$natureza_objeto?>", iSequencial, '');
+            oDadosComplementares.setObjetoRetorno($('idObra'));
+            oDadosComplementares.setLicitacao(codigoLicitacao);
+          
+            if(iSequencial){
+                oDadosComplementares.preencheCampos(iSequencial);
+            }else{
+                oDadosComplementares.setCallBackFunction(() => {
+                    js_lancaDadosCompCallBack();
+                });
+            }
+
+            oDadosComplementares.show();
         }
-        oDadosComplementares.show();
+        
     }
 
     function js_lancaDadosCompCallBack(){
         let oEndereco = new Object();
         oEndereco.exec = 'findDadosObra';
         oEndereco.licitacao = codigoLicitacao;
-        // oEndereco.sequencial = $F('idObra');
         js_AjaxCgm(oEndereco, js_retornoDadosObra);
 
         function js_retornoDadosObra(oAjax) {
@@ -294,7 +320,7 @@ $db_botao = true;
 
             if (oRetorno.dadoscomplementares == false) {
 
-                let strMessageUsuario = "Falha ao ler os dados complementares cadastrado! ";
+                let strMessageUsuario = "Falha ao ler os dados complementares cadastrados! ";
                 js_messageBox(strMessageUsuario,'');
                 return false;
             } else {
@@ -324,10 +350,10 @@ $db_botao = true;
         let iNumDados = aDados.length;
         for (let iInd=0; iInd < iNumDados; iInd++) {
             let sEndereco = "";
-            sEndereco += "Sequencial: "+aDados[iInd].sequencial.urlDecode()+", ";
-            sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode()+", ";
+            sEndereco += "Sequencial: "+aDados[iInd].db150_sequencial.urlDecode()+", ";
+            sEndereco += "Obra: "+aDados[iInd].db150_codobra.urlDecode()+", ";
             sEndereco += aDados[iInd].descrmunicipio.urlDecode()+", ";
-            sEndereco += aDados[iInd].bairro != '' ? aDados[iInd].bairro.urlDecode() : '';
+            sEndereco += aDados[iInd].db150_bairro != '' ? aDados[iInd].db150_bairro.urlDecode() : '';
 
             $('dados_complementares').value = sEndereco;
         }
@@ -346,29 +372,9 @@ $db_botao = true;
     function js_lancaDadosObra(){
 
         let dadoscomplementares = $('dados_complementares').value;
-        let valores = dadoscomplementares.split(',');
 
         if(dadoscomplementares != ''){
-            let linhas = oDBGrid.aRows.length;
-
-            let aLinha = new Array();
-            aLinha[0] = linhas+1;
-            aLinha[1] = valores[0].split(':')[1].trim();
-            valores[0] = '';
-            let novosValores = valores.filter( e => {
-                let valor = e.trim().replace(',','');
-                return valor;
-            });
-
-            aLinha[2] = novosValores.join(',');
-
-            aLinha[3] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+aLinha[1]+'"'+");'>"+
-                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
-
-            oDBGrid.addRow(aLinha);
-            oDBGrid.renderRows();
-            $('dados_complementares').value = '';
-            $('idObra').value = '';
+            js_buscaDadosComplementares();
         }else{
             alert('Informe algum endereço');
         }
@@ -395,26 +401,70 @@ $db_botao = true;
     }
 
     function js_retornoDados(oAjax){
+
         let oRetorno    = eval("("+oAjax.responseText+")");
+
         oRetorno.dadoscomplementares.forEach((dado) => {
-            let descMunicipio = unescape(dado.descrmunicipio).replace(/\+/g, ' ');
-            let bairro        = decodeURI(dado.bairro).replace(/\+/g, ' ');
-            let linhas = oDBGrid.aRows.length;
-            let descricaoLinha = `Obra: ${dado.codigoobra},`;
-            descricaoLinha += `${descMunicipio},`;
+
+            let descMunicipio  = dado.descrmunicipio.urlDecode();
+            let bairro         = dado.db150_bairro.urlDecode();
+            let linhas         = oDBGrid.aRows.length;
+            let descricaoLinha = `Obra: ${dado.db150_codobra}, `;
+
+            /**
+             * Se existir valor para esse atributo, os dados são de lote
+             */
+            if(dado.l04_descricao){
+                descricaoLinha += `${dado.l04_descricao.urlDecode()}, `;
+            }
+
+            descricaoLinha += `${descMunicipio.urlDecode()},`;
             descricaoLinha += bairro ? ` ${bairro}` : '';
 
             let aLinha = new Array();
+            
             aLinha[0] = linhas+1;
-            aLinha[1] = dado.sequencial;
+            aLinha[1] = dado.l04_descricao ? dado.db150_codobra : dado.db150_sequencial;
             aLinha[2] = descricaoLinha;
-            aLinha[3] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+aLinha[1]+'"'+");'>"+
-                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
+            aLinha[3] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+dado.db150_sequencial+'"'+");'>"+
+                "<input type='button' value='E' onclick='js_excluiDados("+'"'+dado.db150_sequencial+'",'+'"'+dado.l04_descricao+'"'+");'>";
             oDBGrid.addRow(aLinha);
         });
+
         oDBGrid.renderRows();
         $('dados_complementares').value = '';
         $('idObra').value = '';
+
+    }
+
+    function js_liberaAncoraDados(){
+        let oParam = new Object();
+        oParam.exec = 'getLotesPendentes';
+        oParam.iLicitacao = codigoLicitacao;
+
+        let oAjax = new Ajax.Request(
+            "lic4_licitacao.RPC.php",
+            { parameters: 'json='+Object.toJSON(oParam),
+                asynchronous:false,
+                method: 'post',
+                onComplete : (oAjax) => {
+                    let response = eval('('+oAjax.responseText+')');
+                    let aLotes = [];
+
+                    response.itens.map(item => {
+
+                        if(!aLotes.includes(item.descricao)){
+                            aLotes.push(item.descricao);
+                        }
+                        
+                    });
+
+                    !aLotes.length ? alert('Não há mais lotes a serem cadastrados!') : js_exibeDadosCompl();
+
+                }
+            }
+          )
+        
     }
 
     function js_lancaDadosAlt(valor){
@@ -422,8 +472,16 @@ $db_botao = true;
         js_exibeDadosCompl(valor, false);
     }
 
-    function js_excluiDados(valor){
-        let resposta = window.confirm('Deseja excluir o endereço do código da obra '+valor+'?');
+    function js_excluiDados(valor, lote){
+        let mensagem = '';
+
+        if(lote != 'undefined' && lote){
+            mensagem = `Deseja excluir o endereço do ${lote.urlDecode()}?`;
+        }else{
+            mensagem = `Deseja excluir o endereço do código da obra ${valor}?`;
+        }
+
+        let resposta = window.confirm(mensagem);
 
         if(resposta){
             let sUrlRpc = "con4_endereco.RPC.php";
@@ -449,16 +507,22 @@ $db_botao = true;
         alert(resposta.message.urlDecode());
 
         if(resposta.status == 1){
-            for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
-                let codigoobra = oDBGrid.aRows[cont].aCells[1].content;
+            if(!resposta.lote){
 
-                if(codigoobra == obra.sequencial){
-                    let valores = [];
-                    valores.push(cont);
-                    oDBGrid.removeRow(valores);
+                for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
+                    let codigoobra = oDBGrid.aRows[cont].aCells[1].content;
+    
+                    if(codigoobra == obra.sequencial){
+                        let valores = [];
+                        valores.push(cont);
+                        oDBGrid.removeRow(valores);
+                    }
                 }
+                oDBGrid.renderRows();
+
+            }else{
+                js_buscaDadosComplementares();
             }
-            oDBGrid.renderRows();
         }
 
     }
@@ -469,7 +533,7 @@ $db_botao = true;
 
         if(valor.includes(';')){
             document.getElementById('links').value = valor.replace(/;/g, ',');
-            alert('Caractere ponto e vírugla não é permitido e será substituído por vírgula.');
+            alert('Caractere ponto e vírgula não é permitido e será substituído por vírgula.');
         }
     });
 </script>

@@ -226,7 +226,8 @@ class cl_obrasdadoscomplementares
 			$this->erro_status = "0";
 			return false;
 		}else{
-			$this->db150_subgrupobempublico = 'null';
+			if($this->db150_grupobempublico == '99')
+				$this->db150_subgrupobempublico = 'null';
 		}
 
 		if ($this->db150_descratividadeservico == null) {
@@ -399,10 +400,10 @@ class cl_obrasdadoscomplementares
 			$sql .= $virgula . " db150_bairro = null ";
 			$virgula = ",";
 		}
-//		if (trim($this->db150_numero) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])) {
+
 		$sql .= $virgula . " db150_numero = ".(!$this->db150_numero ? 'null' : $this->db150_numero);
 		$virgula = ",";
-//		}
+		
 		if (trim($this->db150_logradouro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_logradouro"])) {
 			$sql .= $virgula . " db150_logradouro = '$this->db150_logradouro' ";
 			$virgula = ",";
@@ -435,16 +436,22 @@ class cl_obrasdadoscomplementares
 			$sql .= $virgula . " db150_classeobjeto = $this->db150_classeobjeto ";
 			$virgula = ",";
 		}
-		if (trim($this->db150_atividadeobra) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeobra"])) {
+		if (trim($this->db150_atividadeobra) || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeobra"])) {
 			$sql .= $virgula . " db150_atividadeobra = $this->db150_atividadeobra ";
+			$sql .= $virgula . " db150_atividadeservico = null ";
+			$sql .= $virgula . " db150_atividadeservicoesp = null ";
 			$virgula = ",";
 		}
-		if (trim($this->db150_atividadeservico) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeservico"])) {
+		if (trim($this->db150_atividadeservico) || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeservico"])) {
 			$sql .= $virgula . " db150_atividadeservico = $this->db150_atividadeservico ";
+			$sql .= $virgula . " db150_atividadeobra = null ";
+			$sql .= $virgula . " db150_atividadeservicoesp = null ";
 			$virgula = ",";
 		}
-		if (trim($this->db150_atividadeservicoesp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeservicoesp"])) {
+		if (trim($this->db150_atividadeservicoesp) || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeservicoesp"])) {
 			$sql .= $virgula . " db150_atividadeservicoesp = $this->db150_atividadeservicoesp ";
+			$sql .= $virgula . " db150_atividadeservico = null ";
+			$sql .= $virgula . " db150_atividadeobra = null ";
 			$virgula = ",";
 		}
 

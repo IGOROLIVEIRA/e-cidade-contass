@@ -151,7 +151,16 @@ $iddepart = db_getsession("DB_coddepto");
   <input type="button" value="Imprimir" onClick="js_imprimir();" 
          <?=(isset($opcao_imp) && $opcao_imp != "" ? "" : "disabled") ?> />
   <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" 
-         <?=($db_opcao == 1 || isset($db_opcaoal) ? "style='visibility:hidden;'" : "") ?> />
+         <?=($db_opcao == 1 || isset($db_opcaoal) ? "style='display:none;'" : "") ?> />
+    <?php
+    $sSqlTermo = "SELECT t59_termodeguarda from cfpatriinstituicao where t59_instituicao = " . db_getsession('DB_instit');
+    $rsTermo = db_query($sSqlTermo);
+    $iTermo = db_utils::fieldsMemory($rsTermo, 0)->t59_termodeguarda;
+
+    if($iTermo == 'f'){
+        db_select('modelo', array(0 => 'Selecione', 1 => 'Modelo 1'), $db_opcao, '');
+    }
+    ?>
   <br />
   <table>
    <tr>
@@ -173,16 +182,33 @@ $iddepart = db_getsession("DB_coddepto");
 </form>
 
 <script type="text/javascript">
-/**
- * 
- */
+
+document.getElementById('modelo').selectedIndex = 1;
+
 function js_imprimir() {
+    let sUrl = '';
+    let termoguarda = "<?=$iTermo?>";
 
-  var sUrl  = 'pat2_reltermoguarda001.php?';
-      sUrl += 'iTermo='+$F('t22_bensguarda');
-
-  js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+    if(termoguarda == 't'){
+        sUrl  = 'pat2_reltermoguarda001.php?';
+    }else{
+        sUrl = 'pat2_reltermoguardamodelo.php?';
+    }
+   
+    sUrl += 'iTermo='+document.getElementById('t22_bensguarda').value;
+    
+    if(termoguarda == 't'){
+        js_OpenJanelaIframe('', 'db_iframe_imprime_termo', sUrl, 'Imprime Termo', true);
+    }else{
+        if(!document.form1.modelo.selectedIndex){
+            alert('Informe um modelo!');
+            return;
+        }
+        let janela = window.open(sUrl, 'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
+	      janela.moveTo(0,0);
+    }
 }
+
 function js_cancelar() {
   
   var opcao = document.createElement("input");
@@ -194,7 +220,7 @@ function js_cancelar() {
 }
 
 function js_pesquisat22_bensguarda(mostra){
-
+  
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bensguarda','func_bensguarda.php?funcao_js=parent.js_mostrabensguarda1|t21_codigo|t21_codigo','Pesquisa',true,'0');
   }else{
@@ -224,11 +250,13 @@ function js_mostrabensguarda1(chave1,chave2){
 
 function js_pesquisat22_bem(mostra){
 
+  let codigo_guarda = "<?=$t22_bensguarda?>";
+
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>&funcao_js=parent.js_mostrabens1|t52_bem|t52_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?guarda='+codigo_guarda+'&chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>&funcao_js=parent.js_mostrabens1|t52_bem|t52_descr','Pesquisa',true,'0');
   }else{
      if(document.form1.t22_bem.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?pesquisa_chave='+document.form1.t22_bem.value+'&funcao_js=parent.js_mostrabens&chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_bensguardaitem','db_iframe_bens','func_bensconfirmacao.php?guarda='+codigo_guarda+'&pesquisa_chave='+document.form1.t22_bem.value+'&funcao_js=parent.js_mostrabens&chave_id_usuario=<?=$idus ?>&chave_t93_depart=<?=$iddepart ?>','Pesquisa',false);
      }else{
        document.form1.t52_descr.value = ''; 
      }

@@ -416,8 +416,7 @@ switch ($oParam->exec) {
 
         db_inicio_transacao();
             try {
-
-                $oEndereco = new obrasDadosComplementares(null);
+                $oEndereco = new obrasDadosComplementares(null, $oParam->endereco->sLote);
                 $oEndereco->setEstado($oParam->endereco->codigoEstado);
                 $oEndereco->setPais($oParam->endereco->codigoPais);
                 $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
@@ -427,12 +426,25 @@ switch ($oParam->exec) {
                 $oEndereco->setCodigoObra($oParam->endereco->codigoObra);
                 $oEndereco->setDistrito($oParam->endereco->distrito);
                 $oEndereco->setLogradouro($oParam->endereco->logradouro);
-                $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
-                $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
-                $oEndereco->setSegundoLatitude($oParam->endereco->segundoLatitude);
-                $oEndereco->setGrausLongitude($oParam->endereco->grausLongitude);
-                $oEndereco->setMinutoLongitude($oParam->endereco->minutoLongitude);
-                $oEndereco->setSegundoLongitude($oParam->endereco->segundoLongitude);
+                
+                if(!$oParam->endereco->lLote){
+                  
+                    $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
+                    $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
+                    $oEndereco->setSegundoLatitude($oParam->endereco->segundoLatitude);
+                    $oEndereco->setGrausLongitude($oParam->endereco->grausLongitude);
+                    $oEndereco->setMinutoLongitude($oParam->endereco->minutoLongitude);
+                    $oEndereco->setSegundoLongitude($oParam->endereco->segundoLongitude);
+
+                }else{
+
+                    $oEndereco->setLatitude($oParam->endereco->latitude);
+                    $oEndereco->setLongitude($oParam->endereco->longitude);
+                    $oEndereco->setLote($oParam->endereco->sLote);
+                    $oEndereco->setFlagLote($oParam->endereco->lLote);
+
+                }
+
                 $oEndereco->setClasseObjeto($oParam->endereco->classeObjeto);
                 $oEndereco->setAtividadeObra($oParam->endereco->atividadeObra);
                 $oEndereco->setAtividadeServico($oParam->endereco->atividadeServico);
@@ -483,25 +495,105 @@ switch ($oParam->exec) {
     case 'excluiDadosObra':
         db_inicio_transacao();
         try{
+
             if($oParam->sequencial){
-                if(obrasDadosComplementares::isLastRegister($oParam->sequencial, $oParam->licitacao)){
+                if(obrasDadosComplementares::isManyRegisters($oParam->sequencial, $oParam->licitacao)){
                     throw new Exception("Primeiro Registro não pode ser excluído.\n\nRemova os demais registros para excluí-lo.\n\n");
                 }else{
-                    $clObras = new cl_obrasdadoscomplementares();
+
+                    $rsLicitacao = db_query('select l20_anousu, l20_tipojulg from liclicita where l20_codigo = ' . $oParam->licitacao);
+                    $oLicitacao = db_utils::fieldsMemory($rsLicitacao, 0);
+                    $tabela = $oLicitacao->l20_anousu >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+                    
+                    $clObras = db_utils::getDao($tabela);
                     $sSql = $clObras->sql_query_completo('','db150_sequencial','', 'db151_liclicita = '.$oParam->licitacao);
+                    
                     $rsSql = $clObras->sql_record($sSql);
                     $iLinhas = $clObras->numrows;
 
-                    $clObras->excluir('', 'db150_sequencial = '.$oParam->sequencial);
-                    $msg = urlencode($clObras->erro_msg);
+                    $oObrasCodigos = db_utils::getDao('obrascodigos');
 
-                    if($iLinhas == 1) {
-                        $oObrasCodigos = db_utils::getDao('obrascodigos');
-                        $oObrasCodigos->excluir('', 'db151_liclicita = ' . $oParam->licitacao);
+                    if($tabela == 'obrasdadoscomplementares'){
+
+                        $clObras->excluir('', 'db150_sequencial = '.$oParam->sequencial);
+
+                        if($clObras->numrows_excluir){
+                            $msg = urlencode($clObras->erro_msg);
+                        }
+                        
+                        if($iLinhas == 1) {
+                            $oObrasCodigos->excluir('', 'db151_liclicita = ' . $oParam->licitacao);
+                            $msg = urlencode($oObrasCodigos->erro_msg);
+                        } 
+
+                    }else{
+
+                        $sSqlLotes = "
+                            SELECT db150_sequencial, db150_codobra
+                              FROM obrasdadoscomplementareslote
+                              WHERE db150_lote IN
+                                (SELECT l04_codigo
+                                   FROM liclicitemlote
+                                   WHERE l04_descricao =
+                                     (SELECT l04_descricao
+                                        FROM liclicitemlote
+                                        WHERE l04_codigo =
+                                          (SELECT db150_lote
+                                             FROM obrasdadoscomplementareslote
+                                             WHERE db150_sequencial = $oParam->sequencial)))";
+
+                        $rsLotes = db_query($sSqlLotes);
+
+                        if(pg_numrows($rsLotes)){
+
+                            $aLotes  = db_utils::getCollectionByRecord($rsLotes);
+                            
+                            for($count=0; $count < count($aLotes); $count++){
+    
+                                $clDadosComplementares = db_utils::getDao('obrasdadoscomplementareslote');
+                                $clDadosComplementares->excluir($aLotes[$count]->db150_sequencial);
+    
+                                if(!$clDadosComplementares->numrows_excluir){
+                                    throw new Exception('Registros dos dados complementares do lote não podem ser excluídos');
+                                }
+    
+                            }
+
+                        }else{
+                            $clDadosComplementares = db_utils::getDao('obrasdadoscomplementareslote');
+                            $clDadosComplementares->excluir($oParam->sequencial);
+
+                            if(!$clDadosComplementares->numrows_excluir){
+                                throw new Exception('Registros dos dados complementares do lote não pode ser excluído');
+                            }
+                        }
+
+                        $sSqlItens = "
+                            SELECT obrasdadoscomplementareslote.*
+                              FROM obrasdadoscomplementareslote
+                              INNER JOIN obrascodigos ON db151_codigoobra = db150_codobra
+                              WHERE db151_liclicita = $oParam->licitacao
+                        ";
+                        
+                        $rsItens = db_query($sSqlItens);
+                        
+                        if(!pg_numrows($rsItens)){
+                            $oObrasCodigos->excluir('', 'db151_liclicita = ' . $oParam->licitacao);
+                        }
+
+                        if($oLicitacao->l20_tipojulg == 1){
+                            $msg = urlencode('Endereço da obra excluído com sucesso!'); 
+                        }else{
+                            $msg = urlencode('Endereço do lote excluído com sucesso!'); 
+                        }
+
                     }
-                }
+
+                  }
+                  
             }
             $oRetorno->message = $msg;
+            $oRetorno->lote = $tabela == 'obrasdadoscomplementareslote' ? true : false;
             db_fim_transacao(false);
         }catch(Exception $erro){
             db_fim_transacao(true);
@@ -529,9 +621,11 @@ switch ($oParam->exec) {
     break;
 
     case 'isFirstRegister':
-        $clObras = db_utils::getDao('obrasdadoscomplementares');
+        $table_name = !$oParam->sLote ? 'obrasdadoscomplementares' : 'obrasdadoscomplementareslote';
+        $clObras = db_utils::getDao($table_name);
         $sSql = $clObras->sql_query_completo('', 'min(db150_sequencial) as minimo','','db151_codigoobra = '.$oParam->iCodigo);
         $rsSql = $clObras->sql_record($sSql);
+
         $iCodigo = db_utils::fieldsMemory($rsSql, 0)->minimo;
 
         if($iCodigo == $oParam->iSequencial){
@@ -539,7 +633,9 @@ switch ($oParam->exec) {
         }else{
             $oRetorno->status = 2;
         }
+
         echo $oJson->encode($oRetorno);
+
     break;
 }
 ?>

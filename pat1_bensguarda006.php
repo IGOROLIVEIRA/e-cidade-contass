@@ -32,36 +32,27 @@ require_once ("libs/db_usuariosonline.php");
 require_once ("dbforms/db_funcoes.php");
 require_once ("classes/db_bensguarda_classe.php");
 require_once ("classes/db_bensguardaitem_classe.php");
+require_once ("classes/db_bensguardaitemdev_classe.php");
 require_once ("libs/db_app.utils.php");
+
 $clbensguarda = new cl_bensguarda;
 $clbensguardaitem = new cl_bensguardaitem;
+$clbensguardaitemdev = new cl_bensguardaitemdev;
 
 db_postmemory($HTTP_POST_VARS);
 $db_opcao = 33;
 $db_botao = false;
-if (isset($excluir)) {
-  $sqlerro = false;
-  db_inicio_transacao();
-  $clbensguardaitem->t22_codigo = $t21_codigo;
-  $clbensguardaitem->excluir($t21_codigo);
 
-  if ($clbensguardaitem->erro_status == 0) {
-    $sqlerro = true;
-  }
-  $erro_msg = $clbensguardaitem->erro_msg;
-  $clbensguarda->excluir($t21_codigo);
-  if ($clbensguarda->erro_status == 0) {
-    $sqlerro = true;
-  }
-  $erro_msg = $clbensguarda->erro_msg;
-  db_fim_transacao($sqlerro);
-  $db_opcao = 3;
-  $db_botao = true;
-} else if (isset($chavepesquisa)) {
-  $db_opcao = 3;
-  $db_botao = true;
-  $result = $clbensguarda->sql_record($clbensguarda->sql_query($chavepesquisa));
-  db_fieldsmemory($result, 0);
+if (isset($chavepesquisa)) {
+    $db_opcao = 3;
+    $db_botao = true;
+    $result = $clbensguarda->sql_record($clbensguarda->sql_query($chavepesquisa));
+  
+    $sSqlGuarda = $clbensguardaitem->sql_query_file('', 'count(*)', '', 't22_bensguarda = '. $chavepesquisa);
+    $rsGuarda = $clbensguardaitem->sql_record($sSqlGuarda);
+    $iLinhas = db_utils::fieldsMemory($rsGuarda, 0)->count;
+
+    db_fieldsmemory($result, 0);
 }
 ?>
 <html>
@@ -123,5 +114,73 @@ if (isset($chavepesquisa)) {
 }
 if ($db_opcao == 22 || $db_opcao == 33) {
   echo "<script>document.form1.pesquisar.click();</script>";
+}
+
+
+if($db_opcao == 33 || $db_opcao == 3 )  {
+  ?>
+    <script>
+
+        document.getElementById('db_opcao').addEventListener('click', (e) => {
+
+            e.preventDefault();
+
+            let iLinhas = parseInt("<?=$iLinhas?>");
+            let resposta = false;
+
+            if(iLinhas){
+                resposta = confirm('Existem bens vinculados a guarda, deseja realmente excluí-la?');
+            }else{
+                resposta = confirm('Deseja realmente excluir a guarda?');
+            }
+
+            if(resposta){
+                let oParam = new Object;
+                oParam.exec = 'excluiTermoGuarda';
+                oParam.t21_codigo = "<?=$t21_codigo?>";
+                let oAjax = new Ajax.Request('pat1_bensnovo.RPC.php',
+                {
+                    method: 'POST',
+                    parameters: 'json='+Object.toJSON(oParam), 
+                    onComplete: js_retorno
+                });
+
+            } else {
+                parent.document.formaba.bensguardaitem.disabled = false;
+                top.corpo.iframe_bensguardaitem.location.href = 'pat1_bensguardaitem001.php?t22_bensguarda=<?=$t21_codigo?>';
+                parent.iframe_bensguarda.location.href='pat1_bensguarda005.php?chavepesquisa=<?=$t21_codigo?>';
+            }
+          
+        });
+
+        function js_retorno(oAjax){
+            
+            let oResponse = eval('('+oAjax.responseText+')');
+
+            if(oResponse.status == 2){
+                alert(oResponse.msg.urlDecode());
+            }else{
+                alert('Guarda excluída com sucesso!');
+                js_limpaCampos();
+                document.form1.pesquisar.click();
+            }
+
+        }
+
+        function js_limpaCampos(){
+            document.form1.t21_codigo.value = '';
+            document.form1.t21_numcgm.value = '';
+            document.form1.z01_nome.value = '';
+            document.form1.t21_tipoguarda.value = '';
+            document.form1.t20_descr.value = '';
+            document.form1.t21_representante.value = '';
+            document.form1.t21_cpf.value = '';
+            document.form1.t21_data.value = '';
+            document.form1.t21_obs.value = '';
+            document.form1.db_opcao.disabled = true;
+        }
+
+    </script>
+<?php
 }
 ?>

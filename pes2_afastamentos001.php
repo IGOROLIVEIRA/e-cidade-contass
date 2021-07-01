@@ -110,6 +110,7 @@ include("classes/db_cfautent_classe.php");
                                    6 => '6 - Doença + de 15 dias',
                                    7 => '7 - Sem Vencimentos, Sem Ônus',
                                    8 => '8 - Doença + de 30 dias',
+                                   10 => '10 - Afastado doença -15 dias',
                                   );
              db_select('iAfastamentos',$aAfastamentos,true,1);
             ?>

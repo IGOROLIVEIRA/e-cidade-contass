@@ -281,10 +281,6 @@ if ( $filtro == 0 || $filtro == 1 ) {
 
       $oDadosPrev = db_utils::fieldsMemory($rsDadosPrev,$iInd);
 
-      if ($oDadosPrev->r993 == 0) {
-        continue;
-      }
-
       $oDadosRegist = new stdClass();
       $oDadosRegist->sNome   = $oDadosPrev->z01_nome;
       $oDadosRegist->iRegime = $oDadosPrev->rh30_regime;

@@ -66,6 +66,14 @@ if ($rsBuscaCGM == false) {
  */
 $oCgmModel = CgmFactory::getInstance('', $oCgm->z01_numcgm);
 
+$oDaoContaFornecedor        = db_utils::getDao('pcfornecon');
+$sWhere                     = "pc63_numcgm = {$oCgmModel->getCodigo()} AND pc64_contabanco IS NOT NULL";
+$sSqlBuscaContaFornecedor   = $oDaoContaFornecedor->sql_query_padrao(null, "*", null, $sWhere);
+$rsBuscaContaFornecedor     = $oDaoContaFornecedor->sql_record($sSqlBuscaContaFornecedor);
+
+if ($oDaoContaFornecedor->numrows > 0) {
+    $oContaFornecedor = db_utils::fieldsMemory($rsBuscaContaFornecedor, 0);
+}
 /**
  * Enter description here ...
  */
@@ -77,6 +85,10 @@ $clrotulo->label("z01_cgccpf");
 $clrotulo->label("z01_ender");
 $clrotulo->label("z01_bairro");
 $clrotulo->label("z01_nomefanta");
+
+$clrotulo->label("pc63_banco");
+$clrotulo->label("pc63_agencia");
+$clrotulo->label("pc63_conta");
 ?>
 
 <html>
@@ -230,6 +242,26 @@ $clrotulo->label("z01_nomefanta");
 			  	</td>
 			  </tr>
 			<?php } ?>
+            <tr>
+                <td>
+                    <strong><?= $Lpc63_banco ?></strong>
+                </td>
+                <td class="valores">
+                    <?= $oContaFornecedor->pc63_banco != NULL ? $oContaFornecedor->pc63_banco : '' ?>
+                </td>
+                <td>
+                <strong><?= $Lpc63_agencia ?></strong>
+                </td>
+                <td class="valores">
+                    <?= $oContaFornecedor->pc63_agencia != NULL ? $oContaFornecedor->pc63_agencia."-".$oContaFornecedor->pc63_agencia_dig : '' ?>
+                </td>
+                <td>
+                    <strong><?= $Lpc63_conta ?></strong>
+                </td>
+                <td class="valores">
+                    <?= $oContaFornecedor->pc63_conta != NULL ? $oContaFornecedor->pc63_conta."-".$oContaFornecedor->pc63_conta_dig : '' ?>
+                </td>
+            </tr>           
 			<tr>
 				<td>
 					<strong>Observação: </strong>
@@ -239,7 +271,7 @@ $clrotulo->label("z01_nomefanta");
 					  echo $oCgmModel->getObs();
 					?>
 				</td>
-			</tr>
+			</tr> 
 		</table>
 	</fieldset>
 	<fieldset>

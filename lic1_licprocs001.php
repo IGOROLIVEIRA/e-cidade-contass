@@ -54,7 +54,13 @@ $clrotulo->label("descrdepto");
 $clrotulo->label("nome");
 $clrotulo->label("l20_codigo");
 $lRegistroPreco = false;
-$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao,"l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber"));
+$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao,"l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber, l20_criterioadjudicacao, l20_codtipocom"));
+
+$oLicitacao = db_utils::fieldsMemory($result, 0);  
+
+$criterio = $oLicitacao->l20_criterioadjudicacao;
+$codTipoLicitacao = $oLicitacao->l20_codtipocom; 
+
 if ($clliclicita->numrows > 0) {
 
   db_fieldsmemory($result,0);
@@ -106,6 +112,9 @@ function js_liberaexclusao(value){
     <?
            db_input('licitacao',10,$Il20_codigo,true,'text',3);
     ?>
+    <input type="hidden" id="l20_criterioadjudicacao" name="l20_criterioadjudicacao" value="<?echo $criterio;?>">
+    <input type="hidden" id="codTipoLicitacao" name="codTipoLicitacao" value="<?echo $codTipoLicitacao;?>">
+
     </td>
     <td><b>Processos de Compras:</b></td>
     <td>
@@ -283,6 +292,13 @@ function js_liberaexclusao(value){
     <td align="left" nowrap>
     <?
       db_input('descrdepto',41,$Idescrdepto,true,'text',3);
+      db_input('pc80_criterioadjudicacao',41,$pc80_criterioadjudicacao,true,'hidden',3);
+      echo "<script>";
+            echo "parent.document.form1.criterioadj_item.value = document.getElementById('pc80_criterioadjudicacao').value;";
+            echo "parent.document.form1.criterioadj_contrato.value = document.getElementById('l20_criterioadjudicacao').value;";
+            echo "parent.document.form1.codTipoLicitacao.value = document.getElementById('codTipoLicitacao').value;";
+      echo "</script>";
+
     ?>
     </td>
   </tr>

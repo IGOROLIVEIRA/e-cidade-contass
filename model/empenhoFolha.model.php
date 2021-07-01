@@ -969,6 +969,13 @@ class empenhoFolha {
                                              true,
                                              date("d/m/Y", db_getsession("DB_datausu")),
                                              $oDaoEmpenho->e60_resumo,
+                                             false,
+                                             null,
+                                             null,
+                                             null,
+                                             null,
+                                             '',
+                                             null,
                                              false
                                            );
       require_once("libs/JSON.php");

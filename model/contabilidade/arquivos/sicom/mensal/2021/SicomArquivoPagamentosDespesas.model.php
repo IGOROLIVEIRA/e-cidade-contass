@@ -1028,7 +1028,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
                       JOIN orctiporec ON o58_codigo = o15_codigo AND cg.k105_data = corrente.k12_data AND cg.k105_id = corrente.k12_id
                       JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = cg.k105_sequencial AND c23_conlancam = {$oEmpPago->lancamento}
-                      WHERE e80_instit = " . db_getsession("DB_instit") . "
+                      WHERE e60_instit = " . db_getsession("DB_instit") . "
                         AND k12_codord = {$oEmpPago->ordem}
                         AND e81_cancelado IS NULL";
 

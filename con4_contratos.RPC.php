@@ -121,6 +121,30 @@ switch($oParam->exec) {
 
     }
     break;
+  
+  case 'buscarNatureza':
+    
+      try {
+        $oDaoAcordo                = new cl_habilitacaoforn(); 
+        $oRetorno->numero          = array();
+        $sSql1="SELECT l.l20_naturezaobjeto
+                FROM habilitacaoforn h INNER JOIN liclicita l ON l.l20_codigo = h.l206_licitacao where h.l206_fornecedor=$oParam->iContratado";
+        $rsNatuObejto              = $oDaoAcordo->sql_record($sSql1); 
+  
+        for ($iCont = 0; $iCont < pg_num_rows($rsNatuObejto); $iCont++) {
+  
+          $dados = db_utils::fieldsMemory($rsNatuObejto, $iCont);
+          $valor = $dados->l20_naturezaobjeto; 
+          $oRetorno->numero[$iCont] = $valor;
+        }
+  
+        //$oRetorno->numero          = $oNatuObjeto;
+      } catch (Exception $eErro) {
+        $oRetorno->status  = 2;
+        $oRetorno->message = "Erro de busca";
+      }
+      
+      break;  
 
   case 'getAcordo':
 

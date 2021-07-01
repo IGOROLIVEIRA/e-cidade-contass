@@ -161,10 +161,10 @@ for($linha=0;$linha<$numrows;$linha++){
         0 as receita,
 		null::text as receita_descr,
 		corhist.k12_histcor::text as historico,
-		case 
+		case
             when e86_cheque is not null and e86_cheque <> '0' then 'CHE '||e86_cheque::text
-            when coremp.k12_cheque = 0 then e81_numdoc::text 
-            else 'CHE '||coremp.k12_cheque::text 
+            when coremp.k12_cheque = 0 then e81_numdoc::text
+            else 'CHE '||coremp.k12_cheque::text
             end as numdoc,
 		    null::text as contrapartida,
 		    coremp.k12_codord as ordem,
@@ -636,7 +636,7 @@ select caixa,
 	     union all
 /* SLIP CREDITO */
 
-	     select
+	     select distinct on (data, caixa, k12_codautent, codigo)
 	           corrente.k12_id as caixa,
 	           corlanc.k12_data as data,
 		   0                  as valor_debito,
@@ -714,14 +714,14 @@ select caixa,
 	//$lPrimeiroDaConta = true;
 	if (pg_numrows($resmovimentacao)>0){
 		for  ($i=0;$i < pg_numrows($resmovimentacao);$i++){
-			
+
 			db_fieldsmemory($resmovimentacao,$i);
 
 			//quando agrupar os pagamentos o sistema vai retirar as retenções do relatorio.
             if($pagempenhos==3){
 				if (  $ordem > 0 and ($k105_corgrupotipo == 5 or $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2)  ) {
 					continue;
-				}	
+				}
 			}
 			if (isset($considerar_retencoes) && $considerar_retencoes == "n") {
 				if ( $ordem > 0 and ( $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2 ) ) {
@@ -880,10 +880,10 @@ select caixa,
 			  $saldo_dia_credito += $valor_credito;
 
 			  $quebra_data = $data;
-			  
+
 			  $aContas[$k13_reduz]->data[$iInd]->movimentacoes[] = $oMovimentacao;
 			}
-			
+
 
 		}
 	}
@@ -1159,7 +1159,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else{
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->ordem == $oMovimento->ordem && $controle == false 
+						if($oValor->ordem == $oMovimento->ordem && $controle == false
 							&& $oMovimento->tipo == "empenho" && $oValor->tipo == "empenho")
 						{
 
@@ -1201,7 +1201,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 			foreach ($oData->movimentacoes as $oMovimento){
 				$controle = false;
 
-				if($oMovimento->tipo != "empenho" && $oMovimento->tipo != "planilha" 
+				if($oMovimento->tipo != "empenho" && $oMovimento->tipo != "planilha"
 					&& ($oMovimento->tipo != "slip" && !in_array($oMovimento->slipoperacaotipo, array(5,6) ) ) ) {
 
 					$aMovimentacao[] = $oMovimento;
@@ -1209,7 +1209,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else if($oMovimento->tipo == "planilha"){
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->receita == $oMovimento->receita && $controle == false 
+						if($oValor->receita == $oMovimento->receita && $controle == false
 							&& $oMovimento->tipo == "planilha" && $oValor->tipo == "planilha")
 						{
 							$controle = true;
@@ -1226,7 +1226,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else if($oMovimento->tipo == "slip" && !in_array($oMovimento->slipoperacaotipo, array(5,6) ) ){
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false 
+						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false
 							&& $oMovimento->tipo == "slip" && $oValor->tipo == "slip")
 						{
 							$controle = true;
@@ -1243,7 +1243,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else{
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false 
+						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false
 							&& $oMovimento->tipo == "empenho" && $oValor->tipo == "empenho")
 						{
 
@@ -1342,7 +1342,7 @@ if($imprime_pdf == 'p'){
 
 						$pdf->AddPage("L");
 
-						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+						imprimeConta($pdf,$oConta,$lImprimeSaldo);
 						imprimeCabecalho($pdf);
 
 					}
@@ -1350,7 +1350,7 @@ if($imprime_pdf == 'p'){
 
 
 					if($lQuebra_Historico){
-						imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+						imprimeConta($pdf,$oConta,$lImprimeSaldo);
 						imprimeCabecalho($pdf);
 						$lQuebra_Historico = false;
 					}
@@ -1373,7 +1373,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
 
 							}
@@ -1385,7 +1385,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
 
 							}
@@ -1398,7 +1398,7 @@ if($imprime_pdf == 'p'){
 
 								$pdf->AddPage("L");
 
-								imprimeConta($pdf,$oConta,$lImprimeSaldo); 
+								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
 
 							}

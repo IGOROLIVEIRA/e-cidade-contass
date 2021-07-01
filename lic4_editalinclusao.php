@@ -40,13 +40,13 @@ $clliclancedital = new cl_liclancedital;
 $clliclicita = new cl_liclicita;
 $clcflicita = new cl_cflicita;
 $cleditaldocumento = new cl_editaldocumento;
-$clobrasdadoscomplementares = new cl_obrasdadoscomplementares;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $sqlerro = false;
 $db_opcao = 1;
 //  Realizar busca pelos campos
+
 if ($licitacao) {
 
 	$sWhere = "
@@ -59,8 +59,9 @@ if ($licitacao) {
 
 	$sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
         UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
-        l47_dataenvio', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
+        l47_dataenvio, l20_anousu, l20_tipojulg', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
 	$rsLicita = $clliclicita->sql_record($sqlLicita);
+
 	$oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
 	$natureza_objeto = $oDadosLicitacao->natureza_objeto;
 	$objeto = $oDadosLicitacao->l20_objeto;
@@ -69,6 +70,12 @@ if ($licitacao) {
 	$edital = $oDadosLicitacao->l20_edital;
 	$codigolicitacao = $oDadosLicitacao->l20_codigo;
 	$numero_edital = $oDadosLicitacao->l20_nroedital;
+    $anoLicitacao = $oDadosLicitacao->l20_anousu;
+    $iTipoJulgamento = $oDadosLicitacao->l20_tipojulg;
+
+    $tabela_base = $anoLicitacao >= 2021 ? 'obrasdadoscomplementareslote' : 'obrasdadoscomplementares';
+    $clobrasdadoscomplementares = db_utils::getDao($tabela_base);
+
 }
 
 if (isset($incluir) && isset($licitacao)) {
@@ -167,7 +174,6 @@ if (isset($incluir) && isset($licitacao)) {
 
 }
 
-
 ?>
 <html>
 <head>
@@ -184,8 +190,8 @@ if (isset($incluir) && isset($licitacao)) {
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.maskedinput.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
-    <script language="JavaScript" type="text/javascript"
-            src="scripts/classes/dbViewCadDadosComplementares.classe.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/classes/dbViewCadDadosComplementares.classe.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/classes/DBViewLotesPendentesLicitacao.classe.js"></script>
 
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
