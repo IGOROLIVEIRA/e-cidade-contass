@@ -113,6 +113,14 @@ db_app::load("prototype.js");
           ?>
         </td>
       </tr>
+
+      <tr>
+          <td nowrap title="<?=@$Tk29_conciliacaobancaria?>"><?=@$Lk29_conciliacaobancaria?></td>
+          <td>
+            <? db_inputdata('k29_conciliacaobancaria', @$k29_conciliacaobancaria_dia, @$k29_conciliacaobancaria_mes, @$k29_conciliacaobancaria_ano, true, 'text', $db_opcao, "") ?>
+          </td>
+      </tr>
+
       <tr>
         <td nowrap title="<?=@$Tk29_trazdatacheque?>">
           <?=@$Lk29_trazdatacheque?>

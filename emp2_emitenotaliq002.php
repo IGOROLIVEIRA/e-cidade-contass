@@ -33,6 +33,7 @@ require_once("classes/db_pagordem_classe.php");
 require_once("classes/db_pagordemele_classe.php");
 require_once("model/retencaoNota.model.php");
 require_once("classes/db_empautitem_classe.php");
+require_once("classes/db_empagetipo_classe.php");
 
 /*
  * Configurações GED
@@ -45,6 +46,7 @@ $oGet           = db_utils::postMemory($_GET);
 $clpagordem     = new cl_pagordem;
 $clpagordemele  = new cl_pagordemele;
 $clempautitem   = new cl_empautitem;
+$clempagetipo   = new cl_empagetipo;
 
 $sFornecedor = null;
 if ( isset($oGet) && !empty($oGet) ) {
@@ -531,6 +533,23 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
         }
 
+    }
+
+    if ($e50_contapag != '') {
+
+        $sCampos            = " e83_conta, e83_descr, c63_agencia, c63_dvagencia, c63_conta, c63_dvconta ";
+        $sWhere             = " e83_codtipo = {$e50_contapag} ";
+        $sSqlContaPagadora  = $clempagetipo->sql_query_conplanoconta(null, $sCampos, null, $sWhere);
+        $rsContaPagadora    = $clempagetipo->sql_record($sSqlContaPagadora);
+
+        if ($clempagetipo->numrows > 0) {
+            
+            db_fieldsmemory($rsContaPagadora, 0);
+            $pdf1->conta_pagadora_reduz     = $e83_conta;
+            $pdf1->conta_pagadora_agencia   = "{$c63_agencia}-{$c63_dvagencia}";
+            $pdf1->conta_pagadora_conta     = "{$c63_conta}-{$c63_dvconta} {$e83_descr}";
+
+        }
     }
     
    $pdf1->imprime();

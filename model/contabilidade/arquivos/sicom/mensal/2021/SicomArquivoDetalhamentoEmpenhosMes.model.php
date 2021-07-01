@@ -225,8 +225,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
         CASE
         WHEN ac16_sequencial IS NULL THEN NULL
-        WHEN ac16_numero IS NULL THEN ac16_numeroacordo
-        ELSE ac16_numero
+        WHEN ac16_numeroacordo IS NULL THEN ac16_numero
+        ELSE ac16_numeroacordo
         END AS nrocontrato,
         CASE
         WHEN ac16_sequencial IS NULL THEN NULL
@@ -696,6 +696,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
             FROM empempenho
             JOIN orcdotacao ON e60_coddot = o58_coddot
+                  and e60_anousu = o58_anousu
             JOIN empelemento ON e60_numemp = e64_numemp
             JOIN orcelemento ON e64_codele = o56_codele
             JOIN orctiporec ON o58_codigo = o15_codigo

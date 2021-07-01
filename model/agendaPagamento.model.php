@@ -199,19 +199,7 @@ class agendaPagamento {
     $oDaoEmpAgeTipo = db_utils::getDao("empagetipo");
     $sWhere         = " e50_codord = {$iCodigoOrdem} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
     $sCampos        = " distinct e83_conta, e83_descr,e83_codtipo,c61_codigo ";
-    $sSqlContas     = $oDaoEmpAgeTipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere,$lRetornaContasVinculadas , $iCodigoOrdem, $lContaUnicaFundeb);
-    /* [Extensão] - Filtro da Despesa - getContasRecurso */
-    
-    if ($lSomenteCorrente) {
-      $sSqlContas .= " AND EXISTS (SELECT contabancaria.*,c60_codcon,c60_descr,c61_anousu FROM conplanoreduz 
-      JOIN conplano ON conplanoreduz.c61_codcon = conplano.c60_codcon 
-      AND conplanoreduz.c61_anousu = conplano.c60_anousu
-      JOIN conplanocontabancaria ON conplano.c60_codcon = conplanocontabancaria.c56_codcon 
-      AND conplano.c60_anousu = conplanocontabancaria.c56_anousu
-      JOIN contabancaria ON conplanocontabancaria.c56_contabancaria = contabancaria.db83_sequencial
-      WHERE conplanoreduz.c61_anousu = ". db_getsession('DB_anousu') ." AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
-    }
-
+    $sSqlContas     = $oDaoEmpAgeTipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere,$lRetornaContasVinculadas , $iCodigoOrdem, $lSomenteCorrente, $lContaUnicaFundeb);    
     $rsContas       = $oDaoEmpAgeTipo->sql_record($sSqlContas);
     $aContas        = array();
     if ($oDaoEmpAgeTipo->numrows > 0 ) {
@@ -1417,11 +1405,13 @@ class agendaPagamento {
       e71_codnota,
       e79_concarpeculiar,
       e60_concarpeculiar,
-      (case when e85_codmov is null then
+      (case when e50_contapag is not null then e50_contapag
+            when e85_codmov is null then
            (select e28_empagetipo
          from empageformacgm
         where e28_numcgm = e60_numcgm)
         else e85_codtipo end) as e85_codtipo,
+      e50_contapag,
       e97_codmov,
       e90_cancelado,
       case

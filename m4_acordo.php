@@ -148,8 +148,8 @@ if (isset($alterar)) {
 
     if (!empty($manutac_codunidsubanterior)) {
 
-      $sSqlMaxmanutac = $clmanutencaoacordo->sql_query_file(null, "max(manutac_sequencial)", null, "manutac_acordo = $l20_codigo");
-      $clmanutencaoacordo->sql_record($sSqlMaxEdital);
+      $sSqlMaxmanutac = $clmanutencaoacordo->sql_query_file(null, "max(manutac_sequencial)", null, "manutac_acordo = $ac16_sequencial");
+      $clmanutencaoacordo->sql_record($sSqlMaxmanutac);
 
       if ($clmanutencaoacordo->numrows > 0) {
         $clmanutencaoacordo->excluir('', "manutac_acordo = $ac16_sequencial");

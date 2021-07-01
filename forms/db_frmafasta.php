@@ -102,7 +102,9 @@ $clrotulo->label('z01_nome');
                          "7" => "7 - Licença sem vencimento, cessão sem ônus",
                          "8" => "8 - Afastado doença +30 dias",
                          "22" => "9 - Licença por Motivo de Afastamento do Cônjuge",
-                         "10" => "10 - Afastado doença -15 dias"
+                         "10" => "10 - Afastado doença -15 dias",
+                         "11" => "11 - Licença para concorrer a mandato eletivo"
+                         // "12" => "12 - Prorrogação Licença Maternidade"
                         );
       db_select('r45_situac', $db_situac, true, ($db_opcao==1?1:3),"onChange = 'js_verificasituac(this.value)'");
       ?>

@@ -59,10 +59,10 @@ if(isset($alterar)){
 db_postmemory($HTTP_GET_VARS);
 if(isset($chavepesquisa)){
 
- $rubrica = $clrubricasesocial->sql_query($chavepesquisa);
+ $sSqlRubrica = $clrubricasesocial->sql_query_file($chavepesquisa);
 
- $orubrica = $clrubricasesocial->sql_record($rubrica);
- db_fieldsmemory($orubrica);
+ $rsRubrica = $clrubricasesocial->sql_record($sSqlRubrica);
+ db_fieldsmemory($rsRubrica);
  $db_opcao = 2;
 }
 

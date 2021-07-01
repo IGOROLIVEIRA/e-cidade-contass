@@ -314,11 +314,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                       if(!isset($l20_criterioadjudicacao) || $l20_criterioadjudicacao == '') {
                                         $l20_criterioadjudicacao = "";
                                       }
-                                      $aCriterios = array("Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
+                                      $aCriterios = array("3"=>"Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
                                       if(db_getsession('DB_anousu') >= 2019){
 //                                        $aCriterios["3"] = "Menor preço global";
                                       }
-                                      db_select("l20_criterioadjudicacao", $aCriterios, true, '');
+                                      db_select("l20_criterioadjudicacao", $aCriterios, true, '');                                      
                                       ?>
                                   </td>
                                 </tr>

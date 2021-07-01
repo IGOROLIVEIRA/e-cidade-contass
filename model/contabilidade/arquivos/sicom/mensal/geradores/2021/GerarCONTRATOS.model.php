@@ -209,12 +209,7 @@ class GerarCONTRATOS extends GerarAM
         if (strlen($aCONTRATOS20['si87_codunidadesub']) > 5) {
           $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 8); // campo 19
         } else {
-          if (strlen($aCONTRATOS20['si87_codunidadesub']) == 5) {
-            $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 6); // campo 19
-          }
-          if (strlen($aCONTRATOS20['si87_codunidadesub']) < 5) {
-            $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 5); // campo 19
-          }
+          $aCSVCONTRATOS20['si87_codunidadesub']     = $aCONTRATOS20['si87_codunidadesub'] == '' ? ' ' : $this->padLeftZero($aCONTRATOS20['si87_codunidadesub'], 5); // campo 19
         }
 
         //$aCSVCONTRATOS20['si87_codunidadesub']                 =  str_pad($aCONTRATOS20['si87_codunidadesub'], 5, "0", STR_PAD_LEFT);
