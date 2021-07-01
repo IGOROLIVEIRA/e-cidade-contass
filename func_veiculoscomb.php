@@ -87,8 +87,10 @@ $clveiculoscomb->rotulo->label("ve06_veiccadcomb");
     <td align="center" valign="top"> 
       <?
         $dbwhere = " ";
-        if (isset($filtrar_veiculo) && trim($filtrar_veiculo) != ""){
-          $dbwhere = "ve06_veiculos = $filtrar_veiculo ";
+        if (isset($filtrar_veiculo) && trim($filtrar_veiculo) != "" && $controlador==0){
+          $dbwhere = "ve06_veiculos = $filtrar_veiculo and ve06_padrao = true";
+        }else{
+          $dbwhere = "ve06_veiculos = $filtrar_veiculo";
         }
 
       if(!isset($pesquisa_chave)){

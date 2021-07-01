@@ -141,6 +141,7 @@ $rotulo->label("z01_cgccpf");
           $campos = "empempenho.e60_numemp,
           empempenho.e60_codemp,
           empempenho.e60_anousu,
+          empempenho.e60_numcgm,
           case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
           case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
           case when ac16_datafim is null then si174_novadatatermino else ac16_datafim end as si174_novadatatermino,
@@ -280,7 +281,15 @@ $rotulo->label("z01_cgccpf");
 
                <fieldset>
                 <legend><strong>Resultado da Pesquisa</strong></legend>
-                <?php db_lovrot($sql, 15, "()", "%", $funcao_js, "", "NoMe", $repassa, false); ?>
+                <?php 
+                 if($clempempenho->numrows==0){
+                   $lin = "parent.js_mostraempempenho";
+                  //echo "<script> alert('Não encontrado');</script>";
+                  echo "<script>" . $lin . "('Número(" . $chave_e60_codemp . ") não Encontrado', true);</script>";
+                 }else{
+                  db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa, true); 
+                 }?>
+                
               </fieldset>
               <?php
         } else {
@@ -349,7 +358,7 @@ $rotulo->label("z01_cgccpf");
                           //             (SELECT m52_numemp FROM matordemitem
                           //             UNION
                           //             SELECT e69_numemp FROM empnota)";
-                          $sSql = $clempempenho->sql_query(null, $campos, null, $where, $filtroempelemento);
+                          $sSql = $clempempenho->sql_query(null, "*", null, $where, $filtroempelemento);
                         } else {
                           // $where = " e60_vlremp = e60_vlranu
                           //             AND e60_vlrliq = 0
@@ -358,7 +367,7 @@ $rotulo->label("z01_cgccpf");
                           //             UNION
                           //             SELECT e69_numemp FROM empnota)
                           //             and empempenho.e60_numemp = $pesquisa_chave ";
-                          $sSql = $clempempenho->sql_query($pesquisa_chave, $campos, null,$where, $filtroempelemento);
+                          $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null,$where, $filtroempelemento);
                         }
                       }
 
@@ -370,7 +379,7 @@ $rotulo->label("z01_cgccpf");
                         //               UNION
                         //               SELECT e69_numemp FROM empnota)
                         //               and empempenho.e60_numemp = $pesquisa_chave ";
-                        $sSql = $clempempenho->sql_query($pesquisa_chave,$campos,null,$where,$filtroempelemento);
+                        $sSql = $clempempenho->sql_query($pesquisa_chave,"*",null,$where,$filtroempelemento);
                       }
                       //echo $sSql;exit;
                       $result = $clempempenho->sql_record($sSql);
@@ -380,7 +389,7 @@ $rotulo->label("z01_cgccpf");
                         db_fieldsmemory($result, 0);
 
                         if (isset($lNovoDetalhe) && $lNovoDetalhe == 1) {
-                          echo "<script>" . $funcao_js . "('{$e60_codemp} / {$e60_anousu}', false);</script>";
+                          echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false);</script>";
                         } elseif (isset($lPesquisaPorCodigoEmpenho)) {
                           echo "<script>" . $funcao_js . "('{$e60_numemp}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
                         } else {

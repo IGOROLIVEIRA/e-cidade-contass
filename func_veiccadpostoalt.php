@@ -31,6 +31,8 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_veiccadposto_classe.php");
+include("classes/db_veiccadpostoexterno_classe.php");
+include("classes/db_cgm_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -38,6 +40,9 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clveiccadposto = new cl_veiccadposto;
 $clveiccadposto->rotulo->label("ve29_codigo");
 $clveiccadposto->rotulo->label("ve29_codigo");
+
+$clcgm				         = new cl_cgm;
+$clveiccadpostoexterno = new cl_veiccadpostoexterno;
 ?>
 <html>
 <head>
@@ -108,10 +113,27 @@ $clveiccadposto->rotulo->label("ve29_codigo");
         $campos = "ve29_codigo, cgm.z01_numcgm, cgm.z01_cgccpf, z01_nome, case when descrdepto is null and z01_nome is not null then 'EXTERNO' else case when descrdepto is not null then 'INTERNO' else 'EXTERNO' end end as tipo";
         if(isset($chave_ve29_codigo) && (trim($chave_ve29_codigo)!="") ){
 	         $sql = $clveiccadposto->sql_query_tip(null,$campos,"ve29_codigo","ve29_codigo = $chave_ve29_codigo $and $dbwhere");
+        }if(isset($chave_numcgm) && (trim($chave_numcgm)!="") ){
+           $sql = $clveiccadposto->sql_query_tip(null,$campos,"ve29_codigo","z01_numcgm = $chave_numcgm $and $dbwhere");
+           $s = $clveiccadposto->sql_record($clveiccadposto->sql_query_tip(null,$campos,"ve29_codigo","z01_numcgm = $chave_numcgm $and $dbwhere"));
+           if($clveiccadposto->numrows==0){
+            $clveiccadposto->ve29_tipo = 2;
+            $clveiccadposto->incluir();
+
+            $sql_result = $clveiccadposto->sql_record($clveiccadposto->sql_query(null,"max(ve29_codigo)","ve29_codigo",""));
+
+            $clveiccadpostoexterno->ve34_veiccadposto = $clveiccadposto->ve29_codigo;
+            $clveiccadpostoexterno->ve34_numcgm = $chave_numcgm;
+            $clveiccadpostoexterno->incluir();
+
+            $sql = $clveiccadposto->sql_query_tip(null,$campos,"ve29_codigo","z01_numcgm = $chave_numcgm $and $dbwhere");
+          }
         }else{
            $sql = $clveiccadposto->sql_query_tip("",$campos,"ve29_codigo",$dbwhere);
         }
         // print_r($sql);die();
+        
+        
 
         $repassa = array();
         if(isset($chave_ve29_codigo)){
