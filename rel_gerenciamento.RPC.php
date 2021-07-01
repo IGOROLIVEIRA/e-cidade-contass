@@ -72,6 +72,8 @@ switch ($oParam->exec) {
 
     $datasistema =  implode("/", array_reverse(explode("-", date('Y-m-d', db_getsession('DB_datausu')))));
 
+    $dSistema = date("d M") . " de " . date("Y");
+
     db_fieldsmemory($rsArquivo, 0);
 
     $mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
@@ -131,6 +133,7 @@ FOOTER;
     $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
     $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
     $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
+
 
     $sCorpo = base64_decode($oParam->sCorpo);
     //var_dump($sCorpo);

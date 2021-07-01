@@ -38,6 +38,23 @@ $db_botao = true;
   <script type="text/javascript">
     tinymce.init({
       selector: "#rel_corpo",
+      menubar: 'file edit view insert format tools table tc',
+      toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+      style_formats: [{
+          title: 'Line height 20px',
+          selector: 'p,div,h1,h2,h3,h4,h5,h6',
+          styles: {
+            lineHeight: '30px'
+          }
+        },
+        {
+          title: 'Line height 30px',
+          selector: 'p,div,h1,h2,h3,h4,h5,h6',
+          styles: {
+            lineHeight: '40px'
+          }
+        }
+      ]
     });
   </script>
 </head>

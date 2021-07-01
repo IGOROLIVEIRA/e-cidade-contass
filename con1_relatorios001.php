@@ -61,7 +61,8 @@ if (isset($chavepesquisa)) {
   <script src='https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y'></script>
   <script type="text/javascript">
     tinymce.init({
-      selector: '#rel_corpo'
+      selector: '#rel_corpo',
+      toolbar: "undo redo | styleselect | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent",
     });
   </script>
 </head>

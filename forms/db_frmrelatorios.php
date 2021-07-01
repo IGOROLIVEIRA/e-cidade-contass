@@ -141,8 +141,10 @@ $clrotulo->label("descrproced");
       arrHead = ['Descrição', 'Nome do campo'];
 
       var arrValue = new Array();
+
       arrValue.push([unescape("Município"), '#$' + "sMunicipio" + '#']);
       arrValue.push([unescape("Data do sistema"), '#$' + "datasistema" + '#']);
+      arrValue.push([unescape("Data do sistema mês textual"), '#$' + "dSistema" + '#']);
       oRetorno.itens.each(function(oItem, iLinha) {
         arrValue.push([unescape(oItem.descricao), '#$' + oItem.nomecam + '#']);
       });
