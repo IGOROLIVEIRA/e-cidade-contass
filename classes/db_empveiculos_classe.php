@@ -20,7 +20,7 @@ class cl_empveiculos {
    var $si05_numemp = 0; 
    var $si05_atestado = 'f'; 
    var $si05_codabast = 0;
-   var $si05_item_empenho = null;
+   var $si05_item_empenho = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si05_sequencial = int8 = Sequencial 

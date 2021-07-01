@@ -205,7 +205,7 @@ db_app::load("estilos.css");
                                 <td>
                                   <? //db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); ?>
 
-                                  <?php db_input('si05_numemp', 10, $Isi05_numemp, true, 'hidden', 1); ?>
+                                  <?php db_input('si05_numemp', 10, $Isi05_numemp, true, 'hidden', 1); ?> 
                                   <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1); ?>
                                   
                                 </td>
@@ -472,10 +472,8 @@ function ancoraPosto(){
           document.form1.ve70_valor.value = ""; 
           document.form1.ve71_veiccadposto.value = "";
           document.form1.posto.value = ""; 
-        if(controlador ==0){
+        if(controlador==0){
           js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&chave_e60_codemp='+e60_codemp+'&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
-        }else if(controlador==2){
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&chave_e60_numemp='+e60_numemp+'&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
         }else{
           js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
         }  

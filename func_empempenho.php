@@ -172,6 +172,8 @@ $rotulo->label("z01_cgccpf");
            * @see ocorrÃªncia contass 1011
            *
            */
+
+          
           if ($filtroabast == 1) {
             $dbwhere .= " and elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
             //removido por meio da solicitacao da oc 6848
@@ -188,6 +190,8 @@ $rotulo->label("z01_cgccpf");
            * @see ocorrÃªncias contass 2079, 20105
            *
            */
+
+           
           if ($filtromanut == 1) {
 
             $anoant = db_getsession("DB_anousu") - 1;
@@ -208,6 +212,8 @@ $rotulo->label("z01_cgccpf");
            * @see ocorrÃªncia contass 3414
            *
            */
+
+           
           if (isset($emperro) && $emperro == true) {
             $dbwhere .= " AND e60_vlremp = e60_vlranu
                   AND e60_vlrliq = 0
@@ -236,45 +242,6 @@ $rotulo->label("z01_cgccpf");
           } else {
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "{$dbwhere}", $filtroempelemento);
           }
-
-          $repassa = array(
-            "chave_z01_nome" => @$chave_z01_nome
-          );
-          if (isset($relordemcompra) && $relordemcompra == true) {
-            $campos .= ",z01_numcgm";
-            $whereRelCompra = ' e60_instit=' . db_getsession('DB_instit');
-            if (isset($periodoini) && $periodoini != "") {
-
-              $data = explode("/", $periodoini);
-              $periodoini = $data[2] . '-' . $data[1] . '-' . $data[0];
-
-              $whereRelCompra .= " AND e60_emiss >= '$periodoini'";
-            }
-            if (isset($periodofim) && $periodofim != "") {
-              $data = explode("/", $periodofim);
-              $periodofim = $data[2] . '-' . $data[1] . '-' . $data[0];
-
-              $whereRelCompra .= " AND e60_emiss <= '$periodofim'";
-            }
-            if (isset($fornecedor) && $fornecedor != "") {
-              $whereRelCompra .= " AND z01_numcgm = $fornecedor";
-            }
-            if (isset($chave_e60_codemp) && $chave_e60_codemp != "") {
-              $whereRelCompra .= " AND e60_codemp = '$chave_e60_codemp'";
-            }
-            if (isset($chave_z01_cgccpf) && $chave_z01_cgccpf != "") {
-              $whereRelCompra .= " AND z01_cgccpf = '$chave_z01_cgccpf'";
-            }
-            if (isset($chave_z01_nome) && $chave_z01_nome != "") {
-              $whereRelCompra .= " AND z01_nome LIKE '%$chave_z01_nome%'";
-            }
-
-
-
-            $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
-          }
-          //echo $sql;
-          $result = $clempempenho->sql_record($sql);
 
                 $repassa = array(
                   "chave_z01_nome" => @$chave_z01_nome
@@ -326,8 +293,10 @@ $rotulo->label("z01_cgccpf");
                   //echo "<script> alert('Não encontrado');</script>";
                   echo "<script>" . $lin . "('Número(" . $chave_e60_codemp . ") não Encontrado', true);</script>";
                  }else{
-                  db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa, true); 
-                 }?>
+                  db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa, true);  
+                 }
+                 
+                 ?>
                 
               </fieldset>
               <?php
@@ -428,7 +397,7 @@ $rotulo->label("z01_cgccpf");
                         db_fieldsmemory($result, 0);
 
                         if (isset($lNovoDetalhe) && $lNovoDetalhe == 1) {
-                          echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false);</script>";
+                          echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false);</script>"; 
                         } elseif (isset($lPesquisaPorCodigoEmpenho)) {
                           echo "<script>" . $funcao_js . "('{$e60_numemp}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
                         } else {
@@ -451,20 +420,7 @@ $rotulo->label("z01_cgccpf");
                     echo "<script>" . $funcao_js . "('', false);</script>";
                   }
                 }
-                if (isset($protocolo)) {
-                  echo "<script>" . $funcao_js . "('" . str_replace("'", "\'", $z01_nome) . "', '{$e60_numemp}','{$e60_emiss}','{$e60_vlremp}','{$e60_codemp}',false);</script>";
-                } else {
-                  echo "<script>" . $funcao_js . "('" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
-                }
-              }
-            } else {
-              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") nÃ£o Encontrado', true);</script>";
-            }
-          } else {
-
-            echo "<script>" . $funcao_js . "('', false);</script>";
-          }
-        }
+                
         ?>
       </td>
     </tr>

@@ -304,7 +304,7 @@ if (isset($incluir) && $self != "") {
      */
   	if ($sqlerro==false) {
         $clempveiculos->si05_codabast=$clveicabast->ve70_codigo;
-        $clempveiculos->si05_item_empenho = $si05_item_empenho;
+        $clempveiculos->si05_item_empenho = $si05_item_empenho;  
         $clempveiculos->incluir(null);
         if ($clempveiculos->erro_status=="0") {
           $sqlerro=true;

@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "empempitem.e62_numemp,empempitem.e62_item,empempitem.e62_sequen,empempitem.e62_quant,empempitem.e62_vltot,empempitem.e62_codele,empempitem.e62_vlrun"; 
+$campos = "empempitem.e62_numemp,empempitem.e62_item,empempitem.e62_sequen,empempitem.e62_quant,empempitem.e62_vltot,empempitem.e62_codele,empempitem.e62_vlrun";  
 ?>

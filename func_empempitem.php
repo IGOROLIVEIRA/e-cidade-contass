@@ -116,7 +116,7 @@ $clempempitem->rotulo->label("e62_item");
        
         
         if($clempempitem->numrows>1){
-          echo "<script>alert('Selecione um item do empenho');</script>";
+          echo "<script>alert('Selecione um item do empenho');</script>"; 
         }
         db_lovrot($sql, 15, "()", "", $funcao_js);
       }else{

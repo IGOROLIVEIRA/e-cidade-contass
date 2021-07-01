@@ -30,7 +30,7 @@ class Oc14865 extends AbstractMigration
         $sSql = "
         BEGIN;
 
-        ALTER TABLE empveiculos add column si05_item_empenho bool;
+        ALTER TABLE empveiculos add column si05_item_empenho bool; 
 
         COMMIT;
         ";
