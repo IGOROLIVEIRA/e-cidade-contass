@@ -6,7 +6,6 @@ include("libs/db_usuariosonline.php");
 include("classes/db_relatorios_classe.php");
 include("classes/db_db_sysprocedarq_classe.php");
 include("dbforms/db_funcoes.php");
-require_once("model/relatorios/Relatorio.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clrelatorios      = new cl_relatorios;
@@ -39,12 +38,6 @@ $db_botao = true;
   <script type="text/javascript">
     tinymce.init({
       selector: "#rel_corpo",
-      setup: function(editor) {
-        editor.on('change', function() {
-          tinymce.triggerSave();
-          chkSubmit();
-        });
-      }
     });
   </script>
 </head>

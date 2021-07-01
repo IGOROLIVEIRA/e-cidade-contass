@@ -45,7 +45,7 @@ $clrotulo->label("descrproced");
       </table>
 
     </fieldset>
-    <input name="Gerar" type="button" id="db_opcao" value="Gerar">
+    <input name="Gerar" type="button" id="db_opcao" value="Gerar" onclick="js_submit()">
   </div>
 </form>
 <script>
@@ -197,45 +197,6 @@ $clrotulo->label("descrproced");
     if (oRetorno.status == 1) {}
   }
 
-  // function js_gerar() {
-
-  //   var oParam = new Object();
-
-  //   oParam.sExec = 'gerar';
-  //   oParam.sequencial = $F('rel_sequencial');
-  //   oParam.arquivo = $F('input_arquivo');
-
-  //   js_divCarregando('Gerando Relatório, aguarde.', 'msgbox');
-
-  //   var oAjax = new Ajax.Request(sUrl, {
-  //     method: 'POST',
-  //     parameters: 'json=' + Object.toJSON(oParam),
-  //     onComplete: js_confirma
-  //   });
-
-  // }
-
-  $(document).on('click', '#db_opcao', chkSubmit);
-
-  function chkSubmit() {
-
-    tinymce.get("rel_corpo").getContent();
-
-    js_divCarregando('Gerando Relatório, aguarde.', 'msgbox');
-
-    var oParam = new Object();
-    oParam.exec = "Print";
-    oParam.iSequencial = $F('rel_sequencial');
-    oParam.iArquivo = $F('input_arquivo');
-    oParam.sCorpo = tinymce.get("rel_corpo").getContent();
-    var oAjax = new Ajax.Request(sUrl, {
-      method: "post",
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoCorpo
-    });
-
-  }
-
   function js_confirma(oAjax) {
 
     js_removeObj('msgbox');
@@ -247,5 +208,42 @@ $clrotulo->label("descrproced");
       //alert(oRetorno.sMensagem.urlDecode());
       return false;
     }
+  }
+
+  function js_submit() {
+
+    js_divCarregando('Gerando Relatório, aguarde.', 'msgbox');
+
+    if (!$F('input_arquivo')) {
+      alert("É preciso selicionar o arquivo");
+      js_removeObj('msgbox');
+      return false;
+    }
+
+    var ed = encodeURIComponent(btoa(tinymce.get("rel_corpo").getContent()));
+
+    var oParam = new Object();
+    oParam.exec = "Print";
+    oParam.iSequencial = $F('rel_sequencial');
+    oParam.iArquivo = $F('input_arquivo');
+    oParam.sArquivo = $F('arquivo');
+    oParam.sDescricao = encodeURIComponent(btoa($F('rel_descricao')));
+    oParam.sCorpo = ed;
+    var oAjax = new Ajax.Request(sUrl, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_finaliza
+    });
+
+  }
+
+  function js_finaliza(oAjax) {
+
+    js_removeObj('msgbox');
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    var file = oRetorno.itens[0];
+    console.log(file);
+    window.open("data:application/pdf;base64," + file + "", "_blank");
+
   }
 </script>
