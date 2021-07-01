@@ -84,6 +84,10 @@ class Oc14986 extends PostgresMigration
         INSERT INTO configuracoes.db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select codarq from db_sysarquivo where nomearq = 'rhvinculodotpatronais'), (select codcam from db_syscampo where nomecam = 'rh171_anousu'), 11, 0);
         INSERT INTO configuracoes.db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select codarq from db_sysarquivo where nomearq = 'rhvinculodotpatronais'), (select codcam from db_syscampo where nomecam = 'rh171_instit'), 12, 0);
 
+        -- Criação de menu para relatório
+        INSERT INTO db_itensmenu VALUES ((select max(id_item)+1 from db_itensmenu),'Empenhos de Obrigações Patronais (Novo)', 'Empenhos de Obrigações Patronais (Novo)','pes2_empenhospatronaisvinculo001.php',1,1,'Empenhos de Obrigações Patronais (Novo)','t');
+        INSERT INTO db_menu VALUES (2287, (select max(id_item) from db_itensmenu), (select max(menusequencia) from db_menu where id_item = 2287)+1, 952);
+
         COMMIT;
 
 SQL;
