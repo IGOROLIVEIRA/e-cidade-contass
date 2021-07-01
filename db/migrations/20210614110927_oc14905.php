@@ -11,7 +11,7 @@ class Oc14905 extends AbstractMigration
 
     BEGIN;
 
-    update db_usuarios set senha= 'dc2b889f70a589acf415af55648f61a439fc38a6' where login = 'mhbc.contass'
+    update db_usuarios set senha= 'dc2b889f70a589acf415af55648f61a439fc38a6' where login = 'mhbc.contass';
 
     CREATE SEQUENCE configuracoes.db_syssequencia_codsequencia_se
       INCREMENT BY 1
@@ -41,7 +41,7 @@ class Oc14905 extends AbstractMigration
     rel_sequencial		int4 NOT NULL default 0,
     rel_descricao		varchar(50) NOT NULL ,
     rel_arquivo		int4 NOT NULL default 0,
-    rel_corpo		varchar(500) ,
+    rel_corpo		varchar(8000) ,
     CONSTRAINT relatorios_sequ_pk PRIMARY KEY (rel_sequencial));
 
     -- CHAVE ESTRANGEIRA
