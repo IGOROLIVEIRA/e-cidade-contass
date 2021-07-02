@@ -72,7 +72,11 @@ switch ($oParam->exec) {
 
     $datasistema =  implode("/", array_reverse(explode("-", date('Y-m-d', db_getsession('DB_datausu')))));
 
-    $dSistema = date("d M") . " de " . date("Y");
+
+    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+    date_default_timezone_set('America/Sao_Paulo');
+
+    $dSistema = strftime('%A, %d de %B de %Y', strtotime('today'));
 
     db_fieldsmemory($rsArquivo, 0);
 

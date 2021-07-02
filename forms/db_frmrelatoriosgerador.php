@@ -252,8 +252,23 @@ $clrotulo->label("descrproced");
     js_removeObj('msgbox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
     var file = oRetorno.itens[0];
-    console.log(file);
-    window.open("data:application/pdf;base64," + file + "", "_blank");
+    //console.log(file);
+    //window.open("data:application/pdf;base64," + file + "", "_blank");
+    var base64PDF = file;
+    var objbuilder = '';
+    objbuilder += ('<object width="100%" height="100%"      data="data:application/pdf;base64,');
+    objbuilder += (base64PDF);
+    objbuilder += ('" type="application/pdf" class="internal">');
+    objbuilder += ('<embed src="data:application/pdf;base64,');
+    objbuilder += (base64PDF);
+    objbuilder += ('" type="application/pdf" />');
+    objbuilder += ('</object>');
 
+    var win = window.open("", "_blank", "titlebar=yes");
+    win.document.title = $F('rel_descricao');
+    win.document.write('<html><body>');
+    win.document.write(objbuilder);
+    win.document.write('</body></html>');
+    layer = jQuery(win.document);
   }
 </script>
