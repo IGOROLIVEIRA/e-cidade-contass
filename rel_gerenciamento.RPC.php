@@ -81,7 +81,8 @@ switch ($oParam->exec) {
     db_fieldsmemory($rsArquivo, 0);
 
     $mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
-
+    // echo "imagens/files/{$oInstit->getImagemLogo()}";
+    // exit;
     if (file_exists("imagens/files/{$oInstit->getImagemLogo()}")) {
       $sLogo = "<img src='imagens/files/{$oInstit->getImagemLogo()}' width='70px' >";
     } else {
@@ -102,52 +103,68 @@ switch ($oParam->exec) {
 
     $sDescricao = base64_decode($oParam->sDescricao);
 
+    $sCorpo = base64_decode($oParam->sCorpo);
+
+    $corpo = db_geratexto($sCorpo);
+
     $header = <<<HEADER
-      <header>
-            <div style="width: 100%; border-bottom: 1px solid #000; border-collapse: inherit; table-layout: fixed; font-family:sans-serif;">
-            <div style="border: 0px solid #000; float: left; width: 80px;">
-                    <div style="width: 80px; height: 80px">
-                    {$sLogo}
-                    </div>
+      <html>
+      <body>
+      <div>
+            <div style="width: 100%; table-layout: fixed; font-family:sans-serif;">
+              <div style="border: 0px solid #000; float: left; width: 80px;">
+                      <div style="width: 80px; height: 80px">
+                      {$sLogo}
+                      </div>
+              </div>
+              <div style="float: left; width: 300px; font-size: 8pt; font-style: italic; padding-left: 10px">
+                  <span style="font-weight: bold;">{$oInstit->getDescricao()}</span><br>
+                  <span>{$sEndCompleto}</span><br>
+                  <span>{$sMunicipio}</span><br>
+                  <span>{$sTelCnpj}</span><br>
+                  <span>{$sEmail}</span><br>
+                  <span>{$sSite}</span><br>
+              </div>
+              <div style="border: 1px solid #000; margin-left: 20px; float: left; width: 230px; height: 80px; text-align: center; border-radius: 10px 10px 10px 0px; background-color: #eee;">
+                      <div style="padding-top: 35px; font-size: 8pt;">
+                      {$sDescricao}
+                      </div>
+              </div>
             </div>
-            <div style="float: left; width: 394px; font-size: 8pt; font-style: italic; padding-left: 10px">
-                <span style="font-weight: bold;">{$oInstit->getDescricao()}</span><br>
-                <span>{$sEndCompleto}</span><br>
-                <span>{$sMunicipio}</span><br>
-                <span>{$sTelCnpj}</span><br>
-                <span>{$sEmail}</span><br>
-                <span>{$sSite}</span><br>
-            </div>
-            <div style="float: left; width: 160px;">&nbsp;</div>
-            <div style="border: 1px solid #000; float: left; width: 400px; height: 90px; text-align: center; border-radius: 10px 10px 10px 0px; background-color: #eee;">
-                    <div style="padding-top: 35px; font-size: 8pt;">
-                    {$sDescricao}
-                    </div>
-            </div>
-            </div>
-      </header>
+      </div>
+
 HEADER;
 
+    $container = <<<CONTAINER
+    <br /><br /><br /><br />
+<div style='width:100%;text-align:right;height:10px;'>
+<br />
+    {$corpo}
+</div>
+CONTAINER;
+
+
     $footer = <<<FOOTER
-      <div style='border-top:1px solid #000;width:100%;text-align:right;font-family:sans-serif;font-size:10px;height:10px;'>
-            {PAGENO}/{nb}
       </div>
+      <div style='border-top:1px solid #000;width:100%;text-align:right;height:10px;'>
+
+      </div>
+      <body>
+      </html>
 FOOTER;
 
-    $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
-    $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
-    $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
+    // $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
+    // $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
+    // $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 
+    $html = $header;
+    $html .= $container;
+    $html .= $footer;
+    //$mPDF->WriteHTML(utf8_encode($html));
 
-    $sCorpo = base64_decode($oParam->sCorpo);
-    //var_dump($sCorpo);
-    $corpo = db_geratexto($sCorpo);
-    // var_dump($corpo);
-    // exit;
-    $html = $corpo;
-    $mPDF->WriteHTML(utf8_encode($html));
+    $oRetorno->itens[] = $html;
 
-    $oRetorno->itens[] = base64_encode($mPDF->Output($oParam->sDescricao . '.pdf', "S"));
+    //$oRetorno->itens[] = base64_encode($mPDF->Output($oParam->sDescricao . '.pdf', "S"));
 
     break;
 }

@@ -40,7 +40,10 @@ $db_botao = true;
       selector: "#rel_corpo",
       menubar: 'file edit view insert format tools table tc',
       toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-      language: 'pt_BR'
+      plugins: 'print',
+      language: 'pt_BR',
+      height: '600px',
+      width: '820px'
     });
   </script>
 </head>

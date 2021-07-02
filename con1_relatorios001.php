@@ -63,7 +63,9 @@ if (isset($chavepesquisa)) {
     tinymce.init({
       selector: '#rel_corpo',
       toolbar: "undo redo | styleselect | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent",
-      language: 'pt_BR'
+      language: 'pt_BR',
+      height: '600px',
+      width: '820px'
     });
   </script>
 </head>

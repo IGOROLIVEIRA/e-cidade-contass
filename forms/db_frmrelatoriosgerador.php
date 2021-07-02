@@ -15,9 +15,11 @@ $clrotulo->label("descrproced");
       <table border="0">
         <tr>
           <td nowrap title="Relatorios">
-            <?
-            db_ancora("Relatorios", "js_pesquisarelatorios(true);", $db_opcao);
-            ?>
+            <strong>
+              <?
+              db_ancora("Relatorios", "js_pesquisarelatorios(true);", $db_opcao);
+              ?>
+            </strong>
           </td>
           <td align="left">
             <?
@@ -29,7 +31,10 @@ $clrotulo->label("descrproced");
           </td>
         </tr>
         <tr>
-          <td id="tdArquivoAncora"></td>
+          <td>
+            <strong id="tdArquivoAncora">
+            </strong>
+          </td>
           <td id="tdArquivoInput" align="left"></td>
         </tr>
         <tr>
@@ -38,14 +43,15 @@ $clrotulo->label("descrproced");
           </td>
           <td>
             <?
-            db_textarea('rel_corpo', 30, 90, 'rel_corpo', true, 'text', 3, "");
+            db_textarea('rel_corpo', 50, 130, 'rel_corpo', true, 'text', 3, "");
             ?>
           </td>
         </tr>
       </table>
 
     </fieldset>
-    <input name="Gerar" type="button" id="db_opcao" value="Gerar" onclick="js_submit()">
+    <input name="Processar" type="button" id="db_opcao" value="Processar" onclick="js_submit()">
+    <input name="Imprimir" type="button" id="db_opcao" value="Imprimir" onclick="js_imprimir()">
   </div>
 </form>
 <script>
@@ -251,24 +257,35 @@ $clrotulo->label("descrproced");
 
     js_removeObj('msgbox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
-    var file = oRetorno.itens[0];
-    //console.log(file);
-    //window.open("data:application/pdf;base64," + file + "", "_blank");
-    var base64PDF = file;
-    var objbuilder = '';
-    objbuilder += ('<object width="100%" height="100%"      data="data:application/pdf;base64,');
-    objbuilder += (base64PDF);
-    objbuilder += ('" type="application/pdf" class="internal">');
-    objbuilder += ('<embed src="data:application/pdf;base64,');
-    objbuilder += (base64PDF);
-    objbuilder += ('" type="application/pdf" />');
-    objbuilder += ('</object>');
+    //var file = oRetorno.itens[0];
 
-    var win = window.open("", "_blank", "titlebar=yes");
-    win.document.title = $F('rel_descricao');
-    win.document.write('<html><body>');
-    win.document.write(objbuilder);
-    win.document.write('</body></html>');
-    layer = jQuery(win.document);
+    tinymce.activeEditor.execCommand('mceNewDocument');
+    tinymce.activeEditor.execCommand('mceInsertContent', false, oRetorno.itens[0]);
+
+    // tinymce.activeEditor.execCommand('mceNewDocument');
+    // document.form1.rel_sequencial.value = '';
+    // document.form1.rel_descricao.value = '';
+    // document.getElementById("input_arquivo").value = '';
+
+    // var base64PDF = file;
+    // var objbuilder = '';
+    // objbuilder += ('<object width="100%" height="100%"      data="data:application/pdf;base64,');
+    // objbuilder += (base64PDF);
+    // objbuilder += ('" type="application/pdf" class="internal">');
+    // objbuilder += ('<embed src="data:application/pdf;base64,');
+    // objbuilder += (base64PDF);
+    // objbuilder += ('" type="application/pdf" />');
+    // objbuilder += ('</object>');
+
+    // var win = window.open("", "_blank", "titlebar=yes");
+    // win.document.title = $F('rel_descricao');
+    // win.document.write('<html><body>');
+    // win.document.write(objbuilder);
+    // win.document.write('</body></html>');
+    // layer = jQuery(win.document);
+  }
+
+  function js_imprimir() {
+    tinymce.activeEditor.execCommand('mcePrint');
   }
 </script>
