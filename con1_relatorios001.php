@@ -39,7 +39,7 @@ if (isset($chavepesquisa)) {
   $db_botao = true;
 }
 ?>
-
+<!DOCTYPE HTML>
 <html>
 
 <head>
@@ -58,11 +58,12 @@ if (isset($chavepesquisa)) {
   db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
   db_app::load("estilos.css, grid.style.css");
   ?>
-  <script src='https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y'></script>
+  <script src="https://cdn.tiny.cloud/1/kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
   <script type="text/javascript">
     tinymce.init({
       selector: '#rel_corpo',
       toolbar: "undo redo | styleselect | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent",
+      language: 'pt_BR'
     });
   </script>
 </head>

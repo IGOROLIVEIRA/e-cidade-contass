@@ -54,7 +54,7 @@ $clrotulo->label("descrproced");
           </td>
           <td>
             <?
-            db_textarea('rel_corpo', 10, 85, 'rel_corpo', true, 'text', $db_opcao, "");
+            db_textarea('rel_corpo', 30, 85, 'rel_corpo', true, 'text', $db_opcao, "");
             ?>
           </td>
         </tr>
@@ -82,6 +82,9 @@ $clrotulo->label("descrproced");
         document.form1.nomearq.value = '';
       }
     }
+    $('Jandb_iframe_db_sysarquivo').style.width = '100%';
+    $('Jandb_iframe_db_sysarquivo').style.height = '100%';
+    $('Jandb_iframe_db_sysarquivo').style.top = '30px';
   }
 
   function js_mostradb_sysarquivo(chave, erro) {
@@ -173,6 +176,9 @@ $clrotulo->label("descrproced");
 
   function js_pesquisa() {
     js_OpenJanelaIframe('top.corpo', 'db_iframe_relatorios', 'func_relatorios.php?funcao_js=parent.js_preenchepesquisa|rel_sequencial', 'Pesquisa', true);
+    $('Jandb_iframe_relatorios').style.width = '100%';
+    $('Jandb_iframe_relatorios').style.height = '100%';
+    $('Jandb_iframe_relatorios').style.top = '30px';
   }
 
   function js_preenchepesquisa(chave) {

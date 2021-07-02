@@ -14,6 +14,7 @@ $db_opcao = 1;
 $db_botao = true;
 ?>
 
+<!DOCTYPE HTML>
 <html>
 
 <head>
@@ -33,28 +34,13 @@ $db_botao = true;
   db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
   db_app::load("estilos.css, grid.style.css");
   ?>
-  <script script src='https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y'>
-  </script>
+  <script src="https://cdn.tiny.cloud/1/kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
   <script type="text/javascript">
     tinymce.init({
       selector: "#rel_corpo",
       menubar: 'file edit view insert format tools table tc',
       toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-      style_formats: [{
-          title: 'Line height 20px',
-          selector: 'p,div,h1,h2,h3,h4,h5,h6',
-          styles: {
-            lineHeight: '30px'
-          }
-        },
-        {
-          title: 'Line height 30px',
-          selector: 'p,div,h1,h2,h3,h4,h5,h6',
-          styles: {
-            lineHeight: '40px'
-          }
-        }
-      ]
+      language: 'pt_BR'
     });
   </script>
 </head>

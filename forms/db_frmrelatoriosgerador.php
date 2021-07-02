@@ -19,7 +19,7 @@ $clrotulo->label("descrproced");
             db_ancora("Relatorios", "js_pesquisarelatorios(true);", $db_opcao);
             ?>
           </td>
-          <td>
+          <td align="left">
             <?
             db_input('rel_sequencial', 10, $Irel_sequencial, true, 'text', $db_opcao, " onchange='js_pesquisarelatorios(false);'")
             ?>
@@ -30,7 +30,7 @@ $clrotulo->label("descrproced");
         </tr>
         <tr>
           <td id="tdArquivoAncora"></td>
-          <td id="tdArquivoInput"></td>
+          <td id="tdArquivoInput" align="left"></td>
         </tr>
         <tr>
           <td nowrap title="<?= @$Trel_corpo ?>">
@@ -38,7 +38,7 @@ $clrotulo->label("descrproced");
           </td>
           <td>
             <?
-            db_textarea('rel_corpo', 15, 90, 'rel_corpo', true, 'text', 3, "");
+            db_textarea('rel_corpo', 30, 90, 'rel_corpo', true, 'text', 3, "");
             ?>
           </td>
         </tr>
@@ -61,6 +61,11 @@ $clrotulo->label("descrproced");
         document.form1.rel_descricao.value = '';
       }
     }
+
+    $('Jandb_iframe_relatorios').style.width = '100%';
+    $('Jandb_iframe_relatorios').style.height = '100%';
+    $('Jandb_iframe_relatorios').style.top = '30px';
+
   }
 
   function js_mostrafunc_relatorios(chave, erro) {
@@ -167,6 +172,11 @@ $clrotulo->label("descrproced");
     script.innerText += " document.form1.input_arquivo_descricao.value = '';"
     script.innerText += "}";
     script.innerText += "}";
+
+    script.innerText += " $('Jandb_iframe_" + sArq + "').style.width = '100%';";
+    script.innerText += " $('Jandb_iframe_" + sArq + "').style.height = '100%';";
+    script.innerText += " $('Jandb_iframe_" + sArq + "').style.top = '30px';";
+
     script.innerText += "}";
     document.body.appendChild(script);
 
