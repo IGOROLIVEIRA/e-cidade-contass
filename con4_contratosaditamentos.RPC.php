@@ -178,11 +178,11 @@ try {
               $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               $dateassinatura = implode("-",array_reverse(explode("/",$oParam->dataassinatura)));
 
-//              if($dateassinatura != "") {
-//                if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-//                  throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-//                }
-//              }
+              if($dateassinatura != "") {
+                if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+                  throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                }
+              }
             }
 
             $oAditivo = db_utils::getDao('acordoposicaoaditamento');
