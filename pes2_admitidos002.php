@@ -42,6 +42,8 @@ $clrotulo->label("rh37_descr");
 $clrotulo->label("r70_estrut");
 $clrotulo->label("r70_descr");
 $clrotulo->label("r70_codigo");
+$clrotulo->label("o40_orgao");
+$clrotulo->label("o40_descr");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
@@ -53,7 +55,10 @@ $mes = db_mesfolha();
 $camposQuebra = ", '' as quebrar";
 $labelFuncaoLotacao = $RLrh37_descr;
 $valorImprime = "rh37_descr";
-if($lota == "l"){
+if($tiporesumo == "l"){
+  $labelFuncaoLotacao = $RLr70_descr;
+  $valorImprime = "r70_descr";
+  $camposQuebra = ", r70_estrut as quebrar, r70_descr as descricao";
   $camposQuebra = ", r70_estrut as quebrar, r70_descr as descricao";
   if($ordem == "a"){
     $orderby = " r70_estrut,z01_nome ";
@@ -65,9 +70,9 @@ if($lota == "l"){
     $orderby = " r70_estrut,rh01_admiss ";
     $head6  = "ORDEM: ADMISSÃO";
   }
-}else if($lota == "c"){
-  $labelFuncaoLotacao = $RLr70_descr;
-  $valorImprime = "r70_descr";
+}else if($tiporesumo == "c"){
+  $labelFuncaoLotacao = $RLrh37_funcao;
+  $valorImprime = "rh37_funcao";
   $camposQuebra = ", rh37_funcao as quebrar, rh37_descr as descricao";
   if($ordem == "a"){
     $orderby = " rh37_descr,z01_nome ";
@@ -77,6 +82,20 @@ if($lota == "l"){
     $head6  = "ORDEM: MATRÍCULA";
   }else{
     $orderby = " rh37_descr,rh01_admiss ";
+    $head6  = "ORDEM: ADMISSÃO";
+  }
+}else if($tiporesumo == "o"){
+  $labelFuncaoLotacao = $RLo40_descr;
+  $valorImprime = "o40_descr";
+  $camposQuebra = ", o40_orgao as quebrar, o40_descr as descricao";
+  if($ordem == "a"){
+    $orderby = " o40_descr,z01_nome ";
+    $head6  = "ORDEM: ALFABÉTICA";
+  }else if($ordem == "n"){
+    $orderby = " o40_descr,rh01_regist ";
+    $head6  = "ORDEM: MATRÍCULA";
+  }else{
+    $orderby = " o40_descr,rh01_admiss ";
     $head6  = "ORDEM: ADMISSÃO";
   }
 }else{
@@ -219,11 +238,9 @@ $imprime_dados_quebra = true;
 for($x=0; $x<$numrows_dados; $x++){
   db_fieldsmemory($result_dados,$x);
 
-  if($lota != "n" && $lotacao_antes != $quebrar){
+  if($quebrapagina == "s" && $lotacao_antes != $quebrar){
     $lotacao_antes = $quebrar;
-    if($quebrapagina == "s"){
-      $troca = 1;
-    }
+    $troca = 1;
     $imprime_dados_quebra = true;
   }
 
@@ -250,7 +267,7 @@ for($x=0; $x<$numrows_dados; $x++){
     $pre = 1;
   }
 
-  if($lota != 'n' && $imprime_dados_quebra == true){
+  if($quebrapagina == "s" && $imprime_dados_quebra == true){
     $pdf->setfont("arial","b",8);
     $pdf->ln(2);
     $pdf->cell(0,$alt,$quebrar." - ".$descricao,0,1,"L",0);
