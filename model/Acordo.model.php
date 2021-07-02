@@ -3113,7 +3113,7 @@ class Acordo
 
         foreach ($aItens as $oItem) {
 
-            $oItemContrato = $this->getUltimaPosicao(true)->getItemByCodigo($oItem->codigo);
+            $oItemContrato = $this->getUltimaPosicao(true)->getItemByCodigopcmater($oItem->codigoitem);
 
             $oNovoItem = new AcordoItem(null);
             $oNovoItem->setCodigoPosicao($oNovaPosicao->getCodigo());
@@ -3123,7 +3123,6 @@ class Acordo
             }
 
             if ($oItemContrato) {
-
                 $oOrigemItem = $oItemContrato->getOrigem();
                 $oNovoItem->setElemento($oItemContrato->getElemento());
                 $oNovoItem->setMaterial($oItemContrato->getMaterial());
