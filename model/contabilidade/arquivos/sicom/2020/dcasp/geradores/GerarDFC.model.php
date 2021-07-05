@@ -198,7 +198,6 @@ class GerarDFC extends GerarAM
                 $aCSVDFC70['si225_tiporegistro']                        = $this->padLeftZero($aDFC70['si225_tiporegistro'], 2);
                 $aCSVDFC70['si225_vloperacoescredito']                  = $this->sicomNumberReal($aDFC70['si225_vloperacoescredito'], 2);
                 $aCSVDFC70['si225_vlintegralizacaodependentes']         = $this->sicomNumberReal($aDFC70['si225_vlintegralizacaodependentes'], 2);
-                //$aCSVDFC70['si225_vltranscapitalrecebida']              = $this->sicomNumberReal($aDFC70['si225_vltranscapitalrecebida'], 2);
                 $aCSVDFC70['si225_vloutrosingressosfinanciamento']      = $this->sicomNumberReal($aDFC70['si225_vloutrosingressosfinanciamento'], 2);
                 $aCSVDFC70['si225_vltotalingressoatividafinanciament']  = $this->sicomNumberReal($aDFC70['si225_vltotalingressoatividafinanciament'], 2);
 

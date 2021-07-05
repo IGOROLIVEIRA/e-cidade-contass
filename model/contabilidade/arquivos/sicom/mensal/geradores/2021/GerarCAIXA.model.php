@@ -78,7 +78,7 @@ class GerarCAIXA extends GerarAM
 
             $aCAIXA12 = pg_fetch_array($rsCAIXA12, $iCont3);
             
-            if ($aCAIXA10['si103_sequencial'] == $aCAIXA12['si104_reg10']) {
+            if ($aCAIXA10['si103_sequencial'] == $aCAIXA12['si104_reg10'] && $aCSVCAIXA11['si166_codfontecaixa'] == $aCAIXA12['si104_codfontecaixa']) {
 
               $aCSVCAIXA12['si104_tiporegistro']      = $this->padLeftZero($aCAIXA12['si104_tiporegistro'], 2);
               $aCSVCAIXA12['si104_codreduzido']       = substr($aCAIXA12['si104_codreduzido'], 0, 15);
@@ -99,7 +99,7 @@ class GerarCAIXA extends GerarAM
 
               $aCAIXA13 = pg_fetch_array($rsCAIXA13, $iCont4);
 
-              if ($aCAIXA12['si104_codreduzido'] == $aCAIXA13['si105_codreduzido']) {
+              if ($aCAIXA10['si103_sequencial'] == $aCAIXA13['si105_reg10'] && $aCAIXA12['si104_codreduzido'] == $aCAIXA13['si105_codreduzido'] && $aCSVCAIXA11['si166_codfontecaixa'] == $aCAIXA12['si104_codfontecaixa']) {
 
                 $aCSVCAIXA13['si105_tiporegistro']          = $this->padLeftZero($aCAIXA13['si105_tiporegistro'], 2);
                 $aCSVCAIXA13['si105_codreduzido']           = substr($aCAIXA13['si105_codreduzido'], 0, 15);

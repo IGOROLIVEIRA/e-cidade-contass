@@ -1082,6 +1082,21 @@ class AcordoPosicao {
     }
   }
 
+    /**
+     * retorna  o item pelo codigo do material compras
+     *
+     * @param integer $iCodigopcmater codigo do item
+     * @return AcordoItem
+     */
+    public function getItemByCodigopcmater($iCodigopcmater) {
+
+        foreach ($this->getItens() as $oItem) {
+            if ($oItem->getMaterial()->getMaterial() == $iCodigopcmater) {
+                return $oItem;
+            }
+        }
+    }
+
   /**
    * Salva o valor aditado na posicao
    *
@@ -1676,6 +1691,7 @@ class AcordoPosicao {
       $oAcordo = new Acordo($this->getAcordo());
       $oAcordo->setDataInicial($oAcordo->getUltimaPosicao(true)->getVigenciaInicial());
       $oAcordo->setDataFinal($oAcordo->getUltimaPosicao(true)->getVigenciaFinal());
+      $oAcordo->setProvidencia(1);
       $oAcordo->save();
     }
 

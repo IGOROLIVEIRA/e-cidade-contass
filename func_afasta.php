@@ -184,8 +184,6 @@ if(!isset($pesquisa_chave)){
         $dbwhere .= "               )                                  ";
       }
 
-      $dbwhere .= ' and not exists(select 1 from afastaassenta where h81_afasta = r45_codigo)';
-
 
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){

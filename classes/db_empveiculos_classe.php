@@ -19,13 +19,15 @@ class cl_empveiculos {
    var $si05_sequencial = 0; 
    var $si05_numemp = 0; 
    var $si05_atestado = 'f'; 
-   var $si05_codabast = 0; 
+   var $si05_codabast = 0;
+   var $si05_item_empenho = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si05_sequencial = int8 = Sequencial 
                  si05_numemp = int8 = N. Empenho 
                  si05_atestado = bool = Atestado 
-                 si05_codabast = int8 = Codigo Abastecimento 
+                 si05_codabast = int8 = Codigo Abastecimento
+                 si05_item_empenho = bool = Preencher item empenho 
                  ";
    //funcao construtor da classe 
    function cl_empveiculos() { 
@@ -49,6 +51,7 @@ class cl_empveiculos {
        $this->si05_numemp = ($this->si05_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["si05_numemp"]:$this->si05_numemp);
        $this->si05_atestado = ($this->si05_atestado == "f"?@$GLOBALS["HTTP_POST_VARS"]["si05_atestado"]:$this->si05_atestado);
        $this->si05_codabast = ($this->si05_codabast == ""?@$GLOBALS["HTTP_POST_VARS"]["si05_codabast"]:$this->si05_codabast);
+       $this->si05_item_empenho = ($this->si05_item_empenho == ""?@$GLOBALS["HTTP_POST_VARS"]["si05_item_empenho"]:$this->si05_item_empenho);
      }else{
        $this->si05_sequencial = ($this->si05_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si05_sequencial"]:$this->si05_sequencial);
      }
@@ -83,6 +86,15 @@ class cl_empveiculos {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si05_item_empenho == null ){ 
+      $this->erro_sql = " Campo do item empenho nao Informado.";
+      $this->erro_campo = "si05_item_empenho";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      
      
    if($si05_sequencial == "" || $si05_sequencial == null ){
@@ -123,13 +135,15 @@ class cl_empveiculos {
                                        si05_sequencial 
                                       ,si05_numemp 
                                       ,si05_atestado 
-                                      ,si05_codabast 
+                                      ,si05_codabast
+                                      ,si05_item_empenho 
                        )
                 values (
                                 $this->si05_sequencial 
                                ,$this->si05_numemp 
                                ,'$this->si05_atestado' 
-                               ,$this->si05_codabast 
+                               ,$this->si05_codabast
+                               ,'$this->si05_item_empenho'  
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -225,6 +239,19 @@ class cl_empveiculos {
          return false;
        }
      }
+     if(trim($this->si05_item_empenho)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si05_item_empenho"])){ 
+      $sql  .= $virgula." si05_item_empenho = '$this->si05_item_empenho' ";
+      $virgula = ",";
+      if(trim($this->si05_item_empenho) == null ){ 
+        $this->erro_sql = " Campo item empenho nao Informado.";
+        $this->erro_campo = "si05_item_empenho";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($si05_sequencial!=null){
        $sql .= " si05_sequencial = $this->si05_sequencial";

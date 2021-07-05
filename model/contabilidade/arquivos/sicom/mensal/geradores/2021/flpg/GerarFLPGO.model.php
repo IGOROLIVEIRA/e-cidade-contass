@@ -73,7 +73,7 @@ class GerarFLPGO extends GerarAM {
                     if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I') {
                         $aCSVFLPGO10['si195_dsccargo']           = substr($aFLPGO10['si195_dsccargo'], 0, 120);
                         $aCSVFLPGO10['si195_codcargo']           = ($aFLPGO10['si195_codcargo']==0)?' ':$aFLPGO10['si195_codcargo'];
-                        $aCSVFLPGO10['si195_sglcargo']           = str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
+                        $aCSVFLPGO10['si195_sglcargo']           = empty($aFLPGO10['si195_sglcargo']) ? ' ' : str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
                     }else{
                         $aCSVFLPGO10['si195_dsccargo']           = ' ';
                         $aCSVFLPGO10['si195_codcargo']           = ($aFLPGO10['si195_codcargo']==0)?' ':$aFLPGO10['si195_codcargo'];
@@ -84,7 +84,7 @@ class GerarFLPGO extends GerarAM {
                     $aCSVFLPGO10['si195_dscapo'] = substr($aFLPGO10['si195_dscapo'],0, 3);
 
                     if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I')
-                        $aCSVFLPGO10['si195_natcargo']           = str_pad($aFLPGO10['si195_natcargo'], 1, "0", STR_PAD_LEFT);
+                        $aCSVFLPGO10['si195_natcargo']           = empty($aFLPGO10['si195_natcargo']) ? ' ' : str_pad($aFLPGO10['si195_natcargo'], 1, "0", STR_PAD_LEFT);
                     else
                         $aCSVFLPGO10['si195_natcargo']           = ' ';
 
@@ -112,7 +112,7 @@ class GerarFLPGO extends GerarAM {
 
                     $aCSVFLPGO10['si195_dsccargo']               = substr($aFLPGO10['si195_dsccargo'], 0, 120);
                     $aCSVFLPGO10['si195_codcargo']               = ($aFLPGO10['si195_codcargo']==0)?' ':$aFLPGO10['si195_codcargo'];
-                    $aCSVFLPGO10['si195_sglcargo']               = str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
+                    $aCSVFLPGO10['si195_sglcargo']               = empty($aFLPGO10['si195_sglcargo']) ? ' ' : str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
 
                     if($aCSVFLPGO10['si195_sglcargo'] == 'OTC')
                         $aCSVFLPGO10['si195_dscsiglacargo']      = substr($aFLPGO10['si195_dsccargo'], 0, 150);
@@ -120,7 +120,7 @@ class GerarFLPGO extends GerarAM {
                         $aCSVFLPGO10['si195_dscsiglacargo']      = ' ';
 
                     $aCSVFLPGO10['si195_dscapo']                 = substr($aFLPGO10['si195_dscapo'],0, 3);
-                    $aCSVFLPGO10['si195_natcargo']               = str_pad($aFLPGO10['si195_natcargo'], 1, "0", STR_PAD_LEFT);
+                    $aCSVFLPGO10['si195_natcargo']               = empty($aFLPGO10['si195_natcargo']) ? ' ' : str_pad($aFLPGO10['si195_natcargo'], 1, "0", STR_PAD_LEFT);
                     $aCSVFLPGO10['si195_dscnatcargo']            = $aFLPGO10['si195_dscnatcargo'];
                     $aCSVFLPGO10['si195_indcessao']              = str_pad($aFLPGO10['si195_indcessao'], 1, " ", STR_PAD_LEFT);
                     $aCSVFLPGO10['si195_dsclotacao']             = substr($aFLPGO10['si195_dsclotacao'], 0, 22);

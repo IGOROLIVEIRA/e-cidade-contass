@@ -67,7 +67,9 @@ $fCFM = 0;
 $fCIDE = 0;
 $fCFH = 0;
 $fFEX = 0;
+$fIPM = 0;
 $fSTN = 0;
+$fTEUEDM = 0;
 
 foreach ($aReceitas as $Receitas) {
 
@@ -80,12 +82,12 @@ foreach ($aReceitas as $Receitas) {
   if(strstr($Receitas->o57_fonte, '17180261000000'))$fFEP+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17180611000000'))$fICMS+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17180151000000'))$fITR+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '17280221000000'))$fCFM+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '17280221000000')||strstr($Receitas->o57_fonte, '17180221000000'))$fCFM+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17280141000000'))$fCIDE+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17180211000000'))$fCFH+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '17189911000000'))$fFEX+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '17280131000000'))$fSTN+=$Receitas->saldo_arrecadado;
-
+  if(strstr($Receitas->o57_fonte, '17280131000000'))$fIPM+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '95172801110100')||strstr($Receitas->o57_fonte, '95172801210100'))$fTEUEDM+=abs($Receitas->saldo_arrecadado);
 }
 db_query("drop table if exists work_receita");
 
@@ -106,7 +108,7 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 20, 15, 8, 11);
+$mPDF = new mpdf('', 'A4', 0, '', 10, 10, 20, 15, 8, 11);
 
 
 $header = <<<HEADER
@@ -146,7 +148,7 @@ ob_start();
 
   <style type="text/css">
     .ritz .waffle a { color : inherit; }
-    .ritz .waffle .s3 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+    .ritz .waffle .s3 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; }
     .ritz .waffle .s4 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
     .ritz .waffle .s6 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
     .ritz .waffle .s1 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
@@ -175,7 +177,7 @@ ob_start();
             <td class="s0 bdleft" colspan="2">Inc. III, do art. 2º, da Lei n.º 9.715/98</td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft" style="width:700px">Receitas Correntes (Líquida de deduções)</td>
+            <td class="s1 bdleft" style="width:700px">Receitas Correntes</td>
             <td class="s2" style="width:172px">VALOR</td>
           </tr>
           <tr style=''>
@@ -189,7 +191,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1200.00.00.00 - Receita de Contribuições -</td>
+            <td class="s3 bdleft">1200.00.00.00 - Receita de Contribuições </td>
             <td class="s4">
               <?php
               $aDadosRC = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412%'");
@@ -199,7 +201,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1300.00.00.00 - Receita Patrimonial -</td>
+            <td class="s3 bdleft">1300.00.00.00 - Receita Patrimonial </td>
             <td class="s4">
               <?php
               $aDadosRP = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '413%'");
@@ -209,7 +211,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1400.00.00.00 - Receita Agropecuária -</td>
+            <td class="s3 bdleft">1400.00.00.00 - Receita Agropecuária </td>
             <td class="s4">
               <?php
               $aDadosRA = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '414%'");
@@ -219,7 +221,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1500.00.00.00 - Receita Industrial -</td>
+            <td class="s3 bdleft">1500.00.00.00 - Receita Industrial </td>
             <td class="s4">
               <?php
               $aDadosRI = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '415%'");
@@ -229,7 +231,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1600.00.00.00 - Receita de Serviços -</td>
+            <td class="s3 bdleft">1600.00.00.00 - Receita de Serviços </td>
             <td class="s4">
               <?php
               $aDadosRS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '416%'");
@@ -239,7 +241,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1700.00.00.00 - Transferências Correntes ?</td>
+            <td class="s3 bdleft">1700.00.00.00 - Transferências Correntes</td>
             <td class="s4">
               <?php
               $aDadosTC = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417%'");
@@ -249,7 +251,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1900.00.00.00 - Outras receitas correntes -</td>
+            <td class="s3 bdleft">1900.00.00.00 - Outras receitas correntes </td>
             <td class="s4">
               <?php
               $aDadosORC = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '419%'");
@@ -259,7 +261,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft">Sub-Total I -</td>
+            <td class="s1 bdleft">Sub-Total I </td>
             <td class="s5">
               <?php
               $fSubTutalI = array_sum(array($fRT,$fRC,$fRP,$fRA,$fRI,$fRS,$fTC,$fORC));
@@ -278,7 +280,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft">Sub-Total II -</td>
+            <td class="s1 bdleft">Sub-Total II </td>
             <td class="s5">
               <?php
               $fSubTutalII = $fTCA;
@@ -287,7 +289,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft">Total das Receitas (I) -</td>
+            <td class="s1 bdleft">Total das Receitas (I) </td>
             <td class="s5">
               <?php
               $fTotalReceitasI = $fSubTutalI+$fSubTutalII;
@@ -322,8 +324,7 @@ ob_start();
           </tr>
           <tr>
             <td class="s3 bdleft" dir="ltr">
-              Contrato de repasse ou instrumento congênere com objeto definido (§ 7º, do art. 2º, da Lei n.º
-              <br/> 9.715/98)
+              Contrato de repasse ou instrumento congênere com objeto definido (§ 7º, do art. 2º, da Lei n.º 9.715/98)
             </td>
             <td class="s4">
               <?=db_formatar($fCRICOD = 0,"f")?>
@@ -335,17 +336,13 @@ ob_start();
           </tr>
           <tr style=''>
             <td class="s3 bdleft">
-              Transferências efetuadas à União, aos Estados, ao Distrito Federal e a outros Municípios, bem
-              <br>como às autarquias dessas entidades (Solução de Consulta RFB n.º 31, de 28 de fevereiro de
-              <br>2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
+                Transferências efetuadas à União, aos Estados, ao Distrito Federal e a outros Municípios, bem como às autarquias dessas entidades
             </td>
-            <td class="s4"><?=db_formatar($fTEUEDM = 0,"f")?></td>
+            <td class="s4"><?=db_formatar($fTEUEDM,"f")?></td>
           </tr>
           <tr style=''>
             <td class="s3 bdleft">
-              Transferências efetuadas à Instituições Multigovernamentais Nacionais (criadas e mantidas por
-              <br>dois ou mais entes da Federação) de caráter público, criadas por lei. (Solução de Consulta RFB
-              <br>n.º 31, de 28 de fevereiro de 2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
+              Transferências efetuadas à Instituições Multigovernamentais Nacionais (criadas e mantidas por dois ou mais entes da Federação) de caráter público, criadas por lei. (Solução de Consulta RFB n.º 31, de 28 de fevereiro de 2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
             </td>
             <td class="s4"><?=db_formatar($fTEIMN = 0,"f")?></td>
           </tr>
@@ -362,7 +359,7 @@ ob_start();
               ?>
             </tr>
             <tr style=''>
-              <td class="s1 bdleft">Total das exclusões da Receita (II) -</td>
+              <td class="s1 bdleft">Total das exclusões da Receita (II) </td>
               <td class="s5">
                 <?php
                 $fTotalExclusaoReceitaII = array_sum(array($fTotalTC,$fCRICOD,$fTOEDPI,$fTEUEDM,$fTEIMN,$fTCons));
@@ -371,7 +368,7 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
-              <td class="s7 bdleft">III - TOTAL RECEITA LÍQUIDA (BASE DE CÁLCULO) (I-II) -</td>
+              <td class="s7 bdleft">III - TOTAL RECEITA LÍQUIDA (BASE DE CÁLCULO) (I-II) </td>
               <td class="s8">
                 <?php
                 $fTotalRecLiqIII = $fTotalReceitasI - $fTotalExclusaoReceitaII;
@@ -380,7 +377,7 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
-              <td class="s9 bdleft">IV - RETENÇÕES DO PASEP NA FONTE</td>
+              <td class="s9 bdleft">IV - RECEITAS COM RETENÇÕES DO PASEP NA FONTE</td>
               <td class="s6">VALOR</td>
             </tr>
             <tr style=''>
@@ -465,8 +462,7 @@ ob_start();
             </tr>
             <tr style=''>
               <td class="s3 bdleft" dir="ltr">
-                Outras transferências correntes e de capital recebidas, se comprovada a retenção na fonte, pela
-                <br>Secretaria do Tesouro Nacional - STN, da contribuição incidente sobre tais valores.
+                Outras transferências correntes e de capital recebidas, se comprovada a retenção na fonte, pela Secretaria do Tesouro Nacional - STN, da contribuição incidente sobre tais valores.
               </td>
               <td class="s4">
                 <?php
@@ -477,7 +473,7 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
-              <td class="s1 bdleft">TOTAL DOS VALORES RETIDOS (IV) -</td>
+              <td class="s1 bdleft">TOTAL DAS RECEITAS COM RETENÇÕES DO PASEP NA FONTE (IV)</td>
               <td class="s5">
                 <?php
                 $fTotalRetidosIV = array_sum(array($fPFM,$fFEP,$fICMS,$fITR,$fCFM,$fCIDE,$fCFH,$fFEX,$fSTN));
@@ -490,15 +486,15 @@ ob_start();
               <td class="s6">VALOR</td>
             </tr>
             <tr style=''>
-              <td class="s3 bdleft">a) Total da Receita Líquida (III) -</td>
+              <td class="s3 bdleft">a) Total da Receita Líquida (III) </td>
               <td class="s5"><?=db_formatar($fTotalRecLiqIII,"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s3 bdleft">b) 1% sobre total das Receitas (a*1%) -</td>
+              <td class="s3 bdleft">b) 1% sobre total das Receitas (a*1%) </td>
               <td class="s5"><?=db_formatar($fTotalRecLiqIII*0.01,"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s3 bdleft">c) PASEP retido na Fonte (IV) -</td>
+              <td class="s3 bdleft">c) PASEP retido na Fonte (IV*1%)</td>
               <td class="s5"><?=db_formatar($fTotalRetidosIV*0.01,"f")?></td>
             </tr>
             <tr style=''>
@@ -522,7 +518,7 @@ ob_start();
             <td class="s0 bdleft" colspan="2">Inc. III, do art. 2º, da Lei n.º 9.715/98</td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft" style="width:700px">Receitas Correntes (Líquida de deduções)</td>
+            <td class="s1 bdleft" style="width:700px">Receitas Correntes</td>
             <td class="s2" style="width:172px">VALOR</td>
           </tr>
           <tr style=''>
@@ -536,7 +532,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1200.00.00.00 - Receita de Contribuições -</td>
+            <td class="s3 bdleft">1200.00.00.00 - Receita de Contribuições </td>
             <td class="s4">
               <?php
               $aDadosRC = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412%'");
@@ -546,7 +542,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1300.00.00.00 - Receita Patrimonial -</td>
+            <td class="s3 bdleft">1300.00.00.00 - Receita Patrimonial </td>
             <td class="s4">
               <?php
               $aDadosRP = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '413%'");
@@ -556,7 +552,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1400.00.00.00 - Receita Agropecuária -</td>
+            <td class="s3 bdleft">1400.00.00.00 - Receita Agropecuária </td>
             <td class="s4">
               <?php
               $aDadosRA = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '414%'");
@@ -566,7 +562,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1500.00.00.00 - Receita Industrial -</td>
+            <td class="s3 bdleft">1500.00.00.00 - Receita Industrial </td>
             <td class="s4">
               <?php
               $aDadosRI = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '415%'");
@@ -576,7 +572,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1600.00.00.00 - Receita de Serviços -</td>
+            <td class="s3 bdleft">1600.00.00.00 - Receita de Serviços </td>
             <td class="s4">
               <?php
               $aDadosRS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '416%'");
@@ -586,7 +582,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1700.00.00.00 - Transferências Correntes ?</td>
+            <td class="s3 bdleft">1700.00.00.00 - Transferências Correntes</td>
             <td class="s4">
               <?php
               $aDadosTC = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417%'");
@@ -596,7 +592,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s3 bdleft">1900.00.00.00 - Outras receitas correntes -</td>
+            <td class="s3 bdleft">1900.00.00.00 - Outras receitas correntes </td>
             <td class="s4">
               <?php
               $aDadosORC = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '419%'");
@@ -606,7 +602,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft">Sub-Total I -</td>
+            <td class="s1 bdleft">Sub-Total I </td>
             <td class="s5">
               <?php
               $fSubTutalI = array_sum(array($fRT,$fRC,$fRP,$fRA,$fRI,$fRS,$fTC,$fORC));
@@ -625,7 +621,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft">Sub-Total II -</td>
+            <td class="s1 bdleft">Sub-Total II </td>
             <td class="s5">
               <?php
               $fSubTutalII = $fTCA;
@@ -634,7 +630,7 @@ ob_start();
             </td>
           </tr>
           <tr style=''>
-            <td class="s1 bdleft">Total das Receitas (I) -</td>
+            <td class="s1 bdleft">Total das Receitas (I) </td>
             <td class="s5">
               <?php
               $fTotalReceitasI = $fSubTutalI+$fSubTutalII;
@@ -662,8 +658,7 @@ ob_start();
           </tr>
           <tr>
             <td class="s3 bdleft" dir="ltr">
-              Contrato de repasse ou instrumento congênere com objeto definido (§ 7º, do art. 2º, da Lei n.º
-              <br/> 9.715/98)
+              Contrato de repasse ou instrumento congênere com objeto definido (§ 7º, do art. 2º, da Lei n.º 9.715/98)
             </td>
             <td class="s4">
               <?=db_formatar($fCRICOD = 0,"f")?>
@@ -675,17 +670,13 @@ ob_start();
           </tr>
           <tr style=''>
             <td class="s3 bdleft">
-              Transferências efetuadas à União, aos Estados, ao Distrito Federal e a outros Municípios, bem
-              <br>como às autarquias dessas entidades (Solução de Consulta RFB n.º 31, de 28 de fevereiro de
-              <br>2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
+                Transferências efetuadas à União, aos Estados, ao Distrito Federal e a outros Municípios, bem como às autarquias dessas entidades
             </td>
-            <td class="s4"><?=db_formatar($fTEUEDM = 0,"f")?></td>
+            <td class="s4"><?=db_formatar($fTEUEDM,"f")?></td>
           </tr>
           <tr style=''>
             <td class="s3 bdleft">
-              Transferências efetuadas à Instituições Multigovernamentais Nacionais (criadas e mantidas por
-              <br>dois ou mais entes da Federação) de caráter público, criadas por lei. (Solução de Consulta RFB
-              <br>n.º 31, de 28 de fevereiro de 2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
+              Transferências efetuadas à Instituições Multigovernamentais Nacionais (criadas e mantidas por dois ou mais entes da Federação) de caráter público, criadas por lei. (Solução de Consulta RFB n.º 31, de 28 de fevereiro de 2013 - 6ª Região Fiscal - D.O.U.: 05.03.2013)
             </td>
             <td class="s4"><?=db_formatar($fTEIMN = 0,"f")?></td>
           </tr>
@@ -700,7 +691,7 @@ ob_start();
               ?>
             </tr>
             <tr style=''>
-              <td class="s1 bdleft">Total das exclusões da Receita (II) -</td>
+              <td class="s1 bdleft">Total das exclusões da Receita (II) </td>
               <td class="s5">
                 <?php
                 $fTotalExclusaoReceitaII = array_sum(array($fTotalTC,$fCRICOD,$fTOEDPI,$fTEUEDM,$fTEIMN,$fTCons));
@@ -709,7 +700,7 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
-              <td class="s7 bdleft">III - TOTAL RECEITA LÍQUIDA (BASE DE CÁLCULO) (I-II) -</td>
+              <td class="s7 bdleft">III - TOTAL RECEITA LÍQUIDA (BASE DE CÁLCULO) (I-II) </td>
               <td class="s8">
                 <?php
                 $fTotalRecLiqIII = $fTotalReceitasI - $fTotalExclusaoReceitaII;
@@ -718,7 +709,7 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
-              <td class="s9 bdleft">IV - RETENÇÕES DO PASEP NA FONTE</td>
+              <td class="s9 bdleft">IV - RECEITAS COM RETENÇÕES DO PASEP NA FONTE</td>
               <td class="s6">VALOR</td>
             </tr>
             <tr style=''>
@@ -786,9 +777,16 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
+              <td class="s3 bdleft">IPM - IPI Exportação</td>
+              <td class="s4">
+                <?php
+                echo db_formatar($fIPM, "f");
+                ?>
+              </td>
+            </tr>
+            <tr style=''>
               <td class="s3 bdleft" dir="ltr">
-                Outras transferências correntes e de capital recebidas, se comprovada a retenção na fonte, pela
-                <br>Secretaria do Tesouro Nacional - STN, da contribuição incidente sobre tais valores.
+                Outras transferências correntes e de capital recebidas, se comprovada a retenção na fonte, pela Secretaria do Tesouro Nacional - STN, da contribuição incidente sobre tais valores.
               </td>
               <td class="s4">
                 <?php
@@ -797,10 +795,10 @@ ob_start();
               </td>
             </tr>
             <tr style=''>
-              <td class="s1 bdleft">TOTAL DOS VALORES RETIDOS (IV) -</td>
+              <td class="s1 bdleft">TOTAL DAS RECEITAS COM RETENÇÕES DO PASEP NA FONTE (IV)</td>
               <td class="s5">
                 <?php
-                $fTotalRetidosIV = array_sum(array($fPFM,$fFEP,$fICMS,$fITR,$fCFM,$fCIDE,$fCFH,$fFEX,$fSTN));
+                $fTotalRetidosIV = array_sum(array($fPFM,$fFEP,$fICMS,$fITR,$fCFM,$fCIDE,$fCFH,$fFEX,$fIPM,$fSTN));
                 echo db_formatar($fTotalRetidosIV,"f");
                 ?>
               </td>
@@ -810,20 +808,21 @@ ob_start();
               <td class="s6">VALOR</td>
             </tr>
             <tr style=''>
-              <td class="s3 bdleft">a) Total da Receita Líquida (III) -</td>
+              <td class="s3 bdleft">a) Total da Receita Líquida (III) </td>
               <td class="s5"><?=db_formatar($fTotalRecLiqIII,"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s3 bdleft">b) 1% sobre total das Receitas (a*1%) -</td>
-              <td class="s5"><?=db_formatar($fTotalRecLiqIII*0.01,"f")?></td>
+              <td class="s3 bdleft">b) 1% sobre total das Receitas (a*1%) </td>
+              <td class="s5"><?=db_formatar(floatval(number_format(($fTotalRecLiqIII*0.01),2,'.','')),"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s3 bdleft">c) PASEP retido na Fonte (IV) -</td>
-              <td class="s5"><?=db_formatar($fTotalRetidosIV*0.01,"f")?></td>
+              <td class="s3 bdleft">c) PASEP retido na Fonte</td>
+              <?php $fPASEPRETIDO = ( ($fPFM + $fFEP + $fICMS +  $fCFM + $fCIDE + $fCFH + $fFEX + $fSTN) * 0.01 ) + ( ($fITR + $fIPM ) * 0.008 ) ?>
+              <td class="s5"><?=db_formatar(floatval(number_format($fPASEPRETIDO,2,'.','')),"f")?></td>
             </tr>
             <tr style=''>
-              <td class="s7 bdleft">RESULTADO DO CÁLCULO (b-c)</td>
-              <td class="s8"><?=db_formatar(($fTotalRecLiqIII*0.01)-($fTotalRetidosIV*0.01),"f")?></td>
+              <td class="s7 bdleft">RESULTADO DO CÁLCULO (b-c)</td>              
+              <td class="s8"><?=db_formatar(floatval(number_format(($fTotalRecLiqIII*0.01),2,'.',''))-floatval(number_format($fPASEPRETIDO,2,'.','')),'f')?></td>
             </tr>
           </tbody>
         </table>

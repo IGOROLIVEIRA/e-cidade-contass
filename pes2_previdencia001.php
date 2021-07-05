@@ -178,6 +178,16 @@ db_postmemory($HTTP_POST_VARS);
         </td>
       </tr>
       <tr>
+        <td align="right">
+           <strong>Alíquota complementar %:</strong>
+        </td>
+        <td align="left" >
+          <?
+          db_input('campoextra',4,4,true,'text',2,'');
+          ?>
+        </td>
+      </tr>
+      <tr>
         <td colspan="2" >
               <fieldset>
                 <Legend>
@@ -287,6 +297,7 @@ function js_emite() {
     qry+= "&selecao="+document.form1.selecao.value;
     qry+= "&filtro="+document.form1.filtro_rel.value;
     qry+= "&quebra_pagina="+document.form1.quebra_pagina.value;
+    qry+= "&campoextra="+document.form1.campoextra.value;
     if(document.form1.lotaci){
       qry+= "&lotaci="+document.form1.lotaci.value;
       qry+= "&lotacf="+document.form1.lotacf.value;

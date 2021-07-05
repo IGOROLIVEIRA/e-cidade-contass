@@ -39,6 +39,9 @@ require_once("classes/db_pontofx_classe.php");
 require_once("classes/db_pontofs_classe.php");
 require_once("classes/db_rhrubricas_classe.php");
 require_once("classes/db_inssirf_classe.php");
+require_once("classes/db_assenta_classe.php");
+require_once("classes/db_tipoasse_classe.php");
+require_once("classes/db_afastaassenta_classe.php");
 require_once("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_POST_VARS);
@@ -65,8 +68,6 @@ if (isset($incluir)) {
 
   $r45_dtafas = $r45_dtafas_ano."-".$r45_dtafas_mes."-".$r45_dtafas_dia;
   $r45_dtreto = null;
-  $dbwhere1 = " r45_dtafas <= '".$r45_dtafas."' ";
-  $dbwhere2 = " (r45_dtafas >= '".$r45_dtafas."' and r45_dtreto >= '".$r45_dtafas."') ";
   
   if(trim($r45_dtreto_ano) != "" && trim($r45_dtreto_mes) != "" && trim($r45_dtreto_dia) != ""){
     $r45_dtreto = $r45_dtreto_ano."-".$r45_dtreto_mes."-".$r45_dtreto_dia;
@@ -78,7 +79,7 @@ if (isset($incluir)) {
   $sSqlRetornoNulo  = $clafasta->sql_query_file(null, "r45_codigo", null, "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} and r45_dtreto is null ");
   $rsSqlRetornoNulo = $clafasta->sql_record($sSqlRetornoNulo);
   $aRetornoNulo     = db_utils::getCollectionByRecord($rsSqlRetornoNulo);
-  if(count($aRetornoNulo) > 0){
+  if(count($aRetornoNulo) > 0) {
     
     $sqlerro  = true;
     $erro_msg = "O Servidor já possui afastamento sem retorno \\n Verifique afastamentos Anteriores";
@@ -86,16 +87,13 @@ if (isset($incluir)) {
   
   //r45_dtreto
   $sWhereVerificaAfastamento = "r45_anousu = {$r45_anousu} and r45_mesusu = {$r45_mesusu} and r45_regist = {$r45_regist} ";
-  $dtRetorno                 = "";
-  $dtLancamento              = implode("-", array_reverse(explode("/",$r45_dtafas)));
-  
   if($r45_dtreto != null || $r45_dtreto != ''){
-  	
-  	$dtRetorno                  = implode("-", array_reverse(explode("/",$r45_dtreto)));
-  	$sWhereVerificaAfastamento .= " and  ( r45_dtafas ,  r45_dtreto) overlaps ";
-  	$sWhereVerificaAfastamento .= "      (  '{$dtLancamento}'::date,  '{$dtRetorno}'::date) ";
+    $sWhereVerificaAfastamento .= " and (";
+  	$sWhereVerificaAfastamento .= " ( r45_dtafas between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date or r45_dtreto between '{$r45_dtafas}'::date and '{$r45_dtreto}'::date )";
+    $sWhereVerificaAfastamento .= " or ( '{$r45_dtafas}'::date between r45_dtafas and r45_dtreto or '{$r45_dtreto}'::date between r45_dtafas and r45_dtreto )";
+    $sWhereVerificaAfastamento .= " )";
   } else {
-  	$sWhereVerificaAfastamento .= " and  r45_dtafas >= '{$dtLancamento}' ";
+  	$sWhereVerificaAfastamento .= " and  r45_dtafas >= '{$r45_dtafas}' ";
   }
   
   $sSqlVerificaAfastamento   = $clafasta->sql_query_file(null, "r45_codigo", null, $sWhereVerificaAfastamento);
@@ -136,21 +134,41 @@ if (isset($incluir)) {
     if($sqlerro == false){
 
       /**
-       * Incluimos na tabela assenta e criamos uma relação entre os assentamentos do pessoal e do rh
-       * incluindo as chaves na tabela afastaassenta
+       * $r45_situac == 2 - Afastado sem remuneração
+       * $r45_situac == 7 - Licença sem vencimento, cessão sem ônus
        */
-  
-      $classenta             = new cl_assenta();
-      $classenta->h16_histor = $h16_histor;
-      $classenta->h16_hist2  = '';
-      $classenta->h16_perc   = "0";
-      $classenta->h16_dtlanc = date("Y-m-d",db_getsession("DB_datausu"));
-      $classenta->h16_conver = "false";
-      $classenta->h16_login  = db_getsession("DB_id_usuario");
-      $classenta->h16_assent = $h16_assent;
-      $classenta->incluir($h16_codigo);
+      if (in_array($r45_situac, array(2,7))) {
 
-      $arr_possiveis = Array(2,3,4,5,6,7,8);
+        $classenta  = new cl_assenta();
+        $cltipoasse = new cl_tipoasse();
+        $clafastaassenta   = new cl_afastaassenta;
+        
+        $classenta->h16_dtconc = $r45_dtafas;
+        $classenta->h16_dtterm = $r45_dtreto;
+        $classenta->h16_regist = $r45_regist;
+        $classenta->h16_histor = $h16_histor;
+        $classenta->h16_hist2  = '';
+        $classenta->h16_perc   = "0";
+        $classenta->h16_dtlanc = date("Y-m-d",db_getsession("DB_datausu"));
+        $classenta->h16_conver = "false";
+        $classenta->h16_login  = db_getsession("DB_id_usuario");
+        $classenta->h16_assent = db_utils::fieldsMemory(db_query($cltipoasse->sql_query_file(null,"h12_codigo",null,"trim(h12_assent) = 'LTIP'")), 0)->h12_codigo;
+        $classenta->incluir(null);
+        if($clafasta->erro_status == "0") {
+          $sqlerro  = true;
+          $erro_msg = $classenta->erro_msg;
+        }
+
+        $clafastaassenta->h81_afasta = $clafasta->r45_codigo;
+        $clafastaassenta->h81_assenta = $classenta->h16_codigo;
+        $clafastaassenta->incluir(null);
+        if($clafasta->erro_status == "0") {
+          $sqlerro  = true;
+          $erro_msg = $clafastaassenta->erro_msg;
+        }
+      }
+
+      $arr_possiveis = Array(2,3,4,5,6,7,8,10,12);
       if(in_array($r45_situac,$arr_possiveis)){
 
         $result_pontofx = $clpontofx->sql_record($clpontofx->sql_query_file(db_anofolha(),db_mesfolha(),$r45_regist));

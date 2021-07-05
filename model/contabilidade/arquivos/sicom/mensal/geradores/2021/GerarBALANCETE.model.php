@@ -93,6 +93,12 @@ class GerarBALANCETE extends GerarAM
         $rsBALANCETE27 = db_query($sSql27);
         $sSql2 = "select * from balancete282021 where si198_mes = " . $this->iMes . " and si197_instit =" . db_getsession("DB_instit");
         $rsBALANCETE28 = db_query($sSql28);
+        $sSql29 = "select * from balancete292021 where si241_mes = ". $this->iMes . " and si241_instit =" . db_getsession("DB_instit");
+        $rsBALANCETE29 = db_query($sSql29);
+        $sSql30 = "select * from balancete302021 where si242_mes = ". $this->iMes . " and si242_instit =" . db_getsession("DB_instit");
+        $rsBALANCETE30 = db_query($sSql30);
+        $sSql31 = "select * from balancete312021 where si243_mes = ". $this->iMes . " and si243_instit =" . db_getsession("DB_instit");
+        $rsBALANCETE31 = db_query($sSql31);
 
         if (pg_num_rows($rsBALANCETE10) == 0) {
 
@@ -141,7 +147,6 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE11['si178_idacao']                  = $this->padLeftZero($aBALACETE11['si178_idacao'], 4);
                         $aCSVBALANCETE11['si178_idsubacao']               = ($aBALACETE11['si178_idsubacao'] == 0 ? ' ' : $this->padLeftZero($aBALACETE11['si178_idsubacao'], 4));
                         $aCSVBALANCETE11['si178_naturezadespesa']         = $this->padLeftZero($aBALACETE11['si178_naturezadespesa'], 6);
-                        $aCSVBALANCETE11['si178_subelemento']             = $this->padLeftZero($aBALACETE11['si178_subelemento'], 2);
                         $aCSVBALANCETE11['si178_codfontrecursos']         = $this->padLeftZero($aBALACETE11['si178_codfontrecursos'], 3);
                         $aCSVBALANCETE11['si178_saldoinicialcd']          = $this->sicomNumberReal($aBALACETE11['si178_saldoinicialcd'], 2);
                         $aCSVBALANCETE11['si178_naturezasaldoinicialcd']  = $this->padLeftZero($aBALACETE11['si178_naturezasaldoinicialcd'], 1);
@@ -268,7 +273,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE16['si183_contacontabil']               = $this->padLeftZero($aBALACETE16['si183_contacontabil'], 9);
                         $aCSVBALANCETE16['si183_codfundo']                    = $aBALACETE16['si183_codfundo'];
                         $aCSVBALANCETE16['si183_atributosf']                  = trim($aBALACETE16['si183_atributosf']);
-                        $aCSVBALANCETE16['si183_codfontrecursos']             = $this->padLeftZero($aBALACETE16['si183_codfontrecursos'], 3);
+                        $aCSVBALANCETE16['si183_codfontrecursos']             = ($aBALACETE16['si183_codfontrecursos'] == 0) ? ' ' : $this->padLeftZero($aBALACETE16['si183_codfontrecursos'], 3);
                         $aCSVBALANCETE16['si183_saldoinicialfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_saldoinicialfontsf'], 2);
                         $aCSVBALANCETE16['si183_naturezasaldoinicialfontsf']  = $this->padLeftZero($aBALACETE16['si183_naturezasaldoinicialfontsf'], 1);
                         $aCSVBALANCETE16['si183_totaldebitosfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_totaldebitosfontsf'], 2);
@@ -563,6 +568,87 @@ class GerarBALANCETE extends GerarAM
                         $this->adicionaLinha();
                     }
                 }
+
+                for ($iCont29 = 0; $iCont29 < pg_num_rows($rsBALANCETE29); $iCont29++) {
+
+                    $aBALACETE29 = pg_fetch_array($rsBALANCETE29, $iCont29);
+
+                    if ($aBALACETE29['si241_reg10'] == $aBALACETE10['si177_sequencial']) {
+
+                        $aCSVBALANCETE29['si241_tiporegistro']                = $this->padLeftZero($aBALACETE29['si241_tiporegistro'], 2);
+                        $aCSVBALANCETE29['si241_contacontabil']               = $this->padLeftZero($aBALACETE29['si241_contacontabil'], 9);
+                        $aCSVBALANCETE29['si241_codfundo']                    = $aBALACETE29['si241_codfundo'];
+                        $aCSVBALANCETE29['si241_atributosf']                  = trim($aBALACETE29['si241_atributosf']);
+                        $aCSVBALANCETE29['si241_codfontrecursos']             = ($aBALACETE29['si241_codfontrecursos'] == 0) ? ' ' : $this->padLeftZero($aBALACETE29['si241_codfontrecursos'], 3);
+                        $aCSVBALANCETE29['si241_dividaconsolidada']           = $aBALACETE29['si241_dividaconsolidada'];
+                        $aCSVBALANCETE29['si241_saldoinicialfontsf']          = $this->sicomNumberReal($aBALACETE29['si241_saldoinicialfontsf'], 2);
+                        $aCSVBALANCETE29['si241_naturezasaldoinicialfontsf']  = $this->padLeftZero($aBALACETE29['si241_naturezasaldoinicialfontsf'], 1);
+                        $aCSVBALANCETE29['si241_totaldebitosfontsf']          = $this->sicomNumberReal($aBALACETE29['si241_totaldebitosfontsf'], 2);
+                        $aCSVBALANCETE29['si241_totalcreditosfontsf']         = $this->sicomNumberReal($aBALACETE29['si241_totalcreditosfontsf'], 2);
+                        $aCSVBALANCETE29['si241_saldofinalfontsf']            = $this->sicomNumberReal($aBALACETE29['si241_saldofinalfontsf'], 2);
+                        $aCSVBALANCETE29['si241_naturezasaldofinalfontsf']    = $this->padLeftZero($aBALACETE29['si241_naturezasaldofinalfontsf'], 1);
+
+                        $this->sLinha = $aCSVBALANCETE29;
+                        $this->adicionaLinha();
+                    }
+                }
+
+                for ($iCont30 = 0; $iCont30 < pg_num_rows($rsBALANCETE30); $iCont30++) {
+
+                    $aBALACETE30 = pg_fetch_array($rsBALANCETE30, $iCont30);
+
+                    if ($aBALACETE30['si242_reg10'] == $aBALACETE10['si177_sequencial']) {
+
+                        $aCSVBALANCETE30['si242_tiporegistro']            = $this->padLeftZero($aBALACETE30['si242_tiporegistro'], 2);
+                        $aCSVBALANCETE30['si242_contacontaabil']          = $this->padLeftZero($aBALACETE30['si242_contacontaabil'], 9);
+                        $aCSVBALANCETE30['si242_codfundo']                = $aBALACETE30['si242_codfundo'];
+                        $aCSVBALANCETE30['si242_codorgao']                = $this->padLeftZero($aBALACETE30['si242_codorgao'], 2);
+                        $aCSVBALANCETE30['si242_codunidadesub']           = $this->padLeftZero($aBALACETE30['si242_codunidadesub'], 5);
+                        $aCSVBALANCETE30['si242_codfuncao']               = $this->padLeftZero($aBALACETE30['si242_codfuncao'], 2);
+                        $aCSVBALANCETE30['si242_codsubfuncao']            = $this->padLeftZero($aBALACETE30['si242_codsubfuncao'], 3);
+                        $aCSVBALANCETE30['si242_codprograma']             = $this->padLeftZero($aBALACETE30['si242_codprograma'], 4);
+                        $aCSVBALANCETE30['si242_idacao']                  = $this->padLeftZero($aBALACETE30['si242_idacao'], 4);
+                        $aCSVBALANCETE30['si242_idsubacao']               = ($aBALACETE30['si242_idsubacao'] == 0 ? ' ' : $this->padLeftZero($aBALACETE30['si242_idsubacao'], 4));
+                        $aCSVBALANCETE30['si242_naturezadespesa']         = $this->padLeftZero($aBALACETE30['si242_naturezadespesa'], 6);
+                        $aCSVBALANCETE30['si242_subelemento']             = $this->padLeftZero($aBALACETE30['si242_subelemento'], 2);
+                        $aCSVBALANCETE30['si242_codfontrecursos']         = $this->padLeftZero($aBALACETE30['si242_codfontrecursos'], 3);
+                        $aCSVBALANCETE30['si242_tipodespesarpps']         = $aBALACETE30['si242_tipodespesarpps'] == 0 ? ' ' : $this->padLeftZero($aBALACETE30['si242_tipodespesarpps'], 1);
+                        $aCSVBALANCETE30['si242_saldoinicialcde']         = $this->sicomNumberReal($aBALACETE30['si242_saldoinicialcde'], 2);
+                        $aCSVBALANCETE30['si242_naturezasaldoinicialcde'] = $this->padLeftZero($aBALACETE30['si242_naturezasaldoinicialcde'], 1);
+                        $aCSVBALANCETE30['si242_totaldebitoscde']         = $this->sicomNumberReal($aBALACETE30['si242_totaldebitoscde'], 2);
+                        $aCSVBALANCETE30['si242_totalcreditoscde']        = $this->sicomNumberReal($aBALACETE30['si242_totalcreditoscde'], 2);
+                        $aCSVBALANCETE30['si242_saldofinalcde']           = $this->sicomNumberReal($aBALACETE30['si242_saldofinalcde'], 2);
+                        $aCSVBALANCETE30['si242_naturezasaldofinalcde']   = $this->padLeftZero($aBALACETE30['si242_naturezasaldofinalcde'], 1);
+
+                        $this->sLinha = $aCSVBALANCETE30;
+                        $this->adicionaLinha();
+                    }
+                }
+
+                for ($iCont31 = 0; $iCont31 < pg_num_rows($rsBALANCETE31); $iCont31++) {
+
+                    $aBALACETE31 = pg_fetch_array($rsBALANCETE31, $iCont31);
+
+                    if ($aBALACETE31['si243_reg10'] == $aBALACETE10['si177_sequencial']) {
+
+                        $aCSVBALANCETE31['si243_tiporegistro']            = $this->padLeftZero($aBALACETE31['si243_tiporegistro'], 2);
+                        $aCSVBALANCETE31['si243_contacontabil']           = $this->padLeftZero($aBALACETE31['si243_contacontabil'], 9);
+                        $aCSVBALANCETE31['si243_codfundo']                = $aBALACETE31['si243_codfundo'];
+                        $aCSVBALANCETE31['si243_naturezareceita']         = $this->padLeftZero($aBALACETE31['si243_naturezareceita'], 6);
+                        $aCSVBALANCETE31['si243_codfontrecursos']         = $this->padLeftZero($aBALACETE31['si243_codfontrecursos'], 3);
+                        $aCSVBALANCETE31['si243_emendaparlamentar']       = $aBALACETE31['si243_emendaparlamentar'];
+                        $aCSVBALANCETE31['si243_saldoinicialcre']         = $this->sicomNumberReal($aBALACETE31['si243_saldoinicialcre'], 2);
+                        $aCSVBALANCETE31['si243_naturezasaldoinicialcre'] = $this->padLeftZero($aBALACETE31['si243_naturezasaldoinicialcre'], 1);
+                        $aCSVBALANCETE31['si243_totaldebitoscre']         = $this->sicomNumberReal($aBALACETE31['si243_totaldebitoscre'], 2);
+                        $aCSVBALANCETE31['si243_totalcreditoscre']        = $this->sicomNumberReal($aBALACETE31['si243_totalcreditoscre'], 2);
+                        $aCSVBALANCETE31['si243_saldofinalcre']           = $this->sicomNumberReal($aBALACETE31['si243_saldofinalcre'], 2);
+                        $aCSVBALANCETE31['si243_naturezasaldofinalcre']   = $this->padLeftZero($aBALACETE31['si243_naturezasaldofinalcre'], 1);
+
+                        $this->sLinha = $aCSVBALANCETE31;
+                        $this->adicionaLinha();
+                    }
+                }
+
             }
 
 

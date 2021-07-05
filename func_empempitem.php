@@ -102,14 +102,23 @@ $clempempitem->rotulo->label("e62_item");
            $campos = "empempitem.*";
            }
         }
+        
         if(isset($chave_e62_numemp) && (trim($chave_e62_numemp)!="") ){
-	         $sql = $clempempitem->sql_query($chave_e62_numemp,$chave_e62_sequen,$campos,"e62_numemp");
+           $dbwhere1 = "e62_numemp = ".$chave_e62_numemp;
+	         $sql = $clempempitem->sql_query($chave_e62_numemp,$chave_e62_sequen,"e62_numemp, e62_item, e62_sequen, e62_quant, pc01_descrmater, e62_vlrun","e62_numemp");
+           $sq = $clempempitem->sql_record($clempempitem->sql_query($chave_e62_numemp,$chave_e62_sequen,$campos,"e62_numemp"));
         }else if(isset($chave_e62_item) && (trim($chave_e62_item)!="") ){
 	         $sql = $clempempitem->sql_query("","",$campos,"e62_item"," e62_item like '$chave_e62_item%' ");
+           $sq = $clempempitem->sql_record($clempempitem->sql_query("","",$campos,"e62_item"," e62_item like '$chave_e62_item%' "));
         }else{
            $sql = $clempempitem->sql_query("","",$campos,"e62_numemp#e62_sequen","");
         }
-        db_lovrot($sql,15,"()","",$funcao_js);
+       
+        
+        if($clempempitem->numrows>1){
+          echo "<script>alert('Selecione um item do empenho');</script>"; 
+        }
+        db_lovrot($sql, 15, "()", "", $funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
           $result = $clempempitem->sql_record($clempempitem->sql_query($pesquisa_chave));

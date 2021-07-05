@@ -552,7 +552,7 @@ function js_pesquisae55_item(mostra){
   }
 }
 function js_mostrapcmater(chave,erro,codele,quant,vluni,tipoitem,total,sequencial){
-  document.form1.pc01_descrmater.value = chave;
+  // document.form1.pc01_descrmater.value = chave;
   let opcao = "<?= $opcao ?>";
 
   if(erro==true){
@@ -563,7 +563,7 @@ function js_mostrapcmater(chave,erro,codele,quant,vluni,tipoitem,total,sequencia
     document.form1.submit();
   } else {
       document.form1.pc07_codele.value = codele;
-      document.form1.pc01_descrmater.value = chave;
+      // document.form1.pc01_descrmater.value = chave;
       document.form1.e55_quant.value = quant;
       document.form1.totalad.value = total;
       document.form1.e55_quant.focus();
@@ -583,7 +583,7 @@ function js_mostrapcmater(chave,erro,codele,quant,vluni,tipoitem,total,sequencia
 
 function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chave7,chave8,chave9) {
   document.form1.e55_item.value        = chave1;
-  document.form1.pc01_descrmater.value = chave2;
+  // document.form1.pc01_descrmater.value = chave2;
   document.form1.pc07_codele.value     = codele;
   document.form1.e55_quant.value = chave3;
   document.form1.e55_vluni.value = '';

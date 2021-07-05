@@ -38,5 +38,6 @@ $campos .= "e72_codnota,         ";
 $campos .= "e139_matestoqueitem, ";
 $campos .= "pc01_descrmater,     ";
 $campos .= "e139_justificativa,  ";
-$campos .= "t64_codcla           ";
+$campos .= "t64_codcla,          ";
+$campos .= "e72_qtd              ";
 ?>

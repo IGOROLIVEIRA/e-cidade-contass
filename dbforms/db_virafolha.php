@@ -1033,6 +1033,12 @@ if($res_exc == false){
       $sqlerro = true;
       //echo "<BR> erro 4";
     }
+    if ($sqlerro == false) {
+      $retorno = $clcfpess->updateDtFechamento($dataii_ano,$dataii_mes,$instit);
+      if($retorno == false) {
+        $sqlerro = true;
+      }
+    }
   }
 
   if($sqlerro == false){

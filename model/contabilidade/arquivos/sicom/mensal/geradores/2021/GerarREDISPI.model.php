@@ -26,7 +26,6 @@ class GerarREDISPI extends GerarAM
         $sSql = "select * from redispi102021 where si183_mes = " . $this->iMes . " and si183_instit=" . db_getsession("DB_instit");
         $rsREDISPI10 = db_query($sSql);
 
-
         $sSql2 = "select * from redispi112021 where si184_mes = " . $this->iMes . " and si184_instit=" . db_getsession("DB_instit");;
         $rsREDISPI11 = db_query($sSql2);
 
@@ -67,6 +66,7 @@ class GerarREDISPI extends GerarAM
                 $aCSVREDISPI10['si183_razao']                                 = substr($aREDISPI10['si183_razao'], 0, 250);
                 $aCSVREDISPI10['si183_vlrecurso']                             = $this->sicomNumberReal($aREDISPI10['si183_vlrecurso'], 2);
                 $aCSVREDISPI10['si183_bdi']                                   = $aREDISPI10['si183_naturezaobjeto'] == '7' ? '' : $this->sicomNumberReal($aREDISPI10['si183_bdi'], 2);
+                $aCSVREDISPI10['si183_link']                                  = $aREDISPI10['si183_link'];
 
                 $this->sLinha = $aCSVREDISPI10;
                 $this->adicionaLinha();
@@ -120,12 +120,9 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI12['si185_distrito']                    = $aREDISPI12['si185_distrito'];
                         $aCSVREDISPI12['si185_cidade']                      = $aREDISPI12['si185_cidade'];
                         $aCSVREDISPI12['si185_cep']                         = $aREDISPI12['si185_cep'];
-                        $aCSVREDISPI12['si185_graulatitude']                = $aREDISPI12['si185_graulatitude'];
-                        $aCSVREDISPI12['si185_minutolatitude']              = $aREDISPI12['si185_minutolatitude'];
-                        $aCSVREDISPI12['si185_segundolatitude']             = $this->sicomNumberReal($aREDISPI12['si185_segundolatitude'], 2);
-                        $aCSVREDISPI12['si185_graulongitude']               = $aREDISPI12['si185_graulongitude'];
-                        $aCSVREDISPI12['si185_minutolongitude']             = $aREDISPI12['si185_minutolongitude'];
-                        $aCSVREDISPI12['si185_segundolongitude']            = $this->sicomNumberReal($aREDISPI12['si185_segundolongitude'], 2);
+                        $aCSVREDISPI12['si185_latitude']                    = $this->sicomNumberReal($aREDISPI12['si185_latitude'],6);
+                        $aCSVREDISPI12['si185_longitude']                   = $this->sicomNumberReal($aREDISPI12['si185_longitude'], 6);
+                        $aCSVREDISPI12['si185_codbempublico']               = $this->padLeftZero($aREDISPI12['si185_codbempublico'], 4);
 
                         $this->sLinha = $aCSVREDISPI12;
                         $this->adicionaLinha();

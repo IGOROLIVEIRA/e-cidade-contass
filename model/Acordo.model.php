@@ -443,6 +443,12 @@ class Acordo
     private $lSituacaoVigencia;
 
     /**
+     * Valor da providência do acordo acordo.ac16_providencia
+     * @var integer
+     */
+    private $lProvidencia;
+
+    /**
      * @return mixed
      */
     public function getiLicoutroorgao()
@@ -1485,13 +1491,49 @@ class Acordo
         }
         $aGarantias      = $this->getGarantias();
         $iTotalGarantias = count($aGarantias);
-        for ($i = 0; $i < $iTotalGarantias; $i++) {
+        
+        
+        if($iTotalGarantias==1){
+                
+                $oDaoAcordoGarantia = db_utils::getDao("acordoacordogarantia");
+                $oDaoAcordoGarantia->excluir(null, "ac12_acordo={$this->getCodigoAcordo()}");
+                $this->aGarantias = "";
+                $op=1;
 
-            if ($this->aGarantias[$i]->getCodigo() == $iGarantia) {
-                array_splice($this->aGarantias, $i, 1);
-                break;
-            }
+                
+        }else{
+
+            $oDaoGarantias = db_utils::getDao("acordoacordogarantia");
+            $sSqlGarantias = $oDaoGarantias->sql_query(null, "ac12_acordogarantia,
+          ac12_texto", "ac12_sequencial", "ac12_acordo={$this->getCodigoAcordo()}");
+            $rsGarantias   = $oDaoGarantias->sql_record($sSqlGarantias);
+            if ($oDaoGarantias->numrows > 0) {
+
+                for ($i = 0; $i < $oDaoGarantias->numrows; $i++) {
+
+                    $oGarantiaPadrao = db_utils::fieldsMemory($rsGarantias, $i);
+                    $valor_ac12_acordogarantia = $oGarantiaPadrao->ac12_acordogarantia;
+                    if($valor_ac12_acordogarantia==$iGarantia){
+                        array_splice($this->aGarantias, $i, 1);
+                        break;
+                    }
+                }
+            }/*
+            for ($i = 0; $i < $iTotalGarantias; $i++) {
+                
+                if($op==1){
+                    break;
+                }
+                if ($this->aGarantias[$i]->getCodigo() == $iGarantia) {
+                    
+                    array_splice($this->aGarantias, $i, 1);
+                    break;
+                }         
+            }*/
         }
+
+        
+          
         return $this;
     }
 
@@ -1532,6 +1574,35 @@ class Acordo
         }
         $aPenalidades      = $this->getPenalidades();
         $iTotalPenalidades = count($aPenalidades);
+
+        if($iTotalPenalidades==1){
+                
+            $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
+            $oDaoPenalidades->excluir(null, "ac15_acordo={$this->getCodigoAcordo()}");
+            $this->aPenalidades = ""; 
+           
+
+            
+    }else{
+
+        $oDaoPenalidades = db_utils::getDao("acordoacordopenalidade");
+            $sSqlPenalidades = $oDaoPenalidades->sql_query(null, "ac15_acordopenalidade,
+          ac15_texto", "ac15_sequencial", "ac15_acordo={$this->getCodigoAcordo()}");
+            $rsPenalidades   = $oDaoPenalidades->sql_record($sSqlPenalidades);
+            if ($oDaoPenalidades->numrows > 0) {
+
+                for ($i = 0; $i < $oDaoPenalidades->numrows; $i++) {
+
+                    $oPenalidadePadrao = db_utils::fieldsMemory($rsPenalidades, $i);
+                    $valor_penalidade = $oPenalidadePadrao->ac15_acordopenalidade;
+                    if($valor_penalidade==$iPenalidade){
+                        array_splice($this->aPenalidades, $i, 1);
+                        break;
+                    }
+
+                }
+            }
+        /*
         for ($i = 0; $i < $iTotalPenalidades; $i++) {
 
             if ($this->aPenalidades[$i]->getCodigo() == $iPenalidade) {
@@ -1539,7 +1610,8 @@ class Acordo
                 array_splice($this->aPenalidades, $i, 1);
                 break;
             }
-        }
+        }*/
+    }
         return $this;
     }
 
@@ -1583,6 +1655,16 @@ class Acordo
         if ($oDaoAcordoVigencia->erro_status == 0) {
             throw new Exception("Erro ao definir vigência do contrato.\n{$oDaoAcordoVigencia->erro_msg}");
         }
+
+        $oDaoAcordo = db_utils::getDao('acordo');
+        $oDaoAcordo->ac16_sequencial  = $this->getCodigo();
+        $oDaoAcordo->ac16_providencia = $this->getProvidencia();
+        $oDaoAcordo->alterar($this->getCodigo());
+
+        if($oDaoAcordo->erro_status == 0){
+            throw new Exception("Erro ao alterar contrato.\n{$oDaoAcordo->erro_msg}");
+        }
+
     }
 
     /**
@@ -1628,6 +1710,7 @@ class Acordo
         $oDaoAcordo->ac16_licoutroorgao            = $this->getiLicoutroorgao();
         $oDaoAcordo->ac16_adesaoregpreco           = $this->getiAdesaoregpreco();
         $oDaoAcordo->ac16_tipocadastro             = $this->getITipocadastro();
+        $oDaoAcordo->ac16_providencia              = $this->getProvidencia();
         $iCodigoAcordo                             = $this->getCodigoAcordo();
 
         /**
@@ -2959,7 +3042,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia)
     {
         $nValorItens = 0;
 
@@ -3006,6 +3089,12 @@ class Acordo
         $sAtualDtFim     = new DBDate($this->getDataFinal());
         $this->setDataInicial($dtVigenciaInicial);
         $this->setDataFinal($dtVigenciaFinal);
+        /**
+         * A providência do contrato é alterada para 2 (finalizada), se tiver sido redirecionado a partir do arquivo modulos.php
+         */
+        if($lProvidencia){
+            $this->setProvidencia(2);
+        }
         $this->salvarAlteracoesContrato();
         if (in_array($iTipoAditamento, array(
             5,
@@ -3024,7 +3113,7 @@ class Acordo
 
         foreach ($aItens as $oItem) {
 
-            $oItemContrato = $this->getUltimaPosicao(true)->getItemByCodigo($oItem->codigo);
+            $oItemContrato = $this->getUltimaPosicao(true)->getItemByCodigopcmater($oItem->codigoitem);
 
             $oNovoItem = new AcordoItem(null);
             $oNovoItem->setCodigoPosicao($oNovaPosicao->getCodigo());
@@ -3034,7 +3123,6 @@ class Acordo
             }
 
             if ($oItemContrato) {
-
                 $oOrigemItem = $oItemContrato->getOrigem();
                 $oNovoItem->setElemento($oItemContrato->getElemento());
                 $oNovoItem->setMaterial($oItemContrato->getMaterial());
@@ -3608,6 +3696,24 @@ class Acordo
     public function setNumeroAcordo($iNumeroAcordo)
     {
         $this->iNumeroAcordo = $iNumeroAcordo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProvidencia(){
+
+        return $this->lProvidencia;
+    }
+
+    /**
+     * @param int $lProvidencia
+     * @return $lProvidencia
+     */
+
+    public function setProvidencia($lProvidencia){
+
+        $this->lProvidencia = $lProvidencia;
     }
 
     /**

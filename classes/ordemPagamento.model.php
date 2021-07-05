@@ -1361,7 +1361,7 @@ class ordemPagamento {
    * faz um estorno de liquidacao, e uma anulacao.
    * @param float $nValor valor a descontar;
    */
-  function desconto($oNota, $nValor, $sMotivo = '') {
+  function desconto($oNota, $nValor, $sMotivo = '', $sAto = '', $dtAto = '') {
 
     $oDadosOrdem = $this->getDadosOrdem();
 
@@ -1822,6 +1822,8 @@ class ordemPagamento {
     /*OC 4401*/
     $clempanulado->e94_id_usuario     = db_getsession("DB_id_usuario");
     /*Fim - OC 4401*/
+    $clempanulado->e94_ato            = $sAto;
+    $clempanulado->e94_dataato        = $dtAto;
     $clempanulado->incluir(null);
 
     if ($clempanulado->erro_status == 0) {
@@ -2207,4 +2209,26 @@ class ordemPagamento {
       }
     }
   }
+
+    /**
+     * Busca data do pagamento realizado
+     */
+    public function getDataPagamento() {
+      
+        $oDaoConlancamEmp = db_utils::getDao("conlancamemp");
+        $sWhere     = "    c75_numemp = {$this->getDadosOrdem()->e50_numemp} ";
+        $sWhere     .= "    and c80_codord = {$this->iCodOrdem} ";
+        $sSqlPag    = $oDaoConlancamEmp->sql_query_pagamentoEmpenho(null, "c70_data, c70_anousu", "c75_data DESC", $sWhere);
+        $rsPag      = $oDaoConlancamEmp->sql_record($sSqlPag);
+
+        if ($oDaoConlancamEmp->numrows > 0) {
+
+            $oLancamPag = db_utils::fieldsMemory($rsPag, 0);
+            return $oLancamPag;
+            
+        } else {
+            throw new Exception("Lançamento de pagamento não encontrado.");
+        }
+
+    }
 }

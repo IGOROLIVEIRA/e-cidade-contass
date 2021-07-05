@@ -187,7 +187,7 @@ class BemAcertoContaClassificacao {
     $oDadosReavaliacao = InventarioBem::buscaDadosDaReavaliacaoBem($oBem);
 
     if (!empty($oDadosReavaliacao)) {
-      $nValorAquisicao = $oDadosReavaliacao->getValorDepreciavel() + $oDadosReavaliacao->getValorResidual();
+      $nValorAquisicao = $oDadosReavaliacao->getValorDepreciavel();
     }
 
     $oDadosUltimaDepreciacao  = BemDepreciacao::getInstance($oBem);
@@ -231,7 +231,9 @@ class BemAcertoContaClassificacao {
     $oLancamentoAuxiliarBem = new LancamentoAuxiliarBem();
     $oLancamentoAuxiliarBem->setBem($oBem);
     $oLancamentoAuxiliarBem->setValorTotal($nValorLancamentoAjuste);
-    $oLancamentoAuxiliarBem->setObservacaoHistorico("Lançamento de ajuste da baixa do bem.");
+    $sHistoricoLancamento = "LANÇAMENTO DE AJUSTE DA BAIXA DO BEM {$oBem->getDescricao()}, ";
+    $sHistoricoLancamento .= "PLACA {$oBem->getPlaca()->getPlacaSeq()}, CÓDIGO {$oBem->getCodigoBem()}.";
+    $oLancamentoAuxiliarBem->setObservacaoHistorico(strtoupper($sHistoricoLancamento));
     $oLancamentoAuxiliarBem->setHistorico($aLancamentos[0]->getHistorico());
     $oEventoContabil->executaLancamento($oLancamentoAuxiliarBem);
     return self::STATUS_OK;

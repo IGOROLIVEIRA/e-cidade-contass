@@ -32,7 +32,8 @@ require_once("libs/db_utils.php");
 require_once("classes/db_pagordem_classe.php");
 require_once("classes/db_pagordemele_classe.php");
 require_once("model/retencaoNota.model.php");
-
+require_once("classes/db_empautitem_classe.php");
+require_once("classes/db_empagetipo_classe.php");
 
 /*
  * Configurações GED
@@ -44,6 +45,8 @@ require_once ("libs/exceptions/BusinessException.php");
 $oGet           = db_utils::postMemory($_GET);
 $clpagordem     = new cl_pagordem;
 $clpagordemele  = new cl_pagordemele;
+$clempautitem   = new cl_empautitem;
+$clempagetipo   = new cl_empagetipo;
 
 $sFornecedor = null;
 if ( isset($oGet) && !empty($oGet) ) {
@@ -191,7 +194,9 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
              contad.si166_crccontador as crc,
              controleinterno.z01_nome as controleinterno,
 
-             (select nome from db_usuarios where id_usuario = pagordem.e50_id_usuario) as usuario
+             (select nome from db_usuarios where id_usuario = pagordem.e50_id_usuario) as usuario,
+             e54_autori,
+             pc50_descr
            from pagordem
 				inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
         inner join cgm on cgm.z01_numcgm = empempenho.e60_numcgm
@@ -238,9 +243,12 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
      		LEFT JOIN cgm AS ordenapagamento ON ordenapagamento.z01_numcgm = ordenapaga.si166_numcgm
 				left join pagordemconta on e50_codord = e49_codord
 				left join pagordemprocesso on pagordem.e50_codord = pagordemprocesso.e03_pagordem
+        left outer join empempaut on e60_numemp = e61_numemp
+        left join empautoriza ON e61_autori = e54_autori
+        left join pctipocompra on pc50_codcom = e60_codcom
 				where pagordem.e50_codord = {$e50_codord} ) as x
         inner join cgm on cgm.z01_numcgm = _numcgm
-        left join pcfornecon on pc63_numcgm = _numcgm  and pc63_tipoconta=1
+        left join pcfornecon on pc63_numcgm = _numcgm
         left join pcforneconpad ON pc64_contabanco = pc63_contabanco
         ORDER BY pc64_contabanco
 	   ";
@@ -262,11 +270,11 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
            LEFT JOIN cgm orde ON orde.z01_numcgm = o41_ordpagamento 
            LEFT JOIN orcorgao ON o40_anousu = o41_anousu 
            AND o40_orgao = o41_orgao 
-           INNER JOIN orcdotacao ON o58_anousu = o41_anousu 
-           AND o58_orgao = o41_orgao 
+           INNER JOIN orcdotacao ON o58_orgao = o41_orgao 
            AND o58_unidade = o41_unidade 
            AND o58_instit = o41_instit 
-           INNER JOIN empempenho ON e60_coddot = o58_coddot 
+           INNER JOIN empempenho ON e60_coddot = o58_coddot
+           AND e60_anousu = o58_anousu
            INNER JOIN pagordem ON e50_numemp = e60_numemp 
            WHERE e50_codord = {$e50_codord} 
            AND o41_anousu = DATE_PART('YEAR',pagordem.e50_data)
@@ -463,6 +471,87 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    	 $pdf1->valor_ordem = "";
    	 $pdf1->obs 		= "$e50_obs";
    }
+
+   //tipo Direta
+    if ($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
+    
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+
+        if ($clempautitem->numrows > 0) {         
+
+            db_fieldsmemory($result_empaut, 0);
+            $pdf1->processo = $e54_numerl;
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+
+    }
+
+    //tipo licitacao de outros orgaos
+    if ($e54_tipoautorizacao == 2) {
+        
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+        
+        if ($clempautitem->numrows > 0) {
+
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->processo = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+    
+    }
+
+    //tipo licitacao
+    if ($e54_tipoautorizacao == 3) {
+        
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+        
+        if ($clempautitem->numrows > 0) {
+
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->processo = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+
+    }
+
+    //tipo Adesao regpreco
+    if ($e54_tipoautorizacao == 4 ) {
+        
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
+        
+        if ($clempautitem->numrows > 0) {
+        
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->processo = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->descr_tipocompra = $pc50_descr;
+
+        }
+
+    }
+
+    if ($e50_contapag != '') {
+
+        $sCampos            = " e83_conta, e83_descr, c63_agencia, c63_dvagencia, c63_conta, c63_dvconta ";
+        $sWhere             = " e83_codtipo = {$e50_contapag} ";
+        $sSqlContaPagadora  = $clempagetipo->sql_query_conplanoconta(null, $sCampos, null, $sWhere);
+        $rsContaPagadora    = $clempagetipo->sql_record($sSqlContaPagadora);
+
+        if ($clempagetipo->numrows > 0) {
+            
+            db_fieldsmemory($rsContaPagadora, 0);
+            $pdf1->conta_pagadora_reduz     = $e83_conta;
+            $pdf1->conta_pagadora_agencia   = "{$c63_agencia}-{$c63_dvagencia}";
+            $pdf1->conta_pagadora_conta     = "{$c63_conta}-{$c63_dvconta} {$e83_descr}";
+
+        }
+    }
+    
    $pdf1->imprime();
 }
 

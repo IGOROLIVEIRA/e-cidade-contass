@@ -113,6 +113,14 @@ db_app::load("prototype.js");
           ?>
         </td>
       </tr>
+
+      <tr>
+          <td nowrap title="<?=@$Tk29_conciliacaobancaria?>"><?=@$Lk29_conciliacaobancaria?></td>
+          <td>
+            <? db_inputdata('k29_conciliacaobancaria', @$k29_conciliacaobancaria_dia, @$k29_conciliacaobancaria_mes, @$k29_conciliacaobancaria_ano, true, 'text', $db_opcao, "") ?>
+          </td>
+      </tr>
+
       <tr>
         <td nowrap title="<?=@$Tk29_trazdatacheque?>">
           <?=@$Lk29_trazdatacheque?>
@@ -146,6 +154,17 @@ db_app::load("prototype.js");
           <?php
           db_input("k29_orctiporecfundeb", 10, null, false, "text", 1, "onchange='js_pesquisaRecurso(false);'");
           db_input("sDescricaoRecurso", 40, null, true, "text", 3);
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap title="<?=@$Tk29_cotaunicafundeb?>">
+          <?=@$Lk29_cotaunicafundeb?>
+        </td>
+        <td>
+          <?
+          $x = array('f'=>'Não','t'=>'Sim');
+          db_select('k29_cotaunicafundeb',$x,true,$db_opcao,"");
           ?>
         </td>
       </tr>
@@ -194,6 +213,7 @@ db_app::load("prototype.js");
   $('k29_boletimzerado').style.width = '155px';
   $('k29_saldoemitechq').style.width = '155px';
   $('k29_trazdatacheque').style.width = '155px';
+  $('k29_cotaunicafundeb').style.width = '155px';
   $('k29_contassemmovimento').style.width = '155px';
   $('k29_chqduplicado').style.width = '110px';
   $('tipo_transmissao').style.width = '110px';

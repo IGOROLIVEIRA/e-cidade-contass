@@ -619,7 +619,7 @@ class cl_liclicita
             }
 
         }
-        if ($this->l20_tipojulg == null) {
+        if ($this->l20_tipojulg == null || !$this->l20_tipojulg) {
             $this->erro_sql = " Campo Tipo de Julgamento não Informado.";
             $this->erro_campo = "l20_tipojulg";
             $this->erro_banco = "";
@@ -935,13 +935,8 @@ class cl_liclicita
         }
 
         if(db_getsession('DB_anousu') >= 2020){
-            if (!$this->l20_cadinicial) {
-                $this->l20_cadinicial = 1;
-            };
-
-            if (!$this->l20_exercicioedital) {
-                $this->l20_exercicioedital = db_getsession('DB_anousu');
-            };
+            $this->l20_cadinicial = 1;
+            $this->l20_exercicioedital = db_getsession('DB_anousu');
         }else{
             $this->l20_cadinicial = 'null';
             $this->l20_exercicioedital = 'null';
@@ -1543,7 +1538,7 @@ class cl_liclicita
         if (trim($this->l20_tipojulg != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipojulg"]))) {
             $sql .= $virgula . " l20_tipojulg = $this->l20_tipojulg ";
             $virgula = ",";
-            if (trim($this->l20_tipojulg) == null) {
+            if (trim($this->l20_tipojulg) == null || !trim($this->l20_tipojulg)) {
                 $this->erro_sql = " Campo Tipo de Julgamento nao Informado.";
                 $this->erro_campo = "l20_tipojulg";
                 $this->erro_banco = "";

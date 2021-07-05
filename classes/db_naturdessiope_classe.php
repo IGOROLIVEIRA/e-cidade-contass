@@ -62,8 +62,6 @@ class cl_naturdessiope {
     // funcao para inclusao
     function incluir ($c222_natdespecidade,$c222_natdespsiope, $c222_anousu, $c222_previdencia) {
         $this->atualizacampos();
-        $this->c222_natdespecidade = $c222_natdespecidade;
-        $this->c222_natdespsiope = $c222_natdespsiope;
         if (($this->c222_natdespecidade == null) || ($this->c222_natdespecidade == "") ) {
             $this->erro_sql = " Campo c222_natdespecidade nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
@@ -79,6 +77,9 @@ class cl_naturdessiope {
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
+        }
+        if ($this->c222_previdencia == null || ($this->c222_previdencia == "")) {
+            $this->c222_previdencia = 'f';
         }
         $sql = "insert into naturdessiope(
                                        c222_natdespecidade
@@ -393,7 +394,7 @@ class cl_naturdessiope {
             $sql .= $campos;
         }
         $sql .= " from naturdessiope ";
-        $sql .= ' inner join eledessiope on eledessiope.c223_eledespecidade = naturdessiope.c222_natdespsiope and naturdessiope.c222_anousu = eledessiope.c223_anousu ';
+        $sql .= ' inner join eledessiope on eledessiope.c223_eledespsiope = naturdessiope.c222_natdespsiope and naturdessiope.c222_anousu = eledessiope.c223_anousu ';
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c222_natdespecidade!=null ) {

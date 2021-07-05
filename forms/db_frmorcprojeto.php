@@ -135,30 +135,32 @@ $clrotulo->label("o45_numlei");
   	function js_validaTipoSup() {
 
 		let iTipoLei = document.getElementById('iTipoLei').value;
+        console.log(iTipoLei);
 		let iTipoSup = document.getElementById('o39_tiposuplementacao').value;
+        console.log(iTipoSup);
 
 		if (iTipoLei == 1) {
 		
-			let aTipoSupPermitidosLOA = ['Selecione','1001','1002','1003','1004','1011','1018','1019','1020','1021','1022'];
+			let aTipoSupPermitidosLOA = ['Selecione','1001','1002','1003','1004','1011','1018','1019','1020','1021','1022','2026'];
 			js_validaTipoSupArray(aTipoSupPermitidosLOA, iTipoSup, iTipoLei);
 
 		}
 
 		if (iTipoLei == 2) {
 
-			let aTipoSupPermitidosLDO = ['Selecione','1017','1014','1015','1016','1020','1021','1022'];
+			let aTipoSupPermitidosLDO = ['Selecione','1017','1014','1015','1016','1020','1021','1022','2026'];
 			js_validaTipoSupArray(aTipoSupPermitidosLDO, iTipoSup, iTipoLei);
 		
 		}
 
 		if (iTipoLei == 3) {
 
-			let aTipoSupPermitidosLAO = ['Selecione','1006','1007','1008','1009','1010','1012','1013','1023','1024','1025','1014','1015','1016'];
+			let aTipoSupPermitidosLAO = ['Selecione','1006','1007','1008','1009','1010','1012','1013','1023','1024','1025','1014','1015','1016','2026'];
 			js_validaTipoSupArray(aTipoSupPermitidosLAO, iTipoSup, iTipoLei);
 			
 		}
 
-	  	if (iTipoSup == 1001 || iTipoSup == 1003 || iTipoSup == 1004) {
+	  	if (iTipoSup == 1001 || iTipoSup == 1002 || iTipoSup == 1003 || iTipoSup == 1004) {
 			
 			document.getElementById('o39_usalimite').value = 't';	
 			document.getElementById('o39_usalimite_select_descr').value = 'Sim';

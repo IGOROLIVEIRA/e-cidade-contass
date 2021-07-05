@@ -518,7 +518,7 @@ if (isset($ci03_numproc) && $ci03_numproc != '' && isset($ci03_anoproc) && $ci03
                         dtDataIniMes: document.form1['aQuestoes'+i+'ci05_inianalise_mes'].value,
                         dtDataIniAno: document.form1['aQuestoes'+i+'ci05_inianalise_ano'].value,
                         bAtendeQuest: bAtendeQuest,            
-                        sAchado:      sAchados,
+                        sAchado:      encodeURIComponent(sAchados.replace(/\\/g,  "<contrabarra>")),
                     };
 
                     questoesEnviar.push(novoLancamento);

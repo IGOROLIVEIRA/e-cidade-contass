@@ -1101,7 +1101,7 @@ class cl_layout_SEFIP {
             ."1"
             .db_formatar($this->SFPRegistro12_004_017,"s","0",14,"e",0)
             .str_repeat("0", 36)
-            .trim(str_pad($this->SFPRegistro12_054_068, 15,"0", STR_PAD_LEFT))
+            .db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($this->SFPRegistro12_054_068,"f")))),"s","0",15,"e",0)
             .str_repeat("0", 15)
             ." "
             .trim(str_pad($this->SFPRegistro12_085_099, 15,"0", STR_PAD_LEFT))

@@ -36,39 +36,15 @@ include("dbforms/db_funcoes.php");
     <div style="display: table">
         <fieldset>
             <legend>
-                <b>Gerar PCA - Prestação de Contas Anual</b>
+                <b>Documentos DCASP Consolidado</b>
             </legend>
             <table style='empty-cells: show; border-collapse: collapse;'>
-                <?php
-                $oInstit = new Instituicao(db_getsession('DB_instit'));
-                if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
-                    ?>
-                    <tr>
-                        <td colspan="4">
-                            <fieldset>
-                                <table>
-                                    <tr>
-                                        <td>Tipo da Geração:</td>
-                                        <td>
-                                            <select id="TipoGeracao" class="TipoGeracao" onchange="tipoGeracao()">
-                                                <option value="CONSOLIDADO">CONSOLIDADO</option>
-                                                <option value="ISOLADO">ISOLADO</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </fieldset>
-                        </td>
-                    </tr>
-                <?php } ?>
                 <tr>
                     <td colspan="3">
                         <div id='dadospca'>
 
                             <fieldset>
-                                <legend>
-                                    <b>Enviar Arquivos</b>
-                                </legend>
+
                                 <table id="consolidado">
 
                                     <tr>
@@ -436,15 +412,9 @@ include("dbforms/db_funcoes.php");
     function js_processar() {
 
         var aArquivosSelecionados = new Array();
+        var tipoGeracao = 'COSOLIDADO';
+        var aArquivos = $$(".consolidado");
 
-        var select = document.getElementById('TipoGeracao');
-        var tipoGeracao = select.options[select.selectedIndex].value;
-
-        if (tipoGeracao == 'CONSOLIDADO') {
-            var aArquivos = $$(".consolidado");
-        } else {
-            var aArquivos = $$(".isolado");
-        }
 //    var aArquivos             = $$("input[type='file']");
         /*
          * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
