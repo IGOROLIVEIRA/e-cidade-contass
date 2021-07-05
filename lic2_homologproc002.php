@@ -209,7 +209,7 @@ for($x = 0; $x < $numrows_forne;$x++){
                     $oPDF->cell(25,$alt,"Quantidade",0,0,"R",0);
                     $oPDF->cell(21,$alt,"Marca",0,0,"R",0);
                     $oPDF->cell(40,$alt,"Valor Unitário",0,0,"R",0);
-                    $oPDF->cell(95,$alt,"Valor Total Unitário",0,1,"R",0);
+                    $oPDF->cell(95,$alt,"Valor Total",0,1,"R",0);
                     $oPDF->ln();
                     $oPDF->setfont("arial","",8);
                 }else if($op==1){
@@ -218,7 +218,7 @@ for($x = 0; $x < $numrows_forne;$x++){
                     $oPDF->cell(80,$alt,substr($z01_nome,0,40)." - ".$z01_cgccpf,0,1,"L",0);
                     $oPDF->cell(25,$alt,"Quantidade",0,0,"R",0);
                     $oPDF->cell(35,$alt,"Valor Unitário",0,0,"R",0);
-                    $oPDF->cell(120,$alt,"Valor Total Unitário",0,1,"R",0);
+                    $oPDF->cell(120,$alt,"Valor Total",0,1,"R",0);
                     $oPDF->ln();
                     $oPDF->setfont("arial","",8);
                 }
