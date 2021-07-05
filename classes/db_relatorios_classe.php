@@ -161,22 +161,22 @@ class cl_relatorios
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-      && ($lSessaoDesativarAccount === false))) {
+    // if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+    //   && ($lSessaoDesativarAccount === false))) {
 
-      $resaco = $this->sql_record($this->sql_query_file($this->rel_sequencial));
-      if (($resaco != false) || ($this->numrows != 0)) {
+    //   $resaco = $this->sql_record($this->sql_query_file($this->rel_sequencial));
+    //   if (($resaco != false) || ($this->numrows != 0)) {
 
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2012515,'$this->rel_sequencial','I')");
-        $resac = db_query("insert into db_acount values($acount,1010192,2012515,'','" . AddSlashes(pg_result($resaco, 0, 'rel_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1010192,2012516,'','" . AddSlashes(pg_result($resaco, 0, 'rel_descricao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1010192,2012517,'','" . AddSlashes(pg_result($resaco, 0, 'rel_arquivo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1010192,2012518,'','" . AddSlashes(pg_result($resaco, 0, 'rel_corpo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2012515,'$this->rel_sequencial','I')");
+    //     $resac = db_query("insert into db_acount values($acount,1010192,2012515,'','" . AddSlashes(pg_result($resaco, 0, 'rel_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,1010192,2012516,'','" . AddSlashes(pg_result($resaco, 0, 'rel_descricao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,1010192,2012517,'','" . AddSlashes(pg_result($resaco, 0, 'rel_arquivo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,1010192,2012518,'','" . AddSlashes(pg_result($resaco, 0, 'rel_corpo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }
     return true;
   }
 
@@ -242,30 +242,30 @@ class cl_relatorios
     if ($rel_sequencial != null) {
       $sql .= " rel_sequencial = $this->rel_sequencial";
     }
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-      && ($lSessaoDesativarAccount === false))) {
+    // $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+    // if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+    //   && ($lSessaoDesativarAccount === false))) {
 
-      $resaco = $this->sql_record($this->sql_query_file($this->rel_sequencial));
-      if ($this->numrows > 0) {
+    //   $resaco = $this->sql_record($this->sql_query_file($this->rel_sequencial));
+    //   if ($this->numrows > 0) {
 
-        for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+    //     for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
 
-          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-          $acount = pg_result($resac, 0, 0);
-          $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-          $resac = db_query("insert into db_acountkey values($acount,2012515,'$this->rel_sequencial','A')");
-          if (isset($GLOBALS["HTTP_POST_VARS"]["rel_sequencial"]) || $this->rel_sequencial != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2012515,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_sequencial')) . "','$this->rel_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-          if (isset($GLOBALS["HTTP_POST_VARS"]["rel_descricao"]) || $this->rel_descricao != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2012516,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_descricao')) . "','$this->rel_descricao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-          if (isset($GLOBALS["HTTP_POST_VARS"]["rel_arquivo"]) || $this->rel_arquivo != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2012517,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_arquivo')) . "','$this->rel_arquivo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-          if (isset($GLOBALS["HTTP_POST_VARS"]["rel_corpo"]) || $this->rel_corpo != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2012518,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_corpo')) . "','$this->rel_corpo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-      }
-    }
+    //       $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //       $acount = pg_result($resac, 0, 0);
+    //       $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //       $resac = db_query("insert into db_acountkey values($acount,2012515,'$this->rel_sequencial','A')");
+    //       if (isset($GLOBALS["HTTP_POST_VARS"]["rel_sequencial"]) || $this->rel_sequencial != "")
+    //         $resac = db_query("insert into db_acount values($acount,1010192,2012515,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_sequencial')) . "','$this->rel_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //       if (isset($GLOBALS["HTTP_POST_VARS"]["rel_descricao"]) || $this->rel_descricao != "")
+    //         $resac = db_query("insert into db_acount values($acount,1010192,2012516,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_descricao')) . "','$this->rel_descricao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //       if (isset($GLOBALS["HTTP_POST_VARS"]["rel_arquivo"]) || $this->rel_arquivo != "")
+    //         $resac = db_query("insert into db_acount values($acount,1010192,2012517,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_arquivo')) . "','$this->rel_arquivo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //       if (isset($GLOBALS["HTTP_POST_VARS"]["rel_corpo"]) || $this->rel_corpo != "")
+    //         $resac = db_query("insert into db_acount values($acount,1010192,2012518,'" . AddSlashes(pg_result($resaco, $conresaco, 'rel_corpo')) . "','$this->rel_corpo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     }
+    //   }
+    // }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -302,32 +302,6 @@ class cl_relatorios
   // funcao para exclusao
   function excluir($rel_sequencial = null, $dbwhere = null)
   {
-
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-      && ($lSessaoDesativarAccount === false))) {
-
-      if ($dbwhere == null || $dbwhere == "") {
-
-        $resaco = $this->sql_record($this->sql_query_file($rel_sequencial));
-      } else {
-        $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-      }
-      if (($resaco != false) || ($this->numrows != 0)) {
-
-        for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-          $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-          $acount = pg_result($resac, 0, 0);
-          $resac  = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-          $resac  = db_query("insert into db_acountkey values($acount,2012515,'$rel_sequencial','E')");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2012515,'','" . AddSlashes(pg_result($resaco, $iresaco, 'rel_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2012516,'','" . AddSlashes(pg_result($resaco, $iresaco, 'rel_descricao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2012517,'','" . AddSlashes(pg_result($resaco, $iresaco, 'rel_arquivo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2012518,'','" . AddSlashes(pg_result($resaco, $iresaco, 'rel_corpo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-      }
-    }
     $sql = " delete from relatorios
                     where ";
     $sql2 = "";
