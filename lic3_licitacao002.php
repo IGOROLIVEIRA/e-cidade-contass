@@ -189,7 +189,7 @@ if (!empty($oProcessoProtocolo)) {
     </tr>
     <tr>
       <td nowrap="nowrap" >
-        <b><?=@$Ll20_recdocumentacao?></b>
+        <b>Abertura das Propostas:</b>
       </td>
       <td nowrap="nowrap" class="valor" style="text-align: left;">
         <?php echo implode("/", array_reverse(explode("-", $oLicitatacao->l20_recdocumentacao))); ?>
