@@ -53,10 +53,11 @@ switch ($oParam->exec) {
     $oRetorno->itens[] = $oDados;
     break;
 
-  case 'Print':
+  case 'Processar':
 
     $iInstit        = db_getsession('DB_instit');
     $oInstit        = new Instituicao($iInstit);
+    $sInstit      = $oInstit->getDescricao();
 
     $sSqlSysArqCamp = $oDaoSysArquivo->sql_query_buscaCamposPkPorTabela($oParam->iArquivo);
     $rsSysArqCamp   = $oDaoSysArqCamp->sql_record($sSqlSysArqCamp);
@@ -81,8 +82,6 @@ switch ($oParam->exec) {
     db_fieldsmemory($rsArquivo, 0);
 
     $mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
-    // echo "imagens/files/{$oInstit->getImagemLogo()}";
-    // exit;
     if (file_exists("imagens/files/{$oInstit->getImagemLogo()}")) {
       $sLogo = "<img src='imagens/files/{$oInstit->getImagemLogo()}' width='70px' >";
     } else {
@@ -101,10 +100,15 @@ switch ($oParam->exec) {
     $sEmail       = trim($oInstit->getEmail());
     $sSite        = $oInstit->getSite();
 
+
+    if ($l20_codtipocom) {
+      require_once("classes/db_" . $cflicita . "_classe.php");
+      $clcflicita = new cl_cflicita;
+      db_fieldsmemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocom, "distinct l03_descr")), 0);
+    }
+
     $sDescricao = base64_decode($oParam->sDescricao);
-
     $sCorpo = base64_decode($oParam->sCorpo);
-
     $corpo = db_geratexto($sCorpo);
 
     $header = <<<HEADER
@@ -143,7 +147,6 @@ HEADER;
 </div>
 CONTAINER;
 
-
     $footer = <<<FOOTER
       </div>
       <div style='border-top:1px solid #000;width:100%;text-align:right;height:10px;'>
@@ -153,18 +156,11 @@ CONTAINER;
       </html>
 FOOTER;
 
-    // $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
-    // $mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
-    // $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
-
     $html = $header;
     $html .= $container;
     $html .= $footer;
-    //$mPDF->WriteHTML(utf8_encode($html));
 
-    $oRetorno->itens[] = $html;
-
-    //$oRetorno->itens[] = base64_encode($mPDF->Output($oParam->sDescricao . '.pdf', "S"));
+    $oRetorno->itens[] = base64_encode($html);
 
     break;
 }

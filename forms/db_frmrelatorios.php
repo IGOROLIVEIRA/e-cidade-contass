@@ -148,6 +148,11 @@ $clrotulo->label("descrproced");
       arrValue.push([unescape("Município"), '#$' + "sMunicipio" + '#']);
       arrValue.push([unescape("Data do sistema"), '#$' + "datasistema" + '#']);
       arrValue.push([unescape("Data do sistema mês textual"), '#$' + "dSistema" + '#']);
+      arrValue.push([unescape("Descrição da instituição"), '#$' + "sInstit" + '#']);
+      var str = oRetorno.itens[0].nomecam.split("_");
+      if (str[0] == 'l20')
+        arrValue.push([unescape("Descrição da modalidade"), '#$' + "l03_descr" + '#']);
+
       oRetorno.itens.each(function(oItem, iLinha) {
         arrValue.push([unescape(oItem.descricao), '#$' + oItem.nomecam + '#']);
       });

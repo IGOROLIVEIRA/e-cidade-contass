@@ -22,6 +22,7 @@ if (isset($alterar)) {
   db_inicio_transacao();
   $db_opcao = 2;
   $clrelatorios->rel_arquivo = $codarq;
+  $clrelatorios->rel_corpo = $rel_corpo;
   $clrelatorios->alterar($rel_sequencial);
   db_fim_transacao();
 }
@@ -61,8 +62,10 @@ if (isset($chavepesquisa)) {
   <script src="https://cdn.tiny.cloud/1/kcd8n7brt444oarrbdfk633ydzmb80qomjucnpdzlhsvfa1y/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
   <script type="text/javascript">
     tinymce.init({
-      selector: '#rel_corpo',
-      toolbar: "undo redo | styleselect | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent",
+      selector: "#rel_corpo",
+      menubar: 'file edit view insert format tools table tc',
+      toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+      plugins: 'print',
       language: 'pt_BR',
       height: '600px',
       width: '820px'

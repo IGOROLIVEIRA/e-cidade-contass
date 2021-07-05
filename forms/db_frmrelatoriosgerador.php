@@ -50,8 +50,8 @@ $clrotulo->label("descrproced");
       </table>
 
     </fieldset>
-    <input name="Processar" type="button" id="db_opcao" value="Processar" onclick="js_submit()">
-    <input name="Imprimir" type="button" id="db_opcao" value="Imprimir" onclick="js_imprimir()">
+    <input name="Processar" type="button" id="db_opcao" value="Processar" onclick="js_processar()">
+    <input name="Imprimir" type="button" id="db_imprimir" value="Imprimir" disabled="disabled" onclick="js_imprimir()">
   </div>
 </form>
 <script>
@@ -71,7 +71,7 @@ $clrotulo->label("descrproced");
     $('Jandb_iframe_relatorios').style.width = '100%';
     $('Jandb_iframe_relatorios').style.height = '100%';
     $('Jandb_iframe_relatorios').style.top = '30px';
-
+    document.getElementById('db_imprimir').disabled = true;
   }
 
   function js_mostrafunc_relatorios(chave, erro) {
@@ -226,7 +226,7 @@ $clrotulo->label("descrproced");
     }
   }
 
-  function js_submit() {
+  function js_processar() {
 
     js_divCarregando('Gerando Relatório, aguarde.', 'msgbox');
 
@@ -237,13 +237,13 @@ $clrotulo->label("descrproced");
     }
 
     var ed = encodeURIComponent(btoa(tinymce.get("rel_corpo").getContent()));
-
+    var descricao = btoa($F('rel_descricao'));
     var oParam = new Object();
-    oParam.exec = "Print";
+    oParam.exec = "Processar";
     oParam.iSequencial = $F('rel_sequencial');
     oParam.iArquivo = $F('input_arquivo');
     oParam.sArquivo = $F('arquivo');
-    oParam.sDescricao = encodeURIComponent(btoa($F('rel_descricao')));
+    oParam.sDescricao = descricao;
     oParam.sCorpo = ed;
     var oAjax = new Ajax.Request(sUrl, {
       method: "post",
@@ -251,38 +251,18 @@ $clrotulo->label("descrproced");
       onComplete: js_finaliza
     });
 
+    document.getElementById('db_imprimir').disabled = false;
+
   }
 
   function js_finaliza(oAjax) {
 
     js_removeObj('msgbox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
-    //var file = oRetorno.itens[0];
 
     tinymce.activeEditor.execCommand('mceNewDocument');
-    tinymce.activeEditor.execCommand('mceInsertContent', false, oRetorno.itens[0]);
+    tinymce.activeEditor.execCommand('mceInsertContent', false, atob(oRetorno.itens[0]));
 
-    // tinymce.activeEditor.execCommand('mceNewDocument');
-    // document.form1.rel_sequencial.value = '';
-    // document.form1.rel_descricao.value = '';
-    // document.getElementById("input_arquivo").value = '';
-
-    // var base64PDF = file;
-    // var objbuilder = '';
-    // objbuilder += ('<object width="100%" height="100%"      data="data:application/pdf;base64,');
-    // objbuilder += (base64PDF);
-    // objbuilder += ('" type="application/pdf" class="internal">');
-    // objbuilder += ('<embed src="data:application/pdf;base64,');
-    // objbuilder += (base64PDF);
-    // objbuilder += ('" type="application/pdf" />');
-    // objbuilder += ('</object>');
-
-    // var win = window.open("", "_blank", "titlebar=yes");
-    // win.document.title = $F('rel_descricao');
-    // win.document.write('<html><body>');
-    // win.document.write(objbuilder);
-    // win.document.write('</body></html>');
-    // layer = jQuery(win.document);
   }
 
   function js_imprimir() {
