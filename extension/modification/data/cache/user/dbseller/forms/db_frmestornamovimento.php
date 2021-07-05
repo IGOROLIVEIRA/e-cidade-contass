@@ -788,7 +788,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     );
   }
 
-  function js_objectToJson(oObject) { return JSON.stringify(oObject);
+  function js_objectToJson(oObject) { return JSON.stringify(oObject); 
 
     var sJson = JSON.stringify(oObject);;
     sJson     = sJson.replace("(","");

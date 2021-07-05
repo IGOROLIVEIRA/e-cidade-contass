@@ -832,7 +832,7 @@ function js_retornoConsultaOrdens(oAjax) {
   }
 
 }
-function js_objectToJson(oObject) { return JSON.stringify(oObject);
+function js_objectToJson(oObject) { return JSON.stringify(oObject); 
 
    var sJson = JSON.stringify(oObject);;
    sJson     = sJson.replace("(","");

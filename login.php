@@ -76,7 +76,7 @@ try {
 
   $oSmtp                     = new Smtp();
   $lMostraLinkPrimeiroAcesso = false;
-} catch(Exception $e) {
+} catch (Exception $e) {
 
   $lMostraLinkPrimeiroAcesso = true;
 }
@@ -88,7 +88,7 @@ require_once(modification("libs/db_stdlib.php"));
 $sDiretorio         = "config/require_extensions.xml";
 $lValidaLogin       = false;
 
-if ( file_exists($sDiretorio) ) {
+if (file_exists($sDiretorio)) {
 
   // Abre o arquivo XML e transforma em um objeto
   $oXmlEst      = simplexml_load_file($sDiretorio);
@@ -101,20 +101,20 @@ if ( file_exists($sDiretorio) ) {
   header("Location: index.php");
 }
 
-if ( isset($DB_VALIDA_REQUISITOS) && $DB_VALIDA_REQUISITOS == true ) {
+if (isset($DB_VALIDA_REQUISITOS) && $DB_VALIDA_REQUISITOS == true) {
 
-  if(!session_id()){
+  if (!session_id()) {
     session_start();
   }
 
-  if ( !session_is_registered("DB_configuracao_ok") ) {
+  if (!session_is_registered("DB_configuracao_ok")) {
 
     session_destroy();
     header("Location: index.php");
   }
 }
 
-if ( isset($serv) && $serv != "" ) {
+if (isset($serv) && $serv != "") {
 
   $servidor   = $DB_CONEXAO[$serv]["SERVIDOR"];
   $user       = base64_encode($DB_CONEXAO[$serv]["USUARIO"]);
@@ -122,7 +122,7 @@ if ( isset($serv) && $serv != "" ) {
   $senh       = base64_encode($DB_CONEXAO[$serv]["SENHA"]);
   $base_pesq  = $DB_CONEXAO[$serv]["BASE"];
 
-  if (!($conn1 = pg_connect("host=$servidor dbname=template1 user=".$DB_CONEXAO[$serv]["USUARIO"]." port=$port password=".$DB_CONEXAO[$serv]["SENHA"])) ) {
+  if (!($conn1 = pg_connect("host=$servidor dbname=template1 user=" . $DB_CONEXAO[$serv]["USUARIO"] . " port=$port password=" . $DB_CONEXAO[$serv]["SENHA"]))) {
 
     echo "<script>location.href='index.php';</script>";
     exit;
@@ -132,7 +132,6 @@ if ( isset($serv) && $serv != "" ) {
   $result_bases  = db_query($sql_bases);
   $numrows_bases = pg_numrows($result_bases);
   pg_close($conn1);
-
 } else {
 
   $servidor = "";
@@ -145,13 +144,13 @@ foreach ($oXmlEst->template_login as $aSrc) {
   $sScriptLogin = $aSrc['src'];
 }
 
-if(!session_id()){
+if (!session_id()) {
   session_start();
 }
 
 $oTentativasAcesso = new StdClass();
 
-if ( !empty($_SESSION['DB_tentativasAcesso'] ) ) {
+if (!empty($_SESSION['DB_tentativasAcesso'])) {
   $oTentativasAcesso = DB_getsession('DB_tentativasAcesso');
 }
 
@@ -159,7 +158,7 @@ $iTotalTentativas = array_sum((array) $oTentativasAcesso);
 
 $lCaptcha = (isset($lUtilizaCaptcha) && $lUtilizaCaptcha && $iTotalTentativas >= 3);
 
-if ( $lValidaLogin ) {
+if ($lValidaLogin) {
   include(modification($sScriptLogin));
 }
 
@@ -177,53 +176,53 @@ if ( $lValidaLogin ) {
 
     $('testaLogin').innerHTML = '';
 
-    var sLogin                = $F('usu_login');
-    var sSenha                = calcMD5($F('usu_senha'));
-    var wname                 = 'wname' + Math.floor(Math.random() * 10000);
-    var sQuery                = "";
+    var sLogin = $F('usu_login');
+    var sSenha = calcMD5($F('usu_senha'));
+    var wname = 'wname' + Math.floor(Math.random() * 10000);
+    var sQuery = "";
 
-    $('usu_senha').value      = "";
-    $('usu_login').value      = "";
+    $('usu_senha').value = "";
+    $('usu_login').value = "";
 
-    if ($('serv')){
+    if ($('serv')) {
 
-      sQuery += "&servidor="+$F('servidor');
-      sQuery += "&base="+$F('base');
-      sQuery += "&user="+$F('user');
-      sQuery += "&port="+$F('port');
-      sQuery += "&senha="+$F('senh');
+      sQuery += "&servidor=" + $F('servidor');
+      sQuery += "&base=" + $F('base');
+      sQuery += "&user=" + $F('user');
+      sQuery += "&port=" + $F('port');
+      sQuery += "&senha=" + $F('senh');
     }
 
     var oCaptcha = document.getElementById('captcha');
-    var sAuth    = btoa("DB_login="+sLogin+"&DB_senha="+sSenha).urlEncode();
-        sUrl     = 'abrir.php?sAuth=' + sAuth
-                   + ((oCaptcha) ?  '&conteudoCaptcha=' + $F('ct_captcha') : '')
-                   + sQuery;
+    var sAuth = btoa("DB_login=" + sLogin + "&DB_senha=" + sSenha).urlEncode();
+    sUrl = 'abrir.php?sAuth=' + sAuth +
+      ((oCaptcha) ? '&conteudoCaptcha=' + $F('ct_captcha') : '') +
+      sQuery;
 
     $('usu_senha').value = '';
 
-    var jan   = window.open(sUrl,wname,'width=1,height=1');
+    var jan = window.open(sUrl, wname, 'width=1,height=1');
   }
 
-  function js_mostrarelatorio(){
+  function js_mostrarelatorio() {
 
-    var sUrl = "fpdf151/mostrarelatorio.php?arquivo="+$F('arquivo');
-    var jan  = window.open(sUrl,'','location=0');
+    var sUrl = "fpdf151/mostrarelatorio.php?arquivo=" + $F('arquivo');
+    var jan = window.open(sUrl, '', 'location=0');
 
     $('arquivo').select();
     $('arquivo').focus();
 
   }
 
-  function js_verifica_cookie(){
+  function js_verifica_cookie() {
 
     // Esta funcao testa se os cookies sao aceitos
     // Tenta escrever um cookie.
     document.cookie = 'aceita_cookie=sim;path=/;';
     // Checa se conseguiu
-    if(document.cookie == '') {
+    if (document.cookie == '') {
 
-      window.location.href='cookie.html';
+      window.location.href = 'cookie.html';
       return (false);
     } else {
 
@@ -237,23 +236,23 @@ if ( $lValidaLogin ) {
 
     if ($('serv')) {
 
-      $('serv').observe('change', function(event){
+      $('serv').observe('change', function(event) {
         $('form1').submit();
       });
     }
 
     if ($('gerar')) {
 
-      $('gerar').observe('click', function(event){
+      $('gerar').observe('click', function(event) {
         js_mostrarelatorio();
       });
     }
 
-    $('btnlogar').observe('click', function(event){
+    $('btnlogar').observe('click', function(event) {
       js_acessar();
     });
 
-    $('usu_senha').observe('keyup', function(event){
+    $('usu_senha').observe('keyup', function(event) {
       js_logaComTeclaEnter(event);
     });
 
@@ -262,27 +261,27 @@ if ( $lValidaLogin ) {
   }
 
 
-/**
- * Valida se a versão do Firefox utilizada pelo usuário é válida.
- * Este bloco de código, deve ser removido em 2018.
- */
-(function(){
+  /**
+   * Valida se a versão do Firefox utilizada pelo usuário é válida.
+   * Este bloco de código, deve ser removido em 2018.
+   */
+  (function() {
 
-  var sAgent                 = navigator.userAgent;
-  var iVersaoCompletaFirefox = sAgent.substring(sAgent.indexOf("Firefox") + 8);
-  var iVersaoFirefox         = parseInt(''+iVersaoCompletaFirefox,10);
-  var dtAtual                = new Date();
+    var sAgent = navigator.userAgent;
+    var iVersaoCompletaFirefox = sAgent.substring(sAgent.indexOf("Firefox") + 8);
+    var iVersaoFirefox = parseInt('' + iVersaoCompletaFirefox, 10);
+    var dtAtual = new Date();
 
-  if (isNaN(iVersaoFirefox)) {
-    iVersaoFirefox = parseInt(navigator.appVersion,10);
-  }
+    if (isNaN(iVersaoFirefox)) {
+      iVersaoFirefox = parseInt(navigator.appVersion, 10);
+    }
 
-  if (iVersaoFirefox < 42 && dtAtual.getFullYear() == 2017 ) {
-    
-    var sMensagem  = "Identificamos que você está utilizando uma versão desatualizada do Firefox.";
-        sMensagem += "\nA partir de 2018, a versão mínima suportada pelo e-cidade será a 42, sendo a versão 52 a máxima homologada.";
-    alert(sMensagem);
-  }
+    if (iVersaoFirefox < 42 && dtAtual.getFullYear() == 2017) {
 
-})();
+      var sMensagem = "Identificamos que você está utilizando uma versão desatualizada do Firefox.";
+      sMensagem += "\nA partir de 2018, a versão mínima suportada pelo e-cidade será a 42, sendo a versão 52 a máxima homologada.";
+      alert(sMensagem);
+    }
+
+  })();
 </script>

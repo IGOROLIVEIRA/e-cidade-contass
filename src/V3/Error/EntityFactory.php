@@ -6,9 +6,11 @@ use \Exception;
 use \ECidade\V3\Error\Trace;
 use \ECidade\V3\Error\Entity;
 
-class EntityFactory {
+class EntityFactory
+{
 
-  public static function createFromException(Exception $exception) {
+  public static function createFromException($exception)
+  {
 
     $type = E_ERROR;
     $suppress = error_reporting() === 0;
@@ -24,7 +26,8 @@ class EntityFactory {
     return $entity;
   }
 
-  public static function create($type = null, $suppress = null, $message = null, $file = null, $line = null, $time = null, $trace = null) {
+  public static function create($type = null, $suppress = null, $message = null, $file = null, $line = null, $time = null, $trace = null)
+  {
 
     $entity = new Entity();
     $entity->setType($type);
@@ -38,5 +41,4 @@ class EntityFactory {
 
     return $entity;
   }
-
 }
