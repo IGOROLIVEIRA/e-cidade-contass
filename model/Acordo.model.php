@@ -3085,8 +3085,12 @@ class Acordo
             5
         )))
             $aTiposAlteracao[] = $iTipoAditamento;
-        $sAtualDtInicial = new DBDate($this->getDataInicial());
-        $sAtualDtFim     = new DBDate($this->getDataFinal());
+        $sAtualDtInicial = $this->getDataInicial();
+        $sAtualDtFim     = $this->getDataFinal();
+
+        $sAtualDtInicial = DateTime::createFromFormat('d/m/Y', $this->getDataInicial());
+        $sAtualDtFim = DateTime::createFromFormat('d/m/Y', $this->getDataFinal());
+
         $this->setDataInicial($dtVigenciaInicial);
         $this->setDataFinal($dtVigenciaFinal);
         /**
@@ -3104,9 +3108,10 @@ class Acordo
             /**
              * Verifica se houve alteração do período de vigência do contrato
              */
-            $sNovaDtInicial = new DBDate(date("Y-m-d", $this->getDataInicial()));
-            $sNovaDtFim     = new DBDate(date("Y-m-d", $this->getDataFinal()));
-            if ($sAtualDtInicial->getDate() != $sNovaDtInicial->getDate() || $sAtualDtFim->getDate() != $sNovaDtFim->getDate()) {
+            $sNovaDtInicial = DateTime::createFromFormat('d/m/Y', $this->getDataInicial());
+            $sNovaDtFim = DateTime::createFromFormat('d/m/Y', $this->getDataFinal());
+
+            if ($sAtualDtInicial != $sNovaDtInicial || $sAtualDtFim != $sNovaDtFim) {
                 $aTiposAlteracao[] = 6;
             }
         }
@@ -3144,11 +3149,11 @@ class Acordo
                     /**
                      * Verifica se houve alteração do período de execução do ítem.
                      */
-                    $sNovaDtExecucaoInicio = new DBDate($oItem->dtexecucaoinicio);
-                    $sNovaDtExecucaoFim    = new DBDate($oItem->dtexecucaofim);
-                    if (($sNovaDtExecucaoInicio->getDate() != $aPeriodosItem[0]->dtDataInicial) || ($sNovaDtExecucaoFim->getDate() != $aPeriodosItem[0]->dtDataFinal)) {
-                        $aPeriodosItem[0]->dtDataInicial = $sNovaDtExecucaoInicio->getDate();
-                        $aPeriodosItem[0]->dtDataFinal   = $sNovaDtExecucaoFim->getDate();
+                    $sNovaDtExecucaoInicio = DateTime::createFromFormat('d/m/Y', $oItem->dtexecucaoinicio);
+                    $sNovaDtExecucaoFim = DateTime::createFromFormat('d/m/Y', $oItem->dtexecucaofim);
+                    if (($sNovaDtExecucaoInicio != $aPeriodosItem[0]->dtDataInicial) || ($sNovaDtExecucaoFim != $aPeriodosItem[0]->dtDataFinal)) {
+                        $aPeriodosItem[0]->dtDataInicial = $sNovaDtExecucaoInicio;
+                        $aPeriodosItem[0]->dtDataFinal   = $sNovaDtExecucaoFim;
                         $aTiposAlteracao[]               = 8;
                     }
                 }
