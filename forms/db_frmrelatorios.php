@@ -24,7 +24,7 @@ $clrotulo->label("descrproced");
           </td>
         </tr>
         <tr>
-          <td nowrap title="<?= @$Trel_descricao ?>" align="left">
+          <td nowrap title="Descrição" align="left">
             <strong>Descrição:</strong>
           </td>
           <td align="left">
