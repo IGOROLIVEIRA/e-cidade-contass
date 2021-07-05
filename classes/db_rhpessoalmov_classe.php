@@ -2737,4 +2737,24 @@ class cl_rhpessoalmov {
         return $sql;
     }
 
+    /**
+     * Retorna sql de servidores ativos no mes
+     * @param integer $anousu
+     * @param integer $mesusu
+     * @param string $campos
+     * @return string $sql
+     */
+    public function sql_servidores_ativos_mes_caged($anousu, $mesusu, $campos = "*") {
+        $instit = db_getsession("DB_instit");
+        $primeirodia  = $anousu."-".$mesusu."-01";
+        $sql = "SELECT {$campos} FROM rhpessoal
+        INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
+        AND rhpessoalmov.rh02_anousu = {$anousu}
+        AND rhpessoalmov.rh02_mesusu = {$mesusu}
+        AND rhpessoalmov.rh02_instit = {$instit}
+        LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+        WHERE rh01_instit = {$instit} AND rh01_admiss <= '{$primeirodia}' AND (rh05_recis IS NULL OR rh05_recis >= '{$primeirodia}')";
+        return $sql;
+    }
+
 }
