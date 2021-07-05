@@ -14,8 +14,8 @@ $clrotulo->label("descrproced");
       <legend><b>Cadastro</b></legend>
       <table border="0">
         <tr>
-          <td nowrap title="<?= @$Trel_sequencial ?>" align="left">
-            <?= @$Lrel_sequencial ?>
+          <td nowrap title="Sequencial" align="left">
+            <strong>Sequencial:</strong>
           </td>
           <td align="left">
             <?
@@ -24,8 +24,8 @@ $clrotulo->label("descrproced");
           </td>
         </tr>
         <tr>
-          <td nowrap title="<?= @$Trel_descricao ?>" align="left">
-            <?= @$Lrel_descricao ?>
+          <td nowrap title="Descrição" align="left">
+            <strong>Descrição:</strong>
           </td>
           <td align="left">
             <?

@@ -38,8 +38,8 @@ $clrotulo->label("descrproced");
           <td id="tdArquivoInput" align="left"></td>
         </tr>
         <tr>
-          <td nowrap title="<?= @$Trel_corpo ?>">
-            <?= @$Lrel_corpo ?>
+          <td nowrap title="Corpo">
+            <strong>Corpo:</strong>
           </td>
           <td>
             <?
