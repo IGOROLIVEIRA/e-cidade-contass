@@ -141,7 +141,7 @@ db_app::load("estilos.css");
               <tr>
                 <td nowrap title="<?= @$Tve70_veiculoscomb ?>">
                   <?
-                  db_ancora(@$Lve70_veiculoscomb, "js_pesquisave70_veiculoscomb(true);", $db_opcao);
+                  db_ancora(@$Lve70_veiculoscomb, "js_pesquisave70_veiculoscomb(true,1);", $db_opcao);
                   ?>
                 </td>
                 <td>
@@ -160,12 +160,13 @@ db_app::load("estilos.css");
                             ?>
                             <tr>
                               <td nowrap title="<?= @$Tve70_origemgasto ?>">
-                                <?= @$Lve70_origemgasto ?>
+                                <?//= @$Lve70_origemgasto ?>
+                                <strong>Origem Gasto</strong>
                               </td>
                               <td>
                                 <?
-                                $x = array("1" => "ESTOQUE", "2" => "CONSUMO IMEDIATO");
-                                db_select('ve70_origemgasto', $x, true, $db_opcao, "");
+                                $x = array("2" => "CONSUMO IMEDIATO", "1" => "ESTOQUE");
+                                db_select('ve70_origemgasto', $x, true, $db_opcao, "onclick=ancoraPosto()");
                                 ?>
                               </td>
                             </tr>
@@ -176,25 +177,106 @@ db_app::load("estilos.css");
                               <td>
                                 <?
                                 db_inputdata('ve70_dtabast', @$ve70_dtabast_dia, @$ve70_dtabast_mes, @$ve70_dtabast_ano, true, 'text', $db_opcao,
-                                  "onchange='js_pesquisa_ultimamedida();'", "", "", "none", "", "", "js_pesquisa_ultimamedida();")
+                                  "onchange='js_pesquisa_ultimamedida();'", "", "", "none", "", "", "js_pesquisa_ultimamedida();");
+                                  echo "<strong>Hora:</strong>";
+                                  db_input('ve70_hora', 10, $Ive70_hora, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");
+                                  ?>
+                                </td>
+                            
+                              </tr>
+
+                              <tr>
+                                <td> <strong>Itens do Empenho:</strong></td>
+                                <td nowrap title="">
+                                  <?
+                                  $y = array(''=>'Selecione','t' => 'Sim', 'f' => 'Não');
+                                  db_select('si05_item_empenho', $y, true, $db_opcao, "");
                                   ?>
                                 </td>
                               </tr>
 
 
                               <tr>
-                                <td nowrap title="Hora do abastecimento">
-                                  <strong>Hora do abastecimento:</strong>
-                                </td>
-                                <td>
-                                  <?
-                                  db_input('ve70_hora', 10, $Ive70_hora, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");
+                              <td align="left" nowrap title="<?= $Te60_codemp ?>">
+                                  <? 
+                                   db_ancora("Número do Empenho:", "js_pesquisae60_codemp(true,1);", 1);
                                   ?>
+                                </td> 
+                                <td>
+                                  <? //db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); ?>
 
+                                  <?php db_input('si05_numemp', 10, $Isi05_numemp, true, 'hidden', 1); ?> 
+                                  <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1); ?>
+                                  
                                 </td>
+
                               </tr>
 
+                              <?
+                              if (isset($ve50_postoproprio) && $ve50_postoproprio == 3) {
+                                db_input('posto_proprio', 1, "", true, 'hidden', 3, '');
+                                ?>
+                                <tr>
+                                  <td nowrap title="Tipo de Posto"><b>Tipo de Posto:</b></td>
+                                  <td>
+                                    <select name="sel_proprio" onChange="js_mostravalores(this,<?= $db_opcao ?>);"
+                                      style="width: 100px;">
+                                      <option value="0" <? if (isset($sel_proprio) && $sel_proprio == 0) {
+                                        echo "SELECTED";
+                                      } ?>>Nenhum
+                                    </option>
+                                    <option value="1" <? if (isset($sel_proprio) && $sel_proprio == 1) {
+                                      echo "SELECTED";
+                                    } ?>>Interno
+                                  </option>
+                                  <option value="2" <? if (isset($sel_proprio) && $sel_proprio == 2) {
+                                    echo "SELECTED";
+                                  } ?>>Externo
+                                </option>
+                              </select>
+                            </td>
+                          </tr>
+                          <?
+                        }
 
+                        $mostrar = true;
+                        if (isset($sel_proprio) && $sel_proprio == 0 ||
+                          !isset($sel_proprio) && isset($ve50_postoproprio) && $ve50_postoproprio == 3
+                          ) {
+                          $mostrar = false;
+                      }
+
+                      if ($db_opcao != 1) {
+                        $mostrar = true;
+                      }
+
+                      if ($mostrar == true) {
+                        ?>
+                        <tr>
+                          <td nowrap title="<?= @$Tve71_veiccadposto ?>">
+                            <div id="postoEstoque" style="display:none;">
+                            <?
+                            db_ancora(@$Lve71_veiccadposto, "js_pesquisave71_veiccadposto(true,1);", $db_opcao1);
+                            ?>
+                            </div>
+                            <div id="postoConsImediato" >
+                            
+                            <strong> Posto: </strong>
+                            
+                            </div>
+                          </td>
+                          <td>
+                            <?
+                            db_input('ve71_veiccadposto', 10, $Ive71_veiccadposto, true, 'text', 3, " onchange='js_pesquisave71_veiccadposto(false);'")
+                            ?>
+                            <?
+                            db_input('posto', 40, "", true, 'text', 3, '');
+                            ?>
+                            <input type ="hidden" id="numcgm_posto" name="numcgm_posto">
+                          </td>
+                        </tr>
+                        <?
+                      }?>
 
                               <tr>
                                 <td nowrap title="Última Medida"><b>Última Medida:</b></td>
@@ -248,62 +330,6 @@ db_app::load("estilos.css");
                               </tr>
 
                               <?
-                              if (isset($ve50_postoproprio) && $ve50_postoproprio == 3) {
-                                db_input('posto_proprio', 1, "", true, 'hidden', 3, '');
-                                ?>
-                                <tr>
-                                  <td nowrap title="Tipo de Posto"><b>Tipo de Posto:</b></td>
-                                  <td>
-                                    <select name="sel_proprio" onChange="js_mostravalores(this,<?= $db_opcao ?>);"
-                                      style="width: 100px;">
-                                      <option value="0" <? if (isset($sel_proprio) && $sel_proprio == 0) {
-                                        echo "SELECTED";
-                                      } ?>>Nenhum
-                                    </option>
-                                    <option value="1" <? if (isset($sel_proprio) && $sel_proprio == 1) {
-                                      echo "SELECTED";
-                                    } ?>>Interno
-                                  </option>
-                                  <option value="2" <? if (isset($sel_proprio) && $sel_proprio == 2) {
-                                    echo "SELECTED";
-                                  } ?>>Externo
-                                </option>
-                              </select>
-                            </td>
-                          </tr>
-                          <?
-                        }
-
-                        $mostrar = true;
-                        if (isset($sel_proprio) && $sel_proprio == 0 ||
-                          !isset($sel_proprio) && isset($ve50_postoproprio) && $ve50_postoproprio == 3
-                          ) {
-                          $mostrar = false;
-                      }
-
-                      if ($db_opcao != 1) {
-                        $mostrar = true;
-                      }
-
-                      if ($mostrar == true) {
-                        ?>
-                        <tr>
-                          <td nowrap title="<?= @$Tve71_veiccadposto ?>">
-                            <?
-                            db_ancora(@$Lve71_veiccadposto, "js_pesquisave71_veiccadposto(true);", $db_opcao);
-                            ?>
-                          </td>
-                          <td>
-                            <?
-                            db_input('ve71_veiccadposto', 10, $Ive71_veiccadposto, true, 'text', $db_opcao, " onchange='js_pesquisave71_veiccadposto(false);'")
-                            ?>
-                            <?
-                            db_input('posto', 40, "", true, 'text', 3, '');
-                            ?>
-                          </td>
-                        </tr>
-                        <?
-                      }
 
                       if (isset($ve50_postoproprio) && $ve50_postoproprio == 0 ||
                         isset($ve70_valor) && $ve70_valor > 0 ||
@@ -373,20 +399,7 @@ db_app::load("estilos.css");
                               </fieldset>
                             </td>
                           </tr>
-                          <tr>
-                            <td align="left" nowrap title="<?= $Tsi05_numemp ?>">
-                              <? db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); ?>
-
-                              <?php db_input('si05_numemp', 10, $Isi05_numemp, true, 'text', 3); ?>
-                            </td>
-
-                            <td align="left" nowrap title="<?= $Te60_codemp ?>">
-                              <?= @$Le60_codemp ?>
-
-                              <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 3); ?>
-                            </td>
-
-                          </tr>
+                          
                           <tr>
                             <td> <?= @$Lsi05_atestado ?> </td>
                             <td nowrap title="<?= @$Tsi05_atestado ?>">
@@ -416,12 +429,55 @@ db_app::load("estilos.css");
             </form>
             <script>
 
+var el = document.getElementById("e60_codemp");
+el.onblur = function(){
+   console.log("blur", "saiu do input" , this);
+   var valor_e60Codemp = document.form1.e60_codemp.value;
+   var valor_ve70Dtabast = document.form1.ve70_dtabast.value;
+   if(valor_e60Codemp!="" && valor_ve70Dtabast!=""){
+    js_pesquisae60_codemp(true,0);
+   }
+   if(valor_ve70Dtabast==""){
+      alert("Preencher Data de Abastecimento");
+   }else if(valor_e60Codemp==""){
+      alert("Preencher Número do Empenho");
+   }
+   
+   /// ; utilizando desta forma o this aqui dentro sera o input
+}
+
+// Libera a ancora Posto de acordo com origem do gasto
+function ancoraPosto(){
+  var valor_origem = document.getElementById("ve70_origemgasto").value;
+    if(valor_origem==1){
+      document.getElementById("postoConsImediato").style.display = 'none';
+      document.getElementById("postoEstoque").style.display = 'block';
+    }else{
+      document.getElementById("postoConsImediato").style.display = 'block';
+      document.getElementById("postoEstoque").style.display = 'none';
+    }
+  
+}
+
     //--------------------------------
     //Para filtrar apenas empenhos com o elemento 333903099000000, usar o parametro filtroabast=1
-    function js_pesquisae60_codemp(mostra) {
+    function js_pesquisae60_codemp(mostra,controlador) {
       if (mostra == true) {
           var ve70_abast = $F("ve70_dtabast");
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss', 'Pesquisa', true);
+          var e60_codemp = $F("e60_codemp");
+          var e60_numemp = $F("si05_numemp");
+          document.form1.ve70_vlrun.value = ""; 
+          document.form1.ve70_litros.value = "";
+          document.form1.numcgm_posto.value = "";
+          document.form1.ve70_valor.value = ""; 
+          document.form1.ve71_veiccadposto.value = "";
+          document.form1.posto.value = ""; 
+        if(controlador==0){
+          js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&chave_e60_codemp='+e60_codemp+'&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+        }else{
+          js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+        }  
+        
       } else {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
       }
@@ -431,20 +487,39 @@ db_app::load("estilos.css");
     * Função alterada para validar se a data do empenho escolhido é maior que a data do abastecimento.
     * Ocorrência 1017: A contabilidade, em acordo com o suporte, solicitaram a remoção destas validações. Foi removida a obrigatoriedade e mantido a mensagem de alerta.
     * */
-    function js_mostraempempenho2(chave1, chave2, chave3, chave4) {
+    function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5) {
       var dtEmpenho = new Date(chave4);
       var dtAbast = new Date(document.form1.ve70_dtabast_ano.value+"-"+document.form1.ve70_dtabast_mes.value+"-"+document.form1.ve70_dtabast_dia.value);
       if(dtEmpenho > dtAbast){
         var resp = confirm("Alerta: A data do empenho selecionado ("+dtEmpenho.toLocaleDateString()+") é maior que a data do abastecimento ("+dtAbast.toLocaleDateString()+"). Deseja continuar mesmo assim?");
         if (resp == true){
           document.form1.si05_numemp.value = chave1;
-          document.form1.e60_codemp.value = chave2 + ' / ' + chave3;
+          document.form1.e60_codemp.value = chave2 + '/' + chave3;
+          document.form1.numcgm_posto.value = chave5;
           db_iframe_empempenho.hide();
+          var test = document.getElementById("si05_item_empenho").value;
+        if(test=='t'){
+          js_pesquisaItem_emp(true);
+          js_pesquisave71_veiccadposto(true,0);
+        }
+        if(test=='f'){
+          js_pesquisave71_veiccadposto(true,0);
+        }
         }
       } else {
         document.form1.si05_numemp.value = chave1;
-        document.form1.e60_codemp.value = chave2 + ' / ' + chave3;
+        document.form1.e60_codemp.value = chave2 + '/' + chave3;
+        document.form1.numcgm_posto.value = chave5;
         db_iframe_empempenho.hide();
+        var test = document.getElementById("si05_item_empenho").value;
+        if(test=='t'){
+          js_pesquisaItem_emp(true);
+          js_pesquisave71_veiccadposto(true,0);
+        }
+        if(test=='f'){
+          js_pesquisave71_veiccadposto(true,0);
+        }
+        
       }
     }
 
@@ -461,6 +536,26 @@ db_app::load("estilos.css");
       document.form1.e60_codemp.value = chave1;
       db_iframe_empempenho.hide();
     }
+
+    //--------------------------------
+    //Para filtrar apenas os itens de determinado empenho
+    function js_pesquisaItem_emp(mostra) {
+      if (mostra == true) {
+          var si05_numemp = $F("si05_numemp");
+          
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempitem', 'func_empempitem.php?chave_e62_numemp='+si05_numemp+'&funcao_js=parent.js_mostraitem_emp2|e62_vlrun|e62_quant', 'Pesquisa', true);
+      }
+    }
+
+    function js_mostraitem_emp2(chave1,chave2) {
+
+      
+        document.form1.ve70_vlrun.value = chave1; 
+        document.form1.ve70_litros.value = chave2;
+        js_calcula_total();
+        db_iframe_empempitem.hide();
+      
+  }
 
     //--------------------------------
 
@@ -640,18 +735,19 @@ db_app::load("estilos.css");
               document.form1.ve01_placa.value = chave2;
               js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
               db_iframe_veiculos.hide();
+              js_pesquisave70_veiculoscomb(true,0);
             }
 
-            function js_pesquisave70_veiculoscomb(mostra) {
+            function js_pesquisave70_veiculoscomb(mostra,controlador) {
 
-
+          
               if (mostra == true) {
                 if (document.form1.ve70_veiculos.value != "") {
-                  js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculoscomb', 'func_veiculoscomb.php?filtrar_veiculo=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveiculoscomb1|ve06_sequencial|ve26_descr|ve06_veiccadcomb', 'Pesquisa', true);
+                  js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculoscomb', 'func_veiculoscomb.php?filtrar_veiculo=' + document.form1.ve70_veiculos.value + '&controlador='+controlador+'&funcao_js=parent.js_mostraveiculoscomb1|ve06_sequencial|ve26_descr|ve06_veiccadcomb', 'Pesquisa', true);
                 }
               } else {
                 if (document.form1.ve70_veiculoscomb.value != '' && document.form1.ve70_veiculos.value != "") {
-                  js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculoscomb', 'func_veiculoscombabast.php?filtrar_veiculocomb=' + document.form1.ve70_veiculoscomb.value + '&funcao_js=parent.js_mostraveiculoscomb&cod_veiculo=' + document.form1.ve70_veiculos.value + '&pesquisa_chave=' + document.form1.ve70_veiculoscomb.value, 'Pesquisa', false);
+                  js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculoscomb', 'func_veiculoscombabast.php?filtrar_veiculocomb=' + document.form1.ve70_veiculoscomb.value + '&controlador='+controlador+'&funcao_js=parent.js_mostraveiculoscomb&cod_veiculo=' + document.form1.ve70_veiculos.value + '&pesquisa_chave=' + document.form1.ve70_veiculoscomb.value, 'Pesquisa', false);
                 } else {
                   document.form1.ve70_veiculoscomb.value = "";
                   document.form1.ve26_descr.value = "";
@@ -675,7 +771,7 @@ db_app::load("estilos.css");
               document.form1.ve26_descr.value = chave2;
               db_iframe_veiculoscomb.hide();
             }
-            function js_pesquisave71_veiccadposto(mostra) {
+            function js_pesquisave71_veiccadposto(mostra,conrtolador) {
               <?
               $param_tipo = $ve50_postoproprio;
               if (isset($sel_proprio) && $sel_proprio > 0){
@@ -686,8 +782,16 @@ db_app::load("estilos.css");
             }
           }
           ?>
+          if(conrtolador==0){
+            var numcgm_posto = document.getElementById("numcgm_posto").value;
+          }
+          
           if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?param_tipo=<?=$param_tipo?>&funcao_js=parent.js_mostraposto1|ve29_codigo|z01_nome|descrdepto', 'Pesquisa', true);
+            if(conrtolador==0){
+              js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?param_tipo=<?=$param_tipo?>&chave_numcgm='+numcgm_posto+'&funcao_js=parent.js_mostraposto1|ve29_codigo|z01_nome|descrdepto|z01_numcgm', 'Pesquisa', true);
+            }else{
+              js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?param_tipo=<?=$param_tipo?>&funcao_js=parent.js_mostraposto1|ve29_codigo|z01_nome|descrdepto|z01_numcgm', 'Pesquisa', true);
+            }
           } else {
             if (document.form1.ve71_veiccadposto.value != '') {
               js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?param_tipo=<?=$param_tipo?>&pesquisa_chave=' + document.form1.ve71_veiccadposto.value + '&funcao_js=parent.js_mostraposto', 'Pesquisa', false);
@@ -703,8 +807,13 @@ db_app::load("estilos.css");
             document.form1.ve71_veiccadposto.value = '';
           }
         }
-        function js_mostraposto1(chave1, chave2, chave3) {
-          document.form1.ve71_veiccadposto.value = chave1;
+        function js_mostraposto1(chave1, chave2, chave3,chave4) {
+          if(chave1==""){
+            document.form1.ve71_veiccadposto.value = chave4;
+          }else{
+            document.form1.ve71_veiccadposto.value = chave1;
+          }
+          
           if (chave2 != "") {
             posto = chave2;
           }

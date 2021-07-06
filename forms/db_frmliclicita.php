@@ -412,7 +412,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
                                 <tr>
                                     <td nowrap title="<?=@$Tl20_recdocumentacao?>" id="recdocumentacao">
-                                        <?=@$Ll20_recdocumentacao?>
+                                        <b>Abertura das Propostas :</b>
                                     </td>
                                     <td>
                                         <?
