@@ -208,7 +208,7 @@ for($x = 0; $x < $numrows_forne;$x++){
                     $oPDF->cell(80,$alt,substr($z01_nome,0,40)." - ".$z01_cgccpf,0,1,"L",0);
                     $oPDF->cell(25,$alt,"Quantidade",0,0,"R",0);
                     $oPDF->cell(35,$alt,"Marca",0,0,"C",0);
-                    $oPDF->cell(45,$alt,"Valor Unitário",0,0,"R",0);
+                    $oPDF->cell(40,$alt,"Valor Unitário",0,0,"R",0);
                     $oPDF->cell(80,$alt,"Valor Total",0,1,"R",0);
                     $oPDF->ln();
                     $oPDF->setfont("arial","",8);
@@ -234,7 +234,7 @@ for($x = 0; $x < $numrows_forne;$x++){
                 $oPDF->multicell(180,$alt,"Item ".$l21_ordem." - ".$pc01_descrmater . " - " . $pc11_resum,0,"J",$cor);
                 $oPDF->cell(15,$alt,$pc23_quant,0,0,"R",$cor);
                 $oPDF->cell(55,$alt,$pc23_obs,0,0,"C",$cor);
-                $oPDF->cell(20,$alt,$pc23_vlrun,0,0,"R",$cor);
+                $oPDF->cell(20,$alt,db_formatar(@$pc23_vlrun,"f"),0,0,"R",$cor);
                 $oPDF->cell(90,$alt,"R$".db_formatar(@$pc23_valor,"f"),0,1,"R",$cor);
                 $quant_tot += $pc23_quant;
                 $val_tot += $pc23_valor;
