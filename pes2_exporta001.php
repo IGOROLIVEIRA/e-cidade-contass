@@ -310,7 +310,15 @@ order by z01_nome";
        ||';'||'00298'
        ||';'||rpad(coalesce(to_char(rh01_nasc,'DDMMYYYY'),''),8)
        ||';'||rpad(coalesce(rh01_natura,''),30,' ')
-       ||';'||'RS'
+       ||';'||coalesce((SELECT
+db71_sigla
+from cadendermunicipio 
+INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
+AND cadendermunicipiosistema.db125_db_sistemaexterno = 4
+INNER JOIN cadenderestado ON cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial
+INNER JOIN cadenderpais ON cadenderestado.db71_cadenderpais = cadenderpais.db70_sequencial
+INNER JOIN cadenderpaissistema ON cadenderpais.db70_sequencial = cadenderpaissistema.db135_db_cadenderpais
+WHERE db125_codigosistema = z01_ibge),'MG')
        ||';'||case rh01_sexo
               when 'F' then '2'
               when 'M' then '1'
@@ -322,8 +330,8 @@ order by z01_nome";
        ||';'||case when rh08_estciv > 2 then 3 else rh08_estciv end
        ||';'||rpad('RG',30,' ')
        ||';'||rpad(coalesce(z01_ident,''),15,' ')
-       ||';'||'        '
-       ||';'||rpad('SSP-RS',20,' ')
+       ||';'||rpad(coalesce(to_char(z01_identdtexp,'DDMMYYYY'),''),8)
+       ||';'||lpad(coalesce(z01_identorgao,''),5,'0')
        ||';'||rpad(substr(nomeinst,1,40),40,' ')
        ||';'||rpad(rh37_descr,40,' ')
        ||';'||lpad(translate(trim(coalesce(provento,'0')),'.,',''),15,'0')
