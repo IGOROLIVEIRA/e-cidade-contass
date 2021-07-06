@@ -520,3 +520,70 @@
 [2021-07-03 10:49:22] WARNING: file: 'con1_ativatrace.RPC.php' operation: '#2 - atualiza todas as sessoes, ativando pre menu'
 [2021-07-03 10:49:22] INFO: Realizado parse: model/configuracao/TraceLog.model.php | operacoes executadas: 1/1 | user: dbseller
 [2021-07-03 10:49:22] INFO: Realizado parse: libs/db_sessoes.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:11] INFO: Desinstalando modificação
+[2021-07-05 21:27:15] INFO: Instalando modificação
+[2021-07-05 21:27:15] INFO: Realizado parse: con4_trocadata.php | operacoes executadas: 0/2 | user: dbseller
+[2021-07-05 21:27:15] WARNING: file: 'con4_trocadata.php' operation: '#0 - deixa compativel com versao'
+[2021-07-05 21:27:15] WARNING: file: 'con4_trocadata.php' operation: '#1 - troca data da sessao global'
+[2021-07-05 21:27:15] INFO: Realizado parse: func_calendario.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: inicio.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: dbforms/db_funcoes.php | operacoes executadas: 2/2 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: libs/db_stdlib.php | operacoes executadas: 3/6 | user: dbseller
+[2021-07-05 21:27:15] WARNING: file: 'libs/db_stdlib.php' operation: '#2'
+[2021-07-05 21:27:15] WARNING: file: 'libs/db_stdlib.php' operation: '#3'
+[2021-07-05 21:27:15] WARNING: file: 'libs/db_stdlib.php' operation: '#4'
+[2021-07-05 21:27:15] INFO: Realizado parse: skins/default/estilos/estilos.css | operacoes executadas: 3/3 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: skins/ecidade_classico/estilos/estilos.css | operacoes executadas: 1/3 | user: dbseller
+[2021-07-05 21:27:15] WARNING: file: 'skins/ecidade_classico/estilos/estilos.css' operation: '#0'
+[2021-07-05 21:27:15] WARNING: file: 'skins/ecidade_classico/estilos/estilos.css' operation: '#1'
+[2021-07-05 21:27:15] INFO: Realizado parse: skins/rondonia/estilos/estilos.css | operacoes executadas: 1/3 | user: dbseller
+[2021-07-05 21:27:15] WARNING: file: 'skins/rondonia/estilos/estilos.css' operation: '#0'
+[2021-07-05 21:27:15] WARNING: file: 'skins/rondonia/estilos/estilos.css' operation: '#1'
+[2021-07-05 21:27:15] INFO: Realizado parse: scripts/widgets/windowAux.widget.js | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: dbforms/db_classesgenericas.php | operacoes executadas: 3/3 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: scripts/scripts.js | operacoes executadas: 17/34 | user: dbseller
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#4'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#6'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#12'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#15'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#19'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#20'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#21'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#22'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#23'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#24'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#25'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#26'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#28'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#29'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#30'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#31'
+[2021-07-05 21:27:15] WARNING: file: 'scripts/scripts.js' operation: '#32'
+[2021-07-05 21:27:15] INFO: Realizado parse: scripts/webseller.js | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: cai3_gerfinanc001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: libs/db_conecta.php | operacoes executadas: 2/2 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_cancelafechamentosuplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_aberturacomplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_cancelaaberturasuplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_aberturasuplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_cancelafechamentosalario001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_fechamentosuplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_cancelaaberturacomplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_cancelafechamentocomplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: pes4_fechamentocomplementar001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: arr3_histocorrencia001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: iss2_simples002.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: func_histocorrencia.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: emp4_anularpagamentoagenda001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: emp4_emitereciboretencao001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: emp4_pagamentoagenda001.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: forms/db_frmempageformache.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: forms/db_frmestornamovimento.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: forms/db_frmgerarslipretencao.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: forms/db_frmgerarslipretencaofolha.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: forms/db_frmmanutencaoagendaslip.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: forms/db_frmorccenarioeconomicoconplano.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: con1_ativatrace.RPC.php | operacoes executadas: 2/3 | user: dbseller
+[2021-07-05 21:27:15] WARNING: file: 'con1_ativatrace.RPC.php' operation: '#2 - atualiza todas as sessoes, ativando pre menu'
+[2021-07-05 21:27:15] INFO: Realizado parse: model/configuracao/TraceLog.model.php | operacoes executadas: 1/1 | user: dbseller
+[2021-07-05 21:27:15] INFO: Realizado parse: libs/db_sessoes.php | operacoes executadas: 1/1 | user: dbseller
