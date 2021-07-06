@@ -209,8 +209,8 @@ for($x = 0; $x < $numrows_forne;$x++){
                     $z01_nomeant = $z01_nome;
                     $oPDF->cell(80,$alt,substr($z01_nome,0,40),0,1,"L",0);
                     $oPDF->cell(30,$alt,"Quant. Adjud.",0,0,"R",0);
-                    $oPDF->cell(20,$alt,"Marca",0,0,"R",0);
-                    $oPDF->cell(30,$alt,"Valor Adjud.",0,1,"R",0);
+                    $oPDF->cell(50,$alt,"Marca",0,0,"C",0);
+                    $oPDF->cell(50,$alt,"Valor Adjud.",0,1,"R",0);
                     $oPDF->ln();
                     $oPDF->setfont('arial','',8);
                 }else{
@@ -235,8 +235,8 @@ for($x = 0; $x < $numrows_forne;$x++){
 
                 $oPDF->multicell(180,$alt,"Item ".$l21_ordem." - ".$pc01_descrmater . " - " . $pc11_resum,0,"J",$cor);
                 $oPDF->cell(30,$alt,$pc23_quant,0,0,"C",$cor);
-                $oPDF->cell(30,$alt,$pc23_obs,0,0,"C",$cor);
-                $oPDF->cell(30,$alt,"R$".db_formatar(@$pc23_valor,'f'),0,1,"C",$cor);
+                $oPDF->cell(50,$alt,$pc23_obs,0,0,"C",$cor);
+                $oPDF->cell(80,$alt,"R$".db_formatar(@$pc23_valor,'f'),0,1,"C",$cor);
             }else{
 
                 $oPDF->multicell(180,$alt,"Item ".$l21_ordem." - ".$pc01_descrmater . " - " . $pc11_resum,0,"J",$cor);
