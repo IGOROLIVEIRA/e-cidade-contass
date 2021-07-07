@@ -193,7 +193,7 @@ if (count($aParametrosEmpenho) > 0) {
           /**
            * Acrescentado por causa do sicom
            */
-          $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05', 2 => 'Sim, chave de acesso municipal ou outra', 3 => 'Não', 4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
+          $aNfEletronica = array(0 => 'Selecione',1 => 'Sim, padrão Estadual ou SINIEF 07/05', 2 => 'Sim, chave de acesso municipal ou outra', 3 => 'Não', 4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
           db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);' style='width:315px'"); //
           ?>
         </td>
