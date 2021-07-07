@@ -135,7 +135,7 @@ while ($row = pg_fetch_object($query)) {
     $data = new StdClass();
     $data->k173_data = $row->data;
     $data->k173_codigo = ($row->codigo == 0 OR $row->codigo == "null") ? "" : $row->codigo;
-    $data->k173_documento = (!$row->documento AND $row->documento == "0") ? "" : $row->documento;
+    $data->k173_documento = (!$row->cheque AND $row->cheque == "0") ? "" : $row->cheque;
     $data->k173_historico = descricaoHistorico($row->tipo, $row->codigo, $row->historico);
     $data->k173_valor = abs($valor);
     $lancamentos[$movimento][] = $data;
@@ -379,7 +379,12 @@ function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento
                 corrente.k12_valor as valor_credito,
                 coremp.k12_codord::text as codigo,
                 'OP' :: text as tipo,
-                e81_numdoc :: text as cheque,
+                case
+                when e86_cheque is not null
+                and e86_cheque <> '0' then 'CHE ' || e86_cheque :: text
+                when coremp.k12_cheque = 0 then e81_numdoc :: text
+                else 'CHE ' || coremp.k12_cheque :: text
+            end as cheque,
                 coremp.k12_codord::text as ordem,
                 z01_nome :: text as credor,
                 z01_numcgm :: text as numcgm,
@@ -424,10 +429,22 @@ function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento
                 AND k12_codmov = e81_codmov
                 LEFT JOIN conhistdoc ON
                 conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
+                left join empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
                     LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
                 AND conc.k172_data = corrente.k12_data
                 AND conc.k172_coddoc = conhistdoc.c53_tipo
-                AND conc.k172_codigo = concat_ws('', coremp.k12_codord :: text, e81_numdoc::text)
+                AND conc.k172_codigo = concat_ws(
+                  '',
+                  coremp.k12_codord :: text,
+                  (
+                      case
+                          when e86_cheque is not null
+                          and e86_cheque <> '0' then 'CHE ' || e86_cheque :: text
+                          when coremp.k12_cheque = 0 then e81_numdoc :: text
+                          else 'CHE ' || coremp.k12_cheque :: text
+                      end
+                  )
+              )
             WHERE
                 corrente.k12_conta = {$conta}
                 AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}'
@@ -573,7 +590,10 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
                 0 as valor_credito,
                 k12_codigo::text as codigo,
                 'SLIP'::text as tipo,
-                e91_cheque::text as cheque,
+                case
+                when e91_cheque is null then e81_numdoc :: text
+                else 'CHE ' || e91_cheque :: text
+            end as cheque,
                 '' as ordem,
                 z01_nome::text as credor,
                 z01_numcgm::text as numcgm,
@@ -611,12 +631,15 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
                 LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
                 LEFT JOIN conhistdoc ON
                 conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
-
+                left join empagemov on  e81_codmov = corconf.k12_codmov
                 LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
                 AND conc.k172_data = corrente.k12_data
                 AND conc.k172_coddoc = conhistdoc.c53_tipo
                 AND conc.k172_valor = corrente.k12_valor
-                AND conc.k172_codigo = concat_ws('', k12_codigo::text, e91_cheque::text)
+                AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
+                when e91_cheque is null then e81_numdoc :: text
+                else 'CHE ' || e91_cheque :: text
+              end)
             where
                 corlanc.k12_conta = {$conta}
                 AND ((corlanc.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL)
@@ -643,7 +666,10 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             corrente.k12_valor as valor_credito,
             k12_codigo::text as codigo,
             'SLIP'::text as tipo,
-            e91_cheque::text as cheque,
+            case
+            when e91_cheque is null then e81_numdoc :: text
+            else 'CHE ' || e91_cheque :: text
+        end as cheque,
             '' as ordem,
             z01_nome::text as credor,
             z01_numcgm::text as numcgm,
@@ -665,6 +691,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             and corconf.k12_autent = corlanc.k12_autent
             and corconf.k12_ativo is true
             left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
+
             left join empageconfche on empageconfche.e91_codcheque = corconf.k12_codmov
             and corconf.k12_ativo is true
             and empageconfche.e91_ativo is true
@@ -681,11 +708,19 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
             LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
             LEFT JOIN conhistdoc ON
             conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
-       LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
-            AND conc.k172_data = corrente.k12_data
-            AND conc.k172_coddoc = conhistdoc.c53_tipo
-            AND conc.k172_valor = corrente.k12_valor
-            AND conc.k172_codigo = concat_ws('', k12_codigo::text, e91_cheque::text)
+            left join corempagemov on corempagemov.k12_data = corautent.k12_data
+                and corempagemov.k12_id = corautent.k12_id
+                and corempagemov.k12_autent = corautent.k12_autent
+                left join empageslip  on empageslip.e89_codigo = slip.k17_codigo
+                left join empagemov   on e89_codmov=e81_codmov
+                LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
+                AND conc.k172_data = corrente.k12_data
+                AND conc.k172_coddoc = conhistdoc.c53_tipo
+                AND conc.k172_valor = corrente.k12_valor
+                AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
+                when e91_cheque is null then e81_numdoc :: text
+                else 'CHE ' || e91_cheque :: text
+            end)
         where
             corrente.k12_conta = {$conta}
             AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL) {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data between '{$data_inicial}' AND '{$data_final}')) {$condicao_lancamento}

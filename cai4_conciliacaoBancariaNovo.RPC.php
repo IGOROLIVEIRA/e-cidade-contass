@@ -706,7 +706,10 @@ function queryPadraoSlipDebito()
   0 as valor_credito,
   k12_codigo::text as codigo,
   'SLIP'::text as tipo,
-  e91_cheque::text as cheque,
+  case
+                when e91_cheque is null then e81_numdoc :: text
+                else 'CHE ' || e91_cheque :: text
+            end as cheque,
   '' as ordem,
   z01_nome::text as credor,
   z01_numcgm::text as numcgm,
@@ -737,7 +740,6 @@ from
   left join corautent on corautent.k12_id = corrente.k12_id
   and corautent.k12_data = corrente.k12_data
   and corautent.k12_autent = corrente.k12_autent
-  /* Inclus�o do tipo doc */
   LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
   AND conlancamcorrente.c86_data = corrente.k12_data
   AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -745,11 +747,18 @@ from
   LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
   LEFT JOIN conhistdoc ON
   conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
+  left join corempagemov on corempagemov.k12_data = corautent.k12_data
+										   and corempagemov.k12_id = corautent.k12_id
+										   and corempagemov.k12_autent = corautent.k12_autent
+  left join empagemov on corempagemov.k12_codmov = e81_codmov
   LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
   AND conc.k172_data = corrente.k12_data
   AND conc.k172_coddoc = conhistdoc.c53_tipo
   AND conc.k172_valor = corrente.k12_valor
-  AND conc.k172_codigo = concat_ws('', k12_codigo::text, e91_cheque::text)
+  AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
+  when e91_cheque is null then e81_numdoc :: text
+  else 'CHE ' || e91_cheque :: text
+end)
 where";
 }
 
@@ -784,7 +793,10 @@ function queryPadraoSlipCredito()
       corrente.k12_valor as valor_credito,
       k12_codigo::text as codigo,
       'SLIP'::text as tipo,
-      e91_cheque::text as cheque,
+      case
+                when e91_cheque is null then e81_numdoc :: text
+                else 'CHE ' || e91_cheque :: text
+            end as cheque,
       '' as ordem,
       z01_nome::text as credor,
       z01_numcgm::text as numcgm,
@@ -815,7 +827,6 @@ function queryPadraoSlipCredito()
       left join corautent on corautent.k12_id = corrente.k12_id
       and corautent.k12_data = corrente.k12_data
       and corautent.k12_autent = corrente.k12_autent
-      /* Inclus�o do tipo doc */
       LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
       AND conlancamcorrente.c86_data = corrente.k12_data
       AND conlancamcorrente.c86_autent = corrente.k12_autent
@@ -823,11 +834,19 @@ function queryPadraoSlipCredito()
       LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
       LEFT JOIN conhistdoc ON
       conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
+      left join corempagemov on corempagemov.k12_data = corautent.k12_data
+      and corempagemov.k12_id = corautent.k12_id
+      and corempagemov.k12_autent = corautent.k12_autent
+      left join empageslip  on empageslip.e89_codigo = slip.k17_codigo
+      left join empagemov   on e89_codmov=e81_codmov
       LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
       AND conc.k172_data = corrente.k12_data
       AND conc.k172_coddoc = conhistdoc.c53_tipo
       AND conc.k172_valor = corrente.k12_valor
-      AND conc.k172_codigo = concat_ws('', k12_codigo::text, e91_cheque::text)
+      AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
+      when e91_cheque is null then e81_numdoc :: text
+      else 'CHE ' || e91_cheque :: text
+  end)
   where";
 }
 
@@ -972,7 +991,12 @@ function queryPadraoOP()
       corrente.k12_valor as valor_credito,
       e60_codemp || '/' || e60_anousu :: text as codigo,
       'OP' :: text as tipo,
-      e81_numdoc :: text as cheque,
+      case
+                when e86_cheque is not null
+                and e86_cheque <> '0' then 'CHE ' || e86_cheque :: text
+                when coremp.k12_cheque = 0 then e81_numdoc :: text
+                else 'CHE ' || coremp.k12_cheque :: text
+            end as cheque,
       coremp.k12_codord::text as ordem,
       z01_nome :: text as credor,
       z01_numcgm :: text as numcgm,
@@ -1014,13 +1038,26 @@ function queryPadraoOP()
       AND k12_codmov = e81_codmov
       LEFT JOIN conhistdoc ON
           conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
+          left join empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
       LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
       AND conc.k172_data = corrente.k12_data
       AND conc.k172_coddoc = conhistdoc.c53_tipo
-      AND conc.k172_codigo = concat_ws('', coremp.k12_codord :: text, e81_numdoc::text)
+      AND conc.k172_codigo = concat_ws(
+        '',
+        coremp.k12_codord :: text,
+        (
+            case
+                when e86_cheque is not null
+                and e86_cheque <> '0' then 'CHE ' || e86_cheque :: text
+                when coremp.k12_cheque = 0 then e81_numdoc :: text
+                else 'CHE ' || coremp.k12_cheque :: text
+            end
+        )
+    )
       LEFT JOIN retencaopagordem ON e20_pagordem = coremp.k12_codord
       LEFT join retencaoreceitas on e23_retencaopagordem = e20_sequencial
       AND k12_valor = e23_valorretencao
+
   WHERE";
 }
 
