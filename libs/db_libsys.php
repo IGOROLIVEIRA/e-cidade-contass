@@ -26,7 +26,8 @@
  */
 
 
-function db_sysexportaagata($sArquivoXml) {
+function db_sysexportaagata($sArquivoXml)
+{
 
   // Select para Buscar Dicionário de Dados do DBPortal
   $sSql  = "  select db_sysmodulo.nomemod, ";
@@ -49,7 +50,7 @@ function db_sysexportaagata($sArquivoXml) {
   $result  = db_query($sSql);
   $numrows = pg_num_rows($result);
 
-  if($numrows == 0) {
+  if ($numrows == 0) {
     return $sXml;
   }
 
@@ -60,16 +61,16 @@ function db_sysexportaagata($sArquivoXml) {
   $sTabela  = "";
   $lAbreTag = false;
 
-  for($x=0; $x<$numrows; $x++) {
+  for ($x = 0; $x < $numrows; $x++) {
     $nomemod  = trim(pg_result($result, $x, "nomemod"));
     $nomearq  = trim(pg_result($result, $x, "nomearq"));
     $rotarq   = trim(pg_result($result, $x, "rotarq"));
     $nomecam  = trim(pg_result($result, $x, "nomecam"));
     $rotcam   = trim(pg_result($result, $x, "rotcam"));
 
-    if($sTabela <> $nomearq) {
+    if ($sTabela <> $nomearq) {
 
-      if($lAbreTag==true) {
+      if ($lAbreTag == true) {
         // Fechar Tags
         $sXml .= "        </dic:fields>\n";
         $sXml .= "    </dic:$sTabela>\n\n";
@@ -81,7 +82,7 @@ function db_sysexportaagata($sArquivoXml) {
 
       $rotarq  = trim($rotarq);
       $sTabela = trim($nomearq);
-      $rotarq = ($rotarq=="")?$sTabela:"$rotarq ($sTabela)";
+      $rotarq = ($rotarq == "") ? $sTabela : "$rotarq ($sTabela)";
 
       $sXml .= "        <dic:label>$rotarq</dic:label>\n";
 
@@ -96,7 +97,6 @@ function db_sysexportaagata($sArquivoXml) {
     $sXml .= "          <dic:$nomecam>\n";
     $sXml .= "              <dic:label>$rotcam</dic:label>\n";
     $sXml .= "          </dic:$nomecam>\n\n";
-
   }
   $sXml .= "        </dic:fields>\n";
   $sXml .= "    </dic:$sTabela>\n\n";
@@ -105,30 +105,32 @@ function db_sysexportaagata($sArquivoXml) {
 }
 
 // classe de configuracao do agata
-class cl_dbagata {
+class cl_dbagata
+{
 
   var $nomeprojeto = "";
   var $relatorio = "";
   var $api;
   var $arquivo = "";
 
-  function cl_dbagata($_relatorio='') {
+  function __construct($_relatorio = '')
+  {
     $this->api = new AgataAPI;
     $this->api->setLanguage('pt'); //'en', 'pt', 'es', 'de', 'fr', 'it', 'se'
 
-    if(!empty($_relatorio)) {
+    if (!empty($_relatorio)) {
       $this->relatorio = $_relatorio;
       $this->api->setReportPath("dbagata/reports/$_relatorio");
     }
 
-    global $codigo, $nomeinst,$logo,$ender,$munic,$uf,$telef,$email,$url;
+    global $codigo, $nomeinst, $logo, $ender, $munic, $uf, $telef, $email, $url;
     db_sel_instit();
 
     $this->api->setParameter('$db_codigoinst', "$codigo");
     $this->api->setParameter('$db_nomeinst', "$nomeinst");
 
     // A resolucao da Imagem deve ser 68 x 74 pixels
-      $this->api->setParameter('$db_logo', "imagens/files/agata{$logo}");
+    $this->api->setParameter('$db_logo', "imagens/files/agata{$logo}");
 
     $this->api->setParameter('$db_enderinst', "$ender");
 
@@ -139,13 +141,13 @@ class cl_dbagata {
     $this->api->setParameter('$db_siteinst', "$url");
 
     /**
-      *  query para disponibilizar a variavem de caminho do item de menu
+     *  query para disponibilizar a variavem de caminho do item de menu
      */
-    $sSqlMenuAcess = "SELECT fc_montamenu(funcao) as menu from db_itensmenu where id_item =".db_getsession("DB_itemmenu_acessado");
+    $sSqlMenuAcess = "SELECT fc_montamenu(funcao) as menu from db_itensmenu where id_item =" . db_getsession("DB_itemmenu_acessado");
     $rsMenuAcess   = db_query($sSqlMenuAcess);
-    $sMenuAcess    = substr(pg_result($rsMenuAcess,0,"menu"), 0, 50);
+    $sMenuAcess    = substr(pg_result($rsMenuAcess, 0, "menu"), 0, 50);
 
-    $this->api->setParameter('$db_item_menu_extenso',trim($sMenuAcess));
+    $this->api->setParameter('$db_item_menu_extenso', trim($sMenuAcess));
 
 
     $sDadosUsuarioFolha = "
@@ -160,14 +162,14 @@ class cl_dbagata {
         left join pessoal.rhpesrescisao on rh02_seqpes = rh05_seqpes
         left join pessoal.rhfuncao      on rh02_funcao = rh37_funcao and rh02_instit = rh37_instit
     where db_usuarios.id_usuario = (fc_getsession('db_id_usuario'::text))::integer and rh05_seqpes is null";
-    $rsDadosUsuarioFolha= db_query($sDadosUsuarioFolha);
+    $rsDadosUsuarioFolha = db_query($sDadosUsuarioFolha);
 
-    $this->api->setParameter('$db_nomeusu',          trim(pg_result($rsDadosUsuarioFolha, 0, "nome"       )) );
-    $this->api->setParameter('$db_login',            trim(pg_result($rsDadosUsuarioFolha, 0, "login"       )) );
-    $this->api->setParameter('$db_cargofolhausu',    trim(pg_result($rsDadosUsuarioFolha, 0, "rh37_descr" )) );
-    $this->api->setParameter('$db_matriculafolhausu',trim(pg_result($rsDadosUsuarioFolha, 0, "rh01_regist")) );
+    $this->api->setParameter('$db_nomeusu',          trim(pg_result($rsDadosUsuarioFolha, 0, "nome")));
+    $this->api->setParameter('$db_login',            trim(pg_result($rsDadosUsuarioFolha, 0, "login")));
+    $this->api->setParameter('$db_cargofolhausu',    trim(pg_result($rsDadosUsuarioFolha, 0, "rh37_descr")));
+    $this->api->setParameter('$db_matriculafolhausu', trim(pg_result($rsDadosUsuarioFolha, 0, "rh01_regist")));
 
-    $sSqlDataExtenso = " SELECT fc_dataextenso('" . date("Y-m-d",db_getsession("DB_datausu")) . "') as data_atual_extenso; ";
+    $sSqlDataExtenso = " SELECT fc_dataextenso('" . date("Y-m-d", db_getsession("DB_datausu")) . "') as data_atual_extenso; ";
     $rsDataExtenso = db_query($sSqlDataExtenso);
 
     $data_atual_extenso = trim(pg_result($rsDataExtenso, 0, "data_atual_extenso"));
@@ -175,9 +177,9 @@ class cl_dbagata {
 
     $aProject = array();
 
-    $aProject["host"] = db_getsession("DB_servidor").":".db_getsession("DB_porta");
+    $aProject["host"] = db_getsession("DB_servidor") . ":" . db_getsession("DB_porta");
 
-    if(session_is_registered("DB_NBASE")){
+    if (session_is_registered("DB_NBASE")) {
       $this->api->setParameter('$db_base', db_getsession("DB_NBASE"));
       $aProject["name"] = db_getsession("DB_NBASE");
     } else {
@@ -192,27 +194,22 @@ class cl_dbagata {
 
     $this->api->setDataSource($aProject);
 
-	  $nome = @$GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"];
-	  $nome = substr($nome,strrpos($nome,"/")+1);
-    $this->api->setParameter('$db_programa',"$nome");
+    $nome = @$GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"];
+    $nome = substr($nome, strrpos($nome, "/") + 1);
+    $this->api->setParameter('$db_programa', "$nome");
 
     $this->api->setParameter('$db_id_usuario', db_getsession("DB_id_usuario"));
     $this->api->setParameter('$db_login', db_getsession("DB_login"));
     $this->api->setParameter('$db_anousu',  db_getsession("DB_anousu"));
-    $this->api->setParameter('$db_datausu', date("d-m-Y",db_getsession("DB_datausu")));
+    $this->api->setParameter('$db_datausu', date("d-m-Y", db_getsession("DB_datausu")));
     $this->api->setParameter('$db_horausu', date("H:i:s"));
 
     $this->api->setParameter('$db_coddepto', db_getsession("DB_coddepto"));
 
-    if(!isset($this->api->format)){
+    if (!isset($this->api->format)) {
       $this->api->setFormat('pdf'); // 'pdf', 'txt', 'xml', 'html', 'csv', 'sxw'
     }
 
     $this->api->setLayout('dbseller');
-
   }
-
 }
-
-
-?>

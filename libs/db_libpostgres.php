@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 class PostgreSQLUtils {
@@ -45,7 +45,7 @@ class PostgreSQLUtils {
 		return $this->_numrows;
 	}
 
-	function PostgreSQLUtils($conexao=null) {
+	function __construct($conexao=null) {
 		$this->_conexao = $conexao;
 		$this->_numrows = 0;
 		$this->_sql     = "";
@@ -53,9 +53,9 @@ class PostgreSQLUtils {
 
 	function getVersion() {
 		$sqlVersao = "select version();";
-		
+
 		$resultVersao = $this->query($sqlVersao);
-		
+
 		if($this->getNumRows() > 0) {
 			return pg_result($resultVersao, 0, 0);
 		}
@@ -91,14 +91,14 @@ class PostgreSQLUtils {
 
 		return;
 	}
-  
+
   function isTableExists ($sRelacao, $sType = 'tabela', $sEsquema = null) {
 
     $aTiposRelacao["tabela"]    = "r"; // relkind r = ordinary table
     $aTiposRelacao["indice"]    = "i"; // relkind i = indice
     $aTiposRelacao["visao"]     = "v"; // relkind v = view
     $aTiposRelacao["sequencia"] = "S"; // relkind S = sequence
-    $aTiposRelacao["tipo"]      = "c"; // relkind c = composite type 
+    $aTiposRelacao["tipo"]      = "c"; // relkind c = composite type
     $aTiposRelacao["especial"]  = "s"; // relkind s = special
     $aTiposRelacao["toast"]     = "t"; // relkind t = toast table
     if(empty($sRelacao)) {
@@ -121,24 +121,23 @@ class PostgreSQLUtils {
       return false;
     }
   }
-  
+
   /*
    * Verifica Indexes das Tabelas
    * Return @$aIndexes
    */
   function getTableIndexes($sNomeTabela) {
-  	
+
   	$sSqlTableIndex  = "select indexname from pg_indexes where tablename = '{$sNomeTabela}'";
   	$rsSqlTableIndex = db_query($sSqlTableIndex);
   	$aIndexes        = array();
   	$iNumRows        = pg_num_rows($rsSqlTableIndex);
   	for ($iInd = 0; $iInd < $iNumRows; $iInd++) {
-  		
+
   		$oIndexName = db_utils::fieldsMemory($rsSqlTableIndex, $iInd);
   		$aIndexes[] = $oIndexName->indexname;
   	}
-  	
+
   	return $aIndexes;
   }
 }
-?>

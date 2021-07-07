@@ -504,14 +504,14 @@ function db_criatabela($result)
                                                                                 case "date":
                                                                                   $datav = split("-", $aux);
                                                                                   $split_data = $matriz[$i] . "_dia";
-                                                                                  global $$split_data;
-                                                                                  $$split_data =  @$datav[2];
+                                                                                  global ${$split_data};
+                                                                                  ${$split_data} =  @$datav[2];
                                                                                   $split_data = $matriz[$i] . "_mes";
-                                                                                  global $$split_data;
-                                                                                  $$split_data =  @$datav[1];
+                                                                                  global ${$split_data};
+                                                                                  ${$split_data} =  @$datav[1];
                                                                                   $split_data = $matriz[$i] . "_ano";
-                                                                                  global $$split_data;
-                                                                                  $$split_data =  @$datav[0];
+                                                                                  global ${$split_data};
+                                                                                  ${$split_data} =  @$datav[0];
                                                                                   ${$matriz[$i]} = $aux;
                                                                                   break;
                                                                                 default:
