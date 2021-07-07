@@ -186,6 +186,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
                 sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
                 sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 20) then round(c70_valor,2)
                          when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 21) then round(c70_valor,2) *-1
+                         when c71_coddoc in (select c53_coddoc from conhistdoc where c53_coddoc = 31) then round(c70_valor,2) *-1
                          else 0 end) as vlrliq,
                 sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 30) then round(c70_valor,2)
                          when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 31) then round(c70_valor,2) *-1
