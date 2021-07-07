@@ -10,7 +10,7 @@ $clrubricasesocial->rotulo->label();
 
 
     <fieldset >
-        <Legend><strong>Servidores por Lotação</strong></Legend>
+        <Legend><strong>Rúbricas</strong></Legend>
         <table border="0">
           <tr>
             <td nowrap title="<?=@$Te990_sequencial?>">
