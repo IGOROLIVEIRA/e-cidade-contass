@@ -174,11 +174,11 @@ $oGet = db_utils::postMemory($_GET);
                                     aRow[2] = oDado.tipo == '' ? '1 - Inclusão' : oDado.tipo+' - '+oDado.aditamento.urlDecode();
                                     aRow[3] = oDado.descricao.urlDecode();
                                     aRow[4] = oDado.quantidade;
-                                    aRow[5] = oDado.unidade;
+                                    aRow[5] = oDado.unidademed.urlDecode();
                                     aRow[6] = oDado.vlrUnit;
                                     aRow[7] = oDado.vlrTotal;
                                     oGrvDetalhes.addRow(aRow);
-
+                                    
                                     var sTextEvent  = "<b>Unidade: </b>"+oDado.unidademed+"</br>";
                                     sTextEvent += "<b>Elemento: </b>"+oDado.elemento+"</br>";
 
@@ -191,7 +191,7 @@ $oGet = db_utils::postMemory($_GET);
                                     var oDadosHint           = new Object();
                                     oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
                                     oDadosHint.sText     = sTextEvent;
-                                    aDadosHintGrid.push(oDadosHint);
+                                    aDadosHintGrid.push(oDadosHint); 
 
                                     break;
 
