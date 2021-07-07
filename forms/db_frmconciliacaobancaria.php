@@ -587,10 +587,10 @@ db_app::load("widgets/windowAux.widget.js");
                     aLinha[8] = js_formatar(nValor, "f");
                     aLinha[9] = historico;
 
-                    dados_complementares_numcgm[iNotas + 1] = numcgm;
-                    dados_complementares_coddoc[iNotas + 1] = cod_doc;
-                    dados_complementares_oprecslip[iNotas + 1] = op_rec_slip;
-                    dados_complementares_documento[iNotas + 1] = documento;
+                    dados_complementares_numcgm[iNotas + 1]           = numcgm;
+                    dados_complementares_coddoc[iNotas + 1]           = cod_doc;
+                    dados_complementares_oprecslip[iNotas + 1]        = op_rec_slip;
+                    dados_complementares_documento[iNotas + 1]        = documento;
                     dados_complementares_valor_individual[iNotas + 1] = valor_individual;
 
                     gridLancamentos.addRow(aLinha, false, lDisabled);
@@ -795,6 +795,7 @@ db_app::load("widgets/windowAux.widget.js");
     function js_janelaAgrupados(lancamentos) {
         var dtBase = 1;
         var iCheque = 2;
+        var total = 0;
 
         windowLancamentoItem = new windowAux('wndChequeItem', 'Informações Detalhadas', 1000, 250);
         var sContent = "<div class='grid_detalhamentos' id='grid_detalhamentos' style='margin: 0 auto; width: 100%; text-align: center'>";
@@ -824,9 +825,17 @@ db_app::load("widgets/windowAux.widget.js");
             sContent += "                   <td style='text-align: right'>" + js_formatar(data.valor, "f"); + "</td>";
             sContent += "                   <td>" + data.historico + "</td>";
             sContent += "           </tr>";
+            total += parseFloat(data.valor);
         });
 
         sContent += "           </tbody>";
+        sContent += "           <tfoot>";
+        sContent += "           <tr>";
+        sContent += "                   <td colspan='6'><b>Total:</b></td>";
+        sContent += "                   <td style='text-align: right'><b>" + js_formatar(total, "f"); + "</b></td>";
+        sContent += "                   <td> </td>";
+        sContent += "           </tr>";
+        sContent += "           </tfoot>";
         sContent += "       </table>";
         sContent += "</div>";
 
@@ -901,7 +910,7 @@ db_app::load("widgets/windowAux.widget.js");
     function js_retorno_processar_lancamentos(oAjax) {
         js_removeObj("msgBox");
         // console.log("Antes da resposta");
-        // console.log(oAjax.responseText);
+        console.log(oAjax.responseText);
 
         var oResponse = eval("(" + oAjax.responseText + ")");
         if (oResponse.error)
@@ -968,6 +977,7 @@ db_app::load("widgets/windowAux.widget.js");
         lancamento.documento        = dados_complementares_documento[movimento[1]];
         lancamento.movimentacao     = movimento[8];
         lancamento.valor            = dados_complementares_valor_individual[movimento[1]];
+        console.log(lancamento);
         return lancamento;
     }
 

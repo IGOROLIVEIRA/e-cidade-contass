@@ -288,7 +288,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
                                         <tr>
                                             <td><b>Valor:</b></td>
                                             <td align="left">
-                                                <? db_input("valor", 27, 0, true, "text", 1, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\""); ?>
+                                                <? db_input("valor", 27, 0, true, "text", 1, "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event); js_validaNegativo(this)\""); ?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -331,6 +331,11 @@ function tipoDocumentoLancamento($tipo_lancamento)
     else {
         js_reset();
         js_bloquear_campos(true);
+    }
+
+    function js_validaNegativo(campo)
+    {
+        campo.value = campo.value.replace('-', '');
     }
 
     function js_atualizarCampos()
@@ -497,7 +502,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
             return false;
         }
 
-        if ($F("tipo_lancamento") == "1" && js_comparadata($F("data_lancamento"), dataConciliacaoBancaria, ">")) {
+        if ($F("tipo_lancamento") == "1" && js_comparadata($F("data_lancamento"), dataConciliacaoBancaria, ">=")) {
             alert("Não é possí­vel incluir movimento de implantação após a data de implantação da conciliação bancária.");
             return false;
         }

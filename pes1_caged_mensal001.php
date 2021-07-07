@@ -165,21 +165,8 @@ if(isset($gerar)){
       }else{
         $nomearq = "/tmp/CAGED.TXT";
         $cldb_layouttxr = new db_layouttxt(6,$nomearq,"C,X");
-        $totaldoprimeirodia = 0;
-        for($i=0; $i<$clrhpessoal->numrows; $i++){
-          db_fieldsmemory($result_dad, $i);
-          if(trim($rh01_admiss) != ""){
-            if(mktime(0,0,0,db_subdata($rh01_admiss,"m"),db_subdata($rh01_admiss,"d"),db_subdata($rh01_admiss,"a")) <= mktime(0,0,0,db_subdata($primeirodia,"m"),db_subdata($primeirodia,"d"),db_subdata($primeirodia,"a"))){ 
-              if(trim($rh05_recis) == ""){
-                $totaldoprimeirodia ++;
-              }else{
-                if(mktime(0,0,0,db_subdata($rh05_recis,"m"),db_subdata($rh05_recis,"d"),db_subdata($rh05_recis,"a")) > mktime(0,0,0,db_subdata($primeirodia,"m"),db_subdata($primeirodia,"d"),db_subdata($primeirodia,"a"))){
-                  $totaldoprimeirodia ++;
-                }
-              }
-            }
-	  }
-        }
+        $clrhpessoalmov->sql_record($clrhpessoalmov->sql_servidores_ativos_mes_caged($anousu, $mesusu));
+        $totaldoprimeirodia = $clrhpessoalmov->numrows;
 
         $contador_C = 0;
         $contador_X = 0;
