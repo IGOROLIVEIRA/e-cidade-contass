@@ -30,9 +30,9 @@ class gerarEXEOBRAS extends GerarAM
 
         if (pg_num_rows($rsexeobras102021) == 0) {
 
-            $aCSV['tiporegistro'] = '99';
-            $this->sLinha = $aCSV;
-            $this->adicionaLinha();
+//            $aCSV['tiporegistro'] = '99';
+//            $this->sLinha = $aCSV;
+//            $this->adicionaLinha();
 
         } else {
 
