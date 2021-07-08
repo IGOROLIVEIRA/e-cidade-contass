@@ -62,6 +62,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
         $exeobras102021 = new cl_exeobras102021();
+        $exeobras202021 = new cl_exeobras202021();
 
         /**
          * excluir informacoes do mes selecioado para evitar duplicacao de registros
@@ -78,6 +79,16 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
             }
         }
 
+        /**
+         * registro 20 exclusão
+         */
+        $result = db_query($exeobras202021->sql_query(null, "*", null, "si204_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si204_instit=" . db_getsession("DB_instit")));
+        if (pg_num_rows($result) > 0) {
+            $exeobras202021->excluir(null, "si204_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si204_instit=" . db_getsession("DB_instit"));
+            if ($exeobras202021->erro_status == 0) {
+                throw new Exception($exeobras202021->erro_msg);
+            }
+        }
         /**
          * registro 10
          */

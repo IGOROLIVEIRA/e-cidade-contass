@@ -28,11 +28,11 @@ class gerarEXEOBRAS extends GerarAM
         $rsexeobras202021 = db_query($sSql);
 
 
-        if (pg_num_rows($rsexeobras102021) == 0) {
+        if (pg_num_rows($rsexeobras102021) == 0 && pg_num_rows($rsexeobras202021) == 0) {
 
-//            $aCSV['tiporegistro'] = '99';
-//            $this->sLinha = $aCSV;
-//            $this->adicionaLinha();
+            $aCSV['tiporegistro'] = '99';
+            $this->sLinha = $aCSV;
+            $this->adicionaLinha();
 
         } else {
 
@@ -55,15 +55,6 @@ class gerarEXEOBRAS extends GerarAM
                 $this->sLinha = $aCSVEXEOBRAS10;
                 $this->adicionaLinha();
             }
-        }
-
-        if (pg_num_rows($rsexeobras202021) == 0) {
-
-//            $aCSV['tiporegistro'] = '99';
-//            $this->sLinha = $aCSV;
-//            $this->adicionaLinha();
-
-        } else {
 
             /**
              *
@@ -78,6 +69,7 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS20['si204_codunidadesub'] = substr($aEXEOBRAS20['si204_codunidadesub'], 0, 8);
                 $aCSVEXEOBRAS20['si204_nrocontrato'] = $aEXEOBRAS20['si204_nrocontrato'];
                 $aCSVEXEOBRAS20['si204_exerciciocontrato'] = $aEXEOBRAS20['si204_exerciciocontrato'];
+                $aCSVEXEOBRAS20['si204_exercicioprocesso'] = $aEXEOBRAS20['si204_exercicioprocesso'];
                 $aCSVEXEOBRAS20['si204_nroprocesso'] = $aEXEOBRAS20['si204_nroprocesso'];
                 $aCSVEXEOBRAS20['si204_tipoprocesso'] = $aEXEOBRAS20['si204_tipoprocesso'];
                 $aCSVEXEOBRAS20['si204_codobra'] = $aEXEOBRAS20['si204_codobra'];
@@ -87,6 +79,7 @@ class gerarEXEOBRAS extends GerarAM
                 $this->adicionaLinha();
             }
         }
+
 
         $this->fechaArquivo();
     }
