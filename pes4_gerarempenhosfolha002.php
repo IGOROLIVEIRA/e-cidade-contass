@@ -1883,6 +1883,7 @@ function js_gerarEmpenhos() {
   oParam.exec      = "gerarEmpenhos";
   oParam.iNumCgm   = $F('z01_numcgm');
   oParam.lOPporRecurso = $('opporrecurso').checked;
+  oParam.iTipo = oParametros.iTipo;
   oParam.aEmpenhos = new Array();
   aItens.each(function(oEmpenho, id) {
 

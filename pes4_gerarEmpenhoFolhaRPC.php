@@ -489,6 +489,8 @@ try {
 
             $aEmpenhosFinaceirosGerados = array();
 			 
+            $lPrevidencia = ($oParam->iTipo == 2);
+			 
 			foreach ($oParam->aEmpenhos as $oEmpenhoFolha) {
 				 
 				$oEmpenho = new empenhoFolha($oEmpenhoFolha->rh72_sequencial);
@@ -506,7 +508,7 @@ try {
 					$oParam->iNumCgm = $oEmpenhoFolha->rh01_numcgm;
 				}
 				 
-				$oEmpenho->gerarEmpenho($oParam->iNumCgm);
+				$oEmpenho->gerarEmpenho($oParam->iNumCgm, $lPrevidencia);
                 
                 $aEmpenhosFinaceirosGerados[] = $oEmpenho->getNumeroEmpenhoFinanceiro();
 				 
@@ -524,8 +526,7 @@ try {
 			}
 
 			$oRetorno->e42_sequencial = $iOPAuxiliar = $oParam->lOPporRecurso?implode(", ", $aRecursos):$iOPAuxiliar;
-            $oRetorno->empenhos_financeiros_gerados = count($aEmpenhosFinaceirosGerados) > 1 ? implode(',',$aEmpenhosFinaceirosGerados) : '';
-    
+            $oRetorno->empenhos_financeiros_gerados = count($aEmpenhosFinaceirosGerados) > 0 ? implode(',',$aEmpenhosFinaceirosGerados) : '';
 			db_fim_transacao(false);
 			 
 			break;

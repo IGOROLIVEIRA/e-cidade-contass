@@ -1708,7 +1708,372 @@ class dadosEmpenhoFolha {
       }
     }
   }
-  
+
+    /**
+     * Gera os dados de retenções para os empenhos da previdência 
+     *
+     * @param string  $sSigla    Tipo de Folha
+     * @param integer $iAnoUsu   Exercício da Folha
+     * @param integer $iMesUsu   Mês da Folha
+     * @param integer $iInstit   Instituição
+     * @param string  $sSemestre Semestre ( Caso seja folha complementar ) 
+     */  
+    public function geraRetencoesEmpenhosPrev($sSigla='',$iAnoUsu='',$iMesUsu='',$iInstit='',$sSemestre='') {
+
+        $sMsgErro = 'Geração de retenções empenhos previdência abortada';
+        
+        if ( trim($sSigla) == '' ) {
+            throw new Exception("{$sMsgErro}, sigla não informada!");
+        }
+        if ( trim($iAnoUsu) == '' ) {
+            $iAnoUsu = db_anofolha();
+        }   
+        if ( trim($iMesUsu) == '' ) {
+            $iAnoUsu = db_mesfolha();
+        }
+        if ( trim($iInstit) == '' ) {
+            $iInstit = db_getsession('DB_instit');
+        }  
+        if ( trim($sSemestre) == '' ) {
+            $sSemestre = '0';
+        }
+
+        $oDaorhEmpenhoFolhaRubrica         = db_utils::getDao('rhempenhofolharubrica');
+        $oDaorhEmpenhoFolhaRubricaRetencao = db_utils::getDao('rhempenhofolharubricaretencao');
+        $oDaorhEmpenhoFolhaRhEmpRubrica    = db_utils::getDao('rhempenhofolharhemprubrica');
+        $oDaorhSlipFolhaRhEmpRubrica       = db_utils::getDao('rhslipfolharhemprubrica');
+
+        //Agrupa os registros recisão para considerar a mesma dotação na tela de emissão do empenho
+        $sSiglaAgrupamento = $sSigla;
+
+        if ($sSigla == 'r20') {
+            $sSiglaAgrupamento = 'r14';
+        }
+
+        /**
+         *  Consulta os dados já gerados para empenhos
+         */
+        $sSqlDadosEmp  = " select distinct rh73_seqpes     as seqpes,                                         ";
+        $sSqlDadosEmp .= "                 rh72_sequencial as rhempenho,                                      ";
+        $sSqlDadosEmp .= "                 round(sum(case when rh73_pd = 2 then rh73_valor*-1 else rh73_valor end),2) as valor                                  ";  
+        $sSqlDadosEmp .= "            from rhempenhofolharubrica                                              ";
+        $sSqlDadosEmp .= "                 inner join rhempenhofolharhemprubrica on rh81_rhempenhofolharubrica = rh73_sequencial     ";
+        $sSqlDadosEmp .= "                 inner join rhempenhofolha             on rh72_sequencial            = rh81_rhempenhofolha ";  
+        $sSqlDadosEmp .= "           where rh72_anousu      = {$iAnoUsu}                                      ";
+        $sSqlDadosEmp .= "             and rh72_mesusu      = {$iMesUsu}                                      ";
+        $sSqlDadosEmp .= "             and rh72_siglaarq    = '{$sSiglaAgrupamento}'                          ";
+        $sSqlDadosEmp .= "             and rh72_tipoempenho = 2                                               ";
+        $sSqlDadosEmp .= "             and rh72_tabprev     = 1                                               ";
+        $sSqlDadosEmp .= "             and rh72_seqcompl    = '{$sSemestre}'                                  ";
+        $sSqlDadosEmp .= "             and rh73_instit      = '{$iInstit}'                                    ";
+        $sSqlDadosEmp .= "        group by rh73_seqpes,                                                       ";
+        $sSqlDadosEmp .= "                 rh72_sequencial                                                    ";
+        $sSqlDadosEmp .= "        having   round(sum(case when rh73_pd=2  then rh73_valor*-1 else rh73_valor end),2)> 0";
+        $sSqlDadosEmp .= "        order by rh73_seqpes                                                        ";
+
+        $rsDadosEmp    = db_query($sSqlDadosEmp);
+        
+        if ( $rsDadosEmp ) {
+    	
+            $iLinhasDadosEmp = pg_num_rows($rsDadosEmp);
+            
+            if ( $iLinhasDadosEmp > 0 ) {
+                
+                for ( $iInd=0; $iInd < $iLinhasDadosEmp; $iInd++ ) {
+                
+                    $oDadosEmp = db_utils::fieldsMemory($rsDadosEmp,$iInd);
+                    
+                    /**
+                     * Calcula total gerado por servidor 
+                    */
+                    if ( isset($aDadosEmp[$oDadosEmp->seqpes]['total']) ) {
+                        $aDadosEmp[$oDadosEmp->seqpes]['total'] += $oDadosEmp->valor;
+                    } else {
+                        $aDadosEmp[$oDadosEmp->seqpes]['total']  = $oDadosEmp->valor;
+                    }
+                    
+                }
+
+            }
+
+        }
+        
+        /**
+         *  Consulta os regitros já gerados de slip 
+         */
+        $sSqlDadosSlip  = " select distinct rh73_seqpes     as seqpes,                                                          ";
+        $sSqlDadosSlip .= "                 rh79_sequencial as rhslip,                                                          ";
+        $sSqlDadosSlip .= "                 round(sum(rh73_valor),2) as valor                                                   ";  
+        $sSqlDadosSlip .= "            from rhempenhofolharubrica                                                               ";
+        $sSqlDadosSlip .= "                 inner join rhslipfolharhemprubrica on rh80_rhempenhofolharubrica = rh73_sequencial  ";
+        $sSqlDadosSlip .= "                 inner join rhslipfolha             on rh79_sequencial            = rh80_rhslipfolha ";  
+        $sSqlDadosSlip .= "           where rh79_anousu      = {$iAnoUsu}                                                       ";
+        $sSqlDadosSlip .= "             and rh79_mesusu      = {$iMesUsu}                                                       ";
+        $sSqlDadosSlip .= "             and rh79_siglaarq    = '{$sSigla}'                                                      ";
+        $sSqlDadosSlip .= "             and rh79_tipoempenho = 2                                                                ";
+        $sSqlDadosSlip .= "             and rh79_tabprev     = 1                                                                ";
+        $sSqlDadosSlip .= "             and rh79_seqcompl    = '{$sSemestre}'                                                   ";
+        $sSqlDadosSlip .= "             and rh73_instit      = '{$iInstit}'                                                     ";
+        $sSqlDadosSlip .= "        group by rh73_seqpes,                                                                        ";
+        $sSqlDadosSlip .= "                 rh79_sequencial                                                                     ";
+        $sSqlDadosSlip .= "        order by rh73_seqpes                                                                         ";
+
+        $rsDadosSlip    = db_query($sSqlDadosSlip);
+        
+        if ( $rsDadosSlip ) {
+      
+            $iLinhasDadosSlip = pg_num_rows($rsDadosSlip);
+            
+            if ( $iLinhasDadosSlip > 0 ) {
+            
+                for ( $iInd=0; $iInd < $iLinhasDadosSlip; $iInd++ ){
+            
+                    $oDadosSlip = db_utils::fieldsMemory($rsDadosSlip,$iInd);
+                    /**
+                     * Calcula total gerado por servidor
+                     */
+                    if ( isset($aDadosEmp[$oDadosSlip->seqpes]['total']) ) {
+                        $aDadosEmp[$oDadosSlip->seqpes]['total'] += $oDadosSlip->valor;
+                    } else {
+                        $aDadosEmp[$oDadosSlip->seqpes]['total']  = $oDadosSlip->valor;
+                    }
+            
+                }
+
+            }
+
+        }
+
+        for ( $iInd=0; $iInd < $iLinhasDadosEmp; $iInd++ ) {
+      
+            $oDadosEmp = db_utils::fieldsMemory($rsDadosEmp,$iInd);
+            $aDadosEmp[$oDadosEmp->seqpes]['rhempenho'][$oDadosEmp->rhempenho]['valor'] = $oDadosEmp->valor;
+            /**
+             * Calcula o percentual do valor do empenho sobre o total
+             */
+            $aDadosEmp[$oDadosEmp->seqpes]['rhempenho'][$oDadosEmp->rhempenho]['perc']  = ($oDadosEmp->valor*100)/$aDadosEmp[$oDadosEmp->seqpes]['total'];
+        
+        }
+        
+        for ( $iInd=0; $iInd < $iLinhasDadosSlip; $iInd++ ){
+
+            $oDadosSlip = db_utils::fieldsMemory($rsDadosSlip,$iInd);
+            $aDadosEmp[$oDadosSlip->seqpes]['rhslip'][$oDadosSlip->rhslip]['valor'] = $oDadosSlip->valor;
+            /**
+             * Calcula o percentual do valor do slip sobre o total
+             */
+            $aDadosEmp[$oDadosSlip->seqpes]['rhslip'][$oDadosSlip->rhslip]['perc']  = ($oDadosSlip->valor*100)/$aDadosEmp[$oDadosSlip->seqpes]['total'];
+        
+        }
+
+        switch ($sSigla) {
+            case "r48":
+                $sTabela      = "gerfcom";
+                $sCampoPensao = "r52_valcom";
+            break;
+            case "r14":
+                $sTabela      = "gerfsal";
+                $sCampoPensao = "r52_valor";
+            break;
+            case "r35":
+                $sTabela      = "gerfs13";
+                $sCampoPensao = "r52_val13";
+            break;
+            case "r22":
+                $sTabela      = "gerfadi";
+                $sCampoPensao = "r52_valor";
+            break;
+            case "r20":
+                $sTabela      = "gerfres";
+                $sCampoPensao = "r52_valres";
+            break;                    
+        }
+
+         /**
+         * Cosulta os registros de retenção
+         */
+        $sSqlDadosRetencao  = " select distinct rh02_seqpes          as seqpes,                             ";
+        $sSqlDadosRetencao .= "                 rh02_regist          as regist,                             ";
+        $sSqlDadosRetencao .= "                 {$sSigla}_rubric     as rubric,                             ";
+        $sSqlDadosRetencao .= "                 {$sSigla}_pd         as pd,                                 ";
+        $sSqlDadosRetencao .= "                 rh75_retencaotiporec as retencao,                           ";
+        $sSqlDadosRetencao .= "                 {$sSigla}_valor      as valor                              ";
+        // $sSqlDadosRetencao .= "                 case                                                        ";
+        // $sSqlDadosRetencao .= "                     when {$sSigla}_rubric in ('0433','0499','0501','0502','0680','0681','4499','R919','R921') then {$sSigla}_valor ";
+        // $sSqlDadosRetencao .= "                     else 0                                                  ";
+        // $sSqlDadosRetencao .= "                 end as salario_familia,                                     ";
+        // $sSqlDadosRetencao .= "                 case                                                        ";
+        // $sSqlDadosRetencao .= "                     when {$sSigla}_rubric in ('0682', 'R920') then {$sSigla}_valor      ";
+        // $sSqlDadosRetencao .= "                     else 0                                                  ";
+        // $sSqlDadosRetencao .= "                 end as salario_maternidade                                  "; 
+        $sSqlDadosRetencao .= "   from {$sTabela}                                                           ";
+        $sSqlDadosRetencao .= "        inner join rhpessoalmov     on rh02_anousu    = {$sSigla}_anousu     ";
+        $sSqlDadosRetencao .= "                                   and rh02_mesusu    = {$sSigla}_mesusu     ";
+        $sSqlDadosRetencao .= "                                   and rh02_regist    = {$sSigla}_regist     ";
+        $sSqlDadosRetencao .= "        inner join rhrubretencao    on rh75_rubric    = {$sSigla}_rubric     ";
+        $sSqlDadosRetencao .= "                                   and rh75_instit    = {$sSigla}_instit     ";
+        $sSqlDadosRetencao .= "        inner join retencaotiporec  on e21_sequencial = rh75_retencaotiporec ";
+        $sSqlDadosRetencao .= "  where e21_retencaotiporecgrupo = 1                                         ";
+        $sSqlDadosRetencao .= "    and {$sSigla}_anousu      = {$iAnoUsu}                                   ";
+        $sSqlDadosRetencao .= "    and {$sSigla}_mesusu      = {$iMesUsu}                                   ";
+        $sSqlDadosRetencao .= "    and rh02_instit           = {$iInstit}                                   ";
+        // $sSqlDadosRetencao .= "    and {$sSigla}_rubric in ('R992','0433','0499','0501','0502','0680','0681','4499','R919','R921','0682','R920') ";
+        
+        if ( $sSigla == 'r48' ) {
+            $sSqlDadosRetencao .= "  and {$sSigla}_semest      = {$sSemestre}                               ";
+        }
+
+        $rsDadosRetencao = db_query($sSqlDadosRetencao);
+
+        if ( $rsDadosRetencao ) {
+      
+            $iLinhasDadosRetencao = pg_num_rows($rsDadosRetencao);
+      
+            if ( $iLinhasDadosRetencao > 0  ) {
+
+                for ( $iInd=0; $iInd < $iLinhasDadosRetencao; $iInd++ ) {
+
+                    $oDadosRetencao = db_utils::fieldsMemory($rsDadosRetencao,$iInd);
+
+                    if ( isset($aDadosEmp[$oDadosRetencao->seqpes]) ) {
+
+                        $nValorTotal = 0;
+                        $nValor      = $oDadosRetencao->valor;
+                        
+                        if ( isset($aDadosEmp[$oDadosRetencao->seqpes]['rhslip']) ) {
+                            $lSlip = true;         	  
+                        } else {
+                            $lSlip = false;
+                        }
+
+                        /**
+                         *  Define as retenções sobre as rubricas de empenhos
+                         */
+                        if ( isset($aDadosEmp[$oDadosRetencao->seqpes]['rhempenho'] ) ) {
+
+                            $iUltimoReg = end(array_keys($aDadosEmp[$oDadosRetencao->seqpes]['rhempenho']));
+                            
+                            foreach( $aDadosEmp[$oDadosRetencao->seqpes]['rhempenho'] as $iCodrhEmpenho => $aRhEmpenho ) {
+
+                                $nPerc  = $aRhEmpenho['perc'];
+                                /**
+                                 *  Calcula o valor da retenção apartir do percentual achado anteriormente
+                                 */
+                                $nValorRetencao  = db_formatar($oDadosRetencao->valor*($nPerc/100),'p');
+                                $nValorTotal    += $nValorRetencao;
+
+                                /**
+                                 *  Caso seja o último registro então o valor da retençao fica como o restante
+                                 */	                
+                                if ( $iUltimoReg == $iCodrhEmpenho  && !$lSlip ) {
+                                    $nValorRetencao = $nValor - ($nValorTotal-$nValorRetencao);
+                                }
+
+                                /**
+                                 *  Inclui a rubrica de retenção
+                                 */
+                                $oDaorhEmpenhoFolhaRubrica->rh73_rubric          = $oDadosRetencao->rubric; 
+                                $oDaorhEmpenhoFolhaRubrica->rh73_seqpes          = $oDadosRetencao->seqpes;
+                                $oDaorhEmpenhoFolhaRubrica->rh73_instit          = $iInstit;
+                                $oDaorhEmpenhoFolhaRubrica->rh73_valor           = db_formatar($nValorRetencao,'p');
+                                $oDaorhEmpenhoFolhaRubrica->rh73_pd              = $oDadosRetencao->pd;
+                                $oDaorhEmpenhoFolhaRubrica->rh73_tiporubrica     = 2;
+
+                                $oDaorhEmpenhoFolhaRubrica->incluir(null);
+		                  
+                                if ( $oDaorhEmpenhoFolhaRubrica->erro_status == '0' ) {
+                                    throw new Exception($oDaorhEmpenhoFolhaRubrica->erro_msg);
+                                }
+
+                                $oDaorhEmpenhoFolhaRhEmpRubrica->rh81_rhempenhofolharubrica = $oDaorhEmpenhoFolhaRubrica->rh73_sequencial; 
+                                $oDaorhEmpenhoFolhaRhEmpRubrica->rh81_rhempenhofolha        = $iCodrhEmpenho;
+                                $oDaorhEmpenhoFolhaRhEmpRubrica->incluir(null);
+                                                    
+                                if ( $oDaorhEmpenhoFolhaRhEmpRubrica->erro_status == '0' ) {
+                                    throw new Exception($oDaorhEmpenhoFolhaRhEmpRubrica->erro_msg);
+                                }                                   
+                                
+                                $oDaorhEmpenhoFolhaRubricaRetencao->rh78_rhempenhofolharubrica = $oDaorhEmpenhoFolhaRubrica->rh73_sequencial;
+                                $oDaorhEmpenhoFolhaRubricaRetencao->rh78_retencaotiporec       = $oDadosRetencao->retencao;
+                                $oDaorhEmpenhoFolhaRubricaRetencao->incluir(null);
+                                
+                                if ( $oDaorhEmpenhoFolhaRubricaRetencao->erro_status == '0' ) {
+                                    throw new Exception($oDaorhEmpenhoFolhaRubricaRetencao->erro_msg);
+                                }
+
+                            }
+
+                        }
+
+                         /**
+                         *  Define a retenção sobre as rubricas de slip
+                         */
+                        if ( isset($aDadosEmp[$oDadosRetencao->seqpes]['rhslip']) ) {
+
+                            $iUltimoReg  = end(array_keys($aDadosEmp[$oDadosRetencao->seqpes]['rhslip']));
+
+                            foreach( $aDadosEmp[$oDadosRetencao->seqpes]['rhslip'] as $iCodrhSlip => $aRHSlip ) {
+
+                                $nPerc  = $aRHSlip['perc'];
+
+                                /**
+                                 *  Calcula o valor da retenção apartir do percentual achado anteriormente
+                                 */	              	
+                                $nValorRetencao  = db_formatar($oDadosRetencao->valor*($nPerc/100),'p');
+                                $nValorTotal    += $nValorRetencao;
+
+                                /**
+                                 *  Caso seja o último registro então o valor da retençao fica como o restante
+                                 */                     
+                                if ( $iUltimoReg == $iCodrhSlip ) {
+                                    $nValorRetencao = $nValor - ($nValorTotal-$nValorRetencao);
+                                }
+
+                                /**
+                                 *  Inclui a rubrica de retenção
+                                 */	                  
+                                $oDaorhEmpenhoFolhaRubrica->rh73_rubric          = $oDadosRetencao->rubric; 
+                                $oDaorhEmpenhoFolhaRubrica->rh73_seqpes          = $oDadosRetencao->seqpes;
+                                $oDaorhEmpenhoFolhaRubrica->rh73_instit          = $iInstit;
+                                $oDaorhEmpenhoFolhaRubrica->rh73_valor           = db_formatar($nValorRetencao,'p');
+                                $oDaorhEmpenhoFolhaRubrica->rh73_pd              = $oDadosRetencao->pd;
+                                $oDaorhEmpenhoFolhaRubrica->rh73_tiporubrica     = 2;
+                                    
+                                $oDaorhEmpenhoFolhaRubrica->incluir(null);
+                                    
+                                if ( $oDaorhEmpenhoFolhaRubrica->erro_status == '0' ) {
+                                    throw new Exception($oDaorhEmpenhoFolhaRubrica->erro_msg);
+                                }                   
+                                
+                                $oDaorhSlipFolhaRhEmpRubrica->rh80_rhempenhofolharubrica = $oDaorhEmpenhoFolhaRubrica->rh73_sequencial; 
+                                $oDaorhSlipFolhaRhEmpRubrica->rh80_rhslipfolha           = $iCodrhSlip;
+                                $oDaorhSlipFolhaRhEmpRubrica->incluir(null);
+                                                
+                                if ( $oDaorhSlipFolhaRhEmpRubrica->erro_status == '0' ) {
+                                    throw new Exception($oDaorhSlipFolhaRhEmpRubrica->erro_msg);
+                                }                               
+                                
+                                $oDaorhEmpenhoFolhaRubricaRetencao->rh78_rhempenhofolharubrica = $oDaorhEmpenhoFolhaRubrica->rh73_sequencial;
+                                $oDaorhEmpenhoFolhaRubricaRetencao->rh78_retencaotiporec       = $oDadosRetencao->retencao;
+                                $oDaorhEmpenhoFolhaRubricaRetencao->incluir(null);
+                                
+                                if ( $oDaorhEmpenhoFolhaRubricaRetencao->erro_status == '0' ) {
+                                    throw new Exception($oDaorhEmpenhoFolhaRubricaRetencao->erro_msg);
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }  
   
   /**
    * Gera dados de pagamento extra
@@ -2122,9 +2487,10 @@ class dadosEmpenhoFolha {
    * @param  string  $sVinculo
    * @param  integer $iElemento
    * @param  integer $iMesUsu
+   * @param  boolean $lDeParaDotacaoPrevidencia
    * @return object 
    */
-  public function getEstrututal($iAnoUsu,$iLotacao,$sVinculo,$iElemento,$iMesUsu=null){
+  public function getEstrututal($iAnoUsu,$iLotacao,$sVinculo,$iElemento,$iMesUsu=null,$lDeParaDotacaoPrevidencia=false){
 
   	if ( trim($iAnoUsu) == '' ) {
   		throw new Exception('Exercício não informado!');
@@ -2279,47 +2645,97 @@ class dadosEmpenhoFolha {
     /**
      * De/para para dotação realizado de acordo com OC14986
      */
-    $iInstit = db_getsession("DB_instit");
-    $sCampos = "rh171_orgaonov      as orgao,
-                rh171_unidadenov    as unidade,
-                rh171_projativnov   as projativ,
-                rh171_recursonov    as recurso";
-    $sWhere = " rh171_orgaoorig         = {$iOrgao}
-                and rh171_unidadeorig   = {$iUnidade}
-                and rh171_projativorig  = {$iProjAtiv}
-                and rh171_recursoorig   = {$iRecurso}
-                and rh171_mes           = {$iMesUsu}
-                and rh171_instit        = {$iInstit}
-                and rh171_anousu        = {$iAnoUsu}";
-    
-    $sSqlVinculoDotPatronais    = $oDaorhvinculodotpatronais->sql_query_file(null, $sCampos, null, $sWhere);
-    $rsVinculoDotPatronais      = $oDaorhvinculodotpatronais->sql_record($sSqlVinculoDotPatronais);
+    if ($lDeParaDotacaoPrevidencia) {
 
-    if ($oDaorhvinculodotpatronais->numrows > 0) {
+        $iInstit = db_getsession("DB_instit");
+        $sCampos = "rh171_orgaonov      as orgao,
+                    rh171_unidadenov    as unidade,
+                    rh171_projativnov   as projativ,
+                    rh171_recursonov    as recurso";
+        $sWhere = " rh171_orgaoorig         = {$iOrgao}
+                    and rh171_unidadeorig   = {$iUnidade}
+                    and rh171_projativorig  = {$iProjAtiv}
+                    and rh171_recursoorig   = {$iRecurso}
+                    and rh171_mes           = {$iMesUsu}
+                    and rh171_instit        = {$iInstit}
+                    and rh171_anousu        = {$iAnoUsu}";
         
-        $oVinculoDotPatronais = db_utils::fieldsMemory($rsVinculoDotPatronais,0);
-        $iOrgao     = $oVinculoDotPatronais->orgao;
-        $iUnidade   = $oVinculoDotPatronais->unidade;
-        $iProjAtiv  = $oVinculoDotPatronais->projativ;
-        $iRecurso   = $oVinculoDotPatronais->recurso;
-    
-    }            
+        $sSqlVinculoDotPatronais    = $oDaorhvinculodotpatronais->sql_query_file(null, $sCampos, null, $sWhere);
+        $rsVinculoDotPatronais      = $oDaorhvinculodotpatronais->sql_record($sSqlVinculoDotPatronais);
+
+        if ($oDaorhvinculodotpatronais->numrows > 0) {
+            
+            $oVinculoDotPatronais = db_utils::fieldsMemory($rsVinculoDotPatronais,0);
+            $iOrgao     = $oVinculoDotPatronais->orgao;
+            $iUnidade   = $oVinculoDotPatronais->unidade;
+            $iProjAtiv  = $oVinculoDotPatronais->projativ;
+            $iRecurso   = $oVinculoDotPatronais->recurso;
+        
+        }
+        
+    }
             
     if ( $oParametro->o50_subelem == "f" ) {
               
-      $sCamposElemento = "substr(o56_elemento,1,7)||'000000' as elemento";
-      $sWhereElemento  = "     o56_codele = {$iElemento} "; 
-      $sWhereElemento .= " and o56_anousu = {$iAnoUsu}   ";
-      
-      $sWhereParam  = null;
-              
-      $sSqlElemento = $oDaoOrcElemento->sql_query_file(null,null,$sCamposElemento,null,$sWhereElemento);
-      $rsElemento   = $oDaoOrcElemento->sql_record($sSqlElemento);
-             
-      if ( $oDaoOrcElemento->numrows > 0 ) {
-        $oElemento   = db_utils::fieldsMemory($rsElemento,0);
-        $sWhereParam = " and o56_elemento='{$oElemento->elemento}' ";
-      }
+        $sCamposElemento  = "substr(o56_elemento,1,7)||'000000' as elemento,";
+        $sCamposElemento .= "o56_elemento,";
+        $sCamposElemento .= "{$iRecurso} as fonte";
+        $sWhereElemento   = "     o56_codele = {$iElemento} "; 
+        $sWhereElemento  .= " and o56_anousu = {$iAnoUsu}   ";
+        
+        $sWhereParam  = null;
+                
+        $sSqlElemento = $oDaoOrcElemento->sql_query_file(null,null,$sCamposElemento,null,$sWhereElemento);
+        $rsElemento   = $oDaoOrcElemento->sql_record($sSqlElemento);
+                
+        if ( $oDaoOrcElemento->numrows > 0 ) {
+            
+            $oElemento   = db_utils::fieldsMemory($rsElemento,0);
+
+            if ($lDeParaDotacaoPrevidencia) {
+
+                $lBuscaNovoElemento = false;
+
+                if (substr($oElemento->o56_elemento, 0, 9) == '331901303') {
+
+                    if ($iRecurso == '118') {
+                        $sElemento = '3319013040000';
+                        $lBuscaNovoElemento = true;
+                    } elseif ($iRecurso == '119') {
+                        $sElemento = '3319013050000';
+                        $lBuscaNovoElemento = true;
+                    }
+
+                }
+
+                if (substr($oElemento->o56_elemento, 0, 9) == '331911302') {
+                    
+                    if ($iRecurso == '118') {
+                        $sElemento = '3319113040000';
+                        $lBuscaNovoElemento = true;
+                    } elseif ($iRecurso == '119') {
+                        $sElemento = '3319113050000';
+                        $lBuscaNovoElemento = true;
+                    }
+
+                }
+
+                if ($lBuscaNovoElemento) {
+                    
+                    $sWhereNovoElemento = "o56_elemento = '{$sElemento}' and o56_anousu = {$iAnoUsu}";
+                    $sSqlNovoElemento   = $oDaoOrcElemento->sql_query_file(null,null,"o56_codele",null,$sWhereNovoElemento);
+                    $rsNovoElemento     = $oDaoOrcElemento->sql_record($sSqlNovoElemento);
+    
+                    if ($oDaoOrcElemento->numrows > 0) {
+                        $iElemento = db_utils::fieldsMemory($rsNovoElemento,0)->o56_codele;
+                    }
+                        
+                }
+
+            }
+
+            $sWhereParam = " and o56_elemento='{$oElemento->elemento}' ";
+        }
              
     } else {
       $sWhereParam = " and o58_codele = {$iElemento}";
@@ -3046,10 +3462,15 @@ class dadosEmpenhoFolha {
             
           $oGerador = db_utils::fieldsMemory($rsGerador,$iInd);
           $iCaract  = $oGerador->caract;
+
+          //Agrupa recisão com salário
+          if ($oGerador->sigla == 'r20') {
+              $oGerador->sigla = 'r14';
+          }
           
           try {
             
-            $oEstrututal = $this->getEstrututal(db_getsession('DB_anousu'),$oGerador->lotacao,$oGerador->vinculo,$oGerador->elemento,$iMesUsu);
+            $oEstrututal = $this->getEstrututal(db_getsession('DB_anousu'),$oGerador->lotacao,$oGerador->vinculo,$oGerador->elemento,$iMesUsu,true);
             
             $iOrgao     = $oEstrututal->iOrgao; 
             $iUnidade   = $oEstrututal->iUnidade;
@@ -3253,6 +3674,16 @@ class dadosEmpenhoFolha {
       throw new Exception("{$sMsgErro},Erro na consulta!");
     }
     
+    foreach ( $aSiglas as $iInd => $sSigla ) {   
+        
+        try {
+            $this->geraRetencoesEmpenhosPrev($sSigla,$iAnoUsu,$iMesUsu,$iInstit,$sSemestre);			
+        } catch (Exception $eException){
+            throw new Exception($eException->getMessage());
+        }
+
+    }
+    
   }
 
 
@@ -3376,6 +3807,19 @@ class dadosEmpenhoFolha {
       
       $aListaEmpenhos = array_unique($aListaEmpenhos);
       $sListaEmpenhos = implode(',',$aListaEmpenhos);
+
+      /**
+       * Exclui inicialmente os registros de retenção
+       */
+      $sSqlExcluiRetencoes  = " delete from rhempenhofolharubricaretencao                                                "; 
+	  $sSqlExcluiRetencoes .= "  where rh78_rhempenhofolharubrica in ( select rh81_rhempenhofolharubrica                 ";
+	  $sSqlExcluiRetencoes .= "                                          from rhempenhofolharhemprubrica                 ";
+	  $sSqlExcluiRetencoes .= "                                         where rh81_rhempenhofolha in ({$sListaEmpenhos}))";
+	  $rsExcluiRetencoes    = db_query($sSqlExcluiRetencoes);
+
+	  if ( !$rsExcluiRetencoes ) {
+	  	throw new Exception("{$sMsgErro},\n".pg_last_error());
+	  }
       
       $sSqlExcluiEmpenhosRub  = " delete from rhempenhofolharhemprubrica            ";
       $sSqlExcluiEmpenhosRub .= "  where rh81_rhempenhofolha in ({$sListaEmpenhos}) ";
@@ -3402,12 +3846,39 @@ class dadosEmpenhoFolha {
       
       
       if ( $iLinhasEmpenhos > 0 ) {
+        
         for ( $iInd=0; $iInd < $iLinhasEmpenhos; $iInd++ ) {
-          $oEmpenhoFolha = db_utils::fieldsMemory($rsEmpenhosFolha,$iInd);
-          $oDaorhEmpenhoFolha->excluir($oEmpenhoFolha->rh72_sequencial);
-          if ( $oDaorhEmpenhoFolha->erro_status == "0") {
-            throw new Exception("{$sMsgErro},\n{$oDaorhEmpenhoFolha->erro_msg}");
-          }
+          
+            $oEmpenhoFolha = db_utils::fieldsMemory($rsEmpenhosFolha,$iInd);
+            /**
+             * Excluimos a reserva de saldo, caso Exista
+             */
+            $oDaoReserva             = db_utils::getDao("orcreserva");
+            $oDaoReservaSaldoEmpenho = db_utils::getDao("orcreservarhempenhofolha");
+            $sWhere                  = "o120_rhempenhofolha = {$oEmpenhoFolha->rh72_sequencial}";
+            $sSqlDadosReserva        = $oDaoReservaSaldoEmpenho->sql_query_file(null, "o120_orcreserva", null, $sWhere);
+            $rsDadosEmpenho          = $oDaoReservaSaldoEmpenho->sql_record($sSqlDadosReserva);
+            
+            if ($oDaoReservaSaldoEmpenho->numrows > 0) {
+
+                $oReserva = db_utils::fieldsMemory($rsDadosEmpenho, 0);
+                
+                $oDaoReservaSaldoEmpenho->excluir(null, "o120_orcreserva = {$oReserva->o120_orcreserva}");
+                if ($oDaoReservaSaldoEmpenho->erro_status == 0) {
+                    throw new Exception("Erro ao Excluir Reservas de saldo do Empenho.\n{$oDaoReservaSaldoEmpenho->erro_msg}");
+                }
+                
+                $oDaoReserva->excluir($oReserva->o120_orcreserva);
+                if ($oDaoReserva->erro_status == 0) {
+                    throw new Exception("Erro ao Excluir Reservas de saldo do Empenho.\n{$oDaoReserva->erro_msg}");
+                }
+
+            }
+
+            $oDaorhEmpenhoFolha->excluir($oEmpenhoFolha->rh72_sequencial);
+            if ( $oDaorhEmpenhoFolha->erro_status == "0") {
+                throw new Exception("{$sMsgErro},\n{$oDaorhEmpenhoFolha->erro_msg}");
+            }
         }
       }
     }    

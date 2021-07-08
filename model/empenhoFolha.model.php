@@ -518,7 +518,7 @@ class empenhoFolha {
    * Retorna as retencoes lancadas para o empenho da folha
    *
    */
-  function getRetencoes() {
+  function getRetencoes($iTipoEmpenho = 1, $iPd = 2) {
 
     $sSqlDadosRetencao   = "SELECT rh72_sequencial, ";
     $sSqlDadosRetencao  .= "       rh72_coddot, ";
@@ -542,9 +542,9 @@ class empenhoFolha {
     $sSqlDadosRetencao  .= "                                                and rh73_instit                = rh02_instit ";
     $sSqlDadosRetencao  .= "       inner join  rhempenhofolharubricaretencao on rh78_rhempenhofolharubrica = rh73_sequencial ";
     $sSqlDadosRetencao  .= "   where rh72_sequencial  = {$this->empenhofolha}  ";
-    $sSqlDadosRetencao  .= "     and rh72_tipoempenho = 1";
+    $sSqlDadosRetencao  .= "     and rh72_tipoempenho = {$iTipoEmpenho}";
     $sSqlDadosRetencao  .= "     and rh73_tiporubrica = 2";
-    $sSqlDadosRetencao  .= "     and rh73_pd          = 2";
+    $sSqlDadosRetencao  .= "     and rh73_pd          = {$iPd}";
     $sSqlDadosRetencao  .= "   group by rh72_sequencial,  ";
     $sSqlDadosRetencao  .= "            rh72_coddot,  ";
     $sSqlDadosRetencao  .= "            rh72_codele, ";
@@ -568,7 +568,7 @@ class empenhoFolha {
   /**
    * Gera o empenho para esse empenho da folha
    */
-  function gerarEmpenho($iNumCgm) {
+  function gerarEmpenho($iNumCgm, $lPrevidencia = false) {
 
 
     /**
@@ -1028,7 +1028,13 @@ class empenhoFolha {
       $lGeraRetencao = db_utils::fieldsMemory($rsParam,0)->r11_geraretencaoempenho;
       if ( $lGeraRetencao == 't') {
 
-        $aRetencoes =  $this->getRetencoes();
+        
+        if ($lPrevidencia) {
+            $aRetencoes =  $this->getRetencoes(2, 1);
+        } else {
+            $aRetencoes =  $this->getRetencoes();
+        }   
+
         require_once("model/retencaoNota.model.php");
         $oRetencaoNota = new retencaoNota($oRetornoLiquidacao->iCodNota);
         $oRetencaoNota->setINotaLiquidacao($oRetornoLiquidacao->e50_codord);
