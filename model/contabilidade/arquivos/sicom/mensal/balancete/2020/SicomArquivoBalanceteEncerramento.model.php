@@ -1497,11 +1497,10 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                             //OC12114
                             $saldoFinalRsp          = ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) == '' ? 0 : ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos);
                             $bFonteEncerrada        = in_array($oReg14->codfontrecursos, $this->aFontesEncerradas);
-                            $bRPExercicioAnterior   = in_array(substr($oContas10->si177_contacontaabil, 0, 4), array('5312', '5322'));
 
                             if ($bFonteEncerrada && $nMes == '01' && $saldoFinalRsp == 0) {
                                 $iFonte = $oReg14->codfontrecursos;
-                            } elseif ($bFonteEncerrada && db_getsession("DB_anousu") >= 2020 && !$bRPExercicioAnterior) {
+                            } elseif ($bFonteEncerrada && db_getsession("DB_anousu") >= 2020) {
                                 $iFonte = substr($oReg14->codfontrecursos, 0, 1).'59';
                             } else {
                                 $iFonte = $oReg14->codfontrecursos;
