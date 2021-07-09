@@ -1056,7 +1056,7 @@ function queryPadraoOP()
     )
       LEFT JOIN retencaopagordem ON e20_pagordem = coremp.k12_codord
       LEFT join retencaoreceitas on e23_retencaopagordem = e20_sequencial
-      AND k12_valor = e23_valorretencao
+          AND (k12_valor = e23_valorbase OR k12_valor = e23_valorretencao)
 
   WHERE";
 }

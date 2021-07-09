@@ -421,7 +421,7 @@ function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento
                 )
                 LEFT JOIN retencaopagordem ON e20_pagordem = coremp.k12_codord
                 LEFT join retencaoreceitas on e23_retencaopagordem = e20_sequencial
-                AND k12_valor = e23_valorretencao
+                    AND (k12_valor = e23_valorbase OR k12_valor = e23_valorretencao)
                 LEFT JOIN corempagemov ON corempagemov.k12_id = coremp.k12_id
                 AND corempagemov.k12_autent = coremp.k12_autent
                 AND corempagemov.k12_data = coremp.k12_data
