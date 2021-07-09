@@ -2156,7 +2156,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
   //cria nome da funcao com parametros
   if ($arquivo == "()") {
 
-    $arrayFuncao                = split("\|", $aonde);
+    $arrayFuncao                = explode("|", $aonde);
     $quantidadeItemsArrayFuncao = sizeof($arrayFuncao);
   }
 
