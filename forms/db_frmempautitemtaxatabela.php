@@ -46,47 +46,12 @@ $clrotulo->label("e54_anousu");
 $clrotulo->label("o56_elemento");
 $clrotulo->label("pc01_descrmater");
 
-
-if (!isset($e30_numdec)) {
-  $e30_numdec = 4;
-}
-
-if (isset($db_opcaoal)) {
-  $db_opcao = 3;
-  $db_botao = false;
-} else {
-  $db_botao = true;
-}
-if (isset($opcao) && $opcao == "alterar") {
-  $db_opcao = 2;
-} elseif (isset($opcao) && $opcao == "excluir" || isset($db_opcao) && $db_opcao == 3) {
-  $db_opcao = 3;
-  if (isset($db_opcaoal)) {
-    $db_opcao = 33;
-  }
-} else {
-  $db_opcao = 1;
-  $db_botao = true;
-  if (isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro == false)) {
-    $e55_item   = "";
-    $e55_sequen = "";
-    $e55_quant  = "";
-    $e55_vltot  = "";
-    $e55_descr  = "";
-    $e55_vluni  = "";
-    $e55_marca  = "";
-    $pc01_descrmater  = "";
-  }
-}
-
 ?>
 
-<script type="text/javascript" src="scripts/scripts.js"></script>
-<script type="text/javascript" src="scripts/prototype.js"></script>
-
-<link href="https://unpkg.com/vanilla-datatables@latest/dist/vanilla-dataTables.min.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="https://unpkg.com/vanilla-datatables@latest/dist/vanilla-dataTables.min.js"></script>
-
+<!-- <script type="text/javascript" src="scripts/scripts.js"></script> -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
+<script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
 
 <script>
   function js_calcula(origem) {
@@ -202,139 +167,21 @@ if (isset($opcao) && $opcao == "alterar") {
           </td>
         </tr>
         <tr style="height: 20px;">
-          <td nowrap title="<?= @$Te55_item ?>">
-            <? db_ancora(@$Le55_item, "js_pesquisae55_item(true);", $db_opcao); ?>
+          <td nowrap title="<?= @$Te55_descr ?>">
+            <?= @$Le55_descr ?>
           </td>
           <td>
-            <? db_input('e55_item', 8, $Ie55_item, true, 'text', $db_opcao, " onchange='js_pesquisae55_item(false);'")  ?>
-            <? db_input('pc01_descrmater', 52, $Ipc01_descrmater, true, 'text', 3, '')   ?>
+            <?
+            db_textarea('e55_descr', 3, 70, $Ie55_descr, true, 'text', $iOpcao, "");
+            ?>
           </td>
         </tr>
-
         <tr>
-          <td><b>Unidade:</b></td>
+          <td><b>Desconto automático:</b></td>
           <td>
             <?
-            $result_unidade = array();
-            $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
-            $numrows_unid = $clmatunid->numrows;
-            for ($i = 0; $i < $numrows_unid; $i++) {
-              db_fieldsmemory($result_sql_unid, $i);
-              $result_unidade[$m61_codmatunid] = $m61_descr;
-            }
-
-            db_select("e55_unid", $result_unidade, true, $db_opcao);
-
-            ?>
-            <label style="margin-left: 20px"><b>Marca:</b></label>
-            <? db_input('e55_marca', 20, $Ie55_marca, true, 'text', $db_opcao, '', '', '', '', 100)   ?>
-          </td>
-        </tr>
-
-        <? if (isset($e55_item) && $e55_item != '' && (empty($liberado) || (isset($liberado) && $liberado == true))) { ?>
-          <tr style="height: 20px;">
-            <td nowrap title="">
-              <b>Ele. item: </b>
-            </td>
-            <td>
-              <? db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '', "js_troca(this.value);");  ?>
-            </td>
-          </tr>
-        <?
-        } else {
-          db_input('pc07_codele', 50, 0, true, 'hidden', 1);
-        }
-
-        ?>
-
-        <tr style="height: 20px;">
-          <td><?= $Lo56_elemento ?></td>
-          <td>
-            <?
-            $ero = $clempautitem->erro_msg;
-
-
-            $result88 = $clempautitem->sql_record($clempautitem->sql_query_pcmaterele($e55_autori, null, "o56_codele as codele,o56_elemento as elemento01,o56_descr"));
-            if ($clempautitem->numrows > 0) {
-              $numrows88 = $clpcmater->numrows;
-              db_fieldsmemory($result88, 0); //$codele é o primeiro elemento incluido
-              echo "
-       <script>
-      parent.document.formaba.empautidot.disabled=false;\n
-     </script>
-         ";
-            } else {
-              echo "
-    <script>
-      parent.document.formaba.empautidot.disabled=false;\n
-    </script>
-
-      ";
-              if (isset($e55_item) && $e55_item != "") {
-                $result99  = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item, "o56_codele as  codele,o56_elemento as elemento01,o56_descr"));
-                $numrows99 = $clpcmater->numrows;
-                db_fieldsmemory($result99, 0); //$codele é o primeiro elemento incluido
-              } else {
-                $elemento01 = '';
-                $o56_descr = '';
-              }
-            }
-            $clempautitem->erro_msg = $ero;
-            db_input('elemento01', 20, 0, true, 'text', 3);
-            db_input('o56_descr', 40, 0, true, 'text', 3);
-            if (isset($numrows99) && $numrows99 > 0) {
-              for ($i = 0; $i < $numrows99; $i++) {
-                db_fieldsmemory($result99, $i);
-                $r = "ele_$codele";
-                $$r = "$elemento01#$o56_descr";
-                db_input("ele_$codele", 20, 0, true, 'hidden', 3);
-              }
-            }
-            ?>
-          </td>
-        </tr>
-        <tr style="height: 20px;">
-          <td nowrap title="<?= @$Te55_quant ?>">
-            <?= @$Le55_quant ?>
-          </td>
-          <td>
-            <?php
-            /*if(isset($pc01_servico) and $pc01_servico=='t') {
-
-            if (!isset($e55_servicoquantidade) || $e55_servicoquantidade == "f") {
-              $e55_quant = 1;
-            }
-            $db_opcao_e55_quant = 3;
-          } else {
-            $db_opcao_e55_quant = $db_opcao;
-          }*/
-            db_input('e55_quant', 11, $e55_quant, true, 'text', '', "onchange=\"js_calcula('quant');\"");
-            ?>
-
-            <script>
-              //Controla a validação de vírgulas e pontos.
-              var oQuantidade = $("e55_quant");
-              oQuantidade.setAttribute("onkeydown", "return js_controla_tecla_enter(this,event);");
-              oQuantidade.setAttribute("onkeyup", "js_ValidaCampos(this,4,'Quantidade','f','f',event);");
-              oQuantidade.setAttribute("onblur", "js_ValidaMaiusculo(this,'f',event);");
-            </script>
-            <label><b>Valor unitário:</b></label>
-            <?
-            if (isset($opcao)) {
-              if (!isset($e55_vlrun)) {
-                $e55_vlrun = number_format($e55_vltot / $e55_quant, 2, ".", "");
-              }
-            }
-            db_input('e55_vluni', 10, $Ie55_vluni, true, 'text', 1, "onchange=\"js_calcula('uni');\"onkeyup=\"js_removeVirgula(this.value);\"");
-            ?>
-            <?= @$Le55_vltot ?>
-            <?
-            if (isset($pc01_servico) and $pc01_servico == 't') {
-              $db_opcao_e55_vltot = 3;
-            } else {
-              $db_opcao_e55_vltot = $db_opcao;
-            }
-            db_input('e55_vltot', 10, $Ie55_vltot, true, 'text', 3, "onblur=\"js_calcula('tot');\"");
+            $aDescAutomatico = array("f" => "Não", "t" => "Sim");
+            db_select("descauto", $aDescAutomatico, true, $db_opcao);
             ?>
           </td>
         </tr>
@@ -372,93 +219,101 @@ if (isset($opcao) && $opcao == "alterar") {
             <?php endif; ?>
           </td>
         </tr>
-        <tr style="height: 20px;">
-          <td nowrap title="<?= @$Te55_descr ?>">
-            <?= @$Le55_descr ?>
-          </td>
-          <td>
-            <?
-            $lDisabled = false;
-            if (empty($opcao)) {
 
-              if (isset($e55_item) && $e55_item != '') {
-
-                $sWhere      = "pc01_codmater = {$e55_item}";
-                $sSqlPcMater = $clpcmater->sql_query_file($e55_item, "pc01_complmater,pc01_liberaresumo", null, $sWhere);
-                $result      = $clpcmater->sql_record($sSqlPcMater);
-                if ($clpcmater->numrows > 0) {
-
-                  db_fieldsmemory($result, 0);
-                  if ($pc01_liberaresumo == 'f') {
-
-                    $lDisabled = true;
-                    $e55_descr = $pc01_complmater;
-                  } else {
-
-                    // PARA SAPIRANGA A VARIÁVEL TEM QUE ESTAR EM BRANCO
-                    $e55_descr = '';
-                  }
-                } else {
-                  $e55_descr = '';
-                }
-              } else {
-                $e55_descr = '';
-              }
-            }
-
-            if ($lDisabled) {
-              $iOpcao = 3;
-            } else {
-              $iOpcao = $db_opcao;
-            }
-
-            db_textarea('e55_descr', 3, 70, $Ie55_descr, true, 'text', $iOpcao, "");
-            ?>
-          </td>
-        </tr>
       </table>
-
     </fieldset>
-    <table>
-      <tr>
-        <td colspan='2' align='center'>
-          <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> <?= ($db_opcao == 2 || $db_opcao == 1) ? "onclick='return js_verificar();'" : '' ?>>
-          <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?= ($db_opcao == 1 || isset($db_opcaoal) ? "style='visibility:hidden;'" : "") ?>>
-        </td>
-      </tr>
-    </table>
     <div class="container">
-      <table class="table">
+      <table height="100%" width="400px" id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>M</th>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Unidade</th>
+            <th>Marca</th>
+            <th>Qtdd</th>
+            <th>Vlr. Unit.</th>
+            <th>Desc. %</th>
+            <th>Total</th>
+          </tr>
+        </thead>
       </table>
     </div>
+    <input name="salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
   </center>
 </form>
 <script>
-  var table = new DataTable(".table", {
-    ajax: {
-      url: "emp1_empautitemtaxatabela.RPC.php?Param=BuscaItens",
-      //url: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/massive.json",
-      load: function(xhr) {
-        console.log(JSON.parse(xhr.responseText));
-        var data = JSON.parse(xhr.responseText);
-
-        for (var i = 0; i < data.length; i++) {
-          for (var p in data[i]) {
-            if (!isNaN(data[i][p])) {
-              data[i][p] = "<u style='color:red;'>" + data[i][p] + "</u>"
-            }
+  $(document).ready(function() {
+    $('#myTable').DataTable({
+      language: {
+        "sEmptyTable": "Nenhum registro encontrado",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "_MENU_ resultados por página",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sSearch": "Pesquisar",
+        "oPaginate": {
+          "sNext": "Próximo",
+          "sPrevious": "Anterior",
+          "sFirst": "Primeiro",
+          "sLast": "Último"
+        },
+        "oAria": {
+          "sSortAscending": ": Ordenar colunas de forma ascendente",
+          "sSortDescending": ": Ordenar colunas de forma descendente"
+        },
+        buttons: {
+          pageLength: {
+            _: "Mostrar %d linhas",
+            '-1': "Mostrar todo"
           }
+        },
+        select: {
+          rows: "%d linhas selecionadas"
+        },
+      },
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: "emp1_empautitemtaxatabela.RPC.php",
+        type: "POST",
+        data: {
+          action: 'BuscaItens',
+          autori: <?php echo $e55_autori ?>,
+          cgm: <?php echo $z01_numcgm ?>,
+          dataType: "json"
         }
-
-        return JSON.stringify(data);
-      }
-    }
+      },
+    });
   });
 
-  table.on("datatable.ajax.loaded", function() {
-    // IE9
-    this.wrapper.className = this.wrapper.className.replace(" dataTable-loading", "");
-  });
+  function js_salvar() {
+
+    var oParam = new Object();
+    oParam.exec = "salvar";
+
+    //js_divCarregando(_M(CAMINHO_MENSAGENS + "salvando"), 'msgBox');
+
+    new Ajax.Request("emp1_empautitemtaxatabela.RPC.php", {
+      method: 'post',
+      parameters: 'json=' + js_objectToJson(oParam),
+      onComplete: js_retornoSalvar
+    });
+  }
+
+  function js_retornoSalvar(oAjax) {
+
+    //js_removeObj('msgBox');
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    var sMensagem = oRetorno.sMessage.urlDecode();
+    alert(sMensagem);
+
+  }
 
   function js_verificar() {
 
@@ -512,93 +367,6 @@ if (isset($opcao) && $opcao == "alterar") {
     }
     ?>
     document.form1.submit();
-  }
-
-  function js_cancelar() {
-    var opcao = document.createElement("input");
-    opcao.setAttribute("type", "hidden");
-    opcao.setAttribute("name", "novo");
-    opcao.setAttribute("value", "true");
-    document.form1.appendChild(opcao);
-    document.form1.submit();
-  }
-
-  function js_pesquisae55_item(mostra) {
-
-    if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo.iframe_empautitem', 'db_iframe_pcmaterele', "func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao=" + $F('e55_autori') + "&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem|pc94_sequencial", 'Pesquisa', true, "0", "1");
-    } else {
-      if (document.form1.e55_item.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_empautitem', 'db_iframe_pcmaterele', "func_pcmaterelelibaut.php?pesquisa=true&z01_numcgm=<?= $z01_numcgm ?>&iCodigoAutorizacao=" + $F('e55_autori') + "&pesquisa_chave=" + document.form1.e55_item.value + "&funcao_js=parent.js_mostrapcmater", 'Pesquisa', false);
-      } else {
-        document.form1.pc01_descrmater.value = '';
-        document.form1.submit();
-      }
-    }
-  }
-
-  function js_mostrapcmater(chave, erro, codele, quant, vluni, tipoitem, total, sequencial) {
-    // document.form1.pc01_descrmater.value = chave;
-    let opcao = "<?= $opcao ?>";
-
-    if (erro == true) {
-      document.form1.e55_item.focus();
-      document.form1.e55_item.value = '';
-      document.form1.pc01_descrmater.value = '';
-      document.form1.e55_quant.value = '';
-      document.form1.submit();
-    } else {
-      document.form1.pc07_codele.value = codele;
-      // document.form1.pc01_descrmater.value = chave;
-      document.form1.e55_quant.value = quant;
-      document.form1.totalad.value = total;
-      document.form1.e55_quant.focus();
-
-      var params = {
-        exec: 'verificaSaldoCriterio',
-        e55_item: document.form1.e55_item.value,
-        e55_autori: document.form1.e55_autori.value,
-        tipoitem: tipoitem,
-        pc94_sequencial: sequencial,
-        total: total
-      };
-
-      js_consultaValores(params);
-    }
-  }
-
-  function js_mostrapcmater1(chave1, chave2, codele, chave3, chave4, chave5, chave6, chave7, chave8, chave9) {
-    document.form1.e55_item.value = chave1;
-    // document.form1.pc01_descrmater.value = chave2;
-    document.form1.pc07_codele.value = codele;
-    document.form1.e55_quant.value = chave3;
-    document.form1.e55_vluni.value = '';
-    chave7 == 't' ? document.form1.e55_vltot.value = chave5 : "";
-    document.form1.pc80_criterioadjudicacao.value = chave6;
-    document.form1.totalad.value = chave5;
-    db_iframe_pcmaterele.hide();
-    var params = {
-      exec: 'verificaSaldoCriterio',
-      e55_item: chave1,
-      e55_autori: document.form1.e55_autori.value,
-      tipoitem: chave8,
-      pc94_sequencial: chave9,
-      total: chave5
-    };
-
-    js_consultaValores(params);
-  }
-
-  function js_consultaValores(params) {
-    novoAjax(params, (e) => {
-      let totitens = JSON.parse(e.responseText).itens;
-      document.form1.utilizado.value = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0";
-      document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
-
-      js_consulta();
-
-      document.form1.e55_quant.focus();
-    });
   }
 
   function novoAjax(params, onComplete) {
