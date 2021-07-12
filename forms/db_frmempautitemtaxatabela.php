@@ -36,7 +36,7 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clempparametro = new cl_empparametro;
 $clpctabelaitem = new cl_pctabelaitem;
 $clpcmaterele   = new cl_pcmaterele;
-$clempautitem = new cl_empautitem;
+$clempautitem   = new cl_empautitem;
 
 $aTabFonec = array("" => "Selecione");
 $tabsFonecVencedor = $clpctabelaitem->buscarTabFonecVencedor($e55_autori, $z01_numcgm);
@@ -45,9 +45,14 @@ if (!empty($tabsFonecVencedor)) {
     $aTabFonec += array($tabFonecVencedor->pc94_sequencial => "$tabFonecVencedor->pc94_sequencial - $tabFonecVencedor->pc01_descrmater");
   }
 }
+// echo 'leras';
+// exit;
+// echo $e55_item;
+// exit;
+//$result_elemento = $clpcmaterele->sql_record($clpcmaterele->sql_query(null, null, "pc07_codele,o56_descr", "", "pc07_codmater=$e55_item "));
+//db_criatabela($result_elemento);
+//exit;
 
-$resultElemento = $clpcmaterele->sql_record($clpcmaterele->sql_query($e55_autori, null, "o56_codele as codele,o56_elemento as elemento01,o56_descr"));
-db_criatabela($resultElemento);
 
 
 $clempautitem->rotulo->label();

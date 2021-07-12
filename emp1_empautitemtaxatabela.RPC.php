@@ -25,18 +25,16 @@ switch ($_POST["action"]) {
     $iAnoSessao         = db_getsession('DB_anousu');
 
     $result_unidade = array();
+    //echo $clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr");
     $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
     $numrows_unid = $clmatunid->numrows;
     for ($i = 0; $i < $numrows_unid; $i++) {
       db_fieldsmemory($result_sql_unid, $i);
       $result_unidade[$m61_codmatunid] = $m61_descr;
     }
-    $selectunid = "<select>";
-    $selectunid .= "<option selected='selected'>..</option>";
-    foreach ($result_unidade as $item) {
-      $selectunid .= "<option value='strtolower($item)'>$item</option>";
-    }
-    $selectunid .= "</select>";
+
+    // db_criatabela($result_unidade);
+    // exit;
 
     $sqlQuery = "SELECT *
     FROM
@@ -158,6 +156,14 @@ switch ($_POST["action"]) {
         db_fieldsmemory($result, 0);
 
         $itemRows  = array();
+
+        $selectunid = "";
+        $selectunid = "<select>";
+        $selectunid .= "<option selected='selected'>..</option>";
+        foreach ($result_unidade as $item) {
+          $selectunid .= "<option value='strtolower($item)'>$item</option>";
+        }
+        $selectunid .= "</select>";
 
         $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='js_verificaItem(this.id)'>";
         $itemRows[] = $oDados->pc01_codmater;
