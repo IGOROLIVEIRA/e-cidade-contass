@@ -125,34 +125,6 @@ $oGet = db_utils::postMemory($_GET);
                                   AND disbanco.codret = {$oGet->codret}";
      }
 
-     if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO) {
-
-       $sSqlEcidadeHLH = "SELECT * FROM disbanco 
-                      INNER JOIN debitos_hlh on  disbanco.k00_numpre = debitos_hlh.numguia::int 
-                      INNER JOIN arrecad on (arrecad.k00_numpre,arrecad.k00_numpar) = (debitos_hlh.k00_numpre,debitos_hlh.k00_numpar) 
-                      WHERE disbanco.k00_numpre = debitos_hlh.numguia::int
-                      AND disbanco.codret = {$oGet->codret}  
-                      AND disbanco.k00_numpre in (SELECT recibopaga.k00_numnov FROM recibopaga 
-                                                    WHERE recibopaga.k00_numnov = debitos_hlh.numguia::int )";
-       $resultEcidadeHLH = db_query($sSqlEcidadeHLH);
-       if( pg_numrows($resultEcidadeHLH) > 0 ) {
-            
-            throw new Exception('Entre com contato com o Suporte, verifique arquivo retorno.');            
-
-       }else{
-            $sSqlIntegracaoHLH = "UPDATE disbanco
-                              SET k00_numpre = debitos_hlh.k00_numpre,
-                                  k00_numpar = debitos_hlh.k00_numpar
-                              FROM debitos_hlh 
-                              INNER JOIN arrecad on (arrecad.k00_numpre,arrecad.k00_numpar) = (debitos_hlh.k00_numpre,debitos_hlh.k00_numpar) 
-                              WHERE disbanco.k00_numpre = debitos_hlh.numguia::int
-                                  AND disbanco.codret = {$oGet->codret} ";
-            if (!db_query($sSqlIntegracaoHLH)) {
-              throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
-            } 
-       }
-       
-     }
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
    	if (!$rsBaixaBanco) {
