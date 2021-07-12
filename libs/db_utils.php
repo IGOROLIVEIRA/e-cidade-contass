@@ -30,20 +30,25 @@
  * @author $Author: dbrafael.nery $
  * @version $Revision: 1.37 $
  */
-class _db_fields {}
+class _db_fields
+{
+}
 
 /**
  * Classe com Utilitários comuns para Uso no Projeto
  * @abstract
  */
-class db_utils {
+class db_utils
+{
 
   const ITERATION_CONTINUE = '$__DB_UTILS_::_ITERATION__CONTINUE__$';
   const ITERATION_BREAK    = '$__DB_UTILS_::_ITERATION__BREAK__$';
   /**
    * Construtor da Classe
    */
-  function db_utils() {}
+  function __construct()
+  {
+  }
 
   /**
    * Transforma uma linha do resultado SQL em Objeto
@@ -54,7 +59,8 @@ class db_utils {
    * @param boolean $lEncode - Valida se Deve Codificar as strings de Saida como URL( urlencode() )
    * @return stdClass
    */
-  static function fieldsMemory( $rs, $idx, $formata=false, $mostra = false, $lEncode=false ) {
+  static function fieldsMemory($rs, $idx, $formata = false, $mostra = false, $lEncode = false)
+  {
 
     $oFields      = new stdClass();
     $numFields    = pg_num_fields($rs);
@@ -66,41 +72,39 @@ class db_utils {
       $sFieldType = @pg_field_type($rs, $i);
 
       if ($iTotalLinhas > 0) {
-         $sValor = trim(@pg_result($rs, $idx, $sFieldName));
+        $sValor = trim(@pg_result($rs, $idx, $sFieldName));
       }
       if ($formata) {
 
         switch ($sFieldType) {
 
-        case "date" :
-          if ($sValor != null) {
-            $sValor = implode('/',array_reverse(explode("-",$sValor)));
-          }
-        break;
-        default :
-          $sValor  = stripslashes($sValor);
-         break;
+          case "date":
+            if ($sValor != null) {
+              $sValor = implode('/', array_reverse(explode("-", $sValor)));
+            }
+            break;
+          default:
+            $sValor  = stripslashes($sValor);
+            break;
         }
-
       }
       if ($mostra) {
-        echo $sFieldName ." => ".$sValor." <br>";
+        echo $sFieldName . " => " . $sValor . " <br>";
       }
-      if ($lEncode){
+      if ($lEncode) {
 
-         switch ($sFieldType){
+        switch ($sFieldType) {
 
-           case "bpchar":
-              $sValor = urlencode($sValor);
-           break;
-           case "varchar":
-              $sValor = urlencode($sValor);
-           break;
-           case "text":
-              $sValor = urlencode($sValor);
-           break;
-
-         }
+          case "bpchar":
+            $sValor = urlencode($sValor);
+            break;
+          case "varchar":
+            $sValor = urlencode($sValor);
+            break;
+          case "text":
+            $sValor = urlencode($sValor);
+            break;
+        }
       }
 
       $oFields->$sFieldName = $sValor;
@@ -114,7 +118,8 @@ class db_utils {
    * @param bool $mostra
    * @return stdClass
    */
-  static function postMemory( $aVetor, $mostra = false ) {
+  static function postMemory($aVetor, $mostra = false)
+  {
 
     $oFields = new stdClass();
     for ($i = 0; $i < count($aVetor); $i++) {
@@ -123,7 +128,7 @@ class db_utils {
       $sValor         = current($aVetor);
 
       if ($mostra) {
-        echo $sFieldName ." => ".$sValor." <br>\n";
+        echo $sFieldName . " => " . $sValor . " <br>\n";
       }
       $oFields->$sFieldName = $sValor;
       next($aVetor);
@@ -140,23 +145,24 @@ class db_utils {
    * @param boolean $rInstance - Testa se além de carregar arquivo deve também Instanciá-la
    * @return OBJECT|boolean - Objeto da Classe Instanciada ou Apenas confirmação do Carregamento
    */
-  static function getDao( $sClasse, $lInstanciaClasse = true ){
+  static function getDao($sClasse, $lInstanciaClasse = true)
+  {
 
-     if (!class_exists("cl_{$sClasse}")){
-        require_once modification("classes/db_{$sClasse}_classe.php");
-     }
+    if (!class_exists("cl_{$sClasse}")) {
+      require_once modification("classes/db_{$sClasse}_classe.php");
+    }
 
-     if ( $lInstanciaClasse ) {
+    if ($lInstanciaClasse) {
 
-       /**
+      /**
      //  * @TODO modificar Eval por Chamada Dinamica
      //  * $sNomeClasse = "cl_{$sClasse}";
      //  * $objRet      = new  {$sNomeClasse};
-         */
-        eval ("\$objRet = new cl_{$sClasse};");
-        return $objRet;
-     }
-     return true;
+       */
+      eval("\$objRet = new cl_{$sClasse};");
+      return $objRet;
+    }
+    return true;
   }
 
   /**
@@ -165,18 +171,19 @@ class db_utils {
    * @see db_utils::fieldsMemory()
    * @return stdClass[]
    */
-  static function getCollectionByRecord( $rsRecordset, $lFormata=false, $lMostra=false, $lEncode=false ) {
+  static function getCollectionByRecord($rsRecordset, $lFormata = false, $lMostra = false, $lEncode = false)
+  {
 
     $iINumRows = @pg_num_rows($rsRecordset);
     $aDButils  = array();
 
-    if ( $iINumRows > 0 ) {
+    if ($iINumRows > 0) {
 
-      for ($iIndice = 0; $iIndice < $iINumRows; $iIndice++ ) {
-        $aDButils[] = self::fieldsMemory($rsRecordset,$iIndice,$lFormata,$lMostra,$lEncode);
+      for ($iIndice = 0; $iIndice < $iINumRows; $iIndice++) {
+        $aDButils[] = self::fieldsMemory($rsRecordset, $iIndice, $lFormata, $lMostra, $lEncode);
       }
     }
-   return $aDButils;
+    return $aDButils;
   }
 
   /**
@@ -184,43 +191,44 @@ class db_utils {
    * @param  resource - Conexao a Ser testada
    * @return boolean
    */
-  static function inTransaction( $pConexao = null ) {
+  static function inTransaction($pConexao = null)
+  {
 
-    if ( is_null($pConexao) ) {
+    if (is_null($pConexao)) {
 
       global $conn;
       $pConexao = $conn;
     }
 
     $isIntransaction = false;
-    $lStatus         = pg_transaction_status( $pConexao );
+    $lStatus         = pg_transaction_status($pConexao);
 
-    switch( $lStatus ) {
+    switch ($lStatus) {
 
-      // sem transacao em  (0)
+        // sem transacao em  (0)
       case  PGSQL_TRANSACTION_IDLE:
         $isIntransaction = false;
-      break;
+        break;
 
-      //em Transacao Ativa, comando sendo executado  (1)
+        //em Transacao Ativa, comando sendo executado  (1)
       case PGSQL_TRANSACTION_ACTIVE:
         $isIntransaction = true;
-      break;
+        break;
 
-      //transacao em andamento  (2)
+        //transacao em andamento  (2)
       case PGSQL_TRANSACTION_INTRANS:
         $isIntransaction = true;
-      break;
+        break;
 
-      //transacao com erro  (3)
+        //transacao com erro  (3)
       case  PGSQL_TRANSACTION_INERROR:
         $isIntransaction = false;
-      break;
+        break;
 
-      //falha na conexao; (4);
+        //falha na conexao; (4);
       case PGSQL_TRANSACTION_UNKNOWN:
         $isIntransaction = false;
-      break;
+        break;
     }
     return $isIntransaction;
   }
@@ -236,8 +244,9 @@ class db_utils {
    *
    * @return \stdClass[]
    */
-  static function getColectionByRecord( $rsRecordset, $lFormata=false, $lMostra=false, $lEncode=false ) {
-    return self::getCollectionByRecord( $rsRecordset, $lFormata, $lMostra, $lEncode );
+  static function getColectionByRecord($rsRecordset, $lFormata = false, $lMostra = false, $lEncode = false)
+  {
+    return self::getCollectionByRecord($rsRecordset, $lFormata, $lMostra, $lEncode);
   }
 
   /**
@@ -245,22 +254,24 @@ class db_utils {
    * @param  string $string
    * @return boolean
    */
-	static function isUTF8( $sString ) {
+  static function isUTF8($sString)
+  {
 
-	  if ( mb_detect_encoding($sString.'x', 'UTF-8, ISO-8859-1') == 'UTF-8'){
-	  	return true;
-	  }
-  	return false;
-	}
+    if (mb_detect_encoding($sString . 'x', 'UTF-8, ISO-8859-1') == 'UTF-8') {
+      return true;
+    }
+    return false;
+  }
 
-	/**
+  /**
    * Valida se uma String está codificada como LATIN1(ISO-8859-1)
-	 * @param  string $string
-	 * @return boolean
-	 */
-  static function isLATIN1( $sString ) {
+   * @param  string $string
+   * @return boolean
+   */
+  static function isLATIN1($sString)
+  {
 
-    if ( mb_detect_encoding($sString.'x', 'UTF-8, ISO-8859-1') == 'ISO-8859-1') {
+    if (mb_detect_encoding($sString . 'x', 'UTF-8, ISO-8859-1') == 'ISO-8859-1') {
       return true;
     }
     return false;
@@ -272,7 +283,8 @@ class db_utils {
    * @param $aKeys
    * @return null|stdClass
    */
-  static function getRowFromDao($oDao, $aKeys) {
+  static function getRowFromDao($oDao, $aKeys)
+  {
 
     $sSqlRow = call_user_func_array(array($oDao, "sql_query_file"), $aKeys);
 
@@ -292,7 +304,8 @@ class db_utils {
    *
    * @return mixed - Retorno informado na Closure
    */
-  public static function makeFromRecord($rsRecord, Closure $fRetorno, $iIndice = null) {
+  public static function makeFromRecord($rsRecord, Closure $fRetorno, $iIndice = null)
+  {
     return $fRetorno(pg_fetch_object($rsRecord, $iIndice));
   }
 
@@ -305,12 +318,13 @@ class db_utils {
    *
    * @return array - Coleção criada
    */
-  public static function makeCollectionFromRecord($rsRecord, Closure $fRetorno) {
+  public static function makeCollectionFromRecord($rsRecord, Closure $fRetorno)
+  {
 
     $aRetorno     = array();
     $iTotalLinhas = pg_num_rows($rsRecord);
 
-    for ( $iIndice = 0; $iIndice < $iTotalLinhas; $iIndice++ ) {
+    for ($iIndice = 0; $iIndice < $iTotalLinhas; $iIndice++) {
 
       $mRetorno   = self::makeFromRecord($rsRecord, $fRetorno);
 
@@ -329,16 +343,17 @@ class db_utils {
 
   /**
    * Verifica os dados postados e verificar se o conteudo enviado não ultrapassou o max_post_size,
-   * onde o PHP não dispara nenhum alerta quando esse valor é ultrapassado, 
+   * onde o PHP não dispara nenhum alerta quando esse valor é ultrapassado,
    * gerando apenas erros onde a variável POST/GET/REQUEST não for definida
    */
-  public static function checkContentSize() {
+  public static function checkContentSize()
+  {
 
     $maxPostSize = self::getBytesFromINIFormat(ini_get('post_max_size'));
     $contentSize = $_SERVER['CONTENT_LENGTH'];
 
     if ($contentSize > $maxPostSize) {
-        
+
       $maxPostSize = DBString::formatSizeUnits($maxPostSize);
       $contentSize = DBString::formatSizeUnits($contentSize);
       throw new ParameterException(
@@ -347,11 +362,12 @@ class db_utils {
     }
     return true;
   }
-    
+
   /**
    * Retorna a quantidade de bytes no formato do INI file
    */
-  private static function getBytesFromINIFormat($valor) {
+  private static function getBytesFromINIFormat($valor)
+  {
 
     $letra = '';
 

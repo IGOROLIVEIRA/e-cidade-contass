@@ -25,7 +25,8 @@
  *                licenca/licenca_pt.txt
  */
 
-class libdocumento {
+class libdocumento
+{
 
   public $iTipoDoc      = 0;
   public $iCodDoc       = 0;
@@ -57,7 +58,8 @@ class libdocumento {
    * @param  db03_tipodoc  integer  Codigo do tipo do documento (tabela db_tipodoc);
    * @param  db03_cododc   integer  Codigo do documento (tabela db_tipodoc);
    */
-  public function __construct($db03_tipodoc = null, $db03_coddoc = null) {
+  public function __construct($db03_tipodoc = null, $db03_coddoc = null)
+  {
 
     $this->iTipoDoc = $db03_tipodoc;
     $this->iCodDoc  = $db03_coddoc;
@@ -134,7 +136,7 @@ class libdocumento {
     );
 
     $this->cldb_documento = new cl_db_documento();
-    $this->cldb_documento->sql_record($this->cldb_documento->sql_query(null, "*", null, "db03_tipodoc = {$this->iTipoDoc} and db03_instit = ".db_getsession('DB_instit')));
+    $this->cldb_documento->sql_record($this->cldb_documento->sql_query(null, "*", null, "db03_tipodoc = {$this->iTipoDoc} and db03_instit = " . db_getsession('DB_instit')));
     //
     //  Se encontrar documento especifico usa o especifico
     //
@@ -155,7 +157,7 @@ class libdocumento {
       //
       $this->cldb_documentopadrao = new cl_db_documentopadrao();
 
-      $this->cldb_documentopadrao->sql_record($this->cldb_documentopadrao->sql_query(null, "*", null, "db60_tipodoc = {$this->iTipoDoc} and db60_instit = ".db_getsession('DB_instit')));
+      $this->cldb_documentopadrao->sql_record($this->cldb_documentopadrao->sql_query(null, "*", null, "db60_tipodoc = {$this->iTipoDoc} and db60_instit = " . db_getsession('DB_instit')));
       if ($this->cldb_documentopadrao->numrows > 0) {
 
         $this->oDbDocumentoDAO   = new cl_db_documentopadrao();
@@ -176,7 +178,8 @@ class libdocumento {
     }
   }
 
-  public function __toString() {
+  public function __toString()
+  {
     return "Object";
   }
 
@@ -184,7 +187,8 @@ class libdocumento {
    * Ativa ou desativa o cache
    * @param $lCache boolean
    */
-  public function setCache($lCache) {
+  public function setCache($lCache)
+  {
     $this->lCache = $lCache;
   }
 
@@ -192,7 +196,8 @@ class libdocumento {
    * Retorna o status do cache
    * @return boolean
    */
-  public function getCache() {
+  public function getCache()
+  {
     return $this->lCache;
   }
 
@@ -200,7 +205,8 @@ class libdocumento {
    * Define o tempo de duração do cache
    * @param $sTempoCache string
    */
-  public function setTempoCache($sTempoCache) {
+  public function setTempoCache($sTempoCache)
+  {
     $this->sTempoCache = $sTempoCache;
   }
 
@@ -208,15 +214,17 @@ class libdocumento {
    * Retorna o tempo de duração do cache
    * @return string
    */
-  public function getTempoCache() {
+  public function getTempoCache()
+  {
     return $this->sTempoCache;
   }
 
- /**
-  * funcao para pegar paragrafos e retornar uma colecao de objetos,
-  * onde o indice do array é a ordem do paragrafo.
-  */
-  public function getParagrafos() {
+  /**
+   * funcao para pegar paragrafos e retornar uma colecao de objetos,
+   * onde o indice do array é a ordem do paragrafo.
+   */
+  public function getParagrafos()
+  {
 
     (string) $sWhere = null;
     if ($this->iCodDoc != null || trim($this->iCodDoc) != '') {
@@ -228,13 +236,18 @@ class libdocumento {
       if ($this->iInstit != null) {
         $sWhere .= " and {$this->sNomeCampoInstit} = {$this->iInstit}";
       } else {
-        $sWhere .= " and {$this->sNomeCampoInstit} = ".db_getsession('DB_instit');
+        $sWhere .= " and {$this->sNomeCampoInstit} = " . db_getsession('DB_instit');
       }
     }
 
 
-    $this->rsParag = $this->oDbDocParagDAO->sql_record($this->oDbDocParagDAO->sql_query(null, null, "{$this->sCamposDocParag}",
-                              "{$this->sNomeCampoOrdem}", " {$this->sNomeCampoTipodoc} = {$this->iTipoDoc} {$sWhere}"));
+    $this->rsParag = $this->oDbDocParagDAO->sql_record($this->oDbDocParagDAO->sql_query(
+      null,
+      null,
+      "{$this->sCamposDocParag}",
+      "{$this->sNomeCampoOrdem}",
+      " {$this->sNomeCampoTipodoc} = {$this->iTipoDoc} {$sWhere}"
+    ));
     if ($this->oDbDocParagDAO->numrows > 0) {
 
       $iNumRows  = $this->oDbDocParagDAO->numrows;
@@ -246,14 +259,16 @@ class libdocumento {
     }
   }
 
-  private function getChaveCache() {
+  private function getChaveCache()
+  {
     return md5($this->iInstit . $this->iTipoDoc . $this->iCodDoc);
   }
 
   /**
    * Metodo para retornar coleção de objetos do tipo paragrafo( de acordo com o cadastro de documentos )
    */
-  public function getDocParagrafos() {
+  public function getDocParagrafos()
+  {
 
     $sCache = DBCache::read($this->getChaveCache(), $this->sTempoCache);
     if (!$this->lCache || $sCache === false) {
@@ -303,14 +318,16 @@ class libdocumento {
     return $this->aParagrafos;
   }
 
-  public function setParametros($iOrdem, $aParam) {
+  public function setParametros($iOrdem, $aParam)
+  {
     $this->aParametros[$iOrdem] = $aParam;
   }
 
   /**
    * Emite o Documento com quebras de linha html(<br>) ordenado pela ordem do documento.
    */
-  public function emiteDocHTML() {
+  public function emiteDocHTML()
+  {
 
     $this->getParagrafos();
     for ($i = 0; $i < count($this->aParagrafos); $i++) {
@@ -328,21 +345,22 @@ class libdocumento {
    * @param $texto texto do paragrafo;
    * @DEPRECATED - usar o metodo replaceText
    */
-  public function geraTexto($texto) {
+  public function geraTexto($texto)
+  {
 
     $texto .= "#";
     $txt = split("#", $texto);
     $texto1 = '';
-    for ($x = 0; $x < sizeof($txt); $x ++) {
+    for ($x = 0; $x < sizeof($txt); $x++) {
 
       if (substr($txt[$x], 0, 1) == "$") {
 
         $txt1 = substr($txt[$x], 1);
-        global $$txt1;
-        $texto1 .= $$txt1;
+        global ${$txt1};
+        $texto1 .= ${$txt1};
       } else {
 
-        if ((substr($txt[$x], 0, 2) == '\n')or(substr($txt[$x], 0, 4) == '<br>')) {
+        if ((substr($txt[$x], 0, 2) == '\n') or (substr($txt[$x], 0, 4) == '<br>')) {
           $texto1 .= "\n";
         } elseif (substr($txt[$x], 0, 2) == '\t') {
           $texto1 .= "\t";
@@ -354,13 +372,14 @@ class libdocumento {
     return $texto1;
   }
 
-  public function replaceText($texto) {
+  public function replaceText($texto)
+  {
 
     $texto .= "#";
     $txt = split("#", $texto);
     $texto1 = '';
 
-    for ($x = 0; $x < sizeof($txt); $x ++) {
+    for ($x = 0; $x < sizeof($txt); $x++) {
 
       if (substr($txt[$x], 0, 1) == "$") {
 

@@ -1654,7 +1654,6 @@ function db_indexOf($str, $proc)
  */
 function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array(), $automatico = true, $totalizacao = array())
 {
-
   global $BrowSe;
   //cor do cabecalho
   global $db_corcabec;
@@ -1671,15 +1670,15 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
   //recebe os valores do campo hidden
 
   if (isset($_POST["totreg" . $NomeForm])) {
-    $$tot_registros = $_POST["totreg" . $NomeForm];
+    ${$tot_registros} = $_POST["totreg" . $NomeForm];
   } else {
-    $$tot_registros = 0;
+    ${$tot_registros} = 0;
   }
 
   if (isset($_POST["offset" . $NomeForm])) {
-    $$offset = $_POST["offset" . $NomeForm];
+    ${$offset} = $_POST["offset" . $NomeForm];
   } else {
-    $$offset = 0;
+    ${$offset} = 0;
   }
 
   if (isset($_POST["recomecar"])) {
@@ -1687,7 +1686,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
   }
 
   // se for a primeira vez que é rodado, pega o total de registros e guarda no campo hidden
-  if ((empty($$tot_registros) && !empty($query)) || isset($recomecar)) {
+  if ((empty(${$tot_registros}) && !empty($query)) || isset($recomecar)) {
 
     if (isset($recomecar)) {
       $query = db_getsession("dblov_query_inicial");
@@ -1721,9 +1720,9 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
     db_putsession("dblov_query_inicial", $query);
 
-    $$tot_registros = pg_result($tot, 0, 0);
+    ${$tot_registros} = pg_result($tot, 0, 0);
 
-    if ($$tot_registros == 0) {
+    if (${$tot_registros} == 0) {
       $Dd2 = "disabled";
     }
   }
@@ -1737,50 +1736,50 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
   // testa qual botao foi pressionado
   if (isset($_POST["pri" . $NomeForm])) {
 
-    $$offset = 0;
+    ${$offset} = 0;
     $Dd1     = "disabled";
     $query   = base64_decode($_POST["filtroquery"]);
   } else if (isset($_POST["ant" . $NomeForm])) {
 
     $query = base64_decode(@$_POST["filtroquery"]);
 
-    if ($$offset <= $numlinhas) {
+    if (${$offset} <= $numlinhas) {
 
-      $$offset = 0;
+      ${$offset} = 0;
       $Dd1     = "disabled";
     } else {
-      $$offset = $$offset - $numlinhas;
+      ${$offset} = ${$offset} - $numlinhas;
     }
   } else if (isset($_POST["prox" . $NomeForm])) {
 
     $query = base64_decode($_POST["filtroquery"]);
 
-    if (($$offset + ($numlinhas * 2)) >= $$tot_registros) {
+    if ((${$offset} + ($numlinhas * 2)) >= ${$tot_registros}) {
       $Dd2 = "disabled";
     }
 
-    if ($numlinhas >= ($$tot_registros - $$offset)) {
+    if ($numlinhas >= (${$tot_registros} - ${$offset})) {
 
-      if ($$tot_registros - $$offset - $numlinhas >= $numlinhas) {
-        $$offset = $numlinhas;
+      if (${$tot_registros} - ${$offset} - $numlinhas >= $numlinhas) {
+        ${$offset} = $numlinhas;
       } else {
-        $$offset = $$offset + $numlinhas;
+        ${$offset} = ${$offset} + $numlinhas;
       }
 
-      if ($$offset > $$tot_registros) {
-        $$offset = 0;
+      if (${$offset} > ${$tot_registros}) {
+        ${$offset} = 0;
       }
 
       $Dd2 = "disabled";
     } else {
-      $$offset = $$offset + $numlinhas;
+      ${$offset} = ${$offset} + $numlinhas;
     }
   } else if (isset($_POST["ult" . $NomeForm])) {
 
     $query   = base64_decode($_POST["filtroquery"]);
-    $$offset = $$tot_registros - $numlinhas;
-    if ($$offset < 0) {
-      $$offset = 0;
+    ${$offset} = ${$tot_registros} - $numlinhas;
+    if (${$offset} < 0) {
+      ${$offset} = 0;
     }
 
     $Dd2 = "disabled";
@@ -1846,7 +1845,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
           }
         }
 
-        $$offset = 0;
+        ${$offset} = 0;
         break;
       }
       next($_POST);
@@ -1860,7 +1859,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     exit;
   }
 
-  $query  .= " limit $numlinhas offset " . $$offset;
+  $query  .= " limit $numlinhas offset " . ${$offset};
   $result  = db_query($query);
   $NumRows = pg_numrows($result);
 
@@ -1894,9 +1893,9 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
         $tot = db_query("select count(*) from ({$query_anterior}) as temp");
       }
 
-      $$tot_registros = pg_result($tot, 0, 0);
+      ${$tot_registros} = pg_result($tot, 0, 0);
 
-      $query       = $query_anterior . " limit $numlinhas offset " . $$offset;
+      $query       = $query_anterior . " limit $numlinhas offset " . ${$offset};
       $result      = db_query($query);
       $NumRows     = pg_numrows($result);
       $filtroquery = $query_anterior;
@@ -1931,9 +1930,9 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
         $tot = db_query("select count(*) from ({$query_novo_filtro}) as temp");
       }
 
-      $$tot_registros = pg_result($tot, 0, 0);
+      ${$tot_registros} = pg_result($tot, 0, 0);
 
-      if ($$tot_registros == 0) {
+      if (${$tot_registros} == 0) {
         $Dd2 = "disabled";
       }
     }
@@ -1941,7 +1940,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
   $NumFields = pg_numfields($result);
 
-  if (($NumRows < $numlinhas) && ($numlinhas < ($$tot_registros - $$offset - $numlinhas))) {
+  if (($NumRows < $numlinhas) && ($numlinhas < (${$tot_registros} - ${$offset} - $numlinhas))) {
     $Dd1 = @$Dd2 = "disabled";
   }
 
@@ -2013,8 +2012,8 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
   $sHtml .= "        <input type=\"submit\" name=\"ant" . $NomeForm . "\"    value=\"Anterior\" " . @$Dd1 . ">   ";
   $sHtml .= "        <input type=\"submit\" name=\"prox" . $NomeForm . "\"   value=\"Próximo\" " . @$Dd2 . ">    ";
   $sHtml .= "        <input type=\"submit\" name=\"ult" . $NomeForm . "\"    value=\"Último\" " . @$Dd2 . ">     ";
-  $sHtml .= "        <input type=\"hidden\" name=\"offset" . $NomeForm . "\" value=\"" . @$$offset . "\">        ";
-  $sHtml .= "        <input type=\"hidden\" name=\"totreg" . $NomeForm . "\" value=\"" . @$$tot_registros . "\"> ";
+  $sHtml .= "        <input type=\"hidden\" name=\"offset" . $NomeForm . "\" value=\"" . @${$offset} . "\">        ";
+  $sHtml .= "        <input type=\"hidden\" name=\"totreg" . $NomeForm . "\" value=\"" . @${$tot_registros} . "\"> ";
   $sHtml .= "        <input type=\"hidden\" name=\"codigo_pesquisa\"     value=\"\">                      ";
   $sHtml .= "        <input type=\"hidden\" name=\"distinct_pesquisa\"   value=\"\">                      ";
   $sHtml .= "        <input type=\"hidden\" name=\"filtro\"              value=\"$filtro\">               ";
@@ -2092,10 +2091,10 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
   if ($NumRows > 0) {
 
-    $sHtml .= "Foram retornados <label class='DBLovrotNumeroRegistros'> " . $$tot_registros . "</label> registros.";
-    $sHtml .= " Mostrando de <label class='DBLovrotNumeroRegistros'>" . (@$$offset + 1) . " </label> até";
+    $sHtml .= "Foram retornados <label class='DBLovrotNumeroRegistros'> " . ${$tot_registros} . "</label> registros.";
+    $sHtml .= " Mostrando de <label class='DBLovrotNumeroRegistros'>" . (@${$offset} + 1) . " </label> até";
     $sHtml .= "<label class='DBLovrotNumeroRegistros'> ";
-    $sHtml .= ($$tot_registros < (@$$offset + $numlinhas) ? ($NumRows <= $numlinhas ? $$tot_registros : $NumRows) : ($$offset + $numlinhas));
+    $sHtml .= (${$tot_registros} < (@${$offset} + $numlinhas) ? ($NumRows <= $numlinhas ? ${$tot_registros} : $NumRows) : (${$offset} + $numlinhas));
     $sHtml .= "</label>.";
   } else {
     $sHtml .= "Nenhum Registro Retornado";
@@ -2155,7 +2154,6 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
   //cria nome da funcao com parametros
   if ($arquivo == "()") {
-
     $arrayFuncao                = split("\|", $aonde);
     $quantidadeItemsArrayFuncao = sizeof($arrayFuncao);
   }
@@ -2362,7 +2360,6 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
       $sHtml .= $sHtmlCampos;
 
       if ($arquivo != "") {
-
         $sHtml   .= "<a title=\"$mensagem\" class='DBLovrotRegistrosRetornados' ";
         $sHtml   .= "   " . ($arquivo == "()" ? "OnClick=\"" . $resultadoRetorno . ";return false\">" : "onclick=\"JanBrowse = window.open('" . $arquivo . "?" . base64_encode("retorno=" . ($BrowSe == 1 ? $i : trim(pg_result($result, $i, 0)))) . "','$aonde','width=800,height=600');return false\">") . trim($var_data);
         $sHtml   .= "</a>";
@@ -2479,7 +2476,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
   if ($automatico == true) {
 
-    if (pg_numrows($result) == 1 && $$offset == 0) {
+    if (pg_numrows($result) == 1 && ${$offset} == 0) {
       $sHtml .= "<script>" . @$resultadoRetorno . "</script>";
     }
   }
@@ -2503,41 +2500,41 @@ function db_lov($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_sel
   $tot_registros = "tot_registros" . $NomeForm;
   $offset = "offset" . $NomeForm;
   //recebe os valores do campo hidden
-  $$tot_registros = @$HTTP_POST_VARS["totreg" . $NomeForm];
-  $$offset = @$HTTP_POST_VARS["offset" . $NomeForm];
+  ${$tot_registros} = @$HTTP_POST_VARS["totreg" . $NomeForm];
+  ${$offset} = @$HTTP_POST_VARS["offset" . $NomeForm];
   // se for a primeira vez que é rodado, pega o total de registros e guarda no campo hidden
-  if (empty($$tot_registros)) {
+  if (empty(${$tot_registros})) {
     $Dd1 = "disabled";
     $tot = db_query("select count(*) from ($query) as temp");
-    $$tot_registros = pg_result($tot, 0, 0);
+    ${$tot_registros} = pg_result($tot, 0, 0);
   }
   // testa qual botao foi pressionado
   if (isset($HTTP_POST_VARS["pri" . $NomeForm])) {
-    $$offset = 0;
+    ${$offset} = 0;
     $Dd1 = "disabled";
   } else
     if (isset($HTTP_POST_VARS["ant" . $NomeForm])) {
-    if ($$offset <= $numlinhas) {
-      $$offset = 0;
+    if (${$offset} <= $numlinhas) {
+      ${$offset} = 0;
       $Dd1 = "disabled";
     } else
-      $$offset = $$offset - $numlinhas;
+      ${$offset} = ${$offset} - $numlinhas;
   } else
       if (isset($HTTP_POST_VARS["prox" . $NomeForm])) {
-    if ($numlinhas >= ($$tot_registros - $$offset - $numlinhas)) {
-      $$offset = $$tot_registros - $numlinhas;
+    if ($numlinhas >= (${$tot_registros} - ${$offset} - $numlinhas)) {
+      ${$offset} = ${$tot_registros} - $numlinhas;
       $Dd2 = "disabled";
     } else
-      $$offset = $$offset + $numlinhas;
+      ${$offset} = ${$offset} + $numlinhas;
   } else
         if (isset($HTTP_POST_VARS["ult" . $NomeForm])) {
-    $$offset = $$tot_registros - $numlinhas;
+    ${$offset} = ${$tot_registros} - $numlinhas;
     $Dd2 = "disabled";
   } else {
-    $$offset = @$HTTP_POST_VARS["offset" . $NomeForm] == "" ? 0 : @$HTTP_POST_VARS["offset" . $NomeForm];
+    ${$offset} = @$HTTP_POST_VARS["offset" . $NomeForm] == "" ? 0 : @$HTTP_POST_VARS["offset" . $NomeForm];
   }
   // executa a query e cria a tabela
-  $query .= " limit $numlinhas offset " . $$offset;
+  $query .= " limit $numlinhas offset " . ${$offset};
   $result = db_query($query);
   $NumRows = pg_numrows($result);
   $NumFields = pg_numfields($result);
@@ -2551,13 +2548,13 @@ function db_lov($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_sel
             <input type=\"submit\" name=\"ant" . $NomeForm . "\" value=\"<\" " . @$Dd1 . ">
             <input type=\"submit\" name=\"prox" . $NomeForm . "\" value=\">\" " . @$Dd2 . ">
             <input type=\"submit\" name=\"ult" . $NomeForm . "\" value=\">>\" " . @$Dd2 . ">
-                <input type=\"hidden\" name=\"offset" . $NomeForm . "\" value=\"" . $$offset . "\">
-                <input type=\"hidden\" name=\"totreg" . $NomeForm . "\" value=\"" . $$tot_registros . "\">
+                <input type=\"hidden\" name=\"offset" . $NomeForm . "\" value=\"" . ${$offset} . "\">
+                <input type=\"hidden\" name=\"totreg" . $NomeForm . "\" value=\"" . ${$tot_registros} . "\">
                 <input type=\"hidden\" name=\"filtro\" value=\"$filtro\">
           </form>" . ($NumRows > 0 ? "
-          Foram retornados <font color=\"red\"><strong>" . $$tot_registros . "</strong></font> registros.
-          Mostrando de <font color=\"red\"><strong>" . ($$offset + 1) . "</strong></font> até
-          <font color=\"red\"><strong>" . ($$tot_registros < ($$offset + $numlinhas) ? $NumRows : ($$offset + $numlinhas)) . "</strong></font>." : "Nenhum Registro
+          Foram retornados <font color=\"red\"><strong>" . ${$tot_registros} . "</strong></font> registros.
+          Mostrando de <font color=\"red\"><strong>" . (${$offset} + 1) . "</strong></font> até
+          <font color=\"red\"><strong>" . (${$tot_registros} < (${$offset} + $numlinhas) ? $NumRows : (${$offset} + $numlinhas)) . "</strong></font>." : "Nenhum Registro
           Retornado") . "
           </td></tr>\n";
   /*********************************/
