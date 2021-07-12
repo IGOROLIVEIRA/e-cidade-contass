@@ -508,6 +508,7 @@ try {
 					$oParam->iNumCgm = $oEmpenhoFolha->rh01_numcgm;
 				}
 				 
+                $oEmpenho->setTipoEmpenhoResumo($oParam->iTipo);
 				$oEmpenho->gerarEmpenho($oParam->iNumCgm, $lPrevidencia);
                 
                 $aEmpenhosFinaceirosGerados[] = $oEmpenho->getNumeroEmpenhoFinanceiro();

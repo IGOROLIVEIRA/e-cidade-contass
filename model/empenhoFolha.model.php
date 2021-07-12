@@ -169,6 +169,13 @@ class empenhoFolha {
   protected $iNumeroEmpenhoFinanceiro = null;
 
   /**
+   * Tipo empenho resumo da folha
+   *
+   * @var integer
+   */
+  protected $tipoEmpenhoResumo = 0;
+
+  /**
    * @param integer $iNumeroEmpenhoFinanceiro
    */
   function setNumeroEmpenhoFinanceiro($iNumeroEmpenhoFinanceiro) {
@@ -644,7 +651,7 @@ class empenhoFolha {
       $oDaoEmpAutoriza->e54_contat         = '';
       $oDaoEmpAutoriza->e54_telef          = '';
       $oDaoEmpAutoriza->e54_numsol         = '';
-      $oDaoEmpAutoriza->e54_resumo         = "Pagamento de {$this->tipofolha} {$this->mes}/{$this->anoFolha}";
+      $oDaoEmpAutoriza->e54_resumo         = $this->getResumo();
       $oDaoEmpAutoriza->e54_numcgm         = $iNumCgm;
       $oDaoEmpAutoriza->e54_login          = db_getsession("DB_id_usuario");
       $oDaoEmpAutoriza->e54_anulad         = null;
@@ -1598,5 +1605,31 @@ class empenhoFolha {
     }
     return $nValorDesconto;
   }
+
+  /**
+   * @return string
+   */
+  function getResumo() {
+    
+    if ($this->tipoEmpenhoResumo == 2) {
+        return "Contribuição Patronal referente ao mês {$this->mes}/{$this->anoFolha}";
+    } 
+    
+    if ($this->tipoEmpenhoResumo == 3) {
+        return "FGTS referente ao mês {$this->mes}/{$this->anoFolha}";
+    }
+
+    return "Pagamento de {$this->tipofolha} {$this->mes}/{$this->anoFolha}";
+
+  }
+  
+  /**
+   * Atribui tipo do empenho para definição do resumo/histórico do empenho
+   * @param $iTipo Tipo informado
+   */
+  function setTipoEmpenhoResumo($iTipo) {
+    $this->tipoEmpenhoResumo = $iTipo;
+  }
+
 }
 ?>
