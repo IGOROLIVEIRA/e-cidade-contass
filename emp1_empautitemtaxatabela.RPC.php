@@ -7,9 +7,13 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_db_sysarqcamp_classe.php");
+require_once("classes/db_matunid_classe.php");
+require_once("classes/db_empautitem_classe.php");
 
 $oJson             = new services_json();
 $oDaoSysArqCamp    = new cl_db_sysarqcamp();
+$clmatunid         = new cl_matunid;
+$clempautitem      = new cl_empautitem;
 
 switch ($_POST["action"]) {
 
@@ -17,6 +21,22 @@ switch ($_POST["action"]) {
 
     $autori = $_POST["autori"];
     $cgm    = $_POST["cgm"];
+    $tabela = $_POST["tabela"];
+    $iAnoSessao         = db_getsession('DB_anousu');
+
+    $result_unidade = array();
+    $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
+    $numrows_unid = $clmatunid->numrows;
+    for ($i = 0; $i < $numrows_unid; $i++) {
+      db_fieldsmemory($result_sql_unid, $i);
+      $result_unidade[$m61_codmatunid] = $m61_descr;
+    }
+    $selectunid = "<select>";
+    $selectunid .= "<option selected='selected'>..</option>";
+    foreach ($result_unidade as $item) {
+      $selectunid .= "<option value='strtolower($item)'>$item</option>";
+    }
+    $selectunid .= "</select>";
 
     $sqlQuery = "SELECT *
     FROM
@@ -53,13 +73,16 @@ switch ($_POST["action"]) {
        LEFT JOIN pcmater ON pcmater.pc01_codmater = pctabelaitem.pc95_codmater
        LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pctabelaitem.pc95_codmater
        INNER JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
-       AND orcelemento.o56_anousu = 2021
+       AND orcelemento.o56_anousu = $iAnoSessao
        WHERE l20_codigo =
            (SELECT e54_codlicitacao
             FROM empautoriza
             WHERE e54_autori = $autori)
-         AND pc24_pontuacao=1
-       UNION SELECT distinct pcmater.pc01_codmater,
+         AND pc24_pontuacao=1";
+    if (!empty($_POST["tabela"])) {
+      $sqlQuery .= " and  pc94_sequencial = $tabela";
+    }
+    $sqlQuery .= "UNION SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
                         z01_numcgm,
                         matunid.m61_codmatunid,
@@ -90,12 +113,15 @@ switch ($_POST["action"]) {
        LEFT JOIN pctabela ON pctabela.pc94_codmater = pcmater.pc01_codmater
        LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pcmater.pc01_codmater
        LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
-       AND orcelemento.o56_anousu = 2021
+       AND orcelemento.o56_anousu = $iAnoSessao
        WHERE l20_codigo =
            (SELECT e54_codlicitacao
             FROM empautoriza
-            WHERE e54_autori = $autori)
-         AND pc24_pontuacao=1
+            WHERE e54_autori = $autori)";
+    if (!empty($_POST["tabela"])) {
+      $sqlQuery .= " and  pc94_sequencial = $tabela";
+    }
+    $sqlQuery .= "AND pc24_pontuacao=1
          AND (pcmater.pc01_tabela = 't'
               OR pcmater.pc01_taxa = 't')
          AND pcmater.pc01_codmater NOT IN
@@ -103,8 +129,6 @@ switch ($_POST["action"]) {
             FROM pctabela) ) fornecedores
     WHERE fornecedores.z01_numcgm = $cgm
     ";
-    // echo $sqlQuery;
-    // exit;
     $sqlTotal = $sqlQuery;
     if (!empty($_POST["search"]["value"])) {
       // $sqlQuery .= ' and (id LIKE "%' . $_POST["search"]["value"] . '%" ';
@@ -130,13 +154,16 @@ switch ($_POST["action"]) {
 
         $oDados = db_utils::fieldsMemory($rsDados, $i);
 
+        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "e55_item, e55_sequen as seq, e55_codele as desdobramento", "e55_sequen"));
+        db_fieldsmemory($result, 0);
+
         $itemRows  = array();
 
         $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='js_verificaItem(this.id)'>";
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
-        $itemRows[] = "<select name='descauto' id='descauto'><option value='f'>Não</option><option value='t'>Sim</option></select>";
-        $itemRows[] = $oDados->pc01_codmater;
+        $itemRows[] = $selectunid;
+        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='' />";
         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='' />";
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' />"; //p/ usuário
         $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' />";

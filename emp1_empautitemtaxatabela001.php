@@ -40,6 +40,7 @@ require_once("classes/db_orcelemento_classe.php");
 require_once("classes/db_matunid_classe.php");
 require_once("classes/db_solicitemunid_classe.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_pctabelaitem_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);

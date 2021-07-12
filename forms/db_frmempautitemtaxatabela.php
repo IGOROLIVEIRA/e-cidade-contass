@@ -28,14 +28,27 @@
 //MODULO: empenho
 require_once("classes/db_empparametro_classe.php");
 require_once("dbforms/db_classesgenericas.php");
-
+require_once("classes/db_pcmaterele_classe.php");
+require_once("classes/db_empautitem_classe.php");
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clempparametro = new cl_empparametro;
+$clpctabelaitem = new cl_pctabelaitem;
+$clpcmaterele   = new cl_pcmaterele;
+$clempautitem = new cl_empautitem;
 
-$result_elementos = $clorcparametro->sql_record($clorcparametro->sql_query_file(null, "o50_subelem"));
-if ($clorcparametro->numrows > 0) {
-  db_fieldsmemory($result_elementos, 0);
+$aTabFonec = array("" => "Selecione");
+$tabsFonecVencedor = $clpctabelaitem->buscarTabFonecVencedor($e55_autori, $z01_numcgm);
+if (!empty($tabsFonecVencedor)) {
+  foreach ($tabsFonecVencedor as $tabFonecVencedor) {
+    $aTabFonec += array($tabFonecVencedor->pc94_sequencial => "$tabFonecVencedor->pc94_sequencial - $tabFonecVencedor->pc01_descrmater");
+  }
 }
+
+$resultElemento = $clpcmaterele->sql_record($clpcmaterele->sql_query($e55_autori, null, "o56_codele as codele,o56_elemento as elemento01,o56_descr"));
+db_criatabela($resultElemento);
+
 
 $clempautitem->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -176,6 +189,30 @@ $clrotulo->label("pc01_descrmater");
             ?>
           </td>
         </tr>
+
+        <tr style="height: 20px;">
+          <td nowrap title="">
+            <strong>Tabela:</strong>
+          </td>
+          <td>
+            <?
+            db_select('chave_tabela', $aTabFonec, true, $db_opcao, " onchange='js_mudaTabela(false)' style='width:452;' ");
+            ?>
+          </td>
+        </tr>
+
+
+
+        <tr style="height: 20px;">
+          <td nowrap title="">
+            <b>Ele. item</b>
+          </td>
+          <td>
+            <? db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '', "js_troca(this.value);");  ?>
+          </td>
+        </tr>
+
+
         <tr>
           <td><b>Desconto automático:</b></td>
           <td>
@@ -193,7 +230,8 @@ $clrotulo->label("pc01_descrmater");
             <? db_input('utilizado', 11, "", true, 'text', 3, ""); ?>
             <strong style="margin-right:15px">Disponível: </strong>
             <? db_input('disponivel', 10, "", true, 'text', 3, ""); ?>
-            <? db_input('totalad', 9, "", true, 'hidden', 3, ""); ?>
+            <strong style="margin-right:15px">A lançar: </strong>
+            <? db_input('totalad', 9, "", true, 'text', 3, ""); ?>
           </td>
         </tr>
         <tr style="height: 20px;">
@@ -243,7 +281,12 @@ $clrotulo->label("pc01_descrmater");
   </center>
 </form>
 <script>
-  $(document).ready(function() {
+  js_loadTable();
+
+  function js_loadTable() {
+
+    console.log(document.getElementById('chave_tabela').value);
+    $('#myTable').DataTable().clear().destroy();
     $('#myTable').DataTable({
       language: {
         "sEmptyTable": "Nenhum registro encontrado",
@@ -286,11 +329,12 @@ $clrotulo->label("pc01_descrmater");
           action: 'BuscaItens',
           autori: <?php echo $e55_autori ?>,
           cgm: <?php echo $z01_numcgm ?>,
+          tabela: document.getElementById('chave_tabela').value,
           dataType: "json"
         }
       },
     });
-  });
+  };
 
   function js_salvar() {
 
@@ -313,6 +357,10 @@ $clrotulo->label("pc01_descrmater");
     var sMensagem = oRetorno.sMessage.urlDecode();
     alert(sMensagem);
 
+  }
+
+  function js_mudaTabela(campo) {
+    js_loadTable();
   }
 
   function js_verificar() {
