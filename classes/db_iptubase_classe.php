@@ -49,6 +49,7 @@ class cl_iptubase {
    var $j01_baixa_mes = null; 
    var $j01_baixa_ano = null; 
    var $j01_baixa = null; 
+   var $j01_unidade = null; 
    var $j01_codave = 0; 
    var $j01_fracao = 0; 
    // cria propriedade com as variaveis do arquivo 
@@ -57,6 +58,7 @@ class cl_iptubase {
                  j01_numcgm = int4 = Numcgm 
                  j01_idbql = int4 = Id Lote 
                  j01_baixa = date = Baixa 
+                 j01_unidade = varchar(10) = Unidade 
                  j01_codave = int4 = Codigo da Averbacao 
                  j01_fracao = float8 = Fracao Ideal 
                  ";
@@ -89,6 +91,7 @@ class cl_iptubase {
             $this->j01_baixa = $this->j01_baixa_ano."-".$this->j01_baixa_mes."-".$this->j01_baixa_dia;
          }
        }
+       $this->j01_unidade = ($this->j01_unidade == ""?@$GLOBALS["HTTP_POST_VARS"]["j01_unidade"]:$this->j01_unidade);
        $this->j01_codave = ($this->j01_codave == ""?@$GLOBALS["HTTP_POST_VARS"]["j01_codave"]:$this->j01_codave);
        $this->j01_fracao = ($this->j01_fracao == ""?@$GLOBALS["HTTP_POST_VARS"]["j01_fracao"]:$this->j01_fracao);
      }else{
@@ -110,6 +113,15 @@ class cl_iptubase {
      if($this->j01_idbql == null ){ 
        $this->erro_sql = " Campo Id Lote nao Informado.";
        $this->erro_campo = "j01_idbql";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->j01_unidade == null ){ 
+       $this->erro_sql = " Campo Unidade nao Informado.";
+       $this->erro_campo = "j01_unidade";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -162,6 +174,7 @@ class cl_iptubase {
                                       ,j01_numcgm 
                                       ,j01_idbql 
                                       ,j01_baixa 
+                                      ,j01_unidade 
                                       ,j01_codave 
                                       ,j01_fracao 
                        )
@@ -170,6 +183,7 @@ class cl_iptubase {
                                ,$this->j01_numcgm 
                                ,$this->j01_idbql 
                                ,".($this->j01_baixa == "null" || $this->j01_baixa == ""?"null":"'".$this->j01_baixa."'")." 
+                               ,$this->j01_unidade 
                                ,$this->j01_codave 
                                ,$this->j01_fracao 
                       )";
@@ -207,6 +221,7 @@ class cl_iptubase {
        $resac = db_query("insert into db_acount values($acount,27,142,'','".AddSlashes(pg_result($resaco,0,'j01_numcgm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,27,143,'','".AddSlashes(pg_result($resaco,0,'j01_idbql'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,27,144,'','".AddSlashes(pg_result($resaco,0,'j01_baixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,27,1009245,'','".AddSlashes(pg_result($resaco,0,'j01_unidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,27,145,'','".AddSlashes(pg_result($resaco,0,'j01_codave'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,27,368,'','".AddSlashes(pg_result($resaco,0,'j01_fracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
@@ -272,6 +287,13 @@ class cl_iptubase {
        $sql  .= $virgula." j01_codave = $this->j01_codave ";
        $virgula = ",";
      }
+     if(trim($this->j01_unidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["j01_unidade"])){ 
+        if(trim($this->j01_unidade)=="" && isset($GLOBALS["HTTP_POST_VARS"]["j01_unidade"])){ 
+           $this->j01_unidade = "001" ; 
+        } 
+       $sql  .= $virgula." j01_unidade = $this->j01_unidade ";
+       $virgula = ",";
+     }
      if(trim($this->j01_fracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["j01_fracao"])){ 
         if(trim($this->j01_fracao)=="" && isset($GLOBALS["HTTP_POST_VARS"]["j01_fracao"])){ 
            $this->j01_fracao = "0" ; 
@@ -298,6 +320,8 @@ class cl_iptubase {
            $resac = db_query("insert into db_acount values($acount,27,143,'".AddSlashes(pg_result($resaco,$conresaco,'j01_idbql'))."','$this->j01_idbql',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["j01_baixa"]))
            $resac = db_query("insert into db_acount values($acount,27,144,'".AddSlashes(pg_result($resaco,$conresaco,'j01_baixa'))."','$this->j01_baixa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["j01_unidade"]))
+           $resac = db_query("insert into db_acount values($acount,27,1009245,'".AddSlashes(pg_result($resaco,$conresaco,'j01_unidade'))."','$this->j01_unidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["j01_codave"]))
            $resac = db_query("insert into db_acount values($acount,27,145,'".AddSlashes(pg_result($resaco,$conresaco,'j01_codave'))."','$this->j01_codave',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["j01_fracao"]))
@@ -353,6 +377,7 @@ class cl_iptubase {
          $resac = db_query("insert into db_acount values($acount,27,142,'','".AddSlashes(pg_result($resaco,$iresaco,'j01_numcgm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,27,143,'','".AddSlashes(pg_result($resaco,$iresaco,'j01_idbql'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,27,144,'','".AddSlashes(pg_result($resaco,$iresaco,'j01_baixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,27,1009245,'','".AddSlashes(pg_result($resaco,$iresaco,'j01_unidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,27,145,'','".AddSlashes(pg_result($resaco,$iresaco,'j01_codave'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,27,368,'','".AddSlashes(pg_result($resaco,$iresaco,'j01_fracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
@@ -540,7 +565,7 @@ $sql = "
                                        when j01_matric is null and j18_testadanumero = true
                                          then testadanumero.j15_compl 
                                        else iptuconstr.j39_compl
-                                     end as complemento
+                                     end as complemento, j01_unidade 
 																	   
                                      from iptubase
                                      inner join cgm            on j01_numcgm = z01_numcgm
@@ -564,7 +589,7 @@ $sql = "
                                         when j01_matric is null and j18_testadanumero = true
                                           then testadanumero.j15_compl 
                                         else iptuconstr.j39_compl
-                                      end as complemento
+                                      end as complemento, j01_unidade 
 																		  
                                       from propri
                                       inner join iptubase      on j42_matric = j01_matric
@@ -589,7 +614,7 @@ $sql = "
                                         when j01_matric is null and j18_testadanumero = true
                                           then testadanumero.j15_compl 
                                         else iptuconstr.j39_compl
-                                      end as complemento
+                                      end as complemento, j01_unidade 
 																		  
                                       from promitente
                                       inner join iptubase      on j41_matric = j01_matric
@@ -628,7 +653,8 @@ $sql = "
 												 'PROPRIETARIO'::varchar(12) as proprietario, 
 												 j01_idbql, 
 												 cgm.z01_nome, 
-												 j01_baixa
+												 j01_baixa,
+                         j01_unidade 
 									from   iptubase
 									left join iptuconstr on j39_matric = j01_matric and j39_dtdemo is null
 									inner join cgm on j01_numcgm = z01_numcgm
@@ -639,7 +665,8 @@ $sql = "
 												 'OUTRO PROPR'::varchar(12) as proprietario, 
 												 j01_idbql, 
 												 cgm.z01_nome, 
-												 j01_baixa
+												 j01_baixa,
+                         j01_unidade 
 									from   propri
 									inner join iptubase on j42_matric = j01_matric
 									left join iptuconstr on j39_matric = j01_matric and j39_dtdemo is null
@@ -651,7 +678,8 @@ $sql = "
 												 'PROMITENTE'::varchar(12) as proprietario, 
 												 j01_idbql, 
 												 cgm.z01_nome, 
-												 j01_baixa
+												 j01_baixa,
+                         j01_unidade 
 									from   promitente
 									inner join iptubase on j41_matric = j01_matric
 									left join iptuconstr on j39_matric = j01_matric and j39_dtdemo is null
@@ -675,7 +703,8 @@ $sql = "
 												 'PROPRIETARIO'::varchar(12) as proprietario, 
 												 j01_idbql, 
 												 cgm.z01_nome, 
-												 j01_baixa
+												 j01_baixa,
+                         j01_unidade 
 									from   iptubase
 									left join iptuconstr on j39_matric = j01_matric and j39_dtdemo is null
 									inner join cgm on j01_numcgm = z01_numcgm
@@ -686,7 +715,8 @@ $sql = "
 												 'OUTRO PROPR'::varchar(12) as proprietario, 
 												 j01_idbql, 
 												 cgm.z01_nome, 
-												 j01_baixa
+												 j01_baixa,
+                         j01_unidade 
 									from   propri
 									inner join iptubase on j42_matric = j01_matric
 									left join iptuconstr on j39_matric = j01_matric and j39_dtdemo is null
@@ -712,7 +742,8 @@ $sql = "
 												 j01_idbql,
 												 case when j41_matric is null then a.z01_nome
 												      else b.z01_nome end as z01_nome,
-												 j01_baixa
+												 j01_baixa,
+                         j01_unidade 
 									from   iptubase
 									left join iptuconstr on j39_matric = iptubase.j01_matric and j39_dtdemo is null
 									left join promitente on j41_matric = iptubase.j01_matric and j41_tipopro is true 

@@ -24,6 +24,9 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+
+db_sel_instit(null, "db21_usadistritounidade");
+
 ?>
 <script>
 function js_novolote1(){
@@ -146,6 +149,18 @@ function js_checa() {
   }
  //==========================================================================================================
   ?>
+  <?if($db21_usadistritounidade=='t'){?>
+  <tr>
+    <td nowrap title="<?=@$Tj34_distrito?>">
+       <?=@$Lj34_distrito?>
+    </td>
+    <td>
+<?
+db_input('j34_distrito',10,4,true,'text',$db_opcao,"");
+?>
+    </td>
+  </tr>
+  <?}?>
   <tr>
     <td nowrap title="<?=@$Tj34_setor?>">
        <?
@@ -216,6 +231,7 @@ db_input('j34_lote',10,$val,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
+  
   <tr>
     <td nowrap title="<?=@$Tj34_area?>">
        <?=@$Lj34_area?>

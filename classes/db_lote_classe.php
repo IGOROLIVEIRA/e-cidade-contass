@@ -45,7 +45,8 @@ class cl_lote {
    var $j34_idbql = 0;
    var $j34_setor = null;
    var $j34_quadra = null;
-   var $j34_lote = null;
+   var $j34_distrito = 0;
+   var $j34_lote = null;   
    var $j34_area = 0;
    var $j34_bairro = 0;
    var $j34_areal = 0;
@@ -58,6 +59,7 @@ class cl_lote {
                  j34_idbql = int4 = Cód. Lote
                  j34_setor = char(4) = Setor
                  j34_quadra = char(4) = Quadra
+                 j34_distrito = int8 = Distrito
                  j34_lote = char(4) = Lote
                  j34_area = float8 = Área M2
                  j34_bairro = int4 = Cód. Bairro
@@ -96,6 +98,7 @@ class cl_lote {
        $this->j34_zona = ($this->j34_zona == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_zona"]:$this->j34_zona);
        $this->j34_quamat = ($this->j34_quamat == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_quamat"]:$this->j34_quamat);
        $this->j34_areapreservada = ($this->j34_areapreservada == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_areapreservada"]:$this->j34_areapreservada);
+       $this->j34_distrito = ($this->j34_distrito == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_distrito"]:$this->j34_distrito);
      }else{
        $this->j34_idbql = ($this->j34_idbql == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_idbql"]:$this->j34_idbql);
      }
@@ -115,6 +118,15 @@ class cl_lote {
      if($this->j34_quadra == null ){
        $this->erro_sql = " Campo Quadra nao Informado.";
        $this->erro_campo = "j34_quadra";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->j34_distrito == null ){
+       $this->erro_sql = " Campo Quadra nao Informado.";
+       $this->erro_campo = "j34_distrito";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -201,6 +213,7 @@ class cl_lote {
        $this->erro_status = "0";
        return false;
      }
+     
      $sql = "insert into lote(
                                        j34_idbql
                                       ,j34_setor
@@ -213,6 +226,7 @@ class cl_lote {
                                       ,j34_zona
                                       ,j34_quamat
                                       ,j34_areapreservada
+                                      ,j34_distrito
                        )
                 values (
                                 $this->j34_idbql
@@ -226,6 +240,7 @@ class cl_lote {
                                ,$this->j34_zona
                                ,$this->j34_quamat
                                ,$this->j34_areapreservada
+                               ,$this->j34_distrito
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -268,6 +283,7 @@ class cl_lote {
        $resac = db_query("insert into db_acount values($acount,19,2380,'','".AddSlashes(pg_result($resaco,0,'j34_zona'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,19,2533,'','".AddSlashes(pg_result($resaco,0,'j34_quamat'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,19,15148,'','".AddSlashes(pg_result($resaco,0,'j34_areapreservada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,19,1009244,'','".AddSlashes(pg_result($resaco,0,'j34_distrito'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    }
@@ -334,6 +350,19 @@ class cl_lote {
        if(trim($this->j34_area) == null ){
          $this->erro_sql = " Campo Área M2 nao Informado.";
          $this->erro_campo = "j34_area";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->j34_distrito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["j34_distrito"])){
+       $sql  .= $virgula." j34_distrito = '$this->j34_distrito' ";
+       $virgula = ",";
+       if(trim($this->j34_distrito) == null ){
+         $this->erro_sql = " Campo Quadra nao Informado.";
+         $this->erro_campo = "j34_distrito";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -428,6 +457,8 @@ class cl_lote {
            $resac = db_query("insert into db_acount values($acount,19,2533,'".AddSlashes(pg_result($resaco,$conresaco,'j34_quamat'))."','$this->j34_quamat',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["j34_areapreservada"]) || $this->j34_areapreservada != "")
            $resac = db_query("insert into db_acount values($acount,19,15148,'".AddSlashes(pg_result($resaco,$conresaco,'j34_areapreservada'))."','$this->j34_areapreservada',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["j34_distrito"]) || $this->j34_distrito != "")
+           $resac = db_query("insert into db_acount values($acount,19,1009244,'".AddSlashes(pg_result($resaco,$conresaco,'j34_distrito'))."','$this->j34_distrito',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -486,6 +517,7 @@ class cl_lote {
          $resac = db_query("insert into db_acount values($acount,19,2380,'','".AddSlashes(pg_result($resaco,$iresaco,'j34_zona'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,19,2533,'','".AddSlashes(pg_result($resaco,$iresaco,'j34_quamat'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,19,15148,'','".AddSlashes(pg_result($resaco,$iresaco,'j34_areapreservada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,19,15148,'','".AddSlashes(pg_result($resaco,$iresaco,'j34_distrito'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from lote
@@ -715,6 +747,7 @@ class cl_lote {
     $sSql  = "select lote.j34_setor,                                                      ";
     $sSql .= "       setor.j30_descr,                                                     ";
     $sSql .= "       lote.j34_quadra,                                                     ";
+    $sSql .= "       lote.j34_distrito,                                                     ";
     $sSql .= "       lote.j34_lote,                                                       ";
     $sSql .= "       lote.j34_area,                                                       ";
     $sSql .= "       lote.j34_bairro,                                                     ";

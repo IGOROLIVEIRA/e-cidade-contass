@@ -43,6 +43,8 @@ $clcadimobil  = new cl_cadimobil;
 $oPost        = db_utils::postMemory($_POST);
 $oGet         = db_utils::postMemory($_GET);
 
+db_sel_instit(null, "db21_usadistritounidade");
+
 $iAnoUsu      = db_getsession('DB_anousu');
 
 $iFontBic     = 8;
@@ -53,12 +55,14 @@ if(isset($oGet->imprimeNulo)){
   $lImprimeNulo = true;
 }
 
-$sSqlConsulta   = " select iptubase.j01_fracao,                                                                                                                    ";
+$sSqlConsulta   = " select iptubase.j01_fracao,                 ";
 $sSqlConsulta  .= "        lote.j34_areapreservada,                                                                                                                ";
 $sSqlConsulta  .= "        round(((round((select rnfracao                                                                                                          ";
 $sSqlConsulta  .= "                         from fc_iptu_fracionalote(iptubase.j01_matric, {$iAnoUsu}, true, false)), 10) * lote.j34_area)/100), 10) as area_lote, ";
 $sSqlConsulta  .= "        loteloteam.j34_loteam,                                                                                                                  ";
 $sSqlConsulta  .= "        loteam.j34_descr,                                                                                                                       ";
+$sSqlConsulta  .= "        lote.j34_distrito,                                                                                        ";
+$sSqlConsulta  .= "        (select j01_unidade from iptubase where j01_matric = proprietario.j01_matric) as unidade,                                                                                        ";
 $sSqlConsulta  .= "        setor.j30_codi,                                                                                                                         ";
 $sSqlConsulta  .= "        setor.j30_descr,                                                                                                                        ";
 $sSqlConsulta  .= "        zonas.j50_zona,                                                                                                                         ";
@@ -172,6 +176,8 @@ for ( $iInd = 0; $iInd  < $iNumRows; $iInd++ ) {
     $oDadosImovel->iCodLogradouro    = $oDados->codpri;
     $oDadosImovel->sLogradouroDescr  = $oDados->nomepri;
     $oDadosImovel->sRuaTipoDescr     = $oDados->j88_descricao;
+    $oDadosImovel->iDistrito         = $oDados->j34_distrito;
+    $oDadosImovel->iUnidade          = $oDados->unidade;
 
     $nAreaLote = '0';
     if (!empty($oDados->area_lote)) {
@@ -204,7 +210,8 @@ for ( $iInd = 0; $iInd  < $iNumRows; $iInd++ ) {
       $nAreaPreservada = '0';
     }
 
-    $nFracaoIdeal = $oDados->j01_fracao;
+    //$nFracaoIdeal = $oDados->j01_fracao;
+    $nFracaoIdeal = ($nAreaLote/$nAreaRealLote)*100;
     if (empty($nFracaoIdeal)) {
       $nFracaoIdeal = '0';
     }
@@ -1059,20 +1066,24 @@ if ( isset($oGet->dadosimovel) ) {
     foreach ( $aDadosImovel as $oDadoImovel ) {
 
       $pdf->setfont('arial','B',$iFontBic);
-      $pdf->cell(25, $iAlt, 'Matricula'                                                           ,0,0,"L",0);
-      $pdf->cell(25, $iAlt, 'Setor'                                                               ,0,0,"L",0);
-      $pdf->cell(25, $iAlt, 'Quadra'                                                              ,0,0,"L",0);
-      $pdf->cell(25, $iAlt, 'Lote'                                                                ,0,0,"L",0);
-      $pdf->cell(93, $iAlt, 'Referência Anterior'                                                 ,0,1,"L",0);
+      $pdf->cell(25, $iAlt, 'Matricula'             ,0,0,"L",0);
+      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, 'Distrito'              ,0,0,"L",0):'';      
+      $pdf->cell(25, $iAlt, 'Setor'                 ,0,0,"L",0);
+      $pdf->cell(25, $iAlt, 'Quadra'                ,0,0,"L",0);
+      $pdf->cell(25, $iAlt, 'Lote'                  ,0,0,"L",0);
+      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, 'Unidade'               ,0,0,"L",0):'';      
+      $pdf->cell(93, $iAlt, 'Referência Anterior'   ,0,1,"L",0);
 
       $pdf->setfont('arial','',$iFontBic);
-      $pdf->cell(25, $iAlt, $oDadoImovel->iMatricula                                              ,0,0,"L",0);
-      $pdf->cell(25, $iAlt, $oDadoImovel->iSetor                                                  ,0,0,"L",0);
-      $pdf->cell(25, $iAlt, $oDadoImovel->iQuadra                                                 ,0,0,"L",0);
-      $pdf->cell(25, $iAlt, $oDadoImovel->iLote                                                   ,0,0,"L",0);
-      $pdf->cell(93, $iAlt, $oDadoImovel->sRefAnterior                                            ,0,1,"L",0);
+      $pdf->cell(25, $iAlt, $oDadoImovel->iMatricula    ,0,0,"L",0);
+      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, $oDadoImovel->iDistrito        ,0,0,"L",0):'';      
+      $pdf->cell(25, $iAlt, $oDadoImovel->iSetor        ,0,0,"L",0);
+      $pdf->cell(25, $iAlt, $oDadoImovel->iQuadra       ,0,0,"L",0);
+      $pdf->cell(25, $iAlt, $oDadoImovel->iLote         ,0,0,"L",0);
+      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, $oDadoImovel->iUnidade         ,0,0,"L",0):'';      
+      $pdf->cell(93, $iAlt, $oDadoImovel->sRefAnterior  ,0,1,"L",0);
 
-      $pdf->cell(193, 1, ''                                                                       ,0,1,"L",0);
+      $pdf->cell(193, 1, '' ,0,1,"L",0);
 
       $pdf->setfont('arial','B',$iFontBic);
       $pdf->cell(25, $iAlt, 'Bairro'                                                              ,0,0,"L",0);

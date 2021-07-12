@@ -228,6 +228,8 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     $clcgm = new cl_cgm;
     $cliptuconstrhabite = new cl_iptuconstrhabite();
 
+    db_sel_instit(null, "db21_usadistritounidade");
+    
     for ($totalRegistos=0;$totalRegistos<sizeof($parametro);$totalRegistos++){
 
       $lTemCalculo = true;
@@ -250,6 +252,8 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
         $sql .= "        loteloc.*,                                                                                               ";
         $sql .= "        setorloc.*,                                                                                              ";
         $sql .= "        loteloteam.j34_loteam,                                                                                   ";
+        $sql .= "        lote.j34_distrito,                                                                                        ";
+        $sql .= "        (select j01_unidade from iptubase where j01_matric = proprietario.j01_matric) as unidade,                                                                                        ";
         $sql .= "        loteam.j34_descr,                                                                                        ";
         $sql .= "        bairro.j13_descr as bairro,                                                                              ";
         $sql .= "        round(((                                                                                                 ";
@@ -538,6 +542,12 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
           $pdf->Cell(200,4,"","",1,"C",0);
 
           $pdf->setX(5);
+          if($db21_usadistritounidade=='t'){
+            $pdf->SetFont('Arial','',9);
+            $pdf->Cell(13,4,"Distrito :","",0,"L",0);
+            $pdf->SetFont('Arial','B',9);
+            $pdf->Cell(7,4,"$fieldmatriculaSelecionada->j34_distrito","",0,"L",0);
+          }
           $pdf->SetFont('Arial','',9);
           $pdf->Cell(10,4,"Setor :","",0,"L",0);
           $pdf->SetFont('Arial','B',9);
@@ -550,6 +560,12 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
           $pdf->Cell(10,4,"Lote :","",0,"L",0);
           $pdf->SetFont('Arial','B',9);
           $pdf->Cell(10,4,"$fieldmatriculaSelecionada->j34_lote","",0,"L",0);
+          if($db21_usadistritounidade=='t'){
+            $pdf->SetFont('Arial','',9);
+            $pdf->Cell(15,4,"Unidade :","",0,"L",0);
+            $pdf->SetFont('Arial','B',9);
+            $pdf->Cell(10,4,"$fieldmatriculaSelecionada->unidade","",0,"L",0);
+          }
           $pdf->SetFont('Arial','',9);
           $pdf->Cell(10,4,"Zona :","",0,"L",0);
           $pdf->SetFont('Arial','B',9);

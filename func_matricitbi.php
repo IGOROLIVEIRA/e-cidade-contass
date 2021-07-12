@@ -34,6 +34,7 @@ include("classes/db_iptubase_classe.php");
 include("libs/db_app.utils.php");
 
 db_postmemory($_POST);
+db_sel_instit(null, "db21_usadistritounidade");
 
 if(!isset($setorCodigo)) {
   $setorCodigo = '';
@@ -59,6 +60,8 @@ $clrotulo->label("j34_setor");
 $clrotulo->label("j34_quadra");
 $clrotulo->label("j34_lote");
 $clrotulo->label("j40_refant");
+$clrotulo->label("j34_distrito");
+$clrotulo->label("j01_unidade");
 
 $clrotulo->label("j04_setorregimovel");
 $clrotulo->label("j04_quadraregimo");
@@ -114,14 +117,17 @@ $clrotulo->label("j04_loteregimo");
 
 <tr> 
   <td title="<?=$Tj34_setor?>">
-    <?=$Lj34_setor?>/<?=$Lj34_quadra?>/<?=$Lj34_lote?>
+    <?=($db21_usadistritounidade=='t')?$Lj34_distrito.'/'.$Lj34_setor.'/'.$Lj34_quadra.'/'.$Lj34_lote.'/'.$Lj01_unidade:$Lj34_setor.'/'.$Lj34_quadra.'/'.$Lj34_lote?>
+    
   </td>
   <td> 
-  <?
-    db_input("j34_setor" ,10,$Ij34_setor,true,'text',4);
-    db_input("j34_quadra",10,$Ij34_quadra,true,'text',4);
-    db_input("j34_lote"  ,10,$Ij34_lote,true,'text',4);
-  ?>
+    <?=($db21_usadistritounidade=='t')?db_input("j34_distrito" ,10,$Ij34_distrito,true,'text',4):''?>  
+    <?    
+      db_input("j34_setor" ,10,$Ij34_setor,true,'text',4);
+      db_input("j34_quadra",10,$Ij34_quadra,true,'text',4);
+      db_input("j34_lote"  ,10,$Ij34_lote,true,'text',4);    
+    ?>
+    <?=($db21_usadistritounidade=='t')?db_input("j01_unidade"  ,10,$Ij01_unidade,true,'text',4):''?>
   </td>
 </tr>
 
@@ -219,9 +225,11 @@ $clrotulo->label("j04_loteregimo");
       $sCampos .= " end as j39_numero,                                        \n";
       $sCampos .= "  j40_refant,                                              \n";
       $sCampos .= " j39_compl,                                                \n";
+      $sCampos .= " j34_distrito,                                             \n";
       $sCampos .= " j34_setor,                                                \n";
       $sCampos .= " j34_quadra,                                               \n";
       $sCampos .= " j34_lote,                                                 \n";
+      $sCampos .= " j01_unidade,                                              \n";
       $sCampos .= " j05_codigoproprio,                                        \n";
       $sCampos .= " j06_quadraloc,                                            \n";
       $sCampos .= " j06_lote                                                  \n";
@@ -253,7 +261,13 @@ $clrotulo->label("j04_loteregimo");
         }
         if (isset($j34_lote) && trim($j34_lote)!="") {
           $sWhere .= " and j34_lote = '" . str_pad($j34_lote,4,"0",STR_PAD_LEFT) . "'";
-         }
+        }
+        if (isset($j34_distrito) && trim($j34_distrito)!="") {
+          $sWhere .= " and j34_distrito = '" . $j34_distrito . "'";
+        }
+        if (isset($j01_unidade) && trim($j01_unidade)!="") {
+          $sWhere .= " and j01_unidade = '" . $j01_unidade . "'";
+        }
 
          $sWhere .= " and j02_matric is null ";
          $sWhere .= " and j01_baixa is null ";

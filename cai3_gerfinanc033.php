@@ -34,8 +34,8 @@ require_once("libs/db_app.utils.php");
 require_once("libs/db_libtributario.php");
 require_once("dbforms/db_funcoes.php");
 
-
 db_app::import("exceptions.*");
+db_sel_instit(null, "db21_usadistritounidade");
 
 if(isset($_GET['sessao'])){
 
@@ -702,7 +702,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
     $pdf1->iptbql          = $j34_setor.'-'.$j34_quadra.'-'.$j34_lote." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"");
     $pdf1->pql_localizacao = $pql_localizacao;
-    $bql                   = '  SQL:'.$j34_setor.'-'.$j34_quadra.'-'.$j34_lote." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"");
+    $bql                   = '  DSQLU: '.($db21_usadistritounidade=='t'?$j34_distrito.'-':'').$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade=='t'?'-'.$j01_unidade:'')." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"");
+
 
     if (isset ($impmodelo) && $impmodelo == 30) {
 
@@ -716,11 +717,11 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     } else {
 
       if ($k00_tipo != 6) {
-        $iNumeroOrigem = $j01_matric.'  SQL:'.$j34_setor.'-'.$j34_quadra.'-'.$j34_lote;
+        $iNumeroOrigem = $j01_matric.'  DSQLU:'.($db21_usadistritounidade=='t'?$j34_distrito.'-':'').$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade=='t'?'-'.$j01_unidade:'');
       } else {
 
         $iNumeroOrigem = "";
-        $iNumeroOrigem = $j01_matric.'  SQL:'.$j34_setor.'-'.$j34_quadra.'-'.$j34_lote;
+        $iNumeroOrigem = $j01_matric.'  DSQLU:'.($db21_usadistritounidade=='t'?$j34_distrito.'-':'').$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade=='t'?'-'.$j01_unidade:'');
       }
     }
   } else if (!empty ($descr) && $descr == 'Inscrição') {
