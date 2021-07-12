@@ -26,6 +26,7 @@ pmcapitaoeneas      5432    prefeituras
 pmcristalia         5432    prefeituras
 pmluislandia        5432    prefeituras
 pmitacambira        5432    prefeituras
+basemodeloppa       5432    prefeituras
 treinamento         5432    prefeituras
 
 pmburitizeiro          5432    prefeituras2
@@ -94,3 +95,5 @@ pmgraomogol         5432    e-cidadenovosclientes
 pmburitizeiro       5432    e-cidadenovosclientes
 
 e-cidade            5432    pmnovaporteirinha
+
+e-cidade            5432    pmburitizeiro
