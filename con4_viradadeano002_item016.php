@@ -75,7 +75,7 @@ if($sqlerro==false) {
     $iCountFeriados = sizeof($aFeriados);
     for ($i = 0; $i < $iCountFeriados; $i++) {
       db_atutermometro($i, $iCountFeriados, 'termometroitem', 1, $sMensagemTermometroItem . " Passo (2/2)");
-      list($dia, $mes) = split("/", $aFeriados[$i]); 
+      list($dia, $mes) = explode("/", $aFeriados[$i]); 
       $data  = "{$anodestino}-{$mes}-{$dia}";
       $result = $clcalend->sql_record($clcalend->sql_query_file($data));
       if ($clcalend->numrows == 0) {

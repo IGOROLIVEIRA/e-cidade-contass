@@ -64,7 +64,7 @@ function mens_help() {
   
   $nome_help = @pg_result($result,0,"cod");
   $texto_help = @pg_result($result,0,"mens");
-  $param_help = split("&",@pg_result($result,0,"alinhamento"));
+  $param_help = explode("&",@pg_result($result,0,"alinhamento"));
   $larg_div = $param_help[0];
   $alt_div  = @$param_help[1];
   $x_div    = @$param_help[2];

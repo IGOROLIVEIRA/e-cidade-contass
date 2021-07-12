@@ -359,7 +359,7 @@ if (1 == 2) {
 						if ($j40_refant == "") {
 							$j40_refant = "....";
 						}
-						$sqlsub = split('\.', $j40_refant);
+						$sqlsub = explode('\.', $j40_refant);
 						fputs($clabre_arquivo->arquivo, str_pad($sqlsub[3], 4));
 
 						$z01_nome = str_replace(chr(128), "C", $z01_nome);
@@ -759,7 +759,7 @@ for ($iunica=0;$iunica < $numrowsunica;$iunica++){
 		next($vt);
 	}
 
-	$numpres = split("N", $numpres);
+	$numpres = explode("N", $numpres);
 
 	$unica = false;
 	if (sizeof($numpres) < 2) {
@@ -772,7 +772,7 @@ for ($iunica=0;$iunica < $numrowsunica;$iunica++){
 	}
 	//  pg_exec("BEGIN");
 	for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
-		$codigos = split("P", $numpres[$volta]);
+		$codigos = explode("P", $numpres[$volta]);
 	}
 
 	$resultunica = pg_exec("select j23_anousu from iptucalc inner join iptunump on j20_anousu = j23_anousu and j20_matric = j23_matric where j20_numpre = $numpre_unica");

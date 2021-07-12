@@ -1646,7 +1646,7 @@ sub main
         # replace non-ASCII characters with character entities.
         if ( !$eight_bit_clean )
         {
-            @chars = split(//,$line);
+            @chars = explode(//,$line);
             foreach $_ (@chars)
             {
                 $_ = $char_entities{$_} if defined( $char_entities{$_} );

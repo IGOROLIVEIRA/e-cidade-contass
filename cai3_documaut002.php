@@ -45,16 +45,16 @@ $clrotulo->label("pc63_agencia");
 $dbwhere  = "where 1=1 and k12_instit = ".db_getsession("DB_instit");
 $data     = str_replace("/","-",$lista_data);
 
-$vet_data = split(",",$data);
+$vet_data = explode(",",$data);
 $virgula  = "";
 $data     = "";
 for($i=0; $i < sizeof($vet_data); $i++){
-     $datas   = split("-",$vet_data[$i]);
+     $datas   = explode("-",$vet_data[$i]);
      $data   .= $virgula."'".trim($datas[2])."-".trim($datas[1])."-".trim($datas[0])."'";
      $virgula = ", ";
 }
 
-$vet_estorn = split(",",$lista_estorn);
+$vet_estorn = explode(",",$lista_estorn);
 $virgula    = "";
 $estorno    = "";
 for($i=0; $i < sizeof($vet_estorn); $i++){
@@ -65,7 +65,7 @@ for($i=0; $i < sizeof($vet_estorn); $i++){
 $lista_estorn = $estorno;
 
 if (isset($lista_nfs)&&trim($lista_nfs)!=""){
-     $vet_nfs = split(",",$lista_nfs);
+     $vet_nfs = explode(",",$lista_nfs);
      $virgula = "";
      $notas   = "";
      for($i=0; $i < sizeof($vet_nfs); $i++){

@@ -75,7 +75,7 @@ if (isset($dtini) && $dtini != '' && isset($dtfim) && $dtfim != ''){
 
 if (isset($e60_codemp) && $e60_codemp != '') {
 
-    $aCodEmp = split("/",$e60_codemp);
+    $aCodEmp = explode("/",$e60_codemp);
 
     if (count($aCodEmp) == 2  && isset($aCodEmp[1]) && $aCodEmp[1] != '' ) {
         $sWhereAno = " AND e60_anousu = ".$aCodEmp[1];

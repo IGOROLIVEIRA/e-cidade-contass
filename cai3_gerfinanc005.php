@@ -33,7 +33,7 @@ require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
 require_once("classes/db_termoprotprocesso_classe.php");
 
-$mat_numpre = split("#",base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
+$mat_numpre = explode("#",base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
 
 $iTipo  = $mat_numpre[0];
 $numpre = $mat_numpre[1];

@@ -56,7 +56,7 @@ if(isset($e94_codanu)) {
 
 } elseif(isset($e60_codemp)) {
 
-  $arr = split("/",$e60_codemp);
+  $arr = explode("/",$e60_codemp);
   if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ) {
 	  $ano = " and e60_anousu = ".$arr[1];
   } else {

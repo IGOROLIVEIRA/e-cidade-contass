@@ -160,7 +160,7 @@ if(!isset($HTTP_POST_VARS["atualizar"]) && !isset($HTTP_POST_VARS["excluir"])) {
 } else if(isset($HTTP_POST_VARS["atualizar"])) {
   db_postmemory($HTTP_POST_VARS);
   pg_exec("BEGIN");
-  $alt_ind = split("\r\n",$alt_ind);
+  $alt_ind = explode("\r\n",$alt_ind);
   $result = pg_exec("delete from db_sysprikey where codarq = $tabela") or die("Erro(94) deletando db_sysprikey");
   for($i = 0;$i < sizeof($alt_ind) - 1;$i++) {
     if($alt_ind[$i] != "" && $alt_ind[$i] != " " && $alt_ind[$i] != "  " ) {

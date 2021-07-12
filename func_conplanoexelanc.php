@@ -74,7 +74,7 @@ if(isset($codred)){
    $result = db_query($campos);
    // db_criatabela($result);exit;
    db_fieldsmemory($result,0);
-   $funcao_js = split("\|",$funcao_js);
+   $funcao_js = explode("\|",$funcao_js);
    echo "<script>".$funcao_js[0]."('$codred','$c60_descr','".db_formatar($saldo_final,'f')."','$sinal_final');</script>";
 }
 ?>

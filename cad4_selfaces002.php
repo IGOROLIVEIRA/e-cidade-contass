@@ -41,11 +41,11 @@ $cliptunaogeracarnesetqua = new cl_iptunaogeracarnesetqua;
 $db_opcao=1;
 $db_botao=true;		
 if (isset($atualizar)&&$atualizar!=""){
-	$arr_dados = split("#",$chaves);
+	$arr_dados = explode("#",$chaves);
 	$sqlerro=false;
 	db_inicio_transacao();
 	for($w=0;$w<count($arr_dados);$w++){
-		$arr_info = split("-",$arr_dados[$w]);
+		$arr_info = explode("-",$arr_dados[$w]);
 		$face = $arr_info[0];
 		$setor = $arr_info[1];
 		$quadra = $arr_info[2];

@@ -41,12 +41,12 @@ $clrotulo->label("e21_descricao");
               <?
               if(isset($r52_dtincl)){
                 if((strpos(strtoupper("#".$r52_dtincl),'-')+0) > 0 ){
-                  $arr_dtincl = split("-",$r52_dtincl);
+                  $arr_dtincl = explode("-",$r52_dtincl);
       	          $r52_dtincl_dia = $arr_dtincl[2];
       	          $r52_dtincl_mes = $arr_dtincl[1];
       	          $r52_dtincl_ano = $arr_dtincl[0];
                 }else{
-              		$arr_dtincl = split("/",$r52_dtincl);
+              		$arr_dtincl = explode("/",$r52_dtincl);
       	          $r52_dtincl_dia = $arr_dtincl[0];
       	          $r52_dtincl_mes = $arr_dtincl[1];
       	          $r52_dtincl_ano = $arr_dtincl[2];
@@ -346,7 +346,7 @@ db_input('r52_valor',15,$Ir52_valor,true,'hidden',$db_opcao,"");
 db_input('r52_valcom',15,$Ir52_valcom,true,'hidden',$db_opcao,"");
 db_input('r52_val13',15,$Ir52_val13,true,'hidden',$db_opcao,"");
 if(isset($r52_limite) && trim($r52_limite) != ""){
-  $arr_limite = split("-",$r52_limite);
+  $arr_limite = explode("-",$r52_limite);
   $r52_limite_dia = $arr_limite[2];
   $r52_limite_mes = $arr_limite[1];
   $r52_limite_ano = $arr_limite[0];

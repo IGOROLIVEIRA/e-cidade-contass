@@ -52,7 +52,7 @@ if (isset($l07_motivo) && trim(@$l07_motivo) != ""){
 
      db_inicio_transacao();
 
-     $vetor_itens = split(",",$coditens);
+     $vetor_itens = explode(",",$coditens);
      for($i = 0; $i < count($vetor_itens); $i++){
           $clliclicitemanu->l07_usuario    = db_getsession("DB_id_usuario");
           $clliclicitemanu->l07_data       = date("Y-m-d",db_getsession("DB_datausu"));
@@ -167,7 +167,7 @@ if (isset($confirmar) && trim(@$confirmar) != ""){
       $tam = strlen(trim($coditens));
       db_input("coditens",$tam,"",true,"hidden",3);
 
-      $vetor_itens = split(",",$coditens);
+      $vetor_itens = explode(",",$coditens);
       for($i = 0; $i < count($vetor_itens); $i++){
            $res_itens = $clliclicitem->sql_record($clliclicitem->sql_query_sol(trim($vetor_itens[$i]),"l21_codigo,pc01_descrmater","l21_codigo"));
            if ($clliclicitem->numrows > 0){

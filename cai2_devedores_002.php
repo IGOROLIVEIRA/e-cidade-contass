@@ -385,7 +385,7 @@ if ($grupo == 'tipo'){
 
     $pdf->Cell(50,05,"TIPOS DE DEBITOS ESCOLHIDOS:","",1,"L",1);
  
-    $tiposdeb = split("-",$campo);
+    $tiposdeb = explode("-",$campo);
 
     for ($x = 0; $x < count($tiposdeb); $x++) {
       $sql = "select k00_tipo, k00_descr from arretipo where k00_tipo = " . $tiposdeb[$x];

@@ -33,7 +33,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 //db_postmemory($HTTP_SERVER_VARS,2);exit;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -133,7 +133,7 @@ $result = pg_exec($sql);
 //db_criatabela($result);exit;
 
 
-$xcampos = split("-",$orgaos);
+$xcampos = explode("-",$orgaos);
 
 $where = '';
 $virgula = '';
@@ -145,7 +145,7 @@ else{
    $where = " o58_unidade in (";
 }
 for($i=0;$i < sizeof($xcampos);$i++){
-   $xxcampos = split("_",$xcampos[$i]);
+   $xxcampos = explode("_",$xcampos[$i]);
    if($tipo_agrupa == 1){
      $where .= $virgula.$xxcampos[1];
    }else{
@@ -157,7 +157,7 @@ for($i=0;$i < sizeof($xcampos);$i++){
 
   // segundo filtro funcao-subfuncao-prog ..
 
-$xcampos = split("-",$orgaosele);
+$xcampos = explode("-",$orgaosele);
 
 $virgula = '';
 
@@ -168,7 +168,7 @@ if($tipo_rel=='2'){
 
  $where .= ") and $ccampo in (";
  for($i=0;$i < sizeof($xcampos);$i++){
-     $xxcampos = split("_",$xcampos[$i]);
+     $xxcampos = explode("_",$xcampos[$i]);
      for($ii=0;$ii<sizeof($xxcampos);$ii++){
 	if($ii > 0){
 	   $where .= $virgula."'".$xxcampos[$ii]."'";

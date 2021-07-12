@@ -37,7 +37,7 @@ $rr =$cldb_config->sql_record($cldb_config->sql_query_file(db_getsession("DB_ins
 if ($cldb_config->numrows > 0 ){
    db_fieldsmemory($rr,0);
 }
-$dt = split('-',$dtcont);
+$dt = explode('-',$dtcont);
 $dtcont_dia = $dt[2];
 $dtcont_mes = $dt[1];
 $dtcont_ano = $dt[0];

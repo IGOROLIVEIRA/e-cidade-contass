@@ -85,7 +85,7 @@ td {
    }			
 	/*
 	
-	$netstat = split("\n",shell_exec("export LANG=pt_BR; ".$DB_NETSTAT." -n --tcp | grep tcp | grep :".$HTTP_SERVER_VARS['SERVER_PORT']));
+	$netstat = explode("\n",shell_exec("export LANG=pt_BR; ".$DB_NETSTAT." -n --tcp | grep tcp | grep :".$HTTP_SERVER_VARS['SERVER_PORT']));
 	$numrows = pg_numrows($result);
 	$tamNet = sizeof($netstat);
 	$usuarios[0] = "";
@@ -94,8 +94,8 @@ td {
 	for($j = 0;$j < $numrows;$j++) {
   	  for($i = 0;$i < $tamNet;$i++) {
 	    $coluna = preg_split("/\s+/",$netstat[$i]);
-		$coluna[3] = split(":",@$coluna[3]);	
-		$coluna[4] = split(":",@$coluna[4]);
+		$coluna[3] = explode(":",@$coluna[3]);	
+		$coluna[4] = explode(":",@$coluna[4]);
 		//echo "Src: ".$coluna[3][0]." SrcP: ".$coluna[3][1]." Dest: ".$coluna[4][0]." DestP: ".$coluna[4][1]." Status: ".$coluna[5];
 	    if(pg_result($result,$j,"porta") == @$coluna[4][1] && 
 		   pg_result($result,$j,"ip") == @$coluna[4][0] && 

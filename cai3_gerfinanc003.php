@@ -175,7 +175,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
     for($i = 0;$i < $tam;$i++) {
       if(db_indexOf(key($vt) ,"CHECK") > 0){
         $numpres .= "N" . $vt[key($vt)];
-        $matnumpres = split("N", $vt[key($vt)]);
+        $matnumpres = explode("N", $vt[key($vt)]);
 
         if (!isset($inicial)) {
 
@@ -187,9 +187,9 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
               continue;
             }
 
-            $resultado = split("P",$numprecerto);
-            $numpar    = split("P",$resultado[1]);
-            $numpar    = split("R",$numpar[0]);
+            $resultado = explode("P",$numprecerto);
+            $numpar    = explode("P",$resultado[1]);
+            $numpar    = explode("R",$numpar[0]);
 
             $sSqlInflatores  = " select distinct   ";
             $sSqlInflatores .= "        k00_numpar, ";
@@ -304,7 +304,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
 
       if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
 
-        $aNumpres   = split("N",$numpres);
+        $aNumpres   = explode("N",$numpres);
         $numpres   = "";
         $sNumPreAnt = "";
         $sAuxiliar  = "";
@@ -314,9 +314,9 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
             continue;
           }
 
-          $iNumpre = split("P",$aNumpres[$iInd]);
-          $iNumpar = split("P", strstr($aNumpres[$iInd],"P"));
-          $iNumpar = split("R",$iNumpar[1]);
+          $iNumpre = explode("P",$aNumpres[$iInd]);
+          $iNumpar = explode("P", strstr($aNumpres[$iInd],"P"));
+          $iNumpar = explode("R",$iNumpar[1]);
           $iReceit = $iNumpar[1];
           $iNumpar = $iNumpar[0];
           $iNumpre = $iNumpre[0];
@@ -350,12 +350,12 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
 
     }
 
-    $numpres   = split("N",$numpres);
+    $numpres   = explode("N",$numpres);
 
     $totalregistrospassados=0;
 
     for($iii = 0;$iii < sizeof($numpres);$iii++) {
-      $valores = split("P",$numpres[$iii]);
+      $valores = explode("P",$numpres[$iii]);
       if ($numpres[$iii] <> "") {
         if(!isset($inicial)) {
           $totalregistrospassados+=sizeof($valores)-1;
@@ -400,7 +400,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
         continue;
       }
 
-      $valores = split("P",$numpres[$ii]);
+      $valores = explode("P",$numpres[$ii]);
 
 
       if (isset($inicial)) {
@@ -442,7 +442,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
 
       } else {
 
-        $numpar = split("R", $valores[1]);
+        $numpar = explode("R", $valores[1]);
 
         if ( in_array(array($valores[0],$numpar[0]),$aDebitosRecibo) ) {
           continue;
@@ -1363,7 +1363,7 @@ if (isset($tipo_debito)) {
       $oDadosAuto   = db_utils::fieldsmemory($rsDadosHist,0);
       $sObsAuto     = "";
 
-      $aObs = split("\n",$oDadosAuto->y50_obs);
+      $aObs = explode("\n",$oDadosAuto->y50_obs);
       if (count($aObs) > 3) {
         $sObsAuto = $aObs[0]."\n".$aObs[1]."\n".$aObs[2];
       } else {
@@ -1821,7 +1821,7 @@ $temdesconto = false;
 
 for ($mensdesc=0; $mensdesc < pg_numrows($resultmensagemdesconto); $mensdesc++) {
   db_fieldsmemory($resultmensagemdesconto, $mensdesc);
-  $descrlei = split("#",$k40_descr);
+  $descrlei = explode("#",$k40_descr);
   $k00_mensagemdesconto .= $descrlei[0] . ($mensdesc == pg_numrows($resultmensagemdesconto)?"":"-");
   $temdesconto = true;
 }

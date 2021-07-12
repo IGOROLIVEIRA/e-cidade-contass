@@ -484,7 +484,7 @@ function db_grid($sql,$data,$id_usuario,$vet_periodo_ini=null,$vet_periodo_fim=n
 							if($achou) {
 								if(pg_fieldtype($result, $j) == "date") {
 									if(pg_result($result, $k, $j) != "") {
-										$matriz_data = split("-", pg_result($result, $k, $j));
+										$matriz_data = explode("-", pg_result($result, $k, $j));
 										$var_data = $matriz_data[2]."/".$matriz_data[1]."/".$matriz_data[0];
 									} else {
 										$var_data = "//";
@@ -609,7 +609,7 @@ function db_grid($sql,$data,$id_usuario,$vet_periodo_ini=null,$vet_periodo_fim=n
 			}
 			if(pg_fieldtype($rs_tarefa, $j) == "date") {
 				if(pg_result($rs_tarefa, $i, $j) != "") {
-					$matriz_data = split("-", pg_result($rs_tarefa, $i, $j));
+					$matriz_data = explode("-", pg_result($rs_tarefa, $i, $j));
 					$var_data = $matriz_data[2]."/".$matriz_data[1]."/".$matriz_data[0];
 				} else {
 					$var_data = "//";

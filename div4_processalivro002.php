@@ -169,7 +169,7 @@ $resultexec = db_query($sqldata);
 db_fieldsmemory($resultexec, 0);
 $datainscr = $v01_dtinsc;
 
-list ( $ano, $mes, $dia ) = split('-', $datainscr);
+list ( $ano, $mes, $dia ) = explode('-', $datainscr);
 $mes1 = db_mes($mes, 2);
 $datacompleta = "$munic, $dia de $mes1 de $ano";
 

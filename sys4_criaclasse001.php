@@ -856,7 +856,7 @@ input {
          fputs($fd,',$ordem=null,$dbwhere=""){ '."\n");
          fputs($fd,'     $sql = "select ";'."\n");
          fputs($fd,'     if($campos != "*" ){'."\n");
-         fputs($fd,'       $campos_sql = split("#",$campos);'."\n");
+         fputs($fd,'       $campos_sql = explode("#",$campos);'."\n");
          fputs($fd,'       $virgula = "";'."\n");
          fputs($fd,'       for($i=0;$i<sizeof($campos_sql);$i++){'."\n");
          fputs($fd,'         $sql .= $virgula.$campos_sql[$i];'."\n");
@@ -942,7 +942,7 @@ input {
          fputs($fd,'     $sql .= $sql2;'."\n");
          fputs($fd,'     if($ordem != null ){'."\n");
          fputs($fd,'       $sql .= " order by ";'."\n");
-         fputs($fd,'       $campos_sql = split("#",$ordem);'."\n");
+         fputs($fd,'       $campos_sql = explode("#",$ordem);'."\n");
          fputs($fd,'       $virgula = "";'."\n");
          fputs($fd,'       for($i=0;$i<sizeof($campos_sql);$i++){'."\n");
          fputs($fd,'         $sql .= $virgula.$campos_sql[$i];'."\n");
@@ -967,7 +967,7 @@ input {
          fputs($fd,',$campos="*",$ordem=null,$dbwhere=""){ '."\n");
          fputs($fd,'     $sql = "select ";'."\n");
          fputs($fd,'     if($campos != "*" ){'."\n");
-         fputs($fd,'       $campos_sql = split("#",$campos);'."\n");
+         fputs($fd,'       $campos_sql = explode("#",$campos);'."\n");
          fputs($fd,'       $virgula = "";'."\n");
          fputs($fd,'       for($i=0;$i<sizeof($campos_sql);$i++){'."\n");
          fputs($fd,'         $sql .= $virgula.$campos_sql[$i];'."\n");
@@ -1013,7 +1013,7 @@ input {
 	 fputs($fd,'     $sql .= $sql2;'."\n");
 	 fputs($fd,'     if($ordem != null ){'."\n");
 	 fputs($fd,'       $sql .= " order by ";'."\n");
-         fputs($fd,'       $campos_sql = split("#",$ordem);'."\n");
+         fputs($fd,'       $campos_sql = explode("#",$ordem);'."\n");
          fputs($fd,'       $virgula = "";'."\n");
          fputs($fd,'       for($i=0;$i<sizeof($campos_sql);$i++){'."\n");
          fputs($fd,'         $sql .= $virgula.$campos_sql[$i];'."\n");

@@ -37,7 +37,7 @@ db_postmemory($HTTP_POST_VARS);
 
 $classinatura = new cl_assinatura;
 
-$xinstit = split("-", $db_selinstit);
+$xinstit = explode("-", $db_selinstit);
 $resultinst = db_query("select codigo,nomeinstabrev from db_config where codigo in (".str_replace('-', ', ', $db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -62,7 +62,7 @@ $head3 = "PROGRAMA DE TRABALHO DO GOVERNO ";
 $head4 = "ANEXO (7) EXERCÍCIO: ".db_getsession("DB_anousu")." - ".$xtipo;
 $head5 = "INSTITUIÇÕES : ".$descr_inst;
 
-$xcampos = split("-", $orgaos);
+$xcampos = explode("-", $orgaos);
 
 if (substr($nivel, 0, 1) == '1') {
 	$xwhere1 = " trim(to_char(o58_orgao,'99')) in (";
@@ -83,7 +83,7 @@ elseif (substr($nivel, 0, 1) == '5') {
 $virgula1 = ' ';
 
 for ($i = 0; $i < sizeof($xcampos); $i ++) {
-	$xxcampos = split("_", $xcampos[$i]);
+	$xxcampos = explode("_", $xcampos[$i]);
 	$virgula = '';
 	$where = "'";
 	$where1 = "'";

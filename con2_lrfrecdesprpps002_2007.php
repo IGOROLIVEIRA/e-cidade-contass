@@ -155,13 +155,13 @@ if (!isset($arqinclude)){ // se este arquivo não esta incluido por outro
 
 } // end !include
 
-$dt          = split("-",$dt_ini);
+$dt          = explode("-",$dt_ini);
 $periodo_mes = strtoupper(db_mes($dt[1]));
 
-$dt = split("-",$dt_ini);
+$dt = explode("-",$dt_ini);
 $dt_ini_ant = $anousu_ant."-".$dt[1]."-".$dt[2];
 
-$dt = split("-",$dt_fin);
+$dt = explode("-",$dt_fin);
 $dt_fin_ant = $anousu_ant."-".$dt[1]."-".$dt[2];
 
 // RPPS ///////////////////////////////////////////////////////////////////////
@@ -540,7 +540,7 @@ $db_filtro = "c61_instit in (".$instit.") ";
 // saldo inicial
 // demonstra o saldo do mes anterior ao periodo de referencia
 
-$dt_ini_per = split('-',$dt_fin);
+$dt_ini_per = explode('-',$dt_fin);
 $dt_ini_per = $dt_ini_per[0].'-'.$dt_ini_per[1].'-01';
 
 /*
@@ -646,11 +646,11 @@ if (!isset($arqinclude)){ //
   $head3 = "DEMONSTRATIVO DE RECEITAS E DESPESAS DO RPPS";
   $head4 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
   $txt = strtoupper(db_mes('01'));
-  $dt  = split("-",$dt_fin);
+  $dt  = explode("-",$dt_fin);
   $txt.= " À ".strtoupper(db_mes($dt[1]))." $anousu/BIMESTRE ";;
-  $dt  = split("-",$dt_ini);
+  $dt  = explode("-",$dt_ini);
   $txt.= strtoupper(db_mes($dt[1]))."-";
-  $dt  = split("-",$dt_fin);
+  $dt  = explode("-",$dt_fin);
   $txt.= strtoupper(db_mes($dt[1]));
   $head5 = "$txt";
   

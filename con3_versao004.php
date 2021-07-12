@@ -274,7 +274,7 @@ if( $numrows > 0 ) {
         $itens_listados = array();
         for($x=0;$x<count($matriz_item_seleciona);$x++){
           $contador = 0;
-          $impmat = split("-",$matriz_item_seleciona[$x]);
+          $impmat = explode("-",$matriz_item_seleciona[$x]);
           for($imp=0;$imp<count($impmat);$imp++){
             $contador += 1;
             if( ! isset($itens_listados[$impmat[$imp]])){

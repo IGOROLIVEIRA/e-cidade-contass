@@ -39,7 +39,7 @@ db_fieldsmemory($result3,0);
 
 function db_geratexto($texto){
   $texto .= "#";
-  $txt = split("#",$texto);
+  $txt = explode("#",$texto);
   $texto1  = '';
   for($x=0;$x<sizeof($txt);$x++){
      if(substr($txt[$x],0,1) == "$"){
@@ -1132,7 +1132,7 @@ function mens_help($mens="") {
 
   $nome_help  = pg_result($result,0,"cod");
   $texto_help = pg_result($result,0,"mens");
-  $param_help = split("&",pg_result($result,0,"alinhamento"));
+  $param_help = explode("&",pg_result($result,0,"alinhamento"));
   $larg_div   = $param_help[0];
 
   $alt_div  = $param_help[1];
@@ -1823,7 +1823,7 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
 
     case "d":
 
-      $data = split("-",$str);
+      $data = explode("-",$str);
 
       return $data[2]."/".$data[1]."/".$data[0];
 
@@ -1855,13 +1855,13 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
 
           } else if(strpos($str,"-") != "") {
 
-        $str = split("-",$str);
+        $str = explode("-",$str);
 
                 return $str[2]."-".$str[1]."-".$str[0];
 
           } else if(strpos($str,"/") != "") {
 
-            $str = split("/",$str);
+            $str = explode("/",$str);
 
                 return $str[2]."-".$str[1]."-".$str[0];
 
@@ -1916,7 +1916,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="", $mostravar=false){
 
           if($aux!=""){
 
-                    $data = split("-",$aux);
+                    $data = explode("-",$aux);
 
                     $$matriz[$i] = $data[2]."/".$data[1]."/".$data[0];
 
@@ -1943,7 +1943,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="", $mostravar=false){
 
                 case "date":
 
-                  $datav = split("-",$aux);
+                  $datav = explode("-",$aux);
 
           $split_data = $matriz[$i]."_dia";
 
@@ -2681,9 +2681,9 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		    echo "<input type=\"hidden\" name=\"totalizacao_repas\" value=\"".$totrepreg."\">";
 		  }
 		}else if(isset( $HTTP_POST_VARS["totalizacao_repas"]) ){
-		  $totalizacao_split = split("\|",$HTTP_POST_VARS["totalizacao_repas"]);
+		  $totalizacao_split = explode("\|",$HTTP_POST_VARS["totalizacao_repas"]);
 		  for($totrep=0;$totrep<count($totalizacao_split);$totrep++){
-		    $totalizacao_sep = split("\=",$totalizacao_split[$totrep]);
+		    $totalizacao_sep = explode("\=",$totalizacao_split[$totrep]);
 	     $totalizacao[$totalizacao_sep[0]] = $totalizacao_sep[1];
 	     if(isset($HTTP_POST_VARS["totrep_".$totalizacao_sep[0]])){
 	       echo "<input type=\"hidden\" name=\"totrep_".$totalizacao_sep[0]."\" value=\"".$HTTP_POST_VARS["totrep_".$totalizacao_sep[0]]."\">";
@@ -2708,7 +2708,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		  //    echo "<td title='Outras Informações'>OI</td>\n";
 		  //se foi passado funcao
 		  if ($campos_layer != "") {
-		    $campo_layerexe = split("\|", $campos_layer);
+		    $campo_layerexe = explode("\|", $campos_layer);
 		    echo "<td nowrap bgcolor=\"$db_corcabec\" title=\"Executa Procedimento Específico.\" align=\"center\">Clique</td>\n";
 		  }
 
@@ -2729,7 +2729,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		}
 		//cria nome da funcao com parametros
 		if ($arquivo == "()") {
-		  $arrayFuncao = split("\|", $aonde);
+		  $arrayFuncao = explode("\|", $aonde);
 		  $quantidadeItemsArrayFuncao = sizeof($arrayFuncao);
 
 		}
@@ -2783,14 +2783,14 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 		  // implamentacao de informacoes complementares
 		  //    $mostradiv="";
 		  if ($campos_layer != "") {
-		    $campo_layerexe = split("\|", $campos_layer);
+		    $campo_layerexe = explode("\|", $campos_layer);
 		    echo "<td id=\"funcao_aux".$i."\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a href=\"\" onclick=\"".$campo_layerexe[1]."($loop);return false\" ><strong>".$campo_layerexe[0]."&nbsp;</strong></a></td>\n";
 		  }
 		  for ($j = 0; $j < $NumFields; $j ++) {
 		    if (strlen(strstr(pg_fieldname($result, $j), "db_")) == 0 || strlen(strstr(pg_fieldname($result, $j), "db_m_")) != 0) {
 		      if (pg_fieldtype($result, $j) == "date") {
 		        if (pg_result($result, $i, $j) != "") {
-		          $matriz_data = split("-", pg_result($result, $i, $j));
+		          $matriz_data = explode("-", pg_result($result, $i, $j));
 		          $var_data = $matriz_data[2]."/".$matriz_data[1]."/".$matriz_data[0];
 		        } else {
 		          $var_data = "//";

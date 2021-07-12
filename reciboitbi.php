@@ -624,8 +624,8 @@ if ($lLiberado) {
   /// Fim código barras
 }
 
-$areaterrenomat = split('\.',$areatran);
-$areaedificadamat = split('\.',@$areatotal);
+$areaterrenomat = explode('\.',$areatran);
+$areaedificadamat = explode('\.',@$areatotal);
 
 $result = $clitbiruralcaract->sql_record($clitbiruralcaract->sql_query($itbi,"","*","j31_codigo"));
 $linhasitbiruralcaract = $clitbiruralcaract->numrows;

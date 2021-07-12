@@ -1210,7 +1210,7 @@ function retornaDebitosSelecionados($oFormulario,$iTipoAgrupamento = null) {
 
         if ( stripos(" ".$sChave, "CHECK") ) {
 
-          $aNumpre             = split("N", $sValor);
+          $aNumpre             = explode("N", $sValor);
           foreach ($aNumpre as $iIndiceNumpre => $sNumpres) {
 
             if ($sNumpres == "") {
@@ -1219,9 +1219,9 @@ function retornaDebitosSelecionados($oFormulario,$iTipoAgrupamento = null) {
             if($sNumpres != "") {
               $iTotalSelecionados++;
             }
-            $aParcela               = split("P", $sNumpres);
+            $aParcela               = explode("P", $sNumpres);
             $iNumpre                = $aParcela[0];
-            $aSliceParcela          = split("R", $aParcela[1]);
+            $aSliceParcela          = explode("R", $aParcela[1]);
             $iNumpar                = (int)$aSliceParcela[0];
             $iReceita               = (int)$aSliceParcela[1];
 

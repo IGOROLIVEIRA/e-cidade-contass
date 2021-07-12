@@ -117,7 +117,7 @@ if(isset($HTTP_POST_VARS["incluir"])) {
       if(isset($itensdef)){
 	$numArray = sizeof($itensdef);
 	for($i = 0;$i < $numArray;$i++) {
-	  $aux = split("#&",$itensdef[$i]);
+	  $aux = explode("#&",$itensdef[$i]);
 	      pg_exec("insert into db_syscampodef values(".$codcam.",'".$aux[0]."','".$aux[1]."')") or die("Erro(44) inserindo em db_syscampodef");
 	}
       }
@@ -201,7 +201,7 @@ if(isset($HTTP_POST_VARS["incluir"])) {
     if(isset($itensdef)){
       $numArray = sizeof($itensdef);
       for($i = 0;$i < $numArray;$i++) {
-	$aux = split("#&",$itensdef[$i]);
+	$aux = explode("#&",$itensdef[$i]);
 	    pg_exec("insert into db_syscampodef values(".$codcam.",'".$aux[0]."','".$aux[1]."')") or die("Erro(44) inserindo em db_syscampodef");
       }
     }
@@ -467,10 +467,10 @@ input {
             <td width="302"> <input type="text" name="nomecam" value="<?=@$nomecam?>">
               <?
 	  if(isset($conteudo)) {
-	    $v_tipo = split('\(',$conteudo);
+	    $v_tipo = explode('\(',$conteudo);
 		$conteudo = $v_tipo[0];
 		if(isset($v_tipo[1])){
-		    $v = split("\)",$v_tipo[1]);
+		    $v = explode("\)",$v_tipo[1]);
 		}else{
 		  $v = "";
 		}

@@ -70,7 +70,7 @@ $val = false;
                 db_fieldsmemory($sql_solicita,$i,true);
                 $arr_numero[$pc10_numero] = $pc10_numero;
                 $arr_index[$pc10_numero]  = $i;
-                $arr_data = split("/",$pc10_data);
+                $arr_data = explode("/",$pc10_data);
 
                 if ($i == 0) {
                   $pc10_data_dia = $arr_data[0];
@@ -99,7 +99,7 @@ $val = false;
                   }
                 </script>";
                 db_fieldsmemory($sql_solicita,$arr_index[$cod]);
-                $arr_data = split("-",$pc10_data);
+                $arr_data = explode("-",$pc10_data);
 
                 $pc10_data_dia = $arr_data[2];
                 $pc10_data_mes = $arr_data[1];

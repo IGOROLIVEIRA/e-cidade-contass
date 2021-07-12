@@ -62,7 +62,7 @@ class arquivoCobrancaRegistrada {
       throw new Exception("[ 3 ] - Erro ao inserir dados em Partilha Arquivo\n {$oDaoPartilhaArquivo->erro_msg}");
     }
     
-    $aDtProcessamento = split("-",$dtProcessamento);
+    $aDtProcessamento = explode("-",$dtProcessamento);
     $sDtProcessamento = $aDtProcessamento[2].$aDtProcessamento[1].substr($aDtProcessamento[0],2,2);
     
     /*
@@ -109,10 +109,10 @@ class arquivoCobrancaRegistrada {
         
         $sNumeroControleParticipante = $aDados->z01_numcgm.$aDados->numbanco.str_replace("-","",$aDados->k00_dtpaga);
         
-        $aDataEmissao    = split("-",$aDados->k00_dtoper);
+        $aDataEmissao    = explode("-",$aDados->k00_dtoper);
         $sDataEmissao    = $aDataEmissao[2].$aDataEmissao[1].substr($aDataEmissao[0],2,2);
 
-        $aDataVencimento = split("-",$aDados->k00_dtpaga);
+        $aDataVencimento = explode("-",$aDados->k00_dtpaga);
         $sDataVencimento = $aDataVencimento[2].$aDataVencimento[1].substr($aDataVencimento[0],2,2); 
         
         $nValor    = number_format(round($aDados->valor_total_recibo,2), 2, '', '');
@@ -380,7 +380,7 @@ class arquivoCobrancaRegistrada {
       throw new Exception("[ 3 ] - Erro ao inserir dados em Partilha Arquivo\n {$oDaoPartilhaArquivo->erro_msg}");
     }
     
-    $aDtProcessamento = split("-",$dtProcessamento);
+    $aDtProcessamento = explode("-",$dtProcessamento);
     $sDtProcessamento = $aDtProcessamento[2].$aDtProcessamento[1].$aDtProcessamento[0];
 
     $oHeader = new stdClass();
@@ -406,10 +406,10 @@ class arquivoCobrancaRegistrada {
       
         $iRegistro++;
         
-        $aDataVencimento         = split("-",$aDados->k00_dtpaga);
+        $aDataVencimento         = explode("-",$aDados->k00_dtpaga);
         $sDataVencimento         = $aDataVencimento[2].$aDataVencimento[1].$aDataVencimento[0];
         
-        $aDataUltimaDistribuicao = split("-",$aDados->v70_data);
+        $aDataUltimaDistribuicao = explode("-",$aDados->v70_data);
         $sDataUltimaDistribuicao = $aDataUltimaDistribuicao[2].$aDataUltimaDistribuicao[1].$aDataUltimaDistribuicao[0];
        
         $oDetalheTipo1 = new stdClass();
@@ -691,7 +691,7 @@ class arquivoCobrancaRegistrada {
               if ($iPosM > 0) {
                 
                 $sOrigemNumpreMatric = substr(str_replace("M","",$sOrigemNumpre),$iPosM, strlen($sOrigemNumpre));
-                $aMatric = split(",",$sOrigemNumpreMatric);
+                $aMatric = explode(",",$sOrigemNumpreMatric);
                 
                 $sSqlProprietario  = " select z01_numcgm,                 "; 
                 $sSqlProprietario .= "        z01_nome,                   ";
@@ -721,7 +721,7 @@ class arquivoCobrancaRegistrada {
               if ($iPosI > 0 && $iPosM == 0) {
                 
                 $sOrigemNumpreInscr = substr(str_replace("I","",$sOrigemNumpre),$iPosM, strlen($sOrigemNumpre));
-                $aInscr = split(",",$sOrigemNumpreInscr);
+                $aInscr = explode(",",$sOrigemNumpreInscr);
                 
                 $sSqlEmpresa  = " select z01_numcgm,                 "; 
                 $sSqlEmpresa .= "        z01_nome,                   ";

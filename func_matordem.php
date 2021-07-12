@@ -125,7 +125,7 @@ $clrotulo->label('z01_nome');
        if (isset($chave_m51_codordem) && (trim($chave_m51_codordem)!="") ) {
 	         $sql = $clmatordem->sql_query_numemp(null,$campos,"m51_codordem"," m53_codordem is null and m51_codordem = {$chave_m51_codordem} and $where_instit");
        } else if (isset($chave_e60_codemp) && (trim($chave_e60_codemp)!="") ) {
-	       $arr = split("/",$chave_e60_codemp);
+	       $arr = explode("/",$chave_e60_codemp);
 	       
 	       if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ) {
 		        $dbwhere_ano = " and e60_anousu = ".$arr[1];

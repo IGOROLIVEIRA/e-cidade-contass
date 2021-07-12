@@ -43,7 +43,7 @@ elseif(substr($nivel,0,1) == '1')
 elseif(substr($nivel,0,1) == '2')
   $tipo_agrupa = 3;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = db_query("select codigo,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -100,14 +100,14 @@ if($tipo_agrupa==1){
 
 $result = db_query($sql);
 
-$xcampos = split("-",$orgaos);
+$xcampos = explode("-",$orgaos);
 
 $virgula = '';
 $tem_orgao = 0;
 $where_orgao = " o58_orgao in (";
 if (substr($nivel,0,1)!=7)
 for($i=0;$i < sizeof($xcampos);$i++){
-   $xxcampos = split("_",$xcampos[$i]);
+   $xxcampos = explode("_",$xcampos[$i]);
    if (!isset($xxcampos["1"])) continue;
    $where_orgao .= $virgula.$xxcampos["1"];
    $virgula = ', ';
@@ -120,7 +120,7 @@ $tem_unidade = 0;
 $where_unidade = " o58_unidade in (";
 if (substr($nivel,0,1)!=7)
 for($i=0;$i < sizeof($xcampos);$i++){
-   $xxcampos = split("_",$xcampos[$i]);
+   $xxcampos = explode("_",$xcampos[$i]);
    if (!isset($xxcampos["2"])) continue;
    $where_unidade .= $virgula.$xxcampos["2"];
    $virgula = ', ';
@@ -133,7 +133,7 @@ $tem_elemento =0;
 $where_elemento = " cast(o56_elemento as bigint) in (";
 if (substr($nivel,0,1)=="7")
 for($i=0;$i < sizeof($xcampos);$i++){
-   $xxcampos = split("_",$xcampos[$i]);
+   $xxcampos = explode("_",$xcampos[$i]);
    if (!isset($xxcampos["1"])) continue;
    $where_elemento .= $virgula.$xxcampos["1"];
    $virgula = ', ';

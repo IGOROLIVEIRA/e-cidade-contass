@@ -89,7 +89,7 @@ if (!isset($db_selinstit)) {
   $db_selinstit = db_getsession("DB_instit");
 }
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -121,9 +121,9 @@ $sele_work = $clselorcdotacao->getDados();
 
 $clselorcdotacao->instit = "(".db_getsession("DB_instit").")";
 
-$xinstit    = split("-",$db_selinstit);
+$xinstit    = explode("-",$db_selinstit);
 
-$arr_niveis = split(",",$vernivel);
+$arr_niveis = explode(",",$vernivel);
 
 //$nivela = substr($nivel,0,1);
 $sele_work = $sele_work.' and w.o58_instit in ('.str_replace('-',', ',$db_selinstit).') ';

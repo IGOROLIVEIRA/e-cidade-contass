@@ -32,7 +32,7 @@ require ("fpdf151/pdf.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $sTiposDebitos = $tipos;
-$tipos 		  = split(",", $tipos);
+$tipos 		  = explode(",", $tipos);
 
 if (isset ($db_datausu)) {
 	if (!checkdate(substr($db_datausu, 5, 2), substr($db_datausu, 8, 2), substr($db_datausu, 0, 4))) {

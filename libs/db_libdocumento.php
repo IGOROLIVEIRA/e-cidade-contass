@@ -349,7 +349,7 @@ class libdocumento
   {
 
     $texto .= "#";
-    $txt = split("#", $texto);
+    $txt = explode("#", $texto);
     $texto1 = '';
     for ($x = 0; $x < sizeof($txt); $x++) {
 
@@ -376,7 +376,7 @@ class libdocumento
   {
 
     $texto .= "#";
-    $txt = split("#", $texto);
+    $txt = explode("#", $texto);
     $texto1 = '';
 
     for ($x = 0; $x < sizeof($txt); $x++) {

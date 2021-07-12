@@ -73,10 +73,10 @@ if(isset($incluir)){
 
 
   if($sqlerro==false){
-    $arr_dados = split("#",$dados);
+    $arr_dados = explode("#",$dados);
     $tam = count($arr_dados);
     for($i=0; $i<$tam; $i++){
-      $arr_ele = split("-",$arr_dados[$i]);
+      $arr_ele = explode("-",$arr_dados[$i]);
           $elemento = $arr_ele[0];   
           $valor = $arr_ele[1];   
 

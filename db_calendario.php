@@ -509,7 +509,7 @@ class db_calendario {
           
           $datat = date("Y-m-d",mktime(0,0,0,$this->mesatual,$c,$this->anousu));
           
-          $identifica = split("-",key($matriz_imp));
+          $identifica = explode("-",key($matriz_imp));
                    
           if( isset($matriz_imp[key($matriz_imp)]['m'][substr($datat,8,2)]) ){
           	$color = "red";
@@ -539,7 +539,7 @@ class db_calendario {
           
           $datat = date("Y-m-d",mktime(0,0,0,$this->mesatual,$c,$this->anousu));
           
-          $identifica = split("-",key($matriz_imp));
+          $identifica = explode("-",key($matriz_imp));
                    
           if( isset($matriz_imp[key($matriz_imp)]["t"][substr($datat,8,2)]) ){
           	$color = "red";
@@ -780,7 +780,7 @@ class db_calendario {
           
           $datat = date("Y-m-d",mktime(0,0,0,$this->mesatual,$c,$this->anousu));
           
-          $identifica = split("-",key($matriz_imp));
+          $identifica = explode("-",key($matriz_imp));
                    
           if( isset($matriz_imp[key($matriz_imp)][substr($datat,8,2)]) ){
           	$color = "red";

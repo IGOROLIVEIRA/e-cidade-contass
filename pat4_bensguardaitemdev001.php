@@ -60,7 +60,7 @@ if (isset($incluir)) {
   if ($chaves != "") {
     
     db_inicio_transacao();
-    $dados = split("#", $chaves);
+    $dados = explode("#", $chaves);
     for ($w = 0; $w < count($dados); $w++) {
       
       if ($sqlerro == false) {

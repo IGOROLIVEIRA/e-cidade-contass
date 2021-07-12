@@ -75,7 +75,7 @@ $clorcfontesdes = new cl_orcfontesdes;
        </td>
     </tr> 
 <?
-  $matriz= split("\.",$o50_estrutreceita);
+  $matriz= explode("\.",$o50_estrutreceita);
   $inicia=false;//variavel que indica que o nivel não tem mais filhos
   $tam=(count($matriz)-1);
   $codigos='';

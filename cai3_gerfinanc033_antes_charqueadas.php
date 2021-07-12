@@ -42,7 +42,7 @@ if($k03_tipo == 1){
     next($vt);
   }
 
-  $numpres = split("N",$numpres);
+  $numpres = explode("N",$numpres);
 
   $unica = false;
   if(sizeof($numpres)<2){
@@ -55,7 +55,7 @@ if($k03_tipo == 1){
   }
   pg_exec("BEGIN");
   for($volta = 1;$volta < sizeof($numpres);$volta++) {
-    $codigos = split("P",$numpres[$volta]);  
+    $codigos = explode("P",$numpres[$volta]);  
   }
   $pdf = new fpdf();
   $pdf->Open();
@@ -304,7 +304,7 @@ if($k03_tipo == 1){
   $pdf->setfont('Times','',4); 
   $pdf->Rect(5,5,200,60,'d');
 //  echo 'sandro'.$j40_refant;exit;		  
-  $dadosma = split("\.",trim($j40_refant));
+  $dadosma = explode("\.",trim($j40_refant));
 		  
   $pdf->Text(166,9,'INSCRIÇÃO');
   $pdf->Text(144,16,'ZONA');
@@ -539,7 +539,7 @@ for($i = 0;$i < $tam;$i++) {
   next($vt);
 }
 $sounica = $numpres;
-$numpres = split("N",$numpres);
+$numpres = explode("N",$numpres);
 
 $unica = 2;
 if(sizeof($numpres)<2){
@@ -844,7 +844,7 @@ for($volta = 1;$volta < sizeof($numpres);$volta++) {
   $result = pg_exec("select fc_numbco($k00_codbco,'$k00_codage')");
   db_fieldsmemory($result,0);
  
-  $valores = split("P",$numpres[$volta]);
+  $valores = explode("P",$numpres[$volta]);
   $k00_numpre = $valores[0];
   $k00_numpar = $valores[1];  
   $k03_anousu = $H_ANOUSU;

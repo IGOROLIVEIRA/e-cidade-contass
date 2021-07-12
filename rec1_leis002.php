@@ -39,9 +39,9 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $arr_dados_iframe = split("\|", $anos_perc_inf);
+  $arr_dados_iframe = explode("\|", $anos_perc_inf);
   for($i=0; $i<count($arr_dados_iframe); $i++){
-    $arr_valores = split("-", $arr_dados_iframe[$i]);
+    $arr_valores = explode("-", $arr_dados_iframe[$i]);
     $anos = $arr_valores[0];
     $perc = $arr_valores[1];
     $car  = $arr_valores[2];

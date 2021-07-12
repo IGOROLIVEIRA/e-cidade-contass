@@ -444,7 +444,7 @@ function db_criatabela($result)
                                                                               else
                                                                                 return str_pad(number_format($str, 2, ",", "."), $quantidade, $caracter, STR_PAD_LEFT);
                                                                             case "d":
-                                                                              $data = split("-", $str);
+                                                                              $data = explode("-", $str);
                                                                               return $data[2] . "/" . $data[1] . "/" . $data[0];
                                                                             case "s":
                                                                               if ($TipoDePreenchimento == "e") {
@@ -460,10 +460,10 @@ function db_criatabela($result)
                                                                                 $str = str_replace(",", ".", $str);
                                                                                 return $str;
                                                                               } else if (strpos($str, "-") != "") {
-                                                                                $str = split("-", $str);
+                                                                                $str = explode("-", $str);
                                                                                 return $str[2] . "-" . $str[1] . "-" . $str[0];
                                                                               } else if (strpos($str, "/") != "") {
-                                                                                $str = split("/", $str);
+                                                                                $str = explode("/", $str);
                                                                                 return $str[2] . "-" . $str[1] . "-" . $str[0];
                                                                               }
                                                                               break;
@@ -489,7 +489,7 @@ function db_criatabela($result)
                                                                                   break;
                                                                                 case "date":
                                                                                   if ($aux != "") {
-                                                                                    $data = split("-", $aux);
+                                                                                    $data = explode("-", $aux);
                                                                                     ${$matriz[$i]} = $data[2] . "/" . $data[1] . "/" . $data[0];
                                                                                   } else {
                                                                                     ${$matriz[$i]} = "";
@@ -502,7 +502,7 @@ function db_criatabela($result)
                                                                             } else
                                                                               switch (pg_fieldtype($recordset, $i)) {
                                                                                 case "date":
-                                                                                  $datav = split("-", $aux);
+                                                                                  $datav = explode("-", $aux);
                                                                                   $split_data = $matriz[$i] . "_dia";
                                                                                   global ${$split_data};
                                                                                   ${$split_data} =  @$datav[2];
@@ -838,7 +838,7 @@ function db_getsession($var) {
                                                                           }
                                                                           //cria nome da funcao com parametros
                                                                           if ($arquivo == "()") {
-                                                                            $arrayFuncao = split("\|", $aonde);
+                                                                            $arrayFuncao = explode("\|", $aonde);
                                                                             $quantidadeItemsArrayFuncao = sizeof($arrayFuncao);
                                                                           }
 
@@ -886,7 +886,7 @@ function db_getsession($var) {
                                                                               if (strlen(strstr(pg_fieldname($result, $j), "db_")) == 0) {
                                                                                 if (pg_fieldtype($result, $j) == "date") {
                                                                                   if (pg_result($result, $i, $j) != "") {
-                                                                                    $matriz_data = split("-", pg_result($result, $i, $j));
+                                                                                    $matriz_data = explode("-", pg_result($result, $i, $j));
                                                                                     $var_data = $matriz_data[2] . "/" . $matriz_data[1] . "/" . $matriz_data[0];
                                                                                   } else {
                                                                                     $var_data = "//";

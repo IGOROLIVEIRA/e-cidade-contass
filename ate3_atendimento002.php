@@ -125,7 +125,7 @@ if($tipo!=0){
   }
 }
 if($scodigo!=""){
-  $campos = split("-",$scodigo);
+  $campos = explode("-",$scodigo);
   $sql .= " and ".$campos[0]." = ".$campos[1];
 }
 

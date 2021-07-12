@@ -21,7 +21,7 @@ if (isset($post->incluir)){
    $clissnotaavulsa->q51_usuario = db_getsession("DB_id_usuario");
 	 $clissnotaavulsa->q51_hora    = date("h:i");
 	 $clissnotaavulsa->q51_data    = date("Y-m-d",db_getsession("DB_datausu"));
-	 $dtparte                          = split("/",$post->q51_dtemiss);
+	 $dtparte                          = explode("/",$post->q51_dtemiss);
 	 $clissnotaavulsa->q51_dtemiss_dia = $dtparte[0];
 	 $clissnotaavulsa->q51_dtemiss_mes = $dtparte[1];
 	 $clissnotaavulsa->q51_dtemiss_ano = $dtparte[2];

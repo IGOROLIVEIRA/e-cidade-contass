@@ -5,7 +5,7 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_sql.php");
-$mat_numpre = split("#",base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
+$mat_numpre = explode("#",base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
 //echo $mat_numpre[0]."-";
 //echo $mat_numpre[1]."-";  
 //echo $mat_numpre[2];  

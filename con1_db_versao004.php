@@ -58,7 +58,7 @@ if(isset($incluir)){
       echo "<script>alert('Não existe versão para esta release! Cadastre primeiro uma versao')</script>";
       exit;
      }
-     $matriz= split("P",$max);
+     $matriz= explode("P",$max);
 //     $db30_codversao = $matriz[0]; 
      $db30_codrelease = $matriz[1];
   }

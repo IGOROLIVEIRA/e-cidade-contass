@@ -64,7 +64,7 @@ For any suggestions or bug report please contact me : guinux@cosmoplazza.com
 			$x += $this->_bar_width*10;
 
 			foreach($this->_pattern as $pos=>$digit) {
-				$digit = split( ' ', $digit);
+				$digit = explode( ' ', $digit);
 				$bar = true;
 				foreach ($digit as $tmp=>$nb) {
 					$this->_draw_line( $x, $y, $nb, $bar_height, $bar );

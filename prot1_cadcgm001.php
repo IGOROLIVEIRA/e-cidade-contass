@@ -111,7 +111,7 @@
             else "; 
          if (isset($testanome)) {
            
-          $camp = split("\|",$valores);
+          $camp = explode("\|",$valores);
           $vals = "";
           $vir = "";
           
@@ -239,7 +239,7 @@
    } // ------------------------ FIM NÃO ENTRA -----------------------------------------------   
    
    if (isset($testanome)) {
-     $camp = split("\|",$valores);
+     $camp = explode("\|",$valores);
      $vals = "";
      $vir = "";
      for ($f=1;$f<count($camp);$f++) {

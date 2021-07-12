@@ -163,7 +163,7 @@ $fc_febraban = pg_result($resultcod,0,0);
     			
 $codigo_barras   = substr($fc_febraban,0,strpos($fc_febraban,','));
 $linha_digitavel = substr($fc_febraban,strpos($fc_febraban,',')+1);
-$matriz= split('\.',$j40_refant);
+$matriz= explode('\.',$j40_refant);
 $pdf = new scpdf();
 $pdf->Open();
 $pdf->settopmargin(5);

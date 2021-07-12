@@ -34,7 +34,7 @@ function formatar($field,$size,$tipo=""){
      $field = str_replace('.','',$field);
      $field = espaco($size-(strlen($field)),'0').$field;
   } else if ($tipo =="d"){  
-     $dt= split("-",$field);
+     $dt= explode("-",$field);
      $field = "$dt[2]$dt[1]$dt[0]";
   }
   

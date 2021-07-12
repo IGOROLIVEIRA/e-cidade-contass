@@ -94,7 +94,7 @@
         $sqlerro = true;
       }
 
-      $matriz = split("X", $oPost->caracteristica);
+      $matriz = explode("X", $oPost->caracteristica);
       for($i=0; $i<sizeof($matriz); $i++){
         $x12_codigo = $matriz[$i];
         if($x12_codigo != ""){
@@ -178,7 +178,7 @@
         $sqlerro=true;
       }
 
-      $matriz = split("X", $oPost->caracteristica);
+      $matriz = explode("X", $oPost->caracteristica);
       for($i=0; $i<sizeof($matriz); $i++){
         $x12_codigo = $matriz[$i];
         if($x12_codigo != ""){

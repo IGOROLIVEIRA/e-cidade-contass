@@ -127,13 +127,13 @@ if ($clrharqbanco->numrows > 0) {
   $horageracao = date("H") . date("i") . date("s");
 
   if (isset($datageracao) && $datageracao != "") {
-    $datag = split('-', $datageracao);
+    $datag = explode('-', $datageracao);
     $datag_dia = $datag[2];
     $datag_mes = $datag[1];
     $datag_ano = $datag[0];
   }
   if (isset($datadeposit) && $datadeposit != "") {
-    $datad = split('-', $datadeposit);
+    $datad = explode('-', $datadeposit);
     $datad_dia = $datad[2];
     $datad_mes = $datad[1];
     $datad_ano = $datad[0];

@@ -86,8 +86,8 @@
 
   //////////////////////////////////
   $head4 = "Relatorio de Projetos";
-  $perini= split("-",$dt_ini);
-  $perfim= split("-",$dt_fim);
+  $perini= explode("-",$dt_ini);
+  $perfim= explode("-",$dt_fim);
   $head5 = "PERIODO : $perini[2]/$perini[1]/$perini[0]  à  $perfim[2]/$perfim[1]$perfim[0]";
    
   $pdf = new PDF();

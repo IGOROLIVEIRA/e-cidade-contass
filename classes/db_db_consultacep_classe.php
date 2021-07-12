@@ -100,7 +100,7 @@ class cl_db_consultacep {
 			db_fieldsmemory($result, 0);
 			$sql = ("select j29_cep as cep,j14_nome as endereco,'' as bairro,j14_codigo as codigorua from ruascep inner join ruas on j14_codigo = j29_codigo where j29_cep = '$cep'");
 			$result = $this->sql_record($sql);
-			$campos = split("\|", $funcao_js);
+			$campos = explode("\|", $funcao_js);
 			if ($this->numrows > 0) {
 				db_fieldsmemory($result, 0);
 				echo "<script>" . $campos[0] . "('" . $GLOBALS['cep'] . "','" . $GLOBALS['endereco'] . "','" . $GLOBALS['munic'] . "','" . $GLOBALS['uf'] . "','" . $GLOBALS['bairro'] . "','" . $GLOBALS['codigorua'] . "')</script>";
@@ -122,7 +122,7 @@ class cl_db_consultacep {
 			/*  $camposql = "db10_cep as cep,'' as endereco,db10_munic as municipio, db12_uf as estado";
 			  $sql = $this->sql_query($cep,$camposql,""," inner join db_uf on db10_uf = db12_codigo where db10_cep = '$cep' ");
 			  $result = $this->sql_record($sql);
-			  $campos = split("\|",$funcao_js);*/
+			  $campos = explode("\|",$funcao_js);*/
 			$sql = "select case when ceplogradouros.cp06_cep is null then ceplocalidades.cp05_cepinicial	                           
 				                     else ceplogradouros.cp06_cep
 						end as cep,       
@@ -362,7 +362,7 @@ class cl_db_consultacep {
 	function sql_query($cep, $campos = "*", $ordem = null, $dbwhere = "") {
 		$sql = "select ";
 		if ($campos != "*") {
-			$campos_sql = split("#", $campos);
+			$campos_sql = explode("#", $campos);
 			$virgula = "";
 			for ($i = 0; $i < sizeof($campos_sql); $i++) {
 				$sql .= $virgula . $campos_sql[$i];
@@ -384,7 +384,7 @@ class cl_db_consultacep {
 		$sql .= $sql2;
 		if ($ordem != null) {
 			$sql .= " order by ";
-			$campos_sql = split("#", $ordem);
+			$campos_sql = explode("#", $ordem);
 			$virgula = "";
 			for ($i = 0; $i < sizeof($campos_sql); $i++) {
 				$sql .= $virgula . $campos_sql[$i];

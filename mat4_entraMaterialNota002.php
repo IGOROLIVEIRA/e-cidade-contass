@@ -119,24 +119,24 @@ if (isset($confirma)){
   }
   $erro_msg = $clmatestoqueini->erro_msg;
 
-  $dados    = split("quant_","$valores");
-  $cods     = split("coditem_","$codmatmater");
-  $vlitem   = split("valor","$val");
-  $qmult    = split("qntmul_",$valmul);
-  $unidad   = split("codunid_","$codunidade");
+  $dados    = explode("quant_","$valores");
+  $cods     = explode("coditem_","$codmatmater");
+  $vlitem   = explode("valor","$val");
+  $qmult    = explode("qntmul_",$valmul);
+  $unidad   = explode("codunid_","$codunidade");
 
   for ($i=1; $i<count($dados); $i++){
     if ($sqlerro==false){
-      $quamul          = split("_",$qmult[$i]);
+      $quamul          = explode("_",$qmult[$i]);
       $quant_mult      = db_formatar($quamul[1], 'p');
-      $numero          = split("_",$dados[$i]);
-      $codigosmat      = split("_",$cods[$i]);
+      $numero          = explode("_",$dados[$i]);
+      $codigosmat      = explode("_",$cods[$i]);
       $codmatmater     = $codigosmat[1];
       $codele          = $numero[0];
       $numemp          = $numero[1];
       $codmatordemitem = $numero[2];
       $quanti          = db_formatar($numero[4], 'p');
-      $valitem         = split("_",$vlitem[$i]);
+      $valitem         = explode("_",$vlitem[$i]);
       $valorquant      = $valitem[2];
       $valor_item      = "";
 
@@ -266,7 +266,7 @@ if (isset($confirma)){
       reset($arr_eles);
       for($y=0;$y<sizeof($arr_eles);$y++){
         $codele_numemp = key($arr_eles);
-        $arr_emp       = split("_",$codele_numemp);
+        $arr_emp       = explode("_",$codele_numemp);
         $codelem       = $arr_emp[0];
         $numemp1       = $arr_emp[1];
         if ($numemp1==$iNumEmp){
@@ -292,8 +292,8 @@ if (isset($confirma)){
   for ($i=1; $i<sizeof($dados); $i++){
     if ($sqlerro==false){
 
-      $numero          = split("_",$dados[$i]);
-      $codigosmat      = split("_",$cods[$i]);
+      $numero          = explode("_",$dados[$i]);
+      $codigosmat      = explode("_",$cods[$i]);
       $codmatmater     = $codigosmat[1];
       $codele          = $numero[0];
       $numemp          = $numero[1];
@@ -301,13 +301,13 @@ if (isset($confirma)){
       $quanti          = $numero[4];
 
       //echo "reg: $i - quanti: $quanti - " . $vlitem[$i] . "<br>";
-      $valitem    = split("_",$vlitem[$i]);
+      $valitem    = explode("_",$vlitem[$i]);
       $valorquant = $valitem[2];
-      $quamul     = split("_",$qmult[$i]);
+      $quamul     = explode("_",$qmult[$i]);
       $quant_mult = db_formatar($quamul[1], 'p');
       $quanti_ant = db_formatar($quanti,'p');
       $quanti     = $quanti*$quant_mult;
-      $unid       = split("_",$unidad[$i]);
+      $unid       = explode("_",$unidad[$i]);
       $codi_unid  = $unid[1];
       $tam        = strlen($codi_unid);
       $tam        = $tam-1;

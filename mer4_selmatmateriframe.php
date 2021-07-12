@@ -58,7 +58,7 @@ if (isset ($atualizar) && $atualizar != "") {
     for ($i = 0; $i < $ta; $i ++) {
         $chave = key($vt);
         if (substr($chave, 0, 5) == "CHECK") {
-            $dados = split("_", $chave);
+            $dados = explode("_", $chave);
             $clmer_alimentomatmater->me36_i_alimento = $me36_i_alimento;
             $clmer_alimentomatmater->me36_i_matmater = $dados[1];              
             $clmer_alimentomatmater->incluir(null);

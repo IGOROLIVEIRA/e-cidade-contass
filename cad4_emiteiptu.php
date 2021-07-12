@@ -993,11 +993,11 @@ if(isset($geracarnes)){
       // demais modelo 1
 	      $dtVencUnica = "";
 	      $vir         = "";
-	      $dtudica     = split("U",$unica);
+	      $dtudica     = explode("U",$unica);
 	      $tam         = (count($dtudica));
 
 	      for($t=0; $t < $tam; $t++){
-	          $dtvenc = split("=",$dtudica[$t]);
+	          $dtvenc = explode("=",$dtudica[$t]);
 	          if(trim($dtvenc[0])!=""){
 	            $dtVencUnica .= $vir.$dtvenc[0];
 	            $vir      =",";

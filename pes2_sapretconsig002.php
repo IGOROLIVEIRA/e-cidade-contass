@@ -50,7 +50,7 @@ if(trim($rubrs) != ""){
   $dbwhererubs = " and #s#_rubric in ('".str_replace(",","','",$rubrs)."')";
 }
 
-$arr_pontos = split(",",$ponts);
+$arr_pontos = explode(",",$ponts);
 $varSQL = "";
 
 $headPontos = "";

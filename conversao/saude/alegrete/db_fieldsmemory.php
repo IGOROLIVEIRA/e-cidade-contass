@@ -28,7 +28,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="",$mostravar=false){
             break;
           case "date":
           if($aux!=""){
-              $data = split("-",$aux);
+              $data = explode("-",$aux);
               $$matriz[$i] = $data[2]."/".$data[1]."/".$data[0];
             }else{
               $$matriz[$i] = "";
@@ -43,7 +43,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="",$mostravar=false){
      } else
          switch(pg_fieldtype($recordset,$i)) {
           case "date":
-            $datav = split("-",$aux);
+            $datav = explode("-",$aux);
           $split_data = $matriz[$i]."_dia";
           global $$split_data;
           $$split_data =  @$datav[2];     
@@ -75,7 +75,7 @@ function db_endereco($endtrocar) {
   global $compl;
   if(ereg($er,$texto,$matriz)) {
     $numero = trim(substr($matriz[0],2,9));
-    $xender = split($matriz[0],$texto);
+    $xender = explode($matriz[0],$texto);
     $ender  = $xender[0];
     $compl  = trim(substr($xender[1],1,20));
   } else {

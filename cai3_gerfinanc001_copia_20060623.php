@@ -704,7 +704,7 @@ function js_label(liga,str){
 
 
 
-			$tipo_pesq = split("=",$arg);
+			$tipo_pesq = explode("=",$arg);
 
 
 

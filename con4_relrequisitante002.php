@@ -78,8 +78,8 @@ for ($x = 0; $x < pg_numrows($result); $x++) {
   }
   $pdf->setfont('arial','',7);
 
-  $aDataHora = split(" ", $oRequisitantes->db149_data);
-  $sData = split( "-", $aDataHora[0] );
+  $aDataHora = explode(" ", $oRequisitantes->db149_data);
+  $sData = explode( "-", $aDataHora[0] );
   $sDataHora    = $sData[2] . "/" . $sData[1] . "/" . $sData[0]. " " .$aDataHora[1];
   
   $pdf->cell(30, $alt, $oRequisitantes->db149_matricula,1,0,"C",0);

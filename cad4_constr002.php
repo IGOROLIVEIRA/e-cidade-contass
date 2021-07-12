@@ -61,7 +61,7 @@ if(isset($incluir)){
      $j39_idcons = $j39_idcons + 1;
    }      
    $cliptuconstr->incluir($j39_matric,$j39_idcons);
-   $matriz= split("X",$caracteristica);
+   $matriz= explode("X",$caracteristica);
    for($i=0;$i<sizeof($matriz);$i++){
      $j48_caract = $matriz[$i];
      if($j48_caract!=""){
@@ -78,7 +78,7 @@ if(isset($incluir)){
     $clcarconstr->excluir();
 
     $cliptuconstr->alterar($j39_matric,$j39_idcons);
-    $matriz= split("X",$caracteristica);
+    $matriz= explode("X",$caracteristica);
     for($i=0;$i<sizeof($matriz);$i++){
       $j48_caract = $matriz[$i];
       if($j48_caract!=""){

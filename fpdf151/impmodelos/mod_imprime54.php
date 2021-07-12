@@ -95,7 +95,7 @@ $this->objpdf->text($xcol+ 23,$xlin+17,':  '.$this->Sdata);
 $this->objpdf->setxy($xcol+24,$xlin+22);
 
 $Sresumo = trim($this->Sresumo);
-$vresumo = split("\n",$Sresumo);
+$vresumo = explode("\n",$Sresumo);
 
 if (count($vresumo) > 1){
   $Sresumo   = "";

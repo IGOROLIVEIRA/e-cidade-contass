@@ -38,7 +38,7 @@ $classinatura = new cl_assinatura;
 
 //$tipo_agrupa = substr($nivel,0,1);
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = db_query("select codigo, nomeinstabrev as nomeinst from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -64,7 +64,7 @@ $head1 = "DEMOSTRATIVO DA DESPESA POR ORGÃO/FUNÇÃO";
 $head2 = "ANEXO(9) - EXERCICIO: ".db_getsession("DB_anousu")." - ".$xtipo;
 $head3 = "INSTITUIÇÕES : ".$descr_inst;
 
-$xcampos = split("-",$orgaos);
+$xcampos = explode("-",$orgaos);
 
 
 if (substr($nivel,0,1) == '1') {
@@ -76,7 +76,7 @@ if (substr($nivel,0,1) == '1') {
 }
 $virgula1 = ' ';
 for ($i=0; $i < sizeof($xcampos); $i++) {
-  $xxcampos = split("_",$xcampos[$i]);
+  $xxcampos = explode("_",$xcampos[$i]);
   $virgula = '';
   $where  = "'";
   $where1 = "'";

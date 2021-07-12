@@ -45,14 +45,14 @@ if(isset($valores) && trim($valores)!=""){
     $sair = false;
   }  
 }else if(isset($coluna) && trim($coluna)!=""){
-  $arr_valorescoluna = split(",",$coluna);
+  $arr_valorescoluna = explode(",",$coluna);
   $arr_codigtipo = Array();
   $arr_valortipo = Array();
   $arr_indextipo = Array();
   $numrows_valores = 0;
   $sair  = false;
   for($i=0;$i<sizeof($arr_valorescoluna);$i++){    
-    $arr_quebracoluna = split("-",$arr_valorescoluna[$i]);
+    $arr_quebracoluna = explode("-",$arr_valorescoluna[$i]);
     $codigtipo = $arr_quebracoluna[0];
     $valortipo = $arr_quebracoluna[1];
     if(!isset($arr_codigtipo[$codigtipo])){

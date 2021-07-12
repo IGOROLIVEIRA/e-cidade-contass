@@ -3758,16 +3758,16 @@ class empenho {
 
     if(isset($oFiltro->codempini) && !empty($oFiltro->codempini)) {
 
-      $codempIni  = split("/",$oFiltro->codempini);
+      $codempIni  = explode("/",$oFiltro->codempini);
       if (isset($oFiltro->codempfim) && !empty($oFiltro->codempfim)) {
 
-        $codempFim  = split("/",$oFiltro->codempfim);
+        $codempFim  = explode("/",$oFiltro->codempfim);
         $str = "  ( ( e60_codemp::integer >= ".$codempIni[0]." AND e60_anousu = {$iAnoUso} )                          ";
         $str .= " AND ( e60_codemp::integer <= ".$codempFim[0]." AND e60_anousu = {$iAnoUso} ) )                      ";
 
       } else {
 
-        $codemp  = split("/",$oFiltro->codempini);
+        $codemp  = explode("/",$oFiltro->codempini);
         if (count($codemp) > 1) {
           $str = " e60_codemp = '".$codemp[0]."' AND e60_anousu = ".$codemp[1]." ";
         } else {
@@ -3788,12 +3788,12 @@ class empenho {
     if (isset($oFiltro->dtemissini) && isset($oFiltro->dtemissfim)) {
 
       if (!empty($oFiltro->dtemissini)) {
-        $dtDataIni = split("/", $oFiltro->dtemissini);
+        $dtDataIni = explode("/", $oFiltro->dtemissini);
         $dtDataIni = $dtDataIni[2]."-".$dtDataIni[1]."-".$dtDataIni[0];
       }
 
       if (!empty($oFiltro->dtemissini)) {
-        $dtDataFim = split("/", $oFiltro->dtemissfim);
+        $dtDataFim = explode("/", $oFiltro->dtemissfim);
         $dtDataFim = $dtDataFim[2]."-".$dtDataFim[1]."-".$dtDataFim[0];
       }
 

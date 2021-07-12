@@ -628,7 +628,7 @@ function sqlRecordTabelaTemp($sCampos="*", $sWhere=null, $sOrdem="a") {
   $sSql = "select ";
   if ( $sCampos != "*" ) {
   	
-    $aCamposSql = split("#", $sCampos);
+    $aCamposSql = explode("#", $sCampos);
     $sVirgula   = "";
     for($i=0; $i < sizeof($aCamposSql); $i++) {
     	
@@ -650,7 +650,7 @@ function sqlRecordTabelaTemp($sCampos="*", $sWhere=null, $sOrdem="a") {
   if ( !empty($sOrdem) ) {
   	
     $sSql      .= " order by ";
-    $aCamposSql = split("#",$sOrdem);
+    $aCamposSql = explode("#",$sOrdem);
     $sVirgula   = "";
     for ($i = 0; $i < sizeof($aCamposSql); $i++) {
     	

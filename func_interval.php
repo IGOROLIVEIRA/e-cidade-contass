@@ -51,7 +51,7 @@ if($cldb_syscampo->numrows > 0){
   }
 }
 if(isset($valorvariavel) && trim($valorvariavel) != ""){
-	$arr_valorvariavel = split("[|]",$valorvariavel);
+	$arr_valorvariavel = explode("[|]",$valorvariavel);
 	$camporecebe = $nomecam;
 	for($i=1;$i<count($arr_valorvariavel);$i++){
 		$qualcampo  = $camporecebe.$i;
@@ -157,7 +157,7 @@ js_retornavalor();
 				$mes = $nomecam."_mes";
 				$ano = $nomecam."_ano";
 				if(isset($$teste1)){
-					$arr_teste1 = split("-",$$teste1);
+					$arr_teste1 = explode("-",$$teste1);
 					$$dia = $arr_teste1[2];
 					$$mes = $arr_teste1[1];
 					$$ano = $arr_teste1[0];
@@ -170,7 +170,7 @@ js_retornavalor();
 			  echo "&nbsp;<b>a</b>&nbsp;";
 				$teste2 = $nomecam."2";
 				if(isset($$teste2)){
-					$arr_teste2 = split("-",$$teste2);
+					$arr_teste2 = explode("-",$$teste2);
 					$$dia = $arr_teste2[2];
 					$$mes = $arr_teste2[1];
 					$$ano = $arr_teste2[0];

@@ -582,7 +582,7 @@ class cl_rhpesrescisao {
    function sql_query ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -607,7 +607,7 @@ class cl_rhpesrescisao {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -620,7 +620,7 @@ class cl_rhpesrescisao {
    function sql_query_file ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -641,7 +641,7 @@ class cl_rhpesrescisao {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -656,7 +656,7 @@ class cl_rhpesrescisao {
    function sql_query_retorno ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere="",$anonovo,$mesnovo){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -683,7 +683,7 @@ class cl_rhpesrescisao {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -695,7 +695,7 @@ class cl_rhpesrescisao {
    function sql_query_rescisao ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -727,7 +727,7 @@ class cl_rhpesrescisao {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -739,7 +739,7 @@ class cl_rhpesrescisao {
    function sql_query_ngeraferias ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -761,7 +761,7 @@ class cl_rhpesrescisao {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -774,7 +774,7 @@ class cl_rhpesrescisao {
   function sql_relatorios_termo_rescisao ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere="") { 
     $sql = "select ";
     if($campos != "*" ){
-        $campos_sql = split("#",$campos);
+        $campos_sql = explode("#",$campos);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
             $sql .= $virgula.$campos_sql[$i];
@@ -825,7 +825,7 @@ class cl_rhpesrescisao {
     $sql .= $sql2;
     if($ordem != null ){
         $sql .= " order by ";
-        $campos_sql = split("#",$ordem);
+        $campos_sql = explode("#",$ordem);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
             $sql .= $virgula.$campos_sql[$i];
@@ -838,7 +838,7 @@ class cl_rhpesrescisao {
   function sql_servidor_rescisao ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere=""){ 
       $sql = "select ";
       if($campos != "*" ){
-          $campos_sql = split("#",$campos);
+          $campos_sql = explode("#",$campos);
           $virgula = "";
           for($i=0;$i<sizeof($campos_sql);$i++){
               $sql .= $virgula.$campos_sql[$i];
@@ -863,7 +863,7 @@ class cl_rhpesrescisao {
       $sql .= $sql2;
       if($ordem != null ){
           $sql .= " order by ";
-          $campos_sql = split("#",$ordem);
+          $campos_sql = explode("#",$ordem);
           $virgula = "";
           for($i=0;$i<sizeof($campos_sql);$i++){
               $sql .= $virgula.$campos_sql[$i];
@@ -876,7 +876,7 @@ class cl_rhpesrescisao {
   function sql_dados_rescisao ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere="") { 
       $sql = "select ";
       if($campos != "*" ){
-          $campos_sql = split("#",$campos);
+          $campos_sql = explode("#",$campos);
           $virgula = "";
           for($i=0;$i<sizeof($campos_sql);$i++){
               $sql .= $virgula.$campos_sql[$i];
@@ -912,7 +912,7 @@ class cl_rhpesrescisao {
       $sql .= $sql2;
       if($ordem != null ){
           $sql .= " order by ";
-          $campos_sql = split("#",$ordem);
+          $campos_sql = explode("#",$ordem);
           $virgula = "";
           for($i=0;$i<sizeof($campos_sql);$i++){
               $sql .= $virgula.$campos_sql[$i];

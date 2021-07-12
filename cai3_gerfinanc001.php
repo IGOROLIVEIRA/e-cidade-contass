@@ -1647,7 +1647,7 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
   $permissao = db_permissaomenu(db_getsession("DB_anousu"), 1985522, 5604);
 
   //colocado aqui
-  $tipo_pesq = split("=", $arg);
+  $tipo_pesq = explode("=", $arg);
   if ($tipo_pesq [0] != "numpre") {
       $tipo = "c";
       $whereissvar = ($k03_certissvar == 't' ? " k00_valor <> 0 " : "");

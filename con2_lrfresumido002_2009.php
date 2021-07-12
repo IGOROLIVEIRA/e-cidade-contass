@@ -82,7 +82,7 @@ $periodo_selecao = $dados["periodo"];
 //die($bimestre);
 $anousu_ant = $anousu-1;
 
-$xinstit    = split("-",$db_selinstit);
+$xinstit    = explode("-",$db_selinstit);
 $resultinst = pg_exec("select munic from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 db_fieldsmemory($resultinst,0);
 
@@ -92,10 +92,10 @@ if (!isset($arqinclude)){
   $txt2  = "DEMONSTRATIVO SIMPLIFICADO DO RELATÓRIO RESUMIDO DA EXECUÇÃO ORÇAMENTÁRIA";
   $txt3  = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 
-  $mes     = split("-",$dt_ini); 
+  $mes     = explode("-",$dt_ini); 
   $mesini  = strtoupper(db_mes($mes[1]));
   $txt4    = "JANEIRO";
-  $mes     = split("-",$dt_fin); 
+  $mes     = explode("-",$dt_fin); 
   $mesfin  = strtoupper(db_mes($mes[1]));
   $txt4   .= " A $mesfin/$anousu";
 
@@ -654,7 +654,7 @@ if ($emite_rcl==1||$emite_ppp==1){
    */
 
   // se o ano atual  bissexto deve subtrair 366 somente se a data for superior a 28/02/200X
-  $dt = split('-',$dt_fin);  // mktime -- (mes,dia,ano)
+  $dt = explode('-',$dt_fin);  // mktime -- (mes,dia,ano)
   $dt_ini_ant = "{$anousu_ant}-01-01";
   $dt_fin_ant = "{$anousu_ant}-12-31";  
 

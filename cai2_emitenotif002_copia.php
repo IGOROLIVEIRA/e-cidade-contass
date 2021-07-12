@@ -259,7 +259,7 @@ if ( $tiporel == 1 ) {
         $resultender = pg_exec($sqlender);
         db_fieldsmemory($resultender,0);
 
-        $endereco = split("#",$fc_iptuender);
+        $endereco = explode("#",$fc_iptuender);
 
         $z01_ender    = $endereco[0];
         $z01_numero   = $endereco[1];

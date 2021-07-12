@@ -118,7 +118,7 @@ if(!isset($filtroquery)){
 	  }
         }
         if($passar){
-          $executa = split("\|",$executar);
+          $executa = explode("\|",$executar);
           // variável retornadepart usada na solicitação de compras para retornar departamento quando o reduzido é digitado
 	  if($retornadepart==null){
             echo "<script>".$executa[0]."('$chave_o58_coddot');</script>";
@@ -162,7 +162,7 @@ function js_verifica_depto(coddot){
 //    alert(coddot);
 //    alert(document.form1.departamento.value);
     <?
-    $executa = split("\|",$funcao_js);
+    $executa = explode("\|",$funcao_js);
     echo $executa[0]."(coddot,document.form1.departamento.value);";
     ?>
   }

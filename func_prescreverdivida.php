@@ -307,7 +307,7 @@ if($prescrnoti=="n"){
       }
 	  }
 	  
-	  $numpres = split('#',$chaves);
+	  $numpres = explode('#',$chaves);
 	  $numrows = count($numpres);
 	  $i = 0;
 
@@ -319,7 +319,7 @@ if($prescrnoti=="n"){
 
 	      $i++;
 
-	      list ($k00_numpre,$k00_numpar) = split('-',$nv);
+	      list ($k00_numpre,$k00_numpar) = explode('-',$nv);
 
 	      if ($sqlerro == false) {
 	        $result_deb = debitos_numpre($k00_numpre,0,null,db_getsession("DB_datausu"),db_getsession("DB_anousu"),$k00_numpar);

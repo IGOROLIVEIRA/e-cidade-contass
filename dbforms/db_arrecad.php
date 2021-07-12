@@ -30,7 +30,7 @@ require("../libs/db_conecta.php");
 include("../libs/db_sessoes.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 if(!isset($arg)) {
-  $str = split("\?",$HTTP_SERVER_VARS['QUERY_STRING']);
+  $str = explode("\?",$HTTP_SERVER_VARS['QUERY_STRING']);
   $str1 = base64_decode($str[0]);
   $str2 = base64_decode($str[1]);
   echo "$str1<br>$str2";

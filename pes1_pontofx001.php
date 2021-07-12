@@ -312,7 +312,7 @@ if ( (isset($incluir) && !isset($alertconfirma)) || (isset($pontonovo) && !isset
   elseif ( $sqlerro == false && ((($ponto == "fs" || $ponto == "Rfs") && !isset($pontonovo)) || (isset($pontonovo) && trim($pontonovo)=="fs")) ) {
 
     if(isset($pontonovo) && trim($pontonovo)=="fs" && $proporcionalizar == 't'){
-      $arr_ano_mes_usu = split("-",$data_de_admissao);
+      $arr_ano_mes_usu = explode("-",$data_de_admissao);
       $ano_da_admissao = $arr_ano_mes_usu[0];
       $mes_da_admissao = $arr_ano_mes_usu[1];
       $dia_da_admissao = $arr_ano_mes_usu[2] - 1;
@@ -570,7 +570,7 @@ else if (isset($alterar)) {
     }else if($sqlerro == false && ((($ponto == "fs" || $ponto == "Rfs") && !isset($pontonovo)) || (isset($pontonovo) && trim($pontonovo)=="fs"))){
 
       if(isset($pontonovo) && trim($pontonovo)=="fs" && $proporcionalizar == 't'){
-      	$arr_ano_mes_usu = split("-",$data_de_admissao);
+      	$arr_ano_mes_usu = explode("-",$data_de_admissao);
       	$ano_da_admissao = $arr_ano_mes_usu[0];
       	$mes_da_admissao = $arr_ano_mes_usu[1];
         $dia_da_admissao = $arr_ano_mes_usu[2] - 1;

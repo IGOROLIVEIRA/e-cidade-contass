@@ -188,7 +188,7 @@ if(isset($salvarrelatorio)){
   }
 
   if($sqlerro == false){
-  	$arr_tabelas_selecionadas = split(",",$campo_auxilio_tabelasel);
+  	$arr_tabelas_selecionadas = explode(",",$campo_auxilio_tabelasel);
   	for($i=0; $i<count($arr_tabelas_selecionadas); $i++){
 		  $cldb_relattabelas->db92_codrel = $db91_codrel;
 		  $cldb_relattabelas->db92_codarq = $arr_tabelas_selecionadas[$i];
@@ -202,7 +202,7 @@ if(isset($salvarrelatorio)){
   }
 
   if($sqlerro == false){
-  	$arr_camposs_selecionados = split(",",$campo_auxilio_sselecion);
+  	$arr_camposs_selecionados = explode(",",$campo_auxilio_sselecion);
   	for($i=0; $i<count($arr_camposs_selecionados); $i++){
 		  $cldb_relatselecionados->db93_codrel = $db91_codrel;
 		  $cldb_relatselecionados->db93_codcam = $arr_camposs_selecionados[$i];
@@ -219,7 +219,7 @@ if(isset($salvarrelatorio)){
 	  if($sqlerro == false){
 	  	$variavelteste = "campo_camporecb_filtro".$i;
 	  	if(trim($$variavelteste) != ""){
-		  	$arr_filtros_selecionados1 = split("#",$$variavelteste);
+		  	$arr_filtros_selecionados1 = explode("#",$$variavelteste);
 		  	$campofiltro01 = $arr_filtros_selecionados1[0];
 		  	$valorfiltro11 = $arr_filtros_selecionados1[1];
 		  	$valorfiltro12 = "";
@@ -259,7 +259,7 @@ if(isset($salvarrelatorio)){
   }
 
   if($sqlerro == false){
-  	$arr_camposs_somatoriocam = split(",",$campo_camporecb_somator);
+  	$arr_camposs_somatoriocam = explode(",",$campo_camporecb_somator);
   	for($i=0; $i<count($arr_camposs_somatoriocam); $i++){
 		  $cldb_relatsoma->db96_codrel = $db91_codrel;
 		  $cldb_relatsoma->db96_codcam = $arr_camposs_somatoriocam[$i];
@@ -273,8 +273,8 @@ if(isset($salvarrelatorio)){
   }
 
   if($sqlerro == false){
-  	$arr_camposs_quebrapagcam = split(",",$campo_camporecb_qbrapor);
-  	$arr_camposs_totalizacams = split(",",$campo_camporecb_totaliz);
+  	$arr_camposs_quebrapagcam = explode(",",$campo_camporecb_qbrapor);
+  	$arr_camposs_totalizacams = explode(",",$campo_camporecb_totaliz);
   	for($i=0; $i<count($arr_camposs_quebrapagcam); $i++){
   		$totaliza = "false";
   		if(in_array($arr_camposs_quebrapagcam[$i],$arr_camposs_totalizacams)){

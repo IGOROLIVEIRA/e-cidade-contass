@@ -24,7 +24,7 @@ for ($record1=0;$record1 < pg_numrows($result1);$record1++) {
   db_fieldsmemory($result1,$record1);
   echo "processando matricula $j01_matric... refant: $j40_refant\n";
   
-  $matriz= split("\.",$j40_refant);
+  $matriz= explode("\.",$j40_refant);
   $lote    = $matriz[3];
   $sublote = $matriz[4];
 
@@ -64,7 +64,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="",$mostravar=false){
 		  break;
 		case "date":
           if($aux!=""){
-		    $data = split("-",$aux);
+		    $data = explode("-",$aux);
 		    $$matriz[$i] = $data[2]."/".$data[1]."/".$data[0];
 		  }else{
 		    $$matriz[$i] = "";
@@ -79,7 +79,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="",$mostravar=false){
 	} else
   	  switch(pg_fieldtype($recordset,$i)) {
 		case "date":
-		  $datav = split("-",$aux);
+		  $datav = explode("-",$aux);
           $split_data = $matriz[$i]."_dia";
           global $$split_data;
           $$split_data =  @$datav[2];	

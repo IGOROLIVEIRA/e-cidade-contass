@@ -236,7 +236,7 @@ class cl_formulario_relcampos {
         	}
         }
         if(isset($campo_auxilio_sselecion) && $campo_auxilio_sselecion != ""){
-          $arr_selecionados = split(",",$campo_auxilio_sselecion);
+          $arr_selecionados = explode(",",$campo_auxilio_sselecion);
           for($i=0; $i<count($arr_selecionados); $i++){
         		$result_campos = @pg_exec("select db_syscampo.codcam, rotulo, conteudo from db_syscampo where codcam in (".$campo_auxilio_sselecion.") ");
         		if($result_campos != false){

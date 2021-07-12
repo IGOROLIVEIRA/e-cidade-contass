@@ -69,7 +69,7 @@ if (isset($script) && $script != "") {
 	<?
 			$vals = "";
 			$vir  = "";
-			$camp = split(",",$valores);
+			$camp = explode(",",$valores);
 
 			for($f=0;$f<count($camp);$f++){
 				$vals .= $vir."'".$camp[$f]."'";
@@ -85,7 +85,7 @@ if (isset($script) && $script != "") {
 
 if (isset($testanome) && !isset($pesquisa_chave)) {
 
-  $funmat			= split("\|",$funcao_js);
+  $funmat			= explode("\|",$funcao_js);
   $func_antes = $funmat[0];
   $valores		= "";
   $camp				= "";

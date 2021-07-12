@@ -78,9 +78,9 @@ imagecopyresized($saida,$im,$xp,$yp,0,0,imagesx($im),imagesy($im),imagesx($im),i
 ///////////INICIO///////////
 
 Header("Content-type: image/png");
-$str = split("##",base64_decode($argv[0]));
+$str = explode("##",base64_decode($argv[0]));
 parse_str($str[0]);
-$codigo_barras = split("&&",$str[1]);
+$codigo_barras = explode("&&",$str[1]);
 $valor = $str[2];
 $dtvenc = $str[3];
 $img = ImageCreateFromPNG("recibo2.png");

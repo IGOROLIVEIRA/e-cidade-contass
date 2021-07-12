@@ -65,7 +65,7 @@ if(isset($alterar) || isset($incluir) || isset($excluir)){
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa) || isset($opcao)){
   if(isset($opcao)){
-    $r62_data = split("/",$r62_data);
+    $r62_data = explode("/",$r62_data);
     $r62_data = $r62_data[2]."-".$r62_data[1]."-".$r62_data[0];
     $chavepesquisa = $r62_calend;
     $result_data = $clcalendf->sql_record($clcalendf->sql_query_file($chavepesquisa, $r62_data));

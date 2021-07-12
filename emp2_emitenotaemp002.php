@@ -88,8 +88,8 @@ if(isset($e60_numemp) && $e60_numemp != ''){
         db_fieldsmemory($res_empenho,0);
     }
 } else if ((isset($e60_codemp) && $e60_codemp !='') && (isset($e60_codemp_fim) && $e60_codemp_fim !='')){
-    $arr = split("/",$e60_codemp);
-    $arr2 = split("/",$e60_codemp_fim);
+    $arr = explode("/",$e60_codemp);
+    $arr2 = explode("/",$e60_codemp_fim);
     if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
         $dbwhere_ano = " and e60_anousu = ".$arr[1];
         $anousu = $arr[1];
@@ -98,7 +98,7 @@ if(isset($e60_numemp) && $e60_numemp != ''){
     }
     $dbwhere = "e60_codemp::integer >=".$arr[0].". and e60_codemp::integer <='".$arr2[0]."'$dbwhere_ano";
 }else if (isset($e60_codemp) && $e60_codemp !=''){
-    $arr = split("/",$e60_codemp);
+    $arr = explode("/",$e60_codemp);
     if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
         $dbwhere_ano = " and e60_anousu = ".$arr[1];
         $anousu = $arr[1];
@@ -514,7 +514,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
 
     $Sresumo = $pdf1->resumo;
-    $vresumo = split("\n",$Sresumo);
+    $vresumo = explode("\n",$Sresumo);
 
     if (count($vresumo) > 1){
         $Sresumo   = "";
@@ -547,7 +547,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             if($e54_numerl != "") {
-                $arr_numerl = split("/", $e54_numerl);
+                $arr_numerl = explode("/", $e54_numerl);
                 $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
                 $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
                 $pdf1->resumo     = $e60_resumo;
@@ -566,7 +566,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
-            $arr_numerl = split("/", $e54_numerl);
+            $arr_numerl = explode("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
             $pdf1->resumo     = $e60_resumo;
@@ -580,7 +580,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
-            $arr_numerl = split("/", $e54_numerl);
+            $arr_numerl = explode("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
             $pdf1->resumo     = $e60_resumo;
@@ -594,7 +594,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
-            $arr_numerl = split("/", $e54_numerl);
+            $arr_numerl = explode("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
             $pdf1->resumo     = $e60_resumo;

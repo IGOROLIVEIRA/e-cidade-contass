@@ -62,7 +62,7 @@ $clrotulo->label("e81_valor");
 $clrotulo->label("e81_codmov");
 
 if(isset($movs)){
-  $arr_movs = split("XX",$movs);
+  $arr_movs = explode("XX",$movs);
   $arr_m = array();
   for($i=0; $i<count($arr_movs); $i++){
     $arr_m[$arr_movs[$i]] = $arr_movs[$i];

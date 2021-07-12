@@ -103,7 +103,7 @@ $rotulo->label("e50_numemp");
         }else if(isset($chave_e50_numemp) && (trim($chave_e50_numemp)!="") ){
            $sql = $oDaoEmpNota->sql_query_nota("",$campos,"e50_numemp","$dbwhere and e50_numemp like '$chave_e50_numemp%' ");
         }else if(isset($chave_e60_codemp) && (trim($chave_e60_codemp)!="") ){
-        $arr = split("/",$chave_e60_codemp);
+        $arr = explode("/",$chave_e60_codemp);
         if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
     $dbwhere_ano = " and e60_anousu = ".$arr[1];
               }else{

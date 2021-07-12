@@ -69,7 +69,7 @@ if(isset($HTTP_POST_VARS["enviar"])) {
 						v50_movim = '$v50_movim'
 					WHERE v50_codigo = $v50_codigo") or die("Erro(43) atualizando juridico");
   $result = pg_exec("DELETE FROM autproc WHERE v55_proces = $v50_codigo") or die("Erro(44) deletando autproc");
-  $aux_autor = split("#",$aux_autor);
+  $aux_autor = explode("#",$aux_autor);
   $tam = sizeof($aux_autor);
   for($i = 1;$i < $tam;$i++)
     $result = pg_exec("INSERT INTO autproc VALUES($v50_codigo,'".$aux_autor[$i]."',$i)") or die("Erro(48) inserindo em autproc");

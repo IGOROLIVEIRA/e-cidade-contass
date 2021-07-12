@@ -301,7 +301,7 @@ if(!isset($ref)) {
     }
   } else {
     db_postmemory($HTTP_POST_VARS);
-    $campos = split("\r\n",$alt_ind);
+    $campos = explode("\r\n",$alt_ind);
     pg_exec("BEGIN");
     $result = pg_exec("delete from db_sysforkey where codarq = $tabela and referen = $ref") or die("Erro(122) excluindo db_sysforkey");
     for($i = 0;$i < sizeof($campos) - 1;$i++) {

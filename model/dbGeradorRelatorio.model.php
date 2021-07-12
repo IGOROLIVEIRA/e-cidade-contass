@@ -464,7 +464,7 @@ class dbGeradorRelatorio {
 
     foreach ($aFrom as $sTipoRel => $sSql) {
 
-      $aPalavrasFrom = split("[\n ]+",trim($sSql));
+      $aPalavrasFrom = explode("[\n ]+",trim($sSql));
 
       foreach ($aPalavrasFrom as $iInd => $sValor) {
         $sPalavra = trim($sValor);

@@ -44,7 +44,7 @@ $clliclicitemlote->rotulo->label();
 $erro_msg = "";
 
 if (isset($excluir)&&trim($excluir)!=""){
-     $vetor_lotes = split(",",$l04_descricao);
+     $vetor_lotes = explode(",",$l04_descricao);
      $sqlerro     = false;
 
      db_inicio_transacao();

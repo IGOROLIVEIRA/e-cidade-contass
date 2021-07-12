@@ -64,12 +64,12 @@ if (isset($alterar)&&trim($alterar)!=""){
 
      db_inicio_transacao();
 
-     $vetor = split(",", $descricao);
+     $vetor = explode(",", $descricao);
 
      $l04_liclicitem = "";
      $l04_descricao  = "";
      for($i = 0; $i < sizeof($vetor); $i++){
-          $vetor_codigos  = split("_",$vetor[$i]);
+          $vetor_codigos  = explode("_",$vetor[$i]);
 
           $l04_liclicitem = $vetor_codigos[0]*1;
           $l04_descricao  = $vetor_codigos[1];

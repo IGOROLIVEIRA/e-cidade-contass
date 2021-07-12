@@ -99,8 +99,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir
       $sqlerro = true;
     }
     if(isset($codigo) && isset($valor) && $codigo != "" && $valor != "" && $sqlerro == false){
-      $cod = split(",",$codigo);
-      $val = split(",",$valor);
+      $cod = explode(",",$codigo);
+      $val = explode(",",$valor);
       for($i=0;$i<sizeof($cod);$i++){
         $clitbiruralcaract->it19_guia = $clitbi->it01_guia;
         $clitbiruralcaract->it19_codigo = $cod[$i];

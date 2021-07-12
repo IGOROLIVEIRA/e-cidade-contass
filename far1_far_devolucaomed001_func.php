@@ -136,11 +136,11 @@ require_once("classes/materialestoque.model.php");
   }
 
   $m82_matestoqueini = $oDaoMatestoqueini->m80_codigo;
-  $dados             = split("quant_","$valores");
+  $dados             = explode("quant_","$valores");
 
   for ($y = 1; $y < count($dados); $y++) {
 
-    $info            = split('_', $dados[$y]);
+    $info            = explode('_', $dados[$y]);
     $atendrequiitem  = $info[0];
     $codmatmater     = $info[1];
     $matrequiitem    = $info[2];

@@ -269,8 +269,8 @@ if (!isset($oPost->reautentica) && $clautenticar->erro == false) {
 
   if (isset($oPost->codautent)) {
 
-    $aut1 = split(",", $oDadosAutenticadora->k11_aut1);
-    $aut2 = split(",", $oDadosAutenticadora->k11_aut2);
+    $aut1 = explode(",", $oDadosAutenticadora->k11_aut1);
+    $aut2 = explode(",", $oDadosAutenticadora->k11_aut2);
 
     $str_aut1 = "";
     if (trim($oDadosAutenticadora->k11_aut1) != "") {

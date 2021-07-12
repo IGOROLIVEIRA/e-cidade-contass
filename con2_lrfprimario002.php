@@ -64,9 +64,9 @@ if (!isset($arqinclude)){ // se este arquivo não esta incluido por outro
    $dt_ini = $dtini;
    $dt_fin = $dtfin;
  
-   $dt = split('-',$dt_ini);
+   $dt = explode('-',$dt_ini);
    $dt_ini_ant = (db_getsession("DB_anousu")-1).'-'.$dt[1].'-'.$dt[2];
-   $dt = split('-',$dt_fin);
+   $dt = explode('-',$dt_fin);
    $dt_fin_ant = (db_getsession("DB_anousu")-1).'-'.$dt[1].'-'.$dt[2];
 
  }  
@@ -282,7 +282,7 @@ for($x=0;$x< pg_numrows($result_rec);$x++){
 
 if (!isset($arqinclude)){ 
 
- $xinstit = split("-",$db_selinstit);
+ $xinstit = explode("-",$db_selinstit);
  $resultinst = pg_exec("select munic from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
  db_fieldsmemory($resultinst,0);
  $descr_inst = $munic;
@@ -293,8 +293,8 @@ if (!isset($arqinclude)){
  $head5 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 
  $dados  = data_periodo($anousu,$periodo);
- $perini = split("-",$dados[0]);
- $perfin = split("-",$dados[1]);
+ $perini = explode("-",$dados[0]);
+ $perfin = explode("-",$dados[1]);
 
  $txtper = strtoupper($dados["periodo"]);
  $mesini = strtoupper(db_mes($perini[1]));

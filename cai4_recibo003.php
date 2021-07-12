@@ -92,11 +92,11 @@ if (!isset($lReemissao)) {
   $dignum = db_sqlformatar($k03_numpre,8,'0')."001001";
   $dignum = db_CalculaDV($dignum);
   
-  $rece           = split("YY",$codrece);
-  $concarpeculiar = split("YY",$codcpca);
-  $codtaxa        = split("YY",$codtaxa);
-  $valor          = split("YY",$vlrrece);
-  $recurso        = split("YY",$codrecu);
+  $rece           = explode("YY",$codrece);
+  $concarpeculiar = explode("YY",$codcpca);
+  $codtaxa        = explode("YY",$codtaxa);
+  $valor          = explode("YY",$vlrrece);
+  $recurso        = explode("YY",$codrecu);
   
   if($j01_matric!=""){
     $cliptubase = new cl_iptubase;

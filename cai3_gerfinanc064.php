@@ -144,7 +144,7 @@ if(isset($ver_matric)){
     if(db_indexOf(key($vt),"CHECK") > 0){
     	
       $numpres = $vt[key($vt)];
-      $mat = split("N",$numpres);
+      $mat = explode("N",$numpres);
       
       if (isset($oPost->marcarvencidas) && isset($oPost->marcartodas)) {
           
@@ -156,9 +156,9 @@ if(isset($ver_matric)){
               continue;   
             }
                 
-            $numpre = split("P", $mat[$iInd]);
-            $numpar = split("P", strstr($mat[$iInd], "P"));
-            $numpar = split("R",$numpar[1]);
+            $numpre = explode("P", $mat[$iInd]);
+            $numpar = explode("P", strstr($mat[$iInd], "P"));
+            $numpar = explode("R",$numpar[1]);
             $receit = @$numpar[1];
             $numpar = $numpar[0];
             $numpre = $numpre[0];
@@ -186,9 +186,9 @@ if(isset($ver_matric)){
 	          if ($mat[$j] == "") {
 	            continue;
 	          }
-	          $numpre = split("P",$mat[$j]);
-	          $numpar = split("P",strstr($mat[$j],"P"));
-	          $numpar = split("R",$numpar[1]);
+	          $numpre = explode("P",$mat[$j]);
+	          $numpar = explode("P",strstr($mat[$j],"P"));
+	          $numpar = explode("R",$numpar[1]);
 	          $numpar = $numpar[0];
 	          $numpre = $numpre[0];
 	          $numpar1 .= $virgula.$numpar;
@@ -203,9 +203,9 @@ if(isset($ver_matric)){
 	        if ($mat[$j] == "") {
 	          continue;
 	        }
-	        $numpre = split("P",$mat[$j]);
-	        $numpar = split("P",strstr($mat[$j],"P"));
-	        $numpar = split("R",$numpar[1]);
+	        $numpre = explode("P",$mat[$j]);
+	        $numpar = explode("P",strstr($mat[$j],"P"));
+	        $numpar = explode("R",$numpar[1]);
 	        $numpar = $numpar[0];
 	        $numpre = $numpre[0];
 	        $numpar1 .= $virgula.$numpar;
@@ -219,8 +219,8 @@ if(isset($ver_matric)){
 }
 
 $lSqlErro = false;
-$mat  = split(",",$numpre1);
-$mat1 = split(",",$numpar1);
+$mat  = explode(",",$numpre1);
+$mat1 = explode(",",$numpar1);
 $aListaCertidao = array();
 
 if ($iFormaGeracao == 2 && $k03_tipo == 5) {

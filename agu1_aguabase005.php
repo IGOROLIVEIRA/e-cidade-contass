@@ -71,7 +71,7 @@
       $sqlerro = true;
     }
 
-    $matriz = split("X", $caracteristica);
+    $matriz = explode("X", $caracteristica);
 
     for ($i = 0; $i < sizeof($matriz); $i++) {
 

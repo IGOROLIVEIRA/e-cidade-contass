@@ -79,7 +79,7 @@ if(isset($mostra)){
 
   db_inicio_transacao();
   $sqlerro = false;
-  $arr_movimentos = split(",",$movimentos);
+  $arr_movimentos = explode(",",$movimentos);
   for($i=0; $i < sizeof($arr_movimentos); $i++) {
 
     $movimento = $arr_movimentos[$i];
@@ -181,8 +181,8 @@ if(isset($mostra)){
 
 
       if($sqlerro == false){
-	$arr_data  = split("-",$e87_data);
-	$arr_datap = split("-",$e87_dataproc);
+	$arr_data  = explode("-",$e87_data);
+	$arr_datap = explode("-",$e87_dataproc);
 	$data    =  $arr_data[2].$arr_data[1].$arr_data[0];
 	$dat_cred = $arr_datap[2].$arr_datap[1].$arr_datap[0];
 	/// criar campo de sequencia do arquivo no empagetipo.

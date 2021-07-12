@@ -69,7 +69,7 @@ if(!session_is_registered("DB_tipodebitoparcel")){
 $wheretipodeb = "";
 $and = "";
 $tipo = db_getsession("DB_tipodebitoparcel");
-$tipodeb = split( 'X',$tipo );
+$tipodeb = explode( 'X',$tipo );
 for($tb = 0 ; $tb< count($tipodeb); $tb++){
   if($tipodeb[$tb]!=""){
     $wheretipodeb .= $and." exists (select k41_arretipo
@@ -118,16 +118,16 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
     if(db_indexOf(key($vt),"CHECK") > 0){
       $conteudoaparcelar.="XXX" . (!isset($inicial)?"NUMPRE":"INICIAL") . $vt[key($vt)];
       $numpres = $vt[key($vt)];
-      $mat = split("N",$numpres);
+      $mat = explode("N",$numpres);
 
       for($j = 0;$j < count($mat);$j++) {
         if ($mat[$j] == ""){
 					continue;
 				}
-        $numpre = split("P",$mat[$j]);
-        $numpar = split("P",strstr($mat[$j],"P"));
+        $numpre = explode("P",$mat[$j]);
+        $numpar = explode("P",strstr($mat[$j],"P"));
         if(!isset($inicial)){
-          $numpar = split("R",$numpar[1]);
+          $numpar = explode("R",$numpar[1]);
           $numpar = $numpar[0];
 					$numpre = $numpre[0];
         } else {
@@ -156,7 +156,7 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
 
 	  if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
 
-	    $aNumpres   = split("N",$numpres);
+	    $aNumpres   = explode("N",$numpres);
 	    $numpres    = "";
 	    $sNumPreAnt = "";
 	    $sAuxiliar  = "";
@@ -166,9 +166,9 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
 	        continue;
 	      }
 
-	      $iNumpre = split("P",$aNumpres[$iInd]);
-	      $iNumpar = split("P", strstr($aNumpres[$iInd],"P"));
-	      $iNumpar = split("R",$iNumpar[1]);
+	      $iNumpre = explode("P",$aNumpres[$iInd]);
+	      $iNumpar = explode("P", strstr($aNumpres[$iInd],"P"));
+	      $iNumpar = explode("R",$iNumpar[1]);
 	      $iReceit = $iNumpar[1];
 	      $iNumpar = $iNumpar[0];
 	      $iNumpre = $iNumpre[0];
@@ -202,10 +202,10 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
 
 	}
 
-  $numpres = split("N",$numpres);
+  $numpres = explode("N",$numpres);
   $totalregistrospassados=0;
   for($i = 0;$i < sizeof($numpres);$i++) {
-    $valores = split("P",$numpres[$i]);
+    $valores = explode("P",$numpres[$i]);
     $totalregistrospassados+=sizeof($valores)-1;
   }
 
@@ -525,7 +525,7 @@ if(!session_is_registered("conteudoparc")) {
 }
 
 //db_msgbox('antes da matriz --- '.db_getsession("conteudoparc"));
-$matriz	= split("XXX", db_getsession("conteudoparc"));
+$matriz	= explode("XXX", db_getsession("conteudoparc"));
 
 $novamatrizval = array();
 
@@ -538,8 +538,8 @@ for ($x=0; $x < sizeof($matriz); $x++) {
 	} else {
 		$tiporeg = "INICIAL";
 	}
-	$registro  = split($tiporeg, $matriz[$x]);
-	$registros = split("N", $registro[1]);
+	$registro  = explode($tiporeg, $matriz[$x]);
+	$registros = explode("N", $registro[1]);
 	for ($reg=0; $reg < sizeof($registros); $reg++) {
 		if ($registros[$reg] == "") {
 			continue;
@@ -618,7 +618,7 @@ if (@$mostra == 1) {
 	echo $sql . ";<br>";
 }
 //db_msgbox("Teste : ".db_getsession("conteudoparc"));
-$matnumpres = split("XXX",db_getsession("conteudoparc"));
+$matnumpres = explode("XXX",db_getsession("conteudoparc"));
 for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 	if ($matnumpres[$contanumpres] == "") {
 		continue;
@@ -630,7 +630,7 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 	} else {
 		$tiporeg = "INICIAL";
 	}
-	$registro = split($tiporeg, $matnumpres[$contanumpres]);
+	$registro = explode($tiporeg, $matnumpres[$contanumpres]);
 
   if ($tiporeg == "NUMPRE") {
 		$registros=split("R", $registro[1]);
@@ -912,8 +912,8 @@ if(isset($envia) or (@$mostra == 1) ) {
   } else {
     if($retorno == 1){
       echo $retorno;
-      $parc = split(":",$retorno);
-      $parc = split("-",$parc[1]);
+      $parc = explode(":",$retorno);
+      $parc = explode("-",$parc[1]);
       db_query("COMMIT");
     }else{
       echo "Ocorreu um erro durante o processamento\n".$retorno;

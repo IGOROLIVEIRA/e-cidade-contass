@@ -57,7 +57,7 @@ $texto = $dt['texto'];
 // calcula periodo do exercicio anterior para fechar os 12 meses
 $anousu_ant  = db_getsession("DB_anousu")-1;
 // se o ano atual é bissexto deve subtrair 366 somente se a data for superior a 28/02/200X
-$dt = split('-',$dt_fin);  // mktime -- (mes,dia,ano)
+$dt = explode('-',$dt_fin);  // mktime -- (mes,dia,ano)
 $dt_ini_ant = date('Y-m-d',mktime(0,0,0,$dt[1],$dt[2]-365,$dt[0]));
 $dt_fin_ant = $anousu_ant.'-12-31';  
 
@@ -75,16 +75,16 @@ if ($dtfin!=''){
 
   $dt_fin = $dtfin;
 
-  $dt = split('-',$dt_ini);
+  $dt = explode('-',$dt_ini);
   $dt_ini_ant = (db_getsession("DB_anousu")-1).'-'.$dt[1].'-'.$dt[2];
-  $dt = split('-',$dt_fin);
+  $dt = explode('-',$dt_fin);
   $dt_fin_ant = (db_getsession("DB_anousu")-1).'-'.$dt[1].'-'.$dt[2];
 
 }  
 
 ////////////////////////////////////////////////////////////////////
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -112,8 +112,8 @@ $head3 = "RELATÓRIO DE GESTÃO FISCAL";
 $head4 = "DEMONSTRATIVO DA DESPESA COM PESSOAL";
 $head5 = "ORCAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 
-$dt1 = split('-',$dt_ini);
-$dt2 = split('-',$dt_fin); 
+$dt1 = explode('-',$dt_ini);
+$dt2 = explode('-',$dt_fin); 
 if ($tipo_emissao=='periodo'){
   $texto = strtoupper(db_mes($dt1[1]))." A ".strtoupper(db_mes($dt2[1]))." DE ";
   $head6 = $texto.db_getsession("DB_anousu");
@@ -471,8 +471,8 @@ $pdf->cell(145,$alt,"",'RB',0,"R",0);
 if ($tipo_emissao=='periodo'){
   $pdf->cell(40,$alt,"(Últimos 12 Meses)",'B',1,"C",0);
 } else {  
-  $dt1 = split('-',$dt_ini);
-  $dt2 = split('-',$dt_fin); 
+  $dt1 = explode('-',$dt_ini);
+  $dt2 = explode('-',$dt_fin); 
   $pdf->cell(40,$alt,$dt1[2].'/'.$dt[1].'/'.$dt1[0].' À '.$dt2[2].'/'.$dt2[1].'/'.$dt2[0],'B',1,"C",0);
 }
 $pdf->setfont('arial','',7);

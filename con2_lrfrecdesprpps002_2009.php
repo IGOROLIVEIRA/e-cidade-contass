@@ -236,10 +236,10 @@ if (!isset($arqinclude)){ // se este arquivo não esta incluido por outro
 
 $ultimo_periodo = ($oGet->periodo=="6B") || ($oGet->periodo=="2S");
 
-$aDataInicial     = split("-",$dtDataInicial);
+$aDataInicial     = explode("-",$dtDataInicial);
 $periodo_mes      = strtoupper(db_mes($aDataInicial[1]));
 $dtDataInicialAnt = $anousu_ant."-".$aDataInicial[1]."-".$aDataInicial[2];
-$aDataFinal  	  = split("-",$dtDataFinal);
+$aDataFinal  	  = explode("-",$dtDataFinal);
 
 if ($aDataFinal[1] == 2){
   $aDataFinal[2]  = cal_days_in_month(CAL_GREGORIAN, $aDataFinal[1],$anousu_ant);
@@ -983,7 +983,7 @@ if (!isset($arqinclude)){ //
   $head3 = "DEMONSTRATIVO DE RECEITAS E DESPESAS PREVIDENCIÁRIAS DO REGIME PRÓPRIO DOS SERVIDORES PÚBLICOS";
   $head4 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
   $txt = strtoupper(db_mes('01'));
-  $dt  = split("-",$dtDataFinal);
+  $dt  = explode("-",$dtDataFinal);
   $txt.= " À ".strtoupper(db_mes($dt[1]))."$anousu/{$sDescrPeriodo} ";;
   $head5 = "$txt";
 

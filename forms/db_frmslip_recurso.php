@@ -37,7 +37,7 @@ db_postmemory($HTTP_POST_VARS);
 
 $clsliprecurso = new cl_sliprecurso;
 if(isset($valores)){
-  $arr_valores = split(",", $valores);
+  $arr_valores = explode(",", $valores);
   $sqlerro = false;
   db_inicio_transacao();
   $clsliprecurso->excluir(null, " k29_slip = $numslip ");

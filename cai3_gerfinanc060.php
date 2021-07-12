@@ -176,7 +176,7 @@ if(isset($notificacao)){
 	       $numpres .= " a.k00_numpre = $numpre and "; 
 	    }
 	    $numpres .= " k00_tipo in (";
-	    $num = split(",",$tipo);
+	    $num = explode(",",$tipo);
 	    $numm = "";
 	    for($i=0;$i<sizeof($num);$i++){
 	      $numpres .= $numm.$num[$i];

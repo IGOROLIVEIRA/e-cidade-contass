@@ -40,7 +40,7 @@ if(isset($chavepesquisa)){
   $o50_estrutreceita=db_formatar($o50_estrutreceita,"receita_int");
 }
 if((isset($atualizar) || isset($o50_estrutreceita)) && empty($incluir)&& empty($alterar)&& empty($excluir) && empty($chavepesquisa)){
-  $matriz= split("\.",$o50_estrutreceita);
+  $matriz= explode("\.",$o50_estrutreceita);
   $inicia=false;//variavel que indica que o nivel não tem mais filhos
   $tam=(count($matriz)-1);
   $codigos='';
@@ -155,7 +155,7 @@ db_input('o70_codrec',6,$Io70_codrec,true,'text',3)
     <td colspan='2' align='center'>
 <?
 if((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado)&& empty($negado)){
-  $matriz= split("\.",$o50_estrutreceita);
+  $matriz= explode("\.",$o50_estrutreceita);
   $inicia=false;//variavel que indica que o nivel não tem mais filhos
   $tam=(count($matriz)-1);
   $codigos='';
@@ -174,7 +174,7 @@ if((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado)&& empt
       $codigos=$codigo."#".$codigos;
     }
   }
-  $matriz02= split("#",$codigos);
+  $matriz02= explode("#",$codigos);
   $tam=count($matriz02);
   $espaco=3;
   $esp='';

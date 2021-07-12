@@ -152,7 +152,7 @@ $imprime_selecao  = "";
 $union = "";
 $virg  = "";
 
-$arr_selecionados = split(",",$selecionados);
+$arr_selecionados = explode(",",$selecionados);
 for($i=0; $i<count($arr_selecionados); $i++){
   $indice_siglas = $arr_selecionados[$i];
   $clgeradorsql->inicio_rh= false;

@@ -101,8 +101,8 @@ $dt             = data_periodo($anousu, $sSiglaPeriodo);
 $periodo        = $sSiglaPeriodo;
 
 $dt = data_periodo($anousu, $sSiglaPeriodo);
-$dt_ini = split("-", $dt [0]);
-$dt_fin = split("-", $dt [1]);
+$dt_ini = explode("-", $dt [0]);
+$dt_fin = explode("-", $dt [1]);
 
 $period = strtoupper(db_mes("01")) . " A " . strtoupper(db_mes($dt_fin [1])) . " DE " . $anousu;
 

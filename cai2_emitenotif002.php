@@ -850,7 +850,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
       $resultender = db_query($sqlender);
       db_fieldsmemory($resultender,0);
 
-      $endereco = split("#", $fc_iptuender);
+      $endereco = explode("#", $fc_iptuender);
 
       if (sizeof($endereco) < 7) {
 
@@ -3993,14 +3993,14 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
 
         $pdf->AddPage();
         $iQtdNotificoesGeradas++;
-        $opcoesverso = split("\n",$db02_texto);
+        $opcoesverso = explode("\n",$db02_texto);
 
         $remetente_parte1 = 0;
         $remetente_parte3 = 0;
 
         for ($xxx=0; $xxx < sizeof($opcoesverso); $xxx++) {
 
-          $dadosopcoes = split("=", $opcoesverso[$xxx]);
+          $dadosopcoes = explode("=", $opcoesverso[$xxx]);
 
           if ($dadosopcoes[0] == "parte1" && ( trim($dadosopcoes[1]) == "REMETENTE" ) ) {
             $remetente_parte1 = 1;
@@ -4013,7 +4013,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
 
         for ($xxx=0; $xxx < sizeof($opcoesverso); $xxx++) {
 
-          $dadosopcoes = split("=", $opcoesverso[$xxx]);
+          $dadosopcoes = explode("=", $opcoesverso[$xxx]);
 
           if ($dadosopcoes[0] == "parte2") {
 
@@ -4202,7 +4202,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
                   $resultender = db_query($sqlender);
                   db_fieldsmemory($resultender,0);
 
-                  $endereco = split("#", $fc_iptuender);
+                  $endereco = explode("#", $fc_iptuender);
 
                   if (sizeof($endereco) < 7 || ereg_replace("[# 0]","",$fc_iptuender) == "") {
 
@@ -4349,10 +4349,10 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
 
               for ($contamsg = 0; $contamsg < sizeof($opcoesverso); $contamsg++) {
 
-                $msgparte2 = split("=", $opcoesverso[$contamsg]);
+                $msgparte2 = explode("=", $opcoesverso[$contamsg]);
                 if ($msgparte2[0] == "msgparte2") {
 
-                  $parte2 = split("\|", $msgparte2[1]);
+                  $parte2 = explode("\|", $msgparte2[1]);
                   for ($contaparte2 = 0; $contaparte2 < sizeof($parte2 ); $contaparte2++) {
                     $pdf->cell(190,5,$parte2[$contaparte2],0,1,"C",0);
                   }
@@ -4775,7 +4775,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
 
       } else {
 
-        $imprimir= split("#\n",$texto);
+        $imprimir= explode("#\n",$texto);
         if (strtoupper($db02_descr) == "PARAGRAFO 1") {
 
           $pdf->WriteText($texto);

@@ -642,12 +642,12 @@ if($linhasIptunump >0 ){
 
     for ($i = 0; $i < $tam; $i ++) {
       if (db_indexOf(key($vt), "CHECK") > 0) {
-        $registros = split("N",$vt[key($vt)]);
+        $registros = explode("N",$vt[key($vt)]);
         for ($reg=0; $reg < sizeof($registros); $reg++) {
           if ($registros[$reg] == "") {
             continue;
           }
-          $registro = split("R", $registros[$reg]);
+          $registro = explode("R", $registros[$reg]);
           if (gettype(strpos($numpres, "N".$registro[0])) == "boolean") {
             $numpres .= "N".$registro[0];
           }
@@ -657,7 +657,7 @@ if($linhasIptunump >0 ){
     }
     $sounica = $numpres;
 
-    $numpres = split("N", $numpres);
+    $numpres = explode("N", $numpres);
     if($debugar ==true){
       echo "<br>NUMPRES<br>
         <pre>";
@@ -689,7 +689,7 @@ if($linhasIptunump >0 ){
           continue;
         }
 
-        $aNumpre = split('P',$numpres[$volta]);
+        $aNumpre = explode('P',$numpres[$volta]);
 
         $k00_numpre = $aNumpre[0];
         $k00_numpar = $aNumpre[1];
@@ -1417,9 +1417,9 @@ if($oRegraEmissao->isCobranca()){
 
         }
 
-        $valores    = split("P", $numpres[$volta]);
+        $valores    = explode("P", $numpres[$volta]);
         $k00_numpre = $valores[0];
-        $k00_numpar = split("R", $valores[1]);
+        $k00_numpar = explode("R", $valores[1]);
         $k00_numpar = $k00_numpar[0];
         $k03_anousu = $H_ANOUSU;
 
@@ -1795,7 +1795,7 @@ if($oRegraEmissao->isCobranca()){
         }
         $pdf1->descr5 = $k00_numpar.' / '.$k00_numtot;
 
-        $tmpdta    = split("/",$k00_dtvenc);
+        $tmpdta    = explode("/",$k00_dtvenc);
         $tmpdtvenc = $tmpdta[2]."-".$tmpdta[1]."-".$tmpdta[0];
         if($db_datausu > $tmpdtvenc){
           $pdf1->dtparapag    = db_formatar($db_datausu,'d');

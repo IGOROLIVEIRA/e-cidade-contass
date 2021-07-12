@@ -925,7 +925,7 @@ if ($lUltimoPeriodo) {
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if (!isset($arqinclude)){
-  $xinstit    = split("-",$db_selinstit);
+  $xinstit    = explode("-",$db_selinstit);
   $resultinst = pg_exec("select munic from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
   db_fieldsmemory($resultinst,0);
 
@@ -937,8 +937,8 @@ if (!isset($arqinclude)){
   $head4 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 
   $dados  = data_periodo($anousu,$periodo_selecionado);
-  $perini = split("-",$dados[0]);
-  $perfin = split("-",$dados[1]);
+  $perini = explode("-",$dados[0]);
+  $perfin = explode("-",$dados[1]);
 
   $txtper = strtoupper($dados["periodo"]);
   $mesini = db_mes($perini[1],1);

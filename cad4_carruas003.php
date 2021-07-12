@@ -67,7 +67,7 @@ if(isset($atualizar) && $atualizar!=""){
   $sqlerro=false;
   db_inicio_transacao();
 
-  $matriz01 = split(",",$faces);
+  $matriz01 = explode(",",$faces);
   for($i=0; $i<sizeof($matriz01); $i++){
 
     $x="caracter_".$matriz01[$i];

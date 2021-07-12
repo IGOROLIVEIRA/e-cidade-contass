@@ -585,7 +585,7 @@ class cl_far_matersaude {
    function sql_query ( $fa01_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -632,7 +632,7 @@ class cl_far_matersaude {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -645,7 +645,7 @@ class cl_far_matersaude {
    function sql_query_tipo ( $fa01_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select distinct ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -674,7 +674,7 @@ class cl_far_matersaude {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -687,7 +687,7 @@ class cl_far_matersaude {
    function sql_query_file ( $fa01_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -709,7 +709,7 @@ class cl_far_matersaude {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -723,7 +723,7 @@ class cl_far_matersaude {
 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -753,7 +753,7 @@ class cl_far_matersaude {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -766,7 +766,7 @@ class cl_far_matersaude {
 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -792,7 +792,7 @@ class cl_far_matersaude {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -811,7 +811,7 @@ class cl_far_matersaude {
 
     if ($sCampos != "*" ) {
 
-      $sCampos_sql = split("#",$sCampos);
+      $sCampos_sql = explode("#",$sCampos);
       $sVirgula    = "";
 
       for( $i = 0; $i < sizeof($sCampos_sql); $i++ ) {
@@ -849,7 +849,7 @@ class cl_far_matersaude {
     if( $sOrdem != null ) {
 
       $sSql        .= " order by ";
-      $sCampos_sql  = split( "#", $sOrdem );
+      $sCampos_sql  = explode( "#", $sOrdem );
       $sVirgula     = "";
 
       for( $i = 0; $i < sizeof($sCampos_sql); $i++ ) {
@@ -870,7 +870,7 @@ class cl_far_matersaude {
      $sSql = "select ";
      if ($sCampos != "*") {
 
-       $sCampos_sql = split("#",$sCampos);
+       $sCampos_sql = explode("#",$sCampos);
        $sVirgula    = "";
        for ($i = 0; $i < sizeof($sCampos_sql); $i++) {
 
@@ -901,7 +901,7 @@ class cl_far_matersaude {
      if ($sOrdem != null) {
 
        $sSql        .= " order by ";
-       $sCampos_sql  = split("#",$sOrdem);
+       $sCampos_sql  = explode("#",$sOrdem);
        $sVirgula     = "";
        for ($i = 0; $i < sizeof($sCampos_sql); $i++){
 
@@ -927,7 +927,7 @@ class cl_far_matersaude {
      $sSql = "select ";
      if ($sCampos != "*") {
 
-       $sCampos_sql = split("#",$sCampos);
+       $sCampos_sql = explode("#",$sCampos);
        $sVirgula    = "";
        for ($i = 0; $i < sizeof($sCampos_sql); $i++) {
 
@@ -959,7 +959,7 @@ class cl_far_matersaude {
      if ($sOrdem != null) {
 
        $sSql        .= " order by ";
-       $sCampos_sql  = split("#",$sOrdem);
+       $sCampos_sql  = explode("#",$sOrdem);
        $sVirgula     = "";
        for ($i = 0; $i < sizeof($sCampos_sql); $i++){
 
@@ -985,7 +985,7 @@ class cl_far_matersaude {
      $sSql = "select ";
      if ($sCampos != "*") {
 
-       $sCampos_sql = split("#",$sCampos);
+       $sCampos_sql = explode("#",$sCampos);
        $sVirgula    = "";
        for ($i = 0; $i < sizeof($sCampos_sql); $i++) {
 
@@ -1049,7 +1049,7 @@ class cl_far_matersaude {
      if ($sOrdem != null) {
 
        $sSql        .= " order by ";
-       $sCampos_sql  = split("#",$sOrdem);
+       $sCampos_sql  = explode("#",$sOrdem);
        $sVirgula     = "";
        for ($i = 0; $i < sizeof($sCampos_sql); $i++){
 

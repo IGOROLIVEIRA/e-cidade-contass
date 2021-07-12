@@ -296,7 +296,7 @@ function js_desabilita(dis){
 		}
 
 		if (isset ($matrizvolta)) {
-	    $matrizvolta = split("X", $matrizvolta);
+	    $matrizvolta = explode("X", $matrizvolta);
 	    $intNumLinhasVolta = sizeof($matrizvolta);
 		}
 
@@ -308,7 +308,7 @@ function js_desabilita(dis){
 
 			$temvalor = false;
 			if($fq < $intNumLinhasVolta) {
-				$matrizdados = split("-", $matrizvolta[$fq]);
+				$matrizdados = explode("-", $matrizvolta[$fq]);
 				$temvalor = true;
 			} else {
 				$temvalor = false;

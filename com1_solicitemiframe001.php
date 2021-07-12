@@ -414,8 +414,8 @@ if (isset($incluir) && $sqlerro == false) {
     }
   } else {
     if (isset($itens) && trim($itens) != "") {
-      $vet_itens = split("#", $itens);
-      $vet_dotac_itens = split("#", $dotac_itens);
+      $vet_itens = explode("#", $itens);
+      $vet_dotac_itens = explode("#", $dotac_itens);
       $virgula = "";
       $lista_itens = "";
       $lista_dotac_itens = "";

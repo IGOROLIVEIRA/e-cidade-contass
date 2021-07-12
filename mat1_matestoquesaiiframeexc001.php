@@ -61,12 +61,12 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
-  $arr_valores = split(",",$valores);
+  $arr_valores = explode(",",$valores);
   $sqlerro     = false;
   $codigoanterior = "";
   for($i=0;$i<count($arr_valores);$i++){
     $nomecampo    = $arr_valores[$i];
-    $separacampo  = split("_",$arr_valores[$i]);
+    $separacampo  = explode("_",$arr_valores[$i]);
     $m80_codigo   = $separacampo[2];
     $m82_codigo   = $separacampo[1];
 //    echo($clmatestoqueini->sql_query_mater(null,"m71_codlanc,m71_quant,m71_valor,(m71_valor/m71_quant) as valorunitario,m82_quant,matestoqueini.m80_codigo,m70_quant,m70_valor,m70_codigo","","m82_codigo=$m82_codigo and  matestoqueini.m80_codtipo=5 and m86_codigo is null"));

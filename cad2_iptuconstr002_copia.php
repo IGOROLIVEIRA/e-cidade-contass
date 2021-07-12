@@ -48,7 +48,7 @@ $where  = "";
 if(isset($relatorio1)){
 	// $chaves = são as caracteristicas da aba com as caracteristicas
 	if(isset($chaves) && $chaves != ""){
-    $chaves = split("#",$chaves);
+    $chaves = explode("#",$chaves);
     for($i=0;$i<sizeof($chaves);$i++){
       // concatena na $codigo o código das caracteristicas selecionadas
       if($codigo == ""){
@@ -164,8 +164,8 @@ if(isset($setor) && $setor != ""){
     $quadra1 = $quadra;
     $sql_ruas = " inner join iptubase on iptubase.j01_matric = j39_matric inner join testada on iptubase.j01_idbql = j36_idbql inner join face on j36_face = j37_face ";
     if(isset($setor) && $setor != ""){
-      $chaves = split(",",$setor);
-      $chaves1 = split(",",$quadra);
+      $chaves = explode(",",$setor);
+      $chaves1 = explode(",",$quadra);
       $and = "";
       $setor = "";
       for($i=0;$i<sizeof($chaves);$i++){
@@ -532,8 +532,8 @@ $pdf->MultiCell(280,05,"CONSTRUÇÕES APARTIR DO ANO ".$anoini." À ".$anofim."",0,
 }
 if(isset($setores) && $setores != ""){
   if(isset($setor) && $setor != ""){
-    $chaves = split(",",$setores);
-    $chaves1 = split(",",$quadra);
+    $chaves = explode(",",$setores);
+    $chaves1 = explode(",",$quadra);
     $and = "";
     $setores = "";
     for($i=0;$i<sizeof($chaves);$i++){

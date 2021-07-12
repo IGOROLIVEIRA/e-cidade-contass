@@ -55,7 +55,7 @@ if (isset ($atualizar)&&$atualizar!="") {
 	for ($i = 0; $i < $ta; $i ++) {
 		$chave = key($vt);
 		if (substr($chave, 0, 5) == "CHECK") {
-			$dados = split("_", $chave);
+			$dados = explode("_", $chave);
 			$result_ord = $cldb_docparagpadrao->sql_record($cldb_docparagpadrao->sql_query_file($db62_coddoc, null, "max(db62_ordem)as ordem"));
 			if ($cldb_docparagpadrao->numrows > 0) {
 				db_fieldsmemory($result_ord, 0);

@@ -34,7 +34,7 @@ function db_endereco($endtrocar) {
   global $compl;
   if(ereg($er,$texto,$matriz)) {
     $numero = trim(substr($matriz[0],2,9));
-    $xender = split($matriz[0],$texto);
+    $xender = explode($matriz[0],$texto);
     $ender  = $xender[0];
     $compl  = trim(substr($xender[1],1,20));
   } else {

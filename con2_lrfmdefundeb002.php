@@ -561,7 +561,7 @@ $fluxo[5]["valor"] = $m_fluxo_fundeb["valor_atual"];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if (!isset($arqinclude)){
-  $xinstit    = split("-",$db_selinstit);
+  $xinstit    = explode("-",$db_selinstit);
   $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
   $descr_inst = "";
   $xvirg      = "";
@@ -590,9 +590,9 @@ if (!isset($arqinclude)){
   $head4 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 
 
-  $dt    = split("-",$dt_ini);
+  $dt    = explode("-",$dt_ini);
   $txt   = strtoupper(db_mes($dt[1]))."-";
-  $dt    = split("-",$dt_fin);
+  $dt    = explode("-",$dt_fin);
   $txt  .= strtoupper(db_mes($dt[1]))." $anousu/".$texto;
 
   $head5 = "$txt";

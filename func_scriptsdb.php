@@ -362,7 +362,7 @@ if($opcao == "avos"){
 }else if($opcao == "dadosdiversos"){
   include("classes/db_pesdiver_classe.php");
   $clpesdiver = new cl_pesdiver;
-  $arr_diversos = split(",",$div);
+  $arr_diversos = explode(",",$div);
   $erro = false;
   echo "
         <script>

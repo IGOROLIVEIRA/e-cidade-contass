@@ -41,7 +41,7 @@ include("libs/db_sql.php");
 db_postmemory($HTTP_POST_VARS);
 
 $instit     = str_replace('-',', ',$db_selinstit);
-$xinstit    = split("-",$db_selinstit);
+$xinstit    = explode("-",$db_selinstit);
 $resultinst = db_query("select codigo,nomeinstabrev from db_config where codigo in ($instit)");
 $descr_inst = '';
 $xvirg = '';

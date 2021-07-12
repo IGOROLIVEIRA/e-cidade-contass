@@ -29,7 +29,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 include("fpdf151/pdf.php");
 
 $head3 = "RELATORIO  DA RECEITA ";
-$dt = split("-",$data);
+$dt = explode("-",$data);
 
 $head5 =  "DATA SOLICITADA : $dt[2]/$dt[1]/$dt[0] ";  
 

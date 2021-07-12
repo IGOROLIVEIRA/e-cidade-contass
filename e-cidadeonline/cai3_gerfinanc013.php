@@ -33,8 +33,8 @@ if (isset($desconto)) {
 }
 
 $sTiposDebitos = $tipos;
-$tipos = split(",",$tipos);
-$tipostodos = split(",",$tipostodos);
+$tipos = explode(",",$tipos);
+$tipostodos = explode(",",$tipostodos);
 //echo array_search(8,$tipos);
 //exit;
 //echo $tipos[1];

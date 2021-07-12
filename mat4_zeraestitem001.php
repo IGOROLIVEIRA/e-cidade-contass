@@ -182,7 +182,7 @@ if (isset ($excluir)) {
       }
     }
   }
-  $info = split(",",$cod);
+  $info = explode(",",$cod);
   for ($w = 0; $w < count($info); $w++) {
 
     if ($sqlerro == false) {
@@ -295,7 +295,7 @@ if (isset ($excluir)) {
     $vir=",";
   }
 
-  $info = split(",", $cod);
+  $info = explode(",", $cod);
 
   for($w = 0; $w < count($info); $w++) {
 

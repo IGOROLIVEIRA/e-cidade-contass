@@ -66,7 +66,7 @@ $this->objpdf->text($xcol +2, $xlin +95, 'RECURSOS');
   $listagem = $this->recursos;
   foreach($listagem as  $chave=>$recurso){   
        $altura_topo += 5;
-       $sp = split('#',$recurso);
+       $sp = explode('#',$recurso);
        $this->objpdf->Setfont('Arial','', 9);     
        $this->objpdf->setXY($xcol + 6,$altura_topo);
        

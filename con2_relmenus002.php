@@ -84,7 +84,7 @@ for($i=0;$i<$numrows;$i++){
     $itens_listados = array("$id_item"=>"$id_item");
 
     for($x=0;$x<count($matriz_item_seleciona);$x++){
-      $impmat = split("-",$matriz_item_seleciona[$x]);
+      $impmat = explode("-",$matriz_item_seleciona[$x]);
       for($imp=0;$imp<count($impmat);$imp++){
         if( ! isset($itens_listados[$impmat[$imp]])){
           

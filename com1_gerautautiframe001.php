@@ -119,7 +119,7 @@ $gerautori = "";
 if (isset ($incluir)) {
 
 	$gerautori = "";
-	$valor     = split(",", $valores);
+	$valor     = explode(",", $valores);
 	// arrays para dados do empautoriza
 	$arr_vals   = Array ();
 	$arr_cgms   = Array ();
@@ -152,7 +152,7 @@ if (isset ($incluir)) {
 		$e54_emiss = date("Y-m-d", db_getsession("DB_datausu"));
 		$e54_instit = db_getsession("DB_instit");
 
-		$splitei = split("_", $valor[$i]);
+		$splitei = explode("_", $valor[$i]);
         $contar  = $splitei[2];
 
 		$pc81_codprocitem = $splitei[2];
@@ -419,11 +419,11 @@ if (isset ($incluir)) {
 
         $arr_autori[$cont_autori] = $e54_autori;
         $cont_autori++;
-				$arr_item = split(",", $arr_proc[$arr_help[$i]]);
+				$arr_item = explode(",", $arr_proc[$arr_help[$i]]);
 
 				for ($iii = 0; $iii < sizeof($arr_item); $iii ++) {
 
-					$arr_daditem          = split("_", $arr_item[$iii]);
+					$arr_daditem          = explode("_", $arr_item[$iii]);
 					$e55_item             = $arr_daditem[0];
 					$e55_quant            = $arr_daditem[1];
 					$e55_vltot            = $arr_daditem[2];
@@ -823,7 +823,7 @@ if (isset ($incluir)) {
 
         for ($i = $ii; $i < sizeof($valor); $i++) {
 
-          $vetor_autori = split("_", $valor[$i]);
+          $vetor_autori = explode("_", $valor[$i]);
           $contar       = $splitei[2];
           $campo        = "pc10_resumo".$contar;
 

@@ -28,10 +28,10 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
   for($i = 0;$i < $tam;$i++) {
     if(db_indexOf(key($vt),"CHECK") > 0){
       $numpres = $vt[key($vt)];
-      $mat = split("N",$numpres);
+      $mat = explode("N",$numpres);
       for($j = 0;$j < count($mat);$j++) {
-        $numpre = split("P",$mat[$j]);
-        $numpar = split("P",strstr($mat[$j],"P"));
+        $numpre = explode("P",$mat[$j]);
+        $numpar = explode("P",strstr($mat[$j],"P"));
         if(!isset($inicial)){
           $numpar = $numpar[1];
 	}
@@ -53,10 +53,10 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
     }
     next($vt);
   }
-  $numpres = split("N",$numpres);
+  $numpres = explode("N",$numpres);
   $totalregistrospassados=0;
   for($i = 0;$i < sizeof($numpres);$i++) {
-    $valores = split("P",$numpres[$i]);
+    $valores = explode("P",$numpres[$i]);
     $totalregistrospassados+=sizeof($valores)-1;
 //     echo "$i - " . $numpres[$i] . "<br>";
   }
@@ -247,8 +247,8 @@ if(isset($envia) or (@$mostra == 1)) {
   }
   pg_exec($sql);
 
-  $mat = split(",",$numpre);
-  $mat1 = split(",",$numpar);
+  $mat = explode(",",$numpre);
+  $mat1 = explode(",",$numpar);
   for($i=0;$i<count($mat);$i++){
     $numpre = $mat[$i];
     $numpar = $mat1[$i];
@@ -281,7 +281,7 @@ if(isset($envia) or (@$mostra == 1)) {
   } else {
     if($retorno == 1){
       echo $retorno;
-      $parc = split(":",$retorno);
+      $parc = explode(":",$retorno);
       pg_exec("COMMIT");
     }else{
       echo "Ocorreu um erro durante o processamento\n".$retorno;

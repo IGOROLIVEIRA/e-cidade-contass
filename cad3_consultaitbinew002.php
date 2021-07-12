@@ -162,7 +162,7 @@ $clrotulo->label("j13_descr");
   if($clitbi->numrows == 1){
 
     db_fieldsmemory($result,0);
-    $funcao = split("\\|",$funcao_js);
+    $funcao = explode("\\|",$funcao_js);
     echo "<script>".$funcao[0]."('$it01_guia');</script>";
     echo "<script>parent.db_iframe_consultaitbi.hide();</script>";
     exit;

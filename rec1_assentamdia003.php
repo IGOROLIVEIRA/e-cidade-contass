@@ -89,7 +89,7 @@ if(isset($excluir)){
   $h16_codigo = $h22_codigo;
   $h16_regist = $h22_regist;
   $h16_assent = $h22_assent;
-  $arr_dtconc = split('-',$h22_dtconc);
+  $arr_dtconc = explode('-',$h22_dtconc);
   $h16_dtconc_dia = $arr_dtconc[2];
   $h16_dtconc_mes = $arr_dtconc[1]; 
   $h16_dtconc_ano = $arr_dtconc[0]; 
@@ -99,7 +99,7 @@ if(isset($excluir)){
   $h16_atofic = $h22_atofic;
   $h16_quant  = $h22_quant;
   $h16_perc   = $h22_perc;
-  $arr_dtterm = split('-',$h22_dtterm);
+  $arr_dtterm = explode('-',$h22_dtterm);
   $h16_dtterm_dia = $arr_dtterm[2];
   $h16_dtterm_mes = $arr_dtterm[1]; 
   $h16_dtterm_ano = $arr_dtterm[0]; 

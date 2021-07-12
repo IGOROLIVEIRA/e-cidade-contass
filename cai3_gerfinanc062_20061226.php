@@ -32,13 +32,13 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
     if(db_indexOf(key($vt),"CHECK") > 0){
       $conteudoaparcelar.="XXX" . (!isset($inicial)?"NUMPRE":"INICIAL") . $vt[key($vt)];
       $numpres = $vt[key($vt)];
-      $mat = split("N",$numpres);
+      $mat = explode("N",$numpres);
       for($j = 0;$j < count($mat);$j++) {
         if ($mat[$j] == "") continue;
-        $numpre = split("P",$mat[$j]);
-        $numpar = split("P",strstr($mat[$j],"P"));
+        $numpre = explode("P",$mat[$j]);
+        $numpar = explode("P",strstr($mat[$j],"P"));
         if(!isset($inicial)){
-          $numpar = split("R",$numpar[1]);
+          $numpar = explode("R",$numpar[1]);
           $numpar = $numpar[0];
 					$numpre = $numpre[0];
         } else {
@@ -61,10 +61,10 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
     }
     next($vt);
   }
-  $numpres = split("N",$numpres);
+  $numpres = explode("N",$numpres);
   $totalregistrospassados=0;
   for($i = 0;$i < sizeof($numpres);$i++) {
-    $valores = split("P",$numpres[$i]);
+    $valores = explode("P",$numpres[$i]);
     $totalregistrospassados+=sizeof($valores)-1;
   }
 
@@ -201,7 +201,7 @@ if(!session_is_registered("conteudoparc")) {
   db_putsession("conteudoparc",db_getsession("conteudoparc").$conteudoaparcelar);
 }
 
-$matriz	= split("XXX", db_getsession("conteudoparc"));
+$matriz	= explode("XXX", db_getsession("conteudoparc"));
 
 $novamatrizval = array();
 
@@ -216,9 +216,9 @@ for ($x=0; $x < sizeof($matriz); $x++) {
 	} else {
 		$tiporeg = "INICIAL";
 	}
-	$registro = split($tiporeg, $matriz[$x]);
+	$registro = explode($tiporeg, $matriz[$x]);
 
-	$registros = split("N", $registro[1]);
+	$registros = explode("N", $registro[1]);
 	for ($reg=0; $reg < sizeof($registros); $reg++) {
 		if ($registros[$reg] == "") {
 			continue;
@@ -284,7 +284,7 @@ if (@$mostra == 1) {
 	echo $sql . ";<br>";
 }
 
-$matnumpres = split("XXX",db_getsession("conteudoparc"));
+$matnumpres = explode("XXX",db_getsession("conteudoparc"));
 for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 	if ($matnumpres[$contanumpres] == "") {
 		continue;
@@ -295,7 +295,7 @@ for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 	} else {
 		$tiporeg = "INICIAL";
 	}
-	$registro = split($tiporeg, $matnumpres[$contanumpres]);
+	$registro = explode($tiporeg, $matnumpres[$contanumpres]);
 
   if ($tiporeg == "NUMPRE") {
 		$registros=split("R", $registro[1]);
@@ -500,7 +500,7 @@ if(isset($envia) or (@$mostra == 1) ) {
 
 	if (1==2) {
 
-		$matnumpres = split("XXX",db_getsession("conteudoparc"));
+		$matnumpres = explode("XXX",db_getsession("conteudoparc"));
 		for ($contanumpres=0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 			if ($matnumpres[$contanumpres] == "") {
 				continue;
@@ -511,7 +511,7 @@ if(isset($envia) or (@$mostra == 1) ) {
 			} else {
 				$tiporeg = "INICIAL";
 			}
-			$registro = split($tiporeg, $matnumpres[$contanumpres]);
+			$registro = explode($tiporeg, $matnumpres[$contanumpres]);
 
 			if ($tiporeg == "NUMPRE") {
 				$registros=split("R", $registro[1]);
@@ -553,8 +553,8 @@ if(isset($envia) or (@$mostra == 1) ) {
 		db_putsession("conteudoparc","");
 	} elseif (1==2) {
 
-		$mat = split(",",$numpre);
-		$mat1 = split(",",$numpar);
+		$mat = explode(",",$numpre);
+		$mat1 = explode(",",$numpar);
 		for($i=0;$i<count($mat);$i++){
 			$numpre = $mat[$i];
 			$numpar = $mat1[$i];
@@ -589,7 +589,7 @@ if(isset($envia) or (@$mostra == 1) ) {
   } else {
     if($retorno == 1){
       echo $retorno;
-      $parc = split(":",$retorno);
+      $parc = explode(":",$retorno);
       pg_exec("COMMIT");
     }else{
       echo "Ocorreu um erro durante o processamento\n".$retorno;

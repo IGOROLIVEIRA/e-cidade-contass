@@ -115,12 +115,12 @@ if(isset($e80_codage) && $e80_codage != ''){
 }
 
 if(isset($dtfi) && trim($dtfi)!="" and (!isset($dtDataChequeFinal))){
-  $arr_data = split("_",$dtfi);
+  $arr_data = explode("_",$dtfi);
   $dbwhere .= " and e86_data = '".$arr_data[0]."-".$arr_data[1]."-".$arr_data[2]."'";
 }
 if (isset($dtDataChequeFinal) && isset($dtfi) && trim($dtfi)!="") {
 
-   $arr_data      = split("_",$dtfi);
+   $arr_data      = explode("_",$dtfi);
    $dtChequeFinal = implode("-",array_reverse(explode("/", $dtDataChequeFinal))); 
    $dbwhere      .= " and e86_data between '".$arr_data[0]."-".$arr_data[1]."-".$arr_data[2]."'";
    $dbwhere      .= " and '{$dtChequeFinal}'";

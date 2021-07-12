@@ -45,7 +45,7 @@ if (!isset($arqinclude)){ // se este arquivo no esta incluido por outro
 
 if (!isset($arqinclude)) { // se este arquivo no esta incluido por outro
   
-  $xinstit = split("-",$db_selinstit);
+  $xinstit = explode("-",$db_selinstit);
   $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
   $descr_inst = '';
   $xvirg = '';
@@ -67,13 +67,13 @@ if (!isset($arqinclude)) { // se este arquivo no esta incluido por outro
   
   ////////////////////////////////////////////////////Cria Tabela de Filtro///////////////////////////////////////////////////  
 /*  
-  $xcampos = split("-",$orgaos);
+  $xcampos = explode("-",$orgaos);
   $p_orgao ='';
   $v='';
   for($i=0;$i < sizeof($xcampos);$i++){
     $where = '';
     $virgula = ''; 
-    $xxcampos = split("_",$xcampos[$i]);
+    $xxcampos = explode("_",$xcampos[$i]);
     for($ii=0;$ii<sizeof($xxcampos);$ii++){
       if($ii > 0){
         $where .= $virgula.$xxcampos[$ii];

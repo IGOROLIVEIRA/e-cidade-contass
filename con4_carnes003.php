@@ -42,7 +42,7 @@ if(isset($HTTP_POST_VARS["codigo"])) {
   //$aux[1] posy
   //$aux[2] nomcam
   for($i = 1;$i < $tam_vetor;$i++) {
-    $aux = split(";",$HTTP_POST_VARS[key($HTTP_POST_VARS)]);
+    $aux = explode(";",$HTTP_POST_VARS[key($HTTP_POST_VARS)]);
 	$result = pg_exec("select 0 from db_syscampo where nomecam = '".trim($aux[2])."'");
 	if(pg_numrows($result)==0) 
 	   $var = 'f';
@@ -175,7 +175,7 @@ function removeElem(cod) {
 		                                from db_syscampo							            
 							            where nomecam = '".$nomecam."'");
 				if(pg_numrows($comprimento) == 0){
-				   $xx = split("->",$nomecam);
+				   $xx = explode("->",$nomecam);
 				   $comprimento = pg_exec("select length(txcampo),txcampo
 		                                   from db_carnesdados							            
 							               where idtx = '".trim($xx[0])."'::integer");

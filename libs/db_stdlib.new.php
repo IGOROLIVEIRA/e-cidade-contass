@@ -266,7 +266,7 @@ function db_mes($xmes, $tipo = 0)
 function db_geratexto($texto)
 {
   $texto .= "#";
-  $txt = split("#", $texto);
+  $txt = explode("#", $texto);
   $texto1 = '';
   for ($x = 0; $x < sizeof($txt); $x++) {
     if (substr($txt[$x], 0, 1) == "$") {
@@ -1130,7 +1130,7 @@ function db_criatabela($result)
                                                                             case "d":
 
                                                                               if ($str != "") {
-                                                                                $data = split("-", $str);
+                                                                                $data = explode("-", $str);
                                                                                 return $data[2] . "/" . $data[1] . "/" . $data[0];
                                                                               } else {
                                                                                 return $str;
@@ -1152,11 +1152,11 @@ function db_criatabela($result)
                                                                                 return $str;
                                                                               } else
 				if (strpos($str, "-") != "") {
-                                                                                $str = split("-", $str);
+                                                                                $str = explode("-", $str);
                                                                                 return $str[2] . "-" . $str[1] . "-" . $str[0];
                                                                               } else
 					if (strpos($str, "/") != "") {
-                                                                                $str = split("/", $str);
+                                                                                $str = explode("/", $str);
                                                                                 return $str[2] . "-" . $str[1] . "-" . $str[0];
                                                                               }
                                                                               break;
@@ -1211,7 +1211,7 @@ function db_criatabela($result)
                                                                                   break;
                                                                                 case "date":
                                                                                   if ($aux != "") {
-                                                                                    $data = split("-", $aux);
+                                                                                    $data = explode("-", $aux);
                                                                                     ${$matriz[$i]} = $data[2] . "/" . $data[1] . "/" . $data[0];
                                                                                   } else {
                                                                                     ${$matriz[$i]} = "";
@@ -1228,7 +1228,7 @@ function db_criatabela($result)
                                                                             } else
                                                                               switch (pg_fieldtype($recordset, $i)) {
                                                                                 case "date":
-                                                                                  $datav = split("-", $aux);
+                                                                                  $datav = explode("-", $aux);
                                                                                   $split_data = $matriz[$i] . "_dia";
                                                                                   global $$split_data;
                                                                                   $$split_data = @$datav[2];
@@ -1745,7 +1745,7 @@ function db_getsession($var) {
                                                                             //    echo "<td title='Outras Informações'>OI</td>\n";
                                                                             //se foi passado funcao
                                                                             if ($campos_layer != "") {
-                                                                              $campo_layerexe = split("\|", $campos_layer);
+                                                                              $campo_layerexe = explode("\|", $campos_layer);
                                                                               echo "<td nowrap bgcolor=\"$db_corcabec\" title=\"Executa Procedimento Específico.\" align=\"center\">Clique</td>\n";
                                                                             }
 
@@ -1765,7 +1765,7 @@ function db_getsession($var) {
                                                                           }
                                                                           //cria nome da funcao com parametros
                                                                           if ($arquivo == "()") {
-                                                                            $arrayFuncao = split("\|", $aonde);
+                                                                            $arrayFuncao = explode("\|", $aonde);
                                                                             $quantidadeItemsArrayFuncao = sizeof($arrayFuncao);
                                                                           }
 
@@ -1818,14 +1818,14 @@ function db_getsession($var) {
                                                                             // implamentacao de informacoes complementares
                                                                             //    $mostradiv="";
                                                                             if ($campos_layer != "") {
-                                                                              $campo_layerexe = split("\|", $campos_layer);
+                                                                              $campo_layerexe = explode("\|", $campos_layer);
                                                                               echo "<td id=\"funcao_aux" . $i . "\" style=\"text-decoration:none;color:#000000;\" bgcolor=\"$cor\" nowrap><a href=\"\" onclick=\"" . $campo_layerexe[1] . "($loop);return false\" ><strong>" . $campo_layerexe[0] . "&nbsp;</strong></a></td>\n";
                                                                             }
                                                                             for ($j = 0; $j < $NumFields; $j++) {
                                                                               if (strlen(strstr(pg_fieldname($result, $j), "db_")) == 0 || strlen(strstr(pg_fieldname($result, $j), "db_m_")) != 0) {
                                                                                 if (pg_fieldtype($result, $j) == "date") {
                                                                                   if (pg_result($result, $i, $j) != "") {
-                                                                                    $matriz_data = split("-", pg_result($result, $i, $j));
+                                                                                    $matriz_data = explode("-", pg_result($result, $i, $j));
                                                                                     $var_data = $matriz_data[2] . "/" . $matriz_data[1] . "/" . $matriz_data[0];
                                                                                   } else {
                                                                                     $var_data = "//";

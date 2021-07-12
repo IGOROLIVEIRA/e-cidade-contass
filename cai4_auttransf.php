@@ -496,8 +496,8 @@ if ($k11_tipautent == 1) {
 
 if ((isset ($autentica) || isset ($estorna)) && isset ($fc_auttransf)) {
 	$autent = pg_exec("select k11_aut1,k11_aut2 from cfautent where k11_instit = ".db_getsession("DB_instit")." and k11_ipterm = '".$ip."'");
-	$aut1 = split(",", pg_result($autent, 0, 0));
-	$aut2 = split(",", pg_result($autent, 0, 1));
+	$aut1 = explode(",", pg_result($autent, 0, 0));
+	$aut2 = explode(",", pg_result($autent, 0, 1));
 	$str_aut1 = "";
 	$str_aut2 = "";
 	if (trim(pg_result($autent, 0, 0)) != "") {

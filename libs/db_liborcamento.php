@@ -4518,7 +4518,7 @@ class cl_selorcdotacao
       */
       if ($this->elemento != null  && $ret_elemento == true)
         if (trim($this->elemento) != "") {
-          $vet_elementos = split(",", $this->elemento);
+          $vet_elementos = explode(",", $this->elemento);
           $and           = " and ";
           $or            = " or ";
           $elementos     = "e.o56_elemento like ";
@@ -4550,7 +4550,7 @@ class cl_selorcdotacao
         $txt .= " and o58_projativ in " . $this->projativ;
       if ($this->elemento != null  && $ret_elemento == true)
         if (trim($this->elemento) != "") {
-          $vet_elementos = split(",", $this->elemento);
+          $vet_elementos = explode(",", $this->elemento);
           $and           = " and ";
           $or            = " or ";
           $elementos     = "o56_elemento like ";
@@ -4684,9 +4684,9 @@ class cl_selorcdotacao
     $condicao_uniao = " ";
     $estrut    = "";
     if ($this->filtra_despesa != "geral") {
-      $qual_filtro = split('-', $this->filtra_despesa);
+      $qual_filtro = explode('-', $this->filtra_despesa);
       for ($f = 0; $f < sizeof($qual_filtro); $f++) {
-        $ver = split("_", $qual_filtro[$f]);
+        $ver = explode("_", $qual_filtro[$f]);
 
         if ($ver[0] == "instit") {
           $sele_work_instit .= $sepi . $ver[1];

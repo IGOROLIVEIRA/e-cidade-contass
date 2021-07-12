@@ -53,7 +53,7 @@ $sqlerro = false;
 
 /* for excluindo da conciliacor */
 
-  $arrayCorrente = split(',',$dados);
+  $arrayCorrente = explode(',',$dados);
   db_inicio_transacao();
   foreach ($arrayCorrente as $i => $dadoscorrente){
 

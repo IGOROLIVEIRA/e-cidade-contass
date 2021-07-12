@@ -481,7 +481,7 @@ class cl_turmaachorarioprofissional {
    function sql_query ( $ed346_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -517,7 +517,7 @@ class cl_turmaachorarioprofissional {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -530,7 +530,7 @@ class cl_turmaachorarioprofissional {
    function sql_query_file ( $ed346_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -551,7 +551,7 @@ class cl_turmaachorarioprofissional {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -566,7 +566,7 @@ class cl_turmaachorarioprofissional {
     $sSql = "select ";
     if ($sCampos != "*" ) {
 
-      $campos_sql = split("#",$sCampos);
+      $campos_sql = explode("#",$sCampos);
       $virgula    = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
 
@@ -604,7 +604,7 @@ class cl_turmaachorarioprofissional {
     if ($sOrdem != null) {
 
       $sSql      .= " order by ";
-      $campos_sql = split("#",$sOrdem);
+      $campos_sql = explode("#",$sOrdem);
       $virgula    = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sSql   .= $virgula.$campos_sql[$i];

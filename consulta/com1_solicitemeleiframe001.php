@@ -38,11 +38,11 @@ $db_botao = false;
 
 if(isset($incluir)){
   $sqlerro = false;
-  $qualelemento = split(",",$valores);
+  $qualelemento = explode(",",$valores);
   for($i=0;$i<sizeof($qualelemento);$i++){
     if($sqlerro==false){
       $subelemento = $qualelemento[$i];
-      $solicitem = split("_",$subelemento);
+      $solicitem = explode("_",$subelemento);
       $pc18_solicitem = $solicitem[1];
       $clsolicitemele->incluir($pc18_solicitem,$$subelemento);
       $erro_msg = $clsolicitemele->erro_msg;

@@ -132,7 +132,7 @@ if($mostra_totalizador=="S"){
             $result  = db_query($sql);
             $numrows = pg_numrows($result);
             if($numrows > 0){
-	              $matriz_campos = split(",",$campos);
+	              $matriz_campos = explode(",",$campos);
                 $numcolunas    = sizeof($matriz_campos);
 ?>
            <tr>
@@ -323,7 +323,7 @@ if($mostra_totalizador=="S"){
             $result  = db_query($sql);
             $numrows = pg_numrows($result);
             if($numrows > 0){
-	              $matriz_campos = split(",",$campos);
+	              $matriz_campos = explode(",",$campos);
                 $numcolunas    = sizeof($matriz_campos);
 ?>
            <tr>

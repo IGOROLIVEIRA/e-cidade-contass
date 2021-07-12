@@ -548,7 +548,7 @@ for($indx=0;$indx < $numrows; $indx++) {
       $resultender = db_query($sqlender);
       db_fieldsmemory($resultender,0);
       
-      $endereco = split("#",$fc_iptuender);
+      $endereco = explode("#",$fc_iptuender);
 
       if (sizeof($endereco) < 7) {
         $z01_ender    = "";

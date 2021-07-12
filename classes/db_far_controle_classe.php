@@ -360,7 +360,7 @@ class cl_far_controle {
    function sql_query ( $fa11_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -384,7 +384,7 @@ class cl_far_controle {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -397,7 +397,7 @@ class cl_far_controle {
    function sql_query_file ( $fa11_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -418,7 +418,7 @@ class cl_far_controle {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -437,7 +437,7 @@ class cl_far_controle {
 
     $sSql = "select ";
     if ($sCampos != "*" ) {
-      $sCamposSql = split("#",$sCampos);
+      $sCamposSql = explode("#",$sCampos);
       $sVirgula = "";
       for ($i = 0; $i < sizeof($sCamposSql); $i++) {
         $sSql .= $sVirgula.$sCamposSql[$i];
@@ -467,7 +467,7 @@ class cl_far_controle {
     $sSql .= $sSql2;
     if ($sOrdem != null ) {
       $sSql .= " order by ";
-      $sCamposSql = split("#",$sOrdem);
+      $sCamposSql = explode("#",$sOrdem);
       $sVirgula = "";
       for ($i = 0; $i < sizeof($sCamposSql); $i++) {
         $sSql .= $sVirgula.$sCamposSql[$i];

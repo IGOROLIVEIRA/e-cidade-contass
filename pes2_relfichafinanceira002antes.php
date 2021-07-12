@@ -28,7 +28,7 @@ if($orde == "a"){
 $db_where_rubricas = "";
 $virg_das_rubricas = "";
 if(trim($rubricas_selecionadas_text) != ""){
-  $arr_das_rubricas = split(",",$rubricas_selecionadas_text);
+  $arr_das_rubricas = explode(",",$rubricas_selecionadas_text);
   for($i=0; $i<count($arr_das_rubricas); $i++){
     $db_where_rubricas.= $virg_das_rubricas."'".$arr_das_rubricas[$i]."'";
     $virg_das_rubricas = ",";
@@ -48,7 +48,7 @@ if(trim($rubricas_selecionadas_text) != ""){
 $db_where_matriculas = "";
 $virg_das_matriculas = "";
 if(trim($matriculas_selecionadas_text) != ""){
-  $arr_das_matriculas = split(",",$matriculas_selecionadas_text);
+  $arr_das_matriculas = explode(",",$matriculas_selecionadas_text);
   for($i=0; $i<count($arr_das_matriculas); $i++){
     $db_where_matriculas.= $virg_das_matriculas.$arr_das_matriculas[$i];
     $virg_das_matriculas = ",";
@@ -457,7 +457,7 @@ function imprimecabecalho($anos_e_meses){
   global $alt;
   global $pdf;
 
-  $arr_anos_e_meses = split("_",$anos_e_meses);
+  $arr_anos_e_meses = explode("_",$anos_e_meses);
 
   $muda_linha1 = 0;
   $muda_linha2 = 0;
@@ -518,7 +518,7 @@ function imprimedadosrubrica($anos_e_meses,$crub,$drub,$q1,$q2,$q3,$p1,$p2,$p3,$
   global $alt;
   global $pdf;
 
-  $arr_anos_e_meses = split("_",$anos_e_meses);
+  $arr_anos_e_meses = explode("_",$anos_e_meses);
 
   $muda_linha1 = 0;
   $muda_linha2 = 0;
@@ -564,7 +564,7 @@ for($i=0; $i < $clrhpessoal->numrows; $i++){
   	}
 
     $anos_meses = $arr_mostrar[$regist][$ii];
-    $arr_wheres = split("_",$arr_mes_ano[$regist][$ii]);
+    $arr_wheres = explode("_",$arr_mes_ano[$regist][$ii]);
     $sql_dados_work_ficha_financ = "";
 
     // For para montar os SQL's

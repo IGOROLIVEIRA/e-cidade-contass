@@ -67,12 +67,12 @@ if(!isset($emite_recibo_protocolo)){
       }
       next($vt);
     }
-    $numpres = split("N",$numpres);
+    $numpres = explode("N",$numpres);
     for($i = 1;$i < sizeof($numpres);$i++) {
     //  $numpres[$i] = base64_decode($numpres[$i]);
     //  $numpres[$i];
 
-      $valores = split("P",$numpres[$i]);
+      $valores = explode("P",$numpres[$i]);
       $sql = "insert into db_reciboweb values(".$valores[0].",".$valores[1].",$k03_numpre,$k00_codbco,'$k00_codage','$fc_numbco')";
       pg_exec($sql) or die("Erro(26) inserindo em db_reciboweb: ".pg_errormessage());
     }
@@ -318,7 +318,7 @@ $db_numpre = db_numpre($k03_numpre).'000'; //db_formatar(0,'s',3,'e');
 $db_dtvenc = str_replace("-","",$datavencimento);
 //$resultcod = pg_exec("select fc_febraban('816'||'$db_vlrbar'||'".$db_numbanco."'||$db_dtvenc||'000000'||'$db_numpre')");
 db_fieldsmemory($resultcod,0);
-$codigo_barra = split(",",$fc_febraban);
+$codigo_barra = explode(",",$fc_febraban);
 $codigobarras = $codigo_barra[0];
 $linhadigitavel = $codigo_barra[1];
 

@@ -59,7 +59,7 @@ $rec["2"]["valor"] = 0;
 $rec["3"]["valor"] = 0;
 
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = db_query("select codigo,nomeinst,uf from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

@@ -52,10 +52,10 @@ $ordena         = "" ;
 
 if ($selunica != "") {
 
-  $vt = split("U",$selunica);
+  $vt = explode("U",$selunica);
   foreach ($vt as $i => $v){
 
-    $check = split("=",$v);
+    $check = explode("=",$v);
     if (isset($check) && $check != "") {
       array_push($unicas, $check[0]."-".$check[1]."-".$check[2])."#";
     }

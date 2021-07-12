@@ -52,7 +52,7 @@ class uniorcam {
     $res =$clarqpad->sql_record(
                $clarqpad->sql_query(null,"*",null," c54_nomearq = 'UNIORCAM.TXT' and c54_anousu=".db_getsession("DB_anousu")."  and c54_codtrib = $tribinst "));
     if($clarqpad->numrows > 0){
-      $rubant = split("\r\n",pg_result($res,0,"c54_arquivo"));
+      $rubant = explode("\r\n",pg_result($res,0,"c54_arquivo"));
       for($yy=0;$yy<sizeof($rubant);$yy++){
          $contador++;
          $line = $rubant[$yy];

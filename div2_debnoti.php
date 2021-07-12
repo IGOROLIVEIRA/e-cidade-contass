@@ -56,9 +56,9 @@ if( $rsCriaTabela == false ){
 }
 $where = " where ";
 $or = ""; 
-$arr_info = split("XVX",$chaves1);
+$arr_info = explode("XVX",$chaves1);
 for ($w=0;$w<count($arr_info);$w++){
-	$arr_dados = split("-",$arr_info[$w]);
+	$arr_dados = explode("-",$arr_info[$w]);
 	$numpre1 = $arr_dados[0];
 	$numpar1 = $arr_dados[1];
 	//$where .= $or." (listadeb.k61_numpre = $numpre and listadeb.k61_numpar= $numpar)  ";

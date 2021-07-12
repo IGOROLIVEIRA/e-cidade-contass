@@ -2817,7 +2817,7 @@ class cl_cfpess {
      $sql  = 'select ';
      if ($campos != '*') {
  
-       $campos_sql = split('#', $campos);
+       $campos_sql = explode('#', $campos);
        $virgula = '';
  
        for ($i = 0; $i < sizeof($campos_sql); $i++) {
@@ -2873,7 +2873,7 @@ class cl_cfpess {
      if (!empty($ordem)) {
 
       $sql .= " order by ";
-      $campos_sql = split('#', $ordem);
+      $campos_sql = explode('#', $ordem);
       $virgula = '';
 
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
@@ -2892,7 +2892,7 @@ class cl_cfpess {
      $sql = 'select ';
      if ($campos != '*' ) {
 
-       $campos_sql = split('#', $campos);
+       $campos_sql = explode('#', $campos);
        $virgula = '';
 
        for ($i = 0; $i < sizeof($campos_sql); $i++) {
@@ -2941,7 +2941,7 @@ class cl_cfpess {
      if (!empty($ordem)) {
 
        $sql .= ' order by ';
-       $campos_sql = split('#', $ordem);
+       $campos_sql = explode('#', $ordem);
        $virgula = '';
 
        for ($i = 0; $i < sizeof($campos_sql); $i++) {
@@ -2960,7 +2960,7 @@ class cl_cfpess {
    function sql_query_rubr ( $r11_anousu=null,$r11_mesusu=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -2994,7 +2994,7 @@ class cl_cfpess {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -3006,7 +3006,7 @@ class cl_cfpess {
    function sql_query_parametro ( $r11_anousu=null,$r11_mesusu=null,$r11_instit=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -3056,7 +3056,7 @@ class cl_cfpess {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];

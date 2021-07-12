@@ -134,12 +134,12 @@ function js_calcula(campo){
   db_input("codHeaderL",10,'',true,'text',1);
   db_input("codtraillL",10,'',true,'text',1);
   if(isset($geracampo)){
-    $arr_movimentos = split(",",$movimentos);
-    $arr_retlotsmov = split(",",$lotsdemovs);
-    $arr_codigomovs = split(",",$codigomovs);
-    $arr_dataretmov = split(",",$dataretmov);
-    $arr_valoresmov = split(",",$valoresmov);
-    $arr_codilotmov = split(",",$codlotsmov);
+    $arr_movimentos = explode(",",$movimentos);
+    $arr_retlotsmov = explode(",",$lotsdemovs);
+    $arr_codigomovs = explode(",",$codigomovs);
+    $arr_dataretmov = explode(",",$dataretmov);
+    $arr_valoresmov = explode(",",$valoresmov);
+    $arr_codilotmov = explode(",",$codlotsmov);
     $loteant = "";
     for($i=0;$i<$numrows;$i++){
       $impri = false;

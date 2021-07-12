@@ -70,7 +70,7 @@
 	   document.location.href = 'sau1_cgm001.php?mostradadoscgm=sim&z01_numcgm=$z01_numcgm';
 	 else ";
            if(isset($testanome)){
-	     $camp = split("\|",$valores);
+	     $camp = explode("\|",$valores);
 	     $vals = "";
 	     $vir = "";
 	     for($f=1;$f<count($camp);$f++){
@@ -118,7 +118,7 @@
      }
      $z01_numcgm = $clcgm->z01_numcgm;
      if(isset($testanome)){
-       $camp = split("\|",$valores);
+       $camp = explode("\|",$valores);
        $vals = "";
        $vir = "";
        for($f=1;$f<count($camp);$f++){

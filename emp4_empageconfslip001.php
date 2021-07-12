@@ -139,7 +139,7 @@ if (isset ($atualizar) || isset ($prever)) {
 	$cgmprinc = '';
 	$nome_nominal = false;
 
-	$arr = split("XX", $movs);
+	$arr = explode("XX", $movs);
 	$tot_valor = '';
 	$nomes = '';
 
@@ -373,7 +373,7 @@ if (isset ($atualizar) && isset($sqlerro) && $sqlerro == false){
 	//------------------------------------------------------------------------------------------
 	//valores
 
-	$arr = split("XX", $movs);
+	$arr = explode("XX", $movs);
 	$arr_movs = array ();
 	for ($i = 0; $i < count($arr); $i ++) {
 		$mov = $arr[$i];
@@ -461,9 +461,9 @@ if (isset ($atualizar) && isset($sqlerro) && $sqlerro == false){
 		}
 	}
 
-	$arr_cods = split("#", $cods);
+	$arr_cods = explode("#", $cods);
 	for ($i = 0; $i < count($arr_cods); $i ++) {
-		$arr = split("-", $arr_cods[$i]);
+		$arr = explode("-", $arr_cods[$i]);
 		$cheq = $arr[0];
 		$mov = $arr[1];
 		$val = $arr[2];
@@ -496,7 +496,7 @@ if (isset ($atualizar) && isset($sqlerro) && $sqlerro == false){
 		}
 
 		if ($sqlerro == false) {
-			$arr = split("XX", $movs);
+			$arr = explode("XX", $movs);
 			for ($i = 0; $i < count($arr); $i ++) {
 				$mov = $arr[$i];
 				//inclui na tabela empageconf
@@ -678,8 +678,8 @@ if (isset ($emite_vals) && $emite_vals != '' && empty ($prever)) {
 		    document.form1.verso_imp.value  = '$verso_imp';\n";
 	echo "</script>";
 
-	$arr_vals = split("#", $emite_vals);
-	$arr_cheque = split(",", $cheque_imp);
+	$arr_vals = explode("#", $emite_vals);
+	$arr_cheque = explode(",", $cheque_imp);
 
 	$tot_vals = '';
 	$tot_cheques = '';
@@ -734,7 +734,7 @@ if (isset ($emiteverso)) {
 	$ver = str_replace("\n", ' ###', $emiteverso);
 	$emiteverso = str_replace("\r", '', $ver);
 
-	$arr_i = split("###", $emiteverso);
+	$arr_i = explode("###", $emiteverso);
     if($k11_tipoimpcheque == 5){
       $fd = fsockopen($ip_imprime, $k11_portaimpcheque);
     //  $imprimir_ver = chr(27).chr(119).'1';

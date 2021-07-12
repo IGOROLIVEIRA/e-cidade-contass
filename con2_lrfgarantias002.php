@@ -52,7 +52,7 @@ include_once("classes/db_conrelvalor_classe.php");
 $clconrelinfo  = new cl_conrelinfo;
 $clconrelvalor = new cl_conrelvalor;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -246,12 +246,12 @@ $param[18] = $orcparamrel->sql_parametro('5','18', 'f', str_replace('-', ', ', $
 //////////////////////////////////////////////////////////////////////////////////////////
 //$dt_ini_ant = $anousu_ant."-01-01";
 //var_dump($dt); exit;
-$dt = split("-",$dt_ini);
+$dt = explode("-",$dt_ini);
 $dt_ini_ant = date('Y-m-d',mktime(0,0,0,$dt[1]-11,"01",$dt[0]));
 $dt_fim_ant = $anousu_ant."-12-31";
 
 // se o ano atual é bissexto deve subtrair 366 somente se a data for superior a 28/02/200X
-$dt = split('-',$dt_fim);  // mktime -- (mes,dia,ano)
+$dt = explode('-',$dt_fim);  // mktime -- (mes,dia,ano)
 //$dt_ini_ant2 = date('Y-m-d',mktime(0,0,0,$dt[1],$dt[2]-365,$dt[0]));
 $dt_ini_ant2 = date('Y-m-d',mktime(0,0,0,$dt[1]-11,"01",$dt[0]));
 $dt_fim_ant2 = $anousu_ant.'-12-31';  

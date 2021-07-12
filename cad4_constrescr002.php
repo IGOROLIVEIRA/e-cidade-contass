@@ -77,7 +77,7 @@ if(isset($j52_idcons)&&$j52_idcons=="nova"){
      $j52_idcons = $j52_idcons + 1;
    }      
    $clconstrescr->incluir($j52_matric,$j52_idcons);
-   $matriz= split("X",$caracteristica);
+   $matriz= explode("X",$caracteristica);
    for($i=0;$i<sizeof($matriz);$i++){
      $j53_caract = $matriz[$i];
      if($j53_caract!=""){
@@ -92,7 +92,7 @@ if(isset($j52_idcons)&&$j52_idcons=="nova"){
   $clconstrcar->j53_idcons=$j52_idcons;
   $clconstrcar->excluir();
   $clconstrescr->alterar($j52_matric,$j52_idcons);
-  $matriz= split("X",$caracteristica);
+  $matriz= explode("X",$caracteristica);
   for($i=0;$i<sizeof($matriz);$i++){
     $j53_caract = $matriz[$i];
     if($j53_caract!=""){

@@ -817,7 +817,7 @@ class cl_matricula {
    function sql_query ( $ed60_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -865,7 +865,7 @@ class cl_matricula {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -878,7 +878,7 @@ class cl_matricula {
    function sql_query_file ( $ed60_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -899,7 +899,7 @@ class cl_matricula {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -913,7 +913,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
   
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
   
@@ -952,7 +952,7 @@ class cl_matricula {
     if ($sOrdem != null) {
   
     $sSql      .= ' order by ';
-    $sCamposSql = split('#', $sOrdem);
+    $sCamposSql = explode('#', $sOrdem);
     $sVirgula   = '';
     for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
   
@@ -969,7 +969,7 @@ class cl_matricula {
    function sql_query_restricao ( $ed60_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1015,7 +1015,7 @@ class cl_matricula {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1027,7 +1027,7 @@ class cl_matricula {
    function sql_query_diario ( $ed60_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1058,7 +1058,7 @@ class cl_matricula {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1072,7 +1072,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1106,7 +1106,7 @@ class cl_matricula {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1125,7 +1125,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
   
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
   
@@ -1158,7 +1158,7 @@ class cl_matricula {
     if ($sOrdem != null) {
   
     $sSql      .= ' order by ';
-    $sCamposSql = split('#', $sOrdem);
+    $sCamposSql = explode('#', $sOrdem);
     $sVirgula   = '';
     for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
   
@@ -1177,7 +1177,7 @@ class cl_matricula {
       $sSql = 'select ';
       if ($sCampos != '*') {
     
-        $sCamposSql = split('#', $sCampos);
+        $sCamposSql = explode('#', $sCampos);
         $sVirgula   = '';
         for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
     
@@ -1218,7 +1218,7 @@ class cl_matricula {
       if ($sOrdem != null) {
     
         $sSql      .= ' order by ';
-        $sCamposSql = split('#', $sOrdem);
+        $sCamposSql = explode('#', $sOrdem);
         $sVirgula   = '';
         for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
     
@@ -1237,7 +1237,7 @@ class cl_matricula {
       $sSql = 'select ';
       if ($sCampos != '*') {
     
-        $sCamposSql = split('#', $sCampos);
+        $sCamposSql = explode('#', $sCampos);
         $sVirgula   = '';
         for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
     
@@ -1269,7 +1269,7 @@ class cl_matricula {
       if ($sOrdem != null) {
     
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
     
@@ -1288,7 +1288,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1322,7 +1322,7 @@ class cl_matricula {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1341,7 +1341,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
   
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
   
@@ -1370,7 +1370,7 @@ class cl_matricula {
     if ($sOrdem != null) {
   
     $sSql      .= ' order by ';
-    $sCamposSql = split('#', $sOrdem);
+    $sCamposSql = explode('#', $sOrdem);
     $sVirgula   = '';
     for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
   
@@ -1389,7 +1389,7 @@ class cl_matricula {
       $sSql = 'select ';
       if ($sCampos != '*') {
     
-        $sCamposSql = split('#', $sCampos);
+        $sCamposSql = explode('#', $sCampos);
         $sVirgula   = '';
         for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
     
@@ -1420,7 +1420,7 @@ class cl_matricula {
       if ($sOrdem != null) {
     
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
     
@@ -1439,7 +1439,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1473,7 +1473,7 @@ class cl_matricula {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1492,7 +1492,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1526,7 +1526,7 @@ class cl_matricula {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1545,7 +1545,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
   
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
   
@@ -1576,7 +1576,7 @@ class cl_matricula {
     if ($sOrdem != null) {
   
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
   
@@ -1595,7 +1595,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1628,7 +1628,7 @@ class cl_matricula {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1647,7 +1647,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1683,7 +1683,7 @@ class cl_matricula {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1702,7 +1702,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
   
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
   
@@ -1734,7 +1734,7 @@ class cl_matricula {
     if ($sOrdem != null) {
   
     $sSql      .= ' order by ';
-    $sCamposSql = split('#', $sOrdem);
+    $sCamposSql = explode('#', $sOrdem);
     $sVirgula   = '';
     for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
   
@@ -1753,7 +1753,7 @@ class cl_matricula {
       $sSql = 'select ';
       if ($sCampos != '*') {
     
-        $sCamposSql = split('#', $sCampos);
+        $sCamposSql = explode('#', $sCampos);
         $sVirgula   = '';
     
         for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
@@ -1803,7 +1803,7 @@ class cl_matricula {
       if ($sOrdem != null) {
     
       $sSql      .= ' order by ';
-        $sCamposSql = split('#', $sOrdem);
+        $sCamposSql = explode('#', $sOrdem);
         $sVirgula   = '';
     
         for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
@@ -1823,7 +1823,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1859,7 +1859,7 @@ class cl_matricula {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1886,7 +1886,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
   
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
   
@@ -1917,7 +1917,7 @@ class cl_matricula {
     if ($sOrdem != null) {
   
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
     
@@ -1942,7 +1942,7 @@ class cl_matricula {
     $sSql = 'select ';
     if ($sCampos != '*') {
   
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
   
@@ -1972,7 +1972,7 @@ class cl_matricula {
     if ($sOrdem != null) {
   
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
     
@@ -1987,7 +1987,7 @@ class cl_matricula {
   function sql_query_naturalidade_aluno ( $ed60_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -2035,7 +2035,7 @@ class cl_matricula {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -2047,7 +2047,7 @@ class cl_matricula {
    function sql_query_censo ( $ed60_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
   	$sql = "select ";
   	if($campos != "*" ){
-  		$campos_sql = split("#",$campos);
+  		$campos_sql = explode("#",$campos);
   		$virgula = "";
   		for($i=0;$i<sizeof($campos_sql);$i++){
   			$sql .= $virgula.$campos_sql[$i];
@@ -2101,7 +2101,7 @@ class cl_matricula {
   	$sql .= $sql2;
   	if($ordem != null ){
   		$sql .= " order by ";
-  		$campos_sql = split("#",$ordem);
+  		$campos_sql = explode("#",$ordem);
   		$virgula = "";
   		for($i=0;$i<sizeof($campos_sql);$i++){
   			$sql .= $virgula.$campos_sql[$i];
@@ -2114,7 +2114,7 @@ class cl_matricula {
      function sql_query_aluno_transferido ( $ed60_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -2145,7 +2145,7 @@ class cl_matricula {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];

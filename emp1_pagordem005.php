@@ -133,10 +133,10 @@ if (isset ($alterar) || isset ($alterarimp)) {
 
 		//rotina que altera em pagordemele
 		if ($sqlerro == false) {
-			$arr_dados = split("#", $dados);
+			$arr_dados = explode("#", $dados);
 			$tam = count($arr_dados);
 			for ($i = 0; $i < $tam; $i ++) {
-				$arr_ele = split("-", $arr_dados[$i]);
+				$arr_ele = explode("-", $arr_dados[$i]);
 				$elemento = $arr_ele[0];
 
 				if (isset ($chaves) && $chaves != '') {
@@ -255,7 +255,7 @@ if (isset ($alterar) || isset ($alterarimp)) {
 		}
 		//rotina pega as notas marcadas para atualizar os valores liquidados da notas
 		if ($sqlerro == false && isset ($chaves) && $chaves != '') {
-			$arr_notas = split("#", $chaves);
+			$arr_notas = explode("#", $chaves);
 			$tam = count($arr_notas);
 			for ($i = 0; $i < $tam; $i ++) {
 				$nota = $arr_notas[$i];

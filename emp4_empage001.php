@@ -172,7 +172,7 @@ if(isset($atualizar)){
   if($sqlerro==false && $ords !=''){
     $arr =  split("XX",$ords);
     for($i=0; $i<count($arr); $i++ ){
-       $dad = split("-",$arr[$i]);
+       $dad = explode("-",$arr[$i]);
        $ord = $dad[0];
        $emp = $dad[1];
        $val = $dad[2];
@@ -290,7 +290,7 @@ if(isset($atualizar)){
     $arr_movok = Array();
     if($sqlerro==false){
       for($i=0; $i<count($arr); $i++){
-	$dad = split("-",$arr[$i]);
+	$dad = explode("-",$arr[$i]);
 	$ord = $dad[0];
 	$emp = $dad[1];
 	$val = $dad[2];

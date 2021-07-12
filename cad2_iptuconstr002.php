@@ -48,7 +48,7 @@ if(isset($relatorio1)){
   // $chaves = são as caracteristicas da aba com as caracteristicas
   if(isset($chaves) && $chaves != ""){
 
-    $chaves = split("#",$chaves);
+    $chaves = explode("#",$chaves);
     for($i=0;$i<sizeof($chaves);$i++){
 
       // concatena na $codigo o código das caracteristicas selecionadas
@@ -198,8 +198,8 @@ if(isset($setor) && $setor != ""){
     $quadra1 = $quadra;
     if(isset($setor) && $setor != ""){
 
-      $chaves  = split(",",$setor);
-      $chaves1 = split(",",$quadra);
+      $chaves  = explode(",",$setor);
+      $chaves1 = explode(",",$quadra);
       $and     = "";
       $setor   = "";
       $and     = "";
@@ -743,8 +743,8 @@ if(isset($setores) && $setores != ""){
 
   if(isset($setor) && $setor != ""){
 
-    $chaves  = split(",",$setores);
-    $chaves1 = split(",",$quadra);
+    $chaves  = explode(",",$setores);
+    $chaves1 = explode(",",$quadra);
     $and     = "";
     $setores = "";
 

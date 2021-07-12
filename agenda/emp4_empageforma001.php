@@ -56,11 +56,11 @@ if(isset($e80_data_ano)){
 if(isset($atualizar)){
   $sqlerro = false;
   db_inicio_transacao();
-  $arr_valores = split("XX",$ords);
+  $arr_valores = explode("XX",$ords);
   $movimentoss = "";
   $virgulamovi = "";
   for($i=0;$i<sizeof($arr_valores);$i++){
-    $arr_dados = split("-",$arr_valores[$i]);
+    $arr_dados = explode("-",$arr_valores[$i]);
     $agenda = $arr_dados[0];
     $aordem = $arr_dados[1];
     $numemp = $arr_dados[2];

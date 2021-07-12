@@ -64,10 +64,10 @@ if(isset($anular)){
 
   //rotina que inclui em pagordemele
   if($sqlerro==false){
-    $arr_dados = split("#",$dados);
+    $arr_dados = explode("#",$dados);
     $tam = count($arr_dados);
     for($i=0; $i<$tam; $i++){
-         $arr_ele = split("-",$arr_dados[$i]);
+         $arr_ele = explode("-",$arr_dados[$i]);
          $elemento    = $arr_ele[0];
 	 $vlrord      = $arr_ele[1];
 
@@ -116,7 +116,7 @@ if(isset($anular)){
 
      //rotina pega as notas marcadas para anular
      if($sqlerro==false && isset($chaves) && $chaves!=''){
-	$arr_notas = split("#",$chaves);
+	$arr_notas = explode("#",$chaves);
 	$tam = count($arr_notas);
 	for($i=0; $i<$tam; $i++){
 	        $nota = $arr_notas[$i];

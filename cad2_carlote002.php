@@ -58,7 +58,7 @@ $total = 0;
 $valores = 0;
 if(isset($relatorio1)){
   if(isset($chaves) && $chaves != ""){
-    $chaves = split("#",$chaves);
+    $chaves = explode("#",$chaves);
     for($i=0;$i<sizeof($chaves);$i++){
       if($codigo == ""){
 	      $codigo .= substr($chaves[$i],0,(strpos($chaves[$i],"-")));
@@ -166,8 +166,8 @@ if(isset($setor) && $setor != ""){
     $setor1  = $setor;
     $quadra1 = $quadra;
     if(isset($setor) && $setor != ""){
-      $chaves  = split(",",$setor);
-      $chaves1 = split(",",$quadra);
+      $chaves  = explode(",",$setor);
+      $chaves1 = explode(",",$quadra);
       $or      = "";
       $setor   = "";
       for($i=0;$i<sizeof($chaves);$i++){
@@ -180,7 +180,7 @@ if(isset($setor) && $setor != ""){
   $and = " and ";
 }else{
 	if(isset($sosetor) && $sosetor != ""){
-    $chaves  = split(",",$sosetor);
+    $chaves  = explode(",",$sosetor);
     $virgula = "";
     $setor   = "and j34_setor in ( ";	
     for($i=0;$i<sizeof($chaves);$i++){
@@ -512,8 +512,8 @@ if(isset($chaves_caract) && $chaves_caract != ""){
 $pdf->MultiCell(280,05,"CARACTERÍSTICAS NÃO LISTADAS ->  ".@$cod,1,"L");
 if(isset($setores) && $setores != ""){
   if(isset($setor) && $setor != ""){
-    $chaves = split(",",$setores);
-    $chaves1 = split(",",$quadra);
+    $chaves = explode(",",$setores);
+    $chaves1 = explode(",",$quadra);
     $and = "";
     $setores = "";
     for($i=0;$i<sizeof($chaves);$i++){

@@ -3351,7 +3351,7 @@ class MeiArquivo {
   
   function validaNumeroEndereco($sNumero=''){
   	
-  	$aNumero = split("[^0-9]",trim($sNumero));
+  	$aNumero = explode("[^0-9]",trim($sNumero));
   	if ( count($aNumero) > 1 ){
   	  return false;	
   	} else {

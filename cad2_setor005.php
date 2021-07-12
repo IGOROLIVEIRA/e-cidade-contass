@@ -43,7 +43,7 @@ $cllote->rotulo->label();
 $clrotulo->label("z01_nome");
 
 if(isset($j34_zona) && $j34_zona != ""){
-  $zona = split(",",$j34_zona);
+  $zona = explode(",",$j34_zona);
   $vir = "";
   $zon = "";
   for($i=0;$i<count($zona);$i++){
@@ -52,7 +52,7 @@ if(isset($j34_zona) && $j34_zona != ""){
   }
 }
 if(isset($j34_setor) && $j34_setor != ""){
-  $setor = split(",",$j34_setor);
+  $setor = explode(",",$j34_setor);
   $vir = "";
   $set = "";
   for($i=0;$i<count($setor);$i++){

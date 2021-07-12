@@ -45,7 +45,7 @@ if (isset($sql_disabled)) {
 }
 $campos=base64_decode($campos);
 $msg_vazio=base64_decode($msg_vazio);
-$quais_chaves = split("#",$quais_chaves);
+$quais_chaves = explode("#",$quais_chaves);
 $sql_comparar     = base64_decode((isset($sql_comparar)?$sql_comparar:""));
 $sql_servico      = base64_decode((isset($sql_servico)?$sql_servico:""));
 $sql_reservasaldo = base64_decode((isset($sql_reservasaldo)?$sql_reservasaldo:""));
@@ -153,7 +153,7 @@ if (isset($sql_comparar) && $sql_comparar != "") {
   $numrows_comparar     = @pg_numrows($res_comparar);
   $numcols_comparar     = @pg_numfields($res_comparar);
 
-  $matriz_comparar      = split(",",$campos_comparar);
+  $matriz_comparar      = explode(",",$campos_comparar);
   $numcol_comparar      = sizeof($matriz_comparar);
   $linha = 0;
   for ($i = 0; $i < $numrows_servico; $i++) {

@@ -82,7 +82,7 @@
         <td nowrap title="<?=@$Tk13_datvlr?>"> <?=@$Lk13_datvlr?> </td>
         <td><?
 
-  	       @list($k13_datvlr_dia,$k13_datvlr_mes,$k13_datvlr_ano)= split("/",$k13_datvlr);
+  	       @list($k13_datvlr_dia,$k13_datvlr_mes,$k13_datvlr_ano)= explode("/",$k13_datvlr);
 	      db_inputdata('k13_datvlr',@$k13_datvlr_dia,@$k13_datvlr_mes,@$k13_datvlr_ano,true,'text',3,"");
 
 	      ?>

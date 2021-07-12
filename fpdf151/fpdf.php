@@ -2589,7 +2589,7 @@ function Row_multicell($data,$altura=5, $borda=true, $espaco=5, $preenche=0, $na
         // Se for para retornar string no limite da quebra de página
         // e campo corrente for o informado por parâmetro
         if ($usar_quebra==true && $i==$campo_testar ) {
-           $yy = split("\n",$data[$i]);
+           $yy = explode("\n",$data[$i]);
            $imprime_dados_string="";
 
           for ($xx=0;$xx<count($yy);$xx++) {

@@ -369,8 +369,8 @@ if(isset($procreg) && $procreg == 't'){
     if (isset($numrows) && $numrows == 0 ){
 	 db_msgbox("Nenhum registro para o filtro selecionado !");
     }
-    $codigo_k02 = split(",",$codreceita);
-    $codigo_v03 = split(",",$cod_v03_codigo);
+    $codigo_k02 = explode(",",$codreceita);
+    $codigo_v03 = explode(",",$cod_v03_codigo);
     $sqlerro=false;
 
     db_inicio_transacao();

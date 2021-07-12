@@ -46,9 +46,9 @@ $db_opcao=1;
 $db_botao=true;
 
 if(isset($incluir)){
-  $valor = split(",",$valores);
+  $valor = explode(",",$valores);
   for($i=0;$i<sizeof($valor);$i++){
-    $splitei = split("_",$valor[$i]);
+    $splitei = explode("_",$valor[$i]);
     for($ii=0;$ii<sizeof($splitei);$ii++){
       // 'aut_".($contador-1)."_".$pc01_codmater."_".$pc13_coddot."_".$z01_numcgm."'
     }

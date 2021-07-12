@@ -55,7 +55,7 @@ if (isset ($atualizar)) {
 	for ($i = 0; $i < $ta; $i ++) {
 		$chave = key($vt);
 		if (substr($chave, 0, 5) == "CHECK") {
-			$dados = split("_", $chave);
+			$dados = explode("_", $chave);
 			$obtes = $HTTP_POST_VARS;
 			$tam = sizeof($obtes);
 			if (array_key_exists("OB_".$dados[1],$obtes)){
@@ -69,7 +69,7 @@ if (isset ($atualizar)) {
 			for ($w = 0; $w < $tam; $w ++) {
 				$chaveob = key($obtes);
 				if ( $chaveob == "OB_".$dados[1]) {
-					$dadosob = split("_", $chaveob);
+					$dadosob = explode("_", $chaveob);
 					
 				}
 				$proximo = next($obtes);

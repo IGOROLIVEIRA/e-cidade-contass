@@ -430,11 +430,11 @@ function headerPad($iInstit=1,$sDataInicial='',$sDataFinal='',$sDataGeracao='', 
   $rs = pg_query("select nomeinst,cgc from db_config where codigo= ".$iInstit);
   $oInstit = db_utils::fieldsMemory($rs, 0);
   
-  $ini = split("-", $sDataInicial);
+  $ini = explode("-", $sDataInicial);
   $ini = "$ini[2]$ini[1]$ini[0]";
-  $fim = split("-", $sDataFinal);
+  $fim = explode("-", $sDataFinal);
   $fim = "$fim[2]$fim[1]$fim[0]";
-  $dt  = split("-", $sDataGeracao);
+  $dt  = explode("-", $sDataGeracao);
   $dt  = "$dt[2]$dt[1]$dt[0]";
   $iCodigoRemessa = str_pad($iCodigoRemessa, 12, "0", STR_PAD_LEFT);
   return formatar($oInstit->cgc, 14, 'n') . $ini . $fim . $dt . formatar($oInstit->nomeinst, 80, 'c').$iCodigoRemessa;

@@ -224,7 +224,7 @@ if(isset($this->impobslanc) && $this->impobslanc == 't'){
   }
 }
 $data= date("Y-m-d",db_getsession("DB_datausu"));
-$dataex = split("-",$data);
+$dataex = explode("-",$data);
 $dia= $dataex[2];
 $mes= $dataex[1];
 $ano= $dataex[0];

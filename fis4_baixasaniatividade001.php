@@ -63,7 +63,7 @@ if(isset($HTTP_POST_VARS["db_opcao"]) && $db_opcao == "Baixar"){
 
   if(isset($chaves) && $chaves != ""){
     db_inicio_transacao();
-    $chaves = split("#",$chaves);
+    $chaves = explode("#",$chaves);
     $db_opcao = 2;
     $sqlqtativ = "select * from saniatividade
 					where y83_codsani = $y83_codsani and y83_dtfim is null";

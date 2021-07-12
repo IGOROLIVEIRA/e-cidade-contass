@@ -122,7 +122,7 @@ if(isset($newsql) && $newsql=="true"){
 	   exit;
   	}
     if (isset($e60_codemp) and $e60_codemp != "" ) {
-	  $arr = split("/",$e60_codemp);
+	  $arr = explode("/",$e60_codemp);
 	  if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
 	  	$where_sql .= "e60_codemp =  '".$arr[0]."' and e60_anousu = ".$arr[1]." and ";
       $anousu = $arr[1];

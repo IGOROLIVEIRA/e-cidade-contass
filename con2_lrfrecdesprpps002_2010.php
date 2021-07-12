@@ -1176,12 +1176,12 @@ if (!isset($arqinclude)){ //
   $head3 = "DEMONSTRATIVO DE RECEITAS E DESPESAS PREVIDENCIÁRIAS DO REGIME PRÓPRIO DOS SERVIDORES";
   $head4 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
   $txt = strtoupper(db_mes('01'));
-  $dt  = split("-",$dtDataFinal);
+  $dt  = explode("-",$dtDataFinal);
   $txt.= " À ".strtoupper(db_mes($dt[1]))." $anousu";
   $head5 = "$txt";
    $dados  = data_periodo($anousu, $sSiglaPeriodo);
-  $perini = split("-",$dados[0]);
-  $perfin = split("-",$dados[1]);
+  $perini = explode("-",$dados[0]);
+  $perfin = explode("-",$dados[1]);
 
   $txtper = strtoupper($dados["periodo"]);
   $mesini = db_mes($perini[1],1);

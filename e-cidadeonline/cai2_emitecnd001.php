@@ -97,7 +97,7 @@ if (isset ($textarea) && $textarea != "") {
 }
 if ($codproc != "") {
 	if (strpos($codproc, "/") > 0) {
-		$codproc = split("\/", $codproc);
+		$codproc = explode("\/", $codproc);
 		$exercicio = $codproc[1];
 		$codproc = $codproc[0];
 	} else {

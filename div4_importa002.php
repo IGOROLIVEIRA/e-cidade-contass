@@ -60,7 +60,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
   for($i = 0;$i < $tam;$i++) {
    // if(abs($valores[$i]) != 0) {
       //$mat = base64_decode($numpres[$i]);
-      $mat = split("P",$numpres[$i]);
+      $mat = explode("P",$numpres[$i]);
       $numpre = $mat[0];	  
       $numpar = $mat[1];
       $sql = "update issvar set q05_vlrinf = ".$valores[$i]." where q05_numpre = $numpre and q05_numpar = $numpar";

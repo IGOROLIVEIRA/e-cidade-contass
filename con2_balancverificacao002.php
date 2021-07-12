@@ -38,7 +38,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $agrupa_estrutural=($agrupa_estrutural=='1'?false:true);
 $anousu = db_getsession("DB_anousu");
 
-$xinstit = split(",", $db_selinstit);
+$xinstit = explode(",", $db_selinstit);
 $resultinst = db_query("select codigo,nomeinst,nomeinstabrev from db_config where codigo in ({$db_selinstit}) ");
 $descr_inst = '';
 $xvirg = '';

@@ -58,8 +58,8 @@ if (isset($desconto)) {
 }
 
 $sTiposDebitos = $tipos;
-$tipos = split(",",$tipos);
-$tipostodos = split(",",$tipostodos);
+$tipos = explode(",",$tipos);
+$tipostodos = explode(",",$tipostodos);
 
 $head6 = "Débitos Calculados até: ".db_formatar($db_datausu,'d');
 $where = "";

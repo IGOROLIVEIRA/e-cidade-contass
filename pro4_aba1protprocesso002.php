@@ -79,7 +79,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   $clprotprocesso->p58_numeracao = $p58_numeracao;
   $clprotprocesso->p58_numero = $p58_numero;
   $clprotprocesso->alterar($p58_codproc);
-  $chaves = split("#",$docs);
+  $chaves = explode("#",$docs);
   $clprocprocessodoc->excluir($p58_codproc);
   //$clprocprocessodoc->erro(true,false);
   for($i=0;$i<sizeof($chaves);$i++){
@@ -89,7 +89,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
     $clprocprocessodoc->incluir($p58_codproc,$chaves[$i]);
     //$clprocprocessodoc->erro(true,false);
   }
-  $chaves = split("#",$ndocs);
+  $chaves = explode("#",$ndocs);
   for($i=0;$i<sizeof($chaves);$i++){
     $HTTP_POST_VARS['p81_doc'] = 'f';
     $clprocprocessodoc->p81_codproc = $p58_codproc;

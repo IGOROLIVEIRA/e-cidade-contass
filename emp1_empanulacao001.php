@@ -297,14 +297,14 @@ if (isset ($confirmar) || isset ($confirmarn)) {
 	//array que irá armazenar os valores de cada elemento para fazer os lancamentos contabeis
 	$arr_codeleval = array ();
 
-	$arr_dados = split("#", $dados);
+	$arr_dados = explode("#", $dados);
 	$tam = count($arr_dados);
 	if ($sqlerro == false) {
 		for ($i = 0; $i < $tam; $i ++) {
 			if ($sqlerro == true) {
 				break;
 			}
-			$arr_ele = split("-", $arr_dados[$i]);
+			$arr_ele = explode("-", $arr_dados[$i]);
 			$elemento = $arr_ele[0];
 			$vdigitado = $arr_ele[1];
 

@@ -37,7 +37,7 @@ require_once("dbforms/verticalTab.widget.php");
 $k00_matric = null;
 $k00_inscr  = null;
 
-$mat_numpre = split("#",base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
+$mat_numpre = explode("#",base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
 //var_dump(base64_decode(@$HTTP_SERVER_VARS['QUERY_STRING']));
 //echo $mat_numpre[0]."-";
 //echo $mat_numpre[1]."-";

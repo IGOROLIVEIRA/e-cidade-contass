@@ -51,7 +51,7 @@ $erro = false;
 // inclusão do conplanoconta
 if (isset($Processa_bancos) && ($Processa_bancos == 'Processar')) {
   // obtem uma matriz de chaves
-  $chaves = split('#', $chaves);
+  $chaves = explode('#', $chaves);
   if (count($chaves) > 0) {
     for ($i = 0; $i < count($chaves); $i ++) {
       db_inicio_transacao();
@@ -83,7 +83,7 @@ if (isset($Processa_bancos) && ($Processa_bancos == 'Processar')) {
 // processa contas sintéticas
 if (isset($Processa_sintetica) && ($Processa_sintetica == 'Processar')) {
   // obtem uma matriz de chaves
-  $chaves = split('#', $chaves);
+  $chaves = explode('#', $chaves);
   if (count($chaves) > 0) {
     
     for ($i = 0; $i < count($chaves); $i ++) {
@@ -157,7 +157,7 @@ if (isset($Processa_sintetica) && ($Processa_sintetica == 'Processar')) {
 // processa contas analiticas
 if (isset($Processa_analitica) && ($Processa_analitica == 'Processar')) {
   // obtem uma matriz de chaves
-  $chaves = split('#', $chaves);
+  $chaves = explode('#', $chaves);
   if (count($chaves) > 0) {
     for ($i = 0; $i < count($chaves); $i ++) {
       db_inicio_transacao();
@@ -209,7 +209,7 @@ if (isset($Processa_saldos) && ($Processa_saldos == 'Processar')) {
   $dtini = $ano.'-01-01';
   $dtfim = $ano.'-12-31';
   
-  $chaves = split('#', $chaves);
+  $chaves = explode('#', $chaves);
   if (count($chaves) > 0) {
     
     for ($i = 0; $i < count($chaves); $i ++) {

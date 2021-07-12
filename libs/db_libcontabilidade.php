@@ -4890,9 +4890,9 @@ function calcula_rcl2($anousu, $dtini, $dtfin, $db_selinstit, $matriz = false, $
   global $o57_fonte, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro, $bimestre, $dt;
 
   if ($data == 0) {
-    $dt = split("-", $dtfin);
+    $dt = explode("-", $dtfin);
   } else {
-    $dt = split("-", $data);
+    $dt = explode("-", $data);
   }
 
   $bimestre = (int) substr(db_retorna_periodo($dt[1], "B"), 0, 1);

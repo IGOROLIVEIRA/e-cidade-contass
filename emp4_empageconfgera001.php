@@ -328,8 +328,8 @@ if(isset($atualizar)){
      $pc63_banco = db_formatar($pc63_banco,'s','0',3,'e',0);
      if ($codigomodelo==3 && $sqlerro == false) {
 
-       $arr_data  = split('-',$e87_data);
-	     $arr_datap = split('-',$e87_dataproc);
+       $arr_data  = explode('-',$e87_data);
+	     $arr_datap = explode('-',$e87_dataproc);
        $data      =  $arr_data[2].$arr_data[1].$arr_data[0];
 	     $dat_cred  = $arr_datap[2].$arr_datap[1].$arr_datap[0];
 	     /// criar campo de sequencia do arquivo no empagetipo.

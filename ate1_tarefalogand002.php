@@ -336,7 +336,7 @@ if(isset($incluir)){
         // grava os items de menus ligados ao movimento da tarefa
         if ($sqlerro == false) {
 
-          $tarefaslogitem = split('-',$itens_menu_escolhidos);
+          $tarefaslogitem = explode('-',$itens_menu_escolhidos);
 
           if($cltarefalog->at43_tipomov == 3){
             if (count($tarefaslogitem) == 1) {
@@ -447,7 +447,7 @@ if(isset($incluir)){
       $cltarefalogitem->excluir(null,' at66_codmov = '.$at43_sequencial);
 
       if($cltarefalog->at43_tipomov == 3){
-        $tarefaslogitem = split('-',$itens_menu_escolhidos);
+        $tarefaslogitem = explode('-',$itens_menu_escolhidos);
         if( count($tarefaslogitem) == 1 ){
 
           $sqlerro = true;

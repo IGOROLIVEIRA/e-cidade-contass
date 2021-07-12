@@ -50,11 +50,11 @@ if(isset($atualiza)){
 
   for($i=0;$i<count($HTTP_POST_VARS);$i++){
   	if(substr(key($HTTP_POST_VARS),0,9) == 'atividade' ){
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = explode("\_",key($HTTP_POST_VARS));
       $clorcreserprev->excluir(db_getsession("DB_anousu"),$mat[1],$mat[2]);
   	}
   	if(substr(key($HTTP_POST_VARS),0,8) == 'previsao' ){
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = explode("\_",key($HTTP_POST_VARS));
       $clorcprevdesp->excluir(db_getsession("DB_anousu"),$mat[1],$mat[2]);
   	}
     next($HTTP_POST_VARS);
@@ -64,7 +64,7 @@ if(isset($atualiza)){
   for($i=0;$i<count($HTTP_POST_VARS);$i++){
   	if(substr(key($HTTP_POST_VARS),0,9) == 'atividade' ){
 
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = explode("\_",key($HTTP_POST_VARS));
       $clorcreserprev->o33_anousu   = db_getsession("DB_anousu");
       $clorcreserprev->o33_projativ = $mat[1];
       $clorcreserprev->o33_codigo   = $mat[2];
@@ -83,7 +83,7 @@ if(isset($atualiza)){
   	}
   	if(substr(key($HTTP_POST_VARS),0,8) == 'previsao' ){
 
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = explode("\_",key($HTTP_POST_VARS));
       $clorcprevdesp->o35_anousu   = db_getsession("DB_anousu");
       $clorcprevdesp->o35_projativ = $mat[1];
       $clorcprevdesp->o35_codigo   = $mat[2];

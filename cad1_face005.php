@@ -93,7 +93,7 @@ if (isset($alterarface) && $alterarface=='t') {
 			$erro_msg = $clcarface->erro_msg;
 		}
 
-		$matriz = split("X", $caracteristica);
+		$matriz = explode("X", $caracteristica);
 
 		for ($i = 0; $i < sizeof($matriz); $i++) {
 

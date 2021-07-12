@@ -223,12 +223,12 @@ for ($i = 0; $i < $tam; $i ++) {
 
   if (db_indexOf(key($vt), "CHECK") > 0 && db_indexOf(key($vt), "CHECKU") == 0) {
 
-    $registros = split("N",$vt[key($vt)]);
+    $registros = explode("N",$vt[key($vt)]);
     for ($reg=0; $reg < sizeof($registros); $reg++) {
       if ($registros[$reg] == "") {
         continue;
       }
-      $registro = split("R", $registros[$reg]);
+      $registro = explode("R", $registros[$reg]);
       if (gettype(strpos($numpres, "N".$registro[0])) == "boolean") {
         $numpres     .= "N".$registro[0];
         $aVarNumpre   = explode("P",$registro[0]);
@@ -243,7 +243,7 @@ if (isset($oPost->marcarvencidas) && isset($oPost->marcartodas)) {
 
   if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
 
-    $aNumpres   = split("N",$numpres);
+    $aNumpres   = explode("N",$numpres);
     $numpres    = "";
     $sNumPreAnt = "";
     $sAuxiliar  = "";
@@ -253,8 +253,8 @@ if (isset($oPost->marcarvencidas) && isset($oPost->marcartodas)) {
         continue;
       }
 
-      $iNumpre = split("P",$aNumpres[$iInd]);
-      $iNumpar = split("P", strstr($aNumpres[$iInd],"P"));
+      $iNumpre = explode("P",$aNumpres[$iInd]);
+      $iNumpar = explode("P", strstr($aNumpres[$iInd],"P"));
       $iNumpar = $iNumpar[1];
       $iNumpre = $iNumpre[0];
 
@@ -289,7 +289,7 @@ if (isset($oPost->marcarvencidas) && isset($oPost->marcartodas)) {
 }
 
 $sounica = $numpres;
-$numpres = split("N", $numpres);
+$numpres = explode("N", $numpres);
 
 $unica = 2;
 
@@ -352,7 +352,7 @@ if ($unica != "1"){
       continue;
     }
 
-    $aNumpre = split('P',$numpres[$volta]);
+    $aNumpre = explode('P',$numpres[$volta]);
 
     $k00_numpre = $aNumpre[0];
     $k00_numpar = $aNumpre[1];
@@ -1445,9 +1445,9 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
   /******************************************************** FIM PARCELA UNICA ************************************************************************/
 
-  $valores    = split("P", $numpres[$volta]);
+  $valores    = explode("P", $numpres[$volta]);
   $k00_numpre = $valores[0];
-  $k00_numpar = split("R", $valores[1]);
+  $k00_numpar = explode("R", $valores[1]);
   $k00_numpar = $k00_numpar[0];
   $k03_anousu = $H_ANOUSU;
 
@@ -2232,7 +2232,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
   $pdf1->sMensagemCaixa        = $oMensagem->sMensagemCaixa;
 
   $pdf1->descr5 = $k00_numpar.' / '.$k00_numtot;
-  $tmpdta       = split("/",$k00_dtvenc);
+  $tmpdta       = explode("/",$k00_dtvenc);
   $tmpdtvenc    = $tmpdta[2]."-".$tmpdta[1]."-".$tmpdta[0];
 
   if($db_datausu > $tmpdtvenc && $k00_valor > 0){

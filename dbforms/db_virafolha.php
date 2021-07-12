@@ -978,8 +978,8 @@ if($res_exc == false){
 
       $numdias = db_dias_mes($ano,$mes);
 
-      $arr_data1 = split("-",$inici_1_periodo);
-      $arr_data2 = split("-",$final_1_periodo);
+      $arr_data1 = explode("-",$inici_1_periodo);
+      $arr_data2 = explode("-",$final_1_periodo);
 
       $anomesi = $arr_data1[1].$arr_data1[2];
       $anomesf = $arr_data2[1].$arr_data2[2];

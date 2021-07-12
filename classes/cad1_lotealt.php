@@ -116,10 +116,10 @@ if($replote==true){
    $cltestpri->j49_codigo=$j37_codigo;
    $cltestpri->incluir($cllote->j34_idbql,$cartestpri);
 
-   $matriztesta= split("X",$cartestada);
+   $matriztesta= explode("X",$cartestada);
    for($i=0;$i<sizeof($matriztesta);$i++){
      $dados=$matriztesta[$i];
-     $matrizdados= split("-",$dados);
+     $matrizdados= explode("-",$dados);
  
      $j37_face=$matrizdados[0];   
      $j14_codigo=$matrizdados[1];   
@@ -138,7 +138,7 @@ if($replote==true){
    
    $j34_idbql=$cllote->j34_idbql;
    $clcarlote->j35_idbql=$j34_idbql;
-   $matriz= split("X",$caracteristica);
+   $matriz= explode("X",$caracteristica);
    for($i=0;$i<sizeof($matriz);$i++){
      $j35_caract = $matriz[$i];
      if($j35_caract!=""){
@@ -205,10 +205,10 @@ if($replote==true){
 
     }
 	
-    $matriztesta= split("X",$cartestada);
+    $matriztesta= explode("X",$cartestada);
     for($i=0;$i<sizeof($matriztesta);$i++){
       $dados=$matriztesta[$i];
-      $matrizdados= split("-",$dados);
+      $matrizdados= explode("-",$dados);
 
       $j37_face=$matrizdados[0];   
       $j14_codigo=$matrizdados[1];   
@@ -227,7 +227,7 @@ if($replote==true){
 
     $j34_idbql=$cllote->j34_idbql;
     $clcarlote->j35_idbql=$j34_idbql;
-    $matriz= split("X",$caracteristica);
+    $matriz= explode("X",$caracteristica);
     for($i=1;$i<sizeof($matriz);$i++){
      $j35_caract = $matriz[$i]; 
      if($j35_caract!=""){

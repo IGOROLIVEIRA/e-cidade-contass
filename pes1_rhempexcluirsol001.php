@@ -50,7 +50,7 @@ if (isset($solicitacoes) && trim($solicitacoes) != ""){
   db_inicio_transacao();
 
   $sqlerro          = false;
-  $vet_solicitacoes = split("_",$solicitacoes);
+  $vet_solicitacoes = explode("_",$solicitacoes);
 
   $solicitacao      = "";
   $virgula          = "";

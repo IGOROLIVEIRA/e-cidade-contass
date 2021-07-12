@@ -45,7 +45,7 @@ db_fieldsmemory($resultpref,0);
 if(isset($e60_numemp) && $e60_numemp != ''){
    $dbwhere =" e60_numemp = $e60_numemp ";
 } else if (isset($e60_codemp) && $e60_codemp !=''){
-	      $arr = split("/",$e60_codemp);
+	      $arr = explode("/",$e60_codemp);
 	      if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
 		$dbwhere_ano = " and e60_anousu = ".$arr[1];
        	      }else{

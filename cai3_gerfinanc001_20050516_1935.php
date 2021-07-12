@@ -641,7 +641,7 @@ function js_label(liga,str){
 			
 		    // notificao fiscal
 			echo "</td><td style=\"font-size:11px\" valign=\"top\">\n";
-			$tipo_pesq = split("=",$arg);
+			$tipo_pesq = explode("=",$arg);
  			
 			
 			

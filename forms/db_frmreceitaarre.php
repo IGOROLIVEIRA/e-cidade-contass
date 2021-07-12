@@ -172,7 +172,7 @@ if( isset($o70_codrec) && isset($cadastrar)){
   $result = pg_query($sql);
   db_fieldsmemory($result,0);
 
-  $matriz= split("\.",$o50_estrutreceita);
+  $matriz= explode("\.",$o50_estrutreceita);
   $inicia=false;//variavel que indica que o nivel não tem mais filhos
   $tam=(count($matriz)-1);
   $codigos='';
@@ -191,7 +191,7 @@ if( isset($o70_codrec) && isset($cadastrar)){
       $codigos=$codigo."#".$codigos;
     }
   }
-  $matriz02= split("#",$codigos);
+  $matriz02= explode("#",$codigos);
   $tam=count($matriz02);
   $espaco=3;
   $esp='';

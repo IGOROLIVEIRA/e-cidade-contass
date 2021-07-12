@@ -44,7 +44,7 @@ if(isset($e80_codage) && $e80_codage != ""){
         $dbwhere = " e82_codord = $e50_codord ";
    }
    if(isset($e60_codemp) && $e60_codemp!="" ){
-     $arr = split("/",$e60_codemp);
+     $arr = explode("/",$e60_codemp);
      $dbwhere_ano = "";
      if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
         $dbwhere_ano = " and e60_anousu = ".$arr[1];

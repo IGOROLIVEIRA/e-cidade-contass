@@ -163,7 +163,7 @@
 						 </script>";
     if(isset($testanome) && !isset($inconsistenciaSimples)){
     	
-	     $camp = split("\|",$valores);
+	     $camp = explode("\|",$valores);
 	     $vals = "";
 	     $vir = "";
 	     for($f=1;$f<count($camp);$f++){
@@ -402,7 +402,7 @@
        }
      }
      if(isset($testanome)){
-       $camp = split("\|",@$valores);
+       $camp = explode("\|",@$valores);
        $vals = "";
        $vir = "";
        for($f=1;$f<count($camp);$f++){

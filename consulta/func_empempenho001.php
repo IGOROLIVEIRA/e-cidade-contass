@@ -103,14 +103,14 @@ if (isset($e60_numemp) and $e60_numemp !=""){
        <td   align="right" nowrap title="<?=$Te60_emiss?>"><?=$Le60_emiss?></td>
        <td   align="left" nowrap>
              <?  if(isset($e60_emiss) and ($e60_emiss != "")){
-	            list($e60_emiss_dia,$e60_emiss_mes,$e60_emiss_ano)= split('[/.-]',$e60_emiss);
+	            list($e60_emiss_dia,$e60_emiss_mes,$e60_emiss_ano)= explode('[/.-]',$e60_emiss);
                  }
 		 db_inputdata('e60_emiss',@$e60_emiss_dia,@$e60_emiss_mes,@$e60_emiss_ano,true,'text',3,"");
 	       ?> </td>
        <td  align="left" nowrap title="<?=$Te60_vencim ?>">
              <?=$Le60_vencim ?>
              <? if (isset($e60_vencim) and ($e60_vencim != "")) {
-		    list($e60_vencim_dia,$e60_vencim_mes,$e60_vencim_ano) = split('[/.-]',$e60_vencim);
+		    list($e60_vencim_dia,$e60_vencim_mes,$e60_vencim_ano) = explode('[/.-]',$e60_vencim);
 	        }
 		db_inputdata('e60_vencim',@$e60_vencim_dia,@$e60_vencim_mes,@$e60_vencim_ano,true,'text',3,"");
     	       ?></td>

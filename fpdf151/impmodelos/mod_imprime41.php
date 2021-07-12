@@ -227,7 +227,7 @@ if ($this->result_vars != ""){
            $imprime_str .= ucfirst($rotulo).": ".$conteudo.$separador; 
      }
 
-     $linha = split("-",$imprime_str);
+     $linha = explode("-",$imprime_str);
      $this->objpdf->multicell(185, 4, $imprime_str,0,1,"L"); 
 } 
 

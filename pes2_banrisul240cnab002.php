@@ -103,14 +103,14 @@ if($clrharqbanco->numrows>0){
     $descricaobanco = $db90_descr;
 
     if(isset($datagera) && $datagera!=""){
-      $datag = split('-',$datagera);
+      $datag = explode('-',$datagera);
       $datag_dia=$datag[2];
       $datag_mes=$datag[1];
       $datag_ano=$datag[0];
     }
 
     if(isset($datadeposit) && $datadeposit!=""){
-      $datad = split('-',$datadeposit);
+      $datad = explode('-',$datadeposit);
       $datad_dia = $datad[2];
       $datad_mes = $datad[1];
       $datad_ano = $datad[0];

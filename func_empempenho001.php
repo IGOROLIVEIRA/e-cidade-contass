@@ -299,7 +299,7 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                 <td   align="left" nowrap title="<?=$Te60_emiss?>"><?=$Le60_emiss?></td>
                 <td   align="left" nowrap class='valores' colspan="3">
                     <?  if(isset($e60_emiss) and ($e60_emiss != "")){
-                        list($e60_emiss_dia,$e60_emiss_mes,$e60_emiss_ano)= split('[/.-]',$e60_emiss);
+                        list($e60_emiss_dia,$e60_emiss_mes,$e60_emiss_ano)= explode('[/.-]',$e60_emiss);
                     }
                     echo "{$e60_emiss_dia}/{$e60_emiss_mes}/{$e60_emiss_ano}";
                     ?>
@@ -331,7 +331,7 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                 </td>
                 <td class='valores' colspan="3">
                     <? if (isset($e60_vencim) and ($e60_vencim != "")) {
-                        list($e60_vencim_dia,$e60_vencim_mes,$e60_vencim_ano) = split('[/.-]',$e60_vencim);
+                        list($e60_vencim_dia,$e60_vencim_mes,$e60_vencim_ano) = explode('[/.-]',$e60_vencim);
                     }
                     echo "{$e60_vencim_dia}/{$e60_vencim_mes}/{$e60_vencim_ano}";
                     ?>
@@ -388,7 +388,7 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                     "e55_autori = ". @$e61_autori));
                 if ($clempautitem->numrows > 0) {
                 db_fieldsmemory($result_licita,0);
-                $arr_data  = split("-",$l20_anousu);
+                $arr_data  = explode("-",$l20_anousu);
                 $ano_lic   = $arr_data[0];
                 $numerolic = $l20_numero."/".$ano_lic;
                 db_input("l20_codigo",10,"",true,"hidden",3);

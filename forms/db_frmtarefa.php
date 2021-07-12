@@ -772,7 +772,7 @@ function db_grid($sql) {
 			  	$executar = "js_retorna(".pg_result($result, $i, 0).")";
 				if(pg_fieldtype($result, $j) == "date") {
 					if(pg_result($result, $i, $j) != "") {
-						$matriz_data = split("-", pg_result($result, $i, $j));
+						$matriz_data = explode("-", pg_result($result, $i, $j));
 						$var_data = $matriz_data[2]."/".$matriz_data[1]."/".$matriz_data[0];
 					} else {
 						$var_data = "//";

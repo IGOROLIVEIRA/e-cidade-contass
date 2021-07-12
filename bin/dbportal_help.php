@@ -61,7 +61,7 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
     case "d":
      
       if($str!=""){
-        $data = split("-",$str);
+        $data = explode("-",$str);
         return $data[2]."/".$data[1]."/".$data[0];
       }else{
         return $str;
@@ -80,10 +80,10 @@ function db_formatar($str,$tipo,$caracter=" ",$quantidade=0,$TipoDePreenchimento
 	    $str = str_replace(",",".",$str);
 		return $str;
 	  } else if(strpos($str,"-") != "") {
-        $str = split("-",$str);
+        $str = explode("-",$str);
 		return $str[2]."-".$str[1]."-".$str[0];
 	  } else if(strpos($str,"/") != "") {
-	    $str = split("/",$str);
+	    $str = explode("/",$str);
 		return $str[2]."-".$str[1]."-".$str[0];
 	  }
 	  break;
@@ -286,7 +286,7 @@ for($i=0;$i<pg_numrows($result);$i++){
   $rotulorel = pg_result($result,$i,'rotulorel');
   fputs($fd, "$br");
   fputs($fd, "Campo          : *".trim($nomecam)."* $br");
-  $linha = split("$br",$descricao);
+  $linha = explode("$br",$descricao);
   $tags .= trim($nomecam)."\tdb_phphelp.txt\t/*".trim($nomecam)."*$br";
   for($l=0;$l<sizeof($linha);$l++){
     if($l==0)
@@ -338,7 +338,7 @@ for($i=0;$i<pg_numrows($result);$i++){
     $listaarq = true;
     fputs($fd, "$br");
     fputs($fd, "Arquivo        : *".trim($nomearq)."* *cl".trim($nomearq)."*$br");
-    $linha = split("$br",$descricao);
+    $linha = explode("$br",$descricao);
     $tags .= trim($nomearq)."\tdb_phphelp.txt\t/*".trim($nomearq)."*$br";
     $tags .= "cl_".trim($nomearq)."\tdb_phphelp.txt\t/*cl_".trim($nomearq)."*$br";
     $tags .= "cl".trim($nomearq)."\tdb_phphelp.txt\t/*cl".trim($nomearq)."*$br";

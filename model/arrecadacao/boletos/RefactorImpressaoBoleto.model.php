@@ -381,7 +381,7 @@ class RefactorImpressaoBoleto {
           if(db_indexOf(key($vt) ,"CHECK") > 0){
 
             $numpres .= "N" . $vt[key($vt)];
-            $matnumpres = split("N", $vt[key($vt)]);
+            $matnumpres = explode("N", $vt[key($vt)]);
 
             if (!isset($inicial)) {
 
@@ -396,9 +396,9 @@ class RefactorImpressaoBoleto {
                 /**
                  * Numpre e numpar
                  */
-                $resultado = split("P",$numprecerto);
-                $numpar    = split("P",$resultado[1]);
-                $numpar    = split("R",$numpar[0]);
+                $resultado = explode("P",$numprecerto);
+                $numpar    = explode("P",$resultado[1]);
+                $numpar    = explode("R",$numpar[0]);
 
                 $sSqlInflatores  = " select distinct   ";
                 $sSqlInflatores .= "        k00_numpar, ";
@@ -539,7 +539,7 @@ class RefactorImpressaoBoleto {
 
           if ($this->marcarvencidas == 'true' && $this->marcartodas == 'false') {
 
-            $aNumpres   = split("N",$numpres);
+            $aNumpres   = explode("N",$numpres);
             $numpres   = "";
             $sNumPreAnt = "";
             $sAuxiliar  = "";
@@ -549,9 +549,9 @@ class RefactorImpressaoBoleto {
                 continue;
               }
 
-              $iNumpre = split("P",$aNumpres[$iInd]);
-              $iNumpar = split("P", strstr($aNumpres[$iInd],"P"));
-              $iNumpar = split("R",$iNumpar[1]);
+              $iNumpre = explode("P",$aNumpres[$iInd]);
+              $iNumpar = explode("P", strstr($aNumpres[$iInd],"P"));
+              $iNumpar = explode("R",$iNumpar[1]);
               $iReceit = $iNumpar[1];
               $iNumpar = $iNumpar[0];
               $iNumpre = $iNumpre[0];
@@ -585,12 +585,12 @@ class RefactorImpressaoBoleto {
 
         }
 
-        $numpres   = split("N",$numpres);
+        $numpres   = explode("N",$numpres);
 
         $totalregistrospassados=0;
 
         for($iii = 0;$iii < sizeof($numpres);$iii++) {
-          $valores = split("P",$numpres[$iii]);
+          $valores = explode("P",$numpres[$iii]);
           if ($numpres[$iii] <> "") {
             if(!isset($inicial)) {
               $totalregistrospassados+=sizeof($valores)-1;
@@ -638,7 +638,7 @@ class RefactorImpressaoBoleto {
             continue;
           }
 
-          $valores = split("P",$numpres[$ii]);
+          $valores = explode("P",$numpres[$ii]);
 
           if (isset($inicial)) {
 
@@ -690,7 +690,7 @@ class RefactorImpressaoBoleto {
 
           } else {
 
-            $numpar = split("R", $valores[1]);
+            $numpar = explode("R", $valores[1]);
 
             if ( in_array(array($valores[0],$numpar[0]),$aDebitosRecibo) ) {
               continue;
@@ -1690,7 +1690,7 @@ class RefactorImpressaoBoleto {
           $oDadosAuto   = db_utils::fieldsmemory($rsDadosHist,0);
           $sObsAuto     = "";
 
-          $aObs = split("\n",$oDadosAuto->y50_obs);
+          $aObs = explode("\n",$oDadosAuto->y50_obs);
           if (count($aObs) > 3) {
             $sObsAuto = $aObs[0]."\n".$aObs[1]."\n".$aObs[2];
           } else {
@@ -2099,7 +2099,7 @@ class RefactorImpressaoBoleto {
       $k99_desconto = $oDadosDesconto->k99_desconto;
       $k40_descr    = $oDadosDesconto->k40_descr;
 
-      $descrlei = split("#",$k40_descr);
+      $descrlei = explode("#",$k40_descr);
       $k00_mensagemdesconto .= $descrlei[0] . ($mensdesc == pg_num_rows($resultmensagemdesconto)?"":"-");
       $temdesconto = true;
     }

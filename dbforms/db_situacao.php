@@ -36,7 +36,7 @@ if(isset($HTTP_POST_VARS["procurar"])) {
 }
 
 if(!isset($arg)) {
-  $str = split("\?",$HTTP_SERVER_VARS['QUERY_STRING']);
+  $str = explode("\?",$HTTP_SERVER_VARS['QUERY_STRING']);
   $str1 = base64_decode($str[0]);
   $str2 = base64_decode($str[1]);
 //  echo "$str1<br>$str2";

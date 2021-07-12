@@ -595,12 +595,12 @@ if(isset($opVenc) && $opVenc == 1){
 if (isset($unica) && $unica != "") {
 
   $aUnicas =  explode("U", $unica);
-  $vt      = split("U",$unica);
+  $vt      = explode("U",$unica);
   $unicas  = array();
 
   foreach ($vt as $i => $v){
 
-    $check = split("=",$v);
+    $check = explode("=",$v);
     if (isset($check) && $check != "") {
       array_push($unicas, $check[0]."-".$check[1]."-".$check[2])."#";
     }
@@ -1297,7 +1297,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
             $j40_refant = "....";
           }
 
-          $sqlsub = split('\.', $j40_refant);
+          $sqlsub = explode('\.', $j40_refant);
           if ($gerar == "dados") {
 
             if ($tipo == "txt") {

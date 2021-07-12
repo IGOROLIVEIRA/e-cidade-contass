@@ -205,7 +205,7 @@ function db_subdata($data, $opcao, $formatar = "b")
   } else if ($formatar == "t") {
     $data = date("d/m/Y", $data);
   }
-  $arr_data = split("/", $data);
+  $arr_data = explode("/", $data);
   if (trim($arr_data[0]) == "" || !isset($arr_data[1]) || !isset($arr_data[2])) {
     return 0;
   }
@@ -592,7 +592,7 @@ function db_mes($xmes, $tipo = 0)
 function db_geratexto($texto)
 {
   $texto .= "#";
-  $txt = split("#", $texto);
+  $txt = explode("#", $texto);
   $texto1 = '';
   for ($x = 0; $x < sizeof($txt); $x++) {
     if (substr($txt[$x], 0, 1) == "$") {
@@ -1170,7 +1170,7 @@ function db_formatar($str, $tipo, $caracter = " ", $quantidade = 0, $TipoDePreen
     case "d":
 
       if ($str != "") {
-        $data = split("-", str_replace("/", "-", $str));
+        $data = explode("-", str_replace("/", "-", $str));
         return $data[2] . "/" . $data[1] . "/" . $data[0];
       } else {
         return $str;
@@ -1192,11 +1192,11 @@ function db_formatar($str, $tipo, $caracter = " ", $quantidade = 0, $TipoDePreen
         return $str;
       } else
         if (strpos($str, "-") != "") {
-        $str = split("-", $str);
+        $str = explode("-", $str);
         return $str[2] . "-" . $str[1] . "-" . $str[0];
       } else
           if (strpos($str, "/") != "") {
-        $str = split("/", $str);
+        $str = explode("/", $str);
         return $str[2] . "-" . $str[1] . "-" . $str[0];
       }
       break;
@@ -1316,7 +1316,7 @@ function db_fieldsmemory($recordset, $indice, $formatar = "", $mostravar = false
           break;
         case "date":
           if ($aux != "") {
-            $data = split("-", $aux);
+            $data = explode("-", $aux);
             ${$matriz[$i]} = $data[2] . "/" . $data[1] . "/" . $data[0];
           } else {
             ${$matriz[$i]} = "";
@@ -1333,7 +1333,7 @@ function db_fieldsmemory($recordset, $indice, $formatar = "", $mostravar = false
     } else
       switch (pg_fieldtype($recordset, $i)) {
         case "date":
-          $datav = split("-", $aux);
+          $datav = explode("-", $aux);
           $split_data = $matriz[$i] . "_dia";
           global ${$split_data};
           ${$split_data} = @$datav[2];
@@ -2069,11 +2069,11 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     }
   } else if (isset($_POST["totalizacao_repas"])) {
 
-    $totalizacao_split = split("\|", $_POST["totalizacao_repas"]);
+    $totalizacao_split = explode("\|", $_POST["totalizacao_repas"]);
 
     for ($totrep = 0; $totrep < count($totalizacao_split); $totrep++) {
 
-      $totalizacao_sep                  = split("\=", $totalizacao_split[$totrep]);
+      $totalizacao_sep                  = explode("\=", $totalizacao_split[$totrep]);
       $totalizacao[$totalizacao_sep[0]] = $totalizacao_sep[1];
 
       if (isset($_POST["totrep_" . $totalizacao_sep[0]])) {
@@ -2115,7 +2115,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     // se foi passado funcao
     if ($campos_layer != "") {
 
-      $campo_layerexe = split("\|", $campos_layer);
+      $campo_layerexe = explode("\|", $campos_layer);
       $sHtml .= "<td bgcolor=\"$db_corcabec\" title=\"Executa Procedimento Específico.\" class='DBLovrotClique'>";
       $sHtml .= "  Clique";
       $sHtml .= "</td>";
@@ -2203,7 +2203,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
     if ($campos_layer != "") {
 
-      $campo_layerexe = split("\|", $campos_layer);
+      $campo_layerexe = explode("\|", $campos_layer);
       $sHtml .= "<td id=\"funcao_aux" . $i . "\" ";
       $sHtml .= "    class = 'DBLovrotTdFuncaoAuxiliar' ";
       $sHtml .= "    bgcolor=\"$cor\"> ";
@@ -2230,7 +2230,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
           if (pg_result($result, $i, $j) != "") {
 
-            $matriz_data = split("-", pg_result($result, $i, $j));
+            $matriz_data = explode("-", pg_result($result, $i, $j));
             $var_data    = $matriz_data[2] . "/" . $matriz_data[1] . "/" . $matriz_data[0];
           } else {
             $var_data = "//";
@@ -3216,7 +3216,7 @@ function db_separainstrucao($texto, $comeca = 0, &$layout, $linha, $separador, $
 
   $texto = db_geratexto($texto);
 
-  $textos = split("\|", $texto);
+  $textos = explode("\|", $texto);
 
   //        for ($xxx=0; $xxx < sizeof($textos); $xxx++) {
   //                echo "$xxx: " . $textos[$xxx] . "<br>";
@@ -3301,7 +3301,7 @@ function db_formatatexto($linhas, $largura, $texto, $tipo = "t")
     $quebra = "<br>";
   }
 
-  $linha       = split("\n", $texto);
+  $linha       = explode("\n", $texto);
   $numlinhas   = count($linha);
   $obs         = "";
 

@@ -173,7 +173,7 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
                            from db_sysindices
                            where nomeind = '$nome_ind'") or die("Erro(97) selecionando db_sysindices");
 		$ind = pg_result($result,0,0);
-		$alt_ind = split("\r\n",$alt_ind);
+		$alt_ind = explode("\r\n",$alt_ind);
 		for($i = 0;$i < sizeof($alt_ind) - 1;$i++) {
 			if($alt_ind[$i] != "" && $alt_ind[$i] != " " && $alt_ind[$i] != "  ") {
                 $alt_ind[$i] = trim(str_replace("#","",$alt_ind[$i]));
@@ -189,7 +189,7 @@ if(!isset($HTTP_POST_VARS["b_campo_ind"]) && !isset($HTTP_POST_VARS["excluir"]))
 		pg_exec("BEGIN");
 		pg_exec("update db_sysindices set nomeind = '$nome_ind',campounico = '$campounico' where codind = $ind") or die("Erro(111) atualizando db_sysindices");
 		pg_exec("delete from db_syscadind where codind = $ind") or die("Erro(112) excluindo db_syscadind");
-		$alt_ind = split("\r\n",$alt_ind);
+		$alt_ind = explode("\r\n",$alt_ind);
 		for($i = 0;$i < sizeof($alt_ind) - 1;$i++) {
 			if($alt_ind[$i] != "" && $alt_ind[$i] != " " && $alt_ind[$i] != "  ") {
 				$result = pg_exec("

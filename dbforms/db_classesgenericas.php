@@ -404,7 +404,7 @@ class cl_iframe_alterar_excluir_html_novo{
     ";
      $coluna="";
      $virgula="";
-     $colunas= split("#",$quais_colunas);
+     $colunas= explode("#",$quais_colunas);
      $totcol=sizeof($colunas);
      for($i=0; $i<$totcol; $i++){
        $coluna.=$virgula.$colunas[$i];
@@ -636,7 +636,7 @@ class cl_iframe_alterar_excluir_html{
     ";
      $coluna="";
      $virgula="";
-     $colunas= split("#",$quais_colunas);
+     $colunas= explode("#",$quais_colunas);
      $totcol=sizeof($colunas);
      for($i=0; $i<$totcol; $i++){
        $coluna.=$virgula.$colunas[$i];
@@ -1357,7 +1357,7 @@ class cl_db_estrut{
 
     $codigo = str_replace(".","",$codigo);
     $tamanho02   = strlen(str_replace(".","",$mascara));
-    $arr_mascara = split("\.",$mascara);
+    $arr_mascara = explode("\.",$mascara);
     $tamanho =  count($arr_mascara);
 
     //rotina que salva em array onde inicia e qual o tamanho de cada nivel
@@ -1409,7 +1409,7 @@ class cl_db_estrut{
 
   function db_monta($codigo,$mascara,$nivel){
     $codigo = str_replace(".","",$codigo);
-    $arr_mascara = split("\.",$mascara);
+    $arr_mascara = explode("\.",$mascara);
     $tamanho =  count($arr_mascara);
     $tamanho02   = strlen(str_replace(".","",$mascara));
 
@@ -1444,7 +1444,7 @@ class cl_db_estrut{
 
   function db_estrutformata($codigo,$mascara){
     $codigo = str_replace(".","",$codigo);
-    $arr_mascara = split("\.",$mascara);
+    $arr_mascara = explode("\.",$mascara);
     $tamanho =  count($arr_mascara);
     $tamanho02   = strlen(str_replace(".","",$mascara));
 
@@ -2682,7 +2682,7 @@ class cl_formulario_rel_pes {
     if($this->testarescisaoregi == true){
       $registrosselecionados = "";
             $virgula = "";
-            $arr_registrosselecion = split(",",$GLOBALS[$this->campo_auxilio_regi]);
+            $arr_registrosselecion = explode(",",$GLOBALS[$this->campo_auxilio_regi]);
             for($i=0; $i<count($arr_registrosselecion); $i++){
                     $result_rescisoes = db_query("select rh05_recis from rhpessoalmov inner join rhpesrescisao on rh05_seqpes = rh02_seqpes where rh02_anousu = ".$ano." and rh02_mesusu = ".$mes." and rh02_regist = ".$arr_registrosselecion[$i]);
         if(pg_numrows($result_rescisoes) == 0){
@@ -2756,7 +2756,7 @@ class cl_formulario_rel_pes {
         if(isset($GLOBALS[$this->campo_auxilio_lota]) && trim($GLOBALS[$this->campo_auxilio_lota]) != ""){
           $lotacoesselecionadas = "";
           $virgula = "";
-          $arr_lotacoesselecion = split(",",$GLOBALS[$this->campo_auxilio_lota]);
+          $arr_lotacoesselecion = explode(",",$GLOBALS[$this->campo_auxilio_lota]);
           for($i=0; $i<count($arr_lotacoesselecion); $i++){
             $lotacoesselecionadas = $virgula."'".$arr_lotacoesselecion[$i]."'";
             $virgula = ", ";
@@ -2781,7 +2781,7 @@ class cl_formulario_rel_pes {
         if(isset($GLOBALS[$this->campo_auxilio_rubr]) && trim($GLOBALS[$this->campo_auxilio_rubr]) != ""){
           $rubricasselecionadas = "";
           $virgula = "";
-          $arr_rubricasselecion = split(",",$GLOBALS[$this->campo_auxilio_rubr]);
+          $arr_rubricasselecion = explode(",",$GLOBALS[$this->campo_auxilio_rubr]);
           for($i=0; $i<count($arr_rubricasselecion); $i++){
             $rubricasselecionadas = $virgula."'".$arr_rubricasselecion[$i]."'";
             $virgula = ", ";
@@ -2806,7 +2806,7 @@ class cl_formulario_rel_pes {
         if(isset($GLOBALS[$this->campo_auxilio_loca]) && trim($GLOBALS[$this->campo_auxilio_loca]) != ""){
           $locaistrabselecionados = "";
           $virgula = "";
-          $arr_locaistrabselecion = split(",",$GLOBALS[$this->campo_auxilio_loca]);
+          $arr_locaistrabselecion = explode(",",$GLOBALS[$this->campo_auxilio_loca]);
           for($i=0; $i<count($arr_locaistrabselecion); $i++){
             $locaistrabselecionados = $virgula."'".$arr_locaistrabselecion[$i]."'";
             $virgula = ", ";
@@ -2832,7 +2832,7 @@ class cl_formulario_rel_pes {
         if(isset($GLOBALS[$this->campo_auxilio_carg]) && trim($GLOBALS[$this->campo_auxilio_carg]) != ""){
           $locaistrabselecionados = "";
           $virgula = "";
-          $arr_locaistrabselecion = split(",",$GLOBALS[$this->campo_auxilio_carg]);
+          $arr_locaistrabselecion = explode(",",$GLOBALS[$this->campo_auxilio_carg]);
           for($i=0; $i<count($arr_locaistrabselecion); $i++){
             $locaistrabselecionados = $virgula.$arr_locaistrabselecion[$i];
             $virgula = ", ";

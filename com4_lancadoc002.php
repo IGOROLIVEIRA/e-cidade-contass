@@ -118,7 +118,7 @@ if (isset ($atualizar)) {
         $chave = key($vt);
 
         if (substr($chave, 0, 4) == "DATA") {
-            $dados = split("_", $chave);
+            $dados = explode("_", $chave);
             if ($dados[1] != $dadosant) {
 
                 $dadosant = $dados[1];

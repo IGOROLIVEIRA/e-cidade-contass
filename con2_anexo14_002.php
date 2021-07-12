@@ -53,7 +53,7 @@ if ($clorcparamrelnota->numrows > 0 ){
     db_fieldsmemory($res,0);
 }
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

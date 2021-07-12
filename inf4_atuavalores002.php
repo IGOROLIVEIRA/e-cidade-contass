@@ -64,7 +64,7 @@ if ( isset($i03_descr) && $i03_descr != "" ) {
 
      $i04_dados = "i04_dados$i";
 
-     $matriz = split("#",$$i04_dados);
+     $matriz = explode("#",$$i04_dados);
 
      $clinfcor->i04_codigo   = $clinfcab->i03_codigo;
      $clinfcor->i04_seq	     = $i;

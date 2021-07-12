@@ -75,7 +75,7 @@ function js_enviarvalor(){
 			    </legend>
 			    <table width='100%'>
    	      <?
-   	      $arr = split(",",$sel);
+   	      $arr = explode(",",$sel);
 		      $numrows = $cldb_syscampo->numrows;
 		      for($i=0;$i<$numrows;$i++){
 		      	db_fieldsmemory($result_campo, $i);

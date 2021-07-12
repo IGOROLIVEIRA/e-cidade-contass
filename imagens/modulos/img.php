@@ -33,7 +33,7 @@ $preto = imagecolorallocate($img,0,0,0);
 $nome = urldecode(base64_decode($nome));
 
 if(strpos($nome," ")) {
-  $nome = split(" ",$nome);
+  $nome = explode(" ",$nome);
   $x1 = 50 - ((strlen(trim($nome[0])) / 2) * 7);
   if(sizeof($nome) > 1)
     $x2 = 50 - ((strlen(trim($nome[1])) / 2) * 7);

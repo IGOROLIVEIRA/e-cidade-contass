@@ -131,7 +131,7 @@ $clnotificaarretipodoc->rotulo->label();
   	  
   	  //---------------- Busca Numpre, Numpar, Receita
   	  
-  	  $aNumpres = split("N",$oPost->sNumpres);
+  	  $aNumpres = explode("N",$oPost->sNumpres);
   	  
 	  for ($i = 0; $i < count($aNumpres); $i++  ) {
 		if ($aNumpres[$i] == "") {
@@ -310,7 +310,7 @@ $clnotificaarretipodoc->rotulo->label();
   	  
   	  //---------------- Busca Numpre, Numpar, Receita
   	  
-  	  $aNumpres = split("N",$oPost->sNumpres);
+  	  $aNumpres = explode("N",$oPost->sNumpres);
   	  
 	  for ($i = 0; $i < count($aNumpres); $i++  ) {
 		
@@ -318,9 +318,9 @@ $clnotificaarretipodoc->rotulo->label();
 		  continue;		
 		}
 		
-	  	  $iNumpre = split("P",$aNumpres[$i]);
-        $iNumpar = split("P", strstr($aNumpres[$i],"P"));
-        $iNumpar = split("R",$iNumpar[1]);
+	  	  $iNumpre = explode("P",$aNumpres[$i]);
+        $iNumpar = explode("P", strstr($aNumpres[$i],"P"));
+        $iNumpar = explode("R",$iNumpar[1]);
         $iReceit = @$iNumpar[1];
         $iNumpar = @$iNumpar[0];
         $iNumpre = @$iNumpre[0];
@@ -617,7 +617,7 @@ $clnotificaarretipodoc->rotulo->label();
 				  }
 				}  	
 
-				$aNumpres 		  = split("N",$oPost->sNumpres);
+				$aNumpres 		  = explode("N",$oPost->sNumpres);
 			  $sMsgExisteDebito = "";
 				
 				for ($i = 0; $i < count($aNumpres); $i++  ) {

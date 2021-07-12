@@ -75,8 +75,8 @@ if($iTotalSuspensoesAtivas > 0 ){
 	$oSuspensoesAtivas         = $oSuspensoesAtivas[0];
 	
 	$rh101_sequencial          = $oSuspensoesAtivas->rh101_sequencial;
-	$rh101_dtinicial           = split("-", $oSuspensoesAtivas->rh101_dtinicial);
-	$rh101_dtfinal             = split("-", $oSuspensoesAtivas->rh101_dtfinal);
+	$rh101_dtinicial           = explode("-", $oSuspensoesAtivas->rh101_dtinicial);
+	$rh101_dtfinal             = explode("-", $oSuspensoesAtivas->rh101_dtfinal);
 
 } else{
 	
