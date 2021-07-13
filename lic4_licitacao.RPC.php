@@ -904,7 +904,8 @@ switch ($oParam->exec) {
               $sWhereSolicitem .= ' AND pc11_seq = ' . $aItens[$count]->sequencial;
               $sWhereSolicitem .= ' AND pc81_codprocitem = ' . $aItens[$count]->codprocitem;
               $sSqlSolicitem = $oDaoSolicitemReservado->sql_query_pcmater('', 'distinct solicitem.*', '', $sWhereSolicitem);
-
+              // echo $sSqlSolicitem;
+              // exit;
               $rsSolicitem = $oDaoSolicitemReservado->sql_record($sSqlSolicitem);
 
               if (pg_numrows($rsSolicitem)) {
@@ -940,6 +941,7 @@ switch ($oParam->exec) {
                   }
                   // echo ' ' . $oDaoSolicitemReservado->pc11_codigo;
                   // exit;
+
                   /**
                    * Altera a quantidade do item origem na solicitem
                    */
@@ -956,6 +958,17 @@ switch ($oParam->exec) {
                       $sqlerro = true;
                       break;
                     }
+                  }
+
+                  $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oItem->pc11_codigo;
+                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemReservado->pc11_codigo;
+                  $oDaoSolicitemVinculo->incluir(null);
+
+                  if (!$oDaoSolicitemVinculo->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitemVinculo->erro_msg;
+                    $sqlerro = true;
+                    break;
                   }
 
                   $clliclicita = db_utils::getDao('liclicita');

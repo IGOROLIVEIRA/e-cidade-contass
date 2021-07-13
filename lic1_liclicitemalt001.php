@@ -251,6 +251,11 @@ if (!$sqlerro && $codprocesso) {
       $sqlerro = $oDaoPcProcItem->erro_status == '0' ? true : false;
     }
 
+    if (!$sqlerro) {
+      $oDaoVinculo = db_utils::getDao('solicitemvinculo');
+      $oDaoVinculo->excluir(null, "pc55_solicitemfilho = $oSolicitemReservado->pc11_codigo");
+      $sqlerro = $oDaoVinculo->erro_status == '0' ? true : false;
+    }
 
     if (!$sqlerro) {
       $oDaoReservado = db_utils::getDao('solicitem');
