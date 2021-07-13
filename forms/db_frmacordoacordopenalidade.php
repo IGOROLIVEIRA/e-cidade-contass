@@ -268,18 +268,38 @@ function js_retornoGetPenalidades(oAjax) {
 }
 function js_salvarPenalidade() {
 
-   js_divCarregando('Aguarde, salvando Penalidade.','msgBox');
-   var oParam     = new Object();
-   oParam.iTipo       = 1;
-   oParam.exec        = 'salvarPenalidade';
-   oParam.iPenalidade = $F('ac15_acordopenalidade');
-   oParam.sTexto      = encodeURIComponent(tagString($F('ac15_texto')));
+   
+var oParam     = new Object();
+oParam.iTipo       = 1;
+oParam.exec        = 'salvarPenalidade';
+oParam.iPenalidade = $F('ac15_acordopenalidade');
+oParam.sTexto      = encodeURIComponent(tagString($F('ac15_texto')));
+var nome = $F('ac15_texto');
+
+var tamanho = nome.length;
+var valorCaracte = nome.match(/[#@$&*'"-]/ig);  
+if(tamanho<10){
+
+ if(tamanho<10){
+   alert("Mínimo são de 10 carecteres"); 
+ }else if(tamanho<10 && valorCaracte!=null){
+   alert("Caracteres especiais não são aceitos! Caractere(s): ("+valorCaracte+")");
+ }
+  
+}else{
+ if(valorCaracte!=null){
+   alert("Caracteres especiais não são aceitos! Caractere(s): ("+valorCaracte+")");
+ }else{
+   js_divCarregando('Aguarde, salvando Penalidade.','msgBox'); 
    var oAjax          = new Ajax.Request(sUrlRpc,
-                                    {method     : 'post',
-                                     parameters :'json='+Object.toJSON(oParam),
-                                     onComplete : js_retornoSalvar
-                                    }
-                                   )
+                                 {method     : 'post',
+                                  parameters :'json='+Object.toJSON(oParam),
+                                  onComplete : js_retornoSalvar
+                                 }
+                                )
+ } 
+ 
+}
 }
 
 function js_retornoSalvar(oAjax) {
