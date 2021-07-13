@@ -919,9 +919,23 @@ switch ($oParam->exec) {
                    */
                   $oItem = db_utils::fieldsMemory($rsSolicitem, 0);
 
+                  $sql_ult_item  = "select pc11_seq ";
+                  $sql_ult_item .= "from solicitem ";
+                  $sql_ult_item .= "where pc11_numero = $oItem->pc11_numero ";
+                  $sql_ult_item .= "order by pc11_seq desc limit 1";
+
+                  $res_ult_item  = @db_query($sql_ult_item);
+
+                  if (pg_numrows($res_ult_item)) {
+                    $seq = pg_result($res_ult_item, 0, "pc11_seq");
+                    $seq++;
+                  } else {
+                    $seq = 1;
+                  }
+
                   $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                   $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
-                  $oDaoSolicitemReservado->pc11_seq = $oItem->pc11_seq + 1;
+                  $oDaoSolicitemReservado->pc11_seq   = $seq;
                   $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
                   $oDaoSolicitemReservado->pc11_vlrun = $oItem->pc11_vlrun;
                   $oDaoSolicitemReservado->pc11_prazo = $oItem->pc11_prazo;
