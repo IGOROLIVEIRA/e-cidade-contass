@@ -25,16 +25,12 @@ switch ($_POST["action"]) {
     $iAnoSessao         = db_getsession('DB_anousu');
 
     $result_unidade = array();
-    //echo $clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr");
     $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
     $numrows_unid = $clmatunid->numrows;
     for ($i = 0; $i < $numrows_unid; $i++) {
       db_fieldsmemory($result_sql_unid, $i);
       $result_unidade[$m61_codmatunid] = $m61_descr;
     }
-
-    // db_criatabela($result_unidade);
-    // exit;
 
     $sqlQuery = "SELECT *
     FROM
@@ -151,8 +147,7 @@ switch ($_POST["action"]) {
       for ($i = 0; $i < pg_numrows($rsDados); $i++) {
 
         $oDados = db_utils::fieldsMemory($rsDados, $i);
-
-        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "e55_item, e55_sequen as seq, e55_codele as desdobramento", "e55_sequen"));
+        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "e55_item, e55_sequen as seq, e55_codele as desdobramento", "e55_sequen", "e55_item = $oDados->pc01_codmater"));
         db_fieldsmemory($result, 0);
 
         $itemRows  = array();
@@ -160,8 +155,11 @@ switch ($_POST["action"]) {
         $selectunid = "";
         $selectunid = "<select>";
         $selectunid .= "<option selected='selected'>..</option>";
-        foreach ($result_unidade as $item) {
-          $selectunid .= "<option value='strtolower($item)'>$item</option>";
+        foreach ($result_unidade as $key => $item) {
+          if ($key == $e55_unid)
+            $selectunid .= "<option value='$key' selected='selected'>$item</option>";
+          else
+            $selectunid .= "<option value='$key'>$item</option>";
         }
         $selectunid .= "</select>";
 
@@ -169,11 +167,11 @@ switch ($_POST["action"]) {
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
         $itemRows[] = $selectunid;
-        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='' />";
-        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='' />";
-        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' />"; //p/ usuário
+        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$e55_marca}' />";
+        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$e55_quant}' />";
+        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$e55_vlrun}' />"; //p/ usuário
         $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' />";
-        $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' />";
+        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$e55_vltot}' />";
         $employeeData[] = $itemRows;
       }
 
