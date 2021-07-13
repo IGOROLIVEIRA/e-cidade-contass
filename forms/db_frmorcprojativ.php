@@ -351,6 +351,7 @@ $clrotulo->label("o55_rateio");
 <?}else{?>
   <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_orcprojativ.hide();">
 <?}?>
+<input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc1_orcprojativ011.php'">
 </form>
 <script>
 

@@ -165,6 +165,7 @@ db_input('o54_descr',40,$Io54_anousu,true,'text',3);
   </table>
 <input name="alterar"   type="button" id="db_opcao"  value="Alterar"   onclick="js_alterarDotacoes()" >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+<input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc4_ppadespesamanual004.php'">
 </center>
 </form>
 </body>
