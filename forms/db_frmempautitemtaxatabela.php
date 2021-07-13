@@ -346,29 +346,23 @@ $clrotulo->label("pc01_descrmater");
     var oParam = new Object();
     oParam.exec = "salvar";
 
-    var aDados = new Array();
-
-    var ids = [];
-    var coluna = 3; // coluna em que está o ID
+    var oDados = {};
+    var aDados = [];
 
     $("#mytable tr").each(function() {
 
       if ($(this).find("input[type='checkbox']").is(":checked")) {
-        console.log($(this).find("td:eq(4) input").attr("id"));
-        console.log($(this).find("td:eq(4) input").val());
-        console.log($(this).find("td:eq(5) input").attr("id"));
-        console.log($(this).find("td:eq(5) input").attr("value"));
-        console.log($(this).find("td:eq(6) input").attr("id"));
-        console.log($(this).find("td:eq(6) input").attr("value"));
-        console.log($(this).find("td:eq(7) input").attr("id"));
-        console.log($(this).find("td:eq(7) input").attr("value"));
-        //console.log($(this));
-        //console.log($(this).find("td:eq(" + (5) + ")")).attr("id");
+
+        oDados.id = $(this).find("td:eq(1)").html();
+        oDados.unidade = $(this).find("td:eq(3) select").val();
+        oDados.qtd = $(this).find("td:eq(4) input").val();
+        oDados.vlrunit = $(this).find("td:eq(5) input").val();
+        oDados.desc = $(this).find("td:eq(6) input").val();
+        oDados.total = $(this).find("td:eq(7) input").val();
+
         //ids.push($(this).find("td:eq(" + (coluna) + ")").attr("id"));
       }
     });
-
-    alert(document.getElementById('marca_13006').value);
 
     //js_divCarregando(_M(CAMINHO_MENSAGENS + "salvando"), 'msgBox');
 
