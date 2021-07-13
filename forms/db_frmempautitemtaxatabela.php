@@ -346,6 +346,30 @@ $clrotulo->label("pc01_descrmater");
     var oParam = new Object();
     oParam.exec = "salvar";
 
+    var aDados = new Array();
+
+    var ids = [];
+    var coluna = 3; // coluna em que está o ID
+
+    $("#mytable tr").each(function() {
+
+      if ($(this).find("input[type='checkbox']").is(":checked")) {
+        console.log($(this).find("td:eq(4) input").attr("id"));
+        console.log($(this).find("td:eq(4) input").val());
+        console.log($(this).find("td:eq(5) input").attr("id"));
+        console.log($(this).find("td:eq(5) input").attr("value"));
+        console.log($(this).find("td:eq(6) input").attr("id"));
+        console.log($(this).find("td:eq(6) input").attr("value"));
+        console.log($(this).find("td:eq(7) input").attr("id"));
+        console.log($(this).find("td:eq(7) input").attr("value"));
+        //console.log($(this));
+        //console.log($(this).find("td:eq(" + (5) + ")")).attr("id");
+        //ids.push($(this).find("td:eq(" + (coluna) + ")").attr("id"));
+      }
+    });
+
+    alert(document.getElementById('marca_13006').value);
+
     //js_divCarregando(_M(CAMINHO_MENSAGENS + "salvando"), 'msgBox');
 
     new Ajax.Request("emp1_empautitemtaxatabela.RPC.php", {
@@ -361,11 +385,15 @@ $clrotulo->label("pc01_descrmater");
     var oRetorno = eval("(" + oAjax.responseText + ")");
     var sMensagem = oRetorno.sMessage.urlDecode();
     alert(sMensagem);
-
+    js_loadTable();
   }
 
   function js_mudaTabela(campo) {
     js_loadTable();
+  }
+
+  function js_changeInput(obj) {
+    console.log(obj);
   }
 
   function js_verificar() {

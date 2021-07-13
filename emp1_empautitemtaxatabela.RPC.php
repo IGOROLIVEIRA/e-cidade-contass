@@ -167,7 +167,7 @@ switch ($_POST["action"]) {
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
         $itemRows[] = $selectunid;
-        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$e55_marca}' />";
+        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$e55_marca}' onchange='js_changeInput(this)' />";
         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$e55_quant}' />";
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$e55_vlrun}' />"; //p/ usuário
         $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' />";
