@@ -141,6 +141,7 @@ if ($salario == 's') {
             rh25_recurso,
             o15_descr,
             round(sum(inss),2) AS inss,
+            round(sum(patronal),2) AS patronal,
             round(sum(salario_familia),2) AS salario_familia,
             round(sum(salario_maternidade),2) AS salario_maternidade
     from 
@@ -179,6 +180,7 @@ if ($salario == 's') {
                     else orctiporec.o15_descr
                 end as o15_descr,
                 inss,
+                round((inss / 100 * {$r33_ppatro}),2) as patronal,
                 salario_familia,
                 salario_maternidade
         from
@@ -318,6 +320,7 @@ if ($salario == 's') {
             rh25_recurso,
             o15_descr,
             round(sum(inss),2) AS inss,
+            round(sum(patronal),2) AS patronal,
             round(sum(salario_familia),2) AS salario_familia,
             round(sum(salario_maternidade),2) AS salario_maternidade
     from 
@@ -356,6 +359,7 @@ if ($salario == 's') {
                 else orctiporec.o15_descr
             end as o15_descr,
             inss,
+            round((inss / 100 * {$r33_ppatro}),2) as patronal,
             salario_familia,
             salario_maternidade 
 
@@ -471,7 +475,7 @@ $val_pat      = 0;
 $val_extra    = 0;
 $pat60        = 0;
 $pat40        = 0;
-$pat          = 0;
+$patronal     = 0;
 $teste        = 0;
 $extra        = 0;
 $totalSalarioFamilia = 0;
@@ -521,7 +525,6 @@ for ($x = 0; $x < pg_numrows($result);$x++) {
         $proj= $rh25_projativ;
     }
     $pdf->setfont('arial','',6);
-    $pat   = round($inss / 100 * $r33_ppatro,2);
     $aDescRecurso = quebrarTexto($o15_descr, 60);
     
     $altNovo = $alt*count($aDescRecurso);
@@ -533,7 +536,7 @@ for ($x = 0; $x < pg_numrows($result);$x++) {
         $pdf->cell(70,$altNovo,$o15_descr,0,0,"L",0);
     }
     $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($inss,'f'),0,0,"R",0);
-    $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($pat,'f'),0,0,"R",0);
+    $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($patronal,'f'),0,0,"R",0);
     if (trim($perc_extra) != '' ) {
         $extra = round($inss / 100 * $perc_extra,2);
         $pdf->cell(18,$altNovo,trim(db_formatar($extra,'f')),0,0,"R",0);
@@ -542,8 +545,8 @@ for ($x = 0; $x < pg_numrows($result);$x++) {
         $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar($salario_familia,'f'),0,0,"R",0);
         $pdf->cell(22-$width_perc_extra,$altNovo,db_formatar($salario_maternidade,'f'),0,0,"R",0);
     }
-    $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar(($pat + $extra - $salario_familia - $salario_maternidade),'f'),0,1,"R",0);
-    $val_pat      += round((($inss)/100)*$r33_ppatro,2);
+    $pdf->cell(18-$width_perc_extra,$altNovo,db_formatar(($patronal + $extra - $salario_familia - $salario_maternidade),'f'),0,1,"R",0);
+    $val_pat      += $patronal;
     $val_extra    += round((($inss)/100)*$perc_extra,2);
     $val_fgts     += $inss;
     $val_ded      += ($salario_familia+$salario_maternidade);
