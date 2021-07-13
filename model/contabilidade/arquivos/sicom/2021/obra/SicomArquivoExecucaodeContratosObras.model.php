@@ -128,7 +128,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
                AND db01_anousu=" . db_getsession("DB_anousu") . "
            LIMIT 1) AS si197_codunidadesub,
              ac16_numeroacordo AS si197_nrocontrato,
-             l20_processo as si197_nroprocessolicitatorio,
+             l20_edital as si197_nroprocessolicitatorio,
              l20_anousu as si197_exerciciolicitacao,
              ac16_anousu AS si197_exerciciocontrato,
              obr01_numeroobra AS si197_codobra,
@@ -148,7 +148,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
           AND l03_pctipocompratribunal NOT IN (100,101,102,103)
           AND DATE_PART('YEAR',acordo.ac16_dataassinatura)= " . db_getsession("DB_anousu") . "
           AND DATE_PART('MONTH',acordo.ac16_dataassinatura)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $rsResult10 = db_query($sql);
+        $rsResult10 = db_query($sql);//echo $sql;db_criatabela($rsResult10);exit;
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       $clexeobras102021 = new cl_exeobras102021();
