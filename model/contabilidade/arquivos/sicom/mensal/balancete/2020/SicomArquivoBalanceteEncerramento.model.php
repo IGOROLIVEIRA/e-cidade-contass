@@ -1581,6 +1581,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                 $obalancete14->si181_naturezasaldofinalrsp = $saldoFinalRsp >= 0 ? 'D' : 'C';
                                 $obalancete14->si181_instit = db_getsession("DB_instit");
                                 $obalancete14->si181_mes = $nMes;
+                                $obalancete14->recebe_tranferencia = $bFonteEncerrada;
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14] = $obalancete14;
 
                             } else {
@@ -1612,6 +1613,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     $obalancete14Transf->si181_naturezasaldoinicialrsp = $oReg14Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                     $obalancete14Transf->si181_totaldebitosrsp = $oReg14Saldo->saldoanterior >= 0 ? 0 : $oReg14Saldo->saldoanterior;
                                     $obalancete14Transf->si181_totalcreditosrsp = $oReg14Saldo->saldoanterior >= 0 ? $oReg14Saldo->saldoanterior : 0;
+                                    $obalancete14Transf->recebe_tranferencia = false;
                                     if ($this->bEncerramento) {
                                         $obalancete14Transf->si181_totaldebitosencerramento = $obalancete14Transf->si181_saldoinicialrsp >= 0 ? 0 : ($oReg14Saldo->debitosencerramento + $obalancete14Transf->si181_saldoinicialrsp);
                                         $obalancete14Transf->si181_totalcreditosencerramento = $obalancete14Transf->si181_saldoinicialrsp >= 0 ? ($oReg14Saldo->creditosencerramento + abs($obalancete14Transf->si181_saldoinicialrsp)) : 0;
@@ -3122,7 +3124,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg14->si181_naturezasaldoinicialrsp   = $reg14->si181_saldofinalrsp == 0 ? $oDado10->naturezasaldo : ($reg14->si181_saldofinalrsp > 0 ? 'D' : 'C');
                     $obalreg14->si181_totaldebitosrsp           = $reg14->si181_totaldebitosencerramento == 0 ? $obalreg14->si181_totaldebitosrsp : number_format(abs($reg14->si181_totaldebitosencerramento), 2, ".", "");
                     $obalreg14->si181_totalcreditosrsp          = $reg14->si181_totalcreditosencerramento == 0 ? $obalreg14->si181_totalcreditosrsp : number_format(abs($reg14->si181_totalcreditosencerramento), 2, ".", "");
-                    if ($bRPaPagar && !$bTransfereRPAnterior) {
+                    if ($reg14->recebe_tranferencia) {
                         $saldoFinal = ($obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp) == '' ? 0 : ($obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp);
                     } else {
                         $saldoFinal = ($saldoFinal + $obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp) == '' ? 0 : ($saldoFinal + $obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp);
