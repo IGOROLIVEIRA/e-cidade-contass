@@ -927,15 +927,15 @@ switch ($oParam->exec) {
                   $res_ult_item  = @db_query($sql_ult_item);
 
                   if (pg_numrows($res_ult_item)) {
-                    $seq = pg_result($res_ult_item, 0, "pc11_seq");
-                    $seq++;
+                    $seqsolicitem = pg_result($res_ult_item, 0, "pc11_seq");
+                    $seqsolicitem++;
                   } else {
-                    $seq = 1;
+                    $seqsolicitem = 1;
                   }
 
                   $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                   $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
-                  $oDaoSolicitemReservado->pc11_seq   = $seq;
+                  $oDaoSolicitemReservado->pc11_seq   = $seqsolicitem;
                   $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
                   $oDaoSolicitemReservado->pc11_vlrun = $oItem->pc11_vlrun;
                   $oDaoSolicitemReservado->pc11_prazo = $oItem->pc11_prazo;
