@@ -34,28 +34,28 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 //echo($HTTP_SERVER_VARS["QUERY_STRING"]); exit;
 
 if($imprime_analitico=="a"){
-	$head1 = "EXTRATO BANCÁRIO ANALÍTICO";
+	$head1 = "EXTRATO BANCRIO ANALTICO";
 }else{
-	$head1 = "EXTRATO BANCÁRIO SINTÉTICO";
+	$head1 = "EXTRATO BANCRIO SINTTICO";
 }
 
-$head3 = "PERÍODO : ".db_formatar(@$datai,"d")." A ".db_formatar(@$dataf,"d");
+$head3 = "PERODO : ".db_formatar(@$datai,"d")." A ".db_formatar(@$dataf,"d");
 
 if ($somente_contas_bancarias == "s") {
-	$head4 = "SOMENTE CONTAS BANCÁRIAS";
+	$head4 = "SOMENTE CONTAS BANCRIAS";
 }
 
 if($agrupapor == 2){
 	$head5 = "AGRUPAMENTO: PELA CONTA DE RECEITA";
 }
 if($agrupapor == 3){
-	$head5 = "AGRUPAMENTO: PELOS CÓDIGOS DE EMPENHO E RECEITA";
+	$head5 = "AGRUPAMENTO: PELOS CDIGOS DE EMPENHO E RECEITA";
 }
 if($receitaspor == 1){
-	$head6 = "BAIXA BANCÁRIA: NÃO AGRUPADO PELA CLASSIFICAÇÃO";
+	$head6 = "BAIXA BANCRIA: NO AGRUPADO PELA CLASSIFICAO";
 }
 if($receitaspor == 2){
-	$head6 = "BAIXA BANCÁRIA: AGRUPADO PELA CLASSIFICAÇÃO";
+	$head6 = "BAIXA BANCRIA: AGRUPADO PELA CLASSIFICAO";
 }
 
 
@@ -100,7 +100,7 @@ if ($conta != "" && $somente_contas_bancarias == "s"){
 	$sql .= "where c60_codsis = 6 ";
 }
 $sql .= "  ) as x ";
-// verifica se é pra selecionar somente as contas com movimeto
+// verifica se  pra selecionar somente as contas com movimeto
 if ($somente_contas_com_movimento=='s'){
 	//$sql.=" where (debitado > 0 or creditado > 0)  ";
 }
@@ -110,7 +110,7 @@ $sql .= " order by substr(k13_descr,1,3),k13_reduz ";
 $resultcontasmovimento = db_query($sql);
 
 if(pg_numrows($resultcontasmovimento) == 0){
-	db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados neste periodo.');
+	db_redireciona('db_erros.php?fechar=true&db_erro=No existem dados neste periodo.');
 }
 
 $saldo_dia_credito = 0;
@@ -127,14 +127,14 @@ for($linha=0;$linha<$numrows;$linha++){
 		continue;
 	}
 
-	// escreve a conta e a descrição + saldo inicial
+	// escreve a conta e a descrio + saldo inicial
 	$aContas[$k13_reduz]->k13_reduz = $k13_reduz;
 	$aContas[$k13_reduz]->k13_descr = $k13_descr;
     $aContas[$k13_reduz]->c63_conta = $c63_conta.'-'.$c63_dvconta;
     $aContas[$k13_reduz]->c63_agencia = $c63_agencia.'-'.$c63_dvagencia;
 	$aContas[$k13_reduz]->k13_dtimplantacao = $k13_dtimplantacao;
 
-	// para contas bancárias, saldo positivo = debito, negativos indica debito
+	// para contas bancrias, saldo positivo = debito, negativos indica debito
 	if ($anterior > 0 ){
 		$aContas[$k13_reduz]->debito 	= $anterior;
 		$aContas[$k13_reduz]->credito = 0;
@@ -147,7 +147,7 @@ for($linha=0;$linha<$numrows;$linha++){
 
 	// *********************  EMPENHO ***************************
 	$sqlempenho = "
-  /* empenhos- despesa orçamentaria */
+  /* empenhos- despesa oramentaria */
   /*   EMPENHO */
 
   select distinct
@@ -717,7 +717,7 @@ select caixa,
 
 			db_fieldsmemory($resmovimentacao,$i);
 
-			//quando agrupar os pagamentos o sistema vai retirar as retenções do relatorio.
+			//quando agrupar os pagamentos o sistema vai retirar as retenes do relatorio.
             if($pagempenhos==3){
 				if (  $ordem > 0 and ($k105_corgrupotipo == 5 or $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2)  ) {
 					continue;
@@ -808,7 +808,7 @@ select caixa,
 			if ($valor_debito ==0 &&  $valor_credito != 0  ){
 				//$pdf->Cell(20,$alt,'','L',0,"R",0);
 				$oMovimentacao->valor_debito = "";
-				//Modificação feita para acertar a forma quando é mostrada os valores relativos as planilha de dedução
+				//Modificao feita para acertar a forma quando  mostrada os valores relativos as planilha de deduo
 				if ($tipo == "planilha") {
 					$valor_credito = $valor_credito*-1;
 					$oMovimentacao->valor_credito = $valor_credito;
@@ -930,7 +930,7 @@ if($agrupapor != 1 || $receitaspor == 2 ){
 			//$aContasNovas[$oConta->k13_reduz]->data[$key1] = $oData;
 			foreach ($oData->movimentacoes as $oMovimento){
 
-				//se por baixa bancária
+				//se por baixa bancria
 				if($receitaspor== 2 && $oMovimento->tipo == "Baixa"){
 					$controle = false;
 					foreach ($aMovimentacao as $key=>$oValor) {
@@ -953,7 +953,7 @@ if($agrupapor != 1 || $receitaspor == 2 ){
 						$aMovimentacao[$chave]->ordem						= "";
 						$aMovimentacao[$chave]->numdoc					= "";
 						$aMovimentacao[$chave]->slip						= "";
-						$aMovimentacao[$chave]->contrapartida		= "Baixa Bancária ref Arquivo ";
+						$aMovimentacao[$chave]->contrapartida		= "Baixa Bancria ref Arquivo ";
 						$aMovimentacao[$chave]->contrapartida  .= $oMovimento->arqret.", do dia ";
 						$aMovimentacao[$chave]->contrapartida  .= $oMovimento->dtarquivo.", retorno ";
 						$aMovimentacao[$chave]->contrapartida  .= $oMovimento->codret." de ";
@@ -1378,7 +1378,7 @@ if($imprime_pdf == 'p'){
 
 							}
 							$pdf->Cell(20,5,"",0,0,"C",0);
-							$pdf->Cell(30,5,"Autenticação mecânica:","",0,"L",0);
+							$pdf->Cell(30,5,"Autenticao mecnica:","",0,"L",0);
 							$pdf->Cell(150,5,trim($oMovimento->k12_codautent)		,"",0,"L",0);
 							$pdf->ln();
 							if ($pdf->GetY() > $pdf->h - 25){
@@ -1390,8 +1390,8 @@ if($imprime_pdf == 'p'){
 
 							}
 							$pdf->Cell(20,5,"",0,0,"C",0);
-							$pdf->Cell(65,5,"Classificação de baixa bancária:","",0,"L",0);
-							//					$pdf->Cell(65,5,"Baixa Bancária ref Arquivo:","",0,"L",0);
+							$pdf->Cell(65,5,"Classificao de baixa bancria:","",0,"L",0);
+							//					$pdf->Cell(65,5,"Baixa Bancria ref Arquivo:","",0,"L",0);
 							$pdf->Cell(150,5,$oMovimento->codigo		,"",0,"L",0);
 							$pdf->ln();
 							if ($pdf->GetY() > $pdf->h - 25){
@@ -1403,7 +1403,7 @@ if($imprime_pdf == 'p'){
 
 							}
 							$pdf->Cell(20,5,"",0,0,"C",0);
-							$pdf->Cell(25,5,"Nome/Razão Social:","",0,"L",0);
+							$pdf->Cell(25,5,"Nome/Razo Social:","",0,"L",0);
 							$pdf->Cell(150,5,$oMovimento->credor		,"",0,"L",0);
 							$pdf->ln();
 
@@ -1418,7 +1418,7 @@ if($imprime_pdf == 'p'){
 									}
 									$pdf->Cell(20,5,"",0,0,"C",0);
 									if($lh==1){
-										$pdf->Cell(25,5,"Histórico:","",0,"L",0);
+										$pdf->Cell(25,5,"Histrico:","",0,"L",0);
 									}else{
 										$pdf->Cell(25,5,"","",0,"L",0);
 									}
@@ -1427,8 +1427,8 @@ if($imprime_pdf == 'p'){
 							}
 						}else if(isset($oMovimento->agrupado) && $oMovimento->agrupado == 'Baixa' && false){
 							$pdf->Cell(20,5,"",0,0,"C",0);
-							$pdf->Cell(65,5,"Classificação de baixa bancária:","",0,"L",0);
-							//					$pdf->Cell(65,5,"Baixa Bancária ref Arquivo:","",0,"L",0);
+							$pdf->Cell(65,5,"Classificao de baixa bancria:","",0,"L",0);
+							//					$pdf->Cell(65,5,"Baixa Bancria ref Arquivo:","",0,"L",0);
 							$pdf->Cell(150,5,$oMovimento->codigo		,"",0,"L",0);
 							$pdf->ln();
 						}
@@ -1528,7 +1528,7 @@ if($imprime_pdf == 'p'){
 					if(!isset($oMovimento->agrupado)){
 						$aLinhaDados = array();
 						$aLinhaDados[0] ='';
-						$aLinhaDados[1] = "Autenticação mecânica:";
+						$aLinhaDados[1] = "Autenticao mecnica:";
 						$aLinhaDados[2] = '';
 						$aLinhaDados[3] = '';
 						$aLinhaDados[4] = trim($oMovimento->k12_codautent);
@@ -1541,7 +1541,7 @@ if($imprime_pdf == 'p'){
 						$aLinhaDados = array();
 						$aLinhaDados[0] ='';
 						//$pdf->Cell(20,5,"",0,0,"C",0);
-						$aLinhaDados[1] = "Classificação de baixa bancária:";
+						$aLinhaDados[1] = "Classificao de baixa bancria:";
 						$aLinhaDados[2] = '';
 						$aLinhaDados[3] = '';
 						$aLinhaDados[4] = $oMovimento->codigo;
@@ -1553,7 +1553,7 @@ if($imprime_pdf == 'p'){
 
 						$aLinhaDados = array();
 						$aLinhaDados[0] ='';
-						$aLinhaDados[1] = "Nome/Razão Social:";
+						$aLinhaDados[1] = "Nome/Razo Social:";
 						$aLinhaDados[2] = '';
 						$aLinhaDados[3] = '';
 						$aLinhaDados[4] = $oMovimento->credor;
@@ -1568,7 +1568,7 @@ if($imprime_pdf == 'p'){
 						if ($oMovimento->historico!=""  && $imprime_historico=='s' ){
 							$aLinhaDados = array();
 							$aLinhaDados[0] ='';
-							$aLinhaDados[1] = "Histórico:";
+							$aLinhaDados[1] = "Histrico:";
 							$aLinhaDados[2] = '';
 							$aLinhaDados[3] = $oMovimento->historico;
 							$aLinhaDados[4] = '';
@@ -1584,7 +1584,7 @@ if($imprime_pdf == 'p'){
 
 						$aLinhaDados = array();
 						$aLinhaDados[0] ='';
-						$aLinhaDados[1] = "Classificação de baixa bancária:";
+						$aLinhaDados[1] = "Classificao de baixa bancria:";
 						$aLinhaDados[2] = '';
 						$aLinhaDados[3] = '';
 						$aLinhaDados[4] = $oMovimento->codigo ;
@@ -1642,7 +1642,7 @@ function imprimeConta($pdf,$oConta,$lImprimeSaldo){
 	$pdf->SetFont('Arial','',8);
 	$pdf->Cell(95,5,$oConta->k13_reduz." - ".$oConta->k13_descr,0,0,"L",0);
     $pdf->SetFont('Arial','b',8);
-    $pdf->Cell(10,5,"Nº:"								,0,0,"L",0);
+    $pdf->Cell(10,5,"N:"								,0,0,"L",0);
     $pdf->SetFont('Arial','',8);
     $pdf->Cell(15,5,$oConta->c63_conta,0,0,"L",0);
     $pdf->SetFont('Arial','b',8);
@@ -1667,13 +1667,13 @@ function imprimeCabecalho($pdf){
 	$pdf->Cell(25,5,"PLANILHA"			,"TL",0,"C",1);
 	$pdf->Cell(25,5,"EMPENHO"			,"TL",0,"C",1);
 	$pdf->Cell(25,5,"ORDEM"					,"TL",0,"C",1);
-	$pdf->Cell(25,5,"Nº DOCUMENTO"				,"TL",0,"C",1);
+	$pdf->Cell(25,5,"N DOCUMENTO"				,"TL",0,"C",1);
 	$pdf->Cell(25,5,"SLIP"					,"TL",0,"C",1);
-	$pdf->Cell(25,5,"DÉBITO"				,"TL",0,"C",1);
-	$pdf->Cell(25,5,"CRÉDITO"				,"TL",0,"C",1);
+	$pdf->Cell(25,5,"DBITO"				,"TL",0,"C",1);
+	$pdf->Cell(25,5,"CRDITO"				,"TL",0,"C",1);
 	$pdf->ln();
 	$pdf->Cell(20,5,""														,"TB",0,"R",1);
-	$pdf->Cell(210,5,"INFORMAÇÕES COMPLEMENTARES"	,"TLB",0,"C",1);
+	$pdf->Cell(210,5,"INFORMAES COMPLEMENTARES"	,"TLB",0,"C",1);
 	$pdf->Cell(25,5,""														,"TLB",0,"R",1);
 	$pdf->Cell(25,5,""														,"TB",0,"R",1);
 	$pdf->ln();
@@ -1683,7 +1683,7 @@ function imprimeCabecalho($pdf){
 function imprimeTotalMovDia($pdf,$saldo_dia_debito,$saldo_dia_credito,$saldo_dia_final){
 	$pdf->SetFont('Arial','b',8);
 	$pdf->Cell(20,5,""																	,"TB",0,"R",1);
-	$pdf->Cell(210,5,"TOTAIS DA MOVIMENTAÇÃO NO DIA:"		,"TB",0,"R",1);
+	$pdf->Cell(210,5,"TOTAIS DA MOVIMENTAO NO DIA:"		,"TB",0,"R",1);
 	$pdf->Cell(25,5,$saldo_dia_debito 	== 0 ? "" : db_formatar($saldo_dia_debito,'f')	,"TLB",0,"R",1);
 	$pdf->Cell(25,5,$saldo_dia_credito	== 0 ? "" : db_formatar($saldo_dia_credito,'f')	,"TLB",0,"R",1);
 	$pdf->ln();
@@ -1697,7 +1697,7 @@ function imprimeTotalMovDia($pdf,$saldo_dia_debito,$saldo_dia_credito,$saldo_dia
 function imprimeTotalMovConta($pdf,$saldo_debitado,$saldo_creditado,$saldo_atual){
 	$pdf->SetFont('Arial','b',8);
 	$pdf->Cell(20,5,""																	,"TB",0,"R",1);
-	$pdf->Cell(210,5,"TOTAIS DA MOVIMENTAÇÃO 1:"					,"TB",0,"R",1);
+	$pdf->Cell(210,5,"TOTAIS DA MOVIMENTAO 1:"					,"TB",0,"R",1);
 	$pdf->Cell(25,5,$saldo_debitado 	== 0 ? "" : db_formatar($saldo_debitado,'f')	,"TLB",0,"R",1);
 	$pdf->Cell(25,5,$saldo_creditado	== 0 ? "" : db_formatar($saldo_creditado,'f')	,"TB",0,"R",1);
 	$pdf->ln();
@@ -1751,16 +1751,16 @@ function imprimeCabecalhoTxt($fp){
 	$aLinhaCabecalho[2]  = "PLANILHA";
 	$aLinhaCabecalho[3]  = "EMPENHO";
 	$aLinhaCabecalho[4]  = "ORDEM";
-	$aLinhaCabecalho[5]  = "Nº DOCUMENTO";
+	$aLinhaCabecalho[5]  = "N DOCUMENTO";
 	$aLinhaCabecalho[6]  = "SLIP";
-	$aLinhaCabecalho[7]  = "DÉBITO";
-	$aLinhaCabecalho[8]  = "CRÉDITO";
+	$aLinhaCabecalho[7]  = "DBITO";
+	$aLinhaCabecalho[8]  = "CRDITO";
 
 	fputcsv($fp,$aLinhaCabecalho,',','"');
 
 	$aLinhaCabecalho1 = array();
 	$aLinhaCabecalho1[0] = '';
-	$aLinhaCabecalho1[1] = "INFORMAÇÕES COMPLEMENTARES";
+	$aLinhaCabecalho1[1] = "INFORMAES COMPLEMENTARES";
 	$aLinhaCabecalho1[2] = "";
 	$aLinhaCabecalho1[3] = "";
 	$aLinhaCabecalho1[4] = "";
@@ -1780,7 +1780,7 @@ function imprimeTotalMovDiaTxt($fp,$saldo_dia_debito,$saldo_dia_credito,$saldo_d
 	$aLinhaTotalMovDia[3] = '';
 	$aLinhaTotalMovDia[4] = '';
 	$aLinhaTotalMovDia[5] = '';
-	$aLinhaTotalMovDia[6] = "TOTAIS DA MOVIMENTAÇÃO NO DIA:";
+	$aLinhaTotalMovDia[6] = "TOTAIS DA MOVIMENTAO NO DIA:";
 	$aLinhaTotalMovDia[7] = $saldo_dia_debito   == 0 ? "" : db_formatar($saldo_dia_debito,'f') ;
 	$aLinhaTotalMovDia[8] = $saldo_dia_credito  == 0 ? "" : db_formatar($saldo_dia_credito,'f');
 
@@ -1811,7 +1811,7 @@ function imprimeTotalMovContaTxt($fp,$saldo_debitado,$saldo_creditado,$saldo_atu
 	$aLinhaTotalMovConta[3] = '';
 	$aLinhaTotalMovConta[4] = '';
 	$aLinhaTotalMovConta[5] = '';
-	$aLinhaTotalMovConta[6] = "TOTAIS DA MOVIMENTAÇÃO 2:";
+	$aLinhaTotalMovConta[6] = "TOTAIS DA MOVIMENTAO 2:";
 	$aLinhaTotalMovConta[7] = $saldo_debitado   == 0 ? "" : db_formatar($saldo_debitado,'f');
 	$aLinhaTotalMovConta[8] = $saldo_creditado  == 0 ? "" : db_formatar($saldo_creditado,'f');
 
