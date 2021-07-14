@@ -335,7 +335,8 @@ $clrotulo->label("pc01_descrmater");
 
     var oParam = new Object();
     oParam.action = "salvar";
-
+    oParam.autori = $('#e55_autori').val();
+    oParam.sequen = $('#e55_sequen').val();
     var oDados = {};
     var aDados = [];
 
@@ -425,16 +426,6 @@ $clrotulo->label("pc01_descrmater");
     }
     ?>
     document.form1.submit();
-  }
-
-  function novoAjax(params, onComplete) {
-
-    var request = new Ajax.Request('lic4_geraAutorizacoes.RPC.php', {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(params),
-      onComplete: onComplete
-    });
-
   }
 
   function js_pesquisa() {

@@ -192,10 +192,10 @@ switch ($_POST["action"]) {
     db_inicio_transacao();
 
     foreach ($_POST['dados'] as $item) :
-      print_r($item['id']);
-      exit;
-      $result_itens = $clempautitem->sql_record($clempautitem->sql_query($e54_autori, null, "e55_item,pc01_descrmater,e55_descr,e55_codele,o56_descr,e55_sequen,e55_quant,e55_vltot"));
 
+      $result_itens = $clempautitem->sql_record($clempautitem->sql_query(null, null, "e55_item,pc01_descrmater,e55_descr,e55_codele,o56_descr,e55_sequen,e55_quant,e55_vltot", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
+      // echo $clempautitem->sql_query(null, null, "e55_item,pc01_descrmater,e55_descr,e55_codele,o56_descr,e55_sequen,e55_quant,e55_vltot", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . "");
+      // exit;
       if ($clempautitem->numrows == 0) {
         //$clempautitem->e55_descr  = $e55_descr;
         //$clempautitem->e55_codele = $e55_codele;
@@ -206,15 +206,25 @@ switch ($_POST["action"]) {
         $clempautitem->e55_vlrun  = $item['vlrunit'];
         $clempautitem->e55_vltot  = $item['total'];
 
-        $clempautitem->incluir($e54_autori, $e55_sequen);
+        $clempautitem->incluir($_POST['autori'], 1);
       } else {
+        $clempautitem->e55_item   = $item['id'];
+        $clempautitem->e55_quant  = $item['qtd'];
+        $clempautitem->e55_unid   = $item['unidade'];
+        $clempautitem->e55_marca  = $item['marca'];
+        $clempautitem->e55_vlrun  = $item['vlrunit'];
+        $clempautitem->e55_vltot  = $item['total'];
+        $clempautitem->alterar($_POST['autori'], $_POST['sequen']);
       }
     endforeach;
     db_fim_transacao();
 
-    $oRetorno          = new stdClass();
-    $oRetorno->status  = 1;
-    $oRetorno->message = "Parâmetros configurados com sucesso.";
-    break;
+    if ($clempautitem->erro_status == 0) {
+
+      $oRetorno          = new stdClass();
+      $oRetorno->status  = 1;
+      $oRetorno->message = $clempautitem->erro_msg;
+      break;
+    }
 }
 echo $oJson->encode($oRetorno);
