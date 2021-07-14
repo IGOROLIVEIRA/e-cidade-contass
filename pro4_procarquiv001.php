@@ -142,7 +142,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incl
                 $clprocandam->p61_id_usuario = db_getsession("DB_id_usuario");
                 $clprocandam->p61_coddepto = db_getsession("DB_coddepto");
                 $clprocandam->p61_publico = 'true';
-                $clprocandam->p61_situacao = 2;
+                $clprocandam->p61_situacao = 2; 
                 $clprocandam->incluir(null);
                 $erro_msg = $clprocandam->erro_msg;
                 if ($clprocandam->erro_status == 0) {
