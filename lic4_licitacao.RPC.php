@@ -11,6 +11,7 @@ require_once("model/compilacaoRegistroPreco.model.php");
 require_once("model/licitacao.model.php");
 require_once("model/licitacao/SituacaoLicitacao.model.php");
 require_once("model/EditalDocumento.model.php");
+require_once("classes/db_solicitem_classe.php");
 
 $clliclicita       = new cl_liclicita;
 $oJson             = new services_json();
@@ -904,13 +905,13 @@ switch ($oParam->exec) {
               $sWhereSolicitem .= ' AND pc11_seq = ' . $aItens[$count]->sequencial;
               $sWhereSolicitem .= ' AND pc81_codprocitem = ' . $aItens[$count]->codprocitem;
               $sSqlSolicitem = $oDaoSolicitemReservado->sql_query_pcmater('', 'distinct solicitem.*', '', $sWhereSolicitem);
-              // echo $sSqlSolicitem;
-              // exit;
+
               $rsSolicitem = $oDaoSolicitemReservado->sql_record($sSqlSolicitem);
 
               if (pg_numrows($rsSolicitem)) {
 
                 if ($aItens[$count]->qtdexclusiva) {
+
                   // db_criatabela($rsSolicitem);
                   // echo $aItens[$count]->qtdexclusiva;
 
@@ -918,6 +919,31 @@ switch ($oParam->exec) {
                    * Cadastra o novo item com a quantidade exclusiva na solicitem
                    */
                   $oItem = db_utils::fieldsMemory($rsSolicitem, 0);
+
+                  $rsSolicitemControle = $oDaoSolicitemReservado->sql_record("select
+                  abertura.pc55_solicitempai as vinculopai,
+                  abertura.pc55_solicitemfilho as vinculofilho,
+                  itemdaabertura.pc11_codigo as itemdaabertura,
+                  itemdaabertura.pc11_numero as itemdaaberturanumero,
+                  itemdaestimativa.pc11_codigo as itemdaestimativa,
+                  itemdaestimativa.pc11_numero as itemdaestimativanumero,
+                  itemdaestimativa.pc11_quant as itemdaestimativaqtd,
+                  vinculo.pc55_solicitempai,
+                  vinculo.pc55_solicitemfilho
+                  from solicitem as compilacao
+                  join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
+                  left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
+                  left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
+                  left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
+                  left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
+                  left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
+                  left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
+                  left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
+                  where
+                  compilacao.pc11_codigo = $oItem->pc11_codigo");
+
+
+                  $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
 
                   $sql_ult_item  = "select pc11_seq ";
                   $sql_ult_item .= "from solicitem ";
@@ -932,8 +958,11 @@ switch ($oParam->exec) {
                   } else {
                     $seqsolicitem = 1;
                   }
-
+                  //Compilação
                   $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
+                  //Estimativa
+                  $nova_qtd_estimativa = floatval($oItemControle->itemdaestimativaqtd) - floatval($aItens[$count]->qtdexclusiva);
+                  //compilação
                   $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
                   $oDaoSolicitemReservado->pc11_seq   = $seqsolicitem;
                   $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
@@ -953,15 +982,60 @@ switch ($oParam->exec) {
                     $sqlerro = true;
                     break;
                   }
-                  // echo ' ' . $oDaoSolicitemReservado->pc11_codigo;
-                  // exit;
+
+
+                  //Estimativa
+                  //$oDaoSolicitemEstimativa = new cl_solicitem;
+                  $oDaoSolicitemEstimativa = db_utils::getDao('solicitem');
+                  $oDaoSolicitemEstimativa->pc11_numero = $oItemControle->itemdaestimativanumero;
+                  $oDaoSolicitemEstimativa->pc11_seq   = $seqsolicitem;
+                  $oDaoSolicitemEstimativa->pc11_quant = $aItens[$count]->qtdexclusiva;
+                  $oDaoSolicitemEstimativa->pc11_vlrun = $oItem->pc11_vlrun;
+                  $oDaoSolicitemEstimativa->pc11_prazo = $oItem->pc11_prazo;
+                  $oDaoSolicitemEstimativa->pc11_pgto = $oItem->pc11_pgto;
+                  $oDaoSolicitemEstimativa->pc11_resum = $oItem->pc11_resum;
+                  $oDaoSolicitemEstimativa->pc11_just = $oItem->pc11_just;
+                  $oDaoSolicitemEstimativa->pc11_liberado = $oItem->pc11_liberado;
+                  $oDaoSolicitemEstimativa->pc11_servicoquantidade = $oItem->pc11_servicoquantidade;
+                  $oDaoSolicitemEstimativa->pc11_reservado = 'true';
+
+                  $oDaoSolicitemEstimativa->incluir(null);
+
+                  if (!$oDaoSolicitemEstimativa->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitemEstimativa->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+
+                  //Abertura
+                  //$oDaoSolicitemAbertura = new cl_solicitem;
+                  // $oDaoSolicitemAbertura = db_utils::getDao('solicitem');
+                  // $oDaoSolicitemAbertura->pc11_numero = $oItemControle->itemdaaberturanumero;
+                  // $oDaoSolicitemAbertura->pc11_seq   = $seqsolicitem;
+                  // $oDaoSolicitemAbertura->pc11_quant = $aItens[$count]->qtdexclusiva;
+                  // $oDaoSolicitemAbertura->pc11_vlrun = $oItem->pc11_vlrun;
+                  // $oDaoSolicitemAbertura->pc11_prazo = $oItem->pc11_prazo;
+                  // $oDaoSolicitemAbertura->pc11_pgto = $oItem->pc11_pgto;
+                  // $oDaoSolicitemAbertura->pc11_resum = $oItem->pc11_resum;
+                  // $oDaoSolicitemAbertura->pc11_just = $oItem->pc11_just;
+                  // $oDaoSolicitemAbertura->pc11_liberado = $oItem->pc11_liberado;
+                  // $oDaoSolicitemAbertura->pc11_servicoquantidade = $oItem->pc11_servicoquantidade;
+                  // $oDaoSolicitemAbertura->pc11_reservado = 'true';
+
+                  // $oDaoSolicitemAbertura->incluir(null);
+
+                  // if (!$oDaoSolicitemAbertura->numrows_incluir) {
+                  //   $erro_msg = $oDaoSolicitemAbertura->erro_msg;
+                  //   $sqlerro = true;
+                  //   break;
+                  // }
 
                   /**
                    * Altera a quantidade do item origem na solicitem
                    */
 
                   if ($oDaoSolicitemReservado->numrows_incluir) {
-
+                    //compilação
                     $oItemAlterado = db_utils::getDao('solicitem');
                     $oItemAlterado->pc11_quant = $nova_qtd;
                     $oItemAlterado->pc11_codigo = $oItem->pc11_codigo;
@@ -972,8 +1046,31 @@ switch ($oParam->exec) {
                       $sqlerro = true;
                       break;
                     }
+                    //estimativa
+                    $oItemAlterado = db_utils::getDao('solicitem');
+                    $oItemAlterado->pc11_quant = $nova_qtd_estimativa;
+                    $oItemAlterado->pc11_codigo = $oItemControle->itemdaestimativa;
+                    $oItemAlterado->alterar($oItemControle->itemdaestimativa);
+
+                    if (!$oItemAlterado->numrows_alterar) {
+                      $erro_msg = $oItemAlterado->erro_msg;
+                      $sqlerro = true;
+                      break;
+                    }
+                    //abertura
+                    // $oItemAlterado = db_utils::getDao('solicitem');
+                    // $oItemAlterado->pc11_quant = 0;
+                    // $oItemAlterado->pc11_codigo = $oItemControle->itemdaabertura;
+                    // $oItemAlterado->alterar($oItemControle->itemdaabertura);
+
+                    // if (!$oItemAlterado->numrows_alterar) {
+                    //   $erro_msg = $oItemAlterado->erro_msg;
+                    //   $sqlerro = true;
+                    //   break;
+                    // }
                   }
 
+                  //compilação
                   $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
                   $oDaoSolicitemVinculo->pc55_solicitempai   = $oItem->pc11_codigo;
                   $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemReservado->pc11_codigo;
@@ -984,6 +1081,30 @@ switch ($oParam->exec) {
                     $sqlerro = true;
                     break;
                   }
+
+                  //estimativa
+                  $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+                  $oDaoSolicitemVinculo->pc55_solicitempai   = $oItemControle->pc55_solicitempai;
+                  $oDaoSolicitemVinculo->pc55_solicitemfilho = $oItemControle->pc55_solicitemfilho;
+                  $oDaoSolicitemVinculo->incluir(null);
+
+                  if (!$oDaoSolicitemVinculo->numrows_incluir) {
+                    $erro_msg = $oDaoSolicitemVinculo->erro_msg;
+                    $sqlerro = true;
+                    break;
+                  }
+
+                  //abertura
+                  // $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+                  // $oDaoSolicitemVinculo->pc55_solicitempai   = $oItemControle->vinculopai;
+                  // $oDaoSolicitemVinculo->pc55_solicitemfilho = $oItemControle->vinculofilho;
+                  // $oDaoSolicitemVinculo->incluir(null);
+
+                  // if (!$oDaoSolicitemVinculo->numrows_incluir) {
+                  //   $erro_msg = $oDaoSolicitemVinculo->erro_msg;
+                  //   $sqlerro = true;
+                  //   break;
+                  // }
 
                   $clliclicita = db_utils::getDao('liclicita');
                   $sSqlLiclicita = $clliclicita->sql_query_file(null, "l20_usaregistropreco", null, "l20_codigo=$oParam->licitacao");
@@ -1039,7 +1160,7 @@ switch ($oParam->exec) {
                     $oDaoSolicitemRegPreco->pc57_solicitem = $oDaoSolicitemReservado->pc11_codigo;
                     $oDaoSolicitemRegPreco->pc57_quantmax = $aItens[$count]->qtdexclusiva;
                     $oDaoSolicitemRegPreco->pc57_quantmin = 1;
-                    $oDaoSolicitemRegPreco->pc57_itemorigem = $oDaoSolicitemReservado->pc11_codigo;
+                    $oDaoSolicitemRegPreco->pc57_itemorigem = $oItemControle->itemdaabertura;
                     $oDaoSolicitemRegPreco->pc57_ativo = 't';
                     $oDaoSolicitemRegPreco->pc57_quantidadeexecedente = 0;
 

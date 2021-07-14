@@ -99,8 +99,9 @@ if (!$sqlerro && $codprocesso) {
   $rsSolicitem = db_query($sSqlSolicitem);
 
   for ($count = 0; $count < pg_numrows($rsSolicitem); $count++) {
-
+    db_criatabela($rsSolicitem);
     $oSolicitemReservado = db_utils::fieldsMemory($rsSolicitem, $count);
+    // echo intval($oSolicitemReservado->pc11_seq);
 
     $oDaoItemOrigem = db_utils::getDao('solicitem');
 
@@ -108,10 +109,14 @@ if (!$sqlerro && $codprocesso) {
     $sWhereItem = 'pc11_seq = ' . $iSeqOrigem . ' and pc11_numero = ' . $oSolicitemReservado->pc11_numero;
     $sSqlOrigem = $oDaoItemOrigem->sql_query_file(null, '*', 'pc11_codigo asc limit 1', $sWhereItem);
     $rsOrigem = $oDaoItemOrigem->sql_record($sSqlOrigem);
+    // echo ' ' . floatval($oSolicitemReservado->pc11_quant) . ' ';
+    // echo $sSqlOrigem;
 
     db_inicio_transacao();
 
     $oItemOrigem = db_utils::fieldsMemory($rsOrigem, 0);
+    //echo ' ' . floatval($oItemOrigem->pc11_quant);
+    //exit;
     $nova_quantidade = floatval($oItemOrigem->pc11_quant) + floatval($oSolicitemReservado->pc11_quant);
     //echo $sSqlOrigem;
     //echo $sSqlSolicitem;
