@@ -88,12 +88,12 @@ $clrotulo->label("o05_valor");
   <tr>
     <td nowrap title="<?=@$To08_unidade?>">
        <?
-       db_ancora(@$Lo08_unidade,"js_pesquisao08_unidade(true);",1);
+       db_ancora(@$Lo08_unidade,"js_pesquisao08_unidade(true);",$db_opcao);
        ?>
     </td>
     <td> 
       <?
-      db_input('o08_unidade',10,$Io08_unidade,true,'text',1," onchange='js_pesquisao08_unidade(false);'");
+      db_input('o08_unidade',10,$Io08_unidade,true,'text',$db_opcao," onchange='js_pesquisao08_unidade(false);'");
       db_input('o41_descr',40,$Io41_descr,true,'text',3,'')
       ?>
     </td>
@@ -163,7 +163,9 @@ db_input('o54_descr',40,$Io54_anousu,true,'text',3);
   </td>
   </tr>
   </table>
-<input name="alterar"   type="button" id="db_opcao"  value="Alterar"   onclick="js_alterarDotacoes()" >
+  
+<input name="<?= $db_opcao==1 ? "alterar" : "excluir" ?>"   type="<?= $db_opcao==1 ? "button" : "submit" ?>" 
+    id="db_opcao"  value="<?= $db_opcao==1 ? "Alterar" : "Excluir" ?>"  <?= $db_opcao==1 ? "onclick='js_alterarDotacoes()'" : "" ?>  >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 <input name="Novo" type="button" id="novo" value="Novo" onClick="location.href = 'orc4_ppadespesamanual004.php'">
 </center>
@@ -462,7 +464,9 @@ function js_pesquisa() {
                       ,0);
 }
 function js_preenchepesquisa(o40_orgao, o41_unidade, o52_funcao, o53_subfuncao, o54_programa, o55_projativ,o08_ppaversao){
-  
+  console.log('preenche');
+  let db_opcao = <?= $db_opcao ?>;
+  console.log(db_opcao);
   if (db_iframe_ppadotacao) {
     db_iframe_ppadotacao.hide();
   }
