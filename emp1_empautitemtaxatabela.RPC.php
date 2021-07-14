@@ -10,14 +10,17 @@ require_once("classes/db_db_sysarqcamp_classe.php");
 require_once("classes/db_matunid_classe.php");
 require_once("classes/db_empautitem_classe.php");
 
-$oJson             = new services_json();
+$oJson                = new services_json();
+$oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]));
+
 $oDaoSysArqCamp    = new cl_db_sysarqcamp();
 $clmatunid         = new cl_matunid;
 $clempautitem      = new cl_empautitem;
 
+
 switch ($_POST["action"]) {
 
-  case 'BuscaItens':
+  case 'buscaItens':
 
     $autori = $_POST["autori"];
     $cgm    = $_POST["cgm"];
@@ -167,7 +170,7 @@ switch ($_POST["action"]) {
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
         $itemRows[] = $selectunid;
-        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$e55_marca}' onchange='js_changeInput(this)' />";
+        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$e55_marca}' />";
         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$e55_quant}' />";
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$e55_vlrun}' />"; //p/ usuário
         $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' />";
@@ -182,6 +185,36 @@ switch ($_POST["action"]) {
         "data"  =>   $employeeData
       );
     }
+    break;
+
+  case 'salvar':
+
+    db_inicio_transacao();
+
+    foreach ($_POST['dados'] as $item) :
+      print_r($item['id']);
+      exit;
+      $result_itens = $clempautitem->sql_record($clempautitem->sql_query($e54_autori, null, "e55_item,pc01_descrmater,e55_descr,e55_codele,o56_descr,e55_sequen,e55_quant,e55_vltot"));
+
+      if ($clempautitem->numrows == 0) {
+        //$clempautitem->e55_descr  = $e55_descr;
+        //$clempautitem->e55_codele = $e55_codele;
+        $clempautitem->e55_item   = $item['id'];
+        $clempautitem->e55_quant  = $item['qtd'];
+        $clempautitem->e55_unid   = $item['unidade'];
+        $clempautitem->e55_marca  = $item['marca'];
+        $clempautitem->e55_vlrun  = $item['vlrunit'];
+        $clempautitem->e55_vltot  = $item['total'];
+
+        $clempautitem->incluir($e54_autori, $e55_sequen);
+      } else {
+      }
+    endforeach;
+    db_fim_transacao();
+
+    $oRetorno          = new stdClass();
+    $oRetorno->status  = 1;
+    $oRetorno->message = "Parâmetros configurados com sucesso.";
     break;
 }
 echo $oJson->encode($oRetorno);

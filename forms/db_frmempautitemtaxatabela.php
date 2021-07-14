@@ -45,15 +45,6 @@ if (!empty($tabsFonecVencedor)) {
     $aTabFonec += array($tabFonecVencedor->pc94_sequencial => "$tabFonecVencedor->pc94_sequencial - $tabFonecVencedor->pc01_descrmater");
   }
 }
-// echo 'leras';
-// exit;
-// echo $e55_item;
-// exit;
-//$result_elemento = $clpcmaterele->sql_record($clpcmaterele->sql_query(null, null, "pc07_codele,o56_descr", "", "pc07_codmater=$e55_item "));
-//db_criatabela($result_elemento);
-//exit;
-
-
 
 $clempautitem->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -290,7 +281,6 @@ $clrotulo->label("pc01_descrmater");
 
   function js_loadTable() {
 
-    console.log(document.getElementById('chave_tabela').value);
     $('#myTable').DataTable().clear().destroy();
     $('#myTable').DataTable({
       language: {
@@ -331,7 +321,7 @@ $clrotulo->label("pc01_descrmater");
         url: "emp1_empautitemtaxatabela.RPC.php",
         type: "POST",
         data: {
-          action: 'BuscaItens',
+          action: 'buscaItens',
           autori: <?php echo $e55_autori ?>,
           cgm: <?php echo $z01_numcgm ?>,
           tabela: document.getElementById('chave_tabela').value,
@@ -344,7 +334,7 @@ $clrotulo->label("pc01_descrmater");
   function js_salvar() {
 
     var oParam = new Object();
-    oParam.exec = "salvar";
+    oParam.action = "salvar";
 
     var oDados = {};
     var aDados = [];
@@ -355,39 +345,32 @@ $clrotulo->label("pc01_descrmater");
 
         oDados.id = $(this).find("td:eq(1)").html();
         oDados.unidade = $(this).find("td:eq(3) select").val();
-        oDados.qtd = $(this).find("td:eq(4) input").val();
-        oDados.vlrunit = $(this).find("td:eq(5) input").val();
-        oDados.desc = $(this).find("td:eq(6) input").val();
-        oDados.total = $(this).find("td:eq(7) input").val();
+        oDados.marca = $(this).find("td:eq(4) input").val();
+        oDados.qtd = $(this).find("td:eq(5) input").val();
+        oDados.vlrunit = $(this).find("td:eq(6) input").val();
+        oDados.desc = $(this).find("td:eq(7) input").val();
+        oDados.total = $(this).find("td:eq(8) input").val();
 
-        //ids.push($(this).find("td:eq(" + (coluna) + ")").attr("id"));
+        aDados.push(oDados);
       }
     });
 
+    oParam.dados = aDados;
     //js_divCarregando(_M(CAMINHO_MENSAGENS + "salvando"), 'msgBox');
 
-    new Ajax.Request("emp1_empautitemtaxatabela.RPC.php", {
-      method: 'post',
-      parameters: 'json=' + js_objectToJson(oParam),
-      onComplete: js_retornoSalvar
+    $.ajax({
+      type: "POST",
+      url: "emp1_empautitemtaxatabela.RPC.php",
+      data: oParam,
+      success: function(data) {
+        console.log(data);
+        //$('#target').html(data.msg);
+      }
     });
-  }
-
-  function js_retornoSalvar(oAjax) {
-
-    //js_removeObj('msgBox');
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    var sMensagem = oRetorno.sMessage.urlDecode();
-    alert(sMensagem);
-    js_loadTable();
   }
 
   function js_mudaTabela(campo) {
     js_loadTable();
-  }
-
-  function js_changeInput(obj) {
-    console.log(obj);
   }
 
   function js_verificar() {
