@@ -62,7 +62,7 @@ function js_relatorio2() {
   var query = "";
 
   if(document.getElementById('contas')){
-	//Le os itens lanados na combo da conta
+	//Le os itens lançados na combo da conta
 		vir="";
 		listacontas="";
 
@@ -114,7 +114,7 @@ function js_relatorio2() {
 		<td height="430" align="center" valign="top" bgcolor="#CCCCCC">
 		<center>
 		<fieldset style="width: 430px;">
-		<legend><b>Extrato Bancrio</b></legend>
+		<legend><b>Extrato Bancário</b></legend>
 
 		<form name="form1" method="post" action="">
 		<table border="0" cellspacing="3" cellpadding="0" align=center>
@@ -161,15 +161,15 @@ function js_relatorio2() {
 			<tr>
 				<td align="right" nowrap title="<?="Agrupamentos das receitas"?>"><b>Agrupamento das receitas:</b></td>
 				<td align="left" nowrap><?
-				$x = array(1=>"Analtico",2=>"Pela conta de receita",3=>"Pelos cdigos de empenho e receita");
+				$x = array(1=>"Analítico",2=>"Pela conta de receita",3=>"Pelos códigos de empenho e receita");
 
 				db_select("agrupapor",$x,true,1);
 				?></td>
 			</tr>
 			<tr>
-				<td align="right" nowrap title="<?="Receitas por baixa bancria"?>"><b>Receitas por baixa bancria:</b></td>
+				<td align="right" nowrap title="<?="Receitas por baixa bancária"?>"><b>Receitas por baixa bancária:</b></td>
 				<td align="left" nowrap><?
-				$x = array(1=>"No agrupar pela classificao",2=>"Agrupar pela classificao");
+				$x = array(1=>"Não agrupar pela classificação",2=>"Agrupar pela classificação");
 				db_select("receitaspor",$x,true,1);
 				?></td>
 			</tr>
@@ -189,20 +189,20 @@ function js_relatorio2() {
 			</tr>
 
 			<tr>
-				<td nowrap align=right><b>Totalizador dirio:</b></td>
+				<td nowrap align=right><b>Totalizador diário:</b></td>
 				<td><? $matriz = array("n"=>"nao","s"=>"sim");
 				db_select("totalizador_diario", $matriz,true,1);
 				?></td>
 			</tr>
 			<tr>
-				<td nowrap align=right><b>Imprime histrico:</b></td>
+				<td nowrap align=right><b>Imprime histórico:</b></td>
 				<td><? $matriz = array("s"=>"sim","n"=>"nao");
 				db_select("imprime_historico", $matriz,true,1);
 				?></td>
 			</tr>
 			<tr>
-             <td nowrap align=right><b>Tipo Impresso:</b></td>
-              <td><? $matriz = array("s"=>"Sinttico","a"=>"Analtico");
+             <td nowrap align=right><b>Tipo Impressão:</b></td>
+              <td><? $matriz = array("s"=>"Sintético","a"=>"Analítico");
                    db_select("imprime_analitico", $matriz,true,1);
                    ?>
               </td>
@@ -210,14 +210,14 @@ function js_relatorio2() {
   			<tr>
 			</tr>
       <tr>
-        <td nowrap align="right"><b>Somente contas bancrias:</b></td>
+        <td nowrap align="right"><b>Somente contas bancárias:</b></td>
         <td><?
                $matriz = array("s"=>"sim","n"=>"nao");
                db_select("somente_contas_bancarias",$matriz,true,1);
         ?></td>
       </tr>
       <tr>
-        <td nowrap align="right"><b>Formato do relatrio:</b></td>
+        <td nowrap align="right"><b>Formato do relatório:</b></td>
         <td><?
                $matriz = array("p"=>"pdf","t"=>"csv");
                db_select("imprime_pdf",$matriz,true,1);
