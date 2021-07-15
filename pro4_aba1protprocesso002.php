@@ -31,6 +31,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("libs/db_utils.php");
 include("classes/db_protprocesso_classe.php");
+include("classes/db_procandam_classe.php");
 include("classes/db_procdoctipo_classe.php");
 include("classes/db_protparam_classe.php");
 include("classes/db_procvar_classe.php");
@@ -47,6 +48,7 @@ $oPost = db_utils::postMemory($_POST,0);
 $oGet  = db_utils::postMemory($_GET,0);
 
 $clprotprocesso    = new cl_protprocesso;
+$clprocandam       = new cl_procandam;
 $clprocprocessodoc = new cl_procprocessodoc;
 $clproctipovar     = new cl_proctipovar;
 $clandpadrao       = new cl_andpadrao;
@@ -144,11 +146,20 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
        $result   = $clprotprocesso->sql_record($clprotprocesso->sql_query($chavepesquisa)); 
        db_fieldsmemory($result,0);
        $db_botao = true;
-       $result_andam = $clprotprocesso->sql_record($clprotprocesso->sql_query_alt($p58_codproc,"*",null,"p58_codproc = $p58_codproc and p61_codandam is null and p63_codtran is null "));
+       $result_andam = $clprotprocesso->sql_record($clprotprocesso->sql_query_alt($p58_codproc,"*",null,"p58_codproc = $p58_codproc and p58_situacao = 1")); // p61_codandam is null and p63_codtran is null p61_situacao = 1
+       
+       //$recult_procan = $clprocandam->sql_record($clprocandam->sql_query($p58_codproc,"*",null,"p61_codandam = $p58_codproc"));   
+
+       if ($clprotprocesso->numrows==0){ 
+          $db_opcao = 3;
+          $db_botao  = false;
+       }
+       
+       /*
        if ($clprotprocesso->numrows==0){
            $db_opcao = 3;
           $db_botao  = false;
-      }
+      }*/
    }
 }else{
 //     include("classes/db_procdoctipo_classe.php");

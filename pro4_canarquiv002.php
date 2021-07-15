@@ -118,6 +118,7 @@ if ((isset($QUERY_STRING["p58_codproc"]))) {
             $clprocandam->p61_id_usuario = db_getsession("DB_id_usuario");
             $clprocandam->p61_coddepto = $p67_coddepto;
             $clprocandam->p61_publico = "t";
+            $clprocandam->p61_situacao = 2; 
             $clprocandam->incluir("");
 
             if ($clprocandam->erro_status == "1") {
