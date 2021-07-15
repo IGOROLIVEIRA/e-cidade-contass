@@ -1049,7 +1049,7 @@ if ($situacao == 2) {
 				if( $processaposnumpre == true ) {
 
 					if ($lDebugAtivo == true) {
-                            echo 'linha do registro:'.$arq_array[$i];
+                        echo 'linha do registro:'.$arq_array[$i];
                     }
 
                     $numpre = substr($arq_array[$i], substr($k15_numpre, 0, 3) - 1, substr($k15_numpre, 3, 3));
@@ -1059,18 +1059,18 @@ if ($situacao == 2) {
                     $oInstit = new Instituicao(db_getsession('DB_instit'));
 
                     if($hlhposicaonumpre > 0 && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO) ){
-                            if ($lDebugAtivo == true) {
-                                    echo "     </br> continuando Guia da HLH";
-                            }
-                            $numpre 	= substr($arq_array[$i],67-1,10);
-                            $sqlhlh    	= "select k00_numpre, k00_numpar from debitos_hlh where numguia = '".$numpre."' ";
-                            $resulthlh 	= db_query($sqlhlh) or die($sqlhlh);
+                        if ($lDebugAtivo == true) {
+                                echo "</br> continuando Guia da HLH";
+                        }
+                        $numpre 	= substr($arq_array[$i],67-1,10);
+                        $sqlhlh    	= "select k00_numpre, k00_numpar from debitos_hlh where numguia = '".$numpre."' ";
+                        $resulthlh 	= db_query($sqlhlh) or die($sqlhlh);
 
-                            if (pg_numrows($resulthlh) > 0) {
-                                    db_fieldsmemory($resulthlh, 0, true);
-                                    $numpre = $k00_numpre;
-                                    $numpar = $k00_numpar;
-                            }
+                        if (pg_numrows($resulthlh) > 0) {
+                                db_fieldsmemory($resulthlh, 0, true);
+                                $numpre = $k00_numpre;
+                                $numpar = $k00_numpar;
+                        }
                     }
                     if ($lDebugAtivo == true) {
                             echo '<br>numpre '.$numpre.' e numpar '.$numpar.'<br>' ;
