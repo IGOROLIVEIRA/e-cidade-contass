@@ -1,6 +1,7 @@
 <?php
 //ini_set('display_errors','on');
-require_once("fpdf151/fpdf.php");
+//require_once("fpdf151/fpdf.php");
+include("fpdf151/pdf.php");
 require_once("std/DBDate.php");
 include("libs/db_sql.php");
 require_once("libs/db_utils.php");
@@ -88,9 +89,10 @@ INNER JOIN db_paragrafo ON db04_idparag = db02_idparag
 WHERE db02_descr LIKE 'DECLARAÇÃO DE REC. ORC. E FINANCEIRO TEXTO1') and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
 $resparag = pg_query($sqlparag);
 db_fieldsmemory( $resparag, 0 );
+$head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
 
 
-$pdf = new FPDF();
+$pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
 $pdf->SetAutoPageBreak(false);
@@ -99,35 +101,36 @@ $pdf->SetFillColor(235);
 $pdf->addpage('P');
 $alt = 3;
 $pdf->SetFont('arial','B',12);
+$pdf->ln($alt+6);
 $pdf->Cell(190,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
 $pdf->ln($alt+3);
-$pdf->SetFont('arial','',9);
-$pdf->MultiCell(190,3,"     Examinando as Dotações constantes do orçamento fiscal e levando-se em conta os serviços que se pretende contratar, cujo objeto é {$objeto} , no valor total estimado de R$ {$vlrtotal} em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
+$pdf->SetFont('arial','',11);
+$pdf->MultiCell(190,4,"     Examinando as Dotações constantes do orçamento fiscal e levando-se em conta os serviços que se pretende contratar, cujo objeto é {$objeto} , no valor total estimado de R$ ".trim(db_formatar($vlrtotal,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
 
 $pdf->ln($alt+3);
 $pdf->cell(30,4,"Ficha"                           ,1,0,"C",1);
 $pdf->cell(50,4,"Cód. orçamentário"               ,1,0,"C",1);
 $pdf->cell(60,4,"Projeto Atividade"               ,1,0,"C",1);
 $pdf->cell(50,4,"Fonte de Recurso"                ,1,1,"C",1);
-$pdf->setfont('arial','',10);
+$pdf->setfont('arial','',11);
 $pdf->ln($alt);
 if(pg_num_rows($resultDotacao) != 0){
     for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
         $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
-        $pdf->cell(30, 3, $oDadosDotacoes->ficha, 0, 0, "C", 0);
-        $pdf->cell(50, 3, $oDadosDotacoes->codorcamentario, 0, 0, "C", 0);
-        $pdf->cell(60, 3, $oDadosDotacoes->projetoativ, 0, 0, "C", 0);
-        $pdf->cell(50, 3, $oDadosDotacoes->fonterecurso, 0, 1, "C", 0);
+        $pdf->cell(30, 4, $oDadosDotacoes->ficha, 0, 0, "C", 0);
+        $pdf->cell(50, 4, $oDadosDotacoes->codorcamentario, 0, 0, "C", 0);
+        $pdf->cell(60, 4, $oDadosDotacoes->projetoativ, 0, 0, "C", 0);
+        $pdf->cell(50, 4, $oDadosDotacoes->fonterecurso, 0, 1, "C", 0);
     }
 }else{
-    $pdf->setfont('arial','b',9);
-    $pdf->cell(190,3,"Nenhum Registro Encontrato."     ,0,1,"C",0);
+    $pdf->setfont('arial','b',11);
+    $pdf->cell(190,4,"Nenhum Registro Encontrato."     ,0,1,"C",0);
 }
 $pdf->ln($alt+3);
 
-$pdf->setfont('arial','',9);
-$pdf->MultiCell(190,3,"     que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez , foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
-$pdf->ln($alt+3);
+$pdf->setfont('arial','',11);
+$pdf->MultiCell(190,4,"     que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez , foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
+$pdf->ln($alt+6);
 
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);

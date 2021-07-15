@@ -48,7 +48,7 @@ $clrotulo->label("pc80_codproc");
 <center>
     <form name="form1" method="post" action="">
 
-        <fieldset style="width: 480px;">
+        <fieldset style="width: 480px;margin-top: 30px">
             <legend><strong>Relatório de Recursos Orçamentarios</strong></legend>
 
             <table>
@@ -68,9 +68,8 @@ $clrotulo->label("pc80_codproc");
                     </td>
                     <td>
                         <?$iTipoRelatorio = array(
-                            1 =>"Solicitação de Parecer Contábil",
-                            2 =>"Solicitação de Disponibilização Financeira",
-                            3 =>"Declaração de Recursos Orçamentários");
+                            1=>"Solicitação de Disponibilização Financeira",
+                            2 =>"Declaração de Recursos Orçamentários");
                         db_select("tiporelatorio",$iTipoRelatorio,true,1,"");
                         ?>
                     </td>
@@ -119,14 +118,22 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
         let tiporelatorio = $F('tiporelatorio');
 
         if(tiporelatorio == 1){
+            processodecompras = $F('pc80_codproc');
 
+            if(processodecompras == ""){
+                alert("Processo de Compras não informado.");
+                return;
+            }
+
+            Filtros = "";
+            Filtros += "processodecompras="+processodecompras;
+
+            var jan = window.open('com2_relatorioorcamentario002.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
+                'width='+(screen.availWidth - 5)+', scrollbars=1');
+            jan.moveTo(0, 0);
         }
 
         if(tiporelatorio == 2){
-
-        }
-
-        if(tiporelatorio == 3){
             processodecompras = $F('pc80_codproc');
 
             if(processodecompras == ""){
