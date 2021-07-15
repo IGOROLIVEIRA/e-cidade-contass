@@ -98,6 +98,84 @@ class RefactorConsultaProcessoProtocolo {
     if ( $clproctransferproc->numrows > 0 ) {
 
       /**
+       * Verifica se possui algum despacho antes do Trâmite Inicial
+       */
+      
+      $result_procandam1 = $clprocandam->sql_record($clprocandam->sql_query_com(null, "p61_codandam", "p61_codandam", "p61_codproc = $codproc"));
+      extract( (array) db_utils::fieldsMemory($result_procandam1, $xy));
+      //if ($clprocandam->numrows > 0) {
+
+        //for ($xy = 0; $xy < $clprocandam->numrows; $xy ++) {
+
+          
+          /*
+          $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
+          $oDadosMovimentacao->sSituacao = $p61_situacao;
+          if($oDadosMovimentacao->sSituacao==0){
+            $oDadosMovimentacao->sData = db_formatar($p61_dtandam, 'd');
+            $oDadosMovimentacao->sHora = $p61_hora;
+            $oDadosMovimentacao->iDepartamento = $p61_coddepto;
+            $oDadosMovimentacao->sDepartamento = $descrdepto;
+            $oDadosMovimentacao->iInstituicao = $instit;
+            $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
+            $oDadosMovimentacao->sLogin = $nome;
+            $oDadosMovimentacao->sObservacoes = "Recebeu Processo";
+            $oDadosMovimentacao->sDespacho = "$p61_despacho";
+
+            $this->aMovimentacoes[] = $oDadosMovimentacao;
+          }*/
+
+          $sSqlProcandamint_des = $clprocandamint->sql_query_sim(null,
+                                                                 "*,
+                                                                 coalesce(p100_descricao,'Despacho') as tipo_despacho,
+                                                                 coalesce(p100_sequencial, 1) as codigo_tipo_despacho",
+                                                                "p78_sequencial", "p78_codandam = $p61_codandam  ");
+          $result_procandamint_des = $clprocandamint->sql_record($sSqlProcandamint_des);
+
+          /**
+           *  Dispacho interno
+           */ 
+          if ($clprocandamint->numrows > 0) {
+
+            for ($x = 0; $x < $clprocandamint->numrows; $x ++) {
+
+              extract( (array) db_utils::fieldsMemory($result_procandamint_des, $x));
+
+              /**
+               * Despacho interno transferido
+               */
+              if ($p78_transint == 't') {
+                break;
+              }
+
+              $oDadosMovimentacao1 = new RefactorDadosMovimentacaoProcessoProtocolo();
+              $oDadosMovimentacao1->sSituacao = $p78_situacao;
+                  if($oDadosMovimentacao1->sSituacao==0){
+                    $oDadosMovimentacao1->sData = db_formatar($p78_data, 'd');
+                    $oDadosMovimentacao1->sHora = $p78_hora;
+                    $oDadosMovimentacao->iDepartamento = $p61_coddepto;
+                    $oDadosMovimentacao1->sDepartamento = $descrdepto;
+                    $oDadosMovimentacao1->iInstituicao = $instit;
+                    $oDadosMovimentacao1->sInstituicao = $nomeinstabrev;
+                    $oDadosMovimentacao1->sLogin = $nome;
+                    $oDadosMovimentacao1->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
+                    $oDadosMovimentacao1->sDespacho = "$p78_despacho";
+                    $oDadosMovimentacao1->iAndamentoInterno = $p78_sequencial;
+
+                    if ($p78_usuario == $this->iUsuarioLogado) {
+                      $oDadosMovimentacao1->lImprimir = true;
+                    }
+
+                    $this->aMovimentacoes[] = $oDadosMovimentacao1;
+
+                    $cod_procandamint = $p78_sequencial;
+                 }
+            }
+          }
+        //}
+      //} 
+
+      /**
        * Processo criado
        */
       $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
@@ -274,7 +352,7 @@ class RefactorConsultaProcessoProtocolo {
               $this->aMovimentacoes[] = $oDadosMovimentacao;
 
             }
-
+            
               $sQueryDespacho          = $clprocandamint->sql_query_sim(null, "*,
                                                                         coalesce(p100_descricao,'Despacho') as tipo_despacho,
                                                                         coalesce(p100_sequencial, 1) as codigo_tipo_despacho",
@@ -298,24 +376,27 @@ class RefactorConsultaProcessoProtocolo {
                   }
 
                   $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
-                  $oDadosMovimentacao->sData = db_formatar($p78_data, 'd');
-                  $oDadosMovimentacao->sHora = $p78_hora;
-                  $oDadosMovimentacao->iDepartamento = $p61_coddepto;
-                  $oDadosMovimentacao->sDepartamento = $descrdepto;
-                  $oDadosMovimentacao->iInstituicao = $instit;
-                  $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                  $oDadosMovimentacao->sLogin = $nome;
-                  $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
-                  $oDadosMovimentacao->sDespacho = "$p78_despacho";
-                  $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
+                  $oDadosMovimentacao->sSituacao = $p78_situacao;
+                  if($oDadosMovimentacao->sSituacao==1){
+                      $oDadosMovimentacao->sData = db_formatar($p78_data, 'd');
+                      $oDadosMovimentacao->sHora = $p78_hora;
+                      $oDadosMovimentacao->iDepartamento = $p61_coddepto;
+                      $oDadosMovimentacao->sDepartamento = $descrdepto;
+                      $oDadosMovimentacao->iInstituicao = $instit;
+                      $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
+                      $oDadosMovimentacao->sLogin = $nome;
+                      $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
+                      $oDadosMovimentacao->sDespacho = "$p78_despacho";
+                      $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
 
-                  //if ($p78_usuario == $this->iUsuarioLogado) {
-                    $oDadosMovimentacao->lImprimir = true;
-                  //}
+                      //if ($p78_usuario == $this->iUsuarioLogado) {
+                        $oDadosMovimentacao->lImprimir = true;
+                      //}
 
-                  $this->aMovimentacoes[] = $oDadosMovimentacao;
+                      $this->aMovimentacoes[] = $oDadosMovimentacao;
 
-                  $cod_procandamint = $p78_sequencial;
+                      $cod_procandamint = $p78_sequencial;
+                  }
                 }
 
               }
@@ -503,17 +584,20 @@ class RefactorConsultaProcessoProtocolo {
           extract( (array) db_utils::fieldsMemory($result_procandam, $xy));
 
           $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
-          $oDadosMovimentacao->sData = db_formatar($p61_dtandam, 'd');
-          $oDadosMovimentacao->sHora = $p61_hora;
-          $oDadosMovimentacao->iDepartamento = $p61_coddepto;
-          $oDadosMovimentacao->sDepartamento = $descrdepto;
-          $oDadosMovimentacao->iInstituicao = $instit;
-          $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-          $oDadosMovimentacao->sLogin = $nome;
-          $oDadosMovimentacao->sObservacoes = "Recebeu Processo";
-          $oDadosMovimentacao->sDespacho = "$p61_despacho";
+          $oDadosMovimentacao->sSituacao = $p61_situacao;
+          if($oDadosMovimentacao->sSituacao==0){
+            $oDadosMovimentacao->sData = db_formatar($p61_dtandam, 'd');
+            $oDadosMovimentacao->sHora = $p61_hora;
+            $oDadosMovimentacao->iDepartamento = $p61_coddepto;
+            $oDadosMovimentacao->sDepartamento = $descrdepto;
+            $oDadosMovimentacao->iInstituicao = $instit;
+            $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
+            $oDadosMovimentacao->sLogin = $nome;
+            $oDadosMovimentacao->sObservacoes = "Recebeu Processo";
+            $oDadosMovimentacao->sDespacho = "$p61_despacho";
 
-          $this->aMovimentacoes[] = $oDadosMovimentacao;
+            $this->aMovimentacoes[] = $oDadosMovimentacao;
+          }
 
           $sSqlProcandamint_des = $clprocandamint->sql_query_sim(null,
                                                                  "*,
@@ -539,24 +623,27 @@ class RefactorConsultaProcessoProtocolo {
               }
 
               $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
-              $oDadosMovimentacao->sData = db_formatar($p78_data, 'd');
-              $oDadosMovimentacao->sHora = $p78_hora;
-              $oDadosMovimentacao->iDepartamento = $p61_coddepto;
-              $oDadosMovimentacao->sDepartamento = $descrdepto;
-              $oDadosMovimentacao->iInstituicao = $instit;
-              $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-              $oDadosMovimentacao->sLogin = $nome;
-              $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
-              $oDadosMovimentacao->sDespacho = "$p78_despacho";
-              $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
+              $oDadosMovimentacao->sSituacao = $p78_situacao;
+              if($oDadosMovimentacao->sSituacao==0){  
+                  $oDadosMovimentacao->sData = db_formatar($p78_data, 'd');
+                  $oDadosMovimentacao->sHora = $p78_hora;
+                  $oDadosMovimentacao->iDepartamento = $p61_coddepto;
+                  $oDadosMovimentacao->sDepartamento = $descrdepto;
+                  $oDadosMovimentacao->iInstituicao = $instit;
+                  $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
+                  $oDadosMovimentacao->sLogin = $nome;
+                  $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
+                  $oDadosMovimentacao->sDespacho = "$p78_despacho";
+                  $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
 
-              if ($p78_usuario == $this->iUsuarioLogado) {
-                $oDadosMovimentacao->lImprimir = true;
+                  if ($p78_usuario == $this->iUsuarioLogado) {
+                    $oDadosMovimentacao->lImprimir = true;
+                  }
+
+                  $this->aMovimentacoes[] = $oDadosMovimentacao;
+
+                  $cod_procandamint = $p78_sequencial;
               }
-
-              $this->aMovimentacoes[] = $oDadosMovimentacao;
-
-              $cod_procandamint = $p78_sequencial;
             }
 
           }
@@ -680,6 +767,7 @@ class RefactorDadosMovimentacaoProcessoProtocolo {
   public $iAndamentoInterno;
   public $lImprimir = false;
   public $iTipo;
+  public $sSituacao;
 
   /**
    * Valida antes de declarar propriedades do refactor

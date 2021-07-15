@@ -573,7 +573,10 @@ if(isset($db_opcaoal)){
                                         '02'=>'02 - Exposta (aposentadoria esp. 15 anos)',
                                         '03'=>'03 - Exposta (aposentadoria esp. 20 anos)',
                                         '04'=>'04 - Exposta (aposentadoria esp. 25 anos)',
-                                        '05'=>'05 - Mais de um vínculo (ou fonte pagadora) - Não exposição a agente nocivo'
+                                        '05'=>'05 - Mais de um vínculo (ou fonte pagadora) - Não exposição a agente nocivo',
+                                        '06'=>'06 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 15 anos)',
+                                        '07'=>'07 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 20 anos)',
+                                        '08'=>'08 - Mais de um vínculo (ou fonte pagadora) - Exposta (aposentadoria esp. 25 anos)'
                                     );
                                     db_select("rh02_ocorre",$arr_ocorre,true,$db_opcao);
                                     ?>

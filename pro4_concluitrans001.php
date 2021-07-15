@@ -132,13 +132,14 @@ $db_botao = true;
 
           db_atutermometro($i, pg_num_rows($rs), 'termometro');
 					db_fieldsmemory($rs,$i);
-					$sqlproc = "select p58_despacho,p58_publico, p58_numeracao  from protprocesso where p58_codproc = ".$p63_codproc;
+					$sqlproc = "select p58_despacho,p58_publico, p58_numeracao, p58_codandam  from protprocesso where p58_codproc = ".$p63_codproc;
 
 					$rsproc = db_query($sqlproc);
 					//inclui o andamento
 					$despach   = pg_result($rsproc,0,"p58_despacho");
 					$publico   = pg_result($rsproc,0,"p58_publico");
 					$numeracao = pg_result($rsproc,0,"p58_numeracao");
+					$codandam = pg_result($rsproc,0,"p58_codandam");
 					$despach =  str_replace("'","",$despach);
 					$publico =  str_replace("'","",$publico);
 
@@ -147,21 +148,42 @@ $db_botao = true;
 					$result=$clprocandam->sql_record($clprocandam->sql_query_file(null,"*",null,"p61_codproc=$p63_codproc"));
 					$numrows=$clprocandam->numrows;
 
-					if ($numrows==0) {
-						$clprocandam->p61_despacho ='Tramite Inicial';
-					} else {
-						$clprocandam->p61_despacho = $despach;
-					}
+					
+					if($codandam!=""){
+						
+						$clprocandam->p61_codandam  = $codandam;
+						$clprocandam->p61_despacho   ='Tramite Inicial';
+						$clprocandam->p61_publico    = $publico;
+						$clprocandam->p61_codproc    = $p63_codproc;
+						$data                        = date('Y-m-d');
+						$hora                        = db_hora();
+						$clprocandam->p61_dtandam    = $data;
+					    $clprocandam->p61_hora       = $hora;
+						$clprocandam->p61_situacao   = 2;
+						$clprocandam->p61_id_usuario = db_getsession("DB_id_usuario");
+						$clprocandam->p61_coddepto   = db_getsession("DB_coddepto");
+						$clprocandam->alterar($codandam);
 
-					$clprocandam->p61_publico    = $publico;
-					$clprocandam->p61_codproc    = $p63_codproc;
-					$data                        = date('Y-m-d');
-					$hora                        = db_hora();
-					$clprocandam->p61_dtandam    = $data;
-					$clprocandam->p61_hora       = $hora;
-					$clprocandam->p61_id_usuario = db_getsession("DB_id_usuario");
-					$clprocandam->p61_coddepto   = db_getsession("DB_coddepto");
-					$clprocandam->incluir(null);
+						
+
+					}else{
+						if ($numrows==0) {
+							$clprocandam->p61_despacho ='Tramite Inicial';
+						} else {
+							$clprocandam->p61_despacho = $despach;
+						}
+	
+						$clprocandam->p61_publico    = $publico;
+						$clprocandam->p61_codproc    = $p63_codproc;
+						$data                        = date('Y-m-d');
+						$hora                        = db_hora();
+						$clprocandam->p61_dtandam    = $data;
+						$clprocandam->p61_hora       = $hora;
+						$clprocandam->p61_id_usuario = db_getsession("DB_id_usuario");
+						$clprocandam->p61_coddepto   = db_getsession("DB_coddepto");
+						$clprocandam->incluir(null);
+					}
+					
 
 					if ($clprocandam->erro_status == "1") {
 						$erro = 0;
@@ -192,6 +214,7 @@ $db_botao = true;
 					$clprotprocesso->p58_codandam  = $clprocandam->p61_codandam;
 					$clprotprocesso->p58_despacho  = " ";
 					$clprotprocesso->p58_numeracao = $numeracao;
+					$clprotprocesso->p58_situacao  = 2;
 					$clprotprocesso->p58_instit    = db_getsession("DB_instit");
 					$clprotprocesso->alterar($p63_codproc);
 
@@ -205,13 +228,13 @@ $db_botao = true;
 					}
 				}
 
-				if ($erro == 0) {
+				if ($erro == 0) { 
 					echo "<script>alert('Recebimento efetuado com sucesso!')</script>";
 				}
 			} else {
 				echo "<script>alert('Recebimento inválido ou já efetuado');</script>";
 			}
-			db_fim_transacao($sqlerro);
+			db_fim_transacao($sqlerro); 
 
       echo "		</td>";
       echo "	</tr>";

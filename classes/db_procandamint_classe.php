@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE procandamint
 class cl_procandamint {
    // cria variaveis de erro
-   var $rotulo     = null;
+   var $rotulo     = null;   
    var $query_sql  = null;
    var $numrows    = 0;
    var $numrows_incluir = 0;
@@ -28,6 +28,7 @@ class cl_procandamint {
    var $p78_publico = 'f';
    var $p78_transint = 'f';
    var $p78_tipodespacho = 1;
+   var $p78_situacao = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  p78_sequencial = int4 = Cod. sequencial
@@ -39,6 +40,7 @@ class cl_procandamint {
                  p78_publico = bool = Despacho Publico
                  p78_transint = bool = Trans. Int.
                  p78_tipodespacho = int4 = Tipo de Despacho
+                 p78_situacao = int4 = Situação
                  ";
    //funcao construtor da classe
    function cl_procandamint() {
@@ -74,6 +76,7 @@ class cl_procandamint {
        $this->p78_publico = ($this->p78_publico == "f"?@$GLOBALS["HTTP_POST_VARS"]["p78_publico"]:$this->p78_publico);
        $this->p78_transint = ($this->p78_transint == "f"?@$GLOBALS["HTTP_POST_VARS"]["p78_transint"]:$this->p78_transint);
        $this->p78_tipodespacho = ($this->p78_tipodespacho == ""?@$GLOBALS["HTTP_POST_VARS"]["p78_tipodespacho"]:$this->p78_tipodespacho);
+       $this->p78_situacao = ($this->p78_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["p78_situacao"]:$this->p78_situacao);
      }else{
        $this->p78_sequencial = ($this->p78_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["p78_sequencial"]:$this->p78_sequencial);
      }
@@ -171,6 +174,9 @@ class cl_procandamint {
      if($this->p78_tipodespacho == null ){
        $this->p78_tipodespacho = 1;
      }
+     if($this->p78_situacao == null ){
+      $this->p78_situacao = 0;
+    }
      $sql = "insert into procandamint(
                                        p78_sequencial
                                       ,p78_codandam
@@ -181,6 +187,7 @@ class cl_procandamint {
                                       ,p78_publico
                                       ,p78_transint
                                       ,p78_tipodespacho
+                                      ,p78_situacao
                        )
                 values (
                                 $this->p78_sequencial
@@ -192,6 +199,7 @@ class cl_procandamint {
                                ,'$this->p78_publico'
                                ,'$this->p78_transint'
                                ,$this->p78_tipodespacho
+                               ,$this->p78_situacao
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -368,6 +376,19 @@ class cl_procandamint {
          return false;
        }
      }
+     if(trim($this->p78_situacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p78_situacao"])){
+      $sql  .= $virgula." p78_situacao = $this->p78_situacao ";
+      $virgula = ",";
+      if(trim($this->p78_situacao) == null ){
+        $this->erro_sql = " Campo Tipo de Despacho não informado.";
+        $this->erro_campo = "p78_situacao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($p78_sequencial!=null){
        $sql .= " p78_sequencial = $this->p78_sequencial";
