@@ -762,8 +762,8 @@ if (isset($p->incluir)) {
            $clorcprojativ->o55_instit             = $oConc->o55_instit;
            $clorcprojativ->o55_tipoacao           = $oConc->o55_tipoacao==""?"0":$oConc->o55_tipoacao;
            $clorcprojativ->o55_orcproduto         = $oConc->o55_orcproduto==""?"0":$oConc->o55_orcproduto;
-           $clorcprojativ->o55_tipoensino         = $oConc->o55_tipoensino==""?"0":$oConc->o55_tipoensino;
-           $clorcprojativ->o55_tipopasta          = $oConc->o55_tipopasta==""?"0":$oConc->o55_tipopasta;
+           $clorcprojativ->o55_tipoensino         = $oConc->o55_tipoensino==""||$oConc->o55_tipoensino=="0"?"7":$oConc->o55_tipoensino;
+           $clorcprojativ->o55_tipopasta          = $oConc->o55_tipopasta==""||$oConc->o55_tipopasta=="0"?"3":$oConc->o55_tipopasta;
            $clorcprojativ->o55_formaimplementacao = $oConc->o55_formaimplementacao==""?"0":$oConc->o55_formaimplementacao;
            $clorcprojativ->incluir($clorcprojativ->o55_anousu, $oConc->o55_projativ);
            if ($clorcprojativ->erro_status == "0") {
