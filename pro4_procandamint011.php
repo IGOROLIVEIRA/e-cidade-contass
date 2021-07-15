@@ -54,15 +54,8 @@ if ( isset($incluir) ) {
 
   db_inicio_transacao();
 
-  $result = $clprotprocesso->sql_record($clprotprocesso->sql_query_file($p58_codproc,"p58_codandam,p58_situacao"));
+  $result = $clprotprocesso->sql_record($clprotprocesso->sql_query_file($p58_codproc,"p58_codandam"));
   db_fieldsmemory($result,0);
-  
-  if ( $clprotprocesso->numrows > 0 ) {
-    $resultado  = db_utils::fieldsMemory($result,0);
-          if($resultado->p58_situacao == 2){
-            $valor = 1;
-          }
-  }
 
   $sWhereParametrosProtocolo = "p90_instit = " . db_getsession('DB_instit');
   $sSqlParametrosProtocolo = $clprotparam->sql_query_file(null, '*', null, $sWhereParametrosProtocolo);
@@ -112,7 +105,6 @@ if ( isset($incluir) ) {
   	$clprocandamint->p78_publico  = $p78_publico;
   	$clprocandamint->p78_transint = 'false';
   	$clprocandamint->p78_tipodespacho = $p78_tipodespacho;
-    $clprocandamint->p78_situacao = $valor;
   	$clprocandamint->incluir(null);
 
   	$erro_msg = $clprocandamint->erro_msg;

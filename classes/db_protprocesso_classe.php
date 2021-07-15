@@ -62,7 +62,6 @@ class cl_protprocesso {
     var $p58_numero = null;
     var $p58_ano = 0;
     var $p58_numeracao = 0;
-    var $p58_situacao = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  p58_codproc = int4 = Número de Controle
@@ -82,7 +81,6 @@ class cl_protprocesso {
                  p58_numero = varchar(30) = Número do Processo
                  p58_ano = int4 = Ano do Processo
                  p58_numeracao = int4 = Numeração
-                 p58_situacao = int4 = Situação
                  ";
     //funcao construtor da classe
     function cl_protprocesso() {
@@ -125,7 +123,6 @@ class cl_protprocesso {
             $this->p58_instit = ($this->p58_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["p58_instit"]:$this->p58_instit);
             $this->p58_numero = ($this->p58_numero == ""?@$GLOBALS["HTTP_POST_VARS"]["p58_numero"]:$this->p58_numero);
             $this->p58_ano = ($this->p58_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["p58_ano"]:$this->p58_ano);
-            $this->p58_situacao = ($this->p58_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["p58_situacao"]:$this->p58_situacao);
         }else{
             $this->p58_codproc = ($this->p58_codproc == ""?@$GLOBALS["HTTP_POST_VARS"]["p58_codproc"]:$this->p58_codproc);
         }
@@ -266,14 +263,6 @@ class cl_protprocesso {
             $this->erro_status = "0";
             return false;
         }
-        if(($this->p58_situacao == null) || ($this->p58_situacao == "") ){
-            $this->erro_sql = " Campo Situcação nao declarado.";
-            $this->erro_banco = "Situcao sem valor.";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         $sql = "insert into protprocesso(
                                        p58_codproc
                                       ,p58_codigo
@@ -292,7 +281,6 @@ class cl_protprocesso {
                                       ,p58_numero
                                       ,p58_ano
                                       ,p58_numeracao
-                                      ,p58_situacao
                        )
                 values (
                                 $this->p58_codproc
@@ -312,7 +300,6 @@ class cl_protprocesso {
                                ,'$this->p58_numero'
                                ,$this->p58_ano
                                ,$this->p58_numeracao
-                               ,$this->p58_situacao
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -541,19 +528,6 @@ class cl_protprocesso {
             if(trim($this->p58_ano) == null ){
                 $this->erro_sql = " Campo Ano do Processo nao Informado.";
                 $this->erro_campo = "p58_ano";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if(trim($this->p58_situacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p58_situacao"])){
-            $sql  .= $virgula." p58_situacao = $this->p58_situacao ";
-            $virgula = ",";
-            if(trim($this->p58_situacao) == null ){
-                $this->erro_sql = " Campo Situação nao Informado.";  
-                $this->erro_campo = "p58_situacao";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1320,7 +1294,7 @@ class cl_protprocesso {
 
             $sSqlBuscaProcessos .= "       left join proctransferproc on p63_codproc = p58_codproc ";
             $sSqlBuscaProcessos .= "       left join procandam        on p61_codproc = p58_codproc ";
-            $sSqlBuscaProcessos .= " where p63_codproc is null {$sWhere} order by {$sOrdem}"; //and p61_codproc is null (retirado)
+            $sSqlBuscaProcessos .= " where p63_codproc is null and p61_codproc is null {$sWhere} order by {$sOrdem}";
         } else {
 
             $sSqlBuscaProcessos .= " where case ";

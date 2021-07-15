@@ -41,7 +41,6 @@ require_once("classes/db_procprocessodoc_classe.php");
 require_once("classes/db_arrenumcgm_classe.php");
 require_once("classes/db_protparam_classe.php");
 require_once("classes/db_numeracaotipoproc_classe.php");
-require_once("classes/db_procandam_classe.php");
 require_once("dbforms/db_funcoes.php");
 
 db_app::import("protocolo.ProcessoProtocoloNumeracao");
@@ -60,7 +59,6 @@ $clproctipovar     = new cl_proctipovar;
 $clandpadrao       = new cl_andpadrao;
 $clarrenumcgm      = new cl_arrenumcgm;
 $clnumeracaotipoproc = new cl_numeracaotipoproc;
-$clprocandam    = new cl_procandam;
 
 $db_opcao = 1;
 $sqlerro  = false;
@@ -111,7 +109,6 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
        $clprotprocesso->p58_numero     = "{$iNumeroProcesso}";
        $clprotprocesso->p58_ano        = db_getsession("DB_anousu");
        $clprotprocesso->p58_numeracao  = $p58_numeracao;
-       $clprotprocesso->p58_situacao   = 1;
        $clprotprocesso->incluir($p58_codproc);
 
        $p58_codproc = $clprotprocesso->p58_codproc;
@@ -122,30 +119,6 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
        $clnumeracaotipoproc->p200_codigo = $p200_codigo;
        $clnumeracaotipoproc->p200_numeracao = $p58_numeracao;
        $clnumeracaotipoproc->alterar($p200_codigo);
-
-        //Inclui na tabela
-          $clprocandam->p61_despacho   = " ";
-          $clprocandam->p61_publico    = "false";
-					$clprocandam->p61_codproc    = $p58_codproc;
-					$data                        = date('Y-m-d');
-					$hora                        = db_hora();
-					$clprocandam->p61_dtandam    = $data;
-					$clprocandam->p61_hora       = $hora;
-          $clprocandam->p61_situacao   = 1;
-					$clprocandam->p61_id_usuario = db_getsession("DB_id_usuario");
-					$clprocandam->p61_coddepto   = db_getsession("DB_coddepto");;
-					$clprocandam->incluir(null);
-       
-        //Atualiza o processo com chave estrageira da tabela procandam
-        
-          $clprotprocesso->p58_codproc    = $p58_codproc;
-					$clprotprocesso->p58_codandam   = $clprocandam->p61_codandam;
-					$clprotprocesso->p58_despacho   = " ";
-					$clprotprocesso->p58_numeracao  = $p58_numeracao;
-          $clprotprocesso->p58_situacao   = 1; 
-					$clprotprocesso->p58_instit     = db_getsession("DB_instit");
-          $clprotprocesso->p58_ano        = db_getsession("DB_anousu");  
-					$clprotprocesso->alterar($p58_codproc); 
 
 
        if ( $clprotprocesso->erro_status == '0' ) {
