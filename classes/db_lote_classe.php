@@ -125,13 +125,7 @@ class cl_lote {
        return false;
      }
      if($this->j34_distrito == null ){
-       $this->erro_sql = " Campo Quadra nao Informado.";
-       $this->erro_campo = "j34_distrito";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+        $this->j34_distrito = "0";
      }
      if($this->j34_lote == null ){
        $this->erro_sql = " Campo Lote nao Informado.";

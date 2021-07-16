@@ -1067,20 +1067,20 @@ if ( isset($oGet->dadosimovel) ) {
 
       $pdf->setfont('arial','B',$iFontBic);
       $pdf->cell(25, $iAlt, 'Matricula'             ,0,0,"L",0);
-      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, 'Distrito'              ,0,0,"L",0):'';      
+      ($db21_usadistritounidade == 't') ? $pdf->cell(25, $iAlt, 'Distrito'              ,0,0,"L",0) : '';      
       $pdf->cell(25, $iAlt, 'Setor'                 ,0,0,"L",0);
       $pdf->cell(25, $iAlt, 'Quadra'                ,0,0,"L",0);
       $pdf->cell(25, $iAlt, 'Lote'                  ,0,0,"L",0);
-      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, 'Unidade'               ,0,0,"L",0):'';      
+      ($db21_usadistritounidade == 't') ? $pdf->cell(25, $iAlt, 'Unidade'               ,0,0,"L",0) : '';      
       $pdf->cell(93, $iAlt, 'Referência Anterior'   ,0,1,"L",0);
 
       $pdf->setfont('arial','',$iFontBic);
       $pdf->cell(25, $iAlt, $oDadoImovel->iMatricula    ,0,0,"L",0);
-      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, $oDadoImovel->iDistrito        ,0,0,"L",0):'';      
+      ($db21_usadistritounidade == 't') ? $pdf->cell(25, $iAlt, $oDadoImovel->iDistrito        ,0,0,"L",0) : '';      
       $pdf->cell(25, $iAlt, $oDadoImovel->iSetor        ,0,0,"L",0);
       $pdf->cell(25, $iAlt, $oDadoImovel->iQuadra       ,0,0,"L",0);
       $pdf->cell(25, $iAlt, $oDadoImovel->iLote         ,0,0,"L",0);
-      ($db21_usadistritounidade=='t')?$pdf->cell(25, $iAlt, $oDadoImovel->iUnidade         ,0,0,"L",0):'';      
+      ($db21_usadistritounidade == 't') ? $pdf->cell(25, $iAlt, $oDadoImovel->iUnidade         ,0,0,"L",0) : '';      
       $pdf->cell(93, $iAlt, $oDadoImovel->sRefAnterior  ,0,1,"L",0);
 
       $pdf->cell(193, 1, '' ,0,1,"L",0);

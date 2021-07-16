@@ -207,7 +207,7 @@ $pdf->Cell(35,$alt,"Local da obra: ","L",0,"L",0);
 $pdf->SetFont('Arial','',8);
 $pdf->Cell(0,$alt,"o mesmo","R",1,"L",0);
 
-if($db21_usadistritounidade=='t'){
+if($db21_usadistritounidade == 't'){
   $pdf->SetFont('Arial','B',8);
   $pdf->Cell(15,$alt,"Distrito: ","L",0,"L",0);
   $pdf->SetFont('Arial','',8);

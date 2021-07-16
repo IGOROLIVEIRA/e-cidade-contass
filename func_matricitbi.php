@@ -117,17 +117,17 @@ $clrotulo->label("j04_loteregimo");
 
 <tr> 
   <td title="<?=$Tj34_setor?>">
-    <?=($db21_usadistritounidade=='t')?$Lj34_distrito.'/'.$Lj34_setor.'/'.$Lj34_quadra.'/'.$Lj34_lote.'/'.$Lj01_unidade:$Lj34_setor.'/'.$Lj34_quadra.'/'.$Lj34_lote?>
+    <?=($db21_usadistritounidade == 't') ? $Lj34_distrito.'/'.$Lj34_setor.'/'.$Lj34_quadra.'/'.$Lj34_lote.'/'.$Lj01_unidade : $Lj34_setor.'/'.$Lj34_quadra.'/'.$Lj34_lote?>
     
   </td>
   <td> 
-    <?=($db21_usadistritounidade=='t')?db_input("j34_distrito" ,10,$Ij34_distrito,true,'text',4):''?>  
+    <?=($db21_usadistritounidade == 't') ? db_input("j34_distrito" ,10,$Ij34_distrito,true,'text',4) : ''?>  
     <?    
       db_input("j34_setor" ,10,$Ij34_setor,true,'text',4);
       db_input("j34_quadra",10,$Ij34_quadra,true,'text',4);
       db_input("j34_lote"  ,10,$Ij34_lote,true,'text',4);    
     ?>
-    <?=($db21_usadistritounidade=='t')?db_input("j01_unidade"  ,10,$Ij01_unidade,true,'text',4):''?>
+    <?=($db21_usadistritounidade == 't') ? db_input("j01_unidade"  ,10,$Ij01_unidade,true,'text',4) : ''?>
   </td>
 </tr>
 

@@ -30,6 +30,7 @@
  * @version $Revision: 1.211 $
  */
  $lNovaEmissao   = false;
+ 
 if(isset($_GET['sessao'])){
   $lNovaEmissao   = true;
   require_once("fpdf151/scpdf.php");
@@ -68,6 +69,8 @@ if(isset($_GET['sessao'])){
 db_postmemory($HTTP_SERVER_VARS);
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($aDados);
+db_sel_instit(null, "db21_usadistritounidade");
+
 $oPost = db_utils::postMemory($aDados);
 $oGet  = db_utils::postMemory($_GET);
 $cldb_bancos = new cl_db_bancos;
@@ -907,10 +910,8 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
                                    then proprietario.j13_descr
                                    else ''
                                end as j13_descr,";
-  $sSqlIdentificacao .= ($db21_usadistritounidade=='t')?
-                              "proprietario.j34_distrito||'.'||proprietario.j34_setor||'.'||proprietario.j34_quadra||'.'||proprietario.j34_lote||'.'||proprietario.j01_unidade as sql,"
-                              :
-                              "proprietario.j34_setor||'.'||proprietario.j34_quadra||'.'||proprietario.j34_lote as sql,";
+  $sSqlIdentificacao .= ($db21_usadistritounidade == 't' ) ? 
+                              "proprietario.j34_distrito||'.'||proprietario.j34_setor||'.'||proprietario.j34_quadra||'.'||proprietario.j34_lote||'.'||proprietario.j01_unidade as sql," : "proprietario.j34_setor||'.'||proprietario.j34_quadra||'.'||proprietario.j34_lote as sql,";
   $sSqlIdentificacao .= "                               
                                proprietario.z01_cgccpf,
                                proprietario.z01_bairro,
@@ -930,7 +931,7 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
 
   $ident_tipo_ii = 'Imóvel';
 
-  $numero = $numero." DSQLU: ".$sql;
+  $numero = ($db21_usadistritounidade == 't') ? $numero." DSQLU: ".$sql : $numero." SQL: ".$sql;
 
 } else if(!empty($aDados["ver_inscr"]) || $inscricaorecibo > 0 ) {
 

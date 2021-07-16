@@ -120,13 +120,7 @@ class cl_iptubase {
        return false;
      }
      if($this->j01_unidade == null ){ 
-       $this->erro_sql = " Campo Unidade nao Informado.";
-       $this->erro_campo = "j01_unidade";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+       $this->j01_unidade = "0";
      }
      if($this->j01_baixa == null ){ 
        $this->j01_baixa = "null";

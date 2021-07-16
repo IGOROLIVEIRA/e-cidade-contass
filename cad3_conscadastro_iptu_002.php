@@ -232,15 +232,15 @@ if ($linhasareaconst>0){
     <td align="left" bgcolor="#FFFFFF" width="35"> <font color="#666666"><strong>&nbsp;<?=@$j91_codigo . " - " . @$j90_descr?></strong></font></td>
   </tr>
   <tr>
-    <td align="right" bgcolor="#CCCCCC"><?=($db21_usadistritounidade == 't')?'Distrito/Setor/Quadra/Lote/Unidade':'Setor/Quadra/Lote:' ?> &nbsp;</td>
+    <td align="right" bgcolor="#CCCCCC"><?=($db21_usadistritounidade == 't') ? 'Distrito/Setor/Quadra/Lote/Unidade' : 'Setor/Quadra/Lote:' ?> &nbsp;</td>
     <td bgcolor="#FFFFFF"><font color="#666666" colspan="2"><strong>&nbsp;
-      <?=($db21_usadistritounidade == 't')?$j34_distrito.'/&nbsp;':'' ?>
+      <?=($db21_usadistritounidade == 't') ? $j34_distrito.'/&nbsp;' : '' ?>
       <?=$j34_setor?>
       /&nbsp;
       <?=$j34_quadra?>
-      /&nbsp;
-      <?=$j34_lote?>
-      <?=($db21_usadistritounidade == 't')?'/&nbsp;'.$j01_unidade:'' ?>
+      / <font color="#666666">
+      <?=$j34_lote?>      
+      <?=($db21_usadistritounidade == 't') ? '/&nbsp;'.$j01_unidade : '' ?>
       <?
        include("classes/db_setor_classe.php");
        $clsetor = new cl_setor;

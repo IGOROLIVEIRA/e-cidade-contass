@@ -104,7 +104,7 @@ function js_verinome(){
 	   db_input('j40_refant',20,$Ij40_refant,true,'text',$db_opcao,"")
 	   ?></td>
 			</tr>
-      <?if($db21_usadistritounidade=='t'){?>
+      <?if($db21_usadistritounidade == 't'){?>
       <tr>
         <td nowrap title="<?=@$Tj01_unidade?>"><?=@$Lj01_unidade?></td>
         <td><?

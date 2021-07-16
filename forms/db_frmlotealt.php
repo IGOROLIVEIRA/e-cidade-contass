@@ -149,7 +149,7 @@ function js_checa() {
   }
  //==========================================================================================================
   ?>
-  <?if($db21_usadistritounidade=='t'){?>
+  <?if($db21_usadistritounidade == 't'){?>
   <tr>
     <td nowrap title="<?=@$Tj34_distrito?>">
        <?=@$Lj34_distrito?>

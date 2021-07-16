@@ -320,17 +320,17 @@ function js_comTeclaEnter(evt) {
 					</tr>
 					<tr title="<?=@$Tj34_setor?>">
 						
-						<td nowrap><?=($db21_usadistritounidade=='t')?str_replace(":","",$Lj34_distrito)."/".str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".str_replace(":","",$Lj34_lote)."/".$Lj01_unidade:str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".$Lj34_lote?>
+						<td nowrap><?=($db21_usadistritounidade=='t') ? str_replace(":","",$Lj34_distrito)."/".str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".str_replace(":","",$Lj34_lote)."/".$Lj01_unidade : str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".$Lj34_lote?>
 						</td>
-						<td nowrap><?=($db21_usadistritounidade=='t')?
-						db_input('j34_distrito',5,$Ij34_distrito,true,'text',1, "onkeypress='js_comTeclaEnter(event)'").'/':''
+						<td nowrap><?=($db21_usadistritounidade=='t') ? 
+						db_input('j34_distrito',5,$Ij34_distrito,true,'text',1, "onkeypress='js_comTeclaEnter(event)'").'/' : ''
 						?><?
 						db_input('j34_setor',5,$Ij34_setor,true,'text',1, "onkeypress='js_comTeclaEnter(event)'")
 						?>/ <?
 						db_input('j34_quadra',5,$Ij34_quadra,true,'text',1, "onkeypress='js_comTeclaEnter(event)'")
 						?>/ <?
 						db_input('j34_lote',5,$Ij34_lote,true,'text',1, "onkeypress='js_comTeclaEnter(event)'")
-						?><?=($db21_usadistritounidade=='t')?'/'.db_input('j01_unidade',5,$Ij01_unidade,true,'text',1, "onkeypress='js_comTeclaEnter(event)'"):''
+						?><?=($db21_usadistritounidade=='t') ? '/'.db_input('j01_unidade',5,$Ij01_unidade,true,'text',1, "onkeypress='js_comTeclaEnter(event)'") : ''
 						?></td>
 					</tr>
 					<?php  if ($rsSetorLoc) {?>

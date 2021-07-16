@@ -165,13 +165,13 @@ MM_reloadPage(true);
      <th class="borda" style="font-size:12px" nowrap>Compl</th>
      <th class="borda" style="font-size:12px" nowrap>Bairro</th>
      <th class="borda" style="font-size:12px" nowrap>ID Lote</th>
-     <?if($db21_usadistritounidade=='t'){?>
+     <?if($db21_usadistritounidade == 't'){?>
      <th class="borda" style="font-size:12px" nowrap>Distrito</th>
      <?}?>
      <th class="borda" style="font-size:12px" nowrap>Setor</th>
      <th class="borda" style="font-size:12px" nowrap>Quadra</th>
      <th class="borda" style="font-size:12px" nowrap>Lote</th>
-     <?if($db21_usadistritounidade=='t'){?>
+     <?if($db21_usadistritounidade == 't'){?>
      <th class="borda" style="font-size:12px" nowrap>Unidade</th>
      <?}?>
      <th class="borda" style="font-size:12px" nowrap>Área M2</th>
@@ -223,13 +223,13 @@ $cor="#EFE029";
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j39_compl?></td>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j13_descr?></td>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j01_idbql?></td>
-           <?if($db21_usadistritounidade=='t'){?>
+           <?if($db21_usadistritounidade == 't'){?>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j34_distrito?></td>
            <?}?>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j34_setor?></td>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j34_quadra?></td>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j34_lote?></td>
-           <?if($db21_usadistritounidade=='t'){?>
+           <?if($db21_usadistritounidade == 't'){?>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j01_unidade?></td>
            <?}?>
            <td align="left" style="font-size:12px" nowrap bgcolor="<?=$cor?>">&nbsp;<?=$j34_area?></td>
