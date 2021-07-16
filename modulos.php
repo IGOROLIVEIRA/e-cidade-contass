@@ -39,6 +39,28 @@ if(!session_is_registered("DB_instit")) {
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_db_config_classe.php");
+
+$cldbconfig         = new cl_db_config();
+$codigo = db_getsession("DB_instit");
+$result = $cldbconfig->sql_record($cldbconfig->sql_query(null,"*",null,"codigo = {$codigo}"));
+
+
+
+if($cldbconfig->numrows>0){
+    $resultado = db_utils::fieldsMemory($result,0);
+    $valorOrde = $resultado->orderdepart;
+    
+    if($valorOrde==1){
+        $ordernar = "order by d.descrdepto";
+    }else if($valorOrde==2){
+        $ordernar = "order by d.coddepto ASC";
+    }else if($valorOrde==3){
+        $ordernar = "order by d.coddepto DESC";
+    }else if($valorOrde==null){
+        $ordernar = "order by u.db17_ordem";
+    }
+}
 
 if(isset($modulo) and is_numeric($modulo)){
 
@@ -282,7 +304,7 @@ if(pg_numrows($result) == 0) {
                             $sSql .= "   where u.id_usuario = ".db_getsession("DB_id_usuario");
                             $sSql .= "     and o58_instit   = ".db_getsession("DB_instit");
                             $sSql .= "     and o58_anousu   = ".db_getsession("DB_anousu");
-                            $sSql .= "order by u.db17_ordem";
+                            $sSql .= $ordernar; 
 
                             /**
                              * Se o usuario tiver departamento, aparecem os departamentos
@@ -294,7 +316,7 @@ if(pg_numrows($result) == 0) {
                             $sSql  .= "   where instit       = ".db_getsession("DB_instit");
                             $sSql  .= "     and u.id_usuario = ".db_getsession("DB_id_usuario");
                             $sSql  .= "     and (d.limite is null or d.limite >= '" . date("Y-m-d",db_getsession("DB_datausu")) . "')";
-                            $sSql  .= "order by u.db17_ordem ";
+                            $sSql  .= $ordernar;
                             $result = db_query($sSql) or die($sSql);
 
                             if(pg_numrows($result) == 0){
@@ -346,9 +368,9 @@ if(pg_numrows($result) == 0) {
 
                                 echo "Departamento:&nbsp;&nbsp;</td><td>";
                                 $mostra_menu = true;
-                                $result      = db_query($sSql) or die($sSql);
+                                $result      = db_query($sSql) or die($sSql); // ordenar por $descrdepto
                                 db_selectrecord('coddepto',$result,true,2,'','','','','js_mostramodulo(document.form1.coddepto.value,document.form1.coddeptodescr.options.text)');
-
+                                echo $teste;
                                 if(!session_is_registered("DB_coddepto")){
 
                                     db_putsession("DB_coddepto",pg_result($result,0,0));
