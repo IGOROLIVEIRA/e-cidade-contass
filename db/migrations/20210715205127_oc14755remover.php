@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc14755 extends AbstractMigration
+class Oc14755remover extends AbstractMigration
 {
     /**
      * Change Method.
@@ -27,11 +27,11 @@ class Oc14755 extends AbstractMigration
      */
     public function up()
     {
-        $sSql = "
-        ALTER TABLE procandamint ADD COLUMN p78_situacao integer;
-        ALTER TABLE procandam ADD COLUMN p61_situacao integer;
-        ALTER TABLE protprocesso ADD COLUMN p58_situacao integer;        
+        $sql = "
+        ALTER TABLE procandamint DROP COLUMN p78_situacao;
+        ALTER TABLE procandam DROP COLUMN p61_situacao;
+        ALTER TABLE protprocesso DROP COLUMN p58_situacao;
         ";
-        $this->execute($sSql);
+        $this->execute($sql);
     }
 }

@@ -52,8 +52,7 @@ class cl_procandam {
    var $p61_despacho = null; 
    var $p61_coddepto = 0; 
    var $p61_publico = 'f'; 
-   var $p61_hora = null;
-   var $p61_situacao = 0; 
+   var $p61_hora = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  p61_codandam = int4 = Código andamento 
@@ -63,8 +62,7 @@ class cl_procandam {
                  p61_despacho = text = Parecer 
                  p61_coddepto = int4 = departamento 
                  p61_publico = bool = Despacho Publico 
-                 p61_hora = varchar(5) = Hora
-                 p61_situacao = int4 = Situação 
+                 p61_hora = varchar(5) = Hora 
                  ";
    //funcao construtor da classe 
    function cl_procandam() { 
@@ -99,7 +97,6 @@ class cl_procandam {
        $this->p61_coddepto = ($this->p61_coddepto == ""?@$GLOBALS["HTTP_POST_VARS"]["p61_coddepto"]:$this->p61_coddepto);
        $this->p61_publico = ($this->p61_publico == "f"?@$GLOBALS["HTTP_POST_VARS"]["p61_publico"]:$this->p61_publico);
        $this->p61_hora = ($this->p61_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["p61_hora"]:$this->p61_hora);
-       $this->p61_situacao = ($this->p61_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["p61_situacao"]:$this->p61_situacao);
      }else{
        $this->p61_codandam = ($this->p61_codandam == ""?@$GLOBALS["HTTP_POST_VARS"]["p61_codandam"]:$this->p61_codandam);
      }
@@ -161,15 +158,6 @@ class cl_procandam {
        $this->erro_status = "0";
        return false;
      }
-     if($this->p61_situacao == null ){ 
-      $this->erro_sql = " Campo Hora nao Informado.";
-      $this->erro_campo = "p61_situacao";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
      if($p61_codandam == "" || $p61_codandam == null ){
        $result = db_query("select nextval('procandam_p61_codandam_seq')"); 
        if($result==false){
@@ -210,8 +198,7 @@ class cl_procandam {
                                       ,p61_despacho 
                                       ,p61_coddepto 
                                       ,p61_publico 
-                                      ,p61_hora
-                                      ,p61_situacao 
+                                      ,p61_hora 
                        )
                 values (
                                 $this->p61_codandam 
@@ -221,8 +208,7 @@ class cl_procandam {
                                ,'$this->p61_despacho' 
                                ,$this->p61_coddepto 
                                ,'$this->p61_publico' 
-                               ,'$this->p61_hora'
-                               ,$this->p61_situacao 
+                               ,'$this->p61_hora' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -379,19 +365,6 @@ class cl_procandam {
          return false;
        }
      }
-     if(trim($this->p61_situacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p61_situacao"])){ 
-      $sql  .= $virgula." p61_situacao = '$this->p61_situacao' ";
-      $virgula = ",";
-      if(trim($this->p61_situacao) == null ){ 
-        $this->erro_sql = " Campo Situação nao Informado.";
-        $this->erro_campo = "p61_situacao";   
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
      $sql .= " where ";
      if($p61_codandam!=null){
        $sql .= " p61_codandam = $this->p61_codandam";
@@ -419,8 +392,6 @@ class cl_procandam {
            $resac = db_query("insert into db_acount values($acount,407,6521,'".AddSlashes(pg_result($resaco,$conresaco,'p61_publico'))."','$this->p61_publico',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["p61_hora"]))
            $resac = db_query("insert into db_acount values($acount,407,6561,'".AddSlashes(pg_result($resaco,$conresaco,'p61_hora'))."','$this->p61_hora',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         //if(isset($GLOBALS["HTTP_POST_VARS"]["p61_situacao"]))
-           //$resac = db_query("insert into db_acount values($acount,407,6561,'".AddSlashes(pg_result($resaco,$conresaco,'p61_situacao'))."','$this->p61_hora',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");  
        }
      }
      $result = db_query($sql);
