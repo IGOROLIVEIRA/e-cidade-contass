@@ -11,27 +11,52 @@ $db_opcao       = 1;
 $db_opcao_orig  = 1;
 $db_botao       = true;
 $sql_erro       = false;
+$iAnoUsu        = db_getsession("DB_anousu");
+$iInstit        = db_getsession("DB_instit");
 
 if (isset($incluir)) {
-  
-    db_inicio_transacao();
     
-    $clrhvinculodotpatronais->rh171_anousu = db_getsession("DB_anousu");
-    $clrhvinculodotpatronais->rh171_instit = db_getsession("DB_instit");
-    
-    for ($iContMes = $rh171_mes; $iContMes <= 13; $iContMes++) {
-        
-        $clrhvinculodotpatronais->rh171_mes = $iContMes;
-        $clrhvinculodotpatronais->incluir();
+    $clrhvinculodotpatronais->rh171_anousu = $iAnoUsu;
+    $clrhvinculodotpatronais->rh171_instit = $iInstit;
 
-        if ($clrhvinculodotpatronais->erro_status == 0) {
-            $sql_erro = true;
-            break;
-        }
+    $oDaoRhVinculoDotPatronais = db_utils::getDao('rhvinculodotpatronais');
+    $sWhere      = " rh171_orgaoorig = {$rh171_orgaoorig} ";
+    $sWhere     .= " and rh171_unidadeorig = {$rh171_unidadeorig} ";
+    $sWhere     .= " and rh171_projativorig = {$rh171_projativorig} ";
+    $sWhere     .= " and rh171_recursoorig = {$rh171_recursoorig} ";
+    $sWhere     .= " and rh171_anousu = {$iAnoUsu} ";
+    $sWhere     .= " and rh171_instit = {$iInstit} ";
+    
+    $rsVinculo  = $oDaoRhVinculoDotPatronais->sql_record($oDaoRhVinculoDotPatronais->sql_query_file(null, "*", null, $sWhere));
+
+    if ($oDaoRhVinculoDotPatronais->numrows > 0) {
+        echo 'erro<br>';
+        $clrhvinculodotpatronais->erro_msg      = "Já existe de/para cadastrado para dotação original informada.";
+        $clrhvinculodotpatronais->erro_status   = 0;
+        $sql_erro = true;
 
     }
 
-    db_fim_transacao($sql_erro);
+    if (!$sql_erro) {
+
+        db_inicio_transacao();
+    
+        for ($iContMes = $rh171_mes; $iContMes <= 13; $iContMes++) {
+            
+            $clrhvinculodotpatronais->rh171_mes = $iContMes;
+            $clrhvinculodotpatronais->incluir();
+
+            if ($clrhvinculodotpatronais->erro_status == 0) {
+                $sql_erro = true;
+                break;
+            }
+
+        }
+
+        db_fim_transacao($sql_erro);
+
+    }
+
 }
 ?>
 <html>
