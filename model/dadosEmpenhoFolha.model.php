@@ -1898,14 +1898,6 @@ class dadosEmpenhoFolha {
         $sSqlDadosRetencao .= "                 {$sSigla}_pd         as pd,                                 ";
         $sSqlDadosRetencao .= "                 rh75_retencaotiporec as retencao,                           ";
         $sSqlDadosRetencao .= "                 {$sSigla}_valor      as valor                              ";
-        // $sSqlDadosRetencao .= "                 case                                                        ";
-        // $sSqlDadosRetencao .= "                     when {$sSigla}_rubric in ('0433','0499','0501','0502','0680','0681','4499','R919','R921') then {$sSigla}_valor ";
-        // $sSqlDadosRetencao .= "                     else 0                                                  ";
-        // $sSqlDadosRetencao .= "                 end as salario_familia,                                     ";
-        // $sSqlDadosRetencao .= "                 case                                                        ";
-        // $sSqlDadosRetencao .= "                     when {$sSigla}_rubric in ('0682', 'R920') then {$sSigla}_valor      ";
-        // $sSqlDadosRetencao .= "                     else 0                                                  ";
-        // $sSqlDadosRetencao .= "                 end as salario_maternidade                                  "; 
         $sSqlDadosRetencao .= "   from {$sTabela}                                                           ";
         $sSqlDadosRetencao .= "        inner join rhpessoalmov     on rh02_anousu    = {$sSigla}_anousu     ";
         $sSqlDadosRetencao .= "                                   and rh02_mesusu    = {$sSigla}_mesusu     ";
@@ -1917,7 +1909,6 @@ class dadosEmpenhoFolha {
         $sSqlDadosRetencao .= "    and {$sSigla}_anousu      = {$iAnoUsu}                                   ";
         $sSqlDadosRetencao .= "    and {$sSigla}_mesusu      = {$iMesUsu}                                   ";
         $sSqlDadosRetencao .= "    and rh02_instit           = {$iInstit}                                   ";
-        // $sSqlDadosRetencao .= "    and {$sSigla}_rubric in ('R992','0433','0499','0501','0502','0680','0681','4499','R919','R921','0682','R920') ";
         
         if ( $sSigla == 'r48' ) {
             $sSqlDadosRetencao .= "  and {$sSigla}_semest      = {$sSemestre}                               ";
