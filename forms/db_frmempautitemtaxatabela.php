@@ -62,96 +62,6 @@ $clrotulo->label("pc01_descrmater");
 <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
 
-<script>
-  function js_calcula(origem) {
-    obj = document.form1;
-    quant = new Number(obj.e55_quant.value);
-    uni = new Number(obj.e55_vluni.value);
-    tot = new Number(obj.e55_vltot.value).toFixed(2);
-
-    conQt = 'false';
-
-    if (document.querySelector('#lControlaQuantidade')) {
-      conQt = obj.lControlaQuantidade.value;
-    }
-
-    if (conQt == 'true') {
-      t = new Number(uni * quant);
-      obj.e55_vltot.value = t.toFixed(2);
-    }
-
-    if (origem == 'quant' && quant != '' && conQt == 'false') {
-      if (isNaN(quant)) {
-        obj.e55_quant.focus();
-        return false;
-      }
-      if (tot != 0) {
-        t = new Number(tot / quant);
-        obj.e55_vltot.value = tot;
-        obj.e55_vluni.value = t.toFixed('<?= $e30_numdec ?>');
-      } else {
-        t = new Number(uni * quant);
-        obj.e55_vltot.value = t.toFixed(2);
-      }
-    }
-
-    if (origem == "uni") {
-      if (isNaN(uni)) {
-        //alert("Valor unico inváido!");
-        obj.e55_vluni.focus();
-        return false;
-      }
-      t = new Number(uni * quant);
-      obj.e55_vltot.value = t.toFixed(2);
-    }
-
-    if (origem == "tot" && conQt == 'false') {
-      if (isNaN(tot)) {
-        //alert("Valor total inváido!");
-        obj.e55_vltot.focus();
-        return false;
-      }
-      if (quant != 0) {
-        t = new Number(tot / quant);
-        obj.e55_vltot.value = tot;
-        obj.e55_vluni.value = t.toFixed('<?= $e30_numdec ?>');
-      }
-    }
-
-  }
-
-  function js_verificaControlaQuantidade(lControla) {
-    <?php
-    if ($db_opcao == 3) {
-      echo "return;";
-    }
-    ?>
-    if (lControla == "true") {
-      $("e55_quant").style.backgroundColor = "#FFFFFF";
-      $("e55_quant").removeAttribute("readonly");
-      $("e55_vluni").style.backgroundColor = "#DEB887";
-      $("e55_vluni").setAttribute("readonly", true);
-    } else {
-      $("e55_quant").style.backgroundColor = "#DEB887";
-      $("e55_quant").setAttribute("readonly", true);
-      //$("e55_quant").value = 1;
-      $("e55_vluni").style.backgroundColor = "#FFFFFF";
-      $("e55_vluni").removeAttribute("readonly");
-      js_calcula('uni');
-    }
-  }
-
-  function js_troca(codele) {
-
-    descr = eval("document.form1.ele_" + codele + ".value");
-    arr = descr.split("#");
-
-    elemento = arr[0];
-    descricao = arr[1];
-    document.form1.elemento01.value = elemento;
-    document.form1.o56_descr.value = descricao;
-  }
-</script>
 <form name="form1" method="post" action="">
   <input type="hidden" id="pc80_criterioadjudicacao" name="pc80_criterioadjudicacao">
   <input type="hidden" id="e55_quant_ant" name="e55_quant_ant" value="<?= $e55_quant ?>">
@@ -214,7 +124,7 @@ $clrotulo->label("pc01_descrmater");
           <td>
             <?
             $aDescAutomatico = array("f" => "Não", "t" => "Sim");
-            db_select("descauto", $aDescAutomatico, true, $db_opcao);
+            db_select("descauto", $aDescAutomatico, true, $db_opcao, "onchange='js_desconto(this.value)'");
             ?>
           </td>
         </tr>
@@ -374,6 +284,21 @@ $clrotulo->label("pc01_descrmater");
     js_loadTable();
   }
 
+  function js_desconto(obj) {
+    console.log(obj);
+    if (obj == 't') {
+      $("#mytable tr").each(function() {
+        $(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
+        $(this).find("td:eq(7) input").attr('readonly', true);
+      });
+    } else {
+      $("#mytable tr").each(function() {
+        $(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
+        $(this).find("td:eq(7) input").attr('readonly', false);
+      });
+    }
+  }
+
   function js_verificar() {
 
     let qt = new Number(document.form1.e55_quant.value);
@@ -408,39 +333,6 @@ $clrotulo->label("pc01_descrmater");
     return true;
   }
 
-  function js_consulta() {
-    var opcao = document.createElement("input");
-    opcao.setAttribute("type", "hidden");
-    opcao.setAttribute("name", "consultando");
-    opcao.setAttribute("value", "true");
-    document.form1.appendChild(opcao);
-    <?
-    if (isset($opcao) && $opcao == "alterar") {
-    ?>
-      var opcao = document.createElement("input");
-      opcao.setAttribute("type", "hidden");
-      opcao.setAttribute("name", "opcao");
-      opcao.setAttribute("value", "alterar");
-      document.form1.appendChild(opcao);
-    <?
-    }
-    ?>
-    document.form1.submit();
-  }
-
-  function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_empautitem', 'func_empautitem.php?funcao_js=parent.js_preenchepesquisa|e55_autori|e55_sequen', 'Pesquisa', true);
-  }
-
-  function js_preenchepesquisa(chave, chave1) {
-    db_iframe_empautitem.hide();
-    <?
-    if ($db_opcao != 1) {
-      echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave+'&chavepesquisa1='+chave1";
-    }
-    ?>
-  }
-
   function js_removeVirgula(valor) {
     let valor_unitario = '';
     if (valor.includes('.') && valor.includes(',')) {
@@ -452,17 +344,160 @@ $clrotulo->label("pc01_descrmater");
     }
   }
 
-  <?
-  if (isset($incluir) || isset($alterar) || isset($excluir)) {
 
-    echo "\n\ntop.corpo.iframe_empautidot.location.href =  'emp1_empautidottaxatabela001.php?anulacao=true&e56_autori=$e55_autori';\n";
-  }
-  ?>
+  function js_calcula(origem) {
 
-  <? if (isset($numrows99) && $numrows99 > 0) { ?>
-    codele = document.form1.pc07_codele.value;
-    if (codele != '') {
-      js_troca(codele);
+    const item = origem.id.split('_');
+
+    const id = item[1];
+
+    quant = new Number($('#qtd_' + id).val());
+    uni = new Number($('#vlrunit_' + id).val());
+    tot = new Number($('#total_' + id).val()).toFixed(2);
+
+    conQt = 'false';
+
+    // if (document.querySelector('#lControlaQuantidade')) {
+    //   conQt = obj.lControlaQuantidade.value;
+    // }
+
+    if (conQt == 'true') {
+      t = new Number(uni * quant);
+      $('#total_' + id).val(t.toFixed(2));
     }
-  <? } ?>
+
+    if (item[0] == 'qtd' && quant != '' && conQt == 'false') {
+      if (isNaN(quant)) {
+        $('#qtd_' + id).focus();
+        return false;
+      }
+      if (tot != 0) {
+        t = new Number(tot / quant);
+        $('#total_' + id).val(tot);
+
+        $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
+      } else {
+        t = new Number(uni * quant);
+        $('#total_' + id).val(t.toFixed(2));
+      }
+    }
+
+    if (item[0] == "vlrunit") {
+      if (isNaN(uni)) {
+        //alert("Valor unico inváido!");
+        $('#vlrunit_' + id).focus();
+        return false;
+      }
+      t = new Number(uni * quant);
+      $('#total_' + id).val(t.toFixed(2));
+    }
+
+    if (item[0] == "total" && conQt == 'false') {
+      if (isNaN(tot)) {
+        //alert("Valor total inváido!");
+        $('#total_' + id).focus();
+        return false;
+      }
+      if (quant != 0) {
+        t = new Number(tot / quant);
+        $('#total_' + id).val(tot);
+        $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
+      }
+    }
+
+  }
+
+  // function js_consultaValores(params) {
+  //   novoAjax(params, (e) => {
+  //     let totitens = JSON.parse(e.responseText).itens;
+  //     document.form1.utilizado.value = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0";
+  //     document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
+
+  //     js_consulta();
+
+  //     document.form1.e55_quant.focus();
+  //   });
+  // }
+
+  function consultaValores(origem) {
+
+    const item = origem.id.split('_');
+
+    const id = item[1];
+
+    var params = {
+      action: 'verificaSaldoCriterio',
+      e55_item: id,
+      e55_autori: $('#e55_autori').val(),
+      cgm: <?php echo $z01_numcgm ?>,
+      //tipoitem: chave8,
+      //pc94_sequencial: chave9,
+      total: $('#total_' + id).val()
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "emp1_empautitemtaxatabela.RPC.php",
+      data: params,
+      success: function(data) {
+        console.log(data);
+        //$('#target').html(data.msg);
+      }
+    });
+
+    // var request = new Ajax.Request('lic4_geraAutorizacoes.RPC.php', {
+    //   method: 'post',
+    //   parameters: 'json=' + Object.toJSON(params),
+    //   onComplete: onComplete
+    // });
+
+  }
+
+  // function js_verificaControlaQuantidade(lControla) {
+  //   <?php
+        //   if ($db_opcao == 3) {
+        //     echo "return;";
+        //   }
+        //
+        ?>
+  //   if (lControla == "true") {
+  //     $("e55_quant").style.backgroundColor = "#FFFFFF";
+  //     $("e55_quant").removeAttribute("readonly");
+  //     $("e55_vluni").style.backgroundColor = "#DEB887";
+  //     $("e55_vluni").setAttribute("readonly", true);
+  //   } else {
+  //     $("e55_quant").style.backgroundColor = "#DEB887";
+  //     $("e55_quant").setAttribute("readonly", true);
+  //     //$("e55_quant").value = 1;
+  //     $("e55_vluni").style.backgroundColor = "#FFFFFF";
+  //     $("e55_vluni").removeAttribute("readonly");
+  //     js_calcula('uni');
+  //   }
+  // }
+
+  function js_troca(codele) {
+
+    descr = eval("document.form1.ele_" + codele + ".value");
+    arr = descr.split("#");
+
+    elemento = arr[0];
+    descricao = arr[1];
+    document.form1.elemento01.value = elemento;
+    document.form1.o56_descr.value = descricao;
+  }
+
+  // <?
+      // if (isset($incluir) || isset($alterar) || isset($excluir)) {
+
+      //   echo "\n\ntop.corpo.iframe_empautidot.location.href =  'emp1_empautidottaxatabela001.php?anulacao=true&e56_autori=$e55_autori';\n";
+      // }
+      //
+      ?>
+
+  // <? if (isset($numrows99) && $numrows99 > 0) { ?>
+  //   codele = document.form1.pc07_codele.value;
+  //   if (codele != '') {
+  //     js_troca(codele);
+  //   }
+  // <? } ?>
 </script>

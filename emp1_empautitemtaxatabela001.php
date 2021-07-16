@@ -57,228 +57,148 @@ $clorcelemento = new cl_orcelemento;
 $db_opcao = 1;
 $db_botao = true;
 
-//
-// se a opção abaixo for 'false' não é permitido incluir ítens de desdobramentos diferentes
-//
-$libera_desdobramento = false;
-
-if (isset($consultando) || isset($incluir) || isset($alterar)) {
-
-  $sqlerro = false;
-  //rotina que verifica se o item é válido
-  $pc01_servico = null;
-  $result = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item, "o56_elemento as elemento03, pc01_servico"));
-  if ($clpcmater->numrows == 0) {
-    $sqlerro = true;
-    $erro_msg = "Item não válido!";
-  } else {
-    $pc01_servico = pg_result($result, 0, "pc01_servico");
-  }
-  //
-  // o codigo abaixo pega o primeiro ítem que foi incluido na autorização
-  //
-  if ($sqlerro == false) {
-    $result = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori, null, "e55_item as item, e55_sequen as seq, e55_codele as desdobramento", "e55_sequen"));
-  }
-  if ($sqlerro == false && $clempautitem->numrows > 0) {
-    db_fieldsmemory($result, 0);
-    // se entramos nesta condição  é porque ja temos ítens incluidos na autorização
-    //  este teste verifica a existencia de itens com desdobramentos diferentes
-    //  para prefeituras com orçamento no desdobramento isto não é permitido de fato
-    //  para prefeituras com orçamento no elemento isto é facultativo, porém o TCERS não aconselha
-
-    // o codigo abaixo procura o codele do item que esta sendo incluido
-    $result = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item, "o56_codele as desdobramento02"));
-    db_fieldsmemory($result, 0); //$desdobramento2 é o desdobramento a ser incluido
-
-    /** aqui esta o código que libera ou não ítens de desdobramentos diferentes */
-    $liberado = true;
-    if ($desdobramento != $pc07_codele && isset($incluir)  && $incluir == 'Incluir') {
-      $liberado = false;
-    }
-    if ($liberado == false) {
-      $sqlerro = true;
-      $clempautitem->erro_status = "0";
-      $erro_msg = "Desdobramento do item diferente !";
-    } // endif
-  } // endif
-
-  $sWhere = "
-            l20_codigo = (SELECT e54_codlicitacao
-                                        FROM empautoriza
-                                        WHERE e54_autori = {$e55_autori}) AND pcmater.pc01_codmater = {$e55_item}
-                        AND pc24_pontuacao = 1 AND (pcmater.pc01_tabela = 't' OR pcmater.pc01_taxa = 't')
-                        AND pcmater.pc01_codmater NOT IN (SELECT pc94_codmater FROM pctabela)
-    ";
-}
-
-if (empty($result_elemento) && isset($e55_item) && !empty($e55_item)) {
-  $result_elemento = $clpcmaterele->sql_record($clpcmaterele->sql_query(null, null, "pc07_codele,o56_descr", "", "pc07_codmater=$e55_item "));
-}
+$result_elemento = db_query("select
+*
+from
+(
+select
+  distinct
+  pc07_codele,
+  o56_descr,
+  z01_numcgm
+from
+  liclicitem
+left join pcprocitem on
+  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+left join pcproc on
+  pcproc.pc80_codproc = pcprocitem.pc81_codproc
+left join solicitem on
+  solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+left join solicita on
+  solicita.pc10_numero = solicitem.pc11_numero
+left join db_depart on
+  db_depart.coddepto = solicita.pc10_depto
+left join liclicita on
+  liclicita.l20_codigo = liclicitem.l21_codliclicita
+left join cflicita on
+  cflicita.l03_codigo = liclicita.l20_codtipocom
+left join pctipocompra on
+  pctipocompra.pc50_codcom = cflicita.l03_codcom
+left join solicitemunid on
+  solicitemunid.pc17_codigo = solicitem.pc11_codigo
+left join matunid on
+  matunid.m61_codmatunid = solicitemunid.pc17_unid
+left join pcorcamitemlic on
+  l21_codigo = pc26_liclicitem
+left join pcorcamval on
+  pc26_orcamitem = pc23_orcamitem
+left join pcorcamforne on
+  pc21_orcamforne = pc23_orcamforne
+left join cgm on
+  z01_numcgm = pc21_numcgm
+left join pcorcamjulg on
+  pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+  and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+left join db_usuarios on
+  pcproc.pc80_usuario = db_usuarios.id_usuario
+left join solicitempcmater on
+  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+left join pcmater itemtabela on
+  itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
+left join pctabela on
+  pctabela.pc94_codmater = itemtabela.pc01_codmater
+left join pctabelaitem on
+  pctabelaitem.pc95_codtabela = pctabela.pc94_sequencial
+left join pcmater on
+  pcmater.pc01_codmater = pctabelaitem.pc95_codmater
+left join pcmaterele on
+  pcmaterele.pc07_codmater = pctabelaitem.pc95_codmater
+inner join orcelemento on
+  orcelemento.o56_codele = pcmaterele.pc07_codele
+  and orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
+where
+  l20_codigo = (
+  select
+    e54_codlicitacao
+  from
+    empautoriza
+  where
+    e54_autori = $e55_autori
+    )
+  and pc24_pontuacao = 1
+union
+select
+  distinct
+  pc07_codele,
+  o56_descr,
+  z01_numcgm
+from
+  liclicitem
+left join pcprocitem on
+  liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+left join pcproc on
+  pcproc.pc80_codproc = pcprocitem.pc81_codproc
+left join solicitem on
+  solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+left join solicita on
+  solicita.pc10_numero = solicitem.pc11_numero
+left join db_depart on
+  db_depart.coddepto = solicita.pc10_depto
+left join liclicita on
+  liclicita.l20_codigo = liclicitem.l21_codliclicita
+left join cflicita on
+  cflicita.l03_codigo = liclicita.l20_codtipocom
+left join pctipocompra on
+  pctipocompra.pc50_codcom = cflicita.l03_codcom
+left join solicitemunid on
+  solicitemunid.pc17_codigo = solicitem.pc11_codigo
+left join matunid on
+  matunid.m61_codmatunid = solicitemunid.pc17_unid
+left join pcorcamitemlic on
+  l21_codigo = pc26_liclicitem
+left join pcorcamval on
+  pc26_orcamitem = pc23_orcamitem
+left join pcorcamforne on
+  pc21_orcamforne = pc23_orcamforne
+left join cgm on
+  z01_numcgm = pc21_numcgm
+left join pcorcamjulg on
+  pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+  and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+left join db_usuarios on
+  pcproc.pc80_usuario = db_usuarios.id_usuario
+left join solicitempcmater on
+  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+left join pcmater on
+  pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+left join pcmaterele on
+  pcmaterele.pc07_codmater = pcmater.pc01_codmater
+left join orcelemento on
+  orcelemento.o56_codele = pcmaterele.pc07_codele
+  and orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
+where
+  l20_codigo = (
+  select
+    e54_codlicitacao
+  from
+    empautoriza
+  where
+    e54_autori = $e55_autori
+    )
+  and pc24_pontuacao = 1
+  and (pcmater.pc01_tabela = 't'
+    or pcmater.pc01_taxa = 't')
+  and pcmater.pc01_codmater not in (
+  select
+    pc94_codmater
+  from
+    pctabela) ) fornecedores
+");
 
 if (!isset($lControlaQuantidade)) {
   $lControlaQuantidade = "false";
 }
 
-if (isset($autori_importa)) {
-  $sqlerro = false;
-  db_inicio_transacao();
-  //rotina para importar da tabela empautitem
-  if ($sqlerro == false) {
-    $atual_autori = $e55_autori;
-    $result = $clempautitem->sql_record($clempautitem->sql_query_file($autori_importa));
-    $numrows = $clempautitem->numrows;
-
-    //rotina que pega a sequencia
-    $result02 = $clempautitem->sql_record($clempautitem->sql_query_file($atual_autori, null, "max(e55_sequen)+1 as e55_seq"));
-    db_fieldsmemory($result02, 0);
-    if ($e55_seq == '') {
-      $e55_seq = 1;
-    }
-    if ($numrows > 0) {
-      for ($i = 0; $i < $numrows; $i++) {
-        db_fieldsmemory($result, $i);
-        //rotina para testar se os elementos são iguais
-        $liberado = true;
-        if (isset($elemento01)) {
-          $result02 = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item, "o56_codele as elemento02"));
-          db_fieldsmemory($result02, 0); //$codele é o primeiro elemento incluido
-
-          //verifica nos parametros
-          $result02 = $clorcparametro->sql_record($clorcparametro->sql_query_file(null, "o50_subelem"));
-          db_fieldsmemory($result02, 0);
-          if ($o50_subelem == 't') {
-            if ($elemento01 != $elemento02) {
-              $liberado = false;
-            }
-          } else {
-            if (substr($elemento01, 0, 7) != substr($elemento02, 0, 7)) {
-              $liberado = false;
-            }
-          }
-        }
-        //final da rotina
-
-        if ($liberado == true) {
-
-          //$valorunitarioautitem = db_formatar($e55_vltot/$e55_quant,"vdec"," ",4);
-          $clempautitem->e55_codele = $codele;
-          $clempautitem->e55_autori = $atual_autori;
-          $clempautitem->e55_sequen = $e55_seq;
-          $clempautitem->e55_item = $e55_item;
-          $clempautitem->e55_quant = $e55_quant;
-          $clempautitem->e55_vltot = $e55_vltot;
-          $clempautitem->e55_vlrun = $e55_vluni;
-          $clempautitem->e55_descr = $e55_descr;
-          $clempautitem->e55_marca = $e55_marca;
-          $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
-          $clempautitem->incluir($atual_autori, $e55_seq);
-          if ($clempautitem->erro_status == "0") {
-            $erro_msg = $clempautitem->erro_msg;
-            $sqlerro = true;
-          }
-          $e55_seq++;
-        } else {
-          $sqlerro = true;
-          $clempautitem->erro_status = "0";
-          $clempautitem->erro_msg = "Os itens da autorização $autori_importa possui elementos diferentes dos itens já cadastrados nesta autorização!";
-        }
-      }
-    }
-    $e55_autori = $atual_autori;
-  }
-  //final
-  //$sqlerro=true;
-  db_fim_transacao($sqlerro);
-} else
-  if (isset($incluir)) {
-  db_inicio_transacao();
-
-  if ($sqlerro == false) {
-    $clempautitem->e55_autori = $e55_autori;
-    $result = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori, null, "max(e55_sequen)+1 as e55_sequen"));
-    db_fieldsmemory($result, 0);
-    if ($e55_sequen == '') {
-      $e55_sequen = 1;
-    }
-    //rotina para pegar o codele da tabela pcmaterele
-    $codele = @$pc07_codele;
-    //  final
-
-    $clempautitem->e55_codele = $codele;
-    $clempautitem->e55_sequen = $e55_sequen;
-    $clempautitem->e55_vlrun = $e55_vluni;
-    $clempautitem->e55_marca = $e55_marca;
-
-    //incluindo unidade/referencia na tabela empautitem
-    $clempautitem->e55_unid = $e55_unid;
-
-
-    $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
-    $clempautitem->incluir($e55_autori, $e55_sequen);
-    $erro_msg = $clempautitem->erro_msg;
-    if ($clempautitem->erro_status == "0") {
-      $sqlerro = true;
-    } else {
-      $e55_sequen = $clempautitem->e55_sequen;
-      $e55_autori = $clempautitem->e55_autori;
-    }
-    $sSqlValor  = "update empautoriza ";
-    $sSqlValor .= "   set e54_valor = (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori} )";
-    $sSqlValor .= " where e54_autori = {$e55_autori}";
-    $rs = db_query($sSqlValor);
-  }
-  // $sqlerro=true;
-  db_fim_transacao($sqlerro);
-} else
-    if (isset($alterar)) {
-  db_inicio_transacao();
-  if ($sqlerro == false) {
-    $clempautitem->e55_autori = $e55_autori;
-    $clempautitem->e55_sequen = $e55_sequen;
-    $clempautitem->e55_codele = $pc07_codele;
-    $clempautitem->e55_vlrun = $e55_vluni;
-    $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
-    $clempautitem->e55_marca = $e55_marca;
-
-    //incluindo unidade/referencia na tabela empautitem
-    $clempautitem->e55_unid = $e55_unid;
-
-    $clempautitem->alterar($e55_autori, $e55_sequen);
-    $erro_msg = $clempautitem->erro_msg;
-    if ($clempautitem->erro_status == "0") {
-      $sqlerro = true;
-    }
-    $sSqlValor  = "update empautoriza ";
-    $sSqlValor .= "   set e54_valor = (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori} )";
-    $sSqlValor .= " where e54_autori = {$e55_autori}";
-    $rs = db_query($sSqlValor);
-  }
-  db_fim_transacao($sqlerro);
-} else
-      if (isset($excluir)) {
-  $sqlerro = false;
-  db_inicio_transacao();
-  $clempautitem->e55_autori = $e55_autori;
-  $clempautitem->e55_sequen = $e55_sequen;
-  $clempautitem->excluir($e55_autori, $e55_sequen);
-  $erro_msg = $clempautitem->erro_msg;
-  if ($clempautitem->erro_status == "0") {
-    $sqlerro = true;
-  }
-  $sSqlValor  = "update empautoriza ";
-  $sSqlValor .= "   set e54_valor = (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori} )";
-  $sSqlValor .= " where e54_autori = {$e55_autori}";
-  $rs = db_query($sSqlValor);
-  db_fim_transacao($sqlerro);
-} elseif (isset($opcao) && empty($consultando)) {
-
-  $result = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen));
-
-  db_fieldsmemory($result, 0);
-  //echo "<BR><BR>".($clpcmaterele->sql_query(null,null,"pc07_codele,o56_descr","","pc07_codmater=$e55_item and o56_elemento = '$o56_elemento'" ));
-  $result_elemento = $clpcmaterele->sql_record($clpcmaterele->sql_query(null, null, "pc07_codele,o56_descr", "", "pc07_codmater=$e55_item and o56_elemento = '$o56_elemento'"));
-}
 ?>
 <html>
 
@@ -303,80 +223,3 @@ if (isset($autori_importa)) {
 </body>
 
 </html>
-<?
-
-
-if (isset($incluir) || isset($alterar) || isset($excluir) || isset($autori_importa)) {
-  if ($sqlerro == true) {
-    db_msgbox($erro_msg);
-    $db_botao = true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if ($clempautitem->erro_campo != "") {
-      echo "<script> document.form1." . $clempautitem->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1." . $clempautitem->erro_campo . ".focus();</script>";
-    }
-  } else {
-    // variavel $tot_valor é gerada no formulário
-    echo "
-                <script>
-        top.corpo.iframe_empautidot.js_calc('$tot_valor');\n
-                </script>
-       ";
-
-    //db_msgbox($erro_msg);
-  }
-} else
-  if (isset($liberado)) {
-  if ($liberado == false) {
-    db_msgbox("Elemento do item diferente!");
-    echo "
-                <script>
-             document.form1.e55_item.value='';
-             document.form1.pc01_descrmater.value='';
-             document.form1.submit();
-                </script>
-             ";
-  } else {
-    echo "
-                <script>
-            document.form1.e55_quant.focus();
-                </script>
-             ";
-  }
-}
-if (isset($consultando)) {
-  if (isset($pc01_servico) and $pc01_servico == 't') {
-    echo "<script>document.form1.e55_vluni.focus();</script>";
-  } else {
-    echo "<script>document.form1.e55_quant.focus();</script>";
-  }
-  $result = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen));
-  $oItem = db_utils::fieldsmemory($result, 0);
-  if ($opcao == 'alterar') {
-    echo "<script>";
-    echo "document.form1.e55_quant.value = $oItem->e55_quant;";
-    echo "document.form1.e55_vluni.value = $oItem->e55_vlrun;";
-    echo "document.form1.e55_vltot.value = $oItem->e55_vltot;";
-    echo "</script>";
-  }
-} else {
-  if ($opcao == 'alterar' && isset($e55_item)) {
-    echo "<script>js_pesquisae55_item(false);</script>";
-    return;
-  }
-
-  echo "<script>document.form1.e55_item.focus();</script>";
-  if ($e55_item == '') {
-    echo "<script>";
-    echo "document.form1.e55_quant.value = '';";
-    echo "document.form1.e55_vluni.value = '';";
-    echo "document.form1.e55_vltot.value = '';";
-    echo "document.form1.utilizado.value = '';";
-    echo "document.form1.disponivel.value = '';";
-    echo "</script>";
-  }
-}
-?>
-<script>
-  document.form1.e55_unid.value = 1;
-</script>

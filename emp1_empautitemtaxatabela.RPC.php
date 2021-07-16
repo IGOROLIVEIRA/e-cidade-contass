@@ -156,7 +156,7 @@ switch ($_POST["action"]) {
         $itemRows  = array();
 
         $selectunid = "";
-        $selectunid = "<select>";
+        $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
         $selectunid .= "<option selected='selected'>..</option>";
         foreach ($result_unidade as $key => $item) {
           if ($key == $e55_unid)
@@ -166,14 +166,14 @@ switch ($_POST["action"]) {
         }
         $selectunid .= "</select>";
 
-        $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='js_verificaItem(this.id)'>";
+        $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaValores(this)'>";
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
         $itemRows[] = $selectunid;
         $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$e55_marca}' />";
-        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$e55_quant}' />";
-        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$e55_vlrun}' />"; //p/ usuário
-        $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' />";
+        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$e55_quant}' onkeyup='js_calcula(this)' />";
+        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$e55_vlrun}' onkeyup='js_calcula(this)' />";
+        $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' />";
         $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$e55_vltot}' />";
         $employeeData[] = $itemRows;
       }
@@ -226,5 +226,170 @@ switch ($_POST["action"]) {
       $oRetorno->message = $clempautitem->erro_msg;
       break;
     }
+
+  case "verificaSaldoCriterio":
+
+    try {
+
+      $sql = "
+                                SELECT * FROM (
+                                  SELECT DISTINCT pcmater.pc01_codmater,
+                                                  pcmater.pc01_descrmater,
+                                                  pc07_codele,
+                                                  pcmater.pc01_servico,
+                                                  pc23_orcamforne,
+                                                  z01_numcgm,
+                                                  pc23_quant,
+                                                  pc23_vlrun,
+                                                  pc23_valor,
+                                                  pc80_criterioadjudicacao,
+                                                  pcmater.pc01_servico,
+                                                  'itemtabela' as tipoitem,
+                                                  pctabela.pc94_sequencial
+                                  FROM liclicitem
+                                  LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                                  LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                                  LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                                  LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                                  LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+                                  LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+                                  LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                                  LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                                  LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                                  LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                                  LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                                  LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                                  LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+                                  LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+                                  LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                                              AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                                  LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+                                  LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                                  LEFT JOIN pcmater itemtabela ON itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
+                                  LEFT JOIN pctabela ON pctabela.pc94_codmater = itemtabela.pc01_codmater
+                                  LEFT JOIN pctabelaitem ON pctabelaitem.pc95_codtabela = pctabela.pc94_sequencial
+                                  LEFT JOIN pcmater ON pcmater.pc01_codmater = pctabelaitem.pc95_codmater
+                                  LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pctabelaitem.pc95_codmater
+                                  INNER JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                                              AND orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
+                                  WHERE l20_codigo =
+                                          (SELECT e54_codlicitacao
+                                          FROM empautoriza
+                                          WHERE e54_autori = {$_POST['e55_autori']}
+                                          and pcmater.pc01_codmater = {$_POST['e55_item']})
+                                      AND pc24_pontuacao=1
+
+                                  UNION
+
+                                  SELECT DISTINCT pcmater.pc01_codmater,
+                                          pcmater.pc01_descrmater,
+                                          pc07_codele,
+                                          pcmater.pc01_servico,
+                                          pc23_orcamforne,
+                                          z01_numcgm,
+                                          pc23_quant,
+                                          pc23_vlrun,
+                                          pc23_valor,
+                                          pc80_criterioadjudicacao,
+                                          pcmater.pc01_servico,
+                                          'naoitem' as tipoitem,
+                                          0 as pc94_sequencial
+                                FROM liclicitem
+                                LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                                LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                                LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                                LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                                LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+                                LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+                                LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                                LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                                LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                                LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                                LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                                LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                                LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+                                LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+                                LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                                LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+                                LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                                LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                                LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pcmater.pc01_codmater
+                                LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                                AND orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
+                                WHERE l20_codigo =
+                                        (SELECT e54_codlicitacao
+                                          FROM empautoriza
+                                          WHERE e54_autori = {$_POST['e55_autori']}
+                                          and pcmater.pc01_codmater = {$_POST['e55_item']})
+                                    AND pc24_pontuacao=1
+                                    AND (pcmater.pc01_tabela = 't' OR pcmater.pc01_taxa = 't')
+                                    AND pcmater.pc01_codmater NOT IN (select pc94_codmater from pctabela)
+                                ) fornecedores
+                                WHERE fornecedores.z01_numcgm = {$_POST['cgm']}
+                                ORDER BY fornecedores.pc01_codmater
+                            ";
+
+      $result = db_query($sql);
+      db_fieldsmemory($result, 0);
+      echo $sql;
+      exit;
+      $oRetorno->itens   = verificaSaldoCriterio($_POST['e55_autori'], $_POST['e55_item'], $tipoitem, $pc94_sequencial);
+      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori'], $_POST['e55_item']);
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+      $oRetorno->status   = 2;
+    }
+
+    break;
 }
+
+function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem, $pc94_sequencial)
+{
+  $sSQL = "";
+  if (strcasecmp($tipoitem, 'item') === 0) {
+    $sSQL = "
+     select sum(e55_vltot) as totalitens
+      from empautitem
+       inner join empautoriza on e54_autori = e55_autori
+        where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
+         and e55_item = {$e55_item}
+    ";
+  } else {
+
+    $sSQL = "
+      select sum(e55_vltot) as totalitens
+      from empautitem
+       inner join empautoriza on e54_autori = e55_autori
+       inner join pctabelaitem on pctabelaitem.pc95_codmater = empautitem.e55_item
+       inner join pctabela on pctabela.pc94_sequencial = pctabelaitem.pc95_codtabela
+        where e54_codlicitacao = (
+                                  select e54_codlicitacao
+                                   from empautoriza
+                                    where e54_autori = {$e55_autori}
+                                  )
+                                  and pc94_sequencial = {$pc94_sequencial}
+    ";
+  }
+  $rsConsulta = db_query($sSQL);
+  $oItens = db_utils::getCollectionByRecord($rsConsulta);
+  return $oItens;
+}
+
+function verificaSaldoCriterioItemQuantidade($e55_autori, $e55_item)
+{
+
+  $sSQL = "
+   select sum(e55_quant) as totalitensqt
+    from empautitem
+     inner join empautoriza on e54_autori = e55_autori
+      where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
+       and e55_item = {$e55_item}
+  ";
+
+  $rsConsulta = db_query($sSQL);
+  $oItens = db_utils::getCollectionByRecord($rsConsulta);
+  return $oItens;
+}
+
 echo $oJson->encode($oRetorno);
