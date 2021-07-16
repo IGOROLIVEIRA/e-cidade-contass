@@ -128,6 +128,7 @@ if ($oParam->exec == "getElementosFromAcao") {
   $sCampos .= "o05_anoreferencia,";
   $sCampos .= "o08_elemento,";
   $sCampos .= "o56_descr,";
+  $sCampos .= "o56_elemento,";
   $sCampos .= "o08_concarpeculiar,";
   $sCampos .= "o08_recurso,";
   $sCampos .= "o15_descr,";
@@ -165,6 +166,7 @@ if ($oParam->exec == "getElementosFromAcao") {
   $sCampos          .= "o05_anoreferencia,";
   $sCampos          .= "o08_elemento,";
   $sCampos          .= "o56_descr,";
+  $sCampos          .= "o56_elemento,";
   $sCampos          .= "o08_recurso,";
   $sCampos          .= "o15_descr,";
   $sCampos          .= "o08_localizadorgastos,";
@@ -185,78 +187,130 @@ if ($oParam->exec == "getElementosFromAcao") {
   $oRetorno->itens = db_utils::fieldsMemory($rsDotacaoItens, 0, false, false, true);
 } else if ($oParam->exec == "salvarElemento") {
 
-  /**
-   * Apenas alteramos a cadastro da dotacao do ppa caso nao seje estimativa gerada pelo sistema
-   */
-  $lSqlErro = false;
-  db_inicio_transacao();
-  $oDaoPPaDotacao = db_utils::getDao("ppadotacao");
-  if ($oParam->o19_coddot == "") {
+    $sSql = "   SELECT p2.o08_sequencial,
+                       o05_sequencial,
+                       o05_valor,
+                       p2.o08_ano
+                    FROM ppadotacao p1
+                    INNER JOIN ppadotacao p2
+                        ON p1.o08_orgao         = p2.o08_orgao
+                        AND p1.o08_unidade      = p2.o08_unidade
+                        AND p1.o08_funcao       = p2.o08_funcao
+                        AND p1.o08_subfuncao    = p2.o08_subfuncao
+                        AND p1.o08_programa     = p2.o08_programa
+                        AND p1.o08_projativ     = p2.o08_projativ
+                        AND p1.o08_ppaversao    = p2.o08_ppaversao
+                        AND p1.o08_elemento     = p2.o08_elemento
+                    INNER JOIN ppaestimativadespesa on o07_coddot = p2.o08_sequencial
+                    INNER JOIN ppaestimativa ON ppaestimativa.o05_sequencial = ppaestimativadespesa.o07_ppaestimativa
+                WHERE p1.o08_sequencial = {$oParam->o08_sequencial} ";
+    
+    if ($oParam->atualiza_anos_seguintes) {
+        $sSql .= " AND p2.o08_ano >= p1.o08_ano";
+    } else {
+        $sSql .= " AND p2.o08_ano = {$oParam->o05_anoreferencia}";
+    }
 
-    $oDaoPPaDotacao->o08_localizadorgastos = $oParam->o08_localizadorgastos;
-    $oDaoPPaDotacao->o08_elemento          = $oParam->o08_elemento;
-    $oDaoPPaDotacao->o08_recurso           = $oParam->o08_recurso;
-    $oDaoPPaDotacao->o08_sequencial        = $oParam->o08_sequencial;
-    $oDaoPPaDotacao->o08_concarpeculiar    = $oParam->o08_concarpeculiar;
-    $oDaoPPaDotacao->alterar($oParam->o08_sequencial);
+    $rsPpaAnos = db_query($sSql);
 
-   } else {
+    for($iCont = 0; $iCont < pg_num_rows($rsPpaAnos); $iCont++) {
 
-     $oDaoPPaDotacao->o08_localizadorgastos = $oParam->o08_localizadorgastos;
-     $oDaoPPaDotacao->o08_sequencial        = $oParam->o08_sequencial;
-     $oDaoPPaDotacao->o08_concarpeculiar    = $oParam->o08_concarpeculiar;
-     $oDaoPPaDotacao->alterar($oParam->o08_sequencial);
+        $lSqlErro = false;
+        db_inicio_transacao();
 
-     /**
-      *
-      * excluimos o vinculo da dotacao com a estimativa, caso houve modificacao no localizador de gastos da estimativa
-      * do ppa.
-      */
-     $sSqlDadosEstimativa = $oDaoPPaDotacao->sql_query_file($oParam->o08_sequencial);
-     $rsDadosEstimativa   = $oDaoPPaDotacao->sql_record($sSqlDadosEstimativa);
-     if ($oDaoPPaDotacao->numrows == 1) {
+        $oPPAano = db_utils::fieldsMemory($rsPpaAnos, $iCont);
 
-       $oDadosEstimativa = db_utils::fieldsMemory($rsDadosEstimativa, 0);
-       if ($oParam->o08_localizadorgastos != $oDadosEstimativa->o08_localizadorgastos) {
+        if ($iCont == 0) {
+            $iAnoInicio = $oPPAano->o08_ano;
+        }
+    
+        /**
+         * Apenas alteramos a cadastro da dotacao do ppa caso nao seje estimativa gerada pelo sistema
+         */
+  
+        $oDaoPPaDotacao = db_utils::getDao("ppadotacao");
+        if ($oParam->o19_coddot == "") {
 
-         $oDaoPPaOrcDotacao= db_utils::getDao("ppadotacaoorcdotacao");
-         $oDaoPPaOrcDotacao->excluir(null, "o19_ppadotacao={$oParam->o08_sequencial}");
-         if ($oDaoPPaOrcDotacao->erro_status == 0) {
+            $oDaoPPaDotacao->o08_localizadorgastos = $oParam->o08_localizadorgastos;
+            $oDaoPPaDotacao->o08_elemento          = $oParam->o08_elemento;
+            $oDaoPPaDotacao->o08_recurso           = $oParam->o08_recurso;
+            $oDaoPPaDotacao->o08_sequencial        = $oParam->o08_sequencial;
+            $oDaoPPaDotacao->o08_concarpeculiar    = $oParam->o08_concarpeculiar;
+            $oDaoPPaDotacao->alterar($oPPAano->o08_sequencial);
 
-           $oRetorno->status = 2;
-           $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaOrcDotacao->erro_msg}");
-         }
-       }
-     }
-   }
+        } else {
 
-   if ($oDaoPPaDotacao->erro_status == 0) {
+            $oDaoPPaDotacao->o08_localizadorgastos = $oParam->o08_localizadorgastos;
+            $oDaoPPaDotacao->o08_sequencial        = $oParam->o08_sequencial;
+            $oDaoPPaDotacao->o08_concarpeculiar    = $oParam->o08_concarpeculiar;
+            $oDaoPPaDotacao->alterar($oPPAano->o08_sequencial);
 
-     $oRetorno->status = 2;
-     $oRetorno->message = urlencode( "Não foi possível alterar a dotação.\n{$oDaoPPaDotacao->erro_msg}");
-   }
-  /**
-   * Alteramos  valor da estimativa
-   */
-  $oDaoPPaestimativa = db_utils::getDao("ppaestimativa");
-  $oDaoPPaestimativa->o05_sequencial = $oParam->o05_sequencial;
-  $nValorSalvar = round($oParam->o05_valor);
-  if ($oParametroOrcamento->o50_liberadecimalppa == "t") {
-    $nValorSalvar = round($oParam->o05_valor, 2);
-  }
-  $oDaoPPaestimativa->o05_valor      = "{$nValorSalvar}";
-  $oDaoPPaestimativa->alterar($oParam->o05_sequencial);
-  if ($oDaoPPaestimativa->erro_status == 0) {
+            /**
+             *
+            * excluimos o vinculo da dotacao com a estimativa, caso houve modificacao no localizador de gastos da estimativa
+            * do ppa.
+            */
+            $sSqlDadosEstimativa = $oDaoPPaDotacao->sql_query_file($oPPAano->o08_sequencial);
+            $rsDadosEstimativa   = $oDaoPPaDotacao->sql_record($sSqlDadosEstimativa);
+            if ($oDaoPPaDotacao->numrows == 1) {
 
-    $oRetorno->status = 2;
-    $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaestimativa->erro_msg}");
+                $oDadosEstimativa = db_utils::fieldsMemory($rsDadosEstimativa, 0);
+                if ($oParam->o08_localizadorgastos != $oDadosEstimativa->o08_localizadorgastos) {
 
-  }
-  if ($oRetorno->status == 2) {
-    db_fim_transacao(true);
-  } else {
-    db_fim_transacao(false);
-  }
+                    $oDaoPPaOrcDotacao= db_utils::getDao("ppadotacaoorcdotacao");
+                    $oDaoPPaOrcDotacao->excluir(null, "o19_ppadotacao={$oPPAano->o08_sequencial}");
+                    if ($oDaoPPaOrcDotacao->erro_status == 0) {
+
+                        $oRetorno->status = 2;
+                        $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaOrcDotacao->erro_msg}");
+                    }
+                }
+            }
+        }
+
+        if ($oDaoPPaDotacao->erro_status == 0) {
+
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode( "Não foi possível alterar a dotação.\n{$oDaoPPaDotacao->erro_msg}");
+        }
+        /**
+         * Alteramos  valor da estimativa
+         */
+        $oDaoPPaestimativa = db_utils::getDao("ppaestimativa");
+        $oDaoPPaestimativa->o05_sequencial = $oPPAano->o05_sequencial;
+
+        $nValorParam   = ppa::getAcrescimosEstimativa($oParam->o08_elemento, $oPPAano->o08_ano);
+        
+    	$nValor = $oParam->o05_valor;
+    	if ($oPPAano->o08_ano > $iAnoInicio) {
+
+            if ($nValorParam > 0) {
+                $nValor *= $nValorParam;
+            }
+            $oParam->o05_valor = $nValor;
+
+        }
+
+        $nValorSalvar = round($oParam->o05_valor);
+        if ($oParametroOrcamento->o50_liberadecimalppa == "t") {
+            $nValorSalvar = round($oParam->o05_valor, 2);
+        }
+        $oDaoPPaestimativa->o05_valor      = "{$nValorSalvar}";
+        $oDaoPPaestimativa->alterar($oPPAano->o05_sequencial);
+        if ($oDaoPPaestimativa->erro_status == 0) {
+
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaestimativa->erro_msg}");
+
+        }
+        if ($oRetorno->status == 2) {
+            db_fim_transacao(true);
+        } else {
+            db_fim_transacao(false);
+        }
+
+    }
+
 } else if ($oParam->exec == "excluirElemento") {
 
    db_inicio_transacao();

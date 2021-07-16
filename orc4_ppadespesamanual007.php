@@ -43,62 +43,90 @@ $db_botao = true;
 $lSqlErro = false;
 $sErroMsg = "";
 if (isset($oPost->excluir)) {
-  
-    die('excluir');
-//   db_inicio_transacao(); 
-//   /**
-//    * Verificamos se existe uma dotacao do ppa vinculada a
-//    * uma dotacao do orçamento
-//    */
-//   $oDaoPPaOrcDotacao = db_utils::getDao("ppadotacaoorcdotacao");
-//   $sSqlOrcDotacao    = $oDaoPPaOrcDotacao->sql_query_file(null,"*", null,"o19_ppadotacao= {$oPost->o08_sequencial}");
-//   $rsOrcDotacao      = $oDaoPPaOrcDotacao->sql_record($sSqlOrcDotacao);
-//   if ($oDaoPPaOrcDotacao->numrows > 0) {
-    
-//     $oOrcDotacao = db_utils::fieldsMemory($rsOrcDotacao, 0);
-//     $oDaoPPaOrcDotacao->excluir($oOrcDotacao->o19_sequencial);
-//     if ($oDaoPPaOrcDotacao->erro_status == 0) {
 
-//       $sErroMsg = $oDaoPPaOrcDotacao->erro_msg;
-//       $lSqlErro = true;
-      
-//     }
-//   }
-//   if (!$lSqlErro) {
+    db_inicio_transacao(); 
+    /**
+     * Verificamos se existe uma dotacao do ppa vinculada a
+     * uma dotacao do orçamento
+     */
+
+    $sWhere   = " o08_instit        =".db_getsession("DB_instit");
+    $sWhere  .= " and o08_orgao     = {$oPost->o08_orgao}";
+    $sWhere  .= " and o08_unidade   = {$oPost->o08_unidade}";
+    $sWhere  .= " and o08_funcao    = {$oPost->o08_funcao}";
+    $sWhere  .= " and o08_subfuncao = {$oPost->o08_subfuncao}";
+    $sWhere  .= " and o08_programa  = {$oPost->o08_programa}";
+    $sWhere  .= " and o08_projativ  = {$oPost->o08_projativ}";
+    $sWhere  .= " and o08_ppaversao = {$oPost->o05_ppaversao}";
+    $sWhere  .= " and o05_base is false";
+
+    $oDaoPPaDotacao     = db_utils::getDao("ppaestimativadespesa");
+    $sSqlDotacaoItens   = $oDaoPPaDotacao->sql_query_conplano(null,"o05_sequencial, o08_sequencial",null,$sWhere);
+    $rsDotacaoItens     = $oDaoPPaDotacao->sql_record($sSqlDotacaoItens);
+
+    if ($oDaoPPaDotacao->numrows > 0) {
+
+        for ($iCont = 0; $iCont < $oDaoPPaDotacao->numrows; $iCont++) {
+
+            $oAcao = db_utils::fieldsMemory($rsDotacaoItens, $iCont);
+            
+            $oDaoPPaOrcDotacao = db_utils::getDao("ppadotacaoorcdotacao");
+            $sSqlOrcDotacao    = $oDaoPPaOrcDotacao->sql_query_file(null,"*", null,"o19_ppadotacao = {$oAcao->o08_sequencial}");    
+            $rsOrcDotacao      = $oDaoPPaOrcDotacao->sql_record($sSqlOrcDotacao);
+
+            if ($oDaoPPaOrcDotacao->numrows > 0) {
+                
+                $oOrcDotacao = db_utils::fieldsMemory($rsOrcDotacao, 0);
+                $oDaoPPaOrcDotacao->excluir($oOrcDotacao->o19_sequencial);
+                if ($oDaoPPaOrcDotacao->erro_status == 0) {
+
+                $sErroMsg = $oDaoPPaOrcDotacao->erro_msg;
+                $lSqlErro = true;
+                
+                }
+            }
+
+            if (!$lSqlErro) {
+                /**
+                 * deletamos a estimativa da dotacaçao
+                 */
+                $oDaoPPaEstimativaDespesa = db_utils::getDao("ppaestimativadespesa");
+                $oDaoPPaEstimativaDespesa->excluir(null, "o07_ppaestimativa = {$oAcao->o05_sequencial}");
+                if ($oDaoPPaEstimativaDespesa->erro_status == 0) {
+                
+                    $sErroMsg = $oDaoPPaEstimativaDespesa->erro_msg;
+                    $lSqlErro = true;
+                
+                }
+            }
+
+            if (!$lSqlErro){
+        
+                $oDaoPPaEstimativa = db_utils::getDao("ppaestimativa");
+                $oDaoPPaEstimativa->excluir($oAcao->o05_sequencial);
+                if ($oDaoPPaEstimativa->erro_status == 0) {
+                
+                $sErroMsg = $oDaoPPaEstimativa->erro_msg;
+                $lSqlErro = true;
+                
+                }
+            }
+
+            if (!$lSqlErro) {
+        
+                $clppadotacao->excluir($oAcao->o08_sequencial);
+                if ($clppadotacao->erro_status == 0) {
+                
+                $sErroMsg = $clppadotacao->erro_msg;
+                $lSqlErro = true;
+                }
+            }
+
+        }
+
+    }
     
-//     /**
-//      * deletamos a estimativa da dotacaçao
-//      */
-//     $oDaoPPaEstimativaDespesa = db_utils::getDao("ppaestimativadespesa");
-//     $oDaoPPaEstimativaDespesa->excluir(null, "o07_ppaestimativa = {$oPost->o05_sequencial}");
-//     if ($oDaoPPaEstimativaDespesa->erro_status == 0) {
-      
-//       $sErroMsg = $oDaoPPaEstimativaDespesa->erro_msg;
-//       $lSqlErro = true;
-      
-//     }
-//   }
-//   if (!$lSqlErro){
-    
-//     $oDaoPPaEstimativa = db_utils::getDao("ppaestimativa");
-//     $oDaoPPaEstimativa->excluir($oPost->o05_sequencial);
-//     if ($oDaoPPaEstimativa->erro_status == 0) {
-      
-//       $sErroMsg = $oDaoPPaEstimativa->erro_msg;
-//       $lSqlErro = true;
-      
-//     }
-//   }
-//   if (!$lSqlErro) {
-    
-//     $clppadotacao->excluir($oPost->o08_sequencial);
-//     if ($clppadotacao->erro_status == 0) {
-    
-//       $sErroMsg = $clppadotacao->erro_msg;
-//       $lSqlErro = true;
-//     }
-//   }
-//   db_fim_transacao($lSqlErro);
+    db_fim_transacao($lSqlErro);
 }
 if (isset($oGet->chavepesquisa)) {
     

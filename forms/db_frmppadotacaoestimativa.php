@@ -464,9 +464,7 @@ function js_pesquisa() {
                       ,0);
 }
 function js_preenchepesquisa(o40_orgao, o41_unidade, o52_funcao, o53_subfuncao, o54_programa, o55_projativ,o08_ppaversao){
-  console.log('preenche');
-  let db_opcao = <?= $db_opcao ?>;
-  console.log(db_opcao);
+
   if (db_iframe_ppadotacao) {
     db_iframe_ppadotacao.hide();
   }
@@ -519,7 +517,9 @@ function js_retornoPesquisa(oRequest) {
       $('db_opcao').disabled = true;
     }  
   }
-  top.corpo.iframe_ppadotacaoele.addValoresGrid(oRetorno.itens); 
+
+  let db_opcao = <?= $db_opcao ?>;
+  top.corpo.iframe_ppadotacaoele.addValoresGrid(oRetorno.itens, db_opcao); 
 }
 
 function js_pesquisao05_ppalei(mostra){
