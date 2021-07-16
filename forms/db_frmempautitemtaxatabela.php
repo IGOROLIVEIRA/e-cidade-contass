@@ -443,7 +443,8 @@ $clrotulo->label("pc01_descrmater");
       data: params,
       success: function(data) {
         console.log(data);
-        //$('#target').html(data.msg);
+        // document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
+        // document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
       }
     });
 
