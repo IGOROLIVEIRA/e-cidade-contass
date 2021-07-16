@@ -247,6 +247,8 @@ $clrotulo->label("pc01_descrmater");
     oParam.action = "salvar";
     oParam.autori = $('#e55_autori').val();
     oParam.sequen = $('#e55_sequen').val();
+    oParam.codele = $('#pc07_codele').val();
+    oParam.descr = $('#e55_descr').val();
     var oDados = {};
     var aDados = [];
 
@@ -453,6 +455,17 @@ $clrotulo->label("pc01_descrmater");
 
   }
 
+  function js_troca(codele) {
+
+    descr = eval("document.form1.ele_" + codele + ".value");
+    arr = descr.split("#");
+
+    elemento = arr[0];
+    descricao = arr[1];
+    document.form1.elemento01.value = elemento;
+    document.form1.o56_descr.value = descricao;
+  }
+
   // function js_verificaControlaQuantidade(lControla) {
   //   <?php
         //   if ($db_opcao == 3) {
@@ -474,17 +487,6 @@ $clrotulo->label("pc01_descrmater");
   //     js_calcula('uni');
   //   }
   // }
-
-  function js_troca(codele) {
-
-    descr = eval("document.form1.ele_" + codele + ".value");
-    arr = descr.split("#");
-
-    elemento = arr[0];
-    descricao = arr[1];
-    document.form1.elemento01.value = elemento;
-    document.form1.o56_descr.value = descricao;
-  }
 
   // <?
       // if (isset($incluir) || isset($alterar) || isset($excluir)) {

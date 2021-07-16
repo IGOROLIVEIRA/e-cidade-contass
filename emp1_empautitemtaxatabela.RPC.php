@@ -150,16 +150,17 @@ switch ($_POST["action"]) {
       for ($i = 0; $i < pg_numrows($rsDados); $i++) {
 
         $oDados = db_utils::fieldsMemory($rsDados, $i);
-        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "e55_item, e55_sequen as seq, e55_codele as desdobramento", "e55_sequen", "e55_item = $oDados->pc01_codmater"));
-        db_fieldsmemory($result, 0);
-
+        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", "e55_item = $oDados->pc01_codmater"));
+        $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, $i);
+        // db_criatabela($resultEmpAutItem);
+        // exit;
         $itemRows  = array();
 
         $selectunid = "";
         $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
         $selectunid .= "<option selected='selected'>..</option>";
         foreach ($result_unidade as $key => $item) {
-          if ($key == $e55_unid)
+          if ($key == $oDadosEmpAutItem->e55_unid)
             $selectunid .= "<option value='$key' selected='selected'>$item</option>";
           else
             $selectunid .= "<option value='$key'>$item</option>";
@@ -170,11 +171,11 @@ switch ($_POST["action"]) {
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
         $itemRows[] = $selectunid;
-        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$e55_marca}' />";
-        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$e55_quant}' onkeyup='js_calcula(this)' />";
-        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$e55_vlrun}' onkeyup='js_calcula(this)' />";
+        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}' />";
+        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' />";
+        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' />";
         $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' />";
-        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$e55_vltot}' />";
+        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' />";
         $employeeData[] = $itemRows;
       }
 
@@ -197,8 +198,8 @@ switch ($_POST["action"]) {
       // echo $clempautitem->sql_query(null, null, "e55_item,pc01_descrmater,e55_descr,e55_codele,o56_descr,e55_sequen,e55_quant,e55_vltot", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . "");
       // exit;
       if ($clempautitem->numrows == 0) {
-        //$clempautitem->e55_descr  = $e55_descr;
-        //$clempautitem->e55_codele = $e55_codele;
+        $clempautitem->e55_descr  = $_POST['descr'];
+        $clempautitem->e55_codele = $_POST['codele'];
         $clempautitem->e55_item   = $item['id'];
         $clempautitem->e55_quant  = $item['qtd'];
         $clempautitem->e55_unid   = $item['unidade'];
@@ -208,6 +209,8 @@ switch ($_POST["action"]) {
 
         $clempautitem->incluir($_POST['autori'], 1);
       } else {
+        $clempautitem->e55_descr  = $_POST['descr'];
+        $clempautitem->e55_codele = $_POST['codele'];
         $clempautitem->e55_item   = $item['id'];
         $clempautitem->e55_quant  = $item['qtd'];
         $clempautitem->e55_unid   = $item['unidade'];
@@ -332,8 +335,6 @@ switch ($_POST["action"]) {
 
       $result = db_query($sql);
       db_fieldsmemory($result, 0);
-      echo $sql;
-      exit;
       $oRetorno->itens   = verificaSaldoCriterio($_POST['e55_autori'], $_POST['e55_item'], $tipoitem, $pc94_sequencial);
       $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori'], $_POST['e55_item']);
     } catch (Exception $e) {
