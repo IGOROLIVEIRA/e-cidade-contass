@@ -113,14 +113,13 @@ $pdf->cell(50,4,"Cód. orçamentário"               ,1,0,"C",1);
 $pdf->cell(60,4,"Projeto Atividade"               ,1,0,"C",1);
 $pdf->cell(50,4,"Fonte de Recurso"                ,1,1,"C",1);
 $pdf->setfont('arial','',11);
-$pdf->ln($alt);
 if(pg_num_rows($resultDotacao) != 0){
     for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
         $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
-        $pdf->cell(30, 4, $oDadosDotacoes->ficha, 0, 0, "C", 0);
-        $pdf->cell(50, 4, $oDadosDotacoes->codorcamentario, 0, 0, "C", 0);
-        $pdf->cell(60, 4, $oDadosDotacoes->projetoativ, 0, 0, "C", 0);
-        $pdf->cell(50, 4, $oDadosDotacoes->fonterecurso, 0, 1, "C", 0);
+        $pdf->cell(30, 5, $oDadosDotacoes->ficha,           1, 0, "C", 0);
+        $pdf->cell(50, 5, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
+        $pdf->cell(60, 5, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
+        $pdf->cell(50, 5, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
     }
 }else{
     $pdf->setfont('arial','b',11);
@@ -129,18 +128,18 @@ if(pg_num_rows($resultDotacao) != 0){
 $pdf->ln($alt+3);
 
 $pdf->setfont('arial','',11);
-$pdf->MultiCell(190,4,"     que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez , foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
-$pdf->ln($alt+6);
+$pdf->MultiCell(190,4,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
+$pdf->ln($alt+9);
 
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);
-$pdf->cell(190,4,$munic.','.strtoupper($sDataExtenso)                      ,0,1,"C",0);
+$pdf->cell(190,4,$munic.','.strtoupper($sDataExtenso)                     ,0,1,"C",0);
+$pdf->ln($alt+5);
+$pdf->cell(95,4,"________________________"                                ,0,0,"C",0);
+$pdf->cell(95,4,"________________________"                                ,0,1,"C",0);
+$pdf->cell(95,5,"Serviço Contábil"                                        ,0,0,"C",0);
+$pdf->cell(95,5,"Serviço Financeiro"                                      ,0,0,"C",0);
 $pdf->ln($alt+3);
-$pdf->cell(190,4,"________________________"                                ,0,1,"C",0);
-$pdf->cell(190,4,"Serviço Contábil"                                        ,0,1,"C",0);
-$pdf->ln($alt+3);
-$pdf->cell(190,4,"________________________"                                ,0,1,"C",0);
-$pdf->cell(190,4,"Serviço Financeiro"                                      ,0,1,"C",0);
 
 $pdf->Output();
 
