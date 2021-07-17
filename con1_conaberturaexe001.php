@@ -758,7 +758,7 @@ if (isset($p->incluir)) {
            $clorcprojativ->o55_tipo               = $oConc->o55_tipo;
            $clorcprojativ->o55_projativ           = $oConc->o55_projativ;
            $clorcprojativ->o55_descr              = $oConc->o55_descr;
-           $clorcprojativ->o55_finali             = $oConc->o55_finali;
+           $clorcprojativ->o55_finali             = str_replace("'","",$oConc->o55_finali);
            $clorcprojativ->o55_instit             = $oConc->o55_instit;
            $clorcprojativ->o55_tipoacao           = $oConc->o55_tipoacao==""?"0":$oConc->o55_tipoacao;
            $clorcprojativ->o55_orcproduto         = $oConc->o55_orcproduto==""?"0":$oConc->o55_orcproduto;
