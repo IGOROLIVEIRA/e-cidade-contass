@@ -291,50 +291,50 @@ $clrotulo->label("pc01_descrmater");
     console.log(obj);
     if (obj == 't') {
       $("#mytable tr").each(function() {
-        $(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
+        //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
         $(this).find("td:eq(7) input").attr('readonly', true);
       });
     } else {
       $("#mytable tr").each(function() {
-        $(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
+        //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
         $(this).find("td:eq(7) input").attr('readonly', false);
       });
     }
   }
 
-  function js_verificar() {
+  // function js_verificar() {
 
-    let qt = new Number(document.form1.e55_quant.value);
-    let qtant = new Number(document.form1.e55_quant_ant.value);
-    let vluni = new Number(document.form1.e55_vluni.value);
-    let vltot = new Number(document.form1.e55_vltot.value);
-    let total = new Number(document.form1.totalad.value);
-    let utili = new Number(document.form1.utilizado.value);
-    let dispo = new Number(document.form1.disponivel.value);
+  //   let qt = new Number(document.form1.e55_quant.value);
+  //   let qtant = new Number(document.form1.e55_quant_ant.value);
+  //   let vluni = new Number(document.form1.e55_vluni.value);
+  //   let vltot = new Number(document.form1.e55_vltot.value);
+  //   let total = new Number(document.form1.totalad.value);
+  //   let utili = new Number(document.form1.utilizado.value);
+  //   let dispo = new Number(document.form1.disponivel.value);
 
-    if (isNaN(qt) || qt <= 0) {
-      alert('Quantidade do item é inválida!');
-      return false;
-    }
+  //   if (isNaN(qt) || qt <= 0) {
+  //     alert('Quantidade do item é inválida!');
+  //     return false;
+  //   }
 
-    if (isNaN(vluni) || vluni <= 0) {
-      alert('Valor unitário é inválido!');
-      return false;
-    }
+  //   if (isNaN(vluni) || vluni <= 0) {
+  //     alert('Valor unitário é inválido!');
+  //     return false;
+  //   }
 
-    if (isNaN(vltot) || vltot == 0 || vltot == ' ') {
+  //   if (isNaN(vltot) || vltot == 0 || vltot == ' ') {
 
-      alert('Valor total inválido!');
-      return false;
-    }
+  //     alert('Valor total inválido!');
+  //     return false;
+  //   }
 
-    if ((vltot + utili) > total) {
-      alert('O valor total do item não pode ser maior que o valor total do item Adjudicado!');
-      return false;
-    }
+  //   if ((vltot + utili) > total) {
+  //     alert('O valor total do item não pode ser maior que o valor total do item Adjudicado!');
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   function js_calcula(origem) {
 
@@ -441,7 +441,6 @@ $clrotulo->label("pc01_descrmater");
         $('#utilizado').val(utilizado);
         $('#disponivel').val(disponivel);
         $('#totalad').val($('#total_' + id).val());
-        document.form1.totalad.value = total;
       }
     });
 
