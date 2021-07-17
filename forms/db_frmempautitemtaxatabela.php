@@ -114,7 +114,7 @@ $clrotulo->label("pc01_descrmater");
             <b>Ele. item</b>
           </td>
           <td>
-            <? db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '', "js_troca(this.value);");  ?>
+            <? db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '', "js_troca();");  ?>
           </td>
         </tr>
 
@@ -235,6 +235,7 @@ $clrotulo->label("pc01_descrmater");
           autori: <?php echo $e55_autori ?>,
           cgm: <?php echo $z01_numcgm ?>,
           tabela: document.getElementById('chave_tabela').value,
+          codele: document.getElementById('pc07_codele').value,
           dataType: "json"
         }
       },
@@ -276,8 +277,8 @@ $clrotulo->label("pc01_descrmater");
       url: "emp1_empautitemtaxatabela.RPC.php",
       data: oParam,
       success: function(data) {
-        console.log(data);
-        //$('#target').html(data.msg);
+        //console.log(data);
+        js_loadTable();
       }
     });
   }
@@ -335,27 +336,16 @@ $clrotulo->label("pc01_descrmater");
     return true;
   }
 
-  function js_removeVirgula(valor) {
-    let valor_unitario = '';
-    if (valor.includes('.') && valor.includes(',')) {
-      document.form1.e55_vluni.value = valor.replace(',', '');
-    }
-
-    if (valor.includes(',') && !valor.includes('.')) {
-      document.form1.e55_vluni.value = valor.replace(',', '.');
-    }
-  }
-
-
   function js_calcula(origem) {
 
     const item = origem.id.split('_');
 
     const id = item[1];
 
-    quant = new Number($('#qtd_' + id).val());
-    uni = new Number($('#vlrunit_' + id).val());
-    tot = new Number($('#total_' + id).val()).toFixed(2);
+    const desc = new Number($('#desc_' + id).val());
+    const quant = new Number($('#qtd_' + id).val());
+    const uni = new Number($('#vlrunit_' + id).val());
+    const tot = new Number($('#total_' + id).val()).toFixed(2);
 
     conQt = 'false';
 
@@ -371,6 +361,22 @@ $clrotulo->label("pc01_descrmater");
     if (item[0] == 'qtd' && quant != '' && conQt == 'false') {
       if (isNaN(quant)) {
         $('#qtd_' + id).focus();
+        return false;
+      }
+      if (tot != 0) {
+        t = new Number(tot / quant);
+        $('#total_' + id).val(tot);
+
+        $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
+      } else {
+        t = new Number(uni * quant);
+        $('#total_' + id).val(t.toFixed(2));
+      }
+    }
+
+    if (item[0] == 'desc' && desc != '' && conQt == 'false') {
+      if (isNaN(quant)) {
+        $('#desc_' + id).focus();
         return false;
       }
       if (tot != 0) {
@@ -409,22 +415,9 @@ $clrotulo->label("pc01_descrmater");
 
   }
 
-  // function js_consultaValores(params) {
-  //   novoAjax(params, (e) => {
-  //     let totitens = JSON.parse(e.responseText).itens;
-  //     document.form1.utilizado.value = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0";
-  //     document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
-
-  //     js_consulta();
-
-  //     document.form1.e55_quant.focus();
-  //   });
-  // }
-
   function consultaValores(origem) {
 
     const item = origem.id.split('_');
-
     const id = item[1];
 
     var params = {
@@ -442,29 +435,21 @@ $clrotulo->label("pc01_descrmater");
       url: "emp1_empautitemtaxatabela.RPC.php",
       data: params,
       success: function(data) {
-        console.log(data);
-        // document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
-        // document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
+        let totitens = JSON.parse(data);
+        let utilizado = totitens.itens[0].totalitens > 0 ? totitens.itens[0].totalitens : "0";
+        let disponivel = new Number(params.total - totitens.itens[0].totalitens) > 0 ? new Number(params.total - totitens.itens[0].totalitens) : "0";
+        $('#utilizado').val(utilizado);
+        $('#disponivel').val(disponivel);
+        $('#totalad').val($('#total_' + id).val());
+        document.form1.totalad.value = total;
       }
     });
 
-    // var request = new Ajax.Request('lic4_geraAutorizacoes.RPC.php', {
-    //   method: 'post',
-    //   parameters: 'json=' + Object.toJSON(params),
-    //   onComplete: onComplete
-    // });
-
   }
 
-  function js_troca(codele) {
-
-    descr = eval("document.form1.ele_" + codele + ".value");
-    arr = descr.split("#");
-
-    elemento = arr[0];
-    descricao = arr[1];
-    document.form1.elemento01.value = elemento;
-    document.form1.o56_descr.value = descricao;
+  function js_troca() {
+    js_loadTable();
+    consultaValores();
   }
 
   // function js_verificaControlaQuantidade(lControla) {
@@ -488,19 +473,4 @@ $clrotulo->label("pc01_descrmater");
   //     js_calcula('uni');
   //   }
   // }
-
-  // <?
-      // if (isset($incluir) || isset($alterar) || isset($excluir)) {
-
-      //   echo "\n\ntop.corpo.iframe_empautidot.location.href =  'emp1_empautidottaxatabela001.php?anulacao=true&e56_autori=$e55_autori';\n";
-      // }
-      //
-      ?>
-
-  // <? if (isset($numrows99) && $numrows99 > 0) { ?>
-  //   codele = document.form1.pc07_codele.value;
-  //   if (codele != '') {
-  //     js_troca(codele);
-  //   }
-  // <? } ?>
 </script>

@@ -25,6 +25,8 @@ switch ($_POST["action"]) {
     $autori = $_POST["autori"];
     $cgm    = $_POST["cgm"];
     $tabela = $_POST["tabela"];
+    $codele = $_POST["codele"];
+
     $iAnoSessao         = db_getsession('DB_anousu');
 
     $result_unidade = array();
@@ -76,8 +78,14 @@ switch ($_POST["action"]) {
             FROM empautoriza
             WHERE e54_autori = $autori)
          AND pc24_pontuacao=1";
+    $sqlQueryTotal = $sqlQuery;
     if (!empty($_POST["tabela"])) {
       $sqlQuery .= " and  pc94_sequencial = $tabela";
+    }
+    if (!empty($_POST["codele"])) {
+      $sqlQuery .= " and  pc07_codele = $codele";
+    } else {
+      $sqlQuery .= "AND pc07_codele=1";
     }
     $sqlQuery .= "UNION SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
@@ -115,10 +123,16 @@ switch ($_POST["action"]) {
            (SELECT e54_codlicitacao
             FROM empautoriza
             WHERE e54_autori = $autori)";
+    $sqlTotal = $sqlQueryTotal;
     if (!empty($_POST["tabela"])) {
       $sqlQuery .= " and  pc94_sequencial = $tabela";
     }
-    $sqlQuery .= "AND pc24_pontuacao=1
+    if (!empty($_POST["codele"])) {
+      $sqlQuery .= " and  pc07_codele = $codele";
+    } else {
+      $sqlQuery .= "AND pc07_codele=1";
+    }
+    $sqlQuery .= "
          AND (pcmater.pc01_tabela = 't'
               OR pcmater.pc01_taxa = 't')
          AND pcmater.pc01_codmater NOT IN
@@ -126,7 +140,7 @@ switch ($_POST["action"]) {
             FROM pctabela) ) fornecedores
     WHERE fornecedores.z01_numcgm = $cgm
     ";
-    $sqlTotal = $sqlQuery;
+
     if (!empty($_POST["search"]["value"])) {
       // $sqlQuery .= ' and (id LIKE "%' . $_POST["search"]["value"] . '%" ';
       // $sqlQuery .= ' OR name LIKE "%' . $_POST["search"]["value"] . '%" ';
@@ -142,6 +156,7 @@ switch ($_POST["action"]) {
     if ($_POST["length"] != -1) {
       $sqlQuery .= 'LIMIT ' . $_POST['length'];
     }
+
     $rsDadosTotal = $oDaoSysArqCamp->sql_record($sqlTotal);
     $rsDados      = $oDaoSysArqCamp->sql_record($sqlQuery);
 
@@ -152,8 +167,7 @@ switch ($_POST["action"]) {
         $oDados = db_utils::fieldsMemory($rsDados, $i);
         $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", "e55_item = $oDados->pc01_codmater"));
         $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, $i);
-        // db_criatabela($resultEmpAutItem);
-        // exit;
+
         $itemRows  = array();
 
         $selectunid = "";
