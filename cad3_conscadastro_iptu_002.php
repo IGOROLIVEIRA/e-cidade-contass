@@ -42,6 +42,8 @@ $sql = "select proprietario.*, j50_descr,
 							 j.z01_ender as ender_imobiliaria,
 							 j.z01_numcgm as z01_numimob,
 							 lote.j34_totcon,
+               lote.j34_distrito,
+               j01_unidade,
 							 iptubaseregimovel.*,
 							 ruastipo.j88_descricao as ruadescricao
           from proprietario
@@ -64,6 +66,8 @@ if($numMatriculaSelecionada > 0){
   db_fieldsmemory($matriculaSelecionada,0);
   $cod_matricula= $j01_matric;
 }
+
+db_sel_instit(null, "db21_usadistritounidade"); 
 
  /***********************************************************************************************/
  // Verifica se encontrou a matrícula. Caso não tenha encontrado exibe a mensagem abaixo.
@@ -228,13 +232,15 @@ if ($linhasareaconst>0){
     <td align="left" bgcolor="#FFFFFF" width="35"> <font color="#666666"><strong>&nbsp;<?=@$j91_codigo . " - " . @$j90_descr?></strong></font></td>
   </tr>
   <tr>
-    <td align="right" bgcolor="#CCCCCC">Setor/quadra/lote:&nbsp;</td>
+    <td align="right" bgcolor="#CCCCCC"><?=($db21_usadistritounidade == 't') ? 'Distrito/Setor/Quadra/Lote/Unidade' : 'Setor/Quadra/Lote:' ?> &nbsp;</td>
     <td bgcolor="#FFFFFF"><font color="#666666" colspan="2"><strong>&nbsp;
+      <?=($db21_usadistritounidade == 't') ? $j34_distrito.'/&nbsp;' : '' ?>
       <?=$j34_setor?>
       /&nbsp;
       <?=$j34_quadra?>
       / <font color="#666666">
-      <?=$j34_lote?>
+      <?=$j34_lote?>      
+      <?=($db21_usadistritounidade == 't') ? '/&nbsp;'.$j01_unidade : '' ?>
       <?
        include("classes/db_setor_classe.php");
        $clsetor = new cl_setor;
