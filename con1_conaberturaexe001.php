@@ -683,7 +683,7 @@ if (isset($p->incluir)) {
         $oConc = db_utils::fieldsMemory($rsUni, $i);
         $clorcunidade->o41_orgao   = $oConc->o41_orgao;
         $clorcunidade->o41_anousu  = $clconaberturaexe->c91_anousudestino;
-        $clorcunidade->o41_codtri  = $oConc->o41_codtri;
+        $clorcunidade->o41_codtri  = $oConc->o41_codtri == "" || $oConc->o41_codtri == "0" ? $oConc->o41_unidade : $oConc->o41_codtri;
         $clorcunidade->o41_descr   = $oConc->o41_descr;
         $clorcunidade->o41_instit  = $oConc->o41_instit;
         $clorcunidade->o41_unidade = $oConc->o41_unidade;
