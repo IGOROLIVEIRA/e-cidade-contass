@@ -100,9 +100,10 @@ $pdf->SetTextColor(0,0,0);
 $pdf->SetFillColor(235);
 $pdf->addpage('P');
 $alt = 3;
-$pdf->SetFont('arial','B',12);
+$pdf->SetFont('arial','B',14);
 $pdf->ln($alt+6);
-$pdf->Cell(190,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
+$pdf->x = 30;
+$pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
 $pdf->ln($alt+3);
 $pdf->x = 30;
 $pdf->SetFont('arial','',11);
@@ -120,6 +121,7 @@ $pdf->x = 30;
 
 if(pg_num_rows($resultDotacao) != 0){
     for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+        $pdf->x = 30;
         $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
         $pdf->cell(20, 5, $oDadosDotacoes->ficha,           1, 0, "C", 0);
         $pdf->cell(40, 5, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
@@ -141,7 +143,8 @@ $pdf->ln($alt+9);
 
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);
-$pdf->cell(190,4,$munic.','.strtoupper($sDataExtenso)                     ,0,1,"C",0);
+$pdf->x = 30;
+$pdf->cell(160,4,$munic.','.strtoupper($sDataExtenso)                     ,0,1,"C",0);
 $pdf->ln($alt+5);
 $pdf->cell(95,4,"________________________"                                ,0,0,"C",0);
 $pdf->cell(95,4,"________________________"                                ,0,1,"C",0);

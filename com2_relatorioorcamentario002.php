@@ -82,7 +82,7 @@ $pdf->SetTextColor(0,0,0);
 $pdf->SetFillColor(235);
 $pdf->addPage('P');
 $alt = 3;
-$pdf->SetFont('arial','B',12);
+$pdf->SetFont('arial','B',14);
 $pdf->ln($alt + 4);
 $pdf->cell(190,4,"SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA",0,1,"C",0);
 $pdf->ln($alt + 4);
