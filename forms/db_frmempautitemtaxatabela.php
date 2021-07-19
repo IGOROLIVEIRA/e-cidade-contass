@@ -78,25 +78,6 @@ $clrotulo->label("pc01_descrmater");
           </td>
         </tr>
         <tr style="height: 20px;">
-          <td nowrap title="<?= @$Te55_sequen ?>">
-            <?= @$Le55_sequen ?>
-          </td>
-          <td>
-            <? db_input('e55_sequen', 8, $Ie55_sequen, true, 'text', 3)  ?>
-          </td>
-        </tr>
-        <tr style="height: 20px;">
-          <td nowrap title="<?= @$Te55_descr ?>">
-            <?= @$Le55_descr ?>
-          </td>
-          <td>
-            <?
-            db_textarea('e55_descr', 3, 70, $Ie55_descr, true, 'text', $iOpcao, "");
-            ?>
-          </td>
-        </tr>
-
-        <tr style="height: 20px;">
           <td nowrap title="">
             <strong>Tabela:</strong>
           </td>
@@ -107,8 +88,6 @@ $clrotulo->label("pc01_descrmater");
           </td>
         </tr>
 
-
-
         <tr style="height: 20px;">
           <td nowrap title="">
             <b>Ele. item</b>
@@ -118,16 +97,6 @@ $clrotulo->label("pc01_descrmater");
           </td>
         </tr>
 
-
-        <tr>
-          <td><b>Desconto automático:</b></td>
-          <td>
-            <?
-            $aDescAutomatico = array("f" => "Não", "t" => "Sim");
-            db_select("descauto", $aDescAutomatico, true, $db_opcao, "onchange='js_desconto(this.value)'");
-            ?>
-          </td>
-        </tr>
         <tr style="height: 20px;">
           <td>
             <strong>Utilizado: </strong>
@@ -172,6 +141,7 @@ $clrotulo->label("pc01_descrmater");
           <tr>
             <th>M</th>
             <th>Código</th>
+            <th>Item</th>
             <th>Descrição</th>
             <th>Unidade</th>
             <th>Marca</th>
@@ -240,14 +210,21 @@ $clrotulo->label("pc01_descrmater");
         }
       },
     });
+    consultaValores();
   };
 
   function js_salvar() {
 
+    //console.log($("input[type='checkbox']").is(':checked'));
+    if (!$("input[type='checkbox']").is(':checked')) {
+      alert("É necessário marcar algum item");
+      return false;
+    }
+    return false;
+
     var oParam = new Object();
     oParam.action = "salvar";
     oParam.autori = $('#e55_autori').val();
-    oParam.sequen = $('#e55_sequen').val();
     oParam.codele = $('#pc07_codele').val();
     oParam.descr = $('#e55_descr').val();
     var oDados = {};
@@ -258,26 +235,25 @@ $clrotulo->label("pc01_descrmater");
       if ($(this).find("input[type='checkbox']").is(":checked")) {
 
         oDados.id = $(this).find("td:eq(1)").html();
-        oDados.unidade = $(this).find("td:eq(3) select").val();
-        oDados.marca = $(this).find("td:eq(4) input").val();
-        oDados.qtd = $(this).find("td:eq(5) input").val();
-        oDados.vlrunit = $(this).find("td:eq(6) input").val();
-        oDados.desc = $(this).find("td:eq(7) input").val();
-        oDados.total = $(this).find("td:eq(8) input").val();
+        oDados.descr = $(this).find("td:eq(3) input").val();
+        oDados.unidade = $(this).find("td:eq(4) select").val();
+        oDados.marca = $(this).find("td:eq(5) input").val();
+        oDados.qtd = $(this).find("td:eq(6) input").val();
+        oDados.vlrunit = $(this).find("td:eq(7) input").val();
+        oDados.desc = $(this).find("td:eq(8) input").val();
+        oDados.total = $(this).find("td:eq(9) input").val();
 
         aDados.push(oDados);
       }
     });
 
     oParam.dados = aDados;
-    //js_divCarregando(_M(CAMINHO_MENSAGENS + "salvando"), 'msgBox');
 
     $.ajax({
       type: "POST",
       url: "emp1_empautitemtaxatabela.RPC.php",
       data: oParam,
       success: function(data) {
-        //console.log(data);
         js_loadTable();
       }
     });
@@ -288,53 +264,18 @@ $clrotulo->label("pc01_descrmater");
   }
 
   function js_desconto(obj) {
-    console.log(obj);
     if (obj == 't') {
       $("#mytable tr").each(function() {
         //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
-        $(this).find("td:eq(7) input").attr('readonly', true);
+        $(this).find("td:eq(8) input").attr('readonly', true);
       });
     } else {
       $("#mytable tr").each(function() {
         //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
-        $(this).find("td:eq(7) input").attr('readonly', false);
+        $(this).find("td:eq(8) input").attr('readonly', false);
       });
     }
   }
-
-  // function js_verificar() {
-
-  //   let qt = new Number(document.form1.e55_quant.value);
-  //   let qtant = new Number(document.form1.e55_quant_ant.value);
-  //   let vluni = new Number(document.form1.e55_vluni.value);
-  //   let vltot = new Number(document.form1.e55_vltot.value);
-  //   let total = new Number(document.form1.totalad.value);
-  //   let utili = new Number(document.form1.utilizado.value);
-  //   let dispo = new Number(document.form1.disponivel.value);
-
-  //   if (isNaN(qt) || qt <= 0) {
-  //     alert('Quantidade do item é inválida!');
-  //     return false;
-  //   }
-
-  //   if (isNaN(vluni) || vluni <= 0) {
-  //     alert('Valor unitário é inválido!');
-  //     return false;
-  //   }
-
-  //   if (isNaN(vltot) || vltot == 0 || vltot == ' ') {
-
-  //     alert('Valor total inválido!');
-  //     return false;
-  //   }
-
-  //   if ((vltot + utili) > total) {
-  //     alert('O valor total do item não pode ser maior que o valor total do item Adjudicado!');
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
 
   function js_calcula(origem) {
 
@@ -415,19 +356,12 @@ $clrotulo->label("pc01_descrmater");
 
   }
 
-  function consultaValores(origem) {
-
-    const item = origem.id.split('_');
-    const id = item[1];
+  function consultaValores() {
 
     var params = {
       action: 'verificaSaldoCriterio',
-      e55_item: id,
       e55_autori: $('#e55_autori').val(),
       cgm: <?php echo $z01_numcgm ?>,
-      //tipoitem: chave8,
-      //pc94_sequencial: chave9,
-      total: $('#total_' + id).val()
     };
 
     $.ajax({
@@ -440,36 +374,23 @@ $clrotulo->label("pc01_descrmater");
         let disponivel = new Number(params.total - totitens.itens[0].totalitens) > 0 ? new Number(params.total - totitens.itens[0].totalitens) : "0";
         $('#utilizado').val(utilizado);
         $('#disponivel').val(disponivel);
-        $('#totalad').val($('#total_' + id).val());
       }
     });
+  }
 
+  function consultaLancar() {
+    var total = 0;
+    $("#mytable tr").each(function() {
+      if ($(this).find("input[type='checkbox']").is(":checked")) {
+        total += Number($(this).find("td:eq(9) input").val());
+        console.log('total', total);
+      }
+    });
+    $('#totalad').val(total);
   }
 
   function js_troca() {
     js_loadTable();
     consultaValores();
   }
-
-  // function js_verificaControlaQuantidade(lControla) {
-  //   <?php
-        //   if ($db_opcao == 3) {
-        //     echo "return;";
-        //   }
-        //
-        ?>
-  //   if (lControla == "true") {
-  //     $("e55_quant").style.backgroundColor = "#FFFFFF";
-  //     $("e55_quant").removeAttribute("readonly");
-  //     $("e55_vluni").style.backgroundColor = "#DEB887";
-  //     $("e55_vluni").setAttribute("readonly", true);
-  //   } else {
-  //     $("e55_quant").style.backgroundColor = "#DEB887";
-  //     $("e55_quant").setAttribute("readonly", true);
-  //     //$("e55_quant").value = 1;
-  //     $("e55_vluni").style.backgroundColor = "#FFFFFF";
-  //     $("e55_vluni").removeAttribute("readonly");
-  //     js_calcula('uni');
-  //   }
-  // }
 </script>
