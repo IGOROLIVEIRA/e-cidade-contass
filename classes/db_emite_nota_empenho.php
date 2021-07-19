@@ -113,7 +113,7 @@ class cl_emite_nota_empenho {
 
         return $sqlemp;
 
-    } 
+    }
 
     function get_sql_pacto($e61_autori) {
 
@@ -228,11 +228,11 @@ class cl_emite_nota_empenho {
         $sSqlFuncaoOrdenaPagamento .=" order by  rh02_seqpes asc limit 1 ";
 
         return $sSqlFuncaoOrdenaPagamento;
-        
+
     }
 
     function get_sql_funcao_ordena_despesa($cgmordenadespesa, $iAno, $iMes) {
-    
+
         $sSqlFuncaoOrdenadespesa =" select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenadespesa";
         $sSqlFuncaoOrdenadespesa .=" from rhpessoal ";
         $sSqlFuncaoOrdenadespesa .=" LEFT join rhpessoalmov on rh02_regist=rh01_regist ";
@@ -250,11 +250,13 @@ class cl_emite_nota_empenho {
     }
 
     function get_dados_licitacao($e54_tipoautorizacao, $e54_autori) {
-    
+
         /**
          * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
          * @MarioJunior OC 7425
         */
+
+        $clempautitem = db_utils::getDao("empautitem");
 
         $sCampos        = "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo";
         $sSqlEmpaut     = $clempautitem->sql_query_processocompras(null, null, $sCampos, null, "e55_autori = $e54_autori ");
@@ -266,10 +268,10 @@ class cl_emite_nota_empenho {
         $oDado->resumo              = '';
         $oDado->descr_tipocompra    = '';
         $oDado->descr_modalidade    = '';
-    
+
         //tipo Direta
         if($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
-            
+
             if ($clempautitem->numrows > 0) {
                 db_fieldsmemory($result_empaut, 0);
                 if($e54_numerl != "") {
@@ -289,7 +291,7 @@ class cl_emite_nota_empenho {
         //tipo licitacao de outros orgaos
 
         if($e54_tipoautorizacao == 2){
-            
+
             if ($clempautitem->numrows > 0) {
                 db_fieldsmemory($result_empaut, 0);
                 $arr_numerl = split("/", $e54_numerl);
@@ -303,7 +305,7 @@ class cl_emite_nota_empenho {
 
         //tipo licitacao
         if($e54_tipoautorizacao == 3){
-            
+
             if ($clempautitem->numrows > 0) {
                 db_fieldsmemory($result_empaut, 0);
                 $arr_numerl = split("/", $e54_numerl);
@@ -317,7 +319,7 @@ class cl_emite_nota_empenho {
 
         //tipo Adesao regpreco
         if($e54_tipoautorizacao == 4){
-            
+
             if ($clempautitem->numrows > 0) {
                 db_fieldsmemory($result_empaut, 0);
                 $arr_numerl = split("/", $e54_numerl);
@@ -334,7 +336,7 @@ class cl_emite_nota_empenho {
     }
 
     function get_acordo($e60_numemp) {
-    
+
         $sSql = " SELECT ac16_numeroacordo, ac16_anousu from empempenhocontrato JOIN acordo ON ac16_sequencial = e100_acordo where e100_numemp = ".$e60_numemp;
         $rsAcordo = db_query($sSql);
         return db_utils::fieldsMemory($rsAcordo, 0);
@@ -342,5 +344,3 @@ class cl_emite_nota_empenho {
     }
 
 }
-
-?>
