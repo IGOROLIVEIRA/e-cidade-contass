@@ -370,7 +370,6 @@ if(pg_numrows($result) == 0) {
                                 $mostra_menu = true;
                                 $result      = db_query($sSql) or die($sSql); // ordenar por $descrdepto
                                 db_selectrecord('coddepto',$result,true,2,'','','','','js_mostramodulo(document.form1.coddepto.value,document.form1.coddeptodescr.options.text)');
-                                echo $teste;
                                 if(!session_is_registered("DB_coddepto")){
 
                                     db_putsession("DB_coddepto",pg_result($result,0,0));
