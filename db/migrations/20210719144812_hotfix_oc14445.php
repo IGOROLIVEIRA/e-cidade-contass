@@ -2,9 +2,8 @@
 
 use Classes\PostgresMigration;
 
-class Oc14445 extends PostgresMigration
+class HotfixOc14445 extends PostgresMigration
 {
-
     public function up()
     {
         $sql = <<<SQL
@@ -253,6 +252,6 @@ class Oc14445 extends PostgresMigration
         COMMIT;
 
 SQL;
-        //$this->execute($sql);
+        $this->execute($sql);
     }
 }
