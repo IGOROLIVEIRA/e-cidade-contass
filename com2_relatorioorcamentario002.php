@@ -101,7 +101,6 @@ $pdf->cell(190,4,$munic.','.strtoupper($sDataExtenso)                      ,0,1,
 $pdf->ln($alt+6);
 $pdf->cell(190,4,"________________________"                                ,0,1,"C",0);
 $pdf->cell(190,4,"Presidente da CPL"                                       ,0,1,"C",0);
-$pdf->ln($alt+3);
 $pdf->cell(190,4,"E/OU Presidente da Comissão de Licitação"                ,0,1,"C",0);
 
 $pdf->Output();
