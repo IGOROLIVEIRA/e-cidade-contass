@@ -29,7 +29,7 @@ class Oc14445camposdistrito extends PostgresMigration
 
         -- ADICIONA CAMPO A TABELA DB_CONFIG
         ALTER TABLE configuracoes.db_config ADD COLUMN db21_usadistritounidade boolean;
-        ALTER TABLE configuracoes.db_config ALTER COLUMN db21_usadistritounidade SET DEFAULT FALSE;
+        UPDATE configuracoes.db_config SET db21_usadistritounidade = false;
 
         COMMIT;        
 
