@@ -167,7 +167,6 @@ try {
 				$sSqlEmpenhos  .= "        order by rh72_recurso,rh72_orgao,rh72_unidade,rh72_projativ,rh72_coddot,rh72_codele ";
 
 				$rsDadosEmpenho = db_query($sSqlEmpenhos);
-                
 				$aEmpenhos      = db_utils::getCollectionByRecord($rsDadosEmpenho, false, false, true);
 				$iTotalEmpenhos = count($aEmpenhos);
 				for ($iEmpenho = 0; $iEmpenho < $iTotalEmpenhos; $iEmpenho++) {
@@ -486,10 +485,6 @@ try {
 				$rsListaEmpenhos   = db_query($sSqlListaEmpenhosRescisao);
 				$oParam->aEmpenhos = db_utils::getCollectionByRecord($rsListaEmpenhos);
 			}
-
-            $aEmpenhosFinaceirosGerados = array();
-			 
-            $lPrevidencia = ($oParam->iTipo == 2);
 			 
 			foreach ($oParam->aEmpenhos as $oEmpenhoFolha) {
 				 
@@ -508,10 +503,7 @@ try {
 					$oParam->iNumCgm = $oEmpenhoFolha->rh01_numcgm;
 				}
 				 
-                $oEmpenho->setTipoEmpenhoResumo($oParam->iTipo);
-				$oEmpenho->gerarEmpenho($oParam->iNumCgm, $lPrevidencia);
-                
-                $aEmpenhosFinaceirosGerados[] = $oEmpenho->getNumeroEmpenhoFinanceiro();
+				$oEmpenho->gerarEmpenho($oParam->iNumCgm);
 				 
 				/**
 				 * caso for folha de rescisao, devemos atualizar a rescisao como empenhada
@@ -527,7 +519,7 @@ try {
 			}
 
 			$oRetorno->e42_sequencial = $iOPAuxiliar = $oParam->lOPporRecurso?implode(", ", $aRecursos):$iOPAuxiliar;
-            $oRetorno->empenhos_financeiros_gerados = count($aEmpenhosFinaceirosGerados) > 0 ? implode(',',$aEmpenhosFinaceirosGerados) : '';
+			 
 			db_fim_transacao(false);
 			 
 			break;
@@ -663,54 +655,6 @@ try {
 			$oRetorno->itens = $aEmpenhos;
 
 			break;
-
-        case "getEmpenhosFinanceiros":
-
-            $aSiglas = explode(',', $oParam->sSigla);			
-			$aEmpenhosFinanceiros = array();
-			
-			foreach ($aSiglas as $sSigla) {
-				
-				$oParam->sSigla = trim($sSigla);
-
-                $sSqlEmpenhos   = "SELECT DISTINCT rh76_numemp                                                                                          ";
-				$sSqlEmpenhos  .= "  from rhempenhofolha 																		        ";
-				$sSqlEmpenhos  .= "       inner join rhempenhofolharhemprubrica  on rh81_rhempenhofolha = rh72_sequencial               ";
-				$sSqlEmpenhos  .= "       inner join rhempenhofolharubrica       on rh73_sequencial     = rh81_rhempenhofolharubrica    ";
-				$sSqlEmpenhos  .= "       inner join rhempenhofolhaempenho        on rh72_sequencial     = rh76_rhempenhofolha          ";
-				$sSqlEmpenhos  .= " where rh72_tipoempenho = {$oParam->iTipo}                                                           ";
-				$sSqlEmpenhos  .= "   and rh73_instit      = ".db_getsession("DB_instit"). "                                            ";
-				$sSqlEmpenhos  .= "   and rh73_tiporubrica = 1																		    ";
-				$sSqlEmpenhos  .= "   and rh72_anousu      = {$oParam->iAnoFolha}                                                       ";
-				$sSqlEmpenhos  .= "   and rh72_mesusu      = {$oParam->iMesFolha}                                                       ";
-				$sSqlEmpenhos  .= "   and rh72_siglaarq    = '{$oParam->sSigla}'                                                        ";
-                
-                if (isset($oParam->iSeqPes)) {
-					$sSqlEmpenhos  .= " and rh73_seqpes     = {$oParam->iSeqPes}";
-				} else if ($oParam->iTipo == 1) {
-					$sSqlEmpenhos  .= " and rh72_seqcompl    = {$oParam->sSemestre}";
-				}
-
-				/**
-				 * Inclui no where condicao das tabelas da previdencia
-				 * caso seja o tipo 2 - previdencia e selecionou 1 ou mais tabelas
-				 */
-				if ( $oParam->iTipo == 2 && $oParam->sPrevidencia !== '' ) {
-					$sSqlEmpenhos .= " and rh72_tabprev in({$oParam->sPrevidencia})  ";
-				}
-				
-				$sSqlEmpenhos  .= " order by rh76_numemp";
-
-				$rsDadosEmpenho = db_query($sSqlEmpenhos);
-                for ($i = 0; $i < pg_num_rows($rsDadosEmpenho); $i++) {
-                    $aEmpenhosFinanceiros[] = db_utils::fieldsMemory($rsDadosEmpenho,$i)->rh76_numemp;
-                }
-                
-            }
-
-            $oRetorno->empenhos_financeiros = count($aEmpenhosFinanceiros) > 1 ? implode(',',$aEmpenhosFinanceiros) : '';
-
-            break;
 			 
 	}
  
