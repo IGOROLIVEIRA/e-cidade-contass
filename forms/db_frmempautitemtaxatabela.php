@@ -93,7 +93,14 @@ $clrotulo->label("pc01_descrmater");
             <b>Ele. item</b>
           </td>
           <td>
-            <? db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '', "js_troca();");  ?>
+            <?
+            if (pg_numrows($result) == 0) {
+              db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '', "js_troca();");
+            } else {
+              db_fieldsmemory($result_elemento, 0);
+              db_input('pc07_codele', 50, 0, true, 'text', 3);
+            }
+            ?>
           </td>
         </tr>
 
@@ -109,29 +116,6 @@ $clrotulo->label("pc01_descrmater");
             <? db_input('totalad', 9, "", true, 'text', 3, ""); ?>
           </td>
         </tr>
-        <tr style="height: 20px;">
-          <td>&nbsp;</td>
-          <td>
-            <?php if (isset($pc01_servico) && $pc01_servico == 't') :
-
-              if (!isset($e55_servicoquantidade)) {
-                $e55_servicoquantidade = "f";
-              }
-            ?>
-
-              <b>Controlar por quantidade:</b>
-              <select name="lControlaQuantidade" id="lControlaQuantidade" onchange="js_verificaControlaQuantidade(this.value);" <?php echo $db_opcao == 3 ? " disabled='true'" : "" ?>>
-                <option value="false">NÃO</option>
-                <option value="true">SIM</option>
-              </select>
-              <script>
-                lControlaQuantidade = "<?php echo $e55_servicoquantidade == 't' ? 'true' : 'false'; ?>";
-                $("lControlaQuantidade").value = lControlaQuantidade;
-                js_verificaControlaQuantidade($F("lControlaQuantidade"));
-              </script>
-            <?php endif; ?>
-          </td>
-        </tr>
 
       </table>
     </fieldset>
@@ -145,6 +129,7 @@ $clrotulo->label("pc01_descrmater");
             <th>Descrição</th>
             <th>Unidade</th>
             <th>Marca</th>
+            <th>Serviço</th>
             <th>Qtdd</th>
             <th>Vlr. Unit.</th>
             <th>Desc. %</th>
@@ -154,6 +139,7 @@ $clrotulo->label("pc01_descrmater");
       </table>
     </div>
     <input name="salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
+    <input name="excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
   </center>
 </form>
 <script>
@@ -215,12 +201,15 @@ $clrotulo->label("pc01_descrmater");
 
   function js_salvar() {
 
-    //console.log($("input[type='checkbox']").is(':checked'));
     if (!$("input[type='checkbox']").is(':checked')) {
       alert("É necessário marcar algum item");
       return false;
     }
-    return false;
+
+    if ($('#disponivel').val() < $('#totalad').val()) {
+      alert("Não há valor disponível");
+      return false;
+    }
 
     var oParam = new Object();
     oParam.action = "salvar";
@@ -238,10 +227,11 @@ $clrotulo->label("pc01_descrmater");
         oDados.descr = $(this).find("td:eq(3) input").val();
         oDados.unidade = $(this).find("td:eq(4) select").val();
         oDados.marca = $(this).find("td:eq(5) input").val();
-        oDados.qtd = $(this).find("td:eq(6) input").val();
-        oDados.vlrunit = $(this).find("td:eq(7) input").val();
-        oDados.desc = $(this).find("td:eq(8) input").val();
-        oDados.total = $(this).find("td:eq(9) input").val();
+        oDados.marca = $(this).find("td:eq(6) input").val();
+        oDados.qtd = $(this).find("td:eq(7) input").val();
+        oDados.vlrunit = $(this).find("td:eq(8) input").val();
+        oDados.desc = $(this).find("td:eq(9) input").val();
+        oDados.total = $(this).find("td:eq(10) input").val();
 
         aDados.push(oDados);
       }
@@ -254,6 +244,46 @@ $clrotulo->label("pc01_descrmater");
       url: "emp1_empautitemtaxatabela.RPC.php",
       data: oParam,
       success: function(data) {
+        console.log(data);
+        let response = JSON.parse(data);
+        console.log(response);
+        alert(response.message);
+        js_loadTable();
+      }
+    });
+  }
+
+  function js_excluir() {
+
+    //console.log($("input[type='checkbox']").is(':checked'));
+    if (!$("input[type='checkbox']").is(':checked')) {
+      alert("É necessário marcar algum item");
+      return false;
+    }
+
+    var oParam = new Object();
+    oParam.action = "excluir";
+    oParam.autori = $('#e55_autori').val();
+    var oDados = {};
+    var aDados = [];
+
+    $("#mytable tr").each(function() {
+
+      if ($(this).find("input[type='checkbox']").is(":checked")) {
+
+        oDados.id = $(this).find("td:eq(1)").html();
+        aDados.push(oDados);
+      }
+    });
+
+    oParam.dados = aDados;
+
+    $.ajax({
+      type: "POST",
+      url: "emp1_empautitemtaxatabela.RPC.php",
+      data: oParam,
+      success: function(data) {
+        console.log(data);
         js_loadTable();
       }
     });
@@ -263,16 +293,20 @@ $clrotulo->label("pc01_descrmater");
     js_loadTable();
   }
 
+  function js_servico(origem) {
+
+  }
+
   function js_desconto(obj) {
     if (obj == 't') {
       $("#mytable tr").each(function() {
         //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
-        $(this).find("td:eq(8) input").attr('readonly', true);
+        $(this).find("td:eq(9) input").attr('readonly', true);
       });
     } else {
       $("#mytable tr").each(function() {
         //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
-        $(this).find("td:eq(8) input").attr('readonly', false);
+        $(this).find("td:eq(9) input").attr('readonly', false);
       });
     }
   }
@@ -280,7 +314,6 @@ $clrotulo->label("pc01_descrmater");
   function js_calcula(origem) {
 
     const item = origem.id.split('_');
-
     const id = item[1];
 
     const desc = new Number($('#desc_' + id).val());
@@ -289,10 +322,6 @@ $clrotulo->label("pc01_descrmater");
     const tot = new Number($('#total_' + id).val()).toFixed(2);
 
     conQt = 'false';
-
-    // if (document.querySelector('#lControlaQuantidade')) {
-    //   conQt = obj.lControlaQuantidade.value;
-    // }
 
     if (conQt == 'true') {
       t = new Number(uni * quant);
@@ -382,7 +411,7 @@ $clrotulo->label("pc01_descrmater");
     var total = 0;
     $("#mytable tr").each(function() {
       if ($(this).find("input[type='checkbox']").is(":checked")) {
-        total += Number($(this).find("td:eq(9) input").val());
+        total += Number($(this).find("td:eq(10) input").val());
         console.log('total', total);
       }
     });

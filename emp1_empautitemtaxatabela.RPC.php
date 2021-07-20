@@ -201,9 +201,11 @@ switch ($_POST["action"]) {
     // } else {
     //   $sqlQuery .= 'ORDER BY id DESC ';
     // }
+
     if ($_POST["length"] != -1) {
       $sqlQuery .= 'LIMIT ' . $_POST['length'];
     }
+
     $rsDadosTotal = $oDaoSysArqCamp->sql_record($sqlQueryTotal);
     $rsDados      = $oDaoSysArqCamp->sql_record($sqlQuery);
 
@@ -228,16 +230,35 @@ switch ($_POST["action"]) {
         }
         $selectunid .= "</select>";
 
+
+
+        $selectservico = "";
+        $selectservico = "<select id='servico_{$oDados->pc01_codmater}' onchange='js_servico(this)' >";
+
+        if ($oDadosEmpAutItem->e55_servicoquantidade) {
+          $selectservico .= "<option value='1' selected='selected'>Sim</option>";
+          $selectservico .= "<option value='0'>" . utf8_encode('Não') . "</option>";
+        } else {
+          $selectservico .= "<option value='1'>Sim</option>";
+          $selectservico .= "<option value='0' selected='selected'>" . utf8_encode('Não') . "</option>";
+        }
+        $selectservico .= "</select>";
+
         $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
         $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}' />";
         $itemRows[] = $selectunid;
         $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}' />";
-        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' />";
+        $itemRows[] = $selectservico;
+        if ($oDadosEmpAutItem->e55_servicoquantidade) {
+          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' readonly />";
+        } else {
+          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' />";
+        }
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' />";
         $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' />";
-        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' />";
+        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly />";
         $employeeData[] = $itemRows;
       }
 
@@ -292,7 +313,13 @@ switch ($_POST["action"]) {
   case "excluir":
 
     db_inicio_transacao();
-    $clempautitem->excluir(null, null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id']);
+    foreach ($_POST['dados'] as $item) :
+      $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
+
+      if (pg_numrows($rsItem) > 0)
+        $clempautitem->excluir(null, null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id']);
+
+    endforeach;
     db_fim_transacao();
 
     if ($clempautitem->erro_status == 0) {
@@ -307,7 +334,7 @@ switch ($_POST["action"]) {
   case "verificaSaldoCriterio":
 
     try {
-      $oRetorno->itens   = verificaSaldoCriterio($_POST['e55_autori'], $pc94_sequencial);
+      $oRetorno->itens   = verificaSaldoCriterio($_POST['e55_autori']);
       $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
     } catch (Exception $e) {
       $oRetorno->erro = $e->getMessage();
@@ -317,32 +344,16 @@ switch ($_POST["action"]) {
     break;
 }
 
-function verificaSaldoCriterio($e55_autori, $pc94_sequencial)
+function verificaSaldoCriterio($e55_autori)
 {
-  $sSQL = "";
-  if (!$pc94_sequencial) {
-    $sSQL = "
+  $sSQL = "
      select sum(e55_vltot) as totalitens
       from empautitem
        inner join empautoriza on e54_autori = e55_autori
         where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
     ";
-  } else {
-
-    $sSQL = "
-      select sum(e55_vltot) as totalitens
-      from empautitem
-       inner join empautoriza on e54_autori = e55_autori
-       inner join pctabelaitem on pctabelaitem.pc95_codmater = empautitem.e55_item
-       inner join pctabela on pctabela.pc94_sequencial = pctabelaitem.pc95_codtabela
-        where e54_codlicitacao = (
-                                  select e54_codlicitacao
-                                   from empautoriza
-                                    where e54_autori = {$e55_autori}
-                                  )
-                                  and pc94_sequencial = {$pc94_sequencial}
-    ";
-  }
+  echo $sSQL;
+  exit;
   $rsConsulta = db_query($sSQL);
   $oItens = db_utils::getCollectionByRecord($rsConsulta);
   return $oItens;
@@ -357,7 +368,6 @@ function verificaSaldoCriterioItemQuantidade($e55_autori)
      inner join empautoriza on e54_autori = e55_autori
       where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
   ";
-
   $rsConsulta = db_query($sSQL);
   $oItens = db_utils::getCollectionByRecord($rsConsulta);
   return $oItens;

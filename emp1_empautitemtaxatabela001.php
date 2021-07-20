@@ -195,16 +195,9 @@ where
     pctabela) ) fornecedores
 ");
 
-if (!isset($lControlaQuantidade)) {
-  $lControlaQuantidade = "false";
-}
-
-//if (isset($opcao) && empty($consultando)) {
-
 $result = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen));
 
 db_fieldsmemory($result, 0);
-//}
 
 ?>
 <html>
