@@ -395,7 +395,7 @@ class cl_empautoriza
                                    ," . ($this->e54_adesaoregpreco == "null" || $this->e54_adesaoregpreco == "" ? "null" : "'" . $this->e54_adesaoregpreco . "'") . "
                                    ," . ($this->e54_tipoorigem == "null" || $this->e54_tipoorigem == "" ? "null" : "'" . $this->e54_tipoorigem . "'") . "
                                    ," . ($this->e54_tipoautorizacao == "null" || $this->e54_tipoautorizacao == "" ? "null" : "'" . $this->e54_tipoautorizacao . "'") . "
-                                   ,$this->e54_desconto
+                                   ,'$this->e54_desconto'
                           )";
     $result = db_query($sql);
     if ($result == false) {
@@ -778,7 +778,7 @@ class cl_empautoriza
         $sql  .= $virgula . " e54_desconto = 'null' ";
         $virgula = ",";
       } else {
-        $sql  .= $virgula . " e54_desconto = $this->e54_desconto ";
+        $sql  .= $virgula . " e54_desconto = '$this->e54_desconto' ";
         $virgula = ",";
       }
     }

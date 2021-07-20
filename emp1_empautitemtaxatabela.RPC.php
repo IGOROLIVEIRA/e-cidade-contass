@@ -247,17 +247,22 @@ switch ($_POST["action"]) {
         $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
-        $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}' />";
+        $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}' onkeypress='return lettersOnly(event)' />";
         $itemRows[] = $selectunid;
-        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}' />";
+        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}' onkeypress='return lettersOnly(event)' />";
         $itemRows[] = $selectservico;
         if ($oDadosEmpAutItem->e55_servicoquantidade) {
           $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' readonly />";
         } else {
-          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' />";
+          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' />";
         }
-        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' />";
-        $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' />";
+        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' />";
+
+        if ($_POST['desconto'] == 't')
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' readonly />";
+        else
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' />";
+
         $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly />";
         $employeeData[] = $itemRows;
       }
@@ -352,8 +357,7 @@ function verificaSaldoCriterio($e55_autori)
        inner join empautoriza on e54_autori = e55_autori
         where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
     ";
-  echo $sSQL;
-  exit;
+
   $rsConsulta = db_query($sSQL);
   $oItens = db_utils::getCollectionByRecord($rsConsulta);
   return $oItens;

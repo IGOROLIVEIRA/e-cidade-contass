@@ -291,7 +291,7 @@ db_app::load("DBFormCache.js");
         <td>
           <?
           $aDescAutomatico = array("f" => "Não", "t" => "Sim");
-          db_select("descauto", $aDescAutomatico, true, $db_opcao, "onchange='js_desconto(this.value)'");
+          db_select("e54_desconto", $aDescAutomatico, true, $db_opcao);
           ?>
         </td>
       </tr>

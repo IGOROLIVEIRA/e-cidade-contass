@@ -138,6 +138,7 @@ $clrotulo->label("pc01_descrmater");
         </thead>
       </table>
     </div>
+    <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
     <input name="salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
     <input name="excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
   </center>
@@ -149,6 +150,8 @@ $clrotulo->label("pc01_descrmater");
 
     $('#myTable').DataTable().clear().destroy();
     $('#myTable').DataTable({
+      searchable: false,
+      paging: false,
       language: {
         "sEmptyTable": "Nenhum registro encontrado",
         "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -192,6 +195,7 @@ $clrotulo->label("pc01_descrmater");
           cgm: <?php echo $z01_numcgm ?>,
           tabela: document.getElementById('chave_tabela').value,
           codele: document.getElementById('pc07_codele').value,
+          desconto: document.getElementById('e54_desconto').value,
           dataType: "json"
         }
       },
@@ -295,6 +299,19 @@ $clrotulo->label("pc01_descrmater");
 
   function js_servico(origem) {
 
+    //console.log(origem.id);
+    const item = origem.id.split('_');
+    const id = item[1];
+
+    //console.log($('#servico_' + id).val());
+    if ($('#servico_' + id).val() == 1) {
+      $('#qtd_' + id).val(1);
+      $('#qtd_' + id).attr('readonly', true);
+    } else {
+      $('#qtd_' + id).val(0);
+      $('#qtd_' + id).attr('readonly', false);
+    }
+
   }
 
   function js_desconto(obj) {
@@ -315,7 +332,7 @@ $clrotulo->label("pc01_descrmater");
 
     const item = origem.id.split('_');
     const id = item[1];
-
+    console.log(item);
     const desc = new Number($('#desc_' + id).val());
     const quant = new Number($('#qtd_' + id).val());
     const uni = new Number($('#vlrunit_' + id).val());
@@ -324,8 +341,13 @@ $clrotulo->label("pc01_descrmater");
     conQt = 'false';
 
     if (conQt == 'true') {
-      t = new Number(uni * quant);
-      $('#total_' + id).val(t.toFixed(2));
+      if ($('#e54_desconto' + id).val() == 'f') {
+        t = new Number((uni - (desc / 100)) * quant);
+        $('#total_' + id).val(t.toFixed(2));
+      } else {
+        t = new Number(uni * quant);
+        $('#total_' + id).val(t.toFixed(2));
+      }
     }
 
     if (item[0] == 'qtd' && quant != '' && conQt == 'false') {
@@ -382,7 +404,7 @@ $clrotulo->label("pc01_descrmater");
         $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
       }
     }
-
+    consultaLancar();
   }
 
   function consultaValores() {
@@ -421,5 +443,29 @@ $clrotulo->label("pc01_descrmater");
   function js_troca() {
     js_loadTable();
     consultaValores();
+  }
+
+  function onlynumber(evt) {
+    var theEvent = evt || window.event;
+    var key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+    //var regex = /^[0-9.,]+$/;
+    var regex = /^[0-9.]+$/;
+    if (!regex.test(key)) {
+      theEvent.returnValue = false;
+      if (theEvent.preventDefault) theEvent.preventDefault();
+    }
+  }
+
+  function lettersOnly(evt) {
+    evt = (evt) ? evt : event;
+    var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
+      ((evt.which) ? evt.which : 0));
+    if (charCode > 31 && (charCode < 65 || charCode > 90) &&
+      (charCode < 97 || charCode > 122)) {
+      //alert("Apenas letras.");
+      return false;
+    }
+    return true;
   }
 </script>
