@@ -89,11 +89,11 @@ if (isset($alterar)) {
                 acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
                 inner join acordosituacao on
                 acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-                inner join acordocomissao on
+                left join acordocomissao on
                 acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
                 inner join acordovigencia on
                 ac26_sequencial = ac18_acordoposicao
-                inner join acordoposicaoaditamento on
+                left join acordoposicaoaditamento on
                 ac26_sequencial = ac35_acordoposicao
                 inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
                 where ac16_sequencial = '$ac16_sequencial'"
