@@ -107,7 +107,7 @@ $pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
 $pdf->ln($alt+3);
 $pdf->x = 30;
 $pdf->SetFont('arial','',11);
-$pdf->MultiCell(160,5,"     Examinando as Dotações constantes do orçamento fiscal e levando-se em conta os serviços que se pretende contratar, cujo objeto é ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($vlrtotal,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
+$pdf->MultiCell(160,5,"     Examinando  as  Dotações  constantes  do  orçamento  fiscal  e  levando-se  em  conta  o objeto que se  pretende  contratar, ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($vlrtotal,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
 
 $pdf->ln($alt+3);
 $pdf->x = 30;
