@@ -54,6 +54,7 @@ $clrotulo->label("o54_anousu");
 $clrotulo->label("o55_descr");
 $clrotulo->label("o55_descr");
 $clrotulo->label("o56_codele");
+$clrotulo->label("o56_elemento");
 $clrotulo->label("o05_valor");
 $clrotulo->label("o11_descricao");
 $clrotulo->label("o08_concarpeculiar");
@@ -79,16 +80,23 @@ db_app::load("estilos.css");
 .dotacaonormal {
   background-color:  #FFFFFF;
 }
+#o56_descr {
+    width: 311px;
+}
+#o15_descr, #o11_descricao, #c58_descr {
+    width: 420px;
+}
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_init()">
 <center> 
 <form method="post" name='form1'>
-  <table>
+  <table width="850px">
    <tr>
    <td>
    <fieldset><legend><b>Elementos</legend>
-    <table>
+   <center> 
+   <table>
      <tr>
     <td nowrap title="<?=@$To08_elemento?>">
        <?
@@ -98,8 +106,9 @@ db_app::load("estilos.css");
     </td>
     <td> 
      <?
-     db_input('o08_elemento',10,$Io08_elemento,true,'text',$db_opcao," onchange='js_pesquisao08_elemento(false);'");
-     db_input('o56_descr',40,$Io56_codele,true,'text',3,'');
+     db_input('o08_elemento',10,$Io08_elemento,true,'text',$db_opcao," onchange='js_pesquisao08_elemento(false,this);'");
+     db_input('o56_elemento',13,$Io56_elemento,true,'text',$db_opcao," onchange='js_pesquisao08_elemento(false,this);'");
+     db_input('o56_descr',41,$Io56_codele,true,'text',3,'');
      db_input('oo8_sequencial',10,0,true,'hidden',3,'')  
      ?>
     </td>
@@ -113,7 +122,7 @@ db_app::load("estilos.css");
     <td> 
     <?
     db_input('o08_recurso',10,$Io08_recurso,true,'text',$db_opcao,"onchange='js_pesquisac62_codrec(false);'");
-    db_input('o15_descr',40,$Io08_recurso,true,'text',3,"");
+    db_input('o15_descr',56,$Io08_recurso,true,'text',3,"");
     ?>
     </td>
   </tr>
@@ -125,6 +134,7 @@ db_app::load("estilos.css");
     </td>
     <td> 
    <?
+   $o08_localizadorgastos = 3;
    db_input('o08_localizadorgastos',10,$Io08_localizadorgastos,true,'text',$db_opcao," onchange='js_pesquisao08_localizadorgastos(false);'");  
    db_input('o11_descricao',40,$Io11_descricao,true,'text',3,'');
     ?>
@@ -137,7 +147,8 @@ db_app::load("estilos.css");
             ?>
       </td>
         <td> 
-      <?
+      <?    
+            $o08_concarpeculiar = '000';
             db_input ( 'o08_concarpeculiar', 10, $Io08_concarpeculiar, true, 'text', $db_opcao, " onchange='js_pesquisao08_concarpeculiar(false);'" );
             db_input ( 'c58_descr', 40, $Ic58_descr, true, 'text', 3, '' );
             ?>
@@ -171,6 +182,7 @@ db_app::load("estilos.css");
         <input id='btncancelar' type='button' value='Cancelar' >
       </td>
     </tr>
+    </center>
   </table>
   </fieldset>
   </tr>
@@ -191,36 +203,65 @@ db_app::load("estilos.css");
 iAnoIni     = 0;
 iAnoFim     = 0;
 iCodigoItem = null;
-function js_pesquisao08_elemento(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele',
-                        'db_iframe_orcelemento',
-                        'func_orcelemento.php?funcao_js=parent.js_mostraorcelemento1|o56_codele|o56_descr&analitica=1',
-                        'Elementos da Despesa',
-                        true);
-  }else{
-     if(document.form1.o08_elemento.value != ''){ 
+function js_pesquisao08_elemento(mostra,elemento){
+    
+    let sUrl = '';
+
+    if (mostra==true) {
+
+        sUrl = 'func_orcelemento.php?funcao_js=parent.js_mostraorcelemento1|o56_codele|o56_descr|o56_elemento&analitica=1';
+        js_openJanela(sUrl, true);
+        
+    } else {
+
+        if (elemento.name == 'o08_elemento' && document.form1.o08_elemento.value != '') {
+
+            sUrl = 'func_orcelemento.php?pesquisa_chave='+document.form1.o08_elemento.value+
+                    '&funcao_js=parent.js_mostraorcelemento&tipo_pesquisa=1&analitica=1&busca_elemento=true';
+
+        } else if (elemento.name == 'o56_elemento' && document.form1.o56_elemento.value != '') {
+
+            sUrl = 'func_orcelemento.php?pesquisa_chave='+document.form1.o56_elemento.value+
+                    '&funcao_js=parent.js_mostraorcelemento&analitica=1&busca_elemento=true';
+
+        } else {
+            document.form1.o56_descr.value = '';
+        }
+
+        js_openJanela(sUrl, false);
+
+    }
+}
+
+function js_openJanela(sUrl = '', mostra = null) {
+
+    if (sUrl != '' && mostra != null) {
+
         js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele',
                             'db_iframe_orcelemento',
-                            'func_orcelemento.php?pesquisa_chave='+document.form1.o08_elemento.value+
-                            '&funcao_js=parent.js_mostraorcelemento&tipo_pesquisa=1&analitica=1','Pesquisa', false);
-     }else{
-       document.form1.o56_codele.value = ''; 
-     }
-  }
+                            sUrl,
+                            'Elementos da Despesa',
+                            mostra);
+    }
 }
-function js_mostraorcelemento(chave,erro){
 
-  document.form1.o56_descr.value = chave;
+function js_mostraorcelemento(chave1,erro,chave2,chave3){
+
+  document.form1.o56_descr.value    = chave1;
+  document.form1.o56_elemento.value = chave2;
+  document.form1.o08_elemento.value = chave3;
    
   if(erro==true){ 
     document.form1.o08_elemento.focus(); 
     document.form1.o08_elemento.value = ''; 
+    document.form1.o56_elemento.value = '';
+    document.form1.o08_elemento.value = '';
   }
 }
-function js_mostraorcelemento1(chave1,chave2){
+function js_mostraorcelemento1(chave1,chave2,chave3){
   document.form1.o08_elemento.value = chave1;
   document.form1.o56_descr.value    = chave2;
+  document.form1.o56_elemento.value = chave3;
   db_iframe_orcelemento.hide();
 }
 function js_pesquisao08_localizadorgastos(mostra){
@@ -320,7 +361,8 @@ function js_init() {
   oGridPPA.nameInstance = 'oGridPPA';
   oGridPPA.allowSelectColumns(true);
   oGridPPA.setHeight(150);
-  oGridPPA.setCellAlign(new Array("right","left","left","left","center","center","center"));
+  oGridPPA.setCellWidth(new Array("6%","48%","10%","10%","4%","4%","8%","6%"));
+  oGridPPA.setCellAlign(new Array("right","left","center","center","center","center","center","center"));
   oGridPPA.setHeader(new Array(
                               "Código",
                               "Elemento", 
@@ -334,25 +376,24 @@ function js_init() {
  oGridPPA.show(document.getElementById('gridItensPPA'));
 }      
 
-function addValoresGrid(aValores) {
-  
+function addValoresGrid(aValores, db_opcao = null) {
   js_limparCampos();
   oGridPPA.clearAll(true);
   $('btnsalvar').disabled = false;
-  if (top.corpo.iframe_ppadotacao.$('db_opcao').disabled) {
+  if (top.corpo.iframe_ppadotacao.$('db_opcao').disabled || db_opcao == 3) {
     $('btnsalvar').disabled = true; 
   }
   aValores.each(function(oElemento,id) {
   
      aLinha = new Array();
      aLinha[0]  = oElemento.o05_sequencial;   
-     aLinha[1]  = oElemento.o56_descr.urlDecode();   
-     aLinha[2]  = oElemento.o15_descr.urlDecode();   
-     aLinha[3]  = oElemento.o11_descricao.urlDecode();   
+     aLinha[1]  = oElemento.o56_elemento+' - '+oElemento.o56_descr.urlDecode();   
+     aLinha[2]  = oElemento.o08_recurso;   
+     aLinha[3]  = oElemento.o08_localizadorgastos;   
      aLinha[4]  = oElemento.o08_concarpeculiar.urlDecode();   
      aLinha[5]  = oElemento.o05_anoreferencia;   
      aLinha[6]  = js_formatar(oElemento.o05_valor,'f'); 
-     if (top.corpo.iframe_ppadotacao.$('db_opcao').disabled) {
+     if (top.corpo.iframe_ppadotacao.$('db_opcao').disabled || db_opcao == 3) {
        aLinha[7]  = '';
      } else {
        aLinha[7]  = "<input id='teste' type='button' value='Editar' onclick='js_editarValor("+id+")'>";
@@ -464,7 +505,9 @@ function js_save() {
      return false;
   }
   if (iCodigoItem != null) {
-  
+
+    let atualiza_anos_seguintes = false;
+    atualiza_anos_seguintes = confirm("Deseja atualizar os valores dos anos seguintes?");  
     
     oParam.exec                  = "salvarElemento";
     oParam.o05_sequencial        = iCodigoItem;
@@ -475,6 +518,8 @@ function js_save() {
     oParam.o08_concarpeculiar    = $F('o08_concarpeculiar');    
     oParam.o19_coddot            = oObjetoSelecionado.o19_coddot;    
     oParam.o05_valor             = $F('o05_valor');
+    oParam.o05_anoreferencia     = $F('o05_anoreferencia');
+    oParam.atualiza_anos_seguintes = atualiza_anos_seguintes;
     js_divCarregando('Aguarde, Salvando Dotação','msgbox');
     var oRequest = new Ajax.Request(
                                  'orc4_ppadotacaoalteracaoRPC.php',
@@ -560,15 +605,11 @@ function js_retornoSave(oRequest) {
   var oRetorno = eval("("+oRequest.responseText+")");
   if (oRetorno.status == 1) {
    
-    $(oGridPPA.aRows[iLinha].aCells[1].sId).innerHTML = $F('o56_descr'); 
-    $(oGridPPA.aRows[iLinha].aCells[2].sId).innerHTML = $F('o15_descr'); 
-    $(oGridPPA.aRows[iLinha].aCells[3].sId).innerHTML = $F('o11_descricao');
-    $(oGridPPA.aRows[iLinha].aCells[6].sId).innerHTML = js_formatar($F('o05_valor'),"f"); 
-     
     js_limparCampos(); 
     delete iLinha;
     delete iCodigoItem;
     delete oObjetoSelecionado;
+    getElementos();
     
   } else {
     alert(oRetorno.message.urlDecode());
@@ -683,10 +724,51 @@ $('btncancelar').onclick = function() {
   $('o05_anoreferencia').style.backgroundColor     = "#FFFFFF";
   $('o05_anoreferencia').readOnly                  = false;  
   $('btnexcluir').disabled = true;
+  $('o08_concarpeculiar').value = '000';
+  $('o08_localizadorgastos').value = '3';
+  
+  let eChange = new Event('change');
+  $('o08_localizadorgastos').dispatchEvent(eChange);
+  $('o08_concarpeculiar').dispatchEvent(eChange);
   
 }
 $('o05_anoreferencia').onkeypress=function (event){
    return js_mask(event,'0-9');
+}
+
+function getElementos() {
+
+    oGrupoOriginal = new Object();
+    js_divCarregando('Aguarde, Carregando estimativas','msgbox');
+    oGrupoOriginal.exec          = "getElementosFromAcao";
+    oGrupoOriginal.o40_orgao     = top.corpo.iframe_ppadotacao.$F('o08_orgao');
+    oGrupoOriginal.o41_unidade   = top.corpo.iframe_ppadotacao.$F('o08_unidade');
+    oGrupoOriginal.o52_funcao    = top.corpo.iframe_ppadotacao.$F('o08_funcao');
+    oGrupoOriginal.o53_subfuncao = top.corpo.iframe_ppadotacao.$F('o08_subfuncao');
+    oGrupoOriginal.o54_programa  = top.corpo.iframe_ppadotacao.$F('o08_programa');
+    oGrupoOriginal.o55_projativ  = top.corpo.iframe_ppadotacao.$F('o08_projativ');
+    oGrupoOriginal.o08_ppaversao = top.corpo.iframe_ppadotacao.$F('o05_ppaversao');
+    
+    var oRequest = new Ajax.Request(
+                                    'orc4_ppadotacaoalteracaoRPC.php',
+                                    {
+                                        method    : 'post', 
+                                        parameters: 'json='+Object.toJSON(oGrupoOriginal), 
+                                        onComplete: js_retornoPesquisa 
+                                    }
+                                );
+
+}
+
+function js_retornoPesquisa(oRequest) {
+  
+    js_removeObj('msgbox');
+    
+    var oRetorno = eval("("+oRequest.responseText+")");
+    if (oRetorno.status == 1) {
+        addValoresGrid(oRetorno.itens, 1); 
+    }
+
 }
 $('o05_anoreferencia').maxLength       = '4';
 $('o05_anoreferencia').style.textAlign = 'right';

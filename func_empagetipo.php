@@ -37,6 +37,13 @@ $clempagetipo = new cl_empagetipo;
 $clempagetipo->rotulo->label("e83_codtipo");
 $clempagetipo->rotulo->label("e83_conta");
 $clempagetipo->rotulo->label("e83_descr");
+
+$lContaUnicaFundeb = false;
+$aParametrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_instit")));
+
+if (count($aParametrosCaixa) > 0) {
+    $lContaUnicaFundeb = $aParametrosCaixa[0]->k29_cotaunicafundeb == "t" ? true : false;
+}
 ?>
 <html>
 <head>
@@ -112,7 +119,7 @@ $clempagetipo->rotulo->label("e83_descr");
             $sDataAtual = date('Y-m-d', db_getsession('DB_datausu'));
             $sWhere     = " e60_numemp = {$e60_numemp} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
             $sCampos    = " distinct e83_codtipo, e83_conta, (db83_conta||'-'||db83_dvconta)::varchar as dl_Numero_da_Conta, e83_descr, c61_codigo ";
-            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, true);
+            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, true, $lContaUnicaFundeb, null, $e60_numemp);
 
         } else {
             $sql = $clempagetipo->sql_query("",$campos,"e83_codtipo","");
@@ -128,7 +135,7 @@ $clempagetipo->rotulo->label("e83_descr");
             $sWhere     = " e60_numemp = {$e60_numemp} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
             $sWhere2    = " e83_conta = {$e83_conta} ";
             $sCampos    = " distinct e83_codtipo, e83_conta, db83_conta, e83_descr, c61_codigo ";
-            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, true, false, $sWhere2);
+            $sql        = $clempagetipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere, false, null, true, $lContaUnicaFundeb, $sWhere2, $e60_numemp);
             $result     = $clempagetipo->sql_record($sql);
             
             if ($clempagetipo->numrows != 0) {

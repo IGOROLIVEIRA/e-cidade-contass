@@ -193,7 +193,11 @@ if (count($aParametrosEmpenho) > 0) {
           /**
            * Acrescentado por causa do sicom
            */
-          $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05', 2 => 'Sim, chave de acesso municipal ou outra', 3 => 'Não', 4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
+          $aNfEletronica = array(0 => 'Selecione',
+                                 1 => 'Sim, padrão Estadual ou SINIEF 07/05',
+                                 2 => 'Sim, chave de acesso municipal ou outra',
+                                 3 => 'Não',
+                                 4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
           db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);' style='width:315px'"); //
           ?>
         </td>
@@ -1540,9 +1544,6 @@ if (count($aParametrosEmpenho) > 0) {
    */
   function js_confirmaEntrada() {
 
-    /*if(verificaChave()){
-      return false;
-    }*/
     if (confirm('Confirma a entrada dos Itens Selecionados no estoque?')) {
 
       //Número da nota, é obrigatorio
@@ -1552,9 +1553,14 @@ if (count($aParametrosEmpenho) > 0) {
 
             return false;
 
-         }*/     
+         }*/
 
-      if ($F('e69_notafiscaleletronica') == 2) {
+        if ($F('e69_notafiscaleletronica') == 0) {
+            alert('É necessário selecionar o tipo de Nota Fiscal!');
+            return false;
+        }
+
+        if ($F('e69_notafiscaleletronica') == 2) {
         if ($F('e69_nfserie') == '') {
           alert('O número de série deve ser preenchido!');
           $('e69_nfserie').focus();
@@ -2215,7 +2221,7 @@ if (count($aParametrosEmpenho) > 0) {
       return verificaChave();
     } else {
       alert("Chave de Acesso inválida ");
-      $('e69_chaveacesso').value = '';
+      // $('e69_chaveacesso').value = '';
       return false;
     }
 
@@ -2225,7 +2231,7 @@ if (count($aParametrosEmpenho) > 0) {
 echo "<script>js_consultaOrdem({$m51_codordem});
   document.form1.dtjs_e69_dtnota.style.display   = 'none';
   document.form1.dtjs_e69_dtrecebe.style.display = 'none';
-  \$('matmater').style.width='80px';
+  $('matmater').style.width='80px';
   lSalvo    = true;
   teclaModi = '';
 </script>";

@@ -573,8 +573,12 @@ db_app::load("widgets/windowAux.widget.js");
                     aLinha[3] = credor;
                     aLinha[4] = tipo;
                     if (agrupado) {
-                        aLinha[5] = '';
-                        aLinha[6] = '';
+                        aLinha[5] = ''
+                        if (documento != 0) {
+                            aLinha[6] = documento[0];
+                        } else {
+                            aLinha[6] = '';
+                        }
                     } else {
                         aLinha[5] = op_rec_slip;
                         if (documento != 0) {
