@@ -107,15 +107,15 @@ $pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
 $pdf->ln($alt+3);
 $pdf->x = 30;
 $pdf->SetFont('arial','',11);
-$pdf->MultiCell(160,4,"     Examinando as Dotações constantes do orçamento fiscal e levando-se em conta os serviços que se pretende contratar, cujo objeto é ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($vlrtotal,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
+$pdf->MultiCell(160,5,"     Examinando as Dotações constantes do orçamento fiscal e levando-se em conta os serviços que se pretende contratar, cujo objeto é ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($vlrtotal,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
 
 $pdf->ln($alt+3);
 $pdf->x = 30;
 
-$pdf->cell(20,4,"Ficha"                           ,1,0,"C",1);
-$pdf->cell(40,4,"Cód. orçamentário"               ,1,0,"C",1);
-$pdf->cell(60,4,"Projeto Atividade"               ,1,0,"C",1);
-$pdf->cell(40,4,"Fonte de Recurso"                ,1,1,"C",1);
+$pdf->cell(20,6,"Ficha"                           ,1,0,"C",1);
+$pdf->cell(40,6,"Cód. orçamentário"               ,1,0,"C",1);
+$pdf->cell(60,6,"Projeto Atividade"               ,1,0,"C",1);
+$pdf->cell(40,6,"Fonte de Recurso"                ,1,1,"C",1);
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
 
@@ -123,34 +123,33 @@ if(pg_num_rows($resultDotacao) != 0){
     for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
         $pdf->x = 30;
         $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
-        $pdf->cell(20, 5, $oDadosDotacoes->ficha,           1, 0, "C", 0);
-        $pdf->cell(40, 5, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
-        $pdf->cell(60, 5, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
-        $pdf->cell(40, 5, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
+        $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
+        $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
+        $pdf->cell(60, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
+        $pdf->cell(40, 6, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
     }
 }else{
     $pdf->x = 30;
     $pdf->setfont('arial','b',11);
-    $pdf->cell(190,4,"Nenhum Registro Encontrato."     ,0,1,"C",0);
+    $pdf->cell(190,6,"Nenhum Registro Encontrato."     ,0,1,"C",0);
 }
 $pdf->ln($alt+3);
 
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
 
-$pdf->MultiCell(160,4,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
+$pdf->MultiCell(160,5,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
 $pdf->ln($alt+9);
 
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);
 $pdf->x = 30;
 $pdf->cell(160,4,$munic.','.strtoupper($sDataExtenso)                     ,0,1,"C",0);
-$pdf->ln($alt+5);
+$pdf->ln($alt+20);
 $pdf->cell(95,4,"________________________"                                ,0,0,"C",0);
 $pdf->cell(95,4,"________________________"                                ,0,1,"C",0);
 $pdf->cell(95,5,"Serviço Contábil"                                        ,0,0,"C",0);
 $pdf->cell(95,5,"Serviço Financeiro"                                      ,0,0,"C",0);
-$pdf->ln($alt+3);
 
 $pdf->Output();
 

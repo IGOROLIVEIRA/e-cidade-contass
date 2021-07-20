@@ -88,20 +88,20 @@ $pdf->cell(190,4,"SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA",0,1,"C",
 $pdf->ln($alt + 4);
 $pdf->SetFont('arial','',11);
 $pdf->x = 30;
-$pdf->cell(190,4,"De: Pregoeira/ Comissão permanente de Licitação"  ,0,1,"L",0);
+$pdf->cell(190,5,"De: Pregoeira/ Comissão permanente de Licitação"  ,0,1,"L",0);
 $pdf->x = 30;
-$pdf->cell(190,4,"Para: Setor contábil"                             ,0,1,"L",0);
+$pdf->cell(190,5,"Para: Setor contábil"                             ,0,1,"L",0);
 $pdf->ln($alt + 4);
 $pdf->x = 30;
-$pdf->MultiCell(160,4,"Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$".trim(db_formatar($vlrtotal,'f')),0,"J",0);
-$pdf->ln($alt + 4);
+$pdf->MultiCell(160,5,"     Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$".trim(db_formatar($vlrtotal,'f')),0,"J",0);
+$pdf->ln($alt + 20);
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);
 $pdf->cell(190,4,$munic.','.strtoupper($sDataExtenso)                      ,0,1,"C",0);
-$pdf->ln($alt+6);
-$pdf->cell(190,4,"________________________"                                ,0,1,"C",0);
-$pdf->cell(190,4,"Presidente da CPL"                                       ,0,1,"C",0);
-$pdf->cell(190,4,"e/ou Presidente da Comissão de Licitação"                ,0,1,"C",0);
+$pdf->ln($alt+20);
+$pdf->cell(190,5,"________________________"                                ,0,1,"C",0);
+$pdf->cell(190,5,"Presidente da CPL"                                       ,0,1,"C",0);
+$pdf->cell(190,5,"e/ou Presidente da Comissão de Licitação"                ,0,1,"C",0);
 
 $pdf->Output();
 
