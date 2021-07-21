@@ -673,7 +673,7 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
   $('k81_conta') .value = iCodigoConta;
   $('k13_descr') .value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
-  iCodRecursoConta      = $F('c61_codigo');
+  iCodRecursoConta      = $F('recurso');
 
   if( $('estrutural').value.substr(0,3) == '211' ) {
 
