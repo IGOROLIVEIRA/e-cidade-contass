@@ -587,8 +587,11 @@ db_app::load("widgets/windowAux.widget.js");
                             aLinha[6] = '';
                         }
                     }
-                    aLinha[7] = movimento;
-                    aLinha[8] = js_formatar(nValor, "f");
+                    var color = 'red';
+                    if (movimento == 'E')
+                        color = 'blue';
+                    aLinha[7] = "<span style='color:" + color + "'>" + movimento + '</span>';
+                    aLinha[8] = "<span style='color:" + color + "'>" + js_formatar(nValor, "f") + '</span>';
                     aLinha[9] = historico;
 
                     dados_complementares_numcgm[iNotas + 1]           = numcgm;
@@ -1045,6 +1048,12 @@ db_app::load("widgets/windowAux.widget.js");
     }
 
     document.form1.emitir_capa.onclick = function() {
+        if (confirm("Deseja emitir também o extrato bancário?")) {
+            var parametros = "conta=(" + $F("k13_conta") + ")&imprime_historico=s&imprime_analitico=s&totalizador_diario=n&somente_contas_com_movimento=s&datai=" + js_data($F("data_inicial")) + "&dataf=" + js_data($F("data_final")) + "&agrupapor=1&receitaspor=1&pagempenhos=1&imprime_pdf=p&somente_contas_bancarias=s&exibir_retencoes=n";
+            jan = window.open('cai2_extratobancario002.php?'+parametros,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+            jan.moveTo(0,0);
+        }
+
         sUrl = "cai4_concbancnovo002.php?conta_nova=" + $F("k13_conta") + "&data_inicial=" + js_data($F("data_inicial")) + "&data_final=" + js_data($F("data_final")) + "&saldo_extrato=" + $F("saldo_conciliado");
         window.open(sUrl, '', 'location=0');
     }

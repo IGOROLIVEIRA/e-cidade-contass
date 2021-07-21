@@ -58,7 +58,6 @@ function js_relatorio2() {
   var datai = aData[2]+'-'+aData[1]+'-'+aData[0];
   aData = document.getElementById('dataf').value.split("/");
   var dataf = aData[2]+'-'+aData[1]+'-'+aData[0];
-
   var query = "";
 
   if(document.getElementById('contas')){
@@ -67,6 +66,12 @@ function js_relatorio2() {
 		listacontas="";
 
 		for(x=0;x<document.form1.contas.length;x++){
+
+            if (F.emitir_capa.value == 's') {
+                sUrl = "cai4_concbancnovo002.php?conta_nova=" + document.form1.contas.options[x].value + "&data_inicial=" + datai + "&data_final=" + dataf + "&saldo_extrato=" + 0;
+                window.open(sUrl, '', 'location=0');
+            }
+
 			listacontas+=vir+document.form1.contas.options[x].value;
 		  vir=",";
 		}
@@ -89,6 +94,7 @@ function js_relatorio2() {
   query += "&imprime_pdf="+F.imprime_pdf.value;
   //query += "&conta="+F.k13_conta.value;
   query += "&somente_contas_bancarias="+F.somente_contas_bancarias.value;
+  query += "&exibir_retencoes="+F.exibir_retencoes.value;
 
   jan = window.open('cai2_extratobancario002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
   jan.moveTo(0,0);
@@ -180,6 +186,23 @@ function js_relatorio2() {
 				db_select("pagempenhos",$x,true,1);
 				?></td>
 			</tr>
+
+      <tr>
+          <td nowrap align="right"><b>Exibir Retenções:</b></td>
+          <td><?
+               $matriz = array("s"=>"sim","n"=>"nao");
+               db_select("exibir_retencoes",$matriz,true,1);
+          ?></td>
+      </tr>
+
+      <tr>
+          <td nowrap align="right"><b>Emitir Capa Conciliação:</b></td>
+          <td><?
+               $matriz = array("n"=>"nao","s"=>"sim");
+               db_select("emitir_capa",$matriz,true,1);
+          ?></td>
+      </tr>
+
 			<tr>
 				<td nowrap align=right><b>Somente contas com movimento:</b></td>
 				<td><? $matriz = array("n"=>"nao","s"=>"sim");
