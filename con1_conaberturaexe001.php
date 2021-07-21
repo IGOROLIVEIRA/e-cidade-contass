@@ -683,7 +683,7 @@ if (isset($p->incluir)) {
         $oConc = db_utils::fieldsMemory($rsUni, $i);
         $clorcunidade->o41_orgao   = $oConc->o41_orgao;
         $clorcunidade->o41_anousu  = $clconaberturaexe->c91_anousudestino;
-        $clorcunidade->o41_codtri  = $oConc->o41_codtri;
+        $clorcunidade->o41_codtri  = $oConc->o41_codtri == "" || $oConc->o41_codtri == "0" ? $oConc->o41_unidade : $oConc->o41_codtri;
         $clorcunidade->o41_descr   = $oConc->o41_descr;
         $clorcunidade->o41_instit  = $oConc->o41_instit;
         $clorcunidade->o41_unidade = $oConc->o41_unidade;
@@ -758,12 +758,12 @@ if (isset($p->incluir)) {
            $clorcprojativ->o55_tipo               = $oConc->o55_tipo;
            $clorcprojativ->o55_projativ           = $oConc->o55_projativ;
            $clorcprojativ->o55_descr              = $oConc->o55_descr;
-           $clorcprojativ->o55_finali             = $oConc->o55_finali;
+           $clorcprojativ->o55_finali             = str_replace("'","",$oConc->o55_finali);
            $clorcprojativ->o55_instit             = $oConc->o55_instit;
            $clorcprojativ->o55_tipoacao           = $oConc->o55_tipoacao==""?"0":$oConc->o55_tipoacao;
            $clorcprojativ->o55_orcproduto         = $oConc->o55_orcproduto==""?"0":$oConc->o55_orcproduto;
-           $clorcprojativ->o55_tipoensino         = $oConc->o55_tipoensino==""?"0":$oConc->o55_tipoensino;
-           $clorcprojativ->o55_tipopasta          = $oConc->o55_tipopasta==""?"0":$oConc->o55_tipopasta;
+           $clorcprojativ->o55_tipoensino         = $oConc->o55_tipoensino==""||$oConc->o55_tipoensino=="0"?"7":$oConc->o55_tipoensino;
+           $clorcprojativ->o55_tipopasta          = $oConc->o55_tipopasta==""||$oConc->o55_tipopasta=="0"?"3":$oConc->o55_tipopasta;
            $clorcprojativ->o55_formaimplementacao = $oConc->o55_formaimplementacao==""?"0":$oConc->o55_formaimplementacao;
            $clorcprojativ->incluir($clorcprojativ->o55_anousu, $oConc->o55_projativ);
            if ($clorcprojativ->erro_status == "0") {
