@@ -58,6 +58,10 @@ if($receitaspor == 2){
 	$head6 = "BAIXA BANCÁRIA: AGRUPADO PELA CLASSIFICAÇÃO";
 }
 
+if ($exibir_retencoes == 'n') {
+    $head7 = "NÃO EXIBIR RETENÇÕES";
+}
+
 
 /// CONTAS MOVIMENTO
 $sql ="	    select   k13_reduz,
@@ -198,6 +202,9 @@ for($linha=0;$linha<$numrows;$linha++){
 
 
 ";
+    if ($exibir_retencoes == 'n') {
+        $sqlempenho .= condicao_retencao('empenho');
+    }
 
 	$sqlanalitico = "
   /* RECIBO */
@@ -280,9 +287,13 @@ for($linha=0;$linha<$numrows;$linha++){
                      and (corrente.k12_data between '".$datai."'  and '".$dataf."')
 		                 and corrente.k12_instit = ".db_getsession("DB_instit")."
                      and k12_codcla is null
-                     and k82_seqpla is null
+                     and k82_seqpla is null ";
 
-              ) as x
+    if ($exibir_retencoes == 'n') {
+        $sqlanalitico .= condicao_retencao('recibo');
+    }
+
+    $sqlanalitico .= " ) as x
 		group by
 		       caixa,
 			   data,
@@ -700,7 +711,7 @@ select caixa,
 		$sqltotal = $sqlempenho.$sqlsintetico.$sqlslip;
 	}
 	$sqltotal = $sqlempenho." union all ".$sqlanalitico.$sqlslip;
-	//die($sqltotal);
+    // die($sqltotal);
 	$resmovimentacao = db_query($sqltotal);
 	// echo $sqltotal;
 	// db_criatabela($resmovimentacao);exit;
@@ -1356,7 +1367,7 @@ if($imprime_pdf == 'p'){
 					}
 
 					$pdf->Cell(20,5,db_formatar($oData->data,'d')	,"T",0,"C",0);
-					$pdf->Cell(85,5,$oMovimento->contrapartida,"T",0,"L",0);
+					$pdf->Cell(85,5,substr($oMovimento->contrapartida, 0, 58),"T",0,"L",0);
 					$pdf->Cell(25,5,$oMovimento->planilha			,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->empenho			,"T",0,"C",0);
 					$pdf->Cell(25,5,$oMovimento->ordem 	== "0" ? "" : $oMovimento->ordem,"T",0,"C",0);
@@ -1830,5 +1841,50 @@ function imprimeTotalMovContaTxt($fp,$saldo_debitado,$saldo_creditado,$saldo_atu
 	$aLinhaTotalMovConta[8] =$saldo_atual    == 0 ? "" : db_formatar($saldo_atual,'f');
 	fputcsv($fp,$aLinhaTotalMovConta,',','"');
 
+}
+
+
+function condicao_retencao($bloco_query) {
+    $sql  = " AND ( ";
+    $sql .= "     SELECT * FROM ( ";
+
+    if ($bloco_query == 'empenho')
+        $sql .= "     SELECT SUM(e23_valorretencao) retencao ";
+    if ($bloco_query == 'recibo')
+        $sql .= "     SELECT e23_valorretencao retencao ";
+
+    $sql .= "         FROM retencaoreceitas ";
+    $sql .= "         INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec ";
+    $sql .= "         INNER JOIN retencaopagordem retencao ON retencao.e20_sequencial = retencaoreceitas.e23_retencaopagordem ";
+    $sql .= "         INNER JOIN tabrec ON tabrec.k02_codigo = retencaotiporec.e21_receita ";
+    $sql .= "         INNER JOIN retencaotipocalc ON retencaotipocalc.e32_sequencial = retencaotiporec.e21_retencaotipocalc ";
+    $sql .= "         INNER JOIN pagordem ON pagordem.e50_codord = retencao.e20_pagordem ";
+    $sql .= "         INNER JOIN pagordemnota ON pagordem.e50_codord = pagordemnota.e71_codord ";
+    $sql .= "         INNER JOIN empnota ON pagordemnota.e71_codnota = empnota.e69_codnota ";
+    $sql .= "         INNER JOIN retencaoempagemov ON e23_sequencial = e27_retencaoreceitas ";
+    $sql .= "         LEFT JOIN empagemovslips ON e27_empagemov = k107_empagemov ";
+    $sql .= "         LEFT JOIN slipempagemovslips ON k107_sequencial = k108_empagemovslips ";
+    $sql .= "         LEFT JOIN retencaocorgrupocorrente ON e23_sequencial = e47_retencaoreceita ";
+    $sql .= "         LEFT JOIN corgrupocorrente ON e47_corgrupocorrente = k105_sequencial ";
+    $sql .= "         LEFT JOIN cornump as numpre ON numpre.k12_data = k105_data ";
+    $sql .= "            AND numpre.k12_autent = k105_autent ";
+    $sql .= "            AND numpre.k12_id = k105_id ";
+    $sql .= "         LEFT JOIN issplannumpre ON numpre.k12_numpre = q32_numpre ";
+
+    if ($bloco_query == 'empenho')
+        $sql .= "     WHERE retencao.e20_pagordem = coremp.k12_codord ";
+    if ($bloco_query == 'recibo') {
+        $sql .= "     WHERE retencao.e20_pagordem = retencaopagordem.e20_pagordem ";
+        $sql .= "        AND numpre.k12_numpre = cornump.k12_numpre ";
+        $sql .= "        AND numpre.k12_numpar = cornump.k12_numpar ";
+    }
+
+    $sql .= "            AND e27_principal IS TRUE ";
+    $sql .= "            AND e23_ativo IS TRUE ";
+    $sql .= "    ) as w ";
+    $sql .= "    WHERE round(retencao, 2) = round(corrente.k12_valor, 2) ";
+    $sql .= " ) IS NULL ";
+
+    return $sql;
 }
 ?>
