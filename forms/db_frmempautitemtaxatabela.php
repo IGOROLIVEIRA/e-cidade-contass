@@ -58,9 +58,6 @@ $clrotulo->label("pc01_descrmater");
 
 ?>
 
-<!-- <script type="text/javascript" src="scripts/scripts.js"></script>
-<script type="text/javascript" src="scripts/prototype.js"></script> -->
-
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
 <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
@@ -214,7 +211,7 @@ $clrotulo->label("pc01_descrmater");
       return false;
     }
 
-    if ($('#disponivel').val() < $('#totalad').val()) {
+    if (Number($('#disponivel').val()) < Number($('#totalad').val())) {
       alert("Não há valor disponível");
       return false;
     }
@@ -256,7 +253,7 @@ $clrotulo->label("pc01_descrmater");
         //console.log(response);
         alert(response.message);
         //js_loadTable();
-        //window.location.reload();
+        window.location.reload();
       }
     });
   }
@@ -295,7 +292,7 @@ $clrotulo->label("pc01_descrmater");
         // parent.location.reload();
         let response = JSON.parse(data);
         alert(response.message);
-        //window.location.reload();
+        window.location.reload();
         //js_loadTable();
       }
     });

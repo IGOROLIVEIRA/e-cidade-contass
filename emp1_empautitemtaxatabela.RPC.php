@@ -242,7 +242,11 @@ switch ($_POST["action"]) {
         }
         $selectservico .= "</select>";
 
-        $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+        if ($oDados->pc01_codmater == $oDadosEmpAutItem->e55_item)
+          $itemRows[] = "<input type='checkbox' checked id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+        else
+          $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
+
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
         $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}' onkeypress='return lettersOnly(event)' />";
