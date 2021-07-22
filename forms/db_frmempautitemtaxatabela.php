@@ -39,6 +39,7 @@ $clpcmaterele   = new cl_pcmaterele;
 $clempautitem   = new cl_empautitem;
 
 $aTabFonec = array("" => "Selecione");
+
 $tabsFonecVencedor = $clpctabelaitem->buscarTabFonecVencedor($e55_autori, $z01_numcgm);
 if (!empty($tabsFonecVencedor)) {
   foreach ($tabsFonecVencedor as $tabFonecVencedor) {
@@ -57,7 +58,10 @@ $clrotulo->label("pc01_descrmater");
 
 ?>
 
-<!-- <script type="text/javascript" src="scripts/scripts.js"></script> -->
+<!-- <script type="text/javascript" src="scripts/scripts.js"></script>
+<script type="text/javascript" src="scripts/prototype.js"></script> -->
+
+
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
 <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
@@ -231,7 +235,7 @@ $clrotulo->label("pc01_descrmater");
         oDados.descr = $(this).find("td:eq(3) input").val();
         oDados.unidade = $(this).find("td:eq(4) select").val();
         oDados.marca = $(this).find("td:eq(5) input").val();
-        oDados.marca = $(this).find("td:eq(6) input").val();
+        oDados.servico = $(this).find("td:eq(6) input").val();
         oDados.qtd = $(this).find("td:eq(7) input").val();
         oDados.vlrunit = $(this).find("td:eq(8) input").val();
         oDados.desc = $(this).find("td:eq(9) input").val();
@@ -248,11 +252,11 @@ $clrotulo->label("pc01_descrmater");
       url: "emp1_empautitemtaxatabela.RPC.php",
       data: oParam,
       success: function(data) {
-        console.log(data);
         let response = JSON.parse(data);
-        console.log(response);
+        //console.log(response);
         alert(response.message);
-        js_loadTable();
+        //js_loadTable();
+        //window.location.reload();
       }
     });
   }
@@ -288,7 +292,11 @@ $clrotulo->label("pc01_descrmater");
       data: oParam,
       success: function(data) {
         console.log(data);
-        js_loadTable();
+        // parent.location.reload();
+        let response = JSON.parse(data);
+        alert(response.message);
+        //window.location.reload();
+        //js_loadTable();
       }
     });
   }
@@ -340,7 +348,21 @@ $clrotulo->label("pc01_descrmater");
 
     conQt = 'false';
 
-    if (conQt == 'true') {
+
+    if ($('#e54_desconto' + id).val() == 'f') {
+      t = new Number((uni - (desc / 100)) * quant);
+      $('#total_' + id).val(t.toFixed(2));
+    } else {
+      t = new Number(uni * quant);
+      $('#total_' + id).val(t.toFixed(2));
+    }
+
+
+    if (item[0] == 'qtd' && quant != '') {
+      if (isNaN(quant)) {
+        $('#qtd_' + id).focus();
+        return false;
+      }
       if ($('#e54_desconto' + id).val() == 'f') {
         t = new Number((uni - (desc / 100)) * quant);
         $('#total_' + id).val(t.toFixed(2));
@@ -350,32 +372,14 @@ $clrotulo->label("pc01_descrmater");
       }
     }
 
-    if (item[0] == 'qtd' && quant != '' && conQt == 'false') {
-      if (isNaN(quant)) {
-        $('#qtd_' + id).focus();
-        return false;
-      }
-      if (tot != 0) {
-        t = new Number(tot / quant);
-        $('#total_' + id).val(tot);
-
-        $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
-      } else {
-        t = new Number(uni * quant);
-        $('#total_' + id).val(t.toFixed(2));
-      }
-    }
-
-    if (item[0] == 'desc' && desc != '' && conQt == 'false') {
+    if (item[0] == 'desc' && desc != '') {
       if (isNaN(quant)) {
         $('#desc_' + id).focus();
         return false;
       }
-      if (tot != 0) {
-        t = new Number(tot / quant);
-        $('#total_' + id).val(tot);
-
-        $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
+      if ($('#e54_desconto' + id).val() == 'f') {
+        t = new Number((uni - (desc / 100)) * quant);
+        $('#total_' + id).val(t.toFixed(2));
       } else {
         t = new Number(uni * quant);
         $('#total_' + id).val(t.toFixed(2));
@@ -388,22 +392,27 @@ $clrotulo->label("pc01_descrmater");
         $('#vlrunit_' + id).focus();
         return false;
       }
-      t = new Number(uni * quant);
-      $('#total_' + id).val(t.toFixed(2));
+      if ($('#e54_desconto' + id).val() == 'f') {
+        t = new Number((uni - (desc / 100)) * quant);
+        $('#total_' + id).val(t.toFixed(2));
+      } else {
+        t = new Number(uni * quant);
+        $('#total_' + id).val(t.toFixed(2));
+      }
     }
 
-    if (item[0] == "total" && conQt == 'false') {
-      if (isNaN(tot)) {
-        //alert("Valor total inváido!");
-        $('#total_' + id).focus();
-        return false;
-      }
-      if (quant != 0) {
-        t = new Number(tot / quant);
-        $('#total_' + id).val(tot);
-        $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
-      }
-    }
+    // if (item[0] == "total" && conQt == 'false') {
+    //   if (isNaN(tot)) {
+    //     //alert("Valor total inváido!");
+    //     $('#total_' + id).focus();
+    //     return false;
+    //   }
+    //   if (quant != 0) {
+    //     t = new Number(tot / quant);
+    //     $('#total_' + id).val(tot);
+    //     $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
+    //   }
+    // }
     consultaLancar();
   }
 
@@ -420,11 +429,13 @@ $clrotulo->label("pc01_descrmater");
       url: "emp1_empautitemtaxatabela.RPC.php",
       data: params,
       success: function(data) {
+
         let totitens = JSON.parse(data);
-        let utilizado = totitens.itens[0].totalitens > 0 ? totitens.itens[0].totalitens : "0";
-        let disponivel = new Number(params.total - totitens.itens[0].totalitens) > 0 ? new Number(params.total - totitens.itens[0].totalitens) : "0";
-        $('#utilizado').val(utilizado);
-        $('#disponivel').val(disponivel);
+        console.log(totitens.itens[0]);
+        // let utilizado = totitens.itens[0].totalitens > 0 ? totitens.itens[0].totalitens : "0";
+        // let disponivel = new Number(params.total - totitens.itens[0].totalitens) > 0 ? new Number(params.total - totitens.itens[0].totalitens) : "0";
+        $('#utilizado').val(totitens.itens[0].utilizado);
+        $('#disponivel').val(totitens.itens[0].saldodisponivel);
       }
     });
   }
@@ -457,15 +468,12 @@ $clrotulo->label("pc01_descrmater");
     }
   }
 
-  function lettersOnly(evt) {
-    evt = (evt) ? evt : event;
-    var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
-      ((evt.which) ? evt.which : 0));
-    if (charCode > 31 && (charCode < 65 || charCode > 90) &&
-      (charCode < 97 || charCode > 122)) {
-      //alert("Apenas letras.");
+  function lettersOnly(texto) {
+    var tecla = texto.which || texto.keyCode;
+    if ((tecla >= 97 && tecla <= 117) || (tecla === 8)) {
+      return true;
+    } else {
       return false;
     }
-    return true;
   }
 </script>

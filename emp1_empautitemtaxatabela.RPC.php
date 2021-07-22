@@ -214,7 +214,7 @@ switch ($_POST["action"]) {
       for ($i = 0; $i < pg_numrows($rsDados); $i++) {
 
         $oDados = db_utils::fieldsMemory($rsDados, $i);
-        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", "e55_item = $oDados->pc01_codmater"));
+        $resultEmpAutItem = $clempautitem->sql_record($clempautitem->sql_query_file($autori, null, "*", "e55_sequen", " e55_autori = $autori and e55_item = $oDados->pc01_codmater"));
         $oDadosEmpAutItem = db_utils::fieldsMemory($resultEmpAutItem, 0);
 
         $itemRows  = array();
@@ -230,12 +230,10 @@ switch ($_POST["action"]) {
         }
         $selectunid .= "</select>";
 
-
-
         $selectservico = "";
         $selectservico = "<select id='servico_{$oDados->pc01_codmater}' onchange='js_servico(this)' >";
 
-        if ($oDadosEmpAutItem->e55_servicoquantidade) {
+        if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
           $selectservico .= "<option value='1' selected='selected'>Sim</option>";
           $selectservico .= "<option value='0'>" . utf8_encode('Não') . "</option>";
         } else {
@@ -251,17 +249,18 @@ switch ($_POST["action"]) {
         $itemRows[] = $selectunid;
         $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}' onkeypress='return lettersOnly(event)' />";
         $itemRows[] = $selectservico;
-        if ($oDadosEmpAutItem->e55_servicoquantidade) {
-          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' readonly />";
+
+        if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
+          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' />";
         } else {
-          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' />";
+          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
         }
-        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' />";
+        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
 
         if ($_POST['desconto'] == 't')
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' readonly />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' readonly maxlength='2' />";
         else
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
 
         $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly />";
         $employeeData[] = $itemRows;
@@ -279,30 +278,36 @@ switch ($_POST["action"]) {
   case 'salvar':
 
     db_inicio_transacao();
-    foreach ($_POST['dados'] as $item) :
 
-      $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "e55_item,pc01_descrmater,e55_descr,e55_codele,o56_descr,e55_sequen,e55_quant,e55_vltot", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
-      if ($clempautitem->numrows == 0) {
+    foreach ($_POST['dados'] as $item) :
+      $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
+      if (pg_numrows($rsItem) == 0) {
         $clempautitem->e55_codele = $_POST['codele'];
         $clempautitem->e55_item   = $item['id'];
         $clempautitem->e55_descr  = $item['descr'];
         $clempautitem->e55_quant  = $item['qtd'];
         $clempautitem->e55_unid   = $item['unidade'];
         $clempautitem->e55_marca  = $item['marca'];
+        $clempautitem->e55_servicoquantidade  = $item['servico'];
         $clempautitem->e55_vlrun  = $item['vlrunit'];
         $clempautitem->e55_vltot  = $item['total'];
 
-        $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "max(e55_sequen)+1 as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
+        $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
         $clempautitem->incluir($_POST['autori'], $proximoSequen);
       } else {
+
+        $clempautitem->e55_autori = $_POST['autori'];
         $clempautitem->e55_codele = $_POST['codele'];
+        $clempautitem->e55_sequen = db_utils::fieldsMemory($rsItem, 0)->e55_sequen;
         $clempautitem->e55_item   = $item['id'];
         $clempautitem->e55_descr  = $item['descr'];
         $clempautitem->e55_quant  = $item['qtd'];
         $clempautitem->e55_unid   = $item['unidade'];
         $clempautitem->e55_marca  = $item['marca'];
+        $clempautitem->e55_servicoquantidade  = $item['servico'];
         $clempautitem->e55_vlrun  = $item['vlrunit'];
         $clempautitem->e55_vltot  = $item['total'];
+
         $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
       }
     endforeach;
@@ -313,7 +318,18 @@ switch ($_POST["action"]) {
       $oRetorno->status  = 1;
       $oRetorno->message = $clempautitem->erro_msg;
       break;
+    } else {
+      $oRetorno          = new stdClass();
+      $oRetorno->status  = 1;
+
+      if (pg_numrows($rsItem) == 0)
+        $oRetorno->message = utf8_encode('Incluído com sucesso');
+      else
+        $oRetorno->message = utf8_encode('Alterado com sucesso');
+      break;
     }
+
+    break;
 
   case "excluir":
 
@@ -331,6 +347,11 @@ switch ($_POST["action"]) {
       $oRetorno          = new stdClass();
       $oRetorno->status  = 1;
       $oRetorno->message = $clempautitem->erro_msg;
+      break;
+    } else {
+      $oRetorno          = new stdClass();
+      $oRetorno->status  = 1;
+      $oRetorno->message = utf8_encode('Excluído com sucesso');
       break;
     }
 
@@ -352,10 +373,49 @@ switch ($_POST["action"]) {
 function verificaSaldoCriterio($e55_autori)
 {
   $sSQL = "
-     select sum(e55_vltot) as totalitens
-      from empautitem
-       inner join empautoriza on e54_autori = e55_autori
-        where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
+          SELECT DISTINCT
+          case when e55_vltot is null then pc23_valor
+              else pc23_valor-(select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori})
+          end as saldodisponivel,
+          (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori}) as utilizado
+          FROM liclicitem
+          INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+          INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+          INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+          INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+          INNER JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+          LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+          LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+          LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+          LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+          LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+          LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+          LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+          LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+          AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+          LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+          LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+          LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+          LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+          LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+          LEFT JOIN pcsubgrupo ON pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo
+          LEFT JOIN pctipo ON pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo
+          LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
+          LEFT JOIN orcelemento ON orcelemento.o56_codele = solicitemele.pc18_codele
+          AND orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
+          LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
+          LEFT JOIN empautitem ON empautitem.e55_autori = empautitempcprocitem.e73_autori
+          AND empautitem.e55_sequen = empautitempcprocitem.e73_sequen
+          LEFT JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+          LEFT JOIN empempaut ON empempaut.e61_autori = empautitem.e55_autori
+          LEFT JOIN empempenho ON empempenho.e60_numemp = empempaut.e61_numemp
+          LEFT JOIN pcdotac ON solicitem.pc11_codigo = pcdotac.pc13_codigo
+          left join pcorcamitem on pc22_orcamitem=pc26_orcamitem
+          WHERE l21_codliclicita = (select e54_codlicitacao
+                                     from empautoriza
+                                      where e54_autori = {$e55_autori}
+                                    ) and l20_criterioadjudicacao=1
+
     ";
 
   $rsConsulta = db_query($sSQL);
