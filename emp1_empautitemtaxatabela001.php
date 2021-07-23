@@ -68,50 +68,51 @@ select
   z01_numcgm
 from
   liclicitem
-left join pcprocitem on
+join pcprocitem on
   liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
-left join pcproc on
+join pcproc on
   pcproc.pc80_codproc = pcprocitem.pc81_codproc
-left join solicitem on
+join solicitem on
   solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-left join solicita on
+join solicita on
   solicita.pc10_numero = solicitem.pc11_numero
-left join db_depart on
+join db_depart on
   db_depart.coddepto = solicita.pc10_depto
-left join liclicita on
+join liclicita on
   liclicita.l20_codigo = liclicitem.l21_codliclicita
-left join cflicita on
+join cflicita on
   cflicita.l03_codigo = liclicita.l20_codtipocom
-left join pctipocompra on
+join pctipocompra on
   pctipocompra.pc50_codcom = cflicita.l03_codcom
-left join solicitemunid on
+join solicitemunid on
   solicitemunid.pc17_codigo = solicitem.pc11_codigo
-left join matunid on
+join matunid on
   matunid.m61_codmatunid = solicitemunid.pc17_unid
-left join pcorcamitemlic on
+join pcorcamitemlic on
   l21_codigo = pc26_liclicitem
-left join pcorcamval on
+join pcorcamval on
   pc26_orcamitem = pc23_orcamitem
-left join pcorcamforne on
+join pcorcamforne on
   pc21_orcamforne = pc23_orcamforne
-left join cgm on
+join cgm on
   z01_numcgm = pc21_numcgm
-left join pcorcamjulg on
+join pcorcamjulg on
   pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
   and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
-left join db_usuarios on
+join db_usuarios on
   pcproc.pc80_usuario = db_usuarios.id_usuario
-left join solicitempcmater on
+join solicitempcmater on
   solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-left join pcmater itemtabela on
+join pcmater itemtabela on
   itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
-left join pctabela on
+join pctabela on
   pctabela.pc94_codmater = itemtabela.pc01_codmater
-left join pctabelaitem on
+join pctabelaitem on
   pctabelaitem.pc95_codtabela = pctabela.pc94_sequencial
-left join pcmater on
-  pcmater.pc01_codmater = pctabelaitem.pc95_codmater
-left join pcmaterele on
+join pcmater on
+  pcmater.pc01_codmater = pctabelaitem.pc95_codmater and (pcmater.pc01_tabela = 't'
+    or pcmater.pc01_taxa = 't') /*Acrescentado o and para filtrar somente os itens tabela*/
+join pcmaterele on
   pcmaterele.pc07_codmater = pctabelaitem.pc95_codmater
 inner join orcelemento on
   orcelemento.o56_codele = pcmaterele.pc07_codele
@@ -188,11 +189,7 @@ where
   and pc24_pontuacao = 1
   and (pcmater.pc01_tabela = 't'
     or pcmater.pc01_taxa = 't')
-  and pcmater.pc01_codmater not in (
-  select
-    pc94_codmater
-  from
-    pctabela) ) fornecedores
+   ) fornecedores
 ");
 
 $result = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen));

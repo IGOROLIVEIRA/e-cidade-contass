@@ -249,9 +249,9 @@ switch ($_POST["action"]) {
 
         $itemRows[] = $oDados->pc01_codmater;
         $itemRows[] = $oDados->pc01_descrmater;
-        $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}' onkeypress='return lettersOnly(event)' />";
+        $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}'  />";
         $itemRows[] = $selectunid;
-        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}' onkeypress='return lettersOnly(event)' />";
+        $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}'  />";
         $itemRows[] = $selectservico;
 
         if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
@@ -261,7 +261,7 @@ switch ($_POST["action"]) {
         }
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
 
-        if ($_POST['desconto'] == 't')
+        if ($_POST['desconto'] == 'f')
           $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' readonly maxlength='2' />";
         else
           $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
@@ -284,7 +284,9 @@ switch ($_POST["action"]) {
     db_inicio_transacao();
 
     foreach ($_POST['dados'] as $item) :
+
       $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
+
       if (pg_numrows($rsItem) == 0) {
         $clempautitem->e55_codele = $_POST['codele'];
         $clempautitem->e55_item   = $item['id'];

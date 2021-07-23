@@ -124,7 +124,7 @@ $clrotulo->label("pc01_descrmater");
       <table height="100%" width="400px" id="myTable" class="table table-bordered table-striped">
         <thead>
           <tr>
-            <th>M</th>
+            <th style="text-align: center"><input type="checkbox" id="select_all" onclick="selectall()" /></th>
             <th>Código</th>
             <th>Item</th>
             <th>Descrição</th>
@@ -150,7 +150,16 @@ $clrotulo->label("pc01_descrmater");
   function js_loadTable() {
 
     $('#myTable').DataTable().clear().destroy();
-    $('#myTable').DataTable({
+    var table = $('#myTable').DataTable({
+      columnDefs: [{
+        orderable: false,
+        className: 'select-checkbox',
+        targets: 0
+      }],
+      select: {
+        style: 'multi',
+        selector: 'td:first-child'
+      },
       searchable: false,
       paging: false,
       language: {
@@ -204,6 +213,15 @@ $clrotulo->label("pc01_descrmater");
     consultaValores();
   };
 
+  function selectall() {
+    if ($('#select_all:checked').val() === 'on')
+      //table.rows().select();
+      console.log('on');
+    else
+      console.log('off');
+    //table.rows().deselect();
+  };
+
   function js_salvar() {
 
     if (!$("input[type='checkbox']").is(':checked')) {
@@ -227,21 +245,22 @@ $clrotulo->label("pc01_descrmater");
     $("#mytable tr").each(function() {
 
       if ($(this).find("input[type='checkbox']").is(":checked")) {
-
-        oDados.id = $(this).find("td:eq(1)").html();
-        oDados.descr = $(this).find("td:eq(3) input").val();
-        oDados.unidade = $(this).find("td:eq(4) select").val();
-        oDados.marca = $(this).find("td:eq(5) input").val();
-        oDados.servico = $(this).find("td:eq(6) input").val();
-        oDados.qtd = $(this).find("td:eq(7) input").val();
-        oDados.vlrunit = $(this).find("td:eq(8) input").val();
-        oDados.desc = $(this).find("td:eq(9) input").val();
-        oDados.total = $(this).find("td:eq(10) input").val();
+        console.log('unidade', $(this).find("td").eq(4).find("select").val());
+        oDados.id = $(this).find("td").eq(1).html();
+        oDados.descr = $(this).find("td").eq(3).find("input").val();
+        oDados.unidade = $(this).find("td").eq(4).find("select").val();
+        oDados.marca = $(this).find("td").eq(5).find("input").val();
+        oDados.servico = $(this).find("td").eq(6).find("select").val();
+        oDados.qtd = $(this).find("td").eq(7).find("input").val();
+        oDados.vlrunit = $(this).find("td").eq(8).find("input").val();
+        oDados.desc = $(this).find("td").eq(9).find("input").val();
+        oDados.total = $(this).find("td").eq(10).find("input").val();
 
         aDados.push(oDados);
+        oDados = {};
       }
     });
-
+    console.log(aDados);
     oParam.dados = aDados;
 
     $.ajax({
@@ -276,8 +295,9 @@ $clrotulo->label("pc01_descrmater");
 
       if ($(this).find("input[type='checkbox']").is(":checked")) {
 
-        oDados.id = $(this).find("td:eq(1)").html();
+        oDados.id = $(this).find("td").eq(1).html();
         aDados.push(oDados);
+        oDados = {};
       }
     });
 
@@ -462,15 +482,6 @@ $clrotulo->label("pc01_descrmater");
     if (!regex.test(key)) {
       theEvent.returnValue = false;
       if (theEvent.preventDefault) theEvent.preventDefault();
-    }
-  }
-
-  function lettersOnly(texto) {
-    var tecla = texto.which || texto.keyCode;
-    if ((tecla >= 97 && tecla <= 117) || (tecla === 8)) {
-      return true;
-    } else {
-      return false;
     }
   }
 </script>
