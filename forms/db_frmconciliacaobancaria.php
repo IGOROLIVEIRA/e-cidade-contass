@@ -661,7 +661,9 @@ db_app::load("widgets/windowAux.widget.js");
 
         gridLancamentos.selectSingle = function(oCheckbox, sRow, oRow, lVerificaSaldo, bSelectAll) {
             var limpar = true;
-            var valor = parseFloat(document.form1.total_selecionado.value);
+            var valor = document.form1.total_selecionado.value.replace('.', '');
+            valor = valor.replace(',', '.');
+            valor = parseFloat(valor);
 
             if (js_comparadata($F("data_conciliacao"), oRow.aCells[2].getValue(), "<")) {
                 if (!alertError) {
@@ -701,7 +703,7 @@ db_app::load("widgets/windowAux.widget.js");
                     // }
                 }
             }
-            document.form1.total_selecionado.value = valor.toFixed(2);
+            document.form1.total_selecionado.value = js_formatar(valor.toFixed(2), "f");
         }
 
         gridLancamentos.selectAll = function(idObjeto, sClasse, sLinha) {
