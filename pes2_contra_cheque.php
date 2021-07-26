@@ -10,9 +10,26 @@ require_once("classes/db_cfpess_classe.php");
 
 require_once("libs/db_utils.php");
 require_once("libs/db_libpessoal.php");
+require_once("libs/JSON.php");
 
 db_postmemory($HTTP_SERVER_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+$oJson        = new services_json();
+$oParametros  = $oJson->decode(str_replace("\\","",$json));
+/**
+ * constantes para o Relatorio
+ */
+define( "TIPO_RELATORIO_GERAL"              , "0" );
+define( "TIPO_RELATORIO_ORGAO"              , "1" );
+define( "TIPO_RELATORIO_LOTACAO"            , "2" );
+define( "TIPO_RELATORIO_MATRICULA"          , "3" );
+define( "TIPO_RELATORIO_LOCAIS_TRABALHO"    , "4" );
+define( "TIPO_RELATORIO_CARGO"              , "5" );
+define( "TIPO_RELATORIO_RECURSO"            , "6" );
+
+define( "TIPO_FILTRO_GERAL"                 , 0 );
+define( "TIPO_FILTRO_INTERVALO"             , 1 );
+define( "TIPO_FILTRO_SELECIONADOS"          , 2 );
 
 $clrhemitecontracheque = new cl_rhemitecontracheque();
 $oDaoCfpess            = new cl_cfpess;
@@ -26,7 +43,75 @@ if(!$iTipoRelatorio) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Modelo de impressão invalido, verifique parametros.');
 }
 
-$wherepes = '';
+switch ( $oParametros->iTipoRelatorio ) {
+
+  default:
+
+    $sCampoCondicaoTipoRelatorio   = 1;
+    $sCampoDescricaoTipoRelatorio  = "";
+
+  break;
+
+  case TIPO_RELATORIO_CARGO:
+
+    $sCampoCondicaoTipoRelatorio   = "rh37_funcao";
+    $sCampoDescricaoTipoRelatorio  = "rh37_descr";
+
+  break;
+
+  case TIPO_RELATORIO_LOTACAO:
+
+    $sCampoCondicaoTipoRelatorio     = "r70_codigo";
+    $sCampoDescricaoTipoRelatorio    = "r70_descr";
+
+  break;
+
+  case TIPO_RELATORIO_ORGAO:
+
+    $sCampoCondicaoTipoRelatorio  = "rh26_orgao";
+    $sCampoDescricaoTipoRelatorio = "o40_descr";
+
+  break;
+
+  case TIPO_RELATORIO_LOCAIS_TRABALHO:
+
+    $sCampoCondicaoTipoRelatorio  = "rh55_codigo";
+    $sCampoDescricaoTipoRelatorio = "rh55_descr";
+
+  break;
+
+  case TIPO_RELATORIO_MATRICULA:
+
+    $sCampoCondicaoTipoRelatorio  = "rh02_regist";
+    $sCampoDescricaoTipoRelatorio = "z01_nome";
+
+  break;
+
+  case TIPO_RELATORIO_RECURSO:
+
+    $sCampoCondicaoTipoRelatorio  = "o15_codigo";
+    $sCampoDescricaoTipoRelatorio = "o15_descr";
+
+  break;
+}
+$sWhere = "";
+if ( $oParametros->iTipoRelatorio <> TIPO_RELATORIO_GERAL ) {
+
+  switch ( $oParametros->iTipoFiltro ) {
+
+    case TIPO_FILTRO_GERAL:
+      //Sem Filtros
+    break;
+    case TIPO_FILTRO_INTERVALO:
+      $sWhere = " and {$sCampoCondicaoTipoRelatorio} between $oParametros->iIntervaloInicial and $oParametros->iIntervaloFinal";
+    break;
+    case TIPO_FILTRO_SELECIONADOS:
+      $sWhere = " and {$sCampoCondicaoTipoRelatorio} in (" . implode(", ", $oParametros->iRegistros) . ")";
+    break;
+  }
+}
+
+$wherepes = $sWhere;
 if($selecao != ''){
   $result_sel = db_query("select r44_where , r44_descr from selecao where r44_selec = ".$selecao);
   if(pg_numrows($result_sel) > 0){
@@ -82,33 +167,6 @@ if ( $opcao == 'salario' ){
   $arquivo = 'ajusteir';
   $qualarquivo = 'AJUSTE DO IRRF';
 }
-$txt_where="1=1";
-if (isset($filtro)&&$filtro!='N'){
-  if ($filtro=='M'){
-    $campo=$sigla."regist";
-  }else if ($filtro=='L'){
-    $campo=$sigla."lotac::integer";
-  }else if ($filtro=='T'){
-    $campo= "rh56_localtrab";
-  }else if ($filtro=='S'){
-    $campo= "o40_orgao";
-  }
-  if (isset($dados)&&$dados!=""){
-    $txt_where = " $campo in ($dados) ";
-  }elseif (isset($codini) && $codini != "" && $codfim != ""){
-    $txt_where = " $campo between $codini and $codfim ";
-  }
-}
-if(isset($local) && trim($local) != ""){
-  if($txt_where!=""){
-     $txt_where.= " and ";
-  }
-  if($tipo_local == 's'){
-    $txt_where.= " rh56_localtrab = ".$local;
-  }else{
-    $txt_where.= " rh56_localtrab <> ".$local;
-  }
-}
 
 $wheresemest = "";
 if(isset($semest) && trim($semest) != 0){
@@ -149,7 +207,7 @@ $sql1= "select distinct
      		  left join rhfuncao       on rh37_funcao = rh02_funcao
 		                              and rh37_instit = rh02_instit
      		  left join rhlota         on r70_codigo  = rh02_lota
-				                          and r70_instit  = rh02_instit	
+				                          and r70_instit  = rh02_instit
           left join rhpescargo     on rh20_seqpes = rh02_seqpes
 		                              and rh20_instit = rh02_instit
           left join rhpesbanco     on rh44_seqpes = rh02_seqpes
@@ -157,14 +215,18 @@ $sql1= "select distinct
 		                              and rh04_instit = rh02_instit
           left join rhpeslocaltrab on rh56_seqpes = rh02_seqpes
                                   and rh56_princ  = true
+          left  join rhlocaltrab on rhpeslocaltrab.rh56_localtrab = rhlocaltrab.rh55_codigo
           left join rhpesdoc on rh16_regist = rh01_regist
           left  join rhlotaexe    on rh26_codigo = r70_codigo  
                             and rh26_anousu = $ano        
           left join orcorgao      on o40_orgao   = rh26_orgao  
                             and o40_anousu  = $ano        
                             and o40_instit  = rh02_instit 
+          left  join rhlotavinc on rh25_codigo = r70_codigo
+          and rh25_anousu = rhpessoalmov.rh02_anousu
+          left  join orctiporec on o15_codigo = rh25_recurso
 
-	        where $txt_where $wherepes
+	        where 1=1 $wherepes
 	        ";
 
 $sql = "select * from ($sql1) as xxx, generate_series(1,$num_vias) order by ";
