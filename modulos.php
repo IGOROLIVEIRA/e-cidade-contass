@@ -178,7 +178,7 @@ if(pg_numrows($result) == 0) {
         color: red;
         text-align: center;
         margin-top: 18px;
-        margin-bottom: -17px;
+        margin-bottom: 0px;
         z-index: 1;
         position: relative;
     }
@@ -542,22 +542,47 @@ if(pg_numrows($result) == 0) {
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php
-                            $sqlPermissao = "select m.id_item,m.descricao
-                                                from db_permissao p
-                            inner join db_itensmenu m on m.id_item = p .id_item
-                            where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
-                            $result = db_query($sqlPermissao);
-                            $db_modulo = db_getsession("DB_modulo");
+                            $sSqlPerfil  = "select db_permissao.id_usuario, anousu   ";
+                            $sSqlPerfil .= "from db_permissao       ";
+                            $sSqlPerfil .= "WHERE db_permissao.id_usuario IN";
+                            $sSqlPerfil .= "    (SELECT db_permherda.id_perfil";
+                            $sSqlPerfil .= "     FROM db_permherda";
+                            $sSqlPerfil .= "     WHERE db_permherda.id_usuario = ".db_getsession("DB_id_usuario").")";
+                            $sSqlPerfil .= "group by db_permissao.id_usuario, db_permissao.anousu ";
+                            $sSqlPerfil .= "order by db_permissao.anousu desc LIMIT 1";
+                            $resultPerfil = db_query($sSqlPerfil);
 
-                            if($db_modulo == 604 && pg_numrows($result) > 0):
+                            if(pg_numrows($resultPerfil) == 0) {
+                                $sqlPermissaoMenu = "select m.id_item,m.descricao
+                                                     from db_permissao p
+                                                     inner join db_itensmenu m on m.id_item = p .id_item
+                                                     where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
+                                $resultMenuRecebimento = db_query($sqlPermissaoMenu);
+                                $db_modulo = db_getsession("DB_modulo");
+                            }else{
+                                $codperfil = pg_result($resultPerfil,0,0);
+
+                                $sqlPermissaoPerfil = "select m.id_item,m.descricao
+                                                       from db_permissao p
+                                                       inner join db_itensmenu m on m.id_item = p .id_item
+                                                       where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = $codperfil";
+                                $resultMenuRecebimento = db_query($sqlPermissaoPerfil);
+                                $db_modulo = db_getsession("DB_modulo");
+                            }
+
+                            if($db_modulo == 604 && pg_numrows($resultMenuRecebimento) > 0):
                                 ?>
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
                                     <td>
                                         <h2>Processos a receber no Departamento</h2>
-                                        <iframe frameborder="0"  width="100%" height="300%" id="processos" name="Processos" src="db_procreceber.php" scrolling="auto"></iframe>
                                     </td>
                                 </tr>
+                            <tr>
+                                <td>
+                                    <iframe width="100%" height="300%" frameborder="0" id="processos" name="Processos" src="db_procreceber.php" scrolling="auto"></iframe>
+                                </td>
+                            </tr>
                             <?php endif; ?>
                         </table>
                     </center>
