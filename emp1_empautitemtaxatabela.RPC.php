@@ -221,7 +221,7 @@ switch ($_POST["action"]) {
 
         $selectunid = "";
         $selectunid = "<select id='unidade_{$oDados->pc01_codmater}'>";
-        $selectunid .= "<option selected='selected'>..</option>";
+        $selectunid .= "<option selected='selected'></option>";
         foreach ($result_unidade as $key => $item) {
           if ($key == $oDadosEmpAutItem->e55_unid)
             $selectunid .= "<option value='$key' selected='selected'>$item</option>";
@@ -321,17 +321,13 @@ switch ($_POST["action"]) {
 
     if ($clempautitem->erro_status == 0) {
       $oRetorno          = new stdClass();
-      $oRetorno->status  = 1;
-      $oRetorno->message = $clempautitem->erro_msg;
+      $oRetorno->status  = 0;
+      $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
       break;
     } else {
       $oRetorno          = new stdClass();
       $oRetorno->status  = 1;
-
-      if (pg_numrows($rsItem) == 0)
-        $oRetorno->message = utf8_encode('Incluído com sucesso');
-      else
-        $oRetorno->message = utf8_encode('Alterado com sucesso');
+      $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
       break;
     }
 
@@ -351,8 +347,8 @@ switch ($_POST["action"]) {
 
     if ($clempautitem->erro_status == 0) {
       $oRetorno          = new stdClass();
-      $oRetorno->status  = 1;
-      $oRetorno->message = $clempautitem->erro_msg;
+      $oRetorno->status  = 0;
+      $oRetorno->message = urlencode(str_replace("\\n", "\n", $clempautitem->erro_msg));
       break;
     } else {
       $oRetorno          = new stdClass();

@@ -123,18 +123,19 @@ $clrotulo->label("pc01_descrmater");
     <div class="container">
       <table height="100%" width="400px" id="myTable" class="table table-bordered table-striped">
         <thead>
-          <tr>
-            <th style="text-align: center"><input type="checkbox" id="select_all" onclick="selectall()" /></th>
-            <th>Código</th>
-            <th>Item</th>
-            <th>Descrição</th>
-            <th>Unidade</th>
-            <th>Marca</th>
-            <th>Serviço</th>
-            <th>Qtdd</th>
-            <th>Vlr. Unit.</th>
-            <th>Desc. %</th>
-            <th>Total</th>
+          <!-- <tr>
+            <th style="text-align: center"><input type="checkbox" id="select_all" onclick="selectall()" /></th> -->
+          <th></th>
+          <th>Código</th>
+          <th>Item</th>
+          <th>Descrição</th>
+          <th>Unidade</th>
+          <th>Marca</th>
+          <th>Serviço</th>
+          <th>Qtdd</th>
+          <th>Vlr. Unit.</th>
+          <th>Desc. %</th>
+          <th>Total</th>
           </tr>
         </thead>
       </table>
@@ -151,15 +152,6 @@ $clrotulo->label("pc01_descrmater");
 
     $('#myTable').DataTable().clear().destroy();
     var table = $('#myTable').DataTable({
-      columnDefs: [{
-        orderable: false,
-        className: 'select-checkbox',
-        targets: 0
-      }],
-      select: {
-        style: 'multi',
-        selector: 'td:first-child'
-      },
       searchable: false,
       paging: false,
       language: {
@@ -214,12 +206,13 @@ $clrotulo->label("pc01_descrmater");
   };
 
   function selectall() {
-    if ($('#select_all:checked').val() === 'on')
+    if ($('#select_all:checked').val() === 'on') {
       //table.rows().select();
       console.log('on');
-    else
+    } else {
       console.log('off');
-    //table.rows().deselect();
+      //table.rows().deselect();
+    }
   };
 
   function js_salvar() {
@@ -245,7 +238,7 @@ $clrotulo->label("pc01_descrmater");
     $("#mytable tr").each(function() {
 
       if ($(this).find("input[type='checkbox']").is(":checked")) {
-        console.log('unidade', $(this).find("td").eq(4).find("select").val());
+
         oDados.id = $(this).find("td").eq(1).html();
         oDados.descr = $(this).find("td").eq(3).find("input").val();
         oDados.unidade = $(this).find("td").eq(4).find("select").val();
@@ -269,10 +262,15 @@ $clrotulo->label("pc01_descrmater");
       data: oParam,
       success: function(data) {
         let response = JSON.parse(data);
-        //console.log(response);
-        alert(response.message);
-        //js_loadTable();
-        window.location.reload();
+        console.log(response);
+        if (response.status == 0) {
+          alert(response.message.urlDecode());
+          return false;
+        } else {
+          //js_loadTable();
+          alert(response.message.urlDecode());
+          window.location.reload();
+        }
       }
     });
   }
