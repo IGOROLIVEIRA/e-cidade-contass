@@ -425,6 +425,8 @@ if (isset($alterar)) {
   } else {
     $clempautoriza->erro(true, false);
   }
+  //echo "<script>alert('tst'); </script>";
+  echo "<script>top.corpo.iframe_empautitem.location.reload(); </script>";
 }
 if ($db_opcao == 22 && $anulacao == false) {
   echo "<script>document.form1.pesquisar.click();</script>";

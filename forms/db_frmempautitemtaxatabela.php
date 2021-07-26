@@ -151,7 +151,42 @@ $clrotulo->label("pc01_descrmater");
   function js_loadTable() {
 
     $('#myTable').DataTable().clear().destroy();
-    var table = $('#myTable').DataTable({
+    var table = $('#myTable').removeAttr('width').DataTable({
+      bAutoWidth: false,
+      aoColumns: [{
+          sWidth: '2%'
+        },
+        {
+          sWidth: '2%'
+        },
+        {
+          sWidth: '15%'
+        },
+        {
+          sWidth: '5%'
+        },
+        {
+          sWidth: '5%'
+        },
+        {
+          sWidth: '5%'
+        },
+        {
+          sWidth: '3%'
+        },
+        {
+          sWidth: '3%'
+        },
+        {
+          sWidth: '3%'
+        },
+        {
+          sWidth: '3%'
+        },
+        {
+          sWidth: '3%'
+        }
+      ],
       searchable: false,
       paging: false,
       language: {
@@ -355,16 +390,13 @@ $clrotulo->label("pc01_descrmater");
 
     const item = origem.id.split('_');
     const id = item[1];
-    console.log(item);
     const desc = new Number($('#desc_' + id).val());
     const quant = new Number($('#qtd_' + id).val());
     const uni = new Number($('#vlrunit_' + id).val());
-    const tot = new Number($('#total_' + id).val()).toFixed(2);
-
-    conQt = 'false';
+    //const tot = new Number($('#total_' + id).val()).toFixed(2);
 
 
-    if ($('#e54_desconto' + id).val() == 'f') {
+    if ($('#e54_desconto').val() == 't') {
       t = new Number((uni - (desc / 100)) * quant);
       $('#total_' + id).val(t.toFixed(2));
     } else {
@@ -378,7 +410,12 @@ $clrotulo->label("pc01_descrmater");
         $('#qtd_' + id).focus();
         return false;
       }
-      if ($('#e54_desconto' + id).val() == 'f') {
+      if ($('#e54_desconto').val() == 't') {
+        // alert((desc / 100));
+        // alert(uni);
+        // alert((uni - (desc / 100)));
+        // alert(quant);
+        // alert((uni - (desc / 100)) * quant);
         t = new Number((uni - (desc / 100)) * quant);
         $('#total_' + id).val(t.toFixed(2));
       } else {
@@ -392,7 +429,7 @@ $clrotulo->label("pc01_descrmater");
         $('#desc_' + id).focus();
         return false;
       }
-      if ($('#e54_desconto' + id).val() == 'f') {
+      if ($('#e54_desconto').val() == 't') {
         t = new Number((uni - (desc / 100)) * quant);
         $('#total_' + id).val(t.toFixed(2));
       } else {
@@ -407,7 +444,7 @@ $clrotulo->label("pc01_descrmater");
         $('#vlrunit_' + id).focus();
         return false;
       }
-      if ($('#e54_desconto' + id).val() == 'f') {
+      if ($('#e54_desconto').val() == 't') {
         t = new Number((uni - (desc / 100)) * quant);
         $('#total_' + id).val(t.toFixed(2));
       } else {
@@ -415,19 +452,6 @@ $clrotulo->label("pc01_descrmater");
         $('#total_' + id).val(t.toFixed(2));
       }
     }
-
-    // if (item[0] == "total" && conQt == 'false') {
-    //   if (isNaN(tot)) {
-    //     //alert("Valor total inváido!");
-    //     $('#total_' + id).focus();
-    //     return false;
-    //   }
-    //   if (quant != 0) {
-    //     t = new Number(tot / quant);
-    //     $('#total_' + id).val(tot);
-    //     $('#vlrunit_' + id).val(t.toFixed($('#desc_' + id).val()));
-    //   }
-    // }
     consultaLancar();
   }
 

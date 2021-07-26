@@ -176,9 +176,20 @@ class cl_empautitem
       $this->erro_status = "0";
       return false;
     }
-    if (($this->e55_unid == null) || ($this->e55_unid == "")) {
-      $this->e55_unid = 0;
+    // if (($this->e55_unid == null) || ($this->e55_unid == "")) {
+    //   $this->e55_unid = 0;
+    // }
+
+    if ($this->e55_unid == null) {
+      $this->erro_sql = " Campo Unidade nao Informado.";
+      $this->erro_campo = "e55_unid";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
     }
+
     $sql = "insert into empautitem(
                                        e55_autori
                                       ,e55_item
@@ -225,9 +236,9 @@ class cl_empautitem
     }
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-    $this->erro_sql .= "Valores : " . $this->e55_autori . "-" . $this->e55_sequen;
+    //$this->erro_sql .= "Valores : " . $this->e55_autori . "-" . $this->e55_sequen;
     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+    //$this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
     $resaco = $this->sql_record($this->sql_query_file($this->e55_autori, $this->e55_sequen));
@@ -362,6 +373,15 @@ class cl_empautitem
     if (trim($this->e55_unid) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e55_unid"])) {
       $sql  .= $virgula . " e55_unid = '$this->e55_unid' ";
       $virgula = ",";
+      if (trim($this->e55_unid) == null) {
+        $this->erro_sql = " Campo Unidade nao Informado.";
+        $this->erro_campo = "e55_vlrun";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
     }
 
     $sql .= " where ";

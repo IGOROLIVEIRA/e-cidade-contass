@@ -42,8 +42,8 @@ switch ($_POST["action"]) {
     z01_numcgm,
     matunid.m61_codmatunid,
    case
-      when pc23_percentualdesconto is null then pc23_perctaxadesctabela
-      else pc23_percentualdesconto
+   when pc23_perctaxadesctabela is null then pc23_percentualdesconto
+      else pc23_perctaxadesctabela
       end as desconto
       FROM liclicitem
       LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -92,8 +92,8 @@ switch ($_POST["action"]) {
                         z01_numcgm,
                         matunid.m61_codmatunid,
                        case
-                          when pc23_percentualdesconto is null then pc23_perctaxadesctabela
-                          else pc23_percentualdesconto
+                       when pc23_perctaxadesctabela is null then pc23_percentualdesconto
+      else pc23_perctaxadesctabela
                           end as desconto
        FROM liclicitem
        LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -140,8 +140,8 @@ switch ($_POST["action"]) {
                         z01_numcgm,
                         matunid.m61_codmatunid,
                        case
-                          when pc23_percentualdesconto is null then pc23_perctaxadesctabela
-                          else pc23_percentualdesconto
+                       when pc23_perctaxadesctabela is null then pc23_percentualdesconto
+                       else pc23_perctaxadesctabela
                           end as desconto
        FROM liclicitem
        LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -255,18 +255,18 @@ switch ($_POST["action"]) {
         $itemRows[] = $selectservico;
 
         if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' />";
+          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
         } else {
-          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
+          $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
         }
-        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
+        $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
 
         if ($_POST['desconto'] == 'f')
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' readonly maxlength='2' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' readonly maxlength='2' style='width: 80px' />";
         else
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
 
-        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly />";
+        $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
         $employeeData[] = $itemRows;
       }
 
@@ -377,9 +377,15 @@ function verificaSaldoCriterio($e55_autori)
   $sSQL = "
           SELECT DISTINCT
           case when e55_vltot is null then pc23_valor
-              else pc23_valor-(select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori})
+              else pc23_valor-(select sum(e55_vltot) from empautoriza join liclicita on l20_codigo = e54_codlicitacao join empautitem on e55_autori=e54_autori where l20_codigo= (select e54_codlicitacao
+              from empautoriza
+               where e54_autori = {$e55_autori}
+             ))
           end as saldodisponivel,
-          (select sum(e55_vltot) from empautitem where e55_autori = {$e55_autori}) as utilizado
+          (select sum(e55_vltot) from empautoriza join liclicita on l20_codigo = e54_codlicitacao join empautitem on e55_autori=e54_autori where l20_codigo= (select e54_codlicitacao
+          from empautoriza
+           where e54_autori = {$e55_autori}
+         ) ) as utilizado
           FROM liclicitem
           INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
           INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
