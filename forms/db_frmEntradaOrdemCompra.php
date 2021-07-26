@@ -1543,7 +1543,7 @@ if (count($aParametrosEmpenho) > 0) {
    * faz algumas verificações antes de realmente fazer o envio.
    */
   function js_confirmaEntrada() {
-
+    
     if (confirm('Confirma a entrada dos Itens Selecionados no estoque?')) {
 
       //Número da nota, é obrigatorio
@@ -1582,6 +1582,15 @@ if (count($aParametrosEmpenho) > 0) {
         $('e69_dtnota').focus();
         return false;
 
+      }
+
+      var strData = $F('e69_dtrecebe');
+      var partesData = strData.split("/");
+      var data = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+      if(data > new Date()){
+        
+        alert("Data não pode ser maior que a data atual");
+        return false;
       }
 
       if ($F('e69_chaveacesso') == '' && ($F('e69_notafiscaleletronica') == 1 || $F('e69_notafiscaleletronica') == 2 || $F('e69_notafiscaleletronica') == 4)) {
