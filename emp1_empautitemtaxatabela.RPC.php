@@ -79,10 +79,8 @@ switch ($_POST["action"]) {
     if (!empty($_POST["tabela"])) {
       $sqlQueryTotal .= " and  pc94_sequencial = $tabela";
     }
-    if (!empty($_POST["codele"])) {
+    if ($_POST["codele"] != '...') {
       $sqlQueryTotal .= " and  pc07_codele = $codele";
-    } else {
-      $sqlQueryTotal .= "AND pc07_codele=1";
     }
 
     $sqlQuery = "SELECT *
@@ -130,10 +128,8 @@ switch ($_POST["action"]) {
     if (!empty($_POST["tabela"])) {
       $sqlQuery .= " and  pc94_sequencial = $tabela";
     }
-    if (!empty($_POST["codele"])) {
+    if ($_POST["codele"] != '...') {
       $sqlQuery .= " and  pc07_codele = $codele";
-    } else {
-      $sqlQuery .= "AND pc07_codele=1";
     }
     $sqlQuery .= "UNION SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
@@ -175,10 +171,8 @@ switch ($_POST["action"]) {
     if (!empty($_POST["tabela"])) {
       $sqlQuery .= " and  pc94_sequencial = $tabela";
     }
-    if (!empty($_POST["codele"])) {
+    if ($_POST["codele"] != '...') {
       $sqlQuery .= " and  pc07_codele = $codele";
-    } else {
-      $sqlQuery .= "AND pc07_codele=1";
     }
     $sqlQuery .= "
          AND (pcmater.pc01_tabela = 't'
@@ -262,7 +256,7 @@ switch ($_POST["action"]) {
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
 
         if ($_POST['desconto'] == 'f')
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' readonly maxlength='2' style='width: 80px' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='width: 80px' />";
         else
           $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
 

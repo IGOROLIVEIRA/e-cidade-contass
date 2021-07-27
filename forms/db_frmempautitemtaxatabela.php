@@ -96,8 +96,9 @@ $clrotulo->label("pc01_descrmater");
           <td>
             <?
             if (pg_numrows($result) == 0) {
-              db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '', "js_troca();");
+              db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '...', "js_troca();");
             } else {
+              $result_elemento = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen, 'e55_codele as pc07_codele'));
               db_fieldsmemory($result_elemento, 0);
               db_input('pc07_codele', 50, 0, true, 'text', 3);
             }
@@ -252,12 +253,19 @@ $clrotulo->label("pc01_descrmater");
 
   function js_salvar() {
 
+    if ($('#pc07_codele').val() == '...') {
+      alert("É necessário escolher um elemento");
+      return false;
+    }
+
     if (!$("input[type='checkbox']").is(':checked')) {
       alert("É necessário marcar algum item");
       return false;
     }
+    let rsDisponivel;
+    rsDisponivel = Number($('#disponivel').val()) - Number($('#utilizado').val());
 
-    if (Number($('#disponivel').val()) < Number($('#totalad').val())) {
+    if (rsDisponivel < Number($('#totalad').val())) {
       alert("Não há valor disponível");
       return false;
     }
@@ -506,4 +514,10 @@ $clrotulo->label("pc01_descrmater");
       if (theEvent.preventDefault) theEvent.preventDefault();
     }
   }
+  $(document).ready(function() {
+    $('input[type="text"]').each(function() {
+      var val = $(this).val().replace(',', '.');
+      $(this).val(val);
+    });
+  });
 </script>

@@ -107,7 +107,7 @@ db_app::load("DBFormCache.js");
           </b>
         </td>
         <td align="left" nowrap>
-          <? db_input("e54_codlicitacao", 10, $Il20_codigo, true, "text", ($db_opcao == 1) ? $db_opcao : 3, ($db_opcao == 1) ? "onchange='js_pesquisa_liclicita(false);'" : "onchange='js_pesquisa_fornecedor(this.value);'"); ?>
+          <? db_input("e54_codlicitacao", 10, $Il20_codigo, true, "text", 3, ($db_opcao == 1) ? "onchange='js_pesquisa_liclicita(false);'" : "onchange='js_pesquisa_fornecedor(this.value);'"); ?>
         </td>
       </tr>
       <tr>
