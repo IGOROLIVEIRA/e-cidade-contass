@@ -335,7 +335,6 @@ if(!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
 					$oPdf->cell(28, $alt, substr($aDadosSolicita['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
 					$oPdf->cell(39, $alt, str_replace("\\n", "\n", substr(trim($aDadosSolicita['oDados']->sCompl), 0, 20)), 0, 0, "L", $lPreenchimento);
 					$oPdf->cell(16, $alt, $aDadosSolicita['oDados']->sUnidade, 0, 0, "C", $lPreenchimento);
-					$oPdf->cell(16, $alt, db_formatar($aDadosSolicita['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
 					$oPdf->cell(($aDadosSolicita['oDados']->lControlaValor ? 50 : 32), $alt, substr($aDadosSolicita['oDados']->sFornecedor, 0, ($aDadosSolicita['oDados']->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
 
 					if (!$aDadosSolicita['oDados']->lControlaValor) {
@@ -343,7 +342,8 @@ if(!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
 					}
 
 					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->iSolicitada, 'v', " ", $casadec) : $aDadosSolicita['oDados']->iSolicitada), 0, 0, "R", $lPreenchimento);
-					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->iEmpenhada, 'v', " ", $casadec) : $aDadosSolicita['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
+                    $oPdf->cell(16, $alt, db_formatar($aDadosSolicita['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
+                    $oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->iEmpenhada, 'v', " ", $casadec) : $aDadosSolicita['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
 					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->nSolicitar, 'v', " ", $casadec) : $aDadosSolicita['oDados']->nSolicitar), 0, 0, "R", $lPreenchimento);
 					$oPdf->cell(25, $alt, ($aDadosSolicita['oDados']->lControlaValor ? db_formatar($aDadosSolicita['oDados']->nEmpenhar, 'v', " ", $casadec) : $aDadosSolicita['oDados']->nEmpenhar), 0, 1, "R", $lPreenchimento);
 
@@ -416,7 +416,6 @@ if(!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
 				$oPdf->cell(28, $alt, substr($oItem['oDados']->sDescrItem, 0, 20), 0, 0, "L", $lPreenchimento);
 				$oPdf->cell(39, $alt, str_replace("\\n", "\n", substr(trim($oItem['oDados']->sCompl), 0, 20)), 0, 0, "L", $lPreenchimento);
 				$oPdf->cell(16, $alt, $oItem['oDados']->sUnidade, 0, 0, "C", $lPreenchimento);
-				$oPdf->cell(16, $alt, db_formatar($oItem['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
 				$oPdf->cell(($oItem['oDados']->lControlaValor ? 50 : 32), $alt, substr($oItem['oDados']->sFornecedor, 0, ($oItem['oDados']->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
 
 				if (!$oItem['oDados']->lControlaValor) {
@@ -424,9 +423,10 @@ if(!strlen($oGet->fornecedores) && $oGet->lQuebraFornecedor == 'f') {
 				}
 
 				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->iSolicitada, 'v', " ", $casadec) : $oItem['oDados']->iSolicitada), 0, 0, "R", $lPreenchimento);
-				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->iEmpenhada, 'v', " ", $casadec) : $oItem['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
+                $oPdf->cell(16, $alt, db_formatar($oItem['nTotalVlrUnid'], 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
+                $oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->iEmpenhada, 'v', " ", $casadec) : $oItem['oDados']->iEmpenhada), 0, 0, "R", $lPreenchimento);
 				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->nSolicitar, 'v', " ", $casadec) : $oItem['oDados']->nSolicitar), 0, 0, "R", $lPreenchimento);
-				$oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->nEmpenhar, 'v', " ", $casadec) : $oItem['oDados']->nEmpenhar), 0, 1, "R", $lPreenchimento);
+                $oPdf->cell(25, $alt, ($oItem['oDados']->lControlaValor ? db_formatar($oItem['oDados']->nEmpenhar, 'v', " ", $casadec) : $oItem['oDados']->nEmpenhar), 0, 1, "R", $lPreenchimento);
 
 				/**
 				 * Total de cada numero de solicitacao
@@ -515,7 +515,6 @@ function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $
   $oPdf->cell(28, $alt, "Descrição"  , 1, 0, "C", 1);
   $oPdf->cell(39, $alt, "Complemento", 1, 0, "C", 1);
   $oPdf->cell(16, $alt, "Unidade"    , 1, 0, "C", 1);
-  $oPdf->cell(16, $alt, ($lControlaValor ? "Valor" : "Vlr Uni.")   , 1, 0, "C", 1);
   $oPdf->cell(($lControlaValor ? 50 : 32), $alt, "Fornecedor" , 1, 0, "C", 1);
 
   if (!$lControlaValor) {
@@ -523,6 +522,7 @@ function imprimeCabecalho(&$oPdf, $alt, $iAbertura, $iCompilacao, $sLicitacao, $
   }
 
   $oPdf->cell(25, $alt, ($lControlaValor ? "Solicitado" : "Solicitada") , 1, 0, "C", 1);
+  $oPdf->cell(16, $alt, ($lControlaValor ? "Valor" : "Vlr Uni.")   , 1, 0, "C", 1);
   $oPdf->cell(25, $alt, ($lControlaValor ? "Empenhado" : "Empenhada")  , 1, 0, "C", 1);
   $oPdf->cell(25, $alt, "Solicitar"  , 1, 0, "C", 1);
   $oPdf->cell(25, $alt, "Empenhar"   , 1, 1, "C", 1);
