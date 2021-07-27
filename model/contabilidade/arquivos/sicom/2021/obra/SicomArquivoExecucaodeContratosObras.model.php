@@ -134,7 +134,10 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
              obr01_numeroobra AS si197_codobra,
              ac16_objeto AS si197_objeto,
              obr01_linkobra AS si197_linkobra,
-             l04_codigo as si197_nrolote
+            CASE
+                WHEN l20_tipojulg = 1 THEN '1'
+                    ELSE l04_codigo
+                END AS si197_nrolote      
       FROM acordo
       INNER JOIN liclicita ON l20_codigo = ac16_licitacao
       inner join liclicitem on l21_codliclicita = l20_codigo
