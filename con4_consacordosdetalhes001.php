@@ -150,6 +150,20 @@ $oGet = db_utils::postMemory($_GET);
 
                                     break;
 
+                                case 'getdotacaoacordo':
+                                    console.log('aqui');
+                                    console.log(oDado);
+                                    var aRow = new Array();
+
+                                    aRow[0] = oDado.ficha;
+                                    aRow[1] = oDado.fonterecurso;
+                                    aRow[2] = oDado.projetoativ;
+                                    aRow[3] = oDado.codorcamentario;
+
+                                    oGrvDetalhes.addRow(aRow);
+
+                                    break;
+
                                 case "processodecompras":
 
                                     var aRow = new Array();
@@ -495,6 +509,20 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes.setCellAlign(new Array("right","right","left","center"));
                 oGrvDetalhes.setHeader(new Array("Codigo","Acordo","Descricao","Download"));
                 oGrvDetalhes.setHeight(230);
+                oGrvDetalhes.show($('grvDetalhes'));
+                oGrvDetalhes.clearAll(true);
+                oGrvDetalhes.renderRows();
+                break;
+
+            case 'getdotacaoacordo':
+
+                oGrvDetalhes = new DBGrid('detalhes');
+                oGrvDetalhes.nameInstance = 'oGrvDetalhes';
+                oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center' , 'center']);
+                oGrvDetalhes.setHeader(['Ficha','Cód. orçamentario','Projeto Atividade', 'Fonte de Recurso']);
+                oGrvDetalhes.setHeight(230);
+                oGrvDetalhes.hasTotalizador = true;
                 oGrvDetalhes.show($('grvDetalhes'));
                 oGrvDetalhes.clearAll(true);
                 oGrvDetalhes.renderRows();

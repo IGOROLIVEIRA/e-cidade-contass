@@ -420,6 +420,17 @@ switch($oParam->exec) {
     }
     break;
 
+    case "getdotacaoacordoConsulta" :
+
+
+        $oAcordo = new Acordo($oParam->ac16_sequencial);
+        $aDotacoes = $oAcordo->getDotacoesAcordo();
+
+        $oRetorno->dados    = $aDotacoes;
+        $oRetorno->detalhe  = $oParam->detalhe;
+
+        break;
+
 	case 'saldoConsulta':
 
 		$oRetorno->dados = array();
