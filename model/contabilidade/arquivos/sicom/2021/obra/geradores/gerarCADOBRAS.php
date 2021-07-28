@@ -99,7 +99,7 @@ class gerarCADOBRAS extends GerarAM
                             $aCSVCADOBRAS21['si200_dtparalisacao'] = $this->sicomDate($aCADORBRAS21['si200_dtparalisacao']);
                             $aCSVCADOBRAS21['si200_motivoparalisacap'] = str_pad($aCADORBRAS21['si200_motivoparalisacap'], 2, "0", STR_PAD_LEFT);
                             $aCSVCADOBRAS21['si200_descoutrosparalisacao'] = $aCADORBRAS21['si200_descoutrosparalisacao'];
-                            $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']) == "" ? " ;" : $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
+//                            $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']) == "" ? " ;" : $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
                             $this->sLinha = $aCSVCADOBRAS21;
                             $this->adicionaLinha();
                         }
