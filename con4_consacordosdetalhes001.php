@@ -156,9 +156,9 @@ $oGet = db_utils::postMemory($_GET);
                                     var aRow = new Array();
 
                                     aRow[0] = oDado.ficha;
-                                    aRow[1] = oDado.fonterecurso;
+                                    aRow[1] = oDado.codorcamentario;
                                     aRow[2] = oDado.projetoativ;
-                                    aRow[3] = oDado.codorcamentario;
+                                    aRow[3] = oDado.fonterecurso;
 
                                     oGrvDetalhes.addRow(aRow);
 
