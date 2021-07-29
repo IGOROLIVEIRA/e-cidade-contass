@@ -716,6 +716,29 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                     </center>
                 </td>
             </tr>
+            <tr>
+                <?
+                $sql = "SELECT max(pc11_seq) as totalitens,
+	                           sum(pc11_vlrun*pc11_quant) as totalvalores	
+                        FROM solicitem
+                        WHERE pc11_numero = {$pc11_numero}";
+                $rsResult = db_query($sql);
+                db_fieldsmemory($rsResult, 0);
+                ?>
+                <td>
+                    <strong>Total de itens:</strong>
+                    <?
+                    db_input('totalitens', 10, "Total de itens", true, 'text', 3, "");
+                    ?>
+                    <strong>Total dos valores:</strong>
+                    <?
+                    db_input('totalvalores', 10, "Total de itens", true, 'text', 3, "");
+                    ?>
+                </td>
+                <td>
+
+                </td>
+            </tr>
         </table>
     </center>
     <?
