@@ -1152,13 +1152,19 @@ if ($situacao == 2) {
 	                            	echo '<br>soma '.$soma;
 	                        	}
 
-	                            $desconto = ($soma+4.21) - $hlhvalor;
+	                        	$txexpediente = 0.00;
+	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO){ 	$txexpediente = 3.00; }
+	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO){ 		$txexpediente = 4.21; }
+	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_NOVAPORTEIRINHA){	$txexpediente = 0.00; }
+	                        	
+	                            $desconto = ($soma + $txexpediente) - $hlhvalor;
 	                            if( $desconto > 0 ){
 	                            	//Adiciona desconto ao recibo
-								    $sSqlreceit = "select k00_receit as recdesconto from (
-													     select sum(k00_valor) as valor,k00_receit from recibopaga 
-													     where k00_numnov = ".$iNumpreBoleto." and k00_receit not in (503,447,410,477,393,396,499)
-													     group by k00_receit order by 1 desc limit 1
+								    $sSqlreceit = "select recibopaga.k00_receit as recdesconto from (
+													     select sum(recibopaga.k00_valor) as valor,recibopaga.k00_receit from recibopaga 
+													     inner join arrecad on (arrecad.k00_numpre,arrecad.k00_numpar) = (recibopaga.k00_numpre,recibopaga.k00_numpar)
+													     where recibopaga.k00_numnov = ".$iNumpreBoleto." 
+													     group by recibopaga.k00_receit order by 1 desc limit 1
 									                             ) as x";
 								    $resultSqlrecei = db_query($sSqlreceit);
 								    db_fieldsmemory($resultSqlrecei, 0, true);
