@@ -602,6 +602,7 @@ foreach ($oDadosPosRegPreco->aSolicitacoes as $iCodigoCompilacao => $oCompilacao
                         $oPdf->cell(39, $iAlt, str_replace("\\n", "\n",substr(trim($oItemEstimativa->sCompl), 0, 20)) , 0, 0, "L", $lPreenchimento);
                         $oPdf->cell(16, $iAlt, $oItemEstimativa->sUnidade    , 0, 0, "C", $lPreenchimento);
                         $oPdf->cell(($oCompilacao->lControlaValor ? 50 : 32), $iAlt, substr($oItemEstimativa->sFornecedor, 0, ($oCompilacao->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
+                        $oPdf->cell(16,  $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
 
                         if (!$oCompilacao->lControlaValor) {
                           $oPdf->cell(18, $iAlt, $oItemEstimativa->nQuantMax   , 0, 0, "R", $lPreenchimento);
@@ -623,7 +624,6 @@ foreach ($oDadosPosRegPreco->aSolicitacoes as $iCodigoCompilacao => $oCompilacao
                           $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iSolicitada, 'v', " ", $casadec) : $oFornecedor->iSolicitada) ,   0, 0, "R", 0);
                           $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iEmpenhada, 'v', " ", $casadec) : $oFornecedor->iEmpenhada)  ,   0, 0, "R", 0);
                           $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iSolicitar, 'v', " ", $casadec) : $oFornecedor->iSolicitar)  ,   0, 0, "R", 0);
-                          $oPdf->cell(16,  $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
                           $oPdf->cell(25,  $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oFornecedor->iEmpenhar, 'v', " ", $casadec) : $oFornecedor->iEmpenhar)   ,   0, 1, "R", 0);
                           $oPdf->ln(2);
                         }
@@ -665,6 +665,7 @@ foreach ($oDadosPosRegPreco->aSolicitacoes as $iCodigoCompilacao => $oCompilacao
                     $oPdf->cell(16, $iAlt, $oItemEstimativa->sUnidade    , 0, 0, "C", $lPreenchimento);
                     $oPdf->cell(16, $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
                     $oPdf->cell(($oCompilacao->lControlaValor ? 50 : 32), $iAlt, substr($oItemEstimativa->sFornecedor, 0, ($oCompilacao->lControlaValor ? 35 : 20)), 0, 0, "L", $lPreenchimento);
+                    $oPdf->cell(16, $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
 
                     if (!$oCompilacao->lControlaValor) {
                         $oPdf->cell(18, $iAlt, $oItemEstimativa->nQuantMax   , 0, 0, "R", $lPreenchimento);
@@ -673,7 +674,6 @@ foreach ($oDadosPosRegPreco->aSolicitacoes as $iCodigoCompilacao => $oCompilacao
                     $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitada, 'v', " ", $casadec) : $oItemEstimativa->iSolicitada) , 0, 0, "R", $lPreenchimento);
                     $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhada, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhada)  , 0, 0, "R", $lPreenchimento);
                     $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iSolicitar, 'v', " ", $casadec) : $oItemEstimativa->iSolicitar)  , 0, 0, "R", $lPreenchimento);
-                    $oPdf->cell(16, $iAlt, db_formatar($oItemEstimativa->nVlrUnitario, 'v', " ", $casadec), 0, 0, "R", $lPreenchimento);
                     $oPdf->cell(25, $iAlt, ($oCompilacao->lControlaValor ? db_formatar($oItemEstimativa->iEmpenhar, 'v', " ", $casadec) : $oItemEstimativa->iEmpenhar)   , 0, 1, "R", $lPreenchimento);
                 }
             }
@@ -887,13 +887,13 @@ function imprimeCabecalho(&$oPdf, $iAlt, $iAbertura, $iCompilacao, $lQuebraPagin
   $oPdf->cell(39, $iAlt, "Complemento", 1, 0, "C", 1);
   $oPdf->cell(16, $iAlt, "Unidade"    , 1, 0, "C", 1);
   $oPdf->cell(($lControlaValor ? 50 : 32), $iAlt, "Fornecedor" , 1, 0, "C", 1);
+  $oPdf->cell(16, $iAlt, ($lControlaValor ? "Valor" : "Vlr Uni.")   , 1, 0, "C", 1);
 
   if (!$lControlaValor) {
     $oPdf->cell(18, $iAlt, "Máx"        , 1, 0, "C", 1);
   }
 
   $oPdf->cell(25, $iAlt, ($lControlaValor ? "Solicitado" : "Solicitada") , 1, 0, "C", 1);
-  $oPdf->cell(16, $iAlt, ($lControlaValor ? "Valor" : "Vlr Uni.")   , 1, 0, "C", 1);
   $oPdf->cell(25, $iAlt, ($lControlaValor ? "Empenhado" : "Empenhada")  , 1, 0, "C", 1);
   $oPdf->cell(25, $iAlt, "Solicitar"  , 1, 0, "C", 1);
   $oPdf->cell(25, $iAlt, "Empenhar"   , "TB", 1, "C", 1);
