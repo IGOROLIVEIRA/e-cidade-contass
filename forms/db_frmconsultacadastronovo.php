@@ -40,9 +40,12 @@ $clrotulo->label("j69_descr");
 $clrotulo->label("j06_setorloc");
 $clrotulo->label("j06_quadraloc");  
 $clrotulo->label("j06_lote");
+$clrotulo->label("j34_distrito");
+$clrotulo->label("j01_unidade");
 ?>
 <? 
 	db_app::load('scripts.js, prototype.js, strings.js, dbcomboBox.widget.js, estilos.css');
+	db_sel_instit(null, "db21_usadistritounidade");
 ?>
 <script>
 function mostraJanelaPesquisa() {
@@ -317,14 +320,17 @@ function js_comTeclaEnter(evt) {
 					</tr>
 					<tr title="<?=@$Tj34_setor?>">
 						
-						<td nowrap><?=str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".$Lj34_lote?>
+						<td nowrap><?=($db21_usadistritounidade=='t') ? str_replace(":","",$Lj34_distrito)."/".str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".str_replace(":","",$Lj34_lote)."/".$Lj01_unidade : str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".$Lj34_lote?>
 						</td>
-						<td nowrap><?
+						<td nowrap><?=($db21_usadistritounidade=='t') ? 
+						db_input('j34_distrito',5,$Ij34_distrito,true,'text',1, "onkeypress='js_comTeclaEnter(event)'").'/' : ''
+						?><?
 						db_input('j34_setor',5,$Ij34_setor,true,'text',1, "onkeypress='js_comTeclaEnter(event)'")
 						?>/ <?
 						db_input('j34_quadra',5,$Ij34_quadra,true,'text',1, "onkeypress='js_comTeclaEnter(event)'")
 						?>/ <?
 						db_input('j34_lote',5,$Ij34_lote,true,'text',1, "onkeypress='js_comTeclaEnter(event)'")
+						?><?=($db21_usadistritounidade=='t') ? '/'.db_input('j01_unidade',5,$Ij01_unidade,true,'text',1, "onkeypress='js_comTeclaEnter(event)'") : ''
 						?></td>
 					</tr>
 					<?php  if ($rsSetorLoc) {?>

@@ -39,6 +39,28 @@ if(!session_is_registered("DB_instit")) {
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_db_config_classe.php");
+
+$cldbconfig         = new cl_db_config();
+$codigo = db_getsession("DB_instit");
+$result = $cldbconfig->sql_record($cldbconfig->sql_query(null,"*",null,"codigo = {$codigo}"));
+
+
+
+if($cldbconfig->numrows>0){
+    $resultado = db_utils::fieldsMemory($result,0);
+    $valorOrde = $resultado->orderdepart;
+    
+    if($valorOrde==1){
+        $ordernar = "order by d.descrdepto";
+    }else if($valorOrde==2){
+        $ordernar = "order by d.coddepto ASC";
+    }else if($valorOrde==3){
+        $ordernar = "order by d.coddepto DESC";
+    }else if($valorOrde==null){
+        $ordernar = "order by u.db17_ordem";
+    }
+}
 
 if(isset($modulo) and is_numeric($modulo)){
 
@@ -156,7 +178,7 @@ if(pg_numrows($result) == 0) {
         color: red;
         text-align: center;
         margin-top: 18px;
-        margin-bottom: -17px;
+        margin-bottom: 0px;
         z-index: 1;
         position: relative;
     }
@@ -282,7 +304,7 @@ if(pg_numrows($result) == 0) {
                             $sSql .= "   where u.id_usuario = ".db_getsession("DB_id_usuario");
                             $sSql .= "     and o58_instit   = ".db_getsession("DB_instit");
                             $sSql .= "     and o58_anousu   = ".db_getsession("DB_anousu");
-                            $sSql .= "order by u.db17_ordem";
+                            $sSql .= $ordernar; 
 
                             /**
                              * Se o usuario tiver departamento, aparecem os departamentos
@@ -294,7 +316,7 @@ if(pg_numrows($result) == 0) {
                             $sSql  .= "   where instit       = ".db_getsession("DB_instit");
                             $sSql  .= "     and u.id_usuario = ".db_getsession("DB_id_usuario");
                             $sSql  .= "     and (d.limite is null or d.limite >= '" . date("Y-m-d",db_getsession("DB_datausu")) . "')";
-                            $sSql  .= "order by u.db17_ordem ";
+                            $sSql  .= $ordernar;
                             $result = db_query($sSql) or die($sSql);
 
                             if(pg_numrows($result) == 0){
@@ -346,9 +368,8 @@ if(pg_numrows($result) == 0) {
 
                                 echo "Departamento:&nbsp;&nbsp;</td><td>";
                                 $mostra_menu = true;
-                                $result      = db_query($sSql) or die($sSql);
+                                $result      = db_query($sSql) or die($sSql); // ordenar por $descrdepto
                                 db_selectrecord('coddepto',$result,true,2,'','','','','js_mostramodulo(document.form1.coddepto.value,document.form1.coddeptodescr.options.text)');
-
                                 if(!session_is_registered("DB_coddepto")){
 
                                     db_putsession("DB_coddepto",pg_result($result,0,0));
@@ -521,22 +542,47 @@ if(pg_numrows($result) == 0) {
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php
-                            $sqlPermissao = "select m.id_item,m.descricao
-                                                from db_permissao p
-                            inner join db_itensmenu m on m.id_item = p .id_item
-                            where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
-                            $result = db_query($sqlPermissao);
-                            $db_modulo = db_getsession("DB_modulo");
+                            $sSqlPerfil  = "select db_permissao.id_usuario, anousu   ";
+                            $sSqlPerfil .= "from db_permissao       ";
+                            $sSqlPerfil .= "WHERE db_permissao.id_usuario IN";
+                            $sSqlPerfil .= "    (SELECT db_permherda.id_perfil";
+                            $sSqlPerfil .= "     FROM db_permherda";
+                            $sSqlPerfil .= "     WHERE db_permherda.id_usuario = ".db_getsession("DB_id_usuario").")";
+                            $sSqlPerfil .= "group by db_permissao.id_usuario, db_permissao.anousu ";
+                            $sSqlPerfil .= "order by db_permissao.anousu desc LIMIT 1";
+                            $resultPerfil = db_query($sSqlPerfil);
 
-                            if($db_modulo == 604 && pg_numrows($result) > 0):
+                            if(pg_numrows($resultPerfil) == 0) {
+                                $sqlPermissaoMenu = "select m.id_item,m.descricao
+                                                     from db_permissao p
+                                                     inner join db_itensmenu m on m.id_item = p .id_item
+                                                     where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
+                                $resultMenuRecebimento = db_query($sqlPermissaoMenu);
+                                $db_modulo = db_getsession("DB_modulo");
+                            }else{
+                                $codperfil = pg_result($resultPerfil,0,0);
+
+                                $sqlPermissaoPerfil = "select m.id_item,m.descricao
+                                                       from db_permissao p
+                                                       inner join db_itensmenu m on m.id_item = p .id_item
+                                                       where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = $codperfil";
+                                $resultMenuRecebimento = db_query($sqlPermissaoPerfil);
+                                $db_modulo = db_getsession("DB_modulo");
+                            }
+
+                            if($db_modulo == 604 && pg_numrows($resultMenuRecebimento) > 0):
                                 ?>
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
                                     <td>
                                         <h2>Processos a receber no Departamento</h2>
-                                        <iframe frameborder="0"  width="100%" height="300%" id="processos" name="Processos" src="db_procreceber.php" scrolling="auto"></iframe>
                                     </td>
                                 </tr>
+                            <tr>
+                                <td>
+                                    <iframe width="100%" height="300%" frameborder="0" id="processos" name="Processos" src="db_procreceber.php" scrolling="auto"></iframe>
+                                </td>
+                            </tr>
                             <?php endif; ?>
                         </table>
                     </center>

@@ -45,6 +45,7 @@ require_once ("classes/db_orcparametro_classe.php");
 require_once ("classes/db_orcfontesdes_classe.php");
 require_once ("classes/db_conplanoreduz_classe.php");
 require_once ("dbforms/db_funcoes.php");
+require_once ("classes/db_conplanoexe_classe.php");
 
 ( string ) $sMsg = null;
 
@@ -64,6 +65,7 @@ $clorcparametro   = new cl_orcparametro();
 $clconplanoreduz  = new cl_conplanoreduz();
 $clconplanoconta  = new cl_conplanoconta();
 $cldb_config      = new cl_db_config();
+$clconplanoexe    = new cl_conplanoexe();
 
 $clconplanocontacorrente      = new cl_conplanocontacorrente();
 $clconplanocontabancaria      = new cl_conplanocontabancaria();
@@ -104,8 +106,8 @@ if ($clconaberturaexe->numrows == 0) {
   }
 
 } else {
-  $rs2 = $clconaberturaexe->sql_record($clconaberturaexe->sql_query(null, '*', '', 'c91_tipo = 1 
-		                                                                   and c91_anousudestino =' . (db_getSession("DB_anousu") + 1) . ' 
+  $rs2 = $clconaberturaexe->sql_record($clconaberturaexe->sql_query(null, '*', '', 'c91_tipo = 1
+		                                                                   and c91_anousudestino =' . (db_getSession("DB_anousu") + 1) . '
 		                                                                   and c91_situacao in (1,2)
 		                                                                   and c91_instit        =' . db_getSession("DB_instit")));
   if ($clconaberturaexe->numrows > 0) {
@@ -261,7 +263,7 @@ if (isset($p->incluir)) {
                     c60_consistemaconta,
                     c60_identificadorfinanceiro,
                     CASE
-                        WHEN c60_naturezasaldo IS NULL THEN 
+                        WHEN c60_naturezasaldo IS NULL THEN
                             CASE
                                 WHEN substr(c60_estrut,1,1) IN ('1','3','5','7') THEN 1
                                 WHEN substr(c60_estrut,1,1) IN ('2','4','6','8') THEN 2
@@ -362,9 +364,9 @@ if (isset($p->incluir)) {
             $oDaoPlanoOrcamentario->c60_codcla                  = $oPlanoOrcarmento->c60_codcla;
             $oDaoPlanoOrcamentario->c60_consistemaconta         = $oPlanoOrcarmento->c60_consistemaconta;
             $oDaoPlanoOrcamentario->c60_identificadorfinanceiro = $oPlanoOrcarmento->c60_identificadorfinanceiro;
-            
+
             if ($oPlanoOrcarmento->c60_naturezasaldo == "" || $oPlanoOrcarmento->c60_naturezasaldo == NULL) {
-                
+
                 if (substr($oPlanoOrcarmento->c60_estrut,0,1) == 3) {
                     $oDaoPlanoOrcamentario->c60_naturezasaldo = 1;
                 } elseif (substr($oPlanoOrcarmento->c60_estrut,0,1) == 4) {
@@ -376,7 +378,7 @@ if (isset($p->incluir)) {
             } else {
                 $oDaoPlanoOrcamentario->c60_naturezasaldo = $oPlanoOrcarmento->c60_naturezasaldo;
             }
-            
+
             $oDaoPlanoOrcamentario->c60_funcao                  = addslashes($oPlanoOrcarmento->c60_funcao == "" ? "" : $oPlanoOrcarmento->c60_funcao);
             $oDaoPlanoOrcamentario->incluir($oPlanoOrcarmento->c60_codcon, $oDaoPlanoOrcamentario->c60_anousu);
 
@@ -471,7 +473,6 @@ if (isset($p->incluir)) {
     echo "<script>document.getElementById('lblimp').innerHTML = 'Importando ConplanoExe - {$iAno}'</script>";
     flush();
 
-    $oDaoConPlanoExe = db_utils::getDao("conplanoexe");
     $sSqlConplanoExe = "SELECT * FROM conplanoexe
                         INNER JOIN conplanoreduz ON (conplanoreduz.c61_reduz, conplanoreduz.c61_anousu) = (conplanoexe.c62_reduz, {$clconaberturaexe->c91_anousudestino})
                         WHERE c62_anousu = ".$clconaberturaexe->c91_anousuorigem."
@@ -480,24 +481,24 @@ if (isset($p->incluir)) {
                                WHERE x.c62_reduz = conplanoexe.c62_reduz
                                  AND x.c62_codrec = conplanoexe.c62_codrec
                                  AND x.c62_anousu = $clconaberturaexe->c91_anousudestino)";
-    $rsConPlanoExe   = $oDaoConPlanoExe->sql_record($sSqlConplanoExe);
-    $iNumRows = $oDaoConPlanoExe->numrows;
-    if ($oDaoConPlanoExe->numrows > 0) {
+    $rsConPlanoExe   = $clconplanoexe->sql_record($sSqlConplanoExe);
+    $iNumRows = $clconplanoexe->numrows;
+    if ($clconplanoexe->numrows > 0) {
 
     	for ($i = 0; $i < $iNumRows; $i++) {
 
         db_atutermometro($i, $iNumRows, 'divimp2');
         $oConPlanoExe = db_utils::fieldsMemory($rsConPlanoExe, $i);
-        $oDaoConPlanoExe->c62_anousu = $clconaberturaexe->c91_anousudestino;
-        $oDaoConPlanoExe->c62_reduz  = $oConPlanoExe->c62_reduz;
-        $oDaoConPlanoExe->c62_codrec = $oConPlanoExe->c62_codrec;
-        $oDaoConPlanoExe->c62_vlrcre = $oConPlanoExe->c62_vlrcre;
-        $oDaoConPlanoExe->c62_vlrdeb = $oConPlanoExe->c62_vlrdeb;
-        $oDaoConPlanoExe->incluir($clconaberturaexe->c91_anousudestino,$oConPlanoExe->c62_reduz);
-        if ($oDaoConPlanoExe->erro_status == "0") {
+        $clconplanoexe->c62_anousu = $clconaberturaexe->c91_anousudestino;
+        $clconplanoexe->c62_reduz  = $oConPlanoExe->c62_reduz;
+        $clconplanoexe->c62_codrec = $oConPlanoExe->c62_codrec;
+        $clconplanoexe->c62_vlrcre = $oConPlanoExe->c62_vlrcre;
+        $clconplanoexe->c62_vlrdeb = $oConPlanoExe->c62_vlrdeb;
+        $clconplanoexe->incluir($clconaberturaexe->c91_anousudestino,$oConPlanoExe->c62_reduz);
+        if ($clconplanoexe->erro_status == "0") {
 
            $sErro  = " [6] Erro ao incluir dados em conplanoexe. <br>";
-    	     $sErro .= " Erro: {$oDaoConPlanoExe->erro_msg}";
+    	     $sErro .= " Erro: {$clconplanoexe->erro_msg}";
            throw new Exception($sErro);
         }
       }
@@ -682,7 +683,7 @@ if (isset($p->incluir)) {
         $oConc = db_utils::fieldsMemory($rsUni, $i);
         $clorcunidade->o41_orgao   = $oConc->o41_orgao;
         $clorcunidade->o41_anousu  = $clconaberturaexe->c91_anousudestino;
-        $clorcunidade->o41_codtri  = $oConc->o41_codtri;
+        $clorcunidade->o41_codtri  = $oConc->o41_codtri == "" || $oConc->o41_codtri == "0" ? $oConc->o41_unidade : $oConc->o41_codtri;
         $clorcunidade->o41_descr   = $oConc->o41_descr;
         $clorcunidade->o41_instit  = $oConc->o41_instit;
         $clorcunidade->o41_unidade = $oConc->o41_unidade;
@@ -757,12 +758,12 @@ if (isset($p->incluir)) {
            $clorcprojativ->o55_tipo               = $oConc->o55_tipo;
            $clorcprojativ->o55_projativ           = $oConc->o55_projativ;
            $clorcprojativ->o55_descr              = $oConc->o55_descr;
-           $clorcprojativ->o55_finali             = $oConc->o55_finali;
+           $clorcprojativ->o55_finali             = str_replace("'","",$oConc->o55_finali);
            $clorcprojativ->o55_instit             = $oConc->o55_instit;
            $clorcprojativ->o55_tipoacao           = $oConc->o55_tipoacao==""?"0":$oConc->o55_tipoacao;
            $clorcprojativ->o55_orcproduto         = $oConc->o55_orcproduto==""?"0":$oConc->o55_orcproduto;
-           $clorcprojativ->o55_tipoensino         = $oConc->o55_tipoensino==""?"0":$oConc->o55_tipoensino;
-           $clorcprojativ->o55_tipopasta          = $oConc->o55_tipopasta==""?"0":$oConc->o55_tipopasta;
+           $clorcprojativ->o55_tipoensino         = $oConc->o55_tipoensino==""||$oConc->o55_tipoensino=="0"?"7":$oConc->o55_tipoensino;
+           $clorcprojativ->o55_tipopasta          = $oConc->o55_tipopasta==""||$oConc->o55_tipopasta=="0"?"3":$oConc->o55_tipopasta;
            $clorcprojativ->o55_formaimplementacao = $oConc->o55_formaimplementacao==""?"0":$oConc->o55_formaimplementacao;
            $clorcprojativ->incluir($clorcprojativ->o55_anousu, $oConc->o55_projativ);
            if ($clorcprojativ->erro_status == "0") {

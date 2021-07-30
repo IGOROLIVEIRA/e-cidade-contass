@@ -780,7 +780,8 @@ class cl_empagetipo {
     return $sql;
   }
    function sql_query_contas_vinculadas ($e83_codtipo = null, $campos = "*", $ordem = null, $sWhere, $lVinculadas = false, 
-                                        $op = null, $lSomenteCorrente = false, $lContaUnicaFundeb = false, $sWhere2 = null) {
+                                        $op = null, $lSomenteCorrente = false, $lContaUnicaFundeb = false, $sWhere2 = null,
+                                        $numemp = null) {
 
    $sSql = "select ";
     if($campos != "*" ){
@@ -796,10 +797,17 @@ class cl_empagetipo {
     /* PARA ATENDER A Portaria n° 3992/GM/MS/2017 DO MINISTERIO DA SAÚDE. QUE PERMITE PAGAMENTO DESTAS FONTES COM A MESMA CONTA BANCARIA */
     /* Acrescentado fonte 159 e 259 para atender alterações do TCE/MG a partir de 2020 */
     $aFontes = array('148','149','150','151','152', '159', '248','249','250','251','252', '259');
-    $sqlFonteEmp = "select o15_codtri from empempenho inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu=o58_anousu ";
-    $sqlFonteEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
-    $sqlFonteEmp .= " inner join orctiporec on o58_codigo=o15_codigo ";  
-    $sqlFonteEmp .= " where e50_codord = ".$op;
+    $sqlFonteEmp = " select o15_codtri from empempenho ";
+    $sqlFonteEmp .= "   inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu ";    
+    if ($op != null) {
+        $sqlFonteEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
+    }    
+    $sqlFonteEmp .= " inner join orctiporec on o58_codigo=o15_codigo ";
+    if ($numemp != null) {
+        $sqlFonteEmp .= " where e60_numemp = ".$numemp;    
+    } else {
+        $sqlFonteEmp .= " where e50_codord = ".$op;
+    }    
     $rsResultFonteEmp = db_query($sqlFonteEmp);
     $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codtri;
     if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){

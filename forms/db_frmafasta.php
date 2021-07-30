@@ -124,11 +124,7 @@ $clrotulo->label('z01_nome');
     <td colspan="3" nowrap>
       <?
       $result_codfa = $clcodmovsefip->sql_record($clcodmovsefip->sql_query_file(null,null,null,"r66_codigo,r66_descr","r66_descr","r66_anousu = ".db_anofolha()." and r66_mesusu = ".db_mesfolha()." and r66_tipo = 'A'"));
-      if(!isset($r45_codafa) || (isset($r45_codafa) && trim($r45_codafa) == "")){
-      	db_fieldsmemory($result_codfa, 0);
-      	$r45_codafa = $r66_codigo;
-      }
-      db_selectrecord("r45_codafa", $result_codfa, true, ($db_opcao==1?1:3), "", "", "", "", "js_abrelista();");
+      db_selectrecord("r45_codafa", $result_codfa, true, ($db_opcao==1?1:3), "", "", "", " - Selecione", "js_abrelista();");
       ?>
     </td>
   </tr>
@@ -138,7 +134,7 @@ $clrotulo->label('z01_nome');
     </td>
     <td colspan="3" nowrap>
       <?
-      $arr_codre = Array();
+      $arr_codre = array(" " => "Selecione");
       $result_codre = $clmovcasadassefip->sql_record($clmovcasadassefip->sql_query(db_anofolha(),db_mesfolha(),$r45_codafa,null,"r67_reto"));
       if($clmovcasadassefip->numrows == 0){
         $result_codre = $clmovcasadassefip->sql_record($clmovcasadassefip->sql_query(db_anofolha(),db_mesfolha(),null,null,"r67_reto"));
@@ -302,6 +298,12 @@ function js_testacampos(){
     alert("Informe a data de afastamento.");
     document.form1.r45_dtafas_dia.select();
     document.form1.r45_dtafas_dia.focus();
+  }else if (!document.form1.r45_codafa.value.trim()) {
+    alert("Selecione um Afastamento Sefip.");
+  }else if (!document.form1.r45_codret.value.trim()) {
+    alert("Selecione um Retorno Sefip.");
+  }else if (!document.form1.r45_dtreto.value.trim()) {
+    alert("Informe a data final do afastamento.");
   }else{
     data_teste = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),<?=db_dias_mes(db_anofolha(),db_mesfolha())?>);
     data_afast = new Date(document.form1.r45_dtafas_ano.value,(document.form1.r45_dtafas_mes.value - 1),document.form1.r45_dtafas_dia.value);
