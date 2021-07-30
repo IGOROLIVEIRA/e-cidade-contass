@@ -58,13 +58,13 @@ try {
             $oRetorno->aLinhasExtrato = array();
             $data_inicial = data($oParam->params[0]->data_inicial);
             $data_final = data($oParam->params[0]->data_final);
-            $condicao_lancamento = $oParam->params[0]->tipo_lancamento > 0 ? " AND conhistdoc.c53_tipo IN (" . tipoDocumentoLancamento($oParam->params[0]->tipo_lancamento) . ") " : "";
+            $condicao_lancamento = condicao_lancamento($oParam->params[0]->tipo_lancamento);
             $sql = query_lancamentos($oParam->params[0]->conta, $data_inicial, $data_final, $condicao_lancamento, $oParam->params[0]->tipo_lancamento);
             // $oRetorno->aLinhasExtrato[] = $sql;
-            $resultado = db_query($sql);
-            $rows = pg_numrows($resultado);
+            $resultado   = db_query($sql);
+            $rows        = pg_numrows($resultado);
             $lancamentos = array();
-            $agrupado = array();
+            $agrupado    = array();
             $movimentacao_permitida = $oParam->params[0]->tipo_movimento ? array($oParam->params[0]->tipo_movimento) : array("E", "S");
             $i = 0;
             $diferenciador = 1;
@@ -76,7 +76,7 @@ try {
                 if (in_array($movimento, $movimentacao_permitida)) {
                     $cod_doc = $cod_doc == 116 ? 100 : $cod_doc;
 
-                    $documento = numero_documento_lancamento($tipo, $ordem, $codigo, $codigo);
+                    $documento = numero_documento_lancamento($tipo, $ordem, $codigo);
                     if ($tipo_lancamento == 0) {
                         if (in_array($tipo, array("OP")))
                             $chave = $credor . $data . $data_conciliacao . $movimento . trim($cheque) . $cod_doc;
@@ -86,6 +86,8 @@ try {
                             } else {
                                 $chave = $credor . $data . $data_conciliacao . $movimento . trim($cheque) . $cod_doc;
                             }
+                        } else if ($tipo == "SLIP") {
+                            $chave = $credor . $data . $data_conciliacao . $documento . $movimento . $cod_doc;
                         } else
                             $chave = $credor . $data . $data_conciliacao . $documento . $movimento . $cod_doc;
                     } else {
@@ -114,7 +116,7 @@ try {
                         $lancamentos[$chave]["data_lancamento"] = date("d/m/Y", strtotime($data));
                         $lancamentos[$chave]["data_conciliacao"] = $data_conciliacao ? date("d/m/Y", strtotime($data_conciliacao)) : "";
                         $lancamentos[$chave]["credor"] = $credor;
-                        $lancamentos[$chave]["tipo"] = $tipo_lancamento == 2 ? "" : descricaoTipoLancamento($cod_doc);
+                        $lancamentos[$chave]["tipo"] = $tipo_lancamento == 2 ? utf8_encode("PENDÊNCIA") : descricaoTipoLancamento($cod_doc);
                         $lancamentos[$chave]["op_rec_slip"][] = !$documento ? "" : $documento;
                         $lancamentos[$chave]["documento"][] = trim($cheque);
                         $lancamentos[$chave]["movimento"] = $movimento;
@@ -122,7 +124,7 @@ try {
                         $lancamentos[$chave]["valor_individual"][] = $valor_debito <> 0 ? $valor_debito : $valor_credito;
                         if ($tipo_lancamento == 0) {
                             if ($tipo == "REC") {
-                                $lancamentos[$chave]["historico"] = "<a href='#' onclick='js_janelaPlanilhaDetalhada(" . json_encode(dadosPlanilha($oParam->params[0]->conta, $data, $codigo, $cod_doc)) . ")'>" . descricaoHistorico($tipo, $codigo, $historico) . "</a>";
+                                $lancamentos[$chave]["historico"] = "<a href='#' onclick='js_janelaPlanilhaDetalhada(" . json_encode(dados_planilha($oParam->params[0]->conta, $data, $codigo, $cod_doc)) . ")'>" . descricaoHistorico($tipo, $codigo, $historico) . "</a>";
                             } else {
                                 $lancamentos[$chave]["historico"] = descricaoHistorico($tipo, $codigo, $historico);
                             }
@@ -142,7 +144,7 @@ try {
                         $lancamentos[$chave]["agrupado"] = true;
 
                         if ($tipo == "REC") {
-                            $lancamentos[$chave]["historico"] = "<a href='#' onclick='js_janelaPlanilhaDetalhada(" . json_encode(dadosPlanilha($oParam->params[0]->conta, $data, $codigo, $cod_doc)) . ")'>" . descricaoHistorico($tipo, $codigo, $historico) . "</a>";
+                            $lancamentos[$chave]["historico"] = "<a href='#' onclick='js_janelaPlanilhaDetalhada(" . json_encode(dados_planilha($oParam->params[0]->conta, $data, $codigo, $cod_doc)) . ")'>" . descricaoHistorico($tipo, $codigo, $historico) . "</a>";
                         } else {
                             $lancamentos[$chave]["historico"] = "<a href='#' onclick='js_janelaAgrupados(" .  json_encode($agrupado[$chave]) . ")'>(+) Mais Detalhes</a>";
                         }
@@ -238,10 +240,10 @@ try {
             $conta = $oParam->params[0]->conta;
             // Preenche os dados para retorno
             $oDadosLinha = new StdClass();
-            $oDadosLinha->saldo_anterior = saldo_anterior_extrato($conta, $data_inicial, $data_final);
-            $oDadosLinha->total_entradas = queryMovimentacaoSaldo($conta, $data_inicial, $data_final, 1);
-            $oDadosLinha->total_saidas = queryMovimentacaoSaldo($conta, $data_inicial, $data_final, 2);
-            $oDadosLinha->saldo_final = saldoFinalExtrato($conta, $data_final);
+            $oDadosLinha->saldo_anterior   = saldo_anterior_extrato($conta, $data_inicial, $data_final);
+            $oDadosLinha->total_entradas   = movimentacao_extrato($conta, $data_inicial, $data_final, 1);
+            $oDadosLinha->total_saidas     = movimentacao_extrato($conta, $data_inicial, $data_final, 2);
+            $oDadosLinha->saldo_final      = saldo_final_extrato($conta, $data_final);
             $oDadosLinha->valor_conciliado = valor_conciliado($conta, $data_final);
             // Retorna os dados
             $oRetorno->aLinhasExtrato[] = $oDadosLinha;
@@ -256,7 +258,12 @@ try {
     $oRetorno->status  = 2;
     $oRetorno->message = urlencode($oErro->getMessage());
 }
+
 echo $oJson->encode($oRetorno);
+
+function condicao_lancamento($tipo_lancamento) {
+    return $tipo_lancamento > 0 ? " AND conhistdoc.c53_tipo IN (" . tipo_documento_lancamento($tipo_lancamento) . ") " : "";
+}
 
 function valor_conciliado($conta, $data) {
     $sql = "SELECT k171_saldo FROM conciliacaobancaria WHERE k171_dataconciliacao = '{$data}' AND k171_conta = {$conta}";
@@ -293,38 +300,39 @@ function saldo_anterior_extrato($conta, $inicio, $data) {
     }
 }
 
-function saldoFinalExtrato($conta, $data) {
-    $sql = "select k171_saldo from conciliacaobancaria WHERE k171_conta = {$conta} AND k171_data = '{$data}'";
-    $resultado = pg_query($sql);
-    if (pg_numrows($resultado) > 0) {
-        return number_format(pg_fetch_object($resultado, 0)->k171_saldo, 2, ".", "");
+function saldo_final_extrato($conta, $data) {
+    $sql   = "select k171_saldo from conciliacaobancaria WHERE k171_conta = {$conta} AND k171_data = '{$data}'";
+    $query = db_query($sql);
+    if (pg_numrows($query) > 0) {
+        return number_format(db_utils::fieldsMemory($query, 0)->k171_saldo, 2, ".", "");
     }
     return 0;
 }
 
-function numero_documento_lancamento($tipoLancamento, $numeroOP, $planilha, $numeroSlip)
-{
-    switch ($tipoLancamento) {
+function numero_documento_lancamento($tipo, $ordem, $codigo) {
+    switch ($tipo) {
         case "OP":
-            return $numeroOP;
+            return $ordem;
             break;
         case "REC":
-            return $planilha;
+            return $codigo;
+            break;
+        case "BAIXA":
+            return $codigo;
             break;
         case "SLIP":
-            return $numeroSlip;
+            return $codigo;
             break;
         case 1:
-            return $planilha;
+            return $codigo;
             break;
         case 2:
-            return $planilha;
+            return $codigo;
             break;
     }
 }
 
-function tipoLancamento($id_tipo_lancamento)
-{
+function tipo_lancamento($id_tipo_lancamento) {
     $tipo_lancamento = array("Selecione", "PGTO. EMPENHO", "EST. PGTO EMPENHO", "REC. ORCAMENTARIA",
                                 "EST. REC. ORCAMENTARIA", "PGTO EXTRA ORCAMENTARIA", "EST. PGTO EXTRA ORCAMENTARIA",
                                 "REC. EXTRA ORCAMENTARIA", "EST. REC. EXTRA ORCAMENTARIA", "PERDAS", "ESTORNO PERDAS",
@@ -332,9 +340,8 @@ function tipoLancamento($id_tipo_lancamento)
     return $tipo_lancamento[$id_tipo_lancamento];
 }
 
-function tipoDocumentoLancamento($tipo_lancamento)
-{
-    switch (tipoLancamento($tipo_lancamento)) {
+function tipo_documento_lancamento($tipo_lancamento) {
+    switch (tipo_lancamento($tipo_lancamento)) {
         case "PGTO. EMPENHO":
             return "30, 35, 5, 37";
             break;
@@ -374,8 +381,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
     }
 }
 
-function descricaoTipoLancamento($cod_doc)
-{
+function descricaoTipoLancamento($cod_doc) {
     switch ($cod_doc) {
         case in_array($cod_doc, array("5", "30", "35", "37")):
             return "PGTO. EMPENHO";
@@ -418,8 +424,7 @@ function descricaoTipoLancamento($cod_doc)
     }
 }
 
-function descricaoHistorico($tipo, $codigo, $historico)
-{
+function descricaoHistorico($tipo, $codigo, $historico) {
     switch ($tipo) {
         case "OP":
             return utf8_encode("Empenho Nº {$codigo}");
@@ -435,61 +440,7 @@ function descricaoHistorico($tipo, $codigo, $historico)
     }
 }
 
-function naoPermitidos($cod_doc)
-{
-    $nao_permitidos = array("116");
-    if (in_array($cod_doc, $nao_permitidos))
-        return false;
-    return true;
-}
-
-function data($data)
-{
-    $data = explode("/", $data);
-    if (count($data) > 1) {
-        return $data[2] . "-" . $data[1] . "-" . $data[0];
-    } else {
-        return $data[0];
-    }
-}
-
-function excluir_lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
-{
-    $retorno = array();
-    // $retorno[] = $movimentos;
-    foreach ($movimentos as $id => $movimento) {
-        if (strlen($movimento->data_conciliacao) == 10) {
-            $i = 0;
-            foreach ($movimento->tipo as $tipo) {
-                $valor = $movimento->valor[$i];
-                $numcgm = trim($movimento->cgm);
-                $documento = trim($movimento->codigo[$i] . $movimento->documento[$i]);
-                $data = data($movimento->data_lancamento);
-                $where = where_conciliados($conta, $data, $tipo, $valor, data($movimento->data_conciliacao), $numcgm, $documento);
-                $conciliacao = new cl_conciliacaobancarialancamento();
-                // $retorno[] = $where;
-                $retorno[] = $conciliacao->excluir(null, $where);
-                $i++;
-            }
-        }
-    }
-    return $retorno;
-}
-
-function where_conciliados($conta, $data, $tipo, $valor, $data_conciliacao, $numcgm, $documento)
-{
-    $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND k172_valor = {$valor} ";
-    $where .= $data_conciliacao ? " AND k172_dataconciliacao = '{$data_conciliacao}' " : " ";
-    $where .= $tipo ? " AND k172_coddoc = {$tipo} " : " AND k172_coddoc IS NULL ";
-    $where .= $numcgm ? " AND k172_numcgm = {$numcgm} " :  " AND k172_numcgm IS NULL ";
-    // $documento = preg_replace( "~\x{00a0}~siu", "", $documento);
-    $where .= $documento ? " AND k172_codigo = '{$documento}' " : " AND (k172_codigo IS NULL OR k172_codigo = '') ";
-
-    return $where;
-}
-
-function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
-{
+function lancamentos_conciliados($movimentos, $conta, $data_conciliacao) {
     $retorno = array();
     // $retorno[] = $movimentos;
     // $retorno[] = $movimentos;
@@ -542,42 +493,41 @@ function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
     return $retorno;
 }
 
-function data_implantacao_saldo()
-{
-    $clcaiparametro = new cl_caiparametro;
-    $clcaiparametro->k29_instit = db_getsession("DB_instit");
-    $result   = $clcaiparametro->sql_record($clcaiparametro->sql_query(db_getsession("DB_instit")));
-    if($result != false && $clcaiparametro->numrows > 0 ) {
-        return $clcaiparametro->k29_conciliacaobancaria;
-    } else {
-        return FALSE;
+function excluir_lancamentos_conciliados($movimentos, $conta, $data_conciliacao) {
+    $retorno = array();
+    // $retorno[] = $movimentos;
+    foreach ($movimentos as $id => $movimento) {
+        if (strlen($movimento->data_conciliacao) == 10) {
+            $i = 0;
+            foreach ($movimento->tipo as $tipo) {
+                $valor = $movimento->valor[$i];
+                $numcgm = trim($movimento->cgm);
+                $documento = trim($movimento->codigo[$i] . $movimento->documento[$i]);
+                $data = data($movimento->data_lancamento);
+                $where = where_conciliados($conta, $data, $tipo, $valor, data($movimento->data_conciliacao), $numcgm, $documento);
+                $conciliacao = new cl_conciliacaobancarialancamento();
+                // $retorno[] = $where;
+                $retorno[] = $conciliacao->excluir(null, $where);
+                $i++;
+            }
+        }
     }
+    return $retorno;
 }
 
-function data_conciliacao($conta, $data, $numcgm, $cod_doc, $documento, $cheque, $valor)
-{
-    $oDaoConciliacaoBancaria = new cl_conciliacaobancarialancamento();
-    if (is_array($cod_doc))
-        $cod_doc = implode(",", $cod_doc);
-    $data = data($data);
-    $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND k172_coddoc IN ({$cod_doc}) AND k172_valor = {$valor}";
-    if ($numcgm)
-        $where .= " AND k172_numcgm = {$numcgm} ";
-    if ($documento)
-        $where .= " AND k172_codigo = '{$documento}' ";
+function where_conciliados($conta, $data, $tipo, $valor, $data_conciliacao, $numcgm, $documento) {
+    $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND k172_valor = {$valor} ";
+    $where .= $data_conciliacao ? " AND k172_dataconciliacao = '{$data_conciliacao}' " : " ";
+    $where .= $tipo ? " AND k172_coddoc = {$tipo} " : " AND k172_coddoc IS NULL ";
+    $where .= $numcgm ? " AND k172_numcgm = {$numcgm} " :  " AND k172_numcgm IS NULL ";
+    // $documento = preg_replace( "~\x{00a0}~siu", "", $documento);
+    $where .= $documento ? " AND k172_codigo = '{$documento}' " : " AND (k172_codigo IS NULL OR k172_codigo = '') ";
 
-    $oSql = $oDaoConciliacaoBancaria->sql_query_file(null, "*", null, $where);
-    $linha = $oDaoConciliacaoBancaria->sql_record($oSql);
-    if ($oDaoConciliacaoBancaria->numrows > 0) {
-        return date("d/m/Y", strtotime(pg_result($linha, 0, 6)));
-    } else {
-        return "";
-    }
+    return $where;
 }
 
-function query_lancamentos($conta, $data_inicial, $data_final, $condicao_lancamento, $tipo)
-{
-    $dataImplantacao = getDataImplantacao();
+function query_lancamentos($conta, $data_inicial, $data_final, $condicao_lancamento, $tipo) {
+    $dataImplantacao = data_implantacao();
     $sql = "SELECT * FROM (";
     if (in_array($tipo, array(0, 13, 14))) {
         $sql .= query_pendencias($conta, $data_inicial, $data_final, $tipo);
@@ -586,133 +536,86 @@ function query_lancamentos($conta, $data_inicial, $data_final, $condicao_lancame
         if ($tipo == 0)
             $sql .= " union all ";
         $sql .= query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento, data($dataImplantacao));
-        $sql .= " union all ";
+        $sql .= " UNION ALL ";
+        $sql .= query_baixa($conta, $data_inicial, $data_final, $condicao_lancamento, data($dataImplantacao));
+        $sql .= " UNION ALL ";
         $sql .= query_planilhas($conta, $data_inicial, $data_final, $condicao_lancamento, data($dataImplantacao));
-        $sql .= " union all ";
+        $sql .= " UNION ALL ";
         $sql .= query_transferencias_debito($conta, $data_inicial, $data_final, $condicao_lancamento, data($dataImplantacao));
-        $sql .= " union all ";
+        $sql .= " UNION ALL ";
         $sql .= query_transferencias_credito($conta, $data_inicial, $data_final, $condicao_lancamento, data($dataImplantacao));
     }
     $sql .= ") as w ORDER BY w.data";
     return $sql;
 }
 
-function query_pendencias($conta, $data_inicial, $data_final, $tipo)
-{
-        $sql = "SELECT
-                k173_tipolancamento tipo_lancamento,
-                k173_data as data,
-                k172_dataconciliacao data_conciliacao,
-                k173_tipomovimento cod_doc,
-                CASE WHEN k173_mov = 1 THEN k173_valor ELSE 0 END as valor_debito,
-                CASE WHEN k173_mov = 2 THEN k173_valor ELSE 0 END as valor_credito,
-                k173_codigo codigo,
-                k173_tipolancamento::text tipo,
-                k173_documento as cheque,
-                '' as ordem,
-                z01_nome credor,
-                k173_numcgm::text numcgm,
-                k173_sequencial::text as historico
-            FROM
-                conciliacaobancariapendencia
-            LEFT JOIN cgm ON z01_numcgm = k173_numcgm
-            LEFT JOIN conciliacaobancarialancamento ON k172_data = k173_data
-                AND ((k172_numcgm IS NULL AND k173_numcgm IS NULL) OR (k172_numcgm = k173_numcgm))
-                AND ((k172_coddoc is null AND k173_tipomovimento = '') OR (k172_coddoc::text = k173_tipomovimento))
-                AND ((k173_documento is null AND k172_codigo is null) OR
-
-                 (k172_codigo::text = concat_ws(
-                '',
-                k173_codigo :: text,
-                k173_documento :: text) ))
-                AND k172_valor = k173_valor
-                AND k172_mov = k173_mov
-            WHERE
-                ((k173_data BETWEEN '{$data_inicial}'
-                AND '{$data_final}') OR (k172_dataconciliacao > k173_data AND k172_dataconciliacao BETWEEN '{$data_inicial}'
-                AND '{$data_final}' AND k173_data < '{$data_final}')
-                  OR (k172_dataconciliacao IS NULL AND k173_data < '{$data_inicial}')
-                  OR (k172_dataconciliacao BETWEEN '{$data_inicial}'
-                AND '{$data_final}'))
-                AND k173_conta = {$conta} ";
-
-        if ($tipo == 13)
-            $sql .= " AND k173_tipolancamento = 2 ";
-        if ($tipo == 14)
-            $sql .= " AND k173_tipolancamento = 1 ";
-    return $sql;
-}
-
-function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao)
-{
+function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao) {
     $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
     if ($data_implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data >= '{$data_implantacao}' AND corrente.k12_data <= '{$data_final}')  ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data BETWEEN '{$data_implantacao}' AND '{$data_final}')  ";
     } else {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data < '{$data_inicial}') ";
     }
 
-    $sql = queryPadraoOP() . "
-                corrente.k12_conta = {$conta}
-                AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}')
-                {$condicao_implantacao} OR (k172_dataconciliacao BETWEEN '{$data_inicial}'
-                AND '{$data_final}'))
-                {$condicao_lancamento}
-                AND c69_sequen IS NOT NULL
-                -- AND e23_valorretencao IS NULL
-                AND corrente.k12_instit = " . db_getsession("DB_instit") . "
-                AND   (
-                    SELECT
-                        *
-                    FROM(
-                            select
-                                SUM(e23_valorretencao) retencao
-                            from
-                                retencaoreceitas
-                                inner join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
-                                inner join retencaopagordem on retencaopagordem.e20_sequencial = retencaoreceitas.e23_retencaopagordem
-                                inner join tabrec on tabrec.k02_codigo = retencaotiporec.e21_receita
-                                inner join retencaotipocalc on retencaotipocalc.e32_sequencial = retencaotiporec.e21_retencaotipocalc
-                                inner join pagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem
-                                inner join pagordemnota on pagordem.e50_codord = pagordemnota.e71_codord
-                                inner join empnota on pagordemnota.e71_codnota = empnota.e69_codnota
-                                inner join retencaoempagemov on e23_sequencial = e27_retencaoreceitas
-                                left join empagemovslips on e27_empagemov = k107_empagemov
-                                left join slipempagemovslips on k107_sequencial = k108_empagemovslips
-                                left join retencaocorgrupocorrente on e23_sequencial = e47_retencaoreceita
-                                left join corgrupocorrente on e47_corgrupocorrente = k105_sequencial
-                                left join cornump as numpre on numpre.k12_data = k105_data
-                                and numpre.k12_autent = k105_autent
-                                and numpre.k12_id = k105_id
-                                left join issplannumpre on numpre.k12_numpre = q32_numpre
-                            where
-                                e20_pagordem = coremp.k12_codord
-                                and e27_principal is true
-                                and e23_ativo is true
-                        ) as w
-                    WHERE
-                    round(retencao,2) = round(corrente.k12_valor,2)
-                ) IS NULL";
+    $sql  = query_padrao_op();
+    $sql .= " corrente.k12_conta = {$conta} ";
+    $sql .= " AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}') ";
+    $sql .= "     {$condicao_implantacao} ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data < '{$data_final}' ) ";
+    $sql .= "     OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
+    $sql .= " {$condicao_lancamento} ";
+    $sql .= " AND c69_sequen IS NOT NULL ";
+    $sql .= " AND corrente.k12_instit = " . db_getsession("DB_instit");
+    $sql .= " AND " . condicao_retencao();
+
     return $sql;
 }
 
-function query_planilhas($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao)
-{
-    $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
+function query_baixa($conta, $inicio, $fim, $condicao, $implantacao) {
+    $inicio = $inicio < $implantacao ? $implantacao : $inicio;
+    $condicao_implantacao = query_baixa_implantacao($inicio, $fim, $implantacao);
+
+    $sql  = query_baixa_padrao();
+    $sql .= "       WHERE corrente.k12_conta = {$conta} ";
+    $sql .= "           AND corrente.k12_instit = " . db_getsession('DB_instit');
+    $sql .= "           AND corplacaixa.k82_id IS NULL ";
+    $sql .= "           AND corplacaixa.k82_data IS NULL ";
+    $sql .= "           AND corplacaixa.k82_autent IS NULL ";
+    $sql .= "           {$condicao} ";
+    $sql .= "       GROUP BY corrente.k12_conta, corrente.k12_data, discla.codret, c53_tipo, c71_coddoc, z01_numcgm ";
+    $sql .= "    ) as x ";
+    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = k12_conta ";
+    $sql .= "        AND conc.k172_data = data ";
+    $sql .= "        AND conc.k172_coddoc = cod_doc ";
+    $sql .= "        AND conc.k172_codigo = codigo::text ";
+    $sql .= "        AND round(conc.k172_valor, 2) = round(valor_debito, 2) ";
+    $sql .= "    WHERE ";
+    $sql .= "        ((data between '{$inicio}' AND '{$fim}' AND k172_dataconciliacao IS NULL) ";
+    $sql .= "            {$condicao_implantacao} ";
+    $sql .= "            OR (k172_dataconciliacao > '{$fim}' AND data < '{$fim}') ";
+    $sql .= "            OR (k172_dataconciliacao between '{$inicio}' AND '{$fim}')) ";
+    $sql .= " ) as xx ";
+
+    return $sql;
+}
+
+function query_planilhas($conta, $inicio, $fim, $condicao_lancamento, $data_implantacao) {
+    $inicio = $inicio < $data_implantacao ? $data_implantacao : $inicio;
     if ($data_implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data >= '{$data_implantacao}' AND data <= '{$data_final}') ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data >= '{$data_implantacao}' AND data <= '{$fim}') ";
     } else {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data < '{$data_inicial}') ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data < '{$inicio}') ";
     }
 
-    $sql = queryPadraoREC($conta, $condicao_lancamento) . "
-                 ((data between '{$data_inicial}' AND '{$data_final}') {$condicao_implantacao} OR (k172_dataconciliacao BETWEEN '{$data_inicial}'
-                            AND '{$data_final}'))";
+    $sql  = query_padrao_rec($conta, $condicao_lancamento);
+    $sql .= " ((data between '{$inicio}' AND '{$fim}') ";
+    $sql .= " {$condicao_implantacao} ";
+    $sql .= " OR (k172_dataconciliacao > '{$fim}' AND data < '{$fim}') ";
+    $sql .= " OR (k172_dataconciliacao BETWEEN '{$inicio}' AND '{$fim}')) ";
     return $sql;
 }
 
-function query_transferencias_debito($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao)
-{
+function query_transferencias_debito($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao) {
     $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
     if ($data_implantacao) {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data  >= '{$data_implantacao}' AND corlanc.k12_data <= '{$data_final}')  ";
@@ -720,82 +623,18 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data < '{$data_inicial}') ";
     }
 
-    $sql = queryPadraoSlipDebito() . "
-                corlanc.k12_conta = {$conta}
-                AND ((corlanc.k12_data between '{$data_inicial}' AND '{$data_final}') {$condicao_implantacao} OR (k172_dataconciliacao BETWEEN '{$data_inicial}'
-                AND '{$data_final}'))  {$condicao_lancamento}";
+    $sql  = query_padrao_slip_debito();
+    $sql .= " corlanc.k12_conta = {$conta} ";
+    $sql .= "     AND ((corlanc.k12_data between '{$data_inicial}' AND '{$data_final}') ";
+    $sql .= "     {$condicao_implantacao} ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corlanc.k12_data < '{$data_final}' ) ";
+    $sql .="      OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
+    $sql .= " {$condicao_lancamento} ";
+    $sql .= " AND e81_cancelado IS NULL ";
     return $sql;
 }
 
-function queryPadraoSlipDebito()
-{
-  return "select
-  0 as tipo_lancamento,
-  corlanc.k12_data as data,
-  k172_dataconciliacao data_conciliacao,
-  conhistdoc.c53_tipo::text cod_doc,
-  corrente.k12_valor as valor_debito,
-  0 as valor_credito,
-  k12_codigo::text as codigo,
-  'SLIP'::text as tipo,
-  case
-                when e91_cheque is null then e81_numdoc :: text
-                else 'CHE ' || e91_cheque :: text
-            end as cheque,
-  '' as ordem,
-  z01_nome::text as credor,
-  z01_numcgm::text as numcgm,
-  '' as historico
-from
-  corlanc
-  inner join corrente on corrente.k12_id = corlanc.k12_id
-  and corrente.k12_data = corlanc.k12_data
-  and corrente.k12_autent = corlanc.k12_autent
-  inner join slip on slip.k17_codigo = corlanc.k12_codigo
-  inner join conplanoreduz on c61_reduz = slip.k17_credito
-  and c61_anousu =  " . db_getsession('DB_anousu') . "
-  inner join conplano on c60_codcon = c61_codcon
-  and c60_anousu = c61_anousu
-  left join slipnum on slipnum.k17_codigo = slip.k17_codigo
-  left join cgm on slipnum.k17_numcgm = z01_numcgm
-  left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
-  left join corconf on corconf.k12_id = corlanc.k12_id
-  and corconf.k12_data = corlanc.k12_data
-  and corconf.k12_autent = corlanc.k12_autent
-  and corconf.k12_ativo is true
-  left join empageconfche on empageconfche.e91_codcheque = corconf.k12_codmov
-  and corconf.k12_ativo is true
-  and empageconfche.e91_ativo is true
-  left join corhist on corhist.k12_id = corrente.k12_id
-  and corhist.k12_data = corrente.k12_data
-  and corhist.k12_autent = corrente.k12_autent
-  left join corautent on corautent.k12_id = corrente.k12_id
-  and corautent.k12_data = corrente.k12_data
-  and corautent.k12_autent = corrente.k12_autent
-  LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
-  AND conlancamcorrente.c86_data = corrente.k12_data
-  AND conlancamcorrente.c86_autent = corrente.k12_autent
-  LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
-  LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
-  LEFT JOIN conhistdoc ON
-  conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
-  left join corempagemov on corempagemov.k12_data = corautent.k12_data
-										   and corempagemov.k12_id = corautent.k12_id
-										   and corempagemov.k12_autent = corautent.k12_autent
-  left join empagemov on corempagemov.k12_codmov = e81_codmov
-  LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
-  AND conc.k172_data = corrente.k12_data
-  AND conc.k172_coddoc = conhistdoc.c53_tipo
-  AND conc.k172_valor = corrente.k12_valor
-  AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
-  when e91_cheque is null then e81_numdoc :: text
-  else 'CHE ' || e91_cheque :: text
-end)
-where";
-}
-
-function query_transferencias_credito($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao)
-{
+function query_transferencias_credito($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao) {
     $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
     if ($data_implantacao) {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data  >= '{$data_implantacao}' AND corrente.k12_data <= '{$data_final}')  ";
@@ -803,136 +642,29 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data < '{$data_inicial}') ";
     }
 
-    $sql = queryPadraoSlipCredito() . "
-            corrente.k12_conta = {$conta}
-            AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}') {$condicao_implantacao} OR (k172_dataconciliacao BETWEEN '{$data_inicial}'
-                AND '{$data_final}')) {$condicao_lancamento}
-        order by
-            data,
-            codigo";
+    $sql  = query_padrao_slip_credito();
+    $sql .= " corrente.k12_conta = {$conta} ";
+    $sql .= " AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}') ";
+    $sql .= "     {$condicao_implantacao} ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data < '{$data_final}' ) ";
+    $sql .= "     OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
+    $sql .= " {$condicao_lancamento} ";
+    $sql .= " AND e81_cancelado IS NULL ";
+    $sql .= " ORDER BY data, codigo ";
     return $sql;
 }
 
-function queryPadraoSlipCredito()
-{
-  return "
-  select
-      0 as tipo_lancamento,
-      corlanc.k12_data as data,
-      k172_dataconciliacao data_conciliacao,
-      conhistdoc.c53_tipo::text cod_doc,
-      0 as valor_debito,
-      corrente.k12_valor as valor_credito,
-      k12_codigo::text as codigo,
-      'SLIP'::text as tipo,
-      case
-                when e91_cheque is null then e81_numdoc :: text
-                else 'CHE ' || e91_cheque :: text
-            end as cheque,
-      '' as ordem,
-      z01_nome::text as credor,
-      z01_numcgm::text as numcgm,
-      '' as historico
-  from
-      corrente
-      inner join corlanc on corrente.k12_id = corlanc.k12_id
-      and corrente.k12_data = corlanc.k12_data
-      and corrente.k12_autent = corlanc.k12_autent
-      inner join slip on slip.k17_codigo = corlanc.k12_codigo
-      inner join conplanoreduz on c61_reduz = slip.k17_debito
-      and c61_anousu =  " . db_getsession('DB_anousu') . "
-      inner join conplano on c60_codcon = c61_codcon
-      and c60_anousu = c61_anousu
-      left join slipnum on slipnum.k17_codigo = slip.k17_codigo
-      left join cgm on slipnum.k17_numcgm = z01_numcgm
-      left join corconf on corconf.k12_id = corlanc.k12_id
-      and corconf.k12_data = corlanc.k12_data
-      and corconf.k12_autent = corlanc.k12_autent
-      and corconf.k12_ativo is true
-      left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
-      left join empageconfche on empageconfche.e91_codcheque = corconf.k12_codmov
-      and corconf.k12_ativo is true
-      and empageconfche.e91_ativo is true
-      left join corhist on corhist.k12_id = corrente.k12_id
-      and corhist.k12_data = corrente.k12_data
-      and corhist.k12_autent = corrente.k12_autent
-      left join corautent on corautent.k12_id = corrente.k12_id
-      and corautent.k12_data = corrente.k12_data
-      and corautent.k12_autent = corrente.k12_autent
-      LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
-      AND conlancamcorrente.c86_data = corrente.k12_data
-      AND conlancamcorrente.c86_autent = corrente.k12_autent
-      LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
-      LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
-      LEFT JOIN conhistdoc ON
-      conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
-      left join corempagemov on corempagemov.k12_data = corautent.k12_data
-      and corempagemov.k12_id = corautent.k12_id
-      and corempagemov.k12_autent = corautent.k12_autent
-      left join empageslip  on empageslip.e89_codigo = slip.k17_codigo
-      left join empagemov   on e89_codmov=e81_codmov
-      LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
-      AND conc.k172_data = corrente.k12_data
-      AND conc.k172_coddoc = conhistdoc.c53_tipo
-      AND conc.k172_valor = corrente.k12_valor
-      AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
-      when e91_cheque is null then e81_numdoc :: text
-      else 'CHE ' || e91_cheque :: text
-  end)
-  where";
-}
-
-function dadosPlanilha($conta, $data_lancamento, $planilha)
-{
-    $sql = "SELECT DISTINCT
-            k81_codpla as planilha, k81_receita as codigo, k02_drecei as descricao, SUM(k12_valor) as valor
-        from
-            corrente
-            inner join corplacaixa on k12_id = k82_id
-                AND k12_data = k82_data
-                AND k12_autent = k82_autent
-            inner join placaixarec on k81_seqpla = k82_seqpla
-            inner join tabrec on tabrec.k02_codigo = k81_receita
-        where
-            corrente.k12_conta = {$conta}
-            and corrente.k12_instit = " . db_getsession('DB_instit') . "
-            AND corrente.k12_data = '{$data_lancamento}'
-            AND k81_codpla = {$planilha}
-        GROUP BY k81_codpla, k81_receita, k02_drecei
-        ORDER BY k81_receita";
-
-    $resultado = pg_query($sql);
-    $receita = array();
-    while ($row = pg_fetch_object($resultado)) {
-        $receita[] = array(
-          "planilha"  => $row->planilha,
-          "codigo"    => $row->codigo,
-          "data"      => date("d/m/Y", strtotime($data_lancamento)),
-          "descricao" => utf8_encode($row->descricao),
-          "valor"     => $row->valor
-        );
-    }
-    return $receita;
-}
-
-function getDataImplantacao()
-{
-    $sSQL = "SELECT k29_conciliacaobancaria FROM caiparametro WHERE k29_instit = " . db_getsession('DB_instit');
-    $rsResult = db_query($sSQL);
-    return db_utils::fieldsMemory($rsResult, 0)->k29_conciliacaobancaria ? date("d/m/Y", strtotime(db_utils::fieldsMemory($rsResult, 0)->k29_conciliacaobancaria)) : "";
-}
-
-/** Movimentações de Saldo */
-function queryMovimentacaoSaldo($conta, $dataInicial, $dataFinal, $movimentacao)
-{
-	  $implantacao = data(getDataImplantacao());
-    $sql = queryEmpenhosTotal($conta, $dataInicial, $dataFinal, $implantacao);
+function movimentacao_extrato($conta, $dataInicial, $dataFinal, $movimentacao) {
+    $implantacao = data(data_implantacao());
+    $sql  = query_empenhos_total($conta, $dataInicial, $dataFinal, $implantacao);
+    $sql .= " UNION ALL ";
+    $sql .= query_baixa_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " union all ";
-    $sql .= queryPlanilhasTotal($conta, $dataInicial, $dataFinal, $implantacao);
+    $sql .= query_planilha_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " union all ";
-    $sql .= queryTransferenciasDebitoTotal($conta, $dataInicial, $dataFinal, $implantacao);
+    $sql .= query_transferencias_debito_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " union all ";
-    $sql .= queryTransferenciasCreditoTotal($conta, $dataInicial, $dataFinal, $implantacao);
+    $sql .= query_transferencias_credito_total($conta, $dataInicial, $dataFinal, $implantacao);
 
     $query = pg_query($sql);
 
@@ -971,7 +703,7 @@ function queryMovimentacaoSaldo($conta, $dataInicial, $dataFinal, $movimentacao)
               OR (k172_dataconciliacao > '{$dataFinal}' AND  k173_data <= '{$dataFinal}')
               OR (k172_dataconciliacao IS NULL AND k173_data <= '{$dataInicial}'))
               AND k173_conta = {$conta} ";
-             // return $sqlPendencias;
+            // return $sqlPendencias;
           $query = pg_query($sqlPendencias);
 
     while ($row = pg_fetch_object($query)) {
@@ -992,134 +724,53 @@ function queryMovimentacaoSaldo($conta, $dataInicial, $dataFinal, $movimentacao)
     return $valor;
 }
 
-function queryEmpenhosTotal($conta, $data_inicial, $data_final, $data_implantacao)
-{
+function query_empenhos_total($conta, $data_inicial, $data_final, $data_implantacao) {
     $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
     if ($data_implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data  >= '{$data_implantacao}' AND corrente.k12_data <= '{$data_final}')   ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data BETWEEN '{$data_implantacao}' AND '{$data_final}')   ";
     } else {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data < '{$data_inicial}') ";
     }
 
-    $sql = queryPadraoOP() . "
-                corrente.k12_conta = {$conta}
-                AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}'
-                AND k172_dataconciliacao IS NULL) {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data between '{$data_inicial}' AND '{$data_final}'))
-                AND c69_sequen IS NOT NULL
-                -- AND e23_valorretencao IS NULL
-                AND corrente.k12_instit = " . db_getsession("DB_instit") . "
-                AND   (
-                    SELECT
-                        *
-                    FROM(
-                            select
-                                SUM(e23_valorretencao) e23_valorretencao
-                            from
-                                retencaoreceitas
-                                inner join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
-                                inner join retencaopagordem on retencaopagordem.e20_sequencial = retencaoreceitas.e23_retencaopagordem
-                                inner join tabrec on tabrec.k02_codigo = retencaotiporec.e21_receita
-                                inner join retencaotipocalc on retencaotipocalc.e32_sequencial = retencaotiporec.e21_retencaotipocalc
-                                inner join pagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem
-                                inner join pagordemnota on pagordem.e50_codord = pagordemnota.e71_codord
-                                inner join empnota on pagordemnota.e71_codnota = empnota.e69_codnota
-                                inner join retencaoempagemov on e23_sequencial = e27_retencaoreceitas
-                                left join empagemovslips on e27_empagemov = k107_empagemov
-                                left join slipempagemovslips on k107_sequencial = k108_empagemovslips
-                                left join retencaocorgrupocorrente on e23_sequencial = e47_retencaoreceita
-                                left join corgrupocorrente on e47_corgrupocorrente = k105_sequencial
-                                left join cornump as numpre on numpre.k12_data = k105_data
-                                and numpre.k12_autent = k105_autent
-                                and numpre.k12_id = k105_id
-                                left join issplannumpre on numpre.k12_numpre = q32_numpre
-                            where
-                                e20_pagordem = coremp.k12_codord
-                                and e27_principal is true
-                                and e23_ativo is true
-                        ) as w
-                    WHERE
-                        e23_valorretencao = corrente.k12_valor
-                ) IS NULL";
+    $sql = query_padrao_op();
+    $sql .= " corrente.k12_conta = {$conta} ";
+    $sql .= " AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL) ";
+    $sql .= "     {$condicao_implantacao} ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data < '{$data_final}' )) ";
+    $sql .= " AND c69_sequen IS NOT NULL ";
+    $sql .= " AND corrente.k12_instit = " . db_getsession("DB_instit");
+    $sql .= " AND " . condicao_retencao();
+
     return $sql;
 }
 
-function queryPadraoOP()
-{
-  return "select
-  0 as tipo_lancamento,
-  corrente.k12_data as data,
-  k172_dataconciliacao data_conciliacao,
-  conhistdoc.c53_tipo :: text cod_doc,
-  0 as valor_debito,
-  corrente.k12_valor as valor_credito,
-  e60_codemp || '/' || e60_anousu :: text as codigo,
-  'OP' :: text as tipo,
-  case
-      when e86_cheque is not null
-      and e86_cheque <> '0' then 'CHE ' || e86_cheque :: text
-      when coremp.k12_cheque = 0 then e81_numdoc :: text
-      else 'CHE ' || coremp.k12_cheque :: text
-  end as cheque,
-  coremp.k12_codord :: text as ordem,
-  z01_nome :: text as credor,
-  z01_numcgm :: text as numcgm,
-  '' as historico
-from
-  corrente
-  inner join coremp on coremp.k12_id = corrente.k12_id
-  and coremp.k12_data = corrente.k12_data
-  and coremp.k12_autent = corrente.k12_autent
-  inner join empempenho on e60_numemp = coremp.k12_empen
-  inner join cgm on z01_numcgm = e60_numcgm
-  left join corhist on corhist.k12_id = corrente.k12_id
-  and corhist.k12_data = corrente.k12_data
-  and corhist.k12_autent = corrente.k12_autent
-  left join corautent on corautent.k12_id = corrente.k12_id
-  and corautent.k12_data = corrente.k12_data
-  and corautent.k12_autent = corrente.k12_autent
-  left join corgrupocorrente on corrente.k12_data = k105_data
-  and corrente.k12_id = k105_id
-  and corrente.k12_autent = k105_autent
-  LEFT JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = k105_sequencial
-  LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamcorgrupocorrente.c23_conlancam
-  LEFT JOIN conlancamval ON conlancamval.c69_codlan = conlancamcorgrupocorrente.c23_conlancam
-  AND (
-      (
-          c69_credito = corrente.k12_conta
-          AND corrente.k12_valor > 0
-      )
-      OR (
-          c69_debito = corrente.k12_conta
-          AND corrente.k12_valor < 0
-      )
-  )
-  LEFT JOIN corempagemov ON corempagemov.k12_id = coremp.k12_id
-  AND corempagemov.k12_autent = coremp.k12_autent
-  AND corempagemov.k12_data = coremp.k12_data
-  left join empagemov on e60_numemp = empagemov.e81_numemp
-  AND k12_codmov = e81_codmov
-  LEFT JOIN conhistdoc ON conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
-  left join empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
-  LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
-  AND conc.k172_data = corrente.k12_data
-  AND conc.k172_coddoc = conhistdoc.c53_tipo
-  AND conc.k172_codigo = concat_ws(
-      '',
-      coremp.k12_codord :: text,
-      (
-          case
-              when e86_cheque is not null
-              and e86_cheque <> '0' then 'CHE ' || e86_cheque :: text
-              when coremp.k12_cheque = 0 then e81_numdoc :: text
-              else 'CHE ' || coremp.k12_cheque :: text
-          end
-      )
-  )
-WHERE";
+function query_baixa_total($conta, $inicio, $fim, $implantacao) {
+    $inicio = $inicio < $implantacao ? $implantacao : $inicio;
+    $condicao_implantacao = query_baixa_implantacao($inicio, $fim, $implantacao);
+
+    $sql  = query_baixa_padrao();
+    $sql .= "       WHERE corrente.k12_conta = {$conta} ";
+    $sql .= "           AND corrente.k12_instit = " . db_getsession('DB_instit');
+    $sql .= "           AND corplacaixa.k82_id IS NULL ";
+    $sql .= "           AND corplacaixa.k82_data IS NULL ";
+    $sql .= "           AND corplacaixa.k82_autent IS NULL ";
+    $sql .= "       GROUP BY corrente.k12_conta, corrente.k12_data, discla.codret, c53_tipo, c71_coddoc, z01_numcgm ";
+    $sql .= "    ) as x ";
+    $sql .= "    LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = k12_conta ";
+    $sql .= "        AND conc.k172_data = data ";
+    $sql .= "        AND conc.k172_coddoc = cod_doc ";
+    $sql .= "        AND conc.k172_codigo = codigo::text ";
+    $sql .= "        AND round(conc.k172_valor, 2) = round(valor_debito, 2) ";
+    $sql .= "    WHERE ";
+    $sql .= "        ((data between '{$inicio}' AND '{$fim}' AND k172_dataconciliacao IS NULL) ";
+    $sql .= "            {$condicao_implantacao} ";
+    $sql .= "            OR (k172_dataconciliacao > '{$fim}' AND data < '{$fim}')) ";
+    $sql .= " ) as xx ";
+
+    return $sql;
 }
 
-function queryPlanilhasTotal($conta, $data_inicial, $data_final, $data_implantacao)
-{
+function query_planilha_total($conta, $data_inicial, $data_final, $data_implantacao) {
     $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
     if ($data_implantacao) {
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data >= '{$data_implantacao}' AND data <= '{$data_final}')   ";
@@ -1127,14 +778,231 @@ function queryPlanilhasTotal($conta, $data_inicial, $data_final, $data_implantac
         $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data < '{$data_inicial}') ";
     }
 
-    $sql = queryPadraoREC($conta, "") . "
-                     ((data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL) {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}' AND data between '{$data_inicial}' AND '{$data_final}'))
-                    ";
+    $sql  = query_padrao_rec($conta, "");
+    $sql .= " ((data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL) ";
+    $sql .= " {$condicao_implantacao} ";
+    $sql .= " OR (k172_dataconciliacao > '{$data_final}' AND data < '{$data_final}')) ";
+
     return $sql;
 }
 
+function query_transferencias_debito_total($conta, $data_inicial, $data_final, $data_implantacao) {
+    $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
+    if ($data_implantacao) {
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data  >= '{$data_implantacao}' AND corlanc.k12_data <= '{$data_final}')   ";
+    } else {
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data < '{$data_inicial}') ";
+    }
 
-function queryPadraoREC($conta, $condicao) {
+    $sql = query_padrao_slip_debito() . "
+                corlanc.k12_conta = {$conta}
+                AND ((corlanc.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL)
+                {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}' AND corlanc.k12_data < '{$data_final}'))
+                AND e81_cancelado IS NULL
+                ";
+
+    return $sql;
+}
+
+function query_transferencias_credito_total($conta, $data_inicial, $data_final, $data_implantacao) {
+    $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
+    if ($data_implantacao) {
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data  >= '{$data_implantacao}' AND corrente.k12_data <= '{$data_final}')   ";
+    } else {
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data < '{$data_inicial}') ";
+    }
+
+    $sql = query_padrao_slip_credito() . "
+            corrente.k12_conta = {$conta}
+            AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL)
+            {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}'
+            AND corrente.k12_data < '{$data_final}'))
+            AND e81_cancelado IS NULL
+        order by
+            data,
+            codigo";
+    return $sql;
+}
+
+function query_padrao_op() {
+    $sql  = " SELECT ";
+    $sql .= "     0 as tipo_lancamento, ";
+    $sql .= "     corrente.k12_data as data, ";
+    $sql .= "     k172_dataconciliacao data_conciliacao, ";
+    $sql .= "     conhistdoc.c53_tipo::text cod_doc, ";
+    $sql .= "     0 as valor_debito, ";
+    $sql .= "     corrente.k12_valor as valor_credito, ";
+    $sql .= "     e60_codemp || '/' || e60_anousu::text as codigo, ";
+    $sql .= "     'OP'::text as tipo, ";
+    $sql .= "     CASE ";
+    $sql .= "         WHEN e86_cheque IS NOT NULL AND e86_cheque <> '0' ";
+    $sql .= "         THEN 'CHE ' || e86_cheque :: text ";
+    $sql .= "         WHEN coremp.k12_cheque = 0 ";
+    $sql .= "         THEN e81_numdoc::text ";
+    $sql .= "         ELSE 'CHE ' || coremp.k12_cheque::text ";
+    $sql .= "     END AS cheque, ";
+    $sql .= "     coremp.k12_codord::text AS ordem, ";
+    $sql .= "     z01_nome::text AS credor, ";
+    $sql .= "     z01_numcgm::text AS numcgm, ";
+    $sql .= "     '' AS historico ";
+    $sql .= " FROM corrente ";
+    $sql .= " INNER JOIN coremp ON coremp.k12_id = corrente.k12_id ";
+    $sql .= "     AND coremp.k12_data = corrente.k12_data ";
+    $sql .= "     AND coremp.k12_autent = corrente.k12_autent ";
+    $sql .= " INNER JOIN empempenho ON e60_numemp = coremp.k12_empen ";
+    $sql .= " INNER JOIN cgm ON z01_numcgm = e60_numcgm ";
+    $sql .= " LEFT JOIN corhist ON corhist.k12_id = corrente.k12_id ";
+    $sql .= "     AND corhist.k12_data = corrente.k12_data ";
+    $sql .= "     AND corhist.k12_autent = corrente.k12_autent ";
+    $sql .= " LEFT JOIN corautent ON corautent.k12_id = corrente.k12_id ";
+    $sql .= "     AND corautent.k12_data = corrente.k12_data ";
+    $sql .= "     AND corautent.k12_autent = corrente.k12_autent ";
+    $sql .= " LEFT JOIN corgrupocorrente ON corrente.k12_data = k105_data ";
+    $sql .= "     AND corrente.k12_id = k105_id ";
+    $sql .= "     AND corrente.k12_autent = k105_autent ";
+    $sql .= " LEFT JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = k105_sequencial ";
+    $sql .= " LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamcorgrupocorrente.c23_conlancam ";
+    $sql .= " LEFT JOIN conlancamval ON conlancamval.c69_codlan = conlancamcorgrupocorrente.c23_conlancam ";
+    $sql .= "     AND (";
+    $sql .= "         ( c69_credito = corrente.k12_conta";
+    $sql .= "             AND corrente.k12_valor > 0 )";
+    $sql .= "         OR ( c69_debito = corrente.k12_conta ";
+    $sql .= "             AND corrente.k12_valor < 0 )";
+    $sql .= "     )";
+    $sql .= " LEFT JOIN corempagemov ON corempagemov.k12_id = coremp.k12_id";
+    $sql .= "     AND corempagemov.k12_autent = coremp.k12_autent";
+    $sql .= "     AND corempagemov.k12_data = coremp.k12_data";
+    $sql .= " LEFT JOIN empagemov ON e60_numemp = empagemov.e81_numemp";
+    $sql .= "      AND k12_codmov = e81_codmov";
+    $sql .= " LEFT JOIN conhistdoc ON conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc";
+    $sql .= " LEFT JOIN empageconf ON empageconf.e86_codmov = empagemov.e81_codmov";
+    $sql .= " LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta";
+    $sql .= "     AND conc.k172_data = corrente.k12_data";
+    $sql .= "     AND conc.k172_coddoc = conhistdoc.c53_tipo";
+    $sql .= "     AND conc.k172_codigo = concat_ws('', coremp.k12_codord::text, ( ";
+    $sql .= "         CASE ";
+    $sql .= "             WHEN e86_cheque IS NOT NULL AND e86_cheque <> '0' ";
+    $sql .= "             THEN 'CHE ' || e86_cheque::text ";
+    $sql .= "             WHEN coremp.k12_cheque = 0 ";
+    $sql .= "             THEN e81_numdoc::text ";
+    $sql .= "             ELSE 'CHE ' || coremp.k12_cheque::text ";
+    $sql .= "         END ";
+    $sql .= "         ) ";
+    $sql .= "     ) ";
+    $sql .= " WHERE ";
+
+    return $sql;
+}
+
+function query_baixa_padrao() {
+    $sql = " SELECT ";
+    $sql .= "     0 as tipo_lancamento, ";
+    $sql .= "     data, ";
+    $sql .= "     data_conciliacao, ";
+    $sql .= "     cod_doc::text cod_doc, ";
+    $sql .= "     valor_debito, ";
+    $sql .= "     valor_credito, ";
+    $sql .= "     codigo, ";
+    $sql .= "     'BAIXA'::text as tipo, ";
+    $sql .= "     NULL as cheque, ";
+    $sql .= "     ordem::text ordem, ";
+    $sql .= "     credor, ";
+    $sql .= "     numcgm::text numcgm, ";
+    $sql .= utf8_encode(" 'Arrecadação de Receita' historico ");
+    $sql .= " FROM ( ";
+    $sql .= "    SELECT ";
+    $sql .= "        data, ";
+    $sql .= "        valor_debito, ";
+    $sql .= "        k172_dataconciliacao data_conciliacao, ";
+    $sql .= "        valor_credito, ";
+    $sql .= "        codigo :: text, ";
+    $sql .= "        tipo :: text, ";
+    $sql .= "        ordem, ";
+    $sql .= "        credor :: text, ";
+    $sql .= "        tipo_doc, ";
+    $sql .= "        cod_doc, ";
+    $sql .= "        numcgm ";
+    $sql .= "    FROM ( ";
+    $sql .= "       SELECT ";
+    $sql .= "            corrente.k12_conta, ";
+    $sql .= "            corrente.k12_data as data, ";
+    $sql .= "            SUM(c70_valor) as valor_debito, ";
+    $sql .= "            0 as valor_credito, ";
+    $sql .= "            discla.codret as codigo, ";
+    $sql .= "            'baixa' :: text as tipo, ";
+    $sql .= "            0 as ordem, ";
+    $sql .= "            z01_nome credor, ";
+    $sql .= "            conhistdoc.c53_tipo tipo_doc, ";
+    $sql .= "            c71_coddoc cod_doc, ";
+    $sql .= "            z01_numcgm numcgm ";
+    $sql .= "       FROM corrente ";
+    $sql .= "       LEFT JOIN corhist on corhist.k12_id = corrente.k12_id ";
+    $sql .= "           AND corhist.k12_data = corrente.k12_data ";
+    $sql .= "           AND corhist.k12_autent = corrente.k12_autent ";
+    $sql .= "       LEFT JOIN corautent on corautent.k12_id = corrente.k12_id ";
+    $sql .= "           AND corautent.k12_data = corrente.k12_data ";
+    $sql .= "           AND corautent.k12_autent = corrente.k12_autent ";
+    $sql .= "       INNER JOIN corcla on corcla.k12_id = corrente.k12_id ";
+    $sql .= "           AND corcla.k12_data = corrente.k12_data ";
+    $sql .= "           AND corcla.k12_autent = corrente.k12_autent ";
+    $sql .= "       INNER JOIN discla on discla.codcla = corcla.k12_codcla ";
+    $sql .= "           AND discla.instit = " . db_getsession('DB_instit');
+    $sql .= "       INNER JOIN disarq on disarq.codret = discla.codret ";
+    $sql .= "           AND disarq.instit = discla.instit ";
+    $sql .= "       LEFT JOIN corplacaixa ON corplacaixa.k82_id = corrente.k12_id ";
+    $sql .= "           AND corplacaixa.k82_data = corrente.k12_data ";
+    $sql .= "           AND corplacaixa.k82_autent = corrente.k12_autent ";
+    $sql .= "       LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id ";
+    $sql .= "           AND conlancamcorrente.c86_data = corrente.k12_data ";
+    $sql .= "           AND conlancamcorrente.c86_autent = corrente.k12_autent ";
+    $sql .= "       LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam ";
+    $sql .= "       LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan ";
+    $sql .= "       LEFT JOIN conhistdoc ON conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc ";
+    $sql .= "       LEFT JOIN placaixarec on k81_seqpla = k82_seqpla ";
+    $sql .= "       LEFT JOIN cgm on cgm.z01_numcgm = placaixarec.k81_numcgm ";
+    return $sql;
+}
+
+function query_pendencias($conta, $data_inicial, $data_final, $tipo) {
+    $sql  = " SELECT ";
+    $sql .= "     k173_tipolancamento tipo_lancamento, ";
+    $sql .= "     k173_data as data, ";
+    $sql .= "     k172_dataconciliacao data_conciliacao, ";
+    $sql .= "     k173_tipomovimento cod_doc, ";
+    $sql .= "     CASE WHEN k173_mov = 1 THEN k173_valor ELSE 0 END as valor_debito, ";
+    $sql .= "     CASE WHEN k173_mov = 2 THEN k173_valor ELSE 0 END as valor_credito, ";
+    $sql .= "     k173_codigo codigo, ";
+    $sql .= "     k173_tipolancamento::text tipo, ";
+    $sql .= "     k173_documento as cheque, ";
+    $sql .= "     '' as ordem, ";
+    $sql .= "     z01_nome credor, ";
+    $sql .= "     k173_numcgm::text numcgm, ";
+    $sql .= "     k173_sequencial::text as historico ";
+    $sql .= " FROM conciliacaobancariapendencia ";
+    $sql .= " LEFT JOIN cgm ON z01_numcgm = k173_numcgm ";
+    $sql .= " LEFT JOIN conciliacaobancarialancamento ON k172_data = k173_data ";
+    $sql .= "     AND ((k172_numcgm IS NULL AND k173_numcgm IS NULL) OR (k172_numcgm = k173_numcgm)) ";
+    $sql .= "     AND ((k172_coddoc is null AND k173_tipomovimento = '') OR (k172_coddoc::text = k173_tipomovimento)) ";
+    $sql .= "     AND ((k173_documento is null AND k172_codigo is null)  ";
+    $sql .= "         OR (k172_codigo::text = concat_ws('', k173_codigo::text, k173_documento::text))) ";
+    $sql .= "     AND k172_valor = k173_valor ";
+    $sql .= "     AND k172_mov = k173_mov ";
+    $sql .= "     AND k172_conta = k173_conta ";
+    $sql .= " WHERE ((k173_data BETWEEN '{$data_inicial}' AND '{$data_final}') ";
+    $sql .= "         OR (k172_dataconciliacao > '{$data_final}' AND k173_data < '{$data_final}') ";
+    $sql .= "         OR (k172_dataconciliacao IS NULL AND k173_data < '{$data_inicial}') ";
+    $sql .= "         OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
+    $sql .= "     AND k173_conta = {$conta} ";
+
+    if ($tipo == 13)
+        $sql .= " AND k173_tipolancamento = 2 ";
+    if ($tipo == 14)
+        $sql .= " AND k173_tipolancamento = 1 ";
+
+    return $sql;
+}
+
+function query_padrao_rec($conta, $condicao) {
   return "select
   0 as tipo_lancamento,
   data,
@@ -1150,7 +1018,7 @@ function queryPadraoREC($conta, $condicao) {
   credor,
   numcgm :: text as numcgm,
   '' as historico
-from
+ from
   (
       select
           data,
@@ -1237,40 +1105,224 @@ from
               WHERE ";
 }
 
+function query_padrao_slip_debito() {
+  return "select
+  0 as tipo_lancamento,
+  corlanc.k12_data as data,
+  k172_dataconciliacao data_conciliacao,
+  conhistdoc.c53_tipo::text cod_doc,
+  corrente.k12_valor as valor_debito,
+  0 as valor_credito,
+  k12_codigo::text as codigo,
+  'SLIP'::text as tipo,
+  case
+                when e91_cheque is null then e81_numdoc :: text
+                else 'CHE ' || e91_cheque :: text
+            end as cheque,
+  '' as ordem,
+  z01_nome::text as credor,
+  z01_numcgm::text as numcgm,
+  '' as historico
+ from
+  corlanc
+  inner join corrente on corrente.k12_id = corlanc.k12_id
+  and corrente.k12_data = corlanc.k12_data
+  and corrente.k12_autent = corlanc.k12_autent
+  inner join slip on slip.k17_codigo = corlanc.k12_codigo
+  inner join conplanoreduz on c61_reduz = slip.k17_credito
+  and c61_anousu =  " . db_getsession('DB_anousu') . "
+  inner join conplano on c60_codcon = c61_codcon
+  and c60_anousu = c61_anousu
+  left join slipnum on slipnum.k17_codigo = slip.k17_codigo
+  left join cgm on slipnum.k17_numcgm = z01_numcgm
+  left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
+  left join corconf on corconf.k12_id = corlanc.k12_id
+  and corconf.k12_data = corlanc.k12_data
+  and corconf.k12_autent = corlanc.k12_autent
+  and corconf.k12_ativo is true
+  left join empageconfche on empageconfche.e91_codcheque = corconf.k12_codmov
+  and corconf.k12_ativo is true
+  and empageconfche.e91_ativo is true
+  left join corhist on corhist.k12_id = corrente.k12_id
+  and corhist.k12_data = corrente.k12_data
+  and corhist.k12_autent = corrente.k12_autent
+  left join corautent on corautent.k12_id = corrente.k12_id
+  and corautent.k12_data = corrente.k12_data
+  and corautent.k12_autent = corrente.k12_autent
+  LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
+  AND conlancamcorrente.c86_data = corrente.k12_data
+  AND conlancamcorrente.c86_autent = corrente.k12_autent
+  LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
+  LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
+  LEFT JOIN conhistdoc ON
+  conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
+  left join corempagemov on corempagemov.k12_data = corautent.k12_data
+										   and corempagemov.k12_id = corautent.k12_id
+										   and corempagemov.k12_autent = corautent.k12_autent
+  left join empagemov on corempagemov.k12_codmov = e81_codmov
+  LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
+  AND conc.k172_data = corrente.k12_data
+  AND conc.k172_coddoc = conhistdoc.c53_tipo
+  AND conc.k172_valor = corrente.k12_valor
+  AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
+  when e91_cheque is null then e81_numdoc :: text
+  else 'CHE ' || e91_cheque :: text
+ end)
+ where";
+}
 
-function queryTransferenciasDebitoTotal($conta, $data_inicial, $data_final, $data_implantacao)
-{
-    $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
-    if ($data_implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data  >= '{$data_implantacao}' AND corlanc.k12_data <= '{$data_final}')   ";
-    } else {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corlanc.k12_data < '{$data_inicial}') ";
+function query_padrao_slip_credito() {
+  return "
+  select
+      0 as tipo_lancamento,
+      corlanc.k12_data as data,
+      k172_dataconciliacao data_conciliacao,
+      conhistdoc.c53_tipo::text cod_doc,
+      0 as valor_debito,
+      corrente.k12_valor as valor_credito,
+      k12_codigo::text as codigo,
+      'SLIP'::text as tipo,
+      case
+                when e91_cheque is null then e81_numdoc :: text
+                else 'CHE ' || e91_cheque :: text
+            end as cheque,
+      '' as ordem,
+      z01_nome::text as credor,
+      z01_numcgm::text as numcgm,
+      '' as historico
+  from
+      corrente
+      inner join corlanc on corrente.k12_id = corlanc.k12_id
+      and corrente.k12_data = corlanc.k12_data
+      and corrente.k12_autent = corlanc.k12_autent
+      inner join slip on slip.k17_codigo = corlanc.k12_codigo
+      inner join conplanoreduz on c61_reduz = slip.k17_debito
+      and c61_anousu =  " . db_getsession('DB_anousu') . "
+      inner join conplano on c60_codcon = c61_codcon
+      and c60_anousu = c61_anousu
+      left join slipnum on slipnum.k17_codigo = slip.k17_codigo
+      left join cgm on slipnum.k17_numcgm = z01_numcgm
+      left join corconf on corconf.k12_id = corlanc.k12_id
+      and corconf.k12_data = corlanc.k12_data
+      and corconf.k12_autent = corlanc.k12_autent
+      and corconf.k12_ativo is true
+      left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
+      left join empageconfche on empageconfche.e91_codcheque = corconf.k12_codmov
+      and corconf.k12_ativo is true
+      and empageconfche.e91_ativo is true
+      left join corhist on corhist.k12_id = corrente.k12_id
+      and corhist.k12_data = corrente.k12_data
+      and corhist.k12_autent = corrente.k12_autent
+      left join corautent on corautent.k12_id = corrente.k12_id
+      and corautent.k12_data = corrente.k12_data
+      and corautent.k12_autent = corrente.k12_autent
+      LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
+      AND conlancamcorrente.c86_data = corrente.k12_data
+      AND conlancamcorrente.c86_autent = corrente.k12_autent
+      LEFT JOIN conlancam ON conlancam.c70_codlan = conlancamcorrente.c86_conlancam
+      LEFT JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
+      LEFT JOIN conhistdoc ON
+      conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc
+      left join corempagemov on corempagemov.k12_data = corautent.k12_data
+      and corempagemov.k12_id = corautent.k12_id
+      and corempagemov.k12_autent = corautent.k12_autent
+      left join empageslip  on empageslip.e89_codigo = slip.k17_codigo
+      left join empagemov   on e89_codmov=e81_codmov
+      LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
+      AND conc.k172_data = corrente.k12_data
+      AND conc.k172_coddoc = conhistdoc.c53_tipo
+      AND conc.k172_valor = corrente.k12_valor
+      AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
+      when e91_cheque is null then e81_numdoc :: text
+      else 'CHE ' || e91_cheque :: text
+  end)
+  where";
+}
+
+function dados_planilha($conta, $data_lancamento, $planilha) {
+    $sql = "SELECT DISTINCT
+            k81_codpla as planilha, k81_receita as codigo, k02_drecei as descricao, SUM(k12_valor) as valor
+        from
+            corrente
+            inner join corplacaixa on k12_id = k82_id
+                AND k12_data = k82_data
+                AND k12_autent = k82_autent
+            inner join placaixarec on k81_seqpla = k82_seqpla
+            inner join tabrec on tabrec.k02_codigo = k81_receita
+        where
+            corrente.k12_conta = {$conta}
+            and corrente.k12_instit = " . db_getsession('DB_instit') . "
+            AND corrente.k12_data = '{$data_lancamento}'
+            AND k81_codpla = {$planilha}
+        GROUP BY k81_codpla, k81_receita, k02_drecei
+        ORDER BY k81_receita";
+
+    $resultado = pg_query($sql);
+    $receita = array();
+    while ($row = pg_fetch_object($resultado)) {
+        $receita[] = array(
+          "planilha"  => $row->planilha,
+          "codigo"    => $row->codigo,
+          "data"      => date("d/m/Y", strtotime($data_lancamento)),
+          "descricao" => utf8_encode($row->descricao),
+          "valor"     => $row->valor
+        );
     }
+    return $receita;
+}
 
-    $sql = queryPadraoSlipDebito() . "
-                corlanc.k12_conta = {$conta}
-                AND ((corlanc.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL)
-                {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}'
-                AND corrente.k12_data between '{$data_inicial}' AND '{$data_final}'))";
+function data_implantacao() {
+    $sSQL = "SELECT k29_conciliacaobancaria FROM caiparametro WHERE k29_instit = " . db_getsession('DB_instit');
+    $rsResult = db_query($sSQL);
+    return db_utils::fieldsMemory($rsResult, 0)->k29_conciliacaobancaria ? date("d/m/Y", strtotime(db_utils::fieldsMemory($rsResult, 0)->k29_conciliacaobancaria)) : "";
+}
+
+function condicao_retencao() {
+    $sql  = " ( ";
+    $sql .= " SELECT * ";
+    $sql .= " FROM ( ";
+    $sql .= "     SELECT SUM(e23_valorretencao) retencao ";
+    $sql .= "     FROM retencaoreceitas ";
+    $sql .= "     INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec ";
+    $sql .= "     INNER JOIN retencaopagordem ON retencaopagordem.e20_sequencial = retencaoreceitas.e23_retencaopagordem ";
+    $sql .= "     INNER JOIN tabrec ON tabrec.k02_codigo = retencaotiporec.e21_receita ";
+    $sql .= "     INNER JOIN retencaotipocalc ON retencaotipocalc.e32_sequencial = retencaotiporec.e21_retencaotipocalc ";
+    $sql .= "     INNER JOIN pagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem ";
+    $sql .= "     INNER JOIN pagordemnota ON pagordem.e50_codord = pagordemnota.e71_codord ";
+    $sql .= "     INNER JOIN empnota ON pagordemnota.e71_codnota = empnota.e69_codnota ";
+    $sql .= "     INNER JOIN retencaoempagemov ON e23_sequencial = e27_retencaoreceitas ";
+    $sql .= "     LEFT JOIN empagemovslips ON e27_empagemov = k107_empagemov ";
+    $sql .= "     LEFT JOIN slipempagemovslips ON k107_sequencial = k108_empagemovslips ";
+    $sql .= "     LEFT JOIN retencaocorgrupocorrente ON e23_sequencial = e47_retencaoreceita ";
+    $sql .= "     LEFT JOIN corgrupocorrente ON e47_corgrupocorrente = k105_sequencial ";
+    $sql .= "     LEFT JOIN cornump as numpre ON numpre.k12_data = k105_data ";
+    $sql .= "         AND numpre.k12_autent = k105_autent ";
+    $sql .= "         AND numpre.k12_id = k105_id ";
+    $sql .= "     LEFT JOIN issplannumpre ON numpre.k12_numpre = q32_numpre ";
+    $sql .= "     WHERE e20_pagordem = coremp.k12_codord ";
+    $sql .= "         AND e27_principal IS true ";
+    $sql .= "         AND e23_ativo IS true ";
+    $sql .= "     ) as w ";
+    $sql .= " WHERE round(retencao,2) = round(corrente.k12_valor,2) ";
+    $sql .= " ) IS NULL ";
+
     return $sql;
 }
 
-function queryTransferenciasCreditoTotal($conta, $data_inicial, $data_final, $data_implantacao)
-{
-    $data_inicial = $data_inicial < $data_implantacao ? $data_implantacao : $data_inicial;
-    if ($data_implantacao) {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data  >= '{$data_implantacao}' AND corrente.k12_data <= '{$data_final}')   ";
+function query_baixa_implantacao($inicio, $fim, $implantacao) {
+    if ($implantacao) {
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data >= '{$implantacao}' AND data <= '{$fim}') ";
     } else {
-        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND corrente.k12_data < '{$data_inicial}') ";
+        $condicao_implantacao = " OR (k172_dataconciliacao IS NULL AND data < '{$inicio}') ";
     }
+    return $condicao_implantacao;
+}
 
-    $sql = queryPadraoSlipCredito() . "
-            corrente.k12_conta = {$conta}
-            AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL)
-            {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}'
-            AND corrente.k12_data between '{$data_inicial}' AND '{$data_final}')) {$condicao_lancamento}
-        order by
-            data,
-            codigo";
-    return $sql;
+function data($data) {
+    $data = explode("/", $data);
+    if (count($data) > 1) {
+        return $data[2] . "-" . $data[1] . "-" . $data[0];
+    } else {
+        return $data[0];
+    }
 }

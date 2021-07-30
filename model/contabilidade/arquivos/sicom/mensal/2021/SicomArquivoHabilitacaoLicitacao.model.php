@@ -199,8 +199,8 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	pcforne.pc60_orgaoreg as orgaoRespRegistro,
 	pcforne.pc60_dtreg as dataRegistro,
 	pcforne.pc60_numeroregistro as nroRegistro,
-	pcforne.pc60_dtreg as dataRegistroCVM,
-	pcforne.pc60_numeroregistro as nroRegistroCVM,
+	pcforne.pc60_dtreg_cvm as dataRegistroCVM,
+	pcforne.pc60_numerocvm as nroRegistroCVM,
 	pcforne.pc60_inscriestadual as nroInscricaoEstadual,
 	pcforne.pc60_uf as ufInscricaoEstadual,
 	habilitacaoforn.l206_numcertidaoinss as nroCertidaoRegularidadeINSS,
@@ -252,16 +252,16 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
       $clhablic10->si57_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
       $clhablic10->si57_tipodocumento = $oDados10->tipodocumento;
       $clhablic10->si57_nrodocumento = $oDados10->nrodocumento;
-      $clhablic10->si57_objetosocial = $oDados10->tipodocumento == 1 ? '' : $this->removeCaracteres(substr($oDados10->objetosocial, 0, 2000));
-      $clhablic10->si57_orgaorespregistro = $oDados10->tipodocumento == 1 ? '' : $oDados10->orgaorespregistro;
-      $clhablic10->si57_dataregistro = $oDados10->tipodocumento == 1 ? '' : $oDados10->dataregistro;
-      if($oDados10->orgaorespregistro == 4){
+      $clhablic10->si57_objetosocial = $oDados10->tipodocumento == "1" ? '' : $this->removeCaracteres(substr($oDados10->objetosocial, 0, 2000));
+      $clhablic10->si57_orgaorespregistro = $oDados10->tipodocumento == "1" ? '' : $oDados10->orgaorespregistro;
+      $clhablic10->si57_dataregistro = $oDados10->tipodocumento == "1" ? '' : $oDados10->dataregistro;
+      if($oDados10->orgaorespregistro == "4"){
           $clhablic10->si57_nroregistro = '';
       }else{
-          $clhablic10->si57_nroregistro = $oDados10->tipodocumento == 1 ? '' : $oDados10->nroregistro;
+          $clhablic10->si57_nroregistro = $oDados10->tipodocumento == "1" ? '' : $oDados10->nroregistro;
       }
-      $clhablic10->si57_dataregistrocvm = $oDados10->tipodocumento == 1 ? '' : ($oDados10->dataregistrocvm != "" && $oDados10->nroregistrocvm != "") ? $oDados10->dataregistrocvm : "";
-      $clhablic10->si57_nroregistrocvm = $oDados10->tipodocumento == 1 ? '' : ($oDados10->dataregistrocvm != "" && $oDados10->nroregistrocvm != "") ? $oDados10->nroregistrocvm : "";
+      $clhablic10->si57_dataregistrocvm = $oDados10->tipodocumento == "1" ? '' : ($oDados10->dataregistrocvm != "" && $oDados10->nroregistrocvm != "") ? $oDados10->dataregistrocvm : "";
+      $clhablic10->si57_nroregistrocvm = $oDados10->tipodocumento == "1" ? '' : ($oDados10->dataregistrocvm != "" && $oDados10->nroregistrocvm != "") ? $oDados10->nroregistrocvm : "";
       $clhablic10->si57_nroinscricaoestadual = $oDados10->nroinscricaoestadual;
       $clhablic10->si57_ufinscricaoestadual = $oDados10->ufinscricaoestadual;
       $clhablic10->si57_nrocertidaoregularidadeinss = $oDados10->nrocertidaoregularidadeinss;
