@@ -98,9 +98,11 @@ $clrotulo->label("pc01_descrmater");
             if (pg_numrows($result) == 0) {
               db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '...', "js_troca();");
             } else {
-              $result_elemento = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen, 'e55_codele as pc07_codele'));
+              $result_elemento = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen, 'e55_codele as pc07_codele, o56_descr, o56_elemento'));
               db_fieldsmemory($result_elemento, 0);
-              db_input('pc07_codele', 50, 0, true, 'text', 3);
+              db_input('pc07_codele', 5, 0, true, 'text', 3);
+              db_input('o56_descr', 50, 0, true, 'text', 3);
+              db_input('o56_elemento', 50, 0, true, 'hidden', 3);
             }
             ?>
           </td>
@@ -122,7 +124,8 @@ $clrotulo->label("pc01_descrmater");
       </table>
     </fieldset>
     <div class="container">
-      <table height="100%" width="400px" id="myTable" class="table table-bordered table-striped">
+      <span id="textocontainer"><strong>Selecione um elemento</strong></span>
+      <table style="display: none" height="100%" width="400px" id="myTable" class="table table-bordered table-striped">
         <thead>
           <!-- <tr>
             <th style="text-align: center"><input type="checkbox" id="select_all" onclick="selectall()" /></th> -->
@@ -141,13 +144,14 @@ $clrotulo->label("pc01_descrmater");
         </thead>
       </table>
     </div>
+    <br />
     <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
     <input name="salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
     <input name="excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
   </center>
 </form>
 <script>
-  js_loadTable();
+  js_troca();
 
   function js_loadTable() {
 
@@ -188,6 +192,7 @@ $clrotulo->label("pc01_descrmater");
           sWidth: '3%'
         }
       ],
+      bInfo: false,
       searchable: false,
       paging: false,
       language: {
@@ -241,16 +246,6 @@ $clrotulo->label("pc01_descrmater");
     consultaValores();
   };
 
-  function selectall() {
-    if ($('#select_all:checked').val() === 'on') {
-      //table.rows().select();
-      console.log('on');
-    } else {
-      console.log('off');
-      //table.rows().deselect();
-    }
-  };
-
   function js_salvar() {
 
     if ($('#pc07_codele').val() == '...') {
@@ -296,7 +291,7 @@ $clrotulo->label("pc01_descrmater");
         oDados = {};
       }
     });
-    console.log(aDados);
+
     oParam.dados = aDados;
 
     $.ajax({
@@ -305,13 +300,13 @@ $clrotulo->label("pc01_descrmater");
       data: oParam,
       success: function(data) {
         let response = JSON.parse(data);
-        console.log(response);
         if (response.status == 0) {
           alert(response.message.urlDecode());
           return false;
         } else {
           //js_loadTable();
           alert(response.message.urlDecode());
+          top.corpo.iframe_empautidot.location.reload();
           window.location.reload();
         }
       }
@@ -320,7 +315,11 @@ $clrotulo->label("pc01_descrmater");
 
   function js_excluir() {
 
-    //console.log($("input[type='checkbox']").is(':checked'));
+    if ($('#pc07_codele').val() == '...') {
+      alert("É necessário escolher um elemento");
+      return false;
+    }
+
     if (!$("input[type='checkbox']").is(':checked')) {
       alert("É necessário marcar algum item");
       return false;
@@ -349,11 +348,12 @@ $clrotulo->label("pc01_descrmater");
       url: "emp1_empautitemtaxatabela.RPC.php",
       data: oParam,
       success: function(data) {
-        console.log(data);
-        // parent.location.reload();
+
         let response = JSON.parse(data);
         alert(response.message);
-        window.location.reload();
+        //top.corpo.iframe_empautitem.location.reload();
+        top.corpo.iframe_empautoriza.location.reload();
+        //window.location.reload();
         //js_loadTable();
       }
     });
@@ -365,11 +365,9 @@ $clrotulo->label("pc01_descrmater");
 
   function js_servico(origem) {
 
-    //console.log(origem.id);
     const item = origem.id.split('_');
     const id = item[1];
 
-    //console.log($('#servico_' + id).val());
     if ($('#servico_' + id).val() == 1) {
       $('#qtd_' + id).val(1);
       $('#qtd_' + id).attr('readonly', true);
@@ -405,7 +403,7 @@ $clrotulo->label("pc01_descrmater");
 
 
     if ($('#e54_desconto').val() == 't') {
-      t = new Number((uni - (desc / 100)) * quant);
+      t = new Number((uni - (uni * desc / 100)) * quant);
       $('#total_' + id).val(t.toFixed(2));
     } else {
       t = new Number(uni * quant);
@@ -424,7 +422,7 @@ $clrotulo->label("pc01_descrmater");
         // alert((uni - (desc / 100)));
         // alert(quant);
         // alert((uni - (desc / 100)) * quant);
-        t = new Number((uni - (desc / 100)) * quant);
+        t = new Number((uni - (uni * desc / 100)) * quant);
         $('#total_' + id).val(t.toFixed(2));
       } else {
         t = new Number(uni * quant);
@@ -438,7 +436,7 @@ $clrotulo->label("pc01_descrmater");
         return false;
       }
       if ($('#e54_desconto').val() == 't') {
-        t = new Number((uni - (desc / 100)) * quant);
+        t = new Number((uni - (uni * desc / 100)) * quant);
         $('#total_' + id).val(t.toFixed(2));
       } else {
         t = new Number(uni * quant);
@@ -453,7 +451,7 @@ $clrotulo->label("pc01_descrmater");
         return false;
       }
       if ($('#e54_desconto').val() == 't') {
-        t = new Number((uni - (desc / 100)) * quant);
+        t = new Number((uni - (uni * desc / 100)) * quant);
         $('#total_' + id).val(t.toFixed(2));
       } else {
         t = new Number(uni * quant);
@@ -478,9 +476,6 @@ $clrotulo->label("pc01_descrmater");
       success: function(data) {
 
         let totitens = JSON.parse(data);
-        console.log(totitens.itens[0]);
-        // let utilizado = totitens.itens[0].totalitens > 0 ? totitens.itens[0].totalitens : "0";
-        // let disponivel = new Number(params.total - totitens.itens[0].totalitens) > 0 ? new Number(params.total - totitens.itens[0].totalitens) : "0";
         $('#utilizado').val(totitens.itens[0].utilizado);
         $('#disponivel').val(totitens.itens[0].saldodisponivel);
       }
@@ -492,15 +487,25 @@ $clrotulo->label("pc01_descrmater");
     $("#mytable tr").each(function() {
       if ($(this).find("input[type='checkbox']").is(":checked")) {
         total += Number($(this).find("td:eq(10) input").val());
-        console.log('total', total);
       }
     });
     $('#totalad').val(total);
   }
 
   function js_troca() {
-    js_loadTable();
-    consultaValores();
+    if (document.getElementById('pc07_codele').value == '...') {
+      $('#textocontainer').css("display", "inline");
+      $('#myTable').DataTable().clear().destroy();
+      $('#myTable').css("display", "none");
+      $('#salvar').css("display", "none");
+      $('#excluir').css("display", "none");
+    } else {
+      $('#textocontainer').css("display", "none");
+      $('#myTable').css("display", "inline");
+      $('#salvar').css("display", "inline");
+      $('#excluir').css("display", "inline");
+      js_loadTable();
+    }
   }
 
   function onlynumber(evt) {

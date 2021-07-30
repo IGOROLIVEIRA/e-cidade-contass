@@ -128,8 +128,11 @@ switch ($_POST["action"]) {
     if (!empty($_POST["tabela"])) {
       $sqlQuery .= " and  pc94_sequencial = $tabela";
     }
-    if ($_POST["codele"] != '...') {
-      $sqlQuery .= " and  pc07_codele = $codele";
+    //if ($_POST["codele"] != '...') {
+    $sqlQuery .= " and  pc07_codele = $codele";
+    //}
+    if (!empty($_POST["search"]["value"])) {
+      $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
     }
     $sqlQuery .= "UNION SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
@@ -171,8 +174,11 @@ switch ($_POST["action"]) {
     if (!empty($_POST["tabela"])) {
       $sqlQuery .= " and  pc94_sequencial = $tabela";
     }
-    if ($_POST["codele"] != '...') {
-      $sqlQuery .= " and  pc07_codele = $codele";
+    //if ($_POST["codele"] != '...') {
+    $sqlQuery .= " and  pc07_codele = $codele";
+    //}
+    if (!empty($_POST["search"]["value"])) {
+      $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
     }
     $sqlQuery .= "
          AND (pcmater.pc01_tabela = 't'
@@ -183,13 +189,6 @@ switch ($_POST["action"]) {
     WHERE fornecedores.z01_numcgm = $cgm
     ";
 
-    if (!empty($_POST["search"]["value"])) {
-      // $sqlQuery .= ' and (id LIKE "%' . $_POST["search"]["value"] . '%" ';
-      // $sqlQuery .= ' OR name LIKE "%' . $_POST["search"]["value"] . '%" ';
-      // $sqlQuery .= ' OR designation LIKE "%' . $_POST["search"]["value"] . '%" ';
-      // $sqlQuery .= ' OR address LIKE "%' . $_POST["search"]["value"] . '%" ';
-      // $sqlQuery .= ' OR skills LIKE "%' . $_POST["search"]["value"] . '%") ';
-    }
     // if (!empty($_POST["order"])) {
     //   $sqlQuery .= 'ORDER BY ' . $_POST['order']['0']['column'] . ' ' . $_POST['order']['0']['dir'] . ' ';
     // } else {
@@ -199,7 +198,8 @@ switch ($_POST["action"]) {
     if ($_POST["length"] != -1) {
       $sqlQuery .= 'LIMIT ' . $_POST['length'];
     }
-
+    // echo $sqlQuery;
+    // exit;
     $rsDadosTotal = $oDaoSysArqCamp->sql_record($sqlQueryTotal);
     $rsDados      = $oDaoSysArqCamp->sql_record($sqlQuery);
 
@@ -376,10 +376,28 @@ function verificaSaldoCriterio($e55_autori)
                where e54_autori = {$e55_autori}
              ))
           end as saldodisponivel,
-          (select sum(e55_vltot) from empautoriza join liclicita on l20_codigo = e54_codlicitacao join empautitem on e55_autori=e54_autori where l20_codigo= (select e54_codlicitacao
-          from empautoriza
-           where e54_autori = {$e55_autori}
-         ) ) as utilizado
+          (select sum(x.utilizado) from
+(select
+case
+	 when e54_anulad is null and sum(e60_vlranu) is not null  then sum(e55_vltot) - sum(e60_vlranu)
+	 when e54_anulad is null and sum(e60_vlranu) is null then sum(e55_vltot)
+	 when e54_anulad is not null then 0
+end as utilizado,
+e54_anulad
+from empautoriza
+join liclicita on l20_codigo = e54_codlicitacao
+join empautitem on e55_autori = e54_autori
+left join empempaut on e61_autori=e54_autori
+left join empempenho on e60_numemp=e61_numemp
+left join empanulado on e94_numemp=e60_numemp
+where l20_codigo = (
+			select
+				e54_codlicitacao
+			from
+				empautoriza
+			where
+				e54_autori = {$e55_autori} )
+group by empautoriza.e54_anulad) x) as utilizado
           FROM liclicitem
           INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
           INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
