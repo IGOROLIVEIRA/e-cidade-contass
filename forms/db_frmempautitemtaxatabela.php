@@ -145,21 +145,6 @@ $clrotulo->label("pc01_descrmater");
                         <th data-orderable="false">Total</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th></th>
-                        <th>Código</th>
-                        <th>Item</th>
-                        <th>Descrição</th>
-                        <th>Unidade</th>
-                        <th>Marca</th>
-                        <th>Serviço</th>
-                        <th>Qtdd</th>
-                        <th>Vlr. Unit.</th>
-                        <th>Desc. %</th>
-                        <th>Total</th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
         <br />
