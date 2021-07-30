@@ -360,6 +360,9 @@ db_app::import("configuracao.DBDepartamento");
         $oTabDetalhes->add("documentos", "Documentos" ,
             "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=documentos");
 
+        $oTabDetalhes->add("Dotacoes","Dotações",
+            "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=getdotacaoacordo");
+
         $iCodigoComissao = $clAcordo->getComissao()->getCodigo();
         $oTabDetalhes->add("comissao", "Comissões",
             "con4_consacordosdetalhecomissao001.php?iComissao={$iCodigoComissao}");
