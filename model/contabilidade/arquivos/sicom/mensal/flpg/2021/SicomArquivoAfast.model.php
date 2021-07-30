@@ -129,6 +129,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             AND (r45_mesusu = {$iMes} OR (r45_mesusu > {$iMes} AND DATE_PART('MONTH',r45_dtafas) = {$iMes}))
             AND r45_dtafas >= '".db_getsession("DB_anousu")."-01-01'
             AND rh02_instit = ".db_getsession("DB_instit")."
+            and r45_situac != 10
             GROUP BY r45_regist,si199_tipoafastamento
             ";
 
