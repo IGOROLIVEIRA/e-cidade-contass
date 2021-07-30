@@ -42,9 +42,9 @@ $aTabFonec = array("" => "Selecione");
 
 $tabsFonecVencedor = $clpctabelaitem->buscarTabFonecVencedor($e55_autori, $z01_numcgm);
 if (!empty($tabsFonecVencedor)) {
-  foreach ($tabsFonecVencedor as $tabFonecVencedor) {
-    $aTabFonec += array($tabFonecVencedor->pc94_sequencial => "$tabFonecVencedor->pc94_sequencial - $tabFonecVencedor->pc01_descrmater");
-  }
+    foreach ($tabsFonecVencedor as $tabFonecVencedor) {
+        $aTabFonec += array($tabFonecVencedor->pc94_sequencial => "$tabFonecVencedor->pc94_sequencial - $tabFonecVencedor->pc01_descrmater");
+    }
 }
 
 $clempautitem->rotulo->label();
@@ -63,466 +63,450 @@ $clrotulo->label("pc01_descrmater");
 <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
 
+<!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script> -->
+
 <form name="form1" method="post" action="">
-  <input type="hidden" id="pc80_criterioadjudicacao" name="pc80_criterioadjudicacao">
-  <input type="hidden" id="e55_quant_ant" name="e55_quant_ant" value="<?= $e55_quant ?>">
-  <center>
-    <fieldset style="margin-top:5px; width:45%;">
-      <legend><b>Ítens</b></legend>
-      <table border="0" cellpadding='0' cellspacing='0'>
-        <tr style="height: 20px;">
-          <td nowrap title="<?= @$Te55_autori ?>">
-            <?= $Le55_autori ?>
-          </td>
-          <td>
-            <?php db_input('e55_autori', 8, $Ie55_autori, true, 'text', 3); ?>
-          </td>
-        </tr>
-        <tr style="height: 20px;">
-          <td nowrap title="">
-            <strong>Tabela:</strong>
-          </td>
-          <td>
-            <?
-            db_select('chave_tabela', $aTabFonec, true, $db_opcao, " onchange='js_mudaTabela(false)' style='width:452;' ");
-            ?>
-          </td>
-        </tr>
+    <input type="hidden" id="pc80_criterioadjudicacao" name="pc80_criterioadjudicacao">
+    <input type="hidden" id="e55_quant_ant" name="e55_quant_ant" value="<?= $e55_quant ?>">
+    <center>
+        <fieldset style="margin-top:5px; width:45%;">
+            <legend><b>Ítens</b></legend>
+            <table border="0" cellpadding='0' cellspacing='0'>
+                <tr style="height: 20px;">
+                    <td nowrap title="<?= @$Te55_autori ?>">
+                        <?= $Le55_autori ?>
+                    </td>
+                    <td>
+                        <?php db_input('e55_autori', 8, $Ie55_autori, true, 'text', 3); ?>
+                    </td>
+                </tr>
+                <tr style="height: 20px;">
+                    <td nowrap title="">
+                        <strong>Tabela:</strong>
+                    </td>
+                    <td>
+                        <?
+                        db_select('chave_tabela', $aTabFonec, true, $db_opcao, " onchange='js_mudaTabela(false)' style='width:452;' ");
+                        ?>
+                    </td>
+                </tr>
 
-        <tr style="height: 20px;">
-          <td nowrap title="">
-            <b>Ele. item</b>
-          </td>
-          <td>
-            <?
-            if (pg_numrows($result) == 0) {
-              db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '...', "js_troca();");
-            } else {
-              $result_elemento = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen, 'e55_codele as pc07_codele, o56_descr, o56_elemento'));
-              db_fieldsmemory($result_elemento, 0);
-              db_input('pc07_codele', 5, 0, true, 'text', 3);
-              db_input('o56_descr', 50, 0, true, 'text', 3);
-              db_input('o56_elemento', 50, 0, true, 'hidden', 3);
-            }
-            ?>
-          </td>
-        </tr>
+                <tr style="height: 20px;">
+                    <td nowrap title="">
+                        <b>Ele. item</b>
+                    </td>
+                    <td>
+                        <?
+                        if (pg_numrows($result) == 0) {
+                            db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '...', "js_troca();");
+                        } else {
+                            $result_elemento = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen, 'e55_codele as pc07_codele, o56_descr, o56_elemento'));
+                            db_fieldsmemory($result_elemento, 0);
+                            db_input('pc07_codele', 5, 0, true, 'text', 3);
+                            db_input('o56_descr', 50, 0, true, 'text', 3);
+                            db_input('o56_elemento', 50, 0, true, 'hidden', 3);
+                        }
+                        ?>
+                    </td>
+                </tr>
 
-        <tr style="height: 20px;">
-          <td>
-            <strong>Utilizado: </strong>
-          </td>
-          <td>
-            <? db_input('utilizado', 11, "", true, 'text', 3, ""); ?>
-            <strong style="margin-right:15px">Disponível: </strong>
-            <? db_input('disponivel', 10, "", true, 'text', 3, ""); ?>
-            <strong style="margin-right:15px">A lançar: </strong>
-            <? db_input('totalad', 9, "", true, 'text', 3, ""); ?>
-          </td>
-        </tr>
+                <tr style="height: 20px;">
+                    <td>
+                        <strong>Utilizado: </strong>
+                    </td>
+                    <td>
+                        <? db_input('utilizado', 11, "", true, 'text', 3, ""); ?>
+                        <strong style="margin-right:15px">Disponível: </strong>
+                        <? db_input('disponivel', 10, "", true, 'text', 3, ""); ?>
+                        <strong style="margin-right:15px">A lançar: </strong>
+                        <? db_input('totalad', 9, "", true, 'text', 3, ""); ?>
+                    </td>
+                </tr>
 
-      </table>
-    </fieldset>
-    <div class="container">
-      <span id="textocontainer"><strong>Selecione um elemento</strong></span>
-      <table style="display: none" height="100%" width="400px" id="myTable" class="table table-bordered table-striped">
-        <thead>
-          <!-- <tr>
-            <th style="text-align: center"><input type="checkbox" id="select_all" onclick="selectall()" /></th> -->
-          <th></th>
-          <th>Código</th>
-          <th>Item</th>
-          <th>Descrição</th>
-          <th>Unidade</th>
-          <th>Marca</th>
-          <th>Serviço</th>
-          <th>Qtdd</th>
-          <th>Vlr. Unit.</th>
-          <th>Desc. %</th>
-          <th>Total</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-    <br />
-    <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
-    <input name="salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
-    <input name="excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
-  </center>
+            </table>
+        </fieldset>
+        <div class="container">
+            <span id="textocontainer"><strong>Selecione um elemento</strong></span>
+            <table style="display: none" id="myTable" class="display nowrap">
+                <thead>
+                    <tr>
+                        <th data-orderable="false"></th>
+                        <th data-orderable="false">Código</th>
+                        <th data-orderable="false">Item</th>
+                        <th data-orderable="false">Descrição</th>
+                        <th data-orderable="false">Unidade</th>
+                        <th data-orderable="false">Marca</th>
+                        <th data-orderable="false">Serviço</th>
+                        <th data-orderable="false">Qtdd</th>
+                        <th data-orderable="false">Vlr. Unit.</th>
+                        <th data-orderable="false">Desc. %</th>
+                        <th data-orderable="false">Total</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>Código</th>
+                        <th>Item</th>
+                        <th>Descrição</th>
+                        <th>Unidade</th>
+                        <th>Marca</th>
+                        <th>Serviço</th>
+                        <th>Qtdd</th>
+                        <th>Vlr. Unit.</th>
+                        <th>Desc. %</th>
+                        <th>Total</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <br />
+        <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
+        <input name="salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
+        <input name="excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
+    </center>
 </form>
 <script>
-  js_troca();
+    js_troca();
 
-  function js_loadTable() {
+    function js_loadTable() {
 
-    $('#myTable').DataTable().clear().destroy();
-    var table = $('#myTable').removeAttr('width').DataTable({
-      bAutoWidth: false,
-      aoColumns: [{
-          sWidth: '2%'
-        },
-        {
-          sWidth: '2%'
-        },
-        {
-          sWidth: '15%'
-        },
-        {
-          sWidth: '5%'
-        },
-        {
-          sWidth: '5%'
-        },
-        {
-          sWidth: '5%'
-        },
-        {
-          sWidth: '3%'
-        },
-        {
-          sWidth: '3%'
-        },
-        {
-          sWidth: '3%'
-        },
-        {
-          sWidth: '3%'
-        },
-        {
-          sWidth: '3%'
-        }
-      ],
-      bInfo: false,
-      searchable: false,
-      paging: false,
-      language: {
-        "sEmptyTable": "Nenhum registro encontrado",
-        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-        "sInfoPostFix": "",
-        "sInfoThousands": ".",
-        "sLengthMenu": "_MENU_ resultados por página",
-        "sLoadingRecords": "Carregando...",
-        "sProcessing": "Processando...",
-        "sZeroRecords": "Nenhum registro encontrado",
-        "sSearch": "Pesquisar",
-        "oPaginate": {
-          "sNext": "Próximo",
-          "sPrevious": "Anterior",
-          "sFirst": "Primeiro",
-          "sLast": "Último"
-        },
-        "oAria": {
-          "sSortAscending": ": Ordenar colunas de forma ascendente",
-          "sSortDescending": ": Ordenar colunas de forma descendente"
-        },
-        buttons: {
-          pageLength: {
-            _: "Mostrar %d linhas",
-            '-1': "Mostrar todo"
-          }
-        },
-        select: {
-          rows: "%d linhas selecionadas"
-        },
-      },
-      processing: true,
-      serverSide: true,
-      ajax: {
-        url: "emp1_empautitemtaxatabela.RPC.php",
-        type: "POST",
-        data: {
-          action: 'buscaItens',
-          autori: <?php echo $e55_autori ?>,
-          cgm: <?php echo $z01_numcgm ?>,
-          tabela: document.getElementById('chave_tabela').value,
-          codele: document.getElementById('pc07_codele').value,
-          desconto: document.getElementById('e54_desconto').value,
-          dataType: "json"
-        }
-      },
-    });
-    consultaValores();
-  };
-
-  function js_salvar() {
-
-    if ($('#pc07_codele').val() == '...') {
-      alert("É necessário escolher um elemento");
-      return false;
-    }
-
-    if (!$("input[type='checkbox']").is(':checked')) {
-      alert("É necessário marcar algum item");
-      return false;
-    }
-    let rsDisponivel;
-    rsDisponivel = Number($('#disponivel').val()) - Number($('#utilizado').val());
-
-    if (rsDisponivel < Number($('#totalad').val())) {
-      alert("Não há valor disponível");
-      return false;
-    }
-
-    var oParam = new Object();
-    oParam.action = "salvar";
-    oParam.autori = $('#e55_autori').val();
-    oParam.codele = $('#pc07_codele').val();
-    oParam.descr = $('#e55_descr').val();
-    var oDados = {};
-    var aDados = [];
-
-    $("#mytable tr").each(function() {
-
-      if ($(this).find("input[type='checkbox']").is(":checked")) {
-
-        oDados.id = $(this).find("td").eq(1).html();
-        oDados.descr = $(this).find("td").eq(3).find("input").val();
-        oDados.unidade = $(this).find("td").eq(4).find("select").val();
-        oDados.marca = $(this).find("td").eq(5).find("input").val();
-        oDados.servico = $(this).find("td").eq(6).find("select").val();
-        oDados.qtd = $(this).find("td").eq(7).find("input").val();
-        oDados.vlrunit = $(this).find("td").eq(8).find("input").val();
-        oDados.desc = $(this).find("td").eq(9).find("input").val();
-        oDados.total = $(this).find("td").eq(10).find("input").val();
-
-        aDados.push(oDados);
-        oDados = {};
-      }
-    });
-
-    oParam.dados = aDados;
-
-    $.ajax({
-      type: "POST",
-      url: "emp1_empautitemtaxatabela.RPC.php",
-      data: oParam,
-      success: function(data) {
-        let response = JSON.parse(data);
-        if (response.status == 0) {
-          alert(response.message.urlDecode());
-          return false;
-        } else {
-          //js_loadTable();
-          alert(response.message.urlDecode());
-          top.corpo.iframe_empautidot.location.reload();
-          window.location.reload();
-        }
-      }
-    });
-  }
-
-  function js_excluir() {
-
-    if ($('#pc07_codele').val() == '...') {
-      alert("É necessário escolher um elemento");
-      return false;
-    }
-
-    if (!$("input[type='checkbox']").is(':checked')) {
-      alert("É necessário marcar algum item");
-      return false;
-    }
-
-    var oParam = new Object();
-    oParam.action = "excluir";
-    oParam.autori = $('#e55_autori').val();
-    var oDados = {};
-    var aDados = [];
-
-    $("#mytable tr").each(function() {
-
-      if ($(this).find("input[type='checkbox']").is(":checked")) {
-
-        oDados.id = $(this).find("td").eq(1).html();
-        aDados.push(oDados);
-        oDados = {};
-      }
-    });
-
-    oParam.dados = aDados;
-
-    $.ajax({
-      type: "POST",
-      url: "emp1_empautitemtaxatabela.RPC.php",
-      data: oParam,
-      success: function(data) {
-
-        let response = JSON.parse(data);
-        alert(response.message);
-        //top.corpo.iframe_empautitem.location.reload();
-        top.corpo.iframe_empautoriza.location.reload();
-        //window.location.reload();
-        //js_loadTable();
-      }
-    });
-  }
-
-  function js_mudaTabela(campo) {
-    js_loadTable();
-  }
-
-  function js_servico(origem) {
-
-    const item = origem.id.split('_');
-    const id = item[1];
-
-    if ($('#servico_' + id).val() == 1) {
-      $('#qtd_' + id).val(1);
-      $('#qtd_' + id).attr('readonly', true);
-    } else {
-      $('#qtd_' + id).val(0);
-      $('#qtd_' + id).attr('readonly', false);
-    }
-
-  }
-
-  function js_desconto(obj) {
-    if (obj == 't') {
-      $("#mytable tr").each(function() {
-        //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
-        $(this).find("td:eq(9) input").attr('readonly', true);
-      });
-    } else {
-      $("#mytable tr").each(function() {
-        //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
-        $(this).find("td:eq(9) input").attr('readonly', false);
-      });
-    }
-  }
-
-  function js_calcula(origem) {
-
-    const item = origem.id.split('_');
-    const id = item[1];
-    const desc = new Number($('#desc_' + id).val());
-    const quant = new Number($('#qtd_' + id).val());
-    const uni = new Number($('#vlrunit_' + id).val());
-    //const tot = new Number($('#total_' + id).val()).toFixed(2);
-
-
-    if ($('#e54_desconto').val() == 't') {
-      t = new Number((uni - (uni * desc / 100)) * quant);
-      $('#total_' + id).val(t.toFixed(2));
-    } else {
-      t = new Number(uni * quant);
-      $('#total_' + id).val(t.toFixed(2));
-    }
-
-
-    if (item[0] == 'qtd' && quant != '') {
-      if (isNaN(quant)) {
-        $('#qtd_' + id).focus();
-        return false;
-      }
-      if ($('#e54_desconto').val() == 't') {
-        // alert((desc / 100));
-        // alert(uni);
-        // alert((uni - (desc / 100)));
-        // alert(quant);
-        // alert((uni - (desc / 100)) * quant);
-        t = new Number((uni - (uni * desc / 100)) * quant);
-        $('#total_' + id).val(t.toFixed(2));
-      } else {
-        t = new Number(uni * quant);
-        $('#total_' + id).val(t.toFixed(2));
-      }
-    }
-
-    if (item[0] == 'desc' && desc != '') {
-      if (isNaN(quant)) {
-        $('#desc_' + id).focus();
-        return false;
-      }
-      if ($('#e54_desconto').val() == 't') {
-        t = new Number((uni - (uni * desc / 100)) * quant);
-        $('#total_' + id).val(t.toFixed(2));
-      } else {
-        t = new Number(uni * quant);
-        $('#total_' + id).val(t.toFixed(2));
-      }
-    }
-
-    if (item[0] == "vlrunit") {
-      if (isNaN(uni)) {
-        //alert("Valor unico inváido!");
-        $('#vlrunit_' + id).focus();
-        return false;
-      }
-      if ($('#e54_desconto').val() == 't') {
-        t = new Number((uni - (uni * desc / 100)) * quant);
-        $('#total_' + id).val(t.toFixed(2));
-      } else {
-        t = new Number(uni * quant);
-        $('#total_' + id).val(t.toFixed(2));
-      }
-    }
-    consultaLancar();
-  }
-
-  function consultaValores() {
-
-    var params = {
-      action: 'verificaSaldoCriterio',
-      e55_autori: $('#e55_autori').val(),
-      cgm: <?php echo $z01_numcgm ?>,
+        $('#myTable').DataTable().clear().destroy();
+        var table = $('#myTable').DataTable({
+            bAutoWidth: false,
+            bInfo: false,
+            searchable: false,
+            paging: false,
+            processing: true,
+            serverSide: true,
+            language: {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                buttons: {
+                    pageLength: {
+                        _: "Mostrar %d linhas",
+                        '-1': "Mostrar todo"
+                    }
+                },
+                select: {
+                    rows: "%d linhas selecionadas"
+                },
+            },
+            ajax: {
+                url: "emp1_empautitemtaxatabela.RPC.php",
+                type: "POST",
+                data: {
+                    action: 'buscaItens',
+                    autori: <?php echo $e55_autori ?>,
+                    cgm: <?php echo $z01_numcgm ?>,
+                    tabela: document.getElementById('chave_tabela').value,
+                    codele: document.getElementById('pc07_codele').value,
+                    desconto: document.getElementById('e54_desconto').value,
+                    dataType: "json"
+                }
+            },
+        });
+        consultaValores();
     };
 
-    $.ajax({
-      type: "POST",
-      url: "emp1_empautitemtaxatabela.RPC.php",
-      data: params,
-      success: function(data) {
+    function js_salvar() {
 
-        let totitens = JSON.parse(data);
-        $('#utilizado').val(totitens.itens[0].utilizado);
-        $('#disponivel').val(totitens.itens[0].saldodisponivel);
-      }
-    });
-  }
+        if ($('#pc07_codele').val() == '...') {
+            alert("É necessário escolher um elemento");
+            return false;
+        }
 
-  function consultaLancar() {
-    var total = 0;
-    $("#mytable tr").each(function() {
-      if ($(this).find("input[type='checkbox']").is(":checked")) {
-        total += Number($(this).find("td:eq(10) input").val());
-      }
-    });
-    $('#totalad').val(total);
-  }
+        if (!$("input[type='checkbox']").is(':checked')) {
+            alert("É necessário marcar algum item");
+            return false;
+        }
+        let rsDisponivel;
+        rsDisponivel = Number($('#disponivel').val()) - Number($('#utilizado').val());
 
-  function js_troca() {
-    if (document.getElementById('pc07_codele').value == '...') {
-      $('#textocontainer').css("display", "inline");
-      $('#myTable').DataTable().clear().destroy();
-      $('#myTable').css("display", "none");
-      $('#salvar').css("display", "none");
-      $('#excluir').css("display", "none");
-    } else {
-      $('#textocontainer').css("display", "none");
-      $('#myTable').css("display", "inline");
-      $('#salvar').css("display", "inline");
-      $('#excluir').css("display", "inline");
-      js_loadTable();
+        if (rsDisponivel < Number($('#totalad').val())) {
+            alert("Não há valor disponível");
+            return false;
+        }
+
+        var oParam = new Object();
+        oParam.action = "salvar";
+        oParam.autori = $('#e55_autori').val();
+        oParam.codele = $('#pc07_codele').val();
+        oParam.descr = $('#e55_descr').val();
+        var oDados = {};
+        var aDados = [];
+
+        $("#mytable tr").each(function() {
+
+            if ($(this).find("input[type='checkbox']").is(":checked")) {
+
+                oDados.id = $(this).find("td").eq(1).html();
+                oDados.descr = $(this).find("td").eq(3).find("input").val();
+                oDados.unidade = $(this).find("td").eq(4).find("select").val();
+                oDados.marca = $(this).find("td").eq(5).find("input").val();
+                oDados.servico = $(this).find("td").eq(6).find("select").val();
+                oDados.qtd = $(this).find("td").eq(7).find("input").val();
+                oDados.vlrunit = $(this).find("td").eq(8).find("input").val();
+                oDados.desc = $(this).find("td").eq(9).find("input").val();
+                oDados.total = $(this).find("td").eq(10).find("input").val();
+
+                aDados.push(oDados);
+                oDados = {};
+            }
+        });
+
+        oParam.dados = aDados;
+
+        $.ajax({
+            type: "POST",
+            url: "emp1_empautitemtaxatabela.RPC.php",
+            data: oParam,
+            success: function(data) {
+                let response = JSON.parse(data);
+                if (response.status == 0) {
+                    alert(response.message.urlDecode());
+                    return false;
+                } else {
+                    //js_loadTable();
+                    alert(response.message.urlDecode());
+                    top.corpo.iframe_empautidot.location.reload();
+                    window.location.reload();
+                }
+            }
+        });
     }
-  }
 
-  function onlynumber(evt) {
-    var theEvent = evt || window.event;
-    var key = theEvent.keyCode || theEvent.which;
-    key = String.fromCharCode(key);
-    //var regex = /^[0-9.,]+$/;
-    var regex = /^[0-9.]+$/;
-    if (!regex.test(key)) {
-      theEvent.returnValue = false;
-      if (theEvent.preventDefault) theEvent.preventDefault();
+    function js_excluir() {
+
+        if ($('#pc07_codele').val() == '...') {
+            alert("É necessário escolher um elemento");
+            return false;
+        }
+
+        if (!$("input[type='checkbox']").is(':checked')) {
+            alert("É necessário marcar algum item");
+            return false;
+        }
+
+        var oParam = new Object();
+        oParam.action = "excluir";
+        oParam.autori = $('#e55_autori').val();
+        var oDados = {};
+        var aDados = [];
+
+        $("#mytable tr").each(function() {
+
+            if ($(this).find("input[type='checkbox']").is(":checked")) {
+
+                oDados.id = $(this).find("td").eq(1).html();
+                aDados.push(oDados);
+                oDados = {};
+            }
+        });
+
+        oParam.dados = aDados;
+
+        $.ajax({
+            type: "POST",
+            url: "emp1_empautitemtaxatabela.RPC.php",
+            data: oParam,
+            success: function(data) {
+
+                let response = JSON.parse(data);
+                alert(response.message);
+                //top.corpo.iframe_empautitem.location.reload();
+                top.corpo.iframe_empautoriza.location.reload();
+                //window.location.reload();
+                //js_loadTable();
+            }
+        });
     }
-  }
-  $(document).ready(function() {
-    $('input[type="text"]').each(function() {
-      var val = $(this).val().replace(',', '.');
-      $(this).val(val);
+
+    function js_mudaTabela(campo) {
+        js_loadTable();
+    }
+
+    function js_servico(origem) {
+
+        const item = origem.id.split('_');
+        const id = item[1];
+
+        if ($('#servico_' + id).val() == 1) {
+            $('#qtd_' + id).val(1);
+            $('#qtd_' + id).attr('readonly', true);
+        } else {
+            $('#qtd_' + id).val(0);
+            $('#qtd_' + id).attr('readonly', false);
+        }
+
+    }
+
+    function js_desconto(obj) {
+        if (obj == 't') {
+            $("#mytable tr").each(function() {
+                //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
+                $(this).find("td:eq(9) input").attr('readonly', true);
+            });
+        } else {
+            $("#mytable tr").each(function() {
+                //$(this).find("td:eq(7) input").style.backgroundColor = "#DEB887";
+                $(this).find("td:eq(9) input").attr('readonly', false);
+            });
+        }
+    }
+
+    function js_calcula(origem) {
+
+        const item = origem.id.split('_');
+        const id = item[1];
+        const desc = new Number($('#desc_' + id).val());
+        const quant = new Number($('#qtd_' + id).val());
+        const uni = new Number($('#vlrunit_' + id).val());
+        //const tot = new Number($('#total_' + id).val()).toFixed(2);
+
+
+        if ($('#e54_desconto').val() == 't') {
+            t = new Number((uni - (uni * desc / 100)) * quant);
+            $('#total_' + id).val(t.toFixed(2));
+        } else {
+            t = new Number(uni * quant);
+            $('#total_' + id).val(t.toFixed(2));
+        }
+
+
+        if (item[0] == 'qtd' && quant != '') {
+            if (isNaN(quant)) {
+                $('#qtd_' + id).focus();
+                return false;
+            }
+            if ($('#e54_desconto').val() == 't') {
+                // alert((desc / 100));
+                // alert(uni);
+                // alert((uni - (desc / 100)));
+                // alert(quant);
+                // alert((uni - (desc / 100)) * quant);
+                t = new Number((uni - (uni * desc / 100)) * quant);
+                $('#total_' + id).val(t.toFixed(2));
+            } else {
+                t = new Number(uni * quant);
+                $('#total_' + id).val(t.toFixed(2));
+            }
+        }
+
+        if (item[0] == 'desc' && desc != '') {
+            if (isNaN(quant)) {
+                $('#desc_' + id).focus();
+                return false;
+            }
+            if ($('#e54_desconto').val() == 't') {
+                t = new Number((uni - (uni * desc / 100)) * quant);
+                $('#total_' + id).val(t.toFixed(2));
+            } else {
+                t = new Number(uni * quant);
+                $('#total_' + id).val(t.toFixed(2));
+            }
+        }
+
+        if (item[0] == "vlrunit") {
+            if (isNaN(uni)) {
+                //alert("Valor unico inváido!");
+                $('#vlrunit_' + id).focus();
+                return false;
+            }
+            if ($('#e54_desconto').val() == 't') {
+                t = new Number((uni - (uni * desc / 100)) * quant);
+                $('#total_' + id).val(t.toFixed(2));
+            } else {
+                t = new Number(uni * quant);
+                $('#total_' + id).val(t.toFixed(2));
+            }
+        }
+        consultaLancar();
+    }
+
+    function consultaValores() {
+
+        var params = {
+            action: 'verificaSaldoCriterio',
+            e55_autori: $('#e55_autori').val(),
+            cgm: <?php echo $z01_numcgm ?>,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "emp1_empautitemtaxatabela.RPC.php",
+            data: params,
+            success: function(data) {
+
+                let totitens = JSON.parse(data);
+                $('#utilizado').val(totitens.itens[0].utilizado);
+                $('#disponivel').val(totitens.itens[0].saldodisponivel);
+            }
+        });
+    }
+
+    function consultaLancar() {
+        var total = 0;
+        $("#mytable tr").each(function() {
+            if ($(this).find("input[type='checkbox']").is(":checked")) {
+                total += Number($(this).find("td:eq(10) input").val());
+            }
+        });
+        $('#totalad').val(total);
+    }
+
+    function js_troca() {
+        if (document.getElementById('pc07_codele').value == '...') {
+            $('#textocontainer').css("display", "inline");
+            $('#myTable').DataTable().clear().destroy();
+            $('#myTable').css("display", "none");
+            $('#salvar').css("display", "none");
+            $('#excluir').css("display", "none");
+        } else {
+            $('#textocontainer').css("display", "none");
+            $('#myTable').css("display", "inline");
+            $('#salvar').css("display", "inline");
+            $('#excluir').css("display", "inline");
+            js_loadTable();
+        }
+    }
+
+    function onlynumber(evt) {
+        var theEvent = evt || window.event;
+        var key = theEvent.keyCode || theEvent.which;
+        key = String.fromCharCode(key);
+        //var regex = /^[0-9.,]+$/;
+        var regex = /^[0-9.]+$/;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+    $(document).ready(function() {
+        $('input[type="text"]').each(function() {
+            var val = $(this).val().replace(',', '.');
+            $(this).val(val);
+        });
     });
-  });
 </script>
