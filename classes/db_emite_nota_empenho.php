@@ -249,13 +249,14 @@ class cl_emite_nota_empenho {
 
     }
 
-    function get_dados_licitacao($e54_tipoautorizacao, $e54_autori) {
+    function get_dados_licitacao($e54_tipoautorizacao, $e54_autori, $pc50_descr = '') {
     
         /**
          * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
          * @MarioJunior OC 7425
         */
 
+        $clempautitem   = db_utils::getDao("empautitem");
         $sCampos        = "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo";
         $sSqlEmpaut     = $clempautitem->sql_query_processocompras(null, null, $sCampos, null, "e55_autori = $e54_autori ");
         $result_empaut  = $clempautitem->sql_record($sSqlEmpaut);
@@ -263,7 +264,6 @@ class cl_emite_nota_empenho {
         $oDado = new stdClass();
         $oDado->edital_licitacao    = '';
         $oDado->modalidade          = '';
-        $oDado->resumo              = '';
         $oDado->descr_tipocompra    = '';
         $oDado->descr_modalidade    = '';
     
@@ -271,12 +271,11 @@ class cl_emite_nota_empenho {
         if($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
             
             if ($clempautitem->numrows > 0) {
-                db_fieldsmemory($result_empaut, 0);
-                if($e54_numerl != "") {
-                    $arr_numerl = split("/", $e54_numerl);
+                $oResult = db_utils::fieldsMemory($result_empaut, 0);
+                if($oResult->e54_numerl != "") {
+                    $arr_numerl = split("/", $oResult->e54_numerl);
                     $oDado->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
-                    $oDado->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
-                    $oDado->resumo     = $e60_resumo;
+                    $oDado->modalidade = $oResult->e54_nummodalidade . '/' . $arr_numerl[1];
                 }else{
                     $oDado->edital_licitacao = "";
                     $oDado->modalidade = "";
@@ -291,11 +290,10 @@ class cl_emite_nota_empenho {
         if($e54_tipoautorizacao == 2){
             
             if ($clempautitem->numrows > 0) {
-                db_fieldsmemory($result_empaut, 0);
-                $arr_numerl = split("/", $e54_numerl);
+                $oResult = db_utils::fieldsMemory($result_empaut, 0);
+                $arr_numerl = split("/", $oResult->e54_numerl);
                 $oDado->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
-                $oDado->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
-                $oDado->resumo     = $e60_resumo;
+                $oDado->modalidade = $oResult->e54_nummodalidade.'/'.$arr_numerl[1];
             }
             $oDado->descr_tipocompra = substr($pc50_descr,0,36);
             $oDado->descr_modalidade = '';
@@ -305,11 +303,10 @@ class cl_emite_nota_empenho {
         if($e54_tipoautorizacao == 3){
             
             if ($clempautitem->numrows > 0) {
-                db_fieldsmemory($result_empaut, 0);
-                $arr_numerl = split("/", $e54_numerl);
+                $oResult = db_utils::fieldsMemory($result_empaut, 0);
+                $arr_numerl = split("/", $oResult->e54_numerl);
                 $oDado->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
-                $oDado->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
-                $oDado->resumo     = $e60_resumo;
+                $oDado->modalidade = $oResult->e54_nummodalidade.'/'.$arr_numerl[1];
             }
             $oDado->descr_tipocompra = $pc50_descr;
             $oDado->descr_modalidade = $pc50_descr;
@@ -319,11 +316,10 @@ class cl_emite_nota_empenho {
         if($e54_tipoautorizacao == 4){
             
             if ($clempautitem->numrows > 0) {
-                db_fieldsmemory($result_empaut, 0);
-                $arr_numerl = split("/", $e54_numerl);
+                $oResult = db_utils::fieldsMemory($result_empaut, 0);
+                $arr_numerl = split("/", $oResult->e54_numerl);
                 $oDado->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
-                $oDado->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
-                $oDado->resumo     = $e60_resumo;
+                $oDado->modalidade = $oResult->e54_nummodalidade.'/'.$arr_numerl[1];
             }
             $oDado->descr_tipocompra = $pc50_descr;
             $oDado->descr_modalidade = '';

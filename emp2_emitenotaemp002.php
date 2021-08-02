@@ -332,11 +332,11 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     if (in_array($e54_tipoautorizacao, array('0','1','2','3','4'))) {
 
-        $oAutoriza = $clemite_nota_emp->get_dados_licitacao($e54_tipoautorizacao, $e54_autori);
+        $oAutoriza = $clemite_nota_emp->get_dados_licitacao($e54_tipoautorizacao, $e54_autori, $pc50_descr);
 
         $pdf1->edital_licitacao = $oAutoriza->edital_licitacao;
         $pdf1->modalidade       = $oAutoriza->modalidade;
-        $pdf1->resumo           = $oAutoriza->resumo;
+        $pdf1->resumo           = $e60_resumo;
         $pdf1->descr_tipocompra = $oAutoriza->descr_tipocompra;
         $pdf1->descr_modalidade = $oAutoriza->descr_modalidade;
 
