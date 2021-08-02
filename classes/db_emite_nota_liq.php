@@ -233,24 +233,20 @@ class cl_emite_nota_liq {
 
     function get_dados_licitacao($e54_tipoautorizacao, $e54_autori) {
 
-        $sCampos    = "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo";
-        $sWhere     = "e55_autori = $e54_autori ";
-        $sSql       = $clempautitem->sql_query_processocompras(null, null, $sCampos, null, $sWhere);
-        $result_empaut = $clempautitem->sql_record($sSql);
+        $clempautitem   = db_utils::getDao("empautitem");
+        $sCampos        = "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo";
+        $sWhere         = "e55_autori = $e54_autori ";
+        $sSql           = $clempautitem->sql_query_processocompras(null, null, $sCampos, null, $sWhere);
+        $result_empaut  = $clempautitem->sql_record($sSql);
 
         $oDado = new stdClass();
         $oDado->processo            = '';
-        $oDado->descr_tipocompra    = '';
 
         //tipo Direta
         if ($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
 
             if ($clempautitem->numrows > 0) {         
-
-                db_fieldsmemory($result_empaut, 0);
-                $oDado->processo            = $e54_numerl;
-                $oDado->descr_tipocompra    = $pc50_descr;
-
+                $oDado->processo            = db_utils::fieldsMemory($result_empaut, 0)->e54_numerl;
             }
 
         }
@@ -259,12 +255,8 @@ class cl_emite_nota_liq {
         if ($e54_tipoautorizacao == 2) {
             
             if ($clempautitem->numrows > 0) {
-
-                db_fieldsmemory($result_empaut, 0);
-                $arr_numerl = split("/", $e54_numerl);
+                $arr_numerl = split("/", db_utils::fieldsMemory($result_empaut, 0)->e54_numerl);
                 $oDado->processo            = $arr_numerl[0].'/'.$arr_numerl[1];
-                $oDado->descr_tipocompra    = $pc50_descr;
-
             }
         
         }
@@ -273,26 +265,18 @@ class cl_emite_nota_liq {
         if ($e54_tipoautorizacao == 3) {
             
             if ($clempautitem->numrows > 0) {
-
-                db_fieldsmemory($result_empaut, 0);
-                $arr_numerl = split("/", $e54_numerl);
+                $arr_numerl = split("/", db_utils::fieldsMemory($result_empaut, 0)->e54_numerl);
                 $oDado->processo            = $arr_numerl[0].'/'.$arr_numerl[1];
-                $oDado->descr_tipocompra    = $pc50_descr;
-
             }
 
         }
 
         //tipo Adesao regpreco
-        if ($e54_tipoautorizacao == 4 ) {
+        if ($e54_tipoautorizacao == 4) {
             
             if ($clempautitem->numrows > 0) {
-            
-                db_fieldsmemory($result_empaut, 0);
-                $arr_numerl = split("/", $e54_numerl);
+                $arr_numerl = split("/", db_utils::fieldsMemory($result_empaut, 0)->e54_numerl);
                 $oDado->processo            = $arr_numerl[0].'/'.$arr_numerl[1];
-                $oDado->descr_tipocompra    = $pc50_descr;
-
             }
 
         }

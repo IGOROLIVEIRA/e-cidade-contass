@@ -216,7 +216,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    }
 
-   $sSqlFuncaoOrdenaPagamento = $clemite_nota_liq->get_sql_funcao_ordena_pagamento($z01_cgccpf);   
+   $sSqlFuncaoOrdenaPagamento = $clemite_nota_liq->get_sql_funcao_ordena_pagamento($cgmpaga);   
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
 
    $sSqlFuncaoOrdenadespesa = $clemite_nota_liq->get_sql_funcao_ordena_despesa($cgmordenadespesa);   
@@ -342,7 +342,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
         $oAutoriza = $clemite_nota_liq->get_dados_licitacao($e54_tipoautorizacao, $e54_autori);
 
         $pdf1->processo         = $oAutoriza->processo;
-        $pdf1->descr_tipocompra = $oAutoriza->descr_tipocompra;
+        $pdf1->descr_tipocompra = $pc50_descr;
 
     }   
 
