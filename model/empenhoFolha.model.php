@@ -690,11 +690,12 @@ class empenhoFolha {
   	  $oDaoAutorizacaoItem->e55_vlrun  = $this->valorempenho;
   	  $oDaoAutorizacaoItem->e55_descr  = $oDaoEmpAutoriza->e54_resumo;
 	    $oDaoAutorizacaoItem->e55_codele = $this->elemento;
+      $oDaoAutorizacaoItem->e55_unid   = '0';
 	    $oDaoAutorizacaoItem->incluir($oDaoEmpAutoriza->e54_autori, 1);
 	    if ($oDaoAutorizacaoItem->erro_status == 0) {
 
 	      $sErroMsg  = "Não foi possivel gerar Autorização de empenho para empenho da folha ({$this->empenhofolha})\n";
-        $sErroMsg .= "Impossível incluir item da autorização";
+        $sErroMsg .= "Impossível incluir item da autorização \n {$oDaoAutorizacaoItem->erro_msg}";
         throw new DBException($sErroMsg);
 
 	    }
