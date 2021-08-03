@@ -716,6 +716,33 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                     </center>
                 </td>
             </tr>
+            <tr>
+                <?
+                $sql = "SELECT max(pc11_seq) as totalitens,
+	                           sum(pc11_vlrun*pc11_quant) as totalvalores,
+	                           pc10_solicitacaotipo	
+                        FROM solicitem
+                        INNER JOIN solicita ON pc10_numero = pc11_numero
+                        WHERE pc11_numero = {$pc11_numero} GROUP BY pc10_solicitacaotipo";
+                $rsResult = db_query($sql);
+                db_fieldsmemory($rsResult, 0);
+                if($pc10_solicitacaotipo == "5"):
+                ?>
+                <td>
+                    <strong>Total de itens:</strong>
+                    <?
+                    db_input('totalitens', 10, "Total de itens", true, 'text', 3, "");
+                    ?>
+                    <strong>Total dos valores:</strong>
+                    <?
+                    db_input('totalvalores', 10, "Total de itens", true, 'text', 3, "");
+                    ?>
+                </td>
+                <?endif;?>
+                <td>
+
+                </td>
+            </tr>
         </table>
     </center>
     <?
