@@ -201,6 +201,7 @@ if ($oParam->exec == "getElementosFromAcao") {
                         AND p1.o08_projativ     = p2.o08_projativ
                         AND p1.o08_ppaversao    = p2.o08_ppaversao
                         AND p1.o08_elemento     = p2.o08_elemento
+                        AND p1.o08_recurso      = p2.o08_recurso
                     INNER JOIN ppaestimativadespesa on o07_coddot = p2.o08_sequencial
                     INNER JOIN ppaestimativa ON ppaestimativa.o05_sequencial = ppaestimativadespesa.o07_ppaestimativa
                 WHERE p1.o08_sequencial = {$oParam->o08_sequencial} ";
@@ -210,6 +211,7 @@ if ($oParam->exec == "getElementosFromAcao") {
     } else {
         $sSql .= " AND p2.o08_ano = {$oParam->o05_anoreferencia}";
     }
+    $sSql .= " ORDER BY o05_sequencial";
 
     $rsPpaAnos = db_query($sSql);
 
