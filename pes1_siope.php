@@ -46,15 +46,15 @@ ELSE 'Nenhum'
 END || ';' || 
 translate(trim(to_char(round(x.rh02_salari,2),'99999999.99')),'.',',') || ';' || 
 
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (118,1118) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (118,1118) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (118,1118,218,166, 266) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (118,1118,218,166, 266) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (119,1119) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,219,167, 267) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119,219,167, 267) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
 '0,00' || ';' ||
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (119,1119,118,1118) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then x.valor 
                    else 0 end ),2))::varchar),'.',',') 
 
 
@@ -97,6 +97,7 @@ AS dado  from
      AND r14_mesusu = $mesfolha
      AND r14_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r14_rubric=rh27_rubric
@@ -109,7 +110,7 @@ AS dado  from
     LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219,166, 266,167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -166,6 +167,7 @@ SELECT
      AND r48_mesusu = $mesfolha
      AND r48_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r48_rubric=rh27_rubric
@@ -178,7 +180,7 @@ SELECT
     LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219,166, 266,167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -235,6 +237,7 @@ SELECT
      AND r20_mesusu = $mesfolha
      AND r20_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r20_rubric=rh27_rubric
@@ -247,7 +250,7 @@ SELECT
     LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219,166, 266,167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -305,6 +308,7 @@ SELECT
      AND r35_mesusu = $mesfolha
      AND r35_instit = " . db_getsession("DB_instit") . "
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r35_rubric=rh27_rubric
@@ -317,7 +321,7 @@ SELECT
     LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219,166, 266,167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -393,15 +397,15 @@ END || ';'
    end    || ';' ||
 translate(trim(to_char(round(x.rh02_salari,2),'99999999.99')),'.',',') || ';' || 
 
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (118,1118) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (118,1118) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (118,1118,218,166, 266) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (118,1118,218,166, 266) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (119,1119) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,219,167, 267) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119,219,167, 267) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
 '0,00' || ';' ||
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (119,1119,118,1118) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then x.valor 
                    else 0 end ),2))::varchar),'.',',') 
 
 
@@ -445,7 +449,8 @@ AS dado  from
      AND r14_anousu = $anofolha
      AND r14_mesusu = $mesfolha
      AND r14_instit = ".db_getsession("DB_instit")."
-     LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes 
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r14_rubric=rh27_rubric
@@ -459,7 +464,7 @@ AS dado  from
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219,166, 266, 167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -520,6 +525,7 @@ SELECT
      AND r48_mesusu = $mesfolha
      AND r48_instit = ".db_getsession("DB_instit")."
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r48_rubric=rh27_rubric
@@ -533,7 +539,7 @@ SELECT
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266, 167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -594,6 +600,7 @@ SELECT
      AND r20_mesusu = $mesfolha
      AND r20_instit = ".db_getsession("DB_instit")."
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r20_rubric=rh27_rubric
@@ -607,7 +614,7 @@ SELECT
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266,167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -669,6 +676,7 @@ SELECT
      AND r35_mesusu = $mesfolha
      AND r35_instit = ".db_getsession("DB_instit")."
      LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+     AND rh56_princ = 't'
     LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
     INNER JOIN cgm ON z01_numcgm = rh01_numcgm
     LEFT JOIN rhrubricas ON r35_rubric=rh27_rubric
@@ -682,7 +690,7 @@ SELECT
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118) 
+    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266, 167, 267) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
