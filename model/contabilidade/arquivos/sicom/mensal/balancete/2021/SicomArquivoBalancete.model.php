@@ -1966,7 +1966,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                              */
                             if ($oContas10->nregobrig == 16) {
 
-                                $sHash16 = '16' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $oReg16Font->codfontrecursos;
+                                $sHash16 = '16' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro . $oReg16Font->codfontrecursos;
 
                                 if (!isset($aContasReg10[$reg10Hash]->reg16[$sHash16])) {
 
@@ -1975,8 +1975,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete16->si183_tiporegistro = 16;
                                     $obalancete16->si183_contacontabil = $oContas10->si177_contacontaabil;
                                     $obalancete16->si183_codfundo = $sCodFundo;
-                                    $obalancete16->si183_atributosf = $oContas10->identificadorfinanceiro;
-                                    $obalancete16->si183_codfontrecursos = ($oContas10->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
+                                    $obalancete16->si183_atributosf = $oReg16Saldo->identificadorfinanceiro;
+                                    $obalancete16->si183_codfontrecursos = ($oReg16Saldo->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
                                     $obalancete16->si183_saldoinicialfontsf = $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior;
                                     $obalancete16->si183_naturezasaldoinicialfontsf = $oReg16Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                     $obalancete16->si183_totaldebitosfontsf = $oReg16Saldo->debitos;

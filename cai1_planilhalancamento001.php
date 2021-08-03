@@ -673,7 +673,7 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
   $('k81_conta') .value = iCodigoConta;
   $('k13_descr') .value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
-  iCodRecursoConta      = $F('recurso');
+  iCodRecursoConta      = $F('c61_codigo').substr(-3);
 
   if( $('estrutural').value.substr(0,3) == '211' ) {
 
@@ -719,7 +719,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
   $('k81_conta').value = iCodigoConta;
   $('k13_descr').value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
-  iCodRecursoConta      = $F('c61_codigo');
+  iCodRecursoConta      = $F('c61_codigo').substr(-3);
 
   if ( $F('estrutural').substr(0,3) == '211' ) {
 
