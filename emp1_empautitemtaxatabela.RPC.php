@@ -356,14 +356,74 @@ switch ($_POST["action"]) {
   case "verificaSaldoCriterio":
 
     try {
-      $oRetorno->itens   = verificaSaldoCriterio($_POST['e55_autori']);
-      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
+      $oRetorno->itens   = verificaSaldoCriterioDisponivel($_POST['e55_autori'],$_POST['tabela']);
+//      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($_POST['e55_autori']);
     } catch (Exception $e) {
       $oRetorno->erro = $e->getMessage();
       $oRetorno->status   = 2;
     }
 
     break;
+}
+
+function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
+    $sqlTotal = "SELECT DISTINCT pc23_valor
+                    FROM liclicitem
+                    LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                    LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                    LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                    LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                    LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+                    LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+                    LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                    LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                    LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                    LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                    LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                    LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                    LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+                    LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+                    LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                    AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                    LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+                    LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                    LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                    LEFT JOIN pctabela ON pctabela.pc94_codmater = pcmater.pc01_codmater
+                    LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pcmater.pc01_codmater
+                    LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                    AND orcelemento.o56_anousu = 2021
+                    WHERE l20_codigo =
+                            (SELECT e54_codlicitacao
+                             FROM empautoriza
+                             WHERE e54_autori = $e55_autori)
+                          AND pc94_sequencial = $tabela";
+    $rsConsultaTotal = db_query($sqlTotal);
+
+    $oDadosTotal = db_utils::getCollectionByRecord($rsConsultaTotal);
+
+
+    $sqlUtilizado = "SELECT sum(e55_vltot) AS totalitens
+                        FROM empautitem
+                        INNER JOIN empautoriza ON e54_autori = e55_autori
+                        INNER JOIN pctabelaitem ON pctabelaitem.pc95_codmater = empautitem.e55_item
+                        INNER JOIN pctabela ON pctabela.pc94_sequencial = pctabelaitem.pc95_codtabela
+                        WHERE e54_codlicitacao =
+                                (SELECT e54_codlicitacao
+                                 FROM empautoriza
+                                 WHERE e54_autori = $e55_autori )
+                            AND pc94_sequencial = $tabela";
+    $rsConsultaUtilizado = db_query($sqlUtilizado);
+    $oDadosTotalUtilizado = db_utils::getCollectionByRecord($rsConsultaUtilizado);
+
+    $disponivel = $oDadosTotal[0]->pc23_valor - $oDadosTotalUtilizado[0]->totalitens;
+
+
+    $saldotabela = new stdClass();
+    $saldotabela->disponivel = $disponivel;
+    $saldotabela->utilizado  = $oDadosTotalUtilizado[0]->totalitens;
+    $saldotabela->total      = $oDadosTotal[0]->pc23_valor;
+
+    return $saldotabela;
 }
 
 function verificaSaldoCriterio($e55_autori)

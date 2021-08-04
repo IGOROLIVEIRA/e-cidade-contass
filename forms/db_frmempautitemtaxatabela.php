@@ -435,6 +435,7 @@ $clrotulo->label("pc01_descrmater");
         var params = {
             action: 'verificaSaldoCriterio',
             e55_autori: $('#e55_autori').val(),
+            tabela: $('#chave_tabela').val(),
             cgm: <?php echo $z01_numcgm ?>,
         };
 
@@ -445,8 +446,9 @@ $clrotulo->label("pc01_descrmater");
             success: function(data) {
 
                 let totitens = JSON.parse(data);
-                $('#utilizado').val(totitens.itens[0].utilizado);
-                $('#disponivel').val(totitens.itens[0].saldodisponivel);
+                console.log(totitens);
+                $('#utilizado').val(totitens.itens.utilizado);
+                $('#disponivel').val(totitens.itens.disponivel);
             }
         });
     }
