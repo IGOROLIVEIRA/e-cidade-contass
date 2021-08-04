@@ -41,6 +41,14 @@ $clrotulo->label("o57_descr");
 $clrotulo->label("o70_codigo");
 $clrotulo->label("o15_descr");
 ?>
+<style type="text/css">
+    #o01_descricao, #o15_descr, #c58_descr {
+        width: 412px;
+    }
+    #o57_descr {
+        width: 296px;
+    }
+</style>
 <form name="form1" method="post" action="">
 <center>
 <table>
@@ -177,6 +185,13 @@ $clrotulo->label("o15_descr");
         echo " <legend><b>Valores</b></legend>";
         echo " <table>";
 
+        $ano_final = 0;
+        foreach($aValores as $index => $oValor) {
+            if ($oValor->o06_anousu > $ano_final) {
+                $ano_final = $oValor->o06_anousu;
+            }
+        }
+
         foreach($aValores as $index => $oValor) {
 
             $oValor->o05_valor = round($oValor->o05_valor);
@@ -186,7 +201,10 @@ $clrotulo->label("o15_descr");
             echo "    <b>{$oValor->o06_anousu}:</b>";
             echo "  </td>";
             echo "  <td>";
-            echo "      <input value='{$oValor->o05_valor}' name='aValoresForm[$index][valor]' type='text' oninput=\"js_ValidaCampos(this,4,'Valor Estimado','f','f',event);\">";
+            echo "      <input value='{$oValor->o05_valor}' class='anovalor' id='{$oValor->o06_anousu}'";
+            echo "          name='aValoresForm[$index][valor]' type='text' ";
+            echo "          onblur='js_calculaValores({$oValor->o06_anousu}, {$ano_final}, this.value)'";
+            echo "          oninput=\"js_ValidaCampos(this,4,'Valor Estimado','f','f',event);\">";
             echo "      <input value='{$oValor->o05_sequencial}' name='aValoresForm[$index][sequencial]' type='hidden'>";
             echo "  </td>";
             echo "</tr>";
@@ -217,10 +235,10 @@ $clrotulo->label("o15_descr");
   </center>
   <?
   if ($db_opcao == 1) {
-    echo "<input name='pesquisar' type='button' id='btncadastrar' value='Cadastrar' onclick='js_cadastrarReceita();'>";
+    echo "<input name='pesquisar' type='button' id='btnsubmit' value='Cadastrar' onclick='js_cadastrarReceita();'>";
   } else {
 ?>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+<input id='btnsubmit' name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
        type="submit" id="db_opcao"
        value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
  <?
@@ -421,7 +439,7 @@ function js_calculaValores(iAno, iAnoFinal, nValor) {
 
   }
   js_divCarregando("Aguarde, Calculando Valores","msgBox");
-  $('btncadastrar').disabled = true;
+  $('btnsubmit').disabled = true;
   var oParam            = new Object();
   oParam.exec           = "calculaValorEstimativa";
   oParam.iCodCon        = $F('o06_codrec');
@@ -444,7 +462,7 @@ function js_calculaValores(iAno, iAnoFinal, nValor) {
 function js_retornoCalculo(oAjax) {
 
   js_removeObj("msgBox");
-  $('btncadastrar').disabled = false;
+  $('btnsubmit').disabled = false;
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1){
 
@@ -512,7 +530,7 @@ function js_cadastrarReceita() {
      }
    }
   js_divCarregando("Aguarde, Cadastrando Receitas","msgBox");
-  $('btncadastrar').disabled = true;
+  $('btnsubmit').disabled = true;
   var oAjax   = new Ajax.Request(
                          sUrlRPC,
                          {
@@ -528,7 +546,7 @@ function js_cadastrarReceita() {
 function js_retornoAdicaoReceita(oAjax) {
 
   js_removeObj("msgBox");
-  $('btncadastrar').disabled = false;
+  $('btnsubmit').disabled = false;
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
 
@@ -537,6 +555,9 @@ function js_retornoAdicaoReceita(oAjax) {
 
       $('o06_codrec').value    = "";
       $('o57_descr').value     = "";
+      $('o57_fonte').value     = "";
+      $('o15_codtri').value    = "";
+      $('o15_descr').value     = "";
       var aInputsValores = js_getElementbyClass(form1,"anovalor");
       for (var i = 0; i < aInputsValores.length; i++) {
          aInputsValores[i].value = "";

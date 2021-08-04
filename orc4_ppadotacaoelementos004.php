@@ -463,10 +463,7 @@ function js_retornoAdicaoDotacao(oAjax) {
       $('o56_descr').value             = "";
       $('o15_codigo').value            = "";
       $('o15_descr').value             = "";
-      $('o08_localizadorgastos').value = "";
-      $('o11_descricao').value         = "";
-      $('o08_concarpeculiar').value    = "";
-      $('c58_descr').value             = "";
+      $('o56_elemento').value             = "";      
       var aInputsValores = js_getElementbyClass(form1,"anovalor");
       for (var i = 0; i < aInputsValores.length; i++) {
          aInputsValores[i].value = "";    
