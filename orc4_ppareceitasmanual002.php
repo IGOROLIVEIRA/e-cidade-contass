@@ -39,25 +39,30 @@ $clppaestimativa        = new cl_ppaestimativa;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $clppaestimativareceita->alterar($o06_sequencial);
-  $clppaestimativa->alterar($o05_sequencial);
-  db_fim_transacao();
+
+    db_inicio_transacao();
+    $db_opcao = 2;
+    $clppaestimativareceita->alterar($o06_sequencial);
+
+    foreach($aValoresForm as $aValor) {
+
+        $clppaestimativa->o05_valor = $aValor['valor'];
+        $clppaestimativa->o05_sequencial = $aValor['sequencial'];
+        $clppaestimativa->alterar($aValor['sequencial']);
+
+    }
+
+    db_fim_transacao();
 } else if(isset($chavepesquisa)) {
   
    $db_opcao = 2;
    $result = $clppaestimativareceita->sql_record($clppaestimativareceita->sql_query_analitica($chavepesquisa)); 
    db_fieldsmemory($result,0);
-   $o05_valor = round($o05_valor);
+
    $oLei->o119_sequencial = $o05_ppaversao;
    $oLei->o01_sequencial  = $o119_ppalei;
    $db_botao = true;
-   /*
-   if ($o01_anoinicio - 1 != db_getsession("DB_anousu") && db_getsession("DB_anousu") < 2014) {
-   	$db_botao = false;
-   }
-   */
+
    $iAnoPcasp = db_getsession("DB_anousu");
    if (isset($_SESSION['DB_ano_pcasp']) && $_SESSION['DB_ano_pcasp'] > db_getsession("DB_anousu")) {
 
@@ -66,6 +71,14 @@ if(isset($alterar)){
    if ($o01_anoinicio - 1 != $iAnoPcasp ) {
      $db_botao = false;  
    }
+
+   //busca valores dos outros anos
+   $aValores = array();
+   $oDaoPpaEstimativa   = db_utils::getdao('ppaestimativareceita');
+   $sWhere              = "o06_codrec = $o06_codrec AND o06_ppaversao = $o06_ppaversao AND o05_base = '$o05_base'";
+   $sSqlPpaEstimativa   = $oDaoPpaEstimativa->sql_query_analitica(null, "o05_sequencial, o05_valor, o06_anousu", 'o06_anousu', $sWhere);
+   $rsPpaEstimativa     = $oDaoPpaEstimativa->sql_record($sSqlPpaEstimativa);
+   $aValores            = db_utils::getcollectionbyrecord($rsPpaEstimativa);
    
 }
 ?>
@@ -76,6 +89,7 @@ if(isset($alterar)){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
