@@ -194,6 +194,7 @@ class AutenticacaoBaixaBanco {
         $sSqlRec  .= " inner join conplanoorcamento on c60_codcon = c21_codcon " ;
         $sSqlRec  .= "   and c21_anousu = c60_anousu where c60_estrut = '".$oReceitaDeducao->getContaOrcamento()->getEstrutural() ."' " ;
         $sSqlRec  .= "   and c60_anousu = $this->iAnoUsu " ;
+        $sSqlRec  .= "   and c21_instit = ".db_getsession("DB_instit");
         $rsRec = db_query($sSqlRec);
 
         $oDadosRec = db_utils::fieldsMemory($rsRec, 0)->c21_congrupo;
