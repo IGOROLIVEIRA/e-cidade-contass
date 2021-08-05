@@ -134,15 +134,8 @@ $clrotulo->label('z01_nome');
     </td>
     <td colspan="3" nowrap>
       <?
-      $arr_codre = array(" " => "Selecione");
+      $arr_codre = array();
       $result_codre = $clmovcasadassefip->sql_record($clmovcasadassefip->sql_query(db_anofolha(),db_mesfolha(),$r45_codafa,null,"r67_reto"));
-      if($clmovcasadassefip->numrows == 0){
-        $result_codre = $clmovcasadassefip->sql_record($clmovcasadassefip->sql_query(db_anofolha(),db_mesfolha(),null,null,"r67_reto"));
-      }
-      for($i=0; $i<$clmovcasadassefip->numrows; $i++){
-        db_fieldsmemory($result_codre, $i);
-        $arr_codre[$r67_reto] = $r67_reto;
-      }
       db_select("r45_codret", $arr_codre, true, ($db_opcao==1?1:3), "");
       ?>
     </td>
