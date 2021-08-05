@@ -30,8 +30,10 @@ include("fpdf151/scpdf.php");
 include("libs/db_sql.php");
 include("classes/db_basesr_classe.php");
 include("classes/db_selecao_classe.php");
+include("classes/db_rhautonomolanc_classe.php");
 $clselecao = new cl_selecao();
 $clbasesr = new cl_basesr;
+$clrhautonomolanc = new cl_rhautonomolanc();
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 if ($tipo == 'd') {
@@ -81,81 +83,11 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
  $virg_nome   = ', '; 
 }
 
-//echo $descr_nome;exit;
-/*
-//$ano = 2005;
-//$mes = 7;
-//$previdencia = 2;
-$sql1 = "SELECT distinct r33_ppatro
-         FROM inssirf 
-   WHERE r33_anousu = $ano 
-	   and r33_mesusu = $mes
-	   and to_number(r33_codtab,'9')-2 in ($previdencia)
-	   and r33_codtab > 2
-	   and r33_instit = ".db_getsession("DB_instit")."
-	  ";
-//echo $sql1; exit;
-$res1 = db_query($sql1);
-
-
-
 $xbases    = " ('R992') ";
 $xdeducao  = " (".$sql_in.") ";
 $xrubricas = " ('R901','R902','R903','R904','R905','R906','R907','R908','R909','R910','R911','R912') ";
 $prev      = " and rh02_tbprev in ($previdencia) ";
 $devolucao = " ('')";
-
-if(pg_numrows($res1) > 1){
-   db_redireciona('db_erros.php?fechar=true&db_erro=As previdências escolhidas possuem percentuais patronais diferentes. Verifique!');
-}elseif(pg_numrows($res1) > 0){
-  db_fieldsmemory($res1,0);
-  $perc_patro = $r33_ppatro;
-}
-
-
-//echo $perc_patro;exit;
-*/
-/*
-if ( $previdencia == 1 ){
-  $prev      = " and rh02_tbprev = $previdencia ";
-  $xbases    = " ('R992') ";
-  $xrubricas = " ('R901','R902','R903') ";
-  $xdeducao  = " (".$sql_in.") ";
-  $devolucao = " ('0000')";
-  $cod_pagto = 2402;
-}elseif ( $previdencia == 2){
-  $prev      = " and rh02_tbprev = $previdencia ";
-  $xbases    = " ('R992') ";
-  $xdeducao  = " (".$sql_in.") ";
-  $xrubricas = " ('R904','R905','R906') ";
-  $devolucao = " ('0000') ";	
-  $cod_pagto = '';
-}elseif ( $previdencia == 3){
-  $prev      = " and rh02_tbprev = $previdencia ";
-  $xdeducao  = " (".$sql_in.") ";
-  $xbases    = " ('R992') ";
-  $xrubricas = " ('R907','R908','R909') ";
-  $devolucao = " ('')";
-  $cod_pagto = 2402;
-}elseif ( $previdencia == 4){
-  $prev      = " and rh02_tbprev = $previdencia ";
-  $xdeducao  = " (".$sql_in.") ";
-  $xbases    = " ('R992') ";
-  $xrubricas = " ('R910','R911','R912') ";
-  $devolucao = " ('')";
-  $cod_pagto = 2402;
-}
-
-//echo $xdeducao;
-*/
-
-
-$xbases    = " ('R992') ";
-$xdeducao  = " (".$sql_in.") ";
-$xrubricas = " ('R901','R902','R903','R904','R905','R906','R907','R908','R909','R910','R911','R912') ";
-$prev      = " and rh02_tbprev in ($previdencia) ";
-$devolucao = " ('')";
-
 
 $soma     = 0;
 $base     = 0;
@@ -163,8 +95,7 @@ $ded      = 0;
 $dev      = 0;
 $desco    = 0;
 $patronal = 0;
-
-
+$agentes_nocivos = 0;
 
 for($inome=0;$inome<pg_numrows($res_nome);$inome++){
     db_fieldsmemory($res_nome,$inome);
@@ -177,7 +108,8 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            round(sum(dev),2)                  as dev1,
            round(sum(desco),2)                as desco1,
            round(sum(parcela_patronal),2)     as patronal1,
-           round(sum(campoextra),2) AS campoextra1
+           round(sum(campoextra),2) AS campoextra1,
+           round(sum(agentes_nocivos),2) AS agentes_nocivos1
     from 
     (
     select r01_regist                           as soma,
@@ -186,7 +118,8 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            sum(dev)                             as dev,
            sum(desco)                           as desco,
            sum(base)/100*$r33_ppatro   as parcela_patronal,
-           sum(base)/100* ".$campoextra." AS campoextra
+           sum(base)/100* ".$campoextra." AS campoextra,
+           sum(nocivo) AS agentes_nocivos
     from 
     (
     select 
@@ -197,7 +130,11 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            sum(case when r14_rubric in ".$xrubricas." then r14_valor else 0 end) as desco,
            sum(case when r14_rubric in ".$xdeducao." then r14_valor else 0 end) as ded ,
            sum(case when r14_rubric in ".$devolucao." then r14_valor else 0 end) as dev ,
-           sum(case when r14_rubric in ".$xbases."    then r14_valor else 0 end) as base
+           sum(case when r14_rubric in ".$xbases."    then r14_valor else 0 end) as base,
+           sum(case when r14_rubric = 'R992' and rh02_ocorre IN ('02','06') then r14_valor*12/100
+                    when r14_rubric = 'R992' and rh02_ocorre IN ('03','07') then r14_valor*9/100 
+                    when r14_rubric = 'R992' and rh02_ocorre IN ('04','08') then r14_valor*6/100 
+           else 0 end) as nocivo
     from gerfsal 
          inner join rhpessoalmov on rh02_anousu = r14_anousu 
                                 and rh02_mesusu = r14_mesusu 
@@ -236,7 +173,11 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            sum(case when r48_rubric in ".$xrubricas." then r48_valor else 0 end) as desco,
            sum(case when r48_rubric in ".$xdeducao."  then r48_valor else 0 end) as ded ,
            sum(case when r48_rubric in ".$devolucao." then r48_valor else 0 end) as dev ,
-           sum(case when r48_rubric in ".$xbases."    then r48_valor else 0 end) as base
+           sum(case when r48_rubric in ".$xbases."    then r48_valor else 0 end) as base,
+           sum(case when r48_rubric = 'R992' and rh02_ocorre IN ('02','06') then r48_valor*12/100
+                    when r48_rubric = 'R992' and rh02_ocorre IN ('03','07') then r48_valor*9/100 
+                    when r48_rubric = 'R992' and rh02_ocorre IN ('04','08') then r48_valor*6/100 
+           else 0 end) as nocivo
     from gerfcom
          inner join rhpessoalmov on rh02_anousu = r48_anousu 
                                 and rh02_mesusu = r48_mesusu 
@@ -275,7 +216,11 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            sum(case when r20_rubric in ".$xrubricas." then r20_valor else 0 end) as desco,
            sum(case when r20_rubric in ".$xdeducao."  then r20_valor else 0 end) as ded ,
            sum(case when r20_rubric in ".$devolucao." then r20_valor else 0 end) as dev ,
-           sum(case when r20_rubric in ".$xbases."    then r20_valor else 0 end) as base
+           sum(case when r20_rubric in ".$xbases."    then r20_valor else 0 end) as base,
+           sum(case when r20_rubric = 'R992' and rh02_ocorre IN ('02','06') then r20_valor*12/100
+                    when r20_rubric = 'R992' and rh02_ocorre IN ('03','07') then r20_valor*9/100 
+                    when r20_rubric = 'R992' and rh02_ocorre IN ('04','08') then r20_valor*6/100 
+           else 0 end) as nocivo
     from gerfres
          inner join rhpessoalmov on rh02_anousu = r20_anousu 
                                 and rh02_mesusu = r20_mesusu 
@@ -298,7 +243,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
          or r20_rubric in ".$xdeducao." 
          or r20_rubric in ".$devolucao." 
          or r20_rubric in ".$xbases.")
-      and rh25_anousu = $ano       
+      and rh25_anousu = $ano   
       group by 
            rh01_regist,
            z01_nome,
@@ -319,7 +264,8 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            round(sum(dev),2)                  as dev1,
            round(sum(desco),2)                as desco1,
            round(sum(parcela_patronal),2)     as patronal1,
-           round(sum(campoextra),2) AS campoextra1
+           round(sum(campoextra),2) AS campoextra1,
+           round(sum(agentes_nocivos),2) AS agentes_nocivos1
     from 
     (
     select r01_regist                           as soma,
@@ -328,7 +274,8 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            sum(dev)                             as dev,
            sum(desco)                           as desco,
            sum(base)/100*$r33_ppatro   as parcela_patronal,
-           sum(base)/100* ".$campoextra." AS campoextra
+           sum(base)/100* ".$campoextra." AS campoextra,
+           sum(nocivo) AS agentes_nocivos
     from 
     (
     select 
@@ -339,7 +286,11 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            sum(case when r35_rubric in ".$xrubricas." then r35_valor else 0 end) as desco,
            sum(case when r35_rubric in ".$xdeducao." then r35_valor else 0 end) as ded ,
            sum(case when r35_rubric in ".$devolucao." then r35_valor else 0 end) as dev ,
-           sum(case when r35_rubric in ".$xbases."    then r35_valor else 0 end) as base
+           sum(case when r35_rubric in ".$xbases."    then r35_valor else 0 end) as base,
+           sum(case when r35_rubric = 'R992' and rh02_ocorre IN ('02','06') then r35_valor*12/100
+                    when r35_rubric = 'R992' and rh02_ocorre IN ('03','07') then r35_valor*9/100 
+                    when r35_rubric = 'R992' and rh02_ocorre IN ('04','08') then r35_valor*6/100 
+           else 0 end) as nocivo
     from gerfs13
          inner join rhpessoalmov on rh02_anousu = r35_anousu 
                                 and rh02_mesusu = r35_mesusu 
@@ -392,8 +343,12 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
     $desco    += $desco1;
     $patronal += $patronal1;
     $cmpextra += $campoextra1;
+    $agentes_nocivos += $agentes_nocivos1;
 }
 //echo $sql ; exit;
+
+$sql = $clrhautonomolanc->sql_query_file(null, "sum((rh89_valorserv*20/100)+rh89_valorretinss) as terceiros",null,"(rh89_anousu,rh89_mesusu) = ({$ano},{$mes})");
+$rsTerceiros = $clrhautonomolanc->sql_record($sql);
 
 global $pdf;
 $pdf = new scpdf();
@@ -419,13 +374,12 @@ $pdf1->desconto         = $desco - $dev;
 $pdf1->patronal         = $patronal;
 $pdf1->campoextra       = $cmpextra;
 $pdf1->cod_pagto        = $cod_pagto;
-$pdf1->terceiros        = 0;
+$pdf1->terceiros        = round(db_utils::fieldsMemory($rsTerceiros, 0)->terceiros, 2);
+$pdf1->agentes_nocivos  = $agentes_nocivos;
 $pdf1->atu_monetaria    = 0;
 $pdf1->juros            = 0;
 $pdf1->previdencia      = strtoupper($tipo == 's'?$descr_nome:$descr_nome.' S/ 13º');
-$pdf1->imprime();
-//$pdf1->mensagem         = $msg;
- 
+$pdf1->imprime(); 
 
 $pdf1->objpdf->output();
    
