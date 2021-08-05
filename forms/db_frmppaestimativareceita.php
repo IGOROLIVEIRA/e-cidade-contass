@@ -36,7 +36,19 @@ $clrotulo->label("o57_codfon");
 $clrotulo->label("o01_descricao");
 $clrotulo->label("o01_sequencial");
 $clrotulo->label("o05_valor");
+$clrotulo->label("o57_fonte");
+$clrotulo->label("o57_descr");
+$clrotulo->label("o70_codigo");
+$clrotulo->label("o15_descr");
 ?>
+<style type="text/css">
+    #o01_descricao, #o15_descr, #c58_descr {
+        width: 412px;
+    }
+    #o57_descr {
+        width: 296px;
+    }
+</style>
 <form name="form1" method="post" action="">
 <center>
 <table>
@@ -117,8 +129,20 @@ $clrotulo->label("o05_valor");
     <td>
    <?
     db_input('o06_codrec',10,$Io06_codrec,true,'text',$db_opcao," onchange='js_pesquisao06_codrec(false);'");
+    db_input('o57_fonte',14,$Io57_fonte,true,'text',$db_opcao," onchange='js_pesquisaoo57_fonte();'");
     db_input('o57_descr',40,$Io57_codfon,true,'text',3,'');
     ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap >
+        <?=@$Lo70_codigo?>
+    </td>
+    <td>
+        <?
+        db_input('o15_codtri',10,$Io70_codigo,true,'text',3);
+        db_input('o15_descr',30,$Io15_descr,true,'text',3);
+        ?>
     </td>
   </tr>
   <tr>
@@ -127,45 +151,82 @@ $clrotulo->label("o05_valor");
     ?></td>
     <td>
     <?
-      db_input("o06_concarpeculiar",10,$Io06_concarpeculiar,true,"text",$db_opcao,"onChange='js_pesquisae54_concarpeculiar(false);'");
-      db_input("c58_descr",50,0,true,"text",3);
+        $o06_concarpeculiar = '000';
+        $c58_descr = 'NÃO SE APLICA';
+        db_input("o06_concarpeculiar",10,$Io06_concarpeculiar,true,"text",$db_opcao,"onChange='js_pesquisae54_concarpeculiar(false);'");
+        db_input("c58_descr",50,0,true,"text",3);
     ?>
     </td>
   </tr>
-  <?
-   if (isset($oLei) && $db_opcao == 1 ) {
-     echo "<tr><td colspan='3'> <fieldset>";
-     echo " <legend><b>Valores</b></legend>";
-     echo " <table>";
-     for ($i = $oLei->o01_anoinicio; $i <= $oLei->o01_anofinal; $i++) {
+    <?
+    if (isset($oLei) && $db_opcao == 1 ) {
+        echo "<tr><td colspan='3'> <fieldset>";
+        echo " <legend><b>Valores</b></legend>";
+        echo " <table>";
+        for ($i = $oLei->o01_anoinicio; $i <= $oLei->o01_anofinal; $i++) {
 
-       echo "<tr>";
-       echo "  <td>";
-       echo "     <b>{$i}:</b>";
-       echo "  </td>";
-       echo "  <td>";
-       echo "    <input type='text' class='anovalor' ";
-       echo "           name='valor{$i}' onblur='js_calculaValores({$i}, {$oLei->o01_anofinal}, this.value)' ";
-       echo "           size='10' id='{$i}'>";
-       echo "  </td>";
-       echo "</tr>";
+            echo "<tr>";
+            echo "  <td>";
+            echo "     <b>{$i}:</b>";
+            echo "  </td>";
+            echo "  <td>";
+            echo "    <input type='text' class='anovalor' ";
+            echo "           name='valor{$i}' onblur='js_calculaValores({$i}, {$oLei->o01_anofinal}, this.value)' ";
+            echo "           size='10' id='{$i}'>";
+            echo "  </td>";
+            echo "</tr>";
 
-     }
-     echo "</table>";
-    echo "</fieldset>";
-   } else if ($db_opcao == 2 || $db_opcao == 22 || $db_opcao == 3) {
+        }
+        echo "</table>";
+        echo "</fieldset>";
+    } else if ($db_opcao == 2 || $db_opcao == 22) {
 
-     echo "<tr>";
-     echo "  <td>";
-     echo "    <b>Valor</b>";
-     echo "  </td>";
-     echo "  <td>";
-     db_input('o05_valor',10,$Io05_valor,true,'text',$db_opcao,"");
-     db_input('o05_sequencial',10,"",true,'hidden',3);
-     echo "  </td>";
-     echo "</tr>";
+        echo "<tr><td colspan='3'> <fieldset>";
+        echo " <legend><b>Valores</b></legend>";
+        echo " <table>";
 
-   }
+        $ano_final = 0;
+        foreach($aValores as $index => $oValor) {
+            if ($oValor->o06_anousu > $ano_final) {
+                $ano_final = $oValor->o06_anousu;
+            }
+        }
+
+        foreach($aValores as $index => $oValor) {
+
+            $oValor->o05_valor = round($oValor->o05_valor);
+
+            echo "<tr>";
+            echo "  <td>";
+            echo "    <b>{$oValor->o06_anousu}:</b>";
+            echo "  </td>";
+            echo "  <td>";
+            echo "      <input value='{$oValor->o05_valor}' class='anovalor' id='{$oValor->o06_anousu}'";
+            echo "          name='aValoresForm[$index][valor]' type='text' ";
+            echo "          onblur='js_calculaValores({$oValor->o06_anousu}, {$ano_final}, this.value)'";
+            echo "          oninput=\"js_ValidaCampos(this,4,'Valor Estimado','f','f',event);\">";
+            echo "      <input value='{$oValor->o05_sequencial}' name='aValoresForm[$index][sequencial]' type='hidden'>";
+            echo "  </td>";
+            echo "</tr>";
+
+        }
+
+        echo "</table>";
+        echo "</fieldset>";
+
+    } else if ($db_opcao == 3) {
+        
+        echo "<tr>";
+        echo "  <td>";
+        echo "    <b>Valor</b>";
+        echo "  </td>";
+        echo "  <td>";
+        db_input('o05_valor',10,$Io05_valor,true,'text',$db_opcao,"");
+        db_input('o05_sequencial',10,"",true,'hidden',3);
+        echo "  </td>";
+        echo "</tr>";
+
+    }
    ?>
    </tr>
   </table>
@@ -174,10 +235,10 @@ $clrotulo->label("o05_valor");
   </center>
   <?
   if ($db_opcao == 1) {
-    echo "<input name='pesquisar' type='button' id='btncadastrar' value='Cadastrar' onclick='js_cadastrarReceita();'>";
+    echo "<input name='pesquisar' type='button' id='btnsubmit' value='Cadastrar' onclick='js_cadastrarReceita();'>";
   } else {
 ?>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+<input id='btnsubmit' name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
        type="submit" id="db_opcao"
        value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
  <?
@@ -190,28 +251,98 @@ $clrotulo->label("o05_valor");
 sUrlRPC    = 'orc4_ppaRPC.php';
 function js_pesquisao06_codrec(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontesreceita.php?funcao_js=parent.js_mostraorcfontes1|o57_codfon|o57_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_codfon|o57_descr|o57_fonte|c61_codigo|o15_descr','Pesquisa',true);
   }else{
      if(document.form1.o06_codrec.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes',
                             'func_orcfontes.php?lPesquisaCodigo=true&pesquisa_chave='+document.form1.o06_codrec.value+
-                            '&funcao_js=parent.js_mostraorcfontes','Pesquisa',false);
+                            '&funcao_js=parent.js_mostraorcfontes&lBuscaFonte=true','Pesquisa',false);
      }else{
        document.form1.o57_descr.value = '';
+       document.form1.o57_fonte.value = '';
      }
   }
 }
-function js_mostraorcfontes(chave,erro){
-  document.form1.o57_descr.value = chave;
-  if(erro==true){
-    document.form1.o06_codrec.focus();
-    document.form1.o06_codrec.value = '';
-  }
+
+function js_pesquisaoo57_fonte() {
+
+    if(document.form1.o57_fonte.value != '') {
+        js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes',
+                            'func_orcfontes.php?lPesquisaCodigo=true&pesquisa_chave='+document.form1.o57_fonte.value+
+                            '&funcao_js=parent.js_mostraorcfontes&lBuscaFonte=true&lPesquisaEstrut=true','Pesquisa',false);
+    } else {
+        document.form1.o06_codrec.value = '';
+        document.form1.o57_descr.value  = '';
+    }
 }
-function js_mostraorcfontes1(chave1,chave2){
-  document.form1.o06_codrec.value = chave1;
-  document.form1.o57_descr.value = chave2;
+
+function js_validaEstrutural() {
+    
+    if ($F('o57_fonte') != "") {
+
+        js_divCarregando("Aguarde, Validando estrutural.","msgBox");
+        
+        var oParam          = new Object();
+        oParam.sEstrutural  = $F('o57_fonte');  
+        oParam.exec         = "validaEstrutural";
+        var oAjax = new Ajax.Request(
+                            sUrlRPC,
+                            {
+                                method    : 'post',
+                                parameters: 'json='+js_objectToJson(oParam),
+                                onComplete: js_retornoValidaEstrutural
+                            }
+                        );
+    }
+}
+
+function js_retornoValidaEstrutural(oAjax) {
+
+    js_removeObj("msgBox");
+
+    var oRetorno = eval("("+oAjax.responseText+")");
+    
+    if (oRetorno.status == 2) {
+        
+        alert(oRetorno.message.urlDecode());
+        document.form1.o06_codrec.value = '';
+        document.form1.o57_fonte.value  = '';
+        document.form1.o57_descr.value  = '';
+        
+        js_OpenJanelaIframe('top.corpo',
+                            'db_iframe_orcfontes',
+                            'func_orcfontes.php?chave_o57_fonte='+oRetorno.sEstrutural+'&funcao_js=parent.js_mostraorcfontes1|o57_codfon|o57_descr|o57_fonte|c61_codigo|o15_descr',
+                            'Pesquisa',true);
+
+    }
+    
+}
+function js_mostraorcfontes(sDescr, erro, iCodFon, sEstrut, iFonte, sDescrFonte){
+    
+    document.form1.o06_codrec.value = iCodFon;
+    document.form1.o57_descr.value    = sDescr;
+    document.form1.o57_fonte.value    = sEstrut;
+    document.form1.o15_codtri.value   = iFonte;
+    document.form1.o15_descr.value    = sDescrFonte;
+  
+    if(erro==true){
+        document.form1.o06_codrec.focus();
+        document.form1.o06_codrec.value = '';
+        document.form1.o57_fonte.value  = '';
+        document.form1.o15_codtri.value = '';
+        document.form1.o15_descr.value  = '';
+    }
+    
+    js_validaEstrutural();
+}
+function js_mostraorcfontes1(iCodFon, sDescr, sEstrut, iFonte, sDescrFonte){
+  document.form1.o06_codrec.value   = iCodFon;
+  document.form1.o57_descr.value    = sDescr;
+  document.form1.o57_fonte.value    = sEstrut;
+  document.form1.o15_codtri.value   = iFonte;
+  document.form1.o15_descr.value    = sDescrFonte;
   db_iframe_orcfontes.hide();
+  js_validaEstrutural();
 }
 function js_pesquisa(){
   js_OpenJanelaIframe('top.corpo','db_iframe_ppaestimativareceita','func_ppaestimativareceita.php?lEstimativa=true&funcao_js=parent.js_preenchepesquisa|o06_sequencial','Pesquisa',true);
@@ -308,7 +439,7 @@ function js_calculaValores(iAno, iAnoFinal, nValor) {
 
   }
   js_divCarregando("Aguarde, Calculando Valores","msgBox");
-  $('btncadastrar').disabled = true;
+  $('btnsubmit').disabled = true;
   var oParam            = new Object();
   oParam.exec           = "calculaValorEstimativa";
   oParam.iCodCon        = $F('o06_codrec');
@@ -331,7 +462,7 @@ function js_calculaValores(iAno, iAnoFinal, nValor) {
 function js_retornoCalculo(oAjax) {
 
   js_removeObj("msgBox");
-  $('btncadastrar').disabled = false;
+  $('btnsubmit').disabled = false;
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1){
 
@@ -399,7 +530,7 @@ function js_cadastrarReceita() {
      }
    }
   js_divCarregando("Aguarde, Cadastrando Receitas","msgBox");
-  $('btncadastrar').disabled = true;
+  $('btnsubmit').disabled = true;
   var oAjax   = new Ajax.Request(
                          sUrlRPC,
                          {
@@ -415,7 +546,7 @@ function js_cadastrarReceita() {
 function js_retornoAdicaoReceita(oAjax) {
 
   js_removeObj("msgBox");
-  $('btncadastrar').disabled = false;
+  $('btnsubmit').disabled = false;
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
 
@@ -424,6 +555,9 @@ function js_retornoAdicaoReceita(oAjax) {
 
       $('o06_codrec').value    = "";
       $('o57_descr').value     = "";
+      $('o57_fonte').value     = "";
+      $('o15_codtri').value    = "";
+      $('o15_descr').value     = "";
       var aInputsValores = js_getElementbyClass(form1,"anovalor");
       for (var i = 0; i < aInputsValores.length; i++) {
          aInputsValores[i].value = "";
