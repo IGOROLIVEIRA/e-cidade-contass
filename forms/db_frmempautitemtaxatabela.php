@@ -229,7 +229,7 @@ $clrotulo->label("pc01_descrmater");
         let rsDisponivel;
         rsDisponivel = Number($('#disponivel').val()) - Number($('#utilizado').val());
 
-        if (rsDisponivel < Number($('#totalad').val())) {
+        if (Number($('#totalad').val()) > Number($('#disponivel').val())) {
             alert("Não há valor disponível");
             return false;
         }
