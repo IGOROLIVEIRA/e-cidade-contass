@@ -88,27 +88,18 @@ $clrotulo->label("pc01_descrmater");
                     </td>
                     <td>
                         <?
-                        db_select('chave_tabela', $aTabFonec, true, $db_opcao, " onchange='js_mudaTabela(false)' style='width:452;' ");
+                        db_select('chave_tabela', $aTabFonec, true, $db_opcao, " onchange='mostrarElemento();' style='width:452;' ");
                         ?>
                     </td>
                 </tr>
 
-                <tr style="height: 20px;">
+                <tr id = "trelemento" style="height: 20px; display: none">
                     <td nowrap title="">
                         <b>Ele. item</b>
                     </td>
                     <td>
-                        <?
-                        if (pg_numrows($result) == 0) {
-                            db_selectrecord("pc07_codele", $result_elemento, true, $db_opcao, '', '', '', '...', "js_troca();");
-                        } else {
-                            $result_elemento = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen, 'e55_codele as pc07_codele, o56_descr, o56_elemento'));
-                            db_fieldsmemory($result_elemento, 0);
-                            db_input('pc07_codele', 5, 0, true, 'text', 3);
-                            db_input('o56_descr', 50, 0, true, 'text', 3);
-                            db_input('o56_elemento', 50, 0, true, 'hidden', 3);
-                        }
-                        ?>
+                        <select id="pc07_codele" onchange="js_troca();">
+                        </select>
                     </td>
                 </tr>
 
@@ -149,12 +140,12 @@ $clrotulo->label("pc01_descrmater");
         </div>
         <br />
         <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
-        <input name="salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
-        <input name="excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
+        <input name="Salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
+        <input name="Excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
     </center>
 </form>
 <script>
-    js_troca();
+    // js_troca();
 
     function js_loadTable() {
 
@@ -451,6 +442,48 @@ $clrotulo->label("pc01_descrmater");
                 $('#disponivel').val(totitens.itens.disponivel);
             }
         });
+    }
+
+    function mostrarElemento() {
+
+        let select = $('#pc07_codele');
+        select.html('');
+
+        // Cria option "default"
+        let defaultOpt = document.createElement('option');
+        defaultOpt.textContent = 'Selecione uma opção';
+        select.append(defaultOpt);
+
+        //Busco Elementos de acordo com a tabela
+        let params = {
+            action: 'getElementosTabela',
+            e55_autori: $('#e55_autori').val(),
+            tabela: $('#chave_tabela').val(),
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "emp1_empautitemtaxatabela.RPC.php",
+            data: params,
+            success: function(data) {
+
+                let elementos = JSON.parse(data);
+
+                elementos.elementos.forEach(function (oElementos, ele) {
+                        let option = document.createElement('option');
+                        option.value = oElementos.pc07_codele;
+                        option.text = oElementos.o56_descr;
+                        select.append(option);
+                })
+            }
+        });
+
+        // Libera a Selecao do Elemento
+        let tabela = $('#chave_tabela').val();
+
+        if(tabela != ""){
+            $('#trelemento').show();
+        }
     }
 
     function consultaLancar() {

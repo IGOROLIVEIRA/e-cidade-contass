@@ -189,17 +189,10 @@ switch ($_POST["action"]) {
     WHERE fornecedores.z01_numcgm = $cgm
     ";
 
-    // if (!empty($_POST["order"])) {
-    //   $sqlQuery .= 'ORDER BY ' . $_POST['order']['0']['column'] . ' ' . $_POST['order']['0']['dir'] . ' ';
-    // } else {
-    //   $sqlQuery .= 'ORDER BY id DESC ';
-    // }
-
     if ($_POST["length"] != -1) {
       $sqlQuery .= 'LIMIT ' . $_POST['length'];
     }
-    // echo $sqlQuery;
-    // exit;
+
     $rsDadosTotal = $oDaoSysArqCamp->sql_record($sqlQueryTotal);
     $rsDados      = $oDaoSysArqCamp->sql_record($sqlQuery);
 
@@ -271,6 +264,26 @@ switch ($_POST["action"]) {
         "data"  =>   $employeeData
       );
     }
+    break;
+
+  case 'getElementosTabela':
+
+        $autori = $_POST["e55_autori"];
+        $tabela = $_POST["tabela"];
+        $codele = $_POST["codele"];
+        $iAnoSessao         = db_getsession('DB_anousu');
+
+        $sqlElementosTabela = "select distinct pc07_codele,o56_descr from pctabela 
+        inner join pctabelaitem on pc95_codtabela = pc94_sequencial
+        inner join pcmaterele on pc07_codmater = pc95_codmater
+        LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+        AND orcelemento.o56_anousu = $iAnoSessao
+        where pc94_sequencial = $tabela";
+      $rsEleTabela = db_query($sqlElementosTabela);
+
+      $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
+      $oRetorno->elementos = $oElementos;
+
     break;
 
   case 'salvar':
