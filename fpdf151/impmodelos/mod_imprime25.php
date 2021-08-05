@@ -117,7 +117,7 @@ for ($i = 0; $i < 2; $i++) {
     $this->objpdf->rect($xcol + 150, $xlin + 22, 50, $alt);
 
     $this->objpdf->Setfont('Arial', '', 8);
-    $this->objpdf->text($xcol + 116, $xlin + 33.5, '13 - TERCEIROS');
+    $this->objpdf->text($xcol + 116, $xlin + 33.5, '13 - AUTÔNOMOS');
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->text($xcol + 155, $xlin + 33.5, 'R$' . db_formatar($this->terceiros, 'f'));
     $this->objpdf->rect($xcol + 115, $xlin + 29, 35, $alt);
