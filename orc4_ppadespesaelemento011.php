@@ -40,8 +40,16 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_ppaestimativa_classe.php");
 require_once("libs/db_liborcamento.php");
+require_once("classes/db_orcorgao_classe.php");
+require_once("classes/db_orcfuncao_classe.php");
+require_once("classes/db_orctiporec_classe.php");
+require_once("classes/db_orcunidade_classe.php");
 
 $clppaestimativa = new cl_ppaestimativa();
+$clorcorgao      = new cl_orcorgao();
+$clorcfuncao     = new cl_orcfuncao();
+$clorctiporec    = new cl_orctiporec();
+$clorcunidade    = new cl_orcunidade();
 $oPost           = db_utils::postMemory($_POST);
 $clppaestimativa->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -50,6 +58,10 @@ $clrotulo->label("o01_anoinicio");
 $clrotulo->label("o01_anofinal");
 $clrotulo->label("o01_sequencial");
 $clrotulo->label("o01_numerolei");
+$clrotulo->label("o40_orgao");
+$clrotulo->label("o52_funcao");
+$clrotulo->label("o15_codigo");
+$clrotulo->label("o41_unidade");
 $db_opcao = 1;
 $lProcessaManual = false;
 if (isset($oPost->o05_ppalei) && $oPost->o05_ppalei != "") {
@@ -91,91 +103,126 @@ db_app::load("prototype.js");
 db_app::load("strings.js");
 ?>
 <script language="JavaScript" type="text/javascript" src="scripts/ppaUserInterface.js"></script>
+<style type="text/css">
+    #o40_orgao, #o52_funcao, #o41_unidade {
+        width: 55px;
+    }
+    #o40_orgaodescr, #o52_funcaodescr, #o15_codigodescr, #o41_unidadedescr {
+        width: 440px;
+    }
+    #o01_descricao {
+        width: 410px;
+    }
+    #o01_anoinicio, #o01_anofinal, #o01_numerolei {
+        width: 112px;
+    }
+</style>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-  <center>
-  <form name='form1' method='post'>
-  <table>
-    <tr>
-      <td>
-        <fieldset>
-          <legend>
-            <b>PPA Por Elemento</b>
-          </legend>
-          <table>
-            <td nowrap title="<?=@$To05_ppalei?>">
-                <?
-                db_ancora("<b>Lei do PPA</b>","js_pesquisao05_ppalei(true);",$db_opcao);
-                ?>
-              </td>
-              <td>
-                <?
-                db_input('o05_ppalei',10,$Io01_sequencial,true,'text',$db_opcao," onchange='js_pesquisao05_ppalei(false);'")
-                ?>
-                <?
-                db_input('o01_descricao',40,$Io01_descricao,true,'text',3,'')
-                ?>
-              </td>
-            </tr>
-            <tr>
-              <td nowrap title="<?=@$To05_ppaversao?>">
-                <b>Versão:</b>
-              </td>
-              <td id='verppa'>
-
-              </td>
-            </tr>
-              <tr>
-                <td nowrap title="<?=@$To01_anoinicio?>">
-                 <?=@$Lo01_anoinicio?>
-                </td>
-                <td>
-                <?
-                  db_input('o01_anoinicio',10,$Io01_anoinicio,true,'text',3,"")
-                ?>
-               </td>
-            </tr>
-            <tr>
-              <td nowrap title="<?=@$To01_anofinal?>">
-                <?=@$Lo01_anofinal?>
-              </td>
-              <td>
-                <?
-                  db_input('o01_anofinal',10,$Io01_anofinal,true,'text',3,"")
-                ?>
-              </td>
-            </tr>
-            <tr>
-              <td nowrap title="<?=@$To01_numerolei?>">
-                 <?=@$Lo01_numerolei?>
-              </td>
-              <td>
-                <?
-                  db_input('o01_numerolei',10,$Io01_numerolei,true,'text',3,"")
-                ?>
-              </td>
-            </tr>
-            <tr>
-               <td>&nbsp;</td>
-               <td >
-                 <? db_selinstit('',300,100);
-                  db_input('filtra_despesa', 10,'',true, 'hidden', 3);
-                 ?>
-              </td>
-            </tr>
-          </table>
-        </fieldset>
-      </td>
-    </tr>
-    <tr>
-      <td colspan='2' align="center">
-        <input name="imprime" type="button" id="imprime" value="Imprime"
-               onclick='js_imprimeRelatorio()'>
-      </td>
-    </tr>
-  </table>
-  </form>
-  </center>
+<center>
+<form name='form1' method='post'>
+    <table>
+        <tr>
+            <td>
+                <fieldset>
+                <legend>
+                    <b>PPA Por Elemento</b>
+                </legend>
+                <table>
+                    <td nowrap title="<?=@$To05_ppalei?>">
+                        <? db_ancora("<b>Lei do PPA</b>","js_pesquisao05_ppalei(true);",$db_opcao); ?>
+                    </td>
+                    <td colspan="2">
+                        <? db_input('o05_ppalei',10,$Io01_sequencial,true,'text',$db_opcao," onchange='js_pesquisao05_ppalei(false);'") ?>
+                        <? db_input('o01_descricao',40,$Io01_descricao,true,'text',3,'') ?>
+                    </td>
+                    <tr>
+                        <td nowrap title="<?=@$To05_ppaversao?>">
+                            <b>Versão:</b>
+                        </td>
+                        <td id='verppa' colspan="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap title="<?=@$To01_anoinicio?>">
+                            <?=@$Lo01_anoinicio?>
+                        </td>
+                        <td>
+                            <? db_input('o01_anoinicio',10,$Io01_anoinicio,true,'text',3,"") ?>
+                            <?=@$Lo01_anofinal?>
+                            <? db_input('o01_anofinal',10,$Io01_anofinal,true,'text',3,"") ?>
+                        </td>
+                        <td nowrap title="<?=@$To01_numerolei?>">
+                            <?=@$Lo01_numerolei?>
+                            <? db_input('o01_numerolei',10,$Io01_numerolei,true,'text',3,"") ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap title="<?=@$To40_orgao?>">
+                            <?=@$Lo40_orgao?>
+                        </td>
+                        <td colspan="2">
+                            <? 
+                            $sWhere = "o40_instit = ".db_getsession("DB_instit")." and o40_anousu = ".db_getsession("DB_anousu");
+                            $rsOrgao = $clorcorgao->sql_record($clorcorgao->sql_query(null,null,"o40_orgao, o40_descr", "o40_orgao", $sWhere));
+                            db_selectrecord("o40_orgao",$rsOrgao,true,1,"","","","0");                    
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap title="<?=@$To52_funcao?>">
+                            <?=@$Lo52_funcao?>
+                        </td>
+                        <td colspan="2">
+                            <? 
+                            $rsFuncao = $clorcfuncao->sql_record($clorcfuncao->sql_query(null,"o52_funcao, o52_descr", null, ""));
+                            db_selectrecord("o52_funcao",$rsFuncao,true,1,"","","","0");                    
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap title="<?=@$To41_unidade?>">
+                            <?=@$Lo41_unidade?>
+                        </td>
+                        <td colspan="2">
+                            <? 
+                            $sWhere = "o41_instit = ".db_getsession("DB_instit")." and o41_anousu = ".db_getsession("DB_anousu");
+                            $rsUnidade = $clorcunidade->sql_record($clorcunidade->sql_query(null,null,null,"o41_unidade, o41_descr", "o41_unidade", $sWhere));
+                            db_selectrecord("o41_unidade",$rsUnidade,true,1,"","","","0");                    
+                            ?>
+                        </td>
+                    </tr>      
+                    <tr>
+                        <td nowrap title="<?=@$To15_codigo?>">
+                            <?=@$Lo15_codigo?>
+                        </td>
+                        <td colspan="2">
+                            <? 
+                            $sWhere = " o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."'";
+                            $rsRecurso = $clorctiporec->sql_record($clorctiporec->sql_query(null,"o15_codigo, o15_descr", "o15_codigo", $sWhere));
+                            db_selectrecord("o15_codigo",$rsRecurso,true,1,"","","","0");                    
+                            ?>
+                        </td>
+                    </tr>     
+                </table>
+                <center>
+                    <? 
+                    db_selinstit('',300,100);
+                    db_input('filtra_despesa', 10,'',true, 'hidden', 3);
+                    ?>
+                </center>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' align="center">
+                <input name="imprime" type="button" id="imprime" value="Imprime"
+                    onclick='js_imprimeRelatorio()'>
+            </td>
+        </tr>
+    </table>
+</form>
+</center>
 </body>
 </html>
 <script>

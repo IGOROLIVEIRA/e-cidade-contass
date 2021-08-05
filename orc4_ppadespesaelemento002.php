@@ -106,6 +106,15 @@ $sSql .= "   and o08_instit in ({$instits})                                     
 $sSql .= "   and o05_ppaversao  =  {$oPost->o05_ppaversao}                                                               ";
 $sSql .= "   and o08_ppaversao  =  {$oPost->o05_ppaversao}                                                               ";
 $sSql .= "   and o08_ano       >=  {$oLeiPPA->o01_anoinicio}                                                             ";
+if (isset($o40_orgao) && $o40_orgao != 0) {
+    $sSql .= " and o08_orgao = {$o40_orgao}                                                                              ";
+}
+if (isset($o52_funcao) && $o52_funcao != 0) {
+    $sSql .= " and o08_funcao = {$o52_funcao}                                                                            ";
+}
+if (isset($o41_unidade) && $o41_unidade != 0) {
+    $sSql .= " and o08_unidade = {$o41_unidade}                                                                            ";
+}
 $sSql .= " order by o08_orgao,                                                                                           "; 
 $sSql .= "       o40_descr,                                                                                              ";
 $sSql .= "       o08_unidade,                                                                                            ";
@@ -168,6 +177,8 @@ if ($iNumRows > 0) {
     }
     if ($sRecursos) {
       $sSqlElemento  .= "   and o08_recurso  in {$sRecursos}                                          ";
+    } elseif (isset($o15_codigo) && $o15_codigo != 0) {
+        $sSqlElemento  .= "   and o08_recurso = {$o15_codigo}                                         ";
     }
     $sSqlElemento    .= "   and o08_instit in ({$instits})                                            ";
     $sSqlElemento    .= "   order by o56_elemento                                                     ";
