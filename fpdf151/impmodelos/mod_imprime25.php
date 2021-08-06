@@ -78,6 +78,8 @@ for ($i = 0; $i < 2; $i++) {
 
     $this->objpdf->Setfont('Arial', '', 8);
     $this->objpdf->text($xcol + 9, $xlin + 113.5, 'Autônomos');
+    $this->objpdf->Setfont('Arial', 'B', 10);
+    $this->objpdf->text($xcol + 58, $xlin + 113.5, 'R$' . db_formatar($this->valor_servico, 'f'));
     $this->objpdf->rect($xcol + 7, $xlin + 109, 45, $alt);
     $this->objpdf->rect($xcol + 52, $xlin + 109, 55, $alt);
 
@@ -131,7 +133,7 @@ for ($i = 0; $i < 2; $i++) {
     $this->objpdf->rect($xcol + 150, $xlin + 36, 50, $alt);
 
     $this->objpdf->Setfont('Arial', '', 8);
-    $liquido = $this->desconto + $this->patronal + $this->agentes_nocivos - $this->deducao;
+    $liquido = $this->desconto + $this->patronal + $this->agentes_nocivos + $this->terceiros - $this->deducao;
     $this->objpdf->text($xcol + 116, $xlin + 47.5, '15 - DEDUÇÕES');
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->text($xcol + 155, $xlin + 47.5, 'R$' . db_formatar($this->deducao, 'f'));

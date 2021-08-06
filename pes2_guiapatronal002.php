@@ -347,7 +347,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
 }
 //echo $sql ; exit;
 
-$sql = $clrhautonomolanc->sql_query_file(null, "sum((rh89_valorserv*20/100)+rh89_valorretinss) as terceiros",null,"(rh89_anousu,rh89_mesusu) = ({$ano},{$mes})");
+$sql = $clrhautonomolanc->sql_query_file(null, "sum((rh89_valorserv*20/100)+rh89_valorretinss) as terceiros,sum(rh89_valorserv) as valor_servico",null,"(rh89_anousu,rh89_mesusu) = ({$ano},{$mes})");
 $rsTerceiros = $clrhautonomolanc->sql_record($sql);
 
 global $pdf;
@@ -375,6 +375,7 @@ $pdf1->patronal         = $patronal;
 $pdf1->campoextra       = $cmpextra;
 $pdf1->cod_pagto        = $cod_pagto;
 $pdf1->terceiros        = round(db_utils::fieldsMemory($rsTerceiros, 0)->terceiros, 2);
+$pdf1->valor_servico    = round(db_utils::fieldsMemory($rsTerceiros, 0)->valor_servico, 2);
 $pdf1->agentes_nocivos  = $agentes_nocivos;
 $pdf1->atu_monetaria    = 0;
 $pdf1->juros            = 0;
