@@ -34,7 +34,24 @@
 
   $this->objpdf->text(130, ($xlin+2.5) - $linpc,'PROCESSO DE COMPRA N'.CHR(176));
   $this->objpdf->text(165, ($xlin+2.5) - $linpc,db_formatar(pg_result($this->recorddositens,0,$this->Snumeroproc),'s','0',6,'e'));
+  $autori = pg_result($this->recorddositens,0,$this->autori);
 
+  $rsLicitacao = db_query("SELECT DISTINCT l20_codigo,
+											 l20_anousu,
+											 l20_numero,
+											 l03_codcom,
+											 l03_descr
+				FROM empautitem
+				INNER JOIN empautitempcprocitem ON empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+				AND empautitempcprocitem.e73_autori = empautitem.e55_autori
+				INNER JOIN liclicitem ON liclicitem.l21_codpcprocitem = empautitempcprocitem.e73_pcprocitem
+				INNER JOIN liclicita ON liclicitem.l21_codliclicita = liclicita.l20_codigo
+				INNER JOIN cflicita ON liclicita.l20_codtipocom = cflicita.l03_codigo
+				INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+				WHERE e55_autori = $autori");
+
+  $this->objpdf->text(130, ($xlin+6.5) - $linpc,'PROCESSO LICITÓRIO:'.CHR(176));
+  $this->objpdf->text(165, ($xlin+6.5) - $linpc,db_formatar(pg_result($this->recorddositens,0,$this->Snumeroproc),'s','0',6,'e'));
   $this->objpdf->text(130, ($xlin+$linpc-2.25), 'TIPO DA COMPRA: ');
   $this->objpdf->text(165, ($xlin+$linpc-2.25) , db_formatar(pg_result($this->recorddositens, 0,
                                                  $this->sTipoCompra), 's' , '0', 6, 'e'));
