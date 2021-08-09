@@ -290,7 +290,7 @@ switch ($_POST["action"]) {
 
     db_inicio_transacao();
 
-    foreach ($_POST['dados'] as $item) :
+    foreach ($_POST['dados'] as $Seq => $item) :
 
       $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
@@ -304,6 +304,7 @@ switch ($_POST["action"]) {
         $clempautitem->e55_servicoquantidade  = $item['servico'];
         $clempautitem->e55_vlrun  = $item['vlrunit'];
         $clempautitem->e55_vltot  = $item['total'];
+        $clempautitem->e55_sequen = $Seq + 1;
 
         $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
         $clempautitem->incluir($_POST['autori'], $proximoSequen);
@@ -428,12 +429,15 @@ function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
     $rsConsultaUtilizado = db_query($sqlUtilizado);
     $oDadosTotalUtilizado = db_utils::getCollectionByRecord($rsConsultaUtilizado);
 
-    $disponivel = $oDadosTotal[0]->pc23_valor - $oDadosTotalUtilizado[0]->totalitens;
-
+    if($oDadosTotalUtilizado[0]->totalitens == ""){
+        $disponivel = $oDadosTotal[0]->pc23_valor;
+    }else{
+        $disponivel = $oDadosTotal[0]->pc23_valor - $oDadosTotalUtilizado[0]->totalitens;
+    }
 
     $saldotabela = new stdClass();
     $saldotabela->disponivel = $disponivel;
-    $saldotabela->utilizado  = $oDadosTotalUtilizado[0]->totalitens;
+    $saldotabela->utilizado  = $oDadosTotalUtilizado[0]->totalitens == "" ? 0 : $oDadosTotalUtilizado[0]->totalitens;
     $saldotabela->total      = $oDadosTotal[0]->pc23_valor;
 
     return $saldotabela;

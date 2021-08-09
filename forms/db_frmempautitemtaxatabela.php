@@ -119,9 +119,10 @@ $clrotulo->label("pc01_descrmater");
             </table>
         </fieldset>
         <div class="container">
-            <span id="textocontainer"><strong>Selecione um elemento</strong></span>
-            <table style="display: none" id="myTable" class="display nowrap">
-                <thead>
+            <span id="textocontainer"><strong>Selecione uma tabela.</strong></span>
+            <div>
+                <table style="display: none" id="myTable" class="display nowrap">
+                    <thead>
                     <tr>
                         <th data-orderable="false"></th>
                         <th data-orderable="false">Código</th>
@@ -135,13 +136,14 @@ $clrotulo->label("pc01_descrmater");
                         <th data-orderable="false">Desc. %</th>
                         <th data-orderable="false">Total</th>
                     </tr>
-                </thead>
-            </table>
+                    </thead>
+                </table>
+            </div>
         </div>
         <br />
         <input name="e54_desconto" type="hidden" id="e54_desconto" value="<?php echo $e54_desconto ?>">
-        <input name="Salvar" type="button" id="salvar" value="salvar" onclick="js_salvar();">
-        <input name="Excluir" type="button" id="excluir" value="excluir" onclick="js_excluir();">
+        <input name="Salvar" type="button" id="salvar" value="Salvar" onclick="js_salvar();">
+        <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_excluir();">
     </center>
 </form>
 <script>
@@ -157,6 +159,7 @@ $clrotulo->label("pc01_descrmater");
             paging: false,
             processing: true,
             serverSide: true,
+            scrollY: "200px",
             language: {
                 "sEmptyTable": "Nenhum registro encontrado",
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -220,7 +223,7 @@ $clrotulo->label("pc01_descrmater");
         let rsDisponivel;
         rsDisponivel = Number($('#disponivel').val()) - Number($('#utilizado').val());
 
-        if (rsDisponivel < Number($('#totalad').val())) {
+        if (Number($('#totalad').val()) > Number($('#disponivel').val())) {
             alert("Não há valor disponível");
             return false;
         }
@@ -319,6 +322,7 @@ $clrotulo->label("pc01_descrmater");
         });
     }
 
+    console.log($(this).find("input[type='checkbox']"));
     function js_mudaTabela(campo) {
         js_loadTable();
     }
@@ -437,7 +441,6 @@ $clrotulo->label("pc01_descrmater");
             success: function(data) {
 
                 let totitens = JSON.parse(data);
-                console.log(totitens);
                 $('#utilizado').val(totitens.itens.utilizado);
                 $('#disponivel').val(totitens.itens.disponivel);
             }
@@ -469,12 +472,16 @@ $clrotulo->label("pc01_descrmater");
 
                 let elementos = JSON.parse(data);
 
-                elementos.elementos.forEach(function (oElementos, ele) {
+                if(elementos.elementos.length != 0){
+                    elementos.elementos.forEach(function (oElementos, ele) {
                         let option = document.createElement('option');
                         option.value = oElementos.pc07_codele;
                         option.text = oElementos.o56_descr;
                         select.append(option);
-                })
+                    })
+                }else{
+                    top.corpo.iframe_empautoriza.location.reload();
+                }
             }
         });
 
