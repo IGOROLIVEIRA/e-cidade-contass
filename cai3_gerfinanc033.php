@@ -1853,8 +1853,6 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
   $nTotalDebito = 0;
   $vlrhonorarios += 0;
-  $vlrhonorarios_m += 0;
-  $vlrhonorarios_j += 0;
   for ($x = 0; $x < $intnumrows; $x ++) {
 
     db_fieldsmemory($rsReceitas, $x);
@@ -1866,8 +1864,6 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $oInstit = new Instituicao(db_getsession('DB_instit'));
     if($codreceita == 718 && $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){ //valor honorarios
       $vlrhonorarios += $valor_corrigido;
-      $vlrhonorarios_m += $valor_multa;
-      $vlrhonorarios_j += $valor_juros;
     }
 
     if ($k00_hist != 918) {
