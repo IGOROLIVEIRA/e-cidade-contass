@@ -2642,7 +2642,10 @@ class dadosEmpenhoFolha {
         $sCampos = "rh171_orgaonov      as orgao,
                     rh171_unidadenov    as unidade,
                     rh171_projativnov   as projativ,
-                    rh171_recursonov    as recurso";
+                    rh171_recursonov    as recurso,
+                    rh171_programanov   as programa,
+                    rh171_funcaonov     as funcao,
+                    rh171_subfuncaonov  as subfuncao";
         $sWhere = " rh171_orgaoorig         = {$iOrgao}
                     and rh171_unidadeorig   = {$iUnidade}
                     and rh171_projativorig  = {$iProjAtiv}
@@ -2650,6 +2653,16 @@ class dadosEmpenhoFolha {
                     and rh171_mes           = {$iMesUsu}
                     and rh171_instit        = {$iInstit}
                     and rh171_anousu        = {$iAnoUsu}";
+
+        if(!empty($iPrograma)){
+            $sWhere .= " and rh171_programaorig = {$iPrograma}   ";
+        }
+        if(!empty($iFuncao)){
+            $sWhere .= " and rh171_funcaoorig = {$iFuncao}   ";
+        }
+        if(!empty($iSubFuncao)){
+            $sWhere .= " and rh171_subfuncaoorig = {$iSubFuncao}   ";
+        }
         
         $sSqlVinculoDotPatronais    = $oDaorhvinculodotpatronais->sql_query_file(null, $sCampos, null, $sWhere);
         $rsVinculoDotPatronais      = $oDaorhvinculodotpatronais->sql_record($sSqlVinculoDotPatronais);
@@ -2661,6 +2674,16 @@ class dadosEmpenhoFolha {
             $iUnidade   = $oVinculoDotPatronais->unidade;
             $iProjAtiv  = $oVinculoDotPatronais->projativ;
             $iRecurso   = $oVinculoDotPatronais->recurso;
+
+            if(!empty($iPrograma)){
+                $iPrograma = $oVinculoDotPatronais->programa;
+            }
+            if(!empty($iFuncao)){
+                $iFuncao = $oVinculoDotPatronais->funcao;
+            }
+            if(!empty($iSubFuncao)){
+                $iSubFuncao = $oVinculoDotPatronais->subfuncao;
+            }
         
         }
         
@@ -2751,7 +2774,7 @@ class dadosEmpenhoFolha {
     if(!empty($iPrograma)){
       $sWhereDotacao .= " and o58_programa = {$iPrograma}   ";
     }
-    
+
     $sWhereDotacao .= " and o58_codigo   = {$iRecurso}    ";
     $sWhereDotacao .= $sWhereParam;
          
@@ -3440,7 +3463,7 @@ class dadosEmpenhoFolha {
                                                     $sWhereGerador,
                                                     $iInstit);
     }
-    
+
     $rsGerador = db_query($sSqlGerador);                                             
       
     if ( $rsGerador ) {
@@ -3462,7 +3485,7 @@ class dadosEmpenhoFolha {
           try {
             
             $oEstrututal = $this->getEstrututal(db_getsession('DB_anousu'),$oGerador->lotacao,$oGerador->vinculo,$oGerador->elemento,$iMesUsu,true);
-            
+
             $iOrgao     = $oEstrututal->iOrgao; 
             $iUnidade   = $oEstrututal->iUnidade;
             $iProjAtiv  = $oEstrututal->iProjAtiv;
