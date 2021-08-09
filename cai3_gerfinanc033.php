@@ -1852,6 +1852,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
   unset($pdf1->arrayvalreceitas);
 
   $nTotalDebito = 0;
+  $vlrhonorarios += 0;
   for ($x = 0; $x < $intnumrows; $x ++) {
 
     db_fieldsmemory($rsReceitas, $x);
@@ -1859,6 +1860,11 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arraycodreceitas[$x]   = $codreceita;
     $pdf1->arrayreduzreceitas[$x] = $reduzreceita;
     $pdf1->arraydescrreceitas[$x] = $descrreceita;
+
+    $oInstit = new Instituicao(db_getsession('DB_instit'));
+    if($codreceita == 718 && $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){ //valor honorarios
+      $vlrhonorarios += $valor_corrigido;
+    }
 
     if ($k00_hist != 918) {
 
@@ -2538,9 +2544,10 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
     } else {
 
-      $pdf1->descr4_2  = "Valor da parcela                        R$".db_formatar($nTotalDebito,"f")."\n";
+      $pdf1->descr4_2  = $vlrhonorarios > 0 ? "Valor da parcela   R$".db_formatar($nTotalDebito-$vlrhonorarios,"f")." + R$".db_formatar($vlrhonorarios,"f")."\n" : "Valor da parcela                       R$".db_formatar($nTotalDebito,"f")."\n";
       $pdf1->descr4_2 .= "Juro (mora + fincanciamento) R$".db_formatar($vlrjuros,"f")."\n";
       $pdf1->descr4_2 .= "Multa                                          R$".db_formatar($vlrmulta,"f")."\n";
+            
     }
   }
 
