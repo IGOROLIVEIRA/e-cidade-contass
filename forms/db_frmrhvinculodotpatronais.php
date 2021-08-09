@@ -37,13 +37,17 @@ $aMeses = array(
             <td colspan='2' style="text-align: center"><span><b>Nova Dotação</b></span></td>
         </tr>
         <tr>
-            <td></td>
-            <td></td>
             <td>
-                <? db_ancora("Dotação: ","js_pesquisa_coddot(true);", $db_opcao); ?>
+                <? db_ancora("Dotação: ","js_pesquisa_coddot(true, 1);", $db_opcao); ?>
             </td>
             <td>
-                <? db_input("dotacao",8,"",true,"text",$db_opcao, "onchange='js_pesquisa_coddot(false);'"); ?>
+                <? db_input("dotacao_orig",8,"",true,"text",$db_opcao, "onchange='js_pesquisa_coddot(false, 1);'"); ?>
+            </td>
+            <td>
+                <? db_ancora("Dotação: ","js_pesquisa_coddot(true, 2);", $db_opcao); ?>
+            </td>
+            <td>
+                <? db_input("dotacao_nov",8,"",true,"text",$db_opcao, "onchange='js_pesquisa_coddot(false, 2);'"); ?>
             </td>
         </tr>
         <tr>
@@ -193,6 +197,9 @@ $aMeses = array(
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+
+let sTagTipoCampo = '';
+
 function js_pesquisa(){
     js_OpenJanelaIframe('top.corpo','db_iframe_rhvinculodotpatronais','func_rhvinculodotpatronais.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
@@ -207,7 +214,9 @@ function js_preenchepesquisa(chave){
 
 }
 
-function js_pesquisa_coddot(mostra){
+function js_pesquisa_coddot(mostra, iTipo){
+
+    sTagTipoCampo = iTipo == 1 ? 'orig' : 'nov';
     
     if(mostra==true){
         js_OpenJanelaIframe('', 
@@ -215,16 +224,16 @@ function js_pesquisa_coddot(mostra){
                             'func_orcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot', 
                             'Pesquisar Dotações',true);
     } else {
-        js_buscaDotacao(document.form1.dotacao.value);
+        js_buscaDotacao(document.getElementById('dotacao_'+sTagTipoCampo).value);
     }
 }
 
-function js_mostraorcdotacao1(chave1) {
+function js_mostraorcdotacao1(chave1, iTipo) {
 
-    document.form1.dotacao.value = chave1;
+    document.getElementById('dotacao_'+sTagTipoCampo).value = chave1;
     db_iframe_orcdotacao.hide();
 
-    js_buscaDotacao(document.form1.dotacao.value);
+    js_buscaDotacao(document.getElementById('dotacao_'+sTagTipoCampo).value);
 
 }
 
@@ -252,23 +261,23 @@ function js_retornoBuscaDotacao(oResponse) {
 
         oDotacao = oRetorno.oDotacao;
 
-        document.form1.rh171_orgaonov.value     = oDotacao.o58_orgao;
-        document.form1.o40_descr_nov.value      = oDotacao.o40_descr.urlDecode();
-        document.form1.rh171_unidadenov.value   = oDotacao.o58_unidade;
-        document.form1.o41_descr_nov.value      = oDotacao.o41_descr.urlDecode();
-        document.form1.rh171_projativnov.value  = oDotacao.o58_projativ;
-        document.form1.o55_descr_nov.value      = oDotacao.o55_descr.urlDecode();
-        document.form1.rh171_recursonov.value   = oDotacao.o58_codigo;
-        document.form1.o15_descr_nov.value      = oDotacao.o15_descr.urlDecode();        
-        document.form1.rh171_programanov.value  = oDotacao.o58_programa;
-        document.form1.o54_descr_nov.value      = oDotacao.o54_descr.urlDecode();
-        document.form1.rh171_funcaonov.value    = oDotacao.o58_funcao;
-        document.form1.o52_descr_nov.value      = oDotacao.o52_descr.urlDecode();
-        document.form1.rh171_subfuncaonov.value = oDotacao.o58_subfuncao;
-        document.form1.o53_descr_nov.value      = oDotacao.o53_descr.urlDecode();            
+        document.getElementById('rh171_orgao'+sTagTipoCampo).value      = oDotacao.o58_orgao;
+        document.getElementById('o40_descr_'+sTagTipoCampo).value       = oDotacao.o40_descr.urlDecode();
+        document.getElementById('rh171_unidade'+sTagTipoCampo).value    = oDotacao.o58_unidade;
+        document.getElementById('o41_descr_'+sTagTipoCampo).value       = oDotacao.o41_descr.urlDecode();
+        document.getElementById('rh171_projativ'+sTagTipoCampo).value   = oDotacao.o58_projativ;
+        document.getElementById('o55_descr_'+sTagTipoCampo).value       = oDotacao.o55_descr.urlDecode();
+        document.getElementById('rh171_recurso'+sTagTipoCampo).value    = oDotacao.o58_codigo;
+        document.getElementById('o15_descr_'+sTagTipoCampo).value       = oDotacao.o15_descr.urlDecode();        
+        document.getElementById('rh171_programa'+sTagTipoCampo).value   = oDotacao.o58_programa;
+        document.getElementById('o54_descr_'+sTagTipoCampo).value       = oDotacao.o54_descr.urlDecode();
+        document.getElementById('rh171_funcao'+sTagTipoCampo).value     = oDotacao.o58_funcao;
+        document.getElementById('o52_descr_'+sTagTipoCampo).value       = oDotacao.o52_descr.urlDecode();
+        document.getElementById('rh171_subfuncao'+sTagTipoCampo).value  = oDotacao.o58_subfuncao;
+        document.getElementById('o53_descr_'+sTagTipoCampo).value       = oDotacao.o53_descr.urlDecode();            
             
     } else {
-        document.form1.dotacao.value = ''
+        document.getElementById('dotacao_'+sTagTipoCampo).value = ''
         alert(oRetorno.message.urlDecode());
     }
 }
