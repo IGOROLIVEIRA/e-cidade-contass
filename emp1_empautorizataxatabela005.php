@@ -231,8 +231,8 @@ if (isset($alterar) && !$sqlerro) {
       }
     }
   }
+    db_fim_transacao($sqlerro);
     db_redireciona("emp1_empautorizataxatabela005.php");
-  db_fim_transacao($sqlerro);
 } else if (isset($chavepesquisa)) {
   $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
   db_fieldsmemory($result, 0);
