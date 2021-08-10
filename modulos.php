@@ -562,6 +562,9 @@ if(pg_numrows($result) == 0) {
                                                      inner join db_itensmenu m on m.id_item = p .id_item
                                                      where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
                                 $resultMenuRecebimento = db_query($sqlPermissaoMenu);
+                                if(pg_numrows($resultMenuRecebimento) > 0){
+                                    $liberarRecebimento = true;
+                                }
                             }else{
                                 for($i = 0;$i < pg_numrows($resultPerfil);$i++) {
                                     $codperfil = pg_result($resultPerfil,$i,0);
