@@ -3653,7 +3653,8 @@ class dadosEmpenhoFolha {
           $sSqlPercPatronal .= "  where r33_anousu = {$iAnoUsu} ";
           $sSqlPercPatronal .= "    and r33_mesusu = {$iMesUsu} ";
           $sSqlPercPatronal .= "    and r33_codtab = ".($oGerador->previdencia+2);
-          
+          $sSqlPercPatronal .= "    and r33_instit = ".db_getsession('DB_instit');
+
           $rsPercPatronal    = db_query($sSqlPercPatronal);
           $oPercPatronal     = db_utils::fieldsMemory($rsPercPatronal,0);
           $nPercPatronal     = $oPercPatronal->r33_ppatro/100;
