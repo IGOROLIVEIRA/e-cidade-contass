@@ -65,6 +65,7 @@ class Registro40 extends RegistroBase {
         "12"=>"31");
         $sDataCompFim = "{$this->iAnoFolha}-{$this->iMesFolha}-".$aUltimoDia[$this->iMesFolha];
         $sWhere  = "rh05_recis between '{$sDataCompIni}' AND '{$sDataCompFim}' AND rh02_instit = ".db_getsession("DB_instit");
+        $sWhere .= " AND rh02_anousu = {$this->iAnoFolha} AND rh02_mesusu = {$this->iMesFolha}";
         if (!empty($this->sServidores)) {
             $sWhere .= " AND rh01_regist IN ({$this->sServidores})";
         }
