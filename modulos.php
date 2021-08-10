@@ -47,6 +47,7 @@ $result = $cldbconfig->sql_record($cldbconfig->sql_query(null,"*",null,"codigo =
 
 
 
+
 if($cldbconfig->numrows>0){
     $resultado = db_utils::fieldsMemory($result,0);
     $valorOrde = $resultado->orderdepart;
@@ -57,6 +58,8 @@ if($cldbconfig->numrows>0){
         $ordernar = "order by d.coddepto ASC";
     }else if($valorOrde==3){
         $ordernar = "order by d.coddepto DESC";
+    }else if($valorOrde==4){
+        $ordernar = "order by u.db17_ordem ASC";
     }else if($valorOrde==null){
         $ordernar = "order by u.db17_ordem";
     }

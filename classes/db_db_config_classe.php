@@ -1443,7 +1443,7 @@ class cl_db_config {
    }
    // funcao para mudar ordenação
    function alterarOrdenacao ($codigo) {
-    $sql = " update db_config set orderdepart = ".$this->orderdepart." where codigo = ".$codigo;
+    $sql = " update db_config set orderdepart = ".$this->orderdepart." where codigo = ".$codigo; 
 
     $result = db_query($sql);
      if($result==false){
