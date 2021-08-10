@@ -2538,7 +2538,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
           $pdf1->descr4_2 .= "Desconto até o vencimento     R$".db_formatar($valorDesconto,"f");
 
         }else{
-          $pdf1->descr4_2="";
+          $pdf1->descr4_2  = $vlrhonorarios > 0 ? "Valor da parcela   R$".db_formatar($nTotalDebito-$vlrhonorarios,"f")." + R$".db_formatar($vlrhonorarios,"f")."\n" : "Valor da parcela                       R$".db_formatar($nTotalDebito,"f")."\n";
         }
       }
 
