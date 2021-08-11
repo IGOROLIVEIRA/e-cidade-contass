@@ -235,7 +235,7 @@ switch ($_POST["action"]) {
           $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
 
         $itemRows[] = $oDados->pc01_codmater;
-        $itemRows[] = $oDados->pc01_descrmater;
+        $itemRows[] = "<input type='text' name ='{$oDados->pc01_descrmater}' title='{$oDados->pc01_descrmater}' style='background-color: #DEB887' readonly value='{$oDados->pc01_descrmater}'  />";
         $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}'  />";
         $itemRows[] = $selectunid;
         $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}'  />";
@@ -249,9 +249,9 @@ switch ($_POST["action"]) {
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
 
         if ($_POST['desconto'] == 'f')
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='width: 80px' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='background-color: #DEB887; width: 80px' />";
         else
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' readonly style='width: 80px' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
 
         $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
         $employeeData[] = $itemRows;
