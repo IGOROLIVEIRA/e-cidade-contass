@@ -47,7 +47,6 @@ if(isset($_POST['oRdenarPor'])){
 
   $valor = $_POST['oRdenarPor'];
   $codigoEmp = $_POST['codigo'];
-  echo "<script>alert($codigoEmp)</script>";
   $cldbconfig->orderdepart = $valor;
   $cldbconfig->alterarOrdenacao($codigoEmp);
   echo "<script>alert('Parâmetro salvo com sucesso!')</script>";
