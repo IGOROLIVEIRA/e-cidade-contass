@@ -91,66 +91,6 @@ $aMeses = array(
             </td>
         </tr>
         <tr>
-            <td nowrap title="<?=@$Trh171_projativorig?>">
-                <?=db_ancora($Lrh171_projativorig, "js_pesquisaProjAtivOrig(true)", $db_opcao_orig);?>
-            </td>
-            <td> 
-                <? 
-                    db_input('rh171_projativorig',8,$Irh171_projativorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaProjAtivOrig(false);");
-                    db_input('o55_descr_orig', 35, '', true, 'text', 3);
-                ?>
-            </td>
-            <td nowrap title="<?=@$Trh171_projativnov?>">
-                <?=db_ancora($Lrh171_projativnov, "js_pesquisaProjAtivNov(true)", 3);?>
-            </td>
-            <td> 
-                <? 
-                    db_input('rh171_projativnov',8,$Irh171_projativnov,true,'text',3,"onchange=js_pesquisaProjAtivNov(false);");
-                    db_input('o55_descr_nov', 35, '', true, 'text', 3);    
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td nowrap title="<?=@$Trh171_recursoorig?>">
-                <?=db_ancora($Lrh171_recursoorig, "js_pesquisaRecursoOrig(true)", $db_opcao_orig);?>
-            </td>
-            <td> 
-                <? 
-                    db_input('rh171_recursoorig',8,$Irh171_recursoorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaRecursoOrig(false);");
-                    db_input('o15_descr_orig', 35, '', true, 'text', 3);
-                ?>
-            </td>
-            <td nowrap title="<?=@$Trh171_recursonov?>">
-                <?=db_ancora($Lrh171_recursonov, "js_pesquisaRecursoNov(true)", 3);?>
-            </td>
-            <td> 
-                <? 
-                    db_input('rh171_recursonov',8,$Irh171_recursonov,true,'text',3,"onchange=js_pesquisaRecursoNov(false);");
-                    db_input('o15_descr_nov', 35, '', true, 'text', 3);    
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td nowrap title="<?=@$Trh171_programaorig?>">
-                <?=db_ancora($Lrh171_programaorig, "js_pesquisaProgramaOrig(true)", $db_opcao_orig);?>
-            </td>
-            <td> 
-                <? 
-                    db_input('rh171_programaorig',8,$Irh171_programaorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaProgramaOrig(false);");
-                    db_input('o54_descr_orig', 35, '', true, 'text', 3);
-                ?>
-            </td>
-            <td nowrap title="<?=@$Trh171_programanov?>">
-                <?=db_ancora($Lrh171_programanov, "js_pesquisaProgramaNov(true)", 3);?>
-            </td>
-            <td> 
-                <? 
-                    db_input('rh171_programanov',8,$Irh171_programanov,true,'text',3,"onchange=js_pesquisaProgramaNov(false);");
-                    db_input('o54_descr_nov', 35, '', true, 'text', 3);    
-                ?>
-            </td>
-        </tr>
-        <tr>
             <td nowrap title="<?=@$Trh171_funcaoorig?>">
                 <?=db_ancora($Lrh171_funcaoorig, "js_pesquisaFuncaoOrig(true)", $db_opcao_orig);?>
             </td>
@@ -190,6 +130,66 @@ $aMeses = array(
                 ?>
             </td>
         </tr>
+        <tr>
+            <td nowrap title="<?=@$Trh171_programaorig?>">
+                <?=db_ancora($Lrh171_programaorig, "js_pesquisaProgramaOrig(true)", $db_opcao_orig);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_programaorig',8,$Irh171_programaorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaProgramaOrig(false);");
+                    db_input('o54_descr_orig', 35, '', true, 'text', 3);
+                ?>
+            </td>
+            <td nowrap title="<?=@$Trh171_programanov?>">
+                <?=db_ancora($Lrh171_programanov, "js_pesquisaProgramaNov(true)", 3);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_programanov',8,$Irh171_programanov,true,'text',3,"onchange=js_pesquisaProgramaNov(false);");
+                    db_input('o54_descr_nov', 35, '', true, 'text', 3);    
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Trh171_projativorig?>">
+                <?=db_ancora($Lrh171_projativorig, "js_pesquisaProjAtivOrig(true)", $db_opcao_orig);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_projativorig',8,$Irh171_projativorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaProjAtivOrig(false);");
+                    db_input('o55_descr_orig', 35, '', true, 'text', 3);
+                ?>
+            </td>
+            <td nowrap title="<?=@$Trh171_projativnov?>">
+                <?=db_ancora($Lrh171_projativnov, "js_pesquisaProjAtivNov(true)", 3);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_projativnov',8,$Irh171_projativnov,true,'text',3,"onchange=js_pesquisaProjAtivNov(false);");
+                    db_input('o55_descr_nov', 35, '', true, 'text', 3);    
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Trh171_recursoorig?>">
+                <?=db_ancora($Lrh171_recursoorig, "js_pesquisaRecursoOrig(true)", $db_opcao_orig);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_recursoorig',8,$Irh171_recursoorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaRecursoOrig(false);");
+                    db_input('o15_descr_orig', 35, '', true, 'text', 3);
+                ?>
+            </td>
+            <td nowrap title="<?=@$Trh171_recursonov?>">
+                <?=db_ancora($Lrh171_recursonov, "js_pesquisaRecursoNov(true)", 3);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_recursonov',8,$Irh171_recursonov,true,'text',3,"onchange=js_pesquisaRecursoNov(false);");
+                    db_input('o15_descr_nov', 35, '', true, 'text', 3);    
+                ?>
+            </td>
+        </tr>        
     </table>
 </fieldset>
 </center>

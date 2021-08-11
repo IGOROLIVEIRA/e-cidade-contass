@@ -3662,7 +3662,7 @@ class dadosEmpenhoFolha {
           $oDaorhEmpenhoFolhaRubrica->rh73_rubric          = $oGerador->rubric; 
           $oDaorhEmpenhoFolhaRubrica->rh73_seqpes          = $oGerador->pessoalmov;
           $oDaorhEmpenhoFolhaRubrica->rh73_instit          = $iInstit;
-          $oDaorhEmpenhoFolhaRubrica->rh73_valor           = db_formatar(($oGerador->valor * $nPercPatronal),'p');
+          $oDaorhEmpenhoFolhaRubrica->rh73_valor           = ($oGerador->valor * $nPercPatronal);
           $oDaorhEmpenhoFolhaRubrica->rh73_pd              = 1;
           $oDaorhEmpenhoFolhaRubrica->rh73_tiporubrica     = 1;
                   
