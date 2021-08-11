@@ -47,6 +47,7 @@ $result = $cldbconfig->sql_record($cldbconfig->sql_query(null,"*",null,"codigo =
 
 
 
+
 if($cldbconfig->numrows>0){
     $resultado = db_utils::fieldsMemory($result,0);
     $valorOrde = $resultado->orderdepart;
@@ -57,6 +58,8 @@ if($cldbconfig->numrows>0){
         $ordernar = "order by d.coddepto ASC";
     }else if($valorOrde==3){
         $ordernar = "order by d.coddepto DESC";
+    }else if($valorOrde==4){
+        $ordernar = "order by u.db17_ordem ASC";
     }else if($valorOrde==null){
         $ordernar = "order by u.db17_ordem";
     }
@@ -542,6 +545,7 @@ if(pg_numrows($result) == 0) {
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php
+                            $liberarRecebimento = false;
                             $sSqlPerfil  = "select db_permissao.id_usuario, anousu   ";
                             $sSqlPerfil .= "from db_permissao       ";
                             $sSqlPerfil .= "WHERE db_permissao.id_usuario IN";
@@ -549,7 +553,7 @@ if(pg_numrows($result) == 0) {
                             $sSqlPerfil .= "     FROM db_permherda";
                             $sSqlPerfil .= "     WHERE db_permherda.id_usuario = ".db_getsession("DB_id_usuario").")";
                             $sSqlPerfil .= "group by db_permissao.id_usuario, db_permissao.anousu ";
-                            $sSqlPerfil .= "order by db_permissao.anousu desc LIMIT 1";
+                            $sSqlPerfil .= "order by db_permissao.anousu desc";
                             $resultPerfil = db_query($sSqlPerfil);
 
                             if(pg_numrows($resultPerfil) == 0) {
@@ -558,19 +562,26 @@ if(pg_numrows($result) == 0) {
                                                      inner join db_itensmenu m on m.id_item = p .id_item
                                                      where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
                                 $resultMenuRecebimento = db_query($sqlPermissaoMenu);
-                                $db_modulo = db_getsession("DB_modulo");
+                                if(pg_numrows($resultMenuRecebimento) > 0){
+                                    $liberarRecebimento = true;
+                                }
                             }else{
-                                $codperfil = pg_result($resultPerfil,0,0);
-
-                                $sqlPermissaoPerfil = "select m.id_item,m.descricao
+                                for($i = 0;$i < pg_numrows($resultPerfil);$i++) {
+                                    $codperfil = pg_result($resultPerfil,$i,0);
+                                    $sqlPermissaoPerfil = "select m.id_item,m.descricao
                                                        from db_permissao p
                                                        inner join db_itensmenu m on m.id_item = p .id_item
                                                        where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = $codperfil";
-                                $resultMenuRecebimento = db_query($sqlPermissaoPerfil);
-                                $db_modulo = db_getsession("DB_modulo");
-                            }
+                                    $resultMenuRecebimento = db_query($sqlPermissaoPerfil);
+                                    if(pg_numrows($resultMenuRecebimento) > 0){
+                                        $liberarRecebimento = true;
+                                    }
+                                }
 
-                            if($db_modulo == 604 && pg_numrows($resultMenuRecebimento) > 0):
+                            }
+                            $db_modulo = db_getsession("DB_modulo");
+
+                            if($db_modulo == 604 && $liberarRecebimento = true):
                                 ?>
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
