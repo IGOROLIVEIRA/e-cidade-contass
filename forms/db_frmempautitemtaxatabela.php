@@ -269,8 +269,8 @@ $clrotulo->label("pc01_descrmater");
                 } else {
                     //js_loadTable();
                     alert(response.message.urlDecode());
-                    top.corpo.iframe_empautidot.location.reload();
-                    window.location.reload();
+                    // top.corpo.iframe_empautidot.location.reload();
+                    // window.location.reload();
                 }
             }
         });

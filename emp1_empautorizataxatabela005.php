@@ -367,7 +367,7 @@ if (isset($e54_numcgm) && !empty($e54_numcgm)) {
 <?
 if (isset($erro_msg)) {
   db_msgbox($erro_msg);
-  db_redireciona("emp1_empautorizataxatabela005.php");
+//  db_redireciona("emp1_empautorizataxatabela005.php");
 }
 //////////////////////////////////////////////////
 
