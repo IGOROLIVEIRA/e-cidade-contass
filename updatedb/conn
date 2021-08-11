@@ -20,7 +20,6 @@ e-cidade            5432    cmarinos
 e-cidade            5432    pmlagoadospatos
 
 e-cidade            5432    pmsaoromao
-e-cidade            5432    pmubai
 
 pmcapitaoeneas      5432    prefeituras
 pmcristalia         5432    prefeituras
@@ -37,6 +36,7 @@ pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
 pmmontalvania          5432    prefeituras2
 pmjanuaria             5432    prefeituras2
+pmubai                 5432    prefeituras2
 
 e-cidade            5432    cmbhecid
 

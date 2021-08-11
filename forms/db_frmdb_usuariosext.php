@@ -68,7 +68,7 @@ db_input('id_usuario',10,$Iid_usuario,true,'text',3,"")
     </td>
     <td>
 <?
-db_input('login',20,$Ilogin,true,'text',3,"")
+db_input('login',20,$Ilogin,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>

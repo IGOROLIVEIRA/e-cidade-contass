@@ -43,9 +43,8 @@ $aSkins = $oSkin->getSkins();
 
 $cldbconfig         = new cl_db_config();
 
-
-
 if(isset($_POST['oRdenarPor'])){
+
   $valor = $_POST['oRdenarPor'];
   $codigoEmp = $_POST['codigo'];
   $cldbconfig->orderdepart = $valor;
@@ -93,7 +92,7 @@ if($cldbconfig->numrows>0){
                 </td>
                 <td>
                   <?php 
-                  $valores = array("1"=>"Ordem Alfabética", "2"=>"Ordem Crescente", "3"=>"Ordem Decrescente");
+                  $valores = array("1"=>"Ordem Alfabética", "2"=>"Ordem Crescente", "3"=>"Ordem Decrescente", "4"=>"Ordenar por Prioridade");
                   db_select('oRdenarPor', $valores, true, 1,"style='width:172px;'"); 
                   ?>
                   <input type="hidden" id="codigo" name="codigo" value="<?echo db_getsession("DB_instit");?>">

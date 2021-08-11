@@ -410,7 +410,8 @@ function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
                             (SELECT e54_codlicitacao
                              FROM empautoriza
                              WHERE e54_autori = $e55_autori)
-                          AND pc94_sequencial = $tabela";
+                          AND pc94_sequencial = $tabela
+                          AND pc24_pontuacao = 1";
     $rsConsultaTotal = db_query($sqlTotal);
 
     $oDadosTotal = db_utils::getCollectionByRecord($rsConsultaTotal);

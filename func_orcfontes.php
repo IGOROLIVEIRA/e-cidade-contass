@@ -116,14 +116,24 @@ function js_limpa(){
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
           if (isset($lPesquisaCodigo)) {
-            echo $clorcfontes->sql_query_previsao(null,null,"orcfontes.*",null,$dbwhere." and o57_codfon = '$pesquisa_chave'");
-             $result = $clorcfontes->sql_record($clorcfontes->sql_query_previsao(null,null,"orcfontes.*",null,$dbwhere." and o57_codfon = '$pesquisa_chave'"));
+              if (isset($lPesquisaEstrut) && $lPesquisaEstrut) {
+                $pesquisa_chave = str_pad($pesquisa_chave, 15, "0");
+                $result = $clorcfontes->sql_record($clorcfontes->sql_query_previsao(null,null,"orcfontes.*, c61_codigo, o15_descr",null,$dbwhere." and o57_fonte = '$pesquisa_chave'"));
+              } else {
+                $result = $clorcfontes->sql_record($clorcfontes->sql_query_previsao(null,null,"orcfontes.*, c61_codigo, o15_descr",null,$dbwhere." and o57_codfon = '$pesquisa_chave'"));
+              }
           } else {
              $result = $clorcfontes->sql_record($clorcfontes->sql_query_previsao(null,null,"orcfontes.*",null,$dbwhere." and o57_fonte = '$pesquisa_chave'"));
           }
           if($clorcfontes->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$o57_descr',false);</script>";
+
+            if (isset($lBuscaFonte)) {
+                echo "<script>".$funcao_js."('$o57_descr',false, '$o57_codfon', '$o57_fonte', '$c61_codigo', '$o15_descr');</script>";
+            } else {
+                echo "<script>".$funcao_js."('$o57_descr',false);</script>";
+            }
+            
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

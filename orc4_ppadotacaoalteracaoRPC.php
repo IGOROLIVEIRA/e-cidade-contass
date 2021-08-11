@@ -450,41 +450,41 @@ if ($oParam->exec == "getElementosFromAcao") {
 } else if ($oParam->exec == "incluirAcao") {
 
 
-  require("model/ppadespesa.model.php");
-  $oPPADespesa = new ppaDespesa($oParam->o08_ppaversao);
-  try {
+  	require("model/ppadespesa.model.php");
+    $oPPADespesa = new ppaDespesa($oParam->o08_ppaversao);
+    try {
 
-  	$oDaoppaVersao = db_utils::getDao("ppaversao");
-  	$sSqlVersao    = $oDaoppaVersao->sql_query($oParam->o08_ppaversao);
-  	$rsPPaVersao   = $oDaoppaVersao->sql_record($sSqlVersao);
-  	$oVersao       = db_utils::fieldsMemory($rsPPaVersao,0);
-    db_inicio_transacao();
-    for ($iAno = $oParam->oDotacao->iAno; $iAno <= $oVersao->o01_anofinal; $iAno++) {
+        $oDaoppaVersao = db_utils::getDao("ppaversao");
+        $sSqlVersao    = $oDaoppaVersao->sql_query($oParam->o08_ppaversao);
+        $rsPPaVersao   = $oDaoppaVersao->sql_record($sSqlVersao);
+        $oVersao       = db_utils::fieldsMemory($rsPPaVersao,0);
 
-    	$nValorParam   = ppa::getAcrescimosEstimativa($oParam->oDotacao->o08_elemento, $iAno);
-    	$nValor        = $oParam->oDotacao->nValor;
-    	if ($iAno >= $oVersao->o01_anoinicio) {
+        db_inicio_transacao();
+        for ($iAno = $oParam->oDotacao->iAno; $iAno <= $oVersao->o01_anofinal; $iAno++) {
 
-      	if ($nValorParam > 0) {
+            $nValorParam   = ppa::getAcrescimosEstimativa($oParam->oDotacao->o08_elemento, $iAno);
+            $nValor        = $oParam->oDotacao->nValor;
+    	    if ($iAno >= $oVersao->o01_anoinicio) {
+            
+                if ($nValorParam > 0 && $iAno > $oVersao->o01_anoinicio) {
+                    $nValor *= $nValorParam;
+                }
 
-      		$nValor *= $nValorParam;
+                $oParam->oDotacao->nValor = $nValor;
+                $oParam->oDotacao->iAno   = $iAno;
+                $oPPADespesa->adicionarEstimativa($oParam->oDotacao);
 
-      	}
-      	$oParam->oDotacao->nValor = $nValor;
-      	$oParam->oDotacao->iAno   = $iAno;
-      	$oPPADespesa->adicionarEstimativa($oParam->oDotacao);
+            }
+        }
+        db_fim_transacao(false);
 
-      }
+    } catch (Exception $eErroDotacao) {
+
+        $oRetorno->status = 2;
+        $oRetorno->message = urlencode($eErroDotacao->getMessage());
+        db_fim_transacao(true);
+
     }
-    db_fim_transacao(false);
-
-  } catch (Exception $eErroDotacao) {
-
-    $oRetorno->status = 2;
-    $oRetorno->message = urlencode($eErroDotacao->getMessage());
-    db_fim_transacao(true);
-
-  }
 }
 echo $oJson->encode($oRetorno);
 ?>
