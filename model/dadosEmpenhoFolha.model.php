@@ -1905,8 +1905,8 @@ class dadosEmpenhoFolha {
         $sSqlDadosRetencao .= "        inner join rhrubretencao    on rh75_rubric    = {$sSigla}_rubric     ";
         $sSqlDadosRetencao .= "                                   and rh75_instit    = {$sSigla}_instit     ";
         $sSqlDadosRetencao .= "        inner join retencaotiporec  on e21_sequencial = rh75_retencaotiporec ";
-        $sSqlDadosRetencao .= "  where e21_retencaotiporecgrupo = 1                                         ";
-        $sSqlDadosRetencao .= "    and {$sSigla}_anousu      = {$iAnoUsu}                                   ";
+        $sSqlDadosRetencao .= "  where {$sSigla}_rubric IN ('0122', '0308', 'R917', 'R918', 'R919', 'R921', '0144', '0145', '4144')";
+        $sSqlDadosRetencao .= "     {$sSigla}_anousu      = {$iAnoUsu}                                      ";
         $sSqlDadosRetencao .= "    and {$sSigla}_mesusu      = {$iMesUsu}                                   ";
         $sSqlDadosRetencao .= "    and rh02_instit           = {$iInstit}                                   ";
         
@@ -2642,7 +2642,10 @@ class dadosEmpenhoFolha {
         $sCampos = "rh171_orgaonov      as orgao,
                     rh171_unidadenov    as unidade,
                     rh171_projativnov   as projativ,
-                    rh171_recursonov    as recurso";
+                    rh171_recursonov    as recurso,
+                    rh171_programanov   as programa,
+                    rh171_funcaonov     as funcao,
+                    rh171_subfuncaonov  as subfuncao";
         $sWhere = " rh171_orgaoorig         = {$iOrgao}
                     and rh171_unidadeorig   = {$iUnidade}
                     and rh171_projativorig  = {$iProjAtiv}
@@ -2650,6 +2653,16 @@ class dadosEmpenhoFolha {
                     and rh171_mes           = {$iMesUsu}
                     and rh171_instit        = {$iInstit}
                     and rh171_anousu        = {$iAnoUsu}";
+
+        if(!empty($iPrograma)){
+            $sWhere .= " and rh171_programaorig = {$iPrograma}   ";
+        }
+        if(!empty($iFuncao)){
+            $sWhere .= " and rh171_funcaoorig = {$iFuncao}   ";
+        }
+        if(!empty($iSubFuncao)){
+            $sWhere .= " and rh171_subfuncaoorig = {$iSubFuncao}   ";
+        }
         
         $sSqlVinculoDotPatronais    = $oDaorhvinculodotpatronais->sql_query_file(null, $sCampos, null, $sWhere);
         $rsVinculoDotPatronais      = $oDaorhvinculodotpatronais->sql_record($sSqlVinculoDotPatronais);
@@ -2661,6 +2674,16 @@ class dadosEmpenhoFolha {
             $iUnidade   = $oVinculoDotPatronais->unidade;
             $iProjAtiv  = $oVinculoDotPatronais->projativ;
             $iRecurso   = $oVinculoDotPatronais->recurso;
+
+            if(!empty($iPrograma)){
+                $iPrograma = $oVinculoDotPatronais->programa;
+            }
+            if(!empty($iFuncao)){
+                $iFuncao = $oVinculoDotPatronais->funcao;
+            }
+            if(!empty($iSubFuncao)){
+                $iSubFuncao = $oVinculoDotPatronais->subfuncao;
+            }
         
         }
         
@@ -2751,7 +2774,7 @@ class dadosEmpenhoFolha {
     if(!empty($iPrograma)){
       $sWhereDotacao .= " and o58_programa = {$iPrograma}   ";
     }
-    
+
     $sWhereDotacao .= " and o58_codigo   = {$iRecurso}    ";
     $sWhereDotacao .= $sWhereParam;
          
@@ -3380,7 +3403,9 @@ class dadosEmpenhoFolha {
 	      $lLiberada = $this->isLiberada($sSigla,
 	                                     2,
 	                                     $iAnoUsu,
-	                                     $iMesUsu); 
+	                                     $iMesUsu,
+                                         '',
+                                         $sListaPrev); 
 	    } catch ( Exception $eException ){
 	      throw new Exception("{$sMsgErro}, {$eException->getMessage()}");
 	    }    
@@ -3440,7 +3465,7 @@ class dadosEmpenhoFolha {
                                                     $sWhereGerador,
                                                     $iInstit);
     }
-    
+
     $rsGerador = db_query($sSqlGerador);                                             
       
     if ( $rsGerador ) {
@@ -3462,7 +3487,7 @@ class dadosEmpenhoFolha {
           try {
             
             $oEstrututal = $this->getEstrututal(db_getsession('DB_anousu'),$oGerador->lotacao,$oGerador->vinculo,$oGerador->elemento,$iMesUsu,true);
-            
+
             $iOrgao     = $oEstrututal->iOrgao; 
             $iUnidade   = $oEstrututal->iUnidade;
             $iProjAtiv  = $oEstrututal->iProjAtiv;
@@ -3630,7 +3655,8 @@ class dadosEmpenhoFolha {
           $sSqlPercPatronal .= "  where r33_anousu = {$iAnoUsu} ";
           $sSqlPercPatronal .= "    and r33_mesusu = {$iMesUsu} ";
           $sSqlPercPatronal .= "    and r33_codtab = ".($oGerador->previdencia+2);
-          
+          $sSqlPercPatronal .= "    and r33_instit = ".db_getsession('DB_instit');
+
           $rsPercPatronal    = db_query($sSqlPercPatronal);
           $oPercPatronal     = db_utils::fieldsMemory($rsPercPatronal,0);
           $nPercPatronal     = $oPercPatronal->r33_ppatro/100;
@@ -3638,7 +3664,7 @@ class dadosEmpenhoFolha {
           $oDaorhEmpenhoFolhaRubrica->rh73_rubric          = $oGerador->rubric; 
           $oDaorhEmpenhoFolhaRubrica->rh73_seqpes          = $oGerador->pessoalmov;
           $oDaorhEmpenhoFolhaRubrica->rh73_instit          = $iInstit;
-          $oDaorhEmpenhoFolhaRubrica->rh73_valor           = db_formatar(($oGerador->valor * $nPercPatronal),'p');
+          $oDaorhEmpenhoFolhaRubrica->rh73_valor           = ($oGerador->valor * $nPercPatronal);
           $oDaorhEmpenhoFolhaRubrica->rh73_pd              = 1;
           $oDaorhEmpenhoFolhaRubrica->rh73_tiporubrica     = 1;
                   
@@ -3885,9 +3911,10 @@ class dadosEmpenhoFolha {
    * @param integer $iAnoUsu   Exercício da Folha 
    * @param integer $iMesUsu   Mês da Folha
    * @param string  $sSemestre Semestre ( Caso seja folha complementar ) 
+   * @param string  $sListaPrev Previdência
    * @return boolean
    */
-  public function isLiberada($sSigla='',$sTipoEmp='',$iAnoUsu='',$iMesUsu='',$sSemestre='') {
+  public function isLiberada($sSigla='',$sTipoEmp='',$iAnoUsu='',$iMesUsu='',$sSemestre='',$sListaPrev='') {
   	
   	$sMsgErro = " Consulta de liberação abortada";
   	
@@ -3922,7 +3949,11 @@ class dadosEmpenhoFolha {
 		}
 		$sWhereLiberacao .= " and rh83_tipoempenho  = {$sTipoEmp}  ";
 		$sWhereLiberacao .= " and rh83_instit       = ".db_getsession("DB_instit");
-		
+
+        if ($sListaPrev != '') {
+            $sWhereLiberacao .= " and rh83_tabprev  in ({$sListaPrev})  ";
+        }
+        
 		$sSqlLiberacao    = $oDaorhEmpenhoFolhaConfirma->sql_query_file(null,"*",null,$sWhereLiberacao);
   	$rsLiberacao      = $oDaorhEmpenhoFolhaConfirma->sql_record($sSqlLiberacao);
   	

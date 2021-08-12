@@ -15,7 +15,7 @@ $aMeses = array(
   "10" => "Outubro",
   "11" => "Novembro",
   "12" => "Dezembro",
-  "13" => "Encerramento"
+  "13" => "13º Salário"
 );
 
 ?>
@@ -37,6 +37,20 @@ $aMeses = array(
             <td colspan='2' style="text-align: center"><span><b>Nova Dotação</b></span></td>
         </tr>
         <tr>
+            <td>
+                <? db_ancora("Dotação: ","js_pesquisa_coddot(true, 1);", $db_opcao); ?>
+            </td>
+            <td>
+                <? db_input("dotacao_orig",8,"",true,"text",$db_opcao, "onchange='js_pesquisa_coddot(false, 1);'"); ?>
+            </td>
+            <td>
+                <? db_ancora("Dotação: ","js_pesquisa_coddot(true, 2);", $db_opcao); ?>
+            </td>
+            <td>
+                <? db_input("dotacao_nov",8,"",true,"text",$db_opcao, "onchange='js_pesquisa_coddot(false, 2);'"); ?>
+            </td>
+        </tr>
+        <tr>
             <td nowrap title="<?=@$Trh171_orgaoorig?>">
                 <?=db_ancora($Lrh171_orgaoorig, "js_pesquisaOrgaoOrig(true)", $db_opcao_orig);?>
             </td>
@@ -47,11 +61,11 @@ $aMeses = array(
                 ?>
             </td>
             <td nowrap title="<?=@$Trh171_orgaonov?>">
-                <?=db_ancora($Lrh171_orgaonov, "js_pesquisaOrgaoNov(true)", $db_opcao);?>
+                <?=db_ancora($Lrh171_orgaonov, "js_pesquisaOrgaoNov(true)", 3);?>
             </td>
             <td nowrap> 
                 <?
-                    db_input("rh171_orgaonov", 8, $Irh171_orgaonov, true, 'text', $db_opcao, "onchange=js_pesquisaOrgaoNov(false);");
+                    db_input("rh171_orgaonov", 8, $Irh171_orgaonov, true, 'text', 3, "onchange=js_pesquisaOrgaoNov(false);");
                     db_input('o40_descr_nov', 35, '', true, 'text', 3);
                 ?>
             </td>
@@ -67,12 +81,72 @@ $aMeses = array(
                 ?>
             </td>
             <td nowrap title="<?=@$Trh171_unidadenov?>">
-                <?=db_ancora($Lrh171_unidadenov, "js_pesquisaUnidadeNov(true)", $db_opcao);?>
+                <?=db_ancora($Lrh171_unidadenov, "js_pesquisaUnidadeNov(true)", 3);?>
             </td>
             <td> 
                 <? 
-                    db_input('rh171_unidadenov',8,$Irh171_unidadenov,true,'text',$db_opcao,"onchange=js_pesquisaUnidadeNov(false);");
+                    db_input('rh171_unidadenov',8,$Irh171_unidadenov,true,'text',3,"onchange=js_pesquisaUnidadeNov(false);");
                     db_input('o41_descr_nov', 35, '', true, 'text', 3);    
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Trh171_funcaoorig?>">
+                <?=db_ancora($Lrh171_funcaoorig, "js_pesquisaFuncaoOrig(true)", $db_opcao_orig);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_funcaoorig',8,$Irh171_funcaoorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaFuncaoOrig(false);");
+                    db_input('o52_descr_orig', 35, '', true, 'text', 3);
+                ?>
+            </td>
+            <td nowrap title="<?=@$Trh171_funcaonov?>">
+                <?=db_ancora($Lrh171_funcaonov, "js_pesquisaFuncaoNov(true)", 3);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_funcaonov',8,$Irh171_funcaonov,true,'text',3,"onchange=js_pesquisaFuncaoNov(false);");
+                    db_input('o52_descr_nov', 35, '', true, 'text', 3);    
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Trh171_subfuncaoorig?>">
+                <?=db_ancora($Lrh171_subfuncaoorig, "js_pesquisaSubFuncaoOrig(true)", $db_opcao_orig);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_subfuncaoorig',8,$Irh171_subfuncaoorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaSubFuncaoOrig(false);");
+                    db_input('o53_descr_orig', 35, '', true, 'text', 3);
+                ?>
+            </td>
+            <td nowrap title="<?=@$Trh171_subfuncaonov?>">
+                <?=db_ancora($Lrh171_subfuncaonov, "js_pesquisaSubFuncaoNov(true)", 3);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_subfuncaonov',8,$Irh171_subfuncaonov,true,'text',3,"onchange=js_pesquisaSubFuncaoNov(false);");
+                    db_input('o53_descr_nov', 35, '', true, 'text', 3);    
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Trh171_programaorig?>">
+                <?=db_ancora($Lrh171_programaorig, "js_pesquisaProgramaOrig(true)", $db_opcao_orig);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_programaorig',8,$Irh171_programaorig,true,'text',$db_opcao_orig,"onchange=js_pesquisaProgramaOrig(false);");
+                    db_input('o54_descr_orig', 35, '', true, 'text', 3);
+                ?>
+            </td>
+            <td nowrap title="<?=@$Trh171_programanov?>">
+                <?=db_ancora($Lrh171_programanov, "js_pesquisaProgramaNov(true)", 3);?>
+            </td>
+            <td> 
+                <? 
+                    db_input('rh171_programanov',8,$Irh171_programanov,true,'text',3,"onchange=js_pesquisaProgramaNov(false);");
+                    db_input('o54_descr_nov', 35, '', true, 'text', 3);    
                 ?>
             </td>
         </tr>
@@ -87,11 +161,11 @@ $aMeses = array(
                 ?>
             </td>
             <td nowrap title="<?=@$Trh171_projativnov?>">
-                <?=db_ancora($Lrh171_projativnov, "js_pesquisaProjAtivNov(true)", $db_opcao);?>
+                <?=db_ancora($Lrh171_projativnov, "js_pesquisaProjAtivNov(true)", 3);?>
             </td>
             <td> 
                 <? 
-                    db_input('rh171_projativnov',8,$Irh171_projativnov,true,'text',$db_opcao,"onchange=js_pesquisaProjAtivNov(false);");
+                    db_input('rh171_projativnov',8,$Irh171_projativnov,true,'text',3,"onchange=js_pesquisaProjAtivNov(false);");
                     db_input('o55_descr_nov', 35, '', true, 'text', 3);    
                 ?>
             </td>
@@ -107,15 +181,15 @@ $aMeses = array(
                 ?>
             </td>
             <td nowrap title="<?=@$Trh171_recursonov?>">
-                <?=db_ancora($Lrh171_recursonov, "js_pesquisaRecursoNov(true)", $db_opcao);?>
+                <?=db_ancora($Lrh171_recursonov, "js_pesquisaRecursoNov(true)", 3);?>
             </td>
             <td> 
                 <? 
-                    db_input('rh171_recursonov',8,$Irh171_recursonov,true,'text',$db_opcao,"onchange=js_pesquisaRecursoNov(false);");
+                    db_input('rh171_recursonov',8,$Irh171_recursonov,true,'text',3,"onchange=js_pesquisaRecursoNov(false);");
                     db_input('o15_descr_nov', 35, '', true, 'text', 3);    
                 ?>
             </td>
-        </tr>
+        </tr>        
     </table>
 </fieldset>
 </center>
@@ -123,6 +197,9 @@ $aMeses = array(
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+
+let sTagTipoCampo = '';
+
 function js_pesquisa(){
     js_OpenJanelaIframe('top.corpo','db_iframe_rhvinculodotpatronais','func_rhvinculodotpatronais.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
@@ -135,6 +212,74 @@ function js_preenchepesquisa(chave){
     }
     ?>
 
+}
+
+function js_pesquisa_coddot(mostra, iTipo){
+
+    sTagTipoCampo = iTipo == 1 ? 'orig' : 'nov';
+    
+    if(mostra==true){
+        js_OpenJanelaIframe('', 
+                            'db_iframe_orcdotacao', 
+                            'func_orcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot', 
+                            'Pesquisar Dotações',true);
+    } else {
+        js_buscaDotacao(document.getElementById('dotacao_'+sTagTipoCampo).value);
+    }
+}
+
+function js_mostraorcdotacao1(chave1, iTipo) {
+
+    document.getElementById('dotacao_'+sTagTipoCampo).value = chave1;
+    db_iframe_orcdotacao.hide();
+
+    js_buscaDotacao(document.getElementById('dotacao_'+sTagTipoCampo).value);
+
+}
+
+function js_buscaDotacao(iCodDotacao) {
+
+    js_divCarregando('Aguarde, buscando dotação', 'msgbox');
+  
+    var oParam           = new Object();
+    oParam.exec          = "getDotacao";
+    oParam.iCodDot       = iCodDotacao;
+
+    var oAjax = new Ajax.Request("orc4_orcdotacao.RPC.php", {
+        method:'post',
+        parameters:'json='+Object.toJSON(oParam),
+        onComplete:js_retornoBuscaDotacao
+    });
+                              
+}
+
+function js_retornoBuscaDotacao(oResponse) {
+  
+    js_removeObj('msgbox');
+    var oRetorno = eval("("+oResponse.responseText+")");
+    if (oRetorno.status == 1)  {
+
+        oDotacao = oRetorno.oDotacao;
+
+        document.getElementById('rh171_orgao'+sTagTipoCampo).value      = oDotacao.o58_orgao;
+        document.getElementById('o40_descr_'+sTagTipoCampo).value       = oDotacao.o40_descr.urlDecode();
+        document.getElementById('rh171_unidade'+sTagTipoCampo).value    = oDotacao.o58_unidade;
+        document.getElementById('o41_descr_'+sTagTipoCampo).value       = oDotacao.o41_descr.urlDecode();
+        document.getElementById('rh171_projativ'+sTagTipoCampo).value   = oDotacao.o58_projativ;
+        document.getElementById('o55_descr_'+sTagTipoCampo).value       = oDotacao.o55_descr.urlDecode();
+        document.getElementById('rh171_recurso'+sTagTipoCampo).value    = oDotacao.o58_codigo;
+        document.getElementById('o15_descr_'+sTagTipoCampo).value       = oDotacao.o15_descr.urlDecode();        
+        document.getElementById('rh171_programa'+sTagTipoCampo).value   = oDotacao.o58_programa;
+        document.getElementById('o54_descr_'+sTagTipoCampo).value       = oDotacao.o54_descr.urlDecode();
+        document.getElementById('rh171_funcao'+sTagTipoCampo).value     = oDotacao.o58_funcao;
+        document.getElementById('o52_descr_'+sTagTipoCampo).value       = oDotacao.o52_descr.urlDecode();
+        document.getElementById('rh171_subfuncao'+sTagTipoCampo).value  = oDotacao.o58_subfuncao;
+        document.getElementById('o53_descr_'+sTagTipoCampo).value       = oDotacao.o53_descr.urlDecode();            
+            
+    } else {
+        document.getElementById('dotacao_'+sTagTipoCampo).value = ''
+        alert(oRetorno.message.urlDecode());
+    }
 }
 
 function js_pesquisaOrgaoOrig(lMostra) {
@@ -403,6 +548,101 @@ function js_preencheRecursoNov(sDescricao, lErro) {
     if (lErro) {
         document.form1.rh171_recursonov.value = "";
         document.form1.rh171_recursonov.focus();
+    }
+
+}
+function js_pesquisaProgramaOrig(lMostra) {
+
+    var sUrlPrograma = "func_orcprograma.php?funcao_js=parent.js_preencheProgramaNov1|o54_programa|o54_descr";
+
+    if (!lMostra) {
+        var iPrograma = document.form1.rh171_programaorig.value;
+        sUrlPrograma = "func_orcprograma.php?pesquisa_chave=" + iPrograma + "&funcao_js=parent.js_preencheProgramaNov";
+    }
+
+    js_OpenJanelaIframe("", "db_iframe_orcprograma", sUrlPrograma, "Pesquisa Programa", lMostra);
+
+}
+
+function js_preencheProgramaNov1(iPrograma, sDescricao) {
+
+    document.form1.rh171_programaorig.value = iPrograma;
+    document.form1.o54_descr_orig.value = sDescricao;
+    db_iframe_orcprograma.hide();
+
+}
+
+function js_preencheProgramaNov(sDescricao, lErro) {
+
+    document.form1.o54_descr_orig.value = sDescricao;
+
+    if (lErro) {
+        document.form1.rh171_programaorig.value = "";
+        document.form1.rh171_programaorig.focus();
+    }
+
+}
+
+function js_pesquisaFuncaoOrig(lMostra) {
+
+    var sUrlFuncao = "func_orcfuncao.php?funcao_js=parent.js_preencheFuncaoNov1|o52_funcao|o52_descr";
+
+    if (!lMostra) {
+        var iFuncao = document.form1.rh171_funcaoorig.value;
+        sUrlFuncao = "func_orcfuncao.php?pesquisa_chave=" + iFuncao + "&funcao_js=parent.js_preencheFuncaoNov";
+    }
+
+    js_OpenJanelaIframe("", "db_iframe_orcfuncao", sUrlFuncao, "Pesquisa Função", lMostra);
+
+}
+
+function js_preencheFuncaoNov1(iFuncao, sDescricao) {
+
+    document.form1.rh171_funcaoorig.value = iFuncao;
+    document.form1.o52_descr_orig.value = sDescricao;
+    db_iframe_orcfuncao.hide();
+
+}
+
+function js_preencheFuncaoNov(sDescricao, lErro) {
+
+    document.form1.o52_descr_orig.value = sDescricao;
+
+    if (lErro) {
+        document.form1.rh171_funcaoorig.value = "";
+        document.form1.rh171_funcaoorig.focus();
+    }
+
+}
+
+function js_pesquisaSubFuncaoOrig(lMostra) {
+
+    var sUrlSubFuncao = "func_orcsubfuncao.php?funcao_js=parent.js_preencheSubFuncaoNov1|o53_subfuncao|o53_descr";
+
+    if (!lMostra) {
+        var iSubfuncao = document.form1.rh171_subfuncaoorig.value;
+        sUrlSubFuncao = "func_orcsubfuncao.php?pesquisa_chave=" + iSubfuncao + "&funcao_js=parent.js_preencheSubFuncaoNov";
+    }
+
+    js_OpenJanelaIframe("", "db_iframe_orcsubfuncao", sUrlSubFuncao, "Pesquisa Subfunção", lMostra);
+
+}
+
+function js_preencheSubFuncaoNov1(iSubfuncao, sDescricao) {
+
+    document.form1.rh171_subfuncaoorig.value = iSubfuncao;
+    document.form1.o53_descr_orig.value = sDescricao;
+    db_iframe_orcsubfuncao.hide();
+
+}
+
+function js_preencheSubFuncaoNov(sDescricao, lErro) {
+
+    document.form1.o53_descr_orig.value = sDescricao;
+
+    if (lErro) {
+        document.form1.rh171_subfuncaoorig.value = "";
+        document.form1.rh171_subfuncaoorig.focus();
     }
 
 }

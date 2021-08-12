@@ -28,6 +28,12 @@ class cl_rhvinculodotpatronais {
   public $rh171_mes = 0; 
   public $rh171_anousu = 0; 
   public $rh171_instit = 0; 
+  public $rh171_programaorig = 0;
+  public $rh171_programanov = 0;
+  public $rh171_funcaoorig = 0;
+  public $rh171_funcaonov = 0;
+  public $rh171_subfuncaoorig = 0;
+  public $rh171_subfuncaonov = 0;
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
                  rh171_sequencial = int8 = Código Sequencial 
@@ -42,6 +48,12 @@ class cl_rhvinculodotpatronais {
                  rh171_mes = int8 = Mês 
                  rh171_anousu = int8 = Ano 
                  rh171_instit = int8 = Instituição 
+                 rh171_programaorig = int8 = Programa
+                 rh171_programanov = int8 = Programa
+                 rh171_funcaoorig = int8 = Função
+                 rh171_funcaonov = int8 = Função
+                 rh171_subfuncaoorig = int8 = Subfunção
+                 rh171_subfuncaonov = int8 = Subfunção
                  ";
 
   //funcao construtor da classe 
@@ -76,6 +88,12 @@ class cl_rhvinculodotpatronais {
        $this->rh171_mes = ($this->rh171_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_mes"]:$this->rh171_mes);
        $this->rh171_anousu = ($this->rh171_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_anousu"]:$this->rh171_anousu);
        $this->rh171_instit = ($this->rh171_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_instit"]:$this->rh171_instit);
+       $this->rh171_programaorig = ($this->rh171_programaorig == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_programaorig"]:$this->rh171_programaorig);
+       $this->rh171_programanov = ($this->rh171_programanov == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_programanov"]:$this->rh171_programanov);
+       $this->rh171_funcaoorig = ($this->rh171_funcaoorig == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_funcaoorig"]:$this->rh171_funcaoorig);
+       $this->rh171_funcaonov = ($this->rh171_funcaonov == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_funcaonov"]:$this->rh171_funcaonov);
+       $this->rh171_subfuncaoorig = ($this->rh171_subfuncaoorig == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_subfuncaoorig"]:$this->rh171_subfuncaoorig);
+       $this->rh171_subfuncaonov = ($this->rh171_subfuncaonov == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_subfuncaonov"]:$this->rh171_subfuncaonov);
      } else {
      }
    }
@@ -206,6 +224,26 @@ class cl_rhvinculodotpatronais {
          $this->rh171_sequencial = $rh171_sequencial; 
        }
      }
+
+     if ($this->rh171_programaorig == null) {
+         $this->rh171_programaorig = "null";
+     }
+     if ($this->rh171_programanov == null) {
+         $this->rh171_programanov = "null";
+     }
+     if ($this->rh171_funcaoorig == null) {
+         $this->rh171_funcaoorig = "null";
+     }
+     if ($this->rh171_funcaonov == null) {
+         $this->rh171_funcaonov = "null";
+     }
+     if ($this->rh171_subfuncaoorig == null) {
+         $this->rh171_subfuncaoorig = "null";
+     }
+     if ($this->rh171_subfuncaonov == null) {
+         $this->rh171_subfuncaonov = "null";
+     }
+
      $sql = "insert into rhvinculodotpatronais(
                                        rh171_sequencial 
                                       ,rh171_orgaoorig 
@@ -219,6 +257,12 @@ class cl_rhvinculodotpatronais {
                                       ,rh171_mes 
                                       ,rh171_anousu 
                                       ,rh171_instit 
+                                      ,rh171_programaorig
+                                      ,rh171_programanov
+                                      ,rh171_funcaoorig
+                                      ,rh171_funcaonov
+                                      ,rh171_subfuncaoorig
+                                      ,rh171_subfuncaonov
                        )
                 values (
                                 $this->rh171_sequencial 
@@ -233,6 +277,12 @@ class cl_rhvinculodotpatronais {
                                ,$this->rh171_mes 
                                ,$this->rh171_anousu 
                                ,$this->rh171_instit 
+                               ,$this->rh171_programaorig
+                               ,$this->rh171_programanov
+                               ,$this->rh171_funcaoorig
+                               ,$this->rh171_funcaonov
+                               ,$this->rh171_subfuncaoorig
+                               ,$this->rh171_subfuncaonov
                       )";
 
      $result = db_query($sql); 
@@ -268,7 +318,7 @@ class cl_rhvinculodotpatronais {
 
   // funcao para alteracao
   function alterar ( $rh171_sequencial=null, $rh171_orgaoorig=null, $rh171_unidadeorig=null, $rh171_projativorig=null, $rh171_recursoorig=null,
-                    $rh171_mes=null, $rh171_anousu=null, $rh171_instit=null ) { 
+                    $rh171_programaorig=null, $rh171_funcaoorig=null, $rh171_subfuncaoorig=null, $rh171_mes=null, $rh171_anousu=null, $rh171_instit=null ) { 
       $this->atualizacampos();
 
       $sql = " update rhvinculodotpatronais set ";
@@ -422,6 +472,60 @@ class cl_rhvinculodotpatronais {
          return false;
        }
      }
+     if (trim($this->rh171_programaorig)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_programaorig"])) { 
+       if (trim($this->rh171_programaorig)=="") {
+        $sql  .= $virgula." rh171_programaorig = null ";
+       } else {
+        $sql  .= $virgula." rh171_programaorig = $this->rh171_programaorig ";
+       }
+       $virgula = ",";
+     }
+
+     if (trim($this->rh171_programanov)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_programanov"])) { 
+       if (trim($this->rh171_programanov)=="") {
+        $sql  .= $virgula." rh171_programanov = null ";
+       } else {
+        $sql  .= $virgula." rh171_programanov = $this->rh171_programanov ";
+       }
+       $virgula = ",";
+     }
+
+     if (trim($this->rh171_funcaoorig)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_funcaoorig"])) { 
+       if (trim($this->rh171_funcaoorig)=="") {
+        $sql  .= $virgula." rh171_funcaoorig = null ";
+       } else {
+        $sql  .= $virgula." rh171_funcaoorig = $this->rh171_funcaoorig ";
+       }
+       $virgula = ",";
+     }
+
+     if (trim($this->rh171_funcaonov)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_funcaonov"])) { 
+       if (trim($this->rh171_funcaonov)=="") {
+        $sql  .= $virgula." rh171_funcaonov = null ";
+       } else {
+        $sql  .= $virgula." rh171_funcaonov = $this->rh171_funcaonov ";
+       }
+       $virgula = ",";
+     }
+
+     if (trim($this->rh171_subfuncaoorig)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_subfuncaoorig"])) { 
+       if (trim($this->rh171_subfuncaoorig)=="") {
+        $sql  .= $virgula." rh171_subfuncaoorig = null ";
+       } else {
+        $sql  .= $virgula." rh171_subfuncaoorig = $this->rh171_subfuncaoorig ";
+       }
+       $virgula = ",";
+     }
+
+     if (trim($this->rh171_subfuncaonov)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_subfuncaonov"])) { 
+       if (trim($this->rh171_subfuncaonov)=="") {
+        $sql  .= $virgula." rh171_subfuncaonov = null ";
+       } else {
+        $sql  .= $virgula." rh171_subfuncaonov = $this->rh171_subfuncaonov ";
+       }
+       $virgula = ",";
+     }
+
      $sql .= " where ";     
 
      if($rh171_sequencial!=null){
@@ -439,6 +543,15 @@ class cl_rhvinculodotpatronais {
         if($rh171_recursoorig!=null){
             $sql .= " and  rh171_recursoorig = $this->rh171_recursoorig";
         }
+        if($rh171_programaorig!=null){
+            $sql .= " and  rh171_programaorig = $this->rh171_programaorig";
+        }
+        if($rh171_funcaoorig!=null){
+            $sql .= " and  rh171_funcaoorig = $this->rh171_funcaoorig";
+        }
+        if($rh171_subfuncaoorig!=null){
+            $sql .= " and  rh171_subfuncaoorig = $this->rh171_subfuncaoorig";
+        }
         if($rh171_mes!=null){
             $sql .= " and  rh171_mes = $rh171_mes";
         }
@@ -449,8 +562,6 @@ class cl_rhvinculodotpatronais {
             $sql .= " and  rh171_instit = $rh171_instit";
         }
      }
-
-    // echo $sql.'<br><br>';
 
      $result = db_query($sql);
 
@@ -485,7 +596,7 @@ class cl_rhvinculodotpatronais {
 
   // funcao para exclusao 
   function excluir ( $rh171_sequencial=null, $rh171_orgaoorig=null, $rh171_unidadeorig=null, $rh171_projativorig=null, $rh171_recursoorig=null,
-                    $rh171_mes=null, $rh171_anousu=null, $rh171_instit=null ,$dbwhere=null) { 
+                    $rh171_programaorig=null, $rh171_funcaoorig=null, $rh171_subfuncaoorig=null, $rh171_mes=null, $rh171_anousu=null, $rh171_instit=null ,$dbwhere=null) { 
 
      $sql = " delete from rhvinculodotpatronais
                     where ";
@@ -516,6 +627,24 @@ class cl_rhvinculodotpatronais {
             $sql2 .= " and ";
           }
           $sql2 .= " rh171_recursoorig = $rh171_recursoorig ";
+        }
+        if($rh171_programaorig != ""){
+          if($sql2!=""){
+            $sql2 .= " and ";
+          }
+          $sql2 .= " rh171_programaorig = $rh171_programaorig ";
+        }
+        if($rh171_funcaoorig != ""){
+          if($sql2!=""){
+            $sql2 .= " and ";
+          }
+          $sql2 .= " rh171_funcaoorig = $rh171_funcaoorig ";
+        }
+        if($rh171_subfuncaoorig != ""){
+          if($sql2!=""){
+            $sql2 .= " and ";
+          }
+          $sql2 .= " rh171_subfuncaoorig = $rh171_subfuncaoorig ";
         }
         if($rh171_mes != ""){
           if($sql2!=""){
@@ -623,6 +752,14 @@ class cl_rhvinculodotpatronais {
      $sql .= "                                          and orcprojativnov.o55_anousu       = rh171_anousu          ";
      $sql .= "      join orctiporec orctiporecorig      on  orctiporecorig.o15_codigo       = rh171_recursoorig     ";
      $sql .= "      join orctiporec orctiporecnov       on  orctiporecnov.o15_codigo        = rh171_recursonov      ";
+     $sql .= "      left join orcfuncao orcfuncaoorig   on orcfuncaoorig.o52_funcao         = rh171_funcaoorig      ";
+     $sql .= "      left join orcfuncao orcfuncaonov    on orcfuncaonov.o52_funcao          = rh171_funcaonov       ";
+     $sql .= "      left join orcsubfuncao orcsubfuncaoorig on orcsubfuncaoorig.o53_subfuncao = rh171_subfuncaoorig ";
+     $sql .= "      left join orcsubfuncao orcsubfuncaonov on orcsubfuncaonov.o53_subfuncao = rh171_subfuncaonov    ";
+     $sql .= "      left join orcprograma orcprogramaorig on orcprogramaorig.o54_anousu     = rh171_anousu          ";
+     $sql .= "                                          and orcprogramaorig.o54_programa = rh171_programaorig       ";
+     $sql .= "      left join orcprograma orcprogramanov on orcprogramanov.o54_anousu = rh171_anousu                ";
+     $sql .= "                                          and orcprogramanov.o54_programa = rh171_programanov         ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ( $rh171_sequencial != "" && $rh171_sequencial != null) {
