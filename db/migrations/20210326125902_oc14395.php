@@ -188,7 +188,13 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE exeobras202021
               OWNER TO dbportal;
-            
+              
+            CREATE SEQUENCE exeobras202021_si204_sequencial_seq
+            INCREMENT 1
+            MINVALUE 1
+            MAXVALUE 9223372036854775807
+            START 1
+            CACHE 1;
             
             -- Table: cadobras102021
             
