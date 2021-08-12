@@ -1905,8 +1905,8 @@ class dadosEmpenhoFolha {
         $sSqlDadosRetencao .= "        inner join rhrubretencao    on rh75_rubric    = {$sSigla}_rubric     ";
         $sSqlDadosRetencao .= "                                   and rh75_instit    = {$sSigla}_instit     ";
         $sSqlDadosRetencao .= "        inner join retencaotiporec  on e21_sequencial = rh75_retencaotiporec ";
-        $sSqlDadosRetencao .= "  where e21_retencaotiporecgrupo = 1                                         ";
-        $sSqlDadosRetencao .= "    and {$sSigla}_anousu      = {$iAnoUsu}                                   ";
+        $sSqlDadosRetencao .= "  where {$sSigla}_rubric IN ('0122', '0308', 'R917', 'R918', 'R919', 'R921', '0144', '0145', '4144')";
+        $sSqlDadosRetencao .= "     {$sSigla}_anousu      = {$iAnoUsu}                                      ";
         $sSqlDadosRetencao .= "    and {$sSigla}_mesusu      = {$iMesUsu}                                   ";
         $sSqlDadosRetencao .= "    and rh02_instit           = {$iInstit}                                   ";
         
@@ -3403,7 +3403,9 @@ class dadosEmpenhoFolha {
 	      $lLiberada = $this->isLiberada($sSigla,
 	                                     2,
 	                                     $iAnoUsu,
-	                                     $iMesUsu); 
+	                                     $iMesUsu,
+                                         '',
+                                         $sListaPrev); 
 	    } catch ( Exception $eException ){
 	      throw new Exception("{$sMsgErro}, {$eException->getMessage()}");
 	    }    
@@ -3909,9 +3911,10 @@ class dadosEmpenhoFolha {
    * @param integer $iAnoUsu   Exercício da Folha 
    * @param integer $iMesUsu   Mês da Folha
    * @param string  $sSemestre Semestre ( Caso seja folha complementar ) 
+   * @param string  $sListaPrev Previdência
    * @return boolean
    */
-  public function isLiberada($sSigla='',$sTipoEmp='',$iAnoUsu='',$iMesUsu='',$sSemestre='') {
+  public function isLiberada($sSigla='',$sTipoEmp='',$iAnoUsu='',$iMesUsu='',$sSemestre='',$sListaPrev='') {
   	
   	$sMsgErro = " Consulta de liberação abortada";
   	
@@ -3946,7 +3949,11 @@ class dadosEmpenhoFolha {
 		}
 		$sWhereLiberacao .= " and rh83_tipoempenho  = {$sTipoEmp}  ";
 		$sWhereLiberacao .= " and rh83_instit       = ".db_getsession("DB_instit");
-		
+
+        if ($sListaPrev != '') {
+            $sWhereLiberacao .= " and rh83_tabprev  in ({$sListaPrev})  ";
+        }
+        
 		$sSqlLiberacao    = $oDaorhEmpenhoFolhaConfirma->sql_query_file(null,"*",null,$sWhereLiberacao);
   	$rsLiberacao      = $oDaorhEmpenhoFolhaConfirma->sql_record($sSqlLiberacao);
   	
