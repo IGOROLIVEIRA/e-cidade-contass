@@ -2005,7 +2005,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                  * Controle por Fonte de Recursos, Atributo SF e Dívida Consolidada
                                  */
                                 
-                                $sHash29 = '29' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $oReg16Font->codfontrecursos;
+                                $sHash29 = '29' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro . $oReg16Font->codfontrecursos;
 
                                 if (!isset($aContasReg10[$reg10Hash]->reg29[$sHash29])) {
 
@@ -2014,8 +2014,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete29->si241_tiporegistro = 29;
                                     $obalancete29->si241_contacontabil = $oContas10->si177_contacontaabil;
                                     $obalancete29->si241_codfundo = $sCodFundo;
-                                    $obalancete29->si241_atributosf = $oContas10->identificadorfinanceiro;
-                                    $obalancete29->si241_codfontrecursos = ($oContas10->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
+                                    $obalancete29->si241_atributosf = $oReg16Saldo->identificadorfinanceiro;
+                                    $obalancete29->si241_codfontrecursos = ($oReg16Saldo->identificadorfinanceiro == 'F') ? $oReg16Font->codfontrecursos : 0;
                                     $obalancete29->si241_dividaconsolidada = substr($oContas10->si177_contacontaabil,0,2) == '22' ? 1 : 2;
                                     $obalancete29->si241_saldoinicialfontsf = $oReg16Saldo->naturezasaldoinicialctb == 'C' ? $oReg16Saldo->saldoanterior * -1 : $oReg16Saldo->saldoanterior;
                                     $obalancete29->si241_naturezasaldoinicialfontsf = $oReg16Saldo->saldoanterior >= 0 ? 'D' : 'C';
