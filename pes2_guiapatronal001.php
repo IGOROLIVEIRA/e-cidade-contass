@@ -80,6 +80,7 @@ function js_emite(){
   qry += "&tipo="+document.form1.tipo.value;
   qry += "&cod_pagto="+document.form1.cod_pagto.value;
   qry += "&previdencia="+ selecionados;
+  qry += "&selautonomo="+ document.form1.selautonomo.value;
   qry += "&campoextra="+document.form1.campoextra.value;
   jan = window.open('pes2_guiapatronal002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -147,6 +148,17 @@ function js_emite(){
           ?>
         </td>
       </tr>
+      <tr>
+        <td align="right" >
+          <b>Imprimir Autônomos:</b>
+        </td>
+        <td >
+         <?
+           $xx = array("false"=>"Não","true"=>"Sim");
+           db_select('selautonomo',$xx,true,4,"");
+         ?>
+        </td>
+      </tr> 
       <tr >
         <td align="center" colspan="2" >
          <?
@@ -162,7 +174,7 @@ function js_emite(){
          ?>
         </td>
       </tr>
-      
+
       <tr>
         <td >&nbsp;</td>
         <td >&nbsp;</td>
