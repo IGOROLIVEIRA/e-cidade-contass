@@ -1906,7 +1906,7 @@ class dadosEmpenhoFolha {
         $sSqlDadosRetencao .= "                                   and rh75_instit    = {$sSigla}_instit     ";
         $sSqlDadosRetencao .= "        inner join retencaotiporec  on e21_sequencial = rh75_retencaotiporec ";
         $sSqlDadosRetencao .= "  where {$sSigla}_rubric IN ('0122', '0308', 'R917', 'R918', 'R919', 'R921', '0144', '0145', '4144')";
-        $sSqlDadosRetencao .= "     {$sSigla}_anousu      = {$iAnoUsu}                                      ";
+        $sSqlDadosRetencao .= "    and {$sSigla}_anousu      = {$iAnoUsu}                                      ";
         $sSqlDadosRetencao .= "    and {$sSigla}_mesusu      = {$iMesUsu}                                   ";
         $sSqlDadosRetencao .= "    and rh02_instit           = {$iInstit}                                   ";
         
