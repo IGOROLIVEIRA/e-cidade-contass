@@ -191,7 +191,6 @@ where
     or pcmater.pc01_taxa = 't')
    ) fornecedores
 ");
-
 $result = $clempautitem->sql_record($clempautitem->sql_query($e55_autori, $e55_sequen));
 
 db_fieldsmemory($result, 0);
