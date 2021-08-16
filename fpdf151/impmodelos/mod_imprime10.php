@@ -34,7 +34,21 @@
 
   $this->objpdf->text(130, ($xlin+2.5) - $linpc,'PROCESSO DE COMPRA N'.CHR(176));
   $this->objpdf->text(165, ($xlin+2.5) - $linpc,db_formatar(pg_result($this->recorddositens,0,$this->Snumeroproc),'s','0',6,'e'));
+  $autori = pg_result($this->recorddositens,0,$this->autori);
 
+  $sqlLicitacao = "SELECT e54_numerl,
+                                e54_nummodalidade
+								FROM empautoriza
+								LEFT JOIN liclicita ON l20_codigo = e54_codlicitacao
+								WHERE e54_autori = " . $autori;
+  $rsLicitacao = db_query($sqlLicitacao);
+  db_fieldsmemory($rsLicitacao,0,true);
+
+  global $e54_numerl;
+  global $e54_nummodalidade;
+
+  $this->objpdf->text(130, ($xlin+6.5) - $linpc,'PROCESSO LICITÓRIO:'.CHR(176));
+  $this->objpdf->text(160, ($xlin+6.5) - $linpc,$e54_numerl ." MODALIDADE: ".$e54_nummodalidade);
   $this->objpdf->text(130, ($xlin+$linpc-2.25), 'TIPO DA COMPRA: ');
   $this->objpdf->text(165, ($xlin+$linpc-2.25) , db_formatar(pg_result($this->recorddositens, 0,
                                                  $this->sTipoCompra), 's' , '0', 6, 'e'));

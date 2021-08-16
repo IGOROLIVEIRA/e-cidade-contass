@@ -1,7 +1,7 @@
 <?
 /*
  *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
  *
@@ -26,8 +26,8 @@
  */
 
 //MODULO: contabilidade
-//CLASSE DA ENTIDADE conparametro
-class cl_conparametro
+//CLASSE DA ENTIDADE despesaexercicioanterior
+class cl_despesaexercicioanterior
 {
     // cria variaveis de erro
     var $rotulo     = null;
@@ -43,25 +43,27 @@ class cl_conparametro
     var $erro_campo = null;
     var $pagina_retorno = null;
     // cria variaveis do arquivo
-    var $c90_estrutsistema = null;
-    var $c90_estrutcontabil = null;
-    var $c90_codestrut = 0;
-    var $c90_utilcontabancaria = 'f';
-    var $c90_usapcasp = 'f';
+    var $c233_codhist = 0;
+    var $c233_compl = 'f';
+    var $c233_descr = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 c90_estrutsistema = varchar(40) = Estrutural Sistema
-                 c90_estrutcontabil = varchar(50) = Estrutural Contabilidade
-                 c90_codestrut = int4 = Código
-                 c90_utilcontabancaria = bool = Utiliza Conta Bancária
-                 c90_usapcasp = bool = Usa PCASP
-                 c90_dataimplantacao = date = Data Implantacao
-                 ";
+        c233_sequencial serial,
+        c233_orgao int4 NOT NULL,
+        c233_mes int4 NOT NULL,
+        c233_ano int4 NOT NULL,
+        c233_elemento int8 NOT NULL,
+        c233_fonte int8 NOT NULL,
+        c233_valorempenhado float8 NOT NULL,
+        c233_tipodespesarpps int4,
+        c233_competencia date,
+        c233_valorliquidado float8,
+        c233_valorpago float8 ";
     //funcao construtor da classe
-    function cl_conparametro()
+    function cl_despesaexercicioanterior()
     {
         //classes dos rotulos dos campos
-        $this->rotulo = new rotulo("conparametro");
+        $this->rotulo = new rotulo("despesaexercicioanterior");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
     //funcao erro
@@ -78,97 +80,90 @@ class cl_conparametro
     function atualizacampos($exclusao = false)
     {
         if ($exclusao == false) {
-            $this->c90_estrutsistema = ($this->c90_estrutsistema == "" ? @$GLOBALS["HTTP_POST_VARS"]["c90_estrutsistema"] : $this->c90_estrutsistema);
-            $this->c90_estrutcontabil = ($this->c90_estrutcontabil == "" ? @$GLOBALS["HTTP_POST_VARS"]["c90_estrutcontabil"] : $this->c90_estrutcontabil);
-            $this->c90_codestrut = ($this->c90_codestrut == "" ? @$GLOBALS["HTTP_POST_VARS"]["c90_codestrut"] : $this->c90_codestrut);
-            $this->c90_utilcontabancaria = ($this->c90_utilcontabancaria == "f" ? @$GLOBALS["HTTP_POST_VARS"]["c90_utilcontabancaria"] : $this->c90_utilcontabancaria);
-            $this->c90_usapcasp = ($this->c90_usapcasp == "f" ? @$GLOBALS["HTTP_POST_VARS"]["c90_usapcasp"] : $this->c90_usapcasp);
-            if ($this->c90_dataimplantacao == "") {
-                $this->c90_dataimplantacao_dia = ($this->c90_dataimplantacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c90_dataimplantacao_dia"] : $this->c90_dataimplantacao_dia);
-                $this->c90_dataimplantacao_mes = ($this->c90_dataimplantacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["c90_dataimplantacao_mes"] : $this->c90_dataimplantacao_mes);
-                $this->c90_dataimplantacao_ano = ($this->c90_dataimplantacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["c90_dataimplantacao_ano"] : $this->c90_dataimplantacao_ano);
-                if ($this->c90_dataimplantacao_dia != "") {
-                    $this->c90_dataimplantacao = $this->c90_dataimplantacao_ano . "-" . $this->c90_dataimplantacao_mes . "-" . $this->c90_dataimplantacao_dia;
-                }
-            }
+            $this->c233_sequencial = ($this->c233_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_sequencial"] : $this->c233_sequencial);
+            $this->c233_orgao = ($this->c233_orgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_orgao"] : $this->c233_orgao);
+            $this->c233_mes = ($this->c233_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_mes"] : $this->c233_mes);
+            $this->c233_ano = ($this->c233_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_ano"] : $this->c233_ano);
+            $this->c233_elemento = ($this->c233_elemento == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_elemento"] : $this->c233_elemento);
+            $this->c233_fonte = ($this->c233_fonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_fonte"] : $this->c233_fonte);
+            $this->c233_valorempenhado = ($this->c233_valorempenhado == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_valorempenhado"] : $this->c233_valorempenhado);
+            $this->c233_tipodespesarpps = ($this->c233_tipodespesarpps == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_tipodespesarpps"] : $this->c233_tipodespesarpps);
+            $this->c233_competencia = ($this->c233_competencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_competencia"] : $this->c233_competencia);
+            $this->c233_valorliquidado = ($this->c233_valorliquidado == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_valorliquidado"] : $this->c233_valorliquidado);
+            $this->c233_valorpago = ($this->c233_valorpago == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_valorpago"] : $this->c233_valorpago);
         } else {
+            $this->c233_sequencial = ($this->c233_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c233_sequencial"] : $this->c233_sequencial);
         }
     }
     // funcao para inclusao
     function incluir()
     {
         $this->atualizacampos();
-        if ($this->c90_estrutsistema == null) {
-            $this->erro_sql = " Campo Estrutural Sistema nao Informado.";
-            $this->erro_campo = "c90_estrutsistema";
+        if ($this->c233_orgao == null) {
+            $this->erro_sql = " Campo Orgao nao Informado.";
+            $this->erro_campo = "c233_orgao";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->c90_estrutcontabil == null) {
-            $this->erro_sql = " Campo Estrutural Contabilidade nao Informado.";
-            $this->erro_campo = "c90_estrutcontabil";
+        if ($this->c233_mes == null) {
+            $this->erro_sql = " Campo Mes nao Informado.";
+            $this->erro_campo = "c233_mes";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->c90_codestrut == null) {
-            $this->erro_sql = " Campo Código nao Informado.";
-            $this->erro_campo = "c90_codestrut";
+        if ($this->c233_ano == null) {
+            $this->erro_sql = " Campo Ano nao Informado.";
+            $this->erro_campo = "c233_ano";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->c90_utilcontabancaria == null) {
-            $this->erro_sql = " Campo Utiliza Conta Bancária nao Informado.";
-            $this->erro_campo = "c90_utilcontabancaria";
+        if ($this->c233_elemento == null) {
+            $this->erro_sql = " Campo Elemento nao Informado.";
+            $this->erro_campo = "c233_elemento";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->c90_usapcasp == null) {
-            $this->erro_sql = " Campo Usa PCASP nao Informado.";
-            $this->erro_campo = "c90_usapcasp";
+
+        if ($this->c233_valorempenhado == null) {
+            $this->erro_sql = " Campo Valor Empenhado nao Informado.";
+            $this->erro_campo = "c233_valorempenhado";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        $sql = "insert into conparametro(
-                                       c90_estrutsistema
-                                      ,c90_estrutcontabil
-                                      ,c90_codestrut
-                                      ,c90_utilcontabancaria
-                                      ,c90_usapcasp
-                                      ,c90_dataimplantacao
-                       )
-                values (
-                                '$this->c90_estrutsistema'
-                               ,'$this->c90_estrutcontabil'
-                               ,$this->c90_codestrut
-                               ,'$this->c90_utilcontabancaria'
-                               ,'$this->c90_usapcasp'
-                               ,'$this->c90_dataimplantacao'
-                      )";
+
+        $this->c233_tipodespesarpps = $this->c233_tipodespesarpps == '' ? 0 : $this->c233_tipodespesarpps;
+        $this->c233_valorliquidado = $this->c233_valorliquidado == '' ? 0 : $this->c233_valorliquidado;
+        $this->c233_valorpago = $this->c233_valorpago == '' ? 0 : $this->c233_valorpago;
+        $this->c233_fonte = $this->c233_fonte == '' ? 'null' : $this->c233_fonte;
+        $this->c233_competencia = $this->c233_competencia == '' ? 'null' : "'$this->c233_competencia'";
+
+        $sql = "insert into despesaexercicioanterior(c233_orgao,c233_mes,c233_ano,c233_elemento,c233_fonte,c233_valorempenhado,c233_tipodespesarpps,c233_competencia,c233_valorliquidado,c233_valorpago)values($this->c233_orgao,$this->c233_mes,$this->c233_ano,$this->c233_elemento,$this->c233_fonte,$this->c233_valorempenhado,$this->c233_tipodespesarpps,$this->c233_competencia,$this->c233_valorliquidado,$this->c233_valorpago)";
+
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "Parametro Contabilidade () nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "Despesa do Exercício Anterior nao Incluída. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "Parametro Contabilidade já Cadastrado";
+                $this->erro_banco = "Despesa do Exercício Anterior já Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "Parametro Contabilidade () nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "Despesa do Exercício Anterior nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
@@ -178,76 +173,25 @@ class cl_conparametro
         }
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
+        $this->erro_sql .= "Valores : " . $this->c233_sequencial;
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
         return true;
     }
-    // funcao para alteracao
-    function alterar($oid = null)
+
+    function alterar($c233_sequencial = null)
     {
         $this->atualizacampos();
-        $sql = " update conparametro set ";
+        $sql = " update despesaexercicioanterior set ";
         $virgula = "";
-        if (trim($this->c90_estrutsistema) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c90_estrutsistema"])) {
-            $sql  .= $virgula . " c90_estrutsistema = '$this->c90_estrutsistema' ";
+        if (trim($this->c233_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c233_sequencial"])) {
+            $sql .= $virgula . " c233_sequencial = $this->c233_sequencial ";
             $virgula = ",";
-            if (trim($this->c90_estrutsistema) == null) {
-                $this->erro_sql = " Campo Estrutural Sistema nao Informado.";
-                $this->erro_campo = "c90_estrutsistema";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if (trim($this->c90_estrutcontabil) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c90_estrutcontabil"])) {
-            $sql  .= $virgula . " c90_estrutcontabil = '$this->c90_estrutcontabil' ";
-            $virgula = ",";
-            if (trim($this->c90_estrutcontabil) == null) {
-                $this->erro_sql = " Campo Estrutural Contabilidade nao Informado.";
-                $this->erro_campo = "c90_estrutcontabil";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if (trim($this->c90_codestrut) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c90_codestrut"])) {
-            $sql  .= $virgula . " c90_codestrut = $this->c90_codestrut ";
-            $virgula = ",";
-            if (trim($this->c90_codestrut) == null) {
-                $this->erro_sql = " Campo Código nao Informado.";
-                $this->erro_campo = "c90_codestrut";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if (trim($this->c90_utilcontabancaria) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c90_utilcontabancaria"])) {
-            $sql  .= $virgula . " c90_utilcontabancaria = '$this->c90_utilcontabancaria' ";
-            $virgula = ",";
-            if (trim($this->c90_utilcontabancaria) == null) {
-                $this->erro_sql = " Campo Utiliza Conta Bancária nao Informado.";
-                $this->erro_campo = "c90_utilcontabancaria";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if (trim($this->c90_usapcasp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c90_usapcasp"])) {
-            $sql  .= $virgula . " c90_usapcasp = '$this->c90_usapcasp' ";
-            $virgula = ",";
-            if (trim($this->c90_usapcasp) == null) {
-                $this->erro_sql = " Campo Usa PCASP nao Informado.";
-                $this->erro_campo = "c90_usapcasp";
+            if (trim($this->c233_sequencial) == null) {
+                $this->erro_sql = " Campo Sequencial nao Informado.";
+                $this->erro_campo = "c233_sequencial";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -256,22 +200,86 @@ class cl_conparametro
             }
         }
 
-        if (trim($this->c90_dataimplantacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c90_dataimplantacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["c90_dataimplantacao_dia"] != "")) {
-            $sql .= $virgula . " c90_dataimplantacao = '$this->c90_dataimplantacao' ";
+        if (trim($this->c233_orgao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c233_orgao"])) {
+            $sql  .= $virgula . " c233_orgao = '$this->c233_orgao' ";
             $virgula = ",";
-        } else {
-            if (isset($GLOBALS["HTTP_POST_VARS"]["c90_dataimplantacao_dia"])) {
-                $sql .= $virgula . " c90_dataimplantacao = null ";
-                $virgula = ",";
+            if (trim($this->c233_orgao) == null) {
+                $this->erro_sql = " Campo Orgao nao Informado.";
+                $this->erro_campo = "c233_orgao";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->c233_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c233_mes"])) {
+            $sql  .= $virgula . " c233_mes = '$this->c233_mes' ";
+            $virgula = ",";
+            if (trim($this->c233_mes) == null) {
+                $this->erro_sql = " Campo Mês nao Informado.";
+                $this->erro_campo = "c233_mes";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->c233_ano) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c233_ano"])) {
+            $sql  .= $virgula . " c233_ano = '$this->c233_ano' ";
+            $virgula = ",";
+            if (trim($this->c233_ano) == null) {
+                $this->erro_sql = " Campo Ano nao Informado.";
+                $this->erro_campo = "c233_ano";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->c233_elemento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c233_elemento"])) {
+            $sql  .= $virgula . " c233_elemento = '$this->c233_elemento' ";
+            $virgula = ",";
+            if (trim($this->c233_elemento) == null) {
+                $this->erro_sql = " Campo Elemento nao Informado.";
+                $this->erro_campo = "c233_elemento";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->c233_valorempenhado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c233_valorempenhado"])) {
+            $sql  .= $virgula . " c233_valorempenhado = '$this->c233_valorempenhado' ";
+            $virgula = ",";
+            if (trim($this->c233_valorempenhado) == null) {
+                $this->erro_sql = " Campo Valor da Empenhado nao Informado.";
+                $this->erro_campo = "c233_valorempenhado";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
             }
         }
 
         $sql .= " where ";
-        $sql .= "oid = '$oid'";
+        if ($c233_sequencial != null) {
+            $sql .= " c233_sequencial = $this->c233_sequencial";
+        }
+
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Parametro Contabilidade nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql   = "Despesa do Exercicio Anterior nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql .= "Valores : " . $this->c233_sequencial;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -280,7 +288,8 @@ class cl_conparametro
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Parametro Contabilidade nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql = "Despesa do Exercicio Anterior nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql .= "Valores : " . $this->c233_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -289,6 +298,7 @@ class cl_conparametro
             } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+                $this->erro_sql .= "Valores : " . $this->c233_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -298,20 +308,26 @@ class cl_conparametro
         }
     }
     // funcao para exclusao
-    function excluir($oid = null, $dbwhere = null)
+    function excluir($c233_sequencial = null, $dbwhere = null)
     {
-        $sql = " delete from conparametro
+        $sql = " delete from despesaexercicioanterior
                     where ";
         $sql2 = "";
         if ($dbwhere == null || $dbwhere == "") {
-            $sql2 = "oid = '$oid'";
+            if ($c233_sequencial != "") {
+                if ($sql2 != "") {
+                    $sql2 .= " and ";
+                }
+                $sql2 .= " c233_sequencial = $c233_sequencial ";
+            }
         } else {
             $sql2 = $dbwhere;
         }
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Parametro Contabilidade nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "Despesa do Exercicio Anterior nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql .= "Valores : " . $c233_sequencial;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -320,15 +336,17 @@ class cl_conparametro
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Parametro Contabilidade nao Encontrado. Exclusão não Efetuada.\\n";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_sql = "Despesa do Exercicio Anterior nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql .= "Valores : " . $c233_sequencial;
+                $this->erro_msg  = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql .= "Valores : " . $c233_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -353,7 +371,7 @@ class cl_conparametro
         $this->numrows = pg_numrows($result);
         if ($this->numrows == 0) {
             $this->erro_banco = "";
-            $this->erro_sql   = "Record Vazio na Tabela:conparametro";
+            $this->erro_sql   = "Record Vazio na Tabela:despesaexercicioanterior";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -361,12 +379,11 @@ class cl_conparametro
         }
         return $result;
     }
-    // funcao do sql
-    function sql_query($oid = null, $campos = "conparametro.oid,*", $ordem = null, $dbwhere = "")
+    function sql_query($c233_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -375,11 +392,11 @@ class cl_conparametro
         } else {
             $sql .= $campos;
         }
-        $sql .= " from conparametro ";
+        $sql .= " from despesaexercicioanterior ";
         $sql2 = "";
         if ($dbwhere == "") {
-            if ($oid != "" && $oid != null) {
-                $sql2 = " where conparametro.oid = '$oid'";
+            if ($c233_sequencial != null) {
+                $sql2 .= " where despesaexercicioanterior.c233_sequencial = $c233_sequencial ";
             }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
@@ -387,7 +404,7 @@ class cl_conparametro
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -396,12 +413,11 @@ class cl_conparametro
         }
         return $sql;
     }
-    // funcao do sql
-    function sql_query_file($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
+    function sql_query_file($c233_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -410,16 +426,19 @@ class cl_conparametro
         } else {
             $sql .= $campos;
         }
-        $sql .= " from conparametro ";
+        $sql .= " from despesaexercicioanterior ";
         $sql2 = "";
         if ($dbwhere == "") {
+            if ($c233_sequencial != null) {
+                $sql2 .= " where despesaexercicioanterior.c233_sequencial = $c233_sequencial ";
+            }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];

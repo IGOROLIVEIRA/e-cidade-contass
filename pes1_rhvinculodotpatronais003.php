@@ -22,7 +22,8 @@ if (isset($excluir)) {
     for ($iContMes = $rh171_mes; $iContMes <= 13; $iContMes++) {
         
         $clrhvinculodotpatronais->excluir(null, $rh171_orgaoorig, $rh171_unidadeorig, $rh171_projativorig,
-                                            $rh171_recursoorig, $iContMes, $iAnoUsu, $iInstit, null);
+                                            $rh171_recursoorig, $rh171_programaorig, $rh171_funcaoorig, $rh171_subfuncaoorig,
+                                            $iContMes, $iAnoUsu, $iInstit, null);
 
         if ($clrhvinculodotpatronais->erro_status == 0) {
             $sql_erro = true;
@@ -46,7 +47,14 @@ if (isset($excluir)) {
                 orcprojativorig.o55_descr   as o55_descr_orig,
                 orcprojativnov.o55_descr    as o55_descr_nov,
                 orctiporecorig.o15_descr    as o15_descr_orig,
-                orctiporecnov.o15_descr     as o15_descr_nov";
+                orctiporecnov.o15_descr     as o15_descr_nov,
+                orctiporecnov.o15_descr     as o15_descr_nov,
+                orcprogramaorig.o54_descr   as o54_descr_orig,
+                orcprogramanov.o54_descr    as o54_descr_nov,
+                orcfuncaoorig.o52_descr     as o52_descr_orig,
+                orcfuncaonov.o52_descr      as o52_descr_nov,
+                orcsubfuncaoorig.o53_descr  as o53_descr_orig,
+                orcsubfuncaonov.o53_descr   as o53_descr_nov";
     $result = $clrhvinculodotpatronais->sql_record($clrhvinculodotpatronais->sql_query($chavepesquisa, $sCampos)); 
     db_fieldsmemory($result,0);
     $db_botao = true;

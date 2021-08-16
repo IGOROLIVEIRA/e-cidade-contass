@@ -346,9 +346,10 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
     $agentes_nocivos += $agentes_nocivos1;
 }
 //echo $sql ; exit;
-
-$sql = $clrhautonomolanc->sql_query_file(null, "sum((rh89_valorserv*20/100)+rh89_valorretinss) as terceiros,sum(rh89_valorserv) as valor_servico",null,"(rh89_anousu,rh89_mesusu) = ({$ano},{$mes})");
-$rsTerceiros = $clrhautonomolanc->sql_record($sql);
+if ($selautonomo == 'true') {
+    $sql = $clrhautonomolanc->sql_query_file(null, "sum((rh89_valorserv*20/100)+rh89_valorretinss) as terceiros,sum(rh89_valorserv) as valor_servico",null,"(rh89_anousu,rh89_mesusu) = ({$ano},{$mes})");
+    $rsTerceiros = $clrhautonomolanc->sql_record($sql);
+}
 
 global $pdf;
 $pdf = new scpdf();

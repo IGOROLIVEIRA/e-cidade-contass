@@ -189,17 +189,10 @@ switch ($_POST["action"]) {
     WHERE fornecedores.z01_numcgm = $cgm
     ";
 
-    // if (!empty($_POST["order"])) {
-    //   $sqlQuery .= 'ORDER BY ' . $_POST['order']['0']['column'] . ' ' . $_POST['order']['0']['dir'] . ' ';
-    // } else {
-    //   $sqlQuery .= 'ORDER BY id DESC ';
-    // }
-
     if ($_POST["length"] != -1) {
       $sqlQuery .= 'LIMIT ' . $_POST['length'];
     }
-    // echo $sqlQuery;
-    // exit;
+
     $rsDadosTotal = $oDaoSysArqCamp->sql_record($sqlQueryTotal);
     $rsDados      = $oDaoSysArqCamp->sql_record($sqlQuery);
 
@@ -242,7 +235,7 @@ switch ($_POST["action"]) {
           $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}' onclick='consultaLancar()'>";
 
         $itemRows[] = $oDados->pc01_codmater;
-        $itemRows[] = $oDados->pc01_descrmater;
+        $itemRows[] = "<input type='text' name ='{$oDados->pc01_descrmater}' title='{$oDados->pc01_descrmater}' style='background-color: #DEB887' readonly value='{$oDados->pc01_descrmater}'  />";
         $itemRows[] = "<input type='text' id='descricao_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_descr}'  />";
         $itemRows[] = $selectunid;
         $itemRows[] = "<input type='text' id='marca_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_marca}'  />";
@@ -256,9 +249,9 @@ switch ($_POST["action"]) {
         $itemRows[] = "<input type='text' id='vlrunit_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vlrun}' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
 
         if ($_POST['desconto'] == 'f')
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='width: 80px' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='0' onkeyup='js_calcula(this)' readonly maxlength='2' style='background-color: #DEB887; width: 80px' />";
         else
-          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' style='width: 80px' />";
+          $itemRows[] = "<input type='text' id='desc_{$oDados->pc01_codmater}' value='$oDados->desconto' onkeyup='js_calcula(this)' onkeypress='return onlynumber()' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
 
         $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_vltot}' readonly style='width: 80px' />";
         $employeeData[] = $itemRows;
@@ -273,11 +266,31 @@ switch ($_POST["action"]) {
     }
     break;
 
+  case 'getElementosTabela':
+
+        $autori = $_POST["e55_autori"];
+        $tabela = $_POST["tabela"];
+        $codele = $_POST["codele"];
+        $iAnoSessao         = db_getsession('DB_anousu');
+
+        $sqlElementosTabela = "select distinct pc07_codele,o56_descr from pctabela 
+        inner join pctabelaitem on pc95_codtabela = pc94_sequencial
+        inner join pcmaterele on pc07_codmater = pc95_codmater
+        LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+        AND orcelemento.o56_anousu = $iAnoSessao
+        where pc94_sequencial = $tabela";
+      $rsEleTabela = db_query($sqlElementosTabela);
+
+      $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
+      $oRetorno->elementos = $oElementos;
+
+    break;
+
   case 'salvar':
 
     db_inicio_transacao();
 
-    foreach ($_POST['dados'] as $item) :
+    foreach ($_POST['dados'] as $Seq => $item) :
 
       $rsItem = $clempautitem->sql_record($clempautitem->sql_query(null, null, "*", null, "e55_autori = " . $_POST['autori'] . " and e55_item = " . $item['id'] . ""));
 
@@ -291,6 +304,7 @@ switch ($_POST["action"]) {
         $clempautitem->e55_servicoquantidade  = $item['servico'];
         $clempautitem->e55_vlrun  = $item['vlrunit'];
         $clempautitem->e55_vltot  = $item['total'];
+        $clempautitem->e55_sequen = $Seq + 1;
 
         $proximoSequen = db_utils::fieldsMemory($clempautitem->sql_record($clempautitem->sql_query(null, null, "case when max(e55_sequen)+ 1 is null then 1 else max(e55_sequen)+ 1 end as e55_sequen", null, "e55_autori = " . $_POST['autori'])), 0)->e55_sequen;
         $clempautitem->incluir($_POST['autori'], $proximoSequen);
@@ -416,12 +430,15 @@ function verificaSaldoCriterioDisponivel ($e55_autori,$tabela){
     $rsConsultaUtilizado = db_query($sqlUtilizado);
     $oDadosTotalUtilizado = db_utils::getCollectionByRecord($rsConsultaUtilizado);
 
-    $disponivel = $oDadosTotal[0]->pc23_valor - $oDadosTotalUtilizado[0]->totalitens;
-
+    if($oDadosTotalUtilizado[0]->totalitens == ""){
+        $disponivel = $oDadosTotal[0]->pc23_valor;
+    }else{
+        $disponivel = $oDadosTotal[0]->pc23_valor - $oDadosTotalUtilizado[0]->totalitens;
+    }
 
     $saldotabela = new stdClass();
     $saldotabela->disponivel = $disponivel;
-    $saldotabela->utilizado  = $oDadosTotalUtilizado[0]->totalitens;
+    $saldotabela->utilizado  = $oDadosTotalUtilizado[0]->totalitens == "" ? 0 : $oDadosTotalUtilizado[0]->totalitens;
     $saldotabela->total      = $oDadosTotal[0]->pc23_valor;
 
     return $saldotabela;
