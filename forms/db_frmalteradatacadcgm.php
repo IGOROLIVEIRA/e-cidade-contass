@@ -55,6 +55,17 @@ $clcgm->rotulo->label();
                         <tr></tr>
                         <tr>
                             <td align="left" nowrap="">
+                                <b>Data de Cadastro Original: </b>
+                            </td>
+                            <td align="left" nowrap="">
+								<?php
+								db_inputdata("datacadastro_original", '', '', '', true, 'text', 3);
+								?>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td align="left" nowrap="">
                                 <b>Data de Cadastro:</b>
                             </td>
                             <td align="left" nowrap="">
@@ -108,7 +119,8 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
                 parameters:'json='+Object.toJSON(oParam),
                 onComplete: res => {
                     let response = JSON.parse(res.responseText);
-                    document.form1.z09_datacadastro.value = js_formatar(response.z09_cadastro, 'd');
+                    document.form1.z09_datacadastro.value       = js_formatar(response.z09_cadastro, 'd');
+                    document.form1.datacadastro_original.value  = js_formatar(response.z01_cadast, 'd');
                 }
             }
         )
