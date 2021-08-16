@@ -51,6 +51,7 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_exerciciocontrato'] = $aEXEOBRAS10['si197_exerciciocontrato'];
                 $aCSVEXEOBRAS10['si197_exerciciolicitacao'] = $aEXEOBRAS10['si197_exerciciolicitacao'];
                 $aCSVEXEOBRAS10['si197_nroprocessolicitatorio'] = $aEXEOBRAS10['si197_nroprocessolicitatorio'];
+                $aCSVEXEOBRAS10['si197_codunidadesubresp'] = substr($aEXEOBRAS10['si197_codunidadesubresp'], 0, 8);
                 $aCSVEXEOBRAS10['si197_nrolote'] = $aEXEOBRAS10['si197_nrolote'];
                 $aCSVEXEOBRAS10['si197_codobra'] = $aEXEOBRAS10['si197_codobra'];
                 $aCSVEXEOBRAS10['si197_objeto'] = $aEXEOBRAS10['si197_objeto'];
@@ -74,6 +75,7 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS20['si204_exerciciocontrato'] = $aEXEOBRAS20['si204_exerciciocontrato'];
                 $aCSVEXEOBRAS20['si204_exercicioprocesso'] = $aEXEOBRAS20['si204_exercicioprocesso'];
                 $aCSVEXEOBRAS20['si204_nroprocesso'] = $aEXEOBRAS20['si204_nroprocesso'];
+                $aCSVEXEOBRAS20['si204_codunidadesubresp'] = substr($aEXEOBRAS20['si204_codunidadesubresp'], 0, 8);
                 $aCSVEXEOBRAS20['si204_tipoprocesso'] = $aEXEOBRAS20['si204_tipoprocesso'];
                 $aCSVEXEOBRAS20['si204_codobra'] = $aEXEOBRAS20['si204_codobra'];
                 $aCSVEXEOBRAS20['si204_objeto'] = $aEXEOBRAS20['si204_objeto'];

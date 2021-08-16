@@ -28,15 +28,15 @@ class Oc14395 extends AbstractMigration
     public function up()
     {
         $sql = <<<SQL
-        
+
         BEGIN;
 
         SELECT fc_startsession();
 
             -- Table: licobras102021
-            
+
             DROP TABLE licobras102021;
-            
+
             CREATE TABLE licobras102021
             (
               si195_sequencial bigint,
@@ -63,12 +63,12 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE licobras102021
               OWNER TO dbportal;
-            
-            
+
+
             -- Table: licobras202021
-            
+
             DROP TABLE licobras202021;
-            
+
             CREATE TABLE licobras202021
             (
               si196_sequencial bigint,
@@ -95,12 +95,12 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE licobras202021
               OWNER TO dbportal;
-            
-            
+
+
             -- Table: licobras302021
-            
+
             DROP TABLE if exists licobras302021;
-            
+
             CREATE TABLE licobras302021
             (
               si203_sequencial bigint,
@@ -124,21 +124,21 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE licobras302021
               OWNER TO dbportal;
-            
+
             -- cria sequencia da tabela
-            
+
             CREATE SEQUENCE licobras302021_si203_sequencial_seq
             INCREMENT 1
             MINVALUE 1
             MAXVALUE 9223372036854775807
             START 1
             CACHE 1;
-            
-            
+
+
             -- Table: exeobras102020
-            
+
             DROP TABLE if exists exeobras102021;
-            
+
             CREATE TABLE exeobras102021
             (
               si197_sequencial bigint,
@@ -149,6 +149,7 @@ class Oc14395 extends AbstractMigration
               si197_exerciciocontrato bigint,
               si197_exerciciolicitacao bigint,
               si197_nroprocessolicitatorio bigint,
+              si197_codunidadesubresp character varying(8),
               si197_nrolote bigint,
               si197_codobra bigint,
               si197_objeto text,
@@ -161,11 +162,11 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE exeobras102021
               OWNER TO dbportal;
-            
+
             -- Table: exeobras202021
-            
+
             DROP TABLE if exists exeobras202021;
-            
+
             CREATE TABLE exeobras202021
             (
               si204_sequencial bigint,
@@ -176,6 +177,7 @@ class Oc14395 extends AbstractMigration
               si204_exerciciocontrato bigint,
               si204_exercicioprocesso bigint,
               si204_nroprocesso character varying(12),
+              si204_codunidadesubresp character varying(8),
               si204_tipoprocesso bigint,
               si204_codobra bigint,
               si204_objeto text,
@@ -188,18 +190,18 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE exeobras202021
               OWNER TO dbportal;
-              
+
             CREATE SEQUENCE exeobras202021_si204_sequencial_seq
             INCREMENT 1
             MINVALUE 1
             MAXVALUE 9223372036854775807
             START 1
             CACHE 1;
-            
+
             -- Table: cadobras102021
-            
+
             DROP TABLE cadobras102021;
-            
+
             CREATE TABLE cadobras102021
             (
               si198_sequencial bigint,
@@ -222,11 +224,11 @@ class Oc14395 extends AbstractMigration
             );
             ALTER TABLE cadobras102021
               OWNER TO dbportal;
-              
+
             --ALTERA TABELA licobrasresponsaveis
-            
+
             ALTER TABLE licobrasresponsaveis ADD COLUMN obr05_dscoutroconselho varchar(40);
-  
+
         COMMIT;
 
 SQL;

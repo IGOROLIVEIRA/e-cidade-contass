@@ -23,6 +23,7 @@ class cl_exeobras102021 {
   public $si197_nrocontrato = 0;
   public $si197_exerciciocontrato  = 0;
   public $si197_nroprocessolicitatorio  = null;
+  public $si197_codunidadesubresp = null;
   public $si197_exerciciolicitacao = 0;
   public $si197_nrolote  = null;
   public $si197_codobra = 0;
@@ -39,6 +40,7 @@ class cl_exeobras102021 {
                  si197_nrocontrato = int8 = nroContrato
                  si197_exerciciocontrato = int4 = si197_exerciciocontrato
                  si197_nroprocessolicitatorio = int4 = si197_nroprocessolicitatorio
+                 si197_codunidadesubresp = text = si197_codunidadesubresp
                  si197_exerciciolicitacao = int4 = si197_exerciciolicitacao
                  si197_nrolote = int4 = numero do lote
                  si197_codobra = int8 = codigoobra
@@ -75,6 +77,7 @@ class cl_exeobras102021 {
       $this->si197_nrocontrato = ($this->si197_nrocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrocontrato"]:$this->si197_nrocontrato);
       $this->si197_exerciciocontrato = ($this->si197_exerciciocontrato == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_exerciciocontrato"]:$this->si197_exerciciocontrato);
       $this->si197_nroprocessolicitatorio = ($this->si197_nroprocessolicitatorio == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nroprocessolicitatorio"]:$this->si197_nroprocessolicitatorio);
+      $this->si197_codunidadesubresp = ($this->si197_codunidadesubresp == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codunidadesubresp"]:$this->si197_codunidadesubresp);
       $this->si197_exerciciolicitacao = ($this->si197_exerciciolicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_exerciciolicitacao"]:$this->si197_exerciciolicitacao);
       $this->si197_nrolote = ($this->si197_nrolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrolote"]:$this->si197_nrolote);
       $this->si197_codobra = ($this->si197_codobra == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codobra"]:$this->si197_codobra);
@@ -155,6 +158,15 @@ class cl_exeobras102021 {
       $this->erro_status = "0";
       return false;
     }
+    if ($this->si197_codunidadesubresp == null ) {
+      $this->erro_sql = " Campo cod Unidade Sub Processo Licitatorio não informado.";
+      $this->erro_campo = "si197_nroprocessolicitatorio";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     if ($this->si197_exerciciolicitacao == null ) {
       $this->erro_sql = " Campo exercicio da licitação não informado.";
       $this->erro_campo = "si197_exerciciolicitacao";
@@ -227,6 +239,7 @@ class cl_exeobras102021 {
                                       ,si197_exerciciocontrato
                                       ,si197_exerciciolicitacao
                                       ,si197_nroprocessolicitatorio
+                                      ,si197_codunidadesubresp
                                       ,si197_nrolote
                                       ,si197_codobra
                                       ,si197_objeto
@@ -243,6 +256,7 @@ class cl_exeobras102021 {
                                ,$this->si197_exerciciocontrato
                                ,$this->si197_exerciciolicitacao
                                ,$this->si197_nroprocessolicitatorio
+                               ,'$this->si197_codunidadesubresp'
                                ,$this->si197_nrolote
                                ,$this->si197_codobra
                                ,'$this->si197_objeto'
