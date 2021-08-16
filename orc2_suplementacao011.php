@@ -101,12 +101,12 @@ function js_projeto(){
 
 function js_mostra(chave,erro){
   	
-	document.form1.o39_codproj.value = chave;
+	document.form1.iCodProj.value = chave;
   	
 	if (erro==true) {
 		
-		$('o39_codproj').focus();
-		$('o39_codproj').value = '';
+		$('iCodProj').focus();
+		$('iCodProj').value = '';
 		
 	} 
 	
